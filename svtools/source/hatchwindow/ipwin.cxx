@@ -44,7 +44,7 @@
 SvResizeHelper::SvResizeHelper()
     : aBorder( 5, 5 )
     , nGrab( -1 )
-    , bResizeable( TRUE )
+    , bResizeable( sal_True )
 {
 }
 
@@ -128,7 +128,7 @@ void SvResizeHelper::Draw( OutputDevice * pDev )
 
     Rectangle   aMoveRects[ 4 ];
     FillMoveRectsPixel( aMoveRects );
-    USHORT i;
+    sal_uInt16 i;
     for( i = 0; i < 4; i++ )
         pDev->DrawRect( aMoveRects[ i ] );
     if( bResizeable )
@@ -152,7 +152,7 @@ void SvResizeHelper::InvalidateBorder( Window * pWin )
 {
     Rectangle   aMoveRects[ 4 ];
     FillMoveRectsPixel( aMoveRects );
-    for( USHORT i = 0; i < 4; i++ )
+    for( sal_uInt16 i = 0; i < 4; i++ )
         pWin->Invalidate( aMoveRects[ i ] );
 }
 
@@ -161,7 +161,7 @@ void SvResizeHelper::InvalidateBorder( Window * pWin )
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SvResizeHelper::SelectBegin( Window * pWin, const Point & rPos )
+sal_Bool SvResizeHelper::SelectBegin( Window * pWin, const Point & rPos )
 {
     if( -1 == nGrab )
     {
@@ -170,10 +170,10 @@ BOOL SvResizeHelper::SelectBegin( Window * pWin, const Point & rPos )
         {
             aSelPos = rPos; // Start-Position merken
             pWin->CaptureMouse();
-            return TRUE;
+            return sal_True;
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -189,14 +189,14 @@ short SvResizeHelper::SelectMove( Window * pWin, const Point & rPos )
         {
             Rectangle aRects[ 8 ];
             FillHandleRectsPixel( aRects );
-            for( USHORT i = 0; i < 8; i++ )
+            for( sal_uInt16 i = 0; i < 8; i++ )
                 if( aRects[ i ].IsInside( rPos ) )
                     return i;
         }
         // Move-Rect ueberlappen Handles
         Rectangle aMoveRects[ 4 ];
         FillMoveRectsPixel( aMoveRects );
-        for( USHORT i = 0; i < 4; i++ )
+        for( sal_uInt16 i = 0; i < 4; i++ )
             if( aMoveRects[ i ].IsInside( rPos ) )
                 return 8;
     }
@@ -421,7 +421,7 @@ void SvResizeHelper::ValidateRect( Rectangle & rValidate ) const
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SvResizeHelper::SelectRelease( Window * pWin, const Point & rPos,
+sal_Bool SvResizeHelper::SelectRelease( Window * pWin, const Point & rPos,
                                     Rectangle & rOutPosSize )
 {
     if( -1 != nGrab )
@@ -431,9 +431,9 @@ BOOL SvResizeHelper::SelectRelease( Window * pWin, const Point & rPos,
         nGrab = -1;
         pWin->ReleaseMouse();
         pWin->HideTracking();
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -632,7 +632,7 @@ long SvResizeWindow::Notify( NotifyEvent& rEvt )
 {
     if ( rEvt.GetType() == EVENT_LOSEFOCUS && m_bActive )
     {
-        BOOL bHasFocus = HasChildPathFocus(TRUE);
+        sal_Bool bHasFocus = HasChildPathFocus(sal_True);
         if ( !bHasFocus )
         {
             m_bActive = sal_False;

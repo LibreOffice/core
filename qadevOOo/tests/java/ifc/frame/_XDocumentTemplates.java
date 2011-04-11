@@ -207,7 +207,7 @@ public class _XDocumentTemplates extends MultiMethodTest {
                 statRes.next();
             }
         } catch (com.sun.star.sdbc.SQLException e) {
-            log.println("Exception occured:" + e);
+            log.println("Exception occurred:" + e);
         }
 
         return ret;
@@ -218,7 +218,7 @@ public class _XDocumentTemplates extends MultiMethodTest {
         try {
             statResSet = getDynaResultSet(content).getStaticResultSet();
         } catch(com.sun.star.ucb.ListenerAlreadySetException e) {
-            log.println("Exception occured:" + e);
+            log.println("Exception occurred:" + e);
         }
         return statResSet;
     }
@@ -267,7 +267,7 @@ public class _XDocumentTemplates extends MultiMethodTest {
                 statRes.next();
             }
         } catch(com.sun.star.sdbc.SQLException e) {
-            log.println("Exception occured:" + e);
+            log.println("Exception occurred:" + e);
         }
 
         return subContent;

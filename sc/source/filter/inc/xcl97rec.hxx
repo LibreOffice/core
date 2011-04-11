@@ -50,7 +50,7 @@ public:
 
     /// return: 1-based ObjId
     ///! count>=0xFFFF: Obj will be deleted, return 0
-    UINT16              Add( XclObj* );
+    sal_uInt16              Add( XclObj* );
 
     inline XclExpMsoDrawing* GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
 
@@ -85,10 +85,10 @@ protected:
         XclExpMsoDrawing*   pClientTextbox;
         XclTxo*             pTxo;
         sal_uInt16          mnObjType;
-        UINT16              nObjId;
-        UINT16              nGrbit;
+        sal_uInt16              nObjId;
+        sal_uInt16              nGrbit;
         SCTAB               mnScTab;
-        BOOL                bFirstOnSheet;
+        sal_Bool                bFirstOnSheet;
 
         bool                    mbOwnEscher;    /// true = Escher part created on the fly.
 
@@ -108,23 +108,23 @@ public:
 
     inline sal_uInt16           GetObjType() const { return mnObjType; }
 
-    inline  void                SetId( UINT16 nId ) { nObjId = nId; }
+    inline  void                SetId( sal_uInt16 nId ) { nObjId = nId; }
     inline  sal_uInt16          GetId() const       { return nObjId; }
 
     inline  void                SetTab( SCTAB nScTab )  { mnScTab = nScTab; }
     inline  SCTAB               GetTab() const          { return mnScTab; }
 
-    inline  void                SetLocked( BOOL b )
+    inline  void                SetLocked( sal_Bool b )
                                     { b ? nGrbit |= 0x0001 : nGrbit &= ~0x0001; }
-    inline  void                SetPrintable( BOOL b )
+    inline  void                SetPrintable( sal_Bool b )
                                     { b ? nGrbit |= 0x0010 : nGrbit &= ~0x0010; }
-    inline  void                SetAutoFill( BOOL b )
+    inline  void                SetAutoFill( sal_Bool b )
                                     { b ? nGrbit |= 0x2000 : nGrbit &= ~0x2000; }
-    inline  void                SetAutoLine( BOOL b )
+    inline  void                SetAutoLine( sal_Bool b )
                                     { b ? nGrbit |= 0x4000 : nGrbit &= ~0x4000; }
 
                                 // set corresponding Excel object type in OBJ/ftCmo
-            void                SetEscherShapeType( UINT16 nType );
+            void                SetEscherShapeType( sal_uInt16 nType );
     inline  void                SetEscherShapeTypeGroup() { mnObjType = EXC_OBJTYPE_GROUP; }
 
     /** If set to true, this object has created its own escher data.
@@ -177,13 +177,13 @@ public:
 class XclObjDropDown : public XclObj
 {
 private:
-    BOOL                        bIsFiltered;
+    sal_Bool                        bIsFiltered;
 
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 protected:
 public:
-                                XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, BOOL bFilt );
+                                XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, sal_Bool bFilt );
     virtual                     ~XclObjDropDown();
 };
 
@@ -204,7 +204,7 @@ public:
 
     virtual void                Save( XclExpStream& rStrm );
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 
 private:
@@ -269,15 +269,15 @@ private:
 class ExcBof8_Base : public ExcBof_Base
 {
 protected:
-        UINT32              nFileHistory;       // bfh
-        UINT32              nLowestBiffVer;     // sfo
+        sal_uInt32              nFileHistory;       // bfh
+        sal_uInt32              nLowestBiffVer;     // sfo
 
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 ExcBof8_Base();
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -327,7 +327,7 @@ public:
 class XclObproj : public ExcRecord
 {
 public:
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -342,7 +342,7 @@ private:
 public:
                                 XclCodename( const String& );
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -355,13 +355,13 @@ public:
 class ExcEScenarioCell
 {
 private:
-    UINT16                      nCol;
-    UINT16                      nRow;
+    sal_uInt16                      nCol;
+    sal_uInt16                      nRow;
     XclExpString                sText;
 
 protected:
 public:
-                                ExcEScenarioCell( UINT16 nC, UINT16 nR, const String& rTxt );
+                                ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const String& rTxt );
 
     inline sal_Size             GetStringBytes()
                                     { return sText.GetSize(); }
@@ -381,12 +381,12 @@ private:
     XclExpString                sName;
     XclExpString                sComment;
     XclExpString                sUserName;
-    UINT8                       nProtected;
+    sal_uInt8                       nProtected;
 
     inline ExcEScenarioCell*    _First()    { return (ExcEScenarioCell*) List::First(); }
     inline ExcEScenarioCell*    _Next()     { return (ExcEScenarioCell*) List::Next(); }
 
-    BOOL                        Append( UINT16 nCol, UINT16 nRow, const String& rTxt );
+    sal_Bool                        Append( sal_uInt16 nCol, sal_uInt16 nRow, const String& rTxt );
 
     virtual void                SaveCont( XclExpStream& rStrm );
 
@@ -395,7 +395,7 @@ public:
                                 ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab );
     virtual                     ~ExcEScenario();
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
@@ -406,7 +406,7 @@ public:
 class ExcEScenarioManager : public ExcRecord, private List
 {
 private:
-    UINT16                      nActive;
+    sal_uInt16                      nActive;
 
     inline ExcEScenario*        _First()    { return (ExcEScenario*) List::First(); }
     inline ExcEScenario*        _Next()     { return (ExcEScenario*) List::Next(); }
@@ -424,7 +424,7 @@ public:
     virtual void                Save( XclExpStream& rStrm );
     virtual void                SaveXml( XclExpXmlStream& rStrm );
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 };
 
@@ -450,13 +450,13 @@ private:
 class XclCalccount : public ExcRecord
 {
 private:
-    UINT16                      nCount;
+    sal_uInt16                      nCount;
 protected:
     virtual void                SaveCont( XclExpStream& rStrm );
 public:
                                 XclCalccount( const ScDocument& );
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
@@ -468,13 +468,13 @@ public:
 class XclIteration : public ExcRecord
 {
 private:
-    UINT16                      nIter;
+    sal_uInt16                      nIter;
 protected:
     virtual void                SaveCont( XclExpStream& rStrm );
 public:
                                 XclIteration( const ScDocument& );
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
@@ -492,7 +492,7 @@ protected:
 public:
                                 XclDelta( const ScDocument& );
 
-    virtual UINT16              GetNum() const;
+    virtual sal_uInt16              GetNum() const;
     virtual sal_Size            GetLen() const;
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
@@ -511,11 +511,11 @@ public:
 
 // ============================================================================
 
-class XclExpFilePass : public XclExpRecord
+class XclExpFileEncryption : public XclExpRecord
 {
 public:
-    explicit XclExpFilePass( const XclExpRoot& rRoot );
-    virtual ~XclExpFilePass();
+    explicit XclExpFileEncryption( const XclExpRoot& rRoot );
+    virtual ~XclExpFileEncryption();
 
 private:
     virtual void WriteBody( XclExpStream& rStrm );

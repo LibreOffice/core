@@ -125,7 +125,7 @@ class AnnotationWindow : public FloatingWindow
         void setAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation, bool bGrabFocus = false );
         const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& getAnnotation() const { return mxAnnotation; }
 
-        void ExecuteSlot( USHORT nSID );
+        void ExecuteSlot( sal_uInt16 nSID );
 
         ScrollBar*      Scrollbar()     { return mpVScrollbar;}
 

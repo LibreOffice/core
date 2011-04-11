@@ -74,8 +74,8 @@ namespace
 class GrindApp : public Application
 {
 public:
-    virtual void   Main();
-    virtual USHORT Exception( USHORT nError );
+    virtual int Main();
+    virtual sal_uInt16 Exception( sal_uInt16 nError );
 };
 
 class TestWindow : public Dialog
@@ -83,7 +83,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString::createFromAscii( "OutDev grinding" ) );
+            SetText( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutDev grinding")) );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
@@ -154,7 +154,7 @@ void setupMethodStubs( functor_vector_type& res )
     const Wallpaper   aWallpaper( aWhiteColor );
 
     GDIMetaFile       aMtf;
-    aMtf.AddAction( new MetaFillColorAction(Color(COL_RED),TRUE) );
+    aMtf.AddAction( new MetaFillColorAction(Color(COL_RED),sal_True) );
     aMtf.AddAction( new MetaRectAction(aRect) );
 
     /* void DrawText( const Point& rStartPt, const XubString& rStr,
@@ -166,7 +166,7 @@ void setupMethodStubs( functor_vector_type& res )
 //        boost::bind(
 //            &OutputDevice::DrawText,
 //            _1,
-//            aPt1, aString, (USHORT)0, aString.Len(), (MetricVector*)0, (String*)0, (vcl::ITextLayout*)0 ));
+//            aPt1, aString, (sal_uInt16)0, aString.Len(), (MetricVector*)0, (String*)0, (vcl::ITextLayout*)0 ));
 
     /* void DrawTextArray( const Point& rStartPt, const XubString& rStr,
                                        const sal_Int32* pDXAry = NULL,
@@ -178,7 +178,7 @@ void setupMethodStubs( functor_vector_type& res )
         boost::bind(
             &OutputDevice::DrawTextArray,
             _1,
-            aPt1, aString, (const sal_Int32*)0, (USHORT)0, aString.Len() ));
+            aPt1, aString, (const sal_Int32*)0, (sal_uInt16)0, aString.Len() ));
 
     /* void DrawPixel( const Point& rPt, const Color& rColor ); */
     add(res,
@@ -257,12 +257,12 @@ void setupMethodStubs( functor_vector_type& res )
             aRect ));
 
     /* void DrawRect( const Rectangle& rRect,
-                                  ULONG nHorzRount, ULONG nVertRound );
+                                  sal_uLong nHorzRount, sal_uLong nVertRound );
     */
     add(res,
         "DrawRect(round corners)",
         boost::bind(
-            (void (OutputDevice::*)( const Rectangle&, ULONG nHorzRount, ULONG nVertRound ))(
+            (void (OutputDevice::*)( const Rectangle&, sal_uLong nHorzRount, sal_uLong nVertRound ))(
                 &OutputDevice::DrawRect),
             _1,
             aRect2,
@@ -353,14 +353,14 @@ void setupMethodStubs( functor_vector_type& res )
 
     /* void CopyArea( const Point& rDestPt,
                                   const Point& rSrcPt,  const Size& rSrcSize,
-                                  USHORT nFlags = 0 );
+                                  sal_uInt16 nFlags = 0 );
     */
     add(res,
         "CopyArea",
         boost::bind(
             &OutputDevice::CopyArea,
             _1,
-            aPt1,aPt3,aRect2.GetSize(),(USHORT)0 ));
+            aPt1,aPt3,aRect2.GetSize(),(sal_uInt16)0 ));
 
     /* void DrawBitmap( const Point& rDestPt,
                                     const Bitmap& rBitmap );
@@ -697,20 +697,20 @@ void setupMethodStubs( functor_vector_type& res )
             aPt1,aRect.GetSize(),aPt3,aRect2.GetSize(),aBitmap,aBlackColor ));
 
     /* void DrawImage( const Point& rPos,
-                                   const Image& rImage, USHORT nStyle = 0 );
+                                   const Image& rImage, sal_uInt16 nStyle = 0 );
     */
     add(res,
         "DrawImage",
         boost::bind(
             (void (OutputDevice::*)( const Point&,
                                      const Image&,
-                                     USHORT nStyle ))(
+                                     sal_uInt16 nStyle ))(
                 &OutputDevice::DrawImage),
             _1,
-            aPt1,aImage,(USHORT)0 ));
+            aPt1,aImage,(sal_uInt16)0 ));
 
     /* void DrawImage( const Point& rPos, const Size& rSize,
-                                   const Image& rImage, USHORT nStyle = 0 );
+                                   const Image& rImage, sal_uInt16 nStyle = 0 );
     */
     add(res,
         "DrawImage(scaled)",
@@ -718,10 +718,10 @@ void setupMethodStubs( functor_vector_type& res )
             (void (OutputDevice::*)( const Point&,
                                      const Size&,
                                      const Image&,
-                                     USHORT nStyle ))(
+                                     sal_uInt16 nStyle ))(
                 &OutputDevice::DrawImage),
             _1,
-            aPt1,aRect.GetSize(),aImage,(USHORT)0 ));
+            aPt1,aRect.GetSize(),aImage,(sal_uInt16)0 ));
 
     /* void DrawGradient( const Rectangle& rRect, const Gradient& rGradient ); */
     add(res,
@@ -757,15 +757,15 @@ void setupMethodStubs( functor_vector_type& res )
             _1,
             aRect2,aWallpaper ));
 
-    /* void DrawWaveLine( const Point& rStartPos, const Point& rEndPos, USHORT nStyle ); */
+    /* void DrawWaveLine( const Point& rStartPos, const Point& rEndPos, sal_uInt16 nStyle ); */
     add(res,
         "DrawWaveLine",
         boost::bind(
             &OutputDevice::DrawWaveLine,
             _1,
-            aPt1,aPt2,(USHORT)WAVE_NORMAL ));
+            aPt1,aPt2,(sal_uInt16)WAVE_NORMAL ));
 
-    /* void DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nFlags ); */
+    /* void DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags ); */
     add(res,
         "DrawGrid",
         boost::bind(
@@ -774,15 +774,15 @@ void setupMethodStubs( functor_vector_type& res )
             aRect,Size(10,20),GRID_HORZLINES|GRID_VERTLINES ));
 
     /* void DrawTransparent( const PolyPolygon& rPolyPoly,
-                                         USHORT nTransparencePercent );
+                                         sal_uInt16 nTransparencePercent );
     */
     add(res,
         "DrawTransparent",
         boost::bind(
-            (void (OutputDevice::*)( const PolyPolygon&, USHORT ))(
+            (void (OutputDevice::*)( const PolyPolygon&, sal_uInt16 ))(
                 &OutputDevice::DrawTransparent),
             _1,
-            aPoly3,(USHORT)50 ));
+            aPoly3,(sal_uInt16)50 ));
 
     /* void DrawTransparent( const GDIMetaFile& rMtf,
                                          const Point& rPos, const Size& rSize,
@@ -903,7 +903,7 @@ void TestWindow::Paint( const Rectangle& )
     fflush( stdout );
 }
 
-USHORT GrindApp::Exception( USHORT nError )
+sal_uInt16 GrindApp::Exception( sal_uInt16 nError )
 {
     switch( nError & EXC_MAJORTYPE )
     {
@@ -915,23 +915,23 @@ USHORT GrindApp::Exception( USHORT nError )
     return 0;
 }
 
-void GrindApp::Main()
+int GrindApp::Main()
 {
     bool bHelp = false;
 
-    for( USHORT i = 0; i < GetCommandLineParamCount(); i++ )
+    for( sal_uInt16 i = 0; i < GetCommandLineParamCount(); i++ )
     {
         ::rtl::OUString aParam = GetCommandLineParam( i );
 
-        if( aParam.equalsAscii( "--help" ) ||
-            aParam.equalsAscii( "-h" ) )
+        if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--help" ) ) ||
+            aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) )
                 bHelp = true;
     }
 
     if( bHelp )
     {
         printf( "outdevgrind - Profile OutputDevice\n" );
-        return;
+        return EXIT_SUCCESS;
     }
 
     //-------------------------------------------------
@@ -959,8 +959,8 @@ void GrindApp::Main()
 
     // Create UCB.
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
     ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     TestWindow pWindow;
@@ -968,6 +968,7 @@ void GrindApp::Main()
 
     // clean up UCB
     ::ucbhelper::ContentBroker::deinitialize();
+    return EXIT_SUCCESS;
 }
 
 } // namespace

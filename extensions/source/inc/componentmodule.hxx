@@ -122,21 +122,6 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
         static void revokeComponent(
             const ::rtl::OUString& _rImplementationName);
 
-        /** write the registration information of all known components
-            <p>writes the registration information of all components which are currently registered into the
-            specified registry.<p/>
-            <p>Usually used from within component_writeInfo.<p/>
-            @param  _rxServiceManager
-                        the service manager
-            @param  _rRootKey
-                        the registry key under which the information will be stored
-            @return
-                        sal_True if the registration of all implementations was successfull, sal_False otherwise
-        */
-        static sal_Bool writeComponentInfos(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceManager,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rRootKey);
-
         /** creates a Factory for the component with the given implementation name.
             <p>Usually used from within component_getFactory.<p/>
             @param  _rxServiceManager
@@ -184,7 +169,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
     class ModuleRes : public ::ResId
     {
     public:
-        ModuleRes(USHORT _nId) : ResId(_nId, *OModule::getResManager()) { }
+        ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
 
     //==========================================================================

@@ -42,8 +42,8 @@
 #include <vcl/bmpacc.hxx>
 
 #include <svx/sxekitm.hxx>
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 
 #include <svx/svdmodel.hxx>
 #include "gradtrns.hxx"
@@ -63,7 +63,7 @@
 #include <svx/sdr/overlay/overlaytriangle.hxx>
 #include <svx/sdr/overlay/overlayhatchrect.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <vcl/lazydelete.hxx>
@@ -89,10 +89,10 @@ class SdrHdlBitmapSet
     BitmapEx& impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const Rectangle& rRectangle);
 
 public:
-    SdrHdlBitmapSet(UINT16 nResId);
+    SdrHdlBitmapSet(sal_uInt16 nResId);
     ~SdrHdlBitmapSet();
 
-    const BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nInd=0);
+    const BitmapEx& GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd=0);
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +100,7 @@ public:
 #define INDEX_COUNT         (6)
 #define INDIVIDUAL_COUNT    (4)
 
-SdrHdlBitmapSet::SdrHdlBitmapSet(UINT16 nResId)
+SdrHdlBitmapSet::SdrHdlBitmapSet(sal_uInt16 nResId)
 :   maMarkersBitmap(),
     // 14 kinds (BitmapMarkerKind) use index [0..5], 4 extra
     maRealMarkers((KIND_COUNT * INDEX_COUNT) + INDIVIDUAL_COUNT)
@@ -133,7 +133,7 @@ BitmapEx& SdrHdlBitmapSet::impGetOrCreateTargetBitmap(sal_uInt16 nIndex, const R
 }
 
 // change getting of bitmap to use the big ressource bitmap
-const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nInd)
+const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd)
 {
     // fill in size and source position in maMarkersBitmap
     const sal_uInt16 nYPos(nInd * 11);
@@ -142,7 +142,7 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UIN
     {
         default:
         {
-            DBG_ERROR( "unknown kind of marker" );
+            OSL_FAIL( "unknown kind of marker" );
             // no break here, return Rect_7x7 as default
         }
         case Rect_7x7:
@@ -286,12 +286,6 @@ SdrHdlBitmapSet& getModernSet()
     return *aModernSet.get();
 }
 
-SdrHdlBitmapSet& getHighContrastSet()
-{
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aHighContrastSet(new SdrHdlBitmapSet(SIP_SA_ACCESSIBILITY_MARKERS));
-    return *aHighContrastSet.get();
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrHdl::SdrHdl():
@@ -304,9 +298,9 @@ SdrHdl::SdrHdl():
     nPolyNum(0),
     nPPntNum(0),
     nSourceHdlNum(0),
-    bSelect(FALSE),
-    b1PixMore(FALSE),
-    bPlusHdl(FALSE),
+    bSelect(sal_False),
+    b1PixMore(sal_False),
+    bPlusHdl(sal_False),
     mbMoveOutside(false),
     mbMouseOver(false)
 {
@@ -323,9 +317,9 @@ SdrHdl::SdrHdl(const Point& rPnt, SdrHdlKind eNewKind):
     nPolyNum(0),
     nPPntNum(0),
     nSourceHdlNum(0),
-    bSelect(FALSE),
-    b1PixMore(FALSE),
-    bPlusHdl(FALSE),
+    bSelect(sal_False),
+    b1PixMore(sal_False),
+    bPlusHdl(sal_False),
     mbMoveOutside(false),
     mbMouseOver(false)
 {
@@ -336,7 +330,7 @@ SdrHdl::~SdrHdl()
     GetRidOfIAObject();
 }
 
-void SdrHdl::Set1PixMore(BOOL bJa)
+void SdrHdl::Set1PixMore(sal_Bool bJa)
 {
     if(b1PixMore != bJa)
     {
@@ -381,7 +375,7 @@ void SdrHdl::SetPos(const Point& rPnt)
     }
 }
 
-void SdrHdl::SetSelected(BOOL bJa)
+void SdrHdl::SetSelected(sal_Bool bJa)
 {
     if(bSelect != bJa)
     {
@@ -441,7 +435,7 @@ void SdrHdl::CreateB2dIAObject()
         BitmapColorIndex eColIndex = LightGreen;
         BitmapMarkerKind eKindOfMarker = Rect_7x7;
 
-        BOOL bRot = pHdlList->IsRotateShear();
+        sal_Bool bRot = pHdlList->IsRotateShear();
         if(pObj)
             eColIndex = (bSelect) ? Cyan : LightCyan;
         if(bRot)
@@ -625,24 +619,16 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
         case Rect_7x7:          eRetval = Rect_9x9;         break;
         case Rect_9x9:          eRetval = Rect_11x11;       break;
         case Rect_11x11:        eRetval = Rect_13x13;       break;
-        //case Rect_13x13:      eRetval = ; break;
 
         case Circ_7x7:          eRetval = Circ_9x9;         break;
         case Circ_9x9:          eRetval = Circ_11x11;       break;
-        //case Circ_11x11:      eRetval = ; break;
 
         case Elli_7x9:          eRetval = Elli_9x11;        break;
-        //case Elli_9x11:           eRetval = ; break;
 
         case Elli_9x7:          eRetval = Elli_11x9;        break;
-        //case Elli_11x9:           eRetval = ; break;
 
         case RectPlus_7x7:      eRetval = RectPlus_9x9;     break;
         case RectPlus_9x9:      eRetval = RectPlus_11x11;   break;
-        //case RectPlus_11x11:  eRetval = ; break;
-
-        //case Crosshair:           eRetval = ; break;
-        //case Glue:                eRetval = ; break;
 
         // #98388# let anchor blink with it's pressed state
         case Anchor:            eRetval = AnchorPressed;    break;
@@ -657,22 +643,15 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
 }
 
 // #101928#
-BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine, sal_Bool bIsHighContrast)
+BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine )
 {
-    if(bIsHighContrast)
+    if(bFine)
     {
-        return getHighContrastSet().GetBitmapEx(eKindOfMarker, nInd);
+        return getModernSet().GetBitmapEx(eKindOfMarker, nInd);
     }
     else
     {
-        if(bFine)
-        {
-            return getModernSet().GetBitmapEx(eKindOfMarker, nInd);
-        }
-        else
-        {
-            return getSimpleSet().GetBitmapEx(eKindOfMarker, nInd);
-        }
+        return getSimpleSet().GetBitmapEx(eKindOfMarker, nInd);
     }
 }
 
@@ -682,8 +661,6 @@ BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd,
 {
     ::sdr::overlay::OverlayObject* pRetval = 0L;
     sal_Bool bIsFineHdl(pHdlList->IsFineHdl());
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    sal_Bool bIsHighContrast(rStyleSettings.GetHighContrastMode());
 
     // support bigger sizes
     sal_Bool bForceBiggerSize(sal_False);
@@ -691,17 +668,6 @@ BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd,
     if(pHdlList->GetHdlSize() > 3)
     {
         bForceBiggerSize = sal_True;
-    }
-
-    // #101928# ...for high contrast, too.
-    if(!bForceBiggerSize && bIsHighContrast)
-    {
-        // #107925#
-        // ...but not for anchors, else they will not blink when activated
-        if(Anchor != eKindOfMarker && AnchorTR != eKindOfMarker)
-        {
-            bForceBiggerSize = sal_True;
-        }
     }
 
     if(bForceBiggerSize)
@@ -741,11 +707,12 @@ BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd,
 
         // create animated hdl
         // #101928# use ImpGetBitmapEx(...) now
-        BitmapEx aBmpEx1 = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
-        BitmapEx aBmpEx2 = ImpGetBitmapEx(eNextBigger, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
+        BitmapEx aBmpEx1 = ImpGetBitmapEx( eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl );
+        BitmapEx aBmpEx2 = ImpGetBitmapEx( eNextBigger,   (sal_uInt16)eColIndex, bIsFineHdl );
 
         // #i53216# Use system cursor blink time. Use the unsigned value.
-        const sal_uInt32 nBlinkTime((sal_uInt32)Application::GetSettings().GetStyleSettings().GetCursorBlinkTime());
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        const sal_uInt32 nBlinkTime((sal_uInt32)rStyleSettings.GetCursorBlinkTime());
 
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
@@ -756,24 +723,24 @@ BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd,
         {
             // #101688# AnchorTR for SW, take top right as (0,0)
             pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
-                (UINT16)(aBmpEx1.GetSizePixel().Width() - 1), 0,
-                (UINT16)(aBmpEx2.GetSizePixel().Width() - 1), 0);
+                (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1), 0,
+                (sal_uInt16)(aBmpEx2.GetSizePixel().Width() - 1), 0);
         }
         else
         {
             // create centered handle as default
             pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
-                (UINT16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
-                (UINT16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
-                (UINT16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
-                (UINT16)(aBmpEx2.GetSizePixel().Height() - 1) >> 1);
+                (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
+                (sal_uInt16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
+                (sal_uInt16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
+                (sal_uInt16)(aBmpEx2.GetSizePixel().Height() - 1) >> 1);
         }
     }
     else
     {
         // create normal handle
         // #101928# use ImpGetBitmapEx(...) now
-        BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
+        BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl );
 
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
@@ -784,7 +751,7 @@ BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd,
         {
             // #101688# AnchorTR for SW, take top right as (0,0)
             pRetval = new ::sdr::overlay::OverlayBitmapEx(rPos, aBmpEx,
-                (UINT16)(aBmpEx.GetSizePixel().Width() - 1), 0);
+                (sal_uInt16)(aBmpEx.GetSizePixel().Width() - 1), 0);
         }
         else
         {
@@ -827,9 +794,9 @@ bool SdrHdl::IsHdlHit(const Point& rPnt) const
 Pointer SdrHdl::GetPointer() const
 {
     PointerStyle ePtr=POINTER_MOVE;
-    const BOOL bSize=eKind>=HDL_UPLFT && eKind<=HDL_LWRGT;
-    const BOOL bRot=pHdlList!=NULL && pHdlList->IsRotateShear();
-    const BOOL bDis=pHdlList!=NULL && pHdlList->IsDistortShear();
+    const sal_Bool bSize=eKind>=HDL_UPLFT && eKind<=HDL_LWRGT;
+    const sal_Bool bRot=pHdlList!=NULL && pHdlList->IsRotateShear();
+    const sal_Bool bDis=pHdlList!=NULL && pHdlList->IsDistortShear();
     if (bSize && pHdlList!=NULL && (bRot || bDis)) {
         switch (eKind) {
             case HDL_UPLFT: case HDL_UPRGT:
@@ -859,7 +826,7 @@ Pointer SdrHdl::GetPointer() const
             while (nHdlWink<0) nHdlWink+=36000;
             while (nHdlWink>=36000) nHdlWink-=36000;
             nHdlWink/=4500;
-            switch ((BYTE)nHdlWink) {
+            switch ((sal_uInt8)nHdlWink) {
                 case 0: ePtr=POINTER_ESIZE;  break;
                 case 1: ePtr=POINTER_NESIZE; break;
                 case 2: ePtr=POINTER_NSIZE;  break;
@@ -895,7 +862,7 @@ Pointer SdrHdl::GetPointer() const
 }
 
 // #97016# II
-BOOL SdrHdl::IsFocusHdl() const
+sal_Bool SdrHdl::IsFocusHdl() const
 {
     switch(eKind)
     {
@@ -910,9 +877,9 @@ BOOL SdrHdl::IsFocusHdl() const
         {
             // if it's a activated TextEdit, it's moved to extended points
             if(pHdlList && pHdlList->IsMoveOutside())
-                return FALSE;
+                return sal_False;
             else
-                return TRUE;
+                return sal_True;
         }
 
         case HDL_MOVE:      // Handle zum Verschieben des Objekts
@@ -939,12 +906,12 @@ BOOL SdrHdl::IsFocusHdl() const
 
         case HDL_USER:
         {
-            return TRUE;
+            return sal_True;
         }
 
         default:
         {
-            return FALSE;
+            return sal_False;
         }
     }
 }
@@ -965,7 +932,7 @@ bool SdrHdl::isMouseOver() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // class SdrHdlColor
 
-SdrHdlColor::SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize, BOOL bLum)
+SdrHdlColor::SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize, sal_Bool bLum)
 :   SdrHdl(rRef, HDL_COLR),
     aMarkerSize(rSize),
     bUseLuminance(bLum)
@@ -1011,8 +978,8 @@ void SdrHdlColor::CreateB2dIAObject()
                                 ::sdr::overlay::OverlayBitmapEx(
                                     aPosition,
                                     BitmapEx(aBmpCol),
-                                    (UINT16)(aBmpCol.GetSizePixel().Width() - 1) >> 1,
-                                    (UINT16)(aBmpCol.GetSizePixel().Height() - 1) >> 1
+                                    (sal_uInt16)(aBmpCol.GetSizePixel().Width() - 1) >> 1,
+                                    (sal_uInt16)(aBmpCol.GetSizePixel().Height() - 1) >> 1
                                 );
                             DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
@@ -1043,8 +1010,8 @@ Bitmap SdrHdlColor::CreateColorDropper(Color aCol)
     if(pWrite)
     {
         // draw outer border
-        INT32 nWidth = aMarkerSize.Width();
-        INT32 nHeight = aMarkerSize.Height();
+        sal_Int32 nWidth = aMarkerSize.Width();
+        sal_Int32 nHeight = aMarkerSize.Height();
 
         pWrite->SetLineColor(Color(COL_LIGHTGRAY));
         pWrite->DrawLine(Point(0, 0), Point(0, nHeight - 1));
@@ -1080,7 +1047,7 @@ Bitmap SdrHdlColor::CreateColorDropper(Color aCol)
 
 Color SdrHdlColor::GetLuminance(const Color& rCol)
 {
-    UINT8 aLum = rCol.GetLuminance();
+    sal_uInt8 aLum = rCol.GetLuminance();
     Color aRetval(aLum, aLum, aLum);
     return aRetval;
 }
@@ -1090,7 +1057,7 @@ void SdrHdlColor::CallColorChangeLink()
     aColorChangeHdl.Call(this);
 }
 
-void SdrHdlColor::SetColor(Color aNew, BOOL bCallLink)
+void SdrHdlColor::SetColor(Color aNew, sal_Bool bCallLink)
 {
     if(IsUseLuminance())
         aNew = GetLuminance(aNew);
@@ -1124,7 +1091,7 @@ void SdrHdlColor::SetSize(const Size& rNew)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // class SdrHdlGradient
 
-SdrHdlGradient::SdrHdlGradient(const Point& rRef1, const Point& rRef2, BOOL bGrad)
+SdrHdlGradient::SdrHdlGradient(const Point& rRef1, const Point& rRef2, sal_Bool bGrad)
 :   SdrHdl(rRef1, bGrad ? HDL_GRAD : HDL_TRNS),
     pColHdl1(NULL),
     pColHdl2(NULL),
@@ -1179,8 +1146,8 @@ void SdrHdlGradient::CreateB2dIAObject()
                             double fHalfArrowWidth = (0.05 * 0.5) * fVecLen;
                             aVec.normalize();
                             basegfx::B2DVector aPerpend(-aVec.getY(), aVec.getX());
-                            INT32 nMidX = (INT32)(aPos.X() + aVec.getX() * fLongPercentArrow);
-                            INT32 nMidY = (INT32)(aPos.Y() + aVec.getY() * fLongPercentArrow);
+                            sal_Int32 nMidX = (sal_Int32)(aPos.X() + aVec.getX() * fLongPercentArrow);
+                            sal_Int32 nMidY = (sal_Int32)(aPos.Y() + aVec.getY() * fLongPercentArrow);
                             Point aMidPoint(nMidX, nMidY);
 
                             basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
@@ -1197,10 +1164,10 @@ void SdrHdlGradient::CreateB2dIAObject()
                             maOverlayGroup.append(*pNewOverlayObject);
 
                             // arrowhead
-                            Point aLeft(aMidPoint.X() + (INT32)(aPerpend.getX() * fHalfArrowWidth),
-                                        aMidPoint.Y() + (INT32)(aPerpend.getY() * fHalfArrowWidth));
-                            Point aRight(aMidPoint.X() - (INT32)(aPerpend.getX() * fHalfArrowWidth),
-                                        aMidPoint.Y() - (INT32)(aPerpend.getY() * fHalfArrowWidth));
+                            Point aLeft(aMidPoint.X() + (sal_Int32)(aPerpend.getX() * fHalfArrowWidth),
+                                        aMidPoint.Y() + (sal_Int32)(aPerpend.getY() * fHalfArrowWidth));
+                            Point aRight(aMidPoint.X() - (sal_Int32)(aPerpend.getX() * fHalfArrowWidth),
+                                        aMidPoint.Y() - (sal_Int32)(aPerpend.getY() * fHalfArrowWidth));
 
                             basegfx::B2DPoint aPositionLeft(aLeft.X(), aLeft.Y());
                             basegfx::B2DPoint aPositionRight(aRight.X(), aRight.Y());
@@ -1228,11 +1195,11 @@ void SdrHdlGradient::CreateB2dIAObject()
 IMPL_LINK(SdrHdlGradient, ColorChangeHdl, SdrHdl*, /*pHdl*/)
 {
     if(GetObj())
-        FromIAOToItem(GetObj(), TRUE, TRUE);
+        FromIAOToItem(GetObj(), sal_True, sal_True);
     return 0;
 }
 
-void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, BOOL bSetItemOnObject, BOOL bUndo)
+void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, sal_Bool bSetItemOnObject, sal_Bool bUndo)
 {
     // from IAO positions and colors to gradient
     const SfxItemSet& rSet = _pObj->GetMergedItemSet();
@@ -1569,13 +1536,13 @@ Pointer ImpEdgeHdl::GetPointer() const
         return Pointer(POINTER_SSIZE);
 }
 
-BOOL ImpEdgeHdl::IsHorzDrag() const
+sal_Bool ImpEdgeHdl::IsHorzDrag() const
 {
     SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pObj);
     if (pEdge==NULL)
-        return FALSE;
+        return sal_False;
     if (nObjHdlNum<=1)
-        return FALSE;
+        return sal_False;
 
     SdrEdgeKind eEdgeKind = ((SdrEdgeKindItem&)(pEdge->GetObjectItem(SDRATTR_EDGEKIND))).GetValue();
 
@@ -1588,11 +1555,11 @@ BOOL ImpEdgeHdl::IsHorzDrag() const
     {
         long nWink=nObjHdlNum==2 ? rInfo.nAngle1 : rInfo.nAngle2;
         if (nWink==0 || nWink==18000)
-            return TRUE;
+            return sal_True;
         else
-            return FALSE;
+            return sal_False;
     }
-    return FALSE;
+    return sal_False;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1775,7 +1742,7 @@ int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
                 { // #48763#
                     if (eKind1==eKind2)
                         return (long)pElem1<(long)pElem2 ? -1 : 1; // Notloesung, um immer die gleiche Sortierung zu haben
-                    return (USHORT)eKind1<(USHORT)eKind2 ? -1 : 1;
+                    return (sal_uInt16)eKind1<(sal_uInt16)eKind2 ? -1 : 1;
                 }
                 else
                     return nNum1<nNum2 ? -1 : 1;
@@ -1896,7 +1863,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
     if(aList.Count())
     {
         // take care of old handle
-        const ULONG nOldHdlNum(mnFocusIndex);
+        const sal_uIntPtr nOldHdlNum(mnFocusIndex);
         SdrHdl* pOld = GetHdl(nOldHdlNum);
         //SDOsal_Bool bRefresh(sal_False);
 
@@ -1923,7 +1890,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         qsort(pHdlAndIndex, aList.Count(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
 
         // #105678# look for old num in sorted array
-        ULONG nOldHdl(nOldHdlNum);
+        sal_uIntPtr nOldHdl(nOldHdlNum);
 
         if(nOldHdlNum != CONTAINER_ENTRY_NOTFOUND)
         {
@@ -1938,7 +1905,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         }
 
         // #105678# build new HdlNum
-        ULONG nNewHdl(nOldHdl);
+        sal_uIntPtr nNewHdl(nOldHdl);
 
         // #105678# do the focus travel
         if(bForward)
@@ -2037,7 +2004,7 @@ void SdrHdlList::SetFocusHdl(SdrHdl* pNew)
 
         if(!pActual || pActual != pNew)
         {
-            ULONG nNewHdlNum = GetHdlNum(pNew);
+            sal_uIntPtr nNewHdlNum = GetHdlNum(pNew);
 
             if(nNewHdlNum != CONTAINER_ENTRY_NOTFOUND)
             {
@@ -2086,10 +2053,10 @@ SdrHdlList::SdrHdlList(SdrMarkView* pV)
     aList(1024,32,32)
 {
     nHdlSize = 3;
-    bRotateShear = FALSE;
-    bMoveOutside = FALSE;
-    bDistortShear = FALSE;
-    bFineHandles = FALSE;
+    bRotateShear = sal_False;
+    bMoveOutside = sal_False;
+    bDistortShear = sal_False;
+    bFineHandles = sal_False;
 }
 
 SdrHdlList::~SdrHdlList()
@@ -2097,7 +2064,7 @@ SdrHdlList::~SdrHdlList()
     Clear();
 }
 
-void SdrHdlList::SetHdlSize(USHORT nSiz)
+void SdrHdlList::SetHdlSize(sal_uInt16 nSiz)
 {
     if(nHdlSize != nSiz)
     {
@@ -2105,7 +2072,7 @@ void SdrHdlList::SetHdlSize(USHORT nSiz)
         nHdlSize = nSiz;
 
         // propagate change to IAOs
-        for(UINT32 i=0; i<GetHdlCount(); i++)
+        for(sal_uInt32 i=0; i<GetHdlCount(); i++)
         {
             SdrHdl* pHdl = GetHdl(i);
             pHdl->Touch();
@@ -2113,7 +2080,7 @@ void SdrHdlList::SetHdlSize(USHORT nSiz)
     }
 }
 
-void SdrHdlList::SetMoveOutside(BOOL bOn)
+void SdrHdlList::SetMoveOutside(sal_Bool bOn)
 {
     if(bMoveOutside != bOn)
     {
@@ -2121,7 +2088,7 @@ void SdrHdlList::SetMoveOutside(BOOL bOn)
         bMoveOutside = bOn;
 
         // propagate change to IAOs
-        for(UINT32 i=0; i<GetHdlCount(); i++)
+        for(sal_uInt32 i=0; i<GetHdlCount(); i++)
         {
             SdrHdl* pHdl = GetHdl(i);
             pHdl->Touch();
@@ -2129,17 +2096,17 @@ void SdrHdlList::SetMoveOutside(BOOL bOn)
     }
 }
 
-void SdrHdlList::SetRotateShear(BOOL bOn)
+void SdrHdlList::SetRotateShear(sal_Bool bOn)
 {
     bRotateShear = bOn;
 }
 
-void SdrHdlList::SetDistortShear(BOOL bOn)
+void SdrHdlList::SetDistortShear(sal_Bool bOn)
 {
     bDistortShear = bOn;
 }
 
-void SdrHdlList::SetFineHdl(BOOL bOn)
+void SdrHdlList::SetFineHdl(sal_Bool bOn)
 {
     if(bFineHandles != bOn)
     {
@@ -2147,7 +2114,7 @@ void SdrHdlList::SetFineHdl(BOOL bOn)
         bFineHandles = bOn;
 
         // propagate change to IAOs
-        for(UINT32 i=0; i<GetHdlCount(); i++)
+        for(sal_uInt32 i=0; i<GetHdlCount(); i++)
         {
             SdrHdl* pHdl = GetHdl(i);
             pHdl->Touch();
@@ -2155,7 +2122,7 @@ void SdrHdlList::SetFineHdl(BOOL bOn)
     }
 }
 
-SdrHdl* SdrHdlList::RemoveHdl(ULONG nNum)
+SdrHdl* SdrHdlList::RemoveHdl(sal_uIntPtr nNum)
 {
     SdrHdl* pRetval = (SdrHdl*)aList.Remove(nNum);
 
@@ -2164,15 +2131,15 @@ SdrHdl* SdrHdlList::RemoveHdl(ULONG nNum)
 
 void SdrHdlList::Clear()
 {
-    for (ULONG i=0; i<GetHdlCount(); i++)
+    for (sal_uIntPtr i=0; i<GetHdlCount(); i++)
     {
         SdrHdl* pHdl=GetHdl(i);
         delete pHdl;
     }
     aList.Clear();
 
-    bRotateShear=FALSE;
-    bDistortShear=FALSE;
+    bRotateShear=sal_False;
+    bDistortShear=sal_False;
 }
 
 void SdrHdlList::Sort()
@@ -2204,21 +2171,21 @@ void SdrHdlList::Sort()
     }
 }
 
-ULONG SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
+sal_uIntPtr SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
 {
     if (pHdl==NULL)
         return CONTAINER_ENTRY_NOTFOUND;
-    ULONG nPos=aList.GetPos(pHdl);
+    sal_uIntPtr nPos=aList.GetPos(pHdl);
     return nPos;
 }
 
-void SdrHdlList::AddHdl(SdrHdl* pHdl, BOOL bAtBegin)
+void SdrHdlList::AddHdl(SdrHdl* pHdl, sal_Bool bAtBegin)
 {
     if (pHdl!=NULL)
     {
         if (bAtBegin)
         {
-            aList.Insert(pHdl,ULONG(0));
+            aList.Insert(pHdl,sal_uIntPtr(0));
         }
         else
         {
@@ -2228,11 +2195,11 @@ void SdrHdlList::AddHdl(SdrHdl* pHdl, BOOL bAtBegin)
     }
 }
 
-SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, BOOL bBack, BOOL bNext, SdrHdl* pHdl0) const
+SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, sal_Bool bBack, sal_Bool bNext, SdrHdl* pHdl0) const
 {
    SdrHdl* pRet=NULL;
-   ULONG nAnz=GetHdlCount();
-   ULONG nNum=bBack ? 0 : nAnz;
+   sal_uIntPtr nAnz=GetHdlCount();
+   sal_uIntPtr nNum=bBack ? 0 : nAnz;
    while ((bBack ? nNum<nAnz : nNum>0) && pRet==NULL)
    {
        if (!bBack)
@@ -2241,7 +2208,7 @@ SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, BOOL bBack, BOOL bNext, SdrH
        if (bNext)
        {
            if (pHdl==pHdl0)
-               bNext=FALSE;
+               bNext=sal_False;
        }
        else
        {
@@ -2257,7 +2224,7 @@ SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt, BOOL bBack, BOOL bNext, SdrH
 SdrHdl* SdrHdlList::GetHdl(SdrHdlKind eKind1) const
 {
    SdrHdl* pRet=NULL;
-   for (ULONG i=0; i<GetHdlCount() && pRet==NULL; i++)
+   for (sal_uIntPtr i=0; i<GetHdlCount() && pRet==NULL; i++)
    {
        SdrHdl* pHdl=GetHdl(i);
        if (pHdl->GetKind()==eKind1)
@@ -2277,16 +2244,9 @@ SdrCropHdl::SdrCropHdl(const Point& rPnt, SdrHdlKind eNewKind)
 
 // --------------------------------------------------------------------
 
-BitmapEx SdrCropHdl::GetHandlesBitmap( bool bIsFineHdl, bool bIsHighContrast )
+BitmapEx SdrCropHdl::GetHandlesBitmap( bool bIsFineHdl )
 {
-    if( bIsHighContrast )
-    {
-        static BitmapEx* pHighContrastBitmap = 0;
-        if( pHighContrastBitmap == 0 )
-            pHighContrastBitmap = new BitmapEx(ResId(SIP_SA_ACCESSIBILITY_CROP_MARKERS, *ImpGetResMgr()));
-        return *pHighContrastBitmap;
-    }
-    else if( bIsFineHdl )
+    if( bIsFineHdl )
     {
         static BitmapEx* pModernBitmap = 0;
         if( pModernBitmap == 0 )
@@ -2358,12 +2318,9 @@ void SdrCropHdl::CreateB2dIAObject()
     {
         sal_Bool bIsFineHdl(pHdlList->IsFineHdl());
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        sal_Bool bIsHighContrast(rStyleSettings.GetHighContrastMode());
         int nHdlSize = pHdlList->GetHdlSize();
-        if( bIsHighContrast )
-            nHdlSize = 4;
 
-        const BitmapEx aHandlesBitmap( GetHandlesBitmap( bIsFineHdl, bIsHighContrast ) );
+        const BitmapEx aHandlesBitmap( GetHandlesBitmap( bIsFineHdl ) );
         BitmapEx aBmpEx1( GetBitmapForHandle( aHandlesBitmap, nHdlSize ) );
 
         for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
@@ -2390,17 +2347,17 @@ void SdrCropHdl::CreateB2dIAObject()
                         const sal_uInt32 nBlinkTime = sal::static_int_cast<sal_uInt32>(rStyleSettings.GetCursorBlinkTime());
 
                         pOverlayObject = new ::sdr::overlay::OverlayAnimatedBitmapEx(aPosition, aBmpEx1, aBmpEx2, nBlinkTime,
-                            (UINT16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
-                            (UINT16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
-                            (UINT16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
-                            (UINT16)(aBmpEx2.GetSizePixel().Height() - 1) >> 1);
+                            (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
+                            (sal_uInt16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
+                            (sal_uInt16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
+                            (sal_uInt16)(aBmpEx2.GetSizePixel().Height() - 1) >> 1);
                     }
                     else
                     {
                         // create centered handle as default
                         pOverlayObject = new ::sdr::overlay::OverlayBitmapEx(aPosition, aBmpEx1,
-                            (UINT16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
-                            (UINT16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1);
+                            (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
+                            (sal_uInt16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1);
                     }
 
                     // OVERLAYMANAGER

@@ -39,7 +39,7 @@
 #include <com/sun/star/style/CharacterProperties.idl>
 #endif
 
-#ifndef __com_sun_star_chart_Chart3DBarPropertiesidl__
+#ifndef __com_sun_star_chart_Chart3DBarProperties_idl__
 #include <com/sun/star/chart/Chart3DBarProperties.idl>
 #endif
 

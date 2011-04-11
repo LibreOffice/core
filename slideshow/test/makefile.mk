@@ -39,6 +39,8 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 # --- Common ----------------------------------------------------------
 
 # BEGIN target1 -------------------------------------------------------
@@ -53,7 +55,6 @@ SHL1STDLIBS= 	$(SALLIB)		 \
                 $(BASEGFXLIB)	 \
                 $(CPPUHELPERLIB) \
                 $(CPPULIB)		 \
-                                $(TESTSHL2LIB)    \
                 $(CPPUNITLIB)	 \
                 $(UNOTOOLSLIB)	 \
                 $(VCLLIB)
@@ -68,6 +69,8 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = export.map
+SHL1RPATH = NONE
+
 # END target1 ----------------------------------------------------------
 
 # BEGIN target2 --------------------------------------------------------

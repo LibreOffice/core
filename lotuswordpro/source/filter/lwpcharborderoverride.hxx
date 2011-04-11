@@ -76,6 +76,8 @@ public:
 
     virtual ~LwpCharacterBorderOverride();
 
+    virtual LwpCharacterBorderOverride* clone() const;
+
     void Read(LwpObjectStream* pStrm);
 
     void Override(LwpCharacterBorderOverride* pOther);
@@ -99,6 +101,12 @@ public:
     inline void RevertMargins();
     inline void RevertAboveWidth();
     inline void RevertBelowWidth();
+
+protected:
+    LwpCharacterBorderOverride(LwpCharacterBorderOverride const& rOther);
+
+private:
+    LwpCharacterBorderOverride& operator=(LwpCharacterBorderOverride const& rOther); // not implemented
 
 private:
     LwpBorderStuff* m_pBorderStuff;

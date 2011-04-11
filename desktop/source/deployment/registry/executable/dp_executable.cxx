@@ -72,6 +72,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         bool getFileAttributes(sal_uInt64& out_Attributes);
         bool isUrlTargetInExtension();
+
     public:
         inline ExecutablePackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
@@ -84,7 +85,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     };
     friend class ExecutablePackageImpl;
 
-    typedef ::std::hash_map< OUString, Reference<XInterface>,
+    typedef ::boost::unordered_map< OUString, Reference<XInterface>,
                              ::rtl::OUStringHash > t_string2object;
 
     // PackageRegistryBackend
@@ -93,8 +94,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv );
 
     void addDataToDb(OUString const & url);
-    bool isRegisteredInDb(OUString const & url);
-    void deleteDataFromDb(OUString const & url);
+    bool hasActiveEntry(OUString const & url);
+    void revokeEntryFromDb(OUString const & url);
 
     Reference<deployment::XPackageTypeInfo> m_xExecutableTypeInfo;
     std::auto_ptr<ExecutableBackendDb> m_backendDb;
@@ -105,6 +106,9 @@ public:
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException);
 
     using PackageRegistryBackend::disposing;
 };
@@ -118,8 +122,7 @@ BackendImpl::BackendImpl(
                                 OUSTR("application/vnd.sun.star.executable"),
                                 OUSTR(""),
                                 OUSTR("Executable"),
-                                RID_IMG_COMPONENT,
-                                RID_IMG_COMPONENT_HC ) )
+                                RID_IMG_COMPONENT ) )
 {
     if (!transientMode())
     {
@@ -135,19 +138,19 @@ void BackendImpl::addDataToDb(OUString const & url)
         m_backendDb->addEntry(url);
 }
 
-bool BackendImpl::isRegisteredInDb(OUString const & url)
+void BackendImpl::revokeEntryFromDb(OUString const & url)
 {
-    bool ret = false;
     if (m_backendDb.get())
-        ret = m_backendDb->getEntry(url);
-    return ret;
+        m_backendDb->revokeEntry(url);
 }
 
-void BackendImpl::deleteDataFromDb(OUString const & url)
+bool BackendImpl::hasActiveEntry(OUString const & url)
 {
     if (m_backendDb.get())
-        m_backendDb->removeEntry(url);
+        return m_backendDb->hasActiveEntry(url);
+    return false;
 }
+
 
 // XPackageRegistry
 Sequence< Reference<deployment::XPackageTypeInfo> >
@@ -155,6 +158,14 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
     return Sequence<Reference<deployment::XPackageTypeInfo> >(
         & m_xExecutableTypeInfo, 1);
+}
+
+void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException)
+{
+    if (m_backendDb.get())
+        m_backendDb->removeEntry(url);
 }
 
 // PackageRegistryBackend
@@ -193,7 +204,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     return Reference<deployment::XPackage>();
 }
 
-//##############################################################################
 
 
 // Package
@@ -218,7 +228,7 @@ BackendImpl::ExecutablePackageImpl::isRegistered_(
     ::rtl::Reference<dp_misc::AbortChannel> const &,
     Reference<XCommandEnvironment> const & )
 {
-    bool registered = getMyBackend()->isRegisteredInDb(getURL());
+    bool registered = getMyBackend()->hasActiveEntry(getURL());
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
             sal_True /* IsPresent */,
                 beans::Ambiguous<sal_Bool>(
@@ -249,7 +259,8 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
             else if (getMyBackend()->m_context.equals(OUSTR("shared")))
                 attributes |= (osl_File_Attribute_OwnExe | osl_File_Attribute_GrpExe
                                | osl_File_Attribute_OthExe);
-            else if (!getMyBackend()->m_context.equals(OUSTR("bundled")))
+            else if (!getMyBackend()->m_context.equals(OUSTR("bundled"))
+                && !getMyBackend()->m_context.equals(OUSTR("bundled_prereg")))
                 //Bundled extension are required to be in the properly
                 //installed. That is an executable must have the right flags
                 OSL_ASSERT(0);
@@ -262,7 +273,7 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
     }
     else
     {
-        getMyBackend()->deleteDataFromDb(getURL());
+        getMyBackend()->revokeEntryFromDb(getURL());
     }
 }
 
@@ -278,7 +289,8 @@ bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension()
         sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$UNO_USER_PACKAGES_CACHE"));
     else if (getMyBackend()->m_context.equals(OUSTR("shared")))
         sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$UNO_SHARED_PACKAGES_CACHE"));
-    else if (getMyBackend()->m_context.equals(OUSTR("bundled")))
+    else if (getMyBackend()->m_context.equals(OUSTR("bundled"))
+        || getMyBackend()->m_context.equals(OUSTR("bundled_prereg")))
         sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$BUNDLED_EXTENSIONS"));
     else
         OSL_ASSERT(0);
@@ -313,7 +325,6 @@ bool BackendImpl::ExecutablePackageImpl::getFileAttributes(sal_uInt64& out_Attri
     return bSuccess;
 }
 
-//##############################################################################
 
 
 } // anon namespace

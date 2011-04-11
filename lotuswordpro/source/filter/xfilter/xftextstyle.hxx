@@ -58,12 +58,6 @@
  * Style for <text:p> or <text:h> or <text:span>
  * Now we have only font attributes.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-26 create this file.
- * 2005-01-04 Change the static style id.
- * 2005-01-20 Get rid of the static id.
- ************************************************************************/
 #ifndef     _XFTEXTSTYLE_HXX
 #define     _XFTEXTSTYLE_HXX
 

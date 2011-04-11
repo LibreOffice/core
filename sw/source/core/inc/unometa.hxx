@@ -85,7 +85,7 @@ protected:
     virtual void SAL_CALL AttachImpl(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > & xTextRange,
-            const USHORT nWhich)
+            const sal_uInt16 nWhich)
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException);
 

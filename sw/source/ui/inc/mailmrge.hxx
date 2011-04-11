@@ -117,7 +117,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     const String&   rDBName;
     const String&   rTableName;
 
-    USHORT          nMergeType;
+    sal_uInt16          nMergeType;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >       m_aSelection;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
 
@@ -146,7 +146,7 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0);
     ~SwMailMergeDlg();
 
-    inline USHORT   GetMergeType() { return nMergeType; }
+    inline sal_uInt16   GetMergeType() { return nMergeType; }
     const ::rtl::OUString& GetSaveFilter() const {return m_sSaveFilter;}
     inline const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const { return m_aSelection; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
@@ -166,7 +166,7 @@ public:
     SwMailMergeCreateFromDlg(Window* pParent);
     ~SwMailMergeCreateFromDlg();
 
-    BOOL    IsThisDocument() const {return aThisDocRB.IsChecked();}
+    sal_Bool    IsThisDocument() const {return aThisDocRB.IsChecked();}
 };
 
 class SwMailMergeFieldConnectionsDlg : public ModalDialog
@@ -184,7 +184,7 @@ public:
     SwMailMergeFieldConnectionsDlg(Window* pParent);
     ~SwMailMergeFieldConnectionsDlg();
 
-    BOOL    IsUseExistingConnections() const {return aUseExistingRB.IsChecked();}
+    sal_Bool    IsUseExistingConnections() const {return aUseExistingRB.IsChecked();}
 };
 
 #endif

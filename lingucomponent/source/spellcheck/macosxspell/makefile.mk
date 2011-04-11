@@ -39,7 +39,7 @@ USE_DEFFILE=TRUE
 .INCLUDE : settings.mk
 
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
-HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
+HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell -DHUNSPELL_STATIC
 .ENDIF
 
 CXXFLAGS += $(HUNSPELL_CFLAGS)
@@ -90,3 +90,11 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 dummy:
     @echo " Nothing to build for GUIBASE=$(GUIBASE)"
 .ENDIF
+
+ALLTAR : $(MISC)/MacOSXSpell.component
+
+$(MISC)/MacOSXSpell.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt MacOSXSpell.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt MacOSXSpell.component

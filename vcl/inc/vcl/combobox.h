@@ -29,11 +29,11 @@
 #ifndef _SV_COMBOBOX_H
 #define _SV_COMBOBOX_H
 
-#define COMBOBOX_APPEND             ((USHORT)0xFFFF)
-#define COMBOBOX_ENTRY_NOTFOUND     ((USHORT)0xFFFF)
-#define COMBOBOX_ERROR              ((USHORT)0xFFFF)
+#define COMBOBOX_APPEND             ((sal_uInt16)0xFFFF)
+#define COMBOBOX_ENTRY_NOTFOUND     ((sal_uInt16)0xFFFF)
+#define COMBOBOX_ERROR              ((sal_uInt16)0xFFFF)
 
-#define COMBOBOX_USERDRAW_SELECTED  ((USHORT)0x0001)
+#define COMBOBOX_USERDRAW_SELECTED  ((sal_uInt16)0x0001)
 
 #endif  // _SV_COMBOBOX_H
 

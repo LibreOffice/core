@@ -90,7 +90,7 @@ ScVbaFileDialog::Show( ) throw (::com::sun::star::uno::RuntimeException)
     {
         m_sSelectedItems.realloc(0);
 
-        const ::rtl::OUString sServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FilePicker" );
+        const ::rtl::OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ));
 
         Reference< lang::XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
         // Set the type of File Picker Dialog: TemplateDescription::FILEOPEN_SIMPLE.
@@ -103,13 +103,13 @@ ScVbaFileDialog::Show( ) throw (::com::sun::star::uno::RuntimeException)
             xFilePicker->setMultiSelectionMode(sal_True);
             if ( xFilePicker->execute() )
             {
-                sal_Bool bUseXFilePicker2 = sal_False;
+                sal_Bool bUseXFilePicker2 = false;
                 Reference< lang::XServiceInfo > xServiceInfo( xFilePicker, UNO_QUERY );
                 if (xServiceInfo.is())
                 {
                     rtl::OUString sImplName = xServiceInfo->getImplementationName();
-                    if (sImplName.equalsAscii("com.sun.star.comp.fpicker.VistaFileDialog") ||
-                        sImplName.equalsAscii("com.sun.star.ui.dialogs.SalGtkFilePicker"))
+                    if (sImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.fpicker.VistaFileDialog")) ||
+                        sImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.ui.dialogs.SalGtkFilePicker")))
                     {
                         bUseXFilePicker2 = sal_True;
                     }

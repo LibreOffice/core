@@ -107,9 +107,9 @@ private:
     ESelection          GetSelection() const;
     void                SetSelection(const ESelection &rSel);
 
-    BOOL                IsEmpty() const;
-    BOOL                IsSelected() const;
-    BOOL                IsAllSelected() const;
+    sal_Bool                IsEmpty() const;
+    sal_Bool                IsSelected() const;
+    sal_Bool                IsAllSelected() const;
     void                Cut();
     void                Copy();
     void                Paste();
@@ -118,7 +118,7 @@ private:
     void                MarkError(const Point &rPos);
     void                SelNextMark();
     void                SelPrevMark();
-    BOOL                HasMark(const String &rText) const;
+    sal_Bool                HasMark(const String &rText) const;
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 };

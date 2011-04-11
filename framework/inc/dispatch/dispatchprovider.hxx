@@ -125,9 +125,6 @@ class DispatchProvider  :   // interfaces
         /// different dispatcher to handle special dispatch calls, protocols or URLs (they will be created on demand.)
         css::uno::Reference< css::frame::XDispatch > m_xMenuDispatcher     ;
         css::uno::Reference< css::frame::XDispatch > m_xHelpAgentDispatcher;
-/*      css::uno::Reference< css::frame::XDispatch > m_xBlankDispatcher    ;
-        css::uno::Reference< css::frame::XDispatch > m_xSelfDispatcher     ;
-        css::uno::Reference< css::frame::XDispatch > m_xDefaultDispatcher  ;*/
         /// cache of some other dispatch provider which are registered inside configuration to handle special URL protocols
         HandlerCache m_aProtocolHandlerCache;
 

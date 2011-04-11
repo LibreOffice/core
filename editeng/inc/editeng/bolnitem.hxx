@@ -41,24 +41,26 @@
 
 
 /*
-[Beschreibung]
-Dieses Item transportiert eine SvxBorderLine.
+[Description]
+This Item transports a editeng::SvxBorderLine.
 */
 
-class SvxBorderLine;
+namespace editeng {
+    class SvxBorderLine;
+}
 
 class EDITENG_DLLPUBLIC SvxLineItem : public SfxPoolItem
 {
 public:
     TYPEINFO();
 
-    SvxLineItem( const USHORT nId );
+    SvxLineItem( const sal_uInt16 nId );
     SvxLineItem( const SvxLineItem& rCpy );
     ~SvxLineItem();
     SvxLineItem &operator=( const SvxLineItem& rLine );
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -66,16 +68,16 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
     virtual bool             ScaleMetrics( long nMult, long nDiv );
     virtual bool             HasMetrics() const;
 
-    const   SvxBorderLine*  GetLine     () const { return pLine; }
-    void                    SetLine     ( const SvxBorderLine *pNew );
+    const   editeng::SvxBorderLine*  GetLine     () const { return pLine; }
+    void                    SetLine     ( const editeng::SvxBorderLine *pNew );
 
 private:
-    SvxBorderLine*  pLine;
+    editeng::SvxBorderLine*  pLine;
 };
 
 

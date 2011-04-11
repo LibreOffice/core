@@ -57,16 +57,16 @@ typedef long (*PSTUB)( void*, void* );
     long Class::Method( ArgType ArgName )
 
 #define IMPL_STUB(Class, Method, ArgType) \
-    long __EXPORT Class::LinkStub##Method( void* pThis, void* pCaller) \
+    long Class::LinkStub##Method( void* pThis, void* pCaller) \
     { \
         return ((Class*)pThis )->Method( (ArgType)pCaller ); \
     }
 
 #define IMPL_STATIC_LINK( Class, Method, ArgType, ArgName ) \
-    long __EXPORT Class::Method( Class* pThis, ArgType ArgName )
+    long Class::Method( Class* pThis, ArgType ArgName )
 
 #define IMPL_STATIC_LINK_NOINSTANCE( Class, Method, ArgType, ArgName ) \
-    long __EXPORT Class::Method( Class*, ArgType ArgName )
+    long Class::Method( Class*, ArgType ArgName )
 
 #define LINK( Inst, Class, Member ) \
     Link( (Class*)Inst, (PSTUB)&Class::LinkStub##Member )
@@ -113,14 +113,14 @@ public:
 
     long        Call( void* pCaller ) const;
 
-    BOOL        IsSet() const;
-    BOOL        operator !() const;
+    sal_Bool        IsSet() const;
+    sal_Bool        operator !() const;
 
-    BOOL        operator==( const Link& rLink ) const;
-    BOOL        operator!=( const Link& rLink ) const
+    sal_Bool        operator==( const Link& rLink ) const;
+    sal_Bool        operator!=( const Link& rLink ) const
                     { return !(Link::operator==( rLink )); }
-    BOOL        operator<( const Link& rLink ) const
-                    { return ((ULONG)rLink.pFunc < (ULONG)pFunc); }
+    sal_Bool        operator<( const Link& rLink ) const
+                    { return ((sal_uIntPtr)rLink.pFunc < (sal_uIntPtr)pFunc); }
 };
 
 inline Link::Link()
@@ -140,20 +140,20 @@ inline long Link::Call(void *pCaller) const
     return pFunc ? (*pFunc)(pInst, pCaller) : 0;
 }
 
-inline BOOL Link::IsSet() const
+inline sal_Bool Link::IsSet() const
 {
     if ( pFunc )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline BOOL Link::operator !() const
+inline sal_Bool Link::operator !() const
 {
     if ( !pFunc )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 #endif  // _LINK_HXX

@@ -55,8 +55,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
-
+using ::rtl::OUString;
 
 #define SERVICENAME "com.sun.star.registry.NestedRegistry"
 #define IMPLNAME       "com.sun.star.comp.stoc.NestedRegistry"
@@ -1324,7 +1323,7 @@ void SAL_CALL NestedRegistryImpl::close(  )
     }
 /*
     throw InvalidRegistryException(
-            OUString::createFromAscii("the 'close' method is not specified for a nested registry"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("the 'close' method is not specified for a nested registry")),
             Reference< XInterface >() );
 */
 }

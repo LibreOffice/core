@@ -30,10 +30,10 @@
 #include "precompiled_sw.hxx"
 
 #include "swabstdlg.hxx"
-#include "swuilib.hxx"
 
 #include <osl/module.hxx>
 #include <tools/string.hxx>
+#include <vcl/unohelp.hxx>
 
 typedef SwAbstractDialogFactory* (__LOADONCALLAPI *SwFuncPtrCreateDialogFactory)();
 
@@ -43,7 +43,8 @@ SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
 {
     SwFuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( RTL_CONSTASCII_USTRINGPARAM( DLL_NAME ) ) ) )
+    static const ::rtl::OUString sLibName(::vcl::unohelper::CreateLibraryName("swui", sal_True));
+    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( sLibName ) ) )
         fp = ( SwAbstractDialogFactory* (__LOADONCALLAPI*)() )
             aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")));
     if ( fp )

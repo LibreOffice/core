@@ -36,23 +36,15 @@
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <calbck.hxx>
-#include <errhdl.hxx>       // Fuer die inline ASSERT
-#include <error.h>          // Fuer die inline ASSERT
 #include <hints.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <stringhash.hxx>
-// --> OD 2008-02-21 #refactorlists#
-class SwNodeNum;
 #include <SwNumberTreeTypes.hxx>
-// <--
-// --> OD 2008-02-19 #refactorlists#
 #include <vector>
-class SwTxtFmtColl;
-// <--
-// --> OD 2008-07-08 #i91400#
-class IDocumentListsAccess;
-// <--
 
+class SwTxtFmtColl;
+class IDocumentListsAccess;
+class SwNodeNum;
 class Font;
 class SvxBrushItem;
 class SvxNumRule;
@@ -61,7 +53,7 @@ class SwDoc;
 class SwFmtVertOrient;
 class SwTxtNode;
 
-const sal_Unicode cBulletChar   = 0x2022;   // Charakter fuer Aufzaehlungen
+const sal_Unicode cBulletChar = 0x2022; // Character for lists.
 
 class SW_DLLPUBLIC SwNumFmt : public SvxNumberFormat, public SwClient
 {
@@ -73,6 +65,9 @@ class SW_DLLPUBLIC SwNumFmt : public SvxNumberFormat, public SwClient
     using SvxNumberFormat::operator ==;
     using SvxNumberFormat::operator !=;
 
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+
 public:
     SwNumFmt();
     SwNumFmt( const SwNumFmt& );
@@ -82,12 +77,12 @@ public:
 
     SwNumFmt& operator=( const SwNumFmt& );
 
-    BOOL operator==( const SwNumFmt& ) const;
-    BOOL operator!=( const SwNumFmt& r ) const { return !(*this == r); }
+    sal_Bool operator==( const SwNumFmt& ) const;
+    sal_Bool operator!=( const SwNumFmt& r ) const { return !(*this == r); }
 
-    SwCharFmt* GetCharFmt() const { return (SwCharFmt*)pRegisteredIn; }
+    SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
     void SetCharFmt( SwCharFmt* );
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
+    void ForgetCharFmt();
 
     virtual void            SetCharFmtName(const String& rSet);
     virtual const String&   GetCharFmtName()const;
@@ -98,19 +93,18 @@ public:
     virtual sal_Int16   GetVertOrient() const;
     const SwFmtVertOrient*      GetGraphicOrientation() const;
 
-    BOOL IsEnumeration() const; // #i22362#
-    BOOL IsItemize() const; // #i29560#
+    sal_Bool IsEnumeration() const; // #i22362#
+    sal_Bool IsItemize() const; // #i29560#
 };
 
 class SwPaM;
 enum SwNumRuleType { OUTLINE_RULE = 0, NUM_RULE = 1, RULE_END = 2 };
 class SW_DLLPUBLIC SwNumRule
 {
-// --> OD 2008-02-19 #refactorlists#
+
 public:
     typedef std::vector< SwTxtNode* > tTxtNodeList;
     typedef std::vector< SwTxtFmtColl* > tParagraphStyleList;
-// <--
 private:
     friend void _FinitCore();
 
@@ -120,116 +114,82 @@ private:
 #endif
 
     static SwNumFmt* aBaseFmts [ RULE_END ][ MAXLEVEL ];
-    static USHORT aDefNumIndents[ MAXLEVEL ];
-    // --> OD 2008-02-11 #newlistlevelattrs#
+    static sal_uInt16 aDefNumIndents[ MAXLEVEL ];
     // default list level properties for position-and-space mode LABEL_ALIGNMENT
     static SwNumFmt* aLabelAlignmentBaseFmts [ RULE_END ][ MAXLEVEL ];
-    // <--
-    static USHORT nRefCount;
+    static sal_uInt16 nRefCount;
     static char* pDefOutlineName;
 
     SwNumFmt* aFmts[ MAXLEVEL ];
 
-    /** container for associated text nodes
-
-    */
-    // --> OD 2008-02-19 #refactorlists#
-//    SwTxtNodeTable* pTxtNodeList;
+    /** container for associated text nodes */
     tTxtNodeList maTxtNodeList;
-    // <--
 
-    /** container for associated paragraph styles
-
-        OD 2008-03-03 #refactorlists#
-    */
+    /** container for associated paragraph styles */
     tParagraphStyleList maParagraphStyleList;
 
-    // #i36749#
-    /**
-       hash_map containing "name->rule" relation
-     */
-    std::hash_map<String, SwNumRule *, StringHash> * pNumRuleMap;
+    /** boost::unordered_map containing "name->rule" relation */
+    boost::unordered_map<String, SwNumRule *, StringHash> * pNumRuleMap;
 
     String sName;
     SwNumRuleType eRuleType;
-    USHORT nPoolFmtId;      // Id-fuer "automatich" erzeugte NumRules
-    USHORT nPoolHelpId;     // HelpId fuer diese Pool-Vorlage
-    BYTE nPoolHlpFileId;    // FilePos ans Doc auf die Vorlagen-Hilfen
-    BOOL bAutoRuleFlag : 1;
-    BOOL bInvalidRuleFlag : 1;
-    BOOL bContinusNum : 1;  // Fortlaufende Numerierung - ohne Ebenen
-    BOOL bAbsSpaces : 1;    // die Ebenen repraesentieren absol. Einzuege
+    sal_uInt16 nPoolFmtId;      // Id-for NumRules created "automatically"
+    sal_uInt16 nPoolHelpId;     // HelpId for this Pool-style.
+    sal_uInt8 nPoolHlpFileId;   // FilePos at Doc on style helps.
+    sal_Bool bAutoRuleFlag : 1;
+    sal_Bool bInvalidRuleFlag : 1;
+    sal_Bool bContinusNum : 1;  // Continuous numbering without levels.
+    sal_Bool bAbsSpaces : 1;    // Levels represent absolute indents.
     bool mbCountPhantoms;
 
-    // --> OD 2008-02-11 #newlistlevelattrs#
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
-    // <--
-
-    // --> OD 2008-04-03 #refactorlists#
     String msDefaultListId;
-    // <--
-
-    // forbidden and not implemented.
-    SwNumRule();
 
 public:
-    // --> OD 2008-02-08 #newlistlevelattrs#
     // add parameter <eDefaultNumberFormatPositionAndSpaceMode>
     SwNumRule( const String& rNm,
                const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode,
                SwNumRuleType = NUM_RULE,
-               BOOL bAutoFlg = TRUE );
+               sal_Bool bAutoFlg = sal_True );
 
     SwNumRule( const SwNumRule& );
     ~SwNumRule();
 
     SwNumRule& operator=( const SwNumRule& );
-    BOOL operator==( const SwNumRule& ) const;
-    BOOL operator!=( const SwNumRule& r ) const { return !(*this == r); }
+    sal_Bool operator==( const SwNumRule& ) const;
+    sal_Bool operator!=( const SwNumRule& r ) const { return !(*this == r); }
 
-    const SwNumFmt* GetNumFmt( USHORT i ) const;
-    const SwNumFmt& Get( USHORT i ) const;
+    const SwNumFmt* GetNumFmt( sal_uInt16 i ) const;
+    const SwNumFmt& Get( sal_uInt16 i ) const;
 
-    void Set( USHORT i, const SwNumFmt* );
-    void Set( USHORT i, const SwNumFmt& );
-    String MakeNumString( const SwNodeNum&, BOOL bInclStrings = TRUE,
-                            BOOL bOnlyArabic = FALSE ) const;
-    // --> OD 2005-10-17 #126238#
+    void Set( sal_uInt16 i, const SwNumFmt* );
+    void Set( sal_uInt16 i, const SwNumFmt& );
+    String MakeNumString( const SwNodeNum&, sal_Bool bInclStrings = sal_True,
+                            sal_Bool bOnlyArabic = sal_False ) const;
     // - add optional parameter <_nRestrictToThisLevel> in order to
     //   restrict returned string to this level.
     String MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
-                          const BOOL bInclStrings = TRUE,
-                          const BOOL bOnlyArabic = FALSE,
+                          const sal_Bool bInclStrings = sal_True,
+                          const sal_Bool bOnlyArabic = sal_False,
                           const unsigned int _nRestrictToThisLevel = MAXLEVEL ) const;
-    // <--
-    // --> OD 2007-08-24 #i81002#
     String MakeRefNumString( const SwNodeNum& rNodeNum,
                              const bool bInclSuperiorNumLabels = false,
                              const sal_uInt8 nRestrictInclToThisLevel = 0 ) const;
-    // <--
 
     /** Returns list of associated text nodes.
 
-       OD 2008-02-19 #refactorlists#
-
        @return list of associated text nodes
     */
-//    const SwTxtNodeTable * GetTxtNodeList() const { return pTxtNodeList; }
     void GetTxtNodeList( SwNumRule::tTxtNodeList& rTxtNodeList ) const;
     SwNumRule::tTxtNodeList::size_type GetTxtNodeListSize() const;
 
-    // --> OD 2008-02-19 #refactorlists#
     void AddTxtNode( SwTxtNode& rTxtNode );
     void RemoveTxtNode( SwTxtNode& rTxtNode );
-    // <--
 
-    // --> OD 2008-03-03 #refactorlists#
     SwNumRule::tParagraphStyleList::size_type GetParagraphStyleListSize() const;
     void AddParagraphStyle( SwTxtFmtColl& rTxtFmtColl );
     void RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl );
-    // <--
 
-    // --> OD 2008-04-03 #refactorlists#
     inline void SetDefaultListId( const String sDefaultListId )
     {
         msDefaultListId = sDefaultListId;
@@ -238,91 +198,79 @@ public:
     {
         return msDefaultListId;
     }
-    // <--
-    // #i36749#
     /**
        Register this rule in a "name->numrule" map.
 
        @param pNumRuleMap      map to register in
      */
     void SetNumRuleMap(
-                std::hash_map<String, SwNumRule *, StringHash>* pNumRuleMap );
+                boost::unordered_map<String, SwNumRule *, StringHash>* pNumRuleMap );
 
     static char* GetOutlineRuleName() { return pDefOutlineName; }
 
-    static USHORT GetNumIndent( BYTE nLvl );
-    static USHORT GetBullIndent( BYTE nLvl );
+    static sal_uInt16 GetNumIndent( sal_uInt8 nLvl );
+    static sal_uInt16 GetBullIndent( sal_uInt8 nLvl );
 
     SwNumRuleType GetRuleType() const           { return eRuleType; }
     void SetRuleType( SwNumRuleType eNew )      { eRuleType = eNew;
-                                                  bInvalidRuleFlag = TRUE; }
+                                                  bInvalidRuleFlag = sal_True; }
 
-    // eine Art Copy-Constructor, damit die Num-Formate auch an den
-    // richtigen CharFormaten eines Dokumentes haengen !!
-    // (Kopiert die NumFormate und returnt sich selbst)
+    // A kind of copy-constructor to make sure the num formats are
+    // attached to the correctCharFormats of a document!!
+    // (Copies the NumFormats and returns itself).
     SwNumRule& CopyNumRule( SwDoc*, const SwNumRule& );
 
-    // testet ob die CharFormate aus dem angegeben Doc sind und kopiert
-    // die gegebenfalls
+    // Tests whether the CharFormats are from the given doc
+    // and copies them if appropriate.
     void CheckCharFmts( SwDoc* pDoc );
 
     const String& GetName() const       { return sName; }
-    // --> OD 2008-07-08 #i91400#
+
     void SetName( const String& rNm,
-                  IDocumentListsAccess& rDocListAccess ); // #i36749#
-    // <--
+                  IDocumentListsAccess& rDocListAccess );
 
-    BOOL IsAutoRule() const             { return bAutoRuleFlag; }
-    void SetAutoRule( BOOL bFlag )      { bAutoRuleFlag = bFlag; }
+    sal_Bool IsAutoRule() const             { return bAutoRuleFlag; }
+    void SetAutoRule( sal_Bool bFlag )      { bAutoRuleFlag = bFlag; }
 
-    BOOL IsInvalidRule() const          { return bInvalidRuleFlag; }
-    void SetInvalidRule( BOOL bFlag );
+    sal_Bool IsInvalidRule() const          { return bInvalidRuleFlag; }
+    void SetInvalidRule( sal_Bool bFlag );
 
-    BOOL IsContinusNum() const          { return bContinusNum; }
-    void SetContinusNum( BOOL bFlag )   { bContinusNum = bFlag; }
+    sal_Bool IsContinusNum() const          { return bContinusNum; }
+    void SetContinusNum( sal_Bool bFlag )   { bContinusNum = bFlag; }
 
-    BOOL IsAbsSpaces() const            { return bAbsSpaces; }
-    void SetAbsSpaces( BOOL bFlag )     { bAbsSpaces = bFlag; }
+    sal_Bool IsAbsSpaces() const            { return bAbsSpaces; }
+    void SetAbsSpaces( sal_Bool bFlag )     { bAbsSpaces = bFlag; }
 
-    // #115901#
-    BOOL IsOutlineRule() const { return eRuleType == OUTLINE_RULE; }
+    sal_Bool IsOutlineRule() const { return eRuleType == OUTLINE_RULE; }
 
     bool IsCountPhantoms() const;
     void SetCountPhantoms(bool bCountPhantoms);
 
-    // erfragen und setzen der Poolvorlagen-Id's
-    USHORT GetPoolFmtId() const         { return nPoolFmtId; }
-    void SetPoolFmtId( USHORT nId )     { nPoolFmtId = nId; }
+    // Query and set PoolFormat IDs.
+    sal_uInt16 GetPoolFmtId() const         { return nPoolFmtId; }
+    void SetPoolFmtId( sal_uInt16 nId )     { nPoolFmtId = nId; }
 
-    // erfragen und setzen der Hilfe-Id's fuer die Document-Vorlagen
-    USHORT GetPoolHelpId() const        { return nPoolHelpId; }
-    void SetPoolHelpId( USHORT nId )    { nPoolHelpId = nId; }
-    BYTE GetPoolHlpFileId() const       { return nPoolHlpFileId; }
-    void SetPoolHlpFileId( BYTE nId )   { nPoolHlpFileId = nId; }
+    // Query and set Help-IDs for document styles.
+    sal_uInt16 GetPoolHelpId() const        { return nPoolHelpId; }
+    void SetPoolHelpId( sal_uInt16 nId )    { nPoolHelpId = nId; }
+    sal_uInt8 GetPoolHlpFileId() const      { return nPoolHlpFileId; }
+    void SetPoolHlpFileId( sal_uInt8 nId )  { nPoolHlpFileId = nId; }
 
     void        SetSvxRule(const SvxNumRule&, SwDoc* pDoc);
     SvxNumRule  MakeSvxNumRule() const;
 
-    // #i23726#, #i23725#
-    // --> OD 2008-06-09 #i90078#
-    // refactoring: provide certain method for certain purpose
-//    void        Indent(short aAmount, int nLevel = -1,
-//                       int nReferenceLevel = -1, BOOL bRelative = TRUE,
-//                       BOOL bFirstLine = TRUE, BOOL bCheckGtZero = TRUE);
     // change indent of all list levels by given difference
     void ChangeIndent( const short nDiff );
     // set indent of certain list level to given value
     void SetIndent( const short nNewIndent,
-                    const USHORT nListLevel );
+                    const sal_uInt16 nListLevel );
     // set indent of first list level to given value and change other list level's
     // indents accordingly
     void SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent );
-    // <--
 
     void Validate();
 };
 
-// --> OD 2006-06-27 #b6440955#
 // namespace for static functions and methods for numbering and bullets
 namespace numfunc
 {
@@ -334,7 +282,6 @@ namespace numfunc
 
     /** determine if default bullet font is user defined
 
-        OD 2008-06-06 #i63395#
         The default bullet font is user defined, if it is given in the user configuration
 
         @author OD
@@ -351,22 +298,18 @@ namespace numfunc
 
         @author OD
     */
-    sal_Unicode GetBulletChar( BYTE nLevel );
+    sal_Unicode GetBulletChar( sal_uInt8 nLevel );
 
     /** configuration, if at first position of the first list item the <TAB>-key
         increased the indent of the complete list or only demotes this list item.
         The same for <SHIFT-TAB>-key at the same position for decreasing the
         indent of the complete list or only promotes this list item.
 
-        OD 2007-10-01 #b6600435#
-
         @author OD
     */
     sal_Bool ChangeIndentOnTabAtFirstPosOfFirstListItem();
 
     /**
-        OD 2008-06-06 #i89178#
-
         @author OD
     */
     SvxNumberFormat::SvxNumPositionAndSpaceMode GetDefaultPositionAndSpaceMode();

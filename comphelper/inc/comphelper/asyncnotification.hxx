@@ -132,8 +132,9 @@ namespace comphelper
         virtual oslInterlockedCount SAL_CALL acquire();
         virtual oslInterlockedCount SAL_CALL release();
 
-        /// creates (starts) the thread
         using AsyncEventNotifier_TBASE::create;
+        using AsyncEventNotifier_TBASE::join;
+        using AsyncEventNotifier_TBASE::getIdentifier;
 
         using AsyncEventNotifier_TBASE::operator new;
         using AsyncEventNotifier_TBASE::operator delete;

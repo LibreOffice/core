@@ -36,10 +36,8 @@
 
 #include "com/sun/star/io/XSeekable.hpp"
 
-#ifdef TEST_DBHELP
-#include <osl/time.h>
-#endif
-
+#include "osl/file.hxx"
+#include "osl/thread.hxx"
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -49,13 +47,9 @@ namespace berkeleydbproxy {
 //----------------------------------------------------------------------------
 namespace db_internal
 {
-    // static void raise_error(int dberr, const char * where);
-
     static inline int check_error(int dberr, const char * where)
     {
         (void)where;
-
-        // if (dberr) raise_error(dberr,where);
         return dberr;
     }
 }
@@ -92,204 +86,6 @@ bool DBHelp::implReadLenAndData( const char* pData, int& riPos, DBData& rValue )
     return bSuccess;
 }
 
-#ifdef TEST_DBHELP
-
-typedef std::pair< rtl::OString, rtl::OString >     KeyValPair;
-typedef std::vector< KeyValPair >                   KeyValPairVector;
-
-void testWriteKeyValue( FILE* pFile, const KeyValPair& rKeyValPair )
-{
-    if( pFile == NULL )
-        return;
-    char cLF = 10;
-
-    const rtl::OString& aKeyStr = rKeyValPair.first;
-    const rtl::OString& aValueStr = rKeyValPair.second;
-    int nKeyLen = aKeyStr.getLength();
-    int nValueLen = aValueStr.getLength();
-    fprintf( pFile, "%x ", nKeyLen );
-    if( nKeyLen > 0 )
-        fwrite( aKeyStr.getStr(), 1, nKeyLen, pFile );
-    fprintf( pFile, " %x ", nValueLen );
-    if( nValueLen > 0 )
-        fwrite( aValueStr.getStr(), 1, nValueLen, pFile );
-    fprintf( pFile, "%c", cLF );
-}
-
-bool DBHelp::testAgainstDb( const rtl::OString& fileName, bool bOldDbAccess )
-{
-    bool bSuccess = true;
-
-    KeyValPairVector avKeyValPair;
-
-    rtl::OString aOutFileName = fileName;
-    aOutFileName += "_TestOut";
-    if( bOldDbAccess )
-        aOutFileName += "_Old";
-    FILE* pFile = fopen( aOutFileName.getStr(), "wb" );
-
-    // Get all values
-    Db table;
-    if( 0 == table.open( 0,fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
-    {
-        bool first = true;
-
-        Dbc* cursor = 0;
-        table.cursor( 0,&cursor,0 );
-        Dbt key_,data;
-        key_.set_flags( DB_DBT_MALLOC ); // Initially the cursor must allocate the necessary memory
-        data.set_flags( DB_DBT_MALLOC );
-
-        while( cursor && DB_NOTFOUND != cursor->get( &key_,&data,DB_NEXT ) )
-        {
-            rtl::OString keyword( static_cast<sal_Char*>(key_.get_data()),
-                                  key_.get_size() );
-            rtl::OString value( static_cast<sal_Char*>(data.get_data()),
-                                data.get_size() );
-
-            KeyValPair aPair( keyword, value );
-            avKeyValPair.push_back( aPair );
-            if( pFile != NULL )
-                testWriteKeyValue( pFile, aPair );
-
-            if( first )
-            {
-                key_.set_flags( DB_DBT_REALLOC );
-                data.set_flags( DB_DBT_REALLOC );
-                first = false;
-            }
-        }
-
-        if( cursor ) cursor->close();
-    }
-    table.close( 0 );
-
-    // TEST
-    DBData aDBData;
-    Db tableTest;
-    Dbt data;
-
-    int nOkCount = 0;
-    int nErrCount = 0;
-
-    bool bTestSuccess;
-    const char* pTestReadData = NULL;
-    int nTestReadDataSize = 0;
-
-    sal_uInt32 starttime = osl_getGlobalTimer();
-    sal_uInt32 afterfirsttime = starttime;
-
-    if( pFile != NULL )
-    {
-        if( bOldDbAccess )
-            fprintf( pFile, "\nTesting old access:\n" );
-        else
-            fprintf( pFile, "\nTesting new access:\n" );
-    }
-
-    KeyValPairVector::const_iterator it;
-    bool bFirst = true;
-    for( it = avKeyValPair.begin() ; it != avKeyValPair.end() ; ++it )
-    {
-        const KeyValPair& rKeyValPair = *it;
-
-        const rtl::OString& aKeyStr = rKeyValPair.first;
-        const rtl::OString& aValueStr = rKeyValPair.second;
-        int nKeyLen = aKeyStr.getLength();
-        int nValueLen = aValueStr.getLength();
-
-        const sal_Char* ptr = aValueStr.getStr();
-
-        bTestSuccess = false;
-        pTestReadData = NULL;
-        nTestReadDataSize = 0;
-        if( bOldDbAccess )
-        {
-            if( bFirst )
-            {
-                if( tableTest.open( 0,fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
-                {
-                    if( pFile != NULL )
-                        fprintf( pFile, "Cannot open database\n" );
-
-                    break;
-                }
-            }
-
-            Dbt key( static_cast< void* >( const_cast< sal_Char* >( aKeyStr.getStr() ) ), aKeyStr.getLength() );
-            int err = tableTest.get( 0, &key, &data, 0 );
-            if( err == 0 )
-            {
-                bTestSuccess = true;
-                pTestReadData = static_cast< sal_Char* >( data.get_data() );
-                nTestReadDataSize = data.get_size();
-            }
-        }
-        else
-        {
-            bTestSuccess = getValueForKey( aKeyStr, aDBData );
-            if( bTestSuccess )
-            {
-                pTestReadData = aDBData.getData();
-                nTestReadDataSize = aDBData.getSize();
-            }
-        }
-        if( bFirst )
-        {
-            afterfirsttime = osl_getGlobalTimer();
-            bFirst = false;
-        }
-        int nError = 0;
-        if( bTestSuccess && pTestReadData != NULL )
-        {
-            int nCmp = memcmp( ptr, pTestReadData, nValueLen );
-            if( nCmp == 0 )
-                ++nOkCount;
-            else
-                nError = 1;
-
-            if( nValueLen != nTestReadDataSize )
-                nError = 2;
-        }
-        else
-            nError = 3;
-
-        if( nError != 0 )
-        {
-            bSuccess = false;
-            ++nErrCount;
-
-            if( pFile != NULL )
-            {
-                fprintf( pFile, "ERROR, not found:\n" );
-                testWriteKeyValue( pFile, rKeyValPair );
-                fprintf( pFile, "\nError Code: %d\n", nError );
-            }
-        }
-    }
-    tableTest.close( 0 );
-
-    sal_uInt32 endtime = osl_getGlobalTimer();
-    double dDiffTime = (endtime-starttime) / 1000.0;
-    double dDiffFirstTime = (afterfirsttime-starttime) / 1000.0;
-    if( pFile != NULL )
-    {
-        int nCount = avKeyValPair.size();
-        fprintf( pFile, "%d key/values in total, read %d correctly, %d errors\n",
-            nCount, nOkCount, nErrCount );
-        fprintf( pFile, "Time taken: %g s (First access %g s)\n", dDiffTime, dDiffFirstTime );
-        fprintf( pFile, "Average time per access: %g s\n", dDiffTime / nCount );
-    }
-
-    if( pFile != NULL )
-        fclose( pFile );
-
-    return bSuccess;
-}
-
-#endif
-
-
 void DBHelp::createHashMap( bool bOptimizeForPerformance )
 {
     releaseHashMap();
@@ -306,11 +102,11 @@ void DBHelp::createHashMap( bool bOptimizeForPerformance )
         m_pStringToValPosMap = new StringToValPosMap();
     }
 
-    Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileName );
+    Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileURL );
     if( xIn.is() )
     {
         Sequence< sal_Int8 > aData;
-        sal_Int32 nSize = m_xSFA->getSize( m_aFileName );
+        sal_Int32 nSize = m_xSFA->getSize( m_aFileURL );
         sal_Int32 nRead = xIn->readBytes( aData, nSize );
 
         const char* pData = (const char*)aData.getConstArray();
@@ -389,7 +185,7 @@ bool DBHelp::getValueForKey( const rtl::OString& rKey, DBData& rValue )
             int iValuePos = rValPair.first;
             int nValueLen = rValPair.second;
 
-            Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileName );
+            Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileURL );
             if( xIn.is() )
             {
                 Reference< XSeekable > xXSeekable( xIn, UNO_QUERY );
@@ -437,9 +233,9 @@ bool DBHelp::startIteration( void )
 {
     bool bSuccess = false;
 
-    sal_Int32 nSize = m_xSFA->getSize( m_aFileName );
+    sal_Int32 nSize = m_xSFA->getSize( m_aFileURL );
 
-    Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileName );
+    Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileURL );
     if( xIn.is() )
     {
         m_nItRead = xIn->readBytes( m_aItData, nSize );
@@ -520,6 +316,19 @@ int Db::open(DB_TXN *txnid,
     return db_internal::check_error( err,"Db::open" );
 }
 
+int Db::open(DB_TXN *txnid,
+             ::rtl::OUString const & fileURL,
+             DBTYPE type,
+             u_int32_t flags,
+             int mode)
+{
+    ::rtl::OUString ouPath;
+    ::osl::FileBase::getSystemPathFromFileURL(fileURL, ouPath);
+    const ::rtl::OString sPath = ::rtl::OUStringToOString(ouPath, osl_getThreadTextEncoding());
+    return open(txnid, sPath.getStr(), 0, type, flags, mode);
+}
+
+
 
 int Db::get(DB_TXN *txnid, Dbt *key, Dbt *data, u_int32_t flags)
 {
@@ -592,28 +401,6 @@ Dbt::Dbt(void *data_arg, u_int32_t size_arg)
     this->set_size(size_arg);
 }
 
-/*
-Dbt::Dbt(const Dbt & other)
-{
-    using namespace std;
-    const DBT *otherpod = &other;
-    DBT *thispod = this;
-    memcpy(thispod, otherpod, sizeof *thispod);
-}
-
-Dbt& Dbt::operator = (const Dbt & other)
-{
-    if (this != &other)
-    {
-        using namespace std;
-        const DBT *otherpod = &other;
-        DBT *thispod = this;
-        memcpy(thispod, otherpod, sizeof *thispod);
-    }
-    return *this;
-}
-*/
-
 Dbt::~Dbt()
 {
 }
@@ -643,24 +430,6 @@ void Dbt::set_flags(u_int32_t value)
     this->flags = value;
 }
 
-//----------------------------------------------------------------------------
-/*
-void db_internal::raise_error(int dberr, const char * where)
-{
-    if (!where) where = "<unknown>";
-
-    const char * dberrmsg = db_strerror(dberr);
-    if (!dberrmsg || !*dberrmsg) dberrmsg = "<unknown DB error>";
-
-    rtl::OString msg = where;
-    msg += ": ";
-    msg += dberrmsg;
-
-    throw DbException(msg);
-}
-*/
-
-//----------------------------------------------------------------------------
 } // namespace ecomp
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

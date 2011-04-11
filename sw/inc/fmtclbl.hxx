@@ -37,18 +37,18 @@
 class SW_DLLPUBLIC SwFmtNoBalancedColumns : public SfxBoolItem
 {
 public:
-    SwFmtNoBalancedColumns( BOOL bFlag = FALSE )
+    SwFmtNoBalancedColumns( sal_Bool bFlag = sal_False )
         : SfxBoolItem( RES_COLUMNBALANCE, bFlag ) {}
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 };
 
 
-inline const SwFmtNoBalancedColumns &SwAttrSet::GetBalancedColumns(BOOL bInP) const
+inline const SwFmtNoBalancedColumns &SwAttrSet::GetBalancedColumns(sal_Bool bInP) const
     { return (const SwFmtNoBalancedColumns&)Get( RES_COLUMNBALANCE, bInP ); }
 
-inline const SwFmtNoBalancedColumns &SwFmt::GetBalancedColumns(BOOL bInP) const
+inline const SwFmtNoBalancedColumns &SwFmt::GetBalancedColumns(sal_Bool bInP) const
     { return aSet.GetBalancedColumns( bInP ); }
 
 #endif

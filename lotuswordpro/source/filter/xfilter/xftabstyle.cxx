@@ -57,10 +57,6 @@
  * @file
  * Tab style for paragraph.include tab offset and tab char properties.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-27 create this file.
- ************************************************************************/
 #include    "xftabstyle.hxx"
 
 XFTabStyle::XFTabStyle()

@@ -354,7 +354,7 @@ public class InterfaceContainer implements Cloneable
     }
 
     /**
-     * Searches for the first occurence of the given argument, testing
+     * Searches for the first occurrence of the given argument, testing
      * for equality using the <tt>equals</tt> method.
      *
      * @param   elem   an object.

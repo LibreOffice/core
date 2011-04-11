@@ -110,6 +110,7 @@
 #include <vcl/stdtext.hxx>
 #include "UITools.hxx"
 #include "TokenWriter.hxx"
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
@@ -160,16 +161,16 @@ Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiS
 //------------------------------------------------------------------------------
 ::rtl::OUString SbaXGridControl::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.dbu.SbaXGridControl");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dbu.SbaXGridControl"));
 }
 
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(3);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.control.InteractionGridControl");
-    aSupported[1] = ::rtl::OUString::createFromAscii("com.sun.star.form.control.GridControl");
-    aSupported[2] = ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControl");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.control.InteractionGridControl"));
+    aSupported[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.control.GridControl"));
+    aSupported[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControl"));
     return aSupported;
 }
 DBG_NAME(SbaXGridControl );
@@ -251,14 +252,11 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
 {
     FmXGridControl::createPeer(rToolkit, rParentPeer);
 
-    DBG_ASSERT(/*(0 == m_nPeerCreationLevel) && */!mbCreatingPeer, "FmXGridControl::createPeer : recursion!");
+    OSL_ENSURE(!mbCreatingPeer, "FmXGridControl::createPeer : recursion!");
         // see the base class' createPeer for a comment on this
-        // 14.05.2001 - 86836 - frank.schoenheit@germany.sun.com
 
     // TODO: why the hell this whole class does not use any mutex?
 
-//  if (0 == m_nPeerCreationLevel)
-    {
         Reference< ::com::sun::star::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
         for (   StatusMultiplexerArray::iterator aIter = m_aStatusMultiplexer.begin();
                 aIter != m_aStatusMultiplexer.end();
@@ -267,7 +265,6 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
             if ((*aIter).second && (*aIter).second->getLength())
                 xDisp->addStatusListener((*aIter).second, (*aIter).first);
         }
-    }
 }
 
 //---------------------------------------------------------------------------------------
@@ -423,10 +420,10 @@ Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType) throw (RuntimeExce
 //---------------------------------------------------------------------------------------
 Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
-    if  (   (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/BrowserAttribs")))
-        ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/RowHeight")))
-        ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/ColumnAttribs")))
-        ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/ColumnWidth")))
+    if  (   (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/BrowserAttribs"))))
+        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/RowHeight"))))
+        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/ColumnAttribs"))))
+        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/ColumnWidth"))))
         )
     {
         return (::com::sun::star::frame::XDispatch*)this;
@@ -463,13 +460,13 @@ IMPL_LINK( SbaXGridPeer, OnDispatchEvent, void*, /*NOTINTERESTEDIN*/ )
 SbaXGridPeer::DispatchType SbaXGridPeer::classifyDispatchURL( const URL& _rURL )
 {
     DispatchType eURLType = dtUnknown;
-    if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/BrowserAttribs" ) )
+    if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GridSlots/BrowserAttribs" ) ) )
         eURLType = dtBrowserAttribs;
-    else if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/RowHeight" ) )
+    else if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GridSlots/RowHeight" ) ) )
         eURLType = dtRowHeight;
-    else if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/ColumnAttribs" ) )
+    else if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GridSlots/ColumnAttribs" ) ) )
         eURLType = dtColumnAttribs;
-    else if ( _rURL.Complete.equalsAscii( ".uno:GridSlots/ColumnWidth" ) )
+    else if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GridSlots/ColumnWidth" ) ) )
         eURLType = dtColumnWidth;
     return eURLType;
 }
@@ -509,17 +506,17 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     const PropertyValue* pArgs = aArgs.getConstArray();
     for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArgs)
     {
-        if (pArgs->Name == ::rtl::OUString::createFromAscii("ColumnViewPos"))
+        if (pArgs->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnViewPos")))
         {
             nColId = pGrid->GetColumnIdFromViewPos(::comphelper::getINT16(pArgs->Value));
             break;
         }
-        if (pArgs->Name == ::rtl::OUString::createFromAscii("ColumnModelPos"))
+        if (pArgs->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnModelPos")))
         {
             nColId = pGrid->GetColumnIdFromModelPos(::comphelper::getINT16(pArgs->Value));
             break;
         }
-        if (pArgs->Name == ::rtl::OUString::createFromAscii("ColumnId"))
+        if (pArgs->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnId")))
         {
             nColId = ::comphelper::getINT16(pArgs->Value);
             break;
@@ -547,7 +544,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
 
             case dtColumnAttribs:
             {
-                DBG_ASSERT(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
+                OSL_ENSURE(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
                 if (nColId != -1)
                     break;
                 pGrid->SetColAttrs(nColId);
@@ -556,7 +553,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
 
             case dtColumnWidth:
             {
-                DBG_ASSERT(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
+                OSL_ENSURE(nColId != -1, "SbaXGridPeer::dispatch : invalid parameter !");
                 if (nColId != -1)
                     break;
                 pGrid->SetColWidth(nColId);
@@ -675,10 +672,6 @@ void SbaGridHeader::MouseButtonDown( const MouseEvent& _rMEvt )
             // the base class will start a column move here, which we don't want to allow
             // (at the moment. If we store relative positions with the columns, we can allow column moves ....)
 
-//          sal_uInt16  nPos(0);
-//          sal_uInt16  nHitTest = ImplHitTest( _rMEvt.GetPosPixel(), mnMouseOff, nPos );
-//          if (!nHitTest & HEAD_HITTEST_DIVIDER)
-//              return;
         }
 
     FmGridHeader::MouseButtonDown(_rMEvt);
@@ -818,7 +811,7 @@ SbaGridControl::SbaGridControl(Reference< XMultiServiceFactory > _rM,
     :FmGridControl(_rM,pParent, _pPeer, nBits)
     ,m_pMasterListener(NULL)
     ,m_nAsyncDropEvent(0)
-    ,m_nCurrentActionColId((USHORT)-1)
+    ,m_nCurrentActionColId((sal_uInt16)-1)
     ,m_bActivatingForDrop(sal_False)
 {
     DBG_CTOR(SbaGridControl ,NULL);
@@ -863,7 +856,7 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
         rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, aNewItems.GetItemText(ID_BROWSER_ROWHEIGHT), 0, nPos++);
         rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, aNewItems.GetHelpId(ID_BROWSER_ROWHEIGHT));
         rMenu.InsertSeparator(nPos++);
-    } // if (!IsReadOnlyDB())
+    }
 
     if ( GetSelectRowCount() > 0 )
     {
@@ -958,7 +951,7 @@ void SbaGridControl::SetRowHeight()
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"setPropertyValue: PROPERTY_ROW_HEIGHT throws a exception");
+            OSL_FAIL("setPropertyValue: PROPERTY_ROW_HEIGHT throws a exception");
         }
     }
 }
@@ -994,13 +987,13 @@ void SbaGridControl::SetBrowserAttrs()
     try
     {
         PropertyValue aArg;
-        aArg.Name = ::rtl::OUString::createFromAscii("IntrospectedObject");
+        aArg.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IntrospectedObject"));
         aArg.Value <<= xGridModel;
         Sequence< Any > aDialogArgs(1);
         aDialogArgs[0] <<= aArg;
 
         Reference< XInterface > xDialog = getServiceManager()->createInstanceWithArguments(
-            ::rtl::OUString::createFromAscii("com.sun.star.form.ControlFontDialog"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.ControlFontDialog")),
             aDialogArgs
             );
         if (!xDialog.is())
@@ -1116,11 +1109,11 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
                 xEmptyReturn.set(xCol->getPropertyValue(PROPERTY_BOUNDFIELD),UNO_QUERY);
         }
         else
-            OSL_ENSURE(0,"SbaGridControl::getField getColumns returns NULL or ModelPos is > than count!");
+            OSL_FAIL("SbaGridControl::getField getColumns returns NULL or ModelPos is > than count!");
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"SbaGridControl::getField Exception occured!");
+        OSL_FAIL("SbaGridControl::getField Exception occurred!");
     }
 
     return xEmptyReturn;
@@ -1206,14 +1199,14 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         // check which kind of dragging has to be initiated
         if  (   bHitHandle                          //  the handle column
                                                     // AND
-            &&  (   GetSelectRowCount()                     //  at least one row is selected
-                                                        // OR
-                ||  (   (nRow >= 0)                         //  a row below the header
-                    &&  !bCurrentRowVirtual                 //  we aren't appending a new record
-                    &&  (nRow != GetCurrentPos())           //  a row which is not the current one
-                    )                                   // OR
-                ||  (   (0 == GetSelectRowCount())          // no rows selected
-                    &&  (-1 == nRow)                        // hit the header
+            &&  (   GetSelectRowCount()             //  at least one row is selected
+                                                    // OR
+                ||  (   (nRow >= 0)                 //  a row below the header
+                    &&  !bCurrentRowVirtual         //  we aren't appending a new record
+                    &&  (nRow != GetCurrentPos())   //  a row which is not the current one
+                    )                               // OR
+                ||  (   (0 == GetSelectRowCount())  // no rows selected
+                    &&  (-1 == nRow)                // hit the header
                     )
                 )
             )
@@ -1273,7 +1266,7 @@ void SbaGridControl::Command(const CommandEvent& rEvt)
 void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 {
     Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
-    DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoColumnDrag : invalid data source !");
+    OSL_ENSURE(xDataSource.is(), "SbaGridControl::DoColumnDrag : invalid data source !");
 
     Reference< XPropertySet > xAffectedCol;
     Reference< XPropertySet > xAffectedField;
@@ -1296,7 +1289,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaGridControl::DoColumnDrag : something went wrong while getting the column");
+        OSL_FAIL("SbaGridControl::DoColumnDrag : something went wrong while getting the column");
     }
     if (0 == sField.getLength())
         return;
@@ -1309,7 +1302,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 // -----------------------------------------------------------------------
 void SbaGridControl::CopySelectedRowsToClipboard()
 {
-    DBG_ASSERT( GetSelectRowCount() > 0, "SbaGridControl::CopySelectedRowsToClipboard: invalid call!" );
+    OSL_ENSURE( GetSelectRowCount() > 0, "SbaGridControl::CopySelectedRowsToClipboard: invalid call!" );
     implTransferSelectedRows( (sal_Int16)FirstSelectedRow(), true );
 }
 
@@ -1323,7 +1316,7 @@ void SbaGridControl::DoRowDrag( sal_Int16 nRowPos )
 void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag )
 {
     Reference< XPropertySet > xForm( getDataSource(), UNO_QUERY );
-    DBG_ASSERT( xForm.is(), "SbaGridControl::implTransferSelectedRows: invalid form!" );
+    OSL_ENSURE( xForm.is(), "SbaGridControl::implTransferSelectedRows: invalid form!" );
 
     // build the sequence of numbers of selected rows
     Sequence< Any > aSelectedRows;
@@ -1379,7 +1372,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaGridControl::DoFieldDrag : could not retrieve the cell's contents !");
+        OSL_FAIL("SbaGridControl::DoFieldDrag : could not retrieve the cell's contents !");
         return;
     }
 
@@ -1397,8 +1390,6 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
         {
             switch (_aType.mnSotId)
             {
-//              case SOT_FORMAT_RTF:                    // RTF data descriptions
-//              case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
                 case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command
@@ -1540,7 +1531,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
         if (IsCurrentAppending())
             --nCorrectRowCount; // the current data record doesn't really exist, we are appending a new one
 
-        DBG_ASSERT((nCol != BROWSER_INVALIDID) && (nRow < nCorrectRowCount), "SbaGridControl::Drop : dropped on an invalid position !");
+        OSL_ENSURE((nCol != BROWSER_INVALIDID) && (nRow < nCorrectRowCount), "SbaGridControl::Drop : dropped on an invalid position !");
             // AcceptDrop should have caught this
 
         // from now we work with ids instead of positions

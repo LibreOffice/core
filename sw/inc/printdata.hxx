@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SW_PRINTDATA_HXX
-#define _SW_PRINTDATA_HXX
+#ifndef SW_PRINTDATA_HXX
+#define SW_PRINTDATA_HXX
 
 
 #include <sal/types.h>
@@ -47,7 +47,7 @@ class SwViewOption;
 class OutputDevice;
 class SwViewOptionAdjust_Impl;
 class SwPrtOptions;
-class SwWrtShell;
+class ViewShell;
 class SfxViewShell;
 
 // forward declarations
@@ -71,9 +71,9 @@ public:
              bPrintLeftPages, bPrintRightPages, bPrintReverse, bPrintProspect,
              bPrintProspectRTL,
              bPrintSingleJobs, bPaperFromSetup,
-             // --> FME 2005-12-13 #b6354161# Print empty pages
+             // Print empty pages
              bPrintEmptyPages,
-             // <--
+
              // #i56195# no field update while printing mail merge documents
              bUpdateFieldsInPrinting,
              bModified;
@@ -207,7 +207,7 @@ public:
     bool IsPrintWithBlackTextColor() const      { return getBoolValue( "PrintBlackFonts",      m_rDefaultPrintData.bPrintBlackFont ); }
     sal_Int16 GetPrintPostItsType() const       { return static_cast< sal_Int16 >(getIntValue( "PrintAnnotationMode", m_rDefaultPrintData.nPrintPostIts )); }
     bool IsPaperFromSetup() const               { return getBoolValue( "PrintPaperFromSetup",  m_rDefaultPrintData.bPaperFromSetup ); }
-    bool IsPrintReverse() const                 { return false; /*handled by print dialog now*/ /*getBoolValue( "PrintReversed",        m_rDefaultPrintData.bPrintReverse );*/ }
+    bool IsPrintReverse() const                 { return false; /*handled by print dialog now*/ }
 
     bool IsPrintLeftPages() const;
     bool IsPrintRightPages() const;
@@ -249,7 +249,7 @@ class SwRenderData
     // the view options to be applied for printing
     SwViewOptionAdjust_Impl *   m_pViewOptionAdjust;
 
-    SwPrtOptions *              m_pPrtOptions;
+    SwPrintData *               m_pPrtOptions;
 
 public:
 
@@ -263,21 +263,21 @@ public:
     ~SwRenderData();
 
 
-    bool HasPostItData() const  { return m_pPostItShell != 0 && m_pPostItDoc != 0 && m_pPostItShell != 0; }
+    bool HasPostItData() const  { return m_pPostItShell != 0 && m_pPostItDoc != 0; }
     void CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
     void DeletePostItData();
 
     bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != 0; }
-    bool NeedNewViewOptionAdjust( const SwWrtShell& ) const;
-    void ViewOptionAdjustStart( SwWrtShell &rSh, const SwViewOption &rViewOptions );
-    void ViewOptionAdjust( const SwPrtOptions *pPrtOptions );
+    bool NeedNewViewOptionAdjust( const ViewShell& ) const;
+    void ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions );
+    void ViewOptionAdjust( SwPrintData const* const pPrtOptions );
     void ViewOptionAdjustStop();
 
     bool HasSwPrtOptions() const    { return m_pPrtOptions != 0; }
-    void SetSwPrtOptions( SwPrtOptions * pOpt )     { m_pPrtOptions = pOpt; }
-    const SwPrtOptions *    GetSwPrtOptions() const { return m_pPrtOptions; }
-    SwPrtOptions &          GetSwPrtOptionsRef()    { return *m_pPrtOptions; }
-    void MakeSwPrtOptions( SwPrtOptions &rOptions, const SwDocShell *pDocShell,
+    void SetSwPrtOptions(SwPrintData *const pOpt)   { m_pPrtOptions = pOpt; }
+    SwPrintData const*  GetSwPrtOptions() const     { return m_pPrtOptions; }
+    SwPrintData &       GetSwPrtOptionsRef()        { return *m_pPrtOptions; }
+    void MakeSwPrtOptions( SwPrintData & rOptions, const SwDocShell *pDocShell,
             const SwPrintUIOptions *pOpt, const SwRenderData *pData, bool bIsPDFExport );
 
 
@@ -321,6 +321,18 @@ public:
 
 ////////////////////////////////////////////////////////////
 
-#endif  //_SW_PRINTDATA_HXX
+// last remnants of swprtopt.hxx:
+#define POSTITS_NONE    0
+#define POSTITS_ONLY    1
+#define POSTITS_ENDDOC  2
+#define POSTITS_ENDPAGE 3
+
+namespace sw {
+
+void InitPrintOptionsFromApplication(SwPrintData & o_rData, bool const bWeb);
+
+} // namespace sw
+
+#endif  // SW_PRINTDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

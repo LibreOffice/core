@@ -50,8 +50,11 @@
 
 #include <smart/com/sun/star/test/XSimpleTest.hxx>
 
-using namespace rtl;
 using namespace usr;
+
+using ::rtl::OString;
+using ::rtl::OWStringToOString;
+using ::rtl::OStringToOWString;
 
 
 // Needed to switch on solaris threads
@@ -84,15 +87,10 @@ int __LOADONCALLAPI main (int argc, char **argv)
     try {
         // Create registration service
         XInterfaceRef x = xSMgr->createInstance(
-            UString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
+            UString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.registry.ImplementationRegistration" )) );
         x->queryInterface( XImplementationRegistration::getSmartUik() , xReg );
 
-/*      x = xSMgr->createInstance( L"stardiv.uno.repos.SimpleRegistry" );
-        OSL_ASSERT( x.is() );
-        x->queryInterface( XSimpleRegistry::getSmartUik() , xSimpleReg );
-        OSL_ASSERT( xSimpleReg.is() );
-        xSimpleReg->open( L"testcomp.rdb" , FALSE , TRUE );
-*/  }
+    }
     catch( Exception& e ) {
         printf( "%s\n" , OWStringToOString( e.getName() , CHARSET_SYSTEM ).getStr() );
         exit(1);
@@ -108,7 +106,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
             UString aDllName( OStringToOWString( szBuf, CHARSET_SYSTEM ) );
 
             xReg->registerImplementation(
-                UString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                UString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" )),
                 aDllName,
                 xSimpleReg );
         }
@@ -129,7 +127,7 @@ int __LOADONCALLAPI main (int argc, char **argv)
         ORealDynamicLoader::computeModuleName( sTestName.getStr() , szBuf, 1024 );
         UString aDllName = OStringToOWString( szBuf, CHARSET_SYSTEM );
         xReg->registerImplementation(
-            UString::createFromAscii( "com.sun.star.loader.SharedLibrary" ) ,
+            UString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" )) ,
             aDllName,
             xSimpleReg );
     }

@@ -39,12 +39,12 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFmtFollowTextFlow : public SfxBoolItem
 {
 public:
-    SwFmtFollowTextFlow( BOOL bFlag = FALSE )
+    SwFmtFollowTextFlow( sal_Bool bFlag = sal_False )
         : SfxBoolItem( RES_FOLLOW_TEXT_FLOW, bFlag ) {}
 
     TYPEINFO();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -56,10 +56,10 @@ public:
 
 #if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx; revisit with gcc3
-inline const SwFmtFollowTextFlow &SwAttrSet::GetFollowTextFlow(BOOL bInP) const
+inline const SwFmtFollowTextFlow &SwAttrSet::GetFollowTextFlow(sal_Bool bInP) const
     { return (const SwFmtFollowTextFlow&)Get( RES_FOLLOW_TEXT_FLOW, bInP ); }
 
-inline const SwFmtFollowTextFlow &SwFmt::GetFollowTextFlow(BOOL bInP) const
+inline const SwFmtFollowTextFlow &SwFmt::GetFollowTextFlow(sal_Bool bInP) const
     { return aSet.GetFollowTextFlow( bInP ); }
 #endif
 

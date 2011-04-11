@@ -57,7 +57,7 @@ published enum ShadeMode
 
     //-------------------------------------------------------------------------
 
-    /** With <const>SMOOTH</const> shading, the colors of the lit vertiecs is
+    /** With <const>SMOOTH</const> shading, the colors of the lit vertices is
         interpolated.
      */
     SMOOTH,

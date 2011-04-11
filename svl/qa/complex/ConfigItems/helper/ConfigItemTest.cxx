@@ -27,8 +27,8 @@
  ************************************************************************/
 
 #include "HistoryOptTest.hxx"
-#include "AccessibilityOptTest.hxx"
-#include "PrintOptTest.hxx"
+// #include "AccessibilityOptTest.hxx"
+// #include "PrintOptTest.hxx"
 #include "UserOptTest.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -47,13 +47,11 @@ namespace css = ::com::sun::star;
 namespace svl{
 
 //=============================================================================
-static const ::rtl::OUString PROP_TEST                  = ::rtl::OUString::createFromAscii("Test");
-static const ::rtl::OUString TEST_PICKLIST              = ::rtl::OUString::createFromAscii("checkPicklist");
-static const ::rtl::OUString TEST_URLHISTORY            = ::rtl::OUString::createFromAscii("checkURLHistory");
-static const ::rtl::OUString TEST_HELPBOOKMARKS         = ::rtl::OUString::createFromAscii("checkHelpBookmarks");
-static const ::rtl::OUString TEST_ACCESSIBILITYOPTIONS  = ::rtl::OUString::createFromAscii("checkAccessibilityOptions");
-static const ::rtl::OUString TEST_PRINTOPTIONS          = ::rtl::OUString::createFromAscii("checkPrintOptions");
-static const ::rtl::OUString TEST_USEROPTIONS           = ::rtl::OUString::createFromAscii("checkUserOptions");
+static const ::rtl::OUString PROP_TEST                  (RTL_CONSTASCII_USTRINGPARAM("Test"));
+static const ::rtl::OUString TEST_PICKLIST              (RTL_CONSTASCII_USTRINGPARAM("checkPicklist"));
+static const ::rtl::OUString TEST_URLHISTORY            (RTL_CONSTASCII_USTRINGPARAM("checkURLHistory"));
+static const ::rtl::OUString TEST_HELPBOOKMARKS         (RTL_CONSTASCII_USTRINGPARAM("checkHelpBookmarks"));
+static const ::rtl::OUString TEST_USEROPTIONS           (RTL_CONSTASCII_USTRINGPARAM("checkUserOptions"));
 
 //=============================================================================
 class ConfigItemTest : public ::cppu::WeakImplHelper2< css::task::XJob         ,
@@ -137,16 +135,16 @@ css::uno::Any SAL_CALL ConfigItemTest::execute(const css::uno::Sequence< css::be
         HistoryOptTest aOptTest;
         aOptTest.checkHelpBookmarks();
     }
-    else if (sTest.equals(TEST_ACCESSIBILITYOPTIONS))
-    {
-        AccessibilityOptTest aOptTest;
-        aOptTest.impl_checkAccessibilityOptions();
-    }
-    else if (sTest.equals(TEST_PRINTOPTIONS))
-    {
-        PrintOptTest aOptTest;
-        aOptTest.impl_checkPrint();
-    }
+//  else if (sTest.equals(TEST_ACCESSIBILITYOPTIONS))
+//  {
+//      AccessibilityOptTest aOptTest;
+//      aOptTest.impl_checkAccessibilityOptions();
+//  }
+//  else if (sTest.equals(TEST_PRINTOPTIONS))
+//  {
+//         PrintOptTest aOptTest;
+//         aOptTest.impl_checkPrint();
+//  }
     else if (sTest.equals(TEST_USEROPTIONS))
     {
         UserOptTest aOptTest;
@@ -189,14 +187,14 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL ConfigItemTest::getSupportedServi
 //=============================================================================
 ::rtl::OUString SAL_CALL ConfigItemTest::st_getImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.svl.ConfigItemTest");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.svl.ConfigItemTest"));
 }
 
 //=============================================================================
 css::uno::Sequence< ::rtl::OUString > SAL_CALL ConfigItemTest::st_getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lServices(1);
-    lServices[0] = ::rtl::OUString::createFromAscii("com.sun.star.test.ConfigItems");
+    lServices[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.test.ConfigItems"));
     return lServices;
 }
 

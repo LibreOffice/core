@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <malloc.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <rtl/alloc.h>
 #include <osl/mutex.hxx>
@@ -65,7 +65,7 @@ namespace
         // pCallStack: ret, [return ptr], this, params
         char * pTopStack = (char *)(pCallStack + 0);
         char * pCppStack = pTopStack;
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "cpp2uno_call\n");
 #endif
         // return
@@ -81,14 +81,14 @@ namespace
         {
             if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
             {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "simple return\n");
 #endif
                 pUnoReturn = pRegisterReturn; // direct way for simple types
             }
             else // complex return via ptr (pCppReturn)
             {
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "complex return\n");
 #endif
                 pCppReturn = (void *)r8;
@@ -190,18 +190,18 @@ namespace
         uno_Any aUnoExc; // Any will be constructed by callee
         uno_Any * pUnoExc = &aUnoExc;
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "before dispatch\n");
 #endif
         // invoke uno dispatch call
         (*pThis->getUnoI()->pDispatcher)(
           pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "after dispatch\n");
 #endif
 
-        // in case an exception occured...
+        // in case an exception occurred...
         if (pUnoExc)
         {
             // destruct temporary in/inout params
@@ -222,7 +222,7 @@ namespace
             // is here for dummy
             return typelib_TypeClass_VOID;
         }
-        else // else no exception occured...
+        else // else no exception occurred...
         {
             // temporary params
             for ( ; nTempIndizes--; )
@@ -277,7 +277,7 @@ namespace
         sal_Int64 * pRegisterReturn /* space for register return */ )
     {
     void ** pCallStack = (void**)(sp);
-#ifdef CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "cpp_mediate with\n");
     fprintf(stderr, "%x %x\n", nFunctionIndex, nVtableOffset);
     fprintf(stderr, "and %x %x\n", pCallStack, pRegisterReturn);
@@ -300,7 +300,7 @@ namespace
         if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
         {
             throw RuntimeException(
-                OUString::createFromAscii("illegal vtable index!"),
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
                 (XInterface *)pCppI );
         }
 
@@ -399,7 +399,7 @@ namespace
         default:
         {
             throw RuntimeException(
-                OUString::createFromAscii("no member description found!"),
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
                 (XInterface *)pCppI );
             // is here for dummy
             eRet = typelib_TypeClass_VOID;
@@ -513,9 +513,6 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 typelib_InterfaceMethodTypeDescription *pMethodTD =
                     reinterpret_cast<
                         typelib_InterfaceMethodTypeDescription * >(member);
-
-                bool issimple = bridges::cpp_uno::shared::isSimpleType(
-                    pMethodTD->pReturnTypeRef);
 
                 code = codeSnippet(code, functionOffset++, vtableOffset);
                 break;

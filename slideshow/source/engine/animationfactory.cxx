@@ -592,6 +592,13 @@ namespace slideshow
                 bool                               mbAnimationStarted;
             };
 
+            //Current c++0x draft (apparently) has std::identity, but not operator()
+            template<typename T> struct SGI_identity : public std::unary_function<T,T>
+            {
+                T& operator()(T& x) const { return x; }
+                const T& operator()(const T& x) const { return x; }
+            };
+
             /** Function template wrapper around GenericAnimation template
 
                 @tpl AnimationBase
@@ -608,7 +615,7 @@ namespace slideshow
             {
                 return ::boost::shared_ptr< AnimationBase >(
                     new GenericAnimation< AnimationBase,
-                                          ::std::identity< typename AnimationBase::ValueType > >(
+                                          SGI_identity< typename AnimationBase::ValueType > >(
                                               rShapeManager,
                                               nFlags,
                                               pIsValid,
@@ -616,8 +623,8 @@ namespace slideshow
                                               pGetValue,
                                               pSetValue,
                                               // no modification necessary, use identity functor here
-                                              ::std::identity< typename AnimationBase::ValueType >(),
-                                              ::std::identity< typename AnimationBase::ValueType >() ) );
+                                              SGI_identity< typename AnimationBase::ValueType >(),
+                                              SGI_identity< typename AnimationBase::ValueType >() ) );
             }
 
             class Scaler
@@ -686,7 +693,7 @@ namespace slideshow
 
                 if( !rAny.hasValue() )
                 {
-                    OSL_ENSURE( false, "getDefault(): cannot get requested shape property" );
+                    OSL_FAIL( "getDefault(): cannot get requested shape property" );
                     OSL_TRACE( "getDefault(): cannot get '%s' shape property",
                                ::rtl::OUStringToOString( rPropertyName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -698,7 +705,7 @@ namespace slideshow
 
                     if( !(rAny >>= aValue) )
                     {
-                        OSL_ENSURE( false, "getDefault(): cannot extract requested shape property" );
+                        OSL_FAIL( "getDefault(): cannot extract requested shape property" );
                         OSL_TRACE( "getDefault(): cannot extract '%s' shape property",
                                    ::rtl::OUStringToOString( rPropertyName,
                                                              RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -717,7 +724,7 @@ namespace slideshow
 
                 if( !rAny.hasValue() )
                 {
-                    OSL_ENSURE( false, "getDefault(): cannot get requested shape color property" );
+                    OSL_FAIL( "getDefault(): cannot get requested shape color property" );
                     OSL_TRACE( "getDefault(): cannot get '%s' shape color property",
                                ::rtl::OUStringToOString( rPropertyName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -729,7 +736,7 @@ namespace slideshow
 
                     if( !(rAny >>= nValue) )
                     {
-                        OSL_ENSURE( false, "getDefault(): cannot extract requested shape color property" );
+                        OSL_FAIL( "getDefault(): cannot extract requested shape color property" );
                         OSL_TRACE( "getDefault(): cannot extract '%s' shape color property",
                                    ::rtl::OUStringToOString( rPropertyName,
                                                              RTL_TEXTENCODING_ASCII_US ).getStr() );

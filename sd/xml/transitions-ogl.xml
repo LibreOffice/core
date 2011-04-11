@@ -30,4 +30,19 @@
  <anim:par pres:preset-id="rochade">
   <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="bottomRight"/>
  </anim:par>
+ <anim:par pres:preset-id="venetian3dv">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="bottomLeft"/>
+ </anim:par>
+ <anim:par pres:preset-id="venetian3dh">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="topCenter"/>
+ </anim:par>
+ <anim:par pres:preset-id="static">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="rightCenter"/>
+ </anim:par>
+ <anim:par pres:preset-id="finedissolve">
+  <anim:transitionFilter smil:type="miscShapeWipe" smil:subtype="bottomCenter"/>
+ </anim:par>
+ <anim:par pres:preset-id="zoom-rotate-in">
+  <anim:transitionFilter smil:type="zoom" smil:subtype="rotateIn"/>
+ </anim:par>
  </anim:seq>

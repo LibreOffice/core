@@ -34,8 +34,11 @@
 #include "csvgrid.hxx"
 
 #include <algorithm>
+#include <memory>
+
 #include <svtools/colorcfg.hxx>
 #include <svl/smplhint.hxx>
+#include <sal/macros.h>
 #include <tools/poly.hxx>
 #include "scmod.hxx"
 #include "asciiopt.hxx"
@@ -61,14 +64,16 @@ struct Func_SetType
 {
     sal_Int32                   mnType;
     inline                      Func_SetType( sal_Int32 nType ) : mnType( nType ) {}
-    inline void                 operator()( ScCsvColState& rState ) { rState.mnType = mnType; }
+    inline void                 operator()( ScCsvColState& rState ) const
+        { rState.mnType = mnType; }
 };
 
 struct Func_Select
 {
     bool                        mbSelect;
     inline                      Func_Select( bool bSelect ) : mbSelect( bSelect ) {}
-    inline void                 operator()( ScCsvColState& rState ) { rState.Select( mbSelect ); }
+    inline void                 operator()( ScCsvColState& rState ) const
+        { rState.Select( mbSelect ); }
 };
 
 
@@ -76,8 +81,8 @@ struct Func_Select
 
 ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
-    mrColorConfig( SC_MOD()->GetColorConfig() ),
-    mpEditEngine( new ScEditEngineDefaulter( EditEngine::CreatePool(), TRUE ) ),
+    mpColorConfig( 0 ),
+    mpEditEngine( new ScEditEngineDefaulter( EditEngine::CreatePool(), true ) ),
     maHeaderFont( GetFont() ),
     maColStates( 1 ),
     maTypeNames( 1 ),
@@ -90,18 +95,26 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
 
     maPopup.SetMenuFlags( maPopup.GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
 
-    EnableRTL( false ); // #107812# RTL
-    InitColors();
+    EnableRTL( false ); // RTL
     InitFonts();
     ImplClearSplits();
-    mrColorConfig.AddListener(this);
 }
 
 ScCsvGrid::~ScCsvGrid()
 {
-    mrColorConfig.RemoveListener(this);
+    OSL_ENSURE(mpColorConfig, "the object hasn't been initialized properly");
+    if (mpColorConfig)
+        mpColorConfig->RemoveListener(this);
 }
 
+void
+ScCsvGrid::Init()
+{
+    OSL_PRECOND(!mpColorConfig, "the object has already been initialized");
+    mpColorConfig = &SC_MOD()->GetColorConfig();
+    InitColors();
+    mpColorConfig->AddListener(this);
+}
 
 // common grid handling -------------------------------------------------------
 
@@ -200,11 +213,14 @@ sal_Int32 ScCsvGrid::GetNoScrollCol( sal_Int32 nPos ) const
 
 void ScCsvGrid::InitColors()
 {
-    maBackColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::DOCCOLOR ).nColor ) );
-    maGridColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::CALCGRID ).nColor ) );
-    maGridPBColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::CALCPAGEBREAK ).nColor ) );
-    maAppBackColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::APPBACKGROUND ).nColor ) );
-    maTextColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::FONTCOLOR ).nColor ) );
+    OSL_PRECOND(mpColorConfig, "the object hasn't been initialized properly");
+    if ( !mpColorConfig )
+        return;
+    maBackColor.SetColor( static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::DOCCOLOR ).nColor ) );
+    maGridColor.SetColor( static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::CALCGRID ).nColor ) );
+    maGridPBColor.SetColor( static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::CALCPAGEBREAK ).nColor ) );
+    maAppBackColor.SetColor( static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::APPBACKGROUND ).nColor ) );
+    maTextColor.SetColor( static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::FONTCOLOR ).nColor ) );
 
     const StyleSettings& rSett = GetSettings().GetStyleSettings();
     maHeaderBackColor = rSett.GetFaceColor();
@@ -236,7 +252,7 @@ void ScCsvGrid::InitFonts()
     aDefSet.Put( aComplexItem );
 
     // set Asian/Complex font size to height of character in Latin font
-    ULONG nFontHt = static_cast< ULONG >( maMonoFont.GetSize().Height() );
+    sal_uLong nFontHt = static_cast< sal_uLong >( maMonoFont.GetSize().Height() );
     aDefSet.Put( SvxFontHeightItem( nFontHt, 100, EE_CHAR_FONTHEIGHT_CJK ) );
     aDefSet.Put( SvxFontHeightItem( nFontHt, 100, EE_CHAR_FONTHEIGHT_CTL ) );
 
@@ -508,7 +524,7 @@ sal_uInt8 lcl_GetExtColumnType( sal_Int32 nIntType )
 {
     static sal_uInt8 pExtTypes[] =
         { SC_COL_STANDARD, SC_COL_TEXT, SC_COL_DMY, SC_COL_MDY, SC_COL_YMD, SC_COL_ENGLISH, SC_COL_SKIP };
-    static sal_Int32 nExtTypeCount = sizeof( pExtTypes ) / sizeof( *pExtTypes );
+    static sal_Int32 nExtTypeCount = SAL_N_ELEMENTS(pExtTypes);
     return pExtTypes[ ((0 <= nIntType) && (nIntType < nExtTypeCount)) ? nIntType : 0 ];
 }
 
@@ -887,8 +903,8 @@ void ScCsvGrid::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode& rKCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = rKCode.GetCode();
-    bool bShift = rKCode.IsShift() == TRUE;
-    bool bMod1 = rKCode.IsMod1() == TRUE;
+    bool bShift = rKCode.IsShift() == sal_True;
+    bool bMod1 = rKCode.IsMod1() == sal_True;
 
     if( !rKCode.IsMod2() )
     {
@@ -1348,7 +1364,9 @@ void ScCsvGrid::ImplDrawTrackingRect( sal_uInt32 nColIndex )
 
 ScAccessibleCsvControl* ScCsvGrid::ImplCreateAccessible()
 {
-    return new ScAccessibleCsvGrid( *this );
+    std::auto_ptr<ScAccessibleCsvControl> pControl(new ScAccessibleCsvGrid( *this ));
+    pControl->Init();
+    return pControl.release();
 }
 
 

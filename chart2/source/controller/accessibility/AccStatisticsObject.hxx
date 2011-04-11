@@ -38,15 +38,6 @@ namespace chart
 class AccStatisticsObject : public AccessibleChartElement
 {
 public:
-    /*
-    enum StatisticsObjectType
-    {
-        MEAN_VAL_LINE = OBJECTTYPE_AVERAGEVALUE,
-        ERROR_BARS    = OBJECTTYPE_ERROR,
-        REGRESSION    = OBJECTTYPE_REGRESSION
-    };
-    */
-
     AccStatisticsObject( const AccessibleElementInfo& rAccInfo );
 
     virtual ~AccStatisticsObject();
@@ -56,10 +47,6 @@ public:
 
     // ________ XServiceInfo ________
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
-
-private:
-    //const StatisticsObjectType    m_eType;
-    //const sal_uInt16              m_nSeriesIndex;
 };
 
 }  // accessibility

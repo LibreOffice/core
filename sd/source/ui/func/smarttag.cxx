@@ -122,30 +122,30 @@ bool SmartTag::getContext( SdrViewContext& /*rContext*/ )
 
 // --------------------------------------------------------------------
 
-ULONG SmartTag::GetMarkablePointCount() const
+sal_uLong SmartTag::GetMarkablePointCount() const
 {
     return 0;
 }
 
 // --------------------------------------------------------------------
 
-ULONG SmartTag::GetMarkedPointCount() const
+sal_uLong SmartTag::GetMarkedPointCount() const
 {
     return 0;
 }
 
 // --------------------------------------------------------------------
 
-BOOL SmartTag::MarkPoint(SdrHdl& /*rHdl*/, BOOL /*bUnmark*/ )
+sal_Bool SmartTag::MarkPoint(SdrHdl& /*rHdl*/, sal_Bool /*bUnmark*/ )
 {
-    return FALSE;
+    return sal_False;
 }
 
 // --------------------------------------------------------------------
 
-BOOL SmartTag::MarkPoints(const Rectangle* /*pRect*/, BOOL /*bUnmark*/ )
+sal_Bool SmartTag::MarkPoints(const Rectangle* /*pRect*/, sal_Bool /*bUnmark*/ )
 {
-    return FALSE;
+    return sal_False;
 }
 
 // --------------------------------------------------------------------
@@ -369,14 +369,14 @@ bool SmartTagSet::getContext( SdrViewContext& rContext ) const
 // support point editing
 // --------------------------------------------------------------------
 
-BOOL SmartTagSet::HasMarkablePoints() const
+sal_Bool SmartTagSet::HasMarkablePoints() const
 {
-    return GetMarkablePointCount() != 0 ? TRUE : FALSE;
+    return GetMarkablePointCount() != 0 ? sal_True : sal_False;
 }
 
 // --------------------------------------------------------------------
 
-ULONG SmartTagSet::GetMarkablePointCount() const
+sal_uLong SmartTagSet::GetMarkablePointCount() const
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->GetMarkablePointCount();
@@ -385,14 +385,14 @@ ULONG SmartTagSet::GetMarkablePointCount() const
 
 // --------------------------------------------------------------------
 
-BOOL SmartTagSet::HasMarkedPoints() const
+sal_Bool SmartTagSet::HasMarkedPoints() const
 {
-    return GetMarkedPointCount() != 0 ? TRUE : FALSE;
+    return GetMarkedPointCount() != 0 ? sal_True : sal_False;
 }
 
 // --------------------------------------------------------------------
 
-ULONG SmartTagSet::GetMarkedPointCount() const
+sal_uLong SmartTagSet::GetMarkedPointCount() const
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->GetMarkedPointCount();
@@ -402,7 +402,7 @@ ULONG SmartTagSet::GetMarkedPointCount() const
 
 // --------------------------------------------------------------------
 
-BOOL SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
+sal_Bool SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
 {
     const SmartHdl* pSmartHdl = dynamic_cast< const SmartHdl* >( &rHdl );
 
@@ -411,21 +411,21 @@ BOOL SmartTagSet::IsPointMarkable(const SdrHdl& rHdl) const
 
 // --------------------------------------------------------------------
 
-BOOL SmartTagSet::MarkPoint(SdrHdl& rHdl, BOOL bUnmark )
+sal_Bool SmartTagSet::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->MarkPoint( rHdl, bUnmark );
 
-    return FALSE;
+    return sal_False;
 }
 
 // --------------------------------------------------------------------
 
-BOOL SmartTagSet::MarkPoints(const Rectangle* pRect, BOOL bUnmark)
+sal_Bool SmartTagSet::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark)
 {
     if( mxSelectedTag.is() )
         return mxSelectedTag->MarkPoints( pRect, bUnmark );
-    return FALSE;
+    return sal_False;
 }
 
 // --------------------------------------------------------------------

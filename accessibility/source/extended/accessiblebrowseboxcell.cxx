@@ -77,13 +77,13 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     ::Rectangle AccessibleBrowseBoxCell::implGetBoundingBox()
     {
-        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, FALSE, FALSE );
+        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, sal_False, sal_False );
     }
 
     // -----------------------------------------------------------------------------
     ::Rectangle AccessibleBrowseBoxCell::implGetBoundingBoxOnScreen()
     {
-        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, FALSE );
+        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, sal_False );
     }
 
 // .................................................................................

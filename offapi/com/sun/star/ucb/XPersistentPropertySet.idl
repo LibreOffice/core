@@ -39,7 +39,7 @@ module com { module sun { module star { module ucb {
  published interface XPropertySetRegistry;
 
 //=============================================================================
-/** A persistent propertyset, which can be saved in and restored from a
+/** A persistent property set, which can be saved in and restored from a
     <type>XPropertySetRegistry</type>.
 
      @version  1.0
@@ -56,7 +56,7 @@ published interface XPersistentPropertySet : com::sun::star::beans::XPropertySet
     com::sun::star::ucb::XPropertySetRegistry getRegistry();
 
     //-------------------------------------------------------------------------
-    /** returns the key used to address the set in the propertyset registry.
+    /** returns the key used to address the set in the property set registry.
 
         @returns
         The key.

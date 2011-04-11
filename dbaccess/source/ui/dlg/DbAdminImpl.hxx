@@ -182,7 +182,7 @@ namespace dbaui
         */
         sal_Bool            hasAuthentication(const SfxItemSet& _rSet) const;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         ::rtl::OString translatePropertyId( sal_Int32 _nId );
 #endif
     };

@@ -85,6 +85,11 @@ interface SlideSorterView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_DUPLICATE_PAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_DELETE_PAGE
     [
         ExecMethod = FuTemporary ;
@@ -232,21 +237,6 @@ interface SlideSorterView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    /*
-    SID_PRINTDOC // ole : no, status : ?
-    [
-        StateMethod = GetMenuState ;
-    ]
-    SID_PRINTDOCDIRECT // ole : no, status : ?
-    [
-        StateMethod = GetMenuState ;
-    ]
-    SID_SETUPPRINTER // ole : no, status : ?
-    [
-        StateMethod = GetMenuState ;
-    ]
-*/
-
     SID_OUTPUT_QUALITY_COLOR // ole : no, status : play rec
     [
         ExecMethod = ExecCtrl ;
@@ -283,7 +273,6 @@ interface SlideSorterView
         StateMethod = GetCtrlState ;
     ]
 
-        // #96090#
     SID_GETUNDOSTRINGS // ole : no, status : ?
     [
         ExecMethod = FuSupport ;

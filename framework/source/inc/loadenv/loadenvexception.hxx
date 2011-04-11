@@ -58,7 +58,7 @@ namespace css = ::com::sun::star;
             load environment only.
 
     @descr  Of course outside code must wrapp it, to transport
-            the occured information to its caller.
+            the occurred information to its caller.
 
     @author as96863
  */
@@ -133,7 +133,7 @@ class LoadEnvException
         /** @short  An ID, which make this exception unique among others. */
         sal_Int32 m_nID;
 
-        /** @short  Contains the original exception, if any occured. */
+        /** @short  Contains the original exception, if any occurred. */
         css::uno::Any m_exOriginal;
 
         /** TODO

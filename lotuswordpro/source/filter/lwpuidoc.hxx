@@ -80,8 +80,8 @@ class LwpMergeOptions;
 class LwpNamedProperties
 {
 public:
-    LwpNamedProperties(){};
-    ~LwpNamedProperties(){};
+    LwpNamedProperties(){}
+    ~LwpNamedProperties(){}
 public:
     void Read(LwpObjectStream *pStrm);
 };
@@ -92,8 +92,8 @@ public:
 class LwpAutoRunMacroOptions
 {
 public:
-    LwpAutoRunMacroOptions(){};
-    ~LwpAutoRunMacroOptions(){};
+    LwpAutoRunMacroOptions(){}
+    ~LwpAutoRunMacroOptions(){}
 private:
     LwpAtomHolder m_OpenName;
     LwpAtomHolder m_CloseName;
@@ -109,8 +109,8 @@ public:
 class LwpMergeOptions
 {
 public:
-    LwpMergeOptions(){};
-    ~LwpMergeOptions(){};
+    LwpMergeOptions(){}
+    ~LwpMergeOptions(){}
 private:
     LwpAtomHolder m_RecordFile;
     LwpAtomHolder m_DescriptionFile;

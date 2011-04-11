@@ -153,9 +153,8 @@ extern "C" UINT __stdcall SetProductInstallationPath(MSIHANDLE handle)
             MsiSetProperty(handle, TEXT("INSTALLLOCATION"), path.c_str());
         }
     }
-    catch(std::runtime_error& ex)
+    catch(std::runtime_error&)
     {
-        ex = ex; // no warnings
     }
     return ERROR_SUCCESS;
 }

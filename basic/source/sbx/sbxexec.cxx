@@ -36,21 +36,21 @@
 class SbxSimpleCharClass
 {
 public:
-    BOOL isAlpha( sal_Unicode c ) const
+    sal_Bool isAlpha( sal_Unicode c ) const
     {
-        BOOL bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+        sal_Bool bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
         return bRet;
     }
 
-    BOOL isDigit( sal_Unicode c ) const
+    sal_Bool isDigit( sal_Unicode c ) const
     {
-        BOOL bRet = (c >= '0' && c <= '9');
+        sal_Bool bRet = (c >= '0' && c <= '9');
         return bRet;
     }
 
-    BOOL isAlphaNumeric( sal_Unicode c ) const
+    sal_Bool isAlphaNumeric( sal_Unicode c ) const
     {
-        BOOL bRet = isDigit( c ) || isAlpha( c );
+        sal_Bool bRet = isDigit( c ) || isAlpha( c );
         return bRet;
     }
 };
@@ -72,7 +72,7 @@ static const xub_Unicode* SkipWhitespace( const xub_Unicode* p )
 
 static const xub_Unicode* Symbol( const xub_Unicode* p, XubString& rSym, const SbxSimpleCharClass& rCharClass )
 {
-    USHORT nLen = 0;
+    sal_uInt16 nLen = 0;
     // Did we have a nonstandard symbol?
     if( *p == '[' )
     {
@@ -142,7 +142,7 @@ static SbxVariable* QualifiedName
 // a function (with optional parameters).
 
 static SbxVariable* Operand
-    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf, BOOL bVar )
+    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf, sal_Bool bVar )
 {
     static SbxSimpleCharClass aCharClass;
 
@@ -154,7 +154,7 @@ static SbxVariable* Operand
      || *p == '&' ) )
     {
         // A number could be scanned in directly!
-        USHORT nLen;
+        sal_uInt16 nLen;
         if( !refVar->Scan( XubString( p ), &nLen ) )
             refVar.Clear();
         else
@@ -192,12 +192,12 @@ static SbxVariable* Operand
 static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
 {
     const xub_Unicode* p = *ppBuf;
-    SbxVariableRef refVar( Operand( pObj, pGbl, &p, FALSE ) );
+    SbxVariableRef refVar( Operand( pObj, pGbl, &p, sal_False ) );
     p = SkipWhitespace( p );
     while( refVar.Is() && ( *p == '*' || *p == '/' ) )
     {
         xub_Unicode cOp = *p++;
-        SbxVariableRef refVar2( Operand( pObj, pGbl, &p, FALSE ) );
+        SbxVariableRef refVar2( Operand( pObj, pGbl, &p, sal_False ) );
         if( refVar2.Is() )
         {
             // temporary variable!
@@ -256,7 +256,7 @@ static SbxVariable* PlusMinus( SbxObject* pObj, SbxObject* pGbl, const xub_Unico
 static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
 {
     const xub_Unicode* p = *ppBuf;
-    SbxVariableRef refVar( Operand( pObj, pGbl, &p, TRUE ) );
+    SbxVariableRef refVar( Operand( pObj, pGbl, &p, sal_True ) );
     p = SkipWhitespace( p );
     if( refVar.Is() )
     {
@@ -304,7 +304,7 @@ static SbxVariable* Element
     SbxVariableRef refVar;
     if( aSym.Len() )
     {
-        USHORT nOld = pObj->GetFlags();
+        sal_uInt16 nOld = pObj->GetFlags();
         if( pObj == pGbl )
             pObj->SetFlag( SBX_GBLSEARCH );
         refVar = pObj->Find( aSym, t );
@@ -318,7 +318,7 @@ static SbxVariable* Element
             {
                 p++;
                 SbxArrayRef refPar = new SbxArray;
-                USHORT nArg = 0;
+                sal_uInt16 nArg = 0;
                 // We are once relaxed and accept as well
                 // the line- or commandend as delimiter
                 // Search parameter always global!

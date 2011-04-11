@@ -52,7 +52,6 @@
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
 
-// #97016#
 #include <svx/sxciaitm.hxx>
 
 namespace sd {
@@ -96,12 +95,12 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 
     if (pArgs)
     {
-        SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X, FALSE);
-        SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y, FALSE);
-        SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X, FALSE);
-        SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y, FALSE);
-        SFX_REQUEST_ARG (rReq, pPhiStart, SfxUInt32Item, ID_VAL_ANGLESTART, FALSE);
-        SFX_REQUEST_ARG (rReq, pPhiEnd, SfxUInt32Item, ID_VAL_ANGLEEND, FALSE);
+        SFX_REQUEST_ARG (rReq, pCenterX, SfxUInt32Item, ID_VAL_CENTER_X, sal_False);
+        SFX_REQUEST_ARG (rReq, pCenterY, SfxUInt32Item, ID_VAL_CENTER_Y, sal_False);
+        SFX_REQUEST_ARG (rReq, pAxisX, SfxUInt32Item, ID_VAL_AXIS_X, sal_False);
+        SFX_REQUEST_ARG (rReq, pAxisY, SfxUInt32Item, ID_VAL_AXIS_Y, sal_False);
+        SFX_REQUEST_ARG (rReq, pPhiStart, SfxUInt32Item, ID_VAL_ANGLESTART, sal_False);
+        SFX_REQUEST_ARG (rReq, pPhiEnd, SfxUInt32Item, ID_VAL_ANGLEEND, sal_False);
 
         Rectangle   aNewRectangle (pCenterX->GetValue () - pAxisX->GetValue () / 2,
                                    pCenterY->GetValue () - pAxisY->GetValue () / 2,
@@ -126,15 +125,15 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-BOOL FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
+sal_Bool FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    BOOL bReturn = FuConstruct::MouseButtonDown( rMEvt );
+    sal_Bool bReturn = FuConstruct::MouseButtonDown( rMEvt );
 
     if ( rMEvt.IsLeft() && !mpView->IsAction() )
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         mpWindow->CaptureMouse();
-        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
         mpView->BegCreateObj(aPnt, (OutputDevice*) NULL, nDrgLog);
 
         SdrObject* pObj = mpView->GetCreateObj();
@@ -144,11 +143,10 @@ BOOL FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
             SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
 
-//-/            pObj->NbcSetAttributes(aAttr, FALSE);
             pObj->SetMergedItemSet(aAttr);
         }
 
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
     return bReturn;
 }
@@ -159,7 +157,7 @@ BOOL FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-BOOL FuConstructArc::MouseMove( const MouseEvent& rMEvt )
+sal_Bool FuConstructArc::MouseMove( const MouseEvent& rMEvt )
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -170,26 +168,26 @@ BOOL FuConstructArc::MouseMove( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-BOOL FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
+sal_Bool FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    BOOL bReturn = FALSE;
-    BOOL bCreated = FALSE;
+    sal_Bool bReturn = sal_False;
+    sal_Bool bCreated = sal_False;
 
     if ( mpView->IsCreateObj() && rMEvt.IsLeft() )
     {
         Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-        ULONG nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
+        sal_uLong nCount = mpView->GetSdrPageView()->GetObjList()->GetObjCount();
 
         if (mpView->EndCreateObj(SDRCREATE_NEXTPOINT) )
         {
             if (nCount != mpView->GetSdrPageView()->GetObjList()->GetObjCount())
             {
-                bCreated = TRUE;
+                bCreated = sal_True;
             }
         }
 
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
 
     bReturn = FuConstruct::MouseButtonUp (rMEvt) || bReturn;
@@ -204,14 +202,14 @@ BOOL FuConstructArc::MouseButtonUp( const MouseEvent& rMEvt )
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
-|* FALSE.
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
+|* sal_False.
 |*
 \************************************************************************/
 
-BOOL FuConstructArc::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuConstructArc::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
+    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -259,10 +257,9 @@ void FuConstructArc::Activate()
         break;
     }
 
-    mpView->SetCurrentObj((UINT16)aObjKind);
+    mpView->SetCurrentObj((sal_uInt16)aObjKind);
 
     FuConstruct::Activate();
-//  FuDraw::Activate();
 }
 
 /*************************************************************************
@@ -274,22 +271,10 @@ void FuConstructArc::Activate()
 void FuConstructArc::Deactivate()
 {
     FuConstruct::Deactivate();
-//  FuDraw::Deactivate();
 }
 
-// #97016#
 SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
-    // case SID_DRAW_ARC:
-    // case SID_DRAW_CIRCLEARC:
-    // case SID_DRAW_PIE:
-    // case SID_DRAW_PIE_NOFILL:
-    // case SID_DRAW_CIRCLEPIE:
-    // case SID_DRAW_CIRCLEPIE_NOFILL:
-    // case SID_DRAW_ELLIPSECUT:
-    // case SID_DRAW_ELLIPSECUT_NOFILL:
-    // case SID_DRAW_CIRCLECUT:
-    // case SID_DRAW_CIRCLECUT_NOFILL:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
@@ -330,7 +315,7 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
         }
         else
         {
-            DBG_ERROR("Object is NO circle object");
+            OSL_FAIL("Object is NO circle object");
         }
     }
 

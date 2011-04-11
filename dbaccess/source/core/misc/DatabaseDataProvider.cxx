@@ -119,7 +119,7 @@ uno::Any DatabaseDataProvider::queryInterface(uno::Type const & type) throw (uno
 //------------------------------------------------------------------------------
 rtl::OUString DatabaseDataProvider::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.chart2.data.DatabaseDataProvider");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.data.DatabaseDataProvider"));
 }
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
@@ -173,26 +173,25 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
 // chart2::data::XDataProvider:
 ::sal_Bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const uno::Sequence< beans::PropertyValue > & _aArguments) throw (uno::RuntimeException)
 {
-    //::osl::ResettableMutexGuard aClearForNotifies(m_aMutex);
     const beans::PropertyValue* pArgIter = _aArguments.getConstArray();
     const beans::PropertyValue* pArgEnd  = pArgIter + _aArguments.getLength();
     for(;pArgIter != pArgEnd;++pArgIter)
     {
-        if ( pArgIter->Name.equalsAscii("DataRowSource") )
+        if ( pArgIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("DataRowSource")) )
         {
             ::com::sun::star::chart::ChartDataRowSource eRowSource = ::com::sun::star::chart::ChartDataRowSource_COLUMNS;
             pArgIter->Value >>= eRowSource;
             if ( eRowSource != ::com::sun::star::chart::ChartDataRowSource_COLUMNS )
                 return sal_False;
-        } // if ( pArgIter->Name.equalsAscii("DataRowSource") )
-        else if ( pArgIter->Name.equalsAscii("CellRangeRepresentation") )
+        }
+        else if ( pArgIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")) )
         {
             ::rtl::OUString sRange;
             pArgIter->Value >>= sRange;
-            if ( !sRange.equalsAscii("all") )
+            if ( !sRange.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("all")) )
                 return sal_False;
         }
-        else if ( pArgIter->Name.equalsAscii("FirstCellAsLabel") )
+        else if ( pArgIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FirstCellAsLabel")) )
         {
             sal_Bool bFirstCellAsLabel = sal_True;
             pArgIter->Value >>= bFirstCellAsLabel;
@@ -241,7 +240,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             {
             }
         }
-        if ( !bRet ) // no command set or an error occured, use Internal data handler
+        if ( !bRet ) // no command set or an error occurred, use Internal data handler
         {
             uno::Reference< lang::XInitialization> xIni(m_xInternal,uno::UNO_QUERY);
             if ( xIni.is() )

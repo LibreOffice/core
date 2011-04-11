@@ -78,7 +78,7 @@ void Bridge::handle_java_exc(
     if (! jo_exc.is())
     {
         throw BridgeRuntimeError(
-            OUSTR("java exception occured, but no java exception available!?") +
+            OUSTR("java exception occurred, but no java exception available!?") +
             jni.get_stack_trace() );
     }
 
@@ -126,7 +126,7 @@ void Bridge::handle_java_exc(
 #if OSL_DEBUG_LEVEL > 1
     OUStringBuffer trace_buf( 128 );
     trace_buf.appendAscii(
-        RTL_CONSTASCII_STRINGPARAM("exception occured uno->java: [") );
+        RTL_CONSTASCII_STRINGPARAM("exception occurred uno->java: [") );
     trace_buf.append( exc_name );
     trace_buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("] ") );
     trace_buf.append(
@@ -135,7 +135,7 @@ void Bridge::handle_java_exc(
     OString cstr_trace(
         OUStringToOString(
             trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( cstr_trace.getStr() );
+    OSL_TRACE( "%s", cstr_trace.getStr() );
 #endif
 }
 
@@ -261,7 +261,7 @@ void Bridge::call_java(
     OString cstr_trace(
         OUStringToOString(
             trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( cstr_trace.getStr() );
+    OSL_TRACE( "%s", cstr_trace.getStr() );
 #endif
 
     // complex return value
@@ -413,7 +413,7 @@ void Bridge::call_java(
             }
         } // else: already set integral uno return value
 
-        // no exception occured
+        // no exception occurred
         *uno_exc = 0;
     }
 #ifdef BROKEN_ALLOCA
@@ -558,7 +558,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
         OUStringToOString(
             OUSTR("freeing binary uno proxy: ") + that->m_oid,
             RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( cstr_msg.getStr() );
+    OSL_TRACE( "%s", cstr_msg.getStr() );
 #endif
 
     try
@@ -576,15 +576,14 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg2(
             OUStringToOString( err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg2.getStr() );
+        OSL_FAIL( cstr_msg2.getStr() );
 #else
         (void) err; // unused
 #endif
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        OSL_ENSURE(
-            0,
+        OSL_FAIL(
             "[jni_uno bridge error] attaching current thread to java failed!" );
     }
 
@@ -629,7 +628,7 @@ void SAL_CALL UNO_proxy_dispatch(
     OString cstr_msg(
         OUStringToOString(
             trace_buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( cstr_msg.getStr() );
+    OSL_TRACE( "%s", cstr_msg.getStr() );
 #endif
 
     try
@@ -784,7 +783,7 @@ void SAL_CALL UNO_proxy_dispatch(
                                 reinterpret_cast< uno_Any * >( uno_ret ),
                                 0, 0, 0 );
                         }
-                        // no exception occured
+                        // no exception occurred
                         *uno_exc = 0;
                     }
                 }
@@ -865,7 +864,7 @@ void SAL_CALL UNO_proxy_dispatch(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg2(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg2.getStr() );
+        OSL_FAIL( cstr_msg2.getStr() );
 #endif
     }
 }

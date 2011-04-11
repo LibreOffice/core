@@ -32,7 +32,6 @@
 #include <osl/file.hxx>
 #include <osl/socket.h>
 #include <cppuhelper/factory.hxx>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -52,63 +51,10 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::container;
 
 //=========================================================================
-static sal_Bool writeInfo( void * pRegistryKey,
-                           const rtl::OUString & rImplementationName,
-                              Sequence< rtl::OUString > const & rServiceNames )
-{
-    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
-    aKeyName += rImplementationName;
-    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
-
-    Reference< registry::XRegistryKey > xKey;
-    try
-    {
-        xKey = static_cast< registry::XRegistryKey * >(
-            pRegistryKey )->createKey( aKeyName );
-    }
-    catch ( registry::InvalidRegistryException const & )
-    {
-    }
-
-    if ( !xKey.is() )
-        return sal_False;
-
-    sal_Bool bSuccess = sal_True;
-
-    for ( sal_Int32 n = 0; n < rServiceNames.getLength(); ++n )
-    {
-        try
-        {
-            xKey->createKey( rServiceNames[ n ] );
-        }
-        catch ( registry::InvalidRegistryException const & )
-        {
-            bSuccess = sal_False;
-            break;
-        }
-    }
-    return bSuccess;
-}
-
-//=========================================================================
 extern "C" void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//=========================================================================
-extern "C" sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
-{
-    return pRegistryKey &&
-
-    //////////////////////////////////////////////////////////////////////
-    // File Content Provider.
-    //////////////////////////////////////////////////////////////////////
-
-    writeInfo( pRegistryKey,
-               fileaccess::shell::getImplementationName_static(),
-               fileaccess::shell::getSupportedServiceNames_static() );
 }
 
 //=========================================================================
@@ -263,7 +209,7 @@ FileProvider::supportsService(
                   const rtl::OUString& ServiceName )
   throw( RuntimeException )
 {
-  return ServiceName == rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" );
+  return ServiceName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"));
 }
 
 
@@ -468,17 +414,17 @@ private:
 XPropertySetInfoImpl2::XPropertySetInfoImpl2()
     : m_seq( 3 )
 {
-    m_seq[0] = Property( rtl::OUString::createFromAscii( "HostName" ),
+    m_seq[0] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HostName")),
                          -1,
                          getCppuType( static_cast< rtl::OUString* >( 0 ) ),
                          PropertyAttribute::READONLY );
 
-    m_seq[1] = Property( rtl::OUString::createFromAscii( "HomeDirectory" ),
+    m_seq[1] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HomeDirectory")),
                          -1,
                          getCppuType( static_cast< rtl::OUString* >( 0 ) ),
                          PropertyAttribute::READONLY );
 
-    m_seq[2] = Property( rtl::OUString::createFromAscii( "FileSystemNotation" ),
+    m_seq[2] = Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileSystemNotation")),
                          -1,
                          getCppuType( static_cast< sal_Int32* >( 0 ) ),
                          PropertyAttribute::READONLY );

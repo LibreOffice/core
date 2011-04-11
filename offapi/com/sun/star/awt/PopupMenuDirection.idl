@@ -35,7 +35,7 @@
 //=============================================================================
 
 /** These values are used to specify the direction in which
-    a popup menu will grow.
+    a pop-up menu will grow.
 
     <p>They may be expanded in future versions.</p>
  */

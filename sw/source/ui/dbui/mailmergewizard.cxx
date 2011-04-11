@@ -49,11 +49,9 @@
 #include <dbmgr.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <wrtsh.hxx>
-#include <sfx2/viewfrm.hxx>
 #include "vcl/msgbox.hxx" // RET_CANCEL
 
 #include <helpid.h>
-#include <dbui.hrc>
 #include <mailmergewizard.hrc>
 
 using namespace svt;
@@ -305,7 +303,7 @@ void SwMailMergeWizard::updateRoadmapItemLabel( WizardState _nState )
 
 short SwMailMergeWizard::Execute()
 {
-    OSL_ENSURE(false, "SwMailMergeWizard cannot be executed via Dialog::Execute!\n"
+    OSL_FAIL("SwMailMergeWizard cannot be executed via Dialog::Execute!\n"
                "It creates a thread (MailDispatcher instance) that will call"
                "back to VCL apartment => deadlock!\n"
                "Use Dialog::StartExecuteModal to execute the dialog!" );

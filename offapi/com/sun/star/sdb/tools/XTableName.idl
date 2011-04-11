@@ -59,7 +59,7 @@ module com {  module sun {  module star {  module sdb { module tools {
     <p>The <type>XTableName</type> interface eases this and other, similar tasks around table
     names.</p>
 
-    <p>The component itself does not have life-time control mechanimns, i.e. you
+    <p>The component itself does not have life-time control mechanisms, i.e. you
     cannot explicitly dispose it (<member scope="com::sun::star::lang">XComponent::dispose</member>),
     and you cannot be notified when it dies.<br/>
     However, if your try to access any of its methods or attributes, after the
@@ -88,7 +88,7 @@ interface XTableName
     [attribute] string  TableName;
 
     /** returns the composed table name, including the catalog and schema name,
-        respecting the databases's quoting requirements, plus
+        respecting the database's quoting requirements, plus
 
         @param Type
             the type of name composition to be used.

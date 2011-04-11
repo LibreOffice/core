@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_script_InvocationInfo_idl__
 #define __com_sun_star_script_InvocationInfo_idl__
 
-#ifndef __com_sun_star_script_MemberType_idl__
 #include <com/sun/star/script/MemberType.idl>
-#endif
 
-#ifndef __com_sun_star_reflection_ParamMode_idl__
 #include <com/sun/star/reflection/ParamMode.idl>
-#endif
 
 //=============================================================================
 

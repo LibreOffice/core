@@ -53,7 +53,8 @@
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <boost/ptr_container/ptr_list.hpp>
 
 class ScRangeList;
 class ScMyStyleNumberFormats;
@@ -164,6 +165,7 @@ enum ScXMLLabelRangeAttrTokens
 
 enum ScXMLTableTokens
 {
+    XML_TOK_TABLE_NAMED_EXPRESSIONS,
     XML_TOK_TABLE_COL_GROUP,
     XML_TOK_TABLE_HEADER_COLS,
     XML_TOK_TABLE_COLS,
@@ -530,7 +532,8 @@ enum ScXMLDataPilotTableSourceCellRangeElemTokens
 
 enum ScXMLDataPilotTableSourceCellRangeAttrTokens
 {
-    XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS
+    XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS,
+    XML_TOK_SOURCE_CELL_RANGE_ATTR_NAME
 };
 
 enum ScXMLDataPilotFieldAttrTokens
@@ -630,7 +633,7 @@ struct ScMyNamedExpression
     sal_Bool           bIsExpression;
 };
 
-typedef std::list<const ScMyNamedExpression*> ScMyNamedExpressions;
+typedef ::boost::ptr_list<ScMyNamedExpression> ScMyNamedExpressions;
 
 struct ScMyLabelRange
 {
@@ -652,7 +655,7 @@ struct ScMyImportValidation
     rtl::OUString                                   sFormula2;
     rtl::OUString                                   sFormulaNmsp1;
     rtl::OUString                                   sFormulaNmsp2;
-    rtl::OUString                                   sBaseCellAddress;   // #b4974740# string is used directly
+    rtl::OUString                                   sBaseCellAddress;   // string is used directly
     com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
     com::sun::star::sheet::ValidationType           aValidationType;
     com::sun::star::sheet::ConditionOperator        aOperator;
@@ -670,7 +673,7 @@ class ScMyStylesImportHelper;
 
 class ScXMLImport: public SvXMLImport
 {
-    typedef ::std::hash_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >  CellTypeMap;
+    typedef ::boost::unordered_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >   CellTypeMap;
     CellTypeMap             aCellTypeMap;
 
     ScDocument*             pDoc;
@@ -683,17 +686,12 @@ class ScXMLImport: public SvXMLImport
     rtl::OUString                       sStandardFormat;
     rtl::OUString                       sType;
 
-//  SvXMLAutoStylePoolP     *pScAutoStylePool;
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
     UniReference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
-//  SvXMLImportContextRef       xStyles;
-//  SvXMLImportContextRef       xAutoStyles;
 
-//  SvXMLImportItemMapper   *pParaItemMapper;// paragraph item import
-//  SvI18NMap               *pI18NMap;          // name mapping for I18N
     SvXMLTokenMap           *pDocElemTokenMap;
     SvXMLTokenMap           *pStylesElemTokenMap;
     SvXMLTokenMap           *pStylesAttrTokenMap;
@@ -797,7 +795,7 @@ protected:
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
-    virtual SvXMLImportContext *CreateContext(USHORT nPrefix,
+    virtual SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
                                       const ::rtl::OUString& rLocalName,
                                       const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -816,14 +814,12 @@ public:
     //     the root element (i.e. office:document-meta)
     SvXMLImportContext *CreateMetaContext(
                                     const ::rtl::OUString& rLocalName );
-    SvXMLImportContext *CreateFontDeclsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    SvXMLImportContext *CreateFontDeclsContext(const sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateScriptContext(
                                     const ::rtl::OUString& rLocalName );
     SvXMLImportContext *CreateStylesContext(const ::rtl::OUString& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList, sal_Bool bAutoStyles );
-//  SvXMLImportContext *CreateUseStylesContext(const ::rtl::OUString& rLocalName ,
-//                                  const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateBodyContext(
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -843,21 +839,10 @@ public:
 
     sal_Int16 GetCellType(const ::rtl::OUString& rStrValue) const;
 
-//  SvI18NMap& GetI18NMap() { return *pI18NMap; }
-
-//  inline const SvXMLImportItemMapper& GetParaItemMapper() const;
-//  SvXMLImportContext *CreateParaItemImportContext( USHORT nPrefix,
-//                                const ::rtl::OUString& rLocalName,
-//                                const ::com::sun::star::uno::Reference<
-//                                  ::com::sun::star::xml::sax::XAttributeList& xAttrList,
-//                                SfxItemSet& rItemSet );
-
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const { return xColumnStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper() const { return xRowStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
-//  SvXMLImportContextRef           GetAutoStyles() const { return xAutoStyles; }
-//  SvXMLImportContextRef           GetStyles() const { return xStyles; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();
     const SvXMLTokenMap& GetBodyElemTokenMap();
@@ -923,16 +908,14 @@ public:
     const SvXMLTokenMap& GetDataPilotMembersElemTokenMap();
     const SvXMLTokenMap& GetDataPilotMemberAttrTokenMap();
     const SvXMLTokenMap& GetConsolidationAttrTokenMap();
-//  const SvXMLTokenMap& GetTextPElemTokenMap();
-//  const SvXMLTokenMap& GetTextPAttrTokenMap();
-//  const SvXMLTokenMap& GetStyleStylesElemTokenMap();
-//  const SvXMLTokenMap& GetTextListBlockAttrTokenMap();
-//  const SvXMLTokenMap& GetTextListBlockElemTokenMap();
 
-    void    AddNamedExpression(const ScMyNamedExpression* pMyNamedExpression) {
+    void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
+    {
         if (!pMyNamedExpressions)
             pMyNamedExpressions = new ScMyNamedExpressions();
-        pMyNamedExpressions->push_back(pMyNamedExpression); }
+        pMyNamedExpressions->push_back(pMyNamedExpression);
+    }
+
     ScMyNamedExpressions* GetNamedExpressions() { return pMyNamedExpressions; }
 
     void    AddLabelRange(const ScMyLabelRange* pMyLabelRange) {
@@ -995,7 +978,6 @@ public:
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // ::com::sun::star::xml::sax::XDocumentHandler
     virtual void SAL_CALL startDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL endDocument(void)
@@ -1003,6 +985,18 @@ public:
 
     virtual void DisposingModel();
 
+    /**
+     * Use this class to manage solar mutex locking instead of calling
+     * LockSolarMutex() and UnlockSolarMutex() directly.
+     */
+    class MutexGuard
+    {
+    public:
+        explicit MutexGuard(ScXMLImport& rImport);
+        ~MutexGuard();
+    private:
+        ScXMLImport& mrImport;
+    };
     void LockSolarMutex();
     void UnlockSolarMutex();
 
@@ -1041,7 +1035,7 @@ public:
             The value of the processed formula attribute.
 
         @param bRestrictToExternalNmsp
-            If set to TRUE, only namespaces of external formula grammars will
+            If set to sal_True, only namespaces of external formula grammars will
             be recognized. Internal namespace prefixes (e.g. 'oooc:' or 'of:'
             will be considered to be part of the formula, e.g. an expression
             with range operator.

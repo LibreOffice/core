@@ -25,16 +25,10 @@
 #
 #*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
-
 PRJ=..$/..
 
 PRJNAME=sal
 TARGET=qa_ostringbuffer
-# this is removed at the moment because we need some enhancements
-# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -46,11 +40,6 @@ CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES= \
-#	  $(SLO)$/OStringBuffer.obj
 
 #----------------------------------- OStringBuffer -----------------------------------
 
@@ -75,6 +64,4 @@ SLOFILES=$(SHL1OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
-
-.END
+.INCLUDE: $(PRJ)$/qa$/cppunit_local.mk

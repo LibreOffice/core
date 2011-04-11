@@ -150,7 +150,7 @@ namespace rptui
     // -----------------------------------------------------------------------------
     void FormattedFieldBeautifier::notifyPropertyChange( const beans::PropertyChangeEvent& _rEvent )
     {
-        if  ( !_rEvent.PropertyName.equalsAscii( "DataField" ) )
+        if  ( !_rEvent.PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DataField" ) ) )
             // not interested in
             return;
 
@@ -180,14 +180,13 @@ namespace rptui
         if ( xSection.is() )
         {
             OReportPage *pPage = pModel->getPage(xSection);
-            ULONG nIndex = pPage->getIndexOf(_xComponent);
+            sal_uLong nIndex = pPage->getIndexOf(_xComponent);
             if (nIndex < pPage->GetObjCount() )
             {
                 SdrObject *pObject = pPage->GetObj(nIndex);
                 OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObject);
                 if ( pUnoObj ) // this doesn't need to be done for shapes
                 {
-                    // Rectangle aRect = pUnoObj->GetCurrentBoundRect();
                     ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_rReportController.getSectionWindow(xSection);
                     if (pSectionWindow != NULL)
                     {

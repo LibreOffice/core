@@ -75,7 +75,7 @@ published interface XShapeCombiner: com::sun::star::uno::XInterface
 
         @param xShapes
             the <type>Shape</type> is converted to a
-            <type>PolyPolygonBezierShape</type>s and then splited into
+            <type>PolyPolygonBezierShape</type>s and then split into
             several <type>PolyPolygonBezierShape</type>s
             The <type>Shape</types>s in xShape will be removed from the
             <type>GenericDrawPage</type> and disposed.

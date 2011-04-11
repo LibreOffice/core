@@ -61,7 +61,7 @@ published service AccessibleSpreadsheetDocumentView
 
     <ul>
         <li>The parent returned by <method>getAccessibleParent</method>
-            is the window wich contains the view of these document.</li>
+            is the window which contains the view of these document.</li>
         <li>The children returned by <method>getAccessibleChild</method> all
             support the interface XAccessible. Calling
             <method>getAccessibleContext</method> for these children returns
@@ -99,7 +99,7 @@ published service AccessibleSpreadsheetDocumentView
             is also the last child.</p>
         <ul>
             <li>Graphics, embedded objects and shapes appear
-                before the other childs if they are painted in the
+                before the other children if they are painted in the
                 background. Their order reflects the z order.</li>
             <li>The current table is painted after the background and so it
                 comes after all background objects.</li>

@@ -141,25 +141,25 @@ class SbiTokenizer : public SbiScanner {
 protected:
     SbiToken eCurTok;               // aktuelles Token
     SbiToken ePush;                 // Pushback-Token
-    USHORT  nPLine, nPCol1, nPCol2; // Pushback-Location
-    BOOL bEof;                      // TRUE bei Dateiende
-    BOOL bEos;                      // TRUE bei Statement-Ende
-    BOOL bKeywords;                 // TRUE, falls Keywords geparst werden
-    BOOL bAs;                       // letztes Keyword war AS
-    BOOL bErrorIsSymbol;            // Handle Error token as Symbol, not keyword
+    sal_uInt16  nPLine, nPCol1, nPCol2; // Pushback-Location
+    sal_Bool bEof;                      // sal_True bei Dateiende
+    sal_Bool bEos;                      // sal_True bei Statement-Ende
+    sal_Bool bKeywords;                 // sal_True, falls Keywords geparst werden
+    sal_Bool bAs;                       // letztes Keyword war AS
+    sal_Bool bErrorIsSymbol;            // Handle Error token as Symbol, not keyword
 public:
     SbiTokenizer( const ::rtl::OUString&, StarBASIC* = NULL );
    ~SbiTokenizer();
 
-    inline BOOL IsEof()             { return bEof; }
-    inline BOOL IsEos()             { return bEos; }
+    inline sal_Bool IsEof()             { return bEof; }
+    inline sal_Bool IsEos()             { return bEos; }
 
     void  Push( SbiToken );             // Pushback eines Tokens
     const String& Symbol( SbiToken );// Rueckumwandlung
 
     SbiToken Peek();                    // das naechste Token lesen
     SbiToken Next();                    // Ein Token lesen
-    BOOL MayBeLabel( BOOL= FALSE ); // Kann es ein Label sein?
+    sal_Bool MayBeLabel( sal_Bool= sal_False ); // Kann es ein Label sein?
 
     void Hilite( SbTextPortions& ); // Syntax-Highlighting
 
@@ -168,14 +168,14 @@ public:
     void Error( SbError, const char* );
     void Error( SbError, String );
 
-    void Keywords( BOOL b ) { bKeywords = b; }
+    void Keywords( sal_Bool b ) { bKeywords = b; }
 
-    static BOOL IsEoln( SbiToken t )
-        { return BOOL( t == EOS || t == EOLN || t == REM ); }
-    static BOOL IsKwd( SbiToken t )
-        { return BOOL( t >= FIRSTKWD && t <= LASTKWD ); }
-    static BOOL IsExtra( SbiToken t )
-        { return BOOL( t >= FIRSTEXTRA ); }
+    static sal_Bool IsEoln( SbiToken t )
+        { return sal_Bool( t == EOS || t == EOLN || t == REM ); }
+    static sal_Bool IsKwd( SbiToken t )
+        { return sal_Bool( t >= FIRSTKWD && t <= LASTKWD ); }
+    static sal_Bool IsExtra( SbiToken t )
+        { return sal_Bool( t >= FIRSTEXTRA ); }
 };
 
 

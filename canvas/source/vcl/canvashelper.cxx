@@ -145,7 +145,7 @@ namespace vclcanvas
     void CanvasHelper::setBackgroundOutDev( const OutDevProviderSharedPtr& rOutDev )
     {
         mp2ndOutDev = rOutDev;
-        mp2ndOutDev->getOutDev().EnableMapMode( FALSE );
+        mp2ndOutDev->getOutDev().EnableMapMode( sal_False );
     }
 
     void CanvasHelper::clear()
@@ -156,7 +156,7 @@ namespace vclcanvas
             OutputDevice& rOutDev( mpOutDev->getOutDev() );
             tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
 
-            rOutDev.EnableMapMode( FALSE );
+            rOutDev.EnableMapMode( sal_False );
             rOutDev.SetLineColor( COL_TRANSPARENT );
             rOutDev.SetFillColor( COL_TRANSPARENT );
             rOutDev.DrawRect( Rectangle( Point(),
@@ -167,7 +167,7 @@ namespace vclcanvas
                 OutputDevice& rOutDev2( mp2ndOutDev->getOutDev() );
 
                 rOutDev2.SetDrawMode( DRAWMODE_DEFAULT );
-                rOutDev2.EnableMapMode( FALSE );
+                rOutDev2.EnableMapMode( sal_False );
                 rOutDev2.SetLineColor( COL_TRANSPARENT );
                 rOutDev2.SetFillColor( COL_TRANSPARENT );
                 rOutDev2.DrawRect( Rectangle( Point(),
@@ -298,9 +298,9 @@ namespace vclcanvas
                 // DrawPolygon(), and open ones via DrawPolyLine():
                 // closed polygons will simply already contain the
                 // closing segment.
-                USHORT nSize( aPolyPoly.Count() );
+                sal_uInt16 nSize( aPolyPoly.Count() );
 
-                for( USHORT i=0; i<nSize; ++i )
+                for( sal_uInt16 i=0; i<nSize; ++i )
                 {
                     mpOutDev->getOutDev().DrawPolyLine( aPolyPoly[i] );
 
@@ -410,21 +410,21 @@ namespace vclcanvas
             // self-intersections. Therefore, if we would render it
             // via OutDev::DrawPolyPolygon(), on/off fill would
             // generate off areas on those self-intersections.
-            USHORT nSize( aVCLPolyPoly.Count() );
+            sal_uInt16 nSize( aVCLPolyPoly.Count() );
 
-            for( USHORT i=0; i<nSize; ++i )
+            for( sal_uInt16 i=0; i<nSize; ++i )
             {
                 if( aStrokedPolyPoly.getB2DPolygon( i ).isClosed() ) {
                     mpOutDev->getOutDev().DrawPolygon( aVCLPolyPoly[i] );
                     if( mp2ndOutDev )
                         mp2ndOutDev->getOutDev().DrawPolygon( aVCLPolyPoly[i] );
                 } else {
-                    const USHORT nPolySize = aVCLPolyPoly[i].GetSize();
+                    const sal_uInt16 nPolySize = aVCLPolyPoly[i].GetSize();
                     if( nPolySize ) {
                         Point rPrevPoint = aVCLPolyPoly[i].GetPoint( 0 );
                         Point rPoint;
 
-                        for( USHORT j=1; j<nPolySize; j++ ) {
+                        for( sal_uInt16 j=1; j<nPolySize; j++ ) {
                             rPoint = aVCLPolyPoly[i].GetPoint( j );
                             mpOutDev->getOutDev().DrawLine( rPrevPoint, rPoint );
                             if( mp2ndOutDev )
@@ -497,7 +497,7 @@ namespace vclcanvas
             }
             else
             {
-                mpOutDev->getOutDev().DrawTransparent( aPolyPoly, (USHORT)nTransPercent );
+                mpOutDev->getOutDev().DrawTransparent( aPolyPoly, (sal_uInt16)nTransPercent );
             }
 
             if( mp2ndOutDev )
@@ -522,7 +522,7 @@ namespace vclcanvas
                 }
                 else
                 {
-                    mp2ndOutDev->getOutDev().DrawTransparent( aPolyPoly, (USHORT)nTransPercent );
+                    mp2ndOutDev->getOutDev().DrawTransparent( aPolyPoly, (sal_uInt16)nTransPercent );
                 }
             }
         }
@@ -584,7 +584,7 @@ namespace vclcanvas
                 return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
 
             // change text direction and layout mode
-            ULONG nLayoutMode(0);
+            sal_uIntPtr nLayoutMode(0);
             switch( textDirection )
             {
                 case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
@@ -608,16 +608,16 @@ namespace vclcanvas
             mpOutDev->getOutDev().SetLayoutMode( nLayoutMode );
             mpOutDev->getOutDev().DrawText( aOutpos,
                                             text.Text,
-                                            ::canvas::tools::numeric_cast<USHORT>(text.StartPosition),
-                                            ::canvas::tools::numeric_cast<USHORT>(text.Length) );
+                                            ::canvas::tools::numeric_cast<sal_uInt16>(text.StartPosition),
+                                            ::canvas::tools::numeric_cast<sal_uInt16>(text.Length) );
 
             if( mp2ndOutDev )
             {
                 mp2ndOutDev->getOutDev().SetLayoutMode( nLayoutMode );
                 mp2ndOutDev->getOutDev().DrawText( aOutpos,
                                                    text.Text,
-                                                   ::canvas::tools::numeric_cast<USHORT>(text.StartPosition),
-                                                   ::canvas::tools::numeric_cast<USHORT>(text.Length) );
+                                                   ::canvas::tools::numeric_cast<sal_uInt16>(text.StartPosition),
+                                                   ::canvas::tools::numeric_cast<sal_uInt16>(text.Length) );
             }
         }
 
@@ -760,7 +760,7 @@ namespace vclcanvas
                     // equivalent to the origAlpha*modulateAlpha the
                     // DX canvas performs)
                     aGrfAttr.SetTransparency(
-                        static_cast< BYTE >(
+                        static_cast< sal_uInt8 >(
                             ::basegfx::fround( 255.0*( 1.0 - nAlphaModulation ) ) ) );
                 }
 
@@ -779,7 +779,7 @@ namespace vclcanvas
                     // (3600,0].  Note that the original angle may have
                     // values outside the [0,2Pi) interval.
                     const double nAngleInTenthOfDegrees (3600.0 - nRotate * 3600.0 / (2*M_PI));
-                    aGrfAttr.SetRotation( static_cast< USHORT >(::basegfx::fround(nAngleInTenthOfDegrees)) );
+                    aGrfAttr.SetRotation( static_cast< sal_uInt16 >(::basegfx::fround(nAngleInTenthOfDegrees)) );
 
                     pGrfObj.reset( new GraphicObject( aBmpEx ) );
                 }
@@ -914,7 +914,7 @@ namespace vclcanvas
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-        rOutDev.EnableMapMode( FALSE );
+        rOutDev.EnableMapMode( sal_False );
 
         // TODO(F2): Support alpha vdev canvas here
         const Point aEmptyPoint(0,0);
@@ -943,7 +943,7 @@ namespace vclcanvas
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-        rOutDev.EnableMapMode( FALSE );
+        rOutDev.EnableMapMode( sal_False );
 
         Bitmap aBitmap( rOutDev.GetBitmap(aRect.TopLeft(),
                                           aRect.GetSize()) );
@@ -996,11 +996,11 @@ namespace vclcanvas
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-        rOutDev.EnableMapMode( FALSE );
+        rOutDev.EnableMapMode( sal_False );
 
         const Rectangle aRect( ::vcl::unotools::rectangleFromIntegerRectangle2D(rect) );
-        const USHORT    nBitCount( ::std::min( (USHORT)24U,
-                                               (USHORT)rOutDev.GetBitCount() ) );
+        const sal_uInt16    nBitCount( ::std::min( (sal_uInt16)24U,
+                                               (sal_uInt16)rOutDev.GetBitCount() ) );
         const BitmapPalette* pPalette = NULL;
 
         if( nBitCount <= 8 )
@@ -1046,7 +1046,7 @@ namespace vclcanvas
 
                         for( x=0; x<nWidth; ++x )
                         {
-                            *pScan++ = (BYTE)pWriteAccess->GetBestPaletteIndex(
+                            *pScan++ = (sal_uInt8)pWriteAccess->GetBestPaletteIndex(
                                 BitmapColor( data[ nCurrPos ],
                                              data[ nCurrPos+1 ],
                                              data[ nCurrPos+2 ] ) );
@@ -1122,7 +1122,7 @@ namespace vclcanvas
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-        rOutDev.EnableMapMode( FALSE );
+        rOutDev.EnableMapMode( sal_False );
 
         const Size aBmpSize( rOutDev.GetOutputSizePixel() );
 
@@ -1159,7 +1159,7 @@ namespace vclcanvas
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
         tools::OutDevStateKeeper aStateKeeper( mpProtectedOutDev );
-        rOutDev.EnableMapMode( FALSE );
+        rOutDev.EnableMapMode( sal_False );
 
         const Size aBmpSize( rOutDev.GetOutputSizePixel() );
 
@@ -1198,7 +1198,7 @@ namespace vclcanvas
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
         OutputDevice* p2ndOutDev = NULL;
 
-        rOutDev.EnableMapMode( FALSE );
+        rOutDev.EnableMapMode( sal_False );
 
         if( mp2ndOutDev )
             p2ndOutDev = &mp2ndOutDev->getOutDev();

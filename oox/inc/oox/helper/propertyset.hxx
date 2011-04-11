@@ -31,6 +31,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include "oox/token/properties.hxx"
 
 namespace oox {
 
@@ -98,7 +99,7 @@ public:
     ::com::sun::star::uno::Any getAnyProperty( sal_Int32 nPropId ) const;
 
     /** Gets the specified boolean property from the property set.
-        @return  true = property contains true; false = property contains false or error occured. */
+        @return  true = property contains true; false = property contains false or error occurred. */
     bool                getBoolProperty( sal_Int32 nPropId ) const;
 
     /** Gets the specified properties from the property set. Tries to use the XMultiPropertySet interface.

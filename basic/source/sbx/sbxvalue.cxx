@@ -29,154 +29,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#define _TLBIGINT_INT64
-#include <tools/bigint.hxx>
+#include <math.h>
 #include <tools/stream.hxx>
 
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
-#include <math.h>
 #include "runtime.hxx"
 
 TYPEINIT1(SbxValue,SbxBase)
 
-/////////////////////////// SbxINT64 /////////////////////////////////////
-SbxINT64 &SbxINT64::operator -= ( const SbxINT64 &r )
-{
-    BigInt b( *this );
-    b -= BigInt( r );
-    b.INT64( this );
-    return *this;
-}
-SbxINT64 &SbxINT64::operator += ( const SbxINT64 &r )
-{
-    BigInt b( *this );
-    b += BigInt( r );
-    b.INT64( this );
-    return *this;
-}
-SbxINT64 &SbxINT64::operator *= ( const SbxINT64 &r )
-{
-    BigInt b( *this );
-    b *= BigInt( r );
-    b.INT64( this );
-    return *this;
-}
-SbxINT64 &SbxINT64::operator %= ( const SbxINT64 &r )
-{
-    BigInt b( *this );
-    b %= BigInt( r );
-    b.INT64( this );
-    return *this;
-}
-SbxINT64 &SbxINT64::operator /= ( const SbxINT64 &r )
-{
-    BigInt b( *this );
-    b /= BigInt( r );
-    b.INT64( this );
-    return *this;
-}
-SbxINT64 &SbxINT64::operator &= ( const SbxINT64 &r )
-{
-    nHigh &= r.nHigh;
-    nLow  &= r.nLow;
-    return *this;
-}
-SbxINT64 &SbxINT64::operator |= ( const SbxINT64 &r )
-{
-    nHigh |= r.nHigh;
-    nLow  |= r.nLow;
-    return *this;
-}
-SbxINT64 &SbxINT64::operator ^= ( const SbxINT64 &r )
-{
-    nHigh ^= r.nHigh;
-    nLow  ^= r.nLow;
-    return *this;
-}
 
-SbxINT64 operator - ( const SbxINT64 &l, const SbxINT64 &r )
-{
-    SbxINT64 a(l);
-    a -= r;
-    return a;
-}
-SbxINT64 operator + ( const SbxINT64 &l, const SbxINT64 &r )
-{
-    SbxINT64 a(l);
-    a += r;
-    return a;
-}
-SbxINT64 operator / ( const SbxINT64 &l, const SbxINT64 &r )
-{
-    SbxINT64 a(l);
-    a /= r;
-    return a;
-}
-SbxINT64 operator % ( const SbxINT64 &l, const SbxINT64 &r )
-{
-    SbxINT64 a(l);
-    a %= r;
-    return a;
-}
-SbxINT64 operator * ( const SbxINT64 &l, const SbxINT64 &r )
-{
-    SbxINT64 a(l);
-    a *= r;
-    return a;
-}
-SbxINT64 operator & ( const SbxINT64 &l, const SbxINT64 &r )
-{
-    SbxINT64 a;
-    a.nHigh = r.nHigh & l.nHigh;
-    a.nLow  = r.nLow  & l.nLow;
-    return a;
-}
-SbxINT64 operator | ( const SbxINT64 &l, const SbxINT64 &r )
-{
-    SbxINT64 a;
-    a.nHigh = r.nHigh | l.nHigh;
-    a.nLow  = r.nLow  | l.nLow;
-    return a;
-}
-SbxINT64 operator ^ ( const SbxINT64 &r, const SbxINT64 &l )
-{
-    SbxINT64 a;
-    a.nHigh = r.nHigh ^ l.nHigh;
-    a.nLow  = r.nLow  ^ l.nLow;
-    return a;
-}
-
-SbxINT64 operator - ( const SbxINT64 &r )
-{
-    SbxINT64 a( r );
-    a.CHS();
-    return a;
-}
-SbxINT64 operator ~ ( const SbxINT64 &r )
-{
-    SbxINT64 a;
-    a.nHigh = ~r.nHigh;
-    a.nLow  = ~r.nLow;
-    return a;
-}
-
-SbxUINT64 &SbxUINT64::operator %= ( const SbxUINT64 &r )
-{
-    BigInt b( *this );
-    b %= BigInt( r );
-    b.UINT64( this );
-    return *this;
-}
-SbxUINT64 &SbxUINT64::operator /= ( const SbxUINT64 &r )
-{
-    BigInt b( *this );
-    b /= BigInt( r );
-    b.UINT64( this );
-    return *this;
-}
-/////////////////////////// Error processing /////////////////////////////
-
+///////////////////////////// error handling //////////////////////////////
+// bring back ?? was ever in ?? currently ifdef out ?
 #ifdef _USED
 // STILL Reverse ENGINEERING!
 
@@ -198,12 +62,11 @@ int matherr( struct _exception* p )
 #endif
         default:        SbxBase::SetError( SbxERR_NOTIMP ); break;
     }
-    return TRUE;
+    return sal_True;
 }
 #endif
 
 #endif // _USED
-
 
 ///////////////////////////// constructors //////////////////////////////
 
@@ -224,21 +87,21 @@ SbxValue::SbxValue( SbxDataType t, void* p ) : SbxBase()
     if( p )
     switch( t & 0x0FFF )
     {
-        case SbxINTEGER:    n |= SbxBYREF; aData.pInteger = (INT16*) p; break;
-        case SbxULONG64:    n |= SbxBYREF; aData.pULong64 = (SbxUINT64*) p; break;
-        case SbxLONG64:
-        case SbxCURRENCY:   n |= SbxBYREF; aData.pLong64 = (SbxINT64*) p; break;
-        case SbxLONG:       n |= SbxBYREF; aData.pLong = (INT32*) p; break;
+        case SbxINTEGER:    n |= SbxBYREF; aData.pInteger = (sal_Int16*) p; break;
+        case SbxSALUINT64:  n |= SbxBYREF; aData.puInt64 = (sal_uInt64*) p; break;
+        case SbxSALINT64:
+        case SbxCURRENCY:   n |= SbxBYREF; aData.pnInt64 = (sal_Int64*) p; break;
+        case SbxLONG:       n |= SbxBYREF; aData.pLong = (sal_Int32*) p; break;
         case SbxSINGLE:     n |= SbxBYREF; aData.pSingle = (float*) p; break;
         case SbxDATE:
         case SbxDOUBLE:     n |= SbxBYREF; aData.pDouble = (double*) p; break;
         case SbxSTRING:     n |= SbxBYREF; aData.pOUString = (::rtl::OUString*) p; break;
         case SbxERROR:
         case SbxUSHORT:
-        case SbxBOOL:       n |= SbxBYREF; aData.pUShort = (UINT16*) p; break;
-        case SbxULONG:      n |= SbxBYREF; aData.pULong = (UINT32*) p; break;
-        case SbxCHAR:       n |= SbxBYREF; aData.pChar = (xub_Unicode*) p; break;
-        case SbxBYTE:       n |= SbxBYREF; aData.pByte = (BYTE*) p; break;
+        case SbxBOOL:       n |= SbxBYREF; aData.pUShort = (sal_uInt16*) p; break;
+        case SbxULONG:      n |= SbxBYREF; aData.pULong = (sal_uInt32*) p; break;
+        case SbxCHAR:       n |= SbxBYREF; aData.pChar = (sal_Unicode*) p; break;
+        case SbxBYTE:       n |= SbxBYREF; aData.pByte = (sal_uInt8*) p; break;
         case SbxINT:        n |= SbxBYREF; aData.pInt = (int*) p; break;
         case SbxOBJECT:
             aData.pObj = (SbxBase*) p;
@@ -359,8 +222,8 @@ SbxValue::~SbxValue()
         {
             HACK(nicht bei Parent-Prop - sonst CyclicRef)
             SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
-            BOOL bParentProp = pThisVar && 5345 ==
-            ( (INT16) ( pThisVar->GetUserData() & 0xFFFF ) );
+            sal_Bool bParentProp = pThisVar && 5345 ==
+            ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
             if ( !bParentProp )
                 aData.pObj->ReleaseRef();
         }
@@ -390,8 +253,8 @@ void SbxValue::Clear()
                 {
                     HACK(nicht bei Parent-Prop - sonst CyclicRef)
                     SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
-                    BOOL bParentProp = pThisVar && 5345 ==
-                    ( (INT16) ( pThisVar->GetUserData() & 0xFFFF ) );
+                    sal_Bool bParentProp = pThisVar && 5345 ==
+                    ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
                     if ( !bParentProp )
                         aData.pObj->ReleaseRef();
                 }
@@ -416,7 +279,7 @@ void SbxValue::Clear()
 
 // Dummy
 
-void SbxValue::Broadcast( ULONG )
+void SbxValue::Broadcast( sal_uIntPtr )
 {}
 
 //////////////////////////// Readout data //////////////////////////////
@@ -428,11 +291,13 @@ void SbxValue::Broadcast( ULONG )
 
 SbxValue* SbxValue::TheRealValue() const
 {
-    return TheRealValue( TRUE );
+    return TheRealValue( sal_True );
 }
 
 // #55226 ship additional information
-SbxValue* SbxValue::TheRealValue( BOOL bObjInObjError ) const
+bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal );    // sbunoobj.cxx
+
+SbxValue* SbxValue::TheRealValue( sal_Bool bObjInObjError ) const
 {
     SbxValue* p = (SbxValue*) this;
     for( ;; )
@@ -449,7 +314,7 @@ SbxValue* SbxValue::TheRealValue( BOOL bObjInObjError ) const
 
                 // If this is an object and contains itself,
                 // we cannot access on it
-                // #55226# The old condition to set an error
+                // The old condition to set an error
                 // is not correct, because e.g. a regular variant variable with an object
                 // could be affected thereof, if another value should be assigned.
                 // Therefore with flag.
@@ -457,15 +322,15 @@ SbxValue* SbxValue::TheRealValue( BOOL bObjInObjError ) const
                     ((SbxValue*) pObj)->aData.eType == SbxOBJECT &&
                     ((SbxValue*) pObj)->aData.pObj == pObj )
                 {
-                    SetError( SbxERR_BAD_PROP_VALUE );
-                    p = NULL;
+                    bool bSuccess = handleToStringForCOMObjects( pObj, p );
+                    if( !bSuccess )
+                    {
+                        SetError( SbxERR_BAD_PROP_VALUE );
+                        p = NULL;
+                    }
                 }
                 else if( pDflt )
                     p = pDflt;
-                /* ALT:
-                else
-                    p = pDflt ? pDflt : (SbxVariable*) pObj;
-                */
                 break;
             }
             // Did we have an array?
@@ -501,9 +366,9 @@ SbxValue* SbxValue::TheRealValue( BOOL bObjInObjError ) const
     return p;
 }
 
-BOOL SbxValue::Get( SbxValues& rRes ) const
+sal_Bool SbxValue::Get( SbxValues& rRes ) const
 {
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     SbxError eOld = GetError();
     if( eOld != SbxERR_OK )
         ResetError();
@@ -534,11 +399,11 @@ BOOL SbxValue::Get( SbxValues& rRes ) const
                 case SbxSALUINT64:  rRes.uInt64 = ImpGetUInt64( &p->aData ); break;
                 case SbxSINGLE:  rRes.nSingle = ImpGetSingle( &p->aData ); break;
                 case SbxDOUBLE:  rRes.nDouble = ImpGetDouble( &p->aData ); break;
-                case SbxCURRENCY:rRes.nLong64 = ImpGetCurrency( &p->aData ); break;
+                case SbxCURRENCY:rRes.nInt64 = ImpGetCurrency( &p->aData ); break;
                 case SbxDECIMAL: rRes.pDecimal = ImpGetDecimal( &p->aData ); break;
                 case SbxDATE:    rRes.nDouble = ImpGetDate( &p->aData ); break;
                 case SbxBOOL:
-                    rRes.nUShort = sal::static_int_cast< UINT16 >(
+                    rRes.nUShort = sal::static_int_cast< sal_uInt16 >(
                         ImpGetBool( &p->aData ) );
                     break;
                 case SbxCHAR:    rRes.nChar = ImpGetChar( &p->aData ); break;
@@ -593,18 +458,18 @@ BOOL SbxValue::Get( SbxValues& rRes ) const
     }
     if( !IsError() )
     {
-        bRes = TRUE;
+        bRes = sal_True;
         if( eOld != SbxERR_OK )
             SetError( eOld );
     }
     return bRes;
 }
 
-BOOL SbxValue::GetNoBroadcast( SbxValues& rRes )
+sal_Bool SbxValue::GetNoBroadcast( SbxValues& rRes )
 {
-    USHORT nFlags_ = GetFlags();
+    sal_uInt16 nFlags_ = GetFlags();
     SetFlag( SBX_NO_BROADCAST );
-    BOOL bRes = Get( rRes );
+    sal_Bool bRes = Get( rRes );
     SetFlags( nFlags_ );
     return bRes;
 }
@@ -644,7 +509,7 @@ const XubString& SbxValue::GetCoreString() const
     return aResult;
 }
 
-BOOL SbxValue::HasObject() const
+sal_Bool SbxValue::HasObject() const
 {
     ErrCode eErr = GetError();
     SbxValues aRes;
@@ -654,43 +519,41 @@ BOOL SbxValue::HasObject() const
     return 0 != aRes.pObj;
 }
 
-BOOL SbxValue::GetBool() const
+sal_Bool SbxValue::GetBool() const
 {
     SbxValues aRes;
     aRes.eType = SbxBOOL;
     Get( aRes );
-    return BOOL( aRes.nUShort != 0 );
+    return sal_Bool( aRes.nUShort != 0 );
 }
 
 #define GET( g, e, t, m ) \
 t SbxValue::g() const { SbxValues aRes(e); Get( aRes ); return aRes.m; }
 
-GET( GetByte,     SbxBYTE,       BYTE,             nByte )
-GET( GetChar,     SbxCHAR,       xub_Unicode,           nChar )
-GET( GetCurrency, SbxCURRENCY,   SbxINT64,         nLong64 )
-GET( GetDate,     SbxDATE,       double,           nDouble )
-GET( GetData,     SbxDATAOBJECT, void*,            pData )
-GET( GetDouble,   SbxDOUBLE,     double,           nDouble )
-GET( GetErr,      SbxERROR,      UINT16,           nUShort )
-GET( GetInt,      SbxINT,        int,              nInt )
-GET( GetInteger,  SbxINTEGER,    INT16,            nInteger )
-GET( GetLong,     SbxLONG,       INT32,            nLong )
-GET( GetLong64,   SbxLONG64,     SbxINT64,         nLong64 )
-GET( GetObject,   SbxOBJECT,     SbxBase*,         pObj )
-GET( GetSingle,   SbxSINGLE,     float,            nSingle )
-GET( GetULong,    SbxULONG,      UINT32,           nULong )
-GET( GetULong64,  SbxULONG64,    SbxUINT64,        nULong64 )
-GET( GetUShort,   SbxUSHORT,     UINT16,           nUShort )
-GET( GetInt64,    SbxSALINT64,   sal_Int64,        nInt64 )
-GET( GetUInt64,   SbxSALUINT64,  sal_uInt64,       uInt64 )
-GET( GetDecimal,  SbxDECIMAL,    SbxDecimal*,      pDecimal )
+GET( GetByte,     SbxBYTE,       sal_uInt8,     nByte )
+GET( GetChar,     SbxCHAR,       xub_Unicode,   nChar )
+GET( GetCurrency, SbxCURRENCY,   sal_Int64,     nInt64 )
+GET( GetDate,     SbxDATE,       double,        nDouble )
+GET( GetData,     SbxDATAOBJECT, void*,         pData )
+GET( GetDouble,   SbxDOUBLE,     double,        nDouble )
+GET( GetErr,      SbxERROR,      sal_uInt16,    nUShort )
+GET( GetInt,      SbxINT,        int,           nInt )
+GET( GetInteger,  SbxINTEGER,    sal_Int16,     nInteger )
+GET( GetLong,     SbxLONG,       sal_Int32,     nLong )
+GET( GetObject,   SbxOBJECT,     SbxBase*,      pObj )
+GET( GetSingle,   SbxSINGLE,     float,         nSingle )
+GET( GetULong,    SbxULONG,      sal_uInt32,    nULong )
+GET( GetUShort,   SbxUSHORT,     sal_uInt16,    nUShort )
+GET( GetInt64,    SbxSALINT64,   sal_Int64,     nInt64 )
+GET( GetUInt64,   SbxSALUINT64,  sal_uInt64,    uInt64 )
+GET( GetDecimal,  SbxDECIMAL,    SbxDecimal*,   pDecimal )
 
 
 //////////////////////////// Write data /////////////////////////////
 
-BOOL SbxValue::Put( const SbxValues& rVal )
+sal_Bool SbxValue::Put( const SbxValues& rVal )
 {
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     SbxError eOld = GetError();
     if( eOld != SbxERR_OK )
         ResetError();
@@ -704,7 +567,7 @@ BOOL SbxValue::Put( const SbxValues& rVal )
         // the real values
         SbxValue* p = this;
         if( rVal.eType != SbxOBJECT )
-            p = TheRealValue( FALSE );  // #55226 Don't allow an error here
+            p = TheRealValue( sal_False );  // Don't allow an error here
         if( p )
         {
             if( !p->CanWrite() )
@@ -721,7 +584,7 @@ BOOL SbxValue::Put( const SbxValues& rVal )
                 case SbxSALUINT64:  ImpPutUInt64( &p->aData, rVal.uInt64 ); break;
                 case SbxSINGLE:     ImpPutSingle( &p->aData, rVal.nSingle ); break;
                 case SbxDOUBLE:     ImpPutDouble( &p->aData, rVal.nDouble ); break;
-                case SbxCURRENCY:   ImpPutCurrency( &p->aData, rVal.nLong64 ); break;
+                case SbxCURRENCY:   ImpPutCurrency( &p->aData, rVal.nInt64 ); break;
                 case SbxDECIMAL:    ImpPutDecimal( &p->aData, rVal.pDecimal ); break;
                 case SbxDATE:       ImpPutDate( &p->aData, rVal.nDouble ); break;
                 case SbxBOOL:       ImpPutBool( &p->aData, rVal.nInteger ); break;
@@ -733,16 +596,16 @@ BOOL SbxValue::Put( const SbxValues& rVal )
                 case SbxSTRING:     ImpPutString( &p->aData, rVal.pOUString ); break;
                 case SbxINT:
 #if SAL_TYPES_SIZEOFINT == 2
-                    ImpPutInteger( &p->aData, (INT16) rVal.nInt );
+                    ImpPutInteger( &p->aData, (sal_Int16) rVal.nInt );
 #else
-                    ImpPutLong( &p->aData, (INT32) rVal.nInt );
+                    ImpPutLong( &p->aData, (sal_Int32) rVal.nInt );
 #endif
                     break;
                 case SbxUINT:
 #if SAL_TYPES_SIZEOFINT == 2
-                    ImpPutUShort( &p->aData, (UINT16) rVal.nUInt );
+                    ImpPutUShort( &p->aData, (sal_uInt16) rVal.nUInt );
 #else
-                    ImpPutULong( &p->aData, (UINT32) rVal.nUInt );
+                    ImpPutULong( &p->aData, (sal_uInt32) rVal.nUInt );
 #endif
                     break;
                 case SbxOBJECT:
@@ -763,12 +626,12 @@ BOOL SbxValue::Put( const SbxValues& rVal )
                         {
                             if ( p != this )
                             {
-                                DBG_ERROR( "TheRealValue" );
+                                OSL_FAIL( "TheRealValue" );
                             }
                             HACK(nicht bei Parent-Prop - sonst CyclicRef)
                             SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
-                            BOOL bParentProp = pThisVar && 5345 ==
-                                    ( (INT16) ( pThisVar->GetUserData() & 0xFFFF ) );
+                            sal_Bool bParentProp = pThisVar && 5345 ==
+                                    ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
                             if ( !bParentProp )
                                 p->aData.pObj->AddRef();
                         }
@@ -788,11 +651,11 @@ BOOL SbxValue::Put( const SbxValues& rVal )
             }
             if( !IsError() )
             {
-                p->SetModified( TRUE );
+                p->SetModified( sal_True );
                 p->Broadcast( SBX_HINT_DATACHANGED );
                 if( eOld != SbxERR_OK )
                     SetError( eOld );
-                bRes = TRUE;
+                bRes = sal_True;
             }
         }
     }
@@ -806,7 +669,7 @@ BOOL SbxValue::Put( const SbxValues& rVal )
 // if Float were declared with ',' as the decimal seperator or BOOl
 // explicit with "TRUE" or "FALSE".
 // Implementation in ImpConvStringExt (SBXSCAN.CXX)
-BOOL SbxValue::PutStringExt( const ::rtl::OUString& r )
+sal_Bool SbxValue::PutStringExt( const ::rtl::OUString& r )
 {
     // Copy; if it is Unicode convert it immediately
     ::rtl::OUString aStr( r );
@@ -821,7 +684,7 @@ BOOL SbxValue::PutStringExt( const ::rtl::OUString& r )
 
     // Only if really something was converted, take the copy,
     // elsewise take the original (Unicode remain)
-    BOOL bRet;
+    sal_Bool bRet;
     if( ImpConvStringExt( aStr, eTargetType ) )
         aRes.pOUString = (::rtl::OUString*)&aStr;
     else
@@ -829,7 +692,7 @@ BOOL SbxValue::PutStringExt( const ::rtl::OUString& r )
 
     // #34939: Set a Fixed-Flag at Strings. which contain a number, and
     // if this has a Num-Type, so that the type will not be changed
-    USHORT nFlags_ = GetFlags();
+    sal_uInt16 nFlags_ = GetFlags();
     if( ( eTargetType >= SbxINTEGER && eTargetType <= SbxCURRENCY ) ||
         ( eTargetType >= SbxCHAR && eTargetType <= SbxUINT ) ||
         eTargetType == SbxBOOL )
@@ -841,7 +704,7 @@ BOOL SbxValue::PutStringExt( const ::rtl::OUString& r )
     }
 
     Put( aRes );
-    bRet = BOOL( !IsError() );
+    bRet = sal_Bool( !IsError() );
 
     // If it throwed an error with FIXED, set it back
     // (UI-Action should not cast an error, but only fail)
@@ -852,104 +715,102 @@ BOOL SbxValue::PutStringExt( const ::rtl::OUString& r )
     return bRet;
 }
 
-BOOL SbxValue::PutString( const xub_Unicode* p )
+sal_Bool SbxValue::PutString( const xub_Unicode* p )
 {
     ::rtl::OUString aVal( p );
     SbxValues aRes;
     aRes.eType = SbxSTRING;
     aRes.pOUString = &aVal;
     Put( aRes );
-    return BOOL( !IsError() );
+    return sal_Bool( !IsError() );
 }
 
-BOOL SbxValue::PutBool( BOOL b )
+sal_Bool SbxValue::PutBool( sal_Bool b )
 {
     SbxValues aRes;
     aRes.eType = SbxBOOL;
-    aRes.nUShort = sal::static_int_cast< UINT16 >(b ? SbxTRUE : SbxFALSE);
+    aRes.nUShort = sal::static_int_cast< sal_uInt16 >(b ? SbxTRUE : SbxFALSE);
     Put( aRes );
-    return BOOL( !IsError() );
+    return sal_Bool( !IsError() );
 }
 
-BOOL SbxValue::PutEmpty()
+sal_Bool SbxValue::PutEmpty()
 {
-    BOOL bRet = SetType( SbxEMPTY );
-        SetModified( TRUE );
+    sal_Bool bRet = SetType( SbxEMPTY );
+        SetModified( sal_True );
     return bRet;
 }
 
-BOOL SbxValue::PutNull()
+sal_Bool SbxValue::PutNull()
 {
-    BOOL bRet = SetType( SbxNULL );
+    sal_Bool bRet = SetType( SbxNULL );
     if( bRet )
-        SetModified( TRUE );
+        SetModified( sal_True );
     return bRet;
 }
 
 
 // Special decimal methods
-BOOL SbxValue::PutDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec )
+sal_Bool SbxValue::PutDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec )
 {
     SbxValue::Clear();
     aData.pDecimal = new SbxDecimal( rAutomationDec );
     aData.pDecimal->addRef();
     aData.eType = SbxDECIMAL;
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SbxValue::fillAutomationDecimal
+sal_Bool SbxValue::fillAutomationDecimal
     ( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec )
 {
     SbxDecimal* pDecimal = GetDecimal();
     if( pDecimal != NULL )
     {
         pDecimal->fillAutomationDecimal( rAutomationDec );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 
-BOOL SbxValue::PutpChar( const xub_Unicode* p )
+sal_Bool SbxValue::PutpChar( const xub_Unicode* p )
 {
     ::rtl::OUString aVal( p );
     SbxValues aRes;
     aRes.eType = SbxLPSTR;
     aRes.pOUString = &aVal;
     Put( aRes );
-    return BOOL( !IsError() );
+    return sal_Bool( !IsError() );
 }
 
-BOOL SbxValue::PutString( const ::rtl::OUString& r )
+sal_Bool SbxValue::PutString( const ::rtl::OUString& r )
 {
     SbxValues aRes;
     aRes.eType = SbxSTRING;
     aRes.pOUString = (::rtl::OUString*) &r;
     Put( aRes );
-    return BOOL( !IsError() );
+    return sal_Bool( !IsError() );
 }
 
 
 #define PUT( p, e, t, m ) \
-BOOL SbxValue::p( t n ) \
-{ SbxValues aRes(e); aRes.m = n; Put( aRes ); return BOOL( !IsError() ); }
+sal_Bool SbxValue::p( t n ) \
+{ SbxValues aRes(e); aRes.m = n; Put( aRes ); return sal_Bool( !IsError() ); }
 
-PUT( PutByte,     SbxBYTE,       BYTE,             nByte )
-PUT( PutChar,     SbxCHAR,       xub_Unicode,      nChar )
-PUT( PutCurrency, SbxCURRENCY,   const SbxINT64&,  nLong64 )
+PUT( PutByte,     SbxBYTE,       sal_uInt8,             nByte )
+PUT( PutChar,     SbxCHAR,       sal_Unicode,      nChar )
+PUT( PutCurrency, SbxCURRENCY,   const sal_Int64&, nInt64 )
 PUT( PutDate,     SbxDATE,       double,           nDouble )
 PUT( PutData,     SbxDATAOBJECT, void*,            pData )
 PUT( PutDouble,   SbxDOUBLE,     double,           nDouble )
-PUT( PutErr,      SbxERROR,      UINT16,           nUShort )
+PUT( PutErr,      SbxERROR,      sal_uInt16,           nUShort )
 PUT( PutInt,      SbxINT,        int,              nInt )
-PUT( PutInteger,  SbxINTEGER,    INT16,            nInteger )
-PUT( PutLong,     SbxLONG,       INT32,            nLong )
-PUT( PutLong64,   SbxLONG64,     const SbxINT64&,  nLong64 )
+PUT( PutInteger,  SbxINTEGER,    sal_Int16,            nInteger )
+PUT( PutLong,     SbxLONG,       sal_Int32,            nLong )
 PUT( PutObject,   SbxOBJECT,     SbxBase*,         pObj )
 PUT( PutSingle,   SbxSINGLE,     float,            nSingle )
-PUT( PutULong,    SbxULONG,      UINT32,           nULong )
-PUT( PutULong64,  SbxULONG64,    const SbxUINT64&, nULong64 )
-PUT( PutUShort,   SbxUSHORT,     UINT16,           nUShort )
+PUT( PutULong,    SbxULONG,      sal_uInt32,           nULong )
+PUT( PutUShort,   SbxUSHORT,     sal_uInt16,           nUShort )
 PUT( PutInt64,    SbxSALINT64,   sal_Int64,        nInt64 )
 PUT( PutUInt64,   SbxSALUINT64,  sal_uInt64,       uInt64 )
 PUT( PutDecimal,  SbxDECIMAL,    SbxDecimal*,      pDecimal )
@@ -957,7 +818,7 @@ PUT( PutDecimal,  SbxDECIMAL,    SbxDecimal*,      pDecimal )
 
 ////////////////////////// Setting of the data type ///////////////////////////
 
-BOOL SbxValue::IsFixed() const
+sal_Bool SbxValue::IsFixed() const
 {
     return ( (GetFlags() & SBX_FIXED) | (aData.eType & SbxBYREF) ) != 0;
 }
@@ -966,22 +827,22 @@ BOOL SbxValue::IsFixed() const
 // or if it contains a complete convertible String
 
 // #41692, implement it for RTL and Basic-Core seperably
-BOOL SbxValue::IsNumeric() const
+sal_Bool SbxValue::IsNumeric() const
 {
-    return ImpIsNumeric( /*bOnlyIntntl*/FALSE );
+    return ImpIsNumeric( /*bOnlyIntntl*/sal_False );
 }
 
-BOOL SbxValue::IsNumericRTL() const
+sal_Bool SbxValue::IsNumericRTL() const
 {
-    return ImpIsNumeric( /*bOnlyIntntl*/TRUE );
+    return ImpIsNumeric( /*bOnlyIntntl*/sal_True );
 }
 
-BOOL SbxValue::ImpIsNumeric( BOOL bOnlyIntntl ) const
+sal_Bool SbxValue::ImpIsNumeric( sal_Bool bOnlyIntntl ) const
 {
 
     if( !CanRead() )
     {
-        SetError( SbxERR_PROP_WRITEONLY ); return FALSE;
+        SetError( SbxERR_PROP_WRITEONLY ); return sal_False;
     }
     // Test downcast!!!
     if( this->ISA(SbxVariable) )
@@ -994,14 +855,14 @@ BOOL SbxValue::ImpIsNumeric( BOOL bOnlyIntntl ) const
             ::rtl::OUString s( *aData.pOUString );
             double n;
             SbxDataType t2;
-            USHORT nLen = 0;
-            if( ImpScan( s, n, t2, &nLen, /*bAllowIntntl*/FALSE, bOnlyIntntl ) == SbxERR_OK )
-                return BOOL( nLen == s.getLength() );
+            sal_uInt16 nLen = 0;
+            if( ImpScan( s, n, t2, &nLen, /*bAllowIntntl*/sal_False, bOnlyIntntl ) == SbxERR_OK )
+                return sal_Bool( nLen == s.getLength() );
         }
-        return FALSE;
+        return sal_False;
     }
     else
-        return BOOL( t == SbxEMPTY
+        return sal_Bool( t == SbxEMPTY
             || ( t >= SbxINTEGER && t <= SbxCURRENCY )
             || ( t >= SbxCHAR && t <= SbxUINT ) );
 }
@@ -1021,19 +882,19 @@ SbxDataType SbxValue::GetFullType() const
     return aData.eType;
 }
 
-BOOL SbxValue::SetType( SbxDataType t )
+sal_Bool SbxValue::SetType( SbxDataType t )
 {
     DBG_ASSERT( !( t & 0xF000 ), "Setzen von BYREF|ARRAY verboten!" );
     if( ( t == SbxEMPTY && aData.eType == SbxVOID )
      || ( aData.eType == SbxEMPTY && t == SbxVOID ) )
-        return TRUE;
+        return sal_True;
     if( ( t & 0x0FFF ) == SbxVARIANT )
     {
         // Trial to set the data type to Variant
         ResetFlag( SBX_FIXED );
         if( IsFixed() )
         {
-            SetError( SbxERR_CONVERSION ); return FALSE;
+            SetError( SbxERR_CONVERSION ); return sal_False;
         }
         t = SbxEMPTY;
     }
@@ -1041,7 +902,7 @@ BOOL SbxValue::SetType( SbxDataType t )
     {
         if( !CanWrite() || IsFixed() )
         {
-            SetError( SbxERR_CONVERSION ); return FALSE;
+            SetError( SbxERR_CONVERSION ); return sal_False;
         }
         else
         {
@@ -1056,12 +917,12 @@ BOOL SbxValue::SetType( SbxDataType t )
                     {
                         HACK(nicht bei Parent-Prop - sonst CyclicRef)
                         SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
-                        UINT16 nSlotId = pThisVar
-                                    ? ( (INT16) ( pThisVar->GetUserData() & 0xFFFF ) )
+                        sal_uInt16 nSlotId = pThisVar
+                                    ? ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) )
                                     : 0;
                         DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName() == UniString::CreateFromAscii( "Parent" ),
                                     "SID_PARENTOBJECT heisst nicht 'Parent'" );
-                        BOOL bParentProp = 5345 == nSlotId;
+                        sal_Bool bParentProp = 5345 == nSlotId;
                         if ( !bParentProp )
                             aData.pObj->ReleaseRef();
                     }
@@ -1073,31 +934,31 @@ BOOL SbxValue::SetType( SbxDataType t )
             aData.eType = t;
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SbxValue::Convert( SbxDataType eTo )
+sal_Bool SbxValue::Convert( SbxDataType eTo )
 {
     eTo = SbxDataType( eTo & 0x0FFF );
     if( ( aData.eType & 0x0FFF ) == eTo )
-        return TRUE;
+        return sal_True;
     if( !CanWrite() )
-        return FALSE;
+        return sal_False;
     if( eTo == SbxVARIANT )
     {
         // Trial to set the data type to Variant
         ResetFlag( SBX_FIXED );
         if( IsFixed() )
         {
-            SetError( SbxERR_CONVERSION ); return FALSE;
+            SetError( SbxERR_CONVERSION ); return sal_False;
         }
         else
-            return TRUE;
+            return sal_True;
     }
     // Converting from zero doesn't work. Once zero, always zero!
     if( aData.eType == SbxNULL )
     {
-        SetError( SbxERR_CONVERSION ); return FALSE;
+        SetError( SbxERR_CONVERSION ); return sal_False;
     }
 
     // Conversion of the data:
@@ -1111,17 +972,17 @@ BOOL SbxValue::Convert( SbxDataType eTo )
         {
             SetType( eTo );
             Put( aNew );
-            SetModified( TRUE );
+            SetModified( sal_True );
         }
         Broadcast( SBX_HINT_CONVERTED );
-        return TRUE;
+        return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 ////////////////////////////////// Calculating /////////////////////////////////
 
-BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
+sal_Bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 {
     bool bVBAInterop =  SbiRuntime::isVBAEnabled();
 
@@ -1183,34 +1044,24 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
         else if( eOpType == SbxSTRING && rOp.IsFixed() )
         {   // Numeric: there is no String allowed on the right side
             SetError( SbxERR_CONVERSION );
+            // falls all the way out
         }
         else if( ( eOp >= SbxIDIV && eOp <= SbxNOT ) || eOp == SbxMOD )
         {
             if( GetType() == eOpType )
             {
-                if( GetType() == SbxULONG64
-                    || GetType() == SbxLONG64
-                    || GetType() == SbxCURRENCY
-                    || GetType() == SbxULONG )
+                if( GetType() == SbxSALUINT64 || GetType() == SbxSALINT64
+                 || GetType() == SbxCURRENCY  || GetType() == SbxULONG )
                     aL.eType = aR.eType = GetType();
-//              else if( GetType() == SbxDouble || GetType() == SbxSingle )
-//                  aL.eType = aR.eType = SbxLONG64;
                 else if ( bVBAInterop && eOpType == SbxBOOL )
                     aL.eType = aR.eType = SbxBOOL;
                 else
                     aL.eType = aR.eType = SbxLONG;
             }
-            else if( GetType() == SbxCURRENCY || eOpType == SbxCURRENCY
-                     || GetType() == SbxULONG64 || eOpType == SbxULONG64
-                     || GetType() == SbxLONG64 || eOpType == SbxLONG64 )
-                aL.eType = aR.eType = SbxLONG64;
-//          else if( GetType() == SbxDouble || rOP.GetType() == SbxDouble
-//                   || GetType() == SbxSingle || rOP.GetType() == SbxSingle )
-//              aL.eType = aR.eType = SbxLONG64;
             else
                 aL.eType = aR.eType = SbxLONG;
 
-            if( rOp.Get( aR ) )
+            if( rOp.Get( aR ) )     // re-do Get after type assigns above
             {
                 if( rOp.GetType() == SbxEMPTY )
                 {
@@ -1221,13 +1072,17 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                 {
                     case SbxIDIV:
                         if( aL.eType == SbxCURRENCY )
-                            aL.eType = SbxLONG64;
-                        if( aL.eType == SbxLONG64 )
-                            if( !aR.nLong64 ) SetError( SbxERR_ZERODIV );
-                            else aL.nLong64 /= aR.nLong64;
-                        else if( aL.eType == SbxULONG64 )
-                            if( !aR.nULong64 ) SetError( SbxERR_ZERODIV );
-                            else aL.nULong64 /= aR.nULong64;
+                            if( !aR.nInt64 ) SetError( SbxERR_ZERODIV );
+                            else {
+                                aL.nInt64 /= aR.nInt64;
+                                aL.nInt64 *= CURRENCY_FACTOR;
+                        }
+                        else if( aL.eType == SbxSALUINT64 )
+                            if( !aR.uInt64 ) SetError( SbxERR_ZERODIV );
+                            else aL.uInt64 /= aR.uInt64;
+                        else if( aL.eType == SbxSALINT64 )
+                            if( !aR.nInt64 ) SetError( SbxERR_ZERODIV );
+                            else aL.nInt64 /= aR.nInt64;
                         else if( aL.eType == SbxLONG )
                             if( !aR.nLong ) SetError( SbxERR_ZERODIV );
                             else aL.nLong /= aR.nLong;
@@ -1236,14 +1091,12 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                             else aL.nULong /= aR.nULong;
                         break;
                     case SbxMOD:
-                        if( aL.eType == SbxCURRENCY )
-                            aL.eType = SbxLONG64;
-                        if( aL.eType == SbxLONG64 )
-                            if( !aR.nLong64 ) SetError( SbxERR_ZERODIV );
-                            else aL.nLong64 %= aR.nLong64;
-                        else if( aL.eType == SbxULONG64 )
-                            if( !aR.nULong64 ) SetError( SbxERR_ZERODIV );
-                            else aL.nULong64 %= aR.nULong64;
+                        if( aL.eType == SbxCURRENCY || aL.eType == SbxSALINT64 )
+                            if( !aR.nInt64 ) SetError( SbxERR_ZERODIV );
+                            else aL.nInt64 %= aR.nInt64;
+                        else if( aL.eType == SbxSALUINT64 )
+                            if( !aR.uInt64 ) SetError( SbxERR_ZERODIV );
+                            else aL.uInt64 %= aR.uInt64;
                         else if( aL.eType == SbxLONG )
                             if( !aR.nLong ) SetError( SbxERR_ZERODIV );
                             else aL.nLong %= aR.nLong;
@@ -1253,31 +1106,31 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                         break;
                     case SbxAND:
                         if( aL.eType != SbxLONG && aL.eType != SbxULONG )
-                            aL.nLong64 &= aR.nLong64;
+                            aL.nInt64 &= aR.nInt64;
                         else
                             aL.nLong &= aR.nLong;
                         break;
                     case SbxOR:
                         if( aL.eType != SbxLONG && aL.eType != SbxULONG )
-                            aL.nLong64 |= aR.nLong64;
+                            aL.nInt64 |= aR.nInt64;
                         else
                             aL.nLong |= aR.nLong;
                         break;
                     case SbxXOR:
                         if( aL.eType != SbxLONG && aL.eType != SbxULONG )
-                            aL.nLong64 ^= aR.nLong64;
+                            aL.nInt64 ^= aR.nInt64;
                         else
                             aL.nLong ^= aR.nLong;
                         break;
                     case SbxEQV:
                         if( aL.eType != SbxLONG && aL.eType != SbxULONG )
-                            aL.nLong64 = (aL.nLong64 & aR.nLong64) | (~aL.nLong64 & ~aR.nLong64);
+                            aL.nInt64 = (aL.nInt64 & aR.nInt64) | (~aL.nInt64 & ~aR.nInt64);
                         else
                             aL.nLong = (aL.nLong & aR.nLong) | (~aL.nLong & ~aR.nLong);
                         break;
                     case SbxIMP:
                         if( aL.eType != SbxLONG && aL.eType != SbxULONG )
-                            aL.nLong64 = ~aL.nLong64 | aR.nLong64;
+                            aL.nInt64 = ~aL.nInt64 | aR.nInt64;
                         else
                             aL.nLong = ~aL.nLong | aR.nLong;
                         break;
@@ -1285,7 +1138,7 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                         if( aL.eType != SbxLONG && aL.eType != SbxULONG )
                         {
                             if ( aL.eType != SbxBOOL )
-                                aL.nLong64 = ~aL.nLong64;
+                                aL.nInt64 = ~aL.nInt64;
                             else
                                 aL.nLong = ~aL.nLong;
                         }
@@ -1296,8 +1149,8 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                 }
             }
         }
-        else if( ( GetType() == SbxDECIMAL || rOp.GetType() == SbxDECIMAL ) &&
-                 ( eOp == SbxMUL || eOp == SbxDIV || eOp == SbxPLUS || eOp == SbxMINUS || eOp == SbxNEG ) )
+        else if( ( GetType() == SbxDECIMAL || rOp.GetType() == SbxDECIMAL )
+              && ( eOp == SbxMUL || eOp == SbxDIV || eOp == SbxPLUS || eOp == SbxMINUS || eOp == SbxNEG ) )
         {
             aL.eType = aR.eType = SbxDECIMAL;
             bDecimal = true;
@@ -1353,52 +1206,81 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 
             if( rOp.Get( aR ) )
             {
-                static BigInt n10K( 10000 );
-
                 if( rOp.GetType() == SbxEMPTY )
                     goto Lbl_OpIsEmpty;
 
                 if( Get( aL ) ) switch( eOp )
                 {
+                    double dTest;
                     case SbxMUL:
-                    {
-                        // #i20704 Implement directly
-                        BigInt b1( aL.nLong64 );
-                        BigInt b2( aR.nLong64 );
-                        b1 *= b2;
-                        b1 /= n10K;
-                        double d = double( b1 ) / 10000.0;
-                        if( d > SbxMAXCURR || d < SbxMINCURR )
+                        // first overflow check: see if product will fit - test real value of product (hence 2 curr factors)
+                        dTest = (double)aL.nInt64 * (double)aR.nInt64 / (double)CURRENCY_FACTOR_SQUARE;
+                        if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
+                        {
+                            aL.nInt64 = SAL_MAX_INT64;
+                            if( dTest < SbxMINCURR ) aL.nInt64 = SAL_MIN_INT64;
                             SetError( SbxERR_OVERFLOW );
-                        else
-                            b1.INT64( &aL.nLong64 );
+                            break;
+                        }
+                        // second overflow check: see if unscaled product overflows - if so use doubles
+                        dTest = (double)aL.nInt64 * (double)aR.nInt64;
+                        if( dTest < SAL_MIN_INT64 || SAL_MAX_INT64 < dTest)
+                        {
+                            aL.nInt64 = (sal_Int64)( dTest / (double)CURRENCY_FACTOR );
+                            break;
+                        }
+                        // precise calc: multiply then scale back (move decimal pt)
+                        aL.nInt64 *= aR.nInt64;
+                        aL.nInt64 /= CURRENCY_FACTOR;
                         break;
-                    }
+
                     case SbxDIV:
-                        if( !aR.nLong64 )
+                        if( !aR.nInt64 )
                         {
                             SetError( SbxERR_ZERODIV );
+                            break;
                         }
-                        else
+                        // first overflow check: see if quotient will fit - calc real value of quotient (curr factors cancel)
+                        dTest = (double)aL.nInt64 / (double)aR.nInt64;
+                        if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
                         {
-                            // #i20704 Implement directly
-                            BigInt b1( aL.nLong64 );
-                            BigInt b2( aR.nLong64 );
-                            b1 *= n10K;
-                            b1 /= b2;
-                            double d = double( b1 ) / 10000.0;
-                            if( d > SbxMAXCURR || d < SbxMINCURR )
-                                SetError( SbxERR_OVERFLOW );
-                            else
-                                b1.INT64( &aL.nLong64 );
+                            SetError( SbxERR_OVERFLOW );
+                            break;
                         }
+                        // second overflow check: see if scaled dividend overflows - if so use doubles
+                        dTest = (double)aL.nInt64 * (double)CURRENCY_FACTOR;
+                        if( dTest < SAL_MIN_INT64 || SAL_MAX_INT64 < dTest)
+                        {
+                            aL.nInt64 = (sal_Int64)(dTest / (double)aR.nInt64);
+                            break;
+                        }
+                        // precise calc: scale (move decimal pt) then divide
+                        aL.nInt64 *= CURRENCY_FACTOR;
+                        aL.nInt64 /= aR.nInt64;
                         break;
+
                     case SbxPLUS:
-                        aL.nLong64 += aR.nLong64; break;
+                        dTest = ( (double)aL.nInt64 + (double)aR.nInt64 ) / (double)CURRENCY_FACTOR;
+                        if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
+                        {
+                            SetError( SbxERR_OVERFLOW );
+                            break;
+                        }
+                        aL.nInt64 += aR.nInt64;
+                        break;
+
                     case SbxMINUS:
-                        aL.nLong64 -= aR.nLong64; break;
+                        dTest = ( (double)aL.nInt64 - (double)aR.nInt64 ) / (double)CURRENCY_FACTOR;
+                        if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
+                        {
+                            SetError( SbxERR_OVERFLOW );
+                            break;
+                        }
+                        aL.nInt64 -= aR.nInt64;
+                        break;
                     case SbxNEG:
-                        aL.nLong64 = -aL.nLong64; break;
+                        aL.nInt64 = -aL.nInt64;
+                        break;
                     default:
                         SetError( SbxERR_NOTIMP );
                 }
@@ -1406,7 +1288,7 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
         }
         else
 Lbl_OpIsDouble:
-        {   // other operators
+        {   // other types and operators including Date, Double and Single
             aL.eType = aR.eType = SbxDOUBLE;
             if( rOp.Get( aR ) )
             {
@@ -1429,6 +1311,9 @@ Lbl_OpIsDouble:
                             else aL.nDouble /= aR.nDouble; break;
                         case SbxPLUS:
                             aL.nDouble += aR.nDouble; break;
+                            // #45465 Date needs with "+" a special handling: forces date type
+                            if( GetType() == SbxDATE || rOp.GetType() == SbxDATE )
+                                aL.eType = SbxDATE;
                         case SbxMINUS:
                             aL.nDouble -= aR.nDouble; break;
                         case SbxNEG:
@@ -1437,9 +1322,6 @@ Lbl_OpIsDouble:
                             SetError( SbxERR_NOTIMP );
                     }
 
-                    // #45465 Date needs with "+" a special handling
-                    if( eOp == SbxPLUS && (GetType() == SbxDATE || rOp.GetType() == SbxDATE ) )
-                        aL.eType = SbxDATE;
                 }
             }
 
@@ -1454,7 +1336,7 @@ Lbl_OpIsDouble:
     }
 Lbl_OpIsEmpty:
 
-    BOOL bRes = BOOL( !IsError() );
+    sal_Bool bRes = sal_Bool( !IsError() );
     if( bRes && eOld != SbxERR_OK )
         SetError( eOld );
     return bRes;
@@ -1462,11 +1344,11 @@ Lbl_OpIsEmpty:
 
 // The comparison routine deliver TRUE or FALSE.
 
-BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
+sal_Bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
 {
     bool bVBAInterop =  SbiRuntime::isVBAEnabled();
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     SbxError eOld = GetError();
     if( eOld != SbxERR_OK )
         ResetError();
@@ -1474,24 +1356,24 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
         SetError( SbxERR_PROP_WRITEONLY );
     else if( GetType() == SbxNULL && rOp.GetType() == SbxNULL && !bVBAInterop )
     {
-        bRes = TRUE;
+        bRes = sal_True;
     }
     else if( GetType() == SbxEMPTY && rOp.GetType() == SbxEMPTY )
-        bRes = !bVBAInterop ? TRUE : ( eOp == SbxEQ ? TRUE : FALSE );
+        bRes = !bVBAInterop ? sal_True : ( eOp == SbxEQ ? sal_True : sal_False );
     // Special rule 1: If an operand is zero, the result is FALSE
     else if( GetType() == SbxNULL || rOp.GetType() == SbxNULL )
-        bRes = FALSE;
+        bRes = sal_False;
     // Special rule 2: If both are variant and one is numeric
     // and the other is a String, num is < str
     else if( !IsFixed() && !rOp.IsFixed()
      && ( rOp.GetType() == SbxSTRING && GetType() != SbxSTRING && IsNumeric() ) && !bVBAInterop
     )
-        bRes = BOOL( eOp == SbxLT || eOp == SbxLE || eOp == SbxNE );
+        bRes = sal_Bool( eOp == SbxLT || eOp == SbxLE || eOp == SbxNE );
     else if( !IsFixed() && !rOp.IsFixed()
      && ( GetType() == SbxSTRING && rOp.GetType() != SbxSTRING && rOp.IsNumeric() )
 && !bVBAInterop
     )
-        bRes = BOOL( eOp == SbxGT || eOp == SbxGE || eOp == SbxNE );
+        bRes = sal_Bool( eOp == SbxGT || eOp == SbxGE || eOp == SbxNE );
     else
     {
         SbxValues aL, aR;
@@ -1503,17 +1385,17 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
             if( Get( aL ) && rOp.Get( aR ) ) switch( eOp )
             {
                 case SbxEQ:
-                    bRes = BOOL( *aL.pOUString == *aR.pOUString ); break;
+                    bRes = sal_Bool( *aL.pOUString == *aR.pOUString ); break;
                 case SbxNE:
-                    bRes = BOOL( *aL.pOUString != *aR.pOUString ); break;
+                    bRes = sal_Bool( *aL.pOUString != *aR.pOUString ); break;
                 case SbxLT:
-                    bRes = BOOL( *aL.pOUString <  *aR.pOUString ); break;
+                    bRes = sal_Bool( *aL.pOUString <  *aR.pOUString ); break;
                 case SbxGT:
-                    bRes = BOOL( *aL.pOUString >  *aR.pOUString ); break;
+                    bRes = sal_Bool( *aL.pOUString >  *aR.pOUString ); break;
                 case SbxLE:
-                    bRes = BOOL( *aL.pOUString <= *aR.pOUString ); break;
+                    bRes = sal_Bool( *aL.pOUString <= *aR.pOUString ); break;
                 case SbxGE:
-                    bRes = BOOL( *aL.pOUString >= *aR.pOUString ); break;
+                    bRes = sal_Bool( *aL.pOUString >= *aR.pOUString ); break;
                 default:
                     SetError( SbxERR_NOTIMP );
             }
@@ -1527,17 +1409,17 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
               switch( eOp )
             {
                 case SbxEQ:
-                    bRes = BOOL( aL.nSingle == aR.nSingle ); break;
+                    bRes = sal_Bool( aL.nSingle == aR.nSingle ); break;
                 case SbxNE:
-                    bRes = BOOL( aL.nSingle != aR.nSingle ); break;
+                    bRes = sal_Bool( aL.nSingle != aR.nSingle ); break;
                 case SbxLT:
-                    bRes = BOOL( aL.nSingle <  aR.nSingle ); break;
+                    bRes = sal_Bool( aL.nSingle <  aR.nSingle ); break;
                 case SbxGT:
-                    bRes = BOOL( aL.nSingle >  aR.nSingle ); break;
+                    bRes = sal_Bool( aL.nSingle >  aR.nSingle ); break;
                 case SbxLE:
-                    bRes = BOOL( aL.nSingle <= aR.nSingle ); break;
+                    bRes = sal_Bool( aL.nSingle <= aR.nSingle ); break;
                 case SbxGE:
-                    bRes = BOOL( aL.nSingle >= aR.nSingle ); break;
+                    bRes = sal_Bool( aL.nSingle >= aR.nSingle ); break;
                 default:
                     SetError( SbxERR_NOTIMP );
             }
@@ -1553,17 +1435,17 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
                 switch( eOp )
                 {
                     case SbxEQ:
-                        bRes = BOOL( eRes == SbxDecimal::EQ ); break;
+                        bRes = sal_Bool( eRes == SbxDecimal::EQ ); break;
                     case SbxNE:
-                        bRes = BOOL( eRes != SbxDecimal::EQ ); break;
+                        bRes = sal_Bool( eRes != SbxDecimal::EQ ); break;
                     case SbxLT:
-                        bRes = BOOL( eRes == SbxDecimal::LT ); break;
+                        bRes = sal_Bool( eRes == SbxDecimal::LT ); break;
                     case SbxGT:
-                        bRes = BOOL( eRes == SbxDecimal::GT ); break;
+                        bRes = sal_Bool( eRes == SbxDecimal::GT ); break;
                     case SbxLE:
-                        bRes = BOOL( eRes != SbxDecimal::GT ); break;
+                        bRes = sal_Bool( eRes != SbxDecimal::GT ); break;
                     case SbxGE:
-                        bRes = BOOL( eRes != SbxDecimal::LT ); break;
+                        bRes = sal_Bool( eRes != SbxDecimal::LT ); break;
                     default:
                         SetError( SbxERR_NOTIMP );
                 }
@@ -1579,24 +1461,23 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
         else
         {
             aL.eType = aR.eType = SbxDOUBLE;
-            //if( Get( aL ) && rOp.Get( aR ) )
             bool bGetL = Get( aL );
             bool bGetR = rOp.Get( aR );
             if( bGetL && bGetR )
               switch( eOp )
             {
                 case SbxEQ:
-                    bRes = BOOL( aL.nDouble == aR.nDouble ); break;
+                    bRes = sal_Bool( aL.nDouble == aR.nDouble ); break;
                 case SbxNE:
-                    bRes = BOOL( aL.nDouble != aR.nDouble ); break;
+                    bRes = sal_Bool( aL.nDouble != aR.nDouble ); break;
                 case SbxLT:
-                    bRes = BOOL( aL.nDouble <  aR.nDouble ); break;
+                    bRes = sal_Bool( aL.nDouble <  aR.nDouble ); break;
                 case SbxGT:
-                    bRes = BOOL( aL.nDouble >  aR.nDouble ); break;
+                    bRes = sal_Bool( aL.nDouble >  aR.nDouble ); break;
                 case SbxLE:
-                    bRes = BOOL( aL.nDouble <= aR.nDouble ); break;
+                    bRes = sal_Bool( aL.nDouble <= aR.nDouble ); break;
                 case SbxGE:
-                    bRes = BOOL( aL.nDouble >= aR.nDouble ); break;
+                    bRes = sal_Bool( aL.nDouble >= aR.nDouble ); break;
                 default:
                     SetError( SbxERR_NOTIMP );
             }
@@ -1608,7 +1489,7 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
                 if ( bVBAInterop && eOp == SbxEQ && GetError() == SbxERR_CONVERSION )
                 {
                     ResetError();
-                    bRes = FALSE;
+                    bRes = sal_False;
                 }
             }
         }
@@ -1620,10 +1501,12 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
 
 ///////////////////////////// Reading/Writing ////////////////////////////
 
-BOOL SbxValue::LoadData( SvStream& r, USHORT )
+sal_Bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
 {
+    // #TODO see if these types are really dumped to any stream
+    // more than likely this is functionality used in the binfilter alone
     SbxValue::Clear();
-    UINT16 nType;
+    sal_uInt16 nType;
     r >> nType;
     aData.eType = SbxDataType( nType );
     switch( nType )
@@ -1643,7 +1526,7 @@ BOOL SbxValue::LoadData( SvStream& r, USHORT )
             if( ImpScan( aVal, d, t, NULL ) != SbxERR_OK || t == SbxDOUBLE )
             {
                 aData.nSingle = 0.0F;
-                return FALSE;
+                return sal_False;
             }
             aData.nSingle = (float) d;
             break;
@@ -1658,19 +1541,25 @@ BOOL SbxValue::LoadData( SvStream& r, USHORT )
             if( ImpScan( aVal, aData.nDouble, t, NULL ) != SbxERR_OK )
             {
                 aData.nDouble = 0.0;
-                return FALSE;
+                return sal_False;
             }
             break;
         }
-        case SbxULONG64:
-        {
-            r >> aData.nULong64.nHigh >> aData.nULong64.nLow;
+        case SbxSALUINT64:
+        case SbxSALINT64:
+            // Rather ugly use of the union here because we only
+            // have a SvStream& SvStream::operator>>(sal_uInt64&) available to us
+            // There is no SvStream::operator>>(sal_Int64&) due to conflict with
+            // SvStream::operator>>(long&) ( at least on 64 bit linux )
+            r >> aData.uInt64;
             break;
-        }
-        case SbxLONG64:
         case SbxCURRENCY:
         {
-            r >> aData.nLong64.nHigh >> aData.nLong64.nLow;
+            sal_uInt32 tmpHi = 0;
+            sal_uInt32 tmpLo = 0;
+            r >> tmpHi >> tmpLo;
+            aData.nInt64 = ((sal_Int64)tmpHi << 32);
+            aData.nInt64 |= (sal_Int64)tmpLo;
             break;
         }
         case SbxSTRING:
@@ -1688,7 +1577,7 @@ BOOL SbxValue::LoadData( SvStream& r, USHORT )
             r >> aData.nUShort; break;
         case SbxOBJECT:
         {
-            BYTE nMode;
+            sal_uInt8 nMode;
             r >> nMode;
             switch( nMode )
             {
@@ -1697,7 +1586,7 @@ BOOL SbxValue::LoadData( SvStream& r, USHORT )
                     break;
                 case 1:
                     aData.pObj = SbxBase::Load( r );
-                    return BOOL( aData.pObj != NULL );
+                    return sal_Bool( aData.pObj != NULL );
                 case 2:
                     aData.pObj = this;
                     break;
@@ -1717,7 +1606,7 @@ BOOL SbxValue::LoadData( SvStream& r, USHORT )
             r >> aData.nULong; break;
         case SbxINT:
         {
-            BYTE n;
+            sal_uInt8 n;
             r >> n;
             // Match the Int on this system?
             if( n > SAL_TYPES_SIZEOFINT )
@@ -1728,7 +1617,7 @@ BOOL SbxValue::LoadData( SvStream& r, USHORT )
         }
         case SbxUINT:
         {
-            BYTE n;
+            sal_uInt8 n;
             r >> n;
             // Match the UInt on this system?
             if( n > SAL_TYPES_SIZEOFINT )
@@ -1753,14 +1642,14 @@ BOOL SbxValue::LoadData( SvStream& r, USHORT )
             ResetFlag(SBX_FIXED);
             aData.eType = SbxNULL;
             DBG_ASSERT( !this, "Nicht unterstuetzer Datentyp geladen" );
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SbxValue::StoreData( SvStream& r ) const
+sal_Bool SbxValue::StoreData( SvStream& r ) const
 {
-    UINT16 nType = sal::static_int_cast< UINT16 >(aData.eType);
+    sal_uInt16 nType = sal::static_int_cast< sal_uInt16 >(aData.eType);
     r << nType;
     switch( nType & 0x0FFF )
     {
@@ -1779,15 +1668,16 @@ BOOL SbxValue::StoreData( SvStream& r ) const
         case SbxDOUBLE:
             r.WriteByteString( GetCoreString(), RTL_TEXTENCODING_ASCII_US );
             break;
-        case SbxULONG64:
-        {
-            r << aData.nULong64.nHigh << aData.nULong64.nLow;
+        case SbxSALUINT64:
+        case SbxSALINT64:
+            // see comment in SbxValue::StoreData
+            r << aData.uInt64;
             break;
-        }
-        case SbxLONG64:
         case SbxCURRENCY:
         {
-            r << aData.nLong64.nHigh << aData.nLong64.nLow;
+            sal_Int32 tmpHi = ( (aData.nInt64 >> 32) &  0xFFFFFFFF );
+            sal_Int32 tmpLo = ( sal_Int32 )aData.nInt64;
+            r << tmpHi << tmpLo;
             break;
         }
         case SbxSTRING:
@@ -1810,14 +1700,14 @@ BOOL SbxValue::StoreData( SvStream& r ) const
             {
                 if( PTR_CAST(SbxValue,aData.pObj) != this )
                 {
-                    r << (BYTE) 1;
+                    r << (sal_uInt8) 1;
                     return aData.pObj->Store( r );
                 }
                 else
-                    r << (BYTE) 2;
+                    r << (sal_uInt8) 2;
             }
             else
-                r << (BYTE) 0;
+                r << (sal_uInt8) 0;
             break;
         case SbxCHAR:
         {
@@ -1831,13 +1721,13 @@ BOOL SbxValue::StoreData( SvStream& r ) const
             r << aData.nULong; break;
         case SbxINT:
         {
-            BYTE n = SAL_TYPES_SIZEOFINT;
+            sal_uInt8 n = SAL_TYPES_SIZEOFINT;
             r << n << (sal_Int32)aData.nInt;
             break;
         }
         case SbxUINT:
         {
-            BYTE n = SAL_TYPES_SIZEOFINT;
+            sal_uInt8 n = SAL_TYPES_SIZEOFINT;
             r << n << (sal_uInt32)aData.nUInt;
             break;
         }
@@ -1854,9 +1744,9 @@ BOOL SbxValue::StoreData( SvStream& r ) const
             break;
         default:
             DBG_ASSERT( !this, "Speichern eines nicht unterstuetzten Datentyps" );
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

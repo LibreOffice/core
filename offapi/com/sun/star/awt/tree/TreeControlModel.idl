@@ -73,7 +73,7 @@ service TreeControlModel
     [property] boolean RootDisplayed;
 
     /** Specifies whether the node handles should be displayed.
-        <p>The handles are doted lines that visualize the tree like hirarchie<p>
+        <p>The handles are doted lines that visualize the tree like hierarchy<p>
         <p>The default value is <TRUE/></p>
     */
     [property] boolean ShowsHandles;

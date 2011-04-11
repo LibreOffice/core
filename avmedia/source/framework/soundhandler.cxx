@@ -256,7 +256,6 @@ void SAL_CALL SoundHandler::impl_initService()
 {
 }
 
-
 /*-************************************************************************************************************//**
     @short      standard ctor
     @descr      These initialize a new instance of this class with needed informations for work.
@@ -424,7 +423,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = ::rtl::OUString::createFromAscii("wav_Wave_Audio_File");
+        sTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wav_Wave_Audio_File"));
         aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }
@@ -492,44 +491,6 @@ IMPL_LINK( SoundHandler, implts_PlayerNotify, void*, EMPTYARG )
 extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-// -----------------------
-// - component_writeInfo -
-// -----------------------
-
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
-{
-    sal_Bool bRet = sal_False;
-
-    if( pRegistryKey )
-    {
-       try
-       {
-           rtl::OUString sKeyName = DECLARE_ASCII( "/" );
-           sKeyName += avmedia::SoundHandler::impl_getStaticImplementationName();
-           sKeyName += DECLARE_ASCII( "/UNO/SERVICES" );
-           css::uno::Reference< css::registry::XRegistryKey > xNewKey(
-               static_cast< css::registry::XRegistryKey* >( pRegistryKey )->createKey(sKeyName));
-
-           if ( xNewKey.is() == sal_True )
-           {
-               css::uno::Sequence< ::rtl::OUString > seqServiceNames = avmedia::SoundHandler::impl_getStaticSupportedServiceNames();
-               const ::rtl::OUString* pArray = seqServiceNames.getArray();
-               sal_Int32 nLength = seqServiceNames.getLength();
-               for ( sal_Int32 nCounter = 0; nCounter < nLength; ++nCounter )
-                   xNewKey->createKey( pArray[nCounter] );
-           }
-
-           bRet = sal_True;
-       }
-       catch( css::registry::InvalidRegistryException& )
-       {
-           OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-       }
-    }
-
-    return bRet;
 }
 
 // ------------------------

@@ -36,7 +36,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
@@ -242,7 +242,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
         while (i < nServiceCount && !bFound)
         {
             if (aServices[i].equals(sFieldMaster_Bibliography))
-            // here we should use a methode which compares in reverse order if available
+            // here we should use a method which compares in reverse order if available
             // #85282#
                 bFound = sal_True;
             else

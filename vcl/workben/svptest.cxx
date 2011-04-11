@@ -47,9 +47,11 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 // -----------------------------------------------------------------------
 
 // Forward declaration
@@ -62,7 +64,7 @@ SAL_IMPLEMENT_MAIN()
     tools::extendApplicationEnvironment();
 
     Reference< XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
+    xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "types.rdb" ) ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
     InitVCL( xMS );
     ::Main();
@@ -189,7 +191,7 @@ static Point project( const Point& rPoint )
 static Color approachColor( const Color& rFrom, const Color& rTo )
 {
     Color aColor;
-    UINT8 nDiff;
+    sal_uInt8 nDiff;
     // approach red
     if( rFrom.GetRed() < rTo.GetRed() )
     {

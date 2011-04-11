@@ -62,7 +62,6 @@ Resource RID_SW_SHELLRES
     String STR_CALC_POW
     {
         Text [ en-US ] = "** Square function overflow **" ;
-        /* ### ACHTUNG: Neuer Text in Resource? ** Überlauf in Quadratfunktion ** : ** šberlauf in Quadratfunktion ** */
     };
     String STR_CALC_VARNFND
     {
@@ -71,7 +70,6 @@ Resource RID_SW_SHELLRES
     String STR_CALC_OVERFLOW
     {
         Text [ en-US ] = "** Overflow **" ;
-        /* ### ACHTUNG: Neuer Text in Resource? ** Überlauf ** : ** šberlauf ** */
     };
     String STR_CALC_WRONGTIME
     {
@@ -162,7 +160,6 @@ Resource RID_SW_SHELLRES
     };
     String FLD_DOCINFO_KEYS
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Schlüsselwörter : Schl³sselw÷rter */
         Text [ en-US ] = "Keywords" ;
     };
     String FLD_DOCINFO_COMMENT

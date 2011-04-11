@@ -39,7 +39,10 @@
 #include <rtl/uri.hxx>
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
 
 #define PATH_DELEMITTER '/'
 
@@ -72,7 +75,7 @@ static sal_Bool retrievePortalUserDir( OUString *pDirectory )
     {
         if ( !osl_getCommandArg(--nArgs, &sArg.pData) )
         {
-            if ( sArg.indexOf(OUString::createFromAscii("-userid")) == 0 )
+            if ( sArg.indexOf(OUString( RTL_CONSTASCII_USTRINGPARAM( "-userid" ))) == 0 )
             {
 
                 bIsPortalUser = sal_True;

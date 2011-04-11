@@ -38,12 +38,12 @@
 
 #include "printopt.hrc"
 #include "dialog.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/viewsh.hxx>
 #include <sfx2/printopt.hxx>
 
-static USHORT   aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
-static BOOL     bOutputForPrinter = TRUE;
+static sal_uInt16   aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
+static sal_Bool     bOutputForPrinter = sal_True;
 
 SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, SfxResId( TP_COMMONPRINTOPTIONS ), rSet ),
@@ -78,12 +78,12 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, con
 
     if( bOutputForPrinter )
     {
-        aPrinterOutputRB.Check( TRUE );
+        aPrinterOutputRB.Check( sal_True );
         aOutputGB.SetText( OutputDevice::GetNonMnemonicString( aPrinterOutputRB.GetText() ) );
     }
     else
     {
-        aPrintFileOutputRB.Check( TRUE );
+        aPrintFileOutputRB.Check( sal_True );
         aOutputGB.SetText( OutputDevice::GetNonMnemonicString( aPrintFileOutputRB.GetText() ) );
     }
 
@@ -143,12 +143,12 @@ Window* SfxCommonPrintOptionsTabPage::GetParentLabelFor( const Window* pWindow )
         return SfxTabPage::GetParentLabelFor( pWindow );
 }
 
-BOOL SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
+sal_Bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     SvtPrintWarningOptions  aWarnOptions;
     SvtPrinterOptions       aPrinterOptions;
     SvtPrintFileOptions     aPrintFileOptions;
-    BOOL                    bModified = FALSE;
+    sal_Bool                    bModified = sal_False;
 
 
     if( aPaperSizeCB.IsChecked() != aPaperSizeCB.GetSavedValue())
@@ -204,29 +204,29 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
     aReduceTransparencyCB.Check( pCurrentOptions->IsReduceTransparency() );
 
     if( pCurrentOptions->GetReducedTransparencyMode() == PRINTER_TRANSPARENCY_AUTO )
-        aReduceTransparencyAutoRB.Check( TRUE );
+        aReduceTransparencyAutoRB.Check( sal_True );
     else
-        aReduceTransparencyNoneRB.Check( TRUE );
+        aReduceTransparencyNoneRB.Check( sal_True );
 
     aReduceGradientsCB.Check( pCurrentOptions->IsReduceGradients() );
 
     if( pCurrentOptions->GetReducedGradientMode() == PRINTER_GRADIENT_STRIPES )
-        aReduceGradientsStripesRB.Check( TRUE );
+        aReduceGradientsStripesRB.Check( sal_True );
     else
-        aReduceGradientsColorRB.Check( TRUE );
+        aReduceGradientsColorRB.Check( sal_True );
 
     aReduceGradientsStepCountNF.SetValue( pCurrentOptions->GetReducedGradientStepCount() );
 
     aReduceBitmapsCB.Check( pCurrentOptions->IsReduceBitmaps() );
 
     if( pCurrentOptions->GetReducedBitmapMode() == PRINTER_BITMAP_OPTIMAL )
-        aReduceBitmapsOptimalRB.Check( TRUE );
+        aReduceBitmapsOptimalRB.Check( sal_True );
     else if( pCurrentOptions->GetReducedBitmapMode() == PRINTER_BITMAP_NORMAL )
-        aReduceBitmapsNormalRB.Check( TRUE );
+        aReduceBitmapsNormalRB.Check( sal_True );
     else
-        aReduceBitmapsResolutionRB.Check( TRUE );
+        aReduceBitmapsResolutionRB.Check( sal_True );
 
-    const USHORT nDPI = pCurrentOptions->GetReducedBitmapResolution();
+    const sal_uInt16 nDPI = pCurrentOptions->GetReducedBitmapResolution();
 
     if( nDPI < aDPIArray[ 0 ] )
         aReduceBitmapsResolutionLB.SelectEntryPos( 0 );
@@ -236,7 +236,7 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
         {
             if( nDPI >= aDPIArray[ i ] )
             {
-                aReduceBitmapsResolutionLB.SelectEntryPos( (USHORT) i );
+                aReduceBitmapsResolutionLB.SelectEntryPos( (sal_uInt16) i );
                 i = -1;
             }
         }
@@ -356,12 +356,12 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
     pCurrentOptions->SetReducedTransparencyMode( aReduceTransparencyAutoRB.IsChecked() ? PRINTER_TRANSPARENCY_AUTO : PRINTER_TRANSPARENCY_NONE );
     pCurrentOptions->SetReduceGradients( aReduceGradientsCB.IsChecked() );
     pCurrentOptions->SetReducedGradientMode( aReduceGradientsStripesRB.IsChecked() ? PRINTER_GRADIENT_STRIPES : PRINTER_GRADIENT_COLOR  );
-    pCurrentOptions->SetReducedGradientStepCount( (USHORT) aReduceGradientsStepCountNF.GetValue() );
+    pCurrentOptions->SetReducedGradientStepCount( (sal_uInt16) aReduceGradientsStepCountNF.GetValue() );
     pCurrentOptions->SetReduceBitmaps( aReduceBitmapsCB.IsChecked() );
     pCurrentOptions->SetReducedBitmapMode( aReduceBitmapsOptimalRB.IsChecked() ? PRINTER_BITMAP_OPTIMAL :
                                            ( aReduceBitmapsNormalRB.IsChecked() ? PRINTER_BITMAP_NORMAL : PRINTER_BITMAP_RESOLUTION ) );
-    pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ Min( (USHORT) aReduceBitmapsResolutionLB.GetSelectEntryPos(),
-                                                            (USHORT)( SAL_N_ELEMENTS( aDPIArray ) - 1 ) ) ] );
+    pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ Min( (sal_uInt16) aReduceBitmapsResolutionLB.GetSelectEntryPos(),
+                                                            (sal_uInt16)( SAL_N_ELEMENTS( aDPIArray ) - 1 ) ) ] );
     pCurrentOptions->SetReducedBitmapIncludesTransparency( aReduceBitmapsTransparencyCB.IsChecked() );
     pCurrentOptions->SetConvertToGreyscales( aConvertToGreyscalesCB.IsChecked() );
 }
@@ -369,7 +369,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*, pBox )
 {
     (void)pBox; //unused
-    const BOOL bReduceTransparency = aReduceTransparencyCB.IsChecked();
+    const sal_Bool bReduceTransparency = aReduceTransparencyCB.IsChecked();
 
     aReduceTransparencyAutoRB.Enable( bReduceTransparency );
     aReduceTransparencyNoneRB.Enable( bReduceTransparency );
@@ -382,7 +382,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, CheckBox*, pBox )
 {
     (void)pBox; //unused
-    const BOOL bEnable = aReduceGradientsCB.IsChecked();
+    const sal_Bool bEnable = aReduceGradientsCB.IsChecked();
 
     aReduceGradientsStripesRB.Enable( bEnable );
     aReduceGradientsColorRB.Enable( bEnable );
@@ -396,7 +396,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, CheckBox*, p
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, CheckBox*, pBox )
 {
     (void)pBox; //unused
-    const BOOL bEnable = aReduceBitmapsCB.IsChecked();
+    const sal_Bool bEnable = aReduceBitmapsCB.IsChecked();
 
     aReduceBitmapsOptimalRB.Enable( bEnable );
     aReduceBitmapsNormalRB.Enable( bEnable );
@@ -412,7 +412,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, CheckBox*, pBo
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, RadioButton*, pButton )
 {
     (void)pButton; //unused
-    const BOOL bEnable = aReduceGradientsCB.IsChecked() && aReduceGradientsStripesRB.IsChecked();
+    const sal_Bool bEnable = aReduceGradientsCB.IsChecked() && aReduceGradientsStripesRB.IsChecked();
 
     aReduceGradientsStepCountNF.Enable( bEnable );
 
@@ -422,7 +422,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, Radi
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, RadioButton*, pButton )
 {
     (void)pButton; //unused
-    const BOOL bEnable = aReduceBitmapsCB.IsChecked() && aReduceBitmapsResolutionRB.IsChecked();
+    const sal_Bool bEnable = aReduceBitmapsCB.IsChecked() && aReduceBitmapsResolutionRB.IsChecked();
 
     aReduceBitmapsResolutionLB.Enable( bEnable );
 
@@ -435,7 +435,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton*,
     {
         aOutputGB.SetText( OutputDevice::GetNonMnemonicString( pButton->GetText() ) );
         ImplUpdateControls( &maPrinterOptions );
-        bOutputForPrinter = TRUE;
+        bOutputForPrinter = sal_True;
         // #i63982#
         ImplSetAccessibleNames();
     }
@@ -451,7 +451,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton
     {
         aOutputGB.SetText( OutputDevice::GetNonMnemonicString( pButton->GetText() ) );
         ImplUpdateControls( &maPrintFileOptions );
-        bOutputForPrinter = FALSE;
+        bOutputForPrinter = sal_False;
         // #i63982#
         ImplSetAccessibleNames();
     }

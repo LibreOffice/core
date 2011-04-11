@@ -34,13 +34,14 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/util$/package.pmk
 
 # --- Files --------------------------------------------------------
 .IF "$(L10N_framework)"==""
-#CFLAGS+=/Ob0 /Od
 .IF "$(SYSTEM_ZLIB)" == "YES"
 CFLAGS+=-DSYSTEM_ZLIB
 .ENDIF
+
 SLOFILES= \
         $(SLO)$/CRC32.obj			\
         $(SLO)$/ByteChucker.obj		\

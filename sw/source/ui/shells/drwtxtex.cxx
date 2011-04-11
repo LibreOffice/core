@@ -48,7 +48,6 @@
 #include <editeng/adjitem.hxx>
 #include <editeng/crsditem.hxx>
 #include <editeng/shdditem.hxx>
-#include <editeng/hyznitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -64,18 +63,13 @@
 #include <svl/ctloptions.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/languageoptions.hxx>
-#include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editstat.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/slstitm.hxx>
 #include <editeng/langitem.hxx>
-#include <svtools/langtab.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/writingmodeitem.hxx>
@@ -87,26 +81,6 @@
 #include <editeng/editview.hxx>
 #include <vcl/outdev.hxx>
 #include <editeng/hyznitem.hxx>
-#include <editeng/kernitem.hxx>
-#include <editeng/langitem.hxx>
-#include <editeng/lspcitem.hxx>
-#include <editeng/orphitem.hxx>
-#include <editeng/outliner.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/scripttypeitem.hxx>
-#include <editeng/shdditem.hxx>
-#include <editeng/spltitem.hxx>
-#include <svx/svdoutl.hxx>
-#include <svx/svdview.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/unolingu.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/widwitem.hxx>
-#include <editeng/writingmodeitem.hxx>
-#include <tools/shl.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/outdev.hxx>
-#include <vcl/window.hxx>
 
 #include <cmdid.h>
 #include <doc.hxx>
@@ -132,8 +106,6 @@
 #include "chrdlg.hrc"
 #include "misc.hrc"
 
-
-#include <langhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -190,7 +162,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SvxScriptSetItem aSetItem( nSlot, *pPool2 );
 
             // #i78017 establish the same behaviour as in Writer
-            USHORT nScriptTypes = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+            sal_uInt16 nScriptTypes = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
             if (nSlot == SID_ATTR_CHAR_FONT)
                 nScriptTypes = pOLV->GetSelectedScriptType();
 
@@ -305,7 +277,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 SwView* pView = &GetView();
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)) );
+                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
                 SfxItemSet aDlgAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
 
                 // util::Language gibts an der EditEngine nicht! Daher nicht im Set.
@@ -318,7 +290,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( pView->GetWindow(), *pView, aDlgAttr, DLG_CHAR,0, sal_True );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
-                USHORT nRet = pDlg->Execute();
+                sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet )
                 {
                     rReq.Done( *( pDlg->GetOutputItemSet() ) );
@@ -377,7 +349,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SwDocStat aCurr;
             SwDocStat aDocStat( rSh.getIDocumentStatistics()->GetDocStat() );
             {
-                SwWait aWait( *GetView().GetDocShell(), TRUE );
+                SwWait aWait( *GetView().GetDocShell(), sal_True );
                 rSh.StartAction();
                 rSh.CountWords( aCurr );
                 rSh.UpdateDocStat( aDocStat );
@@ -400,7 +372,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             {
                 SwView* pView = &GetView();
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, pView));
-                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)) );
+                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
                 SfxItemSet aDlgAttr(GetPool(),
                                     EE_ITEMS_START, EE_ITEMS_END,
                                     SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_HYPHENZONE,
@@ -410,10 +382,6 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                                     0);
 
                 aDlgAttr.Put(aEditAttr);
-
-                // Die Werte sind erst einmal uebernommen worden, um den Dialog anzuzeigen.
-                // Muss natuerlich noch geaendert werden
-                // aDlgAttr.Put( SvxParaDlgLimitsItem( 567 * 50, 5670) );
 
                 aDlgAttr.Put( SvxHyphenZoneItem( sal_False, RES_PARATR_HYPHENZONE) );
                 aDlgAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
@@ -426,7 +394,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, DLG_PARA, 0, sal_True );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
-                USHORT nRet = pDlg->Execute();
+                sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)
                 {
                     rReq.Done( *( pDlg->GetOutputItemSet() ) );
@@ -520,7 +488,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             sal_Bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
             const SfxPoolItem* pPoolItem;
-            if( pNewAttrs && SFX_ITEM_SET == pNewAttrs->GetItemState( nSlot, TRUE, &pPoolItem ) )
+            if( pNewAttrs && SFX_ITEM_SET == pNewAttrs->GetItemState( nSlot, sal_True, &pPoolItem ) )
             {
                 if( !( (SfxBoolItem*)pPoolItem)->GetValue() )
                     bLeftToRight = !bLeftToRight;
@@ -530,8 +498,8 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                         EE_PARA_WRITINGDIR, EE_PARA_WRITINGDIR,
                         0 );
 
-            USHORT nAdjust = SVX_ADJUST_LEFT;
-            if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, TRUE, &pPoolItem ) )
+            sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
+            if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, sal_True, &pPoolItem ) )
                 nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
 
             if( bLeftToRight )
@@ -587,8 +555,8 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
 
     while(nWhich)
     {
-        USHORT nSlotId = GetPool().GetSlotId( nWhich );
-        BOOL bFlag = FALSE;
+        sal_uInt16 nSlotId = GetPool().GetSlotId( nWhich );
+        sal_Bool bFlag = sal_False;
         switch( nSlotId )
         {
             case SID_LANGUAGE_STATUS://20412:
@@ -672,7 +640,7 @@ ASK_ESCAPE:
             // disable "Thesaurus" if the language is not supported
             const SfxPoolItem &rItem = GetShell().GetDoc()->GetDefault(
                             GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                            GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage())) );
+                            GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage())) );
             LanguageType nLang = ((const SvxLanguageItem &) rItem).GetLanguage();
 
             uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
@@ -804,11 +772,11 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
-    USHORT nScriptType = pOLV->GetSelectedScriptType();
+    sal_uInt16 nScriptType = pOLV->GetSelectedScriptType();
     while(nWhich)
     {
         sal_uInt16 nEEWhich = 0;
-        USHORT nSlotId = GetPool().GetSlotId( nWhich );
+        sal_uInt16 nSlotId = GetPool().GetSlotId( nWhich );
         switch( nSlotId )
         {
             case SID_ATTR_CHAR_FONT:
@@ -820,7 +788,7 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
                 if( !pEditPool )
                     pEditPool = aEditAttr.GetPool();
                 SvxScriptSetItem aSetItem( nSlotId, *pEditPool );
-                aSetItem.GetItemSet().Put( aEditAttr, FALSE );
+                aSetItem.GetItemSet().Put( aEditAttr, sal_False );
                 const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                 if( pI )
                     rSet.Put( *pI, nWhich );
@@ -885,7 +853,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
             break;
 
         default:
-            OSL_ENSURE(false, "wrong dispatcher");
+            OSL_FAIL("wrong dispatcher");
             return;
     }
 }

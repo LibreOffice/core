@@ -64,8 +64,6 @@
 #define DIFF(v1,v2)             (v2-v1)
 #define SUM(v1,v2)              (v2+v1)
 
-//
-
 #define FL_MISCELLANEOUS        1
 #define CB_PAGE_PREVIEWS        2
 #define FL_HC_OPTIONS           3

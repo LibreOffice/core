@@ -35,7 +35,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 
 using namespace ::com::sun::star::uno;

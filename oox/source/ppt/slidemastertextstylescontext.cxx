@@ -29,8 +29,6 @@
 #include "oox/drawingml/textliststyle.hxx"
 #include "oox/drawingml/textliststylecontext.hxx"
 #include "oox/ppt/slidemastertextstylescontext.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -55,22 +53,22 @@ Reference< XFastContextHandler > SlideMasterTextStylesContext::createFastChildCo
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case NMSP_PPT|XML_titleStyle:
+        case PPT_TOKEN( titleStyle ):
         {
             aTextListStylePtr = mpSlidePersistPtr->getTitleTextStyle();
             break;
         }
-        case NMSP_PPT|XML_bodyStyle:
+        case PPT_TOKEN( bodyStyle ):
         {
             aTextListStylePtr = mpSlidePersistPtr->getBodyTextStyle();
             break;
         }
-        case NMSP_PPT|XML_notesStyle:
+        case PPT_TOKEN( notesStyle ):
         {
             aTextListStylePtr = mpSlidePersistPtr->getNotesTextStyle();
             break;
         }
-        case NMSP_PPT|XML_otherStyle:
+        case PPT_TOKEN( otherStyle ):
         {
             aTextListStylePtr = mpSlidePersistPtr->getOtherTextStyle();
             break;

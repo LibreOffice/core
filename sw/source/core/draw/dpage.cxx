@@ -37,7 +37,6 @@
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
-#include <docsh.hxx>
 #include <shellres.hxx>
 #include <viewimp.hxx>
 #include <pagefrm.hxx>
@@ -60,7 +59,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::frame;
 
-SwDPage::SwDPage(SwDrawDocument& rNewModel, BOOL bMasterPage) :
+SwDPage::SwDPage(SwDrawDocument& rNewModel, sal_Bool bMasterPage) :
     FmFormPage(rNewModel, 0, bMasterPage),
     pGridLst( 0 ),
     rDoc(rNewModel.GetDoc())
@@ -77,12 +76,9 @@ SwDPage::~SwDPage()
 |*
 |*  SwDPage::ReplaceObject()
 |*
-|*  Ersterstellung      MA 07. Aug. 95
-|*  Letzte Aenderung    MA 07. Aug. 95
-|*
 *************************************************************************/
 
-SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, ULONG nObjNum )
+SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, sal_uLong nObjNum )
 {
     SdrObject *pOld = GetObj( nObjNum );
     OSL_ENSURE( pOld, "Oups, Object not replaced" );
@@ -96,9 +92,6 @@ SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, ULONG nObjNum )
 /*************************************************************************
 |*
 |*  SwDPage::GetGridFrameList()
-|*
-|*  Ersterstellung      MA 04. Sep. 95
-|*  Letzte Aenderung    MA 15. Feb. 96
 |*
 *************************************************************************/
 
@@ -115,7 +108,7 @@ void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrm *pPg )
 const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                         const SdrPageView* pPV, const Rectangle *pRect ) const
 {
-    ViewShell *pSh = ((SwDrawDocument*)GetModel())->GetDoc().GetRootFrm()->GetCurrShell();
+    ViewShell *pSh = ((SwDrawDocument*)GetModel())->GetDoc().GetCurrentViewShell(); //swmod 071108//swmod 071225
     if ( pSh )
     {
         while ( pSh->Imp()->GetPageView() != pPV )
@@ -153,10 +146,10 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
     return pGridLst;
 }
 
-BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
+sal_Bool SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                            const HelpEvent& rEvt )
 {
-    BOOL bWeiter = TRUE;
+    sal_Bool bWeiter = sal_True;
 
     if( rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ))
     {
@@ -207,7 +200,7 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
             if ( sTxt.Len() )
             {
                 // --> OD 2007-07-26 #i80029#
-                BOOL bExecHyperlinks = rDoc.GetDocShell()->IsReadOnly();
+                sal_Bool bExecHyperlinks = rDoc.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
                     SvtSecurityOptions aSecOpts;
@@ -232,7 +225,7 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
                     Help::ShowQuickHelp( pWindow, aRect, sTxt );
                 }
-                bWeiter = FALSE;
+                bWeiter = sal_False;
             }
         }
     }
@@ -242,9 +235,7 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
     return bWeiter;
 }
-/* -----------------------------27.11.00 07:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference< XInterface > SwDPage::createUnoPage()
 {
     Reference < XInterface > xRet;

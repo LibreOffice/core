@@ -39,8 +39,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/odffields.hxx>
-#include "xmlnmspe.hxx"
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -128,7 +128,7 @@ enum lcl_MarkType { TypeReference, TypeReferenceStart, TypeReferenceEnd,
                     TypeFieldmark, TypeFieldmarkStart, TypeFieldmarkEnd
                   };
 
-static SvXMLEnumMapEntry __READONLY_DATA lcl_aMarkTypeMap[] =
+static SvXMLEnumMapEntry const lcl_aMarkTypeMap[] =
 {
     { XML_REFERENCE_MARK,           TypeReference },
     { XML_REFERENCE_MARK_START,     TypeReferenceStart },
@@ -189,7 +189,7 @@ void XMLTextMarkImportContext::StartElement(
     {
         if (m_sBookmarkName.getLength() == 0)
         {
-            m_sBookmarkName = ::rtl::OUString::createFromAscii("Unknown");
+            m_sBookmarkName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown"));
         }
         m_rHelper.pushFieldCtx( m_sBookmarkName, m_sFieldName );
     }
@@ -293,7 +293,12 @@ void XMLTextMarkImportContext::EndElement()
                             Reference<XTextCursor> xInsertionCursor =
                                 m_rHelper.GetText()->createTextCursorByRange(
                                     xEndRange);
+                            try {
                             xInsertionCursor->gotoRange(xStartRange, sal_True);
+                            } catch (uno::Exception&) {
+                                OSL_ENSURE(false,
+                                    "cannot go to end position of bookmark");
+                            }
 
                             //DBG_ASSERT(! xInsertionCursor->isCollapsed(),
                             //              "we want no point mark");
@@ -344,18 +349,18 @@ void XMLTextMarkImportContext::EndElement()
 
                 case TypeReferenceStart:
                 case TypeReferenceEnd:
-                    DBG_ERROR("reference start/end are handled in txtparai !");
+                    OSL_FAIL("reference start/end are handled in txtparai !");
                     break;
 
                 default:
-                    DBG_ERROR("unknown mark type");
+                    OSL_FAIL("unknown mark type");
                     break;
             }
         }
     }
 }
 
-SvXMLImportContext *XMLTextMarkImportContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *XMLTextMarkImportContext::CreateChildContext( sal_uInt16 nPrefix,
                                         const ::rtl::OUString& rLocalName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >&  )
 {
@@ -382,7 +387,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
 
         if (!xIfc.is())
         {
-            OSL_ENSURE(false, "CreateAndInsertMark: cannot create service?");
+            OSL_FAIL("CreateAndInsertMark: cannot create service?");
             return 0;
         }
 
@@ -396,7 +401,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
         {
             if (sMarkName.getLength())
             {
-                OSL_ENSURE(false, "name given, but XNamed not supported?");
+                OSL_FAIL("name given, but XNamed not supported?");
                 return 0;
             }
         }
@@ -419,7 +424,7 @@ Reference<XTextContent> XMLTextMarkImportContext::CreateAndInsertMark(
             }
             catch (com::sun::star::lang::IllegalArgumentException &)
             {
-                OSL_ENSURE(false, "CreateAndInsertMark: cannot insert?");
+                OSL_FAIL("CreateAndInsertMark: cannot insert?");
                 return 0;
             }
         }

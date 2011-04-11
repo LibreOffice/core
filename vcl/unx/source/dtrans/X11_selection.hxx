@@ -43,7 +43,7 @@
 
 #include <osl/conditn.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 
 #include "tools/prex.h"
@@ -65,10 +65,10 @@ namespace x11 {
     class SelectionAdaptor
     {
     public:
-        virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() = 0;
+        virtual com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() = 0;
         virtual void clearTransferable() = 0;
         virtual void fireContentsChanged() = 0;
-        virtual Reference< XInterface > getReference() = 0;
+        virtual com::sun::star::uno::Reference< XInterface > getReference() = 0;
         // returns a reference that will keep the SelectionAdaptor alive until the
         // refernce is released
     };
@@ -86,9 +86,9 @@ namespace x11 {
         sal_Int8                    m_nDefaultActions;
         XLIB_Window                 m_aTargetWindow;
         class SelectionManager*     m_pSelectionManager;
-        Reference< ::com::sun::star::datatransfer::dnd::XDragSource >
+        com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource >
                                     m_xSelectionManager;
-        ::std::list< Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener > >
+        ::std::list< com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener > >
                             m_aListeners;
 
         DropTarget();
@@ -104,8 +104,8 @@ namespace x11 {
         virtual void        SAL_CALL initialize( const Sequence< Any >& args ) throw ( ::com::sun::star::uno::Exception );
 
         // XDropTarget
-        virtual void        SAL_CALL addDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw();
-        virtual void        SAL_CALL removeDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw();
+        virtual void        SAL_CALL addDropTargetListener( const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw();
+        virtual void        SAL_CALL removeDropTargetListener( const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw();
         virtual sal_Bool    SAL_CALL isActive() throw();
         virtual void        SAL_CALL setActive( sal_Bool active ) throw();
         virtual sal_Int8    SAL_CALL getDefaultActions() throw();
@@ -126,7 +126,7 @@ namespace x11 {
         >
     {
         ::osl::Mutex m_aMutex;
-        Reference< ::com::sun::star::datatransfer::dnd::XDragSource >
+        com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource >
             m_xRealDragSource;
     public:
         SelectionManagerHolder();
@@ -147,8 +147,8 @@ namespace x11 {
         virtual void        SAL_CALL startDrag(
             const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
-            const Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
-            const Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
+            const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
+            const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
             ) throw();
 
     };
@@ -163,7 +163,7 @@ namespace x11 {
         >,
         public SelectionAdaptor
     {
-        static ::std::hash_map< ::rtl::OUString, SelectionManager*, ::rtl::OUStringHash >& getInstances();
+        static ::boost::unordered_map< ::rtl::OUString, SelectionManager*, ::rtl::OUStringHash >& getInstances();
 
         // for INCR type selection transfer
         // INCR protocol is used if the data cannot
@@ -259,9 +259,9 @@ namespace x11 {
         oslThread                   m_aDragExecuteThread;
         ::osl::Condition            m_aDragRunning;
         XLIB_Window                 m_aWindow;
-        Reference< ::com::sun::star::awt::XDisplayConnection >
+        com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection >
                                     m_xDisplayConnection;
-        Reference< com::sun::star::script::XInvocation >
+        com::sun::star::uno::Reference< com::sun::star::script::XInvocation >
                                     m_xBitmapConverter;
         sal_Int32                   m_nSelectionTimeout;
         XLIB_Time                   m_nSelectionTimestamp;
@@ -284,7 +284,7 @@ namespace x11 {
         XLIB_Time                   m_nDropTime;
         sal_Int8                    m_nLastDropAction;
         // XTransferable for Xdnd with foreign drag source
-        Reference< ::com::sun::star::datatransfer::XTransferable >
+        com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
                                     m_xDropTransferable;
         int                         m_nLastX, m_nLastY;
         XLIB_Time                   m_nDropTimestamp;
@@ -302,9 +302,9 @@ namespace x11 {
         XLIB_Window                 m_aDropProxy;
         XLIB_Window                 m_aDragSourceWindow;
         // XTransferable for Xdnd when we are drag source
-        Reference< ::com::sun::star::datatransfer::XTransferable >
+        com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
                                     m_xDragSourceTransferable;
-        Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >
+        com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >
                                     m_xDragSourceListener;
         // root coordinates
         int                         m_nLastDragX, m_nLastDragY;
@@ -335,7 +335,7 @@ namespace x11 {
         // drag and drop
 
         int                         m_nCurrentProtocolVersion;
-        ::std::hash_map< XLIB_Window, DropTargetEntry >
+        ::boost::unordered_map< XLIB_Window, DropTargetEntry >
                                     m_aDropTargets;
 
 
@@ -366,22 +366,23 @@ namespace x11 {
         Atom                        m_nXdndActionPrivate;
 
         // caching for atoms
-        ::std::hash_map< Atom, ::rtl::OUString >
+        ::boost::unordered_map< Atom, ::rtl::OUString >
                                     m_aAtomToString;
-        ::std::hash_map< ::rtl::OUString, Atom, ::rtl::OUStringHash >
+        ::boost::unordered_map< ::rtl::OUString, Atom, ::rtl::OUStringHash >
                                     m_aStringToAtom;
 
         // the registered selections
-        ::std::hash_map< Atom, Selection* >
+        ::boost::unordered_map< Atom, Selection* >
                                     m_aSelections;
         // IncrementalTransfers in progress
-        std::hash_map< XLIB_Window, std::hash_map< Atom, IncrementalTransfer > >
+        boost::unordered_map< XLIB_Window, boost::unordered_map< Atom, IncrementalTransfer > >
                                     m_aIncrementals;
 
         // do not use X11 multithreading capabilities
         // since this leads to deadlocks in different Xlib implentations
         // (XFree as well as Xsun) use an own mutex instead
         ::osl::Mutex                m_aMutex;
+        bool                        m_bShutDown;
 
         SelectionManager();
         ~SelectionManager();
@@ -402,13 +403,13 @@ namespace x11 {
         void sendDropPosition( bool bForce, XLIB_Time eventXLIB_Time );
         bool updateDragAction( int modifierState );
         int getXdndVersion( XLIB_Window aXLIB_Window, XLIB_Window& rProxy );
-        XLIB_Cursor createCursor( const char* pPointerData, const char* pMaskData, int width, int height, int hotX, int hotY );
+        XLIB_Cursor createCursor( const unsigned char* pPointerData, const unsigned char* pMaskData, int width, int height, int hotX, int hotY );
         // coordinates on root XLIB_Window
         void updateDragWindow( int nX, int nY, XLIB_Window aRoot );
 
         bool getPasteData( Atom selection, Atom type, Sequence< sal_Int8 >& rData );
         // returns true if conversion was successful
-        bool convertData( const Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
+        bool convertData( const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
                           Atom nType,
                           Atom nSelection,
                           int & rFormat,
@@ -493,15 +494,15 @@ namespace x11 {
         virtual void        SAL_CALL startDrag(
             const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
-            const Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
-            const Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
+            const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
+            const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
             ) throw();
 
         // SelectionAdaptor for XdndSelection Drag (we are drag source)
-        virtual Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() throw();
+        virtual com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > getTransferable() throw();
         virtual void clearTransferable() throw();
         virtual void fireContentsChanged() throw();
-        virtual Reference< XInterface > getReference() throw();
+        virtual com::sun::star::uno::Reference< XInterface > getReference() throw();
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException );

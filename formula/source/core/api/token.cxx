@@ -29,11 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_formula.hxx"
 
-#if STLPORT_VERSION<321
-#include <stddef.h>
-#else
 #include <cstddef>
-#endif
 #include <cstdio>
 
 #include <string.h>
@@ -56,19 +52,19 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator, 32, 16 )
 // Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
 
 // Need a lot of FormulaDoubleToken
-const USHORT nMemPoolDoubleToken = (0x3000 - 64) / sizeof(FormulaDoubleToken);
+const sal_uInt16 nMemPoolDoubleToken = (0x3000 - 64) / sizeof(FormulaDoubleToken);
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken, nMemPoolDoubleToken, nMemPoolDoubleToken )
 // Need a lot of FormulaByteToken
-const USHORT nMemPoolByteToken = (0x3000 - 64) / sizeof(FormulaByteToken);
+const sal_uInt16 nMemPoolByteToken = (0x3000 - 64) / sizeof(FormulaByteToken);
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken, nMemPoolByteToken, nMemPoolByteToken )
 // Need several FormulaStringToken
-const USHORT nMemPoolStringToken = (0x1000 - 64) / sizeof(FormulaStringToken);
+const sal_uInt16 nMemPoolStringToken = (0x1000 - 64) / sizeof(FormulaStringToken);
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken, nMemPoolStringToken, nMemPoolStringToken )
 
 
 // --- helpers --------------------------------------------------------------
 
-inline BOOL lcl_IsReference( OpCode eOp, StackVar eType )
+inline sal_Bool lcl_IsReference( OpCode eOp, StackVar eType )
 {
     return
         (eOp == ocPush && (eType == svSingleRef || eType == svDoubleRef))
@@ -83,14 +79,13 @@ FormulaToken::~FormulaToken()
 {
 }
 
-BOOL FormulaToken::Is3DRef() const
+bool FormulaToken::Is3DRef() const
 {
-    return FALSE;
+    return sal_False;
 }
 
-BOOL FormulaToken::IsFunction() const
+bool FormulaToken::IsFunction() const
 {
-//    OpCode eOp = GetOpCode();
     return (eOp != ocPush && eOp != ocBad && eOp != ocColRowName &&
             eOp != ocColRowNameAuto && eOp != ocName && eOp != ocDBArea &&
            (GetByte() != 0                                                  // x parameters
@@ -107,14 +102,13 @@ BOOL FormulaToken::IsFunction() const
 }
 
 
-BYTE FormulaToken::GetParamCount() const
+sal_uInt8 FormulaToken::GetParamCount() const
 {
-    // OpCode eOp = GetOpCode();
     if ( eOp < SC_OPCODE_STOP_DIV && eOp != ocExternal && eOp != ocMacro &&
             eOp != ocIf && eOp != ocChose && eOp != ocPercentSign )
         return 0;       // parameters and specials
                         // ocIf and ocChose not for FAP, have cByte then
-//2do: BOOL parameter whether FAP or not?
+//2do: sal_Bool parameter whether FAP or not?
     else if ( GetByte() )
         return GetByte();   // all functions, also ocExternal and ocMacro
     else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP)
@@ -134,7 +128,7 @@ BYTE FormulaToken::GetParamCount() const
 }
 
 
-BOOL FormulaToken::IsMatrixFunction() const
+bool FormulaToken::IsMatrixFunction() const
 {
     return formula::FormulaCompiler::IsMatrixFunction(GetOpCode());
 }
@@ -151,7 +145,7 @@ bool FormulaToken::IsExternalRef() const
     return false;
 }
 
-BOOL FormulaToken::operator==( const FormulaToken& rToken ) const
+bool FormulaToken::operator==( const FormulaToken& rToken ) const
 {
     // don't compare reference count!
     return  eType == rToken.eType && GetOpCode() == rToken.GetOpCode();
@@ -160,13 +154,13 @@ BOOL FormulaToken::operator==( const FormulaToken& rToken ) const
 
 // --- virtual dummy methods -------------------------------------------------
 
-BYTE FormulaToken::GetByte() const
+sal_uInt8 FormulaToken::GetByte() const
 {
     // ok to be called for any derived class
     return 0;
 }
 
-void FormulaToken::SetByte( BYTE )
+void FormulaToken::SetByte( sal_uInt8 )
 {
     DBG_ERRORFILE( "FormulaToken::SetByte: virtual dummy called" );
 }
@@ -202,13 +196,13 @@ const String& FormulaToken::GetString() const
     return aDummyString;
 }
 
-USHORT FormulaToken::GetIndex() const
+sal_uInt16 FormulaToken::GetIndex() const
 {
     DBG_ERRORFILE( "FormulaToken::GetIndex: virtual dummy called" );
     return 0;
 }
 
-void FormulaToken::SetIndex( USHORT )
+void FormulaToken::SetIndex( sal_uInt16 )
 {
     DBG_ERRORFILE( "FormulaToken::SetIndex: virtual dummy called" );
 }
@@ -233,17 +227,18 @@ FormulaToken* FormulaToken::GetFAPOrigToken() const
     return NULL;
 }
 
-USHORT FormulaToken::GetError() const
+sal_uInt16 FormulaToken::GetError() const
 {
     DBG_ERRORFILE( "FormulaToken::GetError: virtual dummy called" );
     return 0;
 }
 
-void FormulaToken::SetError( USHORT )
+void FormulaToken::SetError( sal_uInt16 )
 {
     DBG_ERRORFILE( "FormulaToken::SetError: virtual dummy called" );
 }
-BOOL FormulaToken::TextEqual( const FormulaToken& rToken ) const
+
+bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 {
     return *this == rToken;
 }
@@ -252,24 +247,24 @@ BOOL FormulaToken::TextEqual( const FormulaToken& rToken ) const
 // --------------------------------------------------------------------------
 
 
-BYTE FormulaByteToken::GetByte() const                       { return nByte; }
-void FormulaByteToken::SetByte( BYTE n )                     { nByte = n; }
+sal_uInt8 FormulaByteToken::GetByte() const                       { return nByte; }
+void FormulaByteToken::SetByte( sal_uInt8 n )                     { nByte = n; }
 bool FormulaByteToken::HasForceArray() const                 { return bHasForceArray; }
 void FormulaByteToken::SetForceArray( bool b )               { bHasForceArray = b; }
-BOOL FormulaByteToken::operator==( const FormulaToken& r ) const
+bool FormulaByteToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
         bHasForceArray == r.HasForceArray();
 }
 
 
-FormulaToken* FormulaFAPToken::GetFAPOrigToken() const            { return pOrigToken; }
-BOOL FormulaFAPToken::operator==( const FormulaToken& r ) const
+FormulaToken* FormulaFAPToken::GetFAPOrigToken() const { return pOrigToken.get(); }
+bool FormulaFAPToken::operator==( const FormulaToken& r ) const
 {
     return FormulaByteToken::operator==( r ) && pOrigToken == r.GetFAPOrigToken();
 }
 short* FormulaJumpToken::GetJump() const                     { return pJump; }
-BOOL FormulaJumpToken::operator==( const FormulaToken& r ) const
+bool FormulaJumpToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pJump[0] == r.GetJump()[0] &&
         memcmp( pJump+1, r.GetJump()+1, pJump[0] * sizeof(short) ) == 0;
@@ -304,9 +299,9 @@ bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,Exter
                 // long is svIndex, used for name / database area, or "byte" for spaces
                 sal_Int32 nValue = _aToken.Data.get<sal_Int32>();
                 if ( eOpCode == ocName || eOpCode == ocDBArea )
-                    AddToken( formula::FormulaIndexToken( eOpCode, static_cast<USHORT>(nValue) ) );
+                    AddToken( formula::FormulaIndexToken( eOpCode, static_cast<sal_uInt16>(nValue) ) );
                 else if ( eOpCode == ocSpaces )
-                    AddToken( formula::FormulaByteToken( ocSpaces, static_cast<BYTE>(nValue) ) );
+                    AddToken( formula::FormulaByteToken( ocSpaces, static_cast<sal_uInt8>(nValue) ) );
                 else
                     bError = true;
             }
@@ -339,7 +334,6 @@ bool FormulaTokenArray::Fill(const uno::Sequence< sheet::FormulaToken >& _aSeque
     }
     return bError;
 }
-//////////////////////////////////////////////////////////////////////////
 FormulaToken* FormulaTokenArray::GetNextReference()
 {
     while( nIndex < nLen )
@@ -499,7 +493,7 @@ void FormulaTokenArray::DelRPN()
     if( nRPN )
     {
         FormulaToken** p = pRPN;
-        for( USHORT i = 0; i < nRPN; i++ )
+        for( sal_uInt16 i = 0; i < nRPN; i++ )
         {
             (*p++)->DecRef();
         }
@@ -509,7 +503,7 @@ void FormulaTokenArray::DelRPN()
     nRPN = nIndex = 0;
 }
 
-FormulaToken* FormulaTokenArray::PeekPrev( USHORT & nIdx )
+FormulaToken* FormulaTokenArray::PeekPrev( sal_uInt16 & nIdx )
 {
     if (0 < nIdx && nIdx <= nLen)
         return pCode[--nIdx];
@@ -528,7 +522,7 @@ FormulaToken* FormulaTokenArray::PeekNextNoSpaces()
 {
     if( pCode && nIndex < nLen )
     {
-        USHORT j = nIndex;
+        sal_uInt16 j = nIndex;
         while ( pCode[j]->GetOpCode() == ocSpaces && j < nLen )
             j++;
         if ( j < nLen )
@@ -544,7 +538,7 @@ FormulaToken* FormulaTokenArray::PeekPrevNoSpaces()
 {
     if( pCode && nIndex > 1 )
     {
-        USHORT j = nIndex - 2;
+        sal_uInt16 j = nIndex - 2;
         while ( pCode[j]->GetOpCode() == ocSpaces && j > 0 )
             j--;
         if ( j > 0 || pCode[j]->GetOpCode() != ocSpaces )
@@ -558,7 +552,7 @@ FormulaToken* FormulaTokenArray::PeekPrevNoSpaces()
 
 bool FormulaTokenArray::HasExternalRef() const
 {
-    for ( USHORT j=0; j < nLen; j++ )
+    for ( sal_uInt16 j=0; j < nLen; j++ )
     {
         if (pCode[j]->IsExternalRef())
             return true;
@@ -566,43 +560,42 @@ bool FormulaTokenArray::HasExternalRef() const
     return false;
 }
 
-BOOL FormulaTokenArray::HasOpCode( OpCode eOp ) const
+bool FormulaTokenArray::HasOpCode( OpCode eOp ) const
 {
-    for ( USHORT j=0; j < nLen; j++ )
+    for ( sal_uInt16 j=0; j < nLen; j++ )
     {
         if ( pCode[j]->GetOpCode() == eOp )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL FormulaTokenArray::HasOpCodeRPN( OpCode eOp ) const
+bool FormulaTokenArray::HasOpCodeRPN( OpCode eOp ) const
 {
-    for ( USHORT j=0; j < nRPN; j++ )
+    for ( sal_uInt16 j=0; j < nRPN; j++ )
     {
         if ( pRPN[j]->GetOpCode() == eOp )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL FormulaTokenArray::HasNameOrColRowName() const
+bool FormulaTokenArray::HasNameOrColRowName() const
 {
-    for ( USHORT j=0; j < nLen; j++ )
+    for ( sal_uInt16 j=0; j < nLen; j++ )
     {
         if( pCode[j]->GetType() == svIndex || pCode[j]->GetOpCode() == ocColRowName )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-////////////////////////////////////////////////////////////////////////////
 
 FormulaTokenArray::FormulaTokenArray()
 {
     pCode = NULL; pRPN = NULL;
     nError = nLen = nIndex = nRPN = nRefs = 0;
-    bHyperLink = FALSE;
+    bHyperLink = sal_False;
     ClearRecalcMode();
 }
 
@@ -632,14 +625,14 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
     {
         pp = pCode = new FormulaToken*[ nLen ];
         memcpy( pp, r.pCode, nLen * sizeof( FormulaToken* ) );
-        for( USHORT i = 0; i < nLen; i++ )
+        for( sal_uInt16 i = 0; i < nLen; i++ )
             (*pp++)->IncRef();
     }
     if( nRPN )
     {
         pp = pRPN = new FormulaToken*[ nRPN ];
         memcpy( pp, r.pRPN, nRPN * sizeof( FormulaToken* ) );
-        for( USHORT i = 0; i < nRPN; i++ )
+        for( sal_uInt16 i = 0; i < nRPN; i++ )
             (*pp++)->IncRef();
     }
 }
@@ -665,7 +658,7 @@ FormulaTokenArray* FormulaTokenArray::Clone() const
     {
         pp = p->pCode = new FormulaToken*[ nLen ];
         memcpy( pp, pCode, nLen * sizeof( FormulaToken* ) );
-        for( USHORT i = 0; i < nLen; i++, pp++ )
+        for( sal_uInt16 i = 0; i < nLen; i++, pp++ )
         {
             *pp = (*pp)->Clone();
             (*pp)->IncRef();
@@ -675,14 +668,14 @@ FormulaTokenArray* FormulaTokenArray::Clone() const
     {
         pp = p->pRPN = new FormulaToken*[ nRPN ];
         memcpy( pp, pRPN, nRPN * sizeof( FormulaToken* ) );
-        for( USHORT i = 0; i < nRPN; i++, pp++ )
+        for( sal_uInt16 i = 0; i < nRPN; i++, pp++ )
         {
             FormulaToken* t = *pp;
             if( t->GetRef() > 1 )
             {
                 FormulaToken** p2 = pCode;
-                USHORT nIdx = 0xFFFF;
-                for( USHORT j = 0; j < nLen; j++, p2++ )
+                sal_uInt16 nIdx = 0xFFFF;
+                for( sal_uInt16 j = 0; j < nLen; j++, p2++ )
                 {
                     if( *p2 == t )
                     {
@@ -708,7 +701,7 @@ void FormulaTokenArray::Clear()
     if( pCode )
     {
         FormulaToken** p = pCode;
-        for( USHORT i = 0; i < nLen; i++ )
+        for( sal_uInt16 i = 0; i < nLen; i++ )
         {
             (*p++)->DecRef();
         }
@@ -716,7 +709,7 @@ void FormulaTokenArray::Clear()
     }
     pCode = NULL; pRPN = NULL;
     nError = nLen = nIndex = nRPN = nRefs = 0;
-    bHyperLink = FALSE;
+    bHyperLink = sal_False;
     ClearRecalcMode();
 }
 
@@ -736,7 +729,6 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
         pCode = new FormulaToken*[ MAXCODE ];
     if( nLen < MAXCODE-1 )
     {
-        // fprintf (stderr, "Add : %d\n", t->GetOpCode());
         pCode[ nLen++ ] = t;
         if( t->GetOpCode() == ocPush
             && ( t->GetType() == svSingleRef || t->GetType() == svDoubleRef ) )
@@ -774,7 +766,7 @@ FormulaToken* FormulaTokenArray::AddDouble( double fVal )
     return Add( new FormulaDoubleToken( fVal ) );
 }
 
-FormulaToken* FormulaTokenArray::AddName( USHORT n )
+FormulaToken* FormulaTokenArray::AddName( sal_uInt16 n )
 {
     return Add( new FormulaIndexToken( ocName, n ) );
 }
@@ -818,7 +810,7 @@ void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
 }
 
 
-BOOL FormulaTokenArray::HasMatrixDoubleRefOps()
+bool FormulaTokenArray::HasMatrixDoubleRefOps()
 {
     if ( pRPN && nRPN )
     {
@@ -827,11 +819,11 @@ BOOL FormulaTokenArray::HasMatrixDoubleRefOps()
         FormulaToken** pStack = new FormulaToken* [nRPN];
         FormulaToken* pResult = new FormulaDoubleToken( 0.0 );
         short sp = 0;
-        for ( USHORT j = 0; j < nRPN; j++ )
+        for ( sal_uInt16 j = 0; j < nRPN; j++ )
         {
             FormulaToken* t = pRPN[j];
             OpCode eOp = t->GetOpCode();
-            BYTE nParams = t->GetParamCount();
+            sal_uInt8 nParams = t->GetParamCount();
             switch ( eOp )
             {
                 case ocAdd :
@@ -848,13 +840,13 @@ BOOL FormulaTokenArray::HasMatrixDoubleRefOps()
                 case ocLessEqual :
                 case ocGreaterEqual :
                 {
-                    for ( BYTE k = nParams; k; k-- )
+                    for ( sal_uInt8 k = nParams; k; k-- )
                     {
                         if ( sp >= k && pStack[sp-k]->GetType() == svDoubleRef )
                         {
                             pResult->Delete();
                             delete [] pStack;
-                            return TRUE;
+                            return sal_True;
                         }
                     }
                 }
@@ -876,7 +868,7 @@ BOOL FormulaTokenArray::HasMatrixDoubleRefOps()
                 sp = sal::static_int_cast<short>( sp - nParams );
                 if ( sp < 0 )
                 {
-                    DBG_ERROR( "FormulaTokenArray::HasMatrixDoubleRefOps: sp < 0" );
+                    OSL_FAIL( "FormulaTokenArray::HasMatrixDoubleRefOps: sp < 0" );
                     sp = 0;
                 }
                 pStack[sp++] = pResult;
@@ -886,7 +878,7 @@ BOOL FormulaTokenArray::HasMatrixDoubleRefOps()
         delete [] pStack;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -935,21 +927,21 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
             if (mnCurArg == 2)
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=TRUE()
+                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=sal_True()
             }
             break;
         case ocPoissonDist:
             if (mnCurArg == 1)
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 1.0 );      // 3rd, Cumulative=TRUE()
+                pNewArr->AddDouble( 1.0 );      // 3rd, Cumulative=sal_True()
             }
             break;
         case ocNormDist:
             if ( mnCurArg == 2 )
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=TRUE()
+                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=sal_True()
             }
             break;
         case ocLogNormDist:
@@ -1089,7 +1081,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
     FormulaMissingContext aCtx[ nAlloc ];
     int aOpCodeAddressStack[ nAlloc ];  // use of ADDRESS() function
     const int nOmitAddressArg = 3;      // ADDRESS() 4th parameter A1/R1C1
-    USHORT nTokens = GetLen() + 1;
+    sal_uInt16 nTokens = GetLen() + 1;
     FormulaMissingContext* pCtx = (nAlloc < nTokens ? new FormulaMissingContext[nTokens] : &aCtx[0]);
     int* pOcas = (nAlloc < nTokens ? new int[nTokens] : &aOpCodeAddressStack[0]);
     // Never go below 0, never use 0, mpFunc always NULL.
@@ -1119,7 +1111,6 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
                 if (!(pOcas[ i ] == nFn && pCur->GetOpCode() == ocSep))
                     bAdd = false;
             }
-            //fprintf( stderr, "ocAddress %d arg %d%s\n", (int)i, (int)pCtx[ pOcas[ i ] ].mnCurArg, (bAdd ? "" : " omitted"));
         }
         switch ( pCur->GetOpCode() )
         {
@@ -1144,7 +1135,6 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
                 if (nOcas && pOcas[ nOcas-1 ] == nFn && pCtx[ nFn ].mnCurArg == nOmitAddressArg)
                 {
                     bAdd = false;
-                    //fprintf( stderr, "ocAddress %d sep %d omitted\n", (int)nOcas-1, nOmitAddressArg);
                 }
                 break;
             case ocMissing:
@@ -1171,7 +1161,7 @@ bool FormulaTokenArray::MayReferenceFollow()
     if ( pCode && nLen > 0 )
     {
         // ignore trailing spaces
-        USHORT i = nLen - 1;
+        sal_uInt16 i = nLen - 1;
         while ( i > 0 && pCode[i]->GetOpCode() == SC_OPCODE_SPACES )
         {
             --i;
@@ -1212,7 +1202,7 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
             }
             break;
         default:
-            pRet = new FormulaByteToken( eOp, 0, FALSE );
+            pRet = new FormulaByteToken( eOp, 0, sal_False );
             break;
     }
     return AddToken( *pRet );
@@ -1300,7 +1290,7 @@ void FormulaTokenIterator::Jump( short nStart, short nNext, short nStop )
 
 bool FormulaTokenIterator::IsEndOfPath() const
 {
-    USHORT nTest = pCur->nPC + 1;
+    sal_uInt16 nTest = pCur->nPC + 1;
     if( nTest < pCur->pArr->nRPN  && nTest < pCur->nStop )
     {
         const FormulaToken* t = pCur->pArr->pRPN[ nTest ];
@@ -1316,44 +1306,44 @@ bool FormulaTokenIterator::IsEndOfPath() const
 
 double      FormulaDoubleToken::GetDouble() const            { return fDouble; }
 double &    FormulaDoubleToken::GetDoubleAsReference()       { return fDouble; }
-BOOL FormulaDoubleToken::operator==( const FormulaToken& r ) const
+bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && fDouble == r.GetDouble();
 }
 
 
 const String& FormulaStringToken::GetString() const          { return aString; }
-BOOL FormulaStringToken::operator==( const FormulaToken& r ) const
+bool FormulaStringToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && aString == r.GetString();
 }
 
 
 const String& FormulaStringOpToken::GetString() const             { return aString; }
-BOOL FormulaStringOpToken::operator==( const FormulaToken& r ) const
+bool FormulaStringOpToken::operator==( const FormulaToken& r ) const
 {
     return FormulaByteToken::operator==( r ) && aString == r.GetString();
 }
 
-USHORT  FormulaIndexToken::GetIndex() const                  { return nIndex; }
-void    FormulaIndexToken::SetIndex( USHORT n )              { nIndex = n; }
-BOOL FormulaIndexToken::operator==( const FormulaToken& r ) const
+sal_uInt16  FormulaIndexToken::GetIndex() const                  { return nIndex; }
+void    FormulaIndexToken::SetIndex( sal_uInt16 n )              { nIndex = n; }
+bool FormulaIndexToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && nIndex == r.GetIndex();
 }
 const String&   FormulaExternalToken::GetExternal() const    { return aExternal; }
-BYTE            FormulaExternalToken::GetByte() const        { return nByte; }
-void            FormulaExternalToken::SetByte( BYTE n )      { nByte = n; }
-BOOL FormulaExternalToken::operator==( const FormulaToken& r ) const
+sal_uInt8            FormulaExternalToken::GetByte() const        { return nByte; }
+void            FormulaExternalToken::SetByte( sal_uInt8 n )      { nByte = n; }
+bool FormulaExternalToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
         aExternal == r.GetExternal();
 }
 
 
-USHORT          FormulaErrorToken::GetError() const          { return nError; }
-void            FormulaErrorToken::SetError( USHORT nErr )   { nError = nErr; }
-BOOL FormulaErrorToken::operator==( const FormulaToken& r ) const
+sal_uInt16          FormulaErrorToken::GetError() const          { return nError; }
+void            FormulaErrorToken::SetError( sal_uInt16 nErr )   { nError = nErr; }
+bool FormulaErrorToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) &&
         nError == static_cast< const FormulaErrorToken & >(r).GetError();
@@ -1364,13 +1354,13 @@ const String&   FormulaMissingToken::GetString() const
     static  String              aDummyString;
     return aDummyString;
 }
-BOOL FormulaMissingToken::operator==( const FormulaToken& r ) const
+bool FormulaMissingToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r );
 }
 
 
-BOOL FormulaUnknownToken::operator==( const FormulaToken& r ) const
+bool FormulaUnknownToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r );
 }

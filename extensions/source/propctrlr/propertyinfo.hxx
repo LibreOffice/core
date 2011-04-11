@@ -32,6 +32,7 @@
 #include <sal/types.h>
 #include <tools/string.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
 #include <vector>
 
 //............................................................................
@@ -47,7 +48,7 @@ namespace pcr
     public:
         virtual sal_Int32                           getPropertyId(const String& _rName) const = 0;
         virtual String                              getPropertyTranslation(sal_Int32 _nId) const = 0;
-        virtual sal_Int32                           getPropertyHelpId(sal_Int32 _nId) const = 0;
+        virtual rtl::OString                        getPropertyHelpId(sal_Int32 _nId) const = 0;
         virtual sal_Int16                           getPropertyPos(sal_Int32 _nId) const = 0;
         virtual sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const = 0;
         virtual ::std::vector< ::rtl::OUString >    getPropertyEnumRepresentations(sal_Int32 _nId) const = 0;

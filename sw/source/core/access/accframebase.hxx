@@ -52,6 +52,7 @@ protected:
     virtual void _InvalidateFocus();
 
     virtual ~SwAccessibleFrameBase();
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
 
@@ -60,8 +61,6 @@ public:
                            const SwFlyFrm *pFlyFrm );
 
     virtual sal_Bool HasCursor();   // required by map to remember that object
-
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     static sal_uInt8 GetNodeType( const SwFlyFrm *pFlyFrm );
 

@@ -303,7 +303,7 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const rtl::OUS
 
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
 
-    USHORT nWID = pEntry->nWID;
+    sal_uInt16 nWID = pEntry->nWID;
     if ( nWID == ATTR_FONT || nWID == ATTR_CJK_FONT || nWID == ATTR_CTL_FONT || !nWID )
     {
         //  static default for font is system-dependent,
@@ -378,7 +378,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const rtl::OUString& aPr
     if (pEntry->nWID)
     {
         ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
-        const SfxPoolItem* pItem = pPool->GetItem( pEntry->nWID, SFX_ITEMS_STATICDEFAULT );
+        const SfxPoolItem* pItem = pPool->GetItem2( pEntry->nWID, SFX_ITEMS_DEFAULT );
         if (pItem)
             pItem->QueryValue( aRet, pEntry->nMemberId );
     }

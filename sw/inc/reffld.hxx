@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _REFFLD_HXX
-#define _REFFLD_HXX
+#ifndef SW_REFFLD_HXX
+#define SW_REFFLD_HXX
 
 #include <fldbas.hxx>
 
@@ -56,7 +56,7 @@ enum REFERENCEMARK
     REF_ONLYNUMBER,
     REF_ONLYCAPTION,
     REF_ONLYSEQNO,
-    // --> OD 2007-08-24 #i81002#
+    // --> #i81002#
     // new reference format types for referencing bookmarks and set references
     REF_NUMBER,
     REF_NUMBER_NO_CONTEXT,
@@ -73,19 +73,20 @@ enum REFERENCEMARK
 class SwGetRefFieldType : public SwFieldType
 {
     SwDoc* pDoc;
+protected:
+    // ueberlagert, um alle Ref-Felder zu updaten
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 public:
     SwGetRefFieldType(SwDoc* pDoc );
     virtual SwFieldType*    Copy() const;
 
     SwDoc*                  GetDoc() const { return pDoc; }
-    // ueberlagert, um alle Ref-Felder zu updaten
-    virtual void Modify( SfxPoolItem *, SfxPoolItem * );
 
     void MergeWithOtherDoc( SwDoc& rDestDoc );
 
     static SwTxtNode* FindAnchor( SwDoc* pDoc, const String& rRefMark,
-                                        USHORT nSubType, USHORT nSeqNo,
-                                        USHORT* pStt, USHORT* pEnd = 0 );
+                                        sal_uInt16 nSubType, sal_uInt16 nSeqNo,
+                                        sal_uInt16* pStt, sal_uInt16* pEnd = 0 );
 };
 
 /*--------------------------------------------------------------------
@@ -97,27 +98,28 @@ class SW_DLLPUBLIC SwGetRefField : public SwField
 private:
     String sSetRefName;
     String sTxt;
-    USHORT nSubType;
-    USHORT nSeqNo;
+    sal_uInt16 nSubType;
+    sal_uInt16 nSeqNo;
 
-    // --> OD 2007-08-24 #i81002#
-    String MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
-                          const SwTxtNode& rTxtNodeOfReferencedItem,
-                          const sal_uInt32 nRefNumFormat ) const;
-    // <--
-public:
-    SwGetRefField( SwGetRefFieldType*, const String& rSetRef,
-                    USHORT nSubType, USHORT nSeqNo, ULONG nFmt );
-
-    virtual ~SwGetRefField();
-
-    virtual String      GetCntnt(BOOL bName = FALSE) const;
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
 
+    // #i81002#
+    String MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
+                          const SwTxtNode& rTxtNodeOfReferencedItem,
+                          const sal_uInt32 nRefNumFormat ) const;
+
+public:
+    SwGetRefField( SwGetRefFieldType*, const String& rSetRef,
+                    sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFmt );
+
+    virtual ~SwGetRefField();
+
+    virtual String      GetFieldName() const;
+
     const String&       GetSetRefName() const { return sSetRefName; }
 
-    // --> OD 2007-09-06 #i81002#
+    // #i81002#
     // The <SwTxtFld> instance, which represents the text attribute for the
     // <SwGetRefField> instance, has to be passed to the method.
     // This <SwTxtFld> instance is needed for the reference format type REF_UPDOWN
@@ -125,33 +127,33 @@ public:
     // Note: This instance may be NULL (field in Undo/Redo). This will cause
     // no update for these reference format types.
     void                UpdateField( const SwTxtFld* pFldTxtAttr );
-    // <--
+
     void                SetExpand( const String& rStr ) { sTxt = rStr; }
 
     // SubType erfragen/setzen
-    virtual USHORT      GetSubType() const;
-    virtual void        SetSubType( USHORT n );
+    virtual sal_uInt16      GetSubType() const;
+    virtual void        SetSubType( sal_uInt16 n );
 
-    // --> OD 2007-11-09 #i81002#
+    // --> #i81002#
     bool IsRefToHeadingCrossRefBookmark() const;
     bool IsRefToNumItemCrossRefBookmark() const;
     const SwTxtNode* GetReferencedTxtNode() const;
     // <--
-    // --> OD 2008-01-09 #i85090#
+    // #i85090#
     String GetExpandedTxtOfReferencedTxtNode() const;
-    // <--
+
 
     // SequenceNo erfragen/setzen (nur fuer REF_SEQUENCEFLD interressant)
-    USHORT              GetSeqNo() const        { return nSeqNo; }
-    void                SetSeqNo( USHORT n )    { nSeqNo = n; }
+    sal_uInt16              GetSeqNo() const        { return nSeqNo; }
+    void                SetSeqNo( sal_uInt16 n )    { nSeqNo = n; }
 
     // Name der Referenz
     virtual const String& GetPar1() const;
     virtual void        SetPar1(const String& rStr);
 
     virtual String      GetPar2() const;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 
     void                ConvertProgrammaticToUIName();
 
@@ -159,6 +161,6 @@ public:
 };
 
 
-#endif // _REFFLD_HXX
+#endif // SW_REFFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

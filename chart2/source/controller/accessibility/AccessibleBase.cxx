@@ -61,6 +61,7 @@
 #include <vcl/window.hxx>
 
 #include <algorithm>
+#include <o3tl/compat_functional.hxx>
 
 #include "ChartElementFactory.hxx"
 
@@ -200,12 +201,11 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
     else if( m_bMayHaveChildren )
     {
         bool bStop = false;
-        // /--
+
         ClearableMutexGuard aGuard( GetMutex() );
         // make local copy for notification
         ChildListVectorType aLocalChildList( m_aChildList );
         aGuard.clear();
-        // \--
 
         ChildListVectorType::iterator aEndIter = aLocalChildList.end();
         for( ChildListVectorType::iterator aIter = aLocalChildList.begin() ;
@@ -245,7 +245,6 @@ bool AccessibleBase::UpdateChildren()
 {
     bool bMustUpdateChildren = false;
     {
-        // /--
         MutexGuard aGuard( GetMutex() );
         if( ! m_bMayHaveChildren ||
             m_bIsDisposed )
@@ -253,7 +252,6 @@ bool AccessibleBase::UpdateChildren()
 
         bMustUpdateChildren = ( m_bMayHaveChildren &&
                                 ! m_bChildrenInitialized );
-        // \--
     }
 
     // update unguarded
@@ -275,7 +273,7 @@ bool AccessibleBase::ImplUpdateChildren()
         aAccChildren.reserve( aModelChildren.size());
         ::std::transform( m_aChildOIDMap.begin(), m_aChildOIDMap.end(),
                           ::std::back_inserter( aAccChildren ),
-                          ::std::select1st< ChildOIDMap::value_type >());
+                          ::o3tl::select1st< ChildOIDMap::value_type >());
 
         ::std::sort( aModelChildren.begin(), aModelChildren.end());
 
@@ -319,7 +317,6 @@ void AccessibleBase::AddChild( AccessibleBase * pChild  )
     OSL_ENSURE( pChild != NULL, "Invalid Child" );
     if( pChild )
     {
-        // /--
         ClearableMutexGuard aGuard( GetMutex() );
 
         Reference< XAccessible > xChild( pChild );
@@ -334,10 +331,8 @@ void AccessibleBase::AddChild( AccessibleBase * pChild  )
             aNew <<= xChild;
 
             aGuard.clear();
-            // \-- (1st)
             BroadcastAccEvent( AccessibleEventId::CHILD, aNew, aEmpty );
         }
-        // \-- (2nd)
     }
 }
 
@@ -346,7 +341,6 @@ void AccessibleBase::AddChild( AccessibleBase * pChild  )
  */
 void AccessibleBase::RemoveChildByOId( const ObjectIdentifier& rOId )
 {
-    // /--
     ClearableMutexGuard aGuard( GetMutex() );
 
     ChildOIDMap::iterator aIt( m_aChildOIDMap.find( rOId ));
@@ -370,7 +364,6 @@ void AccessibleBase::RemoveChildByOId( const ObjectIdentifier& rOId )
 
         // call listeners unguarded
         aGuard.clear();
-        // \-- (1st)
 
         // inform listeners of removed child
         if( bInitialized )
@@ -393,18 +386,16 @@ awt::Point AccessibleBase::GetUpperLeftOnScreen() const
     awt::Point aResult;
     if( m_aAccInfo.m_pParent )
     {
-        // /--
         ClearableMutexGuard aGuard( GetMutex() );
         AccessibleBase * pParent = m_aAccInfo.m_pParent;
         aGuard.clear();
-        // \--
 
         if( pParent )
         {
             aResult = pParent->GetUpperLeftOnScreen();
         }
         else
-            OSL_ENSURE( false, "Default position used is probably incorrect." );
+            OSL_FAIL( "Default position used is probably incorrect." );
     }
 
     return aResult;
@@ -416,7 +407,6 @@ void AccessibleBase::BroadcastAccEvent(
     const Any & rOld,
     bool bSendGlobally ) const
 {
-    // /--
     ClearableMutexGuard aGuard( GetMutex() );
 
     if ( !m_nEventNotifierId && !bSendGlobally )
@@ -434,7 +424,6 @@ void AccessibleBase::BroadcastAccEvent(
         ::comphelper::AccessibleEventNotifier::addEvent( m_nEventNotifierId, aEvent );
 
     aGuard.clear();
-    // \--
 
     // send event to global message queue
     if( bSendGlobally )
@@ -445,7 +434,6 @@ void AccessibleBase::BroadcastAccEvent(
 
 void AccessibleBase::KillAllChildren()
 {
-    // /--
     ClearableMutexGuard aGuard( GetMutex() );
 
     // make local copy for notification
@@ -456,7 +444,6 @@ void AccessibleBase::KillAllChildren()
     m_aChildOIDMap.clear();
 
     aGuard.clear();
-    // \--
 
     // call dispose for all children
     // and notify listeners
@@ -507,7 +494,6 @@ AccessibleUniqueId AccessibleBase::GetId() const
 // ________ (XComponent::dispose) ________
 void SAL_CALL AccessibleBase::disposing()
 {
-    // /--
     ClearableMutexGuard aGuard( GetMutex() );
     OSL_ENSURE( ! m_bIsDisposed, "dispose() called twice" );
 
@@ -536,7 +522,6 @@ void SAL_CALL AccessibleBase::disposing()
 
     // call listeners unguarded
     aGuard.clear();
-    // \--
 
     if( m_bMayHaveChildren )
     {
@@ -557,7 +542,6 @@ Reference< XAccessibleContext > SAL_CALL AccessibleBase::getAccessibleContext()
 sal_Int32 SAL_CALL AccessibleBase::getAccessibleChildCount()
     throw (RuntimeException)
 {
-    // /--
     ClearableMutexGuard aGuard( GetMutex() );
     if( ! m_bMayHaveChildren ||
         m_bIsDisposed )
@@ -567,7 +551,6 @@ sal_Int32 SAL_CALL AccessibleBase::getAccessibleChildCount()
                                  ! m_bChildrenInitialized );
 
     aGuard.clear();
-    // \--
 
     // update unguarded
     if( bMustUpdateChildren )
@@ -588,13 +571,11 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int32 
     CheckDisposeState();
     Reference< XAccessible > xResult;
 
-    // /--
     ResettableMutexGuard aGuard( GetMutex() );
     bool bMustUpdateChildren = ( m_bMayHaveChildren &&
                                  ! m_bChildrenInitialized );
 
     aGuard.clear();
-    // \--
 
     if( bMustUpdateChildren )
         UpdateChildren();
@@ -602,14 +583,13 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleChild( sal_Int32 
     xResult.set( ImplGetAccessibleChildById( i ));
 
     return xResult;
-    // \--
 }
 
 Reference< XAccessible > AccessibleBase::ImplGetAccessibleChildById( sal_Int32 i ) const
     throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
     Reference< XAccessible > xResult;
-    // /--
+
     MutexGuard aGuard( GetMutex());
     if( ! m_bMayHaveChildren ||
         i < 0 ||
@@ -727,11 +707,9 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const aw
     if( ( aRect.X <= aPoint.X && aPoint.X <= (aRect.X + aRect.Width) ) &&
         ( aRect.Y <= aPoint.Y && aPoint.Y <= (aRect.Y + aRect.Height)))
     {
-        // /--
         ClearableMutexGuard aGuard( GetMutex() );
         ChildListVectorType aLocalChildList( m_aChildList );
         aGuard.clear();
-        // \--
 
         Reference< XAccessibleComponent > aComp;
         for( ChildListVectorType::const_iterator aIter = aLocalChildList.begin();
@@ -768,7 +746,6 @@ awt::Rectangle SAL_CALL AccessibleBase::getBounds()
             Rectangle aRect( aLogicRect.X, aLogicRect.Y,
                              aLogicRect.X + aLogicRect.Width,
                              aLogicRect.Y + aLogicRect.Height );
-            // /-- solar
             SolarMutexGuard aSolarGuard;
             aRect = pWindow->LogicToPixel( aRect );
 
@@ -779,14 +756,12 @@ awt::Rectangle SAL_CALL AccessibleBase::getBounds()
             if( xParent.is() )
                 aParentLocOnScreen = xParent->getLocationOnScreen();
 
-            // aOffset = aParentLocOnScreen - GetUpperLeftOnScreen()
             awt::Point aULOnScreen = GetUpperLeftOnScreen();
             awt::Point aOffset( aParentLocOnScreen.X - aULOnScreen.X,
                                 aParentLocOnScreen.Y - aULOnScreen.Y );
 
             return awt::Rectangle( aRect.getX() - aOffset.X, aRect.getY() - aOffset.Y,
                                    aRect.getWidth(), aRect.getHeight());
-            // \-- solar
         }
     }
 

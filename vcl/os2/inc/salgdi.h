@@ -35,7 +35,7 @@
 #include <vcl/outfont.hxx>
 #include <vcl/impfont.hxx>
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 class ImplOs2FontEntry;
 
@@ -75,7 +75,7 @@ public:
     bool                    AliasSymbolsHigh() const    { return mbAliasSymbolsHigh; }
     bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
 
-    ImplFontCharMap*        GetImplFontCharMap() const;
+    const ImplFontCharMap*  GetImplFontCharMap() const;
 
 private:
     sal_IntPtr              mnId;
@@ -83,7 +83,7 @@ private:
     mutable bool                    mbHasKoreanRange;
     mutable bool                    mbHasCJKSupport;
 
-    mutable ImplFontCharMap*        mpUnicodeMap;
+    mutable const ImplFontCharMap*  mpUnicodeMap;
 
     // TODO: get rid of the members below needed to work with the Win9x non-unicode API
     BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)
@@ -101,7 +101,7 @@ private:
 #ifdef GNG_VERT_HACK
     void                    ReadGsubTable( HDC ) const;
 
-    typedef std::hash_set<int> IntHashSet;
+    typedef boost::unordered_set<int> IntHashSet;
     mutable IntHashSet      maGsubTable;
     mutable bool            mbGsubRead;
 public:
@@ -152,8 +152,6 @@ public:
     virtual ~Os2SalGraphics();
 
 protected:
-    virtual BOOL        unionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual bool                unionClipRegion( const ::basegfx::B2DPolyPolygon& );
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void        drawPixel( long nX, long nY );
     virtual void        drawPixel( long nX, long nY, SalColor nSalColor );
@@ -206,17 +204,13 @@ public:
     // get device resolution
     virtual void            GetResolution( long& rDPIX, long& rDPIY );
     // get the depth of the device
-    virtual USHORT          GetBitCount();
+    virtual USHORT          GetBitCount() const;
     // get the width of the device
     virtual long            GetGraphicsWidth() const;
 
     // set the clip region to empty
     virtual void            ResetClipRegion();
-    // begin setting the clip region, add rectangles to the
-    // region with the UnionClipRegion call
-    virtual void            BeginSetClipRegion( ULONG nCount );
-    // all rectangles were added and the clip region should be set now
-    virtual void            EndSetClipRegion();
+    virtual bool            setClipRegion( const Region& );
 
     // set the line color to transparent (= don't draw lines)
     virtual void            SetLineColor();

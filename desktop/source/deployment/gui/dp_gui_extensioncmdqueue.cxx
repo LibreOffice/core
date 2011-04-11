@@ -102,9 +102,10 @@
 #endif
 
 #ifdef WNT
-#include "tools/prewin.h"
+#define GradientStyle_RECT BLA_GradientStyle_RECT
+#include <windows.h>
 #include <objbase.h>
-#include "tools/postwin.h"
+#undef GradientStyle_RECT
 #endif
 
 
@@ -260,6 +261,8 @@ private:
 
     virtual void execute();
     virtual void SAL_CALL onTerminated();
+
+    void _insert(const TExtensionCmd& rExtCmd);
 
     void _addExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
                         const OUString &rPackageURL,
@@ -648,57 +651,30 @@ void ExtensionCmdQueue::Thread::addExtension( const ::rtl::OUString &rExtensionU
                                               const ::rtl::OUString &rRepository,
                                               const bool bWarnUser )
 {
-    ::osl::MutexGuard aGuard( m_mutex );
-
-    //If someone called stop then we do not add the extension -> game over!
-    if ( m_bStopped )
-        return;
-
     if ( rExtensionURL.getLength() )
     {
         TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::ADD, rExtensionURL, rRepository, bWarnUser ) );
-
-        m_queue.push( pEntry );
-        m_eInput = START;
-        m_wakeup.set();
+        _insert( pEntry );
     }
 }
 
 //------------------------------------------------------------------------------
 void ExtensionCmdQueue::Thread::removeExtension( const uno::Reference< deployment::XPackage > &rPackage )
 {
-    ::osl::MutexGuard aGuard( m_mutex );
-
-    //If someone called stop then we do not remove the extension -> game over!
-    if ( m_bStopped )
-        return;
-
     if ( rPackage.is() )
     {
         TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::REMOVE, rPackage ) );
-
-        m_queue.push( pEntry );
-        m_eInput = START;
-        m_wakeup.set();
+        _insert( pEntry );
     }
 }
 
 //------------------------------------------------------------------------------
 void ExtensionCmdQueue::Thread::acceptLicense( const uno::Reference< deployment::XPackage > &rPackage )
 {
-    ::osl::MutexGuard aGuard( m_mutex );
-
-    //If someone called stop then we do not remove the extension -> game over!
-    if ( m_bStopped )
-        return;
-
     if ( rPackage.is() )
     {
         TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::ACCEPT_LICENSE, rPackage ) );
-
-        m_queue.push( pEntry );
-        m_eInput = START;
-        m_wakeup.set();
+        _insert( pEntry );
     }
 }
 
@@ -706,20 +682,12 @@ void ExtensionCmdQueue::Thread::acceptLicense( const uno::Reference< deployment:
 void ExtensionCmdQueue::Thread::enableExtension( const uno::Reference< deployment::XPackage > &rPackage,
                                                  const bool bEnable )
 {
-    ::osl::MutexGuard aGuard( m_mutex );
-
-    //If someone called stop then we do not remove the extension -> game over!
-    if ( m_bStopped )
-        return;
-
     if ( rPackage.is() )
     {
         TExtensionCmd pEntry( new ExtensionCmd( bEnable ? ExtensionCmd::ENABLE :
                                                           ExtensionCmd::DISABLE,
                                                 rPackage ) );
-        m_queue.push( pEntry );
-        m_eInput = START;
-        m_wakeup.set();
+        _insert( pEntry );
     }
 }
 
@@ -727,16 +695,8 @@ void ExtensionCmdQueue::Thread::enableExtension( const uno::Reference< deploymen
 void ExtensionCmdQueue::Thread::checkForUpdates(
     const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
 {
-    ::osl::MutexGuard aGuard( m_mutex );
-
-    //If someone called stop then we do not update the extension -> game over!
-    if ( m_bStopped )
-        return;
-
     TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::CHECK_FOR_UPDATES, vExtensionList ) );
-    m_queue.push( pEntry );
-    m_eInput = START;
-    m_wakeup.set();
+    _insert( pEntry );
 }
 
 //------------------------------------------------------------------------------
@@ -848,12 +808,6 @@ void ExtensionCmdQueue::Thread::execute()
                     break;
                 }
             }
-            //catch ( deployment::DeploymentException &)
-            //{
-            //}
-            //catch ( lang::IllegalArgumentException &)
-            //{
-            //}
             catch ( ucb::CommandAbortedException & )
             {
                 //This exception is thrown when the user clicks cancel on the progressbar.
@@ -915,9 +869,6 @@ void ExtensionCmdQueue::Thread::execute()
             currentCmdEnv->stopProgress();
     }
     //end for
-    //enable all buttons
-//     m_pDialog->m_bAddingExtensions = false;
-//     m_pDialog->updateButtonStates();
 #ifdef WNT
     CoUninitialize();
 #endif
@@ -944,7 +895,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     OUString sName;
     if ( ! (anyTitle >>= sName) )
     {
-        OSL_ENSURE(0, "Could not get file name for extension.");
+        OSL_FAIL("Could not get file name for extension.");
         return;
     }
 
@@ -1013,13 +964,13 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
 
     if ( ( pUpdateDialog->Execute() == RET_OK ) && !vData.empty() )
     {
-        // If there is at least one directly downloadable dialog then we
+        // If there is at least one directly downloadable extension then we
         // open the install dialog.
         ::std::vector< UpdateData > dataDownload;
         int countWebsiteDownload = 0;
         typedef std::vector< dp_gui::UpdateData >::const_iterator cit;
 
-        for ( cit i = vData.begin(); i < vData.end(); i++ )
+        for ( cit i = vData.begin(); i < vData.end(); ++i )
         {
             if ( i->sWebsiteURL.getLength() > 0 )
                 countWebsiteDownload ++;
@@ -1039,7 +990,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
         //Now start the webbrowser and navigate to the websites where we get the updates
         if ( RET_OK == nDialogResult )
         {
-            for ( cit i = vData.begin(); i < vData.end(); i++ )
+            for ( cit i = vData.begin(); i < vData.end(); ++i )
             {
                 if ( m_pDialogHelper && ( i->sWebsiteURL.getLength() > 0 ) )
                     m_pDialogHelper->openWebBrowser( i->sWebsiteURL, m_pDialogHelper->getWindow()->GetText() );
@@ -1125,6 +1076,19 @@ void ExtensionCmdQueue::Thread::onTerminated()
     m_bTerminated = true;
 }
 
+void ExtensionCmdQueue::Thread::_insert(const TExtensionCmd& rExtCmd)
+{
+    ::osl::MutexGuard aGuard( m_mutex );
+
+    // If someone called stop then we do not process the command -> game over!
+    if ( m_bStopped )
+        return;
+
+    m_queue.push( rExtCmd );
+    m_eInput = START;
+    m_wakeup.set();
+}
+
 //------------------------------------------------------------------------------
 OUString ExtensionCmdQueue::Thread::searchAndReplaceAll( const OUString &rSource,
                                                          const OUString &rWhat,
@@ -1146,8 +1110,6 @@ OUString ExtensionCmdQueue::Thread::searchAndReplaceAll( const OUString &rSource
 }
 
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 ExtensionCmdQueue::ExtensionCmdQueue( DialogHelper * pDialogHelper,
                                       TheExtensionManager *pManager,

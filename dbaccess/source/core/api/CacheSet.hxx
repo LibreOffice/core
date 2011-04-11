@@ -62,11 +62,12 @@ namespace dbaccess
         ::com::sun::star::uno::Sequence<sal_Int32>  m_aColumnTypes;
         ORowSetRow                                  m_aInsertRow;
         ::rtl::OUString                             m_aComposedTableName;
+        sal_Int32                                   m_nMaxRows;
         sal_Bool                                    m_bInserted;
         sal_Bool                                    m_bUpdated;
         sal_Bool                                    m_bDeleted;
 
-        OCacheSet();
+        OCacheSet(sal_Int32 i_nMaxRows);
         virtual ~OCacheSet();
 
         void setParameter(sal_Int32 nPos

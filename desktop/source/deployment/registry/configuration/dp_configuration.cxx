@@ -133,15 +133,20 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         Reference<XCommandEnvironment> const & xCmdEnv );
     void configmgrini_flush( Reference<XCommandEnvironment> const & xCmdEnv );
 
-    bool addToConfigmgrIni( bool isSchema, OUString const & url,
+    /* The paramter isURL is false in the case of adding the conf:ini-entry
+       value from the backend db. This entry already contains the path as it
+       is used in the configmgr.ini.
+     */
+    bool addToConfigmgrIni( bool isSchema, bool isURL, OUString const & url,
                      Reference<XCommandEnvironment> const & xCmdEnv );
     bool removeFromConfigmgrIni( bool isSchema, OUString const & url,
                           Reference<XCommandEnvironment> const & xCmdEnv );
 
     void addDataToDb(OUString const & url, ConfigurationBackendDb::Data const & data);
     ::boost::optional<ConfigurationBackendDb::Data> readDataFromDb(OUString const & url);
-    OUString deleteDataFromDb(OUString const & url);
-    ::std::list<OUString> getAllIniEntries();
+    void revokeEntryFromDb(OUString const & url);
+    bool hasActiveEntry(OUString const & url);
+    bool activateEntry(OUString const & url);
 
 public:
     BackendImpl( Sequence<Any> const & args,
@@ -150,6 +155,9 @@ public:
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException);
 
     using PackageRegistryBackend::disposing;
 };
@@ -185,13 +193,13 @@ BackendImpl::BackendImpl(
                                      "vnd.sun.star.configuration-data"),
                                OUSTR("*.xcu"),
                                getResourceString(RID_STR_CONF_DATA),
-                               RID_IMG_CONF_XML, RID_IMG_CONF_XML_HC ) ),
+                               RID_IMG_CONF_XML ) ),
       m_xConfSchemaTypeInfo( new Package::TypeInfo(
                                  OUSTR("application/"
                                        "vnd.sun.star.configuration-schema"),
                                  OUSTR("*.xcs"),
                                  getResourceString(RID_STR_CONF_SCHEMA),
-                                 RID_IMG_CONF_XML, RID_IMG_CONF_XML_HC ) ),
+                                 RID_IMG_CONF_XML ) ),
       m_typeInfos( 2 )
 {
     m_typeInfos[ 0 ] = m_xConfDataTypeInfo;
@@ -241,26 +249,24 @@ void BackendImpl::addDataToDb(
     return data;
 }
 
-OUString BackendImpl::deleteDataFromDb(OUString const & url)
-{
-    OUString url2(url);
-    if (m_backendDb.get()) {
-        boost::optional< ConfigurationBackendDb::Data > data(
-            m_backendDb->getEntry(url));
-        if (data) {
-            url2 = expandUnoRcTerm(data->iniEntry);
-        }
-        m_backendDb->removeEntry(url);
-    }
-    return url2;
-}
-
-::std::list<OUString> BackendImpl::getAllIniEntries()
+void BackendImpl::revokeEntryFromDb(OUString const & url)
 {
     if (m_backendDb.get())
-        return m_backendDb->getAllIniEntries();
-    else
-        return ::std::list<OUString>();
+        m_backendDb->revokeEntry(url);
+}
+
+bool BackendImpl::hasActiveEntry(OUString const & url)
+{
+    if (m_backendDb.get())
+        return m_backendDb->hasActiveEntry(url);
+    return false;
+}
+
+bool BackendImpl::activateEntry(OUString const & url)
+{
+    if (m_backendDb.get())
+        return m_backendDb->activateEntry(url);
+    return false;
 }
 
 
@@ -271,6 +277,13 @@ Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
     return m_typeInfos;
+}
+void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException)
+{
+    if (m_backendDb.get())
+        m_backendDb->removeEntry(url);
 }
 
 // PackageRegistryBackend
@@ -342,7 +355,6 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         static_cast<sal_Int16>(-1) );
 }
 
-//##############################################################################
 
 //______________________________________________________________________________
 void BackendImpl::configmgrini_verify_init(
@@ -458,10 +470,10 @@ void BackendImpl::configmgrini_flush(
 }
 
 //______________________________________________________________________________
-bool BackendImpl::addToConfigmgrIni( bool isSchema, OUString const & url_,
+bool BackendImpl::addToConfigmgrIni( bool isSchema, bool isURL, OUString const & url_,
                               Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    const OUString rcterm( dp_misc::makeRcTerm(url_) );
+    const OUString rcterm( isURL ? dp_misc::makeRcTerm(url_) : url_ );
     const ::osl::MutexGuard guard( getMutex() );
     configmgrini_verify_init( xCmdEnv );
     t_stringlist & rSet = getFiles(isSchema);
@@ -506,10 +518,10 @@ bool BackendImpl::removeFromConfigmgrIni(
     return true;
 }
 
-//##############################################################################
 
 // Package
 //______________________________________________________________________________
+
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
@@ -535,7 +547,7 @@ BackendImpl::PackageImpl::isRegistered_(
     const rtl::OUString url(getURL());
 
     bool bReg = false;
-    if (that->readDataFromDb(getURL()))
+    if (that->hasActiveEntry(getURL()))
         bReg = true;
     if (!bReg)
         //fallback for user extension registered in berkeley DB
@@ -678,38 +690,48 @@ void BackendImpl::PackageImpl::processPackage_(
 
     if (doRegisterPackage)
     {
-        ConfigurationBackendDb::Data data;
-        if (!m_isSchema)
+        if (getMyBackend()->activateEntry(getURL()))
         {
-            const OUString sModFolder = that->createFolder(OUString(), xCmdEnv);
-            bool out_replaced = false;
-            url = replaceOrigin(url, sModFolder, xCmdEnv, out_replaced);
-            if (out_replaced)
-                data.dataUrl = sModFolder;
-            else
-                deleteTempFolder(sModFolder);
+            ::boost::optional<ConfigurationBackendDb::Data> data = that->readDataFromDb(url);
+            OSL_ASSERT(data);
+            that->addToConfigmgrIni( m_isSchema, false, data->iniEntry, xCmdEnv );
         }
-        //No need for live-deployment for bundled extension, because OOo
-        //restarts after installation
-        if (that->m_eContext != CONTEXT_BUNDLED
-            && !startup)
+        else
         {
-            if (m_isSchema)
+            ConfigurationBackendDb::Data data;
+            if (!m_isSchema)
             {
-                com::sun::star::configuration::Update::get(
-                    that->m_xComponentContext)->insertExtensionXcsFile(
-                        that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
+                const OUString sModFolder = that->createFolder(OUString(), xCmdEnv);
+                bool out_replaced = false;
+                url = replaceOrigin(url, sModFolder, xCmdEnv, out_replaced);
+                if (out_replaced)
+                    data.dataUrl = sModFolder;
+                else
+                    deleteTempFolder(sModFolder);
             }
-            else
+            //No need for live-deployment for bundled extension, because OOo
+            //restarts after installation
+            if (that->m_eContext != CONTEXT_BUNDLED
+                && that->m_eContext != CONTEXT_BUNDLED_PREREG
+                && !startup)
             {
-                com::sun::star::configuration::Update::get(
-                    that->m_xComponentContext)->insertExtensionXcuFile(
-                        that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
+                if (m_isSchema)
+                {
+                    com::sun::star::configuration::Update::get(
+                        that->m_xComponentContext)->insertExtensionXcsFile(
+                            that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
+                }
+                else
+                {
+                    com::sun::star::configuration::Update::get(
+                        that->m_xComponentContext)->insertExtensionXcuFile(
+                            that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
+                }
             }
+            that->addToConfigmgrIni( m_isSchema, true, url, xCmdEnv );
+            data.iniEntry = dp_misc::makeRcTerm(url);
+            that->addDataToDb(getURL(), data);
         }
-        that->addToConfigmgrIni( m_isSchema, url, xCmdEnv );
-        data.iniEntry = dp_misc::makeRcTerm(url);
-        that->addDataToDb(getURL(), data);
     }
     else // revoke
     {
@@ -742,7 +764,7 @@ void BackendImpl::PackageImpl::processPackage_(
                        else
                            deleteTempFolder(sModFolder);
                    }
-                   that->addToConfigmgrIni(schema, url_replaced, xCmdEnv);
+                   that->addToConfigmgrIni(schema, true, url_replaced, xCmdEnv);
                    data.iniEntry = dp_misc::makeRcTerm(url_replaced);
                    that->addDataToDb(url2, data);
                 }
@@ -760,12 +782,17 @@ void BackendImpl::PackageImpl::processPackage_(
                 OSL_ASSERT(0);
             }
         }
-        url = that->deleteDataFromDb(url);
-        if (!m_isSchema) {
+
+        ::boost::optional<ConfigurationBackendDb::Data> data = that->readDataFromDb(url);
+        //If an xcu file was life deployed then always a data entry is written.
+        //If the xcu file was already in the configmr.ini then there is also
+        //a data entry
+        if (!m_isSchema && data)
+        {
             com::sun::star::configuration::Update::get(
-                that->m_xComponentContext)->removeExtensionXcuFile(
-                    expandUnoRcUrl(url));
+                that->m_xComponentContext)->removeExtensionXcuFile(expandUnoRcTerm(data->iniEntry));
         }
+        that->revokeEntryFromDb(url);
     }
 }
 

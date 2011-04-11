@@ -52,11 +52,11 @@ void applyStyleList( const TextParagraphPropertiesVector& rSourceListStyle, Text
         if ( aDestListStyleIter != rDestListStyle.end() )
         {
             (*aDestListStyleIter)->apply( **aSourceListStyleIter );
-            aDestListStyleIter++;
+            ++aDestListStyleIter;
         }
         else
             rDestListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties( **aSourceListStyleIter ) ) );
-        aSourceListStyleIter++;
+        ++aSourceListStyleIter;
     }
 }
 
@@ -65,17 +65,6 @@ void TextListStyle::apply( const TextListStyle& rTextListStyle )
     applyStyleList( rTextListStyle.getAggregationListStyle(), getAggregationListStyle() );
     applyStyleList( rTextListStyle.getListStyle(), getListStyle() );
 }
-
-#if OSL_DEBUG_LEVEL > 0
-void TextListStyle::dump( int nLevels )
-{
-    for ( int i = 0; i < nLevels; i++ )
-    {
-    OSL_TRACE("level: %d", i);
-        maListStyle[ i ]->dump();
-    }
-}
-#endif
 
 } }
 

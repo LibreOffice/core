@@ -69,7 +69,7 @@ typedef sal_uInt32 oslProcessExitCode;
 typedef enum {
     osl_Process_E_None,                 /* no error */
     osl_Process_E_NotFound,             /* image not found */
-    osl_Process_E_TimedOut,             /* timout occured */
+    osl_Process_E_TimedOut,             /* timout occurred */
     osl_Process_E_NoPermission,         /* permission denied */
     osl_Process_E_Unknown,              /* unknown error */
     osl_Process_E_InvalidError,         /* unmapped error */
@@ -323,7 +323,7 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process);
     @return
     osl_Process_E_None on success
     osl_Process_E_TimedOut waiting for the child process timed out
-    osl_Process_E_Unknown an error occured or the parameter are invalid
+    osl_Process_E_Unknown an error occurred or the parameter are invalid
 
     @see osl_executeProcess
 */

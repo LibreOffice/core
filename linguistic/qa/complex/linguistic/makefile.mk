@@ -25,49 +25,37 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
-TARGET  = HangulHanjaConversion
-PRJNAME = linguistic
-PACKAGE = complex$/linguistic
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-# --- Settings -----------------------------------------------------
+PRJ = ../../..
+PRJNAME = sc
+TARGET = qa_complex_linguistic
+
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/linguistic
+
+# here store only Files which contain a @Test
+JAVATESTFILES = \
+    HangulHanjaConversion.java
+
+# put here all other files
+JAVAFILES = $(JAVATESTFILES) \
+    TestDocument.java
+
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+
+# Sample how to debug
+# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
+
+.END
+
 .INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
+ALLTAR : javatest
 
-#----- compile .java files -----------------------------------------
-
-JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar \
-                  OOoRunner.jar mysql.jar
-JAVAFILES       = HangulHanjaConversion.java
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-#----- make a jar from compiled files ------------------------------
-
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
-
-# --- Parameters for the test --------------------------------------
-
-# test base is java complex
-CT_TESTBASE = -tb java_complex
-
-# test looks something like the.full.package.TestName
-CT_TEST     = -o $(PACKAGE:s\$/\.\).$(JAVAFILES:b)
-
-# start the runner application
-CT_APP      = org.openoffice.Runner
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-RUN: run
-
-run:
-    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_TEST) -tdoc $(PWD)$/testdocuments
-
-
-
+.END

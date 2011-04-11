@@ -38,39 +38,39 @@ class ImplBorderWindowView;
 // - ImplBorderWindow-Types -
 // --------------------------
 
-#define BORDERWINDOW_STYLE_OVERLAP          ((USHORT)0x0001)
-#define BORDERWINDOW_STYLE_BORDER           ((USHORT)0x0002)
-#define BORDERWINDOW_STYLE_FLOAT            ((USHORT)0x0004)
-#define BORDERWINDOW_STYLE_FRAME            ((USHORT)0x0008)
-#define BORDERWINDOW_STYLE_APP              ((USHORT)0x0010)
+#define BORDERWINDOW_STYLE_OVERLAP          ((sal_uInt16)0x0001)
+#define BORDERWINDOW_STYLE_BORDER           ((sal_uInt16)0x0002)
+#define BORDERWINDOW_STYLE_FLOAT            ((sal_uInt16)0x0004)
+#define BORDERWINDOW_STYLE_FRAME            ((sal_uInt16)0x0008)
+#define BORDERWINDOW_STYLE_APP              ((sal_uInt16)0x0010)
 
-#define BORDERWINDOW_HITTEST_TITLE          ((USHORT)0x0001)
-#define BORDERWINDOW_HITTEST_LEFT           ((USHORT)0x0002)
-#define BORDERWINDOW_HITTEST_MENU           ((USHORT)0x0004)
-#define BORDERWINDOW_HITTEST_TOP            ((USHORT)0x0008)
-#define BORDERWINDOW_HITTEST_RIGHT          ((USHORT)0x0010)
-#define BORDERWINDOW_HITTEST_BOTTOM         ((USHORT)0x0020)
-#define BORDERWINDOW_HITTEST_TOPLEFT        ((USHORT)0x0040)
-#define BORDERWINDOW_HITTEST_TOPRIGHT       ((USHORT)0x0080)
-#define BORDERWINDOW_HITTEST_BOTTOMLEFT     ((USHORT)0x0100)
-#define BORDERWINDOW_HITTEST_BOTTOMRIGHT    ((USHORT)0x0200)
-#define BORDERWINDOW_HITTEST_CLOSE          ((USHORT)0x0400)
-#define BORDERWINDOW_HITTEST_ROLL           ((USHORT)0x0800)
-#define BORDERWINDOW_HITTEST_DOCK           ((USHORT)0x1000)
-#define BORDERWINDOW_HITTEST_HIDE           ((USHORT)0x2000)
-#define BORDERWINDOW_HITTEST_HELP           ((USHORT)0x4000)
-#define BORDERWINDOW_HITTEST_PIN            ((USHORT)0x8000)
+#define BORDERWINDOW_HITTEST_TITLE          ((sal_uInt16)0x0001)
+#define BORDERWINDOW_HITTEST_LEFT           ((sal_uInt16)0x0002)
+#define BORDERWINDOW_HITTEST_MENU           ((sal_uInt16)0x0004)
+#define BORDERWINDOW_HITTEST_TOP            ((sal_uInt16)0x0008)
+#define BORDERWINDOW_HITTEST_RIGHT          ((sal_uInt16)0x0010)
+#define BORDERWINDOW_HITTEST_BOTTOM         ((sal_uInt16)0x0020)
+#define BORDERWINDOW_HITTEST_TOPLEFT        ((sal_uInt16)0x0040)
+#define BORDERWINDOW_HITTEST_TOPRIGHT       ((sal_uInt16)0x0080)
+#define BORDERWINDOW_HITTEST_BOTTOMLEFT     ((sal_uInt16)0x0100)
+#define BORDERWINDOW_HITTEST_BOTTOMRIGHT    ((sal_uInt16)0x0200)
+#define BORDERWINDOW_HITTEST_CLOSE          ((sal_uInt16)0x0400)
+#define BORDERWINDOW_HITTEST_ROLL           ((sal_uInt16)0x0800)
+#define BORDERWINDOW_HITTEST_DOCK           ((sal_uInt16)0x1000)
+#define BORDERWINDOW_HITTEST_HIDE           ((sal_uInt16)0x2000)
+#define BORDERWINDOW_HITTEST_HELP           ((sal_uInt16)0x4000)
+#define BORDERWINDOW_HITTEST_PIN            ((sal_uInt16)0x8000)
 
-#define BORDERWINDOW_DRAW_TITLE             ((USHORT)0x0001)
-#define BORDERWINDOW_DRAW_BORDER            ((USHORT)0x0002)
-#define BORDERWINDOW_DRAW_FRAME             ((USHORT)0x0004)
-#define BORDERWINDOW_DRAW_CLOSE             ((USHORT)0x0008)
-#define BORDERWINDOW_DRAW_ROLL              ((USHORT)0x0010)
-#define BORDERWINDOW_DRAW_DOCK              ((USHORT)0x0020)
-#define BORDERWINDOW_DRAW_HIDE              ((USHORT)0x0040)
-#define BORDERWINDOW_DRAW_HELP              ((USHORT)0x0080)
-#define BORDERWINDOW_DRAW_PIN               ((USHORT)0x0100)
-#define BORDERWINDOW_DRAW_MENU              ((USHORT)0x0200)
+#define BORDERWINDOW_DRAW_TITLE             ((sal_uInt16)0x0001)
+#define BORDERWINDOW_DRAW_BORDER            ((sal_uInt16)0x0002)
+#define BORDERWINDOW_DRAW_FRAME             ((sal_uInt16)0x0004)
+#define BORDERWINDOW_DRAW_CLOSE             ((sal_uInt16)0x0008)
+#define BORDERWINDOW_DRAW_ROLL              ((sal_uInt16)0x0010)
+#define BORDERWINDOW_DRAW_DOCK              ((sal_uInt16)0x0020)
+#define BORDERWINDOW_DRAW_HIDE              ((sal_uInt16)0x0040)
+#define BORDERWINDOW_DRAW_HELP              ((sal_uInt16)0x0080)
+#define BORDERWINDOW_DRAW_PIN               ((sal_uInt16)0x0100)
+#define BORDERWINDOW_DRAW_MENU              ((sal_uInt16)0x0200)
 #define BORDERWINDOW_DRAW_ALL               (BORDERWINDOW_DRAW_TITLE |      \
                                              BORDERWINDOW_DRAW_BORDER |     \
                                              BORDERWINDOW_DRAW_FRAME |      \
@@ -82,11 +82,11 @@ class ImplBorderWindowView;
                                              BORDERWINDOW_DRAW_PIN  |       \
                                              BORDERWINDOW_DRAW_MENU)
 
-#define BORDERWINDOW_TITLE_NORMAL           ((USHORT)0x0001)
-#define BORDERWINDOW_TITLE_SMALL            ((USHORT)0x0002)
-#define BORDERWINDOW_TITLE_TEAROFF          ((USHORT)0x0004)
-#define BORDERWINDOW_TITLE_POPUP            ((USHORT)0x0008)
-#define BORDERWINDOW_TITLE_NONE             ((USHORT)0x0010)
+#define BORDERWINDOW_TITLE_NORMAL           ((sal_uInt16)0x0001)
+#define BORDERWINDOW_TITLE_SMALL            ((sal_uInt16)0x0002)
+#define BORDERWINDOW_TITLE_TEAROFF          ((sal_uInt16)0x0004)
+#define BORDERWINDOW_TITLE_POPUP            ((sal_uInt16)0x0008)
+#define BORDERWINDOW_TITLE_NONE             ((sal_uInt16)0x0010)
 
 // --------------------
 // - ImplBorderWindow -
@@ -108,26 +108,26 @@ private:
     long                    mnMaxHeight;
     long                    mnRollHeight;
     long                    mnOrgMenuHeight;
-    USHORT                  mnTitleType;
-    USHORT                  mnBorderStyle;
-    BOOL                    mbFloatWindow;
-    BOOL                    mbSmallOutBorder;
-    BOOL                    mbFrameBorder;
-    BOOL                    mbPined;
-    BOOL                    mbRollUp;
-    BOOL                    mbMenuHide;
-    BOOL                    mbDockBtn;
-    BOOL                    mbHideBtn;
-    BOOL                    mbHelpBtn;
-    BOOL                    mbMenuBtn;
-    BOOL                    mbDisplayActive;
+    sal_uInt16                  mnTitleType;
+    sal_uInt16                  mnBorderStyle;
+    sal_Bool                    mbFloatWindow;
+    sal_Bool                    mbSmallOutBorder;
+    sal_Bool                    mbFrameBorder;
+    sal_Bool                    mbPined;
+    sal_Bool                    mbRollUp;
+    sal_Bool                    mbMenuHide;
+    sal_Bool                    mbDockBtn;
+    sal_Bool                    mbHideBtn;
+    sal_Bool                    mbHelpBtn;
+    sal_Bool                    mbMenuBtn;
+    sal_Bool                    mbDisplayActive;
 
     using Window::ImplInit;
     void                    ImplInit( Window* pParent,
-                                      WinBits nStyle, USHORT nTypeStyle,
+                                      WinBits nStyle, sal_uInt16 nTypeStyle,
                                       SystemParentData* pParentData );
     void                    ImplInit( Window* pParent,
-                                      WinBits nStyle, USHORT nTypeStyle,
+                                      WinBits nStyle, sal_uInt16 nTypeStyle,
                                       const ::com::sun::star::uno::Any& );
 
                             // Copy assignment is forbidden and not implemented.
@@ -138,11 +138,11 @@ public:
                             ImplBorderWindow( Window* pParent,
                                               SystemParentData* pParentData,
                                               WinBits nStyle = 0,
-                                              USHORT nTypeStyle = 0 );
+                                              sal_uInt16 nTypeStyle = 0 );
                             ImplBorderWindow( Window* pParent, WinBits nStyle = 0,
-                                              USHORT nTypeStyle = 0 );
+                                              sal_uInt16 nTypeStyle = 0 );
                             ImplBorderWindow( Window* pParent,
-                                              WinBits nStyle, USHORT nTypeStyle,
+                                              WinBits nStyle, sal_uInt16 nTypeStyle,
                                               const ::com::sun::star::uno::Any& );
                             ~ImplBorderWindow();
 
@@ -158,28 +158,28 @@ public:
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     void                    InitView();
-    void                    UpdateView( BOOL bNewView, const Size& rNewOutSize );
+    void                    UpdateView( sal_Bool bNewView, const Size& rNewOutSize );
     void                    InvalidateBorder();
 
     using Window::Draw;
     void                    Draw( const Rectangle& rRect, OutputDevice* pDev, const Point& rPos );
 
-    void                    SetDisplayActive( BOOL bActive );
-    BOOL                    IsDisplayActive() const { return mbDisplayActive; }
-    void                    SetTitleType( USHORT nTitleType, const Size& rSize );
-    void                    SetBorderStyle( USHORT nStyle );
-    USHORT                  GetBorderStyle() const { return mnBorderStyle; }
-    void                    SetPin( BOOL bPin );
-    void                    SetRollUp( BOOL bRollUp, const Size& rSize );
+    void                    SetDisplayActive( sal_Bool bActive );
+    sal_Bool                    IsDisplayActive() const { return mbDisplayActive; }
+    void                    SetTitleType( sal_uInt16 nTitleType, const Size& rSize );
+    void                    SetBorderStyle( sal_uInt16 nStyle );
+    sal_uInt16                  GetBorderStyle() const { return mnBorderStyle; }
+    void                    SetPin( sal_Bool bPin );
+    void                    SetRollUp( sal_Bool bRollUp, const Size& rSize );
     void                    SetCloser();
-    void                    SetDockButton( BOOL bDockButton );
-    void                    SetHideButton( BOOL bHideButton );
-    void                    SetHelpButton( BOOL bHelpButton );
-    void                    SetMenuButton( BOOL bMenuButton );
+    void                    SetDockButton( sal_Bool bDockButton );
+    void                    SetHideButton( sal_Bool bHideButton );
+    void                    SetHelpButton( sal_Bool bHelpButton );
+    void                    SetMenuButton( sal_Bool bMenuButton );
 
     void                    UpdateMenuHeight();
     void                    SetMenuBarWindow( Window* pWindow );
-    void                    SetMenuBarMode( BOOL bHide );
+    void                    SetMenuBarMode( sal_Bool bHide );
 
     void                    SetMinOutputSize( long nWidth, long nHeight )
                                 { mnMinWidth = nWidth; mnMinHeight = nHeight; }
@@ -226,18 +226,18 @@ struct ImplBorderFrameData
     long                    mnBorderSize;
     long                    mnTitleHeight;
     long                    mnTitleOff;
-    USHORT                  mnHitTest;
-    USHORT                  mnPinState;
-    USHORT                  mnCloseState;
-    USHORT                  mnRollState;
-    USHORT                  mnDockState;
-    USHORT                  mnMenuState;
-    USHORT                  mnHideState;
-    USHORT                  mnHelpState;
-    USHORT                  mnTitleType;
-    BOOL                    mbFloatWindow;
-    BOOL                    mbDragFull;
-    BOOL                    mbTitleClipped;
+    sal_uInt16                  mnHitTest;
+    sal_uInt16                  mnPinState;
+    sal_uInt16                  mnCloseState;
+    sal_uInt16                  mnRollState;
+    sal_uInt16                  mnDockState;
+    sal_uInt16                  mnMenuState;
+    sal_uInt16                  mnHideState;
+    sal_uInt16                  mnHelpState;
+    sal_uInt16                  mnTitleType;
+    sal_Bool                    mbFloatWindow;
+    sal_Bool                    mbDragFull;
+    sal_Bool                    mbTitleClipped;
 };
 
 // =======================================================================
@@ -251,23 +251,23 @@ class ImplBorderWindowView
 public:
     virtual                 ~ImplBorderWindowView();
 
-    virtual BOOL            MouseMove( const MouseEvent& rMEvt );
-    virtual BOOL            MouseButtonDown( const MouseEvent& rMEvt );
-    virtual BOOL            Tracking( const TrackingEvent& rTEvt );
+    virtual sal_Bool            MouseMove( const MouseEvent& rMEvt );
+    virtual sal_Bool            MouseButtonDown( const MouseEvent& rMEvt );
+    virtual sal_Bool            Tracking( const TrackingEvent& rTEvt );
     virtual String          RequestHelp( const Point& rPos, Rectangle& rHelpRect );
 
     virtual void            Init( OutputDevice* pDev, long nWidth, long nHeight ) = 0;
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const = 0;
     virtual long            CalcTitleWidth() const = 0;
-    virtual void            DrawWindow( USHORT nDrawFlags, OutputDevice* pOutDev = NULL, const Point* pOffset = NULL ) = 0;
+    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev = NULL, const Point* pOffset = NULL ) = 0;
     virtual Rectangle       GetMenuRect() const;
 
     void                    ImplInitTitle( ImplBorderFrameData* pData );
-    USHORT                  ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
-    BOOL                    ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    BOOL                    ImplMouseButtonDown( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    BOOL                    ImplTracking( ImplBorderFrameData* pData, const TrackingEvent& rTEvt );
+    sal_uInt16                  ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
+    sal_Bool                    ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
+    sal_Bool                    ImplMouseButtonDown( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
+    sal_Bool                    ImplTracking( ImplBorderFrameData* pData, const TrackingEvent& rTEvt );
     String                  ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, Rectangle& rHelpRect );
     long                    ImplCalcTitleWidth( const ImplBorderFrameData* pData ) const;
 };
@@ -287,7 +287,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
     virtual long            CalcTitleWidth() const;
-    virtual void            DrawWindow( USHORT nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
+    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
 };
 
 
@@ -316,7 +316,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
     virtual long            CalcTitleWidth() const;
-    virtual void            DrawWindow( USHORT nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
+    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
 };
 
 
@@ -337,9 +337,9 @@ public:
                             ImplStdBorderWindowView( ImplBorderWindow* pBorderWindow );
                             ~ImplStdBorderWindowView();
 
-    virtual BOOL            MouseMove( const MouseEvent& rMEvt );
-    virtual BOOL            MouseButtonDown( const MouseEvent& rMEvt );
-    virtual BOOL            Tracking( const TrackingEvent& rTEvt );
+    virtual sal_Bool            MouseMove( const MouseEvent& rMEvt );
+    virtual sal_Bool            MouseButtonDown( const MouseEvent& rMEvt );
+    virtual sal_Bool            Tracking( const TrackingEvent& rTEvt );
     virtual String          RequestHelp( const Point& rPos, Rectangle& rHelpRect );
     virtual Rectangle       GetMenuRect() const;
 
@@ -347,7 +347,7 @@ public:
     virtual void            GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                        sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
     virtual long            CalcTitleWidth() const;
-    virtual void            DrawWindow( USHORT nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
+    virtual void            DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* pOutDev, const Point* pOffset );
 };
 
 

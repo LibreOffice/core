@@ -33,6 +33,7 @@
 #include <tools/color.hxx>
 #include "ftools.hxx"
 #include "xladdress.hxx"
+#include <boost/shared_ptr.hpp>
 
 // Constants and enumerations =================================================
 
@@ -122,7 +123,7 @@ struct XclSelectionData
     inline explicit     XclSelectionData() : mnCursorIdx( 0 ) {}
 };
 
-typedef ScfRef< XclSelectionData > XclSelectionDataRef;
+typedef boost::shared_ptr< XclSelectionData > XclSelectionDataRef;
 
 // ----------------------------------------------------------------------------
 
@@ -153,7 +154,7 @@ struct XclTabViewData
     bool                mbShowZeros;        /// true = Show zero value zells.
     bool                mbShowOutline;      /// true = Show outlines.
     Color               maTabBgColor;       /// Tab Color default = (COL_AUTO )
-    bool                IsDefaultTabBgColor() const { return maTabBgColor == Color(COL_AUTO) ? TRUE : FALSE; };
+    bool                IsDefaultTabBgColor() const { return maTabBgColor == Color(COL_AUTO) ? sal_True : false; };
     sal_uInt32          mnTabBgColorId;         /// pallette color id
 
     explicit            XclTabViewData();

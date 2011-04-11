@@ -30,7 +30,7 @@
 #include "precompiled_dbaccess.hxx"
 
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
@@ -174,7 +174,7 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
 
     // Prompt for connection information.
     hr = dlPrompt->PromptEdit((IDispatch **)&piTmpConnection,&pbSuccess);
-    if( SUCCEEDED( hr ) && FALSE == pbSuccess ) //if user press cancel then FALSE == pbSuccess
+    if( SUCCEEDED( hr ) && sal_False == pbSuccess ) //if user press cancel then sal_False == pbSuccess
     {
         piTmpConnection->Release( );
         dlPrompt->Release( );

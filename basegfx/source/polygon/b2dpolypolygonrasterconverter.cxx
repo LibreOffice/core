@@ -350,12 +350,12 @@ namespace basegfx
                 return 0.0f;
             }
 
-            bool isEnded()
+            bool isEnded() const
             {
                 return mnYCounter<=0;
             }
 
-            bool isDownwards()
+            bool isDownwards() const
             {
                 return mbDownwards;
             }
@@ -591,8 +591,7 @@ namespace basegfx
                 switch( eFillRule )
                 {
                     default:
-                        OSL_ENSURE(false,
-                                   "B2DPolyPolygonRasterConverter::rasterConvert(): Unexpected fill rule");
+                        OSL_FAIL("B2DPolyPolygonRasterConverter::rasterConvert(): Unexpected fill rule");
                         return;
 
                     case FillRule_EVEN_ODD:

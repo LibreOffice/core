@@ -64,7 +64,7 @@ public SecurityDialogUtil(XMultiServiceFactory xMSF, String btnName, boolean che
 }
 
 /**
- * Returns the error message that occured while
+ * Returns the error message that occurred while
  * accessing and pressing the button.
  * @return Error message.
  */

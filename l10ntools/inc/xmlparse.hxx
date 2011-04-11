@@ -34,7 +34,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "tools/string.hxx"
-#include "tools/list.hxx"
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include "tools/stream.hxx"
 #include "tools/isofallback.hxx"
@@ -51,7 +50,7 @@ class XMLElement;
 using namespace ::rtl;
 using namespace std;
 
-#include <hash_map> /* std::hashmap*/
+#include <boost/unordered_map.hpp>
 #include <deque>    /* std::deque*/
 #include <iterator> /* std::iterator*/
 #include <list>     /* std::list*/
@@ -64,7 +63,6 @@ using namespace std;
 #define MAX_LANGUAGES               99
 
 
-//#define TESTDRIVER        /* use xml2gsi testclass */
 //-------------------------------------------------------------------------
 
 /** Holds data of Attributes
@@ -88,7 +86,7 @@ public:
     void setValue(const String &rValue){sValue=rValue;}
 
     /// returns true if two attributes are equal and have the same value
-    BOOL IsEqual(
+    sal_Bool IsEqual(
         const XMLAttribute &rAttribute  // the attribute which has to be equal
     )
     {
@@ -96,7 +94,7 @@ public:
     }
 };
 
-DECLARE_LIST( XMLAttributeList, XMLAttribute * )
+typedef ::std::vector< XMLAttribute* > XMLAttributeList;
 
 //-------------------------------------------------------------------------
 
@@ -108,7 +106,7 @@ protected:
     XMLNode() {}
 
 public:
-    virtual USHORT GetNodeType() = 0;
+    virtual sal_uInt16 GetNodeType() = 0;
     virtual ~XMLNode() {}
 };
 
@@ -127,14 +125,14 @@ protected:
     XMLChildNode( const XMLChildNode& obj);
     XMLChildNode& operator=(const XMLChildNode& obj);
 public:
-    virtual USHORT GetNodeType() = 0;
+    virtual sal_uInt16 GetNodeType() = 0;
 
     /// returns the parent of this node
     XMLParentNode *GetParent() { return pParent; }
     virtual ~XMLChildNode(){};
 };
 
-DECLARE_LIST( XMLChildNodeList, XMLChildNode * )
+typedef ::std::vector< XMLChildNode* > XMLChildNodeList;
 
 //-------------------------------------------------------------------------
 
@@ -145,9 +143,9 @@ class XMLData;
 class XMLParentNode : public XMLChildNode
 {
 private:
-    XMLChildNodeList *pChildList;
+    XMLChildNodeList* pChildList;
     static int dbgcnt;
-    //int         nParentPos;
+
 protected:
     XMLParentNode( XMLParentNode *pPar )
                 : XMLChildNode( pPar ), pChildList( NULL )
@@ -163,7 +161,7 @@ protected:
 
 
 public:
-    virtual USHORT GetNodeType() = 0;
+    virtual sal_uInt16 GetNodeType() = 0;
 
     /// returns child list of this node
     XMLChildNodeList *GetChildList() { return pChildList; }
@@ -174,11 +172,11 @@ public:
     );
 
     void AddChild(
-        XMLChildNode *pChild , int pos  /// the new child
+        XMLChildNode *pChild , size_t pos   /// the new child
     );
 
     virtual int GetPosition( ByteString id );
-    int RemoveChild( XMLElement *pRefElement );
+    size_t RemoveChild( XMLElement *pRefElement );
     void RemoveAndDeleteAllChilds();
 
     /// returns a child element which matches the given one
@@ -189,20 +187,18 @@ public:
 
 //-------------------------------------------------------------------------
 
-DECLARE_LIST( XMLStringList, XMLElement* )
-
 /// Mapping numeric Language code <-> XML Element
-typedef std::hash_map< ByteString ,XMLElement* , hashByteString,equalByteString > LangHashMap;
+typedef boost::unordered_map< ByteString ,XMLElement* , hashByteString,equalByteString > LangHashMap;
 
 /// Mapping XML Element string identifier <-> Language Map
-typedef std::hash_map<ByteString , LangHashMap* ,
+typedef boost::unordered_map<ByteString , LangHashMap* ,
                       hashByteString,equalByteString>                   XMLHashMap;
 
 /// Mapping iso alpha string code <-> iso numeric code
-typedef std::hash_map<ByteString, int, hashByteString,equalByteString>  HashMap;
+typedef boost::unordered_map<ByteString, int, hashByteString,equalByteString>   HashMap;
 
 /// Mapping XML tag names <-> have localizable strings
-typedef std::hash_map<ByteString , BOOL ,
+typedef boost::unordered_map<ByteString , sal_Bool ,
                       hashByteString,equalByteString>                   TagMap;
 
 /** Holds information of a XML file, is root node of tree
@@ -220,7 +216,7 @@ public:
     ~XMLFile();
 
     ByteString* GetGroupID(std::deque<ByteString> &groupid);
-    void        Print( XMLNode *pCur = NULL, USHORT nLevel = 0 );
+    void        Print( XMLNode *pCur = NULL, sal_uInt16 nLevel = 0 );
     virtual void SearchL10NElements( XMLParentNode *pCur, int pos = 0 );
     void        Extract( XMLFile *pCur = NULL );
     void        View();
@@ -228,14 +224,14 @@ public:
     void        showType(XMLParentNode* node);
 
     XMLHashMap* GetStrings(){return XMLStrings;}
-    BOOL        Write( ByteString &rFilename );
-    BOOL        Write( ofstream &rStream , XMLNode *pCur = NULL );
+    sal_Bool        Write( ByteString &rFilename );
+    sal_Bool        Write( ofstream &rStream , XMLNode *pCur = NULL );
 
     bool        CheckExportStatus( XMLParentNode *pCur = NULL );// , int pos = 0 );
 
     XMLFile&    operator=(const XMLFile& obj);
 
-    virtual USHORT  GetNodeType();
+    virtual sal_uInt16  GetNodeType();
 
     /// returns file name
     const String &GetName() { return sFileName; }
@@ -276,10 +272,10 @@ public:
     static void         UnQuotHTML  ( String &rString );
 
     /// Return the numeric iso language code
-    //USHORT                GetLangByIsoLang( const ByteString &rIsoLang );
+    //sal_uInt16                GetLangByIsoLang( const ByteString &rIsoLang );
 
     /// Return the alpha strings representation
-    ByteString          GetIsoLangByIndex( USHORT nIndex );
+    ByteString          GetIsoLangByIndex( sal_uInt16 nIndex );
 
     static XMLUtil&     Instance();
     ~XMLUtil();
@@ -345,7 +341,7 @@ public:
 
     XMLElement& operator=(const XMLElement& obj);
     /// returns node type XML_NODE_ELEMENT
-    virtual USHORT GetNodeType();
+    virtual sal_uInt16 GetNodeType();
 
     /// returns element name
     const String &GetName() { return sElementName; }
@@ -415,7 +411,7 @@ public:
     XMLData(const XMLData& obj);
 
     XMLData& operator=(const XMLData& obj);
-    virtual USHORT GetNodeType();
+    virtual sal_uInt16 GetNodeType();
 
     /// returns the data
     const String &GetData() { return sData; }
@@ -447,7 +443,7 @@ public:
     )
                 : XMLChildNode( Parent ), sComment( rComment ) {}
 
-    virtual USHORT GetNodeType();
+    virtual sal_uInt16 GetNodeType();
 
     XMLComment( const XMLComment& obj );
 
@@ -479,7 +475,7 @@ public:
     XMLDefault& operator=(const XMLDefault& obj);
 
     /// returns node type XML_NODE_TYPE_COMMENT
-    virtual USHORT GetNodeType();
+    virtual sal_uInt16 GetNodeType();
 
     /// returns the comment
     const String &GetDefault()  { return sDefault; }
@@ -491,8 +487,8 @@ public:
  */
 struct XMLError {
     XML_Error eCode;    // the error code
-    ULONG nLine;        // error line number
-    ULONG nColumn;      // error column number
+    sal_uLong nLine;        // error line number
+    sal_uLong nColumn;      // error column number
     String sMessage;    // readable error message
 };
 

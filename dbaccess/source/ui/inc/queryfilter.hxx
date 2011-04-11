@@ -115,10 +115,10 @@ namespace dbaui
         DECL_LINK( ListSelectHdl, ListBox * );
         DECL_LINK( ListSelectCompHdl, ListBox * );
 
-        void            SetLine( USHORT nIdx,const ::com::sun::star::beans::PropertyValue& _rItem,sal_Bool _bOr );
+        void            SetLine( sal_uInt16 nIdx,const ::com::sun::star::beans::PropertyValue& _rItem,sal_Bool _bOr );
         void            EnableLines();
         sal_Int32       GetOSQLPredicateType( const String& _rSelectedPredicate ) const;
-        USHORT          GetSelectionPos(sal_Int32 eType,const ListBox& rListBox) const;
+        sal_uInt16          GetSelectionPos(sal_Int32 eType,const ListBox& rListBox) const;
         sal_Bool        getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,::com::sun::star::beans::PropertyValue& _rFilter) const;
         void            fillLines(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& _aValues);
 

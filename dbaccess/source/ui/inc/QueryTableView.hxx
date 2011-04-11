@@ -72,14 +72,14 @@ namespace dbaui
 
         // Basisklasse ueberschrieben : Fenster kreieren und loeschen
         // (eigentlich nicht wirklich LOESCHEN, es geht in die Verantwortung einer UNDO-Action ueber)
-        virtual void AddTabWin( const ::rtl::OUString& _rTableName, const ::rtl::OUString& _rAliasName, BOOL bNewTable = FALSE );
+        virtual void AddTabWin( const ::rtl::OUString& _rTableName, const ::rtl::OUString& _rAliasName, sal_Bool bNewTable = sal_False );
         virtual void RemoveTabWin(OTableWindow* pTabWin);
 
         // und ein AddTabWin, das einen Alias vorgibt
-        void    AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl::OUString& strTableName, const ::rtl::OUString& strAlias, BOOL bNewTable = FALSE);
+        void    AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl::OUString& strTableName, const ::rtl::OUString& strAlias, sal_Bool bNewTable = sal_False);
         // TabWin suchen
         OQueryTableWindow*  FindTable(const String& rAliasName);
-        BOOL            FindTableFromField(const String& rFieldName, OTableFieldDescRef& rInfo, USHORT& rCnt);
+        sal_Bool            FindTableFromField(const String& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt);
 
         // Basisklasse ueberschrieben : Connections kreieren und loeschen
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
@@ -96,7 +96,7 @@ namespace dbaui
             // natuerlich alle Connections an diesen Fenstern und alle Abfrage-Spalten, die auf diesen Tabellen basierten.
 
         // TabWin anzeigen oder verstecken (NICHT kreieren oder loeschen)
-        BOOL    ShowTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction,sal_Bool _bAppend);
+        sal_Bool    ShowTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction,sal_Bool _bAppend);
         void    HideTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction);
 
         // Sichbarkeit eines TabWins sicherstellen (+ Invalidieren der Connections)
@@ -114,15 +114,15 @@ namespace dbaui
         virtual void ClearAll();
 
         // wird vom AddTabDlg benutzt, um festzustellen, ob noch Tabellen hinzugefuegt werden duerfen
-        //virtual BOOL IsAddAllowed();
+        //virtual sal_Bool IsAddAllowed();
 
         // eine neu Connection bekanntgeben und einfuegen lassen, wenn nicht schon existent
-        void NotifyTabConnection(const OQueryTableConnection& rNewConn, BOOL _bCreateUndoAction = TRUE);
+        void NotifyTabConnection(const OQueryTableConnection& rNewConn, sal_Bool _bCreateUndoAction = sal_True);
 
         Link    SetTabWinsChangeHandler(const Link& lnk) { Link lnkRet = m_lnkTabWinsChangeHandler; m_lnkTabWinsChangeHandler = lnk; return lnkRet; }
             // der Handler bekommt einen Zeiger auf eine TabWinsChangeNotification-Struktur
 
-        BOOL ExistsAVisitedConn(const OQueryTableWindow* pFrom) const;
+        sal_Bool ExistsAVisitedConn(const OQueryTableWindow* pFrom) const;
 
         virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName
                                             ,const ::rtl::OUString& _sTableName

@@ -63,7 +63,7 @@ DBG_NAME(ORelationDialog)
 //========================================================================
 ORelationDialog::ORelationDialog( OJoinTableView* pParent,
                                  const TTableConnectionData::value_type& pConnectionData,
-                                 BOOL bAllowTableSelect )
+                                 sal_Bool bAllowTableSelect )
     :ModalDialog( pParent, ModuleRes(DLG_REL_PROPERTIES) )
     ,m_pTableMap(pParent->GetTabWinMap())
 
@@ -83,7 +83,7 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     ,aPB_HELP( this, ModuleRes( PB_HELP ) )
 
     ,m_pOrigConnData( pConnectionData )
-    ,m_bTriedOneUpdate(FALSE)
+    ,m_bTriedOneUpdate(sal_False)
 {
     DBG_CTOR(ORelationDialog,NULL);
 
@@ -121,18 +121,18 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
     {
     case KeyRule::NO_ACTION:
     case KeyRule::RESTRICT:
-        aRB_NoCascUpd.Check( TRUE );
+        aRB_NoCascUpd.Check( sal_True );
         break;
 
     case KeyRule::CASCADE:
-        aRB_CascUpd.Check( TRUE );
+        aRB_CascUpd.Check( sal_True );
         break;
 
     case KeyRule::SET_NULL:
-        aRB_CascUpdNull.Check( TRUE );
+        aRB_CascUpdNull.Check( sal_True );
         break;
     case KeyRule::SET_DEFAULT:
-        aRB_CascUpdDefault.Check( TRUE );
+        aRB_CascUpdDefault.Check( sal_True );
         break;
     }
 
@@ -141,18 +141,18 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
     {
     case KeyRule::NO_ACTION:
     case KeyRule::RESTRICT:
-        aRB_NoCascDel.Check( TRUE );
+        aRB_NoCascDel.Check( sal_True );
         break;
 
     case KeyRule::CASCADE:
-        aRB_CascDel.Check( TRUE );
+        aRB_CascDel.Check( sal_True );
         break;
 
     case KeyRule::SET_NULL:
-        aRB_CascDelNull.Check( TRUE );
+        aRB_CascDelNull.Check( sal_True );
         break;
     case KeyRule::SET_DEFAULT:
-        aRB_CascDelDefault.Check( TRUE );
+        aRB_CascDelDefault.Check( sal_True );
         break;
     }
 }
@@ -171,7 +171,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
 {
     //////////////////////////////////////////////////////////////////////
     // RadioButtons auslesen
-    UINT16 nAttrib = 0;
+    sal_uInt16 nAttrib = 0;
 
     // Delete Rules
     if( aRB_NoCascDel.IsChecked() )
@@ -200,7 +200,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
 
     m_pTableControl->SaveModified();
 
-    //// wenn die ComboBoxen fuer die Tabellenauswahl enabled sind (Constructor mit bAllowTableSelect==TRUE), dann muss ich in die
+    //// wenn die ComboBoxen fuer die Tabellenauswahl enabled sind (Constructor mit bAllowTableSelect==sal_True), dann muss ich in die
     //// Connection auch die Tabellennamen stecken
     //m_pConnData->SetSourceWinName(m_pTableControl->getSourceWinName());
     //m_pConnData->SetDestWinName(m_pTableControl->getDestWinName());
@@ -227,7 +227,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    m_bTriedOneUpdate = TRUE;
+    m_bTriedOneUpdate = sal_True;
     // this means that the original connection may be lost (if m_pConnData was not a newly created but an
     // existent conn to be modified), which we reflect by returning RET_NO (see ::Execute)
 

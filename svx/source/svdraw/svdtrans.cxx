@@ -56,7 +56,6 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, con
 {
     Fraction xFact(rxFact);
     Fraction yFact(ryFact);
-    //long nHgt=rRect.Bottom()-rRect.Top();
 
     {
         if (xFact.GetDenominator()==0) {
@@ -94,32 +93,32 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, con
 
 void ResizePoly(Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    USHORT nAnz=rPoly.GetSize();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ResizePoint(rPoly[i],rRef,xFact,yFact);
     }
 }
 
 void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    USHORT nAnz=rPoly.GetPointCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ResizePoint(rPoly[i],rRef,xFact,yFact);
     }
 }
 
 void ResizePoly(PolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ResizePoly(rPoly[i],rRef,xFact,yFact);
     }
 }
 
 void ResizeXPoly(XPolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ResizeXPoly(rPoly[i],rRef,xFact,yFact);
     }
 }
@@ -128,32 +127,32 @@ void ResizeXPoly(XPolyPolygon& rPoly, const Point& rRef, const Fraction& xFact, 
 
 void RotatePoly(Polygon& rPoly, const Point& rRef, double sn, double cs)
 {
-    USHORT nAnz=rPoly.GetSize();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         RotatePoint(rPoly[i],rRef,sn,cs);
     }
 }
 
 void RotateXPoly(XPolygon& rPoly, const Point& rRef, double sn, double cs)
 {
-    USHORT nAnz=rPoly.GetPointCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         RotatePoint(rPoly[i],rRef,sn,cs);
     }
 }
 
 void RotatePoly(PolyPolygon& rPoly, const Point& rRef, double sn, double cs)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         RotatePoly(rPoly[i],rRef,sn,cs);
     }
 }
 
 void RotateXPoly(XPolyPolygon& rPoly, const Point& rRef, double sn, double cs)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         RotateXPoly(rPoly[i],rRef,sn,cs);
     }
 }
@@ -203,32 +202,32 @@ void MirrorPoint(Point& rPnt, const Point& rRef1, const Point& rRef2)
 
 void MirrorPoly(Polygon& rPoly, const Point& rRef1, const Point& rRef2)
 {
-    USHORT nAnz=rPoly.GetSize();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         MirrorPoint(rPoly[i],rRef1,rRef2);
     }
 }
 
 void MirrorXPoly(XPolygon& rPoly, const Point& rRef1, const Point& rRef2)
 {
-    USHORT nAnz=rPoly.GetPointCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         MirrorPoint(rPoly[i],rRef1,rRef2);
     }
 }
 
 void MirrorPoly(PolyPolygon& rPoly, const Point& rRef1, const Point& rRef2)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         MirrorPoly(rPoly[i],rRef1,rRef2);
     }
 }
 
 void MirrorXPoly(XPolyPolygon& rPoly, const Point& rRef1, const Point& rRef2)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         MirrorXPoly(rPoly[i],rRef1,rRef2);
     }
 }
@@ -237,46 +236,36 @@ void MirrorXPoly(XPolyPolygon& rPoly, const Point& rRef1, const Point& rRef2)
 
 void ShearPoly(Polygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
-    USHORT nAnz=rPoly.GetSize();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetSize();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ShearPoint(rPoly[i],rRef,tn,bVShear);
     }
 }
 
 void ShearXPoly(XPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
-    USHORT nAnz=rPoly.GetPointCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.GetPointCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ShearPoint(rPoly[i],rRef,tn,bVShear);
     }
 }
 
 void ShearPoly(PolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ShearPoly(rPoly[i],rRef,tn,bVShear);
     }
 }
 
 void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
 {
-    USHORT nAnz=rPoly.Count();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rPoly.Count();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         ShearXPoly(rPoly[i],rRef,tn,bVShear);
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//   @@@@  @@@@@   @@@@   @@@@  @@  @@
-//  @@  @@ @@  @@ @@  @@ @@  @@ @@  @@
-//  @@     @@  @@ @@  @@ @@  @@ @@ @@
-//  @@     @@@@@  @@  @@ @@  @@ @@@@
-//  @@     @@  @@ @@  @@ @@  @@ @@ @@
-//  @@  @@ @@  @@ @@  @@ @@  @@ @@  @@
-//   @@@@  @@  @@  @@@@   @@@@  @@  @@
-//
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
@@ -392,19 +381,14 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
                           const Point& rRad, double& rSin, double& rCos, bool bVert,
                           const Rectangle rRefRect)
 {
-    //bool bC1=pC1!=NULL;
-    //bool bC2=pC2!=NULL;
-    //long x0=rPnt.X();
     long y0=rPnt.Y();
     CrookSlantXPoint(rPnt,pC1,pC2,rCenter,rRad,rSin,rCos,bVert);
     if (bVert) {
     } else {
-        //long nBase=rCenter.Y()-rRad.Y();
         long nTop=rRefRect.Top();
         long nBtm=rRefRect.Bottom();
         long nHgt=nBtm-nTop;
         long dy=rPnt.Y()-y0;
-        //bool bOben=rRad.Y()<0;
         double a=((double)(y0-nTop))/nHgt;
         a*=dy;
         rPnt.Y()=y0+Round(a);
@@ -416,8 +400,8 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
 void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
     double nSin,nCos;
-    USHORT nPointAnz=rPoly.GetPointCount();
-    USHORT i=0;
+    sal_uInt16 nPointAnz=rPoly.GetPointCount();
+    sal_uInt16 i=0;
     while (i<nPointAnz) {
         Point* pPnt=&rPoly[i];
         Point* pC1=NULL;
@@ -439,8 +423,8 @@ void CrookRotatePoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, b
 void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
     double nSin,nCos;
-    USHORT nPointAnz=rPoly.GetPointCount();
-    USHORT i=0;
+    sal_uInt16 nPointAnz=rPoly.GetPointCount();
+    sal_uInt16 i=0;
     while (i<nPointAnz) {
         Point* pPnt=&rPoly[i];
         Point* pC1=NULL;
@@ -462,8 +446,8 @@ void CrookSlantPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bo
 void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle rRefRect)
 {
     double nSin,nCos;
-    USHORT nPointAnz=rPoly.GetPointCount();
-    USHORT i=0;
+    sal_uInt16 nPointAnz=rPoly.GetPointCount();
+    sal_uInt16 i=0;
     while (i<nPointAnz) {
         Point* pPnt=&rPoly[i];
         Point* pC1=NULL;
@@ -486,24 +470,24 @@ void CrookStretchPoly(XPolygon& rPoly, const Point& rCenter, const Point& rRad, 
 
 void CrookRotatePoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
-    USHORT nPolyAnz=rPoly.Count();
-    for (USHORT nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
+    sal_uInt16 nPolyAnz=rPoly.Count();
+    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
         CrookRotatePoly(rPoly[nPolyNum],rCenter,rRad,bVert);
     }
 }
 
 void CrookSlantPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert)
 {
-    USHORT nPolyAnz=rPoly.Count();
-    for (USHORT nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
+    sal_uInt16 nPolyAnz=rPoly.Count();
+    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
         CrookSlantPoly(rPoly[nPolyNum],rCenter,rRad,bVert);
     }
 }
 
 void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rRad, bool bVert, const Rectangle rRefRect)
 {
-    USHORT nPolyAnz=rPoly.Count();
-    for (USHORT nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
+    sal_uInt16 nPolyAnz=rPoly.Count();
+    for (sal_uInt16 nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
         CrookStretchPoly(rPoly[nPolyNum],rCenter,rRad,bVert,rRefRect);
     }
 }
@@ -538,7 +522,7 @@ long NormAngle360(long a)
     return a;
 }
 
-USHORT GetAngleSector(long nWink)
+sal_uInt16 GetAngleSector(long nWink)
 {
     while (nWink<0) nWink+=36000;
     while (nWink>=36000) nWink-=36000;
@@ -717,17 +701,17 @@ long BigMulDiv(long nVal, long nMul, long nDiv)
 
 void Kuerzen(Fraction& rF, unsigned nDigits)
 {
-    INT32 nMul=rF.GetNumerator();
-    INT32 nDiv=rF.GetDenominator();
+    sal_Int32 nMul=rF.GetNumerator();
+    sal_Int32 nDiv=rF.GetDenominator();
     bool bNeg = false;
     if (nMul<0) { nMul=-nMul; bNeg=!bNeg; }
     if (nDiv<0) { nDiv=-nDiv; bNeg=!bNeg; }
     if (nMul==0 || nDiv==0) return;
-    UINT32 a;
-    a=UINT32(nMul); unsigned nMulZ=0; // Fuehrende Nullen zaehlen
+    sal_uInt32 a;
+    a=sal_uInt32(nMul); unsigned nMulZ=0; // Fuehrende Nullen zaehlen
     while (a<0x00800000) { nMulZ+=8; a<<=8; }
     while (a<0x80000000) { nMulZ++; a<<=1; }
-    a=UINT32(nDiv); unsigned nDivZ=0; // Fuehrende Nullen zaehlen
+    a=sal_uInt32(nDiv); unsigned nDivZ=0; // Fuehrende Nullen zaehlen
     while (a<0x00800000) { nDivZ+=8; a<<=8; }
     while (a<0x80000000) { nDivZ++; a<<=1; }
     // Anzahl der verwendeten Digits bestimmen
@@ -964,7 +948,7 @@ void SdrFormatter::Undirty()
     nMul_=nMul1;
     nDiv_=nDiv1;
     nKomma_=nKomma1;
-    bDirty=FALSE;
+    bDirty=sal_False;
 }
 
 
@@ -980,7 +964,7 @@ void SdrFormatter::TakeStr(long nVal, XubString& rStr) const
     }
 
     // Hier fallen trotzdem evtl. Nachkommastellen weg, wg. MulDiv statt Real
-    BOOL bNeg(nVal < 0);
+    sal_Bool bNeg(nVal < 0);
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
 
@@ -1088,46 +1072,39 @@ void SdrFormatter::TakeUnitStr(MapUnit eUnit, XubString& rStr)
         // Metrisch
         case MAP_100TH_MM   :
         {
-            sal_Char aText[] = "/100mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/100mm"));
             break;
         }
         case MAP_10TH_MM    :
         {
-            sal_Char aText[] = "/10mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/10mm"));
             break;
         }
         case MAP_MM         :
         {
-            sal_Char aText[] = "mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("mm"));
             break;
         }
         case MAP_CM         :
         {
-            sal_Char aText[] = "cm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("cm"));
             break;
         }
 
         // Inch
         case MAP_1000TH_INCH:
         {
-            sal_Char aText[] = "/1000\"";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/1000\""));
             break;
         }
         case MAP_100TH_INCH :
         {
-            sal_Char aText[] = "/100\"";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/100\""));
             break;
         }
         case MAP_10TH_INCH  :
         {
-            sal_Char aText[] = "/10\"";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/10\""));
             break;
         }
         case MAP_INCH       :
@@ -1138,34 +1115,29 @@ void SdrFormatter::TakeUnitStr(MapUnit eUnit, XubString& rStr)
         }
         case MAP_POINT      :
         {
-            sal_Char aText[] = "pt";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pt"));
             break;
         }
         case MAP_TWIP       :
         {
-            sal_Char aText[] = "twip";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("twip"));
             break;
         }
 
         // Sonstiges
         case MAP_PIXEL      :
         {
-            sal_Char aText[] = "pixel";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pixel"));
             break;
         }
         case MAP_SYSFONT    :
         {
-            sal_Char aText[] = "sysfont";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("sysfont"));
             break;
         }
         case MAP_APPFONT    :
         {
-            sal_Char aText[] = "appfont";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("appfont"));
             break;
         }
         case MAP_RELATIVE   :
@@ -1193,20 +1165,17 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         // Metrisch
         case FUNIT_100TH_MM:
         {
-            sal_Char aText[] = "/100mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/100mm"));
             break;
         }
         case FUNIT_MM     :
         {
-            sal_Char aText[] = "mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("mm"));
             break;
         }
         case FUNIT_CM     :
         {
-            sal_Char aText[] = "cm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("cm"));
             break;
         }
         case FUNIT_M      :
@@ -1217,28 +1186,24 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_KM     :
         {
-            sal_Char aText[] = "km";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("km"));
             break;
         }
 
         // Inch
         case FUNIT_TWIP   :
         {
-            sal_Char aText[] = "twip";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("twip"));
             break;
         }
         case FUNIT_POINT  :
         {
-            sal_Char aText[] = "pt";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pt"));
             break;
         }
         case FUNIT_PICA   :
         {
-            sal_Char aText[] = "pica";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pica"));
             break;
         }
         case FUNIT_INCH   :
@@ -1249,14 +1214,12 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_FOOT   :
         {
-            sal_Char aText[] = "ft";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("ft"));
             break;
         }
         case FUNIT_MILE   :
         {
-            sal_Char aText[] = "mile(s)";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("mile(s)"));
             break;
         }
 

@@ -43,14 +43,12 @@
 #define FIXEDLINE_HEIGHT    1
 #define IMG_SIZE            15
 
-
 ModalDialog DLG_COLLECTION_VIEW
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    //Sizeable = TRUE;
     HelpId = HID_EXPLORERDLG_COLLECTION ;
 
     Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
@@ -64,6 +62,7 @@ ModalDialog DLG_COLLECTION_VIEW
     };
     ImageButton BTN_EXPLORERFILE_NEWFOLDER
     {
+        HelpID = "dbaccess:ImageButton:DLG_COLLECTION_VIEW:BTN_EXPLORERFILE_NEWFOLDER";
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( WIN_X - UNRELATED_CONTROLS -  RELATED_CONTROLS - 2*IMG_SIZE, UNRELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( IMG_SIZE , IMG_SIZE ) ;
@@ -71,6 +70,7 @@ ModalDialog DLG_COLLECTION_VIEW
     };
     ImageButton BTN_EXPLORERFILE_UP
     {
+        HelpID = "dbaccess:ImageButton:DLG_COLLECTION_VIEW:BTN_EXPLORERFILE_UP";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( WIN_X - UNRELATED_CONTROLS - IMG_SIZE, UNRELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( IMG_SIZE , IMG_SIZE ) ;
@@ -93,6 +93,7 @@ ModalDialog DLG_COLLECTION_VIEW
     };
     Edit ED_EXPLORERFILE_FILENAME
     {
+        HelpID = "dbaccess:Edit:DLG_COLLECTION_VIEW:ED_EXPLORERFILE_FILENAME";
         Pos = MAP_APPFONT ( RELATED_CONTROLS + UNRELATED_CONTROLS + 50 , WIN_Y - 3*UNRELATED_CONTROLS - BUTTON_HEIGHT - FIXEDLINE_HEIGHT - EDIT_HEIGHT) ;
         Size = MAP_APPFONT ( WIN_X - RELATED_CONTROLS - 2*UNRELATED_CONTROLS - 50 , EDIT_HEIGHT ) ;
         Border = TRUE ;
@@ -107,6 +108,7 @@ ModalDialog DLG_COLLECTION_VIEW
 
     PushButton BTN_EXPLORERFILE_SAVE
     {
+        HelpID = "dbaccess:PushButton:DLG_COLLECTION_VIEW:BTN_EXPLORERFILE_SAVE";
         Pos = MAP_APPFONT ( WIN_X - 2*UNRELATED_CONTROLS - RELATED_CONTROLS - 150, WIN_Y - UNRELATED_CONTROLS - BUTTON_HEIGHT ) ;
         Size = MAP_APPFONT ( 50 , BUTTON_HEIGHT ) ;
         DefButton = TRUE ;
@@ -128,7 +130,6 @@ ModalDialog DLG_COLLECTION_VIEW
         Size = MAP_APPFONT ( 50 , BUTTON_HEIGHT ) ;
     };
 
-
     String STR_PATHNAME
     {
         Text [ en-US ] = "~Path:" ;
@@ -139,24 +140,16 @@ String STR_NEW_FOLDER
 {
     Text [ en-US ] = "Folder" ;
 };
+
 Image IMG_NAVIGATION_BTN_UP_SC
 {
     ImageBitmap = Bitmap { File = "fp010"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
-Image IMG_NAVIGATION_BTN_UP_SCH
-{
-    ImageBitmap = Bitmap { File = "fph010"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-};
+
 Image IMG_NAVIGATION_CREATEFOLDER_SC
 {
     ImageBitmap = Bitmap { File = "fp015"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-};
-Image IMG_NAVIGATION_CREATEFOLDER_SCH
-{
-    ImageBitmap = Bitmap { File = "fph015"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
@@ -164,4 +157,3 @@ String STR_ALREADYEXISTOVERWRITE
 {
     Text [ en-US ] = "The file already exists. Overwrite?" ;
 };
-

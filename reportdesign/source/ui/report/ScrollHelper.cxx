@@ -93,7 +93,6 @@ void OScrollWindowHelper::impl_initScrollBar( ScrollBar& _rScrollBar ) const
     aStyle.SetDragFullOptions( aStyle.GetDragFullOptions() | DRAGFULL_OPTION_SCROLL ); // live scrolling
     aSettings.SetStyleSettings( aStyle );
     _rScrollBar.SetSettings( aSettings );
-    //_rScrollBar.SetMapMode( MapMode( MAP_100TH_MM ) );
 
     _rScrollBar.SetScrollHdl( LINK( this, OScrollWindowHelper, ScrollHdl ) );
     _rScrollBar.SetLineSize( SCR_LINE_SIZE );
@@ -204,12 +203,12 @@ IMPL_LINK( OScrollWindowHelper, ScrollHdl, ScrollBar*, /*pScroll*/ )
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::addSection(const uno::Reference< report::XSection >& _xSection
                                    ,const ::rtl::OUString& _sColorEntry
-                                   ,USHORT _nPosition)
+                                   ,sal_uInt16 _nPosition)
 {
     m_aReportWindow.addSection(_xSection,_sColorEntry,_nPosition);
 }
 //------------------------------------------------------------------------------
-void OScrollWindowHelper::removeSection(USHORT _nPosition)
+void OScrollWindowHelper::removeSection(sal_uInt16 _nPosition)
 {
     m_aReportWindow.removeSection(_nPosition);
 }
@@ -219,12 +218,12 @@ void OScrollWindowHelper::toggleGrid(sal_Bool _bVisible)
     m_aReportWindow.toggleGrid(_bVisible);
 }
 //------------------------------------------------------------------------------
-USHORT OScrollWindowHelper::getSectionCount() const
+sal_uInt16 OScrollWindowHelper::getSectionCount() const
 {
     return m_aReportWindow.getSectionCount();
 }
 //------------------------------------------------------------------------------
-void OScrollWindowHelper::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType )
+void OScrollWindowHelper::SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType )
 {
     m_aReportWindow.SetInsertObj(eObj,_sShapeType);
 }
@@ -239,7 +238,7 @@ void OScrollWindowHelper::SetMode( DlgEdMode _eNewMode )
     m_aReportWindow.SetMode(_eNewMode);
 }
 //------------------------------------------------------------------------------
-BOOL OScrollWindowHelper::HasSelection() const
+sal_Bool OScrollWindowHelper::HasSelection() const
 {
     return m_aReportWindow.HasSelection();
 }
@@ -259,7 +258,7 @@ void OScrollWindowHelper::Paste()
     m_aReportWindow.Paste();
 }
 //----------------------------------------------------------------------------
-BOOL OScrollWindowHelper::IsPasteAllowed() const
+sal_Bool OScrollWindowHelper::IsPasteAllowed() const
 {
     return m_aReportWindow.IsPasteAllowed();
 }
@@ -359,7 +358,6 @@ void OScrollWindowHelper::alignMarkedObjects(sal_Int32 _nControlModification,boo
 void OScrollWindowHelper::ImplInitSettings()
 {
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
-    // SetBackground( Wallpaper( COL_LIGHTRED ));
     SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
 }
@@ -381,12 +379,12 @@ void OScrollWindowHelper::_propertyChanged(const beans::PropertyChangeEvent& /*_
     m_aReportWindow.notifySizeChanged();
 }
 // -----------------------------------------------------------------------------
-void OScrollWindowHelper::setGridSnap(BOOL bOn)
+void OScrollWindowHelper::setGridSnap(sal_Bool bOn)
 {
     m_aReportWindow.setGridSnap(bOn);
 }
 // -----------------------------------------------------------------------------
-void OScrollWindowHelper::setDragStripes(BOOL bOn)
+void OScrollWindowHelper::setDragStripes(sal_Bool bOn)
 {
     m_aReportWindow.setDragStripes(bOn);
 }

@@ -63,19 +63,11 @@ TYPEINIT1(SwWebDocShell, SwDocShell);
 
 SFX_IMPL_OBJECTFACTORY(SwWebDocShell, SvGlobalName(SO3_SWWEB_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter/web" )
 
-/*-----------------22.01.97 09.29-------------------
-
---------------------------------------------------*/
-
 SwWebDocShell::SwWebDocShell(SfxObjectCreateMode eMode ) :
         SwDocShell(eMode),
         nSourcePara(0)
 {
 }
-
-/*-----------------22.01.97 09.29-------------------
-
---------------------------------------------------*/
 
 SwWebDocShell::~SwWebDocShell()
 {

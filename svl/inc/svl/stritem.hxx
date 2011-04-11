@@ -40,14 +40,14 @@ public:
 
     SfxStringItem() {}
 
-    SfxStringItem(USHORT which, const XubString & rValue):
+    SfxStringItem(sal_uInt16 which, const XubString & rValue):
         CntUnencodedStringItem(which, rValue) {}
 
-    SfxStringItem(USHORT nWhich, SvStream & rStream);
+    SfxStringItem(sal_uInt16 nWhich, SvStream & rStream);
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
 
-    virtual SvStream & Store(SvStream & rStream, USHORT) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 };

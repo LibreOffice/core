@@ -1,7 +1,6 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //Implementierung der Klasse RegistrationContextInformation.
 
-#include <assert.h>
 #include "registrationcontextinformation.hxx"
 #include "msihelper.hxx"
 

@@ -192,9 +192,9 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32          mnTextSize;
 
         SvStorageRef        mrStg;
-        SvStorageStream*    mpCurUserStrm;
-        SvStorageStream*    mpStrm;
-        SvStorageStream*    mpPicStrm;
+        SvStream*           mpCurUserStrm;
+        SvStream*           mpStrm;
+        SvStream*           mpPicStrm;
         PptEscherEx*        mpPptEscherEx;
 
         List                maExOleObj;

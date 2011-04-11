@@ -82,33 +82,6 @@ sub select_language_items
 
             if ( $specificlanguage eq $onelanguage )
             {
-                # $oneitem->{'modules'} = $installer::globals::rootmodulegid;    # all files in a language pack are root files
-                # Using $installer::globals::languagemodulesbase (?)
-
-#               # no more automatic change of module assignments
-#               $oneitem->{'modules'} = $installer::globals::rootmodulegid . "_$locallang";      # all files in a language pack are root files
-#
-#               if (( $installer::globals::islinuxbuild ) || ( $installer::globals::issolarispkgbuild ))
-#               {
-#                   if ( $oneitem->{'Dir'} )
-#                   {
-#                       if ( $oneitem->{'Dir'} eq "gid_Dir_Fonts_Truetype" ) { $oneitem->{'modules'} = "gid_Module_Langpack_Fonts_$locallang"; }
-#                       if ( $oneitem->{'Dir'} eq "gid_Dir_Resource" ) { $oneitem->{'modules'} = "gid_Module_Langpack_Resource_$locallang"; }
-#                       if ( $oneitem->{'Dir'} eq "gid_Dir_Help_Isolanguage" ) { $oneitem->{'modules'} = "gid_Module_Langpack_Help_$locallang"; }
-#                   }
-#               }
-
-                # preparing different modules for Windows Installer language packs
-                # my $underlinelanguage = $specificlanguage;
-                # $underlinelanguage =~ s/-/_/;
-                # if ( $installer::globals::iswindowsbuild ) { $oneitem->{'modules'} = $installer::globals::languagemodulesbase . $underlinelanguage; }
-
-#               # no more collecting of language pack feature
-#               if (! installer::existence::exists_in_array($oneitem->{'modules'}, \@installer::globals::languagepackfeature))
-#               {
-#                   push(@installer::globals::languagepackfeature, $oneitem->{'modules'});  # Collecting all language pack feature
-#               }
-
                 push(@itemsarray, $oneitem);
             }
         }
@@ -195,20 +168,6 @@ sub get_packagename_from_packagelist
 {
     my ( $alldirs, $allvariables, $languagestringref ) = @_;
 
-    # my $packagename = "";
-
-    # for ( my $i = 0; $i <= $#{$alldirs}; $i++ )
-    # {
-    #   if ( ${$alldirs}[$i] =~ /-fonts/ ) { next; }
-    #   if ( ${$alldirs}[$i] =~ /-help/ ) { next; }
-    #   if ( ${$alldirs}[$i] =~ /-res/ ) { next; }
-    #
-    #   $packagename = ${$alldirs}[$i];
-    #   last;
-    # }
-
-    # if ( $packagename eq "" ) { installer::exiter::exit_program("ERROR: Could not find base package in directory $installdir!", "get_packagename_from_packagelist"); }
-
     my $localproductname = $allvariables->{'PRODUCTNAME'};
     $localproductname = lc($localproductname);
     $localproductname =~ s/ //g;
@@ -239,7 +198,7 @@ sub determine_packagename
         my $fileextension = "rpm";
         my $rpmfiles = installer::systemactions::find_file_with_file_extension($fileextension, $installdir);
         if ( ! ( $#{$rpmfiles} > -1 )) { installer::exiter::exit_program("ERROR: Could not find package in directory $installdir!", "determine_packagename"); }
-        my $rpmsav = installer::converter::copy_array_from_references($rpmfiles);
+        my $rpmsav = [@{$rpmfiles}];
         for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$rpmfiles}[$i]); }
 
         $packagename = get_packagename_from_packagelist($rpmfiles, $allvariables, $languagestringref);
@@ -261,7 +220,7 @@ sub determine_packagename
         my $alldirs = installer::systemactions::get_all_directories($installdir);
 
         if ( ! ( $#{$alldirs} > -1 )) { installer::exiter::exit_program("ERROR: Could not find package in directory $installdir!", "determine_packagename"); }
-        my $alldirssav = installer::converter::copy_array_from_references($alldirs);
+        my $alldirssav = [@{$alldirs}];
         for ( my $i = 0; $i <= $#{$alldirs}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$alldirs}[$i]); }
 
         $packagename = get_packagename_from_packagelist($alldirs, $allvariables, $languagestringref);
@@ -411,9 +370,6 @@ sub determine_scriptfile_name
 
     my $scriptfilename = $packagename;
 
-#   if ( $installer::globals::isrpmbuild ) { $scriptfilename =~ s/\.rpm\s*$/\.sh/; }
-#   if ( $installer::globals::issolarisbuild ) { $scriptfilename =~ s/\.tar\.gz\s*$/\.sh/; }
-
     $scriptfilename =~ s/\.tar\.gz\s*$/\.sh/;
 
     my $infoline = "Setting language pack script file name to $scriptfilename\n";
@@ -466,8 +422,7 @@ sub include_package_into_script
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    my $localcall = "chmod 775 $scriptfilename \>\/dev\/null 2\>\&1";
-    system($localcall);
+    chmod 0775, $scriptfilename;
 
 }
 

@@ -38,7 +38,7 @@ module com { module sun { module star { module deployment { module ui {
     packages of the user and shared installation as well as currently open
     documents.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 service PackageManagerDialog : com::sun::star::ui::dialogs::XAsynchronousExecutableDialog
 {
@@ -52,7 +52,7 @@ service PackageManagerDialog : com::sun::star::ui::dialogs::XAsynchronousExecuta
         @param xParent
                parent window
         @param focussedContext
-               context to be focussed
+               context to be focused
     */
     create( [in] com::sun::star::awt::XWindow xParent,
             [in] string focussedContext );

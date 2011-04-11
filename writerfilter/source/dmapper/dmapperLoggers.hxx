@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ooxmlLoggers.hxx,v $
- * $Revision: 1.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -32,7 +29,6 @@
 #ifndef INCLUDED_DMAPPER_LOGGERS_HXX
 #define INCLUDED_DMAPPER_LOGGERS_HXX
 
-#ifdef DEBUG
 #include <resourcemodel/TagLogger.hxx>
 
 namespace writerfilter {
@@ -40,7 +36,7 @@ namespace writerfilter {
         extern TagLogger::Pointer_t dmapper_logger;
     }
 }
-#endif // DEBUG
+
 #endif // INCLUDED_DMAPPER_LOGGERS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

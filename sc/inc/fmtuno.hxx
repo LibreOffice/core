@@ -29,13 +29,13 @@
 #ifndef SC_FMTUNO_HXX
 #define SC_FMTUNO_HXX
 
-#include "address.hxx"
-#include "conditio.hxx"
+#include <vector>
+
 #include <formula/grammar.hxx>
-#include <tools/list.hxx>
 #include <svl/itemprop.hxx>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>
+#include <com/sun/star/sheet/XSheetCondition2.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -48,7 +48,10 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
+#include <com/sun/star/sheet/ConditionOperator2.hpp>
 
+#include "address.hxx"
+#include "conditio.hxx"
 
 class ScDocument;
 class ScTableConditionalEntry;
@@ -83,20 +86,19 @@ class ScTableConditionalFormat : public cppu::WeakImplHelper5<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    List    aEntries;
+    std::vector<ScTableConditionalEntry*>   aEntries;
 
-    ScTableConditionalEntry*    GetObjectByIndex_Impl(USHORT nIndex) const;
+    ScTableConditionalEntry*    GetObjectByIndex_Impl(sal_uInt16 nIndex) const;
     void                        AddEntry_Impl(const ScCondFormatEntryItem& aEntry);
 
     ScTableConditionalFormat(); // disable
 public:
-                            ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
+                            ScTableConditionalFormat(ScDocument* pDoc, sal_uLong nKey,
                                 formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableConditionalFormat();
 
     void                    FillFormat( ScConditionalFormat& rFormat, ScDocument* pDoc,
                                 formula::FormulaGrammar::Grammar eGrammar) const;
-    void                    DataChanged();
 
                             // XSheetConditionalEntries
     virtual void SAL_CALL   addNew( const ::com::sun::star::uno::Sequence<
@@ -153,18 +155,16 @@ public:
 
 
 class ScTableConditionalEntry : public cppu::WeakImplHelper3<
-                            com::sun::star::sheet::XSheetCondition,
+                            com::sun::star::sheet::XSheetCondition2,
                             com::sun::star::sheet::XSheetConditionalEntry,
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScTableConditionalFormat*   pParent;
     ScCondFormatEntryItem       aData;
 
     ScTableConditionalEntry(); // disabled
 public:
-                            ScTableConditionalEntry(ScTableConditionalFormat* pPar,
-                                                    const ScCondFormatEntryItem& aItem);
+                            ScTableConditionalEntry(const ScCondFormatEntryItem& aItem);
     virtual                 ~ScTableConditionalEntry();
 
     void                    GetData(ScCondFormatEntryItem& rData) const;
@@ -172,7 +172,11 @@ public:
                             // XSheetCondition
     virtual ::com::sun::star::sheet::ConditionOperator SAL_CALL getOperator()
                                 throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getConditionOperator()
+                                throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setOperator( ::com::sun::star::sheet::ConditionOperator nOperator )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getFormula1() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setFormula1( const ::rtl::OUString& aFormula1 )
@@ -202,7 +206,7 @@ public:
 
 
 class ScTableValidationObj : public cppu::WeakImplHelper5<
-                            com::sun::star::sheet::XSheetCondition,
+                            com::sun::star::sheet::XSheetCondition2,
                             com::sun::star::sheet::XMultiFormulaTokens,
                             com::sun::star::beans::XPropertySet,
                             com::sun::star::lang::XUnoTunnel,
@@ -210,7 +214,7 @@ class ScTableValidationObj : public cppu::WeakImplHelper5<
 {
 private:
     SfxItemPropertySet  aPropSet;
-    USHORT              nMode;          // enum ScConditionMode
+    sal_uInt16              nMode;          // enum ScConditionMode
     String              aExpr1;
     String              aExpr2;
     String              maExprNmsp1;
@@ -221,14 +225,14 @@ private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > aTokens2;
     ScAddress           aSrcPos;
     String              aPosString;     // formula position as text
-    USHORT              nValMode;       // enum ScValidationMode
-    BOOL                bIgnoreBlank;
+    sal_uInt16              nValMode;       // enum ScValidationMode
+    sal_Bool                bIgnoreBlank;
     sal_Int16           nShowList;
-    BOOL                bShowInput;
+    sal_Bool                bShowInput;
     String              aInputTitle;
     String              aInputMessage;
-    BOOL                bShowError;
-    USHORT              nErrorStyle;    // enum ScValidErrorStyle
+    sal_Bool                bShowError;
+    sal_uInt16              nErrorStyle;    // enum ScValidErrorStyle
     String              aErrorTitle;
     String              aErrorMessage;
 
@@ -236,18 +240,21 @@ private:
 
     ScTableValidationObj(); // disabled
 public:
-                            ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
+                            ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
                                                 const formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableValidationObj();
 
     ScValidationData*       CreateValidationData( ScDocument* pDoc,
                                                 formula::FormulaGrammar::Grammar eGrammar ) const;
-    void                    DataChanged();
 
                             // XSheetCondition
     virtual ::com::sun::star::sheet::ConditionOperator SAL_CALL getOperator()
                                 throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getConditionOperator()
+                                throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setOperator( ::com::sun::star::sheet::ConditionOperator nOperator )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator )
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getFormula1() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setFormula1( const ::rtl::OUString& aFormula1 )

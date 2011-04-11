@@ -50,14 +50,7 @@ namespace svt { namespace table
     */
     typedef sal_Int32   AnyPos;
 
-    /// the ID of a column in a table
-    typedef sal_Int32   ColumnID;
-
     typedef sal_Int32   TableMetrics;
-/** special column width value which indicates that the column should be
-    automatically resized to fit the view
-*/
-#define COLWIDTH_FIT_TO_VIEW    ((::svt::table::TableMetrics)-1)
 
 /// denotes the column containing the row headers
 #define COL_ROW_HEADERS         ((::svt::table::ColPos)-1)

@@ -33,17 +33,12 @@
 #include "x509certificate_mscryptimpl.hxx"
 #include "certificateextension_xmlsecimpl.hxx"
 
-//MM : added by MM
 #include "oid.hxx"
-//MM : end
 
-//CP : added by CP
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
 #include <osl/process.h>
 #include <utility>
-
-//CP : end
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
@@ -207,7 +202,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
         return serial ;
     } else {
-        return NULL ;
+        return Sequence< sal_Int8 >();
     }
 }
 
@@ -241,15 +236,14 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
                 throw RuntimeException() ;
             }
 
-            // By CP , for correct encoding
+            // for correct encoding
             sal_uInt16 encoding ;
             rtl_Locale *pLocale = NULL ;
             osl_getProcessLocale( &pLocale ) ;
             encoding = osl_getTextEncodingFromLocale( pLocale ) ;
-            // CP end
 
             if(issuer[cbIssuer-1] == 0) cbIssuer--; //delimit the last 0x00;
-            OUString xIssuer(issuer , cbIssuer ,encoding ) ; //By CP
+            OUString xIssuer(issuer , cbIssuer ,encoding ) ;
             delete [] issuer ;
 
             return replaceTagSWithTagST(xIssuer);
@@ -368,7 +362,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
         return issuerUid ;
     } else {
-        return NULL ;
+        return Sequence< sal_Int8 >();
     }
 }
 
@@ -380,7 +374,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
         return subjectUid ;
     } else {
-        return NULL ;
+        return Sequence< sal_Int8 >();
     }
 }
 
@@ -404,7 +398,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
         return xExtns ;
     } else {
-        return NULL ;
+        return Sequence< Reference< XCertificateExtension > >();
     }
 }
 
@@ -444,7 +438,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
 
         return rawCert ;
     } else {
-        return NULL ;
+        return Sequence< sal_Int8 >();
     }
 }
 
@@ -475,7 +469,7 @@ void X509Certificate_MSCryptImpl :: setRawCert( Sequence< sal_Int8 > rawCert ) t
     }
 
     if( rawCert.getLength() != 0 ) {
-        m_pCertContext = CertCreateCertificateContext( X509_ASN_ENCODING, ( const BYTE* )&rawCert[0], rawCert.getLength() ) ;
+        m_pCertContext = CertCreateCertificateContext( X509_ASN_ENCODING, ( const sal_uInt8* )&rawCert[0], rawCert.getLength() ) ;
     }
 }
 
@@ -510,7 +504,6 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
         return NULL ;
 }
 
-// MM : added by MM
 ::rtl::OUString findOIDDescription(char *oid)
 {
     OUString ouOID = OUString::createFromAscii( oid );
@@ -549,7 +542,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
         }
     }
 
-    return NULL;
+    return Sequence< sal_Int8 >();
 }
 
 ::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectPublicKeyAlgorithm()
@@ -583,7 +576,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
     }
     else
     {
-        return NULL ;
+        return Sequence< sal_Int8 >();
     }
 }
 
@@ -655,7 +648,5 @@ sal_Int32 SAL_CALL X509Certificate_MSCryptImpl::getCertificateUsage(  )
 
     return usage;
 }
-
-// MM : end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

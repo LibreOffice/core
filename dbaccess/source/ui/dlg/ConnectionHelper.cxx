@@ -45,6 +45,7 @@
 #include "dbaccess_helpid.hrc"
 #include "localresaccess.hxx"
 #include <osl/process.h>
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include "dbadmin.hxx"
@@ -58,7 +59,6 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include "UITools.hxx"
@@ -70,16 +70,11 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/docfilt.hxx>
-#if !defined(WINDOWS_VISTA_PSDK) && (defined(WIN) || defined(WNT))
+#if !defined(WINDOWS_VISTA_PSDK) && defined(WNT)
 #define _ADO_DATALINK_BROWSE_
 #endif
 
 #ifdef _ADO_DATALINK_BROWSE_
-#if defined( WNT )
-    #include <tools/prewin.h>
-    #include <windows.h>
-    #include <tools/postwin.h>
-#endif
 #include <vcl/sysdata.hxx>
 #include "adodatalinks.hxx"
 #endif //_ADO_DATALINK_BROWSE_
@@ -120,7 +115,7 @@ DBG_NAME(OConnectionHelper)
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
         m_aPB_Connection.SetClickHdl(LINK(this, OConnectionHelper, OnBrowseConnections));
-        DBG_ASSERT(m_pCollection, "OConnectionHelper::OConnectionHelper : really need a DSN type collection !");
+        OSL_ENSURE(m_pCollection, "OConnectionHelper::OConnectionHelper : really need a DSN type collection !");
         m_aConnectionURL.SetTypeCollection(m_pCollection);
     }
 
@@ -143,7 +138,7 @@ DBG_NAME(OConnectionHelper)
         m_aConnectionURL.Show();
         m_aConnectionURL.ShowPrefix( ::dbaccess::DST_JDBC == m_pCollection->determineType(m_eType) );
 
-        BOOL bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
+        sal_Bool bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
         m_aPB_Connection.Show( bEnableBrowseButton );
 
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
@@ -184,7 +179,7 @@ DBG_NAME(OConnectionHelper)
             {
                 try
                 {
-                    ::rtl::OUString sFolderPickerService = ::rtl::OUString::createFromAscii(SERVICE_UI_FOLDERPICKER);
+                    ::rtl::OUString sFolderPickerService(SERVICE_UI_FOLDERPICKER);
                     Reference< XFolderPicker > xFolderPicker(m_xORB->createInstance(sFolderPickerService), UNO_QUERY);
                     if (!xFolderPicker.is())
                     {
@@ -328,7 +323,6 @@ DBG_NAME(OConnectionHelper)
                     if (RET_OK == aSelector.Execute())
                     {
                         setURLNoPrefix(aSelector.GetSelected());
-                        //  checkCreateDatabase( ::dbaccess::DST_ADABAS);
                         SetRoadmapStateValue(sal_True);
                         callModifiedHdl();
                     }
@@ -406,7 +400,7 @@ DBG_NAME(OConnectionHelper)
                         aProfiles.insert(pArray[index]);
 
 
-                    // excute the select dialog
+                    // execute the select dialog
                     ODatasourceSelectDialog aSelector(GetParent(), aProfiles, eType);
                     ::rtl::OUString sOldProfile=getURLNoPrefix();
 
@@ -440,13 +434,13 @@ DBG_NAME(OConnectionHelper)
     void OConnectionHelper::impl_setURL( const String& _rURL, sal_Bool _bPrefix )
     {
         String sURL( _rURL );
-        DBG_ASSERT( m_pCollection, "OConnectionHelper::impl_setURL: have no interpreter for the URLs!" );
+        OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_setURL: have no interpreter for the URLs!" );
 
         if ( m_pCollection && sURL.Len() )
         {
             if ( m_pCollection->isFileSystemBased( m_eType ) )
             {
-                // get the tow parts: prefix and file URL
+                // get the two parts: prefix and file URL
                 String sTypePrefix, sFileURLEncoded;
                 if ( _bPrefix )
                 {
@@ -486,13 +480,13 @@ DBG_NAME(OConnectionHelper)
         // get the pure text
         String sURL = _bPrefix ? m_aConnectionURL.GetText() : m_aConnectionURL.GetTextNoPrefix();
 
-        DBG_ASSERT( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
+        OSL_ENSURE( m_pCollection, "OConnectionHelper::impl_getURL: have no interpreter for the URLs!" );
 
         if ( m_pCollection && sURL.Len() )
         {
             if ( m_pCollection->isFileSystemBased( m_eType ) )
             {
-                // get the tow parts: prefix and file URL
+                // get the two parts: prefix and file URL
                 String sTypePrefix, sFileURLDecoded;
                 if ( _bPrefix )
                 {
@@ -584,7 +578,6 @@ DBG_NAME(OConnectionHelper)
                 break;
 
                 case RET_NO:
-                     // SetRoadmapStateValue(sal_False);
                     callModifiedHdl();
                     return RET_OK;
 
@@ -653,7 +646,7 @@ DBG_NAME(OConnectionHelper)
             }
             catch(Exception&)
             {
-                DBG_ERROR("OConnectionHelper::getInstalledAdabasDBDirs: could not enumerate the adabas config files!");
+                OSL_FAIL("OConnectionHelper::getInstalledAdabasDBDirs: could not enumerate the adabas config files!");
             }
         }
 
@@ -697,7 +690,7 @@ DBG_NAME(OConnectionHelper)
         }
         return aInstalledDBs;
     }
-    // #106016# -------------------------------------------------------------------
+    // -----------------------------------------------------------------------------
     IS_PATH_EXIST OConnectionHelper::pathExists(const ::rtl::OUString& _rURL, sal_Bool bIsFile) const
     {
         ::ucbhelper::Content aCheckExistence;
@@ -742,7 +735,7 @@ DBG_NAME(OConnectionHelper)
                             return 1L;  // handled
                     }
                     break;
-            } // switch (_rNEvt.GetType())
+            }
         }
 
         return OGenericAdministrationPage::PreNotify( _rNEvt );
@@ -763,7 +756,6 @@ DBG_NAME(OConnectionHelper)
         ::std::vector< ::rtl::OUString > aToBeCreated;  // the to-be-created levels
 
         // search a level which exists
-        // #106016# ---------------------
         IS_PATH_EXIST eParentExists = PATH_NOT_EXIST;
         while ( eParentExists == PATH_NOT_EXIST && aParser.getSegmentCount())
         {
@@ -785,18 +777,18 @@ DBG_NAME(OConnectionHelper)
             ::rtl::OUString sContentType;
             if ( INET_PROT_FILE == eProtocol )
             {
-                sContentType = ::rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" );
+                sContentType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.staroffice.fsys-folder"));
                 // the file UCP currently does not support the ContentType property
             }
             else
             {
-                Any aContentType = aParent.getPropertyValue( ::rtl::OUString::createFromAscii( "ContentType" ) );
+                Any aContentType = aParent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")) );
                 aContentType >>= sContentType;
             }
 
             // the properties which need to be set on the new content
             Sequence< ::rtl::OUString > aNewDirectoryProperties(1);
-            aNewDirectoryProperties[0] = ::rtl::OUString::createFromAscii("Title");
+            aNewDirectoryProperties[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
 
             // the values to be set
             Sequence< Any > aNewDirectoryAttributes(1);
@@ -856,7 +848,7 @@ DBG_NAME(OConnectionHelper)
                 const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
 
                 if ( ( ::dbaccess::DST_CALC == eType) || ( ::dbaccess::DST_MSACCESS == eType) || ( ::dbaccess::DST_MSACCESS_2007 == eType) )
-                { // #106016# --------------------------
+                {
                     if( pathExists(sURL, sal_True) == PATH_NOT_EXIST )
                     {
                         String sFile = String( ModuleRes( STR_FILE_DOES_NOT_EXIST ) );

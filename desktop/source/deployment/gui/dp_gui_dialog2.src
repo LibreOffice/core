@@ -43,6 +43,7 @@ ModelessDialog RID_DLG_EXTENSION_MANAGER
 
     PushButton RID_EM_BTN_ADD
     {
+        HelpID = "desktop:PushButton:RID_DLG_EXTENSION_MANAGER:RID_EM_BTN_ADD";
         TabStop = TRUE;
         Text [ en-US ] = "~Add...";
         Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
@@ -50,6 +51,7 @@ ModelessDialog RID_DLG_EXTENSION_MANAGER
 
     PushButton RID_EM_BTN_CHECK_UPDATES
     {
+        HelpID = "desktop:PushButton:RID_DLG_EXTENSION_MANAGER:RID_EM_BTN_CHECK_UPDATES";
         TabStop = TRUE;
         Text [ en-US ] = "Check for ~Updates...";
         Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
@@ -131,6 +133,7 @@ ModalDialog RID_DLG_UPDATE_REQUIRED
 
     PushButton RID_EM_BTN_CHECK_UPDATES
     {
+        HelpID = "desktop:PushButton:RID_DLG_UPDATE_REQUIRED:RID_EM_BTN_CHECK_UPDATES";
         TabStop = TRUE;
         Text [ en-US ] = "Check for ~Updates...";
         Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
@@ -138,6 +141,7 @@ ModalDialog RID_DLG_UPDATE_REQUIRED
 
     PushButton RID_EM_BTN_CLOSE
     {
+        HelpID = "desktop:PushButton:RID_DLG_UPDATE_REQUIRED:RID_EM_BTN_CLOSE";
         TabStop = TRUE;
         DefButton = TRUE;
         Text [ en-US ] = "Disable all";
@@ -158,19 +162,9 @@ Image RID_IMG_WARNING
     ImageBitmap = Bitmap { File = "caution_16.png"; };
 };
 
-Image RID_IMG_WARNING_HC
-{
-    ImageBitmap = Bitmap { File = "caution_16_h.png"; };
-};
-
 Image RID_IMG_LOCKED
 {
     ImageBitmap = Bitmap { File = "lock_16.png"; };
-};
-
-Image RID_IMG_LOCKED_HC
-{
-    ImageBitmap = Bitmap { File = "lock_16_h.png"; };
 };
 
 Image RID_IMG_SHARED
@@ -178,19 +172,9 @@ Image RID_IMG_SHARED
     ImageBitmap = Bitmap { File = "shared_16.png"; };
 };
 
-Image RID_IMG_SHARED_HC
-{
-    ImageBitmap = Bitmap { File = "shared_16_h.png"; };
-};
-
 Image RID_IMG_EXTENSION
 {
     ImageBitmap = Bitmap { File = "extension_32.png"; };
-};
-
-Image RID_IMG_EXTENSION_HC
-{
-    ImageBitmap = Bitmap { File = "extension_32_h.png"; };
 };
 
 QueryBox RID_QUERYBOX_INSTALL_FOR_ALL

@@ -121,6 +121,7 @@ public:
     LwpHeaderLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpHeaderLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_HEADER_LAYOUT;}
+    using LwpPlacableLayout::RegisterStyle;
     void RegisterStyle( XFPageMaster* pm1 );
     void RegisterStyle( XFMasterPage* mp1 );
 protected:
@@ -146,6 +147,7 @@ public:
     LwpFooterLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpFooterLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_FOOTER_LAYOUT;}
+    using LwpPlacableLayout::RegisterStyle;
     void RegisterStyle(XFPageMaster* pm1);
     void RegisterStyle(XFMasterPage* mp1);
 protected:

@@ -56,8 +56,7 @@ String
 getContentPart( const String& _rRawString )
 {
     // search over some parts to find a string
-    //static char* aIDs[] = { "CN", "OU", "O", "E", NULL };
-    static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };// By CP
+    static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };
     String sPart;
     int i = 0;
     while ( aIDs[i] )
@@ -83,7 +82,7 @@ isDomainMatch(
     if (hostName.equalsIgnoreAsciiCase( certHostName ))
         return true;
 
-    if ( 0 == certHostName.indexOf( rtl::OUString::createFromAscii( "*" ) ) &&
+    if ( 0 == certHostName.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "*" )) ) &&
               hostName.getLength() >= certHostName.getLength()  )
     {
         rtl::OUString cmpStr = certHostName.copy( 1 );
@@ -148,7 +147,7 @@ executeUnknownAuthDialog(
                                    xServiceFactory,
                                    xManager.get()));
 
-        // Get correct ressource string
+        // Get correct resource string
         rtl::OUString aMessage;
 
         std::vector< rtl::OUString > aArguments;
@@ -197,7 +196,7 @@ executeSSLWarnDialog(
                               xServiceFactory,
                               xManager.get()));
 
-        // Get correct ressource string
+        // Get correct resource string
         rtl::OUString aMessage_1;
         std::vector< rtl::OUString > aArguments_1;
 

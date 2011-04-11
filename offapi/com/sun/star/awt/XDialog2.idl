@@ -16,7 +16,7 @@ module com {  module sun {  module star {  module awt {
 
     @since OOo 3.0
  */
-interface XDialog2: com::sun::star::awt::XDialog
+published interface XDialog2: com::sun::star::awt::XDialog
 {
     /** hides the dialog and then causes <member>XDialog::execute</member>
         to return with the given result value.
@@ -25,7 +25,7 @@ interface XDialog2: com::sun::star::awt::XDialog
     /** sets the help id so that the standard help button action will
         show the appropriate help page.
     */
-    void setHelpId ( [in] long Id );
+    void setHelpId ( [in] string Id );
 };
 
 //=============================================================================

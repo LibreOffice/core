@@ -46,16 +46,19 @@ class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
     String      sSuffix;
 protected:
     bool        m_bEndNote;
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+
 public:
     SvxNumberType aFmt;
-    USHORT    nFtnOffset;
+    sal_uInt16    nFtnOffset;
 
     void        ChgPageDesc( SwPageDesc *pDesc );
-    SwPageDesc *GetPageDesc( SwDoc &rDoc ) const;
-    SwClient   *GetPageDescDep() const { return (SwClient*)&aPageDescDep; }
+    SwPageDesc* GetPageDesc( SwDoc &rDoc ) const;
+    bool        KnowsPageDesc() const;
+    bool        DependsOn( const SwPageDesc* ) const;
 
     void SetFtnTxtColl(SwTxtFmtColl& rColl);
-    SwTxtFmtColl* GetFtnTxtColl() const { return  (SwTxtFmtColl*) GetRegisteredIn(); } // kann 0 sein
+    SwTxtFmtColl* GetFtnTxtColl() const { return  (SwTxtFmtColl*) GetRegisteredIn(); } // can be 0.
 
     SwCharFmt* GetCharFmt(SwDoc &rDoc) const;
     void SetCharFmt( SwCharFmt* );
@@ -65,10 +68,8 @@ public:
     void SetAnchorCharFmt( SwCharFmt* );
     SwClient   *GetAnchorCharFmtDep() const { return (SwClient*)&aAnchorCharFmtDep; }
 
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
-
     SwEndNoteInfo & operator=(const SwEndNoteInfo&);
-    BOOL operator==( const SwEndNoteInfo &rInf ) const;
+    sal_Bool operator==( const SwEndNoteInfo &rInf ) const;
 
     SwEndNoteInfo( SwTxtFmtColl *pTxtColl = 0);
     SwEndNoteInfo(const SwEndNoteInfo&);
@@ -78,11 +79,12 @@ public:
 
     void SetPrefix(const String& rSet)      { sPrefix = rSet; }
     void SetSuffix(const String& rSet)      { sSuffix = rSet; }
+    void ReleaseCollection() { if ( GetRegisteredInNonConst() ) GetRegisteredInNonConst()->Remove( this ); }
 };
 
 enum SwFtnPos
 {
-    //Derzeit nur PAGE und CHAPTER. CHAPTER == Dokumentendenoten.
+    // Momentarily only PAGE and CHAPTER. CHAPTER == document-endnotes.
     FTNPOS_PAGE = 1,
     FTNPOS_CHAPTER = 8
 };
@@ -105,7 +107,7 @@ public:
 
     SwFtnInfo& operator=(const SwFtnInfo&);
 
-    BOOL operator==( const SwFtnInfo &rInf ) const;
+    sal_Bool operator==( const SwFtnInfo &rInf ) const;
 
     SwFtnInfo(SwTxtFmtColl* pTxtColl = 0);
     SwFtnInfo(const SwFtnInfo&);

@@ -2115,7 +2115,7 @@ namespace
                 case META_TEXTRECT_ACTION :
                 {
                     /** CHECKED, WORKS WELL */
-                    // OSL_ENSURE(false, "META_TEXTRECT_ACTION requested (!)");
+                    // OSL_FAIL("META_TEXTRECT_ACTION requested (!)");
                     const MetaTextRectAction* pA = (const MetaTextRectAction*)pAction;
                     const Rectangle& rRectangle = pA->GetRect();
                     const sal_uInt32 nStringLength(pA->GetText().Len());
@@ -2729,7 +2729,7 @@ namespace
                             }
                             default :
                             {
-                                OSL_ENSURE(false, "interpretMetafile: META_MAPMODE_ACTION with unsupported MapUnit (!)");
+                                OSL_FAIL("interpretMetafile: META_MAPMODE_ACTION with unsupported MapUnit (!)");
                                 break;
                             }
                         }
@@ -3147,7 +3147,7 @@ namespace
                 }
                 default:
                 {
-                    OSL_ENSURE(false, "Unknown MetaFile Action (!)");
+                    OSL_FAIL("Unknown MetaFile Action (!)");
                     break;
                 }
             }

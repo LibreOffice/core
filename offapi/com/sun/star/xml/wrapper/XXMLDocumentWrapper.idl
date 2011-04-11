@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
+//i20156 - new file for XML security module
 
 /** -- idl definition -- **/
 
@@ -46,11 +46,11 @@ interface XXMLElementWrapper;
  * When converting SAX events into a DOM tree, this interface is
  * used to manipulate the DOM data in UNO perspective.
  * <p>
- * Every lauguage has its own methods to manipulate its native DOM
+ * Every language has its own methods to manipulate its native DOM
  * data structure, this interface provides a common method set which
- * each lauguage have to implement.
+ * each language have to implement.
  * <p>
- * In another word, this interface wraps language dependant methods,
+ * In another word, this interface wraps language dependent methods,
  * then other component can manipulate DOM data through UNO methods.
  */
 interface XXMLDocumentWrapper : com::sun::star::uno::XInterface
@@ -153,7 +153,7 @@ interface XXMLDocumentWrapper : com::sun::star::uno::XInterface
     /**
      * Converts the whole DOM tree into a SAX event stream.
      *
-     * @param handler   the document handelr which will receive the SAX event
+     * @param handler   the document handler which will receive the SAX event
      *                  stream
      */
     void getTree([in] com::sun::star::xml::sax::XDocumentHandler handler)

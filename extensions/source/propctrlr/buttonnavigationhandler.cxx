@@ -121,7 +121,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "ButtonNavigationHandler::getPropertyState: cannot handle this property!" );
+            OSL_FAIL( "ButtonNavigationHandler::getPropertyState: cannot handle this property!" );
             break;
         }
 
@@ -152,7 +152,7 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "ButtonNavigationHandler::getPropertyValue: cannot handle this property!" );
+            OSL_FAIL( "ButtonNavigationHandler::getPropertyValue: cannot handle this property!" );
             break;
         }
 
@@ -181,7 +181,7 @@ namespace pcr
         break;
 
         default:
-            OSL_ENSURE( sal_False, "ButtonNavigationHandler::setPropertyValue: cannot handle this id!" );
+            OSL_FAIL( "ButtonNavigationHandler::setPropertyValue: cannot handle this id!" );
         }
     }
 
@@ -265,7 +265,7 @@ namespace pcr
         break;
 
         default:
-            OSL_ENSURE( sal_False, "ButtonNavigationHandler::actuatingPropertyChanged: cannot handle this id!" );
+            OSL_FAIL( "ButtonNavigationHandler::actuatingPropertyChanged: cannot handle this id!" );
         }
     }
 

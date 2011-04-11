@@ -64,7 +64,7 @@ class XFormsInstanceContext : public TokenContext
 public:
 
     XFormsInstanceContext( SvXMLImport& rImport,
-                           USHORT nPrfx,
+                           sal_uInt16 nPrfx,
                            const ::rtl::OUString& rLName,
                            com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xModel );
     virtual ~XFormsInstanceContext();
@@ -78,7 +78,7 @@ public:
     //
 
     virtual SvXMLImportContext* CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList >& xAttrList );
 

@@ -34,11 +34,8 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-
-
 #include <xmloff/xmltoken.hxx>
-
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/families.hxx>
 #include <xmloff/txtparae.hxx>
 #include <xmloff/xmlnume.hxx>
@@ -47,7 +44,6 @@
 #include "XMLLineNumberingExport.hxx"
 #include "txtexppr.hxx"
 #include <xmloff/txtprmap.hxx>
-
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -113,17 +109,6 @@ void XMLTextParagraphExport::exportStyleAttributes(
                                           GetExport().EncodeStyleName( sName ) );
         }
     }
-    //sal_Int32 nOutlineLevel = //#outline level, zhaojianwei, moved to styleexp.cxx - XMLStyleExport::exportStyle(бнбн)
-    //  GetExport().GetTextParagraphExport()->GetHeadingLevel( rStyle->getName() );
-    //if( nOutlineLevel != -1 )
-    //{
-    //  OUStringBuffer sTmp;
-    //              sTmp.append( static_cast<sal_Int32>(nOutlineLevel+1L) );
-    //  GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-    //                      XML_DEFAULT_OUTLINE_LEVEL,
-    //                      sTmp.makeStringAndClear() );
-    //}
-
     if( bProgress )
     {
         ProgressBarHelper *pProgress = GetExport().GetProgressBarHelper();

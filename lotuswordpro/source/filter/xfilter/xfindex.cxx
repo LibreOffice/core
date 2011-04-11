@@ -57,10 +57,6 @@
  * @file
  * Represente index source,index body and index index entry.
  ************************************************************************/
-/*************************************************************************
- * Change History
-   2005-02-02   create and implemente.
- ************************************************************************/
 #include    "xfindex.hxx"
 #include    "xfparagraph.hxx"
 
@@ -299,7 +295,7 @@ void    XFIndex::ToXml(IXFStream *pStrm)
 
     //entry templates:
     std::vector<XFIndexTemplate *>::iterator it;
-    for (it = m_aTemplates.begin(); it != m_aTemplates.end(); it++)
+    for (it = m_aTemplates.begin(); it != m_aTemplates.end(); ++it)
     {
         (*it)->SetTagName( strTplName);
         (*it)->ToXml(pStrm);
@@ -321,7 +317,7 @@ void    XFIndex::ToXml(IXFStream *pStrm)
             pStrm->StartElement( A2OUSTR("text:index-source-styles") );
 
             std::vector<rtl::OUString>::iterator it_str;
-            for (it_str = m_aTOCSource[i].begin(); it_str != m_aTOCSource[i].end(); it++)
+            for (it_str = m_aTOCSource[i].begin(); it_str != m_aTOCSource[i].end(); ++it)
             {
                 pAttrList->Clear();
                 pAttrList->AddAttribute( A2OUSTR("text:style-name"), *it_str);

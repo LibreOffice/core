@@ -45,7 +45,7 @@ class OrdinalSuffix : public cppu::WeakImplHelper2
         virtual ~OrdinalSuffix();
 
         // XOrdinalSuffix
-        virtual rtl::OUString SAL_CALL getOrdinalSuffix( sal_Int32 nNumber, const com::sun::star::lang::Locale &rLocale) throw(com::sun::star::uno::RuntimeException);
+        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getOrdinalSuffix( sal_Int32 nNumber, const com::sun::star::lang::Locale &rLocale ) throw(com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
         virtual rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);

@@ -50,9 +50,11 @@
 #define vsnprintf _vsnprintf
 #endif
 
-using namespace rtl;
 using namespace osl;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace {
 

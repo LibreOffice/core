@@ -63,8 +63,8 @@ namespace svx
         HeaderBar*          pHeaderBar;
         ::svx::OptHeaderTabListBox* pPathBox;
         SvLBoxEntry*        m_pCurEntry;
-        ULONG               m_nOldCount;
-        BOOL                m_bModified;
+        sal_uLong               m_nOldCount;
+        sal_Bool                m_bModified;
 
 #ifdef SVX_DBREGISTER_HXX
         DECL_LINK( NewHdl, void * );
@@ -96,13 +96,6 @@ namespace svx
         */
         void openLinkDialog(const String& _sOldName,const String& _sOldLocation,SvLBoxEntry* _pEntry = NULL);
 
-        /** opens a file pciker to select a database file
-            @param  _sLocation
-                If set, the file picker use it as default directory
-            @return
-                the location of the database file
-        */
-        String getFileLocation(const String& _sLocation);
 #endif
 
     public:
@@ -110,9 +103,9 @@ namespace svx
         virtual ~DbRegistrationOptionsPage();
 
         static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-        static USHORT*      GetRanges();
+        static sal_uInt16*      GetRanges();
 
-        virtual BOOL        FillItemSet( SfxItemSet& rSet );
+        virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
         virtual void        Reset( const SfxItemSet& rSet );
         virtual void        FillUserData();
     };

@@ -31,9 +31,7 @@
 
 #include <rtl/ref.hxx>
 #include <tools/stream.hxx>
-#ifndef _VECTOR_
 #include <vector>
-#endif
 
 #endif // _CONNECTIVITY_DBASE_INDEXPAGE_HXX_
 

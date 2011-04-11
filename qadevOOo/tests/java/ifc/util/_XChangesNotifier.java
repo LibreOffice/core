@@ -59,27 +59,27 @@ public class _XChangesNotifier extends MultiMethodTest {
      */
     private static class MyChangesListener implements XChangesListener {
         /** Just lo a call of the listener **/
-        boolean bChangesOccured = false;
+        boolean bChangesOccurred = false;
 
         /** A change did occur
          * @param changesEvent The event.
          **/
         public void changesOccurred(com.sun.star.util.ChangesEvent changesEvent) {
-            bChangesOccured = true;
+            bChangesOccurred = true;
         }
 
         /** Disposing of the listener
          * @param eventObject The event.
          **/
         public void disposing(com.sun.star.lang.EventObject eventObject) {
-            bChangesOccured = true;
+            bChangesOccurred = true;
         }
 
         /**
          * Reset the listener
          */
         public void reset() {
-            bChangesOccured = false;
+            bChangesOccurred = false;
         }
 
         /**
@@ -87,7 +87,7 @@ public class _XChangesNotifier extends MultiMethodTest {
          * @return True, if the listener has been called.
          */
         public boolean didChangesOccur() {
-            return bChangesOccured;
+            return bChangesOccurred;
         }
     }
 

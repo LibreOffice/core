@@ -63,9 +63,6 @@ class UpDownBarWrapper : public MutexContainer
                         , ::com::sun::star::beans::XMultiPropertySet
                         , ::com::sun::star::beans::XPropertyState
                         , ::com::sun::star::beans::XMultiPropertyStates
-                        //  , ::com::sun::star::uno::XWeak          // implemented by WeakImplHelper(optional interface)
-                        //  , ::com::sun::star::uno::XInterface     // implemented by WeakImplHelper
-                        //  , ::com::sun::star::lang::XTypeProvider // implemented by WeakImplHelper
                         >
 {
 public:
@@ -124,11 +121,6 @@ private: //member
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
     rtl::OUString       m_aPropertySetName;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySetInfo >
-                        m_xInfo;//outer PropertySetInfo
-    ::boost::shared_ptr< ::cppu::OPropertyArrayHelper > m_pPropertyArrayHelper;
-
 };
 
 } //  namespace wrapper

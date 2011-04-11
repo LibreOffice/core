@@ -42,9 +42,7 @@
 // folgende fuer InsertSdPage()
 #include <svx/svdlayer.hxx>
 
-#ifndef SVX_LIGHT
 #include "DrawDocShell.hxx"
-#endif
 #include <drawdoc.hxx>
 #include <unomodel.hxx>
 #include "unoprnms.hxx"
@@ -268,10 +266,8 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
         throw beans::UnknownPropertyException();
     }
 
-#ifndef SVX_LIGHT
     if( pLayerManager->GetDocShell() )
         pLayerManager->GetDocShell()->SetModified();
-#endif
 }
 
 uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
@@ -343,7 +339,6 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
             }
         }
 
-#ifndef SVX_LIGHT
         // Versuch 2. Info von der FrameView besorgen
         if(pLayerManager->GetDocShell())
         {
@@ -356,7 +351,6 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
                 case LOCKED:    return pFrameView->GetLockedLayers().IsSet(pLayer->GetID());
                 }
         }
-#endif
     }
     return sal_False; //TODO: uno::Exception?
 }
@@ -385,7 +379,6 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
             }
         }
 
-#ifndef SVX_LIGHT
         // Versuch 2. Info von der FrameView besorgen
         if(pLayerManager->GetDocShell())
         {
@@ -418,7 +411,6 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
                 return;
             }
         }
-#endif
     }
     //TODO: uno::Exception?
 }
@@ -457,12 +449,12 @@ void SAL_CALL SdLayer::dispose(  ) throw (uno::RuntimeException)
 
 void SAL_CALL SdLayer::addEventListener( const uno::Reference< lang::XEventListener >& ) throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented!");
+    OSL_FAIL("not implemented!");
 }
 
 void SAL_CALL SdLayer::removeEventListener( const uno::Reference< lang::XEventListener >& ) throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented!");
+    OSL_FAIL("not implemented!");
 }
 
 
@@ -501,12 +493,12 @@ void SAL_CALL SdLayerManager::dispose(  ) throw (uno::RuntimeException)
 
 void SAL_CALL SdLayerManager::addEventListener( const uno::Reference< lang::XEventListener >& ) throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented!");
+    OSL_FAIL("not implemented!");
 }
 
 void SAL_CALL SdLayerManager::removeEventListener( const uno::Reference< lang::XEventListener >& ) throw (uno::RuntimeException)
 {
-    DBG_ERROR("not implemented!");
+    OSL_FAIL("not implemented!");
 }
 
 // XServiceInfo
@@ -559,7 +551,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
         SdrLayerAdmin& rLA=mpModel->mpDoc->GetLayerAdmin();
         const sal_Int32 nMax=rLA.GetLayerCount();
         if (nIndex>nMax) nIndex=nMax;
-        xLayer = GetLayer (rLA.NewLayer(aLayerName,(USHORT)nIndex));
+        xLayer = GetLayer (rLA.NewLayer(aLayerName,(sal_uInt16)nIndex));
         mpModel->SetModified();
     }
     return xLayer;
@@ -682,7 +674,7 @@ uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
         throw lang::DisposedException();
 
     SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
-    SdrLayer* pLayer = rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), FALSE );
+    SdrLayer* pLayer = rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), sal_False );
     if( pLayer == NULL )
         throw container::NoSuchElementException();
 
@@ -724,7 +716,7 @@ sal_Bool SAL_CALL SdLayerManager::hasByName( const OUString& aName ) throw(uno::
 
     SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
 
-    return NULL != rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), FALSE );
+    return NULL != rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), sal_False );
 }
 
 // XElementAccess

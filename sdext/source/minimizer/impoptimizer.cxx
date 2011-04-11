@@ -120,7 +120,7 @@ void ImpDeleteUnusedMasterPages( const Reference< XModel >& rxModel )
     {
         if ( !aIter->bUsed )
             xMasterPages->remove( aIter->xMasterPage );
-        aIter++;
+        ++aIter;
     }
 }
 
@@ -351,9 +351,9 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             }
                             if ( bNeedsOptimizing && aDestSizePixel.Width && aDestSizePixel.Height )
                             {
-                                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.io.TempFile" ), rxMSF ), UNO_QUERY_THROW );
+                                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")), rxMSF ), UNO_QUERY_THROW );
                                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
-                                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ), rxMSF ), UNO_QUERY_THROW );
+                                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")), rxMSF ), UNO_QUERY_THROW );
 
                                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, bRemoveCropArea, aGraphicCropLogic );
                                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
@@ -371,9 +371,9 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
             else // this is a metafile
             {
                 rtl::OUString aDestMimeType( aSourceMimeType );
-                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.io.TempFile" ), rxMSF ), UNO_QUERY_THROW );
+                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")), rxMSF ), UNO_QUERY_THROW );
                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
-                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ), rxMSF ), UNO_QUERY_THROW );
+                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")), rxMSF ), UNO_QUERY_THROW );
                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, sal_False, aGraphicCropLogic );
                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );
@@ -406,69 +406,87 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
             rOptimizer.SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( nProgress ) ) );
             rOptimizer.DispatchStatus();
 
-            GraphicSettings aGraphicSettings( rGraphicSettings );
-            aGraphicSettings.mbRemoveCropArea = aGraphicIter->mbRemoveCropArea;
-
-            Reference< XPropertySet > xNewGraphicPropertySet( aGraphicIter->mxGraphic, UNO_QUERY_THROW );
-            awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, aGraphicIter->mxGraphic ) );
-            Reference< XGraphic > xNewGraphic( ImpCompressGraphic( rxMSF, aGraphicIter->mxGraphic, aGraphicIter->maLogicalSize, aGraphicIter->maGraphicCropLogic, aGraphicSettings ) );
-            if ( xNewGraphic.is() )
+            if ( aGraphicIter->maUser.size() )
             {
-                // applying graphic to each user
-                std::vector< GraphicCollector::GraphicUser >::iterator aGraphicUserIter( aGraphicIter->maUser.begin() );
-                while( aGraphicUserIter != aGraphicIter->maUser.end() )
+                GraphicSettings aGraphicSettings( rGraphicSettings );
+                aGraphicSettings.mbRemoveCropArea = aGraphicIter->mbRemoveCropArea;
+
+                Reference< XGraphic > xGraphic;
+                if ( aGraphicIter->maUser[ 0 ].mbFillBitmap && aGraphicIter->maUser[ 0 ].mxPropertySet.is() )
                 {
-                    if ( aGraphicUserIter->mxShape.is() )
+                    Reference< XBitmap > xFillBitmap;
+                    if ( aGraphicIter->maUser[ 0 ].mxPropertySet->getPropertyValue( TKGet( TK_FillBitmap ) ) >>= xFillBitmap )
+                        xGraphic = Reference< XGraphic >( xFillBitmap, UNO_QUERY_THROW );
+                }
+                else if ( aGraphicIter->maUser[ 0 ].mxShape.is() )
+                {
+                    Reference< XPropertySet > xShapePropertySet( aGraphicIter->maUser[ 0 ].mxShape, UNO_QUERY_THROW );
+                    xShapePropertySet->getPropertyValue( TKGet( TK_Graphic ) ) >>= xGraphic;
+                }
+                if ( xGraphic.is() )
+                {
+                    Reference< XPropertySet > xNewGraphicPropertySet( xGraphic, UNO_QUERY_THROW );
+                    awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, xGraphic ) );
+                    Reference< XGraphic > xNewGraphic( ImpCompressGraphic( rxMSF, xGraphic, aGraphicIter->maLogicalSize, aGraphicIter->maGraphicCropLogic, aGraphicSettings ) );
+                    if ( xNewGraphic.is() )
                     {
-                        rtl::OUString sEmptyGraphicURL;
-                        Reference< XPropertySet > xShapePropertySet( aGraphicUserIter->mxShape, UNO_QUERY_THROW );
-                        xShapePropertySet->setPropertyValue( TKGet( TK_GraphicURL ), Any( sEmptyGraphicURL ) );
-                        xShapePropertySet->setPropertyValue( TKGet( TK_Graphic ), Any( xNewGraphic ) );
-
-                        if ( aGraphicUserIter->maGraphicCropLogic.Left || aGraphicUserIter->maGraphicCropLogic.Top
-                        || aGraphicUserIter->maGraphicCropLogic.Right || aGraphicUserIter->maGraphicCropLogic.Bottom )
-                        {   // removing crop area was not possible or should't been applied
-                            text::GraphicCrop aGraphicCropLogic( 0, 0, 0, 0 );
-                            if ( !aGraphicSettings.mbRemoveCropArea )
-                            {
-                                awt::Size aNewSize( GraphicCollector::GetOriginalSize( rxMSF, xNewGraphic ) );
-                                aGraphicCropLogic.Left = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Left * ((double)aNewSize.Width / (double)aSize100thMM.Width));
-                                aGraphicCropLogic.Top = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Top * ((double)aNewSize.Height / (double)aSize100thMM.Height));
-                                aGraphicCropLogic.Right = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Right * ((double)aNewSize.Width / (double)aSize100thMM.Width));
-                                aGraphicCropLogic.Bottom = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Bottom * ((double)aNewSize.Height / (double)aSize100thMM.Height));
-                            }
-                            xShapePropertySet->setPropertyValue( TKGet( TK_GraphicCrop ), Any( aGraphicCropLogic ) );
-                        }
-                    }
-                    else if ( aGraphicUserIter->mxPropertySet.is() )
-                    {
-                        Reference< XBitmap > xFillBitmap( xNewGraphic, UNO_QUERY );
-                        if ( xFillBitmap.is() )
+                        // applying graphic to each user
+                        std::vector< GraphicCollector::GraphicUser >::iterator aGraphicUserIter( aGraphicIter->maUser.begin() );
+                        while( aGraphicUserIter != aGraphicIter->maUser.end() )
                         {
-                            awt::Size aSize;
-                            sal_Bool bLogicalSize;
-
-                            Reference< XPropertySet >& rxPropertySet( aGraphicUserIter->mxPropertySet );
-                            rxPropertySet->setPropertyValue( TKGet( TK_FillBitmap ), Any( xFillBitmap ) );
-                            if ( ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapLogicalSize ) ) >>= bLogicalSize )
-                                && ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapSizeX ) ) >>= aSize.Width )
-                                && ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapSizeY ) ) >>= aSize.Height ) )
+                            if ( aGraphicUserIter->mxShape.is() )
                             {
-                                if ( !aSize.Width || !aSize.Height )
-                                {
-                                    rxPropertySet->setPropertyValue( TKGet( TK_FillBitmapLogicalSize ), Any( sal_True ) );
-                                    rxPropertySet->setPropertyValue( TKGet( TK_FillBitmapSizeX ), Any( aGraphicUserIter->maLogicalSize.Width ) );
-                                    rxPropertySet->setPropertyValue( TKGet( TK_FillBitmapSizeY ), Any( aGraphicUserIter->maLogicalSize.Height ) );
+                                rtl::OUString sEmptyGraphicURL;
+                                Reference< XPropertySet > xShapePropertySet( aGraphicUserIter->mxShape, UNO_QUERY_THROW );
+                                xShapePropertySet->setPropertyValue( TKGet( TK_GraphicURL ), Any( sEmptyGraphicURL ) );
+                                xShapePropertySet->setPropertyValue( TKGet( TK_Graphic ), Any( xNewGraphic ) );
+
+                                if ( aGraphicUserIter->maGraphicCropLogic.Left || aGraphicUserIter->maGraphicCropLogic.Top
+                                || aGraphicUserIter->maGraphicCropLogic.Right || aGraphicUserIter->maGraphicCropLogic.Bottom )
+                                {   // removing crop area was not possible or should't been applied
+                                    text::GraphicCrop aGraphicCropLogic( 0, 0, 0, 0 );
+                                    if ( !aGraphicSettings.mbRemoveCropArea )
+                                    {
+                                        awt::Size aNewSize( GraphicCollector::GetOriginalSize( rxMSF, xNewGraphic ) );
+                                        aGraphicCropLogic.Left = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Left * ((double)aNewSize.Width / (double)aSize100thMM.Width));
+                                        aGraphicCropLogic.Top = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Top * ((double)aNewSize.Height / (double)aSize100thMM.Height));
+                                        aGraphicCropLogic.Right = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Right * ((double)aNewSize.Width / (double)aSize100thMM.Width));
+                                        aGraphicCropLogic.Bottom = (sal_Int32)((double)aGraphicUserIter->maGraphicCropLogic.Bottom * ((double)aNewSize.Height / (double)aSize100thMM.Height));
+                                    }
+                                    xShapePropertySet->setPropertyValue( TKGet( TK_GraphicCrop ), Any( aGraphicCropLogic ) );
                                 }
                             }
-                            if ( aGraphicUserIter->mxPagePropertySet.is() )
-                                aGraphicUserIter->mxPagePropertySet->setPropertyValue( TKGet( TK_Background ), Any( rxPropertySet ) );
+                            else if ( aGraphicUserIter->mxPropertySet.is() )
+                            {
+                                Reference< XBitmap > xFillBitmap( xNewGraphic, UNO_QUERY );
+                                if ( xFillBitmap.is() )
+                                {
+                                    awt::Size aSize;
+                                    sal_Bool bLogicalSize;
+
+                                    Reference< XPropertySet >& rxPropertySet( aGraphicUserIter->mxPropertySet );
+                                    rxPropertySet->setPropertyValue( TKGet( TK_FillBitmap ), Any( xFillBitmap ) );
+                                    if ( ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapLogicalSize ) ) >>= bLogicalSize )
+                                        && ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapSizeX ) ) >>= aSize.Width )
+                                        && ( rxPropertySet->getPropertyValue( TKGet( TK_FillBitmapSizeY ) ) >>= aSize.Height ) )
+                                    {
+                                        if ( !aSize.Width || !aSize.Height )
+                                        {
+                                            rxPropertySet->setPropertyValue( TKGet( TK_FillBitmapLogicalSize ), Any( sal_True ) );
+                                            rxPropertySet->setPropertyValue( TKGet( TK_FillBitmapSizeX ), Any( aGraphicUserIter->maLogicalSize.Width ) );
+                                            rxPropertySet->setPropertyValue( TKGet( TK_FillBitmapSizeY ), Any( aGraphicUserIter->maLogicalSize.Height ) );
+                                        }
+                                    }
+                                    if ( aGraphicUserIter->mxPagePropertySet.is() )
+                                        aGraphicUserIter->mxPagePropertySet->setPropertyValue( TKGet( TK_Background ), Any( rxPropertySet ) );
+                                }
+                            }
+                            ++aGraphicUserIter;
                         }
                     }
-                    aGraphicUserIter++;
                 }
             }
-            aGraphicIter++;
+            ++aGraphicIter;
         }
     }
     catch ( Exception& )

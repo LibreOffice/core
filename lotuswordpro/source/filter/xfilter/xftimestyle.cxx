@@ -57,10 +57,6 @@
  * @file
  * Time style. The TIme format for time field.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-20 create this file.
- ************************************************************************/
 
 #include    "xftimestyle.hxx"
 
@@ -141,7 +137,7 @@ void    XFTimeStyle::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("number:time-style") );
 
     std::vector<XFTimePart>::iterator it;
-    for( it = m_aParts.begin(); it != m_aParts.end(); it++ )
+    for( it = m_aParts.begin(); it != m_aParts.end(); ++it )
     {
         (*it).ToXml(pStrm);
     }

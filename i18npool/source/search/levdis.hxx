@@ -145,13 +145,6 @@ class WLevDistance
     int KGV( int a, int b );    // Kleinstes Gemeinsames Vielfaches
 
 public:
-
-#ifdef erTEST
-    // CToren fuer direktes Setzen der Gewichtung mit Set...()
-    // im CTor werden die Defaultwerte fuer Limit/Rep/Ins/Del gesetzt
-    explicit WLevDistance( const ::rtl::OUString& rPattern );
-#endif
-
     // CToren mit Userangaben, danach mit GetLimit() Limit holen
     // interner Aufruf von CalcLPQR()
     // die mathematisch unkorrekte Berechnung wird als Default genommen!
@@ -181,14 +174,6 @@ public:
         // SetSplit( TRUE ) macht nur mit Werten nach CalcLPQR() Sinn!
 
     inline bool IsNormal( sal_Int32 nPos ) const { return( !bpPatIsWild[nPos] ); }
-
-#ifdef erTEST
-    void    ShowTest();
-#ifdef erTESTMAT
-    void    ShowMatrix( const sal_Unicode* cString );
-#endif
-#endif
-
 };
 
 inline int WLevDistance::SetLimit( int nNewLimit )

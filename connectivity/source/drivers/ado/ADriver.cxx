@@ -93,14 +93,14 @@ void ODriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.ado.ODriver");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.ado.ODriver"));
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
-    aSNS[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Driver");
+    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
+    aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Driver"));
     return aSNS;
 }
 //------------------------------------------------------------------
@@ -150,7 +150,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
 sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
         throw(SQLException, RuntimeException)
 {
-    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:ado:"),9));
+    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:ado:")),9));
 }
 // -----------------------------------------------------------------------------
 void ODriver::impl_checkURL_throw(const ::rtl::OUString& _sUrl)
@@ -166,6 +166,37 @@ void ODriver::impl_checkURL_throw(const ::rtl::OUString& _sUrl)
 Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     impl_checkURL_throw(url);
+    if ( acceptsURL(url) )
+    {
+        ::std::vector< DriverPropertyInfo > aDriverInfo;
+
+        Sequence< ::rtl::OUString > aBooleanValues(2);
+        aBooleanValues[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) );
+        aBooleanValues[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
+
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreDriverPrivileges"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ignore the privileges from the database driver."))
+                ,sal_False
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
+                ,aBooleanValues)
+        );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EscapeDateTime"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Escape date time format."))
+                ,sal_False
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
+                ,aBooleanValues)
+        );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeInfoSettings"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines how the type info of the database metadata should be manipulated."))
+                ,sal_False
+                ,::rtl::OUString( )
+                ,Sequence< ::rtl::OUString > ())
+        );
+        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
+    }
     return Sequence< DriverPropertyInfo >();
 }
 // --------------------------------------------------------------------------------
@@ -236,7 +267,7 @@ void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >&
 
     pErrors->AddRef( );
 
-    // alle aufgelaufenen Fehler auslesen und ausgeben
+    // read all noted errors and issue them
     sal_Int32 nLen;
     pErrors->get_Count(&nLen);
     if (nLen)

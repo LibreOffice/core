@@ -31,30 +31,7 @@
 #include <svx/dlgctrl.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
-#include <svx/dstribut_enum.hxx> //CHINA001
-/*************************************************************************
-|*
-\************************************************************************/
-
-/*
-enum SvxDistributeHorizontal
-{
-    SvxDistributeHorizontalNone = 0,
-    SvxDistributeHorizontalLeft,
-    SvxDistributeHorizontalCenter,
-    SvxDistributeHorizontalDistance,
-    SvxDistributeHorizontalRight
-};
-
-enum SvxDistributeVertical
-{
-    SvxDistributeVerticalNone = 0,
-    SvxDistributeVerticalTop,
-    SvxDistributeVerticalCenter,
-    SvxDistributeVerticalDistance,
-    SvxDistributeVerticalBottom
-};
-*/
+#include <svx/dstribut_enum.hxx>
 
 /*************************************************************************
 |*
@@ -94,8 +71,8 @@ public:
 
     static SfxTabPage* Create(Window*, const SfxItemSet&,
         SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
-    static UINT16* GetRanges();
-    virtual BOOL FillItemSet(SfxItemSet&);
+    static sal_uInt16* GetRanges();
+    virtual sal_Bool FillItemSet(SfxItemSet&);
     virtual void Reset(const SfxItemSet&);
     virtual void PointChanged(Window* pWindow, RECT_POINT eRP);
 

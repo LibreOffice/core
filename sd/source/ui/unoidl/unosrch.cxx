@@ -493,7 +493,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
     sal_Int32* pConvertPara = new sal_Int32[nTextLen+2];
 
     int ndbg = 0;
-    const sal_Unicode* pText = aText;
+    const sal_Unicode* pText = aText.getStr();
 
     sal_Int32* pPos = pConvertPos;
     sal_Int32* pPara = pConvertPara;
@@ -547,7 +547,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                                     }
                                     else
                                     {
-                                        DBG_ERROR( "array overflow while searching" );
+                                        OSL_FAIL( "array overflow while searching" );
                                     }
                                 }
 
@@ -568,7 +568,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                                     }
                                     else
                                     {
-                                        DBG_ERROR( "array overflow while searching" );
+                                        OSL_FAIL( "array overflow while searching" );
                                     }
                                 }
 
@@ -591,7 +591,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
             }
             else
             {
-                DBG_ERROR( "array overflow while searching" );
+                OSL_FAIL( "array overflow while searching" );
             }
         }
     }
@@ -615,8 +615,8 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
     {
         if( nStartPos <= nTextLen && nEndPos <= nTextLen )
         {
-            ESelection aSelection( (USHORT)pConvertPara[nStartPos], (USHORT)pConvertPos[nStartPos],
-                             (USHORT)pConvertPara[nEndPos], (USHORT)pConvertPos[nEndPos] );
+            ESelection aSelection( (sal_uInt16)pConvertPara[nStartPos], (sal_uInt16)pConvertPos[nStartPos],
+                             (sal_uInt16)pConvertPara[nEndPos], (sal_uInt16)pConvertPos[nEndPos] );
             SvxUnoTextRange *pRange;
 
             SvxUnoTextBase* pParent = SvxUnoTextBase::getImplementation( xParent );
@@ -627,12 +627,11 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                 xFound = (text::XText*)pRange;
                 pRange->SetSelection(aSelection);
 
-//              pDescr->SetStartPos( nEndPos );
             }
         }
         else
         {
-            DBG_ERROR("Array overflow while searching!");
+            OSL_FAIL("Array overflow while searching!");
         }
     }
 

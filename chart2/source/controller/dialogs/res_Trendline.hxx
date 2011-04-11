@@ -45,7 +45,7 @@ public:
     virtual ~TrendlineResources();
 
     void Reset(const SfxItemSet& rInAttrs);
-    BOOL FillItemSet(SfxItemSet& rOutAttrs) const;
+    sal_Bool FillItemSet(SfxItemSet& rOutAttrs) const;
 
     void FillValueSets();
 

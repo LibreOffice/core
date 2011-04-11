@@ -85,6 +85,12 @@ bool HasOnlySpaces(const std::wstring& String);
         Windows Locale Identifier corresponding to input LocaleSet.
 */
 
+//---------------------------------
+/** Convert a long path name using Windows api call GetShortPathName
+*/
+std::wstring getShortPathName( const std::wstring& aLongName );
+
+
 #ifndef OS2
 LCID LocaleSetToLCID( const LocaleSet_t & Locale );
 #endif

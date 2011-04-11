@@ -216,7 +216,7 @@ static SvxFileFormat setFileNameDisplayFormat( sal_Int16 nFormat )
     }
 }
 
-static util::DateTime getDate( ULONG nDate )
+static util::DateTime getDate( sal_uLong nDate )
 {
     util::DateTime aDate;
     memset( &aDate, 0, sizeof( util::DateTime ) );
@@ -1104,8 +1104,8 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
     OUString* pServices = aSeq.getArray();
     pServices[0] = OUString::createFromAscii( pNewServiceNames[mnServiceId] );
     pServices[1] = OUString::createFromAscii( pOldServiceNames[mnServiceId] );
-    pServices[2] = OUString::createFromAscii( "com.sun.star.text.TextContent" ),
-    pServices[3] = OUString::createFromAscii( "com.sun.star.text.TextField" );
+    pServices[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextContent" )),
+    pServices[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextField" ));
 
     return aSeq;
 }

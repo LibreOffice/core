@@ -170,7 +170,7 @@ void ExceptionThrower::release() throw ()
 //______________________________________________________________________________
 void ExceptionThrower::throwException( Any const & exc ) throw (Exception)
 {
-    OSL_ENSURE( 0, "unexpected!" );
+    OSL_FAIL( "unexpected!" );
     throwException( exc );
 }
 

@@ -158,7 +158,7 @@ WW8Document::~WW8Document()
 {
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 class WW8IdToString : public IdToString
 {
 public:
@@ -185,16 +185,16 @@ WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
 : bSubDocument(false), mfcPicLoc(0), mbPicIsData(false), mpStream(rpStream),
 mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
 {
-    mpDocStream = getSubStream(::rtl::OUString::createFromAscii
-                               ("WordDocument"));
+    mpDocStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                               ("WordDocument")));
 
-    mpSummaryInformationStream = getSubStream(::rtl::OUString::createFromAscii
-                                              ("\5SummaryInformation"));
+    mpSummaryInformationStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                                              ("\5SummaryInformation")));
 
     try
     {
-        mpDataStream = getSubStream(::rtl::OUString::createFromAscii
-                                    ("Data"));
+        mpDataStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                                    ("Data")));
     }
     catch (ExceptionNotFound e)
     {
@@ -202,8 +202,8 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
 
     try
     {
-        mpCompObjStream = getSubStream(::rtl::OUString::createFromAscii
-                                       ("\1CompObj"));
+        mpCompObjStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                                       ("\1CompObj")));
     }
     catch (ExceptionNotFound e)
     {
@@ -219,14 +219,14 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     switch (mpFib->get_fWhichTblStm())
     {
     case 0:
-        mpTableStream = getSubStream(::rtl::OUString::createFromAscii
-                                     ("0Table"));
+        mpTableStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                                     ("0Table")));
 
         break;
 
     case 1:
-        mpTableStream = getSubStream(::rtl::OUString::createFromAscii
-                                     ("1Table"));
+        mpTableStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                                     ("1Table")));
 
         break;
 
@@ -308,16 +308,12 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
                                 mpFib->get_fcPlcfbteChpx(),
                                 mpFib->get_lcbPlcfbteChpx()));
 
-    //clog << "BinTable(CHP):" << mpBinTableCHPX->toString();
-
     parseBinTableCpAndFcs(*mpBinTableCHPX, PROP_CHP);
 
     mpSEDs = PLCF<WW8SED>::Pointer_t(new PLCF<WW8SED>
                                      (*mpTableStream,
                                       mpFib->get_fcPlcfsed(),
                                       mpFib->get_lcbPlcfsed()));
-
-    //mpSEDs->dump(clog);
 
     {
         PLCFHelper<WW8SED>::processPLCFCpAndFcs
@@ -590,7 +586,6 @@ string WW8DocumentImpl::getType() const
 void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
                                             PropertyType eType_)
 {
-    //clog << "<bintable type=\"" << propertyTypeToString(eType_) << "\">" << endl;
     for (sal_uInt32 i = 0; i < rTable.getEntryCount(); i++)
     {
 #if 0
@@ -606,8 +601,6 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
 
         bool bComplex = mpPieceTable->isComplex(aFcFromTable);
         aFcFromTable.setComplex(bComplex);
-
-        //clog << "<entry fc=\"" << aFcFromTable.toString() << "\">" << endl;
 
         try
         {
@@ -645,8 +638,6 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
                 bool bComplexFKP = mpPieceTable->isComplex(aFc);
                 aFc.setComplex(bComplexFKP);
 
-                //clog << "<fkpentry fc=\"" << aFc.toString() << "\"/>" << endl;
-
                 try
                 {
                     Cp aCp = mpPieceTable->fc2cp(aFc);
@@ -654,8 +645,6 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
                     CpAndFc aCpAndFc(aCp, aFc, eType_);
 
                     mCpAndFcs.insert(aCpAndFc);
-
-                    //clog << aCpAndFc << endl;
                 }
                 catch (ExceptionNotFound e)
                 {
@@ -667,11 +656,7 @@ void WW8DocumentImpl::parseBinTableCpAndFcs(WW8BinTable & rTable,
         {
             clog << e.getText() << endl;
         }
-
-        //clog << "</entry>" << endl;
     }
-
-    //clog << "</bintable>" << endl;
 }
 
 WW8Stream::Pointer_t WW8DocumentImpl::getSubStream
@@ -783,7 +768,7 @@ CpAndFc WW8DocumentImpl::getNextCp(const CpAndFc & rCpAndFc) const
 
     if (aIt != mCpAndFcs.end())
     {
-        aIt++;
+        ++aIt;
 
         if (aIt != mCpAndFcs.end())
             aResult = *aIt;
@@ -802,7 +787,7 @@ CpAndFc WW8DocumentImpl::getPrevCp(const CpAndFc & rCpAndFc) const
 
     if (aIt != mCpAndFcs.end() && aIt != mCpAndFcs.begin())
     {
-        aIt--;
+        --aIt;
 
         aResult = *aIt;
     }
@@ -1481,7 +1466,7 @@ void WW8DocumentImpl::text(Stream & rStream, const sal_uInt8 * data, size_t len)
     ::rtl::OUString sText( (const sal_Char*) data, len, RTL_TEXTENCODING_MS_1252 );
     debug_logger->startElement("text");
     debug_logger->chars(OUStringToOString(sText, RTL_TEXTENCODING_ASCII_US).getStr());
-    debug_logger->endElement("text");
+    debug_logger->endElement();
 #endif
     rStream.text(data, len);
 }
@@ -1497,7 +1482,7 @@ void WW8DocumentImpl::utext(Stream & rStream, const sal_uInt8 * data, size_t len
     sText = aBuffer.makeStringAndClear();
 
     debug_logger->chars(OUStringToOString(sText, RTL_TEXTENCODING_ASCII_US).getStr());
-    debug_logger->endElement("utext");
+    debug_logger->endElement();
 #endif
     rStream.utext(data, len);
 }
@@ -1599,7 +1584,7 @@ void WW8DocumentImpl::startCharacterGroup(Stream & rStream)
 void WW8DocumentImpl::endCharacterGroup(Stream & rStream)
 {
 #ifdef DEBUG_ELEMENT
-    debug_logger->endElement("charactergroup");
+    debug_logger->endElement();
 #endif
 
     rStream.endCharacterGroup();
@@ -1625,7 +1610,7 @@ void WW8DocumentImpl::endParagraphGroup(Stream & rStream)
         endCharacterGroup(rStream);
 
 #ifdef DEBUG_ELEMENT
-    debug_logger->endElement("paragraphgroup");
+    debug_logger->endElement();
 #endif
     rStream.endParagraphGroup();
     mbInParagraphGroup = false;
@@ -1650,7 +1635,7 @@ void WW8DocumentImpl::endSectionGroup(Stream & rStream)
         endParagraphGroup(rStream);
 
 #ifdef DEBUG_ELEMENT
-    debug_logger->endElement("sectiongroup");
+    debug_logger->endElement();
 #endif
     rStream.endSectionGroup();
     mbInSection = false;
@@ -1660,15 +1645,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 {
     if (! bSubDocument)
     {
-
-        //mpPieceTable->dump(clog);
-
-        //copy(mCpAndFcs.begin(), mCpAndFcs.end(), ostream_iterator<CpAndFc>(clog, ", "));
-
-        //mpDocStream->dump(output);
-
-        //output.addItem(mTextboxHeaderEndCpAndFc.toString());
-
 #if 1
         output.addItem("<substream-names>");
         output.addItem(mpStream->getSubStreamNames());
@@ -1719,7 +1695,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         if (mpDffBlock.get() != NULL)
         {
             DffBlock * pTmp = new DffBlock(*mpDffBlock);
-            //pTmp->dump(clog);
             writerfilter::Reference<Properties>::Pointer_t pDffBlock =
                 writerfilter::Reference<Properties>::Pointer_t(pTmp);
 
@@ -1833,7 +1808,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 #endif
                     rStream.substream(NS_rtf::LN_footnote, pFootnote);
 #ifdef DEBUG_ELEMENT
-                    debug_logger->endElement("substream");
+                    debug_logger->endElement();
 #endif
                 }
             }
@@ -1851,7 +1826,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 #endif
                     rStream.substream(NS_rtf::LN_endnote, pEndnote);
 #ifdef DEBUG_ELEMENT
-                    debug_logger->endElement("substream");
+                    debug_logger->endElement();
 #endif
                 }
             }
@@ -1869,7 +1844,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 #endif
                     rStream.substream(NS_rtf::LN_annotation, pAnnotation);
 #ifdef DEBUG_ELEMENT
-                    debug_logger->endElement("substream");
+                    debug_logger->endElement();
 #endif
                 }
             }
@@ -1926,9 +1901,8 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         if (pProperties.get() != NULL)
         {
 #ifdef DEBUG_PROPERTIES
-            PropertySetToTagHandler aHandler(IdToString::Pointer_t(new WW8IdToString()));
-            pProperties->resolve(aHandler);
-            debug_logger->addTag(aHandler.getTag());
+            debug_logger->propertySet(pProperties,
+                    IdToString::Pointer_t(new WW8IdToString()));
 #endif
 
             rStream.props(pProperties);
@@ -2284,7 +2258,7 @@ void FieldHelper::init()
 {
     Map_t::iterator aIt;
 
-    for (aIt = mMap.begin(); aIt != mMap.end(); aIt++)
+    for (aIt = mMap.begin(); aIt != mMap.end(); ++aIt)
     {
         mpDoc->insertCpAndFc(aIt->first);
     }
@@ -2320,7 +2294,7 @@ void ShapeHelper::init()
 {
     Map_t::iterator aIt;
 
-    for (aIt = mMap.begin(); aIt != mMap.end(); aIt++)
+    for (aIt = mMap.begin(); aIt != mMap.end(); ++aIt)
     {
         mpDoc->insertCpAndFc(aIt->first);
         aIt->second->setDocument(mpDoc);
@@ -2348,7 +2322,7 @@ void BreakHelper::init()
 {
     Map_t::iterator aIt;
 
-    for (aIt = mMap.begin(); aIt != mMap.end(); aIt++)
+    for (aIt = mMap.begin(); aIt != mMap.end(); ++aIt)
     {
         mpDoc->insertCpAndFc(aIt->first);
     }

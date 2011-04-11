@@ -83,7 +83,7 @@ void LwpFribNote::Read(LwpObjectStream *pObjStrm, sal_uInt16 /*len*/)
 /**
  * @descr  Register style
  */
-void LwpFribNote::RegisterStyle()
+void LwpFribNote::RegisterNewStyle()
 {
     LwpObject* pLayout = m_Layout.obj();
     if(pLayout)

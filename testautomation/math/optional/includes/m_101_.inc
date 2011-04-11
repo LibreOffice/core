@@ -243,7 +243,7 @@ endcase
 testcase tFilePassword
    dim i,x as integer
    dim sTemp as string
-   const cFilterCount = 4
+   const cFilterCount = 3
    dim sFilterName as string
    dim sFilter as string
    dim sFilterExt() as string
@@ -269,7 +269,6 @@ testcase tFilePassword
    if x <> cFilterCount then warnlog " The Filter count is wrong! Have to be ("+cFilterCount+"), but are: "+x
 '   Check: (1): Open Office Formula (.oof)
 '   Check: (2): MathML 1.01 (.mml)
-'   Check: (5): StarMath 5.0 (.smf)
 '   Check: (6): StarOffice 6.0/7 Formula (.sxm)
 
 '/// check if any other then gMathFilter is password able; and if gMathFilter is password able ///'
@@ -281,7 +280,8 @@ testcase tFilePassword
       if Passwort.isEnabled then
          if NOT((instr(sTemp,gMathFilter) = 1)OR(instr(sTemp," (.sxm)") > 1)) then 
              if (4=i) then
-                warnlog "#i112895# (" + i + "/" + x +"): '"+sTemp+"' Password Checkbox: Enabled"
+                '#i112895#
+                warnlog "(" + i + "/" + x +"): '"+sTemp+"' Password Checkbox: Enabled"
              else
                 warnlog "(" + i + "/" + x +"): '"+sTemp+"' Password Checkbox: Enabled"
             endif
@@ -302,7 +302,7 @@ function TBOloadFormulaFromFile () as string
 '///+  take formula out of command window ///
 '///+  save it into a variable ///
 '///  close dokument ///
-   Call hFileOpen ( ConvertPath(gTesttoolPath + "math/optional/input/101_1.sxm") )
+   Call hFileOpenLocally ( ConvertPath(gTesttoolPath + "math/optional/input/101_1.sxm") )
    kontext "dokumentwriter"
    try
    EditSelectAllMath
@@ -344,8 +344,7 @@ testcase tFilePrint
        goto endsub
    endif
 
-    Call hFileOpen ( ConvertPath(gTesttoolPath + "math/optional/input/101_2.sxw") )
-    TBOmakeWriteable()
+    Call hFileOpenLocally ( ConvertPath(gTesttoolPath + "math/optional/input/101_2.sxw") )
 
     '/// find the translated formula in the document and get the language it belongs to ///'
     '///+ compare it to the officelanguage ///'
@@ -580,28 +579,6 @@ testcase tFilePrint
     Call hCloseDocument
 endcase
 
-
-function TBOmakeWriteable()
-   ' check if writeable! (especially for HTML Doks!!)
-   sleep (3)
-   try
-      UseBindings
-      FormatStyleBold
-      sleep 2
-      FormatStyleBold
-   catch
-   '/// make document writeable :-)///'
-      kontext "Funktionsleiste"
-      printlog "ReadOnly, changed it to writeable."
-      Bearbeiten.click
-      kontext
-      if active.exists (5) then
-         Printlog " active, accessrights ?!: '"+active.GetText+"'"
-         active.yes
-      endif
-   endcatch
-   sleep (3)
-end function
 
 function isCheckedWarnAlienFormat (optional bChange as boolean)
     dim uno

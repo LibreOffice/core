@@ -103,7 +103,7 @@ class SwAccessibleTableData_Impl
                        SwAccTableSelHander_Impl& rSelHdl,
                        sal_Bool bColumns ) const;
 
-    // --> OD 2007-06-27 #i77106#
+    // #i77106#
     inline bool IncludeRow( const SwFrm& rFrm ) const
     {
         return !mbOnlyTableColumnHeader ||
@@ -111,8 +111,7 @@ class SwAccessibleTableData_Impl
     }
     // <--
 public:
-    // --> OD 2007-06-27 #i77106#
-    // add third optional parameter <bOnlyTableColumnHeader>, default value <false>
+    // #i77106# - add third optional parameter <bOnlyTableColumnHeader>, default value <false>
     SwAccessibleTableData_Impl( SwAccessibleMap& rAccMap,
                                 const SwTabFrm *pTabFrm,
                                 sal_Bool bIsInPagePreview,
@@ -165,13 +164,12 @@ void SwAccessibleTableData_Impl::CollectData( const SwFrm *pFrm )
         {
             if( pLower->IsRowFrm() )
             {
-                // --> OD 2007-06-27 #i77106#
+                // #i77106#
                 if ( IncludeRow( *pLower ) )
                 {
                     maRows.insert( pLower->Frm().Top() - maTabFrmPos.Y() );
                     CollectData( pLower );
                 }
-                // <--
             }
             else if( pLower->IsCellFrm() &&
                      rLower.IsAccessible( mbIsInPagePreview ) )
@@ -211,13 +209,12 @@ void SwAccessibleTableData_Impl::CollectExtents( const SwFrm *pFrm )
             }
             else
             {
-                // --> OD 2007-06-27 #i77106#
+                // #i77106#
                 if ( !pLower->IsRowFrm() ||
                      IncludeRow( *pLower ) )
                 {
                     CollectExtents( pLower );
                 }
-                // <--
             }
         }
         ++aIter;
@@ -259,13 +256,12 @@ sal_Bool SwAccessibleTableData_Impl::FindCell(
             }
             else
             {
-                // --> OD 2007-06-27 #i77106#
+                // #i77106#
                 if ( !pLower->IsRowFrm() ||
                      IncludeRow( *pLower ) )
                 {
                     bFound = FindCell( rPos, pLower, bExact, rRet );
                 }
-                // <--
             }
         }
         ++aIter;
@@ -326,14 +322,13 @@ void SwAccessibleTableData_Impl::GetSelection(
             }
             else
             {
-                // --> OD 2007-06-27 #i77106#
+                // #i77106#
                 if ( !pLower->IsRowFrm() ||
                      IncludeRow( *pLower ) )
                 {
                     GetSelection( rTabPos, rArea, rSelBoxes, pLower, rSelHdl,
                                   bColumns );
                 }
-                // <--
             }
         }
         ++aIter;
@@ -634,9 +629,7 @@ void SwAccessibleTable::FireTableChangeEvent(
 const SwTableBox* SwAccessibleTable::GetTableBox( sal_Int32 nChildIndex ) const
 {
     DBG_ASSERT( nChildIndex >= 0, "Illegal child index." );
-    // --> OD 2007-06-27 #i77106#
-    DBG_ASSERT( nChildIndex < const_cast<SwAccessibleTable*>(this)->getAccessibleChildCount(), "Illegal child index." );
-    // <--
+    DBG_ASSERT( nChildIndex < const_cast<SwAccessibleTable*>(this)->getAccessibleChildCount(), "Illegal child index." ); // #i77106#
 
     const SwTableBox* pBox = NULL;
 
@@ -675,9 +668,7 @@ sal_Int32 SwAccessibleTable::GetIndexOfSelectedChild(
                 sal_Int32 nSelectedChildIndex ) const
 {
     // iterate over all children to n-th isAccessibleChildSelected()
-    // --> OD 2007-06-27 #i77106#
-    sal_Int32 nChildren = const_cast<SwAccessibleTable*>(this)->getAccessibleChildCount();
-    // <--
+    sal_Int32 nChildren = const_cast<SwAccessibleTable*>(this)->getAccessibleChildCount(); // #i77106#
     if( nSelectedChildIndex >= nChildren )
         return -1L;
 
@@ -741,7 +732,7 @@ SwAccessibleTable::~SwAccessibleTable()
     delete mpTableData;
 }
 
-void SwAccessibleTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwAccessibleTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
     const SwTabFrm *pTabFrm = static_cast< const SwTabFrm * >( GetFrm() );
@@ -788,13 +779,14 @@ void SwAccessibleTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
         break;
 
     case RES_OBJECTDYING:
+        // mba: it seems that this class intentionally does not call code in base class SwClient
         if( GetRegisteredIn() ==
-                static_cast< SwModify *>( static_cast< SwPtrMsgPoolItem * >( pOld )->pObject ) )
-            pRegisteredIn->Remove( this );
+                static_cast< SwModify *>( static_cast< const SwPtrMsgPoolItem * >( pOld )->pObject ) )
+            GetRegisteredInNonConst()->Remove( this );
         break;
 
     default:
-        SwClient::Modify( pOld, pNew );
+        // mba: former call to base class method removed as it is meant to handle only RES_OBJECTDYING
         break;
     }
 }
@@ -851,7 +843,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleTable::getImplementationId()
     return aId;
 }
 
-// --> OD 2007-06-28 #i77106#
+// #i77106#
 SwAccessibleTableData_Impl* SwAccessibleTable::CreateNewTableData()
 {
     const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>( GetFrm() );
@@ -861,7 +853,7 @@ SwAccessibleTableData_Impl* SwAccessibleTable::CreateNewTableData()
 
 void SwAccessibleTable::UpdateTableData()
 {
-    // --> OD 2007-06-28 #i77106# - usage of new method <CreateNewTableData()>
+    // #i77106# - usage of new method <CreateNewTableData()>
     delete mpTableData;
     mpTableData = CreateNewTableData();
     // <--
@@ -907,9 +899,8 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
             sal_Int32 nRow )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    // --> OD 2010-03-10 #i87532#
-    // determine table cell in <nRow>th row and in first column of row header table
-    // and return its text content.
+    // #i87532# - determine table cell in <nRow>th row and
+    // in first column of row header table and return its text content.
     OUString sRowDesc;
 
     GetTableData().CheckRowAndCol(nRow, 0, this);
@@ -943,9 +934,8 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
             sal_Int32 nColumn )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    // --> OD 2010-03-10 #i87532#
-    // determine table cell in first row and in <nColumn>th column of column header table
-    // and return its text content.
+    // #i87532# - determine table cell in first row and
+    // in <nColumn>th column of column header table and return its text content.
     OUString sColumnDesc;
 
     GetTableData().CheckRowAndCol(0, nColumn, this);
@@ -1049,8 +1039,8 @@ uno::Reference< XAccessibleTable > SAL_CALL
         SwAccessibleTable::getAccessibleColumnHeaders(  )
     throw (uno::RuntimeException)
 {
-    // --> OD 2010-03-10 #i87532#
-    // assure that return accesible object is empty, if no column header exists.
+    // #i87532# - assure that return accesible object is empty,
+    // if no column header exists.
     SwAccessibleTableColHeaders* pTableColHeaders =
         new SwAccessibleTableColHeaders( GetMap(), static_cast< const SwTabFrm *>( GetFrm() ) );
     uno::Reference< XAccessibleTable > xTableColumnHeaders( pTableColHeaders );
@@ -1251,7 +1241,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
-    // --> OD 2007-06-27 #i77106#
+    // #i77106#
     if ( ( nChildIndex < 0 ) ||
          ( nChildIndex >= getAccessibleChildCount() ) )
     {
@@ -1290,7 +1280,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
 
     CHECK_FOR_DEFUNC( XAccessibleTable )
 
-    // --> OD 2007-06-27 #i77106#
+    // #i77106#
     if ( ( nChildIndex < 0 ) ||
          ( nChildIndex >= getAccessibleChildCount() ) )
     {
@@ -1361,7 +1351,7 @@ void SwAccessibleTable::Dispose( sal_Bool bRecursive )
     SolarMutexGuard aGuard;
 
     if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 
     SwAccessibleContext::Dispose( bRecursive );
 }
@@ -1401,9 +1391,7 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
                 "table has invalid position" );
         if( HasTableData() )
         {
-            // --> OD 2007-06-28 #i77106#
-            SwAccessibleTableData_Impl *pNewTableData = CreateNewTableData();
-            // <--
+            SwAccessibleTableData_Impl *pNewTableData = CreateNewTableData(); // #i77106#
             if( !pNewTableData->CompareExtents( GetTableData() ) )
             {
                 FireTableChangeEvent( GetTableData() );
@@ -1417,9 +1405,8 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
         }
     }
 
-    // --> OD 2010-02-18 #i013961# - always call super class method
+    // #i013961# - always call super class method
     SwAccessibleContext::InvalidateChildPosOrSize( rChildFrmOrObj, rOldBox );
-    // <--
 }
 
 
@@ -1434,9 +1421,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
-    // --> OD 2007-06-27 #i77106#
-    if( (nChildIndex < 0) || (nChildIndex >= getAccessibleChildCount()) )
-    // <--
+    if( (nChildIndex < 0) || (nChildIndex >= getAccessibleChildCount()) ) // #i77106#
         throw lang::IndexOutOfBoundsException();
 
     // preliminaries: get 'our' table box, and get the cursor shell
@@ -1447,13 +1432,11 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     if( pCrsrShell == NULL )
         return;
 
-    // --> OD 2004-11-16 #111714# - assure, that child, indentified by the given
-    // index, isn't already selected.
+    // assure, that child, indentified by the given index, isn't already selected.
     if ( IsChildSelected( nChildIndex ) )
     {
         return;
     }
-    // <--
 
     // now we can start to do the work: check whether we already have
     // a table selection (in 'our' table). If so, extend the
@@ -1468,7 +1451,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         const SwTableLine* pUpper = pBox->GetUpper();
         while( pUpper->GetUpper() != NULL )
             pUpper = pUpper->GetUpper()->GetUpper();
-        USHORT nPos =
+        sal_uInt16 nPos =
             pSelectedTable->GetTable().GetTabLines().GetPos( pUpper );
         if( nPos == USHRT_MAX )
             pSelectedTable = NULL;
@@ -1478,14 +1461,6 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
     const SwStartNode* pStartNode = pBox->GetSttNd();
     if( pSelectedTable == NULL || !pCrsrShell->GetTblCrs() )
     {
-        // if we're in the wrong table, or there's no table selection
-        // at all, then select the current table cell.
-//      SwPaM* pPaM = pCrsrShell->GetCrsr();
-//      pPaM->DeleteMark();
-//      *(pPaM->GetPoint()) = SwPosition( *pStartNode );
-//      pPaM->Move( fnMoveForward, fnGoNode );
-// //   pCrsrShell->SelTblBox();
-
         pCrsrShell->StartAction();
         // Set cursor into current cell. This deletes any table cursor.
         SwPaM aPaM( *pStartNode );
@@ -1515,20 +1490,6 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         *(aPaM.GetMark()) = *pPaM->GetMark();
         Select( aPaM );
 
-        // if only one box is selected, we select this one in
-        // order to maintain our table selection
-//        if( aPaM.GetPoint()->nNode.GetNode().FindTableBoxStartNode() ==
-//           aPaM.GetMark()->nNode.GetNode().FindTableBoxStartNode() )
-//        {
-// //            pCrsrShell->SelTblBox();
-//         }
-//         else
-//         {
-            // finally; set the selection. This will call UpdateCursor
-            // on the cursor shell, too.
-//            pCrsrShell->KillPams();
- //           pCrsrShell->SetSelection( aPaM );
-//         }
     }
 }
 
@@ -1541,9 +1502,7 @@ sal_Bool SAL_CALL SwAccessibleTable::isAccessibleChildSelected(
     SolarMutexGuard aGuard;
     CHECK_FOR_DEFUNC( XAccessibleTable );
 
-    // --> OD 2007-06-27 #i77106#
-    if( (nChildIndex < 0) || (nChildIndex >= getAccessibleChildCount()) )
-    // <--
+    if( (nChildIndex < 0) || (nChildIndex >= getAccessibleChildCount()) ) // #i77106#
         throw lang::IndexOutOfBoundsException();
 
     return IsChildSelected( nChildIndex );
@@ -1571,9 +1530,7 @@ void SAL_CALL SwAccessibleTable::selectAllAccessibleChildren(  )
     // first clear selection, then select first and last child
     clearAccessibleSelection();
     selectAccessibleChild( 0 );
-    // --> OD 2007-06-27 #i77106#
-    selectAccessibleChild( getAccessibleChildCount()-1 );
-    // <--
+    selectAccessibleChild( getAccessibleChildCount()-1 ); // #i77106#
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getSelectedAccessibleChildCount(  )
@@ -1585,9 +1542,7 @@ sal_Int32 SAL_CALL SwAccessibleTable::getSelectedAccessibleChildCount(  )
     // iterate over all children and count isAccessibleChildSelected()
     sal_Int32 nCount = 0;
 
-    // --> OD 2007-06-27 #i71106#
-    sal_Int32 nChildren = getAccessibleChildCount();
-    // <--
+    sal_Int32 nChildren = getAccessibleChildCount(); // #i71106#
     for( sal_Int32 n = 0; n < nChildren; n++ )
         if( IsChildSelected( n ) )
             nCount++;
@@ -1613,17 +1568,16 @@ uno::Reference<XAccessible> SAL_CALL SwAccessibleTable::getSelectedAccessibleChi
     if( nChildIndex < 0 )
         throw lang::IndexOutOfBoundsException();
 
-    // --> OD 2007-06-28 #i77106#
+    // #i77106#
     if ( nChildIndex >= getAccessibleChildCount() )
     {
         throw lang::IndexOutOfBoundsException();
     }
-    // <--
 
     return getAccessibleChild( nChildIndex );
 }
 
-// --> OD 2004-11-16 #111714# - index has to be treated as global child index.
+// index has to be treated as global child index.
 void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,
@@ -1634,14 +1588,12 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
 
     SwCrsrShell* pCrsrShell = GetCrsrShell();
 
-    // --> OD 2004-11-16 #111714# - index has to be treated as global child index
+    // index has to be treated as global child index
     if ( !pCrsrShell )
         throw lang::IndexOutOfBoundsException();
 
     // assure, that given child index is in bounds.
-    // --> OD 2007-06-27 #i77106#
-    if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
-    // <--
+    if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() ) // #i77106#
         throw lang::IndexOutOfBoundsException();
 
     // assure, that child, identified by the given index, is selected.
@@ -1678,8 +1630,7 @@ void SAL_CALL SwAccessibleTable::deselectAccessibleChild(
     pCrsrShell->EndAction();
 }
 
-// --> OD 2007-06-28 #i77106#
-// implementation of class <SwAccessibleTableColHeaders>
+// #i77106# - implementation of class <SwAccessibleTableColHeaders>
 SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap2,
                                                           const SwTabFrm *pTabFrm )
     : SwAccessibleTable( pMap2, pTabFrm )
@@ -1706,9 +1657,7 @@ SwAccessibleTableColHeaders::SwAccessibleTableColHeaders( SwAccessibleMap *pMap2
     OUString sDesc2 = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
     SetDesc( sDesc2 );
 
-    // --> OD 2008-03-10 #i85634#
-    NotRegisteredAtAccessibleMap();
-    // <--
+    NotRegisteredAtAccessibleMap(); // #i85634#
 }
 
 SwAccessibleTableData_Impl* SwAccessibleTableColHeaders::CreateNewTableData()
@@ -1718,7 +1667,7 @@ SwAccessibleTableData_Impl* SwAccessibleTableColHeaders::CreateNewTableData()
 }
 
 
-void SwAccessibleTableColHeaders::Modify( SfxPoolItem * /*pOld*/, SfxPoolItem * /*pNew*/ )
+void SwAccessibleTableColHeaders::Modify( const SfxPoolItem * /*pOld*/, const SfxPoolItem * /*pNew*/ )
 {
 }
 

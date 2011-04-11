@@ -67,7 +67,6 @@
 // Some defines to write better code :-)
 #define REFERENCE               ::com::sun::star::uno::Reference
 #define ANY                     ::com::sun::star::uno::Any
-#define SEQUENCE                ::com::sun::star::uno::Sequence
 #define XDISPATCH               ::com::sun::star::frame::XDispatch
 #define DISPATCHDESCRIPTOR      ::com::sun::star::frame::DispatchDescriptor
 #define XMODEL                  ::com::sun::star::frame::XModel
@@ -305,7 +304,7 @@ public:
         @onerror    -
     */
 
-    virtual SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL queryDispatches( const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescriptor ) throw( RUNTIMEEXCEPTION ) ;
+    virtual ::com::sun::star::uno::Sequence< REFERENCE< XDISPATCH > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< DISPATCHDESCRIPTOR >& seqDescriptor ) throw( RUNTIMEEXCEPTION ) ;
 
     //____________________________________________________________________________________________________
     //  XControllerBorder
@@ -389,9 +388,9 @@ public:
     // FIXME: TL needs this in sw/source/ui/uno/unotxdoc.cxx now;
     // either the _Impl name should vanish or there should be an "official" API
     SfxViewShell* GetViewShell_Impl() const;
-    SAL_DLLPRIVATE BOOL HandleEvent_Impl( NotifyEvent& rEvent );
-    SAL_DLLPRIVATE BOOL HasKeyListeners_Impl();
-    SAL_DLLPRIVATE BOOL HasMouseClickListeners_Impl();
+    SAL_DLLPRIVATE sal_Bool HandleEvent_Impl( NotifyEvent& rEvent );
+    SAL_DLLPRIVATE sal_Bool HasKeyListeners_Impl();
+    SAL_DLLPRIVATE sal_Bool HasMouseClickListeners_Impl();
     SAL_DLLPRIVATE void SetCreationArguments_Impl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rCreationArgs );
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle > impl_getTitleHelper ();
 private:

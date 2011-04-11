@@ -301,13 +301,6 @@ File gid_File_Extra_Palettes
     Patchfiles = ();
 End
 
-File gid_File_Extra_Palettes_Lang
-    Dir = gid_Dir_User_Config;
-    USER_FILE_BODY;
-    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(palettes,zip);
-End
-
 File gid_File_Extra_Poll_Asp
     Dir = gid_Dir_Config_Webcast;
     PACKED_TXT_FILE_BODY;

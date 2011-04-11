@@ -28,10 +28,7 @@
 #ifndef __ooo_vba_excel_Workbook_idl__
 #define __ooo_vba_excel_Workbook_idl__
 
-#ifndef __ooo_vba_excel_XWorkbook_idl__
 #include <ooo/vba/excel/XWorkbook.idl>
-#endif
-
 #include <com/sun/star/uno/XComponentContext.idl>
 #include <com/sun/star/frame/XModel.idl>
 

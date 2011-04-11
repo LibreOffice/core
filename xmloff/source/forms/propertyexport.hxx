@@ -32,6 +32,7 @@
 #include "formattributes.hxx"
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <callbacks.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "callbacks.hxx"
@@ -75,10 +76,12 @@ namespace xmloff
     protected:
         IFormsExportContext&    m_rContext;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        m_xProps;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
-                        m_xPropertyInfo;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                                m_xProps;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                                m_xPropertyInfo;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >
+                                m_xPropertyState;
 
         // caching
         ::rtl::OUString     m_sValueTrue;
@@ -308,6 +311,14 @@ namespace xmloff
             const ::rtl::OUString& _rPropertyName,
             const sal_Unicode _aQuoteCharacter = '"',
             const sal_Unicode _aListSeparator = ',');
+
+        /** determines whether the given property is to be exported
+
+            <p>Currently, the method simply checks whether the property's state is <em>not</em> PropertyState.DEFAULT,
+            or whether the property is a dynamic property (i.e. added via an <code>XPropertyContainer</code>).
+            So, take care when using the method - the heuristics is not applicable for all properties.</p>
+        */
+        bool shouldExportProperty( const ::rtl::OUString& i_propertyName ) const;
 
         /** tries to convert an arbitrary <type scope="com.sun:star.uno">Any</type> into an string
 

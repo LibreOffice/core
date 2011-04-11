@@ -29,15 +29,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <hintids.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/protitem.hxx>
+
+#include <hintids.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <frmatr.hxx>
 #include <tblsel.hxx>
 #include <crsrsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -51,11 +53,12 @@
 #include <rootfrm.hxx>
 #include <viscrs.hxx>
 #include <swtblfmt.hxx>
-#include <undobj.hxx>
+#include <UndoTable.hxx>
 #include <mvsave.hxx>
-// OD 26.08.2003 #i18103#
 #include <sectfrm.hxx>
 #include <frmtool.hxx>
+#include <switerator.hxx>
+#include <deque>
 
 //siehe auch swtable.cxx
 #define COLFUZZY 20L
@@ -75,11 +78,11 @@
 
 
 _SV_IMPL_SORTAR_ALG( SwSelBoxes, SwTableBoxPtr )
-BOOL SwSelBoxes::Seek_Entry( const SwTableBoxPtr rSrch, USHORT* pFndPos ) const
+sal_Bool SwSelBoxes::Seek_Entry( const SwTableBoxPtr rSrch, sal_uInt16* pFndPos ) const
 {
-    ULONG nIdx = rSrch->GetSttIdx();
+    sal_uLong nIdx = rSrch->GetSttIdx();
 
-    USHORT nO = Count(), nM, nU = 0;
+    sal_uInt16 nO = Count(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
@@ -90,7 +93,7 @@ BOOL SwSelBoxes::Seek_Entry( const SwTableBoxPtr rSrch, USHORT* pFndPos ) const
             {
                 if( pFndPos )
                     *pFndPos = nM;
-                return TRUE;
+                return sal_True;
             }
             else if( (*this)[ nM ]->GetSttIdx() < nIdx )
                 nU = nM + 1;
@@ -98,7 +101,7 @@ BOOL SwSelBoxes::Seek_Entry( const SwTableBoxPtr rSrch, USHORT* pFndPos ) const
             {
                 if( pFndPos )
                     *pFndPos = nU;
-                return FALSE;
+                return sal_False;
             }
             else
                 nO = nM - 1;
@@ -106,7 +109,7 @@ BOOL SwSelBoxes::Seek_Entry( const SwTableBoxPtr rSrch, USHORT* pFndPos ) const
     }
     if( pFndPos )
         *pFndPos = nU;
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -116,21 +119,21 @@ struct _CmpLPt
 {
     Point aPos;
     const SwTableBox* pSelBox;
-    BOOL bVert;
+    sal_Bool bVert;
 
-    _CmpLPt( const Point& rPt, const SwTableBox* pBox, BOOL bVertical );
+    _CmpLPt( const Point& rPt, const SwTableBox* pBox, sal_Bool bVertical );
 
-    BOOL operator==( const _CmpLPt& rCmp ) const
-    {   return X() == rCmp.X() && Y() == rCmp.Y() ? TRUE : FALSE; }
+    sal_Bool operator==( const _CmpLPt& rCmp ) const
+    {   return X() == rCmp.X() && Y() == rCmp.Y() ? sal_True : sal_False; }
 
-    BOOL operator<( const _CmpLPt& rCmp ) const
+    sal_Bool operator<( const _CmpLPt& rCmp ) const
     {
         if ( bVert )
             return X() > rCmp.X() || ( X() == rCmp.X() && Y() < rCmp.Y() )
-                    ? TRUE : FALSE;
+                    ? sal_True : sal_False;
         else
             return Y() < rCmp.Y() || ( Y() == rCmp.Y() && X() < rCmp.X() )
-                    ? TRUE : FALSE;
+                    ? sal_True : sal_False;
     }
 
     long X() const { return aPos.X(); }
@@ -153,8 +156,7 @@ struct _Sort_CellFrm
         : pFrm( &rCFrm ) {}
 };
 
-SV_DECL_VARARR( _Sort_CellFrms, _Sort_CellFrm, 16, 16 )
-SV_IMPL_VARARR( _Sort_CellFrms, _Sort_CellFrm )
+typedef std::deque< _Sort_CellFrm > _Sort_CellFrms;
 
 SV_IMPL_PTRARR( SwChartBoxes, SwTableBoxPtr );
 SV_IMPL_PTRARR( SwChartLines, SwChartBoxes* );
@@ -182,7 +184,7 @@ const SwLayoutFrm *lcl_FindNextCellFrm( const SwLayoutFrm *pLay )
 void GetTblSelCrs( const SwCrsrShell &rShell, SwSelBoxes& rBoxes )
 {
     if( rBoxes.Count() )
-        rBoxes.Remove( USHORT(0), rBoxes.Count() );
+        rBoxes.Remove( sal_uInt16(0), rBoxes.Count() );
     if( rShell.IsTableMode() && ((SwCrsrShell&)rShell).UpdateTblSelBoxes())
         rBoxes.Insert( &rShell.GetTableCrsr()->GetBoxes() );
 }
@@ -190,12 +192,12 @@ void GetTblSelCrs( const SwCrsrShell &rShell, SwSelBoxes& rBoxes )
 void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes )
 {
     if( rBoxes.Count() )
-        rBoxes.Remove( USHORT(0), rBoxes.Count() );
+        rBoxes.Remove( sal_uInt16(0), rBoxes.Count() );
 
     if( rTblCrsr.IsChgd() || !rTblCrsr.GetBoxesCount() )
     {
         SwTableCursor* pTCrsr = (SwTableCursor*)&rTblCrsr;
-        pTCrsr->GetDoc()->GetRootFrm()->MakeTblCrsrs( *pTCrsr );
+        pTCrsr->GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *pTCrsr );  //swmod 080218
     }
 
     if( rTblCrsr.GetBoxesCount() )
@@ -216,7 +218,7 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
                 const SwTblSearchType eSearchType )
 {
     //Start- und Endzelle besorgen und den naechsten fragen.
-    OSL_ENSURE( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( FALSE ),
+    OSL_ENSURE( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( sal_False ),
             "Tabselection nicht auf Cnt." );
 
     // Zeilen-Selektion:
@@ -244,31 +246,31 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
         const SwTable& rTbl = pTblNd->GetTable();
         const SwTableLines& rLines = rTbl.GetTabLines();
 
-        const SwNode* pMarkNode = rCrsr.GetNode( FALSE );
-        const ULONG nMarkSectionStart = pMarkNode->StartOfSectionIndex();
+        const SwNode* pMarkNode = rCrsr.GetNode( sal_False );
+        const sal_uLong nMarkSectionStart = pMarkNode->StartOfSectionIndex();
         const SwTableBox* pMarkBox = rTbl.GetTblBox( nMarkSectionStart );
 
         OSL_ENSURE( pMarkBox, "Point in table, mark outside?" );
 
         const SwTableLine* pLine = pMarkBox ? pMarkBox->GetUpper() : 0;
-        USHORT nSttPos = rLines.GetPos( pLine );
+        sal_uInt16 nSttPos = rLines.GetPos( pLine );
         OSL_ENSURE( USHRT_MAX != nSttPos, "Wo ist meine Zeile in der Tabelle?" );
-        pLine = rTbl.GetTblBox( rCrsr.GetNode( TRUE )->StartOfSectionIndex() )->GetUpper();
-        USHORT nEndPos = rLines.GetPos( pLine );
+        pLine = rTbl.GetTblBox( rCrsr.GetNode( sal_True )->StartOfSectionIndex() )->GetUpper();
+        sal_uInt16 nEndPos = rLines.GetPos( pLine );
         OSL_ENSURE( USHRT_MAX != nEndPos, "Wo ist meine Zeile in der Tabelle?" );
         // pb: #i20193# if tableintable then nSttPos == nEndPos == USHRT_MAX
         if ( nSttPos != USHRT_MAX && nEndPos != USHRT_MAX )
         {
             if( nEndPos < nSttPos )     // vertauschen
             {
-                USHORT nTmp = nSttPos; nSttPos = nEndPos; nEndPos = nTmp;
+                sal_uInt16 nTmp = nSttPos; nSttPos = nEndPos; nEndPos = nTmp;
             }
 
             int bChkProtected = nsSwTblSearchType::TBLSEARCH_PROTECT & eSearchType;
             for( ; nSttPos <= nEndPos; ++nSttPos )
             {
                 pLine = rLines[ nSttPos ];
-                for( USHORT n = pLine->GetTabBoxes().Count(); n ; )
+                for( sal_uInt16 n = pLine->GetTabBoxes().Count(); n ; )
                 {
                     SwTableBox* pBox = pLine->GetTabBoxes()[ --n ];
                     // Zellenschutzt beachten ??
@@ -290,10 +292,10 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
         }
         const SwCntntNode *pCntNd = rCrsr.GetCntntNode();
         const SwLayoutFrm *pStart = pCntNd ?
-            pCntNd->GetFrm( &aPtPos )->GetUpper() : 0;
-        pCntNd = rCrsr.GetCntntNode(FALSE);
+            pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &aPtPos )->GetUpper() : 0;
+        pCntNd = rCrsr.GetCntntNode(sal_False);
         const SwLayoutFrm *pEnd = pCntNd ?
-            pCntNd->GetFrm( &aMkPos )->GetUpper() : 0;
+            pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &aMkPos )->GetUpper() : 0;
         if( pStart && pEnd )
             GetTblSel( pStart, pEnd, rBoxes, 0, eSearchType );
     }
@@ -303,24 +305,22 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 SwSelBoxes& rBoxes, SwCellFrms* pCells,
                 const SwTblSearchType eSearchType )
 {
-    // #112697# Robust:
     const SwTabFrm* pStartTab = pStart->FindTabFrm();
     if ( !pStartTab )
     {
-        OSL_ENSURE( false, "GetTblSel without start table" );
+        OSL_FAIL( "GetTblSel without start table" );
         return;
     }
 
     int bChkProtected = nsSwTblSearchType::TBLSEARCH_PROTECT & eSearchType;
 
-    BOOL bTblIsValid;
-    // --> FME 2006-01-25 #i55421# Reduced value 10
-    int nLoopMax = 10;      //JP 28.06.99: max 100 loops - Bug 67292
-    // <--
-    USHORT i;
+    sal_Bool bTblIsValid;
+    // #i55421# Reduced value 10
+    int nLoopMax = 10;
+    sal_uInt16 i;
 
     do {
-        bTblIsValid = TRUE;
+        bTblIsValid = sal_True;
 
         //Zuerst lassen wir uns die Tabellen und die Rechtecke heraussuchen.
         SwSelUnions aUnions;
@@ -342,7 +342,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
             const SwTabFrm *pTable = pUnion->GetTable();
             if( !pTable->IsValid() && nLoopMax )
             {
-                bTblIsValid = FALSE;
+                bTblIsValid = sal_False;
                 break;
             }
 
@@ -355,7 +355,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
             {
                 if( !pRow->IsValid() && nLoopMax )
                 {
-                    bTblIsValid = FALSE;
+                    bTblIsValid = sal_False;
                     break;
                 }
 
@@ -367,7 +367,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                     {
                         if( !pCell->IsValid() && nLoopMax )
                         {
-                            bTblIsValid = FALSE;
+                            bTblIsValid = sal_False;
                             break;
                         }
 
@@ -464,11 +464,11 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                 break;
         }
 
-        // --> FME 2005-10-13 #125337# Make code robust, check if pStart has
+        // --> Make code robust, check if pStart has
         // been deleted due to the formatting of the table:
         if ( aDelCheck.HasBeenDeleted() )
         {
-            OSL_ENSURE( false, "Current box has been deleted during GetTblSel()" );
+            OSL_FAIL( "Current box has been deleted during GetTblSel()" );
             break;
         }
         // <--
@@ -477,63 +477,63 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         rBoxes.Remove( i, rBoxes.Count() );
         --nLoopMax;
 
-    } while( TRUE );
+    } while( sal_True );
     OSL_ENSURE( nLoopMax, "das Layout der Tabelle wurde nicht valide!" );
 }
 
 
 
-BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
+sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     SwChartLines* pGetCLines )
 {
     const SwTableNode* pTNd = rSttNd.FindTableNode();
     if( !pTNd )
-        return FALSE;
+        return sal_False;
 
     Point aNullPos;
     SwNodeIndex aIdx( rSttNd );
     const SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
     if( !pCNd )
-        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, FALSE, FALSE );
+        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, sal_False, sal_False );
 
-    // #109394# if table is invisible, return
+    // if table is invisible, return
     // (layout needed for forming table selection further down, so we can't
     //  continue with invisible tables)
-    // OD 07.11.2003 #i22135# - Also the content of the table could be
+    // #i22135# - Also the content of the table could be
     //                          invisible - e.g. in a hidden section
     // Robust: check, if content was found (e.g. empty table cells)
-    if ( !pCNd || pCNd->GetFrm() == NULL )
-            return FALSE;
+    if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
+            return sal_False;
 
-    const SwLayoutFrm *pStart = pCNd ? pCNd->GetFrm( &aNullPos )->GetUpper() : 0;
+    const SwLayoutFrm *pStart = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper() : 0;
     OSL_ENSURE( pStart, "ohne Frame geht gar nichts" );
 
     aIdx = rEndNd;
     pCNd = aIdx.GetNode().GetCntntNode();
     if( !pCNd )
-        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, FALSE, FALSE );
+        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, sal_False, sal_False );
 
-    // OD 07.11.2003 #i22135# - Robust: check, if content was found and if it's visible
-    if ( !pCNd || pCNd->GetFrm() == NULL )
+    // #i22135# - Robust: check, if content was found and if it's visible
+    if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
     {
-        return FALSE;
+        return sal_False;
     }
 
-    const SwLayoutFrm *pEnd = pCNd ? pCNd->GetFrm( &aNullPos )->GetUpper() : 0;
+    const SwLayoutFrm *pEnd = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper() : 0;
     OSL_ENSURE( pEnd, "ohne Frame geht gar nichts" );
 
 
-    BOOL bTblIsValid, bValidChartSel;
+    sal_Bool bTblIsValid, bValidChartSel;
     // --> FME 2006-01-25 #i55421# Reduced value 10
     int nLoopMax = 10;      //JP 28.06.99: max 100 loops - Bug 67292
     // <--
-    USHORT i = 0;
+    sal_uInt16 i = 0;
 
     do {
-        bTblIsValid = TRUE;
-        bValidChartSel = TRUE;
+        bTblIsValid = sal_True;
+        bValidChartSel = sal_True;
 
-        USHORT nRowCells = USHRT_MAX;
+        sal_uInt16 nRowCells = USHRT_MAX;
 
         //Zuerst lassen wir uns die Tabellen und die Rechtecke heraussuchen.
         SwSelUnions aUnions;
@@ -551,7 +551,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
             if( !pTable->IsValid() && nLoopMax  )
             {
-                bTblIsValid = FALSE;
+                bTblIsValid = sal_False;
                 break;
             }
 
@@ -566,7 +566,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
             {
                 if( !pRow->IsValid() && nLoopMax )
                 {
-                    bTblIsValid = FALSE;
+                    bTblIsValid = sal_False;
                     break;
                 }
 
@@ -579,7 +579,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     {
                         if( !pCell->IsValid() && nLoopMax  )
                         {
-                            bTblIsValid = FALSE;
+                            bTblIsValid = sal_False;
                             break;
                         }
 
@@ -617,12 +617,11 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                                 rUnion.Top()    <= nFrmBottom &&
                                 nFrmBottom      <= nUnionBottom+ nYFuzzy )
 
-                                aCellFrms.Insert(
-                                        _Sort_CellFrm( *(SwCellFrm*)pCell ),
-                                        aCellFrms.Count() );
+                                aCellFrms.push_back(
+                                        _Sort_CellFrm( *(SwCellFrm*)pCell) );
                             else
                             {
-                                bValidChartSel = FALSE;
+                                bValidChartSel = sal_False;
                                 break;
                             }
                         }
@@ -644,12 +643,12 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
             // alle Zellen der (Teil-)Tabelle zusammen. Dann teste mal ob
             // all huebsch nebeneinander liegen.
-            USHORT n, nEnd, nCellCnt = 0;
+            size_t n, nCellCnt = 0;
             long nYPos = LONG_MAX;
             long nXPos = 0;
             long nHeight = 0;
 
-            for( n = 0, nEnd = aCellFrms.Count(); n < nEnd; ++n )
+            for( n = 0 ; n < aCellFrms.size(); ++n )
             {
                 const _Sort_CellFrm& rCF = aCellFrms[ n ];
                 if( (rCF.pFrm->Frm().*fnRect->fnGetTop)() != nYPos )
@@ -661,7 +660,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                             nRowCells = nCellCnt;
                         else if( nRowCells != nCellCnt )
                         {
-                            bValidChartSel = FALSE;
+                            bValidChartSel = sal_False;
                             break;
                         }
                     }
@@ -684,7 +683,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                 }
                 else
                 {
-                    bValidChartSel = FALSE;
+                    bValidChartSel = sal_False;
                     break;
                 }
             }
@@ -693,20 +692,20 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                 if( USHRT_MAX == nRowCells )
                     nRowCells = nCellCnt;
                 else if( nRowCells != nCellCnt )
-                    bValidChartSel = FALSE;
+                    bValidChartSel = sal_False;
             }
 
             if( bValidChartSel && pGetCLines )
             {
                 nYPos = LONG_MAX;
                 SwChartBoxes* pBoxes = 0;
-                for( n = 0, nEnd = aCellFrms.Count(); n < nEnd; ++n )
+                for( n = 0; n < aCellFrms.size(); ++n )
                 {
                     const _Sort_CellFrm& rCF = aCellFrms[ n ];
                     if( (rCF.pFrm->Frm().*fnRect->fnGetTop)() != nYPos )
                     {
                         pBoxes = new SwChartBoxes( 255 < nRowCells
-                                                    ? 255 : (BYTE)nRowCells);
+                                                    ? 255 : (sal_uInt8)nRowCells);
                         pGetCLines->C40_INSERT( SwChartBoxes, pBoxes, pGetCLines->Count() );
                         nYPos = (rCF.pFrm->Frm().*fnRect->fnGetTop)();
                     }
@@ -735,7 +734,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
         --nLoopMax;
         if( pGetCLines )
             pGetCLines->DeleteAndDestroy( 0, pGetCLines->Count() );
-    } while( TRUE );
+    } while( sal_True );
 
     OSL_ENSURE( nLoopMax, "das Layout der Tabelle wurde nicht valide!" );
 
@@ -746,7 +745,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 }
 
 
-BOOL IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
+sal_Bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
 {
     OSL_ENSURE( pCell->IsCellFrm(), "Frame ohne Gazelle" );
 
@@ -756,7 +755,7 @@ BOOL IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
             (( rUnion.Top() <= pCell->Frm().Top()+20 &&
                rUnion.Bottom() > pCell->Frm().Top() ) ||
              ( rUnion.Top() >= pCell->Frm().Top() &&
-               rUnion.Bottom() < pCell->Frm().Bottom() )) ? TRUE : FALSE );
+               rUnion.Bottom() < pCell->Frm().Bottom() )) ? sal_True : sal_False );
 
     return (
         rUnion.Top() <= pCell->Frm().Top() &&
@@ -766,18 +765,18 @@ BOOL IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
            rUnion.Right() > pCell->Frm().Left() ) ||
 
          ( rUnion.Left() >= pCell->Frm().Left() &&
-           rUnion.Right() < pCell->Frm().Right() )) ? TRUE : FALSE );
+           rUnion.Right() < pCell->Frm().Right() )) ? sal_True : sal_False );
 }
 
-BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
+sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
 {
     SwShellCrsr* pCrsr = rShell.pCurCrsr;
     if ( rShell.IsTableMode() )
         pCrsr = rShell.pTblCrsr;
 
-    const SwLayoutFrm *pStart = pCrsr->GetCntntNode()->GetFrm(
+    const SwLayoutFrm *pStart = pCrsr->GetCntntNode()->getLayoutFrm( rShell.GetLayout(),
                       &pCrsr->GetPtPos() )->GetUpper(),
-                      *pEnd   = pCrsr->GetCntntNode(FALSE)->GetFrm(
+                      *pEnd   = pCrsr->GetCntntNode(sal_False)->getLayoutFrm( rShell.GetLayout(),
                       &pCrsr->GetMkPos() )->GetUpper();
 
     const SwLayoutFrm* pSttCell = pStart;
@@ -790,8 +789,8 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
     // default erstmal nach oben testen, dann nach links
     ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTblSearchType::TBLSEARCH_COL );
 
-    BOOL bTstRow = TRUE, bFound = FALSE;
-    USHORT i;
+    sal_Bool bTstRow = sal_True, bFound = sal_False;
+    sal_uInt16 i;
 
     // 1. teste ob die darueber liegende Box Value/Formel enhaelt:
     for( i = 0; i < aUnions.Count(); ++i )
@@ -815,8 +814,8 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                 {
                     if( pCell == pSttCell )
                     {
-                        USHORT nWhichId = 0;
-                        for( USHORT n = rBoxes.Count(); n; )
+                        sal_uInt16 nWhichId = 0;
+                        for( sal_uInt16 n = rBoxes.Count(); n; )
                             if( USHRT_MAX != ( nWhichId = rBoxes[ --n ]
                                 ->GetTabBox()->IsFormulaOrValueBox() ))
                                 break;
@@ -824,7 +823,7 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                         // alle Boxen zusammen, nicht mehr die Zeile
                         // pruefen, wenn eine Formel oder Value gefunden wurde
                         bTstRow = 0 == nWhichId || USHRT_MAX == nWhichId;
-                        bFound = TRUE;
+                        bFound = sal_True;
                         break;
                     }
 
@@ -858,7 +857,7 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
     // 2. teste ob die links liegende Box Value/Formel enhaelt:
     if( bTstRow )
     {
-        bFound = FALSE;
+        bFound = sal_False;
 
         rBoxes.Remove( 0, rBoxes.Count() );
         aUnions.DeleteAndDestroy( 0, aUnions.Count() );
@@ -884,8 +883,8 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                     {
                         if( pCell == pSttCell )
                         {
-                            USHORT nWhichId = 0;
-                            for( USHORT n = rBoxes.Count(); n; )
+                            sal_uInt16 nWhichId = 0;
+                            for( sal_uInt16 n = rBoxes.Count(); n; )
                                 if( USHRT_MAX != ( nWhichId = rBoxes[ --n ]
                                     ->GetTabBox()->IsFormulaOrValueBox() ))
                                     break;
@@ -893,7 +892,7 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                             // alle Boxen zusammen, nicht mehr die Zeile
                             // pruefen, wenn eine Formel oder Value gefunden wurde
                             bFound = 0 != nWhichId && USHRT_MAX != nWhichId;
-                            bTstRow = FALSE;
+                            bTstRow = sal_False;
                             break;
                         }
 
@@ -927,25 +926,25 @@ BOOL GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
     return bFound;
 }
 
-BOOL HasProtectedCells( const SwSelBoxes& rBoxes )
+sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes )
 {
-    BOOL bRet = FALSE;
-    for( USHORT n = 0, nCnt = rBoxes.Count(); n < nCnt; ++n )
+    sal_Bool bRet = sal_False;
+    for( sal_uInt16 n = 0, nCnt = rBoxes.Count(); n < nCnt; ++n )
         if( rBoxes[ n ]->GetFrmFmt()->GetProtect().IsCntntProtected() )
         {
-            bRet = TRUE;
+            bRet = sal_True;
             break;
         }
     return bRet;
 }
 
 
-_CmpLPt::_CmpLPt( const Point& rPt, const SwTableBox* pBox, BOOL bVertical )
+_CmpLPt::_CmpLPt( const Point& rPt, const SwTableBox* pBox, sal_Bool bVertical )
     : aPos( rPt ), pSelBox( pBox ), bVert( bVertical )
 {}
 
 void lcl_InsTblBox( SwTableNode* pTblNd, SwDoc* pDoc, SwTableBox* pBox,
-                        USHORT nInsPos, USHORT nCnt = 1 )
+                        sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 )
 {
     OSL_ENSURE( pBox->GetSttNd(), "Box ohne Start-Node" );
     SwCntntNode* pCNd = pDoc->GetNodes()[ pBox->GetSttIdx() + 1 ]
@@ -963,25 +962,25 @@ void lcl_InsTblBox( SwTableNode* pTblNd, SwDoc* pDoc, SwTableBox* pBox,
                 nInsPos, nCnt );
 }
 
-BOOL IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
+sal_Bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
 {
     rPam.GetPoint()->nNode = *rBox.GetSttNd()->EndOfSectionNode();
     rPam.Move( fnMoveBackward, fnGoCntnt );
     rPam.SetMark();
     rPam.GetPoint()->nNode = *rBox.GetSttNd();
     rPam.Move( fnMoveForward, fnGoCntnt );
-    BOOL bRet = *rPam.GetMark() == *rPam.GetPoint()
+    sal_Bool bRet = *rPam.GetMark() == *rPam.GetPoint()
         && ( rBox.GetSttNd()->GetIndex() + 1 == rPam.GetPoint()->nNode.GetIndex() );
 
     if( bRet )
     {
         // dann teste mal auf absatzgebundenen Flys
         const SwSpzFrmFmts& rFmts = *rPam.GetDoc()->GetSpzFrmFmts();
-        ULONG nSttIdx = rPam.GetPoint()->nNode.GetIndex(),
+        sal_uLong nSttIdx = rPam.GetPoint()->nNode.GetIndex(),
               nEndIdx = rBox.GetSttNd()->EndOfSectionIndex(),
               nIdx;
 
-        for( USHORT n = 0; n < rFmts.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
         {
             const SwFmtAnchor& rAnchor = rFmts[n]->GetAnchor();
             const SwPosition* pAPos = rAnchor.GetCntntAnchor();
@@ -991,7 +990,7 @@ BOOL IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
                 nSttIdx <= ( nIdx = pAPos->nNode.GetIndex() ) &&
                 nIdx < nEndIdx )
             {
-                bRet = FALSE;
+                bRet = sal_False;
                 break;
             }
         }
@@ -1004,20 +1003,22 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 SwTableBox** ppMergeBox, SwUndoTblMerge* pUndo )
 {
     if( rBoxes.Count() )
-        rBoxes.Remove( USHORT(0), rBoxes.Count() );
+        rBoxes.Remove( sal_uInt16(0), rBoxes.Count() );
 
     //Zuerst lassen wir uns die Tabellen und die Rechtecke heraussuchen.
-    OSL_ENSURE( rPam.GetCntntNode() && rPam.GetCntntNode( FALSE ),
+    OSL_ENSURE( rPam.GetCntntNode() && rPam.GetCntntNode( sal_False ),
             "Tabselection nicht auf Cnt." );
 
 //JP 24.09.96: Merge mit wiederholenden TabellenHeadline funktioniert nicht
 //              richtig. Warum nicht Point 0,0 benutzen? Dann ist garantiert,
 //              das die 1. Headline mit drin ist.
-//  Point aPt( rShell.GetCharRect().Pos() );
     Point aPt( 0, 0 );
-    const SwLayoutFrm *pStart = rPam.GetCntntNode()->GetFrm(
-                                                        &aPt )->GetUpper(),
-                      *pEnd = rPam.GetCntntNode(FALSE)->GetFrm(
+
+    const SwCntntNode* pCntNd = rPam.GetCntntNode();
+    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+                                                        &aPt )->GetUpper();
+    pCntNd = rPam.GetCntntNode(sal_False);
+    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                         &aPt )->GetUpper();
 
     SwSelUnions aUnions;
@@ -1036,7 +1037,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
     SWRECTFN( pStart->GetUpper() )
 
-    for ( USHORT i = 0; i < aUnions.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < aUnions.Count(); ++i )
     {
         const SwTabFrm *pTabFrm = aUnions[i]->GetTable();
 
@@ -1068,7 +1069,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                         {
                             if( ( rUnion.Right() + COLFUZZY ) < pCell->Frm().Right() )
                             {
-                                USHORT nInsPos = pBox->GetUpper()->
+                                sal_uInt16 nInsPos = pBox->GetUpper()->
                                                     GetTabBoxes().C40_GETPOS( SwTableBox, pBox )+1;
                                 lcl_InsTblBox( pTblNd, pDoc, pBox, nInsPos );
                                 pBox->ClaimFrmFmt();
@@ -1112,7 +1113,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                         else if( ( rUnion.Left() - COLFUZZY ) >= pCell->Frm().Left() &&
                                 ( rUnion.Right() + COLFUZZY ) < pCell->Frm().Right() )
                         {
-                            USHORT nInsPos = pBox->GetUpper()->GetTabBoxes().
+                            sal_uInt16 nInsPos = pBox->GetUpper()->GetTabBoxes().
                                             C40_GETPOS( SwTableBox, pBox )+1;
                             lcl_InsTblBox( pTblNd, pDoc, pBox, nInsPos, 2 );
                             pBox->ClaimFrmFmt();
@@ -1132,7 +1133,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             {
                             const SfxPoolItem* pItem;
                             if( SFX_ITEM_SET == pBox->GetFrmFmt()->GetAttrSet()
-                                        .GetItemState( RES_BOX, FALSE, &pItem ))
+                                        .GetItemState( RES_BOX, sal_False, &pItem ))
                             {
                                 SvxBoxItem aBox( *(SvxBoxItem*)pItem );
                                 aBox.SetLine( 0, BOX_LINE_RIGHT );
@@ -1171,7 +1172,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                         {
                             // dann muss eine neue Box einfuegt und die
                             // Breiten angepasst werden
-                            USHORT nInsPos = pBox->GetUpper()->GetTabBoxes().
+                            sal_uInt16 nInsPos = pBox->GetUpper()->GetTabBoxes().
                                             C40_GETPOS( SwTableBox, pBox )+1;
                             lcl_InsTblBox( pTblNd, pDoc, pBox, nInsPos, 1 );
 
@@ -1205,7 +1206,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     if ( pCell->GetNext() )
                     {
                         pCell = (const SwLayoutFrm*)pCell->GetNext();
-                        // --> FME 2005-11-03 #125288# Check if table cell is not empty
+                        // --> Check if table cell is not empty
                         if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                             pCell = pCell->FirstCell();
                     }
@@ -1228,7 +1229,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     // 1. Loesung: gehe ueber das Array und
     //      alle auf der gleichen Y-Ebene werden mit Blanks getrennt
     //      alle anderen werden als Absaetze getrennt.
-    BOOL bCalcWidth = TRUE;
+    sal_Bool bCalcWidth = sal_True;
     const SwTableBox* pFirstBox = aPosArr[ 0 ].pSelBox;
 
     // JP 27.03.98:  Optimierung - falls die Boxen einer Line leer sind,
@@ -1240,8 +1241,8 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
 #if defined( DEL_ONLY_EMPTY_LINES )
         nWidth = pFirstBox->GetFrmFmt()->GetFrmSize().GetWidth();
-        BOOL bEmptyLine = TRUE;
-        USHORT n, nSttPos = 0;
+        sal_Bool bEmptyLine = sal_True;
+        sal_uInt16 n, nSttPos = 0;
 
         for( n = 0; n < aPosArr.Count(); ++n )
         {
@@ -1249,14 +1250,14 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             if( n && aPosArr[ n - 1 ].Y() == rPt.Y() )  // gleiche Ebene ?
             {
                 if( bEmptyLine && !IsEmptyBox( *rPt.pSelBox, aPam ))
-                    bEmptyLine = FALSE;
+                    bEmptyLine = sal_False;
                 if( bCalcWidth )
                     nWidth += rPt.pSelBox->GetFrmFmt()->GetFrmSize().GetWidth();
             }
             else
             {
                 if( bCalcWidth && n )
-                    bCalcWidth = FALSE;     // eine Zeile fertig
+                    bCalcWidth = sal_False;     // eine Zeile fertig
 
                 if( bEmptyLine && nSttPos < n )
                 {
@@ -1264,7 +1265,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     // nicht mit Blanks aufgefuellt und als Absatz
                     // eingefuegt werden.
                     if( pUndo )
-                        for( USHORT i = nSttPos; i < n; ++i )
+                        for( sal_uInt16 i = nSttPos; i < n; ++i )
                             pUndo->SaveCollection( *aPosArr[ i ].pSelBox );
 
                     aPosArr.Remove( nSttPos, n - nSttPos );
@@ -1279,21 +1280,21 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         if( bEmptyLine && nSttPos < n )
         {
             if( pUndo )
-                for( USHORT i = nSttPos; i < n; ++i )
+                for( sal_uInt16 i = nSttPos; i < n; ++i )
                     pUndo->SaveCollection( *aPosArr[ i ].pSelBox );
             aPosArr.Remove( nSttPos, n - nSttPos );
         }
 #elsif defined( DEL_EMPTY_BOXES_AT_START_AND_END )
 
         nWidth = pFirstBox->GetFrmFmt()->GetFrmSize().GetWidth();
-        USHORT n, nSttPos = 0, nSEndPos = 0, nESttPos = 0;
+        sal_uInt16 n, nSttPos = 0, nSEndPos = 0, nESttPos = 0;
 
         for( n = 0; n < aPosArr.Count(); ++n )
         {
             const _CmpLPt& rPt = aPosArr[ n ];
             if( n && aPosArr[ n - 1 ].Y() == rPt.Y() )  // gleiche Ebene ?
             {
-                BOOL bEmptyBox = IsEmptyBox( *rPt.pSelBox, aPam );
+                sal_Bool bEmptyBox = IsEmptyBox( *rPt.pSelBox, aPam );
                 if( bEmptyBox )
                 {
                     if( nSEndPos == n )     // der Anfang ist leer
@@ -1308,7 +1309,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             else
             {
                 if( bCalcWidth && n )
-                    bCalcWidth = FALSE;     // eine Zeile fertig
+                    bCalcWidth = sal_False;     // eine Zeile fertig
 
                 // zuerst die vom Anfang
                 if( nSttPos < nSEndPos )
@@ -1316,10 +1317,10 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     // dann ist der vorder Teil der Line leer und braucht
                     // nicht mit Blanks aufgefuellt werden.
                     if( pUndo )
-                        for( USHORT i = nSttPos; i < nSEndPos; ++i )
+                        for( sal_uInt16 i = nSttPos; i < nSEndPos; ++i )
                             pUndo->SaveCollection( *aPosArr[ i ].pSelBox );
 
-                    USHORT nCnt = nSEndPos - nSttPos;
+                    sal_uInt16 nCnt = nSEndPos - nSttPos;
                     aPosArr.Remove( nSttPos, nCnt );
                     nESttPos -= nCnt;
                     n -= nCnt;
@@ -1330,10 +1331,10 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     // dann ist der vorder Teil der Line leer und braucht
                     // nicht mit Blanks aufgefuellt werden.
                     if( pUndo )
-                        for( USHORT i = nESttPos; i < n; ++i )
+                        for( sal_uInt16 i = nESttPos; i < n; ++i )
                             pUndo->SaveCollection( *aPosArr[ i ].pSelBox );
 
-                    USHORT nCnt = n - nESttPos;
+                    sal_uInt16 nCnt = n - nESttPos;
                     aPosArr.Remove( nESttPos, nCnt );
                     n -= nCnt;
                 }
@@ -1352,10 +1353,10 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             // dann ist der vorder Teil der Line leer und braucht
             // nicht mit Blanks aufgefuellt werden.
             if( pUndo )
-                for( USHORT i = nSttPos; i < nSEndPos; ++i )
+                for( sal_uInt16 i = nSttPos; i < nSEndPos; ++i )
                     pUndo->SaveCollection( *aPosArr[ i ].pSelBox );
 
-            USHORT nCnt = nSEndPos - nSttPos;
+            sal_uInt16 nCnt = nSEndPos - nSttPos;
             aPosArr.Remove( nSttPos, nCnt );
             nESttPos -= nCnt;
             n -= nCnt;
@@ -1365,10 +1366,10 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             // dann ist der vorder Teil der Line leer und braucht
             // nicht mit Blanks aufgefuellt werden.
             if( pUndo )
-                for( USHORT i = nESttPos; i < n; ++i )
+                for( sal_uInt16 i = nESttPos; i < n; ++i )
                     pUndo->SaveCollection( *aPosArr[ i ].pSelBox );
 
-            USHORT nCnt = n - nESttPos;
+            sal_uInt16 nCnt = n - nESttPos;
             aPosArr.Remove( nESttPos, nCnt );
         }
 #else
@@ -1381,7 +1382,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                       aPosArr[ 0 ].Y() ) :
                   0;
 
-        for( USHORT n = 0; n < aPosArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < aPosArr.Count(); ++n )
         {
             const _CmpLPt& rPt = aPosArr[ n ];
             if( bCalcWidth )
@@ -1389,7 +1390,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 if( nY == ( bVert ? rPt.X() : rPt.Y() ) )            // gleiche Ebene ?
                     nWidth += rPt.pSelBox->GetFrmFmt()->GetFrmSize().GetWidth();
                 else
-                    bCalcWidth = FALSE;     // eine Zeile fertig
+                    bCalcWidth = sal_False;     // eine Zeile fertig
             }
 
             if( IsEmptyBox( *rPt.pSelBox, aPam ) )
@@ -1408,7 +1409,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     {
         SwTableBox* pTmpBox = rBoxes[0];
         SwTableLine* pInsLine = pTmpBox->GetUpper();
-        USHORT nInsPos = pInsLine->GetTabBoxes().C40_GETPOS( SwTableBox, pTmpBox );
+        sal_uInt16 nInsPos = pInsLine->GetTabBoxes().C40_GETPOS( SwTableBox, pTmpBox );
 
         lcl_InsTblBox( pTblNd, pDoc, pTmpBox, nInsPos );
         (*ppMergeBox) = pInsLine->GetTabBoxes()[ nInsPos ];
@@ -1439,23 +1440,28 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
         SwPaM aPam( aInsPos );
 
-        for( USHORT n = 0; n < aPosArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < aPosArr.Count(); ++n )
         {
             const _CmpLPt& rPt = aPosArr[ n ];
             aPam.GetPoint()->nNode.Assign( *rPt.pSelBox->GetSttNd()->
                                             EndOfSectionNode(), -1 );
             SwCntntNode* pCNd = aPam.GetCntntNode();
-            USHORT nL = pCNd ? pCNd->Len() : 0;
+            sal_uInt16 nL = pCNd ? pCNd->Len() : 0;
             aPam.GetPoint()->nContent.Assign( pCNd, nL );
 
             SwNodeIndex aSttNdIdx( *rPt.pSelBox->GetSttNd(), 1 );
             // ein Node muss in der Box erhalten bleiben (sonst wird beim
             // Move die gesamte Section geloescht)
+            bool const bUndo(pDoc->GetIDocumentUndoRedo().DoesUndo());
             if( pUndo )
-                pDoc->DoUndo( FALSE );
+            {
+                pDoc->GetIDocumentUndoRedo().DoUndo(false);
+            }
             pDoc->AppendTxtNode( *aPam.GetPoint() );
             if( pUndo )
-                pDoc->DoUndo( TRUE );
+            {
+                pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
+            }
             SwNodeRange aRg( aSttNdIdx, aPam.GetPoint()->nNode );
             rInsPosNd++;
             if( pUndo )
@@ -1468,7 +1474,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             // wo steht jetzt aInsPos ??
 
             if( bCalcWidth )
-                bCalcWidth = FALSE;     // eine Zeile fertig
+                bCalcWidth = sal_False;     // eine Zeile fertig
 
             // den initialen TextNode ueberspringen
             rInsPosNd.Assign( pDoc->GetNodes(),
@@ -1494,49 +1500,51 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 }
 
 
-static BOOL lcl_CheckCol( const _FndBox*& rpFndBox, void* pPara );
+static sal_Bool lcl_CheckCol( const _FndBox*& rpFndBox, void* pPara );
 
-static BOOL lcl_CheckRow( const _FndLine*& rpFndLine, void* pPara )
+static sal_Bool lcl_CheckRow( const _FndLine*& rpFndLine, void* pPara )
 {
     ((_FndLine*)rpFndLine)->GetBoxes().ForEach( &lcl_CheckCol, pPara );
-    return *(BOOL*)pPara;
+    return *(sal_Bool*)pPara;
 }
 
-static BOOL lcl_CheckCol( const _FndBox*& rpFndBox, void* pPara )
+static sal_Bool lcl_CheckCol( const _FndBox*& rpFndBox, void* pPara )
 {
     if( !rpFndBox->GetBox()->GetSttNd() )
     {
         if( rpFndBox->GetLines().Count() !=
             rpFndBox->GetBox()->GetTabLines().Count() )
-            *((BOOL*)pPara) = FALSE;
+            *((sal_Bool*)pPara) = sal_False;
         else
             ((_FndBox*)rpFndBox)->GetLines().ForEach( &lcl_CheckRow, pPara );
     }
     // Box geschuetzt ??
     else if( rpFndBox->GetBox()->GetFrmFmt()->GetProtect().IsCntntProtected() )
-        *((BOOL*)pPara) = FALSE;
-    return *(BOOL*)pPara;
+        *((sal_Bool*)pPara) = sal_False;
+    return *(sal_Bool*)pPara;
 }
 
 
-USHORT CheckMergeSel( const SwPaM& rPam )
+sal_uInt16 CheckMergeSel( const SwPaM& rPam )
 {
     SwSelBoxes aBoxes;
 //JP 24.09.96: Merge mit wiederholenden TabellenHeadline funktioniert nicht
 //              richtig. Warum nicht Point 0,0 benutzen? Dann ist garantiert,
 //              das die 1. Headline mit drin ist.
     Point aPt;
-    const SwLayoutFrm *pStart = rPam.GetCntntNode()->GetFrm(
-                                                    &aPt )->GetUpper(),
-                        *pEnd = rPam.GetCntntNode(FALSE)->GetFrm(
+    const SwCntntNode* pCntNd = rPam.GetCntntNode();
+    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+                                                        &aPt )->GetUpper();
+    pCntNd = rPam.GetCntntNode(sal_False);
+    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                     &aPt )->GetUpper();
     GetTblSel( pStart, pEnd, aBoxes, 0 );
     return CheckMergeSel( aBoxes );
 }
 
-USHORT CheckMergeSel( const SwSelBoxes& rBoxes )
+sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
 {
-    USHORT eRet = TBLMERGE_NOSELECTION;
+    sal_uInt16 eRet = TBLMERGE_NOSELECTION;
     if( rBoxes.Count() )
     {
         eRet = TBLMERGE_OK;
@@ -1548,7 +1556,7 @@ USHORT CheckMergeSel( const SwSelBoxes& rBoxes )
                     &_FndLineCopyCol, &aPara );
         if( aFndBox.GetLines().Count() )
         {
-            BOOL bMergeSelOk = TRUE;
+            sal_Bool bMergeSelOk = sal_True;
             _FndBox* pFndBox = &aFndBox;
             _FndLine* pFndLine = 0;
             while( pFndBox && 1 == pFndBox->GetLines().Count() )
@@ -1603,31 +1611,6 @@ SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
     return nRet;
 }
 
-/*  MA: 20. Sep. 93 wird nicht mehr gebraucht.
-static const SwLayoutFrm *GetPrevCell( const SwLayoutFrm *pCell )
-{
-    const SwLayoutFrm *pLay = pCell->GetPrevLayoutLeaf();
-    if ( pLay && pLay->IsLayoutFrm() && !pLay->IsTab() )
-    {
-        //GetPrevLayoutLeaf() liefert ggf. auch die Umgebung einer Tab zurueck
-        //(naehmlich genau dann, wenn die Zelle noch Vorgaenger hat).
-        const SwFrm *pFrm = pLay->Lower();
-        while ( pFrm->GetNext() )
-            pFrm = pFrm->GetNext();
-        pLay = pFrm->IsTabFrm() ? (SwLayoutFrm*)pFrm : 0;
-    }
-    if ( pLay && pLay->IsTabFrm() )
-    {
-        //GetPrevLayoutLeaf() liefert ggf. auch Tabellen zurueck die letzte
-        //Zelle dieser Tabelle ist das das gesuchte Blatt.
-        pLay = ((SwTabFrm*)pLay)->FindLastCntnt()->GetUpper();
-        while ( !pLay->IsCellFrm() )
-            pLay = pLay->GetUpper();
-    }
-    return pLay;
-}
-*/
-
 void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
                              const SwLayoutFrm *&rpEnd,
                              const int bChkProtected )
@@ -1653,7 +1636,7 @@ void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
         aEndArr.Insert( p, 0 );
     }
 
-    for( USHORT n = 0; n < aEndArr.Count() && n < aSttArr.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aEndArr.Count() && n < aSttArr.Count(); ++n )
         if( aSttArr[ n ] != aEndArr[ n ] )
         {
             // first unequal line or box - all odds are
@@ -1748,8 +1731,8 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
             (!pTmp->IsCellFrm() ||
              ( ( ! bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() < nSX &&
                            (pTmp->Frm().*fnRect->fnGetRight)()< nSX2 ) ||
-                   bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() > nSX &&
-                           (pTmp->Frm().*fnRect->fnGetRight)()> nSX2 ) ) )
+               (   bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() > nSX &&
+                           (pTmp->Frm().*fnRect->fnGetRight)()> nSX2 ) ) ) )
         pTmp = pTmp->GetNextLayoutLeaf();
 
     if ( pTmp )
@@ -1791,7 +1774,7 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
 
     const SwCntntFrm* pLastCntnt = pTab->FindLastCntnt();
     rpEnd = pLastCntnt ? pLastCntnt->GetUpper() : 0;
-    // --> FME 2006-07-17 #134385# Made code robust. If pTab does not have a lower,
+    // --> Made code robust. If pTab does not have a lower,
     // we would crash here.
     if ( !pLastCntnt ) return;
     // <--
@@ -1867,10 +1850,9 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     while ( pEnd && !pEnd->IsCellFrm() )
         pEnd = pEnd->GetUpper();
 
-    // #112697# Robust:
     if ( !pStart || !pEnd )
     {
-        OSL_ENSURE( false, "MakeSelUnions with pStart or pEnd not in CellFrm" );
+        OSL_FAIL( "MakeSelUnions with pStart or pEnd not in CellFrm" );
         return;
     }
 
@@ -1878,14 +1860,14 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     const SwTabFrm *pEndTable = pEnd->FindTabFrm();
     if( !pTable || !pEndTable )
         return;
-    BOOL bExchange = FALSE;
+    sal_Bool bExchange = sal_False;
 
     if ( pTable != pEndTable )
     {
         if ( !pTable->IsAnFollow( pEndTable ) )
         {
             OSL_ENSURE( pEndTable->IsAnFollow( pTable ), "Tabkette verknotet." );
-            bExchange = TRUE;
+            bExchange = sal_True;
         }
     }
     else
@@ -1897,10 +1879,10 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
         {
             if( (pStart->Frm().*fnRect->fnGetLeft)() >
                 (pEnd->Frm().*fnRect->fnGetLeft)() )
-                bExchange = TRUE;
+                bExchange = sal_True;
         }
         else if( bVert == ( nSttTop < nEndTop ) )
-            bExchange = TRUE;
+            bExchange = sal_True;
     }
     if ( bExchange )
     {
@@ -1918,11 +1900,9 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     else if( nsSwTblSearchType::TBLSEARCH_COL == ((~nsSwTblSearchType::TBLSEARCH_PROTECT ) & eSearchType ) )
         ::lcl_FindStartEndCol( pStart, pEnd, nsSwTblSearchType::TBLSEARCH_PROTECT & eSearchType );
 
-    // --> FME 2006-07-17 #134385# Made code robust.
-    if ( !pEnd ) return;
-    // <--
+    if ( !pEnd ) return; // Made code robust.
 
-    //neu besorgen, da sie jetzt verschoben sind. MA: 28. Dec. 93 Bug 5190
+    //neu besorgen, da sie jetzt verschoben sind.
     pTable = pStart->FindTabFrm();
     pEndTable = pEnd->FindTabFrm();
 
@@ -2058,7 +2038,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
     }
 }
 
-BOOL CheckSplitCells( const SwCrsrShell& rShell, USHORT nDiv,
+sal_Bool CheckSplitCells( const SwCrsrShell& rShell, sal_uInt16 nDiv,
                         const SwTblSearchType eSearchType )
 {
     if( !rShell.IsTableMode() )
@@ -2067,13 +2047,13 @@ BOOL CheckSplitCells( const SwCrsrShell& rShell, USHORT nDiv,
     return CheckSplitCells( *rShell.getShellCrsr(false), nDiv, eSearchType );
 }
 
-BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
+sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
                         const SwTblSearchType eSearchType )
 {
     if( 1 >= nDiv )
-        return FALSE;
+        return sal_False;
 
-    USHORT nMinValue = nDiv * MINLAY;
+    sal_uInt16 nMinValue = nDiv * MINLAY;
 
     //Start- und Endzelle besorgen und den naechsten fragen.
     Point aPtPos, aMkPos;
@@ -2083,9 +2063,12 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
         aPtPos = pShCrsr->GetPtPos();
         aMkPos = pShCrsr->GetMkPos();
     }
-    const SwLayoutFrm *pStart = rCrsr.GetCntntNode()->GetFrm(
-                                &aPtPos )->GetUpper(),
-                      *pEnd   = rCrsr.GetCntntNode(FALSE)->GetFrm(
+
+    const SwCntntNode* pCntNd = rCrsr.GetCntntNode();
+    const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
+                                                        &aPtPos )->GetUpper();
+    pCntNd = rCrsr.GetCntntNode(sal_False);
+    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                 &aMkPos )->GetUpper();
 
     SWRECTFN( pStart->GetUpper() )
@@ -2096,7 +2079,7 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
     ::MakeSelUnions( aUnions, pStart, pEnd, eSearchType );
 
     //Jetzt zu jedem Eintrag die Boxen herausfischen und uebertragen.
-    for ( USHORT i = 0; i < aUnions.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < aUnions.Count(); ++i )
     {
         SwSelUnion *pUnion = aUnions[i];
         const SwTabFrm *pTable = pUnion->GetTable();
@@ -2118,7 +2101,7 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
                     if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
                     {
                         if( (pCell->Frm().*fnRect->fnGetWidth)() < nMinValue )
-                            return FALSE;
+                            return sal_False;
                     }
 
                     if ( pCell->GetNext() )
@@ -2134,7 +2117,7 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
             pRow = (const SwLayoutFrm*)pRow->GetNext();
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 // -------------------------------------------------------------------
@@ -2144,7 +2127,7 @@ BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
 
 void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibling )
 {
-    SwRowFrm *pRow = new SwRowFrm( rLine );
+    SwRowFrm *pRow = new SwRowFrm( rLine, pUpper );
     if ( pUpper->IsTabFrm() && ((SwTabFrm*)pUpper)->IsFollow() )
     {
         SwTabFrm* pTabFrm = (SwTabFrm*)pUpper;
@@ -2161,7 +2144,7 @@ void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibling )
 }
 
 
-BOOL _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara )
+sal_Bool _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara )
 {
     _FndPara* pFndPara = (_FndPara*)pPara;
     _FndBox* pFndBox = new _FndBox( (SwTableBox*)rpBox, pFndPara->pFndLine );
@@ -2172,25 +2155,25 @@ BOOL _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara )
         if( !pFndBox->GetLines().Count() )
         {
             delete pFndBox;
-            return TRUE;
+            return sal_True;
         }
     }
     else
     {
         SwTableBoxPtr pSrch = (SwTableBoxPtr)rpBox;
-        USHORT nFndPos;
+        sal_uInt16 nFndPos;
         if( !pFndPara->rBoxes.Seek_Entry( pSrch, &nFndPos ))
         {
             delete pFndBox;
-            return TRUE;
+            return sal_True;
         }
     }
     pFndPara->pFndLine->GetBoxes().C40_INSERT( _FndBox, pFndBox,
                     pFndPara->pFndLine->GetBoxes().Count() );
-    return TRUE;
+    return sal_True;
 }
 
-BOOL _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara )
+sal_Bool _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara )
 {
     _FndPara* pFndPara = (_FndPara*)pPara;
     _FndLine* pFndLine = new _FndLine( (SwTableLine*)rpLine, pFndPara->pFndBox );
@@ -2203,7 +2186,7 @@ BOOL _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara )
     }
     else
         delete pFndLine;
-    return TRUE;
+    return sal_True;
 }
 
 void _FndBox::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
@@ -2215,15 +2198,15 @@ void _FndBox::SetTableLines( const SwSelBoxes &rBoxes, const SwTable &rTable )
     //Line im Array der SwTable. Damit die 0 fuer 'keine Line' verwand werden
     //kann werden die Positionen um 1 nach oben versetzt!
 
-    USHORT nStPos = USHRT_MAX;
-    USHORT nEndPos= 0;
+    sal_uInt16 nStPos = USHRT_MAX;
+    sal_uInt16 nEndPos= 0;
 
-    for ( USHORT i = 0; i < rBoxes.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rBoxes.Count(); ++i )
     {
         SwTableLine *pLine = rBoxes[i]->GetUpper();
         while ( pLine->GetUpper() )
             pLine = pLine->GetUpper()->GetUpper();
-        const USHORT nPos = rTable.GetTabLines().GetPos(
+        const sal_uInt16 nPos = rTable.GetTabLines().GetPos(
                     (const SwTableLine*&)pLine ) + 1;
 
         OSL_ENSURE( nPos != USHRT_MAX, "TableLine not found." );
@@ -2253,7 +2236,7 @@ void _FndBox::SetTableLines( const SwTable &rTable )
         return;
 
     SwTableLine* pTmpLine = GetLines()[0]->GetLine();
-    USHORT nPos = rTable.GetTabLines().C40_GETPOS( SwTableLine, pTmpLine );
+    sal_uInt16 nPos = rTable.GetTabLines().C40_GETPOS( SwTableLine, pTmpLine );
     OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
     if( nPos )
         pLineBefore = rTable.GetTabLines()[ nPos - 1 ];
@@ -2267,7 +2250,7 @@ void _FndBox::SetTableLines( const SwTable &rTable )
 
 inline void UnsetFollow( SwFlowFrm *pTab )
 {
-    pTab->bIsFollow = FALSE;
+    pTab->bIsFollow = sal_False;
 }
 
 void _FndBox::DelFrms( SwTable &rTable )
@@ -2278,8 +2261,8 @@ void _FndBox::DelFrms( SwTable &rTable )
     //Wird ein Master vernichtet, so muss der Follow Master werden.
     //Ein TabFrm muss immer uebrigbleiben.
 
-    USHORT nStPos = 0;
-    USHORT nEndPos= rTable.GetTabLines().Count() - 1;
+    sal_uInt16 nStPos = 0;
+    sal_uInt16 nEndPos= rTable.GetTabLines().Count() - 1;
     if( rTable.IsNewModel() && pLineBefore )
         rTable.CheckRowSpan( pLineBefore, true );
     if ( pLineBefore )
@@ -2299,24 +2282,20 @@ void _FndBox::DelFrms( SwTable &rTable )
         --nEndPos;
     }
 
-    for ( USHORT i = nStPos; i <= nEndPos; ++i)
+    for ( sal_uInt16 i = nStPos; i <= nEndPos; ++i)
     {
         SwFrmFmt *pFmt = rTable.GetTabLines()[i]->GetFrmFmt();
-        SwClientIter aIter( *pFmt );
-        SwClient* pLast = aIter.GoStart();
-        if( pLast )
+        SwIterator<SwRowFrm,SwFmt> aIter( *pFmt );
+        for ( SwRowFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
         {
-            do {
-                SwFrm *pFrm = PTR_CAST( SwFrm, pLast );
-                if ( pFrm &&
-                     ((SwRowFrm*)pFrm)->GetTabLine() == rTable.GetTabLines()[i] )
+                if ( pFrm->GetTabLine() == rTable.GetTabLines()[i] )
                 {
-                    BOOL bDel = TRUE;
+                    sal_Bool bDel = sal_True;
                     SwTabFrm *pUp = !pFrm->GetPrev() && !pFrm->GetNext() ?
                                             (SwTabFrm*)pFrm->GetUpper() : 0;
                     if ( !pUp )
                     {
-                        const USHORT nRepeat =
+                        const sal_uInt16 nRepeat =
                                 ((SwTabFrm*)pFrm->GetUpper())->GetTable()->GetRowsToRepeat();
                         if ( nRepeat > 0 &&
                              ((SwTabFrm*)pFrm->GetUpper())->IsFollow() )
@@ -2350,7 +2329,7 @@ void _FndBox::DelFrms( SwTable &rTable )
                             // flag from pUp to pPrev. pUp may still have the
                             // flag set although there is not more follow flow
                             // line associated with pUp.
-                            pPrev->SetFollowFlowLine( FALSE );
+                            pPrev->SetFollowFlowLine( sal_False );
                             // <--
                         }
                         else if ( pFollow )
@@ -2376,7 +2355,7 @@ void _FndBox::DelFrms( SwTable &rTable )
                                 }
                             }
                             delete pUp;
-                            bDel = FALSE;//Die Row wird mit in den Abgrund
+                            bDel = sal_False;//Die Row wird mit in den Abgrund
                                          //gerissen.
                         }
                     }
@@ -2390,19 +2369,18 @@ void _FndBox::DelFrms( SwTable &rTable )
                             // We do not delete the follow flow line,
                             // this will be done automatically in the
                             // next turn.
-                            ((SwTabFrm*)pTabFrm)->SetFollowFlowLine( FALSE );
+                            ((SwTabFrm*)pTabFrm)->SetFollowFlowLine( sal_False );
                         }
 
                         pFrm->Cut();
                         delete pFrm;
                     }
                 }
-            } while( 0 != ( pLast = aIter++ ));
         }
     }
 }
 
-BOOL lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
+sal_Bool lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
 {
     const SwTabFrm* pTblFrm = rChk.FindTabFrm();
     if( pTblFrm->IsFollow() )
@@ -2428,11 +2406,10 @@ void lcl_UpdateRepeatedHeadlines( SwTabFrm& rTabFrm, bool bCalcLowers )
     // Insert fresh set of headlines:
     pLower = (SwRowFrm*)rTabFrm.Lower();
     SwTable& rTable = *rTabFrm.GetTable();
-    const USHORT nRepeat = rTable.GetRowsToRepeat();
-    for ( USHORT nIdx = 0; nIdx < nRepeat; ++nIdx )
+    const sal_uInt16 nRepeat = rTable.GetRowsToRepeat();
+    for ( sal_uInt16 nIdx = 0; nIdx < nRepeat; ++nIdx )
     {
-        SwRowFrm* pHeadline = new SwRowFrm(
-                                *rTable.GetTabLines()[ nIdx ] );
+        SwRowFrm* pHeadline = new SwRowFrm( *rTable.GetTabLines()[ nIdx ], &rTabFrm );
         pHeadline->SetRepeatedHeadline( true );
         pHeadline->Paste( &rTabFrm, pLower );
         pHeadline->RegistFlys();
@@ -2448,8 +2425,8 @@ void _FndBox::MakeFrms( SwTable &rTable )
     //wieder neu erzeugt werden.
     //Und Zwar fuer alle Auspraegungen der Tabelle (mehrere z.B. im Kopf/Fuss).
 
-    USHORT nStPos = 0;
-    USHORT nEndPos= rTable.GetTabLines().Count() - 1;
+    sal_uInt16 nStPos = 0;
+    sal_uInt16 nEndPos= rTable.GetTabLines().Count() - 1;
     if ( pLineBefore )
     {
         nStPos = rTable.GetTabLines().GetPos(
@@ -2466,33 +2443,32 @@ void _FndBox::MakeFrms( SwTable &rTable )
         --nEndPos;
     }
     //Jetzt die grosse Einfuegeoperation fuer alle Tabllen.
-    SwClientIter aTabIter( *rTable.GetFrmFmt() );
-    for ( SwTabFrm *pTable = (SwTabFrm*)aTabIter.First( TYPE(SwFrm) ); pTable;
-          pTable = (SwTabFrm*)aTabIter.Next() )
+    SwIterator<SwTabFrm,SwFmt> aTabIter( *rTable.GetFrmFmt() );
+    for ( SwTabFrm *pTable = aTabIter.First(); pTable; pTable = aTabIter.Next() )
     {
         if ( !pTable->IsFollow() )
         {
-            SwFrm  *pSibling = 0;
+            SwRowFrm  *pSibling = 0;
             SwFrm  *pUpperFrm  = 0;
             int i;
             for ( i = rTable.GetTabLines().Count()-1;
                     i >= 0 && !pSibling; --i )
             {
                 SwTableLine *pLine = pLineBehind ? pLineBehind :
-                                                    rTable.GetTabLines()[static_cast<USHORT>(i)];
-                SwClientIter aIter( *pLine->GetFrmFmt() );
-                pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
+                                                    rTable.GetTabLines()[static_cast<sal_uInt16>(i)];
+                SwIterator<SwRowFrm,SwFmt> aIter( *pLine->GetFrmFmt() );
+                pSibling = aIter.First();
                 while ( pSibling && (
-                            static_cast<SwRowFrm*>(pSibling)->GetTabLine() != pLine ||
+                            pSibling->GetTabLine() != pLine ||
                             !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
-                            static_cast<SwRowFrm*>(pSibling)->IsRepeatedHeadline() ||
+                            pSibling->IsRepeatedHeadline() ||
                             // --> FME 2005-08-24 #i53647# If !pLineBehind,
                             // IsInSplitTableRow() should be checked.
                             ( pLineBehind && pSibling->IsInFollowFlowRow() ) ||
                             (!pLineBehind && pSibling->IsInSplitTableRow() ) ) )
                             // <--
                 {
-                    pSibling = (SwFrm*)aIter.Next();
+                    pSibling = aIter.Next();
                 }
             }
             if ( pSibling )
@@ -2505,8 +2481,8 @@ void _FndBox::MakeFrms( SwTable &rTable )
 // ???? oder das der Letzte Follow der Tabelle ????
                 pUpperFrm = pTable;
 
-            for ( i = nStPos; (USHORT)i <= nEndPos; ++i )
-                ::lcl_InsertRow( *rTable.GetTabLines()[static_cast<USHORT>(i)],
+            for ( i = nStPos; (sal_uInt16)i <= nEndPos; ++i )
+                ::lcl_InsertRow( *rTable.GetTabLines()[static_cast<sal_uInt16>(i)],
                                 (SwLayoutFrm*)pUpperFrm, pSibling );
             if ( pUpperFrm->IsTabFrm() )
                 ((SwTabFrm*)pUpperFrm)->SetCalcLowers();
@@ -2519,53 +2495,52 @@ void _FndBox::MakeFrms( SwTable &rTable )
     }
 }
 
-void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
-                                            const BOOL bBehind )
+void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
+                                            const sal_Bool bBehind )
 {
     //Frms fuer neu eingefuege Zeilen erzeugen.
-    //bBehind == TRUE:  vor     pLineBehind
-    //        == FALSE: hinter  pLineBefore
-    const USHORT nBfPos = pLineBefore ?
+    //bBehind == sal_True:  vor     pLineBehind
+    //        == sal_False: hinter  pLineBefore
+    const sal_uInt16 nBfPos = pLineBefore ?
         rTable.GetTabLines().GetPos( (const SwTableLine*&)pLineBefore ) :
         USHRT_MAX;
-    const USHORT nBhPos = pLineBehind ?
+    const sal_uInt16 nBhPos = pLineBehind ?
         rTable.GetTabLines().GetPos( (const SwTableLine*&)pLineBehind ) :
         USHRT_MAX;
 
     //nNumber: wie oft ist eingefuegt worden.
     //nCnt:    wieviele sind nNumber mal eingefuegt worden.
 
-    const USHORT nCnt =
+    const sal_uInt16 nCnt =
         ((nBhPos != USHRT_MAX ? nBhPos : rTable.GetTabLines().Count()) -
          (nBfPos != USHRT_MAX ? nBfPos + 1 : 0)) / (nNumber + 1);
 
     //Den Master-TabFrm suchen
-    SwClientIter aTabIter( *rTable.GetFrmFmt() );
+    SwIterator<SwTabFrm,SwFmt> aTabIter( *rTable.GetFrmFmt() );
     SwTabFrm *pTable;
-    for ( pTable = (SwTabFrm*)aTabIter.First( TYPE(SwFrm) ); pTable;
-          pTable = (SwTabFrm*)aTabIter.Next() )
+    for ( pTable = aTabIter.First(); pTable; pTable = aTabIter.Next() )
     {
         if( !pTable->IsFollow() )
         {
-            SwFrm       *pSibling = 0;
+            SwRowFrm* pSibling = 0;
             SwLayoutFrm *pUpperFrm   = 0;
             if ( bBehind )
             {
                 if ( pLineBehind )
                 {
-                    SwClientIter aIter( *pLineBehind->GetFrmFmt() );
-                    pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
+                    SwIterator<SwRowFrm,SwFmt> aIter( *pLineBehind->GetFrmFmt() );
+                    pSibling = aIter.First();
                     while ( pSibling && (
                                 // only consider row frames associated with pLineBehind:
-                                static_cast<SwRowFrm*>(pSibling)->GetTabLine() != pLineBehind ||
+                                pSibling->GetTabLine() != pLineBehind ||
                                 // only consider row frames that are in pTables Master-Follow chain:
                                 !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
                                 // only consider row frames that are not repeated headlines:
-                                static_cast<SwRowFrm*>(pSibling)->IsRepeatedHeadline() ||
+                                pSibling->IsRepeatedHeadline() ||
                                 // only consider row frames that are not follow flow rows
                                 pSibling->IsInFollowFlowRow() ) )
                     {
-                          pSibling = (SwFrm*)aIter.Next();
+                          pSibling = aIter.Next();
                     }
                 }
                 if ( pSibling )
@@ -2576,10 +2551,10 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
                         pTable = pTable->GetFollow();
                     pUpperFrm = pTable;
                 }
-                const USHORT nMax = nBhPos != USHRT_MAX ?
+                const sal_uInt16 nMax = nBhPos != USHRT_MAX ?
                                     nBhPos : rTable.GetTabLines().Count();
 
-                USHORT i = nBfPos != USHRT_MAX ? nBfPos + 1 + nCnt : nCnt;
+                sal_uInt16 i = nBfPos != USHRT_MAX ? nBfPos + 1 + nCnt : nCnt;
 
                 for ( ; i < nMax; ++i )
                     ::lcl_InsertRow( *rTable.GetTabLines()[i], pUpperFrm, pSibling );
@@ -2588,7 +2563,7 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
             }
             else //davor einfuegen
             {
-                USHORT i;
+                sal_uInt16 i;
 
                 // We are looking for the frame that is behind the row frame
                 // that should be inserted.
@@ -2596,16 +2571,16 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
                 {
                     SwTableLine* pLine = pLineBefore ? pLineBefore : rTable.GetTabLines()[i];
 
-                    SwClientIter aIter( *pLine->GetFrmFmt() );
-                    pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
+                    SwIterator<SwRowFrm,SwFmt> aIter( *pLine->GetFrmFmt() );
+                    pSibling = aIter.First();
 
                     while ( pSibling && (
                             // only consider row frames associated with pLineBefore:
-                            static_cast<SwRowFrm*>(pSibling)->GetTabLine() != pLine ||
+                            pSibling->GetTabLine() != pLine ||
                             // only consider row frames that are in pTables Master-Follow chain:
                             !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
                             // only consider row frames that are not repeated headlines:
-                            static_cast<SwRowFrm*>(pSibling)->IsRepeatedHeadline() ||
+                            pSibling->IsRepeatedHeadline() ||
                             // 1. case: pLineBefore == 0:
                             // only consider row frames that are not follow flow rows
                             // 2. case: pLineBefore != 0:
@@ -2616,15 +2591,15 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
                               (  pLineBefore && pSibling->IsInSplitTableRow() ) ) ) )
                             // <--
                     {
-                        pSibling = (SwFrm*)aIter.Next();
+                        pSibling = aIter.Next();
                     }
                 }
 
                 pUpperFrm = pSibling->GetUpper();
                 if ( pLineBefore )
-                    pSibling = pSibling->GetNext();
+                    pSibling = (SwRowFrm*) pSibling->GetNext();
 
-                USHORT nMax = nBhPos != USHRT_MAX ?
+                sal_uInt16 nMax = nBhPos != USHRT_MAX ?
                                     nBhPos - nCnt :
                                     rTable.GetTabLines().Count() - nCnt;
 
@@ -2640,13 +2615,12 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
 
     //Die Headlines mussen ggf. auch verarbeitet werden. Um gut arbeitenden
     //Code nicht zu zerfasern wird hier nochmals iteriert.
-    const USHORT nRowsToRepeat = rTable.GetRowsToRepeat();
+    const sal_uInt16 nRowsToRepeat = rTable.GetRowsToRepeat();
     if ( nRowsToRepeat > 0 &&
          ( ( !bBehind && ( nBfPos == USHRT_MAX || nBfPos + 1 < nRowsToRepeat ) ) ||
            (  bBehind && ( ( nBfPos == USHRT_MAX && nRowsToRepeat > 1 ) || nBfPos + 2 < nRowsToRepeat ) ) ) )
     {
-        for ( pTable = (SwTabFrm*)aTabIter.First( TYPE(SwFrm) ); pTable;
-              pTable = (SwTabFrm*)aTabIter.Next() )
+        for ( pTable = aTabIter.First(); pTable; pTable = aTabIter.Next() )
         {
             if ( pTable->Lower() )
             {
@@ -2662,14 +2636,14 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
     }
 }
 
-BOOL _FndBox::AreLinesToRestore( const SwTable &rTable ) const
+sal_Bool _FndBox::AreLinesToRestore( const SwTable &rTable ) const
 {
     //Lohnt es sich MakeFrms zu rufen?
 
     if ( !pLineBefore && !pLineBehind && rTable.GetTabLines().Count() )
-        return TRUE;
+        return sal_True;
 
-    USHORT nBfPos;
+    sal_uInt16 nBfPos;
     if(pLineBefore)
     {
         const SwTableLine* rLBefore = (const SwTableLine*)pLineBefore;
@@ -2678,7 +2652,7 @@ BOOL _FndBox::AreLinesToRestore( const SwTable &rTable ) const
     else
         nBfPos = USHRT_MAX;
 
-    USHORT nBhPos;
+    sal_uInt16 nBhPos;
     if(pLineBehind)
     {
         const SwTableLine* rLBehind = (const SwTableLine*)pLineBehind;
@@ -2689,17 +2663,16 @@ BOOL _FndBox::AreLinesToRestore( const SwTable &rTable ) const
 
     if ( nBfPos == nBhPos ) //Duerfte eigentlich nie vorkommen.
     {
-        OSL_ENSURE( FALSE, "Table, Loeschen auf keinem Bereich !?!" );
-        return FALSE;
+        OSL_FAIL( "Table, Loeschen auf keinem Bereich !?!" );
+        return sal_False;
     }
 
     if ( rTable.GetRowsToRepeat() > 0 )
     {
         // ups. sollte unsere zu wiederholende Kopfzeile geloescht worden
         // sein??
-        SwClientIter aIter( *rTable.GetFrmFmt() );
-        for( SwTabFrm* pTable = (SwTabFrm*)aIter.First( TYPE( SwFrm ));
-             pTable; pTable = (SwTabFrm*)aIter.Next() )
+        SwIterator<SwTabFrm,SwFmt> aIter( *rTable.GetFrmFmt() );
+        for( SwTabFrm* pTable = aIter.First(); pTable; pTable = aIter.Next() )
         {
             if( pTable->IsFollow() )
             {
@@ -2711,19 +2684,19 @@ BOOL _FndBox::AreLinesToRestore( const SwTable &rTable ) const
 
     // Some adjacent lines at the beginning of the table have been deleted:
     if ( nBfPos == USHRT_MAX && nBhPos == 0 )
-        return FALSE;
+        return sal_False;
 
     // Some adjacent lines at the end of the table have been deleted:
     if ( nBhPos == USHRT_MAX && nBfPos == (rTable.GetTabLines().Count() - 1) )
-        return FALSE;
+        return sal_False;
 
     // Some adjacent lines in the middle of the table have been deleted:
     if ( nBfPos != USHRT_MAX && nBhPos != USHRT_MAX && (nBfPos + 1) == nBhPos )
-        return FALSE;
+        return sal_False;
 
     // The structure of the deleted lines is more complex due to split lines.
     // A call of MakeFrms() is necessary.
-    return TRUE;
+    return sal_True;
 }
 
 

@@ -75,10 +75,10 @@ class LwpOrderedObject : public LwpDLNFVList
 {
 public:
     LwpOrderedObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpOrderedObject(){};
+    virtual ~LwpOrderedObject(){}
     void Read();
-    LwpObjectID* GetPosition(){ return &m_Para;};
-    LwpObjectID* GetListList(){ return &m_ListList;};
+    LwpObjectID* GetPosition(){ return &m_Para;}
+    LwpObjectID* GetListList(){ return &m_ListList;}
 protected:
     LwpObjectID m_ListList;//lwplistlist object,
     LwpObjectID m_Para;

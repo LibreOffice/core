@@ -33,15 +33,14 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <osl/endian.h>
-#include <errhdl.hxx>       // for ASSERT
 #include <tools/string.hxx>
 #include <swdllapi.h>
 
-#define FILTER_RTF      "RTF"       // RTF-Filter
+#define FILTER_RTF      "RTF"       // RTF filter
 #define sRtfWH          "WH_RTF"
-#define FILTER_TEXT     "TEXT"      // Text-Filter mit Default-CodeSet
-#define FILTER_BAS      "BAS"       // StarBasic (identisch mit ANSI)
-#define FILTER_WW8      "CWW8"      // WinWord 97-Filter
+#define FILTER_TEXT     "TEXT"      // text filter with default codeset
+#define FILTER_BAS      "BAS"       // StarBasic (identical to ANSI)
+#define FILTER_WW8      "CWW8"      // WinWord 97 filter
 #define FILTER_TEXT_DLG "TEXT_DLG"  // text filter with encoding dialog
 #define FILTER_XML      "CXML"      // XML filter
 #define FILTER_XMLV     "CXMLV"     // XML filter
@@ -57,9 +56,9 @@
 struct SwIoDetect
 {
     const sal_Char* pName;
-    USHORT nLen;
+    sal_uInt16 nLen;
 
-    inline SwIoDetect( const sal_Char *pN, USHORT nL )
+    inline SwIoDetect( const sal_Char *pN, sal_uInt16 nL )
         : pName( pN ), nLen( nL )
     {}
 
@@ -68,7 +67,7 @@ struct SwIoDetect
         return pName && rNm.EqualsAscii( pName, 0, nLen );
     }
 
-    const sal_Char* IsReader( const sal_Char* pHeader, ULONG nLen_,
+    const sal_Char* IsReader( const sal_Char* pHeader, sal_uLong nLen_,
             const String &rFileName, const String& rUserData ) const;
 };
 
@@ -89,38 +88,37 @@ enum ReaderWriterEnum {
 
 extern SwIoDetect aFilterDetect[];
 
-// Die folgende Klasse ist ein Wrappe fuer die Basic-I/O-Funktionen
-// des Writer 3.0. Alles ist statisch. Alle u.a. Filternamen sind die
-// Writer-internen Namen, d.h. die namen, die in INSTALL.INI vor dem
-// Gleichheitszeichen stehen, z.b. SWG oder ASCII.
+// The following class is a wrapper for basic i/o functions of Writer 3.0.
+// Everything is static. All filter names mentioned are Writer-internal
+// names, i.e. the names in front of the equality sign in INSTALL.INI, like SWG
+// or ASCII.
 
 class SwIoSystem
 {
 public:
-    // suche ueber den internen FormatNamen den Filtereintrag
+    // find for an internal format name the corresponding filter entry
     SW_DLLPUBLIC static const SfxFilter* GetFilterOfFormat( const String& rFormat,
             const SfxFilterContainer* pCnt = 0 );
 
-    // Feststellen des zu verwendenden Filters fuer die uebergebene
-    // Datei. Der Filtername wird zurueckgeliefert. Konnte kein Filter
-    // zurueckgeliefert werden, wird der Name des ASCII-Filters geliefert!
+    // Detect for the given file which filter should be used. The filter name
+    // is returned. If no filter could be found, the name of the ASCII filter
+    // is returned!
     static const SfxFilter* GetFileFilter( const String& rFileName,
             const String& rPrefFltName,
             SfxMedium* pMedium = 0 );
 
-    // Feststellen ob das File in dem vorgegebenen Format vorliegt.
-    // Z.z werden nur unsere eigene Filter unterstuetzt!!
-    static BOOL IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
+    // Detect whether the given file is in the given format.
+    // For now, only our own filters are supported!
+    static sal_Bool IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
             const SfxFilter** ppFlt = 0 );
 
-    static BOOL IsValidStgFilter( SotStorage& , const SfxFilter& );
-    static BOOL IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
+    static sal_Bool IsValidStgFilter( SotStorage& , const SfxFilter& );
+    static sal_Bool IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
-    static bool IsDetectableText( const sal_Char* pBuf, ULONG &rLen,
+    static bool IsDetectableText( const sal_Char* pBuf, sal_uLong &rLen,
             CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0, bool bEncodedFilter = false );
-    //    static bool IsDetectableW4W(const String& rFileName, const String& rUserData);
 
-    static const SfxFilter* GetTextFilter( const sal_Char* pBuf, ULONG nLen );
+    static const SfxFilter* GetTextFilter( const sal_Char* pBuf, sal_uLong nLen );
 
     static const String GetSubStorageName( const SfxFilter& rFltr );
 };

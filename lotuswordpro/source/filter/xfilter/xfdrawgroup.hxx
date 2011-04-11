@@ -57,10 +57,6 @@
  * @file
  * Group of drawing objects.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-2-21 create this file.
- ************************************************************************/
 #ifndef     _XFDRAWGROUP_HXX
 #define     _XFDRAWGROUP_HXX
 
@@ -78,6 +74,8 @@ public:
     XFDrawGroup(){}
 
 public:
+    using XFDrawObject::Add;
+
     /**
      * @descr   Add a drawing object to the group.
      */

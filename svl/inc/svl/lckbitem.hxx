@@ -43,23 +43,23 @@ class SVL_DLLPUBLIC SfxLockBytesItem : public SfxPoolItem
 public:
                             TYPEINFO();
                             SfxLockBytesItem();
-                            SfxLockBytesItem( USHORT nWhich,
+                            SfxLockBytesItem( sal_uInt16 nWhich,
                                               SvLockBytes *pLockBytes );
-                            SfxLockBytesItem( USHORT nWhich, SvStream & );
+                            SfxLockBytesItem( sal_uInt16 nWhich, SvStream & );
                             SfxLockBytesItem( const SfxLockBytesItem& );
                             ~SfxLockBytesItem();
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nItemVersion) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const;
 
     SvLockBytes*            GetValue() const { return _xVal; }
 
     virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 );
+                                        sal_uInt8 nMemberId = 0 );
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 ) const;
+                                        sal_uInt8 nMemberId = 0 ) const;
 };
 
 #endif

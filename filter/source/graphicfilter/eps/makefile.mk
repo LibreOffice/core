@@ -31,8 +31,6 @@ PRJNAME=filter
 TARGET=eps
 DEPTARGET=veps
 
-#GEN_HID=TRUE
-
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -44,13 +42,10 @@ CDEFS+= -DEDITDEBUG
 .ENDIF
 
 SRS1NAME=$(TARGET)
-SRC1FILES =	dlgeps.src \
-            epsstr.src
+SRC1FILES =	epsstr.src
 .IF "$(L10N_framework)"==""
-EXCEPTIONSFILES= \
-	$(SLO)$/eps.obj \
-	$(SLO)$/dlgeps.obj
-SLOFILES = $(EXCEPTIONSFILES)
+EXCEPTIONSFILES=$(SLO)$/eps.obj
+SLOFILES =	$(SLO)$/eps.obj
 .ENDIF
 
 # ==========================================================================

@@ -39,8 +39,7 @@
 
 #include <comphelper/uieventslogger.hxx>
 
-using namespace rtl;
-
+using ::rtl::OUString;
 namespace tools
 {
     typedef void ( *pfunc_CreateRemoteControl)();
@@ -68,7 +67,7 @@ String GetCommandLineParam( sal_uInt32 nParam )
         return String( aParam );
     else
     {
-        DBG_ERROR( "Unable to get CommandLineParam" );
+        OSL_FAIL( "Unable to get CommandLineParam" );
         return String();
     }
 }
@@ -115,12 +114,12 @@ void InitTestToolLib()
                 (reinterpret_cast< pfunc_CreateRemoteControl >(pInitFunc))();
             else
             {
-                DBG_ERROR1( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+                OSL_TRACE( "Unable to get Symbol 'CreateRemoteControl' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
             }
         }
         else
         {
-            DBG_ERROR1( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            OSL_TRACE( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
         }
     }
 
@@ -136,16 +135,16 @@ void InitTestToolLib()
             if ( pInitFunc )
             {
                 (reinterpret_cast< pfunc_CreateEventLogger >(pInitFunc))();
-                bLoggerStarted = TRUE;
+                bLoggerStarted = sal_True;
             }
             else
             {
-                DBG_ERROR1( "Unable to get Symbol 'CreateEventLogger' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+                OSL_TRACE( "Unable to get Symbol 'CreateEventLogger' from library %s while loading testtool support.", SVLIBRARY( "sts" ) );
             }
         }
         else
         {
-            DBG_ERROR1( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
+            OSL_TRACE( "Unable to access library %s while loading testtool support.", SVLIBRARY( "sts" ) );
         }
     }
 }
@@ -173,7 +172,7 @@ void DeInitTestToolLib()
             if ( pDeInitFunc )
             {
                 (reinterpret_cast< pfunc_DestroyEventLogger >(pDeInitFunc))();
-                bLoggerStarted = FALSE;
+                bLoggerStarted = sal_False;
             }
         }
 

@@ -66,13 +66,13 @@
 #include <fmtfld.hxx>
 #include <node.hxx>
 #include <swwait.hxx>
-#include <swprtopt.hxx>
+#include <printdata.hxx>
 #include <frmatr.hxx>
-#include <view.hxx>         // fuer die aktuelle Sicht
+#include <view.hxx>         // for the current view
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
-#include <wrtsh.hxx>        // Verbindung zur Core
-#include <docsh.hxx>        // Dokumenterzeugung
+#include <wrtsh.hxx>        // connection to Core
+#include <docsh.hxx>        // document creation
 #include <basesh.hxx>
 #include <viewopt.hxx>
 #include <wdocsh.hxx>
@@ -82,6 +82,7 @@
 #include <shellio.hxx>      // I/O
 #include <docstyle.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docstat.hxx>
 #include <pagedesc.hxx>
 #include <pview.hxx>
@@ -93,19 +94,15 @@
 #include <swcli.hxx>
 #include <txtftn.hxx>
 #include <ftnidx.hxx>
-
-// --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
 #include <fldbas.hxx>
 #include <docary.hxx>
-// <--
-#include <swerror.h>        // Fehlermeldungen
+#include <swerror.h>        // Error messages
 #include <helpid.h>
 #include <cmdid.h>
 #include <globals.hrc>
 #include <app.hrc>
 
 #include <cfgid.h>
-#include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -123,7 +120,7 @@
 #include <unomid.h>
 
 #include <sfx2/Metadatable.hxx>
-
+#include <switerator.hxx>
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -134,7 +131,6 @@ using namespace ::com::sun::star::container;
 
 SFX_IMPL_INTERFACE( SwDocShell, SfxObjectShell, SW_RES(0) )
 {
-    SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
 }
 
 TYPEINIT2(SwDocShell, SfxObjectShell, SfxListener);
@@ -143,7 +139,7 @@ TYPEINIT2(SwDocShell, SfxObjectShell, SfxListener);
 SFX_IMPL_OBJECTFACTORY(SwDocShell, SvGlobalName(SO3_SW_CLASSID), SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, "swriter"  )
 
 /*--------------------------------------------------------------------
-    Beschreibung: Laden vorbereiten
+    Description: Prepare loading
  --------------------------------------------------------------------*/
 
 
@@ -151,11 +147,11 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
                                     SwCrsrShell *pCrsrShell,
                                     SwPaM* pPaM )
 {
-    BOOL bAPICall = FALSE;
+    sal_Bool bAPICall = sal_False;
     const SfxPoolItem* pApiItem;
     const SfxItemSet* pMedSet;
     if( 0 != ( pMedSet = rMedium.GetItemSet() ) && SFX_ITEM_SET ==
-            pMedSet->GetItemState( FN_API_CALL, TRUE, &pApiItem ) )
+            pMedSet->GetItemState( FN_API_CALL, sal_True, &pApiItem ) )
             bAPICall = ((const SfxBoolItem*)pApiItem)->GetValue();
 
     const SfxFilter* pFlt = rMedium.GetFilter();
@@ -199,7 +195,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         {
             const SfxItemSet* pSet = rMedium.GetItemSet();
             const SfxPoolItem *pPassItem;
-            if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, TRUE, &pPassItem))
+            if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, sal_True, &pPassItem))
                 aPasswd = ((const SfxStringItem *)pPassItem)->GetValue();
         }
 
@@ -210,20 +206,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
             return 0;
         }
     }
-    if(rMedium.IsStorage())
-    {
-        const SfxItemSet* pSet = rMedium.GetItemSet();
-        const SfxPoolItem *pItem;
-        if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, TRUE, &pItem))
-        {
-            OSL_ENSURE(pItem->IsA( TYPE(SfxStringItem) ), "Wrong parameter type");
-            comphelper::OStorageHelper::SetCommonStoragePassword( rMedium.GetStorage(), ((const SfxStringItem *)pItem)->GetValue() );
-        }
-        // Fuer's Dokument-Einfuegen noch die FF-Version, wenn's der
-        // eigene Filter ist.
-        OSL_ENSURE( /*pRead != ReadSw3 || */pRead != ReadXML || pFlt->GetVersion(),
-                "No FF version set in filter" );
-    }
+
     // #i30171# set the UpdateDocMode at the SwDocShell
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
     nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
@@ -238,7 +221,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         const SfxItemSet* pSet;
         const SfxPoolItem* pItem;
         if( 0 != ( pSet = rMedium.GetItemSet() ) && SFX_ITEM_SET ==
-            pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
+            pSet->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) )
             aOpt.ReadUserData( ((const SfxStringItem*)pItem)->GetValue() );
 
         if( pRead )
@@ -249,22 +232,22 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Laden
+    Description: Loading
  --------------------------------------------------------------------*/
 
-BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
+sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::ConvertFrom" );
 
     SwReader* pRdr;
     SwRead pRead = StartConvertFrom(rMedium, &pRdr);
     if (!pRead)
-      return FALSE; // #129881# return if no reader is found
+      return sal_False; // #129881# return if no reader is found
     SotStorageRef pStg=pRead->getSotStorageRef(); // #i45333# save sot storage ref in case of recursive calls
 
-    SwWait aWait( *this, TRUE );
+    SwWait aWait( *this, sal_True );
 
-        // SfxProgress unterdruecken, wenn man Embedded ist
+        // Suppress SfxProgress, when we are Embedded
     SW_MOD()->SetEmbeddedLoadSave(
                             SFX_CREATE_MODE_EMBEDDED == GetCreateMode() );
 
@@ -273,9 +256,9 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
     /* #106748# Restore the pool default if reading a saved document. */
     pDoc->RemoveAllFmtLanguageDependencies();
 
-    ULONG nErr = pRdr->Read( *pRead );
+    sal_uLong nErr = pRdr->Read( *pRead );
 
-    // Evtl. ein altes Doc weg
+    // Maybe put away one old Doc
     if ( pDoc != pRdr->GetDoc() )
     {
         if( pDoc )
@@ -293,10 +276,10 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
     delete pRdr;
 
-    SW_MOD()->SetEmbeddedLoadSave( FALSE );
+    SW_MOD()->SetEmbeddedLoadSave( sal_False );
 
     SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-    BOOL bOk = !IsError( nErr );
+    sal_Bool bOk = !IsError( nErr );
 
     if ( bOk && !pDoc->IsInLoadAsynchron() )
     {
@@ -309,17 +292,17 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Sichern des Default-Formats, Stg vorhanden
+    Description: Saving the Default-Format, Stg present
  --------------------------------------------------------------------*/
 
 
-BOOL SwDocShell::Save()
+sal_Bool SwDocShell::Save()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::Save" );
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
-    SwWait aWait( *this, TRUE );
+    SwWait aWait( *this, sal_True );
 
     CalcLayoutForOLEObjects();  // format for OLE objets
     // #i62875#
@@ -331,7 +314,7 @@ BOOL SwDocShell::Save()
         pDoc->set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
 
-    ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
+    sal_uLong nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     if( SfxObjectShell::Save() )
     {
         switch( GetCreateMode() )
@@ -344,17 +327,17 @@ BOOL SwDocShell::Save()
             {
                 WriterRef xWrt;
                 ::GetXMLWriter( aEmptyStr, GetMedium()->GetBaseURL( true ), xWrt );
-                xWrt->SetOrganizerMode( TRUE );
+                xWrt->SetOrganizerMode( sal_True );
                 SwWriter aWrt( *GetMedium(), *pDoc );
                 nErr = aWrt.Write( xWrt );
-                xWrt->SetOrganizerMode( FALSE );
+                xWrt->SetOrganizerMode( sal_False );
             }
             break;
 
         case SFX_CREATE_MODE_EMBEDDED:
-            // SfxProgress unterdruecken, wenn man Embedded ist
-            SW_MOD()->SetEmbeddedLoadSave( TRUE );
-            // kein break;
+            // Suppress SfxProgress, if we are Embedded
+            SW_MOD()->SetEmbeddedLoadSave( sal_True );
+            // no break;
 
         case SFX_CREATE_MODE_STANDARD:
         case SFX_CREATE_MODE_PREVIEW:
@@ -364,21 +347,21 @@ BOOL SwDocShell::Save()
                 {
                     if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
                         nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) (*this) );
-                    pDoc->SetContainsMSVBasic( FALSE );
+                    pDoc->SetContainsMSVBasic( sal_False );
                 }
 
-                // TabellenBox Edit beenden!
+                // End TableBox Edit!
                 if( pWrtShell )
                     pWrtShell->EndAllTblBoxEdit();
 
                 WriterRef xWrt;
                 ::GetXMLWriter( aEmptyStr, GetMedium()->GetBaseURL( true ), xWrt );
 
-                BOOL bLockedView(FALSE);
+                sal_Bool bLockedView(sal_False);
                 if ( pWrtShell )
                 {
                     bLockedView = pWrtShell->IsViewLocked();
-                    pWrtShell->LockView( TRUE );    //lock visible section
+                    pWrtShell->LockView( sal_True );    //lock visible section
                 }
 
                 SwWriter aWrt( *GetMedium(), *pDoc );
@@ -389,7 +372,7 @@ BOOL SwDocShell::Save()
             }
             break;
         }
-        SW_MOD()->SetEmbeddedLoadSave( FALSE );
+        SW_MOD()->SetEmbeddedLoadSave( sal_False );
     }
     SetError( nErr ? nErr : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
@@ -402,7 +385,7 @@ BOOL SwDocShell::Save()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Sichern im Defaultformat
+    Description: Save using the Defaultformat
  --------------------------------------------------------------------*/
 
 
@@ -410,7 +393,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveAs" );
 
-    SwWait aWait( *this, TRUE );
+    SwWait aWait( *this, sal_True );
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
     if(pView)
         pView->GetEditWin().StopQuickHelp();
@@ -442,8 +425,8 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
                 GetModel(), uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentProperties> xDocProps
                 = xDPS->getDocumentProperties();
-            xDocProps->setTemplateName(::rtl::OUString::createFromAscii(""));
-            xDocProps->setTemplateURL(::rtl::OUString::createFromAscii(""));
+            xDocProps->setTemplateName(::rtl::OUString());
+            xDocProps->setTemplateURL(::rtl::OUString());
             xDocProps->setTemplateDate(::util::DateTime());
         }
     }
@@ -458,7 +441,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         pDoc->set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
 
-    ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
+    sal_uLong nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xStor = rMedium.GetOutputStorage();
     if( SfxObjectShell::SaveAs( rMedium ) )
     {
@@ -471,7 +454,9 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             // will set the wrong class id.
             SvGlobalName aClassName;
             String aAppName, aLongUserName, aUserName;
-            SfxObjectShellRef xDocSh =
+
+            // The document is closed explicitly, but using SfxObjectShellLock is still more correct here
+            SfxObjectShellLock xDocSh =
                 new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
             // the global document can not be a template
             xDocSh->SetupStorage( xStor, SotStorage::GetVersion( xStor ), sal_False );
@@ -482,32 +467,32 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         {
             if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
                 nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) *this );
-            pDoc->SetContainsMSVBasic( FALSE );
+            pDoc->SetContainsMSVBasic( sal_False );
         }
 
-        // TabellenBox Edit beenden!
+        // End TableBox Edit!
         if( pWrtShell )
             pWrtShell->EndAllTblBoxEdit();
 
-        // Modified-Flag merken und erhalten ohne den Link zu Callen
-        // (fuer OLE; nach Anweisung von MM)
-        BOOL bIsModified = pDoc->IsModified();
-        SwUndoNoModifiedPosition aOldPos = pDoc->getUndoNoModifiedPosition();
+        // Remember and preserve Modified-Flag without calling the Link
+        // (for OLE; after Statement from MM)
+        sal_Bool bIsModified = pDoc->IsModified();
+        pDoc->GetIDocumentUndoRedo().LockUndoNoModifiedPosition();
         Link aOldOLELnk( pDoc->GetOle2Link() );
         pDoc->SetOle2Link( Link() );
 
-            // SfxProgress unterdruecken, wenn man Embedded ist
+            // Suppress SfxProgress when we are Embedded
         SW_MOD()->SetEmbeddedLoadSave(
                             SFX_CREATE_MODE_EMBEDDED == GetCreateMode() );
 
         WriterRef xWrt;
         ::GetXMLWriter( aEmptyStr, rMedium.GetBaseURL( true ), xWrt );
 
-        BOOL bLockedView(FALSE);
+        sal_Bool bLockedView(sal_False);
         if ( pWrtShell )
         {
             bLockedView = pWrtShell->IsViewLocked();
-            pWrtShell->LockView( TRUE );    //lock visible section
+            pWrtShell->LockView( sal_True );    //lock visible section
         }
 
         SwWriter aWrt( rMedium, *pDoc );
@@ -519,11 +504,11 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         if( bIsModified )
         {
             pDoc->SetModified();
-            pDoc->setUndoNoModifiedPosition( aOldPos );
+            pDoc->GetIDocumentUndoRedo().UnLockUndoNoModifiedPosition();
         }
         pDoc->SetOle2Link( aOldOLELnk );
 
-        SW_MOD()->SetEmbeddedLoadSave( FALSE );
+        SW_MOD()->SetEmbeddedLoadSave( sal_False );
     }
     SetError( nErr ? nErr : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
@@ -531,22 +516,22 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Sichern aller Formate
+    Description: Save all Formats
  --------------------------------------------------------------------*/
 SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
 {
-    // sind wir in der SourceView?
+    // are we in SourceView?
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst( pSh );
     SfxViewShell* pViewShell = pVFrame ? pVFrame->GetViewShell() : 0;
     return PTR_CAST( SwSrcView, pViewShell);
 }
 
-BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
+sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::ConvertTo" );
     const SfxFilter* pFlt = rMedium.GetFilter();
     if( !pFlt )
-        return FALSE;
+        return sal_False;
 
     WriterRef xWriter;
     SwReaderWriter::GetWriter( pFlt->GetUserData(), rMedium.GetBaseURL( true ), xWriter );
@@ -554,7 +539,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     {   // Filter not available
         InfoBox( 0,
                  SW_RESSTR(STR_DLLNOTFOUND) ).Execute();
-        return FALSE;
+        return sal_False;
     }
 
     //#i3370# remove quick help to prevent saving of autocorrection suggestions
@@ -569,27 +554,27 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         pView->GetPostItMgr()->UpdateDataOnActiveSidebarWin();
     }
 
-    ULONG nVBWarning = 0;
+    sal_uLong nVBWarning = 0;
 
     if( pDoc->ContainsMSVBasic() )
     {
-        BOOL bSave = pFlt->GetUserData().EqualsAscii( "CWW8" )
+        sal_Bool bSave = pFlt->GetUserData().EqualsAscii( "CWW8" )
              && SvtFilterOptions::Get()->IsLoadWordBasicStorage();
 
         if ( bSave )
         {
-            SvStorageRef xStg = new SotStorage( rMedium.GetOutStream(), FALSE );
+            SvStorageRef xStg = new SotStorage( rMedium.GetOutStream(), sal_False );
             OSL_ENSURE( !xStg->GetError(), "No storage available for storing VBA macros!" );
             if ( !xStg->GetError() )
             {
                 nVBWarning = SaveOrDelMSVBAStorage( (SfxObjectShell&) *this, *xStg, bSave, String::CreateFromAscii("Macros") );
                 xStg->Commit();
-                pDoc->SetContainsMSVBasic( TRUE );
+                pDoc->SetContainsMSVBasic( sal_True );
             }
         }
     }
 
-    // TabellenBox Edit beenden!
+    // End TableBox Edit!
     if( pWrtShell )
         pWrtShell->EndAllTblBoxEdit();
 
@@ -620,10 +605,10 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         UpdateDocInfoForSave();
     }
 
-    // --> FME 2007-5-7 #i76360# Update document statistics
+    // #i76360# Update document statistics
     SwDocStat aDocStat( pDoc->GetDocStat() );;
     pDoc->UpdateDocStat( aDocStat );
-    // <--
+
     CalcLayoutForOLEObjects();  // format for OLE objets
     // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
@@ -640,16 +625,16 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
            pFlt->GetUserData().EqualsAscii( FILTER_XMLV ) ||
            pFlt->GetUserData().EqualsAscii( FILTER_XMLVW ) ) )
     {
-        // eigenen Typ ermitteln
-        BYTE nMyType = 0;
+        // determine the own Type
+        sal_uInt8 nMyType = 0;
         if( ISA( SwWebDocShell) )
             nMyType = 1;
         else if( ISA( SwGlobalDocShell) )
             nMyType = 2;
 
-        // gewuenschten Typ ermitteln
-        BYTE nSaveType = 0;
-        ULONG nSaveClipId = pFlt->GetFormat();
+        // determine the desired Type
+        sal_uInt8 nSaveType = 0;
+        sal_uLong nSaveClipId = pFlt->GetFormat();
         if( SOT_FORMATSTR_ID_STARWRITERWEB_8 == nSaveClipId ||
             SOT_FORMATSTR_ID_STARWRITERWEB_60 == nSaveClipId ||
             SOT_FORMATSTR_ID_STARWRITERWEB_50 == nSaveClipId ||
@@ -661,10 +646,10 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
                  SOT_FORMATSTR_ID_STARWRITERGLOB_40 == nSaveClipId )
             nSaveType = 2;
 
-        // Flags am Dokument entsprechend umsetzen
-        BOOL bIsHTMLModeSave = GetDoc()->get(IDocumentSettingAccess::HTML_MODE);
-        BOOL bIsGlobalDocSave = GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT);
-        BOOL bIsGlblDocSaveLinksSave = GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
+        // Change Flags of the Document accordingly
+        sal_Bool bIsHTMLModeSave = GetDoc()->get(IDocumentSettingAccess::HTML_MODE);
+        sal_Bool bIsGlobalDocSave = GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT);
+        sal_Bool bIsGlblDocSaveLinksSave = GetDoc()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
         if( nMyType != nSaveType )
         {
             GetDoc()->set(IDocumentSettingAccess::HTML_MODE, 1 == nSaveType);
@@ -690,33 +675,14 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
             }
         }
 
-        // Jetzt das Dokument normal speichern
-        BOOL bRet = SaveAs( rMedium );
+        // Now normally save the Document
+        sal_Bool bRet = SaveAs( rMedium );
 
         if( nMyType != nSaveType )
         {
             GetDoc()->set(IDocumentSettingAccess::HTML_MODE, bIsHTMLModeSave );
             GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, bIsGlobalDocSave);
             GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bIsGlblDocSaveLinksSave);
-        }
-
-        if( bRet && nMyType != nSaveType )
-        {
-            SvGlobalName aClassName;
-            String aAppName, aLongUserName, aUserName;
-            SfxObjectShellRef xDocSh;
-            switch( nSaveType )
-            {
-            case 0:
-                xDocSh = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
-                break;
-            case 1:
-                xDocSh = new SwWebDocShell( SFX_CREATE_MODE_INTERNAL );
-                break;
-            case 2:
-                xDocSh = new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
-                break;
-            }
         }
 
         return bRet;
@@ -732,7 +698,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         if( 0 != ( pSet = rMedium.GetItemSet() ) )
         {
             if( SFX_ITEM_SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS,
-                                                    TRUE, &pItem ) )
+                                                    sal_True, &pItem ) )
                 sItemOpt = ((const SfxStringItem*)pItem)->GetValue();
         }
         if(sItemOpt.Len())
@@ -741,30 +707,29 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         xWriter->SetAsciiOptions( aOpt );
     }
 
-        // SfxProgress unterdruecken, wenn man Embedded ist
+        // Suppress SfxProgress when we are Embedded
     SW_MOD()->SetEmbeddedLoadSave(
                             SFX_CREATE_MODE_EMBEDDED == GetCreateMode());
 
-    // Kontext aufspannen, um die Anzeige der Selektion zu unterbinden
-    ULONG nErrno;
+    // Span Context in order to suppress the Selection's View
+    sal_uLong nErrno;
     String aFileName( rMedium.GetName() );
 
-    //Keine View also das ganze Dokument!
+    // No View, so the whole Document!
     if ( pWrtShell )
     {
-        SwWait aWait( *this, TRUE );
+        SwWait aWait( *this, sal_True );
         // #i106906#
         const sal_Bool bFormerLockView = pWrtShell->IsViewLocked();
         pWrtShell->LockView( sal_True );
         pWrtShell->StartAllAction();
         pWrtShell->Push();
-        SwWriter aWrt( rMedium, *pWrtShell, TRUE );
+        SwWriter aWrt( rMedium, *pWrtShell, sal_True );
         nErrno = aWrt.Write( xWriter, &aFileName );
-        //JP 16.05.97: falls der SFX uns die View waehrend des speicherns
-        //              entzieht
+        //JP 16.05.97: In case the SFX revokes the View while saving
         if( pWrtShell )
         {
-            pWrtShell->Pop(FALSE);
+            pWrtShell->Pop(sal_False);
             pWrtShell->EndAllAction();
             // #i106906#
             pWrtShell->LockView( bFormerLockView );
@@ -772,7 +737,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
     }
     else
     {
-        // sind wir in der SourceView?
+        // are we in SourceView?
         SwSrcView* pSrcView = ::lcl_GetSourceView( this );
         if( pSrcView )
         {
@@ -786,7 +751,7 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         }
     }
 
-    SW_MOD()->SetEmbeddedLoadSave( FALSE );
+    SW_MOD()->SetEmbeddedLoadSave( sal_False );
     SetError( nErrno ? nErrno : nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     if( !rMedium.IsStorage() )
         rMedium.CloseOutStream();
@@ -795,22 +760,22 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Haende weg
+    Description:    Hands off
  --------------------------------------------------------------------*/
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: ??? noch nicht zu aktivieren, muss TRUE liefern
+    Description: ??? do not yet activate, must deliver TRUE
  --------------------------------------------------------------------*/
 
 
 sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor  )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SaveCompleted" );
-    BOOL bRet = SfxObjectShell::SaveCompleted( xStor );
+    sal_Bool bRet = SfxObjectShell::SaveCompleted( xStor );
     if( bRet )
     {
-        // erst hier entscheiden, ob das Speichern geklappt hat oder nicht
+        // Do not decide until here, whether Saving was successful or not
         if( IsModified() )
             pDoc->SetModified();
         else
@@ -819,47 +784,47 @@ sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xS
 
     if( pOLEChildList )
     {
-        BOOL bResetModified = IsEnableSetModified();
+        sal_Bool bResetModified = IsEnableSetModified();
         if( bResetModified )
-            EnableSetModified( FALSE );
+            EnableSetModified( sal_False );
 
         uno::Sequence < rtl::OUString > aNames = pOLEChildList->GetObjectNames();
         for( sal_Int32 n = aNames.getLength(); n; n-- )
         {
             if ( !pOLEChildList->MoveEmbeddedObject( aNames[n-1], GetEmbeddedObjectContainer() ) )
             {
-                OSL_ENSURE(false, "Copying of objects didn't work!" );
+                OSL_FAIL("Copying of objects didn't work!" );
             }
         }
 
         DELETEZ( pOLEChildList );
         if( bResetModified )
-            EnableSetModified( TRUE );
+            EnableSetModified( sal_True );
     }
     return bRet;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Draw()-Overload fuer OLE2 (Sfx)
+    Description: Draw()-Overload for OLE2 (Sfx)
  --------------------------------------------------------------------*/
 
 void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
-                               USHORT nAspect )
+                               sal_uInt16 nAspect )
 {
-    //fix #25341# Draw sollte das Modified nicht beeinflussen
-    BOOL bResetModified;
-    if ( TRUE == (bResetModified = IsEnableSetModified()) )
-        EnableSetModified( FALSE );
+    //fix #25341# Draw should not affect the Modified
+    sal_Bool bResetModified;
+    if ( sal_True == (bResetModified = IsEnableSetModified()) )
+        EnableSetModified( sal_False );
 
-    //sollte am Document ein JobSetup haengen, dann kopieren wir uns diesen,
-    //um nach dem PrtOle2 diesen wieder am Doc zu verankern.
-    //Einen leeren JobSetup setzen wir nicht ein, denn der wuerde nur zu
-    //fragwuerdigem Ergebnis nach teurer Neuformatierung fuehren (Preview!)
+    // When there is a JobSetup connected to the Document, we copy it to
+    // reconnect it after PrtOle2. We don't use an empty JobSetup because
+    // that would only lead to questionable results after expensive
+    // reformatting (Preview!)
     JobSetup *pOrig = 0;
     if ( rSetup.GetPrinterName().Len() && ASPECT_THUMBNAIL != nAspect )
     {
         pOrig = const_cast<JobSetup*>(pDoc->getJobsetup());
-        if( pOrig )         // dann kopieren wir uns den
+        if( pOrig )         // then we copy that
             pOrig = new JobSetup( *pOrig );
         pDoc->setJobsetup( rSetup );
     }
@@ -871,8 +836,8 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetFillColor();
     pDev->SetLineColor();
     pDev->SetBackground();
-    BOOL bWeb = 0 != PTR_CAST(SwWebDocShell, this);
-    SwPrtOptions aOpts( aEmptyStr );
+    sal_Bool bWeb = 0 != PTR_CAST(SwWebDocShell, this);
+    SwPrintData aOpts;
     ViewShell::PrtOle2( pDoc, SW_MOD()->GetUsrPref(bWeb), aOpts, pDev, aRect );
     pDev->Pop();
 
@@ -882,7 +847,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
         delete pOrig;
     }
     if ( bResetModified )
-        EnableSetModified( TRUE );
+        EnableSetModified( sal_True );
 }
 
 
@@ -903,23 +868,23 @@ void SwDocShell::SetVisArea( const Rectangle &rRect )
         nMoveY = aRect.Top()  < 0 ? -aRect.Top()  : 0;
         aRect.Move( nMoveX, nMoveY );
 
-        //Ruft das SfxInPlaceObject::SetVisArea()!
-        pView->SetVisArea( aRect, TRUE );
+        // Calls SfxInPlaceObject::SetVisArea()!
+        pView->SetVisArea( aRect, sal_True );
     }
     else
         SfxObjectShell::SetVisArea( aRect );
 }
 
 
-Rectangle SwDocShell::GetVisArea( USHORT nAspect ) const
+Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
 {
     if ( nAspect == ASPECT_THUMBNAIL )
     {
-        //PreView: VisArea auf die erste Seite einstellen.
+        // PreView: set VisArea to the first page.
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 1 );
         SwCntntNode* pNd = pDoc->GetNodes().GoNext( &aIdx );
 
-        const SwRect aPageRect = pNd->FindPageFrmRect( FALSE, 0, FALSE );
+        const SwRect aPageRect = pNd->FindPageFrmRect( sal_False, 0, sal_False );
         return aPageRect.SVRect();
     }
     return SfxObjectShell::GetVisArea( nAspect );
@@ -943,12 +908,12 @@ void SwDocShell::OnDocumentPrinterChanged( Printer * pNewPrinter )
         GetDoc()->setPrinter( 0, true, true );
 }
 
-ULONG SwDocShell::GetMiscStatus() const
+sal_uLong SwDocShell::GetMiscStatus() const
 {
     return SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE;
 }
 
-// --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
+// #i20883# Digital Signatures and Encryption
 sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
 {
     // get global state like HIDDENINFORMATION_DOCUMENTVERSIONS
@@ -965,35 +930,28 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
         if ( GetWrtShell() )
         {
             SwFieldType* pType = GetWrtShell()->GetFldType( RES_POSTITFLD, aEmptyStr );
-            SwClientIter aIter( *pType );
-            SwClient* pFirst = aIter.GoStart();
+            SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+            SwFmtFld* pFirst = aIter.First();
             while( pFirst )
             {
-                if( static_cast<SwFmtFld*>(pFirst)->GetTxtFld() &&
-                    static_cast<SwFmtFld*>(pFirst)->IsFldInDoc() )
+                if( pFirst->GetTxtFld() && pFirst->IsFldInDoc() )
                 {
                     nState |= HIDDENINFORMATION_NOTES;
                     break;
                 }
-                pFirst = ++aIter;
+                pFirst = aIter.Next();
             }
         }
     }
 
     return nState;
 }
-// <--
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 
 void SwDocShell::GetState(SfxItemSet& rSet)
 {
     SfxWhichIter aIter(rSet);
-    USHORT  nWhich  = aIter.FirstWhich();
+    sal_uInt16  nWhich  = aIter.FirstWhich();
 
     while (nWhich)
     {
@@ -1001,28 +959,30 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         {
         case SID_PRINTPREVIEW:
         {
-            BOOL bDisable = IsInPlaceActive();
+            sal_Bool bDisable = IsInPlaceActive();
+            // Disable "multiple layout"
             if ( !bDisable )
             {
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);
-                while (pTmpFrm)     // Preview suchen
+                while (pTmpFrm)     // Look for Preview
                 {
                     if ( PTR_CAST(SwView, pTmpFrm->GetViewShell()) &&
-                         ((SwView*)pTmpFrm->GetViewShell())->GetWrtShell().getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
+                         ((SwView*)pTmpFrm->GetViewShell())->GetWrtShell().GetViewOptions()->getBrowseMode() )
                     {
-                        bDisable = TRUE;
+                        bDisable = sal_True;
                         break;
                     }
                     pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this);
                 }
             }
+            // End of disabled "multiple layout"
             if ( bDisable )
                 rSet.DisableItem( SID_PRINTPREVIEW );
             else
             {
-                SfxBoolItem aBool( SID_PRINTPREVIEW, FALSE );
+                SfxBoolItem aBool( SID_PRINTPREVIEW, sal_False );
                 if( PTR_CAST( SwPagePreView, SfxViewShell::Current()) )
-                    aBool.SetValue( TRUE );
+                    aBool.SetValue( sal_True );
                 rSet.Put( aBool );
             }
         }
@@ -1031,7 +991,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         {
             SfxViewShell* pCurrView = GetView() ? (SfxViewShell*)GetView()
                                         : SfxViewShell::Current();
-            BOOL bSourceView = 0 != PTR_CAST(SwSrcView, pCurrView);
+            sal_Bool bSourceView = 0 != PTR_CAST(SwSrcView, pCurrView);
             rSet.Put(SfxBoolItem(SID_SOURCEVIEW, bSourceView));
         }
         break;
@@ -1076,7 +1036,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
 
         case SID_ATTR_YEAR2000:
             {
-                const SvNumberFormatter* pFmtr = pDoc->GetNumberFormatter(FALSE);
+                const SvNumberFormatter* pFmtr = pDoc->GetNumberFormatter(sal_False);
                 rSet.Put( SfxUInt16Item( nWhich,
                         static_cast< sal_uInt16 >(
                         pFmtr ? pFmtr->GetYear2000()
@@ -1088,6 +1048,23 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             rSet.Put( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
         }
         break;
+        case SID_MAIL_PREPAREEXPORT:
+        {
+            //check if linked content or possibly hidden content is available
+            //pDoc->UpdateFlds( NULL, false );
+            sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
+            const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+            sal_Bool bRet = sal_False;
+            if( rLnks.Count() )
+                bRet = sal_True;
+            else
+            {
+                //sections with hidden flag, hidden character attribute, hidden paragraph/text or conditional text fields
+                bRet = pDoc->HasInvisibleContent();
+            }
+            rSet.Put( SfxBoolItem( nWhich, bRet ) );
+        }
+        break;
 
         default: OSL_ENSURE(!this,"You cannot get here!");
 
@@ -1097,23 +1074,23 @@ void SwDocShell::GetState(SfxItemSet& rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   OLE-Hdls
+    Description:    OLE-Hdls
  --------------------------------------------------------------------*/
 
 
 IMPL_LINK( SwDocShell, Ole2ModifiedHdl, void *, p )
 {
-    // vom Doc wird der Status mitgegeben (siehe doc.cxx)
-    //  Bit 0:  -> alter Zustand
-    //  Bit 1:  -> neuer Zustand
+    // the Status is handed over from Doc (see doc.cxx)
+    //  Bit 0:  -> old state
+    //  Bit 1:  -> new state
     long nStatus = (long)p;
     if( IsEnableSetModified() )
-        SetModified( (nStatus & 2) ? TRUE : FALSE );
+        SetModified( (nStatus & 2) ? sal_True : sal_False );
     return 0;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Pool returnen Hier weil virtuelll
+    Description:    return Pool here, because virtual
  --------------------------------------------------------------------*/
 
 
@@ -1137,13 +1114,13 @@ void SwDocShell::PrepareReload()
     ::DelAllGrfCacheEntries( pDoc );
 }
 
-// --> OD 2006-11-07 #i59688#
+// #i59688#
 // linked graphics are now loaded on demand.
 // Thus, loading of linked graphics no longer needed and necessary for
 // the load of document being finished.
 void SwDocShell::LoadingFinished()
 {
-    // --> OD 2007-10-08 #i38810#
+    // #i38810#
     // Original fix fails after integration of cws xmlsec11:
     // interface <SfxObjectShell::EnableSetModified(..)> no longer works, because
     // <SfxObjectShell::FinishedLoading(..)> doesn't care about its status and
@@ -1151,7 +1128,7 @@ void SwDocShell::LoadingFinished()
     // Thus, manuell modify the document, if its modified and its links are updated
     // before <FinishedLoading(..)> is called.
     const bool bHasDocToStayModified( pDoc->IsModified() && pDoc->LinksUpdated() );
-    // <--
+
     FinishedLoading( SFX_LOADED_ALL );
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst(this);
     if(pVFrame)
@@ -1168,10 +1145,10 @@ void SwDocShell::LoadingFinished()
     }
 }
 
-// eine Uebertragung wird abgebrochen (wird aus dem SFX gerufen)
+// a Transfer is cancelled (is called from SFX)
 void SwDocShell::CancelTransfers()
 {
-    // alle Links vom LinkManager Canceln
+    // Cancel all links from LinkManager
     aFinishedTimer.Stop();
     pDoc->GetLinkManager().CancelTransfers();
     SfxObjectShell::CancelTransfers();
@@ -1184,9 +1161,8 @@ SwFEShell* SwDocShell::GetFEShell()
 
 void SwDocShell::RemoveOLEObjects()
 {
-    SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
-    for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-            pNd; pNd = (SwCntntNode*)aIter.Next() )
+    SwIterator<SwCntntNode,SwFmtColl> aIter( *pDoc->GetDfltGrfFmtColl() );
+    for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
     {
         SwOLENode* pOLENd = pNd->GetOLENode();
         if( pOLENd && ( pOLENd->IsOLEObjectDeleted() ||
@@ -1213,9 +1189,8 @@ void SwDocShell::CalcLayoutForOLEObjects()
     if( !pWrtShell )
         return;
 
-    SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
-    for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-            pNd; pNd = (SwCntntNode*)aIter.Next() )
+    SwIterator<SwCntntNode,SwFmtColl> aIter( *pDoc->GetDfltGrfFmtColl() );
+    for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
     {
         SwOLENode* pOLENd = pNd->GetOLENode();
         if( pOLENd && pOLENd->IsOLESizeInvalid() )
@@ -1227,26 +1202,24 @@ void SwDocShell::CalcLayoutForOLEObjects()
 }
 
 
-// --> FME 2005-02-25 #i42634# Overwrites SfxObjectShell::UpdateLinks
+// #i42634# Overwrites SfxObjectShell::UpdateLinks
 // This new function is necessary to trigger update of links in docs
 // read by the binary filter:
 void SwDocShell::UpdateLinks()
 {
-    GetDoc()->UpdateLinks(TRUE);
-    // --> FME 2005-07-27 #i50703# Update footnote numbers
+    GetDoc()->UpdateLinks(sal_True);
+    // #i50703# Update footnote numbers
     SwTxtFtn::SetUniqueSeqRefNo( *GetDoc() );
     SwNodeIndex aTmp( GetDoc()->GetNodes() );
     GetDoc()->GetFtnIdxs().UpdateFtn( aTmp );
-    // <--
 }
 
 uno::Reference< frame::XController >
                                 SwDocShell::GetController()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > aRet;
-    // --> FME 2007-10-15 #i82346# No view in page preview
+    // #i82346# No view in page preview
     if ( GetView() )
-    // <--
         aRet = GetView()->GetController();
     return aRet;
 }
@@ -1306,8 +1279,8 @@ bool SwDocShell::HasChangeRecordProtection() const
 
 void SwDocShell::SetChangeRecording( bool bActivate )
 {
-    USHORT nOn = bActivate ? nsRedlineMode_t::REDLINE_ON : 0;
-    USHORT nMode = pWrtShell->GetRedlineMode();
+    sal_uInt16 nOn = bActivate ? nsRedlineMode_t::REDLINE_ON : 0;
+    sal_uInt16 nMode = pWrtShell->GetRedlineMode();
     pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
 }
 
@@ -1320,7 +1293,7 @@ bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
 
     IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswd = pIDRA->GetRedlinePassword();
-    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
+    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, sal_False, &pItem )
         && ((SfxBoolItem*)pItem)->GetValue() == (aPasswd.getLength() > 0))
         return false;
 
@@ -1356,7 +1329,7 @@ bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
 
     IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswdHash( pIDRA->GetRedlinePassword() );
-    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
+    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, sal_False, &pItem )
         && ((SfxBoolItem*)pItem)->GetValue() == (aPasswdHash.getLength() != 0))
         return false;
     rPasswordHash = aPasswdHash;

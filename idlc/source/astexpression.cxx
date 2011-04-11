@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idlc.hxx"
+
 #include <idlc/astexpression.hxx>
 #include <idlc/astconstant.hxx>
 #include <idlc/astscope.hxx>
@@ -35,6 +36,7 @@
 
 #include <limits.h>
 #include <float.h>
+#include <memory> // auto_ptr<>
 
 #undef  MAXCHAR
 #define MAXCHAR         127
@@ -800,82 +802,105 @@ void AstExpression::evaluate(EvalKind ek)
 
 sal_Bool AstExpression::operator==(AstExpression *pExpr)
 {
+    sal_Bool bRet = sal_False;
     if (m_combOperator != pExpr->getCombOperator())
-        return sal_False;
+        return bRet;
     evaluate(EK_const);
     pExpr->evaluate(EK_const);
     if (m_exprValue == NULL || pExpr->getExprValue() == NULL)
-        return sal_False;
+        return bRet;
     if (m_exprValue->et != pExpr->getExprValue()->et)
-        return sal_False;
+        return bRet;
     switch (m_exprValue->et)
     {
         case ET_short:
-            return (m_exprValue->u.sval == pExpr->getExprValue()->u.sval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.sval == pExpr->getExprValue()->u.sval) ? sal_True : sal_False;
+            break;
         case ET_ushort:
-            return (m_exprValue->u.usval == pExpr->getExprValue()->u.usval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.usval == pExpr->getExprValue()->u.usval) ? sal_True : sal_False;
+            break;
         case ET_long:
-            return (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? sal_True : sal_False;
+            break;
         case ET_ulong:
-            return (m_exprValue->u.ulval == pExpr->getExprValue()->u.ulval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.ulval == pExpr->getExprValue()->u.ulval) ? sal_True : sal_False;
+            break;
         case ET_hyper:
-            return (m_exprValue->u.hval == pExpr->getExprValue()->u.hval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.hval == pExpr->getExprValue()->u.hval) ? sal_True : sal_False;
+            break;
         case ET_uhyper:
-            return (m_exprValue->u.uhval == pExpr->getExprValue()->u.uhval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.uhval == pExpr->getExprValue()->u.uhval) ? sal_True : sal_False;
+            break;
         case ET_float:
-            return (m_exprValue->u.fval == pExpr->getExprValue()->u.fval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.fval == pExpr->getExprValue()->u.fval) ? sal_True : sal_False;
+            break;
         case ET_double:
-            return (m_exprValue->u.dval == pExpr->getExprValue()->u.dval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.dval == pExpr->getExprValue()->u.dval) ? sal_True : sal_False;
+            break;
         case ET_byte:
-            return (m_exprValue->u.byval == pExpr->getExprValue()->u.byval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.byval == pExpr->getExprValue()->u.byval) ? sal_True : sal_False;
+            break;
         case ET_boolean:
-            return (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? sal_True : sal_False;
+            break;
         default:
             OSL_ASSERT(false);
-            return sal_False;
+            bRet = sal_False;
+            break;
     }
 
-    return sal_False;
+    return bRet;
 }
 
 sal_Bool AstExpression::compare(AstExpression *pExpr)
 {
+    bool bRet = sal_False;
     if (m_combOperator != pExpr->getCombOperator())
-        return sal_False;
+        return bRet;
     evaluate(EK_const);
     pExpr->evaluate(EK_const);
     if (m_exprValue == NULL || pExpr->getExprValue() == NULL)
-        return sal_False;
+        return bRet;
     if (m_exprValue->et != pExpr->getExprValue()->et)
-        return sal_False;
+        return bRet;
     switch (m_exprValue->et)
     {
         case ET_short:
-            return (m_exprValue->u.sval == pExpr->getExprValue()->u.sval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.sval == pExpr->getExprValue()->u.sval) ? sal_True : sal_False;
+            break;
         case ET_ushort:
-            return (m_exprValue->u.usval == pExpr->getExprValue()->u.usval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.usval == pExpr->getExprValue()->u.usval) ? sal_True : sal_False;
+            break;
         case ET_long:
-            return (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? sal_True : sal_False;
+            break;
         case ET_ulong:
-            return (m_exprValue->u.ulval == pExpr->getExprValue()->u.ulval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.ulval == pExpr->getExprValue()->u.ulval) ? sal_True : sal_False;
+            break;
         case ET_hyper:
-            return (m_exprValue->u.hval == pExpr->getExprValue()->u.hval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.hval == pExpr->getExprValue()->u.hval) ? sal_True : sal_False;
+            break;
         case ET_uhyper:
-            return (m_exprValue->u.uhval == pExpr->getExprValue()->u.uhval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.uhval == pExpr->getExprValue()->u.uhval) ? sal_True : sal_False;
+            break;
         case ET_float:
-            return (m_exprValue->u.fval == pExpr->getExprValue()->u.fval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.fval == pExpr->getExprValue()->u.fval) ? sal_True : sal_False;
+            break;
         case ET_double:
-            return (m_exprValue->u.dval == pExpr->getExprValue()->u.dval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.dval == pExpr->getExprValue()->u.dval) ? sal_True : sal_False;
+            break;
         case ET_byte:
-            return (m_exprValue->u.byval == pExpr->getExprValue()->u.byval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.byval == pExpr->getExprValue()->u.byval) ? sal_True : sal_False;
+            break;
         case ET_boolean:
-            return (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? sal_True : sal_False;
+            break;
         default:
             OSL_ASSERT(false);
-            return sal_False;
+            bRet = sal_False;
+            break;
     }
-
-    return sal_False;
+    return bRet;
 }
 
 void AstExpression::fillDefinitionDetails()
@@ -928,7 +953,6 @@ AstExprValue* AstExpression::eval_internal(EvalKind ek)
 
 AstExprValue* AstExpression::eval_bin_op(EvalKind ek)
 {
-    AstExprValue *retval = NULL;
     ExprType eType = ET_double;
 
     if ( m_combOperator == EC_mod )
@@ -951,7 +975,7 @@ AstExprValue* AstExpression::eval_bin_op(EvalKind ek)
     if (m_subExpr2->getExprValue() == NULL)
         return NULL;
 
-    retval = new AstExprValue();
+    std::auto_ptr< AstExprValue > retval(new AstExprValue());
     retval->et = eType;
 
     switch (m_combOperator)
@@ -972,20 +996,18 @@ AstExprValue* AstExpression::eval_bin_op(EvalKind ek)
             break;
         case EC_div:
             if (m_subExpr2->getExprValue()->u.dval == 0.0)
-            return NULL;
+                return NULL;
             retval->u.dval = m_subExpr1->getExprValue()->u.dval / m_subExpr2->getExprValue()->u.dval;
             break;
         default:
             return NULL;
     }
 
-    return retval;
+    return retval.release();
 }
 
 AstExprValue* AstExpression::eval_bit_op(EvalKind ek)
 {
-    AstExprValue    *retval = NULL;
-
     if (ek != EK_const && ek != EK_positive_int)
         return NULL;
     if (m_subExpr1 == NULL || m_subExpr2 == NULL)
@@ -1003,7 +1025,7 @@ AstExprValue* AstExpression::eval_bit_op(EvalKind ek)
     if (m_subExpr2->getExprValue() == NULL)
         return NULL;
 
-    retval = new AstExprValue;
+    std::auto_ptr< AstExprValue > retval(new AstExprValue());
     retval->et = ET_long;
 
     switch (m_combOperator)
@@ -1027,13 +1049,11 @@ AstExprValue* AstExpression::eval_bit_op(EvalKind ek)
             return NULL;
     }
 
-    return retval;
+    return retval.release();
 }
 
 AstExprValue* AstExpression::eval_un_op(EvalKind ek)
 {
-    AstExprValue    *retval = NULL;
-
     if (m_exprValue != NULL)
         return m_exprValue;
 
@@ -1048,7 +1068,7 @@ AstExprValue* AstExpression::eval_un_op(EvalKind ek)
     if (m_subExpr1->getExprValue() == NULL)
         return NULL;
 
-    retval = new AstExprValue();
+    std::auto_ptr< AstExprValue > retval(new AstExprValue());
     retval->et = ET_double;
 
     switch (m_combOperator)
@@ -1069,7 +1089,7 @@ AstExprValue* AstExpression::eval_un_op(EvalKind ek)
             return NULL;
     }
 
-    return retval;
+    return retval.release();
 }
 
 AstExprValue* AstExpression::eval_symbol(EvalKind ek)

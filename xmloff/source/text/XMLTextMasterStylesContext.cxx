@@ -32,7 +32,7 @@
 
 
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 

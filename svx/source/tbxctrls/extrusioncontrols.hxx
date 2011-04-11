@@ -63,12 +63,8 @@ private:
     ValueSet* mpDirectionSet;
 
     Image       maImgDirection[9];
-    Image       maImgDirectionH[9];
-
     Image       maImgPerspective;
-    Image       maImgPerspectiveH;
     Image       maImgParallel;
-    Image       maImgParallelH;
 
     const rtl::OUString msExtrusionDirection;
     const rtl::OUString msExtrusionProjection;
@@ -110,13 +106,6 @@ private:
     Image maImgDepth3;
     Image maImgDepth4;
     Image maImgDepthInfinity;
-
-    Image maImgDepth0h;
-    Image maImgDepth1h;
-    Image maImgDepth2h;
-    Image maImgDepth3h;
-    Image maImgDepth4h;
-    Image maImgDepthInfinityh;
 
     FieldUnit   meUnit;
     double      mfDepth;
@@ -164,16 +153,9 @@ private:
     Image maImgLightingOn[9];
     Image maImgLightingPreview[9];
 
-    Image maImgLightingOffh[9];
-    Image maImgLightingOnh[9];
-    Image maImgLightingPreviewh[9];
-
     Image maImgBright;
     Image maImgNormal;
     Image maImgDim;
-    Image maImgBrighth;
-    Image maImgNormalh;
-    Image maImgDimh;
 
     int     mnLevel;
     bool    mbLevelEnabled;
@@ -221,10 +203,6 @@ private:
     Image maImgSurface2;
     Image maImgSurface3;
     Image maImgSurface4;
-    Image maImgSurface1h;
-    Image maImgSurface2h;
-    Image maImgSurface3h;
-    Image maImgSurface4h;
 
     const rtl::OUString msExtrusionSurface;
 

@@ -89,14 +89,7 @@ my @sdfparticles;
 parse_options();
 
 my $binpath = '';
-if( defined $ENV{UPDMINOREXT} )
-{
-    $binpath = $ENV{SOLARVER}."/".$ENV{INPATH}."/bin".$ENV{UPDMINOREXT}."/" ;
-}
-else
-{
-    $binpath = $ENV{SOLARVER}."/".$ENV{INPATH}."/bin/" ;
-}
+$binpath = $ENV{SOLARVER}."/".$ENV{INPATH}."/bin/" ;
 
 #%sl_modules = fetch_sourcelanguage_dirlist();
 
@@ -170,14 +163,14 @@ sub splitfile{
     }
     close( MYFILE );
 
-    if( !defined $ENV{SOURCE_ROOT_DIR} ){
-        print "Error, no SOURCE_ROOT_DIR in env found.\n";
+    if( !defined $ENV{SRC_ROOT} ){
+        print "Error, no SRC_ROOT in env found.\n";
         exit( -1 );
     }
-    my $src_root = $ENV{SOURCE_ROOT_DIR};
+    my $src_root = $ENV{SRC_ROOT};
     my $ooo_src_root = $ENV{SRC_ROOT};
     my $so_l10n_path  = $src_root."/sun/l10n_so/source";
-    my $ooo_l10n_path = $ooo_src_root."/l10n/source";
+    my $ooo_l10n_path = $ooo_src_root."/translations/source";
 
     #print "$so_l10n_path\n";
     #print "$ooo_l10n_path\n";
@@ -314,8 +307,9 @@ sub merge_gsicheck{
     $command .= "$ENV{SOLARVER}/$ENV{INPATH}/bin/gsicheck";
 
     my $errfile = $sdffile.".err";
-    $command .= " -k -c -wcf $tmpfile -wef $errfile -l \"\" $sdffile";
+    $command .= " -k -c -wcf $tmpfile -wef ".fix_cygwin_path($errfile)." -l \"\" ".fix_cygwin_path($sdffile);
     #my $rc = system( $command );
+    if ($bVerbose) { print STDOUT "localize.pl running $command\n"; }
     my $output = `$command`;
     my $rc = $? << 8;
     if ( $output ne "" ){
@@ -346,7 +340,7 @@ sub add_paths
 {
     my $langhash_ref            = shift;
     my $root_dir = $ENV{ SRC_ROOT };
-    my $ooo_l10n_dir = "$root_dir/l10n/source";
+    my $ooo_l10n_dir = "$root_dir/translations/source";
     my $so_l10n_dir  = "$root_dir/l10n_so/source";
 
     if( -e $ooo_l10n_dir )
@@ -387,7 +381,7 @@ sub collectfiles{
     STDOUT->autoflush( 1 );
 
     my $working_path = getcwd();
-    chdir $ENV{SOURCE_ROOT_DIR}, if defined $ENV{SOURCE_ROOT_DIR};
+    chdir $ENV{SRC_ROOT}, if defined $ENV{SRC_ROOT};
     add_paths( $langhash_ref );
 
     my ( $LOCALIZEPARTICLE , $localizeSDF ) = File::Temp::tempfile();
@@ -414,7 +408,7 @@ sub collectfiles{
         # if ( -x $command ){
         if( $command ){
             if( !$bVerbose  ){ $args .= " "; }
-            $args .= " -e -f $localizeSDF -l ";
+            $args .= " -e -f ".fix_cygwin_path($localizeSDF)." -l ";
             my $bFlag="";
             if( $bAll ) {$args .= " en-US";}
             else{
@@ -1074,5 +1068,18 @@ sub usage{
     print STDERR "\nExample:\n";
     print STDERR "\nlocalize -e -l en-US,pt-BR=en-US -f my.sdf\n( Extract en-US and pt-BR with en-US fallback )\n";
     print STDERR "\nlocalize -m -l cs -f my.sdf\n( Merge cs translation into the sourcecode ) \n";
+}
+
+sub fix_cygwin_path
+{
+    my ( $path ) = @_;
+
+    if ( $^O eq 'cygwin' )
+    {
+    $path = qx{cygpath -m "$path"};
+    chomp($path);
+    }
+
+    return $path;
 }
 

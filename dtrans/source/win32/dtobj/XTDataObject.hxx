@@ -40,7 +40,7 @@
 
 #include "DataFmtTransl.hxx"
 
-#include "FEtcList.hxx"
+#include "FetcList.hxx"
 
 #if defined _MSC_VER
 #pragma warning(push,1)

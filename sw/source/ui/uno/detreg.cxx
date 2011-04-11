@@ -44,30 +44,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-    void*   /*pServiceManager*/,
-    void*   pRegistryKey    )
-{
-    Reference< ::registry::XRegistryKey >
-            xKey( reinterpret_cast< ::registry::XRegistryKey* >( pRegistryKey ) ) ;
-
-    OUString aDelimiter( RTL_CONSTASCII_USTRINGPARAM("/") );
-    OUString aUnoServices( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") );
-
-    // Eigentliche Implementierung und ihre Services registrieren
-    sal_Int32 i;
-    Reference< ::registry::XRegistryKey >  xNewKey;
-
-    xNewKey = xKey->createKey( aDelimiter + SwFilterDetect::impl_getStaticImplementationName() +
-                               aUnoServices );
-
-    Sequence< OUString > aServices = SwFilterDetect::impl_getStaticSupportedServiceNames();
-    for(i = 0; i < aServices.getLength(); i++ )
-        xNewKey->createKey( aServices.getConstArray()[i] );
-
-    return sal_True;
-}
-
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     const sal_Char* pImplementationName,
     void* pServiceManager,

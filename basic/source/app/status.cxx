@@ -73,7 +73,7 @@ void StatusLine::SetProfileName( const String& s )
 
 IMPL_LINK( StatusLine, ActivateTask, TaskToolBox*, pTTB )
 {
-    USHORT nFirstWinPos=0;
+    sal_uInt16 nFirstWinPos=0;
     MenuBar* pMenu = pFrame->GetMenuBar();
     PopupMenu* pWinMenu = pMenu->GetPopupMenu( RID_APPWINDOW );
 
@@ -82,14 +82,10 @@ IMPL_LINK( StatusLine, ActivateTask, TaskToolBox*, pTTB )
 
     nFirstWinPos += pTTB->GetItemPos( pTTB->GetCurItemId() ) / 2;
 
-    USHORT x;
-    x = pTTB->GetItemPos( pTTB->GetCurItemId() );
-    x = pWinMenu->GetItemId( nFirstWinPos );
-    x = pWinMenu->GetItemCount();
     AppWin* pWin = pFrame->FindWin( pWinMenu->GetItemText( pWinMenu->GetItemId( nFirstWinPos ) ).EraseAllChars( L'~' ) );
     if ( pWin )
     {
-        pWin->Minimize( FALSE );
+        pWin->Minimize( sal_False );
         pWin->ToTop();
     }
     return 0;
@@ -97,7 +93,7 @@ IMPL_LINK( StatusLine, ActivateTask, TaskToolBox*, pTTB )
 
 void StatusLine::LoadTaskToolBox()
 {
-    USHORT nFirstWinPos=0;
+    sal_uInt16 nFirstWinPos=0;
     MenuBar* pMenu = pFrame->GetMenuBar();
     PopupMenu* pWinMenu = pMenu->GetPopupMenu( RID_APPWINDOW );
 
@@ -113,7 +109,7 @@ void StatusLine::LoadTaskToolBox()
         Window* pWin = pFrame->FindWin( pWinMenu->GetItemId( nFirstWinPos ) );
 
         if ( pWin )
-            pTaskToolBox->UpdateTask( Image(), pWin->GetText(), pWin == pFrame->pList->Last() && !( pFrame->pList->Last()->GetWinState() & TT_WIN_STATE_HIDE ) );
+            pTaskToolBox->UpdateTask( Image(), pWin->GetText(), pWin == pFrame->pList->back() && !( pFrame->pList->back()->GetWinState() & TT_WIN_STATE_HIDE ) );
 
         nFirstWinPos++;
     }

@@ -65,6 +65,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_INS_ATTR
     {
+        HelpID = "sw:ListBox:TP_REDLINE_OPT:LB_INS_ATTR";
         Pos = MAP_APPFONT ( 90 , 25 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
@@ -92,6 +93,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_INS_COL
     {
+        HelpID = "sw:ListBox:TP_REDLINE_OPT:LB_INS_COL";
         Pos = MAP_APPFONT ( 90 , 40 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
@@ -118,6 +120,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_DEL_ATTR
     {
+        HelpID = "sw:ListBox:TP_REDLINE_OPT:LB_DEL_ATTR";
         Pos = MAP_APPFONT ( 90 , 67 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
@@ -131,6 +134,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_DEL_COL
     {
+        HelpID = "sw:ListBox:TP_REDLINE_OPT:LB_DEL_COL";
         Pos = MAP_APPFONT ( 90 , 82 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
@@ -157,6 +161,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_CHG_ATTR
     {
+        HelpID = "sw:ListBox:TP_REDLINE_OPT:LB_CHG_ATTR";
         Pos = MAP_APPFONT ( 90 , 111 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
@@ -170,6 +175,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_CHG_COL
     {
+        HelpID = "sw:ListBox:TP_REDLINE_OPT:LB_CHG_COL";
         Pos = MAP_APPFONT ( 90 , 126 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
@@ -196,6 +202,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_MARKPOS
     {
+        HelpID = "sw:ListBox:TP_REDLINE_OPT:LB_MARKPOS";
         Pos = MAP_APPFONT ( 90 , 155 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
@@ -217,6 +224,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_LC_COL
     {
+        HelpID = "sw:ListBox:TP_REDLINE_OPT:LB_LC_COL";
         Pos = MAP_APPFONT ( 90 , 170 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;

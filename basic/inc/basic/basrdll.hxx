@@ -39,8 +39,8 @@ private:
     ResMgr*     pSttResMgr;
     ResMgr*     pBasResMgr;
 
-    BOOL        bDebugMode;
-    BOOL        bBreakEnabled;
+    sal_Bool        bDebugMode;
+    sal_Bool        bBreakEnabled;
 
 public:
                 BasicDLL();
@@ -51,8 +51,8 @@ public:
 
     static void BasicBreak();
 
-    static void EnableBreak( BOOL bEnable );
-    static void SetDebugMode( BOOL bDebugMode );
+    static void EnableBreak( sal_Bool bEnable );
+    static void SetDebugMode( sal_Bool bDebugMode );
 };
 
 #define BASIC_DLL() (*(BasicDLL**)GetAppData( SHL_BASIC ) )

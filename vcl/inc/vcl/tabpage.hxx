@@ -49,15 +49,13 @@ public:
                     TabPage( Window* pParent, const ResId& rResId );
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 #endif  // _SV_TABPAGE_HXX

@@ -36,10 +36,6 @@
 
 #include <vcl/button.hxx>
 
-
-/*-----------------22.02.97 15.06-------------------
-
---------------------------------------------------*/
 class SwInsertAbstractDlg  : public SfxModalDialog
 {
     FixedLine       aFL;
@@ -58,8 +54,8 @@ public:
     SwInsertAbstractDlg( Window* pParent );
     ~SwInsertAbstractDlg();
 
-    BYTE    GetLevel() const;
-    BYTE    GetPara() const;
+    sal_uInt8   GetLevel() const;
+    sal_uInt8   GetPara() const;
 };
 
 #endif

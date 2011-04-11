@@ -38,7 +38,7 @@ namespace formula
     {
     public:
         virtual void ShowReference(const String& _sRef) = 0;
-        virtual void HideReference( BOOL bDoneRefMode = TRUE ) = 0;
+        virtual void HideReference( sal_Bool bDoneRefMode = sal_True ) = 0;
         virtual void ReleaseFocus( RefEdit* pEdit, RefButton* pButton = NULL ) = 0;
         virtual void ToggleCollapsed( RefEdit* pEdit, RefButton* pButton = NULL ) = 0;
     };

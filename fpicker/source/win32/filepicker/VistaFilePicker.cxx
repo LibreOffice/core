@@ -92,8 +92,8 @@ namespace
     css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker_getSupportedServiceNames()
     {
         css::uno::Sequence< ::rtl::OUString > aRet(2);
-        aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FilePicker");
-        aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.SystemFilePicker");
+        aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FilePicker"));
+        aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFilePicker"));
         return aRet;
     }
 }
@@ -552,17 +552,9 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
-    /*
-    // called twice ?
-    if (m_pDlg)
-        throw css::uno::Exception(
-                ::rtl::OUString::createFromAscii( "XInitialization::initialize() called twice." ),
-                static_cast< css::ui::dialogs::XFilePicker* >( this ));
-    */
-
     if (lArguments.getLength() < 1)
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii( "XInitialization::initialize() called without arguments." ),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "XInitialization::initialize() called without arguments." )),
                 static_cast< css::ui::dialogs::XFilePicker2* >( this ),
                 1);
 
@@ -692,7 +684,7 @@ void SAL_CALL VistaFilePicker::cancel()
 ::rtl::OUString SAL_CALL VistaFilePicker::getImplementationName()
     throw(css::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.fpicker.VistaFileDialog");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.fpicker.VistaFileDialog"));
 }
 
 // -------------------------------------------------

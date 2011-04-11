@@ -29,17 +29,14 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include "com/sun/star/registry/XRegistryKey.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
+#include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "osl/diagnose.h"
 #include "uno/lbnames.h"
-#include "rtl/textenc.h"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
 #include "sal/types.h"
 
 #include "configurationprovider.hxx"
@@ -63,15 +60,17 @@ static cppu::ImplementationEntry const services[] = {
     { &dummy, &configmgr::configuration_provider::getImplementationName,
       &configmgr::configuration_provider::getSupportedServiceNames,
       &configmgr::configuration_provider::createFactory, 0, 0 },
-    { &dummy, &configmgr::default_provider::getImplementationName,
+    { &configmgr::default_provider::create,
+      &configmgr::default_provider::getImplementationName,
       &configmgr::default_provider::getSupportedServiceNames,
-      &configmgr::default_provider::createFactory, 0, 0 },
-    { &dummy, &configmgr::configuration_registry::getImplementationName,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &configmgr::configuration_registry::create,
+      &configmgr::configuration_registry::getImplementationName,
       &configmgr::configuration_registry::getSupportedServiceNames,
-      &configmgr::configuration_registry::createFactory, 0, 0 },
-    { &dummy, &configmgr::update::getImplementationName,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &configmgr::update::create, &configmgr::update::getImplementationName,
       &configmgr::update::getSupportedServiceNames,
-      &configmgr::update::createFactory, 0, 0 },
+      &cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 }
 };
 
@@ -89,50 +88,6 @@ component_getImplementationEnvironment(
     char const ** ppEnvTypeName, uno_Environment **)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey)
-{
-    if (!component_writeInfoHelper(pServiceManager, pRegistryKey, services)) {
-        return false;
-    }
-    try {
-        css::uno::Reference< css::registry::XRegistryKey >(
-            (css::uno::Reference< css::registry::XRegistryKey >(
-                static_cast< css::registry::XRegistryKey * >(pRegistryKey))->
-             createKey(
-                 rtl::OUString(
-                     RTL_CONSTASCII_USTRINGPARAM(
-                         "/com.sun.star.comp.configuration.DefaultProvider/UNO/"
-                         "SINGLETONS/"
-                         "com.sun.star.configuration.theDefaultProvider")))),
-            css::uno::UNO_SET_THROW)->
-            setStringValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.DefaultProvider")));
-        css::uno::Reference< css::registry::XRegistryKey >(
-            (css::uno::Reference< css::registry::XRegistryKey >(
-                static_cast< css::registry::XRegistryKey * >(pRegistryKey))->
-             createKey(
-                 rtl::OUString(
-                     RTL_CONSTASCII_USTRINGPARAM(
-                         "/com.sun.star.comp.configuration.Update/UNO/"
-                         "SINGLETONS/com.sun.star.configuration.Update")))),
-            css::uno::UNO_SET_THROW)->
-            setStringValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.Update_Service")));
-    } catch (css::uno::Exception & e) {
-        (void) e;
-        OSL_TRACE(
-            "configmgr component_writeInfo exception: %s",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
-        return false;
-    }
-    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

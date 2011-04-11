@@ -57,7 +57,7 @@ namespace XmlSec
         const ::rtl::OUString & rRawString);
     String          GetContentPart( const String& _rRawString );
 
-    String          GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep = ":", UINT16 _nLineBreak = 0xFFFF );
+    String          GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep = ":", sal_uInt16 _nLineBreak = 0xFFFF );
 
     long            ShrinkToFitWidth( Control& _rCtrl, long _nOffs = 0 );       // return = new width
     void            AlignAfterImage( const FixedImage& _rImage, Control& _rCtrl, long _nXOffset = 0 );

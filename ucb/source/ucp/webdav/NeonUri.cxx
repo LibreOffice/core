@@ -60,36 +60,24 @@ using namespace webdav_ucp;
 namespace {
 
 const ne_uri g_sUriDefaultsHTTP  = { "http",
-#if NEON_VERSION >= 0x0260
                                      NULL,
-#endif
                                      NULL,
                                      DEFAULT_HTTP_PORT,
-#if NEON_VERSION >= 0x0260
                                      NULL,
-#endif
                                      NULL,
                                      NULL };
 const ne_uri g_sUriDefaultsHTTPS = { "https",
-#if NEON_VERSION >= 0x0260
                                      NULL,
-#endif
                                      NULL,
                                      DEFAULT_HTTPS_PORT,
-#if NEON_VERSION >= 0x0260
                                      NULL,
-#endif
                                      NULL,
                                      NULL };
 const ne_uri g_sUriDefaultsFTP   = { "ftp",
-#if NEON_VERSION >= 0x0260
                                      NULL,
-#endif
                                      NULL,
                                      DEFAULT_FTP_PORT,
-#if NEON_VERSION >= 0x0260
                                      NULL,
-#endif
                                      NULL,
                                      NULL };
 } // namespace
@@ -175,11 +163,7 @@ void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
                     pUri->scheme ? pUri->scheme : pUriDefs->scheme,
                     RTL_TEXTENCODING_UTF8 );
     mUserInfo = rtl::OStringToOUString(
-#if NEON_VERSION >= 0x0260
                     pUri->userinfo ? pUri->userinfo : pUriDefs->userinfo,
-#else
-                    pUri->authinfo ? pUri->authinfo : pUriDefs->authinfo,
-#endif
                     RTL_TEXTENCODING_UTF8 );
     mHostName = rtl::OStringToOUString(
                     pUri->host ? pUri->host : pUriDefs->host,
@@ -189,21 +173,19 @@ void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
                     pUri->path ? pUri->path : pUriDefs->path,
                     RTL_TEXTENCODING_UTF8 );
 
-#if NEON_VERSION >= 0x0260
     if ( pUri->query )
     {
-        mPath += rtl::OUString::createFromAscii( "?" );
+        mPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
         mPath += rtl::OStringToOUString(
             pUri->query,  RTL_TEXTENCODING_UTF8 );
     }
 
     if ( pUri->fragment )
     {
-        mPath += rtl::OUString::createFromAscii( "#" );
+        mPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#"));
         mPath += rtl::OStringToOUString(
             pUri->fragment,  RTL_TEXTENCODING_UTF8 );
     }
-#endif
 }
 
 // -------------------------------------------------------------------
@@ -291,7 +273,7 @@ void NeonUri::calculateURI ()
         return aTemp;
     }
     else
-        return rtl::OUString::createFromAscii ("/");
+        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("/"));
 }
 
 bool NeonUri::operator== ( const NeonUri & rOther ) const
@@ -307,7 +289,7 @@ bool NeonUri::operator== ( const NeonUri & rOther ) const
 void NeonUri::AppendPath (const rtl::OUString& rPath)
 {
     if (mPath.lastIndexOf ('/') != mPath.getLength () - 1)
-        mPath += rtl::OUString::createFromAscii ("/");
+        mPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("/"));
 
     mPath += rPath;
     calculateURI ();

@@ -39,6 +39,10 @@ TARGETTYPE=CUI
 
 SCP_PRODUCT_TYPE=osl
 
+.IF "$(ENABLE_OPENGL)"=="TRUE"
+SCPDEFS+=-DENABLE_OPENGL
+.ENDIF
+
 PARFILES= \
         module_impress.par              \
         file_impress.par 

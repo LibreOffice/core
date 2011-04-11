@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-//#define TF_NEWDESKTOP
-
 #define _SDINTERN_HXX
 
 #include <stdio.h>
@@ -53,7 +51,7 @@
 #include <sfx2/app.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/dispatch.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/viewsh.hxx>
 #include "intro.hxx"
@@ -85,7 +83,7 @@ DBG_NAME(SfxAppMainCHAOSReg)
 //===================================================================
 
 #ifdef TF_POOLABLE
-static SfxItemInfo __READONLY_DATA aItemInfos[] =
+static SfxItemInfo const aItemInfos[] =
 {
     { 0, 0 }
 };
@@ -100,54 +98,40 @@ void SfxApplication::Init
 (
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird vom SFx aus Application:a:Main() gerufen,
-    bevor Execute() ausgef"uhrt wird und
-    - das Intro bereits angezeigt ist,
-    - das Applikationsfenster exisitiert, aber noch hidden ist,
-    - die Bindings bereits existieren (Controller sind anmeldbar),
-    - der Ini- und Config-Manager bereits existiert,
-    - die Standard-Controller bereits exisitieren,
-    - die SFx-Shells ihre Interfaces bereits registriert haben.
+    This virtual method is called from SFx through Application::Main(),
+    before Execute() is called and:
+    - the Intro is already displayed,
+    - the Applications window exists, but it is still hidden,
+    - the Bindings already exist (Controller can be registered),
+    - the Init and Config-Manager already exists,
+    - the Standard-Controller already exists,
+    - the SFx-Shells have alredy registered their Interfaces.
 
-    [Querverweise]
+    [Cross-reference]
+
     <SfxApplication::Exit()>
     <SfxApplication::OpenClients()>
 */
 {
-#ifdef DDE_AVAILABLE
-#ifndef DBG_UTIL
-    InitializeDde();
-#else
-    if( !InitializeDde() )
-    {
-        ByteString aStr( "Kein DDE-Service moeglich. Fehler: " );
-        if( GetDdeService() )
-            aStr += GetDdeService()->GetError();
-        else
-            aStr += '?';
-        DBG_ASSERT( sal_False, aStr.GetBuffer() )
-    }
-#endif
-#endif
 }
 
 //--------------------------------------------------------------------
 
 void SfxApplication::Exit()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird vom SFx aus Application::Main() gerufen,
-    nachdem Execute() beendet ist und
-    - die Konfiguration (SfxConfigManager) bereits gespeichert wurde,
-    - die Fensterpostionen etc. in den SfxIniManager geschrieben wurden,
-    - das Applikationsfenster noch existiert, aber hidden ist
-    - s"amtliche Dokumente und deren Views bereits geschlossen sind.
-    - Dispatcher, Bindings etc. bereits zerst"ort sind
+    This virtual method is called from SFx through Application::Main(),
+    after Execute() has finished and
+    - the configuration (SfxConfigManager) was already saved,
+    - the window postions etc. in the SfxIniManager were written,
+    - the Application widow still exists, but is hidden
+    - all Documents and their Views already are closed.
+    - Dispatcher, Bindings etc. already destroyed.
 
-    [Querverweise]
+    [Cross-reference]
     <SfxApplication::Init(int,char*[])>
 */
 
@@ -158,35 +142,6 @@ void SfxApplication::Exit()
 
 void SfxApplication::PreInit( )
 {
-}
-
-//---------------------------------------------------------------------------
-bool SfxApplication::InitLabelResMgr( const char* _pLabelPrefix, bool _bException )
-{
-    bool bRet = false;
-    // Label-DLL mit diversen Resourcen fuer OEM-Ver. etc. (Intro, Titel, About)
-    DBG_ASSERT( _pLabelPrefix, "Wrong initialisation!" );
-    if ( _pLabelPrefix )
-    {
-        // versuchen, die Label-DLL zu erzeugen
-        pAppData_Impl->pLabelResMgr = CreateResManager( _pLabelPrefix );
-
-        // keine separate Label-DLL vorhanden?
-        if ( !pAppData_Impl->pLabelResMgr )
-        {
-            if ( _bException )
-            {
-                // maybe corrupted installation
-                throw (::com::sun::star::uno::RuntimeException(
-                    ::rtl::OUString::createFromAscii("iso resource could not be loaded by SfxApplication"),
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >()));
-            }
-        }
-        else
-            bRet = true;
-    }
-
-    return bRet;
 }
 
 void SfxApplication::Main( )

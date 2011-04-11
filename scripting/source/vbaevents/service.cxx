@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: service.cxx,v $
- * $Revision: 1.0 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -109,16 +106,6 @@ extern "C"
     {
         OSL_TRACE("In component_getImplementationEnv");
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
-    SAL_DLLPUBLIC_EXPORT  sal_Bool SAL_CALL component_writeInfo(
-        lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
-    {
-        OSL_TRACE("In component_writeInfo");
-        if ( ::cppu::component_writeInfoHelper(
-            pServiceManager, pRegistryKey, s_component_entries ) )
-            return sal_True;
-        return sal_False;
     }
 
     SAL_DLLPUBLIC_EXPORT  void * SAL_CALL component_getFactory(

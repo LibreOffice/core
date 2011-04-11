@@ -31,7 +31,7 @@
 
 #include <rtl/ustring.hxx>
 #include <comphelper/TypeGeneration.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 namespace comphelper
 {
     struct PropertyInfo
@@ -61,11 +61,11 @@ namespace comphelper
     };
 }
 
-typedef std::hash_map < ::rtl::OUString,
+typedef boost::unordered_map < ::rtl::OUString,
                         ::comphelper::PropertyInfo*,
                         ::rtl::OUStringHash,
                         ::comphelper::eqFunc > PropertyInfoHash;
-typedef std::hash_map < ::rtl::OUString,
+typedef boost::unordered_map < ::rtl::OUString,
                         ::comphelper::PropertyData*,
                         ::rtl::OUStringHash,
                         ::comphelper::eqFunc > PropertyDataHash;

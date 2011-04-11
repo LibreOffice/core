@@ -148,7 +148,6 @@ void OTableBorderWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground,
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetPointFont( aFont );
-//      Set/*Zoomed*/PointFont( aFont );
     }
 
     if ( bFont || bForeground )
@@ -278,7 +277,7 @@ IMPL_LINK( OTableDesignView, SwitchHdl, Accelerator*, /*pAcc*/ )
 //------------------------------------------------------------------------------
 long OTableDesignView::PreNotify( NotifyEvent& rNEvt )
 {
-    BOOL bHandled = FALSE;
+    sal_Bool bHandled = sal_False;
     switch(rNEvt.GetType())
     {
         case EVENT_GETFOCUS:

@@ -111,12 +111,12 @@ void pr(ip, file, base)
     char    buf[ BUFSIZ ];
 
     printed = TRUE;
-    len = strlen(ip->i_file)+1;
+    len = (int)strlen(ip->i_file)+1;
     if (current_len + len > width || file != lastfile) {
         lastfile = file;
         sprintf(buf, "\n%s%s%s: %s", objprefix, base, objsuffix,
             ip->i_file);
-        len = current_len = strlen(buf);
+        len = current_len = (int)strlen(buf);
     }
     else {
         buf[0] = ' ';

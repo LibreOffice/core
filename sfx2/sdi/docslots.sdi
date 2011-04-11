@@ -171,11 +171,6 @@ interface OfficeDocument : Document
     [
         StateMethod = StateProps_Impl ;
     ]
-    SID_PLAYMACRO // ole(no) api(final/play/norec)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
     SID_VERSION
     [
         ExecMethod = ExecFile_Impl;

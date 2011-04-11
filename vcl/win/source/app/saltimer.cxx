@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <tools/svwin.h>
+#include <svsys.h>
 #ifdef __MINGW32__
 #include <excpt.h>
 #endif
@@ -43,7 +43,7 @@
 
 // =======================================================================
 
-void ImplSalStartTimer( ULONG nMS, BOOL bMutex )
+void ImplSalStartTimer( sal_uLong nMS, sal_Bool bMutex )
 {
     SalData* pSalData = GetSalData();
 
@@ -52,7 +52,7 @@ void ImplSalStartTimer( ULONG nMS, BOOL bMutex )
     if ( !bMutex )
         pSalData->mnTimerOrgMS = nMS;
 
-    // Periode darf nicht zu gross sein, da Windows mit USHORT arbeitet
+    // Periode darf nicht zu gross sein, da Windows mit sal_uInt16 arbeitet
     if ( nMS > MAX_SYSPERIOD )
         nMS = MAX_SYSPERIOD;
 
@@ -71,7 +71,7 @@ WinSalTimer::~WinSalTimer()
 {
 }
 
-void WinSalTimer::Start( ULONG nMS )
+void WinSalTimer::Start( sal_uLong nMS )
 {
     // switch to main thread
     SalData* pSalData = GetSalData();

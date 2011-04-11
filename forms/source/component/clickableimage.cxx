@@ -296,7 +296,6 @@ namespace frm
                     // * at the UI, show only the mark
                     // * !!!! recognize every SAVEAS on the document, so the absolute URL can be adjusted. This seems
                     // rather impossible !!!
-                    // 89752 - 23.07.2001 - frank.schoenheit@sun.com
                     aURL.Mark = aURL.Complete;
                     aURL.Complete = xModel->getURL();
                     aURL.Complete += aURL.Mark;
@@ -317,7 +316,7 @@ namespace frm
 
                     Sequence<PropertyValue> aArgs(1);
                     PropertyValue& rProp = aArgs.getArray()[0];
-                    rProp.Name = ::rtl::OUString::createFromAscii("Referer");
+                    rProp.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer") );
                     rProp.Value <<= xModel->getURL();
 
                     if (xDisp.is())
@@ -440,7 +439,7 @@ namespace frm
         }
         catch( const Exception& e )
         {
-            OSL_ENSURE( sal_False, "OClickableImageBaseControl::implSubmit: caught an unknown exception!" );
+            OSL_FAIL( "OClickableImageBaseControl::implSubmit: caught an unknown exception!" );
             throw WrappedTargetException( ::rtl::OUString(), *this, makeAny( e ) );
         }
     }
@@ -501,7 +500,6 @@ namespace frm
         osl_incrementInterlockedCount( &m_refCount );
         {
             // simulate a propertyChanged event for the ImageURL
-            // 2003-05-15 - #109591# - fs@openoffice.org
             Any aImageURL;
             getFastPropertyValue( aImageURL, PROPERTY_ID_IMAGE_URL );
             _propertyChanged( PropertyChangeEvent( *this, PROPERTY_IMAGE_URL, sal_False, PROPERTY_ID_IMAGE_URL, Any( ), aImageURL ) );
@@ -699,7 +697,6 @@ namespace frm
                 pImgProd->SetImage( sURL );
             else
                 // caution: the medium may be NULL if somebody gave us a invalid URL to work with
-                // 11/24/2000 - 79667 - FS
                 pImgProd->SetImage(String());
             m_bDownloading = sal_False;
             return;
@@ -733,7 +730,6 @@ namespace frm
         }
 
         // the SfxMedium is not allowed to be created with an invalid URL, so we have to check this first
-        // 23.01.2001 - 81927 - FS
         INetURLObject aUrl(rURL);
         if (INET_PROT_NOT_VALID == aUrl.GetProtocol())
             // we treat an invalid URL like we would treat no URL

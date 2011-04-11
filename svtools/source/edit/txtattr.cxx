@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <txtattr.hxx>
+#include <svtools/txtattr.hxx>
 #include <vcl/font.hxx>
 
 
@@ -156,42 +156,29 @@ int TextAttribHyperLink::operator==( const TextAttrib& rAttr ) const
                 ( maColor == ((const TextAttribHyperLink&)rAttr).maColor ) );
 }
 
-/*-- 24.06.2004 14:49:44---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 TextAttribProtect::TextAttribProtect() :
     TextAttrib( TEXTATTR_PROTECTED )
 {
 }
-/*-- 24.06.2004 14:49:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 TextAttribProtect::TextAttribProtect( const TextAttribProtect&) :
     TextAttrib( TEXTATTR_PROTECTED )
 {
 }
-/*-- 24.06.2004 14:49:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 TextAttribProtect::~TextAttribProtect()
 {
 }
-/*-- 24.06.2004 14:49:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void TextAttribProtect::SetFont( Font& ) const
 {
 }
-/*-- 24.06.2004 14:49:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 TextAttrib*     TextAttribProtect::Clone() const
 {
     return new TextAttribProtect();
 }
-/*-- 24.06.2004 14:49:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 int TextAttribProtect::operator==( const TextAttrib& rAttr ) const
 {
     return ( TextAttrib::operator==(rAttr ) );

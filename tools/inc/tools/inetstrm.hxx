@@ -61,13 +61,13 @@ class TOOLS_DLLPUBLIC INetIStream
     INetIStream& operator= (const INetIStream& rStrm);
 
 protected:
-    virtual int GetData (sal_Char *pData, ULONG nSize) = 0;
+    virtual int GetData (sal_Char *pData, sal_uIntPtr nSize) = 0;
 
 public:
     INetIStream ();
     virtual ~INetIStream (void);
 
-    int Read (sal_Char *pData, ULONG nSize);
+    int Read (sal_Char *pData, sal_uIntPtr nSize);
 
     static void Decode64 (SvStream& rIn, SvStream& rOut);
     static void Encode64 (SvStream& rIn, SvStream& rOut);
@@ -84,13 +84,13 @@ class INetOStream
 
 protected:
     virtual int PutData (
-        const sal_Char *pData, ULONG nSize) = 0;
+        const sal_Char *pData, sal_uIntPtr nSize) = 0;
 
 public:
     INetOStream ();
     virtual ~INetOStream (void);
 
-    int Write (const sal_Char *pData, ULONG nSize);
+    int Write (const sal_Char *pData, sal_uIntPtr nSize);
 };
 
 /*
@@ -103,7 +103,7 @@ class INetIOStream : public INetIStream, public INetOStream
     INetIOStream& operator= (const INetIOStream& rStrm);
 
 public:
-    INetIOStream (ULONG nIBufferSize = 0, ULONG nOBufferSize = 0);
+    INetIOStream (sal_uIntPtr nIBufferSize = 0, sal_uIntPtr nOBufferSize = 0);
     virtual ~INetIOStream (void);
 };
 
@@ -129,9 +129,9 @@ enum INetMessageStreamState
 class INetMessageIStream : public INetIStream
 {
     INetMessage    *pSourceMsg;
-    BOOL            bHeaderGenerated;
+    sal_Bool            bHeaderGenerated;
 
-    ULONG           nBufSiz;
+    sal_uIntPtr           nBufSiz;
     sal_Char       *pBuffer;
     sal_Char       *pRead;
     sal_Char       *pWrite;
@@ -141,24 +141,24 @@ class INetMessageIStream : public INetIStream
     sal_Char       *pMsgRead;
     sal_Char       *pMsgWrite;
 
-    virtual int GetData (sal_Char *pData, ULONG nSize);
+    virtual int GetData (sal_Char *pData, sal_uIntPtr nSize);
 
     // Not implemented.
     INetMessageIStream (const INetMessageIStream& rStrm);
     INetMessageIStream& operator= (const INetMessageIStream& rStrm);
 
 protected:
-    virtual int GetMsgLine (sal_Char *pData, ULONG nSize);
+    virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize);
 
 public:
-    INetMessageIStream (ULONG nBufferSize = 2048);
+    INetMessageIStream (sal_uIntPtr nBufferSize = 2048);
     virtual ~INetMessageIStream (void);
 
     INetMessage *GetSourceMessage (void) const { return pSourceMsg; }
     void SetSourceMessage (INetMessage *pMsg) { pSourceMsg = pMsg; }
 
-    void GenerateHeader (BOOL bGen = TRUE) { bHeaderGenerated = !bGen; }
-    BOOL IsHeaderGenerated (void) const { return bHeaderGenerated; }
+    void GenerateHeader (sal_Bool bGen = sal_True) { bHeaderGenerated = !bGen; }
+    sal_Bool IsHeaderGenerated (void) const { return bHeaderGenerated; }
 };
 
 /*
@@ -167,20 +167,20 @@ public:
 class INetMessageOStream : public INetOStream
 {
     INetMessage            *pTargetMsg;
-    BOOL                    bHeaderParsed;
+    sal_Bool                    bHeaderParsed;
 
     INetMessageStreamState  eOState;
 
     SvMemoryStream         *pMsgBuffer;
 
-    virtual int PutData (const sal_Char *pData, ULONG nSize);
+    virtual int PutData (const sal_Char *pData, sal_uIntPtr nSize);
 
     // Not implemented.
     INetMessageOStream (const INetMessageOStream& rStrm);
     INetMessageOStream& operator= (const INetMessageOStream& rStrm);
 
 protected:
-    virtual int PutMsgLine (const sal_Char *pData, ULONG nSize);
+    virtual int PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize);
 
 public:
     INetMessageOStream (void);
@@ -189,8 +189,8 @@ public:
     INetMessage *GetTargetMessage (void) const { return pTargetMsg; }
     void SetTargetMessage (INetMessage *pMsg) { pTargetMsg = pMsg; }
 
-    void ParseHeader (BOOL bParse = TRUE) { bHeaderParsed = !bParse; }
-    BOOL IsHeaderParsed (void) const { return bHeaderParsed; }
+    void ParseHeader (sal_Bool bParse = sal_True) { bHeaderParsed = !bParse; }
+    sal_Bool IsHeaderParsed (void) const { return bHeaderParsed; }
 };
 
 /*
@@ -205,7 +205,7 @@ class INetMessageIOStream
     INetMessageIOStream& operator= (const INetMessageIOStream& rStrm);
 
 public:
-    INetMessageIOStream (ULONG nBufferSize = 2048);
+    INetMessageIOStream (sal_uIntPtr nBufferSize = 2048);
     virtual ~INetMessageIOStream (void);
 };
 
@@ -227,7 +227,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream : public INetMessageIOStream
 {
     int                    eState;
 
-    ULONG                  nChildIndex;
+    sal_uIntPtr                  nChildIndex;
     INetMIMEMessageStream *pChildStrm;
 
     INetMessageEncoding    eEncoding;
@@ -244,11 +244,11 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream : public INetMessageIOStream
     INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm);
 
 protected:
-    virtual int GetMsgLine (sal_Char *pData, ULONG nSize);
-    virtual int PutMsgLine (const sal_Char *pData, ULONG nSize);
+    virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize);
+    virtual int PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize);
 
 public:
-    INetMIMEMessageStream (ULONG nBufferSize = 2048);
+    INetMIMEMessageStream (sal_uIntPtr nBufferSize = 2048);
     virtual ~INetMIMEMessageStream (void);
 
     using INetMessageIStream::SetSourceMessage;

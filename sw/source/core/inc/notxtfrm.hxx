@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _NOTXTFRM_HXX
-#define _NOTXTFRM_HXX
+#ifndef SW_NOTXTFRM_HXX
+#define SW_NOTXTFRM_HXX
 
 #include <cntfrm.hxx>
 
@@ -40,7 +40,7 @@ class SwNoTxtFrm: public SwCntntFrm
 {
     friend void _FrmFinit();
 
-    short    nWeight;                   // "Wichtigkeit" der Grafik
+    short    nWeight;                   // importance of the graphic
 
     const Size& GetSize() const;
 
@@ -48,31 +48,31 @@ class SwNoTxtFrm: public SwCntntFrm
 
     void Format ( const SwBorderAttrs *pAttrs = 0 );
     void PaintCntnt  ( OutputDevice*, const SwRect&, const SwRect& ) const;
-    /// OD 25.09.2002 #99739# - delete unused 3rd parameter
     void PaintPicture( OutputDevice*, const SwRect& ) const;
 protected:
     virtual void MakeAll();
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 public:
-    SwNoTxtFrm( SwNoTxtNode * const );
+    SwNoTxtFrm( SwNoTxtNode * const, SwFrm* );
     ~SwNoTxtFrm();
 
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
-    virtual void Paint(const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
-    virtual BOOL GetCharRect( SwRect &, const SwPosition&,
+    virtual void Paint( SwRect const&,
+                        SwPrintData const*const pPrintData = NULL ) const;
+    virtual sal_Bool GetCharRect( SwRect &, const SwPosition&,
                               SwCrsrMoveState* = 0) const;
-    BOOL GetCrsrOfst(SwPosition* pPos, Point& aPoint,
+    sal_Bool GetCrsrOfst(SwPosition* pPos, Point& aPoint,
                      SwCrsrMoveState* = 0) const;
 
     const Size &GetGrfSize() const  { return GetSize(); }
-    void GetGrfArea( SwRect &rRect, SwRect * = 0, BOOL bMirror = TRUE ) const;
+    void GetGrfArea( SwRect &rRect, SwRect * = 0, sal_Bool bMirror = sal_True ) const;
 
-    BOOL IsTransparent() const;
+    sal_Bool IsTransparent() const;
 
     void StopAnimation( OutputDevice* = 0 ) const;
-    BOOL HasAnimation()  const;
+    sal_Bool HasAnimation()  const;
 
-    // Routinen fuer den Grafik-Cache
-    USHORT GetWeight() { return nWeight; }
+    // Routine for the graphics cache
+    sal_uInt16 GetWeight() { return nWeight; }
 };
 
 #endif

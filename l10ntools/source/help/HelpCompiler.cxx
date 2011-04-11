@@ -35,10 +35,6 @@
 #include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
-#ifdef __MINGW32__
-#include <tools/prewin.h>
-#include <tools/postwin.h>
-#endif
 #include <osl/thread.hxx>
 
 static void impl_sleep( sal_uInt32 nSec )
@@ -567,7 +563,7 @@ namespace fs
                         rtl::OUString suFilename = aStatus.getFileName();
                         rtl::OUString suFullFileURL;
                         suFullFileURL += _suDirURL;
-                        suFullFileURL += rtl::OUString::createFromAscii("/");
+                        suFullFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                         suFullFileURL += suFilename;
 
                         if (aStatus.getFileType() == osl::FileStatus::Directory)

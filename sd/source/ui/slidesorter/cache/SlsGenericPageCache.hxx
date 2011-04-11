@@ -31,8 +31,6 @@
 
 #include "SlideSorter.hxx"
 #include "SlsRequestQueue.hxx"
-#include "SlsQueueProcessor.hxx"
-#include <boost/function.hpp>
 #include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace slidesorter { namespace cache {
@@ -45,12 +43,18 @@ class QueueProcessor;
 class GenericPageCache
 {
 public:
-    /** The page chache is created with references both to the SlideSorter.
-        This allows access to both view and model and the cache can so fill
-        itself with requests for all or just the visible pages.
+    /** The page chache is created with a reference to the SlideSorter and
+        thus has access to both view and model.  This allows the cache to
+        fill itself with requests for all pages or just the visible ones.
+        @param rPreviewSize
+            The size of the previews is expected in pixel values.
+        @param bDoSuperSampling
+            When <TRUE/> the previews are rendered larger and then scaled
+            down to the requested size to improve image quality.
     */
     GenericPageCache (
         const Size& rPreviewSize,
+        const bool bDoSuperSampling,
         const SharedCacheContext& rpCacheContext);
 
     ~GenericPageCache (void);
@@ -59,10 +63,12 @@ public:
         resize of the slide sorter window or a change of the number of
         columns.
     */
-    void ChangePreviewSize (const Size& rPreviewSize);
+    void ChangePreviewSize (
+        const Size& rPreviewSize,
+        const bool bDoSuperSampling);
 
     /** Request a preview bitmap for the specified page object in the
-        specified size.  The returned bitmap may be preview of the preview,
+        specified size.  The returned bitmap may be a preview of the preview,
         i.e. either a scaled (up or down) version of a previous preview (of
         the wrong size) or an empty bitmap.  In this case a request for the
         generation of a new preview is created and inserted into the request
@@ -71,53 +77,67 @@ public:
         receives the correctly sized preview bitmap.
         @param rRequestData
             This data is used to determine the preview.
-        @param rSize
-            The size of the requested preview bitmap.
+        @param bResize
+            When <TRUE/> then when the available bitmap has not the
+            requested size, it is scaled before it is returned.  When
+            <FALSE/> then the bitmap is returned in the wrong size and it is
+            the task of the caller to scale it.
         @return
             Returns a bitmap that is either empty, contains a scaled (up or
             down) version or is the requested bitmap.
     */
-    BitmapEx GetPreviewBitmap (
-        CacheKey aKey,
-        const Size& rSize);
+    Bitmap GetPreviewBitmap (
+        const CacheKey aKey,
+        const bool bResize);
+    Bitmap GetMarkedPreviewBitmap (
+        const CacheKey aKey,
+        const bool bResize);
+    void SetMarkedPreviewBitmap (
+        const CacheKey aKey,
+        const Bitmap& rMarkedBitmap);
 
     /** When the requested preview bitmap does not yet exist or is not
         up-to-date then the rendering of one is scheduled.  Otherwise this
         method does nothing.
         @param rRequestData
             This data is used to determine the preview.
-        @param rSize
-            The size of the requested preview bitmap in pixel coordinates.
         @param bMayBeUpToDate
             This flag helps the method to determine whether an existing
             preview that matches the request is up to date.  If the caller
-            know that it is not then by passing <FALSE/> he tells us that we
+            knows that it is not then by passing <FALSE/> he tells us that we
             do not have to check the up-to-date flag a second time.  If
-            unsure pass <TRUE/>.
+            unsure use <TRUE/>.
     */
     void RequestPreviewBitmap (
-        CacheKey aKey,
-        const Size& rSize,
-        bool bMayBeUpToDate = true);
+        const CacheKey aKey,
+        const bool bMayBeUpToDate = true);
+
+    /** Tell the cache to replace the bitmap associated with the given
+        request data with a new one that reflects recent changes in the
+        content of the page object.
+        @return
+            When the key is kown then return <TRUE/>.
+    */
+    bool InvalidatePreviewBitmap (const CacheKey aKey);
 
     /** Call this method when a view-object-contact object is being deleted
         and does not need (a) its current bitmap in the cache and (b) a
         requested a new bitmap.
     */
-    void ReleasePreviewBitmap (CacheKey aKey);
+    void ReleasePreviewBitmap (const CacheKey aKey);
 
     /** Call this method when all preview bitmaps have to be generated anew.
         This is the case when the size of the page objects on the screen has
         changed or when the model has changed.
     */
-    void InvalidateCache (bool bUpdateCache);
+    void InvalidateCache (const bool bUpdateCache);
 
     /** With the precious flag you can control whether a bitmap can be
         removed from the cache or reduced in size to make room for other
         bitmaps or is so precious that it will not be touched.  A typical
         use is to set the precious flag for the visible pages.
     */
-    void SetPreciousFlag (CacheKey aKey, bool bIsPrecious);
+    void SetPreciousFlag (const CacheKey aKey, const bool bIsPrecious);
 
     void Pause (void);
     void Resume (void);
@@ -134,6 +154,8 @@ private:
     /** The current size of preview bitmaps.
     */
     Size maPreviewSize;
+
+    bool mbDoSuperSampling;
 
     /** Both bitmap cache and queue processor are created on demand by this
         method.

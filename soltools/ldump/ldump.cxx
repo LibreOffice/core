@@ -165,7 +165,6 @@ bool LibDump::Dump()
                         *pEnd = '\0';
                     strncpy( aBuf, pFound, strlen( pFound));
                     aBuf[ strlen( pFound) ] = '\0';
-//                    fprintf( stderr, "\n--- %s\n", aBuf);
                     break;
                 }
                 else
@@ -176,7 +175,7 @@ bool LibDump::Dump()
             }
         }
 
-        if ((aBuf[0] =='?') || !strncmp(aBuf, "__CT",4))
+        if (aBuf[0] =='?')
         {
             nLen = (int) strlen(aBuf);
             memset( aName, 0, sizeof( aName ) );
@@ -192,7 +191,10 @@ bool LibDump::Dump()
             // und raus damit
             PrintSym( aName, bExportByName );
         }
-        else if ( bAll == true )
+        else if ( bAll == true &&
+                  strncmp(aBuf, "__real@", 7) != 0 &&
+                  strncmp(aBuf, "__CT",4) != 0 &&
+                  strncmp(aBuf, "__TI3?", 6) != 0 )
         {
             int nPreLen = (int) strlen( cAPrefix );
 
@@ -208,11 +210,12 @@ bool LibDump::Dump()
                   nName++;
               }
             }
-            //fprintf( stderr, "Gefundenen Prefix : %s %d \n", aTmpBuf, nPreLen );
             // den ersten _ raus
             nLen = (int) strlen(aName);
+#ifndef _WIN64
             if (aName[0] == '_')
                 strcpy( aBuf , &aName[1] );
+#endif
             strncpy ( aTmpBuf, aBuf, (size_t) nPreLen );
             aTmpBuf[nPreLen] = '\0';
             if ( !strcmp( aTmpBuf, cAPrefix ))
@@ -220,13 +223,13 @@ bool LibDump::Dump()
                 if ( bLdump3 ) {
                     int nChar = '@';
                     char *pNeu = strchr( aBuf, nChar );
-                    int nPos = pNeu - aBuf + 1;
+                    size_t nPos = pNeu - aBuf + 1;
                     if ( nPos > 0 )
                     {
                         char aOldBuf[MAX_MAN];
                         strcpy( aOldBuf, aBuf );
                         char pChar[MAX_MAN];
-                        strncpy( pChar, aBuf, (size_t) (nPos -1) );
+                        strncpy( pChar, aBuf, nPos - 1 );
                         pChar[nPos-1] = '\0';
                         strcpy( aBuf, pChar );
                         strcat( aBuf, "=" );
@@ -575,7 +578,6 @@ LibDump::~LibDump()
 {
     delete [] cBName;
     delete [] cAPrefix;
-//  delete [] cLibName;
     delete [] cFilterName;
     delete [] cModName;
 }
@@ -755,6 +757,7 @@ main( int argc, char **argv )
     pDump->PrintDefFile();
     pDump->PrintDataBase();
     delete pDump;
+    delete [] pLibName;
     return 0;
 }
 

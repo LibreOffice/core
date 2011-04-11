@@ -24,18 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __com_sun_star_ui_dialogs_XFilterGroupManager_idl__
+#define __com_sun_star_ui_dialogs_XFilterGroupManager_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_beans_StringPair_idl__
 #include <com/sun/star/beans/StringPair.idl>
-#endif
-
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
 module com {  module sun {  module star {  module ui { module dialogs {
 
@@ -74,7 +68,5 @@ published interface XFilterGroupManager : com::sun::star::uno::XInterface
     raises( com::sun::star::lang::IllegalArgumentException );
 };
 
-//.............................................................................
 }; }; }; }; };
-//.............................................................................
-
+#endif

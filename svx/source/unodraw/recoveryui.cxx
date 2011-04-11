@@ -45,8 +45,8 @@
 //===============================================
 // const
 
-#define IMPLEMENTATIONNAME_RECOVERYUI       ::rtl::OUString::createFromAscii("com.sun.star.comp.svx.RecoveryUI")
-#define SERVICENAME_RECOVERYUI              ::rtl::OUString::createFromAscii("com.sun.star.dialog.RecoveryUI")
+#define IMPLEMENTATIONNAME_RECOVERYUI       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.svx.RecoveryUI"))
+#define SERVICENAME_RECOVERYUI              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.dialog.RecoveryUI"))
 
 //===============================================
 // namespace
@@ -153,7 +153,7 @@ void SAL_CALL RecoveryUI::dispatch(const css::util::URL&                        
 void SAL_CALL RecoveryUI::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL& ) throw(css::uno::RuntimeException)
 {
     // TODO
-    OSL_ENSURE(sal_False, "RecoveryUI::addStatusListener()\nNot implemented yet!");
+    OSL_FAIL("RecoveryUI::addStatusListener()\nNot implemented yet!");
 }
 
 //===============================================
@@ -161,7 +161,7 @@ void SAL_CALL RecoveryUI::removeStatusListener(const css::uno::Reference< css::f
     throw(css::uno::RuntimeException)
 {
     // TODO
-    OSL_ENSURE(sal_False, "RecoveryUI::removeStatusListener()\nNot implemented yet!");
+    OSL_FAIL("RecoveryUI::removeStatusListener()\nNot implemented yet!");
 }
 
 //===============================================
@@ -191,16 +191,16 @@ static OUString GetCrashConfigDir()
 {
 
 #if defined(WNT) || defined(OS2)
-    OUString    ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+    OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
 #elif defined(MACOSX)
-    OUString    ustrValue = OUString::createFromAscii("~");
+    OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("~"));
 #else
-    OUString    ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
+    OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("$SYSUSERCONFIG"));
 #endif
     Bootstrap::expandMacros( ustrValue );
 
 #if defined(WNT) || defined(OS2)
-    ustrValue += OUString::createFromAscii("/user/crashdata");
+    ustrValue += OUString(RTL_CONSTASCII_USTRINGPARAM("/user/crashdata"));
 #endif
     return ustrValue;
 }
@@ -231,7 +231,7 @@ static bool new_crash_pending()
     OUString    aUnsentURL = GetUnsentURL();
     File    aFile( aUnsentURL );
 
-    if ( FileBase::E_None == aFile.open( OpenFlag_Read ) )
+    if ( FileBase::E_None == aFile.open( osl_File_OpenFlag_Read ) )
     {
         aFile.close();
         return true;

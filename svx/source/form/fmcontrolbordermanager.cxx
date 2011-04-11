@@ -180,7 +180,7 @@ namespace svxform
         if ( _nStatus & CONTROL_STATUS_MOUSE_HOVER )
             return m_nMouseHoveColor;
 
-        OSL_ENSURE( sal_False, "ControlBorderManager::getControlColorByStatus: invalid status!" );
+        OSL_FAIL( "ControlBorderManager::getControlColorByStatus: invalid status!" );
         return 0x00000000;
     }
 
@@ -256,7 +256,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ControlBorderManager::controlStatusGained: caught an exception!" );
+            OSL_FAIL( "ControlBorderManager::controlStatusGained: caught an exception!" );
         }
     }
 
@@ -280,7 +280,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ControlBorderManager::controlStatusLost: caught an exception!" );
+            OSL_FAIL( "ControlBorderManager::controlStatusLost: caught an exception!" );
         }
     }
 
@@ -312,7 +312,7 @@ namespace svxform
             m_nInvalidColor = _nColor;
             break;
         default:
-            OSL_ENSURE( sal_False, "ControlBorderManager::setStatusColor: invalid status!" );
+            OSL_FAIL( "ControlBorderManager::setStatusColor: invalid status!" );
         }
     }
 
@@ -432,7 +432,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ControlBorderManager::validityChanged: caught an exception!" );
+            OSL_FAIL( "ControlBorderManager::validityChanged: caught an exception!" );
         }
     }
 

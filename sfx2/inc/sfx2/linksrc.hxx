@@ -72,12 +72,12 @@ public:
                         SvLinkSource();
     virtual             ~SvLinkSource();
 
-    BOOL                HasDataLinks( const SvBaseLink* = 0 ) const;
+    sal_Bool                HasDataLinks( const SvBaseLink* = 0 ) const;
 
     void                Closed();
 
-    ULONG               GetUpdateTimeout() const;
-    void                SetUpdateTimeout( ULONG nTime );
+    sal_uIntPtr                 GetUpdateTimeout() const;
+    void                SetUpdateTimeout( sal_uIntPtr nTime );
                         // notify the sink, the mime type is not
                         // a selection criterion
     void                DataChanged( const String & rMimeType,
@@ -85,22 +85,22 @@ public:
     void                SendDataChanged();
     void                NotifyDataChanged();
 
-    virtual BOOL        Connect( SvBaseLink* );
-    virtual BOOL        GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual sal_Bool        Connect( SvBaseLink* );
+    virtual sal_Bool        GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                                 const String & rMimeType,
-                                BOOL bSynchron = FALSE );
+                                sal_Bool bSynchron = sal_False );
 
-                        // TRUE => waitinmg for data
-    virtual BOOL        IsPending() const;
-                        // TRUE => data complete loaded
-    virtual BOOL        IsDataComplete() const;
+                        // sal_True => waitinmg for data
+    virtual sal_Bool        IsPending() const;
+                        // sal_True => data complete loaded
+    virtual sal_Bool        IsDataComplete() const;
 
     // Link impl: DECL_LINK( MyEndEditHdl, sfx2::FileDialogHelper* ); <= param is the dialog
     virtual void        Edit( Window *, SvBaseLink *, const Link& rEndEditHdl );
 
 
     void                AddDataAdvise( SvBaseLink *, const String & rMimeType,
-                                        USHORT nAdviceMode );
+                                        sal_uInt16 nAdviceMode );
     void                RemoveAllDataAdvise( SvBaseLink * );
 
     void                AddConnectAdvise( SvBaseLink * );

@@ -43,6 +43,7 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <comphelper/property.hxx>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <osl/diagnose.h>
 #include <rtl/process.h>

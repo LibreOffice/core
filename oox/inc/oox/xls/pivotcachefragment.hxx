@@ -39,18 +39,18 @@ class PivotCacheField;
 
 // ============================================================================
 
-class OoxPivotCacheFieldContext : public OoxWorkbookContextBase
+class PivotCacheFieldContext : public WorkbookContextBase
 {
 public:
-    explicit            OoxPivotCacheFieldContext(
-                            OoxWorkbookFragmentBase& rFragment,
+    explicit            PivotCacheFieldContext(
+                            WorkbookFragmentBase& rFragment,
                             PivotCacheField& rCacheField );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        onStartRecord( RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual void        onStartRecord( SequenceInputStream& rStrm );
 
 private:
     PivotCacheField&    mrCacheField;
@@ -58,17 +58,17 @@ private:
 
 // ============================================================================
 
-class OoxPivotCacheDefinitionFragment : public OoxWorkbookFragmentBase
+class PivotCacheDefinitionFragment : public WorkbookFragmentBase
 {
 public:
-    explicit            OoxPivotCacheDefinitionFragment(
+    explicit            PivotCacheDefinitionFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
                             PivotCache& rPivotCache );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        finalizeImport();
 
@@ -78,23 +78,23 @@ private:
 
 // ============================================================================
 
-class OoxPivotCacheRecordsFragment : public OoxWorksheetFragmentBase
+class PivotCacheRecordsFragment : public WorksheetFragmentBase
 {
 public:
-    explicit            OoxPivotCacheRecordsFragment(
+    explicit            PivotCacheRecordsFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
                             const PivotCache& rPivotCache );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
 private:
     void                startCacheRecord();
-    void                importPCRecord( RecordInputStream& rStrm );
-    void                importPCRecordItem( sal_Int32 nRecId, RecordInputStream& rStrm );
+    void                importPCRecord( SequenceInputStream& rStrm );
+    void                importPCRecordItem( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
 private:
     const PivotCache&   mrPivotCache;
@@ -127,12 +127,12 @@ class BiffPivotCacheRecordsContext : public BiffWorksheetContextBase
 {
 public:
     explicit            BiffPivotCacheRecordsContext(
-                            const BiffWorkbookFragmentBase& rFragment,
+                            const WorkbookHelper& rHelper,
                             const PivotCache& rPivotCache );
 
     /** Reads the current record from stream and tries to insert a cell into
         the source data sheet. */
-    virtual void        importRecord();
+    virtual void        importRecord( BiffInputStream& rStrm );
 
 private:
     void                startNextRow();

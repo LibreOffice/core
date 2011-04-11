@@ -59,8 +59,8 @@ module com { module sun { module star { module ui { module dialogs {
 
     It is <strong>NOT</strong> recommended to cache a reference to a file
     picker instance. Due to restrictions by the underlying system there can
-    be specific limitations possible. To overcome these problems it'
-    s recommended to create a new instance on demand.
+    be specific limitations possible. To overcome these problems it's
+    recommended to create a new instance on demand.
 
     @see XFilePicker
 */
@@ -129,7 +129,7 @@ published service FilePicker
         <br/><br/>
         <p><strong>Notes for the implementation of a FileSave dialog:</strong>
         The implementation of a FileSave dialog should automatically check
-        for existens of a file and issue a warning if a file with the same
+        for existence of a file and issue a warning if a file with the same
         name already exist.</p>
 
         @see com::sun::star::ui::dialogs::TemplateDescription
@@ -138,7 +138,7 @@ published service FilePicker
 
     //-------------------------------------------------------------------------
     /** For canceling a running dialog instance.
-        <p>This may be usefull for automatic test tools for instance.</p>
+        <p>This may be useful for automatic test tools for instance.</p>
     */
     [optional] interface com::sun::star::util::XCancellable;
 

@@ -43,12 +43,10 @@
 #include <swtypes.hxx>
 #include <wdocsh.hxx>
 #include <wrtsh.hxx>
-#include <view.hxx>
 #include <pview.hxx>
-#include <srcview.hxx>
 #include <viewsh.hxx>
 #include <pvprtdat.hxx>
-#include <swprtopt.hxx>
+#include <printdata.hxx>
 #include <svl/stritem.hxx>
 #include <unotxdoc.hxx>
 #include <svl/numuno.hxx>
@@ -78,13 +76,11 @@
 #include <globdoc.hxx>
 #include <viewopt.hxx>
 #include <unochart.hxx>
-#include <doc.hxx>
 #include <charatr.hxx>
 #include <svx/xmleohlp.hxx>
 #include <globals.hrc>
 #include <unomid.h>
 #include <unotools/printwarningoptions.hxx>
-
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -109,7 +105,6 @@
 #include <swcont.hxx>
 #include <unodefaults.hxx>
 #include <SwXDocumentSettings.hxx>
-#include <SwXPrintPreviewSettings.hxx>
 #include <doc.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
@@ -123,11 +118,7 @@
 // <--
 #include <numrule.hxx>
 
-///////////////////////////Modified on Jun. 14th//////////////////////////
-///////////////////////for getDocumentLanguages///////////////////////////
-//-->
 #include <editeng/langitem.hxx>
-#include <doc.hxx>
 #include <docary.hxx>      //SwCharFmts
 #include <i18npool/mslangid.hxx>
 
@@ -153,8 +144,6 @@
 #include <svl/languageoptions.hxx>
 #include <svx/svdview.hxx>
 
-//
-//<--
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::i18n;
@@ -190,17 +179,16 @@ SwPrintUIOptions * lcl_GetPrintUIOptions(
     if (!pDocShell)
         return NULL;
 
-    const BOOL bWebDoc      = NULL != dynamic_cast< const SwWebDocShell * >(pDocShell);
+    const sal_Bool bWebDoc      = NULL != dynamic_cast< const SwWebDocShell * >(pDocShell);
     const bool bSwSrcView   = NULL != dynamic_cast< const SwSrcView * >(pView);
     const SwView * pSwView = dynamic_cast< const SwView * >(pView);
     const bool bHasSelection    = pSwView ? pSwView->HasSelection( sal_False ) : false;  // check for any selection, not just text selection
     const bool bHasPostIts      = lcl_GetPostIts( pDocShell->GetDoc(), 0 );
 
     // get default values to use in dialog from documents SwPrintData
-    const SwPrintData *pPrintData = pDocShell->GetDoc()->getPrintData();
-    OSL_ENSURE( pPrintData, "failed to get SwPrintData from document" );
+    const SwPrintData &rPrintData = pDocShell->GetDoc()->getPrintData();
 
-    return new SwPrintUIOptions( bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, *pPrintData );
+    return new SwPrintUIOptions( bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
 }
 
 SwTxtFmtColl *lcl_GetParaStyle(const String& rCollName, SwDoc* pDoc)
@@ -219,7 +207,7 @@ void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
 {
     // check if the view frame still exists
     SfxViewFrame* pFound = SfxViewFrame::GetFirst( pDocShell,
-                                FALSE );
+                                sal_False );
     while(pFound)
     {
         if( pFound == pToClose)
@@ -229,7 +217,7 @@ void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
         }
         pFound = SfxViewFrame::GetNext( *pFound,
                                 pDocShell,
-                                FALSE );
+                                sal_False );
     }
 }
 
@@ -744,7 +732,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
                             0);
         pSearch->FillSearchItemSet(aSearch);
         pSearch->FillReplaceItemSet(aReplace);
-        BOOL bCancel;
+        sal_Bool bCancel;
         nResult = (sal_Int32)pUnoCrsr->Find( aSearch, !pSearch->bStyles,
                     eStart, eEnd, bCancel,
                     (FindRanges)eRanges,
@@ -756,7 +744,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
         SwTxtFmtColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCrsr->GetDoc());
         SwTxtFmtColl *pReplaceColl = lcl_GetParaStyle(pSearch->sReplaceText, pUnoCrsr->GetDoc());;
 
-        BOOL bCancel;
+        sal_Bool bCancel;
         nResult = pUnoCrsr->Find( *pSearchColl,
                     eStart, eEnd, bCancel,
                     (FindRanges)eRanges, pReplaceColl );
@@ -765,8 +753,8 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     else
     {
         //todo/mba: assuming that notes should be omitted
-        BOOL bSearchInNotes = FALSE;
-        BOOL bCancel;
+        sal_Bool bSearchInNotes = sal_False;
+        sal_Bool bCancel;
         nResult = pUnoCrsr->Find( aSearchOpt, bSearchInNotes,
             eStart, eEnd, bCancel,
             (FindRanges)eRanges,
@@ -785,7 +773,7 @@ Reference< util::XSearchDescriptor >  SwXTextDocument::createSearchDescriptor(vo
 
 }
 
-/* -----------------26.02.99 16:08-------------------
+/* --------------------------------------------------
  * wird fuer findAll/First/Next verwendet
  * --------------------------------------------------*/
 SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > & xDesc,
@@ -872,10 +860,10 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
                                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                                 RES_PARATR_BEGIN, RES_PARATR_END-1,
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-                                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+                                RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
                                 0);
             pSearch->FillSearchItemSet(aSearch);
-            BOOL bCancel;
+            sal_Bool bCancel;
             nResult = (sal_Int32)pUnoCrsr->Find( aSearch, !pSearch->bStyles,
                         eStart, eEnd, bCancel,
                         (FindRanges)eRanges,
@@ -887,7 +875,7 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
             SwTxtFmtColl *pSearchColl = lcl_GetParaStyle(pSearch->sSearchText, pUnoCrsr->GetDoc());
             //pSearch->sReplaceText
             SwTxtFmtColl *pReplaceColl = 0;
-            BOOL bCancel;
+            sal_Bool bCancel;
             nResult = (sal_Int32)pUnoCrsr->Find( *pSearchColl,
                         eStart, eEnd, bCancel,
                         (FindRanges)eRanges, pReplaceColl );
@@ -895,8 +883,8 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
         else
         {
             //todo/mba: assuming that notes should be omitted
-            BOOL bSearchInNotes = FALSE;
-            BOOL bCancel;
+            sal_Bool bSearchInNotes = sal_False;
+            sal_Bool bCancel;
             nResult = (sal_Int32)pUnoCrsr->Find( aSearchOpt, bSearchInNotes,
                     eStart, eEnd, bCancel,
                     (FindRanges)eRanges,
@@ -1005,7 +993,7 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings(void)
         pArray[6] = beans::PropertyValue(C2U("HoriMargin"), -1, aVal, PropertyState_DIRECT_VALUE);
         aVal <<= (sal_Int32)TWIP_TO_MM100_UNSIGNED(aData.GetVertSpace());
         pArray[7] = beans::PropertyValue(C2U("VertMargin"), -1, aVal, PropertyState_DIRECT_VALUE);
-        BOOL bTemp = aData.GetLandscape();
+        sal_Bool bTemp = aData.GetLandscape();
         aVal.setValue(&bTemp, ::getCppuBooleanType());
         pArray[8] = beans::PropertyValue(C2U("IsLandscape"), -1, aVal, PropertyState_DIRECT_VALUE);
     }
@@ -1033,7 +1021,7 @@ sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, sal_Bool& bException)
     return nRet;
 }
 
-String lcl_CreateOutlineString( USHORT nIndex,
+String lcl_CreateOutlineString( sal_uInt16 nIndex,
             const SwOutlineNodes& rOutlineNodes, const SwNumRule* pOutlRule)
 {
     String sEntry;
@@ -1078,13 +1066,13 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
             {
                 if(!nVal || nVal > 0xff)
                     throw RuntimeException();
-                aData.SetRow((BYTE)nVal);
+                aData.SetRow((sal_uInt8)nVal);
             }
             else if(COMPARE_EQUAL == sName.CompareToAscii("PageColumns"))
             {
                 if(!nVal  || nVal > 0xff)
                     throw RuntimeException();
-                aData.SetCol((BYTE)nVal);
+                aData.SetCol((sal_uInt8)nVal);
             }
             else if(COMPARE_EQUAL == sName.CompareToAscii("LeftMargin"))
             {
@@ -1137,11 +1125,11 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
                                     pDocShell->GetDoc()->GetAttrPool());
             aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, sal_True));
 
-        OUString sFileName( C2U(SW_PROP_NAME_STR(UNO_NAME_FILE_NAME)));
-        OUString sCopyCount(C2U(SW_PROP_NAME_STR(UNO_NAME_COPY_COUNT)));
-        OUString sCollate(C2U(SW_PROP_NAME_STR(UNO_NAME_COLLATE)));
-        OUString sSort(C2U(SW_PROP_NAME_STR(UNO_NAME_SORT)));
-        OUString sPages(C2U(SW_PROP_NAME_STR(UNO_NAME_PAGES)));
+        OUString sFileName(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_FILE_NAME)));
+        OUString sCopyCount(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_COPY_COUNT)));
+        OUString sCollate(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_COLLATE)));
+        OUString sSort(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SORT)));
+        OUString sPages(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_PAGES)));
 
         for ( int n = 0; n < xOptions.getLength(); ++n )
         {
@@ -1370,11 +1358,6 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage(void) throw( Runti
         // for the case that it did something by purpose
         ((SwXTextDocument*)this)->pDrawPage = new SwXDrawPage(pDocShell->GetDoc());
         ((SwXTextDocument*)this)->pxXDrawPage = new Reference< drawing::XDrawPage >(pDrawPage);
-
-        //((SwXTextDocument*)this)->pxXDrawPage = new Reference< drawing::XDrawPage > ;
-        //((SwXTextDocument*)this)->pDrawPage = new SwXDrawPage(pDocShell->GetDoc());
-        //Reference< drawing::XShapes >  xTmp = pDrawPage;
-        //*pxXDrawPage = Reference< drawing::XDrawPage>(xTmp, UNO_QUERY);
     }
     return *pxXDrawPage;
 }
@@ -1415,7 +1398,7 @@ void SwXTextDocument::Reactivate(SwDocShell* pNewDocShell)
     if(pDocShell && pDocShell != pNewDocShell)
         Invalidate();
     pDocShell = pNewDocShell;
-    bObjectValid = TRUE;
+    bObjectValid = sal_True;
 }
 
 void    SwXTextDocument::InitNewDoc()
@@ -1682,9 +1665,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
             }
             else if (sCategory == C2U ("text") )
             {
-                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.PrintPreviewSettings") ) )
-                    xRet = Reference < XInterface > ( *new SwXPrintPreviewSettings ( pDocShell->GetDoc() ) );
-                else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
+                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
                     xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
             }
             else if (sCategory == C2U ("chart2") )
@@ -1782,9 +1763,9 @@ sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( R
        )
     return sal_True;
 
-    BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
-    BOOL bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
-    BOOL bTextDoc   = (!bWebDoc && !bGlobalDoc);
+    sal_Bool bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
+    sal_Bool bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
+    sal_Bool bTextDoc   = (!bWebDoc && !bGlobalDoc);
 
     return (
             (bWebDoc    && rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.WebDocument"   ))) ||
@@ -1795,9 +1776,9 @@ sal_Bool SwXTextDocument::supportsService(const OUString& rServiceName) throw( R
 
 Sequence< OUString > SwXTextDocument::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    BOOL bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
-    BOOL bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
-    BOOL bTextDoc   = (!bWebDoc && !bGlobalDoc);
+    sal_Bool bWebDoc    = (0 != PTR_CAST(SwWebDocShell,    pDocShell));
+    sal_Bool bGlobalDoc = (0 != PTR_CAST(SwGlobalDocShell, pDocShell));
+    sal_Bool bTextDoc   = (!bWebDoc && !bGlobalDoc);
 
     Sequence< OUString > aRet (3);
     OUString* pArray = aRet.getArray();
@@ -2080,7 +2061,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_HIDE_TIPS :
         {
-            BOOL bTemp = SW_MOD()->GetModuleConfig()->IsHideFieldTips();
+            sal_Bool bTemp = SW_MOD()->GetModuleConfig()->IsHideFieldTips();
             aAny.setValue(&bTemp, ::getBooleanCppuType());
         }
         break;
@@ -2107,7 +2088,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_TWO_DIGIT_YEAR:
         {
-            aAny <<= static_cast < sal_Int16 > (pDocShell->GetDoc()->GetNumberFormatter ( TRUE )->GetYear2000());
+            aAny <<= static_cast < sal_Int16 > (pDocShell->GetDoc()->GetNumberFormatter ( sal_True )->GetYear2000());
         }
         break;
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
@@ -2179,28 +2160,28 @@ void SwXTextDocument::addPropertyChangeListener(const OUString& /*PropertyName*/
     const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextDocument::removePropertyChangeListener(const OUString& /*PropertyName*/,
     const Reference< XPropertyChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextDocument::addVetoableChangeListener(const OUString& /*PropertyName*/,
     const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SwXTextDocument::removeVetoableChangeListener(const OUString& /*PropertyName*/,
                         const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 Reference< XNameAccess >  SwXTextDocument::getLinks(void) throw( RuntimeException )
@@ -2228,10 +2209,10 @@ void SwXTextDocument::refresh(void) throw( RuntimeException )
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw RuntimeException();
-    SwWrtShell *pWrtShell = pDocShell->GetWrtShell();
+    ViewShell *pViewShell = pDocShell->GetWrtShell();
     notifyRefreshListeners();
-    if(pWrtShell)
-        pWrtShell->CalcLayout();
+    if(pViewShell)
+        pViewShell->CalcLayout();
 }
 
 void SwXTextDocument::addRefreshListener(const Reference< util::XRefreshListener > & l)
@@ -2261,7 +2242,7 @@ void SwXTextDocument::updateLinks(  ) throw(RuntimeException)
     if( rLnkMan.GetLinks().Count() )
     {
         UnoActionContext aAction(pDoc);
-        rLnkMan.UpdateAllLinks( FALSE, FALSE, TRUE );
+        rLnkMan.UpdateAllLinks( sal_False, sal_False, sal_True );
     }
 }
 
@@ -2378,7 +2359,7 @@ SfxViewShell * SwXTextDocument::GetRenderView(
         const beans::PropertyValue *pProps = rOptions.getConstArray();
         for (sal_Int32 i = 0; i < nLen; ++i)
         {
-            if (pProps[i].Name.equalsAscii( "View" ))
+            if (pProps[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "View" ) ))
             {
                 aTmp = pProps[i].Value;
                 break;
@@ -2439,7 +2420,7 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             const TypeId aSwViewTypeId = TYPE(SwView);
             if (rpView  &&  rpView->IsA(aSwViewTypeId))
             {
-                SfxObjectShellRef xDocSh(((SwView*)rpView)->GetOrCreateTmpSelectionDoc());
+                SfxObjectShellLock xDocSh(((SwView*)rpView)->GetOrCreateTmpSelectionDoc());
                 if (xDocSh.Is())
                 {
                     pDoc = ((SwDocShell*)&xDocSh)->GetDoc();
@@ -2448,7 +2429,7 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             }
             else
             {
-                OSL_ENSURE(false, "unexpected ViewShell" );
+                OSL_FAIL("unexpected ViewShell" );
             }
         }
     }
@@ -2460,33 +2441,28 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
     const SwPrintUIOptions &rPrintUIOptions,
     bool bIsPDFEXport )
 {
-    if (!rDoc.getPrintData())
-    {
-        SwPrintData *pTmpData = new SwPrintData;
-        rDoc.setPrintData ( *pTmpData );
-        delete pTmpData;    // setPrintData does make its own copy!
-    }
+    SwPrintData aDocPrintData( rDoc.getPrintData() );
 
-    SwPrintData *pDocPrintData = rDoc.getPrintData();
+    aDocPrintData.SetPrintGraphic( rPrintUIOptions.IsPrintGraphics() );
+    aDocPrintData.SetPrintTable( rPrintUIOptions.IsPrintTables() );
+    aDocPrintData.SetPrintDraw( rPrintUIOptions.IsPrintDrawings() );
+    aDocPrintData.SetPrintControl( rPrintUIOptions.IsPrintFormControls() );
+    aDocPrintData.SetPrintLeftPage( rPrintUIOptions.IsPrintLeftPages() );
+    aDocPrintData.SetPrintRightPage( rPrintUIOptions.IsPrintRightPages() );
+    aDocPrintData.SetPrintReverse( rPrintUIOptions.IsPrintReverse() );
+    aDocPrintData.SetPaperFromSetup( rPrintUIOptions.IsPaperFromSetup() );
+    aDocPrintData.SetPrintEmptyPages( rPrintUIOptions.IsPrintEmptyPages( bIsPDFEXport ) );
+    aDocPrintData.SetPrintPostIts( rPrintUIOptions.GetPrintPostItsType() );
+    aDocPrintData.SetPrintProspect( rPrintUIOptions.IsPrintProspect() );
+    aDocPrintData.SetPrintProspect_RTL( rPrintUIOptions.IsPrintProspectRTL() );
+    aDocPrintData.SetPrintPageBackground( rPrintUIOptions.IsPrintPageBackground() );
+    aDocPrintData.SetPrintBlackFont( rPrintUIOptions.IsPrintWithBlackTextColor() );
+    // aDocPrintData.SetPrintSingleJobs( b ); handled by File/Print dialog itself
+    // arDocPrintData.SetFaxName( s ); n/a in File/Print dialog
+    aDocPrintData.SetPrintHiddenText( rPrintUIOptions.IsPrintHiddenText() );
+    aDocPrintData.SetPrintTextPlaceholder( rPrintUIOptions.IsPrintTextPlaceholders() );
 
-    pDocPrintData->SetPrintGraphic( rPrintUIOptions.IsPrintGraphics() );
-    pDocPrintData->SetPrintTable( rPrintUIOptions.IsPrintTables() );
-    pDocPrintData->SetPrintDraw( rPrintUIOptions.IsPrintDrawings() );
-    pDocPrintData->SetPrintControl( rPrintUIOptions.IsPrintFormControls() );
-    pDocPrintData->SetPrintLeftPage( rPrintUIOptions.IsPrintLeftPages() );
-    pDocPrintData->SetPrintRightPage( rPrintUIOptions.IsPrintRightPages() );
-    pDocPrintData->SetPrintReverse( rPrintUIOptions.IsPrintReverse() );
-    pDocPrintData->SetPaperFromSetup( rPrintUIOptions.IsPaperFromSetup() );
-    pDocPrintData->SetPrintEmptyPages( rPrintUIOptions.IsPrintEmptyPages( bIsPDFEXport ) );
-    pDocPrintData->SetPrintPostIts( rPrintUIOptions.GetPrintPostItsType() );
-    pDocPrintData->SetPrintProspect( rPrintUIOptions.IsPrintProspect() );
-    pDocPrintData->SetPrintProspect_RTL( rPrintUIOptions.IsPrintProspectRTL() );
-    pDocPrintData->SetPrintPageBackground( rPrintUIOptions.IsPrintPageBackground() );
-    pDocPrintData->SetPrintBlackFont( rPrintUIOptions.IsPrintWithBlackTextColor() );
-    // pDocPrintData->SetPrintSingleJobs( b ); handled by File/Print dialog itself
-    // pDocPrintData->SetFaxName( s ); n/a in File/Print dialog
-    pDocPrintData->SetPrintHiddenText( rPrintUIOptions.IsPrintHiddenText() );
-    pDocPrintData->SetPrintTextPlaceholder( rPrintUIOptions.IsPrintTextPlaceholders() );
+    rDoc.setPrintData( aDocPrintData );
 }
 
 sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
@@ -2507,7 +2483,6 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     if (!m_pPrintUIOptions)
         m_pPrintUIOptions = lcl_GetPrintUIOptions( pDocShell, pView );
     bool bFormat = m_pPrintUIOptions->processPropertiesAndCheckFormat( rxOptions );
-    // const bool bIsSkipEmptyPages    = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     OSL_ENSURE( pDoc && pView, "doc or view shell missing!" );
@@ -2527,51 +2502,69 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     else
     {
         SwDocShell *pRenderDocShell = pDoc->GetDocShell();
-        SwWrtShell *pWrtShell = pRenderDocShell->GetWrtShell();
+
+        // TODO/mba: we really need a generic way to get the ViewShell!
+        ViewShell* pViewShell = 0;
+        SwView* pSwView = PTR_CAST(SwView, pView);
+        if ( pSwView )
+        {
+            pViewShell = pSwView->GetWrtShellPtr();
+        }
+        else
+        {
+            if ( bIsPDFExport && bFormat )
+            {
+                //create a hidden view to be able to export as PDF also in print preview
+                //pView and pSwView are not changed intentionally!
+                m_pHiddenViewFrame = SfxViewFrame::LoadHiddenDocument( *pRenderDocShell, 2 );
+                pViewShell = ((SwView*)m_pHiddenViewFrame->GetViewShell())->GetWrtShellPtr();
+            }
+            else
+                pViewShell = ((SwPagePreView*)pView)->GetViewShell();
+        }
+
+        if (!pViewShell || !pViewShell->GetLayout())
+            return 0;
+
         if (bFormat)
         {
             // #i38289
-            if(pDoc->get(IDocumentSettingAccess::BROWSE_MODE))
+            if( pViewShell->GetViewOptions()->getBrowseMode() )
             {
-                pRenderDocShell->ToggleBrowserMode(false,NULL);
-            }
-
-            if (!pWrtShell)
-            {
-                //create a hidden view to be able to export as PDF also in print preview
-                m_pHiddenViewFrame = SfxViewFrame::LoadHiddenDocument( *pRenderDocShell, 2 );
-                SwView* pSwView = (SwView*) m_pHiddenViewFrame->GetViewShell();
-                pWrtShell = pSwView->GetWrtShellPtr();
+                SwViewOption aOpt( *pViewShell->GetViewOptions() );
+                aOpt.setBrowseMode( false );
+                pViewShell->ApplyViewOptions( aOpt );
+                pSwView->RecheckBrowseMode();
             }
 
             // reformating the document for printing will show the changes in the view
             // which is likely to produce many unwanted and not nice to view actions.
             // We don't want that! Thus we disable updating of the view.
-            pWrtShell->StartAction();
+            pViewShell->StartAction();
 
-            const TypeId aSwViewTypeId = TYPE(SwView);
-            if (pView->IsA(aSwViewTypeId))
+            if (pSwView)
             {
-                if (m_pRenderData && m_pRenderData->NeedNewViewOptionAdjust( *pWrtShell ) )
+                if (m_pRenderData && m_pRenderData->NeedNewViewOptionAdjust( *pViewShell ) )
                     m_pRenderData->ViewOptionAdjustStop();
                 if (m_pRenderData && !m_pRenderData->IsViewOptionAdjust())
-                    m_pRenderData->ViewOptionAdjustStart( *pWrtShell, *pWrtShell->GetViewOptions() );
+                    m_pRenderData->ViewOptionAdjustStart( *pViewShell, *pViewShell->GetViewOptions() );
             }
 
-            m_pRenderData->SetSwPrtOptions( new SwPrtOptions( C2U( bIsPDFExport ? "PDF export" : "Printing" ) ) );
+            m_pRenderData->SetSwPrtOptions( new SwPrintData );
             m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
                     m_pPrintUIOptions, m_pRenderData, bIsPDFExport );
 
-            if (pView->IsA(aSwViewTypeId))
+            if (pSwView)
             {
                 // PDF export should not make use of the SwPrtOptions
-                const SwPrtOptions *pPrtOptions = bIsPDFExport? NULL : m_pRenderData->GetSwPrtOptions();
+                const SwPrintData *pPrtOptions = (bIsPDFExport)
+                    ? NULL : m_pRenderData->GetSwPrtOptions();
                 m_pRenderData->ViewOptionAdjust( pPrtOptions );
             }
 
             // since printing now also use the API for PDF export this option
             // should be set for printing as well ...
-            pWrtShell->SetPDFExportOption( sal_True );
+            pViewShell->SetPDFExportOption( sal_True );
             bool bOrigStatus = pRenderDocShell->IsEnableSetModified();
             // check configuration: shall update of printing information in DocInfo set the document to "modified"?
             bool bStateChanged = false;
@@ -2581,9 +2574,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 bStateChanged = true;
             }
 
-
             // --> FME 2005-05-23 #122919# Force field update before PDF export:
-            pWrtShell->ViewShell::UpdateFlds(TRUE);
+            pViewShell->ViewShell::UpdateFlds(sal_True);
             // <--
             if( bStateChanged )
                 pRenderDocShell->EnableSetModified( sal_True );
@@ -2591,17 +2583,16 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             // there is some redundancy between those two function calls, but right now
             // there is no time to sort this out.
             //TODO: check what exatly needs to be done and make just one function for that
-            pWrtShell->CalcLayout();
-            pWrtShell->CalcPagesForPrint( pDoc->GetPageCount() );
+            pViewShell->CalcLayout();
+            pViewShell->CalcPagesForPrint( pViewShell->GetPageCount() );
 
-            pWrtShell->SetPDFExportOption( sal_False );
-
+            pViewShell->SetPDFExportOption( sal_False );
 
             // enable view again
-            pWrtShell->EndAction();
+            pViewShell->EndAction();
         }
 
-        const sal_Int32 nPageCount = pDoc->GetPageCount();
+        const sal_Int32 nPageCount = pViewShell->GetPageCount();
 
         //
         // get number of pages to be rendered
@@ -2609,7 +2600,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         const bool bPrintProspect = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
         if (bPrintProspect)
         {
-            pDoc->CalculatePagePairsForProspectPrinting( *m_pRenderData, *m_pPrintUIOptions, nPageCount );
+            pDoc->CalculatePagePairsForProspectPrinting( *pViewShell->GetLayout(), *m_pRenderData, *m_pPrintUIOptions, nPageCount );
             nRet = m_pRenderData->GetPagePairsForProspectPrinting().size();
         }
         else
@@ -2618,12 +2609,12 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             if (nPostItMode != POSTITS_NONE)
             {
                 OutputDevice *pOutDev = lcl_GetOutputDevice( *m_pPrintUIOptions );
-                m_pRenderData->CreatePostItData( pDoc, pWrtShell->GetViewOptions(), pOutDev );
+                m_pRenderData->CreatePostItData( pDoc, pViewShell->GetViewOptions(), pOutDev );
             }
 
             // get set of valid document pages (according to the current settings)
             // and their start frames
-            pDoc->CalculatePagesForPrinting( *m_pRenderData, *m_pPrintUIOptions, bIsPDFExport, nPageCount );
+            pDoc->CalculatePagesForPrinting( *pViewShell->GetLayout(), *m_pRenderData, *m_pPrintUIOptions, bIsPDFExport, nPageCount );
 
             if (nPostItMode != POSTITS_NONE)
             {
@@ -2677,6 +2668,15 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     // Thus instead of throwing the exception we silently return.
     if (0 > nRenderer)
         throw IllegalArgumentException();
+
+    // TODO/mba: we really need a generic way to get the ViewShell!
+    ViewShell* pVwSh = 0;
+    SwView* pSwView = PTR_CAST(SwView, pView);
+    if ( pSwView )
+        pVwSh = pSwView->GetWrtShellPtr();
+    else
+        pVwSh = ((SwPagePreView*)pView)->GetViewShell();
+
     sal_Int32 nMaxRenderer = 0;
     if (!bIsSwSrcView && m_pRenderData)
     {
@@ -2697,7 +2697,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         // determine the correct page number from the renderer index
         // --> OD 2010-10-01 #i114875
         // consider brochure print
-        const USHORT nPage = bPrintProspect
+        const sal_uInt16 nPage = bPrintProspect
                              ? nRenderer + 1
                              : m_pRenderData->GetPagesToPrint()[ nRenderer ];
         // <--
@@ -2737,20 +2737,37 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                 aTmpSize = pPrinter->LogicToLogic( aTmpSize,
                             pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
                 aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
+                #if 0
+                // #i115048# it seems users didn't like getting double the formatted page size
+                // revert to "old" behavior scaling to the current paper size of the printer
                 if (bPrintProspect)
                 {
                     // we just state what output size we would need
                     // which may cause vcl to set that page size on the printer
                     // (if available and not overriden by the user)
-                    aTmpSize = pDoc->GetPageSize( nPage, bIsSkipEmptyPages );
+                    aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
                     aPreferredPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
                                                      TWIP_TO_MM100( aTmpSize.Height() ));
                 }
+                #else
+                if( bPrintProspect )
+                {
+                    // just switch to an appropriate portrait/landscape format
+                    // FIXME: brochure printing with landscape pages puts the
+                    // pages next to each other, so landscape is currently always
+                    // the better choice
+                    if( aPageSize.Width < aPageSize.Height )
+                    {
+                        aPreferredPageSize.Width = aPageSize.Height;
+                        aPreferredPageSize.Height = aPageSize.Width;
+                    }
+                }
+                #endif
             }
         }
         else
         {
-            aTmpSize = pDoc->GetPageSize( nPage, bIsSkipEmptyPages );
+            aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
             aPageSize = awt::Size ( TWIP_TO_MM100( aTmpSize.Width() ),
                                     TWIP_TO_MM100( aTmpSize.Height() ));
         }
@@ -2819,9 +2836,6 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
     if (pView)
         rbIsSwSrcView = pSwSrcView != 0;
     return pView;
-//    return pSwView ? dynamic_cast< SfxViewShell * >(pSwView) :
-//            (pSwSrcView ? dynamic_cast< SfxViewShell * >(pSwSrcView) :
-//                          dynamic_cast< SfxViewShell * >(pSwPagePreView) );
 }
 
 void SAL_CALL SwXTextDocument::render(
@@ -2886,9 +2900,12 @@ void SAL_CALL SwXTextDocument::render(
                 ViewShell* pVwSh = 0;
                 if (pView)
                 {
-                    pVwSh = pView->IsA(aSwViewTypeId) ?
-                                ((SwView*)pView)->GetWrtShellPtr() :
-                                ((SwPagePreView*)pView)->GetViewShell();
+                    // TODO/mba: we really need a generic way to get the ViewShell!
+                    SwView* pSwView = PTR_CAST(SwView, pView);
+                    if ( pSwView )
+                        pVwSh = pSwView->GetWrtShellPtr();
+                    else
+                        pVwSh = ((SwPagePreView*)pView)->GetViewShell();
                 }
 
                 // get output device to use
@@ -2924,7 +2941,8 @@ void SAL_CALL SwXTextDocument::render(
                     }
                     // <--
 
-                    const SwPrtOptions &rSwPrtOptions = *m_pRenderData->GetSwPrtOptions();
+                    SwPrintData const& rSwPrtOptions =
+                        *m_pRenderData->GetSwPrtOptions();
                     if (bPrintProspect)
                         pVwSh->PrintProspect( pOut, rSwPrtOptions, nRenderer );
                     else    // normal printing and PDF export
@@ -2999,8 +3017,12 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw RuntimeException();
-    //create a new document - hidden - copy the storage and return it
-    SfxObjectShell* pShell = pDocShell->GetDoc()->CreateCopy(false);
+
+    // create a new document - hidden - copy the storage and return it
+    // SfxObjectShellRef is used here, since the model should control object lifetime after creation
+    // and thus SfxObjectShellLock is not allowed here
+    // the model holds reference to the shell, so the shell will not destructed at the end of method
+    SfxObjectShellRef pShell = pDocShell->GetDoc()->CreateCopy(false);
     uno::Reference< frame::XModel > xNewModel = pShell->GetModel();
     uno::Reference< embed::XStorage > xNewStorage = ::comphelper::OStorageHelper::GetTemporaryStorage( );
     uno::Sequence< beans::PropertyValue > aTempMediaDescriptor;
@@ -3054,50 +3076,50 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     //USER STYLES
 
     const SwCharFmts *pFmts = pDoc->GetCharFmts();
-    for(USHORT i = 0; i < pFmts->Count(); ++i)
+    for(sal_uInt16 i = 0; i < pFmts->Count(); ++i)
     {
         const SwAttrSet &rAttrSet = (*pFmts)[i]->GetAttrSet();
         LanguageType nLang = LANGUAGE_DONTKNOW;
         if (bLatin)
         {
-            nLang = rAttrSet.GetLanguage( FALSE ).GetLanguage();
+            nLang = rAttrSet.GetLanguage( sal_False ).GetLanguage();
             if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                 aAllLangs.insert( nLang );
         }
         if (bAsian)
         {
-            nLang = rAttrSet.GetCJKLanguage( FALSE ).GetLanguage();
+            nLang = rAttrSet.GetCJKLanguage( sal_False ).GetLanguage();
             if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                 aAllLangs.insert( nLang );
         }
         if (bComplex)
         {
-            nLang = rAttrSet.GetCTLLanguage( FALSE ).GetLanguage();
+            nLang = rAttrSet.GetCTLLanguage( sal_False ).GetLanguage();
             if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                 aAllLangs.insert( nLang );
         }
     }
 
     const SwTxtFmtColls *pColls = pDoc->GetTxtFmtColls();
-    for (USHORT i = 0; i < pColls->Count(); ++i)
+    for (sal_uInt16 i = 0; i < pColls->Count(); ++i)
     {
         const SwAttrSet &rAttrSet = (*pColls)[i]->GetAttrSet();
         LanguageType nLang = LANGUAGE_DONTKNOW;;
         if (bLatin)
         {
-            nLang = rAttrSet.GetLanguage( FALSE ).GetLanguage();
+            nLang = rAttrSet.GetLanguage( sal_False ).GetLanguage();
             if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                 aAllLangs.insert( nLang );
         }
         if (bAsian)
         {
-            nLang = rAttrSet.GetCJKLanguage( FALSE ).GetLanguage();
+            nLang = rAttrSet.GetCJKLanguage( sal_False ).GetLanguage();
             if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                 aAllLangs.insert( nLang );
         }
         if (bComplex)
         {
-            nLang = rAttrSet.GetCTLLanguage( FALSE ).GetLanguage();
+            nLang = rAttrSet.GetCTLLanguage( sal_False ).GetLanguage();
             if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                 aAllLangs.insert( nLang );
         }
@@ -3122,26 +3144,26 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
             LanguageType nLang = LANGUAGE_DONTKNOW;
             if (bLatin)
             {
-                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_LANGUAGE, FALSE )).GetLanguage();
+                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_LANGUAGE, sal_False )).GetLanguage();
                 if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                     aAllLangs.insert( nLang );
             }
             if (bAsian)
             {
-                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_CJK_LANGUAGE, FALSE )).GetLanguage();
+                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_CJK_LANGUAGE, sal_False )).GetLanguage();
                 if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                     aAllLangs.insert( nLang );
             }
             if (bComplex)
             {
-                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_CTL_LANGUAGE, FALSE )).GetLanguage();
+                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_CTL_LANGUAGE, sal_False )).GetLanguage();
                 if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                     aAllLangs.insert( nLang );
             }
         }
     }
 
-    //get languages from "drawobject"
+    //TODO/mba: it's a strange concept that a view is needed to retrieve core data
     SwWrtShell *pWrtSh = pDocShell->GetWrtShell();
     SdrView *pSdrView = pWrtSh->GetDrawView();
 
@@ -3151,38 +3173,38 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
         if(pOutliner)
         {
             EditEngine& rEditEng = (EditEngine&)pOutliner->GetEditEngine();
-            ULONG nParCount = pOutliner->GetParagraphCount();
-            for (ULONG nPar=0; nPar<nParCount; nPar++)
+            sal_uLong nParCount = pOutliner->GetParagraphCount();
+            for (sal_uLong nPar=0; nPar<nParCount; nPar++)
             {
                 //every paragraph
                 SvUShorts aPortions;
-                rEditEng.GetPortions( (USHORT)nPar, aPortions );
+                rEditEng.GetPortions( (sal_uInt16)nPar, aPortions );
 
-                for ( USHORT nPos = aPortions.Count(); nPos; )
+                for ( sal_uInt16 nPos = aPortions.Count(); nPos; )
                 {
                     //every position
                     --nPos;
-                    USHORT nEnd = aPortions.GetObject( nPos );
-                    USHORT nStart = nPos ? aPortions.GetObject( nPos - 1 ) : 0;
-                    ESelection aSelection( (USHORT)nPar, nStart, (USHORT)nPar, nEnd );
+                    sal_uInt16 nEnd = aPortions.GetObject( nPos );
+                    sal_uInt16 nStart = nPos ? aPortions.GetObject( nPos - 1 ) : 0;
+                    ESelection aSelection( (sal_uInt16)nPar, nStart, (sal_uInt16)nPar, nEnd );
                     SfxItemSet aAttr = rEditEng.GetAttribs( aSelection );
 
                     LanguageType nLang = LANGUAGE_DONTKNOW;
                     if (bLatin)
                     {
-                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE, FALSE )).GetLanguage();
+                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE, sal_False )).GetLanguage();
                         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                             aAllLangs.insert( nLang );
                     }
                     if (bAsian)
                     {
-                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE_CJK, FALSE )).GetLanguage();
+                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE_CJK, sal_False )).GetLanguage();
                         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                             aAllLangs.insert( nLang );
                     }
                     if (bComplex)
                     {
-                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE_CTL, FALSE )).GetLanguage();
+                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE_CTL, sal_False )).GetLanguage();
                         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                             aAllLangs.insert( nLang );
                     }
@@ -3195,11 +3217,11 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
         nMaxCount = static_cast< sal_Int16 >( aAllLangs.size() );
 
     // build return value
-    sal_Int32 nCount = 0;
     uno::Sequence< lang::Locale > aLanguages( nMaxCount );
     lang::Locale* pLanguage = aLanguages.getArray();
     if (nMaxCount > 0)
     {
+        sal_Int32 nCount = 0;
         const SvtLanguageTable aLangTab;
         for (std::set< LanguageType >::const_iterator it = aAllLangs.begin(); it != aAllLangs.end(); ++it)
         {
@@ -3266,14 +3288,6 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
         aRet.setValue(&xRet, ::getCppuType((Reference< XPropertySet>*)0));
     }
-/*  else if(sToCompare == )
-    {
-        sSuffix += UniString::CreateFromAscii(pMarkToText);
-        Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
-                                        pxDoc->, sSuffix );
-        Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
-        aRet.setValue(&xRet, ::getCppuType((const XPropertySet*)0));
-    }*/
     else if(sToCompare == sGraphics)
     {
         sSuffix += UniString::CreateFromAscii(pMarkToGraphic);
@@ -3537,7 +3551,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasElements(void) throw( RuntimeException )
     sal_Bool bRet = sal_False;
     if(pxDoc)
     {
-        OSL_ENSURE(false, "not implemented");
+        OSL_FAIL("not implemented");
     }
     else
     {
@@ -3579,8 +3593,6 @@ Any lcl_GetDisplayBitmap(String sLinkSuffix)
         nImgId = CONTENT_TYPE_FRAME;
     else if(COMPARE_EQUAL  == sLinkSuffix.CompareToAscii(pMarkToGraphic))
         nImgId = CONTENT_TYPE_GRAPHIC;
-//  else if(== sLinkSuffix)
-//      nImgId = CONTENT_TYPE_BOOKMARK;
     else if(COMPARE_EQUAL  == sLinkSuffix.CompareToAscii(pMarkToRegion))
         nImgId = CONTENT_TYPE_REGION;
     else if(COMPARE_EQUAL == sLinkSuffix.CompareToAscii(pMarkToOLE))
@@ -3590,8 +3602,7 @@ Any lcl_GetDisplayBitmap(String sLinkSuffix)
     if(USHRT_MAX != nImgId)
     {
         nImgId += 20000;
-        BOOL bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-        ImageList aEntryImages( SW_RES(bHighContrast ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP) );
+        ImageList aEntryImages( SW_RES(IMG_NAVI_ENTRYBMP) );
         const Image& rImage = aEntryImages.GetImage( nImgId );
         Bitmap aBitmap( rImage.GetBitmapEx().GetBitmap() );
         Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( aBitmap );
@@ -3797,7 +3808,7 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
                 xRet = xDrawDefaults;
             break;
 #if OSL_DEBUG_LEVEL > 1
-            default: OSL_ENSURE(false, "which table?");
+            default: OSL_FAIL("which table?");
 #endif
         }
     }
@@ -3823,7 +3834,7 @@ void SwXDocumentPropertyHelper::onChange()
        m_pDoc->SetModified();
 }
 
-SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwViewOption &rViewOptions ) :
+SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( ViewShell& rSh, const SwViewOption &rViewOptions ) :
     m_rShell( rSh ),
     m_aOldViewOptions( rViewOptions )
 {
@@ -3834,8 +3845,8 @@ SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
     m_rShell.ApplyViewOptions( m_aOldViewOptions );
 }
 
-void SwViewOptionAdjust_Impl::AdjustViewOptions(
-    const SwPrtOptions *pPrtOptions )
+void
+SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
 {
     // to avoid unnecessary reformatting the view options related to the content
     // below should only change if necessary, that is if respective content is present
@@ -3853,15 +3864,15 @@ void SwViewOptionAdjust_Impl::AdjustViewOptions(
     // disable anything in the view that should not be printed (or exported to PDF) by default
     // (see also dialog "Tools/Options - StarOffice Writer - Formatting Aids"
     // in section "Display of ...")
-    aRenderViewOptions.SetParagraph( FALSE );             // paragraph end
-    aRenderViewOptions.SetSoftHyph( FALSE );              // aka custom hyphens
-    aRenderViewOptions.SetBlank( FALSE );                 // spaces
-    aRenderViewOptions.SetHardBlank( FALSE );             // non-breaking spaces
-    aRenderViewOptions.SetTab( FALSE );                   // tabs
-    aRenderViewOptions.SetLineBreak( FALSE );             // breaks (type 1)
-    aRenderViewOptions.SetPageBreak( FALSE );             // breaks (type 2)
-    aRenderViewOptions.SetColumnBreak( FALSE );           // breaks (type 3)
-    BOOL bVal = pPrtOptions? pPrtOptions->bPrintHiddenText : FALSE;
+    aRenderViewOptions.SetParagraph( sal_False );             // paragraph end
+    aRenderViewOptions.SetSoftHyph( sal_False );              // aka custom hyphens
+    aRenderViewOptions.SetBlank( sal_False );                 // spaces
+    aRenderViewOptions.SetHardBlank( sal_False );             // non-breaking spaces
+    aRenderViewOptions.SetTab( sal_False );                   // tabs
+    aRenderViewOptions.SetLineBreak( sal_False );             // breaks (type 1)
+    aRenderViewOptions.SetPageBreak( sal_False );             // breaks (type 2)
+    aRenderViewOptions.SetColumnBreak( sal_False );           // breaks (type 3)
+    sal_Bool bVal = pPrtOptions? pPrtOptions->bPrintHiddenText : sal_False;
     if (bContainsHiddenChars)
         aRenderViewOptions.SetShowHiddenChar( bVal );     // hidden text
     if (bContainsHiddenFields)
@@ -3872,16 +3883,16 @@ void SwViewOptionAdjust_Impl::AdjustViewOptions(
     if (bContainsPlaceHolders)
     {
         // should always be printed in PDF export!
-        bVal = pPrtOptions ? pPrtOptions->bPrintTextPlaceholder : TRUE;
+        bVal = pPrtOptions ? pPrtOptions->bPrintTextPlaceholder : sal_True;
         aRenderViewOptions.SetShowPlaceHolderFields( bVal );
     }
 
     if (bContainsFields)
-        aRenderViewOptions.SetFldName( FALSE );
+        aRenderViewOptions.SetFldName( sal_False );
 
     // we need to set this flag in order to get to see the visible effect of
     // some of the above settings (needed for correct rendering)
-    aRenderViewOptions.SetViewMetaChars( TRUE );
+    aRenderViewOptions.SetViewMetaChars( sal_True );
 
     if (m_aOldViewOptions != aRenderViewOptions)  // check if reformatting is necessary
     {

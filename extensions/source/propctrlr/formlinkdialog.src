@@ -35,6 +35,7 @@
 
 ModalDialog RID_DLG_FORMLINKS
 {
+    HelpID = "extensions:ModalDialog:RID_DLG_FORMLINKS";
     OutputSize = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -133,6 +134,7 @@ ModalDialog RID_DLG_FORMLINKS
 
     PushButton PB_SUGGEST
     {
+        HelpID = "extensions:PushButton:RID_DLG_FORMLINKS:PB_SUGGEST";
         Pos = MAP_APPFONT( 199, 90 );
         Size = MAP_APPFONT( 50, 14 );
         TabStop =  TRUE;

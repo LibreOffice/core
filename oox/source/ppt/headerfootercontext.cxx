@@ -27,9 +27,7 @@
  ************************************************************************/
 
 #include "headerfootercontext.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "tokens.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

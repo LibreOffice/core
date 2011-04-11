@@ -128,7 +128,7 @@ namespace dbmm
     //--------------------------------------------------------------------
     void SAL_CALL ProgressCapture::reset(  ) throw (RuntimeException)
     {
-        OSL_ENSURE( false, "ProgressCapture::reset: not implemented!" );
+        OSL_FAIL( "ProgressCapture::reset: not implemented!" );
     }
 
 //........................................................................

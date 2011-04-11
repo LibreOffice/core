@@ -56,18 +56,18 @@ namespace com{namespace sun{ namespace star{
 }}}
 
 // -----------------------------------------------------------------------
-//Feature-Flags (only USHORT!)
-#define NUM_CONTINUOUS          0x0001 // fortlaufende Numerierung moeglich?
-#define NUM_CHAR_TEXT_DISTANCE  0x0002 // Abstand Symbol<->Text?
-#define NUM_CHAR_STYLE          0x0004 // Zeichenvorlagen?
-#define NUM_BULLET_REL_SIZE     0x0008 // rel. Bulletgroesse?
+//Feature-Flags (only sal_uInt16!)
+#define NUM_CONTINUOUS          0x0001 // consecutive numbers possible?
+#define NUM_CHAR_TEXT_DISTANCE  0x0002 // Distance Symbol<->Text?
+#define NUM_CHAR_STYLE          0x0004 // Character styles?
+#define NUM_BULLET_REL_SIZE     0x0008 // relative bullet size?
 #define NUM_BULLET_COLOR        0x0010 // Bullet color
-#define NUM_SYMBOL_ALIGNMENT    0x0040 // alignment soll unter den Optionen angezeigt werden
-#define NUM_NO_NUMBERS          0x0080 // Numberierungen sind nicht erlaubt
+#define NUM_SYMBOL_ALIGNMENT    0x0040 // alignment to be shown in the options
+#define NUM_NO_NUMBERS          0x0080 // Numbering are not allowed
 #define NUM_ENABLE_LINKED_BMP   0x0100 // linked bitmaps are available
 #define NUM_ENABLE_EMBEDDED_BMP 0x0200 // embedded bitmaps are available
 
-#define SVX_NO_NUM              200 // Markierung fuer keine Numerierung
+#define SVX_NO_NUM              200 // Marker for no numbering
 #define SVX_NO_NUMLEVEL         0x20
 
 #define LINK_TOKEN  0x80 //indicate linked bitmaps - for use in dialog only
@@ -77,15 +77,15 @@ class EDITENG_DLLPUBLIC SvxNumberType
     static com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> xFormatter;
 
     sal_Int16       nNumType;
-    sal_Bool        bShowSymbol;        // Symbol auch anzeigen?
+    sal_Bool        bShowSymbol;        // Also show Symbol ?
 
 public:
     SvxNumberType(sal_Int16 nType = com::sun::star::style::NumberingType::ARABIC);
     SvxNumberType(const SvxNumberType& rType);
     ~SvxNumberType();
 
-    String          GetNumStr( ULONG nNo ) const;
-    String          GetNumStr( ULONG nNo, const com::sun::star::lang::Locale& rLocale ) const;
+    String          GetNumStr( sal_uLong nNo ) const;
+    String          GetNumStr( sal_uLong nNo, const com::sun::star::lang::Locale& rLocale ) const;
 
     void            SetNumberingType(sal_Int16 nSet) {nNumType = nSet;}
     sal_Int16       GetNumberingType() const {return nNumType;}
@@ -122,12 +122,12 @@ private:
 
     SvxAdjust           eNumAdjust;
 
-    BYTE                nInclUpperLevels;   //Nummern aus der vorigen Ebenen uebernehmen
-    USHORT              nStart;             //Start der Zaehlung
+    sal_uInt8           nInclUpperLevels;   // Take over numbers from the previous level.
+    sal_uInt16          nStart;             // Start of counting
 
-    sal_Unicode         cBullet;            //Symbol
-    USHORT              nBulletRelSize;     //proz. Groesse des Bullets
-    Color               nBulletColor;       //Bullet color
+    sal_Unicode         cBullet;            // Symbol
+    sal_uInt16          nBulletRelSize;     // percentage size of bullets
+    Color               nBulletColor;       // Bullet color
 
     // mode indicating, if the position and spacing of the list label is
     // determined by the former attributes (nFirstLineOffset, nAbsLSpace,
@@ -140,10 +140,10 @@ private:
     //         LABEL_ALIGNMENT is active.
     SvxNumPositionAndSpaceMode mePositionAndSpaceMode;
 
-    short               nFirstLineOffset;   //Erstzeileneinzug
-    short               nAbsLSpace;         //Abstand Rand<->Nummer
-    short               nLSpace;            //relative Einrueckung zum Vorgaenger
-    short               nCharTextDistance;  //Abstand Nummer<->Text
+    short               nFirstLineOffset;   // First line indent
+    short               nAbsLSpace;         // Distance Border<->Number
+    short               nLSpace;            // relative to the previous indentation
+    short               nCharTextDistance;  // Distance Number<->Text
 
     // specifies what follows the list label before the text of the first line
     // of the list item starts
@@ -155,13 +155,13 @@ private:
     // specifies the indent before the text, e.g. in L2R-layout the left margin
     long                        mnIndentAt;
 
-    SvxBrushItem*       pGraphicBrush;          //
-    sal_Int16           eVertOrient;        // vert. Ausrichtung einer Bitmap
+    SvxBrushItem*       pGraphicBrush;
+    sal_Int16           eVertOrient;        // vertical alignment of a bitmap
 
-    Size                aGraphicSize;       // immer! in 1/100 mm
-    Font*               pBulletFont;        // Pointer auf den BulletFont
+    Size                aGraphicSize;       // Always! in 1/100 mm
+    Font*               pBulletFont;        // Pointer to the bullet font
 
-    String              sCharStyleName;     // Zeichenvorlage
+    String              sCharStyleName;     // Character Style
 
     BitmapEx*           pScaledImageCache;  // Image scaled to aGraphicSize, only cached for WINDOW/VDEV
 
@@ -178,8 +178,8 @@ public:
     SvStream&       Store(SvStream &rStream, FontToSubsFontConverter pConverter);
 
     SvxNumberFormat& operator=( const SvxNumberFormat&  );
-    BOOL            operator==( const SvxNumberFormat&  ) const;
-    BOOL            operator!=( const SvxNumberFormat& rFmt) const {return !(*this == rFmt);}
+    sal_Bool            operator==( const SvxNumberFormat&  ) const;
+    sal_Bool            operator!=( const SvxNumberFormat& rFmt) const {return !(*this == rFmt);}
 
     void            SetNumAdjust(SvxAdjust eSet) {eNumAdjust = eSet;}
     SvxAdjust       GetNumAdjust() const {return eNumAdjust;}
@@ -195,15 +195,15 @@ public:
     const Font*     GetBulletFont() const {return pBulletFont;}
     void            SetBulletChar(sal_Unicode cSet){cBullet = cSet;}
     sal_Unicode     GetBulletChar()const {return cBullet;}
-    void            SetBulletRelSize(USHORT nSet) {nBulletRelSize = nSet;}
-    USHORT          GetBulletRelSize() const { return nBulletRelSize;}
+    void            SetBulletRelSize(sal_uInt16 nSet) {nBulletRelSize = nSet;}
+    sal_uInt16          GetBulletRelSize() const { return nBulletRelSize;}
     void            SetBulletColor(Color nSet){nBulletColor = nSet;}
     Color           GetBulletColor()const {return nBulletColor;}
 
-    void            SetIncludeUpperLevels( BYTE nSet ) { nInclUpperLevels = nSet;}
-    BYTE            GetIncludeUpperLevels()const  { return nInclUpperLevels;}
-    void            SetStart(USHORT nSet) {nStart = nSet;}
-    USHORT          GetStart() const {return nStart;}
+    void            SetIncludeUpperLevels( sal_uInt8 nSet ) { nInclUpperLevels = nSet;}
+    sal_uInt8           GetIncludeUpperLevels()const  { return nInclUpperLevels;}
+    void            SetStart(sal_uInt16 nSet) {nStart = nSet;}
+    sal_uInt16          GetStart() const {return nStart;}
 
     virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0);
     const SvxBrushItem*         GetBrush() const {return pGraphicBrush;}
@@ -235,7 +235,7 @@ public:
     long GetIndentAt() const;
 
     static Size     GetGraphicSizeMM100(const Graphic* pGraphic);
-    static String   CreateRomanString( ULONG nNo, BOOL bUpper );
+    static String   CreateRomanString( sal_uLong nNo, sal_Bool bUpper );
 };
 
 enum SvxNumRuleType
@@ -248,20 +248,20 @@ enum SvxNumRuleType
 
 class EDITENG_DLLPUBLIC SvxNumRule
 {
-    USHORT              nLevelCount;            // Anzahl der unterstuetzten Levels
-    ULONG               nFeatureFlags;          // was wird unterstuetzt?
-    SvxNumRuleType      eNumberingType;         // was fuer eine Numerierung
-    BOOL                bContinuousNumbering;   // fortlaufende Numerierung
+    sal_uInt16          nLevelCount;            // Number of supported levels
+    sal_uInt32          nFeatureFlags;          // What is supported?
+    SvxNumRuleType      eNumberingType;         // Type of numbering
+    sal_Bool            bContinuousNumbering;   // sequential numbering
 
     SvxNumberFormat*    aFmts[SVX_MAX_NUM];
-    BOOL                aFmtsSet[SVX_MAX_NUM]; //Flags ueber Gueltigkeit der Ebenen
+    sal_Bool            aFmtsSet[SVX_MAX_NUM]; // Flags indicating valid levels
 
     static sal_Int32    nRefCount;
     com::sun::star::lang::Locale aLocale;
 public:
-    SvxNumRule( ULONG nFeatures,
-                USHORT nLevels,
-                BOOL bCont,
+    SvxNumRule( sal_uLong nFeatures,
+                sal_uInt16 nLevels,
+                sal_Bool bCont,
                 SvxNumRuleType eType = SVX_RULETYPE_NUMBERING,
                 SvxNumberFormat::SvxNumPositionAndSpaceMode
                         eDefaultNumberFormatPositionAndSpaceMode
@@ -277,81 +277,77 @@ public:
 
     SvStream&               Store(SvStream &rStream);
 
-    const SvxNumberFormat*  Get(USHORT nLevel)const;
-    const SvxNumberFormat&  GetLevel(USHORT nLevel)const;
-    void                    SetLevel(USHORT nLevel, const SvxNumberFormat& rFmt, BOOL bIsValid = TRUE);
-    void                    SetLevel(USHORT nLevel, const SvxNumberFormat* pFmt);
+    const SvxNumberFormat*  Get(sal_uInt16 nLevel)const;
+    const SvxNumberFormat&  GetLevel(sal_uInt16 nLevel)const;
+    void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat& rFmt, sal_Bool bIsValid = sal_True);
+    void                    SetLevel(sal_uInt16 nLevel, const SvxNumberFormat* pFmt);
 
-    BOOL                    IsContinuousNumbering()const
+    sal_Bool                    IsContinuousNumbering()const
                                             {return bContinuousNumbering;}
-    void                    SetContinuousNumbering(BOOL bSet)
+    void                    SetContinuousNumbering(sal_Bool bSet)
                                             {bContinuousNumbering = bSet;}
 
-    USHORT                  GetLevelCount() const {return nLevelCount;}
-    BOOL                    IsFeatureSupported(ULONG nFeature) const
+    sal_uInt16                  GetLevelCount() const {return nLevelCount;}
+    sal_Bool                    IsFeatureSupported(sal_uInt32 nFeature) const
                                             {return 0 != (nFeatureFlags & nFeature);}
-    ULONG                   GetFeatureFlags() const {return nFeatureFlags;}
-    void                    SetFeatureFlag( ULONG nFlag, BOOL bSet = TRUE ) { if(bSet) nFeatureFlags |= nFlag; else nFeatureFlags &= ~nFlag; }
+    sal_uInt32                  GetFeatureFlags() const {return nFeatureFlags;}
+    void                    SetFeatureFlag( sal_uInt32 nFlag, sal_Bool bSet = sal_True ) { if(bSet) nFeatureFlags |= nFlag; else nFeatureFlags &= ~nFlag; }
 
-    String                  MakeNumString( const SvxNodeNum&, BOOL bInclStrings = TRUE ) const;
+    String                  MakeNumString( const SvxNodeNum&, sal_Bool bInclStrings = sal_True ) const;
 
     SvxNumRuleType          GetNumRuleType() const { return eNumberingType; }
     void                    SetNumRuleType( const SvxNumRuleType& rType ) { eNumberingType = rType; }
 
-    BOOL                    UnLinkGraphics();
+    sal_Bool                    UnLinkGraphics();
 };
-/* -----------------27.10.98 13:04-------------------
- *
- * --------------------------------------------------*/
+
 class EDITENG_DLLPUBLIC SvxNumBulletItem : public SfxPoolItem
 {
     SvxNumRule*             pNumRule;
 public:
     SvxNumBulletItem(SvxNumRule& rRule);
-    SvxNumBulletItem(SvxNumRule& rRule, USHORT nWhich );
+    SvxNumBulletItem(SvxNumRule& rRule, sal_uInt16 nWhich );
     SvxNumBulletItem(const SvxNumBulletItem& rCopy);
     virtual ~SvxNumBulletItem();
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    USHORT  GetVersion( USHORT nFileVersion ) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    sal_uInt16  GetVersion( sal_uInt16 nFileVersion ) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
     virtual int              operator==( const SfxPoolItem& ) const;
 
     SvxNumRule*             GetNumRule() const {return pNumRule;}
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
-/* -----------------28.10.98 15:21-------------------
- *
- * --------------------------------------------------*/
+
 class SvxNodeNum
 {
-    USHORT nLevelVal[ SVX_MAX_NUM ];    // Nummern aller Levels
-    USHORT nSetValue;                   // vorgegebene Nummer
-    BYTE nMyLevel;                      // akt. Level
-    BOOL bStartNum;                     // Numerierung neu starten
+    sal_uInt16 nLevelVal[ SVX_MAX_NUM ];    // Numbers of all levels
+    sal_uInt16 nSetValue;                   // predetermined number
+    sal_uInt8 nMyLevel;                     // Current Level
+    sal_Bool bStartNum;                     // Restart numbering
 
 public:
-    inline SvxNodeNum( BYTE nLevel = SVX_NO_NUM, USHORT nSetVal = USHRT_MAX );
+    inline SvxNodeNum( sal_uInt8 nLevel = SVX_NO_NUM, sal_uInt16 nSetVal = USHRT_MAX );
     inline SvxNodeNum& operator=( const SvxNodeNum& rCpy );
 
-    BYTE GetLevel() const                   { return nMyLevel; }
-    void SetLevel( BYTE nVal )              { nMyLevel = nVal; }
+    sal_uInt8 GetLevel() const                  { return nMyLevel; }
+    void SetLevel( sal_uInt8 nVal )             { nMyLevel = nVal; }
 
-    BOOL IsStart() const                    { return bStartNum; }
-    void SetStart( BOOL bFlag = TRUE )      { bStartNum = bFlag; }
+    sal_Bool IsStart() const                    { return bStartNum; }
+    void SetStart( sal_Bool bFlag = sal_True )      { bStartNum = bFlag; }
 
-    USHORT GetSetValue() const              { return nSetValue; }
-    void SetSetValue( USHORT nVal )         { nSetValue = nVal; }
+    sal_uInt16 GetSetValue() const              { return nSetValue; }
+    void SetSetValue( sal_uInt16 nVal )         { nSetValue = nVal; }
 
-    const USHORT* GetLevelVal() const       { return nLevelVal; }
-          USHORT* GetLevelVal()             { return nLevelVal; }
+    const sal_uInt16* GetLevelVal() const       { return nLevelVal; }
+          sal_uInt16* GetLevelVal()             { return nLevelVal; }
 };
 
-SvxNodeNum::SvxNodeNum( BYTE nLevel, USHORT nSetVal )
-    : nSetValue( nSetVal ), nMyLevel( nLevel ), bStartNum( FALSE )
+SvxNodeNum::SvxNodeNum( sal_uInt8 nLevel, sal_uInt16 nSetVal )
+    : nSetValue( nSetVal ), nMyLevel( nLevel ), bStartNum( sal_False )
 {
     memset( nLevelVal, 0, sizeof( nLevelVal ) );
 }
@@ -366,10 +362,7 @@ inline SvxNodeNum& SvxNodeNum::operator=( const SvxNodeNum& rCpy )
     return *this;
 }
 
-/* --------------------------------------------------
- *
- * --------------------------------------------------*/
-SvxNumRule* SvxConvertNumRule( const SvxNumRule* pRule, USHORT nLevel, SvxNumRuleType eType );
+SvxNumRule* SvxConvertNumRule( const SvxNumRule* pRule, sal_uInt16 nLevel, SvxNumRuleType eType );
 
 #endif
 

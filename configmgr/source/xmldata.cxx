@@ -41,12 +41,12 @@
 #include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
-#include "rtl/textcvt.h"
-#include "rtl/textenc.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "xmlreader/span.hxx"
+#include "xmlreader/xmlreader.hxx"
 
 #include "data.hxx"
 #include "groupnode.hxx"
@@ -58,9 +58,7 @@
 #include "parser.hxx"
 #include "propertynode.hxx"
 #include "setnode.hxx"
-#include "span.hxx"
 #include "type.hxx"
-#include "xmlreader.hxx"
 
 namespace configmgr {
 
@@ -72,90 +70,88 @@ namespace css = com::sun::star;
 
 }
 
-rtl::OUString convertFromUtf8(Span const & text) {
-    OSL_ASSERT(text.is());
-    rtl_uString * s = 0;
-    if (!rtl_convertStringToUString(
-            &s, text.begin, text.length, RTL_TEXTENCODING_UTF8,
-            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
-             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
-             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
-    {
-        throw css::uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM("cannot convert from UTF-8")),
-            css::uno::Reference< css::uno::XInterface >());
-    }
-    return rtl::OUString(s, SAL_NO_ACQUIRE);
-}
-
-Type parseType(XmlReader const & reader, Span const & text) {
+Type parseType(
+    xmlreader::XmlReader const & reader, xmlreader::Span const & text)
+{
     OSL_ASSERT(text.is());
     sal_Int32 i = rtl_str_indexOfChar_WithLength(text.begin, text.length, ':');
     if (i >= 0) {
-        switch (reader.getNamespace(Span(text.begin, i))) {
-        case XmlReader::NAMESPACE_OOR:
-            if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                    RTL_CONSTASCII_STRINGPARAM("any")))
+        switch (reader.getNamespaceId(xmlreader::Span(text.begin, i))) {
+        case ParseManager::NAMESPACE_OOR:
+            if (xmlreader::Span(text.begin + i + 1, text.length - (i + 1)).
+                equals(RTL_CONSTASCII_STRINGPARAM("any")))
             {
                 return TYPE_ANY;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("boolean-list")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("boolean-list")))
             {
                 return TYPE_BOOLEAN_LIST;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("short-list")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("short-list")))
             {
                 return TYPE_SHORT_LIST;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("int-list")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("int-list")))
             {
                 return TYPE_INT_LIST;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("long-list")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("long-list")))
             {
                 return TYPE_LONG_LIST;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("double-list")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("double-list")))
             {
                 return TYPE_DOUBLE_LIST;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("string-list")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("string-list")))
             {
                 return TYPE_STRING_LIST;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("hexBinary-list")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("hexBinary-list")))
             {
                 return TYPE_HEXBINARY_LIST;
             }
             break;
-        case XmlReader::NAMESPACE_XS:
-            if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                    RTL_CONSTASCII_STRINGPARAM("boolean")))
+        case ParseManager::NAMESPACE_XS:
+            if (xmlreader::Span(text.begin + i + 1, text.length - (i + 1)).
+                equals(RTL_CONSTASCII_STRINGPARAM("boolean")))
             {
                 return TYPE_BOOLEAN;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("short")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("short")))
             {
                 return TYPE_SHORT;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("int")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("int")))
             {
                 return TYPE_INT;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("long")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("long")))
             {
                 return TYPE_LONG;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("double")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("double")))
             {
                 return TYPE_DOUBLE;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("string")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("string")))
             {
                 return TYPE_STRING;
-            } else if (Span(text.begin + i + 1, text.length - (i + 1)).equals(
-                           RTL_CONSTASCII_STRINGPARAM("hexBinary")))
+            } else if (xmlreader::Span(
+                           text.begin + i + 1, text.length - (i + 1)).
+                       equals(RTL_CONSTASCII_STRINGPARAM("hexBinary")))
             {
                 return TYPE_HEXBINARY;
             }
@@ -166,11 +162,11 @@ Type parseType(XmlReader const & reader, Span const & text) {
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid type ")) +
-         convertFromUtf8(text)),
+         text.convertFromUtf8()),
         css::uno::Reference< css::uno::XInterface >());
 }
 
-bool parseBoolean(Span const & text) {
+bool parseBoolean(xmlreader::Span const & text) {
     OSL_ASSERT(text.is());
     if (text.equals(RTL_CONSTASCII_STRINGPARAM("true"))) {
         return true;
@@ -180,7 +176,7 @@ bool parseBoolean(Span const & text) {
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid boolean ")) +
-         convertFromUtf8(text)),
+         text.convertFromUtf8()),
         css::uno::Reference< css::uno::XInterface >());
 }
 

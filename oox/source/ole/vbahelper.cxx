@@ -33,9 +33,12 @@
 namespace oox {
 namespace ole {
 
+// ============================================================================
+
+using namespace ::com::sun::star::uno;
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using namespace ::com::sun::star::uno;
 
 // ============================================================================
 

@@ -37,13 +37,13 @@
 #include <rtl/math.hxx>
 #include "sax/tools/converter.hxx"
 
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
-//using namespace com::sun::star::text;
-//using namespace com::sun::star::style;
 using namespace ::com::sun::star::i18n;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace sax {
 
@@ -67,7 +67,7 @@ bool Converter::convertMeasure( sal_Int32& rValue,
     bool bNeg = false;
     double nVal = 0;
 
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     sal_Int32 nLen = rString.getLength();
 
     // skip white space
@@ -270,7 +270,7 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
                                 sal_Int16 nSourceUnit /* = MeasureUnit::MM_100TH */,
                                 sal_Int16 nTargetUnit /* = MeasureUnit::INCH */  )
 {
-    OSL_ENSURE( false, "Converter::convertMeasure - not implemented, tools/BigInt needs replacement" );
+    OSL_FAIL( "Converter::convertMeasure - not implemented, tools/BigInt needs replacement" );
     (void)rBuffer;
     (void)nMeasure;
     (void)nSourceUnit;
@@ -393,7 +393,7 @@ bool Converter::convertNumber(  sal_Int32& rValue,
     bool bNeg = false;
     rValue = 0;
 
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     sal_Int32 nLen = rString.getLength();
 
     // skip white space
@@ -661,7 +661,7 @@ bool Converter::convertDuration(double& rfTime,
             {
                 //! how many days is a year or month?
 
-                OSL_ENSURE( false, "years or months in duration: not implemented");
+                OSL_FAIL( "years or months in duration: not implemented");
                 bSuccess = false;
             }
             else
@@ -1179,11 +1179,10 @@ bool Converter::convertDateOrDateTime(
 
     const ::rtl::OUString string = rString.trim().toAsciiUpperCase();
     sal_Int32 nPos(0);
-    bool bNegative(false);
     if ((string.getLength() > nPos) && (sal_Unicode('-') == string[nPos]))
     {
+        //Negative Number
         ++nPos;
-        bNegative = true;
     }
 
     sal_Int32 nYear(0);

@@ -90,26 +90,43 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
         virtual ~SecurityEnvironment_MSCryptImpl() ;
 
         //Methods from XSecurityEnvironment
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > > SAL_CALL getPersonalCertificates() throw(  ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > > SAL_CALL getPersonalCertificates()
+            throw(  ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL getCertificate( const ::rtl::OUString& issuerName, const ::com::sun::star::uno::Sequence< sal_Int8 >& serialNumber ) throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL getCertificate(
+            const ::rtl::OUString& issuerName,
+            const ::com::sun::star::uno::Sequence< sal_Int8 >& serialNumber )
+            throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL getCertificate( const ::rtl::OUString& issuerName, const ::rtl::OUString& serialNumber ) throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL getCertificate(
+            const ::rtl::OUString& issuerName,
+            const ::rtl::OUString& serialNumber )
+            throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > > SAL_CALL buildCertificatePath( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& beginCert ) throw(  ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > > SAL_CALL buildCertificatePath(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& beginCert )
+            throw(  ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromRaw( const ::com::sun::star::uno::Sequence< sal_Int8 >& rawCertificate ) throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromRaw(
+            const ::com::sun::star::uno::Sequence< sal_Int8 >& rawCertificate )
+            throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromAscii( const ::rtl::OUString& asciiCertificate ) throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate > SAL_CALL createCertificateFromAscii(
+            const ::rtl::OUString& asciiCertificate )
+            throw( ::com::sun::star::uno::SecurityException , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual ::sal_Int32 SAL_CALL verifyCertificate(
             const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
             ::com::sun::star::security::XCertificate > >& intermediateCertificates)
             throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
-    virtual ::sal_Int32 SAL_CALL getCertificateCharacters( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert ) throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
 
-        virtual ::rtl::OUString SAL_CALL getSecurityEnvironmentInformation(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int32 SAL_CALL getCertificateCharacters(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& xCert )
+            throw (::com::sun::star::uno::SecurityException, ::com::sun::star::uno::RuntimeException) ;
+
+        virtual ::rtl::OUString SAL_CALL getSecurityEnvironmentInformation(  )
+            throw (::com::sun::star::uno::RuntimeException);
 
 
         //Methods from XInitialization
@@ -132,9 +149,12 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
         static ::rtl::OUString impl_getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
 
         //Helper for registry
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) throw( ::com::sun::star::uno::RuntimeException ) ;
+        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager )
+            throw( ::com::sun::star::uno::RuntimeException ) ;
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
+        static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > impl_createFactory(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) ;
 
         //Methods from XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
@@ -145,41 +165,30 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
 
         //Native mehtods
         virtual HCRYPTPROV getCryptoProvider() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
         virtual void setCryptoProvider( HCRYPTPROV aProv ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual LPCTSTR getKeyContainer() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
         virtual void setKeyContainer( LPCTSTR aKeyContainer ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual HCERTSTORE getCryptoSlot() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
         virtual void setCryptoSlot( HCERTSTORE aKeyStore ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual HCERTSTORE getCertDb() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
         virtual void setCertDb( HCERTSTORE aCertDb ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual void adoptSymKey( HCRYPTKEY aSymKey ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
         virtual void rejectSymKey( HCRYPTKEY aSymKey ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
         virtual HCRYPTKEY getSymKey( unsigned int position ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual void adoptPubKey( HCRYPTKEY aPubKey ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
         virtual void rejectPubKey( HCRYPTKEY aPubKey ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
         virtual HCRYPTKEY getPubKey( unsigned int position ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual void adoptPriKey( HCRYPTKEY aPriKey ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
         virtual void rejectPriKey( HCRYPTKEY aPriKey ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
         virtual HCRYPTKEY getPriKey( unsigned int position ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         virtual void enableDefaultCrypt( sal_Bool enable ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
-
         virtual sal_Bool defaultEnabled() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         //Native mehtods

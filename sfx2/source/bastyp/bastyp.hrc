@@ -27,12 +27,12 @@
 
 #include <sfx2/sfx.hrc>
 
-//fuer das Mapping Fehlercode -> ResId
+//for the mapping error code -> ResId
 
-#define RC_BASTYP                       RID_SFX_BASTYP_START
-#define STR_FILTER_NOT_INSTALLED        (RC_BASTYP +  9)
-#define STR_FILTER_CONSULT_SERVICE      (RC_BASTYP + 10)
-#define STR_MEMEXCEPTION                (RC_BASTYP + 28)
-#define MSG_MEM_WARN                    (RC_BASTYP + 29)
-#define STR_HTML_GENERATOR              (RC_BASTYP + 30)
+#define RC_BASTYP                                               RID_SFX_BASTYP_START
+#define STR_FILTER_NOT_INSTALLED                (RC_BASTYP +  9)
+#define STR_FILTER_CONSULT_SERVICE              (RC_BASTYP + 10)
+#define STR_MEMEXCEPTION                                (RC_BASTYP + 28)
+#define MSG_MEM_WARN                                    (RC_BASTYP + 29)
+#define STR_HTML_GENERATOR                              (RC_BASTYP + 30)
 

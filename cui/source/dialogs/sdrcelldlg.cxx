@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <svl/cjkoptions.hxx>
 #include <svx/flagsdef.hxx>
 #include "cuires.hrc"
@@ -54,21 +51,13 @@ SvxFormatCellsDialog::SvxFormatCellsDialog( Window* pParent, const SfxItemSet* p
     AddTabPage( RID_SVXPAGE_CHAR_EFFECTS );
     AddTabPage( RID_SVXPAGE_BORDER );
     AddTabPage( RID_SVXPAGE_AREA );
-
-/*
-    SvtCJKOptions aCJKOptions;
-    if( aCJKOptions.IsAsianTypographyEnabled() )
-        AddTabPage( RID_SVXPAGE_PARA_ASIAN);
-    else
-        RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
-*/
 }
 
 SvxFormatCellsDialog::~SvxFormatCellsDialog()
 {
 }
 
-void SvxFormatCellsDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     switch( nId )
     {
@@ -80,13 +69,7 @@ void SvxFormatCellsDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxAreaTabPage&) rPage ).SetPageType( PT_AREA );
             ( (SvxAreaTabPage&) rPage ).SetDlgType( 1 );
             ( (SvxAreaTabPage&) rPage ).SetPos( 0 );
-//          ( (SvxAreaTabPage&) rPage ).SetAreaTP( &mbAreaTP );
-//          ( (SvxAreaTabPage&) rPage ).SetGrdChgd( &mnGradientListState );
-//          ( (SvxAreaTabPage&) rPage ).SetHtchChgd( &mnHatchingListState );
-//          ( (SvxAreaTabPage&) rPage ).SetBmpChgd( &mnBitmapListState );
-//          ( (SvxAreaTabPage&) rPage ).SetColorChgd( &mnColorTableState );
             ( (SvxAreaTabPage&) rPage ).Construct();
-            // ActivatePage() wird das erste mal nicht gerufen
             ( (SvxAreaTabPage&) rPage ).ActivatePage( mrOutAttrs );
 
         break;

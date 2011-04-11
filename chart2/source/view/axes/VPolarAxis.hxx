@@ -48,10 +48,9 @@ public:
            , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount );
 
-    void setIncrements( const ::com::sun::star::uno::Sequence<
-                        ::com::sun::star::chart2::ExplicitIncrementData >& rIncrements );
+    void setIncrements( const std::vector< ExplicitIncrementData >& rIncrements );
 
-    virtual sal_Bool SAL_CALL isAnythingToDraw();
+    virtual sal_Bool isAnythingToDraw();
 
     virtual ~VPolarAxis();
 
@@ -62,8 +61,7 @@ protected:
 
 protected: //member
     PolarPlottingPositionHelper* m_pPosHelper;
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::chart2::ExplicitIncrementData >   m_aIncrements;
+    ::std::vector< ExplicitIncrementData >   m_aIncrements;
 };
 
 //.............................................................................

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 ' **
-' ** owner : joerg.skottke@oracle.com
+' ** owner : gregor.hartmann@oracle.com
 ' **
 ' ** short description : Helper functions for Macro tests
 ' **
@@ -170,6 +170,46 @@ function hBasicIDERunMacro( cIdentifier as string ) as boolean
     else
         warnlog( CFN & "BasicIDE is not open" )
         hBasicIDERunMacro() = false
+    endif
+
+end function
+
+'*******************************************************************************
+
+function hExecMacro( cMacro as string ) as boolean
+
+    const CFN = "global::tools::includes::optional::t_macro_tools.inc::hExecMacro(): "
+
+    dim iCurrentModule as integer
+    dim iCurrentMacro as integer
+    hEXECMacro() = FALSE
+
+    ToolsMacro_uno
+
+    kontext "Makro"
+    if ( Makro.exists( 2 ) ) then
+        ' Iterate through the left treelist
+        for iCurrentModule = hExpandAllNodes( MakroAus ) to 1 step -1
+            MakroAus.select( iCurrentModule )
+            ' Iterate through the Macros list (right pane)
+            for iCurrentMacro = 1 to MakroListe.getItemCount()
+                MakroListe.select( iCurrentMacro )
+                ' Try to find the macro
+                if ( cMacro = MakroListe.getSelText() ) then
+                    ' Run the macro
+                    if ( Ausfuehren.isEnabled() ) then
+                        Ausfuehren.click()
+                        hExecMacro() = TRUE
+                        exit function
+                    else
+                        warnlog( CFN & "Macro found but <Ausfuehren> is not enabled" )
+                        exit function
+                    endif
+                endif
+            next iCurrentMacro
+        next iCurrentModule
+    else
+        warnlog( CFN & "Macro Organizer is not open within 2 seconds" )
     endif
 
 end function

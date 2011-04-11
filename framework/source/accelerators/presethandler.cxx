@@ -212,7 +212,7 @@ void PresetHandler::forgetCachedStorages()
 //-----------------------------------------------
 ::rtl::OUString lcl_getLocalizedMessage(::sal_Int32 nID)
 {
-    ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("Unknown error.");
+    ::rtl::OUString sMessage(RTL_CONSTASCII_USTRINGPARAM("Unknown error."));
 
     switch(nID)
     {
@@ -260,7 +260,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     // Note: May be an user uses URLs without a final slash! Check it ...
     nPos = sShareLayer.lastIndexOf('/');
     if (nPos != sShareLayer.getLength()-1)
-        sShareLayer += ::rtl::OUString::createFromAscii("/");
+        sShareLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     sShareLayer += RELPATH_SHARE_LAYER; // folder
     /*
@@ -316,7 +316,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     // Note: May be an user uses URLs without a final slash! Check it ...
     sal_Int32 nPos = sUserLayer.lastIndexOf('/');
     if (nPos != sUserLayer.getLength()-1)
-        sUserLayer += ::rtl::OUString::createFromAscii("/");
+        sUserLayer += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     sUserLayer  += RELPATH_USER_LAYER; // storage file
 
@@ -416,7 +416,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     {
         if (!xDocumentRoot.is())
             throw css::uno::RuntimeException(
-                    ::rtl::OUString::createFromAscii("There is valid root storage, where the UI configuration can work on."),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("There is valid root storage, where the UI configuration can work on.")),
                     css::uno::Reference< css::uno::XInterface >());
         m_lDocumentStorages.setRootStorage(xDocumentRoot);
         xShare = xDocumentRoot;

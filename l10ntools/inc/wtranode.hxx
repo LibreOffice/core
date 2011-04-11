@@ -81,7 +81,7 @@ class WTT_Node  // WordTransTree-Node
     // INQUIRY
     E_TokenType         TokenType() const;
     UINT8               Value() const;
-    BOOL                IsOnDeleting() const;
+    sal_Bool                IsOnDeleting() const;
     const ByteString &  ReplaceString() const;
 
   private:
@@ -103,7 +103,7 @@ WTT_Node::TokenType() const
 inline UINT8
 WTT_Node::Value() const
     { return nValue; }
-inline BOOL
+inline sal_Bool
 WTT_Node::IsOnDeleting() const
     { return bIsOnDeleting; }
 inline const ByteString &

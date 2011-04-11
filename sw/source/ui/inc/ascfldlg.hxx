@@ -54,7 +54,7 @@ class SwAsciiFilterDlg : public SfxModalDialog
     CancelButton        aCancelPB;
     HelpButton          aHelpPB;
     String              sSystemCharSet;
-    BOOL                bSaveLineStatus;
+    sal_Bool                bSaveLineStatus;
 
     DECL_LINK( CharSetSelHdl, SvxTextEncodingBox* );
     DECL_LINK( LineEndHdl, RadioButton* );

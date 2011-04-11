@@ -77,7 +77,7 @@ protected:
     void                    Labelsst( void );               // 0xFD
 
     void                    Hlink( void );                  // 0x01B8
-    void                    Codename( BOOL bWBGlobals );    // 0x01BA
+    void                    Codename( sal_Bool bWBGlobals );    // 0x01BA
     void                    SheetProtection( void );        // 0x0867
 
     virtual void            EndSheet( void );
@@ -98,17 +98,17 @@ private:
     ScDBData*                   pCurrDBData;
     ScQueryParam                aParam;
     SCSIZE                      nFirstEmpty;
-    BOOL                        bActive;
-    BOOL                        bHasConflict;
-    BOOL                        bCriteria;
-    BOOL                        bAutoOrAdvanced;
+    sal_Bool                        bActive;
+    sal_Bool                        bHasConflict;
+    sal_Bool                        bCriteria;
+    sal_Bool                        bAutoOrAdvanced;
     ScRange                     aCriteriaRange;
     String                      aFilterName;
 
     void                        CreateFromDouble( String& rStr, double fVal );
     void                        SetCellAttribs();
     void                        InsertQueryParam();
-    void                        AmendAFName(const BOOL bUseUnNamed);
+    void                        AmendAFName(const sal_Bool bUseUnNamed);
 
 protected:
 public:
@@ -127,12 +127,12 @@ public:
 
     void                        ReadAutoFilter( XclImpStream& rStrm );
 
-    inline void                 Activate()          { bActive = TRUE; }
+    inline void                 Activate()          { bActive = sal_True; }
     void                        SetAdvancedRange( const ScRange* pRange );
     void                        SetExtractPos( const ScAddress& rAddr );
-    inline void                 SetAutoOrAdvanced()  { bAutoOrAdvanced = TRUE; }
-    void                        Apply( const BOOL bUseUnNamed = FALSE );
-    void                        CreateScDBData( const BOOL bUseUnNamed );
+    inline void                 SetAutoOrAdvanced()  { bAutoOrAdvanced = sal_True; }
+    void                        Apply( const sal_Bool bUseUnNamed = false );
+    void                        CreateScDBData( const sal_Bool bUseUnNamed );
     void                        EnableRemoveFilter();
 };
 
@@ -142,7 +142,7 @@ class XclImpAutoFilterBuffer : private List
 private:
     using                       List::Insert;
 
-    UINT16                      nAFActiveCount;
+    sal_uInt16                      nAFActiveCount;
 
     inline XclImpAutoFilterData* _First()   { return (XclImpAutoFilterData*) List::First(); }
     inline XclImpAutoFilterData* _Next()    { return (XclImpAutoFilterData*) List::Next(); }
@@ -162,7 +162,7 @@ public:
 
     XclImpAutoFilterData*       GetByTab( SCTAB nTab );
     inline void                 IncrementActiveAF() { nAFActiveCount++; }
-    inline BOOL                 UseUnNamed() { return nAFActiveCount == 1; }
+    inline sal_Bool                 UseUnNamed() { return nAFActiveCount == 1; }
 };
 
 #endif

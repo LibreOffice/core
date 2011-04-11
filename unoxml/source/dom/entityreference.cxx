@@ -26,18 +26,39 @@
  *
  ************************************************************************/
 
-#include "entityreference.hxx"
+#include <entityreference.hxx>
+
 #include <string.h>
 
 namespace DOM
 {
-  CEntityReference::CEntityReference(const xmlNodePtr aNodePtr)
+    CEntityReference::CEntityReference(
+            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlNodePtr const pNode)
+        : CEntityReference_Base(rDocument, rMutex,
+                NodeType_ENTITY_REFERENCE_NODE, pNode)
     {
-        m_aNodeType = NodeType_ENTITY_REFERENCE_NODE;
-        init_node(aNodePtr);
     }
+
+    bool CEntityReference::IsChildTypeAllowed(NodeType const nodeType)
+    {
+        switch (nodeType) {
+            case NodeType_ELEMENT_NODE:
+            case NodeType_PROCESSING_INSTRUCTION_NODE:
+            case NodeType_COMMENT_NODE:
+            case NodeType_TEXT_NODE:
+            case NodeType_CDATA_SECTION_NODE:
+            case NodeType_ENTITY_REFERENCE_NODE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     OUString SAL_CALL CEntityReference::getNodeName()throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
        OUString aName;
         if (m_aNodePtr != NULL)
         {
@@ -46,6 +67,7 @@ namespace DOM
         }
         return aName;
     }
+
     OUString SAL_CALL CEntityReference::getNodeValue() throw (RuntimeException)
     {
         return OUString();

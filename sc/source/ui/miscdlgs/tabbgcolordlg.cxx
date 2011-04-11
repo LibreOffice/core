@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: tabbgcolordlg.cxx,v $
- * $Revision: 1.0 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -60,7 +57,7 @@ ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
                                   const String&   rTitle,
                                   const String&   rTabBgColorNoColorText,
                                   const Color&    rDefaultColor,
-                                  ULONG nHelpId ) :
+                                  const rtl::OString& sHelpId ) :
     ModalDialog    ( pParent, ScResId( RID_SCDLG_TAB_BG_COLOR ) ),
     aBorderWin              ( this, ScResId( TAB_BG_COLOR_CT_BORDER ) ),
     aTabBgColorSet          ( &aBorderWin, ScResId( TAB_BG_COLOR_SET_BGDCOLOR ), this ),
@@ -69,10 +66,10 @@ ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
     aBtnHelp                ( this, ScResId( BTN_HELP ) ),
     aTabBgColor             ( rDefaultColor ),
     aTabBgColorNoColorText  ( rTabBgColorNoColorText ),
-    mnHelpId                ( nHelpId )
+    msHelpId                ( sHelpId )
 
 {
-    SetHelpId( nHelpId );
+    SetHelpId( sHelpId );
     this->SetText( rTitle );
     this->SetStyle(GetStyle() | WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL | WB_SYSTEMWINDOW | WB_STANDALONE | WB_HIDE);
 
@@ -101,9 +98,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     ::boost::scoped_ptr<XColorTable> pOwnColorTable; // locally instantiated in case the doc shell doesn't have one.
 
     const Size aSize15x15 = Size( 15, 15 );
-    const Size aSize10x10 = Size( 10, 10 );
-    const Size aSize5x5 = Size( 5, 5 );
-    USHORT nSelectedItem = 0;
+    sal_uInt16 nSelectedItem = 0;
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 
@@ -156,10 +151,10 @@ IMPL_LINK( ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, EMPTYARG )
     Handler, called when color selection is changed
 */
 {
-    USHORT nItemId = aTabBgColorSet.GetSelectItemId();
+    sal_uInt16 nItemId = aTabBgColorSet.GetSelectItemId();
     Color aColor = nItemId ? ( aTabBgColorSet.GetItemColor( nItemId ) ) : Color( COL_AUTO );
     aTabBgColor = aColor;
-    EndDialog( TRUE );
+    EndDialog( sal_True );
     return 0;
 }
 
@@ -168,10 +163,10 @@ IMPL_LINK( ScTabBgColorDlg, TabBgColorOKHdl_Impl, OKButton*, EMPTYARG )
 
 //    Handler, called when the OK button is pushed
 
-    USHORT nItemId = aTabBgColorSet.GetSelectItemId();
+    sal_uInt16 nItemId = aTabBgColorSet.GetSelectItemId();
     Color aColor = nItemId ? ( aTabBgColorSet.GetItemColor( nItemId ) ) : Color( COL_AUTO );
     aTabBgColor = aColor;
-    EndDialog( TRUE );
+    EndDialog( sal_True );
     return 0;
 }
 
@@ -188,10 +183,10 @@ void ScTabBgColorDlg::ScTabBgColorValueSet::KeyInput( const KeyEvent& rKEvt )
         case KEY_SPACE:
         case KEY_RETURN:
         {
-            USHORT nItemId = GetSelectItemId();
+            sal_uInt16 nItemId = GetSelectItemId();
             const Color& aColor = nItemId ? ( GetItemColor( nItemId ) ) : Color( COL_AUTO );
             aTabBgColorDlg->aTabBgColor = aColor;
-            aTabBgColorDlg->EndDialog(TRUE);
+            aTabBgColorDlg->EndDialog(sal_True);
         }
         break;
     }

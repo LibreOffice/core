@@ -38,9 +38,10 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+
+using ::rtl::OUString;
 
 SwLabelConfig::SwLabelConfig() :
     ConfigItem(C2U("Office.Labels/Manufacturer"))
@@ -90,8 +91,8 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
                     //except for the continuous flag ('C'/'S')
                     pValues[nProp] >>= sTmp;
                     String sMeasure(sTmp);
-                    USHORT nTokenCount = sMeasure.GetTokenCount(';');
-                    for(USHORT i = 0; i < nTokenCount; i++)
+                    sal_uInt16 nTokenCount = sMeasure.GetTokenCount(';');
+                    for(sal_uInt16 i = 0; i < nTokenCount; i++)
                     {
                         String sToken(sMeasure.GetToken(i, ';' ));
                         int nVal = sToken.ToInt32();
@@ -228,7 +229,7 @@ void SwLabelConfig::SaveLabel(  const rtl::OUString& rManufacturer,
     {
         if(!AddNode(OUString(), rManufacturer))
         {
-            OSL_ENSURE(false, "New configuration node could not be created");
+            OSL_FAIL("New configuration node could not be created");
             return ;
         }
         else

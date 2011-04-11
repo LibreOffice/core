@@ -83,7 +83,7 @@ using namespace ::com::sun::star::lang;
 
 void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
 {
-    // in FrameSets kann die tatsaechliche Sichtbarkeit von der Einstellung der ViewOptions abweichen
+    // in FrameSets the actual visibility can differ from the ViewOption's setting
     sal_Bool bVScrollChanged = pPref->IsViewVScrollBar() != pSh->GetViewOptions()->IsViewVScrollBar();
     sal_Bool bHScrollChanged = pPref->IsViewHScrollBar() != pSh->GetViewOptions()->IsViewHScrollBar();
     sal_Bool bVAlignChanged = pPref->IsVRulerRight() != pSh->GetViewOptions()->IsVRulerRight();
@@ -91,26 +91,26 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
     pSh->SetUIOptions(*pPref);
     const SwViewOption* pNewPref = pSh->GetViewOptions();
 
-    // Scrollbars an / aus
+    // Scrollbars on / off
     if(bVScrollChanged)
     {
         pView->ShowVScrollbar(pNewPref->IsViewVScrollBar());
     }
     if(bHScrollChanged)
     {
-        pView->ShowHScrollbar( pNewPref->IsViewHScrollBar() || pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE));
+        pView->ShowHScrollbar( pNewPref->IsViewHScrollBar() || pNewPref->getBrowseMode() );
     }
     //if only the position of the vertical ruler has been changed initiate an update
     if(bVAlignChanged && !bHScrollChanged && !bVScrollChanged)
         pView->InvalidateBorder();
 
-    // Lineale an / aus
+    // Rulers on / off
     if(pNewPref->IsViewVRuler())
         pView->CreateVLineal();
     else
         pView->KillVLineal();
 
-    // TabWindow an/aus
+    // TabWindow on / off
     if(pNewPref->IsViewHRuler())
         pView->CreateTab();
     else
@@ -145,14 +145,13 @@ SwView* SwModule::GetNextView(SwView* pView)
 {
     OSL_ENSURE(PTR_CAST(SwView, pView),"return no SwView");
     const TypeId aTypeId = TYPE(SwView);
-    SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId, TRUE);
+    SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId, sal_True);
     return pNView;
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Neuer Master fuer die Einstellungen wird gesetzt;
-                dieser wirkt sich auf die aktuelle Sicht und alle
-                folgenden aus.
+ Description:   New Master for the settings is set; this affects the
+                current view and all following.
 ------------------------------------------------------------------------*/
 
 void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
@@ -166,9 +165,9 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
                                          VIEWOPT_DEST_TEXT== nDest ? sal_False :
                                          pCurrView && pCurrView->ISA(SwWebView) ));
 
-    //per Uno soll nur die sdbcx::View, aber nicht das Module veraendert werden
+    // with Uno, only sdbcx::View, but not the Module should be changed
     sal_Bool bViewOnly = VIEWOPT_DEST_VIEW_ONLY == nDest;
-    //PreView abfruehstuecken
+    // fob PreView off
     SwPagePreView* pPPView;
     if( !pCurrView && 0 != (pPPView = PTR_CAST( SwPagePreView, SfxViewShell::Current())) )
     {
@@ -193,8 +192,13 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     if( !pCurrView )
         return;
 
-    // Weitergabe an die CORE
-    const sal_Bool bReadonly = pCurrView->GetDocShell()->IsReadOnly();
+    // Passing on to CORE
+    sal_Bool bReadonly;
+    const SwDocShell* pDocSh = pCurrView->GetDocShell();
+    if (pDocSh)
+        bReadonly = pDocSh->IsReadOnly();
+    else //Use existing option if DocShell missing
+        bReadonly = pSh->GetViewOptions()->IsReadonly();
     SwViewOption* pViewOpt;
     if(!bViewOnly)
         pViewOpt = new SwViewOption( *pPref );
@@ -203,7 +207,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     pViewOpt->SetReadonly( bReadonly );
     if( !(*pSh->GetViewOptions() == *pViewOpt) )
     {
-        //Ist evtl. nur eine ViewShell
+        //is maybe only a ViewShell
         pSh->StartAction();
         pSh->ApplyViewOptions( *pViewOpt );
         ((SwWrtShell*)pSh)->SetReadOnlyAvailable(pViewOpt->IsCursorInProtectedArea());
@@ -214,11 +218,11 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
 
     lcl_SetUIPrefs(pViewOpt, pCurrView, pSh);
 
-    // zum Schluss wird das Idle-Flag wieder gesetzt
+    // in the end the Idle-Flag is set again
     pPref->SetIdle(sal_True);
 }
 
-void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
+void SwModule::ApplyUserMetric( FieldUnit eMetric, sal_Bool bWeb )
 {
         SwMasterUsrPref* pPref;
         if(bWeb)
@@ -241,7 +245,7 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
         FieldUnit eVScrollMetric = pPref->IsVScrollMetric() ? pPref->GetVScrollMetric() : eMetric;
 
         SwView* pTmpView = SwModule::GetFirstView();
-        // fuer alle MDI-Fenster das Lineal umschalten
+        // switch the ruler for all MDI-Windows
         while(pTmpView)
         {
             if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
@@ -254,7 +258,7 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
         }
 }
 
-void SwModule::ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb )
+void SwModule::ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, sal_Bool bWeb )
 {
     SwMasterUsrPref* pPref;
     if(bWeb)
@@ -293,7 +297,7 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb 
 set the usrpref 's char unit attribute and set ruler
 's unit as char if the "apply char unit" is checked
 --------------------------------------------------*/
-void SwModule::ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb)
+void SwModule::ApplyUserCharUnit(sal_Bool bApplyChar, sal_Bool bWeb)
 {
     SwMasterUsrPref* pPref;
     if(bWeb)
@@ -308,12 +312,12 @@ void SwModule::ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb)
         GetUsrPref(sal_False);
         pPref = pUsrPref;
     }
-    BOOL  bOldApplyCharUnit = pPref->IsApplyCharUnit();
-    BOOL    bHasChanged = FALSE;
+    sal_Bool bOldApplyCharUnit = pPref->IsApplyCharUnit();
+    sal_Bool bHasChanged = sal_False;
     if(bOldApplyCharUnit != bApplyChar)
     {
         pPref->SetApplyCharUnit(bApplyChar);
-        bHasChanged = TRUE;
+        bHasChanged = sal_True;
     }
 
     if( !bHasChanged )
@@ -339,7 +343,7 @@ void SwModule::ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb)
             eVScrollMetric = FUNIT_CM;
     }
     SwView* pTmpView = SwModule::GetFirstView();
-    // fuer alle MDI-Fenster das Lineal umschalten
+    // switch rulers for all MDI-Windows
     while(pTmpView)
     {
         if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
@@ -365,11 +369,11 @@ SwPrintOptions*     SwModule::GetPrtOptions(sal_Bool bWeb)
 {
     if(bWeb && !pWebPrtOpt)
     {
-        pWebPrtOpt = new SwPrintOptions(TRUE);
+        pWebPrtOpt = new SwPrintOptions(sal_True);
     }
     else if(!bWeb && !pPrtOpt)
     {
-        pPrtOpt = new SwPrintOptions(FALSE);
+        pPrtOpt = new SwPrintOptions(sal_False);
     }
 
     return bWeb ? pWebPrtOpt : pPrtOpt;
@@ -382,7 +386,7 @@ SwChapterNumRules*  SwModule::GetChapterNumRules()
     return pChapterNumRules;
 }
 
-void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, BOOL /*bOnlyIfAvailable*/)
+void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, sal_Bool /*bOnlyIfAvailable*/)
 {
     Reference<XFrame> xFrame = rView.GetViewFrame()->GetFrame().GetFrameInterface();
     Reference<XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
@@ -404,7 +408,7 @@ void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, BOOL /*bOnlyIfAva
             xControllerSelection->select(makeAny(aSelection.createPropertyValueSequence()));
         }
         else {
-            OSL_ENSURE(false, "no selection supplier in the beamer!");
+            OSL_FAIL("no selection supplier in the beamer!");
         }
     }
 }
@@ -522,7 +526,7 @@ void SwModule::GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Fuer zukuenftige Erweiterung:
+    Description:    For future extension:
  --------------------------------------------------------------------*/
 
 void SwModule::GetFormatAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet )
@@ -565,7 +569,7 @@ const String& SwModule::GetDocStatWordDelim() const
     return pModuleConfig->GetWordDelimiter();
 }
 
-// Durchreichen der Metric von der ModuleConfig (fuer HTML-Export)
+// Passing-through of the ModuleConfig's Metric (for HTML-Export)
 sal_uInt16 SwModule::GetMetric( sal_Bool bWeb ) const
 {
     SwMasterUsrPref* pPref;
@@ -584,7 +588,7 @@ sal_uInt16 SwModule::GetMetric( sal_Bool bWeb ) const
     return static_cast< sal_uInt16 >(pPref->GetMetric());
 }
 
-// Update-Stati durchreichen
+// Pass-through Update-Stati
 sal_uInt16 SwModule::GetLinkUpdMode( sal_Bool ) const
 {
     if(!pUsrPref)
@@ -626,7 +630,7 @@ void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
              pDocSh = (SwDocShell*)SfxObjectShell::GetNext( *pDocSh, &aType ) )
         {
             SwDoc* pTmp = pDocSh->GetDoc();
-            if ( pTmp->GetRootFrm() )
+            if ( pTmp->GetCurrentViewShell() )  //swmod 071108//swmod 071225
             {
                 pTmp->SpellItAgainSam( bInvalid, bOnlyWrong, bSmartTags );
                 ViewShell* pViewShell = 0;

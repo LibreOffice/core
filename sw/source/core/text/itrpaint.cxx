@@ -33,7 +33,6 @@
 #include "hintids.hxx"
 #include "flyfrm.hxx"     // SwFlyInCntFrm
 #include "viewopt.hxx"  // SwViewOptions
-#include "errhdl.hxx"
 #include "txtatr.hxx"  // SwINetFmt
 #include <tools/multisel.hxx>
 #include <editeng/escpitem.hxx>
@@ -58,7 +57,6 @@
 
 #include "flyfrms.hxx"
 #include "viewsh.hxx"
-#include "txtcfg.hxx"
 #include "itrpaint.hxx"
 #include "txtfrm.hxx"   // pFrm
 #include "txtfly.hxx"
@@ -133,7 +131,6 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
         while( pPor && GetInfo().X() + pPor->Width() + (pPor->Height()/2)
                        < nPaintOfst )
         {
-            DBG_LOOP;
             if( pPor->InSpaceGrp() && GetInfo().GetSpaceAdd() )
             {
                 long nTmp = GetInfo().X() +pPor->Width() +
@@ -174,8 +171,8 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                                  const sal_Bool bUnderSz )
 {
 #if OSL_DEBUG_LEVEL > 1
-//    USHORT nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
-//    USHORT nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
+//    sal_uInt16 nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
+//    sal_uInt16 nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
 #endif
 
     // Adjustierung ggf. nachholen
@@ -242,7 +239,6 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     }
 
     // Alignment:
-    sal_Bool bPlus = sal_False;
     OutputDevice* pOut = GetInfo().GetOut();
     Point aPnt1( nTmpLeft, GetInfo().GetPos().Y() );
     if ( aPnt1.X() < rPaint.Left() )
@@ -254,10 +250,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     if ( aPnt2.X() > rPaint.Right() )
         aPnt2.X() = rPaint.Right();
     if ( aPnt2.Y() > rPaint.Bottom() )
-    {
         aPnt2.Y() = rPaint.Bottom();
-        bPlus = sal_True;
-    }
 
     const SwRect aLineRect( aPnt1, aPnt2 );
 
@@ -268,12 +261,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     }
 
     if( !pPor && !bEndPor )
-    {
-#ifdef DBGTXT
-        aDbstream << "PAINTER: done nothing" << endl;
-#endif
         return;
-    }
 
     // Baseline-Ausgabe auch bei nicht-TxtPortions (vgl. TabPor mit Fill)
     // if no special vertical alignment is used,
@@ -320,7 +308,6 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     while( pPor )
     {
-        DBG_LOOP;
         sal_Bool bSeeked = sal_True;
         GetInfo().SetLen( pPor->GetLen() );
 
@@ -619,11 +606,11 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                           rScriptInfo );
 
         xub_StrLen nTmpIdx = nIndx;
-        ULONG nSumWidth = 0;
-        ULONG nSumHeight = 0;
-        ULONG nBold = 0;
-        USHORT nMaxBaseLineOfst = 0;
-        USHORT nNumberOfPortions = 0;
+        sal_uLong nSumWidth = 0;
+        sal_uLong nSumHeight = 0;
+        sal_uLong nBold = 0;
+        sal_uInt16 nMaxBaseLineOfst = 0;
+        sal_uInt16 nNumberOfPortions = 0;
 
         while( nTmpIdx <= nUnderEnd && pPor )
         {
@@ -642,13 +629,13 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
             if ( !aIter.GetFnt()->GetEscapement() )
             {
                 nSumWidth += pPor->Width();
-                const ULONG nFontHeight = aIter.GetFnt()->GetHeight();
+                const sal_uLong nFontHeight = aIter.GetFnt()->GetHeight();
 
                 // If we do not have a common baseline we take the baseline
                 // and the font of the lowest portion.
                 if ( nAdjustBaseLine )
                 {
-                    USHORT nTmpBaseLineOfst = AdjustBaseLine( *pCurr, pPor );
+                    sal_uInt16 nTmpBaseLineOfst = AdjustBaseLine( *pCurr, pPor );
                     if ( nMaxBaseLineOfst < nTmpBaseLineOfst )
                     {
                         nMaxBaseLineOfst = nTmpBaseLineOfst;
@@ -672,14 +659,14 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         // resulting height
         if ( nNumberOfPortions > 1 && nSumWidth )
         {
-            const ULONG nNewFontHeight = nAdjustBaseLine ?
+            const sal_uLong nNewFontHeight = nAdjustBaseLine ?
                                          nSumHeight :
                                          nSumHeight / nSumWidth;
 
             pUnderlineFnt = new SwFont( *GetInfo().GetFont() );
 
             // font height
-            const BYTE nActual = pUnderlineFnt->GetActual();
+            const sal_uInt8 nActual = pUnderlineFnt->GetActual();
             pUnderlineFnt->SetSize( Size( pUnderlineFnt->GetSize( nActual ).Width(),
                                           nNewFontHeight ), nActual );
 

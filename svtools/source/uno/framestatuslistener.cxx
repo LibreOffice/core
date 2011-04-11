@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include <framestatuslistener.hxx>
+#include <svtools/framestatuslistener.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/mutex.hxx>
@@ -204,7 +204,7 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
         // intialize is called.
         if ( !m_bInitialized )
         {
-            // Put into the hash_map of status listener. Will be activated when initialized is called
+            // Put into the boost::unordered_map of status listener. Will be activated when initialized is called
             m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, Reference< XDispatch >() ));
             return;
         }

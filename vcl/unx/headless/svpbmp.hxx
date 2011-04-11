@@ -47,19 +47,19 @@ public:
 
     // SalBitmap
     virtual bool            Create( const Size& rSize,
-                                    USHORT nBitCount,
+                                    sal_uInt16 nBitCount,
                                     const BitmapPalette& rPal );
     virtual bool            Create( const SalBitmap& rSalBmp );
     virtual bool            Create( const SalBitmap& rSalBmp,
                                     SalGraphics* pGraphics );
     virtual bool            Create( const SalBitmap& rSalBmp,
-                                    USHORT nNewBitCount );
+                                    sal_uInt16 nNewBitCount );
     virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false );
     virtual void            Destroy();
     virtual Size            GetSize() const;
-    virtual USHORT          GetBitCount() const;
+    virtual sal_uInt16              GetBitCount() const;
 
     virtual BitmapBuffer*   AcquireBuffer( bool bReadOnly );
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );

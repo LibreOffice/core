@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _TXMSRT_HXX
-#define _TXMSRT_HXX
+#ifndef SW_TXMSRT_HXX
+#define SW_TXMSRT_HXX
 
 #include <i18npool/lang.h>
 #include <tox.hxx>
@@ -56,10 +56,10 @@ struct SwTOXSource
 {
     const SwCntntNode* pNd;
     xub_StrLen nPos;
-    BOOL bMainEntry;
+    sal_Bool bMainEntry;
 
-    SwTOXSource() : pNd(0), nPos(0), bMainEntry(FALSE) {}
-    SwTOXSource( const SwCntntNode* pNode, xub_StrLen n, BOOL bMain )
+    SwTOXSource() : pNd(0), nPos(0), bMainEntry(sal_False) {}
+    SwTOXSource( const SwCntntNode* pNode, xub_StrLen n, sal_Bool bMain )
         : pNd(pNode), nPos(n), bMainEntry(bMain)
     {}
 };
@@ -72,12 +72,12 @@ class SwTOXInternational
     CharClass* pCharClass;
     LanguageType eLang;
     String sSortAlgorithm;
-    USHORT nOptions;
+    sal_uInt16 nOptions;
 
     void Init();
 
 public:
-    SwTOXInternational( LanguageType nLang, USHORT nOptions,
+    SwTOXInternational( LanguageType nLang, sal_uInt16 nOptions,
                         const String& rSortAlgorithm );
     SwTOXInternational( const SwTOXInternational& );
     ~SwTOXInternational();
@@ -87,7 +87,7 @@ public:
                        const String& rTxt2, const String& rTxtReading2,
                        const ::com::sun::star::lang::Locale& rLocale2 ) const;
 
-    inline BOOL IsEqual( const String& rTxt1, const String& rTxtReading1,
+    inline sal_Bool IsEqual( const String& rTxt1, const String& rTxtReading1,
                          const ::com::sun::star::lang::Locale& rLocale1,
                          const String& rTxt2, const String& rTxtReading2,
                          const ::com::sun::star::lang::Locale& rLocale2 ) const
@@ -96,7 +96,7 @@ public:
                              rTxt2, rTxtReading2, rLocale2 );
     }
 
-    inline BOOL IsLess( const String& rTxt1, const String& rTxtReading1,
+    inline sal_Bool IsLess( const String& rTxt1, const String& rTxtReading1,
                         const ::com::sun::star::lang::Locale& rLocale1,
                         const String& rTxt2, const String& rTxtReading2,
                         const ::com::sun::star::lang::Locale& rLocale2 ) const
@@ -108,10 +108,10 @@ public:
     String GetIndexKey( const String& rTxt, const String& rTxtReading,
                         const ::com::sun::star::lang::Locale& rLcl ) const;
 
-    String GetFollowingText( BOOL bMorePages ) const;
+    String GetFollowingText( sal_Bool bMorePages ) const;
 
     String ToUpper( const String& rStr, xub_StrLen nPos ) const;
-    inline BOOL IsNumeric( const String& rStr ) const;
+    inline sal_Bool IsNumeric( const String& rStr ) const;
 };
 
 /*--------------------------------------------------------------------
@@ -125,10 +125,10 @@ struct SwTOXSortTabBase
     const SwTxtNode* pTOXNd;
     const SwTxtTOXMark* pTxtMark;
     const SwTOXInternational* pTOXIntl;
-    ULONG nPos;
+    sal_uLong nPos;
     xub_StrLen nCntPos;
-    USHORT nType;
-    static USHORT nOpt;
+    sal_uInt16 nType;
+    static sal_uInt16 nOpt;
 
     SwTOXSortTabBase( TOXSortType nType,
                       const SwCntntNode* pTOXSrc,
@@ -137,13 +137,13 @@ struct SwTOXSortTabBase
                       const ::com::sun::star::lang::Locale* pLocale = NULL );
     virtual ~SwTOXSortTabBase() {}
 
-    USHORT  GetType() const         { return nType; }
-    USHORT  GetOptions() const      { return nOpt; }
+    sal_uInt16  GetType() const         { return nType; }
+    sal_uInt16  GetOptions() const      { return nOpt; }
 
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0) const;
-    virtual USHORT  GetLevel()  const = 0;
-    virtual BOOL    operator==( const SwTOXSortTabBase& );
-    virtual BOOL    operator<( const SwTOXSortTabBase& );
+    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0) const;
+    virtual sal_uInt16  GetLevel()  const = 0;
+    virtual sal_Bool    operator==( const SwTOXSortTabBase& );
+    virtual sal_Bool    operator<( const SwTOXSortTabBase& );
 
     virtual String  GetURL() const;
 
@@ -151,11 +151,11 @@ struct SwTOXSortTabBase
     inline const ::com::sun::star::lang::Locale& GetLocale() const;
 
 private:
-    BOOL bValidTxt;
+    sal_Bool bValidTxt;
     String sSortTxt;
     String sSortTxtReading;
 
-    virtual void _GetText( String&, String& ) = 0;
+    virtual void GetText_Impl( String&, String& ) const = 0;
 };
 
 inline void SwTOXSortTabBase::GetTxt( String& rSortTxt,
@@ -164,8 +164,8 @@ inline void SwTOXSortTabBase::GetTxt( String& rSortTxt,
     if( !bValidTxt )
     {
         SwTOXSortTabBase* pThis = (SwTOXSortTabBase*)this;
-        pThis->_GetText( pThis->sSortTxt, pThis->sSortTxtReading );
-        pThis->bValidTxt = TRUE;
+        pThis->GetText_Impl( pThis->sSortTxt, pThis->sSortTxtReading );
+        pThis->bValidTxt = sal_True;
     }
 
     rSortTxt = sSortTxt;
@@ -183,40 +183,40 @@ inline const ::com::sun::star::lang::Locale& SwTOXSortTabBase::GetLocale() const
 
 struct SwTOXIndex : public SwTOXSortTabBase
 {
-    SwTOXIndex( const SwTxtNode&, const SwTxtTOXMark*, USHORT nOptions, BYTE nKeyLevel,
+    SwTOXIndex( const SwTxtNode&, const SwTxtTOXMark*, sal_uInt16 nOptions, sal_uInt8 nKeyLevel,
                 const SwTOXInternational& rIntl,
                 const ::com::sun::star::lang::Locale& rLocale );
     virtual ~SwTOXIndex() {}
 
 
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
-    virtual USHORT  GetLevel() const;
-    virtual BOOL    operator==( const SwTOXSortTabBase& );
-    virtual BOOL    operator<( const SwTOXSortTabBase& );
+    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
+    virtual sal_uInt16  GetLevel() const;
+    virtual sal_Bool    operator==( const SwTOXSortTabBase& );
+    virtual sal_Bool    operator<( const SwTOXSortTabBase& );
 
 private:
-    virtual void _GetText( String&, String& );
+    virtual void GetText_Impl( String&, String& ) const;
 
-    BYTE    nKeyLevel;
+    sal_uInt8   nKeyLevel;
 };
 
 struct SwTOXCustom : public SwTOXSortTabBase
 {
-    SwTOXCustom( const String& rKey, const String& rReading, USHORT nLevel,
+    SwTOXCustom( const String& rKey, const String& rReading, sal_uInt16 nLevel,
                  const SwTOXInternational& rIntl,
                  const ::com::sun::star::lang::Locale& rLocale );
     virtual ~SwTOXCustom() {}
 
-    virtual USHORT GetLevel() const;
-    virtual BOOL   operator==( const SwTOXSortTabBase& );
-    virtual BOOL   operator<( const SwTOXSortTabBase& );
+    virtual sal_uInt16 GetLevel() const;
+    virtual sal_Bool   operator==( const SwTOXSortTabBase& );
+    virtual sal_Bool   operator<( const SwTOXSortTabBase& );
 
 private:
-    virtual void _GetText( String&, String& );
+    virtual void GetText_Impl( String&, String& ) const;
 
     String  aKey;
     String  sReading;
-    USHORT  nLev;
+    sal_uInt16  nLev;
 };
 
 /*--------------------------------------------------------------------
@@ -229,30 +229,30 @@ struct SwTOXContent : public SwTOXSortTabBase
                 const SwTOXInternational& rIntl );
     virtual ~SwTOXContent() {}
 
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
-    virtual USHORT  GetLevel() const;
+    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
+    virtual sal_uInt16  GetLevel() const;
 private:
-    virtual void _GetText( String&, String& );
+    virtual void GetText_Impl( String&, String& ) const;
 
 };
 
 struct SwTOXPara : public SwTOXSortTabBase
 {
-    SwTOXPara( const SwCntntNode&, SwTOXElement, USHORT nLevel = FORM_ALPHA_DELIMITTER );
+    SwTOXPara( const SwCntntNode&, SwTOXElement, sal_uInt16 nLevel = FORM_ALPHA_DELIMITTER );
     virtual ~SwTOXPara() {}
 
     void    SetStartIndex( xub_StrLen nSet)     { nStartIndex = nSet;}
     void    SetEndIndex( xub_StrLen nSet )      { nEndIndex = nSet;}
 
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
-    virtual USHORT  GetLevel() const;
+    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
+    virtual sal_uInt16  GetLevel() const;
 
     virtual String  GetURL() const;
 private:
-    virtual void _GetText( String&, String& );
+    virtual void GetText_Impl( String&, String& ) const;
 
     SwTOXElement eType;
-    USHORT m_nLevel;
+    sal_uInt16 m_nLevel;
     xub_StrLen nStartIndex;
     xub_StrLen nEndIndex;
 };
@@ -262,23 +262,23 @@ struct SwTOXTable : public SwTOXSortTabBase
     SwTOXTable( const SwCntntNode& rNd );
     virtual ~SwTOXTable() {}
 
-    void    SetLevel(USHORT nSet){nLevel = nSet;}
+    void    SetLevel(sal_uInt16 nSet){nLevel = nSet;}
 
-    virtual USHORT  GetLevel() const;
+    virtual sal_uInt16  GetLevel() const;
 
     virtual String  GetURL() const;
 private:
-    virtual void _GetText( String&, String& );
+    virtual void GetText_Impl( String&, String& ) const;
 
-    USHORT nLevel;
+    sal_uInt16 nLevel;
 };
 
 struct SwTOXAuthority : public SwTOXSortTabBase
 {
 private:
     SwFmtFld& m_rField;
-    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT nAuthField = 0 ) const;
-    virtual void _GetText( String&, String& );
+    virtual void    FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 nAuthField = 0 ) const;
+    virtual void GetText_Impl( String&, String& ) const;
 
 public:
     SwTOXAuthority( const SwCntntNode& rNd, SwFmtFld& rField, const SwTOXInternational& rIntl );
@@ -286,12 +286,12 @@ public:
 
     SwFmtFld& GetFldFmt() {return m_rField;}
 
-    virtual BOOL    operator==( const SwTOXSortTabBase& );
-    virtual BOOL    operator<( const SwTOXSortTabBase& );
-    virtual USHORT  GetLevel() const;
+    virtual sal_Bool    operator==( const SwTOXSortTabBase& );
+    virtual sal_Bool    operator<( const SwTOXSortTabBase& );
+    virtual sal_uInt16  GetLevel() const;
 };
 
 
-#endif // _TXMSRT_HXX
+#endif // SW_TXMSRT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

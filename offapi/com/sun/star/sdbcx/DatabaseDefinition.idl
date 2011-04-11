@@ -42,7 +42,7 @@
     <p>
     It may be implemented by a database driver provider, to encapsulate the
     complexity of data definition, and to give a common way for data definition as
-    the DDL of most DBMS's differs.
+    the DDL of most DBMS differs.
     </p>
     <p>
     At least, the access to the tables of a database should be implemented.

@@ -102,10 +102,12 @@ static bool makeCanonicalFileURL( rtl::OUString & rURL )
 
 OfficeInstallationDirectories::OfficeInstallationDirectories(
         const uno::Reference< uno::XComponentContext > & xCtx )
-: m_aOfficeDirMacro( RTL_CONSTASCII_USTRINGPARAM( "$(baseinsturl)" ) ),
+: m_aOfficeBrandDirMacro( RTL_CONSTASCII_USTRINGPARAM( "$(brandbaseurl)" ) ),
+  m_aOfficeBaseDirMacro( RTL_CONSTASCII_USTRINGPARAM( "$(baseinsturl)" ) ),
   m_aUserDirMacro( RTL_CONSTASCII_USTRINGPARAM( "$(userdataurl)" ) ),
   m_xCtx( xCtx ),
-  m_pOfficeDir( 0 ),
+  m_pOfficeBrandDir( 0 ),
+  m_pOfficeBaseDir( 0 ),
   m_pUserDir( 0 )
 {
 }
@@ -114,6 +116,9 @@ OfficeInstallationDirectories::OfficeInstallationDirectories(
 // virtual
 OfficeInstallationDirectories::~OfficeInstallationDirectories()
 {
+    delete m_pOfficeBrandDir;
+    delete m_pOfficeBaseDir;
+    delete m_pUserDir;
 }
 
 //=========================================================================
@@ -125,9 +130,8 @@ rtl::OUString SAL_CALL
 OfficeInstallationDirectories::getOfficeInstallationDirectoryURL()
     throw ( uno::RuntimeException )
 {
-    // late init m_pOfficeDir and m_pUserDir
     initDirs();
-    return rtl::OUString( *m_pOfficeDir );
+    return rtl::OUString( *m_pOfficeBrandDir );
 }
 
 //=========================================================================
@@ -136,7 +140,6 @@ rtl::OUString SAL_CALL
 OfficeInstallationDirectories::getOfficeUserDataDirectoryURL()
     throw ( uno::RuntimeException )
 {
-    // late init m_pOfficeDir and m_pUserDir
     initDirs();
     return rtl::OUString( *m_pUserDir );
 }
@@ -150,29 +153,39 @@ OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
 {
     if ( URL.getLength() > 0 )
     {
-        // late init m_pOfficeDir and m_pUserDir
         initDirs();
 
         rtl::OUString aCanonicalURL( URL );
         makeCanonicalFileURL( aCanonicalURL );
 
-        sal_Int32 nIndex = aCanonicalURL.indexOf( *m_pOfficeDir );
+        sal_Int32 nIndex = aCanonicalURL.indexOf( *m_pOfficeBrandDir );
         if ( nIndex  != -1 )
         {
             return rtl::OUString(
                 URL.replaceAt( nIndex,
-                               m_pOfficeDir->getLength(),
-                               m_aOfficeDirMacro ) );
+                               m_pOfficeBrandDir->getLength(),
+                               m_aOfficeBrandDirMacro ) );
         }
         else
         {
-            nIndex = aCanonicalURL.indexOf( *m_pUserDir );
+            nIndex = aCanonicalURL.indexOf( *m_pOfficeBaseDir );
             if ( nIndex  != -1 )
             {
                 return rtl::OUString(
                     URL.replaceAt( nIndex,
-                                   m_pUserDir->getLength(),
-                                   m_aUserDirMacro ) );
+                                   m_pOfficeBaseDir->getLength(),
+                                   m_aOfficeBaseDirMacro ) );
+            }
+            else
+            {
+                nIndex = aCanonicalURL.indexOf( *m_pUserDir );
+                if ( nIndex  != -1 )
+                {
+                    return rtl::OUString(
+                        URL.replaceAt( nIndex,
+                                       m_pUserDir->getLength(),
+                                       m_aUserDirMacro ) );
+                }
             }
         }
     }
@@ -187,29 +200,40 @@ OfficeInstallationDirectories::makeAbsoluteURL( const rtl::OUString& URL )
 {
     if ( URL.getLength() > 0 )
     {
-        sal_Int32 nIndex = URL.indexOf( m_aOfficeDirMacro );
+        sal_Int32 nIndex = URL.indexOf( m_aOfficeBrandDirMacro );
         if ( nIndex != -1 )
         {
-            // late init m_pOfficeDir and m_pUserDir
             initDirs();
 
             return rtl::OUString(
                 URL.replaceAt( nIndex,
-                               m_aOfficeDirMacro.getLength(),
-                               *m_pOfficeDir ) );
+                               m_aOfficeBrandDirMacro.getLength(),
+                               *m_pOfficeBrandDir ) );
         }
         else
         {
-            nIndex = URL.indexOf( m_aUserDirMacro );
+            nIndex = URL.indexOf( m_aOfficeBaseDirMacro );
             if ( nIndex != -1 )
             {
-                // late init m_pOfficeDir and m_pUserDir
                 initDirs();
 
                 return rtl::OUString(
                     URL.replaceAt( nIndex,
-                                   m_aUserDirMacro.getLength(),
-                                   *m_pUserDir ) );
+                                   m_aOfficeBaseDirMacro.getLength(),
+                                   *m_pOfficeBaseDir ) );
+            }
+            else
+            {
+                nIndex = URL.indexOf( m_aUserDirMacro );
+                if ( nIndex != -1 )
+                {
+                    initDirs();
+
+                    return rtl::OUString(
+                        URL.replaceAt( nIndex,
+                                       m_aUserDirMacro.getLength(),
+                                       *m_pUserDir ) );
+                }
             }
         }
     }
@@ -301,13 +325,14 @@ OfficeInstallationDirectories::Create(
 
 void OfficeInstallationDirectories::initDirs()
 {
-    if ( m_pOfficeDir == 0 )
+    if ( m_pOfficeBrandDir == 0 )
     {
         osl::MutexGuard aGuard( m_aMutex );
-        if ( m_pOfficeDir == 0 )
+        if ( m_pOfficeBrandDir == 0 )
         {
-            m_pOfficeDir = new rtl::OUString;
-            m_pUserDir   = new rtl::OUString;
+            m_pOfficeBrandDir = new rtl::OUString;
+            m_pOfficeBaseDir  = new rtl::OUString;
+            m_pUserDir        = new rtl::OUString;
 
             uno::Reference< util::XMacroExpander > xExpander;
 
@@ -321,15 +346,24 @@ void OfficeInstallationDirectories::initDirs()
 
             if ( xExpander.is() )
             {
-                *m_pOfficeDir =
+                *m_pOfficeBrandDir =
+                    xExpander->expandMacros(
+                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "$BRAND_BASE_DIR" ) ) );
+
+                OSL_ENSURE( m_pOfficeBrandDir->getLength() > 0,
+                            "Unable to obtain office brand installation directory!" );
+
+                makeCanonicalFileURL( *m_pOfficeBrandDir );
+
+                *m_pOfficeBaseDir =
                     xExpander->expandMacros(
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                             "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":BaseInstallation}" ) ) );
 
-                OSL_ENSURE( m_pOfficeDir->getLength() > 0,
-                        "Unable to obtain office installation directory!" );
+                OSL_ENSURE( m_pOfficeBaseDir->getLength() > 0,
+                            "Unable to obtain office base installation directory!" );
 
-                makeCanonicalFileURL( *m_pOfficeDir );
+                makeCanonicalFileURL( *m_pOfficeBaseDir );
 
                 *m_pUserDir =
                     xExpander->expandMacros(
@@ -337,7 +371,7 @@ void OfficeInstallationDirectories::initDirs()
                             "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap" ) ":UserInstallation}" ) ) );
 
                 OSL_ENSURE( m_pUserDir->getLength() > 0,
-                        "Unable to obtain office user data directory!" );
+                            "Unable to obtain office user data directory!" );
 
                 makeCanonicalFileURL( *m_pUserDir );
             }

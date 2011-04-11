@@ -47,9 +47,12 @@ LIB1FILES= $(SLB)$/svpplug.lib \
 SHL1TARGET=vclplug_svp$(DLLPOSTFIX)
 SHL1IMPLIB=isvpplug
 SHL1LIBS=$(LIB1TARGET)
-SHL1DEPN=$(LB)$/libvcl$(DLLPOSTFIX)$(DLLPOST)
+SHL1DEPN=\
+    $(LB)$/libvcl$(DLLPOSTFIX)$(DLLPOST) \
+    $(LB)$/libvclplug_gen$(DLLPOSTFIX)$(DLLPOST)
 SHL1STDLIBS=\
             $(VCLLIB)\
+            -lvclplug_gen$(DLLPOSTFIX) \
             $(I18NPAPERLIB)\
             $(BASEBMPLIB)\
             $(BASEGFXLIB)\

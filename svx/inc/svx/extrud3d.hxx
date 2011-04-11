@@ -90,9 +90,9 @@ public:
     sal_Bool GetCloseBack() const
         { return ((const Svx3DCloseBackItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK)).GetValue(); }
 
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
 
-    virtual void operator=(const SdrObject&);
+    virtual E3dExtrudeObj* Clone() const;
 
     // TakeObjName...() is for the display in the UI (for example "3 frames selected")
     virtual void TakeObjNameSingul(String& rName) const;
@@ -102,7 +102,7 @@ public:
     void SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew);
     const basegfx::B2DPolyPolygon &GetExtrudePolygon() { return maExtrudePolygon; }
 
-    virtual BOOL IsBreakObjPossible();
+    virtual sal_Bool IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };
 

@@ -39,7 +39,6 @@
 #endif // #if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
-#include <errhdl.hxx>
 #include <swtypes.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -399,7 +398,7 @@ void SwAccessibleContext::ScrolledOut( const SwRect& rOldVisArea )
     Dispose( sal_True );
 }
 
-// --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
+// #i27301# - use new type definition for <_nStates>
 void SwAccessibleContext::InvalidateChildrenStates( const SwFrm* _pFrm,
                                                     tAccessibleStates _nStates )
 {
@@ -886,7 +885,7 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(sal_Bool bRelative)
         OSL_ENSURE( GetShell()->IsPreView(), "empty page accessible?" );
         if( GetShell()->IsPreView() )
         {
-            // OD 15.01.2003 #103492# - adjust method call <GetMap()->GetPreViewPageSize()>
+            // adjust method call <GetMap()->GetPreViewPageSize()>
             sal_uInt16 nPageNum =
                 static_cast < const SwPageFrm * >( GetFrm() )->GetPhyPageNum();
             aLogBounds.SSize( GetMap()->GetPreViewPageSize( nPageNum ) );
@@ -1246,7 +1245,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
                 ::rtl::Reference< ::accessibility::AccessibleShape > xAccImpl =
                         GetMap()->GetContextImpl( rChildFrmOrObj.GetDrawObject(),
                                                   this, sal_True );
-                // --> OD 2004-11-29 #i37790#
+                // #i37790#
                 if ( xAccImpl.is() )
                 {
                     ScrolledInShape( rChildFrmOrObj.GetDrawObject(),
@@ -1254,8 +1253,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
                 }
                 else
                 {
-                    OSL_ENSURE( false ,
-                            "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - no accessible shape found." );
+                    OSL_FAIL( "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - no accessible shape found." );
                 }
                 // <--
             }
@@ -1295,8 +1293,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             }
             else if ( rChildFrmOrObj.GetWindow() )
             {
-                OSL_ENSURE( false,
-                        "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - not expected to handle dispose of child of type <Window>." );
+                OSL_FAIL( "<SwAccessibleContext::InvalidateChildPosOrSize(..)> - not expected to handle dispose of child of type <Window>." );
             }
         }
     }
@@ -1323,7 +1320,7 @@ void SwAccessibleContext::InvalidateFocus()
     _InvalidateFocus();
 }
 
-// --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
+// #i27301# - use new type definition for <_nStates>
 void SwAccessibleContext::InvalidateStates( tAccessibleStates _nStates )
 {
     if( GetMap() )
@@ -1374,12 +1371,7 @@ void SwAccessibleContext::InvalidateRelation( sal_uInt16 nType )
     FireAccessibleEvent( aEvent );
 }
 
-/** text selection has changed
-
-    OD 2005-12-14 #i27301#
-
-    @author OD
-*/
+/** #i27301# - text selection has changed */
 void SwAccessibleContext::InvalidateTextSelection()
 {
     AccessibleEventObject aEvent;
@@ -1388,12 +1380,7 @@ void SwAccessibleContext::InvalidateTextSelection()
     FireAccessibleEvent( aEvent );
 }
 
-/** attributes has changed
-
-    OD 2009-01-06 #i88069#
-
-    @author OD
-*/
+/** #i88069# - attributes has changed */
 void SwAccessibleContext::InvalidateAttr()
 {
     AccessibleEventObject aEvent;
@@ -1502,12 +1489,7 @@ bool SwAccessibleContext::HasAdditionalAccessibleChildren()
 
     return bRet;
 }
-/** get additional accessible child by index
-
-    OD 2010-01-27 #i88070#
-
-    @author OD
-*/
+/** #i88070# - get additional accessible child by index */
 Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 nIndex )
 {
     Window* pAdditionalAccessibleChild( 0 );
@@ -1525,12 +1507,7 @@ Window* SwAccessibleContext::GetAdditionalAccessibleChild( const sal_Int32 nInde
     return pAdditionalAccessibleChild;
 }
 
-/** get all additional accessible children
-
-    OD 2010-01-27 #i88070#
-
-    @author OD
-*/
+/** #i88070# - get all additional accessible children */
 void SwAccessibleContext::GetAdditionalAccessibleChildren( std::vector< Window* >* pChildren )
 {
     if ( GetFrm()->IsTxtFrm() )

@@ -28,7 +28,6 @@
 PRJ=..
 PRJNAME=instsetoo_native
 TARGET=util
-GEN_HID2=TRUE
 
 .INCLUDE:  settings.mk
 .INCLUDE: $(SOLARINCDIR)$/rtlbootstrap.mk
@@ -68,13 +67,14 @@ INSTALLDIR=$(OUT)
 
 .INCLUDE: target.mk
 
+.IF "$(DISABLE_PYTHON)" != "TRUE"
 LOCALPYFILES= \
     $(BIN)$/uno.py \
     $(BIN)$/unohelper.py \
     $(BIN)$/pythonloader.py \
-    $(BIN)$/pythonscript.py \
     $(BIN)$/officehelper.py \
     $(BIN)$/mailmerge.py
+.ENDIF
 
 xxxx:
     echo $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product LibreOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml
@@ -85,9 +85,9 @@ ALLTAR  : $(LOCALPYFILES)
 .ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 .IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
-ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack ooohelppack
+ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack)
 .ELSE
-ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack ooohelppack sdkoo_en-US ure_en-US
+ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack) sdkoo_en-US ure_en-US
 .ENDIF
 .ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : updatepack
@@ -332,14 +332,16 @@ openoffice:
 
 .ENDIF			# "$(alllangiso)"!=""
 
+.IF "$(DISABLE_PYTHON)" != "TRUE"
 .IF "$(LOCALPYFILES)"!=""
 $(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".") .archive} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")} oxygenoffice_$i{$(PKGFORMAT:^".") .archive} oxygenofficewithjre_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES)
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
 $(BIN)$/%.py : $(SOLARSHAREDBIN)$/pyuno$/%.py
     @$(COPY) $< $@
+.ENDIF			# "$(DISABLE_PYTHON)" != "TRUE"
 
-$(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/brand$/intro.zip
+$(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/intro.zip
     $(COPY) $< $@
 
 $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/brand_dev$/intro.zip

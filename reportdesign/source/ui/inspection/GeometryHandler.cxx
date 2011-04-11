@@ -67,7 +67,7 @@
 
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/stdtext.hxx>
 
 #include "ModuleHelper.hxx"
@@ -116,6 +116,8 @@
 #include "helpids.hrc"
 #include <toolkit/helper/convert.hxx>
 
+#include <o3tl/compat_functional.hxx>
+
 #define DATA_OR_FORMULA     0
 #define FUNCTION            1
 #define COUNTER             2
@@ -127,18 +129,17 @@ namespace rptui
 {
 //........................................................................
 using namespace ::com::sun::star;
-//using namespace formula;
 
 // comparing two property instances
 struct PropertyCompare : public ::std::binary_function< beans::Property, ::rtl::OUString , bool >
 {
     bool operator() (const beans::Property& x, const ::rtl::OUString& y) const
     {
-        return x.Name.equals(y);// ? true : false;
+        return x.Name.equals(y);
     }
     bool operator() (const ::rtl::OUString& x,const beans::Property& y) const
     {
-        return x.equals(y.Name);// ? true : false;
+        return x.equals(y.Name);
     }
 };
 
@@ -778,12 +779,12 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             break;
         case PROPERTY_ID_INITIALFORMULA:
         case PROPERTY_ID_FORMULA:
-            aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
+            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_PROP_FORMULA);
             aOut.HasPrimaryButton = sal_True;
             aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::MultiLineTextField , sal_False);
             break;
         case PROPERTY_ID_CONDITIONALPRINTEXPRESSION:
-            aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
+            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_PROP_FORMULA);
             aOut.HasPrimaryButton = sal_True;
             aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::MultiLineTextField , sal_False);
             break;
@@ -798,7 +799,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
 
                 if ( m_nDataFieldType == DATA_OR_FORMULA )
                 {
-                    aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
+                    aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_PROP_FORMULA);
                     aOut.HasPrimaryButton = sal_True;
                 }
 
@@ -807,9 +808,9 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                 {
                     // add function names
                     ::std::for_each( m_aFunctionNames.begin(), m_aFunctionNames.end(),
-                        ::std::compose1(
+                        ::o3tl::compose1(
                             ::boost::bind( &inspection::XStringListControl::appendListEntry, xListControl,_1 ),
-                            ::std::select1st<TFunctions::value_type>()));
+                            ::o3tl::select1st<TFunctions::value_type>()));
                 }
                 else
                 {
@@ -825,12 +826,12 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::ColorListBox, sal_False );
             break;
         case PROPERTY_ID_FONT:
-            aOut.PrimaryButtonId = UID_RPT_RPT_PROP_DLG_FONT_TYPE;
+            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_RPT_PROP_DLG_FONT_TYPE);
             aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, sal_True );
             aOut.HasPrimaryButton = sal_True;
             break;
         case PROPERTY_ID_AREA:
-            aOut.PrimaryButtonId = UID_RPT_RPT_PROP_DLG_AREA;
+            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_RPT_PROP_DLG_AREA);
             aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, sal_True );
             aOut.HasPrimaryButton = sal_True;
             break;
@@ -1021,7 +1022,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const ::rtl::OUString 
                     }
                     catch( const uno::Exception& )
                     {
-                        OSL_ENSURE( sal_False, "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                        OSL_FAIL( "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
                     }
                 }
             }
@@ -1166,7 +1167,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
                 }
                 catch( const uno::Exception& )
                 {
-                    OSL_ENSURE( sal_False, "GeometryHandler::convertToControlValue: caught an exception while converting via TypeConverter!" );
+                    OSL_FAIL( "GeometryHandler::convertToControlValue: caught an exception while converting via TypeConverter!" );
                 }
             }
             break;
@@ -1329,7 +1330,7 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
             }
             aNewProps.push_back(*pFind);
         }
-    } // for (size_t i = 0; i < SAL_N_ELEMENTS(pIncludeProperties) ;++i )
+    }
 
     // special property for shapes
 //    if ( uno::Reference< report::XShape>(m_xReportComponent,uno::UNO_QUERY).is() )
@@ -1450,7 +1451,6 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
             eResult = inspection::InteractiveSelectionResult_ObtainedValue;
             beans::PropertyChangeEvent aScopeEvent;
             aScopeEvent.PropertyName = PROPERTY_FILLCOLOR;
-            // aScopeEvent.OldValue <<= _nOldDataFieldType;
             aScopeEvent.NewValue <<= xShape->getPropertyValue(PROPERTY_FILLCOLOR);
             m_aPropertyListeners.notify( aScopeEvent, &beans::XPropertyChangeListener::propertyChange );
         }
@@ -1519,7 +1519,7 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const ::rtl::OUString & 
                 {
                     _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
                     _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
-                } // if ( bEnable )
+                }
                 m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, _rxInspectorUI, _bFirstTimeInit);
             }
             break;
@@ -1609,7 +1609,7 @@ bool GeometryHandler::impl_dialogFilter_nothrow( ::rtl::OUString& _out_rSelected
     catch (sdbc::SQLException& e) { aErrorInfo = e; }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "GeometryHandler::impl_dialogFilter_nothrow: caught an exception!" );
+        OSL_FAIL( "GeometryHandler::impl_dialogFilter_nothrow: caught an exception!" );
     }
 
     if ( aErrorInfo.isValid() )
@@ -1651,7 +1651,7 @@ void GeometryHandler::impl_fillFormulaList_nothrow(::std::vector< ::rtl::OUStrin
     if ( m_nDataFieldType == FUNCTION )
         ::std::transform(m_aDefaultFunctions.begin(),m_aDefaultFunctions.end(),::std::back_inserter(_out_rList),::boost::bind( &DefaultFunction::getName, _1 ));
     else if ( m_nDataFieldType == USER_DEF_FUNCTION )
-        ::std::transform(m_aFunctionNames.begin(),m_aFunctionNames.end(),::std::back_inserter(_out_rList),::std::select1st<TFunctions::value_type>());
+        ::std::transform(m_aFunctionNames.begin(),m_aFunctionNames.end(),::std::back_inserter(_out_rList),::o3tl::select1st<TFunctions::value_type>());
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString GeometryHandler::impl_ConvertUIToMimeType_nothrow(const ::rtl::OUString& _sUIName) const
@@ -1669,7 +1669,7 @@ void GeometryHandler::impl_fillFormulaList_nothrow(::std::vector< ::rtl::OUStrin
             const uno::Sequence< ::rtl::OUString > aMimeTypes( xReportDefinition->getAvailableMimeTypes() );
             sRet = aMimeTypes[nPos];
         }
-    } // if ( aFind != aList.end() )
+    }
     return sRet;
 }
 // -----------------------------------------------------------------------------
@@ -1706,7 +1706,7 @@ void GeometryHandler::impl_fillMimeTypes_nothrow(::std::vector< ::rtl::OUString 
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -1738,7 +1738,7 @@ void GeometryHandler::impl_fillScopeList_nothrow(::std::vector< ::rtl::OUString 
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -1856,7 +1856,7 @@ sal_Bool GeometryHandler::isDefaultFunction( const ::rtl::OUString& _sQuotedFunc
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
     return bDefaultFunction;
 }
@@ -1896,7 +1896,7 @@ sal_Bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< 
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
     return bDefaultFunction;
 }
@@ -1915,13 +1915,6 @@ void GeometryHandler::loadDefaultFunctions()
 
         DefaultFunction aDefault;
         aDefault.m_bDeepTraversing = sal_False;
-
-        //aDefault.m_sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Counter"));
-        //aDefault.m_sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[%FunctionName] + 1"));
-        //aDefault.m_sSearchString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:\\[[:alpha:]+[:alnum:]*\\][:space:]*\\+[:space:]*1"));
-        //aDefault.m_sInitialFormula.IsPresent = sal_True;
-        //aDefault.m_sInitialFormula.Value = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:1"));
-        //m_aDefaultFunctions.push_back(aDefault);
 
         aDefault.m_bPreEvaluated = sal_True;
 
@@ -1994,7 +1987,7 @@ void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -2084,7 +2077,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< ::rtl::OUString
     }
     catch (uno::Exception&)
     {
-        DBG_ERROR( "GeometryHandler::impl_initFieldList_nothrow: caught an exception!" );
+        OSL_FAIL( "GeometryHandler::impl_initFieldList_nothrow: caught an exception!" );
     }
 }
 // -----------------------------------------------------------------------------

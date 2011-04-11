@@ -31,6 +31,7 @@
 
 ModalDialog RID_DLG_SELECTLABELCONTROL
 {
+    HelpID = "extensions:ModalDialog:RID_DLG_SELECTLABELCONTROL";
     OutputSize = TRUE;
     Size = MAP_APPFONT( 200, 151 );
     Moveable = TRUE;
@@ -51,6 +52,7 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
     };
     CheckBox 1
     {
+        HelpID = "extensions:CheckBox:RID_DLG_SELECTLABELCONTROL:1";
         Pos = MAP_APPFONT( 6, 115 );
         Size = MAP_APPFONT( 188, 8 );
         Text [ en-US ] = "~No assignment";

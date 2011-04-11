@@ -73,15 +73,15 @@ namespace connectivity
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > Map2XNameAccess(JNIEnv *pEnv,jobject _pMap);
     jobject convertTypeMapToJavaMap(JNIEnv *pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & _rMap);
 
-    /** return if a exception occured
+    /** return if a exception occurred
         @param  pEnv
             The native java env
         @param  _bClear
             <TRUE/> if the execption should be cleared
         @return
-            <TRUE/> if an exception is occured
+            <TRUE/> if an exception is occurred
     */
-    sal_Bool isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear);
+    sal_Bool isExceptionOccurred(JNIEnv *pEnv,sal_Bool _bClear);
 
     jobject createByteInputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length);
     jobject createCharArrayReader(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length);

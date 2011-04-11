@@ -59,9 +59,9 @@
 #include "controlpropertymap.hxx"
 #include "formevents.hxx"
 #include "formcellbinding.hxx"
-#include "xformsimport.hxx"
+#include "xmloff/xformsimport.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <rtl/logfile.hxx>
 #include <algorithm>
 
@@ -240,11 +240,6 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         TabulatorCycle_RECORDS, OEnumMapper::getEnumMap(OEnumMapper::epTabCyle),
         &::getCppuType( static_cast<TabulatorCycle*>(NULL) ));
 
-    // initialize our style map
-    m_xPropertyHandlerFactory = new OControlPropertyHandlerFactory();
-        ::rtl::Reference< XMLPropertySetMapper > xStylePropertiesMapper = new XMLPropertySetMapper(getControlStylePropertyMap(), m_xPropertyHandlerFactory.get());
-        m_xImportMapper = new SvXMLImportPropertyMapper(xStylePropertiesMapper.get(), _rImporter);
-
     // 'initialize'
     m_aCurrentPageIds = m_aControlIds.end();
 }
@@ -311,11 +306,11 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
             }
             catch(const Exception&)
             {
-                OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::applyControlNumberStyle: couldn't set the format!");
+                OSL_FAIL("OFormLayerXMLImport_Impl::applyControlNumberStyle: couldn't set the format!");
             }
         }
         else
-            OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::applyControlNumberStyle: did not find the style with the given name!");
+            OSL_FAIL("OFormLayerXMLImport_Impl::applyControlNumberStyle: did not find the style with the given name!");
     }
 }
 
@@ -419,12 +414,6 @@ void OFormLayerXMLImport_Impl::registerControlReferences(const Reference< XPrope
 }
 
 //---------------------------------------------------------------------
-::rtl::Reference< SvXMLImportPropertyMapper > OFormLayerXMLImport_Impl::getStylePropertyMapper() const
-{
-    return m_xImportMapper;
-}
-
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPage)
 {
     m_xCurrentPageFormsSupp.clear();
@@ -485,7 +474,7 @@ void OFormLayerXMLImport_Impl::endPage()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::endPage: unable to knit the control references (caught an exception)!");
+        OSL_FAIL("OFormLayerXMLImport_Impl::endPage: unable to knit the control references (caught an exception)!");
     }
 
     // now that we have all children of the forms collection, attach the events
@@ -513,7 +502,7 @@ Reference< XPropertySet > OFormLayerXMLImport_Impl::lookupControlId(const ::rtl:
         if (m_aCurrentPageIds->second.end() != aPos)
             xReturn = aPos->second;
         else
-            OSL_ENSURE(sal_False, "OFormLayerXMLImport_Impl::lookupControlId: invalid control id (did not find it)!");
+            OSL_FAIL("OFormLayerXMLImport_Impl::lookupControlId: invalid control id (did not find it)!");
     }
     return xReturn;
 }
@@ -546,7 +535,7 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nP
 
     if ( !pContext )
     {
-        OSL_ENSURE( false, "unknown element" );
+        OSL_FAIL( "unknown element" );
         pContext =
             new SvXMLImportContext(m_rImporter, _nPrefix, _rLocalName);
     }
@@ -604,7 +593,7 @@ void OFormLayerXMLImport_Impl::documentDone( )
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell!" );
+                OSL_FAIL( "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell!" );
             }
         }
         m_aCellValueBindings.clear();
@@ -631,7 +620,7 @@ void OFormLayerXMLImport_Impl::documentDone( )
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell range!" );
+                OSL_FAIL( "OFormLayerXMLImport_Impl::documentDone: caught an exception while binding to a cell range!" );
             }
         }
         m_aCellRangeListSources.clear();

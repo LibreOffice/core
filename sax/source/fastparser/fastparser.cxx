@@ -49,7 +49,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
-//using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 
 namespace sax_fastparser {
@@ -551,7 +550,7 @@ Sequence< OUString > FastSaxParser::getSupportedServiceNames_Static(void)
 // XServiceInfo
 OUString FastSaxParser::getImplementationName() throw (RuntimeException)
 {
-    return OUString::createFromAscii( PARSER_IMPLEMENTATION_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( PARSER_IMPLEMENTATION_NAME ));
 }
 
 // XServiceInfo
@@ -572,7 +571,7 @@ Sequence< OUString > FastSaxParser::getSupportedServiceNames(void) throw (Runtim
 {
 
     Sequence<OUString> seq(1);
-    seq.getArray()[0] = OUString::createFromAscii( PARSER_SERVICE_NAME );
+    seq.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( PARSER_SERVICE_NAME ));
     return seq;
 }
 

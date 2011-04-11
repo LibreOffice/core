@@ -43,7 +43,7 @@ namespace offapp
     protected:
                             InternationalOptionsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
 
-        virtual BOOL        FillItemSet( SfxItemSet& _rSet );
+        virtual sal_Bool        FillItemSet( SfxItemSet& _rSet );
         virtual void        Reset( const SfxItemSet& _rSet );
 
     public:

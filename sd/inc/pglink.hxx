@@ -29,8 +29,6 @@
 #ifndef _PGLINK_HXX
 #define _PGLINK_HXX
 
-#ifndef SVX_LIGHT
-
 #include <sfx2/lnkbase.hxx>
 
 class SdPage;
@@ -50,12 +48,6 @@ public:
                               const ::com::sun::star::uno::Any & );
     bool         Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
-
-#else
-
-class SdPageLink;
-
-#endif
 
 #endif     // _PGLINK_HXX
 

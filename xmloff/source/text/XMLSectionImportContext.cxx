@@ -35,7 +35,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/prstylei.hxx>
@@ -81,7 +81,7 @@ enum XMLSectionToken
     XML_TOK_SECTION_IS_HIDDEN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
+static SvXMLTokenMapEntry aSectionTokenMap[] =
 {
     { XML_NAMESPACE_XML , XML_ID, XML_TOK_SECTION_XMLID },
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_SECTION_STYLE_NAME },

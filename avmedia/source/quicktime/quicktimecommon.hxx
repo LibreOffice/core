@@ -78,7 +78,6 @@
 // Quicktime 6.4+ in Mac OS X 10.3
 #define QT64 0x06400000
 
-
 #endif // _QUICKTIMECOMMOM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -120,8 +120,8 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentRegion() throw(uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ] );
 
     aOneRange.Justify();
     ScDocShell* pDocSh = GetDocShell();
@@ -134,7 +134,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentRegion() throw(uno::RuntimeExcep
         SCTAB nTab = aOneRange.aStart.Tab();
 
         pDocSh->GetDocument()->GetDataArea(
-                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, TRUE, false );
+                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, sal_True, false );
 
         ScRange aNew( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab );
         SetNewRange( aNew );
@@ -145,8 +145,8 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray() throw(uno::RuntimeExcept
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ] );
 
     aOneRange.Justify();
     ScAddress aCursor(aOneRange.aStart);        //  use the start address of the range
@@ -168,7 +168,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray() throw(uno::RuntimeExcept
     // about a exception
     /*if (!bFound)
     {
-        DBG_ERROR("keine Matrix");
+        OSL_FAIL("keine Matrix");
         //! Exception, oder was?
     }*/
 }
@@ -180,8 +180,8 @@ void SAL_CALL ScCellCursorObj::collapseToMergedArea() throw(uno::RuntimeExceptio
     if ( pDocSh )
     {
         const ScRangeList& rRanges = GetRangeList();
-        DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-        ScRange aNewRange(*rRanges.GetObject(0));
+        DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+        ScRange aNewRange( *rRanges[ 0 ] );
 
         ScDocument* pDoc = pDocSh->GetDocument();
         pDoc->ExtendOverlapped( aNewRange );
@@ -195,8 +195,8 @@ void SAL_CALL ScCellCursorObj::expandToEntireColumns() throw(uno::RuntimeExcepti
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aNewRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aNewRange( *rRanges[ 0 ] );
 
     aNewRange.aStart.SetRow( 0 );
     aNewRange.aEnd.SetRow( MAXROW );
@@ -208,8 +208,8 @@ void SAL_CALL ScCellCursorObj::expandToEntireRows() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aNewRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aNewRange( *rRanges[ 0 ] );
 
     aNewRange.aStart.SetCol( 0 );
     aNewRange.aEnd.SetCol( MAXCOL );
@@ -223,14 +223,14 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
     SolarMutexGuard aGuard;
     if ( nColumns <= 0 || nRows <= 0 )
     {
-        DBG_ERROR("leerer Range geht nicht");
+        OSL_FAIL("leerer Range geht nicht");
         //! und dann?
     }
     else
     {
         const ScRangeList& rRanges = GetRangeList();
-        DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-        ScRange aNewRange(*rRanges.GetObject(0));
+        DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+        ScRange aNewRange( *rRanges[ 0 ] );
 
         aNewRange.Justify();    //! wirklich?
 
@@ -261,8 +261,8 @@ void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea( sal_Bool bExpand )
     if ( pDocSh )
     {
         const ScRangeList& rRanges = GetRangeList();
-        DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-        ScRange aNewRange(*rRanges.GetObject(0));
+        DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+        ScRange aNewRange( *rRanges[0] );
         SCTAB nTab = aNewRange.aStart.Tab();
 
         SCCOL nUsedX = 0;       // Anfang holen
@@ -289,8 +289,8 @@ void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( sal_Bool bExpand )
     if ( pDocSh )
     {
         const ScRangeList& rRanges = GetRangeList();
-        DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-        ScRange aNewRange(*rRanges.GetObject(0));
+        DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+        ScRange aNewRange( *rRanges[ 0 ]);
         SCTAB nTab = aNewRange.aStart.Tab();
 
         SCCOL nUsedX = 0;       // Ende holen
@@ -318,8 +318,8 @@ void SAL_CALL ScCellCursorObj::gotoStart() throw(uno::RuntimeException)
 
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ]);
 
     aOneRange.Justify();
     ScDocShell* pDocSh = GetDocShell();
@@ -332,7 +332,7 @@ void SAL_CALL ScCellCursorObj::gotoStart() throw(uno::RuntimeException)
         SCTAB nTab = aOneRange.aStart.Tab();
 
         pDocSh->GetDocument()->GetDataArea(
-                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE, false );
+                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, false );
 
         ScRange aNew( nStartCol, nStartRow, nTab );
         SetNewRange( aNew );
@@ -346,8 +346,8 @@ void SAL_CALL ScCellCursorObj::gotoEnd() throw(uno::RuntimeException)
 
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ] );
 
     aOneRange.Justify();
     ScDocShell* pDocSh = GetDocShell();
@@ -360,7 +360,7 @@ void SAL_CALL ScCellCursorObj::gotoEnd() throw(uno::RuntimeException)
         SCTAB nTab = aOneRange.aStart.Tab();
 
         pDocSh->GetDocument()->GetDataArea(
-                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE, false );
+                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, false );
 
         ScRange aNew( nEndCol, nEndRow, nTab );
         SetNewRange( aNew );
@@ -371,8 +371,8 @@ void SAL_CALL ScCellCursorObj::gotoNext() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ] );
 
     aOneRange.Justify();
     ScAddress aCursor(aOneRange.aStart);        //  bei Block immer den Start nehmen
@@ -383,7 +383,7 @@ void SAL_CALL ScCellCursorObj::gotoNext() throw(uno::RuntimeException)
     SCTAB nTab  = aCursor.Tab();
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
-        pDocSh->GetDocument()->GetNextPos( nNewX,nNewY, nTab,  1,0, FALSE,TRUE, aMark );
+        pDocSh->GetDocument()->GetNextPos( nNewX,nNewY, nTab,  1,0, false,sal_True, aMark );
     //! sonst Exception oder so
 
     SetNewRange( ScRange( nNewX, nNewY, nTab ) );
@@ -393,8 +393,8 @@ void SAL_CALL ScCellCursorObj::gotoPrevious() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ] );
 
     aOneRange.Justify();
     ScAddress aCursor(aOneRange.aStart);        //  bei Block immer den Start nehmen
@@ -405,7 +405,7 @@ void SAL_CALL ScCellCursorObj::gotoPrevious() throw(uno::RuntimeException)
     SCTAB nTab  = aCursor.Tab();
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
-        pDocSh->GetDocument()->GetNextPos( nNewX,nNewY, nTab, -1,0, FALSE,TRUE, aMark );
+        pDocSh->GetDocument()->GetNextPos( nNewX,nNewY, nTab, -1,0, false,sal_True, aMark );
     //! sonst Exception oder so
 
     SetNewRange( ScRange( nNewX, nNewY, nTab ) );
@@ -416,8 +416,8 @@ void SAL_CALL ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nR
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ] );
     aOneRange.Justify();
 
     if ( aOneRange.aStart.Col() + nColumnOffset >= 0 &&
@@ -473,7 +473,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByName(
 
 rtl::OUString SAL_CALL ScCellCursorObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScCellCursorObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellCursorObj" ));
 }
 
 sal_Bool SAL_CALL ScCellCursorObj::supportsService( const rtl::OUString& rServiceName )
@@ -496,8 +496,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames(
     //  SheetCellCursor should be first (?)
     uno::Sequence<rtl::OUString> aTotalSeq( nParentLen + 2 );
     rtl::OUString* pTotalArr = aTotalSeq.getArray();
-    pTotalArr[0] = rtl::OUString::createFromAscii( SCSHEETCELLCURSOR_SERVICE );
-    pTotalArr[1] = rtl::OUString::createFromAscii( SCCELLCURSOR_SERVICE );
+    pTotalArr[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLCURSOR_SERVICE ));
+    pTotalArr[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLCURSOR_SERVICE ));
 
     //  append cell range services
     for (long i=0; i<nParentLen; i++)

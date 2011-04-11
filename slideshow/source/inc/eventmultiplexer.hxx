@@ -61,7 +61,7 @@ struct EventMultiplexerImpl;
     are handled as well. Note that registered events which
     have a non-zero timeout (i.e. events that return non-zero
     from getActivationTime()) will not be fired immediately
-    after the user action occured, but only after the given
+    after the user action occurred, but only after the given
     timeout. Which is actually a feature.
 */
 class EventMultiplexer : private ::boost::noncopyable

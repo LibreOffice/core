@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "showcols.hxx"
 #include "fmsearch.hrc"
 
@@ -86,7 +83,7 @@ IMPL_LINK( FmShowColsDialog, OnClickedOk, Button*, EMPTYARG )
                 }
                 catch(...)
                 {
-                    DBG_ERROR("FmShowColsDialog::OnClickedOk Exception occured!");
+                    OSL_FAIL("FmShowColsDialog::OnClickedOk Exception occurred!");
                 }
             }
         }
@@ -120,11 +117,11 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
 
             ::rtl::OUString sName;
             xCurCol->getPropertyValue(CUIFM_PROP_LABEL) >>= sName;
-            sCurName = (const sal_Unicode*)sName;
+            sCurName = sName;
         }
         catch(...)
         {
-            DBG_ERROR("FmShowColsDialog::SetColumns Exception occured!");
+            OSL_FAIL("FmShowColsDialog::SetColumns Exception occurred!");
         }
 
         // if the col is hidden, put it into the list

@@ -33,33 +33,32 @@
 //------------------------------------------------------------------------
 #include <sal/types.h>
 
-#include <rtl/string.hxx>
-
 #include <osl/thread.hxx>
 #include <osl/time.h>
 
 #include <rtl/instance.hxx>
+#include <rtl/ustring.hxx>
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
+#ifdef WNT
+#include <windows.h>
+#else
+#include <unistd.h>
+#include <time.h>
+#endif
 
 // -----------------------------------------------------------------------------
 #define CONST_TEST_STRING "gregorian"
 
 namespace {
-struct Gregorian : public rtl::StaticWithInit<const ::rtl::OUString, Gregorian> {
+struct Gregorian : public ::rtl::StaticWithInit<const ::rtl::OUString, Gregorian> {
     const ::rtl::OUString operator () () {
         return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CONST_TEST_STRING ));
     }
 };
-}
-
-inline void printOUString( ::rtl::OUString const & _suStr )
-{
-    rtl::OString aString;
-
-    t_print( "OUString: " );
-    aString = ::rtl::OUStringToOString( _suStr, RTL_TEXTENCODING_ASCII_US );
-    t_print( "'%s'\n", aString.getStr( ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -74,7 +73,7 @@ namespace ThreadHelper
     {
         // if (nVerbose == VERBOSE)
         // {
-        //     t_print("wait %d tenth seconds. ", _nTenthSec );
+        //     printf("wait %d tenth seconds. ", _nTenthSec );
         //     fflush(stdout);
         // }
 #ifdef WNT      //Windows
@@ -88,7 +87,7 @@ namespace ThreadHelper
 #endif
         // if (nVerbose == VERBOSE)
         // {
-        //     t_print("done\n");
+        //     printf("done\n");
         // }
     }
 }
@@ -126,8 +125,6 @@ protected:
             while(schedule())
             {
                 rtl::OUString aStr = Gregorian::get();
-                // printOUString(aStr);
-                // printOUString(m_sConstStr);
                 if (aStr.equals(m_sConstStr))
                 {
                     m_nOK++;
@@ -151,7 +148,7 @@ public:
         {
             if (isRunning())
             {
-                t_print("error: not terminated.\n");
+                printf("error: not terminated.\n");
             }
         }
 };
@@ -180,7 +177,6 @@ namespace rtl_DoubleLocking
         void getValue_001()
             {
                 rtl::OUString aStr = Gregorian::get();
-                printOUString(aStr);
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Gregorian::get() failed, wrong value expected.",
@@ -207,7 +203,7 @@ namespace rtl_DoubleLocking
                 pThread->create();
                 p2Thread->create();
 
-                ThreadHelper::thread_sleep_tenth_sec(50);
+                ThreadHelper::thread_sleep_tenth_sec(5);
 
                 pThread->terminate();
                 p2Thread->terminate();
@@ -218,8 +214,12 @@ namespace rtl_DoubleLocking
                 sal_Int32 nValueOK2 = 0;
                 nValueOK2 = p2Thread->getOK();
 
-                t_print("Value in Thread #1 is %d\n", nValueOK);
-                t_print("Value in Thread #2 is %d\n", nValueOK2);
+#if OSL_DEBUG_LEVEL > 2
+                printf("Value in Thread #1 is %d\n", nValueOK);
+                printf("Value in Thread #2 is %d\n", nValueOK2);
+#else
+                (void)nValueOK2;
+#endif
 
                 sal_Int32 nValueFails = 0;
                 nValueFails = pThread->getFails();
@@ -227,10 +227,11 @@ namespace rtl_DoubleLocking
                 sal_Int32 nValueFails2 = 0;
                 nValueFails2 = p2Thread->getFails();
 
-                t_print("Fails in Thread #1 is %d\n", nValueFails);
-                t_print("Fails in Thread #2 is %d\n", nValueFails2);
+#if OSL_DEBUG_LEVEL > 2
+                printf("Fails in Thread #1 is %d\n", nValueFails);
+                printf("Fails in Thread #2 is %d\n", nValueFails2);
+#endif
 
-                // ThreadHelper::thread_sleep_tenth_sec(1);
                 pThread->join();
                 p2Thread->join();
 
@@ -249,11 +250,11 @@ namespace rtl_DoubleLocking
         CPPUNIT_TEST_SUITE_END();
     }; // class create
 // -----------------------------------------------------------------------------
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_DoubleLocking::getValue, "rtl_DoubleLocking");
+    CPPUNIT_TEST_SUITE_REGISTRATION(rtl_DoubleLocking::getValue);
 } // namespace rtl_DoubleLocking
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

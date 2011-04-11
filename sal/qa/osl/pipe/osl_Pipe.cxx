@@ -26,17 +26,12 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sal.hxx"
-
 //------------------------------------------------------------------------
 // include files
 //------------------------------------------------------------------------
 
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <sal/cppunit.h>
+#include "test/uniquepipename.hxx"
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
@@ -53,7 +48,10 @@
 #include <string.h>
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 //------------------------------------------------------------------------
 // helper functions
@@ -129,9 +127,9 @@ inline void printPipeError( ::osl::Pipe aPipe )
 //------------------------------------------------------------------------
 // pipe name and transfer contents
 //------------------------------------------------------------------------
-const rtl::OUString aTestPipeName = rtl::OUString::createFromAscii( "testpipe2" );
-const rtl::OUString aTestPipe1 = rtl::OUString::createFromAscii( "testpipe1" );
-const rtl::OUString aTestString = rtl::OUString::createFromAscii( "Sun Microsystems" );
+const rtl::OUString aTestPipeName(RTL_CONSTASCII_USTRINGPARAM("testpipe2"));
+const rtl::OUString aTestPipe1(RTL_CONSTASCII_USTRINGPARAM("testpipe1"));
+const rtl::OUString aTestString(RTL_CONSTASCII_USTRINGPARAM("Sun Microsystems"));
 
 const OString m_pTestString1("Sun Microsystems");
 const OString m_pTestString2("test pipe PASS/OK");
@@ -181,8 +179,8 @@ namespace osl_Pipe
         void ctors_name_option( )
             {
                 /// create a named pipe.
-                ::osl::Pipe aPipe( aTestPipeName, osl_Pipe_CREATE );
-                ::osl::Pipe aAssignPipe( aTestPipeName, osl_Pipe_OPEN );
+                ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
+                ::osl::Pipe aAssignPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );
 
                 bRes = aPipe.is( ) && aAssignPipe.is( );
 
@@ -194,7 +192,7 @@ namespace osl_Pipe
             {
                 /// create a security pipe.
                 const ::osl::Security rSecurity;
-                ::osl::Pipe aSecurityPipe( aTestPipeName, osl_Pipe_CREATE, rSecurity );
+                ::osl::Pipe aSecurityPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE, rSecurity );
 
                 bRes = aSecurityPipe.is( );
 
@@ -205,7 +203,7 @@ namespace osl_Pipe
         void ctors_copy( )
             {
                 /// create a pipe.
-                ::osl::Pipe aPipe( aTestPipeName, osl_Pipe_CREATE );
+                ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 /// create a pipe using copy constructor.
                 ::osl::Pipe aCopyPipe( aPipe );
 
@@ -228,7 +226,7 @@ namespace osl_Pipe
         void ctors_no_acquire( )
             {
                 /// create a pipe.
-                ::osl::Pipe aPipe( aTestPipeName, osl_Pipe_CREATE );
+                ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 /// constructs a pipe reference without acquiring the handle.
                 ::osl::Pipe aNoAcquirePipe( aPipe.getHandle( ), SAL_NO_ACQUIRE );
 
@@ -244,7 +242,7 @@ namespace osl_Pipe
         void ctors_acquire( )
             {
                 /// create a base pipe.
-                ::osl::Pipe aPipe( aTestPipeName, osl_Pipe_CREATE );
+                ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 /// constructs two pipes without acquiring the handle on the base pipe.
                 ::osl::Pipe aAcquirePipe( aPipe.getHandle( ) );
                 ::osl::Pipe aAcquirePipe1( NULL );
@@ -282,14 +280,14 @@ namespace osl_Pipe
 
         void is_002( )
             {
-                ::osl::Pipe aPipe( aTestPipeName, osl_Pipe_CREATE );
+                ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test is(), a normal pipe creation.", sal_True == aPipe.is( ) );
             }
 
         void is_003( )
             {
-                ::osl::Pipe aPipe( aTestPipeName, osl_Pipe_CREATE );
+                ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 aPipe.clear( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test is(), an invalid case.", sal_False == aPipe.is( ) );
@@ -332,8 +330,8 @@ namespace osl_Pipe
             {
                 const Security rSec;
                 ::osl::Pipe aPipe;
-                bRes = aPipe.create( aTestPipeName, osl_Pipe_CREATE, rSec );
-                bRes1 = aPipe.create( aTestPipeName, osl_Pipe_CREATE, rSec );
+                bRes = aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE, rSec );
+                bRes1 = aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE, rSec );
                 aPipe.clear( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test creation.",
@@ -344,8 +342,8 @@ namespace osl_Pipe
             {
                 const Security rSec;
                 ::osl::Pipe aPipe, aPipe1;
-                bRes = aPipe.create( aTestPipeName, osl_Pipe_CREATE, rSec );
-                bRes1 = aPipe1.create( aTestPipeName, osl_Pipe_OPEN, rSec );
+                bRes = aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE, rSec );
+                bRes1 = aPipe1.create( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN, rSec );
                 aPipe.clear( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test creation and open.",
@@ -355,8 +353,8 @@ namespace osl_Pipe
         void create_named_001( )
             {
                 ::osl::Pipe aPipe;
-                bRes = aPipe.create( aTestPipeName, osl_Pipe_CREATE );
-                bRes1 = aPipe.create( aTestPipeName, osl_Pipe_CREATE );
+                bRes = aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
+                bRes1 = aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 aPipe.clear( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test creation.",
@@ -366,8 +364,8 @@ namespace osl_Pipe
         void create_named_002( )
             {
                 ::osl::Pipe aPipe, aPipe1;
-                bRes = aPipe.create( aTestPipeName, osl_Pipe_CREATE );
-                bRes1 = aPipe1.create( aTestPipeName, osl_Pipe_OPEN );
+                bRes = aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
+                bRes1 = aPipe1.create( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );
                 aPipe.clear( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test creation and open.",
@@ -377,7 +375,7 @@ namespace osl_Pipe
         void create_named_003( )
             {
                 ::osl::Pipe aPipe;
-                bRes = aPipe.create( aTestPipeName );
+                bRes = aPipe.create( test::uniquePipeName(aTestPipeName) );
                 aPipe.clear( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test default option is open.",
@@ -405,7 +403,7 @@ namespace osl_Pipe
         void clear_001( )
             {
                 ::osl::Pipe aPipe;
-                aPipe.create( aTestPipeName, osl_Pipe_CREATE );
+                aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 aPipe.clear( );
                 bRes = aPipe.is( );
 
@@ -431,7 +429,7 @@ namespace osl_Pipe
         void assign_ref( )
             {
                 ::osl::Pipe aPipe, aPipe1;
-                aPipe.create( aTestPipeName, osl_Pipe_CREATE );
+                aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 aPipe1 = aPipe;
                 bRes = aPipe1.is( );
                 bRes1 = aPipe == aPipe1;
@@ -445,7 +443,7 @@ namespace osl_Pipe
         void assign_handle( )
             {
                 ::osl::Pipe aPipe, aPipe1;
-                aPipe.create( aTestPipeName, osl_Pipe_CREATE );
+                aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 aPipe1 = aPipe.getHandle( );
                 bRes = aPipe1.is( );
                 bRes1 = aPipe == aPipe1;
@@ -495,7 +493,7 @@ namespace osl_Pipe
         void isEqual_001( )
             {
                 ::osl::Pipe aPipe;
-                aPipe.create( aTestPipeName, osl_Pipe_CREATE );
+                aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 bRes  = aPipe == aPipe;
                 aPipe.close( );
 
@@ -506,10 +504,10 @@ namespace osl_Pipe
         void isEqual_002( )
             {
                 ::osl::Pipe aPipe, aPipe1, aPipe2;
-                aPipe.create( aTestPipeName, osl_Pipe_CREATE );
+                aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
 
                 aPipe1 = aPipe;
-                aPipe2.create( aTestPipeName, osl_Pipe_CREATE );
+                aPipe2.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
 
                 bRes  = aPipe == aPipe1;
                 bRes1 = aPipe == aPipe2;
@@ -538,7 +536,7 @@ namespace osl_Pipe
 
         void close_001( )
             {
-                ::osl::Pipe aPipe( aTestPipe1, osl_Pipe_CREATE );
+                ::osl::Pipe aPipe( test::uniquePipeName(aTestPipe1), osl_Pipe_CREATE );
                 aPipe.close( );
                 bRes = aPipe.is( );
 
@@ -551,7 +549,7 @@ namespace osl_Pipe
 
         void close_002( )
             {
-                ::osl::StreamPipe aPipe( aTestPipe1, osl_Pipe_CREATE );
+                ::osl::StreamPipe aPipe( test::uniquePipeName(aTestPipe1), osl_Pipe_CREATE );
                 aPipe.close( );
                 int nRet = aPipe.send( m_pTestString1.getStr(), 3 );
 
@@ -619,7 +617,7 @@ namespace osl_Pipe
 
         void getError_001( )
             {
-                ::osl::Pipe aPipe( aTestPipeName, osl_Pipe_OPEN );
+                ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );
                 oslPipeError nError = aPipe.getError( );
                 printPipeError( aPipe );
                 aPipe.clear( );
@@ -630,8 +628,8 @@ namespace osl_Pipe
 
         void getError_002( )
             {
-                ::osl::Pipe aPipe( aTestPipeName, osl_Pipe_CREATE );
-                ::osl::Pipe aPipe1( aTestPipeName, osl_Pipe_CREATE );
+                ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
+                ::osl::Pipe aPipe1( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 oslPipeError nError = aPipe.getError( );
                 printPipeError( aPipe );
                 aPipe.clear( );
@@ -658,7 +656,7 @@ namespace osl_Pipe
 
         void getHandle_001( )
             {
-                ::osl::Pipe aPipe( aTestPipeName, osl_Pipe_OPEN );
+                ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );
                 bRes = aPipe == aPipe.getHandle( );
                 aPipe.clear( );
 
@@ -668,7 +666,7 @@ namespace osl_Pipe
 
         void getHandle_002( )
             {
-                ::osl::Pipe aPipe( aTestPipeName, osl_Pipe_CREATE );
+                ::osl::Pipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 ::osl::Pipe aPipe1( aPipe.getHandle( ) );
                 bRes = aPipe == aPipe1;
                 aPipe.clear( );
@@ -721,7 +719,7 @@ namespace osl_StreamPipe
         void ctors_none( )
             {
                 // create a pipe.
-                ::osl::StreamPipe aStreamPipe( aTestPipeName, osl_Pipe_CREATE );
+                ::osl::StreamPipe aStreamPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 // create an unattached pipe.
                 ::osl::StreamPipe aStreamPipe1;
                 bRes  = aStreamPipe1.is( );
@@ -739,7 +737,7 @@ namespace osl_StreamPipe
         void ctors_handle( )
             {
                 // create a pipe.
-                ::osl::StreamPipe aStreamPipe( aTestPipeName, osl_Pipe_CREATE );
+                ::osl::StreamPipe aStreamPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 // create a pipe with last handle.
                 ::osl::StreamPipe aStreamPipe1( aStreamPipe.getHandle( ) );
                 bRes  = aStreamPipe1.is( ) && aStreamPipe == aStreamPipe1;
@@ -753,7 +751,7 @@ namespace osl_StreamPipe
         void ctors_copy( )
             {
                 // create a pipe.
-                ::osl::StreamPipe aStreamPipe( aTestPipeName, osl_Pipe_CREATE );
+                ::osl::StreamPipe aStreamPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 // create an unattached pipe.
                 ::osl::StreamPipe aStreamPipe1( aStreamPipe );
                 bRes  = aStreamPipe1.is( ) && aStreamPipe == aStreamPipe1;
@@ -767,9 +765,9 @@ namespace osl_StreamPipe
         void ctors_name_option( )
             {
                 // create a pipe.
-                ::osl::StreamPipe aStreamPipe( aTestPipeName, osl_Pipe_CREATE );
+                ::osl::StreamPipe aStreamPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 // create an unattached pipe.
-                ::osl::StreamPipe aStreamPipe1( aTestPipeName, osl_Pipe_OPEN );
+                ::osl::StreamPipe aStreamPipe1( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );
                 bRes  = aStreamPipe1.is( ) && aStreamPipe.is( );
                 aStreamPipe.clear( );
                 aStreamPipe1.clear( );
@@ -782,7 +780,7 @@ namespace osl_StreamPipe
             {
                 /// create a security pipe.
                 const ::osl::Security rSecurity;
-                ::osl::StreamPipe aSecurityPipe( aTestPipeName, osl_Pipe_CREATE, rSecurity );
+                ::osl::StreamPipe aSecurityPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE, rSecurity );
 
                 bRes = aSecurityPipe.is( );
                 aSecurityPipe.clear( );
@@ -804,7 +802,7 @@ namespace osl_StreamPipe
         void ctors_no_acquire( )
             {
                 // create a pipe.
-                ::osl::StreamPipe aPipe( aTestPipeName, osl_Pipe_CREATE );
+                ::osl::StreamPipe aPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 // constructs a pipe reference without acquiring the handle.
                 ::osl::StreamPipe aNoAcquirePipe( aPipe.getHandle( ), SAL_NO_ACQUIRE );
 
@@ -841,7 +839,7 @@ namespace osl_StreamPipe
        void assign_ref( )
        {
        ::osl::StreamPipe aPipe, aPipe1;
-       aPipe.create( aTestPipeName, osl_Pipe_CREATE );
+       aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
        aPipe1 = aPipe;
        bRes = aPipe1.is( );
        bRes1 = aPipe == aPipe1;
@@ -854,7 +852,7 @@ namespace osl_StreamPipe
 
        void assign_handle( )
        {
-       ::osl::StreamPipe * pPipe = new ::osl::StreamPipe( aTestPipeName, osl_Pipe_CREATE );
+       ::osl::StreamPipe * pPipe = new ::osl::StreamPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
        ::osl::StreamPipe * pAssignPipe = new ::osl::StreamPipe;
        *pAssignPipe = pPipe->getHandle( );
 
@@ -909,7 +907,7 @@ namespace osl_StreamPipe
                 sal_Int32 nChars = 0;
 
                 printf("open pipe\n");
-                ::osl::StreamPipe aSenderPipe( aTestPipeName, osl_Pipe_OPEN );  // aTestPipeName is a string = "TestPipe"
+                ::osl::StreamPipe aSenderPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_OPEN );  // test::uniquePipeName(aTestPipeName) is a string = "TestPipe"
                 if ( aSenderPipe.is() == sal_False )
                 {
                     printf("pipe open failed! \n");
@@ -942,13 +940,13 @@ namespace osl_StreamPipe
     {
     public:
         sal_Char buf[256];
-        //::osl::StreamPipe aListenPipe;  //( aTestPipeName, osl_Pipe_CREATE );
+        //::osl::StreamPipe aListenPipe;  //( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
         ::osl::Pipe aListenPipe;
         ::osl::StreamPipe aConnectionPipe;
         Pipe_DataSource_Thread( )
             {
                 printf("create pipe\n");
-                aListenPipe.create( aTestPipeName, osl_Pipe_CREATE );
+                aListenPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
             }
         ~Pipe_DataSource_Thread( )
             {
@@ -959,7 +957,7 @@ namespace osl_StreamPipe
             {
                 //create pipe.
                 sal_Int32 nChars;
-                //::osl::StreamPipe aListenPipe( aTestPipeName, osl_Pipe_CREATE );
+                //::osl::StreamPipe aListenPipe( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
                 printf("listen\n");
                 if ( aListenPipe.is() == sal_False )
                 {

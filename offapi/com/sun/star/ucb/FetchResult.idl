@@ -50,10 +50,10 @@ published struct FetchResult
 
     //-------------------------------------------------------------------------
     /** indicates the index of the first row contained in
-        <member>FetchResult::Rows</member> in the original resultset. So if
+        <member>FetchResult::Rows</member> in the original result set. So if
         <member>FetchResult::StartIndex</member> equals <code>3</code>, the
         first element in the sequence <member>FetchResult::Rows</member>
-        contains the data of the index <code>3</code> in the original resultset.
+        contains the data of the index <code>3</code> in the original result set.
 
         <p>The following rows are one after the other, but the direction
         depends on the value of <member>FetchResult::Direction</member>
@@ -66,12 +66,12 @@ published struct FetchResult
 
         <p>When <member>FetchResult::Orientation</member> equals <TRUE/>, the
         rows in <member>FetchResult::Rows</member> are ordered in the same way
-        as in the original resultset.
+        as in the original result set.
     */
     boolean Orientation;
 
     //-------------------------------------------------------------------------
-    /** indicates whether and which error has occured, while fetching.
+    /** indicates whether and which error has occurred, while fetching.
 
         <p>The value may contain zero or more constants of the
         <type>FetchError</type> constants group.

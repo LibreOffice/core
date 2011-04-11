@@ -42,9 +42,9 @@ protected:
     ~SwBodyFrm();
 #endif
 public:
-    SwBodyFrm( SwFrmFmt* );
+    SwBodyFrm( SwFrmFmt*, SwFrm* );
 
-    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void Paint( const SwRect&, const SwPrintData *pPrintData = NULL ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwBodyFrm)
 };

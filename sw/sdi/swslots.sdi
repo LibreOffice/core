@@ -120,6 +120,8 @@ ModulePrefix( "Sw" )
     include "_annotsh.sdi"
     include "annotsh.sdi"
 
+    include "_navsh.sdi"
+    include "navsh.sdi"
 }
 
 

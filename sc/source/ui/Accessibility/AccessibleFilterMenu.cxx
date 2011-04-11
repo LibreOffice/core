@@ -173,7 +173,7 @@ Reference<XAccessibleStateSet> ScAccessibleFilterMenu::getAccessibleStateSet()
 OUString ScAccessibleFilterMenu::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString::createFromAscii("ScAccessibleFilterMenu");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("ScAccessibleFilterMenu"));
 }
 
 // XAccessibleEventBroadcaster

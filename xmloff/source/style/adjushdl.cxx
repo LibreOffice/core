@@ -42,7 +42,7 @@ using ::rtl::OUStringBuffer;
 
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Adjust_Enum[] =
+SvXMLEnumMapEntry const pXML_Para_Adjust_Enum[] =
 {
     { XML_START,        style::ParagraphAdjust_LEFT },
     { XML_END,          style::ParagraphAdjust_RIGHT },
@@ -54,7 +54,7 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Adjust_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Align_Last_Enum[] =
+SvXMLEnumMapEntry const pXML_Para_Align_Last_Enum[] =
 {
     { XML_START,        style::ParagraphAdjust_LEFT },
     { XML_CENTER,       style::ParagraphAdjust_CENTER },

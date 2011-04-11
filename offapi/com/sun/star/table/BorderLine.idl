@@ -58,7 +58,7 @@ published struct BorderLine
 
     //-------------------------------------------------------------------------
 
-    /** contaions the width of a single line or the width of outer part of
+    /** contains the width of a single line or the width of outer part of
         a double line (in 1/100 mm).
 
         <p>If this value is zero, no line is drawn.</p>

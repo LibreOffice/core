@@ -28,17 +28,16 @@
 
 #include "ShapeFilterBase.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
+#include "oox/ole/vbaproject.hxx"
 
 namespace oox {
 namespace shape {
 
 using namespace ::com::sun::star;
 
-ShapeFilterBase::ShapeFilterBase
-(const uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
- rxFactory)
-: XmlFilterBase(rxFactory)
-, mxChartConv( new ::oox::drawingml::chart::ChartConverter )
+ShapeFilterBase::ShapeFilterBase( const uno::Reference< uno::XComponentContext >& rxContext ) throw( uno::RuntimeException ) :
+    XmlFilterBase( rxContext ),
+    mxChartConv( new ::oox::drawingml::chart::ChartConverter )
 {
 }
 
@@ -64,6 +63,11 @@ const ::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles
 ::oox::drawingml::chart::ChartConverter& ShapeFilterBase::getChartConverter()
 {
     return *mxChartConv;
+}
+
+::oox::ole::VbaProject* ShapeFilterBase::implCreateVbaProject() const
+{
+    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), CREATE_OUSTRING( "Writer" ) );
 }
 
 ::rtl::OUString ShapeFilterBase::implGetImplementationName() const

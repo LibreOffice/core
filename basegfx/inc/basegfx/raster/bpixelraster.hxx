@@ -92,7 +92,7 @@ namespace basegfx
 #ifdef DBG_UTIL
             if(nIndex >= mnCount)
             {
-                OSL_ENSURE(false, "getBPixel: Access out of range (!)");
+                OSL_FAIL("getBPixel: Access out of range (!)");
                 return BPixel::getEmptyBPixel();
             }
 #endif
@@ -105,7 +105,7 @@ namespace basegfx
 #ifdef DBG_UTIL
             if(nIndex >= mnCount)
             {
-                OSL_ENSURE(false, "getBPixel: Access out of range (!)");
+                OSL_FAIL("getBPixel: Access out of range (!)");
                 return mpContent[0L];
             }
 #endif

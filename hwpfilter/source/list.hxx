@@ -41,6 +41,7 @@
  * re-implements the same functionality, based on the STL.
  */
 
+#include <cstddef>
 #include <vector>
 
 template<class T>
@@ -198,8 +199,8 @@ int LinkedList<T>::remove( T* pItem )
     typename list_t::iterator aEnd = maList.end();
     while( aIter != aEnd  && *aIter != pItem )
     {
-        i++;
-        aIter++;
+        ++i;
+        ++aIter;
     }
 
     if( aIter != aEnd )

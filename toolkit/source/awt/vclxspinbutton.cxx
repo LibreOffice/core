@@ -35,6 +35,7 @@
 
 #include <tools/debug.hxx>
 #include <vcl/spin.hxx>
+#include <vcl/svapp.hxx>
 
 namespace toolkit
 {
@@ -93,7 +94,7 @@ namespace toolkit
     void SAL_CALL VCLXSpinButton::dispose( ) throw(RuntimeException)
     {
         {
-            ::osl::SolarGuard aGuard( GetMutex() );
+            SolarMutexGuard aGuard;
 
             EventObject aDisposeEvent;
             aDisposeEvent.Source = *this;
@@ -123,19 +124,18 @@ namespace toolkit
         typedef long (SpinButton::*GetSpinButtonValue) (void) const;
 
         //................................................................
-        void lcl_setSpinButtonValue( ::osl::SolarMutex& _rMutex, Window* _pWindow, SetSpinButtonValue _pSetter, sal_Int32 _nValue )
+        void lcl_setSpinButtonValue(Window* _pWindow, SetSpinButtonValue _pSetter, sal_Int32 _nValue )
         {
-            ::osl::SolarGuard aGuard( _rMutex );
-
+            SolarMutexGuard aGuard;
             SpinButton* pSpinButton = static_cast< SpinButton* >( _pWindow );
             if ( pSpinButton )
                 (pSpinButton->*_pSetter)( _nValue );
         }
 
         //................................................................
-        sal_Int32 lcl_getSpinButtonValue( ::osl::SolarMutex& _rMutex, const Window* _pWindow, GetSpinButtonValue _pGetter )
+        sal_Int32 lcl_getSpinButtonValue(const Window* _pWindow, GetSpinButtonValue _pGetter )
         {
-            ::osl::SolarGuard aGuard( _rMutex );
+            SolarMutexGuard aGuard;
 
             sal_Int32 nValue = 0;
 
@@ -149,13 +149,13 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setValue( sal_Int32 n ) throw (RuntimeException)
     {
-        lcl_setSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::SetValue, n );
+        lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetValue, n );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) throw (RuntimeException)
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         setMinimum( minValue );
         setMaximum( maxValue );
@@ -165,49 +165,49 @@ namespace toolkit
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL VCLXSpinButton::getValue(  ) throw (RuntimeException)
     {
-        return lcl_getSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::GetValue );
+        return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetValue );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setMinimum( sal_Int32 minValue ) throw (RuntimeException)
     {
-        lcl_setSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::SetRangeMin, minValue );
+        lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetRangeMin, minValue );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setMaximum( sal_Int32 maxValue ) throw (RuntimeException)
     {
-        lcl_setSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::SetRangeMax, maxValue );
+        lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetRangeMax, maxValue );
     }
 
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL VCLXSpinButton::getMinimum(  ) throw (RuntimeException)
     {
-        return lcl_getSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::GetRangeMin );
+        return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetRangeMin );
     }
 
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL VCLXSpinButton::getMaximum(  ) throw (RuntimeException)
     {
-        return lcl_getSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::GetRangeMax );
+        return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetRangeMax );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setSpinIncrement( sal_Int32 spinIncrement ) throw (RuntimeException)
     {
-        lcl_setSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::SetValueStep, spinIncrement );
+        lcl_setSpinButtonValue( GetWindow(), &SpinButton::SetValueStep, spinIncrement );
     }
 
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL VCLXSpinButton::getSpinIncrement(  ) throw (RuntimeException)
     {
-        return lcl_getSpinButtonValue( GetMutex(), GetWindow(), &SpinButton::GetValueStep );
+        return lcl_getSpinButtonValue( GetWindow(), &SpinButton::GetValueStep );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setOrientation( sal_Int32 orientation ) throw (NoSupportException, RuntimeException)
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         lcl_modifyStyle( GetWindow(), WB_HSCROLL, orientation == ScrollBarOrientation::HORIZONTAL );
     }
@@ -223,7 +223,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void VCLXSpinButton::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
     {
-        ::osl::ClearableSolarGuard aGuard( GetMutex() );
+        SolarMutexClearableGuard aGuard;
         Reference< XSpinValue > xKeepAlive( this );
         SpinButton* pSpinButton = static_cast< SpinButton* >( GetWindow() );
         if ( !pSpinButton )
@@ -255,7 +255,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void SAL_CALL VCLXSpinButton::setProperty( const ::rtl::OUString& PropertyName, const Any& Value ) throw(RuntimeException)
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         sal_Int32 nValue = 0;
         sal_Bool  bIsLongValue = ( Value >>= nValue );
@@ -305,7 +305,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     Any SAL_CALL VCLXSpinButton::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         Any aReturn;
 

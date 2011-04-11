@@ -57,70 +57,70 @@ class SFX2_DLLPUBLIC SfxDocumentTemplates
 private:
     SfxDocTemplate_ImplRef  pImp;
 
-    SAL_DLLPRIVATE BOOL CopyOrMove( USHORT nTargetRegion, USHORT nTargetIdx,
-                                    USHORT nSourceRegion, USHORT nSourceIdx, BOOL bMove );
+    SAL_DLLPRIVATE sal_Bool CopyOrMove( sal_uInt16 nTargetRegion, sal_uInt16 nTargetIdx,
+                                    sal_uInt16 nSourceRegion, sal_uInt16 nSourceIdx, sal_Bool bMove );
 public:
                         SfxDocumentTemplates();
                         SfxDocumentTemplates(const SfxDocumentTemplates &);
                         ~SfxDocumentTemplates();
 
-    BOOL                IsConstructed() { return pImp != NULL; }
+    sal_Bool                IsConstructed() { return pImp != NULL; }
     void                Construct();
 
-    static BOOL         SaveDir( /*SfxTemplateDir &rEntry */ ) ;
+    static sal_Bool         SaveDir( /*SfxTemplateDir &rEntry */ ) ;
     const SfxDocumentTemplates &operator=(const SfxDocumentTemplates &);
 
-    BOOL                Rescan( );      // Aktualisieren
+    sal_Bool                Rescan( );      // Aktualisieren
     void                ReInitFromComponent();
 
-    BOOL                IsRegionLoaded( USHORT nIdx ) const;
-    USHORT              GetRegionCount() const;
-    const String&       GetRegionName(USHORT nIdx) const;                   //dv!
-    String              GetFullRegionName(USHORT nIdx) const;
-    USHORT              GetRegionNo( const String &rRegionName ) const;
+    sal_Bool                IsRegionLoaded( sal_uInt16 nIdx ) const;
+    sal_uInt16              GetRegionCount() const;
+    const String&       GetRegionName(sal_uInt16 nIdx) const;                   //dv!
+    String              GetFullRegionName(sal_uInt16 nIdx) const;
+    sal_uInt16              GetRegionNo( const String &rRegionName ) const;
 
-    USHORT              GetCount(USHORT nRegion) const;
-    USHORT              GetCount( const String &rName) const;
-    const String&       GetName(USHORT nRegion, USHORT nIdx) const;         //dv!
-    String              GetFileName(USHORT nRegion, USHORT nIdx) const;
-    String              GetPath(USHORT nRegion, USHORT nIdx) const;
+    sal_uInt16              GetCount(sal_uInt16 nRegion) const;
+    sal_uInt16              GetCount( const String &rName) const;
+    const String&       GetName(sal_uInt16 nRegion, sal_uInt16 nIdx) const;         //dv!
+    String              GetFileName(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
+    String              GetPath(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
 
     String              GetDefaultTemplatePath(const String &rLongName);
 
     // Pfad zur Vorlage geben lassen; logischer Name muss angegeben
     // werden, damit beim Ueberschreiben einer Vorlage der
     // richtige Dateiname gefunden werden kann
-    String              GetTemplatePath(USHORT nRegion, const String &rLongName) const;
+    String              GetTemplatePath(sal_uInt16 nRegion, const String &rLongName) const;
 
     // Allows to retrieve the target template URL from the UCB
     ::rtl::OUString     GetTemplateTargetURLFromComponent( const ::rtl::OUString& aGroupName,
                                                          const ::rtl::OUString& aTitle );
 
     // Speichern als Vorlage hat geklappt -> Aktualisieren
-    void            NewTemplate(USHORT nRegion,
+    void            NewTemplate(sal_uInt16 nRegion,
                                 const String &rLongName,
                                 const String &rFileName);
 
-    BOOL            Copy(USHORT nTargetRegion,
-                         USHORT nTargetIdx,
-                         USHORT nSourceRegion,
-                         USHORT nSourceIdx);
-    BOOL            Move(USHORT nTargetRegion,
-                         USHORT nTargetIdx,
-                         USHORT nSourceRegion,
-                         USHORT nSourceIdx);
-    BOOL            Delete(USHORT nRegion, USHORT nIdx);
-    BOOL            InsertDir(const String &rText, USHORT nRegion);
-    BOOL            SetName(const String &rName, USHORT nRegion, USHORT nIdx);
+    sal_Bool            Copy(sal_uInt16 nTargetRegion,
+                         sal_uInt16 nTargetIdx,
+                         sal_uInt16 nSourceRegion,
+                         sal_uInt16 nSourceIdx);
+    sal_Bool            Move(sal_uInt16 nTargetRegion,
+                         sal_uInt16 nTargetIdx,
+                         sal_uInt16 nSourceRegion,
+                         sal_uInt16 nSourceIdx);
+    sal_Bool            Delete(sal_uInt16 nRegion, sal_uInt16 nIdx);
+    sal_Bool            InsertDir(const String &rText, sal_uInt16 nRegion);
+    sal_Bool            SetName(const String &rName, sal_uInt16 nRegion, sal_uInt16 nIdx);
 
-    BOOL            CopyTo(USHORT nRegion, USHORT nIdx, const String &rName) const;
-    BOOL            CopyFrom(USHORT nRegion, USHORT nIdx, String &rName);
+    sal_Bool            CopyTo(sal_uInt16 nRegion, sal_uInt16 nIdx, const String &rName) const;
+    sal_Bool            CopyFrom(sal_uInt16 nRegion, sal_uInt16 nIdx, String &rName);
 
-    SfxObjectShellRef CreateObjectShell(USHORT nRegion, USHORT nIdx);
-    BOOL            DeleteObjectShell(USHORT, USHORT);
+    SfxObjectShellRef CreateObjectShell(sal_uInt16 nRegion, sal_uInt16 nIdx);
+    sal_Bool            DeleteObjectShell(sal_uInt16, sal_uInt16);
 
-    BOOL            GetFull( const String& rRegion, const String& rName, String& rPath );
-    BOOL            GetLogicNames( const String& rPath, String& rRegion, String& rName ) const;
+    sal_Bool            GetFull( const String& rRegion, const String& rName, String& rPath );
+    sal_Bool            GetLogicNames( const String& rPath, String& rRegion, String& rName ) const;
 
     /** updates the configuration where the document templates structure is stored.
 

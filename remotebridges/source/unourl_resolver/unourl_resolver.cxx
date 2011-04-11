@@ -45,13 +45,14 @@
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::connection;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::registry;
+
+using ::rtl::OUString;
 
 #define SERVICENAME     "com.sun.star.bridge.UnoUrlResolver"
 #define IMPLNAME        "com.sun.star.comp.bridge.UnoUrlResolver"
@@ -238,12 +239,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

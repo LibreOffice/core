@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 
 #include <uielement/menubarmerger.hxx>
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 
 using namespace ::com::sun::star;
 

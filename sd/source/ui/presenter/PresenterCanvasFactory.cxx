@@ -252,7 +252,7 @@ Reference<rendering::XCanvas> PresenterCanvasFactory::CreateCanvas (
             xFactory->createInstanceWithArguments(
                 rsCanvasServiceName.getLength()>0
                     ? rsCanvasServiceName
-                        : OUString::createFromAscii("com.sun.star.rendering.VCLCanvas"),
+                        : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.VCLCanvas")),
                 aArg),
             UNO_QUERY);
     }

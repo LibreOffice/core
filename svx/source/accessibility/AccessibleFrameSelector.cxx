@@ -170,7 +170,7 @@ sal_Int32 AccFrameSelector::getAccessibleIndexInParent(  )
         Window* pTabPage = mpFrameSel->GetParent();
         sal_Int32 nChildren = pTabPage->GetChildCount();
         for( nIdx = 0; nIdx < nChildren; ++nIdx )
-            if( pTabPage->GetChild( static_cast< USHORT >( nIdx ) ) == mpFrameSel )
+            if( pTabPage->GetChild( static_cast< sal_uInt16 >( nIdx ) ) == mpFrameSel )
                 break;
     }
     else
@@ -563,7 +563,7 @@ void AccFrameSelector::removeEventListener( const Reference< XAccessibleEventLis
 
 OUString AccFrameSelector::getImplementationName(  ) throw (RuntimeException)
 {
-    return OUString::createFromAscii("AccFrameSelector");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("AccFrameSelector"));
 }
 
 // ----------------------------------------------------------------------------
@@ -610,7 +610,7 @@ void    AccFrameSelector::NotifyFocusListeners(sal_Bool bGetFocus)
     aEvent.FocusFlags = 0;
     if(bGetFocus)
     {
-        USHORT nFocusFlags = mpFrameSel->GetGetFocusFlags();
+        sal_uInt16 nFocusFlags = mpFrameSel->GetGetFocusFlags();
         if(nFocusFlags&GETFOCUS_TAB)
             aEvent.FocusFlags |= AwtFocusChangeReason::TAB;
         if(nFocusFlags&GETFOCUS_CURSOR)
@@ -625,12 +625,7 @@ void    AccFrameSelector::NotifyFocusListeners(sal_Bool bGetFocus)
             aEvent.FocusFlags |= AwtFocusChangeReason::AROUND;
         if(nFocusFlags&GETFOCUS_UNIQUEMNEMONIC)
             aEvent.FocusFlags |= AwtFocusChangeReason::UNIQUEMNEMONIC;
-    //        if(nFocusFlags&GETFOCUS_INIT)
-    //            aEvent.FocusFlags |= AwtFocusChangeReason::
     }
-//    else
-    //how can I find the current focus window?
-//        aEvent.NextFocus = ;
     aEvent.Temporary = sal_False;
 
     Reference < XAccessibleContext > xThis( this );

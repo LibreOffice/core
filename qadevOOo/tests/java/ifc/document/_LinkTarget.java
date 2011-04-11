@@ -63,7 +63,7 @@ public class _LinkTarget extends MultiPropertyTest {
             tRes.tested("LinkDisplayName",LDN!=null);
         }
         catch (Exception ex) {
-            log.println("Exception occured during LinkDisplayName");
+            log.println("Exception occurred during LinkDisplayName");
             ex.printStackTrace(log);
             tRes.tested("LinkDisplayName",false);
         }

@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 /*
-    WICHTIG:
-    Folgende Reihenfolge beim Aufbau der Pivot-Tabelle unbedingt einzuhalten:
+    IMPORTANT:
+    Strictly adhere to the following sequence when creating a pivot table:
 
     pPivot->SetColFields(aColArr, aColCount)
     pPivot->SetRowFields(aRowArr, aRowCount)
@@ -38,9 +38,7 @@
         pPivotReleaseData();
     }
 
-    ausserdem ist sicherzustellen, dass entweder das ColArr oder das RowArr
-    einen PivotDataField Eintrag enthalten
-
+    Make sure that either ColArr or RowArr contains a PivotDataField entry.
 */
 
 
@@ -69,20 +67,21 @@ class SvStream;
 class ScDocument;
 class ScUserListData;
 class ScProgress;
-struct ScDPLabelData;
 
+struct ScDPLabelData;
 typedef ::boost::shared_ptr<ScDPLabelData> ScDPLabelDataRef;
 
 // -----------------------------------------------------------------------
 
 struct PivotField
 {
-    SCsCOL               nCol;
-    USHORT              nFuncMask;
-    USHORT              nFuncCount;
+    SCsCOL              nCol;
+    sal_uInt16              nFuncMask;
+    sal_uInt16              nFuncCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit            PivotField( SCsCOL nNewCol = 0, USHORT nNewFuncMask = PIVOT_FUNC_NONE );
+    explicit            PivotField( SCsCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
+    PivotField( const PivotField& r );
 
     bool                operator==( const PivotField& r ) const;
 };
@@ -92,45 +91,28 @@ struct PivotField
 // implementation still in global2.cxx
 struct ScPivotParam
 {
-    SCCOL           nCol;           // Cursor Position /
-    SCROW           nRow;           // bzw. Anfang des Zielbereiches
+    SCCOL           nCol;           // cursor position /
+    SCROW           nRow;           // or start of destination area
     SCTAB           nTab;
     ::std::vector<ScDPLabelDataRef> maLabelArray;
-    PivotField      aPageArr[PIVOT_MAXPAGEFIELD];
-    PivotField      aColArr[PIVOT_MAXFIELD];
-    PivotField      aRowArr[PIVOT_MAXFIELD];
-    PivotField      aDataArr[PIVOT_MAXFIELD];
-    SCSIZE          nPageCount;
-    SCSIZE          nColCount;
-    SCSIZE          nRowCount;
-    SCSIZE          nDataCount;
-    BOOL            bIgnoreEmptyRows;
-    BOOL            bDetectCategories;
-    BOOL            bMakeTotalCol;
-    BOOL            bMakeTotalRow;
+    ::std::vector<PivotField> maPageFields;
+    ::std::vector<PivotField> maColFields;
+    ::std::vector<PivotField> maRowFields;
+    ::std::vector<PivotField> maDataFields;
+    sal_Bool            bIgnoreEmptyRows;
+    sal_Bool            bDetectCategories;
+    sal_Bool            bMakeTotalCol;
+    sal_Bool            bMakeTotalRow;
 
     ScPivotParam();
     ScPivotParam( const ScPivotParam& r );
     ~ScPivotParam();
 
     ScPivotParam&   operator=       ( const ScPivotParam& r );
-    BOOL            operator==      ( const ScPivotParam& r ) const;
+    bool            operator==      ( const ScPivotParam& r ) const;
     void            ClearPivotArrays();
     void            SetLabelData    (const ::std::vector<ScDPLabelDataRef>& r);
-    void            SetPivotArrays  ( const PivotField* pPageArr,
-                                      const PivotField* pColArr,
-                                      const PivotField* pRowArr,
-                                      const PivotField* pDataArr,
-                                      SCSIZE            nPageCnt,
-                                      SCSIZE            nColCnt,
-                                      SCSIZE            nRowCnt,
-                                      SCSIZE            nDataCnt );
 };
-
-// -----------------------------------------------------------------------
-
-typedef PivotField          PivotFieldArr[PIVOT_MAXFIELD];
-typedef PivotField          PivotPageFieldArr[PIVOT_MAXPAGEFIELD];
 
 //------------------------------------------------------------------------
 
@@ -148,8 +130,8 @@ struct ScDPLabelData
 {
     ::rtl::OUString     maName;         /// Original name of the dimension.
     ::rtl::OUString     maLayoutName;   /// Layout name (display name)
-    SCsCOL              mnCol;
-    USHORT              mnFuncMask;     /// Page/Column/Row subtotal function.
+    SCCOL               mnCol;
+    sal_uInt16          mnFuncMask;     /// Page/Column/Row subtotal function.
     sal_Int32           mnUsedHier;     /// Used hierarchy.
     sal_Int32           mnFlags;        /// Flags from the DataPilotSource dimension
     bool                mbShowAll;      /// true = Show all (also empty) results.
@@ -177,7 +159,7 @@ struct ScDPLabelData
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   /// Layout info.
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     /// AutoShow info.
 
-    explicit            ScDPLabelData( const String& rName, short nCol, bool bIsValue );
+    explicit            ScDPLabelData( const String& rName, SCCOL nCol, bool bIsValue );
 
     /**
      * return the name that should be displayed in the dp dialogs i.e. when
@@ -186,16 +168,34 @@ struct ScDPLabelData
     ::rtl::OUString SC_DLLPUBLIC getDisplayName() const;
 };
 
+typedef std::vector< ScDPLabelData > ScDPLabelDataVector;
+
+// ============================================================================
+
+struct ScPivotField
+{
+    SCCOL               nCol;
+    sal_uInt16          nFuncMask;
+    sal_uInt16          nFuncCount;
+    ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
+
+    explicit            ScPivotField( SCCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
+
+    bool                operator==( const ScPivotField& r ) const;
+};
+
+typedef ::std::vector< ScPivotField > ScPivotFieldVector;
+
 // ============================================================================
 
 struct ScDPFuncData
 {
     short               mnCol;
-    USHORT              mnFuncMask;
+    sal_uInt16          mnFuncMask;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit            ScDPFuncData( short nNewCol, USHORT nNewFuncMask );
-    explicit            ScDPFuncData( short nNewCol, USHORT nNewFuncMask,
+    explicit            ScDPFuncData( short nNewCol, sal_uInt16 nNewFuncMask );
+    explicit            ScDPFuncData( short nNewCol, sal_uInt16 nNewFuncMask,
                             const ::com::sun::star::sheet::DataPilotFieldReference& rFieldRef );
 };
 
@@ -203,8 +203,6 @@ struct ScDPFuncData
 
 typedef std::vector< ScDPLabelData > ScDPLabelDataVec;
 typedef std::vector<ScDPName> ScDPNameVec;
-
-// ============================================================================
 
 #endif
 

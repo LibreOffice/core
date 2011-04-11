@@ -37,7 +37,7 @@
 class SfxPoolItem;
 class Bitmap;
 
-// Defines zur Steuerung der Ausführung von Slots
+// Defines zur Steuerung der Ausfï¿½hrung von Slots
 #define EXECUTE_NO                  0
 #define EXECUTE_POSSIBLE            1
 #define EXECUTE_YES                 2
@@ -61,10 +61,10 @@ class Bitmap;
 
 class SVT_DLLPUBLIC TTProperties : public ApplicationProperty
 {
-    USHORT nDonePRs;                    // Verwaltung für die Properties, die nur einmal gerufen werden mussen.
-    SVT_DLLPRIVATE BOOL RequestProperty( USHORT nRequest );
+    sal_uInt16 nDonePRs;                    // Verwaltung fï¿½r die Properties, die nur einmal gerufen werden mussen.
+    SVT_DLLPRIVATE sal_Bool RequestProperty( sal_uInt16 nRequest );
 
-    BOOL HasSlots(){ return nPropertyVersion == TT_PROPERTIES_VERSION; }
+    sal_Bool HasSlots(){ return nPropertyVersion == TT_PROPERTIES_VERSION; }
 
 public:
     TYPEINFO();
@@ -76,31 +76,31 @@ public:
             , nPropertyVersion( 0 )
                     {}
 
-    BOOL GetSlots();
+    sal_Bool GetSlots();
 
     /// ExecuteFunction
-    USHORT mnSID;
+    sal_uInt16 mnSID;
     SfxPoolItem** mppArgs;
-    USHORT mnMode;
-    USHORT ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs = NULL, USHORT nMode = 0 );
+    sal_uInt16 mnMode;
+    sal_uInt16 ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs = NULL, sal_uInt16 nMode = 0 );
 
     /// Img
     Bitmap *mpBmp;
-    BOOL Img( Bitmap *pBmp );
+    sal_Bool Img( Bitmap *pBmp );
 
-    static SvtResId GetSvtResId( USHORT nId );
+    static SvtResId GetSvtResId( sal_uInt16 nId );
 
-    ULONG nSidOpenUrl;
-    ULONG nSidFileName;
-    ULONG nSidNewDocDirect;
-    ULONG nSidCopy;
-    ULONG nSidPaste;
-    ULONG nSidSourceView;
-    ULONG nSidSelectAll;
-    ULONG nSidReferer;
+    sal_uLong nSidOpenUrl;
+    sal_uLong nSidFileName;
+    sal_uLong nSidNewDocDirect;
+    sal_uLong nSidCopy;
+    sal_uLong nSidPaste;
+    sal_uLong nSidSourceView;
+    sal_uLong nSidSelectAll;
+    sal_uLong nSidReferer;
 
-    USHORT nActualPR;
-    USHORT nPropertyVersion;        // Wird bei jedem call gesetzt.
+    sal_uInt16 nActualPR;
+    sal_uInt16 nPropertyVersion;        // Wird bei jedem call gesetzt.
 };
 
 #endif // _SVTOOLS_TTPROPS_HXX

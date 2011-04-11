@@ -43,7 +43,6 @@
 #include <pagefrm.hxx>  // SwPageFrm
 #include <paratr.hxx>
 #include <SwPortionHandler.hxx>
-#include <txtcfg.hxx>
 #include <porrst.hxx>
 #include <inftxt.hxx>
 #include <txtpaint.hxx> // ClipVout
@@ -54,6 +53,7 @@
 #include <redlnitr.hxx> // SwRedlineItr
 #include <porfly.hxx>   // SwFlyPortion
 #include <atrhndl.hxx>
+#include "rootfrm.hxx"
 
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -175,7 +175,7 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
         if( rInf.GetFont()->IsPaintBlank() )
         {
-            static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+            static sal_Char const sDoubleSpace[] = "  ";
             XubString aTxtDouble( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
             // --> FME 2006-07-12 #b6439097#
             SwRect aClipRect;
@@ -214,7 +214,7 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 SwArrowPortion::SwArrowPortion( const SwTxtPaintInfo &rInf )
     : bLeft( sal_False )
 {
-    Height( (USHORT)(rInf.GetTxtFrm()->Prt().Height()) );
+    Height( (sal_uInt16)(rInf.GetTxtFrm()->Prt().Height()) );
     aPos.X() = rInf.GetTxtFrm()->Frm().Left() +
                rInf.GetTxtFrm()->Prt().Right();
     aPos.Y() = rInf.GetTxtFrm()->Frm().Top() +
@@ -232,7 +232,7 @@ SwLinePortion *SwArrowPortion::Compress() { return this; }
 SwTwips SwTxtFrm::EmptyHeight() const
 {
     if (IsCollapse()) {
-        ViewShell *pSh = GetShell();
+        ViewShell *pSh = getRootFrm()->GetCurrShell();
         if ( pSh->IsA( TYPE(SwCrsrShell) ) ) {
             SwCrsrShell *pCrSh=(SwCrsrShell*)pSh;
             SwCntntFrm *pCurrFrm=pCrSh->GetCurrFrm();
@@ -250,7 +250,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
     SwFont *pFnt;
     const SwTxtNode& rTxtNode = *GetTxtNode();
     const IDocumentSettingAccess* pIDSA = rTxtNode.getIDocumentSettingAccess();
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( rTxtNode.HasSwAttrSet() )
     {
         const SwAttrSet *pAttrSet = &( rTxtNode.GetSwAttrSet() );
@@ -267,8 +267,8 @@ SwTwips SwTxtFrm::EmptyHeight() const
         pFnt->SetVertical( 2700 );
 
     OutputDevice* pOut = pSh ? pSh->GetOut() : 0;
-    if ( !pOut || !pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) ||
-         ( pSh->GetViewOptions()->IsPrtFormat() ) )
+    if ( !pOut || !pSh->GetViewOptions()->getBrowseMode() ||
+         pSh->GetViewOptions()->IsPrtFormat() )
     {
         pOut = rTxtNode.getIDocumentDeviceAccess()->getReferenceDevice(true);
     }
@@ -410,13 +410,13 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                         }
                         else
                         {
-                            ViewShell *pSh = GetShell();
+                            ViewShell *pSh = getRootFrm()->GetCurrShell();
                             SwFontAccess aFontAccess( pFmt, pSh );
                             SwFont aFnt( *aFontAccess.Get()->GetFont() );
 
                             OutputDevice *pOut = 0;
-                            if( !GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
-                                (pSh && pSh->GetViewOptions()->IsPrtFormat()) )
+                            if( !pSh || !pSh->GetViewOptions()->getBrowseMode() ||
+                                pSh->GetViewOptions()->IsPrtFormat() )
                                 pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
 
                             if( pSh && !pOut )
@@ -443,7 +443,7 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                     break;
                                 }
                                 default:
-                                    OSL_ENSURE( sal_False, ": unknown LineSpaceRule" );
+                                    OSL_FAIL( ": unknown LineSpaceRule" );
                             }
                             switch( rSpace.GetInterLineSpaceRule() )
                             {
@@ -468,7 +468,7 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                     nNettoHeight = rRegDiff;
                                     break;
                                 }
-                                default: OSL_ENSURE( sal_False, ": unknown InterLineSpaceRule" );
+                                default: OSL_FAIL( ": unknown InterLineSpaceRule" );
                             }
                             pDesc->SetRegHeight( rRegDiff );
                             pDesc->SetRegAscent( rRegDiff - nNettoHeight +
@@ -538,7 +538,7 @@ void SwControlCharPortion::Paint( const SwTxtPaintInfo &rInf ) const
         {
             SwFont aTmpFont( *rInf.GetFont() );
             aTmpFont.SetEscapement( CHAR_ZWSP == mcChar ? DFLT_ESC_AUTO_SUB : -25 );
-            const USHORT nProp = 40;
+            const sal_uInt16 nProp = 40;
             aTmpFont.SetProportion( nProp );  // a smaller font
             SwFontSave aFontSave( rInf, &aTmpFont );
 

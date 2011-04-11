@@ -57,11 +57,11 @@ protected:
 
     String          maUpperName;
     ReaderData*     mpReaderData;
-    BOOL            mbIsReading;
+    sal_Bool            mbIsReading;
 
                     GraphicReader() :
                         mpReaderData( NULL ),
-                        mbIsReading( FALSE ) {}
+                        mbIsReading( sal_False ) {}
 
 public:
 
@@ -69,11 +69,11 @@ public:
 
     const String&   GetUpperFilterName() const { return maUpperName; }
     ReaderData*     GetReaderData() const { return mpReaderData; }
-    BOOL            IsReading() const { return mbIsReading; }
+    sal_Bool            IsReading() const { return mbIsReading; }
 
     // TODO: when incompatible changes are possible again
     // the preview size hint should be redone
-    BOOL            IsPreviewModeEnabled() const;
+    sal_Bool            IsPreviewModeEnabled() const;
     void            DisablePreviewMode();
     void            SetPreviewSize( const Size& );
     Size            GetPreviewSize() const;

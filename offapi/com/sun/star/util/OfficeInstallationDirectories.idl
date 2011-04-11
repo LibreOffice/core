@@ -48,11 +48,11 @@ module com {  module sun {  module star {  module  util {
     persistent and re-read later. In many cases, storing the reference
     directly would destroy the relocatability of an office installation and the
     possibility to share one office user data directory among parallel office
-    installtions.
+    installations.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
-service OfficeInstallationDirectories
+published service OfficeInstallationDirectories
 {
   /** provides access to the current office installation directories (office
       base installation and user data).
@@ -67,7 +67,7 @@ service OfficeInstallationDirectories
 
     @see OfficeInstallationDirectories
 */
-singleton theOfficeInstallationDirectories
+published singleton theOfficeInstallationDirectories
 {
     service com::sun::star::util::OfficeInstallationDirectories;
 };

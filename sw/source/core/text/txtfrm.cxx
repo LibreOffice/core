@@ -42,6 +42,7 @@
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>      // GetDoc()
+#include "rootfrm.hxx"
 #include <pagefrm.hxx>  // InvalidateSpelling
 #include <rootfrm.hxx>
 #include <viewsh.hxx>   // ViewShell
@@ -66,7 +67,6 @@
 #include <fmtline.hxx>
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <sectfrm.hxx>      // SwSectFrm
-#include <txtcfg.hxx>       // DBG_LOOP
 #include <itrform2.hxx>       // Iteratoren
 #include <widorp.hxx>       // SwFrmBreak
 #include <txtcache.hxx>
@@ -74,21 +74,16 @@
 #include <SwGrammarMarkUp.hxx>
 #include <lineinfo.hxx>
 #include <SwPortionHandler.hxx>
-// OD 2004-01-15 #110582#
 #include <dcontact.hxx>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-// --> OD 2005-03-30 #???#
 #include <txtflcnt.hxx>     // SwTxtFlyCnt
 #include <fmtflcnt.hxx>     // SwFmtFlyCnt
 #include <fmtcntnt.hxx>     // SwFmtCntnt
-// <--
-// --> OD 2008-01-31 #newlistlevelattrs#
 #include <numrule.hxx>
-// <--
 #include <swtable.hxx>
 #include <fldupde.hxx>
 #include <IGrammarContact.hxx>
+#include <switerator.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <txtpaint.hxx>     // DbgRect
@@ -105,13 +100,22 @@ void SwTxtFrm::SwapWidthAndHeight()
     {
         const long nPrtOfstX = Prt().Pos().X();
         Prt().Pos().X() = Prt().Pos().Y();
-        Prt().Pos().Y() = Frm().Width() - ( nPrtOfstX + Prt().Width() );
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( IsVertLR() )
+            Prt().Pos().Y() = nPrtOfstX;
+        else
+            Prt().Pos().Y() = Frm().Width() - ( nPrtOfstX + Prt().Width() );
+
     }
     else
     {
         const long nPrtOfstY = Prt().Pos().Y();
         Prt().Pos().Y() = Prt().Pos().X();
-        Prt().Pos().X() = Frm().Height() - ( nPrtOfstY + Prt().Height() );
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( IsVertLR() )
+            Prt().Pos().X() = nPrtOfstY;
+        else
+            Prt().Pos().X() = Frm().Height() - ( nPrtOfstY + Prt().Height() );
     }
 
     const long nFrmWidth = Frm().Width();
@@ -129,16 +133,33 @@ void SwTxtFrm::SwapWidthAndHeight()
 void SwTxtFrm::SwitchHorizontalToVertical( SwRect& rRect ) const
 {
     // calc offset inside frame
-    const long nOfstX = rRect.Left() - Frm().Left();
-    const long nOfstY = rRect.Top() + rRect.Height() - Frm().Top();
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    long nOfstX, nOfstY;
+    if ( IsVertLR() )
+    {
+        nOfstX = rRect.Left() - Frm().Left();
+        nOfstY = rRect.Top() - Frm().Top();
+    }
+    else
+    {
+        nOfstX = rRect.Left() - Frm().Left();
+        nOfstY = rRect.Top() + rRect.Height() - Frm().Top();
+    }
+
     const long nWidth = rRect.Width();
     const long nHeight = rRect.Height();
 
-    if ( bIsSwapped )
-        rRect.Left( Frm().Left() + Frm().Height() - nOfstY );
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    if ( IsVertLR() )
+        rRect.Left(Frm().Left() + nOfstY);
     else
-        // frame is rotated
-        rRect.Left( Frm().Left() + Frm().Width() - nOfstY );
+    {
+        if ( bIsSwapped )
+            rRect.Left( Frm().Left() + Frm().Height() - nOfstY );
+        else
+            // frame is rotated
+            rRect.Left( Frm().Left() + Frm().Width() - nOfstY );
+    }
 
     rRect.Top( Frm().Top() + nOfstX );
     rRect.Width( nHeight );
@@ -152,12 +173,17 @@ void SwTxtFrm::SwitchHorizontalToVertical( Point& rPoint ) const
     // calc offset inside frame
     const long nOfstX = rPoint.X() - Frm().Left();
     const long nOfstY = rPoint.Y() - Frm().Top();
-
-    if ( bIsSwapped )
-        rPoint.X() = Frm().Left() + Frm().Height() - nOfstY;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    if ( IsVertLR() )
+        rPoint.X() = Frm().Left() + nOfstY;
     else
-        // calc rotated coords
-        rPoint.X() = Frm().Left() + Frm().Width() - nOfstY;
+    {
+        if ( bIsSwapped )
+            rPoint.X() = Frm().Left() + Frm().Height() - nOfstY;
+        else
+            // calc rotated coords
+            rPoint.X() = Frm().Left() + Frm().Width() - nOfstY;
+    }
 
     rPoint.Y() = Frm().Top() + nOfstX;
 }
@@ -178,10 +204,17 @@ void SwTxtFrm::SwitchVerticalToHorizontal( SwRect& rRect ) const
     long nOfstX;
 
     // calc offset inside frame
-    if ( bIsSwapped )
-        nOfstX = Frm().Left() + Frm().Height() - ( rRect.Left() + rRect.Width() );
+
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    if ( IsVertLR() )
+        nOfstX = rRect.Left() - Frm().Left();
     else
-        nOfstX = Frm().Left() + Frm().Width() - ( rRect.Left() + rRect.Width() );
+    {
+        if ( bIsSwapped )
+            nOfstX = Frm().Left() + Frm().Height() - ( rRect.Left() + rRect.Width() );
+        else
+            nOfstX = Frm().Left() + Frm().Width() - ( rRect.Left() + rRect.Width() );
+    }
 
     const long nOfstY = rRect.Top() - Frm().Top();
     const long nWidth = rRect.Height();
@@ -201,10 +234,17 @@ void SwTxtFrm::SwitchVerticalToHorizontal( Point& rPoint ) const
     long nOfstX;
 
     // calc offset inside frame
-    if ( bIsSwapped )
-        nOfstX = Frm().Left() + Frm().Height() - rPoint.X();
+
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    if ( IsVertLR() )
+        nOfstX = rPoint.X() - Frm().Left();
     else
-        nOfstX = Frm().Left() + Frm().Width() - rPoint.X();
+    {
+        if ( bIsSwapped )
+            nOfstX = Frm().Left() + Frm().Height() - rPoint.X();
+        else
+            nOfstX = Frm().Left() + Frm().Width() - rPoint.X();
+    }
 
     const long nOfstY = rPoint.Y() - Frm().Top();
 
@@ -281,7 +321,7 @@ void SwLayoutModeModifier::Modify( sal_Bool bChgToRTL )
 
 void SwLayoutModeModifier::SetAuto()
 {
-    const ULONG nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
+    const sal_uLong nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
     ((OutputDevice&)rOut).SetLayoutMode( nNewLayoutMode );
 }
 
@@ -339,9 +379,7 @@ void SwTxtFrm::InitCtor()
     mnFtnLine = 0;
     // OD 2004-03-17 #i11860#
     mnHeightOfLastLine = 0;
-    // --> OD 2008-01-31 #newlistlevelattrs#
     mnAdditionalFirstLineOffset = 0;
-    // <--
 
     nType = FRMC_TXT;
     bLocked = bFormatted = bWidow = bUndersized = bJustWidow =
@@ -354,8 +392,8 @@ void SwTxtFrm::InitCtor()
 /*************************************************************************
  *                      SwTxtFrm::SwTxtFrm()
  *************************************************************************/
-SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode)
-    : SwCntntFrm(pNode)
+SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode, SwFrm* pSib )
+    : SwCntntFrm( pNode, pSib )
 {
     InitCtor();
 }
@@ -394,13 +432,13 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
     if( !Frm().Width() && IsValid() && GetUpper()->IsValid() )
                                        //bei Stackueberlauf (StackHack) invalid!
     {
-//        OSL_ENSURE( false, "SwTxtFrm::IsHiddenNow: thin frame" );
+//        OSL_FAIL( "SwTxtFrm::IsHiddenNow: thin frame" );
         return sal_True;
     }
 
     const bool bHiddenCharsHidePara = GetTxtNode()->HasHiddenCharAttribute( true );
     const bool bHiddenParaField = GetTxtNode()->HasHiddenParaField();
-    const ViewShell* pVsh = GetShell();
+    const ViewShell* pVsh = getRootFrm()->GetCurrShell();
 
     if ( pVsh && ( bHiddenCharsHidePara || bHiddenParaField ) )
     {
@@ -446,9 +484,9 @@ void SwTxtFrm::HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd )
     const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
     if( pHints )
     {
-        const USHORT nSize = pHints->Count();
+        const sal_uInt16 nSize = pHints->Count();
         SwPageFrm *pPage = 0;
-        for ( USHORT i = 0; i < nSize; ++i )
+        for ( sal_uInt16 i = 0; i < nSize; ++i )
         {
             const SwTxtAttr *pHt = (*pHints)[i];
             if ( pHt->Which() == RES_TXTATR_FTN )
@@ -569,7 +607,7 @@ void SwTxtFrm::HideAndShowObjects()
             // paragraph is visible, but can contain hidden text portion.
             // first we check if objects are allowed to be hidden:
             const SwTxtNode& rNode = *GetTxtNode();
-            const ViewShell* pVsh = GetShell();
+            const ViewShell* pVsh = getRootFrm()->GetCurrShell();
             const bool bShouldBeHidden = !pVsh || !pVsh->GetWin() ||
                                          !pVsh->GetViewOptions()->IsShowHiddenChar();
 
@@ -606,8 +644,7 @@ void SwTxtFrm::HideAndShowObjects()
                 }
                 else
                 {
-                    OSL_ENSURE( false,
-                            "<SwTxtFrm::HideAndShowObjects()> - object not anchored at/inside paragraph!?" );
+                    OSL_FAIL( "<SwTxtFrm::HideAndShowObjects()> - object not anchored at/inside paragraph!?" );
                 }
             }
         }
@@ -845,13 +882,13 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
         if ( !pTxtNode->GetWrong() && !pTxtNode->IsWrongDirty() )
         {
             pTxtNode->SetWrong( new SwWrongList( WRONGLIST_SPELL ) );
-            pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
+            pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (sal_uInt16)( nCnt > 0 ? nCnt : 1 ) );
         }
         if ( !pTxtNode->GetSmartTags() && !pTxtNode->IsSmartTagDirty() )
         {
             // SMARTTAGS
             pTxtNode->SetSmartTags( new SwWrongList( WRONGLIST_SMARTTAG ) );
-            pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
+            pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (sal_uInt16)( nCnt > 0 ? nCnt : 1 ) );
         }
         pTxtNode->SetWrongDirty( true );
         pTxtNode->SetGrammarCheckDirty( true );
@@ -861,10 +898,10 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
         pTxtNode->SetSmartTagDirty( true );
     }
 
-    SwRootFrm *pRootFrm = rFrm.FindRootFrm();
+    SwRootFrm *pRootFrm = rFrm.getRootFrm();
     if (pRootFrm)
     {
-        pRootFrm->SetNeedGrammarCheck( TRUE );
+        pRootFrm->SetNeedGrammarCheck( sal_True );
     }
 
     SwPageFrm *pPage = rFrm.FindPageFrm();
@@ -905,7 +942,7 @@ void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
  *                      SwTxtFrm::Modify()
  *************************************************************************/
 
-void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const MSHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
 
@@ -914,7 +951,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     if( IsInRange( aFrmFmtSetRange, nWhich ) || RES_FMT_CHG == nWhich )
     {
         SwCntntFrm::Modify( pOld, pNew );
-        if( nWhich == RES_FMT_CHG && GetShell() )
+        if( nWhich == RES_FMT_CHG && getRootFrm()->GetCurrShell() )
         {
             // Collection hat sich geaendert
             Prepare( PREP_CLEAR );
@@ -1029,9 +1066,10 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             }
 
             // --> OD 2010-02-16 #i104008#
-            if ( GetShell() )
+            ViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            if ( pViewSh  )
             {
-                GetShell()->InvalidateAccessibleParaAttrs( *this );
+                pViewSh->InvalidateAccessibleParaAttrs( *this );
             }
             // <--
         }
@@ -1239,7 +1277,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
             if( nCount )
             {
-                if( GetShell() )
+                if( getRootFrm()->GetCurrShell() )
                 {
                     Prepare( PREP_CLEAR );
                     _InvalidatePrt();
@@ -1285,9 +1323,10 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             }
 
             // --> OD 2009-01-06 #i88069#
-            if ( GetShell() )
+            ViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            if ( pViewSh  )
             {
-                GetShell()->InvalidateAccessibleParaAttrs( *this );
+                pViewSh->InvalidateAccessibleParaAttrs( *this );
             }
             // <--
         }
@@ -1488,7 +1527,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         switch ( ePrep )
         {
             case PREP_BOSS_CHGD:
-                SetInvalidVert( TRUE );  // Test
+                SetInvalidVert( sal_True );  // Test
             case PREP_WIDOWS_ORPHANS:
             case PREP_WIDOWS:
             case PREP_FTN_GONE :    return;
@@ -1534,7 +1573,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     if( !HasPara() && PREP_MUST_FIT != ePrep )
     {
-        SetInvalidVert( TRUE );  // Test
+        SetInvalidVert( sal_True );  // Test
         OSL_ENSURE( !IsLocked(), "SwTxtFrm::Prepare: three of a perfect pair" );
         if ( bNotify )
             InvalidateSize();
@@ -1614,9 +1653,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
     // Test
             {
-                SetInvalidVert( FALSE );
-                BOOL bOld = IsVertical();
-                SetInvalidVert( TRUE );
+                SetInvalidVert( sal_False );
+                sal_Bool bOld = IsVertical();
+                SetInvalidVert( sal_True );
                 if( bOld != IsVertical() )
                     InvalidateRange( SwCharRange( GetOfst(), STRING_LEN ) );
             }
@@ -1641,10 +1680,10 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             SwpHints *pHints = GetTxtNode()->GetpSwpHints();
             if( pHints )
             {
-                const USHORT nSize = pHints->Count();
+                const sal_uInt16 nSize = pHints->Count();
                 const xub_StrLen nEnd = GetFollow() ?
                                     GetFollow()->GetOfst() : STRING_LEN;
-                for ( USHORT i = 0; i < nSize; ++i )
+                for ( sal_uInt16 i = 0; i < nSize; ++i )
                 {
                     const SwTxtAttr *pHt = (*pHints)[i];
                     const xub_StrLen nStart = *pHt->GetStart();
@@ -1838,7 +1877,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         pPara->SetPrep( sal_True );
 }
 
-/* -----------------11.02.99 17:56-------------------
+/* --------------------------------------------------
  * Kleine Hilfsklasse mit folgender Funktion:
  * Sie soll eine Probeformatierung vorbereiten.
  * Der Frame wird in Groesse und Position angepasst, sein SwParaPortion zur Seite
@@ -2181,8 +2220,6 @@ SwTwips SwTxtFrm::CalcFitToContent()
     line offset for the real text formatting due to the value of label
     adjustment attribute of the list level.
 
-    OD 2008-01-31 #newlistlevelattrs#
-
     @author OD
 */
 void SwTxtFrm::CalcAdditionalFirstLineOffset()
@@ -2198,7 +2235,7 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
          pTxtNode->GetNumRule() )
     {
         const SwNumFmt& rNumFmt =
-                pTxtNode->GetNumRule()->Get( static_cast<USHORT>(pTxtNode->GetActualListLevel()) );
+                pTxtNode->GetNumRule()->Get( static_cast<sal_uInt16>(pTxtNode->GetActualListLevel()) );
         if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             // keep current paragraph portion and apply dummy paragraph portion
@@ -2270,7 +2307,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     const SwTwips mnOldHeightOfLastLine( mnHeightOfLastLine );
     // <--
     // determine output device
-    ViewShell* pVsh = GetShell();
+    ViewShell* pVsh = getRootFrm()->GetCurrShell();
     OSL_ENSURE( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell" );
     // --> OD 2007-07-02 #i78921# - make code robust, according to provided patch
     // There could be no <ViewShell> instance in the case of loading a binary
@@ -2281,7 +2318,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     }
     OutputDevice* pOut = pVsh->GetOut();
     const IDocumentSettingAccess* pIDSA = GetTxtNode()->getIDocumentSettingAccess();
-    if ( !pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) ||
+    if ( !pVsh->GetViewOptions()->getBrowseMode() ||
           pVsh->GetViewOptions()->IsPrtFormat() )
     {
         pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
@@ -2498,7 +2535,7 @@ void SwTxtFrm::ChgThisLines()
 {
     //not necassary to format here (GerFormatted etc.), because we have to come from there!
 
-    ULONG nNew = 0;
+    sal_uLong nNew = 0;
     const SwLineNumberInfo &rInf = GetNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo();
     if ( GetTxt().Len() && HasPara() )
     {
@@ -2507,7 +2544,7 @@ void SwTxtFrm::ChgThisLines()
         if ( rInf.IsCountBlankLines() )
         {
             aLine.Bottom();
-            nNew = (ULONG)aLine.GetLineNr();
+            nNew = (sal_uLong)aLine.GetLineNr();
         }
         else
         {
@@ -2548,6 +2585,12 @@ void SwTxtFrm::ChgThisLines()
         else //Paragraphs which are not counted should not manipulate the AllLines.
             nThisLines = nNew;
     }
+
+    //mba: invalidating is not necessary; if mongolian script has a problem, it should be fixed at the ritgh place
+    //with invalidating we probably get too much flickering
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    //Ugly. How can we hack if better?
+    //InvalidatePage();
 }
 
 
@@ -2559,9 +2602,9 @@ void SwTxtFrm::RecalcAllLines()
 
     if ( !IsInTab() )
     {
-        const ULONG nOld = GetAllLines();
+        const sal_uLong nOld = GetAllLines();
         const SwFmtLineNumber &rLineNum = pAttrSet->GetLineNumber();
-        ULONG nNewNum;
+        sal_uLong nNewNum;
         const bool bRestart = GetTxtNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo().IsRestartEachPage();
 
         if ( !IsFollow() && rLineNum.GetStartValue() && rLineNum.IsCount() )
@@ -2751,6 +2794,20 @@ void SwTxtFrm::CalcBaseOfstForFly()
 
     mnFlyAnchorOfst = nRet1 - nLeft;
     mnFlyAnchorOfstNoWrap = nRet2 - nLeft;
+}
+
+/* repaint all text frames of the given text node */
+void SwTxtFrm::repaintTextFrames( const SwTxtNode& rNode )
+{
+    SwIterator<SwTxtFrm,SwTxtNode> aIter( rNode );
+    for( const SwTxtFrm *pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+    {
+        SwRect aRec( pFrm->PaintArea() );
+        const SwRootFrm *pRootFrm = pFrm->getRootFrm();
+        ViewShell *pCurShell = pRootFrm ? pRootFrm->GetCurrShell() : NULL;
+        if( pCurShell )
+            pCurShell->InvalidateWindows( aRec );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

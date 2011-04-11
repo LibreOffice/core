@@ -52,7 +52,7 @@ SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet ) :
     }
 }
 
-__EXPORT SwAddrDlg::~SwAddrDlg()
+SwAddrDlg::~SwAddrDlg()
 {
 }
 

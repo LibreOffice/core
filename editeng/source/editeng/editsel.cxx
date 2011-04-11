@@ -43,47 +43,47 @@ EditSelFunctionSet::EditSelFunctionSet()
     pCurView = NULL;
 }
 
-void __EXPORT EditSelFunctionSet::CreateAnchor()
+void EditSelFunctionSet::CreateAnchor()
 {
     if ( pCurView )
         pCurView->pImpEditView->CreateAnchor();
 }
 
-void __EXPORT EditSelFunctionSet::DestroyAnchor()
+void EditSelFunctionSet::DestroyAnchor()
 {
-    // Nur bei Mehrfachselektion
+    // Only with multiple selection
 }
 
-BOOL __EXPORT EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL )
+sal_Bool EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool )
 {
     if ( pCurView )
         return pCurView->pImpEditView->SetCursorAtPoint( rPointPixel );
 
-    return FALSE;
+    return sal_False;
 }
 
-BOOL __EXPORT EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+sal_Bool EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     if ( pCurView )
         return pCurView->pImpEditView->IsSelectionAtPoint( rPointPixel );
 
-    return FALSE;
+    return sal_False;
 }
 
-void __EXPORT EditSelFunctionSet::DeselectAtPoint( const Point& )
+void EditSelFunctionSet::DeselectAtPoint( const Point& )
 {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !  Implementieren, wenn Mehrfachselektion moeglich  !
+// !   Implement when multiple selection is possible   !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
-void __EXPORT EditSelFunctionSet::BeginDrag()
+void EditSelFunctionSet::BeginDrag()
 {
-    // Nur bei Mehrfachselektion
+    // Only with multiple selection
 }
 
 
-void __EXPORT EditSelFunctionSet::DeselectAll()
+void EditSelFunctionSet::DeselectAll()
 {
     if ( pCurView )
         pCurView->pImpEditView->DeselectAll();
@@ -94,10 +94,8 @@ void __EXPORT EditSelFunctionSet::DeselectAll()
 //  ----------------------------------------------------------------------
 EditSelectionEngine::EditSelectionEngine() : SelectionEngine( (Window*)0 )
 {
-    // Wegen Bug OV: (1994)
-    // 1995: RangeSelection lassen, SingleSelection nur fuer ListBoxen geeignet!
     SetSelectionMode( RANGE_SELECTION );
-    EnableDrag( TRUE );
+    EnableDrag( sal_True );
 }
 
 void EditSelectionEngine::SetCurView( EditView* pNewView )

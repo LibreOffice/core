@@ -37,17 +37,15 @@ namespace xls {
 
 // ============================================================================
 
-class OoxRichStringContext : public OoxWorkbookContextBase
+class RichStringContext : public WorkbookContextBase
 {
 public:
     template< typename ParentType >
-    explicit            OoxRichStringContext( ParentType& rParent, RichStringRef xString );
+    explicit            RichStringContext( ParentType& rParent, RichStringRef xString );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onEndElement( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const ::rtl::OUString& rChars );
 
 private:
     RichStringRef       mxString;       /// Processed string.
@@ -59,11 +57,11 @@ private:
 // ----------------------------------------------------------------------------
 
 template< typename ParentType >
-OoxRichStringContext::OoxRichStringContext( ParentType& rParent, RichStringRef xString ) :
-    OoxWorkbookContextBase( rParent ),
+RichStringContext::RichStringContext( ParentType& rParent, RichStringRef xString ) :
+    WorkbookContextBase( rParent ),
     mxString( xString )
 {
-    OSL_ENSURE( mxString.get(), "OoxRichStringContext::OoxRichStringContext - missing string object" );
+    OSL_ENSURE( mxString.get(), "RichStringContext::RichStringContext - missing string object" );
 }
 
 // ============================================================================

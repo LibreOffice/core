@@ -99,7 +99,7 @@ sal_uInt32 ControlContainer::AddControl (::std::auto_ptr<TreeNode> pControl)
 
 
 void ControlContainer::SetExpansionState (
-    UINT32 nIndex,
+    sal_uInt32 nIndex,
     ExpansionState aState)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -178,7 +178,7 @@ void ControlContainer::SetExpansionState (
             }
 
             // Update the expansion state of all controls.
-            for (UINT32 i=0; i<GetControlCount(); i=GetNextIndex(i))
+            for (sal_uInt32 i=0; i<GetControlCount(); i=GetNextIndex(i))
             {
                 TreeNode* pControl = GetControl(i);
                 bResizeNecessary |= pControl->Expand(i == mnActiveControlIndex);
@@ -219,14 +219,6 @@ sal_uInt32 ControlContainer::GetControlIndex (TreeNode* pControlToExpand) const
 
 
 
-sal_uInt32 ControlContainer::GetActiveControlIndex (void) const
-{
-    return mnActiveControlIndex;
-}
-
-
-
-
 void ControlContainer::ListHasChanged (void)
 {
 }
@@ -246,7 +238,7 @@ sal_uInt32 ControlContainer::GetVisibleControlCount (void) const
 {
     sal_uInt32 nCount (0);
 
-    UINT32 nIndex;
+    sal_uInt32 nIndex;
     sal_uInt32 nAllCount (maControlList.size());
     for (nIndex=0; nIndex<nAllCount; nIndex=GetNextIndex(nIndex,true))
     {
@@ -371,53 +363,6 @@ sal_uInt32 ControlContainer::GetNextIndex (
     }
 
     return nCandidate;
-}
-
-
-
-
-sal_uInt32 ControlContainer::GetFirstIndex (bool bIncludeHidden)
-{
-    sal_uInt32 nIndex = 0;
-
-    if (maControlList.size() == 0)
-    {
-        // The list is empty so there is no first element.
-        nIndex = maControlList.size();
-    }
-    else if ( ! bIncludeHidden
-        && ! maControlList[nIndex]->GetWindow()->IsVisible())
-    {
-        // The first element is not visible.  Go the next visible one.
-        nIndex = GetNextIndex (nIndex, bIncludeHidden, false);
-    }
-
-    return nIndex;
-}
-
-
-
-
-sal_uInt32 ControlContainer::GetLastIndex (bool bIncludeHidden)
-{
-    sal_uInt32 nIndex;
-
-    if (maControlList.size() == 0)
-    {
-        // The list is empty so there is no last element.
-        nIndex = maControlList.size();
-    }
-    else
-    {
-        nIndex = maControlList.size() - 1;
-        if ( ! bIncludeHidden
-            && ! maControlList[nIndex]->GetWindow()->IsVisible())
-        {
-            // The last element is not visible.  Go the previous visible one.
-            nIndex = GetPreviousIndex (nIndex, bIncludeHidden, false);
-        }
-    }
-    return nIndex;
 }
 
 

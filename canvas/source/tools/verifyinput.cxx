@@ -81,7 +81,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): point X value contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): point X value contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -90,7 +90,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): point X value contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): point X value contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -115,7 +115,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): size.Width value contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): size.Width value contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -124,7 +124,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): size.Height value contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): size.Height value contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -149,7 +149,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bezier segment's Px value contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bezier segment's Px value contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -158,7 +158,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bezier segment's Py value contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bezier segment's Py value contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -167,7 +167,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bezier segment's C1x value contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bezier segment's C1x value contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -176,7 +176,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bezier segment's C1y value contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bezier segment's C1y value contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -185,7 +185,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bezier segment's C2x value contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bezier segment's C2x value contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -194,7 +194,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bezier segment's C2y value contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bezier segment's C2y value contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -223,7 +223,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): rectangle point X1 contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): rectangle point X1 contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -232,7 +232,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): rectangle point Y1 contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): rectangle point Y1 contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -241,7 +241,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): rectangle point X2 contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): rectangle point X2 contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -250,7 +250,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): rectangle point Y2 contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): rectangle point Y2 contains infinite or NAN" )),
                     xIf,
                     nArgPos );
             }
@@ -285,7 +285,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): AffineMatrix2D contains infinite or NAN value(s) at the following positions (m00-m12): ") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): AffineMatrix2D contains infinite or NAN value(s) at the following positions (m00-m12): " )) +
                     ::rtl::OUString::valueOf(nBinaryState),
                     xIf,
                     nArgPos );
@@ -321,7 +321,7 @@ namespace canvas
             {
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): Matrix2D contains infinite or NAN value(s) at the following positions (m00-m11): ") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): Matrix2D contains infinite or NAN value(s) at the following positions (m00-m11): " )) +
                     ::rtl::OUString::valueOf(nBinaryState),
                     xIf,
                     nArgPos );
@@ -360,11 +360,11 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): render state's device color has too few components (") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): render state's device color has too few components (" )) +
                     ::rtl::OUString::valueOf(nMinColorComponents) +
-                    ::rtl::OUString::createFromAscii(" expected, ") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " expected, " )) +
                     ::rtl::OUString::valueOf(renderState.DeviceColor.getLength()) +
-                    ::rtl::OUString::createFromAscii(" provided)"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " provided)" )),
                     xIf,
                     nArgPos );
 #else
@@ -378,9 +378,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): render state's CompositeOperation value out of range (") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): render state's CompositeOperation value out of range (" )) +
                     ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(renderState.CompositeOperation)) +
-                    ::rtl::OUString::createFromAscii(" not known)"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not known)" )),
                     xIf,
                     nArgPos );
 #else
@@ -404,9 +404,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): textures' alpha value out of range (is ") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): textures' alpha value out of range (is " )) +
                     ::rtl::OUString::valueOf(texture.Alpha) +
-                    ::rtl::OUString::createFromAscii(")"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" )),
                     xIf,
                     nArgPos );
 #else
@@ -419,7 +419,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): textures' NumberOfHatchPolygons is negative"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): textures' NumberOfHatchPolygons is negative" )),
                     xIf,
                     nArgPos );
 #else
@@ -433,9 +433,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): textures' RepeatModeX value is out of range (") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): textures' RepeatModeX value is out of range (" )) +
                     ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(texture.RepeatModeX)) +
-                    ::rtl::OUString::createFromAscii(" not known)"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not known)" )),
                     xIf,
                     nArgPos );
 #else
@@ -449,9 +449,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): textures' RepeatModeY value is out of range (") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): textures' RepeatModeY value is out of range (" )) +
                     ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(texture.RepeatModeY)) +
-                    ::rtl::OUString::createFromAscii(" not known)"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not known)" )),
                     xIf,
                     nArgPos );
 #else
@@ -480,9 +480,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                         throw lang::IllegalArgumentException(
                             ::rtl::OUString::createFromAscii(mpStr) +
-                            ::rtl::OUString::createFromAscii(": verifyInput(): one of stroke attributes' DashArray value out of range (is ") +
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): one of stroke attributes' DashArray value out of range (is " )) +
                             ::rtl::OUString::valueOf(rVal) +
-                            ::rtl::OUString::createFromAscii(")"),
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" )),
                             mrIf,
                             mnArgPos );
 #else
@@ -508,9 +508,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): stroke attributes' StrokeWidth value out of range (is ") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): stroke attributes' StrokeWidth value out of range (is " )) +
                     ::rtl::OUString::valueOf(strokeAttributes.StrokeWidth) +
-                    ::rtl::OUString::createFromAscii(")"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" )),
                     xIf,
                     nArgPos );
 #else
@@ -524,9 +524,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): stroke attributes' MiterLimit value out of range (is ") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): stroke attributes' MiterLimit value out of range (is " )) +
                     ::rtl::OUString::valueOf(strokeAttributes.MiterLimit) +
-                    ::rtl::OUString::createFromAscii(")"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" )),
                     xIf,
                     nArgPos );
 #else
@@ -548,9 +548,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): stroke attributes' StartCapType value is out of range (") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): stroke attributes' StartCapType value is out of range (" )) +
                     ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(strokeAttributes.StartCapType)) +
-                    ::rtl::OUString::createFromAscii(" not known)"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not known)" )),
                     xIf,
                     nArgPos );
 #else
@@ -564,9 +564,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): stroke attributes' StartCapType value is out of range (") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): stroke attributes' StartCapType value is out of range (" )) +
                     ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(strokeAttributes.EndCapType)) +
-                    ::rtl::OUString::createFromAscii(" not known)"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not known)" )),
                     xIf,
                     nArgPos );
 #else
@@ -580,9 +580,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): stroke attributes' JoinType value is out of range (") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): stroke attributes' JoinType value is out of range (" )) +
                     ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(strokeAttributes.JoinType)) +
-                    ::rtl::OUString::createFromAscii(" not known)"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not known)" )),
                     xIf,
                     nArgPos );
 #else
@@ -603,7 +603,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's ScanLines is negative"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's ScanLines is negative" )),
                     xIf,
                     nArgPos );
 #else
@@ -616,7 +616,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's ScanLineBytes is negative"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's ScanLineBytes is negative" )),
                     xIf,
                     nArgPos );
 #else
@@ -629,7 +629,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's ColorSpace is invalid"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's ColorSpace is invalid" )),
                     xIf,
                     nArgPos );
 #else
@@ -643,7 +643,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                     throw lang::IllegalArgumentException(
                         ::rtl::OUString::createFromAscii(pStr) +
-                        ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's ColorSpace getBitsPerPixel() is negative"),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's ColorSpace getBitsPerPixel() is negative" )),
                         xIf,
                         nArgPos );
 #else
@@ -657,9 +657,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                     throw lang::IllegalArgumentException(
                         ::rtl::OUString::createFromAscii(pStr) +
-                        ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's ColorSpace getEndianness() value is out of range (") +
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's ColorSpace getEndianness() value is out of range (" )) +
                         ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.ColorSpace->getEndianness())) +
-                        ::rtl::OUString::createFromAscii(" not known)"),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not known)" )),
                         xIf,
                         nArgPos );
 #else
@@ -681,7 +681,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's ScanLines is negative"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's ScanLines is negative" )),
                     xIf,
                     nArgPos );
 #else
@@ -694,7 +694,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's ScanLineBytes is negative"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's ScanLineBytes is negative" )),
                     xIf,
                     nArgPos );
 #else
@@ -707,7 +707,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's ColorSpace is invalid"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's ColorSpace is invalid" )),
                     xIf,
                     nArgPos );
 #else
@@ -720,7 +720,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's NumComponents is negative"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's NumComponents is negative" )),
                     xIf,
                     nArgPos );
 #else
@@ -734,9 +734,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's Endianness value is out of range (") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's Endianness value is out of range (" )) +
                     ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.Endianness)) +
-                    ::rtl::OUString::createFromAscii(" not known)"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not known)" )),
                     xIf,
                     nArgPos );
 #else
@@ -750,9 +750,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's Format value is out of range (") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): bitmap layout's Format value is out of range (" )) +
                     ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.Format)) +
-                    ::rtl::OUString::createFromAscii(" not known)"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " not known)" )),
                     xIf,
                     nArgPos );
 #else
@@ -783,7 +783,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): font request's CellSize value contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): font request's CellSize value contains infinite or NAN" )),
                     xIf,
                     nArgPos );
 #else
@@ -796,7 +796,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): font request's ReferenceAdvancement value contains infinite or NAN"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): font request's ReferenceAdvancement value contains infinite or NAN" )),
                     xIf,
                     nArgPos );
 #else
@@ -810,7 +810,7 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyInput(): font request's CellSize and ReferenceAdvancement are mutually exclusive, one of them must be 0.0"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyInput(): font request's CellSize and ReferenceAdvancement are mutually exclusive, one of them must be 0.0" )),
                     xIf,
                     nArgPos );
 #else
@@ -858,9 +858,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyBitmapSize(): size has 0 or negative width (value: ") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyBitmapSize(): size has 0 or negative width (value: " )) +
                     ::rtl::OUString::valueOf(size.Width) +
-                    ::rtl::OUString::createFromAscii(")"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" )),
                     xIf,
                     0 );
 #else
@@ -873,9 +873,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifyBitmapSize(): size has 0 or negative height (value: ") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifyBitmapSize(): size has 0 or negative height (value: " )) +
                     ::rtl::OUString::valueOf(size.Height) +
-                    ::rtl::OUString::createFromAscii(")"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" )),
                     xIf,
                     0 );
 #else
@@ -895,9 +895,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifySpriteSize(): size has 0 or negative width (value: ") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifySpriteSize(): size has 0 or negative width (value: " )) +
                     ::rtl::OUString::valueOf(size.Width) +
-                    ::rtl::OUString::createFromAscii(")"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" )),
                     xIf,
                     0 );
 #else
@@ -910,9 +910,9 @@ namespace canvas
 #if OSL_DEBUG_LEVEL > 0
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
-                    ::rtl::OUString::createFromAscii(": verifySpriteSize(): size has 0 or negative height (value: ") +
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": verifySpriteSize(): size has 0 or negative height (value: " )) +
                     ::rtl::OUString::valueOf(size.Height) +
-                    ::rtl::OUString::createFromAscii(")"),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" )),
                     xIf,
                     0 );
 #else

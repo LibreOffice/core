@@ -71,35 +71,35 @@ public:
         SlideViewShell* pSlideVShell);
     virtual ~SlideView (void);
 
-    void                Select( USHORT nSdPageNum, BOOL bSelect );
-    void                SelectAllSlides( BOOL bSelect );
+    void                Select( sal_uInt16 nSdPageNum, sal_Bool bSelect );
+    void                SelectAllSlides( sal_Bool bSelect );
 
     void                MoveFocus( SlideViewFocusMove eMove );
-    USHORT              GetFocusPage() const;
-    BOOL                HasFocus() const;
+    sal_uInt16              GetFocusPage() const;
+    sal_Bool                HasFocus() const;
 
-    USHORT              ChangePagesPerRow( USHORT nNum );
-    USHORT              GetPagesPerRow() const { return nPagesPerRow; }
+    sal_uInt16              ChangePagesPerRow( sal_uInt16 nNum );
+    sal_uInt16              GetPagesPerRow() const { return nPagesPerRow; }
 
     virtual void        InvalidateOneWin( ::Window& rWin );
     virtual void        InvalidateOneWin( ::Window& rWin, const Rectangle& rRect );
 
-    void                SetAllowInvalidate( BOOL bFlag );
-    BOOL                IsInvalidateAllowed() const;
+    void                SetAllowInvalidate( sal_Bool bFlag );
+    sal_Bool                IsInvalidateAllowed() const;
 
     void                Paint(const Rectangle& rRect, OutputDevice* pOut);
-    void                DrawSelectionRect(USHORT nPage);
+    void                DrawSelectionRect(sal_uInt16 nPage);
 
-    Point               CalcPagePos( USHORT nPageNo ) const;
-    Rectangle           GetPageArea( USHORT nPageNo ) const;
-    ULONG               GetPageGap() const;
-    Rectangle           GetFadeIconArea( USHORT nPageNo ) const;
+    Point               CalcPagePos( sal_uInt16 nPageNo ) const;
+    Rectangle           GetPageArea( sal_uInt16 nPageNo ) const;
+    sal_uLong               GetPageGap() const;
+    Rectangle           GetFadeIconArea( sal_uInt16 nPageNo ) const;
     SdPage*             GetHitPage( const Point& rPos ) const;
     SdPage*             GetFadePage( const Point& rPos ) const;
     SdPage*             GetNearestPage( const Point& rPos ) const;
 
     void                DeleteMarked();
-    void                MoveMarked( USHORT nTargetPage );
+    void                MoveMarked( sal_uInt16 nTargetPage );
 
     void                    AddToCache( SdPage* pPage, const Bitmap& rBitmap, long nZoom );
     const GraphicObject*    GetFromCache( SdPage* pPage, long& rZoom, long nZoomTolerance ) const;
@@ -115,12 +115,12 @@ public:
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                     ::sd::Window* pTargetWindow = NULL,
-                                    USHORT nPage = SDRPAGE_NOTFOUND,
-                                    USHORT nLayer = SDRPAGE_NOTFOUND );
+                                    sal_uInt16 nPage = SDRPAGE_NOTFOUND,
+                                    sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                      ::sd::Window* pTargetWindow = NULL,
-                                     USHORT nPage = SDRPAGE_NOTFOUND,
-                                     USHORT nLayer = SDRPAGE_NOTFOUND );
+                                     sal_uInt16 nPage = SDRPAGE_NOTFOUND,
+                                     sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
 
     void                UpdateAllPages();
 
@@ -130,14 +130,14 @@ private:
     SlideViewShell*     pSlideViewShell;
     BitmapCache*        pCache;
     VirtualDevice*      mpVDev;
-    USHORT              nAllowInvalidateSmph;
-    USHORT              nPagesPerRow;
-    USHORT              nFocusPage;
-    BOOL                bInPaint;
-    BOOL                bInDelayedPaint;
+    sal_uInt16              nAllowInvalidateSmph;
+    sal_uInt16              nPagesPerRow;
+    sal_uInt16              nFocusPage;
+    sal_Bool                bInPaint;
+    sal_Bool                bInDelayedPaint;
 
                         DECL_LINK( PaintDelayed, Timer * );
-    void CreateSlideTransferable (::Window* pWindow, BOOL bDrag);
+    void CreateSlideTransferable (::Window* pWindow, sal_Bool bDrag);
 };
 
 } // end of namespace sd

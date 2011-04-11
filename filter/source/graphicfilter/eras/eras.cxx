@@ -40,39 +40,40 @@ class RASWriter {
 
 private:
 
-    SvStream*           mpOStm;
-    USHORT              mpOStmOldModus;
+    SvStream & m_rOStm;
+    sal_uInt16              mpOStmOldModus;
 
-    BOOL                mbStatus;
+    sal_Bool                mbStatus;
     BitmapReadAccess*   mpAcc;
 
-    ULONG               mnWidth, mnHeight;
-    USHORT              mnColors, mnDepth;
+    sal_uLong               mnWidth, mnHeight;
+    sal_uInt16              mnColors, mnDepth;
 
-    ULONG               mnRepCount;
-    BYTE                mnRepVal;
+    sal_uLong               mnRepCount;
+    sal_uInt8               mnRepVal;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
-    void                ImplCallback( ULONG nCurrentYPos );
-    BOOL                ImplWriteHeader();
+    void                ImplCallback( sal_uLong nCurrentYPos );
+    sal_Bool                ImplWriteHeader();
     void                ImplWritePalette();
     void                ImplWriteBody();
-    void                ImplPutByte( BYTE );    // RLE decoding
+    void                ImplPutByte( sal_uInt8 );   // RLE decoding
 
 public:
-                        RASWriter();
-                        ~RASWriter();
+    RASWriter(SvStream &rStream);
+    ~RASWriter();
 
-    BOOL                WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigItem* pFilterConfigItem );
+    sal_Bool WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von RASWriter ==============================
 
-RASWriter::RASWriter() :
-    mbStatus    ( TRUE ),
-    mpAcc       ( NULL ),
-    mnRepCount  ( 0xffffffff )
+RASWriter::RASWriter(SvStream &rStream)
+    : m_rOStm(rStream)
+    , mbStatus(sal_True)
+    , mpAcc(NULL)
+    , mnRepCount( 0xffffffff )
 {
 }
 
@@ -84,19 +85,17 @@ RASWriter::~RASWriter()
 
 // ------------------------------------------------------------------------
 
-void RASWriter::ImplCallback( ULONG nYPos )
+void RASWriter::ImplCallback( sal_uLong nYPos )
 {
     if ( xStatusIndicator.is() )
-        xStatusIndicator->setValue( (USHORT)( ( 100 * nYPos ) / mnHeight ) );
+        xStatusIndicator->setValue( (sal_uInt16)( ( 100 * nYPos ) / mnHeight ) );
 }
 
 //  ------------------------------------------------------------------------
 
-BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigItem* pFilterConfigItem)
+sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     Bitmap  aBmp;
-
-    mpOStm = &rRAS;
 
     if ( pFilterConfigItem )
     {
@@ -122,8 +121,8 @@ BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigI
     mpAcc = aBmp.AcquireReadAccess();
     if ( mpAcc )
     {
-        mpOStmOldModus = mpOStm->GetNumberFormatInt();
-        mpOStm->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+        mpOStmOldModus = m_rOStm.GetNumberFormatInt();
+        m_rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 
         if ( ImplWriteHeader() )
         {
@@ -134,9 +133,9 @@ BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigI
         aBmp.ReleaseAccess( mpAcc );
     }
     else
-        mbStatus = FALSE;
+        mbStatus = sal_False;
 
-    mpOStm->SetNumberFormatInt( mpOStmOldModus );
+    m_rOStm.SetNumberFormatInt( mpOStmOldModus );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -146,7 +145,7 @@ BOOL RASWriter::WriteRAS( const Graphic& rGraphic, SvStream& rRAS, FilterConfigI
 
 // ------------------------------------------------------------------------
 
-BOOL RASWriter::ImplWriteHeader()
+sal_Bool RASWriter::ImplWriteHeader()
 {
     mnWidth = mpAcc->Width();
     mnHeight = mpAcc->Height();
@@ -154,24 +153,24 @@ BOOL RASWriter::ImplWriteHeader()
     {
         mnColors = mpAcc->GetPaletteEntryCount();
         if (mnColors == 0)
-            mbStatus = FALSE;
+            mbStatus = sal_False;
     }
         if ( mbStatus && mnWidth && mnHeight && mnDepth )
     {
-        *mpOStm << (UINT32)0x59a66a95 << (UINT32)mnWidth << (UINT32)mnHeight
-            << (UINT32)mnDepth
-            << (UINT32)(( ( ( ( mnWidth * mnDepth ) + 15 ) >> 4 ) << 1 ) * mnHeight)
-            << (UINT32)2;
+        m_rOStm << (sal_uInt32)0x59a66a95 << (sal_uInt32)mnWidth << (sal_uInt32)mnHeight
+            << (sal_uInt32)mnDepth
+            << (sal_uInt32)(( ( ( ( mnWidth * mnDepth ) + 15 ) >> 4 ) << 1 ) * mnHeight)
+            << (sal_uInt32)2;
 
         if ( mnDepth > 8 )
-            *mpOStm << (UINT32)0 << (UINT32)0;
+            m_rOStm << (sal_uInt32)0 << (sal_uInt32)0;
         else
         {
 
-            *mpOStm << (UINT32)1 << (UINT32)( mnColors * 3 );
+            m_rOStm << (sal_uInt32)1 << (sal_uInt32)( mnColors * 3 );
         }
     }
-    else mbStatus = FALSE;
+    else mbStatus = sal_False;
 
     return mbStatus;
 }
@@ -180,18 +179,18 @@ BOOL RASWriter::ImplWriteHeader()
 
 void RASWriter::ImplWritePalette()
 {
-    USHORT i;
+    sal_uInt16 i;
 
-    for ( i = 0; i < mnColors; *mpOStm << mpAcc->GetPaletteColor( i++ ).GetRed() ) ;
-    for ( i = 0; i < mnColors; *mpOStm << mpAcc->GetPaletteColor( i++ ).GetGreen() ) ;
-    for ( i = 0; i < mnColors; *mpOStm << mpAcc->GetPaletteColor( i++ ).GetBlue() ) ;
+    for ( i = 0; i < mnColors; m_rOStm << mpAcc->GetPaletteColor( i++ ).GetRed() ) ;
+    for ( i = 0; i < mnColors; m_rOStm << mpAcc->GetPaletteColor( i++ ).GetGreen() ) ;
+    for ( i = 0; i < mnColors; m_rOStm << mpAcc->GetPaletteColor( i++ ).GetBlue() ) ;
 }
 
 // ------------------------------------------------------------------------
 
 void RASWriter::ImplWriteBody()
 {
-    ULONG   x, y;
+    sal_uLong   x, y;
 
     if ( mnDepth == 24 )
     {
@@ -222,7 +221,7 @@ void RASWriter::ImplWriteBody()
     }
     else if ( mnDepth == 1 )
     {
-        BYTE nDat = 0;
+        sal_uInt8 nDat = 0;
 
         for ( y = 0; y < mnHeight; y++ )
         {
@@ -234,7 +233,7 @@ void RASWriter::ImplWriteBody()
                     ImplPutByte( nDat );
             }
             if ( x & 7 )
-                ImplPutByte( sal::static_int_cast< BYTE >(nDat << ( ( ( x & 7 ) ^ 7 ) + 1)) );// write remaining bits
+                ImplPutByte( sal::static_int_cast< sal_uInt8 >(nDat << ( ( ( x & 7 ) ^ 7 ) + 1)) );// write remaining bits
             if (!( ( x - 1 ) & 0x8 ) )
                 ImplPutByte( 0 );               // WORD ALIGNMENT ???
         }
@@ -244,7 +243,7 @@ void RASWriter::ImplWriteBody()
 
 // ------------------------------------------------------------------------
 
-void RASWriter::ImplPutByte( BYTE nPutThis )
+void RASWriter::ImplPutByte( sal_uInt8 nPutThis )
 {
     if ( mnRepCount == 0xffffffff )
     {
@@ -259,15 +258,15 @@ void RASWriter::ImplPutByte( BYTE nPutThis )
         {
             if ( mnRepCount == 0 )
             {
-                *mpOStm << (BYTE)mnRepVal;
+                m_rOStm << (sal_uInt8)mnRepVal;
                 if ( mnRepVal == 0x80 )
-                    *mpOStm << (BYTE)0;
+                    m_rOStm << (sal_uInt8)0;
             }
             else
             {
-                *mpOStm << (BYTE)0x80;
-                *mpOStm << (BYTE)mnRepCount;
-                *mpOStm << (BYTE)mnRepVal;
+                m_rOStm << (sal_uInt8)0x80;
+                m_rOStm << (sal_uInt8)mnRepCount;
+                m_rOStm << (sal_uInt8)mnRepVal;
             }
             mnRepVal = nPutThis;
             mnRepCount = 0;
@@ -281,38 +280,11 @@ void RASWriter::ImplPutByte( BYTE nPutThis )
 // - exported function -
 // ---------------------
 
-extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
+extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
 {
-    RASWriter aRASWriter;
+    RASWriter aRASWriter(rStream);
 
-    return aRASWriter.WriteRAS( rGraphic, rStream, pFilterConfigItem );
+    return aRASWriter.WriteRAS( rGraphic, pFilterConfigItem );
 }
-
-// ---------------
-// - Win16 trash -
-// ---------------
-
-#ifdef WIN
-
-static HINSTANCE hDLLInst = 0;
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
-{
-    if ( nHeap )
-        UnlockData( 0 );
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-// ------------------------------------------------------------------------
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

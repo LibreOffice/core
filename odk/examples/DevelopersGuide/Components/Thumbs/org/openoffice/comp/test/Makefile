@@ -74,7 +74,7 @@ $(OUT_COMP_CLASS)/%.mf :
 	@echo Application-Class: $(subst /,.,$(PACKAGE)).$*>> $@
 
 # rule for component jar file
-$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(OUT_COMP_CLASS)/$(PACKAGE)/$(COMPONENT_NAME).class
+$(COMP_JAR) : $(COMP_MANIFESTFILE) $(OUT_COMP_CLASS)/$(PACKAGE)/$(COMP_NAME).class
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_JAR) cvfm $@ $< -C $(OUT_COMP_CLASS) $(PACKAGE)/$(basename $(basename $(@F))).class $(patsubst %.class,-C $(OUT_COMP_CLASS) %.class,$(GENCLASSNAMES))
@@ -87,18 +87,19 @@ $(OUT_COMP_CLASS)/%/manifest.xml :
 	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-typelibrary;type=RDB$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.rdb$(QM)"/$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
-	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-components$(QM)">> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP_COMPONENTS)$(QM)"/$(CSEP)>> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 # rule for component package file
-$(COMPONENT_PACKAGE) : $(COMPONENT_RDB) $(COMPONENT_JAR) $(COMPONENT_UNOPKG_MANIFEST)
+$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(COPY) $(subst /,$(PS),$(COMPONENT_RDB)) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(COMPONENT_RDB_NAME) $(COMPONENT_JAR_NAME)
+	$(COPY) $(subst /,$(PS),$(COMP_RDB)) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	$(SDK_ZIP) $@ $(COMP_COMPONENTS)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_RDB_NAME) $(COMP_JAR_NAME)
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
-	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_CLASS)/$(COMPONENT_RDB_NAME)))
+	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_CLASS)/$(COMP_RDB_NAME)))
 
 $(APP1_JAR) : $(OUT_COMP_CLASS)/$(APP1_NAME).mf $(OUT_COMP_CLASS)/$(PACKAGE)/$(APP1_NAME).class
 	-$(MKDIR) $(subst /,$(PS),$(@D)) && $(DEL) $(subst \\,\,$(subst /,$(PS),$@))
@@ -106,11 +107,11 @@ $(APP1_JAR) : $(OUT_COMP_CLASS)/$(APP1_NAME).mf $(OUT_COMP_CLASS)/$(PACKAGE)/$(A
 	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
 
 
-$(REGISTERFLAG) : $(COMPONENT_PACKAGE)
+$(REGISTERFLAG) : $(COMP_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMP_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -122,7 +123,7 @@ endif
 
 .PHONY: clean
 clean :
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_JAR)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(APP1_JAR)))

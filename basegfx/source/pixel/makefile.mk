@@ -29,9 +29,7 @@ PRJ=..$/..
 PRJNAME=basegfx
 TARGET=pixel
 
-#UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-#ENABLE_EXCEPTIONS=FALSE
-#USE_DEFFILE=TRUE
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 

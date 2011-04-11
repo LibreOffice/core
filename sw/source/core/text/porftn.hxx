@@ -44,7 +44,7 @@ class SwFtnPortion : public SwFldPortion
     KSHORT nOrigHeight;
     // --> OD 2009-01-29 #i98418#
     bool mbPreferredScriptTypeSet;
-    BYTE mnPreferredScriptType;
+    sal_uInt8 mnPreferredScriptType;
     // <--
 public:
     SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrm, SwTxtFtn *pFtn,
@@ -57,7 +57,7 @@ public:
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
     // --> OD 2009-01-29 #i98418#
-    void SetPreferredScriptType( BYTE nPreferredScriptType );
+    void SetPreferredScriptType( sal_uInt8 nPreferredScriptType );
     // <--
 
     const SwTxtFtn* GetTxtFtn() const { return pFtn; };
@@ -72,9 +72,7 @@ class SwFtnNumPortion : public SwNumberPortion
 {
 public:
     inline SwFtnNumPortion( const XubString &rExpand, SwFont *pFntL )
-         // --> OD 2008-01-23 #newlistlevelattrs#
          : SwNumberPortion( rExpand, pFntL, sal_True, sal_False, 0, false )
-         // <--
          { SetWhichPor( POR_FTNNUM ); }
 
     OUTPUT_OPERATOR

@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#include <urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"

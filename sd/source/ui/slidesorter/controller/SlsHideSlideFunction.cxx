@@ -110,8 +110,10 @@ void HideSlideFunction::DoExecute (SfxRequest& rRequest)
         while (aSelectedPages.HasMoreElements())
         {
             model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-            pDescriptor->GetPage()->SetExcluded (eState==EXCLUDED);
-            static_cast<view::SlideSorterView*>(mpView)->RequestRepaint(pDescriptor);
+            static_cast<view::SlideSorterView*>(mpView)->SetState(
+                pDescriptor,
+                model::PageDescriptor::ST_Excluded,
+                eState==EXCLUDED);
         }
     }
 
@@ -130,7 +132,7 @@ HideSlideFunction::ExclusionState HideSlideFunction::GetExclusionState (
     model::PageEnumeration& rPageSet)
 {
     ExclusionState eState (UNDEFINED);
-    BOOL bState;
+    sal_Bool bState;
 
     // Get toggle state of the selected pages.
     while (rPageSet.HasMoreElements() && eState!=MIXED)

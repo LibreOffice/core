@@ -155,9 +155,9 @@ public class NestedRegistry extends TestCase {
             copyFile(source, openF, log) ;
             copyFile(source, mergeF, log) ;
         } catch (java.io.IOException e) {
-            log.println("Exception occured while copying files");
+            log.println("Exception occurred while copying files");
             e.printStackTrace(log);
-            throw new StatusException("Exception occured while copying files", e);
+            throw new StatusException("Exception occurred while copying files", e);
         }
 
         try {

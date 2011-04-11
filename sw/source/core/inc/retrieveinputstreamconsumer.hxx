@@ -40,9 +40,7 @@ class SwAsyncRetrieveInputStreamThread;
 /** class to provide creation of a thread to retrieve an input stream given by
     an URL and to consume the retrieved input stream.
 
-    OD 2007-01-29 #i73788#
-
-    @author OD
+    #i73788#
 */
 class SwAsyncRetrieveInputStreamThreadConsumer
 {
@@ -52,14 +50,10 @@ class SwAsyncRetrieveInputStreamThreadConsumer
         ~SwAsyncRetrieveInputStreamThreadConsumer();
 
         /** method to create thread
-
-            @author OD
         */
         void CreateThread( const String& rURL );
 
         /** method called to provide the retrieved input stream to the thread Consumer
-
-            @author OD
         */
         void ApplyInputStream(
             com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,

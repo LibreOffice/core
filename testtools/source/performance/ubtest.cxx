@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <map>
 
 #include <osl/diagnose.h>
@@ -72,7 +72,6 @@
 
 #define NLOOP 200000000
 
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -82,6 +81,10 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::container;
 using namespace com::sun::star::test::performance;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 #define SERVICENAME     "com.sun.star.test.performance.PerformanceTest"
 #define IMPLNAME        "com.sun.star.comp.performance.PerformanceTest"
@@ -568,7 +571,7 @@ void TimingSheet::insert( const sal_Char * pText, sal_Int64 nLoop, sal_uInt32 nT
 }
 
 //==================================================================================================
-typedef std::hash_map< std::string, TimingSheet > t_TimingSheetMap;
+typedef boost::unordered_map< std::string, TimingSheet > t_TimingSheetMap;
 
 //--------------------------------------------------------------------------------------------------
 static void benchmark(
@@ -1307,7 +1310,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+            OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
     return sal_False;

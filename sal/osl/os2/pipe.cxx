@@ -129,7 +129,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
 
     /* create pipe name */
     OString sPipe = OUStringToOString(ustrPipeName, RTL_TEXTENCODING_ASCII_US);
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
     debug_printf("osl_createPipe options 0x%x\n", Options);
 #endif
 
@@ -140,7 +140,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
             APIRET  fPipeAvailable;
 
             sprintf (strPipeNameBuffer, "\\PIPE\\OSL_PIPE_%s", sPipe.getStr());
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
             debug_printf("osl_createPipe %s\n", strPipeNameBuffer);
 #endif
             ngLastError = DosOpen( (PCSZ)strPipeNameBuffer,
@@ -175,7 +175,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
                 break;
 
             sprintf (strPipeNameBuffer, "\\PIPE\\OSL_PIPE_%s", sPipe.getStr());
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
             debug_printf("osl_createPipe %s\n", strPipeNameBuffer);
 #endif
             ngLastError = DosCreateNPipe( (PCSZ)strPipeNameBuffer,
@@ -473,7 +473,7 @@ oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
 
 sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32 n )
 {
-    /* loop until all desired bytes were send or an error occured */
+    /* loop until all desired bytes were send or an error occurred */
     sal_Int32 BytesSend= 0;
     sal_Int32 BytesToSend= n;
 
@@ -484,7 +484,7 @@ sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32
 
         RetVal= osl_sendPipe(pPipe, pBuffer, BytesToSend);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;
@@ -500,7 +500,7 @@ sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32
 
 sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
 {
-    /* loop until all desired bytes were read or an error occured */
+    /* loop until all desired bytes were read or an error occurred */
     sal_Int32 BytesRead= 0;
     sal_Int32 BytesToRead= n;
 
@@ -510,7 +510,7 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
         sal_Int32 RetVal;
         RetVal= osl_receivePipe(pPipe, pBuffer, BytesToRead);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;

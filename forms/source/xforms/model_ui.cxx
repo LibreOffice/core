@@ -139,7 +139,7 @@ void lcl_OutPosition( OUStringBuffer& rBuffer,
 {
     OSL_ENSURE( xNode->getParentNode().is(), "need parent" );
 
-    // count # of occurences of this node
+    // count # of occurrences of this node
     sal_Int32 nFound = 0;
     sal_Int32 nPosition = -1;
     if( xNode->getParentNode().is() )
@@ -257,7 +257,7 @@ OUString Model::getDefaultBindingExpressionForNode(
 
         default:
             // unknown type? fail!
-            OSL_ENSURE( false, "unknown node type!" );
+            OSL_FAIL( "unknown node type!" );
             xCurrent.set( NULL );
             aBuffer.makeStringAndClear();
             // we'll remove the slash below
@@ -332,7 +332,7 @@ OUString Model::getNodeDisplayName( const XNode_t& xNode,
 
     default:
         // unknown type? fail!
-        OSL_ENSURE( false, "unknown node type!" );
+        OSL_FAIL( "unknown node type!" );
         break;
     }
 
@@ -355,7 +355,7 @@ OUString Model::getNodeName( const XNode_t& xNode )
     case NodeType_DOCUMENT_NODE:
     default:
         // unknown type? fail!
-        OSL_ENSURE( false, "no name for this node type!" );
+        OSL_FAIL( "no name for this node type!" );
         break;
     }
 
@@ -684,7 +684,7 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
     }
     else
     {
-        OSL_ENSURE( false, "can't rename this node type" );
+        OSL_FAIL( "can't rename this node type" );
     }
 
     // adjust bindings (if necessary):
@@ -954,7 +954,7 @@ OUString Model::getResultForExpression(
             pBinding->getMIPEvaluationContexts();
         for( std::vector<EvaluationContext>::iterator aIter = aContext.begin();
              aIter != aContext.end();
-             aIter ++ )
+             ++aIter )
         {
             aExpression.evaluate( *aIter );
             aBuffer.append( lcl_serializeForDisplay(aExpression.getXPath()) );

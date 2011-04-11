@@ -162,7 +162,7 @@ public class ServiceManager implements XMultiServiceFactory,
      * Registers a list of components given by their class names.
      * <p>
      * @param   newImpls    list of the components that should be registered, given by their class names.
-     *                      If any exception occured during the registration, the process will be canceled.
+     *                      If any exception occurred during the registration, the process will be canceled.
      * @see     com.sun.star.container.XSet
      */
     private void xaddFactories( String[] newImpls )

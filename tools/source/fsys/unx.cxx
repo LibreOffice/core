@@ -34,19 +34,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <utime.h>
-#if defined HPUX || defined LINUX
+#if defined LINUX
 #include <mntent.h>
 #define mnttab mntent
-#elif defined SCO
-#include <mnttab.h>
 #elif defined AIX
 #include <sys/mntctl.h>
 #include <sys/vmount.h>
 extern "C" int mntctl( int cmd, size_t size, char* buf );
 #elif defined(NETBSD)
 #include <sys/mount.h>
-#elif defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD)
-#elif defined DECUNIX
+#elif defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
+      defined(DRAGONFLY)
 struct mnttab
 {
   char *mnt_dir;
@@ -61,24 +59,15 @@ struct mnttab
 #endif
 
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/fsys.hxx>
 #include "comdep.hxx"
 #include <rtl/instance.hxx>
 
-DECLARE_LIST( DirEntryList, DirEntry* )
-DECLARE_LIST( FSysSortList, FSysSort* )
-DECLARE_LIST( FileStatList, FileStat* )
-
-#if defined SOLARIS || defined SINIX
+#if defined SOLARIS
 #define MOUNTSPECIAL mnt_special
 #define MOUNTPOINT   mnt_mountp
 #define MOUNTOPTS    mnt_mntopts
 #define MOUNTFS      mnt_fstype
-#elif defined SCO
-#define MNTTAB       "/etc/mnttab"
-#define MOUNTSPECIAL mt_dev
-#define MOUNTPOINT   mt_filsys
 #else
 #define MOUNTSPECIAL mnt_fsname
 #define MOUNTPOINT   mnt_dir
@@ -96,19 +85,19 @@ struct mymnttab
 
 
 #if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX) || \
-    defined(OPENBSD)
-BOOL GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
+    defined(OPENBSD) || defined(DRAGONFLY)
+sal_Bool GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
 {
     DBG_WARNING( "Sorry, not implemented: GetMountEntry" );
-    return FALSE;
+    return sal_False;
 }
 
 #elif defined AIX
-BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
+sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
 {
     int bufsize;
     if (mntctl (MCTL_QUERY, sizeof bufsize, (char*) &bufsize))
-        return FALSE;
+        return sal_False;
 
     char* buffer = (char *)malloc( bufsize * sizeof(char) );
     if (mntctl (MCTL_QUERY, bufsize, buffer) != -1)
@@ -129,40 +118,34 @@ BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
                         += vmt2dataptr((struct vmount*)vmt, VMT_OBJECT);
                 mytab->mountdevice = dev;
                 free( buffer );
-                return TRUE;
+                return sal_True;
             }
         }
     free( buffer );
-    return FALSE;
+    return sal_False;
 }
 
 #else
 
 
-static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
+static sal_Bool GetMountEntry(dev_t dev, struct mymnttab *mytab)
 {
-#if defined SOLARIS || defined SINIX
+#if defined SOLARIS
     FILE *fp = fopen (MNTTAB, "r");
     if (! fp)
-        return FALSE;
+        return sal_False;
     struct mnttab mnt[1];
     while (getmntent (fp, mnt) != -1)
-#elif defined SCO
-    FILE *fp = fopen (MNTTAB, "r");
-    if (! fp)
-        return FALSE;
-    struct mnttab mnt[1];
-    while (fread (&mnt, sizeof mnt, 1, fp) > 0)
-#elif defined DECUNIX || defined AIX
+#elif defined AIX
     FILE *fp = NULL;
     if (! fp)
-        return FALSE;
+        return sal_False;
     struct mnttab mnt[1];
     while ( 0 )
 #else
     FILE *fp = setmntent (MOUNTED, "r");
     if (! fp)
-        return FALSE;
+        return sal_False;
     struct mnttab *mnt;
     while ((mnt = getmntent (fp)) != NULL)
 #endif
@@ -193,12 +176,9 @@ static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
         mytab->mountspecial = mnt->MOUNTSPECIAL;
         mytab->mountpoint   = mnt->MOUNTPOINT;
         mytab->mountdevice  = dev;
-#ifndef SCO
         mytab->mymnttab_filesystem = mnt->MOUNTFS;
-#else
-        mytab->mymnttab_filesystem = "ext2";        //default ist case sensitiv unter unix
-#endif
-        return TRUE;
+
+        return sal_True;
     }
 #   ifdef LINUX
     /* #61624# dito */
@@ -206,7 +186,7 @@ static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
 #   else
     fclose (fp);
 #   endif
-    return FALSE;
+    return sal_False;
 }
 
 #endif
@@ -215,19 +195,15 @@ static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
 |*
 |*    DirEntry::IsCaseSensitive()
 |*
-|*    Beschreibung
-|*    Ersterstellung    TPF 25.02.1999
-|*    Letzte Aenderung  TPF 25.02.1999
-|*
 *************************************************************************/
 
-BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
+sal_Bool DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
 {
 
     if (eFormatter==FSYS_STYLE_HOST)
     {
-#ifdef NETBSD
-        return TRUE;
+#if defined(NETBSD) || defined(DRAGONFLY)
+        return sal_True;
 #else
         struct stat buf;
         DirEntry aPath(*this);
@@ -237,7 +213,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
         {
             if (aPath.Level() == 1)
             {
-                return TRUE;    // ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
+                return sal_True;    // ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
             }
             aPath = aPath [1];
         }
@@ -251,17 +227,17 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
             (fsmnt.mymnttab_filesystem.CompareTo("smb") ==COMPARE_EQUAL) ||
             (fsmnt.mymnttab_filesystem.CompareTo("ncpfs")==COMPARE_EQUAL))
         {
-            return FALSE;
+            return sal_False;
         }
         else
         {
-            return TRUE;
+            return sal_True;
         }
 #endif
     }
     else
     {
-        BOOL isCaseSensitive = TRUE;    // ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
+        sal_Bool isCaseSensitive = sal_True;    // ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
         switch ( eFormatter )
         {
             case FSYS_STYLE_MAC:
@@ -271,19 +247,19 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
             case FSYS_STYLE_NWFS:
             case FSYS_STYLE_HPFS:
                 {
-                    isCaseSensitive = FALSE;
+                    isCaseSensitive = sal_False;
                     break;
                 }
             case FSYS_STYLE_SYSV:
             case FSYS_STYLE_BSD:
             case FSYS_STYLE_DETECT:
                 {
-                    isCaseSensitive = TRUE;
+                    isCaseSensitive = sal_True;
                     break;
                 }
             default:
                 {
-                    isCaseSensitive = TRUE; // ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
+                    isCaseSensitive = sal_True; // ich bin unter UNIX, also ist der default im Zweifelsfall case sensitiv
                     break;
                 }
         }
@@ -295,22 +271,18 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
 |*
 |*    DirEntry::ToAbs()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91 13:30
-|*
 *************************************************************************/
 
-BOOL DirEntry::ToAbs()
+sal_Bool DirEntry::ToAbs()
 {
     if ( FSYS_FLAG_VOLUME == eFlag )
     {
         eFlag = FSYS_FLAG_ABSROOT;
-        return TRUE;
+        return sal_True;
     }
 
     if ( IsAbs() )
-      return TRUE;
+      return sal_True;
 
     char sBuf[MAXPATHLEN + 1];
     *this = DirEntry( String( getcwd( sBuf, MAXPATHLEN ), osl_getThreadTextEncoding() ) ) + *this;
@@ -320,10 +292,6 @@ BOOL DirEntry::ToAbs()
 /*************************************************************************
 |*
 |*    DirEntry::GetVolume()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 04.03.92
-|*    Letzte Aenderung
 |*
 *************************************************************************/
 
@@ -375,13 +343,9 @@ DirEntry DirEntry::GetDevice() const
 |*
 |*    DirEntry::SetCWD()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  DV 04.11.92
-|*
 *************************************************************************/
 
-BOOL DirEntry::SetCWD( BOOL bSloppy ) const
+sal_Bool DirEntry::SetCWD( sal_Bool bSloppy ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -389,31 +353,31 @@ BOOL DirEntry::SetCWD( BOOL bSloppy ) const
     ByteString aPath( GetFull(), osl_getThreadTextEncoding());
     if ( !chdir( aPath.GetBuffer() ) )
     {
-        return TRUE;
+        return sal_True;
     }
     else
     {
         if ( bSloppy && !chdir(aPath.GetBuffer()) )
         {
-            return TRUE;
+            return sal_True;
         }
         else
         {
-            return FALSE;
+            return sal_False;
         }
     }
 }
 
 //-------------------------------------------------------------------------
 
-USHORT DirReader_Impl::Init()
+sal_uInt16 DirReader_Impl::Init()
 {
     return 0;
 }
 
 //-------------------------------------------------------------------------
 
-USHORT DirReader_Impl::Read()
+sal_uInt16 DirReader_Impl::Read()
 {
     if (!pDosDir)
     {
@@ -422,7 +386,7 @@ USHORT DirReader_Impl::Read()
 
     if (!pDosDir)
     {
-        bReady = TRUE;
+        bReady = sal_True;
         return 0;
     }
 
@@ -439,7 +403,7 @@ USHORT DirReader_Impl::Read()
                 :   FSYS_FLAG_NORMAL;
             DirEntry *pTemp = new DirEntry( ByteString(pDosEntry->d_name), eFlag, FSYS_STYLE_UNX );
             if ( pParent )
-                pTemp->ImpChangeParent( new DirEntry( *pParent ), FALSE);
+                pTemp->ImpChangeParent( new DirEntry( *pParent ), sal_False);
             FileStat aStat( *pTemp );
             if ( ( ( ( pDir->eAttrMask & FSYS_KIND_DIR ) &&
                      ( aStat.IsKind( FSYS_KIND_DIR ) ) ) ||
@@ -459,17 +423,13 @@ USHORT DirReader_Impl::Read()
         }
     }
     else
-        bReady = TRUE;
+        bReady = sal_True;
     return 0;
 }
 
 /*************************************************************************
 |*
 |*    FileStat::FileStat()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MA 05.11.91
-|*    Letzte Aenderung  MA 07.11.91
 |*
 *************************************************************************/
 
@@ -487,12 +447,8 @@ FileStat::FileStat( const void *, const void * ):
 |*
 |*    FileStat::Update()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 11.06.91
-|*    Letzte Aenderung  MA 07.11.91
-|*
 *************************************************************************/
-BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL )
+sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool )
 {
 
     nSize = 0;
@@ -509,7 +465,7 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL )
     if ( !rDirEntry.IsValid() )
     {
         nError = FSYS_ERR_NOTEXISTS;
-        return FALSE;
+        return sal_False;
     }
 
     // Sonderbehandlung falls es sich um eine Root handelt
@@ -517,7 +473,7 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL )
     {
         nKindFlags = FSYS_KIND_DIR;
         nError = FSYS_ERR_OK;
-        return TRUE;
+        return sal_True;
     }
 
     struct stat aStat;
@@ -538,11 +494,11 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL )
         {
             nKindFlags = FSYS_KIND_WILD;
             nError = FSYS_ERR_OK;
-            return TRUE;
+            return sal_True;
         }
 
         nError = FSYS_ERR_NOTEXISTS;
-        return FALSE;
+        return sal_False;
     }
 
     nError = FSYS_ERR_OK;
@@ -564,7 +520,7 @@ BOOL FileStat::Update( const DirEntry& rDirEntry, BOOL )
     Unx2DateAndTime( aStat.st_mtime, aTimeModified, aDateModified );
     Unx2DateAndTime( aStat.st_atime, aTimeAccessed, aDateAccessed );
 
-    return TRUE;
+    return sal_True;
 }
 
 //====================================================================
@@ -595,10 +551,6 @@ const char *TempDirImpl( char *pBuf )
 |*
 |*    DirEntry::GetPathStyle() const
 |*
-|*    Beschreibung
-|*    Ersterstellung    MI 11.05.95
-|*    Letzte Aenderung  MI 11.05.95
-|*
 *************************************************************************/
 
 FSysPathStyle DirEntry::GetPathStyle( const String & )
@@ -609,9 +561,6 @@ FSysPathStyle DirEntry::GetPathStyle( const String & )
 /*************************************************************************
 |*
 |*    FileStat::SetDateTime
-|*
-|*    Ersterstellung    PB  27.06.97
-|*    Letzte Aenderung
 |*
 *************************************************************************/
 
@@ -656,7 +605,7 @@ ErrCode FileStat::QueryDiskSpace( const String &, BigInt &, BigInt & )
 
 //=========================================================================
 
-void FSysEnableSysErrorBox( BOOL )
+void FSysEnableSysErrorBox( sal_Bool )
 {
 }
 

@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: interpre.hxx,v $
- * $Revision: 1.35.44.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -69,8 +66,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
     if (pQueryRef->getColSize() < 4)
         return false;
 
-    BOOL bValid;
-    BOOL bFound;
+    sal_Bool bValid;
     OUString aCellStr;
     SCSIZE nIndex = 0;
     SCROW nRow = 0;
@@ -82,7 +78,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
     {
         ScQueryEntry& rEntry = pParam->GetEntry(nIndex);
 
-        bValid = FALSE;
+        bValid = false;
 
         if (nIndex > 0)
         {
@@ -92,19 +88,18 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
             if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_UND)) )
             {
                 rEntry.eConnect = SC_AND;
-                bValid = TRUE;
+                bValid = sal_True;
             }
             else if ( aCellStr.equals(ScGlobal::GetRscString(STR_TABLE_ODER)) )
             {
                 rEntry.eConnect = SC_OR;
-                bValid = TRUE;
+                bValid = sal_True;
             }
         }
 
         if ((nIndex < 1) || bValid)
         {
             // field name in the 2nd column.
-            bFound = FALSE;
             aCellStr = pQueryRef->getString(1, nRow);
             SCCOL nField = pDBRef->findFieldColumn(aCellStr); // TODO: must be case insensitive comparison.
             if (ValidCol(nField))
@@ -119,7 +114,6 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         if (bValid)
         {
             // equality, non-equality operator in the 3rd column.
-            bFound = FALSE;
             aCellStr = pQueryRef->getString(2, nRow);
             lcl_toUpper(aCellStr);
             const sal_Unicode* p = aCellStr.getStr();
@@ -148,7 +142,7 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         {
             // Finally, the right-hand-side value in the 4th column.
             *rEntry.pStr = pQueryRef->getString(3, nRow);
-            rEntry.bDoQuery = TRUE;
+            rEntry.bDoQuery = sal_True;
         }
         nIndex++;
         nRow++;
@@ -178,16 +172,12 @@ bool lcl_createExcelQuery(
 
     if (bValid)
     {
-//      ULONG nVisible = 0;
-//      for ( nCol=nCol1; nCol<=nCol2; nCol++ )
-//          nVisible += aCol[nCol].VisibleCount( nRow1+1, nRow2 );
-
         // Count the number of visible cells (excluding the header row).  Each
         // visible cell corresponds with a single query.
         SCSIZE nVisible = pQueryRef->getVisibleDataCellCount();
         if ( nVisible > SCSIZE_MAX / sizeof(void*) )
         {
-            DBG_ERROR("zu viele Filterkritierien");
+            OSL_FAIL("zu viele Filterkritierien");
             nVisible = 0;
         }
 
@@ -215,7 +205,7 @@ bool lcl_createExcelQuery(
                             pParam->GetEntry(nIndex).eConnect = SC_AND;
                     }
                     else
-                        bValid = FALSE;
+                        bValid = false;
                 }
                 nCol++;
             }
@@ -331,11 +321,13 @@ SCSIZE ScDBInternalRange::getVisibleDataCellCount() const
 
 OUString ScDBInternalRange::getString(SCCOL nCol, SCROW nRow) const
 {
-    String aStr;
+    OUString aStr;
     const ScAddress& s = maRange.aStart;
-    // #i109200# this is used in formula calculation, use GetInputString, not GetString
-    // (consistent with ScDBInternalRange::getCellString)
-    getDoc()->GetInputString(s.Col() + nCol, s.Row() + nRow, maRange.aStart.Tab(), aStr);
+    ScBaseCell* pCell = getDoc()->GetCell(ScAddress(s.Col() + nCol, s.Row() + nRow, maRange.aStart.Tab()));
+    if (!pCell)
+        return aStr;
+
+    getCellString(aStr, pCell);
     return aStr;
 }
 
@@ -348,15 +340,11 @@ SCCOL ScDBInternalRange::findFieldColumn(SCCOL nIndex) const
 {
     const ScRange& rRange = getRange();
     const ScAddress& s = rRange.aStart;
-    const ScAddress& e = rRange.aEnd;
 
     SCCOL nDBCol1 = s.Col();
-    SCCOL nDBCol2 = e.Col();
 
-    if ( nIndex <= 0 || nIndex > (nDBCol2 - nDBCol1 + 1) )
-        return nDBCol1;
-
-    return Min(nDBCol2, static_cast<SCCOL>(nDBCol1 + nIndex - 1));
+    // Don't handle out-of-bound condition here.  We'll do that later.
+    return nIndex + nDBCol1 - 1;
 }
 
 sal_uInt16 ScDBInternalRange::getCellString(OUString& rStr, ScBaseCell* pCell) const
@@ -381,7 +369,7 @@ sal_uInt16 ScDBInternalRange::getCellString(OUString& rStr, ScBaseCell* pCell) c
                 if (pFCell->IsValue())
                 {
                     double fVal = pFCell->GetValue();
-                    ULONG nIndex = pFormatter->GetStandardFormat(
+                    sal_uLong nIndex = pFormatter->GetStandardFormat(
                                         NUMBERFORMAT_NUMBER,
                                         ScGlobal::eLnge);
                     pFormatter->GetInputLineString(fVal, nIndex, aStr);
@@ -393,7 +381,7 @@ sal_uInt16 ScDBInternalRange::getCellString(OUString& rStr, ScBaseCell* pCell) c
             case CELLTYPE_VALUE:
             {
                 double fVal = ((ScValueCell*) pCell)->GetValue();
-                ULONG nIndex = pFormatter->GetStandardFormat(
+                sal_uLong nIndex = pFormatter->GetStandardFormat(
                                         NUMBERFORMAT_NUMBER,
                                         ScGlobal::eLnge);
                 pFormatter->GetInputLineString(fVal, nIndex, aStr);
@@ -420,9 +408,9 @@ SCCOL ScDBInternalRange::findFieldColumn(const OUString& rStr, sal_uInt16* pErr)
     SCCOL nDBCol2 = e.Col();
 
     SCCOL   nField = nDBCol1;
-    BOOL    bFound = TRUE;
+    sal_Bool    bFound = sal_True;
 
-    bFound = FALSE;
+    bFound = false;
     OUString aCellStr;
     ScAddress aLook( nDBCol1, nDBRow1, nDBTab1 );
     while (!bFound && (aLook.Col() <= nDBCol2))
@@ -518,14 +506,6 @@ SCCOL ScDBExternalRange::getFirstFieldColumn() const
 
 SCCOL ScDBExternalRange::findFieldColumn(SCCOL nIndex) const
 {
-    if (nIndex < 1)
-        // 1st field
-        return 0;
-
-    if (nIndex > mnCols)
-        // last field
-        return mnCols - 1;
-
     return nIndex - 1;
 }
 

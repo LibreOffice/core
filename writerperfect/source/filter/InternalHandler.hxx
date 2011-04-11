@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Copyright (C) 2007 Fridrich Strba .strba@bluewin.ch)
  *
@@ -44,3 +45,5 @@ private:
     std::vector<DocumentElement *> *mpElements;
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

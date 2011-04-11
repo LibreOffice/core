@@ -98,8 +98,8 @@ protected:
 class LwpForkedNotifyList
 {
 public:
-    LwpForkedNotifyList(){};
-    ~LwpForkedNotifyList() {};
+    LwpForkedNotifyList(){}
+    ~LwpForkedNotifyList() {}
     void Read(LwpObjectStream* pObjStrm)
     {
         m_PersistentList.Read(pObjStrm);
@@ -119,14 +119,14 @@ public:
     virtual ~LwpTable();
 
     virtual void Parse(IXFStream* pOutputStream);
-    double GetWidth() {return LwpTools::ConvertFromUnitsToMetric(m_nWidth);};
-    double GetHeight() {return LwpTools::ConvertFromUnitsToMetric(m_nHeight);};
-    LwpObjectID * GetDefaultCellStyle() {return &m_DefaultCellStyle;};
-    sal_uInt16 GetRow() {return m_nRow;};
-    sal_uInt16 GetColumn() {return m_nColumn;};
-    LwpTableLayout * GetTableLayout(){return static_cast<LwpTableLayout *>(GetLayout(NULL));};
+    double GetWidth() {return LwpTools::ConvertFromUnitsToMetric(m_nWidth);}
+    double GetHeight() {return LwpTools::ConvertFromUnitsToMetric(m_nHeight);}
+    LwpObjectID * GetDefaultCellStyle() {return &m_DefaultCellStyle;}
+    sal_uInt16 GetRow() {return m_nRow;}
+    sal_uInt16 GetColumn() {return m_nColumn;}
+    LwpTableLayout * GetTableLayout(){return static_cast<LwpTableLayout *>(GetLayout(NULL));}
     sal_Bool IsNumberDown();
-    virtual sal_Bool IsTable(){ return sal_True;};
+    virtual sal_Bool IsTable(){ return sal_True;}
     LwpSuperTableLayout* GetSuperTableLayout();
 protected:
     LwpDLVListHeadTail m_RowCache;

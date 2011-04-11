@@ -282,7 +282,7 @@ public class _XNamedRanges extends MultiMethodTest {
             log.println("Exception expected when removed unexistent element!");
             bResult = false;
         } catch (com.sun.star.uno.RuntimeException e) {
-            log.println("Expected exception occured while testing" +
+            log.println("Expected exception occurred while testing" +
                       "removeByName() when removed unexistent element.");
 
         }

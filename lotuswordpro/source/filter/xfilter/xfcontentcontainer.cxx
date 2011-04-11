@@ -57,11 +57,6 @@
  * @file
  * Container for content.It will destroy all children when destroy.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-27 create this file.
- * 2005-04-08 add copy constructure.
- ************************************************************************/
 #include    "xfcontentcontainer.hxx"
 #include    "xftextcontent.hxx"
 
@@ -73,7 +68,7 @@ XFContentContainer::XFContentContainer(const XFContentContainer& other)
 {
     std::vector<IXFContent*>::const_iterator it;
 
-    for( it = other.m_aContents.begin(); it != other.m_aContents.end(); it++ )
+    for( it = other.m_aContents.begin(); it != other.m_aContents.end(); ++it )
     {
         IXFContent *pContent = *it;
         if( pContent )
@@ -89,7 +84,7 @@ XFContentContainer& XFContentContainer::operator=(const XFContentContainer& othe
 {
     std::vector<IXFContent*>::const_iterator it;
 
-    for( it = other.m_aContents.begin(); it != other.m_aContents.end(); it++ )
+    for( it = other.m_aContents.begin(); it != other.m_aContents.end(); ++it )
     {
         IXFContent *pContent = *it;
         if( pContent )
@@ -106,7 +101,7 @@ XFContentContainer::~XFContentContainer()
 {
     std::vector<IXFContent*>::iterator it;
 
-    for( it = m_aContents.begin(); it != m_aContents.end(); it++ )
+    for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
     {
         IXFContent *pContent = *it;
         if( pContent )
@@ -143,7 +138,7 @@ void    XFContentContainer::Reset()
 {
     std::vector<IXFContent*>::iterator it;
 
-    for( it = m_aContents.begin(); it != m_aContents.end(); it++ )
+    for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
     {
         IXFContent *pContent = *it;
         if( pContent )
@@ -190,7 +185,7 @@ void    XFContentContainer::ToXml(IXFStream *pStrm)
 {
     std::vector<IXFContent*>::iterator it;
 
-    for( it = m_aContents.begin(); it != m_aContents.end(); it++ )
+    for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
     {
         IXFContent *pContent = *it;
         if( pContent )

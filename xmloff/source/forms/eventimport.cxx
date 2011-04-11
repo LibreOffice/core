@@ -137,7 +137,7 @@ namespace xmloff
         Reference< XEventAttacherManager > xEventManager(_rxContainer, UNO_QUERY);
         if (!xEventManager.is())
         {
-            OSL_ENSURE(sal_False, "ODefaultEventAttacherManager::setEvents: invalid argument!");
+            OSL_FAIL("ODefaultEventAttacherManager::setEvents: invalid argument!");
             return;
         }
 

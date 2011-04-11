@@ -60,7 +60,7 @@ DBG_NAME( AccessibleDialogWindow )
 
 
 // -----------------------------------------------------------------------------
-//  class ChildDescriptor
+// class ChildDescriptor
 // -----------------------------------------------------------------------------
 
 AccessibleDialogWindow::ChildDescriptor::ChildDescriptor( DlgEdObj* _pDlgEdObj )
@@ -116,7 +116,7 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
 }
 
 // -----------------------------------------------------------------------------
-//  class AccessibleDialogWindow
+// class AccessibleDialogWindow
 // -----------------------------------------------------------------------------
 
 AccessibleDialogWindow::AccessibleDialogWindow( DialogWindow* pDialogWindow )
@@ -131,9 +131,9 @@ AccessibleDialogWindow::AccessibleDialogWindow( DialogWindow* pDialogWindow )
         SdrPage* pSdrPage = m_pDialogWindow->GetPage();
         if ( pSdrPage )
         {
-            ULONG nCount = pSdrPage->GetObjCount();
+            sal_uLong nCount = pSdrPage->GetObjCount();
 
-            for ( ULONG i = 0; i < nCount; ++i )
+            for ( sal_uLong i = 0; i < nCount; ++i )
             {
                 SdrObject* pObj = pSdrPage->GetObj( i );
                 DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
@@ -358,7 +358,7 @@ void AccessibleDialogWindow::UpdateChildren()
         SdrPage* pSdrPage = m_pDialogWindow->GetPage();
         if ( pSdrPage )
         {
-            for ( ULONG i = 0, nCount = pSdrPage->GetObjCount(); i < nCount; ++i )
+            for ( sal_uLong i = 0, nCount = pSdrPage->GetObjCount(); i < nCount; ++i )
             {
                 SdrObject* pObj = pSdrPage->GetObj( i );
                 DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
@@ -648,7 +648,7 @@ void AccessibleDialogWindow::disposing()
 
 ::rtl::OUString AccessibleDialogWindow::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.basctl.AccessibleWindow" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.basctl.AccessibleWindow" ));
 }
 
 // -----------------------------------------------------------------------------
@@ -669,7 +669,7 @@ sal_Bool AccessibleDialogWindow::supportsService( const ::rtl::OUString& rServic
 Sequence< ::rtl::OUString > AccessibleDialogWindow::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleWindow" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleWindow" ));
     return aNames;
 }
 
@@ -752,7 +752,7 @@ sal_Int32 AccessibleDialogWindow::getAccessibleIndexInParent(  ) throw (RuntimeE
         Window* pParent = m_pDialogWindow->GetAccessibleParentWindow();
         if ( pParent )
         {
-            for ( USHORT i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
+            for ( sal_uInt16 i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
             {
                 Window* pChild = pParent->GetAccessibleChildWindow( i );
                 if ( pChild == static_cast< Window* >( m_pDialogWindow ) )
@@ -778,7 +778,7 @@ sal_Int16 AccessibleDialogWindow::getAccessibleRole(  ) throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString AccessibleDialogWindow::getAccessibleDescription(   ) throw (RuntimeException)
+::rtl::OUString AccessibleDialogWindow::getAccessibleDescription(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
@@ -1115,7 +1115,7 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
             {
                 SdrPageView* pPgView = pSdrView->GetSdrPageView();
                 if ( pPgView )
-                    pSdrView->MarkObj( pDlgEdObj, pPgView, TRUE );
+                    pSdrView->MarkObj( pDlgEdObj, pPgView, sal_True );
             }
         }
     }

@@ -51,7 +51,6 @@ class RscCmdLine
 public:
 
     RscStrList          aInputList;     // Liste der Quelldateien
-    RscStrList          aSymbolList;    // Liste der Symbole
     ByteString          aPath;          // Liste der Pfade
     RSCBYTEORDER_TYPE   nByteOrder;
     unsigned short      nCommands;      // Steuerbits
@@ -91,7 +90,6 @@ struct WriteRcContext;
 class RscCompiler
 {
 private:
-    RscStrList      aTmpFileList;   // Liste der Tmp-Dateien
     ByteString      aTmpOutputHxx;  // Name der TempHxx-Ausgabedatei
     ByteString      aTmpOutputCxx;  // Name der TempCxx-Ausgabedatei
     ByteString      aTmpOutputRcCtor; // Name der Temp Ctor-Ausgabedatei
@@ -124,8 +122,8 @@ public:
     ByteString      GetTmpFileName();   // Die Dateien werden geloescht
 
                     // Include Statements lesen
-    ERRTYPE         IncludeParser( ULONG lFileKey );
-    ERRTYPE         ParseOneFile( ULONG lFileKey, const RscCmdLine::OutputFile* pOutputFile, const WriteRcContext* pContext );
+    ERRTYPE         IncludeParser( sal_uLong lFileKey );
+    ERRTYPE         ParseOneFile( sal_uLong lFileKey, const RscCmdLine::OutputFile* pOutputFile, const WriteRcContext* pContext );
     ERRTYPE         Link();
     void            EndCompile();
 };

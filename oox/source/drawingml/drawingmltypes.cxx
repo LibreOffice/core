@@ -32,7 +32,7 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <sax/tools/converter.hxx>
-#include "tokens.hxx"
+#include "oox/token/tokens.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;

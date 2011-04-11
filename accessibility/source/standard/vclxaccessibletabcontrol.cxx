@@ -289,7 +289,7 @@ void VCLXAccessibleTabControl::ProcessWindowChildEvent( const VclWindowEvent& rV
                 {
                     for ( sal_Int32 i = 0, nCount = m_pTabControl->GetPageCount(); i < nCount; ++i )
                     {
-                        sal_uInt16 nPageId = m_pTabControl->GetPageId( (USHORT)i );
+                        sal_uInt16 nPageId = m_pTabControl->GetPageId( (sal_uInt16)i );
                         TabPage* pTabPage = m_pTabControl->GetTabPage( nPageId );
                         if ( pTabPage == (TabPage*) pChild )
                             UpdateTabPage( i, rVclWindowEvent.GetId() == VCLEVENT_WINDOW_SHOW );
@@ -355,7 +355,7 @@ void VCLXAccessibleTabControl::disposing()
 
 ::rtl::OUString VCLXAccessibleTabControl::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleTabControl" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleTabControl") );
 }
 
 // -----------------------------------------------------------------------------
@@ -363,7 +363,7 @@ void VCLXAccessibleTabControl::disposing()
 Sequence< ::rtl::OUString > VCLXAccessibleTabControl::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleTabControl" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleTabControl") );
     return aNames;
 }
 
@@ -392,7 +392,7 @@ Reference< XAccessible > VCLXAccessibleTabControl::getAccessibleChild( sal_Int32
     {
         if ( m_pTabControl )
         {
-            sal_uInt16 nPageId = m_pTabControl->GetPageId( (USHORT)i );
+            sal_uInt16 nPageId = m_pTabControl->GetPageId( (sal_uInt16)i );
 
             xChild = new VCLXAccessibleTabPage( m_pTabControl, nPageId );
 
@@ -434,7 +434,7 @@ void VCLXAccessibleTabControl::selectAccessibleChild( sal_Int32 nChildIndex ) th
         throw IndexOutOfBoundsException();
 
     if ( m_pTabControl )
-        m_pTabControl->SelectTabPage( m_pTabControl->GetPageId( (USHORT)nChildIndex ) );
+        m_pTabControl->SelectTabPage( m_pTabControl->GetPageId( (sal_uInt16)nChildIndex ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -447,7 +447,7 @@ sal_Bool VCLXAccessibleTabControl::isAccessibleChildSelected( sal_Int32 nChildIn
         throw IndexOutOfBoundsException();
 
     sal_Bool bSelected = sal_False;
-    if ( m_pTabControl && m_pTabControl->GetCurPageId() == m_pTabControl->GetPageId( (USHORT)nChildIndex ) )
+    if ( m_pTabControl && m_pTabControl->GetCurPageId() == m_pTabControl->GetPageId( (sal_uInt16)nChildIndex ) )
         bSelected = sal_True;
 
     return bSelected;

@@ -91,7 +91,7 @@ SAL_DLLPUBLIC_EXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Storag
         }
         catch(Exception& e)
         {
-            OSL_ENSURE(0,"Exception catched! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_isStreamElement");
+            OSL_FAIL("Exception catched! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_isStreamElement");
             if (JNI_FALSE != env->ExceptionCheck())
                 env->ExceptionClear();
             ::rtl::OString cstr( ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
@@ -130,7 +130,7 @@ SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFil
         }
         catch(Exception& e)
         {
-            OSL_ENSURE(0,"Exception catched! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement");
+            OSL_FAIL("Exception catched! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement");
             StorageContainer::throwJavaException(e,env);
         }
     }
@@ -173,7 +173,7 @@ SAL_DLLPUBLIC_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFil
         }
         catch(Exception& e)
         {
-            OSL_ENSURE(0,"Exception catched! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement");
+            OSL_FAIL("Exception catched! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement");
             StorageContainer::throwJavaException(e,env);
         }
     }

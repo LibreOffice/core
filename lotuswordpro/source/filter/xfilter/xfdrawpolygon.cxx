@@ -57,10 +57,6 @@
  * @file
  * Polylon object.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-2-18 create this file.
- ************************************************************************/
 #include    "xfdrawpolygon.hxx"
 
 XFDrawPolygon::XFDrawPolygon()
@@ -82,7 +78,7 @@ void XFDrawPolygon::ToXml(IXFStream *pStrm)
 
     //points
     rtl::OUString   strPoints;
-    for( it = m_aPoints.begin(); it != m_aPoints.end(); it++ )
+    for( it = m_aPoints.begin(); it != m_aPoints.end(); ++it )
     {
         XFPoint pt = *it;
         double  x = (pt.GetX()-rect.GetX())*1000;

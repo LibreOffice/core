@@ -326,7 +326,7 @@ int GetCommandLineTokenCount( const ByteString& rLine )
     return nTokenCount;
 }
 
-String WhitespaceToSpace( const String& rLine, BOOL bProtect )
+String WhitespaceToSpace( const String& rLine, sal_Bool bProtect )
 {
     int nLen = rLine.Len();
     if( ! nLen )
@@ -358,11 +358,11 @@ String WhitespaceToSpace( const String& rLine, BOOL bProtect )
                     pRun++;
             }
             else if( bProtect && *pRun == '`' )
-                CopyUntil( pLeap, pRun, '`', TRUE );
+                CopyUntil( pLeap, pRun, '`', sal_True );
             else if( bProtect && *pRun == '\'' )
-                CopyUntil( pLeap, pRun, '\'', TRUE );
+                CopyUntil( pLeap, pRun, '\'', sal_True );
             else if( bProtect && *pRun == '"' )
-                CopyUntil( pLeap, pRun, '"', TRUE );
+                CopyUntil( pLeap, pRun, '"', sal_True );
             else
             {
                 *pLeap = *pRun;
@@ -383,7 +383,7 @@ String WhitespaceToSpace( const String& rLine, BOOL bProtect )
     return aRet;
 }
 
-ByteString WhitespaceToSpace( const ByteString& rLine, BOOL bProtect )
+ByteString WhitespaceToSpace( const ByteString& rLine, sal_Bool bProtect )
 {
     int nLen = rLine.Len();
     if( ! nLen )
@@ -415,11 +415,11 @@ ByteString WhitespaceToSpace( const ByteString& rLine, BOOL bProtect )
                     pRun++;
             }
             else if( bProtect && *pRun == '`' )
-                CopyUntil( pLeap, pRun, '`', TRUE );
+                CopyUntil( pLeap, pRun, '`', sal_True );
             else if( bProtect && *pRun == '\'' )
-                CopyUntil( pLeap, pRun, '\'', TRUE );
+                CopyUntil( pLeap, pRun, '\'', sal_True );
             else if( bProtect && *pRun == '"' )
-                CopyUntil( pLeap, pRun, '"', TRUE );
+                CopyUntil( pLeap, pRun, '"', sal_True );
             else
             {
                 *pLeap = *pRun;

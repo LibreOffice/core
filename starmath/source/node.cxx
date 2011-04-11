@@ -50,10 +50,12 @@
 #include <math.h>
 #include <float.h>
 
-// define this to draw rectangles for debugging
-//#define SM_RECT_DEBUG
 
 #define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
+
+
+using ::rtl::OUString;
+
 
 ////////////////////////////////////////
 // SmTmpDevice
@@ -76,7 +78,7 @@ class SmTmpDevice
     Color   Impl_GetColor( const Color& rColor );
 
 public:
-    SmTmpDevice(OutputDevice &rTheDev, BOOL bUseMap100th_mm);
+    SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm);
     ~SmTmpDevice()  { rOutDev.Pop(); }
 
     void SetFont(const Font &rNewFont);
@@ -89,14 +91,14 @@ public:
 };
 
 
-SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, BOOL bUseMap100th_mm) :
+SmTmpDevice::SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm) :
     rOutDev(rTheDev)
 {
     rOutDev.Push( PUSH_FONT | PUSH_MAPMODE |
                   PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_TEXTCOLOR );
     if (bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev.GetMapMode().GetMapUnit())
     {
-        DBG_ERROR( "incorrect MapMode?" );
+        OSL_FAIL( "incorrect MapMode?" );
         rOutDev.SetMapMode( MAP_100TH_MM );     //Immer fuer 100% fomatieren
     }
 }
@@ -154,19 +156,19 @@ SmNode::~SmNode()
 }
 
 
-BOOL SmNode::IsVisible() const
+bool SmNode::IsVisible() const
 {
-    return FALSE;
+    return false;
 }
 
 
-USHORT SmNode::GetNumSubNodes() const
+sal_uInt16 SmNode::GetNumSubNodes() const
 {
     return 0;
 }
 
 
-SmNode * SmNode::GetSubNode(USHORT /*nIndex*/)
+SmNode * SmNode::GetSubNode(sal_uInt16 /*nIndex*/)
 {
     return NULL;
 }
@@ -184,14 +186,14 @@ SmNode * SmNode::GetLeftMost()
 }
 
 
-void SmNode::SetPhantom(BOOL bIsPhantomP)
+void SmNode::SetPhantom(bool bIsPhantomP)
 {
     if (! (Flags() & FLG_VISIBLE))
         bIsPhantom = bIsPhantomP;
 
     SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
-    for (USHORT i = 0; i < nSize; i++)
+    sal_uInt16  nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->SetPhantom(bIsPhantom);
 }
@@ -203,14 +205,14 @@ void SmNode::SetColor(const Color& rColor)
         GetFont().SetColor(rColor);
 
     SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
-    for (USHORT i = 0; i < nSize; i++)
+    sal_uInt16  nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->SetColor(rColor);
 }
 
 
-void SmNode::SetAttribut(USHORT nAttrib)
+void SmNode::SetAttribut(sal_uInt16 nAttrib)
 {
     if (
         (nAttrib == ATTR_BOLD && !(Flags() & FLG_BOLD)) ||
@@ -221,14 +223,14 @@ void SmNode::SetAttribut(USHORT nAttrib)
     }
 
     SmNode *pNode;
-    USHORT nSize = GetNumSubNodes();
-    for (USHORT i = 0; i < nSize; i++)
+    sal_uInt16 nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->SetAttribut(nAttrib);
 }
 
 
-void SmNode::ClearAttribut(USHORT nAttrib)
+void SmNode::ClearAttribut(sal_uInt16 nAttrib)
 {
     if (
         (nAttrib == ATTR_BOLD && !(Flags() & FLG_BOLD)) ||
@@ -239,8 +241,8 @@ void SmNode::ClearAttribut(USHORT nAttrib)
     }
 
     SmNode *pNode;
-    USHORT nSize = GetNumSubNodes();
-    for (USHORT i = 0; i < nSize; i++)
+    sal_uInt16 nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->ClearAttribut(nAttrib);
 }
@@ -252,14 +254,14 @@ void SmNode::SetFont(const SmFace &rFace)
         GetFont() = rFace;
 
     SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
-    for (USHORT i = 0; i < nSize; i++)
+    sal_uInt16  nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->SetFont(rFace);
 }
 
 
-void SmNode::SetFontSize(const Fraction &rSize, USHORT nType)
+void SmNode::SetFontSize(const Fraction &rSize, sal_uInt16 nType)
     //! 'rSize' is in units of pts
 {
     Size  aFntSize;
@@ -299,7 +301,7 @@ void SmNode::SetFontSize(const Fraction &rSize, USHORT nType)
         }
 
         // check the requested size against maximum value
-        static int __READONLY_DATA  nMaxVal = SmPtsTo100th_mm(128);
+        static int const    nMaxVal = SmPtsTo100th_mm(128);
         if (aFntSize.Height() > nMaxVal)
             aFntSize.Height() = nMaxVal;
 
@@ -307,8 +309,8 @@ void SmNode::SetFontSize(const Fraction &rSize, USHORT nType)
     }
 
     SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
-    for (USHORT i = 0;  i < nSize;  i++)
+    sal_uInt16  nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0;  i < nSize;  i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->SetFontSize(rSize, nType);
 }
@@ -319,14 +321,14 @@ void SmNode::SetSize(const Fraction &rSize)
     GetFont() *= rSize;
 
     SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
-    for (USHORT i = 0;  i < nSize;  i++)
+    sal_uInt16  nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0;  i < nSize;  i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->SetSize(rSize);
 }
 
 
-void SmNode::SetRectHorAlign(RectHorAlign eHorAlign, BOOL bApplyToSubTree )
+void SmNode::SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree )
 {
     if (!(Flags() & FLG_HORALIGN))
         eRectHorAlign = eHorAlign;
@@ -334,8 +336,8 @@ void SmNode::SetRectHorAlign(RectHorAlign eHorAlign, BOOL bApplyToSubTree )
     if (bApplyToSubTree)
     {
         SmNode *pNode;
-        USHORT  nSize = GetNumSubNodes();
-        for (USHORT i = 0; i < nSize; i++)
+        sal_uInt16  nSize = GetNumSubNodes();
+        for (sal_uInt16 i = 0; i < nSize; i++)
             if (NULL != (pNode = GetSubNode(i)))
                 pNode->SetRectHorAlign(eHorAlign);
     }
@@ -352,11 +354,11 @@ void SmNode::PrepareAttributes()
 void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
 #if OSL_DEBUG_LEVEL > 1
-    bIsDebug    = TRUE;
+    bIsDebug    = true;
 #else
-    bIsDebug    = FALSE;
+    bIsDebug    = false;
 #endif
-    bIsPhantom  = FALSE;
+    bIsPhantom  = false;
     nFlags      = 0;
     nAttributes = 0;
 
@@ -373,8 +375,8 @@ void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     GetFont().SetItalic(ITALIC_NONE);
 
     SmNode *pNode;
-    USHORT      nSize = GetNumSubNodes();
-    for (USHORT i = 0; i < nSize; i++)
+    sal_uInt16      nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->Prepare(rFormat, rDocShell);
 }
@@ -386,11 +388,11 @@ void  SmNode::ToggleDebug() const
 {
     SmNode *pThis = (SmNode *) this;
 
-    pThis->bIsDebug = bIsDebug ? FALSE : TRUE;
+    pThis->bIsDebug = bIsDebug ? false : true;
 
     SmNode *pNode;
-    USHORT      nSize = GetNumSubNodes();
-    for (USHORT i = 0; i < nSize; i++)
+    sal_uInt16      nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (NULL != (pNode = pThis->GetSubNode(i)))
             pNode->ToggleDebug();
 }
@@ -405,8 +407,8 @@ void SmNode::Move(const Point& rPosition)
     SmRect::Move(rPosition);
 
     SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
-    for (USHORT i = 0;  i < nSize;  i++)
+    sal_uInt16  nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0;  i < nSize;  i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->Move(rPosition);
 }
@@ -415,8 +417,8 @@ void SmNode::Move(const Point& rPosition)
 void SmNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
     SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
-    for (USHORT i = 0;  i < nSize;  i++)
+    sal_uInt16  nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0;  i < nSize;  i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->Arrange(rDev, rFormat);
 }
@@ -424,10 +426,10 @@ void SmNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 void SmNode::CreateTextFromNode(String &rText)
 {
     SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
+    sal_uInt16  nSize = GetNumSubNodes();
     if (nSize > 1)
         rText.Append('{');
-    for (USHORT i = 0;  i < nSize;  i++)
+    for (sal_uInt16 i = 0;  i < nSize;  i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->CreateTextFromNode(rText);
     if (nSize > 1)
@@ -438,17 +440,17 @@ void SmNode::CreateTextFromNode(String &rText)
 }
 
 
-void SmNode::AdaptToX(const OutputDevice &/*rDev*/, ULONG /*nWidth*/)
+void SmNode::AdaptToX(const OutputDevice &/*rDev*/, sal_uLong /*nWidth*/)
 {
 }
 
 
-void SmNode::AdaptToY(const OutputDevice &/*rDev*/, ULONG /*nHeight*/)
+void SmNode::AdaptToY(const OutputDevice &/*rDev*/, sal_uLong /*nHeight*/)
 {
 }
 
 
-const SmNode * SmNode::FindTokenAt(USHORT nRow, USHORT nCol) const
+const SmNode * SmNode::FindTokenAt(sal_uInt16 nRow, sal_uInt16 nCol) const
     // returns (first) ** visible ** (sub)node with the tokens text at
     // position 'nRow', 'nCol'.
     //! (there should be exactly one such node if any)
@@ -459,8 +461,8 @@ const SmNode * SmNode::FindTokenAt(USHORT nRow, USHORT nCol) const
         return this;
     else
     {
-        USHORT  nNumSubNodes = GetNumSubNodes();
-        for (USHORT  i = 0;  i < nNumSubNodes;  i++)
+        sal_uInt16  nNumSubNodes = GetNumSubNodes();
+        for (sal_uInt16  i = 0;  i < nNumSubNodes;  i++)
         {   const SmNode *pNode = GetSubNode(i);
 
             if (!pNode)
@@ -485,8 +487,8 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
         pResult = this;
     else
     {
-        USHORT  nNumSubNodes = GetNumSubNodes();
-        for (USHORT  i = 0;  i < nNumSubNodes;  i++)
+        sal_uInt16  nNumSubNodes = GetNumSubNodes();
+        for (sal_uInt16  i = 0;  i < nNumSubNodes;  i++)
         {   const SmNode *pNode = GetSubNode(i);
 
             if (!pNode)
@@ -515,7 +517,7 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
 
 void SmNode::GetAccessibleText( String &/*rText*/ ) const
 {
-    DBG_ERROR( "SmNode: GetAccessibleText not overloaded" );
+    OSL_FAIL( "SmNode: GetAccessibleText not overloaded" );
 }
 
 const SmNode * SmNode::FindNodeWithAccessibleIndex(xub_StrLen nAccIdx) const
@@ -532,8 +534,8 @@ const SmNode * SmNode::FindNodeWithAccessibleIndex(xub_StrLen nAccIdx) const
         pResult = this;
     else
     {
-        USHORT  nNumSubNodes = GetNumSubNodes();
-        for (USHORT  i = 0;  i < nNumSubNodes;  i++)
+        sal_uInt16  nNumSubNodes = GetNumSubNodes();
+        for (sal_uInt16  i = 0;  i < nNumSubNodes;  i++)
         {
             const SmNode *pNode = GetSubNode(i);
             if (!pNode)
@@ -642,17 +644,23 @@ void SmNode::DumpAsDot(std::ostream &out, String* label, int number, int& id, in
 }
 #endif /* DEBUG_ENABLE_DUMPASDOT */
 
+long SmNode::GetFormulaBaseline() const
+{
+    DBG_ASSERT( 0, "This dummy implementation should not have been called." );
+    return 0;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
     SmNode( rNode.GetType(), rNode.GetToken() )
 {
-    ULONG i;
+    sal_uLong i;
     for (i = 0;  i < aSubNodes.size();  i++)
         delete aSubNodes[i];
     aSubNodes.resize(0);
 
-    ULONG nSize = rNode.aSubNodes.size();
+    sal_uLong nSize = rNode.aSubNodes.size();
     aSubNodes.resize( nSize );
     for (i = 0;  i < nSize;  ++i)
     {
@@ -667,7 +675,7 @@ SmStructureNode::~SmStructureNode()
 {
     SmNode *pNode;
 
-    for (USHORT i = 0;  i < GetNumSubNodes();  i++)
+    for (sal_uInt16 i = 0;  i < GetNumSubNodes();  i++)
         if (NULL != (pNode = GetSubNode(i)))
             delete pNode;
 }
@@ -677,12 +685,12 @@ SmStructureNode & SmStructureNode::operator = ( const SmStructureNode &rNode )
 {
     SmNode::operator = ( rNode );
 
-    ULONG i;
+    sal_uLong i;
     for (i = 0;  i < aSubNodes.size();  i++)
         delete aSubNodes[i];
     aSubNodes.resize(0);
 
-    ULONG nSize = rNode.aSubNodes.size();
+    sal_uLong nSize = rNode.aSubNodes.size();
     aSubNodes.resize( nSize );
     for (i = 0;  i < nSize;  ++i)
     {
@@ -718,19 +726,19 @@ void SmStructureNode::SetSubNodes(const SmNodeArray &rNodeArray)
 }
 
 
-BOOL SmStructureNode::IsVisible() const
+bool SmStructureNode::IsVisible() const
 {
-    return FALSE;
+    return false;
 }
 
 
-USHORT SmStructureNode::GetNumSubNodes() const
+sal_uInt16 SmStructureNode::GetNumSubNodes() const
 {
-    return (USHORT) aSubNodes.size();
+    return (sal_uInt16) aSubNodes.size();
 }
 
 
-SmNode * SmStructureNode::GetSubNode(USHORT nIndex)
+SmNode * SmStructureNode::GetSubNode(sal_uInt16 nIndex)
 {
     return aSubNodes[nIndex];
 }
@@ -738,8 +746,8 @@ SmNode * SmStructureNode::GetSubNode(USHORT nIndex)
 
 void SmStructureNode::GetAccessibleText( String &rText ) const
 {
-    USHORT nNodes = GetNumSubNodes();
-    for (USHORT i = 0;  i < nNodes;  ++i)
+    sal_uInt16 nNodes = GetNumSubNodes();
+    for (sal_uInt16 i = 0;  i < nNodes;  ++i)
     {
         const SmNode *pNode = ((SmStructureNode *) this)->GetSubNode(i);
         if (pNode)
@@ -754,19 +762,19 @@ void SmStructureNode::GetAccessibleText( String &rText ) const
 ///////////////////////////////////////////////////////////////////////////
 
 
-BOOL SmVisibleNode::IsVisible() const
+bool SmVisibleNode::IsVisible() const
 {
-    return TRUE;
+    return true;
 }
 
 
-USHORT SmVisibleNode::GetNumSubNodes() const
+sal_uInt16 SmVisibleNode::GetNumSubNodes() const
 {
     return 0;
 }
 
 
-SmNode * SmVisibleNode::GetSubNode(USHORT /*nIndex*/)
+SmNode * SmVisibleNode::GetSubNode(sal_uInt16 /*nIndex*/)
 {
     return NULL;
 }
@@ -785,10 +793,10 @@ void SmGraphicNode::GetAccessibleText( String &rText ) const
 void SmExpressionNode::CreateTextFromNode(String &rText)
 {
     SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
+    sal_uInt16  nSize = GetNumSubNodes();
     if (nSize > 1)
         rText.Append('{');
-    for (USHORT i = 0;  i < nSize;  i++)
+    for (sal_uInt16 i = 0;  i < nSize;  i++)
         if (NULL != (pNode = GetSubNode(i)))
         {
             pNode->CreateTextFromNode(rText);
@@ -815,7 +823,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     Point rPosition;
 
     SmNode *pNode;
-    USHORT  nSize   = GetNumSubNodes();
+    sal_uInt16  nSize   = GetNumSubNodes();
 
     // make distance depend on font size
     long  nDist = +(rFormat.GetDistance(DIS_VERTICAL)
@@ -827,7 +835,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     // arrange subnodes and get maximum width of them
     long  nMaxWidth = 0,
           nTmp;
-    USHORT i;
+    sal_uInt16 i;
     for (i = 0; i < nSize;  i++)
         if (NULL != (pNode = GetSubNode(i)))
         {   pNode->Arrange(rDev, rFormat);
@@ -836,7 +844,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         }
 
     Point  aPos;
-    SmRect::operator = (SmRect(nMaxWidth, 0));
+    SmRect::operator = (SmRect(nMaxWidth, 1));
     for (i = 0;  i < nSize;  i++)
     {   if (NULL != (pNode = GetSubNode(i)))
         {   const SmRect &rNodeRect = pNode->GetRect();
@@ -851,12 +859,34 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
             ExtendBy(rNodeRect, nSize > 1 ? RCP_NONE : RCP_ARG);
         }
     }
+    // --> 4.7.2010 #i972#
+    if (HasBaseline())
+        nFormulaBaseline = GetBaseline();
+    else
+    {
+        SmTmpDevice  aTmpDev ((OutputDevice &) rDev, sal_True);
+        aTmpDev.SetFont(GetFont());
+
+        SmRect aRect = (SmRect(aTmpDev, &rFormat, C2S("a"),
+                               GetFont().GetBorderWidth()));
+        nFormulaBaseline = GetAlignM();
+        // move from middle position by constant - distance
+        // between middle and baseline for single letter
+        nFormulaBaseline += aRect.GetBaseline() - aRect.GetAlignM();
+    }
+    // <--
 }
 
 
 SmNode * SmTableNode::GetLeftMost()
 {
     return this;
+}
+
+
+long SmTableNode::GetFormulaBaseline() const
+{
+    return nFormulaBaseline;
 }
 
 
@@ -881,29 +911,30 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     // arranges all subnodes in one row with some extra space between
 {
     SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
-    USHORT i;
+    sal_uInt16  nSize = GetNumSubNodes();
+    sal_uInt16 i;
     for (i = 0; i < nSize;  i++)
         if (NULL != (pNode = GetSubNode(i)))
             pNode->Arrange(rDev, rFormat);
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
-    // provide an empty rectangle with alignment parameters for the "current"
-    // font (in order to make "a^1 {}_2^3 a_4" work correct, that is, have the
-    // same sub-/supscript positions.)
-    //! be sure to use a character that has explicitly defined HiAttribut
-    //! line in rect.cxx such as 'a' in order to make 'vec a' look same to
-    //! 'vec {a}'.
-    SmRect::operator = (SmRect(aTmpDev, &rFormat, C2S("a"),
-                               GetFont().GetBorderWidth()));
-    // make sure that the rectangle occupies (almost) no space
-    SetWidth(1);
-    SetItalicSpaces(0, 0);
-
     if (nSize < 1)
+    {
+        // provide an empty rectangle with alignment parameters for the "current"
+        // font (in order to make "a^1 {}_2^3 a_4" work correct, that is, have the
+        // same sub-/supscript positions.)
+        //! be sure to use a character that has explicitly defined HiAttribut
+        //! line in rect.cxx such as 'a' in order to make 'vec a' look same to
+        //! 'vec {a}'.
+        SmRect::operator = (SmRect(aTmpDev, &rFormat, C2S("a"),
+                            GetFont().GetBorderWidth()));
+        // make sure that the rectangle occupies (almost) no space
+        SetWidth(1);
+        SetItalicSpaces(0, 0);
         return;
+    }
 
     // make distance depend on font size
     long nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetSize().Height()) / 100L;
@@ -911,14 +942,17 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         nDist = 0;
 
     Point   aPos;
-    for (i = 0;  i < nSize;  i++)
+    // copy the first node into LineNode and extend by the others
+    if (NULL != (pNode = GetSubNode(0)))
+        SmRect::operator = (pNode->GetRect());
+
+    for (i = 1;  i < nSize;  i++)
         if (NULL != (pNode = GetSubNode(i)))
         {
             aPos = pNode->AlignTo(*this, RP_RIGHT, RHA_CENTER, RVA_BASELINE);
 
-            // no horizontal space before first node
-            if (i)
-                aPos.X() += nDist;
+            // add horizontal space to the left for each but the first sub node
+            aPos.X() += nDist;
 
             pNode->MoveTo(aPos);
             ExtendBy( *pNode, RCP_XOR );
@@ -937,7 +971,7 @@ void SmExpressionNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat
     //  copy alignment of leftmost subnode if any
     SmNode *pNode = GetLeftMost();
     if (pNode)
-        SetRectHorAlign(pNode->GetRectHorAlign(), FALSE);
+        SetRectHorAlign(pNode->GetRectHorAlign(), false);
 }
 
 
@@ -946,7 +980,7 @@ void SmExpressionNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat
 
 void SmUnHorNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
-    BOOL  bIsPostfix = GetToken().eType == TFACT;
+    bool  bIsPostfix = GetToken().eType == TFACT;
 
     SmNode *pOper = GetSubNode(bIsPostfix ? 1 : 0),
            *pBody = GetSubNode(bIsPostfix ? 0 : 1);
@@ -1060,7 +1094,7 @@ void SmRootNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (*pBody);
     ExtendBy(*pRootSym, RCP_THIS);
     if (pExtra)
-        ExtendBy(*pExtra, RCP_THIS, (BOOL) TRUE);
+        ExtendBy(*pExtra, RCP_THIS, true);
 }
 
 
@@ -1129,7 +1163,7 @@ void SmBinVerNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     OSL_ENSURE(pLine,  "Sm : NULL pointer");
     OSL_ENSURE(pDenom, "Sm : NULL pointer");
 
-    BOOL  bIsTextmode = rFormat.IsTextmode();
+    bool  bIsTextmode = rFormat.IsTextmode();
     if (bIsTextmode)
     {
         Fraction  aFraction(rFormat.GetRelSize(SIZ_INDEX), 100);
@@ -1204,14 +1238,14 @@ double Det(const Point &rHeading1, const Point &rHeading2)
 }
 
 
-BOOL IsPointInLine(const Point &rPoint1,
+bool IsPointInLine(const Point &rPoint1,
                    const Point &rPoint2, const Point &rHeading2)
-    // ergibt TRUE genau dann, wenn der Punkt 'rPoint1' zu der Gerade gehoert die
+    // ergibt true genau dann, wenn der Punkt 'rPoint1' zu der Gerade gehoert die
     // durch den Punkt 'rPoint2' geht und den Richtungsvektor 'rHeading2' hat
 {
     OSL_ENSURE(rHeading2 != Point(), "Sm : 0 vector");
 
-    BOOL bRes = FALSE;
+    bool bRes = false;
     const double eps = 5.0 * DBL_EPSILON;
 
     double fLambda;
@@ -1230,14 +1264,14 @@ BOOL IsPointInLine(const Point &rPoint1,
 }
 
 
-USHORT GetLineIntersectionPoint(Point &rResult,
+sal_uInt16 GetLineIntersectionPoint(Point &rResult,
                                 const Point& rPoint1, const Point &rHeading1,
                                 const Point& rPoint2, const Point &rHeading2)
 {
     OSL_ENSURE(rHeading1 != Point(), "Sm : 0 vector");
     OSL_ENSURE(rHeading2 != Point(), "Sm : 0 vector");
 
-    USHORT nRes = 1;
+    sal_uInt16 nRes = 1;
     const double eps = 5.0 * DBL_EPSILON;
 
     // sind die Richtumgsvektoren linear abhaengig ?
@@ -1266,7 +1300,7 @@ USHORT GetLineIntersectionPoint(Point &rResult,
 SmBinDiagonalNode::SmBinDiagonalNode(const SmToken &rNodeToken)
 :   SmStructureNode(NBINDIAGONAL, rNodeToken)
 {
-    bAscending = FALSE;
+    bAscending = false;
     SetNumSubNodes(3);
 }
 
@@ -1416,7 +1450,7 @@ void SmBinDiagonalNode::Arrange(const OutputDevice &rDev, const SmFormat &rForma
     //! some routines being called extract some info from the OutputDevice's
     //! font (eg the space to be used for borders OR the font name(!!)).
     //! Thus the font should reflect the needs and has to be set!
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     pLeft->Arrange(aTmpDev, rFormat);
@@ -1509,7 +1543,7 @@ void SmSubSupNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         // (as would be in "a_{1_{2_{3_4}}}")
         if (GetFont().GetSize().Height() > rFormat.GetBaseSize().Height() / 3)
         {
-            USHORT nIndex = (eSubSup == CSUB  ||  eSubSup == CSUP) ?
+            sal_uInt16 nIndex = (eSubSup == CSUB  ||  eSubSup == CSUP) ?
                                     SIZ_LIMITS : SIZ_INDEX;
             Fraction  aFraction ( rFormat.GetRelSize(nIndex), 100 );
             pSubSup->SetSize(aFraction);
@@ -1517,7 +1551,7 @@ void SmSubSupNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
         pSubSup->Arrange(rDev, rFormat);
 
-        BOOL  bIsTextmode = rFormat.IsTextmode();
+        bool  bIsTextmode = rFormat.IsTextmode();
         nDist = 0;
 
         //! be sure that CSUB, CSUP are handled before the other cases!
@@ -1565,12 +1599,12 @@ void SmSubSupNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
                 aPos.Y() -= nDist;
                 break;
             default :
-                OSL_ENSURE(FALSE, "Sm: unknown case");
+                OSL_FAIL("Sm: unknown case");
                 break;
         }
 
         pSubSup->MoveTo(aPos);
-        ExtendBy(*pSubSup, RCP_THIS, (BOOL) TRUE);
+        ExtendBy(*pSubSup, RCP_THIS, true);
 
         // update rectangle to which  RSUB, RSUP, LSUB, LSUP
         // will be aligned to
@@ -1683,7 +1717,7 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     pBody->Arrange(rDev, rFormat);
 
-    BOOL  bIsScaleNormal = rFormat.IsScaleNormalBrackets(),
+    bool  bIsScaleNormal = rFormat.IsScaleNormalBrackets(),
           bScale         = pBody->GetHeight() > 0  &&
                            (GetScaleMode() == SCALE_HEIGHT  ||  bIsScaleNormal),
           bIsABS         = GetToken().eType == TABS;
@@ -1691,10 +1725,10 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     long  nFaceHeight = GetFont().GetSize().Height();
 
     // Uebergroesse in % ermitteln
-    USHORT  nPerc = 0;
+    sal_uInt16  nPerc = 0;
     if (!bIsABS && bScale)
     {   // im Fall von Klammern mit Uebergroesse...
-        USHORT nIndex = GetScaleMode() == SCALE_HEIGHT ?
+        sal_uInt16 nIndex = GetScaleMode() == SCALE_HEIGHT ?
                             DIS_BRACKETSIZE : DIS_NORMALBRACKETSIZE;
         nPerc = rFormat.GetDistance(nIndex);
     }
@@ -1765,12 +1799,12 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
 void SmBracebodyNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
-    USHORT  nNumSubNodes = GetNumSubNodes();
+    sal_uInt16  nNumSubNodes = GetNumSubNodes();
     if (nNumSubNodes == 0)
         return;
 
     // arrange arguments
-    USHORT i;
+    sal_uInt16 i;
     for (i = 0;  i < nNumSubNodes;  i += 2)
         GetSubNode(i)->Arrange(rDev, rFormat);
 
@@ -1787,11 +1821,11 @@ void SmBracebodyNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     nBodyHeight = aRefRect.GetHeight();
 
     // scale separators to required height and arrange them
-    BOOL bScale  = GetScaleMode() == SCALE_HEIGHT  ||  rFormat.IsScaleNormalBrackets();
+    bool bScale  = GetScaleMode() == SCALE_HEIGHT  ||  rFormat.IsScaleNormalBrackets();
     long nHeight = bScale ? aRefRect.GetHeight() : GetFont().GetSize().Height();
-    USHORT nIndex  = GetScaleMode() == SCALE_HEIGHT ?
+    sal_uInt16 nIndex  = GetScaleMode() == SCALE_HEIGHT ?
                         DIS_BRACKETSIZE : DIS_NORMALBRACKETSIZE;
-    USHORT nPerc   = rFormat.GetDistance(nIndex);
+    sal_uInt16 nPerc   = rFormat.GetDistance(nIndex);
     if (bScale)
         nHeight += 2 * (nHeight * nPerc / 100L);
     for (i = 1;  i < nNumSubNodes;  i += 2)
@@ -1809,7 +1843,7 @@ void SmBracebodyNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     SmRect::operator = (*pLeft);
     for (i = 1;  i < nNumSubNodes;  i++)
     {
-        BOOL          bIsSeparator = i % 2 != 0;
+        bool          bIsSeparator = i % 2 != 0;
         RectVerAlign  eVerAlign    = bIsSeparator ? RVA_CENTERY : RVA_BASELINE;
 
         SmNode *pRight = GetSubNode(i);
@@ -1837,7 +1871,7 @@ void SmVerticalBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFor
     OSL_ENSURE(pBrace,  "Sm: NULL pointer!");
     OSL_ENSURE(pScript, "Sm: NULL pointer!");
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     pBody->Arrange(aTmpDev, rFormat);
@@ -2022,7 +2056,7 @@ void SmAttributNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     pAttr->MoveTo(aPos);
 
     SmRect::operator = (*pBody);
-    ExtendBy(*pAttr, RCP_THIS, (BOOL) TRUE);
+    ExtendBy(*pAttr, RCP_THIS, true);
 }
 
 
@@ -2133,7 +2167,7 @@ void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
             break;
     }
     if (nFnt != -1)
-    {   GetFont() = rFormat.GetFont( sal::static_int_cast< USHORT >(nFnt) );
+    {   GetFont() = rFormat.GetFont( sal::static_int_cast< sal_uInt16 >(nFnt) );
         SetFont(GetFont());
     }
 
@@ -2159,7 +2193,7 @@ void SmFontNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
             break;
         case TUNKNOWN : break;  // no assertion on "font <?> <?>"
 
-        case TPHANTOM : SetPhantom(TRUE);               break;
+        case TPHANTOM : SetPhantom(true);               break;
         case TBOLD :    SetAttribut(ATTR_BOLD);         break;
         case TITALIC :  SetAttribut(ATTR_ITALIC);       break;
         case TNBOLD :   ClearAttribut(ATTR_BOLD);       break;
@@ -2175,7 +2209,7 @@ void SmFontNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         case TYELLOW :  SetColor(Color(COL_YELLOW));    break;
 
         default:
-            OSL_ENSURE(FALSE, "Sm: unknown case");
+            OSL_FAIL("Sm: unknown case");
     }
 
     pNode->Arrange(rDev, rFormat);
@@ -2184,7 +2218,7 @@ void SmFontNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-void SmFontNode::SetSizeParameter(const Fraction& rValue, USHORT Type)
+void SmFontNode::SetSizeParameter(const Fraction& rValue, sal_uInt16 Type)
 {
     nSizeType = Type;
     aFontSize = rValue;
@@ -2202,13 +2236,13 @@ SmPolyLineNode::SmPolyLineNode(const SmToken &rNodeToken)
 }
 
 
-void SmPolyLineNode::AdaptToX(const OutputDevice &/*rDev*/, ULONG nNewWidth)
+void SmPolyLineNode::AdaptToX(const OutputDevice &/*rDev*/, sal_uLong nNewWidth)
 {
     aToSize.Width() = nNewWidth;
 }
 
 
-void SmPolyLineNode::AdaptToY(const OutputDevice &/*rDev*/, ULONG nNewHeight)
+void SmPolyLineNode::AdaptToY(const OutputDevice &/*rDev*/, sal_uLong nNewHeight)
 {
     GetFont().FreezeBorderWidth();
     aToSize.Height() = nNewHeight;
@@ -2220,7 +2254,7 @@ void SmPolyLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     //! some routines being called extract some info from the OutputDevice's
     //! font (eg the space to be used for borders OR the font name(!!)).
     //! Thus the font should reflect the needs and has to be set!
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     long  nBorderwidth = GetFont().GetBorderWidth();
@@ -2258,13 +2292,13 @@ void SmPolyLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
 /**************************************************************************/
 
-void SmRootSymbolNode::AdaptToX(const OutputDevice &/*rDev*/, ULONG nWidth)
+void SmRootSymbolNode::AdaptToX(const OutputDevice &/*rDev*/, sal_uLong nWidth)
 {
     nBodyWidth = nWidth;
 }
 
 
-void SmRootSymbolNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
+void SmRootSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
 {
     // etwas extra Laenge damit der horizontale Balken spaeter ueber dem
     // Argument positioniert ist
@@ -2275,13 +2309,13 @@ void SmRootSymbolNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
 /**************************************************************************/
 
 
-void SmRectangleNode::AdaptToX(const OutputDevice &/*rDev*/, ULONG nWidth)
+void SmRectangleNode::AdaptToX(const OutputDevice &/*rDev*/, sal_uLong nWidth)
 {
     aToSize.Width() = nWidth;
 }
 
 
-void SmRectangleNode::AdaptToY(const OutputDevice &/*rDev*/, ULONG nHeight)
+void SmRectangleNode::AdaptToY(const OutputDevice &/*rDev*/, sal_uLong nHeight)
 {
     GetFont().FreezeBorderWidth();
     aToSize.Height() = nHeight;
@@ -2298,14 +2332,14 @@ void SmRectangleNode::Arrange(const OutputDevice &rDev, const SmFormat &/*rForma
     if (nWidth == 0)
         nWidth  = nFontHeight / 3;
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     // add some borderspace
-    ULONG  nTmpBorderWidth = GetFont().GetBorderWidth();
+    sal_uLong  nTmpBorderWidth = GetFont().GetBorderWidth();
     nHeight += 2 * nTmpBorderWidth;
 
-    //! use this method in order to have 'SmRect::HasAlignInfo() == TRUE'
+    //! use this method in order to have 'SmRect::HasAlignInfo() == true'
     //! and thus having the attribut-fences updated in 'SmRect::ExtendBy'
     SmRect::operator = (SmRect(nWidth, nHeight));
 }
@@ -2314,14 +2348,14 @@ void SmRectangleNode::Arrange(const OutputDevice &rDev, const SmFormat &/*rForma
 /**************************************************************************/
 
 
-SmTextNode::SmTextNode( SmNodeType eNodeType, const SmToken &rNodeToken, USHORT nFontDescP ) :
+SmTextNode::SmTextNode( SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 nFontDescP ) :
     SmVisibleNode(eNodeType, rNodeToken)
 {
     nFontDesc = nFontDescP;
 }
 
 
-SmTextNode::SmTextNode( const SmToken &rNodeToken, USHORT nFontDescP ) :
+SmTextNode::SmTextNode( const SmToken &rNodeToken, sal_uInt16 nFontDescP ) :
     SmVisibleNode(NTEXT, rNodeToken)
 {
     nFontDesc = nFontDescP;
@@ -2358,11 +2392,11 @@ void SmTextNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
     PrepareAttributes();
 
-    USHORT  nSizeDesc = GetFontDesc() == FNT_FUNCTION ?
+    sal_uInt16  nSizeDesc = GetFontDesc() == FNT_FUNCTION ?
                             SIZ_FUNCTION : SIZ_TEXT;
     GetFont() *= Fraction (rFormat.GetRelSize(nSizeDesc), 100);
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     SmRect::operator = (SmRect(aTmpDev, &rFormat, aText, GetFont().GetBorderWidth()));
@@ -2370,17 +2404,17 @@ void SmTextNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
 void SmTextNode::CreateTextFromNode(String &rText)
 {
-    BOOL bQuoted=FALSE;
+    bool bQuoted=false;
     if (GetToken().eType == TTEXT)
     {
         rText.Append('\"');
-        bQuoted=TRUE;
+        bQuoted=true;
     }
     else
     {
         SmParser aParseTest;
         SmNode *pTable = aParseTest.Parse(GetToken().aText);
-        bQuoted=TRUE;
+        bQuoted=true;
         if ( (pTable->GetType() == NTABLE) && (pTable->GetNumSubNodes() == 1) )
         {
             SmNode *pResult = pTable->GetSubNode(0);
@@ -2393,7 +2427,7 @@ void SmTextNode::CreateTextFromNode(String &rText)
                 {
                     pResult = pResult->GetSubNode(0);
                     if (pResult->GetType() == NTEXT)
-                        bQuoted=FALSE;
+                        bQuoted=false;
                 }
             }
         }
@@ -2461,9 +2495,9 @@ void SmTextNode::AdjustFontDesc()
 void SmMatrixNode::CreateTextFromNode(String &rText)
 {
     APPEND(rText,"matrix {");
-    for (USHORT i = 0;  i < nNumRows; i++)
+    for (sal_uInt16 i = 0;  i < nNumRows; i++)
     {
-        for (USHORT j = 0;  j < nNumCols; j++)
+        for (sal_uInt16 j = 0;  j < nNumCols; j++)
         {
             SmNode *pNode = GetSubNode(i * nNumCols + j);
             pNode->CreateTextFromNode(rText);
@@ -2483,7 +2517,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     Point   aPosition,
             aOffset;
     SmNode *pNode;
-    USHORT  i, j;
+    sal_uInt16  i, j;
 
     // initialize array that is to hold the maximum widhts of all
     // elements (subnodes) in that column.
@@ -2492,10 +2526,10 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         pColWidth[j] = 0;
 
     // arrange subnodes and calculate the aboves arrays contents
-    USHORT nNodes = GetNumSubNodes();
+    sal_uInt16 nNodes = GetNumSubNodes();
     for (i = 0;  i < nNodes;  i++)
     {
-        USHORT nIdx = nNodes - 1 - i;
+        sal_uInt16 nIdx = nNodes - 1 - i;
         if (NULL != (pNode = GetSubNode(nIdx)))
         {
             pNode->Arrange(rDev, rFormat);
@@ -2579,7 +2613,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 }
 
 
-void SmMatrixNode::SetRowCol(USHORT nMatrixRows, USHORT nMatrixCols)
+void SmMatrixNode::SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols)
 {
     nNumRows = nMatrixRows;
     nNumCols = nMatrixCols;
@@ -2603,7 +2637,7 @@ SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
         SetText( cChar );
 }
 
-void SmMathSymbolNode::AdaptToX(const OutputDevice &rDev, ULONG nWidth)
+void SmMathSymbolNode::AdaptToX(const OutputDevice &rDev, sal_uLong nWidth)
 {
     // Since there is no function to do this, we try to approximate it:
     Size  aFntSize (GetFont().GetSize());
@@ -2612,7 +2646,7 @@ void SmMathSymbolNode::AdaptToX(const OutputDevice &rDev, ULONG nWidth)
     aFntSize.Width() = nWidth;
     GetFont().SetSize(aFntSize);
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     // get denominator of error factor for width
@@ -2626,7 +2660,7 @@ void SmMathSymbolNode::AdaptToX(const OutputDevice &rDev, ULONG nWidth)
     GetFont().SetSize(aFntSize);
 }
 
-void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
+void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, sal_uLong nHeight)
 {
     GetFont().FreezeBorderWidth();
     Size  aFntSize (GetFont().GetSize());
@@ -2648,7 +2682,7 @@ void SmMathSymbolNode::AdaptToY(const OutputDevice &rDev, ULONG nHeight)
     aFntSize.Height() = nHeight;
     GetFont().SetSize(aFntSize);
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     // get denominator of error factor for height
@@ -2692,7 +2726,7 @@ void SmMathSymbolNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat
 
     GetFont() *= Fraction (rFormat.GetRelSize(SIZ_TEXT), 100);
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rText, GetFont().GetBorderWidth()));
@@ -2726,7 +2760,7 @@ void SmRectangleNode::CreateTextFromNode(String &rText)
 void SmAttributNode::CreateTextFromNode(String &rText)
 {
     SmNode *pNode;
-    USHORT  nSize = GetNumSubNodes();
+    sal_uInt16  nSize = GetNumSubNodes();
     OSL_ENSURE(nSize == 2, "Node missing members");
     rText.Append('{');
     sal_Unicode nLast=0;
@@ -2796,7 +2830,7 @@ bool lcl_IsFromGreekSymbolSet( const String &rTokenText )
 }
 
 
-SmSpecialNode::SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT _nFontDesc) :
+SmSpecialNode::SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 _nFontDesc) :
     SmTextNode(eNodeType, rNodeToken, _nFontDesc)
 {
     bIsFromGreekSymbolSet = lcl_IsFromGreekSymbolSet( rNodeToken.aText );
@@ -2820,7 +2854,9 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     String aName( GetToken().aText.Copy(1) );
     if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName( aName )))
     {
-        SetText( pSym->GetCharacter() );
+        sal_UCS4 cChar = pSym->GetCharacter();
+        String aTmp( OUString( &cChar, 1 ) );
+        SetText( aTmp );
         GetFont() = pSym->GetFace();
     }
     else
@@ -2849,7 +2885,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     {
         OSL_ENSURE( GetText().Len() == 1, "a symbol should only consist of 1 char!" );
         bool bItalic = false;
-        INT16 nStyle = rFormat.GetGreekCharStyle();
+        sal_Int16 nStyle = rFormat.GetGreekCharStyle();
         OSL_ENSURE( nStyle >= 0 && nStyle <= 2, "unexpected value for GreekCharStyle" );
         if (nStyle == 1)
             bItalic = true;
@@ -2878,7 +2914,7 @@ void SmSpecialNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
     PrepareAttributes();
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     SmRect::operator = (SmRect(aTmpDev, &rFormat, GetText(), GetFont().GetBorderWidth()));
@@ -2891,7 +2927,7 @@ void SmGlyphSpecialNode::Arrange(const OutputDevice &rDev, const SmFormat &rForm
 {
     PrepareAttributes();
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     SmRect::operator = (SmRect(aTmpDev, &rFormat, GetText(),
@@ -2915,7 +2951,7 @@ void SmPlaceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
     PrepareAttributes();
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     SmRect::operator = (SmRect(aTmpDev, &rFormat, GetText(), GetFont().GetBorderWidth()));
@@ -2939,7 +2975,7 @@ void SmErrorNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
     PrepareAttributes();
 
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     const XubString &rText = GetText();
@@ -2977,7 +3013,7 @@ void SmBlankNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 
 void SmBlankNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
-    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+    SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
     // Abstand von der Fonthoehe abhaengig machen
@@ -3002,7 +3038,7 @@ void SmNode::Accept(SmVisitor*){
     //obscure copy constructor is used... I can't find it's implementation, and
     //don't want to figure out how to fix it... If you want to, just delete this
     //method, making SmNode abstract, and see where you can an problem with that.
-    j_assert(false, "SmNode should not be visitable!");
+    OSL_FAIL("SmNode should not be visitable!");
 }
 
 void SmTableNode::Accept(SmVisitor* pVisitor) {

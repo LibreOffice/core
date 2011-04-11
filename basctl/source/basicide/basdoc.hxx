@@ -40,9 +40,8 @@ class BasicDocShell: public SfxObjectShell
     SfxPrinter*         pPrinter;
 
 protected:
-    virtual void        FillStatusBar( StatusBar& rBar);
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
-                          USHORT nAspect = ASPECT_CONTENT );
+                          sal_uInt16 nAspect = ASPECT_CONTENT );
     virtual void    FillClass( SvGlobalName * pClassName,
                                sal_uInt32 * pFormat,
                                String * pAppName,
@@ -60,7 +59,7 @@ public:
                         BasicDocShell();
                         ~BasicDocShell();
 
-    SfxPrinter*         GetPrinter( BOOL bCreate );
+    SfxPrinter*         GetPrinter( sal_Bool bCreate );
     void                SetPrinter( SfxPrinter* pPrinter );
 };
 

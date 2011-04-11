@@ -481,7 +481,7 @@ oslFileError SAL_CALL osl_closeDirectory( oslDirectory Directory )
         err = osl_File_E_None;
         break;
     default:
-        OSL_ENSURE( 0, "Invalid directory type" );
+        OSL_FAIL( "Invalid directory type" );
         break;
     }
 
@@ -567,7 +567,7 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
 
                 if ( pItemImpl->ustrDrive->buffer[pItemImpl->ustrDrive->length-1] != sal_Unicode('\\') )
                     rtl_uString_newConcat( &pItemImpl->ustrDrive,
-                                            pItemImpl->ustrDrive, rtl::OUString::createFromAscii( "\\" ).pData);
+                                            pItemImpl->ustrDrive, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\")).pData);
 
                 *pItem = pItemImpl;
             }
@@ -1948,7 +1948,7 @@ oslFileError SAL_CALL osl_createDirectoryPath(
 
 oslFileError osl_getCanonicalName( rtl_uString* ustrFileURL, rtl_uString** pustrValidURL )
 {
-    OSL_ENSURE(sal_False, "osl_getCanonicalName not implemented");
+    OSL_FAIL("osl_getCanonicalName not implemented");
 
     rtl_uString_newFromString(pustrValidURL, ustrFileURL);
     return osl_File_E_None;

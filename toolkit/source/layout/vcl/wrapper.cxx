@@ -81,7 +81,7 @@ public:
 
         uno::Reference< lang::XSingleServiceFactory > xFactory(
             comphelper::createProcessComponent(
-                OUString::createFromAscii( "com.sun.star.awt.Layout" ) ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Layout")) ),
             uno::UNO_QUERY );
         if ( !xFactory.is() )
         {
@@ -151,13 +151,13 @@ PeerHandle Context::GetPeerHandle( const char *id, sal_uInt32 nId ) const
     xHandle = pImpl->getByName( OUString( id, strlen( id ), RTL_TEXTENCODING_UTF8 ) );
     if ( !xHandle.is() )
     {
-        DBG_ERROR1( "Failed to fetch widget '%s'", id );
+        OSL_TRACE( "Failed to fetch widget '%s'", id );
     }
 
     if ( nId != 0 )
     {
         rtl::OString aStr = rtl::OString::valueOf( (sal_Int32) nId );
-        xHandle = GetPeerHandle( aStr, 0 );
+        xHandle = GetPeerHandle( aStr.getStr(), 0 );
     }
     return xHandle;
 }
@@ -305,13 +305,17 @@ void Window::setRes (ResId const& res)
         {
             return Resource::ReadStringRes ();
         }
+        rtl::OString ReadByteStringRes()
+        {
+            return Resource::ReadByteStringRes();
+        }
     };
 
     Resource_open_up r (res);
 #endif /* !RESOURCE_PUBLISH_PROTECTED */
-    if (sal_uInt32 help_id = (sal_uInt32)r.GetLongRes (static_cast<char *> (r.GetClassRes ()) + 12))
-        SetHelpId (help_id);
     sal_uInt32 mask = r.ReadLongRes ();
+    if (mask & WINDOW_HELPID)
+        SetHelpId (r.ReadByteStringRes());
     if ( mask & WINDOW_TEXT )
         SetText( r.ReadStringRes ());
 }
@@ -367,24 +371,14 @@ VCLXWindow* Window::GetVCLXWindow() const
     return GetWindow()->GetParent();
 }
 
-void Window::SetHelpId( sal_uIntPtr id )
+void Window::SetHelpId( const rtl::OString& id )
 {
     GetWindow()->SetHelpId( id );
 }
 
-sal_uIntPtr Window::GetHelpId() const
+const rtl::OString& Window::GetHelpId() const
 {
     return GetWindow()->GetHelpId();
-}
-
-void Window::SetSmartHelpId( SmartId const& id, SmartIdUpdateMode mode )
-{
-    GetWindow()->SetSmartHelpId( id, mode );
-}
-
-SmartId Window::GetSmartHelpId() const
-{
-    return GetWindow()->GetSmartHelpId();
 }
 
 void Window::EnterWait ()
@@ -867,7 +861,7 @@ void Dialog::Initialize (SfxChildWinInfo*)
         , yesButton (this, "BTN_YES")
 
 MessageBox::MessageBox (::Window *parent, char const* message,
-                        char const* yes, char const* no, sal_uIntPtr help_id,
+                        char const* yes, char const* no, const rtl::OString& help_id,
                         char const* xml_file, char const* id)
     : MESSAGE_BOX_MEMBER_INIT
 {
@@ -877,7 +871,7 @@ MessageBox::MessageBox (::Window *parent, char const* message,
 }
 
 MessageBox::MessageBox (::Window *parent, OUString const& message,
-                        OUString yes, OUString no, sal_uIntPtr help_id,
+                        OUString yes, OUString no, const rtl::OString& help_id,
                         char const* xml_file, char const* id)
     : MESSAGE_BOX_MEMBER_INIT
 {
@@ -891,7 +885,7 @@ MessageBox::MessageBox (::Window *parent, OUString const& message,
 #endif /* !__GNUC__ */
 
 MessageBox::MessageBox (::Window *parent, WinBits bits, char const* message,
-                        char const* yes, char const* no, sal_uIntPtr help_id,
+                        char const* yes, char const* no, const rtl::OString& help_id,
                         char const* xml_file, char const* id)
     : MESSAGE_BOX_MEMBER_INIT
 {
@@ -904,7 +898,7 @@ MessageBox::MessageBox (::Window *parent, WinBits bits, char const* message,
 }
 
 MessageBox::MessageBox (::Window *parent, WinBits bits, OUString const& message,
-                        OUString yes, OUString no, sal_uIntPtr help_id,
+                        OUString yes, OUString no, const rtl::OString& help_id,
                         char const* xml_file, char const* id)
     : MESSAGE_BOX_MEMBER_INIT
 {
@@ -917,7 +911,7 @@ MessageBox::MessageBox (::Window *parent, WinBits bits, OUString const& message,
 }
 
 void MessageBox::bits_init (WinBits bits, OUString const& message,
-                            OUString yes, OUString no, sal_uIntPtr help_id)
+                            OUString yes, OUString no, const rtl::OString& help_id)
 {
     if ( bits & ( WB_OK_CANCEL | WB_OK ))
         yes = Button::GetStandardText ( BUTTON_OK );
@@ -942,12 +936,12 @@ void MessageBox::bits_init (WinBits bits, OUString const& message,
     init (message, yes, no, help_id);
 }
 
-void MessageBox::init (char const* message, char const* yes, char const* no, sal_uIntPtr help_id)
+void MessageBox::init (char const* message, char const* yes, char const* no, const rtl::OString& help_id)
 {
     init ( OUString::createFromAscii (message), OUString::createFromAscii (yes), OUString::createFromAscii (no), help_id);
 }
 
-void MessageBox::init (OUString const& message, OUString const& yes, OUString const& no, sal_uIntPtr help_id)
+void MessageBox::init (OUString const& message, OUString const& yes, OUString const& no, const rtl::OString& help_id)
 {
     imageError.Hide ();
     imageInfo.Hide ();
@@ -975,28 +969,28 @@ void MessageBox::init (OUString const& message, OUString const& yes, OUString co
 #undef MESSAGE_BOX_IMPL
 #define MESSAGE_BOX_IMPL(Name)\
     Name##Box::Name##Box (::Window *parent, char const* message,\
-                          char const* yes, char const* no, sal_uIntPtr help_id,\
+                          char const* yes, char const* no, const rtl::OString& help_id,\
                           char const* xml_file, char const* id)\
     : MessageBox (parent, message, yes, no, help_id, xml_file, id)\
     {\
         image##Name.Show ();\
     }\
     Name##Box::Name##Box (::Window *parent, OUString const& message,\
-                          OUString yes, OUString no, sal_uIntPtr help_id,\
+                          OUString yes, OUString no, const rtl::OString& help_id,\
                           char const* xml_file, char const* id)\
     : MessageBox (parent, message, yes, no, help_id, xml_file, id)\
     {\
         image##Name.Show ();\
     }\
     Name##Box::Name##Box (::Window *parent, WinBits bits, char const* message,\
-                          char const* yes, char const* no, sal_uIntPtr help_id,\
+                          char const* yes, char const* no, const rtl::OString& help_id,\
                           char const* xml_file, char const* id)\
     : MessageBox (parent, bits, message, yes, no, help_id, xml_file, id)\
     {\
         image##Name.Show ();\
     }\
     Name##Box::Name##Box (::Window *parent, WinBits bits, OUString const& message,\
-                          OUString yes, OUString no, sal_uIntPtr help_id,\
+                          OUString yes, OUString no, const rtl::OString& help_id,\
                           char const* xml_file, char const* id)\
     : MessageBox (parent, bits, message, yes, no, help_id, xml_file, id)\
     {\
@@ -1337,14 +1331,12 @@ class FixedImageImpl: public ControlImpl
 public:
     uno::Reference< graphic::XGraphic > mxGraphic;
     FixedImageImpl( Context *context, const PeerHandle &peer, Window *window)
-//                    const char *pName )
         : ControlImpl( context, peer, window )
-          //, mxGraphic( layoutimpl::loadGraphic( pName ) )
         , mxGraphic( peer, uno::UNO_QUERY )
     {
         if ( !mxGraphic.is() )
         {
-            DBG_ERROR( "ERROR: failed to load image: `%s'" /*, pName*/ );
+            OSL_FAIL( "ERROR: failed to load image: `%s'" );
         }
     }
 };
@@ -1489,7 +1481,7 @@ LocalizedString::operator String()
     return getImpl ().maString;
 }
 
-String LocalizedString::GetToken (USHORT i, sal_Char c)
+String LocalizedString::GetToken (sal_uInt16 i, sal_Char c)
 {
     return getString ().GetToken (i, c);
 }

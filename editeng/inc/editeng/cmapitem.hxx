@@ -42,9 +42,9 @@ namespace rtl
 
 // class SvxCaseMapItem --------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt die Schrift-Ausrichtung (Versalien, Kapitaelchen,...).
+    This item describe the font type (uppercase, small caps ,...).
 */
 
 class EDITENG_DLLPUBLIC SvxCaseMapItem : public SfxEnumItem
@@ -53,22 +53,22 @@ public:
     TYPEINFO();
 
     SvxCaseMapItem( const SvxCaseMap eMap /*= SVX_CASEMAP_NOT_MAPPED*/,
-                    const USHORT nId );
+                    const sal_uInt16 nId );
 
-    // "pure virtual Methoden" vom SfxPoolItem + SfxEnumItem
+    // "pure virtual Methods" from SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
-    virtual String          GetValueTextByPos( USHORT nPos ) const;
-    virtual USHORT          GetValueCount() const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual sal_uInt16          GetValueCount() const;
 
     // MS VC4.0 kommt durcheinander
-    void                    SetValue( USHORT nNewVal )
+    void                    SetValue( sal_uInt16 nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
 
     inline SvxCaseMapItem& operator=(const SvxCaseMapItem& rMap)
@@ -81,9 +81,9 @@ public:
     SvxCaseMap              GetCaseMap() const
                                 { return (SvxCaseMap)GetValue(); }
     void                    SetCaseMap( SvxCaseMap eNew )
-                                { SetValue( (USHORT)eNew ); }
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+                                { SetValue( (sal_uInt16)eNew ); }
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 #endif

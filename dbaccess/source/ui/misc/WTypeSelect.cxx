@@ -31,8 +31,8 @@
 #include "WTypeSelect.hxx"
 #include "WizardPages.hrc"
 #include "dbustrings.hrc"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
 #include "WCopyTable.hxx"
 #include "dbaccess_helpid.hrc"
@@ -43,13 +43,14 @@
 #include "sqlmessage.hxx"
 #include "FieldControls.hxx"
 
+#include "dbaccess_slotid.hrc"
+
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
-//  using namespace ::com::sun::star::sdbcx;
 
 //========================================================================
 // OWizTypeSelectControl
@@ -98,7 +99,7 @@ void OWizTypeSelectControl::DeactivateAggregate( EControlType eType )
 // -----------------------------------------------------------------------
 void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 {
-    DBG_ASSERT(nRow == -1,"nRow muss -1 sein!");
+    OSL_ENSURE(nRow == -1,"nRow muss -1 sein!");
     (void)nRow;
 
     MultiListBox &aListBox = ((OWizTypeSelect*)GetParent())->m_lbColumnNames;
@@ -129,8 +130,8 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                 if ( getMetaData().is() && !getMetaData()->supportsMixedCaseQuotedIdentifiers() )
                 {
                     bCase = sal_False;
-                    USHORT nCount = aListBox.GetEntryCount();
-                    for (USHORT i=0 ; !bDoubleName && i < nCount ; ++i)
+                    sal_uInt16 nCount = aListBox.GetEntryCount();
+                    for (sal_uInt16 i=0 ; !bDoubleName && i < nCount ; ++i)
                     {
                         ::rtl::OUString sEntry(aListBox.GetEntry(i));
                         bDoubleName = sNewName.equalsIgnoreAsciiCase(sEntry);
@@ -246,7 +247,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
     DBG_CTOR(OWizTypeSelect,NULL);
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
-    ModuleRes aModuleRes(isHiContrast(&m_lbColumnNames) ? IMG_JOINS_H : IMG_JOINS);
+    ModuleRes aModuleRes(IMG_JOINS);
     ImageList aImageList(aModuleRes);
     m_imgPKey = aImageList.GetImage(IMG_PRIMARY_KEY);
 
@@ -331,7 +332,7 @@ void OWizTypeSelect::ActivatePage( )
     Reset();
     m_bFirstTime = bOldFirstTime;
 
-    m_lbColumnNames.SelectEntryPos(static_cast<USHORT>(m_nDisplayRow));
+    m_lbColumnNames.SelectEntryPos(static_cast<sal_uInt16>(m_nDisplayRow));
     m_nDisplayRow = 0;
     m_lbColumnNames.GetSelectHdl().Call(&m_lbColumnNames);
 }

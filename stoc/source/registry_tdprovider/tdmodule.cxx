@@ -99,8 +99,7 @@ ModuleTypeDescriptionImpl::getMembers()
             }
             catch ( NoSuchElementException const & )
             {
-                OSL_ENSURE( sal_False,
-                    "ModuleTypeDescriptionImpl::getMembers - "
+                OSL_FAIL( "ModuleTypeDescriptionImpl::getMembers - "
                     " Caught NoSuchElementException!" );
             }
         }

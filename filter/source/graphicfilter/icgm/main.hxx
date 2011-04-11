@@ -54,7 +54,6 @@
 
 #include <vcl/salbtype.hxx>
 #include <tools/stream.hxx>
-#include <tools/list.hxx>
 #include "bundles.hxx"
 #include "bitmap.hxx"
 #include "elements.hxx"

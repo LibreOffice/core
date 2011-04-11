@@ -157,7 +157,7 @@ namespace {
 inline void lclFillAddress( XclAddress& rXclPos, SCCOL nScCol, SCROW nScRow )
 {
     rXclPos.mnCol = static_cast< sal_uInt16 >( nScCol );
-    rXclPos.mnRow = static_cast< sal_uInt16 >( nScRow );
+    rXclPos.mnRow = static_cast< sal_uInt32 >( nScRow );
 }
 
 } // namespace
@@ -260,13 +260,11 @@ bool XclExpAddressConverter::ConvertRange( XclRange& rXclRange,
 
 void XclExpAddressConverter::ValidateRangeList( ScRangeList& rScRanges, bool bWarn )
 {
-    ULONG nIdx = rScRanges.Count();
-    while( nIdx )
+    for ( size_t nRange = rScRanges.size(); nRange > 0; )
     {
-        --nIdx; // backwards to keep nIdx valid
-        ScRange* pScRange = rScRanges.GetObject( nIdx );
-        if( pScRange && !CheckRange( *pScRange, bWarn ) )
-            delete rScRanges.Remove( nIdx );
+        ScRange* pScRange = rScRanges[ --nRange ];
+        if( !CheckRange( *pScRange, bWarn ) )
+            delete rScRanges.Remove(nRange);
     }
 }
 
@@ -274,9 +272,9 @@ void XclExpAddressConverter::ConvertRangeList( XclRangeList& rXclRanges,
         const ScRangeList& rScRanges, bool bWarn )
 {
     rXclRanges.clear();
-    for( ULONG nPos = 0, nCount = rScRanges.Count(); nPos < nCount; ++nPos )
+    for( size_t nPos = 0, nCount = rScRanges.size(); nPos < nCount; ++nPos )
     {
-        if( const ScRange* pScRange = rScRanges.GetObject( nPos ) )
+        if( const ScRange* pScRange = rScRanges[ nPos ] )
         {
             XclRange aXclRange( ScAddress::UNINITIALIZED );
             if( ConvertRange( aXclRange, *pScRange, bWarn ) )
@@ -318,7 +316,7 @@ String XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
     if( GetBiff() == EXC_BIFF8 )    // no HLINK records in BIFF2-BIFF7
     {
         // there was/is already a HLINK record
-        mbMultipleUrls = mxLinkRec.is();
+        mbMultipleUrls = mxLinkRec;
 
         mxLinkRec.reset( new XclExpHyperlink( GetRoot(), rUrlField, maScPos ) );
 
@@ -335,7 +333,7 @@ String XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
 
 bool XclExpHyperlinkHelper::HasLinkRecord() const
 {
-    return !mbMultipleUrls && mxLinkRec.is();
+    return !mbMultipleUrls && mxLinkRec;
 }
 
 XclExpHyperlinkHelper::XclExpHyperlinkRef XclExpHyperlinkHelper::GetLinkRecord()
@@ -481,7 +479,7 @@ XclExpStringRef lclCreateFormattedString(
             {
                 // test if the character is a text field
                 const SfxPoolItem* pItem;
-                if( aEditSet.GetItemState( EE_FEATURE_FIELD, FALSE, &pItem ) == SFX_ITEM_SET )
+                if( aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SFX_ITEM_SET )
                 {
                     const SvxFieldData* pField = static_cast< const SvxFieldItem* >( pItem )->GetField();
                     if( const SvxURLField* pUrlField = PTR_CAST( SvxURLField, pField ) )
@@ -594,8 +592,8 @@ XclExpStringRef XclExpStringHelper::CreateCellString(
     {
         // formatted cell
         ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
-        BOOL bOldUpdateMode = rEE.GetUpdateMode();
-        rEE.SetUpdateMode( TRUE );
+        sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
+        rEE.SetUpdateMode( sal_True );
         // default items
         const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
         SfxItemSet* pEEItemSet = new SfxItemSet( rEE.GetEmptyItemSet() );
@@ -624,8 +622,8 @@ XclExpStringRef XclExpStringHelper::CreateString(
     if( const OutlinerParaObject* pParaObj = rTextObj.GetOutlinerParaObject() )
     {
         EditEngine& rEE = rRoot.GetDrawEditEngine();
-        BOOL bOldUpdateMode = rEE.GetUpdateMode();
-        rEE.SetUpdateMode( TRUE );
+        sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
+        rEE.SetUpdateMode( sal_True );
         // create the string
         rEE.SetText( pParaObj->GetTextObject() );
         xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
@@ -652,8 +650,8 @@ XclExpStringRef XclExpStringHelper::CreateString(
 {
     XclExpStringRef xString;
     EditEngine& rEE = rRoot.GetDrawEditEngine();
-    BOOL bOldUpdateMode = rEE.GetUpdateMode();
-    rEE.SetUpdateMode( TRUE );
+    sal_Bool bOldUpdateMode = rEE.GetUpdateMode();
+    rEE.SetUpdateMode( sal_True );
     rEE.SetText( rEditObj );
     xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
     rEE.SetUpdateMode( bOldUpdateMode );
@@ -712,8 +710,8 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
     SfxItemSet aItemSet( *GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
 
     // edit engine
-    BOOL bOldUpdateMode = mrEE.GetUpdateMode();
-    mrEE.SetUpdateMode( TRUE );
+    sal_Bool bOldUpdateMode = mrEE.GetUpdateMode();
+    mrEE.SetUpdateMode( sal_True );
     mrEE.SetText( *pTextObj );
 
     // font information
@@ -834,7 +832,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
                 const SfxPoolItem* pItem;
                 if( (aSel.nStartPos + 1 == aSel.nEndPos) &&     // fields are single characters
-                    (aEditSet.GetItemState( EE_FEATURE_FIELD, sal_False, &pItem ) == SFX_ITEM_SET) )
+                    (aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SFX_ITEM_SET) )
                 {
                     if( const SvxFieldData* pFieldData = static_cast< const SvxFieldItem* >( pItem )->GetField() )
                     {
@@ -933,7 +931,7 @@ bool lclConvertToDos( String& rUrl, const String& rBasePath, bool bSaveRelUrl )
             bool bLoop = true;
             while( bLoop && ((nPos = aDosBase.Search( '\\', nStartSearch )) != STRING_NOTFOUND) )
             {
-                bLoop = (TRUE == aDosBase.Equals( aDosUrl, 0, nPos + 1 ));
+                bLoop = (sal_True == aDosBase.Equals( aDosUrl, 0, nPos + 1 ));
                 if( bLoop )
                 {
                     aDosBase.Erase( 0, nPos + 1 );
@@ -1087,29 +1085,28 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
     {
         for( SCSIZE nCol = 0; nCol < nCols; ++nCol )
         {
-            ScMatValType nMatValType = SC_MATVAL_VALUE;
-            const ScMatrixValue* pMatVal = mrMatrix.Get( nCol, nRow, nMatValType );
+            ScMatrixValue nMatVal = mrMatrix.Get( nCol, nRow );
 
-            if( !pMatVal || SC_MATVAL_EMPTY == nMatValType )
+            if( SC_MATVAL_EMPTY == nMatVal.nType )
             {
                 rStrm.SetSliceSize( 9 );
                 rStrm << EXC_CACHEDVAL_EMPTY;
                 rStrm.WriteZeroBytes( 8 );
             }
-            else if( ScMatrix::IsNonValueType( nMatValType ) )
+            else if( ScMatrix::IsNonValueType( nMatVal.nType ) )
             {
-                XclExpString aStr( pMatVal->GetString(), EXC_STR_DEFAULT );
+                XclExpString aStr( nMatVal.GetString(), EXC_STR_DEFAULT );
                 rStrm.SetSliceSize( 6 );
                 rStrm << EXC_CACHEDVAL_STRING << aStr;
             }
-            else if( SC_MATVAL_BOOLEAN == nMatValType )
+            else if( SC_MATVAL_BOOLEAN == nMatVal.nType )
             {
-                sal_Int8 nBool = pMatVal->GetBoolean();
+                sal_Int8 nBool = nMatVal.GetBoolean();
                 rStrm.SetSliceSize( 9 );
                 rStrm << EXC_CACHEDVAL_BOOL << nBool;
                 rStrm.WriteZeroBytes( 7 );
             }
-            else if( USHORT nScError = pMatVal->GetError() )
+            else if( sal_uInt16 nScError = nMatVal.GetError() )
             {
                 sal_Int8 nError ( XclTools::GetXclErrorCode( nScError ) );
                 rStrm.SetSliceSize( 9 );
@@ -1119,7 +1116,7 @@ void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
             else
             {
                 rStrm.SetSliceSize( 9 );
-                rStrm << EXC_CACHEDVAL_DOUBLE << pMatVal->fVal;
+                rStrm << EXC_CACHEDVAL_DOUBLE << nMatVal.fVal;
             }
         }
     }

@@ -44,9 +44,6 @@ class ElementMark
  *  This class maintains the security id, buffer id and its type for a
  *  buffer node.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com

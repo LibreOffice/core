@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(__IBMC__))
 #include <io.h>
 #else
 #include <unistd.h>
@@ -291,7 +291,7 @@ void
                         bigfsm[j][fp->state] = (short) nstate;
                     continue;
                 case C_ALPH:
-                    for (j = 0; j <= 256; j++)
+                    for (j = 0; j < 256; j++)
                         if (('a' <= j && j <= 'z') || ('A' <= j && j <= 'Z')
                             || j == '_')
                             bigfsm[j][fp->state] = (short) nstate;
@@ -688,9 +688,13 @@ void
 
     if (s->fd >= 0)
     {
-        close(s->fd);
-        dofree(s->inb);
+        (void) close(s->fd);
+        dofree(s->filename);
     }
+
+    if (s->inb)
+        dofree(s->inb);
+
     cursource = s->next;
     dofree(s);
 }

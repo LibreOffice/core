@@ -48,38 +48,22 @@ SHL1OBJS=  \
     $(SLO)$/rtl_Process.obj
 
 SHL1TARGET= rtl_Process
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 # END ------------------------------------------------------------------
 
 OBJ3FILES=$(OBJ)$/child_process.obj
 APP3TARGET=child_process
 APP3OBJS=$(OBJ3FILES)
-
-#.IF "$(GUI)" == "UNX"
-#APP3STDLIBS=$(LB)$/libsal.so
-#.ENDIF
-#.IF "$(GUI)" == "WNT"
-#APP3STDLIBS=$(KERNEL32LIB) $(LB)$/isal.lib
-#.ENDIF
 APP3STDLIBS=$(SALLIB)
 
 OBJ4FILES=$(OBJ)$/child_process_id.obj
 APP4TARGET=child_process_id
 APP4OBJS=$(OBJ4FILES)
-
-# .IF "$(GUI)" == "UNX"
-# APP4STDLIBS=$(LB)$/libsal.so
-# .ENDIF
-# .IF "$(GUI)" == "WNT"
-# APP4STDLIBS=$(KERNEL32LIB) $(LB)$/isal.lib
-# .ENDIF
 APP4STDLIBS=$(SALLIB)
 
 #------------------------------- All object files -------------------------------
@@ -89,5 +73,4 @@ SLOFILES=$(SHL1OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
-
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk

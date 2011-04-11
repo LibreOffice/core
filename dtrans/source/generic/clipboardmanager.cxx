@@ -48,7 +48,7 @@ using ::rtl::OUString;
 
 ClipboardManager::ClipboardManager():
     WeakComponentImplHelper3< XClipboardManager, XEventListener, XServiceInfo > (m_aMutex),
-    m_aDefaultName(OUString::createFromAscii("default"))
+    m_aDefaultName(OUString(RTL_CONSTASCII_USTRINGPARAM("default")))
 {
 }
 
@@ -63,7 +63,7 @@ ClipboardManager::~ClipboardManager()
 OUString SAL_CALL ClipboardManager::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString::createFromAscii(CLIPBOARDMANAGER_IMPLEMENTATION_NAME);
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(CLIPBOARDMANAGER_IMPLEMENTATION_NAME));
 }
 
 // ------------------------------------------------------------------------
@@ -97,7 +97,7 @@ Reference< XClipboard > SAL_CALL ClipboardManager::getClipboard( const OUString&
 
     // object is disposed already
     if (rBHelper.bDisposed)
-        throw DisposedException(OUString::createFromAscii("object is disposed."),
+        throw DisposedException(OUString(RTL_CONSTASCII_USTRINGPARAM("object is disposed.")),
                                 static_cast < XClipboardManager * > (this));
 
     ClipboardMap::iterator iter =
@@ -118,13 +118,13 @@ void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xCl
 
     // check parameter
     if (!xClipboard.is())
-        throw IllegalArgumentException(OUString::createFromAscii("empty reference"),
+        throw IllegalArgumentException(OUString(RTL_CONSTASCII_USTRINGPARAM("empty reference")),
                                        static_cast < XClipboardManager * > (this), 1);
 
     // the name "default" is reserved for internal use
     OUString aName = xClipboard->getName();
     if (m_aDefaultName.compareTo(aName) == 0)
-        throw IllegalArgumentException(OUString::createFromAscii("name reserved"),
+        throw IllegalArgumentException(OUString(RTL_CONSTASCII_USTRINGPARAM("name reserved")),
                                        static_cast < XClipboardManager * > (this), 1);
 
     // try to add new clipboard to the list
@@ -167,7 +167,7 @@ Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
     MutexGuard aGuard(m_aMutex);
 
     if (rBHelper.bDisposed)
-        throw DisposedException(OUString::createFromAscii("object is disposed."),
+        throw DisposedException(OUString(RTL_CONSTASCII_USTRINGPARAM("object is disposed.")),
                                 static_cast < XClipboardManager * > (this));
 
     if (rBHelper.bInDispose)
@@ -177,7 +177,7 @@ Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
     ClipboardMap::iterator iter = m_aClipboardMap.begin();
     ClipboardMap::iterator imax = m_aClipboardMap.end();
 
-    for (sal_Int32 n = 0; iter != imax; iter++)
+    for (sal_Int32 n = 0; iter != imax; ++iter)
         aRet[n++] = iter->first;
 
     return aRet;
@@ -209,7 +209,7 @@ void SAL_CALL ClipboardManager::dispose()
         ClipboardMap::iterator iter = aCopy.begin();
         ClipboardMap::iterator imax = aCopy.end();
 
-        for (; iter != imax; iter++)
+        for (; iter != imax; ++iter)
         {
             Reference< XComponent > xComponent(iter->second, UNO_QUERY);
             if (xComponent.is())
@@ -257,7 +257,7 @@ Sequence< OUString > SAL_CALL ClipboardManager_getSupportedServiceNames()
 {
     Sequence < OUString > SupportedServicesNames( 1 );
     SupportedServicesNames[0] =
-        OUString::createFromAscii("com.sun.star.datatransfer.clipboard.ClipboardManager");
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.ClipboardManager"));
     return SupportedServicesNames;
 }
 

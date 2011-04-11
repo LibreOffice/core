@@ -40,12 +40,7 @@ end sub
 '-------------------------------------------------------------------------
 '-------------------------------------------------------------------------
 '-------------------------------------------------------------------------
-testcase tExecute
-    
-    if (iSprache = 7) then
-        qaerrorlog "due to issue i94729 this testcase does not work under russian."
-        goto endsub
-    endif    
+testcase tExecute     
 
     '/// open Bibliography database
     printlog "open Bibliography database"    

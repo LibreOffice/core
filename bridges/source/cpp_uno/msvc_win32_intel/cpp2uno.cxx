@@ -166,7 +166,7 @@ static inline typelib_TypeClass cpp2uno_call(
     (*pThis->getUnoI()->pDispatcher)(
         pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-    // in case an exception occured...
+    // in case an exception occurred...
     if (pUnoExc)
     {
         // destruct temporary in/inout params
@@ -191,7 +191,7 @@ static inline typelib_TypeClass cpp2uno_call(
         // is here for dummy
         return typelib_TypeClass_VOID;
     }
-    else // else no exception occured...
+    else // else no exception occurred...
     {
         // temporary params
         while (nTempIndizes--)

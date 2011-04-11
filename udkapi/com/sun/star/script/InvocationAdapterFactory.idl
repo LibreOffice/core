@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_script_InvocationAdapterFactory_idl__
 #define __com_sun_star_script_InvocationAdapterFactory_idl__
 
-#ifndef __com_sun_star_script_XInvocationAdapterFactory_idl__
 #include <com/sun/star/script/XInvocationAdapterFactory.idl>
-#endif
-#ifndef __com_sun_star_script_XInvocationAdapterFactory2_idl__
 #include <com/sun/star/script/XInvocationAdapterFactory2.idl>
-#endif
 
 
 //=============================================================================

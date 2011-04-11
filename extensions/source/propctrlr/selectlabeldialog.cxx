@@ -78,7 +78,7 @@ namespace pcr
         m_aControlTree.SetSelectionMode( SINGLE_SELECTION );
         m_aControlTree.SetDragDropMode( 0 );
         m_aControlTree.EnableInplaceEditing( sal_False );
-        m_aControlTree.SetWindowBits(WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
+        m_aControlTree.SetStyle(m_aControlTree.GetStyle() | WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
 
         m_aControlTree.SetNodeBitmaps( m_aModelImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ), m_aModelImages.GetImage( RID_SVXIMG_EXPANDEDNODE ) );
         m_aControlTree.SetSelectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));

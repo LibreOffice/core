@@ -62,7 +62,6 @@
 #include <ndtxt.hxx>
 #include <fmtruby.hxx>
 #include <breakit.hxx>
-#include <docsh.hxx>
 
 #include <olmenu.hrc>
 
@@ -189,11 +188,6 @@ SwHHCWrapper::~SwHHCWrapper()
         }
 
     }
-
-/*
-    if( bInfoBox )
-        InfoBox(&pView->GetEditWin(), String(SW_RES(STR_SPELL_OK)) ).Execute();
-*/
 }
 
 
@@ -223,10 +217,10 @@ void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd 
     pCrsr->DeleteMark();
 
     rWrtShell.Right( CRSR_SKIP_CHARS, /*bExpand*/ sal_False,
-                  (USHORT) (nUnitOffset + nUnitStart), sal_True );
+                  (sal_uInt16) (nUnitOffset + nUnitStart), sal_True );
     pCrsr->SetMark();
     rWrtShell.Right( CRSR_SKIP_CHARS, /*bExpand*/ sal_True,
-                  (USHORT) (nUnitEnd - nUnitStart), sal_True );
+                  (sal_uInt16) (nUnitEnd - nUnitStart), sal_True );
     // end selection now. Otherwise SHIFT+HOME (extending the selection)
     // won't work when the dialog is closed without any replacement.
     // (see #116346#)
@@ -475,7 +469,7 @@ void SwHHCWrapper::ReplaceUnit(
         }
         break;
         default:
-            OSL_ENSURE(false, "unexpected case" );
+            OSL_FAIL("unexpected case" );
     }
     nUnitOffset += nUnitStart + aNewTxt.getLength();
 
@@ -497,14 +491,12 @@ void SwHHCWrapper::ReplaceUnit(
             // of the flag.
             rWrtShell.EndSelect();
 
-            rWrtShell.Left( 0, TRUE, aNewOrigText.Len(), TRUE, TRUE );
+            rWrtShell.Left( 0, sal_True, aNewOrigText.Len(), sal_True, sal_True );
         }
 
         pRuby->SetPosition( bRubyBelow );
         pRuby->SetAdjustment( RubyAdjust_CENTER );
-        //!! the following seem not to be needed
-        //pRuby->SetCharFmtName( const String& rNm );
-        //pRuby->SetCharFmtId( USHORT nNew );
+
 #ifdef DEBUG
         SwPaM *pPaM = rWrtShell.GetCrsr();
         (void)pPaM;
@@ -543,8 +535,6 @@ void SwHHCWrapper::ReplaceUnit(
             SfxItemSet aSet( rWrtShell.GetAttrPool(), aRanges );
             if (pNewUnitLanguage)
             {
-                //OSL_ENSURE(!IsSimilarChinese( *pNewUnitLanguage, nOldLang ),
-                //      "similar language should not be changed!");
                 aSet.Put( SvxLanguageItem( *pNewUnitLanguage, RES_CHRATR_CJK_LANGUAGE ) );
             }
 
@@ -553,11 +543,11 @@ void SwHHCWrapper::ReplaceUnit(
             if (pTargetFont && pNewUnitLanguage)
             {
                 SvxFontItem aFontItem = (SvxFontItem&) aSet.Get( RES_CHRATR_CJK_FONT );
-                aFontItem.GetFamilyName()   = pTargetFont->GetName();
-                aFontItem.GetFamily()       = pTargetFont->GetFamily();
-                aFontItem.GetStyleName()    = pTargetFont->GetStyleName();
-                aFontItem.GetPitch()        = pTargetFont->GetPitch();
-                aFontItem.GetCharSet()      = pTargetFont->GetCharSet();
+                aFontItem.SetFamilyName(    pTargetFont->GetName());
+                aFontItem.SetFamily(        pTargetFont->GetFamily());
+                aFontItem.SetStyleName(     pTargetFont->GetStyleName());
+                aFontItem.SetPitch(         pTargetFont->GetPitch());
+                aFontItem.SetCharSet( pTargetFont->GetCharSet() );
                 aSet.Put( aFontItem );
             }
 
@@ -695,7 +685,6 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
         return sal_False;
     }
 
-    //ResMgr* pMgr = DIALOG_MGR();
     sal_Bool bGoOn = sal_False;
 
     if ( bIsOtherCntnt )
@@ -717,29 +706,9 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
     }
     else
     {
-        // Ein BODY_Bereich erledigt, Frage nach dem anderen BODY_Bereich
-/*
-        //pWin->LeaveWait();
-
-        sal_uInt16 nResId = RID_SVXQB_CONTINUE;
-        QueryBox aBox( pWin, ResId( nResId, pMgr ) );
-        if ( aBox.Execute() != RET_YES )
-        {
-            // Verzicht auf den anderen Bereich, ggf. Frage nach Sonderbereich
-            //pWin->EnterWait();
-            bStartDone = bEndDone = sal_True;
-            return SpellNext();
-        }
-        else
-        {
-*/
             bStartChk = !bStartDone;
             ConvStart_impl( pConvArgs, bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
             bGoOn = sal_True;
-/*
-        }
-        pWin->EnterWait();
-*/
     }
     return bGoOn;
 }
@@ -748,8 +717,6 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
 sal_Bool SwHHCWrapper::FindConvText_impl()
 {
     //! modified version of SvxSpellWrapper::FindSpellError
-
-    //ShowLanguageErrors();
 
     sal_Bool bFound = sal_False;
 
@@ -790,20 +757,17 @@ void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs
 void SwHHCWrapper::ConvEnd_impl( SwConversionArgs *pConversionArgs )
 {
     pView->SpellEnd( pConversionArgs );
-    //ShowLanguageErrors();
 }
 
 
 sal_Bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
 {
     sal_Bool bProgress = !bIsDrawObj && !bIsSelection;
-//    bLastRet = aConvText.getLength() == 0;
     pConversionArgs->aConvText = OUString();
     pConversionArgs->nConvTextLang = LANGUAGE_NONE;
     uno::Any  aRet = bProgress ?
         pView->GetWrtShell().SpellContinue( &nPageCount, &nPageStart, pConversionArgs ) :
         pView->GetWrtShell().SpellContinue( &nPageCount, NULL, pConversionArgs );
-    //aRet >>= aConvText;
     return pConversionArgs->aConvText.getLength() != 0;
 }
 

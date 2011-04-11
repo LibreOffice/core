@@ -60,6 +60,7 @@ TabPage TP_LAB_FMT
     };
     MetricField FLD_HDIST
     {
+        HelpID = "sw:MetricField:TP_LAB_FMT:FLD_HDIST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 17 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -80,6 +81,7 @@ TabPage TP_LAB_FMT
     };
     MetricField FLD_VDIST
     {
+        HelpID = "sw:MetricField:TP_LAB_FMT:FLD_VDIST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 33 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -100,6 +102,7 @@ TabPage TP_LAB_FMT
     };
     MetricField FLD_WIDTH
     {
+        HelpID = "sw:MetricField:TP_LAB_FMT:FLD_WIDTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 49 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -120,6 +123,7 @@ TabPage TP_LAB_FMT
     };
     MetricField FLD_HEIGHT
     {
+        HelpID = "sw:MetricField:TP_LAB_FMT:FLD_HEIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 65 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -140,6 +144,7 @@ TabPage TP_LAB_FMT
     };
     MetricField FLD_LEFT
     {
+        HelpID = "sw:MetricField:TP_LAB_FMT:FLD_LEFT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 81 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -162,6 +167,7 @@ TabPage TP_LAB_FMT
     };
     MetricField FLD_UPPER
     {
+        HelpID = "sw:MetricField:TP_LAB_FMT:FLD_UPPER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 97 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -184,6 +190,7 @@ TabPage TP_LAB_FMT
     };
     NumericField FLD_COLUMNS
     {
+        HelpID = "sw:NumericField:TP_LAB_FMT:FLD_COLUMNS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 113 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -203,6 +210,7 @@ TabPage TP_LAB_FMT
     };
     NumericField FLD_ROWS
     {
+        HelpID = "sw:NumericField:TP_LAB_FMT:FLD_ROWS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 60 , 129 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -215,6 +223,7 @@ TabPage TP_LAB_FMT
     };
     PushButton  PB_SAVE
     {
+        HelpID = "sw:PushButton:TP_LAB_FMT:PB_SAVE";
         Pos = MAP_APPFONT ( 50 , 148 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Save...";
@@ -269,6 +278,7 @@ ModalDialog DLG_SAVE_LABEL
     };
     ComboBox CB_MAKE
     {
+        HelpID = "sw:ComboBox:DLG_SAVE_LABEL:CB_MAKE";
         Pos = MAP_APPFONT ( 65 , 15 ) ;
         Size = MAP_APPFONT ( 100 , 50 ) ;
         Border = TRUE;
@@ -283,6 +293,7 @@ ModalDialog DLG_SAVE_LABEL
     };
     Edit ED_TYPE
     {
+        HelpID = "sw:Edit:DLG_SAVE_LABEL:ED_TYPE";
         Pos = MAP_APPFONT ( 65 , 30 ) ;
         Size = MAP_APPFONT ( 100 , 12 ) ;
         Border = TRUE;

@@ -74,16 +74,6 @@ public:
     static void revokeComponent(
         const ::rtl::OUString& _rImplementationName);
 
-    /** writes the registration information of all components which are currently registered into the specified registry.
-        Usually used from within component_writeInfo.
-        @param      _rxServiceManager   the service manager
-        @param      _rRootKey           the registry key under which the information will be stored
-        @return                         sal_True if the registration of all implementations was successfull, sal_False otherwise
-    */
-    static sal_Bool writeComponentInfos(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceManager,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rRootKey);
-
     /** creates a Factory for the component with the given implementation name. Usually used from within component_getFactory.
         @param      _rxServiceManager       a pointer to an XMultiServiceFactory interface as got in component_getFactory
         @param      _pImplementationName    the implementation name of the component

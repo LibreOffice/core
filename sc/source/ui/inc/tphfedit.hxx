@@ -109,7 +109,7 @@ private:
     Timer           aTimer;
     ScPopupMenu*    pPopupMenu;
     Link            aMLink;
-    USHORT          nSelected;
+    sal_uInt16          nSelected;
 
     SC_DLLPRIVATE  DECL_LINK( TimerHdl, Timer*);
 
@@ -127,7 +127,7 @@ public:
 
     void            SetPopupMenu(ScPopupMenu* pPopUp);
 
-    USHORT          GetSelected();
+    sal_uInt16          GetSelected();
 
     void            SetMenuHdl( const Link& rLink ) { aMLink = rLink; }
     const Link&     GetMenuHdl() const { return aMLink; }

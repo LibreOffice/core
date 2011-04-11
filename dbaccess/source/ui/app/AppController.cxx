@@ -78,8 +78,8 @@
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
 /** === end UNO includes === **/
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/string.hxx>
 
 #include <svl/urihelper.hxx>
@@ -194,7 +194,7 @@ namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::Database
 Sequence< ::rtl::OUString> OApplicationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.application.DefaultViewController");
+    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.application.DefaultViewController"));
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -336,7 +336,7 @@ OApplicationController::~OApplicationController()
 {
     if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
-        OSL_ENSURE(0,"Please check who doesn't dispose this component!");
+        OSL_FAIL("Please check who doesn't dispose this component!");
         // increment ref count to prevent double call of Dtor
         osl_incrementInterlockedCount( &m_refCount );
         dispose();
@@ -473,7 +473,7 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
     }
     catch(Exception&)
     {
-        DBG_ERROR("OApplicationController::Construct : the construction of UnoDataBrowserView failed !");
+        OSL_FAIL("OApplicationController::Construct : the construction of UnoDataBrowserView failed !");
     }
 
     if ( !bSuccess )
@@ -482,10 +482,6 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
         clearView();
         return sal_False;
     }
-
-    DBG_ASSERT( getView(), "OApplicationController::Construct: have no view!" );
-    if ( getView() )
-        getView()->enableSeparator( );
 
     // now that we have a view we can create the clipboard listener
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
@@ -508,7 +504,7 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     Reference<XConnection> xCon(_rSource.Source, UNO_QUERY);
     if ( xCon.is() )
     {
-        DBG_ASSERT( m_xDataSourceConnection == xCon,
+        OSL_ENSURE( m_xDataSourceConnection == xCon,
             "OApplicationController::disposing: which connection does this come from?" );
 
         if ( getContainer() && getContainer()->getElementType() == E_TABLE )
@@ -1119,7 +1115,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         const PropertyValue* pEnd  = pIter + aArgs.getLength();
                         for( ; pIter != pEnd ; ++pIter)
                         {
-                            if ( pIter->Name.equalsAscii("FormatStringId") )
+                            if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FormatStringId")) )
                             {
                                 SotFormatStringId nFormatId = 0;
                                 if ( pIter->Value >>= nFormatId )
@@ -1276,7 +1272,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         case ID_NEW_TABLE_DESIGN:
                             break;
                         default:
-                            OSL_ENSURE(0,"illegal switch call!");
+                            OSL_FAIL("illegal switch call!");
                     }
                     if ( bAutoPilot )
                         getContainer()->PostUserEvent( LINK( this, OApplicationController, OnCreateWithPilot ), reinterpret_cast< void* >( eType ) );
@@ -1697,7 +1693,7 @@ namespace
             case E_NONE:
                 break;
             default:
-                OSL_ENSURE(0,"Invalid ElementType!");
+                OSL_FAIL("Invalid ElementType!");
                 break;
         }
         return sToolbar;
@@ -1931,7 +1927,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     break;
 
     default:
-        OSL_ENSURE( false, "OApplicationController::openElement: illegal object type!" );
+        OSL_FAIL( "OApplicationController::openElement: illegal object type!" );
         break;
     }
     return xRet;
@@ -2039,7 +2035,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
         break;
 
         default:
-            OSL_ENSURE( false, "OApplicationController::newElement: illegal type!" );
+            OSL_FAIL( "OApplicationController::newElement: illegal type!" );
             break;
     }
 
@@ -2278,7 +2274,7 @@ void OApplicationController::showPreviewFor(const ElementType _eType,const ::rtl
                 return;
 
             default:
-                OSL_ENSURE( false, "OApplicationController::showPreviewFor: unexpected element type!" );
+                OSL_FAIL( "OApplicationController::showPreviewFor: unexpected element type!" );
                 break;
         }
     }
@@ -2340,7 +2336,7 @@ void OApplicationController::onDeleteEntry()
             nId = SID_DB_APP_REPORT_DELETE;
             break;
         default:
-            OSL_ENSURE(0,"Invalid ElementType!");
+            OSL_FAIL("Invalid ElementType!");
             break;
     }
     executeChecked(nId,Sequence<PropertyValue>());
@@ -2500,9 +2496,6 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                                 nAction = DND_ACTION_NONE;
                         }
                     }
-                    /*else
-                        nAction = nActionAskedFor & DND_ACTION_COPYMOVE;
-                    */
                 }
                 return nAction;
             }
@@ -2517,7 +2510,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     OApplicationView* pView = getContainer();
     if ( !pView || pView->getElementType() == E_NONE )
     {
-        DBG_ERROR("OApplicationController::executeDrop: what the hell did queryDrop do?");
+        OSL_FAIL("OApplicationController::executeDrop: what the hell did queryDrop do?");
             // queryDrop shoud not have allowed us to reach this situation ....
         return DND_ACTION_NONE;
     }
@@ -2654,7 +2647,7 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
 
     if ( !m_xModel.is() )
     {
-        OSL_ENSURE( false, "OApplicationController::OnFirstControllerConnected: too late!" );
+        OSL_FAIL( "OApplicationController::OnFirstControllerConnected: too late!" );
     }
 
     // if we have forms or reports which contain macros/scripts, then show a warning
@@ -2718,11 +2711,11 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     Reference< XOfficeDatabaseDocument > xOfficeDoc( _rxModel, UNO_QUERY );
     if ( !xOfficeDoc.is() && _rxModel.is() )
     {
-        DBG_ERROR( "OApplicationController::attachModel: invalid model!" );
+        OSL_FAIL( "OApplicationController::attachModel: invalid model!" );
         return sal_False;
     }
 
-    DBG_ASSERT( !( m_xModel.is() && ( m_xModel != _rxModel ) ),
+    OSL_ENSURE( !( m_xModel.is() && ( m_xModel != _rxModel ) ),
         "OApplicationController::attachModel: missing implementation: setting a new model while we have another one!" );
         // at least: remove as property change listener from the old model/data source
 
@@ -2853,7 +2846,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
         const NamedValue* pEnd  = pIter + aCurrentSelection.getLength();
         for(;pIter != pEnd;++pIter)
         {
-            if ( pIter->Name.equalsAscii("Type") )
+            if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Type")) )
             {
                 sal_Int32 nType = 0;
                 pIter->Value >>= nType;
@@ -2861,7 +2854,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
                     throw IllegalArgumentException();
                 eType = static_cast< ElementType >( nType );
             }
-            else if ( pIter->Name.equalsAscii("Selection") )
+            else if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Selection")) )
                 pIter->Value >>= aSelection;
         }
 
@@ -2977,7 +2970,7 @@ Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException)
             case E_FORM:    aCurrentSelection[0].Type = DatabaseObjectContainer::FORMS;    break;
             case E_REPORT:  aCurrentSelection[0].Type = DatabaseObjectContainer::REPORTS;  break;
             default:
-                OSL_ENSURE( false, "OApplicationController::getSelection: unexpected current element type!" );
+                OSL_FAIL( "OApplicationController::getSelection: unexpected current element type!" );
                 break;
             }
         }

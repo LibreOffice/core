@@ -179,7 +179,7 @@ inline double GetCrookAngle(Point& rPnt, const Point& rCenter, const Point& rRad
 SVX_DLLPUBLIC long GetAngle(const Point& rPnt);
 long NormAngle180(long a); // Winkel normalisieren auf -180.00..179.99
 SVX_DLLPUBLIC long NormAngle360(long a); // Winkel normalisieren auf    0.00..359.99
-USHORT GetAngleSector(long nWink); // Sektor im kartesischen Koordinatensystem bestimmen
+sal_uInt16 GetAngleSector(long nWink); // Sektor im kartesischen Koordinatensystem bestimmen
 // Berechnet die Laenge von (0,0) via a^2 + b^2 = c^2
 // Zur Vermeidung von Ueberlaeufen werden ggf. einige Stellen ignoriert.
 long GetLen(const Point& rPnt);
@@ -304,14 +304,14 @@ private:
     SVX_DLLPRIVATE void Undirty();
     SVX_DLLPRIVATE void ForceUndirty() const { if (bDirty) ((SdrFormatter*)this)->Undirty(); }
 public:
-    SdrFormatter(MapUnit eSrc, MapUnit eDst)     { eSrcMU=eSrc; bSrcFU=FALSE; eDstMU=eDst; bDstFU=FALSE; bDirty=TRUE; }
-    SdrFormatter(MapUnit eSrc, FieldUnit eDst)   { eSrcMU=eSrc; bSrcFU=FALSE; eDstFU=eDst; bDstFU=TRUE;  bDirty=TRUE; }
-    SdrFormatter(FieldUnit eSrc, MapUnit eDst)   { eSrcFU=eSrc; bSrcFU=TRUE;  eDstMU=eDst; bDstFU=FALSE; bDirty=TRUE; }
-    SdrFormatter(FieldUnit eSrc, FieldUnit eDst) { eSrcFU=eSrc; bSrcFU=TRUE;  eDstFU=eDst; bDstFU=TRUE;  bDirty=TRUE; }
-    void SetSourceUnit(MapUnit eSrc)        { eSrcMU=eSrc; bSrcFU=FALSE; bDirty=TRUE; }
-    void SetSourceUnit(FieldUnit eSrc)      { eSrcFU=eSrc; bSrcFU=TRUE;  bDirty=TRUE; }
-    void SetDestinationUnit(MapUnit eDst)   { eDstMU=eDst; bDstFU=FALSE; bDirty=TRUE; }
-    void SetDestinationUnit(FieldUnit eDst) { eDstFU=eDst; bDstFU=TRUE;  bDirty=TRUE; }
+    SdrFormatter(MapUnit eSrc, MapUnit eDst)     { eSrcMU=eSrc; bSrcFU=sal_False; eDstMU=eDst; bDstFU=sal_False; bDirty=sal_True; }
+    SdrFormatter(MapUnit eSrc, FieldUnit eDst)   { eSrcMU=eSrc; bSrcFU=sal_False; eDstFU=eDst; bDstFU=sal_True;  bDirty=sal_True; }
+    SdrFormatter(FieldUnit eSrc, MapUnit eDst)   { eSrcFU=eSrc; bSrcFU=sal_True;  eDstMU=eDst; bDstFU=sal_False; bDirty=sal_True; }
+    SdrFormatter(FieldUnit eSrc, FieldUnit eDst) { eSrcFU=eSrc; bSrcFU=sal_True;  eDstFU=eDst; bDstFU=sal_True;  bDirty=sal_True; }
+    void SetSourceUnit(MapUnit eSrc)        { eSrcMU=eSrc; bSrcFU=sal_False; bDirty=sal_True; }
+    void SetSourceUnit(FieldUnit eSrc)      { eSrcFU=eSrc; bSrcFU=sal_True;  bDirty=sal_True; }
+    void SetDestinationUnit(MapUnit eDst)   { eDstMU=eDst; bDstFU=sal_False; bDirty=sal_True; }
+    void SetDestinationUnit(FieldUnit eDst) { eDstFU=eDst; bDstFU=sal_True;  bDirty=sal_True; }
     void TakeStr(long nVal, XubString& rStr) const;
     static void TakeUnitStr(MapUnit eUnit, XubString& rStr);
     static void TakeUnitStr(FieldUnit eUnit, XubString& rStr);

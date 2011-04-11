@@ -62,7 +62,6 @@
 
 using namespace std;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -71,7 +70,8 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
 using namespace com::sun::star::registry;
 
-
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 static const sal_Int32 CACHE_SIZE = 512;
 
@@ -476,7 +476,7 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
                     catch (container::NoSuchElementException & exc)
                     {
                         throw lang::IllegalArgumentException(
-                            OUSTR("NoSuchElementException occured: ") +
+                            OUSTR("NoSuchElementException occurred: ") +
                             exc.Message, static_cast<OWeakObject *>(this),
                             -1 /* unknown */ );
                     }
@@ -512,13 +512,13 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
             catch (reflection::NoSuchTypeNameException & exc)
             {
                 throw lang::IllegalArgumentException(
-                    OUSTR("NoSuchTypeNameException occured: ") + exc.Message,
+                    OUSTR("NoSuchTypeNameException occurred: ") + exc.Message,
                     static_cast<OWeakObject *>(this), -1 /* unknown */ );
             }
             catch (reflection::InvalidTypeNameException & exc)
             {
                 throw lang::IllegalArgumentException(
-                    OUSTR("InvalidTypeNameException occured: ") + exc.Message,
+                    OUSTR("InvalidTypeNameException occurred: ") + exc.Message,
                     static_cast<OWeakObject *>(this), -1 /* unknown */ );
             }
         }
@@ -585,7 +585,7 @@ ManagerImpl::createTypeDescriptionEnumeration(
         if ( xEnumAccess.is() )
             aStack.push( xEnumAccess );
 
-        it++;
+        ++it;
     }
 
     return Reference< XTypeDescriptionEnumeration >(

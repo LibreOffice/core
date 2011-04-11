@@ -47,15 +47,15 @@ class FuConstPolygon : public FuConstruct
 
     virtual ~FuConstPolygon();
                                        // Mouse- & Key-Events
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 
-    // #98185# Create default drawing objects via keyboard
+    // Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 };
 

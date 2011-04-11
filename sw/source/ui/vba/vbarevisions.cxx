@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile:
- * $Revision:
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -157,7 +154,7 @@ void SAL_CALL SwVbaRevisions::AcceptAll(  ) throw (css::uno::RuntimeException)
     }
 
     std::vector< uno::Reference< word::XRevision > >::iterator it = aRevisions.begin();
-    for( ; it != aRevisions.end(); it++ )
+    for( ; it != aRevisions.end(); ++it )
     {
         uno::Reference< word::XRevision > xRevision( *it );
         xRevision->Accept();

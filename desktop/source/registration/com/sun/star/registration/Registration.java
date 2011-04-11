@@ -63,10 +63,6 @@ public class Registration {
         return xSingleServiceFactory;
     }
 
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return FactoryHelper.writeRegistryServiceInfo(Registration.class.getName(), _serviceName, regKey);
-    }
-
     static final String _serviceName = "com.sun.star.comp.framework.DoRegistrationJob";
 
     static public class _Registration implements XJob {
@@ -315,7 +311,6 @@ public class Registration {
                         out.close();
 
                         int returnCode = con.getResponseCode();
-//                      if (returnCode == HttpURLConnection.HTTP_OK);
                     } catch(java.lang.Exception e) {
                         // IOException and UnknownHostException
                     }

@@ -46,7 +46,7 @@ using namespace formula;
 
 // -----------------------------------------------------------------------
 
-BOOL lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& rName )
+sal_Bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& rName )
 {
     if (pDocSh)
     {
@@ -54,16 +54,15 @@ BOOL lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& r
         ScRangeName* pNames = pDoc->GetRangeName();
         if (pNames)
         {
-            USHORT nPos;
-            if( pNames->SearchName( rName, nPos ) )
+            const ScRangeData* pData = pNames->findByName(rName);
+            if (pData)
             {
-                ScRangeData* pData = (*pNames)[ nPos ];
                 if ( pData->IsValidReference( rRange ) )
-                    return TRUE;
+                    return sal_True;
             }
         }
     }
-    return FALSE;
+    return false;
 }
 
 ScServerObjectSvtListenerForwarder::ScServerObjectSvtListenerForwarder(
@@ -85,7 +84,7 @@ void ScServerObjectSvtListenerForwarder::Notify( SvtBroadcaster& /* rBC */, cons
 ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
     aForwarder( this ),
     pDocSh( pShell ),
-    bRefreshListener( FALSE )
+    bRefreshListener( false )
 {
     //  parse item string
 
@@ -113,7 +112,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
         }
         else
         {
-            DBG_ERROR("ScServerObject: invalid item");
+            OSL_FAIL("ScServerObject: invalid item");
         }
     }
 
@@ -124,7 +123,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
     StartListening(*SFX_APP());     // for SC_HINT_AREAS_CHANGED
 }
 
-__EXPORT ScServerObject::~ScServerObject()
+ScServerObject::~ScServerObject()
 {
     Clear();
 }
@@ -149,12 +148,12 @@ void ScServerObject::EndListeningAll()
     SfxListener::EndListeningAll();
 }
 
-BOOL __EXPORT ScServerObject::GetData(
+sal_Bool ScServerObject::GetData(
         ::com::sun::star::uno::Any & rData /*out param*/,
-        const String & rMimeType, BOOL /* bSynchron */ )
+        const String & rMimeType, sal_Bool /* bSynchron */ )
 {
     if (!pDocSh)
-        return FALSE;
+        return false;
 
     // named ranges may have changed -> update aRange
     if ( aItemStr.Len() )
@@ -163,7 +162,7 @@ BOOL __EXPORT ScServerObject::GetData(
         if ( lcl_FillRangeFromName( aNew, pDocSh, aItemStr ) && aNew != aRange )
         {
             aRange = aNew;
-            bRefreshListener = TRUE;
+            bRefreshListener = sal_True;
         }
     }
 
@@ -175,7 +174,7 @@ BOOL __EXPORT ScServerObject::GetData(
         pDocSh->GetDocument()->StartListeningArea( aRange, &aForwarder );
         StartListening(*pDocSh);
         StartListening(*SFX_APP());
-        bRefreshListener = FALSE;
+        bRefreshListener = false;
     }
 
     String aDdeTextFmt = pDocSh->GetDdeTextFmt();
@@ -185,7 +184,7 @@ BOOL __EXPORT ScServerObject::GetData(
     {
         ScImportExport aObj( pDoc, aRange );
         if( aDdeTextFmt.GetChar(0) == 'F' )
-            aObj.SetFormulas( TRUE );
+            aObj.SetFormulas( sal_True );
         if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
             aDdeTextFmt.EqualsAscii( "FSYLK" ) )
         {
@@ -213,9 +212,9 @@ BOOL __EXPORT ScServerObject::GetData(
     return 0;
 }
 
-void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    BOOL bDataChanged = FALSE;
+    sal_Bool bDataChanged = false;
 
     //  DocShell can't be tested via type info, because SFX_HINT_DYING comes from the dtor
     if ( &rBC == pDocSh )
@@ -236,7 +235,7 @@ void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             //  check if named range was modified
             ScRange aNew;
             if ( lcl_FillRangeFromName( aNew, pDocSh, aItemStr ) && aNew != aRange )
-                bDataChanged = TRUE;
+                bDataChanged = sal_True;
         }
     }
     else
@@ -245,25 +244,25 @@ void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
         const ScHint* pScHint = PTR_CAST( ScHint, &rHint );
         if( pScHint && (pScHint->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING)) )
-            bDataChanged = TRUE;
+            bDataChanged = sal_True;
         else if (rHint.ISA(ScAreaChangedHint))      // position of broadcaster changed
         {
             ScRange aNewRange = ((const ScAreaChangedHint&)rHint).GetRange();
             if ( aRange != aNewRange )
             {
-                bRefreshListener = TRUE;
-                bDataChanged = TRUE;
+                bRefreshListener = sal_True;
+                bDataChanged = sal_True;
             }
         }
         else if (rHint.ISA(SfxSimpleHint))
         {
-            ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+            sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
             if (nId == SFX_HINT_DYING)
             {
                 //  If the range is being deleted, listening must be restarted
                 //  after the deletion is complete (done in GetData)
-                bRefreshListener = TRUE;
-                bDataChanged = TRUE;
+                bRefreshListener = sal_True;
+                bDataChanged = sal_True;
             }
         }
     }

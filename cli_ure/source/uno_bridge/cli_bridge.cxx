@@ -54,7 +54,9 @@ namespace  cssu= com::sun::star::uno;
 
 
 namespace sri= System::Runtime::InteropServices;
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 namespace cli_uno
 {
@@ -110,7 +112,7 @@ void SAL_CALL Mapping_cli2uno(
         OString cstr_msg(
             OUStringToOString(
                 OUSTR("[cli_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg.getStr() );
+        OSL_FAIL( cstr_msg.getStr() );
 #else
         (void) err; // unused
 #endif
@@ -169,7 +171,7 @@ void SAL_CALL Mapping_uno2cli(
         rtl::OString cstr_msg(
             rtl::OUStringToOString(
                 OUSTR("[cli_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg.getStr() );
+        OSL_FAIL( cstr_msg.getStr() );
 #else
         (void) err; // unused
 #endif
@@ -350,7 +352,7 @@ void SAL_CALL uno_ext_getMapping(
         OString cstr_msg(
             OUStringToOString(
                 OUSTR("[cli_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg.getStr() );
+        OSL_FAIL( cstr_msg.getStr() );
 #else
         (void) err; // unused
 #endif

@@ -110,7 +110,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
     while ( it != end )
     {
         delete (*it);
-        it++;
+        ++it;
     }
 }
 
@@ -163,12 +163,12 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
                             = *( m_pImpl->m_aResults[ nIndex ]->pData );
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += rtl::OUString::createFromAscii( "/" );
+            aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         aId += props.getEscapedTitle();
 
         if ( props.isTrailingSlash() )
-            aId += rtl::OUString::createFromAscii( "/" );
+            aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
         return aId;
@@ -375,7 +375,7 @@ sal_Bool DataSupplier::getData()
             if ( (*it).equals( DAVProperties::RESOURCETYPE ) )
                 break;
 
-            it++;
+            ++it;
         }
 
         if ( it == end )
@@ -394,7 +394,7 @@ sal_Bool DataSupplier::getData()
           }
           catch ( DAVException & )
         {
-//          OSL_ENSURE( sal_False, "PROPFIND : DAVException" );
+//          OSL_FAIL( "PROPFIND : DAVException" );
             m_pImpl->m_bThrowException = sal_True;
           }
 

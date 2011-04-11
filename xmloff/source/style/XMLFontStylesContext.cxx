@@ -35,7 +35,7 @@
 #include <rtl/logfile.hxx>
 
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "fonthdl.hxx"
 #include <xmloff/xmlimp.hxx>
@@ -71,7 +71,7 @@ enum XMLFontStyleAttrTokens
 
 const SvXMLTokenMapEntry* lcl_getFontStyleAttrTokenMap()
 {
-    static __FAR_DATA SvXMLTokenMapEntry aFontStyleAttrTokenMap[] =
+    static SvXMLTokenMapEntry aFontStyleAttrTokenMap[] =
     {
         { XML_NAMESPACE_SVG, XML_FONT_FAMILY,
                 XML_TOK_FONT_STYLE_ATTR_FAMILY },

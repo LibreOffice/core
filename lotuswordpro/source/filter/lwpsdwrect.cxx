@@ -70,7 +70,7 @@
 **************************************************************************/
 SdwRectangle::SdwRectangle() : m_bRotated(sal_False)
 {
-    for (UINT16 i = 0; i < 4; i++)
+    for (sal_uInt16 i = 0; i < 4; i++)
     {
         m_nRectCorner[0] = Point(0, 0);
     }

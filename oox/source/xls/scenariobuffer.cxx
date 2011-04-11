@@ -27,36 +27,30 @@
  ************************************************************************/
 
 #include "oox/xls/scenariobuffer.hxx"
+
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XScenario.hpp>
 #include <com/sun/star/sheet/XScenarios.hpp>
 #include <com/sun/star/sheet/XScenariosSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::table::XCell;
-using ::com::sun::star::sheet::XScenario;
-using ::com::sun::star::sheet::XScenarios;
-using ::com::sun::star::sheet::XScenariosSupplier;
-using ::com::sun::star::sheet::XSpreadsheet;
-
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -109,7 +103,7 @@ void Scenario::importInputCells( const AttributeList& rAttribs )
     maCells.push_back( aModel );
 }
 
-void Scenario::importScenario( RecordInputStream& rStrm )
+void Scenario::importScenario( SequenceInputStream& rStrm )
 {
     rStrm.skip( 2 );    // cell count
     // two longs instead of flag field
@@ -118,7 +112,7 @@ void Scenario::importScenario( RecordInputStream& rStrm )
     rStrm >> maModel.maName >> maModel.maComment >> maModel.maUser;
 }
 
-void Scenario::importInputCells( RecordInputStream& rStrm )
+void Scenario::importInputCells( SequenceInputStream& rStrm )
 {
     // TODO: where is the deleted flag?
     ScenarioCellModel aModel;
@@ -239,7 +233,7 @@ void SheetScenarios::importScenarios( const AttributeList& rAttribs )
     maModel.mnShown   = rAttribs.getInteger( XML_show, 0 );
 }
 
-void SheetScenarios::importScenarios( RecordInputStream& rStrm )
+void SheetScenarios::importScenarios( SequenceInputStream& rStrm )
 {
     maModel.mnCurrent = rStrm.readuInt16();
     maModel.mnShown   = rStrm.readuInt16();

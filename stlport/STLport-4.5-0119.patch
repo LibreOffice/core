@@ -38,7 +38,7 @@
  
  MKDIR=-mkdir
  LINK_OUT=/out:
-@@ -51,7 +51,7 @@
+@@ -51,15 +51,15 @@
  #
  
  # FLAGS_COMMON =/nologo /c /W3 /GR /GX /D "WIN32" /D "_WINDOWS" /I "$(STLPORT_DIR)" $(EXTRA_COMMON_FLAGS)
@@ -46,6 +46,15 @@
 +FLAGS_COMMON =/nologo /c /Zi /W3 /GR $(EXFLAGS) /D "WIN32" /D "_WINDOWS" /I "$(STLPORT_DIR)" $(EXTRA_COMMON_FLAGS)
  FLAGS_COMMON_static = $(FLAGS_COMMON) /FD  /D "_STLP_NO_FORCE_INSTANTIATE"
  FLAGS_COMMON_dynamic = $(FLAGS_COMMON)
+ 
+ FLAGS_DEBUG=/Gm /Od /D_DEBUG $(EXTRA_DEBUG_FLAGS)
+ # FLAGS_DEBUG=/Zi /Gm /Od /D_DEBUG $(EXTRA_DEBUG_FLAGS)
+ FLAGS_NDEBUG=/O2 /DNDEBUG  $(EXTRA_NDEBUG_FLAGS)
+ 
+-LDFLAGS_COMMON=/nologo /machine:I386 /debugtype:cv
++LDFLAGS_COMMON=/nologo
+ LDFLAGS_DEBUG=/debug
+ LDFLAGS_RELEASE=/opt:ref
  
 --- misc/STLport-4.5-0119/stlport/config/_epilog.h	Thu Sep  6 00:11:36 2001
 +++ misc/build/STLport-4.5-0119/stlport/config/_epilog.h	Mon Jun  2 10:32:02 2008
@@ -1326,3 +1335,14 @@
  
    explicit _DBG_vector(size_type __n)
      : _STLP_DBG_VECTOR_BASE(__n), _M_iter_list((const _Base*)this) {}
+--- misc/build/STLport-4.5-0119/stlport/stl/_threads.h
++++ misc/build/STLport-4.5-0119/stlport/stl/_threads.h
+@@ -99,7 +99,7 @@
+ #   else 
+ // This section serves as a replacement for windows.h header for Visual C++
+ extern "C" {
+-#   if (defined(_M_MRX000) || defined(_M_ALPHA) \
++#   if (defined(_M_MRX000) || defined(_M_ALPHA) ||  defined(_M_AMD64) \
+        || (defined(_M_PPC) && (_MSC_VER >= 1000))) && !defined(RC_INVOKED)
+ #    define InterlockedIncrement       _InterlockedIncrement
+ #    define InterlockedDecrement       _InterlockedDecrement

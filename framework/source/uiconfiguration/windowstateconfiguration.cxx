@@ -36,6 +36,8 @@
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
 
+#include "helper/mischelper.hxx"
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -59,7 +61,6 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -72,7 +73,6 @@ using namespace ::com::sun::star::ui;
 //_________________________________________________________________________________________________________________
 //  Namespace
 //_________________________________________________________________________________________________________________
-//
 
 static const char CONFIGURATION_ROOT_ACCESS[]               = "/org.openoffice.Office.UI.";
 static const char CONFIGURATION_WINDOWSTATE_ACCESS[]        = "/UIElements/States";
@@ -255,7 +255,7 @@ class ConfigurationAccess_WindowState : // interfaces
         sal_Bool                  impl_initializeConfigAccess();
 
     private:
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  WindowStateInfo,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > ResourceURLToInfoCache;
@@ -264,6 +264,7 @@ class ConfigurationAccess_WindowState : // interfaces
         Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
+        Reference< XContainerListener >   m_xConfigListener;
         ResourceURLToInfoCache            m_aResourceURLToInfoCache;
         sal_Bool                          m_bConfigAccessInitialized : 1,
                                           m_bModified : 1;
@@ -321,7 +322,7 @@ ConfigurationAccess_WindowState::~ConfigurationAccess_WindowState()
     ResetableGuard aLock( m_aLock );
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
-        xContainer->removeContainerListener( this );
+        xContainer->removeContainerListener(m_xConfigListener);
 }
 
 // XNameAccess
@@ -365,16 +366,20 @@ throw ( RuntimeException )
 sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasByName( const ::rtl::OUString& rResourceURL )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    try
-    {
-        getByName( rResourceURL );
-    }
-    catch ( NoSuchElementException& )
-    {
-        return sal_False;
-    }
+    // SAFE
+    ResetableGuard aLock( m_aLock );
 
-    return sal_True;
+    ResourceURLToInfoCache::const_iterator pIter = m_aResourceURLToInfoCache.find( rResourceURL );
+    if ( pIter != m_aResourceURLToInfoCache.end() )
+        return sal_True;
+    else
+    {
+        Any a( impl_getWindowStateFromResourceURL( rResourceURL ) );
+        if ( a == Any() )
+            return sal_False;
+        else
+            return sal_True;
+    }
 }
 
 // XElementAccess
@@ -582,12 +587,10 @@ void SAL_CALL ConfigurationAccess_WindowState::elementInserted( const ContainerE
 
 void SAL_CALL ConfigurationAccess_WindowState::elementRemoved ( const ContainerEvent& ) throw(RuntimeException)
 {
-    //
 }
 
 void SAL_CALL ConfigurationAccess_WindowState::elementReplaced( const ContainerEvent& ) throw(RuntimeException)
 {
-    //
 }
 
 // lang.XEventListener
@@ -1045,12 +1048,11 @@ Any ConfigurationAccess_WindowState::impl_getWindowStateFromResourceURL( const r
     try
     {
         // Try to ask our configuration access
-        if ( m_xConfigAccess.is() )
+        if ( m_xConfigAccess.is() && m_xConfigAccess->hasByName( rResourceURL ) )
         {
-            Reference< XNameAccess > xNameAccess;
-            Any a( m_xConfigAccess->getByName( rResourceURL ));
 
-            if ( a >>= xNameAccess )
+            Reference< XNameAccess > xNameAccess( m_xConfigAccess->getByName( rResourceURL ), UNO_QUERY );
+            if ( xNameAccess.is() )
                 return impl_insertCacheAndReturnSequence( rResourceURL, xNameAccess );
         }
     }
@@ -1224,7 +1226,7 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
     sal_Int32                 i( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );
     Sequence< PropertyValue > aPropSeq;
-    ::rtl::OUString                  aDelim( ::rtl::OUString::createFromAscii( "," ));
+    ::rtl::OUString                  aDelim( RTL_CONSTASCII_USTRINGPARAM(",") );
 
     for ( i = 0; i < nCount; i++ )
     {
@@ -1324,7 +1326,10 @@ sal_Bool ConfigurationAccess_WindowState::impl_initializeConfigAccess()
             // Add as container listener
             Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
             if ( xContainer.is() )
-                xContainer->addContainerListener( this );
+            {
+                m_xConfigListener = new WeakContainerListener(this);
+                xContainer->addContainerListener(m_xConfigListener);
+            }
         }
 
         return sal_True;
@@ -1374,7 +1379,14 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
                                                     UNO_QUERY );
     Reference< XNameAccess > xEmptyNameAccess;
     Reference< XNameAccess > xNameAccess( m_xModuleManager, UNO_QUERY_THROW );
-    Sequence< rtl::OUString > aElementNames = xNameAccess->getElementNames();
+    Sequence< rtl::OUString > aElementNames;
+    try
+    {
+        aElementNames = xNameAccess->getElementNames();
+    }
+    catch (::com::sun::star::uno::RuntimeException &)
+    {
+    }
     Sequence< PropertyValue > aSeq;
     ::rtl::OUString                  aModuleIdentifier;
 
@@ -1386,7 +1398,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
             ::rtl::OUString aWindowStateFileStr;
             for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
             {
-                if ( aSeq[y].Name.equalsAscii("ooSetupFactoryWindowStateConfigRef") )
+                if ( aSeq[y].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ooSetupFactoryWindowStateConfigRef")) )
                 {
                     aSeq[y].Value >>= aWindowStateFileStr;
                     break;

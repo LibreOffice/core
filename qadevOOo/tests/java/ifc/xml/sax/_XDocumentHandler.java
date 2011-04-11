@@ -174,7 +174,7 @@ public class _XDocumentHandler extends MultiMethodTest {
       * Sets document locator to dummy locator implementation and
          * calls the <code>startDocument</code> method. <p>
          *
-     * Has <b> OK </b> status if no runtime exceptions occured.
+     * Has <b> OK </b> status if no runtime exceptions occurred.
      */
     public void _startDocument() {
         if (ToBeSkipped) {
@@ -205,9 +205,9 @@ public class _XDocumentHandler extends MultiMethodTest {
          * This test is finally executed. It finishes XML data
          * transfering with <code>endDocument</code> method call. <p>
          *
-         * Has <b>OK</b> status if no exceptions occured during
+         * Has <b>OK</b> status if no exceptions occurred during
          * the whole transfering and if the appropriate changes
-         * occured in the document where XML data was trnsfered to.
+         * occurred in the document where XML data was trnsfered to.
          * This check is performed by checker relation.
          */
     public void _endDocument() {
@@ -240,7 +240,7 @@ public class _XDocumentHandler extends MultiMethodTest {
          * Transfers XML data obtained from relation
          * <code>'XDocumentHandler.XMLData'</code>. <p>
          *
-         * Has <b>OK</b> status if no exceptions occured during XML data
+         * Has <b>OK</b> status if no exceptions occurred during XML data
          * transfering in <code>startDocument</code> and
          * <code>startElement</code> method tests. <p>
          *
@@ -305,7 +305,7 @@ public class _XDocumentHandler extends MultiMethodTest {
         /**
          * Does nothing. <p>
          *
-         * Has <b>OK</b> status if no exceptions occured during XML data
+         * Has <b>OK</b> status if no exceptions occurred during XML data
          * transfering in <code>startDocument</code> and
          * <code>startElement</code> method tests.
          */
@@ -324,7 +324,7 @@ public class _XDocumentHandler extends MultiMethodTest {
         /**
          * Does nothing. <p>
          *
-         * Has <b>OK</b> status if no exceptions occured during XML data
+         * Has <b>OK</b> status if no exceptions occurred during XML data
          * transfering in <code>startDocument</code> and
          * <code>startElement</code> method tests.
          */
@@ -343,7 +343,7 @@ public class _XDocumentHandler extends MultiMethodTest {
         /**
          * Does nothing. <p>
          *
-         * Has <b>OK</b> status if no exceptions occured during XML data
+         * Has <b>OK</b> status if no exceptions occurred during XML data
          * transfering in <code>startDocument</code> and
          * <code>startElement</code> method tests.
          */
@@ -362,7 +362,7 @@ public class _XDocumentHandler extends MultiMethodTest {
         /**
          * Does nothing. <p>
          *
-         * Has <b>OK</b> status if no exceptions occured during XML data
+         * Has <b>OK</b> status if no exceptions occurred during XML data
          * transfering in <code>startDocument</code> and
          * <code>startElement</code> method tests.
          */
@@ -381,7 +381,7 @@ public class _XDocumentHandler extends MultiMethodTest {
         /**
          * Does nothing. <p>
          *
-         * Has <b>OK</b> status if no exceptions occured during XML data
+         * Has <b>OK</b> status if no exceptions occurred during XML data
          * transfering in <code>startDocument</code> and
          * <code>startElement</code> method tests.
          */
@@ -394,7 +394,7 @@ public class _XDocumentHandler extends MultiMethodTest {
 
         boolean result = locatorResult ;
         if (locatorException != null) {
-            log.println("Exception occured during setDocumentLocator() call:") ;
+            log.println("Exception occurred during setDocumentLocator() call:") ;
             locatorException.printStackTrace(log) ;
             log.println("Wrapped exception :"
                 + locatorException.WrappedException) ;

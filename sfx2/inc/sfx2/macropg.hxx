@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,6 +55,7 @@ class _SfxMacroTabPage_Impl;
 class SFX2_DLLPUBLIC _SfxMacroTabPage : public SfxTabPage
 {
     SvxMacroTableDtor           aTbl;
+//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox * );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox * );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox * );
@@ -66,6 +66,7 @@ class SFX2_DLLPUBLIC _SfxMacroTabPage : public SfxTabPage
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, ChangeScriptHdl_Impl, RadioButton * );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, GetFocus_Impl, Edit* );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer* );
+//#endif
 protected:
     _SfxMacroTabPage_Impl*      mpImpl;
 
@@ -80,7 +81,7 @@ public:
 
     virtual                     ~_SfxMacroTabPage();
 
-    void                        AddEvent( const String & rEventName, USHORT nEventId );
+    void                        AddEvent( const String & rEventName, sal_uInt16 nEventId );
 
     const SvxMacroTableDtor&    GetMacroTbl() const;
     void                        SetMacroTbl( const SvxMacroTableDtor& rTbl );
@@ -95,12 +96,12 @@ public:
     FNGetMacrosOfRangeHdl       GetGetMacrosOfRangeLink() const;
 
     // --------- Erben aus der Basis -------------
-    virtual BOOL                FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
     virtual void                Reset( const SfxItemSet& rSet );
 
-    void                        SetReadOnly( BOOL bSet );
-    BOOL                        IsReadOnly() const;
-    void                        SelectEvent( const String& rEventName, USHORT nEventId );
+    void                        SetReadOnly( sal_Bool bSet );
+    sal_Bool                        IsReadOnly() const;
+    void                        SelectEvent( const String& rEventName, sal_uInt16 nEventId );
 };
 
 inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTbl() const
@@ -147,5 +148,3 @@ public:
 };
 
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

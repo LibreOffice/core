@@ -53,3 +53,10 @@ CUSTOMMANIFESTFILE      = manifest
 
 .INCLUDE :  target.mk
 
+ALLTAR : $(MISC)/productregistration.jar.component
+
+$(MISC)/productregistration.jar.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt productregistration.jar.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)productregistration.jar' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt productregistration.jar.component

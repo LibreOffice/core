@@ -73,7 +73,6 @@ void OColumnControlWindow::ActivateAggregate( EControlType eType )
     {
         case tpFormat:
         case tpDefault:
-//      case tpAutoIncrement:
         case tpColumnName:
             break;
         default:
@@ -87,7 +86,6 @@ void OColumnControlWindow::DeactivateAggregate( EControlType eType )
     {
         case tpFormat:
         case tpDefault:
-//      case tpAutoIncrement:
         case tpColumnName:
             break;
         default:
@@ -95,7 +93,7 @@ void OColumnControlWindow::DeactivateAggregate( EControlType eType )
     }
 }
 // -----------------------------------------------------------------------------
-void OColumnControlWindow::CellModified(long /*nRow*/, USHORT /*nColId*/ )
+void OColumnControlWindow::CellModified(long /*nRow*/, sal_uInt16 /*nColId*/ )
 {
     saveCurrentFieldDescData();
 }

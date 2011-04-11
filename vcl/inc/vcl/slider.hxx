@@ -60,11 +60,11 @@ private:
     long            mnLineSize;
     long            mnPageSize;
     long            mnDelta;
-    USHORT          mnDragDraw;
-    USHORT          mnStateFlags;
+    sal_uInt16          mnDragDraw;
+    sal_uInt16          mnStateFlags;
     ScrollType      meScrollType;
-    BOOL            mbCalcSize;
-    BOOL            mbFullDrag;
+    sal_Bool            mbCalcSize;
+    sal_Bool            mbFullDrag;
     Link            maSlideHdl;
     Link            maEndSlideHdl;
 
@@ -73,16 +73,16 @@ private:
     SAL_DLLPRIVATE void ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void ImplInitSettings();
-    SAL_DLLPRIVATE void ImplUpdateRects( BOOL bUpdate = TRUE );
+    SAL_DLLPRIVATE void ImplUpdateRects( sal_Bool bUpdate = sal_True );
     SAL_DLLPRIVATE long ImplCalcThumbPos( long nPixPos );
     SAL_DLLPRIVATE long ImplCalcThumbPosPix( long nPos );
-    SAL_DLLPRIVATE void ImplCalc( BOOL bUpdate = TRUE );
-    SAL_DLLPRIVATE void ImplDraw( USHORT nDrawFlags );
-    SAL_DLLPRIVATE BOOL ImplIsPageUp( const Point& rPos );
-    SAL_DLLPRIVATE BOOL ImplIsPageDown( const Point& rPos );
-    SAL_DLLPRIVATE long ImplSlide( long nNewPos, BOOL bCallEndSlide );
-    SAL_DLLPRIVATE long ImplDoAction( BOOL bCallEndSlide );
-    SAL_DLLPRIVATE void ImplDoMouseAction( const Point& rPos, BOOL bCallAction = TRUE );
+    SAL_DLLPRIVATE void ImplCalc( sal_Bool bUpdate = sal_True );
+    SAL_DLLPRIVATE void ImplDraw( sal_uInt16 nDrawFlags );
+    SAL_DLLPRIVATE sal_Bool ImplIsPageUp( const Point& rPos );
+    SAL_DLLPRIVATE sal_Bool ImplIsPageDown( const Point& rPos );
+    SAL_DLLPRIVATE long ImplSlide( long nNewPos, sal_Bool bCallEndSlide );
+    SAL_DLLPRIVATE long ImplDoAction( sal_Bool bCallEndSlide );
+    SAL_DLLPRIVATE void ImplDoMouseAction( const Point& rPos, sal_Bool bCallAction = sal_True );
     SAL_DLLPRIVATE long ImplDoSlide( long nNewPos );
     SAL_DLLPRIVATE long ImplDoSlideAction( ScrollType eScrollType );
 
@@ -103,9 +103,9 @@ public:
     virtual void    Slide();
     virtual void    EndSlide();
 
-    void            EnableDrag( BOOL bEnable = TRUE )
+    void            EnableDrag( sal_Bool bEnable = sal_True )
                         { mbFullDrag = bEnable; }
-    BOOL            IsDragEnabled() const { return mbFullDrag; }
+    sal_Bool            IsDragEnabled() const { return mbFullDrag; }
 
     void            SetRangeMin( long nNewRange );
     long            GetRangeMin() const { return mnMinRange; }

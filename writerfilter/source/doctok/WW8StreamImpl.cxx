@@ -40,7 +40,7 @@ namespace doctok
 {
 using namespace ::com::sun::star;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
 #endif
 
@@ -60,8 +60,8 @@ WW8StreamImpl::WW8StreamImpl(uno::Reference<uno::XComponentContext> rContext,
 
     xOLESimpleStorage = uno::Reference<container::XNameContainer>
         (xFactory->createInstanceWithArgumentsAndContext
-         (::rtl::OUString::createFromAscii
-          ("com.sun.star.embed.OLESimpleStorage"),
+         (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+          ("com.sun.star.embed.OLESimpleStorage")),
           aArgs, mrComponentContext ),
          uno::UNO_QUERY );
 

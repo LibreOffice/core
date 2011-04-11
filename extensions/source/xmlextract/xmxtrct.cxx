@@ -189,7 +189,7 @@ REF( NMSP_IO::XInputStream ) SAL_CALL XMLExtractor::extract( const REF( NMSP_IO:
                 aCodec.Decompress( *xStream, *pMemStm );
                 aCodec.EndCompression();
 
-                xRet = new ::utl::OInputStreamHelper( new SvLockBytes( pMemStm, TRUE ), 65535 );
+                xRet = new ::utl::OInputStreamHelper( new SvLockBytes( pMemStm, sal_True ), 65535 );
             }
         }
     }

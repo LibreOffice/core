@@ -64,9 +64,9 @@ private:
     XDashList*          pDashList;
     XLineEndList*       pLineEndList;
 
-    USHORT              nPageType;
-    USHORT              nDlgType;
-    USHORT              nPos;
+    sal_uInt16              nPageType;
+    sal_uInt16              nDlgType;
+    sal_uInt16              nPos;
 
     ChangeType          nColorTableState;
     ChangeType          nBitmapListState;
@@ -77,14 +77,14 @@ private:
 
     PresentationObjects ePO;
 
-    virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
     // fuers Maping mit dem neuen SvxNumBulletItem
     SfxItemSet aInputSet;
     SfxItemSet* pOutSet;
     const SfxItemSet* pOrgSet;
 
-    USHORT GetOutlineLevel() const;
+    sal_uInt16 GetOutlineLevel() const;
 
     using SfxTabDialog::GetOutputItemSet;
 

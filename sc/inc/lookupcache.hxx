@@ -35,7 +35,7 @@
 #include <svl/listener.hxx>
 #include <tools/string.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class ScDocument;
 
@@ -175,7 +175,7 @@ public:
 
     /** Insert query and result.
         @param bAvailable
-            Pass FALSE if the search didn't deliver a result. A subsequent
+            Pass sal_False if the search didn't deliver a result. A subsequent
             lookup() then will return Result::NOT_AVAILABLE.
         @returns successful insertion.
       */
@@ -241,7 +241,7 @@ private:
         }
     };
 
-    typedef ::std::hash_map< QueryKey, QueryCriteriaAndResult, QueryKey::Hash, ::std::equal_to< QueryKey > > QueryMap;
+    typedef ::boost::unordered_map< QueryKey, QueryCriteriaAndResult, QueryKey::Hash, ::std::equal_to< QueryKey > > QueryMap;
     QueryMap        maQueryMap;
     ScRange         maRange;
     ScDocument *    mpDoc;
@@ -253,7 +253,7 @@ private:
 };
 
 
-typedef ::std::hash_map< ScRange, ScLookupCache*, ScLookupCache::Hash, ::std::equal_to< ScRange > > ScLookupCacheMap;
+typedef ::boost::unordered_map< ScRange, ScLookupCache*, ScLookupCache::Hash, ::std::equal_to< ScRange > > ScLookupCacheMap;
 
 #endif
 

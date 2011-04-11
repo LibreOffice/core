@@ -38,21 +38,21 @@
 class ScNavigatorSettings
 {
 private:
-    ::std::vector< BOOL >       maExpandedVec;      /// Array of Booleans for expand state.
-    USHORT                      mnRootSelected;     /// Index of selected root entry.
-    ULONG                       mnChildSelected;    /// Index of selected child entry.
+    ::std::vector< sal_Bool >       maExpandedVec;      /// Array of Booleans for expand state.
+    sal_uInt16                      mnRootSelected;     /// Index of selected root entry.
+    sal_uLong                       mnChildSelected;    /// Index of selected child entry.
 
 public:
                                 ScNavigatorSettings();
 
-    inline void                 SetExpanded( USHORT nIndex, BOOL bExpand ) { maExpandedVec[ nIndex ] = bExpand; }
-    inline BOOL                 IsExpanded( USHORT nIndex ) const { return maExpandedVec[ nIndex ]; }
+    inline void                 SetExpanded( sal_uInt16 nIndex, sal_Bool bExpand ) { maExpandedVec[ nIndex ] = bExpand; }
+    inline sal_Bool                 IsExpanded( sal_uInt16 nIndex ) const { return maExpandedVec[ nIndex ]; }
 
-    inline void                 SetRootSelected( USHORT nIndex ) { mnRootSelected = nIndex; }
-    inline USHORT               GetRootSelected() const { return mnRootSelected; }
+    inline void                 SetRootSelected( sal_uInt16 nIndex ) { mnRootSelected = nIndex; }
+    inline sal_uInt16               GetRootSelected() const { return mnRootSelected; }
 
-    inline void                 SetChildSelected( ULONG nIndex ) { mnChildSelected = nIndex; }
-    inline ULONG                GetChildSelected() const { return mnChildSelected; }
+    inline void                 SetChildSelected( sal_uLong nIndex ) { mnChildSelected = nIndex; }
+    inline sal_uLong                GetChildSelected() const { return mnChildSelected; }
 };
 
 

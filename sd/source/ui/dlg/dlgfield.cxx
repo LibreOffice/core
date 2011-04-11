@@ -62,9 +62,9 @@
 
 SdModifyFieldDlg::SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) :
     ModalDialog ( pWindow, SdResId( DLG_FIELD_MODIFY ) ),
+    aGrpType    ( this, SdResId( GRP_TYPE ) ),
     aRbtFix     ( this, SdResId( RBT_FIX ) ),
     aRbtVar     ( this, SdResId( RBT_VAR ) ),
-    aGrpType    ( this, SdResId( GRP_TYPE ) ),
     maFtLanguage( this, SdResId( FT_LANGUAGE ) ),
     maLbLanguage( this, SdResId( LB_LANGUAGE ) ),
     aFtFormat   ( this, SdResId( FT_FORMAT ) ),
@@ -155,7 +155,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
                 if( pDocSh->HasName() )
                     aName = pDocSh->GetMedium()->GetName();
 
-                // #91225# Get current filename, not the one stored in the old field
+                // Get current filename, not the one stored in the old field
                 pNewField = new SvxExtFileField( aName );
                 ( (SvxExtFileField*) pNewField )->SetType( eType );
                 ( (SvxExtFileField*) pNewField )->SetFormat( eFormat );
@@ -173,7 +173,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
             eFormat = (SvxAuthorFormat) ( aLbFormat.GetSelectEntryPos() );
 
-            // #91225# Get current state of address, not the old one
+            // Get current state of address, not the old one
             SvtUserOptions aUserOptions;
             pNewField = new SvxAuthorField( aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() );
             ( (SvxAuthorField*) pNewField )->SetType( eType );
@@ -183,12 +183,6 @@ SvxFieldData* SdModifyFieldDlg::GetField()
 
     return( pNewField );
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void SdModifyFieldDlg::FillFormatList()
 {
@@ -220,7 +214,7 @@ void SdModifyFieldDlg::FillFormatList()
         aDateField.SetFormat( SVXDATEFORMAT_F );    // Dienstag, 13.Februar 1996
         aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
 
-        aLbFormat.SelectEntryPos( (USHORT) ( pDateField->GetFormat() - 2 ) );
+        aLbFormat.SelectEntryPos( (sal_uInt16) ( pDateField->GetFormat() - 2 ) );
     }
     else if( pField->ISA( SvxExtTimeField ) )
     {
@@ -248,7 +242,7 @@ void SdModifyFieldDlg::FillFormatList()
         //SVXTIMEFORMAT_AM_HMS, // 01:49:38 PM
         //SVXTIMEFORMAT_AM_HMSH // 01:49:38.78 PM
 
-        aLbFormat.SelectEntryPos( (USHORT) ( pTimeField->GetFormat() - 2 ) );
+        aLbFormat.SelectEntryPos( (sal_uInt16) ( pTimeField->GetFormat() - 2 ) );
     }
     else if( pField->ISA( SvxExtFileField ) )
     {
@@ -260,20 +254,20 @@ void SdModifyFieldDlg::FillFormatList()
         aLbFormat.InsertEntry( String( SdResId( STR_FILEFORMAT_PATH ) ) );
         aLbFormat.InsertEntry( String( SdResId( STR_FILEFORMAT_NAME ) ) );
 
-        aLbFormat.SelectEntryPos( (USHORT) ( pFileField->GetFormat() ) );
+        aLbFormat.SelectEntryPos( (sal_uInt16) ( pFileField->GetFormat() ) );
     }
     else if( pField->ISA( SvxAuthorField ) )
     {
         const SvxAuthorField* pAuthorField = (const SvxAuthorField*) pField;
         SvxAuthorField aAuthorField( *pAuthorField );
 
-        for( USHORT i = 0; i < 4; i++ )
+        for( sal_uInt16 i = 0; i < 4; i++ )
         {
             aAuthorField.SetFormat( (SvxAuthorFormat) i );
             aLbFormat.InsertEntry( aAuthorField.GetFormatted() );
         }
 
-        aLbFormat.SelectEntryPos( (USHORT) ( pAuthorField->GetFormat() ) );
+        aLbFormat.SelectEntryPos( (sal_uInt16) ( pAuthorField->GetFormat() ) );
 
     }
 
@@ -328,7 +322,7 @@ void SdModifyFieldDlg::FillControls()
     aRbtVar.SaveValue();
 
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == maInputSet.GetItemState(EE_CHAR_LANGUAGE, TRUE, &pItem ) )
+    if( SFX_ITEM_SET == maInputSet.GetItemState(EE_CHAR_LANGUAGE, sal_True, &pItem ) )
         maLbLanguage.SelectLanguage( static_cast<const SvxLanguageItem*>(pItem)->GetLanguage() );
 
     maLbLanguage.SaveValue();

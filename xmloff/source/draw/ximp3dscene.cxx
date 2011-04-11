@@ -32,7 +32,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "xexptran.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include "eventimp.hxx"
@@ -104,7 +104,7 @@ TYPEINIT1( SdXML3DSceneShapeContext, SdXMLShapeContext );
 
 SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     SvXMLImport& rImport,
-    USHORT nPrfx,
+    sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
@@ -181,7 +181,7 @@ void SdXML3DSceneShapeContext::EndElement()
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
@@ -225,7 +225,7 @@ SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( USHORT nPrefix
 
 SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImporter )
 :   mrImport( rImporter ),
-    mbSetTransform( FALSE ),
+    mbSetTransform( sal_False ),
     mxPrjMode(drawing::ProjectionMode_PERSPECTIVE),
     mnDistance(1000),
     mnFocalLength(1000),
@@ -236,17 +236,18 @@ SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImport
     maVRP(0.0, 0.0, 1.0),
     maVPN(0.0, 0.0, 1.0),
     maVUP(0.0, 1.0, 0.0),
-    mbVRPUsed(FALSE),
-    mbVPNUsed(FALSE),
-    mbVUPUsed(FALSE)
+    mbVRPUsed(sal_False),
+    mbVPNUsed(sal_False),
+    mbVUPUsed(sal_False)
 {
 }
 
 SdXML3DSceneAttributesHelper::~SdXML3DSceneAttributesHelper()
 {
     // release remembered light contexts, they are no longer needed
-    while(maList.Count())
-        maList.Remove(maList.Count() - 1)->ReleaseRef();
+    for ( size_t i = maList.size(); i > 0; )
+        maList[ --i ]->ReleaseRef();
+    maList.clear();
 }
 
 /** creates a 3d ligth context and adds it to the internal list for later processing */
@@ -258,7 +259,7 @@ SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uIn
     if(pContext)
     {
         pContext->AddRef();
-        maList.Insert((SdXML3DLightContext*)pContext, LIST_APPEND);
+        maList.push_back( (SdXML3DLightContext*)pContext );
     }
 
     return pContext;
@@ -284,7 +285,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             if(aNewVec != maVRP)
             {
                 maVRP = aNewVec;
-                mbVRPUsed = TRUE;
+                mbVRPUsed = sal_True;
             }
             return;
         }
@@ -296,7 +297,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             if(aNewVec != maVPN)
             {
                 maVPN = aNewVec;
-                mbVPNUsed = TRUE;
+                mbVPNUsed = sal_True;
             }
             return;
         }
@@ -308,7 +309,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             if(aNewVec != maVUP)
             {
                 maVUP = aNewVec;
-                mbVUPUsed = TRUE;
+                mbVUPUsed = sal_True;
             }
             return;
         }
@@ -396,15 +397,15 @@ void SdXML3DSceneAttributesHelper::setSceneAttributes( const com::sun::star::uno
     aAny <<= mbLightingMode;
     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DSceneTwoSidedLighting")), aAny);
 
-    if(maList.Count())
+    if( !maList.empty() )
     {
         uno::Any aAny2;
         uno::Any aAny3;
 
         // set lights
-        for(sal_uInt32 a(0L); a < maList.Count(); a++)
+        for( size_t a = 0; a < maList.size(); a++)
         {
-            SdXML3DLightContext* pCtx = (SdXML3DLightContext*)maList.GetObject(a);
+            SdXML3DLightContext* pCtx = (SdXML3DLightContext*)maList[ a ];
 
             // set anys
             aAny <<= pCtx->GetDiffuseColor().GetColor();

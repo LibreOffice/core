@@ -67,11 +67,9 @@ class RootAccess;
 
 class Components: private boost::noncopyable {
 public:
-    static void initSingleton(
+    static Components & getSingleton(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context);
-
-    static Components & getSingleton();
 
     static bool allLocales(rtl::OUString const & locale);
 

@@ -41,6 +41,9 @@ typedef struct CGLayer   *CGLayerRef;
 class NSView;
 #endif
 #endif
+#if defined( WNT ) || defined( OS2 )
+#include <windef.h>
+#endif
 
 // -----------------
 // - SystemEnvData -
@@ -181,6 +184,7 @@ struct SystemFontData
 // --------------------
 
 typedef std::vector<SystemGlyphData> SystemGlyphDataVector;
+
 struct SystemTextLayoutData
 {
     unsigned long         nSize;         // size in bytes of this structure

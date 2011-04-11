@@ -37,7 +37,7 @@
 }
 +(id)selectedChildrenAttributeForElement:(AquaA11yWrapper *)wrapper;
 +(void)addAttributeNamesTo:(NSMutableArray *)attributeNames;
-+(MacOSBOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
++(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
 +(void)setSelectedChildrenAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
 @end
 

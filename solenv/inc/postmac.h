@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#undef Boolean
-#undef BOOL
+//#undef Boolean
+//#undef BOOL
 #undef Button
 #undef Byte
 #undef Control
@@ -44,10 +44,9 @@
 #undef LSize
 #undef ModalDialog
 #undef SetCursor
-//#undef ShowWindow
 #undef StringPtr
 #undef DirInfo
-#undef ULONG
+//#undef ULONG
 #undef Line
 #undef TimeValue
 #undef Pattern

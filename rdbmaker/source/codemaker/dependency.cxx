@@ -30,8 +30,8 @@
 #include    <rtl/alloc.h>
 #include    <codemaker/dependency.hxx>
 
-using namespace rtl;
-
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 TypeDependency::TypeDependency()
 {
     m_pImpl = new TypeDependencyImpl();

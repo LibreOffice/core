@@ -169,8 +169,8 @@ namespace svt
                 aSelectionRect,
                 ( bHovered || bFocused ) ? ( bActive ? 1 : 2 ) : 0 /* hilight */,
                 bActive /* check */,
-                TRUE /* border */,
-                FALSE /* ext border only */,
+                sal_True /* border */,
+                sal_False /* ext border only */,
                 0 /* corner radius */,
                 NULL,
                 NULL
@@ -444,14 +444,14 @@ namespace svt
             {
                 if ( i_rImpl.m_rPanelDeck.GetPanelCount() != i_rImpl.m_aItems.size() )
                 {
-                    OSL_ENSURE( false, "lcl_checkConsistency: inconsistent array sizes!" );
+                    OSL_FAIL( "lcl_checkConsistency: inconsistent array sizes!" );
                     return;
                 }
                 for ( size_t i = 0; i < i_rImpl.m_rPanelDeck.GetPanelCount(); ++i )
                 {
                     if ( i_rImpl.m_rPanelDeck.GetPanel( i ).get() != i_rImpl.m_aItems[i].pPanel.get() )
                     {
-                        OSL_ENSURE( false, "lcl_checkConsistency: array elements are inconsistent!" );
+                        OSL_FAIL( "lcl_checkConsistency: array elements are inconsistent!" );
                         return;
                     }
                 }
@@ -686,7 +686,7 @@ namespace svt
 
                 Font aFont( m_rTabBar.GetFont() );
                 aFont.SetOrientation( 2700 );
-                aFont.SetVertical( TRUE );
+                aFont.SetVertical( sal_True );
                 m_rTabBar.SetFont( aFont );
 
                 aTextPos.X() += aTextSize.Height();
@@ -788,7 +788,7 @@ namespace svt
                 return;
         }
 
-        m_rTabBar.SetUpdateMode( FALSE );
+        m_rTabBar.SetUpdateMode( sal_False );
 
         // the aligned bounding and content rect
         const Rectangle aActualBounds = m_aNormalizer.getTransformed( aNormalizedBounds, m_eTabAlignment );
@@ -806,7 +806,7 @@ namespace svt
         // render item "foreground" layer
         m_pRenderer->postRenderItem( m_rTabBar, aActualBounds, nItemFlags );
 
-        m_rTabBar.SetUpdateMode( TRUE );
+        m_rTabBar.SetUpdateMode( sal_True );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1098,16 +1098,21 @@ namespace svt
         ::boost::optional< size_t > aNewItem( m_pImpl->FindItemForPoint( i_rMouseEvent.GetPosPixel() ) );
 
         if  ( i_rMouseEvent.IsLeaveWindow() )
-            aNewItem.reset();
+            aNewItem = ::boost::optional< size_t >();
 
-        if ( aOldItem != aNewItem )
+        bool const bChanged(
+                ( !aOldItem && aNewItem )
+                || ( aOldItem && !aNewItem )
+                || ( aOldItem && aNewItem && aOldItem != aNewItem ) )
+            ;
+        if ( bChanged )
         {
-            if ( !!aOldItem )
+            if ( aOldItem )
                 m_pImpl->InvalidateItem( *aOldItem );
 
             m_pImpl->m_aHoveredItem = aNewItem;
 
-            if ( !!aNewItem )
+            if ( aNewItem )
                 m_pImpl->InvalidateItem( *aNewItem );
         }
     }
@@ -1339,9 +1344,9 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XWindowPeer > PanelTabBar::GetComponentInterface( BOOL i_bCreate )
+    Reference< XWindowPeer > PanelTabBar::GetComponentInterface( sal_Bool i_bCreate )
     {
-        Reference< XWindowPeer > xWindowPeer( Control::GetComponentInterface( FALSE ) );
+        Reference< XWindowPeer > xWindowPeer( Control::GetComponentInterface( sal_False ) );
         if ( !xWindowPeer.is() && i_bCreate )
         {
             xWindowPeer.set( new PanelTabBarPeer( *this ) );

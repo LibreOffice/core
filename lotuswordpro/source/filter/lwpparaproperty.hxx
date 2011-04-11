@@ -89,8 +89,8 @@
 class LwpParaProperty : public LwpDLList
 {
 public:
-    LwpParaProperty(){};
-    virtual ~LwpParaProperty(void){};
+    LwpParaProperty(){}
+    virtual ~LwpParaProperty(void){}
     virtual sal_uInt32  GetType(void) = 0;
     inline  LwpParaProperty* GetNext(void);
     inline  LwpParaProperty* GetPrevious(void);

@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/xtable.hxx>
-#include "xattr.hxx"
+#include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svxids.hrc>
@@ -53,8 +53,8 @@ XOutdevItemPool::XOutdevItemPool(
     const XubString aNullStr;
     const Bitmap aNullBmp;
     const basegfx::B2DPolyPolygon aNullPol;
-    const Color aNullLineCol(RGB_Color(COL_BLACK));
-    const Color aNullFillCol(RGB_Color(COL_DEFAULT_SHAPE_FILLING));  // "Blue 8"
+    const Color aNullLineCol(RGB_Color(COL_DEFAULT_SHAPE_STROKE));
+    const Color aNullFillCol(RGB_Color(COL_DEFAULT_SHAPE_FILLING));
     const Color aNullShadowCol(RGB_Color(COL_LIGHTGRAY));
     const XDash aNullDash;
     const XGradient aNullGrad(aNullLineCol, RGB_Color(COL_WHITE));
@@ -109,7 +109,7 @@ XOutdevItemPool::XOutdevItemPool(
     mppLocalPoolDefaults[XATTR_FILLBMP_STRETCH      -XATTR_START] = new XFillBmpStretchItem;
     mppLocalPoolDefaults[XATTR_FILLBMP_POSOFFSETX       -XATTR_START] = new XFillBmpPosOffsetXItem;
     mppLocalPoolDefaults[XATTR_FILLBMP_POSOFFSETY       -XATTR_START] = new XFillBmpPosOffsetYItem;
-    mppLocalPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem( this, aNullGrad, FALSE );
+    mppLocalPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem( this, aNullGrad, sal_False );
     mppLocalPoolDefaults[XATTR_SECONDARYFILLCOLOR       -XATTR_START] = new XSecondaryFillColorItem(aNullStr, aNullFillCol);
     mppLocalPoolDefaults[XATTR_FILLBACKGROUND           -XATTR_START] = new XFillBackgroundItem;
     mppLocalPoolDefaults[XATTR_FORMTXTSTYLE       -XATTR_START] = new XFormTextStyleItem;
@@ -179,12 +179,12 @@ XOutdevItemPool::XOutdevItemPool(
 /*************************************************************************
 |*
 |* copy ctor, sorgt dafuer, dass die static defaults gecloned werden
-|*            (Parameter 2 = TRUE)
+|*            (Parameter 2 = sal_True)
 |*
 \************************************************************************/
 
 XOutdevItemPool::XOutdevItemPool(const XOutdevItemPool& rPool)
-:   SfxItemPool(rPool, TRUE),
+:   SfxItemPool(rPool, sal_True),
     mppLocalPoolDefaults(0L),
     mpLocalItemInfos(0L)
 {

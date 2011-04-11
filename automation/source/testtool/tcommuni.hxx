@@ -31,11 +31,6 @@
 #include <svl/svarray.hxx>
 
 #include <osl/thread.hxx>
-
-#ifndef _STRING_LIST
-DECLARE_LIST( StringList, String * )
-#define _STRING_LIST
-#endif
 #include <basic/process.hxx>
 
 class Process;
@@ -46,14 +41,14 @@ public:
     CommunicationManagerClientViaSocketTT();
 
     using CommunicationManagerClientViaSocket::StartCommunication;
-    virtual BOOL StartCommunication();
-    virtual BOOL StartCommunication( String aApp, String aParams, Environment *pChildEnv );
+    virtual sal_Bool StartCommunication();
+    virtual sal_Bool StartCommunication( String aApp, String aParams, Environment *pChildEnv );
 
-    BOOL KillApplication();
+    sal_Bool KillApplication();
 
 protected:
-    virtual BOOL RetryConnect();
-    BOOL bApplicationStarted;
+    virtual sal_Bool RetryConnect();
+    sal_Bool bApplicationStarted;
     Time aFirstRetryCall;
     String aAppPath;
     String aAppParams;
@@ -63,7 +58,7 @@ protected:
 
 
 String GetHostConfig();
-ULONG GetTTPortConfig();
-ULONG GetUnoPortConfig();
+sal_uLong GetTTPortConfig();
+sal_uLong GetUnoPortConfig();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

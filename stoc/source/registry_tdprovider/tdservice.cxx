@@ -41,6 +41,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using ::rtl::OUStringBuffer;
 
 namespace {
 
@@ -542,7 +543,7 @@ void ServiceTypeDescriptionImpl::getReferences()
             case RT_REF_NEEDS:
                 break;
             default:
-                OSL_ENSURE( sal_False, "### unsupported reference type!" );
+                OSL_FAIL( "### unsupported reference type!" );
                 break;
             }
         }

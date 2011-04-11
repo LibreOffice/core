@@ -30,6 +30,7 @@
 #define _SWTEXTSH_HXX
 
 #include <basesh.hxx>
+#include <unotools/caserotate.hxx>
 
 class AbstractSvxPostItDialog;
 class SwFldMgr;
@@ -38,11 +39,12 @@ class SvxHyperlinkItem;
 class SwTextShell: public SwBaseShell
 {
     SwFldMgr*   pPostItFldMgr;
+    RotateTransliteration m_aRotateCase;
 
     void InsertSymbol( SfxRequest& );
     void InsertHyperlink(const SvxHyperlinkItem& rHlnkItem);
     bool InsertMediaDlg( SfxRequest& );
-    void ChangeHeaderOrFooter(const String& rStyleName, BOOL bHeader, BOOL bOn, BOOL bShowWarning);
+    void ChangeHeaderOrFooter(const String& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning);
 
 public:
     SFX_DECL_INTERFACE(SW_TEXTSHELL)
@@ -77,6 +79,7 @@ public:
     void    ExecAttr(SfxRequest &);
     void    ExecDB(SfxRequest &);
     void    ExecTransliteration(SfxRequest &);
+    void    ExecRotateTransliteration(SfxRequest &);
 
     void    GetAttrState(SfxItemSet &);
 

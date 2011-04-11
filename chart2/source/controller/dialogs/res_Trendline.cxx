@@ -35,15 +35,10 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 
 #include <vector>
 #include <algorithm>
-
-// macro for selecting a normal or high contrast bitmap the stack variable
-// bIsHighContrast must exist and reflect the correct state
-#define SELECT_IMAGE(name) Image( SchResId( bIsHighContrast ? name ## _HC : name ))
 
 namespace
 {
@@ -86,21 +81,22 @@ enum StatTrendLine
 TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInAttrs, bool bNoneAvailable ) :
         m_aFLType( pParent, SchResId( FL_TYPE )),
 
-        m_aRBNone( pParent, SchResId( RB_NONE )),
-        m_aRBLinear( pParent, SchResId( RB_LINEAR )),
+        m_aRBNone(        pParent, SchResId( RB_NONE        )),
+        m_aRBLinear(      pParent, SchResId( RB_LINEAR      )),
         m_aRBLogarithmic( pParent, SchResId( RB_LOGARITHMIC )),
         m_aRBExponential( pParent, SchResId( RB_EXPONENTIAL )),
-        m_aRBPower( pParent, SchResId( RB_POWER )),
+        m_aRBPower(       pParent, SchResId( RB_POWER       )),
 
-        m_aFINone( pParent, SchResId( FI_NONE )),
-        m_aFILinear( pParent, SchResId( FI_LINEAR )),
+        m_aFINone(        pParent, SchResId( FI_NONE        )),
+        m_aFILinear(      pParent, SchResId( FI_LINEAR      )),
         m_aFILogarithmic( pParent, SchResId( FI_LOGARITHMIC )),
         m_aFIExponential( pParent, SchResId( FI_EXPONENTIAL )),
-        m_aFIPower( pParent, SchResId( FI_POWER )),
+        m_aFIPower(       pParent, SchResId( FI_POWER       )),
 
-        m_aFLEquation( pParent, SchResId( FL_EQUATION )),
-        m_aCBShowEquation( pParent, SchResId( CB_SHOW_EQUATION )),
+        m_aFLEquation(             pParent, SchResId( FL_EQUATION               )),
+        m_aCBShowEquation(         pParent, SchResId( CB_SHOW_EQUATION          )),
         m_aCBShowCorrelationCoeff( pParent, SchResId( CB_SHOW_CORRELATION_COEFF )),
+
         m_eTrendLineType( CHREGRESS_NONE ),
         m_bNoneAvailable( bNoneAvailable ),
         m_bTrendLineUnique( true )
@@ -188,7 +184,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     const SfxPoolItem *pPoolItem = NULL;
     SfxItemState aState = SFX_ITEM_UNKNOWN;
 
-    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_TYPE, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_TYPE, sal_True, &pPoolItem );
     m_bTrendLineUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET )
     {
@@ -197,28 +193,28 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
             m_eTrendLineType = pItem->GetValue();
     }
 
-    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_EQUATION, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_EQUATION, sal_True, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        m_aCBShowEquation.EnableTriState( TRUE );
+        m_aCBShowEquation.EnableTriState( sal_True );
         m_aCBShowEquation.SetState( STATE_DONTKNOW );
     }
     else
     {
-        m_aCBShowEquation.EnableTriState( FALSE );
+        m_aCBShowEquation.EnableTriState( sal_False );
         if( aState == SFX_ITEM_SET )
             m_aCBShowEquation.Check( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
     }
 
-    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_COEFF, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_COEFF, sal_True, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        m_aCBShowCorrelationCoeff.EnableTriState( TRUE );
+        m_aCBShowCorrelationCoeff.EnableTriState( sal_True );
         m_aCBShowCorrelationCoeff.SetState( STATE_DONTKNOW );
     }
     else
     {
-        m_aCBShowCorrelationCoeff.EnableTriState( FALSE );
+        m_aCBShowCorrelationCoeff.EnableTriState( sal_False );
         if( aState == SFX_ITEM_SET )
             m_aCBShowCorrelationCoeff.Check( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
     }
@@ -247,7 +243,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     }
 }
 
-BOOL TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
+sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
 {
     if( m_bTrendLineUnique )
         rOutAttrs.Put( SvxChartRegressItem( m_eTrendLineType, SCHATTR_REGRESSION_TYPE ));
@@ -255,19 +251,17 @@ BOOL TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_EQUATION, m_aCBShowEquation.IsChecked() ));
     if( m_aCBShowCorrelationCoeff.GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_COEFF, m_aCBShowCorrelationCoeff.IsChecked() ));
-    return TRUE;
+    return sal_True;
 }
 
 void TrendlineResources::FillValueSets()
 {
-    bool bIsHighContrast = ( true && m_aFLType.GetSettings().GetStyleSettings().GetHighContrastMode() );
-
     if( m_bNoneAvailable )
-        m_aFINone.SetImage( SELECT_IMAGE( BMP_REGRESSION_NONE ));
-    m_aFILinear.SetImage( SELECT_IMAGE( BMP_REGRESSION_LINEAR ));
-    m_aFILogarithmic.SetImage( SELECT_IMAGE( BMP_REGRESSION_LOG ));
-    m_aFIExponential.SetImage( SELECT_IMAGE( BMP_REGRESSION_EXP ));
-    m_aFIPower.SetImage( SELECT_IMAGE( BMP_REGRESSION_POWER ));
+        m_aFINone.SetImage(    Image( SchResId( BMP_REGRESSION_NONE   ) ) );
+    m_aFILinear.SetImage(      Image( SchResId( BMP_REGRESSION_LINEAR ) ) );
+    m_aFILogarithmic.SetImage( Image( SchResId( BMP_REGRESSION_LOG    ) ) );
+    m_aFIExponential.SetImage( Image( SchResId( BMP_REGRESSION_EXP    ) ) );
+    m_aFIPower.SetImage(       Image( SchResId( BMP_REGRESSION_POWER  ) ) );
 }
 
 void TrendlineResources::UpdateControlStates()

@@ -139,7 +139,7 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             bDone = sal_False;
     }
 
-    while (bDataFound && !bDone)            // solange iterieren bis man auf einem gueltigen Satz ist
+    while (bDataFound && !bDone)            // Iterate until we are at the valid set
     {
         bDataFound = m_pHelper->move(eDelPosition, 1, _bRetrieveData);
         if (_eCursorPosition != IResultSetHelper::RELATIVE)
@@ -155,10 +155,15 @@ sal_Bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPositio
             bDone = sal_False;
     }
 
-    if(bDataFound && bDone )
+    if(bDataFound && bDone)
     {
         const sal_Int32 nDriverPos = m_pHelper->getDriverPos();
-        if ( ::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),nDriverPos) == m_aBookmarksPositions.end() )
+        if ( m_bDeletedVisible )
+        {
+            if ( nDriverPos > (sal_Int32)m_aBookmarksPositions.size() )
+                m_aBookmarksPositions.push_back(nDriverPos);
+        }
+        else if ( ::std::find(m_aBookmarksPositions.begin(),m_aBookmarksPositions.end(),nDriverPos) == m_aBookmarksPositions.end() )
             m_aBookmarksPositions.push_back(nDriverPos);
         /*sal_Int32 nDriverPos = m_pHelper->getDriverPos();
         if(m_aBookmarks.find(nDriverPos) == m_aBookmarks.end())
@@ -247,7 +252,7 @@ sal_Int32 OSkipDeletedSet::getMappedPosition(sal_Int32 _nPos) const
     /*TInt2IntMap::const_iterator aFind = m_aBookmarks.find(_nPos);
     OSL_ENSURE(aFind != m_aBookmarks.end(),"OSkipDeletedSet::getMappedPosition() invalid bookmark!");
     return aFind->second;*/
-    OSL_ENSURE(0,"Why!");
+    OSL_FAIL("Why!");
     return -1;
 }
 // -----------------------------------------------------------------------------

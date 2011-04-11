@@ -48,10 +48,10 @@ enum SvTabJustify
 struct TabListBoxEventData
 {
     SvLBoxEntry*    m_pEntry;
-    USHORT          m_nColumn;
+    sal_uInt16          m_nColumn;
     String          m_sOldText;
 
-    TabListBoxEventData( SvLBoxEntry* pEntry, USHORT nColumn, const String& rOldText ) :
+    TabListBoxEventData( SvLBoxEntry* pEntry, sal_uInt16 nColumn, const String& rOldText ) :
         m_pEntry( pEntry ), m_nColumn( nColumn ), m_sOldText( rOldText ) {}
 };
 
@@ -59,71 +59,71 @@ class SVT_DLLPUBLIC SvTabListBox : public SvTreeListBox
 {
 private:
     SvLBoxTab*                  pTabList;
-    USHORT                      nTabCount;
+    sal_uInt16                      nTabCount;
     XubString                   aCurEntry;
-    ULONG                       nDummy1;
-    ULONG                       nDummy2;
+    sal_uLong                       nDummy1;
+    sal_uLong                       nDummy2;
 
 protected:
     SvLBoxEntry*                pViewParent;
 
-    static const xub_Unicode*   GetToken( const xub_Unicode* pPtr, USHORT& rLen );
+    static const xub_Unicode*   GetToken( const xub_Unicode* pPtr, sal_uInt16& rLen );
 
     virtual void                SetTabs();
     virtual void                InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind );
 
-    String                      GetTabEntryText( ULONG nPos, USHORT nCol ) const;
-    SvLBoxEntry*                GetEntryOnPos( ULONG _nEntryPos ) const;
-    SvLBoxEntry*                GetChildOnPos( SvLBoxEntry* _pParent, ULONG _nEntryPos, ULONG& _rPos ) const;
+    String                      GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const;
+    SvLBoxEntry*                GetEntryOnPos( sal_uLong _nEntryPos ) const;
+    SvLBoxEntry*                GetChildOnPos( SvLBoxEntry* _pParent, sal_uLong _nEntryPos, sal_uLong& _rPos ) const;
 
 public:
     SvTabListBox( Window* pParent, WinBits = WB_BORDER );
     SvTabListBox( Window* pParent, const ResId& );
     ~SvTabListBox();
     void            SetTabs( long* pTabs, MapUnit = MAP_APPFONT );
-    USHORT          TabCount() const { return (USHORT)nTabCount; }
+    sal_uInt16          TabCount() const { return (sal_uInt16)nTabCount; }
     using SvTreeListBox::GetTab;
-    long            GetTab( USHORT nTab ) const;
-    void            SetTab( USHORT nTab, long nValue, MapUnit = MAP_APPFONT );
-    long            GetLogicTab( USHORT nTab );
+    long            GetTab( sal_uInt16 nTab ) const;
+    void            SetTab( sal_uInt16 nTab, long nValue, MapUnit = MAP_APPFONT );
+    long            GetLogicTab( sal_uInt16 nTab );
 
     virtual SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent = 0,
-                                         BOOL bChildsOnDemand = FALSE,
-                                         ULONG nPos=LIST_APPEND, void* pUserData = 0,
+                                         sal_Bool bChildsOnDemand = sal_False,
+                                         sal_uLong nPos=LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
     virtual SvLBoxEntry*    InsertEntry( const XubString& rText,
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
                                          SvLBoxEntry* pParent = 0,
-                                         BOOL bChildsOnDemand = FALSE,
-                                         ULONG nPos = LIST_APPEND, void* pUserData = 0,
+                                         sal_Bool bChildsOnDemand = sal_False,
+                                         sal_uLong nPos = LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
-    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, ULONG nPos = LIST_APPEND,
-                                 USHORT nCol = 0xffff, void* pUserData = NULL );
+    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, sal_uLong nPos = LIST_APPEND,
+                                 sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
     virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, SvLBoxEntry* pParent,
-                                 ULONG nPos, USHORT nCol, void* pUserData = NULL );
+                                 sal_uLong nPos, sal_uInt16 nCol, void* pUserData = NULL );
     virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, const Image& rExpandedEntryBmp,
                                  const Image& rCollapsedEntryBmp, SvLBoxEntry* pParent = NULL,
-                                 ULONG nPos = LIST_APPEND, USHORT nCol = 0xffff, void* pUserData = NULL );
+                                 sal_uLong nPos = LIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
 
     virtual String  GetEntryText( SvLBoxEntry* pEntry ) const;
-    String          GetEntryText( SvLBoxEntry*, USHORT nCol ) const;
-    String          GetEntryText( ULONG nPos, USHORT nCol = 0xffff ) const;
+    String          GetEntryText( SvLBoxEntry*, sal_uInt16 nCol ) const;
+    String          GetEntryText( sal_uLong nPos, sal_uInt16 nCol = 0xffff ) const;
     using SvTreeListBox::SetEntryText;
-    void            SetEntryText( const XubString&, ULONG, USHORT nCol=0xffff );
-    void            SetEntryText(const XubString&,SvLBoxEntry*,USHORT nCol=0xffff);
-    String          GetCellText( ULONG nPos, USHORT nCol ) const;
-    ULONG           GetEntryPos( const XubString&, USHORT nCol = 0xffff );
-    ULONG           GetEntryPos( const SvLBoxEntry* pEntry ) const;
+    void            SetEntryText( const XubString&, sal_uLong, sal_uInt16 nCol=0xffff );
+    void            SetEntryText(const XubString&,SvLBoxEntry*,sal_uInt16 nCol=0xffff);
+    String          GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const;
+    sal_uLong           GetEntryPos( const XubString&, sal_uInt16 nCol = 0xffff );
+    sal_uLong           GetEntryPos( const SvLBoxEntry* pEntry ) const;
 
     virtual void    Resize();
-    void            SetTabJustify( USHORT nTab, SvTabJustify );
-    SvTabJustify    GetTabJustify( USHORT nTab ) const;
+    void            SetTabJustify( sal_uInt16 nTab, SvTabJustify );
+    SvTabJustify    GetTabJustify( sal_uInt16 nTab ) const;
 };
 
-inline long SvTabListBox::GetTab( USHORT nTab ) const
+inline long SvTabListBox::GetTab( sal_uInt16 nTab ) const
 {
     DBG_ASSERT( nTab < nTabCount, "GetTabPos:Invalid Tab" );
     return pTabList[nTab].GetPos();
@@ -161,17 +161,17 @@ public:
     virtual void    Paint( const Rectangle& );
 
     void            InitHeaderBar( HeaderBar* pHeaderBar );
-    sal_Bool        IsItemChecked( SvLBoxEntry* pEntry, USHORT nCol ) const;
+    sal_Bool        IsItemChecked( SvLBoxEntry* pEntry, sal_uInt16 nCol ) const;
 
-    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, ULONG nPos = LIST_APPEND,
-                                 USHORT nCol = 0xffff, void* pUserData = NULL );
+    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, sal_uLong nPos = LIST_APPEND,
+                                 sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
     virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, SvLBoxEntry* pParent,
-                                 ULONG nPos, USHORT nCol, void* pUserData = NULL );
+                                 sal_uLong nPos, sal_uInt16 nCol, void* pUserData = NULL );
     virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, const Image& rExpandedEntryBmp,
                                  const Image& rCollapsedEntryBmp, SvLBoxEntry* pParent = NULL,
-                                 ULONG nPos = LIST_APPEND, USHORT nCol = 0xffff, void* pUserData = NULL );
-    virtual ULONG Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,ULONG nPos=LIST_APPEND);
-    virtual ULONG Insert( SvLBoxEntry* pEntry, ULONG nRootPos = LIST_APPEND );
+                                 sal_uLong nPos = LIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
+    virtual sal_uLong Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,sal_uLong nPos=LIST_APPEND);
+    virtual sal_uLong Insert( SvLBoxEntry* pEntry, sal_uLong nRootPos = LIST_APPEND );
     void            RemoveEntry( SvLBoxEntry* _pEntry );
     void            Clear();
 
@@ -203,13 +203,13 @@ public:
     virtual sal_Bool                HasRowHeader() const; //GetColumnId
     /** @return  <TRUE/>, if the object can focus a cell. */
     virtual sal_Bool                IsCellFocusable() const;
-    virtual BOOL                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
+    virtual sal_Bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
 
     virtual void                    SetNoSelection();
     using SvListView::SelectAll;
     virtual void                    SelectAll();
-    virtual void                    SelectAll( BOOL bSelect, BOOL bPaint = TRUE );
-    virtual void                    SelectRow( long _nRow, BOOL _bSelect = TRUE, BOOL bExpand = TRUE );
+    virtual void                    SelectAll( sal_Bool bSelect, sal_Bool bPaint = sal_True );
+    virtual void                    SelectRow( long _nRow, sal_Bool _bSelect = sal_True, sal_Bool bExpand = sal_True );
     virtual void                    SelectColumn( sal_uInt16 _nColumn, sal_Bool _bSelect = sal_True );
     virtual sal_Int32               GetSelectedRowCount() const;
     virtual sal_Int32               GetSelectedColumnCount() const;
@@ -221,11 +221,11 @@ public:
 
     /** @return  <TRUE/>, if the cell is visible. */
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumn ) const;
-    virtual String                  GetAccessibleCellText( long _nRow, USHORT _nColumnPos ) const;
+    virtual String                  GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const;
 
-    virtual Rectangle               calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen = TRUE );
-    virtual Rectangle               calcTableRect( BOOL _bOnScreen = TRUE );
-    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, BOOL _bIsHeader, BOOL _bOnScreen = TRUE );
+    virtual Rectangle               calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen = sal_True );
+    virtual Rectangle               calcTableRect( sal_Bool _bOnScreen = sal_True );
+    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, sal_Bool _bIsHeader, sal_Bool _bOnScreen = sal_True );
 
     virtual XACC                    CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumn );
     virtual XACC                    CreateAccessibleRowHeader( sal_Int32 _nRow );
@@ -249,12 +249,12 @@ public:
     virtual void                    GrabTableFocus();
 
     // OutputDevice
-    virtual BOOL                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
+    virtual sal_Bool                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector );
 
     // Window
     virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     virtual void                    GrabFocus();
-    virtual XACC                    GetAccessible( BOOL bCreate = TRUE );
+    virtual XACC                    GetAccessible( sal_Bool bCreate = sal_True );
     virtual Window*                 GetAccessibleParentWindow() const;
 
     /** Creates and returns the accessible object of the whole BrowseBox. */

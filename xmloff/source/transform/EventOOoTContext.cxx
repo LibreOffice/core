@@ -31,7 +31,7 @@
 #include "EventOOoTContext.hxx"
 #include "EventMap.hxx"
 #include "MutableAttrList.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "ActionMapTypesOOo.hxx"
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
@@ -39,7 +39,7 @@
 #include <comphelper/stl_types.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -48,7 +48,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 class XMLTransformerOOoEventMap_Impl:
-    public ::std::hash_map< ::rtl::OUString, NameKey_Impl,
+    public ::boost::unordered_map< ::rtl::OUString, NameKey_Impl,
                             ::rtl::OUStringHash, ::comphelper::UStringEqual >
 {
 public:
@@ -63,7 +63,7 @@ public:
 void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry *pInit )
 {
     XMLTransformerOOoEventMap_Impl::key_type aKey;
-    XMLTransformerOOoEventMap_Impl::data_type aData;
+    XMLTransformerOOoEventMap_Impl::mapped_type aData;
     while( pInit->m_pOOoName )
     {
         aKey = OUString::createFromAscii(pInit->m_pOOoName);
@@ -77,7 +77,7 @@ void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry *pInit 
 
         if( !insert( aVal ).second )
         {
-            OSL_ENSURE( false, "duplicate OOo event name extry" );
+            OSL_FAIL( "duplicate OOo event name extry" );
         }
 
         ++pInit;

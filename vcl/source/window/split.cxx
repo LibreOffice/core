@@ -61,13 +61,13 @@ namespace
 
 void Splitter::ImplInitSplitterData()
 {
-    ImplGetWindowImpl()->mbSplitter        = TRUE;
+    ImplGetWindowImpl()->mbSplitter        = sal_True;
     mpRefWin          = NULL;
     mnSplitPos        = 0;
     mnLastSplitPos    = 0;
     mnStartSplitPos   = 0;
-    mbDragFull        = FALSE;
-    mbKbdSplitting    = FALSE;
+    mbDragFull        = sal_False;
+    mbKbdSplitting    = sal_False;
     mbInKeyEvent      = 0;
     mnKeyboardStepSize = SPLITTER_DEFAULTSTEPSIZE;
 }
@@ -89,13 +89,13 @@ void Splitter::ImplInit( Window* pParent, WinBits nWinStyle )
     if ( nWinStyle & WB_HSCROLL )
     {
         ePointerStyle = POINTER_HSPLIT;
-        mbHorzSplit = TRUE;
+        mbHorzSplit = sal_True;
         SetSizePixel( Size( nB, nA ) );
     }
     else
     {
         ePointerStyle = POINTER_VSPLIT;
-        mbHorzSplit = FALSE;
+        mbHorzSplit = sal_False;
         SetSizePixel( Size( nA, nB ) );
     }
 
@@ -218,11 +218,11 @@ Splitter* Splitter::ImplFindSibling()
 
 // -----------------------------------------------------------------------
 
-BOOL Splitter::ImplSplitterActive()
+sal_Bool Splitter::ImplSplitterActive()
 {
     // is splitter in document or at scrollbar handle ?
 
-    BOOL bActive = TRUE;
+    sal_Bool bActive = sal_True;
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     long nA = rSettings.GetScrollBarSize();
     long nB = rSettings.GetSplitSize();
@@ -231,12 +231,12 @@ BOOL Splitter::ImplSplitterActive()
     if ( mbHorzSplit )
     {
         if( aSize.Width() == nB && aSize.Height() == nA )
-            bActive = FALSE;
+            bActive = sal_False;
     }
     else
     {
         if( aSize.Width() == nA && aSize.Height() == nB )
-            bActive = FALSE;
+            bActive = sal_False;
     }
     return bActive;
 }
@@ -352,13 +352,13 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
 
 void Splitter::ImplKbdTracking( KeyCode aKeyCode )
 {
-    USHORT nCode = aKeyCode.GetCode();
+    sal_uInt16 nCode = aKeyCode.GetCode();
     if ( nCode == KEY_ESCAPE || nCode == KEY_RETURN )
     {
         if( !mbKbdSplitting )
             return;
         else
-            mbKbdSplitting = FALSE;
+            mbKbdSplitting = sal_False;
 
         if ( nCode != KEY_ESCAPE )
         {
@@ -553,7 +553,7 @@ void Splitter::ImplStartKbdSplitting()
     if( mbKbdSplitting )
         return;
 
-    mbKbdSplitting = TRUE;
+    mbKbdSplitting = sal_True;
 
     StartSplit();
 
@@ -625,7 +625,7 @@ void Splitter::LoseFocus()
     {
         KeyCode aReturnKey( KEY_RETURN );
         ImplKbdTracking( aReturnKey );
-        mbKbdSplitting = FALSE;
+        mbKbdSplitting = sal_False;
     }
     Invalidate();
 }
@@ -641,7 +641,7 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
 
     Splitter *pSibling = ImplFindSibling();
     KeyCode aKeyCode = rKEvt.GetKeyCode();
-    USHORT nCode = aKeyCode.GetCode();
+    sal_uInt16 nCode = aKeyCode.GetCode();
     switch ( nCode )
     {
         case KEY_UP:

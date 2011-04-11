@@ -32,8 +32,9 @@
 #include <ooxml/OOXMLDocument.hxx>
 #include "OOXMLPropertySetImpl.hxx"
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <resourcemodel/TagLogger.hxx>
+#include <resourcemodel/XPathLogger.hxx>
 #endif
 
 namespace writerfilter {
@@ -52,12 +53,15 @@ class OOXMLParserState
     unsigned int mnContexts;
     unsigned int mnHandle;
     OOXMLDocument * mpDocument;
-    rtl::OUString msXNoteId;
+    sal_Int32 mnXNoteId;
     rtl::OUString msTarget;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
     stack<OOXMLPropertySet::Pointer_t> mCellProps;
     stack<OOXMLPropertySet::Pointer_t> mRowProps;
     stack<OOXMLPropertySet::Pointer_t> mTableProps;
+#if OSL_DEBUG_LEVEL > 1
+    XPathLogger m_xPathLogger;
+#endif
 
 public:
     typedef boost::shared_ptr<OOXMLParserState> Pointer_t;
@@ -86,8 +90,8 @@ public:
     void setDocument(OOXMLDocument * pDocument);
     OOXMLDocument * getDocument() const;
 
-    void setXNoteId(const rtl::OUString & rId);
-    const rtl::OUString & getXNoteId() const;
+    void setXNoteId(const sal_Int32 rId);
+    sal_Int32 getXNoteId() const;
 
     const rtl::OUString & getTarget() const;
 
@@ -105,11 +109,11 @@ public:
 
     void incContextCount();
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 public:
     unsigned int getContextCount() const;
-    string toString() const;
-    XMLTag::Pointer_t toTag() const;
+    void dumpXml( const TagLogger::Pointer_t& pLogger );
+    XPathLogger & getXPathLogger();
 #endif
 
 };

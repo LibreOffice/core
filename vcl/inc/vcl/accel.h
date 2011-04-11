@@ -43,11 +43,11 @@ class Accelerator;
 class ImplAccelEntry
 {
 public:
-    USHORT          mnId;
+    sal_uInt16          mnId;
     KeyCode         maKeyCode;
     Accelerator*    mpAccel;
     Accelerator*    mpAutoAccel;
-    BOOL            mbEnabled;
+    sal_Bool            mbEnabled;
 };
 
 // -----------------
@@ -55,7 +55,7 @@ public:
 // -----------------
 
 // in KEYCOD.CXX
-void ImplGetKeyCode( KeyFuncType eFunc, USHORT& rCode1, USHORT& rCode2, USHORT& rCode3, USHORT& rCode4 );
+void ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 );
 
 #endif  // _SV_ACCEL_H
 

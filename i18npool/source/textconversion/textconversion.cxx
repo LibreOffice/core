@@ -33,7 +33,8 @@
 #include <textconversion.hxx>
 
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -42,9 +43,9 @@ extern "C" { static void SAL_CALL thisModule() {} }
 TextConversion::TextConversion()
 {
 #ifdef SAL_DLLPREFIX
-    OUString lib=OUString::createFromAscii(SAL_DLLPREFIX"textconv_dict"SAL_DLLEXTENSION);
+    OUString lib(RTL_CONSTASCII_USTRINGPARAM(SAL_DLLPREFIX"textconv_dict"SAL_DLLEXTENSION));
 #else
-    OUString lib=OUString::createFromAscii("textconv_dict"SAL_DLLEXTENSION);
+    OUString lib(RTL_CONSTASCII_USTRINGPARAM("textconv_dict"SAL_DLLEXTENSION));
 #endif
     hModule = osl_loadModuleRelative(
         &thisModule, lib.pData, SAL_LOADMODULE_DEFAULT );

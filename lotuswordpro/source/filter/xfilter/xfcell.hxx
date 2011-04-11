@@ -57,10 +57,7 @@
  * @file
  * Table cell.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-21 create this file.
- ************************************************************************/
+
 #ifndef     _XFCell_HXX
 #define     _XFCell_HXX
 
@@ -86,6 +83,8 @@ public:
     virtual ~XFCell();
 
 public:
+    using XFContentContainer::Add;
+
     /**
      * @descr   Add content for table cell.
      */

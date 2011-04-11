@@ -185,7 +185,7 @@
 #ifndef LINE_PREFIX
 #define LINE_PREFIX             ""
 #endif
-
+
 /*
  * OLD_PREPROCESSOR forces the definition of OK_DOLLAR, OK_CONCAT,
  * COMMENT_INVISIBLE, and STRING_FORMAL to values appropriate for
@@ -304,12 +304,7 @@
 #else
 #define PAR_MAC            (31 + 1)
 #endif
-/* ER 13.06.95 19:33
- da Makros im file->buffer expandiert werden, muss NBUFF mindestens NWORK sein
-#define NWORK                   4096
-#define NBUFF                   4096
- */
-/* ER 13.06.95 20:05  NWORK wg. grooossen Makros in *.src erhoeht,
+/* NWORK wg. grooossen Makros in *.src erhoeht,
  da wir bald 10 Sprachen haben werden gleich ordentlich reingehauen.. */
 #define NWORK                   128000
 #define NBUFF                   NWORK

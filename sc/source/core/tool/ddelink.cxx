@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-#include <tools/list.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
@@ -51,24 +47,24 @@ TYPEINIT2(ScDdeLink,::sfx2::SvBaseLink,SfxBroadcaster);
 
 #define DDE_TXT_ENCODING    gsl_getSystemTextEncoding()
 
-BOOL ScDdeLink::bIsInUpdate = FALSE;
+sal_Bool ScDdeLink::bIsInUpdate = false;
 
 //------------------------------------------------------------------------
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const String& rA, const String& rT, const String& rI,
-                        BYTE nM ) :
+                        sal_uInt8 nM ) :
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc( pD ),
     aAppl( rA ),
     aTopic( rT ),
     aItem( rI ),
     nMode( nM ),
-    bNeedUpdate( FALSE ),
+    bNeedUpdate( false ),
     pResult( NULL )
 {
 }
 
-__EXPORT ScDdeLink::~ScDdeLink()
+ScDdeLink::~ScDdeLink()
 {
     // Verbindung aufheben
 
@@ -82,7 +78,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
     aTopic  ( rOther.aTopic ),
     aItem   ( rOther.aItem ),
     nMode   ( rOther.nMode ),
-    bNeedUpdate( FALSE ),
+    bNeedUpdate( false ),
     pResult ( NULL )
 {
     if (rOther.pResult)
@@ -92,7 +88,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
 ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr ) :
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc( pD ),
-    bNeedUpdate( FALSE ),
+    bNeedUpdate( false ),
     pResult( NULL )
 {
     rHdr.StartEntry();
@@ -102,10 +98,10 @@ ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& r
     rStream.ReadByteString( aTopic, eCharSet );
     rStream.ReadByteString( aItem, eCharSet );
 
-    BOOL bHasValue;
+    sal_Bool bHasValue;
     rStream >> bHasValue;
     if ( bHasValue )
-        pResult = new ScMatrix( rStream );
+        pResult = new ScMatrix(0, 0);
 
     if (rHdr.BytesLeft())       // neu in 388b und der 364w (RealTime-Client) Version
         rStream >> nMode;
@@ -124,10 +120,8 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     rStream.WriteByteString( aTopic, eCharSet );
     rStream.WriteByteString( aItem, eCharSet );
 
-    BOOL bHasValue = ( pResult != NULL );
+    sal_Bool bHasValue = ( pResult != NULL );
     rStream << bHasValue;
-    if (bHasValue)
-        pResult->Store( rStream );
 
     if( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )      // nicht bei 4.0 Export
         rStream << nMode;                                   // seit 388b
@@ -138,7 +132,7 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     rHdr.EndEntry();
 }
 
-void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
+void ScDdeLink::DataChanged( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue )
 {
     //  wir koennen nur Strings...
@@ -168,7 +162,7 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
 
     if (!nRows || !nCols)               // keine Daten
     {
-        pResult.Clear();
+        pResult.reset();
     }
     else                                // Daten aufteilen
     {
@@ -181,7 +175,7 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
         //  SC_DDE_DEFAULT - Zahlformat aus Zellvorlage "Standard"
         //  SC_DDE_ENGLISH - Standard-Zahlformat fuer English/US
         //  SC_DDE_TEXT    - ohne NumberFormatter direkt als String
-        ULONG nStdFormat = 0;
+        sal_uLong nStdFormat = 0;
         if ( nMode == SC_DDE_DEFAULT )
         {
             ScPatternAttr* pDefPattern = pDoc->GetDefPattern();     // enthaelt Standard-Vorlage
@@ -202,6 +196,9 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
                 double fVal;
                 if ( nMode != SC_DDE_TEXT && pFormatter->IsNumberFormat( aEntry, nIndex, fVal ) )
                     pResult->PutDouble( fVal, nC, nR );
+                else if (aEntry.Len() == 0)
+                    // empty cell
+                    pResult->PutEmpty(nC, nR);
                 else
                     pResult->PutString( aEntry, nC, nR );
             }
@@ -232,7 +229,7 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
 
 void ScDdeLink::ResetValue()
 {
-    pResult.Clear();
+    pResult.reset();
 
     //  Es hat sich was getan...
     //  Tracking, FID_DATACHANGED etc. passiert von aussen
@@ -241,10 +238,10 @@ void ScDdeLink::ResetValue()
         Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
 }
 
-void __EXPORT ScDdeLink::ListenersGone()
+void ScDdeLink::ListenersGone()
 {
-    BOOL bWas = bIsInUpdate;
-    bIsInUpdate = TRUE;             // Remove() kann Reschedule ausloesen??!?
+    sal_Bool bWas = bIsInUpdate;
+    bIsInUpdate = sal_True;             // Remove() kann Reschedule ausloesen??!?
 
     ScDocument* pStackDoc = pDoc;   // member pDoc can't be used after removing the link
 
@@ -264,16 +261,15 @@ void __EXPORT ScDdeLink::ListenersGone()
 void ScDdeLink::TryUpdate()
 {
     if (bIsInUpdate)
-        bNeedUpdate = TRUE;         // kann jetzt nicht ausgefuehrt werden
+        bNeedUpdate = sal_True;         // kann jetzt nicht ausgefuehrt werden
     else
     {
-        bIsInUpdate = TRUE;
-        //Application::Reschedule();    //! OS/2-Simulation
+        bIsInUpdate = true;
         pDoc->IncInDdeLinkUpdate();
         Update();
         pDoc->DecInDdeLinkUpdate();
-        bIsInUpdate = FALSE;
-        bNeedUpdate = FALSE;
+        bIsInUpdate = false;
+        bNeedUpdate = false;
     }
 }
 

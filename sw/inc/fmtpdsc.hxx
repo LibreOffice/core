@@ -39,23 +39,27 @@ class SwPageDesc;
 class SwHistory;
 class SwPaM;
 class IntlWrapper;
+class SwEndNoteInfo;
 
-//Pagedescriptor
-//Client vom SwPageDesc der durch das Attribut "beschrieben" wird.
+// Pagedescriptor
+// Client of SwPageDesc that is "described" by the attribute.
 
-#define IVER_FMTPAGEDESC_NOAUTO ((USHORT)0x0001)
-#define IVER_FMTPAGEDESC_LONGPAGE   ((USHORT)0x0002)
+#define IVER_FMTPAGEDESC_NOAUTO ((sal_uInt16)0x0001)
+#define IVER_FMTPAGEDESC_LONGPAGE   ((sal_uInt16)0x0002)
 
 class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
 {
-    // diese "Doc"-Funktion ist friend, um nach dem kopieren das
-    // Auto-Flag setzen zu koennen !!
-    friend BOOL InsAttr( SwDoc*, const SwPaM &, const SfxItemSet&, USHORT,
+    // This "Doc"-function is made friend in order to be able
+    // to set the auto-flag after copying!!
+    friend sal_Bool InsAttr( SwDoc*, const SwPaM &, const SfxItemSet&, sal_uInt16,
                         SwHistory* );
-    USHORT nNumOffset;          // Seitennummer Offset
-    USHORT nDescNameIdx;        // SW3-Reader: Stringpool-Index des Vorlagennamens
-    SwModify* pDefinedIn;       // Verweis auf das Objekt, in dem das
-                                // Attribut gesetzt wurde (CntntNode/Format)
+    sal_uInt16 nNumOffset;          // Offset page number.
+    sal_uInt16 nDescNameIdx;        // SW3-Reader: stringpool-index of style name.
+    SwModify* pDefinedIn;       // Points to the object in which the
+                                // attribute was set (CntntNode/Format).
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint );
 
 public:
     SwFmtPageDesc( const SwPageDesc *pDesc = 0 );
@@ -65,7 +69,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -73,27 +77,28 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
           SwPageDesc *GetPageDesc() { return (SwPageDesc*)GetRegisteredIn(); }
     const SwPageDesc *GetPageDesc() const { return (SwPageDesc*)GetRegisteredIn(); }
 
-    USHORT  GetNumOffset() const        { return nNumOffset; }
-    void    SetNumOffset( USHORT nNum ) { nNumOffset = nNum; }
+    sal_uInt16  GetNumOffset() const        { return nNumOffset; }
+    void    SetNumOffset( sal_uInt16 nNum ) { nNumOffset = nNum; }
 
-    // erfrage/setze, wo drin das Attribut verankert ist
+    // Query / set where attribute is anchored.
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     void ChgDefinedIn( const SwModify* pNew ) { pDefinedIn = (SwModify*)pNew; }
+    void RegisterToEndNotInfo( SwEndNoteInfo& );
+    void RegisterToPageDesc( SwPageDesc& );
+    bool KnowsPageDesc() const;
 };
 
 
-inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(BOOL bInP) const
+inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(sal_Bool bInP) const
     { return (const SwFmtPageDesc&)Get( RES_PAGEDESC,bInP); }
 
-inline const SwFmtPageDesc &SwFmt::GetPageDesc(BOOL bInP) const
+inline const SwFmtPageDesc &SwFmt::GetPageDesc(sal_Bool bInP) const
     { return aSet.GetPageDesc(bInP); }
 
 #endif

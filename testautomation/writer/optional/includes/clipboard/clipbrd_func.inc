@@ -55,13 +55,8 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
         printlog "- Paste as: " + ClipboardFormat
         Select Case CheckWhat
             Case "ctext", "DRAW"
-                if lcase(gPlatform) = "sol" and lcase(ClipboardFormat) = "bitmap" then
-                    QAErrorlog "#i49505#Paste drawing object as bitmap crashes office"
-                    goto s_next_item
-                else
-                    InhaltEinfuegen.Ok
-                    Sleep 3
-                end if
+                InhaltEinfuegen.Ok
+                Sleep 3
             Case else
                 InhaltEinfuegen.Ok
                 Sleep 3
@@ -141,8 +136,8 @@ end function
 
 function wSetClipboardtestDefaults(ForWhat as string) as boolean
     printlog " Points cursor to beginning of document "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\writer.sxw")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\writer.sxw")
+    
     Kontext "DocumentWriter"
     printlog " Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"

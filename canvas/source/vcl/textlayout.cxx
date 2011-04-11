@@ -59,7 +59,7 @@ namespace vclcanvas
                               sal_Int8      nTextDirection )
         {
             // TODO(P3): avoid if already correctly set
-            ULONG nLayoutMode;
+            sal_uIntPtr nLayoutMode;
             switch( nTextDirection )
             {
                 default:
@@ -140,10 +140,10 @@ namespace vclcanvas
         if (aVDev.GetTextOutlines(
             aOutlines,
             maText.Text,
-            ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-            ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-            ::canvas::tools::numeric_cast<USHORT>(maText.Length),
-            FALSE,
+            ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+            ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+            ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
+            sal_False,
             0,
             aOffsets.get()))
         {
@@ -193,9 +193,9 @@ namespace vclcanvas
         if (aVDev.GetGlyphBoundRects(
             Point(0,0),
             maText.Text,
-            ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-            ::canvas::tools::numeric_cast<USHORT>(maText.Length),
-            ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
+            ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+            ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
+            ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
             aMetricVector))
         {
             aBoundingBoxes.realloc(aMetricVector.size());
@@ -273,8 +273,8 @@ namespace vclcanvas
             return geometry::RealRectangle2D( 0, nAboveBaseline,
                                               aVDev.GetTextWidth(
                                                   maText.Text,
-                                                  ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-                                                  ::canvas::tools::numeric_cast<USHORT>(maText.Length) ),
+                                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) ),
                                               nBelowBaseline );
         }
     }
@@ -406,15 +406,15 @@ namespace vclcanvas
             rOutDev.DrawTextArray( rOutpos,
                                    maText.Text,
                                    aOffsets.get(),
-                                   ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-                                   ::canvas::tools::numeric_cast<USHORT>(maText.Length) );
+                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
         }
         else
         {
             rOutDev.DrawText( rOutpos,
                               maText.Text,
-                              ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-                              ::canvas::tools::numeric_cast<USHORT>(maText.Length) );
+                              ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                              ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
         }
 
         return true;

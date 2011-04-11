@@ -58,11 +58,11 @@ E3dDragMethod::E3dDragMethod (
     SdrDragView &_rView,
     const SdrMarkList& rMark,
     E3dDragConstraint eConstr,
-    BOOL bFull)
+    sal_Bool bFull)
 :   SdrDragMethod(_rView),
     meConstraint(eConstr),
     mbMoveFull(bFull),
-    mbMovedAtAll(FALSE)
+    mbMovedAtAll(sal_False)
 {
     // Fuer alle in der selektion befindlichen 3D-Objekte
     // eine Unit anlegen
@@ -176,7 +176,7 @@ bool E3dDragMethod::BeginSdrDrag()
         Show();
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -219,7 +219,7 @@ bool E3dDragMethod::EndSdrDrag(bool /*bCopy*/)
             getSdrDragView().EndUndo();
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -322,7 +322,7 @@ TYPEINIT1(E3dDragRotate, E3dDragMethod);
 E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
     const SdrMarkList& rMark,
     E3dDragConstraint eConstr,
-    BOOL bFull)
+    sal_Bool bFull)
 :   E3dDragMethod(_rView, rMark, eConstr, bFull)
 {
     // Zentrum aller selektierten Objekte in Augkoordinaten holen
@@ -422,7 +422,7 @@ void E3dDragRotate::MoveSdrDrag(const Point& rPnt)
             }
             long nSnap = 0;
 
-            if(!getSdrDragView().IsRotateAllowed(FALSE))
+            if(!getSdrDragView().IsRotateAllowed(sal_False))
                 nSnap = 90;
 
             if(nSnap != 0)
@@ -515,7 +515,7 @@ E3dDragMove::E3dDragMove(SdrDragView &_rView,
     const SdrMarkList& rMark,
     SdrHdlKind eDrgHdl,
     E3dDragConstraint eConstr,
-    BOOL bFull)
+    sal_Bool bFull)
 :   E3dDragMethod(_rView, rMark, eConstr, bFull),
     meWhatDragHdl(eDrgHdl)
 {

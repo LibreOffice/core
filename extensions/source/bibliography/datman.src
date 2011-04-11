@@ -62,6 +62,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox     LB_IDENTIFIER
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_IDENTIFIER";
         Pos = MAP_APPFONT ( 65 , 13 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -73,6 +74,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_AUTHORITYTYPE
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_AUTHORITYTYPE";
         Pos = MAP_APPFONT ( 171 , 13 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -84,6 +86,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_YEAR
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_YEAR";
         Pos = MAP_APPFONT ( 282 , 13 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -95,6 +98,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_AUTHOR
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_AUTHOR";
         Pos = MAP_APPFONT ( 65 , 28 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -106,6 +110,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_TITLE
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_TITLE";
         Pos = MAP_APPFONT ( 171 , 28 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -117,6 +122,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_PUBLISHER
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_PUBLISHER";
         Pos = MAP_APPFONT ( 65 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -128,6 +134,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_ADDRESS
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_ADDRESS";
         Pos = MAP_APPFONT ( 171, 43 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -139,6 +146,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_ISBN
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_ISBN";
         Pos = MAP_APPFONT ( 282 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -150,6 +158,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_CHAPTER
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_CHAPTER";
         Pos = MAP_APPFONT ( 65 , 58 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -161,6 +170,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_PAGES
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_PAGES";
         Pos = MAP_APPFONT ( 171, 58) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -172,6 +182,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_EDITOR
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_EDITOR";
         Pos = MAP_APPFONT ( 65 , 73 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -183,6 +194,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_EDITION
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_EDITION";
         Pos = MAP_APPFONT ( 171 , 73 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -194,6 +206,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_BOOKTITLE
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_BOOKTITLE";
         Pos = MAP_APPFONT ( 65, 88 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -205,6 +218,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_VOLUME
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_VOLUME";
         Pos = MAP_APPFONT ( 171 , 88 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -216,6 +230,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_HOWPUBLISHED
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_HOWPUBLISHED";
         Pos = MAP_APPFONT ( 282, 88 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -227,6 +242,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_ORGANIZATIONS
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_ORGANIZATIONS";
         Pos = MAP_APPFONT ( 65 , 103 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -238,6 +254,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_INSTITUTION
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_INSTITUTION";
         Pos = MAP_APPFONT ( 171 , 103) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -249,6 +266,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_SCHOOL
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_SCHOOL";
         Pos = MAP_APPFONT ( 282 , 103 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -260,6 +278,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_REPORTTYPE
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_REPORTTYPE";
         Pos = MAP_APPFONT ( 65 , 118 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -271,6 +290,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_MONTH
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_MONTH";
         Pos = MAP_APPFONT ( 171 , 118) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -282,6 +302,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_JOURNAL
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_JOURNAL";
         Pos = MAP_APPFONT ( 65 , 133) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -293,6 +314,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_NUMBER
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_NUMBER";
         Pos = MAP_APPFONT ( 171 , 133 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -304,6 +326,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_SERIES
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_SERIES";
         Pos = MAP_APPFONT ( 282 , 133 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -315,6 +338,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_ANNOTE
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_ANNOTE";
         Pos = MAP_APPFONT ( 65 , 148 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -326,6 +350,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_NOTE
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_NOTE";
         Pos = MAP_APPFONT ( 171 , 148 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -337,6 +362,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_URL
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_URL";
         Pos = MAP_APPFONT ( 282, 148 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -348,6 +374,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_CUSTOM1
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM1";
         Pos = MAP_APPFONT ( 65 , 163 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -359,6 +386,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_CUSTOM2
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM2";
         Pos = MAP_APPFONT ( 171 , 163 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -370,6 +398,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_CUSTOM3
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM3";
         Pos = MAP_APPFONT ( 282 , 163 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -381,6 +410,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_CUSTOM4
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM4";
         Pos = MAP_APPFONT ( 65 , 177 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;
@@ -392,6 +422,7 @@ ModalDialog RID_DLG_MAPPING
     };
     ListBox LB_CUSTOM5
     {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM5";
         Pos = MAP_APPFONT ( 171 , 177 ) ;
         Size = MAP_APPFONT ( 50 , 60 ) ;
         DropDown = TRUE;

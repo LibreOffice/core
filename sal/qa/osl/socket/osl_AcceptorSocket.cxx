@@ -59,13 +59,15 @@
 // include files
 //------------------------------------------------------------------------
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #include "osl_Socket_Const.h"
 #include "sockethelper.hxx"
 
 using namespace osl;
-using namespace rtl;
+using ::rtl::OUString;
 
 #define IP_PORT_FTP     21
 #define IP_PORT_MYPORT9 8897
@@ -193,8 +195,8 @@ namespace osl_AcceptorSocket
 
         void listen_accept_001()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT3 );
+            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT3 );
             ::osl::StreamSocket ssConnection;
 
             /// launch server socket
@@ -215,9 +217,9 @@ namespace osl_AcceptorSocket
 
         void listen_accept_002()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT4 );
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT4 );
-            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT4 );
+            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT4 );
+            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
             ::osl::StreamSocket ssConnection;
 
             /// launch server socket
@@ -249,9 +251,9 @@ namespace osl_AcceptorSocket
 
 // -----------------------------------------------------------------------------
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::ctors, "osl_AcceptorSocket");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_AcceptorSocket::ctors);
 //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::operator_assign, "osl_AcceptorSocket");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::listen_accept, "osl_AcceptorSocket");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_AcceptorSocket::listen_accept);
 
 } // namespace osl_AcceptorSocket
 
@@ -259,6 +261,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_AcceptorSocket::listen_accept, "osl_Ac
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,10 +6,6 @@
 *
 * OpenOffice.org - a multi-platform office productivity suite
 *
-* $RCSfile: mysqlc_databasemetadata.cxx,v $
-*
-* $Revision: 1.1.2.5 $
-*
 * This file is part of OpenOffice.org.
 *
 * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -55,16 +51,15 @@ using namespace com::sun::star::sdbc;
 using ::rtl::OUString;
 using mysqlc_sdbc_driver::getStringFromAny;
 
-#include <preextstl.h>
 #include <cppconn/connection.h>
 #include <cppconn/resultset.h>
 #include <cppconn/metadata.h>
 #include <cppconn/statement.h>
 #include <cppconn/prepared_statement.h>
-#include <postextstl.h>
+
 #include <sal/macros.h>
 
-static ext_std::string wild("%");
+static std::string wild("%");
 
 using ::rtl::OUStringToOString;
 
@@ -118,7 +113,7 @@ ODatabaseMetaData::~ODatabaseMetaData()
 
 
 /* {{{ ODatabaseMetaData::impl_getStringMetaData() -I- */
-OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, const ext_std::string& (sql::DatabaseMetaData::*_Method)() )
+OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, const std::string& (sql::DatabaseMetaData::*_Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     OUString stringMetaData;
@@ -137,7 +132,7 @@ OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, 
 
 
 /* {{{ ODatabaseMetaData::impl_getStringMetaData() -I- */
-OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, ext_std::string (sql::DatabaseMetaData::*_Method)() )
+OUString ODatabaseMetaData::impl_getStringMetaData(const sal_Char* _methodName, std::string (sql::DatabaseMetaData::*_Method)() )
 {
     OSL_TRACE( "mysqlc::ODatabaseMetaData::%s", _methodName);
     OUString stringMetaData;
@@ -1658,7 +1653,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.DatabaseMetaDataResultSet"))),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
-    ext_std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
+    std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 sch(OUStringToOString(schema, m_rConnection.getConnectionEncoding()).getStr()),
                 tab(OUStringToOString(table, m_rConnection.getConnectionEncoding()).getStr()),
                 cNamePattern(OUStringToOString(columnNamePattern, m_rConnection.getConnectionEncoding()).getStr());
@@ -1700,7 +1695,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     OSL_TRACE("ODatabaseMetaData::getColumns");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.DatabaseMetaDataResultSet"))),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
-    ext_std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
+    std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 sPattern(OUStringToOString(schemaPattern, m_rConnection.getConnectionEncoding()).getStr()),
                 tNamePattern(OUStringToOString(tableNamePattern, m_rConnection.getConnectionEncoding()).getStr()),
                 cNamePattern(OUStringToOString(columnNamePattern, m_rConnection.getConnectionEncoding()).getStr());
@@ -1754,11 +1749,11 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.DatabaseMetaDataResultSet"))),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
-    ext_std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
+    std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 sPattern(OUStringToOString(schemaPattern, m_rConnection.getConnectionEncoding()).getStr()),
                 tNamePattern(OUStringToOString(tableNamePattern, m_rConnection.getConnectionEncoding()).getStr());
 
-    ext_std::list<sql::SQLString> tabTypes;
+    std::list<sql::SQLString> tabTypes;
     for (const OUString *pStart = types.getConstArray(), *p = pStart, *pEnd = pStart + nLength; p != pEnd; ++p) {
         tabTypes.push_back(OUStringToOString(*p, m_rConnection.getConnectionEncoding()).getStr());
     }
@@ -1826,7 +1821,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.DatabaseMetaDataResultSet"))),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
-    ext_std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
+    std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 sPattern(OUStringToOString(schemaPattern, m_rConnection.getConnectionEncoding()).getStr()),
                 pNamePattern(OUStringToOString(procedureNamePattern, m_rConnection.getConnectionEncoding()).getStr());
 
@@ -1886,7 +1881,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     OSL_TRACE("ODatabaseMetaData::getExportedKeys");
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.DatabaseMetaDataResultSet"))),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
-    ext_std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
+    std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 sch(OUStringToOString(schema, m_rConnection.getConnectionEncoding()).getStr()),
                 tab(OUStringToOString(table, m_rConnection.getConnectionEncoding()).getStr());
 
@@ -1928,7 +1923,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.DatabaseMetaDataResultSet"))),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
-    ext_std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
+    std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 sch(OUStringToOString(schema, m_rConnection.getConnectionEncoding()).getStr()),
                 tab(OUStringToOString(table, m_rConnection.getConnectionEncoding()).getStr());
 
@@ -1969,7 +1964,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.DatabaseMetaDataResultSet"))),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
-    ext_std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
+    std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 sch(OUStringToOString(schema, m_rConnection.getConnectionEncoding()).getStr()),
                 tab(OUStringToOString(table, m_rConnection.getConnectionEncoding()).getStr());
 
@@ -2012,7 +2007,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.DatabaseMetaDataResultSet"))),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
-    ext_std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
+    std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 sch(OUStringToOString(schema, m_rConnection.getConnectionEncoding()).getStr()),
                 tab(OUStringToOString(table, m_rConnection.getConnectionEncoding()).getStr());
 
@@ -2055,7 +2050,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.DatabaseMetaDataResultSet"))),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
-    ext_std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
+    std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 sch(OUStringToOString(schema, m_rConnection.getConnectionEncoding()).getStr()),
                 tab(OUStringToOString(table, m_rConnection.getConnectionEncoding()).getStr());
 
@@ -2096,7 +2091,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.DatabaseMetaDataResultSet"))),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
-    ext_std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
+    std::string cat(catalog.hasValue()? OUStringToOString(getStringFromAny(catalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 sPattern(OUStringToOString(schemaPattern, m_rConnection.getConnectionEncoding()).getStr()),
                 tPattern(OUStringToOString(tableNamePattern, m_rConnection.getConnectionEncoding()).getStr());
 
@@ -2161,7 +2156,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     Reference< XResultSet > xResultSet(getOwnConnection().getDriver().getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.helper.DatabaseMetaDataResultSet"))),UNO_QUERY);
     std::vector< std::vector< Any > > rRows;
 
-    ext_std::string primaryCat(primaryCatalog.hasValue()? OUStringToOString(getStringFromAny(primaryCatalog), m_rConnection.getConnectionEncoding()).getStr():""),
+    std::string primaryCat(primaryCatalog.hasValue()? OUStringToOString(getStringFromAny(primaryCatalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 foreignCat(foreignCatalog.hasValue()? OUStringToOString(getStringFromAny(foreignCatalog), m_rConnection.getConnectionEncoding()).getStr():""),
                 pSchema(OUStringToOString(primarySchema, m_rConnection.getConnectionEncoding()).getStr()),
                 pTable(OUStringToOString(primaryTable, m_rConnection.getConnectionEncoding()).getStr()),

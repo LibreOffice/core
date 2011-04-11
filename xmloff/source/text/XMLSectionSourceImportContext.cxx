@@ -35,7 +35,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -74,7 +74,7 @@ enum XMLSectionSourceToken
     XML_TOK_SECTION_TEXT_SECTION_NAME
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aSectionSourceTokenMap[] =
+static SvXMLTokenMapEntry aSectionSourceTokenMap[] =
 {
     { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_SECTION_XLINK_HREF },
     { XML_NAMESPACE_TEXT, XML_FILTER_NAME, XML_TOK_SECTION_TEXT_FILTER_NAME },

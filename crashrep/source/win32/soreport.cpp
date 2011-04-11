@@ -70,7 +70,7 @@
 #include <io.h>
 #include <fcntl.h>
 #include <string>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <winsock.h>
 #include <malloc.h>
 #include <process.h>
@@ -184,12 +184,12 @@ static FILE *_tmpfile(void)
 
 static BOOL GetCrashDataPath( LPTSTR szBuffer )
 {
-    ::rtl::OUString ustrValue = ::rtl::OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+    ::rtl::OUString ustrValue(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
     ::rtl::Bootstrap::expandMacros( ustrValue );
 
     if ( ustrValue.getLength() )
     {
-        ustrValue += ::rtl::OUString::createFromAscii("/user/crashdata");
+        ustrValue += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/user/crashdata"));
 
         ::osl::FileBase::RC result = ::osl::Directory::createPath( ustrValue );
 
@@ -570,7 +570,7 @@ static string xml_encode( const string &rString )
     string temp = rString;
     string::size_type pos = 0;
 
-    // First replace all occurences of '&' because it may occur in further
+    // First replace all occurrences of '&' because it may occur in further
     // encoded chardters too
 
     for( pos = 0; (pos = temp.find( '&', pos )) != string::npos; pos += 4 )
@@ -1700,7 +1700,7 @@ static sal_uInt32 calc_md5_checksum( const char *filename, sal_uInt8 *pChecksum,
 #endif
 //***************************************************************************
 
-static bool WriteStackFile( FILE *fout, hash_map< string, string >& rLibraries, DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers )
+static bool WriteStackFile( FILE *fout, boost::unordered_map< string, string >& rLibraries, DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers )
 {
     bool    fSuccess = false;
 
@@ -1823,7 +1823,7 @@ static bool WriteStackFile( FILE *fout, hash_map< string, string >& rLibraries, 
     return fSuccess;
 }
 
-bool WriteChecksumFile( FILE *fchksum, const hash_map< string, string >& rLibraries )
+bool WriteChecksumFile( FILE *fchksum, const boost::unordered_map< string, string >& rLibraries )
 {
     bool success = false;
 
@@ -1831,11 +1831,9 @@ bool WriteChecksumFile( FILE *fchksum, const hash_map< string, string >& rLibrar
     {
         fprintf( fchksum, "<errormail:Checksums type=\"MD5\">\n" );
 
-        hash_map< string, string >::const_iterator iter;
+        boost::unordered_map< string, string >::const_iterator iter;
 
-        for ( iter = rLibraries.begin();
-            iter != rLibraries.end();
-            iter++ )
+        for ( iter = rLibraries.begin(); iter != rLibraries.end(); ++iter )
         {
             sal_uInt8 checksum[RTL_DIGEST_LENGTH_MD5];
             sal_uInt32 nBytesProcessed = calc_md5_checksum(
@@ -1848,7 +1846,7 @@ bool WriteChecksumFile( FILE *fchksum, const hash_map< string, string >& rLibrar
                 for ( int i = 0; i < sizeof(checksum); fprintf( fchksum, "%02X", checksum[i++] ) );
                 fprintf( fchksum, "\" bytes=\"%d\" file=\"%s\"/>\n",
                     nBytesProcessed,
-                    GetFileName( iter->first ) );
+                    GetFileName( iter->first ).c_str() );
             }
         }
 
@@ -2883,7 +2881,7 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR /*lpCmdLine*/, int 
 
         if( bGotDumpFile )
         {
-            hash_map< string, string > aLibraries;
+            boost::unordered_map< string, string > aLibraries;
 
             if ( g_bLoadReport )
             {

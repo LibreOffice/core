@@ -67,19 +67,19 @@ namespace dbaccess
 
     static const ::rtl::OUString& getConfigurationRootPath()
     {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/RegisteredNames");
+        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/RegisteredNames"));
         return s_sNodeName;
     }
 
     const ::rtl::OUString& getLocationNodeName()
     {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii( "Location" );
+        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Location"));
         return s_sNodeName;
     }
 
     const ::rtl::OUString& getNameNodeName()
     {
-        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii( "Name" );
+        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Name"));
         return s_sNodeName;
     }
 

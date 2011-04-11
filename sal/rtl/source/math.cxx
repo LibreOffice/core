@@ -924,7 +924,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
     if (pStatus != 0)
         *pStatus = eStatus;
     if (pParsedEnd != 0)
-        *pParsedEnd = p;
+        *pParsedEnd = p == p0 ? pBegin : p;
 
     return fVal;
 }
@@ -1224,11 +1224,11 @@ double SAL_CALL rtl_math_erfc( double x ) SAL_THROW_EXTERN_C()
  */
 double SAL_CALL rtl_math_asinh( double fX ) SAL_THROW_EXTERN_C()
 {
-    double fSign = 1.0;
     if ( fX == 0.0 )
         return 0.0;
     else
     {
+        double fSign = 1.0;
         if ( fX < 0.0 )
         {
             fX = - fX;

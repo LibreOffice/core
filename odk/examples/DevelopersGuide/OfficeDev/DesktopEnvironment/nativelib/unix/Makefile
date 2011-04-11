@@ -60,12 +60,12 @@ include $(SETTINGS)/stdtarget.mk
 
 $(OUT_SHL_SLO)/%.$(OBJ_EXT) : %.c
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(CC) $(CC_FLAGS) $(CC_INCLUDES) $(SDK_JAVA_INCLUDES) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
+	$(CC) $(CC_FLAGS_JNI) $(CC_INCLUDES) $(SDK_JAVA_INCLUDES) $(CC_DEFINES_JNI) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
 $(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)$(SHL_NAME).$(SHAREDLIB_EXT) : $(SLOFILES) 
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(LINK) $(LIBRARY_LINK_FLAGS) $(LINK_LIBS) $(LINK_JAVA_LIBS) -o $@ $< \
-	-ljawt $(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
+	-ljawt $(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STDC++LIB)
 
 .PHONY: clean
 clean :

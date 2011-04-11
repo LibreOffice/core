@@ -809,7 +809,6 @@ sub replace_setup_variables
 
     if ( $localminor =~ /^\s*\w(\d+)\w*\s*$/ ) { $localminor = $1; }
 
-    # $updateid
     my $updateid = $productname . "_" . $userdirproductversion . "_" . $$languagestringref;
     $updateid =~ s/ /_/g;
 
@@ -830,6 +829,8 @@ sub replace_setup_variables
         $value =~ s/\<sourceid\>/$installer::globals::build/;
         $value =~ s/\<updateid\>/$updateid/;
         $value =~ s/\<pkgformat\>/$installer::globals::packageformat/;
+        $value =~ s/\<vendor\>/$ENV{'OOO_VENDOR'}/;
+        $value =~ s/\<buildversion\>/$ENV{'BUILD_VER_STRING'}/;
 
         $oneitem->{'Value'} = $value;
     }
@@ -1223,7 +1224,7 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         my $styles = "";
         my $file_can_miss = 0;
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
-        if (( $styles =~ /\bSTARREGISTRY\b/ ) || ( $styles =~ /\bFILE_CAN_MISS\b/ )) { $file_can_miss = 1; }
+        if ( $styles =~ /\bFILE_CAN_MISS\b/ ) { $file_can_miss = 1; }
 
         if (( $installer::globals::languagepack ) && ( ! $onefile->{'ismultilingual'} ) && ( ! ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))) { $file_can_miss = 1; }
         if (( $installer::globals::helppack ) && ( ! $onefile->{'ismultilingual'} ) && ( ! ( $styles =~ /\bFORCEHELPPACK\b/ ))) { $file_can_miss = 1; }
@@ -1244,7 +1245,6 @@ sub get_Source_Directory_For_Files_From_Includepathlist
                 my $oldname = $onefile->{'Name'};
                 my $oldlanguage = $onefile->{'specificlanguage'};
                 my $newlanguage = "en-US";
-                # $onefile->{'Name'} =~ s/$oldlanguage\./$newlanguage\./;   # Example: tplwizfax_it.zip -> tplwizfax_en-US.zip
                 $onefilename = $onefile->{'Name'};
                 $onefilename =~ s/$oldlanguage\./$newlanguage\./;   # Example: tplwizfax_it.zip -> tplwizfax_en-US.zip
                 $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;     # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
@@ -1256,7 +1256,6 @@ sub get_Source_Directory_For_Files_From_Includepathlist
                     $infoline = "WARNING: Using $onefilename instead of $oldname\n";
                     push( @installer::globals::logfileinfo, $infoline);
                     print "    $infoline";
-                    # if ( $onefile->{'destination'} ) { $onefile->{'destination'} =~ s/\Q$oldname\E/$onefile->{'Name'}/; }
 
                     # If the directory, in which the new file is installed, is not language dependent,
                     # the filename has to be changed to avoid installation conflicts
@@ -1339,7 +1338,7 @@ sub remove_Files_Without_Sourcedirectory
 
     my $infoline;
 
-    my $error_occured = 0;
+    my $error_occurred = 0;
     my @missingfiles = ();
     push(@missingfiles, "ERROR: The following files could not be found: \n");
 
@@ -1353,12 +1352,43 @@ sub remove_Files_Without_Sourcedirectory
         if ($sourcepath eq "")
         {
             my $styles = $onefile->{'Styles'};
+            my $filename = $onefile->{'Name'};
 
-            if ( ! ( $styles =~ /\bSTARREGISTRY\b/ ))   # StarRegistry files will be created later
+            if ( ! $installer::globals::languagepack && !$installer::globals::helppack)
             {
-                my $filename = $onefile->{'Name'};
+                $infoline = "ERROR: Removing file $filename from file list.\n";
+                push( @installer::globals::logfileinfo, $infoline);
 
-                if ( ! $installer::globals::languagepack && !$installer::globals::helppack)
+                push(@missingfiles, "ERROR: File not found: $filename\n");
+                $error_occurred = 1;
+
+                next;   # removing this file from list, if sourcepath is empty
+            }
+            elsif ( $installer::globals::languagepack ) # special case for language packs
+            {
+                if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))
+                {
+                    $infoline = "ERROR: Removing file $filename from file list.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+
+                    push(@missingfiles, "ERROR: File not found: $filename\n");
+                    $error_occurred = 1;
+
+                    next;   # removing this file from list, if sourcepath is empty
+                }
+                else
+                {
+                    $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    $infoline = "INFO: It is not language dependent and can be ignored in language packs.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+
+                    next;   # removing this file from list, if sourcepath is empty
+                }
+            }
+            else # special case for help packs
+            {
+                if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCEHELPPACK\b/ ))
                 {
                     $infoline = "ERROR: Removing file $filename from file list.\n";
                     push( @installer::globals::logfileinfo, $infoline);
@@ -1368,51 +1398,16 @@ sub remove_Files_Without_Sourcedirectory
 
                     next;   # removing this file from list, if sourcepath is empty
                 }
-                elsif ( $installer::globals::languagepack ) # special case for language packs
+                else
                 {
-                    if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))
-                    {
-                        $infoline = "ERROR: Removing file $filename from file list.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
+                    $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    $infoline = "INFO: It is not language dependent and can be ignored in help packs.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
 
-                        push(@missingfiles, "ERROR: File not found: $filename\n");
-                        $error_occured = 1;
-
-                        next;   # removing this file from list, if sourcepath is empty
-                    }
-                    else
-                    {
-                        $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                        $infoline = "INFO: It is not language dependent and can be ignored in language packs.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-
-                        next;   # removing this file from list, if sourcepath is empty
-                    }
+                    next;   # removing this file from list, if sourcepath is empty
                 }
-                else # special case for help packs
-                {
-                    if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCEHELPPACK\b/ ))
-                    {
-                        $infoline = "ERROR: Removing file $filename from file list.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-
-                        push(@missingfiles, "ERROR: File not found: $filename\n");
-                        $error_occured = 1;
-
-                        next;   # removing this file from list, if sourcepath is empty
-                    }
-                    else
-                    {
-                        $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-                        $infoline = "INFO: It is not language dependent and can be ignored in help packs.\n";
-                        push( @installer::globals::logfileinfo, $infoline);
-
-                        next;   # removing this file from list, if sourcepath is empty
-                    }
-                }
-            }
+           }
         }
 
         push(@newfilesarray, $onefile);
@@ -1421,7 +1416,7 @@ sub remove_Files_Without_Sourcedirectory
     $infoline = "\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    if ( $error_occured )
+    if ( $error_occurred )
     {
         for ( my $i = 0; $i <= $#missingfiles; $i++ ) { print "$missingfiles[$i]"; }
         installer::exiter::exit_program("ERROR: Missing files", "remove_Files_Without_Sourcedirectory");
@@ -2074,18 +2069,14 @@ sub quoting_illegal_filenames
 
             # sourcepath and destination have to be quoted for epm list file
 
-            # $filename =~ s/\$/\$\$/g;
             $destpath =~ s/\$/\$\$/g;
             $sourcepath =~ s/\$/\$\$/g;
 
-            # my $infoline = "ATTENTION: Files: Renaming $onefile->{'Name'} to $filename\n";
-            # push( @installer::globals::logfileinfo, $infoline);
             my $infoline = "ATTENTION: Files: Quoting sourcepath $onefile->{'sourcepath'} to $sourcepath\n";
             push( @installer::globals::logfileinfo, $infoline);
             $infoline = "ATTENTION: Files: Quoting destination path $onefile->{'destination'} to $destpath\n";
             push( @installer::globals::logfileinfo, $infoline);
 
-            # $onefile->{'Name'} = $filename;
             $onefile->{'sourcepath'} = $sourcepath;
             $onefile->{'destination'} = $destpath;
         }
@@ -2093,19 +2084,20 @@ sub quoting_illegal_filenames
 }
 
 ############################################################################
-# Removing multiple occurences of same module.
+# Removing multiple occurrences of same module.
 ############################################################################
 
 sub optimize_list
 {
     my ( $longlist ) = @_;
+    my %tmpHash;
 
-    my $shortlist = "";
-    my $hashref = installer::converter::convert_stringlist_into_hash(\$longlist, ",");
-    foreach my $key (sort keys %{$hashref} ) { $shortlist = "$shortlist,$key"; }
-    $shortlist =~ s/^\s*\,//;
+    $longlist =~ s/^\s+//;
+    $longlist =~ s/\s+$//;
+    $longlist =~ s/\s*,\s*/,/g;
 
-    return $shortlist;
+    @tmpHash{split /,/, $longlist} = ();
+    return join(",", sort keys %tmpHash);
 }
 
 #######################################################################
@@ -2128,7 +2120,6 @@ sub collect_directories_from_filesarray
     my %alldirectoryhash = ();
 
     my $predefinedprogdir_added = 0;
-    my $alreadyincluded = 0;
 
     # Preparing this already as hash, although the only needed value at the moment is the HostName
     # But also adding: "specificlanguage" and "Dir" (for instance gid_Dir_Program)
@@ -2140,64 +2131,26 @@ sub collect_directories_from_filesarray
         installer::pathanalyzer::get_path_from_fullqualifiedname(\$destinationpath);
         $destinationpath =~ s/\Q$installer::globals::separator\E\s*$//;     # removing ending slashes or backslashes
 
-        $alreadyincluded = 0;
-        if  ( exists($alldirectoryhash{$destinationpath}) ) { $alreadyincluded = 1; }
-
-        if (!($alreadyincluded))
+        do
         {
-            my %directoryhash = ();
-            $directoryhash{'HostName'} = $destinationpath;
-            $directoryhash{'specificlanguage'} = $onefile->{'specificlanguage'};
-            $directoryhash{'Dir'} = $onefile->{'Dir'};
-            $directoryhash{'modules'} = $onefile->{'modules'}; # NEW, saving modules
-            # NEVER!!!  if ( ! $installer::globals::iswindowsbuild ) { $directoryhash{'Styles'} = "(CREATE)"; } # this directories must be created
-
-            if ( $onefile->{'Dir'} eq "PREDEFINED_PROGDIR" ) { $predefinedprogdir_added = 1; }
-
-            $alldirectoryhash{$destinationpath} = \%directoryhash;
-
-            # Problem: The $destinationpath can be share/registry/schema/org/openoffice
-            # but not all directories contain files and will be added to this list.
-            # Therefore the path has to be analyzed.
-
-            while ( $destinationpath =~ /(^.*\S)\Q$installer::globals::separator\E(\S.*?)\s*$/ )    # as long as the path contains slashes
+            if (!exists($alldirectoryhash{$destinationpath}))
             {
-                $destinationpath = $1;
+                my %directoryhash = ();
+                $directoryhash{'HostName'} = $destinationpath;
+                $directoryhash{'specificlanguage'} = $onefile->{'specificlanguage'};
+                $directoryhash{'Dir'} = $onefile->{'Dir'};
+                $directoryhash{'modules'} = $onefile->{'modules'}; # NEW, saving modules
 
-                $alreadyincluded = 0;
-                if  ( exists($alldirectoryhash{$destinationpath}) ) { $alreadyincluded = 1; }
+                $predefinedprogdir_added ||= $onefile->{'Dir'} eq "PREDEFINED_PROGDIR";
 
-                if (!($alreadyincluded))
-                {
-                    my %directoryhash = ();
-
-                    $directoryhash{'HostName'} = $destinationpath;
-                    $directoryhash{'specificlanguage'} = $onefile->{'specificlanguage'};
-                    $directoryhash{'Dir'} = $onefile->{'Dir'};
-                    $directoryhash{'modules'} = $onefile->{'modules'}; # NEW, saving modules
-                    # NEVER!!! if ( ! $installer::globals::iswindowsbuild ) { $directoryhash{'Styles'} = "(CREATE)"; }  # this directories must be created
-
-                    $alldirectoryhash{$destinationpath} = \%directoryhash;
-                }
-                else
-                {
-                    # Adding the modules to the module list!
-                    $alldirectoryhash{$destinationpath}->{'modules'} = $alldirectoryhash{$destinationpath}->{'modules'} . "," . $onefile->{'modules'};
-                }
+                $alldirectoryhash{$destinationpath} = \%directoryhash;
             }
-        }
-        else
-        {
-            # Adding the modules to the module list!
-            $alldirectoryhash{$destinationpath}->{'modules'} = $alldirectoryhash{$destinationpath}->{'modules'} . "," . $onefile->{'modules'};
-
-            # Also adding the module to all parents
-            while ( $destinationpath =~ /(^.*\S)\Q$installer::globals::separator\E(\S.*?)\s*$/ )    # as long as the path contains slashes
+            else
             {
-                $destinationpath = $1;
-                $alldirectoryhash{$destinationpath}->{'modules'} = $alldirectoryhash{$destinationpath}->{'modules'} . "," . $onefile->{'modules'};
+                # Adding the modules to the module list!
+                $alldirectoryhash{$destinationpath}->{'modules'} .= "," . $onefile->{'modules'};
             }
-        }
+        } while ($destinationpath =~ s/(^.*\S)\Q$installer::globals::separator\E(\S.*?)\s*$/$1/);  # as long as the path contains slashes
     }
 
     # if there is no file in the root directory PREDEFINED_PROGDIR, it has to be included into the directory array now
@@ -2260,7 +2213,6 @@ sub collect_directories_with_create_flag_from_directoryarray
                 my %directoryhash = ();
                 $directoryhash{'HostName'} = $directoryname;
                 $directoryhash{'specificlanguage'} = $onedir->{'specificlanguage'};
-                # $directoryhash{'gid'} = $onedir->{'gid'};
                 $directoryhash{'Dir'} = $onedir->{'gid'};
                 $directoryhash{'Styles'} = $onedir->{'Styles'};
 
@@ -2533,7 +2485,6 @@ sub insert_for_item ($$$)
 {
     my ($hash, $item, $id) = @_;
 
-    # print STDERR "insert '$id' for '$item'\n";
     if (!defined $hash->{$item})
     {
         my @gids = ();
@@ -2587,7 +2538,6 @@ sub get_string_of_modulegids_for_itemgid
     my $haslanguagemodule = 0;
     my %foundmodules = ();
 
-    # print STDERR "lookup '" . lc($itemgid) . "'\n";
     my $gid_list = $module_lookup_table->{lc($itemgid)};
 
     for my $gid (@{$gid_list})
@@ -2606,8 +2556,6 @@ sub get_string_of_modulegids_for_itemgid
         my $isreallylanguagemodule = installer::worker::key_in_a_is_also_key_in_b(\%foundmodules, \%installer::globals::alllangmodules);
         if ( ! $isreallylanguagemodule ) { installer::exiter::exit_program("ERROR: \"$itemgid\" is assigned to modules with flag \"LANGUAGEMODULE\" and also to modules without this flag! Modules: $allmodules", "get_string_of_modulegids_for_itemgid");  }
     }
-
-    # print STDERR "get_string_for_itemgid ($itemgid, $itemname) => $allmodules, $haslanguagemodule\n";
 
     return ($allmodules, $haslanguagemodule);
 }

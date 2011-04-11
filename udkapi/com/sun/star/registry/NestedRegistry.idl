@@ -27,12 +27,8 @@
 #ifndef __com_sun_star_registry_DefaultRegistry_idl__
 #define __com_sun_star_registry_DefaultRegistry_idl__
 
-#ifndef __com_sun_star_registry_XSimpleRegistry_idl__
 #include <com/sun/star/registry/XSimpleRegistry.idl>
-#endif
-#ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
-#endif
 
 
 //=============================================================================

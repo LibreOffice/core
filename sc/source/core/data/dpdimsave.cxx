@@ -62,7 +62,7 @@ void ScDPSaveGroupItem::AddElementsFromGroup( const ScDPSaveGroupItem& rGroup )
     // add all elements of the other group (used for nested grouping)
 
     for ( std::vector<String>::const_iterator aIter(rGroup.aElements.begin());
-                                aIter != rGroup.aElements.end(); aIter++ )
+                                aIter != rGroup.aElements.end(); ++aIter )
         aElements.push_back( *aIter );
 }
 
@@ -117,7 +117,7 @@ void ScDPSaveGroupItem::AddToData( ScDPGroupDimension& rDataDim, SvNumberFormatt
         sal_uInt32 nFormat = 0;      //! ...
         double fValue;
         if ( pFormatter->IsNumberFormat( *aIter, nFormat, fValue ) )
-            aData = ScDPItemData( *aIter, fValue, TRUE );
+            aData = ScDPItemData( *aIter, fValue, sal_True );
         else
             aData.SetString( *aIter );
 
@@ -187,7 +187,7 @@ String ScDPSaveGroupDimension::CreateGroupName( const String& rPrefix )
         ++nAdd;                         // continue with higher number
     }
 
-    DBG_ERROR("CreateGroupName: no valid name found");
+    OSL_FAIL("CreateGroupName: no valid name found");
     return EMPTY_STRING;
 }
 
@@ -258,7 +258,7 @@ bool ScDPSaveGroupDimension::HasOnlyHidden( const ScStrCollection& rVisible )
     for ( ScDPSaveGroupItemVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end() && bAllHidden; aIter++ )
     {
         StrData aSearch( aIter->GetGroupName() );
-        USHORT nCollIndex;
+        sal_uInt16 nCollIndex;
         if ( rVisible.Search( &aSearch, nCollIndex ) )
             bAllHidden = false;                             // found one that is visible
     }
@@ -558,7 +558,7 @@ String ScDPDimensionSaveData::CreateGroupDimName( const String& rSourceName,
         else
             ++nAdd;                     // continue with higher number
     }
-    DBG_ERROR("CreateGroupDimName: no valid name found");
+    OSL_FAIL("CreateGroupDimName: no valid name found");
     return EMPTY_STRING;
 }
 

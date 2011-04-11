@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
+
 #include "services/autorecovery.hxx"
 #include <loadenv/loadenv.hxx>
 
@@ -43,6 +44,8 @@
 #include <protocols.h>
 #include <properties.h>
 #include <services.h>
+
+#include "helper/mischelper.hxx"
 
 //_______________________________________________
 // interface includes
@@ -98,6 +101,8 @@
 
 #include <tools/urlobj.hxx>
 
+#include <fwkdllapi.h>
+
 //_______________________________________________
 // namespaces
 
@@ -123,6 +128,7 @@ using ::com::sun::star::frame::XStorable;
 using ::com::sun::star::lang::XComponent;
 
 namespace fpf = ::framework::pattern::frame;
+
 
 namespace framework
 {
@@ -203,7 +209,6 @@ static const ::rtl::OUString PROP_DISPATCH_ASYNCHRON(RTL_CONSTASCII_USTRINGPARAM
 static const ::rtl::OUString PROP_PROGRESS(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"));
 static const ::rtl::OUString PROP_SAVEPATH(RTL_CONSTASCII_USTRINGPARAM("SavePath"));
 static const ::rtl::OUString PROP_ENTRY_ID(RTL_CONSTASCII_USTRINGPARAM("EntryID"));
-static const ::rtl::OUString PROP_DBG_MAKE_IT_FASTER(RTL_CONSTASCII_USTRINGPARAM("DBGMakeItFaster"));
 static const ::rtl::OUString PROP_AUTOSAVE_STATE(RTL_CONSTASCII_USTRINGPARAM("AutoSaveState"));
 
 static const ::rtl::OUString OPERATION_START(RTL_CONSTASCII_USTRINGPARAM("start"));
@@ -230,7 +235,7 @@ static const sal_Int32       GIVE_UP_RETRY                          =   1; // in
 // should be flushed an exception ... so the special error handler for this scenario is triggered
 // #define TRIGGER_FULL_DISC_CHECK
 
-// force "return FALSE" for the method impl_enoughDiscSpace().
+// force "return sal_False" for the method impl_enoughDiscSpace().
 // #define SIMULATE_FULL_DISC
 
 //-----------------------------------------------
@@ -248,103 +253,6 @@ static const sal_Int32       GIVE_UP_RETRY                          =   1; // in
     #undef LOGFILE_RECOVERY
     #define LOG_RECOVERY(MSG)
 #endif
-
-//-----------------------------------------------
-// TODO debug - remove it!
-class DbgListener : private ThreadHelpBase
-                  , public  ::cppu::OWeakObject
-                  , public  css::frame::XStatusListener
-{
-    public:
-
-        FWK_DECLARE_XINTERFACE
-
-        DbgListener()
-        {
-            WRITE_LOGFILE("autorecovery_states.txt", "\n\nDbgListener::ctor()\n\n")
-        }
-
-        virtual ~DbgListener()
-        {
-            WRITE_LOGFILE("autorecovery_states.txt", "\n\nDbgListener::dtor()\n\n")
-        }
-
-        void startListening(const css::uno::Reference< css::frame::XDispatch >& xBroadcaster)
-        {
-            ::rtl::OUStringBuffer sMsg1(256);
-            sMsg1.appendAscii("//**********************************************************************************\n");
-            sMsg1.appendAscii("start listening\n{\n");
-            WRITE_LOGFILE("autorecovery_states.txt", U2B(sMsg1.makeStringAndClear()))
-
-            ++m_refCount;
-
-            css::util::URL aURL;
-            aURL.Complete = ::rtl::OUString();
-            xBroadcaster->addStatusListener(static_cast< css::frame::XStatusListener* >(this), aURL);
-
-            --m_refCount;
-
-            ::rtl::OUStringBuffer sMsg2(256);
-            sMsg2.appendAscii("}\nstart listening\n");
-            sMsg2.appendAscii("//**********************************************************************************\n");
-            WRITE_LOGFILE("autorecovery_states.txt", U2B(sMsg2.makeStringAndClear()))
-        }
-
-        virtual void SAL_CALL disposing(const css::lang::EventObject&)
-            throw(css::uno::RuntimeException)
-        {
-            WRITE_LOGFILE("autorecovery_states.txt", "\n\nDbgListener::dtor()\n\n")
-        }
-
-        virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& aEvent)
-            throw(css::uno::RuntimeException)
-        {
-            ::rtl::OUStringBuffer sMsg(256);
-
-            sMsg.appendAscii("//**********************************************************************************\n");
-
-            sMsg.appendAscii("FeatureURL = \"");
-            sMsg.append     (aEvent.FeatureURL.Complete);
-            sMsg.appendAscii("\"\n");
-
-            sMsg.appendAscii("State = [");
-            sal_Int32 nState = -1;
-            aEvent.State >>= nState;
-            if (nState==-1)
-            {
-                sMsg.appendAscii("?-");
-                sMsg.append     (::rtl::OUString::valueOf(nState));
-                sMsg.appendAscii("-? ");
-            }
-            if (nState==0)
-                sMsg.appendAscii("UNKNOWN ");
-            if ((nState & 1)==1)
-                sMsg.appendAscii("MODIFIED ");
-            if ((nState & 2)==2)
-                sMsg.appendAscii("TRYIT ");
-            if ((nState & 4)==4)
-                sMsg.appendAscii("HANDLED ");
-            if ((nState & 8)==8)
-                sMsg.appendAscii("POSTPONED ");
-            if ((nState & 16)==16)
-                sMsg.appendAscii("INCOMPLETE ");
-            if ((nState & 32)==32)
-                sMsg.appendAscii("DAMAGED ");
-            sMsg.appendAscii("]\n");
-/*
-            sMsg.appendAscii("IsEnabled = \"");
-            sMsg.append     (::rtl::OUString::valueOf(aEvent.IsEnabled));
-            sMsg.appendAscii("\"\n");
-
-            sMsg.appendAscii("Requery = \"");
-            sMsg.append     (::rtl::OUString::valueOf(aEvent.Requery));
-            sMsg.appendAscii("\"\n");
-*/
-            sMsg.appendAscii("\n");
-
-            WRITE_LOGFILE("autorecovery_states.txt", U2B(sMsg.makeStringAndClear()))
-        }
-};
 
 //-----------------------------------------------
 class CacheLockGuard
@@ -421,7 +329,7 @@ void CacheLockGuard::lock(sal_Bool bLockForAddRemoveVectorItems)
         (bLockForAddRemoveVectorItems)
        )
     {
-        OSL_ENSURE(sal_False, "Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.");
+        OSL_FAIL("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.");
         throw css::uno::RuntimeException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.")),
                 m_xOwner);
@@ -448,7 +356,7 @@ void CacheLockGuard::unlock()
 
     if (m_rCacheLock < 0)
     {
-        OSL_ENSURE(sal_False, "Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)");
+        OSL_FAIL("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)");
         throw css::uno::RuntimeException(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)")),
                 m_xOwner);
@@ -506,11 +414,6 @@ void DispatchParams::forget()
 };
 
 //-----------------------------------------------
-DEFINE_XINTERFACE_1(DbgListener                                 ,
-                    OWeakObject                                 ,
-                    DIRECT_INTERFACE(css::frame::XStatusListener))
-
-//-----------------------------------------------
 DEFINE_XINTERFACE_10(AutoRecovery                                                               ,
                      OWeakObject                                                                ,
                      DIRECT_INTERFACE (css::lang::XTypeProvider                                ),
@@ -557,10 +460,6 @@ DEFINE_INIT_SERVICE(
                         // establish callback for our internal used timer.
                         // Note: Its only active, if the timer will be started ...
                         m_aTimer.SetTimeoutHdl(LINK(this, AutoRecovery, implts_timerExpired));
-/*
-                        DbgListener* pListener = new DbgListener();
-                        pListener->startListening(this);
-*/
                     }
                    )
 
@@ -705,7 +604,6 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
 
     try
     {
-        // if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
         //  Auto save is called from our internal timer ... not via dispatch() API !
         // else
         if (
@@ -924,7 +822,7 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
     else
     if (aEvent.EventName.equals(EVENT_ON_UNLOAD))
     {
-        implts_deregisterDocument(xDocument, sal_True); // TRUE => stop listening for disposing() !
+        implts_deregisterDocument(xDocument, sal_True); // sal_True => stop listening for disposing() !
     }
 }
 
@@ -942,7 +840,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
     WriteGuard aWriteLock(m_aLock);
 
     // Changes of the configuration must be ignored if AutoSave/Recovery was disabled for this
-    // office session. That can happen if e.g. the command line arguments "-norestore" or "-headless"
+    // office session. That can happen if e.g. the command line arguments "--norestore" or "--headless"
     // was set.
     if ((m_eJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
        return;
@@ -1019,7 +917,7 @@ void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
     css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
     if (xDocument.is())
     {
-        implts_deregisterDocument(xDocument, sal_False); // FALSE => dont call removeEventListener() .. because it's not needed here
+        implts_deregisterDocument(xDocument, sal_False); // sal_False => dont call removeEventListener() .. because it's not needed here
         return;
     }
 
@@ -1469,7 +1367,8 @@ void AutoRecovery::implts_startListening()
         (! m_bListenForConfigChanges)
        )
     {
-        xCFG->addChangesListener(static_cast< css::util::XChangesListener* >(this));
+        m_xRecoveryCFGListener = new WeakChangesListener(this);
+        xCFG->addChangesListener(m_xRecoveryCFGListener);
         m_bListenForConfigChanges = sal_True;
     }
 
@@ -1488,7 +1387,8 @@ void AutoRecovery::implts_startListening()
         (! bListenForDocEvents)
        )
     {
-        xBroadcaster->addEventListener(static_cast< css::document::XEventListener* >(this));
+        m_xNewDocBroadcasterListener = new WeakDocumentEventListener(this);
+        xBroadcaster->addEventListener(m_xNewDocBroadcasterListener);
         // SAFE ->
         WriteGuard aWriteLock(m_aLock);
         m_bListenForDocEvents = sal_True;
@@ -1515,7 +1415,7 @@ void AutoRecovery::implts_stopListening()
         (m_bListenForDocEvents       )
        )
     {
-        xGlobalEventBroadcaster->removeEventListener(static_cast< css::document::XEventListener* >(this));
+        xGlobalEventBroadcaster->removeEventListener(m_xNewDocBroadcasterListener);
         m_bListenForDocEvents = sal_False;
     }
 
@@ -1524,7 +1424,7 @@ void AutoRecovery::implts_stopListening()
         (m_bListenForConfigChanges)
        )
     {
-        xCFG->removeChangesListener(static_cast< css::util::XChangesListener* >(this));
+        xCFG->removeChangesListener(m_xRecoveryCFGListener);
         m_bListenForConfigChanges = sal_False;
     }
 }
@@ -1573,7 +1473,7 @@ void AutoRecovery::implts_updateTimer()
        )
         return;
 
-    ULONG nMilliSeconds = 0;
+    sal_uLong nMilliSeconds = 0;
     if (m_eTimerType == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
     {
         nMilliSeconds = (m_nAutoSaveTimeIntervall*60000); // [min] => 60.000 ms
@@ -1630,7 +1530,7 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
         implts_stopTimer();
 
         // The timer must be ignored if AutoSave/Recovery was disabled for this
-        // office session. That can happen if e.g. the command line arguments "-norestore" or "-headless"
+        // office session. That can happen if e.g. the command line arguments "--norestore" or "--headless"
         // was set. But normaly the timer was disabled if recovery was disabled ...
         // But so we are more "safe" .-)
         // SAFE -> ----------------------------------
@@ -1711,7 +1611,6 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
     }
     catch(const css::uno::Exception&)
     {
-        LOG_ASSERT(sal_False, "May be you found the reason for bug #125528#. Please report a test scenario to the right developer. THX.");
     }
 
     return 0;
@@ -1811,7 +1710,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
         (!aNew.FactoryURL.getLength())
        )
     {
-        OSL_ENSURE( false, "AutoRecovery::implts_registerDocument: this should not happen anymore!" );
+        OSL_FAIL( "AutoRecovery::implts_registerDocument: this should not happen anymore!" );
         // nowadays, the Basic IDE should already die on the "supports XDocumentRecovery" check. And no other known
         // document type fits in here ...
         return;
@@ -1907,7 +1806,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
 
     AutoRecovery::st_impl_removeFile(aInfo.OldTempURL);
     AutoRecovery::st_impl_removeFile(aInfo.NewTempURL);
-    implts_flushConfigItem(aInfo, sal_True); // TRUE => remove it from config
+    implts_flushConfigItem(aInfo, sal_True); // sal_True => remove it from config
 }
 
 //-----------------------------------------------
@@ -1948,7 +1847,7 @@ void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::fr
     {
         AutoRecovery::TDocumentInfo& rInfo = *pIt;
 
-        // use TRUE as fallback ... so we recognize every document on EmergencySave/AutoRecovery!
+        // use sal_True as fallback ... so we recognize every document on EmergencySave/AutoRecovery!
         sal_Bool bModified = sal_True;
         css::uno::Reference< css::util::XModifiable > xModify(xDocument, css::uno::UNO_QUERY);
         if (xModify.is())
@@ -3298,7 +3197,7 @@ void AutoRecovery::implts_cleanUpWorkingEntry(const DispatchParams& aParams)
 
         AutoRecovery::st_impl_removeFile(rInfo.OldTempURL);
         AutoRecovery::st_impl_removeFile(rInfo.NewTempURL);
-        implts_flushConfigItem(rInfo, sal_True); // TRUE => remove it from xml config!
+        implts_flushConfigItem(rInfo, sal_True); // sal_True => remove it from xml config!
 
         m_lDocCache.erase(pIt);
         break; /// !!! pIt is not defined any longer ... further this function has finished it's work
@@ -3326,9 +3225,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUSt
         { return AutoRecovery::E_WRONG_TARGET_PATH; }
 
     sal_Int32 nNameClash;
-//  nNameClash = css::ucb::NameClash::ERROR;
     nNameClash = css::ucb::NameClash::RENAME;
-//  nNameClash = css::ucb::NameClash::OVERWRITE;
 
     try
     {
@@ -3379,7 +3276,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                     sal_Bool bRecoveryData = ((sal_Bool)(m_lDocCache.size()>0));
 
                     // exists session data ... => then we cant say, that these
-                    // data are valid for recovery. So we have to return FALSE then!
+                    // data are valid for recovery. So we have to return sal_False then!
                     if (bSessionData)
                         bRecoveryData = sal_False;
 

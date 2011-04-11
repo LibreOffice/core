@@ -152,10 +152,11 @@ namespace SVX {
 
 
 
-SvxSimpleParagraphDialog::SvxSimpleParagraphDialog( Window* pParent ) :
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_STD_PARAGRAPH ), rAttr ),
-    Dialog( pParent, "simple-paragraph.xml", "dialog" ),
-    aLineSpacingList( this, "line-spacing-list" )
+SvxSimpleParagraphDialog::SvxSimpleParagraphDialog( Window* pParent )
+    : SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_STD_PARAGRAPH ), rAttr )
+    , Dialog( pParent, "simple-paragraph.xml", "dialog" )
+    , aLineSpacingList( this, "line-spacing-list" )
+    , pPrevWin(NULL)
 {
 fprintf(stderr, "creating res mgr\n");
     pMgr = ResMgr::CreateResMgr("SOME_NAME");

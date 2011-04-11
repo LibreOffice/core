@@ -111,14 +111,10 @@ void SdInsertPagesObjsDlg::Reset()
         Color aColor( COL_WHITE );
         Bitmap aBmpText( SdResId( BMP_DOC_TEXT ) );
         Image aImgText( aBmpText, aColor );
-        Bitmap aBmpTextH( SdResId( BMP_DOC_TEXT_H ) );
-        Image aImgTextH( aBmpTextH, Color( COL_BLACK ) );
-        SvLBoxEntry* pEntry = aLbTree.InsertEntry( rName, aImgText, aImgText );
-        aLbTree.SetExpandedEntryBmp( pEntry, aImgTextH, BMP_COLOR_HIGHCONTRAST );
-        aLbTree.SetCollapsedEntryBmp( pEntry, aImgTextH, BMP_COLOR_HIGHCONTRAST );
+        aLbTree.InsertEntry( rName, aImgText, aImgText );
     }
 
-    aCbxMasters.Check( TRUE );
+    aCbxMasters.Check( sal_True );
 }
 
 /*************************************************************************
@@ -129,7 +125,7 @@ void SdInsertPagesObjsDlg::Reset()
 |*
 \************************************************************************/
 
-List* SdInsertPagesObjsDlg::GetList( USHORT nType )
+List* SdInsertPagesObjsDlg::GetList( sal_uInt16 nType )
 {
     // Bei Draw-Dokumenten muss bei der Selektion des Dokumentes NULL
     // zurueckgegeben werden
@@ -143,7 +139,7 @@ List* SdInsertPagesObjsDlg::GetList( USHORT nType )
         // wird das gesamte Dokument (und nicht mehr!) eingefuegt.
         if( aLbTree.GetSelectionCount() == 0 ||
             ( aLbTree.IsSelected( aLbTree.First() ) ) )
-            return( NULL ); // #37350#
+            return( NULL );
     }
     return( aLbTree.GetSelectEntryList( nType ) );
 }
@@ -154,7 +150,7 @@ List* SdInsertPagesObjsDlg::GetList( USHORT nType )
 |*
 \************************************************************************/
 
-BOOL SdInsertPagesObjsDlg::IsLink()
+sal_Bool SdInsertPagesObjsDlg::IsLink()
 {
     return( aCbxLink.IsChecked() );
 }
@@ -165,7 +161,7 @@ BOOL SdInsertPagesObjsDlg::IsLink()
 |*
 \************************************************************************/
 
-BOOL SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
+sal_Bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
 {
     return( aCbxMasters.IsChecked() );
 }

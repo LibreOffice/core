@@ -51,7 +51,7 @@
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/msgpool.hxx>
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -62,14 +62,14 @@ using namespace ::com::sun::star::util;
 SFX_IMPL_XINTERFACE_3( SfxStatusListener, OWeakObject, ::com::sun::star::lang::XComponent, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
 SFX_IMPL_XTYPEPROVIDER_3( SfxStatusListener, ::com::sun::star::lang::XComponent, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
 
-SfxStatusListener::SfxStatusListener( const Reference< XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const OUString& rCommand ) :
+SfxStatusListener::SfxStatusListener( const Reference< XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& rCommand ) :
     cppu::OWeakObject(),
     m_nSlotID( nSlotId ),
     m_xDispatchProvider( rDispatchProvider )
 {
     m_aCommand.Complete = rCommand;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
     xTrans->parseStrict( m_aCommand );
     if ( rDispatchProvider.is() )
         m_xDispatch = rDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );
@@ -80,7 +80,7 @@ SfxStatusListener::~SfxStatusListener()
 }
 
 // old sfx controller item C++ API
-void SfxStatusListener::StateChanged( USHORT, SfxItemState, const SfxPoolItem* )
+void SfxStatusListener::StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* )
 {
     // must be implemented by sub class
 }
@@ -101,7 +101,7 @@ void SfxStatusListener::Bind()
     }
 }
 
-void SfxStatusListener::Bind( USHORT nSlotId, const rtl::OUString& rNewCommand )
+void SfxStatusListener::Bind( sal_uInt16 nSlotId, const rtl::OUString& rNewCommand )
 {
     // first remove old listener, if we have a dispatch object
     Reference< XStatusListener > aStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
@@ -113,7 +113,7 @@ void SfxStatusListener::Bind( USHORT nSlotId, const rtl::OUString& rNewCommand )
         m_nSlotID = nSlotId;
         m_aCommand.Complete = rNewCommand;
         Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                                rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
         xTrans->parseStrict( m_aCommand );
 
         m_xDispatch = m_xDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );

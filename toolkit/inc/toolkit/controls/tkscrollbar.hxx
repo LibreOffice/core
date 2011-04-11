@@ -51,7 +51,7 @@ namespace toolkit
         ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
     public:
-                            UnoControlScrollBarModel();
+                            UnoControlScrollBarModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                             UnoControlScrollBarModel( const UnoControlScrollBarModel& rModel ) : UnoControlModel( rModel ) {;}
 
         UnoControlModel*    Clone() const { return new UnoControlScrollBarModel( *this ); }
@@ -77,7 +77,7 @@ namespace toolkit
         AdjustmentListenerMultiplexer maAdjustmentListeners;
 
     public:
-                                    UnoScrollBarControl();
+                                    UnoScrollBarControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
         ::rtl::OUString             GetComponentServiceName();
 
         ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlBase::queryInterface(rType); }

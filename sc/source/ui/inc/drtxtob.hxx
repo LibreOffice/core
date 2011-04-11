@@ -29,16 +29,13 @@
 #ifndef SC_DRTXTOB_HXX
 #define SC_DRTXTOB_HXX
 
-#ifndef _SFX_HXX
-#endif
-
 #include <sfx2/shell.hxx>
 #include <sfx2/module.hxx>
 #include <tools/link.hxx>
 
 #include "shellids.hxx"
 
-USHORT ScGetFontWorkId();       // statt SvxFontWorkChildWindow::GetChildWindowId()
+sal_uInt16 ScGetFontWorkId();       // statt SvxFontWorkChildWindow::GetChildWindowId()
 
 class ScViewData;
 class TransferableDataHelper;
@@ -48,7 +45,7 @@ class ScDrawTextObjectBar : public SfxShell
 {
     ScViewData*         pViewData;
     TransferableClipboardListener* pClipEvtLstnr;
-    BOOL                bPastePossible;
+    sal_Bool                bPastePossible;
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
 
@@ -70,8 +67,8 @@ public:
     void GetAttrState( SfxItemSet& rSet );
     void ExecuteToggle( SfxRequest &rReq );
 
-    BOOL ExecuteCharDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
-    BOOL ExecuteParaDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
+    sal_Bool ExecuteCharDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
+    sal_Bool ExecuteParaDlg( const SfxItemSet& rArgs, SfxItemSet& rOutSet );
 
     void ExecuteExtra( SfxRequest &rReq );
     void ExecFormText(SfxRequest& rReq);        // StarFontWork
@@ -81,7 +78,7 @@ private:
     void ExecuteGlobal( SfxRequest &rReq );         // von Execute gerufen fuer ganze Objekte
     void GetGlobalClipState( SfxItemSet& rSet );
     void ExecutePasteContents( SfxRequest &rReq );
-    BOOL IsNoteEdit();
+    sal_Bool IsNoteEdit();
 };
 
 

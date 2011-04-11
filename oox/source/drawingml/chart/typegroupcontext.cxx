@@ -27,15 +27,18 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/typegroupcontext.hxx"
+
 #include "oox/drawingml/chart/seriescontext.hxx"
 #include "oox/drawingml/chart/typegroupmodel.hxx"
-
-using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextHandlerRef;
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using ::oox::core::ContextHandler2Helper;
+using ::oox::core::ContextHandlerRef;
 
 // ============================================================================
 

@@ -43,7 +43,7 @@ class ScXMLContentContext : public SvXMLImportContext
 
 public:
 
-    ScXMLContentContext( ScXMLImport& rImport, USHORT nPrfx,
+    ScXMLContentContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                        const ::rtl::OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -51,7 +51,7 @@ public:
 
     virtual ~ScXMLContentContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

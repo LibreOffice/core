@@ -116,6 +116,7 @@ TableRow& TableRow::operator=( const TableRow& r )
     mbIsVisible = r.mbIsVisible;
     mbIsStartOfNewPage = r.mbIsStartOfNewPage;
     maName = r.maName;
+    mnRow = r.mnRow;
 
     return *this;
 }

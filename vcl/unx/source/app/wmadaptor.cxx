@@ -32,22 +32,23 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sal/alloca.h>
-#include <wmadaptor.hxx>
-#include <saldisp.hxx>
-#include <saldata.hxx>
-#include <salframe.h>
-#include <vcl/salgdi.hxx>
-#include <osl/thread.h>
-#include <rtl/locale.h>
-#include <osl/process.h>
+#include "sal/alloca.h"
+#include "wmadaptor.hxx"
+#include "saldisp.hxx"
+#include "saldata.hxx"
+#include "salframe.h"
+#include "vcl/salgdi.hxx"
+#include "osl/thread.h"
+#include "rtl/locale.h"
+#include "osl/process.h"
 #include <sal/macros.h>
+#include "vcl/configsettings.hxx"
 
-#include <tools/prex.h>
+#include "tools/prex.h"
 #include <X11/X.h>
 #include <X11/Xatom.h>
 #include <X11/Xresource.h>
-#include <tools/postx.h>
+#include "tools/postx.h"
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -240,7 +241,9 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
         m_bEnableAlwaysOnTopWorks( false ),
         m_bLegacyPartialFullscreen( false ),
         m_nWinGravity( StaticGravity ),
-        m_nInitWinGravity( StaticGravity )
+        m_nInitWinGravity( StaticGravity ),
+        m_bWMshouldSwitchWorkspace( true ),
+        m_bWMshouldSwitchWorkspaceInit( false )
 {
     Atom                aRealType   = None;
     int                 nFormat     = 8;
@@ -669,7 +672,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                 && aRealType == XA_CARDINAL
                 && nFormat == 32
                 && nItems != 0
-                && ! m_pSalDisplay->GetXLib()->HasXErrorOccured()
+                && ! m_pSalDisplay->GetXLib()->HasXErrorOccurred()
                 )
             {
                 aCheckWindow =  *(XLIB_Window*)pProperty;
@@ -872,7 +875,7 @@ bool WMAdaptor::getNetWmName()
                 && aRealType == XA_WINDOW
                 && nFormat == 32
                 && nItems != 0
-                && ! m_pSalDisplay->GetXLib()->HasXErrorOccured()
+                && ! m_pSalDisplay->GetXLib()->HasXErrorOccurred()
                 )
             {
                 aCheckWindow =  *(XLIB_Window*)pProperty;
@@ -965,6 +968,30 @@ bool WMAdaptor::getNetWmName()
         }
     }
     return bNetWM;
+}
+
+bool WMAdaptor::getWMshouldSwitchWorkspace() const
+{
+    if( ! m_bWMshouldSwitchWorkspaceInit )
+    {
+        WMAdaptor * pWMA = const_cast<WMAdaptor*>(this);
+
+        pWMA->m_bWMshouldSwitchWorkspace = true;
+        vcl::SettingsConfigItem* pItem = vcl::SettingsConfigItem::get();
+        rtl::OUString aSetting( pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WM" ) ),
+                                                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ShouldSwitchWorkspace" ) ) ) );
+        if( aSetting.getLength() == 0 )
+        {
+            if( m_aWMName.EqualsAscii( "awesome" ) )
+            {
+                pWMA->m_bWMshouldSwitchWorkspace = false;
+            }
+        }
+        else
+            pWMA->m_bWMshouldSwitchWorkspace = aSetting.toBoolean();
+        pWMA->m_bWMshouldSwitchWorkspaceInit = true;
+    }
+    return m_bWMshouldSwitchWorkspace;
 }
 
 /*
@@ -1060,7 +1087,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
 
         if( aCountry.getLength() )
         {
-            aLocaleString += ::rtl::OUString::createFromAscii( "_" );
+            aLocaleString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
             aLocaleString += aCountry;
         }
         if( aVariant.getLength() )
@@ -2340,8 +2367,11 @@ int WMAdaptor::getWindowWorkArea( XLIB_Window aWindow ) const
  *  WMAdaptor::getCurrentWorkArea
  */
 // fixme: multi screen case
-void WMAdaptor::switchToWorkArea( int nWorkArea ) const
+void WMAdaptor::switchToWorkArea( int nWorkArea, bool bConsiderWM ) const
 {
+    if( bConsiderWM && ! getWMshouldSwitchWorkspace() )
+        return;
+
     if( m_aWMAtoms[ NET_CURRENT_DESKTOP ] )
     {
         XEvent aEvent;

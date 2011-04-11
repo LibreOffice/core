@@ -42,7 +42,12 @@
 #include "fwkbase.hxx"
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
 #define JAVASETTINGS "javasettings"
 #define JAVASETTINGS_XML "javasettings.xml"
 #define VENDORSETTINGS "javavendors.xml"
@@ -77,7 +82,7 @@ rtl::OString getVendorSettingsPath(rtl::OUString const & sURL)
         throw FrameworkException(
             JFW_E_ERROR,
             rtl::OString("[Java framework] Error in function "
-                         "getVendorSettingsPath (fwkutil.cxx) "));
+                         "getVendorSettingsPath (fwkbase.cxx) "));
     rtl::OString osSystemPathSettings =
         rtl::OUStringToOString(sSystemPathSettings,osl_getThreadTextEncoding());
     return osSystemPathSettings;
@@ -120,7 +125,7 @@ VendorSettings::VendorSettings():
     {
         OString sMsg("[Java framework] A vendor settings file was not specified."
                "Check the bootstrap parameter " UNO_JAVA_JFW_VENDOR_SETTINGS ".");
-        OSL_ENSURE(0, sMsg.getStr());
+        OSL_FAIL(sMsg.getStr());
         throw FrameworkException(JFW_E_CONFIGURATION, sMsg);
     }
     if (sSettingsPath.getLength() > 0)
@@ -281,7 +286,7 @@ std::vector<OUString> VendorSettings::getSupportedVendors()
     if (xmlXPathNodeSetIsEmpty(result->nodesetval))
         throw FrameworkException(
             JFW_E_ERROR,
-            rtl::OString("[Java framework] Error in function getSupportedVendors (fwkutil.cxx)."));
+            rtl::OString("[Java framework] Error in function getSupportedVendors (fwkbase.cxx)."));
 
     //get the values of the library elements + vendor attribute
     xmlNode* cur = result->nodesetval->nodeTab[0];
@@ -302,7 +307,7 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
 {
     OSL_ASSERT(sVendor.getLength() > 0);
 
-    OString sExcMsg("[Java framework] Error in function getPluginLibrary (fwkutil.cxx).");
+    OString sExcMsg("[Java framework] Error in function getPluginLibrary (fwkbase.cxx).");
     OString sVendorsPath = getVendorSettingsPath(m_xmlDocVendorSettingsFileUrl);
     OUStringBuffer usBuffer(256);
     usBuffer.appendAscii("/jf:javaSelection/jf:plugins/jf:library[@vendor=\"");
@@ -322,7 +327,7 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
         xmlNodeListGetString(
             m_xmlDocVendorSettings,pathObjVendor->nodesetval->nodeTab[0], 1);
 
-    //make an absolute file url from the relativ plugin URL
+    //make an absolute file url from the relative plugin URL
     OUString sUrl = findPlugin(m_xmlDocVendorSettingsFileUrl, xmlCharPlugin);
     if (sUrl.getLength() == 0)
     {

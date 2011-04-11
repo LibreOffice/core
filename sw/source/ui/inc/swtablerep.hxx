@@ -43,20 +43,20 @@ class SW_DLLPUBLIC SwTableRep
     SwTwips     nSpace;
     SwTwips     nLeftSpace;
     SwTwips     nRightSpace;
-    USHORT      nAlign;
-    USHORT      nColCount;
-    USHORT      nAllCols;
-    USHORT      nWidthPercent;
-    BOOL        bComplex : 1;
-    BOOL        bLineSelected : 1;
-    BOOL        bWidthChanged : 1;
-    BOOL        bColsChanged : 1;
+    sal_uInt16      nAlign;
+    sal_uInt16      nColCount;
+    sal_uInt16      nAllCols;
+    sal_uInt16      nWidthPercent;
+    sal_Bool        bComplex : 1;
+    sal_Bool        bLineSelected : 1;
+    sal_Bool        bWidthChanged : 1;
+    sal_Bool        bColsChanged : 1;
 
 public:
-    SwTableRep( const SwTabCols& rTabCol, BOOL bComplex );
+    SwTableRep( const SwTabCols& rTabCol, sal_Bool bComplex );
     ~SwTableRep();
 
-    BOOL        FillTabCols( SwTabCols& rTabCol ) const;
+    sal_Bool        FillTabCols( SwTabCols& rTabCol ) const;
 
     SwTwips     GetLeftSpace() const            {return nLeftSpace;}
     void        SetLeftSpace(SwTwips nSet)      {nLeftSpace = nSet;}
@@ -67,24 +67,24 @@ public:
     SwTwips     GetWidth() const                {return nTblWidth;}
     void        SetWidth(SwTwips nSet)          {nTblWidth = nSet;}
 
-    USHORT      GetWidthPercent() const         {return nWidthPercent;}
-    void        SetWidthPercent(USHORT nSet)    {nWidthPercent = nSet;}
+    sal_uInt16      GetWidthPercent() const         {return nWidthPercent;}
+    void        SetWidthPercent(sal_uInt16 nSet)    {nWidthPercent = nSet;}
 
-    USHORT      GetAlign() const                {return nAlign;}
-    void        SetAlign(USHORT nSet)           {nAlign = nSet;}
+    sal_uInt16      GetAlign() const                {return nAlign;}
+    void        SetAlign(sal_uInt16 nSet)           {nAlign = nSet;}
 
-    BOOL        IsComplex() const               {return bComplex;}
-    USHORT      GetColCount() const             {return nColCount;}
-    USHORT      GetAllColCount() const          {return nAllCols;}
+    sal_Bool        IsComplex() const               {return bComplex;}
+    sal_uInt16      GetColCount() const             {return nColCount;}
+    sal_uInt16      GetAllColCount() const          {return nAllCols;}
 
-    BOOL        HasColsChanged() const          {return bColsChanged;}
-    void        SetColsChanged()                {bColsChanged = TRUE;}
+    sal_Bool        HasColsChanged() const          {return bColsChanged;}
+    void        SetColsChanged()                {bColsChanged = sal_True;}
 
-    BOOL        HasWidthChanged() const         {return bWidthChanged;}
-    void        SetWidthChanged()               {bWidthChanged  = TRUE;}
+    sal_Bool        HasWidthChanged() const         {return bWidthChanged;}
+    void        SetWidthChanged()               {bWidthChanged  = sal_True;}
 
-    BOOL        IsLineSelected() const          {return bLineSelected;}
-    void        SetLineSelected(BOOL bSet)      {bLineSelected = bSet;}
+    sal_Bool        IsLineSelected() const          {return bLineSelected;}
+    void        SetLineSelected(sal_Bool bSet)      {bLineSelected = bSet;}
 
     SwTwips     GetSpace() const                { return nSpace;}
     void        SetSpace(SwTwips nSet)          {nSpace = nSet;}

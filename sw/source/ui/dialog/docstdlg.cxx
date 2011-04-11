@@ -61,23 +61,23 @@ SfxTabPage *  SwDocStatPage::Create(Window *pParent, const SfxItemSet &rSet)
 SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
 
     SfxTabPage  (pParent, SW_RES(TP_DOC_STAT), rSet),
-
-    aTableLbl   (this, SW_RES( FT_TABLE      )),
-    aGrfLbl     (this, SW_RES( FT_GRF        )),
-    aOLELbl     (this, SW_RES( FT_OLE        )),
     aPageLbl    (this, SW_RES( FT_PAGE       )),
-    aParaLbl    (this, SW_RES( FT_PARA       )),
-    aWordLbl    (this, SW_RES( FT_WORD       )),
-    aCharLbl    (this, SW_RES( FT_CHAR       )),
-    aLineLbl    (this, SW_RES( FT_LINE       )),
-
-    aTableNo    (this, SW_RES( FT_TABLE_COUNT)),
-    aGrfNo      (this, SW_RES( FT_GRF_COUNT  )),
-    aOLENo      (this, SW_RES( FT_OLE_COUNT  )),
     aPageNo     (this, SW_RES( FT_PAGE_COUNT )),
+    aTableLbl   (this, SW_RES( FT_TABLE      )),
+    aTableNo    (this, SW_RES( FT_TABLE_COUNT)),
+    aGrfLbl     (this, SW_RES( FT_GRF        )),
+    aGrfNo      (this, SW_RES( FT_GRF_COUNT  )),
+    aOLELbl     (this, SW_RES( FT_OLE        )),
+    aOLENo      (this, SW_RES( FT_OLE_COUNT  )),
+    aParaLbl    (this, SW_RES( FT_PARA       )),
     aParaNo     (this, SW_RES( FT_PARA_COUNT )),
+    aWordLbl    (this, SW_RES( FT_WORD       )),
     aWordNo     (this, SW_RES( FT_WORD_COUNT )),
+    aCharLbl    (this, SW_RES( FT_CHAR       )),
     aCharNo     (this, SW_RES( FT_CHAR_COUNT )),
+    aCharExclSpacesLbl (this, SW_RES( FT_CHAR_EXCL_SPACES )),
+    aCharExclSpacesNo (this, SW_RES( FT_CHAR_COUNT_EXCL_SPACES )),
+    aLineLbl    (this, SW_RES( FT_LINE       )),
     aLineNo     (this, SW_RES( FT_LINE_COUNT )),
     aUpdatePB   (this, SW_RES( PB_PDATE      ))
 {
@@ -89,9 +89,9 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(!pFEShell)
     {
-        aUpdatePB.Show(FALSE);
-        aLineLbl.Show(FALSE);
-        aLineNo .Show(FALSE);
+        aUpdatePB.Show(sal_False);
+        aLineLbl.Show(sal_False);
+        aLineNo .Show(sal_False);
     }
 
 }
@@ -102,20 +102,20 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   ItemSet fuellen bei Aenderung
+    Description:    fill ItemSet when changed
  --------------------------------------------------------------------*/
 
 
-BOOL  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
+sal_Bool  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
 {
-    return FALSE;
+    return sal_False;
 }
 
 void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
 {
 }
 /*------------------------------------------------------------------------
- Beschreibung:  Aktualisieren / Setzen der Daten
+ Description:   update / set data
 ------------------------------------------------------------------------*/
 
 
@@ -128,10 +128,11 @@ void SwDocStatPage::SetData(const SwDocStat &rStat)
     aParaNo.SetText(String::CreateFromInt32( rStat.nPara ));
     aWordNo.SetText(String::CreateFromInt32( rStat.nWord ));
     aCharNo.SetText(String::CreateFromInt32( rStat.nChar ));
+    aCharExclSpacesNo.SetText(String::CreateFromInt32( rStat.nCharExcludingSpaces ));
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Aktualisieren der Statistik
+ Description:   update statistics
 ------------------------------------------------------------------------*/
 
 
@@ -146,7 +147,7 @@ void SwDocStatPage::Update()
 
     OSL_ENSURE( pSh, "Shell not found" );
 
-    SwWait aWait( *pSh->GetDoc()->GetDocShell(), TRUE );
+    SwWait aWait( *pSh->GetDoc()->GetDocShell(), sal_True );
     pSh->StartAction();
     aDocStat = pSh->GetDoc()->GetDocStat();
     pSh->GetDoc()->UpdateDocStat( aDocStat );
@@ -156,7 +157,7 @@ void SwDocStatPage::Update()
 }
 
 /*-----------------19.06.97 16.37-------------------
-    Zeilennummer aktualisieren
+    upate line number
 --------------------------------------------------*/
 IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, EMPTYARG)
 {
@@ -164,7 +165,7 @@ IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, EMPTYARG)
     SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(pFEShell)
-        aLineNo.SetText( String::CreateFromInt32( pFEShell->GetLineCount(FALSE)));
+        aLineNo.SetText( String::CreateFromInt32( pFEShell->GetLineCount(sal_False)));
     //pButton->Disable();
     return 0;
 }

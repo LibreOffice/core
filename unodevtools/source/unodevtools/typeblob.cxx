@@ -52,8 +52,12 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::reflection;
-using namespace rtl;
 using namespace codemaker;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringToOString;
 
 namespace unodevtools {
 
@@ -132,7 +136,7 @@ void writeConstantData(typereg::Writer& rWriter, sal_uInt16 fieldIndex,
     }
     break;
     default:
-        OSL_ENSURE( 0, "unsupported constant type" );
+        OSL_FAIL( "unsupported constant type" );
         break;
     }
 
@@ -794,7 +798,7 @@ void* getTypeBlob(Reference< XHierarchicalNameAccess > xTDmgr,
     }
     break;
     default:
-        OSL_ENSURE( 0, "unsupported type" );
+        OSL_FAIL( "unsupported type" );
         break;
     }
 

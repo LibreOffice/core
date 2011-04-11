@@ -37,14 +37,6 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 
-// class SvxEmptyPage ----------------------------------------------------
-
-class SvxEmptyPage : public TabPage
-{
-public:
-    SvxEmptyPage( Window* pParent );
-};
-
 // class SvxImprovementPage ----------------------------------------------
 
 class SvxImprovementPage : public TabPage
@@ -68,7 +60,7 @@ public:
     SvxImprovementPage( Window* pParent );
     ~SvxImprovementPage();
 
-    inline bool     IsYesChecked() const { return m_aYesRB.IsChecked() != FALSE; }
+    inline bool     IsYesChecked() const { return m_aYesRB.IsChecked() != sal_False; }
 
     inline String   GetPageText() const { return GetText(); }
     inline String   GetInvitationText() const { return m_aInvitationFT.GetText(); }
@@ -106,7 +98,6 @@ public:
     virtual             ~SvxImprovementOptionsPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static sal_uInt16*  GetRanges();
 
     virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
@@ -122,17 +113,6 @@ private:
 
 public:
     SvxImprovementDialog( Window* pParent, const String& rInfoURL );
-};
-
-class SvxInfoWindow : public Window
-{
-private:
-    FixedText   m_aInfoText;
-
-public:
-    SvxInfoWindow( Window* pParent, const ResId& rResId );
-
-    void        SetInfoText( const String& rText );
 };
 
 #endif

@@ -57,10 +57,6 @@
  * @file
  * Style manager for the filter.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
 #include    "xfstylemanager.hxx"
 #include    "ixfstyle.hxx"
 
@@ -323,7 +319,7 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("office:font-decls") );
 
     //font declarations:
-    for( itDecl = s_aFontDecls.begin(); itDecl != s_aFontDecls.end(); itDecl++ )
+    for( itDecl = s_aFontDecls.begin(); itDecl != s_aFontDecls.end(); ++itDecl )
     {
         XFFontDecl &f = *itDecl;
 

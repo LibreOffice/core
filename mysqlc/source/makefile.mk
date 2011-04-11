@@ -35,9 +35,7 @@ ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 EXTENSIONNAME:=mysql-connector-ooo
 
-.IF "$(SYSTEM_MYSQL)" == "YES"
 EXTERNAL_WARNINGS_NOT_ERRORS = TRUE
-.ENDIF
 
 # --- Settings -----------------------------------------------------
 
@@ -116,9 +114,6 @@ CDEFS+=-DCPPDBC_EXPORTS -DCPPCONN_LIB_BUILD
 CDEFS += -DCPPCONN_LIB=\"$(DLLPRE)mysqlcppconn$(DLLPOST)\"
 .ELSE
 CDEFS += -DCPPCONN_LIB=\"$(shell readlink /usr/lib/libmysqlcppconn.so)\"
-.IF "$(USE_SYSTEM_STL)"!="YES"
-CDEFS += -DADAPT_EXT_STL
-.ENDIF
 .ENDIF
 
 # --------------- MySQL settings ------------------
@@ -225,9 +220,7 @@ COMPONENT_LIBRARIES=\
             $(COMPONENT_LIBRARY)
 
 COMPONENT_IMAGES= \
-    $(EXTENSIONDIR)$/images$/extension_32.png \
-    $(EXTENSIONDIR)$/images$/extension_32_h.png
-
+    $(EXTENSIONDIR)$/images$/extension_32.png
 
 # ........ component description ........
 # one file for each WITH_LANG token
@@ -282,18 +275,6 @@ $(EXTENSIONDIR)$/description$/%.txt: .$/description$/%.txt
 $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess$/Drivers.xcu : .$/registry$/data$/org$/openoffice$/Office$/DataAccess$/Drivers.xcu
     @@-$(MKDIRHIER) $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess
     @$(COPY) $< $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess$/Drivers.xcu > $(NULLDEV)
-
-# The below doesn't work - it's completely beyond me .... $@ is some strange path when echoed, so the whole construct
-# doesn't work .... :(
-
-#$(foreach,i,$(COMPONENT_XCU) $(EXTENSIONDIR)$/$i : $i)
-#    @echo -----------------
-#    @echo $@
-#    @echo $<
-#    @echo -----------------
-#    -$(MKDIRHIER) $(@:d)
-#    (COPY) $< $@
-#    @echo -----------------
 
 # non-existing descriptions: copy from the English version
 .IF "$(strip $(MISSING_LANGS))" != ""

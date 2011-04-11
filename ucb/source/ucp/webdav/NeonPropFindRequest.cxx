@@ -40,11 +40,14 @@
 #include "LockEntrySequence.hxx"
 #include "UCBDeadPropertyValue.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace std;
 using namespace webdav_ucp;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
 
 // -------------------------------------------------------------------
 namespace
@@ -143,7 +146,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
                          RTL_CONSTASCII_STRINGPARAM( "<collection" ) ) == 0 )
                 {
                     thePropertyValue.Value
-                        <<= OUString::createFromAscii( "collection" );
+                        <<= OUString(RTL_CONSTASCII_USTRINGPARAM("collection"));
                 }
             }
 
@@ -192,22 +195,13 @@ extern "C" int NPFR_propfind_iter( void* userdata,
 
 // -------------------------------------------------------------------
 extern "C" void NPFR_propfind_results( void* userdata,
-#if NEON_VERSION >= 0x0260
                                        const ne_uri* uri,
-#else
-                                       const char* href,
-#endif
                                        const NeonPropFindResultSet* set )
 {
     // @@@ href is not the uri! DAVResource ctor wants uri!
 
-#if NEON_VERSION >= 0x0260
     DAVResource theResource(
         OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
-#else
-    DAVResource theResource(
-        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
-#endif
 
     ne_propset_iterate( set, NPFR_propfind_iter, &theResource );
 
@@ -234,22 +228,13 @@ extern "C" int NPFR_propnames_iter( void* userdata,
 
 // -------------------------------------------------------------------
 extern "C" void NPFR_propnames_results( void* userdata,
-#if NEON_VERSION >= 0x0260
                                         const ne_uri* uri,
-#else
-                                        const char* href,
-#endif
                                         const NeonPropFindResultSet* results )
 {
     // @@@ href is not the uri! DAVResourceInfo ctor wants uri!
     // Create entry for the resource.
-#if NEON_VERSION >= 0x0260
     DAVResourceInfo theResource(
         OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
-#else
-    DAVResourceInfo theResource(
-        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
-#endif
 
     // Fill entry.
     ne_propset_iterate( results, NPFR_propnames_iter, &theResource );
@@ -333,11 +318,14 @@ NeonPropFindRequest::NeonPropFindRequest(
                             std::vector< DAVResourceInfo > & ioResInfo,
                             int & nError )
 {
-    nError = ne_propnames( inSession,
-                           inPath,
-                           inDepth,
-                           NPFR_propnames_results,
-                           &ioResInfo );
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        nError = ne_propnames( inSession,
+                            inPath,
+                            inDepth,
+                            NPFR_propnames_results,
+                            &ioResInfo );
+    }
 
     // #87585# - Sometimes neon lies (because some servers lie).
     if ( ( nError == NE_OK ) && ioResInfo.empty() )

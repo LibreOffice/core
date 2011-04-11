@@ -75,7 +75,6 @@ void SAL_CALL XSecParser::startDocument(  )
     m_bInSignatureValue = false;
     m_bInDigestValue = false;
     m_bInDate = false;
-    //m_bInTime = false;
 
     if (m_xNextHandler.is())
     {
@@ -152,27 +151,27 @@ void SAL_CALL XSecParser::startElement(
             }
             else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509ISSUERNAME)))
             {
-            m_ouX509IssuerName = rtl::OUString::createFromAscii("");
+            m_ouX509IssuerName = rtl::OUString();
             m_bInX509IssuerName = true;
             }
             else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509SERIALNUMBER)))
             {
-            m_ouX509SerialNumber = rtl::OUString::createFromAscii("");
+            m_ouX509SerialNumber = rtl::OUString();
             m_bInX509SerialNumber = true;
             }
             else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509CERTIFICATE)))
             {
-            m_ouX509Certificate = rtl::OUString::createFromAscii("");
+            m_ouX509Certificate = rtl::OUString();
             m_bInX509Certificate = true;
             }
             else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREVALUE)))
             {
-            m_ouSignatureValue = rtl::OUString::createFromAscii("");
+            m_ouSignatureValue = rtl::OUString();
                 m_bInSignatureValue = true;
             }
             else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_DIGESTVALUE)))
             {
-            m_ouDigestValue = rtl::OUString::createFromAscii("");
+            m_ouDigestValue = rtl::OUString();
                 m_bInDigestValue = true;
             }
             else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTY)) )
@@ -186,16 +185,9 @@ void SAL_CALL XSecParser::startElement(
                         +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":"))
                         +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
             {
-            m_ouDate = rtl::OUString::createFromAscii("");
+            m_ouDate = rtl::OUString();
                 m_bInDate = true;
             }
-            /*
-            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TIME)))
-            {
-            m_ouTime = rtl::OUString::createFromAscii("");
-                m_bInTime = true;
-            }
-            */
 
         if (m_xNextHandler.is())
         {
@@ -271,13 +263,6 @@ void SAL_CALL XSecParser::endElement( const rtl::OUString& aName )
             m_pXSecController->setDate( m_ouDate );
                 m_bInDate = false;
         }
-        /*
-        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TIME)) )
-        {
-            m_pXSecController->setTime( m_ouTime );
-                m_bInTime = false;
-        }
-        */
 
         if (m_xNextHandler.is())
         {
@@ -327,12 +312,6 @@ void SAL_CALL XSecParser::characters( const rtl::OUString& aChars )
     {
         m_ouDate += aChars;
     }
-    /*
-    else if (m_bInTime)
-    {
-        m_ouTime += aChars;
-    }
-    */
 
     if (m_xNextHandler.is())
     {

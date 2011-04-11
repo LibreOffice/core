@@ -68,10 +68,9 @@ NumberFormatDialog::~NumberFormatDialog()
 {
 }
 
-//static
 SfxItemSet NumberFormatDialog::CreateEmptyItemSetForNumberFormatDialog( SfxItemPool& rItemPool )
 {
-    static const USHORT nWhichPairs[] =
+    static const sal_uInt16 nWhichPairs[] =
     {
         SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,
         SID_ATTR_NUMBERFORMAT_NOLANGUAGE, SID_ATTR_NUMBERFORMAT_NOLANGUAGE,

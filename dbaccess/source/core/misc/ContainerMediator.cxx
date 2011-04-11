@@ -75,7 +75,7 @@ OContainerMediator::OContainerMediator( const Reference< XContainer >& _xContain
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OContainerMediator::OContainerMediator: caught an exception!");
+            OSL_FAIL("OContainerMediator::OContainerMediator: caught an exception!");
         }
         osl_decrementInterlockedCount( &m_refCount );
     }
@@ -223,7 +223,7 @@ void OContainerMediator::notifyElementCreated( const ::rtl::OUString& _sName, co
         &&  aFind->second->getDefinition().is()
         )
     {
-        OSL_ENSURE( false, "OContainerMediator::notifyElementCreated: is this really a valid case?" );
+        OSL_FAIL( "OContainerMediator::notifyElementCreated: is this really a valid case?" );
         return;
     }
 

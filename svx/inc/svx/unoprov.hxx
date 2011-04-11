@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/itemprop.hxx>
-#include <tools/list.hxx>
 #include "svx/svxdllapi.h"
 
 class SvxItemPropertySet;
@@ -42,7 +41,7 @@ class SfxItemPool;
 * class UHashMap                                                       *
 ***********************************************************************/
 
-#define UHASHMAP_NOTFOUND sal::static_int_cast< UINT32 >(~0)
+#define UHASHMAP_NOTFOUND sal::static_int_cast< sal_uInt32 >(~0)
 class UHashMap
 {
     UHashMap() {}
@@ -90,12 +89,11 @@ class SVX_DLLPUBLIC SvxUnoPropertyMapProvider
 {
     SfxItemPropertyMapEntry* aMapArr[SVXMAP_END];
     SvxItemPropertySet* aSetArr[SVXMAP_END];
-//  void Sort(USHORT nId);
 public:
     SvxUnoPropertyMapProvider();
     ~SvxUnoPropertyMapProvider();
-    const SfxItemPropertyMapEntry* GetMap(UINT16 nPropertyId);
-    const SvxItemPropertySet* GetPropertySet(UINT16 nPropertyId, SfxItemPool& rPool);
+    const SfxItemPropertyMapEntry* GetMap(sal_uInt16 nPropertyId);
+    const SvxItemPropertySet* GetPropertySet(sal_uInt16 nPropertyId, SfxItemPool& rPool);
 };
 
 /***********************************************************************
@@ -104,8 +102,6 @@ public:
 
 const sal_Int16 OBJ_OLE2_APPLET = 100;
 const sal_Int16 OBJ_OLE2_PLUGIN = 101;
-
-extern SvxUnoPropertyMapProvider aSvxMapProvider;
 
 #define E3D_INVENTOR_FLAG           (0x80000000)
 

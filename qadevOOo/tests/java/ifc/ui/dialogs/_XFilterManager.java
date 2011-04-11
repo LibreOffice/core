@@ -64,7 +64,7 @@ public class _XFilterManager extends MultiMethodTest {
 
     /**
     * Sets the current filter to that which was appended before.<p>
-    * Has <b>OK</b> status if no exceptions occured, else one of
+    * Has <b>OK</b> status if no exceptions occurred, else one of
     * <code>appendFilter</code> and <code>setCurrentFilter</code>
     * methods failed. <p>
     * The following method tests are to be completed successfully before :

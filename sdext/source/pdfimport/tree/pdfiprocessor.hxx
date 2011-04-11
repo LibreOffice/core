@@ -29,6 +29,7 @@
 #ifndef INCLUDED_PDFI_PROCESSOR_HXX
 #define INCLUDED_PDFI_PROCESSOR_HXX
 
+#include <com/sun/star/util/XStringMapping.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/rendering/XVolatileBitmap.hpp>
@@ -47,7 +48,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "imagecontainer.hxx"
 #include "pdfihelper.hxx"
@@ -109,7 +110,10 @@ namespace pdfi
         void sortElements( Element* pElement, bool bDeep = false );
         void sortDocument( bool bDeep = false );
 
+        rtl::OUString mirrorString( const rtl::OUString& i_rInString );
+
     private:
+        void prepareMirrorMap();
         void processGlyphLine();
         void processGlyph(   double       fPreAvarageSpaceValue,
                              CharGlyph&   rGlyph,
@@ -203,11 +207,11 @@ namespace pdfi
 
         void setupImage(ImageId nImage);
 
-        typedef std::hash_map<sal_Int32,FontAttributes> IdToFontMap;
-        typedef std::hash_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
+        typedef boost::unordered_map<sal_Int32,FontAttributes> IdToFontMap;
+        typedef boost::unordered_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
 
-        typedef std::hash_map<sal_Int32,GraphicsContext> IdToGCMap;
-        typedef std::hash_map<GraphicsContext,sal_Int32,GraphicsContextHash> GCToIdMap;
+        typedef boost::unordered_map<sal_Int32,GraphicsContext> IdToGCMap;
+        typedef boost::unordered_map<GraphicsContext,sal_Int32,GraphicsContextHash> GCToIdMap;
 
         typedef std::vector<GraphicsContext> GraphicsContextStack;
 
@@ -243,6 +247,11 @@ namespace pdfi
                                            m_xStatusIndicator;
 
         bool                               m_bHaveTextOnDocLevel;
+        std::vector< sal_Unicode >         m_aMirrorMap;
+        com::sun::star::uno::Reference<
+            com::sun::star::util::XStringMapping >
+                                           m_xMirrorMapper;
+        bool                               m_bMirrorMapperTried;
     };
     class CharGlyph
     {
@@ -261,15 +270,17 @@ namespace pdfi
             void  setGraphicsContext (GraphicsContext&  rCurrentContext ){ m_rCurrentContext= rCurrentContext; }
             void  setCurElement( Element* pCurElement ){ m_pCurElement= pCurElement; }
 
-            double getYPrevGlyphPosition(){ return m_fYPrevGlyphPosition; }
-            double getXPrevGlyphPosition(){ return m_fXPrevGlyphPosition; }
-            double getPrevGlyphHeight(){ return m_fPrevGlyphHeight; }
-            double getPrevGlyphWidth (){ return m_fPrevGlyphWidth; }
-            double getPrevGlyphsSpace() { if( (m_rRect.X1-m_fXPrevGlyphPosition)<0 )
-                                                return 0;
-                                           else
-                                            return m_rRect.X1-m_fXPrevGlyphPosition;
-                                         }
+            double getYPrevGlyphPosition() const { return m_fYPrevGlyphPosition; }
+            double getXPrevGlyphPosition() const { return m_fXPrevGlyphPosition; }
+            double getPrevGlyphHeight() const { return m_fPrevGlyphHeight; }
+            double getPrevGlyphWidth () const { return m_fPrevGlyphWidth; }
+            double getPrevGlyphsSpace() const
+            {
+                if( (m_rRect.X1-m_fXPrevGlyphPosition)<0 )
+                    return 0;
+                else
+                    return m_rRect.X1-m_fXPrevGlyphPosition;
+            }
 
             void setYPrevGlyphPosition( double fYPrevTextPosition ){ m_fYPrevGlyphPosition= fYPrevTextPosition; }
             void setXPrevGlyphPosition( double fXPrevTextPosition ){ m_fXPrevGlyphPosition= fXPrevTextPosition; }

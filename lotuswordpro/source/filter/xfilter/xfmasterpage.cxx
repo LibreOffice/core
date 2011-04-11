@@ -57,10 +57,6 @@
  * @file
  * Master page object which was used to apply a layout to the pages.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
 #include    "xfmasterpage.hxx"
 #include    "xfpagemaster.hxx"
 #include    "xfstylemanager.hxx"

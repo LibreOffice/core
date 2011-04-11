@@ -35,7 +35,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -87,7 +87,7 @@ enum XMLSectionSourceDDEToken
     XML_TOK_SECTION_IS_AUTOMATIC_UPDATE
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aSectionSourceDDETokenMap[] =
+static SvXMLTokenMapEntry aSectionSourceDDETokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
           XML_TOK_SECTION_DDE_APPLICATION },

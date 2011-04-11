@@ -36,7 +36,6 @@
 #include <malloc.h>
 #endif
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/bigint.hxx>
 #include <tools/fsys.hxx>
 #include "comdep.hxx"
@@ -46,10 +45,6 @@
 #endif
 
 int Sys2SolarError_Impl( int nSysErr );
-
-DECLARE_LIST( DirEntryList, DirEntry* );
-DECLARE_LIST( FSysSortList, FSysSort* );
-DECLARE_LIST( FileStatList, FileStat* );
 
 static char sCaseMap[256];
 static BOOL bCaseMap = FALSE;
@@ -112,7 +107,7 @@ int ApiRet2ToSolarError_Impl( int nApiRet )
         case ERROR_FILENAME_EXCED_RANGE:    return ERRCODE_IO_NAMETOOLONG;
     }
 
-    DBG_TRACE1( "FSys: unknown apiret error %d occured", nApiRet );
+    OSL_TRACE( "FSys: unknown apiret error %d occurred", nApiRet );
     return FSYS_ERR_UNKNOWN;
 }
 
@@ -143,10 +138,6 @@ char* volumeid( const char* pPfad )
 |*
 |*    DirEntry::ToAbs()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91 13:30
-|*
 *************************************************************************/
 
 BOOL DirEntry::ToAbs()
@@ -171,10 +162,6 @@ BOOL DirEntry::ToAbs()
 /*************************************************************************
 |*
 |*    DirEntry::GetVolume()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 04.03.92
-|*    Letzte Aenderung  MI 04.03.92
 |*
 *************************************************************************/
 
@@ -203,10 +190,6 @@ String DirEntry::GetVolume() const
 /*************************************************************************
 |*
 |*    DirEntry::SetCWD()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MI 21.05.92
 |*
 *************************************************************************/
 
@@ -237,10 +220,6 @@ BOOL DirEntry::SetCWD( BOOL bSloppy ) const
 /*************************************************************************
 |*
 |*    DirEntry::MoveTo()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 26.04.91
-|*    Letzte Aenderung  MA 02.12.91 14:07
 |*
 *************************************************************************/
 
@@ -346,10 +325,6 @@ USHORT DirReader_Impl::Read()
 |*
 |*    FileStat::FileStat()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MA 05.11.91
-|*    Letzte Aenderung  MA 07.11.91
-|*
 *************************************************************************/
 
 FileStat::FileStat( const void *pInfo,      // struct dirent
@@ -380,10 +355,6 @@ FileStat::FileStat( const void *pInfo,      // struct dirent
 /*************************************************************************
 |*
 |*    FileStat::Update()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 11.06.91
-|*    Letzte Aenderung  MA 07.11.91
 |*
 *************************************************************************/
 
@@ -556,8 +527,6 @@ BOOL IsRedirectable_Impl( const ByteString &rPath )
 |*
 |*    Beschreibung      liefert den Namens des Directories fuer temporaere
 |*                      Dateien
-|*    Ersterstellung    MI 16.03.94
-|*    Letzte Aenderung  MI 16.03.94
 |*
 *************************************************************************/
 
@@ -778,10 +747,6 @@ Date MsDos2Date( const time_t *pTimeT )
 |*
 |*    DirEntry::GetPathStyle() const
 |*
-|*    Beschreibung
-|*    Ersterstellung    MI 11.05.95
-|*    Letzte Aenderung  MI 11.05.95
-|*
 *************************************************************************/
 
 FSysPathStyle DirEntry::GetPathStyle( const String &rDevice )
@@ -799,10 +764,6 @@ FSysPathStyle DirEntry::GetPathStyle( const String &rDevice )
 /*************************************************************************
 |*
 |*    DirEntry::IsCaseSensitive() const
-|*
-|*    Beschreibung
-|*    Ersterstellung    TPF 26.02.1999
-|*    Letzte Aenderung
 |*
 *************************************************************************/
 

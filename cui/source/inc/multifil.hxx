@@ -48,7 +48,7 @@ private:
     DECL_LINK( DelHdl_Impl, PushButton * );
 
 public:
-    SvxMultiFileDialog( Window* pParent, BOOL bEmptyAllowed = FALSE );
+    SvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False );
     ~SvxMultiFileDialog();
 
     String  GetFiles() const { return SvxMultiPathDialog::GetPath(); }

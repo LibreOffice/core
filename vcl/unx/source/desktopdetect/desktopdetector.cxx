@@ -42,9 +42,10 @@
 #include "osl/thread.h"
 
 #include <unistd.h>
+#include <string.h>
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OString;
 enum {
     DESKTOP_NONE = 0,
     DESKTOP_UNKNOWN,
@@ -279,23 +280,32 @@ VCL_DLLPUBLIC rtl::OUString get_desktop_environment()
     {
         // get display to connect to
         const char* pDisplayStr = getenv( "DISPLAY" );
-        int nParams = osl_getCommandArgCount();
-        OUString aParam;
-        OString aBParm;
-        for( int i = 0; i < nParams; i++ )
+
+        const char* pUsePlugin = getenv( "SAL_USE_VCLPLUGIN" );
+
+        if (pUsePlugin && (strcmp(pUsePlugin, "svp") == 0))
+            pDisplayStr = NULL;
+        else
         {
-            osl_getCommandArg( i, &aParam.pData );
-            if( aParam.equalsAscii( "-headless" ) )
+            int nParams = osl_getCommandArgCount();
+            OUString aParam;
+            OString aBParm;
+            for( int i = 0; i < nParams; i++ )
             {
-                pDisplayStr = NULL;
-                break;
-            }
-            if( i < nParams-1 && (aParam.equalsAscii( "-display" ) || aParam.equalsAscii( "--display" )) )
-            {
-                osl_getCommandArg( i+1, &aParam.pData );
-                aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
-                pDisplayStr = aBParm.getStr();
-                break;
+                osl_getCommandArg( i, &aParam.pData );
+                if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-headless" ) ) ||
+                    aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--headless" ) ) )
+                {
+                    pDisplayStr = NULL;
+                    break;
+                }
+                if( i < nParams-1 && (aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-display" ) ) || aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--display" ) )) )
+                {
+                    osl_getCommandArg( i+1, &aParam.pData );
+                    aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
+                    pDisplayStr = aBParm.getStr();
+                    break;
+                }
             }
         }
 

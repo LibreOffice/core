@@ -34,7 +34,6 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
 #include "CommonConverters.hxx"
 #include "NoWarningThisInCTOR.hxx"
 
@@ -64,8 +63,7 @@ LightButton::LightButton( Window* pParent, const ResId& rResId, sal_Int32 nLight
             : ImageButton( pParent, rResId )
             , m_bLightOn(false)
 {
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ), BMP_COLOR_NORMAL );
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF_H) ), BMP_COLOR_HIGHCONTRAST );
+    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ) );
 
     String aTipHelpStr( SchResId(STR_TIP_LIGHTSOURCE_X) );
     rtl::OUString aTipHelp( aTipHelpStr  );
@@ -78,9 +76,11 @@ LightButton::LightButton( Window* pParent, const ResId& rResId, sal_Int32 nLight
     }
     this->SetQuickHelpText( String( aTipHelp ) );
 }
+
 LightButton::~LightButton()
 {
 }
+
 void LightButton::switchLightOn(bool bOn)
 {
     if( m_bLightOn==bOn )
@@ -88,15 +88,14 @@ void LightButton::switchLightOn(bool bOn)
     m_bLightOn = bOn;
     if(m_bLightOn)
     {
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_ON)   ), BMP_COLOR_NORMAL );
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_ON_H) ), BMP_COLOR_HIGHCONTRAST );
+        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_ON) ) );
     }
     else
     {
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ), BMP_COLOR_NORMAL );
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF_H) ), BMP_COLOR_HIGHCONTRAST );
+        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF) ) );
     }
 }
+
 bool LightButton::isLightOn() const
 {
     return m_bLightOn;
@@ -107,11 +106,10 @@ bool LightButton::isLightOn() const
 ColorButton::ColorButton( Window* pParent, const ResId& rResId )
             : ImageButton( pParent, rResId )
 {
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_COLORDLG)   ), BMP_COLOR_NORMAL );
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_COLORDLG_H) ), BMP_COLOR_HIGHCONTRAST );
-
+    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_COLORDLG) ) );
     this->SetQuickHelpText( String( SchResId(STR_TIP_CHOOSECOLOR) ) );
 }
+
 ColorButton::~ColorButton()
 {
 }
@@ -148,12 +146,14 @@ LightSourceInfo::LightSourceInfo()
     aLightSource.aDirection = drawing::Direction3D(1,1,1);
     aLightSource.bIsEnabled = sal_False;
 }
+
 void LightSourceInfo::initButtonFromSource()
 {
     if(!pButton)
         return;
-    pButton->SetModeImage( Image( SVX_RES( aLightSource.bIsEnabled ? RID_SVXIMAGE_LIGHT_ON : RID_SVXIMAGE_LIGHT_OFF )   ), BMP_COLOR_NORMAL );
-    pButton->SetModeImage( Image( SVX_RES( aLightSource.bIsEnabled ? RID_SVXIMAGE_LIGHT_ON_H : RID_SVXIMAGE_LIGHT_OFF_H ) ), BMP_COLOR_HIGHCONTRAST );
+    pButton->SetModeImage( Image( SVX_RES(
+        aLightSource.bIsEnabled ? RID_SVXIMAGE_LIGHT_ON : RID_SVXIMAGE_LIGHT_OFF
+    ) ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -163,13 +163,13 @@ namespace
     rtl::OUString lcl_makeColorName( Color rColor )
     {
         String aStr(SVX_RES(RID_SVXFLOAT3D_FIX_R));
-        aStr += String::CreateFromInt32((INT32)rColor.GetRed());
+        aStr += String::CreateFromInt32((sal_Int32)rColor.GetRed());
         aStr += sal_Unicode(' ');
         aStr += String(SVX_RES(RID_SVXFLOAT3D_FIX_G));
-        aStr += String::CreateFromInt32((INT32)rColor.GetGreen());
+        aStr += String::CreateFromInt32((sal_Int32)rColor.GetGreen());
         aStr += sal_Unicode(' ');
         aStr += String(SVX_RES(RID_SVXFLOAT3D_FIX_B));
-        aStr += String::CreateFromInt32((INT32)rColor.GetBlue());
+        aStr += String::CreateFromInt32((sal_Int32)rColor.GetBlue());
         return aStr;
     }
     void lcl_selectColor( ColorListBox& rListBox, const Color& rColor )
@@ -178,7 +178,7 @@ namespace
         rListBox.SelectEntry( rColor );
         if( rListBox.GetSelectEntryCount() == 0 )
         {
-            USHORT nPos = rListBox.InsertEntry( rColor, lcl_makeColorName( rColor ) );
+            sal_uInt16 nPos = rListBox.InsertEntry( rColor, lcl_makeColorName( rColor ) );
             rListBox.SelectEntryPos( nPos );
         }
     }
@@ -204,7 +204,7 @@ namespace
             catch( const uno::Exception & ex )
             {
                 (void)(ex); // no warning in non-debug builds
-                OSL_ENSURE( false, ::rtl::OUStringToOString(
+                OSL_FAIL( ::rtl::OUStringToOString(
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                                 ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
@@ -236,7 +236,7 @@ namespace
             catch( const uno::Exception & ex )
             {
                 (void)(ex); // no warning in non-debug builds
-                OSL_ENSURE( false, ::rtl::OUStringToOString(
+                OSL_FAIL( ::rtl::OUStringToOString(
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                                 ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
@@ -255,7 +255,7 @@ namespace
         catch( const uno::Exception & ex )
         {
             (void)(ex); // no warning in non-debug builds
-            OSL_ENSURE( false, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
@@ -275,7 +275,7 @@ namespace
         catch( const uno::Exception & ex )
         {
             (void)(ex); // no warning in non-debug builds
-            OSL_ENSURE( false, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
@@ -353,9 +353,16 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWin
 
     ClickLightSourceButtonHdl(&m_aBtn_Light2);
 
-    //m_aDelyedModelChangeTimer.SetTimeout( 4*EDIT_UPDATEDATA_TIMEOUT );
-
     m_aModelChangeListener.startListening( uno::Reference< util::XModifyBroadcaster >(m_xSceneProperties, uno::UNO_QUERY) );
+    m_aBtn_Light1.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light2.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light3.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light4.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light5.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light6.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light7.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light8.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aCtl_Preview.SetAccessibleName(String(SchResId( STR_LIGHT_PREVIEW )));
 }
 
 ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()

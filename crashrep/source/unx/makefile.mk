@@ -56,7 +56,8 @@ APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
 APP1RPATH=BRAND
 
-.IF "$(OS)" != "FREEBSD" && "$(OS)" != "MACOSX" && "$(OS)"!="NETBSD"
+.IF "$(OS)" != "FREEBSD" && "$(OS)" != "MACOSX" && "$(OS)"!="NETBSD" && \
+    "$(OS)" != "DRAGONFLY"
 APP1STDLIBS+=-ldl -lnsl
 .ENDIF
 .IF "$(OS)" == "SOLARIS"

@@ -61,7 +61,6 @@
 #define ST_FAILED                   44
 #define ST_ERROR_SERVER             46
 #define ILIST                       47
-#define ILIST_HC                    48
 
 #define CB_AUTHENTICATION           50
 #define RB_SEP_AUTHENTICATION       51

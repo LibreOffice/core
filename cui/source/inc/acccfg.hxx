@@ -31,11 +31,9 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -89,7 +87,7 @@ public:
                                     m_pAccelConfigPage( pAccelConfigPage )
                                 {}
 
-    void                        ReplaceEntry( USHORT nPos, const String &rStr );
+    void                        ReplaceEntry( sal_uInt16 nPos, const String &rStr );
 };
 
 // class SfxAcceleratorConfigPage ----------------------------------------
@@ -106,7 +104,7 @@ struct TAccInfo
             , m_bIsConfigurable(sal_True )
             , m_sCommand       (         )
             , m_aKey           (aKey     )
-            // its important to set TRUE as default -
+            // its important to set sal_True as default -
             // because only fix entries will be disabled later ...
         {}
 
@@ -183,9 +181,7 @@ private:
 
     String                      GetLabel4Command(const String& sCommand);
     void                        InitAccCfg();
-    KeyCode                     MapPosToKeyCode( USHORT nPos ) const;
-    USHORT                      MapKeyCodeToPos( const KeyCode &rCode ) const;
-    String                      GetFunctionName( KeyFuncType eType ) const;
+    sal_uInt16                      MapKeyCodeToPos( const KeyCode &rCode ) const;
     css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const String& sName);
     void                        StartFileDialog( WinBits nBits, const String& rTitle );
 
@@ -198,13 +194,10 @@ public:
                                 SfxAcceleratorConfigPage( Window *pParent, const SfxItemSet& rItemSet );
     virtual                     ~SfxAcceleratorConfigPage();
 
-    virtual BOOL                FillItemSet( SfxItemSet& );
+    virtual sal_Bool                FillItemSet( SfxItemSet& );
     virtual void                Reset( const SfxItemSet& );
 
-    void                        SelectMacro(const SfxMacroInfoItem*);
     void                        Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
-    void                        CopySource2Target(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xSourceAccMgr,
-                                                  const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xTargetAccMgr);
     static SfxTabPage*          Create( Window* pParent, const SfxItemSet& rAttrSet );
 };
 
@@ -218,53 +211,9 @@ public:
     SfxAcceleratorConfigListBox( Window *pParent, ResId &rResId ) :
         ListBox( pParent, rResId ) {}
 
-    void ReplaceEntry( USHORT nPos, const String &rStr );
-    void ExpandEntry ( USHORT nPos, const String &rStr );
+    void ReplaceEntry( sal_uInt16 nPos, const String &rStr );
+    void ExpandEntry ( sal_uInt16 nPos, const String &rStr );
 };
-
-/*
-// class USHORTArr **********************************************************
-
-DECL_2BYTEARRAY(USHORTArr, USHORT, 10, 10)
-
-// class SfxAcceleratorConfigDialog **************************************************
-
-class SfxAcceleratorConfigDialog : public ModalDialog
-{
-    OKButton           aOKButton;
-    CancelButton       aCancelButton;
-    PushButton         aChangeButton;
-    PushButton         aRemoveButton;
-    SfxAcceleratorConfigListBox aEntriesBox;
-    FixedText          aDescriptionTextText;
-    FixedText          aDescriptionInfoText;
-    FixedLine          aKeyboardGroup;
-    FixedText          aGroupText;
-    ListBox            aGroupLBox;
-    FixedText          aFunctionText;
-    ListBox            aFunctionBox;
-    FixedText          aKeyText;
-    ListBox            aKeyBox;
-    FixedLine          aFunctionsGroup;
-
-    USHORTArr     aAccelArr;
-    USHORTArr     aFunctionArr;
-    USHORTArr     aKeyArr;
-
-    void OKHdl    ( Button  * );
-    void ChangeHdl( Button  * );
-    void RemoveHdl( Button  * );
-    void SelectHdl( ListBox *pListBox );
-
-    KeyCode PosToKeyCode   ( USHORT nPos )          const;
-    USHORT  KeyCodeToPos   ( const KeyCode &rCode ) const;
-    String  GetFunctionName( KeyFuncType eType )    const;
-
-public:
-
-    SfxAcceleratorConfigDialog( Window *pParent );
-};
-*/
 
 class SvxShortcutAssignDlg : public SfxSingleTabDialog
 {

@@ -40,10 +40,12 @@ PACKAGE=com$/sun$/star$/script$/vba
 IDLFILES=\
     VBAEventId.idl \
     VBAEventProcessor.idl \
+    VBAMacroResolver.idl \
     VBASpreadsheetEventProcessor.idl \
     VBATextEventProcessor.idl \
     XVBACompatibility.idl \
     XVBAEventProcessor.idl \
+    XVBAMacroResolver.idl \
     XVBAModuleInfo.idl
 
 # ------------------------------------------------------------------

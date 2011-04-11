@@ -56,7 +56,7 @@
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <osl/diagnose.h>
 #include <rtl/process.h>
 #include <tools/debug.hxx>
@@ -112,7 +112,7 @@ private:
 protected:
 
     virtual void            _ExportMeta() {}
-    virtual void            _ExportStyles( BOOL /* bUsed */ ) {}
+    virtual void            _ExportStyles( sal_Bool /* bUsed */ ) {}
     virtual void            _ExportAutoStyles() {}
     virtual void            _ExportContent() {}
     virtual void            _ExportMasterStyles() {}
@@ -175,7 +175,7 @@ class SVGFilter : public cppu::WeakImplHelper4 < XFilter,
                                                  XExporter,
                                                  XExtendedFilterDetection >
 {
-    typedef ::std::hash_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface > ObjectMap;
+    typedef ::boost::unordered_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface > ObjectMap;
 
 private:
 
@@ -222,7 +222,7 @@ private:
     sal_Bool                            implCreateObjectsFromShape( const Reference< XShape >& rxShape );
     sal_Bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
 
-    ::rtl::OUString                     implGetDescriptionFromShape( const Reference< XShape >& rxShape );
+    ::rtl::OUString                     implGetClassFromShape( const Reference< XShape >& rxShape );
     ::rtl::OUString                     implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
 
                                         DECL_LINK( CalcFieldHdl, EditFieldInfo* );

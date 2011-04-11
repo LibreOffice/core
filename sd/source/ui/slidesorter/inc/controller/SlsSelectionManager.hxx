@@ -30,8 +30,10 @@
 #define SD_SLIDESORTER_CONTROLLER_SELECTION_MANAGER_HXX
 
 #include "model/SlsSharedPageDescriptor.hxx"
+#include "controller/SlsAnimator.hxx"
 #include <sal/types.h>
 #include <tools/gen.hxx>
+#include <basegfx/range/b2irectangle.hxx>
 #include <vector>
 
 class Link;
@@ -44,6 +46,7 @@ class SlideSorter;
 namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
+class SelectionObserver;
 
 /** This class is a part of the controller and handles the selection of
     slides.
@@ -63,54 +66,19 @@ public:
 
     /** Delete the currently selected slides.  When this method returns the
         selection is empty.
+        @param bSelectFollowingPage
+            When <TRUE/> then after deleting the selected pages make the
+            slide after the last selected page the new current page.
+            When <FALSE/> then make the first slide before the selected
+            pages the new current slide.
     */
-    void DeleteSelectedPages (void);
-
-    /** Move the maked pages to a position directly after the specified page.
-    */
-    bool MoveSelectedPages (const sal_Int32 nTargetPage);
+    void DeleteSelectedPages (const bool bSelectFollowingPage = true);
 
     /** Call this method after the selection has changed (possible several
         calls to the PageSelector) to invalidate the relevant slots and send
         appropriate events.
     */
     void SelectionHasChanged (const bool bMakeSelectionVisible = true);
-
-    /** Return <TRUE/> when the selection has changed but has not yet been
-        moved to the visible area of the slide sorter view.
-    */
-    bool IsMakeSelectionVisiblePending (void) const;
-
-    enum SelectionHint { SH_FIRST, SH_LAST, SH_RECENT };
-
-    /** Try to make all currently selected page objects visible, i.e. set
-        the origin so that the page objects lie inside the visible area.
-        When the selection is empty then the visible area is not modified.
-
-        <p>This method, and the ones is calls, look into the Properties
-        object of the SlideSorter in order to determine whether the current
-        selection is to be displayed centered.</p>
-        @param eSelectionHint
-            This is an advice on which selected page object to handle with
-            the highest priority when the whole selection does not fit into
-            the visible area.
-        @return
-            Returns the vertical translation of the visible area.  It is 0
-            when no update of the visible area was done.
-    */
-    Size MakeSelectionVisible (
-        const SelectionHint eSelectionHint = SH_RECENT);
-
-    /** Modify the origin of the visible area so that the given rectangle
-        comes into view.  This is done with the smallest change: no
-        scrolling takes place when the given rectangle already lies in the
-        visible area.  Otherwise either the top or the bottom of the given
-        rectangle is aligned with the top or the bottom of the visible area.
-        @return
-            Returns the vertical translation of the visible area.  It is 0
-            when no update of the visible area was done.
-    */
-    Size MakeRectangleVisible (const Rectangle& rBox);
 
     /** Add a listener that is called when the selection of the slide sorter
         changes.
@@ -144,6 +112,8 @@ public:
     */
     void SetInsertionPosition (const sal_Int32 nInsertionPosition);
 
+    ::boost::shared_ptr<SelectionObserver> GetSelectionObserver (void) const;
+
 private:
     SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
@@ -167,6 +137,17 @@ private:
     */
     sal_Int32 mnInsertionPosition;
 
+    /** Animation id for a scroll animation the will eventually set the top
+        and left of the visible area to maRequestedTopLeft.
+    */
+    Animator::AnimationId mnAnimationId;
+    Point maRequestedTopLeft;
+
+    class PageInsertionListener;
+    ::boost::scoped_ptr<PageInsertionListener> mpPageInsertionListener;
+
+    ::boost::shared_ptr<SelectionObserver> mpSelectionObserver;
+
     /** Delete the given list of normal pages.  This method is a helper
         function for DeleteSelectedPages().
         @param rSelectedNormalPages
@@ -180,31 +161,6 @@ private:
             A list of master pages.  Supplying normal pages is an error.
     */
     void DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedMasterPages);
-
-    /** Return <TRUE/> when the given rectangle, that typically is the
-        bounding box of all currently selected slides, does not fit entirely
-        into the visible area of the slide sorter view.
-    */
-    bool DoesSelectionExceedVisibleArea (const Rectangle& rSelectionBox) const;
-
-    /** When not all currently selected slides fit into the visible area of
-        the slide sorter view, and thus DoesSelectionExceedVisibleArea()
-        would return <TRUE/>, then it is the task of this method to
-        determine which part of the selection to move into the visible area.
-        @param rpFirst
-            The first selected slide.  Must not be an empty pointer.
-        @param rpLast
-            The last selected slide.  Must not be an empty pointer.
-        @param eSelectionHint
-            This hint tells the method on which slide to concentrate,
-            i.e. which slide has to be inside the returned visible area.
-        @return
-            Returns the new visible area.
-    */
-    Rectangle ResolveLargeSelection (
-        const model::SharedPageDescriptor& rpFirst,
-        const model::SharedPageDescriptor& rpLast,
-        const SelectionHint eSelectionHint);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

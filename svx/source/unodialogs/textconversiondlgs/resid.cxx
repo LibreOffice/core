@@ -43,7 +43,7 @@ static ResMgr* getTextConversionResMgr()
         pMgr = ResMgr::CreateResMgr( "textconversiondlgs" );
     return pMgr;
 }
-TextConversionDlgs_ResId::TextConversionDlgs_ResId(USHORT nId)
+TextConversionDlgs_ResId::TextConversionDlgs_ResId(sal_uInt16 nId)
          : ResId( nId, *getTextConversionResMgr() )
 {
 }

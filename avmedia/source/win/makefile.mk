@@ -78,3 +78,11 @@ SHL1STDLIBS += dxguid.lib
 .ENDIF
 
 .INCLUDE :  	target.mk
+
+ALLTAR : $(MISC)/avmediawin.component
+
+$(MISC)/avmediawin.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        avmediawin.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt avmediawin.component

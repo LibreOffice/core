@@ -56,12 +56,9 @@ namespace func_provider
 //*************************************************************************
 ScriptingContext::ScriptingContext( const Reference< XComponentContext > & xContext ) : //ScriptingContextImpl_BASE( GetMutex()),
     OPropertyContainer( GetBroadcastHelper() ),
-        m_xContext( xContext )
+        m_xContext( xContext, UNO_SET_THROW )
 {
     OSL_TRACE( "< ScriptingContext ctor called >\n" );
-
-    validateXRef( m_xContext,
-                  "ScriptingContext::ScriptingContext: No context available\n" );
 
     Any nullAny;
 

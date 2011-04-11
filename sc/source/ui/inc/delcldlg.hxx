@@ -31,7 +31,7 @@
 
 
 #include <vcl/dialog.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
 
@@ -53,7 +53,7 @@ private:
 
 
 public:
-            ScDeleteCellDlg( Window* pParent, BOOL bDisallowCellMove = FALSE );
+            ScDeleteCellDlg( Window* pParent, sal_Bool bDisallowCellMove = false );
             ~ScDeleteCellDlg();
 
     DelCellCmd GetDelCellCmd() const;

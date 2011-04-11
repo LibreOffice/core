@@ -68,7 +68,7 @@ using namespace ::com::sun::star::lang;
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Feldeinfuegen bearbeiten
+    Description: edit insert-field
  --------------------------------------------------------------------*/
 SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), SW_RES(DLG_CHANGE_DB)),
@@ -85,10 +85,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aOKBT       (this, SW_RES(BT_OK         )),
     aCancelBT   (this, SW_RES(BT_CANCEL     )),
     aHelpBT     (this, SW_RES(BT_HELP       )),
-//  aChangeBT   (this, SW_RES(BT_CHANGEDB    )),
     aImageList      (SW_RES(ILIST_DB_DLG    )),
-    aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
-
     pSh(rVw.GetWrtShellPtr()),
     pMgr( new SwFldMgr() )
 {
@@ -102,13 +99,9 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aAddDBPB.SetClickHdl(LINK(this, SwChangeDBDlg, AddDBHdl));
 
     aUsedDBTLB.SetSelectionMode(MULTIPLE_SELECTION);
-    aUsedDBTLB.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
+    aUsedDBTLB.SetStyle(aUsedDBTLB.GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     aUsedDBTLB.SetSpaceBetweenEntries(0);
-
-    aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
-                    aImageList.GetImage(IMG_EXPAND  ), BMP_COLOR_NORMAL );
-    aUsedDBTLB.SetNodeBitmaps( aImageListHC.GetImage(IMG_COLLAPSE),
-                    aImageListHC.GetImage(IMG_EXPAND  ), BMP_COLOR_HIGHCONTRAST );
+    aUsedDBTLB.SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE), aImageList.GetImage(IMG_EXPAND));
 
     Link aLink = LINK(this, SwChangeDBDlg, TreeSelectHdl);
 
@@ -120,7 +113,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbank-Listboxen initialisieren
+    Description: initialise database listboxes
  --------------------------------------------------------------------*/
 void SwChangeDBDlg::FillDBPopup()
 {
@@ -151,12 +144,12 @@ void SwChangeDBDlg::FillDBPopup()
     SvStringsDtor aDBNameList(5, 1);
     pSh->GetAllUsedDB( aDBNameList, &aAllDBNames );
 
-    USHORT nCount = aDBNameList.Count();
+    sal_uInt16 nCount = aDBNameList.Count();
     aUsedDBTLB.Clear();
     SvLBoxEntry *pFirst = 0;
     SvLBoxEntry *pLast = 0;
 
-    for (USHORT k = 0; k < nCount; k++)
+    for (sal_uInt16 k = 0; k < nCount; k++)
     {
         sDBName = *aDBNameList.GetObject(k);
         sDBName = sDBName.GetToken(0);
@@ -177,21 +170,17 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
 {
     String sDBName(rDBName.GetToken(0, DB_DELIM));
     String sTableName(rDBName.GetToken(1, DB_DELIM));
-    int nCommandType = rDBName.GetToken(2, DB_DELIM).ToInt32();
+    sal_IntPtr nCommandType = rDBName.GetToken(2, DB_DELIM).ToInt32();
     SvLBoxEntry* pParent;
     SvLBoxEntry* pChild;
 
-    USHORT nParent = 0;
-    USHORT nChild = 0;
+    sal_uInt16 nParent = 0;
+    sal_uInt16 nChild = 0;
 
     Image aTableImg = aImageList.GetImage(IMG_DBTABLE);
     Image aDBImg = aImageList.GetImage(IMG_DB);
     Image aQueryImg = aImageList.GetImage(IMG_DBQUERY);
-    Image aHCTableImg = aImageListHC.GetImage(IMG_DBTABLE);
-    Image aHCDBImg = aImageListHC.GetImage(IMG_DB);
-    Image aHCQueryImg = aImageListHC.GetImage(IMG_DBQUERY);
     Image& rToInsert = nCommandType ? aQueryImg : aTableImg;
-    Image& rHCToInsert = nCommandType ? aHCQueryImg : aHCTableImg;
     while ((pParent = aUsedDBTLB.GetEntry(nParent++)) != NULL)
     {
         if (sDBName == aUsedDBTLB.GetEntryText(pParent))
@@ -202,42 +191,36 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
                     return pChild;
             }
             SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
-            aUsedDBTLB.SetExpandedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
-            aUsedDBTLB.SetCollapsedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
             pRet->SetUserData((void*)nCommandType);
             return pRet;
         }
     }
     pParent = aUsedDBTLB.InsertEntry(sDBName, aDBImg, aDBImg);
-    aUsedDBTLB.SetExpandedEntryBmp(pParent, aHCDBImg, BMP_COLOR_HIGHCONTRAST);
-    aUsedDBTLB.SetCollapsedEntryBmp(pParent, aHCDBImg, BMP_COLOR_HIGHCONTRAST);
 
     SvLBoxEntry* pRet = aUsedDBTLB.InsertEntry(sTableName, rToInsert, rToInsert, pParent);
-    aUsedDBTLB.SetExpandedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
-    aUsedDBTLB.SetCollapsedEntryBmp(pRet, rHCToInsert, BMP_COLOR_HIGHCONTRAST);
     pRet->SetUserData((void*)nCommandType);
     return pRet;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Dialog zerstoeren
+    Description: destroy dialog
  --------------------------------------------------------------------*/
-__EXPORT SwChangeDBDlg::~SwChangeDBDlg()
+SwChangeDBDlg::~SwChangeDBDlg()
 {
     delete pMgr;
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung:  Schliessen
+     Description:   close
  --------------------------------------------------------------------*/
-void __EXPORT SwChangeDBDlg::Apply()
+void SwChangeDBDlg::Apply()
 {
     UpdateFlds();
 }
 
 void SwChangeDBDlg::UpdateFlds()
 {
-    SvStringsDtor aDBNames( (BYTE)aUsedDBTLB.GetSelectionCount(), 1 );
+    SvStringsDtor aDBNames( (sal_uInt8)aUsedDBTLB.GetSelectionCount(), 1 );
     SvLBoxEntry* pEntry = aUsedDBTLB.FirstSelected();
 
     while( pEntry )
@@ -249,7 +232,7 @@ void SwChangeDBDlg::UpdateFlds()
             *pTmp += DB_DELIM;
             *pTmp += aUsedDBTLB.GetEntryText( pEntry );
             *pTmp += DB_DELIM;
-            int nCommandType = (int)(ULONG)pEntry->GetUserData();
+            int nCommandType = (int)(sal_uLong)pEntry->GetUserData();
             *pTmp += String::CreateFromInt32(nCommandType);
             aDBNames.Insert(pTmp, aDBNames.Count() );
         }
@@ -285,21 +268,21 @@ IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, EMPTYARG )
 
 IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, EMPTYARG )
 {
-    BOOL bEnable = FALSE;
+    sal_Bool bEnable = sal_False;
 
     SvLBoxEntry* pEntry = aAvailDBTLB.GetCurEntry();
 
     if (pEntry)
     {
         if (aAvailDBTLB.GetParent(pEntry))
-            bEnable = TRUE;
+            bEnable = sal_True;
         aOKBT.Enable( bEnable );
     }
     return 0;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Datenbankname fuer Anzeige wandeln
+    Description: convert database name for display
  --------------------------------------------------------------------*/
 void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 {
@@ -308,7 +291,7 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
     sTmp += '.';
     sTmp += (String)rDBData.sCommand;
 
-    for (USHORT i = 0; i < sTmp.Len(); i++)
+    for (sal_uInt16 i = 0; i < sTmp.Len(); i++)
     {
         sName += sTmp.GetChar(i);
         if (sTmp.GetChar(i) == '~')

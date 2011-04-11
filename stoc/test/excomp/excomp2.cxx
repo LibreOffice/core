@@ -49,7 +49,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 #define SERVICENAME2 "example.ExampleComponent2"
 #define IMPLNAME2   "example.ExampleComponent2.Impl"
@@ -199,7 +200,7 @@ Sequence<OUString> SAL_CALL ExampleComponent2Impl::getSupportedServiceNames_Stat
 OUString SAL_CALL ExampleComponent2Impl::getMessage() throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
-    return OUString::createFromAscii("Alle meine Entchen schwimmen auf dem See, schwimmen auf dem See ...");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("Alle meine Entchen schwimmen auf dem See, schwimmen auf dem See ..."));
 }
 
 
@@ -253,7 +254,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+            OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
     return sal_False;

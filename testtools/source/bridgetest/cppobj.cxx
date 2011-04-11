@@ -43,7 +43,6 @@
 #include "cppuhelper/compbase_ex.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
@@ -58,13 +57,15 @@
 #include "currentcontextchecker.hxx"
 #include "multi.hxx"
 
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace test::testtools::bridgetest;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 #define SERVICENAME     "com.sun.star.test.bridge.CppTestObject"
 #define IMPLNAME        "com.sun.star.comp.bridge.CppTestObject"
@@ -126,7 +127,7 @@ static void assign( TestData & rData,
 
 //==================================================================================================
 class Test_Impl :
-    protected osl::DebugBase<Test_Impl>,
+    public osl::DebugBase<Test_Impl>,
     public WeakImplHelper3< XBridgeTest2, XServiceInfo , XRecursiveCall >
 {
     TestData _aData, _aStructData;
@@ -161,7 +162,7 @@ public:
         {}
     virtual ~Test_Impl()
         {
-            OSL_TRACE( "> scalar Test_Impl dtor <\n" );
+            OSL_TRACE( "> scalar Test_Impl dtor <" );
         }
 
     void SAL_CALL acquire() throw ()
@@ -221,7 +222,13 @@ public:
         { return rStruct; }
     virtual BigStruct SAL_CALL echoBigStruct(const BigStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
         { return rStruct; }
-    virtual AllFloats SAL_CALL echoAllFloats(const AllFloats& rStruct) throw(com::sun::star::uno::RuntimeException)
+    virtual TwoFloats SAL_CALL echoTwoFloats(const TwoFloats& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual FourFloats SAL_CALL echoFourFloats(const FourFloats& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual MixedFloatAndInteger SAL_CALL echoMixedFloatAndInteger(const MixedFloatAndInteger& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
+    virtual ThreeByteStruct SAL_CALL echoThreeByteStruct(const ThreeByteStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
         { return rStruct; }
     virtual sal_Int32 SAL_CALL testPPCAlignment( sal_Int64, sal_Int64, sal_Int32, sal_Int64, sal_Int32 i2 ) throw(com::sun::star::uno::RuntimeException)
         { return i2; }
@@ -476,7 +483,7 @@ public:
 };
 
 //Dummy class for XComponent implementation
-class Dummy : protected osl::DebugBase<Dummy>,
+class Dummy : public osl::DebugBase<Dummy>,
               public WeakComponentImplHelperBase
 {
 public:
@@ -1181,27 +1188,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
-            xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM(SERVICENAME) ) );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

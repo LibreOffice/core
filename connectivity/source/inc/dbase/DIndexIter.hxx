@@ -48,14 +48,14 @@ namespace connectivity
             ODbaseIndex*            m_pIndex;
             ONDXPagePtr             m_aRoot,
                                     m_aCurLeaf;
-            USHORT                  m_nCurNode;
+            sal_uInt16                  m_nCurNode;
 
         protected:
-            ULONG Find(BOOL bFirst);
-            ULONG GetCompare(BOOL bFirst);
-            ULONG GetLike(BOOL bFirst);
-            ULONG GetNull(BOOL bFirst);
-            ULONG GetNotNull(BOOL bFirst);
+            sal_uIntPtr Find(sal_Bool bFirst);
+            sal_uIntPtr GetCompare(sal_Bool bFirst);
+            sal_uIntPtr GetLike(sal_Bool bFirst);
+            sal_uIntPtr GetNull(sal_Bool bFirst);
+            sal_uIntPtr GetNotNull(sal_Bool bFirst);
 
             ONDXKey* GetFirstKey(ONDXPage* pPage,
                                 const file::OOperand& rKey);
@@ -76,8 +76,8 @@ namespace connectivity
             }
 
             virtual ~OIndexIterator();
-            ULONG First();
-            ULONG Next();
+            sal_uIntPtr First();
+            sal_uIntPtr Next();
 
         };
     }

@@ -57,10 +57,6 @@
  * @file
  * Table cell.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-21 create this file.
- ************************************************************************/
 #include    "xfcell.hxx"
 #include    "xfparagraph.hxx"
 #include    "xftable.hxx"
@@ -95,6 +91,9 @@ XFCell::XFCell(const XFCell& other) : XFContentContainer(other)
 
 XFCell& XFCell::operator=(const XFCell& other)
 {
+    if( this == &other )
+        return *this;
+
     if( m_pSubTable )
         delete m_pSubTable;
 

@@ -49,3 +49,6 @@
 #define FT_TREE 5
 #define TP_ANIMATION 787
 #define TP_ANIMATION_ACTION 789
+//IAccessibility2 Implementation 2009-----
+#define STR_PATHNAME 1
+ //-----IAccessibility2 Implementation 2009

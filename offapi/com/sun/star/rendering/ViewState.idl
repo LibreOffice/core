@@ -41,7 +41,7 @@ interface XPolyPolygon2D;
     i.e. the invariant setup used when painting a whole view of
     something.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 struct ViewState
 {

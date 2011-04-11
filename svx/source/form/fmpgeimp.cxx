@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svxerr.hxx"
+#include "svx/svxerr.hxx"
 #include "fmpgeimp.hxx"
 #include "fmundo.hxx"
 #include "svx/fmtools.hxx"
@@ -37,8 +37,8 @@
 #include "fmservs.hxx"
 #include "fmobj.hxx"
 #include "formcontrolfactory.hxx"
-#include "svditer.hxx"
-#include "fmresids.hrc"
+#include "svx/svditer.hxx"
+#include "svx/fmresids.hrc"
 #include "svx/dbtoolsclient.hxx"
 #include "treevisitor.hxx"
 
@@ -211,7 +211,7 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl 
 
             if ( bForeignIsForm != bOwnIsForm )
             {
-                OSL_ENSURE( false, "FmFormPageImpl::FmFormPageImpl: inconsistent ordering of objects!" );
+                OSL_FAIL( "FmFormPageImpl::FmFormPageImpl: inconsistent ordering of objects!" );
                 // don't attempt to do further assignments, something's completely messed up
                 break;
             }
@@ -335,7 +335,7 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
     {
         m_bAttemptedFormCreation = true;
 
-        const ::rtl::OUString sFormsCollectionServiceName = ::rtl::OUString::createFromAscii("com.sun.star.form.Forms");
+        const ::rtl::OUString sFormsCollectionServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.Forms") );
         m_xForms = Reference< XNameContainer > (
             ::comphelper::getProcessServiceFactory()->createInstance( sFormsCollectionServiceName ),
             UNO_QUERY
@@ -628,7 +628,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     catch(const Exception& e)
     {
         (void)e;
-        OSL_ENSURE(sal_False, "FmFormPageImpl::findFormForDataSource: caught an exception!");
+        OSL_FAIL("FmFormPageImpl::findFormForDataSource: caught an exception!");
     }
 
     if (sLookupName == sFormDataSourceName)

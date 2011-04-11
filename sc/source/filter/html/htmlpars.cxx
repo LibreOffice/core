@@ -67,11 +67,11 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-
+using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 
-SV_IMPL_VARARR_SORT( ScHTMLColOffset, ULONG );
+SV_IMPL_VARARR_SORT( ScHTMLColOffset, sal_uLong );
 
 
 // ============================================================================
@@ -113,10 +113,10 @@ ScHTMLLayoutParser::ScHTMLLayoutParser( EditEngine* pEditP, const String& rBaseU
         nColOffsetStart(0),
         nMetaCnt(0),
         nOffsetTolerance( SC_HTML_OFFSET_TOLERANCE_SMALL ),
-        bTabInTabCell( FALSE ),
-        bFirstRow( TRUE ),
-        bInCell( FALSE ),
-        bInTitle( FALSE )
+        bTabInTabCell( false ),
+        bFirstRow( sal_True ),
+        bInCell( false ),
+        bInTitle( false )
 {
     MakeColNoRef( pLocalColOffset, 0, 0, 0, 0 );
     MakeColNoRef( pColOffset, 0, 0, 0, 0 );
@@ -128,7 +128,16 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
     ScHTMLTableStackEntry* pS;
     while ( (pS = aTableStack.Pop()) != 0 )
     {
-        if ( pList->GetPos( pS->pCellEntry ) == LIST_ENTRY_NOTFOUND )
+        bool found = false;
+        for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
+        {
+            if ( pS->pCellEntry == maList[ i ] )
+            {
+                found = true;
+                break;
+            }
+        }
+        if ( !found )
             delete pS->pCellEntry;
         if ( pS->pLocalColOffset != pLocalColOffset )
             delete pS->pLocalColOffset;
@@ -147,13 +156,13 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
 }
 
 
-ULONG ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
+sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
 {
     Link aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScHTMLLayoutParser, HTMLImportHdl ) );
 
     SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
-    BOOL bLoading = pObjSh && pObjSh->IsLoading();
+    sal_Bool bLoading = pObjSh && pObjSh->IsLoading();
 
     SvKeyValueIteratorRef xValues;
     SvKeyValueIterator* pAttributes = NULL;
@@ -176,17 +185,17 @@ ULONG ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
         }
     }
 
-    ULONG nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_HTML, pAttributes );
+    sal_uLong nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_HTML, pAttributes );
 
     pEdit->SetImportHdl( aOldLink );
     // Spaltenbreiten erzeugen
     Adjust();
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-    USHORT nCount = pColOffset->Count();
-    const ULONG* pOff = (const ULONG*) pColOffset->GetData();
-    ULONG nOff = *pOff++;
+    sal_uInt16 nCount = pColOffset->Count();
+    const sal_uLong* pOff = (const sal_uLong*) pColOffset->GetData();
+    sal_uLong nOff = *pOff++;
     Size aSize;
-    for ( USHORT j = 1; j < nCount; j++, pOff++ )
+    for ( sal_uInt16 j = 1; j < nCount; j++, pOff++ )
     {
         aSize.Width() = *pOff - nOff;
         aSize = pDefaultDev->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
@@ -244,61 +253,61 @@ void ScHTMLLayoutParser::NextRow( ImportInfo* pInfo )
         nRowMax = nRowCnt;
     nColCnt = nColCntStart;
     nColOffset = nColOffsetStart;
-    bFirstRow = FALSE;
+    bFirstRow = false;
 }
 
 
-BOOL ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset* pOffset, USHORT nOffset,
-        SCCOL* pCol, USHORT nOffsetTol )
+sal_Bool ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset* pOffset, sal_uInt16 nOffset,
+        SCCOL* pCol, sal_uInt16 nOffsetTol )
 {
     DBG_ASSERT( pOffset, "ScHTMLLayoutParser::SeekOffset - illegal call" );
-    USHORT nPos;
-    BOOL bFound = pOffset->Seek_Entry( nOffset, &nPos );
+    sal_uInt16 nPos;
+    sal_Bool bFound = pOffset->Seek_Entry( nOffset, &nPos );
     *pCol = static_cast<SCCOL>(nPos);
     if ( bFound )
-        return TRUE;
-    USHORT nCount = pOffset->Count();
+        return sal_True;
+    sal_uInt16 nCount = pOffset->Count();
     if ( !nCount )
-        return FALSE;
+        return false;
     // nPos ist Einfuegeposition, da liegt der Naechsthoehere (oder auch nicht)
     if ( nPos < nCount && (((*pOffset)[nPos] - nOffsetTol) <= nOffset) )
-        return TRUE;
+        return sal_True;
     // nicht kleiner als alles andere? dann mit Naechstniedrigerem vergleichen
     else if ( nPos && (((*pOffset)[nPos-1] + nOffsetTol) >= nOffset) )
     {
         (*pCol)--;
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return false;
 }
 
 
-void ScHTMLLayoutParser::MakeCol( ScHTMLColOffset* pOffset, USHORT& nOffset,
-        USHORT& nWidth, USHORT nOffsetTol, USHORT nWidthTol )
+void ScHTMLLayoutParser::MakeCol( ScHTMLColOffset* pOffset, sal_uInt16& nOffset,
+        sal_uInt16& nWidth, sal_uInt16 nOffsetTol, sal_uInt16 nWidthTol )
 {
     DBG_ASSERT( pOffset, "ScHTMLLayoutParser::MakeCol - illegal call" );
     SCCOL nPos;
     if ( SeekOffset( pOffset, nOffset, &nPos, nOffsetTol ) )
-        nOffset = (USHORT)(*pOffset)[nPos];
+        nOffset = (sal_uInt16)(*pOffset)[nPos];
     else
         pOffset->Insert( nOffset );
     if ( nWidth )
     {
         if ( SeekOffset( pOffset, nOffset + nWidth, &nPos, nWidthTol ) )
-            nWidth = (USHORT)(*pOffset)[nPos] - nOffset;
+            nWidth = (sal_uInt16)(*pOffset)[nPos] - nOffset;
         else
             pOffset->Insert( nOffset + nWidth );
     }
 }
 
 
-void ScHTMLLayoutParser::MakeColNoRef( ScHTMLColOffset* pOffset, USHORT nOffset,
-        USHORT nWidth, USHORT nOffsetTol, USHORT nWidthTol )
+void ScHTMLLayoutParser::MakeColNoRef( ScHTMLColOffset* pOffset, sal_uInt16 nOffset,
+        sal_uInt16 nWidth, sal_uInt16 nOffsetTol, sal_uInt16 nWidthTol )
 {
     DBG_ASSERT( pOffset, "ScHTMLLayoutParser::MakeColNoRef - illegal call" );
     SCCOL nPos;
     if ( SeekOffset( pOffset, nOffset, &nPos, nOffsetTol ) )
-        nOffset = (USHORT)(*pOffset)[nPos];
+        nOffset = (sal_uInt16)(*pOffset)[nPos];
     else
         pOffset->Insert( nOffset );
     if ( nWidth )
@@ -309,31 +318,31 @@ void ScHTMLLayoutParser::MakeColNoRef( ScHTMLColOffset* pOffset, USHORT nOffset,
 }
 
 
-void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, USHORT& nOldOffset,
-            USHORT& nNewOffset, USHORT nOffsetTol )
+void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOldOffset,
+            sal_uInt16& nNewOffset, sal_uInt16 nOffsetTol )
 {
     DBG_ASSERT( pOffset, "ScHTMLLayoutParser::ModifyOffset - illegal call" );
     SCCOL nPos;
     if ( !SeekOffset( pOffset, nOldOffset, &nPos, nOffsetTol ) )
     {
         if ( SeekOffset( pOffset, nNewOffset, &nPos, nOffsetTol ) )
-            nNewOffset = (USHORT)(*pOffset)[nPos];
+            nNewOffset = (sal_uInt16)(*pOffset)[nPos];
         else
             pOffset->Insert( nNewOffset );
         return ;
     }
-    nOldOffset = (USHORT)(*pOffset)[nPos];
+    nOldOffset = (sal_uInt16)(*pOffset)[nPos];
     SCCOL nPos2;
     if ( SeekOffset( pOffset, nNewOffset, &nPos2, nOffsetTol ) )
     {
-        nNewOffset = (USHORT)(*pOffset)[nPos2];
+        nNewOffset = (sal_uInt16)(*pOffset)[nPos2];
         return ;
     }
-    ULONG* pData = ((ULONG*) pOffset->GetData()) + nPos;        //! QAD
+    sal_uLong* pData = ((sal_uLong*) pOffset->GetData()) + nPos;        //! QAD
     long nDiff = nNewOffset - nOldOffset;
     if ( nDiff < 0 )
     {
-        const ULONG* pStop = pOffset->GetData();
+        const sal_uLong* pStop = pOffset->GetData();
         do
         {
             *pData += nDiff;
@@ -341,7 +350,7 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, USHORT& nOldOff
     }
     else
     {
-        const ULONG* pStop = pOffset->GetData() + pOffset->Count();
+        const sal_uLong* pStop = pOffset->GetData() + pOffset->Count();
         do
         {
             *pData += nDiff;
@@ -350,28 +359,29 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, USHORT& nOldOff
 }
 
 
-void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, BOOL bJoin )
+void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, sal_Bool bJoin )
 {
     if ( ValidCol(pE->nCol) )
     {   // wuerde sonst bei ScAddress falschen Wert erzeugen, evtl. Endlosschleife!
-        BOOL bBadCol = FALSE;
-        BOOL bAgain;
+        sal_Bool bBadCol = false;
+        sal_Bool bAgain;
         ScRange aRange( pE->nCol, pE->nRow, 0,
             pE->nCol + pE->nColOverlap - 1, pE->nRow + pE->nRowOverlap - 1, 0 );
         do
         {
-            bAgain = FALSE;
-            for ( ScRange* pR = xLockedList->First(); pR; pR = xLockedList->Next() )
+            bAgain = false;
+            for ( size_t i =  0, nRanges = xLockedList->size(); i < nRanges; ++i )
             {
+                ScRange* pR = (*xLockedList)[i];
                 if ( pR->Intersects( aRange ) )
                 {
                     pE->nCol = pR->aEnd.Col() + 1;
                     SCCOL nTmp = pE->nCol + pE->nColOverlap - 1;
                     if ( pE->nCol > MAXCOL || nTmp > MAXCOL )
-                        bBadCol = TRUE;
+                        bBadCol = sal_True;
                     else
                     {
-                        bAgain = TRUE;
+                        bAgain = sal_True;
                         aRange.aStart.SetCol( pE->nCol );
                         aRange.aEnd.SetCol( nTmp );
                     }
@@ -387,19 +397,19 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, BOOL bJoin )
 
 void ScHTMLLayoutParser::Adjust()
 {
-    for ( ScRange* pR = xLockedList->First(); pR; pR = xLockedList->Next() )
-        delete pR;
-    xLockedList->Clear();
+    xLockedList->RemoveAll();
+
     ScHTMLAdjustStack aStack;
     ScHTMLAdjustStackEntry* pS;
-    USHORT nTab = 0;
+    sal_uInt16 nTab = 0;
     SCCOL nLastCol = SCCOL_MAX;
     SCROW nNextRow = 0;
     SCROW nCurRow = 0;
-    USHORT nPageWidth = (USHORT) aPageSize.Width();
+    sal_uInt16 nPageWidth = (sal_uInt16) aPageSize.Width();
     Table* pTab = NULL;
-    for ( ScEEParseEntry* pE = pList->First(); pE; pE = pList->Next() )
+    for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
     {
+        ScEEParseEntry* pE = maList[ i ];
         if ( pE->nTab < nTab )
         {   // Table beendet
             if ( (pS = aStack.Pop()) != 0 )
@@ -421,7 +431,7 @@ void ScHTMLLayoutParser::Adjust()
             else
                 nCurRow = nNextRow = pE->nRow;
             SCROW nR;
-            if ( pTab && ((nR = (SCROW)(ULONG)pTab->Get( nCurRow )) != 0) )
+            if ( pTab && ((nR = (SCROW)(sal_uLong)pTab->Get( nCurRow )) != 0) )
                 nNextRow += nR;
             else
                 nNextRow++;
@@ -437,7 +447,7 @@ void ScHTMLLayoutParser::Adjust()
             pTab = (pTables ? (Table*) pTables->Get( nTab ) : NULL);
             // neuer Zeilenabstand
             SCROW nR;
-            if ( pTab && ((nR = (SCROW)(ULONG)pTab->Get( nCurRow )) != 0) )
+            if ( pTab && ((nR = (SCROW)(sal_uLong)pTab->Get( nCurRow )) != 0) )
                 nNextRow = nCurRow + nR;
             else
                 nNextRow = nCurRow + 1;
@@ -451,7 +461,7 @@ void ScHTMLLayoutParser::Adjust()
                 SCROW nRowSpan = pE->nRowOverlap;
                 for ( SCROW j=0; j < nRowSpan; j++ )
                 {   // aus merged Zeilen resultierendes RowSpan
-                    SCROW nRows = (SCROW)(ULONG)pTab->Get( nRow+j );
+                    SCROW nRows = (SCROW)(sal_uLong)pTab->Get( nRow+j );
                     if ( nRows > 1 )
                     {
                         pE->nRowOverlap += nRows - 1;
@@ -468,18 +478,18 @@ void ScHTMLLayoutParser::Adjust()
         // echte Col
         SeekOffset( pColOffset, pE->nOffset, &pE->nCol, nOffsetTolerance );
         SCCOL nColBeforeSkip = pE->nCol;
-        SkipLocked( pE, FALSE );
+        SkipLocked( pE, false );
         if ( pE->nCol != nColBeforeSkip )
         {
             SCCOL nCount = (SCCOL)pColOffset->Count();
             if ( nCount <= pE->nCol )
             {
-                pE->nOffset = (USHORT) (*pColOffset)[nCount-1];
+                pE->nOffset = (sal_uInt16) (*pColOffset)[nCount-1];
                 MakeCol( pColOffset, pE->nOffset, pE->nWidth, nOffsetTolerance, nOffsetTolerance );
             }
             else
             {
-                pE->nOffset = (USHORT) (*pColOffset)[pE->nCol];
+                pE->nOffset = (sal_uInt16) (*pColOffset)[pE->nCol];
             }
         }
         SCCOL nPos;
@@ -505,7 +515,7 @@ void ScHTMLLayoutParser::Adjust()
 }
 
 
-USHORT ScHTMLLayoutParser::GetWidth( ScEEParseEntry* pE )
+sal_uInt16 ScHTMLLayoutParser::GetWidth( ScEEParseEntry* pE )
 {
     if ( pE->nWidth )
         return pE->nWidth;
@@ -513,7 +523,7 @@ USHORT ScHTMLLayoutParser::GetWidth( ScEEParseEntry* pE )
                 nColCntStart + pE->nColOverlap),
             static_cast<sal_Int32>( pLocalColOffset->Count() - 1));
     SCCOL nPos = (nTmp < 0 ? 0 : static_cast<SCCOL>(nTmp));
-    USHORT nOff2 = (USHORT) (*pLocalColOffset)[nPos];
+    sal_uInt16 nOff2 = (sal_uInt16) (*pLocalColOffset)[nPos];
     if ( pE->nOffset < nOff2 )
         return nOff2 - pE->nOffset;
     return 0;
@@ -525,44 +535,43 @@ void ScHTMLLayoutParser::SetWidths()
     ScEEParseEntry* pE;
     SCCOL nCol;
     if ( !nTableWidth )
-        nTableWidth = (USHORT) aPageSize.Width();
+        nTableWidth = (sal_uInt16) aPageSize.Width();
     SCCOL nColsPerRow = nMaxCol - nColCntStart;
     if ( nColsPerRow <= 0 )
         nColsPerRow = 1;
     if ( pLocalColOffset->Count() <= 2 )
     {   // nur PageSize, es gab keine Width-Angabe
-        USHORT nWidth = nTableWidth / static_cast<USHORT>(nColsPerRow);
-        USHORT nOff = nColOffsetStart;
-        pLocalColOffset->Remove( (USHORT)0, pLocalColOffset->Count() );
+        sal_uInt16 nWidth = nTableWidth / static_cast<sal_uInt16>(nColsPerRow);
+        sal_uInt16 nOff = nColOffsetStart;
+        pLocalColOffset->Remove( (sal_uInt16)0, pLocalColOffset->Count() );
         for ( nCol = 0; nCol <= nColsPerRow; ++nCol, nOff = nOff + nWidth )
         {
             MakeColNoRef( pLocalColOffset, nOff, 0, 0, 0 );
         }
-        nTableWidth = (USHORT)((*pLocalColOffset)[pLocalColOffset->Count() -1 ] - (*pLocalColOffset)[0]);
-        pE = pList->Seek( nFirstTableCell );
-        while ( pE )
+        nTableWidth = (sal_uInt16)((*pLocalColOffset)[pLocalColOffset->Count() -1 ] - (*pLocalColOffset)[0]);
+        for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
         {
+            pE = maList[ i ];
             if ( pE->nTab == nTable )
             {
-                pE->nOffset = (USHORT) (*pLocalColOffset)[pE->nCol - nColCntStart];
+                pE->nOffset = (sal_uInt16) (*pLocalColOffset)[pE->nCol - nColCntStart];
                 pE->nWidth = 0;     // to be recalculated later
             }
-            pE = pList->Next();
         }
     }
     else
     {   // einige mit einige ohne Width
-        pE = pList->Seek( nFirstTableCell );
-        // #36350# wieso eigentlich kein pE ?!?
-        if ( pE )
+        // wieso eigentlich kein pE ?!?
+        if ( nFirstTableCell < maList.size() )
         {
-            USHORT* pOffsets = new USHORT[ nColsPerRow+1 ];
-            memset( pOffsets, 0, (nColsPerRow+1) * sizeof(USHORT) );
-            USHORT* pWidths = new USHORT[ nColsPerRow ];
-            memset( pWidths, 0, nColsPerRow * sizeof(USHORT) );
+            sal_uInt16* pOffsets = new sal_uInt16[ nColsPerRow+1 ];
+            memset( pOffsets, 0, (nColsPerRow+1) * sizeof(sal_uInt16) );
+            sal_uInt16* pWidths = new sal_uInt16[ nColsPerRow ];
+            memset( pWidths, 0, nColsPerRow * sizeof(sal_uInt16) );
             pOffsets[0] = nColOffsetStart;
-            while ( pE )
+            for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
             {
+                pE = maList[ i ];
                 if ( pE->nTab == nTable && pE->nWidth )
                 {
                     nCol = pE->nCol - nColCntStart;
@@ -575,8 +584,8 @@ void ScHTMLLayoutParser::SetWidths()
                         }
                         else
                         {   // try to find a single undefined width
-                            USHORT nTotal = 0;
-                            BOOL bFound = FALSE;
+                            sal_uInt16 nTotal = 0;
+                            sal_Bool bFound = false;
                             SCCOL nHere = 0;
                             SCCOL nStop = Min( static_cast<SCCOL>(nCol + pE->nColOverlap), nColsPerRow );
                             for ( ; nCol < nStop; nCol++ )
@@ -587,10 +596,10 @@ void ScHTMLLayoutParser::SetWidths()
                                 {
                                     if ( bFound )
                                     {
-                                        bFound = FALSE;
+                                        bFound = false;
                                         break;  // for
                                     }
-                                    bFound = TRUE;
+                                    bFound = sal_True;
                                     nHere = nCol;
                                 }
                             }
@@ -599,10 +608,9 @@ void ScHTMLLayoutParser::SetWidths()
                         }
                     }
                 }
-                pE = pList->Next();
             }
-            USHORT nWidths = 0;
-            USHORT nUnknown = 0;
+            sal_uInt16 nWidths = 0;
+            sal_uInt16 nUnknown = 0;
             for ( nCol = 0; nCol < nColsPerRow; nCol++ )
             {
                 if ( pWidths[nCol] )
@@ -612,7 +620,7 @@ void ScHTMLLayoutParser::SetWidths()
             }
             if ( nUnknown )
             {
-                USHORT nW = ((nWidths < nTableWidth) ?
+                sal_uInt16 nW = ((nWidths < nTableWidth) ?
                     ((nTableWidth - nWidths) / nUnknown) :
                     (nTableWidth / nUnknown));
                 for ( nCol = 0; nCol < nColsPerRow; nCol++ )
@@ -625,16 +633,16 @@ void ScHTMLLayoutParser::SetWidths()
             {
                 pOffsets[nCol] = pOffsets[nCol-1] + pWidths[nCol-1];
             }
-            pLocalColOffset->Remove( (USHORT)0, pLocalColOffset->Count() );
+            pLocalColOffset->Remove( (sal_uInt16)0, pLocalColOffset->Count() );
             for ( nCol = 0; nCol <= nColsPerRow; nCol++ )
             {
                 MakeColNoRef( pLocalColOffset, pOffsets[nCol], 0, 0, 0 );
             }
             nTableWidth = pOffsets[nColsPerRow] - pOffsets[0];
 
-            pE = pList->Seek( nFirstTableCell );
-            while ( pE )
+            for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
             {
+                pE = maList[ i ];
                 if ( pE->nTab == nTable )
                 {
                     nCol = pE->nCol - nColCntStart;
@@ -648,7 +656,6 @@ void ScHTMLLayoutParser::SetWidths()
                         pE->nWidth = pOffsets[nCol] - pE->nOffset;
                     }
                 }
-                pE = pList->Next();
             }
 
             delete [] pWidths;
@@ -657,13 +664,13 @@ void ScHTMLLayoutParser::SetWidths()
     }
     if ( pLocalColOffset->Count() )
     {
-        USHORT nMax = (USHORT) (*pLocalColOffset)[pLocalColOffset->Count() - 1];
+        sal_uInt16 nMax = (sal_uInt16) (*pLocalColOffset)[pLocalColOffset->Count() - 1];
         if ( aPageSize.Width() < nMax )
             aPageSize.Width() = nMax;
     }
-    pE = pList->Seek( nFirstTableCell );
-    while ( pE )
+    for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
     {
+        pE = maList[ i ];
         if ( pE->nTab == nTable )
         {
             if ( !pE->nWidth )
@@ -673,7 +680,6 @@ void ScHTMLLayoutParser::SetWidths()
             }
             MakeCol( pColOffset, pE->nOffset, pE->nWidth, nOffsetTolerance, nOffsetTolerance );
         }
-        pE = pList->Next();
     }
 }
 
@@ -692,12 +698,12 @@ void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
         nCol = pE->nCol - nColCntStart;
         SCCOL nCount = static_cast<SCCOL>(pLocalColOffset->Count());
         if ( nCol < nCount )
-            nColOffset = (USHORT) (*pLocalColOffset)[nCol];
+            nColOffset = (sal_uInt16) (*pLocalColOffset)[nCol];
         else
-            nColOffset = (USHORT) (*pLocalColOffset)[nCount - 1];
+            nColOffset = (sal_uInt16) (*pLocalColOffset)[nCount - 1];
     }
     pE->nOffset = nColOffset;
-    USHORT nWidth = GetWidth( pE );
+    sal_uInt16 nWidth = GetWidth( pE );
     MakeCol( pLocalColOffset, pE->nOffset, nWidth, nOffsetTolerance, nOffsetTolerance );
     if ( pE->nWidth )
         pE->nWidth = nWidth;
@@ -709,17 +715,26 @@ void ScHTMLLayoutParser::Colonize( ScEEParseEntry* pE )
 
 void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
 {
-    bInCell = FALSE;
+    bInCell = false;
     if ( bTabInTabCell )
     {   // in TableOff vom Stack geholt
-        bTabInTabCell = FALSE;
-        if ( pList->GetPos( pActEntry ) == LIST_ENTRY_NOTFOUND )
+        bTabInTabCell = false;
+        bool found = false;
+        for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
+        {
+            if ( pActEntry == maList[ i ] )
+            {
+                found = true;
+                break;
+            }
+        }
+        if ( !found )
             delete pActEntry;
-        NewActEntry( pList->Last() );   // neuer freifliegender pActEntry
+        NewActEntry( maList.back() );   // neuer freifliegender pActEntry
         return ;
     }
     if ( pActEntry->nTab == 0 )
-        pActEntry->nWidth = (USHORT) aPageSize.Width();
+        pActEntry->nWidth = (sal_uInt16) aPageSize.Width();
     Colonize( pActEntry );
     nColCnt = pActEntry->nCol + pActEntry->nColOverlap;
     if ( nMaxCol < nColCnt )
@@ -744,113 +759,14 @@ void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
         rSel.nEndPara = rSel.nStartPara;
     }
     if ( rSel.HasRange() )
-        pActEntry->aItemSet.Put( SfxBoolItem( ATTR_LINEBREAK, TRUE ) );
-    pList->Insert( pActEntry, LIST_APPEND );
+        pActEntry->aItemSet.Put( SfxBoolItem( ATTR_LINEBREAK, true ) );
+    maList.push_back( pActEntry );
     NewActEntry( pActEntry );   // neuer freifliegender pActEntry
 }
 
 
 IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
 {
-#if defined(erDEBUG) //|| 1
-    static ESelection aDebugSel;
-    static String aDebugStr;
-    static SvFileStream* pDebugStrm = NULL;
-    static ULONG nDebugStrmPos = 0;
-    static ULONG nDebugCount = 0;
-    static ULONG nDebugCountAll = 0;
-    static const sal_Char* sDebugState[15] = {
-                    "RTFIMP_START", "RTFIMP_END",
-                    "RTFIMP_NEXTTOKEN", "RTFIMP_UNKNOWNATTR",
-                    "RTFIMP_SETATTR",
-                    "RTFIMP_INSERTTEXT",
-                    "RTFIMP_INSERTPARA",
-                    "HTMLIMP_START", "HTMLIMP_END",
-                    "HTMLIMP_NEXTTOKEN", "HTMLIMP_UNKNOWNATTR",
-                    "HTMLIMP_SETATTR",
-                    "HTMLIMP_INSERTTEXT",
-                    "HTMLIMP_INSERTPARA", "HTMLIMP_INSERTFIELD"
-    };
-
-    nDebugCountAll++;
-    if ( pInfo->eState != HTMLIMP_NEXTTOKEN     // not too much
-      || pInfo->nToken == HTML_TABLE_ON
-      || pInfo->nToken == HTML_TABLE_OFF
-      || pInfo->nToken == HTML_TABLEROW_ON
-      || pInfo->nToken == HTML_TABLEROW_OFF
-      || pInfo->nToken == HTML_TABLEHEADER_ON
-      || pInfo->nToken == HTML_TABLEHEADER_OFF
-      || pInfo->nToken == HTML_TABLEDATA_ON
-      || pInfo->nToken == HTML_TABLEDATA_OFF
-      || !aDebugSel.IsEqual( pInfo->aSelection )
-      || pInfo->aText.Len() || aDebugStr != pInfo->aText
-        )
-    {
-        aDebugSel = pInfo->aSelection;
-        aDebugStr = pInfo->aText;
-        nDebugCount++;
-        if ( !pDebugStrm )
-        {
-            pDebugStrm = new SvFileStream( "d:\\erdbghtm.log",
-                STREAM_WRITE | STREAM_TRUNC );
-        }
-        else
-        {
-            pDebugStrm->ReOpen();
-            pDebugStrm->Seek( nDebugStrmPos );
-        }
-        SvFileStream& rS = *pDebugStrm;
-        rS.WriteNumber( nDebugCountAll ); rS << ".: ";
-        rS.WriteNumber( nDebugCount ); rS << ". State: ";
-        rS.WriteNumber( (USHORT) pInfo->eState );
-        rS << ' ' << sDebugState[pInfo->eState] << endl;
-        rS << "SPar,SPos EPar,EPos: ";
-        rS.WriteNumber( aDebugSel.nStartPara ); rS << ',';
-        rS.WriteNumber( aDebugSel.nStartPos ); rS << ' ';
-        rS.WriteNumber( aDebugSel.nEndPara ); rS << ',';
-        rS.WriteNumber( aDebugSel.nEndPos ); rS << endl;
-        if ( aDebugStr.Len() )
-        {
-            rS << "Text: \"" << aDebugStr << '\"' << endl;
-        }
-        else
-        {
-            rS << "Text:" << endl;
-        }
-        rS << "Token: "; rS.WriteNumber( pInfo->nToken );
-        switch ( pInfo->nToken )
-        {
-            case HTML_TABLE_ON:
-                rS << " HTML_TABLE_ON";
-                break;
-            case HTML_TABLE_OFF:
-                rS << " HTML_TABLE_OFF";
-                break;
-            case HTML_TABLEROW_ON:
-                rS << " HTML_TABLEROW_ON";
-                break;
-            case HTML_TABLEROW_OFF:
-                rS << " HTML_TABLEROW_OFF";
-                break;
-            case HTML_TABLEHEADER_ON:
-                rS << " HTML_TABLEHEADER_ON";
-                break;
-            case HTML_TABLEHEADER_OFF:
-                rS << " HTML_TABLEHEADER_OFF";
-                break;
-            case HTML_TABLEDATA_ON:
-                rS << " HTML_TABLEDATA_ON";
-                break;
-            case HTML_TABLEDATA_OFF:
-                rS << " HTML_TABLEDATA_OFF";
-                break;
-        }
-        rS << " Value: "; rS.WriteNumber( pInfo->nTokenValue );
-        rS << endl << endl;
-        nDebugStrmPos = pDebugStrm->Tell();
-        pDebugStrm->Close();
-    }
-#endif
     switch ( pInfo->eState )
     {
         case HTMLIMP_NEXTTOKEN:
@@ -865,11 +781,11 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
             if ( pInfo->aSelection.nEndPos )
             {
                 // If text remains: create paragraph, without calling CloseEntry().
-                if( bInCell )   // #108269# ...but only in opened table cells.
+                if( bInCell )   // ...but only in opened table cells.
                 {
-                    bInCell = FALSE;
+                    bInCell = false;
                     NextRow( pInfo );
-                    bInCell = TRUE;
+                    bInCell = sal_True;
                 }
                 CloseEntry( pInfo );
             }
@@ -929,14 +845,14 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
         CloseEntry( pInfo );
     if ( !nTableLevel )
     {
-        DBG_ERROR( "Dummbatz-Dok! <TH> oder <TD> ohne vorheriges <TABLE>" );
+        OSL_FAIL( "Dummbatz-Dok! <TH> oder <TD> ohne vorheriges <TABLE>" );
         TableOn( pInfo );
     }
-    bInCell = TRUE;
-    BOOL bHorJustifyCenterTH = (pInfo->nToken == HTML_TABLEHEADER_ON);
+    bInCell = sal_True;
+    sal_Bool bHorJustifyCenterTH = (pInfo->nToken == HTML_TABLEHEADER_ON);
     const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-    USHORT nArrLen = pOptions->Count();
-    for ( USHORT i = 0; i < nArrLen; i++ )
+    sal_uInt16 nArrLen = pOptions->Count();
+    for ( sal_uInt16 i = 0; i < nArrLen; i++ )
     {
         const HTMLOption* pOption = (*pOptions)[i];
         switch( pOption->GetToken() )
@@ -953,7 +869,7 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
             break;
             case HTML_O_ALIGN:
             {
-                bHorJustifyCenterTH = FALSE;
+                bHorJustifyCenterTH = false;
                 SvxCellHorJustify eVal;
                 const String& rOptVal = pOption->GetString();
                 if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) == COMPARE_EQUAL )
@@ -1042,29 +958,28 @@ void ScHTMLLayoutParser::TableDataOff( ImportInfo* pInfo )
 void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
 {
     String aTabName;
-    bool bBorderOn = false;
 
     if ( ++nTableLevel > 1 )
     {   // Table in Table
-        USHORT nTmpColOffset = nColOffset;  // wird in Colonize noch angepasst
+        sal_uInt16 nTmpColOffset = nColOffset;  // wird in Colonize noch angepasst
         Colonize( pActEntry );
         aTableStack.Push( new ScHTMLTableStackEntry(
             pActEntry, xLockedList, pLocalColOffset, nFirstTableCell,
             nColCnt, nRowCnt, nColCntStart, nMaxCol, nTable,
             nTableWidth, nColOffset, nColOffsetStart,
             bFirstRow ) );
-        USHORT nLastWidth = nTableWidth;
+        sal_uInt16 nLastWidth = nTableWidth;
         nTableWidth = GetWidth( pActEntry );
         if ( nTableWidth == nLastWidth && nMaxCol - nColCntStart > 1 )
         {   // es muss mehr als einen geben, also kann dieser nicht alles sein
-            nTableWidth = nLastWidth / static_cast<USHORT>((nMaxCol - nColCntStart));
+            nTableWidth = nLastWidth / static_cast<sal_uInt16>((nMaxCol - nColCntStart));
         }
         nLastWidth = nTableWidth;
         if ( pInfo->nToken == HTML_TABLE_ON )
         {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
             const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-            USHORT nArrLen = pOptions->Count();
-            for ( USHORT i = 0; i < nArrLen; i++ )
+            sal_uInt16 nArrLen = pOptions->Count();
+            for ( sal_uInt16 i = 0; i < nArrLen; i++ )
             {
                 const HTMLOption* pOption = (*pOptions)[i];
                 switch( pOption->GetToken() )
@@ -1075,7 +990,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
                     }
                     break;
                     case HTML_O_BORDER:
-                        bBorderOn = ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
+                        // Border is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
                     case HTML_O_ID:
                         aTabName.Assign( pOption->GetString() );
@@ -1083,21 +998,21 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
                 }
             }
         }
-        bInCell = FALSE;
+        bInCell = false;
         if ( bTabInTabCell && !(nTableWidth < nLastWidth) )
         {   // mehrere Tabellen in einer Zelle, untereinander
-            bTabInTabCell = FALSE;
+            bTabInTabCell = false;
             NextRow( pInfo );
         }
         else
         {   // in dieser Zelle geht's los, oder nebeneinander
-            bTabInTabCell = FALSE;
+            bTabInTabCell = false;
             nColCntStart = nColCnt;
             nColOffset = nTmpColOffset;
             nColOffsetStart = nColOffset;
         }
 
-        ScEEParseEntry* pE = pList->Last();
+        ScEEParseEntry* pE = maList.back();
         NewActEntry( pE );      // neuer freifliegender pActEntry
         xLockedList = new ScRangeList;
     }
@@ -1121,8 +1036,8 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
         if ( pInfo->nToken == HTML_TABLE_ON )
         {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
             const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-            USHORT nArrLen = pOptions->Count();
-            for ( USHORT i = 0; i < nArrLen; i++ )
+            sal_uInt16 nArrLen = pOptions->Count();
+            for ( sal_uInt16 i = 0; i < nArrLen; i++ )
             {
                 const HTMLOption* pOption = (*pOptions)[i];
                 switch( pOption->GetToken() )
@@ -1133,7 +1048,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
                     }
                     break;
                     case HTML_O_BORDER:
-                        bBorderOn = ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
+                        //BorderOn is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
                     case HTML_O_ID:
                         aTabName.Assign( pOption->GetString() );
@@ -1143,8 +1058,8 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
         }
     }
     nTable = ++nMaxTable;
-    bFirstRow = TRUE;
-    nFirstTableCell = pList->Count();
+    bFirstRow = true;
+    nFirstTableCell = maList.size();
 
     pLocalColOffset = new ScHTMLColOffset;
     MakeColNoRef( pLocalColOffset, nColOffsetStart, 0, 0, 0 );
@@ -1159,7 +1074,7 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
         TableRowOff( pInfo );      // das optionale TableRowOff war nicht
     if ( !nTableLevel )
     {
-        DBG_ERROR( "Dummbatz-Dok! </TABLE> ohne oeffnendes <TABLE>" );
+        OSL_FAIL( "Dummbatz-Dok! </TABLE> ohne oeffnendes <TABLE>" );
         return ;
     }
     if ( --nTableLevel > 0 )
@@ -1172,7 +1087,7 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
             if ( nRows > 1 )
             {   // Groesse der Tabelle an dieser Position eintragen
                 SCROW nRow = pS->nRowCnt;
-                USHORT nTab = pS->nTable;
+                sal_uInt16 nTab = pS->nTable;
                 if ( !pTables )
                     pTables = new Table;
                 // Hoehen der aeusseren Table
@@ -1212,12 +1127,12 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                     {   // aussen
                         for ( SCROW j=0; j < nRowSpan; j++ )
                         {
-                            ULONG nRowKey = nRow + j;
-                            SCROW nR = (SCROW)(ULONG)pTab1->Get( nRowKey );
+                            sal_uLong nRowKey = nRow + j;
+                            SCROW nR = (SCROW)(sal_uLong)pTab1->Get( nRowKey );
                             if ( !nR )
-                                pTab1->Insert( nRowKey, (void*) nRowsPerRow1 );
+                                pTab1->Insert( nRowKey, (void*)(sal_IntPtr)nRowsPerRow1 );
                             else if ( nRowsPerRow1 > nR )
-                                pTab1->Replace( nRowKey, (void*) nRowsPerRow1 );
+                                pTab1->Replace( nRowKey, (void*)(sal_IntPtr)nRowsPerRow1 );
                                 //2do: wie geht das noch besser?
                             else if ( nRowsPerRow1 < nR && nRowSpan == 1
                               && nTable == nMaxTable )
@@ -1226,11 +1141,11 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                                 nR += nAdd;
                                 if ( (nR % nRows) == 0 )
                                 {   // nur wenn abbildbar
-                                    SCROW nR2 = (SCROW)(ULONG)pTab1->Get( nRowKey+1 );
+                                    SCROW nR2 = (SCROW)(sal_uLong)pTab1->Get( nRowKey+1 );
                                     if ( nR2 > nAdd )
                                     {   // nur wenn wirklich Platz
-                                        pTab1->Replace( nRowKey, (void*) nR );
-                                        pTab1->Replace( nRowKey+1, (void*) (nR2 - nAdd) );
+                                        pTab1->Replace( nRowKey, (void*)(sal_IntPtr)nR );
+                                        pTab1->Replace( nRowKey+1, (void*)(sal_IntPtr)(nR2 - nAdd) );
                                         nRowsPerRow2 = nR / nRows;
                                     }
                                 }
@@ -1246,12 +1161,12 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                         }
                         for ( SCROW j=0; j < nRows; j++ )
                         {
-                            ULONG nRowKey = nRow + j;
-                            SCROW nR = (SCROW)(ULONG)pTab2->Get( nRowKey );
+                            sal_uLong nRowKey = nRow + j;
+                            SCROW nR = (SCROW)(sal_uLong)pTab2->Get( nRowKey );
                             if ( !nR )
-                                pTab2->Insert( nRowKey, (void*) nRowsPerRow2 );
+                                pTab2->Insert( nRowKey, (void*)(sal_IntPtr)nRowsPerRow2 );
                             else if ( nRowsPerRow2 > nR )
-                                pTab2->Replace( nRowKey, (void*) nRowsPerRow2 );
+                                pTab2->Replace( nRowKey, (void*)(sal_IntPtr)nRowsPerRow2 );
                         }
                     }
                 }
@@ -1263,10 +1178,10 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                 pE->nWidth = nTableWidth;
             else if ( pE->nWidth < nTableWidth )
             {
-                USHORT nOldOffset = pE->nOffset + pE->nWidth;
-                USHORT nNewOffset = pE->nOffset + nTableWidth;
+                sal_uInt16 nOldOffset = pE->nOffset + pE->nWidth;
+                sal_uInt16 nNewOffset = pE->nOffset + nTableWidth;
                 ModifyOffset( pS->pLocalColOffset, nOldOffset, nNewOffset, nOffsetTolerance );
-                USHORT nTmp = nNewOffset - pE->nOffset - pE->nWidth;
+                sal_uInt16 nTmp = nNewOffset - pE->nOffset - pE->nWidth;
                 pE->nWidth = nNewOffset - pE->nOffset;
                 pS->nTableWidth = pS->nTableWidth + nTmp;
                 if ( pS->nColOffset >= nOldOffset )
@@ -1294,8 +1209,8 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
             pActEntry = pE;
             delete pS;
         }
-        bTabInTabCell = TRUE;
-        bInCell = TRUE;
+        bTabInTabCell = sal_True;
+        bInCell = sal_True;
     }
     else
     {   // einfache Table beendet
@@ -1316,14 +1231,11 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
 
 void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
 {
-    if ( !pActEntry->pImageList )
-        pActEntry->pImageList = new ScHTMLImageList;
-    ScHTMLImageList* pIL = pActEntry->pImageList;
     ScHTMLImage* pImage = new ScHTMLImage;
-    pIL->Insert( pImage, LIST_APPEND );
+    pActEntry->maImageList.push_back( pImage );
     const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-    USHORT nArrLen = pOptions->Count();
-    for ( USHORT i = 0; i < nArrLen; i++ )
+    sal_uInt16 nArrLen = pOptions->Count();
+    for ( sal_uInt16 i = 0; i < nArrLen; i++ )
     {
         const HTMLOption* pOption = (*pOptions)[i];
         switch( pOption->GetToken() )
@@ -1371,7 +1283,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
         return ;
     }
 
-    USHORT nFormat;
+    sal_uInt16 nFormat;
     Graphic* pGraphic = new Graphic;
     GraphicFilter* pFilter = GraphicFilter::GetGraphicFilter();
     if ( GRFILTER_OK != GraphicFilter::LoadGraphic( pImage->aURL, pImage->aFilterName,
@@ -1382,7 +1294,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
     }
     if ( !pActEntry->bHasGraphic )
     {   // discard any ALT text in this cell if we have any image
-        pActEntry->bHasGraphic = TRUE;
+        pActEntry->bHasGraphic = sal_True;
         pActEntry->aAltText.Erase();
     }
     pImage->aFilterName = pFilter->GetImportFormatName( nFormat );
@@ -1393,11 +1305,12 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
         pImage->aSize = pDefaultDev->LogicToPixel( pGraphic->GetPrefSize(),
             pGraphic->GetPrefMapMode() );
     }
-    if ( pIL->Count() > 0 )
+    if ( pActEntry->maImageList.size() > 0 )
     {
         long nWidth = 0;
-        for ( ScHTMLImage* pI = pIL->First(); pI; pI = pIL->Next() )
+        for ( sal_uInt32 i=0; i < pActEntry->maImageList.size(); ++i )
         {
+            ScHTMLImage* pI = &pActEntry->maImageList[ i ];
             if ( pI->nDir & nHorizontal )
                 nWidth += pI->aSize.Width() + 2 * pI->aSpace.X();
             else
@@ -1406,7 +1319,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
         if ( pActEntry->nWidth
           && (nWidth + pImage->aSize.Width() + 2 * pImage->aSpace.X()
                 >= pActEntry->nWidth) )
-            pIL->Last()->nDir = nVertical;
+            pActEntry->maImageList.back().nDir = nVertical;
     }
 }
 
@@ -1414,15 +1327,15 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
 void ScHTMLLayoutParser::ColOn( ImportInfo* pInfo )
 {
     const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-    USHORT nArrLen = pOptions->Count();
-    for ( USHORT i = 0; i < nArrLen; i++ )
+    sal_uInt16 nArrLen = pOptions->Count();
+    for ( sal_uInt16 i = 0; i < nArrLen; i++ )
     {
         const HTMLOption* pOption = (*pOptions)[i];
         switch( pOption->GetToken() )
         {
             case HTML_O_WIDTH:
             {
-                USHORT nVal = GetWidthPixel( pOption );
+                sal_uInt16 nVal = GetWidthPixel( pOption );
                 MakeCol( pLocalColOffset, nColOffset, nVal, 0, 0 );
                 nColOffset = nColOffset + nVal;
             }
@@ -1432,23 +1345,23 @@ void ScHTMLLayoutParser::ColOn( ImportInfo* pInfo )
 }
 
 
-USHORT ScHTMLLayoutParser::GetWidthPixel( const HTMLOption* pOption )
+sal_uInt16 ScHTMLLayoutParser::GetWidthPixel( const HTMLOption* pOption )
 {
     const String& rOptVal = pOption->GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
     {   // Prozent
-        USHORT nW = (nTableWidth ? nTableWidth : (USHORT) aPageSize.Width());
-        return (USHORT)((pOption->GetNumber() * nW) / 100);
+        sal_uInt16 nW = (nTableWidth ? nTableWidth : (sal_uInt16) aPageSize.Width());
+        return (sal_uInt16)((pOption->GetNumber() * nW) / 100);
     }
     else
     {
         if ( rOptVal.Search('*') != STRING_NOTFOUND )
         {   // relativ zu was?!?
-//2do: ColArray aller relativen Werte sammeln und dann MakeCol
+            //todo: ColArray aller relativen Werte sammeln und dann MakeCol
             return 0;
         }
         else
-            return (USHORT)pOption->GetNumber();    // Pixel
+            return (sal_uInt16)pOption->GetNumber();    // Pixel
     }
 }
 
@@ -1456,8 +1369,8 @@ USHORT ScHTMLLayoutParser::GetWidthPixel( const HTMLOption* pOption )
 void ScHTMLLayoutParser::AnchorOn( ImportInfo* pInfo )
 {
     const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-    USHORT nArrLen = pOptions->Count();
-    for ( USHORT i = 0; i < nArrLen; i++ )
+    sal_uInt16 nArrLen = pOptions->Count();
+    for ( sal_uInt16 i = 0; i < nArrLen; i++ )
     {
         const HTMLOption* pOption = (*pOptions)[i];
         switch( pOption->GetToken() )
@@ -1472,7 +1385,7 @@ void ScHTMLLayoutParser::AnchorOn( ImportInfo* pInfo )
 }
 
 
-BOOL ScHTMLLayoutParser::IsAtBeginningOfText( ImportInfo* pInfo )
+sal_Bool ScHTMLLayoutParser::IsAtBeginningOfText( ImportInfo* pInfo )
 {
     ESelection& rSel = pActEntry->aSel;
     return rSel.nStartPara == rSel.nEndPara &&
@@ -1486,8 +1399,8 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
     if ( IsAtBeginningOfText( pInfo ) )
     {   // nur am Anfang des Textes, gilt dann fuer gesamte Zelle
         const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-        USHORT nArrLen = pOptions->Count();
-        for ( USHORT i = 0; i < nArrLen; i++ )
+        sal_uInt16 nArrLen = pOptions->Count();
+        for ( sal_uInt16 i = 0; i < nArrLen; i++ )
         {
             const HTMLOption* pOption = (*pOptions)[i];
             switch( pOption->GetToken() )
@@ -1513,7 +1426,7 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
                 break;
                 case HTML_O_SIZE :
                 {
-                    USHORT nSize = (USHORT) pOption->GetNumber();
+                    sal_uInt16 nSize = (sal_uInt16) pOption->GetNumber();
                     if ( nSize == 0 )
                         nSize = 1;
                     else if ( nSize > SC_HTML_FONTSIZES )
@@ -1537,7 +1450,7 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
 
 void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
 {
-    BOOL bSetLastToken = TRUE;
+    sal_Bool bSetLastToken = sal_True;
     switch ( pInfo->nToken )
     {
         case HTML_META:
@@ -1552,7 +1465,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         break;
         case HTML_TITLE_ON:
         {
-            bInTitle = TRUE;
+            bInTitle = sal_True;
             aString.Erase();
         }
         break;
@@ -1568,7 +1481,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
                     uno::UNO_QUERY_THROW);
                 xDPS->getDocumentProperties()->setTitle(aString);
             }
-            bInTitle = FALSE;
+            bInTitle = false;
         }
         break;
         case HTML_TABLE_ON:
@@ -1585,7 +1498,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         {
             if ( bInCell )
                 CloseEntry( pInfo );
-            // bInCell nicht TRUE setzen, das macht TableDataOn
+            // bInCell nicht sal_True setzen, das macht TableDataOn
             pActEntry->aItemSet.Put(
                 SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT) );
         }   // fall thru
@@ -1622,8 +1535,8 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         break;
         case HTML_PARABREAK_OFF:
         {   // nach einem Image geht es vertikal weiter
-            if ( pActEntry->pImageList && pActEntry->pImageList->Count() > 0 )
-                pActEntry->pImageList->Last()->nDir = nVertical;
+            if ( pActEntry->maImageList.size() > 0 )
+                pActEntry->maImageList.back().nDir = nVertical;
         }
         break;
         case HTML_ANCHOR_ON:
@@ -1638,7 +1551,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         break;
         case HTML_BIGPRINT_ON :
         {
-//2do: aktuelle Fontgroesse merken und einen groesser
+            //tpdo: aktuelle Fontgroesse merken und einen groesser
             if ( IsAtBeginningOfText( pInfo ) )
                 pActEntry->aItemSet.Put( SvxFontHeightItem(
                     maFontHeights[3], 100, ATTR_FONT_HEIGHT ) );
@@ -1646,7 +1559,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         break;
         case HTML_SMALLPRINT_ON :
         {
-//2do: aktuelle Fontgroesse merken und einen kleiner
+            //todo: aktuelle Fontgroesse merken und einen kleiner
             if ( IsAtBeginningOfText( pInfo ) )
                 pActEntry->aItemSet.Put( SvxFontHeightItem(
                     maFontHeights[0], 100, ATTR_FONT_HEIGHT ) );
@@ -1699,7 +1612,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         break;
         default:
         {   // nLastToken nicht setzen!
-            bSetLastToken = FALSE;
+            bSetLastToken = false;
         }
     }
     if ( bSetLastToken )
@@ -1866,7 +1779,8 @@ private:
 // ----------------------------------------------------------------------------
 
 ScHTMLTableMap::ScHTMLTableMap( ScHTMLTable& rParentTable ) :
-    mrParentTable( rParentTable )
+    mrParentTable(rParentTable),
+    mpCurrTable(NULL)
 {
 }
 
@@ -1987,7 +1901,12 @@ ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const ImportInfo& rInfo, bo
     CreateNewEntry( rInfo );
 }
 
-ScHTMLTable::ScHTMLTable( SfxItemPool& rPool, EditEngine& rEditEngine, ScEEParseList& rEEParseList, ScHTMLTableId& rnUnusedId ) :
+ScHTMLTable::ScHTMLTable(
+    SfxItemPool& rPool,
+    EditEngine& rEditEngine,
+    ::std::vector< ScEEParseEntry* >& rEEParseList,
+    ScHTMLTableId& rnUnusedId
+) :
     mpParentTable( 0 ),
     maTableId( rnUnusedId ),
     maTableItemSet( rPool ),
@@ -2020,8 +1939,10 @@ const SfxItemSet& ScHTMLTable::GetCurrItemSet() const
 ScHTMLSize ScHTMLTable::GetSpan( const ScHTMLPos& rCellPos ) const
 {
     ScHTMLSize aSpan( 1, 1 );
-    ScRange* pRange = 0;
-    if( ((pRange = maVMergedCells.Find( rCellPos.MakeAddr() )) != 0) || ((pRange = maHMergedCells.Find( rCellPos.MakeAddr() )) != 0) )
+    const ScRange* pRange = NULL;
+    if(  ( (pRange = maVMergedCells.Find( rCellPos.MakeAddr() ) ) != 0)
+      || ( (pRange = maHMergedCells.Find( rCellPos.MakeAddr() ) ) != 0)
+      )
         aSpan.Set( pRange->aEnd.Col() - pRange->aStart.Col() + 1, pRange->aEnd.Row() - pRange->aStart.Row() + 1 );
     return aSpan;
 }
@@ -2176,7 +2097,7 @@ void ScHTMLTable::BodyOn( const ImportInfo& rInfo )
     bool bPushed = PushEntry( rInfo );
     if( !mpParentTable )
     {
-        // #108269# do not start new row, if nothing (no title) precedes the body.
+        // do not start new row, if nothing (no title) precedes the body.
         if( bPushed || !mbRowOn )
             ImplRowOn();
         if( bPushed || !mbDataOn )
@@ -2269,13 +2190,10 @@ void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos
     {
         const SCCOL nLastCol = maSize.mnCols - 1;
         const SCROW nLastRow = maSize.mnRows - 1;
-        const sal_uInt16 nOuterLine = DEF_LINE_WIDTH_2;
-        const sal_uInt16 nInnerLine = DEF_LINE_WIDTH_0;
-        SvxBorderLine aOuterLine, aInnerLine;
-        aOuterLine.SetColor( Color( COL_BLACK ) );
-        aOuterLine.SetOutWidth( nOuterLine );
-        aInnerLine.SetColor( Color( COL_BLACK ) );
-        aInnerLine.SetOutWidth( nInnerLine );
+        const long nOuterLine = DEF_LINE_WIDTH_2;
+        const long nInnerLine = DEF_LINE_WIDTH_0;
+        SvxBorderLine aOuterLine( NULL, nOuterLine, ::editeng::SOLID );
+        SvxBorderLine aInnerLine( NULL, nInnerLine, ::editeng::SOLID );
         SvxBoxItem aBorderItem( ATTR_BORDER );
 
         for( SCCOL nCol = 0; nCol <= nLastCol; ++nCol )
@@ -2338,7 +2256,7 @@ void ScHTMLTable::ImplPushEntryToList( ScHTMLEntryList& rEntryList, ScHTMLEntryP
     // HTML entry list does not own the entries
     rEntryList.push_back( rxEntry.get() );
     // mrEEParseList (reference to member of ScEEParser) owns the entries
-    mrEEParseList.Insert( rxEntry.release(), LIST_APPEND );
+    mrEEParseList.push_back( rxEntry.release() );
 }
 
 bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rxEntry )
@@ -2603,8 +2521,11 @@ void ScHTMLTable::FillEmptyCells()
         aIter->FillEmptyCells();
 
     // insert the final vertically merged ranges into maUsedCells
-    for( const ScRange* pRange = maVMergedCells.First(); pRange; pRange = maVMergedCells.Next() )
+    for ( size_t i = 0, nRanges = maVMergedCells.size(); i < nRanges; ++i )
+    {
+        ScRange* pRange = maVMergedCells[ i ];
         maUsedCells.Join( *pRange );
+    }
 
     for( ScAddress aAddr; aAddr.Row() < maSize.mnRows; aAddr.IncRow() )
     {
@@ -2750,7 +2671,7 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
             }
             else
             {
-                // #111667# fill up incomplete entry lists
+                // fill up incomplete entry lists
                 SCROW nFirstUnusedRow = aCellDocPos.mnRow + aCellDocSize.mnRows;
                 while( aEntryDocPos.mnRow < nFirstUnusedRow )
                 {
@@ -2768,7 +2689,12 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
 
 // ============================================================================
 
-ScHTMLGlobalTable::ScHTMLGlobalTable( SfxItemPool& rPool, EditEngine& rEditEngine, ScEEParseList& rEEParseList, ScHTMLTableId& rnUnusedId ) :
+ScHTMLGlobalTable::ScHTMLGlobalTable(
+    SfxItemPool& rPool,
+    EditEngine& rEditEngine,
+    ::std::vector< ScEEParseEntry* >& rEEParseList,
+    ScHTMLTableId& rnUnusedId
+) :
     ScHTMLTable( rPool, rEditEngine, rEEParseList, rnUnusedId )
 {
 }
@@ -2794,7 +2720,7 @@ ScHTMLQueryParser::ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc 
     mnUnusedId( SC_HTML_GLOBAL_TABLE ),
     mbTitleOn( false )
 {
-    mxGlobTable.reset( new ScHTMLGlobalTable( *pPool, *pEdit, *pList, mnUnusedId ) );
+    mxGlobTable.reset( new ScHTMLGlobalTable( *pPool, *pEdit, maList, mnUnusedId ) );
     mpCurrTable = mxGlobTable.get();
 }
 
@@ -2802,7 +2728,7 @@ ScHTMLQueryParser::~ScHTMLQueryParser()
 {
 }
 
-ULONG ScHTMLQueryParser::Read( SvStream& rStrm, const String& rBaseURL  )
+sal_uLong ScHTMLQueryParser::Read( SvStream& rStrm, const String& rBaseURL  )
 {
     SvKeyValueIteratorRef xValues;
     SvKeyValueIterator* pAttributes = 0;
@@ -2830,7 +2756,7 @@ ULONG ScHTMLQueryParser::Read( SvStream& rStrm, const String& rBaseURL  )
 
     Link aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScHTMLQueryParser, HTMLImportHdl ) );
-    ULONG nErr = pEdit->Read( rStrm, rBaseURL, EE_FORMAT_HTML, pAttributes );
+    sal_uLong nErr = pEdit->Read( rStrm, rBaseURL, EE_FORMAT_HTML, pAttributes );
     pEdit->SetImportHdl( aOldLink );
 
     mxGlobTable->Recalc();

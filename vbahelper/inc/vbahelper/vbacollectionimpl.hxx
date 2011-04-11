@@ -151,7 +151,7 @@ public:
 typedef ::cppu::WeakImplHelper3< css::container::XNameAccess, css::container::XIndexAccess, css::container::XEnumerationAccess > XNamedCollectionHelper_BASE;
 
 template< typename Ifc1 >
-class VBAHELPER_DLLPUBLIC XNamedObjectCollectionHelper : public XNamedCollectionHelper_BASE
+class XNamedObjectCollectionHelper : public XNamedCollectionHelper_BASE
 {
 public:
 typedef std::vector< css::uno::Reference< Ifc1 > >  XNamedVec;
@@ -305,8 +305,8 @@ public:
             if ( ( Index1 >>= nIndex ) != sal_True )
             {
                 rtl::OUString message;
-                message = rtl::OUString::createFromAscii(
-                    "Couldn't convert index to Int32");
+                message = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Couldn't convert index to Int32"));
                 throw  css::lang::IndexOutOfBoundsException( message,
                     css::uno::Reference< css::uno::XInterface >() );
             }
@@ -349,7 +349,7 @@ public:
 };
 
 template <typename Ifc> // where Ifc must implement XCollectionTest
-class VBAHELPER_DLLPUBLIC CollTestImplHelper :  public ScVbaCollectionBase< ::cppu::WeakImplHelper1< Ifc > >
+class CollTestImplHelper :  public ScVbaCollectionBase< ::cppu::WeakImplHelper1< Ifc > >
 {
 typedef ScVbaCollectionBase< ::cppu::WeakImplHelper1< Ifc >  > ImplBase1;
 

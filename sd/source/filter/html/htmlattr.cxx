@@ -44,7 +44,6 @@
 SdHtmlAttrPreview::SdHtmlAttrPreview( Window* pParent, const ResId& rResId )
 :Control( pParent, rResId )
 {
-//    SetMapMode( MAP_100TH_MM );
 }
 
 // =====================================================================

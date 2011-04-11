@@ -55,7 +55,6 @@ protected:
 
     bool isSystemDependentWindowPeer() const { return m_bWHWND; }
 
-    virtual ::osl::SolarMutex& GetMutexImpl() = 0;
     virtual Window* GetWindowImpl() = 0;
     virtual ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl() = 0;
 
@@ -92,11 +91,10 @@ public:
 //  class VCLXTopWindow
 //  ----------------------------------------------------
 
-class VCLXTopWindow: public VCLXTopWindow_Base,
+class TOOLKIT_DLLPUBLIC VCLXTopWindow: public VCLXTopWindow_Base,
                      public VCLXContainer
 {
 protected:
-    virtual osl::SolarMutex& GetMutexImpl();
     virtual Window* GetWindowImpl();
     virtual ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl();
 

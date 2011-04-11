@@ -140,15 +140,15 @@ public class SwXStyle extends TestCase {
             oStyle = (XStyle) AnyConverter.toObject(
                     new Type(XStyle.class),oSFIA.getByIndex(10));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error: exception occured.");
+            log.println("Error: exception occurred.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
-            log.println("Error: exception occured.");
+            log.println("Error: exception occurred.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error: exception occured.");
+            log.println("Error: exception occurred.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         }
@@ -161,7 +161,7 @@ public class SwXStyle extends TestCase {
                 oMSF.createInstance("com.sun.star.style.CharacterStyle");
             oMyStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, oInt);
         } catch ( com.sun.star.uno.Exception e ) {
-            log.println("Error: exception occured.");
+            log.println("Error: exception occurred.");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't create environment ", e );
         }

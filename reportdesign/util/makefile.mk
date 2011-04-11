@@ -230,3 +230,23 @@ DEF3NAME=$(SHL3TARGET)
 .INCLUDE : target.mk
 
 
+
+ALLTAR : $(MISC)/rpt.component $(MISC)/rptui.component $(MISC)/rptxml.component
+
+$(MISC)/rpt.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        rpt.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt rpt.component
+
+$(MISC)/rptui.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        rptui.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt rptui.component
+
+$(MISC)/rptxml.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        rptxml.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL3TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt rptxml.component

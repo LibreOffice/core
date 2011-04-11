@@ -62,6 +62,9 @@
  Jan 2005           Created
  ************************************************************************/
 
+#include <memory>
+
+#include "clone.hxx"
 #include "lwpcharborderoverride.hxx"
 #include "lwpborderstuff.hxx"
 #include "lwpmargins.hxx"
@@ -69,6 +72,19 @@
 LwpCharacterBorderOverride::LwpCharacterBorderOverride() :
 m_pBorderStuff(new LwpBorderStuff), m_pMargins(new LwpMargins)
 {
+}
+
+LwpCharacterBorderOverride::LwpCharacterBorderOverride(LwpCharacterBorderOverride const& rOther)
+    : LwpOverride(rOther)
+    , m_pBorderStuff(0)
+    , m_pMargins(0)
+    , m_nAboveWidth(rOther.m_nAboveWidth)
+    , m_nBelowWidth(rOther.m_nBelowWidth)
+{
+    std::auto_ptr<LwpBorderStuff> pBorderStuff(::clone(rOther.m_pBorderStuff));
+    std::auto_ptr<LwpMargins> pMargins(::clone(rOther.m_pMargins));
+    m_pBorderStuff = pBorderStuff.release();
+    m_pMargins = pMargins.release();
 }
 
 LwpCharacterBorderOverride::~LwpCharacterBorderOverride()
@@ -81,6 +97,11 @@ LwpCharacterBorderOverride::~LwpCharacterBorderOverride()
     {
         delete m_pMargins;
     }
+}
+
+LwpCharacterBorderOverride* LwpCharacterBorderOverride::clone() const
+{
+    return new LwpCharacterBorderOverride(*this);
 }
 
 void LwpCharacterBorderOverride::Read(LwpObjectStream* pStrm)

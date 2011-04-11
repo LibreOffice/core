@@ -37,6 +37,8 @@
 #include "diagnose_ex.h"
 #include <osl/thread.h>
 
+#include <o3tl/compat_functional.hxx>
+
 //........................................................................
 namespace connectivity
 {
@@ -83,7 +85,7 @@ namespace connectivity
                     catch(const Exception& e)
                     {
                         OSL_UNUSED( e );
-                        OSL_ENSURE(0,"Could not dispose OutputStream");
+                        OSL_FAIL("Could not dispose OutputStream");
                     }
                     m_xOutputStream.clear();
                 }
@@ -91,7 +93,7 @@ namespace connectivity
             catch(Exception& ex)
             {
                 OSL_UNUSED( ex );
-                OSL_ENSURE(0,"Exception catched!");
+                OSL_FAIL("Exception catched!");
             }
         }
         // -----------------------------------------------------------------------------
@@ -136,7 +138,7 @@ namespace connectivity
         ::rtl::OUString StorageContainer::removeOldURLPrefix(const ::rtl::OUString& _sURL)
         {
             ::rtl::OUString sRet = _sURL;
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
             sal_Int32 nIndex = sRet.lastIndexOf('\\');
 #else
             sal_Int32 nIndex = sRet.lastIndexOf('/');
@@ -156,7 +158,7 @@ namespace connectivity
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
-                OSL_ENSURE(0,"ExceptionClear");
+                OSL_FAIL("ExceptionClear");
             }
             ::rtl::OUString aStr;
             if ( jstr )
@@ -173,7 +175,7 @@ namespace connectivity
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
-                OSL_ENSURE(0,"ExceptionClear");
+                OSL_FAIL("ExceptionClear");
             }
             return aStr;
         }
@@ -185,9 +187,9 @@ namespace connectivity
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
-                                        ::std::compose1(
+                                        ::o3tl::compose1(
                                             ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
-                                            ,::std::compose1(::std::select1st<TStorageURLPair>(),::std::compose1(::std::select1st<TStorages::mapped_type>(),::std::select2nd<TStorages::value_type>())))
+                                            ,::o3tl::compose1(::o3tl::select1st<TStorageURLPair>(),::o3tl::compose1(::o3tl::select1st<TStorages::mapped_type>(),::o3tl::select2nd<TStorages::value_type>())))
                     );
             if ( aFind == rMap.end() )
             {
@@ -216,9 +218,9 @@ namespace connectivity
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
-                                        ::std::compose1(
+                                        ::o3tl::compose1(
                                             ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
-                                            ,::std::compose1(::std::select1st<TStorageURLPair>(),::std::compose1(::std::select1st<TStorages::mapped_type>(),::std::select2nd<TStorages::value_type>())))
+                                            ,::o3tl::compose1(::o3tl::select1st<TStorageURLPair>(),::o3tl::compose1(::o3tl::select1st<TStorages::mapped_type>(),::o3tl::select2nd<TStorages::value_type>())))
                     );
             if ( aFind != rMap.end() )
                 sKey = aFind->first;
@@ -311,7 +313,7 @@ namespace connectivity
                             if ( _nMode < 16 )
                                 sMessage += "0";
                             sMessage += ::rtl::OString::valueOf( _nMode, 16 ).toAsciiUpperCase();
-                            OSL_ENSURE( false, sMessage.getStr() );
+                            OSL_FAIL( sMessage.getStr() );
 #endif
                             StorageContainer::throwJavaException(e,env);
                         }

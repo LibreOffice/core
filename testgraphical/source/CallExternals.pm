@@ -489,7 +489,7 @@ sub ExecSQL($)
     ($error, @aResult) = callphp(getPHPExecutable(), $sSQLDirect, singleQuote($sSQL));
     if ($error)
     {
-        log_print ("ExecSQL: An Error occured.\n");
+        log_print ("ExecSQL: An Error occurred.\n");
         log_print ("PHP: " . getPHPExecutable() . "\n");
         log_print ("SQL Statement: " . singleQuote($sSQL) . "\n");
         # exit(1);

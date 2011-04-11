@@ -57,10 +57,6 @@
  * @file
  * Style container,which response for special style,ie. text style.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
 #ifndef     _XFSTYLECONTAINER_HXX
 #define     _XFSTYLECONTAINER_HXX
 
@@ -76,7 +72,7 @@ class IXFStyle;
 class XFStyleContainer : public IXFObject
 {
 public:
-    XFStyleContainer(){};
+    XFStyleContainer(){}
 
     XFStyleContainer(const rtl::OUString& strStyleNamePrefix);
 

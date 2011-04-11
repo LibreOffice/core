@@ -57,12 +57,12 @@
 #include <stdio.h>
 #endif
 
-KDESalFrame::KDESalFrame( SalFrame* pParent, ULONG nState ) :
+KDESalFrame::KDESalFrame( SalFrame* pParent, sal_uLong nState ) :
     X11SalFrame( pParent, nState )
 {
 }
 
-void KDESalFrame::Show( BOOL bVisible, BOOL bNoActivate )
+void KDESalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
 {
     if ( !GetParent() && ! (GetStyle() & SAL_FRAME_STYLE_INTRO) )
     {
@@ -87,13 +87,8 @@ static OUString readEntryUntranslated( KConfigGroup *pGroup, const char *pKey )
     return OUString::createFromAscii( (const char *) pGroup->readEntryUntranslated( pKey ).toAscii() );
 }
 
-/** Helper function to read color from KConfig configuration repository.
-*/
-static Color readColor( KConfigGroup *pGroup, const char *pKey )
-{
-    return toColor( pGroup->readEntry( pKey, QColor(Qt::white) ) );
-}
-
+#if 0
+#endif
 /** Helper function to add information to Font from QFont.
 
     Mostly grabbed from the Gtk+ vclplug (salnativewidgets-gtk.cxx).
@@ -180,7 +175,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
 void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 {
     StyleSettings style( rSettings.GetStyleSettings() );
-    BOOL bSetTitleFont = false;
+    bool bSetTitleFont = false;
 
     // General settings
     QPalette pal = kapp->palette();
@@ -275,9 +270,9 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     {
         Color aColor2 = style.GetLightColor();
         style.
-            SetCheckedColor( Color( (BYTE)(((USHORT)aBack.GetRed()+(USHORT)aColor2.GetRed())/2),
-                        (BYTE)(((USHORT)aBack.GetGreen()+(USHORT)aColor2.GetGreen())/2),
-                        (BYTE)(((USHORT)aBack.GetBlue()+(USHORT)aColor2.GetBlue())/2)
+            SetCheckedColor( Color( (sal_uInt8)(((sal_uInt16)aBack.GetRed()+(sal_uInt16)aColor2.GetRed())/2),
+                        (sal_uInt8)(((sal_uInt16)aBack.GetGreen()+(sal_uInt16)aColor2.GetGreen())/2),
+                        (sal_uInt8)(((sal_uInt16)aBack.GetBlue()+(sal_uInt16)aColor2.GetBlue())/2)
                         ) );
     }
 
@@ -350,6 +345,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Scroll bar size
     style.SetScrollBarSize( kapp->style()->pixelMetric( QStyle::PM_ScrollBarExtent ) );
+    style.SetMinThumbSize( kapp->style()->pixelMetric( QStyle::PM_ScrollBarSliderMin ));
 
     rSettings.SetStyleSettings( style );
 }

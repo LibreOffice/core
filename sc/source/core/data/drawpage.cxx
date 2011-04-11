@@ -44,7 +44,7 @@
 
 // -----------------------------------------------------------------------
 
-ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, BOOL bMasterPage) :
+ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, bool bMasterPage) :
     FmFormPage(rNewModel, pBasic, bMasterPage)
 {
     SetSize( Size( LONG_MAX, LONG_MAX ) );
@@ -52,7 +52,7 @@ ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, BOOL bMasterPa
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScDrawPage::~ScDrawPage()
+ScDrawPage::~ScDrawPage()
 {
 }
 

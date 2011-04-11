@@ -103,7 +103,7 @@ uno::Sequence< ::rtl::OUString > OZipFileAccess::GetPatternsFromString_Impl( con
             }
             else
             {
-                OSL_ENSURE( sal_False, "The backslash is not guarded!\n" );
+                OSL_FAIL( "The backslash is not guarded!\n" );
                 aPattern[nInd] += ::rtl::OUString::valueOf( (sal_Unicode)'\\' );
             }
         }
@@ -277,11 +277,11 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::getElementNames()
     uno::Sequence< ::rtl::OUString > aNames( m_pZipFile->GetEntryHash().size() );
     sal_Int32 nLen = 0;
 
-    for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); aIter++ )
+    for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); ++aIter )
     {
         if ( aNames.getLength() < ++nLen )
         {
-            OSL_ENSURE( sal_False, "The size must be the same!\n" );
+            OSL_FAIL( "The size must be the same!\n" );
             aNames.realloc( nLen );
         }
 
@@ -290,7 +290,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::getElementNames()
 
     if ( aNames.getLength() != nLen )
     {
-        OSL_ENSURE( sal_False, "The size must be the same!\n" );
+        OSL_FAIL( "The size must be the same!\n" );
         aNames.realloc( nLen );
     }
 
@@ -362,7 +362,7 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
     // Code to compare strings by patterns
     uno::Sequence< ::rtl::OUString > aPattern = GetPatternsFromString_Impl( aPatternString );
 
-    for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); aIter++ )
+    for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); ++aIter )
     {
         if ( StringGoodForPattern_Impl( (*aIter).second.sPath, aPattern ) )
         {
@@ -444,15 +444,15 @@ void SAL_CALL OZipFileAccess::removeEventListener( const uno::Reference< lang::X
 uno::Sequence< ::rtl::OUString > SAL_CALL OZipFileAccess::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.packages.zip.ZipFileAccess");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.packages.zip.ZipFileAccess");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.packages.zip.ZipFileAccess") );
+    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.packages.zip.ZipFileAccess") );
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OZipFileAccess::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.package.zip.ZipFileAccess");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.package.zip.ZipFileAccess") );
 }
 
 //-------------------------------------------------------------------------

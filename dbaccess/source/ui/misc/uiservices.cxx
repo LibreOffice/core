@@ -118,28 +118,6 @@ extern "C" DBACCESS_DLLPUBLIC void SAL_CALL component_getImplementationEnvironme
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" DBACCESS_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
-                void* pServiceManager,
-                void* pRegistryKey
-            )
-{
-    if (pRegistryKey)
-    try
-    {
-        writeDBLoaderInfo(pRegistryKey);
-        return ::dbaui::OModuleRegistration::writeComponentInfos(
-            static_cast<XMultiServiceFactory*>(pServiceManager),
-            static_cast<XRegistryKey*>(pRegistryKey));
-    }
-    catch (InvalidRegistryException& )
-    {
-        OSL_ENSURE(sal_False, "DBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
-    }
-
-    return sal_False;
-}
-
-//---------------------------------------------------------------------------------------
 extern "C" DBACCESS_DLLPUBLIC void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

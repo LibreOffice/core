@@ -51,7 +51,7 @@ private:
         ::com::sun::star::xml::sax::XDocumentHandler> mxDocBuilder;
 
 public:
-    SvXMLMetaDocumentContext(SvXMLImport& rImport, USHORT nPrfx,
+    SvXMLMetaDocumentContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
         const rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::document::XDocumentProperties>& xDocProps,
@@ -60,7 +60,7 @@ public:
 
     virtual ~SvXMLMetaDocumentContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

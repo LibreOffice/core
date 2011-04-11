@@ -101,7 +101,7 @@ public:
     uno::Reference<XAccessible> GetAt(const awt::Point& rPoint) const;
 
     void DataChanged(const Rectangle& rVisRect);
-    void SetOffset(sal_Int32 nNewOffset);
+
 private:
     ScPreviewShell*         mpViewShell;
     ScAccessibleDocumentPagePreview* mpAccDoc;
@@ -212,7 +212,7 @@ void ScNotesChilds::Init(const Rectangle& rVisRect, sal_Int32 nOffset)
         mnOffset = nOffset;
         const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
 
-        mnParagraphs = AddNotes(rData, rVisRect, sal_False, maMarks);
+        mnParagraphs = AddNotes(rData, rVisRect, false, maMarks);
         mnParagraphs += AddNotes(rData, rVisRect, sal_True, maNotes);
     }
 }
@@ -228,7 +228,7 @@ struct ScParaFound
     ScParaFound(sal_Int32 nIndex) : mnIndex(nIndex) {}
     sal_Bool operator() (const ScAccNote& rNote)
     {
-        sal_Bool bResult(sal_False);
+        sal_Bool bResult(false);
         if (rNote.mnParaCount > mnIndex)
             bResult = sal_True;
         else
@@ -285,7 +285,7 @@ struct ScPointFound
     ScPointFound(const Point& rPoint) : maPoint(rPoint, Size(0, 0)), mnParagraphs(0) {}
     sal_Bool operator() (const ScAccNote& rNote)
     {
-        sal_Bool bResult(sal_False);
+        sal_Bool bResult(false);
         if (maPoint.IsInside(rNote.maRect))
             bResult = sal_True;
         else
@@ -356,7 +356,7 @@ sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
             aNote.mnParaCount = 1;
         ScAccNotes::iterator aItr = rOldNotes.begin();
         ScAccNotes::iterator aEndItr = rOldNotes.end();
-        sal_Bool bAddNote(sal_False);
+        sal_Bool bAddNote(false);
         for (sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex)
         {
             if (rData.GetNoteInRange(rVisRect, nIndex, bMark, aNote.maNoteCell, aNote.maRect))
@@ -428,7 +428,7 @@ sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
                 {
                     nParagraphs += aNote.mnParaCount;
                     rNewNotes.push_back(aNote);
-                    bAddNote = sal_False;
+                    bAddNote = false;
                 }
             }
         }
@@ -482,7 +482,7 @@ void ScNotesChilds::DataChanged(const Rectangle& rVisRect)
         mnParagraphs = CheckChanges(mpViewShell->GetLocationData(), rVisRect, sal_True, maMarks, aNewMarks, aOldParas, aNewParas);
         maMarks = aNewMarks;
         ScAccNotes aNewNotes;
-        mnParagraphs += CheckChanges(mpViewShell->GetLocationData(), rVisRect, sal_False, maNotes, aNewNotes, aOldParas, aNewParas);
+        mnParagraphs += CheckChanges(mpViewShell->GetLocationData(), rVisRect, false, maNotes, aNewNotes, aOldParas, aNewParas);
         maNotes = aNewNotes;
 
         std::for_each(aOldParas.begin(), aOldParas.end(), ScChildGone(mpAccDoc));
@@ -500,17 +500,6 @@ struct ScChangeOffset
             rNote.mpTextHelper->SetStartIndex(rNote.mpTextHelper->GetStartIndex() + mnDiff);
     }
 };
-
-void ScNotesChilds::SetOffset(sal_Int32 nNewOffset)
-{
-    sal_Int32 nDiff(nNewOffset - mnOffset);
-    if (nDiff != 0)
-    {
-        std::for_each(maMarks.begin(), maMarks.end(), ScChangeOffset(nDiff));
-        std::for_each(maNotes.begin(), maNotes.end(), ScChangeOffset(nDiff));
-        mnOffset = nNewOffset;
-    }
-}
 
 inline ScDocument* ScNotesChilds::GetDocument() const
 {
@@ -546,7 +535,7 @@ private:
 };
 
 ScIAccessibleViewForwarder::ScIAccessibleViewForwarder()
-    : mbValid(sal_False)
+    : mbValid(false)
 {
 }
 
@@ -668,7 +657,7 @@ struct ScShapeChildLess
 {
     sal_Bool operator()(const ScShapeChild& rChild1, const ScShapeChild& rChild2) const
     {
-      sal_Bool bResult(sal_False);
+      sal_Bool bResult(false);
       if (rChild1.mxShape.is() && rChild2.mxShape.is())
           bResult = (rChild1.mxShape.get() < rChild2.mxShape.get());
       return bResult;
@@ -772,7 +761,7 @@ void ScShapeChilds::SetDrawBroadcaster()
     {
         SfxBroadcaster* pDrawBC = mpViewShell->GetDocument()->GetDrawBroadcaster();
         if (pDrawBC)
-            StartListening(*pDrawBC, TRUE);
+            StartListening(*pDrawBC, sal_True);
     }
 }
 
@@ -792,21 +781,6 @@ void ScShapeChilds::Notify(SfxBroadcaster&, const SfxHint& rHint)
                     {
                     }
                     break;
-                    // no longer necessary
-/*                    case HINT_OBJINSERTED :    // Neues Zeichenobjekt eingefuegt
-                    {
-                        uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                        if (xShape.is())
-                            AddShape(xShape, pObj->GetLayer());
-                    }
-                    break;
-                    case HINT_OBJREMOVED :     // Zeichenobjekt aus Liste entfernt
-                    {
-                        uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                        if (xShape.is())
-                            RemoveShape(xShape, pObj->GetLayer());
-                    }
-                    break;*/
                     default :
                     {
                         // other events are not interesting
@@ -929,7 +903,7 @@ sal_Bool ScShapeChilds::ReplaceChild (::accessibility::AccessibleShape* /* pCurr
         throw (uno::RuntimeException)
 {
     DBG_ERRORFILE("should not be called in the page preview");
-    return sal_False;
+    return false;
 }
 
     ///=====  Internal  ========================================================
@@ -1047,7 +1021,7 @@ struct ScShapePointFound
     ScShapePointFound(const awt::Point& rPoint) : maPoint(VCLPoint(rPoint)) {}
     sal_Bool operator() (const ScShapeChild& rShape)
     {
-        sal_Bool bResult(sal_False);
+        sal_Bool bResult(false);
         if ((VCLRectangle(rShape.mpAccShape->getBounds())).IsInside(maPoint))
             bResult = sal_True;
         return bResult;
@@ -1133,9 +1107,9 @@ void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& 
     Window* pWin = mpViewShell->GetWindow();
     if (pPage && pWin)
     {
-        sal_Bool bForeAdded(sal_False);
-        sal_Bool bBackAdded(sal_False);
-        sal_Bool bControlAdded(sal_False);
+        sal_Bool bForeAdded(false);
+        sal_Bool bBackAdded(false);
+        sal_Bool bControlAdded(false);
         Rectangle aClippedPixelPaintRect(aPixelPaintRect);
         if (mpAccDoc)
         {
@@ -1200,144 +1174,6 @@ void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& 
             std::sort(maShapeRanges[nRangeId].maControls.begin(), maShapeRanges[nRangeId].maControls.end(),ScShapeChildLess());
     }
 }
-
-
-/*void ScShapeChilds::AddShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID)
-{
-    uno::Reference < XAccessible > xNew;
-    Window* pWin = mpViewShell->GetWindow();
-    if (pWin)
-    {
-        ScShapeRangeVec::iterator aEndItr = maShapeRanges.end();
-        ScShapeRangeVec::iterator aItr = maShapeRanges.begin();
-        sal_Bool bNotify(sal_False);
-        uno::Reference <XAccessible> xAcc;
-        while (aItr != aEndItr)
-        {
-            Rectangle aLogicPaintRect(pWin->PixelToLogic(aItr->maPixelRect, aItr->maMapMode));
-            Rectangle aRect(VCLPoint(xShape->getPosition()), VCLSize(xShape->getSize()));
-            if(!aRect.GetIntersection(aLogicPaintRect).IsEmpty())
-            {
-                ScShapeChild aShape;
-                aShape.mxShape = xShape;
-                switch (aLayerID)
-                {
-                    case SC_LAYER_INTERN:
-                    case SC_LAYER_FRONT:
-                    {
-                        SetAnchor(aShape);
-                        aItr->maForeShapes.push_back(aShape);
-                        std::sort(aItr->maForeShapes.begin(), aItr->maForeShapes.end(),ScShapeChildLess());
-
-                    }
-                    break;
-                    case SC_LAYER_BACK:
-                    {
-                        aItr->maBackShapes.push_back(aShape);
-                        std::sort(aItr->maBackShapes.begin(), aItr->maBackShapes.end(),ScShapeChildLess());
-                    }
-                    break;
-                    case SC_LAYER_CONTROLS:
-                    {
-                        SetAnchor(aShape);
-                        aItr->maControls.push_back(aShape);
-                        std::sort(aItr->maControls.begin(), aItr->maControls.end(),ScShapeChildLess());
-                    }
-                    break;
-                    default:
-                    {
-                        DBG_ERRORFILE("I don't know this layer.");
-                    }
-                    break;
-                }
-                if (bNotify)
-                {
-                    xAcc = GetAccShape(aShape);
-                    AccessibleEventObject aEvent;
-                    aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
-                    aEvent.EventId = AccessibleEventId::CHILD;
-                    aEvent.NewValue <<= xAcc;
-                    mpAccDoc->CommitChange(aEvent);
-                    bNotify = sal_False;
-                }
-                xAcc = NULL;
-            }
-            ++aItr;
-        }
-    }
-}*/
-
-/*sal_Bool HaveToNotify(uno::Reference<XAccessible>& xAcc, ScShapeChildVec::iterator aItr)
-{
-    sal_Bool bResult(sal_False);
-    if (aItr->mpAccShape)
-    {
-        bResult = sal_True;
-        xAcc = aItr->mpAccShape;
-    }
-    else
-        DBG_ERRORFILE("No Accessible object found. Don't know how to notify.");
-    return bResult;
-}*/
-
-/*void ScShapeChilds::RemoveShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID)
-{
-    ScShapeRangeVec::iterator aEndItr = maShapeRanges.end();
-    ScShapeRangeVec::iterator aItr = maShapeRanges.begin();
-    ScShapeChildVec::iterator aEraseItr;
-    sal_Bool bNotify(sal_False);
-    uno::Reference <XAccessible> xAcc;
-    while (aItr != aEndItr)
-    {
-        switch (aLayerID)
-        {
-            case SC_LAYER_INTERN:
-            case SC_LAYER_FRONT:
-            {
-                if (FindShape(aItr->maForeShapes, xShape, aEraseItr))
-                {
-                    bNotify = HaveToNotify(xAcc, aEraseItr);
-                    aItr->maForeShapes.erase(aEraseItr);
-                }
-            }
-            break;
-            case SC_LAYER_BACK:
-            {
-                if (FindShape(aItr->maBackShapes, xShape, aEraseItr))
-                {
-                    bNotify = HaveToNotify(xAcc, aEraseItr);
-                    aItr->maBackShapes.erase(aEraseItr);
-                }
-            }
-            break;
-            case SC_LAYER_CONTROLS:
-            {
-                if (FindShape(aItr->maControls, xShape, aEraseItr))
-                {
-                    bNotify = HaveToNotify(xAcc, aEraseItr);
-                    aItr->maControls.erase(aEraseItr);
-                }
-            }
-            break;
-            default:
-            {
-                DBG_ERRORFILE("I don't know this layer.");
-            }
-            break;
-        }
-        if (bNotify)
-        {
-            AccessibleEventObject aEvent;
-            aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
-            aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.OldValue <<= xAcc;
-            mpAccDoc->CommitChange(aEvent);
-            bNotify = sal_False;
-        }
-        xAcc = NULL;
-        ++aItr;
-    }
-}*/
 
 SdrPage* ScShapeChilds::GetDrawPage() const
 {
@@ -1431,8 +1267,6 @@ ScAccessibleDocumentPagePreview::ScAccessibleDocumentPagePreview(
     if (pViewShell)
         pViewShell->AddAccessibilityObject(*this);
 
-//    GetNotesChilds(); not neccessary and reduces the creation performance
-//    GetShapeChilds();
 }
 
 ScAccessibleDocumentPagePreview::~ScAccessibleDocumentPagePreview(void)
@@ -1471,7 +1305,7 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
         mpViewShell = NULL;
     }
 
-    // #100593# no need to Dispose the AccessibleTextHelper,
+    // no need to Dispose the AccessibleTextHelper,
     // as long as mpNotesChilds are destructed here
     if (mpNotesChilds)
         DELETEZ(mpNotesChilds);
@@ -1592,19 +1426,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                 const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
                 ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
 
-/*              if ( rData.HasCellsInRange( Rectangle( rPoint, rPoint ) ) )
-                {
-                    if ( !mpTable && (aCount.nTables > 0) )
-                    {
-                        //! order is background shapes, header, table or notes, footer, foreground shapes, controls
-                        sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
-
-                        mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-                        mpTable->acquire();
-                        mpTable->Init();
-                    }
-                    xAccessible = mpTable;
-                }*/
                 if ( !mpTable && (aCount.nTables > 0) )
                 {
                     //! order is background shapes, header, table or notes, footer, foreground shapes, controls
@@ -1633,7 +1454,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                     }
                     if (!mpFooter)
                     {
-                        mpFooter = new ScAccessiblePageHeader( this, mpViewShell, sal_False, aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nNoteParagraphs + aCount.nFooters - 1 );
+                        mpFooter = new ScAccessiblePageHeader( this, mpViewShell, false, aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nNoteParagraphs + aCount.nFooters - 1 );
                         mpFooter->acquire();
                     }
                 }
@@ -1729,7 +1550,7 @@ uno::Reference<XAccessible> SAL_CALL ScAccessibleDocumentPagePreview::getAccessi
         {
             if ( !mpFooter )
             {
-                mpFooter = new ScAccessiblePageHeader( this, mpViewShell, sal_False, nIndex );
+                mpFooter = new ScAccessiblePageHeader( this, mpViewShell, false, nIndex );
                 mpFooter->acquire();
             }
             xAccessible = mpFooter;

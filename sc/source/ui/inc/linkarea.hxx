@@ -39,11 +39,6 @@
 #include <svtools/stdctrl.hxx>
 #include <svtools/inettbc.hxx>
 
-//REMOVE    #ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE    #define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-//REMOVE    SO2_DECL_REF(SvEmbeddedObject)
-//REMOVE    #endif
-
 namespace sfx2 { class DocumentInserter; }
 namespace sfx2 { class FileDialogHelper; }
 
@@ -90,7 +85,7 @@ public:
 
     void            InitFromOldLink( const String& rFile, const String& rFilter,
                                         const String& rOptions, const String& rSource,
-                                        ULONG nRefresh );
+                                        sal_uLong nRefresh );
 
     virtual short   Execute();          // overwritten to set dialog parent
 
@@ -98,7 +93,7 @@ public:
     String          GetFilter();        // may be empty
     String          GetOptions();       // filter options
     String          GetSource();        // separated by ";"
-    ULONG           GetRefresh();       // 0 if disabled
+    sal_uLong           GetRefresh();       // 0 if disabled
 };
 
 #endif

@@ -103,15 +103,15 @@ public:
 
                     ScFuncPage( Window* pParent);
 
-    void            SetCategory(USHORT nCat);
-    void            SetFunction(USHORT nFunc);
+    void            SetCategory(sal_uInt16 nCat);
+    void            SetFunction(sal_uInt16 nFunc);
     void            SetFocus();
-    USHORT          GetCategory();
-    USHORT          GetFunction();
-    USHORT          GetFunctionEntryCount();
+    sal_uInt16          GetCategory();
+    sal_uInt16          GetFunction();
+    sal_uInt16          GetFunctionEntryCount();
 
-    USHORT          GetFuncPos(const ScFuncDesc*);
-    const ScFuncDesc*   GetFuncDesc( USHORT nPos ) const;
+    sal_uInt16          GetFuncPos(const ScFuncDesc*);
+    const ScFuncDesc*   GetFuncDesc( sal_uInt16 nPos ) const;
     String          GetSelFunctionName() const;
 
     void            SetDoubleClickHdl( const Link& rLink ) { aDoubleClickLink = rLink; }

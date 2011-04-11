@@ -118,7 +118,7 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
         sal_uInt8 readbyte;
         sal_uInt16 readword;
 
-        BOOL flag = sal_False;  //switch if unicode part reached
+        sal_Bool flag = sal_False;  //switch if unicode part reached
         sal_uInt16 sublen = 0;
 
         while(readLen<strlen)
@@ -190,7 +190,7 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
 /**
  * @descr       Judge if the data (len) in object stream is lwp unicode packed
 */
-BOOL LwpTools::IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len)
+sal_Bool LwpTools::IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len)
 {
     sal_uInt8 byte;
     sal_uInt16 oldpos = pObjStrm->GetPos();

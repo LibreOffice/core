@@ -41,7 +41,6 @@
 
 #include <vcl/fixed.hxx>
 
-#include <tools/list.hxx>
 #include <comphelper/uno3.hxx>
 
 //............................................................................

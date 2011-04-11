@@ -88,7 +88,7 @@ public class _XChild extends MultiMethodTest {
             tRes.tested("setParent()",true);
         }
         catch (com.sun.star.lang.NoSupportException ex) {
-            log.println("Exception occured during setParent()");
+            log.println("Exception occurred during setParent()");
             ex.printStackTrace(log);
             tRes.tested("setParent()",false);
         }

@@ -68,6 +68,11 @@ class SequenceAsVector : public ::std::vector< TElementType >
                     types from the base! */
         typedef typename ::std::vector< TElementType >::const_iterator const_iterator;
 
+        //---------------------------------------
+        /** @short  When inheriting from a template using typename is generally required when using
+                    types from the base! */
+        typedef typename ::std::vector< TElementType >::iterator iterator;
+
     //-------------------------------------------
     // interface
     public:
@@ -83,6 +88,17 @@ class SequenceAsVector : public ::std::vector< TElementType >
          */
         ~SequenceAsVector()
         {}
+
+        //---------------------------------------
+        /** @short  creates a new vector with the given length.
+
+            @param  nLength
+                    the number of elements for the new vector.
+         */
+        explicit SequenceAsVector(sal_Int32 nLength) :
+            ::std::vector< TElementType >( static_cast< size_t >( nLength ) )
+        {
+        }
 
         //---------------------------------------
         /** @short  creates a new deque from the given uno sequence.

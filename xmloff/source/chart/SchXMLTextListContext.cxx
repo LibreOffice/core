@@ -33,7 +33,7 @@
 #include "SchXMLTextListContext.hxx"
 #include "SchXMLParagraphContext.hxx"
 
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 
@@ -53,7 +53,7 @@ public:
     virtual void EndElement();
 
     virtual SvXMLImportContext* CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -82,7 +82,7 @@ void SchXMLListItemContext::EndElement()
 }
 
 SvXMLImportContext* SchXMLListItemContext::CreateChildContext(
-    USHORT nPrefix, const OUString& rLocalName,
+    sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
@@ -122,7 +122,7 @@ void SchXMLTextListContext::EndElement()
 }
 
 SvXMLImportContext* SchXMLTextListContext::CreateChildContext(
-    USHORT nPrefix, const OUString& rLocalName,
+    sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;

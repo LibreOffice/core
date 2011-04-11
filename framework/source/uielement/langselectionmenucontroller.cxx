@@ -80,7 +80,6 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -189,7 +188,7 @@ void LanguageSelectionMenuController::impl_select(const Reference< XDispatch >& 
     {
         Sequence<PropertyValue>      aArgs;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper( OUString::createFromAscii("LanguageSelectionMenuController")).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs );
+            UiEventLogHelper( OUString(RTL_CONSTASCII_USTRINGPARAM("LanguageSelectionMenuController"))).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs );
         xDispatch->dispatch( aTargetURL, aArgs );
     }
 }
@@ -262,11 +261,9 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     FillLangItems( aLangItems, aLanguageTable, m_xFrame, m_aLangGuessHelper,
             m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedTextLang );
 
-    //
     // now add menu entries
     // the different menues purpose will be handled by the different string
     // for aCmd_Dialog and aCmd_Language
-    //
 
     sal_Int16 nItemId = 1;  // in this control the item id is not important for executing the command
     const OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));  // multiple languages in current selection
@@ -287,7 +284,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
             if (rStr == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
             {
                 //make a sign for the current language
-                pPopupMenu->CheckItem( nItemId, TRUE );
+                pPopupMenu->CheckItem( nItemId, sal_True );
             }
             aLangMap[ nItemId ] = rStr;
             ++nItemId;
@@ -335,15 +332,15 @@ void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::
 
     // TODO: Fill menu with the information retrieved by the status update
 
-    if( m_aCommandURL.equalsAscii( ".uno:SetLanguageSelectionMenu" ))
+    if( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:SetLanguageSelectionMenu" ) ))
     {
         fillPopupMenu(m_xPopupMenu, MODE_SetLanguageSelectionMenu );
     }
-    else if( m_aCommandURL.equalsAscii( ".uno:SetLanguageParagraphMenu" ))
+    else if( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:SetLanguageParagraphMenu" ) ))
     {
         fillPopupMenu(m_xPopupMenu, MODE_SetLanguageParagraphMenu );
     }
-    else if( m_aCommandURL.equalsAscii( ".uno:SetLanguageAllTextMenu" ))
+    else if( m_aCommandURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:SetLanguageAllTextMenu" ) ))
     {
         fillPopupMenu(m_xPopupMenu, MODE_SetLanguageAllTextMenu );
     }

@@ -299,8 +299,7 @@ namespace cppcanvas
                                                     nRotate,
                                                     nShearX ) )
                     {
-                        OSL_ENSURE( false,
-                                    "TransparencyGroupAction::render(): non-decomposable transformation" );
+                        OSL_FAIL( "TransparencyGroupAction::render(): non-decomposable transformation" );
                         return false;
                     }
 
@@ -403,8 +402,7 @@ namespace cppcanvas
                                     break;
 
                                 default:
-                                    OSL_ENSURE( false,
-                                                "Unknown meta action type encountered" );
+                                    OSL_FAIL( "Unknown meta action type encountered" );
                                     break;
                             }
                         }
@@ -461,21 +459,6 @@ namespace cppcanvas
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::setRenderStateTransform(aLocalState, aTransform);
-
-#ifdef SPECIAL_DEBUG
-                aLocalState.Clip.clear();
-                aLocalState.DeviceColor =
-                    ::vcl::unotools::colorToDoubleSequence(
-                        ::Color( 0x80FF0000 ),
-                        mpCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
-
-                if( maState.Clip.is() )
-                    mpCanvas->getUNOCanvas()->fillPolyPolygon( maState.Clip,
-                                                               mpCanvas->getViewState(),
-                                                               aLocalState );
-
-                aLocalState.DeviceColor = maState.DeviceColor;
-#endif
 
                 if( ::rtl::math::approxEqual(mnAlpha, 1.0) )
                 {

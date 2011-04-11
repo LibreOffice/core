@@ -33,7 +33,10 @@
 #include <stdio.h> // C99 snprintf not necessarily in <cstdio>
 #include <string.h> // wntmsci10 does not know <cstring> std::strcmp
 
-#include "testshl/simpleheader.hxx"
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
 #include "sal/types.h"
 
 namespace {
@@ -75,10 +78,10 @@ void Test::test() {
     testPrintf("ABC", "%" SAL_PRIXUINTPTR, static_cast< sal_uIntPtr >(0xabc));
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

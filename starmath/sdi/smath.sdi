@@ -403,8 +403,8 @@ SfxVoidItem InsertConfigName SID_INSERTSYMBOL
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem InsertFormula SID_INSERT_FORMULA
-(SfxStringItem Name SID_INSERT_FORMULA,SfxStringItem Filter FN_PARAM_1)
+SfxBoolItem ImportFormula SID_IMPORT_FORMULA
+(SfxStringItem Name SID_IMPORT_FORMULA,SfxStringItem Filter FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,

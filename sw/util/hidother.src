@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 #include "../inc/helpid.h"          // HID_FUNC_XXX
-#include "hidother.hrc"
 
 //  Help-IDs fuer Dokument-Fenster
 hidspecial HID_EDIT_WIN         { HelpID = HID_EDIT_WIN; };
@@ -70,23 +69,6 @@ hidspecial HID_VS_SINGLENUM   { HelpId = HID_VS_SINGLENUM;};
 hidspecial HID_VS_NUM         { HelpId = HID_VS_NUM      ;};
 hidspecial HID_VS_BULLET      { HelpId = HID_VS_BULLET   ;};
 hidspecial HID_VS_NUMBMP      { HelpId = HID_VS_NUMBMP   ;};
-
-//Wegen Helferlein jetzt auch die ShellIds hier
-hidspecial SW_TEXTSHELL             { HelpId = SW_TEXTSHELL         ;};
-hidspecial SW_LISTSHELL             { HelpId = SW_LISTSHELL         ;};
-hidspecial SW_TABSHELL              { HelpId = SW_TABSHELL          ;};
-hidspecial SW_FRAMESHELL            { HelpId = SW_FRAMESHELL        ;};
-hidspecial SW_GRFSHELL              { HelpId = SW_GRFSHELL          ;};
-hidspecial SW_OLESHELL              { HelpId = SW_OLESHELL          ;};
-hidspecial SW_DRAWSHELL             { HelpId = SW_DRAWSHELL         ;};
-hidspecial SW_DRWTXTSHELL           { HelpId = SW_DRWTXTSHELL       ;};
-hidspecial SW_PAGEPREVIEW           { HelpId = SW_PAGEPREVIEW       ;};
-hidspecial SW_SRC_VIEWSHELL         { HelpId = SW_SRC_VIEWSHELL     ;};
-hidspecial SW_BEZIERSHELL           { HelpId = SW_BEZIERSHELL       ;};
-hidspecial SW_DRAWFORMSHELL         { HelpId = SW_DRAWFORMSHELL     ;};
-hidspecial SW_WEBTEXTSHELL          { HelpId = SW_WEBTEXTSHELL      ;};
-hidspecial SW_WEBFRAMESHELL         { HelpId = SW_WEBFRAMESHELL     ;};
-hidspecial SW_MEDIASHELL            { HelpId = SW_MEDIASHELL        ;};
 
 // Navigator
 hidspecial  HID_NAVIGATOR_TOOLBOX   { HelpId = HID_NAVIGATOR_TOOLBOX;};

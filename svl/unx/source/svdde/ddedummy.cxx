@@ -43,7 +43,7 @@ DdeData::DdeData( const DdeData& )
 {
 }
 
-DdeData::DdeData( const void*, long, ULONG)
+DdeData::DdeData( const void*, long, sal_uLong)
 {
 }
 
@@ -51,11 +51,11 @@ DdeData::~DdeData( void )
 {
 }
 
-void DdeData::SetFormat( ULONG )
+void DdeData::SetFormat( sal_uLong )
 {
 }
 
-ULONG DdeData::GetFormat() const
+sal_uLong DdeData::GetFormat() const
 {
   return 0L;
 }
@@ -112,7 +112,7 @@ void DdeTransaction::Execute(void)
 {
 }
 
-void DdeTransaction::Done( BOOL )
+void DdeTransaction::Done( sal_Bool )
 {
 }
 
@@ -169,34 +169,34 @@ void DdeTopic::RemoveItem( const DdeItem& )
 {
 }
 
-DdeData* DdeTopic::Get( ULONG )
+DdeData* DdeTopic::Get( sal_uLong )
 {
   return NULL;
 }
 
-BOOL DdeTopic::MakeItem( const String& )
+sal_Bool DdeTopic::MakeItem( const String& )
 {
-  return FALSE;
+  return sal_False;
 }
 
-BOOL DdeTopic::StartAdviseLoop()
+sal_Bool DdeTopic::StartAdviseLoop()
 {
-  return FALSE;
+  return sal_False;
 }
 
-BOOL DdeTopic::StopAdviseLoop()
+sal_Bool DdeTopic::StopAdviseLoop()
 {
-  return FALSE;
+  return sal_False;
 }
 
-BOOL DdeTopic::Execute( const String* )
+sal_Bool DdeTopic::Execute( const String* )
 {
-  return FALSE;
+  return sal_False;
 }
 
-BOOL DdeTopic::Put( const DdeData* )
+sal_Bool DdeTopic::Put( const DdeData* )
 {
-  return FALSE;
+  return sal_False;
 }
 
 const String& DdeTopic::GetName() const
@@ -229,17 +229,17 @@ String DdeService::SysTopicGet(const String& rString) {
     return rString;
 }
 
-BOOL DdeService::SysTopicExecute(const String*) {
-    return FALSE;
+sal_Bool DdeService::SysTopicExecute(const String*) {
+    return sal_False;
 }
 
 DdeService::~DdeService()
 {
 }
 
-BOOL DdeService::IsBusy()
+sal_Bool DdeService::IsBusy()
 {
-  return FALSE;
+  return sal_False;
 }
 
 String DdeService::GetHelp()
@@ -247,7 +247,7 @@ String DdeService::GetHelp()
   return String::EmptyString();
 }
 
-void DdeService::AddFormat( ULONG )
+void DdeService::AddFormat( sal_uLong )
 {
 }
 
@@ -259,9 +259,9 @@ void DdeService::RemoveTopic( const DdeTopic& )
 {
 }
 
-BOOL DdeService::MakeTopic( const String& )
+sal_Bool DdeService::MakeTopic( const String& )
 {
-  return FALSE;
+  return sal_False;
 }
 
 const String& DdeService::GetName() const
@@ -306,17 +306,17 @@ DdeItem( rItem )
 {
 }
 
-DdeData* DdeGetPutItem::Get( ULONG )
+DdeData* DdeGetPutItem::Get( sal_uLong )
 {
   return NULL;
 }
 
-BOOL DdeGetPutItem::Put( const DdeData* )
+sal_Bool DdeGetPutItem::Put( const DdeData* )
 {
-  return FALSE;
+  return sal_False;
 }
 
-void DdeGetPutItem::AdviseLoop( BOOL )
+void DdeGetPutItem::AdviseLoop( sal_Bool )
 {
 }
 

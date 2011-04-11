@@ -41,7 +41,6 @@
 #include <dbui.hrc>
 #include <swtypes.hxx>
 #include <mmoutputtypepage.hrc>
-#include <dbui.hrc>
 
 SwMailMergeOutputTypePage::SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_OUTPUTTYPE_PAGE)),

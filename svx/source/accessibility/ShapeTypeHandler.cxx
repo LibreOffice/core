@@ -36,7 +36,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
-#include "svdstr.hrc"
+#include "svx/svdstr.hrc"
 
 
 using namespace ::rtl;
@@ -94,7 +94,6 @@ ShapeTypeId ShapeTypeHandler::GetTypeId (const OUString& aServiceName) const
     tServiceNameToSlotId::iterator I (maServiceNameToSlotId.find (aServiceName));
     if (I != maServiceNameToSlotId.end())
     {
-        //  long nSlotId = maServiceNameToSlotId[aServiceName];
         return maShapeTypeDescriptorList[I->second].mnShapeTypeId;
     }
     else
@@ -157,7 +156,7 @@ ShapeTypeHandler::ShapeTypeHandler (void)
     // Resize the list, if necessary, so that the new type can be inserted.
     maShapeTypeDescriptorList[0].mnShapeTypeId = UNKNOWN_SHAPE_TYPE;
     maShapeTypeDescriptorList[0].msServiceName =
-        OUString::createFromAscii ("UNKNOWN_SHAPE_TYPE");
+        OUString(RTL_CONSTASCII_USTRINGPARAM("UNKNOWN_SHAPE_TYPE"));
     maShapeTypeDescriptorList[0].maCreateFunction = CreateEmptyShapeReference;
     maServiceNameToSlotId[maShapeTypeDescriptorList[0].msServiceName] = 0;
 }

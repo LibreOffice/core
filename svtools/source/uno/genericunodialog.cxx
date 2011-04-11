@@ -35,7 +35,7 @@
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 
 #include <toolkit/awt/vclxwindow.hxx>
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <osl/diagnose.h>
@@ -67,9 +67,9 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XMultiServiceFactory >& _r
         ,m_bNeedInitialization( false )
         ,m_aContext( _rxORB )
 {
-    registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
+    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_TITLE)), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
         &m_sTitle, getCppuType(&m_sTitle));
-    registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_PARENT), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
+    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_PARENT)), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
         &m_xParent, getCppuType(&m_xParent));
 }
 
@@ -84,9 +84,9 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
         ,m_bNeedInitialization( false )
         ,m_aContext(_rxContext)
 {
-    registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
+    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_TITLE)), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
         &m_sTitle, getCppuType(&m_sTitle));
-    registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_PARENT), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
+    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_PARENT)), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
         &m_xParent, getCppuType(&m_xParent));
 }
 
@@ -189,7 +189,7 @@ void SAL_CALL OGenericUnoDialog::setTitle( const ::rtl::OUString& _rTitle ) thro
 
     try
     {
-        setPropertyValue(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_TITLE), makeAny(_rTitle));
+        setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_TITLE)), makeAny(_rTitle));
     }
     catch(RuntimeException&)
     {

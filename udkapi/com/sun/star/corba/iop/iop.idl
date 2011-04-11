@@ -24,6 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __com_sun_star_corba_iop_iop_idl__
+#define __com_sun_star_corba_iop_iop_idl__
+
 #include <com/sun/star/corba/corba.idl>
 module com { module sun { module star { module corba { module iop
 { // IDL
@@ -120,4 +123,4 @@ module com { module sun { module star { module corba { module iop
         };
 
 }; }; }; }; };
-
+#endif

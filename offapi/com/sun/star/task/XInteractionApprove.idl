@@ -39,7 +39,7 @@
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::task::XInteractionApprove
-/** An intearaction continuation specifing 'approval'.
+/** An interaction continuation specifying "approval".
  */
 published interface XInteractionApprove: com::sun::star::task::XInteractionContinuation
 {

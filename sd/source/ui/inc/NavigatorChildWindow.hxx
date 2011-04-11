@@ -48,7 +48,7 @@ class NavigatorChildWindow
 public:
     NavigatorChildWindow (
         ::Window*,
-        USHORT,
+        sal_uInt16,
         SfxBindings*,
         SfxChildWinInfo*);
 

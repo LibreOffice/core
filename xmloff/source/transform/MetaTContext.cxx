@@ -34,7 +34,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 #include "TransformerBase.hxx"
 #include "MutableAttrList.hxx"

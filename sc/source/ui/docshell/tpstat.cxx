@@ -45,7 +45,7 @@
 // Dokumentinfo-Tabpage:
 //========================================================================
 
-SfxTabPage* __EXPORT ScDocStatPage::Create( Window *pParent, const SfxItemSet& rSet )
+SfxTabPage* ScDocStatPage::Create( Window *pParent, const SfxItemSet& rSet )
 {
     return new ScDocStatPage( pParent, rSet );
 }
@@ -80,20 +80,20 @@ ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScDocStatPage::~ScDocStatPage()
+ScDocStatPage::~ScDocStatPage()
 {
 }
 
 //------------------------------------------------------------------------
 
-BOOL __EXPORT ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
+sal_Bool ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
-    return FALSE;
+    return false;
 }
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScDocStatPage::Reset( const SfxItemSet& /* rSet */ )
+void ScDocStatPage::Reset( const SfxItemSet& /* rSet */ )
 {
 }
 

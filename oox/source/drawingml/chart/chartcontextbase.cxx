@@ -27,15 +27,18 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/chartcontextbase.hxx"
-#include "oox/drawingml/shapepropertiescontext.hxx"
-#include "oox/drawingml/chart/modelbase.hxx"
 
-using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextHandlerRef;
+#include "oox/drawingml/chart/modelbase.hxx"
+#include "oox/drawingml/shapepropertiescontext.hxx"
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using ::oox::core::ContextHandler2Helper;
+using ::oox::core::ContextHandlerRef;
 
 // ============================================================================
 

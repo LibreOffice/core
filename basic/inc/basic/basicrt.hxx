@@ -45,8 +45,8 @@ public:
     xub_StrLen GetLine();
     xub_StrLen GetCol1();
     xub_StrLen GetCol2();
-    BOOL IsRun();
-    BOOL IsValid() { return pRun != NULL; }
+    sal_Bool IsRun();
+    sal_Bool IsValid() { return pRun != NULL; }
     BasicRuntime GetNextRuntime();
 };
 
@@ -68,12 +68,12 @@ class BasicRuntimeAccess
 public:
     static BasicRuntime GetRuntime();
     static bool HasRuntime();
-    static USHORT GetStackEntryCount();
-    static BasicErrorStackEntry GetStackEntry( USHORT nIndex );
-    static BOOL HasStack();
+    static sal_uInt16 GetStackEntryCount();
+    static BasicErrorStackEntry GetStackEntry( sal_uInt16 nIndex );
+    static sal_Bool HasStack();
     static void DeleteStack();
 
-    static BOOL IsRunInit();
+    static sal_Bool IsRunInit();
 };
 
 #endif

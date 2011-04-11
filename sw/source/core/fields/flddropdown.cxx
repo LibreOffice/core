@@ -141,7 +141,7 @@ uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
     int i = 0;
     vector<String>::const_iterator aIt;
 
-    for (aIt = aValues.begin(); aIt != aValues.end(); aIt++)
+    for (aIt = aValues.begin(); aIt != aValues.end(); ++aIt)
     {
         pSeq[i] = rtl::OUString(*aIt);
 
@@ -171,7 +171,7 @@ const String & SwDropDownField::GetToolTip() const
     return aToolTip;
 }
 
-BOOL SwDropDownField::SetSelectedItem(const String & rItem)
+sal_Bool SwDropDownField::SetSelectedItem(const String & rItem)
 {
     vector<String>::const_iterator aIt =
         std::find(aValues.begin(), aValues.end(), rItem);
@@ -199,7 +199,7 @@ void SwDropDownField::SetToolTip(const String & rToolTip)
     aToolTip = rToolTip;
 }
 
-bool SwDropDownField::QueryValue(::uno::Any &rVal, USHORT nWhich) const
+bool SwDropDownField::QueryValue(::uno::Any &rVal, sal_uInt16 nWhich) const
 {
     nWhich &= ~CONVERT_TWIPS;
     switch( nWhich )
@@ -222,13 +222,13 @@ bool SwDropDownField::QueryValue(::uno::Any &rVal, USHORT nWhich) const
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
 
 bool SwDropDownField::PutValue(const uno::Any &rVal,
-                               USHORT nWhich)
+                               sal_uInt16 nWhich)
 {
     switch( nWhich )
     {
@@ -277,7 +277,7 @@ bool SwDropDownField::PutValue(const uno::Any &rVal,
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }

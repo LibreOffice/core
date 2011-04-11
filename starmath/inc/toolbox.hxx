@@ -32,12 +32,10 @@
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
 #include <vcl/toolbox.hxx>
+
 #include "smmod.hxx"
 #include "config.hxx"
-
-#include "dialog.hrc"
-
-#define NUM_TBX_CATEGORIES  9
+#include "toolbox.hrc"
 
 class SmToolBoxWindow : public SfxFloatingWindow
 {
@@ -48,19 +46,18 @@ protected:
     ToolBox    *pToolBoxCmd;
     ToolBox    *vToolBoxCategories[NUM_TBX_CATEGORIES];
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
-    ImageList  *aImageListsH[NUM_TBX_CATEGORIES + 1];   /* high contrast */
-    USHORT      nActiveCategoryRID;
+    sal_uInt16      nActiveCategoryRID;
 
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
     virtual void    GetFocus();
 
-    void            ApplyImageLists( USHORT nCategoryRID );
+    void            ApplyImageLists( sal_uInt16 nCategoryRID );
 
     DECL_LINK( CategoryClickHdl, ToolBox* );
     DECL_LINK( CmdSelectHdl, ToolBox* );
 
     SmViewShell * GetView();
-    const ImageList * GetImageList( USHORT nResId, BOOL bHighContrast );
+    const ImageList * GetImageList( sal_uInt16 nResId );
 
 public:
     SmToolBoxWindow(SfxBindings    *pBindings,
@@ -72,8 +69,8 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent &rEvt );
 
-    void        AdjustPosSize( BOOL bSetPos );
-    void        SetCategory(USHORT nCategory);
+    void        AdjustPosSize( bool bSetPos );
+    void        SetCategory(sal_uInt16 nCategory);
 };
 
 /**************************************************************************/
@@ -84,7 +81,7 @@ class SmToolBoxWrapper : public SfxChildWindow
 
 protected:
     SmToolBoxWrapper(Window *pParentWindow,
-                     USHORT, SfxBindings*, SfxChildWinInfo*);
+                     sal_uInt16, SfxBindings*, SfxChildWinInfo*);
 };
 
 #endif

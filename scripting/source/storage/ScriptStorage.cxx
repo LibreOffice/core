@@ -70,31 +70,23 @@ const sal_Char * const SCRIPT_DIR = "/Scripts";
 const sal_Char * const SCRIPT_PARCEL = "/parcel-descriptor.xml";
 const sal_Char * const SCRIPT_PARCEL_NAME_ONLY = "parcel-descriptor";
 
-static OUString ss_implName = OUString::createFromAscii( IMPL_NAME );
-static OUString ss_serviceName = OUString::createFromAscii( SERVICE_NAME );
+static OUString ss_implName(RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME ));
+static OUString ss_serviceName(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
 static Sequence< OUString > ss_serviceNames =
     Sequence< OUString >( &ss_serviceName, 1 );
 
 const sal_uInt16 NUMBER_STORAGE_INITIALIZE_ARGS = 3;
-
-//extern ::rtl_StandardModuleCount s_moduleCount;
-
 
 
 //*************************************************************************
 ScriptStorage::ScriptStorage( const Reference <
                               XComponentContext > & xContext )
 throw ( RuntimeException )
-        : m_xContext( xContext ), m_bInitialised( false )
+        : m_xContext( xContext, UNO_SET_THROW ), m_bInitialised( false )
 {
     OSL_TRACE( "< ScriptStorage ctor called >\n" );
 
-    validateXRef( m_xContext,
-        "ScriptStorage::ScriptStorage : cannot get component context" );
-
-    m_xMgr = m_xContext->getServiceManager();
-    validateXRef( m_xMgr,
-        "ScriptStorage::ScriptStorage : cannot get service manager" );
+    m_xMgr.set( m_xContext->getServiceManager(), UNO_SET_THROW );
 
     if( !mh_scriptLangs )
     {
@@ -102,49 +94,33 @@ throw ( RuntimeException )
         if( !mh_scriptLangs )
         {
             mh_scriptLangs = new ScriptLanguages_hash();
-            Reference< XInterface > xInterface =
-                m_xMgr->createInstanceWithContext(
-                        OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationProvider" )
-                        , m_xContext );
-            validateXRef( xInterface,
-                "ScriptStorage::ScriptStorage: cannot get ConfigurationProvider" );
+            Reference< lang::XMultiServiceFactory > xConfigProvFactory(
+                m_xMgr->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ), m_xContext ),
+                UNO_QUERY_THROW );
             // create an instance of the ConfigurationAccess for accessing the
             // scripting runtime settings
-            Reference< lang::XMultiServiceFactory > xConfigProvFactory =
-                Reference < lang::XMultiServiceFactory >
-                    ( xInterface, UNO_QUERY_THROW );
-            validateXRef( xConfigProvFactory,
-                "ScriptStorage::ScriptStorage: cannot get XMultiServiceFactory interface from ConfigurationProvider" );
             beans::PropertyValue configPath;
-            configPath.Name = ::rtl::OUString::createFromAscii( "nodepath" );
-            configPath.Value <<= ::rtl::OUString::createFromAscii( "org.openoffice.Office.Scripting/ScriptRuntimes" );
+            configPath.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+            configPath.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Scripting/ScriptRuntimes"));
             Sequence < Any > aargs( 1 );
             aargs[ 0 ] <<= configPath;
 
-            xInterface = xConfigProvFactory->createInstanceWithArguments(
-                        OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationAccess"),
-                        aargs );
-            validateXRef( xInterface,
-                "ScriptStorage::ScriptStorage: cannot get ConfigurationAccess" );
-            Reference< container::XNameAccess > xNameAccess =
-                Reference < container::XNameAccess > ( xInterface,
-                                            UNO_QUERY_THROW );
-            validateXRef( xNameAccess,
-                "ScriptStorage::ScriptStorage: cannot get ConfigurationAccess" );
+            Reference< container::XNameAccess > xNameAccess(
+                xConfigProvFactory->createInstanceWithArguments(
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.configuration.ConfigurationAccess")),
+                    aargs
+                ),
+                UNO_QUERY_THROW );
+
             Sequence< OUString > names = xNameAccess->getElementNames();
             for( int i = 0 ; i < names.getLength() ; i++ )
             {
                 OSL_TRACE(  "Getting propertyset for Lang=%s",
                     ::rtl::OUStringToOString( names[i], RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                Reference< beans::XPropertySet > xPropSet =
-                    Reference< beans::XPropertySet >( xNameAccess->getByName(names[i]),
-                                            UNO_QUERY_THROW );
-                validateXRef( xPropSet,
-                    "ScriptStorage::ScriptStorage: cannot get XPropertySet for name" );
+                Reference< beans::XPropertySet > xPropSet( xNameAccess->getByName( names[i] ), UNO_QUERY_THROW );
                 Any aProp = xPropSet->getPropertyValue(
-                        OUString::createFromAscii( "SupportedFileExtensions") );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("SupportedFileExtensions")) );
                 Sequence< OUString > extns;
                 if( sal_False == ( aProp >>= extns ) )
                 {
@@ -163,14 +139,12 @@ throw ( RuntimeException )
             }
         }
     }
-//    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 }
 
 //*************************************************************************
 ScriptStorage::~ScriptStorage() SAL_THROW( () )
 {
     OSL_TRACE( "< ScriptStorage dtor called >\n" );
-//    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
 }
 
 //*************************************************************************
@@ -286,12 +260,10 @@ throw ( RuntimeException, Exception )
         OUString xStringUri(m_stringUri);
 
         ScriptMetadataImporter* SMI = new ScriptMetadataImporter( m_xContext );
-        Reference< xml::sax::XExtendedDocumentHandler > xSMI( SMI );
+        Reference< xml::sax::XExtendedDocumentHandler > xSMI( SMI, UNO_SET_THROW );
 
-        validateXRef( xSMI, "ScriptStorage::create: failed to obtain valid XExtendedDocumentHandler" );
-
-        xStringUri = xStringUri.concat( ::rtl::OUString::createFromAscii(
-            SCRIPT_DIR ) );
+        xStringUri = xStringUri.concat( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            SCRIPT_DIR )) );
 
        // No Scripts directory - just return
        if ( ! m_xSimpleFileAccess->isFolder( xStringUri ) )
@@ -329,7 +301,7 @@ throw ( RuntimeException, Exception )
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
                 OUString parcelFile = parcelDirs[ j ].concat(
-                    ::rtl::OUString::createFromAscii( SCRIPT_PARCEL ) );
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCRIPT_PARCEL )) );
 
                 // Do not have a valid parcel.xml
                 if ( !m_xSimpleFileAccess->exists( parcelFile ) ||
@@ -448,7 +420,7 @@ throw ( RuntimeException, Exception )
     // the char just after the filesep
     lastFileSep += 1;
     sal_Int32 lastFileExt = xStringUri.lastIndexOf( fileExtension );
-    OUString searchString = OUString::createFromAscii( "://" );
+    OUString searchString(RTL_CONSTASCII_USTRINGPARAM("://"));
     sal_Int32 searchStringLength = searchString.getLength();
     sal_Int32 startPath = xStringUri.indexOf( searchString );
     sal_Int32 uriLength = xStringUri.getLength();
@@ -500,7 +472,7 @@ ScriptStorage::getFileExtension( const OUString & stringUri )
     }
     else
     {
-        fileExtension = OUString::createFromAscii("");
+        fileExtension = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
     }
     return fileExtension;
 }
@@ -559,8 +531,8 @@ throw ( RuntimeException )
     // xScriptInvocation = Reference<XScriptInvocation>(xx, UNO_QUERY_THROW);
     Reference< xml::sax::XExtendedDocumentHandler > xHandler;
 
-    OUString parcel_suffix = OUString::createFromAscii( SCRIPT_PARCEL );
-    OUString ou_parcel = OUString(
+    OUString parcel_suffix(RTL_CONSTASCII_USTRINGPARAM( SCRIPT_PARCEL ));
+    OUString ou_parcel(
         RTL_CONSTASCII_USTRINGPARAM( SCRIPT_PARCEL_NAME_ONLY ) );
 
     try
@@ -584,19 +556,18 @@ throw ( RuntimeException )
                     xOS = m_xSimpleFileAccess->openFileWrite( parcel_xml_path );
 
                     OSL_TRACE(  "saving: %s\n", rtl::OUStringToOString(
-                        it_sfh->second.parcelURI.concat( OUString::createFromAscii(
-                        "/parcel.xml" ) ),
+                        it_sfh->second.parcelURI.concat( OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "/parcel.xml" )) ),
                         RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
-                    Reference< XInterface > xInterface =
+                    xHandler.set(
                         m_xMgr->createInstanceWithContext(
-                        OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ),
-                        m_xContext );
-                    validateXRef( xInterface, "ScriptStorage::save: cannot get sax.Writer" );
-                    xHandler = Reference<xml::sax::XExtendedDocumentHandler>(
-                        xInterface, UNO_QUERY_THROW );
-                    xSource = Reference< io::XActiveDataSource >(
-                        xHandler, UNO_QUERY_THROW );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")),
+                            m_xContext
+                        ),
+                        UNO_QUERY_THROW
+                    );
+                    xSource.set( xHandler, UNO_QUERY_THROW );
                     xSource->setOutputStream( xOS );
 
                     writeMetadataHeader( xHandler );
@@ -693,43 +664,6 @@ ScriptStorage::getScriptLogicalNames()
 throw ( RuntimeException )
 {
     Sequence< ::rtl::OUString  > results;
-    // comment out the rest, and ultimately remove method
-    /*ScriptInfo_hash::iterator h_it = mh_implementations.begin();
-    ScriptInfo_hash::iterator h_itEnd =  mh_implementations.end();
-    if ( h_it == h_itEnd  )
-    {
-        OSL_TRACE( "ScriptStorage::getImplementations: EMPTY STORAGE");
-        return results;
-    }
-    results.realloc( mh_implementations.size() );
-
-    //find the implementations for the given logical name
-    try
-    {
-
-        ::osl::Guard< osl::Mutex > aGuard( m_mutex );
-
-        for ( sal_Int32 count = 0; h_it != h_itEnd ; ++h_it )
-        {
-            ::rtl::OUString logicalName = h_it->first;
-            OSL_TRACE( "Adding %s at index %d ", ::rtl::OUStringToOString(
-                logicalName, RTL_TEXTENCODING_ASCII_US ).pData->buffer, count);
-            results[ count++ ] = logicalName;
-        }
-
-    }
-    catch ( RuntimeException & re )
-    {
-        throw RuntimeException(
-            OUSTR( "ScriptStorage::getScriptLogicalNames RuntimeException: " ).concat( re.Message ),
-            Reference< XInterface > () );
-    }
-    catch ( Exception & e )
-    {
-        throw RuntimeException( OUSTR(
-            "ScriptStorage::getScriptLogicalNames Exception: " ).concat(
-            e.Message ), Reference< XInterface > () );
-    } */
     return results;
 }
 
@@ -748,7 +682,6 @@ throw ( lang::IllegalArgumentException,
 // definined in the parcel-desc.xml. As an interim temp solution the  Datas_vec
 // structure that is returned from ScriptMetDataImporter sets the logicalname
 // to the function name. ScriptURI class has been changed in the same way.
-//
     Sequence< Reference< storage::XScriptInfo > > results;
     ScriptURI scriptURI( queryURI );
     OSL_TRACE( "getting impl for language %s, function name: %s",

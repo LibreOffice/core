@@ -27,6 +27,7 @@
  ************************************************************************/
 #include <ConversionHelper.hxx>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -37,6 +38,7 @@
 #include <functional>
 
 using namespace com::sun::star;
+using namespace com::sun::star::table::BorderLineStyle;
 
 namespace writerfilter {
 namespace dmapper{
@@ -137,18 +139,10 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
     //no auto color for borders
     if(!nLineColor)
         ++nLineColor;
-    if(!bIsOOXML && sal::static_int_cast<sal_uInt32>(nLineColor) <
-       sizeof(aBorderDefColor) / sizeof(nLineColor))
+    if(!bIsOOXML && sal::static_int_cast<sal_uInt32>(nLineColor) < SAL_N_ELEMENTS(aBorderDefColor))
         nLineColor = aBorderDefColor[nLineColor];
 
-    enum eBorderCode
-    {
-        single0, single1, single2, single3, single4, single5,
-        double0, double1, double2, double3, double4, double5, double6,
-        double7, double8, double9, double10,
-        none, dashed, dotted
-    } eCodeIdx = none;
-
+    sal_Int16 nLineStyle = NONE;
     // Map to our border types, we should use of one equal line
     // thickness, or one of smaller thickness. If too small we
     // can make the defecit up in additional white space or
@@ -156,187 +150,69 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
     switch(nLineType)
     {
         // First the single lines
-        case  1: break;
+        case  1:
         case  2:
         case  5:
+            nLineStyle = SOLID;
+            break;
         // Dotted and dashed lines
         case  6:
-                 eCodeIdx = dotted;
-                 break;
+            nLineStyle = DOTTED;
+            break;
         case  7:
-                 eCodeIdx = dashed;
-                 break;
+        case 22:
+            nLineStyle = DASHED;
+            break;
         // and the unsupported special cases which we map to a single line
         case  8:
         case  9:
-        case 22:
-        // or if in necessary by a double line
-        case 24:
-        case 25:
-            if( nLineThickness < 10)
-                eCodeIdx = single0;//   1 Twip for us
-            else if( nLineThickness < 20)
-                eCodeIdx = single5;//   10 Twips for us
-            else if (nLineThickness < 50)
-                eCodeIdx = single1;//  20 Twips
-            else if (nLineThickness < 80)
-                eCodeIdx = single2;//  50
-            else if (nLineThickness < 100)
-                eCodeIdx = single3;//  80
-            else if (nLineThickness < 150)
-                eCodeIdx = single4;// 100
-            // Hack: for the quite thick lines we must paint double lines,
-            // because our singles lines don't come thicker than 5 points.
-            else if (nLineThickness < 180)
-                eCodeIdx = double2;// 150
-            else
-                eCodeIdx = double5;// 180
-        break;
-        // then the shading beams which we represent by a double line
-        case 23:
-            eCodeIdx = double1;
-        break;
-        // then the double lines, for which we have good matches
-        case  3:
+        case 20:
+            nLineStyle = SOLID;
+            break;
+        // Double line
+        case 3:
         case 10: //Don't have tripple so use double
-            if (nLineThickness < 60)
-                eCodeIdx = double0;// 22 Twips for us
-            else if (nLineThickness < 135)
-                eCodeIdx = double7;// some more space
-            else if (nLineThickness < 180)
-                eCodeIdx = double1;// 60
-            else
-                eCodeIdx = double2;// 150
+        case 21:
+        case 23:
+            nLineStyle = DOUBLE;
             break;
         case 11:
-            eCodeIdx = double4;//  90 Twips for us
+        case 13: //Don't have thin thick thin, so use thick thin
+            nLineStyle = THINTHICK_SMALLGAP;
             break;
         case 12:
-        case 13: //Don't have thin thick thin, so use thick thin
-            if (nLineThickness < 87)
-                eCodeIdx = double8;//  71 Twips for us
-            else if (nLineThickness < 117)
-                eCodeIdx = double9;// 101
-            else if (nLineThickness < 166)
-                eCodeIdx = double10;// 131
-            else
-                eCodeIdx = double5;// 180
+            nLineStyle = THICKTHIN_SMALLGAP;
             break;
         case 14:
-            if (nLineThickness < 46)
-                eCodeIdx = double0;//  22 Twips for us
-            else if (nLineThickness < 76)
-                eCodeIdx = double1;//  60
-            else if (nLineThickness < 121)
-                eCodeIdx = double4;//  90
-            else if (nLineThickness < 166)
-                eCodeIdx = double2;// 150
-            else
-                eCodeIdx = double6;// 180
+            nLineStyle = THINTHICK_MEDIUMGAP;
             break;
         case 15:
         case 16: //Don't have thin thick thin, so use thick thin
-            if (nLineThickness < 46)
-                eCodeIdx = double0;//  22 Twips for us
-            else if (nLineThickness < 76)
-                eCodeIdx = double1;//  60
-            else if (nLineThickness < 121)
-                eCodeIdx = double3;//  90
-            else if (nLineThickness < 166)
-                eCodeIdx = double2;// 150
-            else
-                eCodeIdx = double5;// 180
+            nLineStyle = THICKTHIN_MEDIUMGAP;
             break;
         case 17:
-            if (nLineThickness < 46)
-                eCodeIdx = double0;//  22 Twips for us
-            else if (nLineThickness < 72)
-                eCodeIdx = double7;//  52
-            else if (nLineThickness < 137)
-                eCodeIdx = double4;//  90
-            else
-                eCodeIdx = double6;// 180
-        break;
+            nLineStyle = THINTHICK_LARGEGAP;
+            break;
         case 18:
         case 19: //Don't have thin thick thin, so use thick thin
-            if (nLineThickness < 46)
-                eCodeIdx = double0;//  22 Twips for us
-            else if (nLineThickness < 62)
-                eCodeIdx = double7;//  52
-            else if (nLineThickness < 87)
-                eCodeIdx = double8;//  71
-            else if (nLineThickness < 117)
-                eCodeIdx = double9;// 101
-            else if (nLineThickness < 156)
-                eCodeIdx = double10;// 131
-            else
-                eCodeIdx = double5;// 180
+            nLineStyle = THICKTHIN_LARGEGAP;
             break;
-        case 20:
-            if (nLineThickness < 46)
-                eCodeIdx = single1; //  20 Twips for us
-            else
-                eCodeIdx = double1;//  60
+        // Embossed and engraved lines
+        case 24:
+            nLineStyle = EMBOSSED;
             break;
-        case 21:
-            eCodeIdx = double1;//  60 Twips for us
+        case 25:
+            nLineStyle = ENGRAVED;
             break;
         case 0:
         case 255:
-            eCodeIdx = none;
-            break;
         default:
-            eCodeIdx = single0;
             break;
     }
-    struct BorderDefinition
-    {
-        sal_Int16 nOut;
-        sal_Int16 nIn;
-        sal_Int16 nDist;
-        sal_Int16 eStyle;
-    };
 
-
-    static const BorderDefinition aLineTab[] =
-    {
-        /* 0*/  { LINE_WIDTH_0, 0, 0, API_LINE_SOLID },
-        /* 1*/  { LINE_WIDTH_1, 0, 0, API_LINE_SOLID },
-        /* 2*/  { LINE_WIDTH_2, 0, 0, API_LINE_SOLID },
-        /* 3*/  { LINE_WIDTH_3, 0, 0, API_LINE_SOLID },
-        /* 4*/  { LINE_WIDTH_4, 0, 0, API_LINE_SOLID },
-        /* 5*/  { LINE_WIDTH_5, 0, 0, API_LINE_SOLID },
-        /* 6*/  { DOUBLE_LINE0_OUT, DOUBLE_LINE0_IN, DOUBLE_LINE0_DIST, API_LINE_SOLID },
-        /* 7*/  { DOUBLE_LINE1_OUT, DOUBLE_LINE1_IN, DOUBLE_LINE1_DIST, API_LINE_SOLID },
-        /* 8*/  { DOUBLE_LINE2_OUT, DOUBLE_LINE2_IN, DOUBLE_LINE2_DIST, API_LINE_SOLID },
-        /* 9*/  { DOUBLE_LINE3_OUT, DOUBLE_LINE3_IN, DOUBLE_LINE3_DIST, API_LINE_SOLID },
-        /*10*/  { DOUBLE_LINE4_OUT, DOUBLE_LINE4_IN, DOUBLE_LINE4_DIST, API_LINE_SOLID },
-        /*11*/  { DOUBLE_LINE5_OUT, DOUBLE_LINE5_IN, DOUBLE_LINE5_DIST, API_LINE_SOLID },
-        /*12*/  { DOUBLE_LINE6_OUT, DOUBLE_LINE6_IN, DOUBLE_LINE6_DIST, API_LINE_SOLID },
-        /*13*/  { DOUBLE_LINE7_OUT, DOUBLE_LINE7_IN, DOUBLE_LINE7_DIST, API_LINE_SOLID },
-        /*14*/  { DOUBLE_LINE8_OUT, DOUBLE_LINE8_IN, DOUBLE_LINE8_DIST, API_LINE_SOLID },
-        /*15*/  { DOUBLE_LINE9_OUT, DOUBLE_LINE9_IN, DOUBLE_LINE9_DIST, API_LINE_SOLID },
-        /*16*/  { DOUBLE_LINE10_OUT,DOUBLE_LINE10_IN,DOUBLE_LINE10_DIST, API_LINE_SOLID},
-        /*17*/  { 0, 0, 0, API_LINE_SOLID },
-        /*18*/  { LINE_WIDTH_5, 0, 0, API_LINE_DASHED },
-        /*19*/  { LINE_WIDTH_5, 0, 0, API_LINE_DOTTED }
-    };
-
+    rToFill.LineStyle = nLineStyle;
+    rToFill.LineWidth = sal_uInt32( nLineThickness );
     rToFill.Color = nLineColor;
-    if( nLineType == 1)
-    {
-        rToFill.InnerLineWidth = 0;
-        rToFill.OuterLineWidth = sal_Int16(nLineThickness);
-        rToFill.LineDistance = 0;
-        rToFill.LineStyle = API_LINE_SOLID;
-    }
-    else
-    {
-        rToFill.InnerLineWidth = aLineTab[eCodeIdx].nIn;
-        rToFill.OuterLineWidth = aLineTab[eCodeIdx].nOut;
-        rToFill.LineDistance = aLineTab[eCodeIdx].nDist;
-        rToFill.LineStyle = aLineTab[eCodeIdx].eStyle;
-    }
 }
 
 void lcl_SwapQuotesInField(::rtl::OUString &rFmt)
@@ -418,7 +294,7 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
                     //todo: this cannot be the right way to replace a part of the string!
                     aNewFormat.setCharAt( nI, 'Y' );
                     aNewFormat.setCharAt( nI + 1, 'Y' );
-                    aNewFormat.insert(nI + 2, ::rtl::OUString::createFromAscii("YY"));
+                    aNewFormat.insert(nI + 2, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YY")));
                     nLen+=2;
                     nI+=3;
                 }
@@ -431,7 +307,7 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
                     //todo: this cannot be the right way to replace a part of the string!
                     aNewFormat.setCharAt( nI, 'y' );
                     aNewFormat.setCharAt( nI + 1, 'y' );
-                    aNewFormat.insert(nI + 2, ::rtl::OUString::createFromAscii("yy"));
+                    aNewFormat.insert(nI + 2, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("yy")));
                     nLen+=2;
                     nI+=3;
                 }
@@ -442,7 +318,7 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
                 // MM We have to escape '/' in case it's used as a char
                 //todo: this cannot be the right way to replace a part of the string!
                 aNewFormat.setCharAt( nI, '\\' );
-                aNewFormat.insert(nI + 1, ::rtl::OUString::createFromAscii("/"));
+                aNewFormat.insert(nI + 1, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")));
                 nI++;
                 nLen++;
             }
@@ -455,38 +331,36 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
 
     if (bForceJapanese)
     {
-        rLocale.Language =  ::rtl::OUString::createFromAscii("ja");
-        rLocale.Country = ::rtl::OUString::createFromAscii("JP");
+        rLocale.Language =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ja"));
+        rLocale.Country = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JP"));
     }
 
     if (bForceNatNum)
     {
-        aNewFormat.insert( 0, ::rtl::OUString::createFromAscii("[NatNum1][$-411]"));
+        aNewFormat.insert( 0, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[NatNum1][$-411]")));
     }
 
     if (bHijri)
     {
-        aNewFormat.insert( 0, ::rtl::OUString::createFromAscii("[~hijri]"));
+        aNewFormat.insert( 0, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[~hijri]")));
     }
     return aNewFormat.makeStringAndClear();
 
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int32 convertTwipToMM100(sal_Int32 _t)
 {
     return TWIP_TO_MM100( _t );
 }
-/*-- 09.08.2007 09:34:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int32 convertEMUToMM100(sal_Int32 _t)
 {
     return _t / 360;
 }
 
-/*-- 21.11.2006 08:47:12---------------------------------------------------
+/*-------------------------------------------------------------------------
     contains a color from 0xTTRRGGBB to 0xTTRRGGBB
   -----------------------------------------------------------------------*/
 sal_Int32 ConvertColor(sal_Int32 nWordColor)
@@ -499,9 +373,8 @@ sal_Int32 ConvertColor(sal_Int32 nWordColor)
     sal_Int32 nRet = (t<<24) + (r<<16) + (g<<8) + b;
     return nRet;
 }
-/*-- 27.06.2007 13:42:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int16 convertTableJustification( sal_Int32 nIntValue )
 {
     sal_Int16 nOrient = text::HoriOrientation::LEFT_AND_WIDTH;
@@ -516,51 +389,7 @@ sal_Int16 convertTableJustification( sal_Int32 nIntValue )
     }
     return nOrient;
 }
-/*-- 06.08.2007 15:27:30---------------------------------------------------
-     conversion form xsd::DateTime
-    [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm]
-  -----------------------------------------------------------------------*/
-com::sun::star::util::DateTime convertDateTime( const ::rtl::OUString& rDateTimeString )
-{
-    util::DateTime aRet( 0, 0, 0, 0, 1, 1, 1901 );
-    //
-    sal_Int32 nIndex = 0;
-    ::rtl::OUString sDate( rDateTimeString.getToken( 0, 'T', nIndex ));
-    sal_Int32 nDateIndex = 0;
-    aRet.Year = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
-    if( nDateIndex > 0)
-        aRet.Month = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
-    if( nDateIndex > 0)
-        aRet.Day = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
-    ::rtl::OUString sTime;
-    if(nIndex > 0)
-    {
-        sTime = ( rDateTimeString.getToken( 0, 'Z', nIndex ));
-        sal_Int32 nTimeIndex = 0;
-        aRet.Hours = (sal_uInt16)sTime.getToken( 0, ':', nTimeIndex ).toInt32();
-        if( nTimeIndex > 0)
-            aRet.Minutes = (sal_uInt16)sTime.getToken( 0, ':', nTimeIndex ).toInt32();
-        if( nTimeIndex > 0)
-        {
-            ::rtl::OUString sSeconds = sTime.getToken( 0, ':', nTimeIndex );
-            nTimeIndex = 0;
-            aRet.Seconds = (sal_uInt16)sSeconds.getToken( 0, '.', nTimeIndex ).toInt32();
-            aRet.HundredthSeconds = (sal_uInt16)sSeconds.getToken( 0, '.', nTimeIndex ).toInt32();
-        }
 
-// todo: ignore time offset for a while - there's no time zone available
-//        nIndex = 0;
-//        ::rtl::OUString sOffset( rDateTimeString.getToken( 1, 'Z', nIndex ));
-//        if( sOffset.getLength() )
-//        {
-//              add hour and minute offset and increase/decrease date if necessary
-//        }
-    }
-    return aRet;
-}
-/*-- 05.03.2008 09:10:13---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Int16 ConvertNumberingType(sal_Int32 nNFC)
 {
     sal_Int16 nRet;

@@ -87,7 +87,7 @@ void mygetchar()
 void testPipe( const Reference < XMultiServiceFactory > & rSmgr )
 {
     Reference < XOutputStream > rOut(
-        rSmgr->createInstance( OUString::createFromAscii( "com.sun.star.io.Pipe" ) ),
+        rSmgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pipe" )) ),
         UNO_QUERY );
 
     OSL_ASSERT( rOut.is() );
@@ -195,7 +195,7 @@ void doSomething( const  Reference < XInterface > &r )
     {
         printf( "got the remote naming service !\n" );
         Reference < XInterface > rXsmgr = rName->getRegisteredObject(
-            OUString::createFromAscii( "StarOffice.ServiceManager" ) );
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice.ServiceManager" )) );
 
         Reference < XMultiServiceFactory > rSmgr( rXsmgr , UNO_QUERY );
         if( rSmgr.is() )

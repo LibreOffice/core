@@ -29,6 +29,7 @@
 #ifndef SD_SLIDESORTER_PAGE_DESCRIPTOR_HXX
 #define SD_SLIDESORTER_PAGE_DESCRIPTOR_HXX
 
+#include "model/SlsVisualState.hxx"
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
@@ -37,21 +38,11 @@
 
 #include <memory>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/scoped_ptr.hpp>
+
 
 class SdPage;
-
-namespace sdr { namespace contact {
-class ObjectContact;
-} }
-
-namespace sd { namespace slidesorter { namespace view {
-class PageObject;
-class PageObjectViewObjectContact;
-} } }
-
-namespace sd { namespace slidesorter { namespace controller {
-class PageObjectFactory;
-} } }
+class SdrPage;
 
 namespace sd { namespace slidesorter { namespace model {
 
@@ -88,8 +79,7 @@ public:
     PageDescriptor (
         const css::uno::Reference<css::drawing::XDrawPage>& rxPage,
         SdPage* pPage,
-        const sal_Int32 nIndex,
-        const controller::PageObjectFactory& rPageObjectFactory);
+        const sal_Int32 nIndex);
 
     ~PageDescriptor (void);
 
@@ -101,33 +91,22 @@ public:
     */
     css::uno::Reference<css::drawing::XDrawPage> GetXDrawPage (void) const;
 
-    /** Return the page shape that is used for visualizing the page.
+    /** Returns the index of the page as it is displayed in the view as page
+        number.  The value may differ from the index returned by the
+        XDrawPage when there are hidden slides and the XIndexAccess used to
+        access the model filters them out.
     */
-    view::PageObject* GetPageObject (void);
-    void ReleasePageObject (void);
+    sal_Int32 GetPageIndex (void) const;
+    void SetPageIndex (const sal_Int32 nIndex);
 
-    /** Return <TRUE/> when the page object is fully or parially visible. */
-    bool IsVisible (void) const;
+    bool UpdateMasterPage (void);
 
-    /** Set the visible state that is returned by the IsVisible() method.
-        This method is typically called by the view who renders the object
-        onto the screen.
-    */
-    void SetVisible (bool bVisible);
+    enum State { ST_Visible, ST_Selected, ST_WasSelected,
+                 ST_Focused, ST_MouseOver, ST_Current, ST_Excluded };
 
-    /** Make sure that the page is selected and return whether the
-        selection state changed.
-    */
-    bool Select (void);
-    /** Make sure that the page is not selected and return whether the
-        selection state changed.
-    */
-    bool Deselect (void);
+    bool HasState (const State eState) const;
 
-    /** Return whether the page is selected (and thus bypasses the internal
-        mbIsSelected flag.
-    */
-    bool IsSelected (void) const;
+    bool SetState (const State eState, const bool bStateValue);
 
     /** Set the internal mbIsSelected flag to the selection state of the
         page.  Use this method to synchronize a page descriptor with the
@@ -138,70 +117,39 @@ public:
             returned.  When they were the same this method returns
             <FALSE/>.
     */
-    bool UpdateSelection (void);
+    bool GetCoreSelection (void);
 
-    bool IsFocused (void) const;
-    void SetFocus (void);
-    void RemoveFocus (void);
-
-    view::PageObjectViewObjectContact* GetViewObjectContact (void) const;
-
-    void SetViewObjectContact (
-        view::PageObjectViewObjectContact* pViewObjectContact);
-
-    /** Return the currently used page object factory.
+    /** Set the selection flags of the SdPage objects to the corresponding
+        selection states of the page descriptors.
     */
-    const controller::PageObjectFactory& GetPageObjectFactory (void) const;
+    void SetCoreSelection (void);
 
-    /** Replace the current page object factory by the given one.
-    */
-    void SetPageObjectFactory (const controller::PageObjectFactory& rFactory);
+    VisualState& GetVisualState (void);
 
-    void SetModelBorder (const SvBorder& rBorder);
-    SvBorder GetModelBorder (void) const;
-
-    /** The size of the area in which the page number is displayed is
-        calculated by the SlideSorterView and then stored in the page
-        descriptors so that the contact objects can access them.  The
-        contact objects can not calculate them on demand because the total
-        number of slides is needed to do that and this number is not known
-        to the contact objects.
-    */
-    void SetPageNumberAreaModelSize (const Size& rSize);
-    Size GetPageNumberAreaModelSize (void) const;
-
-    /** Set or revoke the state of this slide being the current slide.
-    */
-    void SetIsCurrentPage (const bool bIsCurrent);
+    Rectangle GetBoundingBox (void) const;
+    Point GetLocation (const bool bIgnoreLocation = false) const;
+    void SetBoundingBox (const Rectangle& rBoundingBox);
 
 private:
     SdPage* mpPage;
     css::uno::Reference<css::drawing::XDrawPage> mxPage;
+    SdrPage const* mpMasterPage;
+
     /** This index is displayed as page number in the view.  It may or may
-        not be actual page index.
+        not be the actual page index.
     */
-    const sal_Int32 mnIndex;
+    sal_Int32 mnIndex;
 
-    /// The factory that is used to create PageObject objects.
-    const controller::PageObjectFactory* mpPageObjectFactory;
+    Rectangle maBoundingBox;
+    VisualState maVisualState;
 
-    /** The page object will be destroyed by the page into which it has
-        been inserted.
-    */
-    view::PageObject* mpPageObject;
+    bool mbIsSelected : 1;
+    bool mbWasSelected : 1;
+    bool mbIsVisible : 1;
+    bool mbIsFocused : 1;
+    bool mbIsCurrent : 1;
+    bool mbIsMouseOver : 1;
 
-    bool mbIsSelected;
-    bool mbIsVisible;
-    bool mbIsFocused;
-    bool mbIsCurrent;
-
-    view::PageObjectViewObjectContact* mpViewObjectContact;
-
-    /// The borders in model coordinates arround the page object.
-    SvBorder maModelBorder;
-
-    /// The size of the page number area in model coordinates.
-    Size maPageNumberAreaModelSize;
 
     // Do not use the copy constructor operator.  It is not implemented.
     PageDescriptor (const PageDescriptor& rDescriptor);

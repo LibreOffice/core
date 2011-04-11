@@ -41,8 +41,6 @@
 #include <vigra/numerictraits.hxx>
 #include <vigra/metaprogramming.hxx>
 
-#include <functional>
-
 namespace basebmp
 {
 

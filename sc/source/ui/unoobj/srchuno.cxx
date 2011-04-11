@@ -86,21 +86,21 @@ ScCellSearchObj::ScCellSearchObj() :
 {
     pSearchItem = new SvxSearchItem( SCITEM_SEARCHDATA );
     //  Defaults:
-    pSearchItem->SetWordOnly(FALSE);
-    pSearchItem->SetExact(FALSE);
-    pSearchItem->SetMatchFullHalfWidthForms(FALSE);
-    pSearchItem->SetUseAsianOptions(FALSE);     // or all asian bits would have to be handled
-    pSearchItem->SetBackward(FALSE);
-    pSearchItem->SetSelection(FALSE);
-    pSearchItem->SetRegExp(FALSE);
-    pSearchItem->SetPattern(FALSE);
-    pSearchItem->SetLevenshtein(FALSE);
-    pSearchItem->SetLEVRelaxed(FALSE);
+    pSearchItem->SetWordOnly(false);
+    pSearchItem->SetExact(false);
+    pSearchItem->SetMatchFullHalfWidthForms(false);
+    pSearchItem->SetUseAsianOptions(false);     // or all asian bits would have to be handled
+    pSearchItem->SetBackward(false);
+    pSearchItem->SetSelection(false);
+    pSearchItem->SetRegExp(false);
+    pSearchItem->SetPattern(false);
+    pSearchItem->SetLevenshtein(false);
+    pSearchItem->SetLEVRelaxed(false);
     pSearchItem->SetLEVOther(2);
     pSearchItem->SetLEVShorter(2);
     pSearchItem->SetLEVLonger(2);
     //  Calc-Flags
-    pSearchItem->SetRowDirection(FALSE);
+    pSearchItem->SetRowDirection(false);
     pSearchItem->SetCellType(SVX_SEARCHIN_FORMULA);
 
     //  Selection-Flag wird beim Aufruf gesetzt
@@ -207,7 +207,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScCellSearchObj )
 
 rtl::OUString SAL_CALL ScCellSearchObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScCellSearchObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellSearchObj" ));
 }
 
 sal_Bool SAL_CALL ScCellSearchObj::supportsService( const rtl::OUString& rServiceName )
@@ -223,8 +223,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellSearchObj::getSupportedServiceNames(
 {
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCSEARCHDESCRIPTOR_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCREPLACEDESCRIPTOR_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSEARCHDESCRIPTOR_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCREPLACEDESCRIPTOR_SERVICE ));
     return aRet;
 }
 
@@ -242,7 +242,6 @@ sal_Int64 SAL_CALL ScCellSearchObj::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScCellSearchObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -259,7 +258,6 @@ const uno::Sequence<sal_Int8>& ScCellSearchObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScCellSearchObj* ScCellSearchObj::getImplementation(
                                 const uno::Reference<util::XSearchDescriptor> xObj )
 {

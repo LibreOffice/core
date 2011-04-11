@@ -122,7 +122,7 @@ module com { module sun { module star { module configuration {
     <li><strong>string</strong> can hold a human-readable text.
         <p>Values are represented as <atom>string</atom>.</p>
         <p>Sequences are represented as <atom dim="[]">string</atom>.</p>
-        <p>'<em>human-readable</em>' here excludes non-printing characters
+        <p>"<em>human-readable</em>" here excludes non-printing characters
         except for CR, LF and TAB [Unicode code points 9,10,13].
         For binary data, use type <strong>binary</strong> instead.</p>
     </li>

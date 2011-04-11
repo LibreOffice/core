@@ -114,7 +114,6 @@ protected:
     void ExportBlank(const SmNode *pNode, int nLevel);
 
 public:
-    // #110680#
     SmXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nExportFlags=EXPORT_ALL);

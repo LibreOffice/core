@@ -1,6 +1,6 @@
 UDK_3_0_0 {
     global:
-        registerAllTestFunction;
+        cppunitTestPlugIn;
 
     local:
         *;

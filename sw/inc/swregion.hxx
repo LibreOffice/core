@@ -38,18 +38,18 @@ class SwRegionRects : public SwRects
 {
     SwRect aOrigin; // die Kopie des StartRects
 
-    inline void InsertRect( const SwRect &rRect, const USHORT nPos, BOOL &rDel);
+    inline void InsertRect( const SwRect &rRect, const sal_uInt16 nPos, sal_Bool &rDel);
 
 public:
-    SwRegionRects( const SwRect& rStartRect, USHORT nInit = 20,
-                                             USHORT nGrow = 8 );
+    SwRegionRects( const SwRect& rStartRect, sal_uInt16 nInit = 20,
+                                             sal_uInt16 nGrow = 8 );
     // Zum Ausstanzen aus aOrigin.
     void operator-=( const SwRect& rRect );
 
     // Aus Loechern werden Flaechen, aus Flaechen werden Loecher.
     void Invert();
     // Benachbarte Rechtecke zusammenfassen.
-    void Compress( BOOL bFuzzy = TRUE );
+    void Compress( sal_Bool bFuzzy = sal_True );
 
     inline const SwRect &GetOrigin() const { return aOrigin; }
     inline void ChangeOrigin( const SwRect &rRect ) { aOrigin = rRect; }

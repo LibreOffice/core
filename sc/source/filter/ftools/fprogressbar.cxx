@@ -53,7 +53,7 @@ ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, const String& rText )
     Init( pDocShell );
 }
 
-ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, USHORT nResId ) :
+ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, sal_uInt16 nResId ) :
     maText( ScGlobal::GetRscString( nResId ) )
 {
     Init( pDocShell );
@@ -80,12 +80,11 @@ void ScfProgressBar::Init( SfxObjectShell* pDocShell )
     mbInProgress = false;
 }
 
-ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_Int32 nSegment ) const
+ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_Int32 nSegment )
 {
     if( nSegment < 0 )
         return 0;
-    DBG_ASSERT( maSegments.GetObject( nSegment ), "ScfProgressBar::GetSegment - invalid segment index" );
-    return maSegments.GetObject( nSegment );
+    return &(maSegments.at( nSegment ));
 }
 
 void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
@@ -102,7 +101,7 @@ void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
         {
             // System progress has an internal limit of ULONG_MAX/100.
             mnSysProgressScale = 1;
-            ULONG nSysTotalSize = static_cast< ULONG >( mnTotalSize );
+            sal_uLong nSysTotalSize = static_cast< sal_uLong >( mnTotalSize );
             while( nSysTotalSize >= ULONG_MAX / 100 )
             {
                 nSysTotalSize /= 2;
@@ -138,7 +137,7 @@ void ScfProgressBar::IncreaseProgressBar( sal_Size nDelta )
         if( nNewPos >= mnNextUnitPos )
         {
             mnNextUnitPos = nNewPos + mnUnitSize;
-            mxSysProgress->SetState( static_cast< ULONG >( nNewPos / mnSysProgressScale ) );
+            mxSysProgress->SetState( static_cast< sal_uLong >( nNewPos / mnSysProgressScale ) );
         }
     }
     else
@@ -155,9 +154,9 @@ sal_Int32 ScfProgressBar::AddSegment( sal_Size nSize )
     if( nSize == 0 )
         return SCF_INV_SEGMENT;
 
-    maSegments.Append( new ScfProgressSegment( nSize ) );
+    maSegments.push_back( new ScfProgressSegment( nSize ) );
     mnTotalSize += nSize;
-    return static_cast< sal_Int32 >( maSegments.Count() - 1 );
+    return static_cast< sal_Int32 >( maSegments.size() - 1 );
 }
 
 ScfProgressBar& ScfProgressBar::GetSegmentProgressBar( sal_Int32 nSegment )
@@ -214,7 +213,7 @@ ScfSimpleProgressBar::ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDoc
     Init( nSize );
 }
 
-ScfSimpleProgressBar::ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, USHORT nResId ) :
+ScfSimpleProgressBar::ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, sal_uInt16 nResId ) :
     maProgress( pDocShell, nResId )
 {
     Init( nSize );
@@ -227,7 +226,7 @@ void ScfSimpleProgressBar::Init( sal_Size nSize )
         maProgress.ActivateSegment( nSegment );
 }
 
-ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, USHORT nResId ) :
+ScfStreamProgressBar::ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, sal_uInt16 nResId ) :
     mrStrm( rStrm )
 {
     Init( pDocShell, ScGlobal::GetRscString( nResId ) );

@@ -30,7 +30,6 @@
 '* short description :
 '*
 '\**********************************************************************************
-
 sub id_Tools
     printLog "---------    id_006    ----------"
     call tiToolsSpellchecking
@@ -44,19 +43,21 @@ sub id_Tools
     call tiToolsEyedropper    
     call tToolsOptionsTest ' global one
 end sub
+
 '-------------------------------------------------------------------------------
+
 testcase tiToolsSpellchecking
 
     if not gOOO then ' Spellcheck doesn't work in OOo builds.
-        '/// open application ///'
+        printlog "open application"
            Call hNewDocument
-            WaitSlot (2000)    'sleep 2
-        '/// call subroutine 'hSetSpellHypLanguage' for setting the default language in th eoptions, to enable it for languages, which don't provide a dictionary (usually asian ones) ///'
+            WaitSlot (2000) 
+        printlog " call subroutine 'hSetSpellHypLanguage' for setting the default language in th eoptions, to enable it for languages, which don't provide a dictionary (usually asian ones)"
            call hSetSpellHypLanguage
-        '/// create textframe with content ///'
+        printlog "create textframe with content"
            Call hTextrahmenErstellen ("Whaaaat", 10, 10, 30, 40)
            sleep 1
-        '/// Tools->Spellcheck->Check ///'
+        printlog "Tools->Spellcheck->Check"
            ToolsSpellCheck
             WaitSlot (1000)    'sleep 1
             Kontext "MessageBox"
@@ -68,14 +69,14 @@ testcase tiToolsSpellchecking
                     Kontext "Rechtschreibung"
                         if Rechtschreibung.exists then
                             Call DialogTest ( Rechtschreibung )
-                            '/// close dialog 'Spellcheck' ///'
+                            printlog "close dialog 'Spellcheck'"
                             Rechtschreibung.Close
                         else
                             warnlog " Spellcheck dialog didn't came up :-("
                         end if
                 end if
                 sleep 1
-                '/// say OK to messagebox about 'Spellcheck has been completed' ///'
+                printlog "say OK to messagebox about 'Spellcheck has been completed'"
                 Kontext "Messagebox"
                 if Messagebox.exists (5) then
                     warnlog "Shouldn't be any messagebox after pressing close in spellchecker"
@@ -83,26 +84,30 @@ testcase tiToolsSpellchecking
                     sleep (2)
                     Kontext
                 end if
-            '/// close application ///'
+            printlog "close application"
         Call hCloseDocument
     else goto endsub
     endif
-endcase
+endcase 'tiToolsSpellchecking
+
 '-------------------------------------------------------------------------------
+
 testcase tiToolsSpellcheckingAutomatic
-    '/// open application ///'
+    printlog "open application"
     Call hNewDocument
-    '/// Tools->Spellcheck->AutoSpellcheck ///'
+    printlog "Tools->Spellcheck->AutoSpellchec"
     ToolsSpellcheckAutoSpellcheck
-    '/// create textframe with text ///'
+    printlog " create textframe with text "
     Call hTextrahmenErstellen ("What", 10, 10, 30, 40)
     sleep 2
-    '/// Tools->Spellcheck->AutoSpellcheck ///'
+    printlog "Tools->Spellcheck->AutoSpellcheck "
     ToolsSpellcheckAutoSpellcheck
-    '/// close application ///'
+    printlog "close application "
     Call hCloseDocument
-endcase
+endcase 'tiToolsSpellcheckingAutomatic
+
 '-------------------------------------------------------------------------------
+
 testcase tiToolsThesaurus
     Dim sWord as string
     Dim sExt as string
@@ -165,20 +170,16 @@ testcase tiToolsThesaurus
                      sWord = "Hello"
                   endif
     end select
-
     PrintLog "Thesaurus with 1 word: " + sWord
-
-    if( Ucase(gApplication) = "DRAW" ) then
+    if( gApplication = "DRAW" ) then
         sExt = ".odg"
     elseif( Ucase(gApplication) = "IMPRESS" ) then
         sExt = ".odp"
     endif
 
-    Call hFileOpen (gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
-    Call sMakeReadOnlyDocumentEditable()
+    hFileOpenLocally( gTesttoolpath + "graphics\required\input\recht_" + iSprache + sExt)
     Call hTextrahmenErstellen (sWord,20,20,50,30)
     sleep 1
-
     printlog "select the word"
     hTypeKeys "<Home><SHIFT END>"
 
@@ -197,132 +198,138 @@ testcase tiToolsThesaurus
          warnlog "the thesaurus does not appear"
     end if
     Call hCloseDocument
-endcase
+endcase 'tiToolsThesaurus
+
 '-------------------------------------------------------------------------------
+
 testcase tiToolsHyphenation
-    '/// open application ///'
+    printlog "open application "
     Call hNewDocument
-    '/// Tools->Hyphenation ///'
+    printlog "Tools->Hyphenation "
     ToolsLanguageHyphenationDraw
-    WaitSlot (2000)    'sleep 2
-    '/// Tools->Hyphenation ///'
+    WaitSlot (2000)
+    printlog "Tools->Hyphenation "
     ToolsLanguageHyphenationDraw
-    '/// close application ///'
+    printlog "close application "
     Call hCloseDocument
-endcase
+endcase 'tiToolsHyphenation
+
 '-------------------------------------------------------------------------------
+
 testcase tiToolsAutoCorrect
     dim iLanguage as integer ' for resetting the language
-    '/// open application ///'
+    printlog "open application "
     Call hNewDocument
-    WaitSlot (1000)    'sleep 1
-    '/// Tools->Autocorrect ///'
+    WaitSlot (1000)   
+    printlog "Tools->Autocorrect "
     ToolsAutocorrect
-    WaitSlot (2000)    'sleep 1
+    WaitSlot (2000) 
     Kontext
-    '/// select tabpage 'Replace' ///'
+    printlog "select tabpage 'Replace' "
     Messagebox.SetPage TabErsetzung
     Kontext "TabErsetzung"
-        Call DialogTest ( TabErsetzung )
-        '/// remember the language, that is selected in the 'Replacements and exceptions for Language' Listbox ///'
-        iLanguage = WelcheSprache.GetSelIndex
-        '///+ change the language to the 1st from the top ///'
-        WelcheSprache.Select 1 ' select language with empty list
-        '///+ type something into the field 'replace' ///'
-        Kuerzel.SetText "a"
-        '///+ type something into the field 'with' ///'
-        ErsetzenDurch.SetText "b"
-        '///+ click button 'new' ///'
-        Neu.Click
-        sleep 1
-        '///+ click button 'delete' ///'
+    Call DialogTest ( TabErsetzung )
+    printlog "remember the language, that is selected in the 'Replacements and exceptions for Language' Listbox "
+    iLanguage = WelcheSprache.GetSelIndex
+    printlog "+ change the language to the 1st from the top "
+    WelcheSprache.Select 1 ' select language with empty list
+    printlog "+ type something into the field 'replace' "
+    Kuerzel.SetText "a"
+    printlog "+ type something into the field 'with' "
+    ErsetzenDurch.SetText "b"
+    printlog "+ click button 'new' "
+    Neu.Click
+    sleep 1
+    printlog "+ click button 'delete' "
+    Loeschen.Click
+    sleep 1
+    try
+        printlog "+ click button 'delete' again "
         Loeschen.Click
-        sleep 1
-        try
-            '///+ click button 'delete' again ///'
-            Loeschen.Click
-        catch
-            printlog "ok was CRASH before" '#
-        endcatch
-        '///+ if nothing happens it is ok, was a Crash before :-( ///'
-        '///+ restore cthe remembered language ///'
-        WelcheSprache.select (iLanguage)
-        Kontext
-        '/// select tabpage 'Exception' ///'
-        Messagebox.SetPage TabAusnahmen
-            Kontext "TabAusnahmen"
-            Call DialogTest ( TabAusnahmen )
-            '/// type something into the field 'Abbreviations' ///'
-            Abkuerzungen.settext "Lala"
-            '///+ click button 'new' in 'Abbreviations' ///'
-            AbkuerzungenNeu.click
-            '///+ click button 'delete' in 'Abbreviations' ///'
-            AbkuerzungenLoeschen.click
-            '/// type something into the field 'Word with TWo INitial CApitals' ///'
-            Woerter.settext "LALA"
-            '///+ check the checkbox 'AutoInclude' in 'Word with TWo INitial CApitals' ///'
-            WoerterAutomatisch.Check
-            '///+ click button 'new' in 'Word with TWo INitial CApitals' ///'
-            WoerterNeu.click
-            '///+ click button 'delete' in 'Word with TWo INitial CApitals' ///'
-            WoerterLoeschen.click
-            '///+ UNcheck the checkbox 'AutoInclude' in 'Word with TWo INitial CApitals' ///'
-            WoerterAutomatisch.UnCheck
-            Kontext
-            '/// select tabpage 'Options' ///'
-            Messagebox.SetPage TabOptionen
-                Kontext "TabOptionen"
-                Call DialogTest ( TabOptionen )
-                Kontext
-            '/// select tabpage 'Custom Quotes' ///'
-            Messagebox.SetPage TabLocalizedOptions
-                Kontext "TabLocalizedOptions"  ' 1a
-                    '/// in the part of 'single quotes': ///'
-                    '///+ check 'replace' ///'
-                    '///+ click 'start quote' ///'
-                    SingleQuotesReplace.Check
-                    SingleQuotesStart.Click
-                    Kontext "Sonderzeichen"
-                        Call DialogTest ( Sonderzeichen, 1 )
-                        '///+  cancel dialog 'start quote' ///'
-                        Sonderzeichen.Cancel
-                Kontext "TabLocalizedOptions"  ' 1b
-                    '///+ click 'end quote' ///'
-                    SingleQuotesEnd.Click
-                    Kontext "Sonderzeichen"
-                        Call DialogTest ( Sonderzeichen, 2 )
-                        '///+  cancel dialog 'end quote' ///'
-                        Sonderzeichen.Cancel
-                Kontext "TabLocalizedOptions"  ' 1s
-                    '///+ click button 'default' ///'
-                    SingleQuotesDefault.Click
+    catch
+        printlog "ok was CRASH before"
+    endcatch
+    printlog "+ if nothing happens it is ok, was a Crash before :-( "
+    printlog "+ restore cthe remembered language "
+    WelcheSprache.select (iLanguage)
+    Kontext
+    printlog "select tabpage 'Exception' "
+    Messagebox.SetPage TabAusnahmen
+    Kontext "TabAusnahmen"
+    Call DialogTest ( TabAusnahmen )
+    printlog "type something into the field 'Abbreviations' "
+    Abkuerzungen.settext "Lala"
+    printlog "+ click button 'new' in 'Abbreviations' "
+    AbkuerzungenNeu.click
+    printlog "+ click button 'delete' in 'Abbreviations' "
+    AbkuerzungenLoeschen.click
+    printlog "type something into the field 'Word with TWo INitial CApitals' "
+    Woerter.settext "LALA"
+    printlog "+ check the checkbox 'AutoInclude' in 'Word with TWo INitial CApitals' "
+    WoerterAutomatisch.Check
+    printlog "+ click button 'new' in 'Word with TWo INitial CApitals' "
+    WoerterNeu.click
+    printlog "+ click button 'delete' in 'Word with TWo INitial CApitals' "
+    WoerterLoeschen.click
+    printlog "+ UNcheck the checkbox 'AutoInclude' in 'Word with TWo INitial CApitals' "
+    WoerterAutomatisch.UnCheck
+    Kontext
+    printlog "select tabpage 'Options' "
+    Messagebox.SetPage TabOptionen
+    Kontext "TabOptionen"
+    Call DialogTest ( TabOptionen )
+    Kontext
+    printlog "select tabpage 'Custom Quotes' "
+    Messagebox.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"  ' 1a
+    printlog "in the part of 'single quotes': "
+    printlog "+ check 'replace' "
+    printlog "+ click 'start quote' "
+    SingleQuotesReplace.Check
+    SingleQuotesStart.Click
+    Kontext "Sonderzeichen"
+    Call DialogTest ( Sonderzeichen, 1 )
+    printlog "+  cancel dialog 'start quote' "
+    Sonderzeichen.Cancel
+    Kontext "TabLocalizedOptions"  ' 1b
+    printlog "+ click 'end quote' "
+    SingleQuotesEnd.Click
+    Kontext "Sonderzeichen"
+    Call DialogTest ( Sonderzeichen, 2 )
+    printlog "+  cancel dialog 'end quote' "
+    Sonderzeichen.Cancel
+    Kontext "TabLocalizedOptions"  ' 1s
+    printlog "+ click button 'default' "
+    SingleQuotesDefault.Click
 
-                Kontext "TabLocalizedOptions"  ' 2a
-                    '/// in the part of 'double quotes': ///'
-                    '///+ click 'start quote' ///'
-                    DoubleQuotesStart.Click
-                    Kontext "Sonderzeichen"
-                        Call DialogTest ( Sonderzeichen, 3 )
-                        '///+  cancel dialog 'start quote' ///'
-                        Sonderzeichen.Cancel
-                Kontext "TabLocalizedOptions"  ' 2b
-                    '///+ click 'end quote' ///'
-                    DoubleQuotesEnd.Click
-                    Kontext "Sonderzeichen"
-                        Call DialogTest ( Sonderzeichen, 4 )
-                        '///+  cancel dialog 'end quote' ///'
-                        Sonderzeichen.Cancel
-                Kontext "TabLocalizedOptions"  ' 2s
-                    '///+ click button 'default' ///'
-                    DoubleQuotesDefault.Click
-                    '///+ UNcheck 'replace' ///'
-                    SingleQuotesReplace.UnCheck
-                    '/// cancel dialog 'AtorCorrect' ///'
-                    TabLocalizedOptions.cancel
-    '/// close application ///'
+    Kontext "TabLocalizedOptions"  ' 2a
+    printlog " in the part of 'double quotes': "
+    printlog "+ click 'start quote' "
+    DoubleQuotesStart.Click
+    Kontext "Sonderzeichen"
+    Call DialogTest ( Sonderzeichen, 3 )
+    printlog "+  cancel dialog 'start quote' "
+    Sonderzeichen.Cancel
+    Kontext "TabLocalizedOptions"  ' 2b
+    printlog "+ click 'end quote' "
+    DoubleQuotesEnd.Click
+    Kontext "Sonderzeichen"
+    Call DialogTest ( Sonderzeichen, 4 )
+    printlog "+  cancel dialog 'end quote' "
+    Sonderzeichen.Cancel
+    Kontext "TabLocalizedOptions"  ' 2s
+    printlog "+ click button 'default' "
+    DoubleQuotesDefault.Click
+    printlog "+ UNcheck 'replace' "
+    SingleQuotesReplace.UnCheck
+    printlog " cancel dialog 'AtorCorrect' "
+    TabLocalizedOptions.cancel
+    printlog " close application "
     Call hCloseDocument
-endcase
+
+endcase 'tiToolsAutoCorrect
 '-------------------------------------------------------------------------------
+
 testcase tChineseTranslation
 
     qaerrorlog( "#i89634# - Chinese Translation dialog does not close" )
@@ -337,139 +344,143 @@ testcase tChineseTranslation
         sFileName = "graphics\required\input\tchinese.odg"
     end if
 
-    '/// Open application ///'
+    printlog "Open application "
     Call hNewDocument
-    WaitSlot (2000)    'sleep 1
-    '/// Save old state and Activate Support for Asian language ///'
+    WaitSlot (2000) 
+    printlog "Save old state and Activate Support for Asian language "
     bSavedAsianSupport = ActiveDeactivateAsianSupport(TRUE)
-    '/// Open Document ///'
+    printlog "Open Document "
     Call hFileOpen ( ConvertPath(gTesttoolPath + sFileName) )
-    '/// If write-protected - open as Temp-file ///'
+    printlog "If write-protected - open as Temp-file "
     sleep (2)
     Kontext "Standardbar"
-        if Bearbeiten.GetState(2) <> 1 then
-            Bearbeiten.Click '0 = not pressed. 1 = pressed.
-            Kontext
-            if Active.Exists(1) then
-                Active.Yes
-            else
-                warnlog "No messagebox after making document editable? - Test canceled here"
-                goto endsub
-            end if
+    if Bearbeiten.GetState(2) <> 1 then
+        Bearbeiten.Click '0 = not pressed. 1 = pressed.
+        Kontext
+        if Active.Exists(1) then
+            Active.Yes
+        else
+            warnlog "No messagebox after making document editable? - Test canceled here"
+            goto endsub
         end if
+    end if
     if uCase(gApplication) = "IMPRESS" then
         Kontext "DocumentImpress"
     else
         Kontext "DocumentDraw"
     end if
-    '/// Select all, Press RETURN to enter text in Editmode ///'
-    '/// Move marker to top of the text, go two steps right, mark two characters ///'
+    printlog "Select all, Press RETURN to enter text in Editmode "
+    printlog "Move marker to top of the text, go two steps right, mark two characters "
     EditSelectAll
     hTypeKeys "<RETURN>"
     hTypeKeys "<MOD1 HOME><RIGHT><RIGHT><SHIFT RIGHT RIGHT>"
-    '/// Open Chinesetranslation ///'
+    printlog "Open Chinesetranslation "
     ToolsChineseTranslation
     WaitSlot (2000)    'sleep 1
     kontext "ChineseTranslation"
-        '/// Check if everything is there ///'
-        Call DialogTest ( ChineseTranslation )
-        '/// Click on EditTerms ///'
-        EditTerms.Click
-        kontext "ChineseDictionary"
-            '/// Check if everything is there ///'
-            Call DialogTest ( ChineseDictionary )
-            '/// Close dialog 'ChineseDictionary' with 'OK' ///'
-            ChineseDictionary.Ok
+    printlog " Check if everything is there "
+    Call DialogTest ( ChineseTranslation )
+    printlog " Click on EditTerms "
+    EditTerms.Click
+    kontext "ChineseDictionary"
+    printlog " Check if everything is there "
+    Call DialogTest ( ChineseDictionary )
+    printlog " Close dialog 'ChineseDictionary' with 'OK' "
+    ChineseDictionary.Ok
     kontext "ChineseTranslation"
-        '/// Close dialog 'Chinese' with 'OK' ///'
-        ChineseTranslation.OK
+    printlog " Close dialog 'Chinese' with 'OK' "
+    ChineseTranslation.OK
     kontext
-        '/// if messagebox exist, say OK; ('Spellcheck completed' or 'Word not found') ///'
-        if Messagebox.exists (5) then
-            printlog "Messagebox: "+Messagebox.gettext+"'"
-            Messagebox.ok
-        end if
-    '/// Restore old state for Asian language ///'
+    printlog " if messagebox exist, say OK; ('Spellcheck completed' or 'Word not found') "
+    if Messagebox.exists (5) then
+        printlog "Messagebox: "+Messagebox.gettext+"'"
+        Messagebox.ok
+    end if
+    printlog " Restore old state for Asian language "
     ActiveDeactivateAsianSupport(bSavedAsianSupport)
-    '/// Close application ///'
+    printlog " Close application "
     Call hCloseDocument
-endcase
+
+endcase 'tChineseTranslation
 '-------------------------------------------------------------------------------
+
 testcase tiToolsMacro
-    '/// open application ///'
+    printlog "open application "
     Call hNewDocument
     WaitSlot (2000)    'sleep 2
-    '/// Tools->Macro ///'
+    printlog "Tools->Macro "
     ToolsMacro
     Kontext "Makro"
-        Call DialogTest ( Makro )
-        '/// click button 'organizer...' ///'
-        Verwalten.Click
-
+    Call DialogTest ( Makro )
+    printlog "click button 'organizer...' "
+    Verwalten.Click
     Kontext
-        '/// switch to tabpage 'Modules' ///'
-        Messagebox.SetPage TabModule
-        Kontext "TabModule"
-            Call DialogTest ( TabModule )
-
+    printlog "switch to tabpage 'Modules' "
+    Messagebox.SetPage TabModule
+    Kontext "TabModule"
+    Call DialogTest ( TabModule )
     Kontext
-        '/// switch to tabpage 'Libraries' ///'
-        Messagebox.SetPage TabBibliotheken
-        Kontext "TabBibliotheken"
-            Call DialogTest ( TabBibliotheken )
-            '/// click lbutton 'append' ///'
-            Hinzufuegen.Click
-            Kontext "Messagebox"
-                if Messagebox.Exists (5) then
-                    if Messagebox.GetRT = 304 then
-                        Warnlog Messagebox.Gettext
-                        Messagebox.Ok
-                    end if
-                end if
-            Kontext "OeffnenDlg"
-                '/// cancel dialog 'append libraries' ///'
-                OeffnenDlg.Cancel
-        Kontext "TabBibliotheken"
-            '/// click button 'new' ///'
-            Neu.Click
-            kontext "NeueBibliothek"
-                sleep 1 'Bibliotheksname
-                '/// cancel dialog 'new library' ///'
-                NeueBibliothek.cancel
-        Kontext "TabBibliotheken"
-            '/// close dialog 'macro organizer' ///'
-            TabBibliotheken.Close
+    printlog "switch to tabpage 'Libraries' "
+    Messagebox.SetPage TabBibliotheken
+    Kontext "TabBibliotheken"
+    Call DialogTest ( TabBibliotheken )
+    printlog "click lbutton 'append' "
+    Hinzufuegen.Click
+    Kontext "Messagebox"
+    if Messagebox.Exists (5) then
+        if Messagebox.GetRT = 304 then
+            Warnlog Messagebox.Gettext
+            Messagebox.Ok
+        end if
+    end if
+    Kontext "OeffnenDlg"
+    printlog "cancel dialog 'append libraries' "
+    OeffnenDlg.Cancel
+    Kontext "TabBibliotheken"
+    printlog "click button 'new' "
+    Neu.Click
+    kontext "NeueBibliothek"
+    sleep 1 'Bibliotheksname
+    printlog "cancel dialog 'new library' "
+    NeueBibliothek.cancel
+    Kontext "TabBibliotheken"
+    printlog "close dialog 'macro organizer' "
+    TabBibliotheken.Close
 
     Kontext "Makro"
-        '/// close dialog 'macro' ///'
-        Makro.Cancel
-    '/// close application ///'
+    printlog "close dialog 'macro' "
+    Makro.Cancel
+    printlog "close application "
     Call hCloseDocument
-endcase
+endcase 'tiToolsMacro
+
 '-------------------------------------------------------------------------------
+
 testcase tiToolsGallery
-    '/// open application ///'
+    printlog "open application "
     Call hNewDocument
-    '/// Tools->Gallery ///'
+    printlog "Tools->Gallery "
     ToolsGallery
     WaitSlot (2000)    'sleep 1
-    '/// Tools->Gallery ///'
+    printlog "Tools->Gallery "
     ToolsGallery
-    '/// close application ///'
+    printlog "close application "
     Call hCloseDocument
-endcase
+endcase'tiToolsGallery
+
 '-------------------------------------------------------------------------------
+
 testcase tiToolsEyedropper
-    '/// open application ///'
+    printlog "open application "
     Call hNewDocument
-    '/// Tools->Eyedropper ///'
+    printlog "Tools->Eyedropper "
     ToolsEyedropper
     Kontext "Pipette"
         Call DialogTest (Pipette)
-        '/// close dialog 'Eyedropper' ///'
+        printlog "close dialog 'Eyedropper' "
         Pipette.Close
         sleep 1
-    '/// close application ///'
+    printlog "close application "
     Call hCloseDocument
-endcase
+endcase 'tiToolsEyedropper
 

@@ -55,7 +55,7 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
     delete pGraphics;
 }
 
-BOOL SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
+sal_Bool SvpSalVirtualDevice::SetSize( long nNewDX, long nNewDY )
 {
     B2IVector aDevSize( nNewDX, nNewDY );
     if( aDevSize.getX() == 0 )

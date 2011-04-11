@@ -36,7 +36,7 @@ module com { module sun { module star { module embed {
 /** The constant set contains possible modes to open an element.
 
     <p>
-    The modes can be combined by 'or' operation.
+    The modes can be combined by "or" operation.
     <const>ElementModes::READ</const> and <const>ElementModes::WRITE</const>
     are base modes. A result mode must include one of base modes.
     </p>
@@ -55,7 +55,7 @@ published constants ElementModes
 
         <p>
         This mode is ignored for <type>Storage</type> elements.
-        This flag makes sence only in combination with
+        This flag makes sense only in combination with
         <const>ElementModes::READ</const> and/or
         <const>ElementModes::WRITE</const>.
         </p>
@@ -87,10 +87,10 @@ published constants ElementModes
     const long READWRITE = 7;
 
     //------------------------------------------------------------------------
-    /** lets the document be truncated immediatelly after opening.
+    /** lets the document be truncated immediately after opening.
 
         <p>
-        This flag makes sence only in combination with
+        This flag makes sense only in combination with
         <const>ElementModes::WRITE</const>.
         </p>
      */
@@ -101,7 +101,7 @@ published constants ElementModes
         does not exist.
 
         <p>
-        This flag makes sence only in combination with
+        This flag makes sense only in combination with
         <const>ElementModes::WRITE</const>.
         </p>
      */

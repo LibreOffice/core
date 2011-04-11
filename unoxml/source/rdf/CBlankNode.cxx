@@ -101,15 +101,15 @@ void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< ::com::sun::star:
 {
     if (aArguments.getLength() != 1) {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("CBlankNode::initialize: "
-                "must give exactly 1 argument"), *this, 1);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CBlankNode::initialize: "
+                "must give exactly 1 argument")), *this, 1);
     }
 
     ::rtl::OUString arg;
     if (!(aArguments[0] >>= arg)) {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("CBlankNode::initialize: "
-                "argument must be string"), *this, 0);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CBlankNode::initialize: "
+                "argument must be string")), *this, 0);
     }
 
     //FIXME: what is legal?
@@ -117,8 +117,8 @@ void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< ::com::sun::star:
         m_NodeID = arg;
     } else {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii("CBlankNode::initialize: "
-                "argument is not valid blank node ID"), *this, 0);
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CBlankNode::initialize: "
+                "argument is not valid blank node ID")), *this, 0);
     }
 }
 

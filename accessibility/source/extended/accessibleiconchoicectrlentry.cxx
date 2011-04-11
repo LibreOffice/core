@@ -79,7 +79,7 @@ namespace accessibility
     // Ctor() and Dtor()
     // -----------------------------------------------------------------------------
     AccessibleIconChoiceCtrlEntry::AccessibleIconChoiceCtrlEntry( SvtIconChoiceCtrl& _rIconCtrl,
-                                                                  ULONG _nPos,
+                                                                  sal_uLong _nPos,
                                                                   const Reference< XAccessible >& _xParent ) :
 
         AccessibleIconChoiceCtrlEntry_BASE  ( m_aMutex ),
@@ -122,21 +122,6 @@ throw(RuntimeException)
             dispose();
         }
     }
-    #ifdef ACCESSIBLE_EVENT_NOTIFICATION_ENABLED
-    // (the following method is unused currently. If you need it, simply remove the #ifdef thing here and
-    // in the hxx)
-    // -----------------------------------------------------------------------------
-    void AccessibleIconChoiceCtrlEntry::NotifyAccessibleEvent( sal_Int16 _nEventId,
-                                                   const ::com::sun::star::uno::Any& _aOldValue,
-                                                   const ::com::sun::star::uno::Any& _aNewValue )
-    {
-        Reference< uno::XInterface > xSource( *this );
-        AccessibleEventObject aEventObj( xSource, _nEventId, _aNewValue, _aOldValue );
-
-        if (m_nClientId)
-            comphelper::AccessibleEventNotifier::addEvent( m_nClientId, aEventObj );
-    }
-    #endif
     // -----------------------------------------------------------------------------
     Rectangle AccessibleIconChoiceCtrlEntry::GetBoundingBox_Impl() const
     {
@@ -519,7 +504,7 @@ throw(RuntimeException)
             for ( long i = 0; i < nLen; ++i )
             {
                 Rectangle aRect = aLayoutData.GetCharacterBounds(i);
-                BOOL bInside = aRect.IsInside( aPnt );
+                sal_Bool bInside = aRect.IsInside( aPnt );
 
                 if ( bInside )
                     break;
@@ -540,7 +525,7 @@ throw(RuntimeException)
             throw IndexOutOfBoundsException();
 
         sal_Int32 nLen = nEndIndex - nStartIndex + 1;
-        ::svt::OStringTransfer::CopyString( sText.Copy( (USHORT)nStartIndex, (USHORT)nLen ), m_pIconCtrl );
+        ::svt::OStringTransfer::CopyString( sText.Copy( (sal_uInt16)nStartIndex, (sal_uInt16)nLen ), m_pIconCtrl );
 
         return sal_True;
     }

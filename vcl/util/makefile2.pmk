@@ -32,10 +32,3 @@ VISIBILITY_HIDDEN=TRUE
 .IF "$(GUIBASE)"=="aqua"
 CFLAGSCXX+=$(OBJCXXFLAGS)
 .ENDIF  # "$(GUIBASE)"=="aqua"
-
-#building with stlport, but graphite was not built with stlport
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(SYSTEM_GRAPHITE)"=="YES"
-CFLAGSCXX+=-DADAPT_EXT_STL
-.ENDIF
-.ENDIF

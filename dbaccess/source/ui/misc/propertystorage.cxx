@@ -117,7 +117,7 @@ namespace dbaui
             )
             return;
 
-        OSL_ENSURE( false, "SetItemPropertyStorage::getPropertyValue: unsupported item type!" );
+        OSL_FAIL( "SetItemPropertyStorage::getPropertyValue: unsupported item type!" );
     }
 
     //--------------------------------------------------------------------
@@ -129,7 +129,7 @@ namespace dbaui
             )
             return;
 
-        OSL_ENSURE( false, "SetItemPropertyStorage::setPropertyValue: unsupported item type!" );
+        OSL_FAIL( "SetItemPropertyStorage::setPropertyValue: unsupported item type!" );
     }
 
 //........................................................................

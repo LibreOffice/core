@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "txatbase.hxx"
 #include "ndhints.hxx"
 #include <txtatr.hxx>
@@ -43,46 +41,13 @@
 _SV_IMPL_SORTAR_ALG( SwpHtStart, SwTxtAttr* )
 _SV_IMPL_SORTAR_ALG( SwpHtEnd, SwTxtAttr* )
 
-#ifdef NIE
-
-void DumpHints( const SwpHtStart &rHtStart,
-                const SwpHtEnd &rHtEnd )
-{
-#if OSL_DEBUG_LEVEL > 1
-    aDbstream << "DumpHints:" << endl;
-    (aDbstream << "\tStarts:" ).WriteNumber(rHtStart.Count()) << endl;
-    for( USHORT i = 0; i < rHtStart.Count(); ++i )
-    {
-        const SwTxtAttr *pHt = rHtStart[i];
-        ((((aDbstream << '\t').WriteNumber( i )<< " [").WriteNumber( pHt->Which() )
-            << ']' << '\t').WriteNumber( long( pHt ) )
-                  << '\t').WriteNumber( *pHt->GetStart() );
-        if( pHt->GetEnd() )
-            (aDbstream << " -> " ).WriteNumber( *pHt->GetEnd() );
-        aDbstream << endl;
-    }
-    (aDbstream << "\tEnds:").WriteNumber( rHtEnd.Count() )<< endl;
-    for( i = 0; i < rHtEnd.Count(); ++i )
-    {
-        const SwTxtAttr *pHt = rHtEnd[i];
-        (((aDbstream << '\t').WriteNumber( i )<< " [").WriteNumber( pHt->Which() )
-            << ']' << '\t' ).WriteNumber( long( pHt ) );
-        if( pHt->GetEnd() )
-            (aDbstream << '\t').WriteNumber( *pHt->GetEnd() )<< " <- ";
-        aDbstream.WriteNumber( *pHt->GetStart() )<< endl;
-    }
-    aDbstream << endl;
-#endif
-}
-#else
 inline void DumpHints(const SwpHtStart &, const SwpHtEnd &) { }
-#endif
 
 /*************************************************************************
  *                        inline IsEqual()
  *************************************************************************/
 
-inline BOOL IsEqual( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
+inline sal_Bool IsEqual( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     return (long)(&rHt1) == (long)(&rHt2);
 }
@@ -98,7 +63,7 @@ inline BOOL IsEqual( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 // Sortierreihenfolge: Start, Ende (umgekehrt!), Which-Wert (umgekehrt!),
 //                     als letztes die Adresse selbst
 
-static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
+static sal_Bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     if ( *rHt1.GetStart() == *rHt2.GetStart() )
     {
@@ -106,14 +71,14 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
         const xub_StrLen nHt2 = *rHt2.GetAnyEnd();
         if ( nHt1 == nHt2 )
         {
-            const USHORT nWhich1 = rHt1.Which();
-            const USHORT nWhich2 = rHt2.Which();
+            const sal_uInt16 nWhich1 = rHt1.Which();
+            const sal_uInt16 nWhich2 = rHt2.Which();
             if ( nWhich1 == nWhich2 )
             {
                 if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
-                    const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
-                    const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
+                    const sal_uInt16 nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
+                    const sal_uInt16 nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
                     OSL_ENSURE( nS1 != nS2, "AUTOSTYLES: lcl_IsLessStart trouble" );
                     if ( nS1 != nS2 ) // robust
                         return nS1 < nS2;
@@ -134,7 +99,7 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
  *************************************************************************/
 
 // Zuerst nach Ende danach nach Ptr
-static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
+static sal_Bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
     const xub_StrLen nHt1 = *rHt1.GetAnyEnd();
     const xub_StrLen nHt2 = *rHt2.GetAnyEnd();
@@ -142,14 +107,14 @@ static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
     {
         if ( *rHt1.GetStart() == *rHt2.GetStart() )
         {
-            const USHORT nWhich1 = rHt1.Which();
-            const USHORT nWhich2 = rHt2.Which();
+            const sal_uInt16 nWhich1 = rHt1.Which();
+            const sal_uInt16 nWhich2 = rHt2.Which();
             if ( nWhich1 == nWhich2 )
             {
                 if ( RES_TXTATR_CHARFMT == nWhich1 )
                 {
-                    const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
-                    const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
+                    const sal_uInt16 nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
+                    const sal_uInt16 nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
                     OSL_ENSURE( nS1 != nS2, "AUTOSTYLES: lcl_IsLessEnd trouble" );
                     if ( nS1 != nS2 ) // robust
                         return nS1 > nS2;
@@ -170,9 +135,9 @@ static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
  *                      SwpHtStart::Seek_Entry()
  *************************************************************************/
 
-BOOL SwpHtStart::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
+sal_Bool SwpHtStart::Seek_Entry( const SwTxtAttr *pElement, sal_uInt16 *pPos ) const
 {
-    USHORT nOben = Count(), nMitte, nUnten = 0;
+    sal_uInt16 nOben = Count(), nMitte, nUnten = 0;
     if( nOben > 0 )
     {
         nOben--;
@@ -183,7 +148,7 @@ BOOL SwpHtStart::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
             if( IsEqual( *pMitte, *pElement ) )
             {
                 *pPos = nMitte;
-                return TRUE;
+                return sal_True;
             }
             else
                 if( lcl_IsLessStart( *pMitte, *pElement ) )
@@ -192,23 +157,23 @@ BOOL SwpHtStart::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
                     if( nMitte == 0 )
                     {
                         *pPos = nUnten;
-                        return FALSE;
+                        return sal_False;
                     }
                     else
                         nOben = nMitte - 1;
         }
     }
     *pPos = nUnten;
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
  *                      SwpHtEnd::Seek_Entry()
  *************************************************************************/
 
-BOOL SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
+sal_Bool SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, sal_uInt16 *pPos ) const
 {
-    USHORT nOben = Count(), nMitte, nUnten = 0;
+    sal_uInt16 nOben = Count(), nMitte, nUnten = 0;
     if( nOben > 0 )
     {
         nOben--;
@@ -219,7 +184,7 @@ BOOL SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
             if( IsEqual( *pMitte, *pElement ) )
             {
                 *pPos = nMitte;
-                return TRUE;
+                return sal_True;
             }
             else
                 if( lcl_IsLessEnd( *pMitte, *pElement ) )
@@ -228,14 +193,14 @@ BOOL SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
                     if( nMitte == 0 )
                     {
                         *pPos = nUnten;
-                        return FALSE;
+                        return sal_False;
                     }
                     else
                         nOben = nMitte - 1;
         }
     }
     *pPos = nUnten;
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -246,7 +211,7 @@ void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 {
     Resort();
 #if OSL_DEBUG_LEVEL > 1
-    USHORT nPos;
+    sal_uInt16 nPos;
     OSL_ENSURE(!m_HintStarts.Seek_Entry( pHt, &nPos ),
             "Insert: hint already in HtStart");
     OSL_ENSURE(!m_HintEnds.Seek_Entry( pHt, &nPos ),
@@ -254,15 +219,9 @@ void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 #endif
     m_HintStarts.Insert( pHt );
     m_HintEnds.Insert( pHt );
-#if OSL_DEBUG_LEVEL > 1
-#ifdef NIE
-    (aDbstream << "Insert: " ).WriteNumber( long( pHt ) ) << endl;
-    DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
 }
 
-void SwpHintsArray::DeleteAtPos( const USHORT nPos )
+void SwpHintsArray::DeleteAtPos( const sal_uInt16 nPos )
 {
     // optimization: nPos is the position in the Starts array
     const SwTxtAttr *pHt = m_HintStarts[ nPos ];
@@ -270,15 +229,9 @@ void SwpHintsArray::DeleteAtPos( const USHORT nPos )
 
     Resort();
 
-    USHORT nEndPos;
+    sal_uInt16 nEndPos;
     m_HintEnds.Seek_Entry( pHt, &nEndPos );
     m_HintEnds.Remove( nEndPos );
-#if OSL_DEBUG_LEVEL > 1
-#ifdef NIE
-    (aDbstream << "DeleteAtPos: " ).WriteNumber( long( pHt ) ) << endl;
-    DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -307,7 +260,7 @@ bool SwpHintsArray::Check() const
     const SwTxtAttr *pLastStart = 0;
     const SwTxtAttr *pLastEnd = 0;
 
-    for( USHORT i = 0; i < Count(); ++i )
+    for( sal_uInt16 i = 0; i < Count(); ++i )
     {
         // --- Start-Kontrolle ---
 
@@ -359,7 +312,7 @@ bool SwpHintsArray::Check() const
         CHECK_ERR( STRING_LEN != nIdx, "HintsCheck: no GetEndOf" );
 
         // 7a) character attributes in array?
-        USHORT nWhich = pHt->Which();
+        sal_uInt16 nWhich = pHt->Which();
         CHECK_ERR( !isCHRATR(nWhich),
                    "HintsCheck: Character attribute in start array" );
 
@@ -369,7 +322,6 @@ bool SwpHintsArray::Check() const
                    "HintsCheck: Character attribute in end array" );
 
         // 8) style portion check
-#if OSL_DEBUG_LEVEL > 1
         const SwTxtAttr* pHtThis = m_HintStarts[i];
         const SwTxtAttr* pHtLast = i > 0 ? m_HintStarts[i-1] : 0;
         CHECK_ERR( 0 == i ||
@@ -391,7 +343,7 @@ bool SwpHintsArray::Check() const
         // 9) nesting portion check
         if (pHtThis->IsNesting())
         {
-            for ( USHORT j = 0; j < Count(); ++j )
+            for ( sal_uInt16 j = 0; j < Count(); ++j )
             {
                 SwTxtAttr const * const pOther( m_HintStarts[j] );
                 if ( pOther->IsNesting() &&  (i != j) )
@@ -409,7 +361,7 @@ bool SwpHintsArray::Check() const
         // 10) dummy char check (unfortunately cannot check SwTxtNode::m_Text)
         if (pHtThis->HasDummyChar())
         {
-            for ( USHORT j = 0; j < i; ++j )
+            for ( sal_uInt16 j = 0; j < i; ++j )
             {
                 SwTxtAttr const * const pOther( m_HintStarts[j] );
                 if (pOther->HasDummyChar())
@@ -419,7 +371,6 @@ bool SwpHintsArray::Check() const
                 }
             }
         }
-#endif
     }
     return true;
 }
@@ -439,20 +390,13 @@ bool SwpHintsArray::Resort()
 {
     bool bResort = false;
     const SwTxtAttr *pLast = 0;
-    USHORT i;
+    sal_uInt16 i;
 
     for ( i = 0; i < m_HintStarts.Count(); ++i )
     {
         const SwTxtAttr *pHt = m_HintStarts[i];
         if( pLast && !lcl_IsLessStart( *pLast, *pHt ) )
         {
-#ifdef NIE
-#if OSL_DEBUG_LEVEL > 1
-//            OSL_ENSURE( bResort, "!Resort/Start: correcting hints-array" );
-            aDbstream << "Resort: Starts" << endl;
-            DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
             m_HintStarts.Remove( i );
             m_HintStarts.Insert( pHt );
             pHt = m_HintStarts[i];
@@ -469,12 +413,6 @@ bool SwpHintsArray::Resort()
         const SwTxtAttr *pHt = m_HintEnds[i];
         if( pLast && !lcl_IsLessEnd( *pLast, *pHt ) )
         {
-#ifdef NIE
-#if OSL_DEBUG_LEVEL > 1
-            aDbstream << "Resort: Ends" << endl;
-            DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
             m_HintEnds.Remove( i );
             m_HintEnds.Insert( pHt );
             pHt = m_HintEnds[i]; // normalerweise == pLast
@@ -486,12 +424,6 @@ bool SwpHintsArray::Resort()
         }
         pLast = pHt;
     }
-#if OSL_DEBUG_LEVEL > 1
-#ifdef NIE
-    aDbstream << "Resorted:" << endl;
-    DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
     return bResort;
 }
 

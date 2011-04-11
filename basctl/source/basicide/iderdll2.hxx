@@ -58,11 +58,11 @@ private:
     String          aAddLibPath;
     String          aAddLibFilter;
 
-    USHORT          nBasicDialogCount;
+    sal_uInt16          nBasicDialogCount;
 
-    BOOL            OLD_bRelMacroRecording;
-    BOOL            bChoosingMacro;
-    BOOL            bShellInCriticalSection;
+    sal_Bool            OLD_bRelMacroRecording;
+    sal_Bool            bChoosingMacro;
+    sal_Bool            bShellInCriticalSection;
 
 protected:
     DECL_LINK( GlobalBasicBreakHdl, StarBASIC * );
@@ -76,10 +76,10 @@ public:
     BasicEntryDescriptor&   GetLastEntryDescriptor()    { return m_aLastEntryDesc; }
     void                    SetLastEntryDescriptor( BasicEntryDescriptor& rDesc ) { m_aLastEntryDesc = rDesc; }
 
-    BOOL&                   ChoosingMacro()             { return bChoosingMacro; }
-    BOOL&                   ShellInCriticalSection()    { return bShellInCriticalSection; }
+    sal_Bool&                   ChoosingMacro()             { return bChoosingMacro; }
+    sal_Bool&                   ShellInCriticalSection()    { return bShellInCriticalSection; }
 
-    USHORT                  GetBasicDialogCount() const { return nBasicDialogCount; }
+    sal_uInt16                  GetBasicDialogCount() const { return nBasicDialogCount; }
     void                    IncBasicDialogCount()       { nBasicDialogCount++; }
     void                    DecBasicDialogCount()       { nBasicDialogCount--; }
 
@@ -101,8 +101,6 @@ public:
 
     const String&           GetAddLibFilter() const { return aAddLibFilter; }
     void                    SetAddLibFilter( const String& rFilter )  { aAddLibFilter = rFilter; }
-
-    DECL_LINK( ExecuteMacroEvent, void * );
 };
 
 

@@ -41,10 +41,6 @@ G_BEGIN_DECLS
 #define OOO_IS_MOUNT_OPERATION_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), OOO_TYPE_MOUNT_OPERATION))
 #define OOO_MOUNT_OPERATION_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), OOO_TYPE_MOUNT_OPERATION, OOoMountOperationClass))
 
-typedef struct OOoMountOperation         OOoMountOperation;
-typedef struct OOoMountOperationClass    OOoMountOperationClass;
-typedef struct OOoMountOperationPrivate  OOoMountOperationPrivate;
-
 struct OOoMountOperation
 {
     GMountOperation parent_instance;

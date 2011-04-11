@@ -27,17 +27,11 @@
 #ifndef __com_sun_star_beans_XVetoableChangeListener_idl__
 #define __com_sun_star_beans_XVetoableChangeListener_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
-#endif
 
-#ifndef __com_sun_star_beans_PropertyChangeEvent_idl__
 #include <com/sun/star/beans/PropertyChangeEvent.idl>
-#endif
 
-#ifndef __com_sun_star_beans_PropertyVetoException_idl__
 #include <com/sun/star/beans/PropertyVetoException.idl>
-#endif
 
 
 //=============================================================================

@@ -53,7 +53,6 @@
 #include <threadhelp/threadhelpbase.hxx>
 #include <macros/debug.hxx>
 
-// #110897#
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #define REFERENCE                                       ::com::sun::star::uno::Reference
@@ -76,7 +75,6 @@ class MenuManager : public ThreadHelpBase           ,
                     public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
 {
     public:
-        // #110897#
         MenuManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             REFERENCE< XFRAME >& rFrame,
@@ -98,11 +96,14 @@ class MenuManager : public ThreadHelpBase           ,
 
         void    RemoveListener();
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& getServiceFactory();
 
         static void UpdateSpecialWindowMenu( Menu* pMenu ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,IMutex& _rMutex);
-        static void FillMenuImages(::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,Menu* _pMenu,sal_Bool bIsHiContrast,sal_Bool bShowMenuImages);
+        static void FillMenuImages(
+            ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& xFrame,
+            Menu* _pMenu,
+            sal_Bool bShowMenuImages
+        );
 
     protected:
         DECL_LINK( Highlight, Menu * );
@@ -114,16 +115,16 @@ class MenuManager : public ThreadHelpBase           ,
         void UpdateSpecialWindowMenu( Menu* pMenu );
         void ClearMenuDispatch(const EVENTOBJECT& Source = EVENTOBJECT(),bool _bRemoveOnly = true);
         void SetHdl();
-        void AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,USHORT _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren);
-        USHORT FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,USHORT _nIndex) const;
+        void AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren);
+        sal_uInt16 FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,sal_uInt16 _nIndex) const;
 
 
         struct MenuItemHandler
         {
-            MenuItemHandler( USHORT aItemId, MenuManager* pManager, REFERENCE< XDISPATCH >& rDispatch ) :
+            MenuItemHandler( sal_uInt16 aItemId, MenuManager* pManager, REFERENCE< XDISPATCH >& rDispatch ) :
                 nItemId( aItemId ), pSubMenuManager( pManager ), xMenuItemDispatch( rDispatch ) {}
 
-            USHORT                  nItemId;
+            sal_uInt16                  nItemId;
             ::rtl::OUString         aTargetFrame;
             ::rtl::OUString         aMenuItemURL;
             ::rtl::OUString         aFilter;
@@ -137,21 +138,19 @@ class MenuManager : public ThreadHelpBase           ,
                             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsList,
                             const MenuItemHandler* );
 
-        MenuItemHandler* GetMenuItemHandler( USHORT nItemId );
+        MenuItemHandler* GetMenuItemHandler( sal_uInt16 nItemId );
 
         sal_Bool                            m_bInitialized;
         sal_Bool                            m_bDeleteMenu;
         sal_Bool                            m_bDeleteChildren;
         sal_Bool                            m_bActive;
         sal_Bool                            m_bIsBookmarkMenu;
-        sal_Bool                            m_bWasHiContrast;
         sal_Bool                            m_bShowMenuImages;
         ::rtl::OUString                     m_aMenuItemCommand;
         Menu*                               m_pVCLMenu;
         REFERENCE< XFRAME >                 m_xFrame;
         ::std::vector< MenuItemHandler* >   m_aMenuItemHandlerVector;
 
-        // #110897#
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& mxServiceFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >             m_xURLTransformer;
 };

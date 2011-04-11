@@ -230,8 +230,6 @@ XCDGenerator gGenerator;
 //*****************************************************************************************************************
 void XCDGenerator::Main()
 {
-    // Must be :-)
-//    impl_printCopyright();
 
     // Init global servicemanager and set it.
     // It's neccessary for other services ... e.g. configuration.
@@ -343,24 +341,6 @@ void XCDGenerator::impl_parseCommandLine( AppMember& rMember )
     while( nArgument<nCount )
     {
         osl_getCommandArg( nArgument, &sArgument.pData );
-/*OBSOLETE
-        //_____________________________________________________________________________________________________
-        // look for "-fis=..."
-        if( sArgument.compareTo( ARGUMENT_FILENAME_STANDARD, ARGUMENTLENGTH ) == ARGUMENTFOUND )
-        {
-            rMember.sFileNameStandard = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
-            ++nMinCount;
-        }
-        else
-        //_____________________________________________________________________________________________________
-        // look for "-fia=..."
-        if( sArgument.compareTo( ARGUMENT_FILENAME_ADDITIONAL, ARGUMENTLENGTH ) == ARGUMENTFOUND )
-        {
-            rMember.sFileNameAdditional = sArgument.copy( ARGUMENTLENGTH, sArgument.getLength()-ARGUMENTLENGTH );
-            ++nMinCount;
-        }
-        else
-*/
         //_____________________________________________________________________________________________________
         // look for "-pas=..."
         if( sArgument.compareTo( ARGUMENT_PACKAGE_STANDARD, ARGUMENTLENGTH ) == ARGUMENTFOUND )
@@ -2310,53 +2290,6 @@ sal_Bool XCDGenerator::impl_isUsAsciiAlphaDigit(sal_Unicode c, sal_Bool bDigitAl
 ::rtl::OUString XCDGenerator::impl_encodeSetName( const ::rtl::OUString& rSource )
 {
     return impl_encodeSpecialSigns( rSource );
-/*
-    rtl::OUStringBuffer aTarget;
-
-    sal_Unicode const * pBegin = rSource.getStr();
-    sal_Unicode const * pEnd = pBegin + rSource.getLength();
-    sal_Unicode const * pCopyEnd = pBegin;
-    sal_Unicode const * p = pBegin;
-    while (p != pEnd)
-    {
-        sal_Unicode c = *p;
-        if (!impl_isUsAsciiAlphaDigit(c,p != pBegin))
-            switch (c)
-            {
-                case '-':
-                case '.':
-                    if (p != pBegin)
-                        break;
-                default:
-                    aTarget.append(pCopyEnd, p - pCopyEnd);
-                    aTarget.append(sal_Unicode('_'));
-                    ModifiedUTF7Buffer aBuffer(&aTarget);
-                    for (;;)
-                    {
-                        aBuffer.write(c);
-                        ++p;
-                        if (p == pEnd)
-                            break;
-                        c = *p;
-                        if (impl_isUsAsciiAlphaDigit(c) || c == '-' || c == '.')
-                            break;
-                    }
-                    aBuffer.flush();
-                    aTarget.append(sal_Unicode('_'));
-                    pCopyEnd = p;
-                    continue;
-            }
-        ++p;
-    }
-
-    if (pCopyEnd == pBegin)
-        return rSource;
-    else
-    {
-        aTarget.append(pCopyEnd, pEnd - pCopyEnd);
-        return aTarget.makeStringAndClear();
-    }
-*/
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

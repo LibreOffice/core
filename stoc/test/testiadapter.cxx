@@ -50,7 +50,6 @@
 
 
 using namespace test;
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::uno;
@@ -60,6 +59,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 
 //==================================================================================================
@@ -113,7 +116,7 @@ sal_Bool equals( const test::TestData & rData1, const test::TestData & rData2 )
         {
             if (! equals( pElements1[nLen], pElements2[nLen] ))
             {
-                OSL_ENSURE( sal_False, "### sequence element did not match!" );
+                OSL_FAIL( "### sequence element did not match!" );
                 return sal_False;
             }
         }
@@ -538,7 +541,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
     }
     catch (Exception &)
     {
-        OSL_ENSURE( sal_False, "### unexpected exception caught!" );
+        OSL_FAIL( "### unexpected exception caught!" );
         throw;
     }
 
@@ -764,7 +767,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
                 sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
                 SAL_CONST_INT64(0x123456789abcdef0),
                 SAL_CONST_UINT64(0xfedcba9876543210),
-                (float)17.0815, 3.1415926359, TestEnum_LOLA, OUString::createFromAscii("dumdidum"), xI,
+                (float)17.0815, 3.1415926359, TestEnum_LOLA, OUString(RTL_CONSTASCII_USTRINGPARAM("dumdidum")), xI,
                 Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
 
         OSL_ENSURE( aData.Any == xI, "### unexpected any!" );
@@ -867,7 +870,7 @@ test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cC
 {
     IllegalArgumentException aExc;
     aExc.ArgumentPosition = 5;
-    aExc.Message          = OUString::createFromAscii("dum dum dum ich tanz im kreis herum...");
+    aExc.Message          = OUString(RTL_CONSTASCII_USTRINGPARAM("dum dum dum ich tanz im kreis herum..."));
     aExc.Context          = *this;
     throw aExc;
 }
@@ -875,7 +878,7 @@ test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cC
 sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
-    aExc.Message          = OUString::createFromAscii("dum dum dum ich tanz im kreis herum...");
+    aExc.Message          = OUString(RTL_CONSTASCII_USTRINGPARAM("dum dum dum ich tanz im kreis herum..."));
     aExc.Context          = *this;
     throw aExc;
 }
@@ -883,7 +886,7 @@ sal_Int32 Test_Impl::getRuntimeException() throw(::com::sun::star::uno::RuntimeE
 void Test_Impl::setRuntimeException( sal_Int32 /*_runtimeexception*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
     RuntimeException aExc;
-    aExc.Message          = OUString::createFromAscii("dum dum dum ich tanz im kreis herum...");
+    aExc.Message          = OUString(RTL_CONSTASCII_USTRINGPARAM("dum dum dum ich tanz im kreis herum..."));
     aExc.Context          = *this;
     throw aExc;
 }
@@ -952,7 +955,7 @@ sal_Bool raiseException( const Reference<XLanguageBindingTest > & xLBT )
 static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
 {
     Reference< XInvocationAdapterFactory > xAdapFac(
-        xMgr->createInstance( OUString::createFromAscii("com.sun.star.script.InvocationAdapterFactory") ), UNO_QUERY );
+        xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.InvocationAdapterFactory")) ), UNO_QUERY );
     Reference< XInvocationAdapterFactory2 > xAdapFac2( xAdapFac, UNO_QUERY_THROW );
 
     Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
@@ -997,9 +1000,9 @@ static sal_Bool test_adapter( const Reference< XMultiServiceFactory > & xMgr )
 static sal_Bool test_invocation( const Reference< XMultiServiceFactory > & xMgr )
 {
     Reference< XInvocationAdapterFactory > xAdapFac(
-        xMgr->createInstance( OUString::createFromAscii("com.sun.star.script.InvocationAdapterFactory") ), UNO_QUERY );
+        xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.InvocationAdapterFactory")) ), UNO_QUERY );
     Reference< XSingleServiceFactory > xInvocFac(
-        xMgr->createInstance( OUString::createFromAscii("com.sun.star.script.Invocation") ), UNO_QUERY );
+        xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Invocation")) ), UNO_QUERY );
 
     Reference< XLanguageBindingTest > xOriginal( (XLanguageBindingTest *)new Test_Impl() );
     Any aOriginal( &xOriginal, ::getCppuType( &xOriginal ) );
@@ -1028,24 +1031,24 @@ SAL_IMPLEMENT_MAIN()
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         xImplReg->registerImplementation(
-            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-            OUString::createFromAscii("invocadapt.uno" SAL_DLLEXTENSION),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("invocadapt.uno" SAL_DLLEXTENSION)),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
-            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-            OUString::createFromAscii("stocservices.uno" SAL_DLLEXTENSION),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("stocservices.uno" SAL_DLLEXTENSION)),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
-            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-            OUString::createFromAscii("invocation.uno" SAL_DLLEXTENSION),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("invocation.uno" SAL_DLLEXTENSION)),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
-            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-            OUString::createFromAscii("reflection.uno" SAL_DLLEXTENSION),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("reflection.uno" SAL_DLLEXTENSION)),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
-            OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
-            OUString::createFromAscii("introspection.uno" SAL_DLLEXTENSION),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("introspection.uno" SAL_DLLEXTENSION)),
             Reference< XSimpleRegistry >() );
 
         if (test_adapter( xMgr ))
@@ -1059,7 +1062,7 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (Exception & rExc)
     {
-        fprintf( stderr, "> exception occured: " );
+        fprintf( stderr, "> exception occurred: " );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "%s\n", aMsg.getStr() );
     }

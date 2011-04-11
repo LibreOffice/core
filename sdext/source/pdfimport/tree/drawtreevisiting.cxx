@@ -37,13 +37,15 @@
 #include "drawtreevisiting.hxx"
 #include "genericelements.hxx"
 
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <basegfx/range/b2drange.hxx>
+#include "basegfx/polygon/b2dpolypolygontools.hxx"
+#include "basegfx/range/b2drange.hxx"
 
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "com/sun/star/i18n/XBreakIterator.hpp"
+#include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "comphelper/processfactory.hxx"
-#include <com/sun/star/i18n/ScriptType.hpp>
+#include "com/sun/star/i18n/ScriptType.hpp"
+#include "com/sun/star/i18n/DirectionProperty.hpp"
+
 #include <string.h>
 
 using namespace ::com::sun::star;
@@ -61,7 +63,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
     {
         Reference< XComponentContext > xContext( this->m_rProcessor.m_xContext, uno::UNO_SET_THROW );
         Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
-    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator"), xContext);
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")), xContext);
 
         mxBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
     }
@@ -74,10 +76,22 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
     {
         Reference< XComponentContext > xContext( m_rEmitContext.m_xContext, uno::UNO_SET_THROW );
         Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
-    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator"), xContext);
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")), xContext);
         mxBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
     }
     return mxBreakIter;
+}
+
+const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >& DrawXmlEmitter::GetCharacterClassification()
+{
+    if ( !mxCharClass.is() )
+    {
+        Reference< XComponentContext > xContext( m_rEmitContext.m_xContext, uno::UNO_SET_THROW );
+        Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.i18n.CharacterClassification"), xContext);
+        mxCharClass = uno::Reference< i18n::XCharacterClassification >( xInterface, uno::UNO_QUERY );
+    }
+    return mxCharClass;
 }
 
 void DrawXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* >::const_iterator&   )
@@ -98,7 +112,7 @@ void DrawXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* >:
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
     m_rEmitContext.rEmitter.endTag( pType );
 }
@@ -120,14 +134,25 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
 
     rtl::OUString str(elem.Text.getStr());
 
-    // Check for CTL
-    bool isComplex = false;
-    for(int i=0; i< elem.Text.getLength(); i++)
+    // Check for RTL
+    bool isRTL = false;
+    Reference< i18n::XCharacterClassification > xCC( GetCharacterClassification() );
+    if( xCC.is() )
     {
-    sal_Int16 nType = GetBreakIterator()->getScriptType( str, i + 1);
-    if (nType == ::com::sun::star::i18n::ScriptType::COMPLEX)
-        isComplex = true;
+        for(int i=1; i< elem.Text.getLength(); i++)
+        {
+            sal_Int16 nType = xCC->getCharacterDirection( str, i );
+            if ( nType == ::com::sun::star::i18n::DirectionProperty_RIGHT_TO_LEFT           ||
+                 nType == ::com::sun::star::i18n::DirectionProperty_RIGHT_TO_LEFT_ARABIC    ||
+                 nType == ::com::sun::star::i18n::DirectionProperty_RIGHT_TO_LEFT_EMBEDDING ||
+                 nType == ::com::sun::star::i18n::DirectionProperty_RIGHT_TO_LEFT_OVERRIDE
+                )
+                isRTL = true;
+        }
     }
+
+    if (isRTL)  // If so, reverse string
+        str = m_rProcessor.mirrorString( str );
 
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 
@@ -158,7 +183,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag( "text:span" );
@@ -180,7 +205,7 @@ void DrawXmlEmitter::visit( ParagraphElement& elem, const std::list< Element* >:
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag( pTagType );
@@ -188,7 +213,9 @@ void DrawXmlEmitter::visit( ParagraphElement& elem, const std::list< Element* >:
 
 void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
                                      PropertyMap&       rProps,
-                                     const EmitContext& rEmitContext )
+                                     const EmitContext& rEmitContext,
+                                     bool               bWasTransformed
+                                     )
 {
     double rel_x = rElem.x, rel_y = rElem.y;
 
@@ -199,7 +226,7 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
 
     const GraphicsContext& rGC =
         rEmitContext.rProcessor.getGraphicsContext( rElem.GCId );
-    if( rGC.Transformation.isIdentity() )
+    if( rGC.Transformation.isIdentity() || bWasTransformed )
     {
         rProps[ USTR( "svg:x" ) ]       = convertPixelToUnitString( rel_x );
         rProps[ USTR( "svg:y" ) ]       = convertPixelToUnitString( rel_y );
@@ -265,7 +292,7 @@ void DrawXmlEmitter::visit( FrameElement& elem, const std::list< Element* >::con
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     if( bTextBox )
@@ -326,7 +353,10 @@ void DrawXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >::
     }
 
     PropertyMap aProps;
-    fillFrameProps( elem, aProps, m_rEmitContext );
+    // PDFIProcessor transforms geometrical objects, not images and text
+    // so we need to tell fillFrameProps here that the transformation for
+    // a PolyPolyElement was already applied (aside form translation)
+    fillFrameProps( elem, aProps, m_rEmitContext, true );
     rtl::OUStringBuffer aBuf( 64 );
     aBuf.appendAscii( "0 0 " );
     aBuf.append( convPx2mmPrec2(elem.w)*100.0 );
@@ -363,7 +393,7 @@ void DrawXmlEmitter::visit( PageElement& elem, const std::list< Element* >::cons
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag("draw:page");
@@ -379,7 +409,7 @@ void DrawXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >::
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        this_it++;
+        ++this_it;
     }
 
     m_rEmitContext.rEmitter.endTag( m_bWriteDrawDocument ? "office:drawing" : "office:presentation" );
@@ -680,21 +710,14 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
 {
     if( rParent.Children.empty() ) // this should not happen
     {
-        OSL_ENSURE( 0, "empty paragraph optimized" );
+        OSL_FAIL( "empty paragraph optimized" );
         return;
     }
 
     // concatenate child elements with same font id
     std::list< Element* >::iterator next = rParent.Children.begin();
     std::list< Element* >::iterator it = next++;
-    FrameElement* pFrame = dynamic_cast<FrameElement*>(rParent.Parent);
-    bool bRotatedFrame = false;
-    if( pFrame )
-    {
-        const GraphicsContext& rFrameGC = m_rProcessor.getGraphicsContext( pFrame->GCId );
-        if( rFrameGC.isRotatedOrSkewed() )
-            bRotatedFrame = true;
-    }
+
     while( next != rParent.Children.end() )
     {
         bool bConcat = false;
@@ -906,26 +929,6 @@ void DrawXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element* 
     aStyle.SubStyles.push_back( &aSubStyle );
 
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
-
-    // update page boundaries
-    if( elem.Parent )
-    {
-        // check for center alignement
-        // criterion: paragraph is small relative to parent and distributed around its center
-        double p_x = elem.Parent->x;
-        double p_y = elem.Parent->y;
-        double p_w = elem.Parent->w;
-        double p_h = elem.Parent->h;
-
-        PageElement* pPage = dynamic_cast<PageElement*>(elem.Parent);
-        if( pPage )
-        {
-            p_x += pPage->LeftMargin;
-            p_y += pPage->TopMargin;
-            p_w -= pPage->LeftMargin+pPage->RightMargin;
-            p_h -= pPage->TopMargin+pPage->BottomMargin;
-        }
-    }
 
     elem.applyToChildren(*this);
 }

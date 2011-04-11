@@ -1533,7 +1533,7 @@
                             <xsl:value-of select="concat( $curr-char,$second-char , ':'  , $position +2)"/>
                         </xsl:if>
                         <xsl:if test="$isvalid = '0' ">
-                            <xsl:message>ooo2wordml_path.xsl: Error command occured </xsl:message>
+                            <xsl:message>ooo2wordml_path.xsl: Error command occurred </xsl:message>
                         </xsl:if>
                     </xsl:when>
                     <xsl:when test="$curr-char = 'n' ">
@@ -1550,7 +1550,7 @@
                             <xsl:value-of select="concat( $curr-char,$second-char , ':'  , $position +2)"/>
                         </xsl:if>
                         <xsl:if test="$isvalid = '0' ">
-                            <xsl:message>ooo2wordml_path.xsl: Error command occured </xsl:message>
+                            <xsl:message>ooo2wordml_path.xsl: Error command occurred </xsl:message>
                         </xsl:if>
                     </xsl:when>
                     <xsl:when test="$curr-char = 'w' ">
@@ -1567,7 +1567,7 @@
                             <xsl:value-of select="concat( $curr-char,$second-char , ':'  , $position +2)"/>
                         </xsl:if>
                         <xsl:if test="$isvalid = '0' ">
-                            <xsl:message>ooo2wordml_path.xsl: Error command occured </xsl:message>
+                            <xsl:message>ooo2wordml_path.xsl: Error command occurred </xsl:message>
                         </xsl:if>
                     </xsl:when>
                     <xsl:when test="$curr-char = 'q' ">
@@ -1585,7 +1585,7 @@
                             <xsl:value-of select="concat( $curr-char,$second-char , ':'  , $position +2)"/>
                         </xsl:if>
                         <xsl:if test="$isvalid = '0' ">
-                            <xsl:message>ooo2wordml_path.xsl: Error command occured </xsl:message>
+                            <xsl:message>ooo2wordml_path.xsl: Error command occurred </xsl:message>
                         </xsl:if>
                     </xsl:when>
                     <xsl:when test="$curr-char = 'h' ">
@@ -1601,7 +1601,7 @@
                             <xsl:value-of select="concat( $curr-char,$second-char , ':'  , $position +2)"/>
                         </xsl:if>
                         <xsl:if test="$isvalid = '0' ">
-                            <xsl:message>ooo2wordml_path.xsl: Error command occured </xsl:message>
+                            <xsl:message>ooo2wordml_path.xsl: Error command occurred </xsl:message>
                         </xsl:if>
                     </xsl:when>
                     <xsl:when test="string-length(translate($curr-char ,  'mlcxetrv' ,'')) = 0 ">

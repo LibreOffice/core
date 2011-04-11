@@ -30,6 +30,7 @@
 #include "precompiled_svl.hxx"
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <svl/hint.hxx>
 #include <svl/smplhint.hxx>
@@ -58,7 +59,7 @@ void SfxBroadcaster::Broadcast( const SfxHint &rHint )
     if ( aListeners.Count() /*! || aGlobListeners.Count() */ )
     {
         // notify all registered listeners exactly once
-        for ( USHORT n = 0; n < aListeners.Count(); ++n )
+        for ( sal_uInt16 n = 0; n < aListeners.Count(); ++n )
         {
             SfxListener* pListener = aListeners[n];
             if ( pListener )
@@ -97,7 +98,7 @@ SfxBroadcaster::~SfxBroadcaster()
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     // remove all still registered listeners
-    for ( USHORT nPos = 0; nPos < aListeners.Count(); ++nPos )
+    for ( sal_uInt16 nPos = 0; nPos < aListeners.Count(); ++nPos )
     {
         SfxListener *pListener = aListeners[nPos];
         if ( pListener )
@@ -123,7 +124,7 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 {
     DBG_CTOR(SfxBroadcaster, 0);
 
-    for ( USHORT n = 0; n < rBC.aListeners.Count(); ++n )
+    for ( sal_uInt16 n = 0; n < rBC.aListeners.Count(); ++n )
     {
         SfxListener *pListener = rBC.aListeners[n];
         if ( pListener )
@@ -135,25 +136,25 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 
 // add a new SfxListener to the list
 
-BOOL SfxBroadcaster::AddListener( SfxListener& rListener )
+sal_Bool SfxBroadcaster::AddListener( SfxListener& rListener )
 {
     DBG_CHKTHIS(SfxBroadcaster, 0);
     const SfxListener *pListener = &rListener;
     const SfxListener *pNull = 0;
-    USHORT nFreePos = aListeners.GetPos( pNull );
+    sal_uInt16 nFreePos = aListeners.GetPos( pNull );
     if ( nFreePos < aListeners.Count() )
         aListeners.GetData()[nFreePos] = pListener;
     else if ( aListeners.Count() < (USHRT_MAX-1) )
         aListeners.Insert( pListener, aListeners.Count() );
     else
     {
-        DBG_ERROR( "array overflow" );
-        return FALSE;
+        OSL_FAIL( "array overflow" );
+        return sal_False;
     }
 
     DBG_ASSERT( USHRT_MAX != aListeners.GetPos(pListener),
                 "AddListener failed" );
-    return TRUE;
+    return sal_True;
 }
 
 //--------------------------------------------------------------------
@@ -171,8 +172,8 @@ void SfxBroadcaster::ListenersGone()
 
 void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    const USHORT nCount = aListeners.Count();
-    for ( USHORT i = 0; i < nCount; ++i )
+    const sal_uInt16 nCount = aListeners.Count();
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         SfxListener *pListener = aListeners[i];
         if ( pListener )
@@ -188,7 +189,7 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 {
     {DBG_CHKTHIS(SfxBroadcaster, 0);}
     const SfxListener *pListener = &rListener;
-    USHORT nPos = aListeners.GetPos(pListener);
+    sal_uInt16 nPos = aListeners.GetPos(pListener);
     DBG_ASSERT( nPos != USHRT_MAX, "RemoveListener: Listener unknown" );
     aListeners.GetData()[nPos] = 0;
     if ( !HasListeners() )
@@ -197,12 +198,12 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 
 //--------------------------------------------------------------------
 
-BOOL SfxBroadcaster::HasListeners() const
+sal_Bool SfxBroadcaster::HasListeners() const
 {
-    for ( USHORT n = 0; n < aListeners.Count(); ++n )
+    for ( sal_uInt16 n = 0; n < aListeners.Count(); ++n )
         if ( aListeners.GetObject(n) != 0 )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 //--------------------------------------------------------------------

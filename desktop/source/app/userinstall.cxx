@@ -97,11 +97,6 @@ namespace desktop {
                     theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
 
             // localize the provider to user selection
-//            Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
-//            LanguageType aUserLanguageType = LanguageSelection::getLanguageType();
-//            Locale aLocale( MsLangId::convertLanguageToIsoString(aUserLanguageType));
-//            localizable->setLocale(aLocale);
-
             Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
             OUString aUserLanguage = LanguageSelection::getLanguageString();
             Locale aLocale = LanguageSelection::IsoStringToLocale(aUserLanguage);
@@ -109,8 +104,8 @@ namespace desktop {
 
             Sequence< Any > theArgs(1);
             NamedValue v;
-            v.Name = OUString::createFromAscii("NodePath");
-            v.Value = makeAny(OUString::createFromAscii("org.openoffice.Setup"));
+            v.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath"));
+            v.Value = makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")));
             theArgs[0] <<= v;
             Reference< XHierarchicalNameAccess> hnacc(
                 theConfigProvider->createInstanceWithArguments(
@@ -133,7 +128,7 @@ namespace desktop {
         catch (Exception const & e)
         {
             OString msg(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
-            OSL_ENSURE(sal_False, msg.getStr());
+            OSL_FAIL(msg.getStr());
         }
 
         return false;
@@ -202,7 +197,7 @@ namespace desktop {
                     rtl::OUString itemname = aFileStatus.getFileName();
                     // append trailing '/' if needed
                     if (newDstUnqPath.lastIndexOf(sal_Unicode('/')) != newDstUnqPath.getLength()-1)
-                        newDstUnqPath += rtl::OUString::createFromAscii("/");
+                        newDstUnqPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                     newDstUnqPath += itemname;
                     // recursion
                     err = copy_recursive(newSrcUnqPath, newDstUnqPath);
@@ -243,6 +238,11 @@ namespace desktop {
         FileBase::RC rc = Directory::createPath(aUserPath);
         if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
 
+#ifdef UNIX
+    // set safer permissions for the user directory by default
+    File::setAttributes(aUserPath, Attribute_OwnWrite| Attribute_OwnRead| Attribute_OwnExe);
+#endif
+
             // copy data from shared data directory of base installation
         for (sal_Int32 i=0; pszSrcList[i]!=NULL && pszDstList[i]!=NULL; i++)
         {
@@ -261,21 +261,19 @@ namespace desktop {
         }
         try
         {
-            OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-            OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
+            OUString sConfigSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"));
+            OUString sAccessSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
 
             // get configuration provider
             Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
             Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
                 theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
             Sequence< Any > theArgs(1);
-            NamedValue v(OUString::createFromAscii("NodePath"), makeAny(OUString::createFromAscii("org.openoffice.Setup")));
-            //v.Name = OUString::createFromAscii("NodePath");
-            //v.Value = makeAny(OUString::createFromAscii("org.openoffice.Setup"));
+            NamedValue v(OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")), makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup"))));
             theArgs[0] <<= v;
             Reference< XHierarchicalPropertySet> hpset(
                 theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-            hpset->setHierarchicalPropertyValue(OUString::createFromAscii("Office/ooSetupInstCompleted"), makeAny(sal_True));
+            hpset->setHierarchicalPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Office/ooSetupInstCompleted")), makeAny(sal_True));
             Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
         }
         catch ( PropertyVetoException& )
@@ -286,7 +284,7 @@ namespace desktop {
         {
             OString aMsg("create_user_install(): ");
             aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSURE(sal_False, aMsg.getStr());
+            OSL_FAIL(aMsg.getStr());
             return UserInstall::E_Creation;
         }
 

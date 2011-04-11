@@ -199,10 +199,6 @@ protected:
 
     void fireModifyEvent();
 
-    /** const variant of getInfoHelper()
-     */
-    ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelperConst() const;
-
 private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext >

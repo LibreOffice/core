@@ -43,11 +43,11 @@ using namespace CSS::uno;
 using namespace CSS::ucb;
 using namespace CSS::task;
 using namespace CSS::io;
-using namespace rtl;
 using namespace osl;
 using namespace ucbhelper;
 using namespace std;
 
+using ::rtl::OUString;
 
 CSubmissionPut::CSubmissionPut(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
     : CSubmission(aURL, aFragment)
@@ -72,7 +72,7 @@ CSubmission::SubmissionResult CSubmissionPut::submit(const CSS::uno::Reference< 
     } catch (Exception&)
     {
         // XXX
-        OSL_ENSURE(sal_False, "Exception during UCB operatration.");
+        OSL_FAIL("Exception during UCB operatration.");
         return UNKNOWN_ERROR;
     }
 

@@ -43,9 +43,8 @@
 #include <unotools/pathoptions.hxx>
 
 #ifndef ODMA_LIB_HXX
-#include <tools/prewin.h>
+#include <windows.h>
 #include <odma_lib.hxx>
-#include <tools/postwin.h>
 #endif
 
 // using ----------------------------------------------------------------
@@ -67,7 +66,7 @@ ODMAFolderPicker::ODMAFolderPicker( const Reference < XMultiServiceFactory >& xF
     m_bUseDMS( sal_False )
 {
     m_xInterface = xFactory->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFolderPicker" ) );
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.SystemFolderPicker" ) ));
 }
 
 // XExecutableDialog functions
@@ -166,13 +165,13 @@ Sequence< ::rtl::OUString > ODMAFolderPicker::impl_getStaticSupportedServiceName
 {
     Sequence< ::rtl::OUString > seqServiceNames( 1 );
     ::rtl::OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.ODMAFolderPicker" );
+    pArray[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.ODMAFolderPicker" ));
     return seqServiceNames ;
 }
 
 ::rtl::OUString ODMAFolderPicker::impl_getStaticImplementationName( )
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.svtools.ODMAFolderPicker" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.ODMAFolderPicker" ));
 }
 
 Reference< XInterface > SAL_CALL ODMAFolderPicker::impl_createInstance( const Reference< XComponentContext >& rxContext )

@@ -222,7 +222,6 @@ void disposeBridges(Reference<css::uno::XComponentContext> ctx)
     }
 }
 
-//##############################################################################
 extern "C" int unopkg_main()
 {
     tools::extendApplicationEnvironment();
@@ -380,7 +379,12 @@ extern "C" int unopkg_main()
         }
         else if (subCommand.equals(OUSTR("sync")))
         {
-            //sync is private!!!! Only for bundled extensions!!!
+            //sync is private!!!! Only to be called from setup!!!
+            //The UserInstallation is diverted to the prereg folder. But only
+            //the lock file is written! This requires that
+            //-env:UNO_JAVA_JFW_INSTALL_DATA is passed to javaldx and unopkg otherwise the
+            //javasettings file is written to the prereg folder.
+            //
             //For performance reasons unopkg sync is called during the setup and
             //creates the registration data for the repository of the bundled
             //extensions. It is then copied to the user installation during
@@ -395,10 +399,21 @@ extern "C" int unopkg_main()
             //$BUNDLED_EXTENSIONS_USER
             if (hasNoFolder(OUSTR("$BRAND_BASE_DIR/share/extensions")))
             {
-                removeFolder(OUSTR("$BUNDLED_EXTENSIONS_USER"));
+                removeFolder(OUSTR("$BUNDLED_EXTENSIONS_PREREG"));
                 //return otherwise we create the registration data again
                 return 0;
             }
+            //redirect the UserInstallation, so we do not create a
+            //user installation for the admin and we also do not need
+            //to call unopkg with -env:UserInstallation
+            ::rtl::Bootstrap::set(OUSTR("UserInstallation"),
+                                  OUSTR("$BUNDLED_EXTENSIONS_PREREG/.."));
+            //Setting UNO_JAVA_JFW_INSTALL_DATA causes the javasettings to be written
+            //in the office installation. We do not want to create the user data folder
+            //for the admin. The value must also be set in the unopkg script (Linux, etc.)
+            //when calling javaldx
+            ::rtl::Bootstrap::set(OUSTR("UNO_JAVA_JFW_INSTALL_DATA"),
+                                  OUSTR("$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml"));
 
         }
 
@@ -418,6 +433,7 @@ extern "C" int unopkg_main()
         //prevent the deletion of the registry data folder
         //synching is done in XExtensionManager.reinstall
         if (!subcmd_gui && ! subCommand.equals(OUSTR("reinstall"))
+            && ! subCommand.equals(OUSTR("sync"))
             && ! dp_misc::office_is_running())
             dp_misc::syncRepositories(xCmdEnv);
 
@@ -500,10 +516,9 @@ extern "C" int unopkg_main()
                 //Now prepare the vector which tells what extension has an
                 //unaccepted license
                 vecUnaccepted.resize(vecExtUnaccepted.size() + vec_packages.size());
-                ::std::vector<bool>::iterator i_unaccepted =
-                      ::std::fill_n(vecUnaccepted.begin(),
-                                    vecExtUnaccepted.size(), true);
-                ::std::fill_n(i_unaccepted, vec_packages.size(), false);
+                ::std::fill_n(vecUnaccepted.begin(), vecExtUnaccepted.size(), true);
+                ::std::fill_n(vecUnaccepted.begin() + vecExtUnaccepted.size(),
+                      vec_packages.size(), false);
 
                 dp_misc::writeConsole(
                     OUSTR("All deployed ") + repository + OUSTR(" extensions:\n\n"));
@@ -613,12 +628,15 @@ extern "C" int unopkg_main()
         }
         else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("sync")))
         {
-            //This sub command may be removed later and is only there to have a
-            //possibility to start extension synching without any output.
-            //This is just here so we do not get an error, because of an unknown
-            //sub-command. We do synching before
-            //the sub-commands are processed.
-
+            if (! dp_misc::office_is_running())
+            {
+                xExtensionManager->synchronizeBundledPrereg(
+                    Reference<task::XAbortChannel>(), xCmdEnv);
+            }
+            else
+            {
+                dp_misc::writeConsoleError(OUSTR("\nError: office is running"));
+            }
         }
         else
         {

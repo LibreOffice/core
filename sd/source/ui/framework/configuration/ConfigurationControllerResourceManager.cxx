@@ -220,7 +220,9 @@ void ConfigurationControllerResourceManager::DeactivateResource (
     if ( ! rxResourceId.is())
         return;
 
+#if defined VERBOSE && VERBOSE>=1
     bool bSuccess (false);
+#endif
     try
     {
         // 1. Remove resource from URL->Object map.
@@ -254,7 +256,9 @@ void ConfigurationControllerResourceManager::DeactivateResource (
                 }
             }
 
+#if defined VERBOSE && VERBOSE>=1
             bSuccess = true;
+#endif
         }
     }
     catch (RuntimeException&)

@@ -91,10 +91,10 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <sfx2/event.hxx>
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 
 #define OMULTITYPEINTERFACECONTAINERHELPER      ::cppu::OMultiTypeInterfaceContainerHelper
 #define OINTERFACECONTAINERHELPER               ::cppu::OInterfaceContainerHelper
@@ -178,7 +178,7 @@ static GroupIDToCommandGroup    GroupIDCommandGroupMap[] =
     { 0                 ,   0                                                   }
 };
 
-typedef std::hash_map< sal_Int16, sal_Int16 > GroupHashMap;
+typedef boost::unordered_map< sal_Int16, sal_Int16 > GroupHashMap;
 
 
 sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID )
@@ -365,7 +365,6 @@ void SAL_CALL SfxStatusIndicator::disposing( const com::sun::star::lang::EventOb
 }
 
 //________________________________________________________________________________________________________
-//________________________________________________________________________________________________________
 //  declaration IMPL_SfxBaseController_ListenerHelper
 //________________________________________________________________________________________________________
 
@@ -425,7 +424,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EV
     SfxViewShell* pShell = m_pController->GetViewShell_Impl();
     if  ( m_pController !=  NULL &&  pShell )
     {
-        BOOL bCanClose = (BOOL) pShell->PrepareClose( FALSE );
+        sal_Bool bCanClose = (sal_Bool) pShell->PrepareClose( sal_False );
         if ( !bCanClose )
         {
             if ( bDeliverOwnership && ( !pShell->GetWindow() || !pShell->GetWindow()->IsReallyVisible() ) )
@@ -438,7 +437,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EV
                     pShell->TakeFrameOwnerShip_Impl();
             }
 
-            throw com::sun::star::util::CloseVetoException(::rtl::OUString::createFromAscii("Controller disagree ..."),static_cast< ::cppu::OWeakObject*>(this));
+            throw com::sun::star::util::CloseVetoException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Controller disagree ...")),static_cast< ::cppu::OWeakObject*>(this));
         }
     }
 }
@@ -515,7 +514,7 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const FRAMEACT
         if ( aEvent.Action == ::com::sun::star::frame::FrameAction_FRAME_UI_ACTIVATED )
         {
             if ( !m_pController->GetViewShell_Impl()->GetUIActiveIPClient_Impl() )
-                m_pController->GetViewShell_Impl()->GetViewFrame()->MakeActive_Impl( FALSE );
+                m_pController->GetViewShell_Impl()->GetViewFrame()->MakeActive_Impl( sal_False );
         }
         else if ( aEvent.Action == ::com::sun::star::frame::FrameAction_CONTEXT_CHANGED )
         {
@@ -640,7 +639,7 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
             ConnectSfxFrame_Impl( E_CONNECT );
 
             // attaching the frame to the controller is the last step in the creation of a new view, so notify this
-            SfxEventHint aHint( SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell() );
+            SfxViewEventHint aHint( SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell(), uno::Reference< frame::XController2 >( this ) );
             SFX_APP()->NotifyEvent( aHint );
         }
     }
@@ -655,7 +654,7 @@ sal_Bool SAL_CALL SfxBaseController::attachModel( const REFERENCE< XMODEL >& xMo
     if ( m_pData->m_pViewShell && xModel.is() && xModel != m_pData->m_pViewShell->GetObjectShell()->GetModel() )
     {
         // don't allow to reattach a model!
-        DBG_ERROR("Can't reattach model!");
+        OSL_FAIL("Can't reattach model!");
         return sal_False;
     }
 
@@ -692,14 +691,14 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
             getFrame()->removeFrameActionListener( m_pData->m_xListener ) ;
         SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame() ;
 
-        // weitere View auf dasselbe Doc?
+        // More Views on the same document?
         SfxObjectShell* pDocShell   =   m_pData->m_pViewShell->GetObjectShell() ;
         sal_Bool        bOther      =   sal_False                               ;
 
         for ( const SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell ); !bOther && pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell ) )
             bOther = (pFrame != pActFrame);
 
-        BOOL bRet = bOther || pDocShell->PrepareClose();
+        sal_Bool bRet = bOther || pDocShell->PrepareClose();
         if ( bRet )
         {
             ConnectSfxFrame_Impl( E_DISCONNECT );
@@ -735,7 +734,7 @@ ANY SfxBaseController::getViewData() throw( ::com::sun::star::uno::RuntimeExcept
     if ( m_pData->m_pViewShell )
     {
         m_pData->m_pViewShell->WriteUserData( sData1 ) ;
-        OUSTRING    sData( sData1 );
+        ::rtl::OUString    sData( sData1 );
         aAny <<= sData ;
     }
 
@@ -751,7 +750,7 @@ void SAL_CALL SfxBaseController::restoreViewData( const ANY& aValue ) throw( ::c
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
-        OUSTRING sData;
+        ::rtl::OUString sData;
         aValue >>= sData ;
         m_pData->m_pViewShell->ReadUserData( sData ) ;
     }
@@ -782,7 +781,7 @@ REFERENCE< XMODEL > SAL_CALL SfxBaseController::getModel() throw( ::com::sun::st
 //________________________________________________________________________________________________________
 
 REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOURL&             aURL            ,
-                                                                    const   OUSTRING&           sTargetFrameName,
+                                                                    const   ::rtl::OUString&            sTargetFrameName,
                                                                             sal_Int32           eSearchFlags    ) throw( RUNTIMEEXCEPTION )
 {
     SolarMutexGuard aGuard;
@@ -792,11 +791,11 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
         SfxViewFrame*           pAct    = m_pData->m_pViewShell->GetViewFrame() ;
         if ( !m_pData->m_bDisposing )
         {
-            if ( sTargetFrameName.compareToAscii( "_beamer" ) == COMPARE_EQUAL )
+            if ( sTargetFrameName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_beamer")) )
             {
                 SfxViewFrame *pFrame = m_pData->m_pViewShell->GetViewFrame();
                 if ( eSearchFlags & ( ::com::sun::star::frame::FrameSearchFlag::CREATE ))
-                    pFrame->SetChildWindow( SID_BROWSER, TRUE );
+                    pFrame->SetChildWindow( SID_BROWSER, sal_True );
                 SfxChildWindow* pChildWin = pFrame->GetChildWindow( SID_BROWSER );
                 REFERENCE < XFRAME > xFrame;
                 if ( pChildWin )
@@ -809,7 +808,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                     return xProv->queryDispatch( aURL, sTargetFrameName, ::com::sun::star::frame::FrameSearchFlag::SELF );
             }
 
-            if ( aURL.Protocol.compareToAscii( ".uno:" ) == COMPARE_EQUAL )
+            if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:")) )
             {
                 rtl::OUString aMasterCommand = SfxOfficeDispatch::GetMasterUnoCommand( aURL );
                 sal_Bool      bMasterCommand( aMasterCommand.getLength() > 0 );
@@ -865,9 +864,9 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                     }
                 }
             }
-            else if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL )
+            else if ( aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:")) )
             {
-                USHORT nId = (USHORT) aURL.Path.toInt32();
+                sal_uInt16 nId = (sal_uInt16) aURL.Path.toInt32();
 
                 pAct = m_pData->m_pViewShell->GetViewFrame() ;
                 if (nId >= SID_VERB_START && nId <= SID_VERB_END)
@@ -917,7 +916,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                     }
                 }
             }
-            else if( sTargetFrameName.compareToAscii( "_self" )==COMPARE_EQUAL || sTargetFrameName.getLength()==0 )
+            else if( sTargetFrameName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("_self")) || sTargetFrameName.getLength()==0 )
             {
                 // check for already loaded URL ... but with additional jumpmark!
                 REFERENCE< XMODEL > xModel = getModel();
@@ -939,12 +938,12 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
 //  SfxBaseController -> XDispatchProvider
 //________________________________________________________________________________________________________
 
-SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SfxBaseController::queryDispatches( const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescripts ) throw( ::com::sun::star::uno::RuntimeException )
+uno::Sequence< REFERENCE< XDISPATCH > > SAL_CALL SfxBaseController::queryDispatches( const uno::Sequence< DISPATCHDESCRIPTOR >& seqDescripts ) throw( ::com::sun::star::uno::RuntimeException )
 {
     // Create return list - which must have same size then the given descriptor
     // It's not allowed to pack it!
     sal_Int32 nCount = seqDescripts.getLength();
-    SEQUENCE< REFERENCE< XDISPATCH > > lDispatcher( nCount );
+    uno::Sequence< REFERENCE< XDISPATCH > > lDispatcher( nCount );
 
     for( sal_Int32 i=0; i<nCount; ++i )
     {
@@ -1053,7 +1052,7 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
         if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
             pFrame->GetFrame().SetIsClosing_Impl();
         m_pData->m_pViewShell->DiscardClients_Impl();
-        m_pData->m_pViewShell->pImp->bControllerSet = sal_False ;
+        m_pData->m_pViewShell->pImp->m_bControllerSet = false;
 
         if ( pFrame )
         {
@@ -1070,7 +1069,7 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
                 pView = SfxViewFrame::GetNext( *pView, pDoc );
             }
 
-            SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEVIEW ), pDoc ) );
+            SFX_APP()->NotifyEvent( SfxViewEventHint(SFX_EVENT_CLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEVIEW ), pDoc, uno::Reference< frame::XController2 >( this ) ) );
             if ( !pView )
                 SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ), pDoc) );
 
@@ -1207,10 +1206,10 @@ throw (::com::sun::star::uno::RuntimeException)
     SfxSlotPool*  pPool = &SfxSlotPool::GetSlotPool( pViewFrame );
 
     SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
-    const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+    const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
 
-    // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-    for ( USHORT i=0; i<pSlotPool->GetGroupCount(); i++ )
+    // Select Group ( Group 0 is internal )
+    for ( sal_uInt16 i=0; i<pSlotPool->GetGroupCount(); i++ )
     {
         String aName = pSlotPool->SeekGroup( i );
         const SfxSlot* pSfxSlot = pSlotPool->FirstSlot();
@@ -1239,14 +1238,14 @@ throw (::com::sun::star::uno::RuntimeException)
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
-        const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+        const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
 
         SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
         SfxSlotPool*  pPool( &SfxSlotPool::GetSlotPool( pViewFrame ));
         rtl::OUString aCmdPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
 
         SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
-        for ( USHORT i=0; i<pSlotPool->GetGroupCount(); i++ )
+        for ( sal_uInt16 i=0; i<pSlotPool->GetGroupCount(); i++ )
         {
             String aName = pSlotPool->SeekGroup( i );
             const SfxSlot* pSfxSlot = pSlotPool->FirstSlot();
@@ -1279,17 +1278,17 @@ throw (::com::sun::star::uno::RuntimeException)
     return aSeq;
 }
 
-BOOL SfxBaseController::HandleEvent_Impl( NotifyEvent& rEvent )
+sal_Bool SfxBaseController::HandleEvent_Impl( NotifyEvent& rEvent )
 {
     return m_pData->m_aUserInputInterception.handleNotifyEvent( rEvent );
 }
 
-BOOL SfxBaseController::HasKeyListeners_Impl()
+sal_Bool SfxBaseController::HasKeyListeners_Impl()
 {
     return m_pData->m_aUserInputInterception.hasKeyHandlers();
 }
 
-BOOL SfxBaseController::HasMouseClickListeners_Impl()
+sal_Bool SfxBaseController::HasMouseClickListeners_Impl()
 {
     return m_pData->m_aUserInputInterception.hasMouseClickListeners();
 }
@@ -1368,15 +1367,15 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             if ( !rFrame.IsMarkedHidden_Impl() )
             {
                 if ( rDoc.IsHelpDocument() || ( nPluginMode == 2 ) )
-                    pViewFrame->GetDispatcher()->HideUI( TRUE );
+                    pViewFrame->GetDispatcher()->HideUI( sal_True );
                 else
-                    pViewFrame->GetDispatcher()->HideUI( FALSE );
+                    pViewFrame->GetDispatcher()->HideUI( sal_False );
 
                 if ( rFrame.IsInPlace() )
                     pViewFrame->LockAdjustPosSizePixel();
 
                 if ( nPluginMode == 3 )
-                    rFrame.GetWorkWindow_Impl()->SetInternalDockingAllowed( FALSE );
+                    rFrame.GetWorkWindow_Impl()->SetInternalDockingAllowed( sal_False );
 
                 if ( !rFrame.IsInPlace() )
                     pViewFrame->GetDispatcher()->Update_Impl();
@@ -1391,7 +1390,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                     // force resize for OLE server to fix layout problems of writer and math
                     // see i53651
                     if ( nPluginMode == 3 )
-                        pViewFrame->Resize( TRUE );
+                        pViewFrame->Resize( sal_True );
                 }
             }
             else
@@ -1400,11 +1399,11 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                 rFrame.GetWindow().Show();
             }
 
-            // Jetzt UpdateTitle, hidden TopFrames haben sonst keinen Namen!
+            // UpdateTitle now, hidden TopFrames have otherwise no Name!
             pViewFrame->UpdateTitle();
 
             if ( !rFrame.IsInPlace() )
-                pViewFrame->Resize( TRUE );
+                pViewFrame->Resize( sal_True );
 
             // if there's a JumpMark given, then, well, jump to it
             ::comphelper::NamedValueCollection aViewArgs( getCreationArguments() );
@@ -1439,11 +1438,11 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                 try
                 {
                     Reference< XViewDataSupplier > xViewDataSupplier( getModel(), UNO_QUERY_THROW );
-                    Reference< XIndexAccess > xViewData( xViewDataSupplier->getViewData(), UNO_SET_THROW );
+                    Reference< XIndexAccess > xViewData( xViewDataSupplier->getViewData() );
 
                     // find the view data item whose ViewId matches the ID of the view we're just connecting to
                     const SfxObjectFactory& rDocFactory( rDoc.GetFactory() );
-                    const sal_Int32 nCount = xViewData->getCount();
+                    const sal_Int32 nCount = xViewData.is() ? xViewData->getCount() : 0;
                     sal_Int32 nViewDataIndex = 0;
                     for ( sal_Int32 i=0; i<nCount; ++i )
                     {
@@ -1467,7 +1466,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                         Sequence< PropertyValue > aViewData;
                         OSL_VERIFY( xViewData->getByIndex( nViewDataIndex ) >>= aViewData );
                         if ( aViewData.getLength() > 0 )
-                            m_pData->m_pViewShell->ReadUserDataSequence( aViewData, TRUE );
+                            m_pData->m_pViewShell->ReadUserDataSequence( aViewData, sal_True );
                     }
                 }
                 catch( const Exception& )

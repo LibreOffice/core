@@ -64,14 +64,7 @@
 #include <swundo.hxx>           // fuer die UndoIds
 #include <boost/shared_ptr.hpp>
 
-//#define FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES 1
 
-#ifdef FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES
-#include <cellatr.hxx>
-#endif
-
-/*--------------------------------------------------------------------
- --------------------------------------------------------------------*/
 
 namespace
 {
@@ -126,9 +119,6 @@ SfxItemSet* lcl_CreateEmptyItemSet( int nSelectionType, SfxItemPool& rPool
                         FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE,
                         FN_TABLE_BOX_TEXTDIRECTION, FN_TABLE_BOX_TEXTDIRECTION,
                         FN_TABLE_SET_VERT_ALIGN, FN_TABLE_SET_VERT_ALIGN,
-#ifdef FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES
-                        RES_BOXATR_FORMAT,      RES_BOXATR_FORMAT,
-#endif
                         0);
     }
     else if( nSelectionType & nsSelectionType::SEL_TXT )
@@ -189,23 +179,18 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
     rSh.GetRowSplit(pSplit);
     if(pSplit)
         rSet.Put(*pSplit);
-
-    //-- numberformat in cells
-#ifdef FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES
-    rSh.GetTblBoxFormulaAttrs( rSet ); //RES_BOXATR_FORMAT
-#endif
 }
 
 void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
 {
     const SfxPoolItem* pItem = 0;
-    BOOL bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
+    sal_Bool bBorder = ( SFX_ITEM_SET == rSet.GetItemState( RES_BOX ) ||
             SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BORDER_INNER ) );
     pItem = 0;
-    BOOL bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, FALSE, &pItem );
+    sal_Bool bBackground = SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND, sal_False, &pItem );
     const SfxPoolItem* pRowItem = 0, *pTableItem = 0;
-    bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, FALSE, &pRowItem );
-    bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, FALSE, &pTableItem );
+    bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_ROW, sal_False, &pRowItem );
+    bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, sal_False, &pTableItem );
 
     if(bBackground)
     {
@@ -227,7 +212,7 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     if(bBorder)
         rSh.SetTabBorders( rSet );
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, FALSE, &pItem) )
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, sal_False, &pItem) )
         rSh.SetRowsToRepeat( ((SfxUInt16Item*)pItem)->GetValue() );
 
     SwFrmFmt* pFrmFmt = rSh.GetTableFmt();
@@ -235,64 +220,53 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     {
         //RES_SHADOW
         pItem=0;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_SHADOW), FALSE, &pItem);
+        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_SHADOW), sal_False, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_BREAK
         pItem=0;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_BREAK), FALSE, &pItem);
+        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_BREAK), sal_False, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_PAGEDESC
         pItem=0;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_PAGEDESC), FALSE, &pItem);
+        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_PAGEDESC), sal_False, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_LAYOUT_SPLIT
         pItem=0;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_LAYOUT_SPLIT), FALSE, &pItem);
+        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_LAYOUT_SPLIT), sal_False, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_KEEP
         pItem=0;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_KEEP), FALSE, &pItem);
+        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_KEEP), sal_False, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
         //RES_FRAMEDIR
         pItem=0;
-        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_FRAMEDIR), FALSE, &pItem);
+        rSet.GetItemState(rSet.GetPool()->GetWhich(RES_FRAMEDIR), sal_False, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTDIRECTION, FALSE, &pItem) )
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTDIRECTION, sal_False, &pItem) )
     {
         SvxFrameDirectionItem aDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
         aDirection.SetValue(static_cast< const SvxFrameDirectionItem* >(pItem)->GetValue());
         rSh.SetBoxDirection(aDirection);
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_SET_VERT_ALIGN, FALSE, &pItem))
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_SET_VERT_ALIGN, sal_False, &pItem))
         rSh.SetBoxAlign(((SfxUInt16Item*)(pItem))->GetValue());
 
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, FALSE, &pItem) )
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, sal_False, &pItem) )
         rSh.SetRowSplit(*static_cast<const SwFmtRowSplit*>(pItem));
-
-    //-- numberformat in cells
-#ifdef FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_FORMAT, FALSE, &pItem ))
-    {
-        SfxItemSet aBoxSet( *rSet.GetPool(), RES_BOXATR_FORMAT, RES_BOXATR_FORMAT );
-        aBoxSet.Put( SwTblBoxNumFormat( ((SfxUInt32Item*)pItem)->GetValue() ));
-        rSh.SetTblBoxFormulaAttrs( aBoxSet );
-
-    }
-#endif
 }
 }//end anonymous namespace
 
@@ -361,8 +335,8 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     {
         SwPaM* pCrsr = rWrtShell.GetCrsr();
         //select one character only to get the attributes of this single character only
-        BOOL bHasSelection = pCrsr->HasMark();
-        BOOL bForwardSelection = FALSE;
+        sal_Bool bHasSelection = pCrsr->HasMark();
+        sal_Bool bForwardSelection = sal_False;
 
         if(!bHasSelection) //check for and handle multiselections
         {
@@ -412,7 +386,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         SdrView* pDrawView = rWrtShell.GetDrawView();
         if(pDrawView)
         {
-            BOOL bOnlyHardAttr = TRUE;
+            sal_Bool bOnlyHardAttr = sal_True;
             if( pDrawView->AreObjectsMarked() )
             {
                 pItemSet = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
@@ -443,18 +417,18 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         if( pFmt )
             m_aParaStyle = pFmt->GetName();
     }
-    rWrtShell.Pop(FALSE);
+    rWrtShell.Pop(sal_False);
     rWrtShell.EndAction();
 }
 typedef boost::shared_ptr< SfxPoolItem > SfxPoolItemSharedPtr;
 typedef std::vector< SfxPoolItemSharedPtr > ItemVector;
-// #144857# collect all PoolItems from the applied styles
+// collect all PoolItems from the applied styles
 void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSet )
 {
-    const USHORT*  pRanges = rStyleAttrSet.GetRanges();
+    const sal_uInt16*  pRanges = rStyleAttrSet.GetRanges();
     while( *pRanges )
     {
-        for ( USHORT nWhich = *pRanges; nWhich <= *(pRanges+1); ++nWhich )
+        for ( sal_uInt16 nWhich = *pRanges; nWhich <= *(pRanges+1); ++nWhich )
         {
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == rStyleAttrSet.GetItemState( nWhich, sal_False, &pItem ) )
@@ -465,7 +439,7 @@ void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSe
         pRanges += 2;
     }
 }
-// #144857# remove all items that are inherited from the styles
+// remove all items that are inherited from the styles
 void lcl_RemoveEqualItems( SfxItemSet& rTemplateItemSet, ItemVector& rItemVector )
 {
     ItemVector::iterator aEnd = rItemVector.end();
@@ -507,9 +481,9 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                 if( pStyle )
                 {
                     SwFmtCharFmt aFmt(pStyle->GetCharFmt());
-                    // #144857# collect items from character style
+                    // collect items from character style
                     lcl_AppendSetItems( aItemVector, aFmt.GetCharFmt()->GetAttrSet());
-                    USHORT nFlags=0; //(nMode & KEY_SHIFT) ? SETATTR_DONTREPLACE : SETATTR_DEFAULT;
+                    sal_uInt16 nFlags=0;
                     rWrtShell.SetAttr( aFmt, nFlags );
                 }
             }
@@ -518,7 +492,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                 SwDocStyleSheet* pStyle = (SwDocStyleSheet*)pPool->Find(m_aParaStyle, SFX_STYLE_FAMILY_PARA);
                 if( pStyle )
                 {
-                    // #144857# collect items from paragraph style
+                    // collect items from paragraph style
                     lcl_AppendSetItems( aItemVector, pStyle->GetCollection()->GetAttrSet());
                     rWrtShell.SetTxtFmtColl( pStyle->GetCollection() );
                 }
@@ -532,7 +506,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             SdrView* pDrawView = rWrtShell.GetDrawView();
             if(pDrawView)
             {
-                BOOL bReplaceAll = TRUE;
+                sal_Bool bReplaceAll = sal_True;
                 pDrawView->SetAttrToMarked(*m_pItemSet, bReplaceAll);
             }
         }
@@ -544,7 +518,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             if(pTemplateItemSet)
             {
                 pTemplateItemSet->Put( *m_pItemSet );
-                // #144857# only _set_ attributes that differ from style attributes should be applied - the style is applied anyway
+                // only _set_ attributes that differ from style attributes should be applied - the style is applied anyway
                 lcl_RemoveEqualItems( *pTemplateItemSet, aItemVector );
 
                 if( nSelectionType & (nsSelectionType::SEL_FRM | nsSelectionType::SEL_OLE | nsSelectionType::SEL_GRF) )
@@ -558,22 +532,22 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                     {
                         if( SFX_ITEM_SET == pTemplateItemSet->GetItemState(FN_NUMBER_NEWSTART) )
                         {
-                            BOOL bStart = ((SfxBoolItem&)pTemplateItemSet->Get(FN_NUMBER_NEWSTART)).GetValue();
-                            USHORT nNumStart = USHRT_MAX;
+                            sal_Bool bStart = ((SfxBoolItem&)pTemplateItemSet->Get(FN_NUMBER_NEWSTART)).GetValue();
+                            sal_uInt16 nNumStart = USHRT_MAX;
                             if( SFX_ITEM_SET == pTemplateItemSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                             {
                                 nNumStart = ((SfxUInt16Item&)pTemplateItemSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
                                 if(USHRT_MAX != nNumStart)
-                                    bStart = FALSE;
+                                    bStart = sal_False;
                             }
                             rWrtShell.SetNumRuleStart(bStart);
                             rWrtShell.SetNodeNumStart(nNumStart);
                         }
                         else if( SFX_ITEM_SET == pTemplateItemSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                         {
-                            USHORT nNumStart = ((SfxUInt16Item&)pTemplateItemSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+                            sal_uInt16 nNumStart = ((SfxUInt16Item&)pTemplateItemSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
                             rWrtShell.SetNodeNumStart(nNumStart);
-                            rWrtShell.SetNumRuleStart(FALSE);
+                            rWrtShell.SetNumRuleStart(sal_False);
                         }
                     }
                 }

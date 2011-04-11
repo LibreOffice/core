@@ -128,10 +128,10 @@ public:
 
     sal_uInt16 GetFamily() const { return mnFamily; }
 
-    BOOL IsValid() const { return mbValid; }
+    sal_Bool IsValid() const { return mbValid; }
     void SetValid( sal_Bool b ) { mbValid = b; }
 
-    BOOL IsNew() const { return mbNew; }
+    sal_Bool IsNew() const { return mbNew; }
     void SetNew( sal_Bool b ) { mbNew = b; }
 
     // This method is called for every default style
@@ -159,7 +159,7 @@ public:
         and Finish() will not be called.
         The default return value is false
     */
-    virtual BOOL IsTransient() const;
+    virtual sal_Bool IsTransient() const;
 };
 
 class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext

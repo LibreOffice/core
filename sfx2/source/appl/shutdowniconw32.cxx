@@ -41,9 +41,7 @@
 #undef WINVER
 #define WINVER 0x0400
 #define USE_APP_SHORTCUTS
-//
 // the systray icon is only available on windows
-//
 
 #include <unotools/moduleoptions.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
@@ -275,7 +273,7 @@ static HMENU createSystrayMenu( )
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true, aEmpty);
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
-    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, OUString::createFromAscii( "SHELL32" ));
+    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, OUString(RTL_CONSTASCII_USTRINGPARAM("SHELL32")));
     addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
 #endif
     addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false, aEmpty );
@@ -342,30 +340,6 @@ static void addTaskbarIcon( HWND hWnd )
 
 // -------------------------------
 
-/*
-static void removeTaskbarIcon()
-{
-    ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
-    OSL_ENSURE( pShutdownIcon, "ShutdownIcon instance empty!");
-
-    if( !pShutdownIcon )
-        return;
-
-    if ( IsWindow( aListenerWindow ))
-    {
-        deleteSystrayMenu( popupMenu );
-
-        NOTIFYICONDATAA nid;
-        nid.cbSize=sizeof(NOTIFYICONDATA);
-        nid.hWnd = aListenerWindow;
-        nid.uID = ID_QUICKSTART;
-        Shell_NotifyIconA(NIM_DELETE, &nid);
-    }
-}
-*/
-
-// -------------------------------
-
 LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static UINT s_uTaskbarRestart = 0;
@@ -429,7 +403,6 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 #endif
                     int m = TrackPopupMenuEx( popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
                                               pt.x, pt.y, hWnd, NULL );
-                    // BUGFIX: See Q135788 (PRB: Menus for Notification Icons Don't Work Correctly)
                     PostMessage( hWnd, NULL, 0, 0 );
                     switch( m )
                     {
@@ -495,7 +468,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 static sal_Bool checkOEM() {
     Reference<XMultiServiceFactory> rFactory = ::comphelper::getProcessServiceFactory();
     Reference<XJob> rOemJob(rFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.office.OEMPreloadJob")),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.OEMPreloadJob"))),
         UNO_QUERY );
     Sequence<NamedValue> args;
     sal_Bool bResult = sal_False;
@@ -764,7 +737,6 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
                                 IMAGE_ICON, cx, cy,
                                 LR_DEFAULTCOLOR | LR_SHARED );
 
-    // DrawIconEx( lpdis->hDC, x, y+(height-cy)/2, hIcon, cx, cy, 0, NULL, DI_NORMAL );
 
     HBRUSH hbrIcon = CreateSolidBrush( GetSysColor( COLOR_GRAYTEXT ) );
 

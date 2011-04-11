@@ -32,11 +32,11 @@
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <com/sun/star/style/TabStop.hpp>
 #include <xmloff/xmltoken.hxx>
-#include "i18nmap.hxx"
+#include "xmloff/i18nmap.hxx"
 #include <xmloff/xmluconv.hxx>
 
 #include "xmltabi.hxx"
@@ -62,7 +62,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
+static SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE, XML_POSITION,     XML_TOK_TABSTOP_POSITION },
     { XML_NAMESPACE_STYLE, XML_TYPE,         XML_TOK_TABSTOP_TYPE },

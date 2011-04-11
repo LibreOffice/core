@@ -344,7 +344,7 @@ sal_Bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
         pOverStyle->SetStyleName( A2OUSTR(""));
         pOverStyle->SetMasterPage(pLayout->GetStyleName());
         if (m_ParentStyleName.getLength())
-                    pOverStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                    pOverStyle->SetParentStyleName(m_ParentStyleName);
         XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
         m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
     }
@@ -364,16 +364,15 @@ void LwpPara::RegisterStyle()
     XFParaStyle* pBaseStyle = static_cast<XFParaStyle*>(m_pFoundry->GetStyleManager()->GetStyle(m_ParaStyle));
     if (pBaseStyle == NULL) return;
     m_StyleName = pBaseStyle->GetStyleName();//such intf to be added
-    m_ParentStyleName = m_StyleName;//Add by ,2005/12/12
+    m_ParentStyleName = m_StyleName;
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
 
     if (GetParaStyle()->GetIndent())
     {
-        m_pIndentOverride = new LwpIndentOverride;
-        *m_pIndentOverride = *(GetParaStyle()->GetIndent()); //add by  2-6,for indent hierachy
+        std::auto_ptr<LwpIndentOverride> pIndentOverride(GetParaStyle()->GetIndent()->clone());
+        delete m_pIndentOverride;
+        m_pIndentOverride = pIndentOverride.release();
     }
-//  else
-//      m_pIndentOverride = NULL;
 
     XFParaStyle* pOverStyle = NULL;
     sal_Bool noSpacing = sal_True;
@@ -395,13 +394,15 @@ void LwpPara::RegisterStyle()
             {
             case PP_LOCAL_ALIGN:
             {
-                LwpAlignmentOverride aAlign;
                 if (!pParaStyle->GetAlignment())
                     OverrideAlignment(NULL,static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),pOverStyle);
                 else
                 {
-                    aAlign = *(pParaStyle->GetAlignment());
-                    OverrideAlignment(&aAlign,static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),pOverStyle);
+                    boost::scoped_ptr<LwpAlignmentOverride> const pAlign(
+                            pParaStyle->GetAlignment()->clone());
+                    OverrideAlignment(pAlign.get(),
+                            static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),
+                            pOverStyle);
                 }
             }
                 break;
@@ -419,14 +420,16 @@ void LwpPara::RegisterStyle()
                 break;
             case PP_LOCAL_SPACING:
             {
-                LwpSpacingOverride aSpacing;
                 noSpacing = sal_False;
                 if (!pParaStyle->GetSpacing())
                     OverrideSpacing(NULL,static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),pOverStyle);
                 else
                 {
-                    aSpacing = *(pParaStyle->GetSpacing());
-                    OverrideSpacing(&aSpacing,static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),pOverStyle);
+                    boost::scoped_ptr<LwpSpacingOverride> const
+                        pSpacing(pParaStyle->GetSpacing()->clone());
+                    OverrideSpacing(pSpacing.get(),
+                            static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),
+                            pOverStyle);
                 }
             }
                 break;
@@ -519,7 +522,7 @@ void LwpPara::RegisterStyle()
                 }
             }
             if (m_ParentStyleName.getLength())
-                pOverStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                pOverStyle->SetParentStyleName(m_ParentStyleName);
             m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
 
     }
@@ -533,7 +536,7 @@ void LwpPara::RegisterStyle()
                     *pOverStyle = *pBaseStyle;
                     OverrideIndent(NULL,m_pIndentOverride,pOverStyle);
                     if (m_ParentStyleName.getLength())
-                        pOverStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                        pOverStyle->SetParentStyleName(m_ParentStyleName);
                     m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
                 }
             }
@@ -548,7 +551,7 @@ void LwpPara::RegisterStyle()
             *pOverStyle = *pOldStyle;
             pOverStyle->SetAlignType(enumXFAlignStart);
             if (m_ParentStyleName.getLength())
-                pOverStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                pOverStyle->SetParentStyleName(m_ParentStyleName);
             m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
         }
     }
@@ -737,13 +740,13 @@ void LwpPara::RegisterStyle()
                     LwpStory* pMyStory = this->GetStory();
                     if (pMyStory)
                     {
-                        if (pMyStory->IsBullStyleUsedBefore(m_aBulletStyleName, m_aParaNumbering.GetPosition()))
+                        if (pMyStory->IsBullStyleUsedBefore(m_aBulletStyleName, m_pParaNumbering->GetPosition()))
                         {
                             //m_bBullContinue = sal_True;
                         }
                         else
                         {
-                            pMyStory->AddBullStyleName2List(m_aBulletStyleName, m_aParaNumbering.GetPosition());
+                            pMyStory->AddBullStyleName2List(m_aBulletStyleName, m_pParaNumbering->GetPosition());
                         }
                     }
 
@@ -764,7 +767,7 @@ void LwpPara::RegisterStyle()
             XFMargins* pMargin = &pOverStyle->GetMargins();
             pMargin->SetTop(pMargin->GetTop()+pPrePara->GetBelowSpacing());
             if (m_ParentStyleName.getLength())
-                    pOverStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                    pOverStyle->SetParentStyleName(m_ParentStyleName);
             m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
         }
     }
@@ -777,7 +780,7 @@ void LwpPara::RegisterStyle()
         //pOverStyle->SetStyleName(A2OUSTR(""));
         this->RegisterTabStyle(pParaStyle);
         if (m_ParentStyleName.getLength())
-                    pParaStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                    pParaStyle->SetParentStyleName(m_ParentStyleName);
         m_StyleName = pXFStyleManager->AddStyle(pParaStyle)->GetStyleName();
     }
 
@@ -795,7 +798,7 @@ void LwpPara::RegisterStyle()
         *pStyle = *GetXFParaStyle();
         pStyle->SetDropCap(m_nChars-1,m_nLines);
         if (m_ParentStyleName.getLength())
-                    pStyle->SetParentStyleName(m_ParentStyleName); //Add by  2005/12/12
+                    pStyle->SetParentStyleName(m_ParentStyleName);
         m_StyleName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
     }
     // maybe useful for futer version
@@ -965,8 +968,7 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
     }
     if (m_pSilverBullet->HasName())
     {
-//      nLevel = m_pParaNumbering->GetPosition();
-        nLevel = m_aParaNumbering.GetPosition();
+        nLevel = m_pParaNumbering->GetPosition();
         m_nLevel = nLevel;//add by ,for get para level
 //      m_aBulletStyleName = m_pSilverBullet->GetBulletStyleName();
     }
@@ -977,7 +979,7 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
 
 LwpNumberingOverride* LwpPara::GetParaNumbering()
 {
-    return &m_aParaNumbering;
+    return m_pParaNumbering.get();
 }
 
 void LwpForked3NotifyList::Read(LwpObjectStream* pObjStrm)

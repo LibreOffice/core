@@ -32,6 +32,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  $(PRJ)$/inc$/writerfilter.mk
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 RESSOUREMODELLIB=-lresourcemodel

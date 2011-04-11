@@ -46,7 +46,6 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
-    //  using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star;
 
     OConnectionLineAccess::OConnectionLineAccess(OTableConnection* _pLine)
@@ -81,7 +80,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     ::rtl::OUString OConnectionLineAccess::getImplementationName_Static(void) throw( RuntimeException )
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ConnectionLineAccessibility");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.ConnectionLineAccessibility"));
     }
     // -----------------------------------------------------------------------------
     // XAccessibleContext

@@ -72,8 +72,6 @@ DEF1NAME=	$(SHL1TARGET)
 DEFLIB1NAME=	$(TARGET1)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 
-#DEF1EXPORTFILE=	exports.dxp
-
 # ------------------------------------------------------------------------------
 
 OBJFILES=	$(OBJ)$/loader.obj

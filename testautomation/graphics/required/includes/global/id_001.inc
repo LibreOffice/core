@@ -30,7 +30,34 @@
 '* short description :
 '*
 '\******************************************************************************
+sub id_001
 
+    printLog Chr(13) + "---------    id_001    ----------"
+
+    qaerrorlog "#74988# tiFilePassword outcommented due to bug. -FHA"
+    call tiFilePassword
+    call tiFileSaveAs
+    call tiFileReload
+    call tiFileVersion
+    printlog " File->Send not possible to test, because extrnal prg get's called!"
+    call tiFileTemplates
+    '   Call tiFileNew instead i call:
+    call tmFileNewFromTemplate
+    call tmFileOpen
+    call tmFileClose
+    call tmFileSave
+    call tmFileSaveAs
+    call tmFileExit
+
+    call tmFileSaveAll
+    call tmFileProperties
+    call tdFileExport
+    call tmFilePrinterSetting
+    ' special cases
+    '   Call AutoPilot      'inc\desktop\autopilo.inc
+    call tmFileExit ' don't test because unpredictable behaviour
+end sub
+'------------------------------------------------------------------------------
 testcase tiFileSaveAs
 
     dim sFileName as string ' test document & new created doc
@@ -55,9 +82,9 @@ testcase tiFileSaveAs
 
     sFilter (0) = 0 ' initalize ;-)...
     printlog " used document: graphics\required\input\tbo_alf_.od?"
-    sFileName = "graphics\required\input\tbo_alf_." + ExtensionString    ' this is the file with all features
+    sFileName = "graphics\required\input\tbo_alf_." + ExtensionString
     printlog "FileName is " + sFileName
-    sFile = "isas_"                                ' this is the filename of the export files
+    sFile = "isas_"
     sPath = ConvertPath ( gOfficePath + "user/work/graphics/required/"+gApplication+"\"+ gPlatform) ' this is the export path
     printlog "sPath is " + sPath
     if dir (sPath) = "" then
@@ -65,7 +92,7 @@ testcase tiFileSaveAs
     end if
 
     printlog " deleting all files in output directory: \\user\\work\\graphics\\required\\gApplication gPlatform isas_*"
-    if gSamePC = TRUE then ' delete export directory
+    if gSamePC = TRUE then 
         GetFileList ( sPath, sFile+"*", Exlist() )
         if KillFileList ( Exlist() ) <> TRUE then
             Warnlog "Couldn't delete all Files in Output-Export-Directory, the followings are still there:"
@@ -78,68 +105,122 @@ testcase tiFileSaveAs
     printlog "load a sample presentation file"
     Call hFileOpen ( ConvertPath(gTesttoolPath + sFileName) )
     WaitSlot (3000)
-    
-    printlog "running 5 times save as with different Filters"
-    for i = 1 to 6 'run it 5 times
-        printlog "calling Save as Dialog"
-        FileSaveAs
-        WaitSlot (2000)
-        Kontext "SpeichernDlg"
-        printlog "Selecting filter according to number of run"
-        Dateityp.Select i
-        sFilterName = Dateityp.GetSelText
-        sFileName = sPath + sFile + (i)
-        printlog "Filename is " & sFileName
-        printlog "Filtername for this file is " & sFilterName
-        Dateiname.SetText (sFileName)
-        Speichern.Click
-        kontext "AlienWarning"
-        if AlienWarning.exists(5) then
-            AlienWarning.OK
+
+    printlog "Select between Impress and Draw:"
+
+    if (gApplication = "DRAW") then
+        printlog "CASE DRAW: running 4 times save as with different Filters"
+        for i = 1 to 4
+            printlog "calling Save as Dialog, " & i
+            FileSaveAs
+            WaitSlot (2000)
+            Kontext "SpeichernDlg"
+            printlog "Selecting filter according to number of run"
+            Dateityp.Select i
+            sFilterName = Dateityp.GetSelText
+            sFileName = sPath + sFile + (i)
+            printlog "Filename is " & sFileName
+            printlog "Filtername for this file is " & sFilterName
+            Dateiname.SetText (sFileName)
+            Speichern.Click
+            kontext "AlienWarning"
+            if AlienWarning.exists(5) then
+                AlienWarning.OK
+            end if
+            WaitSlot (5000)
+        next i
+        printlog "closing the sample file"
+        fileclose
+        WaitSlot (3000)
+        kontext "Messagebox"
+        if Messagebox.exists then
+            printlog "Messagebox about informationloss... :-) that's OK: 'Text in the messagebox: "+Messagebox.GetText+"'"
+            Messagebox.YES
         end if
-        WaitSlot (5000)
-    next i
-    printlog "closing the sample file"
-    fileclose
-    WaitSlot (3000)
-    kontext "Messagebox"
-    if Messagebox.exists then
-        printlog "Messagebox about informationloss... :-) that's OK: 'Text in the messagebox: "+Messagebox.GetText+"'"
-        Messagebox.YES
-    end if
-     
-    printlog "Loading the former saved files:"
-    for i = 1 to 6 'run it 5 times
-    
-        FileOpen
-        Kontext "OeffnenDlg"
-        WaitSlot (2000)
-        DateiAuswahl.TypeKeys "<END>"
-        DateiAuswahl.TypeKeys "<HOME>"
-        if i <> 1 then
-            DateiAuswahl.TypeKeys "<DOWN>", (i-1)
-        endif
-        sFileNameLoaded = Dateiname.GetSelText
-        printlog "File will be loaded: " & sFileNameLoaded
-        Oeffnen.Click
-        printlog "Closing doc if it gets loaded: " & sFileNameLoaded
-        if gApplication = "IMPRESS" then 
-            Kontext "DocumentImpress"
-            if DocumentImpress.exists(5) then
-                Call hCloseDocument
-            else
-                warnlog "File did not get loaded."
+
+        printlog "Loading the former saved files:"
+        for i = 1 to 4 'run it 4 times
+
+            FileOpen
+            Kontext "OeffnenDlg"
+            WaitSlot (2000)
+            DateiAuswahl.TypeKeys "<END>"
+            DateiAuswahl.TypeKeys "<HOME>"
+            if i <> 1 then
+                DateiAuswahl.TypeKeys "<DOWN>", (i-1)
             endif
-        else
+            sFileNameLoaded = Dateiname.GetSelText
+            printlog i & ":File will be loaded: " & sFileNameLoaded
+            Oeffnen.Click
+            printlog "Closing doc if it gets loaded: " & sFileNameLoaded
             Kontext "DocumentDraw"
             if DocumentDraw.exists(5) then
                 Call hCloseDocument
             else
                 warnlog "File did not get loaded."
             endif
-        endif
-        WaitSlot (2000)
-    next i
+            WaitSlot (2000)
+        next i
+    else
+        printlog "CASE IMPRESS: running 9 times save as with different Filters"
+        for i = 1 to 9
+            printlog "calling Save as Dialog, " & i
+            FileSaveAs
+            WaitSlot (2000)
+            Kontext "SpeichernDlg"
+            printlog "Selecting filter according to number of run"
+            Dateityp.Select i
+            sFilterName = Dateityp.GetSelText
+            sFileName = sPath + sFile + (i)
+            printlog "Filename is " & sFileName
+            printlog "Filtername for this file is " & sFilterName
+            Dateiname.SetText (sFileName)
+            Speichern.Click
+            kontext "AlienWarning"
+            if AlienWarning.exists(5) then
+                AlienWarning.OK
+            end if
+            WaitSlot (5000)
+        next i
+        printlog "closing the sample file"
+        fileclose
+        WaitSlot (3000)
+        kontext "Messagebox"
+        if Messagebox.exists then
+            printlog "Messagebox about informationloss... :-) that's OK: 'Text in the messagebox: "+Messagebox.GetText+"'"
+            Messagebox.YES
+        end if
+
+        printlog "Loading the former saved files:"
+        for i = 1 to 9 'run it 9 times
+            FileOpen
+            Kontext "OeffnenDlg"
+            WaitSlot (2000)
+            DateiAuswahl.TypeKeys "<END>"
+            DateiAuswahl.TypeKeys "<HOME>"
+            if i <> 1 then
+                DateiAuswahl.TypeKeys "<DOWN>", (i-1)
+            endif
+            sFileNameLoaded = Dateiname.GetSelText
+            printlog i & ":File will be loaded: " & sFileNameLoaded
+            Oeffnen.Click
+            printlog "Closing doc if it gets loaded: " & sFileNameLoaded
+            printlog "For checking if its open and closing the doc we need to differ Impress and Draw:"
+            Kontext "DocumentImpress"
+            if DocumentImpress.exists(5) then
+                Call hCloseDocument
+            else
+                Kontext "DocumentDraw"
+                if DocumentDraw.exists(5) then
+                    Call hCloseDocument
+                else
+                    warnlog "File did not get loaded."
+                endif
+            endif
+
+            WaitSlot (2000)
+        next i
+    endif
 
 endcase 'tiFileSaveAs
 

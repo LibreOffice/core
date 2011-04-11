@@ -3,6 +3,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  * Copyright 2010 Miklos Vajna.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,6 +30,7 @@
 #include "rtfsdrexport.hxx"
 #include "rtfexport.hxx"
 #include "writerhelper.hxx"
+#include "rtfattributeoutput.hxx"
 
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <osl/diagnose.h>
@@ -88,7 +90,7 @@ RtfSdrExport::~RtfSdrExport()
     delete[] m_pShapeTypeWritten, m_pShapeTypeWritten = NULL;
 }
 
-void RtfSdrExport::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
+void RtfSdrExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -121,7 +123,7 @@ void RtfSdrExport::CloseContainer()
     EscherEx::CloseContainer();
 }
 
-UINT32 RtfSdrExport::EnterGroup( const String& /*rShapeName*/, const Rectangle* /*pRect*/ )
+sal_uInt32 RtfSdrExport::EnterGroup( const String& /*rShapeName*/, const Rectangle* /*pRect*/ )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -135,7 +137,7 @@ void RtfSdrExport::LeaveGroup()
     /* noop */
 }
 
-void RtfSdrExport::AddShape( UINT32 nShapeType, UINT32 nShapeFlags, UINT32 /*nShapeId*/ )
+void RtfSdrExport::AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 /*nShapeId*/ )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
@@ -473,7 +475,7 @@ sal_Int32 RtfSdrExport::StartShape()
     // Ignore \shpbypage, \shpbymargin, and \shpbycolumn, in favor of the posrelh property.
     m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPBYIGNORE);
 
-    for(std::map<OString,OString>::reverse_iterator i = m_aShapeProps.rbegin(); i != m_aShapeProps.rend(); i++)
+    for(std::map<OString,OString>::reverse_iterator i = m_aShapeProps.rbegin(); i != m_aShapeProps.rend(); ++i)
         lcl_AppendSP(m_rAttrOutput.RunText(), (*i).first, (*i).second );
 
     lcl_AppendSP(m_rAttrOutput.RunText(), "wzDescription", RtfExport::OutString( m_pSdrObject->GetDescription(), m_rExport.eCurrentEncoding));
@@ -520,10 +522,10 @@ void RtfSdrExport::WriteOutliner(const OutlinerParaObject& rParaObj)
     const EditTextObject& rEditObj = rParaObj.GetTextObject();
     MSWord_SdrAttrIter aAttrIter( m_rExport, rEditObj, TXT_HFTXTBOX );
 
-    USHORT nPara = rEditObj.GetParagraphCount();
+    sal_uInt16 nPara = rEditObj.GetParagraphCount();
 
     m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_SHPTXT).append(' ');
-    for (USHORT n = 0; n < nPara; ++n)
+    for (sal_uInt16 n = 0; n < nPara; ++n)
     {
         if( n )
             aAttrIter.NextPara( n );
@@ -577,7 +579,7 @@ void RtfSdrExport::EndShape( sal_Int32 nShapeElement )
     }
 }
 
-UINT32 RtfSdrExport::AddSdrObject( const SdrObject& rObj )
+sal_uInt32 RtfSdrExport::AddSdrObject( const SdrObject& rObj )
 {
     m_pSdrObject = &rObj;
     return EscherEx::AddSdrObject(rObj);

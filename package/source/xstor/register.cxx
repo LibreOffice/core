@@ -70,34 +70,6 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
     return pRet;
 }
 
-sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, void * pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            uno::Reference< registry::XRegistryKey > xKey( reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ) );
-
-            uno::Reference< registry::XRegistryKey >  xNewKey;
-
-            xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-                                        OStorageFactory::impl_staticGetImplementationName() +
-                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
-
-            const uno::Sequence< ::rtl::OUString > aServices = OStorageFactory::impl_staticGetSupportedServiceNames();
-            for( sal_Int32 ind = 0; ind < aServices.getLength(); ind++ )
-                xNewKey->createKey( aServices.getConstArray()[ind] );
-
-            return sal_True;
-        }
-        catch (registry::InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
-}
-
 } // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

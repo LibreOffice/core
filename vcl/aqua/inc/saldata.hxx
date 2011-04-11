@@ -43,7 +43,7 @@
 #include <list>
 #include <vector>
 #include <map>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 #include <cstdio>
 #include <cstdarg>
@@ -71,10 +71,10 @@ class SystemFontList;
 // -----------
 
 class AquaSalFrame;
-struct FrameHash : public std::hash<sal_IntPtr>
+struct FrameHash : public boost::hash<sal_IntPtr>
 {
     size_t operator()(const AquaSalFrame* frame) const
-    { return std::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
+    { return boost::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
 };
 
 #define INVALID_CURSOR_PTR (NSCursor*)0xdeadbeef
@@ -85,7 +85,7 @@ struct SalData
     SALTIMERPROC                                  mpTimerProc;      // timer callback proc
     AquaSalInstance                              *mpFirstInstance;  // pointer of first instance
     std::list<AquaSalFrame*>                      maFrames;         // pointer of first frame
-    std::hash_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existance
+    boost::unordered_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existance
     SalObject                                    *mpFirstObject;    // pointer of first object window
     SalVirtualDevice                             *mpFirstVD;        // first VirDev
     SalPrinter                                   *mpFirstPrinter;   // first printing printer
@@ -132,7 +132,7 @@ inline SalData *GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData
 
 // --- Prototypes ---
 
-BOOL ImplSalYieldMutexTryToAcquire();
+sal_Bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
 

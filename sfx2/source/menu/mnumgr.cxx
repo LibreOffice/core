@@ -34,11 +34,10 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 #ifdef SOLARIS
-// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
 #include <ctime>
 #endif
 
-#include <string>   // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <cstdarg>  // std::va_list
 
 #include <vcl/pointr.hxx>
@@ -57,6 +56,7 @@
 #include <osl/file.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/filter.hxx>
+#include <svl/lngmisc.hxx>
 
 #include <sfx2/mnumgr.hxx>
 
@@ -72,8 +72,7 @@
 #include "sfxtypes.hxx"
 #include <sfx2/bindings.hxx>
 #include "mnucfga.hxx"
-#include "sfxresid.hxx"
-#include <sfx2/macrconf.hxx>
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/sfx.hrc>
 #include "menu.hrc"
@@ -83,8 +82,8 @@
 #include "thessubmenu.hxx"
 
 
-static const USHORT nCompatVersion = 4;
-static const USHORT nVersion = 5;
+static const sal_uInt16 nCompatVersion = 4;
+static const sal_uInt16 nVersion = 5;
 
 // static member initialization
 PopupMenu * SfxPopupMenuManager::pStaticThesSubMenu = NULL;
@@ -115,7 +114,7 @@ SfxMenuManager::SfxMenuManager( const ResId& rResId, SfxBindings &rBindings )
     pResMgr(rResId.GetResMgr()),
     nType( rResId.GetId() )
 {
-    bAddClipboardFuncs = FALSE;
+    bAddClipboardFuncs = sal_False;
     DBG_MEMTEST();
 }
 
@@ -150,8 +149,8 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
     {
         SfxObjectShell* pDoc = pView->GetObjectShell();
         pMenu->InsertSeparator();
-        USHORT nr=0;
-        for ( USHORT n = 0; n < aVerbs.getLength(); ++n )
+        sal_uInt16 nr=0;
+        for ( sal_uInt16 n = 0; n < aVerbs.getLength(); ++n )
         {
             // check for ReadOnly verbs
             if ( pDoc->IsReadOnly() && !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_NEVERDIRTIES) )
@@ -161,15 +160,12 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
             if ( !(aVerbs[n].VerbAttributes & embed::VerbAttributes::MS_VERBATTR_ONCONTAINERMENU) )
                 continue;
 
-            // neue Id vergeben
-            USHORT nId = SID_VERB_START + nr++;
-            DBG_ASSERT(nId <= SID_VERB_END, "Zuviele Verben!");
+            sal_uInt16 nId = SID_VERB_START + nr++;
+            DBG_ASSERT(nId <= SID_VERB_END, "Too many verbs!");
             if ( nId > SID_VERB_END )
                 break;
 
-            // einf"ugen
             pMenu->InsertItem( nId, aVerbs[n].VerbName );
-            pMenu->SetHelpId( nId, (ULONG) nId );
         }
     }
 }
@@ -197,9 +193,9 @@ static Image lcl_GetImageFromPngUrl( const ::rtl::OUString &rFileUrl )
 
 PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 {
-    //
+
     // build thesaurus sub menu if look-up string is available
-    //
+
     PopupMenu* pThesSubMenu = 0;
     SfxPoolItem *pItem = 0;
     pBindings->QueryState( SID_THES, pItem );
@@ -228,22 +224,21 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         if (nNumSynonyms > 0)
         {
             SvtLinguConfig aCfg;
-            const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
             Image aImage;
             String sThesImplName( aHelper.GetThesImplName( aLocale ) );
-            ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName, bHC ) );
+            ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName ) );
             if (sThesImplName.Len() > 0 && aSynonymsImageUrl.getLength() > 0)
                 aImage = Image( lcl_GetImageFromPngUrl( aSynonymsImageUrl ) );
 
-            for (USHORT i = 0; (size_t)i < nNumSynonyms; ++i)
+            for (sal_uInt16 i = 0; (size_t)i < nNumSynonyms; ++i)
             {
                 //! item ids should start with values > 0, since 0 has special meaning
-                const USHORT nId = i + 1;
+                const sal_uInt16 nId = i + 1;
 
-                String aItemText( GetThesaurusReplaceText_Impl( aSynonyms[i] ) );
+                String aItemText( linguistic::GetThesaurusReplaceText( aSynonyms[i] ) );
                 pThesSubMenu->InsertItem( nId, aItemText );
-                ::rtl::OUString aCmd( ::rtl::OUString::createFromAscii( ".uno:ThesaurusFromContext?WordReplace:string=" ) );
+                ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM(".uno:ThesaurusFromContext?WordReplace:string=") );
                 aCmd += aItemText;
                 pThesSubMenu->SetItemCommand( nId, aCmd );
 
@@ -259,7 +254,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         pThesSubMenu->InsertSeparator();
         const String sThesaurus( SfxResId( STR_MENU_THESAURUS ) );
         pThesSubMenu->InsertItem( 100, sThesaurus );
-        pThesSubMenu->SetItemCommand( 100, ::rtl::OUString::createFromAscii( ".uno:ThesaurusDialog" ) );
+        pThesSubMenu->SetItemCommand( 100, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:ThesaurusDialog")) );
 
         pSVMenu->InsertSeparator();
         const String sSynonyms( SfxResId( STR_MENU_SYNONYMS ) );
@@ -290,14 +285,13 @@ void SfxMenuManager::UseDefault()
         ResId aResId(GetType(),*pResMgr);
         aResId.SetRT(RSC_MENU);
         Menu *pSVMenu = new PopupMenu( aResId );
-        //SfxMenuManager::EraseItemCmds( pSVMenu ); // Remove .uno cmds to be compatible with 6.0/src641
 
         if ( bAddClipboardFuncs )
         {
-            USHORT n, nCount = pSVMenu->GetItemCount();
+            sal_uInt16 n, nCount = pSVMenu->GetItemCount();
             for ( n=0; n<nCount; n++ )
             {
-                USHORT nId = pSVMenu->GetItemId( n );
+                sal_uInt16 nId = pSVMenu->GetItemId( n );
                 if ( nId == SID_COPY || nId == SID_CUT || nId == SID_PASTE )
                     break;
             }
@@ -309,13 +303,13 @@ void SfxMenuManager::UseDefault()
                 pSVMenu->InsertSeparator();
                 for ( n=0; n<nCount; n++ )
                 {
-                    USHORT nId = aPop.GetItemId( n );
+                    sal_uInt16 nId = aPop.GetItemId( n );
                     pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ) );
                 }
             }
         }
 
-        pVMenu = new SfxVirtualMenu( pSVMenu, FALSE, *pBindings, TRUE, TRUE );
+        pVMenu = new SfxVirtualMenu( pSVMenu, sal_False, *pBindings, sal_True, sal_True );
     }
 
     Construct(*pVMenu);
@@ -333,7 +327,7 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
 {
     DBG_MEMTEST();
 
-    USHORT nId = (USHORT) pSelMenu->GetCurItemId();
+    sal_uInt16 nId = (sal_uInt16) pSelMenu->GetCurItemId();
     String aCommand = pSelMenu->GetItemCommand( nId );
     if ( !aCommand.Len() && pBindings )
     {
@@ -356,23 +350,23 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
         // special menu function
         pBindings->GetDispatcher_Impl()->Execute( nId );
 
-    return TRUE;
+    return sal_True;
 }
 
 //--------------------------------------------------------------------
 
-void SfxMenuManager::Construct_Impl( Menu* pSVMenu, BOOL bWithHelp )
+void SfxMenuManager::Construct_Impl( Menu* pSVMenu, sal_Bool bWithHelp )
 {
     SfxVirtualMenu *pOldVirtMenu=0;
     if ( pMenu )
     {
-        // Es wird umkonfiguriert
+        // It is reconfigured
         pOldVirtMenu = pMenu;
         pBindings->ENTERREGISTRATIONS();
     }
 
     TryToHideDisabledEntries_Impl( pSVMenu );
-    SfxVirtualMenu *pVMenu = new SfxVirtualMenu( pSVMenu, bWithHelp, *pBindings, TRUE );
+    SfxVirtualMenu *pVMenu = new SfxVirtualMenu( pSVMenu, bWithHelp, *pBindings, sal_True );
     Construct(*pVMenu);
 
     if ( pOldVirtMenu )
@@ -406,10 +400,10 @@ void SfxPopupMenuManager::RemoveDisabledEntries()
 
 //--------------------------------------------------------------------
 
-USHORT SfxPopupMenuManager::Execute( const Point& rPos, Window* pWindow )
+sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, Window* pWindow )
 {
     DBG_MEMTEST();
-    USHORT nVal = ( (PopupMenu*) GetMenu()->GetSVMenu() )->Execute( pWindow, rPos );
+    sal_uInt16 nVal = ( (PopupMenu*) GetMenu()->GetSVMenu() )->Execute( pWindow, rPos );
     delete pStaticThesSubMenu;  pStaticThesSubMenu = NULL;
     return nVal;
 }
@@ -425,13 +419,13 @@ IMPL_LINK_INLINE_END( SfxPopupMenuManager, SelectHdl, void *, EMPTYARG )
 
 //--------------------------------------------------------------------
 
-USHORT SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 )
+sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, va_list pArgs, const SfxPoolItem *pArg1 )
 {
     DBG_MEMTEST();
 
     PopupMenu* pPopMenu = ( (PopupMenu*)GetMenu()->GetSVMenu() );
     pPopMenu->SetSelectHdl( LINK( this, SfxPopupMenuManager, SelectHdl ) );
-    USHORT nId = pPopMenu->Execute( pWindow, rPoint );
+    sal_uInt16 nId = pPopMenu->Execute( pWindow, rPoint );
     pPopMenu->SetSelectHdl( Link() );
 
     if ( nId )
@@ -442,7 +436,7 @@ USHORT SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, va_li
 
 //--------------------------------------------------------------------
 
-USHORT SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1, ... )
+sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, const SfxPoolItem *pArg1, ... )
 {
     DBG_MEMTEST();
 
@@ -467,43 +461,43 @@ void SfxPopupMenuManager::StartInsert()
 void SfxPopupMenuManager::EndInsert()
 {
     pBindings->ENTERREGISTRATIONS();
-    pMenu = new SfxVirtualMenu( pSVMenu, FALSE, *pBindings, TRUE, TRUE );
+    pMenu = new SfxVirtualMenu( pSVMenu, sal_False, *pBindings, sal_True, sal_True );
     Construct( *pMenu );
     pBindings->LEAVEREGISTRATIONS();
 }
 
 //-------------------------------------------------------------------------
 
-void SfxPopupMenuManager::InsertSeparator( USHORT nPos )
+void SfxPopupMenuManager::InsertSeparator( sal_uInt16 nPos )
 {
     pSVMenu->InsertSeparator( nPos );
 }
 
 //-------------------------------------------------------------------------
 
-void SfxPopupMenuManager::InsertItem( USHORT nId, const String& rName, MenuItemBits nBits, USHORT nPos )
+void SfxPopupMenuManager::InsertItem( sal_uInt16 nId, const String& rName, MenuItemBits nBits, const rtl::OString& rHelpId, sal_uInt16 nPos )
 {
     pSVMenu->InsertItem( nId, rName, nBits,nPos );
-    pSVMenu->SetHelpId( nId, (ULONG) nId );
+    pSVMenu->SetHelpId( nId, rHelpId );
 }
 
 //-------------------------------------------------------------------------
 
-void SfxPopupMenuManager::RemoveItem( USHORT nId )
+void SfxPopupMenuManager::RemoveItem( sal_uInt16 nId )
 {
     pSVMenu->RemoveItem( nId );
 }
 
 //-------------------------------------------------------------------------
 
-void SfxPopupMenuManager::CheckItem( USHORT nId, BOOL bCheck )
+void SfxPopupMenuManager::CheckItem( sal_uInt16 nId, sal_Bool bCheck )
 {
     pSVMenu->CheckItem( nId, bCheck );
 }
 
 void SfxPopupMenuManager::AddClipboardFunctions()
 {
-    bAddClipboardFuncs = TRUE;
+    bAddClipboardFuncs = sal_True;
 }
 
 SfxMenuManager::SfxMenuManager( Menu* pMenuArg, SfxBindings &rBindings )
@@ -513,8 +507,8 @@ SfxMenuManager::SfxMenuManager( Menu* pMenuArg, SfxBindings &rBindings )
     pResMgr(NULL),
     nType(0)
 {
-    bAddClipboardFuncs = FALSE;
-    SfxVirtualMenu* pVMenu = new SfxVirtualMenu( pMenuArg, FALSE, rBindings, TRUE, TRUE );
+    bAddClipboardFuncs = sal_False;
+    SfxVirtualMenu* pVMenu = new SfxVirtualMenu( pMenuArg, sal_False, rBindings, sal_True, sal_True );
     Construct(*pVMenu);
 }
 
@@ -527,10 +521,10 @@ SfxPopupMenuManager::SfxPopupMenuManager( PopupMenu* pMenuArg, SfxBindings& rBin
 SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFrame* pFrame,const Point& rPoint, Window* pWindow )
 {
     PopupMenu *pSVMenu = new PopupMenu( rResId );
-    USHORT n, nCount = pSVMenu->GetItemCount();
+    sal_uInt16 n, nCount = pSVMenu->GetItemCount();
     for ( n=0; n<nCount; n++ )
     {
-        USHORT nId = pSVMenu->GetItemId( n );
+        sal_uInt16 nId = pSVMenu->GetItemId( n );
         if ( nId == SID_COPY || nId == SID_CUT || nId == SID_PASTE )
             break;
     }
@@ -546,7 +540,7 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
         pSVMenu->InsertSeparator();
         for ( n=0; n<nCount; n++ )
         {
-            USHORT nId = aPop.GetItemId( n );
+            sal_uInt16 nId = aPop.GetItemId( n );
             pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ) );
             pSVMenu->SetHelpId( nId, aPop.GetHelpId( nId ));
         }
@@ -579,10 +573,10 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
 void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFrame, const Point& rPoint, Window* pWindow )
 {
     PopupMenu *pSVMenu = new PopupMenu( rResId );
-    USHORT n, nCount = pSVMenu->GetItemCount();
+    sal_uInt16 n, nCount = pSVMenu->GetItemCount();
     for ( n=0; n<nCount; n++ )
     {
-        USHORT nId = pSVMenu->GetItemId( n );
+        sal_uInt16 nId = pSVMenu->GetItemId( n );
         if ( nId == SID_COPY || nId == SID_CUT || nId == SID_PASTE )
             break;
     }
@@ -596,7 +590,7 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
         pSVMenu->InsertSeparator();
         for ( n=0; n<nCount; n++ )
         {
-            USHORT nId = aPop.GetItemId( n );
+            sal_uInt16 nId = aPop.GetItemId( n );
             pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ) );
             pSVMenu->SetHelpId( nId, aPop.GetHelpId( nId ));
         }

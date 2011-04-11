@@ -29,14 +29,12 @@
 #include <ooo/vba/XCollection.hpp>
 #include "vbapages.hxx"
 #include <vector>
+#include <com/sun/star/container/XNameContainer.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-// uno servicename com.sun.star.awt.UnoControlProgressBarMode
-const rtl::OUString SVALUE( RTL_CONSTASCII_USTRINGPARAM("ProgressValue") );
-const rtl::OUString SVALUEMAX( RTL_CONSTASCII_USTRINGPARAM("ProgressValueMax") );
-const rtl::OUString SSTEP( RTL_CONSTASCII_USTRINGPARAM("Step") );
+const rtl::OUString SVALUE( RTL_CONSTASCII_USTRINGPARAM("MultiPageValue") );
 
 typedef cppu::WeakImplHelper1< container::XIndexAccess > PagesImpl_Base;
 class PagesImpl : public PagesImpl_Base
@@ -72,8 +70,6 @@ ScVbaMultiPage::getPages( sal_Int32 nPages )
 ScVbaMultiPage::ScVbaMultiPage( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper, const uno::Reference< uno::XInterface >& xDialog ) : MultiPageImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
 {
     mxDialogProps.set( xDialog, uno::UNO_QUERY_THROW );
-    // set dialog step to value of multipage pseudo model
-    setValue(getValue());
 }
 
 // Attributes
@@ -82,17 +78,17 @@ ScVbaMultiPage::getValue() throw (css::uno::RuntimeException)
 {
     sal_Int32 nValue = 0;
     m_xProps->getPropertyValue( SVALUE ) >>= nValue;
-    return nValue;
+    // VBA 0 based tab index
+    return nValue - 1;
 }
 
 void SAL_CALL
 ScVbaMultiPage::setValue( const sal_Int32 _value ) throw (::com::sun::star::uno::RuntimeException)
 {
-    // track change in dialog ( dialog value is 1 based, 0 is a special value )
-    sal_Int32 nVal = _value; // will be _value + 1 when cws container_controls is integrated
+    // Openoffice 1 based tab index
+    sal_Int32 nVal = _value + 1;
     sal_Int32 nOldVal = getValue();
-    m_xProps->setPropertyValue( SVALUE, uno::makeAny( _value ) );
-    mxDialogProps->setPropertyValue( SSTEP, uno::makeAny( _value + 1) );
+    m_xProps->setPropertyValue( SVALUE, uno::makeAny( nVal ) );
     if ( nVal != nOldVal )
         fireChangeEvent();
 }
@@ -108,9 +104,9 @@ ScVbaMultiPage::getServiceImplName()
 uno::Any SAL_CALL
 ScVbaMultiPage::Pages( const uno::Any& index ) throw (uno::RuntimeException)
 {
-    sal_Int32 nValue = 0;
-    m_xProps->getPropertyValue( SVALUEMAX ) >>= nValue;
-    uno::Reference< XCollection > xColl( new ScVbaPages( this, mxContext, getPages( nValue ) ) );
+    // get the container model
+    uno::Reference< container::XNameContainer > xContainer( m_xProps, uno::UNO_QUERY_THROW );
+    uno::Reference< XCollection > xColl( new ScVbaPages( this, mxContext, getPages( xContainer->getElementNames().getLength() ) ) );
     if ( !index.hasValue() )
         return uno::makeAny( xColl );
     return xColl->Item( uno::makeAny( index ), uno::Any() );

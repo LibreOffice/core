@@ -6,10 +6,6 @@
 *
 * OpenOffice.org - a multi-platform office productivity suite
 *
-* $RCSfile: mysqlc_driver.hxx,v $
-*
-* $Revision: 1.1.2.4 $
-*
 * This file is part of OpenOffice.org.
 *
 * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -37,9 +33,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/compbase2.hxx>
-#include <preextstl.h>
 #include <cppconn/driver.h>
-#include <postextstl.h>
 #include <osl/module.h>
 
 namespace connectivity

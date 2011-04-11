@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-
-
 #include "oox/ppt/animationspersist.hxx"
 
 #include <rtl/ustring.hxx>
@@ -38,8 +36,6 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 
 #include "oox/drawingml/shape.hxx"
-
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -191,7 +187,7 @@ namespace oox { namespace ppt {
     {
         Any aAny;
         for( AnimationConditionList::const_iterator iter = l.begin();
-             iter != l.end(); iter++)
+             iter != l.end(); ++iter)
         {
             aAny = addToSequence( aAny, iter->convert(pSlide) );
         }

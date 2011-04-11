@@ -56,7 +56,7 @@ class SbPropertyValues:     public SbPropertyValuesHelper
     NS_UNO::Reference< ::com::sun::star::beans::XPropertySetInfo > _xInfo;
 
 private:
-    INT32                   GetIndex_Impl( const ::rtl::OUString &rPropName ) const;
+    sal_Int32                   GetIndex_Impl( const ::rtl::OUString &rPropName ) const;
 
 public:
                             SbPropertyValues();
@@ -157,7 +157,7 @@ public:
 
     // XPropertyContainer
     virtual void SAL_CALL addProperty(  const ::rtl::OUString& Name,
-                                        INT16 Attributes,
+                                        sal_Int16 Attributes,
                                         const NS_UNO::Any& DefaultValue)
         throw(  NS_BEANS::PropertyExistException, NS_BEANS::IllegalTypeException,
                 NS_LANG::IllegalArgumentException, NS_UNO::RuntimeException );
@@ -181,7 +181,7 @@ public:
 class StarBASIC;
 class SbxArray;
 
-void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
 
 
 #undef NS_BEANS

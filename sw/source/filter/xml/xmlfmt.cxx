@@ -660,8 +660,8 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
     String sName;
-    // --> OD 2005-02-01 #i40788# - first determine the display name of the
-    // page style, then map this name to the corresponding user interface name.
+    // #i40788# - first determine the display name of the page style,
+    // then map this name to the corresponding user interface name.
     sName = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE,
                                              GetMasterPageName() );
     SwStyleNameMapper::FillUIName( sName,
@@ -701,7 +701,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
 
     if( pFmtPageDesc )
     {
-        pPageDesc->Add( pFmtPageDesc );
+        pFmtPageDesc->RegisterToPageDesc( *pPageDesc );
         pItemSet->Put( *pFmtPageDesc );
         delete pFmtPageDesc;
     }
@@ -949,12 +949,6 @@ OUString SwXMLStylesContext_Impl::GetServiceName( sal_uInt16 nFamily ) const
 void SwXMLStylesContext_Impl::EndElement()
 {
     GetSwImport().InsertStyles( IsAutomaticStyle() );
-    // --> OD 2006-10-11 #i69629#
-    // assign paragraph styles to list levels of outline style after all styles
-    // are imported and finished.
-//    if( !bAutoStyles )
-//        GetImport().GetTextImport()->SetOutlineStyles( sal_True );
-    // <--
 }
 
 // ---------------------------------------------------------------------
@@ -1088,7 +1082,7 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
             if( bSendModify )
             {
                 SwCondCollCondChg aMsg( pColl );
-                pColl->Modify( &aMsg, &aMsg );
+                pColl->ModifyNotification( &aMsg, &aMsg );
             }
         }
     }

@@ -191,6 +191,9 @@ class BackendImpl : public ImplBaseT
         virtual OUString SAL_CALL getDescription()
             throw (deployment::ExtensionRemovedException, RuntimeException);
 
+        virtual OUString SAL_CALL getLicenseText()
+            throw (deployment::ExtensionRemovedException, RuntimeException);
+
         virtual void SAL_CALL exportTo(
             OUString const & destFolderURL, OUString const & newTitle,
             sal_Int32 nameClashAction,
@@ -248,7 +251,7 @@ class BackendImpl : public ImplBaseT
 
     void addDataToDb(OUString const & url, ExtensionBackendDb::Data const & data);
     ExtensionBackendDb::Data readDataFromDb(OUString const & url);
-    void deleteDataFromDb(OUString const & url);
+    void revokeEntryFromDb(OUString const & url);
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
@@ -274,6 +277,9 @@ public:
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException);
 
     using ImplBaseT::disposing;
 };
@@ -301,15 +307,13 @@ BackendImpl::BackendImpl(
                              OUSTR("application/vnd.sun.star.package-bundle"),
                              OUSTR("*.oxt;*.uno.pkg"),
                              getResourceString(RID_STR_PACKAGE_BUNDLE),
-                             RID_IMG_DEF_PACKAGE_BUNDLE,
-                             RID_IMG_DEF_PACKAGE_BUNDLE_HC ) ),
+                             RID_IMG_DEF_PACKAGE_BUNDLE ) ),
       m_xLegacyBundleTypeInfo( new Package::TypeInfo(
                                    OUSTR("application/"
                                          "vnd.sun.star.legacy-package-bundle"),
                                    OUSTR("*.zip"),
                                    m_xBundleTypeInfo->getShortDescription(),
-                                   RID_IMG_DEF_PACKAGE_BUNDLE,
-                                   RID_IMG_DEF_PACKAGE_BUNDLE_HC ) ),
+                                   RID_IMG_DEF_PACKAGE_BUNDLE ) ),
     m_typeInfos(2)
 {
     m_typeInfos[ 0 ] = m_xBundleTypeInfo;
@@ -347,7 +351,7 @@ Sequence<OUString> BackendImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return comphelper::makeSequence(
-        OUString::createFromAscii(BACKEND_SERVICE_NAME) );
+        OUString(RTL_CONSTASCII_USTRINGPARAM(BACKEND_SERVICE_NAME)) );
 }
 
 // XPackageRegistry
@@ -358,6 +362,21 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
     return m_typeInfos;
 }
 
+void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
+        throw (deployment::DeploymentException,
+               uno::RuntimeException)
+{
+    //Notify the backend responsible for processing the different media
+    //types that this extension was removed.
+    ExtensionBackendDb::Data data = readDataFromDb(url);
+    for (ExtensionBackendDb::Data::ITC_ITEMS i = data.items.begin(); i != data.items.end(); i++)
+    {
+        m_xRootRegistry->packageRemoved(i->first, i->second);
+    }
+
+    if (m_backendDb.get())
+        m_backendDb->removeEntry(url);
+}
 
 
 // PackageRegistryBackend
@@ -458,14 +477,13 @@ ExtensionBackendDb::Data BackendImpl::readDataFromDb(
     return data;
 }
 
-void BackendImpl::deleteDataFromDb(OUString const & url)
+void BackendImpl::revokeEntryFromDb(OUString const & url)
 {
     if (m_backendDb.get())
-        m_backendDb->removeEntry(url);
+        m_backendDb->revokeEntry(url);
 }
 
 
-//##############################################################################
 
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<PackageRegistryBackend> const & myBackend,
@@ -703,10 +721,6 @@ bool BackendImpl::PackageImpl::checkDependencies(
                 return true;
             else
                 return false;
-                //throw css::deployment::DeploymentException(
-                //    OUSTR("Extension Manager: User declined the license."),
-                //    static_cast<OWeakObject*>(this),
-                //    Any( css::deployment::LicenseException(OUSTR("User declined the license."), 0, m_name, sLicense)));
         }
         return true;
     } catch (css::ucb::CommandFailedException&) {
@@ -903,7 +917,7 @@ void BackendImpl::PackageImpl::processPackage_(
                         }
                         catch (Exception &)
                         {
-                            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+                            OSL_FAIL( ::rtl::OUStringToOString(
                                             ::comphelper::anyToString(
                                                 ::cppu::getCaughtException() ),
                                             RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -971,7 +985,7 @@ void BackendImpl::PackageImpl::processPackage_(
                 // selected
             }
         }
-        getMyBackend()->deleteDataFromDb(getURL());
+        getMyBackend()->revokeEntryFromDb(getURL());
     }
 }
 
@@ -994,13 +1008,38 @@ OUString BackendImpl::PackageImpl::getDescription()
         }
         catch ( css::deployment::DeploymentException& )
         {
-            OSL_ENSURE( 0, ::rtl::OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
+            OSL_FAIL( ::rtl::OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
 
     if (sDescription.getLength())
         return sDescription;
     return m_oldDescription;
+}
+
+//______________________________________________________________________________
+OUString BackendImpl::PackageImpl::getLicenseText()
+    throw (deployment::ExtensionRemovedException, RuntimeException)
+{
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+
+    OUString sLicense;
+    DescriptionInfoset aInfo = getDescriptionInfoset();
+
+    ::boost::optional< SimpleLicenseAttributes > aSimplLicAttr = aInfo.getSimpleLicenseAttributes();
+    if ( aSimplLicAttr )
+    {
+        OUString aLicenseURL = aInfo.getLocalizedLicenseURL();
+
+        if ( aLicenseURL.getLength() )
+        {
+            OUString aFullURL = m_url_expanded + OUSTR("/") + aLicenseURL;
+               sLicense = getTextFromURL( Reference< ucb::XCommandEnvironment >(), aFullURL);
+           }
+    }
+
+     return sLicense;
 }
 
 //______________________________________________________________________________
@@ -1097,14 +1136,14 @@ void BackendImpl::PackageImpl::exportTo(
         }
         // xxx todo: think about exception specs:
         catch (deployment::DeploymentException &) {
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             ::comphelper::anyToString(
                                 ::cppu::getCaughtException() ),
                             RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         catch (lang::IllegalArgumentException & exc) {
             (void) exc;
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
 
@@ -1173,7 +1212,7 @@ void BackendImpl::PackageImpl::exportTo(
             makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
             xCmdEnv, false ) )
         {
-            OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
+            OSL_FAIL( "### missing META-INF/manifest.xml file!" );
             return;
         }
 
@@ -1397,7 +1436,7 @@ void BackendImpl::PackageImpl::scanBundle(
             makeURL( m_url_expanded, OUSTR("META-INF/manifest.xml") ),
             xCmdEnv, false /* no throw */ ))
     {
-        OSL_ENSURE( 0, "### missing META-INF/manifest.xml file!" );
+        OSL_FAIL( "### missing META-INF/manifest.xml file!" );
         return;
     }
 

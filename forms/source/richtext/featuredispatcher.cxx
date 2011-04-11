@@ -148,7 +148,7 @@ namespace frm
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "ORichTextFeatureDispatcher::doNotify: caught an exception!" );
+                OSL_FAIL( "ORichTextFeatureDispatcher::doNotify: caught an exception!" );
             }
         }
     }

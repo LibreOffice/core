@@ -53,7 +53,7 @@ ConfigurationAccess::ConfigurationAccess (
     {
         Reference<lang::XMultiServiceFactory> xProvider (
             xFactory->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")),
                 rxContext),
             UNO_QUERY);
         if (xProvider.is())
@@ -71,7 +71,7 @@ ConfigurationAccess::ConfigurationAccess (
 {
     Reference<lang::XMultiServiceFactory> xProvider (
         ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider"))),
         UNO_QUERY);
     if (xProvider.is())
         Initialize(xProvider, rsRootName, eMode);

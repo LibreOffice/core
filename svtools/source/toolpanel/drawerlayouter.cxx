@@ -88,7 +88,7 @@ namespace svt
         const size_t nUpperBound = !!aActivePanel ? *aActivePanel : nPanelCount - 1;
         for ( size_t i=0; i<=nUpperBound; ++i )
         {
-            sal_uInt32 nDrawerHeight = m_aDrawers[i]->GetPreferredHeightPixel();
+            long nDrawerHeight = m_aDrawers[i]->GetPreferredHeightPixel();
             m_aDrawers[i]->SetPosSizePixel(
                 aUpperDrawerPos, Size( nWidth, nDrawerHeight ) );
             aUpperDrawerPos.Move( 0, nDrawerHeight );
@@ -98,7 +98,7 @@ namespace svt
         Point aLowerDrawerPos( i_rDeckPlayground.BottomLeft() );
         for ( size_t j = nPanelCount - 1; j > nUpperBound; --j )
         {
-            sal_uInt32 nDrawerHeight = m_aDrawers[j]->GetPreferredHeightPixel();
+            long nDrawerHeight = m_aDrawers[j]->GetPreferredHeightPixel();
             m_aDrawers[j]->SetPosSizePixel(
                 Point( aLowerDrawerPos.X(), aLowerDrawerPos.Y() - nDrawerHeight + 1 ),
                 Size( nWidth, nDrawerHeight )
@@ -148,10 +148,10 @@ namespace svt
 
         const PToolPanelDrawer pDrawer( m_aDrawers[ i_nChildIndex ] );
 
-        Reference< XAccessible > xItemAccessible = pDrawer->GetAccessible( FALSE );
+        Reference< XAccessible > xItemAccessible = pDrawer->GetAccessible( sal_False );
         if ( !xItemAccessible.is() )
         {
-            xItemAccessible = pDrawer->GetAccessible( TRUE );
+            xItemAccessible = pDrawer->GetAccessible( sal_True );
             ENSURE_OR_RETURN( xItemAccessible.is(), "illegal accessible provided by the drawer implementation!", NULL );
             OSL_VERIFY( ::comphelper::OAccessibleImplementationAccess::setAccessibleParent( xItemAccessible->getAccessibleContext(),
                 i_rParentAccessible ) );
@@ -166,7 +166,7 @@ namespace svt
         OSL_PRECOND( i_nPosition <= m_aDrawers.size(), "DrawerDeckLayouter::PanelInserted: inconsistency!" );
 
         PToolPanelDrawer pDrawer( new ToolPanelDrawer( m_rParentWindow, i_pPanel->GetDisplayName() ) );
-        pDrawer->SetSmartHelpId( i_pPanel->GetHelpID() );
+        pDrawer->SetHelpId( i_pPanel->GetHelpID() );
         // proper Z-Order
         if ( i_nPosition == 0 )
         {

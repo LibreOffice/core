@@ -71,7 +71,7 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
 {
     uno::Reference< task::XJob > xJob;
 
-    if ( aArguments.getLength() > 0 && aArguments[0].Name.equalsAscii( "JobToExecute" ) )
+    if ( aArguments.getLength() > 0 && aArguments[0].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "JobToExecute" ) ) )
         aArguments[0].Value >>= xJob;
 
     if ( !xJob.is() )
@@ -97,14 +97,14 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
 uno::Sequence< ::rtl::OUString > SAL_CALL UNOMainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString::createFromAscii( "com.sun.star.comp.thread.MainThreadExecutor" );
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.thread.MainThreadExecutor"));
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL UNOMainThreadExecutor::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.thread.MainThreadExecutor" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.thread.MainThreadExecutor"));
 }
 
 //-------------------------------------------------------------------------

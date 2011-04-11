@@ -29,9 +29,7 @@
 #include "oox/drawingml/shapestylecontext.hxx"
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/colorchoicecontext.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -68,12 +66,12 @@ Reference< XFastContextHandler > ShapeStyleContext::createFastChildContext( sal_
     AttributeList aAttribs( rxAttributes );
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML|XML_lnRef :     // CT_StyleMatrixReference
-        case NMSP_DRAWINGML|XML_fillRef :   // CT_StyleMatrixReference
-        case NMSP_DRAWINGML|XML_effectRef : // CT_StyleMatrixReference
-        case NMSP_DRAWINGML|XML_fontRef :   // CT_FontReference
+        case A_TOKEN( lnRef ) :     // CT_StyleMatrixReference
+        case A_TOKEN( fillRef ) :   // CT_StyleMatrixReference
+        case A_TOKEN( effectRef ) : // CT_StyleMatrixReference
+        case A_TOKEN( fontRef ) :   // CT_FontReference
         {
-            sal_Int32 nToken = getToken( aElementToken );
+            sal_Int32 nToken = getBaseToken( aElementToken );
             ShapeStyleRef& rStyleRef = mrShape.getShapeStyleRefs()[ nToken ];
             rStyleRef.mnThemedIdx = (nToken == XML_fontRef) ? aAttribs.getToken( XML_idx, XML_none ) : aAttribs.getInteger( XML_idx, 0 );
             xRet.set( new ColorContext( *this, rStyleRef.maPhClr ) );

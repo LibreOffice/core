@@ -51,8 +51,11 @@
 #include "dumputils.hxx"
 #include "includes.hxx"
 
-using namespace rtl;
 using namespace codemaker::cpp;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 namespace {
 
@@ -1201,7 +1204,7 @@ void CppuType::dumpConstantValue(FileStream& o, sal_uInt16 index)
             {
                 ::rtl::OUString aUStr(constValue.m_value.aString);
                 ::rtl::OString aStr = ::rtl::OUStringToOString(aUStr, RTL_TEXTENCODING_ASCII_US);
-                o << "::rtl::OUString::createFromAscii(\"" << aStr.getStr() << "\")";
+                o << "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"" << aStr.getStr() << "\"))";
             }
             break;
     }

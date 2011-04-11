@@ -236,7 +236,7 @@ void SAL_CALL DeleteTargetDevice( DVTARGETDEVICE* ptd )
     __except( EXCEPTION_EXECUTE_HANDLER )
 #endif
     {
-        OSL_ENSURE( sal_False, "Error DeleteTargetDevice" );
+        OSL_FAIL( "Error DeleteTargetDevice" );
     }
 #ifdef __MINGW32__
     han.Reset();
@@ -357,7 +357,7 @@ sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
     __except( EXCEPTION_EXECUTE_HANDLER )
 #endif
     {
-        OSL_ENSURE( sal_False, "Error CopyFormatEtc" );
+        OSL_FAIL( "Error CopyFormatEtc" );
     }
 #ifdef __MINGW32__
     han.Reset();
@@ -430,7 +430,7 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC*
     __except( EXCEPTION_EXECUTE_HANDLER )
 #endif
     {
-        OSL_ENSURE( sal_False, "Error CompareFormatEtc" );
+        OSL_FAIL( "Error CompareFormatEtc" );
         nMatch = FORMATETC_NO_MATCH;
     }
 #ifdef __MINGW32__
@@ -479,7 +479,7 @@ sal_Bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* 
     __except( EXCEPTION_EXECUTE_HANDLER )
 #endif
     {
-        OSL_ENSURE( sal_False, "Error CompareTargetDevice" );
+        OSL_FAIL( "Error CompareTargetDevice" );
         bRet = sal_False;
     }
 #ifdef __MINGW32__

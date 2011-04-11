@@ -38,20 +38,20 @@ class SwHeadFootFrm : public SwLayoutFrm
 protected:
     void FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs);
     void FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs);
-    inline BOOL GetEatSpacing() const; // in hffrm.cxx
+    inline sal_Bool GetEatSpacing() const; // in hffrm.cxx
 public:
-    SwHeadFootFrm(SwFrmFmt * pFrm, USHORT aType);
+    SwHeadFootFrm(SwFrmFmt * pFrm, SwFrm*, sal_uInt16 aType);
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     virtual SwTwips GrowFrm( SwTwips,
-                             BOOL bTst = FALSE, BOOL bInfo = FALSE );
+                             sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
     virtual SwTwips ShrinkFrm( SwTwips,
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE );
+                               sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
 };
 
 class SwHeaderFrm: public SwHeadFootFrm
 {
 public:
-    SwHeaderFrm( SwFrmFmt* pFrm ) : SwHeadFootFrm(pFrm, FRMC_HEADER) {};
+    SwHeaderFrm( SwFrmFmt* pFrm, SwFrm* pSib ) : SwHeadFootFrm(pFrm, pSib, FRMC_HEADER) {};
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwHeaderFrm)
 };
@@ -59,7 +59,7 @@ public:
 class SwFooterFrm: public SwHeadFootFrm
 {
 public:
-    SwFooterFrm( SwFrmFmt* pFrm ) : SwHeadFootFrm(pFrm, FRMC_FOOTER) {};
+    SwFooterFrm( SwFrmFmt* pFrm, SwFrm* pSib ) : SwHeadFootFrm(pFrm, pSib, FRMC_FOOTER) {};
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwFooterFrm)
 };

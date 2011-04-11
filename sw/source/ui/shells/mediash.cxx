@@ -95,10 +95,10 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
     if( pSdrView )
     {
         const SfxItemSet*   pArgs = rReq.GetArgs();
-        USHORT              nSlotId = rReq.GetSlot();
-        BOOL                bChanged = pSdrView->GetModel()->IsChanged();
+        sal_uInt16              nSlotId = rReq.GetSlot();
+        sal_Bool                bChanged = pSdrView->GetModel()->IsChanged();
 
-        pSdrView->GetModel()->SetChanged( FALSE );
+        pSdrView->GetModel()->SetChanged( sal_False );
 
         switch( nSlotId )
         {
@@ -123,7 +123,7 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
                 {
                     const SfxPoolItem*  pItem;
 
-                    if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, FALSE, &pItem ) ) )
+                    if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, sal_False, &pItem ) ) )
                         pItem = NULL;
 
                     if( pItem )
@@ -154,14 +154,14 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
         if( pSdrView->GetModel()->IsChanged() )
             GetShell().SetModified();
         else if( bChanged )
-            pSdrView->GetModel()->SetChanged(TRUE);
+            pSdrView->GetModel()->SetChanged(sal_True);
     }
 }
 
 void SwMediaShell::GetMediaState(SfxItemSet &rSet)
 {
     SfxWhichIter    aIter( rSet );
-    USHORT          nWhich = aIter.FirstWhich();
+    sal_uInt16          nWhich = aIter.FirstWhich();
 
     while( nWhich )
     {

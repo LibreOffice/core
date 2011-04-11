@@ -75,6 +75,8 @@
 #include "event.hxx"
 #include "tools.hxx"
 
+#include <o3tl/compat_functional.hxx>
+
 #include <boost/bind.hpp>
 #include <iterator>
 #include <algorithm>
@@ -95,7 +97,7 @@ namespace
 class SlideImpl : public Slide,
                   public CursorManager,
                   public ViewEventHandler,
-                  protected ::osl::DebugBase<SlideImpl>
+                  public ::osl::DebugBase<SlideImpl>
 {
 public:
     SlideImpl( const uno::Reference<drawing::XDrawPage>&         xDrawPage,
@@ -140,6 +142,10 @@ public:
     virtual PolyPolygonVector getPolygons();
     virtual void drawPolygons() const;
     virtual bool isPaintOverlayActive() const;
+    virtual void enablePaintOverlay();
+    virtual void disablePaintOverlay();
+    virtual void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth );
+
 
     // TODO(F2): Rework SlideBitmap to no longer be based on XBitmap,
     // but on canvas-independent basegfx bitmaps
@@ -157,6 +163,9 @@ private:
     virtual bool requestCursor( sal_Int16 nCursorShape );
     virtual void resetCursor();
 
+    void activatePaintOverlay();
+    void deactivatePaintOverlay();
+
     /** Query whether the slide has animations at all
 
         If the slide doesn't have animations, show() displays
@@ -168,15 +177,6 @@ private:
         otherwise
     */
     bool isAnimated();
-
-    /** Query whether this slide is currently showing.
-
-        @return true, if this slide is currently showing.
-    */
-    bool isShowing() const;
-
-    void enablePaintOverlay();
-    void disablePaintOverlay();
 
     /// Set all Shapes to their initial attributes for slideshow
     bool applyInitialShapeAttributes( const ::com::sun::star::uno::Reference<
@@ -420,6 +420,13 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     maContext.mrScreenUpdater.addViewUpdate(mpShapeManager);
 }
 
+void SlideImpl::update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth )
+{
+    maUserPaintColor = aUserPaintColor;
+    mdUserPaintStrokeWidth = dUserPaintStrokeWidth;
+    mbUserPaintOverlayEnabled = bUserPaintEnabled;
+}
+
 SlideImpl::~SlideImpl()
 {
     if( mpShapeManager )
@@ -455,9 +462,7 @@ void SlideImpl::dispose()
     mpShapeManager.reset();
     mxRootNode.clear();
     mxDrawPage.clear();
-#ifndef ENABLE_PRESENTER_EXTRA_UI
     mxDrawPagesSupplier.clear();
-#endif
 }
 
 bool SlideImpl::prefetch()
@@ -543,7 +548,7 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
     // ---------------------------------------------------------------
 
     // enable paint overlay, if maUserPaintColor is valid
-    enablePaintOverlay();
+    activatePaintOverlay();
 
     // ---------------------------------------------------------------
 
@@ -567,7 +572,7 @@ void SlideImpl::hide()
 
     // disable user paint overlay under all circumstances,
     // this slide now ceases to be active.
-    disablePaintOverlay();
+    deactivatePaintOverlay();
 
     // ---------------------------------------------------------------
 
@@ -625,7 +630,7 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
                                  rView,
                                  // select view:
                                  boost::bind(
-                                     std::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
+                                     o3tl::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
                                      _1 )))) == aEnd )
     {
         // corresponding view not found - maybe view was not
@@ -699,7 +704,7 @@ void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
                             rView,
                             // select view:
                             boost::bind(
-                                std::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
+                                o3tl::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
                                 _1 ))),
         aEnd );
 }
@@ -730,11 +735,6 @@ void SlideImpl::resetCursor()
 {
     mnCurrentCursor = awt::SystemPointer::ARROW;
     mrCursorManager.resetCursor();
-}
-
-bool SlideImpl::isShowing() const
-{
-    return meAnimationState == SHOWING_STATE;
 }
 
 bool SlideImpl::isAnimated()
@@ -843,8 +843,7 @@ bool SlideImpl::implPrefetchShow()
         {
             if( !maAnimations.importAnimations( mxRootNode ) )
             {
-                OSL_ENSURE( false,
-                            "SlideImpl::implPrefetchShow(): have animation nodes, "
+                OSL_FAIL( "SlideImpl::implPrefetchShow(): have animation nodes, "
                             "but import animations failed." );
 
                 // could not import animation framework,
@@ -874,8 +873,7 @@ bool SlideImpl::implPrefetchShow()
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE(
-            false,
+        OSL_FAIL(
             rtl::OUStringToOString(
                 comphelper::anyToString(cppu::getCaughtException()),
                 RTL_TEXTENCODING_UTF8 ) );
@@ -889,19 +887,33 @@ bool SlideImpl::implPrefetchShow()
 
 void SlideImpl::enablePaintOverlay()
 {
-    if( mbUserPaintOverlayEnabled )
+    if( !mbUserPaintOverlayEnabled || !mbPaintOverlayActive )
+    {
+        mbUserPaintOverlayEnabled = true;
+        activatePaintOverlay();
+    }
+}
+
+void SlideImpl::disablePaintOverlay()
+{
+}
+
+void SlideImpl::activatePaintOverlay()
+{
+    if( mbUserPaintOverlayEnabled || !maPolygons.empty() )
     {
         mpPaintOverlay = UserPaintOverlay::create( maUserPaintColor,
                                                    mdUserPaintStrokeWidth,
                                                    maContext,
-                                                   maPolygons );
+                                                   maPolygons,
+                                                   mbUserPaintOverlayEnabled );
         mbPaintOverlayActive = true;
     }
 }
 
 void SlideImpl::drawPolygons() const
 {
-    if( mbUserPaintOverlayEnabled )
+    if( mpPaintOverlay  )
         mpPaintOverlay->drawPolygons();
 }
 
@@ -924,7 +936,7 @@ bool SlideImpl::isPaintOverlayActive() const
     return mbPaintOverlayActive;
 }
 
-void SlideImpl::disablePaintOverlay()
+void SlideImpl::deactivatePaintOverlay()
 {
     if(mbPaintOverlayActive)
         maPolygons = mpPaintOverlay->getPolygons();
@@ -988,8 +1000,7 @@ bool SlideImpl::applyInitialShapeAttributes(
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE(
-            false,
+        OSL_FAIL(
             rtl::OUStringToOString(
                 comphelper::anyToString(cppu::getCaughtException()),
                 RTL_TEXTENCODING_UTF8 ) );
@@ -1033,8 +1044,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
             if( !pShape )
             {
-                OSL_ENSURE( false,
-                            "SlideImpl::applyInitialShapeAttributes(): no shape found for given target" );
+                OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): no shape found for given target" );
                 continue;
             }
 
@@ -1043,8 +1053,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
             if( !pAttrShape )
             {
-                OSL_ENSURE( false,
-                            "SlideImpl::applyInitialShapeAttributes(): shape found does not "
+                OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): shape found does not "
                             "implement AttributableShape interface" );
                 continue;
             }
@@ -1062,8 +1071,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
                 if( !pAttrShape )
                 {
-                    OSL_ENSURE( false,
-                                "SlideImpl::applyInitialShapeAttributes(): shape found does not "
+                    OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): shape found does not "
                                 "provide a subset for requested paragraph index" );
                     continue;
                 }
@@ -1084,8 +1092,7 @@ bool SlideImpl::applyInitialShapeAttributes(
                 }
                 else
                 {
-                    OSL_ENSURE( false,
-                                "SlideImpl::applyInitialShapeAttributes(): Unexpected "
+                    OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): Unexpected "
                                 "(and unimplemented) property encountered" );
                 }
             }
@@ -1151,7 +1158,7 @@ bool SlideImpl::loadShapes()
                 }
                 addPolygons(aMPShapesFunctor.getPolygons());
 
-                nCurrCount = xMasterPageShapes->getCount() + 1;
+                nCurrCount = aMPShapesFunctor.getImportedShapesCount();
             }
             catch( uno::RuntimeException& )
             {
@@ -1160,15 +1167,13 @@ bool SlideImpl::loadShapes()
             catch( ShapeLoadFailedException& )
             {
                 // TODO(E2): Error handling. For now, bail out
-                OSL_ENSURE( false,
-                            "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
+                OSL_FAIL( "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
                 return false;
 
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( false,
-                            rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -1205,14 +1210,12 @@ bool SlideImpl::loadShapes()
     catch( ShapeLoadFailedException& )
     {
         // TODO(E2): Error handling. For now, bail out
-        OSL_ENSURE( false,
-                    "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
+        OSL_FAIL( "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
         return false;
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
+        OSL_FAIL( rtl::OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -1260,12 +1263,7 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
                             bool                                                bIntrinsicAnimationsAllowed,
                             bool                                                bDisableAnimationZOrder )
 {
-#ifdef ENABLE_PRESENTER_EXTRA_UI
     boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, xDrawPages, xRootNode, rEventQueue,
-#else
-    (void)xDrawPages;
-    boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, NULL, xRootNode, rEventQueue,
-#endif
                                                       rEventMultiplexer, rScreenUpdater,
                                                       rActivitiesQueue, rUserEventQueue,
                                                       rCursorManager, rViewContainer,

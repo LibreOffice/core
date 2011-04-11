@@ -33,6 +33,7 @@
 #include "excrecds.hxx"
 #include "xeroot.hxx"
 #include "root.hxx"
+#include <boost/shared_ptr.hpp>
 
 //------------------------------------------------------------------ Forwards -
 
@@ -55,15 +56,15 @@ class ExcTable : public XclExpRecordBase, public XclExpRoot
 {
 private:
     typedef XclExpRecordList< ExcBundlesheetBase >  ExcBoundsheetList;
-    typedef ScfRef< XclExpCellTable >               XclExpCellTableRef;
+    typedef boost::shared_ptr< XclExpCellTable >    XclExpCellTableRef;
 
     XclExpRecordList<>          aRecList;
     XclExpCellTableRef          mxCellTable;
 
     SCTAB                       mnScTab;    // table number SC document
-    UINT16                      nExcTab;    // table number Excel document
-    UINT16                      nAktRow;    // fuer'n Iterator
-    UINT16                      nAktCol;
+    sal_uInt16                      nExcTab;    // table number Excel document
+    sal_uInt16                      nAktRow;    // fuer'n Iterator
+    sal_uInt16                      nAktCol;
 
     NameBuffer*                 pTabNames;
 

@@ -31,7 +31,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/stdctrl.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 
 class PopupMenu;
 class SwView;
@@ -69,20 +69,20 @@ class SwView;
 
 class SwTbxInsertCtrl : public SfxToolBoxControl
 {
-    USHORT                  nLastSlotId;
+    sal_uInt16                  nLastSlotId;
 
     using SfxToolBoxControl::Select;
-    virtual void            Select( BOOL bMod1 = FALSE );
+    virtual void            Select( sal_Bool bMod1 = sal_False );
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwTbxInsertCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SwTbxInsertCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SwTbxInsertCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID,
+    virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 
@@ -103,12 +103,12 @@ class SwTbxAutoTextCtrl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwTbxAutoTextCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SwTbxAutoTextCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SwTbxAutoTextCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID,
+    virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 
@@ -136,12 +136,11 @@ class SwScrollNaviPopup : public SfxPopupWindow
     FixedLine       aSeparator;
     FixedInfo       aInfoField;
     ImageList       aIList;
-    ImageList       aIListH;
 
     String          sQuickHelp[2 * NID_COUNT];
 
-    USHORT          nFwdId;
-    USHORT          nBackId;
+    sal_uInt16          nFwdId;
+    sal_uInt16          nBackId;
 
     void            ApplyImageList();
 
@@ -152,10 +151,10 @@ protected:
         virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-        SwScrollNaviPopup( USHORT nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+        SwScrollNaviPopup( sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
         ~SwScrollNaviPopup();
 
-    static String           GetQuickHelpText(BOOL bNext);
+    static String           GetQuickHelpText(sal_Bool bNext);
 
     virtual SfxPopupWindow* Clone() const;
     void                GrabFocus(){aToolBox.GrabFocus();}
@@ -169,7 +168,6 @@ class SwNaviImageButton : public ImageButton
 {
         SwScrollNaviPopup*  pPopup;
         Image               aImage;
-        Image               aImageH;
         String              sQuickText;
         SfxPopupWindow*     pPopupWindow;
         SfxPopupWindow*     pFloatingWindow;
@@ -193,26 +191,24 @@ class SwNaviImageButton : public ImageButton
 
 class SwHlpImageButton : public ImageButton
 {
-    BOOL        bUp;
+    sal_Bool        bUp;
     public:
-        SwHlpImageButton(Window* pParent, const ResId& rResId, BOOL bUpBtn) :
+        SwHlpImageButton(Window* pParent, const ResId& rResId, sal_Bool bUpBtn) :
             ImageButton(pParent, rResId), bUp(bUpBtn){}
 
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
 };
-/* -----------------26.11.2002 09:25-----------------
- *
- * --------------------------------------------------*/
+
 class SwPreviewZoomControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwPreviewZoomControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SwPreviewZoomControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SwPreviewZoomControl();
 
-    virtual void            StateChanged( USHORT nSID,
+    virtual void            StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 

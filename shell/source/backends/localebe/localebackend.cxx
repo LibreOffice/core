@@ -321,7 +321,7 @@ css::uno::Any LocaleBackend::getPropertyValue(
 //------------------------------------------------------------------------------
 
 rtl::OUString SAL_CALL LocaleBackend::getBackendName(void) {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.configuration.backend.LocaleBackend") ;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.configuration.backend.LocaleBackend")) ;
 }
 
 //------------------------------------------------------------------------------

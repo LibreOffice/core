@@ -33,9 +33,7 @@
 #include <stdlib.h>             // fuer qsort
 #include <tools/solar.h>
 
-#include "errhdl.hxx"           // fuers ASSERT
 #include "index.hxx"
-#include "error.h"              // fuers ASSERT
 
 #if OSL_DEBUG_LEVEL > 1
 int SwIndex::nSerial = 0;
@@ -43,46 +41,6 @@ int SwIndex::nSerial = 0;
 
 
 TYPEINIT0(SwIndexReg);  // rtti
-
-
-#ifdef CHK
-
-#define IDX_CHK_ARRAY       pArray->ChkArr();
-#define ARR_CHK_ARRAY       ChkArr();
-
-
-void SwIndexReg::ChkArr()
-{
-    OSL_ENSURE( (pFirst && pLast) || (!pFirst && !pLast),
-            "Array falsch Indiziert" );
-
-    if( !pFirst )
-        return;
-
-    xub_StrLen nVal = 0;
-    const SwIndex* pIdx = pFirst, *pPrev = 0;
-    OSL_ENSURE( !pIdx->pPrev, "Array-pFirst nicht am Anfang" );
-
-    while( pIdx != pLast )
-    {
-        OSL_ENSURE( pIdx->pPrev != pIdx && pIdx->pNext != pIdx,
-                "Index zeigt auf sich selbst" );
-
-        OSL_ENSURE( pIdx->nIndex >= nVal, "Reihenfolge stimmt nicht" );
-        OSL_ENSURE( pPrev == pIdx->pPrev, "Verkettung stimmt nicht" );
-        pPrev = pIdx;
-        pIdx = pIdx->pNext;
-        nVal = pPrev->nIndex;
-    }
-}
-
-#else                                   // CHK
-
-#define IDX_CHK_ARRAY
-#define ARR_CHK_ARRAY
-
-#endif                                  // CHK
-
 
 
 SwIndex::SwIndex(SwIndexReg *const pArr, xub_StrLen const nIdx)
@@ -104,7 +62,6 @@ SwIndex::SwIndex(SwIndexReg *const pArr, xub_StrLen const nIdx)
 #if OSL_DEBUG_LEVEL > 1
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
-IDX_CHK_ARRAY
 }
 
 
@@ -116,7 +73,6 @@ SwIndex::SwIndex( const SwIndex& rIdx, short nIdx )
 #if OSL_DEBUG_LEVEL > 1
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
-IDX_CHK_ARRAY
 }
 
 
@@ -127,7 +83,6 @@ SwIndex::SwIndex( const SwIndex& rIdx )
 #if OSL_DEBUG_LEVEL > 1
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
-IDX_CHK_ARRAY
 }
 
 
@@ -222,8 +177,6 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
 
     nIndex = nNewValue;
 
-IDX_CHK_ARRAY
-
     return *this; }
 
 
@@ -238,18 +191,10 @@ void SwIndex::Remove()
         pArray->pLast = pPrev;
     else
         pNext->pPrev = pPrev;
-
-IDX_CHK_ARRAY
 }
 
 /*************************************************************************
-|*
 |*    SwIndex & SwIndex::operator=( const SwIndex & aSwIndex )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 
@@ -261,7 +206,7 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
         Remove();
         pArray = rIdx.pArray;
         pNext = pPrev = 0;
-        bEqual = FALSE;
+        bEqual = sal_False;
     }
     else
         bEqual = rIdx.nIndex == nIndex;
@@ -272,13 +217,7 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
 }
 
 /*************************************************************************
-|*
 |*    SwIndex &SwIndex::Assign
-|*
-|*    Beschreibung
-|*    Ersterstellung    VB 25.03.91
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 
@@ -307,7 +246,6 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
     }
     else if( nIndex != nIdx )
         ChgValue( *this, nIdx );
-IDX_CHK_ARRAY
     return *this;
 }
 
@@ -366,205 +304,134 @@ void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
             pStt = pStt->pNext;
         }
     }
-ARR_CHK_ARRAY
 }
 
 #if OSL_DEBUG_LEVEL > 1
-#ifndef CFRONT
 
 /*************************************************************************
-|*
 |*    SwIndex::operator++()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 xub_StrLen SwIndex::operator++(int)
 {
-    ASSERT_ID( nIndex < INVALID_INDEX, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex < INVALID_INDEX );
 
     xub_StrLen nOldIndex = nIndex;
     ChgValue( *this, nIndex+1 );
     return nOldIndex;
 }
 
-#endif
 
 xub_StrLen SwIndex::operator++()
 {
-    ASSERT_ID( nIndex < INVALID_INDEX, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex < INVALID_INDEX );
 
     ChgValue( *this, nIndex+1 );
     return nIndex;
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator--()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
-#ifndef CFRONT
 
 xub_StrLen SwIndex::operator--(int)
 {
-    ASSERT_ID( nIndex, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex );
 
     xub_StrLen nOldIndex = nIndex;
     ChgValue( *this, nIndex-1 );
     return nOldIndex;
 }
 
-#endif
 
 xub_StrLen SwIndex::operator--()
 {
-    ASSERT_ID( nIndex, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex );
     return ChgValue( *this, nIndex-1 ).nIndex;
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator+=( xub_StrLen )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 xub_StrLen SwIndex::operator+=( xub_StrLen nWert )
 {
-    ASSERT_ID( nIndex < INVALID_INDEX - nWert, ERR_OUTOFSCOPE);
+    OSL_ASSERT( nIndex < INVALID_INDEX - nWert );
     return ChgValue( *this, nIndex + nWert ).nIndex;
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator-=( xub_StrLen )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 xub_StrLen SwIndex::operator-=( xub_StrLen nWert )
 {
-    ASSERT_ID( nIndex >= nWert, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex >= nWert );
     return ChgValue( *this, nIndex - nWert ).nIndex;
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator+=( const SwIndex & )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 xub_StrLen SwIndex::operator+=( const SwIndex & rIndex )
 {
-    ASSERT_ID( nIndex < INVALID_INDEX - rIndex.nIndex, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex < INVALID_INDEX - rIndex.nIndex );
     return ChgValue( *this, nIndex + rIndex.nIndex ).nIndex;
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator-=( const SwIndex & )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
 {
-    ASSERT_ID( nIndex >= rIndex.nIndex, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex >= rIndex.nIndex );
     return ChgValue( *this, nIndex - rIndex.nIndex ).nIndex;
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator<( const SwIndex & )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
-BOOL SwIndex::operator<( const SwIndex & rIndex ) const
+sal_Bool SwIndex::operator<( const SwIndex & rIndex ) const
 {
     OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex < rIndex.nIndex;
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator<=( const SwIndex & )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 04.06.92
-|*
 *************************************************************************/
 
-BOOL SwIndex::operator<=( const SwIndex & rIndex ) const
+sal_Bool SwIndex::operator<=( const SwIndex & rIndex ) const
 {
     OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex <= rIndex.nIndex;
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator>( const SwIndex & )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 04.06.92
-|*
 *************************************************************************/
 
-BOOL SwIndex::operator>( const SwIndex & rIndex ) const
+sal_Bool SwIndex::operator>( const SwIndex & rIndex ) const
 {
     OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex > rIndex.nIndex;
 }
 
 /*************************************************************************
-|*
 |*    SwIndex::operator>=( const SwIndex & )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 07.11.90
-|*    Letzte Aenderung  JP 04.06.92
-|*
 *************************************************************************/
 
-BOOL SwIndex::operator>=( const SwIndex & rIndex ) const
+sal_Bool SwIndex::operator>=( const SwIndex & rIndex ) const
 {
     OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex >= rIndex.nIndex;
 }
 
 /*************************************************************************
-|*
 |*    SwIndex & SwIndex::operator=( xub_StrLen )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 10.12.90
-|*    Letzte Aenderung  JP 07.03.94
-|*
 *************************************************************************/
 
 SwIndex& SwIndex::operator=( xub_StrLen nWert )

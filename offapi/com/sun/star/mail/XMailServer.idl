@@ -95,7 +95,7 @@ module com { module sun { module star { module mail {
 
    @see com::sun::star::mail::XMailMessage
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 interface XMailServer: ::com::sun::star::uno::XInterface {
 
@@ -114,7 +114,7 @@ interface XMailServer: ::com::sun::star::uno::XInterface {
     /**
         Returns all connection types which are supported by the
         mail server. Possible connection types are for instance
-        secure connections like 'SSL' or 'TLS'.
+        secure connections like "SSL" or "TLS".
 
         @returns
         a sequence of supported connection types.
@@ -191,13 +191,13 @@ interface XMailServer: ::com::sun::star::uno::XInterface {
         a wrong server name, an unreachable DNS server, etc.
 
         @throws com::sun::star::io::NoRouteToHostException
-        if an error occured to connect to the remote mail server.
+        if an error occurred to connect to the remote mail server.
         Typically the remote mail server cannot be reach because of an
         intervening firewall, or if an intermediate router is down,
         the network connection is broken, etc.
 
         @throws com::sun::star::io::ConnectException
-        if an error occured while attempting to connect to the remote
+        if an error occurred while attempting to connect to the remote
         mail server. Typically the connection was refused remotely,
         because the mail server is not listening on the remote address/port.
 
@@ -228,7 +228,7 @@ interface XMailServer: ::com::sun::star::uno::XInterface {
                com::sun::star::mail::MailException);
 
     /**
-        Logoff the currently logged in user.
+        Log off the currently logged in user.
 
         @throws com::sun::star::mail::MessagingException
         if errors occur during logoff.
@@ -263,7 +263,7 @@ interface XMailServer: ::com::sun::star::uno::XInterface {
         @throws com::sun::star::datatransfer::UnsupportedFlavorException
         is thrown when the body of the mail message is provided in an
         unsupported mime content type or may be thrown if one of the file
-        attachments specifies an unspupported mime content type.
+        attachments specifies an unsupported mime content type.
 
         @see com::sun::star::io::NotConnectedExceptionException
         @see com::sun::star::mail::SendMailMessageFailedException

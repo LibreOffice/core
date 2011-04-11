@@ -77,7 +77,7 @@ private:
     VirtualDevice           aVD;
     SvtScriptedTextHelper   aScriptedText;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
-    BOOL                    bFitWidth;
+    sal_Bool                    bFitWidth;
     bool                    mbRTL;
     Size                    aPrvSize;
     long                    nLabelColWidth;
@@ -99,19 +99,19 @@ private:
     //-------------------------------------------
     void    Init            ();
     void    DoPaint         ( const Rectangle& rRect );
-    void    CalcCellArray   ( BOOL bFitWidth );
+    void    CalcCellArray   ( sal_Bool bFitWidth );
     void    CalcLineMap     ();
     void    PaintCells      ();
 
-    BYTE                GetFormatIndex( size_t nCol, size_t nRow ) const;
+    sal_uInt8                GetFormatIndex( size_t nCol, size_t nRow ) const;
     const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
 
     void                DrawString( size_t nCol, size_t nRow );
     void                DrawStrings();
     void                DrawBackground();
 
-    void    MakeFonts       ( BYTE nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont );
-    String  MakeNumberString( String cellString, BOOL bAddDec );
+    void    MakeFonts       ( sal_uInt8 nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont );
+    String  MakeNumberString( String cellString, sal_Bool bAddDec );
 };
 
 //========================================================================
@@ -161,7 +161,7 @@ void SwStringInputDlg::GetInputString( String& rString ) const
 }
 
 
-__EXPORT SwStringInputDlg::~SwStringInputDlg()
+SwStringInputDlg::~SwStringInputDlg()
 {
 }
 
@@ -170,18 +170,18 @@ __EXPORT SwStringInputDlg::~SwStringInputDlg()
 
 
 SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
-                    BOOL bSetAutoFormat, const SwTableAutoFmt* pSelFmt )
+                    sal_Bool bSetAutoFormat, const SwTableAutoFmt* pSelFmt )
     : SfxModalDialog( pParent, SW_RES( DLG_AUTOFMT_TABLE ) ),
     //
     aFlFormat       ( this, SW_RES( FL_FORMAT ) ),
     aLbFormat       ( this, SW_RES( LB_FORMAT ) ),
+    aFlFormats       ( this, SW_RES( FL_FORMATS ) ),
 
     aBtnNumFormat   ( this, SW_RES( BTN_NUMFORMAT ) ),
     aBtnBorder      ( this, SW_RES( BTN_BORDER ) ),
     aBtnFont        ( this, SW_RES( BTN_FONT ) ),
     aBtnPattern     ( this, SW_RES( BTN_PATTERN ) ),
     aBtnAlignment   ( this, SW_RES( BTN_ALIGNMENT ) ),
-    aFlFormats       ( this, SW_RES( FL_FORMATS ) ),
     aBtnOk          ( this, SW_RES( BTN_OK ) ),
     aBtnCancel      ( this, SW_RES( BTN_CANCEL ) ),
     aBtnHelp        ( this, SW_RES( BTN_HELP ) ),
@@ -201,7 +201,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
     pShell          ( pWrtShell ),
     nIndex          ( 0 ),
     nDfltStylePos   ( 0 ),
-    bCoreDataChanged( FALSE ),
+    bCoreDataChanged( sal_False ),
     bSetAutoFmt     ( bSetAutoFormat )
 {
     pTableTbl = new SwTableAutoFmtTbl;
@@ -215,7 +215,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
 //------------------------------------------------------------------------
 
 
-__EXPORT SwAutoFormatDlg::~SwAutoFormatDlg()
+SwAutoFormatDlg::~SwAutoFormatDlg()
 {
     delete pWndPreview;
 
@@ -261,7 +261,7 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
         nIndex = 255;
     }
 
-    for( BYTE i = 0, nCount = (BYTE)pTableTbl->Count(); i < nCount; i++ )
+    for( sal_uInt8 i = 0, nCount = (sal_uInt8)pTableTbl->Count(); i < nCount; i++ )
     {
         SwTableAutoFmt* pFmt = (*pTableTbl)[ i ];
         aLbFormat.InsertEntry( pFmt->GetName() );
@@ -276,7 +276,7 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
 //------------------------------------------------------------------------
 
 
-void SwAutoFormatDlg::UpdateChecks( const SwTableAutoFmt& rFmt, BOOL bEnable )
+void SwAutoFormatDlg::UpdateChecks( const SwTableAutoFmt& rFmt, sal_Bool bEnable )
 {
     aBtnNumFormat.Enable( bEnable );
     aBtnNumFormat.Check( rFmt.IsValueFormat() );
@@ -316,7 +316,7 @@ void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
 IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
     SwTableAutoFmtPtr pData  = (*pTableTbl)[nIndex];
-    BOOL bCheck = ((CheckBox*)pBtn)->IsChecked(), bDataChgd = TRUE;
+    sal_Bool bCheck = ((CheckBox*)pBtn)->IsChecked(), bDataChgd = sal_True;
 
     if( pBtn == &aBtnNumFormat )
         pData->SetValueFormat( bCheck );
@@ -328,17 +328,15 @@ IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
         pData->SetBackground( bCheck );
     else if ( pBtn == &aBtnAlignment )
         pData->SetJustify( bCheck );
-//    else if ( pBtn == &aBtnAdjust )
-//        pData->SetIncludeWidthHeight( bCheck );
     else
-        bDataChgd = FALSE;
+        bDataChgd = sal_False;
 
     if( bDataChgd )
     {
         if( !bCoreDataChanged )
         {
             aBtnCancel.SetText( aStrClose );
-            bCoreDataChanged = TRUE;
+            bCoreDataChanged = sal_True;
         }
 
         pWndPreview->NotifyChange( *pData );
@@ -351,7 +349,7 @@ IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 
 IMPL_LINK( SwAutoFormatDlg, AddHdl, void *, EMPTYARG )
 {
-    BOOL bOk = FALSE, bFmtInserted = FALSE;
+    sal_Bool bOk = sal_False, bFmtInserted = sal_False;
     while( !bOk )
     {
         SwStringInputDlg*   pDlg = new SwStringInputDlg( this,
@@ -365,7 +363,7 @@ IMPL_LINK( SwAutoFormatDlg, AddHdl, void *, EMPTYARG )
 
             if( aFormatName.Len() > 0 )
             {
-                USHORT n;
+                sal_uInt16 n;
                 for( n = 0; n < pTableTbl->Count(); ++n )
                     if( (*pTableTbl)[n]->GetName() == aFormatName )
                         break;
@@ -386,16 +384,16 @@ IMPL_LINK( SwAutoFormatDlg, AddHdl, void *, EMPTYARG )
                     pTableTbl->Insert( pNewData, n );
                     aLbFormat.InsertEntry( aFormatName, nDfltStylePos + n );
                     aLbFormat.SelectEntryPos( nDfltStylePos + n );
-                    bFmtInserted = TRUE;
-                    aBtnAdd.Enable( FALSE );
+                    bFmtInserted = sal_True;
+                    aBtnAdd.Enable( sal_False );
                     if ( !bCoreDataChanged )
                     {
                         aBtnCancel.SetText( aStrClose );
-                        bCoreDataChanged = TRUE;
+                        bCoreDataChanged = sal_True;
                     }
 
                     SelFmtHdl( 0 );
-                    bOk = TRUE;
+                    bOk = sal_True;
                 }
             }
 
@@ -408,7 +406,7 @@ IMPL_LINK( SwAutoFormatDlg, AddHdl, void *, EMPTYARG )
             }
         }
         else
-            bOk = TRUE;
+            bOk = sal_True;
         delete pDlg;
     }
     return 0;
@@ -436,14 +434,14 @@ IMPL_LINK( SwAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
 
         if( !nIndex )
         {
-            aBtnRemove.Enable(FALSE);
-            aBtnRename.Enable(FALSE);
+            aBtnRemove.Enable(sal_False);
+            aBtnRename.Enable(sal_False);
         }
 
         if( !bCoreDataChanged )
         {
             aBtnCancel.SetText( aStrClose );
-            bCoreDataChanged = TRUE;
+            bCoreDataChanged = sal_True;
         }
     }
     delete pBox;
@@ -455,7 +453,7 @@ IMPL_LINK( SwAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
 
 IMPL_LINK( SwAutoFormatDlg, RenameHdl, void *, EMPTYARG )
 {
-    BOOL bOk = FALSE;
+    sal_Bool bOk = sal_False;
     while( !bOk )
     {
         SwStringInputDlg* pDlg = new SwStringInputDlg( this,
@@ -463,13 +461,13 @@ IMPL_LINK( SwAutoFormatDlg, RenameHdl, void *, EMPTYARG )
                                                         aEmptyStr );
         if( pDlg->Execute() == RET_OK )
         {
-            BOOL bFmtRenamed = FALSE;
+            sal_Bool bFmtRenamed = sal_False;
             String aFormatName;
             pDlg->GetInputString( aFormatName );
 
             if ( aFormatName.Len() > 0 )
             {
-                USHORT n;
+                sal_uInt16 n;
                 for( n = 0; n < pTableTbl->Count(); ++n )
                     if ((*pTableTbl)[n]->GetName() == aFormatName)
                         break;
@@ -497,12 +495,12 @@ IMPL_LINK( SwAutoFormatDlg, RenameHdl, void *, EMPTYARG )
                     if ( !bCoreDataChanged )
                     {
                         aBtnCancel.SetText( aStrClose );
-                        bCoreDataChanged = TRUE;
+                        bCoreDataChanged = sal_True;
                     }
 
                     SelFmtHdl( 0 );
-                    bOk = TRUE;
-                    bFmtRenamed = TRUE;
+                    bOk = sal_True;
+                    bFmtRenamed = sal_True;
                 }
             }
 
@@ -515,7 +513,7 @@ IMPL_LINK( SwAutoFormatDlg, RenameHdl, void *, EMPTYARG )
             }
         }
         else
-            bOk = TRUE;
+            bOk = sal_True;
         delete pDlg;
     }
     return 0;
@@ -525,30 +523,30 @@ IMPL_LINK( SwAutoFormatDlg, RenameHdl, void *, EMPTYARG )
 
 IMPL_LINK( SwAutoFormatDlg, SelFmtHdl, void *, EMPTYARG )
 {
-    BOOL bBtnEnable = FALSE;
-    BYTE nSelPos = (BYTE) aLbFormat.GetSelectEntryPos(), nOldIdx = nIndex;
+    sal_Bool bBtnEnable = sal_False;
+    sal_uInt8 nSelPos = (sal_uInt8) aLbFormat.GetSelectEntryPos(), nOldIdx = nIndex;
     if( nSelPos >= nDfltStylePos )
     {
         nIndex = nSelPos - nDfltStylePos;
         pWndPreview->NotifyChange( *(*pTableTbl)[nIndex] );
         bBtnEnable = 0 != nIndex;
-        UpdateChecks( *(*pTableTbl)[nIndex], TRUE );
+        UpdateChecks( *(*pTableTbl)[nIndex], sal_True );
     }
     else
     {
         nIndex = 255;
 
         SwTableAutoFmt aTmp( ViewShell::GetShellRes()->aStrNone );
-        aTmp.SetFont( FALSE );
-        aTmp.SetJustify( FALSE );
-        aTmp.SetFrame( FALSE );
-        aTmp.SetBackground( FALSE );
-        aTmp.SetValueFormat( FALSE );
-        aTmp.SetWidthHeight( FALSE );
+        aTmp.SetFont( sal_False );
+        aTmp.SetJustify( sal_False );
+        aTmp.SetFrame( sal_False );
+        aTmp.SetBackground( sal_False );
+        aTmp.SetValueFormat( sal_False );
+        aTmp.SetWidthHeight( sal_False );
 
         if( nOldIdx != nIndex )
             pWndPreview->NotifyChange( aTmp );
-        UpdateChecks( aTmp, FALSE );
+        UpdateChecks( aTmp, sal_False );
     }
 
     aBtnRemove.Enable( bBtnEnable );
@@ -563,7 +561,7 @@ IMPL_LINK_INLINE_START( SwAutoFormatDlg, OkHdl, Button *, EMPTYARG )
     if( bSetAutoFmt )
         pShell->SetTableAutoFmt( *(*pTableTbl)[ nIndex ] );
     EndDialog( RET_OK );
-    return TRUE;
+    return sal_True;
 }
 IMPL_LINK_INLINE_END( SwAutoFormatDlg, OkHdl, Button *, EMPTYARG )
 
@@ -578,7 +576,7 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* 
         aCurData        ( aEmptyStr ),
         aVD             ( *this ),
         aScriptedText   ( aVD ),
-        bFitWidth       ( FALSE ),
+        bFitWidth       ( sal_False ),
         mbRTL           ( false ),
         aPrvSize        ( GetSizePixel().Width() - 6, GetSizePixel().Height() - 30 ),
         nLabelColWidth  ( (aPrvSize.Width() - 4) / 4 - 12 ),
@@ -614,7 +612,7 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* 
 
 //------------------------------------------------------------------------
 
-__EXPORT AutoFmtPreview::~AutoFmtPreview()
+AutoFmtPreview::~AutoFmtPreview()
 {
     delete pNumFmt;
 }
@@ -641,7 +639,7 @@ rFont.MethodName( Value );                                  \
 rCJKFont.MethodName( Value );                               \
 rCTLFont.MethodName( Value );
 
-void AutoFmtPreview::MakeFonts( BYTE nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
+void AutoFmtPreview::MakeFonts( sal_uInt8 nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
 {
     const SwBoxAutoFmt& rBoxFmt = aCurData.GetBoxFmt( nIndex );
 
@@ -659,14 +657,14 @@ void AutoFmtPreview::MakeFonts( BYTE nIndex, Font& rFont, Font& rCJKFont, Font& 
     SETONALLFONTS( SetShadow,       rBoxFmt.GetShadowed().GetValue() );
     SETONALLFONTS( SetColor,        rBoxFmt.GetColor().GetValue() );
     SETONALLFONTS( SetSize,         aFontSize );
-    SETONALLFONTS( SetTransparent,  TRUE );
+    SETONALLFONTS( SetTransparent,  sal_True );
 }
 
 //------------------------------------------------------------------------
 
-BYTE AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
+sal_uInt8 AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 {
-    static const BYTE pnFmtMap[] =
+    static const sal_uInt8 pnFmtMap[] =
     {
         0,  1,  2,  1,  3,
         4,  5,  6,  5,  7,
@@ -689,10 +687,10 @@ void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
     //------------------------
     // Ausgabe des Zelltextes:
     //------------------------
-    ULONG   nNum;
+    sal_uLong   nNum;
     double  nVal;
     String cellString;
-    BYTE    nIndex = static_cast< BYTE >( maArray.GetCellIndex( nCol, nRow, mbRTL ) );
+    sal_uInt8    nIndex = static_cast< sal_uInt8 >( maArray.GetCellIndex( nCol, nRow, mbRTL ) );
 
     switch( nIndex )
     {
@@ -732,10 +730,10 @@ MAKENUMSTR:
             if( aCurData.IsValueFormat() )
             {
                 String sFmt; LanguageType eLng, eSys;
-                aCurData.GetBoxFmt( (BYTE)nNum ).GetValueFormat( sFmt, eLng, eSys );
+                aCurData.GetBoxFmt( (sal_uInt8)nNum ).GetValueFormat( sFmt, eLng, eSys );
 
                 short nType;
-                BOOL bNew;
+                sal_Bool bNew;
                 xub_StrLen nCheckPos;
                 sal_uInt32 nKey = pNumFmt->GetIndexPuttingAndConverting( sFmt, eLng,
                         eSys, nType, bNew, nCheckPos);
@@ -751,13 +749,10 @@ MAKENUMSTR:
     if( cellString.Len() )
     {
         Size                aStrSize;
-        BYTE                nFmtIndex       = GetFormatIndex( nCol, nRow );
+        sal_uInt8                nFmtIndex       = GetFormatIndex( nCol, nRow );
         Rectangle           cellRect        = maArray.GetCellRect( nCol, nRow );
         Point               aPos            = cellRect.TopLeft();
-        USHORT              nRightX         = 0;
-//            BOOL                bJustify        = aCurData.IsJustify();
-//            ScHorJustifyAttr    aHorJustifyItem;
-//          CellHorJustify    eJustification;
+        sal_uInt16              nRightX         = 0;
 
         Size theMaxStrSize( cellRect.GetWidth() - FRAME_OFFSET,
                             cellRect.GetHeight() - FRAME_OFFSET );
@@ -786,44 +781,28 @@ MAKENUMSTR:
         while( theMaxStrSize.Width() <= aStrSize.Width() &&
                 cellString.Len() > 1 )
         {
-//                  if( eJustification == SVX_HOR_JUSTIFY_RIGHT )
-//                          cellString.Erase( 0, 1 );
-//                  else
             cellString.Erase( cellString.Len() - 1 );
             aScriptedText.SetText( cellString, m_xBreak );
             aStrSize = aScriptedText.GetTextSize();
         }
 
-        nRightX  = (USHORT)(  cellRect.GetWidth()
+        nRightX  = (sal_uInt16)(  cellRect.GetWidth()
                                 - aStrSize.Width()
                                 - FRAME_OFFSET );
-        //-------------
-        // Ausrichtung:
-        //-------------
-        /*   if ( bJustify )
-        {
-            aCurData.GetHorJustify( nFmtIndex, aHorJustifyItem );
-            eJustification = (CellHorJustify)aHorJustifyItem.GetValue();
-        }
-        else
-        {
-            eJustification = SC_HOR_JUSTIFY_STANDARD;
-        }*/
 
         //-----------------------------
         // vertikal (immer zentrieren):
         //-----------------------------
-        aPos.Y() += (nRowHeight - (USHORT)aStrSize.Height()) / 2;
+        aPos.Y() += (nRowHeight - (sal_uInt16)aStrSize.Height()) / 2;
 
         //-----------
         // horizontal
         //-----------
-/*        if ( eJustification != SC_HOR_JUSTIFY_STANDARD )*/
         if( mbRTL )
             aPos.X() += nRightX;
         else if (aCurData.IsJustify())
         {
-            USHORT nHorPos = (USHORT)
+            sal_uInt16 nHorPos = (sal_uInt16)
                     ((cellRect.GetWidth()-aStrSize.Width())/2);
             const SvxAdjustItem& rAdj = aCurData.GetBoxFmt(nFmtIndex).GetAdjust();
             switch ( rAdj.GetAdjust() )
@@ -913,19 +892,19 @@ void AutoFmtPreview::PaintCells()
 //------------------------------------------------------------------------
 
 
-void __EXPORT AutoFmtPreview::Init()
+void AutoFmtPreview::Init()
 {
     SetBorderStyle( GetBorderStyle() | WINDOW_BORDER_MONO );
     maArray.Initialize( 5, 5 );
     maArray.SetUseDiagDoubleClipping( false );
-    CalcCellArray( FALSE );
+    CalcCellArray( sal_False );
     CalcLineMap();
 }
 
 //------------------------------------------------------------------------
 
 
-void AutoFmtPreview::CalcCellArray( BOOL _bFitWidth )
+void AutoFmtPreview::CalcCellArray( sal_Bool _bFitWidth )
 {
     maArray.SetXOffset( 2 );
     maArray.SetAllColWidths( _bFitWidth ? nDataColWidth2 : nDataColWidth1 );
@@ -941,7 +920,7 @@ void AutoFmtPreview::CalcCellArray( BOOL _bFitWidth )
 
 //------------------------------------------------------------------------
 
-inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const SvxBorderLine* pBorder )
+inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::SvxBorderLine* pBorder )
 {
     rStyle.Set( pBorder, 0.05, 5 );
 }
@@ -979,7 +958,7 @@ void AutoFmtPreview::CalcLineMap()
 void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
 {
     aCurData  = rNewData;
-    bFitWidth = aCurData.IsJustify();//TRUE;  //???
+    bFitWidth = aCurData.IsJustify();//sal_True;  //???
     CalcCellArray( bFitWidth );
     CalcLineMap();
     DoPaint( Rectangle( Point(0,0), GetSizePixel() ) );
@@ -1003,7 +982,7 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
     Font    aFont;
 
     aFont = aVD.GetFont();
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
 
     aVD.SetFont          ( aFont );
     aVD.SetLineColor     ();
@@ -1042,7 +1021,7 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
 
 //------------------------------------------------------------------------
 
-void __EXPORT AutoFmtPreview::Paint( const Rectangle& rRect )
+void AutoFmtPreview::Paint( const Rectangle& rRect )
 {
     DoPaint( rRect );
 }

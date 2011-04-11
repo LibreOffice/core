@@ -50,6 +50,7 @@ TabPage TP_NUMPARA
     };
     ListBox LB_OUTLINE_LEVEL
     {
+        HelpID = "sw:ListBox:TP_NUMPARA:LB_OUTLINE_LEVEL";
         Pos = MAP_APPFONT ( 130 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 65 ) ;
         DropDown = TRUE ;
@@ -97,6 +98,7 @@ TabPage TP_NUMPARA
     };
     ListBox LB_NUMBER_STYLE
     {
+        HelpID = "sw:ListBox:TP_NUMPARA:LB_NUMBER_STYLE";
         Pos = MAP_APPFONT ( 130 , 41 ) ;
         Size = MAP_APPFONT ( 118 , 65 ) ;
         DropDown = TRUE ;
@@ -108,6 +110,7 @@ TabPage TP_NUMPARA
     };
     TriStateBox CB_NEW_START
     {
+        HelpID = "sw:TriStateBox:TP_NUMPARA:CB_NEW_START";
         Pos = MAP_APPFONT ( 12 , 58 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         Hide = TRUE ;
@@ -116,6 +119,7 @@ TabPage TP_NUMPARA
     };
     TriStateBox CB_NUMBER_NEW_START
     {
+        HelpID = "sw:TriStateBox:TP_NUMPARA:CB_NUMBER_NEW_START";
         Pos = MAP_APPFONT ( 21 , 73 ) ;
         Size = MAP_APPFONT ( 103 , 10 ) ;
         Hide = TRUE ;
@@ -124,6 +128,7 @@ TabPage TP_NUMPARA
     };
     NumericField NF_NEW_START
     {
+        HelpID = "sw:NumericField:TP_NUMPARA:NF_NEW_START";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 130 , 72 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
@@ -147,6 +152,7 @@ TabPage TP_NUMPARA
     };
     TriStateBox CB_COUNT_PARA
     {
+        HelpID = "sw:TriStateBox:TP_NUMPARA:CB_COUNT_PARA";
         Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         TabStop = TRUE ;
@@ -154,6 +160,7 @@ TabPage TP_NUMPARA
     };
     TriStateBox CB_RESTART_PARACOUNT
     {
+        HelpID = "sw:TriStateBox:TP_NUMPARA:CB_RESTART_PARACOUNT";
         Pos = MAP_APPFONT ( 12 , 116 ) ;
         Size = MAP_APPFONT ( 160 , 10 ) ;
         TabStop = TRUE ;
@@ -168,6 +175,7 @@ TabPage TP_NUMPARA
     };
     NumericField NF_RESTART_PARA
     {
+        HelpID = "sw:NumericField:TP_NUMPARA:NF_RESTART_PARA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 130 , 130 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;

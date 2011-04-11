@@ -60,7 +60,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDDataType: setSave: caught an exception!" );
+            OSL_FAIL( "XSDDataType: setSave: caught an exception!" );
         }
     }
 
@@ -75,7 +75,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDDataType: getSave: caught an exception!" );
+            OSL_FAIL( "XSDDataType: getSave: caught an exception!" );
         }
         return aReturn;
     }
@@ -90,7 +90,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDDataType: getFacet: caught an exception!" );
+            OSL_FAIL( "XSDDataType: getFacet: caught an exception!" );
         }
         return aReturn;
     }
@@ -141,7 +141,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDDataType::classify: caught an exception!" );
+            OSL_FAIL( "XSDDataType::classify: caught an exception!" );
         }
         return nTypeClass;
     }
@@ -167,7 +167,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDDataType::setFacet: caught an exception - sure this is the right data type class for this property?" );
+            OSL_FAIL( "XSDDataType::setFacet: caught an exception - sure this is the right data type class for this property?" );
         }
     }
 
@@ -181,7 +181,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDDataType::hasFacet: caught an exception!" );
+            OSL_FAIL( "XSDDataType::hasFacet: caught an exception!" );
         }
         return bReturn;
     }
@@ -195,7 +195,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDDataType::getFacet: caught an exception - sure this is the right data type class for this property?" );
+            OSL_FAIL( "XSDDataType::getFacet: caught an exception - sure this is the right data type class for this property?" );
         }
         return aReturn;
     }
@@ -241,7 +241,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "XSDDataType::copyFacetsFrom: caught an exception!" );
+            OSL_FAIL( "XSDDataType::copyFacetsFrom: caught an exception!" );
         }
     }
 

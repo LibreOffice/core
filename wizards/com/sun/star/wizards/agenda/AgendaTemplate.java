@@ -58,6 +58,7 @@ import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.NumberFormatter;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.text.TextDocument;
 import com.sun.star.wizards.text.TextSectionHandler;
@@ -633,7 +634,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         TextEvent te = (TextEvent) param;
         String controlName = (String) Helper.getUnoPropertyValue(
                 UnoDialog2.getModel(te.Source),
-                "Name");
+                PropertyNames.PROPERTY_NAME);
         redrawTitle(controlName);
 
     }

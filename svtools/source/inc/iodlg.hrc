@@ -28,9 +28,7 @@
 #ifndef _SVTOOLS_IODLGIMPL_HRC
 #define _SVTOOLS_IODLGIMPL_HRC
 
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
 
 // ModalDialog DLG_SVT_EXPLORERFILE
 

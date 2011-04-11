@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -57,40 +54,12 @@
 #include <svx/ofaitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 
-static USHORT pRanges[] =
+static sal_uInt16 pRanges[] =
 {
     SDRATTR_MISC_FIRST, SDRATTR_TEXT_HORZADJUST,
     SDRATTR_TEXT_WORDWRAP, SDRATTR_TEXT_AUTOGROWSIZE,
     0
 };
-
-/*************************************************************************
-|*
-|* Dialog zum Kopieren von Objekten
-|*
-\************************************************************************/
-
-//CHINA001 SvxTextAttrDialog::SvxTextAttrDialog( Window* pParent, const SfxItemSet& rInAttrs,
-//CHINA001                              const SdrView* pSdrView ) :
-//CHINA001      SfxSingleTabDialog( pParent, rInAttrs, RID_SVXPAGE_TEXTATTR )
-//CHINA001 {
-//CHINA001 SvxTextAttrPage* pPage = new SvxTextAttrPage( this, rInAttrs );
-//CHINA001
-//CHINA001 pPage->SetView( pSdrView );
-//CHINA001 pPage->Construct();
-//CHINA001
-//CHINA001 SetTabPage( pPage );
-//CHINA001 SetText( pPage->GetText() );
-//CHINA001 }
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
-//CHINA001 SvxTextAttrDialog::~SvxTextAttrDialog()
-//CHINA001 {
-//CHINA001 }
 
 /*************************************************************************
 |*
@@ -144,6 +113,8 @@ SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) 
 
     aTsbFullWidth.SetClickHdl(
         LINK( this, SvxTextAttrPage, ClickFullWidthHdl_Impl ) );
+
+    aCtlPosition.SetAccessibleRelationMemberOf( &aFlPosition );
 }
 
 /*************************************************************************
@@ -162,7 +133,7 @@ SvxTextAttrPage::~SvxTextAttrPage()
 |*
 \************************************************************************/
 
-void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
+void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
 {
     SfxItemPool* pPool = rAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -226,7 +197,7 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     {
         aTsbAutoGrowHeight.SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        aTsbAutoGrowHeight.EnableTriState( FALSE );
+        aTsbAutoGrowHeight.EnableTriState( sal_False );
     }
     else
         aTsbAutoGrowHeight.SetState( STATE_DONTKNOW );
@@ -237,7 +208,7 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     {
         aTsbAutoGrowWidth.SetState( ( ( const SdrTextAutoGrowWidthItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWWIDTH ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        aTsbAutoGrowWidth.EnableTriState( FALSE );
+        aTsbAutoGrowWidth.EnableTriState( sal_False );
     }
     else
         aTsbAutoGrowWidth.SetState( STATE_DONTKNOW );
@@ -248,7 +219,7 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     {
         aTsbAutoGrowSize.SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        aTsbAutoGrowSize.EnableTriState( FALSE );
+        aTsbAutoGrowSize.EnableTriState( sal_False );
     }
     else
         aTsbAutoGrowSize.SetState( STATE_DONTKNOW );
@@ -259,7 +230,7 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     {
         aTsbWordWrapText.SetState( ( ( const SdrTextWordWrapItem& )rAttrs.Get( SDRATTR_TEXT_WORDWRAP ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        aTsbWordWrapText.EnableTriState( FALSE );
+        aTsbWordWrapText.EnableTriState( sal_False );
     }
     else
         aTsbWordWrapText.SetState( STATE_DONTKNOW );
@@ -278,7 +249,7 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         SdrTextHorzAdjust eTHA = (SdrTextHorzAdjust)((const SdrTextHorzAdjustItem&)rAttrs.Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
         RECT_POINT eRP = RP_LB;
 
-        aTsbFullWidth.EnableTriState( FALSE );
+        aTsbFullWidth.EnableTriState( sal_False );
 
         // Translate item values into local anchor position.
         switch (eTVA)
@@ -352,7 +323,7 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         SdrFitToSizeType eFTS = (SdrFitToSizeType)
                     ( ( const SdrTextFitToSizeTypeItem& )rAttrs.Get( SDRATTR_TEXT_FITTOSIZE ) ).GetValue();
         aTsbFitToSize.SetState( eFTS == SDRTEXTFIT_NONE ? STATE_NOCHECK : STATE_CHECK );
-        aTsbFitToSize.EnableTriState( FALSE );
+        aTsbFitToSize.EnableTriState( sal_False );
     }
     else
         aTsbFitToSize.SetState( STATE_DONTKNOW );
@@ -361,9 +332,9 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     // Konturfluss
     if( rAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME ) != SFX_ITEM_DONTCARE )
     {
-        BOOL bContour = ( ( const SdrTextContourFrameItem& )rAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
+        sal_Bool bContour = ( ( const SdrTextContourFrameItem& )rAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
         aTsbContour.SetState( bContour ? STATE_CHECK : STATE_NOCHECK );
-        aTsbContour.EnableTriState( FALSE );
+        aTsbContour.EnableTriState( sal_False );
     }
     else
         aTsbContour.SetState( STATE_DONTKNOW );
@@ -378,13 +349,13 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
 |*
 \************************************************************************/
 
-BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
+sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
 {
     SfxItemPool* pPool = rAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     SfxMapUnit eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 
-    INT32    nValue;
+    sal_Int32    nValue;
     TriState eState;
 
     if( aMtrFldLeft.GetText() != aMtrFldLeft.GetSavedValue() )
@@ -414,32 +385,32 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     eState = aTsbAutoGrowHeight.GetState();
     if( eState != aTsbAutoGrowHeight.GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAutoGrowHeightItem( (BOOL) STATE_CHECK == eState ) );
+        rAttrs.Put( SdrTextAutoGrowHeightItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
     eState = aTsbAutoGrowWidth.GetState();
     if( eState != aTsbAutoGrowWidth.GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAutoGrowWidthItem( (BOOL) STATE_CHECK == eState ) );
+        rAttrs.Put( SdrTextAutoGrowWidthItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
     eState = aTsbAutoGrowSize.GetState();
     if( eState != aTsbAutoGrowSize.GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAutoGrowHeightItem( (BOOL) STATE_CHECK == eState ) );
+        rAttrs.Put( SdrTextAutoGrowHeightItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
     eState = aTsbWordWrapText.GetState();
     if( eState != aTsbWordWrapText.GetSavedValue() )
     {
-        rAttrs.Put( SdrTextWordWrapItem( (BOOL) STATE_CHECK == eState ) );
+        rAttrs.Put( SdrTextWordWrapItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
     // Konturfluss
     eState = aTsbContour.GetState();
     if( eState != aTsbContour.GetSavedValue() )
     {
-        rAttrs.Put( SdrTextContourFrameItem( (BOOL) STATE_CHECK == eState ) );
+        rAttrs.Put( SdrTextContourFrameItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
     eState = aTsbFitToSize.GetState();
@@ -449,7 +420,7 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
         switch( eState )
         {
             default: ; //prevent warning
-                DBG_ERROR( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
+                OSL_FAIL( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
             case STATE_NOCHECK: eFTS = SDRTEXTFIT_NONE; break;
             case STATE_CHECK: eFTS = SDRTEXTFIT_AUTOFIT; break;
         }
@@ -518,7 +489,7 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
             rAttrs.Put( SdrTextHorzAdjustItem( eTHA ) );
     }
 
-    return( TRUE );
+    return( sal_True );
 }
 
 /*************************************************************************
@@ -531,8 +502,8 @@ void SvxTextAttrPage::Construct()
 {
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 
-    bFitToSizeEnabled = bContourEnabled = TRUE;
-    bWordWrapTextEnabled = bAutoGrowSizeEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = FALSE;
+    bFitToSizeEnabled = bContourEnabled = sal_True;
+    bWordWrapTextEnabled = bAutoGrowSizeEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = sal_False;
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
@@ -551,18 +522,18 @@ void SvxTextAttrPage::Construct()
                     if ( ((SdrTextObj*)pObj)->HasText() )
                     {
                         // Konturfluss ist NICHT bei reinen Textobjekten m�glich
-                        bContourEnabled = FALSE;
+                        bContourEnabled = sal_False;
 
                         // Breite und Hoehe anpassen ist NUR bei reinen Textobjekten m�glich
-                        bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = TRUE;
+                        bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = sal_True;
                     }
                 }
                 break;
                 case OBJ_CUSTOMSHAPE :
                 {
-                    bFitToSizeEnabled = bContourEnabled = FALSE;
-                    bAutoGrowSizeEnabled = TRUE;
-                    bWordWrapTextEnabled = TRUE;
+                    bFitToSizeEnabled = bContourEnabled = sal_False;
+                    bAutoGrowSizeEnabled = sal_True;
+                    bWordWrapTextEnabled = sal_True;
                 }
                 break;
                 default: ;//prevent warning
@@ -595,7 +566,7 @@ SfxTabPage* SvxTextAttrPage::Create( Window* pWindow,
 |*
 \************************************************************************/
 
-USHORT* SvxTextAttrPage::GetRanges()
+sal_uInt16* SvxTextAttrPage::GetRanges()
 {
     return( pRanges );
 }
@@ -713,10 +684,10 @@ IMPL_LINK( SvxTextAttrPage, ClickFullWidthHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, EMPTYARG )
 {
-    BOOL bAutoGrowWidth  = aTsbAutoGrowWidth.GetState() == STATE_CHECK;
-    BOOL bAutoGrowHeight = aTsbAutoGrowHeight.GetState() == STATE_CHECK;
-    BOOL bFitToSize      = aTsbFitToSize.GetState() == STATE_CHECK;
-    BOOL bContour        = aTsbContour.GetState() == STATE_CHECK;
+    sal_Bool bAutoGrowWidth  = aTsbAutoGrowWidth.GetState() == STATE_CHECK;
+    sal_Bool bAutoGrowHeight = aTsbAutoGrowHeight.GetState() == STATE_CHECK;
+    sal_Bool bFitToSize      = aTsbFitToSize.GetState() == STATE_CHECK;
+    sal_Bool bContour        = aTsbContour.GetState() == STATE_CHECK;
 
     aTsbContour.Enable( !bFitToSize &&
                         !( ( bAutoGrowWidth && bAutoGrowWidthEnabled ) || ( bAutoGrowHeight && bAutoGrowHeightEnabled ) ) &&
@@ -783,7 +754,6 @@ bool SvxTextAttrPage::IsTextDirectionLeftToRight (void) const
     return bLeftToRightDirection;
 }
 
-//add CHINA001 begin
 void SvxTextAttrPage::PageCreated(SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pViewItem,OfaPtrItem,SID_SVXTEXTATTRPAGE_VIEW,sal_False);
@@ -793,7 +763,5 @@ void SvxTextAttrPage::PageCreated(SfxAllItemSet aSet)
 
     Construct();
 }
-
-//end of CHINA001
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

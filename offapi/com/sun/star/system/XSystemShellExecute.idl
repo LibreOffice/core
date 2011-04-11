@@ -56,7 +56,7 @@ module com { module sun { module star { module system {
 published interface XSystemShellExecute: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Executes an abitrary system command.
+    /** Executes an arbitrary system command.
 
         @param aCommand
         Specifies the command to execute. This may be an executable file or a

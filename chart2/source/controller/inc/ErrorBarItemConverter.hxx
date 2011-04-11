@@ -30,7 +30,7 @@
 
 #include "ItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -64,12 +64,12 @@ public:
     virtual bool ApplyItemSet( const SfxItemSet & rItemSet );
 
 protected:
-    virtual const USHORT * GetWhichPairs() const;
+    virtual const sal_uInt16 * GetWhichPairs() const;
     virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const;
 
-    virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
         throw( ::com::sun::star::uno::Exception );
-    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
+    virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
 
 private:

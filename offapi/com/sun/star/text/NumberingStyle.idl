@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module text {
 
 //=============================================================================
 
-/** specifies a stylesheet numberings within a
+/** specifies a style sheet numberings within a
     <type scope="com::sun::star::text">Text</type>.
  */
 published service NumberingStyle

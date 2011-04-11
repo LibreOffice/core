@@ -43,14 +43,14 @@ class ScXMLTextPContext : public SvXMLImportContext
     rtl::OUString               sLName;
     rtl::OUString               sSimpleContent;     // copy of the first Character call's argument
     rtl::OUStringBuffer*        pContentBuffer;     // used if there's more than one string
-    USHORT                      nPrefix;
+    sal_uInt16                      nPrefix;
     sal_Bool                    bIsOwn;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLTextPContext( ScXMLImport& rImport, USHORT nPrfx,
+    ScXMLTextPContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -58,7 +58,7 @@ public:
 
     virtual ~ScXMLTextPContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

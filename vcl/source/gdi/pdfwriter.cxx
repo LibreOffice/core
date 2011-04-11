@@ -39,9 +39,9 @@ PDFWriter::AnyWidget::~AnyWidget()
 {
 }
 
-PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext )
+PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& xEnc )
         :
-        pImplementation( new PDFWriterImpl( rContext ) )
+        pImplementation( new PDFWriterImpl( rContext, xEnc, *this ) )
 {
 }
 
@@ -70,16 +70,6 @@ PDFWriter::PDFVersion PDFWriter::GetVersion() const
     return ((PDFWriterImpl*)pImplementation)->getVersion();
 }
 
-void PDFWriter::SetDocInfo( const PDFDocInfo& rInfo )
-{
-    ((PDFWriterImpl*)pImplementation)->setDocInfo( rInfo );
-}
-
-const PDFDocInfo& PDFWriter::GetDocInfo() const
-{
-    return ((PDFWriterImpl*)pImplementation)->getDocInfo();
-}
-
 void PDFWriter::SetDocumentLocale( const com::sun::star::lang::Locale& rLoc )
 {
     ((PDFWriterImpl*)pImplementation)->setDocumentLocale( rLoc );
@@ -101,7 +91,7 @@ void PDFWriter::DrawTextLine(
                              FontStrikeout eStrikeout,
                              FontUnderline eUnderline,
                              FontUnderline eOverline,
-                             BOOL bUnderlineAbove )
+                             sal_Bool bUnderlineAbove )
 {
     ((PDFWriterImpl*)pImplementation)->drawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 }
@@ -118,7 +108,7 @@ void PDFWriter::DrawTextArray(
 
 void PDFWriter::DrawStretchText(
                                 const Point& rStartPt,
-                                ULONG nWidth,
+                                sal_uLong nWidth,
                                 const XubString& rStr,
                                 xub_StrLen nIndex,
                                 xub_StrLen nLen )
@@ -129,7 +119,7 @@ void PDFWriter::DrawStretchText(
 void PDFWriter::DrawText(
                          const Rectangle& rRect,
                          const XubString& rStr,
-                         USHORT nStyle )
+                         sal_uInt16 nStyle )
 {
     ((PDFWriterImpl*)pImplementation)->drawText( rRect, rStr, nStyle );
 }
@@ -159,7 +149,7 @@ void PDFWriter::DrawRect( const Rectangle& rRect )
     ((PDFWriterImpl*)pImplementation)->drawRectangle( rRect );
 }
 
-void PDFWriter::DrawRect( const Rectangle& rRect, ULONG nHorzRound, ULONG nVertRound )
+void PDFWriter::DrawRect( const Rectangle& rRect, sal_uLong nHorzRound, sal_uLong nVertRound )
 {
     ((PDFWriterImpl*)pImplementation)->drawRectangle( rRect, nHorzRound, nVertRound );
 }
@@ -292,7 +282,7 @@ void PDFWriter::DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpap
     ((PDFWriterImpl*)pImplementation)->drawWallpaper( rRect, rWallpaper );
 }
 
-void PDFWriter::DrawTransparent( const PolyPolygon& rPolyPoly, USHORT nTransparencePercent )
+void PDFWriter::DrawTransparent( const PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent )
 {
     ((PDFWriterImpl*)pImplementation)->drawTransparent( rPolyPoly, nTransparencePercent );
 }
@@ -302,7 +292,7 @@ void PDFWriter::BeginTransparencyGroup()
     ((PDFWriterImpl*)pImplementation)->beginTransparencyGroup();
 }
 
-void PDFWriter::EndTransparencyGroup( const Rectangle& rRect, USHORT nTransparentPercent )
+void PDFWriter::EndTransparencyGroup( const Rectangle& rRect, sal_uInt16 nTransparentPercent )
 {
     ((PDFWriterImpl*)pImplementation)->endTransparencyGroup( rRect, nTransparentPercent );
 }
@@ -312,7 +302,7 @@ void PDFWriter::EndTransparencyGroup( const Rectangle& rRect, const Bitmap& rAlp
     ((PDFWriterImpl*)pImplementation)->endTransparencyGroup( rRect, rAlphaMask );
 }
 
-void PDFWriter::Push( USHORT nFlags )
+void PDFWriter::Push( sal_uInt16 nFlags )
 {
     ((PDFWriterImpl*)pImplementation)->push( nFlags );
 }
@@ -367,12 +357,12 @@ void PDFWriter::IntersectClipRegion( const Rectangle& rRect )
     ((PDFWriterImpl*)pImplementation)->intersectClipRegion( rRect );
 }
 
-void PDFWriter::SetAntialiasing( USHORT nMode )
+void PDFWriter::SetAntialiasing( sal_uInt16 nMode )
 {
     ((PDFWriterImpl*)pImplementation)->setAntiAlias( (sal_Int32)nMode );
 }
 
-void PDFWriter::SetLayoutMode( ULONG nMode )
+void PDFWriter::SetLayoutMode( sal_uLong nMode )
 {
     ((PDFWriterImpl*)pImplementation)->setLayoutMode( (sal_Int32)nMode );
 }
@@ -569,6 +559,20 @@ void PDFWriter::DrawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPatter
 std::set< PDFWriter::ErrorCode > PDFWriter::GetErrors()
 {
     return ((PDFWriterImpl*)pImplementation)->getErrors();
+}
+
+com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
+PDFWriter::InitEncryption( const rtl::OUString& i_rOwnerPassword,
+                           const rtl::OUString& i_rUserPassword,
+                           bool b128Bit
+                          )
+{
+    return PDFWriterImpl::initEncryption( i_rOwnerPassword, i_rUserPassword, b128Bit );
+}
+
+void PDFWriter::PlayMetafile( const GDIMetaFile& i_rMTF, const vcl::PDFWriter::PlayMetafileContext& i_rPlayContext, PDFExtOutDevData* i_pData )
+{
+    ((PDFWriterImpl*)pImplementation)->playMetafile( i_rMTF, i_pData, i_rPlayContext, NULL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

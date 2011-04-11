@@ -50,7 +50,7 @@ public:
 };
 
 
-/* -----------------21.04.98 08:11-------------------
+/* --------------------------------------------------
  * Edit, dass keine Spaces akzeptiert
  * --------------------------------------------------*/
 class SW_DLLPUBLIC NoSpaceEdit : public Edit
@@ -67,7 +67,7 @@ public:
     const String&   GetForbiddenChars(){return sForbiddenChars;}
 };
 
-/* -----------------21.04.98 08:33-------------------
+/* --------------------------------------------------
  * Kein Space und kein Punkt
  * --------------------------------------------------*/
 class TableNameEdit : public NoSpaceEdit
@@ -78,7 +78,7 @@ public:
                                 {SetForbiddenChars(String::CreateFromAscii(" .<>"));}
 };
 
-/* -----------------25.06.2003 15:55-----------------
+/* --------------------------------------------------
     call a link when KEY_RETURN is pressed
  --------------------------------------------------*/
 class SW_DLLPUBLIC ReturnActionEdit : public Edit

@@ -124,11 +124,9 @@ AstStack* AstStack::push(AstScope* pScope)
 
 void AstStack::pop()
 {
-    AstScope *pScope;
-
     if (m_top < 1)
         return;
-    pScope = m_stack[--m_top];
+    --m_top;
 }
 
 void AstStack::clear()

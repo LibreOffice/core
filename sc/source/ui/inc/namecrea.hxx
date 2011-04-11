@@ -30,7 +30,7 @@
 #define SC_NAMECREA_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include "scui_def.hxx"
 
@@ -46,9 +46,9 @@ protected:
     CancelButton    aCancelButton;
     HelpButton      aHelpButton;
 public:
-    ScNameCreateDlg( Window * pParent, USHORT nFlags );
+    ScNameCreateDlg( Window * pParent, sal_uInt16 nFlags );
 
-    USHORT          GetFlags() const;
+    sal_uInt16          GetFlags() const;
 };
 
 

@@ -344,8 +344,8 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 rtl::OUString SAL_CALL Content::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return rtl::OUString::createFromAscii(
-                            "com.sun.star.comp.ucb.WebDAVContent" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.comp.ucb.WebDAVContent" ));
 }
 
 //=========================================================================
@@ -355,7 +355,7 @@ uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
 {
     uno::Sequence< rtl::OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ]
-        = rtl::OUString::createFromAscii( WEBDAV_CONTENT_SERVICE_NAME );
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( WEBDAV_CONTENT_SERVICE_NAME ));
     return aSNS;
 }
 
@@ -384,9 +384,9 @@ rtl::OUString SAL_CALL Content::getContentType()
     }
 
     if ( bFolder )
-        return rtl::OUString::createFromAscii( WEBDAV_COLLECTION_TYPE );
+        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( WEBDAV_COLLECTION_TYPE ));
 
-    return rtl::OUString::createFromAscii( WEBDAV_CONTENT_TYPE );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( WEBDAV_CONTENT_TYPE ));
 }
 
 //=========================================================================
@@ -423,8 +423,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -445,8 +445,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -457,8 +457,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "No properties!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "No properties!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -500,8 +500,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -522,8 +522,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -587,8 +587,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                  rtl::OUString::createFromAscii(
-                                      "Wrong argument type!" ),
+                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                      "Wrong argument type!" )),
                                   static_cast< cppu::OWeakObject * >( this ),
                                   -1 ) ),
                 Environment );
@@ -609,8 +609,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -652,8 +652,8 @@ uno::Any SAL_CALL Content::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    rtl::OUString::createFromAscii(
-                                        "Wrong argument type!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Wrong argument type!" )),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -731,8 +731,7 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
     // Check property type.
     if ( !UCBDeadPropertyValue::supportsType( DefaultValue.getValueType() ) )
     {
-        OSL_ENSURE( sal_False,
-                    "Content::addProperty - Unsupported property type!" );
+        OSL_FAIL( "Content::addProperty - Unsupported property type!" );
         throw beans::IllegalTypeException();
     }
 
@@ -817,23 +816,20 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
                         break;
 
                     default:
-                        OSL_ENSURE( sal_False,
-                                    "Content::addProperty - "
+                        OSL_FAIL( "Content::addProperty - "
                                     "Unsupported resource type!" );
                         break;
                     }
                 }
                 catch ( uno::Exception const & )
                 {
-                    OSL_ENSURE( sal_False,
-                                "Content::addProperty - "
+                    OSL_FAIL( "Content::addProperty - "
                                 "Unable to determine resource type!" );
                 }
             }
             else
             {
-                OSL_ENSURE( sal_False,
-                            "Content::addProperty - "
+                OSL_FAIL( "Content::addProperty - "
                             "Unable to determine resource type!" );
             }
         }
@@ -911,23 +907,20 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
                             break;
 
                         default:
-                            OSL_ENSURE( sal_False,
-                                        "Content::removeProperty - "
+                            OSL_FAIL( "Content::removeProperty - "
                                         "Unsupported resource type!" );
                             break;
                     }
                 }
                 catch ( uno::Exception const & )
                 {
-                    OSL_ENSURE( sal_False,
-                                "Content::removeProperty - "
+                    OSL_FAIL( "Content::removeProperty - "
                                 "Unable to determine resource type!" );
                 }
             }
             else
             {
-                OSL_ENSURE( sal_False,
-                            "Content::removeProperty - "
+                OSL_FAIL( "Content::removeProperty - "
                             "Unable to determine resource type!" );
 //                throw beans::UnknownPropertyException();
             }
@@ -952,7 +945,7 @@ Content::queryCreatableContentsInfo()
 
     // document.
     aSeq.getArray()[ 0 ].Type
-        = rtl::OUString::createFromAscii( WEBDAV_CONTENT_TYPE );
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( WEBDAV_CONTENT_TYPE ));
     aSeq.getArray()[ 0 ].Attributes
         = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
           | ucb::ContentInfoAttribute::KIND_DOCUMENT;
@@ -967,7 +960,7 @@ Content::queryCreatableContentsInfo()
 
     // folder.
     aSeq.getArray()[ 1 ].Type
-        = rtl::OUString::createFromAscii( WEBDAV_COLLECTION_TYPE );
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( WEBDAV_COLLECTION_TYPE ));
     aSeq.getArray()[ 1 ].Attributes
         = ucb::ContentInfoAttribute::KIND_FOLDER;
 
@@ -1001,18 +994,18 @@ Content::createNewContent( const ucb::ContentInfo& Info )
                 "WebdavContent::createNewContent - empty identifier!" );
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-        aURL += rtl::OUString::createFromAscii( "/" );
+        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
     sal_Bool isCollection;
     if ( Info.Type.equalsAsciiL(
              RTL_CONSTASCII_STRINGPARAM( WEBDAV_COLLECTION_TYPE ) ) )
     {
-        aURL += rtl::OUString::createFromAscii( "New_Collection" );
+        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("New_Collection"));
         isCollection = sal_True;
     }
     else
     {
-        aURL += rtl::OUString::createFromAscii( "New_Content" );
+        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("New_Content"));
         isCollection = sal_False;
     }
 
@@ -1163,7 +1156,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     std::auto_ptr< ContentProperties > xProps;
     std::auto_ptr< ContentProperties > xCachedProps;
     std::auto_ptr< DAVResourceAccess > xResAccess;
-    rtl::OUString aEscapedTitle;
+    rtl::OUString aUnescapedTitle;
     bool bHasAll = false;
     uno::Reference< lang::XMultiServiceFactory > xSMgr;
     uno::Reference< ucb::XContentIdentifier > xIdentifier;
@@ -1172,7 +1165,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        aEscapedTitle = NeonUri::unescape( m_aEscapedTitle );
+        aUnescapedTitle = NeonUri::unescape( m_aEscapedTitle );
         xSMgr.set( m_xSMgr );
         xIdentifier.set( m_xIdentifier );
         xProvider.set( m_xProvider.get() );
@@ -1345,7 +1338,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         if ( m_eResourceType == NON_DAV )
                             xProps->addProperties( aMissingProps,
                                                    ContentProperties(
-                                                       aEscapedTitle,
+                                                       aUnescapedTitle,
                                                        false ) );
                     }
                     catch ( DAVException const & e )
@@ -1366,32 +1359,33 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // might trigger HTTP redirect.
         // Therefore, title must be updated here.
         NeonUri aUri( xResAccess->getURL() );
-        aEscapedTitle = aUri.GetPathBaseName();
+        aUnescapedTitle = aUri.GetPathBaseNameUnescaped();
 
-        if ( UNKNOWN == rType )
+        if ( rType == UNKNOWN )
         {
-            xProps.reset( new ContentProperties( aEscapedTitle ) );
+            xProps.reset( new ContentProperties( aUnescapedTitle ) );
         }
 
         // For DAV resources we only know the Title, for non-DAV
         // resources we additionally know that it is a document.
-        if ( DAV == rType  )
+
+        if ( rType == DAV )
         {
             //xProps.reset(
-            //    new ContentProperties( aEscapedTitle ) );
+            //    new ContentProperties( aUnescapedTitle ) );
             xProps->addProperty(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
-                uno::makeAny( aEscapedTitle ),
+                uno::makeAny( aUnescapedTitle ),
                 true );
         }
         else
         {
             if ( !xProps.get() )
-                xProps.reset( new ContentProperties( aEscapedTitle, false ) );
+                xProps.reset( new ContentProperties( aUnescapedTitle, false ) );
             else
                 xProps->addProperty(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
-                    uno::makeAny( aEscapedTitle ),
+                    uno::makeAny( aUnescapedTitle ),
                     true );
 
             xProps->addProperty(
@@ -1409,7 +1403,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // No server access for just created (not yet committed) objects.
         // Only a minimal set of properties supported at this stage.
         if (m_bTransient)
-            xProps.reset( new ContentProperties( aEscapedTitle,
+            xProps.reset( new ContentProperties( aUnescapedTitle,
                                                  m_bCollection ) );
     }
 
@@ -1455,12 +1449,12 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         if ( !m_xCachedProps.get() )
-            m_xCachedProps.reset( new ContentProperties( *xProps.get() ) );
+            m_xCachedProps.reset( new CachableContentProperties( *xProps.get() ) );
         else
             m_xCachedProps->addProperties( *xProps.get() );
 
         m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
-        m_aEscapedTitle = aEscapedTitle;
+        m_aEscapedTitle = NeonUri::escapeSegment( aUnescapedTitle );
     }
 
     return xResultRow;
@@ -1527,8 +1521,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
             continue;
         }
@@ -1541,8 +1535,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                rtl::OUString::createFromAscii(
-                    "Property is read-only!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Property is read-only!" )),
                 static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rName.equalsAsciiL(
@@ -1550,8 +1544,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                rtl::OUString::createFromAscii(
-                    "Property is read-only!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Property is read-only!" )),
                 static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rName.equalsAsciiL(
@@ -1559,8 +1553,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Property is read-only!" )),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
@@ -1593,8 +1587,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     catch ( DAVException const & )
                     {
                         aRet[ n ] <<= lang::IllegalArgumentException(
-                            rtl::OUString::createFromAscii(
-                                "Invalid content identifier!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Invalid content identifier!" )),
                             static_cast< cppu::OWeakObject * >( this ),
                             -1 );
                     }
@@ -1602,8 +1596,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 else
                 {
                     aRet[ n ] <<= lang::IllegalArgumentException(
-                        rtl::OUString::createFromAscii(
-                            "Empty title not allowed!" ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "Empty title not allowed!" )),
                         static_cast< cppu::OWeakObject * >( this ),
                         -1 );
                 }
@@ -1611,8 +1605,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 aRet[ n ] <<= beans::IllegalTypeException(
-                    rtl::OUString::createFromAscii(
-                        "Property value has wrong type!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Property value has wrong type!" )),
                     static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -1632,8 +1626,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 // PROPPATCH::set would add the property automatically, which
                 // is not allowed for "setPropertyValues" command!
                 aRet[ n ] <<= beans::UnknownPropertyException(
-                                rtl::OUString::createFromAscii(
-                                    "Property is unknown!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Property is unknown!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
                 continue;
             }
@@ -1642,8 +1636,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             {
                 // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(
-                                rtl::OUString::createFromAscii(
-                                    "Property is read-only!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Property is read-only!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             else if ( rName.equalsAsciiL(
@@ -1651,8 +1645,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             {
                 // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(
-                                rtl::OUString::createFromAscii(
-                                    "Property is read-only!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Property is read-only!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             else if ( rName.equalsAsciiL(
@@ -1660,8 +1654,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             {
                 // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(
-                                rtl::OUString::createFromAscii(
-                                    "Property is read-only!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Property is read-only!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             else if ( rName.equalsAsciiL(
@@ -1670,8 +1664,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 // Read-only property!
                 // (but could be writable, if 'getcontenttype' would be)
                 aRet[ n ] <<= lang::IllegalAccessException(
-                                rtl::OUString::createFromAscii(
-                                    "Property is read-only!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Property is read-only!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             if ( rName.equalsAsciiL(
@@ -1679,8 +1673,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             {
                 // Read-only property!
                 aRet[ n ] <<= lang::IllegalAccessException(
-                                rtl::OUString::createFromAscii(
-                                    "Property is read-only!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Property is read-only!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             else
@@ -1745,8 +1739,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     else
                     {
                         aRet[ n ] <<= uno::Exception(
-                                rtl::OUString::createFromAscii(
-                                    "No property set for storing the value!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "No property set for storing the value!" )),
                                 static_cast< cppu::OWeakObject * >( this ) );
                     }
                 }
@@ -1780,8 +1774,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         catch ( DAVException const & e )
         {
-//            OSL_ENSURE( sal_False,
-//                        "Content::setPropertyValues - PROPPATCH failed!" );
+//            OSL_FAIL( //                        "Content::setPropertyValues - PROPPATCH failed!" );
 
 #if 1
             cancelCommandExecution( e, xEnv );
@@ -1810,7 +1803,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         rtl::OUString aNewURL = getParentURL();
         if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
-            aNewURL += rtl::OUString::createFromAscii( "/" );
+            aNewURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         aNewURL += NeonUri::escapeSegment( aNewTitle );
 
@@ -1853,7 +1846,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
                 // Set error .
                 aRet[ nTitlePos ] <<= uno::Exception(
-                    rtl::OUString::createFromAscii( "Exchange failed!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Exchange failed!")),
                     static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -1871,7 +1864,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        aEvent.PropertyName = rtl::OUString::createFromAscii( "Title" );
+        aEvent.PropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
         aEvent.OldValue     = uno::makeAny( aOldTitle );
         aEvent.NewValue     = uno::makeAny( aNewTitle );
 
@@ -1991,7 +1984,7 @@ uno::Any Content::open(
                     // cache headers.
                     if ( !m_xCachedProps.get())
                         m_xCachedProps.reset(
-                            new ContentProperties( aResource ) );
+                            new CachableContentProperties( aResource ) );
                     else
                         m_xCachedProps->addProperties( aResource );
 
@@ -2037,7 +2030,7 @@ uno::Any Content::open(
                         // cache headers.
                         if ( !m_xCachedProps.get())
                             m_xCachedProps.reset(
-                                new ContentProperties( aResource ) );
+                                new CachableContentProperties( aResource ) );
                         else
                             m_xCachedProps->addProperties(
                                 aResource.properties );
@@ -2174,7 +2167,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     if ( nURLPos != ( aURL.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
-        aURL += rtl::OUString::createFromAscii( "/" );
+        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     }
 
     sal_Int32 nLen = aURL.getLength();
@@ -2233,10 +2226,10 @@ void Content::insert(
 
     if ( aEscapedTitle.getLength() == 0 )
     {
-        OSL_ENSURE( sal_False, "Content::insert - Title missing!" );
+        OSL_FAIL( "Content::insert - Title missing!" );
 
         uno::Sequence< rtl::OUString > aProps( 1 );
-        aProps[ 0 ] = rtl::OUString::createFromAscii( "Title" );
+        aProps[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::MissingPropertiesException(
                                 rtl::OUString(),
@@ -2267,8 +2260,8 @@ void Content::insert(
         if ( !bTransient || ( bTransient && !bCollection  ) )
         {
             ucb::UnsupportedNameClashException aEx(
-                rtl::OUString::createFromAscii(
-                    "Unable to write without overwrite!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Unable to write without overwrite!" )),
                 static_cast< cppu::OWeakObject * >( this ),
                 ucb::NameClash::ERROR );
 
@@ -2311,12 +2304,11 @@ void Content::insert(
 //                            break;
 
                     default:
-                        OSL_ENSURE( sal_False,
-                                    "Content::insert - "
+                        OSL_FAIL( "Content::insert - "
                                     "Unknown interaction selection!" );
                         throw ucb::CommandFailedException(
-                                    rtl::OUString::createFromAscii(
-                                        "Unknown interaction selection!" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "Unknown interaction selection!" )),
                                     uno::Reference< uno::XInterface >(),
                                     aExAsAny );
 //                            break;
@@ -2335,7 +2327,7 @@ void Content::insert(
         // Assemble new content identifier...
         rtl::OUString aURL = getParentURL();
         if ( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ) )
-            aURL += rtl::OUString::createFromAscii( "/" );
+            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         aURL += aEscapedTitle;
 
@@ -2489,19 +2481,19 @@ void Content::transfer(
                 RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) )
         {
             sourceURI.SetScheme(
-                rtl::OUString::createFromAscii( HTTP_URL_SCHEME ) );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HTTP_URL_SCHEME )) );
         }
         else if ( aScheme.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( DAV_URL_SCHEME ) ) )
         {
             sourceURI.SetScheme(
-                rtl::OUString::createFromAscii( HTTP_URL_SCHEME ) );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HTTP_URL_SCHEME )) );
         }
         else if ( aScheme.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( DAVS_URL_SCHEME ) ) )
         {
             sourceURI.SetScheme(
-                rtl::OUString::createFromAscii( HTTPS_URL_SCHEME ) );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HTTPS_URL_SCHEME )) );
         }
         else
         {
@@ -2513,8 +2505,8 @@ void Content::transfer(
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny(
                         ucb::InteractiveBadTransferURLException(
-                            rtl::OUString::createFromAscii(
-                                "Unsupported URL scheme!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Unsupported URL scheme!" )),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
                     Environment );
                 // Unreachable
@@ -2524,11 +2516,11 @@ void Content::transfer(
         if ( targetURI.GetScheme().toAsciiLowerCase().equalsAsciiL(
                  RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) )
             targetURI.SetScheme(
-                rtl::OUString::createFromAscii( HTTP_URL_SCHEME ) );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HTTP_URL_SCHEME )) );
         else if ( targetURI.GetScheme().toAsciiLowerCase().equalsAsciiL(
                  RTL_CONSTASCII_STRINGPARAM( DAV_URL_SCHEME ) ) )
             targetURI.SetScheme(
-                rtl::OUString::createFromAscii( HTTP_URL_SCHEME ) );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HTTP_URL_SCHEME )) );
 
         // @@@ This implementation of 'transfer' only works
         //     if the source and target are located at same host.
@@ -2541,8 +2533,8 @@ void Content::transfer(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( ucb::InteractiveBadTransferURLException(
-                                rtl::OUString::createFromAscii(
-                                    "Different hosts!" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "Different hosts!" )),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
                 Environment );
             // Unreachable
@@ -2564,7 +2556,7 @@ void Content::transfer(
         rtl::OUString aTargetURL = xIdentifier->getContentIdentifier();
         if ( ( aTargetURL.lastIndexOf( '/' ) + 1 )
                 != aTargetURL.getLength() )
-            aTargetURL += rtl::OUString::createFromAscii( "/" );
+            aTargetURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         aTargetURL += aTitle;
 
@@ -2770,7 +2762,7 @@ void Content::lock(
 
         uno::Any aOwnerAny;
         aOwnerAny
-            <<= rtl::OUString::createFromAscii( "http://ucb.openoffice.org" );
+            <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http://ucb.openoffice.org"));
 
         ucb::Lock aLock(
             ucb::LockScope_EXCLUSIVE,
@@ -2836,7 +2828,7 @@ sal_Bool Content::exchangeIdentity(
     // Already persistent?
     if ( m_bTransient )
     {
-        OSL_ENSURE( sal_False, "Content::exchangeIdentity - Not persistent!" );
+        OSL_FAIL( "Content::exchangeIdentity - Not persistent!" );
         return sal_False;
     }
 
@@ -2885,8 +2877,7 @@ sal_Bool Content::exchangeIdentity(
         }
     }
 
-    OSL_ENSURE( sal_False,
-                "Content::exchangeIdentity - "
+    OSL_FAIL( "Content::exchangeIdentity - "
                 "Panic! Cannot exchange identity!" );
     return sal_False;
 }
@@ -2904,7 +2895,7 @@ sal_Bool Content::isFolder(
     }
 
     uno::Sequence< beans::Property > aProperties( 1 );
-    aProperties[ 0 ].Name   = rtl::OUString::createFromAscii( "IsFolder" );
+    aProperties[ 0 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
     aProperties[ 0 ].Handle = -1;
     uno::Reference< sdbc::XRow > xRow( getPropertyValues( aProperties, xEnv ) );
     if ( xRow.is() )
@@ -2927,19 +2918,33 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
     // Map DAVException...
     uno::Any aException;
 
+    rtl::OUString aURL;
+    if ( m_bTransient )
+    {
+        aURL = getParentURL();
+        if ( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ) )
+            aURL += rtl::OUString::createFromAscii( "/" );
+
+        aURL += m_aEscapedTitle;
+    }
+    else
+    {
+        aURL = m_xIdentifier->getContentIdentifier();
+    }
+
     switch ( e.getStatus() )
     {
         case SC_NOT_FOUND:
         {
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= beans::PropertyValue(
-                rtl::OUString::createFromAscii("Uri"), -1,
-                uno::makeAny(m_xIdentifier->getContentIdentifier()),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")), -1,
+                uno::makeAny(aURL),
                 beans::PropertyState_DIRECT_VALUE);
 
             aException <<=
                 ucb::InteractiveAugmentedIOException(
-                    rtl::OUString::createFromAscii( "Not found!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not found!")),
                     static_cast< cppu::OWeakObject * >( this ),
                     task::InteractionClassification_ERROR,
                     ucb::IOErrorCode_NOT_EXISTING,
@@ -3021,22 +3026,22 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
 #if 1
         aException <<=
             ucb::InteractiveLockingLockedException(
-                rtl::OUString::createFromAscii( "Locked!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locked!")),
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
-                m_xIdentifier->getContentIdentifier(),
-                sal_True );
+                aURL,
+                sal_False ); // not SelfOwned
 #else
         {
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= beans::PropertyValue(
-                rtl::OUString::createFromAscii("Uri"), -1,
-                uno::makeAny(m_xIdentifier->getContentIdentifier()),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")), -1,
+                uno::makeAny(aURL),
                 beans::PropertyState_DIRECT_VALUE);
 
             aException <<=
                 ucb::InteractiveAugmentedIOException(
-                    rtl::OUString::createFromAscii( "Locked!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locked!")),
                     static_cast< cppu::OWeakObject * >( this ),
                     task::InteractionClassification_ERROR,
                     ucb::IOErrorCode_LOCKING_VIOLATION,
@@ -3048,29 +3053,29 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
     case DAVException::DAV_LOCKED_SELF:
         aException <<=
             ucb::InteractiveLockingLockedException(
-                rtl::OUString::createFromAscii( "Locked (self)!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locked (self)!")),
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
-                m_xIdentifier->getContentIdentifier(),
-                sal_True );
+                aURL,
+                sal_True ); // SelfOwned
         break;
 
     case DAVException::DAV_NOT_LOCKED:
         aException <<=
             ucb::InteractiveLockingNotLockedException(
-                rtl::OUString::createFromAscii( "Not locked!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Not locked!")),
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
-                m_xIdentifier->getContentIdentifier() );
+                aURL );
         break;
 
     case DAVException::DAV_LOCK_EXPIRED:
         aException <<=
             ucb::InteractiveLockingLockExpiredException(
-                rtl::OUString::createFromAscii( "Lock expired!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lock expired!")),
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
-                m_xIdentifier->getContentIdentifier() );
+                aURL );
         break;
 
     default:
@@ -3175,13 +3180,13 @@ const Content::ResourceType & Content::getResourceType(
                 std::vector< rtl::OUString > aPropNames;
                 uno::Sequence< beans::Property > aProperties( 5 );
                 aProperties[ 0 ].Name
-                    = rtl::OUString::createFromAscii( "IsFolder" );
+                    = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
                 aProperties[ 1 ].Name
-                    = rtl::OUString::createFromAscii( "IsDocument" );
+                    = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument"));
                 aProperties[ 2 ].Name
-                    = rtl::OUString::createFromAscii( "IsReadOnly" );
+                    = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly"));
                 aProperties[ 3 ].Name
-                    = rtl::OUString::createFromAscii( "MediaType" );
+                    = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
                 aProperties[ 4 ].Name
                     = DAVProperties::SUPPORTEDLOCK;
 
@@ -3194,7 +3199,7 @@ const Content::ResourceType & Content::getResourceType(
                 if ( resources.size() == 1 )
                 {
                     m_xCachedProps.reset(
-                        new ContentProperties( resources[ 0 ] ) );
+                        new CachableContentProperties( resources[ 0 ] ) );
                     m_xCachedProps->containsAllNames(
                         aProperties, m_aFailedPropNames );
                 }

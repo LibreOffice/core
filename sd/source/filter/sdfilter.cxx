@@ -79,7 +79,7 @@ SdFilter::~SdFilter()
 
 ::rtl::OUString SdFilter::ImplGetFullLibraryName( const ::rtl::OUString& rLibraryName ) const
 {
-    String aTemp( ::rtl::OUString::createFromAscii( SVLIBRARY( "?" ) ) );
+    String aTemp(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("?"))));
     xub_StrLen nIndex = aTemp.Search( (sal_Unicode)'?' );
     aTemp.Replace( nIndex, 1, rLibraryName );
     ::rtl::OUString aLibraryName( aTemp );
@@ -108,28 +108,6 @@ void SdFilter::CreateStatusIndicator()
     if ( pStatusBarItem )
         pStatusBarItem->GetValue() >>= mxStatusIndicator;
 
-//  try
-//  {
-//      if (mxModel.is())
-//      {
-//          Reference< XController > xController( mxModel->getCurrentController());
-//          if( xController.is())
-//          {
-//              Reference< XFrame > xFrame( xController->getFrame());
-//              if( xFrame.is())
-//              {
-//                  Reference< XStatusIndicatorFactory > xFactory( xFrame, UNO_QUERY );
-//                  if( xFactory.is())
-//                  {
-//                      mxStatusIndicator = xFactory->createStatusIndicator();
-//                  }
-//              }
-//          }
-//      }
-//  }
-//  catch( Exception& )
-//  {
-//  }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <tools/config.hxx>
@@ -72,11 +69,9 @@
 #include <svx/svxids.hrc> // slot ids, mostly for changetracking
 
 // for security TP
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 
 #ifdef UNX
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -139,60 +134,19 @@ const char* SEARCHENGINE_GROUP  = "SearchEngines-$(vlang)";
 
 // -----------------------------------------------------------------------
 
-String lcl_MakeTabEntry(const SfxFilter* pFilter)
-{
-    String sEntry(pFilter->GetMimeType());
-    sEntry += '\t';
-    sEntry += pFilter->GetWildcard().GetWildCard();
-    sEntry += '\t';
-    sEntry += pFilter->GetName();
-#if defined(OS2)
-    sEntry += '\t';
-    sEntry += pFilter->GetTypeName();
-#endif
-    return sEntry;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL IsJavaInstalled_Impl( /*!!!SfxIniManager* pIniMgr*/ )
-{
-    BOOL bRet = FALSE;
-/*!!! (pb) needs new implementation
-    String aIniEntry;
-    String aFullName = Config::GetConfigName( pIniMgr->Get( SFX_KEY_USERCONFIG_PATH ),
-                                              String::CreateFromAscii("java") );
-    INetURLObject aIniFileObj( aFullName, INET_PROT_FILE );
-    String aIniPath = aIniFileObj.getName();
-    if ( pIniMgr->SearchFile( aIniPath ) )
-    {
-        Config aJavaCfg( aIniPath );
-        aJavaCfg.SetGroup( "Java" );
-        ByteString sTemp = aJavaCfg.ReadKey( ByteString(::rtl::OUStringToOString(pIniMgr->GetKeyName( SFX_KEY_JAVA_SYSTEMCLASSPATH ),RTL_TEXTENCODING_UTF8)) );
-        String aJavaSystemClassPath = ::rtl::OStringToOUString(sTemp,RTL_TEXTENCODING_UTF8);
-        String aJavaRuntimeLib = ::rtl::OStringToOUString(aJavaCfg.ReadKey( "RuntimeLib" ),RTL_TEXTENCODING_UTF8);
-        if ( aJavaSystemClassPath.Len() && aJavaRuntimeLib.Len() )
-            bRet = TRUE;
-    }
-*/
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
 void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
 {
     if ( bOnlyNumeric )
     {
         const KeyCode& rKeyCode = rKEvent.GetKeyCode();
-        USHORT nGroup = rKeyCode.GetGroup();
-        USHORT nKey = rKeyCode.GetCode();
-        BOOL bValid = ( KEYGROUP_NUM == nGroup || KEYGROUP_CURSOR == nGroup ||
+        sal_uInt16 nGroup = rKeyCode.GetGroup();
+        sal_uInt16 nKey = rKeyCode.GetCode();
+        sal_Bool bValid = ( KEYGROUP_NUM == nGroup || KEYGROUP_CURSOR == nGroup ||
                         ( KEYGROUP_MISC == nGroup && ( nKey < KEY_ADD || nKey > KEY_EQUAL ) ) );
         if ( !bValid && ( rKeyCode.IsMod1() && (
              KEY_A == nKey || KEY_C == nKey || KEY_V == nKey || KEY_X == nKey || KEY_Z == nKey ) ) )
             // Erase, Copy, Paste, Select All und Undo soll funktionieren
-            bValid = TRUE;
+            bValid = sal_True;
 
         if ( bValid )
             Edit::KeyInput(rKEvent);
@@ -218,12 +172,9 @@ void SvxNoSpaceEdit::Modify()
 }
 
 /********************************************************************/
-/********************************************************************/
 /*                                                                  */
 /*  SvxProxyTabPage                                                 */
 /*                                                                  */
-/*                                                                  */
-/********************************************************************/
 /********************************************************************/
 
 SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
@@ -236,17 +187,17 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aHttpProxyFT      (this, CUI_RES( FT_HTTP_PROXY   )),
     aHttpProxyED      (this, CUI_RES( ED_HTTP_PROXY     )),
     aHttpPortFT       (this, CUI_RES( FT_HTTP_PORT      )),
-    aHttpPortED       (this, CUI_RES( ED_HTTP_PORT      ), TRUE),
+    aHttpPortED       (this, CUI_RES( ED_HTTP_PORT      ), sal_True),
 
     aHttpsProxyFT      (this, CUI_RES( FT_HTTPS_PROXY     )),
     aHttpsProxyED      (this, CUI_RES( ED_HTTPS_PROXY     )),
     aHttpsPortFT       (this, CUI_RES( FT_HTTPS_PORT      )),
-    aHttpsPortED       (this, CUI_RES( ED_HTTPS_PORT      ), TRUE),
+    aHttpsPortED       (this, CUI_RES( ED_HTTPS_PORT      ), sal_True),
 
     aFtpProxyFT       (this, CUI_RES( FT_FTP_PROXY      )),
     aFtpProxyED       (this, CUI_RES( ED_FTP_PROXY      )),
     aFtpPortFT        (this, CUI_RES( FT_FTP_PORT       )),
-    aFtpPortED        (this, CUI_RES( ED_FTP_PORT       ), TRUE),
+    aFtpPortED        (this, CUI_RES( ED_FTP_PORT       ), sal_True),
 
     aNoProxyForFT     (this, CUI_RES( FT_NOPROXYFOR     )),
     aNoProxyForED     (this, CUI_RES( ED_NOPROXYFOR     )),
@@ -306,26 +257,14 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     ArrangeControls_Impl();
 }
 
-/*-----------------12.08.96 14.55-------------------
-
---------------------------------------------------*/
-
 SvxProxyTabPage::~SvxProxyTabPage()
 {
 }
-
-/*-----------------12.08.96 14.55-------------------
-
---------------------------------------------------*/
 
 SfxTabPage* SvxProxyTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SvxProxyTabPage(pParent, rAttrSet);
 }
-
-/*-----------------02.09.04 14.55-------------------
-
---------------------------------------------------*/
 
 void SvxProxyTabPage::ReadConfigData_Impl()
 {
@@ -337,7 +276,7 @@ void SvxProxyTabPage::ReadConfigData_Impl()
 
         if( xNameAccess->getByName(aProxyModePN) >>= nIntValue )
         {
-            aProxyModeLB.SelectEntryPos( (USHORT) nIntValue );
+            aProxyModeLB.SelectEntryPos( (sal_uInt16) nIntValue );
         }
 
         if( xNameAccess->getByName(aHttpProxyPN) >>= aStringValue )
@@ -376,23 +315,19 @@ void SvxProxyTabPage::ReadConfigData_Impl()
         }
     }
 
-    catch(container::NoSuchElementException e) {
+    catch(container::NoSuchElementException &e) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: NoSuchElementException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException &e) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException e) {
+    catch(RuntimeException &e) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: RuntimeException caught" );
     }
 
 }
-
-/*-----------------02.09.04 14.55-------------------
-
---------------------------------------------------*/
 
 void SvxProxyTabPage::ReadConfigDefaults_Impl()
 {
@@ -438,24 +373,20 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
             aNoProxyForED.SetText( aStringValue );
         }
     }
-    catch(beans::UnknownPropertyException e)
+    catch(beans::UnknownPropertyException &e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException &e) {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException e)
+    catch(RuntimeException &e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
     }
 }
-
-/*-----------------02.09.04 14.55-------------------
-
---------------------------------------------------*/
 
 void SvxProxyTabPage::RestoreConfigDefaults_Impl()
 {
@@ -476,24 +407,20 @@ void SvxProxyTabPage::RestoreConfigDefaults_Impl()
         xChangesBatch->commitChanges();
     }
 
-    catch(beans::UnknownPropertyException e)
+    catch(beans::UnknownPropertyException &e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException &e) {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException e)
+    catch(RuntimeException &e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
     }
 }
-
-/*-----------------12.08.96 14.55-------------------
-
---------------------------------------------------*/
 
 void SvxProxyTabPage::Reset(const SfxItemSet&)
 {
@@ -511,101 +438,97 @@ void SvxProxyTabPage::Reset(const SfxItemSet&)
     EnableControls_Impl( aProxyModeLB.GetSelectEntryPos() == 2 );
 }
 
-/*-----------------12.08.96 16.34-------------------
-
---------------------------------------------------*/
-
-BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& )
+sal_Bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
 {
-    BOOL bModified=FALSE;
+    sal_Bool bModified=sal_False;
 
     try {
         Reference< beans::XPropertySet > xPropertySet(m_xConfigurationUpdateAccess, UNO_QUERY_THROW );
 
-        USHORT nSelPos = aProxyModeLB.GetSelectEntryPos();
+        sal_uInt16 nSelPos = aProxyModeLB.GetSelectEntryPos();
         if(aProxyModeLB.GetSavedValue() != nSelPos)
         {
             if( nSelPos == 1 )
             {
                 RestoreConfigDefaults_Impl();
-                return TRUE;
+                return sal_True;
             }
 
             xPropertySet->setPropertyValue(aProxyModePN,
                 makeAny((sal_Int32) nSelPos));
-            bModified = TRUE;
+            bModified = sal_True;
         }
 
         if(aHttpProxyED.GetSavedValue() != aHttpProxyED.GetText())
         {
             xPropertySet->setPropertyValue( aHttpProxyPN,
                 makeAny(rtl::OUString(aHttpProxyED.GetText())));
-            bModified = TRUE;
+            bModified = sal_True;
         }
 
         if ( aHttpPortED.GetSavedValue() != aHttpPortED.GetText() )
         {
             xPropertySet->setPropertyValue( aHttpPortPN,
                 makeAny(aHttpPortED.GetText().ToInt32()));
-            bModified = TRUE;
+            bModified = sal_True;
         }
 
         if(aHttpsProxyED.GetSavedValue() != aHttpsProxyED.GetText())
         {
             xPropertySet->setPropertyValue( aHttpsProxyPN,
                 makeAny(rtl::OUString(aHttpsProxyED.GetText())));
-            bModified = TRUE;
+            bModified = sal_True;
         }
 
         if ( aHttpsPortED.GetSavedValue() != aHttpsPortED.GetText() )
         {
             xPropertySet->setPropertyValue( aHttpsPortPN,
                 makeAny(aHttpsPortED.GetText().ToInt32()));
-            bModified = TRUE;
+            bModified = sal_True;
         }
 
         if(aFtpProxyED.GetSavedValue() != aFtpProxyED.GetText())
         {
             xPropertySet->setPropertyValue( aFtpProxyPN,
                 makeAny( rtl::OUString(aFtpProxyED.GetText())));
-            bModified = TRUE;
+            bModified = sal_True;
         }
 
         if ( aFtpPortED.GetSavedValue() != aFtpPortED.GetText() )
         {
             xPropertySet->setPropertyValue( aFtpPortPN,
                 makeAny(aFtpPortED.GetText().ToInt32()));
-            bModified = TRUE;
+            bModified = sal_True;
         }
 
         if ( aNoProxyForED.GetSavedValue() != aNoProxyForED.GetText() )
         {
             xPropertySet->setPropertyValue( aNoProxyDescPN,
                 makeAny( rtl::OUString(aNoProxyForED.GetText())));
-            bModified = TRUE;
+            bModified = sal_True;
         }
 
         Reference< util::XChangesBatch > xChangesBatch(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
         xChangesBatch->commitChanges();
     }
 
-    catch(com::sun::star::lang::IllegalArgumentException e) {
+    catch(com::sun::star::lang::IllegalArgumentException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: IllegalArgumentException caught" );
     }
 
-    catch(beans::UnknownPropertyException e) {
+    catch(beans::UnknownPropertyException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: UnknownPropertyException caught" );
     }
 
-    catch(beans::PropertyVetoException e) {
+    catch(beans::PropertyVetoException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: PropertyVetoException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException e) {
+    catch(RuntimeException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: RuntimeException caught" );
     }
 
@@ -614,7 +537,7 @@ BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& )
 
 void SvxProxyTabPage::ArrangeControls_Impl()
 {
-    //-->Calculate dynamical width of controls, add buy wuy for i71445 Time: 2007.02.27
+    // calculate dynamic width of controls, to not cut-off translated strings #i71445#
     long nWidth = aProxyModeFT.GetCtrlTextWidth( aProxyModeFT.GetText() );
     long nTemp = aHttpProxyFT.GetCtrlTextWidth( aHttpProxyFT.GetText() );
     if ( nTemp > nWidth )
@@ -660,13 +583,9 @@ void SvxProxyTabPage::ArrangeControls_Impl()
         aNewPos.Y() = aNoProxyForED.GetPosPixel().Y();
         aNoProxyForED.SetPosSizePixel( aNewPos, aNewSize );
     }
-    //<--End buy wuy for i71445 Time: 2007.02.27
 }
 
-/*-----------------12.08.96 13.38-------------------
-
---------------------------------------------------*/
-void SvxProxyTabPage::EnableControls_Impl(BOOL bEnable)
+void SvxProxyTabPage::EnableControls_Impl(sal_Bool bEnable)
 {
     aHttpProxyFT.Enable(bEnable);
     aHttpProxyED.Enable(bEnable);
@@ -692,7 +611,7 @@ void SvxProxyTabPage::EnableControls_Impl(BOOL bEnable)
 
 IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
 {
-    USHORT nPos = pBox->GetSelectEntryPos();
+    sal_uInt16 nPos = pBox->GetSelectEntryPos();
 
     // Restore original system values
     if( nPos == 1 )
@@ -717,12 +636,9 @@ IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 
 
 /********************************************************************/
-/********************************************************************/
 /*                                                                  */
 /*  SvxSearchTabPage                                                */
 /*                                                                  */
-/*                                                                  */
-/********************************************************************/
 /********************************************************************/
 
 SvxSearchTabPage::SvxSearchTabPage(Window* pParent, const SfxItemSet& rSet ) :
@@ -796,12 +712,12 @@ SfxTabPage* SvxSearchTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet
 
 void SvxSearchTabPage::Reset( const SfxItemSet& )
 {
-    //The two lines below are moved here from the last part of this method by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
+    //The two lines below are moved here from the last part of this method
     aChangePB.Disable();
     aAddPB.Disable();
 
     sal_uInt16 nCount = aSearchConfig.Count();
-    aSearchLB.Clear();  //add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
+    aSearchLB.Clear();
     for(sal_uInt16 i = 0; i < nCount; i++)
     {
         const SvxSearchEngineData& rData = aSearchConfig.GetData(i);
@@ -819,11 +735,11 @@ void SvxSearchTabPage::Reset( const SfxItemSet& )
 
 // -----------------------------------------------------------------------
 
-BOOL SvxSearchTabPage::FillItemSet( SfxItemSet&  )
+sal_Bool SvxSearchTabPage::FillItemSet( SfxItemSet&  )
 {
     if(aSearchConfig.IsModified())
         aSearchConfig.Commit();
-    return TRUE;
+    return sal_True;
 }
 /*--------------------------------------------------------------------*/
 
@@ -835,7 +751,6 @@ void SvxSearchTabPage::ActivatePage( const SfxItemSet&  )
 
 int SvxSearchTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    //Modified by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     if(!ConfirmLeave(String()))
         return KEEP_PAGE;
 
@@ -846,22 +761,21 @@ int SvxSearchTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 // -----------------------------------------------------------------------
 
-//add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
-BOOL SvxSearchTabPage::ConfirmLeave( const String& rStringSelection)
+sal_Bool SvxSearchTabPage::ConfirmLeave( const String& rStringSelection)
 {
     if(aChangePB.IsEnabled())
     {
         QueryBox aQuery(this, WB_YES_NO_CANCEL|WB_DEF_YES, sModifyMsg);
-        USHORT nRet = aQuery.Execute();
+        sal_uInt16 nRet = aQuery.Execute();
         if(RET_CANCEL == nRet)
         {
             if(rStringSelection.Len())
                 aSearchLB.SelectEntry(sLastSelectedEntry);
-            return FALSE;
+            return sal_False;
         }
         else if(RET_YES == nRet)
         {
-            USHORT nEntryPos = aSearchLB.GetEntryPos( aSearchNameED.GetText() );
+            sal_uInt16 nEntryPos = aSearchLB.GetEntryPos( aSearchNameED.GetText() );
             if ( nEntryPos != LISTBOX_ENTRY_NOTFOUND  )
                 aSearchLB.SelectEntryPos(nEntryPos);
             else
@@ -872,19 +786,19 @@ BOOL SvxSearchTabPage::ConfirmLeave( const String& rStringSelection)
         }
         else if(RET_NO == nRet)
         {
-            aChangePB.Enable(FALSE);
-            aAddPB.Enable(FALSE);
+            aChangePB.Enable(sal_False);
+            aAddPB.Enable(sal_False);
             SearchEntryHdl_Impl(&aSearchLB);
         }
     }
     if(aAddPB.IsEnabled())
     {
         QueryBox aQuery(this, WB_YES_NO_CANCEL|WB_DEF_YES, sModifyMsg);
-        USHORT nRet = aQuery.Execute();
+        sal_uInt16 nRet = aQuery.Execute();
         if(RET_CANCEL == nRet)
         {
             aSearchLB.SetNoSelection();
-            return FALSE;
+            return sal_False;
         }
         else if(RET_YES == nRet)
         {
@@ -895,13 +809,13 @@ BOOL SvxSearchTabPage::ConfirmLeave( const String& rStringSelection)
         }
         else if(RET_NO == nRet)
         {
-            aAddPB.Enable(FALSE);
-            aChangePB.Enable(FALSE);
+            aAddPB.Enable(sal_False);
+            aChangePB.Enable(sal_False);
             NewSearchHdl_Impl(0);
         }
 
     }
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -953,14 +867,13 @@ void SvxSearchTabPage::InitControls_Impl()
 
 IMPL_LINK( SvxSearchTabPage, NewSearchHdl_Impl, PushButton *, EMPTYARG )
 {
-    //The 3 lines below is modified by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
     SearchEntryHdl_Impl(&aSearchLB);
     if(aChangePB.IsEnabled() || aAddPB.IsEnabled())
         return 0;
     aSearchNameED.SetText( String() );
     aSearchLB.SetNoSelection();
     aCurrentSrchData = SvxSearchEngineData();
-    aAndRB.Check( TRUE );
+    aAndRB.Check( sal_True );
     SearchEntryHdl_Impl( &aSearchLB );
     SearchPartHdl_Impl( &aAndRB );
     return 0;
@@ -970,9 +883,8 @@ IMPL_LINK( SvxSearchTabPage, NewSearchHdl_Impl, PushButton *, EMPTYARG )
 
 IMPL_LINK( SvxSearchTabPage, AddSearchHdl_Impl, PushButton *, EMPTYARG )
 {
-    //The following two lines is added by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
-    aAddPB.Enable(FALSE);
-    aChangePB.Enable(FALSE);
+    aAddPB.Enable(sal_False);
+    aChangePB.Enable(sal_False);
     aCurrentSrchData.sEngineName = aSearchNameED.GetText();
     aSearchConfig.SetData(aCurrentSrchData);
     aSearchLB.InsertEntry( aCurrentSrchData.sEngineName );
@@ -985,10 +897,9 @@ IMPL_LINK( SvxSearchTabPage, AddSearchHdl_Impl, PushButton *, EMPTYARG )
 
 IMPL_LINK( SvxSearchTabPage, ChangeSearchHdl_Impl, PushButton *, EMPTYARG )
 {
-    //The following two lines is added by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
-    aChangePB.Enable(FALSE);
-    aAddPB.Enable(FALSE);
-    USHORT nPos = aSearchLB.GetSelectEntryPos();
+    aChangePB.Enable(sal_False);
+    aAddPB.Enable(sal_False);
+    sal_uInt16 nPos = aSearchLB.GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         String sEngine = aSearchLB.GetSelectEntry();
@@ -999,7 +910,7 @@ IMPL_LINK( SvxSearchTabPage, ChangeSearchHdl_Impl, PushButton *, EMPTYARG )
     }
     else
     {
-        SetUpdateMode(FALSE);
+        SetUpdateMode(sal_False);
         String sEntry = aSearchNameED.GetText();
         // im AddHdl wird sLastSelectedEntry umgesetzt
         String sTemp(sLastSelectedEntry);
@@ -1008,7 +919,7 @@ IMPL_LINK( SvxSearchTabPage, ChangeSearchHdl_Impl, PushButton *, EMPTYARG )
         DeleteSearchHdl_Impl(0);
         aSearchLB.SelectEntry(sEntry);
         SearchEntryHdl_Impl(&aSearchLB);
-        SetUpdateMode(TRUE);
+        SetUpdateMode(sal_True);
     }
     return 0;
 }
@@ -1017,8 +928,8 @@ IMPL_LINK( SvxSearchTabPage, ChangeSearchHdl_Impl, PushButton *, EMPTYARG )
 
 IMPL_LINK( SvxSearchTabPage, DeleteSearchHdl_Impl, PushButton *, EMPTYARG)
 {
-    aChangePB.Enable(FALSE);     //add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
-    USHORT nPos = aSearchLB.GetSelectEntryPos();
+    aChangePB.Enable(sal_False);
+    sal_uInt16 nPos = aSearchLB.GetSelectEntryPos();
     DBG_ASSERT(nPos != LISTBOX_ENTRY_NOTFOUND, "kein Eintrag selektiert!");
     aSearchConfig.RemoveData(aSearchLB.GetSelectEntry());
     aSearchLB.RemoveEntry(nPos);
@@ -1031,11 +942,10 @@ IMPL_LINK( SvxSearchTabPage, DeleteSearchHdl_Impl, PushButton *, EMPTYARG)
 
 IMPL_LINK( SvxSearchTabPage, SearchEntryHdl_Impl, ListBox*, pBox )
 {
-    USHORT nEntryPos = pBox->GetSelectEntryPos();
+    sal_uInt16 nEntryPos = pBox->GetSelectEntryPos();
     if ( nEntryPos != LISTBOX_ENTRY_NOTFOUND )
     {
         String sSelection(pBox->GetSelectEntry());
-        //Modified by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
         if(!ConfirmLeave(sSelection))
             return 0;
 
@@ -1052,18 +962,18 @@ IMPL_LINK( SvxSearchTabPage, SearchEntryHdl_Impl, ListBox*, pBox )
             aSeparatorED.SetText( bAnd ? pData->sAndSeparator : bOr ? pData->sOrSeparator : pData->sExactSeparator);
             aPostFixED.SetText(bAnd ? pData->sAndSuffix : bOr ? pData->sOrSuffix : pData->sExactSuffix );
             sal_Int32 nCase = bAnd ? pData->nAndCaseMatch : bOr ? pData->nOrCaseMatch : pData->nExactCaseMatch;
-            aCaseED.SelectEntryPos( (USHORT)nCase );
+            aCaseED.SelectEntryPos( (sal_uInt16)nCase );
             aCurrentSrchData = *pData;
         }
         aDeletePB.Enable();
     }
     else
     {
-        aDeletePB.Enable(FALSE);
+        aDeletePB.Enable(sal_False);
         sLastSelectedEntry.Erase();
     }
-    aChangePB.Enable(FALSE);
-    aAddPB.Enable(FALSE);
+    aChangePB.Enable(sal_False);
+    aAddPB.Enable(sal_False);
     return 0;
 }
 
@@ -1073,11 +983,11 @@ IMPL_LINK( SvxSearchTabPage, SearchModifyHdl_Impl, SvxNoSpaceEdit*, pEdit )
 {
     if ( pEdit == &aSearchNameED )
     {
-        BOOL bTextLen = ( 0 != pEdit->GetText().Len() );
-        BOOL bFound = FALSE;
+        sal_Bool bTextLen = ( 0 != pEdit->GetText().Len() );
+        sal_Bool bFound = sal_False;
         if ( bTextLen )
         {
-            USHORT nEntryPos = aSearchLB.GetEntryPos( pEdit->GetText() );
+            sal_uInt16 nEntryPos = aSearchLB.GetEntryPos( pEdit->GetText() );
             bFound = ( nEntryPos != LISTBOX_ENTRY_NOTFOUND );
             if ( bFound )
                 aSearchLB.SelectEntryPos(nEntryPos);
@@ -1129,156 +1039,16 @@ IMPL_LINK( SvxSearchTabPage, SearchPartHdl_Impl, RadioButton *, EMPTYARG )
     aSeparatorED.SetText( bAnd ? aCurrentSrchData.sAndSeparator : bOr ? aCurrentSrchData.sOrSeparator : aCurrentSrchData.sExactSeparator);
     aPostFixED.SetText(bAnd ? aCurrentSrchData.sAndSuffix : bOr ? aCurrentSrchData.sOrSuffix : aCurrentSrchData.sExactSuffix );
     sal_Int32 nCase = bAnd ? aCurrentSrchData.nAndCaseMatch : bOr ? aCurrentSrchData.nOrCaseMatch : aCurrentSrchData.nExactCaseMatch;
-    aCaseED.SelectEntryPos( (USHORT)nCase );
+    aCaseED.SelectEntryPos( (sal_uInt16)nCase );
     return 0;
-}
-
-// -----------------------------------------------------------------------
-
-/********************************************************************/
-/********************************************************************/
-/*                                                                  */
-/*  SvxOtherTabPage                                                 */
-/*                                                                  */
-/********************************************************************/
-/********************************************************************/
-
-/*-----------------15.05.97 09:51-------------------
-
---------------------------------------------------*/
-/*
-SvxPatternField::SvxPatternField( Window* pParent, const ResId& rResId ) :
-
-    PatternField( pParent, rResId ),
-
-    sMsg233 ( ResId( ST_MSG_233 ) ),
-    sMsg255 ( ResId( ST_MSG_255 ) )
-
-{
-    FreeResource();
-    SelectFixedFont();
-} */
-
-/*-----------------15.05.97 09:51-------------------
-
---------------------------------------------------*/
-
-/*void SvxPatternField::KeyInput( const KeyEvent& rKEvt )
-{
-    PatternField::KeyInput( rKEvt );
-    BOOL bDelete = ( rKEvt.GetKeyCode().GetCode() == KEY_DELETE );
-    String sEntry( GetText() );
-    sEntry[(USHORT)3] = '.';
-    sEntry[(USHORT)7] = '.';
-    sEntry[(USHORT)11] = '.';
-    Selection aSelection( GetSelection() );
-    String sPart( sEntry.GetToken( 0, '.' ) );
-    USHORT i, nPart( sPart.EraseLeadingChars() );
-    BOOL bSet = FALSE;
-
-    if ( sPart.Len() && ( !nPart || nPart > 255 ) )
-    {
-        // der erste Part darf nicht 0 und nicht gr"osser 255 sein
-        String sMsg( sPart );
-        sMsg += ' ';
-        sMsg += sMsg233;
-        InfoBox( this, sMsg ).Execute();
-
-        if ( nPart == 0 )
-            sPart = "  1";
-        else
-            sPart = "255";
-        sEntry.SetToken( 0, '.', sPart );
-        bSet = TRUE;
-    };
-
-    for ( i = 1; i < 4; i++ )
-    {
-        // die anderen Parts d"urfen nicht gr"osser 255 sein
-        sPart = sEntry.GetToken( i, '.' );
-        nPart = sPart.EraseLeadingChars();
-
-        if ( nPart > 255 )
-        {
-            String sMsg( sPart );
-            sMsg += ' ';
-            sMsg += sMsg255;
-            InfoBox( this, sMsg ).Execute();
-
-            if ( nPart == 0 )
-                sPart = "  1";
-            else
-                sPart = "255";
-            sEntry.SetToken( i, '.', sPart );
-            bSet = TRUE;
-        };
-    }
-
-    if ( bSet )
-    {
-        SetText( sEntry );
-        SetSelection( aSelection );
-    }
-}
-*/
-// -----------------------------------------------------------------------
-#if 0
-long SvxPatternField::Notify( NotifyEvent& rNEvt )
-{
-    return PatternField::Notify( rNEvt );
-/*! long nHandled = 0;
-
-    if ( rNEvt.GetType() == EVENT_KEYUP )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        KeyInput( *pKEvt );
-        nHandled = 1;
-    }
-    return nHandled;*/
-}
-#endif
-
-// class JavaScriptDisableQueryBox_Impl --------------------------------------
-
-class JavaScriptDisableQueryBox_Impl : public ModalDialog
-{
-private:
-    FixedImage      aImage;
-    FixedText       aWarningFT;
-    CheckBox        aDisableCB;
-    OKButton        aYesBtn;
-    CancelButton    aNoBtn;
-
-public:
-    JavaScriptDisableQueryBox_Impl( Window* pParent );
-
-    BOOL        IsWarningDisabled() const { return aDisableCB.IsChecked(); }
-};
-
-JavaScriptDisableQueryBox_Impl::JavaScriptDisableQueryBox_Impl( Window* pParent ) :
-
-    ModalDialog( pParent, CUI_RES( RID_SVXDLG_OPT_JAVASCRIPT_DISABLE ) ),
-
-    aImage      ( this, CUI_RES( IMG_JSCPT_WARNING ) ),
-    aWarningFT  ( this, CUI_RES( FT_JSCPT_WARNING ) ),
-    aDisableCB  ( this, CUI_RES( CB_JSCPT_DISABLE ) ),
-    aYesBtn     ( this, CUI_RES( BTN_JSCPT_YES ) ),
-    aNoBtn      ( this, CUI_RES( BTN_JSCPT_NO ) )
-
-{
-    FreeResource();
-
-    aYesBtn.SetText( Button::GetStandardText( BUTTON_YES ) );
-    aNoBtn.SetText( Button::GetStandardText( BUTTON_NO ) );
-    aImage.SetImage( WarningBox::GetStandardImage() );
 }
 
 //#98647#----------------------------------------------
 void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
 {   // try to show tips just like as on toolbars
-    USHORT nPos=LISTBOX_ENTRY_NOTFOUND;
-    USHORT nTop = GetTopEntry();
-    USHORT nCount = GetDisplayLineCount(); // Attention: Not GetLineCount()
+    sal_uInt16 nPos=LISTBOX_ENTRY_NOTFOUND;
+    sal_uInt16 nTop = GetTopEntry();
+    sal_uInt16 nCount = GetDisplayLineCount(); // Attention: Not GetLineCount()
     Point aPt = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
     Rectangle aItemRect;
     if( nCount > 0 ) // if there're some entries, find it.
@@ -1382,37 +1152,37 @@ IMPL_LINK( SvxSecurityTabPage, SavePasswordHdl, void*, EMPTYARG )
             xMasterPasswd->removeMasterPassword();
             if ( xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
-                maMasterPasswordPB.Enable( TRUE );
-                maMasterPasswordCB.Check( TRUE );
-                maMasterPasswordCB.Enable( TRUE );
-                maMasterPasswordFI.Enable( TRUE );
-                maShowConnectionsPB.Enable( TRUE );
+                maMasterPasswordPB.Enable( sal_True );
+                maMasterPasswordCB.Check( sal_True );
+                maMasterPasswordCB.Enable( sal_True );
+                maMasterPasswordFI.Enable( sal_True );
+                maShowConnectionsPB.Enable( sal_True );
             }
             else
             {
                 xMasterPasswd->allowPersistentStoring( bOldValue );
-                maSavePasswordsCB.Check( FALSE );
+                maSavePasswordsCB.Check( sal_False );
             }
         }
         else
         {
             QueryBox aQuery( this, WB_YES_NO|WB_DEF_NO, msPasswordStoringDeactivateStr );
-            USHORT nRet = aQuery.Execute();
+            sal_uInt16 nRet = aQuery.Execute();
 
             if( RET_YES == nRet )
             {
                 xMasterPasswd->allowPersistentStoring( sal_False );
-                maMasterPasswordCB.Check( TRUE );
-                maMasterPasswordPB.Enable( FALSE );
-                maMasterPasswordCB.Enable( FALSE );
-                maMasterPasswordFI.Enable( FALSE );
-                maShowConnectionsPB.Enable( FALSE );
+                maMasterPasswordCB.Check( sal_True );
+                maMasterPasswordPB.Enable( sal_False );
+                maMasterPasswordCB.Enable( sal_False );
+                maMasterPasswordFI.Enable( sal_False );
+                maShowConnectionsPB.Enable( sal_False );
             }
             else
             {
-                maSavePasswordsCB.Check( TRUE );
-                maMasterPasswordPB.Enable( TRUE );
-                maShowConnectionsPB.Enable( TRUE );
+                maSavePasswordsCB.Check( sal_True );
+                maMasterPasswordPB.Enable( sal_True );
+                maShowConnectionsPB.Enable( sal_True );
             }
         }
     }
@@ -1455,28 +1225,28 @@ IMPL_LINK( SvxSecurityTabPage, MasterPasswordCBHdl, void*, EMPTYARG )
         {
             if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
-                maMasterPasswordPB.Enable( TRUE );
-                maMasterPasswordFI.Enable( TRUE );
+                maMasterPasswordPB.Enable( sal_True );
+                maMasterPasswordFI.Enable( sal_True );
             }
             else
             {
-                maMasterPasswordCB.Check( FALSE );
-                maMasterPasswordPB.Enable( TRUE );
-                maMasterPasswordFI.Enable( TRUE );
+                maMasterPasswordCB.Check( sal_False );
+                maMasterPasswordPB.Enable( sal_True );
+                maMasterPasswordFI.Enable( sal_True );
             }
         }
         else
         {
             if ( xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->useDefaultMasterPassword( Reference< task::XInteractionHandler >() ) )
             {
-                maMasterPasswordPB.Enable( FALSE );
-                maMasterPasswordFI.Enable( FALSE );
+                maMasterPasswordPB.Enable( sal_False );
+                maMasterPasswordFI.Enable( sal_False );
             }
             else
             {
-                maMasterPasswordCB.Check( TRUE );
-                maMasterPasswordPB.Enable( TRUE );
-                maShowConnectionsPB.Enable( TRUE );
+                maMasterPasswordCB.Check( sal_True );
+                maMasterPasswordPB.Enable( sal_True );
+                maShowConnectionsPB.Enable( sal_True );
             }
         }
     }
@@ -1591,11 +1361,11 @@ void SvxSecurityTabPage::InitControls()
         }
     }
 
-    maMasterPasswordPB.Enable( FALSE );
-    maMasterPasswordCB.Enable( FALSE );
-    maMasterPasswordCB.Check( TRUE );
-    maMasterPasswordFI.Enable( FALSE );
-    maShowConnectionsPB.Enable( FALSE );
+    maMasterPasswordPB.Enable( sal_False );
+    maMasterPasswordCB.Enable( sal_False );
+    maMasterPasswordCB.Check( sal_True );
+    maMasterPasswordFI.Enable( sal_False );
+    maShowConnectionsPB.Enable( sal_False );
 
     // initialize the password saving checkbox
     try
@@ -1607,24 +1377,24 @@ void SvxSecurityTabPage::InitControls()
 
         if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
-            maMasterPasswordCB.Enable( TRUE );
-            maShowConnectionsPB.Enable( TRUE );
-            maSavePasswordsCB.Check( TRUE );
+            maMasterPasswordCB.Enable( sal_True );
+            maShowConnectionsPB.Enable( sal_True );
+            maSavePasswordsCB.Check( sal_True );
 
             Reference< task::XMasterPasswordHandling2 > xMasterPasswd2( xMasterPasswd, UNO_QUERY );
             if ( xMasterPasswd2.is() && xMasterPasswd2->isDefaultMasterPasswordUsed() )
-                maMasterPasswordCB.Check( FALSE );
+                maMasterPasswordCB.Check( sal_False );
             else
             {
-                maMasterPasswordPB.Enable( TRUE );
-                maMasterPasswordCB.Check( TRUE );
-                maMasterPasswordFI.Enable( TRUE );
+                maMasterPasswordPB.Enable( sal_True );
+                maMasterPasswordCB.Check( sal_True );
+                maMasterPasswordFI.Enable( sal_True );
             }
         }
     }
     catch( Exception& )
     {
-        maSavePasswordsCB.Enable( FALSE );
+        maSavePasswordsCB.Enable( sal_False );
     }
 
 
@@ -1648,25 +1418,6 @@ int SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 namespace
 {
-/*    bool Enable( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, Control& _rCtrl, FixedImage& _rImg )
-    {
-        bool    b = _rOpt.IsOptionEnabled( _eOpt );
-        _rCtrl.Enable( b );
-        _Img.Show( !b );
-        return b;
-    }
-*/
-    bool EnableAndSet( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt,
-                                                        CheckBox& _rCtrl, FixedImage& _rImg )
-    {
-//        bool    b = Enable( _rOpt, _eOpt, _rCtrl, _rImg );
-        bool    b = _rOpt.IsOptionEnabled( _eOpt );
-        _rCtrl.Enable( b );
-        _rImg.Show( !b );
-        _rCtrl.Check( _rOpt.IsOptionSet( _eOpt ) );
-        return b;
-    }
-
     bool CheckAndSave( SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, const bool _bIsChecked, bool& _rModfied )
     {
         bool bModified = false;
@@ -1684,7 +1435,7 @@ namespace
     }
 }
 
-BOOL SvxSecurityTabPage::FillItemSet( SfxItemSet& )
+sal_Bool SvxSecurityTabPage::FillItemSet( SfxItemSet& )
 {
     bool bModified = false;
 
@@ -1712,7 +1463,6 @@ void SvxSecurityTabPage::Reset( const SfxItemSet& )
     }
 }
 
-//added by jmeng begin
 MozPluginTabPage::MozPluginTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_INET_MOZPLUGIN ), rSet ),
     aMSWordGB       ( this, CUI_RES( GB_MOZPLUGIN       ) ),
@@ -1730,10 +1480,10 @@ SfxTabPage* MozPluginTabPage::Create( Window* pParent,
 {
     return new MozPluginTabPage( pParent, rAttrSet );
 }
-BOOL MozPluginTabPage::FillItemSet( SfxItemSet& )
+sal_Bool MozPluginTabPage::FillItemSet( SfxItemSet& )
 {
-    BOOL hasInstall = isInstalled();
-    BOOL hasChecked = aWBasicCodeCB.IsChecked();
+    sal_Bool hasInstall = isInstalled();
+    sal_Bool hasChecked = aWBasicCodeCB.IsChecked();
     if(hasInstall && (!hasChecked)){
         //try to uninstall
         uninstallPlugin();
@@ -1745,7 +1495,7 @@ BOOL MozPluginTabPage::FillItemSet( SfxItemSet& )
     else{
         // do nothing
     }
-    return TRUE;
+    return sal_True;
 }
 void MozPluginTabPage::Reset( const SfxItemSet& )
 {
@@ -1770,14 +1520,13 @@ inline bool getDllURL(rtl::OString * path)
         return false;
     }
     dirPath = dirPath.copy(0, dirPath.lastIndexOf('/'));
-//    osl::FileBase::getAbsoluteFileURL(dirPath, libPath, dllPath);
     ::rtl::OUString sysDirPath;
     osl::FileBase::getSystemPathFromFileURL(dirPath, sysDirPath);
     *path = OUStringToOString(sysDirPath, RTL_TEXTENCODING_ASCII_US);
     return true;
 }
 
-BOOL MozPluginTabPage::isInstalled()
+sal_Bool MozPluginTabPage::isInstalled()
 {
 #ifdef UNIX
     // get the real file referred by .so lnk file
@@ -1813,7 +1562,7 @@ BOOL MozPluginTabPage::isInstalled()
 #endif
 #ifdef WNT
     // get the value from registry
-        BOOL ret = true;
+        sal_Bool ret = true;
     ::rtl::OString tempString;
     char realFilePath[NPP_PATH_MAX] = {0};
     if (!getDllURL(&tempString)){
@@ -1828,7 +1577,7 @@ BOOL MozPluginTabPage::isInstalled()
 #endif
 }
 
-BOOL MozPluginTabPage::installPlugin()
+sal_Bool MozPluginTabPage::installPlugin()
 {
 #ifdef UNIX
     // get the real file referred by .so lnk file
@@ -1877,7 +1626,7 @@ BOOL MozPluginTabPage::installPlugin()
 #endif
 }
 
-BOOL MozPluginTabPage::uninstallPlugin()
+sal_Bool MozPluginTabPage::uninstallPlugin()
 {
 #ifdef UNIX
     // get the real file referred by .so lnk file
@@ -1903,7 +1652,6 @@ BOOL MozPluginTabPage::uninstallPlugin()
         return false;
 #endif
 }
-//added by jmeng end
 
 /* -------------------------------------------------------------------------*/
 
@@ -2061,26 +1809,26 @@ SfxTabPage*  SvxEMailTabPage::Create( Window* pParent, const SfxItemSet& rAttrSe
 
 /* -------------------------------------------------------------------------*/
 
-BOOL SvxEMailTabPage::FillItemSet( SfxItemSet& )
+sal_Bool SvxEMailTabPage::FillItemSet( SfxItemSet& )
 {
-    BOOL bMailModified = FALSE;
+    sal_Bool bMailModified = sal_False;
     if(!pImpl->aMailConfig.bROProgram && aMailerURLED.GetSavedValue() != aMailerURLED.GetText())
     {
         pImpl->aMailConfig.sProgram = aMailerURLED.GetText();
-        bMailModified = TRUE;
+        bMailModified = sal_True;
     }
     if ( bMailModified )
         pImpl->aMailConfig.Commit();
 
-    return FALSE;
+    return sal_False;
 }
 
 /* -------------------------------------------------------------------------*/
 
 void SvxEMailTabPage::Reset( const SfxItemSet& )
 {
-    aMailerURLED.Enable(TRUE );
-    aMailerURLPB.Enable(TRUE );
+    aMailerURLED.Enable(sal_True );
+    aMailerURLPB.Enable(sal_True );
 
     if(pImpl->aMailConfig.bROProgram)
         aMailerURLFI.Show();

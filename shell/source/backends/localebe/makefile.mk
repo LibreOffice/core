@@ -70,3 +70,11 @@ DEF1NAME=$(SHL1TARGET)
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/localebe1.component
+
+$(MISC)/localebe1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        localebe1.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt localebe1.component

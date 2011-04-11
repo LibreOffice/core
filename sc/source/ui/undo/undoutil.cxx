@@ -42,12 +42,16 @@
 #include "document.hxx"
 #include "dbcolect.hxx"
 #include "globstr.hrc"
+#include "globalnames.hxx"
 #include "global.hxx"
 
-void ScUndoUtil::MarkSimpleBlock( ScDocShell* /* pDocShell */,
+void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ )
 {
+    if ( pDocShell->IsPaintLocked() )
+        return;
+
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
@@ -56,7 +60,7 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* /* pDocShell */,
             pViewShell->SetTabNo( nStartZ );
 
         pViewShell->DoneBlockMode();
-        pViewShell->MoveCursorAbs( nStartX, nStartY, SC_FOLLOW_JUMP, FALSE, FALSE );
+        pViewShell->MoveCursorAbs( nStartX, nStartY, SC_FOLLOW_JUMP, false, false );
         pViewShell->InitOwnBlockMode();
         pViewShell->GetViewData()->GetMarkData().
                 SetMarkArea( ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ) );
@@ -90,26 +94,23 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
 
     if (!pRet)
     {
-        BOOL bWasTemp = FALSE;
+        sal_Bool bWasTemp = false;
         if ( pUndoData )
         {
             String aName;
             pUndoData->GetName( aName );
-            if ( aName == ScGlobal::GetRscString( STR_DB_NONAME ) )
-                bWasTemp = TRUE;
+            if ( rtl::OUString(aName) == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME) ) )
+                bWasTemp = sal_True;
         }
         DBG_ASSERT(bWasTemp, "Undo: didn't find database range");
-
-        USHORT nIndex;
-        ScDBCollection* pColl = pDoc->GetDBCollection();
-        if (pColl->SearchName( ScGlobal::GetRscString( STR_DB_NONAME ), nIndex ))
-            pRet = (*pColl)[nIndex];
-        else
+        (void)bWasTemp;
+        pRet = pDoc->GetAnonymousDBData(nTab);
+        if (!pRet)
         {
-            pRet = new ScDBData( ScGlobal::GetRscString( STR_DB_NONAME ), nTab,
-                                nCol1,nRow1, nCol2,nRow2, TRUE,
+            pRet = new ScDBData( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME)), nTab,
+                                nCol1,nRow1, nCol2,nRow2, sal_True,
                                 pDoc->HasColHeader( nCol1,nRow1,nCol2,nRow2,nTab ) );
-            pColl->Insert( pRet );
+            pDoc->SetAnonymousDBData(nTab,pRet);
         }
     }
 

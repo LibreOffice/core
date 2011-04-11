@@ -89,7 +89,7 @@ void SAL_CALL ORadioButtonControl::createPeer(const Reference<starawt::XToolkit>
     // (formerly this switch-off was done in the toolkit - but the correct place is here ...)
 //  Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
 //  if (xVclWindowPeer.is())
-//      xVclWindowPeer->setProperty(::rtl::OUString::createFromAscii("AutoToggle"), ::cppu::bool2any(sal_False));
+//      xVclWindowPeer->setProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoToggle")), ::cppu::bool2any(sal_False));
     // new order: do _not_ switch off the auto toggle because:
     // * today, it is not necessary anymore to handle the toggling ourself (everything works fine without it)
     // * without auto toggle, the AccessibleEvents as fired by the radio buttons are
@@ -329,7 +329,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
     ::osl::MutexGuard aGuard(m_aMutex);
 
     // Version
-    UINT16 nVersion = _rxInStream->readShort();
+    sal_uInt16 nVersion = _rxInStream->readShort();
 
     ::rtl::OUString sReferenceValue;
     sal_Int16 nDefaultChecked( 0 );
@@ -351,7 +351,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
             readCommonProperties(_rxInStream);
             break;
         default :
-            DBG_ERROR("ORadioButtonModel::read : unknown version !");
+            OSL_FAIL("ORadioButtonModel::read : unknown version !");
             defaultCommonProperties();
             break;
     }
@@ -425,7 +425,7 @@ sal_Bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
         }
         catch(Exception&)
         {
-            DBG_ERROR("ORadioButtonModel::commitControlValueToDbColumn: could not commit !");
+            OSL_FAIL("ORadioButtonModel::commitControlValueToDbColumn: could not commit !");
         }
     }
     return sal_True;

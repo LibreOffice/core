@@ -66,6 +66,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include "UITools.hxx"
+#include <osl/diagnose.h>
 
 #include <boost/optional.hpp>
 
@@ -141,7 +142,7 @@ bool AddTableDialogContext::allowAddition() const
 // -----------------------------------------------------------------------------
 void AddTableDialogContext::addTableWindow( const String& _rQualifiedTableName, const String& _rAliasName )
 {
-    getTableView()->AddTabWin( _rQualifiedTableName, _rAliasName, TRUE );
+    getTableView()->AddTabWin( _rQualifiedTableName, _rAliasName, sal_True );
 }
 
 // -----------------------------------------------------------------------------
@@ -307,7 +308,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
 
             if ( m_pAddTableDialog->IsVisible() )
             {
-                m_pAddTableDialog->Show( FALSE );
+                m_pAddTableDialog->Show( sal_False );
                 getView()->GrabFocus();
             }
             else
@@ -316,7 +317,7 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
                     WaitObject aWaitCursor( getView() );
                     m_pAddTableDialog->Update();
                 }
-                m_pAddTableDialog->Show( TRUE );
+                m_pAddTableDialog->Show( sal_True );
                 ::dbaui::notifySystemWindow(getView(),m_pAddTableDialog,::comphelper::mem_fun(&TaskPaneList::AddWindow));
             }
             break;
@@ -334,7 +335,7 @@ void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabW
     // Wenn die TabWins ein SetData haetten, koennte ich mir das sparen ... haben sie aber nicht, ausserdem muesste ich dann immer
     // noch Informationen, die sich eigentlich nicht geaendert haben, auch neu setzen.
     // Also loesche ich die TabWinDatas nicht, sondern aktualisiere sie nur.
-    DBG_ASSERT(m_vTableData.size() == pTabWinList->size(),
+    OSL_ENSURE(m_vTableData.size() == pTabWinList->size(),
         "OJoinController::SaveTabWinsPosSize : inkonsistenter Zustand : sollte genausviel TabWinDatas haben wie TabWins !");
 
     OJoinTableView::OTableWindowMap::iterator aIter = pTabWinList->begin();
@@ -444,10 +445,10 @@ void OJoinController::saveTableWindows( ::comphelper::NamedValueCollection& o_rV
             aWindowData.put( "ComposedName", (*aIter)->GetComposedName() );
             aWindowData.put( "TableName", (*aIter)->GetTableName() );
             aWindowData.put( "WindowName", (*aIter)->GetWinName() );
-            aWindowData.put( "WindowTop", (*aIter)->GetPosition().Y() );
-            aWindowData.put( "WindowLeft", (*aIter)->GetPosition().X() );
-            aWindowData.put( "WindowWidth", (*aIter)->GetSize().Width() );
-            aWindowData.put( "WindowHeight", (*aIter)->GetSize().Height() );
+            aWindowData.put( "WindowTop", static_cast<sal_Int32>((*aIter)->GetPosition().Y()) );
+            aWindowData.put( "WindowLeft", static_cast<sal_Int32>((*aIter)->GetPosition().X()) );
+            aWindowData.put( "WindowWidth", static_cast<sal_Int32>((*aIter)->GetSize().Width()) );
+            aWindowData.put( "WindowHeight", static_cast<sal_Int32>((*aIter)->GetSize().Height()) );
             aWindowData.put( "ShowAll", (*aIter)->IsShowAll() );
 
             const ::rtl::OUString sTableName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Table" ) ) + ::rtl::OUString::valueOf( i ) );
@@ -463,7 +464,7 @@ TTableWindowData::value_type OJoinController::createTableWindowData(const ::rtl:
     OJoinDesignView* pView = getJoinView();
     if( pView )
         return pView->getTableView()->createTableWindowData(_sComposedName,_sTableName,_sWindowName);
-    OSL_ENSURE(0,"We should never ever reach this point!");
+    OSL_FAIL("We should never ever reach this point!");
 
     return TTableWindowData::value_type();
 }

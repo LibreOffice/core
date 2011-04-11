@@ -3,12 +3,6 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: hittestprimitive3d.cxx,v $
- *
- *  $Revision: 1.1.2.1 $
- *
- *  last change: $Author: aw $ $Date: 2008/09/25 17:12:14 $
- *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *

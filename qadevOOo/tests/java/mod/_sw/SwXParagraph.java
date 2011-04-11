@@ -213,13 +213,13 @@ public class SwXParagraph extends TestCase {
             new Type(XInterface.class),oEnum2.nextElement());
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             e.printStackTrace(log);
-            log.println("Error: exception occured...");
+            log.println("Error: exception occurred...");
         } catch ( com.sun.star.container.NoSuchElementException e ) {
             e.printStackTrace(log);
-            log.println("Error: exception occured...");
+            log.println("Error: exception occurred...");
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
             e.printStackTrace(log);
-            log.println("Error: exception occured...");
+            log.println("Error: exception occurred...");
         }
 
         try {
@@ -230,19 +230,19 @@ public class SwXParagraph extends TestCase {
             paraP.setPropertyValue("NumberingStyleName","Numbering 4");
             nRules = paraP.getPropertyValue("NumberingRules");
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error, exception occured...");
+            log.println("Error, exception occurred...");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get Paragraph", e );
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error, exception occured...");
+            log.println("Error, exception occurred...");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get Paragraph", e );
         } catch ( com.sun.star.beans.UnknownPropertyException e ) {
-            log.println("Error, exception occured...");
+            log.println("Error, exception occurred...");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get Paragraph", e );
         } catch ( com.sun.star.beans.PropertyVetoException e ) {
-            log.println("Error, exception occured...");
+            log.println("Error, exception occurred...");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get Paragraph", e );
         }
@@ -252,7 +252,7 @@ public class SwXParagraph extends TestCase {
             oObj = (XInterface) AnyConverter.toObject(
             new Type(XInterface.class),oEnum.nextElement());
         } catch ( Exception e) {
-            log.println("Error, exception occured...");
+            log.println("Error, exception occurred...");
             e.printStackTrace(log);
             throw new StatusException( "Couldn't get Paragraph", e );
         }

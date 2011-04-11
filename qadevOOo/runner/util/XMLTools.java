@@ -355,7 +355,7 @@ public class XMLTools {
         }
 
         /**
-        * Prints error message and all tags where error occured inside.
+        * Prints error message and all tags where error occurred inside.
         * Also prints "Tag trace" in case if the full XML data isn't
         * printed.
         */

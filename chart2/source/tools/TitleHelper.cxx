@@ -93,7 +93,7 @@ uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
 
         case TitleHelper::MAIN_TITLE:
         default:
-            OSL_ENSURE( false, "Unsupported Title-Type requested" );
+            OSL_FAIL( "Unsupported Title-Type requested" );
             break;
     }
 
@@ -125,7 +125,7 @@ uno::Reference< XTitled > lcl_getTitleParent( TitleHelper::eTitleType nTitleInde
             xResult.set( lcl_getTitleParentFromDiagram( nTitleIndex, xDiagram ));
             break;
         default:
-            OSL_ENSURE( false, "Unsupported Title-Type requested" );
+            OSL_FAIL( "Unsupported Title-Type requested" );
             break;
     }
 
@@ -229,12 +229,14 @@ uno::Reference< XTitle > TitleHelper::createTitle(
                     Reference< beans::XPropertySet > xTitleProps( xTitle, uno::UNO_QUERY );
                     if( xTitleProps.is() )
                     {
-                        double fNewAngleDegree = 90.0;
                         if( (!bIsVertical && eTitleType == TitleHelper::Y_AXIS_TITLE)
                             || (bIsVertical && eTitleType == TitleHelper::X_AXIS_TITLE)
                             || (!bIsVertical && eTitleType == TitleHelper::SECONDARY_Y_AXIS_TITLE)
                             || (bIsVertical && eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE) )
+                        {
+                            double fNewAngleDegree = 90.0;
                             xTitleProps->setPropertyValue( C2U( "TextRotation" ), uno::makeAny( fNewAngleDegree ));
+                        }
                     }
                 }
                 catch( uno::Exception & ex )

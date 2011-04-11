@@ -46,19 +46,19 @@ public:
             using Container::GetObject;
             using Container::GetPos;
 
-            Queue( USHORT _nInitSize = 16, USHORT _nReSize = 16 ) :
+            Queue( sal_uInt16 _nInitSize = 16, sal_uInt16 _nReSize = 16 ) :
                 Container( _nReSize, _nInitSize, _nReSize ) {}
             Queue( const Queue& rQueue ) : Container( rQueue ) {}
 
     void    Put( void* p ) { Container::Insert( p, CONTAINER_APPEND ); }
-    void*   Get()          { return Container::Remove( (ULONG)0 ); }
+    void*   Get()          { return Container::Remove( (sal_uIntPtr)0 ); }
 
     Queue&  operator =( const Queue& rQueue )
                 { Container::operator =( rQueue ); return *this; }
 
-    BOOL    operator ==( const Queue& rQueue ) const
+    sal_Bool    operator ==( const Queue& rQueue ) const
                 { return Container::operator ==( rQueue ); }
-    BOOL    operator !=( const Queue& rQueue ) const
+    sal_Bool    operator !=( const Queue& rQueue ) const
                 { return Container::operator !=( rQueue ); }
 };
 
@@ -73,8 +73,8 @@ public:                                                             \
                 using Queue::Clear;                                 \
                 using Queue::Count;                                 \
                                                                     \
-                ClassName( USHORT _nInitSize = 16,                  \
-                           USHORT _nReSize = 16 ) :                 \
+                ClassName( sal_uInt16 _nInitSize = 16,                  \
+                           sal_uInt16 _nReSize = 16 ) :                 \
                     Queue( _nInitSize, _nReSize ) {}                \
                 ClassName( const ClassName& rClassName ) :          \
                     Queue( rClassName ) {}                          \
@@ -82,12 +82,12 @@ public:                                                             \
     void        Put( Type p ) { Queue::Put( (void*)p ); }           \
     Type        Get()         { return (Type)Queue::Get(); }        \
                                                                     \
-    Type        GetObject( ULONG nIndex ) const                     \
+    Type        GetObject( sal_uIntPtr nIndex ) const                     \
                     { return (Type)Queue::GetObject( nIndex ); }    \
-    ULONG       GetPos( const Type p ) const                        \
+    sal_uIntPtr       GetPos( const Type p ) const                        \
                     { return Queue::GetPos( (const void*)p ); }     \
-    ULONG       GetPos( const Type p, ULONG nStartIndex,            \
-                        BOOL bForward = TRUE ) const                \
+    sal_uIntPtr       GetPos( const Type p, sal_uIntPtr nStartIndex,            \
+                        sal_Bool bForward = sal_True ) const                \
                     { return Queue::GetPos( (const void*)p,         \
                                             nStartIndex,            \
                                             bForward ); }           \
@@ -96,9 +96,9 @@ public:                                                             \
                     { Queue::operator =( rClassName );              \
                       return *this; }                               \
                                                                     \
-    BOOL        operator ==( const Queue& rQueue ) const            \
+    sal_Bool        operator ==( const Queue& rQueue ) const            \
                     { return Queue::operator ==( rQueue ); }        \
-    BOOL        operator !=( const Queue& rQueue ) const            \
+    sal_Bool        operator !=( const Queue& rQueue ) const            \
                     { return Queue::operator !=( rQueue ); }        \
 };
 

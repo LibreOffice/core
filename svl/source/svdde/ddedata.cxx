@@ -42,10 +42,6 @@
 
 #include <osl/thread.h>
 
-#if defined( WIN ) && defined( MSC )
-#pragma code_seg( "SVDDE_MISC_CODE" )
-#endif
-
 // --- DdeData::DdeData() ------------------------------------------
 
 DdeData::DdeData()
@@ -59,7 +55,7 @@ DdeData::DdeData()
 
 // --- DdeData::DdeData() ------------------------------------------
 
-DdeData::DdeData( const void* p, long n, ULONG f )
+DdeData::DdeData( const void* p, long n, sal_uLong f )
 {
     pImp = new DdeDataImp;
     pImp->hData = NULL;
@@ -110,12 +106,12 @@ void DdeData::Lock()
 
 // --- DdeData::GetFormat() ----------------------------------------
 
-ULONG DdeData::GetFormat() const
+sal_uLong DdeData::GetFormat() const
 {
     return pImp->nFmt;
 }
 
-void DdeData::SetFormat( ULONG nFmt )
+void DdeData::SetFormat( sal_uLong nFmt )
 {
     pImp->nFmt = nFmt;
 }
@@ -149,7 +145,7 @@ DdeData& DdeData::operator = ( const DdeData& rData )
     return *this;
 }
 
-ULONG DdeData::GetExternalFormat( ULONG nFmt )
+sal_uLong DdeData::GetExternalFormat( sal_uLong nFmt )
 {
     switch( nFmt )
     {
@@ -165,10 +161,10 @@ ULONG DdeData::GetExternalFormat( ULONG nFmt )
 
     default:
         {
-#if defined(WNT) || defined(WIN) || defined( PM2 )
+#if defined(WNT) || defined( PM2 )
             String aName( SotExchange::GetFormatName( nFmt ) );
 
-#if defined(WNT) || defined(WIN)
+#if defined(WNT)
 
             if( aName.Len() )
                 nFmt = RegisterClipboardFormat( reinterpret_cast<LPCWSTR>(aName.GetBuffer()) );
@@ -178,7 +174,7 @@ ULONG DdeData::GetExternalFormat( ULONG nFmt )
             if( aName.Len() )
             {
                 HATOMTBL hSysTable = WinQuerySystemAtomTable();
-                nFmt = (ULONG)WinAddAtom( hSysTable, (PSZ)aName.GetBuffer() );
+                nFmt = (sal_uLong)WinAddAtom( hSysTable, (PSZ)aName.GetBuffer() );
             }
 #endif
 #endif
@@ -187,7 +183,7 @@ ULONG DdeData::GetExternalFormat( ULONG nFmt )
     return nFmt;
 }
 
-ULONG DdeData::GetInternalFormat( ULONG nFmt )
+sal_uLong DdeData::GetInternalFormat( sal_uLong nFmt )
 {
     switch( nFmt )
     {
@@ -204,7 +200,7 @@ ULONG DdeData::GetInternalFormat( ULONG nFmt )
         break;
 
     default:
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
         if( nFmt >= CF_MAX )
         {
             TCHAR szName[ 256 ];

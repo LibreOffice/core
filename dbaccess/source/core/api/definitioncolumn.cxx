@@ -469,10 +469,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     if ( nId & HAS_AUTOINCREMENT_CREATION )
         ++nHaveOptionally;
 
-    const sal_Int32 nPropertyCount( nHaveAlways + nHaveOptionally );
-    Sequence< Property > aTableDescProperties( nPropertyCount );
-    Property* pDesc = aTableDescProperties.getArray();
-    sal_Int32 nPos = 0;
+    BEGIN_PROPERTY_SEQUENCE( nHaveAlways + nHaveOptionally )
 
     DECL_PROP0_BOOL( ISAUTOINCREMENT                );
     DECL_PROP0_BOOL( ISCURRENCY                     );
@@ -499,12 +496,12 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
         DECL_PROP0_BOOL( ISROWVERSION );
     }
 
-    OSL_ENSURE( nPos == nPropertyCount, "OTableColumnDescriptorWrapper::createArrayHelper: something went wrong!" );
+    END_PROPERTY_SEQUENCE()
 
     if ( !m_bIsDescriptor )
     {
-        for (   Property* prop = aTableDescProperties.getArray();
-                prop != aTableDescProperties.getArray() + aTableDescProperties.getLength();
+        for (   Property* prop = aDescriptor.getArray();
+                prop != aDescriptor.getArray() + aDescriptor.getLength();
                 ++prop
             )
         {
@@ -516,7 +513,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     Sequence< Property > aBaseProperties;
     describeProperties( aBaseProperties );
 
-    Sequence< Property > aAllProperties( ::comphelper::concatSequences( aTableDescProperties, aBaseProperties ) );
+    Sequence< Property > aAllProperties( ::comphelper::concatSequences( aDescriptor, aBaseProperties ) );
     return new ::cppu::OPropertyArrayHelper( aAllProperties, sal_False );
 }
 

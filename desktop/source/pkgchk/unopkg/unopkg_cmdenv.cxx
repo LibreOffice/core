@@ -155,7 +155,7 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
     }
     catch (RuntimeException & exc) {
         (void) exc;
-        OSL_ENSURE( 0, ::rtl::OUStringToOString(
+        OSL_FAIL( ::rtl::OUStringToOString(
                         exc.Message, osl_getThreadTextEncoding() ).getStr() );
     }
 }

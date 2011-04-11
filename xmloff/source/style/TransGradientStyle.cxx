@@ -33,7 +33,7 @@
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
@@ -63,7 +63,7 @@ enum SvXMLTokenMapAttrs
 };
 
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_GradientStyle_Enum[] =
+SvXMLEnumMapEntry const pXML_GradientStyle_Enum[] =
 {
     { XML_GRADIENTSTYLE_LINEAR,         awt::GradientStyle_LINEAR },
     { XML_GRADIENTSTYLE_AXIAL,          awt::GradientStyle_AXIAL },
@@ -107,7 +107,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
     aGradient.Border = 0;
 
     {
-        static __FAR_DATA SvXMLTokenMapEntry aTrGradientAttrTokenMap[] =
+        static SvXMLTokenMapEntry aTrGradientAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
     { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },
@@ -170,7 +170,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
                 sal_Int32 aStartTransparency;
                 SvXMLUnitConverter::convertPercent( aStartTransparency, rStrValue );
 
-                UINT8 n = sal::static_int_cast< UINT8 >(
+                sal_uInt8 n = sal::static_int_cast< sal_uInt8 >(
                     ( (100 - aStartTransparency) * 255 ) / 100 );
 
                 Color aColor( n, n, n );
@@ -182,7 +182,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
                 sal_Int32 aEndTransparency;
                 SvXMLUnitConverter::convertPercent( aEndTransparency, rStrValue );
 
-                UINT8 n = sal::static_int_cast< UINT8 >(
+                sal_uInt8 n = sal::static_int_cast< sal_uInt8 >(
                     ( (100 - aEndTransparency) * 255 ) / 100 );
 
                 Color aColor( n, n, n );
@@ -227,8 +227,6 @@ sal_Bool XMLTransGradientStyleImport::importXML(
 //-------------------------------------------------------------
 // Export
 //-------------------------------------------------------------
-
-#ifndef SVX_LIGHT
 
 XMLTransGradientStyleExport::XMLTransGradientStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
@@ -326,7 +324,5 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
 
     return bRet;
 }
-
-#endif // #ifndef SVX_LIGHT
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

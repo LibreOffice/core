@@ -111,11 +111,9 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
                     sprintf( szError, "Module: %s; rc: %d;\nReason: %s;\n"
                             "Please contact technical support and report above informations.\n\n",
                             buffer, rc, szErrorMessage );
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
                     fprintf( stderr, szError);
-#endif
-                    //OSL_TRACE(szError);
-#ifndef OSL_DEBUG_LEVEL
+#else
                     WinMessageBox(HWND_DESKTOP,HWND_DESKTOP,
                         szError, "Critical error: DosLoadModule failed",
                         0, MB_ERROR | MB_OK | MB_MOVEABLE);
@@ -154,7 +152,7 @@ osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 /*****************************************************************************/
 void SAL_CALL osl_unloadModule(oslModule Module)
 {
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
     if (!Module)
        fprintf( stderr, "osl_unloadModule NULL HANDLE.\n");
 #endif

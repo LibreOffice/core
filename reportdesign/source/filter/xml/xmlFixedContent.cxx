@@ -52,7 +52,7 @@ class OXMLCharContent : public XMLCharContext
 {
     OXMLFixedContent* m_pFixedContent;
     OXMLCharContent(const OXMLCharContent&);
-    void operator =(const OXMLCharContent&);
+    OXMLCharContent operator =(const OXMLCharContent&);
 public:
     OXMLCharContent(
             SvXMLImport& rImport,
@@ -106,7 +106,7 @@ void OXMLCharContent::InsertControlCharacter(sal_Int16   _nControl)
             m_pFixedContent->Characters(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n")));
             break;
         default:
-            OSL_ENSURE(0,"Not supported control character");
+            OSL_FAIL("Not supported control character");
             break;
     }
 }

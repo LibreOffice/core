@@ -188,7 +188,7 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
     }
     catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"OFixedLine::OFixedLine: Exception caught!");
+        OSL_FAIL("OFixedLine::OFixedLine: Exception caught!");
     }
     osl_decrementInterlockedCount( &m_refCount );
 }
@@ -198,7 +198,6 @@ OFixedLine::~OFixedLine()
     DBG_DTOR(rpt_OFixedLine,NULL);
 }
 // -----------------------------------------------------------------------------
-//IMPLEMENT_FORWARD_XINTERFACE2(OFixedLine,FixedLineBase,FixedLinePropertySet)
 IMPLEMENT_FORWARD_REFCOUNT( OFixedLine, FixedLineBase )
 // --------------------------------------------------------------------------------
 uno::Any SAL_CALL OFixedLine::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)

@@ -7,9 +7,6 @@
 *
 * OpenOffice.org - a multi-platform office productivity suite
 *
-* $RCSfile: shutdowniconw32.cxx,v $
-* $Revision: 1.48 $
-*
 * This file is part of OpenOffice.org.
 *
 * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -28,6 +25,10 @@
 * for a copy of the LGPLv3 License.
 *
 ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
 
 #ifdef WNT
 #ifdef _MSC_VER

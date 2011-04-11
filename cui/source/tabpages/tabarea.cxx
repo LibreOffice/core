@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <tools/ref.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
@@ -87,7 +84,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     mnDlgType( 0 ),
     mnPos( 0 ),
     mbAreaTP( sal_False ),
-    mbDeleteColorTable( TRUE )
+    mbDeleteColorTable( sal_True )
 {
     FreeResource();
 
@@ -243,7 +240,7 @@ short SvxAreaTabDialog::Ok()
     SavePalettes();
 
     // Es wird RET_OK zurueckgeliefert, wenn wenigstens eine
-    // TabPage in FillItemSet() TRUE zurueckliefert. Dieses
+    // TabPage in FillItemSet() sal_True zurueckliefert. Dieses
     // geschieht z.Z. standardmaessig.
     return( SfxTabDialog::Ok() );
 }
@@ -261,7 +258,7 @@ IMPL_LINK_INLINE_END( SvxAreaTabDialog, CancelHdlImpl, void *, p )
 
 // -----------------------------------------------------------------------
 
-void SvxAreaTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     switch( nId )
     {

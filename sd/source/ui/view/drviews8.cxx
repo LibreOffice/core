@@ -47,7 +47,6 @@
 #include "app.hrc"
 #include "strings.hrc"
 
-#include "misc.hxx"
 #include "fuzoom.hxx"
 #include "fudspord.hxx"
 #include "futransf.hxx"
@@ -189,7 +188,6 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_INSERT_PLUGIN:
         case SID_INSERT_SOUND:
         case SID_INSERT_VIDEO:
-        case SID_INSERT_APPLET:
         case SID_INSERT_FLOATINGFRAME:
         case SID_INSERT_MATH:
         case SID_INSERT_DIAGRAM:
@@ -206,7 +204,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_COPYOBJECTS:
         {
-            if ( mpDrawView->IsPresObjSelected(FALSE, TRUE) )
+            if ( mpDrawView->IsPresObjSelected(sal_False, sal_True) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
@@ -249,7 +247,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_ZOOM_OUT:
         case SID_ZOOM_PANNING:
         {
-            mbZoomOnPage = FALSE;
+            mbZoomOnPage = sal_False;
             SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
             // Beendet sich selbst, kein Cancel() notwendig!
             Invalidate( SID_ZOOM_TOOLBOX );
@@ -343,7 +341,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_CONNECTION_NEW_ROUTING:
         {
             SfxItemSet aDefAttr( GetPool(), SDRATTR_EDGELINE1DELTA, SDRATTR_EDGELINE3DELTA );
-            GetView()->SetAttributes( aDefAttr, TRUE ); // (ReplaceAll)
+            GetView()->SetAttributes( aDefAttr, sal_True ); // (ReplaceAll)
 
             Cancel();
             rReq.Done();
@@ -352,8 +350,6 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_TWAIN_SELECT:
         {
-            BOOL bDone = FALSE;
-
             if( mxScannerManager.is() )
             {
                 try
@@ -364,7 +360,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
                     if( aContexts.getLength() )
                     {
                         ::com::sun::star::scanner::ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
-                        bDone = mxScannerManager->configureScanner( aContext );
+                        mxScannerManager->configureScanner( aContext );
                     }
                 }
                 catch(...)
@@ -379,7 +375,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_TWAIN_TRANSFER:
         {
-            BOOL bDone = FALSE;
+            sal_Bool bDone = sal_False;
 
             if( mxScannerManager.is() )
             {
@@ -390,7 +386,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
                     if( aContexts.getLength() )
                     {
                         mxScannerManager->startScan( aContexts.getConstArray()[ 0 ], mxScannerListener );
-                        bDone = TRUE;
+                        bDone = sal_True;
                     }
                 }
                 catch( ... )
@@ -401,9 +397,9 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
             if( !bDone )
             {
 #ifndef UNX
-                const USHORT nId = STR_TWAIN_NO_SOURCE;
+                const sal_uInt16 nId = STR_TWAIN_NO_SOURCE;
 #else
-                const USHORT nId = STR_TWAIN_NO_SOURCE_UNX;
+                const sal_uInt16 nId = STR_TWAIN_NO_SOURCE_UNX;
 #endif
 
                 ::sd::Window* pWindow = GetActiveWindow();
@@ -506,7 +502,7 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
                     aPnt += Point( pPage->GetLftBorder(), pPage->GetUppBorder() );
                     Rectangle   aRect( aPnt, aBmpSize );
                     SdrGrafObj* pGrafObj = NULL;
-                    BOOL        bInsertNewObject = TRUE;
+                    sal_Bool        bInsertNewObject = sal_True;
 
                     if( GetView()->AreObjectsMarked() )
                     {
@@ -523,8 +519,8 @@ void DrawViewShell::ScannerEvent( const ::com::sun::star::lang::EventObject& )
 
                                 if( pGrafObj->IsEmptyPresObj() )
                                 {
-                                    bInsertNewObject = FALSE;
-                                    pGrafObj->SetEmptyPresObj(FALSE);
+                                    bInsertNewObject = sal_False;
+                                    pGrafObj->SetEmptyPresObj(sal_False);
                                     pGrafObj->SetOutlinerParaObject(NULL);
                                     pGrafObj->SetGraphic( Graphic( aScanBmp ) );
                                 }

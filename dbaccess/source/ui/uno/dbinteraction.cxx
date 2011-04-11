@@ -31,8 +31,8 @@
 
 #include "dbinteraction.hxx"
 #include "dbu_reghelper.hxx"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbexception.hxx>
 #include "sqlmessage.hxx"
@@ -99,7 +99,7 @@ namespace dbaui
     sal_Bool BasicInteractionHandler::impl_handle_throw( const Reference< XInteractionRequest >& i_Request )
     {
         Any aRequest( i_Request->getRequest() );
-        DBG_ASSERT(aRequest.hasValue(), "BasicInteractionHandler::handle: invalid request!");
+        OSL_ENSURE(aRequest.hasValue(), "BasicInteractionHandler::handle: invalid request!");
         if ( !aRequest.hasValue() )
             // no request -> no handling
             return sal_False;
@@ -146,12 +146,7 @@ namespace dbaui
         Reference< XInteractionSupplyParameters > xParamCallback;
         if (-1 != nParamPos)
             xParamCallback = Reference< XInteractionSupplyParameters >(_rContinuations[nParamPos], UNO_QUERY);
-        DBG_ASSERT(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
-
-        // determine the style of the dialog, dependent on the present continuation types
-        WinBits nDialogStyle = WB_OK | WB_DEF_OK;
-        if (-1 != nAbortPos)
-            nDialogStyle = WB_OK_CANCEL;
+        OSL_ENSURE(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
 
         OParameterDialog aDlg(NULL, _rParamRequest.Parameters, _rParamRequest.Connection, m_xORB);
         sal_Int16 nResult = aDlg.Execute();
@@ -208,7 +203,7 @@ namespace dbaui
             nDialogStyle = WB_RETRY_CANCEL | WB_DEF_RETRY;
         }
 
-        // excute the dialog
+        // execute the dialog
         OSQLMessageBox aDialog(NULL, _rSqlInfo, nDialogStyle);
             // TODO: need a way to specify the parent window
         sal_Int16 nResult = aDialog.Execute();
@@ -228,7 +223,7 @@ namespace dbaui
                     if ( nDisapprovePos != -1 )
                         _rContinuations[ nDisapprovePos ]->select();
                     else
-                        OSL_ENSURE( false, "BasicInteractionHandler::implHandle: no handler for NO!" );
+                        OSL_FAIL( "BasicInteractionHandler::implHandle: no handler for NO!" );
                     break;
 
                 case RET_CANCEL:
@@ -237,13 +232,13 @@ namespace dbaui
                     else if ( nDisapprovePos != -1 )
                         _rContinuations[ nDisapprovePos ]->select();
                     else
-                        OSL_ENSURE( false, "BasicInteractionHandler::implHandle: no handler for CANCEL!" );
+                        OSL_FAIL( "BasicInteractionHandler::implHandle: no handler for CANCEL!" );
                     break;
                 case RET_RETRY:
                     if ( nRetryPos != -1 )
                         _rContinuations[ nRetryPos ]->select();
                     else
-                        OSL_ENSURE( false, "BasicInteractionHandler::implHandle: where does the RETRY come from?" );
+                        OSL_FAIL( "BasicInteractionHandler::implHandle: where does the RETRY come from?" );
                     break;
             }
         }
@@ -282,12 +277,7 @@ namespace dbaui
             if (-1 != nDocuPos)
             {
                 Reference< XInteractionDocumentSave > xCallback(_rContinuations[nDocuPos], UNO_QUERY);
-                DBG_ASSERT(xCallback.is(), "BasicInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
-
-                // determine the style of the dialog, dependent on the present continuation types
-                WinBits nDialogStyle = WB_OK | WB_DEF_OK;
-                if (-1 != nAbortPos)
-                    nDialogStyle = WB_OK_CANCEL;
+                OSL_ENSURE(xCallback.is(), "BasicInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
 
                 OCollectionView aDlg(NULL,_rDocuRequest.Content,_rDocuRequest.Name,m_xORB);
                 sal_Int16 nResult = aDlg.Execute();

@@ -76,4 +76,10 @@ DEF1EXPORTFILE=	exports.dxp
 
 .INCLUDE : target.mk
 
+ALLTAR : $(MISC)/sdbc2.component
 
+$(MISC)/sdbc2.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sdbc2.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sdbc2.component

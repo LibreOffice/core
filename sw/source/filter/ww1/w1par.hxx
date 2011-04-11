@@ -36,7 +36,7 @@
 class Ww1Shell : public SwFltShell
 {
 public:
-    Ww1Shell(SwDoc&, SwPaM&, const String& rBaseURL, BOOL bNew, ULONG nFieldFlags);
+    Ww1Shell(SwDoc&, SwPaM&, const String& rBaseURL, sal_Bool bNew, sal_uLong nFieldFlags);
 };
 
 

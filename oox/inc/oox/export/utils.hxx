@@ -49,14 +49,14 @@
 
 // ---------------------------------------------------------------------------------------------
 
-static inline sal_Int64 PPTtoEMU( INT32 nPPT )
+static inline sal_Int64 PPTtoEMU( sal_Int32 nPPT )
 {
     return (sal_Int64)( (double)nPPT * 1587.5 );
 }
 
 // ---------------------------------------------------------------------------------------------
 
-static inline sal_Int64 MM100toEMU( INT32 nMM100 )
+static inline sal_Int64 MM100toEMU( sal_Int32 nMM100 )
 {
     return (sal_Int64)nMM100 * 360;
 }

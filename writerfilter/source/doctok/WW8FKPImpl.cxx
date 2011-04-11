@@ -139,7 +139,6 @@ WW8PAPFKPImpl::getProperties(const Fc & rFc) const
             }
 
             sal_uInt32 nOffsetEnd = nOffset + nCbPapx;
-            //sal_uInt32 nOffsetSprms = nOffsetIStd + 2;
 
             if (nCbPapx > 1 && nOffset + nCbPapx <= 511)
             {

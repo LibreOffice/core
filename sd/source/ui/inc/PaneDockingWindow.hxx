@@ -36,6 +36,7 @@
 #include <boost/shared_ptr.hpp>
 
 class ToolBox;
+class SplitWindow;
 
 namespace sd {
 
@@ -64,8 +65,25 @@ public:
         const ::rtl::OUString& rsTitle);
 
     virtual ~PaneDockingWindow (void);
-
     virtual void StateChanged( StateChangedType nType );
+    virtual void MouseButtonDown (const MouseEvent& rEvent);
+    /** When docked the given range is passed to the parent SplitWindow.
+    */
+    void SetValidSizeRange (const Range aValidSizeRange);
+
+    enum Orientation { HorizontalOrientation, VerticalOrientation, UnknownOrientation };
+    /** When the PaneDockingWindow is docked and managed by a split window
+        it can derive its orientation from the orientation of the split
+        window and return either HorizontalOrientation or
+        VerticalOrientation.
+        Otherwise UnknownOrientation is returned.
+    */
+    Orientation GetOrientation (void) const;
+
+    /** The current height of the title bar.
+    */
+    sal_Int32 mnTitleBarHeight;
+
 };
 
 } // end of namespace ::sd

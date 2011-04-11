@@ -99,9 +99,9 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FilePicker");
-        aRet[1] = rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.SystemFilePicker");
-        aRet[2] = rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.KDE4FilePicker");
+        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FilePicker"));
+        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFilePicker"));
+        aRet[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.KDE4FilePicker"));
         return aRet;
     }
 }
@@ -198,8 +198,8 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     // (see the KDE VCL plug), then this won't happen, but otherwise
     // simply release the SolarMutex here. The KDE file dialog does not
     // call back to the core, so this should be safe (and if it does,
-    // SolarMutex will need to be re-acquired.
-    ULONG mutexrelease = 0;
+    // SolarMutex will need to be re-acquired).
+    long mutexrelease = 0;
     if( !qApp->clipboard()->property( "useEventLoopWhenWaiting" ).toBool())
         mutexrelease = Application::ReleaseSolarMutex();
     //block and wait for user input
@@ -264,7 +264,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
         files.append(dir);
     }
 
-    for (USHORT i = 0; i < rawFiles.size(); ++i)
+    for (sal_uInt16 i = 0; i < rawFiles.size(); ++i)
     {
         // if the raw file is not the base directory (see above kde bug)
         // we add the file to list of avail files
@@ -339,8 +339,8 @@ void SAL_CALL KDE4FilePicker::appendFilterGroup( const rtl::OUString& , const un
     if (!_filter.isNull())
         _filter.append(QString("\n"));
 
-    const USHORT length = filters.getLength();
-    for (USHORT i = 0; i < length; ++i)
+    const sal_uInt16 length = filters.getLength();
+    for (sal_uInt16 i = 0; i < length; ++i)
     {
         beans::StringPair aPair = filters[i];
 
@@ -615,7 +615,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     if (args.getLength() == 0)
     {
         throw lang::IllegalArgumentException(
-                rtl::OUString::createFromAscii( "no arguments" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
                 static_cast< XFilePicker* >( this ), 1 );
     }
 
@@ -625,7 +625,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
         ( arg.getValueType() != ::getCppuType((sal_Int8*)0)))
     {
         throw lang::IllegalArgumentException(
-                rtl::OUString::createFromAscii( "invalid argument type" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "invalid argument type" )),
                 static_cast< XFilePicker* >( this ), 1 );
     }
 
@@ -697,7 +697,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
         default:
             throw lang::IllegalArgumentException(
-                    rtl::OUString::createFromAscii( "Unknown template" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
                     static_cast< XFilePicker* >( this ),
                     1 );
     }
@@ -726,7 +726,7 @@ void SAL_CALL KDE4FilePicker::disposing( const lang::EventObject &rEvent )
 rtl::OUString SAL_CALL KDE4FilePicker::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return rtl::OUString::createFromAscii( FILE_PICKER_IMPL_NAME );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_IMPL_NAME ));
 }
 
 sal_Bool SAL_CALL KDE4FilePicker::supportsService( const rtl::OUString& ServiceName )

@@ -85,7 +85,7 @@ interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
         set raises ( ::com::sun::star::lang::IllegalArgumentException );
     };
 
-    /** specfies the name of the table in the destination database.
+    /** specifies the name of the table in the destination database.
 
         <p>At initialization time, you can use this attribute to control the
         initial table name as suggested to the user.</p>

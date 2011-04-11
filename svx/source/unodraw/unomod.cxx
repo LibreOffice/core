@@ -35,24 +35,23 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/list.hxx>
 #include <svl/itemprop.hxx>
 #include <svtools/unoevent.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 
 #include <cppuhelper/implbase2.hxx>
-#include <unofill.hxx>
+#include <svx/unofill.hxx>
 #include <editeng/unonrule.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <sfx2/sfx.hrc>
-#include <unoapi.hxx>
+#include <svx/unoapi.hxx>
 
 #include <svx/svdmodel.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/svdtypes.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unopage.hxx>
@@ -80,8 +79,6 @@ using namespace ::com::sun::star;
 
 //-////////////////////////////////////////////////////////////////////
 
-#ifndef SVX_LIGHT
-
 class SvxUnoDrawPagesAccess : public ::cppu::WeakImplHelper2< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo >
 {
 private:
@@ -108,10 +105,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 };
-#endif
 //-////////////////////////////////////////////////////////////////////
 
-#ifndef SVX_LIGHT
 const SvEventDescription* ImplGetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
@@ -123,7 +118,6 @@ const SvEventDescription* ImplGetSupportedMacroItems()
 
     return aMacroDescriptionsImpl;
 }
-#endif
 
 //-////////////////////////////////////////////////////////////////////
 
@@ -193,8 +187,8 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
         sal_uInt32 nType = UHashMap::getId( rServiceSpecifier );
         if( nType != UHASHMAP_NOTFOUND )
         {
-            UINT16 nT = (UINT16)(nType & ~E3D_INVENTOR_FLAG);
-            UINT32 nI = (nType & E3D_INVENTOR_FLAG)?E3dInventor:SdrInventor;
+            sal_uInt16 nT = (sal_uInt16)(nType & ~E3D_INVENTOR_FLAG);
+            sal_uInt32 nI = (nType & E3D_INVENTOR_FLAG)?E3dInventor:SdrInventor;
 
             return uno::Reference< uno::XInterface >( (drawing::XShape*) SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI ) );
         }
@@ -247,8 +241,6 @@ uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence
     return aSeq;
 }
 
-
-#ifndef SVX_LIGHT
 
 ///
 SvxUnoDrawingModel::SvxUnoDrawingModel( SdrModel* pDoc ) throw()
@@ -325,7 +317,7 @@ void SAL_CALL SvxUnoDrawingModel::lockControllers(  )
     throw(uno::RuntimeException)
 {
     if( mpDoc )
-        mpDoc->setLock( sal_True );
+        mpDoc->setLock(true);
 }
 
 void SAL_CALL SvxUnoDrawingModel::unlockControllers(  )
@@ -333,7 +325,7 @@ void SAL_CALL SvxUnoDrawingModel::unlockControllers(  )
 {
     if( mpDoc && mpDoc->isLocked() )
     {
-        mpDoc->setLock( sal_False );
+        mpDoc->setLock(false);
     }
 }
 
@@ -751,7 +743,5 @@ com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCr
 }
 
 ///////////////////////////////////////////////////////////////////////
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

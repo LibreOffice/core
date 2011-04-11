@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <cmdid.h>
 #include "globals.hrc"
 
@@ -58,7 +57,6 @@
 #include <mmconfigitem.hxx>
 
 #include <view.hrc>
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -100,7 +98,7 @@ SwView_Impl::~SwView_Impl()
            pScanEvtLstnr->ViewDestroyed();
     if( xClipEvtLstnr.is() )
     {
-        pClipEvtLstnr->AddRemoveListener( FALSE );
+        pClipEvtLstnr->AddRemoveListener( sal_False );
         pClipEvtLstnr->ViewDestroyed();
     }
     delete pConfigItem;
@@ -127,12 +125,12 @@ SwXTextView*    SwView_Impl::GetUNOObject_Impl()
 
 void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 {
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     switch(nSlot)
     {
         case SID_TWAIN_SELECT:
         {
-            BOOL bDone = FALSE;
+            sal_Bool bDone = sal_False;
             Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
 
             if( xScanMgr.is() )
@@ -158,15 +156,13 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
             else
             {
                 rReq.Ignore();
-// KA 04.07.2002
-//              InfoBox( 0, SW_RES(MSG_SCAN_NOSOURCE) ).Execute();
             }
         }
         break;
 
         case SID_TWAIN_TRANSFER:
         {
-            BOOL bDone = FALSE;
+            sal_Bool bDone = sal_False;
 
             Reference< XScannerManager > xScanMgr = SW_MOD()->GetScannerManager();
             if( xScanMgr.is() )
@@ -179,7 +175,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
                     {
                         Reference< XEventListener > xLstner = &rListener;
                         xScanMgr->startScan( aContexts.getConstArray()[ 0 ], xLstner );
-                        bDone = TRUE;
+                        bDone = sal_True;
                     }
                 }
                 catch(...)
@@ -216,7 +212,7 @@ void SwView_Impl::AddClipboardListener()
     if(!xClipEvtLstnr.is())
     {
         xClipEvtLstnr = pClipEvtLstnr = new SwClipboardChangeListener( *pView );
-        pClipEvtLstnr->AddRemoveListener( TRUE );
+        pClipEvtLstnr->AddRemoveListener( sal_True );
     }
 }
 
@@ -269,8 +265,8 @@ SwScannerEventListener::~SwScannerEventListener()
 
 void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject) throw(uno::RuntimeException)
 {
+#if defined WNT || defined UNX
     SolarMutexGuard aGuard;
-#if defined WIN || defined WNT || defined UNX
     if( pView )
         pView->ScannerEventHdl( rEventObject );
 #endif
@@ -311,7 +307,7 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const CLIP_NMSPC::Clip
     }
 }
 
-void SwClipboardChangeListener::AddRemoveListener( BOOL bAdd )
+void SwClipboardChangeListener::AddRemoveListener( sal_Bool bAdd )
 {
     pView->AddRemoveClipboardListener( Reference< XClipboardListener >( this ), bAdd );
 }

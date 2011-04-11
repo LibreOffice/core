@@ -118,7 +118,7 @@ void ShareControlFile::OpenStream()
                 ucb::InsertCommandArgument aInsertArg;
                 aInsertArg.Data = xInput;
                 aInsertArg.ReplaceExisting = sal_False;
-                aContent.executeCommand( rtl::OUString::createFromAscii( "insert" ), uno::makeAny( aInsertArg ) );
+                aContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")), uno::makeAny( aInsertArg ) );
 
                 // try to let the file be hidden if possible
                 try {
@@ -365,7 +365,7 @@ void ShareControlFile::RemoveFile()
 
     uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
-        xFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess") ),
+        xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ),
         uno::UNO_QUERY_THROW );
     xSimpleFileAccess->kill( m_aURL );
 }

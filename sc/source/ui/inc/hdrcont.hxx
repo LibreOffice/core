@@ -51,10 +51,10 @@ private:
     SelectionEngine*    pSelEngine;
     Font                aNormFont;
     Font                aBoldFont;
-    BOOL                bBoldSet;
+    sal_Bool                bBoldSet;
 
-    USHORT          nFlags;
-    BOOL            bVertical;              // Vertikal = Zeilenheader
+    sal_uInt16          nFlags;
+    sal_Bool            bVertical;              // Vertikal = Zeilenheader
 
     long            nWidth;
     long            nSmallWidth;
@@ -64,18 +64,18 @@ private:
 
     SCCOLROW        nMarkStart;
     SCCOLROW        nMarkEnd;
-    BOOL            bMarkRange;
+    sal_Bool            bMarkRange;
 
-    BOOL            bDragging;              // Groessen aendern
+    sal_Bool            bDragging;              // Groessen aendern
     SCCOLROW        nDragNo;
     long            nDragStart;
     long            nDragPos;
-    BOOL            bDragMoved;
+    sal_Bool            bDragMoved;
 
-    BOOL            bIgnoreMove;
+    sal_Bool            bIgnoreMove;
 
     long            GetScrPos( SCCOLROW nEntryNo );
-    SCCOLROW        GetMousePos( const MouseEvent& rMEvt, BOOL& rBorder );
+    SCCOLROW        GetMousePos( const MouseEvent& rMEvt, sal_Bool& rBorder );
     bool            IsSelectionAllowed(SCCOLROW nPos) const;
     void            ShowDragHelp();
 
@@ -98,20 +98,20 @@ protected:
                     //  neue Methoden
 
     virtual SCCOLROW    GetPos() = 0;                               // aktuelle Position (Scrolling)
-    virtual USHORT  GetEntrySize( SCCOLROW nEntryNo ) = 0;      // Breite / Hoehe (Pixel)
+    virtual sal_uInt16  GetEntrySize( SCCOLROW nEntryNo ) = 0;      // Breite / Hoehe (Pixel)
     virtual String  GetEntryText( SCCOLROW nEntryNo ) = 0;
 
     virtual SCCOLROW GetHiddenCount( SCCOLROW nEntryNo );
-    virtual BOOL    IsLayoutRTL();
-    virtual BOOL    IsMirrored();
+    virtual sal_Bool    IsLayoutRTL();
+    virtual sal_Bool    IsMirrored();
 
-    virtual void    SetEntrySize( SCCOLROW nPos, USHORT nNewWidth ) = 0;
+    virtual void    SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewWidth ) = 0;
     virtual void    HideEntries( SCCOLROW nStart, SCCOLROW nEnd ) = 0;
 
-    virtual void    SetMarking( BOOL bSet );
+    virtual void    SetMarking( sal_Bool bSet );
     virtual void    SelectWindow();
-    virtual BOOL    IsDisabled();
-    virtual BOOL    ResizeAllowed();
+    virtual sal_Bool    IsDisabled();
+    virtual sal_Bool    ResizeAllowed();
     virtual String  GetDragHelp( long nVal );
 
     virtual void    DrawInvert( long nDragPos );
@@ -119,14 +119,14 @@ protected:
 
 public:
             ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEngine,
-                                SCCOLROW nNewSize, USHORT nNewFlags );
+                                SCCOLROW nNewSize, sal_uInt16 nNewFlags );
             ~ScHeaderControl();
 
-    void    SetIgnoreMove(BOOL bSet)            { bIgnoreMove = bSet; }
+    void    SetIgnoreMove(sal_Bool bSet)            { bIgnoreMove = bSet; }
 
     void    StopMarking();
 
-    void    SetMark( BOOL bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd );
+    void    SetMark( sal_Bool bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd );
 
     long    GetWidth() const                    { return nWidth; }
     long    GetSmallWidth() const               { return nSmallWidth; }

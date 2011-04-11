@@ -56,7 +56,7 @@ public:
 
     virtual void            Undo();
     virtual void            Redo();
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
     void dispose();
     virtual void ObjectInDestruction(const SdrObject& rObject);
@@ -76,7 +76,7 @@ private:
         ::sal_Int32     mnRowSpan;
         ::sal_Int32     mnColSpan;
 
-        Data() : mpProperties(0), mpOutlinerParaObject(0) {};
+        Data() : mpProperties(NULL), mpOutlinerParaObject(NULL), mfValue(0) {};
     };
 
     void setDataToCell( const Data& rData );
@@ -173,7 +173,7 @@ public:
 
     virtual void            Undo();
     virtual void            Redo();
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
 private:
     struct Data
@@ -205,7 +205,7 @@ public:
 
     virtual void            Undo();
     virtual void            Redo();
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
 private:
     struct Data

@@ -38,7 +38,7 @@
 #include "tools/gen.hxx"
 
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace psp {
 
@@ -56,9 +56,9 @@ private:
     rtl_TextEncoding    mnBaseEncoding;
     bool                mbUseFontEncoding;
 
-    typedef std::hash_map< sal_Unicode, sal_uInt8 > char_map_t;
+    typedef boost::unordered_map< sal_Unicode, sal_uInt8 > char_map_t;
     typedef std::list< char_map_t > char_list_t;
-    typedef std::hash_map< sal_uInt32, sal_uInt8 > glyph_map_t;
+    typedef boost::unordered_map< sal_uInt32, sal_uInt8 > glyph_map_t;
     typedef std::list< glyph_map_t > glyph_list_t;
 
     char_list_t     maCharList;

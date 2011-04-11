@@ -35,12 +35,9 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
-/* -----------------------------25.03.2002 10:40------------------------------
-
- ---------------------------------------------------------------------------*/
 namespace svtools {class EditableColorConfig;class EditableExtendedColorConfig;}
 class ColorConfigCtrl_Impl;
-class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
+class AbstractSvxNameDialog;
 class SvxColorOptionsTabPage : public SfxTabPage
 {
     using SfxTabPage::DeactivatePage;
@@ -53,7 +50,7 @@ class SvxColorOptionsTabPage : public SfxTabPage
 
     FixedLine               aCustomColorsFL;
 
-    BOOL                    bFillItemSetCalled;
+    sal_Bool                    bFillItemSetCalled;
 
     svtools::EditableColorConfig* pColorConfig;
     svtools::EditableExtendedColorConfig* pExtColorConfig;
@@ -70,7 +67,7 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     virtual int         DeactivatePage( SfxItemSet* pSet );

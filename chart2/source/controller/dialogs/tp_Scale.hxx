@@ -38,6 +38,8 @@
 #include <vcl/button.hxx>
 // header for MetricField
 #include <vcl/field.hxx>
+// header for class ListBox
+#include <vcl/lstbox.hxx>
 
 //.............................................................................
 namespace chart
@@ -50,7 +52,7 @@ public:
     ScaleTabPage( Window* pParent, const SfxItemSet& rInAttrs );
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );
+    virtual sal_Bool FillItemSet( SfxItemSet& rOutAttrs );
     virtual void Reset( const SfxItemSet& rInAttrs );
     using TabPage::DeactivatePage;
     virtual int DeactivatePage( SfxItemSet* pItemSet = NULL );
@@ -65,6 +67,13 @@ public:
 private:
     FixedLine           aFlScale;
 
+    CheckBox            aCbxReverse;
+
+    CheckBox            aCbxLogarithm;
+
+    FixedText           m_aTxt_AxisType;
+    ListBox             m_aLB_AxisType;
+
     FixedText           aTxtMin;
     FormattedField      aFmtFldMin;
     CheckBox            aCbxAutoMin;
@@ -73,35 +82,47 @@ private:
     FormattedField      aFmtFldMax;
     CheckBox            aCbxAutoMax;
 
+    FixedText           m_aTxt_TimeResolution;
+    ListBox             m_aLB_TimeResolution;
+    CheckBox            m_aCbx_AutoTimeResolution;
+
     FixedText           aTxtMain;
     FormattedField      aFmtFldStepMain;
+    MetricField         m_aMt_MainDateStep;
+    ListBox             m_aLB_MainTimeUnit;
     CheckBox            aCbxAutoStepMain;
 
+    FixedText           aTxtHelpCount;
     FixedText           aTxtHelp;
     MetricField         aMtStepHelp;
+    ListBox             m_aLB_HelpTimeUnit;
     CheckBox            aCbxAutoStepHelp;
 
     FixedText           aTxtOrigin;
     FormattedField      aFmtFldOrigin;
     CheckBox            aCbxAutoOrigin;
 
-    CheckBox            aCbxLogarithm;
-    CheckBox            aCbxReverse;
-
     double              fMin;
     double              fMax;
     double              fStepMain;
     sal_Int32           nStepHelp;
     double              fOrigin;
-    int                 nAxisType;
+    sal_Int32           m_nTimeResolution;
+    sal_Int32           m_nMainTimeUnit;
+    sal_Int32           m_nHelpTimeUnit;
+    int                 m_nAxisType;
+    bool                m_bAllowDateAxis;
     SvNumberFormatter*  pNumFormatter;
 
     bool                m_bShowAxisOrigin;
 
     void AdjustControlPositions();
     void EnableControls();
+    void PlaceIntervalControlsAccordingToAxisType();
 
+    DECL_LINK( SelectAxisTypeHdl, void* );
     DECL_LINK( EnableValueHdl, CheckBox* );
+    DECL_LINK( FmtFieldModifiedHdl, FormattedField* );
 
     /** shows a warning window due to an invalid input.
 
@@ -116,7 +137,7 @@ private:
 
         @return false, if nResIdMessage was 0, true otherwise
      */
-    bool ShowWarning( USHORT nResIdMessage, Edit * pControl = NULL );
+    bool ShowWarning( sal_uInt16 nResIdMessage, Control* pControl = NULL );
 };
 
 //.............................................................................

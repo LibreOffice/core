@@ -28,6 +28,7 @@
 #ifndef _FMTFLD_HXX
 #define _FMTFLD_HXX
 
+#include <list>
 #include <svl/poolitem.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/smplhint.hxx>
@@ -38,26 +39,31 @@
 class SwField;
 class SwTxtFld;
 class SwView;
+class SwFieldType;
 
-// ATT_FLD ***********************************
+// ATT_FLD
 class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBroadcaster
 {
     friend class SwTxtFld;
     friend void _InitCore();
 
     SwField *pField;
-    SwTxtFld* pTxtAttr;     // mein TextAttribut
+    SwTxtFld* pTxtAttr;
 
-    SwFmtFld();             // das default-Attibut
+    SwFmtFld(); // Default attibute.
 
-    // geschuetzter CopyCtor
+    // Protected CopyCtor.
     // @@@ copy construction allowed, but copy assignment is not? @@@
     SwFmtFld& operator=(const SwFmtFld& rFld);
+
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint );
 
 public:
     TYPEINFO();
 
-    // single argument constructors shall be explicit.
+    // Single argument constructors shall be explicit.
     explicit SwFmtFld( const SwField &rFld );
 
     // @@@ copy construction allowed, but copy assignment is not? @@@
@@ -65,17 +71,15 @@ public:
 
     virtual ~SwFmtFld();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
-    virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
 
     const SwField *GetFld() const   { return pField; }
     SwField *GetFld()               { return pField; }
 
-    // #111840#
     /**
        Sets current field.
 
@@ -88,8 +92,9 @@ public:
     const SwTxtFld *GetTxtFld() const   { return pTxtAttr; }
     SwTxtFld *GetTxtFld()               { return pTxtAttr; }
 
-    BOOL IsFldInDoc() const;
-    BOOL IsProtect() const;
+    void RegisterToFieldType( SwFieldType& );
+    sal_Bool IsFldInDoc() const;
+    sal_Bool IsProtect() const;
 };
 
 class SW_DLLPUBLIC SwFmtFldHint : public SfxHint

@@ -31,7 +31,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase2.hxx>
 
 #include <com/sun/star/util/XCloneable.hpp>
@@ -53,11 +53,11 @@ namespace pdfi
             : m_aName( i_rName ), m_aValue( i_rValue ) {}
         };
         std::vector< AttrEntry >                                    m_aAttributes;
-        std::hash_map< rtl::OUString, size_t, rtl::OUStringHash >   m_aIndexMap;
+        boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >   m_aIndexMap;
 
     public:
         SaxAttrList() {}
-        SaxAttrList( const std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >& );
+        SaxAttrList( const boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >& );
         SaxAttrList( const SaxAttrList& );
         virtual ~SaxAttrList();
 

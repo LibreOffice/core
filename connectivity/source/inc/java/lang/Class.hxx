@@ -37,12 +37,12 @@ namespace connectivity
     class java_lang_Class : public java_lang_Object
     {
     protected:
-    // statische Daten fuer die Klasse
+    // static Data for the Class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
         virtual ~java_lang_Class();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // a Constructor, that is needed for when Returning the Object is needed:
         java_lang_Class( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
         static java_lang_Class * forName( const ::rtl::OUString &_par0 );

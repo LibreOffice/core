@@ -32,39 +32,24 @@
 '\******************************************************************************
 
 testcase tGridcontrolLoad
-    dim sLocation as string
-    dim i,x,a as integer
-    dim sTemp as string
-    dim lFiles(200) as string
-    dim bTemp as boolean
-    dim iError, iOK as integer
-    
-    sLocation = "framework/optional/include/basic_gridcontrol.inc::"
+    const MACRO_NAME = "Show"
+    const FILE_NAME  = "framework/optional/input/gridcontrol.odt"
 
-    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
+    dim i as integer
+    dim a as integer
 
-    printlog "Open the test document"
-    call hFileOpen(convertPath(gTestToolPath + "framework/optional/input/gridcontrol.odt"))
-    printlog "Security dialog might come up"
-    kontext "SecurityWarning"
-    if SecurityWarning.exists(5) then
-        printlog "Allow to run macros"
-        SecurityWarning.ok
-    endif
-    call sleep 1
-    call sMakeReadOnlyDocumentEditable
-    call sleep 1
+    printlog( "Open the test document: " & FILE_NAME )
+    call hFileOpenLocally( gTestToolPath & FILE_NAME )
 
     printlog "Start the macro, that performs the test"
-    Kontext "GridControlDialogStarter"
- ' FAILS IF DOCUMENT IS READONLY....
-    ShowGridcontrol.typeKeys "<space>"
+    hExecMacro( MACRO_NAME )
+    
     Kontext "GridControlDialog"
     if GridControlDialog.exists(5) then
         for i=1 to gridcontrolcontrol.getcolumncount
-        for a=1 to gridcontrolcontrol.getrowcount
-            printlog " " + i + ":"+a+": '" + gridcontrolcontrol.getitemtype (i,a) + "' '" + gridcontrolcontrol.getitemtext (i,a) + "'"
-        next a
+            for a=1 to gridcontrolcontrol.getrowcount
+                printlog " " + i + ":"+a+": '" + gridcontrolcontrol.getitemtype (i,a) + "' '" + gridcontrolcontrol.getitemtext (i,a) + "'"
+            next a
         next i
         gridcontrolcontrol.select 5
 
@@ -76,37 +61,87 @@ testcase tGridcontrolLoad
             warnlog "No selection Event by .select"
         endif
 
-    Kontext "GridControlDialog"
+        Kontext "GridControlDialog"
         gridcontrolcontrol.typeKeys("<down>")
 
         kontext
         if active.exists(5) then
-        printlog active.gettext
-        active.ok
+            printlog active.gettext
+            active.ok
         else
-        warnlog "No selection event by .typeKeys <down>"
+            warnlog "No selection event by .typeKeys <down>"
         endif
-    Kontext "GridControlDialog"
+        Kontext "GridControlDialog"
         gridcontrolcontrol.typeKeys("<up>")
         kontext
         if active.exists(5) then
-        printlog active.gettext
-        active.ok
+            printlog active.gettext
+            active.ok
         else
-        warnlog "No selection event by .typeKeys <up>"
+            warnlog "No selection event by .typeKeys <up>"
         endif
 
-    Kontext "GridControlDialog"
+        Kontext "GridControlDialog"
         GridControlDialog.close
     else
         warnlog "Gridcontrol Dialog did not come up after pressing button"
     endif
+
+    printlog( "Test exit, cleanup" )
+    hFileCloseAll()
+    hDeleteFile( gLastWorkFile )
+endcase
+
+
+testcase tTabcontrolLoad
+    const MACRO_NAME = "ShowTab"
+    const FILE_NAME  = "framework/optional/input/gridcontrol.odt"
+
+    dim i as integer
+    dim a as integer
+
+    printlog( "Open the test document: " & FILE_NAME )
+    call hFileOpenLocally( gTestToolPath & FILE_NAME )
+
+    printlog "Start the macro, that performs the test"
+    hExecMacro( MACRO_NAME )
     
-    printlog "clean up"
-    printlog "Close the document, else an error about the navigator will be thrown"
-    if getDocumentcount > 0 then
-        call hCloseDocument()
+    Kontext "tabcontroldialog"
+    if tabcontroldialog.exists(5) then
+        if tabcontainer.getPageCount = 2 then
+            printlog "There are 2 tabs"
+        else
+            warnlog "There are NOT 2 tabs, there are: " + tabcontainer.getpagecount
+        endif
+        if tabcontainer.getPage = "tabcontrol_1" then
+            printlog "Default tab page is page 1"
+        else
+            warnlog "Default tab page is NOT page 1"
+        endif
+        tabcontainer.setPage tabcontrol_2
+        wait 1000
+        if tabcontainer.getPage = "tabcontrol_2" then
+            printlog "Switching to tab 2 works"
+        else
+            warnlog "Switching to tab 2 failed"
+        endif
+        tabcontainer.setPage tabcontrol_1
+        wait 1000
+        if tabcontainer.getPage = "tabcontrol_1" then
+            printlog "Switching to tab 1 works"
+        else
+            warnlog "Switching to tab 1 failed"
+        endif
+
+        Kontext "tabcontroldialog"
+        tabcontroldialog.close
+    else
+        warnlog "tabcontrol Dialog did not come up after pressing button"
     endif
+
+    printlog( "Test exit, cleanup" )
+    hFileCloseAll()
+    hDeleteFile( gLastWorkFile )
 endcase
 
 

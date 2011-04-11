@@ -61,7 +61,8 @@ public class JPEGCreator extends EnhancedComplexTestCase
 
     public void checkOneFile(String _sDocumentName, String _sResult, ParameterHelper _aParams) throws OfficeException
     {
-         GlobalLogWriter.println("Document: " + _sDocumentName + " results: " + _sResult);
+         GlobalLogWriter.println("  Document: " + _sDocumentName);
+         GlobalLogWriter.println("   results: " + _sResult);
 //         IOffice aOffice = new Office(_aParams, _sResult);
 //         aOffice.start();
 //         aOffice.load(_sDocumentName);

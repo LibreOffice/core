@@ -39,7 +39,7 @@ module com { module sun { module star { module mail {
 
     @see ::com::sun::star::mail::XMailMessage
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 struct MailAttachment
 {
@@ -48,7 +48,7 @@ struct MailAttachment
         It is expected that the transferable delivers the data as
         sequence of bytes. Although a transferable may support
         multiple data flavors only the first data flavor supplied
-        will be used to retrive the data and it is expected that
+        will be used to retrieve the data and it is expected that
         the type of the data is a sequence of bytes.
 
         @see ::com::sun::star::datatransfer::XTransferable

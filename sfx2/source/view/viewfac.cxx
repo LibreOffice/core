@@ -31,8 +31,8 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <sfx2/app.hxx>
+#include "sfx2/viewfac.hxx"
 #include <rtl/ustrbuf.hxx>
-#include "viewfac.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -72,7 +72,7 @@ String SfxViewFactory::GetAPIViewName() const
 // CTOR / DTOR -----------------------------------------------------------
 
 SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
-                                USHORT nOrdinal, const sal_Char* asciiViewName ):
+                                sal_uInt16 nOrdinal, const sal_Char* asciiViewName ):
     fnCreate(fnC),
     fnInit(fnI),
     nOrd(nOrdinal),

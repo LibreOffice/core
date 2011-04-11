@@ -74,7 +74,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& id )
     FreeResource();
 }
 
-////////////////////////////////////////////////////////////////////
 
 FindDialog::FindDialog( Window* pParent, const ResId& id, String& Text )
 : ModalDialog( pParent, id )
@@ -95,9 +94,9 @@ IMPL_LINK_INLINE_START( FindDialog, ButtonClick, Button *, pB )
 {
     if( pB == &aOk ) {
         *pFind = aFind.GetText();
-        EndDialog( TRUE );
-    } else EndDialog( FALSE );
-    return TRUE;
+        EndDialog( sal_True );
+    } else EndDialog( sal_False );
+    return sal_True;
 }
 IMPL_LINK_INLINE_END( FindDialog, ButtonClick, Button *, pB )
 
@@ -125,12 +124,11 @@ IMPL_LINK( ReplaceDialog, ButtonClick, Button *, pB )
     if( pB == &aOk ) {
         *pFind = aFind.GetText();
         *pReplace = aReplace.GetText();
-        EndDialog( TRUE );
-    } else EndDialog( FALSE );
-    return TRUE;
+        EndDialog( sal_True );
+    } else EndDialog( sal_False );
+    return sal_True;
 }
 
-////////////////////////////////////////////////////////////////////
 
 
 void CheckButtons( ComboBox &aCB, Button &aNewB, Button &aDelB )
@@ -150,7 +148,7 @@ void ConfEdit::Init( Config &aConf )
     aEdit.SetText( aTemp );
 }
 
-ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf )
+ConfEdit::ConfEdit( Window* pParent, sal_uInt16 nResText, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, Config &aConf )
 : PushButton( pParent, SttResId(nResButton) )
 , aText( pParent, SttResId(nResText) )
 , aEdit( pParent, SttResId(nResEdit) )
@@ -159,7 +157,7 @@ ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nR
     Init( aConf );
 }
 
-ConfEdit::ConfEdit( Window* pParent, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf )
+ConfEdit::ConfEdit( Window* pParent, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, Config &aConf )
 : PushButton( pParent, SttResId(nResButton) )
 , aText( pParent )
 , aEdit( pParent, SttResId(nResEdit) )
@@ -197,7 +195,7 @@ void ConfEdit::Click()
     }
 }
 
-OptConfEdit::OptConfEdit( Window* pParent, USHORT nResCheck, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, ConfEdit& rBaseEdit, Config& aConf )
+OptConfEdit::OptConfEdit( Window* pParent, sal_uInt16 nResCheck, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, ConfEdit& rBaseEdit, Config& aConf )
 : ConfEdit( pParent, nResEdit, nResButton, aKN, aConf )
 , aCheck( pParent, SttResId( nResCheck ) )
 , rBase( rBaseEdit )
@@ -247,7 +245,7 @@ OptionsDialog::OptionsDialog( Window* pParent, const ResId& aResId )
 , aCancel( this )
 , aConfig( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) )
 {
-    aConfig.EnablePersistence( FALSE );
+    aConfig.EnablePersistence( sal_False );
     FreeResource();
     aTabCtrl.SetActivatePageHdl( LINK( this, OptionsDialog, ActivatePageHdl ) );
     aTabCtrl.SetCurPageId( RID_TP_PRO );
@@ -261,25 +259,25 @@ OptionsDialog::OptionsDialog( Window* pParent, const ResId& aResId )
 
 OptionsDialog::~OptionsDialog()
 {
-    for ( USHORT i = 0; i < aTabCtrl.GetPageCount(); i++ )
+    for ( sal_uInt16 i = 0; i < aTabCtrl.GetPageCount(); i++ )
         delete aTabCtrl.GetTabPage( aTabCtrl.GetPageId( i ) );
 };
 
-BOOL OptionsDialog::Close()
+sal_Bool OptionsDialog::Close()
 {
   if ( TabDialog::Close() )
   {
     delete this;
-    return TRUE;
+    return sal_True;
   }
   else
-    return FALSE;
+    return sal_False;
 }
 
 
 IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
-    USHORT nId = pTabCtrl->GetCurPageId();
+    sal_uInt16 nId = pTabCtrl->GetCurPageId();
     // If TabPage was not yet created, do it
     if ( !pTabCtrl->GetTabPage( nId ) )
     {
@@ -301,7 +299,7 @@ IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
             case RID_TP_FON:
                 pNewTabPage = new FontOptions( pTabCtrl, aConfig );
                 break;
-            default:    DBG_ERROR( "PageHdl: Unbekannte ID!" );
+            default:    OSL_FAIL( "PageHdl: Unbekannte ID!" );
         }
         DBG_ASSERT( pNewTabPage, "Keine Page!" );
         pTabCtrl->SetTabPage( nId, pNewTabPage );
@@ -349,7 +347,7 @@ IMPL_LINK( OptionsDialog, OKClick, Button *, pButton )
 }
 
 const ByteString ProfilePrefix("_profile_");
-const USHORT ProfilePrefixLen = ProfilePrefix.Len();
+const sal_uInt16 ProfilePrefixLen = ProfilePrefix.Len();
 
 ProfileOptions::ProfileOptions( Window* pParent, Config &rConfig )
 : TabPage( pParent, SttResId( RID_TP_PROFILE ) )
@@ -371,7 +369,7 @@ ProfileOptions::ProfileOptions( Window* pParent, Config &rConfig )
 {
     FreeResource();
 
-    aCbProfile.EnableAutocomplete( TRUE );
+    aCbProfile.EnableAutocomplete( sal_True );
 
     aCbProfile.SetSelectHdl( LINK( this, ProfileOptions, Select ) );
 
@@ -386,7 +384,7 @@ ProfileOptions::ProfileOptions( Window* pParent, Config &rConfig )
 void ProfileOptions::LoadData()
 {
     // collect all profiles (all groups starting with the ProfilePrefix)
-    for ( USHORT i = 0 ; i < rConf.GetGroupCount() ; i++ )
+    for ( sal_uInt16 i = 0 ; i < rConf.GetGroupCount() ; i++ )
     {
         ByteString aProfile = rConf.GetGroupName( i );
         if ( aProfile.Match( ProfilePrefix ) )
@@ -507,7 +505,7 @@ CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
 {
     FreeResource();
 
-    aNFCRPort.SetUseThousandSep( FALSE );
+    aNFCRPort.SetUseThousandSep( sal_False );
 
     ByteString aTemp;
 
@@ -517,7 +515,7 @@ CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
     if ( aTemp.EqualsIgnoreCaseAscii( "true" ) || aTemp.Equals( "1" ) )
         aCBUseProxy.Check();
     else
-        aCBUseProxy.Check( FALSE );
+        aCBUseProxy.Check( sal_False );
 
     aCBUseProxy.SetToggleHdl( LINK( this, CrashreportOptions, CheckProxy ) );
     LINK( this, CrashreportOptions, CheckProxy ).Call( NULL );  // call once to initialize
@@ -532,7 +530,7 @@ CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
     if ( aTemp.EqualsIgnoreCaseAscii( "true" ) || aTemp.Equals( "1" ) )
         aCBAllowContact.Check();
     else
-        aCBAllowContact.Check( FALSE );
+        aCBAllowContact.Check( sal_False );
 
     aCBAllowContact.SetToggleHdl( LINK( this, CrashreportOptions, CheckResponse ) );
     LINK( this, CrashreportOptions, CheckResponse ).Call( NULL );  // call once to initialize
@@ -598,9 +596,9 @@ MiscOptions::MiscOptions( Window* pParent, Config &aConfig )
 {
     FreeResource();
 
-    aNFTTPort.SetUseThousandSep( FALSE );
-    aNFUNOPort.SetUseThousandSep( FALSE );
-    aTFMaxLRU.SetUseThousandSep( FALSE );
+    aNFTTPort.SetUseThousandSep( sal_False );
+    aNFUNOPort.SetUseThousandSep( sal_False );
+    aTFMaxLRU.SetUseThousandSep( sal_False );
 
     ByteString aTemp;
 
@@ -648,8 +646,8 @@ void MiscOptions::Save( Config &aConfig )
 
     aConfig.SetGroup("LRU");
     ByteString aTemp = aConfig.ReadKey( "MaxLRU", "4" );
-    USHORT nOldMaxLRU = (USHORT)aTemp.ToInt32();
-    USHORT n;
+    sal_uInt16 nOldMaxLRU = (sal_uInt16)aTemp.ToInt32();
+    sal_uInt16 n;
     for ( n = nOldMaxLRU ; n > aTFMaxLRU.GetValue() ; n-- )
         aConfig.DeleteKey( ByteString("LRU").Append( ByteString::CreateFromInt32( n ) ) );
     aConfig.WriteKey( "MaxLRU", ByteString::CreateFromInt64( aTFMaxLRU.GetValue() ) );
@@ -677,9 +675,6 @@ FontOptions::FontOptions( Window* pParent, Config &aConfig )
     aFontName.EnableWYSIWYG();
     aFontName.EnableSymbols();
 
-//    aFontSize.SetUnit( FUNIT_POINT );
-//    MapMode aMode( MAP_POINT );
-//    aFTPreview.SetMapMode( aMode );
 
     aFontName.SetModifyHdl( LINK( this, FontOptions, FontNameChanged ) );
     aFontStyle.SetModifyHdl( LINK( this, FontOptions, FontStyleChanged ) );
@@ -722,8 +717,7 @@ IMPL_LINK( FontOptions, FontSizeChanged, void*, EMPTYARG )
 void FontOptions::UpdatePreview()
 {
     Font aFont = aFontList.Get( aFontName.GetText(), aFontStyle.GetText() );
-//    ULONG nFontSize = aFontSize.GetValue( FUNIT_POINT );
-    ULONG nFontSize = static_cast<ULONG>((aFontSize.GetValue() + 5) / 10);
+    sal_uIntPtr nFontSize = static_cast<sal_uIntPtr>((aFontSize.GetValue() + 5) / 10);
     aFont.SetHeight( nFontSize );
     aFTPreview.SetFont( aFont );
     aFTPreview.SetText( aFontName.GetText() );
@@ -757,13 +751,13 @@ GenericOptions::GenericOptions( Window* pParent, Config &aConfig )
 , aPbDelValue( this, SttResId( RID_PB_DEL_VALUE ) )
 
 , nMoveButtons( 0 )
-, bShowSelectPath( FALSE )
+, bShowSelectPath( sal_False )
 {
     FreeResource();
     LoadData();
 
-    aCbArea.EnableAutocomplete( TRUE );
-    aCbValue.EnableAutocomplete( TRUE );
+    aCbArea.EnableAutocomplete( sal_True );
+    aCbValue.EnableAutocomplete( sal_True );
 
     aCbArea.SetSelectHdl( LINK( this, GenericOptions, LoadGroup ) );
 
@@ -789,10 +783,10 @@ GenericOptions::~GenericOptions()
 StringList* GenericOptions::GetAllGroups()
 {
     StringList* pGroups = new StringList();
-    for ( USHORT i = 0 ; i < aConf.GetGroupCount() ; i++ )
+    for ( sal_uInt16 i = 0 ; i < aConf.GetGroupCount() ; i++ )
     {
         String *pGroup = new String( aConf.GetGroupName( i ), RTL_TEXTENCODING_UTF8 );
-        pGroups->Insert( pGroup );
+        pGroups->push_back( pGroup );
     }
     return pGroups;
 }
@@ -800,44 +794,42 @@ StringList* GenericOptions::GetAllGroups()
 void GenericOptions::LoadData()
 {
     StringList* pGroups = GetAllGroups();
-    String* pGroup;
-    while ( (pGroup = pGroups->First()) != NULL )
+    for ( size_t i = 0, n = pGroups->size(); i < n; ++i )
     {
-        pGroups->Remove( pGroup );
+        String* pGroup = pGroups->at( i );
         aConf.SetGroup( ByteString( *pGroup, RTL_TEXTENCODING_UTF8 ) );
         if ( aConf.ReadKey( C_KEY_AKTUELL ).Len() > 0 )
-        {
             aCbArea.InsertEntry( *pGroup );
-        }
         delete pGroup;
     }
+    pGroups->clear();
     delete pGroups;
-    aCbArea.SetText( aCbArea.GetEntry( 0 ) );
+        aCbArea.SetText( aCbArea.GetEntry( 0 ) );
     CheckButtons( aCbArea, aPbNewArea, aPbDelArea );
 
     // Add load the data
     LINK( this, GenericOptions, LoadGroup ).Call( NULL );
 }
 
-void GenericOptions::ShowSelectPath( const String aType )
+void GenericOptions::ShowSelectPath( const String &rType )
 {
     Point aNPos = aPbNewValue.GetPosPixel();
     Point aDPos = aPbDelValue.GetPosPixel();
     long nDelta = aDPos.Y() - aNPos.Y();
-    if ( aType.EqualsIgnoreCaseAscii( "PATH" ) && !bShowSelectPath )
+    if ( rType.EqualsIgnoreCaseAscii( "PATH" ) && !bShowSelectPath )
     {   // Show Path button
         nMoveButtons += nDelta;
         aMoveTimer.Start();
-        bShowSelectPath = TRUE;
-        aPbSelectPath.Show( TRUE );
-        aPbSelectPath.Enable( TRUE );
+        bShowSelectPath = sal_True;
+        aPbSelectPath.Show( sal_True );
+        aPbSelectPath.Enable( sal_True );
     }
-    else if ( !aType.EqualsIgnoreCaseAscii( "PATH" ) && bShowSelectPath )
+    else if ( !rType.EqualsIgnoreCaseAscii( "PATH" ) && bShowSelectPath )
     {   // Hide Path button
         nMoveButtons -= nDelta;
         aMoveTimer.Start();
-        bShowSelectPath = FALSE;
-        aPbSelectPath.Enable( FALSE );
+        bShowSelectPath = sal_False;
+        aPbSelectPath.Enable( sal_False );
     }
 }
 
@@ -890,7 +882,7 @@ IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
 
         aConf.SetGroup( aLastGroupName );
         aConf.WriteKey( C_KEY_AKTUELL, ByteString( aCurrentValue, RTL_TEXTENCODING_UTF8 ) );
-        USHORT i;
+        sal_uInt16 i;
         for ( i=0 ; i < aCbValue.GetEntryCount() ; i++ )
         {
             if ( i > 0 )
@@ -1008,16 +1000,16 @@ class TextAndWin : public DockingWindow
     Window* pFtOriginalParent;
     Window* pWinOriginalParent;
     long nSpace;    // default space
-    BOOL bAlignTop;
+    sal_Bool bAlignTop;
 
 public:
-    TextAndWin( Window *pParent, FixedText *pFtP, Window *pWinP, long nSpaceP, BOOL bAlignTopP );
+    TextAndWin( Window *pParent, FixedText *pFtP, Window *pWinP, long nSpaceP, sal_Bool bAlignTopP );
     ~TextAndWin();
 
     virtual void Resize();
 };
 
-TextAndWin::TextAndWin( Window *pParent, FixedText *pFtP, Window *pWinP, long nSpaceP, BOOL bAlignTopP )
+TextAndWin::TextAndWin( Window *pParent, FixedText *pFtP, Window *pWinP, long nSpaceP, sal_Bool bAlignTopP )
 : DockingWindow( pParent )
 , pFt( pFtP )
 , pWin( pWinP )
@@ -1083,15 +1075,6 @@ DisplayHidDlg::DisplayHidDlg( Window * pParent )
 {
     FreeResource();
 
-/*  ResMgr* pRM = CREATERESMGR( svt );
-    ToolBox aOrig( this, ResId( 12345, pRM ) );
-    delete pRM;
-
-    aTbConf.CopyItem( aOrig, 4 );
-    aTbConf.InsertSeparator();
-    aTbConf.CopyItem( aOrig, 5 );
-    aTbConf.CopyItem( aOrig, 6 );
-    aTbConf.CopyItem( aOrig, 7 );             */
     aTbConf.SetOutStyle( TOOLBOX_STYLE_FLAT );
 
 #if OSL_DEBUG_LEVEL < 2
@@ -1099,8 +1082,8 @@ DisplayHidDlg::DisplayHidDlg( Window * pParent )
 #endif
 
     pSplit = new SplitWindow( this );
-    pControls = new TextAndWin( pSplit, &aFtControls, &aMlbControls, aMlbControls.GetPosPixel().X(), TRUE );
-    pSlots = new TextAndWin( pSplit, &aFtSlots, &aMlbSlots, aMlbControls.GetPosPixel().X(), FALSE );
+    pControls = new TextAndWin( pSplit, &aFtControls, &aMlbControls, aMlbControls.GetPosPixel().X(), sal_True );
+    pSlots = new TextAndWin( pSplit, &aFtSlots, &aMlbSlots, aMlbControls.GetPosPixel().X(), sal_False );
 
     pSplit->SetPosPixel( aFtControls.GetPosPixel() );
     pSplit->InsertItem( 1, pControls, 70, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
@@ -1126,7 +1109,7 @@ DisplayHidDlg::~DisplayHidDlg()
 IMPL_LINK( DisplayHidDlg, CopyToClipboard, void*, EMPTYARG )
 {
     String aSammel;
-    USHORT i;
+    sal_uInt16 i;
 
     for ( i=0 ; i < aMlbControls.GetSelectEntryCount() ; i++ )
     {
@@ -1148,7 +1131,7 @@ IMPL_LINK( DisplayHidDlg, SelectAll, PushButton*, pButton )
 {
     if ( pButton->GetState() != STATE_CHECK )
     {
-        USHORT i;
+        sal_uInt16 i;
         for ( i=0 ; i < aMlbControls.GetEntryCount() ; i++ )
             aMlbControls.SelectEntryPos( i );
         for ( i=0 ; i < aMlbSlots.GetEntryCount() ; i++ )
@@ -1251,8 +1234,6 @@ void DisplayHidDlg::Resize()
     }
     else
     {
-//      SetUpdateMode( FALSE );
-
         // Minimum size
         Size aSize( GetOutputSizePixel() );
         aSize.Width() = std::max( aSize.Width(), (long)(aOKClose.GetSizePixel().Width() * 3 ));
@@ -1306,9 +1287,6 @@ void DisplayHidDlg::Resize()
         aPos.Move( nSpace, -aOKClose.GetSizePixel().Height() );
         aPos.Move( pSplit->GetSizePixel().Width(), pSplit->GetSizePixel().Height() );
         aOKClose.SetPosPixel( aPos );
-
-//      SetUpdateMode( TRUE );
-//      Invalidate();
     }
     FloatingWindow::Resize();
 }
@@ -1348,9 +1326,6 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 else
                     aRadioButtonRID_RB_NEW_BOOL_F.Check();
                 break;
-//              case SbxCURRENCY:
-//              case SbxDATE:
-//              break;
             case SbxINTEGER:
                 aNumericFieldRID_NF_NEW_INTEGER.Show();
                 aNumericFieldRID_NF_NEW_INTEGER.SetText( pVar->GetString() );
@@ -1364,8 +1339,6 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
                 aNumericFieldRID_NF_NEW_LONG.SetMin( -aNumericFieldRID_NF_NEW_LONG.GetMax()-1 );
                 aNumericFieldRID_NF_NEW_LONG.SetFirst( -aNumericFieldRID_NF_NEW_LONG.GetLast()-1 );
                 break;
-//              case SbxOBJECT:     // cannot be edited
-//              break;
             case SbxSINGLE:
             case SbxDOUBLE:
             case SbxSTRING:
@@ -1387,66 +1360,25 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
 IMPL_LINK( VarEditDialog, OKClick, Button *, pButton )
 {
     (void) pButton; /* avoid warning about unused parameter */
-    BOOL bWasError = SbxBase::IsError();    // Probably an error is thrown
+    sal_Bool bWasError = SbxBase::IsError();    // Probably an error is thrown
 
 
     SbxDataType eType = pVar->GetType();
-/*
-Boolean
-Currency
-Date
-Double
-Integer
-Long
-Object
-Single
-String
-Variant
-
-
-atof
-
-  ecvt
-  f
-  gcvt
-
-SvNumberformat::
-    static double StringToDouble( const xub_Unicode* pStr,
-                                const International& rIntl,
-                                int& nErrno,
-                                const xub_Unicode** ppEnd = NULL );
-    // Converts just as strtod a decimal string to a double.
-    // Decimal and thousand separators come from International,
-    // leading spaces are omitted.
-    // If ppEnd!=NULL then *ppEnd is set after the parsed data.
-    // If pStr contains only the String to be parsed, then if success:
-    // **ppEnd=='\0' and *ppEnd-pStr==strlen(pStr).
-    // If overflow fVal=+/-HUGE_VAL, if underflow 0,
-    // nErrno is in this cases set to ERANGE otherwise 0.
-    // "+/-1.#INF" are recognized as +/-HUGE_VAL.
-
-    */
 
 
 
     String aContent( aEditRID_ED_NEW_STRING.GetText() );
-    BOOL bError = FALSE;
+    sal_Bool bError = sal_False;
     switch ( eType )
     {
         case SbxBOOL:
             pVar->PutBool( aRadioButtonRID_RB_NEW_BOOL_T.IsChecked() );
             break;
-//      case SbxCURRENCY:
-//          pVar->PutCurrency( aContent );
-//          break;
-//      case SbxDATE:
-//          pVar->PutDate( aContent );
-//          break;
         case SbxINTEGER:
-            pVar->PutInteger( (INT16)aNumericFieldRID_NF_NEW_INTEGER.GetValue() );
+            pVar->PutInteger( (sal_Int16)aNumericFieldRID_NF_NEW_INTEGER.GetValue() );
             break;
         case SbxLONG:
-            pVar->PutLong( static_cast<INT32>(aNumericFieldRID_NF_NEW_LONG.GetValue()) );
+            pVar->PutLong( static_cast<sal_Int32>(aNumericFieldRID_NF_NEW_LONG.GetValue()) );
             break;
         case SbxDOUBLE:
         case SbxSINGLE:
@@ -1464,10 +1396,9 @@ SvNumberformat::
     }
 
 
-//  pVar->PutStringExt( aEditRID_ED_NEW_STRING.GetText() );
     if ( !bWasError && SbxBase::IsError() )
     {
-        bError = TRUE;
+        bError = sal_True;
         SbxBase::ResetError();
     }
 
@@ -1477,12 +1408,6 @@ SvNumberformat::
         return 1;
     }
 
-//  if ( aEditRID_ED_NEW_STRING.GetText().Compare( pVar->GetString() ) != COMPARE_EQUAL )
-//  {
-//      aFixedTextRID_FT_CONTENT_VALUE.SetText( pVar->GetString() );
-//      aEditRID_ED_NEW_STRING.SetText( pVar->GetString() );
-//      return 1;
-//  }
 
     Close();
     return 0;

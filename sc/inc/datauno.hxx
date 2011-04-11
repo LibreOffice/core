@@ -31,6 +31,7 @@
 
 #include "global.hxx"
 #include "queryparam.hxx"
+#include "subtotalparam.hxx"
 
 #include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
@@ -78,7 +79,7 @@ public:
 };
 
 
-//  ImportDescriptor gibt's nicht mehr als Uno-Objekt, nur noch Property-Sequence
+//  ImportDescriptor is not available as Uno-Objekt any longer, only Property-Sequence
 
 class ScImportDescriptor
 {
@@ -92,7 +93,7 @@ public:
     static long GetPropertyCount();
 };
 
-//  SortDescriptor gibt's nicht mehr als Uno-Objekt, nur noch Property-Sequence
+//  SortDescriptor is not available as Uno-Objekt any longer, only Property-Sequence
 
 class ScSortDescriptor
 {
@@ -107,7 +108,7 @@ public:
 };
 
 
-//  ScSubTotalDescriptorBase - Basisklasse fuer SubTotalDescriptor alleine und im DB-Bereich
+//  ScSubTotalDescriptorBase - base class for SubTotalDescriptor stand alone and in DB area (context?)
 
 //  to uno, both look the same
 
@@ -122,7 +123,7 @@ class ScSubTotalDescriptorBase : public cppu::WeakImplHelper6<
 private:
     SfxItemPropertySet      aPropSet;
 
-    ScSubTotalFieldObj*     GetObjectByIndex_Impl(USHORT nIndex);
+    ScSubTotalFieldObj*     GetObjectByIndex_Impl(sal_uInt16 nIndex);
 
 public:
                             ScSubTotalDescriptorBase();
@@ -216,7 +217,7 @@ public:
 };
 
 
-//  ScSubTotalDescriptor - dummer Container zur Benutzung mit XImportTarget
+//  ScSubTotalDescriptor - dummy container to use with XImportTarget
 
 class ScSubTotalDescriptor : public ScSubTotalDescriptorBase
 {
@@ -227,17 +228,16 @@ public:
                             ScSubTotalDescriptor();
     virtual                 ~ScSubTotalDescriptor();
 
-                            // von ScSubTotalDescriptorBase:
+                            // from ScSubTotalDescriptorBase:
     virtual void            GetData( ScSubTotalParam& rParam ) const;
     virtual void            PutData( const ScSubTotalParam& rParam );
 
-                            // Zugriff von aussen:
+                            // external access:
     void                    SetParam( const ScSubTotalParam& rNew );
-//  const ScSubTotalParam&  GetParam() const    { return aStoredParam; }
 };
 
 
-//  ScRangeSubTotalDescriptor - SubTotalDescriptor eines Datenbank-Bereichs
+//  ScRangeSubTotalDescriptor - SubTotalDescriptor of a data base area
 
 class ScRangeSubTotalDescriptor : public ScSubTotalDescriptorBase
 {
@@ -248,7 +248,7 @@ public:
                             ScRangeSubTotalDescriptor(ScDatabaseRangeObj* pPar);
     virtual                 ~ScRangeSubTotalDescriptor();
 
-                            // von ScSubTotalDescriptorBase:
+                            // from ScSubTotalDescriptorBase:
     virtual void            GetData( ScSubTotalParam& rParam ) const;
     virtual void            PutData( const ScSubTotalParam& rParam );
 };
@@ -261,10 +261,10 @@ class ScSubTotalFieldObj : public cppu::WeakImplHelper2<
 private:
     com::sun::star::uno::Reference<com::sun::star::sheet::XSubTotalDescriptor> xRef;
     ScSubTotalDescriptorBase&   rParent;
-    USHORT                      nPos;
+    sal_uInt16                      nPos;
 
 public:
-                            ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, USHORT nP );
+                            ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, sal_uInt16 nP );
     virtual                 ~ScSubTotalFieldObj();
 
                             // XSubTotalField
@@ -336,8 +336,8 @@ public:
 };
 
 
-//  ScFilterDescriptorBase - Basisklasse fuer FilterDescriptor
-//                           alleine, im DB-Bereich und im DataPilot
+//  ScFilterDescriptorBase - base class for FilterDescriptor
+//                           stand alone, in a DB area (or context?) and in the DataPilot
 
 //  to uno, all three look the same
 
@@ -353,13 +353,17 @@ private:
     ScDocShell*             pDocSh;
 
 public:
+    static void fillQueryParam(
+        ScQueryParam& rParam, ScDocument* pDoc,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::TableFilterField2>& aFilterFields);
+
                             ScFilterDescriptorBase(ScDocShell* pDocShell);
     virtual                 ~ScFilterDescriptorBase();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                            // in den Ableitungen:
-                            // (nField[] hier innerhalb des Bereichs)
+                            // in the derived classes(?):
+                            // (nField[] here within the area)
     virtual void            GetData( ScQueryParam& rParam ) const = 0;
     virtual void            PutData( const ScQueryParam& rParam ) = 0;
 
@@ -428,28 +432,28 @@ public:
 };
 
 
-//  ScFilterDescriptor - dummer Container zur Benutzung mit XFilterable
+//  ScFilterDescriptor - dummy container to use with XFilterable
 
 class ScFilterDescriptor : public ScFilterDescriptorBase
 {
 private:
-    ScQueryParam            aStoredParam;       // nField[] hier innerhalb des Bereichs
+    ScQueryParam            aStoredParam;       // nField[] here within the area
 
 public:
                             ScFilterDescriptor(ScDocShell* pDocSh);
     virtual                 ~ScFilterDescriptor();
 
-                            // von ScFilterDescriptorBase:
+                            // from ScFilterDescriptorBase:
     virtual void            GetData( ScQueryParam& rParam ) const;
     virtual void            PutData( const ScQueryParam& rParam );
 
-                            // Zugriff von aussen:
+                            // external access:
     void                    SetParam( const ScQueryParam& rNew );
     const ScQueryParam&     GetParam() const    { return aStoredParam; }
 };
 
 
-//  ScRangeFilterDescriptor - FilterDescriptor eines Datenbank-Bereichs
+//  ScRangeFilterDescriptor - FilterDescriptor of a data base area
 
 class ScRangeFilterDescriptor : public ScFilterDescriptorBase
 {
@@ -460,13 +464,13 @@ public:
                             ScRangeFilterDescriptor(ScDocShell* pDocSh, ScDatabaseRangeObj* pPar);
     virtual                 ~ScRangeFilterDescriptor();
 
-                            // von ScFilterDescriptorBase:
+                            // from ScFilterDescriptorBase:
     virtual void            GetData( ScQueryParam& rParam ) const;
     virtual void            PutData( const ScQueryParam& rParam );
 };
 
 
-//  ScDataPilotFilterDescriptor - FilterDescriptor eines DataPilotDescriptors
+//  ScDataPilotFilterDescriptor - FilterDescriptor of a DataPilotDescriptors
 
 class ScDataPilotFilterDescriptor : public ScFilterDescriptorBase
 {
@@ -477,7 +481,7 @@ public:
                             ScDataPilotFilterDescriptor(ScDocShell* pDocSh, ScDataPilotDescriptorBase* pPar);
     virtual                 ~ScDataPilotFilterDescriptor();
 
-                            // von ScFilterDescriptorBase:
+                            // from ScFilterDescriptorBase:
     virtual void            GetData( ScQueryParam& rParam ) const;
     virtual void            PutData( const ScQueryParam& rParam );
 };
@@ -508,7 +512,7 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                            // nField[] hier innerhalb des Bereichs:
+                            // nField[] here within the area:
     void                    GetQueryParam(ScQueryParam& rQueryParam) const;
     void                    SetQueryParam(const ScQueryParam& rQueryParam);
     void                    GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
@@ -532,8 +536,6 @@ public:
                             getSubTotalDescriptor() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
                             getImportDescriptor() throw(::com::sun::star::uno::RuntimeException);
-// implemented for the XRefreshable Interface
-//    virtual void SAL_CALL refresh() throw(::com::sun::star::uno::RuntimeException);
 
                             // XRefreshable
     virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException);
@@ -609,7 +611,7 @@ class ScDatabaseRangesObj : public cppu::WeakImplHelper4<
 private:
     ScDocShell*             pDocShell;
 
-    ScDatabaseRangeObj*     GetObjectByIndex_Impl(USHORT nIndex);
+    ScDatabaseRangeObj*     GetObjectByIndex_Impl(sal_uInt16 nIndex);
     ScDatabaseRangeObj*     GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:

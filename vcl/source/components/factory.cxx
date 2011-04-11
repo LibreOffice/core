@@ -59,6 +59,10 @@ extern Sequence< OUString > SAL_CALL FontIdentificator_getSupportedServiceNames(
 extern OUString SAL_CALL FontIdentificator_getImplementationName();
 extern Reference< XInterface > SAL_CALL FontIdentificator_createInstance( const Reference< XMultiServiceFactory > & );
 
+extern Sequence< OUString > SAL_CALL StringMirror_getSupportedServiceNames();
+extern OUString SAL_CALL StringMirror_getImplementationName();
+extern Reference< XInterface > SAL_CALL StringMirror_createInstance( const Reference< XMultiServiceFactory > & );
+
 extern Sequence< OUString > SAL_CALL Clipboard_getSupportedServiceNames();
 extern OUString SAL_CALL Clipboard_getImplementationName();
 extern Reference< XSingleServiceFactory > SAL_CALL Clipboard_createFactory( const Reference< XMultiServiceFactory > & );
@@ -79,62 +83,6 @@ extern "C" {
         uno_Environment** /*ppEnv*/ )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
-    VCL_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pXUnoKey )
-    {
-        if( pXUnoKey )
-        {
-            try
-            {
-                Reference< ::com::sun::star::registry::XRegistryKey > xKey( reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >( pXUnoKey ) );
-
-                OUStringBuffer aImplName(64);
-                aImplName.appendAscii( "/" );
-                aImplName.append( vcl_session_getImplementationName() );
-                aImplName.appendAscii( "/UNO/SERVICES/" );
-                aImplName.append( vcl_session_getSupportedServiceNames()[0] );
-                xKey->createKey( aImplName.makeStringAndClear() );
-
-                aImplName.appendAscii( "/" );
-                aImplName.append( vcl::DisplayAccess_getImplementationName() );
-                aImplName.appendAscii( "/UNO/SERVICES/" );
-                aImplName.append( vcl::DisplayAccess_getSupportedServiceNames()[0] );
-                xKey->createKey( aImplName.makeStringAndClear() );
-
-                aImplName.appendAscii( "/" );
-                aImplName.append( vcl::FontIdentificator_getImplementationName() );
-                aImplName.appendAscii( "/UNO/SERVICES/" );
-                aImplName.append( vcl::FontIdentificator_getSupportedServiceNames()[0] );
-                xKey->createKey( aImplName.makeStringAndClear() );
-
-                #if defined UNX
-                aImplName.appendAscii( "/" );
-                aImplName.append( vcl::Clipboard_getImplementationName() );
-                aImplName.appendAscii( "/UNO/SERVICES/" );
-                aImplName.append( vcl::Clipboard_getSupportedServiceNames()[0] );
-                xKey->createKey( aImplName.makeStringAndClear() );
-
-                aImplName.appendAscii( "/" );
-                aImplName.append( vcl::DragSource_getImplementationName() );
-                aImplName.appendAscii( "/UNO/SERVICES/" );
-                aImplName.append( vcl::DragSource_getSupportedServiceNames()[0] );
-                xKey->createKey( aImplName.makeStringAndClear() );
-
-                aImplName.appendAscii( "/" );
-                aImplName.append( vcl::DropTarget_getImplementationName() );
-                aImplName.appendAscii( "/UNO/SERVICES/" );
-                aImplName.append( vcl::DropTarget_getSupportedServiceNames()[0] );
-                xKey->createKey( aImplName.makeStringAndClear() );
-                #endif
-
-                return sal_True;
-            }
-            catch( ::com::sun::star::registry::InvalidRegistryException& )
-            {
-            }
-        }
-        return sal_False;
     }
 
     VCL_DLLPUBLIC void* SAL_CALL component_getFactory(
@@ -168,6 +116,12 @@ extern "C" {
                 xFactory = ::cppu::createSingleFactory(
                     xMgr, vcl::FontIdentificator_getImplementationName(), vcl::FontIdentificator_createInstance,
                     vcl::FontIdentificator_getSupportedServiceNames() );
+            }
+            else if( vcl::StringMirror_getImplementationName().equalsAscii( pImplementationName ) )
+            {
+                xFactory = ::cppu::createSingleFactory(
+                    xMgr, vcl::StringMirror_getImplementationName(), vcl::StringMirror_createInstance,
+                    vcl::StringMirror_getSupportedServiceNames() );
             }
             else if( vcl::Clipboard_getImplementationName().equalsAscii( pImplementationName ) )
             {

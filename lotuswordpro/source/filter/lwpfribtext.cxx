@@ -81,7 +81,7 @@
 
 LwpFribText::LwpFribText( LwpPara *pPara, sal_Bool bNoUnicode )
     : LwpFrib(pPara), m_bNoUnicode(bNoUnicode)
-{};
+{}
 
 void LwpFribText::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
 {

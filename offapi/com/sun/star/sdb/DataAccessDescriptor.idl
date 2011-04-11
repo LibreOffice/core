@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module sdb {
 
 /** descriptor for accessing basic data access objects.
 
-    <p>Various components interacting with the database access world require to specify (or provide themself) an object
+    <p>Various components interacting with the database access world require to specify (or provide themselves) an object
     such as a query, a table, a result set, a connection to a data source, a column within a table, and so on.<br/>
     All of these objects are usually not specified with a single property, but with a set of properties, and for
     various objects, various (but not always different) properties are needed.<br/>
@@ -66,7 +66,7 @@ published service DataAccessDescriptor
     /** specifies the name of the datasource to access.
 
         <p>This data source is usually used to create a <type>Connection</type>. If no DataSourceName is given
-        and the <member>DatabaseLocation</member> and the <member>ConnectionResource</member> are emtpy, then an <member>ActiveConnection</member>
+        and the <member>DatabaseLocation</member> and the <member>ConnectionResource</member> are empty, then an <member>ActiveConnection</member>
         is required.</p>
 
         @see com::sun::star::sdb::DatabaseContext
@@ -77,7 +77,7 @@ published service DataAccessDescriptor
     /** specifies the URL of the database file.
 
         <p>This database location is usually used to create a <type>Connection</type>. If no DatabaseLocation is given
-        and the <member>ConnectionResource</member> is emtpy, then an <member>ActiveConnection</member> is reuqired.</p>
+        and the <member>ConnectionResource</member> is empty, then an <member>ActiveConnection</member> is required.</p>
 
         @see com::sun::star::sdb::DatabaseContext
         @see ActiveConnection
@@ -87,7 +87,7 @@ published service DataAccessDescriptor
     /** specifies the database URL which locates a database driver.
 
         <p>This database URL is usually used to create a <type>Connection</type>. If no ConnectionResource is given,
-        then an <member>ActiveConnection</member> is reuqired.</p>
+        then an <member>ActiveConnection</member> is required.</p>
 
         @see com::sun::star::sdb::DatabaseContext
         @see ActiveConnection
@@ -134,14 +134,14 @@ published service DataAccessDescriptor
 
         <p><member>Command</member> needs to be interpreted depending on the value of this property.</p>
 
-        <p>This property is only meaningfull together with the <member>Command</member>
+        <p>This property is only meaningful together with the <member>Command</member>
         property, thus either <em>both</em> or <em>none</em> of them are present.</p>
 
         @see com::sun::star::sdb::CommandType
      */
     [optional, property] long CommandType;
 
-    /** specifies an addtional filter to optionally use.
+    /** specifies an additional filter to optionally use.
 
         <p>The Filter string has to form a <code>WHERE</code>-clause, <em>without</em> the
         <code>WHERE</code>-string itself.</p>
@@ -195,7 +195,7 @@ published service DataAccessDescriptor
 
         <p>Usually, you use the properties <member>DataSourceName</member> (alternatively
         <member>ActiveConnection</member>), <member>Command</member> and <member>CommandType</member> to specify
-        how to <em>obtain</em> a result set. However, in scenarious where the provider of a DataAccessDescriptor
+        how to <em>obtain</em> a result set. However, in scenarios where the provider of a DataAccessDescriptor
         has access to an already existent result set, it can pass it along for reusage. This is encouraged
         to increase performance.</p>
 

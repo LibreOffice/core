@@ -152,7 +152,7 @@ void AccessibleDocumentViewBase::Init (void)
 
         pWindow->AddChildEventListener (maWindowLink);
 
-        USHORT nCount = pWindow->GetChildCount();
+        sal_uInt16 nCount = pWindow->GetChildCount();
         for (sal_uInt16 i=0; i<nCount; i++)
         {
             Window* pChildWindow = pWindow->GetChild (i);
@@ -281,7 +281,7 @@ Reference<XAccessible> SAL_CALL
             return mxAccessibleOLEObject;
 
     throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString::createFromAscii ("no child with index ")
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("no child with index ") ))
         + rtl::OUString::valueOf(nIndex),
         NULL);
 }

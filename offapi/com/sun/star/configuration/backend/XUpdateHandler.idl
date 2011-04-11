@@ -169,7 +169,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a node is started as a new item.
 
         <p> The current node must be a set and
-            a preexisting item (if any) must be removeable.
+            a preexisting item (if any) must be removable.
         </p>
         <p> The new item will be created from the default template
             of the set.
@@ -196,7 +196,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <li>if there isn't a set node in progress currently</li>
             <li>if there already was a change to an item of that name</li>
             <li>if the template for the new node is not found</li>
-            <li>if an item of that name exists and is not removeable</li>
+            <li>if an item of that name exists and is not removable</li>
             <li>if the name is not a valid item name</li>
             <li>if the attributes are not valid for the node</li>
             </ul>
@@ -217,7 +217,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
         based on a particular template.
 
         <p> The current node must be a set and
-            a preexisting item (if any) must be removeable.
+            a preexisting item (if any) must be removable.
         </p>
         <p> Subsequent calls describe the difference from the template
             of properties or members of the node until a matching call
@@ -244,7 +244,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <li>if there isn't a set node in progress currently</li>
             <li>if there already was a change to an item of that name</li>
             <li>if the template for the new node is not found</li>
-            <li>if an item of that name exists and is not removeable</li>
+            <li>if an item of that name exists and is not removable</li>
             <li>if the name is not a valid item name</li>
             <li>if the template is not a valid item type for the containing set</li>
             <li>if the attributes are not valid for the node</li>
@@ -289,7 +289,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
     /** receives notification that an item is to be dropped from a set.
 
         <p> The current node must be a set and
-            the item must be removeable.
+            the item must be removable.
         </p>
 
         @param aName
@@ -300,7 +300,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <li>if there isn't a set node in progress currently</li>
             <li>if there already was a change to a node of that name</li>
             <li>if there is no item with that name</li>
-            <li>if the item is not removeable</li>
+            <li>if the item is not removable</li>
             <li>if the name is not a valid node name</li>
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>
@@ -538,7 +538,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         <p> The current node must be extensible and
             a preexisting property (if any) must be
-            removeable in this layer.
+            removable in this layer.
         </p>
 
         @param aName
@@ -564,7 +564,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <ul>
             <li>if there isn't a group or extensible node in progress currently</li>
             <li>if there already was a change to a property of that name</li>
-            <li>if a property of that name exists and is not removeable</li>
+            <li>if a property of that name exists and is not removable</li>
             <li>if the specified type is not allowed</li>
             <li>if the name is not a valid property name</li>
             <li>if the attributes are not valid for the property</li>
@@ -588,7 +588,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
         <p> The current node must be extensible and
             a preexisting property (if any) must be
-            removeable in this layer.
+            removable in this layer.
         </p>
 
         @param aName
@@ -618,7 +618,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <ul>
             <li>if there isn't a group or extensible node in progress currently</li>
             <li>if there already was a change to a property of that name</li>
-            <li>if a property of that name exists and is not removeable</li>
+            <li>if a property of that name exists and is not removable</li>
             <li>if the type of the value is not an allowed type,
                 or if the value is <void/></li>
             <li>if the name is not a valid property name</li>
@@ -640,7 +640,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
 
     /** receives notification that a property is dropped from the current node.
 
-        <p>The current node must be extensible and the property removeable.</p>
+        <p>The current node must be extensible and the property removable.</p>
 
         @param aName
             specifies the name of the property.
@@ -649,7 +649,7 @@ published interface XUpdateHandler: ::com::sun::star::uno::XInterface
             <ul>
             <li>if there isn't a group or extensible node in progress currently</li>
             <li>if there is no property with that name</li>
-            <li>if the property is not removeable</li>
+            <li>if the property is not removable</li>
             <li>if the name is not a valid node name</li>
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>

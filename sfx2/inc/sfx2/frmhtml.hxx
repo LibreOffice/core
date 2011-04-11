@@ -47,7 +47,7 @@ class SFX2_DLLPUBLIC SfxFrameHTMLParser : public SfxHTMLParser
     friend class _SfxFrameHTMLContext;
 
 protected:
-   SfxFrameHTMLParser( SvStream& rStream, BOOL bIsNewDoc=TRUE, SfxMedium *pMediumPtr=0 ):
+   SfxFrameHTMLParser( SvStream& rStream, sal_Bool bIsNewDoc=sal_True, SfxMedium *pMediumPtr=0 ):
    SfxHTMLParser( rStream, bIsNewDoc, pMediumPtr ) {};
 
 public:

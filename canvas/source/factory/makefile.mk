@@ -54,3 +54,10 @@ DEF1NAME = $(SHL1TARGET)
 .ENDIF
 .INCLUDE : target.mk
 
+ALLTAR : $(MISC)/canvasfactory.component
+
+$(MISC)/canvasfactory.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt canvasfactory.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt canvasfactory.component

@@ -92,8 +92,6 @@ Create_AccessMethod( const char *           i_pOutputFileName,
                         break;
             case '\r':  aFile.write( "\\r", 2);
                         break;
-//          case '\t':  aFile.write( "\\t", 2);
-//                      break;
             default:    aFile.write( pTrans, 1);
         }
     }   /* end for */

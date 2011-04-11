@@ -59,9 +59,9 @@ public:
                     ~ScSolverDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual BOOL    IsRefInputMode() const;
+    virtual sal_Bool    IsRefInputMode() const;
     virtual void    SetActive();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
 private:
     FixedLine       aFlVariables;
@@ -87,7 +87,7 @@ private:
     ScDocument*     pDoc;
     const SCTAB     nCurTab;
     formula::RefEdit*       pEdActive;
-    BOOL            bDlgLostFocus;
+    sal_Bool            bDlgLostFocus;
     const String    errMsgInvalidVar;
     const String    errMsgInvalidForm;
     const String    errMsgNoFormula;
@@ -96,7 +96,7 @@ private:
 
 #ifdef _SOLVRDLG_CXX
     void    Init();
-    BOOL    CheckTargetValue( String& rStrVal );
+    sal_Bool    CheckTargetValue( String& rStrVal );
     void    RaiseError( ScSolverErr eError );
 
     DECL_LINK( BtnHdl, PushButton* );

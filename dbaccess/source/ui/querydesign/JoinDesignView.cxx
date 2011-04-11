@@ -49,7 +49,6 @@
 #include <comphelper/extract.hxx>
 #include "UITools.hxx"
 #include "JoinTableView.hxx"
-//  #include <com/sun/star/util/URL.hdl>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -95,7 +94,6 @@ void OJoinDesignView::Construct()
 // -----------------------------------------------------------------------------
 void OJoinDesignView::initialize()
 {
-    //  getAddTableDialog()->Update();
 }
 // -------------------------------------------------------------------------
 void OJoinDesignView::resizeDocumentView(Rectangle& _rPlayground)

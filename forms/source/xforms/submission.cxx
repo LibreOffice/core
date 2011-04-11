@@ -336,7 +336,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
             new CSubmissionGet( getAction(), aFragment));
     else
     {
-        OSL_ENSURE(sal_False, "Unsupported xforms submission method");
+        OSL_FAIL("Unsupported xforms submission method");
         return false;
     }
 
@@ -570,7 +570,7 @@ void SAL_CALL Submission::submitWithInteraction(
     }
     catch( const VetoException& )
     {
-        OSL_ENSURE( sal_False, "Model::submit: Hmm. How can a single submission have a veto right?" );
+        OSL_FAIL( "Model::submit: Hmm. How can a single submission have a veto right?" );
         // allowed to leave
         throw;
     }
@@ -665,7 +665,7 @@ Reference< XDocumentFragment > Submission::createSubmissionDocument(const Refere
 {
     using namespace com::sun::star::xml::xpath;
     Reference< XDocumentBuilder > aDocBuilder(m_aFactory->createInstance(
-        OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), UNO_QUERY);
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.dom.DocumentBuilder"))), UNO_QUERY);
     Reference< XDocument > aDocument = aDocBuilder->newDocument();
     Reference< XDocumentFragment > aFragment = aDocument->createDocumentFragment();
 

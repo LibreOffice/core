@@ -299,7 +299,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
 }
 
 rtl::OUString Service::getImplementationName() {
-    return rtl::OUString::createFromAscii("test.tdmanager.impl");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test.tdmanager.impl"));
 }
 
 css::uno::Sequence< rtl::OUString > Service::getSupportedServiceNames() {
@@ -343,9 +343,9 @@ namespace {
 
 bool writeInfo(void * registryKey, rtl::OUString const & implementationName,
                css::uno::Sequence< rtl::OUString > const & serviceNames) {
-    rtl::OUString keyName(rtl::OUString::createFromAscii("/"));
+    rtl::OUString keyName(RTL_CONSTASCII_USTRINGPARAM("/"));
     keyName += implementationName;
-    keyName += rtl::OUString::createFromAscii("/UNO/SERVICES");
+    keyName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     css::uno::Reference< css::registry::XRegistryKey > key;
     try {
         key = static_cast< css::registry::XRegistryKey * >(registryKey)->

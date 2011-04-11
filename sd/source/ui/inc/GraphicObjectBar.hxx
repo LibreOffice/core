@@ -58,7 +58,7 @@ public:
 protected:
     ::sd::View* mpView;
     ViewShell*  mpViewSh;
-    USHORT          nMappedSlotFilter;
+    sal_uInt16          nMappedSlotFilter;
 
 };
 

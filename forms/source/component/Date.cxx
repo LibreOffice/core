@@ -119,7 +119,7 @@ ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "ODateModel::ODateModel: caught an exception!" );
+        OSL_FAIL( "ODateModel::ODateModel: caught an exception!" );
     }
     osl_decrementInterlockedCount( &m_refCount );
 }

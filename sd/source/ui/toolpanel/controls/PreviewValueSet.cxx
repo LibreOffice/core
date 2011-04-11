@@ -142,12 +142,12 @@ void PreviewValueSet::Command (const CommandEvent& rEvent)
 
 void PreviewValueSet::Rearrange (bool bForceRequestResize)
 {
-    USHORT nOldColumnCount (GetColCount());
-    USHORT nOldRowCount (GetLineCount());
+    sal_uInt16 nOldColumnCount (GetColCount());
+    sal_uInt16 nOldRowCount (GetLineCount());
 
-    USHORT nNewColumnCount (CalculateColumnCount (
+    sal_uInt16 nNewColumnCount (CalculateColumnCount (
         GetOutputSizePixel().Width()));
-    USHORT nNewRowCount (CalculateRowCount (nNewColumnCount));
+    sal_uInt16 nNewRowCount (CalculateRowCount (nNewColumnCount));
 
     SetColCount(nNewColumnCount);
     SetLineCount(nNewRowCount);
@@ -169,7 +169,7 @@ void PreviewValueSet::SetContextMenuCallback (const Link& rLink)
 
 
 
-USHORT PreviewValueSet::CalculateColumnCount (int nWidth) const
+sal_uInt16 PreviewValueSet::CalculateColumnCount (int nWidth) const
 {
     int nColumnCount = 0;
     if (nWidth > 0)
@@ -180,13 +180,13 @@ USHORT PreviewValueSet::CalculateColumnCount (int nWidth) const
         else if (mnMaxColumnCount>0 && nColumnCount>mnMaxColumnCount)
             nColumnCount = mnMaxColumnCount;
     }
-    return (USHORT)nColumnCount;
+    return (sal_uInt16)nColumnCount;
 }
 
 
 
 
-USHORT PreviewValueSet::CalculateRowCount (USHORT nColumnCount) const
+sal_uInt16 PreviewValueSet::CalculateRowCount (sal_uInt16 nColumnCount) const
 {
     int nRowCount = 0;
     int nItemCount = GetItemCount();
@@ -197,7 +197,7 @@ USHORT PreviewValueSet::CalculateRowCount (USHORT nColumnCount) const
             nRowCount = 1;
     }
 
-    return (USHORT)nRowCount;
+    return (sal_uInt16)nRowCount;
 }
 
 

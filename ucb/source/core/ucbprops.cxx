@@ -43,12 +43,13 @@
 #include <com/sun/star/ucb/XDataContainer.hpp>
 #include "ucbprops.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
+
+using ::rtl::OUString;
 
 //=========================================================================
 //
@@ -358,10 +359,10 @@ XTYPEPROVIDER_IMPL_3( UcbPropertiesManager,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UcbPropertiesManager,
-                     OUString::createFromAscii(
-                         "com.sun.star.comp.ucb.UcbPropertiesManager" ),
-                     OUString::createFromAscii(
-                         PROPERTIES_MANAGER_SERVICE_NAME ) );
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.comp.ucb.UcbPropertiesManager" )),
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         PROPERTIES_MANAGER_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -399,8 +400,7 @@ Sequence< Property > SAL_CALL UcbPropertiesManager::getProperties()
         {
             if ( nSize <= nPos )
             {
-                OSL_ENSURE( sal_False,
-                            "UcbPropertiesManager::getProperties - "
+                OSL_FAIL( "UcbPropertiesManager::getProperties - "
                             "Initial size of property sequence too small!" );
 
                 m_pProps->realloc( 128 );

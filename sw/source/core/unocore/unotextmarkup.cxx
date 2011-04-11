@@ -49,7 +49,9 @@ using namespace ::com::sun::star;
 SwXTextMarkup::SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper::ConversionMap* pMap )
     : mpTxtNode( &rTxtNode ), mpConversionMap( pMap )
 {
-     mpTxtNode->Add(this);
+    // FME 2007-07-16 #i79641# SwXTextMarkup is allowed to be removed ...
+    SetIsAllowedToBeRemovedInModifyCall(true);
+    mpTxtNode->Add(this);
 }
 
 SwXTextMarkup::~SwXTextMarkup()
@@ -127,7 +129,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
     }
     else
     {
-        OSL_ENSURE( false, "Unknown mark-up type" );
+        OSL_FAIL( "Unknown mark-up type" );
         return;
     }
 
@@ -145,7 +147,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
     {
         nStart = aStartPos.mnSubPos;
         const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
-        const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+        const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
 
         SwWrongList* pSubList = pWList->SubList( nInsertPos );
         if ( !pSubList )
@@ -174,7 +176,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
         if( bStartInField && nType != text::TextMarkupType::SENTENCE )
         {
             const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
-            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwWrongList* pSubList = pWList->SubList( nInsertPos );
             if ( !pSubList )
             {
@@ -200,7 +202,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
         if( bEndInField && nType != text::TextMarkupType::SENTENCE )
         {
             const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aEndPos.mnPos);
-            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwWrongList* pSubList = pWList->SubList( nInsertPos );
             if ( !pSubList )
             {
@@ -255,7 +257,7 @@ void lcl_commitGrammarMarkUp(
     {
         nStart = aStartPos.mnSubPos;
         const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
-        const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+        const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
 
         SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
         if ( !pSubList )
@@ -281,7 +283,7 @@ void lcl_commitGrammarMarkUp(
         if( bStartInField && nType != text::TextMarkupType::SENTENCE )
         {
             const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aStartPos.mnPos);
-            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
             if ( !pSubList )
             {
@@ -299,7 +301,7 @@ void lcl_commitGrammarMarkUp(
         if( bEndInField && nType != text::TextMarkupType::SENTENCE )
         {
             const xub_StrLen nFieldPosModel = static_cast< xub_StrLen >(aEndPos.mnPos);
-            const USHORT nInsertPos = pWList->GetWrongPos( nFieldPosModel );
+            const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
             SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
             if ( !pSubList )
             {
@@ -422,12 +424,12 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 }
 
 
-void SwXTextMarkup::Modify( SfxPoolItem* /*pOld*/, SfxPoolItem* /*pNew*/ )
+void SwXTextMarkup::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pNew*/ )
 {
     // FME 2007-07-16 #i79641# In my opinion this is perfectly legal,
     // therefore I remove the assertion in SwModify::_Remove()
-    if ( pRegisteredIn )
-        pRegisteredIn->Remove( this );
+    if ( GetRegisteredIn() )
+        GetRegisteredInNonConst()->Remove( this );
     // <--
 
     SolarMutexGuard aGuard;

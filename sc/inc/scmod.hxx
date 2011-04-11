@@ -34,16 +34,14 @@
 #include <vcl/timer.hxx>
 #include <svl/lstner.hxx>
 #include "global.hxx"       // ScInputMode
-#include "markdata.hxx"     //ScMarkData
+#include "markdata.hxx"     // ScMarkData
 #include "shellids.hxx"
 #include <unotools/options.hxx>
 #include <tools/shl.hxx>
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 #include <map>
 #include <list>
 #include <algorithm>
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 
 class KeyEvent;
@@ -124,7 +122,7 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     ScClipData          aClipData;
     ScSelectionTransferObj* pSelTransfer;
     ScMessagePool*      pMessagePool;
-    //  globalen InputHandler gibt's nicht mehr, jede View hat einen
+    // there is no global InputHandler anymore, each View has it's own
     ScInputHandler*     pRefInputHandler;
     ScViewCfg*          pViewCfg;
     ScDocCfg*           pDocCfg;
@@ -140,30 +138,27 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     SfxErrorHandler*    pErrorHdl;
     SvxErrorHandler*    pSvxErrorHdl;
     ScFormEditData*     pFormEditData;
-    USHORT              nCurRefDlgId;
-    BOOL                bIsWaterCan;
-    BOOL                bIsInEditCommand;
-    BOOL                bIsInExecuteDrop;
+    sal_uInt16              nCurRefDlgId;
+    sal_Bool                bIsWaterCan;
+    sal_Bool                bIsInEditCommand;
+    sal_Bool                bIsInExecuteDrop;
     bool                mbIsInSharedDocLoading;
     bool                mbIsInSharedDocSaving;
 
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
-    std::map<USHORT, std::list<Window*> > m_mapRefWindow;
-    //-->Added by PengYunQuan for Validity Cell Range Picker
+    std::map<sal_uInt16, std::list<Window*> > m_mapRefWindow;
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
 
                     ScModule( SfxObjectFactory* pFact );
     virtual         ~ScModule();
 
-    virtual void        FillStatusBar(StatusBar &rBar);
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
     void                DeleteCfg();
 
-                        // von der Applikation verschoben:
+                        // moved by the application
 
-    DECL_LINK( IdleHandler,     Timer* );   // Timer statt idle
+    DECL_LINK( IdleHandler,     Timer* );   // Timer instead of idle
     DECL_LINK( SpellTimerHdl,   Timer* );
     DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
@@ -191,14 +186,14 @@ public:
     ScSelectionTransferObj* GetSelectionTransfer() const    { return pSelTransfer; }
     void                SetSelectionTransfer( ScSelectionTransferObj* pNew );
 
-    void                SetWaterCan( BOOL bNew )    { bIsWaterCan = bNew; }
-    BOOL                GetIsWaterCan() const       { return bIsWaterCan; }
+    void                SetWaterCan( sal_Bool bNew )    { bIsWaterCan = bNew; }
+    sal_Bool                GetIsWaterCan() const       { return bIsWaterCan; }
 
-    void                SetInEditCommand( BOOL bNew )   { bIsInEditCommand = bNew; }
-    BOOL                IsInEditCommand() const         { return bIsInEditCommand; }
+    void                SetInEditCommand( sal_Bool bNew )   { bIsInEditCommand = bNew; }
+    sal_Bool                IsInEditCommand() const         { return bIsInEditCommand; }
 
-    void                SetInExecuteDrop( BOOL bNew )   { bIsInExecuteDrop = bNew; }
-    BOOL                IsInExecuteDrop() const         { return bIsInExecuteDrop; }
+    void                SetInExecuteDrop( sal_Bool bNew )   { bIsInExecuteDrop = bNew; }
+    sal_Bool                IsInExecuteDrop() const         { return bIsInExecuteDrop; }
 
     // Options:
     const ScViewOptions&    GetViewOptions  ();
@@ -211,15 +206,15 @@ SC_DLLPUBLIC    void                    SetDocOptions   ( const ScDocOptions& rO
 SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rOpt );
     void                    SetInputOptions ( const ScInputOptions& rOpt );
     void                    SetPrintOptions ( const ScPrintOptions& rOpt );
-    void                    InsertEntryToLRUList(USHORT nFIndex);
+    void                    InsertEntryToLRUList(sal_uInt16 nFIndex);
     void                    RecentFunctionsChanged();
 
-    static void         GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCtlLang,
-                                        BOOL& rAutoSpell );
-    static void         SetAutoSpellProperty( BOOL bSet );
-    static BOOL         HasThesaurusLanguage( USHORT nLang );
+    static void         GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
+                                        sal_Bool& rAutoSpell );
+    static void         SetAutoSpellProperty( sal_Bool bSet );
+    static sal_Bool         HasThesaurusLanguage( sal_uInt16 nLang );
 
-    USHORT              GetOptDigitLanguage();      // from CTL options
+    sal_uInt16              GetOptDigitLanguage();      // from CTL options
 
     ScNavipiCfg&        GetNavipiCfg();
     ScAddInCfg&         GetAddInCfg();
@@ -230,63 +225,60 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
 
     void                ModifyOptions( const SfxItemSet& rOptSet );
 
-    //  InputHandler:
-    BOOL                IsEditMode();   // nicht bei SC_INPUT_TYPE
-    BOOL                IsInputMode();  // auch bei SC_INPUT_TYPE
+    // InputHandler:
+    sal_Bool                IsEditMode();   // not for SC_INPUT_TYPE
+    sal_Bool                IsInputMode();  // also for SC_INPUT_TYPE
     void                SetInputMode( ScInputMode eMode );
-    BOOL                InputKeyEvent( const KeyEvent& rKEvt, BOOL bStartEdit = FALSE );
-    SC_DLLPUBLIC void                InputEnterHandler( BYTE nBlockMode = 0 );
+    sal_Bool                InputKeyEvent( const KeyEvent& rKEvt, sal_Bool bStartEdit = false );
+    SC_DLLPUBLIC void                InputEnterHandler( sal_uInt8 nBlockMode = 0 );
     void                InputCancelHandler();
     void                InputSelection( EditView* pView );
     void                InputChanged( EditView* pView );
-    ScInputHandler*     GetInputHdl( ScTabViewShell* pViewSh = NULL, BOOL bUseRef = TRUE );
+    ScInputHandler*     GetInputHdl( ScTabViewShell* pViewSh = NULL, sal_Bool bUseRef = sal_True );
 
     void                SetRefInputHdl( ScInputHandler* pNew );
     ScInputHandler*     GetRefInputHdl();
 
     void                ViewShellGone(ScTabViewShell* pViewSh);
     void                ViewShellChanged();
-    // Kommunikation mit Funktionsautopilot
+    // communication with function-autopilot
     void                InputGetSelection( xub_StrLen& rStart, xub_StrLen& rEnd );
     void                InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd );
     void                InputReplaceSelection( const String& rStr );
     String              InputGetFormulaStr();
     void                ActivateInputWindow( const String* pStr = NULL,
-                                                BOOL bMatrix = FALSE );
+                                                sal_Bool bMatrix = false );
 
     void                InitFormEditData();
     void                ClearFormEditData();
     ScFormEditData*     GetFormEditData()       { return pFormEditData; }
 
-    //  Referenzeingabe:
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
-    //void              SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm = NULL );
-    SC_DLLPUBLIC void               SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm = NULL );
-    //-->Added by PengYunQuan for Validity Cell Range Picker
-    BOOL                IsModalMode(SfxObjectShell* pDocSh = NULL);
-    BOOL                IsFormulaMode();
-    BOOL                IsRefDialogOpen();
-    BOOL                IsTableLocked();
+    // input of reference:
+    SC_DLLPUBLIC void               SetRefDialog( sal_uInt16 nId, sal_Bool bVis, SfxViewFrame* pViewFrm = NULL );
+    sal_Bool                IsModalMode(SfxObjectShell* pDocSh = NULL);
+    sal_Bool                IsFormulaMode();
+    sal_Bool                IsRefDialogOpen();
+    sal_Bool                IsTableLocked();
     void                SetReference( const ScRange& rRef, ScDocument* pDoc,
                                         const ScMarkData* pMarkData = NULL );
     void                AddRefEntry();
     void                EndReference();
-    USHORT              GetCurRefDlgId() const                  { return nCurRefDlgId; }
+    sal_uInt16              GetCurRefDlgId() const                  { return nCurRefDlgId; }
 
-    //virtuelle Methoden fuer den Optionendialog
-    virtual SfxItemSet*  CreateItemSet( USHORT nId );
-    virtual void         ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
-    virtual SfxTabPage*  CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet );
+    // virtual methods for the options dialog
+    virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId );
+    virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
+    virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet );
 
     void                SetInSharedDocLoading( bool bNew )  { mbIsInSharedDocLoading = bNew; }
     bool                IsInSharedDocLoading() const        { return mbIsInSharedDocLoading; }
     void                SetInSharedDocSaving( bool bNew )   { mbIsInSharedDocSaving = bNew; }
     bool                IsInSharedDocSaving() const         { return mbIsInSharedDocSaving; }
 
-    SC_DLLPUBLIC BOOL   RegisterRefWindow( USHORT nSlotId, Window *pWnd );
-    SC_DLLPUBLIC BOOL   UnregisterRefWindow( USHORT nSlotId, Window *pWnd );
-    SC_DLLPUBLIC BOOL   IsAliveRefDlg( USHORT nSlotId, Window *pWnd );
-    SC_DLLPUBLIC Window * Find1RefWindow( USHORT nSlotId, Window *pWndAncestor );
+    SC_DLLPUBLIC sal_Bool   RegisterRefWindow( sal_uInt16 nSlotId, Window *pWnd );
+    SC_DLLPUBLIC sal_Bool   UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd );
+    SC_DLLPUBLIC sal_Bool   IsAliveRefDlg( sal_uInt16 nSlotId, Window *pWnd );
+    SC_DLLPUBLIC Window * Find1RefWindow( sal_uInt16 nSlotId, Window *pWndAncestor );
     SC_DLLPUBLIC Window * Find1RefWindow( Window *pWndAncestor );
 };
 

@@ -325,12 +325,6 @@ interface BaseText
         StateMethod = StateInsert ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-    SID_INSERT_APPLET  // status(final|play)
-    [
-        ExecMethod = ExecInsert ;
-        StateMethod = StateInsert ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
     FN_INSERT_TABLE // status(final|play)
     [
         ExecMethod = ExecInsert ;
@@ -920,7 +914,7 @@ interface BaseText
         ExecMethod = ExecField ;
         StateMethod = StateField;
     ]
-    FN_DELETE_NOTE
+    FN_DELETE_COMMENT
     [
         ExecMethod = ExecField ;
         StateMethod = StateField;
@@ -1500,6 +1494,12 @@ interface BaseText
     SID_TRANSLITERATE_TOGGLE_CASE
     [
         ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_ROTATE_CASE
+    [
+        ExecMethod = ExecRotateTransliteration;
         StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]

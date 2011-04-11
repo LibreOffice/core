@@ -28,8 +28,6 @@ PRJ=..$/..$/..
 
 PRJNAME=writerfilter
 TARGET=test-qname
-# this is removed at the moment because we need some enhancements
-# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -51,7 +49,7 @@ SHL1OBJS=\
 
 SHL1TARGET=$(TARGET)
 
-SHL1STDLIBS=$(SALLIB) $(TOOLSLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS=$(SALLIB) $(TOOLSLIB) $(CPPUNITLIB)
 
 .IF "$(GUI)" == "WNT"
 SHL1STDLIBS+=   $(LB)$/iodiapi.lib

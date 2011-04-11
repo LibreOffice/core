@@ -174,7 +174,7 @@ namespace slideshow
             }
             catch (uno::Exception &)
             {
-                OSL_ENSURE( false, rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString(
                                     cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -791,7 +791,7 @@ namespace slideshow
             }
             catch (uno::Exception &)
             {
-                OSL_ENSURE( false, rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString(
                                     cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -1101,7 +1101,7 @@ namespace slideshow
                     {
                         if (!maHyperlinkIndices.empty() &&
                             maHyperlinkIndices.back().second == -1) {
-                            OSL_ENSURE( false, "### pending FIELD_SEQ_END!" );
+                            OSL_FAIL( "### pending FIELD_SEQ_END!" );
                             maHyperlinkIndices.pop_back();
                             maHyperlinkRegions.pop_back();
                         }
@@ -1133,7 +1133,7 @@ namespace slideshow
             }
             if (!maHyperlinkIndices.empty() &&
                 maHyperlinkIndices.back().second == -1) {
-                OSL_ENSURE( false, "### pending FIELD_SEQ_END!" );
+                OSL_FAIL( "### pending FIELD_SEQ_END!" );
                 maHyperlinkIndices.pop_back();
                 maHyperlinkRegions.pop_back();
             }

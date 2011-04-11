@@ -36,7 +36,7 @@
 
 #include <svx/svdmodel.hxx>
 #include <svx/xflhtit.hxx>
-#include "unofill.hxx"
+#include "svx/unofill.hxx"
 #include <svx/unomid.hxx>
 #include "UnoNameItemTable.hxx"
 
@@ -85,7 +85,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getSupportedService
 NameOrIndex* SvxUnoTransGradientTable::createItem() const throw()
 {
     XFillFloatTransparenceItem* pNewItem = new XFillFloatTransparenceItem();
-    pNewItem->SetEnabled( TRUE );
+    pNewItem->SetEnabled( sal_True );
     return pNewItem;
 }
 

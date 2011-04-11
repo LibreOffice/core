@@ -616,13 +616,13 @@ static void dumpPermissions(
             RTL_CONSTASCII_STRINGPARAM("> dumping default permissions:") );
     }
     OString str( ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-    OSL_TRACE( str.getStr() );
+    OSL_TRACE( "%s", str.getStr() );
     Sequence< OUString > permissions( collection.toStrings() );
     OUString const * p = permissions.getConstArray();
     for ( sal_Int32 nPos = 0; nPos < permissions.getLength(); ++nPos )
     {
         OString str( ::rtl::OUStringToOString( p[ nPos ], RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( str.getStr() );
+        OSL_TRACE( "%s", str.getStr() );
     }
     OSL_TRACE( "> permission dump done" );
 }
@@ -689,7 +689,7 @@ void AccessController::checkAndClearPostPoned() SAL_THROW( (RuntimeException) )
             break;
         }
         default:
-            OSL_ENSURE( 0, "### this should never be called in this ac mode!" );
+            OSL_FAIL( "### this should never be called in this ac mode!" );
             break;
         }
     }
@@ -743,7 +743,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         break;
     }
     default:
-        OSL_ENSURE( 0, "### this should never be called in this ac mode!" );
+        OSL_FAIL( "### this should never be called in this ac mode!" );
         return PermissionCollection();
     }
 
@@ -764,7 +764,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"") );
         OString str(
             ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( str.getStr() );
+        OSL_TRACE( "%s", str.getStr() );
 #endif
         return PermissionCollection( new AllPermission() );
     }
@@ -852,7 +852,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         clearPostPoned(); // safety: exception could have happened before checking postponed?
         OUStringBuffer buf( 64 );
         buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("deployment error (AccessControlException occured): ") );
+            RTL_CONSTASCII_STRINGPARAM("deployment error (AccessControlException occurred): ") );
         buf.append( exc.Message );
         throw DeploymentException( buf.makeStringAndClear(), exc.Context );
     }

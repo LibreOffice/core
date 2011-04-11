@@ -36,6 +36,8 @@
 #include "tenchelp.h"
 #include "rtl/textenc.h"
 #include <sal/macros.h>
+#include "rtl/ustring.hxx"
+#include "osl/module.h"
 
 #ifndef INCLUDED_STDDEF_H
 #include <stddef.h>
@@ -88,143 +90,71 @@ static sal_uChar const aImplA0FFSameToCharTab[SAMEA0FFCHAR_END
 
 static sal_uInt16 const aImplDoubleByteIdentifierTab[1] = { 0 };
 
-#include "tcvtarb1.tab"
-#include "tcvteas1.tab"
 #include "tcvtest1.tab"
-#include "tcvtjp1.tab"
-#include "tcvtjp2.tab"
-#include "tcvtjp3.tab"
-#include "tcvtjp4.tab"
-#include "tcvtjp5.tab"
-#include "tcvtjp6.tab"
-#include "tcvtkr1.tab"
-#include "tcvtkr2.tab"
-#include "tcvtkr4.tab"
-#include "tcvtkr5.tab"
-#include "tcvtkr6.tab"
 #include "tcvtlat1.tab"
-#include "tcvtscn1.tab"
-#include "tcvtscn2.tab"
-#include "tcvtscn3.tab"
-#include "tcvtscn4.tab"
-#include "tcvtscn5.tab"
-#include "tcvtscn6.tab"
-#include "tcvtsym1.tab"
-#include "tcvttcn1.tab"
-#include "tcvttcn2.tab"
-#include "tcvttcn6.tab"
 #include "tcvtuni1.tab"
-#include "convertiscii.tab"
 
-#include "convertbig5hkscs.tab"
-#include "converteuctw.tab"
-#include "convertgb18030.tab"
-#include "convertiso2022cn.tab"
-#include "convertiso2022jp.tab"
-#include "convertiso2022kr.tab"
-#include "convertadobe.tab"
+extern "C" {
+        typedef ImplTextEncodingData const *(*TextEncodingFunction) (rtl_TextEncoding nEncoding);
+};
+
+// Yes - we should use the unpleasant to use templatized
+// sal:: doublecheckfoo thing here.
+static TextEncodingFunction pTables;
+
+#define DOSTRING( x )  #x
+#define STRING( x )    DOSTRING( x )
 
 ImplTextEncodingData const *
 Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
 {
-    static ImplTextEncodingData const * const aData[]
-        = { NULL, /* DONTKNOW */
-            &aImplMS1252TextEncodingData, /* MS_1252 */
-            &aImplAPPLEROMANTextEncodingData, /* APPLE_ROMAN */
-            &aImplIBM437TextEncodingData, /* IBM_437 */
-            &aImplIBM850TextEncodingData, /* IBM_850 */
-            &aImplIBM860TextEncodingData, /* IBM_860 */
-            &aImplIBM861TextEncodingData, /* IBM_861 */
-            &aImplIBM863TextEncodingData, /* IBM_863 */
-            &aImplIBM865TextEncodingData, /* IBM_865 */
-            NULL, /* reserved (SYSTEM) */
-            &aImplSYMBOLTextEncodingData, /* SYMBOL */
-            &aImplUSASCIITextEncodingData, /* ASCII_US */
-            &aImplISO88591TextEncodingData, /* ISO_8859_1 */
-            &aImplISO88592TextEncodingData, /* ISO_8859_2 */
-            &aImplISO88593TextEncodingData, /* ISO_8859_3 */
-            &aImplISO88594TextEncodingData, /* ISO_8859_4 */
-            &aImplISO88595TextEncodingData, /* ISO_8859_5 */
-            &aImplISO88596TextEncodingData, /* ISO_8859_6 */
-            &aImplISO88597TextEncodingData, /* ISO_8859_7 */
-            &aImplISO88598TextEncodingData, /* ISO_8859_8 */
-            &aImplISO88599TextEncodingData, /* ISO_8859_9 */
-            &aImplISO885914TextEncodingData, /* ISO_8859_14 */
-            &aImplISO885915TextEncodingData, /* ISO_8859_15 */
-            &aImplIBM737TextEncodingData, /* IBM_737 */
-            &aImplIBM775TextEncodingData, /* IBM_775 */
-            &aImplIBM852TextEncodingData, /* IBM_852 */
-            &aImplIBM855TextEncodingData, /* IBM_855 */
-            &aImplIBM857TextEncodingData, /* IBM_857 */
-            &aImplIBM862TextEncodingData, /* IBM_862 */
-            &aImplIBM864TextEncodingData, /* IBM_864 */
-            &aImplIBM866TextEncodingData, /* IBM_866 */
-            &aImplIBM869TextEncodingData, /* IBM_869 */
-            &aImplMS874TextEncodingData, /* MS_874 */
-            &aImplMS1250TextEncodingData, /* MS_1250 */
-            &aImplMS1251TextEncodingData, /* MS_1251 */
-            &aImplMS1253TextEncodingData, /* MS_1253 */
-            &aImplMS1254TextEncodingData, /* MS_1254 */
-            &aImplMS1255TextEncodingData, /* MS_1255 */
-            &aImplMS1256TextEncodingData, /* MS_1256 */
-            &aImplMS1257TextEncodingData, /* MS_1257 */
-            &aImplMS1258TextEncodingData, /* MS_1258 */
-            NULL, /* TODO! APPLE_ARABIC */
-            &aImplAPPLECENTEUROTextEncodingData, /* APPLE_CENTEURO */
-            &aImplAPPLECROATIANTextEncodingData, /* APPLE_CROATIAN */
-            &aImplAPPLECYRILLICTextEncodingData, /* APPLE_CYRILLIC */
-            NULL, /* TODO! APPLE_DEVANAGARI */
-            NULL, /* TODO! APPLE_FARSI */
-            &aImplAPPLEGREEKTextEncodingData, /* APPLE_GREEK */
-            NULL, /* TODO! APPLE_GUJARATI */
-            NULL, /* TODO! APPLE_GURMUKHI */
-            NULL, /* TODO! APPLE_HEBREW */
-            &aImplAPPLEICELANDTextEncodingData, /* APPLE_ICELAND */
-            &aImplAPPLEROMANIANTextEncodingData, /* APPLE_ROMANIAN */
-            NULL, /* TODO! APPLE_THAI */
-            &aImplAPPLETURKISHTextEncodingData, /* APPLE_TURKISH */
-            &aImplAPPLEUKRAINIANTextEncodingData, /* APPLE_UKRAINIAN */
-            &aImplAPPLECHINSIMPTextEncodingData, /* APPLE_CHINSIMP */
-            &aImplAPPLECHINTRADTextEncodingData, /* APPLE_CHINTRAD */
-            &aImplAPPLEJAPANESETextEncodingData, /* APPLE_JAPANESE */
-            &aImplAPPLEKOREANTextEncodingData, /* APPLE_KOREAN */
-            &aImplMS932TextEncodingData, /* MS_932 */
-            &aImplMS936TextEncodingData, /* MS_936 */
-            &aImplMS949TextEncodingData, /* MS_949 */
-            &aImplMS950TextEncodingData, /* MS_950 */
-            &aImplSJISTextEncodingData, /* SHIFT_JIS */
-            &aImplGB2312TextEncodingData, /* GB_2312 */
-            &aImplGBT12345TextEncodingData, /* GBT_12345 */
-            &aImplGBKTextEncodingData, /* GBK */
-            &aImplBIG5TextEncodingData, /* BIG5 */
-            &aImplEUCJPTextEncodingData, /* EUC_JP */
-            &aImplEUCCNTextEncodingData, /* EUC_CN */
-            &aImplEucTwTextEncodingData, /* EUC_TW */
-            &aImplIso2022JpTextEncodingData, /* ISO_2022_JP */
-            &aImplIso2022CnTextEncodingData, /* ISO_2022_CN */
-            &aImplKOI8RTextEncodingData, /* KOI8_R */
-            &aImplUTF7TextEncodingData, /* UTF7 */
-            &aImplUTF8TextEncodingData, /* UTF8 */
-            &aImplISO885910TextEncodingData, /* ISO_8859_10 */
-            &aImplISO885913TextEncodingData, /* ISO_8859_13 */
-            &aImplEUCKRTextEncodingData, /* EUC_KR */
-            &aImplIso2022KrTextEncodingData, /* ISO_2022_KR */
-            &aImplJISX0201TextEncodingData, /* JIS_X_0201 */
-            &aImplJISX0208TextEncodingData, /* JIS_X_0208 */
-            &aImplJISX0212TextEncodingData, /* JIS_X_0212 */
-            &aImplMS1361TextEncodingData, /* MS_1361 */
-            &aImplGb18030TextEncodingData, /* GB_18030 */
-            &aImplBig5HkscsTextEncodingData, /* BIG5_HKSCS */
-            &aImplTis620TextEncodingData, /* TIS_620 */
-            &aImplKoi8UTextEncodingData, /* KOI8_U */
-            &aImplIsciiDevanagariTextEncodingData, /* ISCII_DEVANAGARI */
-            &aImplJavaUtf8TextEncodingData, /* JAVA_UTF8 */
-            &adobeStandardEncodingData, /* ADOBE_STANDARD */
-            &adobeSymbolEncodingData, /* ADOBE_SYMBOL */
-            &aImplPT154TextEncodingData, /* PT154 */
-            &adobeDingbatsEncodingData }; /* ADOBE_DINGBATS */
-    return
-        nEncoding < SAL_N_ELEMENTS(aData) ? aData[nEncoding] : NULL;
+    switch(nEncoding)
+    {
+        case RTL_TEXTENCODING_ASCII_US:
+            return &aImplUSASCIITextEncodingData; break;
+        case RTL_TEXTENCODING_MS_1252:
+            return &aImplMS1252TextEncodingData; break;
+        case RTL_TEXTENCODING_UTF8:
+            return &aImplUTF8TextEncodingData; break;
+        case RTL_TEXTENCODING_ISO_8859_1:
+            return &aImplISO88591TextEncodingData; break;
+
+#ifndef TOOLS_STRING_MISSUSE
+// ----------------------------------------------
+// These are here temporarily since they are used in error
+// all over the place
+// ----------------------------------------------
+        case RTL_TEXTENCODING_IBM_850:
+            return &aImplIBM850TextEncodingData; break;
+        case RTL_TEXTENCODING_IBM_857:
+            return &aImplIBM857TextEncodingData; break;
+        case RTL_TEXTENCODING_IBM_860:
+            return &aImplIBM860TextEncodingData; break;
+        case RTL_TEXTENCODING_IBM_861:
+            return &aImplIBM861TextEncodingData; break;
+        case RTL_TEXTENCODING_IBM_863:
+            return &aImplIBM863TextEncodingData; break;
+// ----------------------------------------------
+#endif
+        default:
+            if (!pTables)
+            {
+                static char const pName[] = STRING(PLUGIN_NAME);
+                oslModule aModule = osl_loadModuleAscii(pName, SAL_LOADMODULE_DEFAULT);
+
+                if(aModule)
+                {
+                    static char const pSymbol[] = "Impl_getTextEncodingData";
+                    pTables = (TextEncodingFunction)osl_getAsciiFunctionSymbol(aModule, pSymbol);
+                }
+            }
+            if (pTables)
+                return pTables(nEncoding);
+//          else
+//              fprintf (stderr, "missing text encoding library for %d\n", nEncoding);
+            break;
+    }
+    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

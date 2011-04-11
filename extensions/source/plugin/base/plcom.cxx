@@ -35,13 +35,17 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#undef OPTIONAL
+#endif
+
 #ifdef SOLARIS
 #include <limits>
 #endif
 
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
 
 #include <tools/fsys.hxx>
 #include <plugin/impl.hxx>

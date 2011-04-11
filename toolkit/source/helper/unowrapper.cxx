@@ -39,6 +39,7 @@
 #include <toolkit/awt/vclxcontainer.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxgraphics.hxx>
+#include <awt/vclxtabcontrol.hxx>
 
 #include "toolkit/dllapi.h"
 #include <vcl/svapp.hxx>
@@ -69,7 +70,6 @@ using namespace ::com::sun::star;
         // instead of only a <VCLXWindow> instance, especially regarding its
         // corresponding accessibility API.
         case WINDOW_METRICBOX:
-        // <--
         case WINDOW_COMBOBOX:       return new VCLXComboBox;
         case WINDOW_SPINFIELD:
         case WINDOW_NUMERICFIELD:
@@ -108,6 +108,7 @@ using namespace ::com::sun::star;
         case WINDOW_TABPAGE:        return new VCLXContainer;
 
         case WINDOW_TOOLBOX:        return new VCLXToolBox;
+        case WINDOW_TABCONTROL:     return new VCLXMultiPage;
 
         // case WINDOW_FIXEDLINE:
         // case WINDOW_FIXEDBITMAP:
@@ -185,7 +186,7 @@ void UnoWrapper::SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Ref
         {
             int i = 0;
             i++;
-            //          DBG_ERROR( "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
+            //          OSL_FAIL( "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
         }
         pVCLXWindow->SetWindow( pWindow );
         pWindow->SetWindowPeer( xIFace, pVCLXWindow );
@@ -268,7 +269,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
         Window* pClient = pChild->GetWindow( WINDOW_CLIENT );
         if ( pClient->GetWindowPeer() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( FALSE ), ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( sal_False ), ::com::sun::star::uno::UNO_QUERY );
             xComp->dispose();
         }
 
@@ -285,7 +286,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
 
         if ( pClient->GetWindowPeer() && lcl_ImplIsParent( pWindow, pClient ) )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( FALSE ), ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( sal_False ), ::com::sun::star::uno::UNO_QUERY );
             xComp->dispose();
         }
 
@@ -297,7 +298,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
         pParent->GetWindowPeer()->notifyWindowRemoved( *pWindow );
 
     VCLXWindow* pWindowPeer = pWindow->GetWindowPeer();
-    uno::Reference< lang::XComponent > xWindowPeerComp( pWindow->GetComponentInterface( FALSE ), uno::UNO_QUERY );
+    uno::Reference< lang::XComponent > xWindowPeerComp( pWindow->GetComponentInterface( sal_False ), uno::UNO_QUERY );
     OSL_ENSURE( ( pWindowPeer != NULL ) == ( xWindowPeerComp.is() == sal_True ),
         "UnoWrapper::WindowDestroyed: inconsistency in the window's peers!" );
     if ( pWindowPeer )

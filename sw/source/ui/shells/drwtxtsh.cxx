@@ -83,9 +83,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
-#include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
-
 #include <cppuhelper/bootstrap.hxx>
 
 #include "swabstdlg.hxx"
@@ -114,7 +111,7 @@ void SwDrawTextShell::Init()
     if( !pOutliner )
         return ;
     OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-    ULONG nCtrl = pOutliner->GetControlWord();
+    sal_uLong nCtrl = pOutliner->GetControlWord();
     nCtrl |= EE_CNTRL_AUTOCORRECT;
 
     SetUndoManager(&pOutliner->GetUndoManager());
@@ -142,27 +139,15 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
 
     Init();
 
-    rSh.NoEdit(TRUE);
+    rSh.NoEdit(sal_True);
     SetName(String::CreateFromAscii("ObjectText"));
     SetHelpId(SW_DRWTXTSHELL);
 }
 
-__EXPORT SwDrawTextShell::~SwDrawTextShell()
+SwDrawTextShell::~SwDrawTextShell()
 {
     if ( GetView().GetCurShell() == this )
         rView.ResetSubShell();
-
-    //MA 13. Nov. 96: Das kommt durchaus vor #33141#:
-    //(doppel-)Klick von einem Texteditmode in ein anderes Objekt, zwischendurch
-    //wird eine andere (Draw-)Shell gepusht, die alte aber noch nicht deletet.
-    //Dann wird vor dem Flush wieder ein DrawTextShell gepusht und der Mode ist
-    //eingeschaltet. In diesem Moment wird der Dispatcher geflusht und die alte
-    //DrawTextShell zerstoert.
-// OSL_ENSURE( !pSdrView->IsTextEdit(), "TextEdit in DTor DrwTxtSh?" );
-//    if (pSdrView->IsTextEdit())
-//      GetShell().EndTextEdit();   // Danebengeklickt, Ende mit Edit
-
-//    GetShell().Edit();
 }
 
 SwWrtShell& SwDrawTextShell::GetShell()
@@ -176,7 +161,7 @@ SwWrtShell& SwDrawTextShell::GetShell()
 void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
 
     while (nWhich)
     {
@@ -203,7 +188,7 @@ void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
     }
 }
 
-BOOL SwDrawTextShell::IsTextEdit()
+sal_Bool SwDrawTextShell::IsTextEdit()
 {
     return pSdrView->IsTextEdit();
 }
@@ -212,7 +197,7 @@ void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
     FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
-    SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)) );
+    SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     if ( rReq.GetArgs() )
     {
@@ -228,7 +213,7 @@ void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
 
 void SwDrawTextShell::StateFontWork(SfxItemSet& rSet)
 {
-    const USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
+    const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
     rSet.Put(SfxBoolItem(SID_FONTWORK, GetView().GetViewFrame()->HasChildWindow(nId)));
 }
 
@@ -261,12 +246,12 @@ void SwDrawTextShell::ExecFormText(SfxRequest& rReq)
             rTempView.AttrChangedNotify(&rSh);
         }
 
-        if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, TRUE, &pItem) ==
+        if ( rSet.GetItemState(XATTR_FORMTXTSTDFORM, sal_True, &pItem) ==
              SFX_ITEM_SET &&
             ((const XFormTextStdFormItem*) pItem)->GetValue() != XFTFORM_NONE )
         {
 
-            const USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
+            const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
             SvxFontWorkDialog* pDlg = (SvxFontWorkDialog*)(
                     pVFrame->GetChildWindow(nId)->GetWindow());
 
@@ -294,7 +279,7 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
     const SdrObject* pObj = NULL;
     SvxFontWorkDialog* pDlg = NULL;
 
-    const USHORT nId = SvxFontWorkChildWindow::GetChildWindowId();
+    const sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     if ( pVFrame->HasChildWindow(nId) )
@@ -307,13 +292,13 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
         !((SdrTextObj*) pObj)->HasText() )
     {
 #define XATTR_ANZ 12
-        static const USHORT nXAttr[ XATTR_ANZ ] =
+        static const sal_uInt16 nXAttr[ XATTR_ANZ ] =
         {   XATTR_FORMTXTSTYLE, XATTR_FORMTXTADJUST, XATTR_FORMTXTDISTANCE,
             XATTR_FORMTXTSTART, XATTR_FORMTXTMIRROR, XATTR_FORMTXTSTDFORM,
             XATTR_FORMTXTHIDEFORM, XATTR_FORMTXTOUTLINE, XATTR_FORMTXTSHADOW,
             XATTR_FORMTXTSHDWCOLOR, XATTR_FORMTXTSHDWXVAL, XATTR_FORMTXTSHDWYVAL
         };
-        for( USHORT i = 0; i < XATTR_ANZ; )
+        for( sal_uInt16 i = 0; i < XATTR_ANZ; )
             rSet.DisableItem( nXAttr[ i++ ] );
     }
     else
@@ -461,7 +446,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             const SfxPoolItem* pItem = 0;
                         if(pNewAttrs)
             {
-                                pNewAttrs->GetItemState(nSlot, FALSE, &pItem );
+                                pNewAttrs->GetItemState(nSlot, sal_False, &pItem );
                              pOLV->InsertText(((const SfxStringItem *)pItem)->GetValue());
             }
                         break;
@@ -472,9 +457,9 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
             if(pOutliner)
             {
-                ULONG nParaCount = pOutliner->GetParagraphCount();
+                sal_uLong nParaCount = pOutliner->GetParagraphCount();
                 if (nParaCount > 0)
-                    pOLV->SelectRange(0L, USHORT(nParaCount) );
+                    pOLV->SelectRange(0L, sal_uInt16(nParaCount) );
             }
         }
         break;
@@ -482,7 +467,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
         case FN_FORMAT_RESET:   // delete hard text attributes
         {
             pOLV->RemoveAttribsKeepLanguages( true );
-            pOLV->GetEditView().GetEditEngine()->RemoveFields(TRUE);
+            pOLV->GetEditView().GetEditEngine()->RemoveFields(sal_True);
             rReq.Done();
         }
         break;
@@ -509,7 +494,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                     SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog(
                                 &(GetView().GetViewFrame()->GetWindow()),
                                 &aNewAttr, pSdrView );
-                    USHORT nResult = pDlg->Execute();
+                    sal_uInt16 nResult = pDlg->Execute();
 
                     if (nResult == RET_OK)
                     {
@@ -530,7 +515,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
             return;
     }
 
-    GetView().GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+    GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
 
     if (IsTextEdit() && pOLV->GetOutliner()->IsModified())
         rSh.SetModified();
@@ -543,31 +528,31 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
 {
     if( IsTextEdit() )
     {
-        BOOL bCallBase = TRUE;
+        sal_Bool bCallBase = sal_True;
         const SfxItemSet* pArgs = rReq.GetArgs();
         if( pArgs )
         {
-            USHORT nId = rReq.GetSlot(), nCnt = 1;
+            sal_uInt16 nId = rReq.GetSlot(), nCnt = 1;
             const SfxPoolItem* pItem;
             switch( nId )
             {
             case SID_UNDO:
             case SID_REDO:
-                if( SFX_ITEM_SET == pArgs->GetItemState( nId, FALSE, &pItem ) &&
+                if( SFX_ITEM_SET == pArgs->GetItemState( nId, sal_False, &pItem ) &&
                     1 < (nCnt = ((SfxUInt16Item*)pItem)->GetValue()) )
                 {
                     // then we make by ourself.
-                    SfxUndoManager* pUndoManager = GetUndoManager();
+                    ::svl::IUndoManager* pUndoManager = GetUndoManager();
                     if( pUndoManager )
                     {
                         if( SID_UNDO == nId )
                             while( nCnt-- )
-                                pUndoManager->Undo(0);
+                                pUndoManager->Undo();
                         else
                             while( nCnt-- )
-                                pUndoManager->Redo(0);
+                                pUndoManager->Redo();
                     }
-                    bCallBase = FALSE;
+                    bCallBase = sal_False;
                     GetView().GetViewFrame()->GetBindings().InvalidateAll(sal_False);
                 }
                 break;
@@ -591,7 +576,7 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
 
     SfxViewFrame *pSfxViewFrame = GetView().GetViewFrame();
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while( nWhich )
     {
         switch ( nWhich )
@@ -599,27 +584,27 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
         case SID_GETUNDOSTRINGS:
         case SID_GETREDOSTRINGS:
             {
-                SfxUndoManager* pUndoManager = GetUndoManager();
+                ::svl::IUndoManager* pUndoManager = GetUndoManager();
                 if( pUndoManager )
                 {
-                    UniString (SfxUndoManager:: *fnGetComment)( USHORT ) const;
+                    UniString (::svl::IUndoManager:: *fnGetComment)( size_t, bool const ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWhich )
                     {
                         nCount = pUndoManager->GetUndoActionCount();
-                        fnGetComment = &SfxUndoManager::GetUndoActionComment;
+                        fnGetComment = &::svl::IUndoManager::GetUndoActionComment;
                     }
                     else
                     {
                         nCount = pUndoManager->GetRedoActionCount();
-                        fnGetComment = &SfxUndoManager::GetRedoActionComment;
+                        fnGetComment = &::svl::IUndoManager::GetRedoActionComment;
                     }
                     if( nCount )
                     {
                         String sList;
                         for( sal_uInt16 n = 0; n < nCount; ++n )
-                            ( sList += (pUndoManager->*fnGetComment)( n ) )
+                            ( sList += (pUndoManager->*fnGetComment)( n, ::svl::IUndoManager::TopLevel ) )
                                     += '\n';
 
                         SfxStringListItem aItem( nWhich );
@@ -643,51 +628,73 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
 
 void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
 {
+    if (!pSdrView)
+        return;
+
     using namespace i18n;
+
+    sal_uInt32 nMode = 0;
+
+    switch( rReq.GetSlot() )
     {
-        sal_uInt32 nMode = 0;
+    case SID_TRANSLITERATE_SENTENCE_CASE:
+        nMode = TransliterationModulesExtra::SENTENCE_CASE;
+        break;
+    case SID_TRANSLITERATE_TITLE_CASE:
+        nMode = TransliterationModulesExtra::TITLE_CASE;
+        break;
+    case SID_TRANSLITERATE_TOGGLE_CASE:
+        nMode = TransliterationModulesExtra::TOGGLE_CASE;
+        break;
+    case SID_TRANSLITERATE_UPPER:
+        nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+        break;
+    case SID_TRANSLITERATE_LOWER:
+        nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+        break;
 
-        switch( rReq.GetSlot() )
-        {
-        case SID_TRANSLITERATE_SENTENCE_CASE:
-            nMode = TransliterationModulesExtra::SENTENCE_CASE;
-            break;
-        case SID_TRANSLITERATE_TITLE_CASE:
-            nMode = TransliterationModulesExtra::TITLE_CASE;
-            break;
-        case SID_TRANSLITERATE_TOGGLE_CASE:
-            nMode = TransliterationModulesExtra::TOGGLE_CASE;
-            break;
-        case SID_TRANSLITERATE_UPPER:
-            nMode = TransliterationModules_LOWERCASE_UPPERCASE;
-            break;
-        case SID_TRANSLITERATE_LOWER:
-            nMode = TransliterationModules_UPPERCASE_LOWERCASE;
-            break;
+    case SID_TRANSLITERATE_HALFWIDTH:
+        nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
+        break;
+    case SID_TRANSLITERATE_FULLWIDTH:
+        nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
+        break;
 
-        case SID_TRANSLITERATE_HALFWIDTH:
-            nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
-            break;
-        case SID_TRANSLITERATE_FULLWIDTH:
-            nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
-            break;
+    case SID_TRANSLITERATE_HIRAGANA:
+        nMode = TransliterationModules_KATAKANA_HIRAGANA;
+        break;
+    case SID_TRANSLITERATE_KATAGANA:
+        nMode = TransliterationModules_HIRAGANA_KATAKANA;
+        break;
 
-        case SID_TRANSLITERATE_HIRAGANA:
-            nMode = TransliterationModules_KATAKANA_HIRAGANA;
-            break;
-        case SID_TRANSLITERATE_KATAGANA:
-            nMode = TransliterationModules_HIRAGANA_KATAKANA;
-            break;
+    default:
+        OSL_ENSURE(!this, "wrong dispatcher");
+    }
 
-        default:
-            OSL_ENSURE(!this, "wrong dispatcher");
-        }
+    if( nMode )
+    {
+        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
 
-        if( nMode )
-        {
-            OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-            pOLV->TransliterateText( nMode );
-        }
+        if (!pOLV)
+            return;
+
+        pOLV->TransliterateText( nMode );
+    }
+}
+
+void SwDrawTextShell::ExecRotateTransliteration( SfxRequest & rReq )
+{
+    if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
+    {
+        if (!pSdrView)
+            return;
+
+        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+
+        if (!pOLV)
+            return;
+
+        pOLV->TransliterateText( m_aRotateCase.getNextMode() );
     }
 }
 
@@ -702,7 +709,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
     if( pArgs )
-        pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), FALSE, &pItem);
+        pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
 
     String sSym;
     String sFontName;
@@ -710,25 +717,25 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     {
         sSym = ((const SfxStringItem*)pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
-        pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), FALSE, &pFtItem);
+        pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
         if ( pFontItem )
             sFontName = pFontItem->GetValue();
     }
 
     SfxItemSet aSet(pOLV->GetAttribs());
-    USHORT nScript = pOLV->GetSelectedScriptType();
+    sal_uInt16 nScript = pOLV->GetSelectedScriptType();
     SvxFontItem aSetDlgFont( RES_CHRATR_FONT );
     {
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
-        aSetItem.GetItemSet().Put( aSet, FALSE );
+        aSetItem.GetItemSet().Put( aSet, sal_False );
         const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
         if( pI )
             aSetDlgFont = *(SvxFontItem*)pI;
         else
             aSetDlgFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
                         SID_ATTR_CHAR_FONT,
-                        GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() ) ));
+                        GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) ));
         if (!sFontName.Len())
             sFontName = aSetDlgFont.GetFamilyName();
     }
@@ -737,7 +744,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     if(!sSym.Len())
     {
         SfxAllItemSet aAllSet( GetPool() );
-        aAllSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
+        aAllSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
 
         SwViewOption aOpt(*rView.GetWrtShell().GetViewOptions());
         String sSymbolFont = aOpt.GetSymbolFont();
@@ -750,11 +757,11 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( rView.GetWindow(), aAllSet,
             rView.GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
-        USHORT nResult = pDlg->Execute();
+        sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, FALSE );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, FALSE );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, sal_False );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, sal_False );
             if ( pFontItem )
             {
                 aFont.SetName( pFontItem->GetFamilyName() );
@@ -779,7 +786,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         // nicht flackern
         pOLV->HideCursor();
         SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
-        pOutliner->SetUpdateMode(FALSE);
+        pOutliner->SetUpdateMode(sal_False);
 
         SfxItemSet aOldSet( pOLV->GetAttribs() );
         SfxItemSet aFontSet( *aOldSet.GetPool(),
@@ -817,7 +824,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         pOLV->SetAttribs( aFontSet );
 
         // ab jetzt wieder anzeigen
-        pOutliner->SetUpdateMode(TRUE);
+        pOutliner->SetUpdateMode(sal_True);
         pOLV->ShowCursor();
 
         rReq.AppendItem( SfxStringItem( GetPool().GetWhich(SID_CHARMAP), sSym ) );
@@ -827,7 +834,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     }
 }
 
-SfxUndoManager* SwDrawTextShell::GetUndoManager()
+::svl::IUndoManager* SwDrawTextShell::GetUndoManager()
 {
     SwWrtShell &rSh = GetShell();
     pSdrView = rSh.GetDrawView();

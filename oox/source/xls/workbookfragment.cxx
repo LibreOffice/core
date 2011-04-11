@@ -27,14 +27,14 @@
  ************************************************************************/
 
 #include "oox/xls/workbookfragment.hxx"
+
 #include <com/sun/star/table/CellAddress.hpp>
+#include "oox/core/filterbase.hxx"
+#include "oox/drawingml/themefragmenthandler.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/progressbar.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/ole/olestorage.hxx"
-#include "oox/core/filterbase.hxx"
-#include "oox/drawingml/themefragmenthandler.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/chartsheetfragment.hxx"
 #include "oox/xls/connectionsfragment.hxx"
@@ -51,22 +51,18 @@
 #include "oox/xls/worksheetbuffer.hxx"
 #include "oox/xls/worksheetfragment.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::table::CellAddress;
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::FragmentHandlerRef;
-using ::oox::core::RecordInfo;
-using ::oox::core::Relation;
-using ::oox::drawingml::ThemeFragmentHandler;
-
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+using namespace ::oox::core;
+
+using ::oox::drawingml::ThemeFragmentHandler;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -78,15 +74,12 @@ const double PROGRESS_LENGTH_GLOBALS        = 0.1;      /// 10% of progress bar 
 
 // ============================================================================
 
-OoxWorkbookFragment::OoxWorkbookFragment(
-        const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxWorkbookFragmentBase( rHelper, rFragmentPath )
+WorkbookFragment::WorkbookFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
+    WorkbookFragmentBase( rHelper, rFragmentPath )
 {
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
-ContextHandlerRef OoxWorkbookFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef WorkbookFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
@@ -129,108 +122,102 @@ ContextHandlerRef OoxWorkbookFragment::onCreateContext( sal_Int32 nElement, cons
     return 0;
 }
 
-void OoxWorkbookFragment::onEndElement( const OUString& rChars )
+void WorkbookFragment::onCharacters( const OUString& rChars )
 {
-    switch( getCurrentElement() )
-    {
-        case XLS_TOKEN( definedName ):
-            if( mxCurrName.get() ) mxCurrName->setFormula( rChars );
-        break;
-    }
+    if( isCurrentElement( XLS_TOKEN( definedName ) ) && mxCurrName.get() )
+        mxCurrName->setFormula( rChars );
 }
 
-ContextHandlerRef OoxWorkbookFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef WorkbookFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            if( nRecId == OOBIN_ID_WORKBOOK ) return this;
+            if( nRecId == BIFF12_ID_WORKBOOK ) return this;
         break;
 
-        case OOBIN_ID_WORKBOOK:
+        case BIFF12_ID_WORKBOOK:
             switch( nRecId )
             {
-                case OOBIN_ID_SHEETS:
-                case OOBIN_ID_BOOKVIEWS:
-                case OOBIN_ID_EXTERNALREFS:
-                case OOBIN_ID_PIVOTCACHES:      return this;
+                case BIFF12_ID_SHEETS:
+                case BIFF12_ID_BOOKVIEWS:
+                case BIFF12_ID_EXTERNALREFS:
+                case BIFF12_ID_PIVOTCACHES:     return this;
 
-                case OOBIN_ID_FILESHARING:      getWorkbookSettings().importFileSharing( rStrm );   break;
-                case OOBIN_ID_WORKBOOKPR:       getWorkbookSettings().importWorkbookPr( rStrm );    break;
-                case OOBIN_ID_CALCPR:           getWorkbookSettings().importCalcPr( rStrm );        break;
-                case OOBIN_ID_OLESIZE:          getViewSettings().importOleSize( rStrm );           break;
-                case OOBIN_ID_DEFINEDNAME:      getDefinedNames().importDefinedName( rStrm );       break;
+                case BIFF12_ID_FILESHARING:     getWorkbookSettings().importFileSharing( rStrm );   break;
+                case BIFF12_ID_WORKBOOKPR:      getWorkbookSettings().importWorkbookPr( rStrm );    break;
+                case BIFF12_ID_CALCPR:          getWorkbookSettings().importCalcPr( rStrm );        break;
+                case BIFF12_ID_OLESIZE:         getViewSettings().importOleSize( rStrm );           break;
+                case BIFF12_ID_DEFINEDNAME:     getDefinedNames().importDefinedName( rStrm );       break;
             }
         break;
 
-        case OOBIN_ID_SHEETS:
-            if( nRecId == OOBIN_ID_SHEET ) getWorksheets().importSheet( rStrm );
+        case BIFF12_ID_SHEETS:
+            if( nRecId == BIFF12_ID_SHEET ) getWorksheets().importSheet( rStrm );
         break;
-        case OOBIN_ID_BOOKVIEWS:
-            if( nRecId == OOBIN_ID_WORKBOOKVIEW ) getViewSettings().importWorkbookView( rStrm );
+        case BIFF12_ID_BOOKVIEWS:
+            if( nRecId == BIFF12_ID_WORKBOOKVIEW ) getViewSettings().importWorkbookView( rStrm );
         break;
 
-        case OOBIN_ID_EXTERNALREFS:
+        case BIFF12_ID_EXTERNALREFS:
             switch( nRecId )
             {
-                case OOBIN_ID_EXTERNALREF:      importExternalRef( rStrm );                         break;
-                case OOBIN_ID_EXTERNALSELF:     getExternalLinks().importExternalSelf( rStrm );     break;
-                case OOBIN_ID_EXTERNALSAME:     getExternalLinks().importExternalSame( rStrm );     break;
-                case OOBIN_ID_EXTERNALADDIN:    getExternalLinks().importExternalAddin( rStrm );    break;
-                case OOBIN_ID_EXTERNALSHEETS:   getExternalLinks().importExternalSheets( rStrm );   break;
+                case BIFF12_ID_EXTERNALREF:     importExternalRef( rStrm );                         break;
+                case BIFF12_ID_EXTERNALSELF:    getExternalLinks().importExternalSelf( rStrm );     break;
+                case BIFF12_ID_EXTERNALSAME:    getExternalLinks().importExternalSame( rStrm );     break;
+                case BIFF12_ID_EXTERNALADDIN:   getExternalLinks().importExternalAddin( rStrm );    break;
+                case BIFF12_ID_EXTERNALSHEETS:  getExternalLinks().importExternalSheets( rStrm );   break;
             }
         break;
 
-        case OOBIN_ID_PIVOTCACHES:
-            if( nRecId == OOBIN_ID_PIVOTCACHE ) importPivotCache( rStrm );
+        case BIFF12_ID_PIVOTCACHES:
+            if( nRecId == BIFF12_ID_PIVOTCACHE ) importPivotCache( rStrm );
     }
     return 0;
 }
 
-// oox.core.FragmentHandler2 interface ----------------------------------------
-
-const RecordInfo* OoxWorkbookFragment::getRecordInfos() const
+const RecordInfo* WorkbookFragment::getRecordInfos() const
 {
     static const RecordInfo spRecInfos[] =
     {
-        { OOBIN_ID_BOOKVIEWS,       OOBIN_ID_BOOKVIEWS + 1      },
-        { OOBIN_ID_EXTERNALREFS,    OOBIN_ID_EXTERNALREFS + 1   },
-        { OOBIN_ID_FUNCTIONGROUPS,  OOBIN_ID_FUNCTIONGROUPS + 2 },
-        { OOBIN_ID_PIVOTCACHE,      OOBIN_ID_PIVOTCACHE + 1     },
-        { OOBIN_ID_PIVOTCACHES,     OOBIN_ID_PIVOTCACHES + 1    },
-        { OOBIN_ID_SHEETS,          OOBIN_ID_SHEETS + 1         },
-        { OOBIN_ID_WORKBOOK,        OOBIN_ID_WORKBOOK + 1       },
-        { -1,                       -1                          }
+        { BIFF12_ID_BOOKVIEWS,      BIFF12_ID_BOOKVIEWS + 1         },
+        { BIFF12_ID_EXTERNALREFS,   BIFF12_ID_EXTERNALREFS + 1      },
+        { BIFF12_ID_FUNCTIONGROUPS, BIFF12_ID_FUNCTIONGROUPS + 2    },
+        { BIFF12_ID_PIVOTCACHE,     BIFF12_ID_PIVOTCACHE + 1        },
+        { BIFF12_ID_PIVOTCACHES,    BIFF12_ID_PIVOTCACHES + 1       },
+        { BIFF12_ID_SHEETS,         BIFF12_ID_SHEETS + 1            },
+        { BIFF12_ID_WORKBOOK,       BIFF12_ID_WORKBOOK + 1          },
+        { -1,                       -1                              }
     };
     return spRecInfos;
 }
 
-void OoxWorkbookFragment::finalizeImport()
+void WorkbookFragment::finalizeImport()
 {
     ISegmentProgressBarRef xGlobalSegment = getProgressBar().createSegment( PROGRESS_LENGTH_GLOBALS );
 
     // read the theme substream
-    OUString aThemeFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "theme" ) );
+    OUString aThemeFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
     if( aThemeFragmentPath.getLength() > 0 )
         importOoxFragment( new ThemeFragmentHandler( getFilter(), aThemeFragmentPath, getTheme() ) );
     xGlobalSegment->setPosition( 0.25 );
 
     // read the styles substream (requires finalized theme buffer)
-    OUString aStylesFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "styles" ) );
+    OUString aStylesFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "styles" ) );
     if( aStylesFragmentPath.getLength() > 0 )
-        importOoxFragment( new OoxStylesFragment( *this, aStylesFragmentPath ) );
+        importOoxFragment( new StylesFragment( *this, aStylesFragmentPath ) );
     xGlobalSegment->setPosition( 0.5 );
 
     // read the shared string table substream (requires finalized styles buffer)
-    OUString aSstFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "sharedStrings" ) );
+    OUString aSstFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "sharedStrings" ) );
     if( aSstFragmentPath.getLength() > 0 )
-        importOoxFragment( new OoxSharedStringsFragment( *this, aSstFragmentPath ) );
+        importOoxFragment( new SharedStringsFragment( *this, aSstFragmentPath ) );
     xGlobalSegment->setPosition( 0.75 );
 
     // read the connections substream
-    OUString aConnFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "connections" ) );
+    OUString aConnFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "connections" ) );
     if( aConnFragmentPath.getLength() > 0 )
-        importOoxFragment( new OoxConnectionsFragment( *this, aConnFragmentPath ) );
+        importOoxFragment( new ConnectionsFragment( *this, aConnFragmentPath ) );
     xGlobalSegment->setPosition( 1.0 );
 
     /*  Create fragments for all sheets, before importing them. Needed to do
@@ -249,35 +236,35 @@ void OoxWorkbookFragment::finalizeImport()
         {
             // get fragment path of the sheet
             OUString aFragmentPath = getFragmentPathFromRelation( *pRelation );
-            OSL_ENSURE( aFragmentPath.getLength() > 0, "OoxWorkbookFragment::finalizeImport - cannot access sheet fragment" );
+            OSL_ENSURE( aFragmentPath.getLength() > 0, "WorkbookFragment::finalizeImport - cannot access sheet fragment" );
             if( aFragmentPath.getLength() > 0 )
             {
-                ::rtl::Reference< OoxWorksheetFragmentBase > xFragment;
+                ::rtl::Reference< WorksheetFragmentBase > xFragment;
                 double fSegmentLength = getProgressBar().getFreeLength() / (nWorksheetCount - nWorksheet);
                 ISegmentProgressBarRef xSheetSegment = getProgressBar().createSegment( fSegmentLength );
 
                 // create the fragment according to the sheet type
-                if( pRelation->maType == CREATE_OFFICEDOC_RELATIONSTYPE( "worksheet" ) )
+                if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "worksheet" ) )
                 {
-                    xFragment.set( new OoxWorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_WORKSHEET, nCalcSheet ) );
+                    xFragment.set( new WorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_WORKSHEET, nCalcSheet ) );
                 }
-                else if( pRelation->maType == CREATE_OFFICEDOC_RELATIONSTYPE( "chartsheet" ) )
+                else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "chartsheet" ) )
                 {
-                    xFragment.set( new OoxChartsheetFragment( *this, aFragmentPath, xSheetSegment, nCalcSheet ) );
+                    xFragment.set( new ChartsheetFragment( *this, aFragmentPath, xSheetSegment, nCalcSheet ) );
                 }
-                else if( (pRelation->maType == CREATE_MSOFFICE_RELATIONSTYPE( "xlMacrosheet" )) ||
-                         (pRelation->maType == CREATE_MSOFFICE_RELATIONSTYPE( "xlIntlMacrosheet" )) )
+                else if( (pRelation->maType == CREATE_MSOFFICE_RELATION_TYPE( "xlMacrosheet" )) ||
+                         (pRelation->maType == CREATE_MSOFFICE_RELATION_TYPE( "xlIntlMacrosheet" )) )
                 {
-                    xFragment.set( new OoxWorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_MACROSHEET, nCalcSheet ) );
+                    xFragment.set( new WorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_MACROSHEET, nCalcSheet ) );
                 }
-                else if( pRelation->maType == CREATE_OFFICEDOC_RELATIONSTYPE( "dialogsheet" ) )
+                else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "dialogsheet" ) )
                 {
-                    xFragment.set( new OoxWorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_DIALOGSHEET, nCalcSheet ) );
+                    xFragment.set( new WorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_DIALOGSHEET, nCalcSheet ) );
                 }
 
                 // insert the fragment into the map
-                OSL_ENSURE( xFragment.is(), "OoxWorkbookFragment::finalizeImport - unknown sheet type" );
-                OSL_ENSURE( !xFragment.is() || xFragment->isValidSheet(), "OoxWorkbookFragment::finalizeImport - missing sheet in document" );
+                OSL_ENSURE( xFragment.is(), "WorkbookFragment::finalizeImport - unknown sheet type" );
+                OSL_ENSURE( !xFragment.is() || xFragment->isValidSheet(), "WorkbookFragment::finalizeImport - missing sheet in document" );
                 if( xFragment.is() && xFragment->isValidSheet() )
                     aSheetFragments.push_back( xFragment.get() );
             }
@@ -298,7 +285,7 @@ void OoxWorkbookFragment::finalizeImport()
     }
 
     // open the VBA project storage
-    OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATIONSTYPE( "vbaProject" ) );
+    OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATION_TYPE( "vbaProject" ) );
     if( aVbaFragmentPath.getLength() > 0 )
     {
         Reference< XInputStream > xInStrm = getBaseFilter().openInputStream( aVbaFragmentPath );
@@ -312,45 +299,45 @@ void OoxWorkbookFragment::finalizeImport()
 
 // private --------------------------------------------------------------------
 
-void OoxWorkbookFragment::importExternalReference( const AttributeList& rAttribs )
+void WorkbookFragment::importExternalReference( const AttributeList& rAttribs )
 {
     if( ExternalLink* pExtLink = getExternalLinks().importExternalReference( rAttribs ).get() )
         importExternalLinkFragment( *pExtLink );
 }
 
-void OoxWorkbookFragment::importDefinedName( const AttributeList& rAttribs )
+void WorkbookFragment::importDefinedName( const AttributeList& rAttribs )
 {
     mxCurrName = getDefinedNames().importDefinedName( rAttribs );
 }
 
-void OoxWorkbookFragment::importPivotCache( const AttributeList& rAttribs )
+void WorkbookFragment::importPivotCache( const AttributeList& rAttribs )
 {
     sal_Int32 nCacheId = rAttribs.getInteger( XML_cacheId, -1 );
     OUString aRelId = rAttribs.getString( R_TOKEN( id ), OUString() );
     importPivotCacheDefFragment( aRelId, nCacheId );
 }
 
-void OoxWorkbookFragment::importExternalRef( RecordInputStream& rStrm )
+void WorkbookFragment::importExternalRef( SequenceInputStream& rStrm )
 {
     if( ExternalLink* pExtLink = getExternalLinks().importExternalRef( rStrm ).get() )
         importExternalLinkFragment( *pExtLink );
 }
 
-void OoxWorkbookFragment::importPivotCache( RecordInputStream& rStrm )
+void WorkbookFragment::importPivotCache( SequenceInputStream& rStrm )
 {
     sal_Int32 nCacheId = rStrm.readInt32();
-    OUString aRelId = rStrm.readString();
+    OUString aRelId = BiffHelper::readString( rStrm );
     importPivotCacheDefFragment( aRelId, nCacheId );
 }
 
-void OoxWorkbookFragment::importExternalLinkFragment( ExternalLink& rExtLink )
+void WorkbookFragment::importExternalLinkFragment( ExternalLink& rExtLink )
 {
     OUString aFragmentPath = getFragmentPathFromRelId( rExtLink.getRelId() );
     if( aFragmentPath.getLength() > 0 )
-        importOoxFragment( new OoxExternalLinkFragment( *this, aFragmentPath, rExtLink ) );
+        importOoxFragment( new ExternalLinkFragment( *this, aFragmentPath, rExtLink ) );
 }
 
-void OoxWorkbookFragment::importPivotCacheDefFragment( const OUString& rRelId, sal_Int32 nCacheId )
+void WorkbookFragment::importPivotCacheDefFragment( const OUString& rRelId, sal_Int32 nCacheId )
 {
     // pivot caches will be imported on demand, here we just store the fragment path in the buffer
     getPivotCaches().registerPivotCacheFragment( nCacheId, getFragmentPathFromRelId( rRelId ) );
@@ -432,14 +419,15 @@ bool BiffWorkbookFragment::importWorkspaceFragment()
     // import the workspace globals
     ISegmentProgressBarRef xGlobalsProgress = getProgressBar().createSegment( PROGRESS_LENGTH_GLOBALS );
     bool bLoop = true;
-    while( bRet && bLoop && mrStrm.startNextRecord() && (mrStrm.getRecId() != BIFF_ID_EOF) )
+    BiffInputStream& rStrm = getInputStream();
+    while( bRet && bLoop && rStrm.startNextRecord() && (rStrm.getRecId() != BIFF_ID_EOF) )
     {
-        switch( mrStrm.getRecId() )
+        switch( rStrm.getRecId() )
         {
-            case BIFF_ID_SHEET:         rWorksheets.importSheet( mrStrm );                  break;
-            case BIFF_ID_CODEPAGE:      setCodePage( mrStrm.readuInt16() );                 break;
-            case BIFF_ID_FILEPASS:      bRet = getCodecHelper().importFilePass( mrStrm );   break;
-            case BIFF_ID_SHEETHEADER:   mrStrm.rewindRecord(); bLoop = false;               break;
+            case BIFF_ID_SHEET:         rWorksheets.importSheet( rStrm );                   break;
+            case BIFF_ID_CODEPAGE:      setCodePage( rStrm.readuInt16() );                  break;
+            case BIFF_ID_FILEPASS:      bRet = getCodecHelper().importFilePass( rStrm );    break;
+            case BIFF_ID_SHEETHEADER:   rStrm.rewindRecord(); bLoop = false;                break;
         }
     }
     xGlobalsProgress->setPosition( 1.0 );
@@ -449,15 +437,15 @@ bool BiffWorkbookFragment::importWorkspaceFragment()
     for( sal_Int32 nWorksheet = 0, nWorksheetCount = rWorksheets.getWorksheetCount(); bNextSheet && (nWorksheet < nWorksheetCount); ++nWorksheet )
     {
         // try to start a new sheet fragment (with leading SHEETHEADER record)
-        bNextSheet = mrStrm.startNextRecord() && (mrStrm.getRecId() == BIFF_ID_SHEETHEADER);
+        bNextSheet = rStrm.startNextRecord() && (rStrm.getRecId() == BIFF_ID_SHEETHEADER);
         if( bNextSheet )
         {
             double fSegmentLength = getProgressBar().getFreeLength() / (nWorksheetCount - nWorksheet);
             ISegmentProgressBarRef xSheetProgress = getProgressBar().createSegment( fSegmentLength );
             /*  Read current sheet name (sheet substreams may not be in the
                 same order as SHEET records are). */
-            mrStrm.skip( 4 );
-            OUString aSheetName = mrStrm.readByteStringUC( false, getTextEncoding() );
+            rStrm.skip( 4 );
+            OUString aSheetName = rStrm.readByteStringUC( false, getTextEncoding() );
             sal_Int16 nCurrSheet = rWorksheets.getCalcSheetIndex( aSheetName );
             // load the sheet fragment records
             BiffFragmentType eSheetFragment = startFragment( getBiff() );
@@ -486,27 +474,28 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
 
     bool bRet = true;
     bool bLoop = true;
-    while( bRet && bLoop && mrStrm.startNextRecord() )
+    BiffInputStream& rStrm = getInputStream();
+    while( bRet && bLoop && rStrm.startNextRecord() )
     {
-        sal_uInt16 nRecId = mrStrm.getRecId();
+        sal_uInt16 nRecId = rStrm.getRecId();
         bool bExtLinkRec = false;
 
         /*  #i56376# BIFF5-BIFF8: If an EOF record for globals is missing,
             simulate it. The issue is about a document where the sheet fragment
             starts directly after the EXTSST record, without terminating the
             globals fragment with an EOF record. */
-        if( isBofRecord() || (nRecId == BIFF_ID_EOF) )
+        if( BiffHelper::isBofRecord( rStrm ) || (nRecId == BIFF_ID_EOF) )
         {
             bLoop = false;
         }
         else switch( nRecId )
         {
             // records in all BIFF versions
-            case BIFF_ID_CODEPAGE:      setCodePage( mrStrm.readuInt16() );                 break;
-            case BIFF_ID_DATEMODE:      rWorkbookSett.importDateMode( mrStrm );             break;
-            case BIFF_ID_FILEPASS:      bRet = getCodecHelper().importFilePass( mrStrm );   break;
-            case BIFF_ID_PRECISION:     rWorkbookSett.importPrecision( mrStrm );            break;
-            case BIFF_ID_WINDOW1:       rViewSett.importWindow1( mrStrm );                  break;
+            case BIFF_ID_CODEPAGE:      setCodePage( rStrm.readuInt16() );                  break;
+            case BIFF_ID_DATEMODE:      rWorkbookSett.importDateMode( rStrm );              break;
+            case BIFF_ID_FILEPASS:      bRet = getCodecHelper().importFilePass( rStrm );    break;
+            case BIFF_ID_PRECISION:     rWorkbookSett.importPrecision( rStrm );             break;
+            case BIFF_ID_WINDOW1:       rViewSett.importWindow1( rStrm );                   break;
 
             // BIFF specific records
             default: switch( getBiff() )
@@ -516,10 +505,10 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
                     case BIFF2_ID_DEFINEDNAME:  bExtLinkRec = true;                 break;
                     case BIFF2_ID_EXTERNALNAME: bExtLinkRec = true;                 break;
                     case BIFF_ID_EXTERNSHEET:   bExtLinkRec = true;                 break;
-                    case BIFF2_ID_FONT:         rStyles.importFont( mrStrm );       break;
-                    case BIFF_ID_FONTCOLOR:     rStyles.importFontColor( mrStrm );  break;
-                    case BIFF2_ID_FORMAT:       rStyles.importFormat( mrStrm );     break;
-                    case BIFF2_ID_XF:           rStyles.importXf( mrStrm );         break;
+                    case BIFF2_ID_FONT:         rStyles.importFont( rStrm );        break;
+                    case BIFF_ID_FONTCOLOR:     rStyles.importFontColor( rStrm );   break;
+                    case BIFF2_ID_FORMAT:       rStyles.importFormat( rStrm );      break;
+                    case BIFF2_ID_XF:           rStyles.importXf( rStrm );          break;
                 }
                 break;
 
@@ -529,14 +518,14 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
                     case BIFF3_ID_DEFINEDNAME:  bExtLinkRec = true;                         break;
                     case BIFF3_ID_EXTERNALNAME: bExtLinkRec = true;                         break;
                     case BIFF_ID_EXTERNSHEET:   bExtLinkRec = true;                         break;
-                    case BIFF_ID_FILESHARING:   rWorkbookSett.importFileSharing( mrStrm );  break;
-                    case BIFF3_ID_FONT:         rStyles.importFont( mrStrm );               break;
-                    case BIFF2_ID_FORMAT:       rStyles.importFormat( mrStrm );             break;
-                    case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( mrStrm );      break;
-                    case BIFF_ID_PALETTE:       rStyles.importPalette( mrStrm );            break;
-                    case BIFF_ID_STYLE:         rStyles.importStyle( mrStrm );              break;
+                    case BIFF_ID_FILESHARING:   rWorkbookSett.importFileSharing( rStrm );   break;
+                    case BIFF3_ID_FONT:         rStyles.importFont( rStrm );                break;
+                    case BIFF2_ID_FORMAT:       rStyles.importFormat( rStrm );              break;
+                    case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( rStrm );       break;
+                    case BIFF_ID_PALETTE:       rStyles.importPalette( rStrm );             break;
+                    case BIFF_ID_STYLE:         rStyles.importStyle( rStrm );               break;
                     case BIFF_ID_XCT:           bExtLinkRec = true;                         break;
-                    case BIFF3_ID_XF:           rStyles.importXf( mrStrm );                 break;
+                    case BIFF3_ID_XF:           rStyles.importXf( rStrm );                  break;
                 }
                 break;
 
@@ -546,62 +535,62 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
                     case BIFF3_ID_DEFINEDNAME:  bExtLinkRec = true;                         break;
                     case BIFF3_ID_EXTERNALNAME: bExtLinkRec = true;                         break;
                     case BIFF_ID_EXTERNSHEET:   bExtLinkRec = true;                         break;
-                    case BIFF_ID_FILESHARING:   rWorkbookSett.importFileSharing( mrStrm );  break;
-                    case BIFF3_ID_FONT:         rStyles.importFont( mrStrm );               break;
-                    case BIFF4_ID_FORMAT:       rStyles.importFormat( mrStrm );             break;
-                    case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( mrStrm );      break;
-                    case BIFF_ID_PALETTE:       rStyles.importPalette( mrStrm );            break;
-                    case BIFF_ID_STYLE:         rStyles.importStyle( mrStrm );              break;
+                    case BIFF_ID_FILESHARING:   rWorkbookSett.importFileSharing( rStrm );   break;
+                    case BIFF3_ID_FONT:         rStyles.importFont( rStrm );                break;
+                    case BIFF4_ID_FORMAT:       rStyles.importFormat( rStrm );              break;
+                    case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( rStrm );       break;
+                    case BIFF_ID_PALETTE:       rStyles.importPalette( rStrm );             break;
+                    case BIFF_ID_STYLE:         rStyles.importStyle( rStrm );               break;
                     case BIFF_ID_XCT:           bExtLinkRec = true;                         break;
-                    case BIFF4_ID_XF:           rStyles.importXf( mrStrm );                 break;
+                    case BIFF4_ID_XF:           rStyles.importXf( rStrm );                  break;
                 }
                 break;
 
                 case BIFF5: switch( nRecId )
                 {
-                    case BIFF_ID_BOOKBOOL:      rWorkbookSett.importBookBool( mrStrm );     break;
+                    case BIFF_ID_BOOKBOOL:      rWorkbookSett.importBookBool( rStrm );      break;
                     case BIFF_ID_CRN:           bExtLinkRec = true;                         break;
                     case BIFF5_ID_DEFINEDNAME:  bExtLinkRec = true;                         break;
                     case BIFF5_ID_EXTERNALNAME: bExtLinkRec = true;                         break;
                     case BIFF_ID_EXTERNSHEET:   bExtLinkRec = true;                         break;
-                    case BIFF_ID_FILESHARING:   rWorkbookSett.importFileSharing( mrStrm );  break;
-                    case BIFF5_ID_FONT:         rStyles.importFont( mrStrm );               break;
-                    case BIFF4_ID_FORMAT:       rStyles.importFormat( mrStrm );             break;
-                    case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( mrStrm );      break;
-                    case BIFF_ID_OLESIZE:       rViewSett.importOleSize( mrStrm );          break;
-                    case BIFF_ID_PALETTE:       rStyles.importPalette( mrStrm );            break;
-                    case BIFF_ID_PIVOTCACHE:    rPivotCaches.importPivotCacheRef( mrStrm ); break;
-                    case BIFF_ID_SHEET:         rWorksheets.importSheet( mrStrm );          break;
-                    case BIFF_ID_STYLE:         rStyles.importStyle( mrStrm );              break;
+                    case BIFF_ID_FILESHARING:   rWorkbookSett.importFileSharing( rStrm );   break;
+                    case BIFF5_ID_FONT:         rStyles.importFont( rStrm );                break;
+                    case BIFF4_ID_FORMAT:       rStyles.importFormat( rStrm );              break;
+                    case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( rStrm );       break;
+                    case BIFF_ID_OLESIZE:       rViewSett.importOleSize( rStrm );           break;
+                    case BIFF_ID_PALETTE:       rStyles.importPalette( rStrm );             break;
+                    case BIFF_ID_PIVOTCACHE:    rPivotCaches.importPivotCacheRef( rStrm );  break;
+                    case BIFF_ID_SHEET:         rWorksheets.importSheet( rStrm );           break;
+                    case BIFF_ID_STYLE:         rStyles.importStyle( rStrm );               break;
                     case BIFF_ID_XCT:           bExtLinkRec = true;                         break;
-                    case BIFF5_ID_XF:           rStyles.importXf( mrStrm );                 break;
+                    case BIFF5_ID_XF:           rStyles.importXf( rStrm );                  break;
                 }
                 break;
 
                 case BIFF8: switch( nRecId )
                 {
-                    case BIFF_ID_BOOKBOOL:          rWorkbookSett.importBookBool( mrStrm );     break;
-                    case BIFF_ID_CODENAME:          rWorkbookSett.importCodeName( mrStrm );     break;
+                    case BIFF_ID_BOOKBOOL:          rWorkbookSett.importBookBool( rStrm );      break;
+                    case BIFF_ID_CODENAME:          rWorkbookSett.importCodeName( rStrm );      break;
                     case BIFF_ID_CRN:               bExtLinkRec = true;                         break;
                     case BIFF5_ID_DEFINEDNAME:      bExtLinkRec = true;                         break;
                     case BIFF_ID_EXTERNALBOOK:      bExtLinkRec = true;                         break;
                     case BIFF5_ID_EXTERNALNAME:     bExtLinkRec = true;                         break;
                     case BIFF_ID_EXTERNSHEET:       bExtLinkRec = true;                         break;
-                    case BIFF_ID_FILESHARING:       rWorkbookSett.importFileSharing( mrStrm );  break;
-                    case BIFF5_ID_FONT:             rStyles.importFont( mrStrm );               break;
-                    case BIFF4_ID_FORMAT:           rStyles.importFormat( mrStrm );             break;
-                    case BIFF_ID_HIDEOBJ:           rWorkbookSett.importHideObj( mrStrm );      break;
-                    case BIFF_ID_OLESIZE:           rViewSett.importOleSize( mrStrm );          break;
-                    case BIFF_ID_PALETTE:           rStyles.importPalette( mrStrm );            break;
-                    case BIFF_ID_PIVOTCACHE:        rPivotCaches.importPivotCacheRef( mrStrm ); break;
-                    case BIFF_ID_SHEET:             rWorksheets.importSheet( mrStrm );          break;
-                    case BIFF_ID_SST:               rSharedStrings.importSst( mrStrm );         break;
-                    case BIFF_ID_STYLE:             rStyles.importStyle( mrStrm );              break;
-                    case BIFF_ID_USESELFS:          rWorkbookSett.importUsesElfs( mrStrm );     break;
+                    case BIFF_ID_FILESHARING:       rWorkbookSett.importFileSharing( rStrm );   break;
+                    case BIFF5_ID_FONT:             rStyles.importFont( rStrm );                break;
+                    case BIFF4_ID_FORMAT:           rStyles.importFormat( rStrm );              break;
+                    case BIFF_ID_HIDEOBJ:           rWorkbookSett.importHideObj( rStrm );       break;
+                    case BIFF_ID_OLESIZE:           rViewSett.importOleSize( rStrm );           break;
+                    case BIFF_ID_PALETTE:           rStyles.importPalette( rStrm );             break;
+                    case BIFF_ID_PIVOTCACHE:        rPivotCaches.importPivotCacheRef( rStrm );  break;
+                    case BIFF_ID_SHEET:             rWorksheets.importSheet( rStrm );           break;
+                    case BIFF_ID_SST:               rSharedStrings.importSst( rStrm );          break;
+                    case BIFF_ID_STYLE:             rStyles.importStyle( rStrm );               break;
+                    case BIFF_ID_USESELFS:          rWorkbookSett.importUsesElfs( rStrm );      break;
                     case BIFF_ID_VBAPROJECT:        bHasVbaProject = true;                      break;
                     case BIFF_ID_VBAPROJECTEMPTY:   bEmptyVbaProject = true;                    break;
                     case BIFF_ID_XCT:               bExtLinkRec = true;                         break;
-                    case BIFF5_ID_XF:               rStyles.importXf( mrStrm );                 break;
+                    case BIFF5_ID_XF:               rStyles.importXf( rStrm );                  break;
                 }
                 break;
 
@@ -610,7 +599,7 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
         }
 
         if( bExtLinkRec )
-            aExtLinkRecs.push_back( mrStrm.getRecHandle() );
+            aExtLinkRecs.push_back( rStrm.getRecHandle() );
     }
 
     // finalize global buffers
@@ -627,16 +616,16 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
     if( bRet && !aExtLinkRecs.empty() )
     {
         // remember current stream position (the EOF record)
-        sal_Int64 nEofHandle = mrStrm.getRecHandle();
-        // this fragment class implements import of external link records
-        BiffExternalLinkFragment aLinkFragment( *this, true );
+        sal_Int64 nEofHandle = rStrm.getRecHandle();
+        // context handler implementing import of external link records
+        BiffExternalSheetDataContext aSheetContext( *this, true );
         // import all records by using their cached record handle
-        for( RecordHandleVec::const_iterator aIt = aExtLinkRecs.begin(), aEnd = aExtLinkRecs.end(); (aIt != aEnd) && mrStrm.startRecordByHandle( *aIt ); ++aIt )
-            aLinkFragment.importRecord();
+        for( RecordHandleVec::const_iterator aIt = aExtLinkRecs.begin(), aEnd = aExtLinkRecs.end(); (aIt != aEnd) && rStrm.startRecordByHandle( *aIt ); ++aIt )
+            aSheetContext.importRecord( rStrm );
         // finalize global buffers
-        aLinkFragment.finalizeImport();
+        getDefinedNames().finalizeImport();
         // seek back to the EOF record of the workbook globals fragment
-        bRet = mrStrm.startRecordByHandle( nEofHandle );
+        bRet = rStrm.startRecordByHandle( nEofHandle );
     }
 
     // open the VBA project storage
@@ -644,8 +633,8 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
         setVbaProjectStorage( getBaseFilter().openSubStorage( CREATE_OUSTRING( "_VBA_PROJECT_CUR" ), false ) );
 
     // #i56376# missing EOF - rewind before worksheet BOF record (see above)
-    if( bRet && isBofRecord() )
-        mrStrm.rewindRecord();
+    if( bRet && BiffHelper::isBofRecord( rStrm ) )
+        rStrm.rewindRecord();
 
     rProgressBar.setPosition( 1.0 );
     return bRet;
@@ -674,6 +663,7 @@ bool BiffWorkbookFragment::importSheetFragment( ISegmentProgressBar& rProgressBa
     createBuffersPerSheet( nCalcSheet );
 
     // preprocess some records
+    BiffInputStream& rStrm = getInputStream();
     switch( getBiff() )
     {
         // load the workbook globals fragment records in BIFF2-BIFF4
@@ -682,12 +672,12 @@ bool BiffWorkbookFragment::importSheetFragment( ISegmentProgressBar& rProgressBa
         case BIFF4:
         {
             // remember current record to seek back below
-            sal_Int64 nRecHandle = mrStrm.getRecHandle();
+            sal_Int64 nRecHandle = rStrm.getRecHandle();
             // import the global records
             ISegmentProgressBarRef xGlobalsProgress = rProgressBar.createSegment( PROGRESS_LENGTH_GLOBALS );
             importGlobalsFragment( *xGlobalsProgress );
             // rewind stream to fragment BOF record
-            mrStrm.startRecordByHandle( nRecHandle );
+            rStrm.startRecordByHandle( nRecHandle );
         }
         break;
 
@@ -695,11 +685,11 @@ bool BiffWorkbookFragment::importSheetFragment( ISegmentProgressBar& rProgressBa
         case BIFF5:
         {
             // remember current record to seek back below
-            sal_Int64 nRecHandle = mrStrm.getRecHandle();
+            sal_Int64 nRecHandle = rStrm.getRecHandle();
             // fragment implementing import of external link records
-            BiffExternalLinkFragment( *this, false ).importFragment();
+            BiffExternalLinkFragment( *this ).importFragment();
             // rewind stream to fragment BOF record
-            mrStrm.startRecordByHandle( nRecHandle );
+            rStrm.startRecordByHandle( nRecHandle );
         }
         break;
 

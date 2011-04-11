@@ -56,7 +56,6 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -134,7 +133,7 @@ namespace dbaui
     //= OConnectionTabPageSetup
     //========================================================================
     DBG_NAME(OConnectionTabPageSetup)
-    OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, USHORT _rId, const SfxItemSet& _rCoreAttrs, USHORT _nHelpTextResId, USHORT _nHeaderResId, USHORT _nUrlResId)
+    OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId)
         :OConnectionHelper(pParent, ModuleRes(_rId), _rCoreAttrs)
         ,m_bUserGrabFocus(sal_True)
         ,m_aFT_HelpText(this, ModuleRes(FT_AUTOWIZARDHELPTEXT))

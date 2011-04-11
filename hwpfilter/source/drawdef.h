@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-/* NAME $Id: drawdef.h,v 1.5 2008-04-10 11:58:04 rt Exp $
- *
- * HISTORY
- *        frog - Jan 11, 1999: Created.
- */
-
 #ifndef _DRAWDEF_H_
 #define _DRAWDEF_H_
 

@@ -33,12 +33,12 @@
 #include "updatecheckconfig.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-
-#include <com/sun/star/beans/XPropertyState.hpp>
-
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <osl/security.hxx>
 #include <osl/time.h>
 #include <osl/file.hxx>
+#include <sal/macros.h>
 
 #ifdef WNT
 #ifdef _MSC_VER
@@ -77,6 +77,8 @@ namespace uno = com::sun::star::uno ;
 #define RELEASE_NOTE            "ReleaseNote"
 #define EXTENSION_PREFIX        "Extension_"
 
+#define PROPERTY_VERSION        UNISTRING("Version")
+
 static const sal_Char * const aUpdateEntryProperties[] = {
     UPDATE_VERSION,
     UPDATE_BUILDID,
@@ -91,7 +93,7 @@ static const sal_Char * const aUpdateEntryProperties[] = {
     OLD_VERSION
 };
 
-static const sal_uInt32 nUpdateEntryProperties = sizeof(aUpdateEntryProperties) / sizeof(sal_Char *);
+static const sal_uInt32 nUpdateEntryProperties = SAL_N_ELEMENTS(aUpdateEntryProperties);
 
 //------------------------------------------------------------------------------
 
@@ -211,7 +213,7 @@ rtl::OUString UpdateCheckConfig::getDesktopDirectory()
     // This should become a desktop specific setting in some system backend ..
     rtl::OUString aHomeDir;
     osl::Security().getHomeDir( aHomeDir );
-    aRet = aHomeDir + rtl::OUString::createFromAscii("/Desktop");
+    aRet = aHomeDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Desktop"));
 
     // Set path to home directory when there is no /Desktop directory
     osl::Directory aDocumentsDir( aRet );
@@ -245,19 +247,19 @@ rtl::OUString UpdateCheckConfig::getAllUsersDirectory()
 }
 
 //------------------------------------------------------------------------------
-
-UpdateCheckConfig::UpdateCheckConfig(
-    const uno::Reference<container::XNameContainer>& xContainer,
-    const ::rtl::Reference< UpdateCheckConfigListener >& rListener
-) : m_xContainer(xContainer), m_rListener(rListener)
-{
-}
+UpdateCheckConfig::UpdateCheckConfig( const uno::Reference<container::XNameContainer>& xContainer,
+                                      const uno::Reference<container::XNameContainer>& xAvailableUpdates,
+                                      const uno::Reference<container::XNameContainer>& xIgnoredUpdates,
+                                      const ::rtl::Reference< UpdateCheckConfigListener >& rListener ) :
+    m_xContainer( xContainer ),
+    m_xAvailableUpdates( xAvailableUpdates ),
+    m_xIgnoredUpdates( xIgnoredUpdates ),
+    m_rListener( rListener )
+{}
 
 //------------------------------------------------------------------------------
-
 UpdateCheckConfig::~UpdateCheckConfig()
-{
-}
+{}
 
 //------------------------------------------------------------------------------
 
@@ -294,7 +296,15 @@ UpdateCheckConfig::get(
             UNISTRING("com.sun.star.configuration.ConfigurationUpdateAccess"), aArgumentList ),
         uno::UNO_QUERY_THROW );
 
-    return new UpdateCheckConfig( xContainer, rListener );
+    aProperty.Value = uno::makeAny( UNISTRING("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates") );
+    aArgumentList[0] = uno::makeAny( aProperty );
+    uno::Reference< container::XNameContainer > xIgnoredExt( xConfigProvider->createInstanceWithArguments( UNISTRING("com.sun.star.configuration.ConfigurationUpdateAccess"), aArgumentList ), uno::UNO_QUERY_THROW );
+
+    aProperty.Value = uno::makeAny( UNISTRING("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/AvailableUpdates") );
+    aArgumentList[0] = uno::makeAny( aProperty );
+    uno::Reference< container::XNameContainer > xUpdateAvail( xConfigProvider->createInstanceWithArguments( UNISTRING("com.sun.star.configuration.ConfigurationUpdateAccess"), aArgumentList ), uno::UNO_QUERY_THROW );
+
+    return new UpdateCheckConfig( xContainer, xUpdateAvail, xIgnoredExt, rListener );
 }
 
 //------------------------------------------------------------------------------
@@ -626,6 +636,19 @@ UpdateCheckConfig::commitChanges()
             }
         }
     }
+
+    xChangesBatch = uno::Reference< util::XChangesBatch > ( m_xAvailableUpdates, uno::UNO_QUERY );
+    if( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
+    {
+        util::ChangesSet aChangesSet = xChangesBatch->getPendingChanges();
+        xChangesBatch->commitChanges();
+    }
+    xChangesBatch = uno::Reference< util::XChangesBatch > ( m_xIgnoredUpdates, uno::UNO_QUERY );
+    if( xChangesBatch.is() && xChangesBatch->hasPendingChanges() )
+    {
+        util::ChangesSet aChangesSet = xChangesBatch->getPendingChanges();
+        xChangesBatch->commitChanges();
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -653,40 +676,66 @@ UpdateCheckConfig::getPendingChanges(  ) throw (uno::RuntimeException)
 }
 
 //------------------------------------------------------------------------------
-void UpdateCheckConfig::storeExtensionVersion( const rtl::OUString& rExtensionName,
+bool UpdateCheckConfig::storeExtensionVersion( const rtl::OUString& rExtensionName,
                                                const rtl::OUString& rVersion )
 {
-    const rtl::OUString aExtName = UNISTRING( EXTENSION_PREFIX ) + rExtensionName;
-    const uno::Any aValue = uno::makeAny( rVersion );
+    bool bNotify = true;
 
-    if( m_xContainer->hasByName( aExtName ) )
-        m_xContainer->replaceByName( aExtName, aValue );
+    if ( m_xAvailableUpdates->hasByName( rExtensionName ) )
+        uno::Reference< beans::XPropertySet >( m_xAvailableUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->setPropertyValue( PROPERTY_VERSION, uno::Any( rVersion ) );
     else
-        m_xContainer->insertByName( aExtName, aValue );
+    {
+        uno::Reference< beans::XPropertySet > elem( uno::Reference< lang::XSingleServiceFactory >( m_xAvailableUpdates, uno::UNO_QUERY_THROW )->createInstance(), uno::UNO_QUERY_THROW );
+        elem->setPropertyValue( PROPERTY_VERSION, uno::Any( rVersion ) );
+        m_xAvailableUpdates->insertByName( rExtensionName, uno::Any( elem ) );
+    }
+
+    if ( m_xIgnoredUpdates->hasByName( rExtensionName ) )
+    {
+        ::rtl::OUString aIgnoredVersion;
+        uno::Any aValue( uno::Reference< beans::XPropertySet >( m_xIgnoredUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
+        aValue >>= aIgnoredVersion;
+        if ( aIgnoredVersion.getLength() == 0 ) // no version means ignore all updates
+            bNotify = false;
+        else if ( aIgnoredVersion == rVersion ) // the user wanted to ignore this update
+            bNotify = false;
+    }
 
     commitChanges();
+
+    return bNotify;
 }
 
 //------------------------------------------------------------------------------
 bool UpdateCheckConfig::checkExtensionVersion( const rtl::OUString& rExtensionName,
                                                const rtl::OUString& rVersion )
 {
-    const rtl::OUString aExtName = UNISTRING( EXTENSION_PREFIX ) + rExtensionName;
-
-    if( m_xContainer->hasByName( aExtName ) )
+    if ( m_xAvailableUpdates->hasByName( rExtensionName ) )
     {
-        uno::Any aValue = m_xContainer->getByName( aExtName );
-        rtl::OUString aStoredVersion;
+        ::rtl::OUString aStoredVersion;
+        uno::Any aValue( uno::Reference< beans::XPropertySet >( m_xAvailableUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
         aValue >>= aStoredVersion;
 
+        if ( m_xIgnoredUpdates->hasByName( rExtensionName ) )
+        {
+            ::rtl::OUString aIgnoredVersion;
+            uno::Any aValue2( uno::Reference< beans::XPropertySet >( m_xIgnoredUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
+            aValue2 >>= aIgnoredVersion;
+            if ( aIgnoredVersion.getLength() == 0 ) // no version means ignore all updates
+                return false;
+            else if ( aIgnoredVersion == aStoredVersion ) // the user wanted to ignore this update
+                return false;
+            // TODO: else delete ignored entry?
+        }
         if ( isVersionGreater( rVersion, aStoredVersion ) )
             return true;
         else
         {
-            m_xContainer->removeByName( aExtName );
+            m_xAvailableUpdates->removeByName( rExtensionName );
             commitChanges();
         }
     }
+
     return false;
 }
 

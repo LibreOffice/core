@@ -43,7 +43,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <memory>
 
@@ -71,8 +71,8 @@ OUString getImplementationName_DocumentHandlerImpl()
                          "com.sun.star.comp.xml.input.SaxDocumentHandler") );
 }
 
-typedef ::std::hash_map< OUString, sal_Int32, OUStringHash > t_OUString2LongMap;
-typedef ::std::hash_map< sal_Int32, OUString > t_Long2OUStringMap;
+typedef ::boost::unordered_map< OUString, sal_Int32, OUStringHash > t_OUString2LongMap;
+typedef ::boost::unordered_map< sal_Int32, OUString > t_Long2OUStringMap;
 
 struct PrefixEntry
 {
@@ -82,7 +82,7 @@ struct PrefixEntry
         { m_Uids.reserve( 4 ); }
 };
 
-typedef ::std::hash_map<
+typedef ::boost::unordered_map<
     OUString, PrefixEntry *, OUStringHash > t_OUString2PrefixMap;
 
 struct ElementEntry

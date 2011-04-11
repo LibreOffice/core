@@ -83,27 +83,6 @@ AccessibleTreeNode::AccessibleTreeNode(
 
 
 
-AccessibleTreeNode::AccessibleTreeNode(
-    const Reference<XAccessible>& rxParent,
-    ::sd::toolpanel::TreeNode& rNode,
-    const OUString& rsName,
-    const OUString& rsDescription,
-    const sal_Int16 eRole)
-    : AccessibleTreeNodeBase(MutexOwner::maMutex),
-      mxParent(rxParent),
-      mrTreeNode(rNode),
-      mrStateSet(new ::utl::AccessibleStateSetHelper()),
-      msName(rsName),
-      msDescription(rsDescription),
-      meRole(eRole),
-      mnClientId(0)
-{
-    CommonConstructor();
-}
-
-
-
-
 void AccessibleTreeNode::CommonConstructor (void)
 {
     UpdateStateSet();
@@ -570,7 +549,7 @@ sal_Int32 SAL_CALL AccessibleTreeNode::getForeground (void)
 {
     ThrowIfDisposed();
     svtools::ColorConfig aColorConfig;
-    UINT32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
+    sal_uInt32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -581,7 +560,7 @@ sal_Int32 SAL_CALL AccessibleTreeNode::getBackground (void)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
-    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 

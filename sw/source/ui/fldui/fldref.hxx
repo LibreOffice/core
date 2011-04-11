@@ -80,7 +80,7 @@ class SwFldRefPage : public SwFldPage
     DECL_LINK( ModifyHdl, Edit *pEd = 0 );
 
     void                UpdateSubType();
-    USHORT              FillFormatLB(USHORT nTypeId);
+    sal_uInt16              FillFormatLB(sal_uInt16 nTypeId);
 
     // --> OD 2007-12-05 #i83479#
     void SaveSelectedTxtNode();
@@ -89,7 +89,7 @@ class SwFldRefPage : public SwFldPage
     // <--
 
 protected:
-    virtual USHORT      GetGroup();
+    virtual sal_uInt16      GetGroup();
 
 public:
                         SwFldRefPage(Window* pParent, const SfxItemSet& rSet);
@@ -98,7 +98,7 @@ public:
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     virtual void        FillUserData();

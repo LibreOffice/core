@@ -37,13 +37,13 @@ class Point;
 class Rectangle;
 class SvStream;
 
-#define IMAP_OBJ_NONE       ((UINT16)0x0000)
-#define IMAP_OBJ_RECTANGLE  ((UINT16)0x0001)
-#define IMAP_OBJ_CIRCLE     ((UINT16)0x0002)
-#define IMAP_OBJ_POLYGON    ((UINT16)0x0003)
-#define IMAP_OBJ_VERSION    ((UINT16)0x0005)
+#define IMAP_OBJ_NONE       ((sal_uInt16)0x0000)
+#define IMAP_OBJ_RECTANGLE  ((sal_uInt16)0x0001)
+#define IMAP_OBJ_CIRCLE     ((sal_uInt16)0x0002)
+#define IMAP_OBJ_POLYGON    ((sal_uInt16)0x0003)
+#define IMAP_OBJ_VERSION    ((sal_uInt16)0x0005)
 
-#define IMAGE_MAP_VERSION   ((UINT16)0x0001)
+#define IMAGE_MAP_VERSION   ((sal_uInt16)0x0001)
 
 #define IMAPMAGIC           "SDIMAP"
 
@@ -74,11 +74,11 @@ class SVT_DLLPUBLIC IMapObject
     String              aTarget;
     String              aName;
     SvxMacroTableDtor   aEventList;
-    BOOL                bActive;
+    sal_Bool                bActive;
 
 protected:
 
-    UINT16              nReadVersion;
+    sal_uInt16              nReadVersion;
 
     // Binaer-Im-/Export
     virtual void        WriteIMapObject( SvStream& rOStm ) const = 0;
@@ -100,12 +100,12 @@ public:
                                     const String& rDesc,
                                     const String& rTarget,
                                     const String& rName,
-                                    BOOL bActive );
+                                    sal_Bool bActive );
     virtual             ~IMapObject() {};
 
-    virtual UINT16      GetVersion() const;
-    virtual UINT16      GetType() const = 0;
-    virtual BOOL        IsHit( const Point& rPoint ) const = 0;
+    virtual sal_uInt16      GetVersion() const;
+    virtual sal_uInt16      GetType() const = 0;
+    virtual sal_Bool        IsHit( const Point& rPoint ) const = 0;
 
     void                Write ( SvStream& rOStm, const String& rBaseURL ) const;
     void                Read( SvStream& rIStm, const String& rBaseURL );
@@ -127,33 +127,33 @@ public:
     const String&       GetName() const { return aName; }
     void                SetName( const String& rName ) { aName = rName; }
 
-    BOOL                IsActive() const { return bActive; }
-    void                SetActive( BOOL bSetActive = TRUE ) { bActive = bSetActive; }
+    sal_Bool                IsActive() const { return bActive; }
+    void                SetActive( sal_Bool bSetActive = sal_True ) { bActive = bSetActive; }
 
     static Point        GetPixelPoint( const Point& rLogPoint );
     static Point        GetLogPoint( const Point& rPixelPoint );
 
-    BOOL                IsEqual( const IMapObject& rEqObj );
+    sal_Bool                IsEqual( const IMapObject& rEqObj );
 
     // IMap-Events
     inline const SvxMacroTableDtor& GetMacroTable() const { return aEventList;}
     inline void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aEventList = rTbl; }
 
-    inline const SvxMacro&  GetEvent( USHORT nEvent ) const;
-    inline BOOL             HasEvent( USHORT nEvent ) const;
-           void             SetEvent( USHORT nEvent, const SvxMacro& );
-    inline BOOL             DelEvent( USHORT nEvent );
+    inline const SvxMacro&  GetEvent( sal_uInt16 nEvent ) const;
+    inline sal_Bool             HasEvent( sal_uInt16 nEvent ) const;
+           void             SetEvent( sal_uInt16 nEvent, const SvxMacro& );
+    inline sal_Bool             DelEvent( sal_uInt16 nEvent );
 };
 
-inline BOOL IMapObject::HasEvent( USHORT nEvent ) const
+inline sal_Bool IMapObject::HasEvent( sal_uInt16 nEvent ) const
 {
     return aEventList.IsKeyValid( nEvent );
 }
-inline const SvxMacro& IMapObject::GetEvent( USHORT nEvent ) const
+inline const SvxMacro& IMapObject::GetEvent( sal_uInt16 nEvent ) const
 {
     return *(aEventList.Get( nEvent ));
 }
-inline BOOL IMapObject::DelEvent( USHORT nEvent )
+inline sal_Bool IMapObject::DelEvent( sal_uInt16 nEvent )
 {
     SvxMacro *pMacro = aEventList.Remove( nEvent );
     delete pMacro;

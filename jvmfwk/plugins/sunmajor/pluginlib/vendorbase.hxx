@@ -93,7 +93,7 @@ class VendorBase: public salhelper::SimpleReferenceObject
 {
 public:
     VendorBase();
-    /* returns relativ paths to the java executable as
+    /* returns relative paths to the java executable as
        file URLs.
 
        For example "bin/java.exe". You need

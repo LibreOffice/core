@@ -347,7 +347,6 @@ bool getMozillaCurrentProfile(
             mozilla::MozillaProductType_Mozilla,
             mozilla::MozillaProductType_Firefox,
             mozilla::MozillaProductType_Default };
-        int nProduct = 4;
 
         uno::Reference<uno::XInterface> xInstance = rxMSF->createInstance(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.mozilla.MozillaBootstrap")) );
@@ -359,6 +358,7 @@ bool getMozillaCurrentProfile(
 
         if (xMozillaBootstrap.is())
         {
+            int nProduct = 4;
             for (int i=0; i<nProduct; i++)
             {
                 ::rtl::OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
@@ -400,7 +400,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     rtl::OString sCertDir;
     if( sCertDB.getLength() )
     {
-        sCertDir = rtl::OString(sCertDB, sCertDB.getLength(), RTL_TEXTENCODING_ASCII_US);
+        sCertDir = rtl::OUStringToOString(sCertDB, RTL_TEXTENCODING_ASCII_US);
     }
     else
     {
@@ -410,10 +410,8 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
             pDefaultCertDir = new rtl::OString;
             rtl::OUString ouCertDir;
 
-
-
             if ( getMozillaCurrentProfile(mxMSF, ouCertDir) )
-                *pDefaultCertDir = rtl::OString(ouCertDir, ouCertDir.getLength(), RTL_TEXTENCODING_ASCII_US);
+                *pDefaultCertDir = rtl::OUStringToOString(ouCertDir, RTL_TEXTENCODING_ASCII_US);
         }
         sCertDir = *pDefaultCertDir;
 

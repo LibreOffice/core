@@ -260,7 +260,7 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString::createFromAscii ("no accessible child with index ")
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no accessible child with index "))
             + rtl::OUString::valueOf(nIndex),
             static_cast<uno::XWeak*>(this));
 }
@@ -552,7 +552,6 @@ void
 {
     const SolarMutexGuard aSolarGuard;
     uno::Reference< view::XSelectionSupplier >  xSel( mxController, uno::UNO_QUERY );
-    AccessibleShape* pAccessibleChild;
 
     if( xSel.is() )
     {
@@ -573,10 +572,7 @@ void
                     AccessibleShape* pAcc = AccessibleShape::getImplementation( getAccessibleChild( i ) );
 
                     if( pAcc && pAcc->GetXShape().is() )
-                    {
                         xShapes->add( pAcc->GetXShape() );
-                        pAccessibleChild = pAcc;
-                    }
                 }
 
                 if( xShapes->getCount() )
@@ -593,7 +589,6 @@ void
 
             AccessibleShape* pAcc = AccessibleShape::getImplementation(
                 getAccessibleChild( nAccessibleChildIndex ));
-            pAccessibleChild = pAcc;
 
             // Add or remove the shape that is made accessible from the
             // selection of the controller.

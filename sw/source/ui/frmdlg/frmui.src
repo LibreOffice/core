@@ -27,7 +27,7 @@
 #include "frmui.hrc"
 
 /*-----------------------------------------------------------------------
-    Beschreibung: V-Align
+    Description: V-Align
  -----------------------------------------------------------------------*/
 String STR_TOP
 {
@@ -46,7 +46,7 @@ String STR_CENTER_HORI
     Text [ en-US ] = "~Center" ;
 };
 /*-----------------------------------------------------------------------
-    Beschreibung: V-Rel
+    Description: V-Rel
  -----------------------------------------------------------------------*/
 String STR_TOPPRT
 {
@@ -54,13 +54,13 @@ String STR_TOPPRT
 };
 
 /*-----------------------------------------------------------------------
-    Beschreibung: H-Rel
+    Description: H-Rel
  -----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------
-    Beschreibung: V-Rel Zeichenausrichtungen
+    Description: V-Rel character alignment
  -----------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------
-    Beschreibung: Zeichenausrichtungen fuer frmsh.cxx - Kontextmenue
+    Description: character alignment for frmsh.cxx - context menu
  -----------------------------------------------------------------------*/
 String STR_TOP_BASE
 {
@@ -100,7 +100,6 @@ String STR_CHAR_CENTER
 };
 String STR_OLE_INSERT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Objekt einfügen : Objekt einf³gen */
     Text [ en-US ] = "Insert object" ;
 };
 String STR_OLE_EDIT
@@ -127,7 +126,6 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    /* ### ACHTUNG: Neuer Text in Resource? Der Spaltenabstand ist zu groß für die Spaltenbreite. : Der Spaltenabstand ist zu gro˜ f³r die Spaltenbreite. */
     Message [ en-US ] = "Column spacing exceeds the column width." ;
 };
 

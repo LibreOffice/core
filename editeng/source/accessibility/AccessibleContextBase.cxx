@@ -56,7 +56,7 @@ namespace accessibility {
 //=====  internal  ============================================================
 
 // Define a shortcut for the somewhot longish base class name.
-typedef ::cppu::WeakComponentImplHelper4<
+typedef ::cppu::PartialWeakComponentImplHelper4<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleContext,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
@@ -244,7 +244,7 @@ uno::Reference<XAccessible> SAL_CALL
 {
     ThrowIfDisposed ();
     throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString::createFromAscii ("no child with index " + nIndex),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("no child with index ") + nIndex),
         NULL);
 }
 
@@ -638,7 +638,7 @@ void AccessibleContextBase::SetAccessibleName (
 ::rtl::OUString AccessibleContextBase::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("Empty Description");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Empty Description"));
 }
 
 
@@ -647,7 +647,7 @@ void AccessibleContextBase::SetAccessibleName (
 ::rtl::OUString AccessibleContextBase::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("Empty Name");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Empty Name"));
 }
 
 

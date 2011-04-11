@@ -44,7 +44,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
-#include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/langitem.hxx>
 
@@ -140,7 +139,7 @@ public:
                   const SvXMLUnitConverter& rUnitConv );
     virtual ~SwXMLItemSetContext_Impl();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                    const ::rtl::OUString& rLocalName,
                    const ::uno::Reference< xml::sax::XAttributeList > & xAttrList,
                    SfxItemSet&  rItemSet,
@@ -215,7 +214,6 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
 
 void SwXMLImport::_InitItemImport()
 {
-    // #110680#
     pTwipUnitConv = new SvXMLUnitConverter( MAP_TWIP, MAP_TWIP, getServiceFactory() );
 
     xTableItemMap = new SvXMLItemMapEntries( aXMLTableItemMap );

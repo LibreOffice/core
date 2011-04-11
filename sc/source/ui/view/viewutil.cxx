@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-#include <tools/list.hxx>
 #include "scitems.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
@@ -68,9 +64,8 @@
 
 //==================================================================
 
-//  static
 void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
-                                USHORT nWhichId, USHORT nScript )
+                                sal_uInt16 nWhichId, sal_uInt16 nScript )
 {
     //  take the effective item from rCoreSet according to nScript
     //  and put in rShellSet under the (base) nWhichId
@@ -87,13 +82,12 @@ void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSe
         rShellSet.InvalidateItem( nWhichId );
 }
 
-//  static
-USHORT ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
+sal_uInt16 ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
 {
     //  used for thesaurus
 
-    BYTE nScript = pDoc->GetScriptType( rPos.Col(), rPos.Row(), rPos.Tab() );
-    USHORT nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
+    sal_uInt8 nScript = pDoc->GetScriptType( rPos.Col(), rPos.Row(), rPos.Tab() );
+    sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
                     ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE : ATTR_FONT_LANGUAGE );
     const SfxPoolItem* pItem = pDoc->GetAttr( rPos.Col(), rPos.Row(), rPos.Tab(), nWhich);
     SvxLanguageItem* pLangIt = PTR_CAST( SvxLanguageItem, pItem );
@@ -117,8 +111,7 @@ USHORT ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
     return eLnge;
 }
 
-//  static
-sal_Int32 ScViewUtil::GetTransliterationType( USHORT nSlotID )
+sal_Int32 ScViewUtil::GetTransliterationType( sal_uInt16 nSlotID )
 {
     sal_Int32 nType = 0;
     switch ( nSlotID )
@@ -154,8 +147,7 @@ sal_Int32 ScViewUtil::GetTransliterationType( USHORT nSlotID )
     return nType;
 }
 
-//  static
-BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
+sal_Bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
                                 const ScChangeViewSettings& rSettings,
                                 ScDocument& rDocument )
 {
@@ -163,10 +155,10 @@ BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
     // die Reihenfolge von ShowRejected/ShowAccepted ist deswegen wichtig
 
     if ( !rSettings.IsShowRejected() && rAction.IsRejecting() )
-        return FALSE;
+        return false;
 
     if ( !rSettings.IsShowAccepted() && rAction.IsAccepted() && !rAction.IsRejecting() )
-        return FALSE;
+        return false;
 
     if ( rSettings.HasAuthor() )
     {
@@ -175,10 +167,10 @@ BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
             //  GetUser() am ChangeTrack ist der aktuelle Benutzer
             ScChangeTrack* pTrack = rDocument.GetChangeTrack();
             if ( !pTrack || rAction.GetUser() == pTrack->GetUser() )
-                return FALSE;
+                return false;
         }
         else if ( rAction.GetUser() != rSettings.GetTheAuthorToShow() )
-            return FALSE;
+            return false;
     }
 
     if ( rSettings.HasComment() )
@@ -189,12 +181,12 @@ BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
         aComStr+=')';
 
         if(!rSettings.IsValidComment(&aComStr))
-            return FALSE;
+            return false;
     }
 
     if ( rSettings.HasRange() )
         if ( !rSettings.GetTheRangeList().Intersects( rAction.GetBigRange().MakeRange() ) )
-            return FALSE;
+            return false;
 
     if ( rSettings.HasDate() && rSettings.GetTheDateMode() != SCDM_NO_DATEMODE )
     {
@@ -205,23 +197,23 @@ BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
         {   // korrespondiert mit ScHighlightChgDlg::OKBtnHdl
             case SCDM_DATE_BEFORE:
                 if ( aDateTime > rFirst )
-                    return FALSE;
+                    return false;
                 break;
 
             case SCDM_DATE_SINCE:
                 if ( aDateTime < rFirst )
-                    return FALSE;
+                    return false;
                 break;
 
             case SCDM_DATE_EQUAL:
             case SCDM_DATE_BETWEEN:
                 if ( aDateTime < rFirst || aDateTime > rLast )
-                    return FALSE;
+                    return false;
                 break;
 
             case SCDM_DATE_NOTEQUAL:
                 if ( aDateTime >= rFirst && aDateTime <= rLast )
-                    return FALSE;
+                    return false;
                 break;
 
             case SCDM_DATE_SAVE:
@@ -229,7 +221,7 @@ BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
                 ScChangeTrack* pTrack = rDocument.GetChangeTrack();
                 if ( !pTrack || pTrack->GetLastSavedActionNumber() >=
                         rAction.GetActionNumber() )
-                    return FALSE;
+                    return false;
                 }
                 break;
 
@@ -242,20 +234,19 @@ BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
 
     if ( rSettings.HasActionRange() )
     {
-        ULONG nAction = rAction.GetActionNumber();
-        ULONG nFirstAction;
-        ULONG nLastAction;
+        sal_uLong nAction = rAction.GetActionNumber();
+        sal_uLong nFirstAction;
+        sal_uLong nLastAction;
         rSettings.GetTheActionRange( nFirstAction, nLastAction );
         if ( nAction < nFirstAction || nAction > nLastAction )
         {
-            return FALSE;
+            return false;
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 
-// static
 void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
 {
     rMark.MarkToMulti();
@@ -294,7 +285,6 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
 }
 
 
-// static
 bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_t nRows )
 {
     SCTAB nTab = rRange.aStart.Tab();
@@ -309,8 +299,6 @@ bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_
     return static_cast<size_t>(nCount) == nRows && bOneTabOnly;
 }
 
-
-// static
 bool ScViewUtil::HasFiltered( const ScRange& rRange, ScDocument* pDoc )
 {
     SCROW nStartRow = rRange.aStart.Row();
@@ -324,8 +312,7 @@ bool ScViewUtil::HasFiltered( const ScRange& rRange, ScDocument* pDoc )
     return false;
 }
 
-// static
-void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, USHORT nSlotId )
+void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, sal_uInt16 nSlotId )
 {
     SvtCJKOptions aCJKOptions;
     SvtCTLOptions aCTLOptions;
@@ -364,28 +351,28 @@ void ScViewUtil::HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, USH
 
 //==================================================================
 
-BOOL ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
+sal_Bool ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
                                  SfxViewFrame& rFrame,
                                  SvxFontItem&       rNewFont,
                                  String&            rString )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = false;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
         SfxAllItemSet aSet( rFrame.GetObjectShell()->GetPool() );
-        aSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
+        aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
         aSet.Put( SvxFontItem( rOldFont.GetFamily(), rOldFont.GetFamilyName(), rOldFont.GetStyleName(), rOldFont.GetPitch(), rOldFont.GetCharSet(), aSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ) ) );
         SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( &rFrame.GetWindow(), aSet, rFrame.GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if ( pDlg->Execute() == RET_OK )
         {
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, FALSE );
-            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, FALSE );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, false );
+            SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pFontItem, SvxFontItem, SID_ATTR_CHAR_FONT, false );
             if ( pItem )
                 rString  = pItem->GetValue();
             if ( pFontItem )
                 rNewFont = SvxFontItem( pFontItem->GetFamily(), pFontItem->GetFamilyName(), pFontItem->GetStyleName(), pFontItem->GetPitch(), pFontItem->GetCharSet(), rNewFont.Which() );
-            bRet = TRUE;
+            bRet = sal_True;
         }
         delete pDlg;
     }
@@ -436,7 +423,7 @@ void ScUpdateRect::SetNew( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
     nNewEndY = nY2;
 }
 
-BOOL ScUpdateRect::GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
+sal_Bool ScUpdateRect::GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
 {
     if ( nNewStartX == nOldStartX && nNewEndX == nOldEndX &&
          nNewStartY == nOldStartY && nNewEndY == nOldEndY )
@@ -445,7 +432,7 @@ BOOL ScUpdateRect::GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
         rY1 = nNewStartY;
         rX2 = nNewStartX;
         rY2 = nNewStartY;
-        return FALSE;
+        return false;
     }
 
     rX1 = Min(nNewStartX,nOldStartX);
@@ -480,163 +467,7 @@ BOOL ScUpdateRect::GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
-
-#ifdef OLD_SELECTION_PAINT
-BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, BOOL& rCont )
-{
-    rCont = FALSE;
-
-    if (nNewStartX == nOldStartX && nNewEndX == nOldEndX &&
-        nNewStartY == nOldStartY && nNewEndY == nOldEndY)
-    {
-        rX1 = nNewStartX;
-        rY1 = nNewStartY;
-        rX2 = nNewStartX;
-        rY2 = nNewStartY;
-        return FALSE;
-    }
-
-    rX1 = Min(nNewStartX,nOldStartX);
-    rY1 = Min(nNewStartY,nOldStartY);
-    rX2 = Max(nNewEndX,nOldEndX);
-    rY2 = Max(nNewEndY,nOldEndY);
-
-    if (nNewStartX == nOldStartX && nNewEndX == nOldEndX)             // nur vertikal
-    {
-        if (nNewStartY == nOldStartY)
-        {
-            rY1 = Min( nNewEndY, nOldEndY ) + 1;
-            rY2 = Max( nNewEndY, nOldEndY );
-        }
-        else if (nNewEndY == nOldEndY)
-        {
-            rY1 = Min( nNewStartY, nOldStartY );
-            rY2 = Max( nNewStartY, nOldStartY ) - 1;
-        }
-        else
-        {
-            rY1 = Min( nNewStartY, nOldStartY );
-            rY2 = Max( nNewStartY, nOldStartY ) - 1;
-            rCont = TRUE;
-            nContY1 = Min( nNewEndY, nOldEndY ) + 1;
-            nContY2 = Max( nNewEndY, nOldEndY );
-            nContX1 = rX1;
-            nContX2 = rX2;
-        }
-    }
-    else if (nNewStartY == nOldStartY && nNewEndY == nOldEndY)        // nur horizontal
-    {
-        if (nNewStartX == nOldStartX)
-        {
-            rX1 = Min( nNewEndX, nOldEndX ) + 1;
-            rX2 = Max( nNewEndX, nOldEndX );
-        }
-        else if (nNewEndX == nOldEndX)
-        {
-            rX1 = Min( nNewStartX, nOldStartX );
-            rX2 = Max( nNewStartX, nOldStartX ) - 1;
-        }
-        else
-        {
-            rX1 = Min( nNewStartX, nOldStartX );
-            rX2 = Max( nNewStartX, nOldStartX ) - 1;
-            rCont = TRUE;
-            nContX1 = Min( nNewEndX, nOldEndX ) + 1;
-            nContX2 = Max( nNewEndX, nOldEndX );
-            nContY1 = rY1;
-            nContY2 = rY2;
-        }
-    }
-    else if (nNewEndX == nOldEndX && nNewEndY == nOldEndY)            // links oben
-    {
-        if ((nNewStartX<nOldStartX) == (nNewStartY<nOldStartY))
-            rX1 = Min( nNewStartX, nOldStartX );
-        else
-            rX1 = Max( nNewStartX, nOldStartX );            // Ecke weglassen
-        rX2 = nOldEndX;
-        rY1 = Min( nNewStartY, nOldStartY );                // oben
-        rY2 = Max( nNewStartY, nOldStartY ) - 1;
-        rCont = TRUE;
-        nContY1 = rY2+1;
-        nContY2 = nOldEndY;
-        nContX1 = Min( nNewStartX, nOldStartX );            // links
-        nContX2 = Max( nNewStartX, nOldStartX ) - 1;
-    }
-    else if (nNewStartX == nOldStartX && nNewEndY == nOldEndY)        // rechts oben
-    {
-        if ((nNewEndX<nOldEndX) != (nNewStartY<nOldStartY))
-            rX2 = Max( nNewEndX, nOldEndX );
-        else
-            rX2 = Min( nNewEndX, nOldEndX );                // Ecke weglassen
-        rX1 = nOldStartX;
-        rY1 = Min( nNewStartY, nOldStartY );                // oben
-        rY2 = Max( nNewStartY, nOldStartY ) - 1;
-        rCont = TRUE;
-        nContY1 = rY2+1;
-        nContY2 = nOldEndY;
-        nContX1 = Min( nNewEndX, nOldEndX ) + 1;            // rechts
-        nContX2 = Max( nNewEndX, nOldEndX );
-    }
-    else if (nNewEndX == nOldEndX && nNewStartY == nOldStartY)        // links unten
-    {
-        if ((nNewStartX<nOldStartX) != (nNewEndY<nOldEndY))
-            rX1 = Min( nNewStartX, nOldStartX );
-        else
-            rX1 = Max( nNewStartX, nOldStartX );            // Ecke weglassen
-        rX2 = nOldEndX;
-        rY1 = Min( nNewEndY, nOldEndY ) + 1;                // unten
-        rY2 = Max( nNewEndY, nOldEndY );
-        rCont = TRUE;
-        nContY1 = nOldStartY;
-        nContY2 = rY1-1;
-        nContX1 = Min( nNewStartX, nOldStartX );            // links
-        nContX2 = Max( nNewStartX, nOldStartX ) - 1;
-    }
-    else if (nNewStartX == nOldStartX && nNewStartY == nOldStartY)    // rechts unten
-    {
-        if ((nNewEndX<nOldEndX) == (nNewEndY<nOldEndY))
-            rX2 = Max( nNewEndX, nOldEndX );
-        else
-            rX2 = Min( nNewEndX, nOldEndX );                // Ecke weglassen
-        rX1 = nOldStartX;
-        rY1 = Min( nNewEndY, nOldEndY ) + 1;                // unten
-        rY2 = Max( nNewEndY, nOldEndY );
-        rCont = TRUE;
-        nContY1 = nOldStartY;
-        nContY2 = rY1-1;
-        nContX1 = Min( nNewEndX, nOldEndX ) + 1;            // rechts
-        nContX2 = Max( nNewEndX, nOldEndX );
-    }
-    else                                                                // Ueberschlag
-    {
-        rX1 = nOldStartX;
-        rY1 = nOldStartY;
-        rX2 = nOldEndX;
-        rY2 = nOldEndY;
-        rCont = TRUE;
-        nContX1 = nNewStartX;
-        nContY1 = nNewStartY;
-        nContX2 = nNewEndX;
-        nContY2 = nNewEndY;
-    }
-
-    return TRUE;
-}
-
-void ScUpdateRect::GetContDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
-{
-    rX1 = nContX1;
-    rY1 = nContY1;
-    rX2 = nContX2;
-    rY2 = nContY2;
-}
-#endif
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

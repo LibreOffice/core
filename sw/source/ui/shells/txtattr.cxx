@@ -78,12 +78,12 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
     const SfxItemSet  *pArgs   = rReq.GetArgs();
           int          eState = STATE_TOGGLE;
-    USHORT nWhich = rReq.GetSlot();
+    sal_uInt16 nWhich = rReq.GetSlot();
 
     if(pArgs )
     {
         const SfxPoolItem* pItem;
-        pArgs->GetItemState(nWhich, FALSE, &pItem);
+        pArgs->GetItemState(nWhich, sal_False, &pItem);
         eState =  ((const SfxBoolItem &) pArgs->
                                 Get( nWhich )).GetValue() ? STATE_ON : STATE_OFF;
     }
@@ -108,17 +108,17 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 eEscape = nWhich == FN_SET_SUPER_SCRIPT ?
                                 SVX_ESCAPEMENT_SUPERSCRIPT:
                                 SVX_ESCAPEMENT_SUBSCRIPT;
-                if( nWhich == FN_SET_SUB_SCRIPT && nTmpEsc < 0 ||
-                            nWhich == FN_SET_SUPER_SCRIPT && nTmpEsc > 0 )
+                if( (nWhich == FN_SET_SUB_SCRIPT && nTmpEsc < 0) ||
+                            (nWhich == FN_SET_SUPER_SCRIPT && nTmpEsc > 0) )
                     eEscape = SVX_ESCAPEMENT_OFF;
 
                 SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
                 if( nWhich == FN_SET_SUB_SCRIPT )
                     rBind.SetState( SfxBoolItem( FN_SET_SUPER_SCRIPT,
-                                                                    FALSE ) );
+                                                                    sal_False ) );
                 else
                     rBind.SetState( SfxBoolItem( FN_SET_SUB_SCRIPT,
-                                                                    FALSE ) );
+                                                                    sal_False ) );
 
             }
             break;
@@ -180,7 +180,7 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 rSh.DontExpandFmt();
         break;
         default:
-            OSL_ENSURE(false, "wrong  dispatcher");
+            OSL_FAIL("wrong  dispatcher");
             return;
     }
 }
@@ -188,10 +188,10 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
 
 void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
 {
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     const SfxItemSet* pArgs = rReq.GetArgs();
-    BOOL bArgs = pArgs != 0 && pArgs->Count() > 0;
-    int bGrow = FALSE;
+    sal_Bool bArgs = pArgs != 0 && pArgs->Count() > 0;
+    int bGrow = sal_False;
     SwWrtShell& rWrtSh = GetShell();
     SwTxtFmtColl* pColl = 0;
 
@@ -203,7 +203,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             pColl = 0;
     }
     SfxItemPool& rPool = GetPool();
-    USHORT nWhich = rPool.GetWhich(nSlot);
+    sal_uInt16 nWhich = rPool.GetWhich(nSlot);
     switch ( nSlot )
     {
         case FN_TXTATR_INET:
@@ -232,7 +232,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
         break;
 
         case FN_GROW_FONT_SIZE:
-            bGrow = TRUE;
+            bGrow = sal_True;
             // kein break !!
         case FN_SHRINK_FONT_SIZE:
         {
@@ -241,10 +241,10 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             SfxItemSet aAttrSet( rPool, aSetItem.GetItemSet().GetRanges() );
 
             const SfxPoolItem* pI;
-            static const USHORT aScrTypes[] = {
+            static const sal_uInt16 aScrTypes[] = {
                 SCRIPTTYPE_LATIN, SCRIPTTYPE_ASIAN, SCRIPTTYPE_COMPLEX, 0 };
-            USHORT nScriptType = rWrtSh.GetScriptType();
-            for( const USHORT* pScrpTyp = aScrTypes; *pScrpTyp; ++pScrpTyp )
+            sal_uInt16 nScriptType = rWrtSh.GetScriptType();
+            for( const sal_uInt16* pScrpTyp = aScrTypes; *pScrpTyp; ++pScrpTyp )
                 if( ( nScriptType & *pScrpTyp ) &&
                     0 != ( pI = aSetItem.GetItemOfScript( *pScrpTyp )))
                 {
@@ -280,76 +280,15 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
         break;
 
         default:
-            OSL_ENSURE(false, "wrong  dispatcher");
+            OSL_FAIL("wrong  dispatcher");
             return;
     }
 }
 
-
-
-#ifdef CFRONT
-
-void lcl_SetAdjust(SvxAdjust eAdjst, SfxItemSet& rSet)
-{
-    rSet.Put(SvxAdjustItem(eAdjst,RES_PARATR_ADJUST ));
-}
-
-
-
-void lcl_SetLineSpace(BYTE ePropL,SfxItemSet& rSet)
-{
-    SvxLineSpacingItem aLineSpacing(ePropL, RES_PARATR_LINESPACING );
-    aLineSpacing.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
-    if( 100 == ePropL )
-        aLineSpacing.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
-    else
-        aLineSpacing.SetPropLineSpace(ePropL);
-    rSet.Put( aLineSpacing );
-}
-
-
-
-void SwTextShell::ExecParaAttr(SfxRequest &rReq)
-{
-    // gleiche beide Attribute holen, ist nicht teuerer !!
-    SfxItemSet aSet( GetPool(), RES_PARATR_LINESPACING, RES_PARATR_ADJUST );
-
-    switch (rReq.GetSlot())
-    {
-    case FN_SET_LEFT_PARA:          lcl_SetAdjust(ADJLEFT,aSet);    break;
-    case FN_SET_RIGHT_PARA:         lcl_SetAdjust(ADJRIGHT,aSet);   break;
-    case FN_SET_CENTER_PARA:        lcl_SetAdjust(ADJCENTER,aSet);  break;
-    case SID_ATTR_PARA_ADJUST_BLOCK:lcl_SetAdjust(ADJBLOCK,aSet);   break;
-
-    case FN_SET_LINE_SPACE_1:   lcl_SetLineSpace(100,aSet);     break;
-    case FN_SET_LINE_SPACE_15:  lcl_SetLineSpace(150,aSet);     break;
-    case FN_SET_LINE_SPACE_2:   lcl_SetLineSpace(200,aSet);     break;
-
-    default:
-        OSL_ENSURE(false, "SwTextShell::ExecParaAttr wrong Dispatcher");
-        return;
-    }
-    SwWrtShell& rWrtSh = GetShell();
-    SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
-    if(pColl && pColl->IsAutoUpdateFmt())
-    {
-        rWrtSh.AutoUpdatePara(pColl, *pSet);
-    }
-    else
-    {
-        rWrtSh.SetAttr( aSet );
-        rReq.Done( aSet );
-    }
-}
-
-#else
-
-
-
 void SwTextShell::ExecParaAttr(SfxRequest &rReq)
 {
     SvxAdjust eAdjst;
-    BYTE ePropL;
+    sal_uInt8 ePropL;
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     // gleich beide Attribute holen, ist nicht teuerer !!
@@ -358,7 +297,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
         RES_FRAMEDIR, RES_FRAMEDIR,
         0 );
 
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
     {
         case SID_ATTR_PARA_ADJUST:
@@ -384,7 +323,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
 SET_ADJUST:
         {
             aSet.Put(SvxAdjustItem(eAdjst,RES_PARATR_ADJUST));
-            rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), TRUE ) );
+            rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), sal_True ) );
         }
         break;
 
@@ -416,33 +355,20 @@ SET_LINESPACE:
         case SID_ATTR_PARA_LEFT_TO_RIGHT :
         case SID_ATTR_PARA_RIGHT_TO_LEFT :
         {
-            BOOL bSet = TRUE;
-            int eState = pArgs ? pArgs->GetItemState(nSlot) : SFX_ITEM_DISABLED;
-            if (pArgs && SFX_ITEM_SET == eState)
-                bSet = ((const SfxBoolItem&)pArgs->Get(nSlot)).GetValue();
-/*
-// toggling of the slots not used anymore
-
-           if(!bSet)
-                nSlot = SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot ?
-                    SID_ATTR_PARA_RIGHT_TO_LEFT :
-                    SID_ATTR_PARA_LEFT_TO_RIGHT;
-*/
             SfxItemSet aAdjustSet( GetPool(),
                     RES_PARATR_ADJUST, RES_PARATR_ADJUST );
             GetShell().GetCurAttr(aAdjustSet);
-            BOOL bChgAdjust = FALSE;
-            SfxItemState eAdjustState = aAdjustSet.GetItemState(RES_PARATR_ADJUST, FALSE);
+            sal_Bool bChgAdjust = sal_False;
+            SfxItemState eAdjustState = aAdjustSet.GetItemState(RES_PARATR_ADJUST, sal_False);
             if(eAdjustState  >= SFX_ITEM_DEFAULT)
             {
                 int eAdjust = (int)(( const SvxAdjustItem& )
                         aAdjustSet.Get(RES_PARATR_ADJUST)).GetAdjust();
-//                bChgAdjust = SVX_ADJUST_CENTER  != eAdjust  &&  SVX_ADJUST_BLOCK != eAdjust;
                 bChgAdjust = (SVX_ADJUST_LEFT  == eAdjust  &&  SID_ATTR_PARA_RIGHT_TO_LEFT == nSlot) ||
                              (SVX_ADJUST_RIGHT == eAdjust  &&  SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot);
             }
             else
-                bChgAdjust = TRUE;
+                bChgAdjust = sal_True;
 
             SvxFrameDirection eFrmDirection =
                     (SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot) ?
@@ -463,7 +389,7 @@ SET_LINESPACE:
                 {
                     SvxNumRule aRule = pCurRule->MakeSvxNumRule();
 
-                    for(USHORT i = 0; i < aRule.GetLevelCount(); i++)
+                    for(sal_uInt16 i = 0; i < aRule.GetLevelCount(); i++)
                     {
                         SvxNumberFormat aFmt(aRule.GetLevel(i));
                         if(SVX_ADJUST_LEFT == aFmt.GetNumAdjust())
@@ -474,23 +400,19 @@ SET_LINESPACE:
 
                         aRule.SetLevel(i, aFmt, aRule.Get(i) != 0);
                     }
-                    // --> OD 2008-02-11 #newlistlevelattrs#
                     SwNumRule aSetRule( pCurRule->GetName(),
                                         pCurRule->Get( 0 ).GetPositionAndSpaceMode() );
-                    // <--
                     aSetRule.SetSvxRule( aRule, GetShell().GetDoc());
-                    aSetRule.SetAutoRule( TRUE );
-                    // --> OD 2008-03-17 #refactorlists#
+                    aSetRule.SetAutoRule( sal_True );
                     // no start or continuation of a list - list style is only changed
                     GetShell().SetCurNumRule( aSetRule, false );
-                    // <--
                 }
             }
         }
         break;
 
         default:
-            OSL_ENSURE(false, "wrong  dispatcher");
+            OSL_FAIL("wrong  dispatcher");
             return;
     }
     SwWrtShell& rWrtSh = GetShell();
@@ -504,19 +426,15 @@ SET_LINESPACE:
     rReq.Done();
 }
 
-#endif
-
-
-
 void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem *pItem = 0;
 
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
-        pArgs->GetItemState(GetPool().GetWhich(nSlot), FALSE, &pItem);
+        pArgs->GetItemState(GetPool().GetWhich(nSlot), sal_False, &pItem);
     switch ( nSlot )
     {
         case FN_DROP_CHAR_STYLE_NAME:
@@ -556,7 +474,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 {
                     rSh.StartAction();
                     rSh.StartUndo( UNDO_START );
-                    if ( SFX_ITEM_SET == aSet.GetItemState(HINT_END,FALSE,&pItem) )
+                    if ( SFX_ITEM_SET == aSet.GetItemState(HINT_END,sal_False,&pItem) )
                     {
                         if ( ((SfxStringItem*)pItem)->GetValue().Len() )
                             rSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
@@ -593,7 +511,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
         break;
 
         default:
-            OSL_ENSURE(false, "wrong  dispatcher");
+            OSL_FAIL("wrong  dispatcher");
             return;
     }
 }
@@ -608,12 +526,12 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     rSh.GetCurAttr(aCoreSet); // *alle* Textattribute von der Core erfragen
 
     SfxWhichIter aIter(rSet);
-    USHORT nSlot = aIter.FirstWhich();
+    sal_uInt16 nSlot = aIter.FirstWhich();
     sal_Bool bFlag = sal_False;
     SfxBoolItem aFlagItem;
     const SfxPoolItem* pItem = 0;
     int eAdjust = -1;   // Illegaler Wert, um DONTCARE zu erkennen
-    SfxItemState eState = aCoreSet.GetItemState(RES_PARATR_ADJUST, FALSE, &pItem);
+    SfxItemState eState = aCoreSet.GetItemState(RES_PARATR_ADJUST, sal_False, &pItem);
 
     if( SFX_ITEM_DEFAULT == eState )
         pItem = &rPool.GetDefaultItem(RES_PARATR_ADJUST);
@@ -621,14 +539,14 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
         eAdjust = (int)(( SvxAdjustItem* ) pItem)->GetAdjust();
 
     short nEsc = 0;
-    eState =  aCoreSet.GetItemState(RES_CHRATR_ESCAPEMENT, FALSE, &pItem);
+    eState =  aCoreSet.GetItemState(RES_CHRATR_ESCAPEMENT, sal_False, &pItem);
     if( SFX_ITEM_DEFAULT == eState )
         pItem = &rPool.GetDefaultItem(RES_CHRATR_ESCAPEMENT);
     if( eState >= SFX_ITEM_DEFAULT )
         nEsc = ((SvxEscapementItem* )pItem)->GetEsc();
 
-    USHORT nLineSpace = 0;
-    eState =  aCoreSet.GetItemState(RES_PARATR_LINESPACING, FALSE, &pItem);
+    sal_uInt16 nLineSpace = 0;
+    eState =  aCoreSet.GetItemState(RES_PARATR_LINESPACING, sal_False, &pItem);
     if( SFX_ITEM_DEFAULT == eState )
         pItem = &rPool.GetDefaultItem(RES_PARATR_LINESPACING);
     if( SFX_ITEM_DEFAULT <= eState &&
@@ -688,7 +606,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 else
                 {
                     bFlag = SVX_ADJUST_BLOCK == eAdjust;
-                    USHORT nHtmlMode = GetHtmlMode(rSh.GetView().GetDocShell());
+                    sal_uInt16 nHtmlMode = GetHtmlMode(rSh.GetView().GetDocShell());
                     if((nHtmlMode & HTMLMODE_ON) && !(nHtmlMode & (HTMLMODE_FULL_STYLES|HTMLMODE_FIRSTLINE) ))
                     {
                         rSet.DisableItem( nSlot );
@@ -711,7 +629,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             {
                 SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT,
                                             *rSet.GetPool() );
-                aSetItem.GetItemSet().Put( aCoreSet, FALSE );
+                aSetItem.GetItemSet().Put( aCoreSet, sal_False );
                 if( !aSetItem.GetItemOfScript( rSh.GetScriptType() ))
                     rSet.DisableItem( nSlot );
                 nSlot = 0;
@@ -750,9 +668,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 else
                 {
                     // is the item set?
-                    USHORT nHtmlMode = GetHtmlMode(rSh.GetView().GetDocShell());
+                    sal_uInt16 nHtmlMode = GetHtmlMode(rSh.GetView().GetDocShell());
                     if((!(nHtmlMode & HTMLMODE_ON) || (0 != (nHtmlMode & HTMLMODE_SOME_STYLES))) &&
-                    aCoreSet.GetItemState( RES_FRAMEDIR, FALSE ) >= SFX_ITEM_DEFAULT)
+                    aCoreSet.GetItemState( RES_FRAMEDIR, sal_False ) >= SFX_ITEM_DEFAULT)
                     {
                         SvxFrameDirection eFrmDir = (SvxFrameDirection)
                                 ((const SvxFrameDirectionItem& )aCoreSet.Get(RES_FRAMEDIR)).GetValue();
@@ -780,10 +698,10 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case RES_PARATR_DROP:
             {
 #if OSL_DEBUG_LEVEL > 1
-                const SfxPoolItem& rItem = aCoreSet.Get(GetPool().GetWhich(nSlot), TRUE);
+                const SfxPoolItem& rItem = aCoreSet.Get(GetPool().GetWhich(nSlot), sal_True);
                 rSet.Put(rItem);
 #else
-                rSet.Put(aCoreSet.Get( GetPool().GetWhich(nSlot), TRUE));
+                rSet.Put(aCoreSet.Get( GetPool().GetWhich(nSlot), sal_True));
 #endif
                 nSlot = 0;
             }
@@ -805,10 +723,10 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 SfxItemSet aSet(GetPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
                 rSh.GetCurAttr(aSet);
 #if OSL_DEBUG_LEVEL > 1
-                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, TRUE);
+                const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, sal_True);
                 rSet.Put(rItem);
 #else
-                rSet.Put(aSet.Get( RES_TXTATR_INETFMT, TRUE));
+                rSet.Put(aSet.Get( RES_TXTATR_INETFMT, sal_True));
 #endif
                 nSlot = 0;
             }
@@ -829,7 +747,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
         nSlot = aIter.NextWhich();
     }
 
-    rSet.Put(aCoreSet,FALSE);
+    rSet.Put(aCoreSet,sal_False);
 }
 
 

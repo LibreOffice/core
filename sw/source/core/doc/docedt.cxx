@@ -49,6 +49,7 @@
 #include <cntfrm.hxx>           // fuers Spell
 #include <crsrsh.hxx>
 #include <doc.hxx>
+#include <UndoManager.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <doctxm.hxx>       // beim Move: Verzeichnisse korrigieren
@@ -64,10 +65,14 @@
 #include <swtable.hxx>
 #include <swundo.hxx>       // fuer die UndoIds
 #include <txtfrm.hxx>
-#include <undobj.hxx>
+#include <hints.hxx>
+#include <UndoSplitMove.hxx>
+#include <UndoRedline.hxx>
+#include <UndoOverwrite.hxx>
+#include <UndoInsert.hxx>
+#include <UndoDelete.hxx>
 #include <breakit.hxx>
 #include <hhcwrp.hxx>
-#include <breakit.hxx>
 #include <vcl/msgbox.hxx>
 #include "comcore.hrc"
 #include "editsh.hxx"
@@ -81,7 +86,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
 
-//using namespace ::utl;
 #ifndef S2U
 #define S2U(rString) OUString::createFromAscii(rString)
 #endif
@@ -212,7 +216,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
                 pFmt, pFmt->GetDoc()->GetSpzFrmFmts()->Count() );
         pFmt->SetFmtAttr( aAnchor );
         SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
-        if( pCNd && pCNd->GetFrm( 0, 0, sal_False ) )
+        if( pCNd && pCNd->getLayoutFrm( pFmt->GetDoc()->GetCurrentLayout(), 0, 0, sal_False ) )
             pFmt->MakeFrms();
     }
 }
@@ -284,7 +288,6 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                     SwFmtAnchor aAnchor( *pAnchor );
                     aAnchor.SetAnchor( &aPos );
                     pFmt->SetFmtAttr( aAnchor );
-//                  ((SwFmtAnchor*)pAnchor)->SetAnchor( &aPos );
                 }
             }
             else if( ( rSttNdIdx.GetIndex() + nSttOff <= pAPos->nNode.GetIndex()
@@ -350,11 +353,9 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
 
                 pDoc->DelLayoutFmt( pFmt );
 
-                // --> FME 2004-10-06 #117913# DelLayoutFmt can also
-                // trigger the deletion of objects.
+                // DelLayoutFmt can also trigger the deletion of objects.
                 if( i > rTbl.Count() )
                     i = rTbl.Count();
-                // <--
             }
         }
     }
@@ -405,7 +406,7 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                 }
                 else
                 {
-                    pSrch->DelFrms();
+                    pSrch->DelFrms(0);
                     rFtnArr.Remove( nPos );
                     if( bSaveFtn )
                         rSaveArr.Insert( pSrch );
@@ -433,7 +434,7 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                 }
                 else
                 {
-                    pSrch->DelFrms();
+                    pSrch->DelFrms(0);
                     rFtnArr.Remove( nPos );
                     if( bSaveFtn )
                         rSaveArr.Insert( pSrch );
@@ -458,8 +459,8 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                 if( pHints && pHints->HasFtn() ) //...with footnotes
                 {
                     bUpdateFtn = sal_True; // Heureka
-                    USHORT nCount = pHints->Count();
-                    for( USHORT i = 0; i < nCount; ++i )
+                    sal_uInt16 nCount = pHints->Count();
+                    for( sal_uInt16 i = 0; i < nCount; ++i )
                     {
                         SwTxtAttr *pAttr = pHints->GetTextHint( i );
                         if ( pAttr->Which() == RES_TXTATR_FTN )
@@ -593,7 +594,6 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
                             pTmpPos->nNode.GetNode().GetCntntNode(), 0 );
 
                 _SaveRedline* pSave = new _SaveRedline( pNewRedl, rRg.aStart );
-//              rArr.Insert( pSave, rArr.Count() );
                 rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
 
                 pTmpPos = pTmp->End();
@@ -617,7 +617,6 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
             {
                 // gesamt verschieben
                 _SaveRedline* pSave = new _SaveRedline( pTmp, rRg.aStart );
-//              rArr.Insert( pSave, rArr.Count() );
                 rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
             }
             else
@@ -630,7 +629,6 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
                             pTmpPos->nNode.GetNode().GetCntntNode(), 0 );
 
                 _SaveRedline* pSave = new _SaveRedline( pNewRedl, rRg.aStart );
-//              rArr.Insert( pSave, rArr.Count() );
                 rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
 
                 pTmpPos = pTmp->Start();
@@ -760,8 +758,10 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     if(!pNode)
         return sal_False;
 
-    if( DoesUndo() )
-        ClearRedo();
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo not always called
+    }
 
     sal_uInt16 nOldAttrCnt = pNode->GetpSwpHints()
                                 ? pNode->GetpSwpHints()->Count() : 0;
@@ -769,13 +769,11 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     SwIndex& rIdx = rPt.nContent;
     xub_StrLen nStart = 0;
 
-    sal_uInt16 nUndoSize = pUndos->Count();
-    SwUndo * pUndo;
     sal_Unicode c;
     String aStr;
 
-    BOOL bOldExpFlg = pNode->IsIgnoreDontExpand();
-    pNode->SetIgnoreDontExpand( TRUE );
+    sal_Bool bOldExpFlg = pNode->IsIgnoreDontExpand();
+    pNode->SetIgnoreDontExpand( sal_True );
 
     for( xub_StrLen nCnt = 0; nCnt < rStr.Len(); ++nCnt )
     {
@@ -786,16 +784,24 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
             lcl_SkipAttr( pNode, rIdx, nStart );
         }
         c = rStr.GetChar( nCnt );
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            if( DoesGroupUndo() && nUndoSize &&
-                UNDO_OVERWRITE == ( pUndo = (*pUndos)[ nUndoSize-1 ])->GetId() &&
-                ((SwUndoOverwrite*)pUndo)->CanGrouping( this, rPt, c ))
-                ;// wenn CanGrouping() sal_True returnt, ist schon alles erledigt
-            else
+            bool bMerged(false);
+            if (GetIDocumentUndoRedo().DoesGroupUndo())
             {
-                AppendUndo( new SwUndoOverwrite( this, rPt, c ));
-                nUndoSize = pUndos->Count();
+                SwUndo *const pUndo = GetUndoManager().GetLastUndo();
+                SwUndoOverwrite *const pUndoOW(
+                    dynamic_cast<SwUndoOverwrite *>(pUndo) );
+                if (pUndoOW)
+                {
+                    // if CanGrouping() returns true it's already merged
+                    bMerged = pUndoOW->CanGrouping( this, rPt, c );
+                }
+            }
+            if (!bMerged)
+            {
+                SwUndo *const pUndoOW( new SwUndoOverwrite(this, rPt, c) );
+                GetIDocumentUndoRedo().AppendUndo(pUndoOW);
             }
         }
         else
@@ -819,16 +825,11 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     if( nOldAttrCnt != nNewAttrCnt )
     {
         SwUpdateAttr aHint( 0, 0, 0 );
-        SwClientIter aIter( *pNode );
-        SwClient* pGTO = aIter.First(TYPE( SwCrsrShell ));
-        while( pGTO )
-        {
-            pGTO->Modify( 0, &aHint );
-            pGTO = aIter.Next();
-        }
+        pNode->ModifyBroadcast( 0, &aHint, TYPE( SwCrsrShell ) );
     }
 
-    if( !DoesUndo() && !IsIgnoreRedline() && GetRedlineTbl().Count() )
+    if (!GetIDocumentUndoRedo().DoesUndo() &&
+        !IsIgnoreRedline() && GetRedlineTbl().Count())
     {
         SwPaM aPam( rPt.nNode, nStart, rPt.nNode, rPt.nContent.GetIndex() );
         DeleteRedline( aPam, true, USHRT_MAX );
@@ -895,15 +896,13 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         //          in a particular order, and presence of bookmarks
         //          will change this order. Hence, we delete bookmarks
         //          here without undo.
-        BOOL bDoesUndo = DoesUndo();
-        DoUndo( FALSE );
+        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
         _DelBookmarks(
             pStt->nNode,
             pEnd->nNode,
             NULL,
             &pStt->nContent,
             &pEnd->nContent);
-        DoUndo( bDoesUndo );
     }
 
 
@@ -912,9 +911,9 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 
     // falls Undo eingeschaltet, erzeuge das UndoMove-Objekt
     SwUndoMove * pUndoMove = 0;
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo();
         pUndoMove = new SwUndoMove( rPaM, rPos );
         pUndoMove->SetMoveRedlines( eMvFlags == DOC_MOVEREDLINES );
     }
@@ -1011,7 +1010,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 
     rPaM.SetMark();         // um den neuen Bereich eine Sel. aufspannen
     pTNd = aSavePam.GetNode()->GetTxtNode();
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         // korrigiere erstmal den Content vom SavePam
         if( bNullCntnt )
@@ -1046,7 +1045,6 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
             }
             bJoin = sal_False;
         }
-//      else if( !bCorrSavePam && !pSavePam->Move( fnMoveForward, fnGoCntnt ))
         else if ( !aSavePam.Move( fnMoveForward, fnGoCntnt ) )
         {
             aSavePam.GetPoint()->nNode++;
@@ -1055,7 +1053,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         // zwischen SPoint und GetMark steht jetzt der neu eingefuegte Bereich
         pUndoMove->SetDestRange( aSavePam, *rPaM.GetPoint(),
                                     bJoin, bCorrSavePam );
-        AppendUndo( pUndoMove );
+        GetIDocumentUndoRedo().AppendUndo( pUndoMove );
     }
     else
     {
@@ -1065,11 +1063,9 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         {
             if( pTNd->CanJoinNext())
             {
-                // --> OD 2009-08-20 #i100466#
                 // Always join next, because <pTNd> has to stay as it is.
                 // A join previous from its next would more or less delete <pTNd>
                 pTNd->JoinNext();
-                // <--
                 bRemove = false;
             }
         }
@@ -1138,11 +1134,15 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     SwFtnIdxs aTmpFntIdx;
 
     SwUndoMove* pUndo = 0;
-    if( (DOC_CREATEUNDOOBJ & eMvFlags ) && DoesUndo() )
+    if ((DOC_CREATEUNDOOBJ & eMvFlags ) && GetIDocumentUndoRedo().DoesUndo())
+    {
         pUndo = new SwUndoMove( this, rRange, rPos );
+    }
     else
+    {
         bUpdateFtn = lcl_SaveFtn( rRange.aStart, rRange.aEnd, rPos,
                                     GetFtnIdxs(), aTmpFntIdx );
+    }
 
     _SaveRedlines aSaveRedl( 0, 4 );
     SvPtrarr aSavRedlInsPosArr( 0, 4 );
@@ -1188,7 +1188,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         pSaveInsPos = new SwNodeIndex( rRange.aStart, -1 );
 
     // verschiebe die Nodes
-    BOOL bNoDelFrms = 0 != (DOC_NO_DELFRMS & eMvFlags);
+    sal_Bool bNoDelFrms = 0 != (DOC_NO_DELFRMS & eMvFlags);
     if( GetNodes()._MoveNodes( rRange, GetNodes(), rPos, !bNoDelFrms ) )
     {
         aIdx++;     // wieder auf alte Position
@@ -1232,9 +1232,8 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
 
     if( pUndo )
     {
-        ClearRedo();
         pUndo->SetDestRange( aIdx, rPos, *pSaveInsPos );
-        AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     if( pSaveInsPos )
@@ -1255,9 +1254,8 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     return sal_True;
 }
 
-/* #107318# Convert list of ranges of whichIds to a corresponding list
-    of whichIds*/
-SvUShorts * lcl_RangesToUShorts(USHORT * pRanges)
+// Convert list of ranges of whichIds to a corresponding list of whichIds
+SvUShorts * lcl_RangesToUShorts(sal_uInt16 * pRanges)
 {
     SvUShorts * pResult = new SvUShorts();
 
@@ -1266,7 +1264,7 @@ SvUShorts * lcl_RangesToUShorts(USHORT * pRanges)
     {
         OSL_ENSURE(pRanges[i+1] != 0, "malformed ranges");
 
-        for (USHORT j = pRanges[i]; j < pRanges[i+1]; j++)
+        for (sal_uInt16 j = pRanges[i]; j < pRanges[i+1]; j++)
             pResult->Insert(j, pResult->Count());
 
         i += 2;
@@ -1345,8 +1343,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 // falls PageBreaks geloescht / gesetzt werden, darf das
                 // nicht in die Undo-History aufgenommen werden !!
                 // (das loeschen vom Node geht auch am Undo vorbei !!!)
-                sal_Bool bDoUndo = pDoc->DoesUndo();
-                pDoc->DoUndo( sal_False );
+                ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
                 /* PageBreaks, PageDesc, ColumnBreaks */
                 // Sollte an der Logik zum Kopieren der PageBreak's ...
@@ -1398,8 +1395,6 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 if( aBkmkArr.Count() )
                     ::_RestoreCntntIdx( pDoc, aBkmkArr, aIdx.GetIndex() );
 
-                pDoc->DoUndo( bDoUndo );
-
                 // falls der uebergebene PaM nicht im Crsr-Ring steht,
                 // gesondert behandeln (z.B. Aufruf aus dem Auto-Format)
                 if( pOldTxtNd == rPam.GetBound( sal_True ).nContent.GetIdxReg() )
@@ -1417,7 +1412,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 pDelNd->FmtToTxtAttr( pTxtNd );
             else
             {
-                /* #107318# This case was missed:
+                /* This case was missed:
 
                    <something></something>   <-- pTxtNd
                    <other>ccc</other>        <-- pDelNd
@@ -1443,8 +1438,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
             }
 
             pDoc->CorrRel( aIdx, *rPam.GetPoint(), 0, sal_True );
-            // --> OD 2009-08-20 #i100466#
-            // adjust given <rPam>, if it does not belong to the cursors
+            // #i100466# adjust given <rPam>, if it does not belong to the cursors
             if ( pDelNd == rPam.GetBound( sal_True ).nContent.GetIdxReg() )
             {
                 rPam.GetBound( sal_True ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
@@ -1453,7 +1447,6 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
             {
                 rPam.GetBound( sal_False ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
             }
-            // <--
             pTxtNd->JoinNext();
         }
     }
@@ -1538,21 +1531,19 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
     OSL_ENSURE( IsRedlineOn(), "DeleteAndJoinWithRedline: redline off" );
 
     {
-        sal_uInt16 nUndoSize = 0;
         SwUndoRedlineDelete* pUndo = 0;
         RedlineMode_t eOld = GetRedlineMode();
         checkRedlining(eOld);
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
 
     //JP 06.01.98: MUSS noch optimiert werden!!!
     SetRedlineMode(
            (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
 
-            nUndoSize = pUndos->Count();
-            StartUndo(UNDO_EMPTY, NULL);
-            AppendUndo( pUndo = new SwUndoRedlineDelete( rPam, UNDO_DELETE ));
+            GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
+            pUndo = new SwUndoRedlineDelete( rPam, UNDO_DELETE );
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
         if( *rPam.GetPoint() != *rPam.GetMark() )
             AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_DELETE, rPam ), true);
@@ -1560,18 +1551,29 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
 
         if( pUndo )
         {
-            EndUndo(UNDO_EMPTY, NULL);
-            SwUndo* pPrevUndo;
-            if( nUndoSize && DoesGroupUndo() &&
-                nUndoSize + 1 == pUndos->Count() &&
-                UNDO_REDLINE == ( pPrevUndo = (*pUndos)[ nUndoSize-1 ])->GetId() &&
-                UNDO_DELETE == ((SwUndoRedline*)pPrevUndo)->GetUserId() &&
-                ((SwUndoRedlineDelete*)pPrevUndo)->CanGrouping( *pUndo ))
+            GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
+            // ??? why the hell is the AppendUndo not below the
+            // CanGrouping, so this hideous cleanup wouldn't be necessary?
+            // bah, this is redlining, probably changing this would break it...
+            if (GetIDocumentUndoRedo().DoesGroupUndo())
             {
-                DoUndo( sal_False );
-                pUndos->DeleteAndDestroy( nUndoSize, 1 );
-                --nUndoPos, --nUndoCnt;
-                DoUndo( sal_True );
+                SwUndo *const pLastUndo( GetUndoManager().GetLastUndo() );
+                SwUndoRedlineDelete *const pUndoRedlineDel(
+                        dynamic_cast<SwUndoRedlineDelete*>(pLastUndo) );
+                if (pUndoRedlineDel)
+                {
+                    bool const bMerged = pUndoRedlineDel->CanGrouping(*pUndo);
+                    if (bMerged)
+                    {
+                        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+                        SwUndo const*const pDeleted =
+                            GetUndoManager().RemoveLastUndo();
+                        OSL_ENSURE(pDeleted == pUndo,
+                            "DeleteAndJoinWithRedlineImpl: "
+                            "undo removed is not undo inserted?");
+                        delete pDeleted;
+                    }
+                }
             }
 //JP 06.01.98: MUSS noch optimiert werden!!!
 SetRedlineMode( eOld );
@@ -1585,12 +1587,12 @@ bool SwDoc::DeleteAndJoinImpl( SwPaM & rPam,
 {
     sal_Bool bJoinTxt, bJoinPrev;
     lcl_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
-    // --> OD 2009-08-20 #i100466#
+    // #i100466#
     if ( bForceJoinNext )
     {
         bJoinPrev = sal_False;
     }
-    // <--
+
     {
         bool const bSuccess( DeleteRangeImpl( rPam ) );
         if (!bSuccess)
@@ -1668,17 +1670,25 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
     }
 
 
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
-        sal_uInt16 nUndoSize = pUndos->Count();
-        SwUndo * pUndo;
-        if( DoesGroupUndo() && nUndoSize-- &&
-            UNDO_DELETE == ( pUndo = (*pUndos)[ nUndoSize ])->GetId() &&
-            ((SwUndoDelete*)pUndo)->CanGrouping( this, rPam ))
-            ;// wenn CanGrouping() sal_True returnt, ist schon alles erledigt
-        else
-            AppendUndo( new SwUndoDelete( rPam ) );
+        GetIDocumentUndoRedo().ClearRedo();
+        bool bMerged(false);
+        if (GetIDocumentUndoRedo().DoesGroupUndo())
+        {
+            SwUndo *const pLastUndo( GetUndoManager().GetLastUndo() );
+            SwUndoDelete *const pUndoDelete(
+                    dynamic_cast<SwUndoDelete *>(pLastUndo) );
+            if (pUndoDelete)
+            {
+                bMerged = pUndoDelete->CanGrouping( this, rPam );
+                // if CanGrouping() returns true it's already merged
+            }
+        }
+        if (!bMerged)
+        {
+            GetIDocumentUndoRedo().AppendUndo( new SwUndoDelete( rPam ) );
+        }
 
         SetModified();
 
@@ -1796,8 +1806,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
     return true;
 }
 
-// OD 2009-08-20 #i100466#
-// Add handling of new optional parameter <bForceJoinNext>
+// #i100466# Add handling of new optional parameter <bForceJoinNext>
 bool SwDoc::DeleteAndJoin( SwPaM & rPam,
                            const bool bForceJoinNext )
 {
@@ -1823,7 +1832,7 @@ void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::ProofreadingResult&
         return;
     SwGrammarMarkUp* pWrong = rTxtNode.GetGrammarCheck();
     linguistic2::SingleProofreadingError* pArray = rResult.aErrors.getArray();
-    USHORT i, j = 0;
+    sal_uInt16 i, j = 0;
     if( pWrong )
     {
         for( i = 0; i < rResult.aErrors.getLength(); ++i )
@@ -1863,8 +1872,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent,
                             bGrammarCheck );
 
-    ULONG nCurrNd = pSttPos->nNode.GetIndex();
-    ULONG nEndNd = pEndPos->nNode.GetIndex();
+    sal_uLong nCurrNd = pSttPos->nNode.GetIndex();
+    sal_uLong nEndNd = pEndPos->nNode.GetIndex();
 
     uno::Any aRet;
     if( nCurrNd <= nEndNd )
@@ -1877,7 +1886,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
             switch( pNd->GetNodeType() )
             {
             case ND_TEXTNODE:
-                if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->GetFrm()) )
+                if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->getLayoutFrm( GetCurrentLayout() )) )
                 {
                     // geschutze Cellen/Flys ueberspringen, ausgeblendete
                     //ebenfalls
@@ -1957,12 +1966,11 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                 uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *((SwTxtNode*)pNd), aExpandText, pConversionMap );
 
                                 // get error position of cursor in XFlatParagraph
-                                sal_Int32 nGrammarErrorPosInText;
                                 linguistic2::ProofreadingResult aResult;
                                 sal_Int32 nGrammarErrors;
                                 do
                                 {
-                                    nGrammarErrorPosInText = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBeginGrammarCheck );
+                                    ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBeginGrammarCheck );
                                     aResult = xGCIterator->checkSentenceAtPosition(
                                             xDoc, xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
 
@@ -2107,7 +2115,7 @@ sal_Bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
     SwHyphArgs *pHyphArgs = (SwHyphArgs*)pArgs;
     if( pNode )
     {
-        SwCntntFrm* pCntFrm = pNode->GetFrm();
+        SwCntntFrm* pCntFrm = pNode->getLayoutFrm( pNode->GetDoc()->GetCurrentLayout() );
         if( pCntFrm && !((SwTxtFrm*)pCntFrm)->IsHiddenNow() )
         {
             sal_uInt16 *pPageSt = pHyphArgs->GetPageSt();
@@ -2196,7 +2204,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const String& rStr,
     ::std::vector<xub_StrLen> Breaks;
 
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
-    aPam.Normalize(FALSE);
+    aPam.Normalize(sal_False);
     if (aPam.GetPoint()->nNode != aPam.GetMark()->nNode)
     {
         aPam.Move(fnMoveBackward);
@@ -2299,9 +2307,9 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
         {
             RedlineMode_t eOld = GetRedlineMode();
             checkRedlining(eOld);
-            if( DoesUndo() )
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
-                StartUndo(UNDO_EMPTY, NULL);
+                GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
                 // Bug 68584 - if any Redline will change (split!) the node
                 const ::sw::mark::IMark* pBkmk = getIDocumentMarkAccess()->makeMark( aDelPam, ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
@@ -2381,15 +2389,19 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                 InsertItemSet( aTmpRange, aSet, 0 );
             }
 
-            if( DoesUndo() )
-                AppendUndo( new SwUndoRedlineDelete( aDelPam, UNDO_REPLACE ));
+            if (GetIDocumentUndoRedo().DoesUndo())
+            {
+                SwUndo *const pUndoRD =
+                    new SwUndoRedlineDelete( aDelPam, UNDO_REPLACE );
+                GetIDocumentUndoRedo().AppendUndo(pUndoRD);
+            }
             AppendRedline( new SwRedline( nsRedlineType_t::REDLINE_DELETE, aDelPam ), true);
 
             *rPam.GetMark() = *aDelPam.GetMark();
-            if( DoesUndo() )
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
                 *aDelPam.GetPoint() = *rPam.GetPoint();
-                EndUndo(UNDO_EMPTY, NULL);
+                GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
 
                 // Bug 68584 - if any Redline will change (split!) the node
                 const ::sw::mark::IMark* pBkmk = getIDocumentMarkAccess()->makeMark( aDelPam, ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
@@ -2416,21 +2428,13 @@ SetRedlineMode( eOld );
                 DeleteRedline( aDelPam, true, USHRT_MAX );
 
             SwUndoReplace* pUndoRpl = 0;
-            if( DoesUndo() )
+            bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
+            if (bDoesUndo)
             {
-                ClearRedo();
-                SwUndo* pU;
-
-                if( !pUndos->Count() ||
-                    UNDO_REPLACE != ( pU = (*pUndos)[ pUndos->Count()-1 ])->GetId() ||
-                    ( pUndoRpl = (SwUndoReplace*)pU )->IsFull() )
-                {
-                    pUndoRpl = new SwUndoReplace();
-                    AppendUndo( pUndoRpl );
-                }
-                pUndoRpl->AddEntry( aDelPam, sRepl, bRegExReplace );
-                DoUndo( sal_False );
+                pUndoRpl = new SwUndoReplace(aDelPam, sRepl, bRegExReplace);
+                GetIDocumentUndoRedo().AppendUndo(pUndoRpl);
             }
+            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
             if( aDelPam.GetPoint() != pStt )
                 aDelPam.Exchange();
@@ -2483,8 +2487,7 @@ SetRedlineMode( eOld );
 
             if( pUndoRpl )
             {
-                pUndoRpl->SetEntryEnd( rPam );
-                DoUndo( sal_True );
+                pUndoRpl->SetEnd(rPam);
             }
         }
     }
@@ -2515,25 +2518,23 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
 
     if ( nSectDiff-2 <= nNodeDiff || IsRedlineOn() ||
          /* #i9185# Prevent getting the node after the end node (see below) */
-        rEnd.nNode.GetIndex() + 1 == aNodes.Count() )
+        rEnd.nNode.GetIndex() + 1 == GetNodes().Count() )
+    {
         return sal_False;
+    }
 
     // harte SeitenUmbrueche am nachfolgenden Node verschieben
     sal_Bool bSavePageBreak = sal_False, bSavePageDesc = sal_False;
 
     /* #i9185# This whould lead to a segmentation fault if not catched
        above. */
-    ULONG nNextNd = rEnd.nNode.GetIndex() + 1;
-    SwTableNode* pTblNd = aNodes[ nNextNd ]->GetTableNode();
+    sal_uLong nNextNd = rEnd.nNode.GetIndex() + 1;
+    SwTableNode *const pTblNd = GetNodes()[ nNextNd ]->GetTableNode();
 
     if( pTblNd && pNd->IsCntntNode() )
     {
         SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
-//JP 24.08.98: will man wirklich den PageDesc/Break vom
-//              nachfolgen Absatz ueberbuegeln?
-//      const SwAttrSet& rAttrSet = pTableFmt->GetAttrSet();
-//      if( SFX_ITEM_SET != rAttrSet.GetItemState( RES_PAGEDESC ) &&
-//          SFX_ITEM_SET != rAttrSet.GetItemState( RES_BREAK ))
+
         {
             const SfxPoolItem *pItem;
             const SfxItemSet* pSet = ((SwCntntNode*)pNd)->GetpSwAttrSet();
@@ -2553,7 +2554,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
         }
     }
 
-    sal_Bool bDoesUndo = DoesUndo();
+    bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
     if( bDoesUndo )
     {
         if( !rPam.HasMark() )
@@ -2568,7 +2569,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
         pTmpNode = rPam.GetMark()->nNode.GetNode().GetCntntNode();
         rPam.GetMark()->nContent.Assign( pTmpNode, 0 );
 
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo();
 
         SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
         {
@@ -2585,7 +2586,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
 
         *rPam.GetPoint() = *aDelPam.GetPoint();
         pUndo->SetPgBrkFlags( bSavePageBreak, bSavePageDesc );
-        AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
     else
     {
@@ -2600,7 +2601,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             rPam.Exchange();
             if( !rPam.Move( fnMoveBackward, fnGoNode ))
             {
-                OSL_ENSURE( sal_False, "kein Node mehr vorhanden" );
+                OSL_FAIL( "kein Node mehr vorhanden" );
                 return sal_False;
             }
         }
@@ -2626,10 +2627,10 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             }
         }
 
-        SwCntntNode *pTmpNode = rPam.GetBound( TRUE ).nNode.GetNode().GetCntntNode();
-        rPam.GetBound( TRUE ).nContent.Assign( pTmpNode, 0 );
-        pTmpNode = rPam.GetBound( FALSE ).nNode.GetNode().GetCntntNode();
-        rPam.GetBound( FALSE ).nContent.Assign( pTmpNode, 0 );
+        SwCntntNode *pTmpNode = rPam.GetBound( sal_True ).nNode.GetNode().GetCntntNode();
+        rPam.GetBound( sal_True ).nContent.Assign( pTmpNode, 0 );
+        pTmpNode = rPam.GetBound( sal_False ).nNode.GetNode().GetCntntNode();
+        rPam.GetBound( sal_False ).nContent.Assign( pTmpNode, 0 );
         GetNodes().Delete( aRg.aStart, nNodeDiff+1 );
     }
     rPam.DeleteMark();
@@ -2642,15 +2643,13 @@ void SwDoc::TransliterateText(
     const SwPaM& rPaM,
     utl::TransliterationWrapper& rTrans )
 {
-    SwUndoTransliterate* pUndo;
-    if( DoesUndo() )
-        pUndo = new SwUndoTransliterate( rPaM, rTrans );
-    else
-        pUndo = 0;
+    SwUndoTransliterate *const pUndo = (GetIDocumentUndoRedo().DoesUndo())
+        ?   new SwUndoTransliterate( rPaM, rTrans )
+        :   0;
 
     const SwPosition* pStt = rPaM.Start(),
                        * pEnd = rPaM.End();
-    ULONG nSttNd = pStt->nNode.GetIndex(),
+    sal_uLong nSttNd = pStt->nNode.GetIndex(),
           nEndNd = pEnd->nNode.GetIndex();
     xub_StrLen nSttCnt = pStt->nContent.GetIndex(),
                nEndCnt = pEnd->nContent.GetIndex();
@@ -2666,7 +2665,7 @@ void SwDoc::TransliterateText(
                         pTNd->GetTxt(), nSttCnt,
                         pBreakIt->GetLocale( pTNd->GetLang( nSttCnt ) ),
                         WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
-                        TRUE );
+                        sal_True );
 
         if( aBndry.startPos < nSttCnt && nSttCnt < aBndry.endPos )
         {
@@ -2704,8 +2703,7 @@ void SwDoc::TransliterateText(
     {
         if( pUndo->HasData() )
         {
-            ClearRedo();
-            AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
         else
             delete pUndo;
@@ -2724,7 +2722,7 @@ void SwDoc::checkRedlining(RedlineMode_t& _rReadlineMode)
         && !((_rReadlineMode & nsRedlineMode_t::REDLINE_SHOW_DELETE) == nsRedlineMode_t::REDLINE_SHOW_DELETE) )
     {
         WarningBox aWarning( pParent,SW_RES(MSG_DISABLE_READLINE_QUESTION));
-        USHORT nResult = aWarning.Execute();
+        sal_uInt16 nResult = aWarning.Execute();
         mbReadlineChecked = sal_True;
         if ( nResult == RET_YES )
         {
@@ -2742,8 +2740,8 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const
     const SwPosition* pEnd = pStt == rPaM.GetPoint() ? rPaM.GetMark()
                                                      : rPaM.GetPoint();
 
-    const ULONG nSttNd = pStt->nNode.GetIndex();
-    const ULONG nEndNd = pEnd->nNode.GetIndex();
+    const sal_uLong nSttNd = pStt->nNode.GetIndex();
+    const sal_uLong nEndNd = pEnd->nNode.GetIndex();
 
     const xub_StrLen nSttCnt = pStt->nContent.GetIndex();
     const xub_StrLen nEndCnt = pEnd->nContent.GetIndex();

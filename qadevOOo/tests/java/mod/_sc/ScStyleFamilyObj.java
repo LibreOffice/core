@@ -145,15 +145,15 @@ public class ScStyleFamilyObj extends TestCase {
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Exception occured while getting StyleFamily", e);
+                "Exception occurred while getting StyleFamily", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Exception occured while getting StyleFamily", e);
+                "Exception occurred while getting StyleFamily", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException(
-                "Exception occured while getting StyleFamily", e);
+                "Exception occurred while getting StyleFamily", e);
         }
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());

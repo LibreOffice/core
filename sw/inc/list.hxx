@@ -57,13 +57,9 @@ class SwList
         void ValidateListTree();
 
         void MarkListLevel( const int nListLevel,
-                            const BOOL bValue );
+                            const sal_Bool bValue );
 
         bool IsListLevelMarked( const int nListLevel ) const;
-
-//        void ContinueList( SwList& rList );
-//        const SwList* GetContinuedList() const;
-//        void ClearContinuation();
 
     private:
         // no copy constructor and no assignment operator

@@ -33,13 +33,14 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace aqua;
+
+using ::rtl::OUString;
 
 namespace aqua {
 
@@ -57,28 +58,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
-{
-    sal_Bool bRetVal = sal_False;
-
-    if ( pRegistryKey )
-    {
-        try
-        {
-            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-            pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( AQUA_CLIPBOARD_REGKEY_NAME ) ) );
-            bRetVal = sal_True;
-        }
-        catch( InvalidRegistryException& )
-        {
-            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
-            bRetVal = sal_False;
-        }
-    }
-
-    return bRetVal;
 }
 
 void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* pRegistryKey )

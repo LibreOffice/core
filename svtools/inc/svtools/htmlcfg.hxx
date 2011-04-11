@@ -65,37 +65,37 @@ public:
     virtual void    Commit();
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 
-    USHORT      GetFontSize(USHORT nPos) const;
-    void        SetFontSize(USHORT nPos, USHORT nSize);
+    sal_uInt16      GetFontSize(sal_uInt16 nPos) const;
+    void        SetFontSize(sal_uInt16 nPos, sal_uInt16 nSize);
 
-    BOOL        IsImportUnknown() const;
-    void        SetImportUnknown(BOOL bSet);
+    sal_Bool        IsImportUnknown() const;
+    void        SetImportUnknown(sal_Bool bSet);
 
-    USHORT      GetExportMode() const;
-    void        SetExportMode(USHORT nSet);
+    sal_uInt16      GetExportMode() const;
+    void        SetExportMode(sal_uInt16 nSet);
 
-    BOOL        IsStarBasic() const;
-    void        SetStarBasic(BOOL bSet);
+    sal_Bool        IsStarBasic() const;
+    void        SetStarBasic(sal_Bool bSet);
 
-    BOOL        IsStarBasicWarning() const;
-    void        SetStarBasicWarning(BOOL bSet);
+    sal_Bool        IsStarBasicWarning() const;
+    void        SetStarBasicWarning(sal_Bool bSet);
 
-    BOOL        IsSaveGraphicsLocal() const;
-    void        SetSaveGraphicsLocal(BOOL bSet);
+    sal_Bool        IsSaveGraphicsLocal() const;
+    void        SetSaveGraphicsLocal(sal_Bool bSet);
 
-    BOOL        IsPrintLayoutExtension() const;
-    void        SetPrintLayoutExtension(BOOL bSet);
+    sal_Bool        IsPrintLayoutExtension() const;
+    void        SetPrintLayoutExtension(sal_Bool bSet);
 
-    BOOL        IsIgnoreFontFamily() const;
-    void        SetIgnoreFontFamily(BOOL bSet);
+    sal_Bool        IsIgnoreFontFamily() const;
+    void        SetIgnoreFontFamily(sal_Bool bSet);
 
     sal_Bool    IsDefaultTextEncoding() const;
     rtl_TextEncoding GetTextEncoding() const;
     void        SetTextEncoding( rtl_TextEncoding );
     static SvxHtmlOptions* Get();
 
-    BOOL        IsNumbersEnglishUS() const;
-    void        SetNumbersEnglishUS(BOOL bSet);
+    sal_Bool        IsNumbersEnglishUS() const;
+    void        SetNumbersEnglishUS(sal_Bool bSet);
 
     void AddListenerLink( const Link& rLink );
     void RemoveListenerLink( const Link& rLink );

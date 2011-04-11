@@ -787,9 +787,9 @@ namespace basegfx
                                 // (since
                                 // createPolygonFromEllipseSegment()
                                 // normalizes to e.g. cw arc)
-                                const bool bFlipSegment( (bLargeArcFlag!=0) ==
-                                    (fmod(fTheta2+2*M_PI-fTheta1,
-                                          2*M_PI)<M_PI) );
+                                const bool bLessThanPi(fmod(fTheta2+2*M_PI-fTheta1,
+                                          2*M_PI)<M_PI);
+                                const bool bFlipSegment( (bLargeArcFlag!=0) == bLessThanPi );
                                 if( bFlipSegment )
                                     std::swap(fTheta1,fTheta2);
 
@@ -826,7 +826,7 @@ namespace basegfx
 
                     default:
                     {
-                        OSL_ENSURE(false, "importFromSvgD(): skipping tags in svg:d element (unknown)!");
+                        OSL_FAIL("importFromSvgD(): skipping tags in svg:d element (unknown)!");
                         OSL_TRACE("importFromSvgD(): skipping tags in svg:d element (unknown: \"%c\")!", aCurrChar);
                         ++nPos;
                         break;

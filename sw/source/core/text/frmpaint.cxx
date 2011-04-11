@@ -42,12 +42,12 @@
 #include <fmtline.hxx>
 #include <lineinfo.hxx>
 #include <charfmt.hxx>
+#include "rootfrm.hxx"
 #include <pagefrm.hxx>
 #include <viewsh.hxx>   // ViewShell
 #include <viewimp.hxx>  // SwViewImp
 #include <viewopt.hxx>  // SwViewOption
 #include <frmtool.hxx>  // DrawGraphic
-#include <txtcfg.hxx>
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <itrpaint.hxx>     // SwTxtPainter
 #include <txtpaint.hxx>     // SwSaveClip
@@ -67,7 +67,7 @@
 
 // --> OD 2006-06-27 #b6440955#
 // variable moved to class <numfunc:GetDefBulletConfig>
-//extern const sal_Char __FAR_DATA sBulletFntName[];
+//extern const sal_Char sBulletFntName[];
 namespace numfunc
 {
     extern const String& GetDefBulletFontname();
@@ -95,7 +95,7 @@ class SwExtraPainter
     const SwLineNumberInfo &rLineInf;
     SwTwips nX;
     SwTwips nRedX;
-    ULONG nLineNr;
+    sal_uLong nLineNr;
     MSHORT nDivider;
     sal_Bool bGoLeft;
     sal_Bool bLineNum;
@@ -321,7 +321,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
     {
         if( IsLocked() || IsHiddenNow() || !Prt().Height() )
             return;
-        ViewShell *pSh = GetShell();
+        ViewShell *pSh = getRootFrm()->GetCurrShell();
 
         SWAP_IF_NOT_SWAPPED( this )
         SwRect rOldRect( rRect );
@@ -449,6 +449,10 @@ SwRect SwTxtFrm::Paint()
         //      d.h. als linken Rand den berechneten PaintOfst!
         SwRepaint *pRepaint = GetPara()->GetRepaint();
         long l;
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if ( IsVertLR() ) // mba: the following line was added, but we don't need it for the existing directions; kept for IsVertLR(), but should be checked
+            pRepaint->Chg( ( GetUpper()->Frm() ).Pos() + ( GetUpper()->Prt() ).Pos(), ( GetUpper()->Prt() ).SSize() );
+
         if( pRepaint->GetOfst() )
             pRepaint->Left( pRepaint->GetOfst() );
 
@@ -475,7 +479,7 @@ SwRect SwTxtFrm::Paint()
 
 sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
 {
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     if( pSh && ( pSh->GetViewOptions()->IsParagraph() || bInitFont ) )
     {
         bInitFont = sal_False;
@@ -597,12 +601,12 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
  *                      SwTxtFrm::Paint()
  *************************************************************************/
 
-void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ ) const
+void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     ResetRepaint();
 
     // --> FME 2004-06-24 #i16816# tagged pdf support
-    ViewShell *pSh = GetShell();
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
 
     Num_Info aNumInfo( *this );
     SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, 0, 0, *pSh->GetOut() );
@@ -611,7 +615,6 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
     SwTaggedPDFHelper aTaggedPDFHelperParagraph( 0, &aFrmInfo, 0, *pSh->GetOut() );
     // <--
 
-    DBG_LOOP_RESET;
     if( !IsEmpty() || !PaintEmpty( rRect, sal_True ) )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -619,10 +622,6 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
         (void)nDbgY;
 #endif
 
-#ifdef DBGTXT
-        if( IsDbg( this ) )
-            DBTXTFRM << "Paint()" << endl;
-#endif
         if( IsLocked() || IsHiddenNow() || ! Prt().HasArea() )
             return;
 
@@ -722,13 +721,6 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
         {
             do
             {
-                //DBG_LOOP; shadows declaration above.
-                //resolved into:
-#if  OSL_DEBUG_LEVEL > 1
-#if OSL_DEBUG_LEVEL > 1
-                DbgLoop aDbgLoop2( (const void*) this );
-#endif
-#endif
                 aLine.DrawTextLine( rRect, aClip, IsUndersized() );
 
             } while( aLine.Next() && aLine.Y() <= nBottom );

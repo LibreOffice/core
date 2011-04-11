@@ -33,6 +33,7 @@
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
 #include <memory>
+#include <limits>
 
 //.............................................................................
 namespace chart
@@ -340,7 +341,6 @@ TickInfo* EquidistantTickIter::nextInfo()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-//static
 double TickmarkHelper::getMinimumAtIncrement( double fMin, const ExplicitIncrementData& rIncrement )
 {
     //the returned value will be <= fMin and on a Major Tick given by rIncrement
@@ -359,7 +359,7 @@ double TickmarkHelper::getMinimumAtIncrement( double fMin, const ExplicitIncreme
     }
     return fRet;
 }
-//static
+
 double TickmarkHelper::getMaximumAtIncrement( double fMax, const ExplicitIncrementData& rIncrement )
 {
     //the returned value will be >= fMax and on a Major Tick given by rIncrement
@@ -482,7 +482,12 @@ sal_Int32 TickmarkHelper::getMaxTickCount( sal_Int32 nDepth ) const
     if (!isFinite(fSub))
         return 0;
 
-    sal_Int32 nIntervalCount = static_cast<sal_Int32>( fSub / m_rIncrement.Distance );
+    double fIntervalCount = fSub / m_rIncrement.Distance;
+    if (fIntervalCount > std::numeric_limits<sal_Int32>::max())
+        // Interval count too high!  Bail out.
+        return 0;
+
+    sal_Int32 nIntervalCount = static_cast<sal_Int32>(fIntervalCount);
 
     nIntervalCount+=3;
     for(sal_Int32 nN=0; nN<nDepth-1; nN++)
@@ -785,7 +790,6 @@ bool TickmarkHelper_2D::isVerticalAxis() const
     return ( m_aAxisStartScreenPosition2D.getX() == m_aAxisEndScreenPosition2D.getX() );
 }
 
-//static
 sal_Int32 TickmarkHelper_2D::getTickScreenDistance( TickIter& rIter )
 {
     //return the positive distance between the two first tickmarks in screen values

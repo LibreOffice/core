@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef _FLDDAT_HXX
-#define _FLDDAT_HXX
+#ifndef SW_FLDDAT_HXX
+#define SW_FLDDAT_HXX
 
 #include <tools/string.hxx>
 
@@ -37,14 +37,11 @@ class DateTime;
 class Date;
 class Time;
 
-/*--------------------------------------------------------------------
-    Beschreibung: Formate
- --------------------------------------------------------------------*/
 
 enum SwDateFormat
 {
     DF_BEGIN,
-    //neue Formate:
+    // new formats
     DFF_SSYS = DF_BEGIN,
     DFF_LSYS ,
     DFF_DMY ,
@@ -63,7 +60,7 @@ enum SwDateFormat
     DFF_YMD ,
     DFF_YYMD ,
     DF_END ,
-//  Kompatibilitaet:
+    // Compatibility
     DF_SSYS     = DFF_SSYS,
     DF_LSYS     = DFF_LSYS,
     DF_SHORT    = DFF_DMY,
@@ -95,9 +92,6 @@ enum SwDateSubFormat
     DATE_VAR
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Datum/Uhrzeitfeld
- --------------------------------------------------------------------*/
 
 class SwDateTimeFieldType : public SwValueFieldType
 {
@@ -107,45 +101,42 @@ public:
         virtual SwFieldType*    Copy() const;
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Datum/Uhrzeitfeld
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDateTimeField : public SwValueField
 {
-        USHORT              nSubType;
-        long                nOffset;    // Offset in Minuten
+        sal_uInt16              nSubType;
+        long                nOffset;    // Offset in minutes.
+
+        virtual String      Expand() const;
+        virtual SwField*    Copy() const;
 
 public:
-        SwDateTimeField(SwDateTimeFieldType* pType, USHORT nSubType = DATEFLD,
-                    ULONG nFmt = 0, USHORT nLng = 0);
+        SwDateTimeField(SwDateTimeFieldType* pType, sal_uInt16 nSubType = DATEFLD,
+                    sal_uLong nFmt = 0, sal_uInt16 nLng = 0);
 
-        virtual USHORT          GetSubType() const;
-        virtual void            SetSubType(USHORT nSub);
+        virtual sal_uInt16          GetSubType() const;
+        virtual void            SetSubType(sal_uInt16 nSub);
 
         virtual double          GetValue() const;
 
         virtual void            SetPar2(const String& rStr);
         virtual String          GetPar2() const;
 
-        inline BOOL             IsDate() const
+        inline sal_Bool             IsDate() const
                                 { return (nSubType & DATEFLD) != 0; }
 
         inline void             SetOffset(long nMinutes)    { nOffset = nMinutes; }
         inline long             GetOffset() const           { return nOffset; }
 
-        Date                    GetDate(BOOL bUseOffset = FALSE) const;
-        Time                    GetTime(BOOL bUseOffset = FALSE) const;
+        Date                    GetDate(sal_Bool bUseOffset = sal_False) const;
+        Time                    GetTime(sal_Bool bUseOffset = sal_False) const;
         void                    SetDateTime(const DateTime& rDT);
         static double           GetDateTime(SwDoc* pDoc, const DateTime& rDT);
 
-        virtual String          Expand() const;
-        virtual SwField*        Copy() const;
-
-        virtual bool            QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
-        virtual bool            PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
+        virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const;
+        virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
 };
 
-#endif // _FLDDAT_HXX
+#endif // SW_FLDDAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

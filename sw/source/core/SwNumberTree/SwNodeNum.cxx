@@ -38,11 +38,8 @@
 // --> OD 2007-10-31 #i83479#
 #include <IDocumentListItems.hxx>
 // <--
-// --> OD 2010-01-13 #b6912256#
 #include <doc.hxx>
-// <--
 
-// --> OD 2008-02-19 #refactorlists#
 SwNodeNum::SwNodeNum( SwTxtNode* pTxtNode )
     : SwNumberTreeNode(),
       mpTxtNode( pTxtNode ),
@@ -56,7 +53,6 @@ SwNodeNum::SwNodeNum( SwNumRule* pNumRule )
       mpNumRule( pNumRule )
 {
 }
-// <--
 
 SwNodeNum::~SwNodeNum()
 {
@@ -98,16 +94,11 @@ SwPosition SwNodeNum::GetPosition() const
 
 SwNumberTreeNode * SwNodeNum::Create() const
 {
-    // --> OD 2008-02-19 #refactorlists#
-//    SwNodeNum * pResult = new SwNodeNum();
-//    pResult->SetNumRule(mpNumRule);
     SwNodeNum * pResult = new SwNodeNum( GetNumRule() );
-    // <--
 
     return pResult;
 }
 
-// --> OD 2008-02-19 #refactorlists#
 void SwNodeNum::PreAdd()
 {
     OSL_ENSURE( GetTxtNode(),
@@ -191,7 +182,7 @@ bool SwNodeNum::IsContinuous() const
     }
     else
     {
-        OSL_ENSURE( false, "<SwNodeNum::IsContinuous()> - OD debug" );
+        OSL_FAIL( "<SwNodeNum::IsContinuous()> - OD debug" );
     }
     // <--
 
@@ -206,13 +197,6 @@ bool SwNodeNum::IsCounted() const
     {
         // --> OD 2006-01-25 #i59559#
         // <SwTxtNode::IsCounted()> determines, if a text node is counted for numbering
-//        const SwNumFmt * pNumFmt = GetNumFmt();
-//        if (pNumFmt)
-//        {
-//            sal_Int16 nType = pNumFmt->GetNumberingType();
-//            if ( nType != SVX_NUM_NUMBER_NONE)
-//                aResult = mpTxtNode->IsCounted();
-//        }
         aResult = GetTxtNode()->IsCountedInList();
         // <--
     }
@@ -227,9 +211,9 @@ bool SwNodeNum::HasCountedChildren() const
 {
     bool bResult = false;
 
-    tSwNumberTreeChildren::iterator aIt;
+    tSwNumberTreeChildren::const_iterator aIt;
 
-    for (aIt = mChildren.begin(); aIt != mChildren.end(); aIt++)
+    for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
     {
         SwNodeNum* pChild( dynamic_cast<SwNodeNum*>(*aIt) );
         OSL_ENSURE( pChild,
@@ -280,9 +264,6 @@ bool SwNodeNum::LessThan(const SwNumberTreeNode & rNode) const
     {
         // --> OD 2007-10-31 #i83479# - refactoring
         // simplify comparison by comparing the indexes of the text nodes
-//        SwPosition aMyPos(*mpTxtNode);
-//        SwPosition aHisPos(*rTmpNode.mpTxtNode);
-//        bResult = (aMyPos < aHisPos) ? true : false;
         bResult = ( mpTxtNode->GetIndex() < rTmpNode.mpTxtNode->GetIndex() ) ? true : false;
         // <--
     }
@@ -290,24 +271,6 @@ bool SwNodeNum::LessThan(const SwNumberTreeNode & rNode) const
     return bResult;
 }
 
-//void SwNodeNum::SetRestart(bool bRestart)
-//{
-//    // --> OD 2005-10-19 #126009#
-//    // - improvement: invalidation only, if <IsRestart()> state changes.
-//    const bool bInvalidate( mbRestart != bRestart );
-//    // <--
-//    mbRestart = bRestart;
-
-//    // --> OD 2005-10-19 #126009#
-//    if ( bInvalidate )
-//    {
-//        InvalidateMe();
-//        NotifyInvalidSiblings();
-//    }
-//    // <--
-//}
-
-// --> OD 2008-02-25 #refactorlists#
 bool SwNodeNum::IsRestart() const
 {
     bool bIsRestart = false;
@@ -319,23 +282,6 @@ bool SwNodeNum::IsRestart() const
 
     return bIsRestart;
 }
-// <--
-
-//void SwNodeNum::SetStart(SwNumberTree::tSwNumTreeNumber nStart)
-//{
-//    // --> OD 2005-10-19 #126009#
-//    // - improvement: invalidation only, if <IsRestart()> state changes.
-//    const bool bInvalidate( mnStart != nStart );
-//    // <--
-//    mnStart = nStart;
-
-//    // --> OD 2005-10-19 #126009#
-//    if ( bInvalidate )
-//    {
-//        InvalidateMe();
-//        NotifyInvalidSiblings();
-//    }
-//}
 
 bool SwNodeNum::IsCountPhantoms() const
 {
@@ -348,17 +294,14 @@ bool SwNodeNum::IsCountPhantoms() const
                   mpNumRule->IsCountPhantoms();
     else
     {
-        OSL_ENSURE( false,
-                "<SwNodeNum::IsCountPhantoms(): missing numbering rule - please inform OD" );
+        OSL_FAIL( "<SwNodeNum::IsCountPhantoms(): missing numbering rule - please inform OD" );
     }
     // <--
 
     return bResult;
 }
 
-// --> OD 2008-02-25 #refactorlists#
 SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStartValue() const
-//SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStart() const
 {
     SwNumberTree::tSwNumTreeNumber aResult = 1;
 
@@ -376,7 +319,7 @@ SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStartValue() const
 
             if (nLevel >= 0 && nLevel < MAXLEVEL)
             {
-                const SwNumFmt * pFmt = pRule->GetNumFmt( static_cast<USHORT>(nLevel));
+                const SwNumFmt * pFmt = pRule->GetNumFmt( static_cast<sal_uInt16>(nLevel));
 
                 if (pFmt)
                     aResult = pFmt->GetStart();
@@ -387,63 +330,6 @@ SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStartValue() const
     return aResult;
 }
 
-//String SwNodeNum::ToString() const
-//{
-//    String aResult("[ ", RTL_TEXTENCODING_ASCII_US);
-
-//    if (GetTxtNode())
-//    {
-//        char aBuffer[256];
-
-//        sprintf(aBuffer, "%p ", GetTxtNode());
-
-//        aResult += String(aBuffer, RTL_TEXTENCODING_ASCII_US);
-//        aResult += String::CreateFromInt32(GetPosition().nNode.GetIndex());
-//    }
-//    else
-//        aResult += String("*", RTL_TEXTENCODING_ASCII_US);
-
-//    aResult += String(" ", RTL_TEXTENCODING_ASCII_US);
-
-//    unsigned int nLvl = GetLevel();
-//    aResult += String::CreateFromInt32(nLvl);
-
-//    aResult += String(": ", RTL_TEXTENCODING_ASCII_US);
-
-//    tNumberVector aNumVector;
-
-//    _GetNumberVector(aNumVector, false);
-
-//    for (unsigned int n = 0; n < aNumVector.size(); n++)
-//    {
-//        if (n > 0)
-//            aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
-
-//        aResult += String::CreateFromInt32(aNumVector[n]);
-//    }
-
-//    if (IsCounted())
-////        aResult += String(" counted", RTL_TEXTENCODING_ASCII_US);
-//        aResult += String(" C", RTL_TEXTENCODING_ASCII_US);
-
-//    if (IsRestart())
-//    {
-////        aResult += String(" restart(", RTL_TEXTENCODING_ASCII_US);
-//        aResult += String(" R(", RTL_TEXTENCODING_ASCII_US);
-//        aResult += String::CreateFromInt32(GetStart());
-//        aResult += String(")", RTL_TEXTENCODING_ASCII_US);
-//    }
-
-//    if (! IsValid())
-////        aResult += String(" invalid", RTL_TEXTENCODING_ASCII_US);
-//        aResult += String(" I", RTL_TEXTENCODING_ASCII_US);
-
-//    aResult += String(" ]", RTL_TEXTENCODING_ASCII_US);
-
-//    return aResult;
-//}
-
-// --> OD 2006-03-07 #131436#
 void SwNodeNum::HandleNumberTreeRootNodeDelete( SwNodeNum& rNodeNum )
 {
     SwNodeNum* pRootNode = rNodeNum.GetParent()
@@ -471,8 +357,7 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
         SwNodeNum* pChildNode( dynamic_cast<SwNodeNum*>((*rNodeNum.mChildren.begin())) );
         if ( !pChildNode )
         {
-            OSL_ENSURE( false,
-                    "<SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete(..)> - unknown number tree node child" );
+            OSL_FAIL( "<SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete(..)> - unknown number tree node child" );
             ++nAllowedChildCount;
             continue;
         }
@@ -494,8 +379,7 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
         if ( pTxtNode )
         {
             pTxtNode->RemoveFromList();
-            // --> OD 2010-01-13 #b6912256#
-            // clear all list attributes and the list style
+            // --> clear all list attributes and the list style
             SvUShortsSort aResetAttrsArray;
             aResetAttrsArray.Insert( RES_PARATR_LIST_ID );
             aResetAttrsArray.Insert( RES_PARATR_LIST_LEVEL );
@@ -519,8 +403,6 @@ const SwNodeNum* SwNodeNum::GetPrecedingNodeNumOf( const SwTxtNode& rTxtNode ) c
     const SwNodeNum* pPrecedingNodeNum( 0 );
 
     // --> OD 2007-10-31 #i83479#
-//    SwNodeNum aNodeNumForTxtNode;
-//    aNodeNumForTxtNode.SetTxtNode( const_cast<SwTxtNode*>(&rTxtNode) );
     SwNodeNum aNodeNumForTxtNode( const_cast<SwTxtNode*>(&rTxtNode) );
     // <--
 

@@ -33,11 +33,14 @@
 // includes
 //------------------------------------------------------------------------
 
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#endif
+
 #include <WindowsAccessBridgeAdapter.h>
 
-#include <tools/prewin.h>
 #include <wtypes.h>
-#include <tools/postwin.h>
 #include <rtl/process.h>
 #include <tools/link.hxx>
 
@@ -94,17 +97,17 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_getProcessID(JNIEnv
     g_jcWindowsAccessBridgeAdapter =
         static_cast< jclass > (pJNIEnv->NewGlobalRef(clazz));
     if (NULL == g_jcWindowsAccessBridgeAdapter) {
-        return 0; /* jni error occured */
+        return 0; /* jni error occurred */
     }
     g_jmRegisterTopWindow =
         pJNIEnv->GetStaticMethodID(clazz, "registerTopWindow", "(ILcom/sun/star/accessibility/XAccessible;)V");
     if (0 == g_jmRegisterTopWindow) {
-        return 0; /* jni error occured */
+        return 0; /* jni error occurred */
     }
     g_jmRevokeTopWindow =
         pJNIEnv->GetStaticMethodID(clazz, "revokeTopWindow", "(ILcom/sun/star/accessibility/XAccessible;)V");
     if (0 == g_jmRevokeTopWindow) {
-        return 0; /* jni error occured */
+        return 0; /* jni error occurred */
     }
 
     // Use the special protocol of XJavaVM.getJavaVM:  If the passed in
@@ -167,7 +170,7 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEn
         }
     }
 
-    catch ( RuntimeException e)
+    catch ( RuntimeException &e)
     {
         OSL_TRACE("RuntimeException caught while initializing the mapping");
     }
@@ -251,7 +254,7 @@ void handleWindowEvent(Window * pWindow, bool bShow)
                     }
                 }
             }
-            catch (::com::sun::star::uno::RuntimeException e)
+            catch (::com::sun::star::uno::RuntimeException &e)
             {
                 // Ignore show events that throw DisposedExceptions in getAccessibleContext(),
                 // but keep revoking these windows in hide(s).
@@ -284,7 +287,7 @@ void handleWindowEvent(Window * pWindow, bool bShow)
                         (bShow) ? g_jmRegisterTopWindow : g_jmRevokeTopWindow,
                         (jint) GetHWND(pWindow), joXAccessible );
 
-                    // Clear any exception that might have been occured.
+                    // Clear any exception that might have been occurred.
                     if (pJNIEnv->ExceptionCheck()) {
                         pJNIEnv->ExceptionClear();
                     }

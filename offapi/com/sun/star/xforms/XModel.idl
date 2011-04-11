@@ -107,7 +107,7 @@ interface XModel
             consistency criteria for the model data is not fulfilled.
 
         @throws com::sun::star::lang::WrappedTargetException
-            when another error occured during the submission. The
+            when another error occurred during the submission. The
             <member scope="com::sun::star::lang">WrappedTargetException::TargetException</member> describes
             this error then.
     */
@@ -131,7 +131,7 @@ interface XModel
             consistency criteria for the model data is not fulfilled.
 
         @throws com::sun::star::lang::WrappedTargetException
-            when another error occured during the submission. The
+            when another error occurred during the submission. The
             <member scope="com::sun::star::lang">WrappedTargetException::TargetException</member> describes
             this error then.
     */

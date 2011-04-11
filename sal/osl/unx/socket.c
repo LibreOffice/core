@@ -47,7 +47,7 @@
 #endif
 
 #if defined(LINUX) || defined(NETBSD) || defined ( FREEBSD ) || \
-    defined (MACOSX) || defined (OPENBSD)
+    defined (MACOSX) || defined (OPENBSD) || defined(DRAGONFLY)
 #include <sys/poll.h>
 #define HAVE_POLL_H
 #endif /* HAVE_POLL_H */
@@ -594,11 +594,17 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
     oslSocketAddr Addr1,
     oslSocketAddr Addr2)
 {
+    OSL_ASSERT(Addr1);
+    OSL_ASSERT(Addr2);
     struct sockaddr* pAddr1= &(Addr1->m_sockaddr);
     struct sockaddr* pAddr2= &(Addr2->m_sockaddr);
 
     OSL_ASSERT(pAddr1);
     OSL_ASSERT(pAddr2);
+    if (pAddr1 == pAddr2)
+    {
+        return (sal_True);
+    }
 
     if (pAddr1->sa_family == pAddr2->sa_family)
     {
@@ -617,7 +623,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
 
             default:
             {
-                return (memcmp(pAddr1, Addr2, sizeof(struct sockaddr)) == 0);
+                return (memcmp(pAddr1, pAddr2, sizeof(struct sockaddr)) == 0);
             }
         }
     }
@@ -785,7 +791,7 @@ static struct hostent* _osl_gethostbyname_r (
     const char *name, struct hostent *result,
     char *buffer, int buflen, int *h_errnop)
 {
-#if defined(LINUX) || (defined(FREEBSD) && (__FreeBSD_version >= 601103))
+#if defined(LINUX) || (defined(FREEBSD) && (__FreeBSD_version >= 601103)) || defined(DRAGONFLY)
     struct hostent *__result; /* will be the same as result */
     int __error;
     __error = gethostbyname_r (name, result, buffer, buflen,
@@ -1098,7 +1104,6 @@ oslHostAddr SAL_CALL osl_createHostAddr (
         rtl_string_release(strHostname);
     }
 
-
     return HostAddr;
 }
 
@@ -1122,7 +1127,7 @@ oslHostAddr SAL_CALL osl_psz_createHostAddr (
 
     pHostAddr= (oslHostAddr) malloc(sizeof(struct oslHostAddrImpl));
     OSL_ASSERT(pHostAddr);
-    if (pAddr == NULL)
+    if (pHostAddr == NULL)
     {
         free (cn);
         return ((oslHostAddr)NULL);
@@ -1656,7 +1661,7 @@ void SAL_CALL osl_releaseSocket( oslSocket pSocket )
 #if defined(LINUX)
     if ( pSocket->m_bIsAccepting == sal_True )
     {
-        OSL_ENSURE(0, "osl_destroySocket : attempt to destroy socket while accepting\n");
+        OSL_FAIL("osl_destroySocket : attempt to destroy socket while accepting\n");
         return;
     }
 #endif /* LINUX */
@@ -2283,7 +2288,7 @@ sal_Int32 SAL_CALL osl_readSocket (
 
     OSL_ASSERT( pSocket);
 
-    /* loop until all desired bytes were read or an error occured */
+    /* loop until all desired bytes were read or an error occurred */
     while (BytesToRead > 0)
     {
         sal_Int32 RetVal;
@@ -2292,7 +2297,7 @@ sal_Int32 SAL_CALL osl_readSocket (
                                    BytesToRead,
                                    osl_Socket_MsgNormal);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;
@@ -2312,7 +2317,7 @@ sal_Int32 SAL_CALL osl_readSocket (
 sal_Int32 SAL_CALL osl_writeSocket(
     oslSocket pSocket, const void *pBuffer, sal_Int32 n )
 {
-    /* loop until all desired bytes were send or an error occured */
+    /* loop until all desired bytes were send or an error occurred */
     sal_uInt32 BytesSend= 0;
     sal_uInt32 BytesToSend= n;
     sal_uInt8 *Ptr = ( sal_uInt8 * )pBuffer;
@@ -2325,7 +2330,7 @@ sal_Int32 SAL_CALL osl_writeSocket(
 
         RetVal= osl_sendSocket( pSocket,Ptr,BytesToSend,osl_Socket_MsgNormal);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;
@@ -2354,7 +2359,10 @@ sal_Bool __osl_socket_poll (
     int           timeout;
     int           result;
 
-    OSL_ASSERT(pSocket);
+    OSL_ASSERT(0 != pSocket);
+    if (0 == pSocket)
+      return sal_False; /* EINVAL */
+
     pSocket->m_nLastError = 0;
 
     fds.fd      = pSocket->m_Socket;
@@ -2397,7 +2405,10 @@ sal_Bool __osl_socket_poll (
     struct timeval tv;
     int            result;
 
-    OSL_ASSERT(pSocket);
+    OSL_ASSERT(0 != pSocket);
+    if (0 == pSocket)
+      return sal_False; /* EINVAL */
+
     pSocket->m_nLastError = 0;
 
     FD_ZERO(&fds);

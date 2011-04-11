@@ -57,11 +57,6 @@
 * @file
 * Numbering override of Wordpro.
 ************************************************************************/
-/*************************************************************************
-* Change History
-* 2005-01-12 Create and implement.
-************************************************************************/
-
 #ifndef     _LWPNUMBERINGOVERRIDE_HXX
 #define     _LWPNUMBERINGOVERRIDE_HXX
 
@@ -73,6 +68,8 @@ class LwpNumberingOverride : public LwpOverride
 public:
     LwpNumberingOverride();
     virtual ~LwpNumberingOverride(){}
+
+    virtual LwpNumberingOverride* clone() const;
 
     enum
     {
@@ -86,7 +83,6 @@ public:
 
     //add by , 02/03/2005
     void Override(LwpNumberingOverride* pOther);
-    void operator=(const LwpOverride& rOther);
 
     inline sal_uInt16 GetLevel() const;
     inline sal_uInt16 GetPosition() const;
@@ -108,6 +104,13 @@ public:
     inline void RevertHeading();
     inline void RevertSmartLevel();
     //end add
+
+protected:
+    LwpNumberingOverride(LwpNumberingOverride const& rOther);
+
+private:
+    LwpNumberingOverride& operator=(LwpNumberingOverride const& rOther); // not implemented
+
 private:
     sal_uInt16  m_nLevel;
     sal_uInt16  m_nPosition;

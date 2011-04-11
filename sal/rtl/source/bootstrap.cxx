@@ -50,7 +50,7 @@
 
 #include "macro.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 
 #define MY_STRING_(x) # x
@@ -311,9 +311,6 @@ inline void EnsureNoFinalSlash (rtl::OUString & url)
         url = url.copy(0, i - 1);
     }
 }
-
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
 
 struct Bootstrap_Impl
 {
@@ -604,15 +601,10 @@ void Bootstrap_Impl::expandValue(
              requestFile, requestKey, requestStack)).pData);
 }
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-
 namespace {
 
 struct bootstrap_map {
-    // map<> may be preferred here, but hash_map<> is implemented fully inline,
-    // thus there is no need to link against the stlport:
-    typedef std::hash_map<
+    typedef boost::unordered_map<
         rtl::OUString, Bootstrap_Impl *,
         rtl::OUStringHash, std::equal_to< rtl::OUString >,
         rtl::Allocator< OUString > > t;
@@ -985,7 +977,7 @@ rtl::OUString expandMacros(
                         rtl::OUString line;
                         rtl::OUString url;
                         // Silently ignore any errors (is that good?):
-                        if (f.open(OpenFlag_Read) == osl::FileBase::E_None &&
+                        if (f.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None &&
                             f.readLine(seq) == osl::FileBase::E_None &&
                             rtl_convertStringToUString(
                                 &line.pData,

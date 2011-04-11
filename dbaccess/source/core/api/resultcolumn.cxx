@@ -272,7 +272,7 @@ void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
                     rValue <<= m_xMetaData->getColumnTypeName(m_nPos);
                     break;
                 default:
-                    OSL_ENSURE( false, "OResultColumn::getFastPropertyValue: unknown property handle!" );
+                    OSL_FAIL( "OResultColumn::getFastPropertyValue: unknown property handle!" );
                     break;
             }
         }

@@ -36,7 +36,7 @@
 #include "osl/thread.h"
 #include "osl/mutex.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 
 using namespace com::sun::star;
@@ -65,7 +65,7 @@ size_t oslThreadIdentifier_hash::operator()(oslThreadIdentifier s1) const
     return s1;
 }
 
-typedef ::std::hash_map<oslThreadIdentifier,
+typedef ::boost::unordered_map<oslThreadIdentifier,
                         uno_Environment *,
                         oslThreadIdentifier_hash,
                         oslThreadIdentifier_equal>  ThreadMap;
@@ -88,10 +88,7 @@ static void s_setCurrent(uno_Environment * pEnv)
         rThreadMap[threadId] = pEnv;
 
     else
-    {
-        ThreadMap::iterator iEnv = rThreadMap.find(threadId);
-        rThreadMap.erase(iEnv);
-    }
+        rThreadMap.erase(threadId);
 }
 
 static uno_Environment * s_getCurrent(void)

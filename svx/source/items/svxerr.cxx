@@ -32,7 +32,7 @@
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 
-#include "svxerr.hxx"
+#include "svx/svxerr.hxx"
 #include <svx/dialmgr.hxx>
 
 #include <svx/dialogs.hrc>

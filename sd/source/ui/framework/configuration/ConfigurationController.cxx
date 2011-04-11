@@ -84,8 +84,8 @@ OUString ConfigurationController_getImplementationName (void) throw(RuntimeExcep
 Sequence<rtl::OUString> SAL_CALL ConfigurationController_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const OUString sServiceName(OUString::createFromAscii(
-        "com.sun.star.drawing.framework.ConfigurationController"));
+    static const OUString sServiceName(OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.drawing.framework.ConfigurationController")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 

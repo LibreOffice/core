@@ -43,7 +43,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/solar.h>
-
+#include <algorithm>
 //____________________________________________________________________________________________________________
 //  includes of my project
 //____________________________________________________________________________________________________________
@@ -60,6 +60,9 @@ using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star::lang  ;
 using namespace ::com::sun::star::awt   ;
 
+using ::std::vector;
+using ::std::find;
+
 namespace unocontrols{
 
 //____________________________________________________________________________________________________________
@@ -74,12 +77,12 @@ ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFact
     ++m_refCount ;
 
     // Create instances for fixedtext, button and progress ...
-    m_xTopic_Top    = Reference< XFixedText >   ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_SERVICENAME   ) ), UNO_QUERY ) ;
-    m_xText_Top     = Reference< XFixedText >   ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_SERVICENAME   ) ), UNO_QUERY ) ;
-    m_xTopic_Bottom = Reference< XFixedText >   ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_SERVICENAME   ) ), UNO_QUERY ) ;
-    m_xText_Bottom  = Reference< XFixedText >   ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_SERVICENAME   ) ), UNO_QUERY ) ;
-    m_xButton       = Reference< XButton >      ( xFactory->createInstance ( OUString::createFromAscii( BUTTON_SERVICENAME      ) ), UNO_QUERY ) ;
-    m_xProgressBar  = Reference< XProgressBar > ( xFactory->createInstance ( OUString::createFromAscii( SERVICENAME_PROGRESSBAR ) ), UNO_QUERY ) ;
+    m_xTopic_Top    = Reference< XFixedText >   ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_SERVICENAME    )) ), UNO_QUERY ) ;
+    m_xText_Top     = Reference< XFixedText >   ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_SERVICENAME    )) ), UNO_QUERY ) ;
+    m_xTopic_Bottom = Reference< XFixedText >   ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_SERVICENAME    )) ), UNO_QUERY ) ;
+    m_xText_Bottom  = Reference< XFixedText >   ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_SERVICENAME    )) ), UNO_QUERY ) ;
+    m_xButton       = Reference< XButton >      ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( BUTTON_SERVICENAME       )) ), UNO_QUERY ) ;
+    m_xProgressBar  = Reference< XProgressBar > ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_PROGRESSBAR  )) ), UNO_QUERY ) ;
 
     // ... cast controls to Reference< XControl >  (for "setModel"!) ...
     Reference< XControl >   xRef_Topic_Top      ( m_xTopic_Top    , UNO_QUERY ) ;
@@ -90,20 +93,20 @@ ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFact
     Reference< XControl >   xRef_ProgressBar    ( m_xProgressBar  , UNO_QUERY ) ;
 
     // ... set models ...
-    xRef_Topic_Top->setModel    ( Reference< XControlModel > ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_MODELNAME ) ), UNO_QUERY ) ) ;
-    xRef_Text_Top->setModel     ( Reference< XControlModel > ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_MODELNAME ) ), UNO_QUERY ) ) ;
-    xRef_Topic_Bottom->setModel ( Reference< XControlModel > ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_MODELNAME ) ), UNO_QUERY ) ) ;
-    xRef_Text_Bottom->setModel  ( Reference< XControlModel > ( xFactory->createInstance ( OUString::createFromAscii( FIXEDTEXT_MODELNAME ) ), UNO_QUERY ) ) ;
-    xRef_Button->setModel       ( Reference< XControlModel > ( xFactory->createInstance ( OUString::createFromAscii( BUTTON_MODELNAME    ) ), UNO_QUERY ) ) ;
+    xRef_Topic_Top->setModel    ( Reference< XControlModel > ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_MODELNAME )) ), UNO_QUERY ) ) ;
+    xRef_Text_Top->setModel     ( Reference< XControlModel > ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_MODELNAME )) ), UNO_QUERY ) ) ;
+    xRef_Topic_Bottom->setModel ( Reference< XControlModel > ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_MODELNAME )) ), UNO_QUERY ) ) ;
+    xRef_Text_Bottom->setModel  ( Reference< XControlModel > ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( FIXEDTEXT_MODELNAME )) ), UNO_QUERY ) ) ;
+    xRef_Button->setModel       ( Reference< XControlModel > ( xFactory->createInstance ( OUString(RTL_CONSTASCII_USTRINGPARAM( BUTTON_MODELNAME    )) ), UNO_QUERY ) ) ;
     // ProgressBar has no model !!!
 
     // ... and add controls to basecontainercontrol!
-    addControl ( OUString::createFromAscii( CONTROLNAME_TEXT        ) , xRef_Topic_Top      ) ;
-    addControl ( OUString::createFromAscii( CONTROLNAME_TEXT        ) , xRef_Text_Top       ) ;
-    addControl ( OUString::createFromAscii( CONTROLNAME_TEXT        ) , xRef_Topic_Bottom   ) ;
-    addControl ( OUString::createFromAscii( CONTROLNAME_TEXT        ) , xRef_Text_Bottom    ) ;
-    addControl ( OUString::createFromAscii( CONTROLNAME_BUTTON      ) , xRef_Button         ) ;
-    addControl ( OUString::createFromAscii( CONTROLNAME_PROGRESSBAR ) , xRef_ProgressBar    ) ;
+    addControl ( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_TEXT     )) , xRef_Topic_Top     ) ;
+    addControl ( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_TEXT     )) , xRef_Text_Top      ) ;
+    addControl ( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_TEXT     )) , xRef_Topic_Bottom  ) ;
+    addControl ( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_TEXT     )) , xRef_Text_Bottom   ) ;
+    addControl ( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_BUTTON       )) , xRef_Button            ) ;
+    addControl ( OUString(RTL_CONSTASCII_USTRINGPARAM( CONTROLNAME_PROGRESSBAR  )) , xRef_ProgressBar   ) ;
 
     // FixedText make it automaticly visible by himself ... but not the progressbar !!!
     // it must be set explicitly
@@ -112,17 +115,13 @@ ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFact
 
     // Reset to defaults !!!
     // (progressbar take automaticly its own defaults)
-    m_xButton->setLabel      ( OUString::createFromAscii( DEFAULT_BUTTONLABEL           ) ) ;
-    m_xTopic_Top->setText    ( OUString::createFromAscii( PROGRESSMONITOR_DEFAULT_TOPIC ) ) ;
-    m_xText_Top->setText     ( OUString::createFromAscii( PROGRESSMONITOR_DEFAULT_TEXT  ) ) ;
-    m_xTopic_Bottom->setText ( OUString::createFromAscii( PROGRESSMONITOR_DEFAULT_TOPIC ) ) ;
-    m_xText_Bottom->setText  ( OUString::createFromAscii( PROGRESSMONITOR_DEFAULT_TEXT  ) ) ;
+    m_xButton->setLabel      ( OUString(RTL_CONSTASCII_USTRINGPARAM( DEFAULT_BUTTONLABEL           )) ) ;
+    m_xTopic_Top->setText    ( OUString(RTL_CONSTASCII_USTRINGPARAM( PROGRESSMONITOR_DEFAULT_TOPIC )) ) ;
+    m_xText_Top->setText     ( OUString(RTL_CONSTASCII_USTRINGPARAM( PROGRESSMONITOR_DEFAULT_TEXT  )) ) ;
+    m_xTopic_Bottom->setText ( OUString(RTL_CONSTASCII_USTRINGPARAM( PROGRESSMONITOR_DEFAULT_TOPIC )) ) ;
+    m_xText_Bottom->setText  ( OUString(RTL_CONSTASCII_USTRINGPARAM( PROGRESSMONITOR_DEFAULT_TEXT  )) ) ;
 
     --m_refCount ;
-
-    // Initialize info lists for fixedtext's
-    m_pTextlist_Top     = new IMPL_Textlist ;
-    m_pTextlist_Bottom  = new IMPL_Textlist ;
 }
 
 ProgressMonitor::~ProgressMonitor()
@@ -275,11 +274,11 @@ void SAL_CALL ProgressMonitor::addText(
         // ... and insert it in right list.
         if ( bbeforeProgress == sal_True )
         {
-            m_pTextlist_Top->Insert    ( pTextItem, LIST_APPEND ) ;
+            maTextlist_Top.push_back( pTextItem );
         }
         else
         {
-            m_pTextlist_Bottom->Insert ( pTextItem, LIST_APPEND ) ;
+            maTextlist_Bottom.push_back( pTextItem );
         }
     }
 
@@ -309,11 +308,17 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbe
         // ... delete item from right list ...
         if ( bbeforeProgress == sal_True )
         {
-            m_pTextlist_Top->Remove    ( pSearchItem ) ;
+            vector< IMPL_TextlistItem* >::iterator
+                itr = find( maTextlist_Top.begin(), maTextlist_Top.end(), pSearchItem );
+            if (itr != maTextlist_Top.end())
+                maTextlist_Top.erase(itr);
         }
         else
         {
-            m_pTextlist_Bottom->Remove ( pSearchItem ) ;
+            vector< IMPL_TextlistItem* >::iterator
+                itr = find( maTextlist_Bottom.begin(), maTextlist_Bottom.end(), pSearchItem );
+            if (itr != maTextlist_Bottom.end())
+                maTextlist_Bottom.erase(itr);
         }
 
         delete pSearchItem ;
@@ -669,7 +674,7 @@ const Sequence< OUString > ProgressMonitor::impl_getStaticSupportedServiceNames(
 {
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     Sequence< OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = OUString::createFromAscii( SERVICENAME_PROGRESSMONITOR );
+    seqServiceNames.getArray() [0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICENAME_PROGRESSMONITOR ));
     return seqServiceNames ;
 }
 
@@ -679,7 +684,7 @@ const Sequence< OUString > ProgressMonitor::impl_getStaticSupportedServiceNames(
 
 const OUString ProgressMonitor::impl_getStaticImplementationName()
 {
-    return OUString::createFromAscii( IMPLEMENTATIONNAME_PROGRESSMONITOR );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATIONNAME_PROGRESSMONITOR ));
 }
 
 //____________________________________________________________________________________________________________
@@ -726,11 +731,6 @@ void ProgressMonitor::impl_recalcLayout ()
     sal_Int32   nY_ProgressBar          ;
     sal_Int32   nWidth_ProgressBar      ;
     sal_Int32   nHeight_ProgressBar     ;
-
-    sal_Int32   nX_3DLine               ;
-    sal_Int32   nY_3DLine               ;
-    sal_Int32   nWidth_3DLine           ;
-    sal_Int32   nHeight_3DLine          ;
 
     sal_Int32   nX_Text_Top             ;
     sal_Int32   nY_Text_Top             ;
@@ -815,12 +815,6 @@ void ProgressMonitor::impl_recalcLayout ()
     nHeight_Text_Bottom     =   nHeight_Topic_Bottom                                            ;
 
     // Oriented by progressbar.
-    nX_3DLine               =   nX_Topic_Top                                                    ;
-    nY_3DLine               =   nY_Topic_Bottom+nHeight_Topic_Bottom+(PROGRESSMONITOR_FREEBORDER/2)             ;
-    nWidth_3DLine           =   nWidth_ProgressBar                                              ;
-    nHeight_3DLine          =   1                                                               ;   // Height for ONE line ! (But we paint two lines!)
-
-    // Oriented by progressbar.
     nX_Button               =   nX_ProgressBar+nWidth_ProgressBar-nWidth_Button                 ;
     nY_Button               =   nY_Topic_Bottom+nHeight_Topic_Bottom+PROGRESSMONITOR_FREEBORDER ;
 
@@ -893,13 +887,13 @@ void ProgressMonitor::impl_rebuildFixedText ()
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for ( sal_uInt32 n=0; n<m_pTextlist_Top->Count(); ++n )
+        for ( size_t n = 0; n < maTextlist_Top.size(); ++n )
         {
-            IMPL_TextlistItem* pSearchItem = m_pTextlist_Top->GetObject (n) ;
+            IMPL_TextlistItem* pSearchItem = maTextlist_Top[ n ];
             aCollectString  +=  pSearchItem->sTopic ;
-            aCollectString  +=  OUString::createFromAscii("\n")             ;
+            aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))             ;
         }
-        aCollectString  +=  OUString::createFromAscii("\0") ;   // It's better :-)
+        aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\0")) ;   // It's better :-)
 
         m_xTopic_Top->setText ( aCollectString ) ;
     }
@@ -911,13 +905,13 @@ void ProgressMonitor::impl_rebuildFixedText ()
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for ( sal_uInt32 n=0; n<m_pTextlist_Top->Count(); ++n )
+        for ( size_t n = 0; n < maTextlist_Top.size(); ++n )
         {
-            IMPL_TextlistItem* pSearchItem = m_pTextlist_Top->GetObject (n) ;
+            IMPL_TextlistItem* pSearchItem = maTextlist_Top[ n ];
             aCollectString  +=  pSearchItem->sText ;
-            aCollectString  +=  OUString::createFromAscii("\n")            ;
+            aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))            ;
         }
-        aCollectString  +=  OUString::createFromAscii("\0") ;   // It's better :-)
+        aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\0")) ;   // It's better :-)
 
         m_xText_Top->setText ( aCollectString ) ;
     }
@@ -931,13 +925,13 @@ void ProgressMonitor::impl_rebuildFixedText ()
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for ( sal_uInt32 n=0; n<m_pTextlist_Bottom->Count(); ++n )
+        for ( size_t n = 0; n < maTextlist_Bottom.size(); ++n )
         {
-            IMPL_TextlistItem* pSearchItem = m_pTextlist_Bottom->GetObject (n) ;
+            IMPL_TextlistItem* pSearchItem = maTextlist_Bottom[ n ];
             aCollectString  +=  pSearchItem->sTopic ;
-            aCollectString  +=  OUString::createFromAscii("\n")             ;
+            aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))             ;
         }
-        aCollectString  +=  OUString::createFromAscii("\0") ;   // It's better :-)
+        aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\0")) ;   // It's better :-)
 
         m_xTopic_Bottom->setText ( aCollectString ) ;
     }
@@ -949,13 +943,13 @@ void ProgressMonitor::impl_rebuildFixedText ()
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for ( sal_uInt32 n=0; n<m_pTextlist_Bottom->Count(); ++n )
+        for ( size_t n = 0; n < maTextlist_Bottom.size(); ++n )
         {
-            IMPL_TextlistItem* pSearchItem = m_pTextlist_Bottom->GetObject (n) ;
+            IMPL_TextlistItem* pSearchItem = maTextlist_Bottom[ n ];
             aCollectString  +=  pSearchItem->sText ;
-            aCollectString  +=  OUString::createFromAscii("\n")            ;
+            aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))            ;
         }
-        aCollectString  +=  OUString::createFromAscii("\0") ;   // It's better :-)
+        aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\0")) ;   // It's better :-)
 
         m_xText_Bottom->setText ( aCollectString ) ;
     }
@@ -972,23 +966,19 @@ void ProgressMonitor::impl_cleanMemory ()
 
     // Delete all of lists.
 
-    sal_uInt32 nPosition ;
-
-    for ( nPosition = 0; nPosition < m_pTextlist_Top->Count () ; ++nPosition )
+    for ( size_t nPosition = 0; nPosition < maTextlist_Top.size() ; ++nPosition )
     {
-        IMPL_TextlistItem* pSearchItem = m_pTextlist_Top->GetObject ( nPosition ) ;
+        IMPL_TextlistItem* pSearchItem = maTextlist_Top[ nPosition ];
         delete pSearchItem ;
     }
-    m_pTextlist_Top->Clear () ;
-    delete m_pTextlist_Top ;
+    maTextlist_Top.clear();
 
-    for ( nPosition = 0; nPosition < m_pTextlist_Bottom->Count () ; ++nPosition )
+    for ( size_t nPosition = 0; nPosition < maTextlist_Bottom.size() ; ++nPosition )
     {
-        IMPL_TextlistItem* pSearchItem = m_pTextlist_Bottom->GetObject ( nPosition ) ;
+        IMPL_TextlistItem* pSearchItem = maTextlist_Bottom[ nPosition ];
         delete pSearchItem ;
     }
-    m_pTextlist_Bottom->Clear () ;
-    delete m_pTextlist_Bottom ;
+    maTextlist_Bottom.clear();
 }
 
 //____________________________________________________________________________________________________________
@@ -998,30 +988,30 @@ void ProgressMonitor::impl_cleanMemory ()
 IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, sal_Bool bbeforeProgress )
 {
     // Get right textlist for following operations.
-    IMPL_Textlist* pTextList ;
+    ::std::vector< IMPL_TextlistItem* >* pTextList ;
 
     // Ready for multithreading
     ClearableMutexGuard aGuard ( m_aMutex ) ;
 
     if ( bbeforeProgress == sal_True )
     {
-        pTextList = m_pTextlist_Top    ;
+        pTextList = &maTextlist_Top    ;
     }
     else
     {
-        pTextList = m_pTextlist_Bottom ;
+        pTextList = &maTextlist_Bottom ;
     }
 
     // Switch off guard.
     aGuard.clear () ;
 
     // Search the topic in textlist.
-    sal_uInt32  nPosition   =   0                   ;
-    sal_uInt32  nCount      =   pTextList->Count () ;
+    size_t nPosition    = 0;
+    size_t nCount       = pTextList->size();
 
     for ( nPosition = 0; nPosition < nCount ; ++nPosition )
     {
-        IMPL_TextlistItem* pSearchItem = pTextList->GetObject ( nPosition ) ;
+        IMPL_TextlistItem* pSearchItem = pTextList->at( nPosition );
 
         if ( pSearchItem->sTopic == rTopic )
         {

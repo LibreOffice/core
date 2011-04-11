@@ -44,21 +44,15 @@ TYPEINIT1(OutlineViewShellBase, ViewShellBase);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new OutlineViewShellBase object has been constructed.
 
-/*
-SFX_IMPL_VIEWFACTORY(OutlineViewShellBase, SdResId(STR_DEFAULTVIEW))
-{
-    SFX_VIEW_REGISTRATION(DrawDocShell);
-}
-*/
 SfxViewFactory* OutlineViewShellBase::pFactory;
-SfxViewShell* __EXPORT OutlineViewShellBase::CreateInstance (
+SfxViewShell* OutlineViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     OutlineViewShellBase* pBase = new OutlineViewShellBase(pFrame, pOldView);
     pBase->LateInit(framework::FrameworkHelper::msOutlineViewURL);
     return pBase;
 }
-void OutlineViewShellBase::RegisterFactory( USHORT nPrio )
+void OutlineViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"Outline");

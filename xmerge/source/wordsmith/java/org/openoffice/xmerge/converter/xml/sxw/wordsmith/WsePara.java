@@ -261,30 +261,13 @@ class WsePara extends Wse {
         temp = firstIndent / 1.6;
         values[2] = (new Double(temp)).toString() + "mm";
 
-/*        if ((lineSpace & LS_MULTIPLE) != 0) {
-            temp = (lineSpace & LS_VALUEMASK) / 2;
-            temp *= 100;
-            values[3] = (new Double(temp)).toString() + "%";
-          } else {
-            values[3] = (new Double(temp)).toString() + "mm";
-            // DJP: handle other cases
-          }
-*/
         temp = spaceBefore / 1.6;
-//        values[4] = (new Double(temp)).toString() + "mm";
         values[3] = (new Double(temp)).toString() + "mm";
 
         temp = spaceAfter / 1.6;
-//        values[5] = (new Double(temp)).toString() + "mm";
         values[4] = (new Double(temp)).toString() + "mm";
 
         switch (misc) {
-
-// case ALIGN_RIGHT: values[6] = "right"; break;
-//        case ALIGN_LEFT:  values[6] = "left"; break;
-//        case ALIGN_CENTER:values[6] = "center"; break;
-//        case ALIGN_JUST:  values[6] = "justified"; break;
-
             case ALIGN_RIGHT: values[5] = "right"; break;
             case ALIGN_LEFT:  values[5] = "left"; break;
             case ALIGN_CENTER:values[5] = "center"; break;

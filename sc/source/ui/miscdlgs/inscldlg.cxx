@@ -40,11 +40,11 @@
 #include "miscdlgs.hrc"
 
 
-static BYTE nInsItemChecked=0;
+static sal_uInt8 nInsItemChecked=0;
 
 //==================================================================
 
-ScInsertCellDlg::ScInsertCellDlg( Window* pParent,BOOL bDisallowCellMove) :
+ScInsertCellDlg::ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_INSCELL ) ),
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
@@ -113,7 +113,7 @@ InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
     return nReturn;
 }
 
-__EXPORT ScInsertCellDlg::~ScInsertCellDlg()
+ScInsertCellDlg::~ScInsertCellDlg()
 {
 }
 

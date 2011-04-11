@@ -29,44 +29,55 @@
 #ifndef _PARALIST_HXX
 #define _PARALIST_HXX
 
-class Paragraph;
+#include <vector>
 
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 
-class ParagraphList : private List
+class Paragraph;
+
+class ParagraphList
 {
-private:
-    Link            aVisibleStateChangedHdl;
-
 public:
-    void            Clear( BOOL bDestroyParagraphs );
+    void            Clear( sal_Bool bDestroyParagraphs );
 
-    ULONG           GetParagraphCount() const           { return List::Count(); }
-    Paragraph*      GetParagraph( ULONG nPos ) const    { return (Paragraph*)List::GetObject( nPos ); }
+    sal_uInt32      GetParagraphCount() const
+    {
+        return maEntries.size();
+    }
 
-    ULONG           GetAbsPos( Paragraph* pParent ) const { return List::GetPos( pParent ); }
-    ULONG           GetVisPos( Paragraph* pParagraph );
+    Paragraph*      GetParagraph( sal_uLong nPos ) const
+    {
+        return nPos < maEntries.size() ? maEntries[nPos] : NULL;
+    }
 
-    void            Insert( Paragraph* pPara, ULONG nAbsPos = LIST_APPEND ) { List::Insert( pPara, nAbsPos ); }
-    void            Remove( ULONG nPara ) { List::Remove( nPara ); }
-    void            MoveParagraphs( ULONG nStart, ULONG nDest, ULONG nCount );
+    sal_uLong           GetAbsPos( Paragraph* pParent ) const;
+    sal_uLong           GetVisPos( Paragraph* pParagraph ) const;
+
+    void            Append( Paragraph *pPara);
+    void            Insert( Paragraph* pPara, sal_uLong nAbsPos);
+    void            Remove( sal_uLong nPara );
+    void            MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong nCount );
 
     Paragraph*      NextVisible( Paragraph* ) const;
     Paragraph*      PrevVisible( Paragraph* ) const;
     Paragraph*      LastVisible() const;
 
-    Paragraph*      GetParent( Paragraph* pParagraph /*, USHORT& rRelPos */ ) const;
-    BOOL            HasChilds( Paragraph* pParagraph ) const;
-    BOOL            HasHiddenChilds( Paragraph* pParagraph ) const;
-    BOOL            HasVisibleChilds( Paragraph* pParagraph ) const;
-    ULONG           GetChildCount( Paragraph* pParagraph ) const;
+    Paragraph*      GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const;
+    sal_Bool            HasChilds( Paragraph* pParagraph ) const;
+    sal_Bool            HasHiddenChilds( Paragraph* pParagraph ) const;
+    sal_Bool            HasVisibleChilds( Paragraph* pParagraph ) const;
+    sal_uLong           GetChildCount( Paragraph* pParagraph ) const;
 
     void            Expand( Paragraph* pParent );
     void            Collapse( Paragraph* pParent );
 
     void            SetVisibleStateChangedHdl( const Link& rLink ) { aVisibleStateChangedHdl = rLink; }
     Link            GetVisibleStateChangedHdl() const { return aVisibleStateChangedHdl; }
+
+private:
+
+    Link aVisibleStateChangedHdl;
+    std::vector<Paragraph*> maEntries;
 };
 
 #endif

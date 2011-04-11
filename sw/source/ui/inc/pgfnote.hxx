@@ -44,35 +44,41 @@ class SwFootNotePage: public SfxTabPage
 {
 public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
-    static USHORT* GetRanges();
+    static sal_uInt16* GetRanges();
 
-    virtual BOOL FillItemSet(SfxItemSet &rSet);
+    virtual sal_Bool FillItemSet(SfxItemSet &rSet);
     virtual void Reset(const SfxItemSet &rSet);
 
 private:
     SwFootNotePage(Window *pParent, const SfxItemSet &rSet);
     ~SwFootNotePage();
 
+    FixedLine       aPosHeader;
     RadioButton     aMaxHeightPageBtn;
     RadioButton     aMaxHeightBtn;
     MetricField     aMaxHeightEdit;
     FixedText       aDistLbl;
     MetricField     aDistEdit;
-    FixedLine       aPosHeader;
 
+    FixedLine       aLineHeader;
     FixedText       aLinePosLbl;
     ListBox         aLinePosBox;
     FixedText       aLineTypeLbl;
     LineListBox     aLineTypeBox;
     FixedText       aLineWidthLbl;
     MetricField     aLineWidthEdit;
+    FixedText       aLineColorLbl;
+    ColorListBox    aLineColorBox;
+    FixedText       aLineLengthLbl;
+    MetricField     aLineLengthEdit;
     FixedText       aLineDistLbl;
     MetricField     aLineDistEdit;
-    FixedLine       aLineHeader;
 
     DECL_LINK( HeightPage, Button * );
     DECL_LINK( HeightMetric, Button * );
     DECL_LINK( HeightModify, MetricField * );
+    DECL_LINK( LineWidthChanged_Impl, void * );
+    DECL_LINK( LineColorSelected_Impl, void * );
 
     long            lMaxHeight;
 

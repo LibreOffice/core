@@ -49,8 +49,6 @@ const ItemConnFlags ITEMCONN_NONE               = 0x0000;
 
 /** Connection is inactive - virtual functions will not be called. */
 const ItemConnFlags ITEMCONN_INACTIVE           = 0x0001;
-/** Clone item in FillItemSet() from old item set. */
-//const ItemConnFlags ITEMCONN_CLONE_ITEM         = 0x0002;
 
 /** Enable control(s), if the item is known. */
 const ItemConnFlags ITEMCONN_ENABLE_KNOWN       = 0x0010;
@@ -262,13 +260,13 @@ public:
 
     /** Receives pointer to a newly created control wrapper.
         @descr  Takes ownership of the control wrapper. */
-    explicit            ItemControlConnection( USHORT nSlot, ControlWrpT* pNewCtrlWrp,
+    explicit            ItemControlConnection( sal_uInt16 nSlot, ControlWrpT* pNewCtrlWrp,
                             ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 
     /** Convenience constructor. Receives reference to a control directly.
         @descr  May only be used, if ControlWrpT::ControlWrpT( ControlType& )
         constructor exists. */
-    explicit            ItemControlConnection( USHORT nSlot, ControlType& rControl,
+    explicit            ItemControlConnection( sal_uInt16 nSlot, ControlType& rControl,
                             ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 
     virtual             ~ItemControlConnection();
@@ -300,7 +298,7 @@ class SFX2_DLLPUBLIC DummyItemConnection:
     public ItemConnectionBase, public DummyWindowWrapper
 {
 public:
-    explicit            DummyItemConnection( USHORT nSlot, Window& rWindow,
+    explicit            DummyItemConnection( sal_uInt16 nSlot, Window& rWindow,
                             ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 
 protected:
@@ -309,7 +307,7 @@ protected:
     virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet );
 
 private:
-    USHORT              mnSlot;
+    sal_uInt16              mnSlot;
 };
 
 // ----------------------------------------------------------------------------
@@ -334,7 +332,7 @@ class NumericConnection : public ItemControlConnection< ItemWrpT,
 public:
     typedef typename ItemControlConnectionType::ControlWrapperType NumericFieldWrapperType;
 
-    explicit            NumericConnection( USHORT nSlot, NumericField& rField,
+    explicit            NumericConnection( sal_uInt16 nSlot, NumericField& rField,
                             ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
 
@@ -365,7 +363,7 @@ class MetricConnection : public ItemControlConnection< ItemWrpT,
 public:
     typedef typename ItemControlConnectionType::ControlWrapperType MetricFieldWrapperType;
 
-    explicit            MetricConnection( USHORT nSlot, MetricField& rField,
+    explicit            MetricConnection( sal_uInt16 nSlot, MetricField& rField,
                             FieldUnit eItemUnit = FUNIT_NONE, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
 
@@ -397,7 +395,7 @@ public:
     typedef typename ItemControlConnectionType::ControlWrapperType  ListBoxWrapperType;
     typedef typename ListBoxWrapperType::MapEntryType               MapEntryType;
 
-    explicit            ListBoxConnection( USHORT nSlot, ListBox& rListBox,
+    explicit            ListBoxConnection( sal_uInt16 nSlot, ListBox& rListBox,
                             const MapEntryType* pMap = 0, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
 
@@ -429,7 +427,7 @@ public:
     typedef typename ItemControlConnectionType::ControlWrapperType  ValueSetWrapperType;
     typedef typename ValueSetWrapperType::MapEntryType              MapEntryType;
 
-    explicit            ValueSetConnection( USHORT nSlot, ValueSet& rValueSet,
+    explicit            ValueSetConnection( sal_uInt16 nSlot, ValueSet& rValueSet,
                             const MapEntryType* pMap = 0, ItemConnFlags nFlags = ITEMCONN_DEFAULT );
 };
 
@@ -484,7 +482,7 @@ private:
 
 template< typename ItemWrpT, typename ControlWrpT >
 ItemControlConnection< ItemWrpT, ControlWrpT >::ItemControlConnection(
-        USHORT nSlot, ControlWrpT* pNewCtrlWrp, ItemConnFlags nFlags ) :
+        sal_uInt16 nSlot, ControlWrpT* pNewCtrlWrp, ItemConnFlags nFlags ) :
     ItemConnectionBase( nFlags ),
     maItemWrp( nSlot ),
     mxCtrlWrp( pNewCtrlWrp )
@@ -493,7 +491,7 @@ ItemControlConnection< ItemWrpT, ControlWrpT >::ItemControlConnection(
 
 template< typename ItemWrpT, typename ControlWrpT >
 ItemControlConnection< ItemWrpT, ControlWrpT >::ItemControlConnection(
-        USHORT nSlot, ControlType& rControl, ItemConnFlags nFlags ) :
+        sal_uInt16 nSlot, ControlType& rControl, ItemConnFlags nFlags ) :
     ItemConnectionBase( nFlags ),
     maItemWrp( nSlot ),
     mxCtrlWrp( new ControlWrpT( rControl ) )
@@ -536,7 +534,7 @@ bool ItemControlConnection< ItemWrpT, ControlWrpT >::FillItemSet(
         // do not rely on existence of ItemValueType::operator!=
         if( !pOldItem || !(maItemWrp.GetItemValue( *pOldItem ) == aNewValue) )
         {
-            USHORT nWhich = ItemWrapperHelper::GetWhichId( rDestSet, maItemWrp.GetSlotId() );
+            sal_uInt16 nWhich = ItemWrapperHelper::GetWhichId( rDestSet, maItemWrp.GetSlotId() );
             std::auto_ptr< ItemType > xItem(
                 static_cast< ItemType* >( maItemWrp.GetDefaultItem( rDestSet ).Clone() ) );
             xItem->SetWhich( nWhich );
@@ -556,7 +554,7 @@ bool ItemControlConnection< ItemWrpT, ControlWrpT >::FillItemSet(
 
 template< typename ItemWrpT >
 NumericConnection< ItemWrpT >::NumericConnection(
-        USHORT nSlot, NumericField& rField, ItemConnFlags nFlags ) :
+        sal_uInt16 nSlot, NumericField& rField, ItemConnFlags nFlags ) :
     ItemControlConnectionType( nSlot, rField, nFlags )
 {
 }
@@ -565,7 +563,7 @@ NumericConnection< ItemWrpT >::NumericConnection(
 
 template< typename ItemWrpT >
 MetricConnection< ItemWrpT >::MetricConnection(
-        USHORT nSlot, MetricField& rField, FieldUnit eItemUnit, ItemConnFlags nFlags ) :
+        sal_uInt16 nSlot, MetricField& rField, FieldUnit eItemUnit, ItemConnFlags nFlags ) :
     ItemControlConnectionType( nSlot, new MetricFieldWrapperType( rField, eItemUnit ), nFlags )
 {
 }
@@ -574,7 +572,7 @@ MetricConnection< ItemWrpT >::MetricConnection(
 
 template< typename ItemWrpT >
 ListBoxConnection< ItemWrpT >::ListBoxConnection(
-        USHORT nSlot, ListBox& rListBox, const MapEntryType* pMap, ItemConnFlags nFlags ) :
+        sal_uInt16 nSlot, ListBox& rListBox, const MapEntryType* pMap, ItemConnFlags nFlags ) :
     ItemControlConnectionType( nSlot, new ListBoxWrapperType( rListBox, pMap ), nFlags )
 {
 }
@@ -583,7 +581,7 @@ ListBoxConnection< ItemWrpT >::ListBoxConnection(
 
 template< typename ItemWrpT >
 ValueSetConnection< ItemWrpT >::ValueSetConnection(
-        USHORT nSlot, ValueSet& rValueSet, const MapEntryType* pMap, ItemConnFlags nFlags ) :
+        sal_uInt16 nSlot, ValueSet& rValueSet, const MapEntryType* pMap, ItemConnFlags nFlags ) :
     ItemControlConnectionType( nSlot, new ValueSetWrapperType( rValueSet, pMap ), nFlags )
 {
 }

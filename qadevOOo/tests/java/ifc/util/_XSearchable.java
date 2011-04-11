@@ -129,7 +129,7 @@ public class _XSearchable extends MultiMethodTest {
 
     /**
      * Performs search using descriptor created before. Storing the
-     * first occurence result. <p>
+     * first occurrence result. <p>
      * Has <b> OK </b> status if the method not <code>null</code>
      * value. <p>
      * The following method tests are to be completed successfully before :

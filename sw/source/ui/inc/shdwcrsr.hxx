@@ -41,23 +41,23 @@ class SwShadowCursor
     Color aCol;
     Point aOldPt;
     long nOldHeight;
-    USHORT nOldMode;
+    sal_uInt16 nOldMode;
 
-    void DrawTri( const Point& rPt, long nHeight, BOOL bLeft );
-    void DrawCrsr( const Point& rPt, long nHeight, USHORT nMode );
+    void DrawTri( const Point& rPt, long nHeight, sal_Bool bLeft );
+    void DrawCrsr( const Point& rPt, long nHeight, sal_uInt16 nMode );
 
 public:
     SwShadowCursor( Window& rWin, const Color& rCol )
         : pWin( &rWin ), aCol( rCol ), nOldHeight(0), nOldMode( USHRT_MAX ) {}
     ~SwShadowCursor();
 
-    void SetPos( const Point& rPt, long nHeight, USHORT nMode );
+    void SetPos( const Point& rPt, long nHeight, sal_uInt16 nMode );
 
     void Paint();
 
     const Point& GetPoint() const   { return aOldPt; }
     long GetHeight() const          { return nOldHeight; }
-    USHORT GetMode() const          { return nOldMode; }
+    sal_uInt16 GetMode() const          { return nOldMode; }
 
     Rectangle GetRect() const;
 };

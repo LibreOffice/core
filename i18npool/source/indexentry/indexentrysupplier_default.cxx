@@ -170,7 +170,7 @@ OUString Index::getIndexDescription(const OUString& rIndexEntry)
     return OUString(&indexChar, 1);
 }
 
-#define LOCALE_EN lang::Locale(OUString::createFromAscii("en"), OUString(), OUString())
+#define LOCALE_EN lang::Locale(OUString(RTL_CONSTASCII_USTRINGPARAM("en")), OUString(), OUString())
 
 void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm) throw (RuntimeException)
 {

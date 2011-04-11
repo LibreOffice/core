@@ -66,7 +66,7 @@ inline void ImplScaleRect( Rectangle& rRect, double fScaleX, double fScaleY )
 
 inline void ImplScalePoly( Polygon& rPoly, double fScaleX, double fScaleY )
 {
-    for( USHORT i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
+    for( sal_uInt16 i = 0, nCount = rPoly.GetSize(); i < nCount; i++ )
         ImplScalePoint( rPoly[ i ], fScaleX, fScaleY );
 }
 
@@ -103,7 +103,7 @@ MetaAction::MetaAction() :
 
 // ------------------------------------------------------------------------
 
-MetaAction::MetaAction( USHORT nType ) :
+MetaAction::MetaAction( sal_uInt16 nType ) :
     mnRefCount( 1 ),
     mnType( nType )
 {
@@ -176,7 +176,7 @@ void MetaAction::Read( SvStream& rIStm, ImplMetaReadData* )
 MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData )
 {
     MetaAction* pAction = NULL;
-    UINT16      nType;
+    sal_uInt16      nType;
 
     rIStm >> nType;
 
@@ -309,7 +309,7 @@ void MetaPixelAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
     rOStm << maPt;
-    maColor.Write( rOStm, TRUE );
+    maColor.Write( rOStm, sal_True );
 }
 
 // ------------------------------------------------------------------------
@@ -318,7 +318,7 @@ void MetaPixelAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     rIStm >> maPt;
-    maColor.Read( rIStm, TRUE );
+    maColor.Read( rIStm, sal_True );
 }
 
 // ========================================================================
@@ -1133,7 +1133,7 @@ void MetaPolyPolygonAction::Move( long nHorzMove, long nVertMove )
 
 void MetaPolyPolygonAction::Scale( double fScaleX, double fScaleY )
 {
-    for( USHORT i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
+    for( sal_uInt16 i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
 
@@ -1206,7 +1206,7 @@ IMPL_META_ACTION( Text, META_TEXT_ACTION )
 // ------------------------------------------------------------------------
 
 MetaTextAction::MetaTextAction( const Point& rPt, const XubString& rStr,
-                                USHORT nIndex, USHORT nLen ) :
+                                sal_uInt16 nIndex, sal_uInt16 nLen ) :
     MetaAction  ( META_TEXT_ACTION ),
     maPt        ( rPt ),
     maStr       ( rStr ),
@@ -1315,7 +1315,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 {
     if( rAction.mpDXAry )
     {
-        const ULONG nAryLen = mnLen;
+        const sal_uLong nAryLen = mnLen;
 
         mpDXAry = new sal_Int32[ nAryLen ];
         memcpy( mpDXAry, rAction.mpDXAry, nAryLen * sizeof( sal_Int32 ) );
@@ -1329,15 +1329,15 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           const XubString& rStr,
                                           const sal_Int32* pDXAry,
-                                          USHORT nIndex,
-                                          USHORT nLen ) :
+                                          sal_uInt16 nIndex,
+                                          sal_uInt16 nLen ) :
     MetaAction  ( META_TEXTARRAY_ACTION ),
     maStartPt   ( rStartPt ),
     maStr       ( rStr ),
     mnIndex     ( nIndex ),
     mnLen       ( ( nLen == STRING_LEN ) ? rStr.Len() : nLen )
 {
-    const ULONG nAryLen = pDXAry ? mnLen : 0;
+    const sal_uLong nAryLen = pDXAry ? mnLen : 0;
 
     if( nAryLen )
     {
@@ -1386,7 +1386,7 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
 
     if ( mpDXAry && mnLen )
     {
-        for ( USHORT i = 0, nCount = mnLen; i < nCount; i++ )
+        for ( sal_uInt16 i = 0, nCount = mnLen; i < nCount; i++ )
             mpDXAry[ i ] = FRound( mpDXAry[ i ] * fabs(fScaleX) );
     }
 }
@@ -1415,7 +1415,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm   << mnLen;
     rOStm   << nAryLen;
 
-    for( ULONG i = 0UL; i < nAryLen; i++ )
+    for( sal_uLong i = 0UL; i < nAryLen; i++ )
         rOStm << mpDXAry[ i ];
 
     sal_uInt16 j, nLen = maStr.Len();                           // version 2
@@ -1457,7 +1457,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
             mpDXAry = new (std::nothrow)sal_Int32[ mnLen ];
             if ( mpDXAry )
             {
-                   ULONG i;
+                   sal_uLong i;
                 for( i = 0UL; i < nAryLen; i++ )
                     rIStm >> mpDXAry[ i ];
 
@@ -1499,7 +1499,7 @@ IMPL_META_ACTION( StretchText, META_STRETCHTEXT_ACTION )
 
 MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
                                               const XubString& rStr,
-                                              USHORT nIndex, USHORT nLen ) :
+                                              sal_uInt16 nIndex, sal_uInt16 nLen ) :
     MetaAction  ( META_STRETCHTEXT_ACTION ),
     maPt        ( rPt ),
     maStr       ( rStr ),
@@ -1537,7 +1537,7 @@ void MetaStretchTextAction::Move( long nHorzMove, long nVertMove )
 void MetaStretchTextAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
-    mnWidth = (ULONG)FRound( mnWidth * fabs(fScaleX) );
+    mnWidth = (sal_uLong)FRound( mnWidth * fabs(fScaleX) );
 }
 
 // ------------------------------------------------------------------------
@@ -1599,7 +1599,7 @@ IMPL_META_ACTION( TextRect, META_TEXTRECT_ACTION )
 // ------------------------------------------------------------------------
 
 MetaTextRectAction::MetaTextRectAction( const Rectangle& rRect,
-                                        const XubString& rStr, USHORT nStyle ) :
+                                        const XubString& rStr, sal_uInt16 nStyle ) :
     MetaAction  ( META_TEXTRECT_ACTION ),
     maRect      ( rRect ),
     maStr       ( rStr ),
@@ -2457,7 +2457,7 @@ void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     {
         WRITE_BASE_COMPAT( rOStm, 1, pData );
         rOStm << maBmp;
-        maColor.Write( rOStm, TRUE );
+        maColor.Write( rOStm, sal_True );
         rOStm << maDstPt << maDstSz << maSrcPt << maSrcSz;
     }
 }
@@ -2468,7 +2468,7 @@ void MetaMaskScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
     rIStm >> maBmp;
-    maColor.Read( rIStm, TRUE );
+    maColor.Read( rIStm, sal_True );
     rIStm >> maDstPt >> maDstSz >> maSrcPt >> maSrcSz;
 }
 
@@ -2589,7 +2589,7 @@ void MetaGradientExAction::Move( long nHorzMove, long nVertMove )
 
 void MetaGradientExAction::Scale( double fScaleX, double fScaleY )
 {
-    for( USHORT i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
+    for( sal_uInt16 i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
 
@@ -2663,7 +2663,7 @@ void MetaHatchAction::Move( long nHorzMove, long nVertMove )
 
 void MetaHatchAction::Scale( double fScaleX, double fScaleY )
 {
-    for( USHORT i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
+    for( sal_uInt16 i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
 
@@ -2771,7 +2771,7 @@ IMPL_META_ACTION( ClipRegion, META_CLIPREGION_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaClipRegionAction::MetaClipRegionAction( const Region& rRegion, BOOL bClip ) :
+MetaClipRegionAction::MetaClipRegionAction( const Region& rRegion, sal_Bool bClip ) :
     MetaAction  ( META_CLIPREGION_ACTION ),
     maRegion    ( rRegion ),
     mbClip      ( bClip )
@@ -3032,7 +3032,7 @@ IMPL_META_ACTION( LineColor, META_LINECOLOR_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaLineColorAction::MetaLineColorAction( const Color& rColor, BOOL bSet ) :
+MetaLineColorAction::MetaLineColorAction( const Color& rColor, sal_Bool bSet ) :
     MetaAction  ( META_LINECOLOR_ACTION ),
     maColor     ( rColor ),
     mbSet       ( bSet )
@@ -3071,7 +3071,7 @@ sal_Bool MetaLineColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    maColor.Write( rOStm, TRUE );
+    maColor.Write( rOStm, sal_True );
     rOStm << mbSet;
 }
 
@@ -3080,7 +3080,7 @@ void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maColor.Read( rIStm, TRUE );
+    maColor.Read( rIStm, sal_True );
     rIStm >> mbSet;
 }
 
@@ -3090,7 +3090,7 @@ IMPL_META_ACTION( FillColor, META_FILLCOLOR_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaFillColorAction::MetaFillColorAction( const Color& rColor, BOOL bSet ) :
+MetaFillColorAction::MetaFillColorAction( const Color& rColor, sal_Bool bSet ) :
     MetaAction  ( META_FILLCOLOR_ACTION ),
     maColor     ( rColor ),
     mbSet       ( bSet )
@@ -3129,7 +3129,7 @@ sal_Bool MetaFillColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    maColor.Write( rOStm, TRUE );
+    maColor.Write( rOStm, sal_True );
     rOStm << mbSet;
 }
 
@@ -3138,7 +3138,7 @@ void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maColor.Read( rIStm, TRUE );
+    maColor.Read( rIStm, sal_True );
     rIStm >> mbSet;
 }
 
@@ -3182,7 +3182,7 @@ sal_Bool MetaTextColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    maColor.Write( rOStm, TRUE );
+    maColor.Write( rOStm, sal_True );
 }
 
 // ------------------------------------------------------------------------
@@ -3190,7 +3190,7 @@ void MetaTextColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaTextColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maColor.Read( rIStm, TRUE );
+    maColor.Read( rIStm, sal_True );
 }
 
 // ========================================================================
@@ -3199,7 +3199,7 @@ IMPL_META_ACTION( TextFillColor, META_TEXTFILLCOLOR_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaTextFillColorAction::MetaTextFillColorAction( const Color& rColor, BOOL bSet ) :
+MetaTextFillColorAction::MetaTextFillColorAction( const Color& rColor, sal_Bool bSet ) :
     MetaAction  ( META_TEXTFILLCOLOR_ACTION ),
     maColor     ( rColor ),
     mbSet       ( bSet )
@@ -3238,7 +3238,7 @@ sal_Bool MetaTextFillColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    maColor.Write( rOStm, TRUE );
+    maColor.Write( rOStm, sal_True );
     rOStm << mbSet;
 }
 
@@ -3247,7 +3247,7 @@ void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maColor.Read( rIStm, TRUE );
+    maColor.Read( rIStm, sal_True );
     rIStm >> mbSet;
 }
 
@@ -3257,7 +3257,7 @@ IMPL_META_ACTION( TextLineColor, META_TEXTLINECOLOR_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaTextLineColorAction::MetaTextLineColorAction( const Color& rColor, BOOL bSet ) :
+MetaTextLineColorAction::MetaTextLineColorAction( const Color& rColor, sal_Bool bSet ) :
     MetaAction  ( META_TEXTLINECOLOR_ACTION ),
     maColor     ( rColor ),
     mbSet       ( bSet )
@@ -3296,7 +3296,7 @@ sal_Bool MetaTextLineColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    maColor.Write( rOStm, TRUE );
+    maColor.Write( rOStm, sal_True );
     rOStm << mbSet;
 }
 
@@ -3305,7 +3305,7 @@ void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maColor.Read( rIStm, TRUE );
+    maColor.Read( rIStm, sal_True );
     rIStm >> mbSet;
 }
 
@@ -3315,7 +3315,7 @@ IMPL_META_ACTION( OverlineColor, META_OVERLINECOLOR_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaOverlineColorAction::MetaOverlineColorAction( const Color& rColor, BOOL bSet ) :
+MetaOverlineColorAction::MetaOverlineColorAction( const Color& rColor, sal_Bool bSet ) :
     MetaAction  ( META_OVERLINECOLOR_ACTION ),
     maColor     ( rColor ),
     mbSet       ( bSet )
@@ -3354,7 +3354,7 @@ sal_Bool MetaOverlineColorAction::Compare( const MetaAction& rMetaAction ) const
 void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    maColor.Write( rOStm, TRUE );
+    maColor.Write( rOStm, sal_True );
     rOStm << mbSet;
 }
 
@@ -3363,7 +3363,7 @@ void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    maColor.Read( rIStm, TRUE );
+    maColor.Read( rIStm, sal_True );
     rIStm >> mbSet;
 }
 
@@ -3407,14 +3407,14 @@ sal_Bool MetaTextAlignAction::Compare( const MetaAction& rMetaAction ) const
 void MetaTextAlignAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << (UINT16) maAlign;
+    rOStm << (sal_uInt16) maAlign;
 }
 
 // ------------------------------------------------------------------------
 
 void MetaTextAlignAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    UINT16 nTmp16;
+    sal_uInt16 nTmp16;
 
     COMPAT( rIStm );
     rIStm >> nTmp16; maAlign = (TextAlign) nTmp16;
@@ -3564,7 +3564,7 @@ IMPL_META_ACTION( Push, META_PUSH_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaPushAction::MetaPushAction( USHORT nFlags ) :
+MetaPushAction::MetaPushAction( sal_uInt16 nFlags ) :
     MetaAction  ( META_PUSH_ACTION ),
     mnFlags     ( nFlags )
 {
@@ -3683,14 +3683,14 @@ sal_Bool MetaRasterOpAction::Compare( const MetaAction& rMetaAction ) const
 void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    rOStm << (UINT16) meRasterOp;
+    rOStm << (sal_uInt16) meRasterOp;
 }
 
 // ------------------------------------------------------------------------
 
 void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
-    UINT16 nTmp16;
+    sal_uInt16 nTmp16;
 
     COMPAT( rIStm );
     rIStm >> nTmp16; meRasterOp = (RasterOp) nTmp16;
@@ -3702,7 +3702,7 @@ IMPL_META_ACTION( Transparent, META_TRANSPARENT_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaTransparentAction::MetaTransparentAction( const PolyPolygon& rPolyPoly, USHORT nTransPercent ) :
+MetaTransparentAction::MetaTransparentAction( const PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent ) :
     MetaAction      ( META_TRANSPARENT_ACTION ),
     maPolyPoly      ( rPolyPoly ),
     mnTransPercent  ( nTransPercent )
@@ -3736,7 +3736,7 @@ void MetaTransparentAction::Move( long nHorzMove, long nVertMove )
 
 void MetaTransparentAction::Scale( double fScaleX, double fScaleY )
 {
-    for( USHORT i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
+    for( sal_uInt16 i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
 
@@ -3943,7 +3943,7 @@ IMPL_META_ACTION( RefPoint, META_REFPOINT_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaRefPointAction::MetaRefPointAction( const Point& rRefPoint, BOOL bSet ) :
+MetaRefPointAction::MetaRefPointAction( const Point& rRefPoint, sal_Bool bSet ) :
     MetaAction  ( META_REFPOINT_ACTION ),
     maRefPoint  ( rRefPoint ),
     mbSet       ( bSet )
@@ -4014,7 +4014,7 @@ MetaCommentAction::MetaCommentAction( const MetaCommentAction& rAct ) :
 
 // ------------------------------------------------------------------------
 
-MetaCommentAction::MetaCommentAction( const ByteString& rComment, sal_Int32 nValue, const BYTE* pData, sal_uInt32 nDataSize ) :
+MetaCommentAction::MetaCommentAction( const ByteString& rComment, sal_Int32 nValue, const sal_uInt8* pData, sal_uInt32 nDataSize ) :
     MetaAction  ( META_COMMENT_ACTION ),
     maComment   ( rComment ),
     mnValue     ( nValue )
@@ -4024,7 +4024,7 @@ MetaCommentAction::MetaCommentAction( const ByteString& rComment, sal_Int32 nVal
 
 // ------------------------------------------------------------------------
 
-MetaCommentAction::MetaCommentAction( const BYTE* pData, sal_uInt32 nDataSize ) :
+MetaCommentAction::MetaCommentAction( const sal_uInt8* pData, sal_uInt32 nDataSize ) :
     MetaAction  ( META_COMMENT_ACTION ),
     mnValue     ( 0L )
 {
@@ -4041,11 +4041,11 @@ MetaCommentAction::~MetaCommentAction()
 
 // ------------------------------------------------------------------------
 
-void MetaCommentAction::ImplInitDynamicData( const BYTE* pData, sal_uInt32 nDataSize )
+void MetaCommentAction::ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 nDataSize )
 {
     if ( nDataSize && pData )
     {
-        mnDataSize = nDataSize, mpData = new BYTE[ mnDataSize ];
+        mnDataSize = nDataSize, mpData = new sal_uInt8[ mnDataSize ];
         memcpy( mpData, pData, mnDataSize );
     }
     else
@@ -4104,7 +4104,7 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
                     aDest << aFill;
                 }
                 delete[] mpData;
-                ImplInitDynamicData( static_cast<const BYTE*>( aDest.GetData() ), aDest.Tell() );
+                ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
             }
         }
     }
@@ -4147,7 +4147,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                     aDest << aFill;
                 }
                 delete[] mpData;
-                ImplInitDynamicData( static_cast<const BYTE*>( aDest.GetData() ), aDest.Tell() );
+                ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
             } else if( maComment.Equals( "EMF_PLUS_HEADER_INFO" ) ) {
                 SvMemoryStream  aMemStm( (void*)mpData, mnDataSize, STREAM_READ );
                 SvMemoryStream  aDest;
@@ -4173,7 +4173,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                 aDest << m11 << m12 << m21 << m22 << mdx << mdy;
 
                 // save them
-                ImplInitDynamicData( static_cast<const BYTE*>( aDest.GetData() ), aDest.Tell() );
+                ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
             }
         }
     }
@@ -4212,7 +4212,7 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
     if( mnDataSize )
     {
-        mpData = new BYTE[ mnDataSize ];
+        mpData = new sal_uInt8[ mnDataSize ];
         rIStm.Read( mpData, mnDataSize );
     }
     else

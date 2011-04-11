@@ -60,7 +60,7 @@
     <p>
     A ResultSet maintains a cursor pointing to its current row of
     data. Initially the cursor is positioned before the first row.
-    The 'next' method moves the cursor to the next row.
+    The "next" method moves the cursor to the next row.
     </p>
     <p>
     The getXXX methods retrieve column values for the current
@@ -186,7 +186,7 @@ published service ResultSet
         the database doesn't support positioned update/delete, this property is
         a noop. To insure that a cursor has the proper isolation level to support
         updates, the cursor's SELECT statement should be of the form
-        'select for update ...'. If the 'for update' phrase is omitted,
+        "select for update ...". If the "for update" phrase is omitted,
         positioned updates may fail.
         </p>
         <p>

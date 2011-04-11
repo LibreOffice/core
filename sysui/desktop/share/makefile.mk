@@ -220,7 +220,7 @@ $(COMMONMISC)$/{$(PRODUCTLIST)}$/mimelnklist : ../mimetypes/{$(MIMELIST)}.deskto
 $(COMMONMISC)$/{$(PRODUCTLIST)}$/create_tree.sh : makefile.mk
 $(COMMONMISC)$/{$(PRODUCTLIST)}$/create_tree.sh : $$(@:f)
     @@-$(MKDIRHIER) $(@:d)
-    @echo "#\!/bin/bash" > $@.$(INPATH)
+    @echo "#!/bin/bash" > $@.$(INPATH)
     @echo "PREFIX=$(UNIXFILENAME.$(@:d:d:f))" >> $@.$(INPATH)
     @echo "ICON_PREFIX=$(ICONPREFIX.$(@:d:d:f))" >> $@.$(INPATH)
     @echo "ICON_SOURCE_DIR=../../../desktop/icons" >> $@.$(INPATH)

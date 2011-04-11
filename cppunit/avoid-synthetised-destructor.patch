@@ -1,0 +1,29 @@
+rhbz#641350 impl. destructor of CppUnit::Message causes segfault when test
+is built with debug. STL
+
+diff -up cppunit-1.12.1/include/cppunit/Message.h.dt cppunit-1.12.1/include/cppunit/Message.h
+--- misc/build/cppunit-1.12.1/include/cppunit/Message.h.dt	2010-10-08 14:02:26.514477964 +0200
++++ misc/build/cppunit-1.12.1/include/cppunit/Message.h	2010-10-08 14:02:15.411948098 +0200
+@@ -57,6 +57,8 @@ public:
+            const std::string &detail2,
+            const std::string &detail3 );
+ 
++  ~Message();
++
+   Message &operator =( const Message &other );
+ 
+   /*! \brief Returns the short description.
+diff -up cppunit-1.12.1/src/cppunit/Message.cpp.dt cppunit-1.12.1/src/cppunit/Message.cpp
+--- misc/build/cppunit-1.12.1/src/cppunit/Message.cpp.dt	2010-10-08 14:02:39.421768852 +0200
++++ misc/build/cppunit-1.12.1/src/cppunit/Message.cpp	2010-10-08 14:02:54.066829633 +0200
+@@ -47,6 +47,10 @@ Message::Message( const std::string &sho
+   addDetail( detail1, detail2, detail3 );
+ }
+ 
++Message::~Message()
++{
++}
++
+ Message &
+ Message::operator =( const Message &other )
+ {

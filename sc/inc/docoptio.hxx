@@ -39,22 +39,22 @@
 
 class SC_DLLPUBLIC ScDocOptions
 {
-    double fIterEps;                // Epsilon-Wert dazu
-    USHORT nIterCount;              // Anzahl
+    double fIterEps;                // epsilon value dazu
+    sal_uInt16 nIterCount;              // number
     sal_uInt16 nPrecStandardFormat; // precision for standard format
     ScOptionsUtil::KeyBindingType eKeyBindingType;
-    USHORT nDay;                    // Nulldatum:
-    USHORT nMonth;
-    USHORT nYear;
-    USHORT nYear2000;               // bis zu welcher zweistelligen Jahreszahl 20xx angenommen wird
-    USHORT nTabDistance;            // Abstand Standardtabulatoren
-    BOOL   bIsIgnoreCase;           // Gross-/Kleinschr. bei Vergleichen
-    BOOL   bIsIter;                 // Iteration bei cirk. Ref
-    BOOL   bCalcAsShown;            // berechnen wie angezeigt (Precision)
-    BOOL   bMatchWholeCell;         // Suchkriterien muessen ganze Zelle matchen
-    BOOL   bDoAutoSpell;            // Auto-Spelling
-    BOOL   bLookUpColRowNames;      // Spalten-/Zeilenbeschriftungen automagisch suchen
-    BOOL   bFormulaRegexEnabled;    // regular expressions in formulas enabled
+    sal_uInt16 nDay;                    // Null date:
+    sal_uInt16 nMonth;
+    sal_uInt16 nYear;
+    sal_uInt16 nYear2000;               // earlier 19YY is assumed, 20YY otherwise (if only YY of year is given)
+    sal_uInt16 nTabDistance;            // distance of standard tabs
+    sal_Bool   bIsIgnoreCase;           // ignore case for comparisons?
+    sal_Bool   bIsIter;                 // iterations for circular refs
+    sal_Bool   bCalcAsShown;            // calculate as shown (wrt precision)
+    sal_Bool   bMatchWholeCell;         // search criteria must match the whole cell
+    sal_Bool   bDoAutoSpell;            // auto-spelling
+    sal_Bool   bLookUpColRowNames;      // determine column-/row titles automagically
+    sal_Bool   bFormulaRegexEnabled;    // regular expressions in formulas enabled
     bool   bUseEnglishFuncName;     // use English function name even if the locale is not English.
     ::formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
 
@@ -67,27 +67,27 @@ public:
                 ScDocOptions( const ScDocOptions& rCpy );
                 ~ScDocOptions();
 
-    BOOL   IsLookUpColRowNames() const  { return bLookUpColRowNames; }
-    void   SetLookUpColRowNames( BOOL bVal ) { bLookUpColRowNames = bVal; }
-    BOOL   IsAutoSpell() const          { return bDoAutoSpell; }
-    void   SetAutoSpell( BOOL bVal )    { bDoAutoSpell = bVal; }
-    BOOL   IsMatchWholeCell() const     { return bMatchWholeCell; }
-    void   SetMatchWholeCell( BOOL bVal ){ bMatchWholeCell = bVal; }
-    BOOL   IsIgnoreCase() const         { return bIsIgnoreCase; }
-    void   SetIgnoreCase( BOOL bVal )   { bIsIgnoreCase = bVal; }
-    BOOL   IsIter() const               { return bIsIter; }
-    void   SetIter( BOOL bVal )         { bIsIter = bVal; }
-    USHORT GetIterCount() const         { return nIterCount; }
-    void   SetIterCount( USHORT nCount) { nIterCount = nCount; }
+    sal_Bool   IsLookUpColRowNames() const  { return bLookUpColRowNames; }
+    void   SetLookUpColRowNames( sal_Bool bVal ) { bLookUpColRowNames = bVal; }
+    sal_Bool   IsAutoSpell() const          { return bDoAutoSpell; }
+    void   SetAutoSpell( sal_Bool bVal )    { bDoAutoSpell = bVal; }
+    sal_Bool   IsMatchWholeCell() const     { return bMatchWholeCell; }
+    void   SetMatchWholeCell( sal_Bool bVal ){ bMatchWholeCell = bVal; }
+    sal_Bool   IsIgnoreCase() const         { return bIsIgnoreCase; }
+    void   SetIgnoreCase( sal_Bool bVal )   { bIsIgnoreCase = bVal; }
+    sal_Bool   IsIter() const               { return bIsIter; }
+    void   SetIter( sal_Bool bVal )         { bIsIter = bVal; }
+    sal_uInt16 GetIterCount() const         { return nIterCount; }
+    void   SetIterCount( sal_uInt16 nCount) { nIterCount = nCount; }
     double GetIterEps() const           { return fIterEps; }
     void   SetIterEps( double fEps )    { fIterEps = fEps; }
 
-    void   GetDate( USHORT& rD, USHORT& rM, USHORT& rY ) const
+    void   GetDate( sal_uInt16& rD, sal_uInt16& rM, sal_uInt16& rY ) const
                                         { rD = nDay; rM = nMonth; rY = nYear;}
-    void   SetDate (USHORT nD, USHORT nM, USHORT nY)
+    void   SetDate (sal_uInt16 nD, sal_uInt16 nM, sal_uInt16 nY)
                                         { nDay = nD; nMonth = nM; nYear = nY; }
-    USHORT GetTabDistance() const { return nTabDistance;}
-    void   SetTabDistance( USHORT nTabDist ) {nTabDistance = nTabDist;}
+    sal_uInt16 GetTabDistance() const { return nTabDistance;}
+    void   SetTabDistance( sal_uInt16 nTabDist ) {nTabDistance = nTabDist;}
 
     void        ResetDocOptions();
 
@@ -101,14 +101,14 @@ public:
     ScOptionsUtil::KeyBindingType GetKeyBindingType() const { return eKeyBindingType; }
     void        SetKeyBindingType( ScOptionsUtil::KeyBindingType e ) { eKeyBindingType = e; }
 
-    BOOL    IsCalcAsShown() const       { return bCalcAsShown; }
-    void    SetCalcAsShown( BOOL bVal ) { bCalcAsShown = bVal; }
+    sal_Bool    IsCalcAsShown() const       { return bCalcAsShown; }
+    void    SetCalcAsShown( sal_Bool bVal ) { bCalcAsShown = bVal; }
 
-    void    SetYear2000( USHORT nVal )  { nYear2000 = nVal; }
-    USHORT  GetYear2000() const         { return nYear2000; }
+    void    SetYear2000( sal_uInt16 nVal )  { nYear2000 = nVal; }
+    sal_uInt16  GetYear2000() const         { return nYear2000; }
 
-    void    SetFormulaRegexEnabled( BOOL bVal ) { bFormulaRegexEnabled = bVal; }
-    BOOL    IsFormulaRegexEnabled() const       { return bFormulaRegexEnabled; }
+    void    SetFormulaRegexEnabled( sal_Bool bVal ) { bFormulaRegexEnabled = bVal; }
+    sal_Bool    IsFormulaRegexEnabled() const       { return bFormulaRegexEnabled; }
 
     void SetFormulaSyntax( ::formula::FormulaGrammar::Grammar eGram ) { eFormulaGrammar = eGram; }
     ::formula::FormulaGrammar::Grammar GetFormulaSyntax() const { return eFormulaGrammar; }
@@ -189,14 +189,14 @@ inline int ScDocOptions::operator!=( const ScDocOptions& rOpt ) const
 }
 
 //==================================================================
-// Item fuer Einstellungsdialog - Berechnen
+// Item for preferences dialog - calculation
 //==================================================================
 
 class SC_DLLPUBLIC ScTpCalcItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-                ScTpCalcItem( USHORT nWhich,
+                ScTpCalcItem( sal_uInt16 nWhich,
                               const ScDocOptions& rOpt );
                 ScTpCalcItem( const ScTpCalcItem& rItem );
                 ~ScTpCalcItem();

@@ -155,6 +155,18 @@
 #define FT_SMARTTAGS                    221
 #define LB_SMARTTAGS                    222
 #define PB_SMARTTAGS                    223
+//IAccessibility2 Implementation 2009-----
+#define  STR_PB_NEWABBREV               224
+#define  STR_PB_DELABBREV               225
+#define  STR_PB_NEWDOUBLECAPS           226
+#define  STR_PB_DELDOUBLECAPS           227
+#define  STR_PB_SGL_STD                 228
+#define  STR_PB_DBL_STD                 229
+#define  STR_PB_SGL_START               230
+#define  STR_PB_DBL_START               231
+#define  STR_PB_SGL_END                 232
+#define  STR_PB_DBL_END                 233
+//-----IAccessibility2 Implementation 2009
 
 #endif
 

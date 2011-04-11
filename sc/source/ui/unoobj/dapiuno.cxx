@@ -176,7 +176,7 @@ bool lclCheckMinMaxStep( const DataPilotFieldGroupInfo& rInfo )
         lclCheckValidDouble( rInfo.Start, rInfo.HasAutoStart ) &&
         lclCheckValidDouble( rInfo.End, rInfo.HasAutoEnd ) &&
         (rInfo.HasAutoStart || rInfo.HasAutoEnd || (rInfo.Start <= rInfo.End)) &&
-        lclCheckValidDouble( rInfo.Step, sal_False ) &&
+        lclCheckValidDouble( rInfo.Step, false ) &&
         (0.0 <= rInfo.Step);
 }
 
@@ -203,7 +203,7 @@ SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupItemObj, "ScDataPilotFieldGroupItem
 
 //------------------------------------------------------------------------
 
-GeneralFunction ScDataPilotConversion::FirstFunc( USHORT nBits )
+GeneralFunction ScDataPilotConversion::FirstFunc( sal_uInt16 nBits )
 {
     if ( nBits & PIVOT_FUNC_SUM )       return GeneralFunction_SUM;
     if ( nBits & PIVOT_FUNC_COUNT )     return GeneralFunction_COUNT;
@@ -220,9 +220,9 @@ GeneralFunction ScDataPilotConversion::FirstFunc( USHORT nBits )
     return GeneralFunction_NONE;
 }
 
-USHORT ScDataPilotConversion::FunctionBit( GeneralFunction eFunc )
+sal_uInt16 ScDataPilotConversion::FunctionBit( GeneralFunction eFunc )
 {
-    USHORT nRet = PIVOT_FUNC_NONE;  // 0
+    sal_uInt16 nRet = PIVOT_FUNC_NONE;  // 0
     switch (eFunc)
     {
         case GeneralFunction_SUM:       nRet = PIVOT_FUNC_SUM;       break;
@@ -265,8 +265,8 @@ ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const String& rN
         ScDPCollection* pColl = pDoc->GetDPCollection();
         if ( pColl )
         {
-            USHORT nCount = pColl->GetCount();
-            for (USHORT i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            for (size_t i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab &&
@@ -298,7 +298,7 @@ sal_Int32 lcl_GetObjectIndex( ScDPObject* pDPObj, const ScFieldIdentifier& rFiel
         sal_Int32 nCount = pDPObj->GetDimCount();
         for ( sal_Int32 nDim = 0; nDim < nCount; ++nDim )
         {
-            BOOL bIsDataLayout = FALSE;
+            sal_Bool bIsDataLayout = false;
             OUString aDimName( pDPObj->GetDimName( nDim, bIsDataLayout ) );
             if ( rFieldId.mbDataLayout ? bIsDataLayout : (aDimName == rFieldId.maFieldName) )
                 return nDim;
@@ -347,8 +347,8 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nInd
             //  api only handles sheet data at this time
             //! allow all data sources!!!
             sal_Int32 nFound = 0;
-            USHORT nCount = pColl->GetCount();
-            for (USHORT i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            for (size_t i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
@@ -431,7 +431,7 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
     if ( aNewName.getLength() && hasByName( aNewName ) )
         throw RuntimeException();       // no other exceptions specified
 
-    BOOL bDone = FALSE;
+    sal_Bool bDone = false;
     ScDataPilotDescriptorBase* pImp = ScDataPilotDescriptorBase::getImplementation( xDescriptor );
     if ( pDocShell && pImp )
     {
@@ -452,7 +452,7 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
     // todo: handle double fields (for more information see ScDPObject
 
             ScDBDocFunc aFunc(*pDocShell);
-            bDone = aFunc.DataPilotUpdate( NULL, pNewObj, TRUE, TRUE );
+            bDone = aFunc.DataPilotUpdate( NULL, pNewObj, sal_True, sal_True );
         }
     }
 
@@ -469,7 +469,7 @@ void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
     if (pDPObj && pDocShell)
     {
         ScDBDocFunc aFunc(*pDocShell);
-        aFunc.DataPilotUpdate( pDPObj, NULL, TRUE, TRUE );  // remove - incl. undo etc.
+        aFunc.DataPilotUpdate( pDPObj, NULL, sal_True, sal_True );  // remove - incl. undo etc.
     }
     else
         throw RuntimeException();       // no other exceptions specified
@@ -498,9 +498,9 @@ sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException)
             //  api only handles sheet data at this time
             //! allow all data sources!!!
 
-            USHORT nFound = 0;
-            USHORT nCount = pColl->GetCount();
-            for (USHORT i=0; i<nCount; i++)
+            sal_uInt16 nFound = 0;
+            size_t nCount = pColl->GetCount();
+            for (size_t i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
@@ -561,20 +561,20 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
             //  api only handles sheet data at this time
             //! allow all data sources!!!
 
-            USHORT nFound = 0;
-            USHORT nCount = pColl->GetCount();
-            USHORT i;
-            for (i=0; i<nCount; i++)
+            sal_uInt16 nFound = 0;
+            size_t nCount = pColl->GetCount();
+            size_t i;
+            for (i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
                     ++nFound;
             }
 
-            USHORT nPos = 0;
+            sal_uInt16 nPos = 0;
             Sequence<OUString> aSeq(nFound);
             OUString* pAry = aSeq.getArray();
-            for (i=0; i<nCount; i++)
+            for (i=0; i<nCount; ++i)
             {
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
@@ -598,8 +598,8 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
         if ( pColl )
         {
             String aNamStr(aName);
-            USHORT nCount = pColl->GetCount();
-            for (USHORT i=0; i<nCount; i++)
+            size_t nCount = pColl->GetCount();
+            for (size_t i=0; i<nCount; ++i)
             {
                 //  api only handles sheet data at this time
                 //! allow all data sources!!!
@@ -607,11 +607,11 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
                 ScDPObject* pDPObj = (*pColl)[i];
                 if ( pDPObj->GetOutRange().aStart.Tab() == nTab &&
                      pDPObj->GetName() == aNamStr )
-                    return TRUE;
+                    return sal_True;
             }
         }
     }
-    return FALSE;
+    return false;
 }
 
 //------------------------------------------------------------------------
@@ -707,7 +707,7 @@ CellRangeAddress SAL_CALL ScDataPilotDescriptorBase::getSourceRange()
 
     CellRangeAddress aRet;
     if (pDPObject->IsSheetData())
-        ScUnoConversion::FillApiRange( aRet, pDPObject->GetSheetDesc()->aSourceRange );
+        ScUnoConversion::FillApiRange( aRet, pDPObject->GetSheetDesc()->GetSourceRange() );
     return aRet;
 }
 
@@ -719,10 +719,13 @@ void SAL_CALL ScDataPilotDescriptorBase::setSourceRange( const CellRangeAddress&
     if (!pDPObject)
         throw RuntimeException();
 
-    ScSheetSourceDesc aSheetDesc;
+    ScSheetSourceDesc aSheetDesc(pDocShell->GetDocument());
     if (pDPObject->IsSheetData())
         aSheetDesc = *pDPObject->GetSheetDesc();
-    ScUnoConversion::FillScRange( aSheetDesc.aSourceRange, aSourceRange );
+
+    ScRange aRange;
+    ScUnoConversion::FillScRange(aRange, aSourceRange);
+    aSheetDesc.SetSourceRange(aRange);
     pDPObject->SetSheetDesc( aSheetDesc );
     SetDPObject( pDPObject );
 }
@@ -830,7 +833,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                 uno::Sequence<beans::PropertyValue> aArgSeq;
                 if ( aValue >>= aArgSeq )
                 {
-                    ScImportSourceDesc aImportDesc;
+                    ScImportSourceDesc aImportDesc(pDocShell->GetDocument());
 
                     const ScImportSourceDesc* pOldDesc = pDPObject->GetImportSourceDesc();
                     if (pOldDesc)
@@ -839,7 +842,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                     ScImportParam aParam;
                     ScImportDescriptor::FillImportParam( aParam, aArgSeq );
 
-                    USHORT nNewType = sheet::DataImportMode_NONE;
+                    sal_uInt16 nNewType = sheet::DataImportMode_NONE;
                     if ( aParam.bImport )
                     {
                         if ( aParam.bSql )
@@ -980,7 +983,7 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                     aParam.aStatement = pImportDesc->aObject;
                     aParam.bNative    = pImportDesc->bNative;
                     aParam.bSql       = ( pImportDesc->nType == sheet::DataImportMode_SQL );
-                    aParam.nType      = static_cast<BYTE>(( pImportDesc->nType == sheet::DataImportMode_QUERY ) ? ScDbQuery : ScDbTable);
+                    aParam.nType      = static_cast<sal_uInt8>(( pImportDesc->nType == sheet::DataImportMode_QUERY ) ? ScDbQuery : ScDbTable);
 
                     uno::Sequence<beans::PropertyValue> aSeq( ScImportDescriptor::GetPropertyCount() );
                     ScImportDescriptor::FillProperties( aSeq, aParam );
@@ -1008,13 +1011,13 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                 {
                     uno::Sequence<beans::PropertyValue> aSeq( 4 );
                     beans::PropertyValue* pArray = aSeq.getArray();
-                    pArray[0].Name = rtl::OUString::createFromAscii( SC_UNO_SOURCENAME );
+                    pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SOURCENAME ));
                     pArray[0].Value <<= rtl::OUString( pServiceDesc->aParSource );
-                    pArray[1].Name = rtl::OUString::createFromAscii( SC_UNO_OBJECTNAME );
+                    pArray[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_OBJECTNAME ));
                     pArray[1].Value <<= rtl::OUString( pServiceDesc->aParName );
-                    pArray[2].Name = rtl::OUString::createFromAscii( SC_UNO_USERNAME );
+                    pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_USERNAME ));
                     pArray[2].Value <<= rtl::OUString( pServiceDesc->aParUser );
-                    pArray[3].Name = rtl::OUString::createFromAscii( SC_UNO_PASSWORD );
+                    pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PASSWORD ));
                     pArray[3].Value <<= rtl::OUString( pServiceDesc->aParPass );
                     aRet <<= aSeq;
                 }
@@ -1066,7 +1069,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotDescriptorBase::getDataLayoutFi
     {
         if( ScDPSaveData* pSaveData = pDPObject->GetSaveData() )
         {
-            if( /*ScDPSaveDimension* pDataDim =*/ pSaveData->GetDataLayoutDimension() )
+            if( pSaveData->GetDataLayoutDimension() )
             {
                 ScFieldIdentifier aFieldId( OUString( RTL_CONSTASCII_USTRINGPARAM( SC_DATALAYOUT_NAME ) ), 0, true );
                 return new ScDataPilotFieldObj( *this, aFieldId );
@@ -1090,7 +1093,6 @@ sal_Int64 SAL_CALL ScDataPilotDescriptorBase::getSomething(
     return 0;
 }
 
-// static
 const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()
 {
     static Sequence<sal_Int8> * pSeq = 0;
@@ -1107,7 +1109,6 @@ const Sequence<sal_Int8>& ScDataPilotDescriptorBase::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScDataPilotDescriptorBase* ScDataPilotDescriptorBase::getImplementation(
                                 const Reference<XDataPilotDescriptor> xObj )
 {
@@ -1199,7 +1200,7 @@ void ScDataPilotTableObj::SetDPObject( ScDPObject* pDPObject )
     if ( pDPObj && pDocSh )
     {
         ScDBDocFunc aFunc(*pDocSh);
-        aFunc.DataPilotUpdate( pDPObj, pDPObject, TRUE, TRUE );
+        aFunc.DataPilotUpdate( pDPObj, pDPObject, sal_True, sal_True );
     }
 }
 
@@ -1275,21 +1276,17 @@ CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRange() throw(RuntimeExc
     return aRet;
 }
 
-ULONG RefreshDPObject( ScDPObject *pDPObj, ScDocument *pDoc, ScDocShell *pDocSh, BOOL bRecord, BOOL bApi );
-
 void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if( ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName) )
-        RefreshDPObject( pDPObj, NULL, GetDocShell(), TRUE, TRUE );
-    //if (pDPObj)
-    //{
-    //  ScDPObject* pNew = new ScDPObject(*pDPObj);
-    //  ScDBDocFunc aFunc(*GetDocShell());
-    //  aFunc.DataPilotUpdate( pDPObj, pNew, TRUE, TRUE );
-    //  delete pNew;        // DataPilotUpdate copies settings from "new" object
-    //}
-
+    ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName);
+    if (pDPObj)
+    {
+        ScDPObject* pNew = new ScDPObject(*pDPObj);
+        ScDBDocFunc aFunc(*GetDocShell());
+        aFunc.DataPilotUpdate( pDPObj, pNew, true, true );
+        delete pNew;        // DataPilotUpdate copies settings from "new" object
+    }
 }
 
 Sequence< Sequence<Any> > SAL_CALL ScDataPilotTableObj::getDrillDownData(const CellAddress& aAddr)
@@ -1368,8 +1365,8 @@ void SAL_CALL ScDataPilotTableObj::removeModifyListener( const uno::Reference<ut
 
     acquire();      // in case the listeners have the last ref - released below
 
-    USHORT nCount = aModifyListeners.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = aModifyListeners.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<util::XModifyListener> *pObj = aModifyListeners[n];
         if ( *pObj == aListener )
@@ -1395,6 +1392,23 @@ void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         Refreshed_Impl();
     }
+    else if ( rHint.ISA( ScUpdateRefHint ) )
+    {
+        ScRange aRange( 0, 0, nTab );
+        ScRangeList aRanges;
+        aRanges.Append( aRange );
+        const ScUpdateRefHint& rRef = static_cast< const ScUpdateRefHint& >( rHint );
+        if ( aRanges.UpdateReference( rRef.GetMode(), GetDocShell()->GetDocument(), rRef.GetRange(),
+                 rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) &&
+             aRanges.size() == 1 )
+        {
+            const ScRange* pRange = aRanges.front();
+            if ( pRange )
+            {
+                nTab = pRange->aStart.Tab();
+            }
+        }
+    }
 
     ScDataPilotDescriptorBase::Notify( rBC, rHint );
 }
@@ -1407,7 +1421,7 @@ void ScDataPilotTableObj::Refreshed_Impl()
     // the EventObject holds a Ref to this object until after the listener calls
 
     ScDocument* pDoc = GetDocShell()->GetDocument();
-    for ( USHORT n=0; n<aModifyListeners.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aModifyListeners.Count(); n++ )
         pDoc->AddUnoListenerCall( *aModifyListeners[n], aEvent );
 }
 
@@ -1422,10 +1436,10 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     // set defaults like in ScPivotParam constructor
      aSaveData.SetColumnGrand( sal_True );
     aSaveData.SetRowGrand( sal_True );
-    aSaveData.SetIgnoreEmptyRows( sal_False );
-    aSaveData.SetRepeatIfEmpty( sal_False );
+    aSaveData.SetIgnoreEmptyRows( false );
+    aSaveData.SetRepeatIfEmpty( false );
     mpDPObject->SetSaveData(aSaveData);
-    ScSheetSourceDesc aSheetDesc;
+    ScSheetSourceDesc aSheetDesc(pDocSh ? pDocSh->GetDocument() : NULL);
     mpDPObject->SetSheetDesc(aSheetDesc);
     mpDPObject->GetSource();
 }
@@ -1446,7 +1460,7 @@ void ScDataPilotDescriptor::SetDPObject( ScDPObject* pDPObject )
     {
         delete mpDPObject;
         mpDPObject = pDPObject;
-        DBG_ERROR("replace DPObject should not happen");
+        OSL_FAIL("replace DPObject should not happen");
     }
 }
 
@@ -1522,17 +1536,16 @@ ScDPSaveDimension* ScDataPilotChildObjBase::GetDPDimension( ScDPObject** ppDPObj
                 return pSaveData->GetDimensionByName( maFieldId.maFieldName );
 
             // find dimension with specified index (search in duplicated dimensions)
-            String aFieldName = maFieldId.maFieldName;  // needed for comparison
-            const List& rDimensions = pSaveData->GetDimensions();
-            ULONG nDimCount = rDimensions.Count();
+            const boost::ptr_vector<ScDPSaveDimension>& rDimensions = pSaveData->GetDimensions();
+
             sal_Int32 nFoundIdx = 0;
-            for( ULONG nDim = 0; nDim < nDimCount; ++nDim )
+            boost::ptr_vector<ScDPSaveDimension>::const_iterator it;
+            for(it = rDimensions.begin(); it != rDimensions.end(); ++it)
             {
-                ScDPSaveDimension* pDim = static_cast< ScDPSaveDimension* >( rDimensions.GetObject( nDim ) );
-                if( !pDim->IsDataLayout() && (pDim->GetName() == aFieldName) )
+                if( !it->IsDataLayout() && (it->GetName() == maFieldId.maFieldName) )
                 {
                     if( nFoundIdx == maFieldId.mnFieldIdx )
-                        return pDim;
+                        return const_cast<ScDPSaveDimension*>(&(*it));
                     ++nFoundIdx;
                 }
             }
@@ -1612,10 +1625,10 @@ sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSource, cons
     return nRet;
 }
 
-BOOL lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
+sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
                                 const Any& rOrient, SCSIZE nIndex, ScFieldIdentifier& rFieldId )
 {
-    BOOL bOk = FALSE;
+    sal_Bool bOk = false;
     SCSIZE nPos = 0;
     sal_Int32 nDimIndex = 0;
 
@@ -1690,19 +1703,19 @@ BOOL lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
             rFieldId.mnFieldIdx = nRepeat;
         }
         else
-            bOk = sal_False;
+            bOk = false;
     }
 
     return bOk;
 }
 
-BOOL lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldName, ScFieldIdentifier& rFieldId )
+sal_Bool lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldName, ScFieldIdentifier& rFieldId )
 {
     // "By name" is always the first match.
     // The name "Data" always refers to the data layout field.
     rFieldId.maFieldName = rFieldName;
     rFieldId.mnFieldIdx = 0;
-    rFieldId.mbDataLayout = rFieldName.equalsAscii( SC_DATALAYOUT_NAME );
+    rFieldId.mbDataLayout = rFieldName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_DATALAYOUT_NAME ) );
 
     pDPObj->GetSource();    // IsDimNameInUse doesn't update source data
 
@@ -1795,14 +1808,14 @@ Sequence<OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()
     {
         Sequence< OUString > aSeq( lcl_GetFieldCount( pDPObj->GetSource(), maOrient ) );
         OUString* pAry = aSeq.getArray();
-        const List& rDimensions = pDPObj->GetSaveData()->GetDimensions();
-        sal_Int32 nDimCount = rDimensions.Count();
-        for (sal_Int32 nDim = 0; nDim < nDimCount; nDim++)
+
+        const boost::ptr_vector<ScDPSaveDimension>& rDimensions = pDPObj->GetSaveData()->GetDimensions();
+        boost::ptr_vector<ScDPSaveDimension>::const_iterator it;
+        for (it = rDimensions.begin(); it != rDimensions.end(); ++it)
         {
-            ScDPSaveDimension* pDim = (ScDPSaveDimension*)rDimensions.GetObject(nDim);
-            if(maOrient.hasValue() && (pDim->GetOrientation() == maOrient.get< DataPilotFieldOrientation >()))
+            if(maOrient.hasValue() && (it->GetOrientation() == maOrient.get< DataPilotFieldOrientation >()))
             {
-                *pAry = pDim->GetName();
+                *pAry = it->GetName();
                 ++pAry;
             }
         }
@@ -2085,19 +2098,17 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
 
             // look for existing duplicate with orientation "hidden"
 
-            String aNameStr( maFieldId.maFieldName );
-            const List& rDimensions = pSaveData->GetDimensions();
-            sal_Int32 nDimCount = rDimensions.Count();
             sal_Int32 nFound = 0;
-            for ( sal_Int32 nDim = 0; nDim < nDimCount && !pNewDim; nDim++ )
+            const boost::ptr_vector<ScDPSaveDimension>& rDimensions = pSaveData->GetDimensions();
+            boost::ptr_vector<ScDPSaveDimension>::const_iterator it;
+            for ( it = rDimensions.begin(); it != rDimensions.end() && !pNewDim; ++it )
             {
-                ScDPSaveDimension* pOneDim = static_cast<ScDPSaveDimension*>(rDimensions.GetObject(nDim));
-                if ( !pOneDim->IsDataLayout() && (pOneDim->GetName() == aNameStr) )
+                if ( !it->IsDataLayout() && (it->GetName() == maFieldId.maFieldName) )
                 {
-                    if ( pOneDim->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
-                        pNewDim = pOneDim;      // use this one
+                    if ( it->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
+                        pNewDim = const_cast<ScDPSaveDimension*>(&(*it));      // use this one
                     else
-                        ++nFound;               // count existing non-hidden occurences
+                        ++nFound;               // count existing non-hidden occurrences
                 }
             }
 
@@ -2108,10 +2119,10 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
             pDim = pNewDim;
         }
 
-        pDim->SetOrientation(sal::static_int_cast<USHORT>(eNew));
+        pDim->SetOrientation(sal::static_int_cast<sal_uInt16>(eNew));
 
         // move changed field behind all other fields (make it the last field in dimension)
-        pSaveData->SetPosition( pDim, pSaveData->GetDimensions().Count() );
+        pSaveData->SetPosition( pDim, pSaveData->GetDimensions().size() );
 
         SetDPObject( pDPObj );
 
@@ -2152,12 +2163,12 @@ void ScDataPilotFieldObj::setFunction(GeneralFunction eNewFunc)
                 pDim->SetSubTotals( 0, NULL );
             else
             {
-                USHORT nFunc = sal::static_int_cast<USHORT>( eNewFunc );
+                sal_uInt16 nFunc = sal::static_int_cast<sal_uInt16>( eNewFunc );
                 pDim->SetSubTotals( 1, &nFunc );
             }
         }
         else
-            pDim->SetFunction( sal::static_int_cast<USHORT>( eNewFunc ) );
+            pDim->SetFunction( sal::static_int_cast<sal_uInt16>( eNewFunc ) );
         SetDPObject( pDPObj );
     }
 }
@@ -2199,21 +2210,21 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< GeneralFunction >& rSubt
                     pDim->SetSubTotals( 0, NULL );
                 else
                 {
-                    USHORT nFunc = sal::static_int_cast<USHORT>( rSubtotals[ 0 ] );
+                    sal_uInt16 nFunc = sal::static_int_cast<sal_uInt16>( rSubtotals[ 0 ] );
                     pDim->SetSubTotals( 1, &nFunc );
                 }
             }
             else if( nCount > 1 )
             {
                 // set multiple functions, ignore NONE and AUTO in this case
-                ::std::vector< USHORT > aSubt;
+                ::std::vector< sal_uInt16 > aSubt;
                 for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
                 {
                     GeneralFunction eFunc = rSubtotals[ nIdx ];
                     if( (eFunc != GeneralFunction_NONE) && (eFunc != GeneralFunction_AUTO) )
                     {
                         // do not insert functions twice
-                        USHORT nFunc = static_cast< USHORT >( eFunc );
+                        sal_uInt16 nFunc = static_cast< sal_uInt16 >( eFunc );
                         if( ::std::find( aSubt.begin(), aSubt.end(), nFunc ) == aSubt.end() )
                             aSubt.push_back( nFunc );
                     }
@@ -2244,8 +2255,7 @@ void ScDataPilotFieldObj::setCurrentPage( const OUString& rPage )
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
-        String aPage( rPage );
-        pDim->SetCurrentPage( &aPage );
+        pDim->SetCurrentPage( &rPage );
         SetDPObject( pDPObj );
     }
 }
@@ -2269,7 +2279,7 @@ void ScDataPilotFieldObj::setUseCurrentPage( sal_Bool bUse )
                 true, because it is still needed to set an explicit page name. */
             if( !pDim->HasCurrentPage() )
             {
-                String aPage;
+                const ::rtl::OUString aPage;
                 pDim->SetCurrentPage( &aPage );
             }
         }
@@ -2376,7 +2386,7 @@ sal_Bool ScDataPilotFieldObj::hasGroupInfo()
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
         if( const ScDPDimensionSaveData* pDimData = pDPObj->GetSaveData()->GetExistingDimensionData() )
             return pDimData->GetNamedGroupDim( pDim->GetName() ) || pDimData->GetNumGroupDim( pDim->GetName() );
-    return sal_False;
+    return false;
 }
 
 DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
@@ -2534,7 +2544,7 @@ void ScDataPilotFieldObj::setGroupInfo( const DataPilotFieldGroupInfo* pInfo )
 
 sal_Bool ScDataPilotFieldObj::HasString(const Sequence< OUString >& rItems, const OUString& aString)
 {
-    sal_Bool bRet = sal_False;
+    sal_Bool bRet = false;
 
     sal_Int32 nCount(rItems.getLength());
     sal_Int32 nItem(0);
@@ -2952,7 +2962,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, co
     if( !lclExtractGroupMembers( aMembers, rElement ) )
         throw IllegalArgumentException();
 
-    // create the new entry if no error has been occured
+    // create the new entry if no error has been occurred
     maGroups.resize( maGroups.size() + 1 );
     ScFieldGroup& rGroup = maGroups.back();
     rGroup.maName = rName;
@@ -3034,8 +3044,6 @@ void ScDataPilotFieldGroupsObj::renameFieldGroup( const OUString& rOldName, cons
         throw RuntimeException();
     aOldIt->maName = rNewName;
 }
-
-// private
 
 ScFieldGroups::iterator ScDataPilotFieldGroupsObj::implFindByName( const OUString& rName )
 {
@@ -3279,7 +3287,7 @@ Any SAL_CALL ScDataPilotItemsObj::getByName( const OUString& aName )
     {
         Reference<XIndexAccess> xMembersIndex(new ScNameToIndexAccess( xMembers ));
         sal_Int32 nCount = xMembersIndex->getCount();
-        sal_Bool bFound(sal_False);
+        sal_Bool bFound(false);
         sal_Int32 nItem = 0;
         while (nItem < nCount && !bFound )
         {
@@ -3308,7 +3316,7 @@ sal_Bool SAL_CALL ScDataPilotItemsObj::hasByName( const OUString& aName )
                                         throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bFound = sal_False;
+    sal_Bool bFound = false;
     Reference<XNameAccess> xMembers = GetMembers();
     if (xMembers.is())
     {
@@ -3434,11 +3442,11 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const OUString& aPropertyNam
                 if (pMember)
                 {
                     bool bGetNewIndex = false;
-                    if ( aPropertyName.equalsAscii( SC_UNONAME_SHOWDETAIL ) )
+                    if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_SHOWDETAIL ) ) )
                         pMember->SetShowDetails(cppu::any2bool(aValue));
-                    else if ( aPropertyName.equalsAscii( SC_UNONAME_ISHIDDEN ) )
+                    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ISHIDDEN ) ) )
                         pMember->SetIsVisible(!cppu::any2bool(aValue));
-                    else if ( aPropertyName.equalsAscii( SC_UNONAME_POS ) )
+                    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_POS ) ) )
                     {
                         sal_Int32 nNewPos = 0;
                         if ( ( aValue >>= nNewPos ) && nNewPos >= 0 && nNewPos < nCount )
@@ -3484,7 +3492,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                 Reference< XNamed > xMember( xMembersIndex->getByIndex( mnIndex ), UNO_QUERY );
                 String sName( xMember->getName() );
                 ScDPSaveMember* pMember = pDim->GetExistingMemberByName( sName );
-                if( aPropertyName.equalsAscii( SC_UNONAME_SHOWDETAIL ) )
+                if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_SHOWDETAIL ) ) )
                 {
                     if (pMember && pMember->HasShowDetails())
                     {
@@ -3499,7 +3507,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                             aRet <<= true;
                     }
                 }
-                else if ( aPropertyName.equalsAscii( SC_UNONAME_ISHIDDEN ) )
+                else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ISHIDDEN ) ) )
                 {
                     if (pMember && pMember->HasIsVisible())
                     {
@@ -3514,7 +3522,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                             aRet <<= false;
                     }
                 }
-                else if ( aPropertyName.equalsAscii( SC_UNONAME_POS ) )
+                else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_POS ) ) )
                 {
                     aRet <<= mnIndex;
                 }

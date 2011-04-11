@@ -92,7 +92,7 @@ class LwpFrib
 {
 public:
     LwpFrib(LwpPara* pPara);
-    ~LwpFrib();
+    virtual ~LwpFrib();
     static LwpFrib* CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt8 fribtag, sal_uInt8 editID);
     virtual void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
 //  virtual void Parse(IXFStream* pOutputStream);
@@ -113,9 +113,9 @@ public:
     sal_Bool m_ModFlag;
     rtl::OUString GetStyleName(){return m_StyleName;}//add by  1-10
 //  void SetStyle(LwpFoundry* pFoundry);
-    sal_Bool IsModified(){return m_ModFlag;};
+    sal_Bool IsModified(){return m_ModFlag;}
     void SetModifiers(ModifierInfo* pModifiers);
-    ModifierInfo* GetModifiers(){return m_pModifiers;};
+    ModifierInfo* GetModifiers(){return m_pModifiers;}
     virtual void RegisterStyle(LwpFoundry* pFoundry);
     sal_Bool HasNextFrib();
     void ConvertChars(XFContentContainer* pXFPara,OUString text);

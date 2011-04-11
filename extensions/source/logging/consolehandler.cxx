@@ -250,9 +250,9 @@ namespace logging
             return sal_False;
 
         if ( _rRecord.Level >= m_nThreshold )
-            fprintf( stderr, sEntry.getStr() );
+            fprintf( stderr, "%s\n", sEntry.getStr() );
         else
-            fprintf( stdout, sEntry.getStr() );
+            fprintf( stdout, "%s\n", sEntry.getStr() );
 
         return sal_True;
     }

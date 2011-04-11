@@ -49,7 +49,7 @@ GraphicAttr::GraphicAttr() :
     mnRPercent      ( 0 ),
     mnGPercent      ( 0 ),
     mnBPercent      ( 0 ),
-    mbInvert        ( FALSE ),
+    mbInvert        ( sal_False ),
     mcTransparency  ( 0 ),
     meDrawMode      ( GRAPHICDRAWMODE_STANDARD )
 {
@@ -63,7 +63,7 @@ GraphicAttr::~GraphicAttr()
 
 // ------------------------------------------------------------------------
 
-BOOL GraphicAttr::operator==( const GraphicAttr& rAttr ) const
+sal_Bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
 {
     return( ( mfGamma == rAttr.mfGamma ) &&
             ( mnMirrFlags == rAttr.mnMirrFlags ) &&
@@ -88,7 +88,7 @@ SvStream& operator>>( SvStream& rIStm, GraphicAttr& rAttr )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt32      nTmp32;
-    UINT16          nTmp16;
+    sal_uInt16          nTmp16;
 
     rIStm >> nTmp32 >> nTmp32 >> rAttr.mfGamma >> rAttr.mnMirrFlags >> rAttr.mnRotate10;
     rIStm >> rAttr.mnContPercent >> rAttr.mnLumPercent >> rAttr.mnRPercent >> rAttr.mnGPercent >> rAttr.mnBPercent;
@@ -112,7 +112,7 @@ SvStream& operator<<( SvStream& rOStm, const GraphicAttr& rAttr )
 
     rOStm << nTmp32 << nTmp32 << rAttr.mfGamma << rAttr.mnMirrFlags << rAttr.mnRotate10;
     rOStm << rAttr.mnContPercent << rAttr.mnLumPercent << rAttr.mnRPercent << rAttr.mnGPercent << rAttr.mnBPercent;
-    rOStm << rAttr.mbInvert << rAttr.mcTransparency << (UINT16) rAttr.meDrawMode;
+    rOStm << rAttr.mbInvert << rAttr.mcTransparency << (sal_uInt16) rAttr.meDrawMode;
     rOStm << rAttr.mnLeftCrop << rAttr.mnTopCrop << rAttr.mnRightCrop << rAttr.mnBottomCrop;
 
     return rOStm;

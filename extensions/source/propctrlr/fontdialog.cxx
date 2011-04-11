@@ -53,7 +53,6 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crsditem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/flstitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/cmapitem.hxx>
@@ -282,7 +281,7 @@ namespace pcr
         }
         catch (Exception&)
         {
-            DBG_ERROR("ControlCharacterDialog::translatePropertiesToItems: caught an exception!");
+            OSL_FAIL("ControlCharacterDialog::translatePropertiesToItems: caught an exception!");
         }
 
         _pSet->DisableItem(SID_ATTR_CHAR_CJK_FONT);
@@ -385,7 +384,7 @@ namespace pcr
                 sal_Int32 nColor = rUnderlineItem.GetColor().GetColor();
 
                 Any aUnoColor;
-                if (COL_AUTO != (UINT32)nColor)
+                if (COL_AUTO != (sal_uInt32)nColor)
                     aUnoColor <<= nColor;
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTLINECOLOR, aUnoColor );
@@ -430,7 +429,7 @@ namespace pcr
                 sal_Int32 nColor = rColorItem.GetValue().GetColor();
 
                 Any aUnoColor;
-                if (COL_AUTO != (UINT32)nColor)
+                if (COL_AUTO != (sal_uInt32)nColor)
                     aUnoColor <<= nColor;
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTCOLOR, aUnoColor );
@@ -527,7 +526,7 @@ namespace pcr
         *pCounter++ = new SvxFontListItem (new FontList(Application::GetDefaultDevice()), CFID_FONTLIST);
 
         // create the pool
-        static SfxItemInfo __READONLY_DATA aItemInfos[CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1] =
+        static SfxItemInfo const aItemInfos[CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1] =
         {
             { SID_ATTR_CHAR_FONT,               0 },
             { SID_ATTR_CHAR_FONTHEIGHT,         0 },

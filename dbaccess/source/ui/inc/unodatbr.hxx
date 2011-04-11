@@ -120,12 +120,12 @@ namespace dbaui
         Splitter*               m_pSplitter;
         SvLBoxTreeList*         m_pTreeModel;           // contains the datasources of the registry
         SvLBoxEntry*            m_pCurrentlyDisplayed;
-        ULONG                   m_nAsyncDrop;
+        sal_uLong                   m_nAsyncDrop;
 
-        sal_Int16               m_nBorder;              // TRUE when border should be shown
+        sal_Int16               m_nBorder;              // sal_True when border should be shown
 
         sal_Bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
-        sal_Bool                m_bShowMenu;            // if TRUE the menu should be visible otherwise not
+        sal_Bool                m_bShowMenu;            // if sal_True the menu should be visible otherwise not
         sal_Bool                m_bInSuspend;
         sal_Bool                m_bEnableBrowser;
         ::boost::optional< bool >
@@ -222,7 +222,7 @@ namespace dbaui
 
     protected:
         // SbaXDataBrowserController overridables
-        virtual sal_Bool InitializeForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xForm);
+        virtual sal_Bool InitializeForm( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties );
         virtual sal_Bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
 
         virtual sal_Bool preReloadForm();
@@ -451,7 +451,7 @@ namespace dbaui
             void* _pTreeListUserData    // in rela a DBTreeListUserData*, but we do not know this class here ....
         );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         // checks whether the given tree entry denotes a data source
         bool impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const;
 #endif
@@ -471,9 +471,6 @@ namespace dbaui
         // remove all grid columns and dispose them
         void clearGridColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _xColContainer);
 
-        sal_Bool isHiContrast() const;
-
-
         /** checks if the currently displayed entry changed
             @param  _sName
                     Name of the changed entry
@@ -488,6 +485,10 @@ namespace dbaui
             of the load process
         */
         void initializePreviewMode();
+
+        /** checks whether the Order/Filter clauses set at our row set are valid, removes them if not so
+        */
+        void    impl_sanitizeRowSetClauses_nothrow();
     };
 
 // .........................................................................

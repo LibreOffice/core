@@ -37,7 +37,7 @@
 class SC_DLLPUBLIC ScResId : public ResId
 {
  public:
-    ScResId( USHORT nId );      // in scdll.cxx
+    ScResId( sal_uInt16 nId );      // in scdll.cxx
 };
 
 

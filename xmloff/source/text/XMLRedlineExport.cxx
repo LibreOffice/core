@@ -43,7 +43,7 @@
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 
@@ -452,7 +452,7 @@ const OUString XMLRedlineExport::ConvertTypeName(
     }
     else
     {
-        DBG_ERROR("unknown redline type");
+        OSL_FAIL("unknown redline type");
         return sUnknownChange;
     }
 }
@@ -636,7 +636,7 @@ void XMLRedlineExport::ExportStartOrEndRedline(
     }
     else
     {
-        DBG_ERROR("XPropertySet expected");
+        OSL_FAIL("XPropertySet expected");
     }
 }
 
@@ -651,7 +651,7 @@ void XMLRedlineExport::ExportStartOrEndRedline(
     }
     else
     {
-        DBG_ERROR("XPropertySet expected");
+        OSL_FAIL("XPropertySet expected");
     }
 }
 

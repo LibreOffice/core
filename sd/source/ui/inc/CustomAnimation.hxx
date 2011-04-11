@@ -35,7 +35,6 @@ class Window;
 
 namespace sd {
 
-//  extern void showCustomAnimationPane( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawView >& xView );
     extern ::Window* createCustomAnimationPane( ::Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
 }
 

@@ -50,64 +50,64 @@ class SwCSS1Parser : public SvxCSS1Parser
 {
     SwDoc *pDoc;
 
-    ULONG aFontHeights[7];
+    sal_uLong aFontHeights[7];
 
-    USHORT nDropCapCnt;
+    sal_uInt16 nDropCapCnt;
 
-    BOOL bIsNewDoc : 1;
+    sal_Bool bIsNewDoc : 1;
 
-    BOOL bBodyBGColorSet : 1;
-    BOOL bBodyBackgroundSet : 1;
-    BOOL bBodyTextSet : 1;
-    BOOL bBodyLinkSet : 1;
-    BOOL bBodyVLinkSet : 1;
+    sal_Bool bBodyBGColorSet : 1;
+    sal_Bool bBodyBackgroundSet : 1;
+    sal_Bool bBodyTextSet : 1;
+    sal_Bool bBodyLinkSet : 1;
+    sal_Bool bBodyVLinkSet : 1;
 
-    BOOL bSetFirstPageDesc : 1;
-    BOOL bSetRightPageDesc : 1;
+    sal_Bool bSetFirstPageDesc : 1;
+    sal_Bool bSetRightPageDesc : 1;
 
-    BOOL bTableHeaderTxtCollSet : 1;
-    BOOL bTableTxtCollSet : 1;
+    sal_Bool bTableHeaderTxtCollSet : 1;
+    sal_Bool bTableTxtCollSet : 1;
 
-    BOOL bLinkCharFmtsSet : 1;
+    sal_Bool bLinkCharFmtsSet : 1;
 
     // die Vorlagen fuer DL anlegen
-    SwTxtFmtColl* GetDefListTxtFmtColl( USHORT nCollId, USHORT nDeep );
+    SwTxtFmtColl* GetDefListTxtFmtColl( sal_uInt16 nCollId, sal_uInt16 nDeep );
 
-    const SwPageDesc* GetPageDesc( USHORT nPoolId, BOOL bCreate );
+    const SwPageDesc* GetPageDesc( sal_uInt16 nPoolId, sal_Bool bCreate );
 
-    void SetTableTxtColl( BOOL bHeader );
+    void SetTableTxtColl( sal_Bool bHeader );
     void SetLinkCharFmts();
 
 protected:
-    virtual BOOL StyleParsed( const CSS1Selector *pSelector,
+    virtual sal_Bool StyleParsed( const CSS1Selector *pSelector,
                               SfxItemSet& rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo );
 
     using CSS1Parser::ParseStyleSheet;
 
 public:
-    SwCSS1Parser( SwDoc *pDoc, sal_uInt32 aFHeight[7], const String& rBaseURL, BOOL bNewDoc );
+    SwCSS1Parser( SwDoc *pDoc, sal_uInt32 aFHeight[7], const String& rBaseURL, sal_Bool bNewDoc );
     virtual ~SwCSS1Parser();
 
-    virtual BOOL ParseStyleSheet( const String& rIn );
+    virtual sal_Bool ParseStyleSheet( const String& rIn );
 
     // Die Font-Hoehe fuer eine bestimmte Font-Groesse (0-6) ermitteln
-    virtual sal_uInt32 GetFontHeight( USHORT nSize ) const;
+    virtual sal_uInt32 GetFontHeight( sal_uInt16 nSize ) const;
 
     // Die aktuelle Font-Liste holen (auch 0 ist erlaubt)
     virtual const FontList *GetFontList() const;
 
     // das Zeichen-Format zu einem Token und einer ggf leeren Klasse
     // ermitteln
-    SwCharFmt* GetChrFmt( USHORT nToken, const String& rClass ) const;
+    SwCharFmt* GetChrFmt( sal_uInt16 nToken, const String& rClass ) const;
 
     // eine TextFmtColl zu einer Pool-Id ermitteln
-    SwTxtFmtColl *GetTxtFmtColl( USHORT nTxtColl, const String& rClass );
+    SwTxtFmtColl *GetTxtFmtColl( sal_uInt16 nTxtColl, const String& rClass );
 
     // This methods do the same as the one of SwDoc, but change the
     // encoding if required.
-    SwTxtFmtColl *GetTxtCollFromPool( USHORT nPoolId ) const;
-    SwCharFmt *GetCharFmtFromPool( USHORT nPoolId ) const;
+    SwTxtFmtColl *GetTxtCollFromPool( sal_uInt16 nPoolId ) const;
+    SwCharFmt *GetCharFmtFromPool( sal_uInt16 nPoolId ) const;
 
     // Die linke oder rechte Seiten-Vorlage holen. In Dokumenten mit nur
     // einer Vorlage gibt es nur eine rechtee Seite.
@@ -115,9 +115,9 @@ public:
     // eine Benutzter-Vorlage, die on-demand angelegt wird, wenn
     // bCreate gesetzt ist.
     SwPageDesc* GetMasterPageDesc();
-    inline const SwPageDesc* GetFirstPageDesc( BOOL bCreate=FALSE );
-    inline const SwPageDesc* GetRightPageDesc( BOOL bCreate=FALSE );
-    inline const SwPageDesc* GetLeftPageDesc( BOOL bCreate=FALSE );
+    inline const SwPageDesc* GetFirstPageDesc( sal_Bool bCreate=sal_False );
+    inline const SwPageDesc* GetRightPageDesc( sal_Bool bCreate=sal_False );
+    inline const SwPageDesc* GetLeftPageDesc( sal_Bool bCreate=sal_False );
 
     // Attribute an der HTML-Seitenvorlage setzen (gesetzte Attribute
     // werden aus dem Item-Set geloescht ). Wird fuer's BODY-Tag
@@ -136,7 +136,7 @@ public:
     void FillDropCap( SwFmtDrop& rDrop, SfxItemSet& rItemSet,
                       const String *pName=0 );
 
-    BOOL SetFmtBreak( SfxItemSet& rItemSet,
+    sal_Bool SetFmtBreak( SfxItemSet& rItemSet,
                       const SvxCSS1PropertyInfo& rPropInfo );
 
 
@@ -144,26 +144,26 @@ public:
 
     static inline void AddFirstLetterExt( String& rFmtName );
 
-    static BOOL MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
-                                 BOOL bAutoWidth=FALSE );
+    static sal_Bool MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
+                                 sal_Bool bAutoWidth=sal_False );
 
     static sal_uInt16 GetScriptFromClass( String& rClass,
                                       sal_Bool bSubClassOnly = sal_True );
 
-    BOOL IsBodyBGColorSet() const { return bBodyBGColorSet; }
-    BOOL IsBodyBackgroundSet() const { return bBodyBackgroundSet; }
-    BOOL IsBodyTextSet() const { return bBodyTextSet; }
-    BOOL IsBodyLinkSet() const { return bBodyLinkSet; }
-    BOOL IsBodyVLinkSet() const { return bBodyVLinkSet; }
+    sal_Bool IsBodyBGColorSet() const { return bBodyBGColorSet; }
+    sal_Bool IsBodyBackgroundSet() const { return bBodyBackgroundSet; }
+    sal_Bool IsBodyTextSet() const { return bBodyTextSet; }
+    sal_Bool IsBodyLinkSet() const { return bBodyLinkSet; }
+    sal_Bool IsBodyVLinkSet() const { return bBodyVLinkSet; }
 
-    BOOL IsSetFirstPageDesc() const { return bSetFirstPageDesc; }
-    BOOL IsSetRightPageDesc() const { return bSetRightPageDesc; }
+    sal_Bool IsSetFirstPageDesc() const { return bSetFirstPageDesc; }
+    sal_Bool IsSetRightPageDesc() const { return bSetRightPageDesc; }
 
-    void SetBodyBGColorSet() { bBodyBGColorSet = TRUE; }
-    void SetBodyBackgroundSet() { bBodyBackgroundSet = TRUE; }
-    void SetBodyTextSet() { bBodyTextSet = TRUE; }
-    void SetBodyLinkSet() { bBodyLinkSet = TRUE; }
-    void SetBodyVLinkSet() { bBodyVLinkSet = TRUE; }
+    void SetBodyBGColorSet() { bBodyBGColorSet = sal_True; }
+    void SetBodyBackgroundSet() { bBodyBackgroundSet = sal_True; }
+    void SetBodyTextSet() { bBodyTextSet = sal_True; }
+    void SetBodyLinkSet() { bBodyLinkSet = sal_True; }
+    void SetBodyVLinkSet() { bBodyVLinkSet = sal_True; }
 
     const SvxBrushItem& GetPageDescBackground() const;
 
@@ -181,17 +181,17 @@ inline void SwCSS1Parser::AddFirstLetterExt( String& rFmtName )
     rFmtName.AppendAscii( ".FL", 3 );   // first letter
 }
 
-inline const SwPageDesc* SwCSS1Parser::GetFirstPageDesc( BOOL bCreate )
+inline const SwPageDesc* SwCSS1Parser::GetFirstPageDesc( sal_Bool bCreate )
 {
     return GetPageDesc( RES_POOLPAGE_FIRST, bCreate );
 }
 
-inline const SwPageDesc* SwCSS1Parser::GetRightPageDesc( BOOL bCreate )
+inline const SwPageDesc* SwCSS1Parser::GetRightPageDesc( sal_Bool bCreate )
 {
     return GetPageDesc( RES_POOLPAGE_RIGHT, bCreate );
 }
 
-inline const SwPageDesc* SwCSS1Parser::GetLeftPageDesc( BOOL bCreate )
+inline const SwPageDesc* SwCSS1Parser::GetLeftPageDesc( sal_Bool bCreate )
 {
     return GetPageDesc( RES_POOLPAGE_LEFT, bCreate );
 }
@@ -199,13 +199,13 @@ inline const SwPageDesc* SwCSS1Parser::GetLeftPageDesc( BOOL bCreate )
 inline void SwCSS1Parser::SetTHTagStyles()
 {
     if( !bTableHeaderTxtCollSet )
-        SetTableTxtColl( TRUE );
+        SetTableTxtColl( sal_True );
 }
 
 inline void SwCSS1Parser::SetTDTagStyles()
 {
     if( !bTableTxtCollSet )
-        SetTableTxtColl( FALSE );
+        SetTableTxtColl( sal_False );
 }
 
 

@@ -74,7 +74,7 @@ enum SgaObjKind
 // - Defines -
 // -----------
 
-#define IV_IMAPINFO             (UINT32('S')*0x00000001+UINT32('D')*0x00000100+UINT32('U')*0x00010000+UINT32('D')*0x01000000)
+#define IV_IMAPINFO             (sal_uInt32('S')*0x00000001+sal_uInt32('D')*0x00000100+sal_uInt32('U')*0x00010000+sal_uInt32('D')*0x01000000)
 #define ID_IMAPINFO             2
 
 #define USERDATA_HDL()          (LINK(this,SgaUserDataFactory,MakeUserData))
@@ -105,16 +105,16 @@ class ImageMap;
 class Gallery;
 
 SVX_DLLPUBLIC ResMgr*           GetGalleryResMgr();
-USHORT          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, String& rFilterName, BOOL bShowProgress = FALSE );
-BOOL            GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
-BOOL            CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
-SVX_DLLPUBLIC String            GetReducedString( const INetURLObject& rURL, ULONG nMaxLen );
+sal_uInt16          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, String& rFilterName, sal_Bool bShowProgress = sal_False );
+sal_Bool            GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
+sal_Bool            CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
+SVX_DLLPUBLIC String            GetReducedString( const INetURLObject& rURL, sal_uIntPtr nMaxLen );
 String          GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
 
-BOOL            FileExists( const INetURLObject& rURL );
-BOOL            CreateDir(  const INetURLObject& rURL );
-BOOL            CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
-BOOL            KillFile( const INetURLObject& rURL );
+sal_Bool            FileExists( const INetURLObject& rURL );
+sal_Bool            CreateDir(  const INetURLObject& rURL );
+sal_Bool            CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
+sal_Bool            KillFile( const INetURLObject& rURL );
 BitmapEx        GalleryResGetBitmapEx( sal_uInt32 nId );
 
 
@@ -174,7 +174,7 @@ class SVX_DLLPUBLIC GalleryProgress
                                     GalleryProgress( GraphicFilter* pFilter = NULL );
                                     ~GalleryProgress();
 
-    void                            Update( ULONG nVal, ULONG nMaxVal );
+    void                            Update( sal_uIntPtr nVal, sal_uIntPtr nMaxVal );
 };
 
 // -----------------------
@@ -202,7 +202,7 @@ private:
 
 protected:
 
-                                    GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos, bool bLazy );
+                                    GalleryTransferable( GalleryTheme* pTheme, sal_uIntPtr nObjectPos, bool bLazy );
                                     ~GalleryTransferable();
 
     void                            InitData( bool bLazy );
@@ -239,25 +239,25 @@ class GalleryHint : public SfxHint
 {
 private:
 
-    ULONG           mnType;
+    sal_uIntPtr         mnType;
     String          maThemeName;
     String          maStringData;
-    ULONG           mnData1;
-    ULONG           mnData2;
+    sal_uIntPtr         mnData1;
+    sal_uIntPtr         mnData2;
 
 public:
 
-                    GalleryHint( ULONG nType, const String& rThemeName, ULONG nData1 = 0UL, ULONG nData2 = 0UL ) :
+                    GalleryHint( sal_uIntPtr nType, const String& rThemeName, sal_uIntPtr nData1 = 0UL, sal_uIntPtr nData2 = 0UL ) :
                         mnType( nType ), maThemeName( rThemeName ), mnData1( nData1 ), mnData2( nData2 ) {}
 
-                    GalleryHint( ULONG nType, const String& rThemeName, const String& rStringData, ULONG nData1 = 0UL, ULONG nData2 = 0UL ) :
+                    GalleryHint( sal_uIntPtr nType, const String& rThemeName, const String& rStringData, sal_uIntPtr nData1 = 0UL, sal_uIntPtr nData2 = 0UL ) :
                         mnType( nType ), maThemeName( rThemeName ), maStringData( rStringData ), mnData1( nData1 ), mnData2( nData2 ) {}
 
-    ULONG           GetType() const { return mnType; }
+    sal_uIntPtr         GetType() const { return mnType; }
     const String&   GetThemeName() const { return maThemeName; }
     const String&   GetStringData() const { return maStringData; }
-    ULONG           GetData1() const { return mnData1; }
-    ULONG           GetData2() const { return mnData2; }
+    sal_uIntPtr         GetData1() const { return mnData1; }
+    sal_uIntPtr         GetData2() const { return mnData2; }
 };
 
     #endif

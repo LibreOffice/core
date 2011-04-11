@@ -33,9 +33,9 @@
 
 
 module com { module sun { module star { module deployment { module test {
- /* The service is intended to be used in the smoketest to test the installation of
+ /* The service is intended to be used in the smoke test to test the installation of
     an extension (com::sun::star::deployment::XPackageManager::addPackage). It may therefore
-    be constantly adapted to meet the need of the smoketest
+    be constantly adapted to meet the need of the smoke test
  */
         service SmoketestCommandEnvironment: ::com::sun::star::ucb::XCommandEnvironment;
 };};};};};

@@ -29,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#include "xformsexport.hxx"
+#include "xmloff/xformsexport.hxx"
 
 #include "XFormsModelExport.hxx"
 #include "xformsapi.hxx"
 
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include "DomExport.hxx"
 #include <xmloff/xmluconv.hxx>
@@ -536,7 +536,7 @@ OUString lcl_getXSDType( SvXMLExport& rExport,
     case com::sun::star::xsd::DataTypeClass::QName:
     case com::sun::star::xsd::DataTypeClass::NOTATION:
     default:
-        DBG_ERROR( "unknown data type" );
+        OSL_FAIL( "unknown data type" );
     }
 
     return rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_XSD,
@@ -680,7 +680,7 @@ OUString lcl_bool( const Any& rAny )
     bool bResult = bool();
     if( rAny >>= bResult )
         return GetXMLToken( bResult ? XML_TRUE : XML_FALSE );
-    DBG_ERROR( "expected boolean value" );
+    OSL_FAIL( "expected boolean value" );
     return OUString();
 }
 

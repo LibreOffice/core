@@ -94,7 +94,7 @@ public:
 
     void setStream(Stream * pStream);
     void setDocument(OOXMLDocument * pDocument);
-    void setXNoteId(const ::rtl::OUString & rXNoteId);
+    void setXNoteId(const sal_Int32 nXNoteId);
 
     void setIsSubstream( bool bSubstream );
 
@@ -109,7 +109,7 @@ private:
     Stream::Pointer_t mpTmpStream;
 #endif
     OOXMLDocument * mpDocument;
-    ::rtl::OUString msXNoteId;
+    sal_Int32 mnXNoteId;
     mutable boost::shared_ptr<OOXMLFastContextHandler> mpContextHandler;
     boost::shared_ptr<OOXMLFastContextHandler> getContextHandler() const;
 };

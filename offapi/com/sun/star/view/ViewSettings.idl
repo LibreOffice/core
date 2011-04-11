@@ -54,7 +54,7 @@ published service ViewSettings
     [optional, property] boolean ShowHoriScrollBar;
 
     //-------------------------------------------------------------------------
-    /** specfifies the zoom-value in percent.
+    /** specifies the zoom-value in percent.
      */
     [optional, property] short ZoomValue;
 

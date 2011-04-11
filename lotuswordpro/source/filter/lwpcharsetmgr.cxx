@@ -57,14 +57,10 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 #include "lwpcharsetmgr.hxx"
-//Added by yanjun for SS migration : 2007-12-21
+//Added for SS migration
 #include "rtl/textenc.h"
-//End
+
 LwpCharSetMgr* LwpCharSetMgr::Instance = NULL;
 
 LwpCharSetMgr* LwpCharSetMgr::GetInstance()

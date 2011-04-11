@@ -89,7 +89,7 @@ void SAL_CALL OContentHelper::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // say our listeners goobye
+    // say goodbye to our listeners
     EventObject aEvt(*this);
     m_aContentListeners.disposeAndClear(aEvt);
 
@@ -181,7 +181,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         Sequence< Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -201,7 +201,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         Sequence< PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -213,7 +213,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
 
         if ( !aProperties.getLength() )
         {
-            OSL_ENSURE( sal_False, "No properties!" );
+            OSL_FAIL( "No properties!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -242,7 +242,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         // Unsupported command
         //////////////////////////////////////////////////////////////////
 
-        OSL_ENSURE( sal_False, "Content::execute - unsupported command!" );
+        OSL_FAIL( "Content::execute - unsupported command!" );
 
         ucbhelper::cancelCommandExecution(
             makeAny( UnsupportedCommandException(
@@ -307,12 +307,12 @@ void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< ::
 // XPropertyContainer
 void SAL_CALL OContentHelper::addProperty( const ::rtl::OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
 {
-    DBG_ERROR( "OContentHelper::addProperty: not implemented!" );
+    OSL_FAIL( "OContentHelper::addProperty: not implemented!" );
 }
 
 void SAL_CALL OContentHelper::removeProperty( const ::rtl::OUString& /*Name*/ ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
 {
-    DBG_ERROR( "OContentHelper::removeProperty: not implemented!" );
+    OSL_FAIL( "OContentHelper::removeProperty: not implemented!" );
 }
 
 // XInitialization
@@ -324,7 +324,7 @@ void SAL_CALL OContentHelper::initialize( const Sequence< Any >& _aArguments ) t
     for(;pBegin != pEnd;++pBegin)
     {
         *pBegin >>= aValue;
-        if ( aValue.Name.equalsAscii("Parent") )
+        if ( aValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Parent")) )
         {
             m_xParentContainer.set(aValue.Value,UNO_QUERY);
         }
@@ -363,24 +363,27 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            ::rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")
+                            ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            ::rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")
+                            ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
         {
             // Read-only property!
             aRet[ n ] <<= IllegalAccessException(
-                            rtl::OUString::createFromAscii(
-                                "Property is read-only!" ),
+                            ::rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM("Property is read-only!")
+                            ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
@@ -404,7 +407,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
                     }
                     catch( const Exception& )
                     {
-                        OSL_ENSURE( sal_False, "OContentHelper::setPropertyValues('Title'): caught an exception while renaming!" );
+                        OSL_FAIL( "OContentHelper::setPropertyValues('Title'): caught an exception while renaming!" );
                     }
                 }
                 else
@@ -415,8 +418,9 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
             else
             {
                 aRet[ n ] <<= IllegalTypeException(
-                                rtl::OUString::createFromAscii(
-                                    "Property value has wrong type!" ),
+                                ::rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM("Property value has wrong type!")
+                                ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -424,17 +428,15 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
         else
         {
             aRet[ n ] <<= Exception(
-                            rtl::OUString::createFromAscii(
-                                "No property set for storing the value!" ),
+                            ::rtl::OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM("No property set for storing the value!")
+                            ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
     }
 
     if ( nChanged > 0 )
     {
-        // @@@ Save changes.
-//      storeData();
-
         notifyDataSourceModified();
         aGuard.clear();
         aChanges.realloc( nChanged );
@@ -486,27 +488,27 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
     {
         // Append all Core Properties.
         xRow->appendString (
-            Property( rtl::OUString::createFromAscii( "ContentType" ),
+            Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
             getContentType() );
         xRow->appendString (
-            Property( rtl::OUString::createFromAscii( "Title" ),
+            Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title" )),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       PropertyAttribute::BOUND ),
             m_pImpl->m_aProps.aTitle );
         xRow->appendBoolean(
-            Property( rtl::OUString::createFromAscii( "IsDocument" ),
+            Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
                       -1,
                       getCppuBooleanType(),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
             m_pImpl->m_aProps.bIsDocument );
         xRow->appendBoolean(
-            Property( rtl::OUString::createFromAscii( "IsFolder" ),
+            Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
                       -1,
                       getCppuBooleanType(),
                       PropertyAttribute::BOUND

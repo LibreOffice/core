@@ -242,11 +242,12 @@ void processObject(const std::string& rFile, bool bPreserve, bool bVerbose)
 
     if ( bPreserve ) {
         if ( fstat(fd, &aStatBuf) == -1) {
-             std::string sMessage("adjustVisibilty() failed: can't stat file ");
-             sMessage += rFile;
-             sMessage += ": ";
-             sMessage += std::strerror(errno);
-             throw std::runtime_error(sMessage);
+            close(fd);
+            std::string sMessage("adjustVisibilty() failed: can't stat file ");
+            sMessage += rFile;
+            sMessage += ": ";
+            sMessage += std::strerror(errno);
+            throw std::runtime_error(sMessage);
         }
     }
 

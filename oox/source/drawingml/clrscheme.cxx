@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/clrscheme.hxx"
-#include "tokens.hxx"
+#include "oox/token/tokens.hxx"
 
 namespace oox { namespace drawingml {
 

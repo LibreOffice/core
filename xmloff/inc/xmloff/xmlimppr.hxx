@@ -38,9 +38,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include <xmloff/uniref.hxx>
 
 struct XMLPropertyState;

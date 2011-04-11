@@ -29,7 +29,7 @@
 #ifndef _CODEMAKER_DEPENDENCY_HXX_
 #define _CODEMAKER_DEPENDENCY_HXX_
 
-#include    <hash_map>
+#include    <boost/unordered_map.hpp>
 #include    <registry/registry.hxx>
 #include    <registry/reflread.hxx>
 #include    <codemaker/typemanager.hxx>
@@ -80,26 +80,7 @@ struct LessTypeUsing
 typedef ::std::set< TypeUsing, LessTypeUsing > TypeUsingSet;
 
 
-#if (defined( _MSC_VER ) && ( _MSC_VER < 1200 ))
-typedef ::std::__hash_map__
-<
-    ::rtl::OString,
-    TypeUsingSet,
-    HashString,
-    EqualString,
-    NewAlloc
-> DependencyMap;
-
-typedef ::std::__hash_map__
-<
-    ::rtl::OString,
-    sal_uInt16,
-    HashString,
-    EqualString,
-    NewAlloc
-> GenerationMap;
-#else
-typedef ::std::hash_map
+typedef ::boost::unordered_map
 <
     ::rtl::OString,
     TypeUsingSet,
@@ -107,15 +88,13 @@ typedef ::std::hash_map
     EqualString
 > DependencyMap;
 
-typedef ::std::hash_map
+typedef ::boost::unordered_map
 <
     ::rtl::OString,
     sal_uInt16,
     HashString,
     EqualString
 > GenerationMap;
-
-#endif
 
 struct TypeDependencyImpl
 {

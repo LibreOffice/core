@@ -102,10 +102,10 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( HierarchyContentProvider,
-                     rtl::OUString::createFromAscii(
-                         "com.sun.star.comp.ucb.HierarchyContentProvider" ),
-                     rtl::OUString::createFromAscii(
-                         HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.comp.ucb.HierarchyContentProvider" )),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -166,8 +166,7 @@ void SAL_CALL HierarchyContentProvider::initialize(
     throw( uno::Exception, uno::RuntimeException )
 {
     if ( aArguments.getLength() > 0 )
-        OSL_ENSURE( false,
-                    "HierarchyContentProvider::initialize : not supported!" );
+        OSL_FAIL( "HierarchyContentProvider::initialize : not supported!" );
 }
 
 //=========================================================================
@@ -201,13 +200,11 @@ HierarchyContentProvider::getConfigProvider(
         }
         catch ( uno::Exception const & )
         {
-//            OSL_ENSURE( sal_False,
-//                        "HierarchyContentProvider::getConfigProvider - "
+//            OSL_FAIL( //                        "HierarchyContentProvider::getConfigProvider - "
 //                        "caught exception!" );
         }
 
-        OSL_ENSURE( sal_False,
-                    "HierarchyContentProvider::getConfigProvider - "
+        OSL_FAIL( "HierarchyContentProvider::getConfigProvider - "
                     "No config provider!" );
 
         return uno::Reference< lang::XMultiServiceFactory >();
@@ -230,8 +227,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
         {
             if ( (*it).second.bTriedToGetRootReadAccess ) // #82494#
             {
-                OSL_ENSURE( sal_False,
-                    "HierarchyContentProvider::getRootConfigReadNameAccess - "
+                OSL_FAIL( "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "Unable to read any config data! -> #82494#" );
                 return uno::Reference< container::XHierarchicalNameAccess >();
             }
@@ -272,8 +268,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
             {
                 // createInstance, createInstanceWithArguments
 
-                OSL_ENSURE( sal_False,
-                    "HierarchyContentProvider::getRootConfigReadNameAccess - "
+                OSL_FAIL( "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "caught Exception!" );
             }
         }

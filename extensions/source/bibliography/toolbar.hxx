@@ -60,7 +60,7 @@ public:
     BibToolBarListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId);
     ~BibToolBarListener();
 
-    rtl::OUString           GetCommand();
+    rtl::OUString           GetCommand() const;
 
     // ::com::sun::star::lang::XEventListener
     // we do not hold References to dispatches, so there is nothing to do on disposal
@@ -120,7 +120,6 @@ class BibToolBar:   public ToolBox
         BibToolBarListenerArr   aListenerArr;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            xController;
         Timer                   aTimer;
-//      Timer                   aMenuTimer;
         ImageList               aImgLst;
         ImageList               aImgLstHC;
         ImageList               aBigImgLst;

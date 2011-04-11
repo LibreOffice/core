@@ -37,22 +37,22 @@ class ScMarkArray;
 class ScRangeList;
 
 //!     todo:
-//!     Es muss auch die Moeglichkeit geben, MarkArrays pro Tabelle zu halten,
-//!     damit "alle suchen" ueber mehrere Tabellen wieder funktioniert!
+//!     It should be possible to have MarkArrays for each table, in order to
+//!     enable "search all" across more than one table again!
 
 
 class SC_DLLPUBLIC ScMarkData
 {
 private:
-    ScRange         aMarkRange;             // Bereich
-    ScRange         aMultiRange;            // maximaler Bereich insgesamt
-    ScMarkArray*    pMultiSel;              // Mehrfachselektion
-    BOOL            bTabMarked[MAXTABCOUNT];// Tabelle selektiert
-    BOOL            bMarked;                // Rechteck markiert
-    BOOL            bMultiMarked;           // mehrfach markiert
+    ScRange         aMarkRange;             // area
+    ScRange         aMultiRange;            // maximum area altogether
+    ScMarkArray*    pMultiSel;              // multi selection
+    sal_Bool            bTabMarked[MAXTABCOUNT];// table marked
+    sal_Bool            bMarked;                // rectangle marked
+    sal_Bool            bMultiMarked;
 
-    BOOL            bMarking;               // Bereich wird aufgezogen -> kein MarkToMulti
-    BOOL            bMarkIsNeg;             // Aufheben bei Mehrfachselektion
+    sal_Bool            bMarking;               // area is being marked -> no MarkToMulti
+    sal_Bool            bMarkIsNeg;             // cancel if multi selection
 
 public:
                 ScMarkData();
@@ -64,53 +64,53 @@ public:
     void        ResetMark();
     void        SetMarkArea( const ScRange& rRange );
 
-    void        SetMultiMarkArea( const ScRange& rRange, BOOL bMark = TRUE );
+    void        SetMultiMarkArea( const ScRange& rRange, sal_Bool bMark = sal_True );
 
     void        MarkToMulti();
     void        MarkToSimple();
 
-    BOOL        IsMarked() const                { return bMarked; }
-    BOOL        IsMultiMarked() const           { return bMultiMarked; }
+    sal_Bool        IsMarked() const                { return bMarked; }
+    sal_Bool        IsMultiMarked() const           { return bMultiMarked; }
 
     void        GetMarkArea( ScRange& rRange ) const;
     void        GetMultiMarkArea( ScRange& rRange ) const;
 
     void        SetAreaTab( SCTAB nTab );
 
-    void        SelectTable( SCTAB nTab, BOOL bNew )        { bTabMarked[nTab] = bNew; }
-    BOOL        GetTableSelect( SCTAB nTab ) const          { return bTabMarked[nTab]; }
+    void        SelectTable( SCTAB nTab, sal_Bool bNew )        { bTabMarked[nTab] = bNew; }
+    sal_Bool        GetTableSelect( SCTAB nTab ) const          { return bTabMarked[nTab]; }
 
     void        SelectOneTable( SCTAB nTab );
     SCTAB       GetSelectCount() const;
     SCTAB       GetFirstSelected() const;
 
-    void        SetMarkNegative( BOOL bFlag )   { bMarkIsNeg = bFlag; }
-    BOOL        IsMarkNegative() const          { return bMarkIsNeg;  }
-    void        SetMarking( BOOL bFlag )        { bMarking = bFlag;   }
-    BOOL        GetMarkingFlag() const          { return bMarking;    }
+    void        SetMarkNegative( sal_Bool bFlag )   { bMarkIsNeg = bFlag; }
+    sal_Bool        IsMarkNegative() const          { return bMarkIsNeg;  }
+    void        SetMarking( sal_Bool bFlag )        { bMarking = bFlag;   }
+    sal_Bool        GetMarkingFlag() const          { return bMarking;    }
 
-    //  fuer FillInfo / Document etc.
+    //  for FillInfo / Document etc.
     const ScMarkArray* GetArray() const         { return pMultiSel; }
 
-    BOOL        IsCellMarked( SCCOL nCol, SCROW nRow, BOOL bNoSimple = FALSE ) const;
-    void        FillRangeListWithMarks( ScRangeList* pList, BOOL bClear ) const;
+    sal_Bool        IsCellMarked( SCCOL nCol, SCROW nRow, sal_Bool bNoSimple = false ) const;
+    void        FillRangeListWithMarks( ScRangeList* pList, sal_Bool bClear ) const;
     void        ExtendRangeListTables( ScRangeList* pList ) const;
 
-    void        MarkFromRangeList( const ScRangeList& rList, BOOL bReset );
+    void        MarkFromRangeList( const ScRangeList& rList, sal_Bool bReset );
 
     SCCOLROW    GetMarkColumnRanges( SCCOLROW* pRanges );
     SCCOLROW    GetMarkRowRanges( SCCOLROW* pRanges );
 
-    BOOL        IsColumnMarked( SCCOL nCol ) const;
-    BOOL        IsRowMarked( SCROW nRow ) const;
-    BOOL        IsAllMarked( const ScRange& rRange ) const;     // Multi
+    sal_Bool        IsColumnMarked( SCCOL nCol ) const;
+    sal_Bool        IsRowMarked( SCROW nRow ) const;
+    sal_Bool        IsAllMarked( const ScRange& rRange ) const;     // Multi
 
                 /// May return -1
-    SCsROW      GetNextMarked( SCCOL nCol, SCsROW nRow, BOOL bUp ) const;
-    BOOL        HasMultiMarks( SCCOL nCol ) const;
-    BOOL        HasAnyMultiMarks() const;
+    SCsROW      GetNextMarked( SCCOL nCol, SCsROW nRow, sal_Bool bUp ) const;
+    sal_Bool        HasMultiMarks( SCCOL nCol ) const;
+    sal_Bool        HasAnyMultiMarks() const;
 
-    //  Tabellen-Markierungen anpassen:
+    //  adjust table marking:
     void        InsertTab( SCTAB nTab );
     void        DeleteTab( SCTAB nTab );
 };

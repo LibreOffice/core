@@ -44,7 +44,7 @@ namespace css = ::com::sun::star;
 void lcl_sleep(::osl::Condition& aCondition   ,
                ::sal_Int32       nMilliSeconds)
 {
-    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
 
     if (nMilliSeconds < 1)
         aCondition.wait(0);

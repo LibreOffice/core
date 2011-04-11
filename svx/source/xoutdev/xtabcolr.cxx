@@ -29,18 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef SVX_LIGHT
-
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "XPropertyTable.hxx"
+#include "svx/XPropertyTable.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <unotools/pathoptions.hxx>
 
 #include "xmlxtexp.hxx"
 #include "xmlxtimp.hxx"
-
-#endif
 
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
@@ -52,7 +48,8 @@
 #define GLOBALOVERFLOW
 
 using namespace com::sun::star;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 sal_Unicode const pszExtColor[]  = {'s','o','c'};
 
@@ -74,7 +71,7 @@ static XColorTable* pTable=0;
 
 XColorTable::XColorTable( const String& rPath,
                             XOutdevItemPool* pInPool,
-                            USHORT nInitSize, USHORT nReSize ) :
+                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
                 XPropertyTable( rPath, pInPool, nInitSize, nReSize)
 {
     // ColorTable braucht keine eigene BmpTable
@@ -117,18 +114,18 @@ XColorEntry* XColorTable::GetColor(long nIndex) const
 
 /************************************************************************/
 
-BOOL XColorTable::Load()
+sal_Bool XColorTable::Load()
 {
     if( bTableDirty )
     {
-        bTableDirty = FALSE;
+        bTableDirty = sal_False;
 
         INetURLObject aURL( aPath );
 
         if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
         {
             DBG_ASSERT( !aPath.Len(), "invalid URL" );
-            return FALSE;
+            return sal_False;
         }
 
         aURL.Append( aName );
@@ -139,19 +136,19 @@ BOOL XColorTable::Load()
         uno::Reference< container::XNameContainer > xTable( SvxUnoXColorTable_createInstance( this ), uno::UNO_QUERY );
         return SvxXMLXTableImport::load( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
     }
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-BOOL XColorTable::Save()
+sal_Bool XColorTable::Save()
 {
     INetURLObject aURL( aPath );
 
     if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
     {
         DBG_ASSERT( !aPath.Len(), "invalid URL" );
-        return FALSE;
+        return sal_False;
     }
 
     aURL.Append( aName );
@@ -165,13 +162,13 @@ BOOL XColorTable::Save()
 
 /************************************************************************/
 
-BOOL XColorTable::Create()
+sal_Bool XColorTable::Create()
 {
     XubString aStr;
     xub_StrLen nLen;
     ResMgr& rRes = DIALOG_MGR();
 
-    static USHORT __READONLY_DATA aResId[] =
+    static sal_uInt16 aResId[] =
     {
         RID_SVXSTR_BLACK,
         RID_SVXSTR_BLUE,
@@ -200,7 +197,7 @@ BOOL XColorTable::Create()
 
     // BM: ifndef VCL part removed (deprecated)
 
-    static ColorData __READONLY_DATA aColTab[] =
+    static ColorData const aColTab[] =
     {
         COL_BLACK,
         COL_BLUE,
@@ -220,7 +217,7 @@ BOOL XColorTable::Create()
         COL_WHITE
     };
 
-    for( USHORT n = 0; n < 16; ++n )
+    for( sal_uInt16 n = 0; n < 16; ++n )
     {
         Insert( n, new XColorEntry( Color( aColTab[n] ),
                                     String( ResId( aResId[ n ], rRes )) ) );
@@ -454,14 +451,14 @@ BOOL XColorTable::Create()
 
 /************************************************************************/
 
-BOOL XColorTable::CreateBitmapsForUI()
+sal_Bool XColorTable::CreateBitmapsForUI()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
+Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 {
     return( NULL );
 }
@@ -478,7 +475,7 @@ Bitmap* XColorTable::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
 
 XColorList::XColorList( const String& rPath,
                             XOutdevItemPool* pInPool,
-                            USHORT nInitSize, USHORT nReSize ) :
+                            sal_uInt16 nInitSize, sal_uInt16 nReSize ) :
                 XPropertyList( rPath, pInPool, nInitSize, nReSize)
 {
     // pBmpList = new List( nInitSize, nReSize );
@@ -513,35 +510,35 @@ XColorEntry* XColorList::GetColor(long nIndex) const
 
 /************************************************************************/
 
-BOOL XColorList::Load()
+sal_Bool XColorList::Load()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-BOOL XColorList::Save()
+sal_Bool XColorList::Save()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-BOOL XColorList::Create()
+sal_Bool XColorList::Create()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-BOOL XColorList::CreateBitmapsForUI()
+sal_Bool XColorList::CreateBitmapsForUI()
 {
-    return( FALSE );
+    return( sal_False );
 }
 
 /************************************************************************/
 
-Bitmap* XColorList::CreateBitmapForUI( long /*nIndex*/, BOOL /*bDelete*/)
+Bitmap* XColorList::CreateBitmapForUI( long /*nIndex*/, sal_Bool /*bDelete*/)
 {
     return( NULL );
 }

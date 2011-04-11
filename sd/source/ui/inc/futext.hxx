@@ -56,25 +56,24 @@ public:
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
-    virtual BOOL Command(const CommandEvent& rCEvt);
-    virtual BOOL RequestHelp(const HelpEvent& rHEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool Command(const CommandEvent& rCEvt);
+    virtual sal_Bool RequestHelp(const HelpEvent& rHEvt);
     virtual void ReceiveRequest(SfxRequest& rReq);
     virtual void DoubleClick(const MouseEvent& rMEvt);
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 
-    void    SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag);
-    BOOL    DeleteDefaultText();
+    void    SetInEditMode(const MouseEvent& rMEvt, sal_Bool bQuickDrag);
+    sal_Bool    DeleteDefaultText();
     SdrTextObj* GetTextObj() { return static_cast< SdrTextObj* >( mxTextObj.get() ); }
 
     DECL_LINK(SpellError, void* );
 
-    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
     /** is called when the currenct function should be aborted. <p>
@@ -98,12 +97,11 @@ protected:
 
     SdrObjectWeakRef    mxTextObj;
     Link                aOldLink;
-    BOOL                bFirstObjCreated;
+    sal_Bool                bFirstObjCreated;
 
     SfxRequest&         rRequest;
 
 private:
-    // #97016#
     void ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj);
     void ImpSetAttributesFitToSize(SdrTextObj* pTxtObj);
     void ImpSetAttributesFitToSizeVertical(SdrTextObj* pTxtObj);

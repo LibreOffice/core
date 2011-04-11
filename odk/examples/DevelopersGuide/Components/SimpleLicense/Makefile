@@ -62,6 +62,7 @@ COMP_JAR_MANIFEST=$(COMP_GEN_OUT)/$(COMP_NAME).uno.Manifest
 COMP_UNOPKG_MANIFEST = $(COMP_GEN_OUT)/META-INF/manifest.xml
 COMP_REGISTERFLAG=$(COMP_GEN_OUT)$(PS)java_$(COMP_NAME)_register_component.flag
 COMP_LOCAL_FILES = description.xml registration/license_de.txt registration/license_en_US.txt
+COMP_COMPONENTS=$(COMP_NAME).components
 
 IDLFILES = LicenseTest.idl
 
@@ -130,15 +131,16 @@ $(COMP_GEN_OUT)/%/manifest.xml :
 	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-typelibrary;type=RDB$(QM)" >> $@
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(SAMPLE_GEN_OUT)/,,$(@D))).uno.rdb$(QM)"/$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
-	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(SAMPLE_GEN_OUT)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-components$(QM)">> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP_COMPONENTS)$(QM)"/$(CSEP)>> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 # rule for component package file
-$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) $(COMP_UNOPKG_MANIFEST) $(COMP_LOCAL_FILES)
+$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) $(COMP_UNOPKG_MANIFEST) $(COMP_LOCAL_FILES) $(COMP_COMPONENTS)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) ../../../bin/$(@F) $(COMP_RDB_NAME)
+	$(SDK_ZIP) $@ $(COMP_COMPONENTS)
+	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) -u ../../../bin/$(@F) $(COMP_RDB_NAME)
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_JAR_NAME)
 	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 	$(SDK_ZIP) -u $@ $(COMP_LOCAL_FILES)

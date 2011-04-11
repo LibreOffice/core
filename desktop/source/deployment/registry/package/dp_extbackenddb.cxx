@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
-#include "rtl/string.h"
 #include "rtl/bootstrap.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -83,15 +82,19 @@ OUString ExtensionBackendDb::getKeyElementName()
 void ExtensionBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
 {
     try{
-        Reference<css::xml::dom::XNode> extensionNodeNode = writeKeyElement(url);
-        writeVectorOfPair(
-            data.items,
-            OUSTR("extension-items"),
-            OUSTR("item"),
-            OUSTR("url"),
-            OUSTR("media-type"),
-            extensionNodeNode);
-        save();
+        //reactive revoked entry if possible.
+        if (!activateEntry(url))
+        {
+            Reference<css::xml::dom::XNode> extensionNodeNode = writeKeyElement(url);
+            writeVectorOfPair(
+                data.items,
+                OUSTR("extension-items"),
+                OUSTR("item"),
+                OUSTR("url"),
+                OUSTR("media-type"),
+                extensionNodeNode);
+            save();
+        }
     }
     catch(css::uno::Exception &)
     {

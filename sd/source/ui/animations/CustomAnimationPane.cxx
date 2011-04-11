@@ -240,7 +240,7 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPane::CustomAnimationPane(), Exception cought!" );
+        OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception cought!" );
     }
 
     // get current page and update custom animation list
@@ -262,7 +262,7 @@ CustomAnimationPane::~CustomAnimationPane()
     MotionPathTagVector aTags;
     aTags.swap( maMotionPathTags );
     MotionPathTagVector::iterator aIter;
-    for( aIter = aTags.begin(); aIter != aTags.end(); aIter++ )
+    for( aIter = aTags.begin(); aIter != aTags.end(); ++aIter )
         (*aIter)->Dispose();
 
     delete mpFLModify;
@@ -290,7 +290,7 @@ CustomAnimationPane::~CustomAnimationPane()
 
 void CustomAnimationPane::addUndo()
 {
-    SfxUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
+    ::svl::IUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
     if( pManager )
     {
         SdPage* pPage = SdPage::getImplementation( mxCurrentPage );
@@ -730,15 +730,15 @@ void CustomAnimationPane::updateControls()
 
     if( !mxView.is() )
     {
-        mpPBAddEffect->Enable( FALSE );
-        mpPBChangeEffect->Enable( FALSE );
-        mpPBRemoveEffect->Enable( FALSE );
-        mpFLEffect->Enable( FALSE );
-        mpFTStart->Enable( FALSE );
-        mpLBStart->Enable( FALSE );
-        mpPBPropertyMore->Enable( FALSE );
-        mpLBProperty->Enable( FALSE );
-        mpFTProperty->Enable( FALSE );
+        mpPBAddEffect->Enable( sal_False );
+        mpPBChangeEffect->Enable( sal_False );
+        mpPBRemoveEffect->Enable( sal_False );
+        mpFLEffect->Enable( sal_False );
+        mpFTStart->Enable( sal_False );
+        mpLBStart->Enable( sal_False );
+        mpPBPropertyMore->Enable( sal_False );
+        mpLBProperty->Enable( sal_False );
+        mpFTProperty->Enable( sal_False );
         mpCustomAnimationList->clear();
         return;
     }
@@ -753,8 +753,6 @@ void CustomAnimationPane::updateControls()
     mpFTStart->Enable(nSelectionCount > 0);
     mpLBStart->Enable(nSelectionCount > 0);
     mpPBPropertyMore->Enable(nSelectionCount > 0);
-
-//  mpPBPlay->Enable(nSelectionCount > 0);
 
     mpFTProperty->SetText( maStrProperty );
 
@@ -819,15 +817,12 @@ void CustomAnimationPane::updateControls()
         else
         {
             mpLBProperty->setSubControl( 0 );
-            mpFTProperty->Enable( FALSE );
-            mpLBProperty->Enable( FALSE );
-            mpPBPropertyMore->Enable( FALSE );
+            mpFTProperty->Enable( sal_False );
+            mpLBProperty->Enable( sal_False );
+            mpPBPropertyMore->Enable( sal_False );
         }
 
-        //
-        // ---
-        //
-        USHORT nPos = 0xffff;
+        sal_uInt16 nPos = 0xffff;
 
         sal_Int16 nNodeType = pEffect->getNodeType();
         switch( nNodeType )
@@ -863,19 +858,19 @@ void CustomAnimationPane::updateControls()
             mpCBSpeed->SelectEntryPos( nPos );
         }
 
-        mpPBPropertyMore->Enable( TRUE );
+        mpPBPropertyMore->Enable( sal_True );
 
-        mpFTChangeOrder->Enable( TRUE );
+        mpFTChangeOrder->Enable( sal_True );
     }
     else
     {
         mpLBProperty->setSubControl( 0 );
-        mpFTProperty->Enable( FALSE );
-        mpLBProperty->Enable( FALSE );
-        mpPBPropertyMore->Enable( FALSE );
-        mpFTSpeed->Enable(FALSE);
-        mpCBSpeed->Enable(FALSE);
-        mpFTChangeOrder->Enable( FALSE );
+        mpFTProperty->Enable( sal_False );
+        mpLBProperty->Enable( sal_False );
+        mpPBPropertyMore->Enable( sal_False );
+        mpFTSpeed->Enable(sal_False);
+        mpCBSpeed->Enable(sal_False);
+        mpFTChangeOrder->Enable( sal_False );
         mpLBStart->SetNoSelection();
         mpCBSpeed->SetNoSelection();
         mpFLEffect->SetText( maStrModify );
@@ -961,7 +956,7 @@ static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,
             rtl::Reference< MotionPathTag > xMotionPathTag;
             // first try to find if there is already a tag for this
             MotionPathTagVector::iterator aMIter( rOldTags.begin() );
-            for( ; aMIter != rOldTags.end(); aMIter++ )
+            for( ; aMIter != rOldTags.end(); ++aMIter )
             {
                 rtl::Reference< MotionPathTag > xTag( (*aMIter) );
                 if( xTag->getEffect() == pEffect )
@@ -1052,7 +1047,7 @@ void CustomAnimationPane::onSelectionChanged()
         }
         catch( Exception& )
         {
-            DBG_ERROR( "sd::CustomAnimationPane::onSelectionChanged(), Exception catched!" );
+            OSL_FAIL( "sd::CustomAnimationPane::onSelectionChanged(), Exception catched!" );
         }
     }
 }
@@ -1062,7 +1057,7 @@ void CustomAnimationPane::onDoubleClick()
     showOptions();
 }
 
-void CustomAnimationPane::onContextMenu( USHORT nSelectedPopupEntry )
+void CustomAnimationPane::onContextMenu( sal_uInt16 nSelectedPopupEntry )
 {
     switch( nSelectedPopupEntry )
     {
@@ -1371,8 +1366,6 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
             InteractiveSequence* pIS = static_cast< InteractiveSequence* >( pEffectSequence );
             addValue( pSet, nHandleTrigger, makeAny( pIS->getTriggerShape() ) );
         }
-
-        //
 
         CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( pEffect->getPresetId() );
         if( pDescriptor.get() )
@@ -1748,7 +1741,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
     }
 }
 
-void CustomAnimationPane::showOptions( USHORT nPage /* = 0 */ )
+void CustomAnimationPane::showOptions( sal_uInt16 nPage /* = 0 */ )
 {
     STLPropertySet* pSet = createSelectionSet();
 
@@ -1782,7 +1775,7 @@ void CustomAnimationPane::onChangeCurrentPage()
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationPane::onChangeCurrentPage(), exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationPane::onChangeCurrentPage(), exception catched!" );
     }
 }
 
@@ -1842,7 +1835,7 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::CustomAnimationPane::getTextSelection(), exception cought!" );
+        OSL_FAIL( "sd::CustomAnimationPane::getTextSelection(), exception cought!" );
     }
 
     return false;
@@ -1901,7 +1894,7 @@ void CustomAnimationPane::onChange( bool bCreate )
                 aParaTarget.Shape = xShape;
 
                 std::list< sal_Int16 >::iterator aIter( aParaList.begin() );
-                for( ; aIter != aParaList.end(); aIter++ )
+                for( ; aIter != aParaList.end(); ++aIter )
                 {
                     aParaTarget.Paragraph = (*aIter);
                     aTargets.push_back( makeAny( aParaTarget ) );
@@ -1910,7 +1903,7 @@ void CustomAnimationPane::onChange( bool bCreate )
         }
         else
         {
-            DBG_ERROR("sd::CustomAnimationPane::onChange(), unknown view selection!" );
+            OSL_FAIL("sd::CustomAnimationPane::onChange(), unknown view selection!" );
             return;
         }
     }
@@ -1944,15 +1937,25 @@ void CustomAnimationPane::onChange( bool bCreate )
         {
             if( bCreate )
             {
-                mpCustomAnimationList->SelectAll( FALSE );
+                mpCustomAnimationList->SelectAll( sal_False );
 
                 // gather shapes from the selection
                 std::vector< Any >::iterator aIter( aTargets.begin() );
                 const std::vector< Any >::iterator aEnd( aTargets.end() );
                 bool bFirst = true;
-                for( ; aIter != aEnd; aIter++ )
+                for( ; aIter != aEnd; ++aIter )
                 {
                     CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, (*aIter), fDuration );
+
+                    // if only one shape with text and no fill or outline is selected, animate only by first level paragraphs
+                    if( bHasText && (aTargets.size() == 1) )
+                    {
+                        Reference< XShape > xShape( (*aIter), UNO_QUERY );
+                        if( xShape.is() && !hasVisibleShape( xShape ) )
+                        {
+                            mpMainSequence->createTextGroup( pCreated, 1, -1.0, sal_False, sal_False );
+                        }
+                    }
 
                     if( bFirst )
                         bFirst = false;
@@ -2003,7 +2006,7 @@ void CustomAnimationPane::onChange( bool bCreate )
 
 void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTargets, double fDuration)
 {
-    USHORT nSID = 0;
+    sal_uInt16 nSID = 0;
 
     switch( eKind )
     {
@@ -2072,7 +2075,7 @@ void CustomAnimationPane::onChangeStart()
     if( mpLBStart->GetSelectEntryCount() == 1 )
     {
         sal_Int16 nNodeType;
-        USHORT nPos= mpLBStart->GetSelectEntryPos();
+        sal_uInt16 nPos= mpLBStart->GetSelectEntryPos();
         switch( nPos )
         {
         case 0: nNodeType = EffectNodeType::ON_CLICK; break;
@@ -2158,7 +2161,7 @@ void CustomAnimationPane::onChangeSpeed()
 
         double fDuration;
 
-        USHORT nPos= mpCBSpeed->GetSelectEntryPos();
+        sal_uInt16 nPos= mpCBSpeed->GetSelectEntryPos();
 
         switch( nPos )
         {
@@ -2275,9 +2278,9 @@ void CustomAnimationPane::moveSelection( bool bUp )
 
                 if( aInsertPos != rEffectSequence.begin() )
                 {
-                    aInsertPos--;
+                    --aInsertPos;
                     while( (aInsertPos != rEffectSequence.begin()) && !mpCustomAnimationList->isExpanded(*aInsertPos))
-                        aInsertPos--;
+                        --aInsertPos;
 
                     rEffectSequence.insert( aInsertPos, pEffect );
                 }
@@ -2305,9 +2308,9 @@ void CustomAnimationPane::moveSelection( bool bUp )
 
                 if( aInsertPos != rEffectSequence.end() )
                 {
-                    aInsertPos++;
+                    ++aInsertPos;
                     while( (aInsertPos != rEffectSequence.end()) && !mpCustomAnimationList->isExpanded(*aInsertPos))
-                        aInsertPos++;
+                        ++aInsertPos;
 
                     rEffectSequence.insert( aInsertPos, pEffect );
                 }
@@ -2337,7 +2340,7 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
     {
         rtl::Reference< MotionPathTag > xMotionPathTag;
         MotionPathTagVector::iterator aIter;
-        for( aIter = maMotionPathTags.begin(); aIter != maMotionPathTags.end(); aIter++ )
+        for( aIter = maMotionPathTags.begin(); aIter != maMotionPathTags.end(); ++aIter )
         {
             if( (*aIter)->isSelected() )
             {
@@ -2436,7 +2439,7 @@ void CustomAnimationPane::markShapesFromSelectedEffects()
                 Reference< XShape > xShape( pEffect->getTargetShape() );
                 SdrObject* pObj = GetSdrObjectFromXShape( xShape );
                 if( pObj )
-                    pView->MarkObj(pObj, pView->GetSdrPageView(), FALSE, FALSE);
+                    pView->MarkObj(pObj, pView->GetSdrPageView(), sal_False, sal_False);
             }
         }
     }
@@ -2452,7 +2455,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
         CustomAnimationEffectPtr pEffect = xTag->getEffect();
         if( (pPathObj != 0) && pEffect.get() != 0 )
         {
-            SfxUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
+            ::svl::IUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
             if( pManager )
             {
                 SdPage* pPage = SdPage::getImplementation( mxCurrentPage );

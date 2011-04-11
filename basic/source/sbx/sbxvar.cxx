@@ -34,7 +34,6 @@
 #include "svl/brdcst.hxx"
 
 #include <basic/sbx.hxx>
-#include <basic/sbxbase.hxx>
 #include "sbxres.hxx"
 #include "sbxconv.hxx"
 #include <math.h>
@@ -48,9 +47,9 @@ using namespace com::sun::star::uno;
 TYPEINIT1(SbxVariable,SbxValue)
 TYPEINIT1(SbxHint,SfxSimpleHint)
 
-extern UINT32 nVarCreator;          // in SBXBASE.CXX, fuer LoadData()
+extern sal_uInt32 nVarCreator;          // in SBXBASE.CXX, fuer LoadData()
 #ifdef DBG_UTIL
-static ULONG nVar = 0;
+static sal_uIntPtr nVar = 0;
 #endif
 
 ///////////////////////////// SbxVariableImpl ////////////////////////////
@@ -60,13 +59,17 @@ class SbxVariableImpl
     friend class SbxVariable;
     String                      m_aDeclareClassName;
     Reference< XInterface >     m_xComListener;
+    StarBASIC*                  m_pComListenerParentBasic;
 
     SbxVariableImpl( void )
+        : m_pComListenerParentBasic( NULL )
     {}
     SbxVariableImpl( const SbxVariableImpl& r )
         : m_aDeclareClassName( r.m_aDeclareClassName )
         , m_xComListener( r.m_xComListener )
-    {}
+        , m_pComListenerParentBasic( r.m_pComListenerParentBasic )
+    {
+    }
 };
 
 
@@ -81,16 +84,21 @@ SbxVariable::SbxVariable() : SbxValue()
     nHash = 0;
 #ifdef DBG_UTIL
     DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
-    GetSbxData_Impl()->aVars.Insert( this, LIST_APPEND );
 #endif
 }
+
+void registerComListenerVariableForBasic( SbxVariable* pVar, StarBASIC* pBasic );
 
 SbxVariable::SbxVariable( const SbxVariable& r )
            : SvRefBase( r ), SbxValue( r ), mpPar( r.mpPar ), pInfo( r.pInfo )
 {
     mpSbxVariableImpl = NULL;
     if( r.mpSbxVariableImpl != NULL )
+    {
         mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
+        if( mpSbxVariableImpl->m_xComListener.is() )
+            registerComListenerVariableForBasic( this, mpSbxVariableImpl->m_pComListenerParentBasic );
+    }
     pCst = NULL;
     if( r.CanRead() )
     {
@@ -110,7 +118,6 @@ SbxVariable::SbxVariable( const SbxVariable& r )
     if ( maName.EqualsAscii( aCellsStr ) )
         maName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
     DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
-    GetSbxData_Impl()->aVars.Insert( this, LIST_APPEND );
 #endif
 }
 
@@ -123,9 +130,10 @@ SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
     nHash = 0;
 #ifdef DBG_UTIL
     DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
-    GetSbxData_Impl()->aVars.Insert( this, LIST_APPEND );
 #endif
 }
+
+void removeDimAsNewRecoverItem( SbxVariable* pVar );
 
 SbxVariable::~SbxVariable()
 {
@@ -135,8 +143,9 @@ SbxVariable::~SbxVariable()
     static sal_Char const aCellsStr[] = "Cells";
     if ( maName.EqualsAscii( aCellsStr ) )
         maName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
-    GetSbxData_Impl()->aVars.Remove( this );
 #endif
+    if( IsSet( SBX_DIM_AS_NEW ))
+        removeDimAsNewRecoverItem( this );
     delete mpSbxVariableImpl;
     delete pCst;
 }
@@ -153,7 +162,7 @@ SfxBroadcaster& SbxVariable::GetBroadcaster()
 // Perhaps some day one could cut the parameter 0.
 // then the copying will be dropped ...
 
-void SbxVariable::Broadcast( ULONG nHintId )
+void SbxVariable::Broadcast( sal_uIntPtr nHintId )
 {
     if( pCst && !IsSet( SBX_NO_BROADCAST ) && StaticIsEnabledBroadcasting() )
     {
@@ -168,7 +177,7 @@ void SbxVariable::Broadcast( ULONG nHintId )
         // Avoid further broadcasting
         SfxBroadcaster* pSave = pCst;
         pCst = NULL;
-        USHORT nSaveFlags = GetFlags();
+        sal_uInt16 nSaveFlags = GetFlags();
         SetFlag( SBX_READWRITE );
         if( mpPar.Is() )
             // Register this as element 0, but don't change over the parent!
@@ -186,7 +195,7 @@ SbxInfo* SbxVariable::GetInfo()
     {
         Broadcast( SBX_HINT_INFOWANTED );
         if( pInfo.Is() )
-            SetModified( TRUE );
+            SetModified( sal_True );
     }
     return pInfo;
 }
@@ -233,7 +242,7 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
             aTmp += cType;
     }
     aTmp += '(';
-    for( USHORT i = 0; i < pInfo->aParams.Count(); i++ )
+    for( sal_uInt16 i = 0; i < pInfo->aParams.Count(); i++ )
     {
         const SbxParamInfo* q = pInfo->aParams.GetObject( i );
         int nt = q->eType & 0x0FFF;
@@ -267,7 +276,7 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
                 aTmp += String( SbxRes( STRING_AS ) );
                 if( nt < 32 )
                     aTmp += String( SbxRes(
-                        sal::static_int_cast< USHORT >( STRING_TYPES + nt ) ) );
+                        sal::static_int_cast< sal_uInt16 >( STRING_TYPES + nt ) ) );
                 else
                     aTmp += String( SbxRes( STRING_ANY ) );
             }
@@ -280,7 +289,7 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
         aTmp += String( SbxRes( STRING_AS ) );
         if( et < 32 )
             aTmp += String( SbxRes(
-                sal::static_int_cast< USHORT >( STRING_TYPES + et ) ) );
+                sal::static_int_cast< sal_uInt16 >( STRING_TYPES + et ) ) );
         else
             aTmp += String( SbxRes( STRING_ANY ) );
     }
@@ -290,21 +299,21 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
 
 // Create a simple hashcode: the first six characters were evaluated.
 
-USHORT SbxVariable::MakeHashCode( const XubString& rName )
+sal_uInt16 SbxVariable::MakeHashCode( const XubString& rName )
 {
-    USHORT n = 0;
-    USHORT nLen = rName.Len();
+    sal_uInt16 n = 0;
+    sal_uInt16 nLen = rName.Len();
     if( nLen > 6 )
         nLen = 6;
     const xub_Unicode* p = rName.GetBuffer();
     while( nLen-- )
     {
-        BYTE c = (BYTE)*p;
+        sal_uInt8 c = (sal_uInt8)*p;
         p++;
         // If we have a commen sigen break!!
         if( c >= 0x80 )
             return 0;
-        n = sal::static_int_cast< USHORT >( ( n << 3 ) + toupper( c ) );
+        n = sal::static_int_cast< sal_uInt16 >( ( n << 3 ) + toupper( c ) );
     }
     return n;
 }
@@ -316,7 +325,11 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
     SbxValue::operator=( r );
     delete mpSbxVariableImpl;
     if( r.mpSbxVariableImpl != NULL )
+    {
         mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
+        if( mpSbxVariableImpl->m_xComListener.is() )
+            registerComListenerVariableForBasic( this, mpSbxVariableImpl->m_pComListenerParentBasic );
+    }
     else
         mpSbxVariableImpl = NULL;
     return *this;
@@ -339,7 +352,7 @@ SbxClassType SbxVariable::GetClass() const
     return SbxCLASS_VARIABLE;
 }
 
-void SbxVariable::SetModified( BOOL b )
+void SbxVariable::SetModified( sal_Bool b )
 {
     if( IsSet( SBX_NO_MODIFY ) )
         return;
@@ -355,11 +368,11 @@ void SbxVariable::SetParent( SbxObject* p )
     if ( p && ISA(SbxObject) )
     {
         // then this had to be a child of the new parent
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         SbxArray *pChilds = p->GetObjects();
         if ( pChilds )
         {
-            for ( USHORT nIdx = 0; !bFound && nIdx < pChilds->Count(); ++nIdx )
+            for ( sal_uInt16 nIdx = 0; !bFound && nIdx < pChilds->Count(); ++nIdx )
                 bFound = ( this == pChilds->Get(nIdx) );
         }
         if ( !bFound )
@@ -397,26 +410,35 @@ void SbxVariable::SetDeclareClassName( const String& rDeclareClassName )
     pImpl->m_aDeclareClassName = rDeclareClassName;
 }
 
-void SbxVariable::SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener )
+void SbxVariable::SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener,
+                                  StarBASIC* pParentBasic )
 {
     SbxVariableImpl* pImpl = getImpl();
     pImpl->m_xComListener = xComListener;
+    pImpl->m_pComListenerParentBasic = pParentBasic;
+    registerComListenerVariableForBasic( this, pParentBasic );
+}
+
+void SbxVariable::ClearComListener( void )
+{
+    SbxVariableImpl* pImpl = getImpl();
+    pImpl->m_xComListener.clear();
 }
 
 
 ////////////////////////////// Loading/Saving /////////////////////////////
 
-BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
+sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    UINT16 nType;
-    BYTE cMark;
+    sal_uInt16 nType;
+    sal_uInt8 cMark;
     rStrm >> cMark;
     if( cMark == 0xFF )
     {
         if( !SbxValue::LoadData( rStrm, nVer ) )
-            return FALSE;
+            return sal_False;
         rStrm.ReadByteString( maName, RTL_TEXTENCODING_ASCII_US );
-        UINT32 nTemp;
+        sal_uInt32 nTemp;
         rStrm >> nTemp;
         nUserData = nTemp;
     }
@@ -425,7 +447,7 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
         rStrm.SeekRel( -1L );
         rStrm >> nType;
         rStrm.ReadByteString( maName, RTL_TEXTENCODING_ASCII_US );
-        UINT32 nTemp;
+        sal_uInt32 nTemp;
         rStrm >> nTemp;
         nUserData = nTemp;
         // correction: old methods have instead of SbxNULL now SbxEMPTY
@@ -453,7 +475,7 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
                 if( ImpScan( aTmpString, d, t, NULL ) != SbxERR_OK || t == SbxDOUBLE )
                 {
                     aTmp.nSingle = 0;
-                    return FALSE;
+                    return sal_False;
                 }
                 aTmp.nSingle = (float) d;
                 break;
@@ -467,7 +489,7 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
                 if( ImpScan( aTmpString, aTmp.nDouble, t, NULL ) != SbxERR_OK )
                 {
                     aTmp.nDouble = 0;
-                    return FALSE;
+                    return sal_False;
                 }
                 break;
             }
@@ -481,11 +503,11 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
             default:
                 aData.eType = SbxNULL;
                 DBG_ASSERT( !this, "Nicht unterstuetzer Datentyp geladen" );
-                return FALSE;
+                return sal_False;
         }
         // putt value
         if( nType != SbxNULL && nType != SbxEMPTY && !Put( aTmp ) )
-            return FALSE;
+            return sal_False;
     }
     rStrm >> cMark;
     // cMark is also a version number!
@@ -494,29 +516,29 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
     if( cMark )
     {
         if( cMark > 2 )
-            return FALSE;
+            return sal_False;
         pInfo = new SbxInfo;
-        pInfo->LoadData( rStrm, (USHORT) cMark );
+        pInfo->LoadData( rStrm, (sal_uInt16) cMark );
     }
     // Load private data only, if it is a SbxVariable
     if( GetClass() == SbxCLASS_VARIABLE && !LoadPrivateData( rStrm, nVer ) )
-        return FALSE;
+        return sal_False;
     ((SbxVariable*) this)->Broadcast( SBX_HINT_DATACHANGED );
     nHash =  MakeHashCode( maName );
-    SetModified( TRUE );
-    return TRUE;
+    SetModified( sal_True );
+    return sal_True;
 }
 
-BOOL SbxVariable::StoreData( SvStream& rStrm ) const
+sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
 {
-    rStrm << (BYTE) 0xFF;       // Marker
-    BOOL bValStore;
+    rStrm << (sal_uInt8) 0xFF;      // Marker
+    sal_Bool bValStore;
     if( this->IsA( TYPE(SbxMethod) ) )
     {
         // #50200 Avoid that objects , which during the runtime
         // as return-value are saved in the method as a value were saved
         SbxVariable* pThis = (SbxVariable*)this;
-        USHORT nSaveFlags = GetFlags();
+        sal_uInt16 nSaveFlags = GetFlags();
         pThis->SetFlag( SBX_WRITE );
         pThis->SbxValue::Clear();
         pThis->SetFlags( nSaveFlags );
@@ -530,23 +552,21 @@ BOOL SbxVariable::StoreData( SvStream& rStrm ) const
     else
         bValStore = SbxValue::StoreData( rStrm );
     if( !bValStore )
-        return FALSE;
-    // if( !SbxValue::StoreData( rStrm ) )
-        // return FALSE;
+        return sal_False;
     rStrm.WriteByteString( maName, RTL_TEXTENCODING_ASCII_US );
-    rStrm << (UINT32)nUserData;
+    rStrm << (sal_uInt32)nUserData;
     if( pInfo.Is() )
     {
-        rStrm << (BYTE) 2;      // Version 2: with UserData!
+        rStrm << (sal_uInt8) 2;     // Version 2: with UserData!
         pInfo->StoreData( rStrm );
     }
     else
-        rStrm << (BYTE) 0;
+        rStrm << (sal_uInt8) 0;
     // Save private data only, if it is a SbxVariable
     if( GetClass() == SbxCLASS_VARIABLE )
         return StorePrivateData( rStrm );
     else
-        return TRUE;
+        return sal_True;
 }
 
 ////////////////////////////// SbxInfo ///////////////////////////////////
@@ -554,7 +574,7 @@ BOOL SbxVariable::StoreData( SvStream& rStrm ) const
 SbxInfo::SbxInfo() : aHelpFile(), nHelpId( 0 ), aParams()
 {}
 
-SbxInfo::SbxInfo( const String& r, UINT32 n )
+SbxInfo::SbxInfo( const String& r, sal_uInt32 n )
        : aHelpFile( r ), nHelpId( n ), aParams()
 {}
 
@@ -587,7 +607,7 @@ SbxAlias::~SbxAlias()
         EndListening( xAlias->GetBroadcaster() );
 }
 
-void SbxAlias::Broadcast( ULONG nHt )
+void SbxAlias::Broadcast( sal_uIntPtr nHt )
 {
     if( xAlias.Is() && StaticIsEnabledBroadcasting() )
     {
@@ -617,11 +637,11 @@ void SbxAlias::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
     }
 }
 
-void SbxVariable::Dump( SvStream& rStrm, BOOL bFill )
+void SbxVariable::Dump( SvStream& rStrm, sal_Bool bFill )
 {
     ByteString aBNameStr( (const UniString&)GetName( SbxNAME_SHORT_TYPES ), RTL_TEXTENCODING_ASCII_US );
     rStrm << "Variable( "
-          << ByteString::CreateFromInt64( (ULONG) this ).GetBuffer() << "=="
+          << ByteString::CreateFromInt64( (sal_uIntPtr) this ).GetBuffer() << "=="
           << aBNameStr.GetBuffer();
     ByteString aBParentNameStr( (const UniString&)GetParent()->GetName(), RTL_TEXTENCODING_ASCII_US );
     if ( GetParent() )

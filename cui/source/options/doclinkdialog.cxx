@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "doclinkdialog.hxx"
 #include "doclinkdialog.hrc"
 #include <cuires.hrc>
@@ -83,7 +80,6 @@ namespace svx
 
         validate();
 
-        //  m_aURL.SetHelpId( HID_DOCLINKEDIT_URL );
         m_aURL.SetDropDownLineCount( 5 );
     }
 

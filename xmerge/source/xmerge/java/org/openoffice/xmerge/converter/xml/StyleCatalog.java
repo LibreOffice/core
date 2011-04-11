@@ -289,7 +289,6 @@ public class StyleCatalog {
                 styleNode.setAttribute("style:family", s.getFamily());
 
             Element propertiesNode = (Element) s.createNode(parentDoc, "style:properties");
-            // if (propertiesNode.getFirstChild() != null)
             // DJP: only add node if has children OR attributes
             if (propertiesNode != null)
                 styleNode.appendChild(propertiesNode);

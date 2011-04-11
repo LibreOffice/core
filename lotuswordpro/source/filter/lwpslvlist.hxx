@@ -57,11 +57,6 @@
  * @file
  * single list.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-12 create and implement.
- ************************************************************************/
-
 #ifndef     _LWPSLVLIST_HXX
 #define     _LWPSLVLIST_HXX
 
@@ -73,7 +68,7 @@ class LwpSLVList
 {
 public:
     LwpSLVList(){}
-    LwpSLVList(LwpObjectStream* pStrm){Read(pStrm);};
+    LwpSLVList(LwpObjectStream* pStrm){Read(pStrm);}
 public:
     void Read(LwpObjectStream* pStrm)
     {

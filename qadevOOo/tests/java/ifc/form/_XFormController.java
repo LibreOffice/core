@@ -60,7 +60,7 @@ public class _XFormController extends MultiMethodTest {
     XWindow otherWind = null;
 
     /**
-     * Listener which determines and stores events occured.
+     * Listener which determines and stores events occurred.
      */
     protected class MyListener implements XFormControllerListener {
         public boolean activated = false ;

@@ -447,8 +447,6 @@ table_wrapper_get_summary( AtkTable *table )
 
         if( pTable )
         {
-    // FIXME: Summary ??
-//            AtkObject* summary;
             return atk_object_wrapper_conditional_ref( pTable->getAccessibleSummary() );
         }
     }

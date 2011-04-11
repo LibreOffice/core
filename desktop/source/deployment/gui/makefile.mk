@@ -30,7 +30,6 @@ PRJ = ..$/..$/..
 PRJNAME = desktop
 TARGET = deploymentgui
 ENABLE_EXCEPTIONS = TRUE
-#USE_DEFFILE = TRUE
 NO_BSYMBOLIC = TRUE
 USE_PCH :=
 ENABLE_PCH :=
@@ -55,7 +54,6 @@ SLOFILES = \
         $(SLO)$/dp_gui_updatedialog.obj \
         $(SLO)$/dp_gui_updateinstalldialog.obj \
         $(SLO)$/dp_gui_autoscrolledit.obj \
-        $(SLO)$/dp_gui_system.obj \
         $(SLO)$/dp_gui_extensioncmdqueue.obj \
         $(SLO)$/descedit.obj
 
@@ -88,8 +86,6 @@ SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME = $(SHL1TARGET)
-#DEFLIB1NAME = $(TARGET)
-#DEF1DEPN =
 
 SRS1NAME = $(TARGET)
 SRC1FILES = \
@@ -107,3 +103,11 @@ RESLIB1IMAGES=	$(PRJ)$/res
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/deploymentgui.component
+
+$(MISC)/deploymentgui.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt deploymentgui.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt deploymentgui.component

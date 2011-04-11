@@ -68,9 +68,9 @@ class SW_DLLPUBLIC SwGlossaries
     String                  m_sErrPath;
     SvStrings               *m_pPathArr;
     SvStrings               *m_pGlosArr;
-    BOOL                    m_bError;
+    sal_Bool                    m_bError;
 
-    SW_DLLPRIVATE SwTextBlocks* GetGlosDoc(const String &rName, BOOL bCreate = TRUE) const;
+    SW_DLLPRIVATE SwTextBlocks* GetGlosDoc(const String &rName, sal_Bool bCreate = sal_True) const;
     SW_DLLPRIVATE SvStrings     *GetNameList();
 
     // implementation in unoatxt.cxx
@@ -119,14 +119,14 @@ public:
                                 bool _bCreate = false
                             );
 
-    USHORT                  GetGroupCnt();
-    String                  GetGroupName(USHORT );
+    sal_uInt16                  GetGroupCnt();
+    String                  GetGroupName(sal_uInt16 );
     String                  GetGroupTitle( const String& rGroupName );
 
-    BOOL            FindGroupName(String & rGroup);
+    sal_Bool            FindGroupName(String & rGroup);
 
     SwTextBlocks*   GetGroupDoc(const String &rName,
-                                BOOL bCreate = FALSE) const;
+                                sal_Bool bCreate = sal_False) const;
     SwTextBlocks*   GetDefGroupDoc() const {return GetGroupDoc(GetDefName());}
     void            PutGroupDoc(SwTextBlocks *pBlock);
     static String   GetDefName();
@@ -134,14 +134,14 @@ public:
 
     String          GetCompleteGroupName( const ::rtl::OUString& GroupName );
 
-    BOOL            NewGroupDoc(String &rGroupName, const String& rTitle);
-    BOOL            RenameGroupDoc(const String& sOldGroup, String& sNewGroup, const String& rNewTitle);
-    BOOL            DelGroupDoc(const String &);
-    SwDocShellRef   EditGroupDoc(const String &rGrpName, const String& rShortName, BOOL bShow = TRUE );
+    sal_Bool            NewGroupDoc(String &rGroupName, const String& rTitle);
+    sal_Bool            RenameGroupDoc(const String& sOldGroup, String& sNewGroup, const String& rNewTitle);
+    sal_Bool            DelGroupDoc(const String &);
+    SwDocShellRef   EditGroupDoc(const String &rGrpName, const String& rShortName, sal_Bool bShow = sal_True );
     void            SaveGroupDoc(const String &rGrpName, const String& rLongName );
-    void            UpdateGlosPath(BOOL bFull);
+    void            UpdateGlosPath(sal_Bool bFull);
     void            ShowError();
-    inline ULONG    IsGlosPathErr() { return m_bError; }
+    inline sal_uLong    IsGlosPathErr() { return m_bError; }
     const SvStrings*    GetPathArray() const {return m_pPathArr;}
 };
 

@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "EnhancedCustomShape2d.hxx"
+#include "svx/EnhancedCustomShape2d.hxx"
 #include <rtl/ustring.hxx>
 #include <tools/fract.hxx>
 
@@ -61,7 +61,7 @@ void EnhancedCustomShape::FillEquationParameter( const EnhancedCustomShapeParame
     sal_Int32 nValue = 0;
     if ( rSource.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
     {
-        double fValue;
+        double fValue(0.0);
         if ( rSource.Value >>= fValue )
             nValue = (sal_Int32)fValue;
     }

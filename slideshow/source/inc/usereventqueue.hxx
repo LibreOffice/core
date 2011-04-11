@@ -57,7 +57,7 @@ class MouseLeaveHandler;
     This class registeres at the EventMultiplexer and fires
     events registered for certain user actions. Note that all
     events will not be fired immediately after the user action
-    occured, but always added to the EventQueue (and fired the
+    occurred, but always added to the EventQueue (and fired the
     next time that queue is processed). Which is actually a
     feature.
 

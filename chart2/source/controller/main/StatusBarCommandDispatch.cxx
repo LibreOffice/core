@@ -34,9 +34,6 @@
 #include "macros.hxx"
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
-// for ressource strings STR_UNDO and STR_REDO
-#include <sfx2/sfx.hrc>
-
 #include "ResId.hxx"
 
 using namespace ::com::sun::star;

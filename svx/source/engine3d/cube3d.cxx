@@ -29,10 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include <svx/cube3d.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <svx/sdr/contact/viewcontactofe3dcube.hxx>
@@ -88,7 +88,7 @@ void E3dCubeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-UINT16 E3dCubeObj::GetObjIdentifier() const
+sal_uInt16 E3dCubeObj::GetObjIdentifier() const
 {
     return E3D_CUBEOBJ_ID;
 }
@@ -99,29 +99,14 @@ UINT16 E3dCubeObj::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-SdrObject *E3dCubeObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
+SdrObject *E3dCubeObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
 {
     return NULL;
 }
 
-/*************************************************************************
-|*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dCubeObj::operator=(const SdrObject& rObj)
+E3dCubeObj* E3dCubeObj::Clone() const
 {
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dCubeObj& r3DObj = (const E3dCubeObj&)rObj;
-
-    aCubePos = r3DObj.aCubePos;
-    aCubeSize = r3DObj.aCubeSize;
-    bPosIsCenter = r3DObj.bPosIsCenter;
-    nSideFlags = r3DObj.nSideFlags;
+    return CloneHelper< E3dCubeObj >();
 }
 
 /*************************************************************************
@@ -148,7 +133,7 @@ void E3dCubeObj::SetCubeSize(const basegfx::B3DVector& rNew)
     }
 }
 
-void E3dCubeObj::SetPosIsCenter(BOOL bNew)
+void E3dCubeObj::SetPosIsCenter(sal_Bool bNew)
 {
     if(bPosIsCenter != bNew)
     {
@@ -157,7 +142,7 @@ void E3dCubeObj::SetPosIsCenter(BOOL bNew)
     }
 }
 
-void E3dCubeObj::SetSideFlags(UINT16 nNew)
+void E3dCubeObj::SetSideFlags(sal_uInt16 nNew)
 {
     if(nSideFlags != nNew)
     {

@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#if OSL_DEBUG_LEVEL > 0
-#   include <cstdio>
+#if OSL_DEBUG_LEVEL > 1
+#include <cstdio>
 #endif
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
@@ -48,7 +48,6 @@
 
 #include <hintids.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/shaditem.hxx>
 #include <editeng/shaditem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <editeng/lrspitem.hxx> // SvxLRSpaceItem
@@ -79,25 +78,18 @@
 #include "docsh.hxx"
 #include <cstdio>
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
 using namespace ::com::sun::star;
 using namespace nsFieldFlags;
 
-// Damit KA debuggen kann, ohne sich den ganzen Writer zu holen, ist
-// temporaer dieses Debug gesetzt. Ist ausserdem noch das passende IniFlag
-// gesetzt, dann werden in d:\ Hilfsdateien erzeugt.
-// !! sollte demnaechst wieder entfernt werden !!
-// #define DEBUG_KA
-
-
 // ToDo:
 // 5. Die MapModes, die Win nicht kann, umrechnen
 
 // OutGrf() wird fuer jeden GrafNode im Doc gerufen. Es wird ein PicLocFc-Sprm
-// eingefuegt, der statt Adresse ein Magic ULONG enthaelt. Ausserdem wird
+// eingefuegt, der statt Adresse ein Magic sal_uLong enthaelt. Ausserdem wird
 // in der Graf-Klasse der GrfNode-Ptr gemerkt ( fuers spaetere Ausgeben der
 // Grafiken und Patchen der PicLocFc-Attribute )
 
@@ -116,9 +108,6 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
     SvStorageRef xOleStg, SvStorageRef xObjStg, String &rStorageName,
     SwOLENode *pOLENd)
 {
-#ifdef NO_OLE_SIZE_OPTIMIZE
-    return true;
-#else
     bool bGraphicNeeded = false;
     SfxItemIter aIter( rSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
@@ -218,21 +207,20 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
     else
         bGraphicNeeded = true;
     return bGraphicNeeded;
-#endif
 }
 
 void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 {
     OSL_TRACE("WW8Export::OutputOLENode( const SwOLENode& rOLENode )\n" );
-    BYTE *pSpecOLE;
-    BYTE *pDataAdr;
+    sal_uInt8 *pSpecOLE;
+    sal_uInt8 *pDataAdr;
     short nSize;
-    static BYTE aSpecOLE_WW8[] = {
+    static sal_uInt8 aSpecOLE_WW8[] = {
             0x03, 0x6a, 0, 0, 0, 0, // sprmCPicLocation
             0x0a, 0x08, 1,          // sprmCFOLE2
             0x56, 0x08, 1           // sprmCFObj
         };
-    static BYTE aSpecOLE_WW6[] = {
+    static sal_uInt8 aSpecOLE_WW6[] = {
             68, 4, 0, 0, 0, 0,      // sprmCPicLocation (len is 4)
             75, 1,                  // sprmCFOLE2
             118, 1                  // sprmCFObj
@@ -266,7 +254,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
             WW8OleMap *pMap = new WW8OleMap(nPictureId);
             bool bDuplicate = false;
             WW8OleMaps &rOleMap = GetOLEMap();
-            USHORT nPos;
+            sal_uInt16 nPos;
             if ( rOleMap.Seek_Entry(pMap, &nPos) )
             {
                 bDuplicate = true;
@@ -295,7 +283,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                         ::rtl::OUString aObjInfo( RTL_CONSTASCII_USTRINGPARAM( "\3ObjInfo" ) );
                         if ( !xOleStg->IsStream( aObjInfo ) )
                         {
-                            const BYTE pObjInfoData[] = { 0x40, 0x00, 0x03, 0x00 };
+                            const sal_uInt8 pObjInfoData[] = { 0x40, 0x00, 0x03, 0x00 };
                             SvStorageStreamRef rObjInfoStream = xOleStg->OpenSotStream( aObjInfo );
                             if ( rObjInfoStream.Is() && !rObjInfoStream->GetError() )
                             {
@@ -418,7 +406,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     pChpPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
     pO->Remove( 0, pO->Count() );                   // leeren
 
-    // --> OD 2007-06-06 #i29408#
+    // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
     const SwGrfNode* pGrfNd = rFrame.IsInline() && rFrame.GetContent()
                               ? rFrame.GetContent()->GetGrfNode() : 0;
@@ -443,8 +431,8 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
 
     WriteChar( (char)1 );   // Grafik-Sonderzeichen in Haupttext einfuegen
 
-    BYTE aArr[ 18 ];
-    BYTE* pArr = aArr;
+    sal_uInt8 aArr[ 18 ];
+    sal_uInt8* pArr = aArr;
 
     const SwFrmFmt &rFlyFmt = rFrame.GetFrmFmt();
     const RndStdIds eAn = rFlyFmt.GetAttrSet().GetAnchor(false).GetAnchorId();
@@ -475,7 +463,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
                     Set_UInt16( pArr, NS_sprm::LN_CHpsPos );
                 else
                     Set_UInt8( pArr, 101 );
-                Set_UInt16( pArr, -((INT16)nHeight));
+                Set_UInt16( pArr, -((sal_Int16)nHeight));
             }
         }
     }
@@ -499,12 +487,12 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
 
     // Magic variieren, damit verschiedene Grafik-Attribute nicht
     // gemerged werden
-    static BYTE nAttrMagicIdx = 0;
+    static sal_uInt8 nAttrMagicIdx = 0;
     --pArr;
     Set_UInt8( pArr, nAttrMagicIdx++ );
     pChpPlc->AppendFkpEntry( Strm().Tell(), static_cast< short >(pArr - aArr), aArr );
 
-    // --> OD 2007-04-23 #i75464#
+    // #i75464#
     // Check, if graphic isn't exported as-character anchored.
     // Otherwise, an additional paragraph is exported for a graphic, which is
     // forced to be treated as inline, because it's anchored inside another frame.
@@ -515,7 +503,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     {
         WriteChar( (char)0x0d ); // umgebenden Rahmen mit CR abschliessen
 
-        static BYTE __READONLY_DATA nSty[2] = { 0, 0 };
+        static sal_uInt8 nSty[2] = { 0, 0 };
         pO->Insert( nSty, 2, pO->Count() );     // Style #0
         bool bOldGrf = bOutGrf;
         bOutGrf = true;
@@ -526,7 +514,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
         pPapPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
         pO->Remove( 0, pO->Count() );                   // leeren
     }
-    // --> OD 2007-06-06 #i29408#
+    // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
     else if ( pGrfNd && pGrfNd->IsLinkedFile() )
     {
@@ -547,16 +535,16 @@ GraphicDetails& GraphicDetails::operator=(const GraphicDetails &rOther)
 void SwWW8WrGrf::Insert(const sw::Frame &rFly)
 {
     const Size aSize( rFly.GetLayoutSize() );
-    const UINT16 nWidth = static_cast< UINT16 >(aSize.Width());
-    const UINT16 nHeight = static_cast< UINT16 >(aSize.Height());
+    const sal_uInt16 nWidth = static_cast< sal_uInt16 >(aSize.Width());
+    const sal_uInt16 nHeight = static_cast< sal_uInt16 >(aSize.Height());
     maDetails.push_back(GraphicDetails(rFly, nWidth, nHeight));
 }
 
 void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
-    UINT16 mm, UINT16 nWidth, UINT16 nHeight, const SwAttrSet* pAttrSet)
+    sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight, const SwAttrSet* pAttrSet)
 {
-    INT16 nXSizeAdd = 0, nYSizeAdd = 0;
-    INT16 nCropL = 0, nCropR = 0, nCropT = 0, nCropB = 0;
+    sal_Int16 nXSizeAdd = 0, nYSizeAdd = 0;
+    sal_Int16 nCropL = 0, nCropR = 0, nCropT = 0, nCropB = 0;
 
             // Crop-AttributInhalt in Header schreiben ( falls vorhanden )
     const SfxPoolItem* pItem;
@@ -564,21 +552,21 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
         == pAttrSet->GetItemState(RES_GRFATR_CROPGRF, false, &pItem)))
     {
         const SwCropGrf& rCr = *(SwCropGrf*)pItem;
-        nCropL = (INT16)rCr.GetLeft();
-        nCropR = (INT16)rCr.GetRight();
-        nCropT = (INT16)rCr.GetTop();
-        nCropB = (INT16)rCr.GetBottom();
-        nXSizeAdd = nXSizeAdd - (INT16)( rCr.GetLeft() + rCr.GetRight() );
-        nYSizeAdd = nYSizeAdd - (INT16)( rCr.GetTop() + rCr.GetBottom() );
+        nCropL = (sal_Int16)rCr.GetLeft();
+        nCropR = (sal_Int16)rCr.GetRight();
+        nCropT = (sal_Int16)rCr.GetTop();
+        nCropB = (sal_Int16)rCr.GetBottom();
+        nXSizeAdd = nXSizeAdd - (sal_Int16)( rCr.GetLeft() + rCr.GetRight() );
+        nYSizeAdd = nYSizeAdd - (sal_Int16)( rCr.GetTop() + rCr.GetBottom() );
     }
 
     Size aGrTwipSz(rFly.GetSize());
     bool bWrtWW8 = rWrt.bWrtWW8;
-    UINT16 nHdrLen = bWrtWW8 ? 0x44 : 0x3A;
+    sal_uInt16 nHdrLen = bWrtWW8 ? 0x44 : 0x3A;
 
-    BYTE aArr[ 0x44 ] = { 0 };
+    sal_uInt8 aArr[ 0x44 ] = { 0 };
 
-    BYTE* pArr = aArr + 0x2E;  //Do borders first
+    sal_uInt8* pArr = aArr + 0x2E;  //Do borders first
 
     const SwAttrSet& rAttrSet = rFly.GetFrmFmt().GetAttrSet();
     if (SFX_ITEM_ON == rAttrSet.GetItemState(RES_BOX, false, &pItem))
@@ -595,11 +583,11 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
                     (pSI->GetWidth() != 0);
             }
 
-            BYTE aLnArr[4] = { BOX_LINE_TOP, BOX_LINE_LEFT,
+            sal_uInt8 aLnArr[4] = { BOX_LINE_TOP, BOX_LINE_LEFT,
                                 BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
-            for( BYTE i = 0; i < 4; ++i )
+            for( sal_uInt8 i = 0; i < 4; ++i )
             {
-                const SvxBorderLine* pLn = pBox->GetLine( aLnArr[ i ] );
+                const ::editeng::SvxBorderLine* pLn = pBox->GetLine( aLnArr[ i ] );
                 WW8_BRC aBrc;
                 if (pLn)
                 {
@@ -644,7 +632,6 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     Set_UInt16( pArr, mm );                         // set mm
 
     /*
-    #92494#
     Just in case our original size is too big to fit inside a ushort we can
     substitute the final size and loose on retaining the scaling factor but
     still keep the correct display size anyway.
@@ -668,7 +655,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     if( aGrTwipSz.Width() + nXSizeAdd )             // set mx
     {
         double fVal = nWidth * 1000.0 / (aGrTwipSz.Width() + nXSizeAdd);
-        Set_UInt16( pArr, (USHORT)::rtl::math::round(fVal) );
+        Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
     }
     else
         pArr += 2;
@@ -676,7 +663,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     if( aGrTwipSz.Height() + nYSizeAdd )            // set my
     {
         double fVal = nHeight * 1000.0 / (aGrTwipSz.Height() + nYSizeAdd);
-        Set_UInt16( pArr, (USHORT)::rtl::math::round(fVal) );
+        Set_UInt16( pArr, (sal_uInt16)::rtl::math::round(fVal) );
     }
     else
         pArr += 2;
@@ -690,33 +677,18 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
 }
 
 void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
-    const sw::Frame &rFly, UINT16 nWidth, UINT16 nHeight)
+    const sw::Frame &rFly, sal_uInt16 nWidth, sal_uInt16 nHeight)
 {
     if (rGrfNd.IsLinkedFile())     // Linked File
     {
         String aFileN;
         rGrfNd.GetFileFilterNms( &aFileN, 0 );
 
-        // --> OD 2007-06-06 #i29408# - take the file URL as it is.
-//        aFileN = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
-//                                          aFileN);
-//        INetURLObject aUrl( aFileN );
-//        if( aUrl.GetProtocol() == INET_PROT_FILE )
-//            aFileN = aUrl.PathToFileName();
-        // <--
-
-//JP 05.12.98: nach einigen tests hat sich gezeigt, das WW mit 99 nicht
-//              klarkommt. Sie selbst schreiben aber bei Verknuepfunfen,
-//              egal um welchen Type es sich handelt, immer den Wert 94.
-//              Bug 59859
-//      if ( COMPARE_EQUAL == aFiltN.ICompare( "TIF", 3 ) )
-//          mm = 99;                    // 99 = TIFF
-//      else
-            UINT16 mm = 94;                    // 94 = BMP, GIF
+            sal_uInt16 mm = 94;                    // 94 = BMP, GIF
 
         WritePICFHeader(rStrm, rFly, mm, nWidth, nHeight,
             rGrfNd.GetpSwAttrSet());
-        rStrm << (BYTE)aFileN.Len();    // Pascal-String schreiben
+        rStrm << (sal_uInt8)aFileN.Len();    // Pascal-String schreiben
         SwWW8Writer::WriteString8(rStrm, aFileN, false,
             RTL_TEXTENCODING_MS_1252);
     }
@@ -770,9 +742,9 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
 
 void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 {
-    UINT16 nWidth = rItem.mnWid;
-    UINT16 nHeight = rItem.mnHei;
-    UINT32 nPos = rStrm.Tell();         // Grafik-Anfang merken
+    sal_uInt16 nWidth = rItem.mnWid;
+    sal_uInt16 nHeight = rItem.mnHei;
+    sal_uInt32 nPos = rStrm.Tell();         // Grafik-Anfang merken
 
     const sw::Frame &rFly = rItem.maFly;
     switch (rFly.GetWriterType())
@@ -886,7 +858,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             break;
     }
 
-    UINT32 nPos2 = rStrm.Tell();                    // Ende merken
+    sal_uInt32 nPos2 = rStrm.Tell();                    // Ende merken
     rStrm.Seek( nPos );
     SVBT32 nLen;
     UInt32ToSVBT32( nPos2 - nPos, nLen );             // Grafik-Laenge ausrechnen
@@ -898,7 +870,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 // Grafiken raus und merkt sich die File-Positionen der Grafiken, damit
 // beim Schreiben der Attribute die Positionen in die PicLocFc-Sprms
 // eingepatcht werden koennen.
-// Das Suchen in den Attributen nach dem Magic ULONG und das Patchen
+// Das Suchen in den Attributen nach dem Magic sal_uLong und das Patchen
 // passiert beim Schreiben der Attribute. Die SwWW8WrGrf-Klasse liefert
 // hierfuer nur mit GetFPos() sequentiell die Positionen.
 void SwWW8WrGrf::Write()
@@ -907,7 +879,7 @@ void SwWW8WrGrf::Write()
     myiter aEnd = maDetails.end();
     for (myiter aIter = maDetails.begin(); aIter != aEnd; ++aIter)
     {
-        UINT32 nPos = rStrm.Tell();                 // auf 4 Bytes alignen
+        sal_uInt32 nPos = rStrm.Tell();                 // auf 4 Bytes alignen
         if( nPos & 0x3 )
             SwWW8Writer::FillCount( rStrm, 4 - ( nPos & 0x3 ) );
 

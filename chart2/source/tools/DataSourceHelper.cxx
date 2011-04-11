@@ -371,9 +371,7 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
 {
     bool bHasDataRowSource = false;
     bool bHasFirstCellAsLabel = false;
-//     bool bHasHasCategories = false;
     bool bHasCellRangeRepresentation = false;
-//     bool bHasSequenceMapping = false;
 
     uno::Reference< data::XDataProvider > xDataProvider( xChartDocument->getDataProvider() );
     if( !xDataProvider.is() )
@@ -399,24 +397,12 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
                 bHasFirstCellAsLabel =
                     (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(::getBooleanCppuType()));
             }
-//             else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HasCategories" ) ))
-//             {
-//                 bHasHasCategories =
-//                     (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(::getBooleanCppuType()));
-//             }
             else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CellRangeRepresentation" ) ))
             {
                 ::rtl::OUString aRange;
                 bHasCellRangeRepresentation =
                     (aProperty.Value.hasValue() && (aProperty.Value >>= aRange) && aRange.getLength() > 0);
             }
-//         else if( aProperty.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SequenceMapping" ) ))
-//         {
-//             bHasSequenceMapping =
-//                 (aProperty.Value.hasValue() && aProperty.Value.isExtractableTo(
-//                     ::getCppuType( reinterpret_cast<
-//                                    const uno::Sequence< sal_Int32 > * >(0))));
-//         }
         }
     }
     catch( const uno::Exception & ex )
@@ -462,25 +448,8 @@ void DataSourceHelper::setRangeSegmentation(
     if( !xDataSource.is() )
         return;
 
-    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-        DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateFactory );
-
-    rtl::OUString aServiceName( aTemplateAndService.second );
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate = aTemplateAndService.first;
-
-    if( !xTemplate.is() )
-    {
-        if( aServiceName.getLength() == 0 )
-            aServiceName = C2U("com.sun.star.chart2.template.Column");
-        xTemplate.set( xTemplateFactory->createInstance( aServiceName ), uno::UNO_QUERY );
-    }
-    if( !xTemplate.is() )
-        return;
-
-    // /-- locked controllers
     ControllerLockGuard aCtrlLockGuard( xChartModel );
-    xTemplate->changeDiagramData( xDiagram, xDataSource, aArguments );
-    // \-- locked controllers
+    xDiagram->setDiagramData( xDataSource, aArguments );
 }
 
 Sequence< OUString > DataSourceHelper::getRangesFromLabeledDataSequence(

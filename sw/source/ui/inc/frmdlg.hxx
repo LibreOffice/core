@@ -38,23 +38,24 @@ class SwWrtShell;
  --------------------------------------------------------------------*/
 class SwFrmDlg : public SfxTabDialog
 {
-    BOOL                m_bFormat;
-    BOOL                m_bNew;
-    BOOL                m_bHTMLMode;
+    sal_Bool                m_bFormat;
+    sal_Bool                m_bNew;
+    sal_Bool                m_bHTMLMode;
+    bool                m_bEnableVertPos;
     const SfxItemSet&   m_rSet;
-    USHORT              m_nDlgType;
+    sal_uInt16              m_nDlgType;
     SwWrtShell*         m_pWrtShell;
 
 
-    virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 public:
     SwFrmDlg(   SfxViewFrame *pFrame, Window *pParent,
                 const SfxItemSet& rCoreSet,
-                BOOL            bNewFrm  = TRUE,
-                USHORT          nResType = DLG_FRM_STD,
-                BOOL            bFmt     = FALSE,
-                UINT16          nDefPage = 0,
+                sal_Bool            bNewFrm  = sal_True,
+                sal_uInt16          nResType = DLG_FRM_STD,
+                sal_Bool            bFmt     = sal_False,
+                sal_uInt16          nDefPage = 0,
                 const String*   pFmtStr  = 0);
 
     ~SwFrmDlg();

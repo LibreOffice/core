@@ -118,48 +118,12 @@ OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & x
 
 }
 
-    /*
-void lcl_initOutliner( SdrOutliner* pTargetOutliner, SdrOutliner* pSourceOutliner )
-{
-    //just an unsuccessful try to initialize the text edit outliner correctly
-    //if( bInit )
-    {
-        pTargetOutliner->EraseVirtualDevice();
-        pTargetOutliner->SetUpdateMode(FALSE);
-        pTargetOutliner->SetEditTextObjectPool( pSourceOutliner->GetEditTextObjectPool() );
-        pTargetOutliner->SetDefTab( pSourceOutliner->GetDefTab() );
-    }
-
-    pTargetOutliner->SetRefDevice( pSourceOutliner->GetRefDevice() );
-    pTargetOutliner->SetForbiddenCharsTable( pSourceOutliner->GetForbiddenCharsTable() );
-    pTargetOutliner->SetAsianCompressionMode( pSourceOutliner->GetAsianCompressionMode() );
-    pTargetOutliner->SetKernAsianPunctuation( pSourceOutliner->IsKernAsianPunctuation() );
-    pTargetOutliner->SetStyleSheetPool( pSourceOutliner->GetStyleSheetPool() );
-    pTargetOutliner->SetRefMapMode( pSourceOutliner->GetRefMapMode() );
-    pTargetOutliner->SetDefaultLanguage( pSourceOutliner->GetDefaultLanguage() );
-    pTargetOutliner->SetHyphenator( pSourceOutliner->GetHyphenator() );
-
-    USHORT nX, nY;
-    pSourceOutliner->GetGlobalCharStretching( nX, nY );
-    pTargetOutliner->SetGlobalCharStretching( nX, nY );
-
-    *//*
-    if ( !GetRefDevice() )
-    {
-        MapMode aMapMode(eObjUnit, Point(0,0), aObjUnit, aObjUnit);
-        pTargetOutliner->SetRefMapMode(aMapMode);
-    }
-    *//*
-}
-*/
-
 DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool bPaintPageForEditMode)
             : E3dView(pSdrModel, pOut)
             , m_pMarkHandleProvider(NULL)
             , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pSdrModel ) )
             , m_bRestoreMapMode( false )
 {
-    // #114898#
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
 
@@ -200,7 +164,6 @@ void DrawViewWrapper::ReInit()
     bHlplVisible = false;
 
     this->SetNoDragXorPolys(true);//for interactive 3D resize-dragging: paint only a single rectangle (not a simulated 3D object)
-    //this->SetResizeAtCenter(true);//for interactive resize-dragging: keep the object center fix
 
     //a correct work area is at least necessary for correct values in the position and  size dialog
     Rectangle aRect(Point(0,0), aOutputSize);
@@ -221,7 +184,6 @@ SdrPageView* DrawViewWrapper::GetPageView() const
     return pSdrPageView;
 };
 
-//virtual
 void DrawViewWrapper::SetMarkHandles()
 {
     if( m_pMarkHandleProvider && m_pMarkHandleProvider->getMarkHandles( aHdl ) )
@@ -233,8 +195,7 @@ void DrawViewWrapper::SetMarkHandles()
 SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 {
     SdrObject* pRet = NULL;
-    //ULONG nOptions =SDRSEARCH_DEEP|SDRSEARCH_PASS2BOUND|SDRSEARCH_PASS3NEAREST;
-    ULONG nOptions = SDRSEARCH_DEEP | SDRSEARCH_TESTMARKABLE;
+    sal_uLong nOptions = SDRSEARCH_DEEP | SDRSEARCH_TESTMARKABLE;
 
     SdrPageView* pSdrPageView = this->GetPageView();
     this->SdrView::PickObj(rPnt, lcl_getHitTolerance( this->GetFirstOutputDevice() ), pRet, pSdrPageView, nOptions);
@@ -333,7 +294,6 @@ void DrawViewWrapper::attachParentReferenceDevice( const uno::Reference< frame::
 
 SdrOutliner* DrawViewWrapper::getOutliner() const
 {
-//    lcl_initOutliner( m_apOutliner.get(), &GetModel()->GetDrawOutliner() );
     return m_apOutliner.get();
 }
 
@@ -423,7 +383,6 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     }
 }
 
-//static
 SdrObject* DrawViewWrapper::getSdrObject( const uno::Reference<
                     drawing::XShape >& xShape )
 {

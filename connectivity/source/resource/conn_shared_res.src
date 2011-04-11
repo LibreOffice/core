@@ -131,7 +131,7 @@ String STR_STMT_TYPE_NOT_SUPPORTED
 
 String STR_UNSPECIFIED_ERROR
 {
-    Text [ en-US ] = "An unknown error occured.";
+    Text [ en-US ] = "An unknown error occurred.";
 };
 
 String STR_COULD_NOT_CREATE_ADDRESSBOOK
@@ -146,12 +146,12 @@ String STR_COULD_NOT_LOAD_LIB
 
 String STR_ERROR_REFRESH_ROW
 {
-    Text [ en-US ] = "An error occured while refreshing the current row.";
+    Text [ en-US ] = "An error occurred while refreshing the current row.";
 };
 
 String STR_ERROR_GET_ROW
 {
-    Text [ en-US ] = "An error occured while getting the current row.";
+    Text [ en-US ] = "An error occurred while getting the current row.";
 };
 
 String STR_CAN_NOT_CANCEL_ROW_UPDATE
@@ -171,7 +171,7 @@ String STR_QUERY_INVALID_IS_NULL_COLUMN
 
 String STR_ILLEGAL_MOVEMENT
 {
-    Text [ en-US ] = "Illegal cursor movement occured.";
+    Text [ en-US ] = "Illegal cursor movement occurred.";
 };
 
 String STR_COMMIT_ROW
@@ -383,7 +383,7 @@ String STR_NO_CONNECTION
 // dbase
 String STR_COULD_NOT_DELETE_INDEX
 {
-    Text [ en-US ] = "The index could not be deleted. An unknown error while accessing the file system occured.";
+    Text [ en-US ] = "The index could not be deleted. An unknown error while accessing the file system occurred.";
 };
 String STR_ONL_ONE_COLUMN_PER_INDEX
 {
@@ -628,11 +628,11 @@ String STR_INVALID_FILE_URL
 };
 String STR_NO_TABLE_CONTAINER
 {
-    Text [ en-US ] = "An error occured while obtaining the connection's table container.";
+    Text [ en-US ] = "An error occurred while obtaining the connection's table container.";
 };
 String STR_NO_TABLE_EDITOR_DIALOG
 {
-    Text [ en-US ] = "An error occured while creating the table editor dialog.";
+    Text [ en-US ] = "An error occurred while creating the table editor dialog.";
 };
 String STR_NO_TABLENAME
 {

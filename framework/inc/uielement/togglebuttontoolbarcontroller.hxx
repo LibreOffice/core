@@ -59,7 +59,7 @@ class ToggleButtonToolbarController : public ComplexToolbarController
         ToggleButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                        const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                        ToolBox*             pToolBar,
-                                       USHORT               nID,
+                                       sal_uInt16               nID,
                                        Style                eStyle,
                                        const rtl::OUString& aCommand );
         virtual ~ToggleButtonToolbarController();

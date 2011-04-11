@@ -30,6 +30,7 @@
 
 #include <sfx2/shell.hxx>
 #include "shellid.hxx"
+#include <unotools/caserotate.hxx>
 
 class SdrView;
 class SwView;
@@ -39,15 +40,16 @@ class SfxModule;
 class SwDrawTextShell: public SfxShell
 {
     SwView      &rView;
+    RotateTransliteration m_aRotateCase;
 
     SdrView     *pSdrView;
 
-    BOOL        bRotate : 1;
-    BOOL        bSelMove: 1;
+    sal_Bool        bRotate : 1;
+    sal_Bool        bSelMove: 1;
 
     void        SetAttrToMarked(const SfxItemSet& rAttr);
     void        InsertSymbol(SfxRequest& rReq);
-    BOOL        IsTextEdit();
+    sal_Bool        IsTextEdit();
 public:
     SFX_DECL_INTERFACE(SW_DRWTXTSHELL)
     TYPEINFO();
@@ -58,7 +60,8 @@ public:
                 SwDrawTextShell(SwView &rView);
     virtual     ~SwDrawTextShell();
 
-    virtual SfxUndoManager*     GetUndoManager();
+    virtual ::svl::IUndoManager*
+                GetUndoManager();
 
     void        StateDisableItems(SfxItemSet &);
 
@@ -78,6 +81,7 @@ public:
     void        StateClpbrd(SfxItemSet &rSet);
     void        StateInsert(SfxItemSet &rSet);
     void        ExecTransliteration(SfxRequest &);
+    void                ExecRotateTransliteration(SfxRequest &);
 
     void        Init();
     void        StateStatusline(SfxItemSet &rSet);

@@ -139,55 +139,6 @@ sub check_module_existence
 }
 
 ########################################################
-# If the StarRegistry is not defined in the script,
-# it has to be removed from the file definition.
-########################################################
-
-sub check_registry_at_files
-{
-    my %starregistrygid = ();
-
-    my $item;
-    foreach $item ( keys %{$par2script::globals::definitions{'File'}} )
-    {
-        if (( exists($par2script::globals::definitions{'File'}->{$item}->{'Styles'}) ) &&
-            ( $par2script::globals::definitions{'File'}->{$item}->{'Styles'} =~ /\bSTARREGISTRY\b/ ))
-        {
-            $starregistrygid{$item} = 1;
-        }
-    }
-
-    foreach $item ( keys %{$par2script::globals::definitions{'File'}} )
-    {
-        if ( exists($par2script::globals::definitions{'File'}->{$item}->{'RegistryID'}) )
-        {
-            my $registryid = $par2script::globals::definitions{'File'}->{$item}->{'RegistryID'};
-            if ( ! exists($starregistrygid{$registryid}) )
-            {
-                die "\nERROR: No definition found for $registryid at file $item\n\n";
-            }
-
-            # if ( ! ( $par2script::globals::definitions{'File'}->{$item}->{'Styles'} =~ /\bUNO_COMPONENT\b/ ))
-            # {
-            #   die "\nERROR: Flag UNO_COMPONENT required for file $item\n\n";
-            # }
-            # -> also possible, that Regmergefile is defined (does not require flag UNO_COMPONENT)
-        }
-
-        # and also vice versa
-
-        if (( exists($par2script::globals::definitions{'File'}->{$item}->{'Styles'}) ) &&
-            ( $par2script::globals::definitions{'File'}->{$item}->{'Styles'} =~ /\bUNO_COMPONENT\b/ ))
-        {
-            if ( ! exists($par2script::globals::definitions{'File'}->{$item}->{'RegistryID'}) )
-            {
-                die "\nERROR: Flag UNO_COMPONENT defined, but no file as \"RegistryID\" at file $item !\n\n";
-            }
-        }
-    }
-}
-
-########################################################
 # Every script has to contain exactly one root module.
 # This module has no ParentID or an empty ParentID.
 ########################################################

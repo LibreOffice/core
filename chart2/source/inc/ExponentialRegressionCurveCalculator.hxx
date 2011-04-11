@@ -64,9 +64,10 @@ private:
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
 
-    // formula is: f(x) = m_fSlope ^ x + m_fIntercept
-    double m_fSlope;
-    double m_fIntercept;
+    // formula is: f(x) = exp(m_fLogIntercept) * exp( m_fLogSlope * x )
+    // mathematical model f(x) = Intercept * Slope^x
+    double m_fLogSlope;
+    double m_fLogIntercept;
 };
 
 } //  namespace chart

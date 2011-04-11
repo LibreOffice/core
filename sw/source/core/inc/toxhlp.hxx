@@ -60,7 +60,7 @@ public:
     String GetIndexKey( const String& rTxt, const String& rTxtReading,
                         const STAR_NMSPC::lang::Locale& rLocale ) const;
 
-    String GetFollowingText( BOOL bMorePages ) const;
+    String GetFollowingText( sal_Bool bMorePages ) const;
 
     STAR_NMSPC::uno::Sequence< ::rtl::OUString >
     GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLcl ) const;

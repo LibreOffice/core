@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -56,7 +55,6 @@
 #include "boost/scoped_ptr.hpp"
 #include "boost/shared_ptr.hpp"
 #include "boost/spirit/core.hpp"
-#include "bootstrp/sstring.hxx"
 #include "com/sun/star/accessibility/AccessibleEventId.hpp"
 #include "com/sun/star/accessibility/AccessibleEventObject.hpp"
 #include "com/sun/star/accessibility/AccessibleRelationType.hpp"
@@ -755,7 +753,6 @@
 #include "svtools/apearcfg.hxx"
 #include "svl/brdcst.hxx"
 #include "unotools/cacheoptions.hxx"
-#include "svl/cancel.hxx"
 #include "svl/cjkoptions.hxx"
 #include "unotools/cmdoptions.hxx"
 #include "svl/cntwall.hxx"
@@ -807,7 +804,6 @@
 #include "svtools/parhtml.hxx"
 #include "svtools/parrtf.hxx"
 #include "unotools/pathoptions.hxx"
-#include "svl/pickerhelper.hxx"
 #include "svl/poolitem.hxx"
 #include "unotools/printwarningoptions.hxx"
 #include "svl/ptitem.hxx"
@@ -943,7 +939,11 @@
 #include "vcl/unohelp2.hxx"
 #include "vcl/wall.hxx"
 #include "vcl/wintypes.hxx"
-#include "osl/mutex.hxx"
+#include "vos/mutex.hxx"
+#include "vos/ref.hxx"
+#include "vos/refernce.hxx"
+#include "vos/thread.hxx"
+#include "vos/xception.hxx"
 #include "xmloff/DashStyle.hxx"
 #include "xmloff/GradientStyle.hxx"
 #include "xmloff/HatchStyle.hxx"
@@ -960,5 +960,3 @@
 //---MARKER---
 #endif
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

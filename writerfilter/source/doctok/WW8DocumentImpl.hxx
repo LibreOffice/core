@@ -167,7 +167,7 @@ public:
 class ShapeHelper
 {
 public:
-    typedef hash_map<CpAndFc, WW8FSPA::Pointer_t, CpAndFcHash> Map_t;
+    typedef boost::unordered_map<CpAndFc, WW8FSPA::Pointer_t, CpAndFcHash> Map_t;
 
 private:
     WW8DocumentImpl * mpDoc;
@@ -192,7 +192,7 @@ public:
 class FieldHelper
 {
 public:
-    typedef hash_map<CpAndFc, WW8FLD::Pointer_t,
+    typedef boost::unordered_map<CpAndFc, WW8FLD::Pointer_t,
                      CpAndFcHash> Map_t;
 
 private:
@@ -218,7 +218,7 @@ public:
 class BreakHelper
 {
 public:
-    typedef hash_map<CpAndFc, WW8BKD::Pointer_t,
+    typedef boost::unordered_map<CpAndFc, WW8BKD::Pointer_t,
                      CpAndFcHash> Map_t;
 private:
     WW8DocumentImpl * mpDoc;

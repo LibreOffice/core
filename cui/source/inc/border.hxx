@@ -41,7 +41,10 @@
 
 // forward ---------------------------------------------------------------
 
-class SvxBorderLine;
+namespace editeng
+{
+    class SvxBorderLine;
+}
 class XColorTable;
 
 #include <svx/flagsdef.hxx>
@@ -53,13 +56,13 @@ class SvxBorderTabPage : public SfxTabPage
 public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rCoreAttrs );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rCoreAttrs );
     virtual void        Reset( const SfxItemSet& );
 
     void                HideShadowControls();
-    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void        PageCreated (SfxAllItemSet aSet);
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
@@ -78,9 +81,11 @@ private:
     FixedLine           aFlSep1;
     FixedLine           aFlLine;
     FixedText           aStyleFT;
-    LineListBox         aLbLineStyle;
+    LineListBox    aLbLineStyle;
     FixedText           aColorFT;
     ColorListBox        aLbLineColor;
+    FixedText           aWidthFT;
+    MetricField         aLineWidthMF;
 
     FixedLine           aFlSep2;
     FixedLine           aDistanceFL;
@@ -105,7 +110,7 @@ private:
     //properties - "Merge with next paragraph" in Writer
     FixedLine           aPropertiesFL;
     CheckBox            aMergeWithNextCB;
-    // --> collapsing table borders FME 2005-05-27 #i29550#
+    // --> collapsing table borders #i29550#
     CheckBox            aMergeAdjacentBordersCB;
     // <--
 
@@ -123,7 +128,7 @@ private:
     bool                mbBLTREnabled;      /// true = Bottom-left to top-right border enabled.
     bool                mbUseMarginItem;
 
-    static BOOL         bSync;
+    static sal_Bool         bSync;
 
 #ifdef _SVX_BORDER_CXX
     // Handler
@@ -133,10 +138,11 @@ private:
     DECL_LINK( SelSdwHdl_Impl, void* );
     DECL_LINK( LinesChanged_Impl, void* );
     DECL_LINK( ModifyDistanceHdl_Impl, MetricField*);
+    DECL_LINK( ModifyWidthHdl_Impl, void*);
     DECL_LINK( SyncHdl_Impl, CheckBox*);
 
-    USHORT              GetPresetImageId( USHORT nValueSetIdx ) const;
-    USHORT              GetPresetStringId( USHORT nValueSetIdx ) const;
+    sal_uInt16              GetPresetImageId( sal_uInt16 nValueSetIdx ) const;
+    sal_uInt16              GetPresetStringId( sal_uInt16 nValueSetIdx ) const;
 
     void                FillPresetVS();
     void                FillShadowVS();
@@ -145,9 +151,9 @@ private:
     // Filler
     void                FillLineListBox_Impl();
 
-    // Setzen von einzelnen Frame-/Core-Linien
+    // share for individual Frame-/Core-Line
     void                ResetFrameLine_Impl( svx::FrameBorderType eBorder,
-                                             const SvxBorderLine* pCurLine,
+                                             const editeng::SvxBorderLine* pCurLine,
                                              bool bValid );
 #endif
 };

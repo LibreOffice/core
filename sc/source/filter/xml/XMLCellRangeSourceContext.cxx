@@ -55,7 +55,7 @@ ScMyImpCellRangeSource::ScMyImpCellRangeSource() :
 
 ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
         ScXMLImport& rImport,
-        USHORT nPrfx,
+        sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList,
         ScMyImpCellRangeSource* pCellRangeSource ) :
@@ -71,7 +71,7 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( nIndex ));
         const OUString& sValue(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
-        USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -121,7 +121,7 @@ ScXMLCellRangeSourceContext::~ScXMLCellRangeSourceContext()
 }
 
 SvXMLImportContext *ScXMLCellRangeSourceContext::CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList>& /* xAttrList */ )
 {

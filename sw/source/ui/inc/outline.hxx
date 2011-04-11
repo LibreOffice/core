@@ -54,7 +54,7 @@ class SwChapterNumRules;
 
 class SwOutlineTabDialog : public SfxTabDialog
 {
-    static     USHORT    nNumLevel;
+    static     sal_uInt16    nNumLevel;
 
     String              aNullStr;
     String              aCollNames[MAXLEVEL];
@@ -64,14 +64,14 @@ class SwOutlineTabDialog : public SfxTabDialog
     SwNumRule*          pNumRule;
     SwChapterNumRules*  pChapterNumRules;
 
-    BOOL                bModified : 1;
+    sal_Bool                bModified : 1;
 
     protected:
     DECL_LINK( CancelHdl, Button * );
     DECL_LINK( FormHdl, Button * );
     DECL_LINK( MenuSelectHdl, Menu * );
 
-        virtual void    PageCreated(USHORT nPageId, SfxTabPage& rPage);
+        virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage);
         virtual short   Ok();
 
     public:
@@ -81,18 +81,19 @@ class SwOutlineTabDialog : public SfxTabDialog
         ~SwOutlineTabDialog();
 
     SwNumRule*          GetNumRule() {return pNumRule;}
-    USHORT              GetLevel(const String &rFmtName) const;
+    sal_uInt16              GetLevel(const String &rFmtName) const;
     String*             GetCollNames() {return aCollNames;}
 
-    static USHORT       GetActNumLevel() {return nNumLevel;}
-    static void         SetActNumLevel(USHORT nSet) {nNumLevel = nSet;}
+    static sal_uInt16       GetActNumLevel() {return nNumLevel;}
+    static void         SetActNumLevel(sal_uInt16 nSet) {nNumLevel = nSet;}
 };
 
 class SwOutlineSettingsTabPage : public SfxTabPage
 {
-    ListBox         aLevelLB;
     FixedLine       aLevelFL;
+    ListBox         aLevelLB;
 
+    FixedLine        aNumberFL;
     FixedText       aCollLbl;
     ListBox         aCollBox;
     FixedText       aNumberLbl;
@@ -108,7 +109,6 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     Edit            aSuffixED;
     FixedText       aStartLbl;
     NumericField    aStartEdit;
-    FixedLine        aNumberFL;
     NumberingPreview aPreviewWIN;
 
     String              aNoFmtName;
@@ -116,7 +116,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     SwWrtShell*         pSh;
     SwNumRule*          pNumRule;
     String*             pCollNames;
-    USHORT              nActLevel;
+    sal_uInt16              nActLevel;
 
     DECL_LINK( LevelHdl, ListBox * );
     DECL_LINK( ToggleComplete, NumericField * );
@@ -144,7 +144,7 @@ public:
     virtual void        ActivatePage(const SfxItemSet& rSet);
     virtual int         DeactivatePage(SfxItemSet *pSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);

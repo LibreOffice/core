@@ -29,14 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "formmetadata.hxx"
-#include "propctrlr.hrc"
 #include "formstrings.hxx"
 #include "formresid.hrc"
 #include "propctrlr.hrc"
 #include <svtools/localresaccess.hxx>
 #include <tools/debug.hxx>
-#include <cppuhelper/extract.hxx>
-
+#include <comphelper/extract.hxx>
+#include <sal/macros.h>
 #include <algorithm>
 #include <functional>
 
@@ -54,7 +53,7 @@ namespace pcr
     {
         String          sName;
         String          sTranslation;
-        sal_uInt32      nHelpId;
+        rtl::OString    sHelpId;
         sal_Int32       nId;
         sal_uInt16      nPos;
         sal_uInt32      nUIFlags;
@@ -64,16 +63,16 @@ namespace pcr
                         sal_Int32                   _nId,
                         const String&               aTranslation,
                         sal_uInt16                  nPosId,
-                        sal_uInt32                  nHelpId,
+                        const rtl::OString&,
                         sal_uInt32                  _nUIFlags);
     };
 
     //------------------------------------------------------------------------
     OPropertyInfoImpl::OPropertyInfoImpl(const ::rtl::OUString& _rName, sal_Int32 _nId,
-                                   const String& aString, sal_uInt16 nP, sal_uInt32 nHid, sal_uInt32 _nUIFlags)
+                                   const String& aString, sal_uInt16 nP, const rtl::OString& sHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
        ,sTranslation(aString)
-       ,nHelpId(nHid)
+       ,sHelpId(sHid)
        ,nId(_nId)
        ,nPos(nP)
        ,nUIFlags(_nUIFlags)
@@ -360,7 +359,7 @@ namespace pcr
         };
 
         s_pPropertyInfos = aPropertyInfos;
-        s_nCount = sizeof(aPropertyInfos) / sizeof(OPropertyInfoImpl);
+        s_nCount = SAL_N_ELEMENTS(aPropertyInfos);
 
         // sort
         ::std::sort( s_pPropertyInfos, s_pPropertyInfos + s_nCount, PropertyInfoLessByName() );
@@ -397,10 +396,10 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Int32 OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
+    rtl::OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->nHelpId : 0;
+        return (pInfo) ? pInfo->sHelpId : rtl::OString();
     }
 
     //------------------------------------------------------------------------
@@ -518,7 +517,7 @@ namespace pcr
                 nStringItemsResId = RID_RSC_ENUM_SHEET_ANCHOR_TYPE;
                 break;
             default:
-                OSL_ENSURE( sal_False, "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
+                OSL_FAIL( "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
                 break;
         }
 
@@ -558,7 +557,7 @@ namespace pcr
         // intialisierung
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, 0, 0);
+        OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, "", 0);
 
         const OPropertyInfoImpl* pInfo = ::std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );
@@ -652,7 +651,7 @@ namespace pcr
         }
         else
         {
-            DBG_ERROR( "DefaultEnumRepresentation::getValueFromDescription: could not translate the enum string!" );
+            OSL_FAIL( "DefaultEnumRepresentation::getValueFromDescription: could not translate the enum string!" );
             _out_rValue.clear();
         }
     }
@@ -676,7 +675,7 @@ namespace pcr
         }
         else
         {
-            DBG_ERROR( "DefaultEnumRepresentation::getDescriptionForValue: could not translate an enum value" );
+            OSL_FAIL( "DefaultEnumRepresentation::getDescriptionForValue: could not translate an enum value" );
         }
         return sReturn;
     }

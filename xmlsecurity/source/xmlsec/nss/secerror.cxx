@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: securityenvironment_nssimpl.cxx,v $
- * $Revision: 1.23 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -34,6 +31,7 @@
 #include "sslerr.h"
 #include "nspr.h"
 #include "certt.h"
+#include <sal/macros.h>
 
 #include "../diagnose.hxx"
 
@@ -61,7 +59,7 @@ const char *
 getCertError(PRErrorCode errNum)
 {
     static char sEmpty[] = "";
-    const int numDesc = sizeof(allDesc) / sizeof(ErrDesc);
+    const int numDesc = SAL_N_ELEMENTS(allDesc);
     for (int i = 0; i < numDesc; i++)
     {
         if (allDesc[i].errNum == errNum)
@@ -74,7 +72,6 @@ getCertError(PRErrorCode errNum)
 void
 printChainFailure(CERTVerifyLog *log)
 {
-    unsigned long errorFlags  = 0;
     unsigned int       depth  = (unsigned int)-1;
     const char * specificError = NULL;
     const char * issuer = NULL;
@@ -83,6 +80,7 @@ printChainFailure(CERTVerifyLog *log)
     if (log->count > 0)
     {
         xmlsec_trace("Bad certifcation path:");
+        unsigned long errorFlags  = 0;
         for (node = log->head; node; node = node->next)
         {
             if (depth != node->depth)

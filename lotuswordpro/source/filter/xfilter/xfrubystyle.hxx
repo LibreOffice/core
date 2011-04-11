@@ -57,10 +57,6 @@
  * @file
  * ruby style.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-06-21  create this file.
- ************************************************************************/
 #ifndef     _XFRUBYSTYLE_HXX
 #define     _XFRUBYSTYLE_HXX
 
@@ -71,8 +67,8 @@
 class XFRubyStyle : public XFStyle
 {
 public:
-    XFRubyStyle(){};
-    virtual ~XFRubyStyle(){};
+    XFRubyStyle(){}
+    virtual ~XFRubyStyle(){}
     virtual void ToXml(IXFStream *strm);
     void SetPosition(enumXFRubyPosition ePosition);
     void SetAlignment(enumXFRubyPosition eAlignment);

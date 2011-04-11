@@ -42,8 +42,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES =	\
         $(SLO)$/ShapeContextHandler.obj \
-        $(SLO)$/ShapeFilterBase.obj \
-        $(SLO)$/FastTokenHandlerService.obj
+        $(SLO)$/ShapeFilterBase.obj
 
 # --- Targets -------------------------------------------------------
 

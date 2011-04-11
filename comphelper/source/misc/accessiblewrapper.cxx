@@ -161,8 +161,7 @@ namespace comphelper
                 if (!m_aChildrenMap.insert(
                         AccessibleMap::value_type( _rxKey, xValue ) ).second)
                 {
-                    OSL_ENSURE(
-                        false,
+                    OSL_FAIL(
                         "OWrappedAccessibleChildrenManager::"
                             "getAccessibleWrapperFor: element was already"
                             " inserted!" );
@@ -250,7 +249,7 @@ namespace comphelper
                 break;
 
             default:
-                OSL_ENSURE( sal_False, "OWrappedAccessibleChildrenManager::translateAccessibleEvent: unknown (or unexpected) event id!" );
+                OSL_FAIL( "OWrappedAccessibleChildrenManager::translateAccessibleEvent: unknown (or unexpected) event id!" );
                 break;
         }
     }
@@ -280,8 +279,7 @@ namespace comphelper
 #if OSL_DEBUG_LEVEL > 0
         if ( m_aChildrenMap.end() == aDisposedPos )
         {
-               OSL_ENSURE( sal_False,
-                "OWrappedAccessibleChildrenManager::disposing: where did this come from?" );
+               OSL_FAIL( "OWrappedAccessibleChildrenManager::disposing: where did this come from?" );
             // helper for dignostics
             Reference< XAccessible > xOwningAccessible( m_aOwningAccessible );
             Reference< XAccessibleContext > xContext;

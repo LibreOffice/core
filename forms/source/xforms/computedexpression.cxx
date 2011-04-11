@@ -184,7 +184,7 @@ void ComputedExpression::clear()
     mxResult.clear();
 }
 
-Reference<XXPathObject> ComputedExpression::getXPath()
+Reference<XXPathObject> ComputedExpression::getXPath() const
 {
     return mxResult;
 }

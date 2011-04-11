@@ -30,7 +30,7 @@
 #include "precompiled_xmloff.hxx"
 #include <xmloff/XMLPageExport.hxx>
 #include <tools/debug.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -149,13 +149,6 @@ sal_Bool XMLPageExport::exportStyle(
                     GetExport().EncodeStyleName( sNextName ) );
             }
         }
-//      OUString sPageMaster = GetExport().GetAutoStylePool()->Find(
-//                                          XML_STYLE_FAMILY_PAGE_MASTER,
-//                                          xPropSet );
-//      if( sPageMaster.getLength() )
-//          GetExport().AddAttribute( XML_NAMESPACE_STYLE,
-//                                    XML_PAGE_MASTER_NAME,
-//                                    sPageMaster );
 
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
                                   XML_MASTER_PAGE, sal_True, sal_True );
@@ -262,8 +255,6 @@ void XMLPageExport::exportDefaultStyle()
                 }
             }
 
-        //  if ( xPropStates.size() != 0 &&
-          //          ( xPropStates.size() != 1 || xPropStates[0].mnIndex != -1 ) )
             if( bExport )
             {
                 //<style:default-page-layout>

@@ -234,8 +234,8 @@ long BibBookContainer::PreNotify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const KeyCode aKeyCode = pKEvt->GetKeyCode();
-        USHORT nKey = aKeyCode.GetCode();
-        const USHORT nModifier = aKeyCode.GetModifier();
+        sal_uInt16 nKey = aKeyCode.GetCode();
+        const sal_uInt16 nModifier = aKeyCode.GetModifier();
 
         if( KEY_MOD2 == nModifier )
         {
@@ -243,8 +243,8 @@ long BibBookContainer::PreNotify( NotifyEvent& rNEvt )
             {
                 if(pTopWin && pBottomWin)
                 {
-                    USHORT nFirstWinId = KEY_UP == nKey ? TOP_WINDOW : BOTTOM_WINDOW;
-                    USHORT nSecondWinId = KEY_UP == nKey ? BOTTOM_WINDOW : TOP_WINDOW;
+                    sal_uInt16 nFirstWinId = KEY_UP == nKey ? TOP_WINDOW : BOTTOM_WINDOW;
+                    sal_uInt16 nSecondWinId = KEY_UP == nKey ? BOTTOM_WINDOW : TOP_WINDOW;
                     long nHeight = GetItemSize( nFirstWinId );
                     nHeight -= WIN_STEP_SIZE;
                     if(nHeight < WIN_MIN_HEIGHT)

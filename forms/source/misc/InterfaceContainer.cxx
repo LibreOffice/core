@@ -96,7 +96,7 @@ lcl_hasVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents  )
     const ScriptEventDescriptor* pEnd = ( pDesc + sEvents.getLength() );
     for ( ; pDesc != pEnd; ++pDesc )
     {
-        if ( pDesc->ScriptType.equals( rtl::OUString::createFromAscii( "VBAInterop" ) ) )
+        if ( pDesc->ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop") ) ) )
             return true;
     }
     return false;
@@ -112,7 +112,7 @@ lcl_stripVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents )
     sal_Int32 nCopied = 0;
     for ( ; pDesc != pEnd; ++pDesc )
     {
-        if ( !pDesc->ScriptType.equals( rtl::OUString::createFromAscii( "VBAInterop" ) ) )
+        if ( !pDesc->ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop") ) ) )
         {
             sStripped[ nCopied++ ] = *pDesc;
         }
@@ -134,7 +134,7 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
                 break;
 
             Reference< XMultiServiceFactory > xDocFac( xDoc, UNO_QUERY_THROW );
-            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance( rtl::OUString::createFromAscii( "ooo.vba.VBACodeNameProvider" ) ), UNO_QUERY );
+            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.VBACodeNameProvider") ) ), UNO_QUERY );
             if ( !xNameQuery.is() )
                 break;
 
@@ -152,9 +152,9 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
 
             Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
             ::rtl::OUString sServiceName;
-            xProps->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl" ) ) >>= sServiceName;
+            xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultControl") ) ) >>= sServiceName;
 
-            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( rtl::OUString::createFromAscii( "ooo.vba.VBAToOOEventDesc" ) ), UNO_QUERY_THROW );
+            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.VBAToOOEventDesc") ) ), UNO_QUERY_THROW );
             Reference< XInterface > xInterface = m_xServiceFactory->createInstance( sServiceName );
             Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( xInterface, sCodeName );
             // register the vba script events
@@ -554,7 +554,6 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
 
     // after ::read the object is expected to be in the state it was when ::write was called, so we have
     // to empty ourself here
-    // FS - 71598 - 12.01.00
     while (getCount())
         removeByIndex(0);
 
@@ -583,7 +582,6 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                 if ( !xObj.is() )
                     // couldn't handle it
                     throw;
-                // 72133 - 09.02.00 - FS
             }
             catch(Exception&)
             {
@@ -610,7 +608,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                 }
                 catch( const Exception& )
                 {
-                    DBG_ERROR( "OInterfaceContainerHelper::read: reading succeeded, but not inserting!" );
+                    OSL_FAIL( "OInterfaceContainerHelper::read: reading succeeded, but not inserting!" );
                     // create a placeholder
                     xElement = xElement.query( lcl_createPlaceHolder( m_xServiceFactory ) );
                     if ( !xElement.is() )
@@ -805,18 +803,6 @@ void OInterfaceContainer::approveNewElement( const Reference< XPropertySet >& _r
     Reference< XChild > xChild( _rxObject, UNO_QUERY );
     if ( !xChild.is() || xChild->getParent().is() )
     {
-#ifdef FS_PRIV_DEBUG
-        ::rtl::OUString sChildName, sParentName;
-        Reference< XNamed > xNamed( xChild, UNO_QUERY );
-        if ( xNamed.is() )
-            sChildName = xNamed->getName();
-        if ( xChild.is() )
-        {
-            xNamed = xNamed.query( xChild->getParent() );
-            if ( xNamed.is() )
-                sParentName = xNamed->getName();
-        }
-#endif
         lcl_throwIllegalArgumentException();
     }
 
@@ -1149,7 +1135,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& _rName, c
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "OInterfaceContainer::insertByName: caught an exception!" );
+        OSL_FAIL( "OInterfaceContainer::insertByName: caught an exception!" );
     }
     implInsert( m_aItems.size(), xElementProps, sal_True, aElementMetaData.get(), sal_True );
 }

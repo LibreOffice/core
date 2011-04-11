@@ -39,7 +39,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <oox/helper/helper.hxx>
+#include <svx/unoshape.hxx>
 #include "vbafont.hxx"
+#include "drwlayer.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -238,13 +240,42 @@ void SAL_CALL ScVbaSheetObjectBase::setName( const OUString& rName ) throw (uno:
 
 sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement() throw (uno::RuntimeException)
 {
-    // TODO
-    return excel::XlPlacement::xlMoveAndSize;
+    sal_Int32 nRet = excel::XlPlacement::xlMoveAndSize;
+#if 0 // TODO: not working at the moment.
+    SvxShape* pShape = SvxShape::getImplementation( mxShape );
+    if(pShape)
+    {
+        SdrObject* pObj = pShape->GetSdrObject();
+        if (pObj)
+        {
+            ScAnchorType eType = ScDrawLayer::GetAnchor(pObj);
+            if (eType == SCA_PAGE)
+                nRet = excel::XlPlacement::xlFreeFloating;
+        }
+    }
+#endif
+    return nRet;
 }
 
 void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ ) throw (uno::RuntimeException)
 {
-    // TODO
+#if 0 // TODO: not working at the moment.
+    SvxShape* pShape = SvxShape::getImplementation( mxShape );
+    if(pShape)
+    {
+        SdrObject* pObj = pShape->GetSdrObject();
+        if (pObj)
+        {
+            ScAnchorType eType = SCA_CELL;
+            if ( nPlacement == excel::XlPlacement::xlFreeFloating )
+                eType = SCA_PAGE;
+
+            // xlMove is not supported, treated as SCA_CELL (xlMoveAndSize)
+
+            ScDrawLayer::SetAnchor(pObj, eType);
+        }
+    }
+#endif
 }
 
 sal_Bool SAL_CALL ScVbaSheetObjectBase::getPrintObject() throw (uno::RuntimeException)
@@ -351,14 +382,14 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName ) 
     // if a macro name has been passed, try to attach it to the event
     if( rMacroName.getLength() > 0 )
     {
-        VBAMacroResolvedInfo aResolvedMacro = resolveVBAMacro( getSfxObjShell( mxModel ), rMacroName );
-        if( !aResolvedMacro.IsResolved() )
+        MacroResolvedInfo aResolvedMacro = resolveVBAMacro( getSfxObjShell( mxModel ), rMacroName );
+        if( !aResolvedMacro.mbFound )
             throw uno::RuntimeException();
         script::ScriptEventDescriptor aDescriptor;
         aDescriptor.ListenerType = maListenerType;
         aDescriptor.EventMethod = maEventMethod;
         aDescriptor.ScriptType = CREATE_OUSTRING( "Script" );
-        aDescriptor.ScriptCode = makeMacroURL( aResolvedMacro.ResolvedMacro() );
+        aDescriptor.ScriptCode = makeMacroURL( aResolvedMacro.msResolvedMacro );
         xEventMgr->registerScriptEvent( nIndex, aDescriptor );
     }
 }
@@ -378,7 +409,7 @@ void SAL_CALL ScVbaControlObjectBase::setPrintObject( sal_Bool bPrintObject ) th
 sal_Bool SAL_CALL ScVbaControlObjectBase::getAutoSize() throw (uno::RuntimeException)
 {
     // not supported
-    return sal_False;
+    return false;
 }
 
 void SAL_CALL ScVbaControlObjectBase::setAutoSize( sal_Bool /*bAutoSize*/ ) throw (uno::RuntimeException)

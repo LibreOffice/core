@@ -99,9 +99,9 @@ public:
     }
 
     void    Invalidate();
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
@@ -116,7 +116,7 @@ void SwXFootnote::Impl::Invalidate()
     m_rThis.SetDoc(0);
 }
 
-void SwXFootnote::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXFootnote::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 
@@ -130,7 +130,7 @@ void SwXFootnote::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
         {
             case RES_FOOTNOTE_DELETED:
                 if (static_cast<const void*>(m_pFmtFtn) ==
-                        static_cast<SwPtrMsgPoolItem *>(pOld)->pObject)
+                        static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject)
                 {
                     Invalidate();
                 }
@@ -598,8 +598,7 @@ SwXFootnote::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXFootnote::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXFootnote::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -609,8 +608,7 @@ SwXFootnote::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXFootnote::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXFootnote::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -620,8 +618,7 @@ SwXFootnote::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXFootnote::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXFootnote::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -631,8 +628,7 @@ SwXFootnote::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXFootnote::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXFootnote::removeVetoableChangeListener(): not implemented");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,6 +42,7 @@ void IncludesCollection::add_to_collection(const string& dirPath) {
     while ((pent = readdir(pdir))) {
         dirContent.insert(pent->d_name);
     };
+    closedir(pdir);
 #endif // defined( WNT )
     allIncludes.insert(EntriesPair(dirPath, dirContent));
 };
@@ -65,7 +66,6 @@ bool IncludesCollection::exists(string filePath) {
     } else {
         return true;
     };
-    //return false;
 };
 
 extern "C" {

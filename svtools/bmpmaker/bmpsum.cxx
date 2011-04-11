@@ -59,16 +59,15 @@ private:
 
     sal_uInt32      cExitCode;
 
-    BOOL            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
-    BOOL            GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rSwitchParams );
+    sal_Bool            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
 
-    void            SetExitCode( BYTE cExit )
+    void            SetExitCode( sal_uInt8 cExit )
                     {
                         if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) )
                             cExitCode = cExit;
                     }
     void            ShowUsage();
-    void            Message( const String& rText, BYTE cExitCode );
+    void            Message( const String& rText, sal_uInt8 cExitCode );
 
     sal_uInt64      GetCRC( const BitmapEx& rBmpEx );
 
@@ -97,9 +96,9 @@ BmpSum::~BmpSum()
 
 // -----------------------------------------------------------------------
 
-BOOL BmpSum::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam )
+sal_Bool BmpSum::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     for( int i = 0, nCount = rArgs.size(); ( i < nCount ) && !bRet; i++ )
     {
@@ -111,7 +110,7 @@ BOOL BmpSum::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
 
             if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
             {
-                bRet = TRUE;
+                bRet = sal_True;
 
                 if( i < ( nCount - 1 ) )
                     rParam = rArgs[ i + 1 ];
@@ -129,39 +128,7 @@ BOOL BmpSum::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
 
 // -----------------------------------------------------------------------
 
-BOOL BmpSum::GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rParams )
-{
-    BOOL bRet = FALSE;
-
-    for( int i = 0, nCount = rArgs.size(); ( i < nCount ); i++ )
-    {
-        String  aTestStr( '-' );
-
-        for( int n = 0; ( n < 2 ) && !bRet; n++ )
-        {
-            aTestStr += rSwitch;
-
-            if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
-            {
-                if( i < ( nCount - 1 ) )
-                    rParams.push_back( rArgs[ i + 1 ] );
-                else
-                    rParams.push_back( String() );
-
-                break;
-            }
-
-            if( 0 == n )
-                aTestStr = '/';
-        }
-    }
-
-    return( rParams.size() > 0 );
-}
-
-// -----------------------------------------------------------------------
-
-void BmpSum::Message( const String& rText, BYTE nExitCode )
+void BmpSum::Message( const String& rText, sal_uInt8 nExitCode )
 {
     if( EXIT_NOERROR != nExitCode )
         SetExitCode( nExitCode );
@@ -224,7 +191,6 @@ sal_uInt64 BmpSum::GetCRC( const BitmapEx& rBmpEx )
     AlphaMask           aAlpha;
     BitmapReadAccess*   pAAcc = NULL;
     sal_uInt64          nRet = 0;
-    sal_uInt32          nCrc = 0;
 
     if( rBmpEx.IsTransparent() )
     {
@@ -235,6 +201,7 @@ sal_uInt64 BmpSum::GetCRC( const BitmapEx& rBmpEx )
     if( pRAcc && pRAcc->Width() && pRAcc->Height() )
     {
         SVBT32 aBT32;
+        sal_uInt32 nCrc = 0;
 
         for( long nY = 0; nY < pRAcc->Height(); ++nY )
         {

@@ -3,7 +3,7 @@ umask 022
 if [ "${KDEMAINDIR}" ]
 then
   echo Copying icons ..
-  for i in `cd ${ICON_SOURCE_DIR}; find ${ICON_THEMES:-hicolor/??x?? locolor} -name "*.png"`
+  for i in `cd ${ICON_SOURCE_DIR}; find ${ICON_THEMES:-hicolor/???x??? hicolor/??x?? locolor} -name "*.png"`
   do
     targetdir=${DESTDIR}/${KDEMAINDIR}/share/icons/`dirname $i`
     mkdir -p $targetdir
@@ -22,7 +22,7 @@ fi
 if [ "${GNOMEDIR}" ]
 then
   echo Copying GNOME icons ..
-  for i in `cd ${ICON_SOURCE_DIR}/hicolor; find ??x?? -name "*.png"`
+  for i in `cd ${ICON_SOURCE_DIR}/hicolor; find ??x?? ???x??? -name "*.png"`
   do
     targetdir=${DESTDIR}/${GNOMEDIR}/share/icons/gnome/`dirname $i`
     mkdir -p $targetdir
@@ -95,7 +95,9 @@ mkdir -p ${DESTDIR}/usr/bin
 office_prefix=/opt
 office_root=${office_prefix}/${PREFIX}
 
-cp openoffice.sh ${DESTDIR}/usr/bin/${PREFIX}
+#this symlink is needed to have the API boostrap functions running right
+ln -sf ${office_root}/program/soffice ${DESTDIR}/usr/bin/${PREFIX}
+
 cp printeradmin.sh ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 chmod 0755 ${DESTDIR}/usr/bin/${PREFIX} ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 

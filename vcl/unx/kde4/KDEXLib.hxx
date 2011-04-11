@@ -58,7 +58,7 @@ class KDEXLib : public QObject, public SalXLib
         QHash< int, SocketData > socketData; // key is fd
         QTimer timeoutTimer;
         QTimer userEventTimer;
-        enum { LibreOfficeEventLoop, GlibEventLoop } eventLoopType;
+        enum { LibreOfficeEventLoop, GlibEventLoop, QtUnixEventLoop } eventLoopType;
 
     private:
         void setupEventLoop();
@@ -83,7 +83,7 @@ class KDEXLib : public QObject, public SalXLib
         virtual void Yield( bool bWait, bool bHandleAllCurrentEvents );
         virtual void Insert( int fd, void* data, YieldFunc pending, YieldFunc queued, YieldFunc handle );
         virtual void Remove( int fd );
-        virtual void StartTimer( ULONG nMS );
+        virtual void StartTimer( sal_uLong nMS );
         virtual void StopTimer();
         virtual void Wakeup();
         virtual void PostUserEvent();

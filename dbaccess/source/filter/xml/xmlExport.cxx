@@ -118,13 +118,13 @@ namespace dbaxml
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ODBExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.sdb.XMLSettingsExporter");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdb.XMLSettingsExporter"));
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ODBExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
         return aSupported;
     }
 
@@ -137,13 +137,13 @@ namespace dbaxml
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.sdb.XMLFullExporter");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdb.XMLFullExporter"));
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
         return aSupported;
     }
 
@@ -179,7 +179,7 @@ namespace dbaxml
                 return s_sTypeInteger;
 
             default:
-                OSL_ENSURE( false, "lcl_implGetPropertyXMLType: unsupported value type!" );
+                OSL_FAIL( "lcl_implGetPropertyXMLType: unsupported value type!" );
                 return s_sTypeDouble;
         }
     }
@@ -241,36 +241,32 @@ ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 
     m_xExportHelper = new SvXMLExportPropertyMapper(GetTableStylesPropertySetMapper());
     m_xColumnExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetColumnStylesPropertySetMapper());
 
-    //UniReference < XMLPropertySetMapper > xCellStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetCellStylesPropertySetMapper(),m_xPropHdlFactory);
-    //m_xCellExportHelper = new OSpecialHanldeXMLExportPropertyMapper(xCellStylesPropertySetMapper);
-    //m_xCellExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetCellStylesPropertySetMapper());
-    //m_xCellExportHelper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
     m_xCellExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetCellStylesPropertySetMapper());
     m_xRowExportHelper = new OSpecialHanldeXMLExportPropertyMapper(OXMLHelper::GetRowStylesPropertySetMapper());
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_TABLE,
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )),
         m_xExportHelper.get(),
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX ));
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX )));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_COLUMN,
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),
         m_xColumnExportHelper.get(),
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX ));
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX )));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_CELL,
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME )),
         m_xCellExportHelper.get(),
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX ));
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX )));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_ROW,
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME )),
         m_xRowExportHelper.get(),
-        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX ));
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX )));
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO1_STATIC( ODBExport, "com.sun.star.comp.sdb.DBExportFilter", "com.sun.star.document.ExportFilter")
@@ -408,15 +404,15 @@ void ODBExport::exportDataSource()
                 {
                     sal_Int32 nValue = 0;
                     aValue >>= nValue;
-                    if ( sValue.equalsAscii("0") )
+                    if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("0")) )
                         sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-integer"));
-                    else if ( sValue.equalsAscii("1") )
+                    else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1")) )
                         sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("is-boolean"));
-                    else if ( sValue.equalsAscii("2") )
+                    else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")) )
                         sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-boolean"));
-                    else if ( sValue.equalsAscii("3") )
+                    else if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("3")) )
                         sValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("equal-use-only-zero"));
-                    if ( sValue.equalsAscii("equal-integer") )
+                    if ( sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("equal-integer")) )
                         continue;
                     eToken = XML_BOOLEAN_COMPARISON_MODE;
                 }
@@ -574,7 +570,7 @@ void ODBExport::exportConnectionData()
                         sURL.append(sal_Unicode('/'));
 
                     AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(sURL.makeStringAndClear()));
-                } // if ( sOrigUrl == sFileName )
+                }
                 else
                     AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,sOrigUrl);
                 AddAttribute(XML_NAMESPACE_DB,XML_MEDIA_TYPE,m_aTypeCollection.getMediaType(sValue));
@@ -595,7 +591,6 @@ void ODBExport::exportConnectionData()
                 }
                 catch(const Exception&)
                 {
-                    // nii
                 }
                 SvXMLElementExport aFileBasedDB(*this,XML_NAMESPACE_DB, XML_FILE_BASED_DATABASE, sal_True, sal_True);
             }
@@ -744,7 +739,7 @@ void ODBExport::exportDataSourceSettings()
                     pSequenceIterator.reset( new OSequenceIterator< Any >( aIter->Value ) );
                     break;
                 default:
-                    OSL_ENSURE(sal_False, "unsupported sequence type !");
+                    OSL_FAIL("unsupported sequence type !");
                     break;
             }
             if ( pSequenceIterator.get() )
@@ -1234,9 +1229,9 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
                         }
                     }
                     ++aItr;
-                } // while ( aItr != aEnd )
+                }
 
-            } // if ( !aPropStates.empty() )
+            }
             if ( XML_STYLE_FAMILY_TABLE_CELL == pExportHelper[i].second.second )
                 ::std::copy( m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end(), ::std::back_inserter( aPropStates ));
             if ( !aPropStates.empty() )
@@ -1289,7 +1284,7 @@ void ODBExport::_ExportAutoStyles()
     }
 }
 // -----------------------------------------------------------------------------
-void ODBExport::_ExportStyles(BOOL bUsed)
+void ODBExport::_ExportStyles(sal_Bool bUsed)
 {
     SvXMLExport::_ExportStyles(bUsed);
 }
@@ -1330,7 +1325,7 @@ void ODBExport::GetViewSettings(Sequence<PropertyValue>& aProps)
             }
             catch(Exception)
             {
-                OSL_ENSURE(0,"ODBExport::GetViewSettings: Exception catched!");
+                OSL_FAIL("ODBExport::GetViewSettings: Exception catched!");
             }
         }
     }
@@ -1357,7 +1352,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
         }
         catch(Exception)
         {
-            OSL_ENSURE(0,"Could not access layout information from the data source!");
+            OSL_FAIL("Could not access layout information from the data source!");
         }
     }
 }
@@ -1388,7 +1383,7 @@ void ODBExport::GetConfigurationSettings(Sequence<PropertyValue>& aProps)
             GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
             break;
         default:
-            OSL_ENSURE(0,"ODBExport::implConvertAny: Invalid type");
+            OSL_FAIL("ODBExport::implConvertAny: Invalid type");
     }
 
     return aBuffer.makeStringAndClear();

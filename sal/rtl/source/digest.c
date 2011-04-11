@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#define _RTL_DIGEST_C_ "$Revision: 1.9 $"
+#define _RTL_DIGEST_C_
 
 #include <sal/types.h>
 #include <sal/macros.h>

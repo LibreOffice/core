@@ -54,6 +54,7 @@
 #include <connectivity/dbexception.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <comphelper/extract.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
@@ -88,7 +89,7 @@ namespace dbaccess
 rtl::OUString OConnection::getImplementationName(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getImplementationName" );
-    return rtl::OUString::createFromAscii("com.sun.star.comp.dbaccess.Connection");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dbaccess.Connection"));
 }
 
 sal_Bool OConnection::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
@@ -321,7 +322,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
                 _rxORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
         Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster.get());
         setDelegation(xAgg,m_refCount);
-        DBG_ASSERT(m_xConnection.is(), "OConnection::OConnection : invalid master connection !");
+        OSL_ENSURE(m_xConnection.is(), "OConnection::OConnection : invalid master connection !");
     }
     catch(const Exception&)
     {
@@ -683,7 +684,7 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUStr
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::createInstance" );
     Reference< XServiceInfo > xRet;
     if  (  ( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER == _sServiceSpecifier )
-        || ( _sServiceSpecifier.equalsAscii( "com.sun.star.sdb.SingleSelectQueryAnalyzer" ) )
+        || ( _sServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sdb.SingleSelectQueryAnalyzer" ) ) )
         )
     {
         xRet = new OSingleSelectQueryComposer( getTables(),this, m_aContext );

@@ -31,8 +31,7 @@ PRJNAME=fpicker
 TARGET=kdefilepicker
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-#COMP1TYPELIST=$(TARGET)
-#COMPRDB=$(SOLARBINDIR)$/types.rdb
+EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 
 # --- Settings -----------------------------------------------------
 

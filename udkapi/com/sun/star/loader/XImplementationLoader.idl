@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_loader_XImplementationLoader_idl__
 #define __com_sun_star_loader_XImplementationLoader_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
-#ifndef __com_sun_star_registry_XRegistryKey_idl__
 #include <com/sun/star/registry/XRegistryKey.idl>
-#endif
 
-#ifndef __com_sun_star_registry_CannotRegisterImplementationException_idl__
 #include <com/sun/star/registry/CannotRegisterImplementationException.idl>
-#endif
 
-#ifndef __com_sun_star_loader_CannotActivateFactoryException_idl__
 #include <com/sun/star/loader/CannotActivateFactoryException.idl>
-#endif
 
 //=============================================================================
 

@@ -46,6 +46,7 @@ ModalDialog DLG_FLD_INPUT
     };*/
     Edit ED_LABEL
     {
+        HelpID = "sw:Edit:DLG_FLD_INPUT:ED_LABEL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 115 , 12 ) ;
@@ -56,6 +57,7 @@ ModalDialog DLG_FLD_INPUT
     };
     MultiLineEdit ED_EDIT
     {
+        HelpID = "sw:MultiLineEdit:DLG_FLD_INPUT:ED_EDIT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 115 , 72 ) ;
@@ -83,6 +85,7 @@ ModalDialog DLG_FLD_INPUT
     };
     PushButton PB_NEXT
     {
+        HelpID = "sw:PushButton:DLG_FLD_INPUT:PB_NEXT";
         Pos = MAP_APPFONT ( 139 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 15 ) ;
         TabStop = TRUE ;

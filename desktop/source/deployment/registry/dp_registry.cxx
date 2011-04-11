@@ -50,9 +50,9 @@
 #include "com/sun/star/util/XUpdatable.hpp"
 #include "com/sun/star/container/XContentEnumerationAccess.hpp"
 #include "com/sun/star/deployment/PackageRegistryBackend.hpp"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <set>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <memory>
 
 using namespace ::dp_misc;
@@ -91,10 +91,10 @@ class PackageRegistryImpl : private MutexHolder, public t_helper
             return str1.equalsIgnoreAsciiCase( str2 );
         }
     };
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         OUString, Reference<deployment::XPackageRegistry>,
         ci_string_hash, ci_string_equals > t_string2registry;
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         OUString, OUString,
         ci_string_hash, ci_string_equals > t_string2string;
     typedef ::std::set<
@@ -136,6 +136,10 @@ public:
                lang::IllegalArgumentException, RuntimeException);
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
+    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
+                throw (deployment::DeploymentException,
+                RuntimeException);
+
 };
 
 //______________________________________________________________________________
@@ -186,11 +190,25 @@ OUString normalizeMediaType( OUString const & mediaType )
 
 //______________________________________________________________________________
 
+void PackageRegistryImpl::packageRemoved(
+    ::rtl::OUString const & url, ::rtl::OUString const & mediaType)
+    throw (css::deployment::DeploymentException,
+           css::uno::RuntimeException)
+{
+    const t_string2registry::const_iterator i =
+        m_mediaType2backend.find(mediaType);
+
+    if (i != m_mediaType2backend.end())
+    {
+        i->second->packageRemoved(url, mediaType);
+    }
+}
+
 void PackageRegistryImpl::insertBackend(
     Reference<deployment::XPackageRegistry> const & xBackend )
 {
     m_allBackends.insert( xBackend );
-    typedef ::std::hash_set<OUString, ::rtl::OUStringHash> t_stringset;
+    typedef ::boost::unordered_set<OUString, ::rtl::OUStringHash> t_stringset;
     t_stringset ambiguousFilters;
 
     const Sequence< Reference<deployment::XPackageTypeInfo> > packageTypes(
@@ -279,7 +297,7 @@ void PackageRegistryImpl::insertBackend(
                             xBackend, UNO_QUERY_THROW )->
                         getImplementationName() );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             buf.makeStringAndClear(),
                             RTL_TEXTENCODING_UTF8 ) );
         }

@@ -32,11 +32,12 @@
 #include "pagefrm.hxx"
 #include "viewsh.hxx"
 #include "doc.hxx"
-#include "errhdl.hxx"
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
 #include <fmtfsize.hxx>
+#include "viewopt.hxx"
 #include "hffrm.hxx"
+#include "rootfrm.hxx"
 #include "txtfrm.hxx"
 #include "sectfrm.hxx"
 #include "flyfrm.hxx"
@@ -51,7 +52,7 @@
 #include <objectformatter.hxx>
 // <--
 
-extern BOOL bObjsDirect;    //frmtool.cxx
+extern sal_Bool bObjsDirect;    //frmtool.cxx
 
 static SwTwips lcl_GetFrmMinHeight(const SwLayoutFrm & rFrm)
 {
@@ -79,7 +80,7 @@ static SwTwips lcl_CalcContentHeight(SwLayoutFrm & frm)
     SwFrm* pFrm = frm.Lower();
 
     SwTwips nRemaining = 0;
-    USHORT nNum = 0;
+    sal_uInt16 nNum = 0;
     pFrm = frm.Lower();
     while ( pFrm )
     {
@@ -118,20 +119,20 @@ static void lcl_LayoutFrmEnsureMinHeight(SwLayoutFrm & rFrm,
     }
 }
 
-SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, USHORT nTypeIn)
-    : SwLayoutFrm(pFmt)
+SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, SwFrm* pSib, sal_uInt16 nTypeIn)
+    : SwLayoutFrm( pFmt, pSib )
 {
     nType = nTypeIn;
-    SetDerivedVert( FALSE );
+    SetDerivedVert( sal_False );
 
     const SwFmtCntnt &rCnt = pFmt->GetCntnt();
 
     OSL_ENSURE( rCnt.GetCntntIdx(), "Kein Inhalt fuer Header." );
 
     //Fuer Header Footer die Objekte gleich erzeugen lassen.
-    BOOL bOld = bObjsDirect;
-    bObjsDirect = TRUE;
-    ULONG nIndex = rCnt.GetCntntIdx()->GetIndex();
+    sal_Bool bOld = bObjsDirect;
+    bObjsDirect = sal_True;
+    sal_uLong nIndex = rCnt.GetCntntIdx()->GetIndex();
     ::_InsertCnt( this, pFmt->GetDoc(), ++nIndex );
     bObjsDirect = bOld;
 }
@@ -233,7 +234,7 @@ void SwHeadFootFrm::FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs)
 
     }
 
-    bValidPrtArea = TRUE;
+    bValidPrtArea = sal_True;
 }
 
 void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
@@ -242,7 +243,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
     {
         if( !IsColLocked() )
         {
-            bValidSize = bValidPrtArea = TRUE;
+            bValidSize = bValidPrtArea = sal_True;
 
             const SwTwips nBorder = nUL;
             SwTwips nMinHeight = lcl_GetFrmMinHeight(*this);
@@ -398,11 +399,11 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                         Prt().SSize().Height() = Frm().Height() - nBorder;
                     }
                 }
-                bValidSize = bValidPrtArea = TRUE;
+                bValidSize = bValidPrtArea = sal_True;
             } while( nRemaining<=nMaxHeight && nOldHeight!=Prt().Height() );
             ColUnlock();
         }
-        bValidSize = bValidPrtArea = TRUE;
+        bValidSize = bValidPrtArea = sal_True;
     }
     else //if ( GetType() & 0x0018 )
     {
@@ -410,7 +411,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
         {
             if ( Frm().Height() != pAttrs->GetSize().Height() )
                 ChgSize( Size( Frm().Width(), pAttrs->GetSize().Height()));
-            bValidSize = TRUE;
+            bValidSize = sal_True;
             MakePos();
         } while ( !bValidSize );
     }
@@ -441,7 +442,7 @@ void SwHeadFootFrm::Format(const SwBorderAttrs * pAttrs)
     }
 }
 
-SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, BOOL bTst,  BOOL bInfo )
+SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, sal_Bool bTst,  sal_Bool bInfo )
 {
     SwTwips nResult;
 
@@ -543,7 +544,7 @@ SwTwips SwHeadFootFrm::GrowFrm( SwTwips nDist, BOOL bTst,  BOOL bInfo )
     return nResult;
 }
 
-SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
+SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
     SwTwips nResult;
 
@@ -659,15 +660,15 @@ SwTwips SwHeadFootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     return nResult;
 }
 
-BOOL SwHeadFootFrm::GetEatSpacing() const
+sal_Bool SwHeadFootFrm::GetEatSpacing() const
 {
     const SwFrmFmt * pFmt = GetFmt();
     OSL_ENSURE(pFmt, "SwHeadFootFrm: no format?");
 
     if (pFmt->GetHeaderAndFooterEatSpacing().GetValue())
-        return TRUE;
+        return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -676,8 +677,6 @@ BOOL SwHeadFootFrm::GetEatSpacing() const
 |*  SwPageFrm::PrepareHeader()
 |*
 |*  Beschreibung        Erzeugt oder Entfernt Header
-|*  Ersterstellung      MA 04. Feb. 93
-|*  Letzte Aenderung    MA 12. May. 96
 |*
 |*************************************************************************/
 
@@ -709,9 +708,10 @@ void SwPageFrm::PrepareHeader()
     if ( !pLay )
         return;
 
-    const SwFmtHeader &rH = ((SwFrmFmt*)pRegisteredIn)->GetHeader();
+    const SwFmtHeader &rH = ((SwFrmFmt*)GetRegisteredIn())->GetHeader();
 
-    const BOOL bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const sal_Bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rH.IsActive() )
     {   //Header einsetzen, vorher entfernen falls vorhanden.
@@ -728,7 +728,7 @@ void SwPageFrm::PrepareHeader()
             delete pDel;
         }
         OSL_ENSURE( pLay, "Wohin mit dem Header?" );
-        SwHeaderFrm *pH = new SwHeaderFrm( (SwFrmFmt*)rH.GetHeaderFmt() );
+        SwHeaderFrm *pH = new SwHeaderFrm( (SwFrmFmt*)rH.GetHeaderFmt(), this );
         pH->Paste( this, pLay );
         if ( GetUpper() )
             ::RegistFlys( this, pH );
@@ -745,8 +745,6 @@ void SwPageFrm::PrepareHeader()
 |*  SwPageFrm::PrepareFooter()
 |*
 |*  Beschreibung        Erzeugt oder Entfernt Footer
-|*  Ersterstellung      MA 04. Feb. 93
-|*  Letzte Aenderung    MA 12. May. 96
 |*
 |*************************************************************************/
 
@@ -757,11 +755,12 @@ void SwPageFrm::PrepareFooter()
     if ( !pLay )
         return;
 
-    const SwFmtFooter &rF = ((SwFrmFmt*)pRegisteredIn)->GetFooter();
+    const SwFmtFooter &rF = ((SwFrmFmt*)GetRegisteredIn())->GetFooter();
     while ( pLay->GetNext() )
         pLay = (SwLayoutFrm*)pLay->GetNext();
 
-    const BOOL bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const ViewShell *pSh = getRootFrm()->GetCurrShell();
+    const sal_Bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rF.IsActive() )
     {   //Footer einsetzen, vorher entfernen falls vorhanden.
@@ -775,7 +774,7 @@ void SwPageFrm::PrepareFooter()
             pLay->Cut();
             delete pLay;
         }
-        SwFooterFrm *pF = new SwFooterFrm( (SwFrmFmt*)rF.GetFooterFmt() );
+        SwFooterFrm *pF = new SwFooterFrm( (SwFrmFmt*)rF.GetFooterFmt(), this );
         pF->Paste( this );
         if ( GetUpper() )
             ::RegistFlys( this, pF );
@@ -783,10 +782,10 @@ void SwPageFrm::PrepareFooter()
     else if ( pLay && pLay->IsFooterFrm() )
     {   //Footer entfernen falls vorhanden.
         ::DelFlys( pLay, this );
-        ViewShell *pSh;
-        if ( pLay->GetPrev() && 0 != (pSh = GetShell()) &&
-             pSh->VisArea().HasArea() )
-            pSh->InvalidateWindows( pSh->VisArea() );
+        ViewShell *pShell;
+        if ( pLay->GetPrev() && 0 != (pShell = getRootFrm()->GetCurrShell()) &&
+             pShell->VisArea().HasArea() )
+            pShell->InvalidateWindows( pShell->VisArea() );
         pLay->Cut();
         delete pLay;
     }

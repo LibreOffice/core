@@ -31,9 +31,7 @@
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 #include <xmloff/xmlstyle.hxx>
 

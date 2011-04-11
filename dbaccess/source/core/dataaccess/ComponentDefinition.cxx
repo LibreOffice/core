@@ -35,6 +35,7 @@
 #include "module_dba.hxx"
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -151,7 +152,7 @@ OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxCo
     registerProperties();
 
     m_pImpl->m_aProps.aTitle = _rElementName;
-    DBG_ASSERT(m_pImpl->m_aProps.aTitle.getLength() != 0, "OComponentDefinition::OComponentDefinition : invalid name !");
+    OSL_ENSURE(m_pImpl->m_aProps.aTitle.getLength() != 0, "OComponentDefinition::OComponentDefinition : invalid name !");
 }
 
 IMPLEMENT_IMPLEMENTATION_ID(OComponentDefinition);
@@ -254,7 +255,7 @@ OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
         aFind->second->addPropertyChangeListener(::rtl::OUString(),m_xColumnPropertyListener.getRef());
         return new OTableColumnWrapper( aFind->second, aFind->second, true );
     }
-    OSL_ENSURE( false, "OComponentDefinition::createColumn: is this a valid case?" );
+    OSL_FAIL( "OComponentDefinition::createColumn: is this a valid case?" );
         // This here is the last place creating a OTableColumn, and somehow /me thinks it is not needed ...
     return new OTableColumn( _rName );
 }

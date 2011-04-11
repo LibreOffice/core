@@ -24,24 +24,21 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
 PRJ=..$/..
 
 PRJNAME=animations
 TARGET=animcore
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
-#COMP1TYPELIST=$(TARGET)
-#COMPRDB=$(SOLARBINDIR)$/offapi.rdb
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  settings.mk
-.IF "$(L10N_framework)"==""
-# --- Files --------------------------------------------------------
-#UNOUCRDEP=$(SOLARBINDIR)$/offapi.rdb
-#UNOUCRRDB=$(SOLARBINDIR)$/offapi.rdb
-#UNOUCROUT=$(OUT)$/inc$/animations
-#INCPRE+= $(UNOUCROUT)
 
+.INCLUDE :  settings.mk
+
+.IF "$(L10N_framework)"==""
+
+# --- Files --------------------------------------------------------
 
 SLOFILES = 	$(SLO)$/animcore.obj\
             $(SLO)$/factreg.obj\
@@ -68,3 +65,10 @@ DEF1NAME=		$(SHL1TARGET)
 # --- Targets ------------------------------------------------------
 .INCLUDE :	target.mk
 
+ALLTAR : $(MISC)/animcore.component
+
+$(MISC)/animcore.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        animcore.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt animcore.component

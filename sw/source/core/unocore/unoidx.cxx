@@ -41,12 +41,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>
-#include <com/sun/star/text/ChapterFormat.hpp>
-#include <com/sun/star/text/ReferenceFieldPart.hpp>
-#include <com/sun/star/text/BibliographyDataField.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <hints.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>
@@ -147,8 +141,8 @@ lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
         SwTOXType aNewType(TOX_USER, rNewName);
         pNewType = pDoc->InsertTOXType( aNewType );
     }
-    //has to be non-const-casted
-    ((SwTOXType*)pNewType)->Add(&rTOXBase);
+
+    rTOXBase.RegisterToTOXType( *((SwTOXType*)pNewType) );
 }
 
 static const char cUserDefined[] = "User-Defined";
@@ -391,13 +385,13 @@ public:
             ? SwForm::GetFormMaxLevel(m_eTOXType)
             : rSection.GetTOXForm().GetFormMax();
     }
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXDocumentIndex::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXDocumentIndex::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 
@@ -468,19 +462,19 @@ throw (uno::RuntimeException)
 
     return C2U("com.sun.star.text.BaseIndex") == rServiceName
         || ((TOX_INDEX == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.DocumentIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentIndex")))
         || ((TOX_CONTENT == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.ContentIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.ContentIndex")))
         || ((TOX_USER == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.UserDefinedIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.UserDefinedIndex")))
         || ((TOX_ILLUSTRATIONS == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.IllustrationsIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.IllustrationsIndex")))
         || ((TOX_TABLES == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.TableIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TableIndex")))
         || ((TOX_OBJECTS == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.ObjectIndex"))
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.ObjectIndex")))
         || ((TOX_AUTHORITIES == m_pImpl->m_eTOXType) &&
-            rServiceName.equalsAscii("com.sun.star.text.Bibliography"));
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.Bibliography")));
 }
 
 uno::Sequence< OUString > SAL_CALL
@@ -523,7 +517,7 @@ throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
 
-    USHORT nObjectType = SW_SERVICE_TYPE_INDEX;
+    sal_uInt16 nObjectType = SW_SERVICE_TYPE_INDEX;
     switch (m_pImpl->m_eTOXType)
     {
 //      case TOX_INDEX:             break;
@@ -688,7 +682,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         case WID_CREATE_FROM_OUTLINE:
             lcl_AnyToBitMask(rValue, nCreate, nsSwTOXElement::TOX_OUTLINELEVEL);
         break;
-//          case WID_PARAGRAPH_STYLE_NAMES             :DBG_ERROR("not implemented")
+//          case WID_PARAGRAPH_STYLE_NAMES             :OSL_FAIL("not implemented")
 //          break;
         case WID_CREATE_FROM_CHAPTER:
             rTOXBase.SetFromChapter(lcl_AnyToBool(rValue));
@@ -939,8 +933,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 {
                     SwSections aSectArr;
                     pSectionFmt->GetChildSections(aSectArr,
-                            SORTSECT_NOT, FALSE);
-                    for(USHORT i = 0; i < aSectArr.Count(); i++)
+                            SORTSECT_NOT, sal_False);
+                    for(sal_uInt16 i = 0; i < aSectArr.Count(); i++)
                     {
                         SwSection* pSect = aSectArr[i];
                         if(pSect->GetType() == TOX_HEADER_SECTION)
@@ -1196,25 +1190,13 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case WID_INDEX_MARKS:
             {
                 SwTOXMarks aMarks;
-                SwTOXType const*const pType = pTOXBase->GetTOXType();
-                SwClientIter aIter(*pType);
-                SwTOXMark * pMark =
-                    static_cast<SwTOXMark*>(aIter.First(TYPE(SwTOXMark)));
-                while( pMark )
+                const SwTOXType* pType = pTOXBase->GetTOXType();
+                SwTOXMark::InsertTOXMarks( aMarks, *pType );
+                uno::Sequence< uno::Reference<text::XDocumentIndexMark> > aXMarks(aMarks.Count());
+                uno::Reference<text::XDocumentIndexMark>* pxMarks = aXMarks.getArray();
+                for(sal_uInt16 i = 0; i < aMarks.Count(); i++)
                 {
-                    if(pMark->GetTxtTOXMark())
-                    {
-                        aMarks.C40_INSERT(SwTOXMark, pMark, aMarks.Count());
-                    }
-                    pMark = static_cast<SwTOXMark*>(aIter.Next());
-                }
-                uno::Sequence< uno::Reference<text::XDocumentIndexMark> >
-                    aXMarks(aMarks.Count());
-                uno::Reference<text::XDocumentIndexMark>* pxMarks =
-                    aXMarks.getArray();
-                for(USHORT i = 0; i < aMarks.Count(); i++)
-                {
-                    pMark = aMarks.GetObject(i);
+                     SwTOXMark* pMark = aMarks.GetObject(i);
                     pxMarks[i] = SwXDocumentIndexMark::CreateXDocumentIndexMark(
                         *m_pImpl->m_pDoc,
                         *const_cast<SwTOXType*>(pType), *pMark);
@@ -1243,8 +1225,7 @@ SwXDocumentIndex::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndex::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndex::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1254,8 +1235,7 @@ SwXDocumentIndex::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndex::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndex::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1265,8 +1245,7 @@ SwXDocumentIndex::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndex::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndex::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1276,8 +1255,7 @@ SwXDocumentIndex::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndex::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndex::removeVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1583,16 +1561,16 @@ public:
         try {
             InsertTOXMark(rTOXType, rMark, rPam, 0);
         } catch (...) {
-            OSL_ENSURE(false, "ReplaceTOXMark() failed!");
+            OSL_FAIL("ReplaceTOXMark() failed!");
             m_ListenerContainer.Disposing();
             throw;
         }
     }
 
     void    Invalidate();
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 };
 
 void SwXDocumentIndexMark::Impl::Invalidate()
@@ -1614,7 +1592,7 @@ void SwXDocumentIndexMark::Impl::Invalidate()
     m_pTOXMark = 0;
 }
 
-void SwXDocumentIndexMark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXDocumentIndexMark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 
@@ -1857,7 +1835,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     SwUnoInternalPaM aPam(*pDoc);
-    //das muss jetzt sal_True liefern
+    //which must now return sal_True
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     SwTOXMark aMark (pTOXType);
     if (m_pImpl->m_sAltText.getLength())
@@ -1928,7 +1906,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     // n.b.: toxmarks must have either alternative text or an extent
     if (bMark && rMark.GetAlternativeText().Len())
     {
-        rPam.Normalize(TRUE);
+        rPam.Normalize(sal_True);
         rPam.DeleteMark();
         bMark = false;
     }
@@ -2339,8 +2317,7 @@ SwXDocumentIndexMark::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndexMark::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndexMark::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -2350,8 +2327,7 @@ SwXDocumentIndexMark::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-    "SwXDocumentIndexMark::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndexMark::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -2361,8 +2337,7 @@ SwXDocumentIndexMark::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXDocumentIndexMark::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndexMark::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -2372,8 +2347,7 @@ SwXDocumentIndexMark::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-    "SwXDocumentIndexMark::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXDocumentIndexMark::removeVetoableChangeListener(): not implemented");
 }
 
 /******************************************************************
@@ -2809,7 +2783,8 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
         SwFormToken aToken(TOKEN_END);
         for(sal_Int32 j = 0; j < nProperties; j++)
         {
-            if (pProperties[j].Name.equalsAscii("TokenType"))
+            if (pProperties[j].Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("TokenType")))
             {
                 const OUString sTokenType =
                         lcl_AnyToString(pProperties[j].Value);
@@ -2902,7 +2877,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 }
                 aToken.nChapterFormat = nFormat;
             }
-//--->i53420
+// #i53420#
             else if (pProperties[j].Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM("ChapterLevel")))
             {
@@ -2913,7 +2888,6 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 }
                 aToken.nOutlineLevel = nLevel;
             }
-//<---
             else if (pProperties[j].Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM("BibliographyDataField")))
             {
@@ -2948,7 +2922,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
         {
             aToken.eTokenType = TOKEN_ENTRY;
         }
-//---> i53420
+// #i53420#
 // check for chapter format allowed values if it was TOKEN_ENTRY_NO type
 // only allowed value are CF_NUMBER and CF_NUM_NOPREPST_TITLE
 // reading from file
@@ -2963,7 +2937,6 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                 throw lang::IllegalArgumentException();
             }
         }
-//<---
         sPattern += aToken.GetString();
     }
     SwForm aForm(rTOXBase.GetTOXForm());
@@ -3021,7 +2994,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         {
             case TOKEN_ENTRY_NO:
             {
-//--->i53420
+// #i53420#
 // writing to file (from doc to properties)
                 sal_Int32 nElements = 2;
                 sal_Int32 nCurrentElement = 0;
@@ -3072,7 +3045,6 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                     pArr[nCurrentElement].Name = C2U("ChapterLevel");
                     pArr[nCurrentElement].Value <<= aToken.nOutlineLevel;
                 }
-//<---
             }
             break;
             case TOKEN_ENTRY:   // no difference between Entry and Entry Text
@@ -3099,7 +3071,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 if(SVX_TAB_ADJUST_END == aToken.eTabAlign)
                 {
                     pArr[1].Name = C2U("TabStopRightAligned");
-                    BOOL bTemp = sal_True;
+                    sal_Bool bTemp = sal_True;
                     pArr[1].Value.setValue(&bTemp, ::getCppuBooleanType());
                 }
                 else
@@ -3178,11 +3150,9 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                     break;
                 }
                 pArr[2].Value <<= nVal;
-//--->i53420
+// #i53420#
                 pArr[3].Name = C2U("ChapterLevel");
-                //
                 pArr[3].Value <<= aToken.nOutlineLevel;
-//<---
             }
             break;
             case TOKEN_LINK_START:
@@ -3228,7 +3198,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 ;
         }
 
-        aIt++; // #i21237#
+        ++aIt; // #i21237#
     }
 
     uno::Any aRet;

@@ -59,11 +59,17 @@
 #include <netinet/in.h>
 
 
-using namespace rtl;
 using namespace cppu;
 using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OStringBuffer;
 // -----------------------------------------------------------------------
 
 // Forward declaration
@@ -100,8 +106,8 @@ SAL_IMPLEMENT_MAIN()
      *  Create UCB.
      */
     Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    aArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[ 1 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bSuccess =
 #endif
@@ -141,7 +147,7 @@ public:
     void        Paint( const Rectangle& rRect );
     void        Resize();
 
-    BOOL        Close();
+    sal_Bool        Close();
 
     void parseList( const rtl::OString& rList );
     rtl::OString processCommand( const rtl::OString& rCommand );
@@ -190,9 +196,9 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     m_aQuitButton.Show();
 }
 
-BOOL MyWin::Close()
+sal_Bool MyWin::Close()
 {
-    BOOL bRet = WorkWindow::Close();
+    sal_Bool bRet = WorkWindow::Close();
     if( bRet )
         Application::Quit();
     return bRet;
@@ -273,7 +279,7 @@ IMPL_LINK( MyWin, QuitHdl, Button*, )
 IMPL_LINK( MyWin, SelectHdl, ListBox*, )
 {
     String aEntry = m_aSvpBitmaps.GetSelectEntry();
-    USHORT nPos = aEntry.SearchAscii( ": " );
+    sal_uInt16 nPos = aEntry.SearchAscii( ": " );
     if( nPos != STRING_NOTFOUND )
     {
         OStringBuffer aCommand( 64 );
@@ -292,7 +298,7 @@ IMPL_LINK( MyWin, SelectHdl, ListBox*, )
         aFixedSize.Width() += 10;
         aFixedSize.Height() += 10;
         m_aImage.SetSizePixel( aFixedSize );
-        m_aImage.SetBitmap( BitmapEx( aBitmap ) );
+        m_aImage.SetImage( Image( BitmapEx( aBitmap ) ) );
     }
     return 0;
 }

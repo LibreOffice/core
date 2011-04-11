@@ -52,14 +52,14 @@
  module com {  module sun {  module star {  module embed {
 
 //============================================================================
-/** This interface allows to ge access to relationship data.
+/** This interface allows to get access to relationship data.
 
     <p>
     The relationship data is organized as a set of entries. Each of entry
     is represented by a set of tags, where each tag has unique for this entry
     name and a string value. An entry must contain at least one tag named
-    "ID", the value of this tag must be uniqued for the whole set of entries,
-    this tag is used as a uniqued identified of an entry.
+    "ID", the value of this tag must be unique for the whole set of entries,
+    this tag is used as a unique identifier of an entry.
     </p>
  */
 published interface XRelationshipAccess : ::com::sun::star::uno::XInterface

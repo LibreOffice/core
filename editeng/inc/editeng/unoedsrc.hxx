@@ -152,25 +152,25 @@ class EDITENG_DLLPUBLIC SvxTextForwarder
 public:
     virtual             ~SvxTextForwarder();
 
-    virtual USHORT      GetParagraphCount() const = 0;
-    virtual USHORT      GetTextLen( USHORT nParagraph ) const = 0;
+    virtual sal_uInt16      GetParagraphCount() const = 0;
+    virtual sal_uInt16      GetTextLen( sal_uInt16 nParagraph ) const = 0;
     virtual String      GetText( const ESelection& rSel ) const = 0;
-    virtual SfxItemSet  GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib = 0 ) const = 0;
-    virtual SfxItemSet  GetParaAttribs( USHORT nPara ) const = 0;
-    virtual void        SetParaAttribs( USHORT nPara, const SfxItemSet& rSet ) = 0;
+    virtual SfxItemSet  GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = 0 ) const = 0;
+    virtual SfxItemSet  GetParaAttribs( sal_uInt16 nPara ) const = 0;
+    virtual void        SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet ) = 0;
     virtual void        RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich ) = 0;
-    virtual void        GetPortions( USHORT nPara, SvUShorts& rList ) const = 0;
+    virtual void        GetPortions( sal_uInt16 nPara, SvUShorts& rList ) const = 0;
 
-    virtual USHORT      GetItemState( const ESelection& rSel, USHORT nWhich ) const = 0;
-    virtual USHORT      GetItemState( USHORT nPara, USHORT nWhich ) const = 0;
+    virtual sal_uInt16      GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const = 0;
+    virtual sal_uInt16      GetItemState( sal_uInt16 nPara, sal_uInt16 nWhich ) const = 0;
 
     virtual void        QuickInsertText( const String& rText, const ESelection& rSel ) = 0;
     virtual void        QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel ) = 0;
     virtual void        QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel ) = 0;
     virtual void        QuickInsertLineBreak( const ESelection& rSel ) = 0;
 
-    virtual XubString    CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor ) = 0;
-    virtual void         FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos ) = 0;
+    virtual XubString    CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor ) = 0;
+    virtual void         FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos ) = 0;
 
     virtual SfxItemPool* GetPool() const = 0;
 
@@ -178,7 +178,7 @@ public:
 
     // implementation functions for XParagraphAppend and XTextPortionAppend
     virtual void        AppendParagraph() = 0;
-    virtual xub_StrLen  AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet ) = 0;
+    virtual xub_StrLen  AppendTextPortion( sal_uInt16 nPara, const String &rText, const SfxItemSet &rSet ) = 0;
 
     // XTextCopy
     virtual void        CopyText(const SvxTextForwarder& rSource) = 0;
@@ -187,7 +187,7 @@ public:
 
         @return sal_False, if no longer valid
      */
-    virtual BOOL            IsValid() const = 0;
+    virtual sal_Bool            IsValid() const = 0;
 
     /** Query language of character at given position on the underlying edit engine
 
@@ -197,14 +197,14 @@ public:
         @param nIndex[0 .. m-1]
         Index of character to query language of
      */
-    virtual LanguageType    GetLanguage( USHORT nPara, USHORT nIndex ) const = 0;
+    virtual LanguageType    GetLanguage( sal_uInt16 nPara, sal_uInt16 nIndex ) const = 0;
 
     /** Query number of fields in the underlying edit engine
 
         @param nPara[0 .. n-1]
         Index of paragraph to query field number in
      */
-    virtual USHORT          GetFieldCount( USHORT nPara ) const = 0;
+    virtual sal_uInt16          GetFieldCount( sal_uInt16 nPara ) const = 0;
 
     /** Query information for given field number in the underlying edit engine
 
@@ -214,14 +214,14 @@ public:
         @param nField[0 .. m-1]
         Index of field to query information of
      */
-    virtual EFieldInfo      GetFieldInfo( USHORT nPara, USHORT nField ) const = 0;
+    virtual EFieldInfo      GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const = 0;
 
     /** Query information regarding bullets for given paragraph on the underlying edit engine
 
         @param nPara[0 .. n-1]
         Index of paragraph to query bullet info on
      */
-    virtual EBulletInfo     GetBulletInfo( USHORT nPara ) const = 0;
+    virtual EBulletInfo     GetBulletInfo( sal_uInt16 nPara ) const = 0;
 
     /** Query the bounding rectangle of the given character
 
@@ -244,7 +244,7 @@ public:
         left corner of text. The coordinates returned here are to be
         interpreted in the map mode given by GetMapMode().
     */
-    virtual Rectangle       GetCharBounds( USHORT nPara, USHORT nIndex ) const = 0;
+    virtual Rectangle       GetCharBounds( sal_uInt16 nPara, sal_uInt16 nIndex ) const = 0;
 
     /** Query the bounding rectangle of the given paragraph
 
@@ -255,7 +255,7 @@ public:
         left corner of text. The coordinates returned here are to be
         interpreted in the map mode given by GetMapMode().
      */
-    virtual Rectangle       GetParaBounds( USHORT nPara ) const = 0;
+    virtual Rectangle       GetParaBounds( sal_uInt16 nPara ) const = 0;
 
     /** Query the map mode of the underlying EditEngine/Outliner
 
@@ -292,7 +292,7 @@ public:
         @return sal_True, if the point is over any text and both rPara and rIndex are valid
 
      */
-    virtual sal_Bool        GetIndexAtPoint( const Point& rPoint, USHORT& rPara, USHORT& rIndex ) const = 0;
+    virtual sal_Bool        GetIndexAtPoint( const Point& rPoint, sal_uInt16& rPara, sal_uInt16& rIndex ) const = 0;
 
     /** Get the start and the end index of the word at the given index
 
@@ -317,7 +317,7 @@ public:
 
         @return sal_True, if the result is non-empty
      */
-    virtual sal_Bool        GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& rStart, USHORT& rEnd ) const = 0;
+    virtual sal_Bool        GetWordIndices( sal_uInt16 nPara, sal_uInt16 nIndex, sal_uInt16& rStart, sal_uInt16& rEnd ) const = 0;
 
     /** Query range of similar attributes
 
@@ -334,7 +334,7 @@ public:
 
         @return sal_True, if the range has been successfully determined
      */
-    virtual sal_Bool        GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const = 0;
+    virtual sal_Bool        GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex ) const = 0;
 
     /** Query number of lines in the formatted paragraph
 
@@ -344,7 +344,7 @@ public:
         @return number of lines in given paragraph
 
      */
-    virtual USHORT          GetLineCount( USHORT nPara ) const = 0;
+    virtual sal_uInt16          GetLineCount( sal_uInt16 nPara ) const = 0;
 
     /** Query line length
 
@@ -355,7 +355,7 @@ public:
         Index of line in paragraph to query line length of
 
      */
-    virtual USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const = 0;
+    virtual sal_uInt16          GetLineLen( sal_uInt16 nPara, sal_uInt16 nLine ) const = 0;
 
     /** Query bounds of line in paragraph
 
@@ -372,7 +372,7 @@ public:
         Index of line in paragraph to query line length of
 
      */
-    virtual void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const = 0;
+    virtual void            GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_uInt16 nParagraph, sal_uInt16 nLine ) const = 0;
 
     /** Query the line number for a index in the paragraphs text
 
@@ -385,7 +385,7 @@ public:
         @returns [0 .. k-1]
         The line number of the chara in the paragraph
      */
-    virtual USHORT          GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const = 0;
+    virtual sal_uInt16          GetLineNumberAtIndex( sal_uInt16 nPara, sal_uInt16 nIndex ) const = 0;
 
     /** Delete given text range and reformat text
 
@@ -414,7 +414,7 @@ public:
 
          @return sal_True if text have been successfully reformatted
       */
-    virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE ) = 0;
+    virtual sal_Bool        QuickFormatDoc( sal_Bool bFull=sal_False ) = 0;
 
     /** Get the outline depth of given paragraph
 
@@ -424,7 +424,7 @@ public:
         @return the outline level of the given paragraph. The range is
         [0,n), where n is the maximal outline level.
      */
-    virtual sal_Int16       GetDepth( USHORT nPara ) const = 0;
+    virtual sal_Int16       GetDepth( sal_uInt16 nPara ) const = 0;
 
     /** Set the outline depth of given paragraph
 
@@ -435,11 +435,11 @@ public:
         The depth to set on the given paragraph. The range is
         [0,n), where n is the maximal outline level.
 
-        @return TRUE, if depth could be successfully set. Reasons for
+        @return sal_True, if depth could be successfully set. Reasons for
         failure are e.g. the text does not support outline level
         (EditEngine), or the depth range is exceeded.
      */
-    virtual sal_Bool        SetDepth( USHORT nPara, sal_Int16 nNewDepth ) = 0;
+    virtual sal_Bool        SetDepth( sal_uInt16 nPara, sal_Int16 nNewDepth ) = 0;
 
     virtual sal_Int16 GetNumberingStartValue( sal_uInt16 nPara );
     virtual void SetNumberingStartValue( sal_uInt16 nPara, sal_Int16 nNumberingStartValue );
@@ -463,7 +463,7 @@ public:
 
         @return sal_False, if no longer valid
      */
-    virtual BOOL        IsValid() const = 0;
+    virtual sal_Bool        IsValid() const = 0;
 
     /** Query visible area of the view containing the text
 

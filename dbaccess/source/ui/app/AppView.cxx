@@ -83,7 +83,7 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 
     SetBorderStyle(WINDOW_BORDER_MONO);
 
-    m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL ,FALSE);
+    m_pPanel = new OTitleWindow(this,STR_DATABASE,WB_BORDER | WB_DIALOGCONTROL ,sal_False);
     m_pPanel->SetBorderStyle(WINDOW_BORDER_MONO);
     OApplicationSwapWindow* pSwap = new OApplicationSwapWindow( m_pPanel, *this );
     pSwap->Show();
@@ -101,8 +101,7 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 // -----------------------------------------------------------------------------
 OAppBorderWindow::~OAppBorderWindow()
 {
-    //////////////////////////////////////////////////////////////////////
-    // Childs zerstoeren
+    // destroy children
     if ( m_pPanel )
     {
         m_pPanel->Hide();
@@ -127,8 +126,7 @@ void OAppBorderWindow::GetFocus()
 // -----------------------------------------------------------------------------
 void OAppBorderWindow::Resize()
 {
-    //////////////////////////////////////////////////////////////////////
-    // Abmessungen parent window
+    // parent window dimension
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();
@@ -185,10 +183,6 @@ void OAppBorderWindow::ImplInitSettings()
 
     if( true )
         SetBackground( rStyleSettings.GetDialogColor() );
-
-    /*SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
-    SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );*/
 }
 // -----------------------------------------------------------------------------
 OApplicationView* OAppBorderWindow::getView() const
@@ -313,11 +307,11 @@ long OApplicationView::PreNotify( NotifyEvent& rNEvt )
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             // give the pane the chance to intercept mnemonic accelerators
-            // #i34790# - 2004-09-30 - fs@openoffice.org
+            // #i34790#
             if ( getPanel() && getPanel()->interceptKeyInput( *pKeyEvent ) )
                 return 1L;
             // and ditto the detail view
-            // #i72799# - 2006-12-20 / frank.schoenheit@sun.com
+            // #i72799#
             if ( getDetailView() && getDetailView()->interceptKeyInput( *pKeyEvent ) )
                 return 1L;
         }
@@ -601,9 +595,6 @@ void OApplicationView::ImplInitSettings()
 
     if( true )
         SetBackground( rStyleSettings.GetFieldColor() );
-    /*SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
-    SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
-    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );*/
 }
 //-----------------------------------------------------------------------------
 

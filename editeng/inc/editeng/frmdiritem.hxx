@@ -48,15 +48,15 @@ class EDITENG_DLLPUBLIC SvxFrameDirectionItem : public SfxUInt16Item
 public:
     TYPEINFO();
 
-    SvxFrameDirectionItem( USHORT nWhich  );
+    SvxFrameDirectionItem( sal_uInt16 nWhich  );
     SvxFrameDirectionItem( SvxFrameDirection nValue /*= FRMDIR_HORI_LEFT_TOP*/,
-                            USHORT nWhich  );
+                            sal_uInt16 nWhich  );
     virtual ~SvxFrameDirectionItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream & rStrm, USHORT nIVer) const;
-    virtual USHORT          GetVersion( USHORT nFileVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream & rStrm, sal_uInt16 nIVer) const;
+    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -65,10 +65,8 @@ public:
                                     String &rText,
                                     const IntlWrapper * = 0 ) const;
 
-    virtual bool      PutValue( const com::sun::star::uno::Any& rVal,
-                                    BYTE nMemberId );
-    virtual bool      QueryValue( com::sun::star::uno::Any& rVal,
-                                BYTE nMemberId ) const;
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     inline SvxFrameDirectionItem& operator=( const SvxFrameDirectionItem& rItem )
     {

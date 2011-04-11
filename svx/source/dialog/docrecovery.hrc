@@ -36,7 +36,7 @@
 
 // TabDialog
 #define TABDLG_WIDTH                290
-#define TABDLG_HEIGHT               278
+#define TABDLG_HEIGHT               238
 
 // TabPage CrashSave
 
@@ -52,7 +52,7 @@
 
 
 #define SAVE_WIDTH                  290
-#define SAVE_HEIGHT                 278
+#define SAVE_HEIGHT                 238
 #define SAVE_TITLEWINHEIGHT         36
 #define SAVE_DESCRHEIGHT            48
 #define SAVE_COL0                   (RSC_SP_DLG_INNERBORDER_LEFT)
@@ -105,9 +105,6 @@
 #define IMG_GREENCHECK              14
 #define IMG_YELLOWCHECK             15
 #define IMG_REDCROSS                16
-#define IMG_GREENCHECK_HC           17
-#define IMG_YELLOWCHECK_HC          18
-#define IMG_REDCROSS_HC             19
 #define STR_SUCCESSRECOV            20
 #define STR_ORIGDOCRECOV            21
 #define STR_RECOVFAILED             22

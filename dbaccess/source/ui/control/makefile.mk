@@ -48,29 +48,29 @@ SRC1FILES =	\
 # ... exception files .........................
 
 EXCEPTIONSFILES=\
-        $(SLO)$/statusbarontroller.obj	\
-        $(SLO)$/RelationControl.obj		\
-        $(SLO)$/toolboxcontroller.obj	\
-        $(SLO)$/tabletree.obj			\
-        $(SLO)$/TableGrantCtrl.obj		\
-        $(SLO)$/dbtreelistbox.obj       \
-        $(SLO)$/sqledit.obj				\
         $(SLO)$/ColumnControlWindow.obj	\
         $(SLO)$/FieldDescControl.obj    \
-        $(SLO)$/opendoccontrols.obj
+        $(SLO)$/RelationControl.obj	\
+        $(SLO)$/SqlNameEdit.obj		\
+        $(SLO)$/TableGrantCtrl.obj	\
+        $(SLO)$/VertSplitView.obj	\
+        $(SLO)$/charsetlistbox.obj	\
+        $(SLO)$/curledit.obj           	\
+        $(SLO)$/dbtreelistbox.obj       \
+        $(SLO)$/listviewitems.obj	\
+        $(SLO)$/marktree.obj		\
+        $(SLO)$/opendoccontrols.obj	\
+        $(SLO)$/sqledit.obj		\
+        $(SLO)$/statusbarontroller.obj	\
+        $(SLO)$/tabletree.obj		\
+        $(SLO)$/toolboxcontroller.obj	\
+        $(SLO)$/undosqledit.obj
 
 # ... object files ............................
 
 SLOFILES=	\
-        $(EXCEPTIONSFILES)				\
-        $(SLO)$/ScrollHelper.obj		\
-        $(SLO)$/VertSplitView.obj		\
-        $(SLO)$/SqlNameEdit.obj			\
-        $(SLO)$/listviewitems.obj		\
-        $(SLO)$/undosqledit.obj			\
-        $(SLO)$/marktree.obj			\
-        $(SLO)$/curledit.obj            \
-        $(SLO)$/charsetlistbox.obj
+        $(EXCEPTIONSFILES)		\
+        $(SLO)$/ScrollHelper.obj
 
 # --- Targets ----------------------------------
 

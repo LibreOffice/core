@@ -175,7 +175,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQL
 
     if ( !m_pTable || !m_pTable->getConnection() )
     {
-        OSL_ENSURE( false, "OResultSetMetaData::isSearchable: suspicious: called without table or connection!" );
+        OSL_FAIL( "OResultSetMetaData::isSearchable: suspicious: called without table or connection!" );
         return sal_False;
     }
 

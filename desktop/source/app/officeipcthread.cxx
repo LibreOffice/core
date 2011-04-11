@@ -53,11 +53,14 @@
 #include "rtl/process.h"
 #include "tools/getprocessworkingdir.hxx"
 
-using namespace rtl;
 using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
+
+using ::rtl::OString;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 const char  *OfficeIPCThread::sc_aTerminationSequence = "InternalIPC::TerminateThread";
 const int OfficeIPCThread::sc_nTSeqLength = 28;
@@ -222,7 +225,7 @@ OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
     namespace { struct Security : public rtl::Static<osl::Security, Security> {}; }
 ::osl::Mutex*       OfficeIPCThread::pOfficeIPCThreadMutex = 0;
 
-// Turns a string in aMsg such as file://home/foo/.libreoffice/3
+// Turns a string in aMsg such as file:///home/foo/.libreoffice/3
 // Into a hex string of well known length ff132a86...
 String CreateMD5FromString( const OUString& aMsg )
 {
@@ -483,7 +486,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 
     OUString aUserInstallPathHashCode;
 
-    if ( aPreloadData.equalsAscii( "1" ))
+    if ( aPreloadData.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) ))
     {
         sal_Char    szBuffer[32];
         sprintf( szBuffer, "%d", SUPD );
@@ -540,10 +543,9 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         // Seems another office is running. Pipe arguments to it and self terminate
         osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
 
-        sal_Bool bWaitBeforeClose = sal_False;
         ByteString aArguments(RTL_CONSTASCII_STRINGPARAM(ARGUMENT_PREFIX));
         rtl::OUString cwdUrl;
-        if (!(tools::getProcessWorkingDir(&cwdUrl) &&
+        if (!(tools::getProcessWorkingDir(cwdUrl) &&
               addArgument(&aArguments, '1', cwdUrl)))
         {
             aArguments += '0';
@@ -552,19 +554,14 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         for( sal_uInt32 i=0; i < nCount; i++ )
         {
             rtl_getAppCommandArg( i, &aDummy.pData );
-            if( aDummy.indexOf('-',0) != 0 )
-            {
-                bWaitBeforeClose = sal_True;
-            }
             if (!addArgument(&aArguments, ',', aDummy)) {
                 return IPC_STATUS_BOOTSTRAP_ERROR;
             }
         }
-        // finaly, write the string onto the pipe
+        // finally, write the string onto the pipe
         aStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
         aStreamPipe.write( "\0", 1 );
 
-        // wait for confirmation #95361# #95425#
         ByteString aToken(sc_aConfirmationSequence);
         char *aReceiveBuffer = new char[aToken.Len()+1];
         int n = aStreamPipe.read( aReceiveBuffer, aToken.Len() );
@@ -597,7 +594,6 @@ void OfficeIPCThread::DisableOfficeIPCThread()
         // this is done so the subsequent join will not hang
         // because the thread hangs in accept of pipe
         osl::StreamPipe aPipe ( pOfficeIPCThread->maPipeIdent, osl_Pipe_OPEN, Security::get() );
-        //Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
         if (aPipe.is())
         {
             aPipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
@@ -664,8 +660,6 @@ void SAL_CALL OfficeIPCThread::run()
 
         if( nError == osl_Pipe_E_None )
         {
-
-            // #111143# and others:
             // if we receive a request while the office is displaying some dialog or error during
             // bootstrap, that dialogs event loop might get events that are dispatched by this thread
             // we have to wait for cReady to be set by the real main loop.
@@ -695,7 +689,7 @@ void SAL_CALL OfficeIPCThread::run()
             }
             // don't close pipe ...
 
-            // #90717# Is this a lookup message from another application? if so, ignore
+            // Is this a lookup message from another application? if so, ignore
             if ( aArguments.Len() == 0 )
                 continue;
 
@@ -728,14 +722,12 @@ void SAL_CALL OfficeIPCThread::run()
             }
 
             // handle request for acceptor
-            sal_Bool bAcceptorRequest = sal_False;
             OUString aAcceptString;
             if ( aCmdLineArgs->GetAcceptString(aAcceptString) && Desktop::CheckOEM()) {
                 ApplicationEvent* pAppEvent =
                     new ApplicationEvent( aEmpty, aEmpty,
                                           "ACCEPT", aAcceptString );
                 ImplPostForeignAppEvent( pAppEvent );
-                bAcceptorRequest = sal_True;
             }
             // handle acceptor removal
             OUString aUnAcceptString;
@@ -744,7 +736,6 @@ void SAL_CALL OfficeIPCThread::run()
                     new ApplicationEvent( aEmpty, aEmpty,
                                          "UNACCEPT", aUnAcceptString );
                 ImplPostForeignAppEvent( pAppEvent );
-                bAcceptorRequest = sal_True;
             }
 
 #ifndef UNX
@@ -849,8 +840,6 @@ void SAL_CALL OfficeIPCThread::run()
                     aHelpURLBuffer.appendAscii("&System=UNX");
 #elif defined WNT
                     aHelpURLBuffer.appendAscii("&System=WIN");
-#elif defined MAC
-                    aHelpURLBuffer.appendAscii("&System=MAC");
 #elif defined OS2
                     aHelpURLBuffer.appendAscii("&System=OS2");
 #endif
@@ -908,9 +897,6 @@ void SAL_CALL OfficeIPCThread::run()
             while (
                    (nResult = maStreamPipe.send(sc_aConfirmationSequence+nBytes, sc_nCSeqLength-nBytes))>0 &&
                    ((nBytes += nResult) < sc_nCSeqLength) ) ;
-            // now we can close, don't we?
-            // maStreamPipe.close();
-
         }
         else
         {
@@ -972,20 +958,20 @@ static void AddConversionsToDispatchList(
 
     OUString aOutDir( rParamOut.trim() );
     ::rtl::OUString aPWD;
-    ::tools::getProcessWorkingDir( &aPWD );
+    ::tools::getProcessWorkingDir( aPWD );
 
     if( !::osl::FileBase::getAbsoluteFileURL( aPWD, rParamOut, aOutDir ) )
         ::osl::FileBase::getSystemPathFromFileURL( aOutDir, aOutDir );
 
     if( rParamOut.trim().getLength() )
     {
-        aParam += ::rtl::OUString::createFromAscii(";");
+        aParam += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";"));
         aParam += aOutDir;
     }
     else
     {
         ::osl::FileBase::getSystemPathFromFileURL( aPWD, aPWD );
-        aParam += ::rtl::OUString::createFromAscii( ";" ) + aPWD;
+        aParam += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ";" )) + aPWD;
     }
 
     if ( rRequestList.getLength() > 0 )

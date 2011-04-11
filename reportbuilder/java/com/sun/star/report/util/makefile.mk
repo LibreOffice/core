@@ -37,7 +37,11 @@ PACKAGE = com$/sun$/star$/report$/util
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
 EXTRAJARFILES   = $(LIBBASE_JAR) $(LIBXML_JAR) $(JFREEREPORT_JAR)
 .ELSE
-JARFILES        = libbase-1.0.0.jar libxml-1.0.0.jar flow-engine-0.9.2.jar
+.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
+JARFILES += \
+    libbase-$(LIBBASE_VERSION).jar                      \
+    libxml-$(LIBXML_VERSION).jar						\
+    flow-engine-$(FLOW_ENGINE_VERSION).jar
 .ENDIF
 
 JAVAFILES       = DefaultJobProperties.java DefaultParameterMap.java DefaultReportJobDefinition.java ManifestWriter.java

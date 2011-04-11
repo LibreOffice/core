@@ -49,11 +49,11 @@ class FuDraw
 public:
     TYPEINFO();
 
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
-    virtual BOOL RequestHelp(const HelpEvent& rHEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool RequestHelp(const HelpEvent& rHEvt);
 
     virtual void ScrollStart();
     virtual void ScrollEnd();
@@ -65,10 +65,10 @@ public:
 
     virtual void DoubleClick(const MouseEvent& rMEvt);
 
-    BOOL    SetPointer(SdrObject* pObj, const Point& rPos);
-    BOOL    SetHelpText(SdrObject* pObj, const Point& rPos, const SdrViewEvent& rVEvt);
+    sal_Bool    SetPointer(SdrObject* pObj, const Point& rPos);
+    sal_Bool    SetHelpText(SdrObject* pObj, const Point& rPos, const SdrViewEvent& rVEvt);
 
-    void    SetPermanent(BOOL bSet) { bPermanent = bSet; }
+    void    SetPermanent(sal_Bool bSet) { bPermanent = bSet; }
 
     /** is called when the currenct function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
@@ -89,10 +89,10 @@ protected:
 
     Pointer aNewPointer;
     Pointer aOldPointer;
-    BOOL    bMBDown;
-    BOOL    bDragHelpLine;
-    USHORT  nHelpLine;
-    BOOL    bPermanent;
+    sal_Bool    bMBDown;
+    sal_Bool    bDragHelpLine;
+    sal_uInt16  nHelpLine;
+    sal_Bool    bPermanent;
 
 };
 

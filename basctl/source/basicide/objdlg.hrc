@@ -31,10 +31,11 @@
 
 #define RID_BASICIDE_OBJCAT     ( RID_BASICIDE_START + 70 )
 #define RID_FT_MACRODESCR   8
-#define RID_IMGLST_TB_HC 9
 #define RID_TLB_MACROS     10
 #define RID_TB_TOOLBOX     11
 
 #define TBITEM_SHOW     1
+
+#define RID_STR_TLB_MACROS      ( RID_BASICIDE_START + 71 )
 
 #endif // _OBJDLG_HXX

@@ -71,10 +71,10 @@ namespace uno = ::com::sun::star::uno;
 class SvxNoSpaceEdit : public Edit
 {
 private:
-    BOOL            bOnlyNumeric;
+    sal_Bool            bOnlyNumeric;
 
 public:
-    SvxNoSpaceEdit(Window* pParent, ResId rResId, BOOL bNum = FALSE ) :
+    SvxNoSpaceEdit(Window* pParent, ResId rResId, sal_Bool bNum = sal_False ) :
         Edit( pParent, rResId ), bOnlyNumeric( bNum ) {}
 
     virtual void    KeyInput( const KeyEvent& rKEvent );
@@ -129,7 +129,7 @@ private:
 
 #ifdef _SVX_OPTINET2_CXX
     void ArrangeControls_Impl();
-    void EnableControls_Impl(BOOL bEnable);
+    void EnableControls_Impl(sal_Bool bEnable);
     void ReadConfigData_Impl();
     void ReadConfigDefaults_Impl();
     void RestoreConfigDefaults_Impl();
@@ -143,7 +143,7 @@ private:
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
@@ -200,14 +200,14 @@ private:
 
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
-    BOOL                ConfirmLeave( const String& rStringSelection );   //add by BerryJia for fixing Bug102610 Time:2002-8-29 11:00 (China Standard Time GMT+08:00)
+    sal_Bool                ConfirmLeave( const String& rStringSelection );
 
     SvxSearchTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxSearchTabPage();
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
@@ -274,19 +274,18 @@ protected:
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
-//added by jmeng begin
 class MozPluginTabPage : public SfxTabPage
 {
     FixedLine       aMSWordGB;
     CheckBox        aWBasicCodeCB;
 
-    BOOL isInstalled(void);
-    BOOL installPlugin(void);
-    BOOL uninstallPlugin(void);
+    sal_Bool isInstalled(void);
+    sal_Bool installPlugin(void);
+    sal_Bool uninstallPlugin(void);
 
     MozPluginTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~MozPluginTabPage();
@@ -296,16 +295,13 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
 };
-//added by jmeng end
+
 #endif
 
-/* -----------------------------20.06.01 16:32--------------------------------
-
- ---------------------------------------------------------------------------*/
 #ifdef WNT
 #else
 #define HELPER_PAGE_COMPLETE
@@ -332,7 +328,7 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 

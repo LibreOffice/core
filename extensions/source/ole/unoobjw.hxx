@@ -35,10 +35,7 @@
 #include <com/sun/star/script/InvocationInfo.hpp>
 #include <salhelper/simplereferenceobject.hxx>
 
-#include <tools/presys.h>
 #include "comifaces.hxx"
-#include <tools/postsys.h>
-
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
 
@@ -89,7 +86,7 @@ struct MemberInfo
     OUString name;
 };
 
-typedef hash_map
+typedef boost::unordered_map
 <
     OUString,
     DISPID,
@@ -97,7 +94,7 @@ typedef hash_map
     equalOUString_Impl
 > NameToIdMap;
 
-typedef hash_map
+typedef boost::unordered_map
 <
     OUString,
     sal_Bool,
@@ -105,7 +102,7 @@ typedef hash_map
     equalOUString_Impl
 > BadNameMap;
 
-typedef hash_map
+typedef boost::unordered_map
 <
     DISPID,
     MemberInfo
@@ -292,8 +289,6 @@ protected:
 
 
 };
-
-
 
 } // end namespace
 

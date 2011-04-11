@@ -89,7 +89,7 @@ void LwpFribFootnote::Read(LwpObjectStream * pObjStrm, sal_uInt16 /*len*/)
 /**
  * @descr  Register footnote style by calling LwpFootnote::RegisterStyle()
  */
-void LwpFribFootnote::RegisterStyle()
+void LwpFribFootnote::RegisterNewStyle()
 {
     LwpFootnote* pFootnote = GetFootnote();
     if(pFootnote)

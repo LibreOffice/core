@@ -115,7 +115,6 @@
 #define SvxNumTypeItem              SfxUInt16Item
 #define SvxShadowLocationItem       SfxUInt16Item
 #define SvxDbTypeItem               SfxUInt16Item
-//#define SvxChooseControlEnumItem  SfxUInt16Item
 #define SvxDrawToolEnumItem         SfxUInt16Item
 #define SvxChooseControlItem        SfxEnumItem
 #define SvxDrawToolItem             SfxUInt16Item
@@ -123,7 +122,6 @@
 #define SvxCellVerJustifyEnumItem   SfxUInt16Item
 #define SvxCellOrientationEnumItem  SfxUInt16Item
 #define SvxLanguage                 SfxUInt16Item
-//#define SfxLockBytesItem            SfxPoolItem
 #define OfaStringListItem           SfxStringListItem
 #define avmedia_MediaItem           ::avmedia::MediaItem
 #include <sfx2/tplpitem.hxx>

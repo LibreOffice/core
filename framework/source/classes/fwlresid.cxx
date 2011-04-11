@@ -45,11 +45,8 @@ ResMgr* FwlResId::GetResManager()
 
     if ( !pResMgr )
     {
-        rtl::OStringBuffer aBuf( 32 );
-        aBuf.append( "fwe" );
-
         SolarMutexGuard aSolarGuard;
-        pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
+        pResMgr = ResMgr::CreateResMgr("fwe");
     }
 
     return pResMgr;
@@ -57,7 +54,7 @@ ResMgr* FwlResId::GetResManager()
 
 // -----------------------------------------------------------------------
 
-FwlResId::FwlResId( USHORT nId ) :
+FwlResId::FwlResId( sal_uInt16 nId ) :
     ResId( nId, *FwlResId::GetResManager() )
 {
 }

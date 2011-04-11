@@ -77,11 +77,11 @@ public:
     ::sd::View& getView() const { return mrView; }
 
 protected:
-    virtual ULONG GetMarkablePointCount() const;
-    virtual ULONG GetMarkedPointCount() const;
-    virtual BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
+    virtual sal_uLong GetMarkablePointCount() const;
+    virtual sal_uLong GetMarkedPointCount() const;
+    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
     virtual void CheckPossibilities();
-    virtual BOOL MarkPoints(const Rectangle* pRect, BOOL bUnmark);
+    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
 
     virtual void addCustomHandles( SdrHdlList& rHandlerList );
     virtual void select();
@@ -140,13 +140,13 @@ public:
     bool getContext( SdrViewContext& rContext ) const;
 
     // support point editing
-    BOOL HasMarkablePoints() const;
-    ULONG GetMarkablePointCount() const;
-    BOOL HasMarkedPoints() const;
-    ULONG GetMarkedPointCount() const;
-    BOOL IsPointMarkable(const SdrHdl& rHdl) const;
-    BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
-    BOOL MarkPoints(const Rectangle* pRect, BOOL bUnmark);
+    sal_Bool HasMarkablePoints() const;
+    sal_uLong GetMarkablePointCount() const;
+    sal_Bool HasMarkedPoints() const;
+    sal_uLong GetMarkedPointCount() const;
+    sal_Bool IsPointMarkable(const SdrHdl& rHdl) const;
+    sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
+    sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
 
     void CheckPossibilities();
 

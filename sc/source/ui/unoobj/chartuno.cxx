@@ -208,11 +208,11 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     }
 
     ScRangeList* pList = new ScRangeList;
-    USHORT nRangeCount = (USHORT)aRanges.getLength();
+    sal_uInt16 nRangeCount = (sal_uInt16)aRanges.getLength();
     if (nRangeCount)
     {
         const table::CellRangeAddress* pAry = aRanges.getConstArray();
-        for (USHORT i=0; i<nRangeCount; i++)
+        for (sal_uInt16 i=0; i<nRangeCount; i++)
         {
             ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow, pAry[i].Sheet,
                             static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow,   pAry[i].Sheet );
@@ -232,7 +232,8 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
             //  Rechteck anpassen
             //! Fehler/Exception, wenn leer/ungueltig ???
             Point aRectPos( aRect.X, aRect.Y );
-            if (aRectPos.X() < 0) aRectPos.X() = 0;
+            bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+            if ( ( aRectPos.X() < 0 && !bLayoutRTL ) || ( aRectPos.X() > 0 && bLayoutRTL ) ) aRectPos.X() = 0;
             if (aRectPos.Y() < 0) aRectPos.Y() = 0;
             Size aRectSize( aRect.Width, aRect.Height );
             if (aRectSize.Width() <= 0) aRectSize.Width() = 5000;   // Default-Groesse
@@ -272,16 +273,16 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
                 // set arguments
                 uno::Sequence< beans::PropertyValue > aArgs( 4 );
                 aArgs[0] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
                     uno::makeAny( ::rtl::OUString( sRangeStr )), beans::PropertyState_DIRECT_VALUE );
                 aArgs[1] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("HasCategories"), -1,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
                     uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[2] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
                     uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[3] = beans::PropertyValue(
-                    ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
                     uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
                 xReceiver->setArguments( aArgs );
             }
@@ -299,10 +300,6 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
 
             pPage->InsertObject( pObj );
             pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );       //! Undo-Kommentar?
-
-            // Dies veranlaesst Chart zum sofortigen Update
-            //SvData aEmpty;
-            //aIPObj->SendDataChanged( aEmpty );
     }
 }
 
@@ -318,7 +315,7 @@ void SAL_CALL ScChartsObj::removeByName( const rtl::OUString& aName )
         ScDrawLayer* pModel = pDoc->GetDrawLayer();     // ist nicht 0
         SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    // ist nicht 0
 
-        pModel->AddUndo( new SdrUndoRemoveObj( *pObj ) );   //! Undo-Kommentar?
+        pModel->AddUndo( new SdrUndoDelObj( *pObj ) );
         pPage->RemoveObject( pObj->GetOrdNum() );
 
         //! Notify etc.???
@@ -339,7 +336,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScChartsObj::createEnumeration(
 sal_Int32 SAL_CALL ScChartsObj::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    INT32 nCount = 0;
+    sal_Int32 nCount = 0;
     if ( pDocShell )
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -374,7 +371,6 @@ uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xChart);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScChartsObj::getElementType() throw(uno::RuntimeException)
@@ -399,7 +395,6 @@ uno::Any SAL_CALL ScChartsObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xChart);
     else
         throw container::NoSuchElementException();
-//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::RuntimeException)
@@ -466,7 +461,7 @@ ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN)
     pDocShell->GetDocument()->AddUnoObject(*this);
 
     uno::Sequence< table::CellRangeAddress > aInitialPropValue;
-    registerPropertyNoMember( ::rtl::OUString::createFromAscii( "RelatedCellRanges" ),
+    registerPropertyNoMember( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RelatedCellRanges" )),
         PROP_HANDLE_RELATED_CELLRANGES, beans::PropertyAttribute::MAYBEVOID,
         ::getCppuType( &aInitialPropValue ), &aInitialPropValue );
 }
@@ -553,14 +548,14 @@ void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, b
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
-        BOOL bUndo(pDoc->IsUndoEnabled());
+        sal_Bool bUndo(pDoc->IsUndoEnabled());
 
         if (bUndo)
         {
             pDocShell->GetUndoManager()->AddUndoAction(
-                new ScUndoChartData( pDocShell, aChartName, rRanges, bColHeaders, bRowHeaders, FALSE ) );
+                new ScUndoChartData( pDocShell, aChartName, rRanges, bColHeaders, bRowHeaders, false ) );
         }
-        pDoc->UpdateChartArea( aChartName, rRanges, bColHeaders, bRowHeaders, FALSE );
+        pDoc->UpdateChartArea( aChartName, rRanges, bColHeaders, bRowHeaders, false );
     }
 }
 
@@ -600,8 +595,6 @@ void ScChartObj::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno:
             }
             break;
         default:
-            {
-            }
             break;
     }
 }
@@ -616,7 +609,7 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
                 if ( pDoc )
                 {
                     ScRange aEmptyRange;
-                    USHORT nIndex = 0;
+                    sal_uInt16 nIndex = 0;
                     ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
                     ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
                     if ( pCollection && pCollection->Search( &aSearcher, nIndex ) )
@@ -627,12 +620,12 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
                             const ScRangeListRef& rRangeList = pListener->GetRangeList();
                             if ( rRangeList.Is() )
                             {
-                                ULONG nCount = rRangeList->Count();
+                                size_t nCount = rRangeList->size();
                                 uno::Sequence< table::CellRangeAddress > aCellRanges( nCount );
                                 table::CellRangeAddress* pCellRanges = aCellRanges.getArray();
-                                for ( USHORT i = 0; i < nCount; ++i )
+                                for ( size_t i = 0; i < nCount; ++i )
                                 {
-                                    ScRange aRange( *rRangeList->GetObject( i ) );
+                                    ScRange aRange( *(*rRangeList)[i] );
                                     table::CellRangeAddress aCellRange;
                                     ScUnoConversion::FillApiRange( aCellRange, aRange );
                                     pCellRanges[ i ] = aCellRange;
@@ -645,8 +638,6 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
             }
             break;
         default:
-            {
-            }
             break;
     }
 }
@@ -693,7 +684,7 @@ void SAL_CALL ScChartObj::setHasColumnHeaders( sal_Bool bHasColumnHeaders )
     ScRangeListRef xRanges = new ScRangeList;
     bool bOldColHeaders, bOldRowHeaders;
     GetData_Impl( xRanges, bOldColHeaders, bOldRowHeaders );
-    if ( bOldColHeaders != (bHasColumnHeaders != sal_False) )
+    if ( bOldColHeaders != (bHasColumnHeaders != false) )
         Update_Impl( xRanges, bHasColumnHeaders, bOldRowHeaders );
 }
 
@@ -713,7 +704,7 @@ void SAL_CALL ScChartObj::setHasRowHeaders( sal_Bool bHasRowHeaders )
     ScRangeListRef xRanges = new ScRangeList;
     bool bOldColHeaders, bOldRowHeaders;
     GetData_Impl( xRanges, bOldColHeaders, bOldRowHeaders );
-    if ( bOldRowHeaders != (bHasRowHeaders != sal_False) )
+    if ( bOldRowHeaders != (bHasRowHeaders != false) )
         Update_Impl( xRanges, bOldColHeaders, bHasRowHeaders );
 }
 
@@ -725,14 +716,14 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges() throw(un
     GetData_Impl( xRanges, bColHeaders, bRowHeaders );
     if ( xRanges.Is() )
     {
-        ULONG nCount = xRanges->Count();
+        size_t nCount = xRanges->size();
 
         table::CellRangeAddress aRangeAddress;
         uno::Sequence<table::CellRangeAddress> aSeq(nCount);
         table::CellRangeAddress* pAry = aSeq.getArray();
-        for (USHORT i=0; i<nCount; i++)
+        for (size_t i = 0; i < nCount; i++)
         {
-            ScRange aRange(*xRanges->GetObject(i));
+            ScRange aRange( *(*xRanges)[i] );
 
             aRangeAddress.Sheet       = aRange.aStart.Tab();
             aRangeAddress.StartColumn = aRange.aStart.Col();
@@ -745,7 +736,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges() throw(un
         return aSeq;
     }
 
-    DBG_ERROR("ScChartObj::getRanges: keine Ranges");
+    OSL_FAIL("ScChartObj::getRanges: keine Ranges");
     return uno::Sequence<table::CellRangeAddress>();
 }
 
@@ -758,11 +749,11 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
     GetData_Impl( xOldRanges, bColHeaders, bRowHeaders );
 
     ScRangeList* pList = new ScRangeList;
-    USHORT nRangeCount = (USHORT)aRanges.getLength();
+    sal_uInt16 nRangeCount = (sal_uInt16)aRanges.getLength();
     if (nRangeCount)
     {
         const table::CellRangeAddress* pAry = aRanges.getConstArray();
-        for (USHORT i=0; i<nRangeCount; i++)
+        for (sal_uInt16 i=0; i<nRangeCount; i++)
         {
             ScRange aRange( static_cast<SCCOL>(pAry[i].StartColumn), pAry[i].StartRow, pAry[i].Sheet,
                             static_cast<SCCOL>(pAry[i].EndColumn),   pAry[i].EndRow,   pAry[i].Sheet );

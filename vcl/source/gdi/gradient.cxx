@@ -175,7 +175,7 @@ void Gradient::SetEndColor( const Color& rColor )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetAngle( USHORT nAngle )
+void Gradient::SetAngle( sal_uInt16 nAngle )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -185,7 +185,7 @@ void Gradient::SetAngle( USHORT nAngle )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetBorder( USHORT nBorder )
+void Gradient::SetBorder( sal_uInt16 nBorder )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -195,7 +195,7 @@ void Gradient::SetBorder( USHORT nBorder )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetOfsX( USHORT nOfsX )
+void Gradient::SetOfsX( sal_uInt16 nOfsX )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -205,7 +205,7 @@ void Gradient::SetOfsX( USHORT nOfsX )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetOfsY( USHORT nOfsY )
+void Gradient::SetOfsY( sal_uInt16 nOfsY )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -215,7 +215,7 @@ void Gradient::SetOfsY( USHORT nOfsY )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetStartIntensity( USHORT nIntens )
+void Gradient::SetStartIntensity( sal_uInt16 nIntens )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -225,7 +225,7 @@ void Gradient::SetStartIntensity( USHORT nIntens )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetEndIntensity( USHORT nIntens )
+void Gradient::SetEndIntensity( sal_uInt16 nIntens )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
@@ -235,12 +235,105 @@ void Gradient::SetEndIntensity( USHORT nIntens )
 
 // -----------------------------------------------------------------------
 
-void Gradient::SetSteps( USHORT nSteps )
+void Gradient::SetSteps( sal_uInt16 nSteps )
 {
     DBG_CHKTHIS( Gradient, NULL );
 
     MakeUnique();
     mpImplGradient->mnStepCount = nSteps;
+}
+
+// -----------------------------------------------------------------------
+
+void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Point& rCenter ) const
+{
+    Rectangle aRect( rRect );
+    sal_uInt16 nAngle = GetAngle() % 3600;
+
+    if( GetStyle() == GRADIENT_LINEAR || GetStyle() == GRADIENT_AXIAL )
+    {
+        aRect.Left()--;
+        aRect.Top()--;
+        aRect.Right()++;
+        aRect.Bottom()++;
+
+        const double    fAngle = nAngle * F_PI1800;
+        const double    fWidth = aRect.GetWidth();
+        const double    fHeight = aRect.GetHeight();
+        double          fDX = fWidth  * fabs( cos( fAngle ) ) + fHeight * fabs( sin( fAngle ) );
+        double          fDY = fHeight * fabs( cos( fAngle ) ) + fWidth  * fabs( sin( fAngle ) );
+
+        fDX = ( fDX - fWidth  ) * 0.5 + 0.5;
+        fDY = ( fDY - fHeight ) * 0.5 + 0.5;
+
+        aRect.Left()   -= (long) fDX;
+        aRect.Right()  += (long) fDX;
+        aRect.Top()    -= (long) fDY;
+        aRect.Bottom() += (long) fDY;
+
+        rBoundRect = aRect;
+        rCenter = rRect.Center();
+    }
+    else
+    {
+
+        if( GetStyle() == GRADIENT_SQUARE || GetStyle() == GRADIENT_RECT )
+        {
+            const double    fAngle = nAngle * F_PI1800;
+            const double    fWidth = aRect.GetWidth();
+            const double    fHeight = aRect.GetHeight();
+            double          fDX = fWidth  * fabs( cos( fAngle ) ) + fHeight * fabs( sin( fAngle ) );
+            double          fDY = fHeight * fabs( cos( fAngle ) ) + fWidth  * fabs( sin( fAngle ) );
+
+            fDX = ( fDX - fWidth  ) * 0.5 + 0.5;
+            fDY = ( fDY - fHeight ) * 0.5 + 0.5;
+
+            aRect.Left()   -= (long) fDX;
+            aRect.Right()  += (long) fDX;
+            aRect.Top()    -= (long) fDY;
+            aRect.Bottom() += (long) fDY;
+        }
+
+        Size aSize( aRect.GetSize() );
+
+        if( GetStyle() == GRADIENT_RADIAL )
+        {
+            // Radien-Berechnung fuer Kreis
+            aSize.Width() = (long)(0.5 + sqrt((double)aSize.Width()*(double)aSize.Width() + (double)aSize.Height()*(double)aSize.Height()));
+            aSize.Height() = aSize.Width();
+        }
+        else if( GetStyle() == GRADIENT_ELLIPTICAL )
+        {
+            // Radien-Berechnung fuer Ellipse
+            aSize.Width() = (long)( 0.5 + (double) aSize.Width()  * 1.4142 );
+            aSize.Height() = (long)( 0.5 + (double) aSize.Height() * 1.4142 );
+        }
+        else if( GetStyle() == GRADIENT_SQUARE )
+        {
+            if ( aSize.Width() > aSize.Height() )
+                aSize.Height() = aSize.Width();
+            else
+                aSize.Width() = aSize.Height();
+        }
+
+        // neue Mittelpunkte berechnen
+        long    nZWidth = aRect.GetWidth() * (long) GetOfsX() / 100;
+        long    nZHeight = aRect.GetHeight() * (long) GetOfsY() / 100;
+        long    nBorderX = (long) GetBorder() * aSize.Width()  / 100;
+        long    nBorderY = (long) GetBorder() * aSize.Height() / 100;
+        rCenter = Point( aRect.Left() + nZWidth, aRect.Top() + nZHeight );
+
+        // Rand beruecksichtigen
+        aSize.Width() -= nBorderX;
+        aSize.Height() -= nBorderY;
+
+        // Ausgaberechteck neu setzen
+        aRect.Left() = rCenter.X() - ( aSize.Width() >> 1 );
+        aRect.Top() = rCenter.Y() - ( aSize.Height() >> 1 );
+
+        aRect.SetSize( aSize );
+        rBoundRect = rRect;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -266,13 +359,13 @@ Gradient& Gradient::operator=( const Gradient& rGradient )
 
 // -----------------------------------------------------------------------
 
-BOOL Gradient::operator==( const Gradient& rGradient ) const
+sal_Bool Gradient::operator==( const Gradient& rGradient ) const
 {
     DBG_CHKTHIS( Gradient, NULL );
     DBG_CHKOBJ( &rGradient, Gradient, NULL );
 
     if ( mpImplGradient == rGradient.mpImplGradient )
-        return TRUE;
+        return sal_True;
 
     if ( (mpImplGradient->meStyle           == rGradient.mpImplGradient->meStyle)           ||
          (mpImplGradient->mnAngle           == rGradient.mpImplGradient->mnAngle)           ||
@@ -284,15 +377,15 @@ BOOL Gradient::operator==( const Gradient& rGradient ) const
          (mpImplGradient->mnIntensityEnd    == rGradient.mpImplGradient->mnIntensityEnd)    ||
          (mpImplGradient->maStartColor      == rGradient.mpImplGradient->maStartColor)      ||
          (mpImplGradient->maEndColor        == rGradient.mpImplGradient->maEndColor) )
-         return TRUE;
+         return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 SvStream& operator>>( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
-    UINT16          nTmp16;
+    sal_uInt16          nTmp16;
 
     rIStm >> nTmp16; rImpl_Gradient.meStyle = (GradientStyle) nTmp16;
 
@@ -315,7 +408,7 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Gradient& rImpl_Gradient )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm << (UINT16) rImpl_Gradient.meStyle <<
+    rOStm << (sal_uInt16) rImpl_Gradient.meStyle <<
              rImpl_Gradient.maStartColor <<
              rImpl_Gradient.maEndColor <<
              rImpl_Gradient.mnAngle <<

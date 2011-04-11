@@ -30,10 +30,6 @@
 #define _PREX_H
 
 #define Window      XLIB_Window
-#define BYTE        XLIB_BYTE
-#define INT8        XLIB_INT8
-#define INT64       XLIB_INT64
-#define BOOL        XLIB_BOOL
 #define Font        XLIB_Font
 #define Cursor      XLIB_Cursor
 #define String      XLIB_String
@@ -48,7 +44,9 @@
 extern "C" {
 #endif
 
-#if defined(LINUX) || defined(FREEBSD) || defined(MACOSX) || defined(NETBSD) || defined(OPENBSD) // should really check for xfree86 or for X11R6.1 and higher
+// FIXME: should really check for xfree86 or for X11R6.1 and higher
+#if defined(LINUX) || defined(FREEBSD) || defined(MACOSX) || defined(NETBSD) || \
+    defined(OPENBSD) || defined(DRAGONFLY)
 #define __XKeyboardExtension__ 1
 #else
 #define __XKeyboardExtension__ 0

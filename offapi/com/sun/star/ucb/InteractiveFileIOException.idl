@@ -51,7 +51,7 @@ module com { module sun { module star { module ucb {
 published exception InteractiveFileIOException: com::sun::star::ucb::InteractiveIOException
 {
     //-------------------------------------------------------------------------
-    /** The file url where the i/o error occured
+    /** The file url where the i/o error occurred
     */
     string FileName;
 };

@@ -104,8 +104,7 @@ public:
     virtual sal_uInt32 GetObjInventor() const;
     virtual sal_uInt16 GetObjIdentifier() const;
 
-    virtual SdrObject*  Clone() const;                                          // not working yet
-    virtual void        operator= (const SdrObject& rObj);                      // not working yet
+    virtual DlgEdObj*   Clone() const;                                          // not working yet
     virtual void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
 
     // FullDrag support

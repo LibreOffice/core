@@ -28,13 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/xmltypes.hxx>
-#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
-#endif
 #include "strings.hxx"
 #include <xmloff/contextid.hxx>
 #include "controlpropertymap.hxx"

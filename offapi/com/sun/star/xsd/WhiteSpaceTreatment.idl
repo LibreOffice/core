@@ -32,7 +32,7 @@
 module com {  module sun {  module star {  module xsd {
 
 //-----------------------------------------------------------------------------
-/** specifies possibilities how to treat whitespaces in strings
+/** specifies possibilities how to treat whitespace in strings
 
     @see XDataType
 */

@@ -41,10 +41,10 @@ class LibBoxControl: public SfxToolBoxControl
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
 
-                        LibBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                        LibBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
                         ~LibBoxControl();
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
 };
@@ -84,8 +84,8 @@ class BasicLibBox : public DocListenerBox
 {
 private:
     String          aCurText;
-    BOOL            bIgnoreSelect;
-    BOOL            bFillBox;
+    sal_Bool            bIgnoreSelect;
+    sal_Bool            bFillBox;
     com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
     void            ReleaseFocus();
@@ -115,10 +115,10 @@ class LanguageBoxControl: public SfxToolBoxControl
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
 
-                        LanguageBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                        LanguageBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
                         ~LanguageBoxControl();
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 

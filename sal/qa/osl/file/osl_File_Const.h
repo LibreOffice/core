@@ -26,14 +26,9 @@
  *
  ************************************************************************/
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifndef _OSL_FILE_CONST_H_
 #define _OSL_FILE_CONST_H_
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -42,12 +37,6 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
-
-
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 
 #ifdef __cplusplus
 extern "C"
@@ -100,7 +89,12 @@ const sal_Char pBuffer_Blank[]  = "";
 #   include <errno.h>
 #   include <fcntl.h>
 #   include <sys/stat.h>
-#   include <sys/statfs.h>
+#   if !defined(MACOSX) && !defined(__OpenBSD__) && !defined(__FreeBSD__) && !defined(__NetBSD__) && !defined (DRAGONFLY)
+#       include <sys/statfs.h>
+#   else
+#       include <sys/param.h>
+#       include <sys/mount.h>
+#   endif
 #   include <sys/statvfs.h>
 #   include <sys/types.h>
 #   define TEST_PLATFORM        ""
@@ -109,14 +103,12 @@ const sal_Char pBuffer_Blank[]  = "";
 #   define PATH_LIST_DELIMITER  ":"
 #   define PATH_SEPERATOR       "/"
 #endif
+
 #if (defined WNT )                      // Windows
-#include <tools/prewin.h>
-// #    include <windows.h>
-#   include <tchar.h>
-#   include <io.h>
-#   include <stdio.h>
-#   include <stdlib.h>
-#include <tools/postwin.h>
+#       include <tchar.h>
+#       include <io.h>
+#       include <stdio.h>
+#       include <stdlib.h>
 #   define PATH_MAX             MAX_PATH
 #   define TEST_PLATFORM        "c:/"
 #   define TEST_PLATFORM_ROOT   "c:/"
@@ -165,7 +157,7 @@ OSLTEST_DECLARE( TmpName3, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir
 OSLTEST_DECLARE( TmpName4, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir/tmpname" );
 OSLTEST_DECLARE( TmpName5, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir/../tmpdir/./tmpname" );
 OSLTEST_DECLARE( TmpName6, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpname" );
-OSLTEST_DECLARE( TmpName7, FILE_PREFIX TEST_PLATFORM "tmpname" );
+OSLTEST_DECLARE( TmpName7, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/noaccess" );
 OSLTEST_DECLARE( TmpName8, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpname/tmpdir" );
 OSLTEST_DECLARE( TmpName9, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/tmpdir/../tmpdir/./" );
 OSLTEST_DECLARE_UTF8( TmpName10, FILE_PREFIX TEST_PLATFORM TEST_PLATFORM_TEMP "/%E6%9C%AA%E5%91%BD%E5%90%8Dzhgb18030" );
@@ -187,6 +179,7 @@ OSLTEST_DECLARE( SysPath2, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/system/path" 
 OSLTEST_DECLARE( SysPath3, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir" );
 OSLTEST_DECLARE( SysPath4, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpname" );
 OSLTEST_DECLARE_UTF8( SysPath5, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/%E6%9C%AA%E5%91%BD%E5%90%8Dzhgb18030" );
+OSLTEST_DECLARE( SysPathLnk, TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/link.file" );
 OSLTEST_DECLARE( FifoSys,  TEST_PLATFORM_ROOT TEST_PLATFORM_TEMP "/tmpdir/fifo" );
 
 //------------------------------------------------------------------------
@@ -228,17 +221,9 @@ OSLTEST_DECLARE( VolURL5,  FILE_PREFIX  "c:/temp" );
 OSLTEST_DECLARE( VolURL6,  FILE_PREFIX  "e:/" );
 #endif
 
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifdef __cplusplus
 }
 #endif
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 
 #endif /* _OSL_FILE_CONST_H_ */
 

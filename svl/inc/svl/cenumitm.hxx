@@ -39,7 +39,7 @@ DBG_NAMEEX(SfxEnumItemInterface)
 class SVL_DLLPUBLIC SfxEnumItemInterface: public SfxPoolItem
 {
 protected:
-    SfxEnumItemInterface(USHORT which): SfxPoolItem(which) {}
+    SfxEnumItemInterface(sal_uInt16 which): SfxPoolItem(which) {}
 
     SfxEnumItemInterface(const SfxEnumItemInterface & rItem):
         SfxPoolItem(rItem) {}
@@ -55,15 +55,15 @@ public:
                                                 const IntlWrapper * = 0)
         const;
 
-    virtual bool QueryValue(com::sun::star::uno::Any & rVal, BYTE = 0) const;
+    virtual bool QueryValue(com::sun::star::uno::Any & rVal, sal_uInt8 = 0) const;
 
-    virtual bool PutValue(const com::sun::star::uno::Any & rVal, BYTE = 0);
+    virtual bool PutValue(const com::sun::star::uno::Any & rVal, sal_uInt8 = 0);
 
-    virtual USHORT GetValueCount() const = 0;
+    virtual sal_uInt16 GetValueCount() const = 0;
 
-    virtual XubString GetValueTextByPos(USHORT nPos) const;
+    virtual XubString GetValueTextByPos(sal_uInt16 nPos) const;
 
-    virtual USHORT GetValueByPos(USHORT nPos) const;
+    virtual sal_uInt16 GetValueByPos(sal_uInt16 nPos) const;
 
     /// Return the position of some value within this enumeration.
     ///
@@ -75,19 +75,19 @@ public:
     ///
     /// @return  The position of nValue within this enumeration, or USHRT_MAX
     /// if not included.
-    virtual USHORT GetPosByValue(USHORT nValue) const;
+    virtual sal_uInt16 GetPosByValue(sal_uInt16 nValue) const;
 
-    virtual BOOL IsEnabled(USHORT nValue) const;
+    virtual sal_Bool IsEnabled(sal_uInt16 nValue) const;
 
-    virtual USHORT GetEnumValue() const = 0;
+    virtual sal_uInt16 GetEnumValue() const = 0;
 
-    virtual void SetEnumValue(USHORT nValue) = 0;
+    virtual void SetEnumValue(sal_uInt16 nValue) = 0;
 
     virtual int HasBoolValue() const;
 
-    virtual BOOL GetBoolValue() const;
+    virtual sal_Bool GetBoolValue() const;
 
-    virtual void SetBoolValue(BOOL bValue);
+    virtual void SetBoolValue(sal_Bool bValue);
 };
 
 //============================================================================
@@ -95,13 +95,13 @@ DBG_NAMEEX(CntEnumItem)
 
 class SVL_DLLPUBLIC CntEnumItem: public SfxEnumItemInterface
 {
-    USHORT m_nValue;
+    sal_uInt16 m_nValue;
 
 protected:
-    CntEnumItem(USHORT which = 0, USHORT nTheValue = 0):
+    CntEnumItem(sal_uInt16 which = 0, sal_uInt16 nTheValue = 0):
         SfxEnumItemInterface(which), m_nValue(nTheValue) {}
 
-    CntEnumItem(USHORT which, SvStream & rStream);
+    CntEnumItem(sal_uInt16 which, SvStream & rStream);
 
     CntEnumItem(const CntEnumItem & rItem):
         SfxEnumItemInterface(rItem), m_nValue(rItem.m_nValue) {}
@@ -109,18 +109,18 @@ protected:
 public:
     TYPEINFO();
 
-    virtual SvStream & Store(SvStream & rStream, USHORT) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
-    virtual USHORT GetEnumValue() const;
+    virtual sal_uInt16 GetEnumValue() const;
 
-    virtual void SetEnumValue(USHORT nTheValue);
+    virtual void SetEnumValue(sal_uInt16 nTheValue);
 
-    USHORT GetValue() const { return m_nValue; }
+    sal_uInt16 GetValue() const { return m_nValue; }
 
-    inline void SetValue(USHORT nTheValue);
+    inline void SetValue(sal_uInt16 nTheValue);
 };
 
-inline void CntEnumItem::SetValue(USHORT nTheValue)
+inline void CntEnumItem::SetValue(sal_uInt16 nTheValue)
 {
     DBG_ASSERT(GetRefCount() == 0, "CntEnumItem::SetValue(): Pooled item");
     m_nValue = nTheValue;
@@ -131,15 +131,15 @@ DBG_NAMEEX(CntBoolItem)
 
 class SVL_DLLPUBLIC CntBoolItem: public SfxPoolItem
 {
-    BOOL m_bValue;
+    sal_Bool m_bValue;
 
 public:
     TYPEINFO();
 
-    CntBoolItem(USHORT which = 0, BOOL bTheValue = FALSE):
+    CntBoolItem(sal_uInt16 which = 0, sal_Bool bTheValue = sal_False):
         SfxPoolItem(which), m_bValue(bTheValue) {}
 
-    CntBoolItem(USHORT nWhich, SvStream & rStream);
+    CntBoolItem(sal_uInt16 nWhich, SvStream & rStream);
 
     CntBoolItem(const CntBoolItem & rItem):
         SfxPoolItem(rItem), m_bValue(rItem.m_bValue) {}
@@ -155,23 +155,23 @@ public:
                                                 const IntlWrapper * = 0)
         const;
 
-    virtual bool QueryValue(com::sun::star::uno::Any& rVal, BYTE = 0) const;
+    virtual bool QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8 = 0) const;
 
-    virtual bool PutValue(const com::sun::star::uno::Any& rVal, BYTE = 0);
+    virtual bool PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 = 0);
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
 
-    virtual SvStream & Store(SvStream & rStream, USHORT) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 
-    virtual USHORT GetValueCount() const;
+    virtual sal_uInt16 GetValueCount() const;
 
-    virtual UniString GetValueTextByVal(BOOL bTheValue) const;
+    virtual UniString GetValueTextByVal(sal_Bool bTheValue) const;
 
-    BOOL GetValue() const { return m_bValue; }
+    sal_Bool GetValue() const { return m_bValue; }
 
-    void SetValue(BOOL bTheValue) { m_bValue = bTheValue; }
+    void SetValue(sal_Bool bTheValue) { m_bValue = bTheValue; }
 };
 
 #endif // _SVTOOLS_CENUMITM_HXX

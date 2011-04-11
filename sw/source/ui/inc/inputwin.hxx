@@ -28,11 +28,11 @@
 #ifndef SW_INPUTWIN_HXX
 #define SW_INPUTWIN_HXX
 
-
-#include <vcl/menu.hxx>
-#include <sfx2/childwin.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/toolbox.hxx>
+
+#include <sfx2/childwin.hxx>
 
 class SwFldMgr;
 class SwWrtShell;
@@ -67,16 +67,17 @@ friend class InputEdit;
     SwView*         pView;
     SfxBindings*    pBindings;
     String          aAktTableName, sOldFml;
-    USHORT          nActionCnt;
+    sal_Int32       m_nActionCount;
 
-    BOOL            bFirst : 1;  //Initialisierungen beim ersten Aufruf
-    BOOL            bActive : 1; //fuer Hide/Show beim Dokumentwechsel
-    BOOL            bIsTable : 1;
-    BOOL            bDelSel : 1;
-    BOOL            bDoesUndo : 1;
-    BOOL            bResetUndo : 1;
-    BOOL            bCallUndo : 1;
+    sal_Bool        bFirst : 1;  //Initialisierungen beim ersten Aufruf
+    sal_Bool        bActive : 1; //fuer Hide/Show beim Dokumentwechsel
+    sal_Bool        bIsTable : 1;
+    sal_Bool        bDelSel : 1;
+    bool            m_bDoesUndo : 1;
+    bool            m_bResetUndo : 1;
+    bool            m_bCallUndo : 1;
 
+    void CleanupUglyHackWithUndo();
 
     void DelBoxCntnt();
     DECL_LINK( ModifyHdl, InputEdit* );
@@ -101,26 +102,26 @@ public:
 
     void            ShowWin();
 
-    BOOL            IsActive(){ return bActive; };
+    sal_Bool            IsActive(){ return bActive; };
 
     DECL_LINK( SelTblCellsNotify, SwWrtShell * );
 
-    void            SetFormula( const String& rFormula, BOOL bDelSel = TRUE );
+    void            SetFormula( const String& rFormula, sal_Bool bDelSel = sal_True );
     const SwView*   GetView() const{return pView;}
 };
 
 class SwInputChild : public SfxChildWindow
 {
-    BOOL            bObjVis;
+    sal_Bool            bObjVis;
     SfxDispatcher*  pDispatch;
 public:
     SwInputChild( Window* ,
-                        USHORT nId,
+                        sal_uInt16 nId,
                         SfxBindings*,
                         SfxChildWinInfo*  );
     ~SwInputChild();
     SFX_DECL_CHILDWINDOW( SwInputChild );
-    void            SetFormula( const String& rFormula, BOOL bDelSel = TRUE )
+    void            SetFormula( const String& rFormula, sal_Bool bDelSel = sal_True )
                         { ((SwInputWindow*)pWindow)->SetFormula(
                                     rFormula, bDelSel ); }
     const SwView*   GetView() const{return ((SwInputWindow*)pWindow)->GetView();}

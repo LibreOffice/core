@@ -42,14 +42,15 @@
 #endif
 
 #include <rtl/logfile.hxx>
-#include <testshl/simpleheader.hxx>
 
 #include <osl/file.hxx>
 #if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
 #include <tchar.h>
-#include <tools/postwin.h>
 #endif
+
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 using namespace ::osl;
 
@@ -58,11 +59,11 @@ inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = ""
 
     if (strlen(msg) > 0)
     {
-        t_print("%s: ", msg );
+        printf("%s: ", msg );
     }
     rtl::OString aString;
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", (char *)aString.getStr( ) );
+    printf("%s\n", (char *)aString.getStr( ) );
 }
 
 /** get the absolute source file URL "file:///.../sal/qa/rtl/logfile/"
@@ -71,9 +72,9 @@ inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = ""
 inline ::rtl::OUString getTempPath( void )
 {
 #ifdef UNX
-    rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///tmp/"));
+    rtl::OUString suDirURL( RTL_CONSTASCII_USTRINGPARAM("file:///tmp/") );
 #else /* Windows */
-    rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///c:/temp/"));
+    rtl::OUString suDirURL( RTL_CONSTASCII_USTRINGPARAM("file:///c:/temp/") );
 #endif
     return suDirURL;
 }
@@ -84,7 +85,7 @@ bool t_fileExist(rtl::OUString const& _sFilename)
 {
     ::osl::FileBase::RC   nError1;
     ::osl::File aTestFile( _sFilename );
-    nError1 = aTestFile.open ( OpenFlag_Read );
+    nError1 = aTestFile.open ( osl_File_OpenFlag_Read );
     if ( ( ::osl::FileBase::E_NOENT != nError1 ) && ( ::osl::FileBase::E_ACCES != nError1 ) )
     {
         aTestFile.close( );
@@ -137,20 +138,20 @@ namespace rtl_logfile
                 rtl_logfile_trace("trace %d %d %d\n" , 1 , 2 ,3 );
 
                 rtl::OUString suFilePath = getTempPath();
-                suFilePath +=  rtl::OUString::createFromAscii("logfile1_") + getCurrentPID( );
-                suFilePath +=  rtl::OUString::createFromAscii(".log");
+                suFilePath +=  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logfile1_")) + getCurrentPID( );
+                suFilePath +=  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".log"));
 
                 ::osl::FileBase::RC   nError1;
                 ::osl::File aTestFile( suFilePath );
                 printUString( suFilePath );
-                nError1 = aTestFile.open ( OpenFlag_Read );
+                nError1 = aTestFile.open ( osl_File_OpenFlag_Read );
                 CPPUNIT_ASSERT_MESSAGE("create the log file: but the logfile does not exist",
                                        ( ::osl::FileBase::E_NOENT != nError1 ) &&
                                        ( ::osl::FileBase::E_ACCES != nError1 ) );
                 sal_Char       buffer_read[400];
                 sal_uInt64      nCount_read;
                 nError1 = aTestFile.read( buffer_read, 400, nCount_read );
-                //t_print("buffer is %s\n", buffer_read );
+                //printf("buffer is %s\n", buffer_read );
                 CPPUNIT_ASSERT_MESSAGE("write right logs", strstr( buffer_read, "trace 1 2 3") != NULL );
                 aTestFile.sync();
                 aTestFile.close();
@@ -211,10 +212,10 @@ namespace rtl_logfile
 } // namespace rtl_logfile
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( rtl_logfile::logfile, "rtl_logfile" );
+CPPUNIT_TEST_SUITE_REGISTRATION( rtl_logfile::logfile);
 
 // -----------------------------------------------------------------------------
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 //~ do some clean up work after all test completed.
 class GlobalObject
@@ -224,25 +225,25 @@ public:
         {
             try
             {
-                t_print( "\n#Do some clean-ups ... only delete logfile1_*.log here!\n" );
+                printf( "\n#Do some clean-ups ... only delete logfile1_*.log here!\n" );
                 rtl::OUString suFilePath = getTempPath();
-                suFilePath +=  rtl::OUString::createFromAscii("logfile1_") + getCurrentPID( );
-                suFilePath +=  rtl::OUString::createFromAscii(".log");
+                suFilePath +=  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logfile1_")) + getCurrentPID( );
+                suFilePath +=  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".log"));
 
                 //if ( ifFileExist( suFilePath )  == sal_True )
                 ::osl::FileBase::RC nError1;
                 nError1 = osl::File::remove( suFilePath );
 #ifdef WNT
-                t_print("Please remove logfile* manully! Error is Permision denied!");
+                printf("Please remove logfile* manully! Error is Permision denied!");
 #endif
             }
             catch (CppUnit::Exception &e)
             {
-                t_print("Exception caught in GlobalObject dtor(). Exception message: '%s'. Source line: %d\n", e.what(), e.sourceLine().lineNumber());
+                printf("Exception caught in GlobalObject dtor(). Exception message: '%s'. Source line: %d\n", e.what(), e.sourceLine().lineNumber());
             }
             catch (...)
             {
-                t_print("Exception caught (...) in GlobalObject dtor()\n");
+                printf("Exception caught (...) in GlobalObject dtor()\n");
             }
         }
 };

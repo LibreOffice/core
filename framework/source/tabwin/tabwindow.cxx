@@ -58,9 +58,8 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star;
 
 namespace framework
@@ -423,16 +422,16 @@ throw (css::uno::Exception, css::uno::RuntimeException)
                     SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if( pWindow )
-                        pWindow->Show( TRUE );
+                        pWindow->Show( sal_True );
 
                     pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
                     if ( pWindow )
-                        pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE  );
+                        pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE  );
 
                     pWindow = VCLUnoHelper::GetWindow( xTabControl );
                     if ( pWindow )
                     {
-                        pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE  );
+                        pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE  );
                         TabControl* pTabControl = (TabControl *)pWindow;
                         pTabControl->SetActivatePageHdl( LINK( this, TabWindow, Activate ));
                         pTabControl->SetDeactivatePageHdl( LINK( this, TabWindow, Deactivate ));
@@ -848,7 +847,7 @@ sal_Bool SAL_CALL TabWindow::convertFastPropertyValue( css::uno::Any&       aCon
                                                        const css::uno::Any& aValue             )
 throw( css::lang::IllegalArgumentException )
 {
-    //  Initialize state with FALSE !!!
+    //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
     sal_Bool bReturn = sal_False;
 

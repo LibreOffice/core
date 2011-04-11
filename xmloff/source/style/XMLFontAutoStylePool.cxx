@@ -28,12 +28,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-
 #include <tools/debug.hxx>
 #include <svl/cntnrsrt.hxx>
 #include <tools/fontenum.hxx>
-
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "fonthdl.hxx"
@@ -175,7 +173,7 @@ OUString XMLFontAutoStylePool::Add(
     OUString sPoolName;
     XMLFontAutoStylePoolEntry_Impl aTmp( rFamilyName, rStyleName, nFamily,
                                           nPitch, eEnc );
-    ULONG nPos;
+    sal_uLong nPos;
     if( pPool->Seek_Entry( &aTmp, &nPos ) )
     {
         sPoolName = pPool->GetObject( nPos )->GetName();
@@ -229,7 +227,7 @@ OUString XMLFontAutoStylePool::Add(
     OUString sName;
     XMLFontAutoStylePoolEntry_Impl aTmp( rFamilyName, rStyleName, nFamily,
                                           nPitch, eEnc );
-    ULONG nPos;
+    sal_uLong nPos;
     if( pPool->Seek_Entry( &aTmp, &nPos ) )
     {
         sName = pPool->GetObject( nPos )->GetName();

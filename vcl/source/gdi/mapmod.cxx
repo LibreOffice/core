@@ -46,7 +46,7 @@ ImplMapMode::ImplMapMode() :
 {
     mnRefCount  = 1;
     meUnit      = MAP_PIXEL;
-    mbSimple    = FALSE;
+    mbSimple    = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -58,7 +58,7 @@ ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
 {
     mnRefCount      = 1;
     meUnit          = rImplMapMode.meUnit;
-    mbSimple        = FALSE;
+    mbSimple        = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -66,7 +66,7 @@ ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
 SvStream& operator>>( SvStream& rIStm, ImplMapMode& rImplMapMode )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
-    UINT16          nTmp16;
+    sal_uInt16          nTmp16;
 
     rIStm >> nTmp16; rImplMapMode.meUnit = (MapUnit) nTmp16;
     rIStm >> rImplMapMode.maOrigin >> rImplMapMode.maScaleX >>
@@ -81,7 +81,7 @@ SvStream& operator<<( SvStream& rOStm, const ImplMapMode& rImplMapMode )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm << (UINT16) rImplMapMode.meUnit <<
+    rOStm << (sal_uInt16) rImplMapMode.meUnit <<
              rImplMapMode.maOrigin <<
              rImplMapMode.maScaleX <<
              rImplMapMode.maScaleY <<
@@ -107,7 +107,7 @@ ImplMapMode* ImplMapMode::ImplGetStaticMapMode( MapUnit eUnit )
         pImplMapMode->maScaleX  = aDefFraction;
         pImplMapMode->maScaleY  = aDefFraction;
         pImplMapMode->meUnit    = eUnit;
-        pImplMapMode->mbSimple  = TRUE;
+        pImplMapMode->mbSimple  = sal_True;
     }
 
     return pImplMapMode;
@@ -260,40 +260,40 @@ MapMode& MapMode::operator=( const MapMode& rMapMode )
 
 // -----------------------------------------------------------------------
 
-BOOL MapMode::operator==( const MapMode& rMapMode ) const
+sal_Bool MapMode::operator==( const MapMode& rMapMode ) const
 {
     DBG_CHKTHIS( MapMode, NULL );
     DBG_CHKOBJ( &rMapMode, MapMode, NULL );
 
     if ( mpImplMapMode == rMapMode.mpImplMapMode )
-        return TRUE;
+        return sal_True;
 
     if ( (mpImplMapMode->meUnit   == rMapMode.mpImplMapMode->meUnit)   &&
          (mpImplMapMode->maOrigin == rMapMode.mpImplMapMode->maOrigin) &&
          (mpImplMapMode->maScaleX == rMapMode.mpImplMapMode->maScaleX) &&
          (mpImplMapMode->maScaleY == rMapMode.mpImplMapMode->maScaleY) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL MapMode::IsDefault() const
+sal_Bool MapMode::IsDefault() const
 {
     DBG_CHKTHIS( MapMode, NULL );
 
     ImplMapMode* pDefMapMode = ImplMapMode::ImplGetStaticMapMode( MAP_PIXEL );
     if ( mpImplMapMode == pDefMapMode )
-        return TRUE;
+        return sal_True;
 
     if ( (mpImplMapMode->meUnit   == pDefMapMode->meUnit)   &&
          (mpImplMapMode->maOrigin == pDefMapMode->maOrigin) &&
          (mpImplMapMode->maScaleX == pDefMapMode->maScaleX) &&
          (mpImplMapMode->maScaleY == pDefMapMode->maScaleY) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------

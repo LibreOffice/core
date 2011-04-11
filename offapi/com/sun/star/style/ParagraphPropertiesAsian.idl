@@ -44,7 +44,7 @@ published service ParagraphPropertiesAsian
          */
         [property] boolean ParaIsHangingPunctuation;
         //-------------------------------------------------------------------------
-        /** determines if a distance between asian text, western text or complex text is set.
+        /** determines if a distance between Asian text, western text or complex text is set.
          */
         [property] boolean ParaIsCharacterDistance;
         //-------------------------------------------------------------------------

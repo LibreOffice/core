@@ -36,23 +36,23 @@ class SwFilterBase
 protected:
     SvStream    *pIn;
     sal_Char    *pReadBuff; //      Groessenangabe
-    INT32       nBytesLeft; // noch zu lesende Bytes des aktuelle Records
+    sal_Int32       nBytesLeft; // noch zu lesende Bytes des aktuelle Records
 
     CharSet     eQuellChar; // Quell-Zeichensatz (interner Zeichensatz)
 //  CharSet     eZielChar;  // Ziel-Zeichensatz
 
-    USHORT      nTab;       // z.Zt. bearbeitete Tabelle
-    USHORT      nReadBuffSize;// temporaerer Lesepuffer mit
+    sal_uInt16      nTab;       // z.Zt. bearbeitete Tabelle
+    sal_uInt16      nReadBuffSize;// temporaerer Lesepuffer mit
 
     // ----------------------------------------------------------
     inline void ReadChar( char &rC );
-    inline void ReadByte( BYTE &rN );
+    inline void ReadByte( sal_uInt8 &rN );
     inline void Read( short &rN );
     inline void ReadUnicode( sal_Unicode &rU );
-    inline void Read( BYTE &rN0, USHORT &rN1, USHORT &rN2 );
-    inline void Read( USHORT &rN );
-    inline void Read( USHORT &rN1, USHORT &rN2 );
-    inline void Read( USHORT &rN1, USHORT &rN2, USHORT &rN3, USHORT &rN4 );
+    inline void Read( sal_uInt8 &rN0, sal_uInt16 &rN1, sal_uInt16 &rN2 );
+    inline void Read( sal_uInt16 &rN );
+    inline void Read( sal_uInt16 &rN1, sal_uInt16 &rN2 );
+    inline void Read( sal_uInt16 &rN1, sal_uInt16 &rN2, sal_uInt16 &rN3, sal_uInt16 &rN4 );
     inline void Read( double &rF );
             void Read( String &rS );        // liest 0-terminierten C-String!
     inline void ClearBytesLeft( void );
@@ -65,7 +65,7 @@ inline void SwFilterBase::ReadChar( char &rC )
     nBytesLeft--;
     }
 
-inline void SwFilterBase::ReadByte( BYTE &rN )
+inline void SwFilterBase::ReadByte( sal_uInt8 &rN )
     {
     *pIn >> rN;
     nBytesLeft--;
@@ -87,25 +87,25 @@ inline void SwFilterBase::Read( short &rN )
     nBytesLeft -= 2;
     }
 
-inline void SwFilterBase::Read( BYTE &rN0, USHORT &rN1, USHORT &rN2 )
+inline void SwFilterBase::Read( sal_uInt8 &rN0, sal_uInt16 &rN1, sal_uInt16 &rN2 )
     {
     *pIn >> rN0 >> rN1 >> rN2;
     nBytesLeft -= 5;
     }
 
-inline void SwFilterBase::Read( USHORT &rN )
+inline void SwFilterBase::Read( sal_uInt16 &rN )
     {
     *pIn >> rN;
     nBytesLeft -= 2;
     }
 
-inline void SwFilterBase::Read( USHORT &rN1, USHORT &rN2 )
+inline void SwFilterBase::Read( sal_uInt16 &rN1, sal_uInt16 &rN2 )
     {
     *pIn >> rN1 >> rN2;
     nBytesLeft -= 4;
     }
 
-inline void SwFilterBase::Read( USHORT &rN1, USHORT &rN2, USHORT &rN3, USHORT &rN4 )
+inline void SwFilterBase::Read( sal_uInt16 &rN1, sal_uInt16 &rN2, sal_uInt16 &rN3, sal_uInt16 &rN4 )
     {
     *pIn >> rN1 >> rN2 >> rN3 >> rN4;
     nBytesLeft -= 8;

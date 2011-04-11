@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>
 
 #include <com/sun/star/ucb/XContent.hpp>
@@ -68,9 +69,6 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-/*-----------------------------------------------
-    10.03.2004 07:35
------------------------------------------------*/
 const ::rtl::OUString& MediaDescriptor::PROP_ABORTED()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Aborted"));
@@ -110,6 +108,12 @@ const ::rtl::OUString& MediaDescriptor::PROP_DETECTSERVICE()
 const ::rtl::OUString& MediaDescriptor::PROP_DOCUMENTSERVICE()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("DocumentService"));
+    return sProp;
+}
+
+const ::rtl::OUString& MediaDescriptor::PROP_ENCRYPTIONDATA()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("EncryptionData"));
     return sProp;
 }
 
@@ -390,37 +394,25 @@ MediaDescriptor::MediaDescriptor()
 {
 }
 
-/*-----------------------------------------------
-    10.03.2004 08:09
------------------------------------------------*/
 MediaDescriptor::MediaDescriptor(const css::uno::Any& aSource)
     : SequenceAsHashMap(aSource)
 {
 }
 
-/*-----------------------------------------------
-    10.03.2004 08:09
------------------------------------------------*/
 MediaDescriptor::MediaDescriptor(const css::uno::Sequence< css::beans::PropertyValue >& lSource)
     : SequenceAsHashMap(lSource)
 {
 }
 
-/*-----------------------------------------------
-    10.03.2004 08:09
------------------------------------------------*/
 MediaDescriptor::MediaDescriptor(const css::uno::Sequence< css::beans::NamedValue >& lSource)
     : SequenceAsHashMap(lSource)
 {
 }
 
-/*-----------------------------------------------
-    18.11.2004 13:37
------------------------------------------------*/
 sal_Bool MediaDescriptor::isStreamReadOnly() const
 {
-    static ::rtl::OUString CONTENTSCHEME_FILE     = ::rtl::OUString::createFromAscii("file");
-    static ::rtl::OUString CONTENTPROP_ISREADONLY = ::rtl::OUString::createFromAscii("IsReadOnly");
+    static ::rtl::OUString CONTENTSCHEME_FILE(     RTL_CONSTASCII_USTRINGPARAM( "file" ));
+    static ::rtl::OUString CONTENTPROP_ISREADONLY( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ));
     static sal_Bool        READONLY_FALLBACK      = sal_False;
 
     sal_Bool bReadOnly = READONLY_FALLBACK;
@@ -478,27 +470,30 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
 
 css::uno::Any MediaDescriptor::getComponentDataEntry( const ::rtl::OUString& rName ) const
 {
-    SequenceAsHashMap aCompDataMap( getUnpackedValueOrDefault( PROP_COMPONENTDATA(), ComponentDataSequence() ) );
-    SequenceAsHashMap::iterator aIt = aCompDataMap.find( rName );
-    return (aIt == aCompDataMap.end()) ? css::uno::Any() : aIt->second;
+    css::uno::Any aEntry;
+    SequenceAsHashMap::const_iterator aPropertyIter = find( PROP_COMPONENTDATA() );
+    if( aPropertyIter != end() )
+        return NamedValueCollection( aPropertyIter->second ).get( rName );
+    return css::uno::Any();
 }
 
 void MediaDescriptor::setComponentDataEntry( const ::rtl::OUString& rName, const css::uno::Any& rValue )
 {
     if( rValue.hasValue() )
     {
-        // get or craete the 'ComponentData' property entry
+        // get or create the 'ComponentData' property entry
         css::uno::Any& rCompDataAny = operator[]( PROP_COMPONENTDATA() );
-        // check type, insert the value
-        OSL_ENSURE( !rCompDataAny.hasValue() || rCompDataAny.has< ComponentDataSequence >(),
-            "MediaDescriptor::setComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
-        if( !rCompDataAny.hasValue() || rCompDataAny.has< ComponentDataSequence >() )
+        // insert the value (retain sequence type, create NamedValue elements by default)
+        bool bHasNamedValues = !rCompDataAny.hasValue() || rCompDataAny.has< css::uno::Sequence< css::beans::NamedValue > >();
+        bool bHasPropValues = rCompDataAny.has< css::uno::Sequence< css::beans::PropertyValue > >();
+        OSL_ENSURE( bHasNamedValues || bHasPropValues, "MediaDescriptor::setComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
+        if( bHasNamedValues || bHasPropValues )
         {
             // insert or overwrite the passed value
             SequenceAsHashMap aCompDataMap( rCompDataAny );
             aCompDataMap[ rName ] = rValue;
-            // write back the sequence (sal_False = use NamedValue instead of PropertyValue)
-            rCompDataAny = aCompDataMap.getAsConstAny( sal_False );
+            // write back the sequence (restore sequence with correct element type)
+            rCompDataAny = aCompDataMap.getAsConstAny( bHasPropValues );
         }
     }
     else
@@ -513,25 +508,24 @@ void MediaDescriptor::clearComponentDataEntry( const ::rtl::OUString& rName )
     SequenceAsHashMap::iterator aPropertyIter = find( PROP_COMPONENTDATA() );
     if( aPropertyIter != end() )
     {
-        OSL_ENSURE( aPropertyIter->second.has< ComponentDataSequence >(),
-            "MediaDescriptor::clearComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
-        if( aPropertyIter->second.has< ComponentDataSequence >() )
+        css::uno::Any& rCompDataAny = aPropertyIter->second;
+        bool bHasNamedValues = rCompDataAny.has< css::uno::Sequence< css::beans::NamedValue > >();
+        bool bHasPropValues = rCompDataAny.has< css::uno::Sequence< css::beans::PropertyValue > >();
+        OSL_ENSURE( bHasNamedValues || bHasPropValues, "MediaDescriptor::clearComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
+        if( bHasNamedValues || bHasPropValues )
         {
             // remove the value with the passed name
-            SequenceAsHashMap aCompDataMap( aPropertyIter->second );
+            SequenceAsHashMap aCompDataMap( rCompDataAny );
             aCompDataMap.erase( rName );
             // write back the sequence, or remove it completely if it is empty
             if( aCompDataMap.empty() )
                 erase( aPropertyIter );
             else
-                aPropertyIter->second = aCompDataMap.getAsConstAny( sal_False );
+                rCompDataAny = aCompDataMap.getAsConstAny( bHasPropValues );
         }
     }
 }
 
-/*-----------------------------------------------
-    10.03.2004 09:02
------------------------------------------------*/
 sal_Bool MediaDescriptor::addInputStream()
 {
     return impl_addInputStream( sal_True );
@@ -591,20 +585,20 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
         ::rtl::OUString sURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), ::rtl::OUString());
         if (!sURL.getLength())
             throw css::uno::Exception(
-                    ::rtl::OUString::createFromAscii("Found no URL."),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Found no URL." )),
                     css::uno::Reference< css::uno::XInterface >());
 
         // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
         ::rtl::OUString sNormalizedURL = impl_normalizeURL( sURL );
         return impl_openStreamWithURL( sNormalizedURL, bLockFile );
     }
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
     catch(const css::uno::Exception& ex)
     {
         ::rtl::OUStringBuffer sMsg(256);
         sMsg.appendAscii("Invalid MediaDescriptor detected:\n");
         sMsg.append     (ex.Message                           );
-        OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
+        OSL_FAIL(::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
     }
 #else
     catch(const css::uno::Exception&)
@@ -614,15 +608,12 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
     return sal_False;
 }
 
-/*-----------------------------------------------
-    25.03.2004 12:38
------------------------------------------------*/
 sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< css::io::XInputStream >& _rxPostData )
     throw(::com::sun::star::uno::RuntimeException)
 {
     if ( !_rxPostData.is() )
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Found invalid PostData."),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Found invalid PostData." )),
                 css::uno::Reference< css::uno::XInterface >(), 1);
 
     // PostData can't be used in read/write mode!
@@ -640,7 +631,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
     ::rtl::OUString sMediaType = getUnpackedValueOrDefault(MediaDescriptor::PROP_MEDIATYPE(), ::rtl::OUString());
     if (!sMediaType.getLength())
     {
-        sMediaType = ::rtl::OUString::createFromAscii("application/x-www-form-urlencoded");
+        sMediaType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-www-form-urlencoded" ));
         (*this)[MediaDescriptor::PROP_MEDIATYPE()] <<= sMediaType;
     }
 
@@ -679,7 +670,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
     // success?
     if ( !xResultStream.is() )
     {
-        OSL_ENSURE( false, "no valid reply to the HTTP-Post" );
+        OSL_FAIL( "no valid reply to the HTTP-Post" );
         return sal_False;
     }
 
@@ -688,10 +679,6 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
 }
 
 /*-----------------------------------------------*/
-
-/*-----------------------------------------------
-    25.03.2004 12:29
------------------------------------------------*/
 sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, sal_Bool bLockFile )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -827,9 +814,6 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
     return xInputStream.is();
 }
 
-/*-----------------------------------------------
-    10.09.2004 10:51
------------------------------------------------*/
 ::rtl::OUString MediaDescriptor::impl_normalizeURL(const ::rtl::OUString& sURL)
 {
     /* Remove Jumpmarks (fragments) of an URL only here.
@@ -842,7 +826,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
        it parses the URL in another way. It's main part isnt enough
        and it's complete part contains the jumpmark (fragment) parameter ...
     */
-    static ::rtl::OUString SERVICENAME_URIREFERENCEFACTORY = ::rtl::OUString::createFromAscii("com.sun.star.uri.UriReferenceFactory");
+    static ::rtl::OUString SERVICENAME_URIREFERENCEFACTORY( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uri.UriReferenceFactory" ));
 
     try
     {

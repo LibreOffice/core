@@ -65,9 +65,8 @@ using namespace com::sun::star::loader;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
-
+using ::rtl::OUString;
 extern rtl_StandardModuleCount g_moduleCount;
 
 namespace stoc_bootstrap
@@ -180,7 +179,7 @@ Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
 void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE( 0, "dllcomponentloader::initialize should not be called !" );
+    OSL_FAIL( "dllcomponentloader::initialize should not be called !" );
 //      if( aArgs.getLength() != 1 )
 //      {
 //          throw IllegalArgumentException();

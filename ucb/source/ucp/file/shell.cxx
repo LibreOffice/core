@@ -167,24 +167,24 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
       m_bWithConfig( bWithConfig ),
       m_pProvider( pProvider ),
       m_xMultiServiceFactory( xMultiServiceFactory ),
-      Title( rtl::OUString::createFromAscii( "Title" ) ),
+      Title( RTL_CONSTASCII_USTRINGPARAM("Title") ),
       CasePreservingURL(
-          rtl::OUString::createFromAscii( "CasePreservingURL" ) ),
-      IsDocument( rtl::OUString::createFromAscii( "IsDocument" ) ),
-      IsFolder( rtl::OUString::createFromAscii( "IsFolder" ) ),
-      DateModified( rtl::OUString::createFromAscii( "DateModified" ) ),
-      Size( rtl::OUString::createFromAscii( "Size" ) ),
-      IsVolume( rtl::OUString::createFromAscii( "IsVolume" ) ),
-      IsRemoveable( rtl::OUString::createFromAscii( "IsRemoveable" ) ),
-      IsRemote( rtl::OUString::createFromAscii( "IsRemote" ) ),
-      IsCompactDisc( rtl::OUString::createFromAscii( "IsCompactDisc" ) ),
-      IsFloppy( rtl::OUString::createFromAscii( "IsFloppy" ) ),
-      IsHidden( rtl::OUString::createFromAscii( "IsHidden" ) ),
-      ContentType( rtl::OUString::createFromAscii( "ContentType" ) ),
-      IsReadOnly( rtl::OUString::createFromAscii( "IsReadOnly" ) ),
-      CreatableContentsInfo( rtl::OUString::createFromAscii( "CreatableContentsInfo" ) ),
-      FolderContentType( rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ) ),
-      FileContentType( rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-file" ) ),
+          RTL_CONSTASCII_USTRINGPARAM("CasePreservingURL") ),
+      IsDocument( RTL_CONSTASCII_USTRINGPARAM("IsDocument") ),
+      IsFolder( RTL_CONSTASCII_USTRINGPARAM("IsFolder") ),
+      DateModified( RTL_CONSTASCII_USTRINGPARAM("DateModified") ),
+      Size( RTL_CONSTASCII_USTRINGPARAM("Size") ),
+      IsVolume( RTL_CONSTASCII_USTRINGPARAM("IsVolume") ),
+      IsRemoveable( RTL_CONSTASCII_USTRINGPARAM("IsRemoveable") ),
+      IsRemote( RTL_CONSTASCII_USTRINGPARAM("IsRemote") ),
+      IsCompactDisc( RTL_CONSTASCII_USTRINGPARAM("IsCompactDisc") ),
+      IsFloppy( RTL_CONSTASCII_USTRINGPARAM("IsFloppy") ),
+      IsHidden( RTL_CONSTASCII_USTRINGPARAM("IsHidden") ),
+      ContentType( RTL_CONSTASCII_USTRINGPARAM("ContentType") ),
+      IsReadOnly( RTL_CONSTASCII_USTRINGPARAM("IsReadOnly") ),
+      CreatableContentsInfo( RTL_CONSTASCII_USTRINGPARAM("CreatableContentsInfo") ),
+      FolderContentType( RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.staroffice.fsys-folder") ),
+      FileContentType( RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.staroffice.fsys-file") ),
       m_sCommandInfo( 9 )
 {
     // Title
@@ -364,45 +364,45 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
                                              | beans::PropertyAttribute::READONLY ) );
 
     // Commands
-    m_sCommandInfo[0].Name = rtl::OUString::createFromAscii( "getCommandInfo" );
+    m_sCommandInfo[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getCommandInfo"));
     m_sCommandInfo[0].Handle = -1;
     m_sCommandInfo[0].ArgType = getCppuVoidType();
 
-    m_sCommandInfo[1].Name = rtl::OUString::createFromAscii( "getPropertySetInfo" );
+    m_sCommandInfo[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertySetInfo"));
     m_sCommandInfo[1].Handle = -1;
     m_sCommandInfo[1].ArgType = getCppuVoidType();
 
-    m_sCommandInfo[2].Name = rtl::OUString::createFromAscii( "getPropertyValues" );
+    m_sCommandInfo[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues"));
     m_sCommandInfo[2].Handle = -1;
     m_sCommandInfo[2].ArgType = getCppuType( static_cast< uno::Sequence< beans::Property >* >( 0 ) );
 
-    m_sCommandInfo[3].Name = rtl::OUString::createFromAscii( "setPropertyValues" );
+    m_sCommandInfo[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues"));
     m_sCommandInfo[3].Handle = -1;
     m_sCommandInfo[3].ArgType = getCppuType( static_cast< uno::Sequence< beans::PropertyValue >* >( 0 ) );
 
-    m_sCommandInfo[4].Name = rtl::OUString::createFromAscii( "open" );
+    m_sCommandInfo[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open"));
     m_sCommandInfo[4].Handle = -1;
     m_sCommandInfo[4].ArgType = getCppuType( static_cast< OpenCommandArgument* >( 0 ) );
 
-    m_sCommandInfo[5].Name = rtl::OUString::createFromAscii( "transfer" );
+    m_sCommandInfo[5].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer"));
     m_sCommandInfo[5].Handle = -1;
     m_sCommandInfo[5].ArgType = getCppuType( static_cast< TransferInfo* >( 0 ) );
 
-    m_sCommandInfo[6].Name = rtl::OUString::createFromAscii( "delete" );
+    m_sCommandInfo[6].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete"));
     m_sCommandInfo[6].Handle = -1;
     m_sCommandInfo[6].ArgType = getCppuType( static_cast< sal_Bool* >( 0 ) );
 
-    m_sCommandInfo[7].Name = rtl::OUString::createFromAscii( "insert" );
+    m_sCommandInfo[7].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert"));
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = getCppuType( static_cast< InsertCommandArgument* > ( 0 ) );
 
-    m_sCommandInfo[7].Name = rtl::OUString::createFromAscii( "createNewContent" );
+    m_sCommandInfo[7].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createNewContent"));
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = getCppuType( static_cast< ucb::ContentInfo * > ( 0 ) );
 
     if(m_bWithConfig)
     {
-        rtl::OUString Store = rtl::OUString::createFromAscii( "com.sun.star.ucb.Store" );
+        rtl::OUString Store(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.Store"));
         uno::Reference< XPropertySetRegistryFactory > xRegFac(
             m_xMultiServiceFactory->createInstance( Store ),
             uno::UNO_QUERY );
@@ -594,7 +594,7 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
 {
     uno::Reference< XContentProvider > xProvider( m_pProvider );
     osl::File aFile( aUnqPath );
-    osl::FileBase::RC err = aFile.open( OpenFlag_Read );
+    osl::FileBase::RC err = aFile.open( osl_File_OpenFlag_Read );
 
     if( err != osl::FileBase::E_None )
     {
@@ -905,7 +905,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                 {   // valid value for the size
                     osl::File aFile(aUnqPath);
                     bool err =
-                        aFile.open(OpenFlag_Write) != osl::FileBase::E_None ||
+                        aFile.open(osl_File_OpenFlag_Write) != osl::FileBase::E_None ||
                         aFile.setSize(sal_uInt64(newSize)) != osl::FileBase::E_None ||
                         aFile.close() != osl::FileBase::E_None;
 
@@ -914,7 +914,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                         --propChanged; // unsuccessful setting
                         uno::Sequence< uno::Any > names( 1 );
                         ret[0] <<= beans::PropertyValue(
-                            rtl::OUString::createFromAscii("Uri"), -1,
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")), -1,
                             uno::makeAny(aUnqPath),
                             beans::PropertyState_DIRECT_VALUE);
                         IOErrorCode ioError(IOErrorCode_GENERAL);
@@ -978,7 +978,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                         --propChanged; // unsuccessful setting
                         uno::Sequence< uno::Any > names( 1 );
                         names[0] <<= beans::PropertyValue(
-                            rtl::OUString::createFromAscii("Uri"), -1,
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")), -1,
                             uno::makeAny(aUnqPath),
                             beans::PropertyState_DIRECT_VALUE);
                         IOErrorCode ioError;
@@ -1208,7 +1208,7 @@ shell::move( sal_Int32 CommandId,
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    rtl::OUString aPostFix( rtl::OUString::createFromAscii( "_" ) );
+                    rtl::OUString aPostFix( RTL_CONSTASCII_USTRINGPARAM("_") );
                     aPostFix += rtl::OUString::valueOf( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
@@ -1438,7 +1438,7 @@ shell::copy(
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    rtl::OUString aPostFix( rtl::OUString::createFromAscii( "_" ) );
+                    rtl::OUString aPostFix( RTL_CONSTASCII_USTRINGPARAM("_") );
                     aPostFix += rtl::OUString::valueOf( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
@@ -1800,25 +1800,37 @@ shell::write( sal_Int32 CommandId,
 
     if( OverWrite )
     {
-        err = aFile.open( OpenFlag_Write | OpenFlag_Create );
+        err = aFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
         if( err != osl::FileBase::E_None )
         {
             aFile.close();
-            err = aFile.open( OpenFlag_Write );
-        }
+            err = aFile.open( osl_File_OpenFlag_Write );
 
-        if( err != osl::FileBase::E_None )
-        {
-            installError( CommandId,
-                          TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE,
-                          err );
-            return sal_False;
+            if( err != osl::FileBase::E_None )
+            {
+                installError( CommandId,
+                              TASKHANDLING_NO_OPEN_FILE_FOR_OVERWRITE,
+                              err );
+                return sal_False;
+            }
+
+            // the existing file was just opened and should be overwritten now,
+            // truncate it first
+
+            err = aFile.setSize( 0 );
+            if( err != osl::FileBase::E_None  )
+            {
+                installError( CommandId,
+                              TASKHANDLING_FILESIZE_FOR_WRITE,
+                              err );
+                return sal_False;
+            }
         }
     }
     else
     {
-        err = aFile.open( OpenFlag_Read | OpenFlag_NoLock );
+        err = aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock );
         if( err == osl::FileBase::E_None )  // The file exists and shall not be overwritten
         {
             installError( CommandId,
@@ -1831,7 +1843,7 @@ shell::write( sal_Int32 CommandId,
 
         // as a temporary solution the creation does not lock the file at all
         // in future it should be possible to create the file without lock explicitly
-        err = aFile.open( OpenFlag_Write | OpenFlag_Create | OpenFlag_NoLock );
+        err = aFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create | osl_File_OpenFlag_NoLock );
 
         if( err != osl::FileBase::E_None )
         {
@@ -1845,7 +1857,6 @@ shell::write( sal_Int32 CommandId,
 
     sal_Bool bSuccess = sal_True;
 
-    sal_uInt64 nTotalNumberOfBytes = 0;
     sal_uInt64 nWrittenBytes;
     sal_Int32 nReadBytes = 0, nRequestedBytes = 32768 /*32k*/;
     uno::Sequence< sal_Int8 > seq( nRequestedBytes );
@@ -1902,19 +1913,8 @@ shell::write( sal_Int32 CommandId,
                 bSuccess = sal_False;
                 break;
             }
-
-            nTotalNumberOfBytes += nWrittenBytes;
         }
     } while( nReadBytes == nRequestedBytes );
-
-    err = aFile.setSize( nTotalNumberOfBytes );
-    if( err != osl::FileBase::E_None  )
-    {
-        installError( CommandId,
-                      TASKHANDLING_FILESIZE_FOR_WRITE,
-                      err );
-        bSuccess = sal_False;
-    }
 
     err = aFile.close();
     if( err != osl::FileBase::E_None  )
@@ -1977,11 +1977,11 @@ void SAL_CALL shell::insertDefaultProperties( const rtl::OUString& aUnqPath )
 
 sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& Unq )
 {
-    if( 0 == Url.compareToAscii( "file:///" ) ||
-        0 == Url.compareToAscii( "file://localhost/" ) ||
-        0 == Url.compareToAscii( "file://127.0.0.1/" ) )
+    if (Url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file:///")) ||
+        Url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file://localhost/")) ||
+        Url.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file://127.0.0.1/")))
     {
-        Unq = rtl::OUString::createFromAscii( "file:///" );
+        Unq = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
         return false;
     }
 
@@ -2062,7 +2062,7 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
                                           RTL_TEXTENCODING_UTF8 );
 
                 if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
-                    newDstUnqPath += rtl::OUString::createFromAscii( "/" );
+                    newDstUnqPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
                 newDstUnqPath += tit;
 
@@ -3033,7 +3033,7 @@ uno::Sequence< ucb::ContentInfo > shell::queryCreatableContentsInfo()
 
     uno::Sequence< beans::Property > props( 1 );
     props[0] = beans::Property(
-        rtl::OUString::createFromAscii( "Title" ),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
         -1,
         getCppuType( static_cast< rtl::OUString* >( 0 ) ),
         beans::PropertyAttribute::MAYBEVOID
@@ -3056,20 +3056,20 @@ uno::Sequence< ucb::ContentInfo > shell::queryCreatableContentsInfo()
 void SAL_CALL
 shell::getScheme( rtl::OUString& Scheme )
 {
-  Scheme = rtl::OUString::createFromAscii( "file" );
+  Scheme = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file"));
 }
 
 rtl::OUString SAL_CALL
 shell::getImplementationName_static( void )
 {
-  return rtl::OUString::createFromAscii( "com.sun.star.comp.ucb.FileProvider" );
+  return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ucb.FileProvider"));
 }
 
 
 uno::Sequence< rtl::OUString > SAL_CALL
 shell::getSupportedServiceNames_static( void )
 {
-  rtl::OUString Supported = rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ;
+  rtl::OUString Supported(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"));
   com::sun::star::uno::Sequence< rtl::OUString > Seq( &Supported,1 );
   return Seq;
 }

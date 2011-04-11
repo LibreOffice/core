@@ -30,11 +30,11 @@
 #include "precompiled_xmloff.hxx"
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
-#include "DashStyle.hxx"
+#include "xmloff/DashStyle.hxx"
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -62,7 +62,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_DASH_END=XML_TOK_UNKNOWN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
+static SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME,             XML_TOK_DASH_NAME },
     { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,     XML_TOK_DASH_DISPLAY_NAME },
@@ -75,7 +75,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_DashStyle_Enum[] =
+SvXMLEnumMapEntry const pXML_DashStyle_Enum[] =
 {
     { XML_RECT,         drawing::DashStyle_RECT },
     { XML_ROUND,        drawing::DashStyle_ROUND },
@@ -221,8 +221,6 @@ sal_Bool XMLDashStyleImport::importXML(
 // Export
 //-------------------------------------------------------------
 
-#ifndef SVX_LIGHT
-
 XMLDashStyleExport::XMLDashStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
 {
@@ -329,7 +327,5 @@ sal_Bool XMLDashStyleExport::exportXML(
     }
     return bRet;
 }
-
-#endif // #ifndef SVX_LIGHT
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -561,7 +561,7 @@ sal_Int32                   OFieldDescription::GetPrecision()           const
                 if ( !nPrec )
                     nPrec = pTypeInfo->nPrecision;
                 break;
-        } // switch ( pTypeInfo->nType )
+        }
     }
 
     return nPrec;

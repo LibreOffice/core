@@ -68,7 +68,6 @@ awt::Point LabelPositionHelper::transformSceneToScreenPosition( const drawing::P
                   rScenePosition3D, m_xLogicTarget, m_pShapeFactory, m_nDimensionCount );
 }
 
-//static
 void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const tNameSequence& rPropNames, LabelAlignment eAlignment)
 {
     //HorizontalAdjustment
@@ -100,15 +99,14 @@ void lcl_doDynamicFontResize( uno::Any* pAOldAndNewFontHeightAny
                           , const awt::Size& rOldReferenceSize
                           , const awt::Size& rNewReferenceSize  )
 {
-    double fOldFontHeight = 0, fNewFontHeight;
+    double fOldFontHeight = 0;
     if( pAOldAndNewFontHeightAny && ( *pAOldAndNewFontHeightAny >>= fOldFontHeight ) )
     {
-        fNewFontHeight = RelativeSizeHelper::calculate( fOldFontHeight, rOldReferenceSize, rNewReferenceSize );
+        double fNewFontHeight = RelativeSizeHelper::calculate( fOldFontHeight, rOldReferenceSize, rNewReferenceSize );
         *pAOldAndNewFontHeightAny = uno::makeAny(fNewFontHeight);
     }
 }
 
-//static
 void LabelPositionHelper::doDynamicFontResize( tAnySequence& rPropValues
                     , const tNameSequence& rPropNames
                     , const uno::Reference< beans::XPropertySet >& xAxisModelProps
@@ -432,7 +430,6 @@ void lcl_correctRotation_Right_Bottom( double& rfXCorrection, double& rfYCorrect
 
 }//end anonymous namespace
 
-//static
 void LabelPositionHelper::correctPositionForRotation( const uno::Reference< drawing::XShape >& xShape2DText
                      , LabelAlignment eLabelAlignment, const double fRotationAngle, bool bRotateAroundCenter )
 {

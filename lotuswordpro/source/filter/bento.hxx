@@ -89,23 +89,23 @@ namespace OpenStormBento
 #define ASWENTRY_SIZE   204
 struct ClsId
 {
-    INT32   n1;
-    INT16   n2, n3;
-    UINT8   n4, n5, n6, n7, n8, n9, n10, n11;
+    sal_Int32   n1;
+    sal_Int16   n2, n3;
+    sal_uInt8   n4, n5, n6, n7, n8, n9, n10, n11;
 };
 class AswEntry  //total length: 204
 {
-    UINT16  nName[ 68 ];        //Name of IStorage or IStream referenced by this entry, length = 136
-    INT32   nMtime[ 2 ];
-    INT32   nCtime[ 2 ];
-    INT32   nAtime[ 2 ];
+    sal_uInt16  nName[ 68 ];        //Name of IStorage or IStream referenced by this entry, length = 136
+    sal_Int32   nMtime[ 2 ];
+    sal_Int32   nCtime[ 2 ];
+    sal_Int32   nAtime[ 2 ];
     ClsId   aClsId;         //CLSID from OLE 2 IStorage::SetClass call
-    UINT32  nStatebits;     //State bits from OLE 2 IStorage::SetStateBits call
-    UINT32  nType;          // STGTY_STORAGE: 1 or STGTY_STREAM:2,
-    UINT32  nObjectIDRef;       //Persistent Bento reference to Bento object for this IStorage or IStream
-    UINT32  nMversion;
-    UINT32  nLversion;
-    UINT32  nReserved[2];       //skip 16 char
+    sal_uInt32  nStatebits;     //State bits from OLE 2 IStorage::SetStateBits call
+    sal_uInt32  nType;          // STGTY_STORAGE: 1 or STGTY_STREAM:2,
+    sal_uInt32  nObjectIDRef;       //Persistent Bento reference to Bento object for this IStorage or IStream
+    sal_uInt32  nMversion;
+    sal_uInt32  nLversion;
+    sal_uInt32  nReserved[2];       //skip 16 char
 public:
     AswEntry();
     void    Init();                     // initialize the data
@@ -113,12 +113,12 @@ public:
     void    GetName( String& rName ) const;
     void    Load( const void* );
     void Store( void* );
-    UINT32 GetType() const      { return  nType;    }
-    void    SetType( UINT32 t ) { nType = t;}
+    sal_uInt32 GetType() const      { return  nType;    }
+    void    SetType( sal_uInt32 t ) { nType = t;}
     const   ClsId& GetClassId() const   { return aClsId;}
     void    SetClassId( const ClsId& );
-    void SetObjectID(UINT32 id) { nObjectIDRef = id;}
-    UINT32 GetObjectID() const { return nObjectIDRef;}
+    void SetObjectID(sal_uInt32 id) { nObjectIDRef = id;}
+    sal_uInt32 GetObjectID() const { return nObjectIDRef;}
 };
 //End by
 
@@ -197,7 +197,7 @@ typedef unsigned long BenContainerPos;
 typedef unsigned long BenObjectID;
 typedef unsigned long BenGeneration;
 
-ULONG BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer);
+sal_uLong BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer);
 
 class CBenIDListElmt : public CUtListElmt
 {
@@ -214,7 +214,7 @@ private: // Data
 class CBenNamedObjectListElmt : public CUtListElmt
 {
 public: // Methods
-    // added by  to remove warning 2004-06-24
+    // added to remove warning
     CBenNamedObjectListElmt(pCBenNamedObjectListElmt pPrev) : CUtListElmt(pPrev)
       { cpNamedObject = NULL; }
     void SetNamedObject(pCBenNamedObject pObj)
@@ -241,21 +241,21 @@ public: // Overridden methods
 
     /* added by  */
     CBenValue * GetValue(){ return cpValue; };
-    ULONG GetSize() { return m_ulValueLength; };
+    sal_uLong GetSize() { return m_ulValueLength; };
 protected: // Overridden methods
 
-    virtual ULONG   GetData( void* pData, ULONG nSize );
-    virtual ULONG   PutData( const void* pData, ULONG nSize );
-    virtual ULONG   SeekPos( ULONG nPos );
-    virtual void    SetSize( ULONG nSize );
+    virtual sal_uLong   GetData( void* pData, sal_uLong nSize );
+    virtual sal_uLong   PutData( const void* pData, sal_uLong nSize );
+    virtual sal_uLong   SeekPos( sal_uLong nPos );
+    virtual void    SetSize( sal_uLong nSize );
     virtual void    FlushData();
 
 private: // Data
     pCBenValue cpValue;
     unsigned long cCurrentPosition;
 
-    ULONG m_ulValueLength;      // Added by , sum of length of all sub-valuesegments
-//  void    GetAmountLeft(ULONG * pAmtLeft);    useless in SODC
+    sal_uLong m_ulValueLength;      // Added by , sum of length of all sub-valuesegments
+//  void    GetAmountLeft(sal_uLong * pAmtLeft);    useless in SODC
 };
 
 class LtcBenContainer
@@ -293,18 +293,17 @@ public: // Internal methods
     pCUtList GetObjects() { return &cObjects; }
     pCUtList GetNamedObjects() { return &cNamedObjects; }
 
-    // Added by  2004-06-10
     LtcUtBenValueStream * FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream);
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
     LtcUtBenValueStream * FindObjectValueStreamWithObjectIDAndProperty(BenObjectID ObjectID, const char * sPropertyName);
     BenError CreateGraphicStreams(std::vector<SvStream *> * pStreamVector)  ;
     BenError CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
-    //Add by  10/24/2005
+
     SotStorageStreamRef ConvertAswStorageToOLE2Stream(const char * sObjectName);
     LtcUtBenValueStream * FindOLEStorageStreamWithObjectName(const char * sObjectName, AswEntry& rDirStruct);
     void ReadAswEntry(SvStream * pStream, AswEntry& rEntry);
 
-    BenError GetSize(ULONG * pLength);
+    BenError GetSize(sal_uLong * pLength);
     LwpSvStream * GetStream()
     {
         return cpStream;
@@ -313,7 +312,7 @@ private: // Data
     CUtOwningList cObjects;
     CUtList cNamedObjects;
     LwpSvStream * cpStream;
-    ULONG m_ulLength;   // Added for TOCRead.cpp
+    sal_uLong m_ulLength;   // Added for TOCRead.cpp
     BenObjectID cNextAvailObjectID; // for new object
 };
 
@@ -368,7 +367,7 @@ public:
     pCBenProperty BEN_EXPORT GetProperty() { return cpProperty; }
 
 public: // Internal methods
-    // added by  to remove WARNING 2004-06-24
+    // added to remove WARNING
     CBenValue(BenObjectID TypeID):CBenIDListElmt(TypeID)
     {
         cpProperty = NULL;
@@ -414,7 +413,7 @@ public:
     pLtcBenContainer GetContainer() { return GetBenObject()->GetContainer(); }
 
 public: // Internal methods
-    // changed by  to remove WARNING here 2004-06-24
+    // changed to remove WARNING here
     CBenProperty(pCBenObject pObject, BenObjectID PropertyID,
       BenObjectID TypeID, pCBenIDListElmt pPrevProperty) :
       CBenIDListElmt(PropertyID, pPrevProperty), cValue(TypeID)

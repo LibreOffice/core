@@ -57,14 +57,15 @@ APP4_JAR=$(SAMPLE_CLASS_OUT)/$(APP4_NAME).jar
 APP5_NAME=SelectionChangeListener
 APP5_JAR=$(SAMPLE_CLASS_OUT)/$(APP5_NAME).jar
 
-COMPONENT_NAME=JavaSampleChartAddIn
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOOXT_EXT)
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOOXT_EXT)")
-COMPONENT_JAR_NAME = $(COMPONENT_NAME).uno.jar
-COMPONENT_JAR = $(SAMPLE_CLASS_OUT)/$(COMPONENT_JAR_NAME)
-COMPONENT_MANIFESTFILE = $(SAMPLE_CLASS_OUT)/$(COMPONENT_NAME).uno.Manifest
-COMPONENT_UNOPKG_MANIFEST = $(SAMPLE_CLASS_OUT)/$(COMPONENT_NAME)/META-INF/manifest.xml
-COMP_REGISTERFLAG = $(SAMPLE_GEN_OUT)/devguide_$(COMPONENT_NAME)_register_component.flag
+COMP_NAME=JavaSampleChartAddIn
+COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
+COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
+COMP_JAR_NAME = $(COMP_NAME).uno.jar
+COMP_JAR = $(SAMPLE_CLASS_OUT)/$(COMP_JAR_NAME)
+COMP_MANIFESTFILE = $(SAMPLE_CLASS_OUT)/$(COMP_NAME).uno.Manifest
+COMP_UNOPKG_MANIFEST = $(SAMPLE_CLASS_OUT)/$(COMP_NAME)/META-INF/manifest.xml
+COMP_REGISTERFLAG = $(SAMPLE_GEN_OUT)/devguide_$(COMP_NAME)_register_component.flag
+COMP_COMPONENTS=$(COMP_NAME).components
 
 COMPJAVAFILES  = \
 	   JavaSampleChartAddIn.java
@@ -79,7 +80,7 @@ COMPCLASSFILES= $(patsubst %.java,$(SAMPLE_CLASS_OUT)/%.class,$(COMPJAVAFILES))
 APP_CLASSFILES= $(patsubst %.java,$(SAMPLE_CLASS_OUT)/%.class,$(APP_JAVAFILES))
 APP_CLASSNAMES= $(patsubst %.java,%.class,$(APP_JAVAFILES))
 
-$(COMPONENT_NAME)_CLASSFILES = $(COMPONENT_NAME).class
+$(COMP_NAME)_CLASSFILES = $(COMP_NAME).class
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(SAMPLE_CLASS_OUT))
@@ -122,7 +123,7 @@ $(SAMPLE_CLASS_OUT)/%.jar : $(SAMPLE_CLASS_OUT)/%.mf $(SAMPLE_CLASS_OUT)/%.class
 	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
 
 # rule for component jar file
-$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(COMPCLASSFILES)
+$(COMP_JAR) : $(COMP_MANIFESTFILE) $(COMPCLASSFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
@@ -133,22 +134,23 @@ $(SAMPLE_CLASS_OUT)/%/manifest.xml :
 	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
 	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
 	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
-	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(SAMPLE_CLASS_OUT)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-components$(QM)">> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP_COMPONENTS)$(QM)"/$(CSEP)>> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 # rule for component pacakge file
-$(COMPONENT_PACKAGE) : $(COMPONENT_JAR) $(COMPONENT_UNOPKG_MANIFEST)
+$(COMP_PACKAGE) : $(COMP_JAR) $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+	$(SDK_ZIP) $@ $(COMP_COMPONENTS)
+	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) ../../bin/$(@F) -u $(<F)
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) ../../../bin/$(@F) -u META-INF/manifest.xml
 
-$(COMP_REGISTERFLAG) : $(COMPONENT_PACKAGE)
+$(COMP_REGISTERFLAG) : $(COMP_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMP_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -195,4 +197,4 @@ AddInChart.ods.load : $(REGISTERFLAG)
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_CLASS_OUT))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_PACKAGE_URL)))

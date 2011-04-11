@@ -33,7 +33,7 @@
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -136,7 +136,7 @@ void visitNode( DomVisitor& rVisitor, const Reference<XNode>& xNode )
         rVisitor.character( Reference<XCharacterData>( xNode, UNO_QUERY_THROW ) );
         break;
     default:
-        DBG_ERROR( "unknown DOM node type" );
+        OSL_FAIL( "unknown DOM node type" );
         break;
     }
 }

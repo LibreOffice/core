@@ -37,8 +37,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
+#include <vector>
 
 struct HelpHistoryEntry_Impl
 {
@@ -49,7 +49,7 @@ struct HelpHistoryEntry_Impl
         aURL( rURL ), aViewData(rViewData) {}
 };
 
-DECLARE_LIST(HelpHistoryList_Impl,HelpHistoryEntry_Impl*)
+typedef ::std::vector< HelpHistoryEntry_Impl* > HelpHistoryList_Impl;
 
 class SfxHelpWindow_Impl;
 class HelpInterceptor_Impl : public ::cppu::WeakImplHelper3<
@@ -74,7 +74,7 @@ friend class SfxHelpWindow_Impl;
 
     HelpHistoryList_Impl*       m_pHistory;
     SfxHelpWindow_Impl*         m_pWindow;
-    ULONG                       m_nCurPos;
+    sal_uIntPtr                     m_nCurPos;
     String                      m_aCurrentURL;
     com::sun::star::uno::Any    m_aViewData;
 

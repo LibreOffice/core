@@ -85,9 +85,7 @@ const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_UPDTEMPL),     0,  &getBooleanCppuType(),              0, 0},
         /*Stampit enable/disable print cancel */
         {MAP_CHAR_LEN(SC_UNO_ALLOWPRINTJOBCANCEL), 0, &getBooleanCppuType(),        0, 0},
-        // --> PB 2004-08-25 #i33095# Security Options
         {MAP_CHAR_LEN(SC_UNO_LOADREADONLY), 0,  &getBooleanCppuType(),              0, 0},
-        // <--
         {MAP_CHAR_LEN(SC_UNO_SHAREDOC),     0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNO_MODIFYPASSWORDINFO), 0,  &getCppuType((uno::Sequence< beans::PropertyValue >*)0),              0, 0},
         {0,0,0,0,0,0}
@@ -145,7 +143,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         ScDocument* pDoc = pDocShell->GetDocument();
         if (pDoc)
         {
-            sal_Bool bUpdateHeights = sal_False;
+            sal_Bool bUpdateHeights = false;
 
             ScViewOptions aViewOpt(pDoc->GetViewOptions());
 
@@ -245,7 +243,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             {
                 // Int16 contains CharacterCompressionType values
                 sal_Int16 nUno = ScUnoHelpFunctions::GetInt16FromAny( aValue );
-                pDoc->SetAsianCompression( (BYTE) nUno );
+                pDoc->SetAsianCompression( (sal_uInt8) nUno );
                 bUpdateHeights = sal_True;
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_ASIANKERN ) == 0 )
@@ -255,7 +253,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SCSAVEVERSION ) == 0)
             {
-                sal_Bool bTmp=sal_False;
+                sal_Bool bTmp=false;
                 if ( aValue >>= bTmp )
                     pDocShell->SetSaveVersionOnClose( bTmp );
             }
@@ -267,13 +265,13 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_LOADREADONLY ) == 0 )
             {
-                sal_Bool bTmp=sal_False;
+                sal_Bool bTmp=false;
                 if ( aValue >>= bTmp )
                     pDocShell->SetLoadReadonly( bTmp );
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
-                sal_Bool bDocShared = sal_False;
+                sal_Bool bDocShared = false;
                 if ( aValue >>= bDocShared )
                 {
                     pDocShell->SetSharedXMLFlag( bDocShared );
@@ -380,7 +378,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 // #i75610# don't create the printer, return empty string if no printer created yet
                 // (as in SwXDocumentSettings)
-                SfxPrinter* pPrinter = pDoc->GetPrinter( FALSE );
+                SfxPrinter* pPrinter = pDoc->GetPrinter( false );
                 if (pPrinter)
                     aRet <<= rtl::OUString ( pPrinter->GetName());
                 else
@@ -390,7 +388,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 // #i75610# don't create the printer, return empty sequence if no printer created yet
                 // (as in SwXDocumentSettings)
-                SfxPrinter* pPrinter = pDoc->GetPrinter( FALSE );
+                SfxPrinter* pPrinter = pDoc->GetPrinter( false );
                 if (pPrinter)
                 {
                     SvMemoryStream aStream;
@@ -421,7 +419,6 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 aRet <<= pDocShell->IsQueryLoadTemplate();
             else if ( aPropertyName.compareToAscii( SC_UNO_LOADREADONLY ) == 0 )
                 aRet <<= pDocShell->IsLoadReadonly();
-            // <--
             else if ( aPropertyName.compareToAscii( SC_UNO_SHAREDOC ) == 0 )
             {
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasSharedXMLFlagSet() );
@@ -464,7 +461,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocumentConfiguration )
 
 rtl::OUString SAL_CALL ScDocumentConfiguration::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScDocumentConfiguration" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScDocumentConfiguration" ));
 }
 
 sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const rtl::OUString& rServiceName )
@@ -480,8 +477,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDocumentConfiguration::getSupportedServi
 {
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCCOMPSCPREADSHEETSETTINGS_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCDOCUMENTSETTINGS_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCOMPSCPREADSHEETSETTINGS_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCDOCUMENTSETTINGS_SERVICE ));
     return aRet;
 }
 

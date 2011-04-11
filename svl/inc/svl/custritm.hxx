@@ -43,10 +43,10 @@ class SVL_DLLPUBLIC CntUnencodedStringItem: public SfxPoolItem
 public:
     TYPEINFO();
 
-    CntUnencodedStringItem(USHORT which = 0): SfxPoolItem(which)
+    CntUnencodedStringItem(sal_uInt16 which = 0): SfxPoolItem(which)
     { DBG_CTOR(CntUnencodedStringItem, 0); }
 
-    CntUnencodedStringItem(USHORT which, const XubString & rTheValue):
+    CntUnencodedStringItem(sal_uInt16 which, const XubString & rTheValue):
         SfxPoolItem(which), m_aValue(rTheValue)
     { DBG_CTOR(CntUnencodedStringItem, 0); }
 
@@ -70,10 +70,10 @@ public:
         const;
 
     virtual bool QueryValue(com::sun::star::uno::Any& rVal,
-                            BYTE nMemberId = 0) const;
+                            sal_uInt8 nMemberId = 0) const;
 
     virtual bool PutValue(const com::sun::star::uno::Any& rVal,
-                          BYTE nMemberId = 0);
+                          sal_uInt8 nMemberId = 0);
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 

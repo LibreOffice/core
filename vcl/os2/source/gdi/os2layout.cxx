@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-#include <tools/svwin.h>
-
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
 #include <salgdi.h>
@@ -49,12 +47,10 @@
 // for GetMirroredChar
 #include <vcl/svapp.hxx>
 
-#include <hash_map>
-typedef std::hash_map<int,int> IntMap;
+#include <boost/unordered_map.hpp>
+typedef boost::unordered_map<int,int> IntMap;
 
 #define DROPPED_OUTGLYPH 0xFFFF
-
-using namespace rtl;
 
 // =======================================================================
 
@@ -372,7 +368,7 @@ bool Os2SalLayout::LayoutText( ImplLayoutArgs& rArgs )
         if (Ft2FontSupportsUnicodeChar( mhPS, lLcid, TRUE, nCharCode))
             continue;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
         debug_printf("Os2SalLayout::LayoutText font does not support unicode char\n");
 #endif
         // request glyph fallback at this position in the string
@@ -594,7 +590,7 @@ void Os2SalLayout::DrawText( SalGraphics& rGraphics ) const
         if (rc == GPI_ERROR) {
             // if *W fails, convert to codepage and use *A (fallback to GPI into ft2)
             ByteString str( mpOutGlyphs, gsl_getSystemTextEncoding() );
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
             debug_printf("Os2SalLayout::DrawText HPS %08x PosAtW failed '%s'!\n",static_cast<Os2SalGraphics&>(rGraphics).mhPS,str.GetBuffer());
 #endif
             // gliph size is not recalculated, so it could be wrong!
@@ -953,9 +949,6 @@ SalLayout* Os2SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
         }
 #endif // GCP_KERN_HACK
 
-        //BYTE eCharSet = ANSI_CHARSET;
-        //if( mpLogFont )
-        //    eCharSet = mpLogFont->lfCharSet;
         pLayout = new Os2SalLayout( mhPS, 0, rFontFace, rFontInstance );
     }
 
@@ -1039,7 +1032,6 @@ ImplFontData* ImplOs2FontData::Clone() const
 
 ImplFontEntry* ImplOs2FontData::CreateFontInstance( ImplFontSelectData& rFSD ) const
 {
-    //debug_printf("ImplOs2FontData::CreateFontInstance\n");
     ImplFontEntry* pEntry = new ImplOs2FontEntry( rFSD );
     return pEntry;
 }

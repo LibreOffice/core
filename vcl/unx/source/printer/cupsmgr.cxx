@@ -139,7 +139,13 @@ public:
 
 using namespace psp;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringHash;
+using ::rtl::OString;
 
 /*
  *  CUPSWrapper class
@@ -440,7 +446,6 @@ void CUPSManager::runDests()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "starting cupsGetDests\n" );
 #endif
-    int nDests = 0;
     cups_dest_t* pDests = NULL;
 
     // #i86306# prepare against really broken CUPS installations / missing servers
@@ -460,7 +465,7 @@ void CUPSManager::runDests()
     // prepare against a signal during FcInit or FcConfigGetCurrent
     if( sigsetjmp( aViolationBuffer, ~0 ) == 0 )
     {
-        nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
+        int nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "came out of cupsGetDests\n" );
         #endif
@@ -525,12 +530,18 @@ void CUPSManager::initialize()
     // introduced in dests with 1.2
     // this is needed to check for %%IncludeFeature support
     // (#i65684#, #i65491#)
+    bool bUsePDF = false;
     cups_dest_t* pDest = ((cups_dest_t*)m_pDests);
     const char* pOpt = m_pCUPSWrapper->cupsGetOption( "printer-info",
                                                       pDest->num_options,
                                                       pDest->options );
     if( pOpt )
+    {
         m_bUseIncludeFeature = true;
+        bUsePDF = true;
+        if( m_aGlobalDefaults.m_nPSLevel == 0 && m_aGlobalDefaults.m_nPDFDevice == 0 )
+            m_aGlobalDefaults.m_nPDFDevice = 1;
+    }
     // do not send include JobPatch; CUPS will insert that itself
     // TODO: currently unknwon which versions of CUPS insert JobPatches
     // so currently it is assumed CUPS = don't insert JobPatch files
@@ -588,12 +599,14 @@ void CUPSManager::initialize()
         // behaviour
         aPrinter.m_aInfo.m_pParser = NULL;
         aPrinter.m_aInfo.m_aContext.setParser( NULL );
-        std::hash_map< OUString, PPDContext, OUStringHash >::const_iterator c_it = m_aDefaultContexts.find( aPrinterName );
+        boost::unordered_map< OUString, PPDContext, OUStringHash >::const_iterator c_it = m_aDefaultContexts.find( aPrinterName );
         if( c_it != m_aDefaultContexts.end() )
         {
             aPrinter.m_aInfo.m_pParser = c_it->second.getParser();
             aPrinter.m_aInfo.m_aContext = c_it->second;
         }
+        if( bUsePDF && aPrinter.m_aInfo.m_nPSLevel == 0 && aPrinter.m_aInfo.m_nPDFDevice == 0 )
+            aPrinter.m_aInfo.m_nPDFDevice = 1;
         aPrinter.m_aInfo.m_aDriverName = aBuf.makeStringAndClear();
         aPrinter.m_bModified = false;
 
@@ -604,7 +617,7 @@ void CUPSManager::initialize()
     // remove everything that is not a CUPS printer and not
     // a special purpose printer (PDF, Fax)
     std::list< OUString > aRemovePrinters;
-    for( std::hash_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.begin();
+    for( boost::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.begin();
          it != m_aPrinters.end(); ++it )
     {
         if( m_aCUPSDestMap.find( it->first ) != m_aCUPSDestMap.end() )
@@ -691,7 +704,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
     {
         if( m_nDests && m_pDests && ! isCUPSDisabled() )
         {
-            std::hash_map< OUString, int, OUStringHash >::iterator dest_it =
+            boost::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
             m_aCUPSDestMap.find( aPrinter );
             if( dest_it != m_aCUPSDestMap.end() )
             {
@@ -787,13 +800,13 @@ void CUPSManager::setupJobContextData(
 )
 {
 #ifdef ENABLE_CUPS
-    std::hash_map< OUString, int, OUStringHash >::iterator dest_it =
+    boost::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
         m_aCUPSDestMap.find( rData.m_aPrinterName );
 
     if( dest_it == m_aCUPSDestMap.end() )
         return PrinterInfoManager::setupJobContextData( rData );
 
-    std::hash_map< OUString, Printer, OUStringHash >::iterator p_it =
+    boost::unordered_map< OUString, Printer, OUStringHash >::iterator p_it =
         m_aPrinters.find( rData.m_aPrinterName );
     if( p_it == m_aPrinters.end() ) // huh ?
     {
@@ -827,8 +840,15 @@ void CUPSManager::setupJobContextData(
 
 FILE* CUPSManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
+    OSL_TRACE( "endSpool: %s, %s",
+               rtl::OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
+              bQuickCommand ? "true" : "false" );
+
     if( m_aCUPSDestMap.find( rPrintername ) == m_aCUPSDestMap.end() )
+    {
+        OSL_TRACE( "defer to PrinterInfoManager::startSpool" );
         return PrinterInfoManager::startSpool( rPrintername, bQuickCommand );
+    }
 
 #ifdef ENABLE_CUPS
     OUString aTmpURL, aTmpFile;
@@ -851,11 +871,10 @@ struct less_ppd_key : public ::std::binary_function<double, double, bool>
     { return left->getOrderDependency() < right->getOrderDependency(); }
 };
 
-void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOptions, void** rOptions ) const
+void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions ) const
 {
     rNumOptions = 0;
     *rOptions = NULL;
-    int i;
 
     // emit features ordered to OrderDependency
     // ignore features that are set to default
@@ -863,6 +882,7 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOpt
     // sanity check
     if( rJob.m_pParser == rJob.m_aContext.getParser() && rJob.m_pParser )
     {
+        int i;
         int nKeys = rJob.m_aContext.countValuesModified();
         ::std::vector< const PPDKey* > aKeys( nKeys );
         for(  i = 0; i < nKeys; i++ )
@@ -881,21 +901,40 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOpt
             }
         }
     }
+
+    if( rJob.m_nPDFDevice > 0 && rJob.m_nCopies > 1 )
+    {
+        rtl::OString aVal( rtl::OString::valueOf( sal_Int32( rJob.m_nCopies ) ) );
+        rNumOptions = m_pCUPSWrapper->cupsAddOption( "copies", aVal.getStr(), rNumOptions, (cups_option_t**)rOptions );
+    }
+    if( ! bBanner )
+    {
+        rNumOptions = m_pCUPSWrapper->cupsAddOption( "job-sheets", "none", rNumOptions, (cups_option_t**)rOptions );
+    }
 }
 
-int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData )
+int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner )
 {
+    OSL_TRACE( "endSpool: %s, %s, copy count = %d",
+               rtl::OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
+               rtl::OUStringToOString( rJobTitle, RTL_TEXTENCODING_UTF8 ).getStr(),
+               rDocumentJobData.m_nCopies
+               );
+
     int nJobID = 0;
 
     osl::MutexGuard aGuard( m_aCUPSMutex );
 
-    std::hash_map< OUString, int, OUStringHash >::iterator dest_it =
+    boost::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
         m_aCUPSDestMap.find( rPrintername );
     if( dest_it == m_aCUPSDestMap.end() )
-        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData );
+    {
+        OSL_TRACE( "defer to PrinterInfoManager::endSpool" );
+        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData, bBanner );
+    }
 
     #ifdef ENABLE_CUPS
-    std::hash_map< FILE*, OString, FPtrHash >::const_iterator it = m_aSpoolFiles.find( pFile );
+    boost::unordered_map< FILE*, OString, FPtrHash >::const_iterator it = m_aSpoolFiles.find( pFile );
     if( it != m_aSpoolFiles.end() )
     {
         fclose( pFile );
@@ -904,7 +943,7 @@ int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
         // setup cups options
         int nNumOptions = 0;
         cups_option_t* pOptions = NULL;
-        getOptionsFromDocumentSetup( rDocumentJobData, nNumOptions, (void**)&pOptions );
+        getOptionsFromDocumentSetup( rDocumentJobData, bBanner, nNumOptions, (void**)&pOptions );
 
         cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
         nJobID = m_pCUPSWrapper->cupsPrintFile( pDest->name,
@@ -1022,7 +1061,7 @@ bool CUPSManager::setDefaultPrinter( const OUString& rName )
 {
     bool bSuccess = false;
 #ifdef ENABLE_CUPS
-    std::hash_map< OUString, int, OUStringHash >::iterator nit =
+    boost::unordered_map< OUString, int, OUStringHash >::iterator nit =
         m_aCUPSDestMap.find( rName );
     if( nit != m_aCUPSDestMap.end() && m_aCUPSMutex.tryToAcquire() )
     {
@@ -1048,10 +1087,10 @@ bool CUPSManager::writePrinterConfig()
     bool bDestModified = false;
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
-    for( std::hash_map< OUString, Printer, OUStringHash >::iterator prt =
+    for( boost::unordered_map< OUString, Printer, OUStringHash >::iterator prt =
              m_aPrinters.begin(); prt != m_aPrinters.end(); ++prt )
     {
-        std::hash_map< OUString, int, OUStringHash >::iterator nit =
+        boost::unordered_map< OUString, int, OUStringHash >::iterator nit =
             m_aCUPSDestMap.find( prt->first );
         if( nit == m_aCUPSDestMap.end() )
             continue;
@@ -1109,7 +1148,7 @@ const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
     const char* pRet = NULL;
 
 #ifdef ENABLE_CUPS
-    OUString aLib = OUString::createFromAscii( _XSALSET_LIBNAME );
+    OUString aLib(RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ));
     oslModule pLib = osl_loadModule( aLib.pData, SAL_LOADMODULE_LAZY );
     if( pLib )
     {

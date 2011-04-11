@@ -47,7 +47,7 @@ using namespace ::com::sun::star::lang;
 
 namespace scripting_impl {
 
-static const OUString schema = OUString::createFromAscii( "vnd.sun.star.script://" );
+static const OUString schema(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script://"));
 
 /**
  *  Constructor
@@ -145,7 +145,6 @@ void ScriptURI::set_values( scripting_impl::Uri values )
 // In order to temporarly support the existing code functionname is
 // set to the logica name parsed by this class. So getLogicalName() and
 // getFunctionName() return identical string.
-//
 
     m_functionName = values.logicalName;
     m_logicalName = values.logicalName;

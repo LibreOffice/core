@@ -70,7 +70,7 @@ class LwpFribText : public LwpFrib
 {
 public:
     LwpFribText( LwpPara* pPara, sal_Bool bNoUnicode=false);
-    ~LwpFribText(){};
+    ~LwpFribText(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     void XFConvert(XFContentContainer* pXFPara,LwpStory* pStory);
 private:
@@ -83,15 +83,15 @@ public:
 class LwpFribHardSpace : public LwpFrib
 {
 public:
-    LwpFribHardSpace( LwpPara* pPara ) : LwpFrib(pPara){};
-    ~LwpFribHardSpace(){};
+    LwpFribHardSpace( LwpPara* pPara ) : LwpFrib(pPara){}
+    ~LwpFribHardSpace(){}
 };
 
 class LwpFribSoftHyphen : public LwpFrib
 {
 public:
-    LwpFribSoftHyphen( LwpPara* pPara ) : LwpFrib(pPara){};
-    ~LwpFribSoftHyphen(){};
+    LwpFribSoftHyphen( LwpPara* pPara ) : LwpFrib(pPara){}
+    ~LwpFribSoftHyphen(){}
 };
 
 //add by , 02/03/2005
@@ -99,7 +99,7 @@ class LwpFribParaNumber : public LwpFrib
 {
 public:
     LwpFribParaNumber( LwpPara* pPara ) : LwpFrib(pPara),
-        m_nStyleID(0), m_nNumberChar(0), m_nLevel(1), m_nStart(0){};
+        m_nStyleID(0), m_nNumberChar(0), m_nLevel(1), m_nStart(0){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
 
     inline sal_uInt16 GetStyleID() const;
@@ -194,15 +194,15 @@ private:
 class LwpFribTab : public LwpFrib
 {
 public:
-    LwpFribTab( LwpPara* pPara ) : LwpFrib(pPara){};
-    ~LwpFribTab(){};
+    LwpFribTab( LwpPara* pPara ) : LwpFrib(pPara){}
+    ~LwpFribTab(){}
 };
 
 class LwpFribUnicode: public LwpFrib
 {
 public:
-    LwpFribUnicode( LwpPara* pPara ) : LwpFrib(pPara){};
-    ~LwpFribUnicode(){};
+    LwpFribUnicode( LwpPara* pPara ) : LwpFrib(pPara){}
+    ~LwpFribUnicode(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     void XFConvert(XFContentContainer* pXFPara,LwpStory* pStory);
 private:
@@ -215,8 +215,8 @@ class LwpFribPageNumber : public LwpFrib
 {
 public:
     LwpFribPageNumber(LwpPara* pPara) : LwpFrib(pPara),
-        m_nNumStyle(0), m_nStartNum(1), m_nStartOnPage(1), m_nFlag(0){};
-    ~LwpFribPageNumber(){};
+        m_nNumStyle(0), m_nStartNum(1), m_nStartOnPage(1), m_nFlag(0){}
+    ~LwpFribPageNumber(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     void XFConvert(XFContentContainer* pXFPara);
 private:

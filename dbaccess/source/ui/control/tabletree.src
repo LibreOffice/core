@@ -33,7 +33,6 @@
 #endif
 #include "browserids.hxx"
 
-
 Menu MENU_TABLETREE_POPUP
 {
     ItemList =
@@ -65,24 +64,28 @@ String STR_COULDNOTCONNECT
 {
     Text [ en-US ] = "No connection could be established for the URL #connurl#.";
 };
+
 String STR_COULDNOTCONNECT_PLEASECHECK
 {
     Text [ en-US ] = "Please check the current settings, for example user name and password.";
 };
+
 String STR_NOTABLEINFO
 {
     Text [ en-US ] = "Successfully connected, but information about database tables is not available.";
 };
+
 String STR_ALL_TABLES
 {
     Text [ en-US ] = "All tables";
 };
+
 String STR_ALL_VIEWS
 {
     Text [ en-US ] = "All views";
 };
+
 String STR_ALL_TABLES_AND_VIEWS
 {
     Text [ en-US ] = "All tables and views";
 };
-

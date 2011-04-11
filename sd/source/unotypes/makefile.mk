@@ -42,12 +42,6 @@ UNOUCROUT = $(OUT)$/inc
 
 CPPUMAKERFLAGS += -C -X$(SOLARBINDIR)$/types.rdb
 
-#UNOTYPES= \
-#	com.sun.star.presentation.XSlideShow \
-#	com.sun.star.presentation.XSlideShowView \
-#	com.sun.star.presentation.XSlideShowListener \
-#	com.sun.star.presentation.XShapeEventListener
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk

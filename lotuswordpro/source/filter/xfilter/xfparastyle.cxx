@@ -59,11 +59,6 @@
  * Styles for paragraph may include many style,include font,indent,margin,
  * shadow,line height,and so on.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-10 create this file.
- * 2005-01-20 move some structure out of this file.
- ************************************************************************/
 #include    "xfparastyle.hxx"
 #include    "xffont.hxx"
 #include    "xfborders.hxx"

@@ -44,6 +44,7 @@
 #include <fmtinfmt.hxx>
 #include <fmtanchr.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -54,7 +55,7 @@
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <poolfmt.hxx>
-
+#include <switerator.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -67,48 +68,30 @@ enum SwSplitDocType
     SPLITDOC_TO_HTML
 };
 
-BOOL SwDoc::GenerateGlobalDoc( const String& rPath,
+sal_Bool SwDoc::GenerateGlobalDoc( const String& rPath,
                                 const SwTxtFmtColl* pSplitColl )
 {
     return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, pSplitColl );
 }
 
 //#outline level,add by zhaojianwei
-BOOL SwDoc::GenerateGlobalDoc( const String& rPath, int nOutlineLevel )
+sal_Bool SwDoc::GenerateGlobalDoc( const String& rPath, int nOutlineLevel )
 {
     return SplitDoc( SPLITDOC_TO_GLOBALDOC, rPath, nOutlineLevel );
 }
-BOOL SwDoc::GenerateHTMLDoc( const String& rPath, int nOutlineLevel )
+sal_Bool SwDoc::GenerateHTMLDoc( const String& rPath, int nOutlineLevel )
 {
     return SplitDoc( SPLITDOC_TO_HTML, rPath, nOutlineLevel );
 }
 //<-end,zhaojianwei
 
-BOOL SwDoc::GenerateHTMLDoc( const String& rPath,
+sal_Bool SwDoc::GenerateHTMLDoc( const String& rPath,
                                 const SwTxtFmtColl* pSplitColl )
 {
-#ifdef JP_TEST
-    if( !pSplitColl )
-    {
-        BYTE nLvl = 1;
-        const SwTxtFmtColls& rFmtColls =*GetTxtFmtColls();
-        for( USHORT n = rFmtColls.Count(); n; )
-            //if( nLvl == rFmtColls[ --n ]->GetOutlineLevel() )//#outline level,zhaojianwei
-            if( nLvl == rFmtColls[ --n ]->GetAttrOutlineLevel() -1 )//<-end,zhaojianwei 0814
-            {
-                pSplitColl = rFmtColls[ n ];
-                break;
-            }
-
-        if( !pSplitColl )
-            pSplitColl = GetTxtCollFromPool( RES_POOLCOLL_HEADLINE2 );
-    }
-#endif
-
     return SplitDoc( SPLITDOC_TO_HTML, rPath, pSplitColl );
 }
 
-BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
+sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath,
                         const SwTxtFmtColl* pSplitColl )
 {
     // ueber alle Node der Vorlage Iterieren und dafuer einzelne
@@ -119,9 +102,9 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     // Am Ende wird dieses Doc als GlobalDoc/HTML-Doc gespreichert.
     if( !pDocShell || !pDocShell->GetMedium() ||
         ( SPLITDOC_TO_GLOBALDOC == eDocType && get(IDocumentSettingAccess::GLOBAL_DOCUMENT) ) )
-        return FALSE;
+        return sal_False;
 
-    USHORT nOutl = 0;
+    sal_uInt16 nOutl = 0;
     SwOutlineNodes* pOutlNds = (SwOutlineNodes*)&GetNodes().GetOutLineNds();
     SwNodePtr pSttNd;
 
@@ -129,20 +112,18 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     {
         // wenn keine OutlineNumerierung ist, dann benutze eigenes Array
         // und sammel die Nodes zusammen.
-        //if( NO_NUMBERING == pSplitColl->GetOutlineLevel() )//#outline level,zhaojianwei
         if( pSplitColl->GetAttrOutlineLevel() == 0 )//<-end,zhaojianwei, 0814
         {
             pOutlNds = new SwOutlineNodes( 8, 8 );
-            SwClientIter aIter( *(SwModify*)pSplitColl );
-            for( SwTxtNode* pTNd = (SwTxtNode*)aIter.First( TYPE( SwTxtNode ));
-                    pTNd; pTNd = (SwTxtNode*)aIter.Next() )
+            SwIterator<SwTxtNode,SwFmtColl> aIter( *pSplitColl );
+            for( SwTxtNode* pTNd = aIter.First(); pTNd; pTNd = aIter.Next() )
                 if( pTNd->GetNodes().IsDocNodes() )
                     pOutlNds->Insert( pTNd );
 
             if( !pOutlNds->Count() )
             {
                 delete pOutlNds;
-                return FALSE;
+                return sal_False;
             }
         }
     }
@@ -150,8 +131,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     {
         // dann suche die Gliederungs - Vorlage, der 1. Ebene
         const SwTxtFmtColls& rFmtColls =*GetTxtFmtColls();
-        for( USHORT n = rFmtColls.Count(); n; )
-            //if( !rFmtColls[ --n ]->GetOutlineLevel() )//#outline level,zhaojianwei
+        for( sal_uInt16 n = rFmtColls.Count(); n; )
             if ( rFmtColls[ --n ]->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
             {
                 pSplitColl = rFmtColls[ n ];
@@ -159,7 +139,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
             }
 
         if( !pSplitColl )
-            return FALSE;
+            return sal_False;
     }
 
     const SfxFilter* pFilter;
@@ -171,7 +151,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
         break;
 
     default:
-//  case SPLITDOC_TO_GLOBALDOC:
         pFilter = SwIoSystem::GetFilterOfFormat(
                                     String::CreateFromAscii( FILTER_XML ));
         eDocType = SPLITDOC_TO_GLOBALDOC;
@@ -179,10 +158,10 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
     }
 
     if( !pFilter )
-        return FALSE;
+        return sal_False;
 
     // Undo/Redline aufjedenfall abschalten
-    DoUndo( FALSE );
+    GetIDocumentUndoRedo().DoUndo(false);
     SetRedlineMode_intern( (RedlineMode_t)(GetRedlineMode() & ~nsRedlineMode_t::REDLINE_ON));
 
     String sExt( pFilter->GetSuffixes().GetToken(0, ',') );
@@ -231,11 +210,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                 pNd = pOutlNds->GetObject( nOutl );
                 SwTxtFmtColl* pTColl = pNd->GetTxtNode()->GetTxtColl();
 
-                //if( ( pTColl == pSplitColl ||     //#outline level,zhaojianwei
-                //  (   NO_NUMBERING != pSplitColl->GetOutlineLevel() &&
-                //      pTColl->GetOutlineLevel() <
-                //      pSplitColl->GetOutlineLevel() )) &&
-                //  !pNd->FindTableNode() )
                 if( ( pTColl == pSplitColl ||
                     (   pSplitColl->GetAttrOutlineLevel() > 0 &&
                         pTColl->GetAttrOutlineLevel() > 0     &&
@@ -255,7 +229,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
             String sFileName;
             if( pSttNd->GetIndex() + 1 < aEndIdx.GetIndex() )
             {
-                SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
+                SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
                 if( xDocSh->DoInitNew( 0 ) )
                 {
                     SwDoc* pDoc = ((SwDocShell*)(&xDocSh))->GetDoc();
@@ -292,7 +266,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
 
                     SwNodeRange aRg( *pSttNd, 0, aEndIdx.GetNode() );
                     SwNodeIndex aTmpIdx( pDoc->GetNodes().GetEndOfContent() );
-                    GetNodes()._Copy( aRg, aTmpIdx, FALSE );
+                    GetNodes()._Copy( aRg, aTmpIdx, sal_False );
 
                     // den initialen TextNode loeschen
                     SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -310,7 +284,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                     utl::TempFile aTempFile2(sLeading,&sExt,&sPath );
                     sFileName = aTempFile2.GetURL();
                     SfxMedium* pTmpMed = new SfxMedium( sFileName,
-                                                STREAM_STD_READWRITE, TRUE );
+                                                STREAM_STD_READWRITE, sal_True );
                     pTmpMed->SetFilter( pFilter );
 
                     // fuer den HTML-Filter mussen wir aber ein Layout
@@ -341,7 +315,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                     {
                         // loesche alle Nodes im Bereich und setze im "Start-
                         // Node" den Link auf das gespeicherte Doc
-                        ULONG nNodeDiff = aEndIdx.GetIndex() -
+                        sal_uLong nNodeDiff = aEndIdx.GetIndex() -
                                             pSttNd->GetIndex() - 1;
                         if( nNodeDiff )
                         {
@@ -358,14 +332,14 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                                 aTmp.Exchange();
                                 if( !aTmp.Move( fnMoveBackward, fnGoNode ))
                                 {
-                                    OSL_ENSURE( FALSE, "kein Node mehr vorhanden" );
+                                    OSL_FAIL( "kein Node mehr vorhanden" );
                                 }
                             }
                                 // Bookmarks usw. verschieben
-                            CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), TRUE);
+                            CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), sal_True);
 
                             // stehen noch FlyFrames rum, loesche auch diese
-                            for( USHORT n = 0; n < GetSpzFrmFmts()->Count(); ++n )
+                            for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
                             {
                                 SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
                                 const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
@@ -422,7 +396,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                             if( pSectNd->GetIndex() + 1 ==
                                     pSttNd->GetIndex() )
                             {
-                                BOOL bMvIdx = aEndIdx == *pSectEnd;
+                                sal_Bool bMvIdx = aEndIdx == *pSectEnd;
                                 DelSectionFmt( pSectNd->GetSection().GetFmt() );
                                 if( bMvIdx )
                                     aEndIdx--;
@@ -476,7 +450,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
         }
     } while( pSttNd );
 
-//  if( pOutlNds != (SwOutlineNodes*)&GetNodes().GetOutLineNds();
     if( pOutlNds != &GetNodes().GetOutLineNds() )
         delete pOutlNds;
 
@@ -494,7 +467,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
         }
         break;
 
-//  case SPLITDOC_TO_GLOBALDOC:
     default:
         // dann das Globaldoc speichern
         set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
@@ -513,13 +485,13 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
 }
 
 //#outline level,add by zhaojianwei
-BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
+sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, int nOutlineLevel )
 {
     if( !pDocShell || !pDocShell->GetMedium() ||
         ( SPLITDOC_TO_GLOBALDOC == eDocType && get(IDocumentSettingAccess::GLOBAL_DOCUMENT) ) )
-        return FALSE;
+        return sal_False;
 
-    USHORT nOutl = 0;
+    sal_uInt16 nOutl = 0;
     SwOutlineNodes* pOutlNds = (SwOutlineNodes*)&GetNodes().GetOutLineNds();
     SwNodePtr pSttNd;
 
@@ -532,7 +504,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
         break;
 
     default:
-//  case SPLITDOC_TO_GLOBALDOC:
         pFilter = SwIoSystem::GetFilterOfFormat(
                                     String::CreateFromAscii( FILTER_XML ));
         eDocType = SPLITDOC_TO_GLOBALDOC;
@@ -540,10 +511,10 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
     }
 
     if( !pFilter )
-        return FALSE;
+        return sal_False;
 
     // Undo/Redline aufjedenfall abschalten
-    DoUndo( FALSE );
+    GetIDocumentUndoRedo().DoUndo(false);
     SetRedlineMode_intern( (RedlineMode_t)(GetRedlineMode() & ~nsRedlineMode_t::REDLINE_ON));
 
     String sExt( pFilter->GetSuffixes().GetToken(0, ',') );
@@ -606,7 +577,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
             String sFileName;
             if( pSttNd->GetIndex() + 1 < aEndIdx.GetIndex() )
             {
-                SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
+                SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
                 if( xDocSh->DoInitNew( 0 ) )
                 {
                     SwDoc* pDoc = ((SwDocShell*)(&xDocSh))->GetDoc();
@@ -643,7 +614,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
 
                     SwNodeRange aRg( *pSttNd, 0, aEndIdx.GetNode() );
                     SwNodeIndex aTmpIdx( pDoc->GetNodes().GetEndOfContent() );
-                    GetNodes()._Copy( aRg, aTmpIdx, FALSE );
+                    GetNodes()._Copy( aRg, aTmpIdx, sal_False );
 
                     // den initialen TextNode loeschen
                     SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
@@ -661,7 +632,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                     utl::TempFile aTempFile2(sLeading,&sExt,&sPath );
                     sFileName = aTempFile2.GetURL();
                     SfxMedium* pTmpMed = new SfxMedium( sFileName,
-                                                STREAM_STD_READWRITE, TRUE );
+                                                STREAM_STD_READWRITE, sal_True );
                     pTmpMed->SetFilter( pFilter );
 
                     // fuer den HTML-Filter mussen wir aber ein Layout
@@ -670,7 +641,6 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                     if( SPLITDOC_TO_HTML == eDocType &&
                         pDoc->GetSpzFrmFmts()->Count() )
                     {
-                        /* SfxViewFrame* pFrame = */
                             SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
                     }
                     xDocSh->DoSaveAs( *pTmpMed );
@@ -692,7 +662,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                     {
                         // loesche alle Nodes im Bereich und setze im "Start-
                         // Node" den Link auf das gespeicherte Doc
-                        ULONG nNodeDiff = aEndIdx.GetIndex() -
+                        sal_uLong nNodeDiff = aEndIdx.GetIndex() -
                                             pSttNd->GetIndex() - 1;
                         if( nNodeDiff )
                         {
@@ -709,14 +679,14 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                                 aTmp.Exchange();
                                 if( !aTmp.Move( fnMoveBackward, fnGoNode ))
                                 {
-                                    OSL_ENSURE( FALSE, "kein Node mehr vorhanden" );
+                                    OSL_FAIL( "kein Node mehr vorhanden" );
                                 }
                             }
                                 // Bookmarks usw. verschieben
-                            CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), TRUE);
+                            CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), sal_True);
 
                             // stehen noch FlyFrames rum, loesche auch diese
-                            for( USHORT n = 0; n < GetSpzFrmFmts()->Count(); ++n )
+                            for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
                             {
                                 SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
                                 const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
@@ -773,7 +743,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                             if( pSectNd->GetIndex() + 1 ==
                                     pSttNd->GetIndex() )
                             {
-                                BOOL bMvIdx = aEndIdx == *pSectEnd;
+                                sal_Bool bMvIdx = aEndIdx == *pSectEnd;
                                 DelSectionFmt( pSectNd->GetSection().GetFmt() );
                                 if( bMvIdx )
                                     aEndIdx--;

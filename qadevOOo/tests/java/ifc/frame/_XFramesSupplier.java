@@ -88,11 +88,11 @@ public class _XFramesSupplier extends MultiMethodTest {
                        log.println("Can't convert any");
                    }
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                   log.println("Exception occured while calling getByIndex() method :") ;
+                   log.println("Exception occurred while calling getByIndex() method :") ;
                    e.printStackTrace(log) ;
                    return;
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                   log.println("Exception occured while calling getByIndex() method :") ;
+                   log.println("Exception occurred while calling getByIndex() method :") ;
                    e.printStackTrace(log) ;
                    return;
                 }
@@ -136,11 +136,11 @@ public class _XFramesSupplier extends MultiMethodTest {
                     result = false ;
                 }
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occured while calling getByIndex() method :") ;
+                    log.println("Exception occurred while calling getByIndex() method :") ;
                     e.printStackTrace(log) ;
                     return;
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                    log.println("Exception occured while calling getByIndex() method :") ;
+                    log.println("Exception occurred while calling getByIndex() method :") ;
                     e.printStackTrace(log) ;
                     return;
             }
@@ -181,11 +181,11 @@ public class _XFramesSupplier extends MultiMethodTest {
                        log.println("Can't convert any");
                    }
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occured while calling getByIndex() method :") ;
+                    log.println("Exception occurred while calling getByIndex() method :") ;
                     e.printStackTrace(log) ;
                     return;
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                    log.println("Exception occured while calling getByIndex() method :") ;
+                    log.println("Exception occurred while calling getByIndex() method :") ;
                     e.printStackTrace(log) ;
                     return;
             }

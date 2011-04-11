@@ -104,7 +104,7 @@ private:
 
     ImageProcessingData m_aIPData;
 
-    void GetRect(INT32& nLeft, INT32& nTop, INT32& nRight, INT32& nBottom);
+    void GetRect(sal_Int32& nLeft, sal_Int32& nTop, sal_Int32& nRight, sal_Int32& nBottom);
     XFRect GetRectInCM();
     Rectangle GetRectIn100thMM();
     void XFConvertEquation(XFContentContainer* pCont);

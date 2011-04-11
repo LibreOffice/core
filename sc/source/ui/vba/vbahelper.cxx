@@ -82,7 +82,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
     if( !xIntrospection.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        xIntrospection.set( xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.beans.Introspection") ), uno::UNO_QUERY_THROW );
+        xIntrospection.set( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection") ) ), uno::UNO_QUERY_THROW );
     }
     return xIntrospection->inspect( aObject );
 }
@@ -131,7 +131,7 @@ private:
 
     bool getReplaceCellsWarning() throw ( uno::RuntimeException )
     {
-        sal_Bool res = sal_False;
+        sal_Bool res = false;
         getGlobalSheetSettings()->getPropertyValue( REPLACE_CELLS_WARNING ) >>= res;
         return ( res == sal_True );
     }
@@ -161,7 +161,7 @@ public:
     }
 };
 
-void dispatchExecute(css::uno::Reference< css::frame::XModel>& xModel, USHORT nSlot, SfxCallMode nCall)
+void dispatchExecute(css::uno::Reference< css::frame::XModel>& xModel, sal_uInt16 nSlot, SfxCallMode nCall)
 {
     ScTabViewShell* pViewShell = getBestViewShell( xModel );
     SfxViewFrame* pViewFrame = NULL;
@@ -203,13 +203,13 @@ implnCut()
 {
     ScTabViewShell* pViewShell =  getCurrentBestViewShell();
     if ( pViewShell )
-        pViewShell->CutToClip( NULL, TRUE );
+        pViewShell->CutToClip( NULL, sal_True );
 }
 
-void implnPasteSpecial(USHORT nFlags,USHORT nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
+void implnPasteSpecial(sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
 {
     PasteCellsWarningReseter resetWarningBox;
-    sal_Bool bAsLink(sal_False), bOtherDoc(sal_False);
+    sal_Bool bAsLink(false), bOtherDoc(false);
     InsCellCmd eMoveMode = INS_NONE;
 
     ScTabViewShell* pTabViewShell = ScTabViewShell::GetActiveViewShell();
@@ -232,7 +232,7 @@ void implnPasteSpecial(USHORT nFlags,USHORT nFunction,sal_Bool bSkipEmpty, sal_B
                     pDoc = pOwnClip->GetDocument();
                 pTabViewShell->PasteFromClip( nFlags, pDoc,
                     nFunction, bSkipEmpty, bTranspose, bAsLink,
-                    eMoveMode, IDF_NONE, TRUE );
+                    eMoveMode, IDF_NONE, sal_True );
                 pTabViewShell->CellContentChanged();
             }
         }
@@ -271,7 +271,7 @@ getCurrentDocument() throw (uno::RuntimeException)
     if ( pCompVar )
     {
         aModel = sbxToUnoValue( pCompVar );
-        if ( sal_False == ( aModel >>= xModel ) ||
+        if ( false == ( aModel >>= xModel ) ||
             !xModel.is() )
         {
             // trying last gasp try the current component
@@ -279,7 +279,7 @@ getCurrentDocument() throw (uno::RuntimeException)
             // test if vba service is present
             uno::Reference< uno::XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY_THROW );
             uno::Reference<lang::XMultiComponentFactory > xSMgr( xCtx->getServiceManager(), uno::UNO_QUERY_THROW );
-            uno::Reference< frame::XDesktop > xDesktop (xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"), xCtx), uno::UNO_QUERY_THROW );
+            uno::Reference< frame::XDesktop > xDesktop (xSMgr->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), xCtx), uno::UNO_QUERY_THROW );
             xModel.set( xDesktop->getCurrentComponent(), uno::UNO_QUERY );
             if ( !xModel.is() )
             {
@@ -394,8 +394,8 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
     sal_Int32 nTo = 0;
     sal_Int32 nFrom = 0;
     sal_Int16 nCopies = 1;
-    sal_Bool bPreview = sal_False;
-    sal_Bool bCollate = sal_False;
+    sal_Bool bPreview = false;
+    sal_Bool bCollate = false;
     sal_Bool bSelection = bUseSelection;
     From >>= nFrom;
     To >>= nTo;
@@ -444,7 +444,7 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
         }
         SfxBoolItem sfxSelection( SID_SELECTION, bSelection );
         aArgs.Put( sfxSelection, sfxSelection.Which() );
-        SfxBoolItem sfxAsync( SID_ASYNCHRON, sal_False );
+        SfxBoolItem sfxAsync( SID_ASYNCHRON, false );
         aArgs.Put( sfxAsync, sfxAsync.Which() );
         SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
 
@@ -461,7 +461,7 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
                 }
             }
             else
-                pDispatcher->Execute( (USHORT)SID_PRINTDOC, (SfxCallMode)SFX_CALLMODE_SYNCHRON, aArgs );
+                pDispatcher->Execute( (sal_uInt16)SID_PRINTDOC, (SfxCallMode)SFX_CALLMODE_SYNCHRON, aArgs );
         }
 
     }
@@ -491,7 +491,7 @@ rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeEx
     {
         case uno::TypeClass_BOOLEAN:
         {
-            sal_Bool bBool = sal_False;
+            sal_Bool bBool = false;
             pvargItem >>= bBool;
             sString = rtl::OUString::valueOf( bBool );
             break;
@@ -531,7 +531,7 @@ rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeEx
                 break;
             }
         default:
-                   throw uno::RuntimeException( rtl::OUString::createFromAscii( "Invalid type, can't convert" ), uno::Reference< uno::XInterface >() );
+                   throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid type, can't convert" ) ), uno::Reference< uno::XInterface >() );
     }
     return sString;
 }

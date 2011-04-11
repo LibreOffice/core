@@ -50,10 +50,11 @@ RESLIB1SRSFILES=\
     $(SRS)$/notes.srs			\
     $(SRS)$/animui.srs			\
     $(SRS)$/slideshow.srs		\
+    $(SRS)$/slsview.srs			\
     $(SRS)$/uitable.srs			\
     $(SRS)$/view.srs			\
     $(SRS)$/uiannotations.srs	\
-    $(SOLARCOMMONRESDIR)$/sfx.srs
+
 
 # --- StarDraw DLL
 
@@ -86,7 +87,7 @@ SHL1STDLIBS+= \
     $(UCBHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-    $(CANVASLIB) \
+    $(CANVASTOOLSLIB) \
     $(SALLIB) \
     $(SALHELPERLIB) \
     $(AVMEDIALIB)
@@ -279,3 +280,16 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo Making: $@
     @$(TYPE) sd.flt > $@
 
+ALLTAR : $(MISC)/sd.component $(MISC)/sdd.component
+
+$(MISC)/sd.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sd.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sd.component
+
+$(MISC)/sdd.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sdd.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sdd.component

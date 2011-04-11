@@ -42,14 +42,14 @@ using namespace com::sun::star;
 PRV_SV_IMPL_OWNER_LIST(SvCommandList,SvCommand)
 
 
-static String parseString(const String & rCmd, USHORT * pIndex)
+static String parseString(const String & rCmd, sal_uInt16 * pIndex)
 {
     String result;
 
     if(rCmd.GetChar( *pIndex ) == '\"') {
         (*pIndex) ++;
 
-        USHORT begin = *pIndex;
+        sal_uInt16 begin = *pIndex;
 
         while(*pIndex < rCmd.Len() && rCmd.GetChar((*pIndex) ++) != '\"') ;
 
@@ -59,9 +59,9 @@ static String parseString(const String & rCmd, USHORT * pIndex)
     return result;
 }
 
-static String parseWord(const String & rCmd, USHORT * pIndex)
+static String parseWord(const String & rCmd, sal_uInt16 * pIndex)
 {
-    USHORT begin = *pIndex;
+    sal_uInt16 begin = *pIndex;
 
     while(*pIndex < rCmd.Len() && !isspace(rCmd.GetChar(*pIndex)) && rCmd.GetChar(*pIndex) != '=')
         (*pIndex) ++;
@@ -69,7 +69,7 @@ static String parseWord(const String & rCmd, USHORT * pIndex)
     return String(rCmd.Copy(begin, *pIndex - begin));
 }
 
-static void eatSpace(const String & rCmd, USHORT * pIndex)
+static void eatSpace(const String & rCmd, sal_uInt16 * pIndex)
 {
     while(*pIndex < rCmd.Len() && isspace(rCmd.GetChar(*pIndex)))
         (*pIndex) ++;
@@ -77,10 +77,10 @@ static void eatSpace(const String & rCmd, USHORT * pIndex)
 
 
 //=========================================================================
-BOOL SvCommandList::AppendCommands
+sal_Bool SvCommandList::AppendCommands
 (
     const String & rCmd,    /* Dieser Text wird in Kommandos umgesetzt */
-    USHORT * pEaten         /* Anzahl der Zeichen, die gelesen wurden */
+    sal_uInt16 * pEaten         /* Anzahl der Zeichen, die gelesen wurden */
 )
 /*  [Beschreibung]
 
@@ -89,11 +89,11 @@ BOOL SvCommandList::AppendCommands
 
     [R"uckgabewert]
 
-    BOOL        TRUE, der Text wurde korrekt geparsed.
-                FALSE, der Text wurde nicht korrekt geparsed.
+    sal_Bool        sal_True, der Text wurde korrekt geparsed.
+                sal_False, der Text wurde nicht korrekt geparsed.
 */
 {
-    USHORT index = 0;
+    sal_uInt16 index = 0;
     while(index < rCmd.Len())
     {
 
@@ -116,14 +116,14 @@ BOOL SvCommandList::AppendCommands
 
     *pEaten = index;
 
-//      USHORT nPos = 0;
+//      sal_uInt16 nPos = 0;
 //      while( nPos < rCmd.Len() )
 //      {
 //          // ein Zeichen ? Dann faengt hier eine Option an
 //          if( isalpha( rCmd[nPos] ) )
 //          {
 //              String aValue;
-//              USHORT nStt = nPos;
+//              sal_uInt16 nStt = nPos;
 //              register char c;
 
 //              while( nPos < rCmd.Len() &&
@@ -149,7 +149,7 @@ BOOL SvCommandList::AppendCommands
 
 //                  if( nPos != rCmd.Len() )
 //                  {
-//                      USHORT nLen = 0;
+//                      sal_uInt16 nLen = 0;
 //                      nStt = nPos;
 //                      if( '"' == c )
 //                      {
@@ -182,7 +182,7 @@ BOOL SvCommandList::AppendCommands
 //              nPos++;
 //      }
 //      *pEaten = nPos;
-    return TRUE;
+    return sal_True;
 }
 
 //=========================================================================
@@ -199,7 +199,7 @@ String SvCommandList::GetCommands() const
 */
 {
     String aRet;
-    for( ULONG i = 0; i < aTypes.Count(); i++ )
+    for( sal_uLong i = 0; i < aTypes.Count(); i++ )
     {
         if( i != 0 )
             aRet += ' ';
@@ -253,7 +253,7 @@ SvStream & operator >>
     SvStream &      Der "ubergebene Stream.
 */
 {
-    UINT32 nCount = 0;
+    sal_uInt32 nCount = 0;
     rStm >> nCount;
     if( !rStm.GetError() )
     {
@@ -284,10 +284,10 @@ SvStream & operator <<
     SvStream &      Der "ubergebene Stream.
 */
 {
-    UINT32 nCount = rThis.aTypes.Count();
+    sal_uInt32 nCount = rThis.aTypes.Count();
     rStm << nCount;
 
-    for( UINT32 i = 0; i < nCount; i++ )
+    for( sal_uInt32 i = 0; i < nCount; i++ )
     {
         SvCommand * pCmd = (SvCommand *)rThis.aTypes.GetObject( i );
         rStm << *pCmd;
@@ -295,7 +295,7 @@ SvStream & operator <<
     return rStm;
 }
 
-BOOL SvCommandList::FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )
+sal_Bool SvCommandList::FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )
 {
     const sal_Int32 nCount = aCommandSequence.getLength();
     String aCommand, aArg;
@@ -309,7 +309,7 @@ BOOL SvCommandList::FillFromSequence( const com::sun::star::uno::Sequence < com:
         Append( aCommand, aArg );
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 void SvCommandList::FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )

@@ -26,53 +26,50 @@
  *
  ************************************************************************/
 
-#include "GraphicImport.hxx"
-#include "GraphicHelpers.hxx"
+#include <string.h>
 
-#include <dmapper/DomainMapper.hxx>
-#include <PropertyMap.hxx>
-#include <doctok/resourceids.hxx>
-#include <ooxml/resourceids.hxx>
-#include <ConversionHelper.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
-
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
-#include <com/sun/star/text/XTextContent.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <dmapper/DomainMapper.hxx>
+#include <doctok/resourceids.hxx>
+#include <ooxml/resourceids.hxx>
+#include <resourcemodel/ResourceModelHelper.hxx>
 
-#include <iostream>
-#include <resourcemodel/QNameToString.hxx>
-#include <string.h>
-
-#ifdef DEBUG_DOMAINMAPPER
-#include <resourcemodel/TagLogger.hxx>
-#endif
+#include "ConversionHelper.hxx"
+#include "GraphicHelpers.hxx"
+#include "GraphicImport.hxx"
+#include "PropertyMap.hxx"
+#include "WrapPolygonHandler.hxx"
+#include "dmapperLoggers.hxx"
 
 namespace writerfilter {
+
+using resourcemodel::resolveSprmProps;
+
 namespace dmapper
 {
 using namespace ::std;
 using namespace ::com::sun::star;
-
-#ifdef DEBUG_DOMAINMAPPER
-extern TagLogger::Pointer_t dmapper_logger;
-#endif
 
 class XInputStreamHelper : public cppu::WeakImplHelper1
 <    io::XInputStream   >
@@ -94,9 +91,8 @@ public:
     virtual ::sal_Int32 SAL_CALL available(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException);
     virtual void SAL_CALL closeInput(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException);
 };
-/*-- 01.11.2006 13:56:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bBmp) :
         m_pBuffer( buf ),
         m_nLength( len ),
@@ -109,23 +105,20 @@ XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bB
     m_nHeaderLength = m_bBmp ? sizeof( aHeader ) / sizeof(sal_uInt8) : 0;
 
 }
-/*-- 01.11.2006 13:56:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 XInputStreamHelper::~XInputStreamHelper()
 {
 }
-/*-- 01.11.2006 13:56:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::sal_Int32 XInputStreamHelper::readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
     return readSomeBytes( aData, nBytesToRead );
 }
-/*-- 01.11.2006 13:56:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::sal_Int32 XInputStreamHelper::readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead )
         throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
@@ -155,42 +148,36 @@ XInputStreamHelper::~XInputStreamHelper()
     }
     return nRet;
 }
-/*-- 01.11.2006 13:56:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void XInputStreamHelper::skipBytes( ::sal_Int32 nBytesToSkip ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
     if( nBytesToSkip < 0 || m_nPosition + nBytesToSkip > (m_nLength + m_nHeaderLength))
         throw io::BufferSizeExceededException();
     m_nPosition += nBytesToSkip;
 }
-/*-- 01.11.2006 13:56:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::sal_Int32 XInputStreamHelper::available(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
 {
     return ( m_nLength + m_nHeaderLength ) - m_nPosition;
 }
-/*-- 01.11.2006 13:56:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void XInputStreamHelper::closeInput(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
 {
 }
-/*-- 02.11.2006 09:34:29---------------------------------------------------
 
- -----------------------------------------------------------------------*/
+
 struct GraphicBorderLine
 {
     sal_Int32   nLineWidth;
-//    sal_Int32   nLineType;
     sal_Int32   nLineColor;
     sal_Int32   nLineDistance;
     bool        bHasShadow;
 
     GraphicBorderLine() :
         nLineWidth(0)
-//        ,nLineType(0)
         ,nLineColor(0)
         ,nLineDistance(0)
         ,bHasShadow(false)
@@ -231,6 +218,8 @@ public:
     sal_Int32 nWrap;
     bool      bOpaque;
     bool      bContour;
+    bool      bContourOutside;
+    WrapPolygon::Pointer_t mpWrapPolygon;
     bool      bIgnoreWRK;
 
     sal_Int32 nLeftMargin;
@@ -293,6 +282,7 @@ public:
         ,nWrap(0)
         ,bOpaque( true )
         ,bContour(false)
+        ,bContourOutside(true)
         ,bIgnoreWRK(true)
         ,nLeftMargin(319)
         ,nRightMargin(319)
@@ -348,36 +338,52 @@ public:
         return bYSizeValid;
     }
 };
-/*-- 01.11.2006 09:42:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xComponentContext,
                              uno::Reference< lang::XMultiServiceFactory > xTextFactory,
                              DomainMapper& rDMapper,
                              GraphicImportType eImportType )
-: m_pImpl( new GraphicImport_Impl( eImportType, rDMapper ))
-  ,m_xComponentContext( xComponentContext )
-  ,m_xTextFactory( xTextFactory)
+: LoggedProperties(dmapper_logger, "GraphicImport")
+, LoggedTable(dmapper_logger, "GraphicImport")
+, LoggedStream(dmapper_logger, "GraphicImport")
+, m_pImpl( new GraphicImport_Impl( eImportType, rDMapper ))
+, m_xComponentContext( xComponentContext )
+, m_xTextFactory( xTextFactory)
 {
 }
-/*-- 01.11.2006 09:42:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 GraphicImport::~GraphicImport()
 {
     delete m_pImpl;
 }
-/*-- 01.11.2006 09:45:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void GraphicImport::attribute(Id nName, Value & val)
+void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("attribute");
-    dmapper_logger->attribute("name", (*QNameToString::Instance())(nName));
-#endif
+    switch (nVal)
+    {
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides: // 90920;
+        m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
+        break;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_left: // 90921;
+        m_pImpl->nWrap = text::WrapTextMode_LEFT;
+        break;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_right: // 90922;
+        m_pImpl->nWrap = text::WrapTextMode_RIGHT;
+        break;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_largest: // 90923;
+        m_pImpl->nWrap = text::WrapTextMode_DYNAMIC;
+        break;
+    default:;
+    }
+}
+
+
+
+void GraphicImport::lcl_attribute(Id nName, Value & val)
+{
     sal_Int32 nIntValue = val.getInt();
-    /* WRITERFILTERSTATUS: table: PICFattribute */
     switch( nName )
     {
         case NS_rtf::LN_LCB: break;//byte count
@@ -392,28 +398,22 @@ void GraphicImport::attribute(Id nName, Value & val)
         case NS_rtf::LN_BRCRIGHT: //right border
         case NS_rtf::LN_shape: //shape
         case NS_rtf::LN_blip: //the binary graphic data in a shape
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             {
                 switch(nName)
                 {
                     case NS_rtf::LN_BRCTOP: //top border
-                        /* WRITERFILTERSTATUS: */
                         m_pImpl->nCurrentBorderLine = BORDER_TOP;
                     break;
                     case NS_rtf::LN_BRCLEFT: //left border
-                        /* WRITERFILTERSTATUS: */
                         m_pImpl->nCurrentBorderLine = BORDER_LEFT;
                     break;
                     case NS_rtf::LN_BRCBOTTOM: //bottom border
-                        /* WRITERFILTERSTATUS: */
                         m_pImpl->nCurrentBorderLine = BORDER_BOTTOM;
                     break;
                     case NS_rtf::LN_BRCRIGHT: //right border
-                        /* WRITERFILTERSTATUS: */
                         m_pImpl->nCurrentBorderLine = BORDER_RIGHT;
                     break;
                     case NS_rtf::LN_shpopt:
-                        /* WRITERFILTERSTATUS: */
                         m_pImpl->bInShapeOptionMode = true;
                     break;
                     default:;
@@ -426,7 +426,6 @@ void GraphicImport::attribute(Id nName, Value & val)
                 switch(nName)
                 {
                     case NS_rtf::LN_shpopt:
-                        /* WRITERFILTERSTATUS: */
                         m_pImpl->bInShapeOptionMode = false;
                     break;
                     default:;
@@ -434,7 +433,6 @@ void GraphicImport::attribute(Id nName, Value & val)
         }
         break;
         case NS_rtf::LN_payload :
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         {
             writerfilter::Reference<BinaryObj>::Pointer_t pPictureData = val.getBinary();
             if( pPictureData.get())
@@ -442,89 +440,64 @@ void GraphicImport::attribute(Id nName, Value & val)
         }
         break;
         case NS_rtf::LN_BM_RCWINMF: //windows bitmap structure - if it's a bitmap
-            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         break;
         case NS_rtf::LN_DXAGOAL: //x-size in twip
         case NS_rtf::LN_DYAGOAL: //y-size in twip
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_MX:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nHoriScaling = nIntValue;
             break;// hori scaling in 0.001%
         case NS_rtf::LN_MY:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nVertScaling = nIntValue;
             break;// vert scaling in 0.001%
         case NS_rtf::LN_DXACROPLEFT:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nLeftCrop  = ConversionHelper::convertTwipToMM100(nIntValue);
             break;// left crop in twips
         case NS_rtf::LN_DYACROPTOP:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nTopCrop   = ConversionHelper::convertTwipToMM100(nIntValue);
             break;// top crop in twips
         case NS_rtf::LN_DXACROPRIGHT:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nRightCrop = ConversionHelper::convertTwipToMM100(nIntValue);
             break;// right crop in twips
         case NS_rtf::LN_DYACROPBOTTOM:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nBottomCrop = ConversionHelper::convertTwipToMM100(nIntValue);
             break;// bottom crop in twips
         case NS_rtf::LN_BRCL:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;//border type - legacy -
         case NS_rtf::LN_FFRAMEEMPTY:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// picture consists of a single frame
         case NS_rtf::LN_FBITMAP:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             m_pImpl->bIsBitmap = nIntValue > 0 ? true : false;
         break;//1 if it's a bitmap ???
         case NS_rtf::LN_FDRAWHATCH:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;//1 if it's an active OLE object
         case NS_rtf::LN_FERROR:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// 1 if picture is an error message
         case NS_rtf::LN_BPP:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nBitsPerPixel = nIntValue;
             break;//bits per pixel 0 - unknown, 1- mono, 4 - VGA
 
         case NS_rtf::LN_DXAORIGIN: //horizontal offset of hand annotation origin
         case NS_rtf::LN_DYAORIGIN: //vertical offset of hand annotation origin
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         break;
         case NS_rtf::LN_CPROPS:break;// unknown - ignored
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         //metafilepict
         case NS_rtf::LN_MM:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-//      according to the documentation 99 or 98 are provided - but they are not!
-//            m_pImpl->bIsBitmap = 99 == nIntValue ? true : false;
-//            m_pImpl->bIsTiff = 98 == nIntValue ? true : false;
 
         break; //mapmode
         case NS_rtf::LN_XEXT:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->setXSize(nIntValue);
             break; // x-size
         case NS_rtf::LN_YEXT:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->setYSize(nIntValue);
             break; // y-size
         case NS_rtf::LN_HMF: break; //identifier - ignored
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
 
         //sprm 0xf004 and 0xf008, 0xf00b
         case NS_rtf::LN_dfftype://
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             m_pImpl->nDffType = nIntValue;
         break;
         case NS_rtf::LN_dffinstance:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             //todo: does this still work for PICF?
             //in case of LN_dfftype == 0xf01f the instance contains the bitmap type:
             if(m_pImpl->nDffType == 0xf01f)
@@ -538,16 +511,6 @@ void GraphicImport::attribute(Id nName, Value & val)
 
                     {
 
-//                        rBLIPStream.SeekRel( nSkip + 20 );
-//                        // read in size of metafile in EMUS
-//                        rBLIPStream >> aMtfSize100.Width() >> aMtfSize100.Height();
-//                        // scale to 1/100mm
-//                        aMtfSize100.Width() /= 360, aMtfSize100.Height() /= 360;
-//                        if ( pVisArea )     // seem that we currently are skipping the visarea position
-//                            *pVisArea = Rectangle( Point(), aMtfSize100 );
-//                        // skip rest of header
-//                        nSkip = 6;
-//                        bMtfBLIP = bZCodecCompression = TRUE;
                     }
 
                     break;
@@ -557,85 +520,62 @@ void GraphicImport::attribute(Id nName, Value & val)
                     case 0x6E0 :            break;// One byte tag then PNG data
 
                     case 0x7A8 : m_pImpl->bIsBitmap = true;
-//                        nSkip += 1;         // One byte tag then DIB data
                     break;
 
                 }
         break;
         case NS_rtf::LN_dffversion://  ignored
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         break;
 
         //sprm 0xf008
         case NS_rtf::LN_shptype:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpid:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpfGroup:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// This shape is a group shape
         case NS_rtf::LN_shpfChild:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// Not a top-level shape
         case NS_rtf::LN_shpfPatriarch:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// This is the topmost group shape. Exactly one of these per drawing.
         case NS_rtf::LN_shpfDeleted:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// The shape has been deleted
         case NS_rtf::LN_shpfOleShape:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// The shape is an OLE object
         case NS_rtf::LN_shpfHaveMaster:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// Shape has a hspMaster property
         case NS_rtf::LN_shpfFlipH:       // Shape is flipped horizontally
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->bHoriFlip = nIntValue ? true : false;
         break;
         case NS_rtf::LN_shpfFlipV:       // Shape is flipped vertically
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->bVertFlip = nIntValue ? true : false;
         break;
         case NS_rtf::LN_shpfConnector:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// Connector type of shape
         case NS_rtf::LN_shpfHaveAnchor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// Shape has an anchor of some kind
         case NS_rtf::LN_shpfBackground:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// Background shape
         case NS_rtf::LN_shpfHaveSpt:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// Shape has a shape type property
         case NS_rtf::LN_shptypename:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;// shape type name
         case NS_rtf::LN_shppid:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nShapeOptionType = nIntValue;
             break; //type of shape option
         case NS_rtf::LN_shpfBid:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             break; //ignored
         case NS_rtf::LN_shpfComplex:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpop:
-            /* WRITERFILTERSTATUS: done: 50, planned: 10, spent: 5 */
         {
             if(NS_dff::LN_shpwzDescription != sal::static_int_cast<Id>(m_pImpl->nShapeOptionType) )
                 ProcessShapeOptions( val );
         }
         break;
         case NS_rtf::LN_shpname:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpvalue:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         {
             if( NS_dff::LN_shpwzDescription == sal::static_int_cast<Id>(m_pImpl->nShapeOptionType) )
                 ProcessShapeOptions( val );
@@ -644,105 +584,67 @@ void GraphicImport::attribute(Id nName, Value & val)
 
         //BLIP store entry
         case NS_rtf::LN_shpbtWin32:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpbtMacOS:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shprgbUid:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shptag:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpsize:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpcRef:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpfoDelay:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpusage:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpcbName:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpunused2:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_shpunused3:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
 
         //border properties
         case NS_rtf::LN_shpblipbname :
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         break;
 
         case NS_rtf::LN_DPTLINEWIDTH:  // 0x1759
-        /* WRITERFILTERSTATUS: done: 100, planned: 1, spent: 1 */
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineWidth = nIntValue;
         break;
         case NS_rtf::LN_BRCTYPE:   // 0x175a
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             //graphic borders don't support different line types
-            //m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineType = nIntValue;
         break;
         case NS_rtf::LN_ICO:   // 0x175b
-        /* WRITERFILTERSTATUS: done: 100, planned: 1, spent: 1 */
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineColor = ConversionHelper::ConvertColor( nIntValue );
         break;
         case NS_rtf::LN_DPTSPACE:  // 0x175c
-        /* WRITERFILTERSTATUS: done: 100, planned: 1, spent: 1 */
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineDistance = nIntValue;
         break;
         case NS_rtf::LN_FSHADOW:   // 0x175d
-        /* WRITERFILTERSTATUS: done: 0, planned: 1, spent: 0 */
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].bHasShadow = nIntValue ? true : false;
         break;
         case NS_rtf::LN_FFRAME:            // ignored
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED2_15: // ignored
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             break;
 
         case NS_rtf::LN_SPID:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;
         case NS_rtf::LN_XALEFT:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue);
             break; //left position
         case NS_rtf::LN_YATOP:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
             break; //top position
         case NS_rtf::LN_XARIGHT:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nRightPosition = ConversionHelper::convertTwipToMM100(nIntValue);
             break; //right position
         case NS_rtf::LN_YABOTTOM:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nBottomPosition = ConversionHelper::convertTwipToMM100(nIntValue);
             break;//bottom position
         case NS_rtf::LN_FHDR:
         case NS_rtf::LN_XAlign:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-/*
-        static const SwHoriOrient aHoriOriTab[ nCntXAlign ] =
-        {
-            HORI_NONE,     // From left position
-            HORI_LEFT,     // left
-            HORI_CENTER,   // centered
-            HORI_RIGHT,    // right
-            // --> OD 2004-12-06 #i36649#
-            // - inside -> HORI_LEFT and outside -> HORI_RIGHT
-            HORI_LEFT,   // inside
-            HORI_RIGHT   // outside
-*/
             if( nIntValue < 6 && nIntValue > 0 )
             {
                 static const sal_Int16 aHoriOrientTab[ 6 ] =
@@ -759,37 +661,6 @@ void GraphicImport::attribute(Id nName, Value & val)
             }
         break;
         case NS_rtf::LN_YAlign:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-/*
-        static const SwVertOrient aVertOriTab[ nCntYAlign ] =
-        {
-            VERT_NONE,         // From Top position
-            VERT_TOP,          // top
-            VERT_CENTER,       // centered
-            VERT_BOTTOM,       // bottom
-            VERT_LINE_TOP,     // inside (obscure)
-            VERT_LINE_BOTTOM   // outside (obscure)
-        };
-        // CMC,OD 24.11.2003 #i22673# - to-line vertical alignment
-        static const SwVertOrient aToLineVertOriTab[ nCntYAlign ] =
-        {
-            VERT_NONE,         // below
-            VERT_LINE_BOTTOM,  // top
-            VERT_LINE_CENTER,  // centered
-            VERT_LINE_TOP,     // bottom
-            VERT_LINE_BOTTOM,  // inside (obscure)
-            VERT_LINE_TOP      // outside (obscure)
-        };
-        if ( eVertRel == REL_VERT_LINE ) //m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE
-        {
-            eVertOri = aToLineVertOriTab[ nYAlign ];
-        }
-        else
-        {
-            eVertOri = aVertOriTab[ nYAlign ];
-        }
-
-*/
             if( nIntValue < 6 && nIntValue > 0)
             {
                 static const sal_Int16 aVertOrientTab[ 6 ] =
@@ -827,9 +698,7 @@ void GraphicImport::attribute(Id nName, Value & val)
             }
         break;
         case NS_rtf::LN_YRelTo:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_BY: //vert orient relation
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             switch( nIntValue )
             {
                 case  0: m_pImpl->nVertRelation = text::RelOrientation::PAGE_PRINT_AREA; break;
@@ -841,7 +710,6 @@ void GraphicImport::attribute(Id nName, Value & val)
 
         break;
         case NS_rtf::LN_WR: //wrapping
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             switch( nIntValue )
             {
                 case 0: //0 like 2, but doesn't require absolute object
@@ -865,7 +733,6 @@ void GraphicImport::attribute(Id nName, Value & val)
             }
         break;
         case NS_rtf::LN_WRK:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             if( !m_pImpl->bIgnoreWRK )
                 switch( nIntValue )
                 {
@@ -891,26 +758,13 @@ void GraphicImport::attribute(Id nName, Value & val)
         case NS_rtf::LN_FBELOWTEXT:
         case NS_rtf::LN_FANCHORLOCK:
         case NS_rtf::LN_CTXBX:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-//        {
-//            sal_Int32 nValue1 = val.getInt();
-//            nValue1++;
-//        }
         break;
         case NS_rtf::LN_shptxt:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             //todo: text content
         break;
-    /*    case NS_rtf::LN_CH = 10421;
-        case NS_rtf::LN_UNUSED0_5 = 10422;
-        case NS_rtf::LN_FLT = 10423;
-        case NS_rtf::LN_shpLeft = 10424;
-        case NS_rtf::LN_shpTop = 10425;
-            break;*/
         case NS_rtf::LN_dffheader: break;
         case NS_ooxml::LN_CT_PositiveSize2D_cx:// 90407;
         case NS_ooxml::LN_CT_PositiveSize2D_cy:// 90408;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         {
             sal_Int32 nDim = ConversionHelper::convertEMUToMM100( nIntValue );
             if( nName == NS_ooxml::LN_CT_PositiveSize2D_cx )
@@ -923,58 +777,46 @@ void GraphicImport::attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_EffectExtent_t:// 90908;
         case NS_ooxml::LN_CT_EffectExtent_r:// 90909;
         case NS_ooxml::LN_CT_EffectExtent_b:// 90910;
-            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             //todo: extends the wrapping size of the object, e.g. if shadow is added
         break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_id:// 90650;
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             //id of the object - ignored
         break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_name:// 90651;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             //name of the object
             m_pImpl->sName = val.getString();
         break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_descr:// 90652;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             //alternative text
             m_pImpl->sAlternativeText = val.getString();
         break;
         case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noChangeAspect://90644;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             //disallow aspect ratio change - ignored
         break;
         case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noMove:// 90645;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->bPositionProtected = true;
         break;
         case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noResize: // 90646;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->bSizeProtected = true;
         break;
         case NS_ooxml::LN_CT_Anchor_distT: // 90983;
         case NS_ooxml::LN_CT_Anchor_distB: // 90984;
         case NS_ooxml::LN_CT_Anchor_distL: // 90985;
         case NS_ooxml::LN_CT_Anchor_distR: // 90986;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         {
             //redirect to shape option processing
             switch( nName )
             {
                 case NS_ooxml::LN_CT_Anchor_distT: // 90983;
-                    /* WRITERFILTERSTATUS: */
                     m_pImpl->nShapeOptionType = NS_dff::LN_shpdyWrapDistTop;
                 break;
                 case NS_ooxml::LN_CT_Anchor_distB: // 90984;
-                    /* WRITERFILTERSTATUS: */
                     m_pImpl->nShapeOptionType = NS_dff::LN_shpdyWrapDistBottom;
                 break;
                 case NS_ooxml::LN_CT_Anchor_distL: // 90985;
-                    /* WRITERFILTERSTATUS: */
                     m_pImpl->nShapeOptionType = NS_dff::LN_shpdxWrapDistLeft;
                 break;
                 case NS_ooxml::LN_CT_Anchor_distR: // 90986;
-                    /* WRITERFILTERSTATUS: */
                     m_pImpl->nShapeOptionType = NS_dff::LN_shpdxWrapDistRight;
                 break;
                 //m_pImpl->nShapeOptionType = NS_dff::LN_shpcropFromTop
@@ -984,63 +826,53 @@ void GraphicImport::attribute(Id nName, Value & val)
         }
         break;
         case NS_ooxml::LN_CT_Anchor_simplePos_attr: // 90987;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->bUseSimplePos = nIntValue > 0;
         break;
         case NS_ooxml::LN_CT_Anchor_relativeHeight: // 90988;
-            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             //z-order
         break;
         case NS_ooxml::LN_CT_Anchor_behindDoc: // 90989; - in background
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             if( nIntValue > 0 )
                     m_pImpl->bOpaque = false;
         break;
         case NS_ooxml::LN_CT_Anchor_locked: // 90990; - ignored
         case NS_ooxml::LN_CT_Anchor_layoutInCell: // 90991; - ignored
         case NS_ooxml::LN_CT_Anchor_hidden: // 90992; - ignored
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         break;
         case NS_ooxml::LN_CT_Anchor_allowOverlap: // 90993;
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             //enable overlapping - ignored
         break;
         case NS_ooxml::LN_CT_Point2D_x: // 90405;
+            m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->nHoriRelation = text::RelOrientation::PAGE_FRAME;
+            m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
+        break;
         case NS_ooxml::LN_CT_Point2D_y: // 90406;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            if( m_pImpl->bUseSimplePos )
-            {
-                //todo: absolute positioning
-                NS_ooxml::LN_CT_Point2D_x == nName ? m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue) :
-                                                        m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
-
-            }
+            m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->nVertRelation = text::RelOrientation::PAGE_FRAME;
+            m_pImpl->nVertOrient = text::VertOrientation::NONE;
         break;
         case NS_ooxml::LN_CT_WrapTight_wrapText: // 90934;
+            m_pImpl->bContour = true;
+            m_pImpl->bContourOutside = true;
+
+            handleWrapTextValue(val.getInt());
+
+            break;
+        case NS_ooxml::LN_CT_WrapThrough_wrapText:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->bContour = true;
-            //no break;
+            m_pImpl->bContourOutside = false;
+
+            handleWrapTextValue(val.getInt());
+
+            break;
         case NS_ooxml::LN_CT_WrapSquare_wrapText: //90928;
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            switch ( val.getInt() )
-            {
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides: // 90920;
-                    m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
-                break;
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_left: // 90921;
-                    m_pImpl->nWrap = text::WrapTextMode_LEFT;
-                break;
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_right: // 90922;
-                    m_pImpl->nWrap = text::WrapTextMode_RIGHT;
-                break;
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_largest: // 90923;
-                    m_pImpl->nWrap = text::WrapTextMode_DYNAMIC;
-                break;
-                default:;
-            }
-        break;
+
+            handleWrapTextValue(val.getInt());
+            break;
         case NS_ooxml::LN_shape:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             {
                 uno::Reference< drawing::XShape> xShape;
                 val.getAny( ) >>= xShape;
@@ -1055,10 +887,10 @@ void GraphicImport::attribute(Id nName, Value & val)
                             ( xShape, uno::UNO_QUERY_THROW );
 
                         rtl::OUString sUrl;
-                        xShapeProps->getPropertyValue( rtl::OUString::createFromAscii( "GraphicURL" ) ) >>= sUrl;
+                        xShapeProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")) ) >>= sUrl;
 
                         ::com::sun::star::beans::PropertyValues aMediaProperties( 1 );
-                        aMediaProperties[0].Name = rtl::OUString::createFromAscii( "URL" );
+                        aMediaProperties[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
                         aMediaProperties[0].Value <<= sUrl;
 
                         m_xGraphicObject = createGraphicObject( aMediaProperties );
@@ -1071,9 +903,9 @@ void GraphicImport::attribute(Id nName, Value & val)
                             uno::Reference< beans::XPropertySet > xGraphProps( m_xGraphicObject,
                                     uno::UNO_QUERY );
                             awt::Size aSize = xShape->getSize( );
-                            xGraphProps->setPropertyValue( rtl::OUString::createFromAscii( "Height" ),
+                            xGraphProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height")),
                                    uno::makeAny( aSize.Height ) );
-                            xGraphProps->setPropertyValue( rtl::OUString::createFromAscii( "Width" ),
+                            xGraphProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width")),
                                    uno::makeAny( aSize.Width ) );
                         }
                     }
@@ -1122,27 +954,18 @@ void GraphicImport::attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Inline_distB:
         case NS_ooxml::LN_CT_Inline_distL:
         case NS_ooxml::LN_CT_Inline_distR:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             //TODO: need to be handled
         break;
         case NS_ooxml::LN_CT_GraphicalObjectData_uri:
-            /* WRITERFILTERSTATUS: done: 50, planned: 0.5, spent: 0 */
             val.getString();
             //TODO: does it need to be handled?
         break;
         default:
-#if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "GraphicImport::attribute() - Id: ");
-            sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 10 );
-            sMessage += ::rtl::OString(" / 0x");
-            sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 16 );
-            OSL_ENSURE( false, sMessage.getStr())
+#ifdef DEBUG_DMAPPER_GRAPHIC_IMPORT
+            dmapper_logger->element("unhandled");
 #endif
             ;
     }
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("attribute");
-#endif
 }
 
 uno::Reference<text::XTextContent> GraphicImport::GetGraphicObject()
@@ -1159,63 +982,33 @@ uno::Reference<text::XTextContent> GraphicImport::GetGraphicObject()
     return xResult;
 }
 
-/*-- 22.11.2006 09:46:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::ProcessShapeOptions(Value& val)
 {
     sal_Int32 nIntValue = val.getInt();
     sal_Int32 nTwipValue = ConversionHelper::convertTwipToMM100(nIntValue);
-    /* WRITERFILTERSTATUS: table: ShapeOptionsAttribute */
     switch( m_pImpl->nShapeOptionType )
     {
         case NS_dff::LN_shpcropFromTop /*256*/ :
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nTopCrop   = nTwipValue;
             break;// rtf:shpcropFromTop
         case NS_dff::LN_shpcropFromBottom /*257*/ :
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nBottomCrop= nTwipValue;
             break;// rtf:shpcropFromBottom
         case NS_dff::LN_shpcropFromLeft   /*258*/ :
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nLeftCrop  = nTwipValue;
             break;// rtf:shpcropFromLeft
         case NS_dff::LN_shpcropFromRight/*259*/ :
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nRightCrop = nTwipValue;
             break;// rtf:shpcropFromRight
         case NS_dff::LN_shppib/*260*/:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppib
         case NS_dff::LN_shppibName/*261*/:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppibName
         case NS_dff::LN_shppibFlags/*262*/:  // rtf:shppibFlags
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-        /*
-         * // MSOBLIPFLAGS ñ flags for pictures
-            typedef enum
-               {
-               msoblipflagDefault = 0,
-               msoblipflagComment = 0,   // Blip name is a comment
-               msoblipflagFile,          // Blip name is a file name
-               msoblipflagURL,           // Blip name is a full URL
-               msoblipflagType = 3,      // Mask to extract type
-               // Or the following flags with any of the above.
-               msoblipflagDontSave = 4,  // A "dont" is the depression in the metal
-                                         // body work of an automobile caused when a
-                                         // cyclist violently thrusts his or her nose
-                                         // at it, thus a DontSave is another name for
-                                         // a cycle lane.
-               msoblipflagDoNotSave = 4, // For those who prefer English
-               msoblipflagLinkToFile = 8,
-               };
-                             *
-         * */
         break;
         case NS_dff::LN_shppictureContrast/*264*/: // rtf:shppictureContrast docu: "1<<16"
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             /*
             0x10000 is msoffice 50%
             < 0x10000 is in units of 1/50th of 0x10000 per 1%
@@ -1246,29 +1039,22 @@ void GraphicImport::ProcessShapeOptions(Value& val)
             }
         break;
         case NS_dff::LN_shppictureBrightness/*265*/:  // rtf:shppictureBrightness
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->nBrightness     = ( (sal_Int32) nIntValue / 327 );
         break;
         case NS_dff::LN_shppictureGamma/*266*/: // rtf:shppictureGamma
-        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
             //todo check gamma value with _real_ document
             m_pImpl->fGamma = double(nIntValue/655);
         break;
         case NS_dff::LN_shppictureId        /*267*/:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppictureId
         case NS_dff::LN_shppictureDblCrMod  /*268*/:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppictureDblCrMod
         case NS_dff::LN_shppictureFillCrMod /*269*/:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppictureFillCrMod
         case NS_dff::LN_shppictureLineCrMod /*270*/:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppictureLineCrMod
 
         case NS_dff::LN_shppictureActive/*319*/: // rtf:shppictureActive
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             switch( nIntValue & 0x06 )
             {
                 case 0 : m_pImpl->eColorMode = drawing::ColorMode_STANDARD; break;
@@ -1278,30 +1064,24 @@ void GraphicImport::ProcessShapeOptions(Value& val)
             }
         break;
         case NS_dff::LN_shpfillColor           /*385*/:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             m_pImpl->nFillColor = (m_pImpl->nFillColor & 0xff000000) + ConversionHelper::ConvertColor( nIntValue );
         break;
         case NS_dff::LN_shpfillOpacity         /*386*/:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         {
             sal_Int32 nTrans = 0xff - ( nIntValue * 0xff ) / 0xffff;
             m_pImpl->nFillColor = (nTrans << 0x18 ) + (m_pImpl->nFillColor & 0xffffff);
         }
         break;
         case NS_dff::LN_shpfNoFillHitTest      /*447*/:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shpfNoFillHitTest
         case NS_dff::LN_shplineColor           /*448*/:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineColor = ConversionHelper::ConvertColor( nIntValue );
         break;
         case NS_dff::LN_shplineWidth           /*459*/:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             //1pt == 12700 units
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineWidth = ConversionHelper::convertTwipToMM100(nIntValue / 635);
         break;
         case NS_dff::LN_shplineDashing         /*462*/:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             //graphic borders don't support different dashing
             /*MSOLINEDASHING
                 msolineSolid,              // Solid (continuous) pen
@@ -1315,60 +1095,43 @@ void GraphicImport::ProcessShapeOptions(Value& val)
                 msolineDashDotGEL,         // dash short dash
                 msolineLongDashDotGEL,     // long dash short dash
                 msolineLongDashDotDotGEL   // long dash short dash short dash*/
-            //m_pImpl->aBorders[nCurrentBorderLine].nLineType = nIntValue;
         break;
         case NS_dff::LN_shpfNoLineDrawDash     /*511*/:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         break;  // rtf:shpfNoLineDrawDash
         case NS_dff::LN_shpwzDescription /*897*/: //alternative text
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             m_pImpl->sAlternativeText = val.getString();
         break;
-//        case NS_dff::LN_shppihlShape /*898*/:
         case NS_dff::LN_shppWrapPolygonVertices/*899*/:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shppWrapPolygonVertices
         case NS_dff::LN_shpdxWrapDistLeft /*900*/: // contains a twip/635 value
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustLRWrapForWordMargins()
             m_pImpl->nLeftMargin = nIntValue / 360;
         break;
         case NS_dff::LN_shpdyWrapDistTop /*901*/:  // contains a twip/635 value
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustULWrapForWordMargins()
             m_pImpl->nTopMargin = nIntValue / 360;
         break;
         case NS_dff::LN_shpdxWrapDistRight /*902*/:// contains a twip/635 value
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustLRWrapForWordMargins()
             m_pImpl->nRightMargin = nIntValue / 360;
         break;
         case NS_dff::LN_shpdyWrapDistBottom /*903*/:// contains a twip/635 value
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             //todo: changes have to be applied depending on the orientation, see SwWW8ImplReader::AdjustULWrapForWordMargins()
             m_pImpl->nBottomMargin = nIntValue / 360;
         break;
         case NS_dff::LN_shpfPrint              /*959*/:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             break;  // rtf:shpfPrint
         default:
-            OSL_ENSURE( false, "shape option unsupported?");
+            OSL_FAIL( "shape option unsupported?");
     }
 }
-/*-- 01.11.2006 09:45:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void GraphicImport::sprm(Sprm & rSprm)
+
+void GraphicImport::lcl_sprm(Sprm & rSprm)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("sprm");
-    dmapper_logger->chars(rSprm.toString());
-#endif
-
     sal_uInt32 nSprmId = rSprm.getId();
     Value::Pointer_t pValue = rSprm.getValue();
 
-    /* WRITERFILTERSTATUS: table: PICFsprmdata */
     switch(nSprmId)
     {
         case 0xf004: //dff record
@@ -1387,15 +1150,14 @@ void GraphicImport::sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Anchor_effectExtent: // 90979;
         case NS_ooxml::LN_EG_WrapType_wrapSquare: // 90945;
         case NS_ooxml::LN_EG_WrapType_wrapTight: // 90946;
+        case NS_ooxml::LN_EG_WrapType_wrapThrough:
         case NS_ooxml::LN_CT_Anchor_docPr: // 90980;
         case NS_ooxml::LN_CT_Anchor_cNvGraphicFramePr: // 90981;
         case NS_ooxml::LN_CT_Anchor_a_graphic: // 90982;
         case NS_ooxml::LN_CT_WrapPath_start: // 90924;
         case NS_ooxml::LN_CT_WrapPath_lineTo: // 90925;
-        case NS_ooxml::LN_CT_WrapTight_wrapPolygon: // 90933;
         case NS_ooxml::LN_graphic_graphic:
         case NS_ooxml::LN_pic_pic:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
@@ -1404,6 +1166,17 @@ void GraphicImport::sprm(Sprm & rSprm)
             }
         }
         break;
+        case NS_ooxml::LN_CT_WrapTight_wrapPolygon:
+        case NS_ooxml::LN_CT_WrapThrough_wrapPolygon:
+            /* WRITERFILTERSTATUS: done: 100, planned: 4, spent: 2 */
+            {
+                WrapPolygonHandler aHandler;
+
+                resolveSprmProps(aHandler, rSprm);
+
+                m_pImpl->mpWrapPolygon = aHandler.getPolygon();
+            }
+            break;
         case NS_ooxml::LN_CT_Anchor_positionH: // 90976;
         {
             // Use a special handler for the positionning
@@ -1412,10 +1185,12 @@ void GraphicImport::sprm(Sprm & rSprm)
             if( pProperties.get( ) )
             {
                 pProperties->resolve( *pHandler );
-
-                m_pImpl->nHoriRelation = pHandler->m_nRelation;
-                m_pImpl->nHoriOrient = pHandler->m_nOrient;
-                m_pImpl->nLeftPosition = pHandler->m_nPosition;
+                if( !m_pImpl->bUseSimplePos )
+                {
+                    m_pImpl->nHoriRelation = pHandler->m_nRelation;
+                    m_pImpl->nHoriOrient = pHandler->m_nOrient;
+                    m_pImpl->nLeftPosition = pHandler->m_nPosition;
+                }
             }
         }
         break;
@@ -1427,10 +1202,12 @@ void GraphicImport::sprm(Sprm & rSprm)
             if( pProperties.get( ) )
             {
                 pProperties->resolve( *pHandler );
-
-                m_pImpl->nVertRelation = pHandler->m_nRelation;
-                m_pImpl->nVertOrient = pHandler->m_nOrient;
-                m_pImpl->nTopPosition = pHandler->m_nPosition;
+                if( !m_pImpl->bUseSimplePos )
+                {
+                    m_pImpl->nVertRelation = pHandler->m_nRelation;
+                    m_pImpl->nVertOrient = pHandler->m_nOrient;
+                    m_pImpl->nTopPosition = pHandler->m_nPosition;
+                }
             }
         }
         break;
@@ -1446,24 +1223,17 @@ void GraphicImport::sprm(Sprm & rSprm)
         }
         break;
         case NS_ooxml::LN_EG_WrapType_wrapNone: // 90944; - doesn't contain attributes
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             //depending on the behindDoc attribute text wraps through behind or in fron of the object
             m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
         break;
         case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom: // 90948;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->nWrap = text::WrapTextMode_NONE;
-        break;
-        case NS_ooxml::LN_EG_WrapType_wrapThrough: // 90947;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
         break;
         case 0xf010:
         case 0xf011:
             //ignore - doesn't contain useful members
         break;
         case NS_ooxml::LN_CT_GraphicalObject_graphicData:// 90660;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             {
                 m_pImpl->bIsGraphic = true;
 
@@ -1478,24 +1248,17 @@ void GraphicImport::sprm(Sprm & rSprm)
             sMessage += ::rtl::OString::valueOf( sal_Int32( nSprmId ), 10 );
             sMessage += ::rtl::OString(" / 0x");
             sMessage += ::rtl::OString::valueOf( sal_Int32( nSprmId ), 16 );
-            OSL_ENSURE( false, sMessage.getStr())
+            OSL_FAIL( sMessage.getStr())
 #endif
             ;
     }
-
-
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("sprm");
-#endif
 }
-/*-- 01.11.2006 09:45:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void GraphicImport::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
+
+void GraphicImport::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
-/*-- 16.11.2006 16:14:32---------------------------------------------------
+/*-------------------------------------------------------------------------
     crop is stored as "fixed float" as 16.16 fraction value
     related to width/or height
   -----------------------------------------------------------------------*/
@@ -1641,7 +1404,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND_CONTOUR ),
                     uno::makeAny(m_pImpl->bContour));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_OUTSIDE ),
-                    uno::makeAny(true));
+                    uno::makeAny(m_pImpl->bContourOutside));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_LEFT_MARGIN ),
                     uno::makeAny(m_pImpl->nLeftMargin));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_RIGHT_MARGIN ),
@@ -1651,8 +1414,6 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ),
                     uno::makeAny(m_pImpl->nBottomMargin));
 
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_POLY_POLYGON),
-                    uno::Any());
                 if( m_pImpl->eColorMode == drawing::ColorMode_STANDARD &&
                     m_pImpl->nContrast == -70 &&
                     m_pImpl->nBrightness == 70 )
@@ -1680,16 +1441,31 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_MIRRORED_ON_ODD_PAGES ),
                         uno::makeAny( m_pImpl->bHoriFlip ));
                 }
+
                 if( m_pImpl->bVertFlip )
                     xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_MIRRORED ),
                         uno::makeAny( m_pImpl->bVertFlip ));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BACK_COLOR ),
                     uno::makeAny( m_pImpl->nFillColor ));
+
                 //there seems to be no way to detect the original size via _real_ API
                 uno::Reference< beans::XPropertySet > xGraphicProperties( xGraphic, uno::UNO_QUERY_THROW );
                 awt::Size aGraphicSize, aGraphicSizePixel;
                 xGraphicProperties->getPropertyValue(rPropNameSupplier.GetName( PROP_SIZE100th_M_M )) >>= aGraphicSize;
                 xGraphicProperties->getPropertyValue(rPropNameSupplier.GetName( PROP_SIZE_PIXEL )) >>= aGraphicSizePixel;
+
+                uno::Any aContourPolyPolygon;
+                if( aGraphicSize.Width && aGraphicSize.Height &&
+                    m_pImpl->mpWrapPolygon.get() != NULL)
+                {
+                    awt::Size aDstSize(m_pImpl->getXSize(), m_pImpl->getYSize());
+                    WrapPolygon::Pointer_t pCorrected = m_pImpl->mpWrapPolygon->correctWordWrapPolygon(aGraphicSize, aDstSize);
+                    aContourPolyPolygon <<= pCorrected->getPointSequenceSequence();
+                }
+
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_POLY_POLYGON),
+                                                           aContourPolyPolygon);
+
                 if( aGraphicSize.Width && aGraphicSize.Height )
                 {
                     //todo: i71651 graphic size is not provided by the GraphicDescriptor
@@ -1698,9 +1474,11 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     lcl_CalcCrop( m_pImpl->nLeftCrop, aGraphicSize.Width );
                     lcl_CalcCrop( m_pImpl->nRightCrop, aGraphicSize.Width );
 
+
                     xGraphicProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GRAPHIC_CROP ),
                         uno::makeAny(text::GraphicCrop(m_pImpl->nTopCrop, m_pImpl->nBottomCrop, m_pImpl->nLeftCrop, m_pImpl->nRightCrop)));
                 }
+
             }
 
             if(m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
@@ -1730,9 +1508,8 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
     return xGraphicObject;
 }
 
-/*-- 01.11.2006 09:45:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
@@ -1745,90 +1522,77 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
 
         m_xGraphicObject = createGraphicObject( aMediaProperties );
 }
-/*-- 01.11.2006 09:45:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void GraphicImport::startSectionGroup()
-{
-}
-/*-- 01.11.2006 09:45:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void GraphicImport::endSectionGroup()
-{
-}
-/*-- 01.11.2006 09:45:03---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void GraphicImport::startParagraphGroup()
-{
-}
-/*-- 01.11.2006 09:45:03---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void GraphicImport::endParagraphGroup()
-{
-}
-/*-- 01.11.2006 09:45:03---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void GraphicImport::startCharacterGroup()
-{
-}
-/*-- 01.11.2006 09:45:04---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void GraphicImport::endCharacterGroup()
-{
-}
-/*-- 01.11.2006 09:45:04---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void GraphicImport::text(const sal_uInt8 * /*_data*/, size_t /*len*/)
-{
-}
-/*-- 01.11.2006 09:45:05---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void GraphicImport::utext(const sal_uInt8 * /*_data*/, size_t /*len*/)
-{
-}
-/*-- 01.11.2006 09:45:05---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void GraphicImport::props(writerfilter::Reference<Properties>::Pointer_t /*ref*/)
-{
-}
-/*-- 01.11.2006 09:45:06---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void GraphicImport::table(Id /*name*/, writerfilter::Reference<Table>::Pointer_t /*ref*/)
-{
-}
-/*-- 01.11.2006 09:45:07---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void GraphicImport::substream(Id /*name*/, ::writerfilter::Reference<Stream>::Pointer_t /*ref*/)
-{
-}
-/*-- 01.11.2006 09:45:07---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void GraphicImport::info(const string & /*info*/)
+void GraphicImport::lcl_startSectionGroup()
 {
 }
 
-void GraphicImport::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
+
+void GraphicImport::lcl_endSectionGroup()
 {
 }
 
-void GraphicImport::endShape( )
+
+void GraphicImport::lcl_startParagraphGroup()
 {
 }
 
-/*-- 09.08.2007 10:17:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+void GraphicImport::lcl_endParagraphGroup()
+{
+}
+
+
+void GraphicImport::lcl_startCharacterGroup()
+{
+}
+
+
+void GraphicImport::lcl_endCharacterGroup()
+{
+}
+
+
+void GraphicImport::lcl_text(const sal_uInt8 * /*_data*/, size_t /*len*/)
+{
+}
+
+
+void GraphicImport::lcl_utext(const sal_uInt8 * /*_data*/, size_t /*len*/)
+{
+}
+
+
+void GraphicImport::lcl_props(writerfilter::Reference<Properties>::Pointer_t /*ref*/)
+{
+}
+
+
+void GraphicImport::lcl_table(Id /*name*/, writerfilter::Reference<Table>::Pointer_t /*ref*/)
+{
+}
+
+
+void GraphicImport::lcl_substream(Id /*name*/, ::writerfilter::Reference<Stream>::Pointer_t /*ref*/)
+{
+}
+
+
+void GraphicImport::lcl_info(const string & /*info*/)
+{
+}
+
+void GraphicImport::lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
+{
+}
+
+void GraphicImport::lcl_endShape( )
+{
+}
+
+
+
 bool    GraphicImport::IsGraphic() const
 {
     return m_pImpl->bIsGraphic;

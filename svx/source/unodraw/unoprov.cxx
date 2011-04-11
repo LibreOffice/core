@@ -42,18 +42,18 @@
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <hash_map>
-#include <vcl/fldunit.hxx>
+#include <boost/unordered_map.hpp>
+#include <tools/fldunit.hxx>
 #include <tools/shl.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <svx/dialmgr.hxx>
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <editeng/unotext.hxx>
 #include <svx/unoshprp.hxx>
 #include <editeng/editeng.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/dialogs.hrc>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
@@ -652,7 +652,6 @@ SfxItemPropertyMapEntry* ImplGetSvxControlShapePropertyMap()
         { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , &::getBooleanCppuType(),                      0,  0}, \
         { MAP_CHAR_LEN("Visible"),                      SDRATTR_OBJVISIBLE              , &::getBooleanCppuType(),                      0,  0}, \
         {0,0,0,0,0,0}
-
     };
 
     return aControlPropertyMap_Impl;
@@ -839,7 +838,7 @@ comphelper::PropertyMapEntry* ImplGetAdditionalWriterDrawingDefaultsPropertyMap(
 * class UHashMap                                                       *
 ***********************************************************************/
 
-typedef ::std::hash_map< rtl::OUString, sal_uInt32, rtl::OUStringHash > UHashMapImpl;
+typedef ::boost::unordered_map< rtl::OUString, sal_uInt32, rtl::OUStringHash > UHashMapImpl;
 
 namespace {
   static const UHashMapImpl &GetUHashImpl()
@@ -899,7 +898,7 @@ rtl::OUString UHashMap::getNameFromId(sal_uInt32 nId)
         if (it->second == nId)
             return it->first;
     }
-    DBG_ERROR("[CL] unknown SdrObjekt identifier");
+    OSL_FAIL("[CL] unknown SdrObjekt identifier");
     return rtl::OUString();
 }
 
@@ -917,7 +916,7 @@ uno::Sequence< OUString > UHashMap::getServiceNames()
     return aSeq;
 }
 
-UINT32 UHashMap::getId( const OUString& rCompareString )
+sal_uInt32 UHashMap::getId( const OUString& rCompareString )
 {
     const UHashMapImpl &rMap = GetUHashImpl();
     UHashMapImpl::const_iterator it = rMap.find( rCompareString );
@@ -931,30 +930,21 @@ UINT32 UHashMap::getId( const OUString& rCompareString )
 * class SvxUnoPropertyMapProvider                                      *
 ***********************************************************************/
 
-SvxUnoPropertyMapProvider aSvxMapProvider;
-
-EXTERN_C
-#if defined( PM2 ) && (!defined( CSET ) && !defined ( MTW ) && !defined( WTC ))
-int _stdcall
-#else
-#ifdef WNT
-int _cdecl
-#else
-int
-#endif
-#endif
-Svx_CompareMap(const void* pSmaller, const void* pBigger )
+struct theSvxMapProvider :
+    public rtl::Static<SvxUnoPropertyMapProvider, theSvxMapProvider>
 {
-    int nDiff = strcmp( ((const SfxItemPropertyMapEntry*)pSmaller)->pName,
-                        ((const SfxItemPropertyMapEntry*)pBigger)->pName );
-    return nDiff;
+};
+
+SvxUnoPropertyMapProvider& getSvxMapProvider()
+{
+    return theSvxMapProvider::get();
 }
 
 // ---------------------------------------------------------------------
 
 SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
 {
-    for(UINT16 i=0;i<SVXMAP_END; i++)
+    for(sal_uInt16 i=0;i<SVXMAP_END; i++)
     {
         aSetArr[i] = 0;
         aMapArr[i] = 0;
@@ -963,23 +953,13 @@ SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
 
 SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
 {
-    for(UINT16 i=0;i<SVXMAP_END; i++)
+    for(sal_uInt16 i=0;i<SVXMAP_END; i++)
         delete aSetArr[i];
 }
 
 // ---------------------------------------------------------------------
 
-/*void SvxUnoPropertyMapProvider::Sort(USHORT nId)
-{
-    SfxItemPropertyMapEntry* pTemp = aMapArr[nId];
-    UINT16 i = 0;
-    while(pTemp[i].pName) { i++; }
-    qsort(aMapArr[nId], i, sizeof(SfxItemPropertyMapEntry), Svx_CompareMap);
-}*/
-
-// ---------------------------------------------------------------------
-
-const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(UINT16 nPropertyId)
+const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPropertyId)
 {
     DBG_ASSERT(nPropertyId < SVXMAP_END, "Id ?" );
     if(!aMapArr[nPropertyId]) {
@@ -1012,13 +992,13 @@ const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(UINT16 nPropert
             case SVXMAP_PAGE: aMapArr[SVXMAP_PAGE] = ImplGetSvxPageShapePropertyMap(); break;
 
             default:
-                DBG_ERROR( "Unknown property map for SvxUnoPropertyMapProvider!" );
+                OSL_FAIL( "Unknown property map for SvxUnoPropertyMapProvider!" );
         }
 //      Sort(nPropertyId);
     }
     return aMapArr[nPropertyId];
 }
-const SvxItemPropertySet* SvxUnoPropertyMapProvider::GetPropertySet(UINT16 nPropertyId, SfxItemPool& rPool)
+const SvxItemPropertySet* SvxUnoPropertyMapProvider::GetPropertySet(sal_uInt16 nPropertyId, SfxItemPool& rPool)
 {
     if( !aSetArr[nPropertyId] )
         aSetArr[nPropertyId] = new SvxItemPropertySet( GetMap( nPropertyId ), rPool );
@@ -1175,26 +1155,11 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
         break;
 
     default:
-        return FALSE;
+        return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }
-
-/*sal_Int16 SvxUnoGetWhichIdForNamedProperty( const ::rtl::OUString & rPropName )
-{
-    sal_Int16 nWhich = 0;
-
-    const SfxItemPropertyMapEntry* pMap = aSvxMapProvider.GetMap( SVXMAP_SHAPE );
-    if( pMap )
-    {
-        const SfxItemPropertyMapEntry* pFound = SfxItemPropertyMapEntry::getByName( pMap, rPropName );
-        if( pFound )
-            nWhich = pFound->nWID;
-    }
-
-    return nWhich;
-} */
 
 bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, String& rString ) throw()
 {
@@ -1227,29 +1192,29 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
     int i;
     for( i = 0; i < nCount; i++ )
     {
-        USHORT nResId = (USHORT)(nSourceResIds + i);
+        sal_uInt16 nResId = (sal_uInt16)(nSourceResIds + i);
         const ResId aRes( SVX_RES(nResId));
         const String aCompare( aRes );
         if( aShortString == aCompare )
         {
-            USHORT nNewResId = (USHORT)(nDestResIds + i);
+            sal_uInt16 nNewResId = (sal_uInt16)(nDestResIds + i);
             ResId aNewRes( SVX_RES( nNewResId ));
             rString.Replace( 0, aShortString.Len(), String( aNewRes ) );
-            return TRUE;
+            return sal_True;
         }
         else if( rString == aCompare )
         {
-            USHORT nNewResId = (USHORT)(nDestResIds + i);
+            sal_uInt16 nNewResId = (sal_uInt16)(nDestResIds + i);
             ResId aNewRes( SVX_RES( nNewResId ));
             rString = String( aNewRes );
-            return TRUE;
+            return sal_True;
         }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
-static USHORT __READONLY_DATA SvxUnoColorNameDefResId[] =
+static sal_uInt16 SvxUnoColorNameDefResId[] =
 {
     RID_SVXSTR_BLUEGREY_DEF,
     RID_SVXSTR_BLACK_DEF,
@@ -1277,10 +1242,25 @@ static USHORT __READONLY_DATA SvxUnoColorNameDefResId[] =
     RID_SVXSTR_SALMON_DEF,
     RID_SVXSTR_SEABLUE_DEF,
     RID_SVXSTR_COLOR_SUN_DEF,
-    RID_SVXSTR_COLOR_CHART_DEF
+    RID_SVXSTR_COLOR_CHART_DEF,
+    RID_SVXSTR_LIBRE_GREEN_1_DEF,
+    RID_SVXSTR_LIBRE_GREEN_ACCENT_DEF,
+    RID_SVXSTR_LIBRE_BLUE_ACCENT_DEF,
+    RID_SVXSTR_LIBRE_ORANGE_ACCENT_DEF,
+    RID_SVXSTR_LIBRE_PURPLE_DEF,
+    RID_SVXSTR_LIBRE_PURPLE_ACCENT_DEF,
+    RID_SVXSTR_LIBRE_YELLOW_ACCENT_DEF,
+    RID_SVXSTR_TANGO_BUTTER_DEF,
+    RID_SVXSTR_TANGO_ORANGE_DEF,
+    RID_SVXSTR_TANGO_CHOCOLATE_DEF,
+    RID_SVXSTR_TANGO_CHAMELEON_DEF,
+    RID_SVXSTR_TANGO_SKY_BLUE_DEF,
+    RID_SVXSTR_TANGO_PLUM_DEF,
+    RID_SVXSTR_TANGO_SCARLET_RED_DEF,
+    RID_SVXSTR_TANGO_ALUMINIUM_DEF
 };
 
-static USHORT __READONLY_DATA SvxUnoColorNameResId[] =
+static sal_uInt16 SvxUnoColorNameResId[] =
 {
     RID_SVXSTR_BLUEGREY,
     RID_SVXSTR_BLACK,
@@ -1308,10 +1288,25 @@ static USHORT __READONLY_DATA SvxUnoColorNameResId[] =
     RID_SVXSTR_SALMON,
     RID_SVXSTR_SEABLUE,
     RID_SVXSTR_COLOR_SUN,
-    RID_SVXSTR_COLOR_CHART
+    RID_SVXSTR_COLOR_CHART,
+    RID_SVXSTR_LIBRE_GREEN_1,
+    RID_SVXSTR_LIBRE_GREEN_ACCENT,
+    RID_SVXSTR_LIBRE_BLUE_ACCENT,
+    RID_SVXSTR_LIBRE_ORANGE_ACCENT,
+    RID_SVXSTR_LIBRE_PURPLE,
+    RID_SVXSTR_LIBRE_PURPLE_ACCENT,
+    RID_SVXSTR_LIBRE_YELLOW_ACCENT,
+    RID_SVXSTR_TANGO_BUTTER,
+    RID_SVXSTR_TANGO_ORANGE,
+    RID_SVXSTR_TANGO_CHOCOLATE,
+    RID_SVXSTR_TANGO_CHAMELEON,
+    RID_SVXSTR_TANGO_SKY_BLUE,
+    RID_SVXSTR_TANGO_PLUM,
+    RID_SVXSTR_TANGO_SCARLET_RED,
+    RID_SVXSTR_TANGO_ALUMINIUM
 };
 
-bool SvxUnoConvertResourceString( USHORT* pSourceResIds, USHORT* pDestResIds, int nCount, String& rString ) throw()
+bool SvxUnoConvertResourceString( sal_uInt16* pSourceResIds, sal_uInt16* pDestResIds, int nCount, String& rString ) throw()
 {
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
     //replace "Red Hat 1" with the translation of Red :-)
@@ -1346,12 +1341,11 @@ bool SvxUnoConvertResourceString( USHORT* pSourceResIds, USHORT* pDestResIds, in
 */
 void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalName, rtl::OUString& rApiName ) throw()
 {
-#ifndef SVX_LIGHT
     String aNew = rInternalName;
 
     if( nWhich == XATTR_LINECOLOR )
     {
-        if( SvxUnoConvertResourceString( (USHORT*)SvxUnoColorNameResId, (USHORT*)SvxUnoColorNameDefResId, sizeof( SvxUnoColorNameResId ) / sizeof( USHORT ), aNew ) )
+        if( SvxUnoConvertResourceString( (sal_uInt16*)SvxUnoColorNameResId, (sal_uInt16*)SvxUnoColorNameDefResId, sizeof( SvxUnoColorNameResId ) / sizeof( sal_uInt16 ), aNew ) )
         {
             rApiName = aNew;
             return;
@@ -1372,7 +1366,6 @@ void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalNam
             }
         }
     }
-#endif
 
     // just use previous name, if nothing else was found.
     rApiName = rInternalName;
@@ -1383,12 +1376,11 @@ void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalNam
 */
 void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw()
 {
-#ifndef SVX_LIGHT
     String aNew = rApiName;
 
     if( nWhich == XATTR_LINECOLOR )
     {
-        if( SvxUnoConvertResourceString( (USHORT*)SvxUnoColorNameDefResId, (USHORT*)SvxUnoColorNameResId, sizeof( SvxUnoColorNameResId ) / sizeof( USHORT ), aNew ) )
+        if( SvxUnoConvertResourceString( (sal_uInt16*)SvxUnoColorNameDefResId, (sal_uInt16*)SvxUnoColorNameResId, sizeof( SvxUnoColorNameResId ) / sizeof( sal_uInt16 ), aNew ) )
         {
             rInternalName = aNew;
             return;
@@ -1409,7 +1401,6 @@ void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& 
             }
         }
     }
-#endif // !SVX_LIGHT
 
     // just use previous name, if nothing else was found.
     rInternalName = rApiName;
@@ -1423,7 +1414,7 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
 
     if( nServiceId > SVXUNO_SERVICEID_LASTID )
     {
-        DBG_ERROR( "unknown service id!" );
+        OSL_FAIL( "unknown service id!" );
         return NULL;
     }
 
@@ -1445,7 +1436,7 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
             break;
 
         default:
-            DBG_ERROR( "unknown service id!" );
+            OSL_FAIL( "unknown service id!" );
         }
     }
 

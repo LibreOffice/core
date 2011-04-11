@@ -25,9 +25,7 @@
  *
  ************************************************************************/
 
-
 #include "analysis.hrc"
-
 
 Resource RID_ANALYSIS_FUNCTION_NAMES
 {
@@ -498,51 +496,3 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
     };
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -223,6 +223,22 @@ public:
     sal_Int32 getLength() const SAL_THROW(()) { return pData->length; }
 
     /**
+      Checks if a string is empty.
+
+      @return   sal_True if the string is empty;
+                sal_False, otherwise.
+
+      @since LibreOffice 3.4
+    */
+    sal_Bool isEmpty() const SAL_THROW(())
+    {
+        if ( pData->length )
+            return sal_False;
+        else
+            return sal_True;
+    }
+
+    /**
       Returns a pointer to the characters of this string.
 
       <p>The returned pointer is not guaranteed to point to a null-terminated
@@ -422,7 +438,7 @@ public:
 
       @return   a hash code value for this object.
 
-      @see rtl::OStringHash for convenient use of STLPort's hash_map
+      @see rtl::OStringHash for convenient use of boost::unordered_map
     */
     sal_Int32 hashCode() const SAL_THROW(())
     {
@@ -914,7 +930,7 @@ public:
 /** A helper to use OStrings with hash maps.
 
     Instances of this class are unary function objects that can be used as
-    hash function arguments to STLPort's hash_map and similar constructs.
+    hash function arguments to boost::unordered_map and similar constructs.
  */
 struct OStringHash
 {

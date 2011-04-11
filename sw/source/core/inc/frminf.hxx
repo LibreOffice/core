@@ -50,22 +50,22 @@ public:
     inline SwTxtFrmInfo( const SwTxtFrm *pTxtFrm ) : pFrm(pTxtFrm) { }
 
     // Passt der Absatz in eine Zeile?
-    BOOL IsOneLine() const;
+    sal_Bool IsOneLine() const;
 
     // Ist die Zeile zu X% gefuellt?
-    BOOL IsFilled( const BYTE nPercent ) const;
+    sal_Bool IsFilled( const sal_uInt8 nPercent ) const;
 
     // Wo beginnt der Text (ohne whitespaces)? (rel. im Frame !!)
     SwTwips GetLineStart() const;
 
     //returne die mittel Position des n. Charakters
-    SwTwips GetCharPos( xub_StrLen nChar, BOOL bCenter = TRUE ) const;
+    SwTwips GetCharPos( xub_StrLen nChar, sal_Bool bCenter = sal_True ) const;
 
     // Sammelt die whitespaces am Zeilenbeginn und -ende im Pam
-    void GetSpaces( SwPaM &rPam, BOOL bWithLineBreak ) const;
+    void GetSpaces( SwPaM &rPam, sal_Bool bWithLineBreak ) const;
 
     // Ist an der ersten Textposition ein Bullet/Symbol etc?
-    BOOL IsBullet( xub_StrLen nTxtPos ) const;
+    sal_Bool IsBullet( xub_StrLen nTxtPos ) const;
 
     // Ermittelt Erstzeileneinzug
     SwTwips GetFirstIndent() const;
@@ -76,7 +76,7 @@ public:
         { pFrm = pNew; return *this; }
 
     // liegt eine Gegenueberstellung vor? (returnt Pos im Frame)
-    USHORT GetBigIndent( xub_StrLen& rFndPos,
+    sal_uInt16 GetBigIndent( xub_StrLen& rFndPos,
                         const SwTxtFrm *pNextFrm = 0 ) const;
 };
 

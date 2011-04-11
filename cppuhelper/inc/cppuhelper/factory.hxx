@@ -53,7 +53,7 @@ typedef struct _uno_Environment uno_Environment;
     compiled it. If the environment is NOT session specific (needs no additional context),
     then this function should return the environment type name and leave ppEnv (to 0).
 
-    @paramppEnvTypeName environment type name; string must be constant
+    @param ppEnvTypeName environment type name; string must be constant
     @param ppEnv function returns its environment if the environment is session specific,
                  i.e. has special context
 */
@@ -86,6 +86,9 @@ typedef void (SAL_CALL * component_getImplementationEnvironmentExtFunc)(
 typedef const sal_Char * (SAL_CALL * component_getDescriptionFunc)(void);
 
 /** Function pointer declaration.
+
+    @obsolete component_writeInfo should no longer be used in new components
+
     Function writes component registry info, at least writing the supported service names.
 
     @param pServiceManager

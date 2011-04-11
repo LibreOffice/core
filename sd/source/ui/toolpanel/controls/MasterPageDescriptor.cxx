@@ -107,7 +107,7 @@ void MasterPageDescriptor::SetToken (MasterPageContainer::Token aToken)
 
 
 
-Image MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize eSize)
+Image MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize eSize) const
 {
     if (eSize == MasterPageContainer::SMALL)
         return maSmallPreview;
@@ -293,15 +293,15 @@ MasterPageDescriptor::URLClassification MasterPageDescriptor::GetURLClassificati
     {
         if (msURL.getLength() == 0)
             meURLClassification = URLCLASS_UNKNOWN;
-        else if (msURL.indexOf(::rtl::OUString::createFromAscii("presnt"))>=0)
+        else if (msURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("presnt")))>=0)
         {
             meURLClassification = URLCLASS_PRESENTATION;
         }
-        else if (msURL.indexOf(::rtl::OUString::createFromAscii("layout"))>=0)
+        else if (msURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("layout")))>=0)
         {
             meURLClassification = URLCLASS_LAYOUT;
         }
-        else if (msURL.indexOf(::rtl::OUString::createFromAscii("educate"))>=0)
+        else if (msURL.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("educate")))>=0)
         {
             meURLClassification = URLCLASS_OTHER;
         }

@@ -46,7 +46,6 @@
 
 
 #include <mmpreparemergepage.hrc>
-#include <dbui.hrc>
 
 #include <unomid.h>
 
@@ -171,7 +170,7 @@ void  SwMailMergePrepareMergePage::ActivatePage()
     MoveHdl_Impl(&m_aRecordED);
 }
 
-/*-- 13.05.2004 15:38:32---------------------------------------------------
+/*-------------------------------------------------------------------------
     merge the data into a new file
   -----------------------------------------------------------------------*/
 sal_Bool  SwMailMergePrepareMergePage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )

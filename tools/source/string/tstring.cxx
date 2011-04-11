@@ -165,7 +165,7 @@ float ByteString::ToFloat() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    OSL_ENSURE(false, "ByteString::ToFloat unusable");
+    OSL_FAIL("ByteString::ToFloat unusable");
     return 0;
 }
 
@@ -175,13 +175,13 @@ double ByteString::ToDouble() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
-    OSL_ENSURE(false, "ByteString::ToDouble unusable");
+    OSL_FAIL("ByteString::ToDouble unusable");
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ByteString::IsLowerAscii() const
+sal_Bool ByteString::IsLowerAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
@@ -191,18 +191,18 @@ BOOL ByteString::IsLowerAscii() const
     while ( nIndex < nLen )
     {
         if ( (*pStr >= 65) && (*pStr <= 90) )
-            return FALSE;
+            return sal_False;
 
         ++pStr,
         ++nIndex;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ByteString::IsUpperAscii() const
+sal_Bool ByteString::IsUpperAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
@@ -212,18 +212,18 @@ BOOL ByteString::IsUpperAscii() const
     while ( nIndex < nLen )
     {
         if ( (*pStr >= 97) && (*pStr <= 122) )
-            return FALSE;
+            return sal_False;
 
         ++pStr,
         ++nIndex;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ByteString::IsAlphaAscii() const
+sal_Bool ByteString::IsAlphaAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
@@ -234,18 +234,18 @@ BOOL ByteString::IsAlphaAscii() const
     {
         if ( !(((*pStr >= 97) && (*pStr <= 122)) ||
                ((*pStr >= 65) && (*pStr <=  90))) )
-            return FALSE;
+            return sal_False;
 
         ++pStr,
         ++nIndex;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ByteString::IsNumericAscii() const
+sal_Bool ByteString::IsNumericAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
@@ -255,18 +255,18 @@ BOOL ByteString::IsNumericAscii() const
     while ( nIndex < nLen )
     {
         if ( !((*pStr >= 48) && (*pStr <= 57)) )
-            return FALSE;
+            return sal_False;
 
         ++pStr,
         ++nIndex;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ByteString::IsAlphaNumericAscii() const
+sal_Bool ByteString::IsAlphaNumericAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
@@ -278,13 +278,13 @@ BOOL ByteString::IsAlphaNumericAscii() const
         if ( !(((*pStr >= 97) && (*pStr <= 122)) ||
                ((*pStr >= 65) && (*pStr <=  90)) ||
                ((*pStr >= 48) && (*pStr <=  57))) )
-            return FALSE;
+            return sal_False;
 
         ++pStr,
         ++nIndex;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,33 +28,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-
 #include "RelationTableView.hxx"
-
-
 #include "JoinExchange.hxx"
-
-
 #include <comphelper/extract.hxx>
-
-
 #include "browserids.hxx"
-
-
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-
-
 #include <com/sun/star/sdbc/XConnection.hpp>
-
-
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-
-
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-
-
 #include <com/sun/star/sdbcx/KeyType.hpp>
-
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -180,7 +162,7 @@ void ORelationTableView::ReSync()
                 pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter),pTabConnDataList->end() );
                 continue;
             }
-        } // if ( !arrInvalidTables.empty() )
+        }
 
         addConnection( new ORelationTableConnection(this, *aConIter), sal_False ); // don't add the data again
     }
@@ -189,7 +171,7 @@ void ORelationTableView::ReSync()
         GetTabWinMap()->begin()->second->GrabFocus();
 }
 //------------------------------------------------------------------------------
-BOOL ORelationTableView::IsAddAllowed()
+sal_Bool ORelationTableView::IsAddAllowed()
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
 
@@ -252,7 +234,7 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"ORelationTableView::AddConnection: Exception oocured!");
+            OSL_FAIL("ORelationTableView::AddConnection: Exception oocured!");
         }
     }
 }
@@ -292,9 +274,9 @@ void ORelationTableView::AddNewRelation()
     DBG_CHKTHIS(ORelationTableView,NULL);
 
     TTableConnectionData::value_type pNewConnData( new ORelationTableConnectionData() );
-    ORelationDialog aRelDlg(this, pNewConnData, TRUE);
+    ORelationDialog aRelDlg(this, pNewConnData, sal_True);
 
-    BOOL bSuccess = (aRelDlg.Execute() == RET_OK);
+    sal_Bool bSuccess = (aRelDlg.Execute() == RET_OK);
     if (bSuccess)
     {
         // already updated by the dialog
@@ -319,13 +301,13 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"ORelationTableView::RemoveConnection: Something other than SQLException occured!");
+        OSL_FAIL("ORelationTableView::RemoveConnection: Something other than SQLException occurred!");
     }
     return false;
 }
 
 //------------------------------------------------------------------------------
-void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL /*bNewTable*/)
+void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, sal_Bool /*bNewTable*/)
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
     OSL_ENSURE(_rComposedName.getLength(),"There must be a table name supplied!");
@@ -343,7 +325,7 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
     //////////////////////////////////////////////////////////////////
     // Neue Datenstruktur in DocShell eintragen
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
-    pNewTabWinData->ShowAll(FALSE);
+    pNewTabWinData->ShowAll(sal_False);
 
     //////////////////////////////////////////////////////////////////
     // Neues Fenster in Fensterliste eintragen
@@ -376,7 +358,7 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
     OSQLWarningBox aDlg( this, ModuleRes( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES );
     if ( m_bInRemove || aDlg.Execute() == RET_YES )
     {
-        m_pView->getController().getUndoMgr()->Clear();
+        m_pView->getController().ClearUndoManager();
         OJoinTableView::RemoveTabWin( pTabWin );
 
         m_pView->getController().InvalidateFeature(SID_RELATION_ADD_RELATION);
@@ -384,31 +366,7 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
         m_pView->getController().InvalidateFeature(ID_BROWSER_REDO);
     }
 }
-// -----------------------------------------------------------------------------
-//namespace
-//{
-//    class OReleationAskDialog : public ButtonDialog
-//    {
-//        FixedImage        m_aInfoImage;
-//        FixedText     m_aTitle;
-//      FixedText       m_aMessage;
-//    public:
-//        OReleationDialog(Window* _pParent) : ButtonDialog(_pParent,WB_HORZ | WB_STDDIALOG)
-//            ,m_aInfoImage(this)
-//            ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
-//          ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
-//        {
-//            m_aMessage.SetText(ModuleRes(STR_QUERY_REL_EDIT_RELATION));
-//            m_aMessage.Show();
-//
-//            // Changed as per BugID 79541 Branding/Configuration
-//            String sDialogTitle( lcl_getProductName() );
-//            SetText( sDialogTitle.AppendAscii( " Base" ) );
-//            m_aTitle.Show();
-//        }
-//    };
-//}
-// -----------------------------------------------------------------------------
+
 void ORelationTableView::lookForUiActivities()
 {
     if(m_pExistingConnection)
@@ -421,7 +379,7 @@ void ORelationTableView::lookForUiActivities()
         aDlg.AddButton( ModuleRes(STR_QUERY_REL_EDIT), BUTTONID_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
         aDlg.AddButton( ModuleRes(STR_QUERY_REL_CREATE), BUTTONID_YES, 0);
         aDlg.AddButton(BUTTON_CANCEL,BUTTONID_CANCEL,0);
-        UINT16 nRet = aDlg.Execute();
+        sal_uInt16 nRet = aDlg.Execute();
         if( nRet == RET_CANCEL)
         {
             m_pCurrentlyTabConnData.reset();
@@ -470,14 +428,14 @@ void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEve
         OTableWindow* pTableWindow = GetTabWindow(sName);
         if ( pTableWindow )
         {
-            m_pView->getController().getUndoMgr()->Clear();
+            m_pView->getController().ClearUndoManager();
             OJoinTableView::RemoveTabWin( pTableWindow );
 
             m_pView->getController().InvalidateFeature(SID_RELATION_ADD_RELATION);
             m_pView->getController().InvalidateFeature(ID_BROWSER_UNDO);
             m_pView->getController().InvalidateFeature(ID_BROWSER_REDO);
         }
-    } // if ( _rEvent.Accessor >>= sName )
+    }
     m_bInRemove = false;
 }
 // -----------------------------------------------------------------------------

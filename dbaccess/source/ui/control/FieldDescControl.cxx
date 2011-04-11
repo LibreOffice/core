@@ -36,7 +36,6 @@
 
 #include "FieldDescControl.hxx"
 #include "FieldControls.hxx"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "TableDesignHelpBar.hxx"
 #include <vcl/scrbar.hxx>
@@ -71,6 +70,7 @@
 #include <memory>
 #include "dbu_control.hrc"
 #include "dbu_tbl.hrc"
+#include <osl/diagnose.h>
 
 
 using namespace dbaui;
@@ -312,7 +312,7 @@ String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
     static String aOne('1');
     static String aNone(ModuleRes(STR_VALUE_NONE));
 
-    // FS - 66161 - 14.05.1999 - aeltere Versionen haben eventuell einen sprachabhaengigen String als Default gespeichert
+    // aeltere Versionen haben eventuell einen sprachabhaengigen String als Default gespeichert
     if (rPersistentString.Equals(aYes) || rPersistentString.Equals(aNo))
         return rPersistentString;
 
@@ -410,7 +410,6 @@ void OFieldDescControl::CheckScrollBars()
     {
         m_pVertScroll->Show();
         m_pVertScroll->SetRangeMax(nActive - nLastVisible);
-//      m_pVertScroll->SetThumbPos(0);
 
         m_pVertScroll->SetPosSizePixel( Point(nNewHWidth, 0), Size(nVScrollWidth, szOverallSize.Height()) );
     }
@@ -425,7 +424,6 @@ void OFieldDescControl::CheckScrollBars()
     {
         m_pHorzScroll->Show();
         m_pHorzScroll->SetRangeMax((lMaxXPosition - lMaxXAvailable + HSCROLL_STEP - 1 )/HSCROLL_STEP);
-//      m_pHorzScroll->SetThumbPos(0);
 
         m_pHorzScroll->SetPosSizePixel( Point(0, nNewVHeight), Size(bNeedVScrollBar ? nNewHWidth : szOverallSize.Width(), nHScrollHeight) );
     }
@@ -516,7 +514,7 @@ sal_Int32 OFieldDescControl::GetMaxControlHeight() const
             const Size aTemp( ppAggregates[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
             if ( aTemp.Height() > aHeight.Height() )
                 aHeight.Height() = aTemp.Height();
-        } // if ( ppAggregates[i] )
+        }
     }
 
     return aHeight.Height();
@@ -816,7 +814,7 @@ void OFieldDescControl::ArrangeAggregates()
     {
         Control*    pctrlInputControl;  // das eigentliche Control zur Eingabe
         Control*    pctrlTextControl;   // das Label dazu
-        USHORT      nPosSizeArgument;   // das zweite Argument fuer SetPosSize
+        sal_uInt16      nPosSizeArgument;   // das zweite Argument fuer SetPosSize
     };
     AGGREGATE_DESCRIPTION adAggregates[] = {
         { m_pColumnName, m_pColumnNameText, 1},
@@ -1070,9 +1068,9 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     }
 }
 // -----------------------------------------------------------------------------
-void OFieldDescControl::InitializeControl(Control* _pControl,ULONG _nHelpId,bool _bAddChangeHandler)
+void OFieldDescControl::InitializeControl(Control* _pControl,const ::rtl::OString& _sHelpId,bool _bAddChangeHandler)
 {
-    _pControl->SetHelpId(_nHelpId);
+    _pControl->SetHelpId(_sHelpId);
     if ( _bAddChangeHandler )
         ((OPropListBoxCtrl*)_pControl)->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
@@ -1081,7 +1079,7 @@ void OFieldDescControl::InitializeControl(Control* _pControl,ULONG _nHelpId,bool
     _pControl->EnableClipSiblings();
 }
 // -----------------------------------------------------------------------------
-FixedText* OFieldDescControl::CreateText(USHORT _nTextRes)
+FixedText* OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
 {
     FixedText* pFixedText = new FixedText( this );
     pFixedText->SetText( ModuleRes(_nTextRes) );
@@ -1089,15 +1087,15 @@ FixedText* OFieldDescControl::CreateText(USHORT _nTextRes)
     return pFixedText;
 }
 // -----------------------------------------------------------------------------
-OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(USHORT _nHelpStr,short _nProperty,ULONG _nHelpId)
+OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const rtl::OString& _sHelpId)
 {
     OPropNumericEditCtrl* pControl = new OPropNumericEditCtrl( this, _nHelpStr, _nProperty, WB_BORDER );
     pControl->SetDecimalDigits(0);
     pControl->SetMin(0);
     pControl->SetMax(0x7FFFFFFF);   // soll draussen geaendert werden, wenn noetig
-    pControl->SetStrictFormat(TRUE);
+    pControl->SetStrictFormat(sal_True);
 
-    InitializeControl(pControl,_nHelpId,false);
+    InitializeControl(pControl,_sHelpId,false);
 
     return pControl;
 }
@@ -1194,7 +1192,7 @@ void OFieldDescControl::SetPosSize( Control** ppControl, long nRow, sal_uInt16 n
         case 4:
             aSize.Width()  = CONTROL_WIDTH_4;
             break;
-        } // switch( nCol )
+        }
     }
 
 
@@ -1426,7 +1424,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
                 break;
             default:
-                OSL_ENSURE(0,"Unknown type");
+                OSL_FAIL("Unknown type");
         }
         m_pPreviousType = pFieldType;
     }
@@ -1520,7 +1518,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if( pNumType )
     {
-        OSL_ENSURE(sal_False, "OFieldDescControl::DisplayData: invalid num type!");
+        OSL_FAIL("OFieldDescControl::DisplayData: invalid num type!");
     }
 
     if( pLength )
@@ -1537,7 +1535,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if(m_pType)
     {
-        USHORT nPos = pFieldType.get() ? m_pType->GetEntryPos(String(pFieldDescr->getTypeInfo()->aUIName)) : LISTBOX_ENTRY_NOTFOUND;
+        sal_uInt16 nPos = pFieldType.get() ? m_pType->GetEntryPos(String(pFieldDescr->getTypeInfo()->aUIName)) : LISTBOX_ENTRY_NOTFOUND;
         if(nPos == LISTBOX_ENTRY_NOTFOUND)
         {
             const OTypeInfoMap* pMap = getTypeInfo();
@@ -1710,7 +1708,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
         catch(const Exception&)
         {
         }
-    } // if ( sDefault.getLength() )
+    }
     else
         pFieldDescr->SetControlDefault(Any());
 
@@ -1761,7 +1759,7 @@ void OFieldDescControl::GetFocus()
 void OFieldDescControl::implFocusLost(Window* _pWhich)
 {
     DBG_CHKTHIS(OFieldDescControl,NULL);
-    DBG_ASSERT(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
+    OSL_ENSURE(!_pWhich || IsChild(_pWhich), "OFieldDescControl::implFocusLost : invalid window !");
 
     //////////////////////////////////////////////////////////////////////
     // Das aktive Control merken
@@ -1907,7 +1905,7 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
             Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
             OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
             ::rtl::OUString sFormat;
-            xFormSet->getPropertyValue(::rtl::OUString::createFromAscii("FormatString")) >>= sFormat;
+            xFormSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormatString"))) >>= sFormat;
 
             if ( !bTextFormat )
             {

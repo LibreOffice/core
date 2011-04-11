@@ -46,7 +46,7 @@ namespace dbtools
     //=====================================================================
     static const ::rtl::OUString& getActiveConnectionPropertyName()
     {
-        static const ::rtl::OUString s_sActiveConnectionPropertyName = ::rtl::OUString::createFromAscii("ActiveConnection");
+        static const ::rtl::OUString s_sActiveConnectionPropertyName( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ));
         return s_sActiveConnectionPropertyName;
     }
 
@@ -73,7 +73,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::OAutoConnectionDisposer: caught an exception!" );
+            OSL_FAIL( "OAutoConnectionDisposer::OAutoConnectionDisposer: caught an exception!" );
         }
     }
 
@@ -87,7 +87,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::startPropertyListening: caught an exception!" );
+            OSL_FAIL( "OAutoConnectionDisposer::startPropertyListening: caught an exception!" );
         }
     }
 
@@ -108,7 +108,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::stopPropertyListening: caught an exception!" );
+            OSL_FAIL( "OAutoConnectionDisposer::stopPropertyListening: caught an exception!" );
         }
     }
 
@@ -123,7 +123,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::startRowSetListening: caught an exception!" );
+            OSL_FAIL( "OAutoConnectionDisposer::startRowSetListening: caught an exception!" );
         }
         m_bRSListening = sal_True;
     }
@@ -138,7 +138,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::stopRowSetListening: caught an exception!" );
+            OSL_FAIL( "OAutoConnectionDisposer::stopRowSetListening: caught an exception!" );
         }
         m_bRSListening = sal_False;
     }
@@ -182,8 +182,6 @@ namespace dbtools
                 // check this here.
                 //
                 // Yes, this is a HACK :(
-                //
-                // 94407 - 08.11.2001 - fs@openoffice.org
                 if ( xNewConnection.get() != m_xOriginalConnection.get() )
                 {
 #if OSL_DEBUG_LEVEL > 0
@@ -222,7 +220,7 @@ namespace dbtools
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OAutoConnectionDisposer::clearConnection: caught an exception!");
+            OSL_FAIL("OAutoConnectionDisposer::clearConnection: caught an exception!");
         }
     }
     //---------------------------------------------------------------------

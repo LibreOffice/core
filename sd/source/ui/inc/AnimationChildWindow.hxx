@@ -43,7 +43,7 @@ class AnimationChildWindow
 public:
     AnimationChildWindow(
         ::Window*,
-        USHORT,
+        sal_uInt16,
         SfxBindings*,
         SfxChildWinInfo*);
 

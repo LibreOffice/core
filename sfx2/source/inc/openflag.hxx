@@ -28,14 +28,13 @@
 #ifndef _SFX_OPENFLAG_HXX
 #define _SFX_OPENFLAG_HXX
 
-// Datei zum Bearbeiten "offnen, anschliessend funktioniert nur noch
-// die dritte Variante (Lesen einer Kopie)
+// Open file for editing, then only the third option (reading a copy) works
 #define SFX_STREAM_READWRITE  (STREAM_READWRITE |  STREAM_SHARE_DENYWRITE)
-// Ich arbeite roh auf dem Original, keine Kopie
-// -> Datei kann anschliessend nicht zum Bearbeiten ge"offnet werden
+// I work on the original, not a copy
+// -> file then can not be opened for editing
 #define SFX_STREAM_READONLY   (STREAM_READ | STREAM_SHARE_DENYWRITE) // + !bDirect
-// Jemand anders bearbeitet das File, es wird eine Kopie erstellt
-// -> Datei kann anschliessend zum Bearbeiten ge"offnet werden
+// Someone else is editing the file, a copy it created
+// -> the file can then be opened for editing
 #define SFX_STREAM_READONLY_MAKECOPY   (STREAM_READ | STREAM_SHARE_DENYNONE)
 
 

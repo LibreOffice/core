@@ -44,7 +44,7 @@ module com { module sun { module star { module ui {
     @see com::sun::star::frame::XLayoutManager
     </p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 enum DockingArea

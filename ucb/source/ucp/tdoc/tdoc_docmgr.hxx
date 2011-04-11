@@ -40,6 +40,7 @@
 #include "com/sun/star/embed/XStorage.hpp"
 #include "com/sun/star/frame/XModel.hpp"
 #include "com/sun/star/frame/XModuleManager.hpp"
+#include "com/sun/star/util/XCloseListener.hpp"
 
 namespace tdoc_ucp {
 
@@ -89,6 +90,33 @@ namespace tdoc_ucp {
     class OfficeDocumentsManager :
         public cppu::WeakImplHelper1< com::sun::star::document::XEventListener >
     {
+        class OfficeDocumentsCloseListener :
+           public cppu::WeakImplHelper1< com::sun::star::util::XCloseListener >
+
+        {
+        public:
+            OfficeDocumentsCloseListener( OfficeDocumentsManager * pMgr )
+            : m_pManager( pMgr ) {};
+
+            // util::XCloseListener
+            virtual void SAL_CALL queryClosing(
+                    const ::com::sun::star::lang::EventObject& Source,
+                    ::sal_Bool GetsOwnership )
+                throw (::com::sun::star::util::CloseVetoException,
+                       ::com::sun::star::uno::RuntimeException);
+
+            virtual void SAL_CALL notifyClosing(
+                    const ::com::sun::star::lang::EventObject& Source )
+                throw (::com::sun::star::uno::RuntimeException);
+
+            // lang::XEventListener (base of util::XCloseListener)
+            virtual void SAL_CALL disposing(
+                    const com::sun::star::lang::EventObject & Source )
+                throw ( com::sun::star::uno::RuntimeException );
+        private:
+            OfficeDocumentsManager * m_pManager;
+        };
+
     public:
         OfficeDocumentsManager(
             const com::sun::star::uno::Reference<
@@ -132,7 +160,9 @@ namespace tdoc_ucp {
         createDocumentEventNotifier(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
+
         void buildDocumentsList();
+
         bool
         isOfficeDocument(
             const com::sun::star::uno::Reference<
@@ -164,9 +194,11 @@ namespace tdoc_ucp {
         com::sun::star::uno::Reference<
             com::sun::star::document::XEventBroadcaster >   m_xDocEvtNotifier;
         com::sun::star::uno::Reference<
-            com::sun::star::frame::XModuleManager > m_xModuleMgr;
+            com::sun::star::frame::XModuleManager >         m_xModuleMgr;
         DocumentList                                        m_aDocs;
         OfficeDocumentsEventListener *                      m_pDocEventListener;
+        com::sun::star::uno::Reference<
+            com::sun::star::util::XCloseListener >          m_xDocCloseListener;
     };
 
 } // namespace tdoc_ucp

@@ -40,13 +40,6 @@ namespace ary
 namespace idl
 {
 
-namespace
-{
-    const Ce_2s aConstCe2sDummy;
-}
-
-
-
 CodeEntity::CodeEntity()
     :   aDocu(),
         p2s(0)
@@ -60,9 +53,7 @@ CodeEntity::~CodeEntity()
 const Ce_2s &
 CodeEntity::Secondaries() const
 {
-    if (p2s)
-        return *p2s;
-    return aConstCe2sDummy;
+    return const_cast<CodeEntity*>(this)->Secondaries();
 }
 
 Ce_2s &
@@ -73,9 +64,6 @@ CodeEntity::Secondaries()
     p2s = Ce_2s::Create_(AryClass());
     return *p2s;
 }
-
-
-
 
 }   // namespace idl
 }   // namespace ary

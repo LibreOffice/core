@@ -9,4 +9,4 @@ if [ x${JAVA_HOME}x = xx ]; then
     exit 1
 fi
 
-exec java -DSOLARSRC=${SOLARSRC} -DWORK_STAMP=${WORK_STAMP} -DUSE_SHELL=  -jar ${SOLARVER}/${INPATH}/bin${UPDMINOREXT}/jpropex.jar "$@"
+exec java -DSOLARSRC=${SOLARSRC} -DWORK_STAMP=${WORK_STAMP} -DUSE_SHELL=  -jar ${SOLARVER}/${INPATH}/bin/jpropex.jar "$@"

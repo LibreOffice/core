@@ -42,9 +42,9 @@ class SwBlinkPortion
     Point               aPos;
     const SwLinePortion *pPor;
     const SwRootFrm     *pFrm;
-    USHORT              nDir;
+    sal_uInt16              nDir;
 public:
-    SwBlinkPortion( const SwLinePortion* pPortion, USHORT nDirection )
+    SwBlinkPortion( const SwLinePortion* pPortion, sal_uInt16 nDirection )
             { pPor = pPortion; nDir = nDirection; }
     SwBlinkPortion( const SwBlinkPortion* pBlink, const SwLinePortion* pPort )
     {   pPor = pPort; pFrm = pBlink->pFrm; aPos = pBlink->aPos; nDir = pBlink->nDir; }
@@ -53,10 +53,10 @@ public:
     void SetRootFrm( const SwRootFrm* pNew ){ pFrm = pNew; }
     const SwRootFrm* GetRootFrm() const{ return pFrm; }
     const SwLinePortion *GetPortion() const{ return pPor; }
-    USHORT GetDirection() const { return nDir; }
-    BOOL operator<( const SwBlinkPortion& rBlinkPortion ) const
+    sal_uInt16 GetDirection() const { return nDir; }
+    sal_Bool operator<( const SwBlinkPortion& rBlinkPortion ) const
     { return (long)pPor < (long)rBlinkPortion.pPor; }
-    BOOL operator==( const SwBlinkPortion& rBlinkPortion ) const
+    sal_Bool operator==( const SwBlinkPortion& rBlinkPortion ) const
     { return (long)pPor == (long)rBlinkPortion.pPor; }
 };
 
@@ -67,7 +67,7 @@ class SwBlink
 {
     SwBlinkList     aList;
     AutoTimer       aTimer;
-    BOOL            bVisible;
+    sal_Bool            bVisible;
 public:
     SwBlink();
     ~SwBlink();
@@ -75,11 +75,11 @@ public:
     DECL_LINK( Blinker, Timer * );
 
     void Insert( const Point& rPoint, const SwLinePortion* pPor,
-                 const SwTxtFrm *pTxtFrm, USHORT nDir );
+                 const SwTxtFrm *pTxtFrm, sal_uInt16 nDir );
     void Replace( const SwLinePortion* pOld, const SwLinePortion* pNew );
     void Delete( const SwLinePortion* pPor );
     void FrmDelete( const SwRootFrm* pRoot );
-    inline BOOL IsVisible() const { return bVisible ; }
+    inline sal_Bool IsVisible() const { return bVisible ; }
 };
 
 // Blink-Manager, globale Variable, in Blink.Cxx angelegt

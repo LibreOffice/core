@@ -49,7 +49,7 @@ published enum TextAnimationKind
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAnimationKind::BLINK
-    /** Let this text switch its state from visibile to nonvisible continuously.
+    /** Let this text switch its state from visible to invisible continuously.
      */
     BLINK,
 

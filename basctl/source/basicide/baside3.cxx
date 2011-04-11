@@ -29,16 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-//svdraw.hxx
-//#define _SVDRAW_HXX ***
 #define _SDR_NOITEMS
 #define _SDR_NOTOUCH
 #define _SDR_NOTRANSFORM
 #define _SDR_NOOBJECTS
-//#define _SDR_NOVIEWS ***
 #define _SDR_NOVIEWMARKER
 #define _SDR_NODRAGMETHODS
-//#define _SDR_NOUNDO ***
 #define _SDR_NOXOUTDEV
 
 #include <ide_pch.hxx>
@@ -91,9 +87,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::resource;
 using namespace ::com::sun::star::ui::dialogs;
 
-#if defined(MAC)
-#define FILTERMASK_ALL "****"
-#elif defined(OW) || defined(MTF)
+#if defined(UNX)
 #define FILTERMASK_ALL "*"
 #elif defined(PM2)
 #define FILTERMASK_ALL ""
@@ -110,7 +104,7 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, St
         :IDEBaseWindow( pParent, rDocument, aLibName, aName )
         ,pUndoMgr(NULL)
 {
-    InitSettings( TRUE, TRUE, TRUE );
+    InitSettings( sal_True, sal_True, sal_True );
 
     pEditor = new DlgEditor( rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
     pEditor->SetWindow( this );
@@ -130,10 +124,10 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, St
     ::rtl::OUString aOULibName( aLibName );
     Reference< script::XLibraryContainer2 > xDlgLibContainer( GetDocument().getLibraryContainer( E_DIALOGS ), UNO_QUERY );
     if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) )
-        SetReadOnly( TRUE );
+        SetReadOnly( sal_True );
 
     if ( rDocument.isDocument() && rDocument.isReadOnly() )
-        SetReadOnly( TRUE );
+        SetReadOnly( sal_True );
 }
 
 DialogWindow::~DialogWindow()
@@ -234,9 +228,9 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
 
 void DialogWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( ( rCEvt.GetCommand() == COMMAND_WHEEL ) ||
-            ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
-            ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL ) )
+    if ( ( rCEvt.GetCommand() == COMMAND_WHEEL           ) ||
+         ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
+         ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL      ) )
     {
         HandleScrollCommand( rCEvt, GetHScrollBar(), GetVScrollBar() );
     }
@@ -273,23 +267,12 @@ IMPL_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
 {
     (void)pUndoAction;
 
-    // not working yet for unocontrols
-    /*
-    if (pUndoAction)
-    {
-        pUndoMgr->AddUndoAction( pUndoAction );
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if ( pBindings )
-            pBindings->Invalidate( SID_UNDO );
-    }
-    */
-
     return 0;
 }
 
 
 
-void __EXPORT DialogWindow::DoInit()
+void DialogWindow::DoInit()
 {
     GetHScrollBar()->Show();
     GetVScrollBar()->Show();
@@ -298,15 +281,15 @@ void __EXPORT DialogWindow::DoInit()
 
 
 
-void __EXPORT DialogWindow::DoScroll( ScrollBar* pCurScrollBar )
+void DialogWindow::DoScroll( ScrollBar* pCurScrollBar )
 {
     pEditor->DoScroll( pCurScrollBar );
 }
 
-void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
+void DialogWindow::GetState( SfxItemSet& rSet )
 {
     SfxWhichIter aIter(rSet);
-    for ( USHORT nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich() )
+    for ( sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich() )
     {
         switch ( nWh )
         {
@@ -352,10 +335,10 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
                 if( IDE_DLL()->GetShell()->GetFrame() )
                 {
                     rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,
-                              (pEditor->GetMode() == DLGED_TEST) ? TRUE : FALSE) );
+                              (pEditor->GetMode() == DLGED_TEST) ? sal_True : sal_False) );
                 }
                 else
-                    rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,FALSE ));
+                    rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,sal_False ));
             }
             break;
 
@@ -372,7 +355,7 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
                         aItem.SetValue( SVX_SNAP_SELECT );
                     else
                     {
-                        USHORT nObj;
+                        sal_uInt16 nObj;
                         switch( pEditor->GetInsertObj() )
                         {
                             case OBJ_DLG_PUSHBUTTON:        nObj = SVX_SNAP_PUSHBUTTON; break;
@@ -430,7 +413,7 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
 
 
 
-void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
+void DialogWindow::ExecuteCommand( SfxRequest& rReq )
 {
     switch ( rReq.GetSlot() )
     {
@@ -652,16 +635,16 @@ Reference< container::XNameContainer > DialogWindow::GetDialog() const
     return pEditor->GetDialog();
 }
 
-BOOL DialogWindow::RenameDialog( const String& rNewName )
+sal_Bool DialogWindow::RenameDialog( const String& rNewName )
 {
     if ( !BasicIDE::RenameDialog( this, GetDocument(), GetLibName(), GetName(), rNewName ) )
-        return FALSE;
+        return sal_False;
 
     SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
     if ( pBindings )
         pBindings->Invalidate( SID_DOC_MODIFIED );
 
-    return TRUE;
+    return sal_True;
 }
 
 void DialogWindow::DisableBrowser()
@@ -682,13 +665,12 @@ void DialogWindow::UpdateBrowser()
         ((PropBrw*)(pChildWin->GetWindow()))->Update( pIDEShell );
 }
 
-static ::rtl::OUString aResourceResolverPropName =
-    ::rtl::OUString::createFromAscii( "ResourceResolver" );
+static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
 
-BOOL DialogWindow::SaveDialog()
+sal_Bool DialogWindow::SaveDialog()
 {
     DBG_CHKTHIS( DialogWindow, 0 );
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
 
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference < XFilePicker > xFP;
@@ -732,7 +714,7 @@ BOOL DialogWindow::SaveDialog()
         Reference< XInputStream > xInput( xISP->createInputStream() );
 
         Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
-            ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+            ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
 
         Reference< XOutputStream > xOutput;
         try
@@ -790,9 +772,9 @@ BOOL DialogWindow::SaveDialog()
                 aURLObj.removeSegment();
                 ::rtl::OUString aURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
                 sal_Bool bReadOnly = sal_False;
-                ::rtl::OUString aComment( ::rtl::OUString::createFromAscii( "# " ) );
+                ::rtl::OUString aComment( RTL_CONSTASCII_USTRINGPARAM( "# " ));
                 aComment += aDialogName;
-                aComment += ::rtl::OUString::createFromAscii( " strings" );
+                aComment += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " strings" ));
                 Reference< task::XInteractionHandler > xDummyHandler;
 
                 // Remove old properties files in case of overwriting Dialog files
@@ -801,7 +783,7 @@ BOOL DialogWindow::SaveDialog()
                     Sequence< ::rtl::OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
 
                     ::rtl::OUString aDialogName_( aDialogName );
-                    aDialogName_ += ::rtl::OUString::createFromAscii( "_" );
+                    aDialogName_ += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_" ));
                     sal_Int32 nCount = aContentSeq.getLength();
                     const ::rtl::OUString* pFiles = aContentSeq.getConstArray();
                     for( int i = 0 ; i < nCount ; i++ )
@@ -818,8 +800,8 @@ BOOL DialogWindow::SaveDialog()
                             aExtension = aCompleteName.copy( iDot + 1 );
                         }
 
-                        if( aExtension.equalsAscii( "properties" ) ||
-                            aExtension.equalsAscii( "default" ) )
+                        if( aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "properties" ) ) ||
+                            aExtension.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "default" ) ) )
                         {
                             if( aPureName.indexOf( aDialogName_ ) == 0 )
                             {
@@ -922,8 +904,7 @@ NameClashQueryBox::NameClashQueryBox( Window* pParent,
     AddButton( String( IDEResId( RID_STR_DLGIMP_CLASH_REPLACE ) ), RET_NO, 0 );
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
 
-    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
+    SetImage( QueryBox::GetStandardImage() );
 }
 
 
@@ -948,13 +929,12 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     AddButton( BUTTON_HELP, BUTTONID_HELP, BUTTONDIALOG_HELPBUTTON, 4 );
 
-    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
+    SetImage( QueryBox::GetStandardImage() );
 }
 
-BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName )
+sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName )
 {
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
 
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference < XFilePicker > xFP;
@@ -1000,7 +980,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
                 ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY_THROW );
 
             Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
-                ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
+                ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY_THROW );
 
             Reference< XInputStream > xInput;
             if( xSFI->exists( aCurPath ) )
@@ -1044,11 +1024,11 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
             if( bDialogAlreadyExists )
             {
                 String aQueryBoxTitle( IDEResId( RID_STR_DLGIMP_CLASH_TITLE ) );
-                String aQueryBoxText( IDEResId( RID_STR_DLGIMP_CLASH_TEXT ) );
+                String aQueryBoxText(  IDEResId( RID_STR_DLGIMP_CLASH_TEXT  ) );
                 aQueryBoxText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "$(ARG1)" ) ), aXmlDlgName );
 
                 NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
-                USHORT nRet = aQueryBox.Execute();
+                sal_uInt16 nRet = aQueryBox.Execute();
                 if( RET_YES == nRet )
                 {
                     // RET_YES == Rename, see NameClashQueryBox::NameClashQueryBox
@@ -1085,7 +1065,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
             Sequence< lang::Locale > aImportLocaleSeq = xImportStringResource->getLocales();
             sal_Int32 nImportLocaleCount = aImportLocaleSeq.getLength();
 
-            Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );
+            Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, sal_True ) );
             Reference< resource::XStringResourceManager > xLibStringResourceManager = LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
             sal_Int32 nLibLocaleCount = 0;
             Sequence< lang::Locale > aLibLocaleSeq;
@@ -1110,7 +1090,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
                 String aQueryBoxTitle( IDEResId( RID_STR_DLGIMP_MISMATCH_TITLE ) );
                 String aQueryBoxText( IDEResId( RID_STR_DLGIMP_MISMATCH_TEXT ) );
                 LanguageMismatchQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
-                USHORT nRet = aQueryBox.Execute();
+                sal_uInt16 nRet = aQueryBox.Execute();
                 if( RET_YES == nRet )
                 {
                     // RET_YES == Add, see LanguageMismatchQueryBox::LanguageMismatchQueryBox
@@ -1196,9 +1176,9 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
             {
                 if ( BasicIDE::RemoveDialog( rDocument, aLibName, aNewDlgName ) )
                 {
-                    IDEBaseWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, aLibName, aNewDlgName, FALSE, TRUE );
+                    IDEBaseWindow* pDlgWin = pIDEShell->FindDlgWin( rDocument, aLibName, aNewDlgName, sal_False, sal_True );
                     if( pDlgWin != NULL )
-                        pIDEShell->RemoveWindow( pDlgWin, TRUE );
+                        pIDEShell->RemoveWindow( pDlgWin, sal_True );
                     BasicIDE::MarkDocumentModified( rDocument );
                 }
                 else
@@ -1241,10 +1221,10 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
             if( bSuccess )
             {
                 DialogWindow* pNewDlgWin = pIDEShell->CreateDlgWin( rDocument, aLibName, aNewDlgName );
-                pIDEShell->SetCurWindow( pNewDlgWin, TRUE );
+                pIDEShell->SetCurWindow( pNewDlgWin, sal_True );
             }
 
-            bDone = TRUE;
+            bDone = sal_True;
         }
         catch( Exception& )
         {}
@@ -1253,13 +1233,13 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
     return bDone;
 }
 
-BOOL DialogWindow::ImportDialog()
+sal_Bool DialogWindow::ImportDialog()
 {
     DBG_CHKTHIS( DialogWindow, 0 );
 
     const ScriptDocument& rDocument = GetDocument();
     String aLibName = GetLibName();
-    BOOL bRet = implImportDialog( this, aCurPath, rDocument, aLibName );
+    sal_Bool bRet = implImportDialog( this, aCurPath, rDocument, aLibName );
     return bRet;
 }
 
@@ -1278,12 +1258,12 @@ DlgEdView* DialogWindow::GetView() const
     return pEditor ? pEditor->GetView() : NULL;
 }
 
-BOOL __EXPORT DialogWindow::IsModified()
+sal_Bool DialogWindow::IsModified()
 {
     return pEditor->IsModified();
 }
 
-SfxUndoManager* __EXPORT DialogWindow::GetUndoManager()
+::svl::IUndoManager* DialogWindow::GetUndoManager()
 {
     return pUndoMgr;
 }
@@ -1302,7 +1282,7 @@ BasicEntryDescriptor DialogWindow::CreateEntryDescriptor()
     return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, GetName(), OBJ_TYPE_DIALOG );
 }
 
-void DialogWindow::SetReadOnly( BOOL b )
+void DialogWindow::SetReadOnly( sal_Bool b )
 {
     if ( pEditor )
     {
@@ -1313,19 +1293,19 @@ void DialogWindow::SetReadOnly( BOOL b )
     }
 }
 
-BOOL DialogWindow::IsReadOnly()
+sal_Bool DialogWindow::IsReadOnly()
 {
-    BOOL bReadOnly = FALSE;
+    sal_Bool bReadOnly = sal_False;
 
     if ( pEditor && pEditor->GetMode() == DLGED_READONLY )
-        bReadOnly = TRUE;
+        bReadOnly = sal_True;
 
     return bReadOnly;
 }
 
-BOOL DialogWindow::IsPasteAllowed()
+sal_Bool DialogWindow::IsPasteAllowed()
 {
-    return pEditor ? pEditor->IsPasteAllowed() : FALSE;
+    return pEditor ? pEditor->IsPasteAllowed() : sal_False;
 }
 
 void DialogWindow::StoreData()
@@ -1380,14 +1360,14 @@ void DialogWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType()==DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        InitSettings( TRUE, TRUE, TRUE );
+        InitSettings( sal_True, sal_True, sal_True );
         Invalidate();
     }
     else
         IDEBaseWindow::DataChanged( rDCEvt );
 }
 
-void DialogWindow::InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground)
+void DialogWindow::InitSettings(sal_Bool bFont,sal_Bool bForeground,sal_Bool bBackground)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )

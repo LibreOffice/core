@@ -182,7 +182,6 @@ void lcl_setXMLRangePropertyAtDataSequence(
 namespace chart
 {
 
-// static
 double StatisticsHelper::getVariance(
     const Sequence< double > & rData,
     bool bUnbiasedEstimator /* = false */ )
@@ -191,7 +190,6 @@ double StatisticsHelper::getVariance(
     return lcl_getVariance( rData, nValCount, bUnbiasedEstimator );
 }
 
-// static
 double StatisticsHelper::getStandardDeviation( const Sequence< double > & rData )
 {
     double fResult = getVariance( rData );
@@ -201,7 +199,6 @@ double StatisticsHelper::getStandardDeviation( const Sequence< double > & rData 
     return fResult;
 }
 
-// static
 double StatisticsHelper::getStandardError( const Sequence< double > & rData )
 {
     sal_Int32 nValCount;
@@ -222,7 +219,6 @@ double StatisticsHelper::getStandardError( const Sequence< double > & rData )
     return fResult;
 }
 
-// static
 Reference< chart2::data::XLabeledDataSequence > StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
     const Reference< chart2::data::XDataSource > & xDataSource,
     bool bPositiveValue,
@@ -241,7 +237,6 @@ Reference< chart2::data::XLabeledDataSequence > StatisticsHelper::getErrorLabele
     return xResult;
 }
 
-// static
 Reference< chart2::data::XDataSequence > StatisticsHelper::getErrorDataSequenceFromDataSource(
     const Reference< chart2::data::XDataSource > & xDataSource,
     bool bPositiveValue,
@@ -257,7 +252,6 @@ Reference< chart2::data::XDataSequence > StatisticsHelper::getErrorDataSequenceF
     return xLSeq->getValues();
 }
 
-// static
 double StatisticsHelper::getErrorFromDataSource(
     const Reference< chart2::data::XDataSource > & xDataSource,
     sal_Int32 nIndex,
@@ -287,7 +281,6 @@ double StatisticsHelper::getErrorFromDataSource(
     return fResult;
 }
 
-// static
 void StatisticsHelper::setErrorDataSequence(
     const Reference< chart2::data::XDataSource > & xDataSource,
     const Reference< chart2::data::XDataProvider > & xDataProvider,
@@ -319,7 +312,6 @@ void StatisticsHelper::setErrorDataSequence(
     }
 }
 
-// static
 Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
     const Reference< chart2::XDataSeries > & xDataSeries,
     const Reference< uno::XComponentContext > & xContext,
@@ -349,7 +341,6 @@ Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
     return xErrorBar;
 }
 
-// static
 Reference< beans::XPropertySet > StatisticsHelper::getErrorBars(
     const Reference< chart2::XDataSeries > & xDataSeries,
     bool bYError /* = true */ )
@@ -364,7 +355,6 @@ Reference< beans::XPropertySet > StatisticsHelper::getErrorBars(
     return xErrorBar;
 }
 
-// static
 bool StatisticsHelper::hasErrorBars(
     const Reference< chart2::XDataSeries > & xDataSeries,
     bool bYError /* = true */ )
@@ -377,7 +367,6 @@ bool StatisticsHelper::hasErrorBars(
              nStyle != ::com::sun::star::chart::ErrorBarStyle::NONE );
 }
 
-// static
 void StatisticsHelper::removeErrorBars(
     const Reference< chart2::XDataSeries > & xDataSeries,
     bool bYError /* = true  */ )
@@ -388,7 +377,6 @@ void StatisticsHelper::removeErrorBars(
                                          ::com::sun::star::chart::ErrorBarStyle::NONE ));
 }
 
-// static
 bool StatisticsHelper::usesErrorBarRanges(
     const Reference< chart2::XDataSeries > & xDataSeries,
     bool bYError /* = true */ )

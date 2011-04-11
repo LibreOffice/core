@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -52,7 +53,8 @@ enum SmFormulaElement{
     CDotElement,
     EqualElement,
     LessThanElement,
-    GreaterThanElement
+    GreaterThanElement,
+    PercentElement
 };
 
 /** Bracket types that can be inserted */
@@ -130,6 +132,12 @@ public:
     /** Delete the current selection or do nothing */
     void Delete();
 
+    /** Delete selection, previous element or merge lines
+     *
+     * This method implements the behaviour of backspace.
+     */
+    void DeletePrev(OutputDevice* pDev);
+
     /** Insert text at the current position */
     void InsertText(XubString aString);
 
@@ -137,7 +145,7 @@ public:
     void InsertElement(SmFormulaElement element);
 
     /** Insert a command specified in commands.src*/
-    void InsertCommand(USHORT nCommand);
+    void InsertCommand(sal_uInt16 nCommand);
 
     /** Insert command text translated into line entries at position
      *
@@ -180,7 +188,7 @@ public:
      *
      * @returns True, if the caret was in a context where this operation was possible.
      */
-    BOOL InsertLimit(SmSubSup eSubSup, BOOL bMoveCaret = TRUE);
+    bool InsertLimit(SmSubSup eSubSup, bool bMoveCaret = true);
 
     /** Insert a new row or newline
      *
@@ -192,7 +200,7 @@ public:
      * @remarks If the caret is placed in a subline of a command that doesn't support
      *          this operator the method returns FALSE, and doesn't do anything.
      */
-    BOOL InsertRow();
+    bool InsertRow();
 
     /** Insert a fraction, use selection as numerator */
     void InsertFraction();
@@ -226,7 +234,7 @@ public:
     static SmNode* FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected = false);
 
     /** Draw the caret */
-    void Draw(OutputDevice& pDev, Point Offset);
+    void Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible);
 
 private:
     friend class SmDocShell;
@@ -267,6 +275,28 @@ private:
      * This method also deletes SmErrorNode's as they're just meta info in the line.
      */
     static SmNodeList* LineToList(SmStructureNode* pLine, SmNodeList* pList = new SmNodeList());
+
+    /** Auxiliary function for calling LineToList on a node
+     *
+     * This method sets pNode = NULL and remove it from it's parent.
+     * (Assuming it has a parent, and is a child of it).
+     */
+    static SmNodeList* NodeToList(SmNode*& rpNode, SmNodeList* pList = new SmNodeList()){
+        //Remove from parent and NULL rpNode
+        SmNode* pNode = rpNode;
+        if(rpNode && rpNode->GetParent()){    //Don't remove this, correctness relies on it
+            int index = rpNode->GetParent()->IndexOfSubNode(rpNode);
+            if(index != -1)
+                rpNode->GetParent()->SetSubNode(index, NULL);
+        }
+        rpNode = NULL;
+        //Create line from node
+        if(pNode && IsLineCompositionNode(pNode))
+            return LineToList((SmStructureNode*)pNode, pList);
+        if(pNode)
+            pList->push_front(pNode);
+        return pList;
+    }
 
     /** Clone a visual line to a list
      *
@@ -341,14 +371,14 @@ private:
                                                          SmNodeList *pSelectedNodes = NULL);
 
     /** Create an instance of SmMathSymbolNode usable for brackets */
-    static SmNode *CreateBracket(SmBracketType eBracketType, BOOL bIsLeft);
+    static SmNode *CreateBracket(SmBracketType eBracketType, bool bIsLeft);
 
     /** The number of times BeginEdit have been called
      * Used to allow nesting of BeginEdit() and EndEdit() sections
      */
     int nEditSections;
     /** Holds data for BeginEdit() and EndEdit() */
-    BOOL bIsEnabledSetModifiedSmDocShell;
+    bool bIsEnabledSetModifiedSmDocShell;
     /** Begin edit section where the tree will be modified */
     void BeginEdit();
     /** End edit section where the tree will be modified */
@@ -407,17 +437,17 @@ public:
      */
     SmNode* Parse(SmNodeList* list, bool bDeleteErrorNodes = true);
     /** True, if the token is an operator */
-    static BOOL IsOperator(const SmToken &token);
+    static bool IsOperator(const SmToken &token);
     /** True, if the token is a relation operator */
-    static BOOL IsRelationOperator(const SmToken &token);
+    static bool IsRelationOperator(const SmToken &token);
     /** True, if the token is a sum operator */
-    static BOOL IsSumOperator(const SmToken &token);
+    static bool IsSumOperator(const SmToken &token);
     /** True, if the token is a product operator */
-    static BOOL IsProductOperator(const SmToken &token);
+    static bool IsProductOperator(const SmToken &token);
     /** True, if the token is a unary operator */
-    static BOOL IsUnaryOperator(const SmToken &token);
+    static bool IsUnaryOperator(const SmToken &token);
     /** True, if the token is a postfix operator */
-    static BOOL IsPostfixOperator(const SmToken &token);
+    static bool IsPostfixOperator(const SmToken &token);
 private:
     SmNodeList* pList;
     /** Get the current terminal */
@@ -448,3 +478,5 @@ private:
 
 
 #endif /* SMCURSOR_H */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

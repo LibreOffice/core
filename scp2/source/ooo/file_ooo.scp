@@ -108,7 +108,7 @@ File gid_File_Basic_Tutorials
     Name = "basicsrvtutorials.zip";
 End
 
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
 
 File gid_File_Bin_Pagein
     BIN_FILE_BODY;
@@ -134,35 +134,6 @@ File gid_File_Exe_Nsplugin
 End
 #endif
 #endif
-
-File gid_File_Bin_Gengal
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-  #ifdef UNX
-    Name = "gengal.bin";
-  #else
-    Name = "gengal.exe";
-  #endif
-End
-
-#ifdef UNX
-
-File gid_File_Script_Gengal
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "gengal";
-End
-
-#endif
-
-File gid_File_Profile_Gengal
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = PROFILENAME(gengal);
-End
 
 #if !defined(WITHOUT_MOZILLA) && defined(UNX) && !defined(QUARTZ)
 
@@ -343,9 +314,9 @@ File gid_File_Dtd_Toolbar
     Name = "toolbar.dtd";
 End
 
-STD_FILTER_FILE( gid_File_Filter_Eme, eme)
+STD_FILTER_FILE( gid_File_Filter_Sdfilt, sdfilt)
 
-STD_UNO_LIB_FILE_PATCH( gid_File_Filter_Sdfilt, sdfilt)
+STD_FILTER_FILE( gid_File_Filter_Eme, eme)
 
 STD_FILTER_FILE( gid_File_Filter_Icg, icg)
 
@@ -391,12 +362,6 @@ STD_FILTER_FILE( gid_File_Filter_Iti, iti)
 
 STD_RES_FILE( gid_File_Res_Eps, eps )
 
-STD_RES_FILE( gid_File_Res_Egi, egi )
-
-STD_RES_FILE( gid_File_Res_Ept, ept )
-
-STD_RES_FILE( gid_File_Res_Eme, eme )
-
 File gid_File_Help_Common_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY_HELPPACK;
@@ -423,14 +388,13 @@ File gid_File_Help_Schart_Zip
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(schart);
 End
 
-#if defined INCLUDE_JAVA_ACCESSBRIDGE && defined WNT
+#if defined WNT
 
 File gid_File_Jar_Accessbridge
     TXT_FILE_BODY;
     Name = "java_uno_accessbridge.jar";
-    RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE,UNO_COMPONENT);
+    Styles = (PACKED,DONT_OVERWRITE);
 End
 
 #endif
@@ -449,11 +413,7 @@ STD_JAR_FILE( gid_File_Jar_Lucene_Analyzers, lucene-analyzers-2.3 )
 #endif
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Lucenehelpwrapper, LuceneHelpWrapper )
-#endif
-
-#ifdef SOLAR_JAVA
-STD_JAR_FILE( gid_File_Jar_Js, js )
+STD_JAR_FILE( gid_File_Jar_Lucenehelpwrapper, LuceneHelpWrapper )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -473,14 +433,14 @@ End
 
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Report, report )
-UNO_JAR_FILE( gid_File_Jar_Table, table )
-UNO_JAR_FILE( gid_File_Jar_Letter, letter )
-UNO_JAR_FILE( gid_File_Jar_Form, form )
-UNO_JAR_FILE( gid_File_Jar_Fax, fax )
-UNO_JAR_FILE( gid_File_Jar_Agenda, agenda )
-UNO_JAR_FILE( gid_File_Jar_Query, query )
-UNO_JAR_FILE( gid_File_Jar_Web, web )
+STD_JAR_FILE( gid_File_Jar_Report, report )
+STD_JAR_FILE( gid_File_Jar_Table, table )
+STD_JAR_FILE( gid_File_Jar_Letter, letter )
+STD_JAR_FILE( gid_File_Jar_Form, form )
+STD_JAR_FILE( gid_File_Jar_Fax, fax )
+STD_JAR_FILE( gid_File_Jar_Agenda, agenda )
+STD_JAR_FILE( gid_File_Jar_Query, query )
+STD_JAR_FILE( gid_File_Jar_Web, web )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -500,10 +460,8 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
+STD_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -933,9 +891,16 @@ File gid_File_Lm_Scots_Gaelic
     Styles = (PACKED);
 End
 
-File gid_File_Lm_Serbian_Ascii
+File gid_File_Lm_Serbian
     TXT_FILE_BODY;
-    Name = "serbian_ascii.lm";
+    Name = "serbian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Serbian_Latin
+    TXT_FILE_BODY;
+    Name = "serbian-latin.lm";
     Dir = gid_Dir_Share_Fingerprint;
     Styles = (PACKED);
 End
@@ -1189,23 +1154,12 @@ File gid_File_Rdb_Offapi
     Name = "offapi.rdb";
 End
 
-#if defined ENABLE_VBA
-#ifndef VBA_EXTENSION
 File gid_File_Rdb_TypesVba
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Styles = (PACKED, OVERWRITE);
     Name = "oovbaapi.rdb";
 End
-#else
-File gid_File_ExtnVba
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED, OVERWRITE);
-    Name = "vbaapi.oxt";
-End
-#endif
-#endif
 
 File gid_File_Registry_Lang
     Dir = gid_Dir_Share_Registry_Res;
@@ -1332,7 +1286,7 @@ End
 
 #endif
 
-#ifdef UNX
+#if defined UNX && ! defined MACOSX
 
 File gid_File_Txt_Pagein_Calc
     TXT_FILE_BODY;
@@ -1341,20 +1295,12 @@ File gid_File_Txt_Pagein_Calc
     Name = "pagein-calc";
 End
 
-#endif
-
-#ifdef UNX
-
 File gid_File_Txt_Pagein_Common
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "pagein-common";
 End
-
-#endif
-
-#ifdef UNX
 
 File gid_File_Txt_Pagein_Draw
     TXT_FILE_BODY;
@@ -1363,20 +1309,12 @@ File gid_File_Txt_Pagein_Draw
     Name = "pagein-draw";
 End
 
-#endif
-
-#ifdef UNX
-
 File gid_File_Txt_Pagein_Impress
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Styles = (PACKED);
     Name = "pagein-impress";
 End
-
-#endif
-
-#ifdef UNX
 
 File gid_File_Txt_Pagein_Writer
     TXT_FILE_BODY;
@@ -1717,13 +1655,7 @@ File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY);
-#if defined WNT
-    NativeServicesURLPrefix = "vnd.sun.star.expand:$BRAND_BASE_DIR/program/";
-#else
-    NativeServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/";
-#endif
-    JavaServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/";
+    Styles = (PACKED);
 End
 
 #ifdef LINUX
@@ -1836,9 +1768,8 @@ End
 File gid_File_Jar_Productregistration
     TXT_FILE_BODY;
     Name = "productregistration.jar";
-    RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED);
 End
 #endif
 
@@ -1886,13 +1817,6 @@ File gid_File_ImagesTango_Zip
     Styles = (PACKED);
 End
 #endif
-
-File gid_File_ImagesClassic8_Zip
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Share_Config;
-    Name = "images_classic.zip";
-    Styles = (PACKED);
-End
 
 File gid_File_Share_Registry_Lingucomponent_Xcd
     TXT_FILE_BODY;

@@ -37,7 +37,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 
-#include "numuno.hxx"
+#include <svl/numuno.hxx>
 #include "numfmuno.hxx"
 #include <svl/zforlist.hxx>
 

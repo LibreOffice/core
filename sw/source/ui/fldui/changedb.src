@@ -31,6 +31,7 @@
 
 ModalDialog DLG_CHANGE_DB
 {
+    HelpID = "sw:ModalDialog:DLG_CHANGE_DB";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 286 , 175 ) ;
@@ -74,6 +75,7 @@ ModalDialog DLG_CHANGE_DB
     };
     PushButton PB_ADDDB
     {
+        HelpID = "sw:PushButton:DLG_CHANGE_DB:PB_ADDDB";
         Pos = MAP_APPFONT ( 118 ,  90  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Browse..." ;

@@ -87,11 +87,11 @@ protected:
         : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_FRMFMT, aTableBoxSetRange )
     {}
 
+    // zum Erkennen von Veraenderungen (haupts. TableBoxAttribute)
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNewValue );
+
 public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
-
-    // zum Erkennen von Veraenderungen (haupts. TableBoxAttribute)
-    virtual void Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue );
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBoxFmt)
 };

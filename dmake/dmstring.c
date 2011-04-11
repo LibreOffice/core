@@ -200,7 +200,7 @@ char *str;
 PUBLIC char *
 DmStrPbrk( s1, s2 )/*
 ====================
-   find first occurence of char in s2 in string s1.
+   find first occurrence of char in s2 in string s1.
    Returns a pointer to the first occurrence.  NOTE '\0' is considered part
    of s2 and a pointer to it is returned if no other chars match. */
 

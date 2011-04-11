@@ -181,7 +181,7 @@ sal_Bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const String& rN
             return sal_True;
         }
     }
-    return sal_False;       // is nich
+    return false;       // is nich
 }
 
 //------------------------------------------------------------------------
@@ -209,14 +209,14 @@ uno::Reference<uno::XInterface> SAL_CALL ScAutoFormatsObj_CreateInstance(
 
 rtl::OUString ScAutoFormatsObj::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii( "stardiv.StarCalc.ScAutoFormatsObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScAutoFormatsObj" ));
 }
 
 uno::Sequence<rtl::OUString> ScAutoFormatsObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCAUTOFORMATSOBJ_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCAUTOFORMATSOBJ_SERVICE ));
     return aRet;
 }
 
@@ -251,7 +251,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const rtl::OUString& aName, const 
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_Bool bDone = sal_False;
+    sal_Bool bDone = false;
     //  Reflection muss nicht uno::XInterface sein, kann auch irgendein Interface sein...
     uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
     if ( xInterface.is() )
@@ -283,7 +283,7 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const rtl::OUString& aName, const 
                 else
                 {
                     delete pNew;
-                    DBG_ERROR("AutoFormat konnte nicht eingefuegt werden");
+                    OSL_FAIL("AutoFormat konnte nicht eingefuegt werden");
                     throw uno::RuntimeException();
                 }
             }
@@ -422,7 +422,7 @@ sal_Bool SAL_CALL ScAutoFormatsObj::hasByName( const rtl::OUString& aName )
         sal_uInt16 nDummy;
         return lcl_FindAutoFormatIndex( *pFormats, aString, nDummy );
     }
-    return sal_False;
+    return false;
 }
 
 //------------------------------------------------------------------------
@@ -470,7 +470,6 @@ sal_Int64 SAL_CALL ScAutoFormatObj::getSomething(
     return 0;
 }
 
-// static
 const uno::Sequence<sal_Int8>& ScAutoFormatObj::getUnoTunnelId()
 {
     static uno::Sequence<sal_Int8> * pSeq = 0;
@@ -487,7 +486,6 @@ const uno::Sequence<sal_Int8>& ScAutoFormatObj::getUnoTunnelId()
     return *pSeq;
 }
 
-// static
 ScAutoFormatObj* ScAutoFormatObj::getImplementation(
                         const uno::Reference<uno::XInterface> xObj )
 {
@@ -602,7 +600,7 @@ void SAL_CALL ScAutoFormatObj::setName( const rtl::OUString& aNewName )
         else
         {
             delete pNew;
-            DBG_ERROR("AutoFormat konnte nicht eingefuegt werden");
+            OSL_FAIL("AutoFormat konnte nicht eingefuegt werden");
             nFormatIndex = 0;       //! alter Index ist ungueltig
         }
     }
@@ -672,7 +670,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const rtl::OUString& aPrope
         DBG_ASSERT(pData,"AutoFormat Daten nicht da");
 
         sal_Bool bValue;
-        sal_Bool bError = sal_False;
+        sal_Bool bError = false;
 
         String aPropString(aPropertyName);
         if (aPropString.EqualsAscii( SC_UNONAME_INCBACK ))
@@ -747,7 +745,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
         {
             if( const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pEntry->nWID ) )
             {
-                sal_Bool bDone = sal_False;
+                sal_Bool bDone = false;
 
                 switch( pEntry->nWID )
                 {
@@ -759,18 +757,18 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                             switch( eOrient )
                             {
                                 case table::CellOrientation_STANDARD:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, false ) );
                                 break;
                                 case table::CellOrientation_TOPBOTTOM:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, false ) );
                                     pData->PutItem( nFieldIndex, SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
                                 break;
                                 case table::CellOrientation_BOTTOMTOP:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, false ) );
                                     pData->PutItem( nFieldIndex, SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
                                 break;
                                 case table::CellOrientation_STACKED:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, TRUE ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, sal_True ) );
                                 break;
                                 default:
                                 {
@@ -843,7 +841,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const rtl::OUString& a
                     {
                         const SfxInt32Item* pRotItem = (const SfxInt32Item*)pData->GetItem( nFieldIndex, ATTR_ROTATE_VALUE );
                         sal_Int32 nRot = pRotItem ? pRotItem->GetValue() : 0;
-                        BOOL bStacked = ((const SfxBoolItem*)pItem)->GetValue();
+                        sal_Bool bStacked = ((const SfxBoolItem*)pItem)->GetValue();
                         SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aVal );
                     }
                     break;

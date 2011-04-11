@@ -53,7 +53,7 @@ class SW_DLLPUBLIC SwTableFUNC
 {
     SwFrmFmt    *pFmt;
     SwWrtShell  *pSh;
-    BOOL        bCopy;
+    sal_Bool        bCopy;
     SwTabCols   aCols;
 
 private:
@@ -61,18 +61,18 @@ private:
 
 public:
     inline SwTableFUNC(SwFrmFmt &);
-           SwTableFUNC(SwWrtShell *pShell, BOOL bCopyFmt = FALSE);
+           SwTableFUNC(SwWrtShell *pShell, sal_Bool bCopyFmt = sal_False);
            ~SwTableFUNC();
 
     void    InitTabCols();
     void    ColWidthDlg(Window *pParent );
-    SwTwips GetColWidth(USHORT nNum) const;
-    SwTwips GetMaxColWidth(USHORT nNum) const;
-    void    SetColWidth(USHORT nNum, SwTwips nWidth );
-    USHORT  GetColCount() const;
-    USHORT  GetCurColNum() const;
+    SwTwips GetColWidth(sal_uInt16 nNum) const;
+    SwTwips GetMaxColWidth(sal_uInt16 nNum) const;
+    void    SetColWidth(sal_uInt16 nNum, SwTwips nWidth );
+    sal_uInt16  GetColCount() const;
+    sal_uInt16  GetCurColNum() const;
 
-    BOOL IsTableSelected() const { return pFmt != 0; }
+    sal_Bool IsTableSelected() const { return pFmt != 0; }
 
     const SwFrmFmt *GetTableFmt() const { return pFmt; }
 
@@ -89,7 +89,7 @@ public:
 inline SwTableFUNC::SwTableFUNC(SwFrmFmt &rFmt) :
     pFmt(&rFmt),
     pSh(0),
-    bCopy(FALSE)
+    bCopy(sal_False)
 {
 }
 

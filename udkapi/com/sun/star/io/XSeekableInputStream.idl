@@ -27,13 +27,9 @@
 #ifndef __com_sun_star_io_XSeekableInputStream_idl__
 #define __com_sun_star_io_XSeekableInputStream_idl__
 
-#ifndef __com_sun_star_io_XInputStream_idl__
 #include <com/sun/star/io/XInputStream.idl>
-#endif
 
-#ifndef __com_sun_star_io_XSeekable_idl__
 #include <com/sun/star/io/XSeekable.idl>
-#endif
 
 //=============================================================================
 

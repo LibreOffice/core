@@ -43,6 +43,7 @@ class SwWrtShell;
 class SwBreakDlg: public SvxStandardDialog
 {
     SwWrtShell     &rSh;
+    FixedLine       aBreakFL;
     RadioButton     aLineBtn;
     RadioButton     aColumnBtn;
     RadioButton     aPageBtn;
@@ -50,17 +51,16 @@ class SwBreakDlg: public SvxStandardDialog
     ListBox         aPageCollBox;
     CheckBox        aPageNumBox;
     NumericField    aPageNumEdit;
-    FixedLine       aBreakFL;
 
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
 
     String          aTemplate;
-    USHORT          nKind;
-    USHORT          nPgNum;
+    sal_uInt16          nKind;
+    sal_uInt16          nPgNum;
 
-    BOOL            bHtmlMode;
+    sal_Bool            bHtmlMode;
 
     DECL_LINK( ClickHdl, void * );
     DECL_LINK( PageNumHdl, CheckBox * );
@@ -77,8 +77,8 @@ public:
     ~SwBreakDlg();
 
     String  GetTemplateName() { return aTemplate; }
-    USHORT  GetKind() { return nKind; }
-    USHORT  GetPageNumber() { return nPgNum; }
+    sal_uInt16  GetKind() { return nKind; }
+    sal_uInt16  GetPageNumber() { return nPgNum; }
 };
 
 #endif

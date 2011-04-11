@@ -43,8 +43,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace os2;
+
+using ::rtl::OUString;
 
 const Type CPPUTYPE_SEQINT8  = getCppuType( ( Sequence< sal_Int8 >* )0 );
 const Type CPPUTYPE_OUSTRING = getCppuType( (OUString*)0 );
@@ -75,7 +76,6 @@ MRESULT EXPENTRY DtransObjWndProc( HWND hWnd, ULONG nMsg, MPARAM nMP1, MPARAM nM
             Os2Clipboard* os2Clipboard = GetWindowPtr( hWnd);
             if (os2Clipboard)
             {
-                //MutexGuard aGuard(os2Clipboard->m_aMutex);
                 debug_printf("WM_DRAWCLIPBOARD os2Clipboard %08x\n", os2Clipboard);
                 if (os2Clipboard->m_bInSetClipboardData)
                 {
@@ -134,7 +134,7 @@ void SAL_CALL Os2Clipboard::initialize( const Sequence< Any >& aArguments )
 OUString SAL_CALL Os2Clipboard::getImplementationName() throw( RuntimeException )
 {
     debug_printf("Os2Clipboard::getImplementationName\n");
-    return OUString::createFromAscii( OS2_CLIPBOARD_IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( OS2_CLIPBOARD_IMPL_NAME ));
 }
 
 sal_Bool SAL_CALL Os2Clipboard::supportsService( const OUString& ServiceName ) throw( RuntimeException )
@@ -228,7 +228,7 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
         }
     }
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
     // dump list of available mimetypes
     Sequence< DataFlavor > aFlavors( m_aContents->getTransferDataFlavors() );
     for( int i = 0; i < aFlavors.getLength(); i++ )
@@ -237,10 +237,10 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
 #endif
 
     // we can only export text or bitmap
-    DataFlavor nFlavorText( OUString::createFromAscii( "text/plain;charset=utf-16" ),
-                        OUString::createFromAscii( "Unicode-Text" ), CPPUTYPE_OUSTRING);
-    DataFlavor nFlavorBitmap( OUString::createFromAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
-                        OUString::createFromAscii( "Bitmap" ), CPPUTYPE_DEFAULT);
+    DataFlavor nFlavorText( OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=utf-16")),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode-Text")), CPPUTYPE_OUSTRING);
+    DataFlavor nFlavorBitmap( OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap")), CPPUTYPE_DEFAULT);
 
     // try text transfer data (if any)
     PSZ pSharedText = NULL;
@@ -390,14 +390,14 @@ void SAL_CALL Os2Clipboard::notifyAllClipboardListener( )
                         }
                         catch(RuntimeException&)
                         {
-                            OSL_ENSURE( false, "RuntimeException caught" );
+                            OSL_FAIL( "RuntimeException caught" );
                             debug_printf( "RuntimeException caught" );
                         }
                     }
                 }
                 catch(const ::com::sun::star::lang::DisposedException&)
                 {
-                    OSL_ENSURE(false, "Service Manager disposed");
+                    OSL_FAIL("Service Manager disposed");
                     debug_printf( "Service Manager disposed");
 
                     // no further clipboard changed notifications
@@ -414,7 +414,7 @@ void SAL_CALL Os2Clipboard::notifyAllClipboardListener( )
 Sequence< OUString > SAL_CALL Os2Clipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii( OS2_CLIPBOARD_SERVICE_NAME );
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( OS2_CLIPBOARD_SERVICE_NAME ));
     return aRet;
 }
 

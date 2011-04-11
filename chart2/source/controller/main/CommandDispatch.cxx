@@ -183,8 +183,6 @@ void CommandDispatch::fireStatusEventForURL(
         tListenerMap::iterator aIt( m_aListeners.find( aURL.Complete ));
         if( aIt != m_aListeners.end())
         {
-//             ::cppu::OInterfaceContainerHelper * pCntHlp = rBHelper.getContainer(
-//                 ::getCppuType( reinterpret_cast< Reference< frame::XStatusListener > * >(0)));
             if( aIt->second )
             {
                 ::cppu::OInterfaceIteratorHelper aIntfIt( *((*aIt).second) );

@@ -41,12 +41,12 @@
 //------------------------------------------------------------------------
 
 ScRedComDialog::ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
-                    ScDocShell *pShell,ScChangeAction *pAction,BOOL bPrevNext)
+                    ScDocShell *pShell,ScChangeAction *pAction,sal_Bool bPrevNext)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext, TRUE );
+        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext, true );
         DBG_ASSERT(pDlg, "Dialog creation failed!");
         pDocShell=pShell;
         pDlg->DontChangeAuthor();
@@ -116,8 +116,8 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
         pDlg->SetText(aTitle);
         aComment=pChangeAction->GetComment();
 
-        BOOL bNext=FindNext(pChangeAction)!=NULL;
-        BOOL bPrev=FindPrev(pChangeAction)!=NULL;
+        sal_Bool bNext=FindNext(pChangeAction)!=NULL;
+        sal_Bool bPrev=FindPrev(pChangeAction)!=NULL;
         pDlg->EnableTravel(bNext,bPrev);
 
         String aAuthor = pChangeAction->GetUser();
@@ -125,7 +125,7 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
         DateTime aDT = pChangeAction->GetDateTime();
         String aDate = ScGlobal::pLocaleData->getDate( aDT );
         aDate += ' ';
-        aDate += ScGlobal::pLocaleData->getTime( aDT, FALSE, FALSE );
+        aDate += ScGlobal::pLocaleData->getTime( aDT, false, false );
 
         pDlg->ShowLastAuthor(aAuthor, aDate);
         pDlg->SetNote(aComment);

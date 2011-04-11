@@ -29,33 +29,34 @@
 #define INCLUDED_CELLCOLORHANDLER_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 
 namespace writerfilter {
 namespace dmapper
 {
 class TablePropertyMap;
-class WRITERFILTER_DLLPRIVATE CellColorHandler : public Properties
+class WRITERFILTER_DLLPRIVATE CellColorHandler : public LoggedProperties
 {
 public:
+    enum OutputFormat { Form, Paragraph, Character }; // for what part of the document
+private:
     sal_Int32 m_nShadowType;
     sal_Int32 m_nColor;
     sal_Int32 m_nFillColor;
-    bool      m_bParagraph;
-private:
+    OutputFormat m_OutputFormat;
+
+    // Properties
+    virtual void lcl_attribute(Id Name, Value & val);
+    virtual void lcl_sprm(Sprm & sprm);
 
 public:
     CellColorHandler( );
     virtual ~CellColorHandler();
 
-    // Properties
-    virtual void attribute(Id Name, Value & val);
-    virtual void sprm(Sprm & sprm);
-
     ::boost::shared_ptr<TablePropertyMap>            getProperties();
 
-    void setParagraph() { m_bParagraph = true; }
+    void setOutputFormat( OutputFormat format ) { m_OutputFormat = format; }
 };
 typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
 }}

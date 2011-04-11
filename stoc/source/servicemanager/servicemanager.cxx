@@ -32,8 +32,8 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <list>
 #include <uno/mapping.hxx>
 #include <uno/dispatcher.h>
@@ -82,8 +82,12 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OString;
 
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
@@ -283,7 +287,7 @@ struct equaltoRef_Impl
         { return rName1 == rName2; }
 };
 
-typedef hash_set
+typedef boost::unordered_set
 <
     Reference<XInterface >,
     hashRef_Impl,
@@ -450,14 +454,14 @@ struct hashOWString_Impl
         { return rName.hashCode(); }
 };
 
-typedef hash_set
+typedef boost::unordered_set
 <
     OUString,
     hashOWString_Impl,
     equalOWString_Impl
 > HashSet_OWString;
 
-typedef hash_multimap
+typedef boost::unordered_multimap
 <
     OUString,
     Reference<XInterface >,
@@ -465,7 +469,7 @@ typedef hash_multimap
     equalOWString_Impl
 > HashMultimap_OWString_Interface;
 
-typedef hash_map
+typedef boost::unordered_map
 <
     OUString,
     Reference<XInterface >,
@@ -502,11 +506,11 @@ void OServiceManager_Listener::disposing(const EventObject & rEvt )
         }
         catch( const IllegalArgumentException & )
         {
-            OSL_ENSURE( sal_False, "IllegalArgumentException catched" );
+            OSL_FAIL( "IllegalArgumentException catched" );
         }
         catch( const NoSuchElementException & )
         {
-            OSL_ENSURE( sal_False, "NoSuchElementException catched" );
+            OSL_FAIL( "NoSuchElementException catched" );
         }
     }
 }
@@ -929,8 +933,8 @@ void OServiceManager::onUnloadingNotify()
     IT_MM it_end1= m_ServiceMap.end();
     list<IT_MM> listDeleteServiceMap;
     typedef list<IT_MM>::const_iterator CIT_DMM;
-    // find occurences in m_ServiceMap
-    for(IT_MM it_i1= m_ServiceMap.begin(); it_i1 != it_end1; it_i1++)
+    // find occurrences in m_ServiceMap
+    for(IT_MM it_i1= m_ServiceMap.begin(); it_i1 != it_end1; ++it_i1)
     {
         if( m_SetLoadedFactories.find( it_i1->second) != it_SetEnd)
         {
@@ -954,7 +958,7 @@ void OServiceManager::onUnloadingNotify()
     IT_M it_end3= m_ImplementationNameMap.end();
     list<IT_M> listDeleteImplementationNameMap;
     typedef list<IT_M>::const_iterator CIT_DM;
-    for( IT_M it_i3= m_ImplementationNameMap.begin();  it_i3 != it_end3; it_i3++)
+    for( IT_M it_i3= m_ImplementationNameMap.begin();  it_i3 != it_end3; ++it_i3)
     {
         if( m_SetLoadedFactories.find( it_i3->second) != it_SetEnd)
         {
@@ -978,7 +982,7 @@ void OServiceManager::onUnloadingNotify()
     IT_S it_end5= m_ImplementationMap.end();
     list<IT_S> listDeleteImplementationMap;
     typedef list<IT_S>::const_iterator CIT_DS;
-    for( IT_S it_i5= m_ImplementationMap.begin(); it_i5 != it_end5; it_i5++)
+    for( IT_S it_i5= m_ImplementationMap.begin(); it_i5 != it_end5; ++it_i5)
     {
         if( m_SetLoadedFactories.find( *it_i5) != it_SetEnd)
         {
@@ -1001,7 +1005,7 @@ void OServiceManager::onUnloadingNotify()
     IT_S it_end7= m_SetLoadedFactories.end();
 
     Reference<XEventListener> xlistener= getFactoryListener();
-    for( IT_S it_i7= m_SetLoadedFactories.begin(); it_i7 != it_end7; it_i7++)
+    for( IT_S it_i7= m_SetLoadedFactories.begin(); it_i7 != it_end7; ++it_i7)
     {
         Reference<XComponent> xcomp( *it_i7, UNO_QUERY);
         if( xcomp.is())
@@ -1042,7 +1046,7 @@ void OServiceManager::disposing()
         {
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### RuntimeException occured upon disposing factory: %s", str.getStr() );
+            OSL_TRACE( "### RuntimeException occurred upon disposing factory: %s", str.getStr() );
 #else
             (void) exc; // unused
 #endif
@@ -1264,7 +1268,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
         {
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### DisposedException occured: %s", str.getStr() );
+            OSL_TRACE( "### DisposedException occurred: %s", str.getStr() );
 #else
             (void) exc; // unused
 #endif
@@ -1328,7 +1332,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
         {
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### DisposedException occured: %s", str.getStr() );
+            OSL_TRACE( "### DisposedException occurred: %s", str.getStr() );
 #else
             (void) exc; // unused
 #endif
@@ -1372,7 +1376,7 @@ void OServiceManager::initialize( Sequence< Any > const & )
     throw (Exception)
 {
     check_undisposed();
-    OSL_ENSURE( 0, "not impl!" );
+    OSL_FAIL( "not impl!" );
 }
 
 // XServiceInfo

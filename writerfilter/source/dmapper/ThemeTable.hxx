@@ -30,7 +30,7 @@
 #define INCLUDED_THEMETABLE_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <map>
 
@@ -40,7 +40,7 @@ namespace dmapper
 
 struct ThemeTable_Impl;
 
-class WRITERFILTER_DLLPRIVATE ThemeTable : public Properties, public Table
+class WRITERFILTER_DLLPRIVATE ThemeTable : public LoggedProperties, public LoggedTable
 {
     ThemeTable_Impl *m_pImpl;
 
@@ -48,14 +48,15 @@ public:
     ThemeTable();
     virtual ~ThemeTable();
 
+    const ::rtl::OUString getFontNameForTheme(const Id id) const;
+
+ private:
     // Properties
-    virtual void attribute(Id Name, Value & val);
-    virtual void sprm(Sprm & sprm);
+    virtual void lcl_attribute(Id Name, Value & val);
+    virtual void lcl_sprm(Sprm & sprm);
 
     // Table
-    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
-
-    const ::rtl::OUString getFontNameForTheme(const Id id) const;
+    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 };
 typedef boost::shared_ptr< ThemeTable >          ThemeTablePtr;
 }}

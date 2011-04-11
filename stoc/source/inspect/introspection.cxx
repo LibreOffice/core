@@ -72,11 +72,10 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -89,7 +88,10 @@ using namespace com::sun::star::beans::PropertyConcept;
 using namespace com::sun::star::beans::MethodConcept;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.stoc.Introspection"
 #define SERVICE_NAME        "com.sun.star.beans.Introspection"
@@ -174,7 +176,7 @@ struct eqName_Impl
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     OUString,
     sal_Int32,
@@ -186,7 +188,7 @@ IntrospectionNameMap;
 
 // Hashtable zur Zuordnung der exakten Namen zu den zu Lower-Case
 // konvertierten Namen, dient zur Unterst�tzung von XExactName
-typedef std::hash_map
+typedef boost::unordered_map
 <
     OUString,
     OUString,
@@ -1318,20 +1320,6 @@ Sequence< Property > ImplIntrospectionAccess::getProperties(sal_Int32 PropertyCo
         sal_Int32 nConcept = pConcepts[ i ];
         if( nConcept & PropertyConcepts )
             pDestProps[ iDest++ ] = pSourceProps[ i ];
-
-        /*
-        // Property mit Concepts ausgeben
-        OUString aPropName = pSourceProps[ i ].Name;
-        String aNameStr = OOUStringToString(aPropName, CHARSET_SYSTEM);
-        String ConceptStr;
-        if( nConcept & PROPERTYSET )
-            ConceptStr += "PROPERTYSET";
-        if( nConcept & ATTRIBUTES )
-            ConceptStr += "ATTRIBUTES";
-        if( nConcept & METHODS )
-            ConceptStr += "METHODS";
-        printf( "Property %ld: %s, Concept = %s\n", i, aNameStr.GetStr(), ConceptStr.GetStr() );
-        */
     }
 
     // PropertyConcept merken, dies entspricht maLastPropertySeq
@@ -1567,7 +1555,7 @@ struct hashIntrospectionAccessCache_Impl
 
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     hashIntrospectionKey_Impl,
     IntrospectionAccessStatic_Impl*,
@@ -1588,7 +1576,7 @@ public:
 
             (*iter).second->release();
             (*iter).second = NULL;
-            iter++;
+            ++iter;
         }
     }
 };
@@ -1666,7 +1654,7 @@ size_t TypeProviderAccessCache_Impl::operator()(const hashTypeProviderKey_Impl &
 }
 
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     hashTypeProviderKey_Impl,
     IntrospectionAccessStatic_Impl*,
@@ -1686,7 +1674,7 @@ public:
          {
             (*iter).second->release();
             (*iter).second = NULL;
-            iter++;
+            ++iter;
         }
     }
 };
@@ -1993,7 +1981,7 @@ struct eqInterface_Impl
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     void*,
     void*,
@@ -2318,8 +2306,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                 }
                 else
                 {
-                    OSL_ENSURE( sal_False,
-                        OString( "Introspection: Property \"" ) +
+                    OSL_FAIL( OString( "Introspection: Property \"" ) +
                         OUStringToOString( aPropName, RTL_TEXTENCODING_ASCII_US ) +
                         OString( "\" found more than once in PropertySet" ) );
                 }
@@ -2987,7 +2974,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
         Reference<XIdlClass> xClassRef = TypeToIdlClass( aToInspectObj.getValueType(), m_xSMgr );
         if( !xClassRef.is() )
         {
-            OSL_ENSURE( sal_False, "Can't get XIdlClass from Reflection" );
+            OSL_FAIL( "Can't get XIdlClass from Reflection" );
             return pAccess;
         }
 
@@ -3064,32 +3051,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo( void *, void * pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("/" IMPLEMENTATION_NAME "/UNO/SERVICES" )) ) );
-
-            const Sequence< OUString > & rSNL =
-                stoc_inspect::ImplIntrospection::getSupportedServiceNames_Static();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

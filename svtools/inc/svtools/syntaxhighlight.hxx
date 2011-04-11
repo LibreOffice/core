@@ -57,8 +57,6 @@
 #include <tools/string.hxx>
 #include <tools/gen.hxx>
 
-#include <svl/svarray.hxx>
-
 
 // Token-Typen TT_...
 enum TokenTypes
@@ -76,11 +74,10 @@ enum TokenTypes
     TT_PARAMETER
 };
 
-struct HighlightPortion { UINT16 nBegin; UINT16 nEnd; TokenTypes tokenType; };
+struct HighlightPortion { sal_uInt16 nBegin; sal_uInt16 nEnd; TokenTypes tokenType; };
 
 
-
-SV_DECL_VARARR(HighlightPortions, HighlightPortion, 0, 16)
+typedef std::vector<HighlightPortion> HighlightPortions;
 
 /////////////////////////////////////////////////////////////////////////
 // Hilfsklasse zur Untersuchung von JavaScript-Modulen, zunaechst zum
@@ -113,23 +110,23 @@ class SimpleTokenizer_Impl
 {
     HighlighterLanguage aLanguage;
     // Zeichen-Info-Tabelle
-    USHORT aCharTypeTab[256];
+    sal_uInt16 aCharTypeTab[256];
 
     const sal_Unicode* mpStringBegin;
     const sal_Unicode* mpActualPos;
 
     // Zeile und Spalte
-    UINT32 nLine;
-    UINT32 nCol;
+    sal_uInt32 nLine;
+    sal_uInt32 nCol;
 
     sal_Unicode peekChar( void )    { return *mpActualPos; }
     sal_Unicode getChar( void )     { nCol++; return *mpActualPos++; }
 
     // Hilfsfunktion: Zeichen-Flag Testen
-    BOOL testCharFlags( sal_Unicode c, USHORT nTestFlags );
+    sal_Bool testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags );
 
     // Neues Token holen, Leerstring == nix mehr da
-    BOOL getNextToken( /*out*/TokenTypes& reType,
+    sal_Bool getNextToken( /*out*/TokenTypes& reType,
         /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos );
 
     String getTokStr( /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos );
@@ -141,16 +138,16 @@ class SimpleTokenizer_Impl
 #endif
 
     const char** ppListKeyWords;
-    UINT16 nKeyWordCount;
+    sal_uInt16 nKeyWordCount;
 
 public:
     SimpleTokenizer_Impl( HighlighterLanguage aLang = HIGHLIGHT_BASIC );
     ~SimpleTokenizer_Impl( void );
 
-    UINT16 parseLine( UINT32 nLine, const String* aSource );
-    void getHighlightPortions( UINT32 nParseLine, const String& rLine,
+    sal_uInt16 parseLine( sal_uInt32 nLine, const String* aSource );
+    void getHighlightPortions( sal_uInt32 nParseLine, const String& rLine,
                                                     /*out*/HighlightPortions& portions );
-    void setKeyWords( const char** ppKeyWords, UINT16 nCount );
+    void setKeyWords( const char** ppKeyWords, sal_uInt16 nCount );
 };
 
 
@@ -166,7 +163,7 @@ class SVT_DLLPUBLIC SyntaxHighlighter
     HighlighterLanguage eLanguage;
     SimpleTokenizer_Impl* m_pSimpleTokenizer;
     char* m_pKeyWords;
-    UINT16 m_nKeyWordCount;
+    sal_uInt16 m_nKeyWordCount;
 
 //  void initializeKeyWords( HighlighterLanguage eLanguage );
 
@@ -180,10 +177,10 @@ public:
     // nur Zeile 0 angegeben werden.
     void initialize( HighlighterLanguage eLanguage_ );
 
-    const Range notifyChange( UINT32 nLine, INT32 nLineCountDifference,
-                                const String* pChangedLines, UINT32 nArrayLength);
+    const Range notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDifference,
+                                const String* pChangedLines, sal_uInt32 nArrayLength);
 
-    void getHighlightPortions( UINT32 nLine, const String& rLine,
+    void getHighlightPortions( sal_uInt32 nLine, const String& rLine,
                                             HighlightPortions& pPortions );
 
     HighlighterLanguage GetLanguage() { return eLanguage;}

@@ -244,8 +244,8 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
     catch (ucb::IllegalIdentifierException & exc)
     {
         (void) exc; // unused
-        OSL_ENSURE(
-            0, ::rtl::OUStringToOString(
+        OSL_FAIL(
+            ::rtl::OUStringToOString(
                 exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return -1;
     }
@@ -272,14 +272,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-sal_Bool SAL_CALL component_writeInfo(
-    lang::XMultiServiceFactory * pServiceManager,
-    registry::XRegistryKey * pRegistryKey )
-{
-    return ::cppu::component_writeInfoHelper(
-        pServiceManager, pRegistryKey, s_entries );
 }
 
 void * SAL_CALL component_getFactory(

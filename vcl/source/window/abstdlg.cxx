@@ -45,7 +45,7 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
     static ::osl::Module aDialogLibrary;
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( RTL_CONSTASCII_USTRINGPARAM( DLL_NAME ) ) ) )
         fp = ( VclAbstractDialogFactory* (__LOADONCALLAPI*)() )
-            aDialogLibrary.getFunctionSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
+            aDialogLibrary.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialogFactory")) );
     if ( fp )
         return fp();
     return 0;

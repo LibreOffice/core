@@ -1,24 +1,70 @@
-# just dumb wrapper; make install comes later
+# @configure_input@
 
-SHELL=/bin/sh
+SHELL=/usr/bin/env bash
 
-all:
+ifeq ($(USE_GMAKE),)
+GBUILD_OPT:=
+else
+GBUILD_OPT:=--gmake
+endif
+
+all: Makefile dmake/dmake@EXEEXT@ src.downloaded
+
 	@. ./*[Ee]nv.[Ss]et.sh && \
-	./fetch_tarballs.sh ooo.lst && \
-	./bootstrap && \
-		cd instsetoo_native && ../solenv/bin/build.pl -P@BUILD_NCPUS@ --all -P@BUILD_MAX_JOBS@
+        cd instsetoo_native && \
+        build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
-distclean:
+install:
 	@. ./*[Ee]nv.[Ss]et.sh && \
-	dmake distclean
-
-clean:
-	@. ./*[Ee]nv.[Ss]et.sh && \
-	dmake clean
+	echo "Installing in $${prefix:-@prefix@}..." && \
+	ooinstall "$${prefix:-@prefix@}" && \
+	echo "" && \
+	echo "Installation finished, you can now execute:" && \
+	echo "$${prefix:-@prefix@}/program/soffice"
 
 dev-install:
 	@. ./*[Ee]nv.[Ss]et.sh && \
-		ooinstall -l $$SRC_ROOT/install && \
-		echo && \
-		echo "Developer installation finished, you can find it here:" && \
-		echo "$$SRC_ROOT/install"
+        ooinstall -l @abs_builddir@/install && \
+        echo "" && \
+        echo "Developer installation finished, you can now execute:" && \
+        echo "@abs_builddir@/install/program/soffice"
+
+distclean: dmake/dmake@EXEEXT@
+	@. ./*[Ee]nv.[Ss]et.sh && \
+        dmake distclean
+
+clean: dmake/dmake@EXEEXT@
+	@. ./*[Ee]nv.[Ss]et.sh && \
+        dmake clean && \
+        if [ -n "$$USE_GMAKE" ] ; then make -f GNUmakefile.mk -sr clean ; fi
+
+dmake/dmake@EXEEXT@:
+	@. ./*[Ee]nv.[Ss]et.sh && \
+        ./bootstrap
+
+src.downloaded: ooo.lst download
+	@. ./*[Ee]nv.[Ss]et.sh && \
+	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
+
+fetch: src.downloaded
+
+Makefile: configure.in set_soenv.in Makefile.in
+	./autogen.sh
+
+check: Makefile dmake/dmake@EXEEXT@ fetch
+	@. ./*[Ee]nv.[Ss]et.sh && \
+	cd smoketestoo_native && \
+	export SAL_USE_VCLPLUGIN="svp" && \
+        build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+
+id:
+	@. ./*[Ee]nv.[Ss]et.sh && \
+		create-ids
+
+tags:
+	@. ./*[Ee]nv.[Ss]et.sh && \
+		create-tags
+
+docs:
+	@. ./*[Ee]nv.[Ss]et.sh && \
+		mkdocs.sh $$SRC_ROOT/docs $$SOLARENV/inc/doxygen.cfg

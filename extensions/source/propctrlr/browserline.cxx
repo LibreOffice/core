@@ -106,20 +106,20 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::SetComponentHelpIds( const SmartId& _rHelpId, sal_uInt32 _bPrimaryButtonId, sal_uInt32 _nSecondaryButtonId )
+    void OBrowserLine::SetComponentHelpIds( const rtl::OString& _rHelpId, const rtl::OString& _sPrimaryButtonId, const rtl::OString& _sSecondaryButtonId )
     {
         if ( m_pControlWindow )
-            m_pControlWindow->SetSmartHelpId( _rHelpId );
+            m_pControlWindow->SetHelpId( _rHelpId );
 
         if ( m_pBrowseButton )
         {
-            m_pBrowseButton->SetSmartHelpId( _rHelpId );
-            m_pBrowseButton->SetUniqueId( _bPrimaryButtonId );
+            m_pBrowseButton->SetHelpId( _rHelpId );
+            m_pBrowseButton->SetUniqueId( _sPrimaryButtonId );
 
             if ( m_pAdditionalBrowseButton )
             {
-                m_pAdditionalBrowseButton->SetSmartHelpId( _rHelpId );
-                m_pAdditionalBrowseButton->SetUniqueId( _nSecondaryButtonId );
+                m_pAdditionalBrowseButton->SetHelpId( _rHelpId );
+                m_pAdditionalBrowseButton->SetUniqueId( _sSecondaryButtonId );
             }
         }
     }
@@ -413,7 +413,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage, Image& _out_rHCImage )
+    void OBrowserLine::impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage )
     {
         try
         {
@@ -425,24 +425,7 @@ namespace pcr
             aMediaProperties[0].Value <<= _rImageURL;
 
             Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties ), UNO_QUERY_THROW );
-            _out_rImage = _out_rHCImage = Image( xGraphic );
-
-            // see if we find an HC version beside the normal graphic
-            INetURLObject aURL( _rImageURL );
-            ::rtl::OUString sBaseName( aURL.getBase() );
-            aURL.setBase( sBaseName + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_hc" ) ) );
-            ::rtl::OUString sHCImageURL( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-
-            Reference< XGraphic > xHCGraphic;
-            try
-            {
-                aMediaProperties[0].Value <<= sHCImageURL;
-                xHCGraphic = xGraphicProvider->queryGraphic( aMediaProperties );
-            }
-            catch( const Exception& ) { }
-
-            if ( xHCGraphic.is() )
-                _out_rHCImage = Image( xHCGraphic );
+            _out_rImage = Image( xGraphic );
         }
         catch( const Exception& )
         {
@@ -456,12 +439,11 @@ namespace pcr
         PushButton& rButton( impl_ensureButton( _bPrimary ) );
 
         OSL_PRECOND( _rImageURL.getLength(), "OBrowserLine::ShowBrowseButton: use the other version if you don't have an image!" );
-        Image aImage, aHCImage;
-        impl_getImagesFromURL_nothrow( _rImageURL, aImage, aHCImage );
+        Image aImage;
+        impl_getImagesFromURL_nothrow( _rImageURL, aImage );
 
-        rButton.SetModeImage( aImage, BMP_COLOR_NORMAL );
-        rButton.SetModeImage( aHCImage, BMP_COLOR_HIGHCONTRAST );
-    }
+        rButton.SetModeImage( aImage );
+   }
 
     //------------------------------------------------------------------
     void OBrowserLine::ShowBrowseButton( const Image& _rImage, sal_Bool _bPrimary )

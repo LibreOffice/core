@@ -99,7 +99,7 @@ bool importShapeGraphic(
 
         if(nIndex >= aURL.getLength())
         {
-            OSL_ENSURE( false, "ShapeImporter::importShape(): "
+            OSL_FAIL( "ShapeImporter::importShape(): "
                         "embedded graphic has no graphic ID" );
             return false;
         }
@@ -137,7 +137,7 @@ bool importShapeGraphic(
                 STREAM_READ ) );
         if( !pGraphicStream )
         {
-            OSL_ENSURE( false, "ShapeImporter::importShape(): "
+            OSL_FAIL( "ShapeImporter::importShape(): "
                         "cannot create input stream for graphic" );
             return false;
         }
@@ -146,7 +146,7 @@ bool importShapeGraphic(
         if( GraphicConverter::Import(
                 *pGraphicStream, aTmpGraphic ) != ERRCODE_NONE )
         {
-            OSL_ENSURE( false, "ShapeImporter::importShape(): "
+            OSL_FAIL( "ShapeImporter::importShape(): "
                         "Failed to import shape graphic from given URL" );
             return false;
         }
@@ -367,7 +367,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         // animation frame)
         if( !importShapeGraphic( aGraphicObject, xPropSet ) )
             return ShapeSharedPtr(); // error loading graphic -
-                                     // #142147# no placeholders in
+                                     // no placeholders in
                                      // slideshow
 
         if( !aGraphicObject.IsAnimated() )
@@ -416,8 +416,8 @@ ShapeSharedPtr ShapeImporter::createShape(
         aGraphAttrs.SetChannelG( nGreen );
         aGraphAttrs.SetChannelB( nBlue );
         aGraphAttrs.SetGamma( nGamma );
-        aGraphAttrs.SetTransparency( static_cast<BYTE>(nTransparency) );
-        aGraphAttrs.SetRotation( static_cast<USHORT>(nRotation*10) );
+        aGraphAttrs.SetTransparency( static_cast<sal_uInt8>(nTransparency) );
+        aGraphAttrs.SetRotation( static_cast<sal_uInt16>(nRotation*10) );
 
         text::GraphicCrop aGraphCrop;
         if( getPropertyValue( aGraphCrop, xPropSet, OUSTR("GraphicCrop") ))
@@ -475,11 +475,11 @@ bool ShapeImporter::isSkip(
         rtl::OUString layerName;
         uno::Reference<beans::XPropertySet> xPropLayerSet(
                                                           xLayer, uno::UNO_QUERY );
-        const uno::Any& a(xPropLayerSet->getPropertyValue(rtl::OUString::createFromAscii("Name")) );
+        const uno::Any& a(xPropLayerSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))) );
         bool const bRet = (a >>= layerName);
         if(bRet)
         {
-            if( layerName.equals(rtl::OUString::createFromAscii("DrawnInSlideshow")))
+            if( layerName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DrawnInSlideshow"))))
             {
                 //Transform shapes into PolyPolygons
                 importPolygons(xPropSet);
@@ -541,7 +541,7 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
                 pPolyPoly->draw();
                 maPolygons.push_back(pPolyPoly);
         }
-        aIter++;
+        ++aIter;
     }
 }
 
@@ -654,20 +654,13 @@ ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&         
                               sal_Int32                                          nOrdNumStart,
                               bool                                               bConvertingMasterPage ) :
     mxPage( xActualPage ),
-#ifdef ENABLE_PRESENTER_EXTRA_UI
     mxPagesSupplier( xPagesSupplier ),
-#else
-    mxPagesSupplier( NULL ),
-#endif
     mrContext( rContext ),
     maPolygons(),
     maShapesStack(),
     mnAscendingPrio( nOrdNumStart ),
     mbConvertingMasterPage( bConvertingMasterPage )
 {
-#ifndef ENABLE_PRESENTER_EXTRA_UI
-    (void)xPagesSupplier;
-#endif
     uno::Reference<drawing::XShapes> const xShapes(
         xPage, uno::UNO_QUERY_THROW );
     maShapesStack.push( XShapesEntry(xShapes) );

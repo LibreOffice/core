@@ -34,7 +34,6 @@
 #include <grfsh.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <docary.hxx>
 #include <textsh.hxx>
 #include <viewopt.hxx>
 #include <swundo.hxx>
@@ -66,7 +65,6 @@
 
 // -> #111827#
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 #include <comcore.hrc>
 // <- #111827#
 

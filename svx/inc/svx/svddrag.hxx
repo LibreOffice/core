@@ -85,7 +85,7 @@ protected:
     void*     aReservePtr4;
 
     bool      bShown;    // Xor sichrbar?
-    USHORT    nMinMov;   // Soviel muss erstmal minimal bewegt werden
+    sal_uInt16    nMinMov;   // Soviel muss erstmal minimal bewegt werden
     bool      bMinMoved; // MinMove durchbrochen?
 
     bool      bHorFixed; // nur Vertikal draggen
@@ -99,19 +99,19 @@ protected:
 
 protected:
     void Clear(bool bLeaveOne);
-    Point& Pnt(ULONG nNum)                           { return *((Point*)aPnts.GetObject(nNum)); }
+    Point& Pnt(sal_uIntPtr nNum)                           { return *((Point*)aPnts.GetObject(nNum)); }
 //public:
     SdrDragStatUserData*    pUser;     // Userdata
 public:
     SdrDragStat(): aPnts(1024,16,16)                 { pUser=NULL; Reset(); }
-    ~SdrDragStat()                                   { Clear(FALSE); }
+    ~SdrDragStat()                                   { Clear(sal_False); }
     void         Reset();
     SdrView*     GetView() const                     { return pView; }
     void         SetView(SdrView* pV)                { pView=pV; }
     SdrPageView* GetPageView() const                 { return pPageView; }
     void         SetPageView(SdrPageView* pPV)       { pPageView=pPV; }
-    const Point& GetPoint(ULONG nNum) const          { return *((Point*)aPnts.GetObject(nNum)); }
-    ULONG        GetPointAnz() const                 { return aPnts.Count(); }
+    const Point& GetPoint(sal_uIntPtr nNum) const          { return *((Point*)aPnts.GetObject(nNum)); }
+    sal_uIntPtr        GetPointAnz() const                 { return aPnts.Count(); }
     const Point& GetStart() const                    { return GetPoint(0); }
     Point&       Start()                             { return Pnt(0); }
     const Point& GetPrev() const                     { return GetPoint(GetPointAnz()-(GetPointAnz()>=2 ? 2:1)); }
@@ -134,10 +134,10 @@ public:
     void         SetShown(bool bOn)                  { bShown=bOn; }
 
     bool         IsMinMoved() const                  { return bMinMoved; }
-    void         SetMinMoved()                       { bMinMoved=TRUE; }
-    void         ResetMinMoved()                     { bMinMoved=FALSE; }
-    void         SetMinMove(USHORT nDist)            { nMinMov=nDist; if (nMinMov<1) nMinMov=1; }
-    USHORT       GetMinMove() const                  { return nMinMov; }
+    void         SetMinMoved()                       { bMinMoved=sal_True; }
+    void         ResetMinMoved()                     { bMinMoved=sal_False; }
+    void         SetMinMove(sal_uInt16 nDist)            { nMinMov=nDist; if (nMinMov<1) nMinMov=1; }
+    sal_uInt16       GetMinMove() const                  { return nMinMov; }
 
     bool         IsHorFixed() const                  { return bHorFixed; }
     void         SetHorFixed(bool bOn)               { bHorFixed=bOn; }
@@ -171,7 +171,7 @@ public:
     Point KorregPos(const Point& rNow, const Point& rPrev) const;
     void  Reset(const Point& rPnt);
     void  NextMove(const Point& rPnt);
-    void  NextPoint(bool bSaveReal=FALSE);
+    void  NextPoint(bool bSaveReal=sal_False);
     void  PrevPoint();
     bool CheckMinMoved(const Point& rPnt);
     long  GetDX() const                     { return GetNow().X()-GetPrev().X(); }

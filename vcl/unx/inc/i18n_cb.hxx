@@ -90,7 +90,7 @@ typedef struct {
     preedit_status_t        eState;
     preedit_text_t          aText;
     SalExtTextInputEvent    aInputEv;
-    std::vector< USHORT >   aInputFlags;
+    std::vector< sal_uInt16 >   aInputFlags;
 } preedit_data_t;
 
 #endif /* _SAL_I18N_CALLBACK_HXX */

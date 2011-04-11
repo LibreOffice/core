@@ -31,21 +31,20 @@
 
 #include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
+
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/sequence.hxx>
-
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-namespace toolkit {
+#include <boost/scoped_ptr.hpp>
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
+namespace toolkit
+{
+
+class GridEventForwarder;
 
 // ===================================================================
 // = UnoGridModel
@@ -53,20 +52,26 @@ using namespace ::com::sun::star::container;
 class UnoGridModel : public UnoControlModel
 {
 protected:
-    Any     ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::com::sun::star::uno::Any ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-    UnoGridModel();
+    UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     UnoGridModel( const UnoGridModel& rModel );
 
     UnoControlModel* Clone() const;
+
+    // ::com::sun::star::lang::XComponent
+    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::io::XPersistObject
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+
+    // OPropertySetHelper
+    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
 
     // XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoGridModel, UnoControlModel, szServiceName_GridControlModel )
@@ -76,10 +81,13 @@ public:
 // ===================================================================
 // = UnoGridControl
 // ===================================================================
-class UnoGridControl : public ::cppu::ImplInheritanceHelper1< UnoControlBase, ::com::sun::star::awt::grid::XGridControl >
+typedef ::cppu::ImplInheritanceHelper1  <   UnoControlBase
+                                        ,   ::com::sun::star::awt::grid::XGridControl
+                                        >   UnoGridControl_Base;
+class UnoGridControl : public UnoGridControl_Base
 {
 public:
-    UnoGridControl();
+    UnoGridControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString             GetComponentServiceName();
 
     // ::com::sun::star::lang::XComponent
@@ -87,24 +95,22 @@ public:
 
     // ::com::sun::star::awt::XControl
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::grid::XGridControl
-
-    virtual ::sal_Int32 SAL_CALL getItemIndexAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setToolTip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& text, const ::com::sun::star::uno::Sequence< ::sal_Int32 >& columns) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getCurrentColumn(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getCurrentRow(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::grid::XGridSelection
-
-    virtual ::sal_Int32 SAL_CALL getMinSelectionIndex() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getMaxSelectionIndex() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL selectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL selectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL selectAllRows() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL deselectRows(const ::com::sun::star::uno::Sequence< ::sal_Int32 >& rangeOfRows) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL deselectRow( ::sal_Int32 i_rowIndex ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL deselectAllRows() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::sal_Int32 > SAL_CALL getSelection() throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isSelectionEmpty() throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isSelectedIndex(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL selectRow(::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException);
 
@@ -112,9 +118,14 @@ public:
     DECLIMPL_SERVICEINFO_DERIVED( UnoGridControl, UnoControlBase, szServiceName_GridControl )
 
     using UnoControl::getPeer;
+
+protected:
+    ~UnoGridControl();
+
 private:
-    ::com::sun::star::view::SelectionType mSelectionMode;
-    SelectionListenerMultiplexer    m_aSelectionListeners;
+    ::com::sun::star::view::SelectionType       mSelectionMode;
+    SelectionListenerMultiplexer                m_aSelectionListeners;
+    ::boost::scoped_ptr< GridEventForwarder >   m_pEventForwarder;
 };
 
 } // toolkit

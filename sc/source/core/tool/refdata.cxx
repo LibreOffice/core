@@ -67,25 +67,25 @@ void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
     {
         nCol = nRelCol + rPos.Col();
         if ( !VALIDCOL( nCol ) )
-            Flags.bColDeleted = TRUE;
+            Flags.bColDeleted = sal_True;
     }
     if ( Flags.bRowRel )
     {
         nRow = nRelRow + rPos.Row();
         if ( !VALIDROW( nRow ) )
-            Flags.bRowDeleted = TRUE;
+            Flags.bRowDeleted = sal_True;
     }
     if ( Flags.bTabRel )
     {
         nTab = nRelTab + rPos.Tab();
         if ( !VALIDTAB( nTab ) )
-            Flags.bTabDeleted = TRUE;
+            Flags.bTabDeleted = sal_True;
     }
 }
 
 
 
-BOOL ScSingleRefData::operator==( const ScSingleRefData& r ) const
+sal_Bool ScSingleRefData::operator==( const ScSingleRefData& r ) const
 {
     return bFlags == r.bFlags &&
         (Flags.bColRel ? nRelCol == r.nRelCol : nCol == r.nCol) &&
@@ -103,8 +103,8 @@ static void lcl_putInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2 )
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
     SCTAB nTab1, nTab2;
-    BOOL bTmp;
-    BYTE nRelState1, nRelState2;
+    sal_Bool bTmp;
+    sal_uInt8 nRelState1, nRelState2;
     if ( rRef1.Flags.bRelName )
         nRelState1 =
             ((rRef1.Flags.bTabRel & 0x01) << 2)
@@ -185,8 +185,8 @@ static void lcl_putInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2 )
         rRef1.Flags.bTabDeleted = rRef2.Flags.bTabDeleted;
         rRef2.Flags.bTabDeleted = bTmp;
     }
-    rRef1.Flags.bRelName = ( nRelState1 ? TRUE : FALSE );
-    rRef2.Flags.bRelName = ( nRelState2 ? TRUE : FALSE );
+    rRef1.Flags.bRelName = ( nRelState1 ? sal_True : false );
+    rRef2.Flags.bRelName = ( nRelState2 ? sal_True : false );
 }
 
 

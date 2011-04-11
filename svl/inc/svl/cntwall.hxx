@@ -42,35 +42,35 @@ class SVL_DLLPUBLIC CntWallpaperItem : public SfxPoolItem
 private:
     UniString               _aURL;
     Color                   _nColor;
-    USHORT                  _nStyle;
+    sal_uInt16                  _nStyle;
 
 public:
                             TYPEINFO();
 
-                            CntWallpaperItem( USHORT nWhich );
-                            CntWallpaperItem( USHORT nWhich, SvStream& rStream, USHORT nVersion );
+                            CntWallpaperItem( sal_uInt16 nWhich );
+                            CntWallpaperItem( sal_uInt16 nWhich, SvStream& rStream, sal_uInt16 nVersion );
                             CntWallpaperItem( const CntWallpaperItem& rCpy );
                             ~CntWallpaperItem();
 
-    virtual USHORT GetVersion(USHORT) const;
+    virtual sal_uInt16 GetVersion(sal_uInt16) const;
 
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual SfxPoolItem*    Create( SvStream&, USHORT nItemVersion ) const;
-    virtual SvStream&       Store( SvStream&, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nItemVersion ) const;
+    virtual SvStream&       Store( SvStream&, sal_uInt16 nItemVersion ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal,
-                                         BYTE nMemberId = 0 ) const;
+                                         sal_uInt8 nMemberId = 0 ) const;
     virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
-                                         BYTE nMemberId = 0 );
+                                         sal_uInt8 nMemberId = 0 );
 
     void                    SetBitmapURL( const UniString& rURL ) { _aURL = rURL; }
     void                    SetColor( Color nColor ) { _nColor = nColor; }
-    void                    SetStyle( USHORT nStyle ) { _nStyle = nStyle; }
+    void                    SetStyle( sal_uInt16 nStyle ) { _nStyle = nStyle; }
 
     const UniString&        GetBitmapURL() const { return _aURL; }
     Color                   GetColor() const { return _nColor; }
-    USHORT                  GetStyle() const { return _nStyle; }
+    sal_uInt16                  GetStyle() const { return _nStyle; }
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -37,10 +37,6 @@ int main( argc, argv )
     int   argc;
     char *argv[];
 {
-#ifdef TSTCPP
-    ( start_cpp( argc, argv ) );
-    puts("erster teil ist fertig" );
-#endif
     return( start_cpp( argc, argv ) );
 }
 

@@ -45,7 +45,7 @@ inline void logIt(const css::uno::Exception& ex)
     sMsg.appendAscii("Unexpected exception catched. Original message was:\n\""      );
     sMsg.append(ex.Message);
     sMsg.appendAscii("\"");
-    OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
+    OSL_FAIL(::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
 }
 
 #endif

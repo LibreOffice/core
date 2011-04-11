@@ -44,8 +44,8 @@ class FuMarkRect : public FuPoor
  protected:
     Point           aBeginPos;
     Rectangle       aZoomRect;
-    BOOL            bVisible;
-    BOOL            bStartDrag;
+    sal_Bool            bVisible;
+    sal_Bool            bStartDrag;
     ScRangeListRef  aSourceRange;
 
  public:
@@ -53,7 +53,7 @@ class FuMarkRect : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuMarkRect();
 
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
 
     virtual void ScrollStart();
     virtual void ScrollEnd();
@@ -63,10 +63,10 @@ class FuMarkRect : public FuPoor
 
     virtual void ForcePointer(const MouseEvent* pMEvt);
 
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
-    virtual BYTE Command(const CommandEvent& rCEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_uInt8 Command(const CommandEvent& rCEvt);
 };
 
 

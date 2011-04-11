@@ -48,19 +48,20 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 
 using namespace padmin;
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace comphelper;
+
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
 class MyApp : public Application
 {
 public:
-    void            Main();
-    virtual USHORT  Exception( USHORT nError );
+    int Main();
+    virtual sal_uInt16  Exception( sal_uInt16 nError );
 
     static void ReadStringHook( String& );
 };
@@ -83,7 +84,7 @@ void MyApp::ReadStringHook( String& rStr )
 
 // -----------------------------------------------------------------------
 
-USHORT MyApp::Exception( USHORT nError )
+sal_uInt16 MyApp::Exception( sal_uInt16 nError )
 {
     switch( nError & EXC_MAJORTYPE )
     {
@@ -94,7 +95,7 @@ USHORT MyApp::Exception( USHORT nError )
     return 0;
 }
 
-void MyApp::Main()
+int MyApp::Main()
 {
     PADialog* pPADialog;
 
@@ -129,8 +130,8 @@ void MyApp::Main()
      *  Create UCB.
      */
     Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    aArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[ 1 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bSuccess =
 #endif
@@ -150,10 +151,10 @@ void MyApp::Main()
 
     if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
     {
-        BOOL bQuitApp;
+        sal_Bool bQuitApp;
         if( !InitAccessBridge( true, bQuitApp ) )
             if( bQuitApp )
-                return;
+                return EXIT_FAILURE;
     }
 
     // initialize test-tool library (if available)
@@ -161,7 +162,7 @@ void MyApp::Main()
 
     ResMgr::SetReadStringHook( MyApp::ReadStringHook );
 
-    pPADialog = PADialog::Create( NULL , FALSE );
+    pPADialog = PADialog::Create( NULL , sal_False );
     Application::SetDisplayName( pPADialog->GetText() );
     pPADialog->SetIcon(501);
     pPADialog->Execute();
@@ -174,6 +175,7 @@ void MyApp::Main()
      */
     ::ucbhelper::ContentBroker::deinitialize();
 
+    return EXIT_SUCCESS;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

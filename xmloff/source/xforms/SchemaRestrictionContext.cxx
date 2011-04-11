@@ -34,7 +34,7 @@
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmlnmspe.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -94,7 +94,7 @@ static SvXMLTokenMapEntry aChildren[] =
 
 SchemaRestrictionContext::SchemaRestrictionContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     Reference<com::sun::star::xforms::XDataTypeRepository>& rRepository,
     const OUString& sTypeName ) :
@@ -132,7 +132,7 @@ void SchemaRestrictionContext::CreateDataType()
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "exception during type creation" );
+        OSL_FAIL( "exception during type creation" );
     }
     DBG_ASSERT( mxDataType.is(), "can't create type" );
 }
@@ -357,7 +357,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
         break;
 
     default:
-        DBG_ERROR( "unknown facet" );
+        OSL_FAIL( "unknown facet" );
     }
 
     // finally, set the property

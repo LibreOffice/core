@@ -106,9 +106,9 @@ public:
     ERRTYPE( const ERRTYPE & rErr ) { nError = rErr.nError; };
     ERRTYPE& operator = ( const ERRTYPE & rError );
     operator  sal_uInt32() const { return( nError ); }
-    BOOL IsError() const     { return( nError <= ERR_ERROREND ); }
-    BOOL IsOk() const        { return( !IsError() ); }
-    BOOL IsWarning() const   {
+    sal_Bool IsError() const     { return( nError <= ERR_ERROREND ); }
+    sal_Bool IsOk() const        { return( !IsError() ); }
+    sal_Bool IsWarning() const   {
         return( nError >= ERR_WARNINGSTART && nError <= ERR_WARNINGEND );
     };
     void    Clear(){ nError = ERR_OK; }

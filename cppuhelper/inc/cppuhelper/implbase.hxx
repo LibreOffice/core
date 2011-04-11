@@ -179,8 +179,8 @@ namespace cppu \
 struct ClassData##N : public ClassDataBase \
 { \
     Type_Offset arType2Offset[ N ]; \
-    ClassData##N( sal_Int32 nClassCode ) SAL_THROW( () ) \
-        : ClassDataBase( nClassCode ) \
+    ClassData##N( sal_Int32 nInClassCode ) SAL_THROW( () ) \
+        : ClassDataBase( nInClassCode ) \
         {} \
 }; \
 template< __CLASS_IFC##N > \

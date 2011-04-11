@@ -1,0 +1,105 @@
+# Welcome to the mkid language mapper.
+#
+# The format of each line is:
+#
+#       <pattern> <language> [options]
+#
+# Filenames are matched top-to-bottom against the patterns, and the
+# first match is chosen.  The special language `IGNORE' means that
+# this file should be ignored by mkid.  The options are
+# language-specific command-line options to mkid.
+#
+# If a file name doesn't match any pattern, it is assigned the default
+# language.  The default language may be specified here with the
+# special pattern `**', or overridden from the mkid command-line with
+# the `--default-lang=LANG' option.
+#
+# The special pattern `***' means to include the named file that
+# immediately follows.  If no file is named, then the default system
+# language mapper file (i.e., this file) is included.
+
+# Default language
+**          IGNORE  # Although this is listed first,
+                # the default language pattern is
+                # logically matched last.
+
+# Backup files
+*~          IGNORE
+*.bak           IGNORE
+*.bk[0-9]       IGNORE
+
+# SCCS files
+[sp].*          IGNORE
+
+# C dependencies created by automake
+*/.deps/*       IGNORE
+
+*.h         C
+*.h.in          C
+*.H         C++
+*.hh            C++
+*.hpp           C++
+*.hxx           C++
+
+*.l         C
+*.lex           C
+*.y         C
+*.yacc          C
+
+*.c         C
+*.C         C++
+*.cc            C++
+*.cpp           C++
+*.cxx           C++
+
+*.java          Java
+
+ChangeLog*      Cdoc
+
+*.[sS]          asm --comment=;
+*.asm           asm --comment=;
+
+# [nt]roff
+*.[0-9]         roff
+*.ms            roff
+*.me            roff
+*.mm            roff
+
+*.tex           TeX
+*.ltx           TeX
+*.texi          texinfo
+*.texinfo       texinfo
+
+# portable object (i18n)
+*.po            po
+
+*.el            lisp
+*.elc           lisp
+*.lisp          lisp
+*.scm           lisp
+
+*.am            make
+Makefile        make
+Makefile.*      make
+
+*.doc           text
+*.txt           text
+
+*.m4            m4
+
+*.pl            perl
+*.pm            perl
+
+*.gz            FILTER gzip -d <%s
+*.Z         FILTER gzip -d <%s
+
+######### OOo-specific stuff #######################################
+
+# Treat OOo resource header files as C files
+*.hrc           C
+# Treat OOo header files generated from *.idl as C++ files
+*.hdl           C++
+# Treat OOo resource files as C files
+*.src           C
+# Treat OOo *.mk files as makefiles
+*.mk            make

@@ -71,7 +71,7 @@ SdTabTemplateDlg::SdTabTemplateDlg( Window* pParent,
                                 SfxStyleSheetBase& rStyleBase,
                                 SdrModel* pModel,
                                 SdrView* pView ) :
-        SfxStyleDialog      ( pParent, SdResId( TAB_TEMPLATE ), rStyleBase, FALSE ),
+        SfxStyleDialog      ( pParent, SdResId( TAB_TEMPLATE ), rStyleBase, sal_False ),
         rDocShell           ( *pDocShell ),
         pSdrView            ( pView ),
         pColorTab           ( pModel->GetColorTable() ),
@@ -122,7 +122,7 @@ SdTabTemplateDlg::~SdTabTemplateDlg()
 
 // -----------------------------------------------------------------------
 
-void SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch( nId )

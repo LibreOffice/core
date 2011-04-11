@@ -33,7 +33,6 @@ PACKAGE = com$/sun$/star$/wizards$/letter
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
-#.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 JARFILES= unoil.jar jurt.jar ridl.jar juh.jar java_uno.jar java_uno_accessbridge commonwizards.jar
 
@@ -63,3 +62,11 @@ JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR : $(MISC)/letter.component
+
+$(MISC)/letter.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        letter.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)$(JARTARGET)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt letter.component

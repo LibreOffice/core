@@ -68,7 +68,8 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 //=========================================================================
 //
@@ -420,7 +421,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
                 else
                 {
                     // See com/sun/star/ucb/ContentInfo.idl
-                    DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
+                    OSL_FAIL( "UcbExplorerListBoxEntry::createNewContent - "
                                "Invlid type for bootstrap property!" );
                 }
             }
@@ -445,8 +446,8 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
             ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( ucbexplorer ) ) );
         StringInputDialog* pDlg = new StringInputDialog(
                                             *xManager.get(),
-                                            OUString::createFromAscii(
-                                                "Document Data Source URL" ),
+                                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                "Document Data Source URL" )),
                                             OUString() );
         USHORT nRet = pDlg->Execute();
         if ( nRet == RET_OK )
@@ -456,7 +457,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
             OUString aSourceURL( pDlg->GetValue() );
             if ( aSourceURL.getLength() == 0 )
             {
-                DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
+                OSL_FAIL( "UcbExplorerListBoxEntry::createNewContent - "
                                "No document data URL!" );
                 return FALSE;
             }
@@ -470,8 +471,8 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
                 {
                     uno::Reference< XInteractionHandler > xInteractionHandler(
                         pBroker->getServiceManager()->createInstance(
-                                OUString::createFromAscii(
-                                    "com.sun.star.task.InteractionHandler" ) ),
+                                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.task.InteractionHandler" )) ),
                         UNO_QUERY );
 
                     uno::Reference< XProgressHandler > xProgressHandler
@@ -490,7 +491,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
             }
             catch ( ContentCreationException const & )
             {
-                DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
+                OSL_FAIL( "UcbExplorerListBoxEntry::createNewContent - "
                                "No content for document data!" );
                 return FALSE;
             }
@@ -587,7 +588,7 @@ void UcbExplorerTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
                 {
                     Sequence< OUString > aPropertyNames( 0 );
 //                    OUString* pNames = aPropertyNames.getArray();
-//                    pNames[ 0 ] = OUString::createFromAscii( "Title" );
+//                    pNames[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
 
                     uno::Reference< XResultSet > xResultSet
                         = pEntry->m_aContent.createCursor(
@@ -689,7 +690,7 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
             {
                 Property aProp =
                     pEntry->m_aContent.getProperties()->getPropertyByName(
-                                        OUString::createFromAscii( "Title" ) );
+                                        OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) );
                 bEnable = !( aProp.Attributes & PropertyAttribute::READONLY );
             }
             catch( UnknownPropertyException const & )
@@ -719,8 +720,8 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                 pMenu->EnableItem( MENU_DELETE,
                                    pEntry->m_aContent
                                         .getCommands()->hasCommandByName(
-                                        OUString::createFromAscii(
-                                            "delete" ) ) );
+                                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                            "delete" )) ) );
             }
             catch ( CommandAbortedException const & )
             {
@@ -750,7 +751,7 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                     try
                     {
                         pEntry->m_aContent.getPropertyValue(
-                                    OUString::createFromAscii( "Title" ) )
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) )
                                     >>= aNewTitle;
                     }
                     catch ( CommandAbortedException const & )
@@ -769,7 +770,7 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                     StringInputDialog* pDlg
                             = new StringInputDialog(
                                     *xManager.get(),
-                                    OUString::createFromAscii( "Title" ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
                                     aNewTitle );
 
                     USHORT nRet = pDlg->Execute();
@@ -794,7 +795,7 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                     try
                     {
                         pEntry->m_aContent.setPropertyValue(
-                                    OUString::createFromAscii( "Title" ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
                                     aValue );
                         bOK = sal_True;
                     }
@@ -818,7 +819,7 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                         try
                         {
                             pEntry->m_aContent.getPropertyValue(
-                                OUString::createFromAscii( "TargetURL" ) )
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL")) )
                                     >>= aTargetURL;
                         }
                         catch ( CommandAbortedException const & )
@@ -836,7 +837,7 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                         if ( aTargetURL.getLength() > 0 )
                         {
                             // Insert link.
-                            aText += OUString::createFromAscii( " --> " );
+                            aText += OUString(RTL_CONSTASCII_USTRINGPARAM(" --> "));
                             aText += aTargetURL;
                         }
 
@@ -853,7 +854,7 @@ void UcbExplorerTreeListBox::Command( const CommandEvent& rCEvt )
                     try
                     {
                         pEntry->m_aContent.executeCommand(
-                                    OUString::createFromAscii( "delete" ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                                     makeAny( sal_True ) );
                     }
                     catch ( CommandAbortedException const & )
@@ -917,9 +918,9 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
     {
         OUString aTitle;
         rContent.getPropertyValue(
-                        OUString::createFromAscii( "Title" ) ) >>= aTitle;
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) ) >>= aTitle;
         if ( !aTitle.getLength() )
-            aTitle = OUString::createFromAscii( "/" );
+            aTitle = OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
             UcbExplorerListBoxEntry* pEntry = 0;
 
@@ -940,7 +941,7 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
             try
             {
                 rContent.getPropertyValue(
-                    OUString::createFromAscii( "TargetURL" ) ) >>= aTargetURL;
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL")) ) >>= aTargetURL;
             }
             catch ( CommandAbortedException const & )
             {
@@ -957,7 +958,7 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
             if ( aTargetURL.getLength() > 0 )
             {
                 // Insert link.
-                aTitle += OUString::createFromAscii( " --> " );
+                aTitle += OUString(RTL_CONSTASCII_USTRINGPARAM(" --> "));
                 aTitle += aTargetURL;
                 pEntry = static_cast< UcbExplorerListBoxEntry * >(
                                 SvTreeListBox::InsertEntry( aTitle,
@@ -1007,8 +1008,8 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
         {
             uno::Reference< XInteractionHandler > xInteractionHandler(
                 pBroker->getServiceManager()->createInstance(
-                        OUString::createFromAscii(
-                            "com.sun.star.task.InteractionHandler" ) ),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.task.InteractionHandler" )) ),
                 UNO_QUERY );
 
             uno::Reference< XProgressHandler > xProgressHandler
@@ -1084,7 +1085,7 @@ void MyApp::Main()
             cppu::defaultBootstrap_InitialComponentContext() );
         if ( !xCtx.is() )
         {
-            DBG_ERROR( "Error creating initial component context!" );
+            OSL_FAIL( "Error creating initial component context!" );
             return;
         }
 
@@ -1093,13 +1094,13 @@ void MyApp::Main()
 
         if ( !xFac.is() )
         {
-            DBG_ERROR( "No service manager!" );
+            OSL_FAIL( "No service manager!" );
             return;
         }
     }
     catch ( com::sun::star::uno::Exception const & )
     {
-        DBG_ERROR( "Exception during creation of initial component context!" );
+        OSL_FAIL( "Exception during creation of initial component context!" );
         return;
     }
 
@@ -1114,23 +1115,23 @@ void MyApp::Main()
 #if 1
     // Init UCB (Read configuration from registry)
     Sequence< Any > aArgs( 2 );
-    aArgs[ 0 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    aArgs[ 0 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[ 1 ] <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
     sal_Bool bSuccess = ::ucbhelper::ContentBroker::initialize( xFac, aArgs );
 #else
     // Init UCB (Use provided configuration data)
     ::ucbhelper::ContentProviderDataList aProviders;
     aProviders.push_back(
         ::ucbhelper::ContentProviderData(
-            OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ),
-            OUString::createFromAscii( "file" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider")),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("file")),
             OUString() ) );
     sal_Bool bSuccess = ::ucbhelper::ContentBroker::initialize( xFac, aProviders );
 #endif
 
     if ( !bSuccess )
     {
-        DBG_ERROR( "Error creating UCB!" );
+        OSL_FAIL( "Error creating UCB!" );
         return;
     }
 

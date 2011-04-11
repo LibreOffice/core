@@ -30,17 +30,8 @@
 #include "precompiled_lingucomponent.hxx"
 
 #if defined(WNT)
-#include <tools/prewin.h>
+#include <windows.h>
 #endif
-
-#if defined(WNT)
-#include <Windows.h>
-#endif
-
-#if defined(WNT)
-#include <tools/postwin.h>
-#endif
-
 
 #include <osl/thread.h>
 #include <osl/file.hxx>
@@ -51,6 +42,7 @@
 #include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
+#include <rtl/tencinfo.h>
 #include <linguistic/misc.hxx>
 
 #include <set>
@@ -99,7 +91,7 @@ rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName )
     if (nShortLen < nShortBufSize) // conversion successful?
         aRes = rtl::OString( OU2ENC( rtl::OUString( aShortBuffer, nShortLen ), osl_getThreadTextEncoding()) );
     else
-        DBG_ERROR( "Win_GetShortPathName: buffer to short" );
+        OSL_FAIL( "Win_GetShortPathName: buffer to short" );
 
     return aRes;
 }
@@ -124,9 +116,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     rtl::OUString aSystemPrefix;
     rtl::OUString aSystemSuffix;
 #endif
-    bool bSpell = false;
-    bool bHyph  = false;
-    bool bThes  = false;
     if (strcmp( pDicType, "DICT" ) == 0)
     {
         aFormatName     = A2OU("DICT_SPELL");
@@ -135,7 +124,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemDir      = A2OU( DICT_SYSTEM_DIR );
         aSystemSuffix       = aDicExtension;
 #endif
-        bSpell = true;
     }
     else if (strcmp( pDicType, "HYPH" ) == 0)
     {
@@ -146,7 +134,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemPrefix       = A2OU( "hyph_" );
         aSystemSuffix       = aDicExtension;
 #endif
-        bHyph = true;
     }
     else if (strcmp( pDicType, "THES" ) == 0)
     {
@@ -157,7 +144,6 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         aSystemPrefix       = A2OU( "th_" );
         aSystemSuffix       = A2OU( "_v2.dat" );
 #endif
-        bThes = true;
     }
 
 
@@ -254,7 +240,7 @@ void MergeNewStyleDicsAndOldStyleDics(
 
             if (nLang == LANGUAGE_DONTKNOW || nLang == LANGUAGE_NONE)
             {
-                DBG_ERROR( "old style dictionary with invalid language found!" );
+                OSL_FAIL( "old style dictionary with invalid language found!" );
                 continue;
             }
 
@@ -264,9 +250,29 @@ void MergeNewStyleDicsAndOldStyleDics(
         }
         else
         {
-            DBG_ERROR( "old style dictionary with no language found!" );
+            OSL_FAIL( "old style dictionary with no language found!" );
         }
     }
+}
+
+
+rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset)
+{
+    // default result: used to indicate that we failed to get the proper encoding
+    rtl_TextEncoding eRet = RTL_TEXTENCODING_DONTKNOW;
+
+    if (pCharset)
+    {
+        eRet = rtl_getTextEncodingFromMimeCharset(pCharset);
+        if (eRet == RTL_TEXTENCODING_DONTKNOW)
+            eRet = rtl_getTextEncodingFromUnixCharset(pCharset);
+        if (eRet == RTL_TEXTENCODING_DONTKNOW)
+        {
+            if (strcmp("ISCII-DEVANAGARI", pCharset) == 0)
+                eRet = RTL_TEXTENCODING_ISCII_DEVANAGARI;
+        }
+    }
+    return eRet;
 }
 
 //////////////////////////////////////////////////////////////////////

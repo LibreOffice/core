@@ -50,7 +50,7 @@ interface XLayoutContainer: com::sun::star::container::XChild
     /** Read/modify some child layout properties. XPropertySet provides a
        rich API that allows, e.g., for introspection.
        Should rarely be a need to use; containers shall provide an interface
-       for setting properties more confortably. */
+       for setting properties more comfortably. */
     com::sun::star::beans::XPropertySet getChildProperties(
         [in] com::sun::star::awt::XLayoutConstrains Child );
 

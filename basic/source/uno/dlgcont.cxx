@@ -41,6 +41,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include "com/sun/star/resource/XStringResourceWithStorage.hpp"
 #include "com/sun/star/resource/XStringResourceWithLocation.hpp"
+#include "com/sun/star/document/XGraphicObjectResolver.hpp"
 #include "dlgcont.hxx"
 #include "sbmodule.hxx"
 #include <comphelper/processfactory.hxx>
@@ -69,10 +70,13 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 
+using ::rtl::OUString;
+
 using com::sun::star::uno::Reference;
+
+#define GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 
 //============================================================================
 // Implementation class SfxDialogLibraryContainer
@@ -140,7 +144,7 @@ bool writeOasis2OOoLibraryElement(
 
     if (! xSMgr.is())
     {
-        return FALSE;
+        return sal_False;
     }
 
     Reference< xml::sax::XParser > xParser(
@@ -162,7 +166,7 @@ bool writeOasis2OOoLibraryElement(
 
     if ( !xParser.is() || !xWriter.is() )
     {
-        return FALSE;
+        return sal_False;
     }
 
     Sequence<Any> aArgs( 1 );
@@ -183,7 +187,7 @@ bool writeOasis2OOoLibraryElement(
 
     xParser->parseStream( source );
 
-    return TRUE;
+    return sal_True;
 }
 
 void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
@@ -202,13 +206,13 @@ void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
 
     Reference< XInputStream > xInput( xISP->createInputStream() );
 
-    bool bComplete = FALSE;
+    bool bComplete = sal_False;
     if ( mbOasis2OOoFormat )
     {
         bComplete = writeOasis2OOoLibraryElement( xInput, xOutput );
     }
 
-    if ( bComplete == FALSE )
+    if ( bComplete == sal_False )
     {
         Sequence< sal_Int8 > bytes;
         sal_Int32 nRead = xInput->readBytes( bytes, xInput->available() );
@@ -223,6 +227,35 @@ void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
         }
     }
     xInput->closeInput();
+}
+
+void lcl_deepInspectForEmbeddedImages( const Reference< XInterface >& xIf,  std::vector< rtl::OUString >& rvEmbedImgUrls )
+{
+    static rtl::OUString sImageURL= OUString(RTL_CONSTASCII_USTRINGPARAM( "ImageURL" ) );
+    Reference< beans::XPropertySet > xProps( xIf, UNO_QUERY );
+    if ( xProps.is() )
+    {
+
+        if ( xProps->getPropertySetInfo()->hasPropertyByName( sImageURL ) )
+        {
+            rtl::OUString sURL;
+            xProps->getPropertyValue( sImageURL ) >>= sURL;
+            if ( sURL.getLength() && sURL.compareToAscii( GRAPHOBJ_URLPREFIX, RTL_CONSTASCII_LENGTH( GRAPHOBJ_URLPREFIX ) ) == 0 )
+                rvEmbedImgUrls.push_back( sURL );
+        }
+    }
+    Reference< XNameContainer > xContainer( xIf, UNO_QUERY );
+    if ( xContainer.is() )
+    {
+        Sequence< rtl::OUString > sNames = xContainer->getElementNames();
+        sal_Int32 nContainees = sNames.getLength();
+        for ( sal_Int32 index = 0; index < nContainees; ++index )
+        {
+            Reference< XInterface > xCtrl;
+            xContainer->getByName( sNames[ index ] ) >>= xCtrl;
+            lcl_deepInspectForEmbeddedImages( xCtrl, rvEmbedImgUrls );
+        }
+    }
 }
 
 void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< embed::XStorage >& xStorage ) throw ( RuntimeException )
@@ -247,12 +280,60 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
         {
             // if we cannot get the version then the
             // Oasis2OOoTransformer will not be used
-            OSL_ASSERT(FALSE);
+            OSL_ASSERT(sal_False);
         }
     }
 
     SfxLibraryContainer::storeLibrariesToStorage( xStorage );
 
+    // we need to export out any embedded image object(s)
+    // associated with any Dialogs. First, we need to actually gather any such urls
+    // for each dialog in this container
+    Sequence< OUString > sLibraries = getElementNames();
+    for ( sal_Int32 i=0; i < sLibraries.getLength(); ++i )
+    {
+        // libraries will already be loaded from above
+        Reference< XNameContainer > xLib;
+        getByName( sLibraries[ i ] ) >>= xLib;
+        if ( xLib.is() )
+        {
+            Sequence< OUString > sDialogs = xLib->getElementNames();
+            sal_Int32 nDialogs( sDialogs.getLength() );
+            for ( sal_Int32 j=0; j < nDialogs; ++j )
+            {
+                // Each Dialog has an associated xISP
+                Reference< io::XInputStreamProvider > xISP;
+                xLib->getByName( sDialogs[ j ] ) >>= xISP;
+                if ( xISP.is() )
+                {
+                    Reference< io::XInputStream > xInput( xISP->createInputStream() );
+                    Reference< XNameContainer > xDialogModel( mxMSF->createInstance
+                        ( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
+                    Reference< XComponentContext > xContext;
+                    Reference< beans::XPropertySet > xProps( mxMSF, UNO_QUERY );
+                    OSL_ASSERT( xProps.is() );
+                    OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+                    ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, mxOwnerDocument );
+                    std::vector< rtl::OUString > vEmbeddedImageURLs;
+                    lcl_deepInspectForEmbeddedImages( Reference< XInterface >( xDialogModel, UNO_QUERY ),  vEmbeddedImageURLs );
+                    if ( vEmbeddedImageURLs.size() )
+                    {
+                        // Export the images to the storage
+                        Sequence< Any > aArgs( 1 );
+                        aArgs[ 0 ] <<= xStorage;
+                        Reference< document::XGraphicObjectResolver > xGraphicResolver( mxMSF->createInstanceWithArguments(  OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Svx.GraphicExportHelper" ) ), aArgs ), UNO_QUERY );
+                        std::vector< rtl::OUString >::iterator it = vEmbeddedImageURLs.begin();
+                        std::vector< rtl::OUString >::iterator it_end = vEmbeddedImageURLs.end();
+                        if ( xGraphicResolver.is() )
+                        {
+                            for ( sal_Int32 count = 0; it != it_end; ++it, ++count )
+                                xGraphicResolver->resolveGraphicObjectURL( *it );
+                        }
+                    }
+                }
+            }
+        }
+    }
     mbOasis2OOoFormat = sal_False;
 }
 
@@ -268,7 +349,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     //Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
     //if( !xMSF.is() )
     //{
-    //  OSL_ENSURE( 0, "### couln't get ProcessServiceFactory\n" );
+    //  OSL_FAIL( "### couln't get ProcessServiceFactory\n" );
     //  return aRetAny;
     //}
 
@@ -276,7 +357,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
     if( !xParser.is() )
     {
-        OSL_ENSURE( 0, "### couln't create sax parser component\n" );
+        OSL_FAIL( "### couln't create sax parser component\n" );
         return aRetAny;
     }
 
@@ -284,7 +365,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
         ( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
     if( !xDialogModel.is() )
     {
-        OSL_ENSURE( 0, "### couln't create com.sun.star.awt.UnoControlDialogModel component\n" );
+        OSL_FAIL( "### couln't create com.sun.star.awt.UnoControlDialogModel component\n" );
         return aRetAny;
     }
 
@@ -328,9 +409,9 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     }
     catch( Exception& )
     {
-        OSL_ENSURE( 0, "Parsing error\n" );
+        OSL_FAIL( "Parsing error\n" );
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFile );
-        ULONG nErrorCode = ERRCODE_IO_GENERAL;
+        sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
         return aRetAny;
     }

@@ -60,11 +60,6 @@ class XMLDocumentWrapper_XmlSecImpl : public cppu::WeakImplHelper4
  *  Converts SAX events into a libxml2 document, converts the document back
  *  into SAX event stream, and manipulate nodes in the document.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XXMLDocumentWrapper,
- *          XDocumentHandler, XCompressedDocumentHandler,
- *          XServiceInfo
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com

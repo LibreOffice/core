@@ -58,7 +58,7 @@ using osl::FileBase;
 //
 //------------------------------------------------------------------------
 
-const OUString BACKSLASH = OUString::createFromAscii( "\\" );
+const OUString BACKSLASH(RTL_CONSTASCII_USTRINGPARAM( "\\" ));
 
 //------------------------------------------------------------------------
 // ctor
@@ -94,7 +94,7 @@ void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirect
 
         if ( ::osl::FileBase::E_None != rc )
             throw IllegalArgumentException(
-                OUString::createFromAscii( "directory is not a valid file url" ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "directory is not a valid file url" )),
                 static_cast< XFolderPicker* >( m_pFolderPicker ),
                 1 );
 

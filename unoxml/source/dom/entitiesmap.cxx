@@ -26,12 +26,17 @@
  *
  ************************************************************************/
 
-#include "entitiesmap.hxx"
+#include <entitiesmap.hxx>
+
+#include <documenttype.hxx>
+
 
 namespace DOM
 {
-    CEntitiesMap::CEntitiesMap(const CDocumentType* aDocType)
-        : m_pDocType(aDocType)
+    CEntitiesMap::CEntitiesMap(::rtl::Reference<CDocumentType> const& pDocType,
+            ::osl::Mutex & rMutex)
+        : m_pDocType(pDocType)
+        , m_rMutex(rMutex)
     {
     }
 
@@ -40,62 +45,91 @@ namespace DOM
     */
     sal_Int32 SAL_CALL CEntitiesMap::getLength() throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::getLength: not implemented (#i113683#)");
         return 0;
     }
 
     /**
     Retrieves a node specified by local name
     */
-  Reference< XNode > SAL_CALL CEntitiesMap::getNamedItem(const OUString& /*name*/) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CEntitiesMap::getNamedItem(OUString const& /*name*/) throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::getNamedItem: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
     /**
     Retrieves a node specified by local name and namespace URI.
     */
-  Reference< XNode > SAL_CALL CEntitiesMap::getNamedItemNS(const OUString& /*namespaceURI*/,const OUString& /*localName*/) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CEntitiesMap::getNamedItemNS(
+        OUString const& /*namespaceURI*/, OUString const& /*localName*/)
+    throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::getNamedItemNS: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
     /**
     Returns the indexth item in the map.
     */
-  Reference< XNode > SAL_CALL CEntitiesMap::item(sal_Int32 /*index*/) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CEntitiesMap::item(sal_Int32 /*index*/) throw (RuntimeException)
     {
+        OSL_ENSURE(false, "CEntitiesMap::item: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
     /**
     Removes a node specified by name.
     */
-  Reference< XNode > SAL_CALL CEntitiesMap::removeNamedItem(const OUString& /*name*/) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CEntitiesMap::removeNamedItem(OUString const& /*name*/)
+    throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::removeNamedItem: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
     /**
     // Removes a node specified by local name and namespace URI.
     */
-  Reference< XNode > SAL_CALL CEntitiesMap::removeNamedItemNS(const OUString& /*namespaceURI*/, const OUString& /*localName*/) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CEntitiesMap::removeNamedItemNS(
+        OUString const& /*namespaceURI*/, OUString const& /*localName*/)
+    throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::removeNamedItemNS: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
     /**
     // Adds a node using its nodeName attribute.
     */
-  Reference< XNode > SAL_CALL CEntitiesMap::setNamedItem(const Reference< XNode >& /*arg*/) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CEntitiesMap::setNamedItem(Reference< XNode > const& /*arg*/)
+    throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::setNamedItem: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
     /**
     Adds a node using its namespaceURI and localName.
     */
-    Reference< XNode > SAL_CALL CEntitiesMap::setNamedItemNS(const Reference< XNode >& /*arg*/) throw (RuntimeException)
+    Reference< XNode > SAL_CALL
+    CEntitiesMap::setNamedItemNS(Reference< XNode > const& /*arg*/)
+    throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::setNamedItemNS: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 }

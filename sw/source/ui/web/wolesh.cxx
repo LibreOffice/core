@@ -62,7 +62,7 @@ SwWebOleShell::SwWebOleShell(SwView &_rView) :
     SetHelpId(SW_OLESHELL);
 }
 
-__EXPORT SwWebOleShell::~SwWebOleShell()
+SwWebOleShell::~SwWebOleShell()
 {
 }
 

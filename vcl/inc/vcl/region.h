@@ -50,7 +50,7 @@ struct ImplRegionHandle
     Region*             mpRegion;
     ImplRegionBand*     mpCurrRectBand;
     ImplRegionBandSep*  mpCurrRectBandSep;
-    BOOL                mbFirst;
+    sal_Bool                mbFirst;
 };
 
 // ------------------
@@ -73,8 +73,8 @@ public:
     ImplRegionBase( int nCount = 1 ); // TODO: replace manual refcounting
     virtual ~ImplRegionBase();
 public:
-    ULONG               mnRefCount;
-    ULONG               mnRectCount;
+    sal_uIntPtr             mnRefCount;
+    sal_uIntPtr             mnRectCount;
     PolyPolygon*        mpPolyPoly;
     basegfx::B2DPolyPolygon* mpB2DPolyPoly;
 };
@@ -99,14 +99,14 @@ public:
 
     void                CreateBandRange( long nYTop, long nYBottom );
     void                InsertBands( long nYTop, long nYBottom );
-    BOOL                InsertSingleBand( ImplRegionBand* mpImplRegionBand,
+    sal_Bool                InsertSingleBand( ImplRegionBand* mpImplRegionBand,
                                           long nYBandPosition );
-    BOOL                InsertLine( const Point & rFirstPoint,
+    sal_Bool                InsertLine( const Point & rFirstPoint,
                                     const Point & rSecondPoint,
                                     long nLineID );
-    BOOL                InsertPoint( const Point &rPoint,
+    sal_Bool                InsertPoint( const Point &rPoint,
                                      long nLineID,
-                                     BOOL bEndPoint, LineType eLineType );
+                                     sal_Bool bEndPoint, LineType eLineType );
 
     /** Insert one band either after another band or as the first or only
         band.  Both the forward as well as the backward links are updated.
@@ -126,7 +126,7 @@ public:
     void                XOr( long nLeft, long nTop, long nRight, long nBottom );
 
                         // remove emtpy rects
-    BOOL                OptimizeBandList();
+    sal_Bool                OptimizeBandList();
 
     friend SvStream&    operator>>( SvStream& rIStm, Region& rRegion );
     friend SvStream&    operator<<( SvStream& rOStm, const Region& rRegion );

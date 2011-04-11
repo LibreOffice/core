@@ -30,7 +30,7 @@
 #define SC_INSCLDLG_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
 
@@ -51,7 +51,7 @@ private:
     HelpButton      aBtnHelp;
 
 public:
-            ScInsertCellDlg( Window* pParent,BOOL bDisallowCellMove = FALSE );
+            ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove = false );
             ~ScInsertCellDlg();
 
     InsCellCmd GetInsCellCmd() const;

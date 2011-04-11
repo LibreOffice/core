@@ -84,6 +84,12 @@ published service TextColumns
      */
     [property]  boolean SeparatorLineIsOn;
     //------------------------------------------------------------------------
+    /** determines the style of the separator lines between the columns.
+        @see com::sun::star::text:ColumnSeparatorStyle
+            for the possible values.
+     */
+    [property, optional]  short SeparatorLineStyle;
+    //------------------------------------------------------------------------
 };
 
 //=============================================================================

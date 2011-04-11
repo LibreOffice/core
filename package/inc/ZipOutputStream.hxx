@@ -49,7 +49,7 @@ protected:
     ::std::vector < ZipEntry * >            aZipList;
     com::sun::star::uno::Sequence < sal_Int8 > aBuffer, aEncryptionBuffer;
     ::rtl::OUString     sComment;
-    Deflater            aDeflater;
+    ZipUtils::Deflater  aDeflater;
     rtlCipher           aCipher;
     rtlDigest           aDigest;
     CRC32               aCRC;

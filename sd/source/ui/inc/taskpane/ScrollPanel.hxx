@@ -57,10 +57,6 @@ class ScrollPanel
       public TreeNode
 {
 public:
-    /** Create a new sub tool panel with the given window as its
-        parent.  This will usually be a child window.
-    */
-    ScrollPanel (TreeNode* pParent);
     /** Create a new scroll panel which itself is the root of a TreeNode hierarchy
         parent.  This will usually be a child window.
     */
@@ -81,7 +77,7 @@ public:
     TitledControl* AddControl (
         ::std::auto_ptr<TreeNode> pControl,
         const String& rTitle,
-        ULONG nHelpId);
+        const rtl::OString& sHelpId);
 
     /** Add a control to the sub panel without a title bar.
     */

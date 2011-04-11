@@ -40,12 +40,12 @@
 #include "frmtool.hxx"
 
 
-USHORT SwEditShell::GetRedlineMode() const
+sal_uInt16 SwEditShell::GetRedlineMode() const
 {
     return GetDoc()->GetRedlineMode();
 }
 
-void SwEditShell::SetRedlineMode( USHORT eMode )
+void SwEditShell::SetRedlineMode( sal_uInt16 eMode )
 {
     if( eMode != GetDoc()->GetRedlineMode() )
     {
@@ -56,17 +56,17 @@ void SwEditShell::SetRedlineMode( USHORT eMode )
     }
 }
 
-BOOL SwEditShell::IsRedlineOn() const
+sal_Bool SwEditShell::IsRedlineOn() const
 {
     return GetDoc()->IsRedlineOn();
 }
 
-USHORT SwEditShell::GetRedlineCount() const
+sal_uInt16 SwEditShell::GetRedlineCount() const
 {
     return GetDoc()->GetRedlineTbl().Count();
 }
 
-const SwRedline& SwEditShell::GetRedline( USHORT nPos ) const
+const SwRedline& SwEditShell::GetRedline( sal_uInt16 nPos ) const
 {
     return *GetDoc()->GetRedlineTbl()[ nPos ];
 }
@@ -83,22 +83,22 @@ void lcl_InvalidateAll( ViewShell* pSh )
     } while ( pSh != pStop );
 }
 
-BOOL SwEditShell::AcceptRedline( USHORT nPos )
+sal_Bool SwEditShell::AcceptRedline( sal_uInt16 nPos )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    BOOL bRet = GetDoc()->AcceptRedline( nPos, true );
+    sal_Bool bRet = GetDoc()->AcceptRedline( nPos, true );
     if( !nPos && !::IsExtraData( GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
     return bRet;
 }
 
-BOOL SwEditShell::RejectRedline( USHORT nPos )
+sal_Bool SwEditShell::RejectRedline( sal_uInt16 nPos )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    BOOL bRet = GetDoc()->RejectRedline( nPos, true );
+    sal_Bool bRet = GetDoc()->RejectRedline( nPos, true );
     if( !nPos && !::IsExtraData( GetDoc() ) )
         lcl_InvalidateAll( this );
     EndAllAction();
@@ -106,9 +106,9 @@ BOOL SwEditShell::RejectRedline( USHORT nPos )
 }
 
 // Kommentar am Redline setzen
-BOOL SwEditShell::SetRedlineComment( const String& rS )
+sal_Bool SwEditShell::SetRedlineComment( const String& rS )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     FOREACHPAM_START(this)
         bRet = bRet || GetDoc()->SetRedlineComment( *PCURCRSR, rS );
     FOREACHPAM_END()
@@ -137,11 +137,11 @@ void SwEditShell::UpdateRedlineAttr()
 
     // suche das Redline zu diesem Data und returne die Pos im Array
     // USHRT_MAX wird returnt, falls nicht vorhanden
-USHORT SwEditShell::FindRedlineOfData( const SwRedlineData& rData ) const
+sal_uInt16 SwEditShell::FindRedlineOfData( const SwRedlineData& rData ) const
 {
     const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
 
-    for( USHORT i = 0, nCnt = rTbl.Count(); i < nCnt; ++i )
+    for( sal_uInt16 i = 0, nCnt = rTbl.Count(); i < nCnt; ++i )
         if( &rTbl[ i ]->GetRedlineData() == &rData )
             return i;
     return USHRT_MAX;

@@ -91,6 +91,39 @@ namespace cppu
 #pragma enable_warn
 #endif
 
+    /** Same as WeakComponentImplHelper3, except doesn't implement
+        addEventListener, removeEventListener and dispose.
+
+        This requires derived classes to implement those three methods.
+        This makes it possible to implement classes which are required to
+        implement methods from multiple bases which have different
+        addEventListener/removeEventListener signatures without triggering
+        the g++ overloaded-virtual warning
+    */
+    template< class Ifc1, class Ifc2, class Ifc3 >
+    class SAL_NO_VTABLE PartialWeakComponentImplHelper3
+        : public WeakComponentImplHelperBase
+        , public ::com::sun::star::lang::XTypeProvider
+        , public Ifc1, public Ifc2, public Ifc3
+    {
+        /** @internal */
+        struct cd : public rtl::StaticAggregate< class_data, ImplClassData3 < Ifc1, Ifc2, Ifc3, PartialWeakComponentImplHelper3<Ifc1, Ifc2, Ifc3> > > {};
+    public:
+        inline PartialWeakComponentImplHelper3( ::osl::Mutex & rMutex ) throw ()
+            : WeakComponentImplHelperBase( rMutex )
+            {}
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException)
+            { return WeakComponentImplHelper_query( rType, cd::get(), this, (WeakComponentImplHelperBase *)this ); }
+        virtual void SAL_CALL acquire() throw ()
+            { WeakComponentImplHelperBase::acquire(); }
+        virtual void SAL_CALL release() throw ()
+            { WeakComponentImplHelperBase::release(); }
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+            { return WeakComponentImplHelper_getTypes( cd::get() ); }
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException)
+            { return ImplHelper_getImplementationId( cd::get() ); }
+    };
+
     /** Implementation helper supporting ::com::sun::star::lang::XTypeProvider and
         ::com::sun::star::lang::XComponent.
 

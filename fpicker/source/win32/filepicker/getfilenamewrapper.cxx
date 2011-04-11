@@ -55,13 +55,13 @@ namespace /* private */
     //-----------------------------------------------
     class CurDirGuard
     {
-        BOOL m_bValid;
+        sal_Bool m_bValid;
         wchar_t* m_pBuffer;
         DWORD m_nBufLen;
 
     public:
         CurDirGuard()
-        : m_bValid( FALSE )
+        : m_bValid( sal_False )
         , m_pBuffer( NULL )
         , m_nBufLen( 0 )
         {
@@ -75,7 +75,7 @@ namespace /* private */
 
         ~CurDirGuard()
         {
-            BOOL bDirSet = FALSE;
+            bool bDirSet = false;
 
             if ( m_pBuffer )
             {

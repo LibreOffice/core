@@ -30,7 +30,6 @@
 // Here are included the messages of the folder /basic/source/app
 
 
-///////////////////////////////
 // Error messages which go to the result file.
 // *********************
 // ***  !!ATTENTION!!    ***
@@ -38,7 +37,6 @@
 // The numbers must NEVER(!) change,
 // because they are saved in the result files and a renewed display
 // would display new strings or no strings.
-///////////////////////////////
 
 String S_PROG_START
 {

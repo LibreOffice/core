@@ -47,7 +47,6 @@ public:
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
-    //liuchen 2009-7-27
     static sal_Int32 GetSupportedDialogCount();
 };
 

@@ -123,7 +123,7 @@ public:
                                             short nStart, short nNext,
                                             short nStop = SHRT_MAX )
                                     {
-                                        pJump[ (ULONG)nCol * nRows + nRow ].
+                                        pJump[ (sal_uLong)nCol * nRows + nRow ].
                                             SetJump( fBool, nStart, nNext, nStop);
                                     }
             void                GetJump( SCSIZE nCol, SCSIZE nRow, double& rBool,
@@ -141,19 +141,19 @@ public:
                                             nRow = 0;
                                         else if (nCols <= nCol || nRows <= nRow)
                                         {
-                                            DBG_ERROR("ScJumpMatrix::GetJump: dimension error");
+                                            OSL_FAIL("ScJumpMatrix::GetJump: dimension error");
                                             nCol = 0;
                                             nRow = 0;
                                         }
-                                        pJump[ (ULONG)nCol * nRows + nRow ].
+                                        pJump[ (sal_uLong)nCol * nRows + nRow ].
                                             GetJump( rBool, rStart, rNext, rStop);
                                     }
             void                SetAllJumps( double fBool,
                                             short nStart, short nNext,
                                             short nStop = SHRT_MAX )
                                     {
-                                        ULONG n = (ULONG)nCols * nRows;
-                                        for ( ULONG j=0; j<n; ++j )
+                                        sal_uLong n = (sal_uLong)nCols * nRows;
+                                        for ( sal_uLong j=0; j<n; ++j )
                                         {
                                             pJump[ j ].SetJump( fBool, nStart,
                                                     nNext, nStop);
@@ -162,7 +162,7 @@ public:
             void                SetJumpParameters( ScTokenVec* p )
                                     { pParams = p; }
             const ScTokenVec*   GetJumpParameters() const { return pParams; }
-            ScMatrix*           GetResultMatrix() const { return pMat; }
+            ScMatrix*           GetResultMatrix() const { return pMat.get(); }
             void                GetPos( SCSIZE& rCol, SCSIZE& rRow ) const
                                     {
                                         rCol = nCurCol;
@@ -195,7 +195,7 @@ public:
                                     {
                                         if ( nNewCols > nResMatCols || nNewRows > nResMatRows )
                                         {
-                                            pMat = pMat->CloneAndExtend( nNewCols, nNewRows );
+                                            pMat = pMat->CloneAndExtend( nNewCols, nNewRows, pMat->GetDensityType() );
                                             if ( nResMatCols < nNewCols )
                                             {
                                                 pMat->FillDouble( CreateDoubleError(

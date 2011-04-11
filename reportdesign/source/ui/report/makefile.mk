@@ -36,7 +36,6 @@ VISIBILITY_HIDDEN=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-# .INCLUDE : $(PRJ)$/util$/dll.pmk
 
 IMGLST_SRS=$(SRS)$/$(TARGET).srs
 # --- Files --------------------------------------------------------

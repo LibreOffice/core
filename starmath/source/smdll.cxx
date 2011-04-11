@@ -52,19 +52,17 @@
 
 
 
-BOOL SmDLL::bInitialized = FALSE;
+bool SmDLL::bInitialized = false;
 
-/*************************************************************************
-|*
-|* Initialisierung
-|*
-\************************************************************************/
+
+// Initialization
+
 void SmDLL::Init()
 {
     if ( bInitialized )
         return;
 
-    bInitialized = TRUE;
+    bInitialized = true;
 
     SfxObjectFactory& rFactory = SmDocShell::Factory();
 
@@ -88,17 +86,15 @@ void SmDLL::Init()
     SvxUndoRedoControl::RegisterControl( SID_REDO, pp );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pp );
 
-    SmToolBoxWrapper::RegisterChildWindow(TRUE);
-    SmCmdBoxWrapper::RegisterChildWindow(TRUE);
+    SmToolBoxWrapper::RegisterChildWindow(true);
+    SmCmdBoxWrapper::RegisterChildWindow(true);
 
-    ::sfx2::TaskPaneWrapper::RegisterChildWindow( FALSE, pp );
+    ::sfx2::TaskPaneWrapper::RegisterChildWindow( false, pp );
 }
 
-/*************************************************************************
-|*
-|* Deinitialisierung
-|*
-\************************************************************************/
+
+// Deinitialization
+
 void SmDLL::Exit()
 {
     // the SdModule must be destroyed

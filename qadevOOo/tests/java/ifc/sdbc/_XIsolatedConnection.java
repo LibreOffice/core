@@ -59,7 +59,7 @@ public class _XIsolatedConnection extends MultiMethodTest {
     * Test call the method with handler passed as object relation.
     * Then value returned is checked.<p>
     * Has OK status if not null value returned. <&nbsp>
-    * FAILED if exception occured, null value returned or object
+    * FAILED if exception occurred, null value returned or object
     * relation was not found.
     */
     public void _getIsolatedConnectionWithCompletion() throws StatusException {
@@ -86,7 +86,7 @@ public class _XIsolatedConnection extends MultiMethodTest {
     * Test call the method with handler passed as object relation.
     * Then value returned is checked.<p>
     * Has OK status if not null value returned. <&nbsp>
-    * FAILED if exception occured, null value returned or object
+    * FAILED if exception occurred, null value returned or object
     * relation was not found.
     */
     public void _getIsolatedConnection() throws StatusException {

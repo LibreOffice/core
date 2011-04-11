@@ -93,7 +93,7 @@ class SFX2_DLLPUBLIC SfxTemplateDialogWrapper : public SfxChildWindow
 {
 public:
                 SfxTemplateDialogWrapper
-                    (Window*,USHORT,SfxBindings*,SfxChildWinInfo*);
+                    (Window*,sal_uInt16,SfxBindings*,SfxChildWinInfo*);
                 SFX_DECL_CHILDWINDOW(SfxTemplateDialogWrapper);
 
     void            SetParagraphFamily();

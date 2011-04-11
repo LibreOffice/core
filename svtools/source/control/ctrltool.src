@@ -66,18 +66,6 @@ String STR_SVT_STYLE_BLACK_ITALIC
     Text [ en-US ] = "Black Italic" ;
 };
 
-/*
-Finnische Texte:
-    "Light",
-    "Light Kursivoitu",
-    "Normaali",
-    "Kursivoitu",
-    "Lihavoitu",
-    "Lihavoitu Kursivoitu",
-    "Black",
-    "Black Kursivoitu"
-*/
-
 String STR_SVT_FONTMAP_BOTH
 {
     Text [ en-US ] = "The same font will be used on both your printer and your screen." ;
@@ -107,38 +95,3 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
 {
     Text [ en-US ] = "This font has not been installed. The closest available font will be used.";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

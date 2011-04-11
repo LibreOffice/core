@@ -138,58 +138,47 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                             // parent)
                             if( bDataComesFromParent )
                             {
+                                Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram() );
                                 Reference< chart2::data::XDataProvider > xDataProvider( m_xChartDocument->getDataProvider());
-                                if( xDataProvider.is() &&
+                                if( xDataProvider.is() && xDiagram.is() &&
                                     DataSourceHelper::allArgumentsForRectRangeDetected( m_xChartDocument ))
                                 {
-                                    DiagramHelper::tTemplateWithServiceName aTempWithServ(
-                                        DiagramHelper::getTemplateForDiagram(
-                                            m_xChartDocument->getFirstDiagram(),
-                                            Reference< lang::XMultiServiceFactory >(
-                                                m_xChartDocument->getChartTypeManager(), uno::UNO_QUERY )));
-                                    if( aTempWithServ.first.is())
+                                    Reference< chart2::data::XDataSource > xDataSource(
+                                        DataSourceHelper::pressUsedDataIntoRectangularFormat( m_xChartDocument ));
+                                    Sequence< beans::PropertyValue > aArguments(
+                                        xDataProvider->detectArguments( xDataSource ));
+
+                                    OUString aOldRange;
+                                    beans::PropertyValue * pCellRange = 0;
+                                    for( sal_Int32 i=0; i<aArguments.getLength(); ++i )
                                     {
-                                        Reference< chart2::data::XDataSource > xDataSource(
-                                            DataSourceHelper::pressUsedDataIntoRectangularFormat( m_xChartDocument ));
-                                        Sequence< beans::PropertyValue > aArguments(
-                                            xDataProvider->detectArguments( xDataSource ));
-
-                                        OUString aOldRange;
-                                        beans::PropertyValue * pCellRange = 0;
-                                        for( sal_Int32 i=0; i<aArguments.getLength(); ++i )
+                                        if( aArguments[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")))
                                         {
-                                            if( aArguments[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")))
-                                            {
-                                                pCellRange = (aArguments.getArray() + i);
-                                                aArguments[i].Value >>= aOldRange;
-                                                break;
-                                            }
+                                            pCellRange = (aArguments.getArray() + i);
+                                            aArguments[i].Value >>= aOldRange;
+                                            break;
                                         }
-                                        if( pCellRange )
+                                    }
+                                    if( pCellRange )
+                                    {
+                                        // copy means add ranges, move means replace
+                                        if( rEvt.mnAction == DND_ACTION_COPY )
                                         {
-                                            // copy means add ranges, move means replace
-                                            if( rEvt.mnAction == DND_ACTION_COPY )
-                                            {
-                                                // @todo: using implcit knowledge that ranges can be
-                                                // merged with ";". This should be done more general
-                                                pCellRange->Value <<= (aOldRange + OUString( sal_Unicode(';')) + aRangeString );
-                                            }
-                                            // move means replace range
-                                            else
-                                            {
-                                                pCellRange->Value <<= aRangeString;
-                                            }
-
-                                            xDataSource.set( xDataProvider->createDataSource( aArguments ));
-                                            aTempWithServ.first->changeDiagramData(
-                                                m_xChartDocument->getFirstDiagram(),
-                                                xDataSource,
-                                                aArguments );
-
-                                            // always return copy state to avoid deletion of the
-                                            // dragged range
-                                            nResult = DND_ACTION_COPY;
+                                            // @todo: using implcit knowledge that ranges can be
+                                            // merged with ";". This should be done more general
+                                            pCellRange->Value <<= (aOldRange + OUString( sal_Unicode(';')) + aRangeString );
                                         }
+                                        // move means replace range
+                                        else
+                                        {
+                                            pCellRange->Value <<= aRangeString;
+                                        }
+
+                                        xDataSource.set( xDataProvider->createDataSource( aArguments ));
+                                        xDiagram->setDiagramData( xDataSource, aArguments );
+
+                                        // always return copy state to avoid deletion of the dragged range
+                                        nResult = DND_ACTION_COPY;
                                     }
                                 }
                             }

@@ -34,8 +34,6 @@
 #undef PolyPolygon
 #undef Polygon
 #undef Rectangle
-#undef BYTE
-#undef BOOL
 #undef DELETE
 
 /* Hilfe-Ids umbenennen */
@@ -233,9 +231,9 @@
 
 extern "C"
 {
-WIN_BOOL WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 );
-WIN_BOOL WINAPI WIN_Polygon( HDC hDC, CONST POINT * ppt, int ncnt );
-WIN_BOOL WINAPI WIN_PolyPolygon( HDC hDC, CONST POINT * ppt, LPINT npcnt, int ncnt );
+    BOOL WINAPI WIN_Rectangle( HDC hDC, int X1, int Y1, int X2, int Y2 );
+    BOOL WINAPI WIN_Polygon( HDC hDC, CONST POINT * ppt, int ncnt );
+    BOOL WINAPI WIN_PolyPolygon( HDC hDC, CONST POINT * ppt, LPINT npcnt, int ncnt );
 }
 
 #endif

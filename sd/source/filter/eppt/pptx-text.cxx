@@ -67,13 +67,13 @@ PortionObj::PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star
     mnFont              ( 0 ),
     mnAsianOrComplexFont( 0xffff ),
     mnTextSize          ( 0 ),
-    mbLastPortion       ( TRUE ),
+    mbLastPortion       ( sal_True ),
     mpText              ( NULL ),
     mpFieldEntry        ( NULL )
 {
     mXPropSet = rXPropSet;
 
-    ImplGetPortionValues( rFontCollection, FALSE );
+    ImplGetPortionValues( rFontCollection, sal_False );
 }
 
 PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRange,
@@ -88,7 +88,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
 {
     String aString( rXTextRange->getString() );
     String aURL;
-    BOOL bRTL_endingParen = FALSE;
+    sal_Bool bRTL_endingParen = sal_False;
 
     mnTextSize = aString.Len();
     if ( bLast )
@@ -118,14 +118,14 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
                 mpFieldEntry->aFieldUrl = aURL;
             }
         }
-        sal_Bool bSymbol = FALSE;
+        sal_Bool bSymbol = sal_False;
 
-        if ( bPropSetsValid && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), FALSE ) )
+        if ( bPropSetsValid && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), sal_False ) )
         {
             sal_Int16 nCharset = 0;
             mAny >>= nCharset;
             if ( nCharset == ::com::sun::star::awt::CharSet::SYMBOL )
-                bSymbol = TRUE;
+                bSymbol = sal_True;
         }
         if ( mpFieldEntry && ( nFieldType & 0x800000 ) )    // placeholder ?
         {
@@ -143,7 +143,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
             if ( bLast && pText[ aString.Len() - 1 ] == sal_Unicode(')') && rFontCollection.GetScriptDirection( aString ) == com::sun::star::i18n::ScriptDirection::RIGHT_TO_LEFT )
             {
                 mnTextSize++;
-                bRTL_endingParen = TRUE;
+                bRTL_endingParen = sal_True;
             }
             mpText = new sal_uInt16[ mnTextSize ];
             sal_uInt16 nChar;
@@ -190,7 +190,6 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
                         case 156:   nChar = 0x0153; break;// LATIN SMALL LIGATURE OE
                         case 158:   nChar = 0x017E; break;// LATIN SMALL LETTER Z WITH CARON
                         case 159:   nChar = 0x0178; break;// LATIN CAPITAL LETTER Y WITH DIAERESIS
-//                      case 222:   nChar = 0x00B6; break;// PILCROW SIGN / PARAGRAPH SIGN
                     }
                 }
                 mpText[ i ] = nChar;
@@ -203,7 +202,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
             mpText[ mnTextSize - 1 ] = 0xd;
 
         if ( bPropSetsValid )
-            ImplGetPortionValues( rFontCollection, TRUE );
+            ImplGetPortionValues( rFontCollection, sal_True );
     }
 }
 
@@ -505,7 +504,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             xFieldPropSet( aXTextField, ::com::sun::star::uno::UNO_QUERY );
                         if ( xFieldPropSet.is() )
                         {
-                            String aFieldKind( aXTextField->getPresentation( TRUE ) );
+                            String aFieldKind( aXTextField->getPresentation( sal_True ) );
                             if ( aFieldKind == String( RTL_CONSTASCII_USTRINGPARAM( "Date" ) ) )
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsFix" ) ) ), sal_True )
@@ -646,13 +645,13 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
 {
     mXPropSet = rXPropSet;
 
-    bExtendedParameters = FALSE;
+    bExtendedParameters = sal_False;
 
     nDepth = 0;
     nBulletFlags = 0;
     nParaFlags = 0;
 
-    ImplGetParagraphValues( rProv, FALSE );
+    ImplGetParagraphValues( rProv, sal_False );
 }
 
     ParagraphObj::ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContent,
@@ -662,7 +661,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
     mbFirstParagraph    ( aParaFlags.bFirstParagraph ),
     mbLastParagraph     ( aParaFlags.bLastParagraph )
 {
-    bExtendedParameters = FALSE;
+    bExtendedParameters = sal_False;
 
     nDepth = 0;
     nBulletFlags = 0;
@@ -701,7 +700,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
                 }
             }
         }
-        ImplGetParagraphValues( rProv, TRUE );//
+        ImplGetParagraphValues( rProv, sal_True );
     }
 }
 
@@ -789,7 +788,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
     ::com::sun::star::uno::Any aAny;
     if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "ParaLeftMargin" ) ) ) )
     {
-        sal_Int32 nVal;
+        sal_Int32 nVal(0);
         if ( aAny >>= nVal )
             nTextOfs = static_cast< sal_Int16 >( nVal / ( 2540.0 / 576 ) + 0.5 ) ;
     }
@@ -816,7 +815,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
             sal_Int32 nPropertyCount = aPropertySequence.getLength();
             if ( nPropertyCount )
             {
-                bExtendedParameters = TRUE;
+                bExtendedParameters = sal_True;
                 nBulletRealSize = 100;
                 nMappedNumType = 0;
 
@@ -890,7 +889,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "SymbolTextDistance" ) ) )
                             ||  ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Graphic" ) ) ) ) )
                         {
-                            DBG_ERROR( "Unbekanntes Property" );
+                            OSL_FAIL( "Unbekanntes Property" );
                         }
 #endif
                     }
@@ -911,7 +910,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 {
                                     nBulletId = rBuProv.GetId( aUniqueId, aBuGraSize );
                                     if ( nBulletId != 0xffff )
-                                        bExtendedBulletsUsed = TRUE;
+                                        bExtendedBulletsUsed = sal_True;
                                 }
                             }
                         }
@@ -945,49 +944,6 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                         if ( aFontDesc.Name.getLength() )
                         {
-/*
-                            if ( aFontDesc.CharSet != ::com::sun::star::awt::CharSet::SYMBOL )
-                            {
-                                switch ( cBulletId )
-                                {
-                                    // Currency
-                                    case 128:   cBulletId = 0x20AC; break;
-                                    // Punctuation and other
-                                    case 130:   cBulletId = 0x201A; break;// SINGLE LOW-9 QUOTATION MARK
-                                    case 131:   cBulletId = 0x0192; break;// LATIN SMALL LETTER F WITH HOOK
-                                    case 132:   cBulletId = 0x201E; break;// DOUBLE LOW-9 QUOTATION MARK
-                                                                          // LOW DOUBLE PRIME QUOTATION MARK
-                                    case 133:   cBulletId = 0x2026; break;// HORIZONTAL ELLIPSES
-                                    case 134:   cBulletId = 0x2020; break;// DAGGER
-                                    case 135:   cBulletId = 0x2021; break;// DOUBLE DAGGER
-                                    case 136:   cBulletId = 0x02C6; break;// MODIFIER LETTER CIRCUMFLEX ACCENT
-                                    case 137:   cBulletId = 0x2030; break;// PER MILLE SIGN
-                                    case 138:   cBulletId = 0x0160; break;// LATIN CAPITAL LETTER S WITH CARON
-                                    case 139:   cBulletId = 0x2039; break;// SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-                                    case 140:   cBulletId = 0x0152; break;// LATIN CAPITAL LIGATURE OE
-                                    case 142:   cBulletId = 0x017D; break;// LATIN CAPITAL LETTER Z WITH CARON
-                                    case 145:   cBulletId = 0x2018; break;// LEFT SINGLE QUOTATION MARK
-                                                                          // MODIFIER LETTER TURNED COMMA
-                                    case 146:   cBulletId = 0x2019; break;// RIGHT SINGLE QUOTATION MARK
-                                                                          // MODIFIER LETTER APOSTROPHE
-                                    case 147:   cBulletId = 0x201C; break;// LEFT DOUBLE QUOTATION MARK
-                                                                          // REVERSED DOUBLE PRIME QUOTATION MARK
-                                    case 148:   cBulletId = 0x201D; break;// RIGHT DOUBLE QUOTATION MARK
-                                                                          // REVERSED DOUBLE PRIME QUOTATION MARK
-                                    case 149:   cBulletId = 0x2022; break;// BULLET
-                                    case 150:   cBulletId = 0x2013; break;// EN DASH
-                                    case 151:   cBulletId = 0x2014; break;// EM DASH
-                                    case 152:   cBulletId = 0x02DC; break;// SMALL TILDE
-                                    case 153:   cBulletId = 0x2122; break;// TRADE MARK SIGN
-                                    case 154:   cBulletId = 0x0161; break;// LATIN SMALL LETTER S WITH CARON
-                                    case 155:   cBulletId = 0x203A; break;// SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-                                    case 156:   cBulletId = 0x0153; break;// LATIN SMALL LIGATURE OE
-                                    case 158:   cBulletId = 0x017E; break;// LATIN SMALL LETTER Z WITH CARON
-                                    case 159:   cBulletId = 0x0178; break;// LATIN CAPITAL LETTER Y WITH DIAERESIS
-//                                  case 222:   cBulletId = 0x00B6; break;// PILCROW SIGN / PARAGRAPH SIGN
-                                }
-                            }
-*/
                             nParaFlags |= 0x90; // wir geben den Font und den Charset vor
                         }
                     }
@@ -1003,7 +959,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                     {
                         if ( nNumberingType != SVX_NUM_CHAR_SPECIAL )
                         {
-                            bExtendedBulletsUsed = TRUE;
+                            bExtendedBulletsUsed = sal_True;
                             if ( nNumberingDepth & 1 )
                                 cBulletId = 0x2013;         // defaulting bullet characters for ppt97
                             else if ( nNumberingDepth == 4 )
@@ -1287,8 +1243,8 @@ ImplTextObj::ImplTextObj( int nInstance )
     mnTextSize = 0;
     mnInstance = nInstance;
     mpList = new List;
-    mbHasExtendedBullets = FALSE;
-    mbFixedCellHeightUsed = FALSE;
+    mbHasExtendedBullets = sal_False;
+    mbFixedCellHeightUsed = sal_False;
 }
 
 ImplTextObj::~ImplTextObj()
@@ -1320,11 +1276,11 @@ TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSim
                 if ( aAny >>= aXParagraph )
                 {
                     if ( !aXTextParagraphE->hasMoreElements() )
-                        aParaFlags.bLastParagraph = TRUE;
+                        aParaFlags.bLastParagraph = sal_True;
                     ParagraphObj* pPara = new ParagraphObj( aXParagraph, aParaFlags, rFontCollection, rProv );
                     mpImplTextObj->mbHasExtendedBullets |= pPara->bExtendedBulletsUsed;
                     mpImplTextObj->mpList->Insert( pPara, LIST_APPEND );
-                    aParaFlags.bFirstParagraph = FALSE;
+                    aParaFlags.bFirstParagraph = sal_False;
                 }
             }
         }
@@ -1409,12 +1365,12 @@ FontCollection::FontCollection() :
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
         xMSF = ::comphelper::getProcessServiceFactory();
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-        xInterface = xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
+        xInterface = xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" ) ) );
     if ( xInterface.is() )
         xPPTBreakIter = com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator >
             ( xInterface, com::sun::star::uno::UNO_QUERY );
 
-    xInterface = xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.ScriptTypeDetector" ) );
+    xInterface = xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.ScriptTypeDetector" ) ) );
     if ( xInterface.is() )
         xScriptTypeDetector = com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector >
             ( xInterface, com::sun::star::uno::UNO_QUERY );
@@ -1446,8 +1402,6 @@ sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
         Font aFont;
         aFont.SetCharSet( rEntry.CharSet );
         aFont.SetName( rEntry.Original );
-//      aFont.SetFamily( rEntry.Family );
-//      aFont.SetPitch( rEntry.Pitch );
         aFont.SetHeight( 100 );
 
         if ( !pVDev )

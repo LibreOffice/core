@@ -50,11 +50,11 @@ public:
     AccessibleStateSetHelperImpl(const AccessibleStateSetHelperImpl& rImpl);
     ~AccessibleStateSetHelperImpl();
 
-    sal_Bool IsEmpty ()
+    sal_Bool IsEmpty () const
         throw (uno::RuntimeException);
-    sal_Bool Contains (sal_Int16 aState)
+    sal_Bool Contains (sal_Int16 aState) const
         throw (uno::RuntimeException);
-    uno::Sequence<sal_Int16> GetStates()
+    uno::Sequence<sal_Int16> GetStates() const
         throw (uno::RuntimeException);
     void AddState(sal_Int16 aState)
         throw (uno::RuntimeException);
@@ -62,7 +62,7 @@ public:
         throw (uno::RuntimeException);
     sal_Bool Compare(const AccessibleStateSetHelperImpl* pComparativeValue,
                         AccessibleStateSetHelperImpl* pOldStates,
-                        AccessibleStateSetHelperImpl* pNewStates)
+                        AccessibleStateSetHelperImpl* pNewStates) const
         throw (uno::RuntimeException);
 
     inline void AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) );
@@ -85,13 +85,13 @@ AccessibleStateSetHelperImpl::~AccessibleStateSetHelperImpl()
 {
 }
 
-inline sal_Bool AccessibleStateSetHelperImpl::IsEmpty ()
+inline sal_Bool AccessibleStateSetHelperImpl::IsEmpty () const
     throw (uno::RuntimeException)
 {
     return maStates == 0;
 }
 
-inline sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
+inline sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState) const
     throw (uno::RuntimeException)
 {
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
@@ -100,7 +100,7 @@ inline sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
     return ((aTempBitSet & maStates) != 0);
 }
 
-inline uno::Sequence<sal_Int16> AccessibleStateSetHelperImpl::GetStates()
+inline uno::Sequence<sal_Int16> AccessibleStateSetHelperImpl::GetStates() const
     throw (uno::RuntimeException)
 {
     uno::Sequence<sal_Int16> aRet(BITFIELDSIZE);
@@ -144,7 +144,7 @@ inline void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
 inline sal_Bool AccessibleStateSetHelperImpl::Compare(
     const AccessibleStateSetHelperImpl* pComparativeValue,
         AccessibleStateSetHelperImpl* pOldStates,
-        AccessibleStateSetHelperImpl* pNewStates)
+        AccessibleStateSetHelperImpl* pNewStates) const
     throw (uno::RuntimeException)
 {
     sal_Bool bResult(sal_False);

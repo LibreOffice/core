@@ -58,10 +58,6 @@
  * Tool funtions for xml filter.
  * Don't use any template for the ***TOOUString function list for easy.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
 #ifndef     _XFUTIL_HXX
 #define     _XFUTIL_HXX
 

@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_bridge_OleBridgeSupplierVar1_idl__
 #define __com_sun_star_bridge_OleBridgeSupplierVar1_idl__
 
-#ifndef __com_sun_star_bridge_OBridgeSupplier2_idl__
 #include <com/sun/star/bridge/OleBridgeSupplier2.idl>
-#endif
 
 
  module com {  module sun {  module star {  module bridge {

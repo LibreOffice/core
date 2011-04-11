@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_XSheetFilterDescriptor2_idl__
 #define __com_sun_star_sheet_XSheetFilterDescriptor2_idl__
 
-#ifndef __com_sun_star_sheet_TableFilterField2_idl__
 #include <com/sun/star/sheet/TableFilterField2.idl>
-#endif
-
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //=============================================================================
 
@@ -48,7 +43,7 @@ module com {  module sun {  module star {  module sheet {
     whereas the <type>XSheetFilterDescriptor</type> interface uses the
     <type>TableFilterField</type> struct.</p>
 
-    @see com::sun::star::sheet::SheetFilterDescriptor
+    @see SheetFilterDescriptor
     @since OOo 3.2
  */
 published interface XSheetFilterDescriptor2: com::sun::star::uno::XInterface
@@ -57,14 +52,13 @@ published interface XSheetFilterDescriptor2: com::sun::star::uno::XInterface
 
     /** returns the collection of filter fields.
      */
-    sequence< com::sun::star::sheet::TableFilterField2 > getFilterFields2();
+    sequence< TableFilterField2 > getFilterFields2();
 
     //-------------------------------------------------------------------------
 
     /** sets a new collection of filter fields.
      */
-    void setFilterFields2(
-        [in] sequence< com::sun::star::sheet::TableFilterField2 > aFilterFields );
+    void setFilterFields2( [in] sequence< TableFilterField2 > aFilterFields );
 
 };
 

@@ -35,27 +35,20 @@
 #include <basic/sbmod.hxx>
 #include <tools/urlobj.hxx>
 #include <basic/sbx.hxx>
-
 #include <sot/storage.hxx>
 #include <unotools/securityoptions.hxx>
 
-#ifndef _RTL_USTRING_
 #include <rtl/ustring.h>
-#endif
-
 #include <com/sun/star/uno/Any.hxx>
 #include <framework/eventsconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
-
 #include <sfx2/evntconf.hxx>
 
-#include <sfx2/macrconf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
-#include "config.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "eventsupplier.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -67,30 +60,27 @@
 // -----------------------------------------------------------------------
 TYPEINIT1(SfxEventHint, SfxHint);
 TYPEINIT1(SfxEventNamesItem, SfxPoolItem);
+TYPEINIT1(SfxViewEventHint, SfxHint);
 
 using namespace com::sun::star;
 
 SfxEventNamesList& SfxEventNamesList::operator=( const SfxEventNamesList& rTbl )
 {
     DelDtor();
-    for (USHORT n=0; n<rTbl.Count(); n++ )
+    for ( size_t i = 0, n = rTbl.size(); i < n; ++i )
     {
-        SfxEventName* pTmp = ((SfxEventNamesList&)rTbl).GetObject(n);
-        SfxEventName *pNew = new SfxEventName( *pTmp );
-        Insert( pNew, n );
+        SfxEventName* pTmp = rTbl.at( i );
+        SfxEventName* pNew = new SfxEventName( *pTmp );
+        aEventNamesList.push_back( pNew );
     }
     return *this;
 }
 
 void SfxEventNamesList::DelDtor()
 {
-    SfxEventName* pTmp = First();
-    while( pTmp )
-    {
-        delete pTmp;
-        pTmp = Next();
-    }
-    Clear();
+    for ( size_t i = 0, n = aEventNamesList.size(); i < n; ++i )
+        delete aEventNamesList[ i ];
+    aEventNamesList.clear();
 }
 
 int SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
@@ -100,20 +90,20 @@ int SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
     const SfxEventNamesList& rOwn = aEventsList;
     const SfxEventNamesList& rOther = ( (SfxEventNamesItem&) rAttr ).aEventsList;
 
-    if ( rOwn.Count() != rOther.Count() )
-        return FALSE;
+    if ( rOwn.size() != rOther.size() )
+        return sal_False;
 
-    for ( USHORT nNo = 0; nNo < rOwn.Count(); ++nNo )
+    for ( size_t nNo = 0, nCnt = rOwn.size(); nNo < nCnt; ++nNo )
     {
-        const SfxEventName *pOwn = rOwn.GetObject(nNo);
-        const SfxEventName *pOther = rOther.GetObject(nNo);
+        const SfxEventName *pOwn = rOwn.at( nNo );
+        const SfxEventName *pOther = rOther.at( nNo );
         if (    pOwn->mnId != pOther->mnId ||
                 pOwn->maEventName != pOther->maEventName ||
                 pOwn->maUIName != pOther->maUIName )
-            return FALSE;
+            return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 
 }
 
@@ -132,27 +122,27 @@ SfxPoolItem* SfxEventNamesItem::Clone( SfxItemPool *) const
     return new SfxEventNamesItem(*this);
 }
 
-SfxPoolItem* SfxEventNamesItem::Create(SvStream &, USHORT) const
+SfxPoolItem* SfxEventNamesItem::Create(SvStream &, sal_uInt16) const
 {
-    DBG_ERROR("not streamable!");
+    OSL_FAIL("not streamable!");
     return new SfxEventNamesItem(Which());
 }
 
-SvStream& SfxEventNamesItem::Store(SvStream &rStream, USHORT ) const
+SvStream& SfxEventNamesItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
-    DBG_ERROR("not streamable!");
+    OSL_FAIL("not streamable!");
     return rStream;
 }
 
-USHORT SfxEventNamesItem::GetVersion( USHORT ) const
+sal_uInt16 SfxEventNamesItem::GetVersion( sal_uInt16 ) const
 {
-    DBG_ERROR("not streamable!");
+    OSL_FAIL("not streamable!");
     return 0;
 }
 
-void SfxEventNamesItem::AddEvent( const String& rName, const String& rUIName, USHORT nID )
+void SfxEventNamesItem::AddEvent( const String& rName, const String& rUIName, sal_uInt16 nID )
 {
-    aEventsList.Insert( new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
+    aEventsList.push_back( new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
 }
 
 
@@ -180,17 +170,17 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             uno::Sequence < beans::PropertyValue > aProperties(3);
             beans::PropertyValue *pValues = aProperties.getArray();
 
-            ::rtl::OUString aType = ::rtl::OUString::createFromAscii( STAR_BASIC );;
+            ::rtl::OUString aType(RTL_CONSTASCII_USTRINGPARAM( STAR_BASIC ));
             ::rtl::OUString aLib  = pMacro->GetLibName();
             ::rtl::OUString aMacro = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = ::rtl::OUString::createFromAscii( PROP_EVENT_TYPE );
+            pValues[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_EVENT_TYPE ));
             pValues[ 0 ].Value <<= aType;
 
-            pValues[ 1 ].Name = ::rtl::OUString::createFromAscii( PROP_LIBRARY );
+            pValues[ 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_LIBRARY ));
             pValues[ 1 ].Value <<= aLib;
 
-            pValues[ 2 ].Name = ::rtl::OUString::createFromAscii( PROP_MACRO_NAME );
+            pValues[ 2 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_MACRO_NAME ));
             pValues[ 2 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -203,10 +193,10 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             ::rtl::OUString aLib   = pMacro->GetLibName();
             ::rtl::OUString aMacro = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = ::rtl::OUString::createFromAscii( PROP_EVENT_TYPE );
+            pValues[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_EVENT_TYPE ));
             pValues[ 0 ].Value <<= aLib;
 
-            pValues[ 1 ].Name = ::rtl::OUString::createFromAscii( PROP_SCRIPT );
+            pValues[ 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_SCRIPT ));
             pValues[ 1 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -218,10 +208,10 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
 
             ::rtl::OUString aMacro  = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = ::rtl::OUString::createFromAscii( PROP_EVENT_TYPE );
-            pValues[ 0 ].Value <<= ::rtl::OUString::createFromAscii(SVX_MACRO_LANGUAGE_JAVASCRIPT);
+            pValues[ 0 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_EVENT_TYPE ));
+            pValues[ 0 ].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT));
 
-            pValues[ 1 ].Name = ::rtl::OUString::createFromAscii( PROP_MACRO_NAME );
+            pValues[ 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( PROP_MACRO_NAME ));
             pValues[ 1 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -252,7 +242,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
     {
         xSupplier = uno::Reference < document::XEventsSupplier >
                 ( ::comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster" )), uno::UNO_QUERY );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))), uno::UNO_QUERY );
     }
 
     if ( xSupplier.is() )
@@ -294,7 +284,7 @@ void SfxEventConfiguration::ConfigureEvent( rtl::OUString aName, const SvxMacro&
 }
 
 // -------------------------------------------------------------------------------------------------------
-SvxMacro* SfxEventConfiguration::ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, BOOL bBlowUp )
+SvxMacro* SfxEventConfiguration::ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, sal_Bool bBlowUp )
 {
     return SfxEvents_Impl::ConvertToMacro( rElement, pDoc, bBlowUp );
 }

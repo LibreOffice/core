@@ -36,14 +36,14 @@ class SfxSlotServer
 {
 private:
     const SfxSlot*      _pSlot;
-    USHORT              _nShellLevel;
+    sal_uInt16              _nShellLevel;
 
 public:
-                        SfxSlotServer( const SfxSlot &rSlot, USHORT nShell );
+                        SfxSlotServer( const SfxSlot &rSlot, sal_uInt16 nShell );
                         SfxSlotServer();
 
-    USHORT              GetShellLevel() const;
-    void                SetShellLevel(USHORT nLevel) { _nShellLevel = nLevel; }
+    sal_uInt16              GetShellLevel() const;
+    void                SetShellLevel(sal_uInt16 nLevel) { _nShellLevel = nLevel; }
     void                SetSlot(const SfxSlot* pSlot) {
                             _pSlot = pSlot;
                         }
@@ -53,7 +53,7 @@ public:
 
 //--------------------------------------------------------------------
 
-inline SfxSlotServer::SfxSlotServer( const SfxSlot &rSlot, USHORT nShell ):
+inline SfxSlotServer::SfxSlotServer( const SfxSlot &rSlot, sal_uInt16 nShell ):
     _pSlot( &rSlot),
     _nShellLevel( nShell )
 {
@@ -69,7 +69,7 @@ inline SfxSlotServer::SfxSlotServer():
 
 //--------------------------------------------------------------------
 
-inline USHORT SfxSlotServer::GetShellLevel() const
+inline sal_uInt16 SfxSlotServer::GetShellLevel() const
 {
     return _nShellLevel;
 }

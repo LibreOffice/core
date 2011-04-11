@@ -130,7 +130,6 @@ void ORTFReader::NextToken( int nToken )
                 {
 
                     int nTmpToken2 = GetNextToken();
-                    sal_Bool bNext = TRUE;
                     do
                     {
                         Color aColor;
@@ -141,8 +140,7 @@ void ORTFReader::NextToken( int nToken )
                                 case RTF_RED:   aColor.SetRed((sal_uInt8)nTokenValue); break;
                                 case RTF_BLUE:  aColor.SetBlue((sal_uInt8)nTokenValue); break;
                                 case RTF_GREEN: aColor.SetGreen((sal_uInt8)nTokenValue); break;
-                                default:
-                                    bNext = sal_False;
+                                default: break;
                             }
                             nTmpToken2 = GetNextToken();
                         }
@@ -164,7 +162,7 @@ void ORTFReader::NextToken( int nToken )
                     bool bInsertRow = true;
                     if ( !m_xTable.is() ) // erste Zeile als Header verwenden
                     {
-                        sal_uInt32 nTell = rInput.Tell(); // verändert vielleicht die Position des Streams
+                        sal_uInt32 nTell = rInput.Tell(); // verï¿½ndert vielleicht die Position des Streams
 
                         m_bError = !CreateTable(nToken);
                         bInsertRow = m_bAppendFirstLine;
@@ -194,7 +192,7 @@ void ORTFReader::NextToken( int nToken )
                     eraseTokens();
                 }
 
-                m_bInTbl = TRUE; // jetzt befinden wir uns in einer Tabellenbeschreibung
+                m_bInTbl = sal_True; // jetzt befinden wir uns in einer Tabellenbeschreibung
                 break;
             case RTF_TEXTTOKEN:
             case RTF_SINGLECHAR:
@@ -217,7 +215,7 @@ void ORTFReader::NextToken( int nToken )
                 }
                 break;
             case RTF_ROW:
-                // es kann vorkommen, daß die letzte Celle nicht mit \cell abgeschlossen ist
+                // es kann vorkommen, daï¿½ die letzte Celle nicht mit \cell abgeschlossen ist
                 try
                 {
                     insertValueIntoColumn();
@@ -251,7 +249,7 @@ void ORTFReader::NextToken( int nToken )
                 }
                 break;
             case RTF_INTBL:
-                m_bInTbl = TRUE;
+                m_bInTbl = sal_True;
                 break;
             case RTF_TEXTTOKEN:
             case RTF_SINGLECHAR:
@@ -296,7 +294,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
                 if(m_bInTbl)
                     aColumnName.Erase();
 
-                m_bInTbl = TRUE;
+                m_bInTbl = sal_True;
                 break;
             case RTF_TEXTTOKEN:
             case RTF_SINGLECHAR:
@@ -315,8 +313,6 @@ sal_Bool ORTFReader::CreateTable(int nToken)
                 }
                 break;
             case RTF_CF:
-                //  if(nTokenValue < m_vecColor.size())
-                    //  m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,makeAny(m_vecColor[nTokenValue]));
                 break;
             case RTF_B:
                 aFont.Weight = ::com::sun::star::awt::FontWeight::BOLD;

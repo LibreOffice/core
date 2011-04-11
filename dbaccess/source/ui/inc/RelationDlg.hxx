@@ -71,12 +71,12 @@ namespace dbaui
         TTableConnectionData::value_type                                        m_pOrigConnData;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
 
-        BOOL                                                                    m_bTriedOneUpdate;
+        sal_Bool                                                                    m_bTriedOneUpdate;
 
     public:
         ORelationDialog(OJoinTableView* pParent,
                         const TTableConnectionData::value_type& pConnectionData,
-                        BOOL bAllowTableSelect = FALSE );
+                        sal_Bool bAllowTableSelect = sal_False );
         virtual ~ORelationDialog();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection(){ return m_xConnection; }

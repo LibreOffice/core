@@ -1,4 +1,33 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *       Noel Power <noel.power@novell.com>
+ * Portions created by the Initial Developer are Copyright (C) 2010 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *       Noel Power <noel.power@novell.com>
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
 #include <filter/msfilter/mstoolbar.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <stdarg.h>
@@ -108,8 +137,8 @@ uno::Any
 CustomToolBarImportHelper::createCommandFromMacro( const rtl::OUString& sCmd )
 {
 //"vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
-    static rtl::OUString scheme = rtl::OUString::createFromAscii( "vnd.sun.star.script:");
-    static rtl::OUString part2 = rtl::OUString::createFromAscii("?language=Basic&location=document");
+    static rtl::OUString scheme( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ));
+    static rtl::OUString part2( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ));
     // create script url
     rtl::OUString scriptURL = scheme + sCmd + part2;
     return uno::makeAny( scriptURL );
@@ -186,12 +215,13 @@ TBBase::indent_printf( FILE* fp, const char* format, ... )
    va_end( ap );
 }
 
-rtl::OUString TBBase::readUnicodeString( SvStream* pS, sal_Int32 nChars )
+rtl::OUString TBBase::readUnicodeString( SvStream* pS, sal_Size nChars )
 {
-    sal_Int32 nBufSize = nChars * 2;
+    sal_Size nBufSize = nChars * 2;
     boost::scoped_array< sal_uInt8 > pArray( new sal_uInt8[ nBufSize ] );
-    pS->Read( pArray.get(), nBufSize );
-    return svt::BinFilterUtils::CreateOUStringFromUniStringArray(  reinterpret_cast< const char* >( pArray.get() ), nBufSize );
+    sal_Size nReadSize = pS->Read( pArray.get(), nBufSize );
+    OSL_ASSERT(nReadSize == nBufSize);
+    return svt::BinFilterUtils::CreateOUStringFromUniStringArray(  reinterpret_cast< const char* >( pArray.get() ), nReadSize );
 }
 
 TBCHeader::TBCHeader() : bSignature( 0x3 )
@@ -393,7 +423,7 @@ WString::Read( SvStream *pS )
     nOffSet = pS->Tell();
     sal_Int8 nChars = 0;
     *pS >> nChars;
-    sString = readUnicodeString( pS, static_cast< sal_Int32 >( nChars  ) );
+    sString = readUnicodeString( pS, nChars );
     return true;
 }
 
@@ -489,11 +519,11 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
         if ( extraInfo.getOnAction().getLength() )
         {
             aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CommandURL") );
-            ooo::vba::VBAMacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
-            if ( aMacroInf.IsResolved() )
-                aProp.Value = helper.createCommandFromMacro( aMacroInf.ResolvedMacro() );
+            ooo::vba::MacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
+            if ( aMacroInf.mbFound )
+                aProp.Value = helper.createCommandFromMacro( aMacroInf.msResolvedMacro );
             else
-                aProp.Value <<= rtl::OUString::createFromAscii("UnResolvedMacro[").concat( extraInfo.getOnAction() ).concat( rtl::OUString::createFromAscii("]") );
+                aProp.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UnResolvedMacro[" )).concat( extraInfo.getOnAction() ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "]" )) );
             sControlData.push_back( aProp );
         }
 
@@ -727,7 +757,7 @@ bool TBCBitMap::Read( SvStream* pS)
     nOffSet = pS->Tell();
     *pS >> cbDIB;
     // cbDIB = sizeOf(biHeader) + sizeOf(colors) + sizeOf(bitmapData) + 10
-    return mBitMap.Read( *pS, FALSE, TRUE );
+    return mBitMap.Read( *pS, sal_False, sal_True );
 }
 
 void TBCBitMap::Print( FILE* fp )

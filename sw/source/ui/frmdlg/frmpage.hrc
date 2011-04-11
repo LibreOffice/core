@@ -105,7 +105,6 @@
 #define ED_URL                  59
 
 #define BMP_EXAMPLE             62
-#define BMP_EXAMPLE_HC          63
 #define RB_MIRROR_ALL_PAGES     64
 #define RB_MIRROR_LEFT_PAGES    65
 #define RB_MIRROR_RIGHT_PAGES   66

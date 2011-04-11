@@ -71,8 +71,8 @@ DBG_NAMEEX(SfxItemPool)
 
 struct SfxItemInfo
 {
-    USHORT      _nSID;
-    USHORT      _nFlags;
+    sal_uInt16      _nSID;
+    sal_uInt16      _nFlags;
 };
 
 //====================================================================
@@ -105,23 +105,23 @@ class SVL_DLLPUBLIC SfxItemPool
 */
 
 {
-    SVL_DLLPRIVATE void readTheItems(SvStream & rStream, USHORT nCount, USHORT nVersion,
+    SVL_DLLPRIVATE void readTheItems(SvStream & rStream, sal_uInt32 nCount, sal_uInt16 nVersion,
                                      SfxPoolItem * pDefItem, SfxPoolItemArray_Impl ** pArr);
 
     UniString                       aName;
-    USHORT                          nStart, nEnd;
-    USHORT                          _nFileFormatVersion;
+    sal_uInt16                          nStart, nEnd;
+    sal_uInt16                          _nFileFormatVersion;
 #ifdef TF_POOLABLE
     const SfxItemInfo*              pItemInfos;
 #else
-    USHORT*                         pSlotIds;
+    sal_uInt16*                         pSlotIds;
 #endif
     SfxItemPool_Impl*               pImp;
     SfxPoolItem**                   ppStaticDefaults;
     SfxPoolItem**                   ppPoolDefaults;
     SfxItemPool*                    pSecondary;
     SfxItemPool*                    pMaster;
-    USHORT*                         _pPoolRanges;
+    sal_uInt16*                         _pPoolRanges;
     bool                            bPersistentRefCounts;
 
 private:
@@ -138,16 +138,16 @@ public:
 friend class SfxPoolWhichMap;
 
 private:
-    inline  USHORT                  GetIndex_Impl(USHORT nWhich) const;
-    inline  USHORT                  GetSize_Impl() const { return nEnd - nStart + 1; }
+    inline  sal_uInt16                  GetIndex_Impl(sal_uInt16 nWhich) const;
+    inline  sal_uInt16                  GetSize_Impl() const { return nEnd - nStart + 1; }
 
     SVL_DLLPRIVATE SvStream&        Load1_Impl( SvStream &rStream );
-    SVL_DLLPRIVATE bool             IsItemFlag_Impl( USHORT nWhich, USHORT nFlag ) const;
+    SVL_DLLPRIVATE bool             IsItemFlag_Impl( sal_uInt16 nWhich, sal_uInt16 nFlag ) const;
 
 public:
     // fuer dflt. SfxItemSet::CTOR, setze dflt. WhichRanges
-    void                            FillItemIdRanges_Impl( USHORT*& pWhichRanges ) const;
-    const USHORT*                   GetFrozenIdRanges() const
+    void                            FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const;
+    const sal_uInt16*                   GetFrozenIdRanges() const
                                     { return _pPoolRanges; }
     bool                            IsVer2_Impl() const;
 
@@ -155,21 +155,21 @@ public:
     //---------------------------------------------------------------------
 
 protected:
-    static inline void              SetRefCount( SfxPoolItem& rItem, ULONG n );
-    static inline ULONG             AddRef( const SfxPoolItem& rItem, ULONG n = 1 );
-    static inline ULONG             ReleaseRef( const SfxPoolItem& rItem, ULONG n = 1);
+    static inline void              SetRefCount( SfxPoolItem& rItem, sal_uLong n );
+    static inline sal_uLong             AddRef( const SfxPoolItem& rItem, sal_uLong n = 1 );
+    static inline sal_uLong             ReleaseRef( const SfxPoolItem& rItem, sal_uLong n = 1);
 
 public:
                                     SfxItemPool( const SfxItemPool &rPool,
-                                                 BOOL bCloneStaticDefaults = FALSE );
+                                                 sal_Bool bCloneStaticDefaults = sal_False );
                                     SfxItemPool( const UniString &rName,
-                                                 USHORT nStart, USHORT nEnd,
+                                                 sal_uInt16 nStart, sal_uInt16 nEnd,
 #ifdef TF_POOLABLE
                                                  const SfxItemInfo *pItemInfos,
 #endif
                                                  SfxPoolItem **pDefaults = 0,
 #ifndef TF_POOLABLE
-                                                 USHORT *pSlotIds = 0,
+                                                 sal_uInt16 *pSlotIds = 0,
 #endif
                                                  bool bLoadRefCounts = true );
 protected:
@@ -180,14 +180,14 @@ public:
     SfxBroadcaster&                 BC();
 
     void                            SetPoolDefaultItem( const SfxPoolItem& );
-    const SfxPoolItem*              GetPoolDefaultItem( USHORT nWhich ) const;
-    void                            ResetPoolDefaultItem( USHORT nWhich );
+    const SfxPoolItem*              GetPoolDefaultItem( sal_uInt16 nWhich ) const;
+    void                            ResetPoolDefaultItem( sal_uInt16 nWhich );
 
     void                            SetDefaults( SfxPoolItem **pDefaults );
-    void                            ReleaseDefaults( BOOL bDelete = FALSE );
-    static void                     ReleaseDefaults( SfxPoolItem **pDefaults, USHORT nCount, BOOL bDelete = FALSE );
+    void                            ReleaseDefaults( sal_Bool bDelete = sal_False );
+    static void                     ReleaseDefaults( SfxPoolItem **pDefaults, sal_uInt16 nCount, sal_Bool bDelete = sal_False );
 
-    virtual SfxMapUnit              GetMetric( USHORT nWhich ) const;
+    virtual SfxMapUnit              GetMetric( sal_uInt16 nWhich ) const;
     void                            SetDefaultMetric( SfxMapUnit eNewMetric );
     virtual SfxItemPresentation     GetPresentation( const SfxPoolItem& rItem,
                                         SfxItemPresentation ePresentation,
@@ -198,9 +198,9 @@ public:
     virtual SfxItemPool*            Clone() const;
     UniString const &               GetName() const { return aName; }
 
-    virtual const SfxPoolItem&      Put( const SfxPoolItem&, USHORT nWhich = 0 );
+    virtual const SfxPoolItem&      Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 );
     virtual void                    Remove( const SfxPoolItem& );
-    virtual const SfxPoolItem&      GetDefaultItem( USHORT nWhich ) const;
+    virtual const SfxPoolItem&      GetDefaultItem( sal_uInt16 nWhich ) const;
 
     const SfxPoolItem*              LoadItem( SvStream &rStream,
                                               bool bDirect = false,
@@ -209,11 +209,11 @@ public:
                                                const SfxPoolItem &rItem,
                                                bool bDirect = false ) const;
 
-    USHORT                          GetSurrogate(const SfxPoolItem *) const;
-    const SfxPoolItem *             GetItem(USHORT nWhich, USHORT nSurrogate) const;
-    USHORT                          GetItemCount(USHORT nWhich) const;
+    sal_uInt32                      GetSurrogate(const SfxPoolItem *) const;
+    const SfxPoolItem *             GetItem2(sal_uInt16 nWhich, sal_uInt32 nSurrogate) const;
+    sal_uInt32                      GetItemCount2(sal_uInt16 nWhich) const;
     const SfxPoolItem*              LoadSurrogate(SvStream& rStream,
-                                            USHORT &rWhich, USHORT nSlotId,
+                                            sal_uInt16 &rWhich, sal_uInt16 nSlotId,
                                             const SfxItemPool* pRefPool = 0 );
     bool                            StoreSurrogate(SvStream& rStream,
                                             const SfxPoolItem *pItem ) const;
@@ -224,14 +224,14 @@ public:
                                         return bPersistentRefCounts; }
     void                            LoadCompleted();
 
-    USHORT                          GetFirstWhich() const { return nStart; }
-    USHORT                          GetLastWhich() const { return nEnd; }
-    bool                            IsInRange( USHORT nWhich ) const {
+    sal_uInt16                          GetFirstWhich() const { return nStart; }
+    sal_uInt16                          GetLastWhich() const { return nEnd; }
+    bool                            IsInRange( sal_uInt16 nWhich ) const {
                                         return nWhich >= nStart &&
                                                nWhich <= nEnd; }
-    bool                            IsInVersionsRange( USHORT nWhich ) const;
-    bool                            IsInStoringRange( USHORT nWhich ) const;
-    void                            SetStoringRange( USHORT nFrom, USHORT nTo );
+    bool                            IsInVersionsRange( sal_uInt16 nWhich ) const;
+    bool                            IsInStoringRange( sal_uInt16 nWhich ) const;
+    void                            SetStoringRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     void                            SetSecondaryPool( SfxItemPool *pPool );
     SfxItemPool*                    GetSecondaryPool() const {
                                         return pSecondary; }
@@ -243,35 +243,35 @@ public:
     void                            Delete();
 
 #ifdef TF_POOLABLE
-    bool                            IsItemFlag( USHORT nWhich, USHORT nFlag ) const;
-    bool                            IsItemFlag( const SfxPoolItem &rItem, USHORT nFlag ) const
+    bool                            IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const;
+    bool                            IsItemFlag( const SfxPoolItem &rItem, sal_uInt16 nFlag ) const
                                     { return IsItemFlag( rItem.Which(), nFlag ); }
     void                            SetItemInfos( const SfxItemInfo *pInfos )
                                     { pItemInfos = pInfos; }
 #else
     int                             HasMap() const { return 0 != pSlotIds; }
-    void                            SetMap( USHORT *pNewSlotIds )
+    void                            SetMap( sal_uInt16 *pNewSlotIds )
                                     { pSlotIds = pNewSlotIds; }
 #endif
-    USHORT                          GetWhich( USHORT nSlot, BOOL bDeep = TRUE ) const;
-    USHORT                          GetSlotId( USHORT nWhich, BOOL bDeep = TRUE ) const;
-    USHORT                          GetTrueWhich( USHORT nSlot, BOOL bDeep = TRUE ) const;
-    USHORT                          GetTrueSlotId( USHORT nWhich, BOOL bDeep = TRUE ) const;
+    sal_uInt16                          GetWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;
+    sal_uInt16                          GetSlotId( sal_uInt16 nWhich, sal_Bool bDeep = sal_True ) const;
+    sal_uInt16                          GetTrueWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const;
+    sal_uInt16                          GetTrueSlotId( sal_uInt16 nWhich, sal_Bool bDeep = sal_True ) const;
 
-    void                            SetVersionMap( USHORT nVer,
-                                                   USHORT nOldStart, USHORT nOldEnd,
-                                                   USHORT *pWhichIdTab );
-    USHORT                          GetNewWhich( USHORT nOldWhich ) const;
-    USHORT                          GetVersion() const;
-    USHORT                          GetFileFormatVersion() const
+    void                            SetVersionMap( sal_uInt16 nVer,
+                                                   sal_uInt16 nOldStart, sal_uInt16 nOldEnd,
+                                                   sal_uInt16 *pWhichIdTab );
+    sal_uInt16                          GetNewWhich( sal_uInt16 nOldWhich ) const;
+    sal_uInt16                          GetVersion() const;
+    sal_uInt16                          GetFileFormatVersion() const
                                     { return _nFileFormatVersion; }
-    void                            SetFileFormatVersion( USHORT nFileFormatVersion );
-    USHORT                          GetLoadingVersion() const;
+    void                            SetFileFormatVersion( sal_uInt16 nFileFormatVersion );
+    sal_uInt16                          GetLoadingVersion() const;
     bool                            IsCurrentVersionLoading() const;
 
-    static int                      IsWhich(USHORT nId) {
+    static int                      IsWhich(sal_uInt16 nId) {
                                         return nId && nId <= SFX_WHICH_MAX; }
-    static int                      IsSlot(USHORT nId) {
+    static int                      IsSlot(sal_uInt16 nId) {
                                         return nId && nId > SFX_WHICH_MAX; }
 
     static const SfxItemPool*       GetStoringPool();
@@ -284,19 +284,19 @@ private:
 // --------------- Inline Implementierungen ------------------------------
 
 // nur der Pool darf den Referenz-Zaehler manipulieren !!!
-inline void SfxItemPool::SetRefCount( SfxPoolItem& rItem, ULONG n )
+inline void SfxItemPool::SetRefCount( SfxPoolItem& rItem, sal_uLong n )
 {
     rItem.SetRefCount(n);
 }
 
 // nur der Pool darf den Referenz-Zaehler manipulieren !!!
-inline ULONG SfxItemPool::AddRef( const SfxPoolItem& rItem, ULONG n )
+inline sal_uLong SfxItemPool::AddRef( const SfxPoolItem& rItem, sal_uLong n )
 {
     return rItem.AddRef(n);
 }
 
 // nur der Pool darf den Referenz-Zaehler manipulieren !!!
-inline ULONG SfxItemPool::ReleaseRef( const SfxPoolItem& rItem, ULONG n )
+inline sal_uLong SfxItemPool::ReleaseRef( const SfxPoolItem& rItem, sal_uLong n )
 {
     return rItem.ReleaseRef(n);
 }

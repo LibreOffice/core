@@ -29,7 +29,10 @@
 #ifndef _SV_SVSYS_H
 #define _SV_SVSYS_H
 
-#include <tools/svwin.h>
+#ifdef WNT
+#include <prewin.h>
+#include <postwin.h>
+#endif
 
 #endif // _SV_SVSYS_H
 

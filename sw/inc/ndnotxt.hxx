@@ -32,46 +32,42 @@
 
 class PolyPolygon;
 
-// --------------------
 // SwNoTxtNode
-// --------------------
 
 class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
 {
     friend class SwNodes;
     friend class SwNoTxtFrm;
 
-//    String aAlternateText;      // alternativer Text  (HTML)
-
-    PolyPolygon *pContour;      // Polygon fuer Konturumlauf
-    BOOL bAutomaticContour : 1; // automatic contour polygon, not manipulated
-    BOOL bContourMapModeValid : 1; // contour map mode is not the graphics's
+    PolyPolygon *pContour;
+    sal_Bool bAutomaticContour : 1; // automatic contour polygon, not manipulated
+    sal_Bool bContourMapModeValid : 1; // contour map mode is not the graphics's
                                    // prefered map mode, but either
                                       // MM100 or or pixel
-    BOOL bPixelContour : 1;     // contour map mode is invalid and pixel.
+    sal_Bool bPixelContour : 1;     // contour map mode is invalid and pixel.
 
-    // erzeugt fuer alle Ableitungen einen AttrSet mit Bereichen
-    // fuer Frame- und Grafik-Attributen (wird nur vom SwCntntNode gerufen)
+    // Creates for all derivations an AttrSet with ranges for frame- and
+    // graphics-attributes (only called by SwCntntNode).
     virtual void NewAttrSet( SwAttrPool& );
 
-    SwNoTxtNode( const SwNoTxtNode& );              //nicht erlaubt
-    SwNoTxtNode &operator=( const SwNoTxtNode& );   //nicht erlaubt
+    SwNoTxtNode( const SwNoTxtNode& );              // Not allowed.
+    SwNoTxtNode &operator=( const SwNoTxtNode& );   // Not allowed.
 
 protected:
-    SwNoTxtNode( const SwNodeIndex &rWhere, const BYTE nNdType,
+    SwNoTxtNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
                 SwGrfFmtColl *pGrColl, SwAttrSet* pAutoAttr = 0 );
 
 public:
     ~SwNoTxtNode();
 
-    virtual SwCntntFrm *MakeFrm();
+    virtual SwCntntFrm *MakeFrm( SwFrm* );
 
     inline SwGrfFmtColl *GetGrfColl() const { return (SwGrfFmtColl*)GetRegisteredIn(); }
 
     virtual Size GetTwipSize() const = 0;
 
-    virtual BOOL SavePersistentData();
-    virtual BOOL RestorePersistentData();
+    virtual sal_Bool SavePersistentData();
+    virtual sal_Bool RestorePersistentData();
 
     const String GetTitle() const;
     void SetTitle( const String& rTitle,
@@ -80,36 +76,32 @@ public:
     void SetDescription( const String& rDescription,
                          bool bBroadcast = false );
 
-//    const String GetAlternateText() const;
-//    void SetAlternateText( const String& rTxt,
-//                           sal_Bool bBroadcast=sal_False );
-
     void               SetContour( const PolyPolygon *pPoly,
-                                   BOOL bAutomatic = FALSE );
+                                   sal_Bool bAutomatic = sal_False );
     const PolyPolygon *HasContour() const;
-    BOOL               _HasContour() const { return pContour!=0; };
+    sal_Bool               _HasContour() const { return pContour!=0; };
     void               GetContour( PolyPolygon &rPoly ) const;
     void               CreateContour();
 
-    void               SetAutomaticContour( BOOL bSet ) { bAutomaticContour = bSet; }
-    BOOL               HasAutomaticContour() const { return bAutomaticContour; }
+    void               SetAutomaticContour( sal_Bool bSet ) { bAutomaticContour = bSet; }
+    sal_Bool               HasAutomaticContour() const { return bAutomaticContour; }
 
     // set either a MM100 or pixel contour
     void               SetContourAPI( const PolyPolygon *pPoly );
 
-    // get either a MM100 or pixel contour, return FALSE if no contour is set.
-    BOOL               GetContourAPI( PolyPolygon &rPoly ) const;
+    // get either a MM100 or pixel contour, return sal_False if no contour is set.
+    sal_Bool               GetContourAPI( PolyPolygon &rPoly ) const;
 
-    void               SetPixelContour( BOOL bSet ) { bPixelContour = bSet; }
-    BOOL               IsPixelContour() const;
+    void               SetPixelContour( sal_Bool bSet ) { bPixelContour = bSet; }
+    sal_Bool               IsPixelContour() const;
 
-    BOOL               IsContourMapModeValid() const { return bContourMapModeValid; }
+    sal_Bool               IsContourMapModeValid() const { return bContourMapModeValid; }
 
-    //Besorgt die Graphic, mit SwapIn fuer GrfNode, per GetData fuer OLE.
+    // Obtains the graphic with SwapIn for GrfNode via GetData for OLE.
     Graphic GetGraphic() const;
 };
 
-// Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
+// Inline methods from Node.hxx - we know TxtNode only here!!
 inline SwNoTxtNode *SwNode::GetNoTxtNode()
 {
     return ND_NOTXTNODE & nNodeType ? (SwNoTxtNode*)this : 0;

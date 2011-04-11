@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -97,9 +94,9 @@ static String impl_getSvtResString( sal_uInt32 nId )
     return aRet;
 }
 
-BOOL InsertObjectDialog_Impl::IsCreateNew() const
+sal_Bool InsertObjectDialog_Impl::IsCreateNew() const
 {
-    return FALSE;
+    return sal_False;
 }
 
 uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( ::rtl::OUString* /*pGraphicMediaType*/ )
@@ -197,11 +194,6 @@ void SvInsertOleDlg::SelectDefault()
     aLbObjecttype.SelectEntryPos( 0 );
 }
 
-void SvInsertOleDlg::FillObjectServerList( SvObjectServerList* pList )
-{
-    pList->FillInsertObjects();
-}
-
 // -----------------------------------------------------------------------
 SvInsertOleDlg::SvInsertOleDlg
 (
@@ -212,11 +204,11 @@ SvInsertOleDlg::SvInsertOleDlg
     : InsertObjectDialog_Impl( pParent, CUI_RES( MD_INSERT_OLEOBJECT ), xStorage ),
     aRbNewObject( this, CUI_RES( RB_NEW_OBJECT ) ),
     aRbObjectFromfile( this, CUI_RES( RB_OBJECT_FROMFILE ) ),
+    aGbObject( this, CUI_RES( GB_OBJECT ) ),
     aLbObjecttype( this, CUI_RES( LB_OBJECTTYPE ) ),
     aEdFilepath( this, CUI_RES( ED_FILEPATH ) ),
     aBtnFilepath( this, CUI_RES( BTN_FILEPATH ) ),
     aCbFilelink( this, CUI_RES( CB_FILELINK ) ),
-    aGbObject( this, CUI_RES( GB_OBJECT ) ),
     aOKButton1( this, CUI_RES( 1 ) ),
     aCancelButton1( this, CUI_RES( 1 ) ),
     aHelpButton1( this, CUI_RES( 1 ) ),
@@ -230,8 +222,9 @@ SvInsertOleDlg::SvInsertOleDlg
     Link aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
     aRbNewObject.SetClickHdl( aLink );
     aRbObjectFromfile.SetClickHdl( aLink );
-    aRbNewObject.Check( TRUE );
+    aRbNewObject.Check( sal_True );
     RadioHdl( NULL );
+    aBtnFilepath.SetAccessibleRelationMemberOf(&aGbObject);
 }
 
 short SvInsertOleDlg::Execute()
@@ -247,10 +240,10 @@ short SvInsertOleDlg::Execute()
 
     // fill listbox and select default
     ListBox& rBox = GetObjectTypes();
-    rBox.SetUpdateMode( FALSE );
-    for ( ULONG i = 0; i < m_pServers->Count(); i++ )
+    rBox.SetUpdateMode( sal_False );
+    for ( sal_uLong i = 0; i < m_pServers->Count(); i++ )
         rBox.InsertEntry( (*m_pServers)[i].GetHumanName() );
-    rBox.SetUpdateMode( TRUE );
+    rBox.SetUpdateMode( sal_True );
     SelectDefault();
     ::rtl::OUString aName;
 
@@ -258,8 +251,8 @@ short SvInsertOleDlg::Execute()
     if ( m_xStorage.is() && ( nRet = Dialog::Execute() ) == RET_OK )
     {
         String aFileName;
-        BOOL bLink = FALSE;
-        BOOL bCreateNew = IsCreateNew();
+        sal_Bool bLink = sal_False;
+        sal_Bool bCreateNew = IsCreateNew();
         if ( bCreateNew )
         {
             // create and insert new embedded object
@@ -367,7 +360,7 @@ short SvInsertOleDlg::Execute()
                 }
                 else
                 {
-                    OSL_ASSERT( "Can not get InteractionHandler!\n" );
+                    OSL_FAIL( "Can not get InteractionHandler!\n" );
                     aMedium.realloc( 1 );
                 }
 
@@ -455,11 +448,11 @@ IMPL_LINK( SvInsertPlugInDialog, BrowseHdl, PushButton *, EMPTYARG )
 
 SvInsertPlugInDialog::SvInsertPlugInDialog( Window* pParent, const uno::Reference < embed::XStorage >& xStorage )
     : InsertObjectDialog_Impl( pParent, CUI_RES( MD_INSERT_OBJECT_PLUGIN ), xStorage ),
+    aGbFileurl( this, CUI_RES( GB_FILEURL ) ),
     aEdFileurl( this, CUI_RES( ED_FILEURL ) ),
     aBtnFileurl( this, CUI_RES( BTN_FILEURL ) ),
-    aGbFileurl( this, CUI_RES( GB_FILEURL ) ),
-    aEdPluginsOptions( this, CUI_RES( ED_PLUGINS_OPTIONS ) ),
     aGbPluginsOptions( this, CUI_RES( GB_PLUGINS_OPTIONS ) ),
+    aEdPluginsOptions( this, CUI_RES( ED_PLUGINS_OPTIONS ) ),
     aOKButton1( this, CUI_RES( 1 ) ),
     aCancelButton1( this, CUI_RES( 1 ) ),
     aHelpButton1( this, CUI_RES( 1 ) ),
@@ -478,7 +471,7 @@ SvInsertPlugInDialog::~SvInsertPlugInDialog()
 
 static void Plugin_ImplFillCommandSequence( const String& aCommands, uno::Sequence< beans::PropertyValue >& aCommandSequence )
 {
-    USHORT nEaten;
+    sal_uInt16 nEaten;
     SvCommandList aLst;
     aLst.AppendCommands( aCommands, &nEaten );
 
@@ -529,11 +522,11 @@ short SvInsertPlugInDialog::Execute()
             uno::Reference < beans::XPropertySet > xSet( m_xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL") ),
                         makeAny( ::rtl::OUString( m_pURL->GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                 uno::Sequence< beans::PropertyValue > aCommandSequence;
                 Plugin_ImplFillCommandSequence( m_aCommands, aCommandSequence );
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands"), makeAny( aCommandSequence ) );
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands") ), makeAny( aCommandSequence ) );
             }
         }
         else
@@ -648,7 +641,7 @@ short SvInsertAppletDialog::Execute()
     m_aClass.Erase();
     m_aCommands.Erase();
 
-    BOOL bOK = FALSE;
+    sal_Bool bOK = sal_False;
     uno::Reference < beans::XPropertySet > xSet;
     if ( m_xObj.is() )
     {
@@ -658,14 +651,14 @@ short SvInsertAppletDialog::Execute()
                 m_xObj->changeState( embed::EmbedStates::RUNNING );
             xSet = uno::Reference < beans::XPropertySet >( m_xObj->getComponent(), uno::UNO_QUERY );
             ::rtl::OUString aStr;
-            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCode") );
+            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCode") ) );
             if ( aAny >>= aStr )
                 SetClass( aStr );
-            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase") );
+            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase") ) );
             if ( aAny >>= aStr )
                 SetClassLocation( aStr );
             uno::Sequence< beans::PropertyValue > aCommands;
-            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands") );
+            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCommands") ) );
             if ( aAny >>= aCommands )
             {
                 SvCommandList aList;
@@ -675,11 +668,11 @@ short SvInsertAppletDialog::Execute()
 
             String aText( CUI_RES( STR_EDIT_APPLET ) );
             SetText( aText );
-            bOK = TRUE;
+            bOK = sal_True;
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "No Applet!" );
+            OSL_FAIL( "No Applet!" );
         }
     }
     else
@@ -704,7 +697,7 @@ short SvInsertAppletDialog::Execute()
         {
             try
             {
-                BOOL bIPActive = m_xObj->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE;
+                sal_Bool bIPActive = m_xObj->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE;
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::RUNNING );
 
@@ -712,24 +705,24 @@ short SvInsertAppletDialog::Execute()
 
                 // Hack, aFileName wird auch fuer Class benutzt
                 m_aClass = GetClass();
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCode"), makeAny( ::rtl::OUString( m_aClass ) ) );
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCode") ), makeAny( ::rtl::OUString( m_aClass ) ) );
 
                 ::rtl::OUString tmp = aClassLocation;
                 ::osl::File::getFileURLFromSystemPath(tmp, tmp);
                 aClassLocation = tmp;
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase"), makeAny( tmp ) );
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase") ), makeAny( tmp ) );
                 m_aCommands = GetAppletOptions();
 
                 uno::Sequence< beans::PropertyValue > aCommandSequence;
                 Plugin_ImplFillCommandSequence( m_aCommands, aCommandSequence );
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands"), makeAny( aCommandSequence ) );
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCommands") ), makeAny( aCommandSequence ) );
 
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::INPLACE_ACTIVE );
             }
             catch ( uno::Exception& )
             {
-                DBG_ERROR( "No Applet!" );
+                OSL_FAIL( "No Applet!" );
             }
         }
     }
@@ -745,22 +738,23 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent,
     , aFTURL ( this, CUI_RES( FT_URL ) )
     , aEDURL ( this, CUI_RES( ED_URL ) )
     , aBTOpen ( this, CUI_RES(BT_FILEOPEN ) )
+
+    , aFLScrolling ( this, CUI_RES( GB_SCROLLING ) )
     , aRBScrollingOn ( this, CUI_RES( RB_SCROLLINGON ) )
     , aRBScrollingOff ( this, CUI_RES( RB_SCROLLINGOFF ) )
     , aRBScrollingAuto ( this, CUI_RES( RB_SCROLLINGAUTO ) )
-    , aFLScrolling ( this, CUI_RES( GB_SCROLLING ) )
     , aFLSepLeft( this, CUI_RES( FL_SEP_LEFT ) )
+    , aFLFrameBorder( this, CUI_RES( GB_BORDER ) )
     , aRBFrameBorderOn ( this, CUI_RES( RB_FRMBORDER_ON ) )
     , aRBFrameBorderOff ( this, CUI_RES( RB_FRMBORDER_OFF ) )
-    , aFLFrameBorder( this, CUI_RES( GB_BORDER ) )
     , aFLSepRight( this, CUI_RES( FL_SEP_RIGHT ) )
+    , aFLMargin( this, CUI_RES( GB_MARGIN ) )
     , aFTMarginWidth ( this, CUI_RES( FT_MARGINWIDTH ) )
     , aNMMarginWidth ( this, CUI_RES( NM_MARGINWIDTH ) )
     , aCBMarginWidthDefault( this, CUI_RES( CB_MARGINHEIGHTDEFAULT ) )
     , aFTMarginHeight ( this, CUI_RES( FT_MARGINHEIGHT ) )
     , aNMMarginHeight ( this, CUI_RES( NM_MARGINHEIGHT ) )
     , aCBMarginHeightDefault( this, CUI_RES( CB_MARGINHEIGHTDEFAULT ) )
-    , aFLMargin( this, CUI_RES( GB_MARGIN ) )
     , aOKButton1( this, CUI_RES( 1 ) )
     , aCancelButton1( this, CUI_RES( 1 ) )
     , aHelpButton1( this, CUI_RES( 1 ) )
@@ -789,22 +783,25 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent, con
     , aFTURL ( this, CUI_RES( FT_URL ) )
     , aEDURL ( this, CUI_RES( ED_URL ) )
     , aBTOpen ( this, CUI_RES(BT_FILEOPEN ) )
+
+    , aFLScrolling ( this, CUI_RES( GB_SCROLLING ) )
     , aRBScrollingOn ( this, CUI_RES( RB_SCROLLINGON ) )
     , aRBScrollingOff ( this, CUI_RES( RB_SCROLLINGOFF ) )
     , aRBScrollingAuto ( this, CUI_RES( RB_SCROLLINGAUTO ) )
-    , aFLScrolling ( this, CUI_RES( GB_SCROLLING ) )
+
     , aFLSepLeft( this, CUI_RES( FL_SEP_LEFT ) )
+    , aFLFrameBorder( this, CUI_RES( GB_BORDER ) )
     , aRBFrameBorderOn ( this, CUI_RES( RB_FRMBORDER_ON ) )
     , aRBFrameBorderOff ( this, CUI_RES( RB_FRMBORDER_OFF ) )
-    , aFLFrameBorder( this, CUI_RES( GB_BORDER ) )
+
     , aFLSepRight( this, CUI_RES( FL_SEP_RIGHT ) )
+    , aFLMargin( this, CUI_RES( GB_MARGIN ) )
     , aFTMarginWidth ( this, CUI_RES( FT_MARGINWIDTH ) )
     , aNMMarginWidth ( this, CUI_RES( NM_MARGINWIDTH ) )
     , aCBMarginWidthDefault( this, CUI_RES( CB_MARGINHEIGHTDEFAULT ) )
     , aFTMarginHeight ( this, CUI_RES( FT_MARGINHEIGHT ) )
     , aNMMarginHeight ( this, CUI_RES( NM_MARGINHEIGHT ) )
     , aCBMarginHeightDefault( this, CUI_RES( CB_MARGINHEIGHTDEFAULT ) )
-    , aFLMargin( this, CUI_RES( GB_MARGIN ) )
     , aOKButton1( this, CUI_RES( 1 ) )
     , aCancelButton1( this, CUI_RES( 1 ) )
     , aHelpButton1( this, CUI_RES( 1 ) )
@@ -831,7 +828,7 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent, con
 short SfxInsertFloatingFrameDialog::Execute()
 {
     short nRet = RET_OK;
-    BOOL bOK = FALSE;
+    sal_Bool bOK = sal_False;
     uno::Reference < beans::XPropertySet > xSet;
     if ( m_xObj.is() )
     {
@@ -841,78 +838,78 @@ short SfxInsertFloatingFrameDialog::Execute()
                 m_xObj->changeState( embed::EmbedStates::RUNNING );
             xSet = uno::Reference < beans::XPropertySet >( m_xObj->getComponent(), uno::UNO_QUERY );
             ::rtl::OUString aStr;
-            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameURL") );
+            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL") ) );
             if ( aAny >>= aStr )
                 aEDURL.SetText( aStr );
-            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameName") );
+            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName") ) );
             if ( aAny >>= aStr )
                 aEDName.SetText( aStr );
 
             sal_Int32 nSize = SIZE_NOT_SET;
-            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth") );
+            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth") ) );
             aAny >>= nSize;
 
             if ( nSize == SIZE_NOT_SET )
             {
-                aCBMarginWidthDefault.Check( TRUE );
+                aCBMarginWidthDefault.Check( sal_True );
                 aNMMarginWidth.SetText( String::CreateFromInt32( DEFAULT_MARGIN_WIDTH )  );
-                aFTMarginWidth.Enable( FALSE );
-                aNMMarginWidth.Enable( FALSE );
+                aFTMarginWidth.Enable( sal_False );
+                aNMMarginWidth.Enable( sal_False );
             }
             else
                 aNMMarginWidth.SetText( String::CreateFromInt32( nSize ) );
 
-            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight") );
+            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight") ) );
             aAny >>= nSize;
 
             if ( nSize == SIZE_NOT_SET )
             {
-                aCBMarginHeightDefault.Check( TRUE );
+                aCBMarginHeightDefault.Check( sal_True );
                 aNMMarginHeight.SetText( String::CreateFromInt32( DEFAULT_MARGIN_HEIGHT )  );
-                aFTMarginHeight.Enable( FALSE );
-                aNMMarginHeight.Enable( FALSE );
+                aFTMarginHeight.Enable( sal_False );
+                aNMMarginHeight.Enable( sal_False );
             }
             else
                 aNMMarginHeight.SetText( String::CreateFromInt32( nSize ) );
 
-            BOOL bScrollOn = FALSE;
-            BOOL bScrollOff = FALSE;
-            BOOL bScrollAuto = FALSE;
+            sal_Bool bScrollOn = sal_False;
+            sal_Bool bScrollOff = sal_False;
+            sal_Bool bScrollAuto = sal_False;
 
             sal_Bool bSet = sal_False;
-            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll") );
+            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll") ) );
             aAny >>= bSet;
             if ( !bSet )
             {
-                aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode") );
+                aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode") ) );
                 aAny >>= bSet;
                 bScrollOn = bSet;
                 bScrollOff = !bSet;
             }
             else
-                bScrollAuto = TRUE;
+                bScrollAuto = sal_True;
 
             aRBScrollingOn.Check( bScrollOn );
             aRBScrollingOff.Check( bScrollOff );
             aRBScrollingAuto.Check( bScrollAuto );
 
             bSet = sal_False;
-            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder") );
+            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder") ) );
             aAny >>= bSet;
             if ( !bSet )
             {
-                aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder") );
+                aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder") ) );
                 aAny >>= bSet;
                 aRBFrameBorderOn.Check( bSet );
                 aRBFrameBorderOff.Check( !bSet );
             }
 
-            SetUpdateMode( TRUE );
-            bOK = TRUE;
+            SetUpdateMode( sal_True );
+            bOK = sal_True;
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "No IFrame!" );
+            OSL_FAIL( "No IFrame!" );
         }
     }
     else
@@ -948,7 +945,7 @@ short SfxInsertFloatingFrameDialog::Execute()
         {
             try
             {
-                BOOL bIPActive = m_xObj->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE;
+                sal_Bool bIPActive = m_xObj->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE;
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::RUNNING );
 
@@ -975,27 +972,23 @@ short SfxInsertFloatingFrameDialog::Execute()
                 else
                     lMarginHeight = SIZE_NOT_SET;
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"), makeAny( aURL ) );
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"), makeAny( aName ) );
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL") ), makeAny( aURL ) );
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName") ), makeAny( aName ) );
 
                 if ( eScroll == ScrollingAuto )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll") ),
                         makeAny( sal_True ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode") ),
                         makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
-                //if ( aFrmDescr.IsFrameBorderSet() )
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
+                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder") ),
                         makeAny( bHasBorder ) );
-                /*else
-                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
-                        makeAny( sal_True ) );*/
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth") ),
                     makeAny( sal_Int32( lMarginWidth ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight") ),
                     makeAny( sal_Int32( lMarginHeight ) ) );
 
                 if ( bIPActive )
@@ -1003,7 +996,7 @@ short SfxInsertFloatingFrameDialog::Execute()
             }
             catch ( uno::Exception& )
             {
-                DBG_ERROR( "No IFrame!" );
+                OSL_FAIL( "No IFrame!" );
             }
         }
     }

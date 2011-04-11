@@ -916,7 +916,7 @@ public class ToDo {
 
         /** Writing the stack trace from an exception to a string and calling
          * the method showMessage() with this string.
-         * @param exception The occured exception.
+         * @param exception The occurred exception.
          * @see showMessage
          */
         public void showExceptionMessage( Exception exception ) {
@@ -957,9 +957,13 @@ public class ToDo {
      * @param   regKey the registryKey
      * @see     com.sun.star.comp.loader.JavaLoader
      */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        return Factory.writeRegistryServiceInfo(ToDoImpl.class.getName(),
-                                                ToDoImpl.getServiceNames(), regKey);
-    }
+    // This method not longer necessary since OOo 3.4 where the component registration
+    // was changed to passive component registration. For more details see
+    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
+
+//     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
+//         return Factory.writeRegistryServiceInfo(ToDoImpl.class.getName(),
+//                                                 ToDoImpl.getServiceNames(), regKey);
+//     }
 }
 

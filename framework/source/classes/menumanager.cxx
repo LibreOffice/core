@@ -34,12 +34,12 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 #include <classes/menumanager.hxx>
-#include <xml/menuconfiguration.hxx>
-#include <classes/bmkmenu.hxx>
-#include <classes/addonmenu.hxx>
-#include <helper/imageproducer.hxx>
+#include <framework/menuconfiguration.hxx>
+#include <framework/bmkmenu.hxx>
+#include <framework/addonmenu.hxx>
+#include <framework/imageproducer.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include "classes/addonsoptions.hxx"
+#include "framework/addonsoptions.hxx"
 #include <classes/fwkresid.hxx>
 #include <services.h>
 #include "classes/resource.hrc"
@@ -119,26 +119,25 @@ namespace framework
 
 #define SFX_REFERER_USER        "private:user"
 
-const ::rtl::OUString aSlotNewDocDirect( RTL_CONSTASCII_USTRINGPARAM( "slot:5537" ));
-const ::rtl::OUString aSlotAutoPilot( RTL_CONSTASCII_USTRINGPARAM( "slot:6381" ));
+#define aSlotNewDocDirect "slot:5537"
+#define aSlotAutoPilot "slot:6381"
 
-const ::rtl::OUString aSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "file" ));
-const ::rtl::OUString aSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "window" ));
-const ::rtl::OUString aSlotSpecialFileMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5510" ));
-const ::rtl::OUString aSlotSpecialWindowMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:5610" ));
-const ::rtl::OUString aSlotSpecialToolsMenu( RTL_CONSTASCII_USTRINGPARAM( "slot:6677" ));
+#define aSpecialFileMenu "file"
+#define aSpecialWindowMenu "window"
+#define aSlotSpecialFileMenu "slot:5510"
+#define aSlotSpecialWindowMenu "slot:5610"
+#define aSlotSpecialToolsMenu "slot:6677"
 
 // special uno commands for picklist and window list
-const ::rtl::OUString aSpecialFileCommand( RTL_CONSTASCII_USTRINGPARAM( "PickList" ));
-const ::rtl::OUString aSpecialWindowCommand( RTL_CONSTASCII_USTRINGPARAM( "WindowList" ));
+#define aSpecialFileCommand "PickList"
+#define aSpecialWindowCommand "WindowList"
 
 const ::rtl::OUString UNO_COMMAND( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
 
-// #110897#
 MenuManager::MenuManager(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
-:   // #110897#
+:
     ThreadHelpBase( &Application::GetSolarMutex() ),
     mxServiceFactory(xServiceFactory)
 {
@@ -152,18 +151,17 @@ MenuManager::MenuManager(
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetHighContrastMode();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
 
     sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
 
 
-    USHORT nItemCount = pMenu->GetItemCount();
+    sal_uInt16 nItemCount = pMenu->GetItemCount();
     m_aMenuItemHandlerVector.reserve(nItemCount);
     ::rtl::OUString aItemCommand;
-    for ( USHORT i = 0; i < nItemCount; i++ )
+    for ( sal_uInt16 i = 0; i < nItemCount; i++ )
     {
-        USHORT nItemId = FillItemCommand(aItemCommand,pMenu, i );
+        sal_uInt16 nItemId = FillItemCommand(aItemCommand,pMenu, i );
         bool bShowMenuImages( m_bShowMenuImages );
 
         // overwrite the show icons on menu option?
@@ -180,15 +178,13 @@ MenuManager::MenuManager(
             if (! (( aItemCommand.getLength() > nAddonsURLPrefixLength ) &&
                 ( aItemCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 )) )
             {
-                // #110897#
-                // MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
 
                 // Create addon popup menu if there exist elements and this is the tools popup menu
                 if (( nItemId == SID_ADDONLIST ||
-                    aItemCommand == aSlotSpecialToolsMenu ) &&
+                    aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialToolsMenu)) ) &&
                     AddonMenuManager::HasAddonMenuElements() )
                 {
-                    USHORT      nCount   = 0;
+                    sal_uInt16      nCount   = 0;
                     AddonMenu*  pSubMenu = AddonMenuManager::CreateAddonMenu( rFrame );
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
@@ -206,13 +202,11 @@ MenuManager::MenuManager(
                         aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)ITEMID_ADDONLIST );
                         pPopupMenu->SetItemCommand( ITEMID_ADDONLIST, aItemCommand );
 
-                        // #110897#
-                        // MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                         AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
                         // Set image for the addon popup menu item
                         if ( bShowMenuImages && !pPopupMenu->GetItemImage( ITEMID_ADDONLIST ))
                         {
-                            Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
+                            Image aImage = GetImageFromURL( rFrame, aItemCommand, false );
                             if ( !!aImage )
                                    pPopupMenu->SetItemImage( ITEMID_ADDONLIST, aImage );
                         }
@@ -225,43 +219,33 @@ MenuManager::MenuManager(
         else
         {
             if ( nItemId == SID_NEWDOCDIRECT ||
-                 aItemCommand == aSlotNewDocDirect )
+                 aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotNewDocDirect)) )
             {
-                // #110897#
-                // Reference< ::com::sun::star::lang::XMultiServiceFactory > aMultiServiceFactory(::comphelper::getProcessServiceFactory());
-                // MenuConfiguration aMenuCfg( aMultiServiceFactory );
                 MenuConfiguration aMenuCfg( getServiceFactory() );
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
 
-                // #110897#
-                // MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                 AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
-                    Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
+                    Image aImage = GetImageFromURL( rFrame, aItemCommand, false );
                     if ( !!aImage )
                            pMenu->SetItemImage( nItemId, aImage );
                 }
             }
             else if ( nItemId == SID_AUTOPILOTMENU ||
-                      aItemCommand == aSlotAutoPilot )
+                      aItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotAutoPilot)) )
             {
-                // #110897#
-                // Reference< ::com::sun::star::lang::XMultiServiceFactory > aMultiServiceFactory(::comphelper::getProcessServiceFactory());
-                // MenuConfiguration aMenuCfg( aMultiServiceFactory );
                 MenuConfiguration aMenuCfg( getServiceFactory() );
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
 
-                // #110897#
-                // MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                 AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
 
 
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
-                    Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
+                    Image aImage = GetImageFromURL( rFrame, aItemCommand, false );
                     if ( !!aImage )
                            pMenu->SetItemImage( nItemId, aImage );
                 }
@@ -282,14 +266,14 @@ MenuManager::MenuManager(
                         if ( pMenuAttributes && pMenuAttributes->aImageId.getLength() > 0 )
                         {
                             // Retrieve image id from menu attributes
-                            aImage = GetImageFromURL( rFrame, aImageId, FALSE, m_bWasHiContrast );
+                            aImage = GetImageFromURL( rFrame, aImageId, false );
                         }
 
                         if ( !aImage )
                         {
-                            aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
+                            aImage = GetImageFromURL( rFrame, aItemCommand, false );
                             if ( !aImage )
-                                aImage = AddonsOptions().GetImageFromURL( aItemCommand, FALSE, m_bWasHiContrast );
+                                aImage = AddonsOptions().GetImageFromURL( aItemCommand, false );
                         }
 
                         if ( !!aImage )
@@ -297,7 +281,7 @@ MenuManager::MenuManager(
                     }
                     else if ( !pMenu->GetItemImage( nItemId ))
                     {
-                        Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
+                        Image aImage = GetImageFromURL( rFrame, aItemCommand, false );
                         if ( !!aImage )
                                pMenu->SetItemImage( nItemId, aImage );
                     }
@@ -309,7 +293,6 @@ MenuManager::MenuManager(
             }
         }
     }
-
 
     // retrieve label information for all menu items without item text
 
@@ -331,7 +314,7 @@ void MenuManager::SetHdl()
 MenuManager::~MenuManager()
 {
     std::vector< MenuItemHandler* >::iterator p;
-    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
     {
         MenuItemHandler* pItemHandler = *p;
         pItemHandler->xMenuItemDispatch.clear();
@@ -345,12 +328,12 @@ MenuManager::~MenuManager()
 }
 
 
-MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( USHORT nItemId )
+MenuManager::MenuItemHandler* MenuManager::GetMenuItemHandler( sal_uInt16 nItemId )
 {
     ResetableGuard aGuard( m_aLock );
 
     std::vector< MenuItemHandler* >::iterator p;
-    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
     {
         MenuItemHandler* pItemHandler = *p;
         if ( pItemHandler->nItemId == nItemId )
@@ -371,7 +354,7 @@ throw ( RuntimeException )
         ResetableGuard aGuard( m_aLock );
 
         std::vector< MenuItemHandler* >::iterator p;
-        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
         {
             MenuItemHandler* pMenuItemHandler = *p;
             if ( pMenuItemHandler->aMenuItemURL == aFeatureURL )
@@ -407,7 +390,6 @@ throw ( RuntimeException )
             URL aTargetURL;
             aTargetURL.Complete = pStatusChangedMenu->aMenuItemURL;
 
-            // #110897#
             m_xURLTransformer->parseStrict( aTargetURL );
 
             REFERENCE< XDISPATCHPROVIDER > xDispatchProvider( m_xFrame, UNO_QUERY );
@@ -436,9 +418,8 @@ void MenuManager::ClearMenuDispatch(const EVENTOBJECT& Source,bool _bRemoveOnly)
     // disposing called from parent dispatcher
     // remove all listener to prepare shutdown
 
-    // #110897#
     std::vector< MenuItemHandler* >::iterator p;
-    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
     {
         MenuItemHandler* pItemHandler = *p;
         if ( pItemHandler->xMenuItemDispatch.is() )
@@ -479,7 +460,7 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
             ResetableGuard aGuard( m_aLock );
 
             std::vector< MenuItemHandler* >::iterator p;
-            for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+            for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
             {
                 MenuItemHandler* pMenuItemHandler = *p;
                 if ( pMenuItemHandler->xMenuItemDispatch == Source.Source )
@@ -494,7 +475,6 @@ void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIM
                 URL aTargetURL;
                 aTargetURL.Complete = pMenuItemDisposing->aMenuItemURL;
 
-                // #110897#
                 m_xURLTransformer->parseStrict( aTargetURL );
 
                 pMenuItemDisposing->xMenuItemDispatch->removeStatusListener(SAL_STATIC_CAST( XSTATUSLISTENER*, this ), aTargetURL );
@@ -512,7 +492,7 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
     ::std::vector< MenuItemHandler* > aNewPickVector;
     Reference< XStringWidth > xStringLength( new StringLength );
 
-    USHORT  nPickItemId = START_ITEMID_PICKLIST;
+    sal_uInt16  nPickItemId = START_ITEMID_PICKLIST;
     int     nPickListMenuItems = ( aHistoryList.getLength() > 99 ) ? 99 : aHistoryList.getLength();
 
     aNewPickVector.reserve(nPickListMenuItems);
@@ -548,13 +528,12 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
         URL aTargetURL;
         REFERENCE< XDISPATCHPROVIDER > xDispatchProvider( m_xFrame, UNO_QUERY );
 
-        // #110897#
         REFERENCE< XDISPATCH > xMenuItemDispatch;
 
         static const ::rtl::OUString s_sDefault(RTL_CONSTASCII_USTRINGPARAM("_default"));
         // query for dispatcher
         std::vector< MenuItemHandler* >::iterator p;
-        for ( p = aNewPickVector.begin(); p != aNewPickVector.end(); p++ )
+        for ( p = aNewPickVector.begin(); p != aNewPickVector.end(); ++p )
         {
             MenuItemHandler* pMenuItemHandler = *p;
 
@@ -677,11 +656,10 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XMultiSe
     // update window list
     ::std::vector< ::rtl::OUString > aNewWindowListVector;
 
-    // #110897#
     Reference< XDesktop > xDesktop( xServiceFactory->createInstance( SERVICENAME_DESKTOP ), UNO_QUERY );
 
-    USHORT  nActiveItemId = 0;
-    USHORT  nItemId = START_ITEMID_WINDOWLIST;
+    sal_uInt16  nActiveItemId = 0;
+    sal_uInt16  nItemId = START_ITEMID_WINDOWLIST;
 
     if ( xDesktop.is() )
     {
@@ -806,7 +784,7 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         if ( m_bActive )
             return 0;
 
-        m_bActive = TRUE;
+        m_bActive = sal_True;
 
         ::rtl::OUString aCommand( m_aMenuItemCommand );
         if ( m_aMenuItemCommand.matchIgnoreAsciiCase( UNO_COMMAND, 0 ))
@@ -815,24 +793,21 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
             aCommand = aCommand.copy( UNO_COMMAND.getLength() );
         }
 
-        if ( m_aMenuItemCommand == aSpecialFileMenu ||
-             m_aMenuItemCommand == aSlotSpecialFileMenu ||
-             aCommand == aSpecialFileCommand )
+        if ( m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialFileMenu)) ||
+             m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialFileMenu)) ||
+             aCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialFileCommand)) )
             UpdateSpecialFileMenu( pMenu );
-        else if ( m_aMenuItemCommand == aSpecialWindowMenu ||
-                  m_aMenuItemCommand == aSlotSpecialWindowMenu ||
-                  aCommand == aSpecialWindowCommand )
+        else if ( m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialWindowMenu)) ||
+                  m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSlotSpecialWindowMenu)) ||
+                  aCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialWindowCommand)) )
                   UpdateSpecialWindowMenu( pMenu,getServiceFactory(),m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
-        sal_Bool bIsHiContrast = rSettings.GetHighContrastMode();
-
-        if ( m_bWasHiContrast != bIsHiContrast || bShowMenuImages != m_bShowMenuImages )
+        if ( bShowMenuImages != m_bShowMenuImages )
         {
             // The mode changed so we have to replace all images
-            m_bWasHiContrast    = bIsHiContrast;
             m_bShowMenuImages   = bShowMenuImages;
-            FillMenuImages(m_xFrame,pMenu,bIsHiContrast,bShowMenuImages);
+            FillMenuImages( m_xFrame, pMenu, bShowMenuImages );
         }
 
         if ( m_bInitialized )
@@ -841,14 +816,13 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         {
             URL aTargetURL;
 
-            // #110897#
             ResetableGuard aGuard( m_aLock );
 
             REFERENCE< XDISPATCHPROVIDER > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( xDispatchProvider.is() )
             {
                 std::vector< MenuItemHandler* >::iterator p;
-                for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+                for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
                 {
                     MenuItemHandler* pMenuItemHandler = *p;
                     if ( pMenuItemHandler &&
@@ -916,7 +890,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
     {
         ResetableGuard aGuard( m_aLock );
 
-        USHORT nCurItemId = pMenu->GetCurItemId();
+        sal_uInt16 nCurItemId = pMenu->GetCurItemId();
         if ( pMenu == m_pVCLMenu &&
              pMenu->GetItemType( nCurItemId ) != MENUITEM_SEPARATOR )
         {
@@ -925,14 +899,11 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
             {
                 // window list menu item selected
 
-                // #110897#
-                // Reference< XFramesSupplier > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
-                //  DESKTOP_SERVICE ), UNO_QUERY );
                 Reference< XFramesSupplier > xDesktop( getServiceFactory()->createInstance( SERVICENAME_DESKTOP ), UNO_QUERY );
 
                 if ( xDesktop.is() )
                 {
-                    USHORT nTaskId = START_ITEMID_WINDOWLIST;
+                    sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
                     Reference< XIndexAccess > xList( xDesktop->getFrames(), UNO_QUERY );
                     sal_Int32 nCount = xList->getCount();
                     for ( sal_Int32 i=0; i<nCount; ++i )
@@ -992,14 +963,12 @@ IMPL_LINK( MenuManager, Highlight, Menu *, EMPTYARG )
     return 0;
 }
 
-// #110897#
 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& MenuManager::getServiceFactory()
 {
-    // #110897#
     return mxServiceFactory;
 }
 
-void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,USHORT _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren)
+void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren)
 {
     MenuManager* pSubMenuManager = new MenuManager( getServiceFactory(), m_xFrame, _pPopupMenu, _bDelete, _bDeleteChildren );
 
@@ -1014,9 +983,9 @@ void MenuManager::AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCo
     m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
 }
 
-USHORT MenuManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,USHORT _nIndex) const
+sal_uInt16 MenuManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,sal_uInt16 _nIndex) const
 {
-    USHORT nItemId = _pMenu->GetItemId( _nIndex );
+    sal_uInt16 nItemId = _pMenu->GetItemId( _nIndex );
 
     _rItemCommand = _pMenu->GetItemCommand( nItemId );
     if ( !_rItemCommand.getLength() )
@@ -1028,13 +997,13 @@ USHORT MenuManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,
     }
     return nItemId;
 }
-void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_Bool bIsHiContrast,sal_Bool bShowMenuImages)
+void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_Bool bShowMenuImages)
 {
     AddonsOptions       aAddonOptions;
 
-    for ( USHORT nPos = 0; nPos < _pMenu->GetItemCount(); nPos++ )
+    for ( sal_uInt16 nPos = 0; nPos < _pMenu->GetItemCount(); nPos++ )
     {
-        USHORT nId = _pMenu->GetItemId( nPos );
+        sal_uInt16 nId = _pMenu->GetItemId( nPos );
         if ( _pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
         {
             bool bTmpShowMenuImages( bShowMenuImages );
@@ -1058,7 +1027,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_B
 
                 if ( aImageId.getLength() > 0 )
                 {
-                    Image aImage = GetImageFromURL( _xFrame, aImageId, FALSE, bIsHiContrast );
+                    Image aImage = GetImageFromURL( _xFrame, aImageId, false );
                     if ( !!aImage )
                     {
                         bImageSet = sal_True;
@@ -1069,9 +1038,9 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_B
                 if ( !bImageSet )
                 {
                     rtl::OUString aMenuItemCommand = _pMenu->GetItemCommand( nId );
-                    Image aImage = GetImageFromURL( _xFrame, aMenuItemCommand, FALSE, bIsHiContrast );
+                    Image aImage = GetImageFromURL( _xFrame, aMenuItemCommand, false );
                     if ( !aImage )
-                        aImage = aAddonOptions.GetImageFromURL( aMenuItemCommand, FALSE, bIsHiContrast );
+                        aImage = aAddonOptions.GetImageFromURL( aMenuItemCommand, false );
 
                     _pMenu->SetItemImage( nId, aImage );
                 }

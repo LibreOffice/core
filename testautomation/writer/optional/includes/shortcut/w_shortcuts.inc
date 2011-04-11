@@ -779,6 +779,7 @@ testcase tShortcutPasteUnformattedText
 	Kontext	
 	Active.Setpage TabFont
 	Kontext "TabFont"
+    wait 500
 	DefaultSize = Size.GetSelIndex
 	Size.Select 14 ' Size 20
 	DefaultStyle = Style.GetSelIndex
@@ -804,7 +805,7 @@ testcase tShortcutPasteUnformattedText
 		printlog "- shortcut did work"
 	else
 		if gPlatgroup = "osx" then
-			Warnlog "#103102#It is not possible to customize the keyboard combination cmd+option on MAC OSX."
+			Warnlog "It is not possible to customize the keyboard combination cmd+option on MAC OSX."
 			Call hCloseDocument
 			goto endsub
 		else
@@ -824,6 +825,7 @@ testcase tShortcutPasteUnformattedText
 	Kontext	
 	Active.Setpage TabFont
 	Kontext "TabFont"
+    wait 500
 	if Size.GetSelIndex <> 14 then
 		Warnlog "formatted word has lost its size"
 	endif
@@ -842,6 +844,7 @@ testcase tShortcutPasteUnformattedText
 	Kontext	
 	Active.Setpage TabFont
 	Kontext "TabFont"
+    wait 500
 	if Size.GetSelIndex <>  DefaultSize then
 		Warnlog "formatted word has no default size"
 	endif

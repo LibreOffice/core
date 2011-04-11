@@ -59,21 +59,21 @@ class ImpTwain
     Bitmap                      aBitmap;
     DSMENTRYPROC                pDSM;
     osl::Module                 pMod;
-    ULONG                       nCurState;
+    sal_uLong                       nCurState;
 
     void                        ImplCreate();
     void                        ImplOpenSourceManager();
     void                        ImplOpenSource();
-    BOOL                        ImplEnableSource();
+    sal_Bool                        ImplEnableSource();
     void                        ImplXfer();
-    void                        ImplFallback( ULONG nEvent );
+    void                        ImplFallback( sal_uLong nEvent );
 
                                 DECL_LINK( ImplFallbackHdl, void* );
                                 DECL_LINK( ImplDestroyHdl, void* );
 
 public:
 
-    BOOL                        ImplHandleMsg( void* pMsg );
+    sal_Bool                        ImplHandleMsg( void* pMsg );
 
 #ifdef OS2
     HAB                         hAB;
@@ -91,8 +91,8 @@ public:
 
     void                        Destroy();
 
-    BOOL                        SelectSource();
-    BOOL                        InitXfer();
+    sal_Bool                        SelectSource();
+    sal_Bool                        InitXfer();
     Bitmap                      GetXferBitmap();
 };
 

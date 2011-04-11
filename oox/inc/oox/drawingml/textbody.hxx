@@ -29,7 +29,6 @@
 #ifndef OOX_DRAWINGML_TEXTBODY_HXX
 #define OOX_DRAWINGML_TEXTBODY_HXX
 
-#include "oox/helper/containerhelper.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/textbodyproperties.hxx"
 #include "oox/drawingml/textliststyle.hxx"

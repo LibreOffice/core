@@ -27,13 +27,8 @@
 #ifndef __ooo_vba_excel_XFormatConditions_idl__
 #define __ooo_vba_excel_XFormatConditions_idl__
 
-#ifndef __com_sun_star_script_BasicErrorException_idl__
 #include <com/sun/star/script/BasicErrorException.idl>
-#endif
-
-#ifndef __ooo_vba_XCollection_idl__
 #include <ooo/vba/XCollection.idl>
-#endif
 
 module ooo {  module vba { module excel
 {

@@ -42,9 +42,9 @@ constants ConversionDictionaryType
     */
     const short HANGUL_HANJA        = 1;
 
-    /** Dictionary type for the conversion between Simplified and Traditionary Chinese
+    /** Dictionary type for the conversion between Simplified and Traditional Chinese
 
-        @since OOo 2.0.0
+        @since OOo 2.0
     */
     const short SCHINESE_TCHINESE   = 2;
 };

@@ -45,6 +45,7 @@ SHL1TARGET=	$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(SFXLIB)    \
+        $(FWELIB)    \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
         $(VCLLIB)		\
@@ -61,3 +62,11 @@ DEF1EXPORTFILE=	exports.dxp
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/protocolhandler.component
+
+$(MISC)/protocolhandler.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt protocolhandler.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt protocolhandler.component

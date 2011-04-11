@@ -25,16 +25,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define UID_GROSSER_TEST_DLG 101
-#define UID_CheckBox 202
-#define UID_TriStateBox 303
-#define UID_OKButton 404
-#define UID_TimeField 505
-#define UID_MultiLineEdit 606
-#define UID_RadioButton1 707
-#define UID_RadioButton2 708
-#define UID_MultiListBox 809
-#define UID_ComboBox 910
-#define UID_DateBox 1011
+#define UID_GROSSER_TEST_DLG    "AUTOMATION_UID_GROSSER_TEST_DLG"
+#define UID_CheckBox            "AUTOMATION_UID_CheckBox"
+#define UID_TriStateBox         "AUTOMATION_UID_TriStateBox"
+#define UID_OKButton            "AUTOMATION_UID_OKButton"
+#define UID_TimeField           "AUTOMATION_UID_TimeField"
+#define UID_MultiLineEdit       "AUTOMATION_UID_MultiLineEdit"
+#define UID_RadioButton1        "AUTOMATION_UID_RadioButton1"
+#define UID_RadioButton2        "AUTOMATION_UID_RadioButton2"
+#define UID_MultiListBox        "AUTOMATION_UID_MultiListBox"
+#define UID_ComboBox            "AUTOMATION_UID_ComboBox"
+#define UID_DateBox             "AUTOMATION_UID_DateBox"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

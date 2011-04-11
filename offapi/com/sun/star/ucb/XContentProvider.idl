@@ -87,7 +87,7 @@ published interface XContentProvider: com::sun::star::uno::XInterface
 
         @returns
         <code>0</code> is returned, if the identifiers are equal.
-        A value less than <code>0</code> indiactes, that the Id1
+        A value less than <code>0</code> indicates, that the Id1
         is less than Id2. A value greater than <code>0</code>
         is returned, if Id1 is greater than Id2.
     */

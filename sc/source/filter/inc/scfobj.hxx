@@ -38,7 +38,7 @@ class Sc10InsertObject
 {
 public:
     static void InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rectangle& rRect,
-                                SCTAB nSrcTab, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 );
+                                SCTAB nSrcTab, sal_uInt16 nX1, sal_uInt16 nY1, sal_uInt16 nX2, sal_uInt16 nY2 );
 };
 
 

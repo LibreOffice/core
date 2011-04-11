@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-/* $Id: hpara.cpp,v 1.6 2008-06-04 09:59:35 vg Exp $ */
-
 #include "precompile.h"
 
 #include "hwplib.h"
@@ -221,7 +219,7 @@ HBox *HWPPara::readHBox(HWPFile & hwpf)
     if (hh > 31 || hh == CH_END_PARA)
         hbox = new HBox(hh);
     else if (IS_SP_SKIP_BLOCK(hh))
-        hbox = new SkipBlock(hh);
+        hbox = new SkipData(hh);
     else
     {
         switch (hh)

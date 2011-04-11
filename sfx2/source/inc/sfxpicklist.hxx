@@ -64,7 +64,7 @@ class SfxPickList : public SfxListener
 
     static osl::Mutex*      GetOrCreateMutex();
 
-    void                    CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const String& aURL, sal_uInt32 nNo );
+    void                    CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const String& aURL, sal_uInt32 nNo );
     PickListEntry*          GetPickListEntry( sal_uInt32 nIndex );
     void                    CreatePickListEntries();
     void                    RemovePickListEntries();
@@ -77,7 +77,7 @@ class SfxPickList : public SfxListener
         sal_uInt32          GetAllowedMenuSize() { return m_nAllowedMenuSize; }
         sal_uInt32          GetNumOfEntries() const { return m_aPicklistVector.size(); }
         void                CreateMenuEntries( Menu* pMenu );
-        void                ExecuteMenuEntry( USHORT nId );
+        void                ExecuteMenuEntry( sal_uInt16 nId );
         void                ExecuteEntry( sal_uInt32 nIndex );
         String              GetMenuEntryTitle( sal_uInt32 nIndex );
 

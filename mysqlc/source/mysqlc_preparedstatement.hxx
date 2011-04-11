@@ -6,10 +6,6 @@
 *
 * OpenOffice.org - a multi-platform office productivity suite
 *
-* $RCSfile: mysqlc_preparedstatement.hxx,v $
-*
-* $Revision: 1.1.2.4 $
-*
 * This file is part of OpenOffice.org.
 *
 * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -39,9 +35,7 @@
 #include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
-#include <preextstl.h>
 #include <cppconn/prepared_statement.h>
-#include <postextstl.h>
 
 namespace connectivity
 {

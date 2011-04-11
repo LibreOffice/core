@@ -62,63 +62,29 @@ namespace css = ::com::sun::star;
 
 IMPL_LINK_INLINE_START( BasicIDEShell, ObjectDialogCancelHdl, ObjectCatalog *, EMPTYARG )
 {
-    ShowObjectDialog( FALSE, TRUE );
+    ShowObjectDialog( sal_False, sal_True );
     return 0;
 }
 IMPL_LINK_INLINE_END( BasicIDEShell, ObjectDialogCancelHdl, ObjectCatalog *, EMPTYARG )
-
-/*
-IMPL_LINK( BasicIDEShell, ObjectDialogInsertHdl, ObjectCatalog *, pObjCat )
-{
-    if ( !pCurWin )
-        return 0;
-
-    if ( pCurWin->IsA( TYPE( ModulWindow ) ) )
-    {
-        ModulWindow* pEditWin = (ModulWindow*)pCurWin;
-        pEditWin->InsertFromObjectCatalog( pObjCat );
-    }
-    else
-        Sound::Beep();
-
-    return 0;
-}
-*/
 
 Reference< view::XRenderable > BasicIDEShell::GetRenderable()
 {
     return Reference< view::XRenderable >( new basicide::BasicRenderable( pCurWin ) );
 }
 
-#if 0
-USHORT __EXPORT BasicIDEShell::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog )
+sal_Bool BasicIDEShell::HasSelection( sal_Bool /* bText */ ) const
 {
-    if ( pCurWin )
-    {
-        SfxPrinter* pPrinter = GetPrinter( TRUE );
-        if ( pPrinter )
-        {
-            SfxViewShell::Print( rProgress, bIsAPI, pPrintDialog );
-            pCurWin->PrintData( pPrinter );
-        }
-    }
-    return 0;
-}
-#endif
-
-BOOL BasicIDEShell::HasSelection( BOOL /* bText */ ) const
-{
-    BOOL bSel = FALSE;
+    sal_Bool bSel = sal_False;
     if ( pCurWin && pCurWin->ISA( ModulWindow ) )
     {
         TextView* pEditView = ((ModulWindow*)pCurWin)->GetEditView();
         if ( pEditView && pEditView->HasSelection() )
-            bSel = TRUE;
+            bSel = sal_True;
     }
     return bSel;
 }
 
-String BasicIDEShell::GetSelectionText( BOOL bWholeWord )
+String BasicIDEShell::GetSelectionText( sal_Bool bWholeWord )
 {
     String aText;
     if ( pCurWin && pCurWin->ISA( ModulWindow ) )
@@ -128,10 +94,7 @@ String BasicIDEShell::GetSelectionText( BOOL bWholeWord )
         {
             if ( bWholeWord && !pEditView->HasSelection() )
             {
-                // String aStrCurrentDelimiters = pEngine->GetWordDelimiters();
-                // pEngine->SetWordDelimiters( " .,;\"'" );
                 aText = pEditView->GetTextEngine()->GetWord( pEditView->GetSelection().GetEnd() );
-                // pEngine->SetWordDelimiters( aStrCurrentDelimiters );
             }
             else
             {
@@ -144,7 +107,7 @@ String BasicIDEShell::GetSelectionText( BOOL bWholeWord )
     return aText;
 }
 
-SfxPrinter* __EXPORT BasicIDEShell::GetPrinter( BOOL bCreate )
+SfxPrinter* BasicIDEShell::GetPrinter( sal_Bool bCreate )
 {
     if ( pCurWin ) // && pCurWin->ISA( ModulWindow ) )
     {
@@ -155,7 +118,7 @@ SfxPrinter* __EXPORT BasicIDEShell::GetPrinter( BOOL bCreate )
     return 0;
 }
 
-USHORT __EXPORT BasicIDEShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
+sal_uInt16 BasicIDEShell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bool )
 {
     (void)nDiffFlags;
     BasicDocShell* pDocShell = (BasicDocShell*)GetViewFrame()->GetObjectShell();
@@ -195,7 +158,7 @@ void BasicIDEShell::SetMDITitle()
         if ( pShell && aTitle != pShell->GetTitle( SFX_TITLE_CAPTION ) )
         {
             pShell->SetTitle( aTitle );
-            pShell->SetModified( FALSE );
+            pShell->SetModified( sal_False );
         }
 
         css::uno::Reference< css::frame::XController > xController = GetController ();
@@ -228,9 +191,9 @@ void BasicIDEShell::CreateModulWindowLayout()
 
 ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
 {
-    bCreatingWindow = TRUE;
+    bCreatingWindow = sal_True;
 
-    ULONG nKey = 0;
+    sal_uLong nKey = 0;
     ModulWindow* pWin = 0;
 
     String aLibName( rLibName );
@@ -245,7 +208,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
     // Vielleicht gibt es ein suspendiertes?
-    pWin = FindBasWin( rDocument, aLibName, aModName, FALSE, TRUE );
+    pWin = FindBasWin( rDocument, aLibName, aModName, sal_False, sal_True );
 
     if ( !pWin )
     {
@@ -254,11 +217,11 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
         if ( rDocument.hasModule( aLibName, aModName ) )
             bSuccess = rDocument.getModule( aLibName, aModName, aModule );
         else
-            bSuccess = rDocument.createModule( aLibName, aModName, TRUE, aModule );
+            bSuccess = rDocument.createModule( aLibName, aModName, sal_True, aModule );
 
         if ( bSuccess )
         {
-            pWin = FindBasWin( rDocument, aLibName, aModName, FALSE, TRUE );
+            pWin = FindBasWin( rDocument, aLibName, aModName, sal_False, sal_True );
             if( !pWin )
             {
                 // new module window
@@ -292,17 +255,17 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
             aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
         }
     }
-    pTabBar->InsertPage( (USHORT)nKey, aModName );
+    pTabBar->InsertPage( (sal_uInt16)nKey, aModName );
     pTabBar->Sort();
     pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
     if ( !pCurWin )
-        SetCurWindow( pWin, FALSE, FALSE );
+        SetCurWindow( pWin, sal_False, sal_False );
 
-    bCreatingWindow = FALSE;
+    bCreatingWindow = sal_False;
     return pWin;
 }
 
-ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, BOOL bCreateIfNotExist, BOOL bFindSuspended )
+ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended )
 {
     ModulWindow* pModWin = 0;
     IDEBaseWindow* pWin = aIDEWindowTable.First();
@@ -323,13 +286,13 @@ ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const S
     return pModWin;
 }
 
-void __EXPORT BasicIDEShell::Move()
+void BasicIDEShell::Move()
 {
     if ( pCurWin && pCurWin->ISA( ModulWindow ) )
         ((ModulWindow*)pCurWin)->FrameWindowMoved();
 }
 
-void __EXPORT BasicIDEShell::ShowCursor( bool bOn )
+void BasicIDEShell::ShowCursor( bool bOn )
 {
     if ( pCurWin && pCurWin->ISA( ModulWindow ) )
         ((ModulWindow*)pCurWin)->ShowCursor( bOn );
@@ -339,7 +302,7 @@ void __EXPORT BasicIDEShell::ShowCursor( bool bOn )
 sal_Int32 getBasicIDEShellCount( void );
 
 // Nur wenn Basicfenster oben:
-void __EXPORT BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
+void BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
 {
     if ( !pCurWin || !pCurWin->IsA( TYPE( ModulWindow ) ) )
         return;

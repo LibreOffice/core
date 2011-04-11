@@ -37,7 +37,7 @@
 #include <svtools/transfer.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/miscopt.hxx>
-#include "galbrws.hxx"
+#include "svx/galbrws.hxx"
 
 // ----------------------
 // - GalleryBrowserMode -
@@ -118,18 +118,18 @@ private:
     FixedLine           maSeparator;
     FixedText           maInfoBar;
     Point               maDragStartPos;
-    ULONG               mnCurActionPos;
+    sal_uIntPtr             mnCurActionPos;
     GalleryBrowserMode  meMode;
     GalleryBrowserMode  meLastMode;
-    BOOL                mbCurActionIsLinkage;
+    sal_Bool                mbCurActionIsLinkage;
 
     void                InitSettings();
 
-    void                ImplUpdateViews( USHORT nSelectionId );
+    void                ImplUpdateViews( sal_uInt16 nSelectionId );
     void                ImplUpdateInfoBar();
-    ULONG               ImplGetSelectedItemId( const Point* pSelPosPixel, Point& rSelPos );
-    void                ImplSelectItemId( ULONG nItemId );
-    void                ImplExecute( USHORT nId );
+    sal_uIntPtr               ImplGetSelectedItemId( const Point* pSelPosPixel, Point& rSelPos );
+    void                ImplSelectItemId( sal_uIntPtr nItemId );
+    void                ImplExecute( sal_uInt16 nId );
 
     // Control
     virtual void        Resize();
@@ -149,7 +149,7 @@ private:
 
 public:
 
-    static String       GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, ULONG nItemTextFlags );
+    static String       GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, sal_uIntPtr nItemTextFlags );
 
 public:
 
@@ -168,15 +168,15 @@ public:
     INetURLObject       GetURL() const;
     String              GetFilterName() const;
     Graphic             GetGraphic() const;
-    BOOL                GetVCDrawModel( FmFormModel& rModel ) const;
-    BOOL                IsLinkage() const;
+    sal_Bool                GetVCDrawModel( FmFormModel& rModel ) const;
+    sal_Bool                IsLinkage() const;
 
     sal_Int8            AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& rEvt );
     sal_Int8            ExecuteDrop( DropTargetHelper& rTarget, const ExecuteDropEvent& rEvt );
     void                StartDrag( Window* pWindow, const Point* pDragPoint = NULL );
     void                TogglePreview( Window* pWindow, const Point* pPreviewPoint = NULL );
     void                ShowContextMenu( Window* pWindow, const Point* pContextPoint = NULL );
-    BOOL                KeyInput( const KeyEvent& rEvt, Window* pWindow );
+    sal_Bool                KeyInput( const KeyEvent& rEvt, Window* pWindow );
 };
 
 #endif

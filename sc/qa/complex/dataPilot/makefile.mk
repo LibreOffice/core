@@ -25,34 +25,35 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
-TARGET  = DataPilot
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
+PRJ = ../../..
 PRJNAME = sc
-PACKAGE = complex$/dataPilot
+TARGET = qa_complex_datapilot
 
-# --- Settings -----------------------------------------------------
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = complex/dataPilot
+JAVATESTFILES = \
+    CheckDataPilot.java
+
+JAVAFILES = $(JAVATESTFILES) \
+    _XDataPilotDescriptor.java \
+    _XDataPilotTable.java \
+    _XNamed.java \
+    _XPropertySet.java
+
+JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+
+.END
+
 .INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
+ALLTAR : javatest
 
-#----- compile .java files -----------------------------------------
+.END
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
-JAVAFILES       = CheckDataPilot.java
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-SUBDIRS         = interfaceTests$/beans interfaceTests$/container interfaceTests$/sheet
-#----- make a jar from compiled files ------------------------------
-
-MAXLINELENGTH = 100000
-
-JARCLASSDIRS    = $(PACKAGE)
-JARTARGET       = $(TARGET).jar
-JARCOMPRESS 	= TRUE
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-
-run:
-    +java -cp $(CLASSPATH) org.openoffice.Runner -TimeOut 0 -tb java_complex -o $(PACKAGE:s#$/#.#).$(JAVAFILES:b)

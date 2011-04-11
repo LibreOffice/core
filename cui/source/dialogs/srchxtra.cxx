@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 
 #include "srchxtra.hxx"
@@ -87,7 +84,7 @@ SvxSearchFormatDialog::~SvxSearchFormatDialog()
 
 // -----------------------------------------------------------------------
 
-void SvxSearchFormatDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
+void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
 {
     switch ( nId )
     {
@@ -128,7 +125,7 @@ void SvxSearchFormatDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
             ( (SvxParaAlignTabPage&)rPage ).EnableJustifyExt();
             break;
         case RID_SVXPAGE_BACKGROUND :
-            ( (SvxBackgroundTabPage&)rPage ).ShowParaControl(TRUE);
+            ( (SvxBackgroundTabPage&)rPage ).ShowParaControl(sal_True);
             break;
     }
 }
@@ -137,7 +134,7 @@ void SvxSearchFormatDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
 
 SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
                                                     SearchAttrItemList& rLst,
-                                                    const USHORT* pWhRanges ) :
+                                                    const sal_uInt16* pWhRanges ) :
 
     ModalDialog( pParent, CUI_RES( RID_SVXDLG_SEARCHATTR )  ),
 
@@ -152,7 +149,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
 {
     FreeResource();
 
-    aAttrLB.SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
+    aAttrLB.SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     aAttrLB.GetModel()->SetSortMode( SortAscending );
 
     aOKBtn.SetClickHdl( LINK( this, SvxSearchAttributeDialog, OKHdl ) );
@@ -164,21 +161,21 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
     SfxItemPool& rPool = pSh->GetPool();
     SfxItemSet aSet( rPool, pWhRanges );
     SfxWhichIter aIter( aSet );
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
 
     while ( nWhich )
     {
-        USHORT nSlot = rPool.GetSlotId( nWhich );
+        sal_uInt16 nSlot = rPool.GetSlotId( nWhich );
         if ( nSlot >= SID_SVX_START )
         {
-            BOOL bChecked = FALSE, bFound = FALSE;
-            for ( USHORT i = 0; !bFound && i < rList.Count(); ++i )
+            sal_Bool bChecked = sal_False, bFound = sal_False;
+            for ( sal_uInt16 i = 0; !bFound && i < rList.Count(); ++i )
             {
                 if ( nSlot == rList[i].nSlot )
                 {
-                    bFound = TRUE;
+                    bFound = sal_True;
                     if ( IsInvalidItem( rList[i].pItem ) )
-                        bChecked = TRUE;
+                        bChecked = sal_True;
                 }
             }
 
@@ -197,7 +194,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
             if ( pEntry )
             {
                 aAttrLB.SetCheckButtonState( pEntry, bChecked ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
-                pEntry->SetUserData( (void*)(ULONG)nSlot );
+                pEntry->SetUserData( (void*)(sal_uLong)nSlot );
             }
         }
         nWhich = aIter.NextWhich();
@@ -214,12 +211,12 @@ IMPL_LINK( SvxSearchAttributeDialog, OKHdl, Button *, EMPTYARG )
     SearchAttrItem aInvalidItem;
     aInvalidItem.pItem = (SfxPoolItem*)-1;
 
-    for ( USHORT i = 0; i < aAttrLB.GetEntryCount(); ++i )
+    for ( sal_uInt16 i = 0; i < aAttrLB.GetEntryCount(); ++i )
     {
-        USHORT nSlot = (USHORT)(ULONG)aAttrLB.GetEntryData(i);
-        BOOL bChecked = aAttrLB.IsChecked(i);
+        sal_uInt16 nSlot = (sal_uInt16)(sal_uLong)aAttrLB.GetEntryData(i);
+        sal_Bool bChecked = aAttrLB.IsChecked(i);
 
-        USHORT j;
+        sal_uInt16 j;
         for ( j = rList.Count(); j; )
         {
             SearchAttrItem& rItem = rList[ --j ];
@@ -246,7 +243,7 @@ IMPL_LINK( SvxSearchAttributeDialog, OKHdl, Button *, EMPTYARG )
     }
 
     // remove invalid items (pItem == NULL)
-    for ( USHORT n = rList.Count(); n; )
+    for ( sal_uInt16 n = rList.Count(); n; )
         if ( !rList[ --n ].pItem )
             rList.Remove( n );
 
@@ -259,10 +256,10 @@ IMPL_LINK( SvxSearchAttributeDialog, OKHdl, Button *, EMPTYARG )
 SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
 (
     Window* pParent,
-    BOOL bRelax,
-    USHORT nOther,
-    USHORT nShorter,
-    USHORT nLonger
+    sal_Bool bRelax,
+    sal_uInt16 nOther,
+    sal_uInt16 nShorter,
+    sal_uInt16 nLonger
 ) :
     ModalDialog( pParent, CUI_RES( RID_SVXDLG_SEARCHSIMILARITY ) ),
 

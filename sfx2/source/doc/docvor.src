@@ -37,7 +37,7 @@
 
 ModalDialog DLG_ORGANIZE
 {
-    HelpId = SID_ORGANIZER ;
+    HelpId = CMD_SID_ORGANIZER ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 271 , 162 ) ;
@@ -53,14 +53,13 @@ ModalDialog DLG_ORGANIZE
     {
         Pos = MAP_APPFONT ( 205 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
-        /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
         Text [ en-US ] = "Close" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     PushButton BTN_FILES
     {
+        HelpID = "sfx2:PushButton:DLG_ORGANIZE:BTN_FILES";
         Pos = MAP_APPFONT ( 205 , 143 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~File..." ;
@@ -68,12 +67,14 @@ ModalDialog DLG_ORGANIZE
     };
     PushButton BTN_ADDRESSTEMPLATE
     {
+        HelpID = "sfx2:PushButton:DLG_ORGANIZE:BTN_ADDRESSTEMPLATE";
         Pos = MAP_APPFONT ( 205 , 124 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Address Book..." ;
     };
     ListBox LB_LEFT_TYP
     {
+        HelpID = "sfx2:ListBox:DLG_ORGANIZE:LB_LEFT_TYP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 3 , 144 ) ;
         Size = MAP_APPFONT ( 94 , 55 ) ;
@@ -88,6 +89,7 @@ ModalDialog DLG_ORGANIZE
     };
     ListBox LB_RIGHT_TYP
     {
+        HelpID = "sfx2:ListBox:DLG_ORGANIZE:LB_RIGHT_TYP";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 103 , 144 ) ;
         Size = MAP_APPFONT ( 94 , 55 ) ;
@@ -142,6 +144,7 @@ ModalDialog DLG_ORGANIZE
     };
     MenuButton BTN_EDIT
     {
+        HelpID = "sfx2:MenuButton:DLG_ORGANIZE:BTN_EDIT";
         Pos = MAP_APPFONT ( 205 , 23 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Commands" ;
@@ -164,8 +167,6 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_DELETE ;
                     HelpId = HID_ORGANIZE_DELETE ;
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-                    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
                     Text [ en-US ] = "~Delete" ;
                     AccelKey = KeyCode
                     {
@@ -259,57 +260,4 @@ ModalDialog DLG_ORGANIZE
         MASKCOLOR ;
         ImageBitmap = Bitmap { File = "doccl.bmp" ; } ;
     };
-    Image IMG_OPENED_FOLDER_HC
-    {
-        MASKCOLOR ;
-        ImageBitmap = Bitmap { File = "folderop_h.bmp" ; } ;
-    };
-    Image IMG_CLOSED_FOLDER_HC
-    {
-        MASKCOLOR ;
-        ImageBitmap = Bitmap { File = "foldercl_h.bmp" ; } ;
-    };
-    Image IMG_OPENED_DOC_HC
-    {
-        MASKCOLOR ;
-        ImageBitmap = Bitmap { File = "doccl_h.bmp" ; } ;
-    };
-    Image IMG_CLOSED_DOC_HC
-    {
-        MASKCOLOR ;
-        ImageBitmap = Bitmap { File = "doccl_h.bmp" ; } ;
-    };
-    /*    FixedText FT_DEFAULT_TEMPLATE_LABEL
-    {
-        Pos = MAP_APPFONT ( 3 , 161 ) ;
-        Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ en-US ] = "Default template:" ;
-    };
-    FixedText FT_DEFAULT_TEMPLATE
-    {
-        Pos = MAP_APPFONT ( 66 , 161 ) ;
-        Size = MAP_APPFONT ( 131 , 10 ) ;
-    };*/
 };
- // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

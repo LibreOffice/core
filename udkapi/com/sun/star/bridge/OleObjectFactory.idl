@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_bridge_OleObjectFactory_idl__
 #define __com_sun_star_bridge_OleObjectFactory_idl__
 
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
-#endif
 
 
 //=============================================================================

@@ -87,11 +87,11 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException)
     }
     uno::Reference< lang::XServiceInfo > xServiceInfo( xCurrentText, uno::UNO_QUERY_THROW );
     rtl::OUString aImplName = xServiceInfo->getImplementationName();
-    if( aImplName.equalsAscii("SwXBodyText") )
+    if( aImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SwXBodyText")) )
     {
         return word::WdSeekView::wdSeekMainDocument;
     }
-    else if( aImplName.equalsAscii("SwXHeadFootText") )
+    else if( aImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SwXHeadFootText")) )
     {
         if( HeaderFooterHelper::isHeader( mxModel ) )
         {
@@ -112,7 +112,7 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException)
                 return word::WdSeekView::wdSeekPrimaryFooter;
         }
     }
-    else if( aImplName.equalsAscii("SwXFootnote") )
+    else if( aImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SwXFootnote")) )
     {
         if( xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Endnote") ) ) )
             return word::WdSeekView::wdSeekEndnotes;
@@ -129,9 +129,6 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
     // FIXME: save the current cursor position, if the cursor is in the main
     // document, so we can jump back to this position, if the macro sets
     // the ViewMode back to wdSeekMainDocument
-
-    // if( _seekview == getSeekView() )
-    //    return;
 
     word::gotoSelectedObjectAnchor( mxModel );
     switch( _seekview )
@@ -316,7 +313,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
             uno::Reference< beans::XPropertySet > xCursorProps( mxViewCursor, uno::UNO_QUERY_THROW );
             rtl::OUString aPageStyleName;
             xCursorProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("PageStyleName"))) >>= aPageStyleName;
-            if( aPageStyleName.equalsAscii("First Page") )
+            if( aPageStyleName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("First Page")) )
             {
                 // go to the beginning of where the next style is used
                 sal_Bool hasNextPage = sal_False;

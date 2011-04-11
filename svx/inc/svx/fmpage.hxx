@@ -62,17 +62,15 @@ public:
     virtual SdrPage* Clone() const;
     using SdrPage::Clone;
 
-    virtual void    InsertObject(SdrObject* pObj, ULONG nPos = CONTAINER_APPEND,
+    virtual void    InsertObject(SdrObject* pObj, sal_uLong nPos = CONTAINER_APPEND,
                                     const SdrInsertReason* pReason=NULL);
 
-    virtual SdrObject* RemoveObject(ULONG nObjNum);
+    virtual SdrObject* RemoveObject(sal_uLong nObjNum);
 
     // access to all forms
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& GetForms( bool _bForceCreate = true ) const;
 
-#ifndef SVX_LIGHT
     FmFormPageImpl& GetImpl() const { return *m_pImpl; }
-#endif // SVX_LIGHT
 
 public:
     const String&       GetName() const { return m_sPageName; }

@@ -98,10 +98,8 @@ VCLXMenu::VCLXMenu( Menu* pMenu ) : maMenuListeners( *this )
 VCLXMenu::~VCLXMenu()
 {
     DBG_DTOR( VCLXMenu, 0 );
-    for ( sal_uInt32 n = maPopupMenueRefs.Count(); n; )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenueRefs.GetObject( --n );
-        delete pRef;
+    for ( size_t n = maPopupMenueRefs.size(); n; ) {
+        delete maPopupMenueRefs[ --n ];
     }
     if ( mpMenu )
     {
@@ -110,7 +108,7 @@ VCLXMenu::~VCLXMenu()
     }
 }
 
-BOOL VCLXMenu::IsPopupMenu() const
+sal_Bool VCLXMenu::IsPopupMenu() const
 {
     return (mpMenu && ! mpMenu->IsMenuBar());
 }
@@ -205,7 +203,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                 case VCLEVENT_MENU_HIDE:
                 break;
 
-                default:    DBG_ERROR( "MenuEventListener - Unknown event!" );
+                default:    OSL_FAIL( "MenuEventListener - Unknown event!" );
            }
        }
     }
@@ -515,7 +513,7 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
         // Selbst eine Ref halten!
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pNewRef = new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > ;
         *pNewRef = rxPopupMenu;
-        maPopupMenueRefs.Insert( pNewRef, LIST_APPEND );
+        maPopupMenueRefs.push_back( pNewRef );
 
         mpMenu->SetPopupMenu( nItemId, (PopupMenu*) pVCLMenu->GetMenu() );
     }
@@ -530,9 +528,9 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
     Menu* pMenu = mpMenu ? mpMenu->GetPopupMenu( nItemId ) : NULL;
     if ( pMenu )
     {
-        for ( sal_uInt32 n = maPopupMenueRefs.Count(); n; )
+        for ( size_t n = maPopupMenueRefs.size(); n; )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenueRefs.GetObject( --n );
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenueRefs[ --n ];
             Menu* pM = ((VCLXMenu*)pRef->get())->GetMenu();
             if ( pM == pMenu )
             {
@@ -723,7 +721,7 @@ namespace
         sal_Bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
         sal_Bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
         sal_Bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
-        USHORT   nKey   = (USHORT)aAWTKey.KeyCode;
+        sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
 
         return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
     }
@@ -1091,7 +1089,7 @@ DBG_NAME(VCLXMenuBar);
 VCLXMenuBar::VCLXMenuBar()
 {
     DBG_CTOR( VCLXMenuBar, 0 );
-    ImplCreateMenu( FALSE );
+    ImplCreateMenu( sal_False );
 }
 
 VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( (Menu *)pMenuBar )
@@ -1108,7 +1106,7 @@ DBG_NAME(VCLXPopupMenu);
 VCLXPopupMenu::VCLXPopupMenu()
 {
     DBG_CTOR( VCLXPopupMenu, 0 );
-    ImplCreateMenu( TRUE );
+    ImplCreateMenu( sal_True );
 }
 
 VCLXPopupMenu::VCLXPopupMenu( PopupMenu* pPopMenu ) : VCLXMenu( (Menu *)pPopMenu )

@@ -121,7 +121,7 @@ public:
 
 protected:
     /** Callback from edit engine to check the next cell. */
-    virtual BOOL        SpellNextDocument();
+    virtual sal_Bool        SpellNextDocument();
 
     /** Returns true, if the current text contains a spelling error. */
     virtual bool        NeedsConversion();
@@ -155,7 +155,7 @@ public:
 
 protected:
     /** Callback from edit engine to convert the next cell. */
-    virtual BOOL        ConvertNextDocument();
+    virtual sal_Bool        ConvertNextDocument();
 
     /** Returns true, if the current text contains text to convert. */
     virtual bool        NeedsConversion();

@@ -59,7 +59,6 @@ using namespace com::sun::star;
 using namespace cppu;
 
 using rtl::OUString;
-
 namespace { struct lcl_CachedImplId : public rtl::Static< Sequence < sal_Int8 >, lcl_CachedImplId > {}; }
 
 const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageStream::static_getImplementationId()
@@ -417,12 +416,12 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawData()
     }
     catch (ZipException &)//rException)
     {
-        OSL_ENSURE( 0, "ZipException thrown");//rException.Message);
+        OSL_FAIL( "ZipException thrown");//rException.Message);
         return Reference < io::XInputStream > ();
     }
     catch (Exception &)
     {
-        OSL_ENSURE( 0, "Exception is thrown during stream wrapping!\n");
+        OSL_FAIL( "Exception is thrown during stream wrapping!\n");
         return Reference < io::XInputStream > ();
     }
 }
@@ -448,12 +447,12 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
     }
     catch (ZipException &)//rException)
     {
-        OSL_ENSURE( 0,"ZipException thrown");//rException.Message);
+        OSL_FAIL( "ZipException thrown");//rException.Message);
         return Reference < io::XInputStream > ();
     }
     catch (Exception &)
     {
-        OSL_ENSURE( 0, "Exception is thrown during stream wrapping!\n");
+        OSL_FAIL( "Exception is thrown during stream wrapping!\n");
         return Reference < io::XInputStream > ();
     }
 }

@@ -35,10 +35,9 @@
 
 #define CB_USE_VARIANTS             1
 #define CB_TRANSLATE_COMMONTERMS    2
-#define CB_REVERSE                  3
 
 #define FL_DIRECTION        1
 #define FL_COMMONTERMS      2
-#define FL_BOTTOMLINE       3
+#define T_FL_BOTTOMLINE       3
 
 #endif

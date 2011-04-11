@@ -362,7 +362,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STDLIBS) \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
         $(SHL$(TNR)LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -386,7 +386,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STDLIBS)                      \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -469,8 +469,10 @@ $(SHL$(TNR)TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_$(TNR).cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL$(TNR)RPATH) $@
+.IF "$(SHL$(TNR)CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL$(TNR)CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS$(TNR)) $(SHL$(TNR)TARGETN)
@@ -556,7 +558,6 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STDLIBS:^"-l") \
         $(SHL$(TNR)LINKRES) \
         $(SHL$(TNR)STDSHL:^"-l") $(STDSHL$(TNR):^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -567,16 +568,6 @@ $(SHL$(TNR)TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL$(TNR)TARGET)
-
-runtest_$(SHL$(TNR)TARGET) : $(SHL$(TNR)TARGETN)
-    testshl $(SHL$(TNR)TARGETN) sce/$(SHL$(TNR)TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL$(TNR)TARGETN)"!=""
 
 # unroll end

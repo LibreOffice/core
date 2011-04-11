@@ -58,7 +58,7 @@ namespace svxform
         static ::connectivity::simple::createDataAccessToolsFactoryFunction
                                 s_pFactoryCreationFunc;
 
-        mutable BOOL            m_bCreateAlready;
+        mutable sal_Bool            m_bCreateAlready;
 
     private:
         mutable ::rtl::Reference< ::connectivity::simple::IDataAccessToolsFactory > m_xDataAccessFactory;

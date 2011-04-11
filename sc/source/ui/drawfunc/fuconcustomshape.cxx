@@ -76,12 +76,12 @@ FuConstCustomShape::~FuConstCustomShape()
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -92,18 +92,14 @@ BOOL __EXPORT FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
         if ( pObj )
         {
             SetAttributes( pObj );
-            sal_Bool bForceFillStyle = sal_True;
-            sal_Bool bForceNoFillStyle = sal_False;
+            sal_Bool bForceNoFillStyle = false;
             if ( ((SdrObjCustomShape*)pObj)->UseNoFillStyle() )
-            {
-                bForceFillStyle = sal_False;
                 bForceNoFillStyle = sal_True;
-            }
             if ( bForceNoFillStyle )
                 pObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
         }
 
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
     return bReturn;
 }
@@ -114,7 +110,7 @@ BOOL __EXPORT FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -125,18 +121,18 @@ BOOL __EXPORT FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = false;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj(SDRCREATE_FORCEEND);
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
@@ -145,14 +141,14 @@ BOOL __EXPORT FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstCustomShape::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuConstCustomShape::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
+    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -194,7 +190,7 @@ void FuConstCustomShape::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
@@ -219,7 +215,7 @@ SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, c
 
 void FuConstCustomShape::SetAttributes( SdrObject* pObj )
 {
-    sal_Bool bAttributesAppliedFromGallery = sal_False;
+    sal_Bool bAttributesAppliedFromGallery = false;
 
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
     {
@@ -275,7 +271,7 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
         pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER, 0 ) );
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-        pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
+        pObj->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
         ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &aCustomShape );
     }
 }

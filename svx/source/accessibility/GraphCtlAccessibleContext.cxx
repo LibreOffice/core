@@ -46,7 +46,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <svtools/colorcfg.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 
 //===== local includes ========================================================
 #include <svx/ShapeTypeHandler.hxx>
@@ -432,8 +432,6 @@ Reference< XAccessibleStateSet > SAL_CALL SvxGraphCtrlAccessibleContext::getAcce
     }
     else
     {
-        // pStateSetHelper->AddState( AccessibleStateType::ENABLED );
-        // pStateSetHelper->AddState( AccessibleStateType::SENSITIVE );
         pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
         if( mpControl->HasFocus() )
             pStateSetHelper->AddState( AccessibleStateType::FOCUSED );
@@ -556,7 +554,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     svtools::ColorConfig aColorConfig;
-    UINT32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
+    sal_uInt32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -566,7 +564,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground (void)
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -824,7 +822,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::disposing()
     {
         ShapesMapType::iterator I;
 
-        for (I=mxShapes.begin(); I!=mxShapes.end(); I++)
+        for (I=mxShapes.begin(); I!=mxShapes.end(); ++I)
         {
             XAccessible* pAcc = (*I).second;
             Reference< XComponent > xComp( pAcc, UNO_QUERY );
@@ -949,7 +947,7 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
     {
         const SfxSimpleHint* pSfxHint = PTR_CAST(SfxSimpleHint, &rHint );
 
-        // ist unser SdDrawDocument gerade gestorben?
+        // Has our SdDrawDocument just died?
         if(pSfxHint && pSfxHint->GetId() == SFX_HINT_DYING)
         {
             dispose();

@@ -48,22 +48,22 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewsh.hxx>
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include "workwin.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "dialog.hrc"
 
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-#define USERITEM_NAME OUString::createFromAscii( "UserItem" )
+#define USERITEM_NAME OUString(RTL_CONSTASCII_USTRINGPARAM("UserItem"))
 
 class SfxModelessDialog_Impl : public SfxListener
 {
 public:
     ByteString      aWinState;
     SfxChildWindow* pMgr;
-    BOOL            bConstructed;
+    sal_Bool            bConstructed;
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     Timer           aMoveTimer;
@@ -87,7 +87,7 @@ class SfxFloatingWindow_Impl : public SfxListener
 public:
     ByteString      aWinState;
     SfxChildWindow* pMgr;
-    BOOL            bConstructed;
+    sal_Bool            bConstructed;
     Timer           aMoveTimer;
 
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -137,10 +137,10 @@ void SfxModalDialog::SetDialogData_Impl()
 
 void SfxModalDialog::GetDialogData_Impl()
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Hilfsfunktion; liest die Dialogposition aus der Ini-Datei
-    und setzt diese am "ubergebenen Window.
+    Helper function, reads the dialogue position from the ini file and
+    puts them on the transfered window.
 */
 
 {
@@ -161,20 +161,16 @@ void SfxModalDialog::GetDialogData_Impl()
 void SfxModalDialog::init()
 {
     GetDialogData_Impl();
-    aTimer.SetTimeout( 100 );
-    aTimer.SetTimeoutHdl( LINK( this, SfxModalDialog, TimerHdl_Impl ) );
-    aTimer.Start();
 }
 
 // -----------------------------------------------------------------------
 
 SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId )
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Konstruktor der allgemeinen Basisklasse f"ur modale Dialoge;
-    ResId wird als ID im ini-file verwendet.
-    Die dort gespeicherte Position wird gesetzt.
+    Constructor of the general base class for modal Dialoge;
+    ResId is used as ID in ini-file. The saved position from there is set.
 */
 
 :   ModalDialog(pParent, rResId),
@@ -190,11 +186,11 @@ SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId )
 SfxModalDialog::SfxModalDialog(Window* pParent,
                                sal_uInt32 nUniqueId,
                                WinBits nWinStyle) :
-/*      [Beschreibung]
+/*  [Description]
 
-    Konstruktor der allgemeinen Basisklasse f"ur modale Dialoge;
-    ID f"ur das ini-file wird explizit "ubergeben.
-    Die dort gespeicherte Position wird gesetzt.
+    Constructor of the general base class for modal Dialoge;
+    The ID for the ini-file wird explicilty handed over.
+    The saved position from there is set.
 */
 
     ModalDialog(pParent, nWinStyle),
@@ -209,19 +205,13 @@ SfxModalDialog::SfxModalDialog(Window* pParent,
 
 SfxModalDialog::~SfxModalDialog()
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Dtor; schreibt Dialogposition in das ini-file
+    Destructor; writes the Dialog position in the ini-file.
 */
 
 {
-/*
-    SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI )
-        pHelpPI->ResetTopic();
-*/
     SetDialogData_Impl();
-    aTimer.Stop();
     delete pOutputSet;
 }
 
@@ -233,16 +223,6 @@ void SfxModalDialog::CreateOutputItemSet( SfxItemPool& rPool )
 }
 
 // -----------------------------------------------------------------------
-
-IMPL_LINK( SfxModalDialog, TimerHdl_Impl, Timer*, EMPTYARG )
-{
-/*
-    SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI )
-        pHelpPI->LoadTopic( GetHelpId() );
- */
-    return 0L;
-}
 
 void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
 {
@@ -294,7 +274,7 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
             }
         }
 
-        pImp->bConstructed = TRUE;
+        pImp->bConstructed = sal_True;
     }
 
     ModelessDialog::StateChanged( nStateChange );
@@ -302,12 +282,12 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
 
 void SfxModelessDialog::Initialize(SfxChildWinInfo *pInfo)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Initialisierung der Klasse SfxModelessDialog "uber ein SfxChildWinInfo.
-    Die Initialisierung erfolgt erst in einem 2.Schritt
-    nach dem ctor und sollte vom ctor der abgeleiteten Klasse
-    oder von dem des SfxChildWindows aufgerufen werden.
+    Initialization of the class SfxModelessDialog via a SfxChildWinInfo.
+    The initialization is done only in a 2nd step after the constructor, this
+    constructor should be called from the derived class or from the
+    SfxChildWindows.
 */
 
 {
@@ -316,12 +296,11 @@ void SfxModelessDialog::Initialize(SfxChildWinInfo *pInfo)
 
 void SfxModelessDialog::Resize()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode der Klasse FloatingWindow merkt sich ggf. eine
-    ver"anderte Gr"o\se.
-    Wird diese Methode von einer abgeleiteten Klasse "uberschrieben, mu\s
-    auch SfxFloatingWindow::Resize() gerufen werden.
+    This virtual method of the class FloatingWindow keeps track if a change
+    in size has been made. When this method is overridden by a derived class,
+    then the SfxFloatingWindow: Resize() must also be called.
 */
 
 {
@@ -354,7 +333,7 @@ IMPL_LINK( SfxModelessDialog, TimerHdl, Timer*, EMPTYARG)
     {
         if ( !IsRollUp() )
             aSize = GetSizePixel();
-        ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        sal_uIntPtr nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
         if ( GetStyle() & WB_SIZEABLE )
             nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
         pImp->aWinState = GetWindowState( nMask );
@@ -373,10 +352,9 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
     pImp( new SfxModelessDialog_Impl )
 {
     pImp->pMgr = pCW;
-    pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    pImp->bConstructed = sal_False;
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -393,10 +371,9 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
     pImp( new SfxModelessDialog_Impl )
 {
     pImp->pMgr = pCW;
-    pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    pImp->bConstructed = sal_False;
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -407,10 +384,10 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
 
 long SfxModelessDialog::Notify( NotifyEvent& rEvt )
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Wenn ein ModelessDialog aktiviert wird, wird sein ViewFrame aktiviert.
-    Notwendig ist das bei PlugInFrames.
+    If a ModelessDialog is enabled its ViewFrame wil be activated.
+    This is necessary by PluginInFrames.
 */
 
 {
@@ -419,15 +396,15 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
-        ULONG nHelpId  = 0;
-        while ( !nHelpId && pWindow )
+        rtl::OString sHelpId;
+        while ( !sHelpId.getLength() && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( nHelpId )
-            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
+        if ( sHelpId.getLength() )
+            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
     {
@@ -436,9 +413,9 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
     }
     else if( rEvt.GetType() == EVENT_KEYINPUT )
     {
-        // KeyInput zuerst f"ur Dialogfunktionen zulassen ( TAB etc. )
+        // First, allow KeyInput for Dialog functions ( TAB etc. )
         if ( !ModelessDialog::Notify( rEvt ) && SfxViewShell::Current() )
-            // dann auch global g"ultige Acceleratoren verwenden
+            // then also for valid global accelerators.
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
         return sal_True;
     }
@@ -450,9 +427,9 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
 
 SfxModelessDialog::~SfxModelessDialog()
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Dtor
+    Destructor
 */
 
 {
@@ -465,19 +442,16 @@ SfxModelessDialog::~SfxModelessDialog()
 
 sal_Bool SfxModelessDialog::Close()
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Das Fenster wird geschlossen, indem das ChildWindow durch Ausf"uhren des
-    ChildWindow-Slots zerst"ort wird.
-    Wird diese Methode von einer abgeleiteten Klasse "uberschrieben, mu\s
-    danach SfxModelessDialogWindow::Close() gerufen werden, wenn nicht das
-    Close() mit "return sal_False" abgebrochen wird.
-
+    The window is closed when the ChildWindow is destroyed by running the
+    ChildWindow-slots. If this is method is overridden by a derived class
+    method, then the SfxModelessDialogWindow: Close() must be called afterwards
+    if the Close() was not cancelled with "return sal_False".
 */
 
 {
-    // Execute mit Parametern, da Toggle von einigen ChildWindows ignoriert
-    // werden kann
+    // Execute with Parameters, since Toggle is ignored by some ChildWindows.
     SfxBoolItem aValue( pImp->pMgr->GetType(), sal_False);
     pBindings->GetDispatcher_Impl()->Execute(
         pImp->pMgr->GetType(),
@@ -489,14 +463,13 @@ sal_Bool SfxModelessDialog::Close()
 
 void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    F"ullt ein SfxChildWinInfo mit f"ur SfxModelessDialof spezifischen Daten,
-    damit sie in die INI-Datei geschrieben werden koennen.
-    Es wird angenommen, da\s rInfo alle anderen evt. relevanten Daten in
-    der ChildWindow-Klasse erh"alt.
-    ModelessDialogs haben keine spezifischen Informationen, so dass die
-    Basisimplementierung nichts tut und daher nicht gerufen werden mu\s.
+    Fills a SfxChildWinInfo with specific data from SfxModelessDialog,
+    so that it can be written in the INI file. It is assumed that rinfo
+    receives all other possible relevant data in the ChildWindow class.
+    ModelessDialogs have no specific information, so that the base
+    implementation does nothing and therefore must not be called.
 */
 
 {
@@ -509,10 +482,10 @@ void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
 
 long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Wenn ein ModelessDialog aktiviert wird, wird sein ViewFrame aktiviert.
-    Notwendig ist das bei PlugInFrames.
+    If a ModelessDialog is enabled, its ViewFrame will be activated.
+    This necessary for the PluginInFrames.
 */
 
 {
@@ -521,15 +494,15 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
-        ULONG nHelpId  = 0;
-        while ( !nHelpId && pWindow )
+        rtl::OString sHelpId;
+        while ( !sHelpId.getLength() && pWindow )
         {
-            nHelpId = pWindow->GetHelpId();
+            sHelpId = pWindow->GetHelpId();
             pWindow = pWindow->GetParent();
         }
 
-        if ( nHelpId )
-            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), nHelpId );
+        if ( sHelpId.getLength() )
+            SfxHelp::OpenHelpAgent( &pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame(), sHelpId );
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS )
     {
@@ -541,9 +514,9 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
     }
     else if( rEvt.GetType() == EVENT_KEYINPUT )
     {
-        // KeyInput zuerst f"ur Dialogfunktionen zulassen
+        // First, allow KeyInput for Dialog functions
         if ( !FloatingWindow::Notify( rEvt ) && SfxViewShell::Current() )
-            // dann auch global g"ultige Acceleratoren verwenden
+            // then also for valid global accelerators.
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
         return sal_True;
     }
@@ -561,10 +534,9 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImp( new SfxFloatingWindow_Impl )
 {
     pImp->pMgr = pCW;
-    pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    pImp->bConstructed = sal_False;
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -582,10 +554,9 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImp( new SfxFloatingWindow_Impl )
 {
     pImp->pMgr = pCW;
-    pImp->bConstructed = FALSE;
-    sal_uInt32 nId = GetHelpId();
-    SetHelpId(0);
-    SetUniqueId( nId );
+    pImp->bConstructed = sal_False;
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
     pImp->aMoveTimer.SetTimeout(50);
@@ -596,19 +567,16 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 
 sal_Bool SfxFloatingWindow::Close()
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Das Fenster wird geschlossen, indem das ChildWindow durch Ausf"uhren des
-    ChildWindow-Slots zerst"ort wird.
-    Wird diese Methode von einer abgeleiteten Klasse "uberschrieben, mu\s
-    danach SfxFloatingWindow::Close() gerufen werden, wenn nicht das Close()
-    mit "return sal_False" abgebrochen wird.
-
+    The window is closed when the ChildWindow is destroyed by running the
+    ChildWindow-slots. If this is method is overridden by a derived class
+    method, then the SfxModelessDialogWindow: Close) must be called afterwards
+    if the Close() was not cancelled with "return sal_False".
 */
 
 {
-    // Execute mit Parametern, da Toggle von einigen ChildWindows ignoriert
-    // werden kann
+    // Execute with Parameters, since Toggle is ignored by some ChildWindows.
     SfxBoolItem aValue( pImp->pMgr->GetType(), sal_False);
     pBindings->GetDispatcher_Impl()->Execute(
             pImp->pMgr->GetType(),
@@ -620,9 +588,9 @@ sal_Bool SfxFloatingWindow::Close()
 
 SfxFloatingWindow::~SfxFloatingWindow()
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Dtor
+    Destructor
 */
 
 {
@@ -635,12 +603,11 @@ SfxFloatingWindow::~SfxFloatingWindow()
 
 void SfxFloatingWindow::Resize()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode der Klasse FloatingWindow merkt sich ggf. eine
-    ver"anderte Gr"o\se.
-    Wird diese Methode von einer abgeleiteten Klasse "uberschrieben, mu\s
-    auch SfxFloatingWindow::Resize() gerufen werden.
+    This virtual method of the class FloatingWindow keeps track if a change
+    in size has been made. When this method is overridden by a derived class,
+    then the SfxFloatingWindow: Resize() must also be called.
 */
 
 {
@@ -673,7 +640,7 @@ IMPL_LINK( SfxFloatingWindow, TimerHdl, Timer*, EMPTYARG)
     {
         if ( !IsRollUp() )
             aSize = GetSizePixel();
-        ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        sal_uIntPtr nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
         if ( GetStyle() & WB_SIZEABLE )
             nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
         pImp->aWinState = GetWindowState( nMask );
@@ -690,7 +657,7 @@ void SfxFloatingWindow::StateChanged( StateChangedType nStateChange )
         // FloatingWindows are not centered by default
         if ( pImp->aWinState.Len() )
             SetWindowState( pImp->aWinState );
-        pImp->bConstructed = TRUE;
+        pImp->bConstructed = sal_True;
     }
 
     FloatingWindow::StateChanged( nStateChange );
@@ -699,12 +666,12 @@ void SfxFloatingWindow::StateChanged( StateChangedType nStateChange )
 
 void SfxFloatingWindow::Initialize(SfxChildWinInfo *pInfo)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Initialisierung der Klasse SfxFloatingWindow "uber ein SfxChildWinInfo.
-    Die Initialisierung erfolgt erst in einem 2.Schritt
-    nach dem ctor und sollte vom ctor der abgeleiteten Klasse
-    oder von dem des SfxChildWindows aufgerufen werden.
+    Initialization of a class SfxFloatingWindow through a SfxChildWinInfo.
+    The initialization is done only in a 2nd step after the constructor and
+    should be called by the constructor of the derived class or from the
+    SfxChildWindows.
 */
 {
     pImp->aWinState = pInfo->aWinState;
@@ -714,15 +681,13 @@ void SfxFloatingWindow::Initialize(SfxChildWinInfo *pInfo)
 
 void SfxFloatingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    F"ullt ein SfxChildWinInfo mit f"ur SfxFloatingWindow spezifischen Daten,
-    damit sie in die INI-Datei geschrieben werden koennen.
-    Es wird angenommen, da\s rInfo alle anderen evt. relevanten Daten in
-    der ChildWindow-Klasse erh"alt.
-    Eingetragen werden hier gemerkte Gr"o\se und das ZoomIn-Flag.
-    Wird diese Methode "uberschrieben, mu\s zuerst die Basisimplementierung
-    gerufen werden.
+    Fills a SfxChildWinInfo with specific data from SfxFloatingWindow,
+    so that it can be written in the INI file. It is assumed that rinfo
+    receives all other possible relevant data in the ChildWindow class.
+    Insertions are marked with size and the ZoomIn flag.
+    If this method is overridden, the base implementation must be called first.
 */
 
 {
@@ -735,9 +700,9 @@ void SfxFloatingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 
 IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, EMPTYARG )
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Ok_Handler; f"ur die gesetzte Page wird FillItemSet() gerufen.
+    Ok_Handler; FillItemSet() is called for setting of Page.
 */
 
 {
@@ -767,7 +732,7 @@ IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, EMPTYARG )
 
     if ( bModified )
     {
-        // auch noch schnell User-Daten im IniManager abspeichern
+        // Save user data in IniManager.
         pImpl->m_pSfxPage->FillUserData();
         String sData( pImpl->m_pSfxPage->GetUserData() );
         SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( GetUniqId() ) );
@@ -788,10 +753,10 @@ SfxSingleTabDialog::SfxSingleTabDialog
     sal_uInt16 nUniqueId
 ) :
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Konstruktor der allgemeinen Basisklasse f"ur SingleTab-Dialoge;
-    ID f"ur das ini-file wird "ubergeben.
+    Constructor of the general base class for SingleTab-Dialoge;
+    ID for the ini-file is handed over.
 */
 
     SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
@@ -801,7 +766,7 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pHelpBtn        ( 0 ),
     pImpl           ( new SingleTabDlgImpl )
 {
-    DBG_WARNING( "please use the ctor with ViewFrame" );
+    DBG_WARNING( "please use the constructor with ViewFrame" );
     SetInputSet( &rSet );
 }
 
@@ -814,11 +779,11 @@ SfxSingleTabDialog::SfxSingleTabDialog
     const SfxItemSet* pInSet
 )
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Konstruktor der allgemeinen Basisklasse f"ur SingleTab-Dialoge;
-    ID f"ur das ini-file wird "ubergeben.
-    Sollte nicht mehr benutzt werden.
+    Constructor of the general base class for SingleTab-Dialoge;
+    ID for the ini-file is handed over.
+    Deprecated.
  */
 
 :   SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
@@ -828,7 +793,7 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pHelpBtn        ( 0 ),
     pImpl           ( new SingleTabDlgImpl )
 {
-    DBG_WARNING( "bitte den Ctor mit ViewFrame verwenden" );
+    DBG_WARNING( "please use the constructor with ViewFrame" );
     SetInputSet( pInSet );
 }
 
@@ -841,11 +806,11 @@ SfxSingleTabDialog::SfxSingleTabDialog
     const String& rInfoURL
 )
 
-/*      [Beschreibung]
+/*  [Description]
 
-    Konstruktor der allgemeinen Basisklasse f"ur SingleTab-Dialoge;
-    ID f"ur das ini-file wird "ubergeben.
- */
+    Constructor of the general base class for SingleTab-Dialoge;
+    ID for the ini-file is handed over.
+*/
 
 :   SfxModalDialog( pParent, nUniqueId, WinBits( WB_STDMODAL | WB_3DLOOK ) ),
 
@@ -905,7 +870,7 @@ void SfxSingleTabDialog::SetPage( TabPage* pNewPage )
 
     if ( pImpl->m_pTabPage )
     {
-        // Gr"ossen und Positionen anpassen
+        // Adjust size and position.
         pImpl->m_pTabPage->SetPosPixel( Point() );
         Size aOutSz( pImpl->m_pTabPage->GetSizePixel() );
         Size aOffSz = LogicToPixel( Size( RSC_SP_CTRL_X, RSC_SP_CTRL_Y ), MAP_APPFONT );
@@ -934,10 +899,10 @@ void SfxSingleTabDialog::SetPage( TabPage* pNewPage )
         pOKBtn->Show();
         pImpl->m_pTabPage->Show();
 
-        // Text der TabPage in den Dialog setzen
+        // Set TabPage text in the Dialog
         SetText( pImpl->m_pTabPage->GetText() );
 
-        // Dialog bekommt HelpId der TabPage
+        // Dialog recieves the HelpId of TabPage
         SetHelpId( pImpl->m_pTabPage->GetHelpId() );
         SetUniqueId( pImpl->m_pTabPage->GetUniqueId() );
     }
@@ -947,12 +912,11 @@ void SfxSingleTabDialog::SetPage( TabPage* pNewPage )
 
 void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
                                      GetTabPageRanges pRangesFunc )
-/*      [Beschreibung]
+/*  [Description]
 
-    Setzen einer (neuen) TabPage; eine bereits vorhandene Page
-    wird gel"oscht.
-    Die "ubergebene Page wird durch Aufruf von Reset() mit dem
-    initial "ubergebenen Itemset initialisiert.
+    Insert a (new) TabPage; an existing page is deleted.
+    The passed on page is initialized with the initially given Itemset
+    through calling Reset().
 */
 
 {
@@ -975,7 +939,7 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
 
     if ( pImpl->m_pSfxPage )
     {
-        // erstmal die User-Daten besorgen, dann erst Reset()
+        // First obtain the user data, only then Reset()
         SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( GetUniqId() ) );
         String sUserData;
         Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
@@ -986,7 +950,7 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
         pImpl->m_pSfxPage->Reset( *GetInputItemSet() );
         pImpl->m_pSfxPage->Show();
 
-        // Gr"ossen und Positionen anpassen
+        // Adjust size and position
         pImpl->m_pSfxPage->SetPosPixel( Point() );
         Size aOutSz( pImpl->m_pSfxPage->GetSizePixel() );
         Size aBtnSiz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
@@ -1004,10 +968,10 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
         if ( Help::IsContextHelpEnabled() )
             pHelpBtn->Show();
 
-        // Text der TabPage in den Dialog setzen
+        // Set TabPage text in the Dialog
         SetText( pImpl->m_pSfxPage->GetText() );
 
-        // Dialog bekommt HelpId der TabPage
+        // Dialog recieves the HelpId of TabPage
         SetHelpId( pImpl->m_pSfxPage->GetHelpId() );
         SetUniqueId( pImpl->m_pSfxPage->GetUniqueId() );
     }
@@ -1021,7 +985,7 @@ void SfxSingleTabDialog::SetInfoLink( const Link& rLink )
 }
 
 //--------------------------------------------------------------------
-// Vergleichsfunktion fuer qsort
+// Comparison function for qsort
 
 #ifdef WNT
 int __cdecl BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
@@ -1039,15 +1003,15 @@ extern "C" int BaseDlgsCmpUS_Impl( const void* p1, const void* p2 )
 // -----------------------------------------------------------------------
 
 /*
-    Bildet das Set "uber die Ranges der Page. Die Page muss die statische
-    Methode f"ur das Erfragen ihrer Ranges bei SetTabPage angegeben haben,
-    liefert also ihr Set onDemand.
+    Creates the set over the Page range. the page must register the static
+    method for querys on the range in SetTabPage, so the Set is delivered
+    onDemand.
  */
 const sal_uInt16* SfxSingleTabDialog::GetInputRanges( const SfxItemPool& rPool )
 {
     if ( GetInputItemSet() )
     {
-        DBG_ERROR( "Set bereits vorhanden!" );
+        OSL_FAIL( "Set already exists!" );
         return GetInputItemSet()->GetRanges();
     }
 
@@ -1065,13 +1029,13 @@ const sal_uInt16* SfxSingleTabDialog::GetInputRanges( const SfxItemPool& rPool )
         aUS.Insert( pTmpRanges, nLen, aUS.Count() );
     }
 
-    //! Doppelte Ids entfernen?
+    //! Remove duplicate IDs?
     sal_uInt16 nCount = aUS.Count();
 
     for ( sal_uInt16 i = 0; i < nCount; ++i )
         aUS[i] = rPool.GetWhich( aUS[i]) ;
 
-    // sortieren
+    // sort
     if ( aUS.Count() > 1 )
         qsort( (void*)aUS.GetData(), aUS.Count(), sizeof(sal_uInt16), BaseDlgsCmpUS_Impl );
 

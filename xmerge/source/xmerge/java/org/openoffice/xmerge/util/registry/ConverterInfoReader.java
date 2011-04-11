@@ -232,9 +232,6 @@ public class ConverterInfoReader {
                 desc, version, vendor,classImpl,
                 xsltSerial,xsltDeserial);
         }
-        /*ConverterInfo converterInfo = new ConverterInfo(jarfilename,
-            officeMime, deviceMime, name, desc, version, vendor,
-            classImpl);*/
         converterInfoList.add(converterInfo);
     }
 

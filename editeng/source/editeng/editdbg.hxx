@@ -42,12 +42,12 @@ class SfxItemPool;
 class SfxPoolItem;
 
 ByteString  DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem );
-void        DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, BOOL bSearchInParent, BOOL bShowALL );
+void        DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, sal_Bool bSearchInParent, sal_Bool bShowALL );
 
 class EditDbg
 {
 public:
-    static void         ShowEditEngineData( EditEngine* pEditEngine, BOOL bInfoBox = TRUE );
+    static void         ShowEditEngineData( EditEngine* pEditEngine, sal_Bool bInfoBox = sal_True );
     static void         ShowPortionData( ParaPortion* pPortion );
     static ByteString   GetPortionInfo( ParaPortion* pPPortion );
     static ByteString   GetTextPortionInfo( TextPortionList& rPortions );

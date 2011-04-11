@@ -106,7 +106,7 @@ ScChartLockGuard::ScChartLockGuard( ScDocument* pDoc ) :
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR("Unexpected exception in ScChartLockGuard");
+            OSL_FAIL("Unexpected exception in ScChartLockGuard");
         }
     }
 }
@@ -125,7 +125,7 @@ ScChartLockGuard::~ScChartLockGuard()
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR("Unexpected exception in ScChartLockGuard");
+            OSL_FAIL("Unexpected exception in ScChartLockGuard");
         }
     }
 }
@@ -149,7 +149,7 @@ void ScChartLockGuard::AlsoLockThisChart( const Reference< frame::XModel >& xMod
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR("Unexpected exception in ScChartLockGuard");
+            OSL_FAIL("Unexpected exception in ScChartLockGuard");
         }
     }
 }

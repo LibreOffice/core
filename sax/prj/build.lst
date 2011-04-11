@@ -1,4 +1,4 @@
-ax	sax	:	offapi cppuhelper EXPAT:expat comphelper NULL
+ax	sax	:	offapi cppuhelper EXPAT:expat comphelper LIBXSLT:libxslt NULL
 ax	sax										usr1	-	all	ax_mkout NULL
 ax	sax\source\expatwrap					nmake	-	all	ax_expatwrap NULL
 ax	sax\source\tools						nmake	-	all ax_tools  NULL

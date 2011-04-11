@@ -39,24 +39,24 @@ class EDITENG_DLLPUBLIC SvxHorJustifyItem: public SfxEnumItem
 public:
     TYPEINFO();
 
-    SvxHorJustifyItem( const USHORT nId );
+    SvxHorJustifyItem( const sal_uInt16 nId );
 
     SvxHorJustifyItem(
         const SvxCellHorJustify eJustify /*= SVX_HOR_JUSTIFY_STANDARD*/,
-        const USHORT nId );
+        const sal_uInt16 nId );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual USHORT          GetValueCount() const;
-    virtual String          GetValueText( USHORT nVal ) const;
+    virtual sal_uInt16          GetValueCount() const;
+    virtual String          GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVer ) const;
+    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const;
 
     inline  SvxHorJustifyItem& operator=(const SvxHorJustifyItem& rHorJustify)
             {
@@ -72,24 +72,24 @@ class EDITENG_DLLPUBLIC SvxVerJustifyItem: public SfxEnumItem
 public:
     TYPEINFO();
 
-    SvxVerJustifyItem( const USHORT nId  );
+    SvxVerJustifyItem( const sal_uInt16 nId  );
 
     SvxVerJustifyItem(
         const SvxCellVerJustify eJustify /*= SVX_VER_JUSTIFY_STANDARD*/,
-        const USHORT nId  );
+        const sal_uInt16 nId  );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual USHORT          GetValueCount() const;
-    virtual String          GetValueText( USHORT nVal ) const;
+    virtual sal_uInt16          GetValueCount() const;
+    virtual String          GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVer ) const;
+    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const;
 
     inline  SvxVerJustifyItem& operator=(const SvxVerJustifyItem& rVerJustify)
             {
@@ -103,24 +103,24 @@ public:
 class EDITENG_DLLPUBLIC SvxJustifyMethodItem: public SfxEnumItem
 {
 public:
-    SvxJustifyMethodItem( const USHORT nId );
+    SvxJustifyMethodItem( const sal_uInt16 nId );
 
     SvxJustifyMethodItem(
         const SvxCellJustifyMethod eMethod,
-        const USHORT nId );
+        const sal_uInt16 nId );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual USHORT          GetValueCount() const;
-    virtual String          GetValueText( USHORT nVal ) const;
+    virtual sal_uInt16          GetValueCount() const;
+    virtual String          GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rStream, USHORT nVer ) const;
+    virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const;
 
     SvxJustifyMethodItem& operator=(const SvxJustifyMethodItem& r);
 };

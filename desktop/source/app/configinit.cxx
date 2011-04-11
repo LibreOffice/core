@@ -81,7 +81,7 @@ typedef uno::Reference< lang::XMultiServiceFactory > ConfigurationProvider;
 // Get a message string securely. There is a fallback string if the resource
 // is not available. Adapted from Desktop::GetMsgString()
 
-OUString getMsgString( USHORT nId, char const * aFallBackMsg )
+OUString getMsgString( sal_uInt16 nId, char const * aFallBackMsg )
 {
     ResMgr* pResMgr = Desktop::GetDesktopResManager();
     if ( !pResMgr || !nId )
@@ -176,7 +176,6 @@ uno::Reference< lang::XMultiServiceFactory > CreateApplicationConfigurationProvi
 
 
 // ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
 // ConfigurationErrorHandler
 // ----------------------------------------------------------------------------
 
@@ -243,7 +242,7 @@ private:
 uno::Any SAL_CALL ConfigurationErrorHandler::Context::getValueByName( OUString const & aName)
         throw (uno::RuntimeException)
 {
-    if ( aName.equalsAscii( CONFIG_ERROR_HANDLER ) )
+    if ( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CONFIG_ERROR_HANDLER)) )
     {
         if ( !m_xHandler.is() )
             m_xHandler = ConfigurationErrorHandler::getDefaultInteractionHandler();

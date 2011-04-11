@@ -264,10 +264,14 @@ public class FlatXml implements XImportFilter, XExportFilter, XServiceName,
         return xSingleServiceFactory;
     }
 
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey)
-    {
-        return FactoryHelper.writeRegistryServiceInfo(__implName,
-            __serviceName, regKey);
-    }
+    // This method not longer necessary since OOo 3.4 where the component registration
+    // was changed to passive component registration. For more details see
+    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
+
+//     public static boolean __writeRegistryServiceInfo(XRegistryKey regKey)
+//     {
+//         return FactoryHelper.writeRegistryServiceInfo(__implName,
+//             __serviceName, regKey);
+//     }
 
 }

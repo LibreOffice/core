@@ -36,6 +36,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <sal/macros.h>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -133,7 +134,7 @@ void OptimizerSettings::SaveSettingsToConfiguration( const Reference< XNameRepla
 //          Any( maFilterName ),
             Any( mbOpenNewDocument ) };
 
-        sal_Int32 i, nCount = sizeof( pNames ) / sizeof( OUString );
+        sal_Int32 i, nCount = SAL_N_ELEMENTS( pNames );
 
         for ( i = 0; i < nCount; i++ )
         {

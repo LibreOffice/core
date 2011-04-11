@@ -36,7 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
 #include <xmloff/families.hxx>
@@ -196,7 +196,7 @@ enum XMLFtnConfigToken
     XML_TOK_FTNCONFIG_POSITION
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
+static SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_CITATION_STYLE_NAME,      XML_TOK_FTNCONFIG_CITATION_STYLENAME },
     { XML_NAMESPACE_TEXT, XML_CITATION_BODY_STYLE_NAME, XML_TOK_FTNCONFIG_ANCHOR_STYLENAME },
@@ -228,7 +228,7 @@ const SvXMLTokenMap&
     return *pAttrTokenMap;
 }
 
-static SvXMLEnumMapEntry __READONLY_DATA aFootnoteNumberingMap[] =
+static SvXMLEnumMapEntry const aFootnoteNumberingMap[] =
 {
     { XML_PAGE,             FootnoteNumbering::PER_PAGE },
     { XML_CHAPTER,          FootnoteNumbering::PER_CHAPTER },
@@ -302,7 +302,7 @@ void XMLFootnoteConfigurationImportContext::StartElement(
 }
 
 SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
@@ -343,11 +343,8 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
     return pContext;
 }
 
-
-// --> OD 2005-01-31 #i40597# - rename method <CreateAndInsertLate(..)> to
-// <Finish(..)>
+// Rename method <CreateAndInsertLate(..)> to <Finish(..)> (#i40597#)
 void XMLFootnoteConfigurationImportContext::Finish( sal_Bool bOverwrite )
-// <--
 {
 
     if (bOverwrite)

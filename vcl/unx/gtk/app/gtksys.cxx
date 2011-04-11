@@ -53,6 +53,14 @@ GtkSalSystem::~GtkSalSystem()
 {
 }
 
+// convert ~ to indicate mnemonic to '_'
+static ByteString MapToGtkAccelerator (const String &rStr)
+{
+    String aRet( rStr );
+    aRet.SearchAndReplaceAscii("~", String::CreateFromAscii("_"));
+    return ByteString( aRet, RTL_TEXTENCODING_UTF8 );
+}
+
 int GtkSalSystem::ShowNativeDialog( const String& rTitle,
                                     const String& rMessage,
                                     const std::list< String >& rButtons,
@@ -81,15 +89,16 @@ int GtkSalSystem::ShowNativeDialog( const String& rTitle,
     int nButton = 0;
     for( std::list< String >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
     {
-        ByteString aLabel( *it, RTL_TEXTENCODING_UTF8 );
-
         if( nButton == nDefButton )
         {
-            gtk_dialog_add_button( GTK_DIALOG( mainwin ), aLabel.GetBuffer(), nButtons );
+            gtk_dialog_add_button( GTK_DIALOG( mainwin ), MapToGtkAccelerator(*it).GetBuffer(), nButtons );
             gtk_dialog_set_default_response( GTK_DIALOG( mainwin ), nButtons );
         }
         else
+        {
+            ByteString aLabel( *it, RTL_TEXTENCODING_UTF8 );
             gtk_dialog_add_button( GTK_DIALOG( mainwin ), aLabel.GetBuffer(), nButtons );
+        }
         nButtons++;
     }
 

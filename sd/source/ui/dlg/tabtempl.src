@@ -51,7 +51,6 @@ TabDialog TAB_TEMPLATE
             PageItem
             {
                 Identifier = RID_SVXPAGE_AREA ;
-                /* ### ACHTUNG: Neuer Text in Resource? Fläche : Flõche */
                 Text [ en-US ] = "Area" ;
                 PageResID = RID_SVXPAGE_AREA ;
             };
@@ -81,7 +80,6 @@ TabDialog TAB_TEMPLATE
             PageItem
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
-                /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
             };
@@ -100,7 +98,6 @@ TabDialog TAB_TEMPLATE
             PageItem
             {
                 Identifier = RID_SVXPAGE_MEASURE ;
-                /* ### ACHTUNG: Neuer Text in Resource? Bemaßung : Bema˜ung */
                 Text [ en-US ] = "Dimensioning" ;
                 PageResID = RID_SVXPAGE_MEASURE ;
             };
@@ -151,7 +148,6 @@ TabDialog TAB_TEMPLATE
     {
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
         Text [ en-US ] = "Back" ;
         TabStop = TRUE ;
     };

@@ -40,24 +40,24 @@ class SvNumReadHeader
 {
 private:
     SvStream&   rStream;
-    ULONG       nDataEnd;
+    sal_uLong       nDataEnd;
 
 public:
     SvNumReadHeader(SvStream& rNewStream);
     ~SvNumReadHeader();
 
-    ULONG   BytesLeft() const;
+    sal_uLong   BytesLeft() const;
 };
 
 class SvNumWriteHeader
 {
 private:
     SvStream&   rStream;
-    ULONG       nDataPos;
-    ULONG       nDataSize;
+    sal_uLong       nDataPos;
+    sal_uLong       nDataSize;
 
 public:
-    SvNumWriteHeader(SvStream& rNewStream, ULONG nDefault = 0);
+    SvNumWriteHeader(SvStream& rNewStream, sal_uLong nDefault = 0);
     ~SvNumWriteHeader();
 };
 
@@ -71,8 +71,8 @@ private:
     SvStream&       rStream;
     char*           pBuf;
     SvMemoryStream* pMemStream;
-    ULONG           nEndPos;
-    ULONG           nEntryEnd;
+    sal_uLong           nEndPos;
+    sal_uLong           nEntryEnd;
 
 public:
     ImpSvNumMultipleReadHeader(SvStream& rNewStream);
@@ -80,7 +80,7 @@ public:
 
     void    StartEntry();
     void    EndEntry();
-    ULONG   BytesLeft() const;
+    sal_uLong   BytesLeft() const;
 
     static void Skip( SvStream& );      // komplett ueberspringen
 };
@@ -90,12 +90,12 @@ class ImpSvNumMultipleWriteHeader
 private:
     SvStream&       rStream;
     SvMemoryStream  aMemStream;
-    ULONG           nDataPos;
+    sal_uLong           nDataPos;
     sal_uInt32      nDataSize;
-    ULONG           nEntryStart;
+    sal_uLong           nEntryStart;
 
 public:
-    ImpSvNumMultipleWriteHeader(SvStream& rNewStream, ULONG nDefault = 0);
+    ImpSvNumMultipleWriteHeader(SvStream& rNewStream, sal_uLong nDefault = 0);
     ~ImpSvNumMultipleWriteHeader();
 
     void    StartEntry();

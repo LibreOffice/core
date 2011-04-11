@@ -235,7 +235,7 @@ LOCAL BOOLEAN DoProfile (); /* Check if profiling is enabled */
 
                 /* Supplied in Sys V runtime environ */
 LOCAL char *strtok ();      /* Break string into tokens */
-LOCAL char *strrchr ();     /* Find last occurance of char */
+LOCAL char *strrchr ();     /* Find last occurrence of char */
 
 /*
  *  The following local variables are used to hold the state information

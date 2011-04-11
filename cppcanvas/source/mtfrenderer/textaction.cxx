@@ -213,8 +213,8 @@ namespace cppcanvas
                 ::boost::scoped_array< sal_Int32 > pCharWidths( new sal_Int32[nLen] );
 
                 rVDev.GetTextArray( rText, pCharWidths.get(),
-                                    static_cast<USHORT>(nStartPos),
-                                    static_cast<USHORT>(nLen) );
+                                    static_cast<sal_uInt16>(nStartPos),
+                                    static_cast<sal_uInt16>(nLen) );
 
                 return setupDXArray( pCharWidths.get(), nLen, rState );
             }
@@ -288,8 +288,8 @@ namespace cppcanvas
             {
                 // TODO(F2): use correct scale direction
                 const ::basegfx::B2DSize aSize( rVDev.GetTextWidth( rStringContext.Text,
-                                                                    static_cast<USHORT>(rStringContext.StartPosition),
-                                                                    static_cast<USHORT>(rStringContext.Length) ),
+                                                                    static_cast<sal_uInt16>(rStringContext.StartPosition),
+                                                                    static_cast<sal_uInt16>(rStringContext.Length) ),
                                     0 );
 
                 return (rState.mapModeTransform * aSize).getX();
@@ -728,8 +728,7 @@ namespace cppcanvas
             bool TextAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
                                      const Subset&                  /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "TextAction::render(): Subset not supported by this object" );
+                OSL_FAIL( "TextAction::render(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -760,8 +759,7 @@ namespace cppcanvas
             ::basegfx::B2DRange TextAction::getBounds( const ::basegfx::B2DHomMatrix&   rTransformation,
                                                        const Subset&                    /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "TextAction::getBounds(): Subset not supported by this object" );
+                OSL_FAIL( "TextAction::getBounds(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -966,8 +964,7 @@ namespace cppcanvas
             bool EffectTextAction::render( const ::basegfx::B2DHomMatrix&   rTransformation,
                                            const Subset&                    /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "EffectTextAction::render(): Subset not supported by this object" );
+                OSL_FAIL( "EffectTextAction::render(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -1003,8 +1000,7 @@ namespace cppcanvas
             ::basegfx::B2DRange EffectTextAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation,
                                                              const Subset&                  /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "EffectTextAction::getBounds(): Subset not supported by this object" );
+                OSL_FAIL( "EffectTextAction::getBounds(): Subset not supported by this object" );
 
                 // TODO(P1): Retrieve necessary font metric info for
                 // TextAction from XCanvas. Currently, the
@@ -1121,20 +1117,6 @@ namespace cppcanvas
 
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
-
-#ifdef SPECIAL_DEBUG
-                aLocalState.Clip.clear();
-                aLocalState.DeviceColor =
-                    ::vcl::unotools::colorToDoubleSequence( mpCanvas->getUNOCanvas()->getDevice(),
-                                                            ::Color( 0x80FF0000 ) );
-
-                if( maState.Clip.is() )
-                    mpCanvas->getUNOCanvas()->drawPolyPolygon( maState.Clip,
-                                                               mpCanvas->getViewState(),
-                                                               aLocalState );
-
-                aLocalState.DeviceColor = maState.DeviceColor;
-#endif
 
                 mpCanvas->getUNOCanvas()->drawTextLayout( mxTextLayout,
                                                           mpCanvas->getViewState(),
@@ -1937,8 +1919,7 @@ namespace cppcanvas
             ::basegfx::B2DRange OutlineAction::getBounds( const ::basegfx::B2DHomMatrix&    rTransformation,
                                                           const Subset&                     /*rSubset*/ ) const
             {
-                OSL_ENSURE( false,
-                            "OutlineAction::getBounds(): Subset not yet supported by this object" );
+                OSL_FAIL( "OutlineAction::getBounds(): Subset not yet supported by this object" );
 
                 return getBounds( rTransformation );
             }
@@ -1995,10 +1976,10 @@ namespace cppcanvas
                 ::basegfx::B2DPolyPolygon aResultingPolyPolygon;
                 PolyPolyVector aVCLPolyPolyVector;
                 const bool bHaveOutlines( rVDev.GetTextOutlines( aVCLPolyPolyVector, rText,
-                                                                 static_cast<USHORT>(nStartPos),
-                                                                 static_cast<USHORT>(nStartPos),
-                                                                 static_cast<USHORT>(nLen),
-                                                                 TRUE, 0, pDXArray ) );
+                                                                 static_cast<sal_uInt16>(nStartPos),
+                                                                 static_cast<sal_uInt16>(nStartPos),
+                                                                 static_cast<sal_uInt16>(nLen),
+                                                                 sal_True, 0, pDXArray ) );
                 rVDev.SetFont(aOrigFont);
 
                 if( !bHaveOutlines )
@@ -2070,7 +2051,7 @@ namespace cppcanvas
                         rCanvas->getUNOCanvas()->getDevice(),
                         aResultingPolyPolygon ) );
 
-                if( rParms.maTextTransformation.isValid() )
+                if( rParms.maTextTransformation.is_initialized() )
                 {
                     return ActionSharedPtr(
                         new OutlineAction(
@@ -2086,7 +2067,7 @@ namespace cppcanvas
                             rVDev,
                             rCanvas,
                             rState,
-                            rParms.maTextTransformation.getValue() ) );
+                            *rParms.maTextTransformation ) );
                 }
                 else
                 {
@@ -2187,7 +2168,7 @@ namespace cppcanvas
                     rShadowColor == aEmptyColor )
                 {
                     // nope
-                    if( rParms.maTextTransformation.isValid() )
+                    if( rParms.maTextTransformation.is_initialized() )
                     {
                         return ActionSharedPtr( new TextAction(
                                                     aStartPoint,
@@ -2196,7 +2177,7 @@ namespace cppcanvas
                                                     nLen,
                                                     rCanvas,
                                                     rState,
-                                                    rParms.maTextTransformation.getValue() ) );
+                                                    *rParms.maTextTransformation ) );
                     }
                     else
                     {
@@ -2212,7 +2193,7 @@ namespace cppcanvas
                 else
                 {
                     // at least one of the effects requested
-                    if( rParms.maTextTransformation.isValid() )
+                    if( rParms.maTextTransformation.is_initialized() )
                         return ActionSharedPtr( new EffectTextAction(
                                                     aStartPoint,
                                                     aReliefOffset,
@@ -2225,7 +2206,7 @@ namespace cppcanvas
                                                     rVDev,
                                                     rCanvas,
                                                     rState,
-                                                    rParms.maTextTransformation.getValue() ) );
+                                                    *rParms.maTextTransformation ) );
                     else
                         return ActionSharedPtr( new EffectTextAction(
                                                     aStartPoint,
@@ -2251,7 +2232,7 @@ namespace cppcanvas
                     rShadowColor == aEmptyColor )
                 {
                     // nope
-                    if( rParms.maTextTransformation.isValid() )
+                    if( rParms.maTextTransformation.is_initialized() )
                         return ActionSharedPtr( new TextArrayAction(
                                                     aStartPoint,
                                                     rText,
@@ -2260,7 +2241,7 @@ namespace cppcanvas
                                                     aCharWidths,
                                                     rCanvas,
                                                     rState,
-                                                    rParms.maTextTransformation.getValue() ) );
+                                                    *rParms.maTextTransformation ) );
                     else
                         return ActionSharedPtr( new TextArrayAction(
                                                     aStartPoint,
@@ -2274,7 +2255,7 @@ namespace cppcanvas
                 else
                 {
                     // at least one of the effects requested
-                    if( rParms.maTextTransformation.isValid() )
+                    if( rParms.maTextTransformation.is_initialized() )
                         return ActionSharedPtr( new EffectTextArrayAction(
                                                     aStartPoint,
                                                     aReliefOffset,
@@ -2288,7 +2269,7 @@ namespace cppcanvas
                                                     rVDev,
                                                     rCanvas,
                                                     rState,
-                                                    rParms.maTextTransformation.getValue() ) );
+                                                    *rParms.maTextTransformation ) );
                     else
                         return ActionSharedPtr( new EffectTextArrayAction(
                                                     aStartPoint,

@@ -11,6 +11,8 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(SOLAR_JAVA)" != ""
+
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
@@ -19,7 +21,7 @@ SLOFILES = \
 
 SHL1TARGET=$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
-#SHL1IMPLIB=	i$(TARGET)
+SOLARLIB+=$(JAVALIB)
 SHL1STDLIBS=$(AWTLIB) $(SALLIB)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
@@ -27,6 +29,8 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=		$(SHL1TARGET)
 DEF1EXPORTFILE=	$(TARGET).dxp
 DEF1DES=officebean
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

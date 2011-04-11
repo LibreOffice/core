@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: b2dmultirange.cxx,v $
- * $Revision: 1.8 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -603,7 +600,6 @@ namespace basegfx
             std::vector<B2DRange>::const_reverse_iterator aCurrRectR=rRanges.rbegin();
             std::vector<B2VectorOrientation>::const_reverse_iterator aCurrOrientationR=rOrientations.rbegin();
             const std::vector<B2DRange>::const_reverse_iterator aEndR=rRanges.rend();
-            const std::vector<B2VectorOrientation>::const_reverse_iterator aEndOrientationR=rOrientations.rend();
             while( aCurrRectR != aEndR )
             {
                 const B2DRectangle& rCurrRect( *aCurrRectR++ );

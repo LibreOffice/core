@@ -1,25 +1,3 @@
-mkdir: %_DEST%\inc%_EXT%\stl
-mkdir: %_DEST%\inc%_EXT%\stl\stl
-mkdir: %_DEST%\inc%_EXT%\stl\stl\debug
-mkdir: %_DEST%\inc%_EXT%\stl\stl\wrappers
-mkdir: %_DEST%\inc%_EXT%\stl\config
-mkdir: %_DEST%\inc%_EXT%\stl\using
-mkdir: %_DEST%\inc%_EXT%\stl\using\h
-mkdir: %_DEST%\inc%_EXT%\stl\wrap_std
-mkdir: %_DEST%\inc%_EXT%\stl\wrap_std\h
-..\%__SRC%\inc\*.SUNWCCH %_DEST%\inc%_EXT%\stl\*
-..\%__SRC%\inc\stlport\* %_DEST%\inc%_EXT%\stl\*
-..\%__SRC%\inc\stlport\stl\* %_DEST%\inc%_EXT%\stl\stl\*
-..\%__SRC%\inc\stlport\stl\debug\* %_DEST%\inc%_EXT%\stl\stl\debug\*
-..\%__SRC%\inc\stlport\stl\wrappers\* %_DEST%\inc%_EXT%\stl\stl\wrappers\*
-..\%__SRC%\inc\stlport\config\* %_DEST%\inc%_EXT%\stl\config\*
-..\%__SRC%\inc\stlport\using\* %_DEST%\inc%_EXT%\stl\using\*
-..\%__SRC%\inc\stlport\using\h\* %_DEST%\inc%_EXT%\stl\using\h\*
-..\%__SRC%\inc\stlport\wrap_std\* %_DEST%\inc%_EXT%\stl\wrap_std\*
-..\%__SRC%\inc\stlport\wrap_std\h\* %_DEST%\inc%_EXT%\stl\wrap_std\h\*
-..\systemstlguards\*.h %_DEST%\inc%_EXT%\stl\*.h
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
-..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%\lib*.a
-..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 

@@ -28,8 +28,6 @@ PRJ=..$/..$/..
 
 PRJNAME=sal
 TARGET=qa_rtl_crc32
-# this is removed at the moment because we need some enhancements
-# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -48,7 +46,7 @@ SHL1OBJS=  \
     $(SLO)$/rtl_crc32.obj
 
 SHL1TARGET= rtl_crc32
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -66,5 +64,4 @@ SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
-
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk

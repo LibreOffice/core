@@ -73,8 +73,8 @@ published service Style
 
         [optional] interface com::sun::star::beans::XMultiPropertySet;
 
-    /* This optional interface is available as an optimisation, allowing users
-       to use 'setAllPropertiesToDefault', for example. */
+    /* This optional interface is available as an optimization, allowing users
+       to use "setAllPropertiesToDefault", for example. */
     //-------------------------------------------------------------------------
 
     [optional] interface com::sun::star::beans::XMultiPropertyStates;
@@ -101,7 +101,7 @@ published service Style
     /** contains the name of the style as it is displayed in the user interface.
 
         <p> The names of the styles at the API are language independent. The user interface
-        names are localised.</p>
+        names are localized.</p>
      */
     [optional, readonly, property] string DisplayName;
     //-------------------------------------------------------------------------
@@ -127,7 +127,7 @@ published service Style
         <p>Assigning an empty string to the style name will disable
         the conditional style for that context.</p>
 
-        <p>The alowed strings (contexts) for the name part of an entry
+        <p>The allowed strings (contexts) for the name part of an entry
         of the sequence are:</p>
 
         <ul>

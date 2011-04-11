@@ -100,8 +100,8 @@ void FuMorph::DoExecute( SfxRequest& )
         pCloneObj2->SetOutlinerParaObject(NULL);
 
         // Path-Objekte erzeugen
-        SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(FALSE, FALSE);
-        SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(FALSE, FALSE);
+        SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(sal_False, sal_False);
+        SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(sal_False, sal_False);
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         AbstractMorphDlg* pDlg = pFact ? pFact->CreateMorphDlg( static_cast< ::Window*>(mpWindow), pObj1, pObj2 ) : 0;
         if(pPolyObj1 && pPolyObj2 && pDlg && (pDlg->Execute() == RET_OK))
@@ -332,7 +332,7 @@ void FuMorph::ImpAddPolys(::basegfx::B2DPolyPolygon& rSmaller, const ::basegfx::
 //////////////////////////////////////////////////////////////////////////////
 // create group object with morphed polygons
 //
-void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
+void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
     const SdrObject* pObj1, const SdrObject* pObj2)
 {
     Color               aStartFillCol;
@@ -345,11 +345,11 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
     SfxItemPool*        pPool = pObj1->GetObjectItemPool();
     SfxItemSet          aSet1( *pPool,SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END,0 );
     SfxItemSet          aSet2( aSet1 );
-    BOOL                bLineColor = FALSE;
-    BOOL                bFillColor = FALSE;
-    BOOL                bLineWidth = FALSE;
-    BOOL                bIgnoreLine = FALSE;
-    BOOL                bIgnoreFill = FALSE;
+    sal_Bool                bLineColor = sal_False;
+    sal_Bool                bFillColor = sal_False;
+    sal_Bool                bLineWidth = sal_False;
+    sal_Bool                bIgnoreLine = sal_False;
+    sal_Bool                bIgnoreFill = sal_False;
 
     aSet1.Put(pObj1->GetMergedItemSet());
     aSet2.Put(pObj2->GetMergedItemSet());
@@ -363,7 +363,7 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
     {
         if ( ( eLineStyle1 != XLINE_NONE ) && ( eLineStyle2 != XLINE_NONE ) )
         {
-            bLineWidth = bLineColor = TRUE;
+            bLineWidth = bLineColor = sal_True;
 
             aStartLineCol = static_cast< XLineColorItem const & >(
                 aSet1.Get(XATTR_LINECOLOR)).GetColorValue();
@@ -374,18 +374,18 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
             nEndLineWidth = ITEMVALUE( aSet2, XATTR_LINEWIDTH, XLineWidthItem );
         }
         else if ( ( eLineStyle1 == XLINE_NONE ) && ( eLineStyle2 == XLINE_NONE ) )
-            bIgnoreLine = TRUE;
+            bIgnoreLine = sal_True;
 
         if ( ( eFillStyle1 == XFILL_SOLID ) && ( eFillStyle2 == XFILL_SOLID ) )
         {
-            bFillColor = TRUE;
+            bFillColor = sal_True;
             aStartFillCol = static_cast< XFillColorItem const & >(
                 aSet1.Get(XATTR_FILLCOLOR)).GetColorValue();
             aEndFillCol = static_cast< XFillColorItem const & >(
                 aSet2.Get(XATTR_FILLCOLOR)).GetColorValue();
         }
         else if ( ( eFillStyle1 == XFILL_NONE ) && ( eFillStyle2 == XFILL_NONE ) )
-            bIgnoreFill = TRUE;
+            bIgnoreFill = sal_True;
     }
 
     if ( pPageView )
@@ -393,7 +393,7 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
         SfxItemSet      aSet( aSet1 );
         SdrObjGroup*    pObjGroup = new SdrObjGroup;
         SdrObjList*     pObjList = pObjGroup->GetSubList();
-        const ULONG     nCount = rPolyPolyList3D.Count();
+        const sal_uLong     nCount = rPolyPolyList3D.Count();
         const double    fStep = 1. / ( nCount + 1 );
         const double    fDelta = nEndLineWidth - nStartLineWidth;
         double          fFactor = fStep;
@@ -401,7 +401,7 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, BOOL bAttributeFade,
         aSet.Put( XLineStyleItem( XLINE_SOLID ) );
         aSet.Put( XFillStyleItem( XFILL_SOLID ) );
 
-        for ( ULONG i = 0; i < nCount; i++, fFactor += fStep )
+        for ( sal_uLong i = 0; i < nCount; i++, fFactor += fStep )
         {
             const ::basegfx::B2DPolyPolygon& rPolyPoly3D = *(::basegfx::B2DPolyPolygon*)rPolyPolyList3D.GetObject(i);
             SdrPathObj* pNewObj = new SdrPathObj(OBJ_POLY, rPolyPoly3D);
@@ -507,7 +507,7 @@ sal_Bool FuMorph::ImpMorphPolygons(
             rPolyPolyList3D.Insert(pNewPolyPoly2D, LIST_APPEND);
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 

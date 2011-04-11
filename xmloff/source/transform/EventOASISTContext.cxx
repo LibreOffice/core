@@ -31,7 +31,7 @@
 #include "EventOASISTContext.hxx"
 #include "EventMap.hxx"
 #include "MutableAttrList.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "ActionMapTypesOASIS.hxx"
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
@@ -44,7 +44,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using ::rtl::OUString;
 
@@ -53,7 +53,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 class XMLTransformerOASISEventMap_Impl:
-    public ::std::hash_map< NameKey_Impl, ::rtl::OUString,
+    public ::boost::unordered_map< NameKey_Impl, ::rtl::OUString,
                             NameHash_Impl, NameHash_Impl >
 {
 public:
@@ -66,7 +66,7 @@ XMLTransformerOASISEventMap_Impl::XMLTransformerOASISEventMap_Impl( XMLTransform
     if( pInit )
     {
         XMLTransformerOASISEventMap_Impl::key_type aKey;
-        XMLTransformerOASISEventMap_Impl::data_type aData;
+        XMLTransformerOASISEventMap_Impl::mapped_type aData;
         while( pInit->m_pOASISName )
         {
             aKey.m_nPrefix = pInit->m_nOASISPrefix;
@@ -153,7 +153,7 @@ bool ParseURLAsString(
     sal_Int32 params = rAttrValue.indexOf( '?' );
     if ( rAttrValue.indexOf( SCHEME ) != 0 || params < 0 )
     {
-        return FALSE;
+        return sal_False;
     }
 
     sal_Int32 start = SCHEME.getLength();
@@ -187,9 +187,9 @@ bool ParseURLAsString(
 
     if ( aLanguage.equalsIgnoreAsciiCaseAscii( "basic" ) )
     {
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 bool ParseURL(
@@ -203,8 +203,8 @@ bool ParseURL(
         xSMgr = ::comphelper::getProcessServiceFactory();
 
     Reference< com::sun::star::uri::XUriReferenceFactory >
-        xFactory( xSMgr->createInstance( OUString::createFromAscii(
-            "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
+        xFactory( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.uri.UriReferenceFactory" )) ), UNO_QUERY );
 
     if ( xFactory.is() )
     {
@@ -235,11 +235,11 @@ bool ParseURL(
                     {
                         *pLocation = GetXMLToken( XML_APPLICATION );
                     }
-                    return TRUE;
+                    return sal_True;
                 }
             }
         }
-        return FALSE;
+        return sal_False;
     }
     else
     {
@@ -306,7 +306,7 @@ void XMLEventOASISTransformerContext::StartElement(
                             GetXMLToken( XML_LANGUAGE ) ) );
 
                         pMutableAttrList->SetValueByIndex( idx,
-                            OUString::createFromAscii("StarBasic") );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("StarBasic")) );
 
                         OUString aLocQName(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -358,7 +358,7 @@ void XMLEventOASISTransformerContext::StartElement(
                     GetXMLToken( XML_LANGUAGE ) ) );
 
                     pMutableAttrList->SetValueByIndex( idx,
-                    OUString::createFromAscii("StarBasic") );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("StarBasic")) );
 
                     OUString aLocQName(
                     GetTransformer().GetNamespaceMap().GetQNameByKey(

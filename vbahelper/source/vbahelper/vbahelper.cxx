@@ -41,6 +41,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XDialog.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
 
 #include <ooo/vba/msforms/XShape.hpp>
 
@@ -79,9 +82,6 @@
 
 #include <vbahelper/vbahelper.hxx>
 #include <sfx2/app.hxx>
-// #FIXME needs service
-//#include "vbashape.hxx"
-//#include "unonames.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -127,7 +127,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
     if( !xIntrospection.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        xIntrospection.set( xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.beans.Introspection") ), uno::UNO_QUERY_THROW );
+        xIntrospection.set( xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")) ), uno::UNO_QUERY_THROW );
     }
     return xIntrospection->inspect( aObject );
 }
@@ -145,7 +145,7 @@ aNULL()
     return aNULLL;
 }
 
-void dispatchExecute(SfxViewShell* pViewShell, USHORT nSlot, SfxCallMode nCall)
+void dispatchExecute(SfxViewShell* pViewShell, sal_uInt16 nSlot, SfxCallMode nCall)
 {
     SfxViewFrame* pViewFrame = NULL;
     if ( pViewShell )
@@ -464,7 +464,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
                 }
             }
             else
-                pDispatcher->Execute( (USHORT)SID_PRINTDOC, (SfxCallMode)SFX_CALLMODE_SYNCHRON, aArgs );
+                pDispatcher->Execute( (sal_uInt16)SID_PRINTDOC, (SfxCallMode)SFX_CALLMODE_SYNCHRON, aArgs );
         }
 
     }
@@ -558,7 +558,7 @@ rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeEx
                 break;
             }
         default:
-                   throw uno::RuntimeException( rtl::OUString::createFromAscii( "Invalid type, can't convert" ), uno::Reference< uno::XInterface >() );
+                   throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid type, can't convert")), uno::Reference< uno::XInterface >() );
     }
     return sString;
 }
@@ -736,6 +736,9 @@ ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::u
 {
     m_pShapeHelper.reset( new ShapeHelper( xShape ) );
 }
+ConcreteXShapeGeometryAttributes::~ConcreteXShapeGeometryAttributes()
+{
+}
 
 sal_Int32 getPointerStyle( const uno::Reference< frame::XModel >& xModel )
 {
@@ -878,277 +881,122 @@ void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, con
 // ====UserFormGeomentryHelper====
 //---------------------------------------------
 UserFormGeometryHelper::UserFormGeometryHelper( const uno::Reference< uno::XComponentContext >& /*xContext*/, const uno::Reference< awt::XControl >& xControl )
+: mbDialog( uno::Reference< awt::XDialog >( xControl, uno::UNO_QUERY ).is() )
 {
     if ( !xControl.is() )
-        throw uno::RuntimeException();
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No control is provided!" ) ),
+                                     uno::Reference< uno::XInterface >() );
 
-    mxControlUnits.set( xControl->getPeer(), uno::UNO_QUERY_THROW );
-    mxModel.set( xControl->getModel(), uno::UNO_QUERY_THROW );
+    mxWindow.set( xControl->getPeer(), uno::UNO_QUERY_THROW );
 }
 
-//---------------------------------------------
-sal_Int32 UserFormGeometryHelper::ConvertPixelToLogic( sal_Int32 nValue, sal_Bool bIsPoint, sal_Bool bIsX, sal_Int16 nTargetUnit )
-{
-    sal_Int32 nResult = 0;
-    if ( bIsPoint )
-    {
-        // conversion for a point
-        awt::Point aPixelPoint( 0, 0 );
-        ( bIsX ? aPixelPoint.X : aPixelPoint.Y ) = nValue;
-        awt::Point aTargetPoint( 0, 0 );
-        aTargetPoint = mxControlUnits->convertPointToLogic( aPixelPoint, nTargetUnit );
-
-        nResult = bIsX ? aTargetPoint.X : aTargetPoint.Y;
-    }
-    else
-    {
-        // conversion for a size
-        awt::Size aPixelSize( 0, 0 );
-        ( bIsX ? aPixelSize.Width : aPixelSize.Height ) = nValue;
-        awt::Size aTargetSize( 0, 0 );
-        aTargetSize = mxControlUnits->convertSizeToLogic( aPixelSize, nTargetUnit );
-
-        nResult = bIsX ? aTargetSize.Width : aTargetSize.Height;
-    }
-
-    return nResult;
-}
-
-//---------------------------------------------
-sal_Int32 UserFormGeometryHelper::ConvertLogicToPixel( sal_Int32 nValue, sal_Bool bIsPoint, sal_Bool bIsX, sal_Int16 nSourceUnit )
-{
-    sal_Int32 nResult = 0;
-    if ( bIsPoint )
-    {
-        // conversion for a point
-        awt::Point aSourcePoint( 0, 0 );
-        ( bIsX ? aSourcePoint.X : aSourcePoint.Y ) = nValue;
-
-        awt::Point aPixelPoint( 0, 0 );
-        aPixelPoint = mxControlUnits->convertPointToPixel( aSourcePoint, nSourceUnit );
-
-        nResult = bIsX ? aPixelPoint.X : aPixelPoint.Y;
-    }
-    else
-    {
-        // conversion for a size
-        awt::Size aSourceSize( 0, 0 );
-        ( bIsX ? aSourceSize.Width : aSourceSize.Height ) = nValue;
-
-        awt::Size aPixelSize( 0, 0 );
-        aPixelSize = mxControlUnits->convertSizeToPixel( aSourceSize, nSourceUnit );
-
-        nResult = bIsX ? aPixelSize.Width : aPixelSize.Height;
-    }
-
-    return nResult;
-}
 //---------------------------------------------
 double UserFormGeometryHelper::getLeft()
 {
-    double nResult = 0;
-
-    try
-    {
-        sal_Int32 nLeft = 0;
-        mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_LEFT ) ) ) >>= nLeft;
-        nResult = ConvertLogicToPixel( nLeft,
-                                       sal_True, // Point
-                                       sal_True, // X
-                                       util::MeasureUnit::APPFONT );
-    }
-    catch ( uno::RuntimeException& )
-    {
-        throw;
-    }
-    catch ( uno::Exception& e )
-    {
-        throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not get position X!" ) ),
-                uno::Reference< uno::XInterface >(),
-                uno::makeAny( e ) );
-    }
-
-    return nResult;
+    return mxWindow->getPosSize().X;
 }
 
 //---------------------------------------------
 void UserFormGeometryHelper::setLeft( double nLeft )
 {
-    try
-    {
-        mxModel->setPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_LEFT ) ),
-                uno::makeAny( ConvertPixelToLogic( nLeft,
-                                                   sal_True, // Point
-                                                   sal_True, // X
-                                                   util::MeasureUnit::APPFONT ) ) );
-    }
-    catch ( uno::RuntimeException& )
-    {
-        throw;
-    }
-    catch ( uno::Exception& e )
-    {
-        throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not set position X!" ) ),
-                uno::Reference< uno::XInterface >(),
-                uno::makeAny( e ) );
-    }
+    mxWindow->setPosSize( nLeft, mxWindow->getPosSize().Y, 0, 0, awt::PosSize::POS );
 }
 
 //---------------------------------------------
 double UserFormGeometryHelper::getTop()
 {
-    double nResult = 0;
-
-    try
-    {
-        sal_Int32 nTop = 0;
-        mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_TOP ) ) ) >>= nTop;
-        nResult = ConvertLogicToPixel( nTop,
-                                       sal_True, // Point
-                                       sal_False, // Y
-                                       util::MeasureUnit::APPFONT );
-    }
-    catch ( uno::RuntimeException& )
-    {
-        throw;
-    }
-    catch ( uno::Exception& e )
-    {
-        throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not get position Y!" ) ),
-                uno::Reference< uno::XInterface >(),
-                uno::makeAny( e ) );
-    }
-
-    return nResult;
+    return mxWindow->getPosSize().Y;
 }
 
 //---------------------------------------------
 void UserFormGeometryHelper::setTop( double nTop )
 {
-    try
-    {
-        mxModel->setPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_TOP ) ),
-                uno::makeAny( ConvertPixelToLogic( nTop,
-                                                   sal_True, // Point
-                                                   sal_False, // Y
-                                                   util::MeasureUnit::APPFONT ) ) );
-    }
-    catch ( uno::RuntimeException& )
-    {
-        throw;
-    }
-    catch ( uno::Exception& e )
-    {
-        throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not set position X!" ) ),
-                uno::Reference< uno::XInterface >(),
-                uno::makeAny( e ) );
-    }
+    mxWindow->setPosSize( mxWindow->getPosSize().X, nTop, 0, 0, awt::PosSize::POS );
 }
 
 //---------------------------------------------
 double UserFormGeometryHelper::getWidth()
 {
-    double nResult = 0;
-
-    try
+    if ( mbDialog )
     {
-        sal_Int32 nWidth = 0;
-        mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_WIDTH ) ) ) >>= nWidth;
-        nResult = ConvertLogicToPixel( nWidth,
-                                       sal_False, // Size
-                                       sal_True, // X
-                                       util::MeasureUnit::APPFONT );
-    }
-    catch ( uno::RuntimeException& )
-    {
-        throw;
-    }
-    catch ( uno::Exception& e )
-    {
-        throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not get width!" ) ),
-                uno::Reference< uno::XInterface >(),
-                uno::makeAny( e ) );
+        const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
+        if ( pWindow )
+        {
+            // get the size with decoration
+            Rectangle aResult = pWindow->GetWindowExtentsRelative( NULL );
+            return aResult.getWidth();
+        }
     }
 
-    return nResult;
+    return mxWindow->getPosSize().Width;
 }
 
 //---------------------------------------------
-void UserFormGeometryHelper::setWidth( double nWidth)
+void UserFormGeometryHelper::setWidth( double nWidth )
 {
-    try
+    sal_Int64 nNewWidth = nWidth;
+
+    if ( mbDialog )
     {
-        mxModel->setPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_WIDTH ) ),
-                uno::makeAny( ConvertPixelToLogic( nWidth,
-                                                   sal_False, // Size
-                                                   sal_True, // X
-                                                   util::MeasureUnit::APPFONT ) ) );
+        const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
+        if ( pWindow )
+        {
+            // set the size with decoration
+            Rectangle aRDecor = pWindow->GetWindowExtentsRelative( NULL );
+            if ( !aRDecor.IsEmpty() )
+            {
+                sal_Int64 nDecor = aRDecor.getWidth();
+                sal_Int64 nUnDecor = mxWindow->getPosSize().Width;
+                if ( nWidth < nDecor - nUnDecor )
+                    nUnDecor = nDecor - nWidth; // avoid negative size
+                nNewWidth = nWidth + nUnDecor - nDecor;
+            }
+        }
     }
-    catch ( uno::RuntimeException& )
-    {
-        throw;
-    }
-    catch ( uno::Exception& e )
-    {
-        throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not set width!" ) ),
-                uno::Reference< uno::XInterface >(),
-                uno::makeAny( e ) );
-    }
+
+    mxWindow->setPosSize( 0, 0, nNewWidth, 0, awt::PosSize::WIDTH );
 }
 
 //---------------------------------------------
 double UserFormGeometryHelper::getHeight()
 {
-    double nResult = 0;
-
-    try
+    if ( mbDialog )
     {
-        sal_Int32 nHeight = 0;
-        mxModel->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_HEIGHT ) ) ) >>= nHeight;
-        nResult = ConvertLogicToPixel( nHeight,
-                                       sal_False, // Size
-                                       sal_False, // Y
-                                       util::MeasureUnit::APPFONT );
-    }
-    catch ( uno::RuntimeException& )
-    {
-        throw;
-    }
-    catch ( uno::Exception& e )
-    {
-        throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not get height!" ) ),
-                uno::Reference< uno::XInterface >(),
-                uno::makeAny( e ) );
+        const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
+        if ( pWindow )
+        {
+            // get the size with decoration
+            Rectangle aResult = pWindow->GetWindowExtentsRelative( NULL );
+            return aResult.getHeight();
+        }
     }
 
-    return nResult;
+    return mxWindow->getPosSize().Height;
 }
 
 //---------------------------------------------
 void UserFormGeometryHelper::setHeight( double nHeight )
 {
-    try
+    sal_Int64 nNewHeight = nHeight;
+    if ( mbDialog )
     {
-        mxModel->setPropertyValue(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VBA_HEIGHT ) ),
-                uno::makeAny( ConvertPixelToLogic( nHeight,
-                                                   sal_False, // Size
-                                                   sal_False, // Y
-                                                   util::MeasureUnit::APPFONT ) ) );
+        const Window* pWindow = VCLUnoHelper::GetWindow( mxWindow );
+        if ( pWindow )
+        {
+            // set the size with decoration
+            Rectangle aRDecor = pWindow->GetWindowExtentsRelative( NULL );
+            if ( !aRDecor.IsEmpty() )
+            {
+                sal_Int64 nDecor = aRDecor.getHeight();
+                sal_Int64 nUnDecor = mxWindow->getPosSize().Height;
+                if ( nHeight < nDecor - nUnDecor )
+                    nUnDecor = nDecor - nHeight; // avoid negative size
+                nNewHeight = nHeight + nUnDecor - nDecor;
+            }
+        }
     }
-    catch ( uno::RuntimeException& )
-    {
-        throw;
-    }
-    catch ( uno::Exception& e )
-    {
-        throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not set height!" ) ),
-                uno::Reference< uno::XInterface >(),
-                uno::makeAny( e ) );
-    }
+
+    mxWindow->setPosSize( 0, 0, 0, nNewHeight, awt::PosSize::HEIGHT );
 }
 
 // ============
@@ -1191,7 +1039,7 @@ void UserFormGeometryHelper::setHeight( double nHeight )
     ShapeHelper::ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape) throw (css::script::BasicErrorException ) : xShape( _xShape )
     {
         if( !xShape.is() )
-            throw css::uno::RuntimeException( rtl::OUString::createFromAscii("No valid shape for helper"), css::uno::Reference< css::uno::XInterface >() );
+            throw css::uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No valid shape for helper")), css::uno::Reference< css::uno::XInterface >() );
     }
 
     double ShapeHelper::getHeight()
@@ -1265,14 +1113,14 @@ void UserFormGeometryHelper::setHeight( double nHeight )
     void DebugHelper::exception( const rtl::OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const rtl::OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException )
     {
         // #TODO #FIXME ( do we want to support additionalArg here )
-        throw css::script::BasicErrorException( DetailedMessage.concat( rtl::OUString::createFromAscii(" ") ).concat( ex.Message ), css::uno::Reference< css::uno::XInterface >(), err, rtl::OUString() );
+        throw css::script::BasicErrorException( DetailedMessage.concat( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) ).concat( ex.Message ), css::uno::Reference< css::uno::XInterface >(), err, rtl::OUString() );
     }
 
     void DebugHelper::exception( int err,  const rtl::OUString& additionalArgument ) throw( css::script::BasicErrorException )
     {
         exception( rtl::OUString(), css::uno::Exception(), err, additionalArgument );
     }
-    void DebugHelper::exception( css::uno::Exception& ex ) throw( css::script::BasicErrorException )
+    void DebugHelper::exception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException )
     {
         exception( rtl::OUString(), ex, SbERR_INTERNAL_ERROR, rtl::OUString() );
     }

@@ -51,7 +51,7 @@ public:
     sal_Bool        Export();
 
     static void             SaveGraphic( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape );
-    static void             HandleGraphicFilterError( USHORT nFilterError, ULONG nStreamError = ERRCODE_NONE );
+    static void             HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong nStreamError = ERRCODE_NONE );
 };
 
 #endif // _SD_SDGRFFILTER_HXX

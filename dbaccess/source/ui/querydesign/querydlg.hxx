@@ -79,7 +79,7 @@ namespace dbaui
                     const TTableConnectionData::value_type& pData,
                     OJoinTableView::OTableWindowMap*    _pTableMap,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-                    BOOL _bAllowTableSelect);
+                    sal_Bool _bAllowTableSelect);
         virtual ~DlgQryJoin();
         EJoinType GetJoinType() const { return eJoinType; };
 

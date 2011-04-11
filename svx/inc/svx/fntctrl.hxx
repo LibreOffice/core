@@ -48,7 +48,7 @@ class SVX_DLLPUBLIC SvxFontPrevWindow : public Window
 private:
     FontPrevWin_Impl*   pImpl;
 
-    SVX_DLLPRIVATE void             InitSettings( BOOL bForeground, BOOL bBackground );
+    SVX_DLLPRIVATE void             InitSettings( sal_Bool bForeground, sal_Bool bBackground );
 
 public:
                         SvxFontPrevWindow( Window* pParent, const ResId& rId );
@@ -69,15 +69,15 @@ public:
     void                SetColor( const Color& rColor );
     void                ResetColor();
     void                SetBackColor( const Color& rColor );
-    void                UseResourceText( BOOL bUse = TRUE );
+    void                UseResourceText( sal_Bool bUse = sal_True );
     void                Paint( const Rectangle& );
 
-    BOOL                IsTwoLines() const;
-    void                SetTwoLines(BOOL bSet);
+    sal_Bool                IsTwoLines() const;
+    void                SetTwoLines(sal_Bool bSet);
 
     void                SetBrackets(sal_Unicode cStart, sal_Unicode cEnd);
 
-    void                SetFontWidthScale( UINT16 nScaleInPercent );
+    void                SetFontWidthScale( sal_uInt16 nScaleInPercent );
 
     void                AutoCorrectFontColor( void );
 

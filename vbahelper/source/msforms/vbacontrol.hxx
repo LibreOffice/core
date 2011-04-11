@@ -43,6 +43,7 @@
 #include <memory>
 
 //typedef ::cppu::WeakImplHelper1< ov::msforms::XControl > ControlImpl_BASE;
+//template SAL_DLLPUBLIC_IMPORT InheritedHelperInterfaceImpl1< ov::msforms::XControl >;
 typedef InheritedHelperInterfaceImpl1< ov::msforms::XControl > ControlImpl_BASE;
 
 class ScVbaControl : public ControlImpl_BASE
@@ -75,7 +76,7 @@ public:
     void setGeometryHelper( ov::AbstractGeometryAttributes* pHelper );
     // sets the name of the associated library ( used for UserForm controls )
     void setLibraryAndCodeName( const rtl::OUString& sLibCodeName ) { m_sLibraryAndCodeName = sLibCodeName; }
-    rtl::OUString getLibraryAndCodeName() { return m_sLibraryAndCodeName; }
+    rtl::OUString getLibraryAndCodeName() const { return m_sLibraryAndCodeName; }
 
     // XControl
     virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException);

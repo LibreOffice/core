@@ -128,7 +128,7 @@ namespace dbaui
         OTableCopyHelper        m_aTableCopyHelper;
         TransferableClipboardListener*
                                 m_pClipbordNotifier;        // notifier for changes in the clipboard
-        ULONG                   m_nAsyncDrop;
+        sal_uLong                   m_nAsyncDrop;
         OAsyncronousLink        m_aControllerConnectedEvent;
         OAsyncronousLink        m_aSelectContainerEvent;
         PreviewMode             m_ePreviewMode;             // the mode of the preview

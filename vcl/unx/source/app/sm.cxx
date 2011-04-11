@@ -82,6 +82,7 @@ SalSession* X11SalInstance::CreateSalSession()
 {
     if( ! pOneInstance )
         pOneInstance = new IceSalSession();
+    SessionManagerClient::open();
     return pOneInstance;
 }
 
@@ -150,7 +151,7 @@ extern "C" void SAL_CALL ICEConnectionWorker( void* );
 class ICEConnectionObserver
 {
     friend void SAL_CALL ICEConnectionWorker(void*);
-    static BOOL bIsWatching;
+    static sal_Bool bIsWatching;
     static void ICEWatchProc( IceConn connection, IcePointer client_data,
                               Bool opening, IcePointer* watch_data );
 
@@ -176,7 +177,7 @@ public:
 
 SmcConn             SessionManagerClient::aSmcConnection            = NULL;
 ByteString          SessionManagerClient::aClientID;
-BOOL                ICEConnectionObserver::bIsWatching              = FALSE;
+sal_Bool                ICEConnectionObserver::bIsWatching              = sal_False;
 struct pollfd*  ICEConnectionObserver::pFilehandles             = NULL;
 IceConn*            ICEConnectionObserver::pConnections             = NULL;
 int                 ICEConnectionObserver::nConnections             = 0;
@@ -211,7 +212,7 @@ static void BuildSmPropertyList()
 {
     if( ! pSmProps )
     {
-        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
+        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
 
         nSmProps = 5;
         pSmProps = new SmProp[ nSmProps ];
@@ -220,22 +221,22 @@ static void BuildSmPropertyList()
         pSmProps[ 0 ].type      = const_cast<char*>(SmLISTofARRAY8);
         pSmProps[ 0 ].num_vals  = 1;
         pSmProps[ 0 ].vals      = new SmPropValue;
-        pSmProps[ 0 ].vals->length  = aExec.Len()+1;
-        pSmProps[ 0 ].vals->value   = strdup( aExec.GetBuffer() );
+        pSmProps[ 0 ].vals->length  = aExec.getLength()+1;
+        pSmProps[ 0 ].vals->value   = strdup( aExec.getStr() );
 
         pSmProps[ 1 ].name      = const_cast<char*>(SmProgram);
         pSmProps[ 1 ].type      = const_cast<char*>(SmARRAY8);
         pSmProps[ 1 ].num_vals  = 1;
         pSmProps[ 1 ].vals      = new SmPropValue;
-        pSmProps[ 1 ].vals->length  = aExec.Len()+1;
-        pSmProps[ 1 ].vals->value   = strdup( aExec.GetBuffer() );
+        pSmProps[ 1 ].vals->length  = aExec.getLength()+1;
+        pSmProps[ 1 ].vals->value   = strdup( aExec.getStr() );
 
         pSmProps[ 2 ].name      = const_cast<char*>(SmRestartCommand);
         pSmProps[ 2 ].type      = const_cast<char*>(SmLISTofARRAY8);
         pSmProps[ 2 ].num_vals  = 3;
         pSmProps[ 2 ].vals      = new SmPropValue[3];
-        pSmProps[ 2 ].vals[0].length    = aExec.Len()+1;
-        pSmProps[ 2 ].vals[0].value = strdup( aExec.GetBuffer() );
+        pSmProps[ 2 ].vals[0].length    = aExec.getLength()+1;
+        pSmProps[ 2 ].vals[0].value = strdup( aExec.getStr() );
             ByteString aRestartOption( "-session=" );
         aRestartOption.Append( SessionManagerClient::getSessionID() );
         pSmProps[ 2 ].vals[1].length    = aRestartOption.Len()+1;
@@ -377,7 +378,8 @@ void SessionManagerClient::SaveYourselfProc(
         SessionManagerClient::saveDone();
         return;
     }
-    Application::PostUserEvent( STATIC_LINK( (void*)(shutdown ? 0xffffffff : 0x0), SessionManagerClient, SaveYourselfHdl ) );
+    sal_uIntPtr nStateVal = shutdown ? 0xffffffff : 0x0;
+    Application::PostUserEvent( STATIC_LINK( (void*)nStateVal, SessionManagerClient, SaveYourselfHdl ) );
     SMprintf( "waiting for save yourself event to be processed\n" );
 #endif
 }
@@ -559,7 +561,7 @@ void SessionManagerClient::interactionDone( bool bCancelShutdown )
 }
 
 
-String SessionManagerClient::getExecName()
+rtl::OUString SessionManagerClient::getExecName()
 {
     rtl::OUString aExec, aSysExec;
     osl_getExecutableFile( &aExec.pData );
@@ -607,7 +609,7 @@ void ICEConnectionObserver::activate()
     {
         nWakeupFiles[0] = nWakeupFiles[1] = 0;
         ICEMutex = osl_createMutex();
-        bIsWatching = TRUE;
+        bIsWatching = sal_True;
 #ifdef USE_SM_EXTENSION
         /*
          * Default handlers call exit, we don't care that strongly if something
@@ -625,7 +627,7 @@ void ICEConnectionObserver::deactivate()
     if( bIsWatching )
     {
         lock();
-        bIsWatching = FALSE;
+        bIsWatching = sal_False;
 #ifdef USE_SM_EXTENSION
         IceRemoveConnectionWatch( ICEWatchProc, NULL );
         IceSetErrorHandler( origErrorHandler );

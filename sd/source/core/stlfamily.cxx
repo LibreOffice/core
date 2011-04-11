@@ -88,7 +88,7 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
             maStyleSheets.clear();
 
             const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == SD_STYLE_FAMILY_MASTERPAGE) && (pStyle->GetName().Equals( aLayoutName, 0, nLen )) )
@@ -166,7 +166,7 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuc
         else
         {
             const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == mnFamily) && (pStyle->GetApiName() == rName) )
@@ -279,14 +279,13 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
             }
         }
 
-//              *pNames++ = (*iter++).second->GetApiName();
         return aNames;
     }
     else
     {
         std::vector< OUString > aNames;
         const SfxStyles& rStyles = mxPool->GetStyles();
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
         {
             SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
             if( pStyle && (pStyle->GetFamily() == mnFamily) )
@@ -314,7 +313,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(Runtim
         else
         {
             const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == mnFamily) && ( pStyle->GetApiName() == aName ) )
@@ -349,7 +348,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasElements() throw(RuntimeException)
     else
     {
         const SfxStyles& rStyles = mxPool->GetStyles();
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
         {
             SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
             if( pStyle && (pStyle->GetFamily() == mnFamily) )
@@ -377,7 +376,7 @@ sal_Int32 SAL_CALL SdStyleFamily::getCount() throw(RuntimeException)
     else
     {
         const SfxStyles& rStyles = mxPool->GetStyles();
-        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
         {
             SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
             if( pStyle && (pStyle->GetFamily() == mnFamily) )
@@ -404,7 +403,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
             {
                 PresStyleMap::iterator iter( rStyleSheets.begin() );
                 while( Index-- && (iter != rStyleSheets.end()) )
-                    iter++;
+                    ++iter;
 
                 if( (Index==-1) && (iter != rStyleSheets.end()) )
                     return Any( Reference< XStyle >( (*iter).second.get() ) );
@@ -413,7 +412,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
         else
         {
             const SfxStyles& rStyles = mxPool->GetStyles();
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
+            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
             {
                 SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
                 if( pStyle && (pStyle->GetFamily() == mnFamily) )
@@ -539,7 +538,7 @@ void SAL_CALL SdStyleFamily::removeEventListener( const Reference< XEventListene
 
 Reference<XPropertySetInfo> SdStyleFamily::getPropertySetInfo() throw (RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
     return Reference<XPropertySetInfo>();
 }
 
@@ -547,7 +546,7 @@ Reference<XPropertySetInfo> SdStyleFamily::getPropertySetInfo() throw (RuntimeEx
 
 void SdStyleFamily::setPropertyValue( const OUString& , const Any&  ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 // ----------------------------------------------------------
@@ -562,7 +561,6 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (Unkno
         {
             case SD_STYLE_FAMILY_MASTERPAGE:    sDisplayName = getName(); break;
             case SD_STYLE_FAMILY_CELL:          sDisplayName = String( SdResId(STR_CELL_STYLE_FAMILY) ); break;
-//          case SD_STYLE_FAMILY_GRAPHICS:
             default:                            sDisplayName = String( SdResId(STR_GRAPHICS_STYLE_FAMILY) ); break;
         }
         return Any( sDisplayName );
@@ -577,28 +575,28 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (Unkno
 
 void SdStyleFamily::addPropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 // ----------------------------------------------------------
 
 void SdStyleFamily::removePropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 // ----------------------------------------------------------
 
 void SdStyleFamily::addVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 // ----------------------------------------------------------
 
 void SdStyleFamily::removeVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    OSL_ENSURE( 0, "###unexpected!" );
+    OSL_FAIL( "###unexpected!" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

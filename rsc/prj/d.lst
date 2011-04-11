@@ -6,4 +6,4 @@
 ..\%__SRC%\bin\rscpp %_DEST%\bin%_EXT%\rscpp
 
 mkdir: %_DEST%\inc%_EXT%\rsc
-..\inc\rscsfx.hxx %_DEST%\inc%_EXT%\rsc\rscsfx.hxx
+..\inc\rsc/rscsfx.hxx %_DEST%\inc%_EXT%\rsc\rscsfx.hxx

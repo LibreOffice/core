@@ -79,7 +79,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Height", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Title", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {

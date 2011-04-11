@@ -474,31 +474,31 @@ Any SAL_CALL MasterPropertySet::getPropertyDefault( const ::rtl::OUString& rProp
 void MasterPropertySet::_preGetPropertyState ()
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 void MasterPropertySet::_getPropertyState( const comphelper::PropertyInfo&, PropertyState& )
     throw(UnknownPropertyException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 void MasterPropertySet::_postGetPropertyState ()
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 void MasterPropertySet::_setPropertyToDefault( const comphelper::PropertyInfo& )
     throw(UnknownPropertyException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 Any MasterPropertySet::_getPropertyDefault( const comphelper::PropertyInfo& )
     throw(UnknownPropertyException, WrappedTargetException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
     Any aAny;
     return aAny;
 }

@@ -70,7 +70,7 @@ interface XDataProvider  : ::com::sun::star::uno::XInterface
             given range.  The properties should be defined in a
             separate service.
 
-            <p>For spreadsheets and textdocument tables there exists a
+            <p>For spreadsheets and text document tables there exists a
             service <type>TabularDataProviderArguments</type>
             describing valid values for this list.</p>
 

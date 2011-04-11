@@ -49,20 +49,19 @@ class XMLTextFrameContext : public SvXMLImportContext
     SvXMLAttributeList *m_pAttrList;
 
     XMLTextFrameContextHyperlink_Impl   *m_pHyperlink;
-    // --> OD 2009-07-22 #i73249#
+    // Implement Title/Description Elements UI (#i73249#)
     ::rtl::OUString m_sTitle;
-    // <--
     ::rtl::OUString m_sDesc;
 
     ::com::sun::star::text::TextContentAnchorType   m_eDefaultAnchorType;
 
-    // --> OD 2006-03-10 #i51726#
-    // The <draw:name> can longer be used to distinguish Writer graphic/text box
-    // objects and Draw graphic/text box objects.
-    // The new distinguish attribute is the parent style of the automatic style
-    // of the object. All Draw objects have an automatic style without a parent style.
+    /* The <draw:name> can longer be used to distinguish Writer graphic/text box
+       objects and Draw graphic/text box objects.
+       The new distinguish attribute is the parent style of the automatic style
+       of the object. All Draw objects have an automatic style without a parent style.
+       (#i51726#)
+    */
     sal_Bool m_HasAutomaticStyleWithoutParentStyle;
-    // <--
     sal_Bool m_bSupportsReplacement;
 
     sal_Bool CreateIfNotThere();
@@ -97,10 +96,10 @@ public:
 
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextContent > GetTextContent() const;
-    // --> OD 2004-08-24 #i33242#
+
+    // Frame "to character": anchor moves from first to last char after saving (#i33242#)
     ::com::sun::star::uno::Reference <
         ::com::sun::star::drawing::XShape > GetShape() const;
-    // <--
 };
 
 

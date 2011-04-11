@@ -76,9 +76,9 @@ SwPosSection fnSectionStart     = &aFwrd;
 SwPosSection fnSectionEnd       = &aBwrd;
 
 // Travelling in Tabellen
-BOOL GotoPrevTable( SwPaM&, SwPosTable, BOOL bInReadOnly );
-BOOL GotoCurrTable( SwPaM&, SwPosTable, BOOL bInReadOnly );
-BOOL GotoNextTable( SwPaM&, SwPosTable, BOOL bInReadOnly );
+sal_Bool GotoPrevTable( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
+sal_Bool GotoCurrTable( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
+sal_Bool GotoNextTable( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
 
 SwWhichTable fnTablePrev = &GotoPrevTable;
 SwWhichTable fnTableCurr = &GotoCurrTable;
@@ -87,10 +87,10 @@ SwPosTable fnTableStart = &aFwrd;
 SwPosTable fnTableEnd = &aBwrd;
 
 // Travelling in Bereichen
-BOOL GotoPrevRegion( SwPaM&, SwPosRegion, BOOL bInReadOnly );
-BOOL GotoCurrRegion( SwPaM&, SwPosRegion, BOOL bInReadOnly );
-BOOL GotoCurrRegionAndSkip( SwPaM&, SwPosRegion, BOOL bInReadOnly );
-BOOL GotoNextRegion( SwPaM&, SwPosRegion, BOOL bInReadOnly );
+sal_Bool GotoPrevRegion( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
+sal_Bool GotoCurrRegion( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
+sal_Bool GotoCurrRegionAndSkip( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
+sal_Bool GotoNextRegion( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
 
 SwWhichRegion fnRegionPrev = &GotoPrevRegion;
 SwWhichRegion fnRegionCurr = &GotoCurrRegion;

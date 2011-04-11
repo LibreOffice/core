@@ -33,10 +33,8 @@
 #include "xmloff/dllapi.h"
 #include "sal/types.h"
 #include <rtl/ustring.hxx>
-#include <hash_map>
-#ifndef __SGI_STL_MAP
+#include <boost/unordered_map.hpp>
 #include <map>
-#endif
 #include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 
@@ -93,8 +91,8 @@ struct QNamePairEq
     }
 };
 
-typedef ::std::hash_map < QNamePair, ::rtl::OUString, QNamePairHash, QNamePairEq > QNameCache;
-typedef ::std::hash_map < ::rtl::OUString, ::rtl::Reference <NameSpaceEntry >, rtl::OUStringHash, OUStringEqFunc > NameSpaceHash;
+typedef ::boost::unordered_map < QNamePair, ::rtl::OUString, QNamePairHash, QNamePairEq > QNameCache;
+typedef ::boost::unordered_map < ::rtl::OUString, ::rtl::Reference <NameSpaceEntry >, rtl::OUStringHash, OUStringEqFunc > NameSpaceHash;
 typedef ::std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry >, uInt32lt > NameSpaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap

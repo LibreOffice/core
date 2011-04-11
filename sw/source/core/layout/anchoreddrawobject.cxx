@@ -39,18 +39,18 @@
 #include <tolayoutanchoredobjectposition.hxx>
 #include <frmtool.hxx>
 #include <fmtornt.hxx>
-// --> OD 2004-08-12 #i32795#
+// --> #i32795#
 #include <txtfrm.hxx>
 // <--
-// --> OD 2004-08-12 #i32795#
+// --> #i32795#
 // template class <std::vector>
 #include <vector>
 // <--
 
-// --> OD 2004-08-10 #i28749#
+// --> #i28749#
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 // <--
-// --> OD 2005-03-09 #i44559#
+// --> #i44559#
 #include <ndtxt.hxx>
 // <--
 
@@ -79,7 +79,7 @@ SwPosNotify::SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj ) :
     mpAnchoredDrawObj( _pAnchoredDrawObj )
 {
     maOldObjRect = mpAnchoredDrawObj->GetObjRect();
-    // --> OD 2004-10-20 #i35640# - determine correct page frame
+    // --> #i35640# - determine correct page frame
     mpOldPageFrm = mpAnchoredDrawObj->GetPageFrm();
     // <--
 }
@@ -96,7 +96,7 @@ SwPosNotify::~SwPosNotify()
         SwRect aNewObjRect( mpAnchoredDrawObj->GetObjRect() );
         if( aNewObjRect.HasArea() )
         {
-            // --> OD 2004-10-20 #i35640# - determine correct page frame
+            // --> #i35640# - determine correct page frame
             SwPageFrm* pNewPageFrm = mpAnchoredDrawObj->GetPageFrm();
             // <--
             if( pNewPageFrm )
@@ -106,9 +106,9 @@ SwPosNotify::~SwPosNotify()
 
         ::ClrContourCache( mpAnchoredDrawObj->GetDrawObj() );
 
-        // --> OD 2004-10-20 #i35640# - additional notify anchor text frame
+        // --> #i35640# - additional notify anchor text frame
         // Needed for negative positioned drawing objects
-        // --> OD 2005-03-01 #i43255# - refine condition to avoid unneeded
+        // --> #i43255# - refine condition to avoid unneeded
         // invalidations: anchored object had to be on the page of its anchor
         // text frame.
         if ( mpAnchoredDrawObj->GetAnchorFrm()->IsTxtFrm() &&
@@ -143,7 +143,7 @@ SwPosNotify::~SwPosNotify()
     }
 }
 
-// --> OD 2004-08-12 #i32795#
+// --> #i32795#
 Point SwPosNotify::LastObjPos() const
 {
     return maOldObjRect.Pos();
@@ -151,7 +151,7 @@ Point SwPosNotify::LastObjPos() const
 //<--
 
 // ============================================================================
-// OD 2004-08-12 #i32795#
+// #i32795#
 // helper class for oscillation control on object positioning
 // ============================================================================
 class SwObjPosOscillationControl
@@ -206,7 +206,7 @@ bool SwObjPosOscillationControl::OscillationDetected()
         {
             if ( *(pNewObjPos) == *(*aObjPosIter) )
             {
-                // position already occured -> oscillation
+                // position already occurred -> oscillation
                 bOscillationDetected = true;
                 delete pNewObjPos;
                 break;
@@ -229,14 +229,14 @@ TYPEINIT1(SwAnchoredDrawObject,SwAnchoredObject);
 SwAnchoredDrawObject::SwAnchoredDrawObject() :
     SwAnchoredObject(),
     mbValidPos( false ),
-    // --> OD 2004-09-29 #i34748#
+    // --> #i34748#
     mpLastObjRect( 0L ),
     // <--
     mbNotYetAttachedToAnchorFrame( true ),
-    // --> OD 2004-08-09 #i28749#
+    // --> #i28749#
     mbNotYetPositioned( true ),
     // <--
-    // --> OD 2006-03-17 #i62875#
+    // --> #i62875#
     mbCaptureAfterLayoutDirChange( false )
     // <--
 {
@@ -244,12 +244,12 @@ SwAnchoredDrawObject::SwAnchoredDrawObject() :
 
 SwAnchoredDrawObject::~SwAnchoredDrawObject()
 {
-    // --> OD 2004-11-03 - follow-up of #i34748#
+    // --> follow-up of #i34748#
     delete mpLastObjRect;
     // <--
 }
 
-// --> OD 2006-03-17 #i62875#
+// --> #i62875#
 void SwAnchoredDrawObject::UpdateLayoutDir()
 {
     SwFrmFmt::tLayoutDir nOldLayoutDir( GetFrmFmt().GetLayoutDir() );
@@ -266,7 +266,7 @@ void SwAnchoredDrawObject::UpdateLayoutDir()
 }
 // <--
 
-// --> OD 2006-03-17 #i62875#
+// --> #i62875#
 bool SwAnchoredDrawObject::IsOutsidePage() const
 {
     bool bOutsidePage( false );
@@ -283,7 +283,7 @@ bool SwAnchoredDrawObject::IsOutsidePage() const
 // <--
 
 // =============================================================================
-// OD 2004-03-25 #i26791# - implementation of pure virtual method declared in
+// #i26791# - implementation of pure virtual method declared in
 // base class <SwAnchoredObject>
 // =============================================================================
 void SwAnchoredDrawObject::MakeObjPos()
@@ -300,35 +300,33 @@ void SwAnchoredDrawObject::MakeObjPos()
         return;
     }
 
-    // --> OD 2004-08-09 #i28749# - anchored drawing object has to be attached
+    // --> #i28749# - anchored drawing object has to be attached
     // to anchor frame
     if ( mbNotYetAttachedToAnchorFrame )
     {
-        OSL_ENSURE( false,
-                "<SwAnchoredDrawObject::MakeObjPos() - drawing object not yet attached to anchor frame -> no positioning" );
+        OSL_FAIL( "<SwAnchoredDrawObject::MakeObjPos() - drawing object not yet attached to anchor frame -> no positioning" );
         return;
     }
 
     SwDrawContact* pDrawContact =
                         static_cast<SwDrawContact*>(::GetUserCall( GetDrawObj() ));
 
-    // --> OD 2004-08-09 #i28749# - if anchored drawing object hasn't been yet
+    // --> #i28749# - if anchored drawing object hasn't been yet
     // positioned, convert its positioning attributes, if its positioning
     // attributes are given in horizontal left-to-right layout.
-    // --> OD 2004-10-25 #i36010# - Note: horizontal left-to-right layout is made
+    // --> #i36010# - Note: horizontal left-to-right layout is made
     // the default layout direction for <SwDrawFrmFmt> instances. Thus, it has
     // to be adjusted manually, if no adjustment of the positioning attributes
     // have to be performed here.
-    // --> OD 2004-11-17 #i35635# - additionally move drawing object to the
-    // visible layer.
+    // --> #i35635# - additionally move drawing object to the visible layer.
     if ( mbNotYetPositioned )
     {
-        // --> OD 2004-11-17 #i35635#
+        // --> #i35635#
         pDrawContact->MoveObjToVisibleLayer( DrawObj() );
         // <--
-        // --> OD 2004-09-29 #117975# - perform conversion of positioning
+        // --> perform conversion of positioning
         // attributes only for 'master' drawing objects
-        // --> OD 2005-03-11 #i44334#, #i44681# - check, if positioning
+        // --> #i44334#, #i44681# - check, if positioning
         // attributes already have been set.
         if ( !GetDrawObj()->ISA(SwDrawVirtObj) &&
              !static_cast<SwDrawFrmFmt&>(GetFrmFmt()).IsPosAttrSet() )
@@ -336,7 +334,7 @@ void SwAnchoredDrawObject::MakeObjPos()
             _SetPositioningAttr();
         }
         // <--
-        // --> OD 2006-05-24 #b6418964#
+        // -->
         // - reset internal flag after all needed actions are performed to
         //   avoid callbacks from drawing layer
         mbNotYetPositioned = false;
@@ -362,7 +360,7 @@ void SwAnchoredDrawObject::MakeObjPos()
             case FLY_AT_PARA:
             case FLY_AT_CHAR:
             {
-                // --> OD 2004-08-12 #i32795# - move intrinsic positioning to
+                // --> #i32795# - move intrinsic positioning to
                 // helper method <_MakeObjPosAnchoredAtPara()>
                 _MakeObjPosAnchoredAtPara();
             }
@@ -370,19 +368,19 @@ void SwAnchoredDrawObject::MakeObjPos()
             case FLY_AT_PAGE:
             case FLY_AT_FLY:
             {
-                // --> OD 2004-08-12 #i32795# - move intrinsic positioning to
+                // --> #i32795# - move intrinsic positioning to
                 // helper method <_MakeObjPosAnchoredAtLayout()>
                 _MakeObjPosAnchoredAtLayout();
             }
             break;
             default:
             {
-                OSL_ENSURE( false, "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type - please inform OD." );
+                OSL_FAIL( "<SwAnchoredDrawObject::MakeObjPos()> - unknown anchor type - please inform OD." );
             }
         }
 
         // keep, current object rectangle
-        // --> OD 2004-09-29 #i34748# - use new method <SetLastObjRect(..)>
+        // --> #i34748# - use new method <SetLastObjRect(..)>
         SetLastObjRect( GetObjRect().SVRect() );
         // <--
 
@@ -397,7 +395,7 @@ void SwAnchoredDrawObject::MakeObjPos()
         }
     }
 
-    // --> OD 2006-03-17 #i62875#
+    // --> #i62875#
     if ( mbCaptureAfterLayoutDirChange &&
          GetPageFrm() )
     {
@@ -424,22 +422,22 @@ void SwAnchoredDrawObject::MakeObjPos()
 /** method for the intrinsic positioning of a at-paragraph|at-character
     anchored drawing object
 
-    OD 2004-08-12 #i32795# - helper method for method <MakeObjPos>
+    #i32795# - helper method for method <MakeObjPos>
 
     @author OD
 */
 void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
 {
-    // --> OD 2004-08-12 #i32795# - adopt positioning algorithm from Writer
+    // --> #i32795# - adopt positioning algorithm from Writer
     // fly frames, which are anchored at paragraph|at character
 
     // Determine, if anchor frame can/has to be formatted.
     // If yes, after each object positioning the anchor frame is formatted.
     // If after the anchor frame format the object position isn't valid, the
     // object is positioned again.
-    // --> OD 2005-02-22 #i43255# - refine condition: anchor frame format not
+    // --> #i43255# - refine condition: anchor frame format not
     // allowed, if another anchored object, has to be consider its wrap influence
-    // --> OD 2005-06-07 #i50356# - format anchor frame containing the anchor
+    // --> #i50356# - format anchor frame containing the anchor
     // position. E.g., for at-character anchored object this can be the follow
     // frame of the anchor frame, which contains the anchor character.
     const bool bFormatAnchor =
@@ -450,14 +448,14 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
 
     if ( bFormatAnchor )
     {
-        // --> OD 2005-06-07 #i50356#
+        // --> #i50356#
         GetAnchorFrmContainingAnchPos()->Calc();
         // <--
     }
 
     bool bOscillationDetected = false;
     SwObjPosOscillationControl aObjPosOscCtrl( *this );
-    // --> OD 2004-08-25 #i3317# - boolean, to apply temporarly the
+    // --> #i3317# - boolean, to apply temporarly the
     // 'straightforward positioning process' for the frame due to its
     // overlapping with a previous column.
     bool bConsiderWrapInfluenceDueToOverlapPrevCol( false );
@@ -466,7 +464,7 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
         // indicate that position will be valid after positioning is performed
         mbValidPos = true;
 
-        // --> OD 2004-10-20 #i35640# - correct scope for <SwPosNotify> instance
+        // --> #i35640# - correct scope for <SwPosNotify> instance
         {
             // create instance of <SwPosNotify> for correct notification
             SwPosNotify aPosNotify( this );
@@ -492,12 +490,12 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
         // to be invalid.
         if ( bFormatAnchor )
         {
-            // --> OD 2005-06-07 #i50356#
+            // --> #i50356#
             GetAnchorFrmContainingAnchPos()->Calc();
             // <--
         }
 
-        // --> OD 2004-08-25 #i3317#
+        // --> #i3317#
         if ( !ConsiderObjWrapInfluenceOnObjPos() &&
              OverlapsPrevColumn() )
         {
@@ -507,7 +505,7 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
     } while ( !mbValidPos && !bOscillationDetected &&
               !bConsiderWrapInfluenceDueToOverlapPrevCol );
 
-    // --> OD 2004-08-25 #i3317# - consider a detected oscillation and overlapping
+    // --> #i3317# - consider a detected oscillation and overlapping
     // with previous column.
     // temporarly consider the anchored objects wrapping style influence
     if ( bOscillationDetected || bConsiderWrapInfluenceDueToOverlapPrevCol )
@@ -521,7 +519,7 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
 /** method for the intrinsic positioning of a at-page|at-frame anchored
     drawing object
 
-    OD 2004-08-12 #i32795# - helper method for method <MakeObjPos>
+    #i32795# - helper method for method <MakeObjPos>
 
     @author OD
 */
@@ -540,14 +538,14 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtLayout()
 
     // set position
 
-    // --> OD 2004-07-29 #i31698#
-    // --> OD 2004-10-18 #i34995# - setting anchor position needed for filters,
+    // --> #i31698#
+    // --> #i34995# - setting anchor position needed for filters,
     // especially for the xml-filter to the OpenOffice.org file format
     {
         const Point aNewAnchorPos =
                     GetAnchorFrm()->GetFrmAnchorPos( ::HasWrap( GetDrawObj() ) );
         DrawObj()->SetAnchorPos( aNewAnchorPos );
-        // --> OD 2006-10-05 #i70122# - missing invalidation
+        // --> #i70122# - missing invalidation
         InvalidateObjRectWithSpaces();
         // <--
     }
@@ -564,7 +562,7 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtLayout()
 void SwAnchoredDrawObject::_SetDrawObjAnchor()
 {
     // new anchor position
-    // --> OD 2004-07-29 #i31698# -
+    // --> #i31698# -
     Point aNewAnchorPos =
                 GetAnchorFrm()->GetFrmAnchorPos( ::HasWrap( GetDrawObj() ) );
     Point aCurrAnchorPos = GetDrawObj()->GetAnchorPos();
@@ -577,7 +575,7 @@ void SwAnchoredDrawObject::_SetDrawObjAnchor()
         DrawObj()->SetAnchorPos( aNewAnchorPos );
         // correct object position, caused by setting new anchor position
         DrawObj()->Move( aMove );
-        // --> OD 2006-10-05 #i70122# - missing invalidation
+        // --> #i70122# - missing invalidation
         InvalidateObjRectWithSpaces();
         // <--
     }
@@ -585,7 +583,7 @@ void SwAnchoredDrawObject::_SetDrawObjAnchor()
 
 /** method to invalidate the given page frame
 
-    OD 2004-07-02 #i28701#
+    #i28701#
 
     @author OD
 */
@@ -595,7 +593,7 @@ void SwAnchoredDrawObject::_InvalidatePage( SwPageFrm* _pPageFrm )
     {
         if ( _pPageFrm->GetUpper() )
         {
-            // --> OD 2004-11-11 #i35007# - correct invalidation for as-character
+            // --> #i35007# - correct invalidation for as-character
             // anchored objects.
             if ( GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AS_CHAR )
             {
@@ -622,21 +620,21 @@ void SwAnchoredDrawObject::_InvalidatePage( SwPageFrm* _pPageFrm )
 
 void SwAnchoredDrawObject::InvalidateObjPos()
 {
-    // --> OD 2004-07-01 #i28701# - check, if invalidation is allowed
+    // --> #i28701# - check, if invalidation is allowed
     if ( mbValidPos &&
          InvalidationOfPosAllowed() )
     {
         mbValidPos = false;
-        // --> OD 2006-08-10 #i68520#
+        // --> #i68520#
         InvalidateObjRectWithSpaces();
         // <--
 
-        // --> OD 2005-03-08 #i44339# - check, if anchor frame exists.
+        // --> #i44339# - check, if anchor frame exists.
         if ( GetAnchorFrm() )
         {
-            // --> OD 2004-11-22 #118547# - notify anchor frame of as-character
+            // --> #118547# - notify anchor frame of as-character
             // anchored object, because its positioned by the format of its anchor frame.
-            // --> OD 2005-03-09 #i44559# - assure, that text hint is already
+            // --> #i44559# - assure, that text hint is already
             // existing in the text frame
             if ( GetAnchorFrm()->ISA(SwTxtFrm) &&
                  (GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
@@ -653,7 +651,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
             SwPageFrm* pPageFrm = AnchorFrm()->FindPageFrm();
             _InvalidatePage( pPageFrm );
 
-            // --> OD 2004-08-12 #i32270# - also invalidate page frame, at which the
+            // --> #i32270# - also invalidate page frame, at which the
             // drawing object is registered at.
             SwPageFrm* pPageFrmRegisteredAt = GetPageFrm();
             if ( pPageFrmRegisteredAt &&
@@ -662,7 +660,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
                 _InvalidatePage( pPageFrmRegisteredAt );
             }
             // <--
-            // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+            // --> #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
             // is replaced by method <FindPageFrmOfAnchor()>. It's return value
             // have to be checked.
             SwPageFrm* pPageFrmOfAnchor = FindPageFrmOfAnchor();
@@ -698,14 +696,14 @@ const SwRect SwAnchoredDrawObject::GetObjRect() const
     return GetDrawObj()->GetSnapRect();
 }
 
-// --> OD 2006-10-05 #i70122#
+// --> #i70122#
 const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
 {
     return GetDrawObj()->GetCurrentBoundRect();
 }
 // <--
 
-// --> OD 2006-08-10 #i68520#
+// --> #i68520#
 bool SwAnchoredDrawObject::_SetObjTop( const SwTwips _nTop )
 {
     SwTwips nDiff = _nTop - GetObjRect().Top();
@@ -724,7 +722,7 @@ bool SwAnchoredDrawObject::_SetObjLeft( const SwTwips _nLeft )
 
 /** adjust positioning and alignment attributes for new anchor frame
 
-    OD 2004-08-24 #i33313# - add second optional parameter <_pNewObjRect>
+    #i33313# - add second optional parameter <_pNewObjRect>
 
     @author OD
 */
@@ -734,7 +732,7 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm,
     SwTwips nHoriRelPos = 0;
     SwTwips nVertRelPos = 0;
     const Point aAnchorPos = _pNewAnchorFrm->GetFrmAnchorPos( ::HasWrap( GetDrawObj() ) );
-    // --> OD 2004-08-24 #i33313#
+    // --> #i33313#
     const SwRect aObjRect( _pNewObjRect ? *_pNewObjRect : GetObjRect() );
     // <--
     const bool bVert = _pNewAnchorFrm->IsVertical();
@@ -759,14 +757,14 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm,
     GetFrmFmt().SetFmtAttr( SwFmtVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
 }
 
-// --> OD 2004-09-29 #i34748# - change return type
+// --> #i34748# - change return type
 const Rectangle* SwAnchoredDrawObject::GetLastObjRect() const
 {
     return mpLastObjRect;
 }
 // <--
 
-// --> OD 2004-09-29 #i34748# - change return type.
+// --> #i34748# - change return type.
 // If member <mpLastObjRect> is NULL, create one.
 void SwAnchoredDrawObject::SetLastObjRect( const Rectangle& _rNewLastRect )
 {
@@ -780,7 +778,7 @@ void SwAnchoredDrawObject::SetLastObjRect( const Rectangle& _rNewLastRect )
 
 void SwAnchoredDrawObject::ObjectAttachedToAnchorFrame()
 {
-    // --> OD 2004-07-27 #i31698#
+    // --> #i31698#
     SwAnchoredObject::ObjectAttachedToAnchorFrame();
     // <--
 
@@ -792,7 +790,7 @@ void SwAnchoredDrawObject::ObjectAttachedToAnchorFrame()
 
 /** method to set positioning attributes
 
-    OD 2004-10-20 #i35798#
+    #i35798#
     During load the positioning attributes aren't set.
     Thus, the positioning attributes are set by the current object geometry.
     This method is also used for the conversion for drawing objects
@@ -812,7 +810,7 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
 
         SwTwips nHoriPos = aObjRect.Left();
         SwTwips nVertPos = aObjRect.Top();
-        // --> OD 2005-03-10 #i44334#, #i44681#
+        // --> #i44334#, #i44681#
         // perform conversion only if position is in horizontal-left-to-right-layout.
         if ( GetFrmFmt().GetPositionLayoutDir() ==
                 text::PositionLayoutDir::PositionInHoriL2R )
@@ -838,38 +836,31 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
                 break;
                 default:
                 {
-                    OSL_ENSURE( false,
-                            "<SwAnchoredDrawObject::_SetPositioningAttr()> - unsupported layout direction" );
+                    OSL_FAIL( "<SwAnchoredDrawObject::_SetPositioningAttr()> - unsupported layout direction" );
                 }
             }
         }
         // <--
 
-        // --> OD 2006-11-10 #i71182#
+        // --> #i71182#
         // only change position - do not lose other attributes
         SwFmtHoriOrient aHori( GetFrmFmt().GetHoriOrient() );
         aHori.SetPos( nHoriPos );
         GetFrmFmt().SetFmtAttr( aHori );
 
         SwFmtVertOrient aVert( GetFrmFmt().GetVertOrient() );
-        // --> OD 2007-01-03 #i73079# - vertical position already correct
-//        if ( aVert.GetRelationOrient() == text::RelOrientation::CHAR ||
-//             aVert.GetRelationOrient() == text::RelOrientation::TEXT_LINE )
-//        {
-//            nVertPos = -nVertPos;
-//        }
-        // <--
+
         aVert.SetPos( nVertPos );
         GetFrmFmt().SetFmtAttr( aVert );
         // <--
 
-        // --> OD 2004-10-25 #i36010# - set layout direction of the position
+        // --> #i36010# - set layout direction of the position
         GetFrmFmt().SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
         // <--
     }
-    // --> OD 2007-11-29 #i65798# - also for as-character anchored objects
-    // --> OD 2005-05-10 #i45952# - indicate that position
+    // --> #i65798# - also for as-character anchored objects
+    // --> #i45952# - indicate that position
     // attributes are set now.
     static_cast<SwDrawFrmFmt&>(GetFrmFmt()).PosAttrSet();
     // <--
@@ -879,13 +870,13 @@ void SwAnchoredDrawObject::NotifyBackground( SwPageFrm* _pPageFrm,
                                              const SwRect& _rRect,
                                              PrepareHint _eHint )
 {
-    ::Notify_Background( GetDrawObj(), _pPageFrm, _rRect, _eHint, TRUE );
+    ::Notify_Background( GetDrawObj(), _pPageFrm, _rRect, _eHint, sal_True );
 }
 
 /** method to assure that anchored object is registered at the correct
     page frame
 
-    OD 2004-07-02 #i28701#
+    #i28701#
 
     @author OD
 */

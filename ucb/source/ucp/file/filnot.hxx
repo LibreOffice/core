@@ -28,7 +28,7 @@
 #ifndef _FILNOT_HXX_
 #define _FILNOT_HXX_
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
@@ -93,7 +93,7 @@ namespace fileaccess {
     };
 
 
-    typedef std::hash_map< rtl::OUString,
+    typedef boost::unordered_map< rtl::OUString,
                            com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >,
                            hashOUString,
                            equalOUString >      ListenerMap;

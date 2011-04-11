@@ -109,20 +109,24 @@ DEF1NAME=		$(SHL1TARGET)
 
 # --- Resources ---------------------------------------------------------------
 
-# sfx.srs is needed for the strings for UNDO and REDO in the UndoCommandDispatch
 RESLIB1LIST=\
     $(SRS)$/chcdialogs.srs \
     $(SRS)$/chcmenus.srs \
-    $(SOLARCOMMONRESDIR)$/sfx.srs
+
 
 RESLIB1NAME=	$(TARGET)
 RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=$(RESLIB1LIST)
 RESLIB1DEPN=$(RESLIB1LIST)
 
-#RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
-#RESLIB1DEPN=	SRCFILES
-
 # --- Targets -----------------------------------------------------------------
 
 .INCLUDE: target.mk
+
+ALLTAR : $(MISC)/chartcontroller.component
+
+$(MISC)/chartcontroller.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt chartcontroller.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt chartcontroller.component

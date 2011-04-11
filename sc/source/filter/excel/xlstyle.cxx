@@ -36,6 +36,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/font.hxx>
+#include <sal/macros.h>
 #include <rtl/tencinfo.h>
 #include <toolkit/unohlp.hxx>
 #include <editeng/svxfont.hxx>
@@ -112,20 +113,20 @@ XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     {
         case EXC_BIFF2:
             mpnColorTable = spnDefColorTable2;
-            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable2 );
+            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable2 );
         break;
         case EXC_BIFF3:
         case EXC_BIFF4:
             mpnColorTable = spnDefColorTable3;
-            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable3 );
+            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable3 );
         break;
         case EXC_BIFF5:
             mpnColorTable = spnDefColorTable5;
-            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable5 );
+            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable5 );
         break;
         case EXC_BIFF8:
             mpnColorTable = spnDefColorTable8;
-            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable8 );
+            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable8 );
         break;
         default:
             DBG_ERROR_BIFF();
@@ -151,7 +152,7 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
         case EXC_COLOR_NOTETEXT:        nColor = mnNoteText;    break;
         case EXC_COLOR_FONTAUTO:        nColor = COL_AUTO;      break;
         default:
-            DBG_ERROR1( "XclDefaultPalette::GetDefColorData - unknown default color index: %d", nXclIndex );
+            OSL_TRACE( "XclDefaultPalette::GetDefColorData - unknown default color index: %d", nXclIndex );
             nColor = COL_AUTO;
     }
     return nColor;
@@ -198,7 +199,7 @@ void XclFontData::Clear()
 
 void XclFontData::FillFromVclFont( const Font& rFont )
 {
-    maName = XclTools::GetXclFontName( rFont.GetName() );   // #106246# substitute with MS fonts
+    maName = XclTools::GetXclFontName( rFont.GetName() );   // substitute with MS fonts
     maStyle.Erase();
     maColor = rFont.GetColor();
     SetScUnderline( rFont.GetUnderline() );
@@ -1514,7 +1515,7 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
     // language not supported
     if( aBuiltInVec.empty() )
     {
-        DBG_ERROR1( "XclNumFmtBuffer::InsertBuiltinFormats - language 0x%04hX not supported (#i29949#)", meSysLang );
+        OSL_TRACE( "XclNumFmtBuffer::InsertBuiltinFormats - language 0x%04hX not supported (#i29949#)", meSysLang );
         XclBuiltInMap::const_iterator aMIt = aBuiltInMap.find( LANGUAGE_DONTKNOW );
         DBG_ASSERT( aMIt != aBuiltInMap.end(), "XclNumFmtBuffer::InsertBuiltinFormats - default map not found" );
         if( aMIt != aBuiltInMap.end() )
@@ -1646,7 +1647,7 @@ void XclCellAlign::SetScHorAlign( SvxCellHorJustify eHorJust )
         case SVX_HOR_JUSTIFY_BLOCK:     mnHorAlign = EXC_XF_HOR_JUSTIFY;    break;
         case SVX_HOR_JUSTIFY_REPEAT:    mnHorAlign = EXC_XF_HOR_FILL;       break;
         default:                        mnHorAlign = EXC_XF_HOR_GENERAL;
-            DBG_ERROR( "XclCellAlign::SetScHorAlign - unknown horizontal alignment" );
+            OSL_FAIL( "XclCellAlign::SetScHorAlign - unknown horizontal alignment" );
     }
 }
 
@@ -1659,7 +1660,7 @@ void XclCellAlign::SetScVerAlign( SvxCellVerJustify eVerJust )
         case SVX_VER_JUSTIFY_CENTER:    mnVerAlign = EXC_XF_VER_CENTER; break;
         case SVX_VER_JUSTIFY_BOTTOM:    mnVerAlign = EXC_XF_VER_BOTTOM; break;
         default:                        mnVerAlign = EXC_XF_VER_BOTTOM;
-            DBG_ERROR( "XclCellAlign::SetScVerAlign - unknown vertical alignment" );
+            OSL_FAIL( "XclCellAlign::SetScVerAlign - unknown vertical alignment" );
     }
 }
 

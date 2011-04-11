@@ -99,6 +99,10 @@ namespace cppu_threadpool {
                 if( 0 == m_lstCallstack.front() )
                 {
                     // disposed !
+                    if( m_lstJob.empty() )
+                    {
+                        osl_resetCondition( m_cndWait );
+                    }
                     break;
                 }
 
@@ -184,7 +188,7 @@ namespace cppu_threadpool {
         return m_lstCallstack.empty();
     }
 
-    sal_Bool JobQueue::isBusy()
+    sal_Bool JobQueue::isBusy() const
     {
         return m_nToDo > 0;
     }

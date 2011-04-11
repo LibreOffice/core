@@ -94,7 +94,7 @@ public:
     inline LwpDocument* GetDivision();
     void GetNumberOfPages(sal_uInt16& nPageno);
     sal_uInt16 GetMaxNumberOfPages();
-    LwpAtomHolder* GetExternalName(){return &m_ExternalName;};
+    LwpAtomHolder* GetExternalName(){return &m_ExternalName;}
 protected:
     void Read();
 private:

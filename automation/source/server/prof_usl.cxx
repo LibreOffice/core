@@ -86,7 +86,7 @@ String TTProfiler::GetSysdepProfileHeader()
 
 
 // Zustand merken
-void TTProfiler::GetSysdepProfileSnapshot( SysdepProfileSnapshot *pSysdepProfileSnapshot, USHORT )
+void TTProfiler::GetSysdepProfileSnapshot( SysdepProfileSnapshot *pSysdepProfileSnapshot, sal_uInt16 )
 {
     SvFileStream aStream( String::CreateFromAscii("/proc/self/psinfo"), STREAM_READ );      // Das ist ein expliziter Pfad für UNXSOL!
     if ( aStream.IsOpen() )
@@ -123,8 +123,8 @@ String TTProfiler::GetSysdepProfileLine( SysdepProfileSnapshot *pStart, SysdepPr
     aProfile += Pad( String::CreateFromInt64(DIFF_MS( pStart, pStop, mprusage.pr_rtime ) / AVER( pStart, pStop, mprusage.pr_count )), 7 );
 
 
-    ULONG d_utime = DIFF_MS( pStart, pStop, mpstatus.pr_utime ) + DIFF_MS( pStart, pStop, mpstatus.pr_cutime );
-    ULONG d_stime = DIFF_MS( pStart, pStop, mpstatus.pr_stime ) + DIFF_MS( pStart, pStop, mpstatus.pr_cstime );
+    sal_uLong d_utime = DIFF_MS( pStart, pStop, mpstatus.pr_utime ) + DIFF_MS( pStart, pStop, mpstatus.pr_cutime );
+    sal_uLong d_stime = DIFF_MS( pStart, pStop, mpstatus.pr_stime ) + DIFF_MS( pStart, pStop, mpstatus.pr_cstime );
 
     aProfile += Pad( String::CreateFromInt64(d_utime), 7 );
     aProfile += Pad( String::CreateFromInt64(d_stime), 7 );

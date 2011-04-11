@@ -52,7 +52,7 @@ class SAX_DLLPUBLIC FastSerializerHelper
 {
 public:
 
-    FastSerializerHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream );
+    FastSerializerHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream, bool bWriteHeader = true );
 
     ~FastSerializerHelper();
 
@@ -102,7 +102,8 @@ public:
 
     FastAttributeList *createAttrList();
 
-    void mark();
+    void mark( ::com::sun::star::uno::Sequence< sal_Int32 > aOrder =
+            ::com::sun::star::uno::Sequence< sal_Int32 >() );
     void mergeTopMarks( MergeMarksEnum eMergeType = MERGE_MARKS_APPEND );
 
 private:

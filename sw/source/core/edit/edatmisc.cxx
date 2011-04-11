@@ -29,9 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <editsh.hxx>
 #include <doc.hxx>      // fuer aNodes
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>      // fuer SwPaM
 #include <edimp.hxx>    // fuer MACROS
 #include <swundo.hxx>   // fuer die UndoIds
@@ -48,17 +48,21 @@ void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
-    BOOL bUndoGroup = GetCrsr()->GetNext() != GetCrsr();
+    sal_Bool bUndoGroup = GetCrsr()->GetNext() != GetCrsr();
     if( bUndoGroup )
-        GetDoc()->StartUndo(UNDO_RESETATTR, NULL);
+    {
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_RESETATTR, NULL);
+    }
 
         FOREACHPAM_START(this)
-            // if ( PCURCRSR->HasMark() )
+
                 GetDoc()->ResetAttrs(*PCURCRSR, sal_True, pAttrs);
         FOREACHPAM_END()
 
     if( bUndoGroup )
-        GetDoc()->EndUndo(UNDO_RESETATTR, NULL);
+    {
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_RESETATTR, NULL);
+    }
     CallChgLnk();
     EndAllAction();
 }
@@ -67,17 +71,15 @@ void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
 
 void SwEditShell::GCAttr()
 {
-//JP 04.02.97: wozu eine Action-Klammerung - ein Formatierung sollte nicht
-//              ausgeloest werden, so dass es hier ueberfluessig ist.
-//              Sonst Probleme im MouseBut.DownHdl - Bug 35562
-//  StartAllAction();
     FOREACHPAM_START(this)
-        SwTxtNode *pTxtNode;
         if ( !PCURCRSR->HasMark() )
         {
-            if( 0 != (pTxtNode = GetDoc()->GetNodes()[
-                                PCURCRSR->GetPoint()->nNode]->GetTxtNode()))
+            SwTxtNode *const pTxtNode =
+                PCURCRSR->GetPoint()->nNode.GetNode().GetTxtNode();
+            if (pTxtNode)
+            {
                 pTxtNode->GCAttr();
+            }
         }
         else
         {
@@ -92,7 +94,6 @@ void SwEditShell::GCAttr()
                     aIdx <= rEnd );
         }
     FOREACHPAM_END()
-//  EndAllAction();
 }
 
 // Setze das Attribut als neues default Attribut im Dokument.
@@ -106,35 +107,24 @@ void SwEditShell::SetDefault( const SfxPoolItem& rFmtHint )
     EndAllAction();
 }
 
-/*
-
-void SwEditShell::SetDefault( const SfxItemSet& rSet )
-{
-    // 7502: Action-Klammerung
-    StartAllAction();
-    GetDoc()->SetDefault( rSet );
-    EndAllAction();
-}
-*/
-
 // Erfrage das Default Attribut in diesem Dokument.
 
-const SfxPoolItem& SwEditShell::GetDefault( USHORT nFmtHint ) const
+const SfxPoolItem& SwEditShell::GetDefault( sal_uInt16 nFmtHint ) const
 {
     return GetDoc()->GetDefault( nFmtHint );
 
 }
 
 
-void SwEditShell::SetAttr( const SfxPoolItem& rHint, USHORT nFlags )
+void SwEditShell::SetAttr( const SfxPoolItem& rHint, sal_uInt16 nFlags )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
     {
-        BOOL bIsTblMode = IsTableMode();
-        GetDoc()->StartUndo(UNDO_INSATTR, NULL);
+        sal_Bool bIsTblMode = IsTableMode();
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
         FOREACHPAM_START(this)
             if( PCURCRSR->HasMark() && ( bIsTblMode ||
@@ -144,7 +134,7 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, USHORT nFlags )
             }
         FOREACHPAM_END()
 
-        GetDoc()->EndUndo(UNDO_INSATTR, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
     }
     else
     {
@@ -156,15 +146,15 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, USHORT nFlags )
 }
 
 
-void SwEditShell::SetAttr( const SfxItemSet& rSet, USHORT nFlags )
+void SwEditShell::SetAttr( const SfxItemSet& rSet, sal_uInt16 nFlags )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
     {
-        BOOL bIsTblMode = IsTableMode();
-        GetDoc()->StartUndo(UNDO_INSATTR, NULL);
+        sal_Bool bIsTblMode = IsTableMode();
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
         FOREACHPAM_START(this)
             if( PCURCRSR->HasMark() && ( bIsTblMode ||
@@ -174,7 +164,7 @@ void SwEditShell::SetAttr( const SfxItemSet& rSet, USHORT nFlags )
             }
         FOREACHPAM_END()
 
-        GetDoc()->EndUndo(UNDO_INSATTR, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
     }
     else
     {

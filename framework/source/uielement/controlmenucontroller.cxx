@@ -69,7 +69,6 @@
 // Function-Id's
 #define RID_FMSHELL_CONVERSIONMENU (RID_FORMS_START + 4)
 #define RID_SVXIMGLIST_FMEXPL      (RID_FORMS_START + 0)
-#define RID_SVXIMGLIST_FMEXPL_HC   (RID_FORMS_START + 2)
 
 // Forms - Ids, used to address images from image list
 #define SID_FMSLOTS_START                   (SID_SVX_START + 592)
@@ -194,7 +193,6 @@ const char* aCommands[] =
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -220,7 +218,6 @@ ControlMenuController::ControlMenuController( const ::com::sun::star::uno::Refer
     m_pResPopupMenu( 0 )
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    m_bWasHiContrast    = rSettings.GetHighContrastMode();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
 
 }
@@ -232,10 +229,8 @@ ControlMenuController::~ControlMenuController()
 // private function
 void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 {
-    rtl::OUString aResName( RTL_CONSTASCII_USTRINGPARAM( "svx" ));
-
-    ResMgr* pResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
-    ResId aResId( m_bWasHiContrast ? RID_SVXIMGLIST_FMEXPL_HC : RID_SVXIMGLIST_FMEXPL, *pResMgr );
+    ResMgr* pResMgr = ResMgr::CreateResMgr("svx");
+    ResId aResId( RID_SVXIMGLIST_FMEXPL, *pResMgr );
     aResId.SetRT( RSC_IMAGELIST );
 
     if ( pResMgr->IsAvailable( aResId ))
@@ -291,7 +286,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
 
-    USHORT nMenuId = 0;
+    sal_uInt16 nMenuId = 0;
     for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
     {
         if ( Event.FeatureURL.Complete.equalsAscii( aCommands[i] ))
@@ -346,7 +341,7 @@ void ControlMenuController::impl_select(const Reference< XDispatch >& /*_xDispat
         Sequence<PropertyValue>      aArgs;
         Reference< XDispatch > xDispatch = pIter->second;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString::createFromAscii("ControlMenuController")).log(m_xServiceManager, m_xFrame, aURL, aArgs);
+            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlMenuController"))).log(m_xServiceManager, m_xFrame, aURL, aArgs);
         if ( xDispatch.is() )
             xDispatch->dispatch( aURL, aArgs );
     }
@@ -362,14 +357,11 @@ void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& ) thro
 
         // Check if some modes have changed so we have to update our menu images
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_Bool bIsHiContrast      = rSettings.GetHighContrastMode();
         sal_Bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
-        sal_Bool bUpdateImages      = (( m_bWasHiContrast != bIsHiContrast ) || ( bShowMenuImages != m_bShowMenuImages ));
+        sal_Bool bUpdateImages      = (bShowMenuImages != m_bShowMenuImages);
 
         if ( bUpdateImages )
         {
-            // The mode has changed or the complete menu so we have to retrieve all images again
-            m_bWasHiContrast    = bIsHiContrast;
             m_bShowMenuImages   = bShowMenuImages;
 
             VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( m_xPopupMenu );
@@ -388,10 +380,7 @@ void ControlMenuController::impl_setPopupMenu()
 {
     if ( m_pResPopupMenu == 0 )
     {
-        rtl::OStringBuffer aBuf( 32 );
-        aBuf.append( "svx" );
-
-        ResMgr* pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
+        ResMgr* pResMgr = ResMgr::CreateResMgr("svx");
         if ( pResMgr )
         {
             ResId aResId( RID_FMSHELL_CONVERSIONMENU, *pResMgr );

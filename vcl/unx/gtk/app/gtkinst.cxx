@@ -40,6 +40,8 @@
 
 #include <rtl/strbuf.hxx>
 
+#include <rtl/uri.hxx>
+
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
@@ -64,7 +66,7 @@ void GtkHookedYieldMutex::ThreadsEnter()
     acquire();
     if( !aYieldStack.empty() )
     { /* Previously called ThreadsLeave() */
-        ULONG nCount = aYieldStack.front();
+        sal_uLong nCount = aYieldStack.front();
         aYieldStack.pop_front();
         while( nCount-- > 1 )
             acquire();
@@ -187,19 +189,19 @@ GtkInstance::~GtkInstance()
     DeInitAtkBridge();
 }
 
-SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, ULONG nStyle )
+SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
 {
     return new GtkSalFrame( pParent, nStyle );
 }
 
-SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, ULONG )
+SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, sal_uLong )
 {
     SalFrame* pFrame = new GtkSalFrame( pParentData );
 
     return pFrame;
 }
 
-SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow )
+SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
 {
     // there is no method to set a visual for a GtkWidget
     // so we need the X11SalObject in that case
@@ -217,9 +219,25 @@ extern "C"
 
 void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType)
 {
+    rtl::OString sGtkURL;
+    rtl_TextEncoding aSystemEnc = osl_getThreadTextEncoding();
+    if ((aSystemEnc == RTL_TEXTENCODING_UTF8) || (rFileUrl.compareToAscii( "file://", 7 ) !=  0))
+        sGtkURL = rtl::OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8);
+    else
+    {
+        //Non-utf8 locales are a bad idea if trying to work with non-ascii filenames
+        //Decode %XX components
+        rtl::OUString sDecodedUri = rtl::Uri::decode(rFileUrl.copy(7), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
+        //Convert back to system locale encoding
+        rtl::OString sSystemUrl = rtl::OUStringToOString(sDecodedUri, aSystemEnc);
+        //Encode to an escaped ASCII-encoded URI
+        gchar *g_uri = g_filename_to_uri(sSystemUrl.getStr(), NULL, NULL);
+        sGtkURL = rtl::OString(g_uri);
+        g_free(g_uri);
+    }
 #if GTK_CHECK_VERSION(2,10,0)
     GtkRecentManager *manager = gtk_recent_manager_get_default ();
-    gtk_recent_manager_add_item (manager, rtl::OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8).getStr());
+    gtk_recent_manager_add_item (manager, sGtkURL);
     (void)rMimeType;
 #else
     static getDefaultFnc sym_gtk_recent_manager_get_default =
@@ -228,10 +246,7 @@ void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const r
     static addItemFnc sym_gtk_recent_manager_add_item =
         (addItemFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_add_item");
     if (sym_gtk_recent_manager_get_default && sym_gtk_recent_manager_add_item)
-    {
-        sym_gtk_recent_manager_add_item(sym_gtk_recent_manager_get_default(),
-            rtl::OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8).getStr());
-    }
+        sym_gtk_recent_manager_add_item(sym_gtk_recent_manager_get_default(), sGtkURL);
     else
         X11SalInstance::AddToRecentDocumentList(rFileUrl, rMimeType);
 #endif

@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include <xmloff/SettingsExportHelper.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
@@ -83,7 +83,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
              * This assertion pops up when exporting values which are set to:
              * PropertyAttribute::MAYBEVOID, and thus are _supposed_ to have
              * a VOID value...so I'm removing it ...mtg
-             * DBG_ERROR("no type");
+             * OSL_FAIL("no type");
              */
         }
         break;
@@ -180,7 +180,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 exportSymbolDescriptors(aProps, rName);
             }
             else {
-                DBG_ERROR("this type is not implemented now");
+                OSL_FAIL("this type is not implemented now");
             }
         }
         break;
@@ -204,6 +204,7 @@ void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUStr
 
 void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUString& rName) const
 {
+#if 0
     DBG_ASSERT(rName.getLength(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_BYTE );
@@ -212,6 +213,13 @@ void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUStr
     SvXMLUnitConverter::convertNumber(sBuffer, sal_Int32(nValue));
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( sal_False );
+#else
+    (void) nValue; (void) rName;
+    OSL_ENSURE(false, "XMLSettingsExportHelper::exportByte(): #i114162#:\n"
+        "config-items of type \"byte\" are not valid ODF, "
+        "so storing them is disabled!\n"
+        "Use a different type instead (e.g. \"short\").");
+#endif
 }
 void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUString& rName) const
 {
@@ -303,7 +311,6 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
                     const rtl::OUString rName) const
 {
     // #110680#
-    // uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_rContext.GetServiceFactory() );
     DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportSymbolDescriptors: got no service manager" );
 
@@ -423,7 +430,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
     DBG_ASSERT(rName.getLength(), "no name");
     DBG_ASSERT(aIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
                 "wrong IndexAccess" );
-    rtl::OUString sEmpty;// ( RTLCONSTASCII_USTRINGPARAM( "View" ) );
+    rtl::OUString sEmpty;
     if(aIndexed->hasElements())
     {
         m_rContext.AddAttribute( XML_NAME, rName );
@@ -453,7 +460,6 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
         return;
 
     // #110680#
-    // uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_rContext.GetServiceFactory() );
     DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportForbiddenCharacters: got no service manager" );
 

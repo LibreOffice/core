@@ -113,7 +113,7 @@ published interface XLinkageSupport: XCommonEmbedPersist
         <p>
             Most of embedded objects will not support this interface, but some
         of them can do it, to allow conversion from link to object. After
-        the conversion the object does not change, so interface set staies the
+        the conversion the object does not change, so interface set stays the
         same, but the object is not a link any more.
         </p>
 

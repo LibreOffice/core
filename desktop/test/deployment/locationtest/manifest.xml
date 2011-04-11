@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest:manifest>
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
  <manifest:file-entry manifest:full-path="LocationTest.jar" manifest:media-type="application/vnd.sun.star.uno-component;type=Java"/>
  <manifest:file-entry manifest:full-path="LocationTest.rdb" manifest:media-type="application/vnd.sun.star.uno-typelibrary;type=RDB"/>
 </manifest:manifest>

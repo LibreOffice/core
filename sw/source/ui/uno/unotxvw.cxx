@@ -82,7 +82,7 @@
 #include <unocrsrhelper.hxx>
 #include <unotextrange.hxx>
 #include <sfx2/docfile.hxx>
-
+#include <switerator.hxx>
 #include "swdtflvr.hxx"
 #include <vcl/svapp.hxx>
 
@@ -93,10 +93,11 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::frame;
-using namespace rtl;
 
 using ::com::sun::star::util::URL;
 using comphelper::HelperBaseNoState;
+
+using ::rtl::OUString;
 
 SV_IMPL_PTRARR( SelectionChangeListenerArr, XSelectionChangeListenerPtr );
 
@@ -167,7 +168,6 @@ void SwXTextView::Invalidate()
 
 Sequence< uno::Type > SAL_CALL SwXTextView::getTypes(  ) throw(uno::RuntimeException)
 {
-//  uno::Sequence< uno::Type > aViewTypes = SwXTextViewBaseClass::getTypes();
     uno::Sequence< uno::Type > aBaseTypes = SfxBaseController::getTypes();
 
     long nIndex = aBaseTypes.getLength();
@@ -399,8 +399,8 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
             {
                 rSh.EnterStdMode();
                 rSh.GotoMark(pMark);
+                return sal_True;
             }
-            return sal_True;
         }
         // IndexMark, Index, TextField, Draw, Section, Footnote, Paragraph
         //
@@ -454,7 +454,6 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                     SdrObject *pObj = pSvxShape->GetSdrObject();
                     if (pObj)
                     {
-//                      lcl_ShowObject( *m_pViewSh, *pDrawView, pObj );
                         SdrPageView* pPV = pDrawView->GetSdrPageView();
                         if ( pPV && pObj->GetPage() == pPV->GetPage() )
                         {
@@ -487,7 +486,6 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface) throw( lang::IllegalArg
                                 {
                                     if (!pPV)               // erstes Objekt
                                     {
-//                                      lcl_ShowObject( *m_pViewSh, *pDrawView, pObj );
                                         pPV = pDrawView->GetSdrPageView();
                                     }
                                     if ( pPV && pObj->GetPage() == pPV->GetPage() )
@@ -551,9 +549,7 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
                 const SwFrmFmt* pFmt = rSh.GetFlyFrmFmt();
                 if (pFmt)
                 {
-                    SwXFrame* pxFrame = (SwXFrame*)SwClientIter((SwFrmFmt&)*pFmt).
-                                                    First(TYPE(SwXFrame));
-
+                    SwXFrame* pxFrame = SwIterator<SwXFrame,SwFmt>::FirstElement(*pFmt);
                     if(pxFrame)                //das einzige gemeinsame interface fuer alle Frames
                     {
                         aRef = uno::Reference< uno::XInterface >((cppu::OWeakObject*)pxFrame, uno::UNO_QUERY);
@@ -749,11 +745,11 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
     SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
     SwRubyList aList;
 
-    USHORT nCount = pDoc->FillRubyList( *rSh.GetCrsr(), aList, 0 );
+    sal_uInt16 nCount = pDoc->FillRubyList( *rSh.GetCrsr(), aList, 0 );
     Sequence< Sequence< PropertyValue > > aRet(nCount);
     Sequence< PropertyValue >* pRet = aRet.getArray();
     String aString;
-    for(USHORT n = 0; n < nCount; n++)
+    for(sal_uInt16 n = 0; n < nCount; n++)
     {
         const SwRubyListEntryPtr pEntry = aList[n];
 
@@ -762,16 +758,16 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
 
         pRet[n].realloc(5);
         PropertyValue* pValues = pRet[n].getArray();
-        pValues[0].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_RUBY_BASE_TEXT));
+        pValues[0].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_BASE_TEXT));
         pValues[0].Value <<= OUString(rEntryText);
-        pValues[1].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_RUBY_TEXT));
+        pValues[1].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_TEXT));
         pValues[1].Value <<= OUString(rAttr.GetText());
-        pValues[2].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_RUBY_CHAR_STYLE_NAME));
+        pValues[2].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_CHAR_STYLE_NAME));
         SwStyleNameMapper::FillProgName(rAttr.GetCharFmtName(), aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
         pValues[2].Value <<= OUString( aString );
-        pValues[3].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_RUBY_ADJUST));
+        pValues[3].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_ADJUST));
         pValues[3].Value <<= (sal_Int16)rAttr.GetAdjustment();
-        pValues[4].Name = C2U(SW_PROP_NAME_STR(UNO_NAME_RUBY_IS_ABOVE));
+        pValues[4].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_IS_ABOVE));
         sal_Bool bVal = !rAttr.GetPosition();
         pValues[4].Value.setValue(&bVal, ::getBooleanCppuType());
     }
@@ -845,20 +841,23 @@ void SAL_CALL SwXTextView::setRubyList(
                 pEntry->GetRubyAttr().SetPosition(bValue ? 0 : 1);
             }
         }
-        aList.Insert(pEntry, (USHORT)nPos);
+        aList.Insert(pEntry, (sal_uInt16)nPos);
     }
     SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
     pDoc->SetRubyList( *rSh.GetCrsr(), aList, 0 );
 }
 
-SfxObjectShellRef SwXTextView::BuildTmpSelectionDoc( SfxObjectShellRef& /*rRef*/ )
+SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()
 {
     SwWrtShell& rOldSh = m_pView->GetWrtShell();
     SfxPrinter *pPrt = rOldSh.getIDocumentDeviceAccess()->getPrinter( false );
     SwDocShell* pDocSh;
-    SfxObjectShellRef xDocSh( pDocSh = new SwDocShell( /*pPrtDoc, */SFX_CREATE_MODE_STANDARD ) );
+    SfxObjectShellLock xDocSh( pDocSh = new SwDocShell( /*pPrtDoc, */SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
-    rOldSh.FillPrtDoc(pDocSh->GetDoc(),  pPrt);
+    SwDoc *const pTempDoc( pDocSh->GetDoc() );
+    // #i103634#, #i112425#: do not expand numbering and fields on PDF export
+    pTempDoc->SetClipBoard(true);
+    rOldSh.FillPrtDoc(pTempDoc,  pPrt);
     SfxViewFrame* pDocFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     SwView* pDocView = (SwView*) pDocFrame->GetViewShell();
     pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//Damit SelectShell gerufen wird.
@@ -910,7 +909,7 @@ void SwXTextView::NotifySelChanged()
 void SwXTextView::NotifyDBChanged()
 {
     URL aURL;
-    aURL.Complete = C2U(SwXDispatch::GetDBChangeURL());
+    aURL.Complete = rtl::OUString::createFromAscii(SwXDispatch::GetDBChangeURL());
 
     sal_uInt16 nCount = aSelChangedListeners.Count();
     for ( sal_uInt16 i = nCount; i--; )
@@ -960,7 +959,7 @@ void SAL_CALL SwXTextView::setPropertyValue(
             }
             break;
             default :
-                OSL_ENSURE(false, "unknown WID");
+                OSL_FAIL("unknown WID");
         }
     }
 }
@@ -990,9 +989,9 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
 
                 sal_Int32 nCount = -1;
                 if (nWID == WID_PAGE_COUNT)
-                    nCount = m_pView->GetDocShell()->GetDoc()->GetPageCount();
+                    nCount = m_pView->GetWrtShell().GetPageCount();
                 else // WID_LINE_COUNT
-                    nCount = m_pView->GetWrtShell().GetLineCount( FALSE /*of whole document*/ );
+                    nCount = m_pView->GetWrtShell().GetLineCount( sal_False /*of whole document*/ );
                 aRet <<= nCount;
             }
             break;
@@ -1004,13 +1003,13 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
                 const SwViewOption *pOpt = m_pView->GetWrtShell().GetViewOptions();
                 if (!pOpt)
                     throw RuntimeException();
-                UINT32 nFlag = VIEWOPT_1_ONLINESPELL;
+                sal_uInt32 nFlag = VIEWOPT_1_ONLINESPELL;
                 sal_Bool bVal = 0 != (pOpt->GetCoreOptions() & nFlag);
                 aRet <<= bVal;
             }
             break;
             default :
-                OSL_ENSURE(false, "unknown WID");
+                OSL_FAIL("unknown WID");
         }
     }
 
@@ -1022,7 +1021,7 @@ void SAL_CALL SwXTextView::addPropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SwXTextView::removePropertyChangeListener(
@@ -1030,7 +1029,7 @@ void SAL_CALL SwXTextView::removePropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SwXTextView::addVetoableChangeListener(
@@ -1038,7 +1037,7 @@ void SAL_CALL SwXTextView::addVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SwXTextView::removeVetoableChangeListener(
@@ -1046,7 +1045,7 @@ void SAL_CALL SwXTextView::removeVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*rxListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 OUString SwXTextView::getImplementationName(void) throw( RuntimeException )
@@ -1054,10 +1053,10 @@ OUString SwXTextView::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXTextView");
 }
 
-BOOL SwXTextView::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextView::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return rServiceName.equalsAscii("com.sun.star.text.TextDocumentView") ||
-            rServiceName.equalsAscii("com.sun.star.view.OfficeDocumentView");
+    return rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocumentView")) ||
+            rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.view.OfficeDocumentView"));
 }
 
 Sequence< OUString > SwXTextView::getSupportedServiceNames(void) throw( RuntimeException )
@@ -1110,14 +1109,14 @@ sal_Bool SwXTextViewCursor::IsTextSelection( sal_Bool bAllowTables ) const
 sal_Bool SwXTextViewCursor::isVisible(void) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
     return sal_True;
 }
 
 void SwXTextViewCursor::setVisible(sal_Bool /*bVisible*/) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    OSL_ENSURE(false, "not implemented");
+    OSL_FAIL("not implemented");
 }
 
 awt::Point SwXTextViewCursor::getPosition(void) throw( uno::RuntimeException )
@@ -1426,7 +1425,7 @@ sal_Bool SwXTextViewCursor::jumpToFirstPage(void) throw( uno::RuntimeException )
             rSh.LeaveSelFrmMode();
         }
         rSh.EnterStdMode();
-        bRet = rSh.SttEndDoc(TRUE);
+        bRet = rSh.SttEndDoc(sal_True);
     }
     else
         throw uno::RuntimeException();
@@ -1446,7 +1445,7 @@ sal_Bool SwXTextViewCursor::jumpToLastPage(void) throw( uno::RuntimeException )
             rSh.LeaveSelFrmMode();
         }
         rSh.EnterStdMode();
-        bRet = rSh.SttEndDoc(FALSE);
+        bRet = rSh.SttEndDoc(sal_False);
         rSh.SttPg();
     }
     else
@@ -1459,7 +1458,7 @@ sal_Bool SwXTextViewCursor::jumpToPage(sal_Int16 nPage) throw( uno::RuntimeExcep
     SolarMutexGuard aGuard;
     sal_Bool bRet = sal_False;
     if(m_pView)
-        bRet = m_pView->GetWrtShell().GotoPage(nPage, TRUE);
+        bRet = m_pView->GetWrtShell().GotoPage(nPage, sal_True);
     else
         throw uno::RuntimeException();
     return bRet;
@@ -1517,7 +1516,7 @@ sal_Int16 SwXTextViewCursor::getPage(void) throw( uno::RuntimeException )
     {
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
-        nRet = (short)pShellCrsr->GetPageNum( TRUE, 0 );
+        nRet = (short)pShellCrsr->GetPageNum( sal_True, 0 );
     }
     else
         throw uno::RuntimeException();
@@ -1900,7 +1899,7 @@ OUString SwXTextViewCursor::getImplementationName(void) throw( RuntimeException 
     return C2U("SwXTextViewCursor");
 }
 
-BOOL SwXTextViewCursor::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return !rServiceName.compareToAscii("com.sun.star.text.TextViewCursor") ||
             !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties") ||
@@ -1986,8 +1985,8 @@ uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransfera
     else
     {
         SwTransferable* pTransfer = new SwTransferable( rSh );
-        const BOOL bLockedView = rSh.IsViewLocked();
-        rSh.LockView( TRUE );    //lock visible section
+        const sal_Bool bLockedView = rSh.IsViewLocked();
+        rSh.LockView( sal_True );    //lock visible section
         pTransfer->PrepareForCopy();
         rSh.LockView( bLockedView );
         return uno::Reference< datatransfer::XTransferable >( pTransfer );
@@ -2005,7 +2004,7 @@ void SAL_CALL SwXTextView::insertTransferable( const uno::Reference< datatransfe
     {
         SdrView *pSdrView = rSh.GetDrawView();
         OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-        pOLV->GetEditView().InsertText( xTrans, GetView()->GetDocShell()->GetMedium()->GetBaseURL(), FALSE );
+        pOLV->GetEditView().InsertText( xTrans, GetView()->GetDocShell()->GetMedium()->GetBaseURL(), sal_False );
     }
     else
     {

@@ -38,8 +38,10 @@ extern NPNetscapeFuncs aNPNFuncs;
 
 #include <tools/debug.hxx>
 
-using namespace rtl;
 using namespace plugstringhelper;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 #if OSL_DEBUG_LEVEL > 1
 void TRACE( char const * s );
@@ -68,8 +70,8 @@ struct FakeEventRecord : public EventRecord
 }
 -(id)initWithInstance: (XPlugin_Impl*)i_pImpl pluginComm: (MacPluginComm*)i_pCom frame: (NSRect)i_aRect;
 -(void)drawRect: (NSRect)i_aRect;
--(MacOSBOOL)isOpaque;
--(MacOSBOOL)isFlipped;
+-(BOOL)isOpaque;
+-(BOOL)isFlipped;
 
 // NSResponder
 -(void)mouseMoved:   (NSEvent*)i_pEvent;
@@ -102,12 +104,12 @@ struct FakeEventRecord : public EventRecord
     m_pCom->drawView( m_pImpl );
 }
 
--(MacOSBOOL)isOpaque
+-(BOOL)isOpaque
 {
     return NO;
 }
 
--(MacOSBOOL)isFlipped
+-(BOOL)isFlipped
 {
     return YES;
 }
@@ -271,10 +273,10 @@ MacPluginComm::~MacPluginComm()
 }
 
 //--------------------------------------------------------------------------------------------------
-BOOL MacPluginComm::retrieveFunction( const char* i_pName, void** o_ppFunc ) const
+sal_Bool MacPluginComm::retrieveFunction( const char* i_pName, void** o_ppFunc ) const
 {
     if( ! m_hPlugLib || ! o_ppFunc )
-        return FALSE;
+        return sal_False;
 
     *o_ppFunc = (void*)osl_getAsciiFunctionSymbol( m_hPlugLib, i_pName );
 
@@ -486,11 +488,11 @@ long MacPluginComm::doIt()
     break;
     case eNPP_Initialize:
         TRACE( "eNPP_Initialize" );
-        OSL_ENSURE( false, "NPP_Initialize: not implemented!" );
+        OSL_FAIL( "NPP_Initialize: not implemented!" );
         break;
     case eNPP_GetJavaClass:
         TRACE( "eNPP_GetJavaClass" );
-        OSL_ENSURE( false, "NPP_GetJavaClass: not implemented!" );
+        OSL_FAIL( "NPP_GetJavaClass: not implemented!" );
         break;
     }
     return nRet;
@@ -682,7 +684,7 @@ NPError MacPluginComm::NPP_SetValue( NPP instance, NPNVariable variable, void *s
 //--------------------------------------------------------------------------------------------------
 void * MacPluginComm::NPP_GetJavaClass()
 {
-    DBG_ERROR( "no java class available!" );
+    OSL_FAIL( "no java class available!" );
     return 0;
 }
 

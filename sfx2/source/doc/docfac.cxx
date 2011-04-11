@@ -48,13 +48,13 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 #include "fltfnc.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/mnumgr.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 #include "syspath.hxx"
 #include <osl/file.hxx>
@@ -74,14 +74,12 @@ DECL_PTRARRAY( SfxViewFactoryArr_Impl, SfxViewFactory*, 2, 2 )
 
 DBG_NAME(SfxObjectFactory)
 
-//static SfxObjectFactoryArr_Impl* pObjFac = 0;
-
 //========================================================================
 
 struct SfxObjectFactory_Impl
 {
-    SfxViewFactoryArr_Impl      aViewFactoryArr;// Liste von <SfxViewFactory>s
-    SfxFilterArr_Impl           aFilterArr;     // Liste von <SFxFilter>n
+    SfxViewFactoryArr_Impl      aViewFactoryArr;// List of <SfxViewFactory>s
+    SfxFilterArr_Impl           aFilterArr;     // List of <SFxFilter>n
     ResId*                      pNameResId;
     ::rtl::OUString             aServiceName;
     SfxFilterContainer*         pFilterContainer;
@@ -170,7 +168,7 @@ void SfxObjectFactory::RegisterViewFactory
             ByteString sMessage( "SfxObjectFactory::RegisterViewFactory: duplicate view name '" );
             sMessage += ByteString( sViewName, RTL_TEXTENCODING_ASCII_US );
             sMessage += "'!";
-            OSL_ENSURE( false, sMessage.GetBuffer() );
+            OSL_FAIL( sMessage.GetBuffer() );
             break;
         }
     }
@@ -213,16 +211,16 @@ void SfxObjectFactory::SetModule_Impl( SfxModule *pMod )
 void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const String& rTemplateName )
 {
     static const int nMaxPathSize = 16000;
-    static ::rtl::OUString SERVICE_FILTER_FACTORY = ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" );
-    static ::rtl::OUString SERVICE_TYPE_DECTECTION = ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" );
-    static ::rtl::OUString SERVICE_SIMPLE_ACCESS = ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" );
+    static ::rtl::OUString SERVICE_FILTER_FACTORY(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory"));
+    static ::rtl::OUString SERVICE_TYPE_DECTECTION(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection"));
+    static ::rtl::OUString SERVICE_SIMPLE_ACCESS(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"));
 
-    static ::rtl::OUString CONF_ROOT  = ::rtl::OUString::createFromAscii( "/org.openoffice.Setup");
-    static ::rtl::OUString CONF_PATH  = ::rtl::OUString::createFromAscii( "Office/Factories/" ) + ::rtl::OUString( rServiceName );
-    static ::rtl::OUString PROP_DEF_TEMPL_CHANGED  = ::rtl::OUString::createFromAscii( "ooSetupFactorySystemDefaultTemplateChanged" );
-    static ::rtl::OUString PROP_ACTUAL_FILTER  = ::rtl::OUString::createFromAscii( "ooSetupFactoryActualFilter" );
+    static ::rtl::OUString CONF_ROOT(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup"));
+    static ::rtl::OUString CONF_PATH  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Office/Factories/" )) + ::rtl::OUString( rServiceName );
+    static ::rtl::OUString PROP_DEF_TEMPL_CHANGED(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactorySystemDefaultTemplateChanged"));
+    static ::rtl::OUString PROP_ACTUAL_FILTER(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryActualFilter"));
 
-    static ::rtl::OUString DEF_TPL_STR = ::rtl::OUString::createFromAscii("/soffice.");
+    static ::rtl::OUString DEF_TPL_STR(RTL_CONSTASCII_USTRINGPARAM("/soffice."));
 
     String      sURL;
     String      sPath;
@@ -254,11 +252,11 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
             uno::Sequence< beans::PropertyValue > aActuralFilterData;
             xFilterFactory->getByName( aActualFilter ) >>= aActuralFilterData;
             for ( sal_Int32 nInd = 0; nInd < aActuralFilterData.getLength(); nInd++ )
-                if ( aActuralFilterData[nInd].Name.equalsAscii( "Type" ) )
+                if ( aActuralFilterData[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Type" ) ) )
                     aActuralFilterData[nInd].Value >>= aActualFilterTypeName;
             ::comphelper::SequenceAsHashMap aProps1( xTypeDetection->getByName( aActualFilterTypeName ) );
             uno::Sequence< ::rtl::OUString > aAllExt =
-                aProps1.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Extensions" ), uno::Sequence< ::rtl::OUString >() );
+                aProps1.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Extensions")), uno::Sequence< ::rtl::OUString >() );
             //To-do: check if aAllExt is empty first
             ::rtl::OUString aExt = aAllExt[0];
 
@@ -270,7 +268,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
 
             ::rtl::OUString aBackupURL;
             ::osl::Security().getConfigDir(aBackupURL);
-            aBackupURL += ::rtl::OUString::createFromAscii( "/temp" );
+            aBackupURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/temp"));
 
             if ( !xSimpleFileAccess->exists( aBackupURL ) )
                 xSimpleFileAccess->createFolder( aBackupURL );
@@ -286,21 +284,21 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
                 uno::Reference< document::XTypeDetection > xTypeDetector( xTypeDetection, uno::UNO_QUERY );
                 ::comphelper::SequenceAsHashMap aProps2( xTypeDetection->getByName( xTypeDetector->queryTypeByURL( rTemplateName ) ) );
                 ::rtl::OUString aFilterName =
-                    aProps2.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("PreferredFilter"), ::rtl::OUString() );
+                    aProps2.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter")), ::rtl::OUString() );
 
                 uno::Sequence< beans::PropertyValue > aArgs( 3 );
-                aArgs[0].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
                 aArgs[0].Value <<= aFilterName;
-                aArgs[1].Name = ::rtl::OUString::createFromAscii( "AsTemplate" );
+                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
                 aArgs[1].Value <<= sal_True;
-                aArgs[2].Name = ::rtl::OUString::createFromAscii( "URL" );
+                aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
                 aArgs[2].Value <<= ::rtl::OUString( rTemplateName );
 
                 uno::Reference< frame::XLoadable > xLoadable( xFactory->createInstance( ::rtl::OUString( rServiceName ) ), uno::UNO_QUERY );
                 xLoadable->load( aArgs );
 
                 aArgs.realloc( 2 );
-                aArgs[1].Name = ::rtl::OUString::createFromAscii( "Overwrite" );
+                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Overwrite"));
                 aArgs[1].Value <<= sal_True;
 
                 uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY );
@@ -349,40 +347,9 @@ String SfxObjectFactory::GetStandardTemplate( const String& rServiceName )
     return sTemplate;
 }
 
-/*
-const SfxObjectFactory* SfxObjectFactory::GetFactory( const String& rFactoryURL )
-{
-    const SfxObjectFactory* pFactory = 0;
-    String aFact( rFactoryURL );
-    String aPrefix( DEFINE_CONST_UNICODE( "private:factory/" ) );
-    if ( aPrefix.Len() == aFact.Match( aPrefix ) )
-        // Aufruf m"oglich mit z.B. "swriter" oder "private:factory/swriter"
-        aFact.Erase( 0, aPrefix.Len() );
-    sal_uInt16 nPos = aFact.Search( '?' );
-
-    // Etwaige Parameter abschneiden
-    aFact.Erase( nPos, aFact.Len() );
-
-    SfxApplication *pApp = SFX_APP();
-
-    // "swriter4" durch "swriter" ersetzen, zum Vergleichen uppercase verwenden
-    WildCard aSearchedFac( aFact.EraseAllChars('4').ToUpperAscii() );
-    for( sal_uInt16 n = GetObjectFactoryCount_Impl(); !pFactory && n--; )
-    {
-        pFactory = &GetObjectFactory_Impl( n );
-        String aCompareTo = String::CreateFromAscii( pFactory->GetShortName() );
-        aCompareTo.ToUpperAscii();
-        if( !aSearchedFac.Matches( aCompareTo ) )
-            pFactory = 0;
-    }
-
-    return pFactory;
-}
-*/
-
 const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
 {
-    USHORT nVersion=0;
+    sal_uInt16 nVersion=0;
     SfxFilterMatcher aMatcher ( String::CreateFromAscii( pShortName ) );
     SfxFilterMatcherIter aIter( &aMatcher );
     const SfxFilter *pFilter = 0;
@@ -392,7 +359,7 @@ const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
         if( pTemp->IsOwnFormat() && pTemp->IsOwnTemplateFormat() && ( pTemp->GetVersion() > nVersion ) )
         {
             pFilter = pTemp;
-            nVersion = (USHORT) pTemp->GetVersion();
+            nVersion = (sal_uInt16) pTemp->GetVersion();
         }
 
         pTemp = aIter.Next();
@@ -403,7 +370,7 @@ const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
 
 void SfxObjectFactory::SetDocumentTypeNameResource( const ResId& rId )
 {
-    DBG_ASSERT( !pImpl->pNameResId, "UI-Namensresource mehrfach gesetzt!" );
+    DBG_ASSERT( !pImpl->pNameResId, "UI-Name resource set multiple times!" );
     pImpl->pNameResId = new ResId( rId );
 }
 
@@ -439,8 +406,8 @@ String SfxObjectFactory::GetFactoryURL() const
 
 String SfxObjectFactory::GetModuleName() const
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
-    static ::rtl::OUString PROP_MODULEUINAME         = ::rtl::OUString::createFromAscii("ooSetupFactoryUIName");
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"));
+    static ::rtl::OUString PROP_MODULEUINAME        (RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryUIName"));
 
     try
     {
@@ -477,7 +444,7 @@ sal_uInt16 SfxObjectFactory::GetViewNo_Impl( const sal_uInt16 i_nViewId, const s
 
 SfxViewFactory* SfxObjectFactory::GetViewFactoryByViewName( const String& i_rViewName ) const
 {
-    for (   USHORT nViewNo = 0;
+    for (   sal_uInt16 nViewNo = 0;
             nViewNo < GetViewFactoryCount();
             ++nViewNo
         )

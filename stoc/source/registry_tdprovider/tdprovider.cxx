@@ -173,6 +173,8 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
     // XHierarchicalNameAccess
+    Any getByHierarchicalNameImpl( const OUString & rName );
+
     virtual Any SAL_CALL getByHierarchicalName( const OUString & rName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasByHierarchicalName( const OUString & rName ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -224,14 +226,7 @@ Any ProviderImpl::TypeDescriptionManagerWrapper::getByHierarchicalName(
 sal_Bool ProviderImpl::TypeDescriptionManagerWrapper::hasByHierarchicalName(
     OUString const & name ) throw (RuntimeException)
 {
-    try
-    {
-        return getByHierarchicalName( name ).hasValue();
-    }
-    catch (container::NoSuchElementException &)
-    {
-        return false;
-    }
+    return m_xTDMgr->hasByHierarchicalName( name ) || m_xThisProvider->hasByHierarchicalName( name );
 }
 
 //______________________________________________________________________________
@@ -345,8 +340,7 @@ Sequence< OUString > ProviderImpl::getSupportedServiceNames()
 
 // XHierarchicalNameAccess
 //__________________________________________________________________________________________________
-Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
-    throw(::com::sun::star::uno::RuntimeException, com::sun::star::container::NoSuchElementException)
+Any ProviderImpl::getByHierarchicalNameImpl( const OUString & rName )
 {
     Any aRet;
 
@@ -425,15 +419,24 @@ Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
         }
         catch ( InvalidRegistryException const & )
         {
-            OSL_ENSURE( sal_False,
-                        "ProviderImpl::getByHierarchicalName "
+            OSL_FAIL( "ProviderImpl::getByHierarchicalName "
                         "- Caught InvalidRegistryException!" );
 
             // openKey, closeKey, getValueType, getBinaryValue, isValid
 
             // Don't stop iteration in this case.
         }
+        catch ( NoSuchElementException const & )
+        {
+        }
     }
+    return aRet;
+}
+
+Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
+    throw(::com::sun::star::uno::RuntimeException, com::sun::star::container::NoSuchElementException)
+{
+    Any aRet( getByHierarchicalNameImpl( rName ) );
 
     if ( !aRet.hasValue() )
         throw NoSuchElementException(
@@ -446,14 +449,7 @@ Any SAL_CALL ProviderImpl::getByHierarchicalName( const OUString & rName )
 sal_Bool ProviderImpl::hasByHierarchicalName( const OUString & rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    try
-    {
-        return getByHierarchicalName( rName ).hasValue();
-    }
-    catch (NoSuchElementException &)
-    {
-    }
-    return sal_False;
+    return getByHierarchicalNameImpl( rName ).hasValue();
 }
 
 // XTypeDescriptionEnumerationAccess
@@ -602,11 +598,11 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
         case RT_TYPE_INVALID:
         case RT_TYPE_OBJECT:      // deprecated and not used
         case RT_TYPE_UNION:       // deprecated and not used
-            OSL_ENSURE( sal_False, "createTypeDescription - Unsupported Type!" );
+            OSL_FAIL( "createTypeDescription - Unsupported Type!" );
             break;
 
         default:
-            OSL_ENSURE( sal_False, "createTypeDescription - Unknown Type!" );
+            OSL_FAIL( "createTypeDescription - Unknown Type!" );
             break;
     }
 

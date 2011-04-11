@@ -33,7 +33,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weak.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -43,10 +42,11 @@
 #include <com/sun/star/scanner/XScannerManager.hpp>
 #include <com/sun/star/scanner/ScannerException.hpp>
 
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::scanner;
+
+using ::rtl::OUString;
 
 // -----------
 // - Defines -
@@ -83,7 +83,7 @@ public:
 
     // XScannerManager
     virtual SEQ( ScannerContext ) SAL_CALL  getAvailableScanners() throw();
-    virtual BOOL SAL_CALL                   configureScanner( ScannerContext& scanner_context ) throw( ScannerException );
+    virtual sal_Bool SAL_CALL                   configureScanner( ScannerContext& scanner_context ) throw( ScannerException );
     virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const REF( com::sun::star::lang::XEventListener )& rxListener ) throw( ScannerException );
     virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) throw( ScannerException );
     virtual REF( AWT::XBitmap ) SAL_CALL    getBitmap( const ScannerContext& scanner_context ) throw( ScannerException );

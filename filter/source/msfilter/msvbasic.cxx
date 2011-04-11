@@ -880,7 +880,7 @@ VBA_Impl::VBA_Impl(SvStorage &rIn, bool bCmmntd)
 VBA_Impl::~VBA_Impl()
 {
     delete [] pOffsets;
-    for (ULONG i=0;i<aVBAStrings.GetSize();++i)
+    for (sal_uLong i=0;i<aVBAStrings.GetSize();++i)
         delete aVBAStrings.Get(i);
 }
 
@@ -1291,7 +1291,7 @@ bool VBA_Impl::Open( const String &rToplevel, const String &rSublevel )
                 }
                 else if ( key == sDocument )
                 {
-                    /*  #i37965# DR 2004-12-03: add "Document", used i.e.
+                    /*  #i37965# add "Document", used i.e.
                         in Excel for macros attached to sheet or document. */
 
                     // value is of form <name>/&H<identifier>, strip the identifier
@@ -1350,7 +1350,7 @@ const StringArray &VBA_Impl::Decompress(sal_uInt16 nIndex, int *pOverflow)
                 sTempStringa = String( RTL_CONSTASCII_USTRINGPARAM( "\x0D\x0A" ) );
             String sTempStringb(sTempStringa);
             sTempStringb+=sComment;
-            for(ULONG i=0;i<aVBAStrings.GetSize();i++)
+            for(sal_uLong i=0;i<aVBAStrings.GetSize();i++)
             {
                 aVBAStrings.Get(i)->SearchAndReplaceAll(
                     sTempStringa,sTempStringb);

@@ -71,7 +71,7 @@ public:
     /** Imports the anchor points in CommentPr */
     void                importAnchor( bool bFrom, sal_Int32 nWhich, const ::rtl::OUString &rChars );
     /** Imports a cell comment from the passed stream of a COMMENT record. */
-    void                importComment( RecordInputStream& rStrm );
+    void                importComment( SequenceInputStream& rStrm );
 
     /** Creates and returns a new rich-string object for the comment text. */
     RichStringRef       createText();

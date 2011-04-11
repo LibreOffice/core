@@ -97,26 +97,20 @@
 #include <IGrammarContact.hxx>
 #include <tblsel.hxx>
 #include <MarkManager.hxx>
+#include <UndoManager.hxx>
 #include <unochart.hxx>
 
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
 
 
-// --> OD 2006-04-19 #b6375613#
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-// <--
-
-// --> OD 2007-03-16 #i73788#
 #include <pausethreadstarting.hxx>
-// <--
 #include <numrule.hxx>
-// --> OD 2008-03-13 #refactorlists#
 #include <list.hxx>
 #include <listfunc.hxx>
-// <--
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
@@ -126,12 +120,12 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
 
-const sal_Char __FAR_DATA sFrmFmtStr[] = "Frameformat";
-const sal_Char __FAR_DATA sEmptyPageStr[] = "Empty Page";
-const sal_Char __FAR_DATA sColumnCntStr[] = "Columncontainer";
-const sal_Char __FAR_DATA sCharFmtStr[] = "Zeichenformat";
-const sal_Char __FAR_DATA sTxtCollStr[] = "Textformatvorlage";
-const sal_Char __FAR_DATA sGrfCollStr[] = "Graphikformatvorlage";
+const sal_Char sFrmFmtStr[] = "Frameformat";
+const sal_Char sEmptyPageStr[] = "Empty Page";
+const sal_Char sColumnCntStr[] = "Columncontainer";
+const sal_Char sCharFmtStr[] = "Zeichenformat";
+const sal_Char sTxtCollStr[] = "Textformatvorlage";
+const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
 
 SV_IMPL_PTRARR( SwNumRuleTbl, SwNumRulePtr)
 SV_IMPL_PTRARR( SwTxtFmtColls, SwTxtFmtCollPtr)
@@ -155,7 +149,7 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
             }
             catch (uno::Exception &)
             {
-                DBG_ERROR( "No GCIterator" );
+                OSL_FAIL( "No GCIterator" );
             }
         }
     }
@@ -198,7 +192,7 @@ void StartGrammarChecking( SwDoc &rDoc )
 /*
  * interne Funktionen
  */
-BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
+sal_Bool lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 {
     SwFmtCntnt &rFmtCntnt = (SwFmtCntnt&)rpFmt->GetCntnt();
     if ( rFmtCntnt.GetCntntIdx() )
@@ -206,18 +200,20 @@ BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
     SwFmtAnchor &rFmtAnchor = (SwFmtAnchor&)rpFmt->GetAnchor();
     if ( rFmtAnchor.GetCntntAnchor() )
         rFmtAnchor.SetAnchor( 0 );
-    return TRUE;
+    return sal_True;
 }
 
 /*
  * exportierte Methoden
  */
-SwDoc::SwDoc() :
-    aNodes( this ),
-    aUndoNodes( this ),
+SwDoc::SwDoc()
+    : m_pNodes( new SwNodes(this) )
+    ,
     mpAttrPool(new SwAttrPool(this)),
     pMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
+    m_pUndoManager(new ::sw::UndoManager(
+            ::std::auto_ptr<SwNodes>(new SwNodes(this)), *this, *this, *this)),
     pDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     pEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, pDfltFrmFmt ) ),
     pColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, pDfltFrmFmt ) ),
@@ -233,9 +229,8 @@ SwDoc::SwDoc() :
     pGrfFmtCollTbl( new SwGrfFmtColls() ),
     pTOXTypes( new SwTOXTypes() ),
     pDefTOXBases( new SwDefTOXBase_Impl() ),
-    pLayout( 0 ),                   // Rootframe des spezifischen Layouts.
+    pCurrentView( 0 ),  //swmod 071225
     pDrawModel( 0 ),
-    pUndos( new SwUndos( 0, 20 ) ),
     pUpdtFlds( new SwDocUpdtFld() ),
     pFldTypes( new SwFldTypes() ),
     pVirDev( 0 ),
@@ -249,38 +244,27 @@ SwDoc::SwDoc() :
     pFtnIdxs( new SwFtnIdxs ),
     pDocStat( new SwDocStat ),
     pDocShell( 0 ),
-    pDocShRef( 0 ),
     pLinkMgr( new sfx2::LinkManager( 0 ) ),
     pACEWord( 0 ),
     pURLStateChgd( 0 ),
     pNumberFormatter( 0 ),
     pNumRuleTbl( new SwNumRuleTbl ),
-    // --> OD 2008-03-26 #refactorlists#
     maLists(),
     maListStyleLists(),
-    // <--
     pRedlineTbl( new SwRedlineTbl ),
     pAutoFmtRedlnComment( 0 ),
     pUnoCrsrTbl( new SwUnoCrsrTbl( 0, 16 ) ),
     pPgPViewPrtData( 0 ),
     pExtInputRing( 0 ),
     pLayouter( 0 ),
-    // --> OD 2008-03-07 #refactorlists#
     pStyleAccess( 0 ),
-    // <--
     pLayoutCache( 0 ),
     pUnoCallBack(new SwModify(0)),
     mpGrammarContact( 0 ),
     aChartDataProviderImplRef(),
     pChartControllerHelper( 0 ),
-    // --> OD 2007-10-31 #i83479#
-    mpListItemsList( new tImplSortedNodeNumList() ),
-    // <--
+    mpListItemsList( new tImplSortedNodeNumList() ), // #i83479#
     m_pXmlIdRegistry(),
-    nUndoPos( 0 ),
-    nUndoSavePos( 0 ),
-    nUndoCnt( 0 ),
-    nUndoSttEnd( 0 ),
     nAutoFmtRedlnCommentNo( 0 ),
     nLinkUpdMode( GLOBALSETTING ),
      eFldUpdMode( AUTOUPD_GLOBALSETTING ),
@@ -290,12 +274,11 @@ SwDoc::SwDoc() :
     mIdleBlockCount(0),
     nLockExpFld( 0 ),
     mbReadlineChecked(false),
-    // --> OD 2005-02-11 #i38810#
-    mbLinksUpdated( sal_False ),
+    mbLinksUpdated( sal_False ), //#i38810#
     mbClipBoard( false ),
     mbColumnSelection( false ),
-    // i#78591#
-    mbProtectForm(false),
+    mbProtectForm(false), // i#78591#
+    mbLastBrowseMode( false ),
     n32DummyCompatabilityOptions1(0),
     n32DummyCompatabilityOptions2(0),
     mbStartIdleTimer(sal_False)
@@ -305,14 +288,11 @@ SwDoc::SwDoc() :
     mbGlossDoc =
     mbModified =
     mbDtor =
-    mbUndo =
     mbPageNums =
     mbLoaded =
     mbUpdateExpFld =
     mbNewDoc =
     mbCopyIsMove =
-    mbNoDrawUndoObj =
-    mbBrowseMode =
     mbInReading =
     mbInXMLImport =
     mbUpdateTOX =
@@ -332,12 +312,9 @@ SwDoc::SwDoc() :
 #if OSL_DEBUG_LEVEL > 1
     mbXMLExport =
 #endif
-    // --> OD 2006-03-21 #b6375613#
     mbApplyWorkaroundForB6375613 =
-    // <--
                             false;
 
-    mbGroupUndo =
     mbNewFldLst =
     mbVisibleLinks =
     mbPurgeOLE =
@@ -361,6 +338,7 @@ SwDoc::SwDoc() :
     mbUseFormerObjectPos                = aOptions.IsUseObjectPositioning();
     mbUseFormerTextWrapping             = aOptions.IsUseOurTextWrapping();
     mbConsiderWrapOnObjPos              = aOptions.IsConsiderWrappingStyle();
+    mbMathBaselineAlignment                 = false;        // default for *old* documents is 'off'
     mbAddFlyOffsets                         = false;        // hidden
     mbOldNumbering                          = false;        // hidden
     mbUseHiResolutionVirtualDevice          = true;         // hidden
@@ -375,9 +353,7 @@ SwDoc::SwDoc() :
     mbUnixForceZeroExtLeading               = false;        // hidden
     mbOldPrinterMetrics                     = false;        // hidden
     mbTabRelativeToIndent                   = true;         // hidden
-    // --> OD 2008-06-05 #i89181#
-    mbTabAtLeftIndentForParagraphsInList    = false;        // hidden
-    // <--
+    mbTabAtLeftIndentForParagraphsInList    = false;        // hidden #i89181#
     mbInvertBorderSpacing                   = false;        // hidden
     mbCollapseEmptyCellPara                 = true;        // hidden
 
@@ -417,21 +393,18 @@ SwDoc::SwDoc() :
     _InitFieldTypes();
 
     // lege (fuer die Filter) eine Default-OutlineNumRule an
-    // --> OD 2008-02-11 #newlistlevelattrs#
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
-                                  // --> OD 2008-06-06 #i89178#
+                                  // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
-                                  // <--
                                   OUTLINE_RULE );
-    // <--
-    // #115901#
     AddNumRule(pOutlineRule);
-    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+    // Counting of phantoms depends on <IsOldNumbering()>
     pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
-    // <--
 
-    new SwTxtNode( SwNodeIndex( aUndoNodes.GetEndOfContent() ), pDfltTxtFmtColl );
-    new SwTxtNode( SwNodeIndex( aNodes.GetEndOfContent() ),
+    new SwTxtNode(
+            SwNodeIndex(GetUndoManager().GetUndoNodes().GetEndOfContent()),
+            pDfltTxtFmtColl );
+    new SwTxtNode( SwNodeIndex( GetNodes().GetEndOfContent() ),
                     GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 
     // den eigenen IdleTimer setzen
@@ -447,7 +420,6 @@ SwDoc::SwDoc() :
     // create TOXTypes
     InitTOXTypes();
 
-    // --> OD 2008-03-07 #refactorlists#
     // pass empty item set containing the paragraph's list attributes
     // as ignorable items to the stype manager.
     {
@@ -456,7 +428,6 @@ SwDoc::SwDoc() :
                                              0 );
         pStyleAccess = createStyleManager( &aIgnorableParagraphItems );
     }
-    // <--
 
     ResetModified();
 }
@@ -469,14 +440,18 @@ SwDoc::SwDoc() :
  */
 SwDoc::~SwDoc()
 {
-    // --> OD 2007-03-16 #i73788#
-    SwPauseThreadStarting aPauseThreadStarting;
-    // <--
+    // nothing here should create Undo actions!
+    GetIDocumentUndoRedo().DoUndo(false);
 
-    // --> OD 2007-11-01 #i83479#
+    if (pDocShell)
+    {
+        pDocShell->SetUndoManager(0);
+    }
+
+
+    // #i83479#
     delete mpListItemsList;
     mpListItemsList = 0;
-    // <--
 
     // clean up chart related structures...
     // Note: the chart data provider gets already diposed in ~SwDocShell
@@ -504,9 +479,7 @@ SwDoc::~SwDoc()
     delete pURLStateChgd;
 
     delete pLayouter;
-    // --> OD 2005-09-05 #125370#
     pLayouter = 0L;
-    // <--
 
     // Undo-Benachrichtigung vom Draw abschalten
     if( pDrawModel )
@@ -517,11 +490,7 @@ SwDoc::~SwDoc()
 
     delete pPgPViewPrtData;
 
-    mbUndo = FALSE;         // immer das Undo abschalten !!
-    // damit die Fussnotenattribute die Fussnotennodes in Frieden lassen.
-    mbDtor = TRUE;
-
-    DELETEZ( pLayout );
+    mbDtor = sal_True;
 
     delete pRedlineTbl;
     delete pUnoCrsrTbl;
@@ -535,7 +504,7 @@ SwDoc::~SwDoc()
 
     // die BaseLinks freigeben.
     {
-        for( USHORT n = pLinkMgr->GetServers().Count(); n; )
+        for( sal_uInt16 n = pLinkMgr->GetServers().Count(); n; )
             pLinkMgr->GetServers()[ --n ]->Closed();
 
         if( pLinkMgr->GetLinks().Count() )
@@ -544,13 +513,14 @@ SwDoc::~SwDoc()
 
     // die KapitelNummern / Nummern muessen vor den Vorlage geloescht werden
     // ansonsten wird noch staendig geupdatet !!!
-    aNodes.pOutlineNds->Remove( USHORT(0), aNodes.pOutlineNds->Count() );
-    aUndoNodes.pOutlineNds->Remove( USHORT(0), aUndoNodes.pOutlineNds->Count() );
+    m_pNodes->pOutlineNds->Remove(sal_uInt16(0), m_pNodes->pOutlineNds->Count());
+    SwNodes & rUndoNodes( GetUndoManager().GetUndoNodes() );
+    rUndoNodes.pOutlineNds->Remove(sal_uInt16(0), rUndoNodes.pOutlineNds->Count());
 
-    pFtnIdxs->Remove( USHORT(0), pFtnIdxs->Count() );
+    pFtnIdxs->Remove( sal_uInt16(0), pFtnIdxs->Count() );
 
-    pUndos->DeleteAndDestroy( 0, pUndos->Count() ); //Es koennen in den Attributen noch
-                                                    //noch indizes angemeldet sein.
+    // indices could be registered in attributes
+    m_pUndoManager->DelAllUndoObj();
 
     // in den BookMarks sind Indizies auf den Content. Diese muessen vorm
     // loesche der Nodes geloescht werden.
@@ -569,7 +539,7 @@ SwDoc::~SwDoc()
 //JP: alt - loeschen ohne Flag ist teuer; Modify wird verschickt!
 //  aTOXTypes.DeleteAndDestroy( 0, aTOXTypes.Count() );
     {
-        for( USHORT n = pTOXTypes->Count(); n; )
+        for( sal_uInt16 n = pTOXTypes->Count(); n; )
         {
             (*pTOXTypes)[ --n ]->SetInDocDTOR();
             delete (*pTOXTypes)[ n ];
@@ -593,17 +563,15 @@ SwDoc::~SwDoc()
     // Inhaltssections loeschen
     // nicht erst durch den SwNodes-DTOR, damit Formate
     // keine Abhaengigen mehr haben.
-    aNodes.DelNodes( SwNodeIndex( aNodes ), aNodes.Count() );
-    aUndoNodes.DelNodes( SwNodeIndex( aUndoNodes ), aUndoNodes.Count() );
+    m_pNodes->DelNodes( SwNodeIndex(*m_pNodes), m_pNodes->Count() );
+    rUndoNodes.DelNodes( SwNodeIndex( rUndoNodes ), rUndoNodes.Count() );
 
     // Formate loeschen, spaeter mal permanent machen.
 
     // Delete fuer Collections
     // damit die Abhaengigen wech sind
-    SwTxtFmtColl *pFtnColl = pFtnInfo->GetFtnTxtColl();
-    if ( pFtnColl ) pFtnColl->Remove(pFtnInfo);
-    pFtnColl = pEndNoteInfo->GetFtnTxtColl();
-    if ( pFtnColl ) pFtnColl->Remove(pEndNoteInfo);
+    pFtnInfo->ReleaseCollection();
+    pEndNoteInfo->ReleaseCollection();
 
     OSL_ENSURE( pDfltTxtFmtColl == (*pTxtFmtCollTbl)[0],
             "Default-Text-Collection muss immer am Anfang stehen" );
@@ -664,9 +632,8 @@ SwDoc::~SwDoc()
     delete pDfltGrfFmtColl;
     delete pNumRuleTbl;
 
-    // --> OD 2008-03-26 #refactorlists#
     {
-        for ( std::hash_map< String, SwList*, StringHash >::iterator
+        for ( boost::unordered_map< String, SwList*, StringHash >::iterator
                                                     aListIter = maLists.begin();
               aListIter != maLists.end();
               ++aListIter )
@@ -676,7 +643,6 @@ SwDoc::~SwDoc()
         maLists.clear();
     }
     maListStyleLists.clear();
-    // <--
 
     delete pPrtData;
     delete pNumberFormatter;
@@ -686,7 +652,6 @@ SwDoc::~SwDoc()
     delete pFtnIdxs;
     delete pFldTypes;
     delete pTOXTypes;
-    delete pUndos;
     delete pDocStat;
     delete pEmptyPageFmt;
     delete pColumnContFmt;
@@ -702,13 +667,11 @@ VirtualDevice& SwDoc::CreateVirtualDevice_() const
 {
     VirtualDevice* pNewVir = new VirtualDevice( 1 );
 
-    // <--
     pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
 
-    // --> FME 2006-10-09 #i60945# External leading compatibility for unix systems.
+    // #i60945# External leading compatibility for unix systems.
     if ( get(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING ) )
         pNewVir->Compat_ZeroExtleadBug();
-    // <--
 
     MapMode aMapMode( pNewVir->GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
@@ -723,7 +686,7 @@ SfxPrinter& SwDoc::CreatePrinter_() const
     OSL_ENSURE( ! pPrt, "Do not call CreatePrinter_(), call getPrinter() instead" );
 
 #if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( false, "Printer will be created!" );
+    OSL_FAIL( "Printer will be created!" );
 #endif
 
     // wir erzeugen einen default SfxPrinter.
@@ -744,7 +707,15 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
 {
     if( pDocShell != pDSh )
     {
+        if (pDocShell)
+        {
+            pDocShell->SetUndoManager(0);
+        }
         pDocShell = pDSh;
+        if (pDocShell)
+        {
+            pDocShell->SetUndoManager(& GetUndoManager());
+        }
 
         pLinkMgr->SetPersist( pDocShell );
         //JP 27.08.98: Bug 55570 - DocShell Pointer auch am DrawModel setzen
@@ -776,9 +747,8 @@ SfxObjectShell* SwDoc::GetPersist() const
 
 void SwDoc::ClearDoc()
 {
-    BOOL bOldUndo = mbUndo;
-    DelAllUndoObj();
-    mbUndo = FALSE;         // immer das Undo abschalten !!
+    GetIDocumentUndoRedo().DelAllUndoObj();
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     // Undo-Benachrichtigung vom Draw abschalten
     if( pDrawModel )
@@ -788,7 +758,7 @@ void SwDoc::ClearDoc()
     }
 
     // stehen noch FlyFrames rum, loesche auch diese
-    USHORT n;
+    sal_uInt16 n;
     while ( 0 != (n = GetSpzFrmFmts()->Count()) )
         DelLayoutFmt((*pSpzFrmFmtTbl)[n-1]);
     OSL_ENSURE( !pDrawModel || !pDrawModel->GetPage(0)->GetObjCount(),
@@ -812,37 +782,32 @@ void SwDoc::ClearDoc()
     // den ersten immer wieder neu anlegen (ohne Attribute/Vorlagen/...)
     SwTxtNode* pFirstNd = GetNodes().MakeTxtNode( aSttIdx, pDfltTxtFmtColl );
 
-    if( pLayout )
+    if( pCurrentView )  //swmod 071029//swmod 071225
     {
         // set the layout to the dummy pagedesc
         pFirstNd->SetAttr( SwFmtPageDesc( pDummyPgDsc ));
 
         SwPosition aPos( *pFirstNd, SwIndex( pFirstNd ));
-        ::PaMCorrAbs( aSttIdx, SwNodeIndex( GetNodes().GetEndOfContent() ),
-                         aPos );
+        SwPaM const tmpPaM(aSttIdx, SwNodeIndex(GetNodes().GetEndOfContent()));
+        ::PaMCorrAbs(tmpPaM, aPos);
     }
 
     GetNodes().Delete( aSttIdx,
             GetNodes().GetEndOfContent().GetIndex() - aSttIdx.GetIndex() );
 
-    // --> OD 2006-02-28 #i62440#
+    // #i62440#
     // destruction of numbering rules and creation of new outline rule
     // *after* the document nodes are deleted.
     pOutlineRule = NULL;
     pNumRuleTbl->DeleteAndDestroy( 0, pNumRuleTbl->Count() );
     // creation of new outline numbering rule
-    // --> OD 2008-02-11 #newlistlevelattrs#
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
-                                  // --> OD 2008-06-06 #i89178#
+                                  // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
-                                  // <--
                                   OUTLINE_RULE );
-    // <--
     AddNumRule(pOutlineRule);
-    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+    // Counting of phantoms depends on <IsOldNumbering()>
     pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
-    // <--
-    // <--
 
     //remove the dummy pagedec from the array and delete all the old ones
     aPageDescs.Remove( nDummyPgDsc );
@@ -850,28 +815,26 @@ void SwDoc::ClearDoc()
 
     // Delete fuer Collections
     // damit die Abhaengigen wech sind
-    SwTxtFmtColl* pFtnColl = pFtnInfo->GetFtnTxtColl();
-    if( pFtnColl ) pFtnColl->Remove( pFtnInfo );
-    pFtnColl = pEndNoteInfo->GetFtnTxtColl();
-    if( pFtnColl ) pFtnColl->Remove( pEndNoteInfo );
+    pFtnInfo->ReleaseCollection();
+    pEndNoteInfo->ReleaseCollection();
 
-    // JP 27.01.98: opt.: ausgehend davon, das Standard als 2. im Array
-    //              steht, sollte das als letztes geloescht werden, damit
-    //              die ganze Umhaengerei der Formate vermieden wird!
+    // opt.: ausgehend davon, das Standard als 2. im Array
+    // steht, sollte das als letztes geloescht werden, damit
+    // die ganze Umhaengerei der Formate vermieden wird!
     if( 2 < pTxtFmtCollTbl->Count() )
         pTxtFmtCollTbl->DeleteAndDestroy( 2, pTxtFmtCollTbl->Count()-2 );
     pTxtFmtCollTbl->DeleteAndDestroy( 1, pTxtFmtCollTbl->Count()-1 );
     pGrfFmtCollTbl->DeleteAndDestroy( 1, pGrfFmtCollTbl->Count()-1 );
     pCharFmtTbl->DeleteAndDestroy( 1, pCharFmtTbl->Count()-1 );
 
-    if( pLayout )
+    if( pCurrentView )
     {
         // search the FrameFormat of the root frm. This is not allowed to delete
-        pFrmFmtTbl->Remove( pFrmFmtTbl->GetPos( pLayout->GetFmt() ) );
+        pFrmFmtTbl->Remove( pFrmFmtTbl->GetPos( pCurrentView->GetLayout()->GetFmt() ) );
         pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
-        pFrmFmtTbl->Insert( pLayout->GetFmt(), pFrmFmtTbl->Count() );
+        pFrmFmtTbl->Insert( pCurrentView->GetLayout()->GetFmt(), pFrmFmtTbl->Count() );
     }
-    else
+    else    //swmod 071029//swmod 071225
         pFrmFmtTbl->DeleteAndDestroy( 1, pFrmFmtTbl->Count()-1 );
 
     xForbiddenCharsTable.clear();
@@ -889,8 +852,6 @@ void SwDoc::ClearDoc()
     pFirstNd->ResetAllAttr();
     // delete now the dummy pagedesc
     DelPageDesc( nDummyPgDsc );
-
-    mbUndo = bOldUndo;
 }
 
 void SwDoc::SetPreViewPrtData( const SwPagePreViewPrtData* pNew )
@@ -912,8 +873,8 @@ SwModify*   SwDoc::GetUnoCallBack() const
     return pUnoCallBack;
 }
 
-/*-----------------28.5.2001 10:06------------------
- * SwDoc:
+
+/** SwDoc:
  *  Reading and writing of the layout cache.
  *--------------------------------------------------*/
 void SwDoc::ReadLayoutCache( SvStream& rStream )
@@ -941,13 +902,13 @@ IGrammarContact* getGrammarContact( const SwTxtNode& rTxtNode )
     return pDoc->getGrammarContact();
 }
 
-// --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
-// SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
-void SwDoc::UpdateLinks( BOOL bUI )
+// #i42634# Moved common code of SwReader::Read() and SwDocShell::UpdateLinks()
+// to new SwDoc::UpdateLinks():
+void SwDoc::UpdateLinks( sal_Bool bUI )
 {
     SfxObjectCreateMode eMode;
-    USHORT nLinkMode = getLinkUpdateMode( true );
-    USHORT nUpdateDocMode = GetDocShell()->GetUpdateDocMode();
+    sal_uInt16 nLinkMode = getLinkUpdateMode( true );
+    sal_uInt16 nUpdateDocMode = GetDocShell()->GetUpdateDocMode();
     if( GetDocShell() &&
             (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
         GetLinkManager().GetLinks().Count() &&
@@ -958,34 +919,33 @@ void SwDoc::UpdateLinks( BOOL bUI )
         !GetDocShell()->IsPreview() )
     {
         ViewShell* pVSh = 0;
-        BOOL bAskUpdate = nLinkMode == MANUAL;
-        BOOL bUpdate = TRUE;
+        sal_Bool bAskUpdate = nLinkMode == MANUAL;
+        sal_Bool bUpdate = sal_True;
         switch(nUpdateDocMode)
         {
-            case document::UpdateDocMode::NO_UPDATE:   bUpdate = FALSE;break;
-            case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = FALSE; break;
-            case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = TRUE; break;
+            case document::UpdateDocMode::NO_UPDATE:   bUpdate = sal_False;break;
+            case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = sal_False; break;
+            case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = sal_True; break;
         }
         if( bUpdate && (bUI || !bAskUpdate) )
         {
             SfxMedium* pMedium = GetDocShell()->GetMedium();
             SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
             Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
-            if( GetRootFrm() && !GetEditShell( &pVSh ) && !pVSh )
+            if( GetCurrentViewShell() && !GetEditShell( &pVSh ) && !pVSh )  //swmod 071108//swmod 071225
             {
                 ViewShell aVSh( *this, 0, 0 );
 
                 SET_CURR_SHELL( &aVSh );
-                GetLinkManager().UpdateAllLinks( bAskUpdate , TRUE, FALSE, pDlgParent );
+                GetLinkManager().UpdateAllLinks( bAskUpdate , sal_True, sal_False, pDlgParent );
             }
             else
-                GetLinkManager().UpdateAllLinks( bAskUpdate, TRUE, FALSE, pDlgParent );
+                GetLinkManager().UpdateAllLinks( bAskUpdate, sal_True, sal_False, pDlgParent );
         }
     }
 
 }
-// <--
-// --> OD 2006-04-19 #b6375613#
+
 void SwDoc::SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 )
 {
     if ( mbApplyWorkaroundForB6375613 != p_bApplyWorkaroundForB6375613 )
@@ -1023,7 +983,6 @@ void SwDoc::SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 )
         }
     }
 }
-// <--
 
 ::sfx2::IXmlIdRegistry&
 SwDoc::GetXmlIdRegistry()
@@ -1040,6 +999,30 @@ SwDoc::GetXmlIdRegistry()
 SwDoc::GetMetaFieldManager()
 {
     return *m_pMetaFieldManager;
+}
+
+::sw::UndoManager &
+SwDoc::GetUndoManager()
+{
+    return *m_pUndoManager;
+}
+
+::sw::UndoManager const&
+SwDoc::GetUndoManager() const
+{
+    return *m_pUndoManager;
+}
+
+IDocumentUndoRedo &
+SwDoc::GetIDocumentUndoRedo()
+{
+    return *m_pUndoManager;
+}
+
+IDocumentUndoRedo const&
+SwDoc::GetIDocumentUndoRedo() const
+{
+    return *m_pUndoManager;
 }
 
 void SwDoc::InitTOXTypes()
@@ -1065,21 +1048,19 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 {
     SwDoc* pRet = new SwDoc;
     //copy settings
-    USHORT __FAR_DATA aRangeOfDefaults[] = {
+    sal_uInt16 aRangeOfDefaults[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
-        // --> OD 2008-02-25 #refactorlists##
         RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
-        // <--
         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
         0
     };
 
     SfxItemSet aNewDefaults( pRet->GetAttrPool(), aRangeOfDefaults );
 
-    USHORT nWhich;
-    USHORT nRange = 0;
+    sal_uInt16 nWhich;
+    sal_uInt16 nRange = 0;
     while( aRangeOfDefaults[nRange] != 0)
     {
         for( nWhich = aRangeOfDefaults[nRange]; nWhich < aRangeOfDefaults[nRange + 1]; ++nWhich )
@@ -1125,23 +1106,31 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     // COMPATIBILITY FLAGS END
     //
     pRet->ReplaceStyles( * const_cast< SwDoc*>( this ));
-    SfxObjectShellRef aDocShellRef = const_cast< SwDocShell* >( GetDocShell() );
-    pRet->SetRefForDocShell( boost::addressof(aDocShellRef) );
-    SfxObjectShellRef xRetShell = new SwDocShell( pRet, SFX_CREATE_MODE_STANDARD );
+
+    // we have to use pointer here, since the callee has to decide whether SfxObjectShellLock or SfxObjectShellRef should be used
+    // sometimes the object will be returned with refcount set to 0 ( if no DoInitNew is done )
+    SfxObjectShell* pRetShell = new SwDocShell( pRet, SFX_CREATE_MODE_STANDARD );
     if( bCallInitNew )
-        xRetShell->DoInitNew();
+    {
+        // it could happen that DoInitNew creates model, that increases the refcount of the object
+        pRetShell->DoInitNew();
+    }
+
     //copy content
     pRet->Paste( *this );
-    pRet->SetRefForDocShell( 0 );
-    return xRetShell;
+
+    // remove the temporary shell if it is there as it was done before
+    pRet->SetTmpDocShell( (SfxObjectShell*)NULL );
+
+    return pRetShell;
 }
 
-/*-- 08.05.2009 10:52:40---------------------------------------------------
-    copy document content - code from SwFEShell::Paste( SwDoc* , BOOL  )
+/*-------------------------------------------------------------------------
+    copy document content - code from SwFEShell::Paste( SwDoc* , sal_Bool  )
   -----------------------------------------------------------------------*/
 void SwDoc::Paste( const SwDoc& rSource )
 {
-//  this has to be empty const USHORT nStartPageNumber = GetPhyPageNum();
+//  this has to be empty const sal_uInt16 nStartPageNumber = GetPhyPageNum();
     // until the end of the NodesArray
     SwNodeIndex aSourceIdx( rSource.GetNodes().GetEndOfExtras(), 2 );
     SwPaM aCpyPam( aSourceIdx ); //DocStart
@@ -1152,7 +1141,7 @@ void SwDoc::Paste( const SwDoc& rSource )
     aCpyPam.SetMark();
     aCpyPam.Move( fnMoveForward, fnGoDoc );
 
-    this->StartUndo( UNDO_INSGLOSSARY, NULL );
+    this->GetIDocumentUndoRedo().StartUndo( UNDO_INSGLOSSARY, NULL );
     this->LockExpFlds();
 
     {
@@ -1187,9 +1176,9 @@ void SwDoc::Paste( const SwDoc& rSource )
         //additionally copy page bound frames
         if( /*bIncludingPageFrames && */rSource.GetSpzFrmFmts()->Count() )
         {
-            for ( USHORT i = 0; i < rSource.GetSpzFrmFmts()->Count(); ++i )
+            for ( sal_uInt16 i = 0; i < rSource.GetSpzFrmFmts()->Count(); ++i )
             {
-                BOOL bInsWithFmt = TRUE;
+                sal_Bool bInsWithFmt = sal_True;
                 const SwFrmFmt& rCpyFmt = *(*rSource.GetSpzFrmFmts())[i];
                 if( bInsWithFmt  )
                 {
@@ -1206,7 +1195,7 @@ void SwDoc::Paste( const SwDoc& rSource )
         }
     }
 
-    this->EndUndo( UNDO_INSGLOSSARY, NULL );
+    this->GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, NULL );
 
     UnlockExpFlds();
     UpdateFlds(NULL, false);

@@ -312,17 +312,17 @@ Any SAL_CALL PropertySetHelper::getPropertyDefault( const ::rtl::OUString& aProp
 
 void PropertySetHelper::_getPropertyStates( const comphelper::PropertyMapEntry**, PropertyState* ) throw(UnknownPropertyException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 void PropertySetHelper::_setPropertyToDefault( const comphelper::PropertyMapEntry* )  throw(UnknownPropertyException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 }
 
 Any PropertySetHelper::_getPropertyDefault( const comphelper::PropertyMapEntry* ) throw(UnknownPropertyException, WrappedTargetException )
 {
-    OSL_ENSURE( sal_False, "you have to implement this yourself!");
+    OSL_FAIL( "you have to implement this yourself!");
 
     Any aAny;
     return aAny;

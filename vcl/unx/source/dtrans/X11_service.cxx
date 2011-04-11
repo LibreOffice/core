@@ -40,39 +40,46 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/compbase1.hxx>
 
-using namespace rtl;
+namespace {
+
+namespace css = com::sun::star;
+
+}
+
 using namespace cppu;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::awt;
 using namespace x11;
 
+using ::rtl::OUString;
+
 Sequence< OUString > SAL_CALL x11::X11Clipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.clipboard.SystemClipboard");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard"));
     return aRet;
 }
 
 Sequence< OUString > SAL_CALL x11::Xdnd_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DragSource");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DragSource"));
     return aRet;
 }
 
 Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.dnd.X11DropTarget");
+    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.dnd.X11DropTarget"));
     return aRet;
 }
 
 // ------------------------------------------------------------------------
 
-Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
+css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
-    static std::hash_map< OUString, ::std::hash_map< Atom, Reference< XClipboard > >, ::rtl::OUStringHash > m_aInstances;
+    static boost::unordered_map< OUString, ::boost::unordered_map< Atom, Reference< XClipboard > >, ::rtl::OUStringHash > m_aInstances;
 
     OUString aDisplayName;
     Atom nSelection;
@@ -81,7 +88,7 @@ Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& 
     // by SelectionManager.initialize() if no display connection is given.
     if( arguments.getLength() > 0 )
     {
-        Reference< XDisplayConnection > xConn;
+        css::uno::Reference< XDisplayConnection > xConn;
         arguments.getConstArray()[0] >>= xConn;
 
         if( xConn.is() )
@@ -105,11 +112,11 @@ Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& 
     else
     {
         // default atom is clipboard selection
-        nSelection = rManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) );
+        nSelection = rManager.getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("CLIPBOARD")) );
     }
 
-    ::std::hash_map< Atom, Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
-    ::std::hash_map< Atom, Reference< XClipboard > >::iterator it = rMap.find( nSelection );
+    ::boost::unordered_map< Atom, css::uno::Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
+    ::boost::unordered_map< Atom, css::uno::Reference< XClipboard > >::iterator it = rMap.find( nSelection );
     if( it != rMap.end() )
         return it->second;
 
@@ -121,16 +128,16 @@ Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& 
 
 // ------------------------------------------------------------------------
 
-Reference< XInterface > X11SalInstance::CreateDragSource()
+css::uno::Reference< XInterface > X11SalInstance::CreateDragSource()
 {
-    return Reference < XInterface >( ( OWeakObject * ) new SelectionManagerHolder() );
+    return css::uno::Reference < XInterface >( ( OWeakObject * ) new SelectionManagerHolder() );
 }
 
 // ------------------------------------------------------------------------
 
-Reference< XInterface > X11SalInstance::CreateDropTarget()
+css::uno::Reference< XInterface > X11SalInstance::CreateDropTarget()
 {
-    return Reference < XInterface >( ( OWeakObject * ) new DropTarget() );
+    return css::uno::Reference < XInterface >( ( OWeakObject * ) new DropTarget() );
 }
 
 

@@ -63,15 +63,9 @@ public class CharArrayLCSAlgorithm {
         // in those 2 sequences
         diffTable = createDiffTable(orgSeq, modSeq);
 
-        // debug purpose...
-        // printDiffTable(diffTable);
-
         Vector diffResult = new Vector();
 
         generateResult(diffTable, orgSeqlen, modSeqlen, diffResult);
-
-        // don't need anymore if Difference do not contain content information
-        /* fillInDiffContent(diffResult, orgSeq, modSeq); */
 
         Difference[] diffArray = new Difference[0];
 

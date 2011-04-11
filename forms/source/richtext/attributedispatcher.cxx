@@ -114,7 +114,7 @@ namespace frm
             sMessage += "\n (URL: ";
             sMessage += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += ")";
-            DBG_ERROR( sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
         }
 #endif
 

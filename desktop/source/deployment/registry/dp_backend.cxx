@@ -40,11 +40,13 @@
 #include "ucbhelper/content.hxx"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/deployment/InvalidRemovedParameterException.hpp"
+#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
 #include "com/sun/star/ucb/IOErrorCode.hpp"
 #include "com/sun/star/beans/StringPair.hpp"
 #include "com/sun/star/sdbc/XResultSet.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
+#include "unotools/tempfile.hxx"
 
 
 using namespace ::dp_misc;
@@ -100,6 +102,8 @@ PackageRegistryBackend::PackageRegistryBackend(
         m_eContext = CONTEXT_BUNDLED;
     else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("tmp") ))
         m_eContext = CONTEXT_TMP;
+    else if (m_context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled_prereg") ))
+        m_eContext = CONTEXT_BUNDLED_PREREG;
     else if (m_context.matchIgnoreAsciiCaseAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") ))
         m_eContext = CONTEXT_DOCUMENT;
@@ -122,7 +126,7 @@ void PackageRegistryBackend::check()
 void PackageRegistryBackend::disposing()
 {
     try {
-        for ( t_string2ref::const_iterator i = m_bound.begin(); i != m_bound.end(); i++)
+        for ( t_string2ref::const_iterator i = m_bound.begin(); i != m_bound.end(); ++i)
             i->second->removeEventListener(this);
         m_bound.clear();
         m_xComponentContext.clear();
@@ -223,42 +227,43 @@ OUString PackageRegistryBackend::createFolder(
     OUString const & relUrl,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
-    OUString sDataFolder = makeURL(getCachePath(), relUrl);
+    const OUString sDataFolder = makeURL(getCachePath(), relUrl);
     //make sure the folder exist
     ucbhelper::Content dataContent;
     ::dp_misc::create_folder(&dataContent, sDataFolder, xCmdEnv);
 
-    OUString sDataFolderURL = dp_misc::expandUnoRcUrl(sDataFolder);
-
-    OUString tempEntry;
-    if (::osl::File::createTempFile(
-            &sDataFolderURL, 0, &tempEntry ) != ::osl::File::E_None)
-        throw RuntimeException(
-            OUSTR("::osl::File::createTempFile() failed!"), 0 );
-    tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
-    OUString destFolder= makeURL(sDataFolder, tempEntry) + OUSTR("_");
-    ::ucbhelper::Content destFolderContent;
-    dp_misc::create_folder( &destFolderContent, destFolder, xCmdEnv );
-
-    return destFolder;
+    const OUString sDataFolderURL = dp_misc::expandUnoRcUrl(sDataFolder);
+    const String baseDir(sDataFolder);
+    const ::utl::TempFile aTemp(&baseDir, sal_True);
+    const OUString url = aTemp.GetURL();
+    return sDataFolder + url.copy(url.lastIndexOf('/'));
 }
 
+//folderURL can have the extension .tmp or .tmp_
+//Before OOo 3.4 the created a tmp file with osl_createTempFile and
+//then created a Folder with a same name and a trailing '_'
+//If the folderURL has no '_' then there is no corresponding tmp file.
 void PackageRegistryBackend::deleteTempFolder(
     OUString const & folderUrl)
 {
-    OSL_ASSERT(folderUrl.getLength()
-               && folderUrl[folderUrl.getLength() - 1] == '_');
-    if (folderUrl.getLength()
-               && folderUrl[folderUrl.getLength() - 1] == '_')
+    if (folderUrl.getLength())
     {
-        const OUString  tempFile = folderUrl.copy(0, folderUrl.getLength() - 1);
         erase_path( folderUrl, Reference<XCommandEnvironment>(),
                     false /* no throw: ignore errors */ );
-        erase_path( tempFile, Reference<XCommandEnvironment>(),
-                    false /* no throw: ignore errors */ );
+
+        if (folderUrl[folderUrl.getLength() - 1] == '_')
+        {
+            const OUString  tempFile = folderUrl.copy(0, folderUrl.getLength() - 1);
+            erase_path( tempFile, Reference<XCommandEnvironment>(),
+                        false /* no throw: ignore errors */ );
+        }
     }
 }
 
+//usedFolders can contain folder names which have the extension .tmp or .tmp_
+//Before OOo 3.4 we created a tmp file with osl_createTempFile and
+//then created a Folder with a same name and a trailing '_'
+//If the folderURL has no '_' then there is no corresponding tmp file.
 void PackageRegistryBackend::deleteUnusedFolders(
     OUString const & relUrl,
     ::std::list< OUString> const & usedFolders)
@@ -271,11 +276,11 @@ void PackageRegistryBackend::deleteUnusedFolders(
         Reference<sdbc::XResultSet> xResultSet(
             tempFolder.createCursor(
                 Sequence<OUString>( &StrTitle::get(), 1 ),
-                ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
+                ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
         // get all temp directories:
         ::std::vector<OUString> tempEntries;
 
-        char tmp[] = ".tmp";
+        const char tmp[] = ".tmp";
 
         while (xResultSet->next())
         {
@@ -284,21 +289,17 @@ void PackageRegistryBackend::deleteUnusedFolders(
                     xResultSet, UNO_QUERY_THROW )->getString(
                         1 /* Title */ ) );
 
-            if (title.endsWithAsciiL(tmp, sizeof(tmp) - 1))
+            if (title.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(tmp)))
                 tempEntries.push_back(
                     makeURLAppendSysPathSegment(sDataFolder, title));
         }
 
         for ( ::std::size_t pos = 0; pos < tempEntries.size(); ++pos )
         {
-            //usedFolders contains the urls to the folders which have
-            //a trailing underscore
-            const OUString tempFolderName = tempEntries[ pos ] + OUSTR("_");
-
-            if (::std::find( usedFolders.begin(), usedFolders.end(), tempFolderName ) ==
+            if (::std::find( usedFolders.begin(), usedFolders.end(), tempEntries[pos] ) ==
                 usedFolders.end())
             {
-                deleteTempFolder(tempFolderName);
+                deleteTempFolder(tempEntries[pos]);
             }
         }
     }
@@ -312,7 +313,6 @@ void PackageRegistryBackend::deleteUnusedFolders(
 
 }
 
-//##############################################################################
 
 //______________________________________________________________________________
 Package::~Package()
@@ -524,6 +524,15 @@ OUString Package::getDescription() throw (
 }
 
 //______________________________________________________________________________
+OUString Package::getLicenseText() throw (
+    deployment::ExtensionRemovedException,RuntimeException)
+{
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+    return OUString();
+}
+
+//______________________________________________________________________________
 Sequence<OUString> Package::getUpdateInformationURLs() throw (
     deployment::ExtensionRemovedException, RuntimeException)
 {
@@ -627,7 +636,7 @@ beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
     catch (Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw deployment::DeploymentException(
-            OUSTR("unexpected exception occured!"),
+            OUSTR("unexpected exception occurred!"),
             static_cast<OWeakObject *>(this), exc );
     }
 }
@@ -669,7 +678,7 @@ void Package::processPackage_impl(
             }
         }
         catch (RuntimeException &) {
-            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
+            OSL_FAIL( "### unexpected RuntimeException!" );
             throw;
         }
         catch (CommandFailedException &) {
@@ -762,7 +771,6 @@ sal_Bool Package::isRemoved()
     return m_bRemoved;
 }
 
-//##############################################################################
 
 //______________________________________________________________________________
 Package::TypeInfo::~TypeInfo()
@@ -797,12 +805,19 @@ OUString Package::TypeInfo::getFileFilter() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-Any Package::TypeInfo::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
+/**************************
+ * Get Icon
+ *
+ * @param highContrast NOTE: disabled the returning of high contrast icons.
+ *                     This bool is a noop now.
+ * @param smallIcon    Return the small version of the icon
+ */
+Any Package::TypeInfo::getIcon( sal_Bool /*highContrast*/, sal_Bool smallIcon )
     throw (RuntimeException)
 {
     if (! smallIcon)
         return Any();
-    const sal_uInt16 nIconId = (highContrast ? m_smallIcon_HC : m_smallIcon);
+    const sal_uInt16 nIconId = m_smallIcon;
     return Any( &nIconId, getCppuType( static_cast<sal_uInt16 const *>(0) ) );
 }
 

@@ -61,8 +61,8 @@ struct ScHeaderFieldData;
 #define SC_HDFT_RIGHT   2
 
 
-//  ScHeaderFooterContentObj ist ein dummer Container, der per setPropertyValue
-//  wieder in die Seitenvorlage geschrieben werden muss
+//  ScHeaderFooterContentObj is a dumb container which must be re-written into
+//  the page template using setPropertyValue
 
 class ScHeaderFooterContentObj : public cppu::WeakImplHelper3<
                             com::sun::star::sheet::XHeaderFooterContent,
@@ -83,7 +83,7 @@ public:
                                                       const EditTextObject* pRight );
     virtual                 ~ScHeaderFooterContentObj();
 
-                            // fuer ScPageHFItem (per getImplementation)
+                            // for ScPageHFItem (using getImplementation)
     const EditTextObject*   GetLeftEditObject() const   { return pLeftText; }
     const EditTextObject*   GetCenterEditObject() const { return pCenterText; }
     const EditTextObject*   GetRightEditObject() const  { return pRightText; }
@@ -91,7 +91,7 @@ public:
     void                    AddListener( SfxListener& rListener );
     void                    RemoveListener( SfxListener& rListener );
 
-    void                    UpdateText( USHORT nPart, EditEngine& rSource );
+    void                    UpdateText( sal_uInt16 nPart, EditEngine& rSource );
 
                             // XHeaderFooterContent
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
@@ -126,15 +126,15 @@ class ScHeaderFooterTextData : public SfxListener
 {
 private:
     ScHeaderFooterContentObj&   rContentObj;
-    USHORT                      nPart;
+    sal_uInt16                      nPart;
     ScEditEngineDefaulter*      pEditEngine;
     SvxEditEngineForwarder*     pForwarder;
-    BOOL                        bDataValid;
-    BOOL                        bInUpdate;
+    sal_Bool                        bDataValid;
+    sal_Bool                        bInUpdate;
 
 public:
                             ScHeaderFooterTextData( ScHeaderFooterContentObj& rContent,
-                                                    USHORT nP );
+                                                    sal_uInt16 nP );
                             ~ScHeaderFooterTextData();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -144,11 +144,11 @@ public:
     void                    UpdateData();
     ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine; }
 
-    USHORT                  GetPart() const         { return nPart; }
+    sal_uInt16                  GetPart() const         { return nPart; }
     ScHeaderFooterContentObj& GetContentObj() const { return rContentObj; }
 };
 
-//  ScHeaderFooterTextObj veraendert den Text in einem ScHeaderFooterContentObj
+//  ScHeaderFooterTextObj changes the text in a ScHeaderFooterContentObj
 
 class ScHeaderFooterTextObj : public cppu::WeakImplHelper5<
                             com::sun::star::text::XText,
@@ -165,7 +165,7 @@ private:
 
 public:
                             ScHeaderFooterTextObj( ScHeaderFooterContentObj& rContent,
-                                                    USHORT nP );
+                                                    sal_uInt16 nP );
     virtual                 ~ScHeaderFooterTextObj();
 
     const SvxUnoText&       GetUnoText();
@@ -377,10 +377,10 @@ protected:
     ScFieldEditEngine*      pEditEngine;
     SvxEditEngineForwarder* pForwarder;
     ScSharedCellEditSource* pOriginalSource;
-    BOOL                    bDataValid;
-    BOOL                    bInUpdate;
-    BOOL                    bDirty;
-    BOOL                    bDoUpdate;
+    sal_Bool                    bDataValid;
+    sal_Bool                    bInUpdate;
+    sal_Bool                    bDirty;
+    sal_Bool                    bDoUpdate;
 
 protected:
     virtual void            GetCellText(const ScAddress& rCellPos, String& rText);
@@ -402,9 +402,9 @@ public:
     ScDocShell*             GetDocShell() const     { return pDocShell; }
     const ScAddress&        GetCellPos() const      { return aCellPos; }
 
-    void                    SetDirty(BOOL bValue)   { bDirty = bValue; }
-    BOOL                    IsDirty() const         { return bDirty; }
-    void                    SetDoUpdate(BOOL bValue)    { bDoUpdate = bValue; }
+    void                    SetDirty(sal_Bool bValue)   { bDirty = bValue; }
+    sal_Bool                    IsDirty() const         { return bDirty; }
+    void                    SetDoUpdate(sal_Bool bValue)    { bDoUpdate = bValue; }
 };
 
 class ScCellTextObj : public ScCellTextData, public SvxUnoText

@@ -78,6 +78,7 @@ TabDialog RID_RTS_RTSDIALOG
 
 TabPage RID_RTS_PAPERPAGE
 {
+    HelpID = "padmin:TabPage:RID_RTS_PAPERPAGE";
     Hide = TRUE;
     Size = MAP_APPFONT( 230, 175 );
     FixedText RID_RTS_PAPER_PAPER_TXT
@@ -88,6 +89,7 @@ TabPage RID_RTS_PAPERPAGE
     };
     ListBox RID_RTS_PAPER_PAPER_BOX
     {
+        HelpID = "padmin:ListBox:RID_RTS_PAPERPAGE:RID_RTS_PAPER_PAPER_BOX";
         Border = TRUE;
         DropDown = TRUE;
         Pos = MAP_APPFONT( 115, 5 );
@@ -101,6 +103,7 @@ TabPage RID_RTS_PAPERPAGE
     };
     ListBox RID_RTS_PAPER_ORIENTATION_BOX
     {
+        HelpID = "padmin:ListBox:RID_RTS_PAPERPAGE:RID_RTS_PAPER_ORIENTATION_BOX";
         Border = TRUE;
         DropDown = TRUE;
         Pos = MAP_APPFONT( 115, 20 );
@@ -114,6 +117,7 @@ TabPage RID_RTS_PAPERPAGE
     };
     ListBox RID_RTS_PAPER_DUPLEX_BOX
     {
+        HelpID = "padmin:ListBox:RID_RTS_PAPERPAGE:RID_RTS_PAPER_DUPLEX_BOX";
         Border = TRUE;
         DropDown = TRUE;
         Pos = MAP_APPFONT( 115, 35 );
@@ -127,6 +131,7 @@ TabPage RID_RTS_PAPERPAGE
     };
     ListBox RID_RTS_PAPER_SLOT_BOX
     {
+        HelpID = "padmin:ListBox:RID_RTS_PAPERPAGE:RID_RTS_PAPER_SLOT_BOX";
         Border = TRUE;
         DropDown = TRUE;
         Pos = MAP_APPFONT( 115, 50 );
@@ -136,6 +141,7 @@ TabPage RID_RTS_PAPERPAGE
 
 TabPage RID_RTS_DEVICEPAGE
 {
+    HelpID = "padmin:TabPage:RID_RTS_DEVICEPAGE";
     Hide = TRUE;
     Size = MAP_APPFONT( 230, 175 );
 
@@ -156,6 +162,7 @@ TabPage RID_RTS_DEVICEPAGE
     };
     ListBox RID_RTS_DEVICE_PPDKEY_BOX
     {
+        HelpID = "padmin:ListBox:RID_RTS_DEVICEPAGE:RID_RTS_DEVICE_PPDKEY_BOX";
         Border = TRUE;
         Pos = MAP_APPFONT( 5, 14 );
         Size = MAP_APPFONT( 105, 111 );
@@ -168,22 +175,32 @@ TabPage RID_RTS_DEVICEPAGE
     };
     ListBox RID_RTS_DEVICE_PPDVALUE_BOX
     {
+        HelpID = "padmin:ListBox:RID_RTS_DEVICEPAGE:RID_RTS_DEVICE_PPDVALUE_BOX";
         Border = TRUE;
         Pos = MAP_APPFONT( 120, 14 );
         Size = MAP_APPFONT( 105, 111 );
     };
 
-    FixedText RID_RTS_DEVICE_LEVEL_TXT
+    FixedText RID_RTS_DEVICE_PRINTLANG_TXT
     {
         Pos = MAP_APPFONT( 5, 130 );
         Size = MAP_APPFONT( 80, 8 );
-        Text [ en-US ] = "PostScript ~Level";
+        Text [ en-US ] = "Printer ~Language type";
     };
-    ListBox RID_RTS_DEVICE_LEVEL_BOX
+    ListBox RID_RTS_DEVICE_PRINTLANG_BOX
     {
+        HelpID = "padmin:ListBox:RID_RTS_DEVICEPAGE:RID_RTS_DEVICE_LEVEL_BOX";
         DropDown = TRUE;
         Pos = MAP_APPFONT( 120, 130 );
         Size = MAP_APPFONT( 105, 200 );
+        StringList [en-US] =
+        {
+            < "PostScript (Level from driver)" ; 1; > ;
+            < "PostScript Level 1" ; 2; > ;
+            < "PostScript Level 2"; 3; > ;
+            < "PostScript Level 3"; 3; > ;
+            < "PDF"; 10; > ;
+        };
     };
     FixedText RID_RTS_DEVICE_SPACE_TXT
     {
@@ -193,6 +210,7 @@ TabPage RID_RTS_DEVICEPAGE
     };
     ListBox RID_RTS_DEVICE_SPACE_BOX
     {
+        HelpID = "padmin:ListBox:RID_RTS_DEVICEPAGE:RID_RTS_DEVICE_SPACE_BOX";
         DropDown = TRUE;
         Pos = MAP_APPFONT( 120,  145 );
         Size = MAP_APPFONT( 105, 200 );
@@ -205,6 +223,7 @@ TabPage RID_RTS_DEVICEPAGE
     };
     ListBox RID_RTS_DEVICE_DEPTH_BOX
     {
+        HelpID = "padmin:ListBox:RID_RTS_DEVICEPAGE:RID_RTS_DEVICE_DEPTH_BOX";
         DropDown = TRUE;
         Pos = MAP_APPFONT( 120, 160 );
         Size = MAP_APPFONT( 105, 200 );
@@ -218,11 +237,13 @@ TabPage RID_RTS_DEVICEPAGE
 
 TabPage RID_RTS_FONTSUBSTPAGE
 {
+    HelpID = "padmin:TabPage:RID_RTS_FONTSUBSTPAGE";
     Hide = TRUE;
     Size = MAP_APPFONT( 230, 175 );
 
     CheckBox RID_RTS_FS_ENABLE_BTN
     {
+        HelpID = "padmin:CheckBox:RID_RTS_FONTSUBSTPAGE:RID_RTS_FS_ENABLE_BTN";
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 180, 10 );
         Text [ en-US ] = "~Enable font replacement";
@@ -236,6 +257,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
     };
     MultiListBox RID_RTS_FS_SUBST_BOX
     {
+        HelpID = "padmin:MultiListBox:RID_RTS_FONTSUBSTPAGE:RID_RTS_FS_SUBST_BOX";
         AutoHScroll = TRUE;
         Border = TRUE;
         Sort = TRUE;
@@ -245,12 +267,14 @@ TabPage RID_RTS_FONTSUBSTPAGE
     };
     PushButton RID_RTS_FS_ADD_BTN
     {
+        HelpID = "padmin:PushButton:RID_RTS_FONTSUBSTPAGE:RID_RTS_FS_ADD_BTN";
         Pos = MAP_APPFONT( 5, 125 );
         Size = MAP_APPFONT( 107, 12 );
         Text [ en-US ] = "~Add";
     };
     PushButton RID_RTS_FS_REMOVE_BTN
     {
+        HelpID = "padmin:PushButton:RID_RTS_FONTSUBSTPAGE:RID_RTS_FS_REMOVE_BTN";
         Pos = MAP_APPFONT( 117, 125 );
         Size = MAP_APPFONT( 107, 12 );
         Text [ en-US ] = "~Remove";
@@ -263,6 +287,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
     };
     ComboBox RID_RTS_FS_FROM_BOX
     {
+        HelpID = "padmin:ComboBox:RID_RTS_FONTSUBSTPAGE:RID_RTS_FS_FROM_BOX";
         Border = TRUE;
         DropDown = TRUE;
         Sort = TRUE;
@@ -277,6 +302,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
     };
     ListBox RID_RTS_FS_TO_BOX
     {
+        HelpID = "padmin:ListBox:RID_RTS_FONTSUBSTPAGE:RID_RTS_FS_TO_BOX";
         Border = TRUE;
         DropDown = TRUE;
         Sort = TRUE;
@@ -287,11 +313,13 @@ TabPage RID_RTS_FONTSUBSTPAGE
 
 TabPage RID_RTS_COMMANDPAGE
 {
+    HelpID = "padmin:TabPage:RID_RTS_COMMANDPAGE";
     Hide = TRUE;
     Size = MAP_APPFONT( 230, 175 );
 
     ComboBox RID_RTS_CMD_CB_COMMANDS
     {
+        HelpID = "padmin:ComboBox:RID_RTS_COMMANDPAGE:RID_RTS_CMD_CB_COMMANDS";
         Border = TRUE ;
         Sort = TRUE ;
         Dropdown = TRUE;
@@ -300,6 +328,7 @@ TabPage RID_RTS_COMMANDPAGE
     };
     CheckBox RID_RTS_CMD_CB_EXTERNAL
     {
+        HelpID = "padmin:CheckBox:RID_RTS_COMMANDPAGE:RID_RTS_CMD_CB_EXTERNAL";
         Pos = MAP_APPFONT( 11, 95 );
         Size = MAP_APPFONT( 220, 10 );
         Text [ en-US ] = "~Use system print dialog, disable %PRODUCTNAME's print dialog";
@@ -313,6 +342,7 @@ TabPage RID_RTS_COMMANDPAGE
     };
     ComboBox RIT_RTS_CMD_CB_QUICKCMD
     {
+        HelpID = "padmin:ComboBox:RID_RTS_COMMANDPAGE:RIT_RTS_CMD_CB_QUICKCMD";
         Border = TRUE;
         Sort = TRUE;
         Dropdown = TRUE;
@@ -340,6 +370,7 @@ TabPage RID_RTS_COMMANDPAGE
 
     ListBox RID_RTS_CMD_LB_CONFIGURE
     {
+        HelpID = "padmin:ListBox:RID_RTS_COMMANDPAGE:RID_RTS_CMD_LB_CONFIGURE";
         DropDown = true;
         Border = true;
         Pos = MAP_APPFONT( 101, 56 );
@@ -354,6 +385,7 @@ TabPage RID_RTS_COMMANDPAGE
 
     CheckBox RID_RTS_CMD_BOX_SWALLOWFAXNO
     {
+        HelpID = "padmin:CheckBox:RID_RTS_COMMANDPAGE:RID_RTS_CMD_BOX_SWALLOWFAXNO";
         Pos = MAP_APPFONT( 11, 146 );
         Size = MAP_APPFONT( 130, 8 );
         Text [ en-US ] = "~Fax number will be removed from output";
@@ -366,12 +398,14 @@ TabPage RID_RTS_COMMANDPAGE
     };
     Edit RID_RTS_CMD_EDT_PDFDIR
     {
+        HelpID = "padmin:Edit:RID_RTS_COMMANDPAGE:RID_RTS_CMD_EDT_PDFDIR";
         Border = TRUE;
         Pos = MAP_APPFONT( 11, 155 );
         Size = MAP_APPFONT( 130, 12 );
     };
     PushButton RID_RTS_CMD_BTN_PDFDIR
     {
+        HelpID = "padmin:PushButton:RID_RTS_COMMANDPAGE:RID_RTS_CMD_BTN_PDFDIR";
         Pos = MAP_APPFONT( 146, 155 );
         Size = MAP_APPFONT( 15, 12 );
         Text = "...";
@@ -395,12 +429,14 @@ TabPage RID_RTS_COMMANDPAGE
     };
     PushButton RID_RTS_CMD_BTN_HELP
     {
+        HelpID = "padmin:PushButton:RID_RTS_COMMANDPAGE:RID_RTS_CMD_BTN_HELP";
         Pos = MAP_APPFONT( 170, 55 );
         Size = MAP_APPFONT( 50, 12 );
         Text [ en-US ] = "~Help";
     };
     PushButton RID_RTS_CMD_BTN_REMOVE
     {
+        HelpID = "padmin:PushButton:RID_RTS_COMMANDPAGE:RID_RTS_CMD_BTN_REMOVE";
         Pos = MAP_APPFONT( 170, 72 );
         Size = MAP_APPFONT( 50, 12 );
         Text [ en-US ] = "~Remove";
@@ -421,6 +457,7 @@ TabPage RID_RTS_COMMANDPAGE
 
 TabPage RID_RTS_OTHERPAGE
 {
+    HelpID = "padmin:TabPage:RID_RTS_OTHERPAGE";
     Hide = TRUE;
     Size = MAP_APPFONT( 230, 175 );
 
@@ -432,6 +469,7 @@ TabPage RID_RTS_OTHERPAGE
     };
     MetricField RID_RTS_OTHER_LEFTMARGIN_BOX
     {
+        HelpID = "padmin:MetricField:RID_RTS_OTHERPAGE:RID_RTS_OTHER_LEFTMARGIN_BOX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 100 , 5 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
@@ -448,6 +486,7 @@ TabPage RID_RTS_OTHERPAGE
     };
     MetricField RID_RTS_OTHER_TOPMARGIN_BOX
     {
+        HelpID = "padmin:MetricField:RID_RTS_OTHERPAGE:RID_RTS_OTHER_TOPMARGIN_BOX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 100 , 20 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
@@ -464,6 +503,7 @@ TabPage RID_RTS_OTHERPAGE
     };
     MetricField RID_RTS_OTHER_RIGHTMARGIN_BOX
     {
+        HelpID = "padmin:MetricField:RID_RTS_OTHERPAGE:RID_RTS_OTHER_RIGHTMARGIN_BOX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 100 , 35 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
@@ -480,6 +520,7 @@ TabPage RID_RTS_OTHERPAGE
     };
     MetricField RID_RTS_OTHER_BOTTOMMARGIN_BOX
     {
+        HelpID = "padmin:MetricField:RID_RTS_OTHERPAGE:RID_RTS_OTHER_BOTTOMMARGIN_BOX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 100 , 50 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
@@ -496,12 +537,14 @@ TabPage RID_RTS_OTHERPAGE
     };
     Edit RID_RTS_OTHER_COMMENT_EDT
     {
+        HelpID = "padmin:Edit:RID_RTS_OTHERPAGE:RID_RTS_OTHER_COMMENT_EDT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 5 , 75 ) ;
         Size = MAP_APPFONT ( 220 , 12 ) ;
     };
     PushButton RID_RTS_OTHER_DEFAULT_BTN
     {
+        HelpID = "padmin:PushButton:RID_RTS_OTHERPAGE:RID_RTS_OTHER_DEFAULT_BTN";
         Pos = MAP_APPFONT( 175, 5 );
         Size = MAP_APPFONT( 50, 12 );
         Text [ en-US ] = "~Default";
@@ -515,6 +558,7 @@ String RID_TXT_QUERYFAXNUMBER
 
 ModalDialog RID_RTS_PWDIALOG
 {
+    HelpID = "padmin:ModalDialog:RID_RTS_PWDIALOG";
     Text [ en-US ] = "Authentication request";
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -537,6 +581,7 @@ ModalDialog RID_RTS_PWDIALOG
     };
     Edit RID_RTS_PWDIALOG_USER_EDT
     {
+        HelpID = "padmin:Edit:RID_RTS_PWDIALOG:RID_RTS_PWDIALOG_USER_EDT";
         Pos = MAP_APPFONT( 70, 29 );
         Size = MAP_APPFONT( 75, 12 );
         Border = TRUE;
@@ -549,6 +594,7 @@ ModalDialog RID_RTS_PWDIALOG
     };
     Edit RID_RTS_PWDIALOG_PASS_EDT
     {
+        HelpID = "padmin:Edit:RID_RTS_PWDIALOG:RID_RTS_PWDIALOG_PASS_EDT";
         Pos = MAP_APPFONT( 70, 44 );
         Size = MAP_APPFONT( 75, 12 );
         Border = TRUE;

@@ -99,7 +99,7 @@ DGColorNameLookUp::DGColorNameLookUp (void)
         // Create color table in which to look up the given color.
         uno::Reference<container::XNameContainer> xColorTable (
             ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii("com.sun.star.drawing.ColorTable")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ColorTable")) ),
             uno::UNO_QUERY);
 
         // Get list of color names in order to iterate over the color table.
@@ -112,9 +112,9 @@ DGColorNameLookUp::DGColorNameLookUp (void)
             aNames = xNA->getElementNames();
         }
     }
-    catch (uno::RuntimeException e)
+    catch (uno::RuntimeException const&)
     {
-        // When an excpetion occured then whe have an empty name sequence
+        // When an exception occurred then whe have an empty name sequence
         // and the loop below is not entered.
     }
 
@@ -130,9 +130,9 @@ DGColorNameLookUp::DGColorNameLookUp (void)
                 aColor >>= nColor;
                 maColorValueToNameMap[nColor] = aNames[i];
             }
-            catch (uno::RuntimeException e)
+            catch (uno::RuntimeException const&)
             {
-                // Ignore the exception: the color who lead to the excpetion
+                // Ignore the exception: the color who lead to the exception
                 // is not included into the map.
             }
         }

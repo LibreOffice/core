@@ -91,16 +91,16 @@ ScChangeViewSettings& ScChangeViewSettings::operator=( const ScChangeViewSetting
     return *this;
 }
 
-BOOL ScChangeViewSettings::IsValidComment(const String* pCommentStr) const
+sal_Bool ScChangeViewSettings::IsValidComment(const String* pCommentStr) const
 {
-    BOOL nTheFlag=TRUE;
+    sal_Bool nTheFlag=sal_True;
 
     if(pCommentSearcher!=NULL)
     {
         xub_StrLen nStartPos = 0;
         xub_StrLen nEndPos = pCommentStr->Len();
 
-        nTheFlag=sal::static_int_cast<BOOL>(pCommentSearcher->SearchFrwrd( *pCommentStr, &nStartPos, &nEndPos));
+        nTheFlag=sal::static_int_cast<sal_Bool>(pCommentSearcher->SearchFrwrd( *pCommentStr, &nStartPos, &nEndPos));
     }
     return nTheFlag;
 }
@@ -117,7 +117,7 @@ void ScChangeViewSettings::SetTheComment(const String& rString)
     if(rString.Len()>0)
     {
         utl::SearchParam aSearchParam( rString,
-            utl::SearchParam::SRCH_REGEXP,FALSE,FALSE,FALSE );
+            utl::SearchParam::SRCH_REGEXP,false,false,false );
 
         pCommentSearcher = new utl::TextSearch( aSearchParam, *ScGlobal::pCharClass );
     }

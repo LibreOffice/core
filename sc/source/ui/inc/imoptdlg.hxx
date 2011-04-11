@@ -33,7 +33,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <svx/txencbox.hxx>
 #include "scdllapi.h"
 #include "global.hxx"
@@ -45,19 +45,19 @@ class SC_DLLPUBLIC ScImportOptions
 public:
         ScImportOptions()
             : nFieldSepCode(0), nTextSepCode(0),
-            eCharSet(RTL_TEXTENCODING_DONTKNOW), bFixedWidth(FALSE),
-            bSaveAsShown(FALSE)
+            eCharSet(RTL_TEXTENCODING_DONTKNOW), bFixedWidth(false),
+            bSaveAsShown(false), bQuoteAllText(false)
         {}
         ScImportOptions( const String& rStr );
 
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, const String& rStr )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep), aStrFont(rStr),
-            bFixedWidth(FALSE), bSaveAsShown(FALSE)
+            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false)
         { eCharSet = ScGlobal::GetCharsetValue(aStrFont); }
 
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, rtl_TextEncoding nEnc )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep),
-            bFixedWidth(FALSE), bSaveAsShown(FALSE)
+            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false)
         { SetTextEncoding( nEnc ); }
 
         ScImportOptions( const ScImportOptions& rCpy )
@@ -66,7 +66,8 @@ public:
               aStrFont          (rCpy.aStrFont),
               eCharSet          (rCpy.eCharSet),
               bFixedWidth       (rCpy.bFixedWidth),
-              bSaveAsShown      (rCpy.bSaveAsShown)
+              bSaveAsShown      (rCpy.bSaveAsShown),
+              bQuoteAllText     (rCpy.bQuoteAllText)
         {}
 
     ScImportOptions& operator=( const ScImportOptions& rCpy )
@@ -77,10 +78,11 @@ public:
                             eCharSet        = rCpy.eCharSet;
                             bFixedWidth     = rCpy.bFixedWidth;
                             bSaveAsShown    = rCpy.bSaveAsShown;
+                            bQuoteAllText   = rCpy.bQuoteAllText;
                             return *this;
                         }
 
-    BOOL             operator==( const ScImportOptions& rCmp )
+    sal_Bool             operator==( const ScImportOptions& rCmp )
                         {
                             return
                                    nFieldSepCode    == rCmp.nFieldSepCode
@@ -88,7 +90,8 @@ public:
                                 && eCharSet         == rCmp.eCharSet
                                 && aStrFont         == rCmp.aStrFont
                                 && bFixedWidth      == rCmp.bFixedWidth
-                                && bSaveAsShown     == rCmp.bSaveAsShown;
+                                && bSaveAsShown     == rCmp.bSaveAsShown
+                                && bQuoteAllText    == rCmp.bQuoteAllText;
                         }
     String  BuildString() const;
 
@@ -98,8 +101,9 @@ public:
     sal_Unicode nTextSepCode;
     String      aStrFont;
     CharSet     eCharSet;
-    BOOL        bFixedWidth;
-    BOOL        bSaveAsShown;
+    sal_Bool    bFixedWidth;
+    sal_Bool    bSaveAsShown;
+    sal_Bool    bQuoteAllText;
 };
 
 

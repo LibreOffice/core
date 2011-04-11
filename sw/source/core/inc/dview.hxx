@@ -90,7 +90,7 @@ protected:
 
     // overloaded to allow extra handling when picking SwVirtFlyDrawObj's
     using FmFormView::CheckSingleSdrObjectHit;
-    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, SdrObject* pObj, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay) const;
+    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const;
 
 public:
     SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice* pOutDev=NULL );
@@ -104,9 +104,9 @@ public:
     // Overload to resue edit background color in active text edit view (OutlinerView)
     virtual void ModelHasChanged();
 
-    virtual void         ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
-                                            ULONG nNewPos );
-    virtual BOOL TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
+    virtual void         ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,
+                                            sal_uLong nNewPos );
+    virtual sal_Bool TakeDragLimit(SdrDragMode eMode, Rectangle& rRect) const;
     virtual void MakeVisible( const Rectangle&, Window &rWin );
     virtual void CheckPossibilities();
 

@@ -52,10 +52,6 @@ class SvxShape;
 class SdrObject;
 struct SfxItemPropertySimpleEntry;
 
-#ifdef SVX_LIGHT
-#define SvxFmDrawPage SvxDrawPage
-#endif
-
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/

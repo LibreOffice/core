@@ -78,6 +78,7 @@
 
 #include <map>
 #include <algorithm>
+#include <o3tl/compat_functional.hxx>
 
 //------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_EventHandler()
@@ -152,11 +153,11 @@ namespace pcr
     //= EventDescription
     //====================================================================
     EventDescription::EventDescription( EventId _nId, const sal_Char* _pListenerNamespaceAscii, const sal_Char* _pListenerClassAsciiName,
-            const sal_Char* _pListenerMethodAsciiName, sal_uInt16 _nDisplayNameResId, sal_Int32 _nHelpId, sal_Int32 _nUniqueBrowseId )
+            const sal_Char* _pListenerMethodAsciiName, sal_uInt16 _nDisplayNameResId, const rtl::OString& _sHelpId, const rtl::OString& _sUniqueBrowseId )
         :sDisplayName( String( PcrRes( _nDisplayNameResId ) ) )
         ,sListenerMethodName( ::rtl::OUString::createFromAscii( _pListenerMethodAsciiName ) )
-        ,nHelpId( _nHelpId )
-        ,nUniqueBrowseId( _nUniqueBrowseId )
+        ,sHelpId( _sHelpId )
+        ,sUniqueBrowseId( _sUniqueBrowseId )
         ,nId( _nId )
     {
         ::rtl::OUStringBuffer aQualifiedListenerClass;
@@ -220,7 +221,7 @@ namespace pcr
                     DESCRIBE_EVENT( "sdb",  "XRowSetApproveListener",       "approveCursorMove",        POSITIONING );
                     DESCRIBE_EVENT( "sdbc", "XRowSetListener",              "cursorMoved",              POSITIONED );
                     DESCRIBE_EVENT( "form", "XDatabaseParameterListener",   "approveParameter",         APPROVEPARAMETER );
-                    DESCRIBE_EVENT( "sdb",  "XSQLErrorListener",            "errorOccured",             ERROROCCURED );
+                    DESCRIBE_EVENT( "sdb",  "XSQLErrorListener",            "errorOccured",             ERROROCCURRED );
                     DESCRIBE_EVENT( "awt",  "XAdjustmentListener",          "adjustmentValueChanged",   ADJUSTMENTVALUECHANGED );
                 }
             }
@@ -265,13 +266,13 @@ namespace pcr
                     ||  ( pAssignedEvent->ScriptType.getLength() == 0 )
                     )
                 {
-                    DBG_ERROR( "lcl_getAssignedScriptEvent: me thinks this should not happen!" );
+                    OSL_FAIL( "lcl_getAssignedScriptEvent: me thinks this should not happen!" );
                     continue;
                 }
 
                 aScriptEvent = *pAssignedEvent;
 
-                if ( !aScriptEvent.ScriptType.equalsAscii( "StarBasic" ) )
+                if ( !aScriptEvent.ScriptType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StarBasic" ) ) )
                     continue;
 
                 // this is an old-style macro specification:
@@ -304,7 +305,7 @@ namespace pcr
             EventDescription aKnownEvent;
             if ( lcl_getEventDescriptionForMethod( _rFormComponentEventDescriptor.EventMethod, aKnownEvent ) )
                 return aKnownEvent.sListenerClassName;
-            DBG_ERROR( "lcl_getQualifiedKnownListenerName: unknown method name!" );
+            OSL_FAIL( "lcl_getQualifiedKnownListenerName: unknown method name!" );
                 // somebody assigned an script to a form component event which we don't know
                 // Speaking strictly, this is not really an error - it is possible to do
                 // this programmatically -, but it should rarely happen, since it's not possible
@@ -354,7 +355,7 @@ namespace pcr
     class EventHolder : public EventHolder_Base
     {
     private:
-        typedef ::std::hash_map< ::rtl::OUString, ScriptEventDescriptor, ::rtl::OUStringHash >  EventMap;
+        typedef ::boost::unordered_map< ::rtl::OUString, ScriptEventDescriptor, ::rtl::OUStringHash >  EventMap;
         typedef ::std::map< EventId, EventMap::iterator >                                       EventMapIndexAccess;
 
         EventMap            m_aEventNameAccess;
@@ -447,9 +448,9 @@ namespace pcr
 
         Any aRet;
         Sequence< PropertyValue > aScriptDescriptor( 2 );
-        aScriptDescriptor[0].Name = ::rtl::OUString::createFromAscii( "EventType" );
+        aScriptDescriptor[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EventType"));
         aScriptDescriptor[0].Value <<= aDescriptor.ScriptType;
-        aScriptDescriptor[1].Name = ::rtl::OUString::createFromAscii( "Script" );
+        aScriptDescriptor[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
         aScriptDescriptor[1].Value <<= aDescriptor.ScriptCode;
 
         return makeAny( aScriptDescriptor );
@@ -845,7 +846,7 @@ namespace pcr
 
         StlSyntaxSequence< Property > aReturn( aOrderedProperties.size() );
         ::std::transform( aOrderedProperties.begin(), aOrderedProperties.end(), aReturn.begin(),
-            ::std::select2nd< ::std::map< EventId, Property >::value_type >() );
+            ::o3tl::select2nd< ::std::map< EventId, Property >::value_type >() );
         return aReturn;
     }
 
@@ -880,8 +881,8 @@ namespace pcr
 
         const EventDescription& rEvent = impl_getEventForName_throw( _rPropertyName );
         aDescriptor.DisplayName = rEvent.sDisplayName;
-        aDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.nHelpId );
-        aDescriptor.PrimaryButtonId = rEvent.nUniqueBrowseId;
+        aDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.sHelpId );
+        aDescriptor.PrimaryButtonId = rtl::OStringToOUString(rEvent.sUniqueBrowseId, RTL_TEXTENCODING_UTF8);
         aDescriptor.HasPrimaryButton = sal_True;
         aDescriptor.Category = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Events" ) );
         return aDescriptor;
@@ -971,7 +972,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL EventHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
-        DBG_ERROR( "EventHandler::actuatingPropertyChanged: no actuating properties -> no callback (well, this is how it *should* be!)" );
+        OSL_FAIL( "EventHandler::actuatingPropertyChanged: no actuating properties -> no callback (well, this is how it *should* be!)" );
     }
 
     //--------------------------------------------------------------------
@@ -1266,12 +1267,12 @@ namespace pcr
         switch ( m_nGridColumnType )
         {
         case FormComponentType::COMBOBOX:
-            if ( UID_BRWEVT_ACTIONPERFORMED == _rEvent.nUniqueBrowseId )
+            if ( UID_BRWEVT_ACTIONPERFORMED == _rEvent.sUniqueBrowseId )
                 return false;
             break;
         case FormComponentType::LISTBOX:
-            if  (   ( UID_BRWEVT_CHANGED == _rEvent.nUniqueBrowseId )
-                ||  ( UID_BRWEVT_ACTIONPERFORMED == _rEvent.nUniqueBrowseId )
+            if  (   ( UID_BRWEVT_CHANGED == _rEvent.sUniqueBrowseId )
+                ||  ( UID_BRWEVT_ACTIONPERFORMED == _rEvent.sUniqueBrowseId )
                 )
                 return false;
             break;

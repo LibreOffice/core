@@ -8,9 +8,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: dpglobal.cxx,v $
- * $Revision: 1.0 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -35,6 +32,7 @@
 
 #include "dpglobal.hxx"
 #include "document.hxx"
+#include "dpobject.hxx"
 
 #include <stdio.h>
 
@@ -48,68 +46,19 @@ namespace ScDPGlobal
         return rcResult;
     }
 
-    String GetFuncString( const String &rString, const USHORT nIndex )
-    {
-        if ( nIndex <= 1 ) return rString;
-        ULONG uch = rString.Len() ? rString.GetChar( rString.Len()-1 ) : (L'9'+1);
-        bool bEndWithDigital = ( L'0'<=uch && uch<=L'9');
-        char szTemp[__MAX_NUM_LEN+1];
-        int nLen = sprintf( szTemp, bEndWithDigital ? DATA_RENAME_SEPARATOR"%hu" : "%hu", nIndex );
-        String strRet = rString;
-        strRet.Append( String::CreateFromAscii( szTemp, static_cast<USHORT>(nLen) ));
-        return strRet;
-    }
-
-   bool ChkDPTableOverlap( ScDocument *pDestDoc, std::list<ScDPObject> & rClipboard, SCCOL nClipStartCol, SCROW nClipStartRow, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab, USHORT nEndTab, BOOL bExcludeClip /*= FALSE*/ )
-    {
-        if ( ScDPCollection* pDPCollection = pDestDoc->GetDPCollection() )
-        {
-            USHORT nCount = pDPCollection->GetCount();
-            SCsCOL nOffsetX = nStartCol - nClipStartCol;
-            SCsROW nOffsetY = nStartRow - nClipStartRow;
-
-            for( std::list<ScDPObject>::iterator iter = rClipboard.begin(); iter!=rClipboard.end(); iter++ )
-            {
-                ScRange aRange = iter->GetOutRange();
-
-                for( USHORT nCurrTab = nStartTab; nCurrTab<=nEndTab; nCurrTab++ )
-                {
-                    SCsTAB nOffsetZ = nCurrTab - aRange.aStart.Tab();
-                    aRange.Move( nOffsetX, nOffsetY, nOffsetZ );
-
-                    for ( USHORT i = 0; i<nCount; i++)
-                    {
-                        if ( (*pDPCollection)[i] && aRange.Intersects( (*pDPCollection)[i]->GetOutRange()))
-                        {
-                            if ( bExcludeClip && iter->GetOutRange() == (*pDPCollection)[i]->GetOutRange() )
-                            {
-                                continue;
-                            }
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-    return true;
 }
-//end
 
-}
-// --------------------------------------------------------------------
-// ScDPItemDataPool
-// Construct
-ScDPItemDataPool::ScDPItemDataPool(void)
+ScDPItemDataPool::ScDPItemDataPool()
 {
 }
-//
+
 ScDPItemDataPool::ScDPItemDataPool(const ScDPItemDataPool& r):
     maItems(r.maItems),
     maItemIds(r.maItemIds)
 {
 }
 
-ScDPItemDataPool::~ScDPItemDataPool(void)
+ScDPItemDataPool::~ScDPItemDataPool()
 {
 }
 

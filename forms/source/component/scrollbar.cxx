@@ -98,7 +98,7 @@ namespace frm
             aExternalDoubleValue <<= (double)nScrollValue;
         else
         {
-            OSL_ENSURE( sal_False, "translateControlIntToExternalDoubleValue: no integer scroll value!" );
+            OSL_FAIL( "translateControlIntToExternalDoubleValue: no integer scroll value!" );
             // aExternalDoubleValue is void here, which is okay for this purpose ...
         }
 
@@ -231,14 +231,14 @@ namespace frm
     //------------------------------------------------------------------------------
     Any OScrollBarModel::translateDbColumnToControlValue( )
     {
-        OSL_ENSURE( sal_False, "OScrollBarModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
+        OSL_FAIL( "OScrollBarModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return Any();
     }
 
     //------------------------------------------------------------------------------
     sal_Bool OScrollBarModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
-        OSL_ENSURE( sal_False, "OScrollBarModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
+        OSL_FAIL( "OScrollBarModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return sal_True;
     }
 

@@ -83,7 +83,7 @@ published service GraphicObjectShape
     [property] string GraphicURL;
 
     //-------------------------------------------------------------------------
-    /** This is an url to the stream ('in document' or linked graphic) for this graphic shape.
+    /** This is an url to the stream ("in document" or linked graphic) for this graphic shape.
     */
     [property] string GraphicStreamURL;
 
@@ -124,7 +124,7 @@ published service GraphicObjectShape
     [property] short AdjustBlue;
 
     //-------------------------------------------------------------------------
-    /** If this property is set, the gama value of this graphic shape is
+    /** If this property is set, the gamma value of this graphic shape is
         adjusted by the given value.
     */
     [property] double Gamma;

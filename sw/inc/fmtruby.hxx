@@ -38,12 +38,12 @@ class SW_DLLPUBLIC SwFmtRuby : public SfxPoolItem
 {
     friend class SwTxtRuby;
 
-    String sRubyTxt;                    // the ruby txt
-    String sCharFmtName;                // name of the charformat
-    SwTxtRuby* pTxtAttr;                // the TextAttribut
-    USHORT nCharFmtId;                  // PoolId of the charformat
-    USHORT nPosition;                   // Position of the Ruby-Character
-    USHORT nAdjustment;                 // specific adjustment of the Ruby-Ch.
+    String sRubyTxt;                    // The ruby txt.
+    String sCharFmtName;                // Name of the charformat.
+    SwTxtRuby* pTxtAttr;                // The TextAttribute.
+    sal_uInt16 nCharFmtId;                  // PoolId of the charformat.
+    sal_uInt16 nPosition;                   // Position of the Ruby-character.
+    sal_uInt16 nAdjustment;                 // Specific adjustment of the Ruby-ch.
 
 public:
     SwFmtRuby( const String& rRubyTxt );
@@ -52,7 +52,7 @@ public:
 
     SwFmtRuby& operator=( const SwFmtRuby& rAttr );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -63,9 +63,9 @@ public:
                                     const IntlWrapper* pIntl = 0 ) const;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 ) const;
+                                        sal_uInt8 nMemberId = 0 ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 );
+                                        sal_uInt8 nMemberId = 0 );
 
 
     const SwTxtRuby* GetTxtRuby() const         { return pTxtAttr; }
@@ -77,14 +77,14 @@ public:
     const String& GetCharFmtName() const        { return sCharFmtName; }
     void SetCharFmtName( const String& rNm )    { sCharFmtName = rNm; }
 
-    USHORT GetCharFmtId() const                 { return nCharFmtId; }
-    void SetCharFmtId( USHORT nNew )            { nCharFmtId = nNew; }
+    sal_uInt16 GetCharFmtId() const                 { return nCharFmtId; }
+    void SetCharFmtId( sal_uInt16 nNew )            { nCharFmtId = nNew; }
 
-    USHORT GetPosition() const                  { return nPosition; }
-    void SetPosition( USHORT nNew )             { nPosition = nNew; }
+    sal_uInt16 GetPosition() const                  { return nPosition; }
+    void SetPosition( sal_uInt16 nNew )             { nPosition = nNew; }
 
-    USHORT GetAdjustment() const                { return nAdjustment; }
-    void SetAdjustment( USHORT nNew )           { nAdjustment = nNew; }
+    sal_uInt16 GetAdjustment() const                { return nAdjustment; }
+    void SetAdjustment( sal_uInt16 nNew )           { nAdjustment = nNew; }
 };
 
 

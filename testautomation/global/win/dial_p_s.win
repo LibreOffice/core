@@ -1,396 +1,368 @@
-*Passwort HID_PASSWD
-UserName sfx2:Edit:DLG_PASSWD:ED_PASSWD_USER
-PasswortName sfx2:Edit:DLG_PASSWD:ED_PASSWD_PASSWORD
-PasswortBestaetigen sfx2:Edit:DLG_PASSWD:ED_PASSWD_CONFIRM
+*Passwort sym:SFX2_HID_PASSWD
+UserName sym:sfx2:Edit:DLG_PASSWD:ED_PASSWD_USER
+PasswortName sym:sfx2:Edit:DLG_PASSWD:ED_PASSWD_PASSWORD
+PasswortBestaetigen sym:sfx2:Edit:DLG_PASSWD:ED_PASSWD_CONFIRM
 
-*PasswordFileOpen HID_DLG_PASSWORD_UUI
-PasswortName uui:Edit:DLG_UUI_PASSWORD:ED_PASSWORD
+*PasswordFileOpen sym:UUI_HID_DLG_PASSWORD_UUI
+PasswortName sym:uui:Edit:DLG_UUI_PASSWORD:ED_PASSWORD
 
-*PasswordFileSave HID_DLG_PASSWORD_TO_OPEN_MODIFY
-Password HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_OPEN
-PasswordConfirm HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_OPEN
-PasswordMoreOptions HID_DLG_PASSWORD_TO_OPEN_MODIFY_MORE
-PasswordFileReadonly HID_DLG_PASSWORD_TO_OPEN_MODIFY_FILE_READONLY
-PasswordToModify HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_MODIFY
-PasswordToModifyConfirm HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_MODIFY
+*PasswordFileSave sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY
+Password sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_OPEN
+PasswordConfirm sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_OPEN
+PasswordMoreOptions sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_MORE
+PasswordFileReadonly sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_FILE_READONLY
+PasswordToModify sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_PASSWORD_TO_MODIFY
+PasswordToModifyConfirm sym:CUI_HID_DLG_PASSWORD_TO_OPEN_MODIFY_CONFIRM_PASSWORD_TO_MODIFY
 
-*PasswortEingeben SID_CHG_PROTECT
-SchutzAufheben HID_CHG_PROTECT
-PasswortEingabe sfx2:Edit:DLG_PASSWD:ED_PASSWD_USER
-PasswortBestaetigen sfx2:Edit:DLG_PASSWD:ED_PASSWD_CONFIRM
+*PasswortEingeben .uno:ProtectTraceChangeMode
+SchutzAufheben sym:SC_HID_CHG_PROTECT
+PasswortEingabe sym:sfx2:Edit:DLG_PASSWD:ED_PASSWD_USER
+PasswortBestaetigen sym:sfx2:Edit:DLG_PASSWD:ED_PASSWD_CONFIRM
 
-*PBMOptionen filter:ModalDialog:DLG_EXPORT_EPBM
-Binaer filter:RadioButton:DLG_EXPORT_EPBM:RB_RAW
-Ascii filter:RadioButton:DLG_EXPORT_EPBM:RB_ASCII
+*PfadeAuswaehlen sym:CUI_HID_MULTIPATH
+Pfade sym:CUI_HID_OPTIONS_MULTIPATH_LIST
+Hinzufuegen sym:cui:PushButton:RID_SVXDLG_MULTIPATH:BTN_ADD_MULTIPATH
+Loeschen sym:cui:PushButton:RID_SVXDLG_MULTIPATH:BTN_DEL_MULTIPATH
 
-*PfadeAuswaehlen HID_MULTIPATH
-Pfade HID_OPTIONS_MULTIPATH_LIST
-Hinzufuegen cui:PUSHBUTTON:RID_SVXDLG_MULTIPATH:BTN_ADD_MULTIPATH
-Loeschen cui:PUSHBUTTON:RID_SVXDLG_MULTIPATH:BTN_DEL_MULTIPATH
+*Pipette .uno:BmpMask sym:svx:DockingWindow:RID_SVXDLG_BMPMASK
+PipetteKnopf sym:SVX_HID_BMPMASK_TBI_PIPETTE
+Farbfeld sym:SVX_HID_BMPMASK_CTL_PIPETTE
+Ersetzen sym:svx:PushButton:RID_SVXDLG_BMPMASK:BTN_EXEC
+Quellfarbe1 sym:svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_1
+Quellfarbe2 sym:svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_2
+Quellfarbe3 sym:svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_3
+Quellfarbe4 sym:svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_4
+Toleranz1 sym:svx:MetricField:RID_SVXDLG_BMPMASK:SP_1
+Toleranz2 sym:svx:MetricField:RID_SVXDLG_BMPMASK:SP_2
+Toleranz3 sym:svx:MetricField:RID_SVXDLG_BMPMASK:SP_3
+Toleranz4 sym:svx:MetricField:RID_SVXDLG_BMPMASK:SP_4
+ErsetzenDurch1 sym:svx:ListBox:RID_SVXDLG_BMPMASK:LB_1
+ErsetzenDurch2 sym:svx:ListBox:RID_SVXDLG_BMPMASK:LB_2
+ErsetzenDurch3 sym:svx:ListBox:RID_SVXDLG_BMPMASK:LB_3
+ErsetzenDurch4 sym:svx:ListBox:RID_SVXDLG_BMPMASK:LB_4
+ErsetzenDurch5 sym:svx:ListBox:RID_SVXDLG_BMPMASK:LB_TRANS
+Tranzparenz sym:svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_TRANS
 
-*PGMOptionen filter:ModalDialog:DLG_EXPORT_EPGM
-Binaer filter:RadioButton:DLG_EXPORT_EPGM:RB_RAW
-Ascii filter:RadioButton:DLG_EXPORT_EPGM:RB_ASCII
+*PivotFilter sym:SC_HID_SC_PIVOTFILTER
+Operator1 sym:sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_OP1
+Operator2 sym:sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_OP2
+FieldName1 sym:sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_FIELD1
+FieldName2 sym:sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_FIELD2
+FieldName3 sym:sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_FIELD3
+Condition1 sym:sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_COND1
+Condition2 sym:sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_COND2
+Condition3 sym:sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_COND3
+Value1 sym:sc:ComboBox:RID_SCDLG_PIVOTFILTER:ED_VAL1
+Value2 sym:sc:ComboBox:RID_SCDLG_PIVOTFILTER:ED_VAL2
+Value3 sym:sc:ComboBox:RID_SCDLG_PIVOTFILTER:ED_VAL3
+More sym:sc:MoreButton:RID_SCDLG_PIVOTFILTER:BTN_MORE
+CaseSensitive sym:sc:CheckBox:RID_SCDLG_PIVOTFILTER:BTN_CASE
+RegularExpression sym:sc:CheckBox:RID_SCDLG_PIVOTFILTER:BTN_REGEXP
+NoDuplication sym:sc:CheckBox:RID_SCDLG_PIVOTFILTER:BTN_UNIQUE
 
-*PICTOPtionen filter:ModalDialog:DLG_EXPORT_EPCT
-Original filter:RadioButton:DLG_EXPORT_EPCT:RB_ORIGINAL
-Groesse filter:RadioButton:DLG_EXPORT_EPCT:RB_SIZE
-Breite filter:MetricField:DLG_EXPORT_EPCT:MTF_SIZEX
-Hoehe filter:MetricField:DLG_EXPORT_EPCT:MTF_SIZEY
+*PlugInEinfuegen .uno:InsertPlugin
+DateiUrl sym:cui:Edit:MD_INSERT_OBJECT_PLUGIN:ED_FILEURL
+Durchsuchen sym:cui:PushButton:MD_INSERT_OBJECT_PLUGIN:BTN_FILEURL
+Optionen sym:cui:MultiLineEdit:MD_INSERT_OBJECT_PLUGIN:ED_PLUGINS_OPTIONS
 
-*Pipette SID_BMPMASK svx:DockingWindow:RID_SVXDLG_BMPMASK
-PipetteKnopf HID_BMPMASK_TBI_PIPETTE
-Farbfeld HID_BMPMASK_CTL_PIPETTE
-Ersetzen svx:PushButton:RID_SVXDLG_BMPMASK:BTN_EXEC
-Quellfarbe1 svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_1
-Quellfarbe2 svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_2
-Quellfarbe3 svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_3
-Quellfarbe4 svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_4
-Toleranz1 svx:MetricField:RID_SVXDLG_BMPMASK:SP_1
-Toleranz2 svx:MetricField:RID_SVXDLG_BMPMASK:SP_2
-Toleranz3 svx:MetricField:RID_SVXDLG_BMPMASK:SP_3
-Toleranz4 svx:MetricField:RID_SVXDLG_BMPMASK:SP_4
-ErsetzenDurch1 svx:ListBox:RID_SVXDLG_BMPMASK:LB_1
-ErsetzenDurch2 svx:ListBox:RID_SVXDLG_BMPMASK:LB_2
-ErsetzenDurch3 svx:ListBox:RID_SVXDLG_BMPMASK:LB_3
-ErsetzenDurch4 svx:ListBox:RID_SVXDLG_BMPMASK:LB_4
-ErsetzenDurch5 svx:ListBox:RID_SVXDLG_BMPMASK:LB_TRANS
-Tranzparenz svx:CheckBox:RID_SVXDLG_BMPMASK:CBX_TRANS
+*QuelleAuswaehlen sym:SC_HID_DATAPILOT_TYPE
+AktuelleSelektion sym:sc:RadioButton:RID_SCDLG_DAPITYPE:BTN_SELECTION
+AngemeldeteDatenquelle sym:sc:RadioButton:RID_SCDLG_DAPITYPE:BTN_DATABASE
+ExterneQuelle sym:sc:RadioButton:RID_SCDLG_DAPITYPE:BTN_EXTERNAL
 
-*PivotFilter HID_SC_PIVOTFILTER
-Operator1 sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_OP1
-Operator2 sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_OP2
-FieldName1 sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_FIELD1
-FieldName2 sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_FIELD2
-FieldName3 sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_FIELD3
-Condition1 sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_COND1
-Condition2 sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_COND2
-Condition3 sc:ListBox:RID_SCDLG_PIVOTFILTER:LB_COND3
-Value1 sc:ComboBox:RID_SCDLG_PIVOTFILTER:ED_VAL1
-Value2 sc:ComboBox:RID_SCDLG_PIVOTFILTER:ED_VAL2
-Value3 sc:ComboBox:RID_SCDLG_PIVOTFILTER:ED_VAL3
-More sc:MoreButton:RID_SCDLG_PIVOTFILTER:BTN_MORE
-CaseSensitive sc:CheckBox:RID_SCDLG_PIVOTFILTER:BTN_CASE
-RegularExpression sc:CheckBox:RID_SCDLG_PIVOTFILTER:BTN_REGEXP
-NoDuplication sc:CheckBox:RID_SCDLG_PIVOTFILTER:BTN_UNIQUE
+*Rechtschreibung sym:CUI_HID_SPELLCHECK
+Original sym:CUI_HID_SPELLDLG_SETWORD
+Ersetzen sym:CUI_HID_SPLDLG_BUTTON_CHANGE
+AlleErsetzen sym:CUI_HID_SPLDLG_BUTTON_CHANGEALL
+Ignorieren sym:CUI_HID_SPLDLG_BUTTON_IGNORE
+AlleIgnorieren sym:CUI_HID_SPLDLG_BUTTON_IGNOREALL
+Sprache sym:cui:ListBox:RID_SVXDLG_SPELLCHECK:LB_LANGUAGE
+RechtschreibungSchliessen sym:CUI_HID_SPLDLG_BUTTON_CLOSE
 
-*PlugInEinfuegen SID_INSERT_PLUGIN
-DateiUrl cui:EDIT:MD_INSERT_OBJECT_PLUGIN:ED_FILEURL
-Durchsuchen cui:PUSHBUTTON:MD_INSERT_OBJECT_PLUGIN:BTN_FILEURL
-Optionen cui:MULTILINEEDIT:MD_INSERT_OBJECT_PLUGIN:ED_PLUGINS_OPTIONS
+*Redlining sym:SW_HID_REDLINE_ACCEPT
+TabControl sym:SVX_HID_REDLINING_TABCONTROL
+TabListe sym:SVX_HID_REDLINING_VIEW_PAGE
+Liste sym:SVX_HID_REDLINING_VIEW_DG_VIEW
+ListItem sym:SVX_HID_REDLINING_VIEW_DG_VIEW_TABLE
+Akzeptieren sym:SVX_HID_REDLINING_VIEW_PB_ACCEPT
+AlleAkzeptieren sym:SVX_HID_REDLINING_VIEW_PB_ACCEPTALL
+Ablehnen sym:SVX_HID_REDLINING_VIEW_PB_REJECT
+AlleAblehnen sym:SVX_HID_REDLINING_VIEW_PB_REJECTALL
+Undo sym:SVX_HID_REDLINING_VIEW_PB_UNDO
 
-*PNGOptionen svtools:ModalDialog:DLG_EXPORT_EPNG
-Kompression svtools:NumericField:DLG_EXPORT_EPNG:NUM_COMPRESSION
-Interlaced svtools:CheckBox:DLG_EXPORT_EPNG:CBX_INTERLACED
+TabFilter sym:SVX_HID_REDLINING_FILTER_PAGE sym:cui:TabPage:SID_REDLIN_FILTER_PAGE
+Datum sym:SVX_HID_REDLINING_FILTER_CB_DATE sym:cui:CheckBox:SID_REDLIN_FILTER_PAGE:CB_DATE
+DatumListe sym:SVX_HID_REDLINING_FILTER_LB_DATE sym:cui:ListBox:SID_REDLIN_FILTER_PAGE:LB_DATE
+Datum1 sym:SVX_HID_REDLINING_FILTER_DF_DATE sym:cui:DateField:SID_REDLIN_FILTER_PAGE:DF_DATE
+Zeit1 sym:SVX_HID_REDLINING_FILTER_TF_DATE sym:cui:TimeField:SID_REDLIN_FILTER_PAGE:TF_DATE
+Aktuell1 sym:SVX_HID_REDLINING_FILTER_IB_CLOCK sym:svx:ImageButton:SID_REDLIN_FILTER_PAGE:IB_CLOCK
+Datum2 sym:SVX_HID_REDLINING_FILTER_DF_DATE2 sym:svx:DateField:SID_REDLIN_FILTER_PAGE:DF_DATE2
+Zeit2 sym:SVX_HID_REDLINING_FILTER_TF_DATE2 sym:svx:TimeField:SID_REDLIN_FILTER_PAGE:TF_DATE2
+Aktuell2 sym:SVX_HID_REDLINING_FILTER_IB_CLOCK2 sym:svx:ImageButton:SID_REDLIN_FILTER_PAGE:IB_CLOCK2
+Autor sym:SVX_HID_REDLINING_FILTER_CB_AUTOR sym:svx:CheckBox:SID_REDLIN_FILTER_PAGE:CB_AUTOR
+AutoListe sym:SVX_HID_REDLINING_FILTER_LB_AUTOR sym:svx:ListBox:SID_REDLIN_FILTER_PAGE:LB_AUTOR
+Bereich sym:SVX_HID_REDLINING_FILTER_CB_RANGE sym:svx:CheckBox:SID_REDLIN_FILTER_PAGE:CB_RANGE
+BereichText sym:SVX_HID_REDLINING_FILTER_ED_RANGE sym:svx:Edit:SID_REDLIN_FILTER_PAGE:ED_RANGE
+Button sym:SVX_HID_REDLINING_FILTER_BTN_REF sym:svx:PushButton:SID_REDLIN_FILTER_PAGE:BTN_REF
+Aktion sym:SVX_HID_REDLINING_FILTER_CB_ACTION sym:svx:CheckBox:SID_REDLIN_FILTER_PAGE:CB_ACTION
+Aktionsliste sym:SVX_HID_REDLINING_FILTER_LB_ACTION sym:svx:ListBox:SID_REDLIN_FILTER_PAGE:LB_ACTION
+Comment sym:SVX_HID_REDLINING_FILTER_CB_COMMENT sym:svx:CheckBox:SID_REDLIN_FILTER_PAGE:CB_COMMENT
+CommentText sym:SVX_HID_REDLINING_FILTER_ED_COMMENT sym:svx:ListBox:SID_REDLIN_FILTER_PAGE:ED_COMMENT
 
-*PPMOptionen filter:ModalDialog:DLG_EXPORT_EPPM
-Binaer filter:RadioButton:DLG_EXPORT_EPPM:RB_RAW
-Ascii filter:RadioButton:DLG_EXPORT_EPPM:RB_ASCII
+*ReiheFuellen .uno:FillSeries
+Oben sym:sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_TOP
+Unten sym:sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_BOTTOM
+Rechts sym:sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_RIGHT
+Links sym:sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_LEFT
+Arithmetisch sym:sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_ARITHMETIC
+Geometrisch sym:sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_GEOMETRIC
+Datum sym:sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_DATE
+AutoAusfuellen sym:sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_AUTOFILL
+Tag sym:sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_DAY
+WochenTag sym:sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_DAY_OF_WEEK
+Monat sym:sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_MONTH
+Jahr sym:sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_YEAR
+StartWert sym:sc:Edit:RID_SCDLG_FILLSERIES:ED_START_VALUES
+EndWert sym:sc:Edit:RID_SCDLG_FILLSERIES:ED_END_VALUES
+Inkrement sym:sc:Edit:RID_SCDLG_FILLSERIES:ED_INCREMENT
 
-*QuelleAuswaehlen HID_DATAPILOT_TYPE
-AktuelleSelektion sc:RadioButton:RID_SCDLG_DAPITYPE:BTN_SELECTION
-AngemeldeteDatenquelle sc:RadioButton:RID_SCDLG_DAPITYPE:BTN_DATABASE
-ExterneQuelle sc:RadioButton:RID_SCDLG_DAPITYPE:BTN_EXTERNAL
+*Schriften sym:starmath:ModalDialog:RID_FONTDIALOG
+Schriftart sym:starmath:ComboBox:RID_FONTDIALOG:1
+Fett sym:starmath:CheckBox:RID_FONTDIALOG:1
+Kursiv sym:starmath:CheckBox:RID_FONTDIALOG:2
 
-*Rechtschreibung HID_SPELLCHECK
-Original HID_SPELLDLG_SETWORD
-Ersetzen HID_SPLDLG_BUTTON_CHANGE
-AlleErsetzen HID_SPLDLG_BUTTON_CHANGEALL
-Ignorieren HID_SPLDLG_BUTTON_IGNORE
-AlleIgnorieren HID_SPLDLG_BUTTON_IGNOREALL
-Sprache cui:ListBox:RID_SVXDLG_SPELLCHECK:LB_LANGUAGE
-RechtschreibungSchliessen HID_SPLDLG_BUTTON_CLOSE
+*Schriftarten .uno:ChangeFont
+Variablen sym:starmath:ListBox:RID_FONTTYPEDIALOG:1
+Funktionen sym:starmath:ListBox:RID_FONTTYPEDIALOG:2
+Zahlen sym:starmath:ListBox:RID_FONTTYPEDIALOG:3
+Text sym:starmath:ListBox:RID_FONTTYPEDIALOG:4
+Serif sym:starmath:ListBox:RID_FONTTYPEDIALOG:5
+Sans sym:starmath:ListBox:RID_FONTTYPEDIALOG:6
+Fixed sym:starmath:ListBox:RID_FONTTYPEDIALOG:7
+Aendern sym:starmath:MenuButton:RID_FONTTYPEDIALOG:1
+Standard sym:starmath:PushButton:RID_FONTTYPEDIALOG:2
 
-*Redlining HID_REDLINE_ACCEPT
-TabControl HID_REDLINING_TABCONTROL
-TabListe HID_REDLINING_VIEW_PAGE
-Liste HID_REDLINING_VIEW_DG_VIEW
-ListItem HID_REDLINING_VIEW_DG_VIEW_TABLE
-Akzeptieren HID_REDLINING_VIEW_PB_ACCEPT
-AlleAkzeptieren HID_REDLINING_VIEW_PB_ACCEPTALL
-Ablehnen HID_REDLINING_VIEW_PB_REJECT
-AlleAblehnen HID_REDLINING_VIEW_PB_REJECTALL
-Undo HID_REDLINING_VIEW_PB_UNDO
+*Schriftgroessen .uno:ChangeFontSize
+BasisGroesse sym:starmath:MetricField:RID_FONTSIZEDIALOG:1
+TextGroesse sym:starmath:MetricField:RID_FONTSIZEDIALOG:4
+Indizes sym:starmath:MetricField:RID_FONTSIZEDIALOG:5
+Funktionen sym:starmath:MetricField:RID_FONTSIZEDIALOG:6
+Operatoren sym:starmath:MetricField:RID_FONTSIZEDIALOG:7
+Grenzen sym:starmath:MetricField:RID_FONTSIZEDIALOG:8
+Standard sym:starmath:PushButton:RID_FONTSIZEDIALOG:1
 
-TabFilter HID_REDLINING_FILTER_PAGE cui:TABPAGE:SID_REDLIN_FILTER_PAGE
-Datum HID_REDLINING_FILTER_CB_DATE cui:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_DATE
-DatumListe HID_REDLINING_FILTER_LB_DATE cui:LISTBOX:SID_REDLIN_FILTER_PAGE:LB_DATE
-Datum1 HID_REDLINING_FILTER_DF_DATE cui:DATEFIELD:SID_REDLIN_FILTER_PAGE:DF_DATE
-Zeit1 HID_REDLINING_FILTER_TF_DATE cui:TIMEFIELD:SID_REDLIN_FILTER_PAGE:TF_DATE
-Aktuell1 HID_REDLINING_FILTER_IB_CLOCK SVX:IMAGEBUTTON:SID_REDLIN_FILTER_PAGE:IB_CLOCK
-Datum2 HID_REDLINING_FILTER_DF_DATE2 SVX:DATEFIELD:SID_REDLIN_FILTER_PAGE:DF_DATE2
-Zeit2 HID_REDLINING_FILTER_TF_DATE2 SVX:TIMEFIELD:SID_REDLIN_FILTER_PAGE:TF_DATE2
-Aktuell2 HID_REDLINING_FILTER_IB_CLOCK2 SVX:IMAGEBUTTON:SID_REDLIN_FILTER_PAGE:IB_CLOCK2
-Autor HID_REDLINING_FILTER_CB_AUTOR SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_AUTOR
-AutoListe HID_REDLINING_FILTER_LB_AUTOR SVX:LISTBOX:SID_REDLIN_FILTER_PAGE:LB_AUTOR
-Bereich HID_REDLINING_FILTER_CB_RANGE SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_RANGE
-BereichText HID_REDLINING_FILTER_ED_RANGE SVX:EDIT:SID_REDLIN_FILTER_PAGE:ED_RANGE
-Button HID_REDLINING_FILTER_BTN_REF SVX:PUSHBUTTON:SID_REDLIN_FILTER_PAGE:BTN_REF
-Aktion HID_REDLINING_FILTER_CB_ACTION SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_ACTION
-Aktionsliste HID_REDLINING_FILTER_LB_ACTION SVX:LISTBOX:SID_REDLIN_FILTER_PAGE:LB_ACTION
-Comment HID_REDLINING_FILTER_CB_COMMENT SVX:CHECKBOX:SID_REDLIN_FILTER_PAGE:CB_COMMENT
-CommentText HID_REDLINING_FILTER_ED_COMMENT SVX:LISTBOX:SID_REDLIN_FILTER_PAGE:ED_COMMENT
+*ScriptEinfuegen sym:sw:ModalDialog:DLG_JAVAEDIT
+Scripttyp sym:sw:Edit:DLG_JAVAEDIT:ED_TYPE
+HierDerText sym:sw:MultiLineEdit:DLG_JAVAEDIT:ED_EDIT
+ScriptURL sym:sw:RadioButton:DLG_JAVAEDIT:RB_URL
+ScriptURLText sym:sw:Edit:DLG_JAVAEDIT:ED_URL
+ScriptURLWaehlen sym:sw:PushButton:DLG_JAVAEDIT:PB_URL
+ScriptText sym:sw:RadioButton:DLG_JAVAEDIT:RB_EDIT
+NaechstesScript sym:sw:ImageButton:DLG_JAVAEDIT:BTN_NEXT
+VorherigesScript sym:sw:ImageButton:DLG_JAVAEDIT:BTN_PREV
 
-*ReiheFuellen FID_FILL_SERIES
-Oben sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_TOP
-Unten sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_BOTTOM
-Rechts sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_RIGHT
-Links sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_LEFT
-Arithmetisch sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_ARITHMETIC
-Geometrisch sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_GEOMETRIC
-Datum sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_DATE
-AutoAusfuellen sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_AUTOFILL
-Tag sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_DAY
-WochenTag sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_DAY_OF_WEEK
-Monat sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_MONTH
-Jahr sc:RadioButton:RID_SCDLG_FILLSERIES:BTN_YEAR
-StartWert sc:Edit:RID_SCDLG_FILLSERIES:ED_START_VALUES
-EndWert sc:Edit:RID_SCDLG_FILLSERIES:ED_END_VALUES
-Inkrement sc:Edit:RID_SCDLG_FILLSERIES:ED_INCREMENT
+*SeiteEinfuegen .uno:InsertPage
+AutoLayout sym:SD_HID_SD_CTL_NEWFOIL
+Hintergrund sym:SD_HID_SD_CHGFOIL_BACKGROUND
+ObjekteAufDemHintergund sym:SD_HID_SD_CHGFOIL_OBJECTS
 
-*Schriften STARMATH:MODALDIALOG:RID_FONTDIALOG
-Schriftart STARMATH:COMBOBOX:RID_FONTDIALOG:1
-Fett STARMATH:CHECKBOX:RID_FONTDIALOG:1
-Kursiv STARMATH:CHECKBOX:RID_FONTDIALOG:2
+*SeitenLayout .uno:ModifyPage
+AutoLayout sym:SD_HID_SD_CHGFOIL_LAYOUT
+Hintergrund sym:SD_HID_SD_CHGFOIL_BACKGROUND
+SeitenName sym:SD_HID_SD_CHGFOIL_NAME
+ObjekteAufDemHintergrund sym:SD_HID_SD_CHGFOIL_OBJECTS
 
-*Schriftarten SID_FONT
-Variablen starmath:ListBox:RID_FONTTYPEDIALOG:1
-Funktionen starmath:ListBox:RID_FONTTYPEDIALOG:2
-Zahlen starmath:ListBox:RID_FONTTYPEDIALOG:3
-Text starmath:ListBox:RID_FONTTYPEDIALOG:4
-Serif starmath:ListBox:RID_FONTTYPEDIALOG:5
-Sans starmath:ListBox:RID_FONTTYPEDIALOG:6
-Fixed starmath:ListBox:RID_FONTTYPEDIALOG:7
-Aendern starmath:MenuButton:RID_FONTTYPEDIALOG:1
-Standard starmath:PushButton:RID_FONTTYPEDIALOG:2
+*SeitenObjekteEinfuegen sym:SD_HID_DLG_INSERT_PAGES_OBJS
+Verknuepfung sym:sd:CheckBox:DLG_INSERT_PAGES_OBJS:CBX_LINK
+DeleteUnusedBackgrounds sym:sd:CheckBox:DLG_INSERT_PAGES_OBJS:CBX_CHECK_MASTERS
+InsertObjectsList sym:SD_HID_SD_PAGEOBJSTLB
 
-*Schriftgroessen SID_FONTSIZE
-BasisGroesse STARMATH:METRICFIELD:RID_FONTSIZEDIALOG:1
-TextGroesse STARMATH:METRICFIELD:RID_FONTSIZEDIALOG:4
-Indizes STARMATH:METRICFIELD:RID_FONTSIZEDIALOG:5
-Funktionen STARMATH:METRICFIELD:RID_FONTSIZEDIALOG:6
-Operatoren STARMATH:METRICFIELD:RID_FONTSIZEDIALOG:7
-Grenzen STARMATH:METRICFIELD:RID_FONTSIZEDIALOG:8
-Standard STARMATH:PUSHBUTTON:RID_FONTSIZEDIALOG:1
+*Seitenvorlage .uno:PresentationLayout
+Laden sym:sd:PushButton:DLG_PRESLT:BTN_LOAD
+HintergrundseiteAustauschen sym:sd:CheckBox:DLG_PRESLT:CBX_MASTER_PAGE
+DeleteUnusedBackgrounds sym:sd:CheckBox:DLG_PRESLT:CBX_CHECK_MASTERS
 
-*ScriptEinfuegen SW:MODALDIALOG:DLG_JAVAEDIT
-Scripttyp SW:EDIT:DLG_JAVAEDIT:ED_TYPE
-HierDerText SW:MULTILINEEDIT:DLG_JAVAEDIT:ED_EDIT
-ScriptURL sw:RadioButton:DLG_JAVAEDIT:RB_URL
-ScriptURLText sw:Edit:DLG_JAVAEDIT:ED_URL
-ScriptURLWaehlen sw:PushButton:DLG_JAVAEDIT:PB_URL
-ScriptText sw:RadioButton:DLG_JAVAEDIT:RB_EDIT
-NaechstesScript sw:ImageButton:DLG_JAVAEDIT:BTN_NEXT
-VorherigesScript sw:ImageButton:DLG_JAVAEDIT:BTN_PREV
+*SeitenvorlageLaden sym:SW_HID_FILEDLG_LOADTEMPLATE
+Bereiche sym:sfx2:ListBox:DLG_NEW_FILE:LB_REGION
+Beschreibung sym:sfx2:MultiLineEdit:DLG_NEW_FILE:ED_DESC
+Schluesselworte sym:sfx2:Edit:DLG_NEW_FILE:ED_KEYWORDS
+Thema sym:sfx2:Edit:DLG_NEW_FILE:ED_THEMA
+Titel sym:sfx2:Edit:DLG_NEW_FILE:ED_TITLE
+Vorlagen sym:sfx2:ListBox:DLG_NEW_FILE:LB_TEMPLATE
+Vorschau sym:sfx2:CheckBox:DLG_NEW_FILE:BTN_PREVIEW
+Zusaetze sym:sfx2:MoreButton:DLG_NEW_FILE:BT_MORE
 
-*SeiteEinfuegen SID_INSERTPAGE
-AutoLayout HID_SD_CTL_NEWFOIL
-Hintergrund HID_SD_CHGFOIL_BACKGROUND
-ObjekteAufDemHintergund HID_SD_CHGFOIL_OBJECTS
+*Serienbrief .uno:MergeDialog
+DatensaetzeAlle sym:sw:RadioButton:DLG_MAILMERGE:RB_ALL
+DatensaetzeMarkiert sym:sw:RadioButton:DLG_MAILMERGE:RB_MARKED
+DatensaetzeVonBis sym:sw:RadioButton:DLG_MAILMERGE:RB_FROM
+Von sym:sw:NumericField:DLG_MAILMERGE:NF_FROM
+Bis sym:sw:NumericField:DLG_MAILMERGE:NF_TO
+Drucker sym:sw:RadioButton:DLG_MAILMERGE:RB_PRINTER
+Mailing sym:sw:RadioButton:DLG_MAILMERGE:RB_MAILING
+AlsDatei sym:sw:RadioButton:DLG_MAILMERGE:RB_FILE
+DateiButton sym:sw:PushButton:DLG_MAILMERGE:PB_PATH
+Pfadeingabe sym:sw:Edit:DLG_MAILMERGE:ED_PATH
+EinzelneDruckjobserzeugen sym:sw:CheckBox:DLG_MAILMERGE:CB_SINGLE_JOBS
+Adressfeld sym:sw:ListBox:DLG_MAILMERGE:LB_ADDRESSFLD
+Anhaenge sym:sw:Edit:DLG_MAILMERGE:ED_ATTACH
+AnhaengeAuswahl sym:sw:PushButton:DLG_MAILMERGE:PB_ATTACH
+Betreff sym:sw:Edit:DLG_MAILMERGE:ED_SUBJECT
+FormatHTML sym:sw:CheckBox:DLG_MAILMERGE:CB_FORMAT_HTML
+FormatRTF sym:sw:CheckBox:DLG_MAILMERGE:CB_FORMAT_RTF
+FormatStarWriter sym:sw:CheckBox:DLG_MAILMERGE:CB_FORMAT_SW
+Datenbankfeldliste sym:sw:ListBox:DLG_MAILMERGE:LB_COLUMN
 
-*SeitenLayout SID_MODIFYPAGE
-AutoLayout HID_SD_CHGFOIL_LAYOUT
-Hintergrund HID_SD_CHGFOIL_BACKGROUND
-SeitenName HID_SD_CHGFOIL_NAME
-ObjekteAufDemHintergrund HID_SD_CHGFOIL_OBJECTS
+*Sonderzeichen .uno:InsertSymbol
+Schrift sym:cui:ListBox:RID_SVXDLG_CHARMAP:LB_FONT
+SchriftListe sym:CUI_HID_CHARMAP_CTL_SHOWSET
+Loeschen sym:cui:PushButton:RID_SVXDLG_CHARMAP:BTN_DELETE
+Zeichenanzeige sym:CUI_HID_CHARMAP_CTL_SHOWCHAR
+Textanzeige sym:CUI_HID_CHARMAP_CTL_SHOWTEXT
+Subset sym:cui:ListBox:RID_SVXDLG_CHARMAP:LB_SUBSET
 
-*SeitenObjekteEinfuegen DLG_INSERT_PAGES_OBJS
-Verknuepfung sd:CheckBox:DLG_INSERT_PAGES_OBJS:CBX_LINK
-DeleteUnusedBackgrounds sd:CheckBox:DLG_INSERT_PAGES_OBJS:CBX_CHECK_MASTERS
-InsertObjectsList HID_SD_PAGEOBJSTLB
+*SonstigesJavaabschaltung  sym:cui:ModalDialog:RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
+NichtMehrAnzeigen sym:cui:CheckBox:RID_SVXDLG_OPT_JAVASCRIPT_DISABLE:CB_JSCPT_DISABLE
 
-*Seitenvorlage SID_PRESENTATION_LAYOUT
-Laden sd:PushButton:DLG_PRESLT:BTN_LOAD
-HintergrundseiteAustauschen sd:CheckBox:DLG_PRESLT:CBX_MASTER_PAGE
-DeleteUnusedBackgrounds sd:CheckBox:DLG_PRESLT:CBX_CHECK_MASTERS
+*Sortieren .uno:SortDialog
+Schluessel1 sym:sw:CheckBox:DLG_SORTING:CB_KEY1
+Spalte1 sym:sw:NumericField:DLG_SORTING:ED_KEY1
+Schluesseltyp1 sym:sw:ListBox:DLG_SORTING:DLB_KEY1
+Aufsteigend1 sym:sw:RadioButton:DLG_SORTING:RB_UP
+Absteigend1 sym:sw:RadioButton:DLG_SORTING:RB_DN
+Schluessel2 sym:sw:CheckBox:DLG_SORTING:CB_KEY2
+Spalte2 sym:sw:NumericField:DLG_SORTING:ED_KEY2
+Schluesseltyp2 sym:sw:ListBox:DLG_SORTING:DLB_KEY2
+Aufsteigend2 sym:sw:RadioButton:DLG_SORTING:RB_UP2
+Absteigend2 sym:sw:RadioButton:DLG_SORTING:RB_DN2
+Schluessel3 sym:sw:CheckBox:DLG_SORTING:CB_KEY3
+Spalte3 sym:sw:NumericField:DLG_SORTING:ED_KEY3
+Aufsteigend3 sym:sw:RadioButton:DLG_SORTING:RB_UP3
+Absteigend3 sym:sw:RadioButton:DLG_SORTING:RB_DN3
+Schluesseltyp3 sym:sw:ListBox:DLG_SORTING:DLB_KEY3
+Spalten sym:sw:RadioButton:DLG_SORTING:RB_COL
+Zeilen sym:sw:RadioButton:DLG_SORTING:RB_ROW
+Tabulator sym:sw:RadioButton:DLG_SORTING:RB_TAB
+Zeichen sym:sw:RadioButton:DLG_SORTING:RB_TABCH
+Zeichentext sym:sw:Edit:DLG_SORTING:ED_TABCH
+Sonderzeichen sym:sw:PushButton:DLG_SORTING:PB_DELIM
+Sprache sym:sw:ListBox:DLG_SORTING:LB_LANG
+ExakterVergleich sym:sw:CheckBox:DLG_SORTING:CB_CASE
 
-*SeitenvorlageLaden HID_FILEDLG_LOADTEMPLATE
-Bereiche sfx2:ListBox:DLG_NEW_FILE:LB_REGION
-Beschreibung sfx2:MultiLineEdit:DLG_NEW_FILE:ED_DESC
-Schluesselworte sfx2:Edit:DLG_NEW_FILE:ED_KEYWORDS
-Thema sfx2:Edit:DLG_NEW_FILE:ED_THEMA
-Titel sfx2:Edit:DLG_NEW_FILE:ED_TITLE
-Vorlagen sfx2:ListBox:DLG_NEW_FILE:LB_TEMPLATE
-Vorschau sfx2:CheckBox:DLG_NEW_FILE:BTN_PREVIEW
-Zusaetze sfx2:MoreButton:DLG_NEW_FILE:BT_MORE
+*SpalteAusblenden .uno:HideColumn
 
-*Serienbrief FN_QRY_MERGE
-DatensaetzeAlle sw:RadioButton:DLG_MAILMERGE:RB_ALL
-DatensaetzeMarkiert sw:RadioButton:DLG_MAILMERGE:RB_MARKED
-DatensaetzeVonBis sw:RadioButton:DLG_MAILMERGE:RB_FROM
-Von sw:NumericField:DLG_MAILMERGE:NF_FROM
-Bis sw:NumericField:DLG_MAILMERGE:NF_TO
-Drucker sw:RadioButton:DLG_MAILMERGE:RB_PRINTER
-Mailing sw:RadioButton:DLG_MAILMERGE:RB_MAILING
-AlsDatei sw:RadioButton:DLG_MAILMERGE:RB_FILE
-DateiButton sw:PushButton:DLG_MAILMERGE:PB_PATH
-Pfadeingabe sw:Edit:DLG_MAILMERGE:ED_PATH
-EinzelneDruckjobserzeugen sw:CheckBox:DLG_MAILMERGE:CB_SINGLE_JOBS
-Adressfeld sw:ListBox:DLG_MAILMERGE:LB_ADDRESSFLD
-Anhaenge sw:Edit:DLG_MAILMERGE:ED_ATTACH
-AnhaengeAuswahl sw:PushButton:DLG_MAILMERGE:PB_ATTACH
-Betreff sw:Edit:DLG_MAILMERGE:ED_SUBJECT
-FormatHTML sw:CheckBox:DLG_MAILMERGE:CB_FORMAT_HTML
-FormatRTF sw:CheckBox:DLG_MAILMERGE:CB_FORMAT_RTF
-FormatStarWriter sw:CheckBox:DLG_MAILMERGE:CB_FORMAT_SW
-Datenbankfeldliste sw:ListBox:DLG_MAILMERGE:LB_COLUMN
+*SpalteEinblenden .uno:ShowColumn
 
-*Sonderzeichen SID_CHARMAP
-Schrift cui:ListBox:RID_SVXDLG_CHARMAP:LB_FONT
-SchriftListe HID_CHARMAP_CTL_SHOWSET
-Loeschen cui:PushButton:RID_SVXDLG_CHARMAP:BTN_DELETE
-Zeichenanzeige HID_CHARMAP_CTL_SHOWCHAR
-Textanzeige HID_CHARMAP_CTL_SHOWTEXT
-Subset cui:ListBox:RID_SVXDLG_CHARMAP:LB_SUBSET
+*SpaltenbreiteCalc .uno:ColumnWidth
+Breite sym:sc:MetricField:RID_SCDLG_COL_MAN:ED_VALUE HID_SC_MTRIN_VAL
+Standardwert sym:sc:CheckBox:RID_SCDLG_COL_MAN:BTN_DEFVAL HID_SC_MTRIN_DEF
 
-*SonstigesJavaabschaltung  cui:ModalDialog:RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
-NichtMehrAnzeigen cui:CheckBox:RID_SVXDLG_OPT_JAVASCRIPT_DISABLE:CB_JSCPT_DISABLE
+*SpaltenBreite .uno:SetColumnWidth
+Spalte sym:sw:NumericField:DLG_COL_WIDTH:ED_COL
+Breite sym:sw:MetricField:DLG_COL_WIDTH:ED_WIDTH
 
-*Sortieren FN_SORTING_DLG
-Schluessel1 sw:CheckBox:DLG_SORTING:CB_KEY1
-Spalte1 sw:NumericField:DLG_SORTING:ED_KEY1
-Schluesseltyp1 sw:ListBox:DLG_SORTING:DLB_KEY1
-Aufsteigend1 sw:RadioButton:DLG_SORTING:RB_UP
-Absteigend1 sw:RadioButton:DLG_SORTING:RB_DN
-Schluessel2 sw:CheckBox:DLG_SORTING:CB_KEY2
-Spalte2 sw:NumericField:DLG_SORTING:ED_KEY2
-Schluesseltyp2 sw:ListBox:DLG_SORTING:DLB_KEY2
-Aufsteigend2 sw:RadioButton:DLG_SORTING:RB_UP2
-Absteigend2 sw:RadioButton:DLG_SORTING:RB_DN2
-Schluessel3 sw:CheckBox:DLG_SORTING:CB_KEY3
-Spalte3 sw:NumericField:DLG_SORTING:ED_KEY3
-Aufsteigend3 sw:RadioButton:DLG_SORTING:RB_UP3
-Absteigend3 sw:RadioButton:DLG_SORTING:RB_DN3
-Schluesseltyp3 sw:ListBox:DLG_SORTING:DLB_KEY3
-Spalten sw:RadioButton:DLG_SORTING:RB_COL
-Zeilen sw:RadioButton:DLG_SORTING:RB_ROW
-Tabulator sw:RadioButton:DLG_SORTING:RB_TAB
-Zeichen sw:RadioButton:DLG_SORTING:RB_TABCH
-Zeichentext sw:Edit:DLG_SORTING:ED_TABCH
-Sonderzeichen sw:PushButton:DLG_SORTING:PB_DELIM
-Sprache sw:ListBox:DLG_SORTING:LB_LANG
-ExakterVergleich sw:CheckBox:DLG_SORTING:CB_CASE
+*Spaltenzuordnung sym:EXTENSIONS_HID_DLG_MAPPING
+Kuerzel sym:extensions:ListBox:RID_DLG_MAPPING:LB_IDENTIFIER
+Literaturart sym:extensions:ListBox:RID_DLG_MAPPING:LB_AUTHORITYTYPE
+Autor sym:extensions:ListBox:RID_DLG_MAPPING:LB_AUTHOR
+Titel sym:extensions:ListBox:RID_DLG_MAPPING:LB_TITLE
+Jahr sym:extensions:ListBox:RID_DLG_MAPPING:LB_YEAR
+ISBN sym:extensions:ListBox:RID_DLG_MAPPING:LB_ISBN
+Buchtitel sym:extensions:ListBox:RID_DLG_MAPPING:LB_BOOKTITLE
+Kapitel sym:extensions:ListBox:RID_DLG_MAPPING:LB_CHAPTER
+Ausgabe sym:extensions:ListBox:RID_DLG_MAPPING:LB_EDITION
+Herausgeber sym:extensions:ListBox:RID_DLG_MAPPING:LB_EDITOR
+Ausgabeart sym:extensions:ListBox:RID_DLG_MAPPING:LB_HOWPUBLISHED
+Institution sym:extensions:ListBox:RID_DLG_MAPPING:LB_INSTITUTION
+Zeitschrift sym:extensions:ListBox:RID_DLG_MAPPING:LB_JOURNAL
+Monat sym:extensions:ListBox:RID_DLG_MAPPING:LB_MONTH
+Notiz sym:extensions:ListBox:RID_DLG_MAPPING:LB_NOTE
+Anmerkung sym:extensions:ListBox:RID_DLG_MAPPING:LB_ANNOTE
+Nummer sym:extensions:ListBox:RID_DLG_MAPPING:LB_NUMBER
+Organisation sym:extensions:ListBox:RID_DLG_MAPPING:LB_ORGANIZATIONS
+Seiten sym:extensions:ListBox:RID_DLG_MAPPING:LB_PAGES
+Verlag sym:extensions:ListBox:RID_DLG_MAPPING:LB_PUBLISHER
+Adresse sym:extensions:ListBox:RID_DLG_MAPPING:LB_ADDRESS
+Hochschule sym:extensions:ListBox:RID_DLG_MAPPING:LB_SCHOOL
+Serie sym:extensions:ListBox:RID_DLG_MAPPING:LB_SERIES
+ArtDesReport sym:extensions:ListBox:RID_DLG_MAPPING:LB_REPORTTYPE
+Band sym:extensions:ListBox:RID_DLG_MAPPING:LB_VOLUME
+URL sym:extensions:ListBox:RID_DLG_MAPPING:LB_URL
+Benutzerfeld1 sym:extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM1
+Benutzerfeld2 sym:extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM2
+Benutzerfeld3 sym:extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM3
+Benutzerfeld4 sym:extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM4
+Benutzerfeld5 sym:extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM5
 
-*SpalteAusblenden FID_COL_HIDE
+*SpalteOptimaleBreite .uno:SetOptimalColumnWidth
+Extra sym:sc:MetricField:RID_SCDLG_COL_OPT:ED_VALUE HID_SC_MTRIN_VAL
+Standardwert sym:sc:CheckBox:RID_SCDLG_COL_OPT:BTN_DEFVAL HID_SC_MTRIN_DEF
 
-*SpalteEinblenden FID_COL_SHOW
+*Spezialfilter .uno:DataFilterSpecialFilter
+BefindenBereich sym:sc:ListBox:RID_SCDLG_SPEC_FILTER:LB_CRITERIA_AREA
+Befinden sym:sc:Edit:RID_SCDLG_SPEC_FILTER:ED_CRITERIA_AREA
+GrossKleinschreibung sym:sc:CheckBox:RID_SCDLG_SPEC_FILTER:BTN_CASE
+RegulaererAusdruck sym:sc:CheckBox:RID_SCDLG_SPEC_FILTER:BTN_REGEXP
+BereichEnthaeltSpaltenkoepfe sym:sc:CheckBox:RID_SCDLG_SPEC_FILTER:BTN_HEADER
+KeineDuplikate sym:sc:CheckBox:RID_SCDLG_SPEC_FILTER:BTN_UNIQUE
+Persistent sym:sc:CheckBox:RID_SCDLG_SPEC_FILTER:BTN_DEST_PERS
+FilterergebnisAusgeben sym:sc:CheckBox:RID_SCDLG_SPEC_FILTER:BTN_COPY_RESULT
+AusgebenBereich sym:sc:ListBox:RID_SCDLG_SPEC_FILTER:LB_COPY_AREA
+Ausgeben sym:sc:Edit:RID_SCDLG_SPEC_FILTER:ED_COPY_AREA
+Zusaetze sym:sc:MoreButton:RID_SCDLG_SPEC_FILTER:BTN_MORE
+FilterkriterienMin sym:sc:ImageButton:RID_SCDLG_SPEC_FILTER:RB_CRITERIA_AREA
+FilterergebnisMin sym:sc:ImageButton:RID_SCDLG_SPEC_FILTER:RB_COPY_AREA
 
-*SpaltenbreiteCalc FID_COL_WIDTH
-Breite sc:MetricField:RID_SCDLG_COL_MAN:ED_VALUE HID_SC_MTRIN_VAL
-Standardwert sc:CheckBox:RID_SCDLG_COL_MAN:BTN_DEFVAL HID_SC_MTRIN_DEF
+*StandardFilter .uno:DataFilterStandardFilter
+FeldName1 sym:sc:ListBox:RID_SCDLG_FILTER:LB_FIELD1
+Feldname2 sym:sc:ListBox:RID_SCDLG_FILTER:LB_FIELD2
+Feldname3 sym:sc:ListBox:RID_SCDLG_FILTER:LB_FIELD3
+Feldname4 sym:sc:ListBox:RID_SCDLG_FILTER:LB_FIELD4
+Bedingung1 sym:sc:ListBox:RID_SCDLG_FILTER:LB_COND1
+Bedingung2 sym:sc:ListBox:RID_SCDLG_FILTER:LB_COND2
+Bedingung3 sym:sc:ListBox:RID_SCDLG_FILTER:LB_COND3
+Bedingung4 sym:sc:ListBox:RID_SCDLG_FILTER:LB_COND4
+Wert1 sym:sc:ComboBox:RID_SCDLG_FILTER:ED_VAL1
+Wert2 sym:sc:ComboBox:RID_SCDLG_FILTER:ED_VAL2
+Wert3 sym:sc:ComboBox:RID_SCDLG_FILTER:ED_VAL3
+Wert4 sym:sc:ComboBox:RID_SCDLG_FILTER:ED_VAL4
+Verknuepfung1 sym:sc:ListBox:RID_SCDLG_FILTER:LB_OP1
+Verknuepfung2 sym:sc:ListBox:RID_SCDLG_FILTER:LB_OP2
+Verknuepfung3 sym:sc:ListBox:RID_SCDLG_FILTER:LB_OP3
+Verknuepfung4 sym:sc:ListBox:RID_SCDLG_FILTER:LB_OP4
+Zusaetze sym:sc:MoreButton:RID_SCDLG_FILTER:BTN_MORE
+GrossKleinschreibung sym:sc:CheckBox:RID_SCDLG_FILTER:BTN_CASE
+BereicheEnthaeltSpaltenkoepfe sym:sc:CheckBox:RID_SCDLG_FILTER:BTN_HEADER
+RegulaererAusdruck sym:sc:CheckBox:RID_SCDLG_FILTER:BTN_REGEXP
+KeineDuplikate sym:sc:CheckBox:RID_SCDLG_FILTER:BTN_UNIQUE
+FilterergebnisNach sym:sc:CheckBox:RID_SCDLG_FILTER:BTN_COPY_RESULT
+AusgebenBereich sym:sc:ListBox:RID_SCDLG_FILTER:LB_COPY_AREA
+Ausgeben sym:sc:Edit:RID_SCDLG_FILTER:ED_COPY_AREA
+DialogMin sym:sc:ImageButton:RID_SCDLG_FILTER:RB_COPY_AREA
+Persistent sym:sc:CheckBox:RID_SCDLG_FILTER:BTN_DEST_PERS
 
-*SpaltenBreite FN_TABLE_SET_COL_WIDTH
-Spalte sw:NumericField:DLG_COL_WIDTH:ED_COL
-Breite sw:MetricField:DLG_COL_WIDTH:ED_WIDTH
+*Statusbar sym:FWK_HID_STATUSBAR
 
-*Spaltenzuordnung HID_DLG_MAPPING
-Kuerzel extensions:ListBox:RID_DLG_MAPPING:LB_IDENTIFIER
-Literaturart extensions:ListBox:RID_DLG_MAPPING:LB_AUTHORITYTYPE
-Autor extensions:ListBox:RID_DLG_MAPPING:LB_AUTHOR
-Titel extensions:ListBox:RID_DLG_MAPPING:LB_TITLE
-Jahr extensions:ListBox:RID_DLG_MAPPING:LB_YEAR
-ISBN extensions:ListBox:RID_DLG_MAPPING:LB_ISBN
-Buchtitel extensions:ListBox:RID_DLG_MAPPING:LB_BOOKTITLE
-Kapitel extensions:ListBox:RID_DLG_MAPPING:LB_CHAPTER
-Ausgabe extensions:ListBox:RID_DLG_MAPPING:LB_EDITION
-Herausgeber extensions:ListBox:RID_DLG_MAPPING:LB_EDITOR
-Ausgabeart extensions:ListBox:RID_DLG_MAPPING:LB_HOWPUBLISHED
-Institution extensions:ListBox:RID_DLG_MAPPING:LB_INSTITUTION
-Zeitschrift extensions:ListBox:RID_DLG_MAPPING:LB_JOURNAL
-Monat extensions:ListBox:RID_DLG_MAPPING:LB_MONTH
-Notiz extensions:ListBox:RID_DLG_MAPPING:LB_NOTE
-Anmerkung extensions:ListBox:RID_DLG_MAPPING:LB_ANNOTE
-Nummer extensions:ListBox:RID_DLG_MAPPING:LB_NUMBER
-Organisation extensions:ListBox:RID_DLG_MAPPING:LB_ORGANIZATIONS
-Seiten extensions:ListBox:RID_DLG_MAPPING:LB_PAGES
-Verlag extensions:ListBox:RID_DLG_MAPPING:LB_PUBLISHER
-Adresse extensions:ListBox:RID_DLG_MAPPING:LB_ADDRESS
-Hochschule extensions:ListBox:RID_DLG_MAPPING:LB_SCHOOL
-Serie extensions:ListBox:RID_DLG_MAPPING:LB_SERIES
-ArtDesReport extensions:ListBox:RID_DLG_MAPPING:LB_REPORTTYPE
-Band extensions:ListBox:RID_DLG_MAPPING:LB_VOLUME
-URL extensions:ListBox:RID_DLG_MAPPING:LB_URL
-Benutzerfeld1 extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM1
-Benutzerfeld2 extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM2
-Benutzerfeld3 extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM3
-Benutzerfeld4 extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM4
-Benutzerfeld5 extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM5
-
-*SpalteOptimaleBreite FID_COL_OPT_WIDTH
-Extra sc:MetricField:RID_SCDLG_COL_OPT:ED_VALUE HID_SC_MTRIN_VAL
-Standardwert sc:CheckBox:RID_SCDLG_COL_OPT:BTN_DEFVAL HID_SC_MTRIN_DEF
-
-*Spezialfilter SID_SPECIAL_FILTER
-BefindenBereich sc:ListBox:RID_SCDLG_SPEC_FILTER:LB_CRITERIA_AREA
-Befinden sc:Edit:RID_SCDLG_SPEC_FILTER:ED_CRITERIA_AREA
-GrossKleinschreibung sc:CheckBox:RID_SCDLG_SPEC_FILTER:BTN_CASE
-RegulaererAusdruck sc:CheckBox:RID_SCDLG_SPEC_FILTER:BTN_REGEXP
-BereichEnthaeltSpaltenkoepfe sc:CheckBox:RID_SCDLG_SPEC_FILTER:BTN_HEADER
-KeineDuplikate sc:CheckBox:RID_SCDLG_SPEC_FILTER:BTN_UNIQUE
-Persistent sc:CheckBox:RID_SCDLG_SPEC_FILTER:BTN_DEST_PERS
-FilterergebnisAusgeben sc:CheckBox:RID_SCDLG_SPEC_FILTER:BTN_COPY_RESULT
-AusgebenBereich sc:ListBox:RID_SCDLG_SPEC_FILTER:LB_COPY_AREA
-Ausgeben sc:Edit:RID_SCDLG_SPEC_FILTER:ED_COPY_AREA
-Zusaetze sc:MoreButton:RID_SCDLG_SPEC_FILTER:BTN_MORE
-FilterkriterienMin sc:ImageButton:RID_SCDLG_SPEC_FILTER:RB_CRITERIA_AREA
-FilterergebnisMin sc:ImageButton:RID_SCDLG_SPEC_FILTER:RB_COPY_AREA
-
-*StandardFilter SID_FILTER
-FeldName1 sc:ListBox:RID_SCDLG_FILTER:LB_FIELD1
-Feldname2 sc:ListBox:RID_SCDLG_FILTER:LB_FIELD2
-Feldname3 sc:ListBox:RID_SCDLG_FILTER:LB_FIELD3
-Feldname4 sc:ListBox:RID_SCDLG_FILTER:LB_FIELD4
-Bedingung1 sc:ListBox:RID_SCDLG_FILTER:LB_COND1
-Bedingung2 sc:ListBox:RID_SCDLG_FILTER:LB_COND2
-Bedingung3 sc:ListBox:RID_SCDLG_FILTER:LB_COND3
-Bedingung4 sc:ListBox:RID_SCDLG_FILTER:LB_COND4
-Wert1 sc:ComboBox:RID_SCDLG_FILTER:ED_VAL1
-Wert2 sc:ComboBox:RID_SCDLG_FILTER:ED_VAL2
-Wert3 sc:ComboBox:RID_SCDLG_FILTER:ED_VAL3
-Wert4 sc:ComboBox:RID_SCDLG_FILTER:ED_VAL4
-Verknuepfung1 sc:ListBox:RID_SCDLG_FILTER:LB_OP1
-Verknuepfung2 sc:ListBox:RID_SCDLG_FILTER:LB_OP2
-Verknuepfung3 sc:ListBox:RID_SCDLG_FILTER:LB_OP3
-Verknuepfung4 sc:ListBox:RID_SCDLG_FILTER:LB_OP4
-Zusaetze sc:MoreButton:RID_SCDLG_FILTER:BTN_MORE
-GrossKleinschreibung sc:CheckBox:RID_SCDLG_FILTER:BTN_CASE
-BereicheEnthaeltSpaltenkoepfe sc:CheckBox:RID_SCDLG_FILTER:BTN_HEADER
-RegulaererAusdruck sc:CheckBox:RID_SCDLG_FILTER:BTN_REGEXP
-KeineDuplikate sc:CheckBox:RID_SCDLG_FILTER:BTN_UNIQUE
-FilterergebnisNach sc:CheckBox:RID_SCDLG_FILTER:BTN_COPY_RESULT
-AusgebenBereich sc:ListBox:RID_SCDLG_FILTER:LB_COPY_AREA
-Ausgeben sc:Edit:RID_SCDLG_FILTER:ED_COPY_AREA
-DialogMin sc:ImageButton:RID_SCDLG_FILTER:RB_COPY_AREA
-Persistent sc:CheckBox:RID_SCDLG_FILTER:BTN_DEST_PERS
-
-*Statusbar HID_STATUSBAR
-
-'*Standardbrowser extensions:ModalDialog:MD_PROTCHK_DIALOG
-'StarOfficeVerwenden extensions:RadioButton:MD_PROTCHK_DIALOG:RB_STAROFFICE
-'KeineAenderungen extensions:RadioButton:MD_PROTCHK_DIALOG:RB_OTHER
-'ImmerUeberpruefen extensions:CheckBox:MD_PROTCHK_DIALOG:CB_PERFORM
-'Zusaetze extensions:PushButton:MD_PROTCHK_DIALOG:BT_DETAILS
+'*Standardbrowser sym:extensions:ModalDialog:MD_PROTCHK_DIALOG
+'StarOfficeVerwenden sym:extensions:RadioButton:MD_PROTCHK_DIALOG:RB_STAROFFICE
+'KeineAenderungen sym:extensions:RadioButton:MD_PROTCHK_DIALOG:RB_OTHER
+'ImmerUeberpruefen sym:extensions:CheckBox:MD_PROTCHK_DIALOG:CB_PERFORM
+'Zusaetze sym:extensions:PushButton:MD_PROTCHK_DIALOG:BT_DETAILS
 'Protokollauswahl HID_PROTOCOLS
 
 +Stylist Gestalter
 
-*SVMOptionen svtools:ModalDialog:DLG_EXPORT_VEC
-Original svtools:RadioButton:DLG_EXPORT_VEC:RB_ORIGINAL_VEC
-Groesse svtools:RadioButton:DLG_EXPORT_VEC:RB_SIZE_VEC
-Breite svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEX_VEC
-Hoehe svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEY_VEC
+*SymboleMath sym:starmath:ModalDialog:RID_SYMBOLDIALOG
+Symbolset sym:starmath:ListBox:RID_SYMBOLDIALOG:1
+Bearbeiten sym:starmath:PushButton:RID_SYMBOLDIALOG:1
+Uebernehmen sym:starmath:PushButton:RID_SYMBOLDIALOG:2
+Symbols sym:STARMATH_HID_SMA_CONTROL_SYMBOLSET_VIEW
 
-*SymboleMath starmath:ModalDialog:RID_SYMBOLDIALOG
-Symbolset starmath:ListBox:RID_SYMBOLDIALOG:1
-Bearbeiten starmath:PushButton:RID_SYMBOLDIALOG:1
-Uebernehmen starmath:PushButton:RID_SYMBOLDIALOG:2
-Symbols HID_SMA_CONTROL_SYMBOLSET_VIEW
-
-*SzenarioAnlegen SC:MODALDIALOG:RID_SCDLG_NEWSCENARIO SID_SCENARIOS
-SzenarioName sc:Edit:RID_SCDLG_NEWSCENARIO:ED_NAME
-Kommentar sc:MultiLineEdit:RID_SCDLG_NEWSCENARIO:ED_COMMENT
-RahmenAnzeigen SC:CHECKBOX:RID_SCDLG_NEWSCENARIO:CB_SHOWFRAME
-Rahmenfarbe SC:LISTBOX:RID_SCDLG_NEWSCENARIO:LB_COLOR
-Zurueckkopieren SC:CHECKBOX:RID_SCDLG_NEWSCENARIO:CB_TWOWAY
-GanzeTabelle SC:CHECKBOX:RID_SCDLG_NEWSCENARIO:CB_COPYALL
-PreventChanges sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_PROTECT
+*SzenarioAnlegen sym:sc:ModalDialog:RID_SCDLG_NEWSCENARIO .uno:ScenarioManager
+SzenarioName sym:sc:Edit:RID_SCDLG_NEWSCENARIO:ED_NAME
+Kommentar sym:sc:MultiLineEdit:RID_SCDLG_NEWSCENARIO:ED_COMMENT
+RahmenAnzeigen sym:sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_SHOWFRAME
+Rahmenfarbe sym:sc:ListBox:RID_SCDLG_NEWSCENARIO:LB_COLOR
+Zurueckkopieren sym:sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_TWOWAY
+GanzeTabelle sym:sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_COPYALL
+PreventChanges sym:sc:CheckBox:RID_SCDLG_NEWSCENARIO:CB_PROTECT

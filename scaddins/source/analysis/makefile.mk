@@ -84,11 +84,6 @@ SLOFILES=\
     $(SLO)$/analysishelper.obj	\
     $(SLO)$/bessel.obj
 
-# SCO: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO"
-SLOFILES+=$(SLO)$/staticmb.obj
-.ENDIF
-
 ALLIDLFILES=\
     analysisadd.idl
 
@@ -133,3 +128,11 @@ $(BIN)$/analysisadd.rdb: $(ALLIDLFILES)
     touch $@
 
 
+
+ALLTAR : $(MISC)/analysis.component
+
+$(MISC)/analysis.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        analysis.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt analysis.component

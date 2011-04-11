@@ -63,7 +63,7 @@ ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const uno::Any& _aOperator, co
     try
     {
         ScVbaFormatConditions* pFormatConditions = lcl_getScVbaFormatConditionsPtr( moFormatConditions );
-        pFormatConditions->removeFormatCondition(msStyleName, sal_False);
+        pFormatConditions->removeFormatCondition(msStyleName, false);
         pFormatConditions->Add(_nType, _aOperator, _aFormula1, _aFormula2, mxStyle);
     }
     catch (uno::Exception& )

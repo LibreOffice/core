@@ -169,13 +169,13 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     new SwConnectionContext(
                         rConfigItem.GetMailServer(),
                         rConfigItem.GetMailPort(),
-                        ::rtl::OUString::createFromAscii( rConfigItem.IsSecureConnection() ? "Ssl" : "Insecure"));
+                        rConfigItem.IsSecureConnection() ? OUString(RTL_CONSTASCII_USTRINGPARAM("Ssl")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")) );
             xSmtpServer->connect(xConnectionContext, xAuthenticator);
             rxInMailService = uno::Reference< mail::XMailService >( xSmtpServer, uno::UNO_QUERY );
         }
         catch(uno::Exception& )
         {
-            OSL_ENSURE(false, "exception caught");
+            OSL_FAIL("exception caught");
         }
     return xSmtpServer;
 }
@@ -247,7 +247,7 @@ void SwAddressPreview::SetAddress(const ::rtl::OUString& rAddress)
 {
     pImpl->aAdresses.clear();
     pImpl->aAdresses.push_back(rAddress);
-    aVScrollBar.Show(FALSE);
+    aVScrollBar.Show(sal_False);
     Invalidate();
 }
 
@@ -389,7 +389,7 @@ void  SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
 
 void  SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
 {
-    USHORT nKey = rKEvt.GetKeyCode().GetCode();
+    sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
     if(pImpl->nRows || pImpl->nColumns)
     {
         sal_uInt32 nSelectedRow =    (pImpl->nSelectedAddress + 1)/ pImpl->nColumns;
@@ -502,7 +502,7 @@ String SwAddressPreview::FillData(
 
             //find the appropriate assignment
             String sConvertedColumn = aItem.sText;
-            for(USHORT nColumn = 0;
+            for(sal_uInt16 nColumn = 0;
                     nColumn < rDefHeaders.Count() && nColumn < aAssignment.getLength();
                                                                                 ++nColumn)
             {
@@ -541,7 +541,7 @@ String SwAddressPreview::FillData(
                     }
                     catch( sdbc::SQLException& )
                     {
-                        OSL_ENSURE(false, "SQLException caught");
+                        OSL_FAIL("SQLException caught");
                     }
                 }
             }
@@ -662,13 +662,11 @@ SwConnectionListener::~SwConnectionListener()
 void SwConnectionListener::connected(const lang::EventObject& /*aEvent*/)
     throw (uno::RuntimeException)
 {
-    //OSL_ENSURE(false, "Connection opened");
 }
 
 void SwConnectionListener::disconnected(const lang::EventObject& /*aEvent*/)
     throw (uno::RuntimeException)
 {
-    //OSL_ENSURE(false, "Connection closed");
 }
 
 void SwConnectionListener::disposing(const lang::EventObject& /*aEvent*/)
@@ -719,7 +717,7 @@ uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*
     else
     {
         Sequence<sal_Int8> aData;
-        SfxMedium aMedium( m_aURL, STREAM_STD_READ, FALSE );
+        SfxMedium aMedium( m_aURL, STREAM_STD_READ, sal_False );
         SvStream* pStream = aMedium.GetInStream();
         if ( aMedium.GetErrorCode() == ERRCODE_NONE && pStream)
         {
@@ -773,7 +771,7 @@ uno::Any SwMailTransferable::getPropertyValue( const ::rtl::OUString& rPropertyN
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRet;
-    if( rPropertyName.equalsAscii( "URL" ) )
+    if( rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")))
         aRet <<= m_aURL;
     return aRet;
 }

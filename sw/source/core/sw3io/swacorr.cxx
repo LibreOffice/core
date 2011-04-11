@@ -49,9 +49,9 @@ TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
     //      koennen aus der Wortliste herausgeholt werden!)
     //      rShort ist der Stream-Name - gecryptet!
 
-BOOL SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong )
+sal_Bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg, const String& rFileName, const String& rShort, String& rLong )
 {
-    ULONG nRet = 0;
+    sal_uLong nRet = 0;
     if (rStg.is())
     {
         // mba: relative URLs don't make sense here
@@ -66,14 +66,14 @@ BOOL SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg,
 
     //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
     //      rShort ist der Stream-Name - gecryptet!
-BOOL SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg, const String& rFileName, const String& rShort,
+sal_Bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg, const String& rFileName, const String& rShort,
                             SfxObjectShell& rObjSh, String& rLong )
 {
     if( !rObjSh.IsA( TYPE(SwDocShell) ) )
-        return FALSE;
+        return sal_False;
 
     SwDocShell& rDShell = (SwDocShell&)rObjSh;
-    ULONG nRet = 0;
+    sal_uLong nRet = 0;
 
     // mba: relative URLs don't make sense here
     SwXMLTextBlocks aBlk( rStg, rFileName );
@@ -84,7 +84,7 @@ BOOL SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg, co
     {
         ((SwEditShell*)rDShell.GetWrtShell())->_CopySelToDoc( pDoc );
         nRet = aBlk.PutDoc();
-        aBlk.AddName ( rShort, rShort, FALSE );
+        aBlk.AddName ( rShort, rShort, sal_False );
         if( !IsError( nRet ) )
             nRet = aBlk.GetText( rShort, rLong );
     }

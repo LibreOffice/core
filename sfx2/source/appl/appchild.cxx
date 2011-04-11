@@ -59,40 +59,36 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFacto
     if (!pAppData_Impl->pFactArr)
         pAppData_Impl->pFactArr = new SfxChildWinFactArr_Impl;
 
-//#ifdef DBG_UTIL
-    for (USHORT nFactory=0; nFactory<pAppData_Impl->pFactArr->Count(); ++nFactory)
+    for (sal_uInt16 nFactory=0; nFactory<pAppData_Impl->pFactArr->Count(); ++nFactory)
     {
         if (pFact->nId ==  (*pAppData_Impl->pFactArr)[nFactory]->nId)
         {
             pAppData_Impl->pFactArr->Remove( nFactory );
-//          DBG_ERROR("ChildWindow mehrfach registriert!");
-//          return;
         }
     }
-//#endif
 
     pAppData_Impl->pFactArr->C40_INSERT(
         SfxChildWinFactory, pFact, pAppData_Impl->pFactArr->Count() );
 }
 
-void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nId,
+void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt16 nId,
         SfxChildWinContextFactory *pFact)
 {
     SfxChildWinFactArr_Impl *pFactories;
     SfxChildWinFactory *pF = NULL;
     if ( pMod )
     {
-        // Modul "ubergeben, ChildwindowFactory dort suchen
+        // Abandon Module, search there for ChildwindowFactory
         pFactories = pMod->GetChildWinFactories_Impl();
         if ( pFactories )
         {
-            USHORT nCount = pFactories->Count();
-            for (USHORT nFactory=0; nFactory<nCount; ++nFactory)
+            sal_uInt16 nCount = pFactories->Count();
+            for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
             {
                 SfxChildWinFactory *pFac = (*pFactories)[nFactory];
                 if ( nId == pFac->nId )
                 {
-                    // Factory gefunden, Context dort registrieren
+                    // Factory found, registrer Context here.
                     pF = pFac;
                     break;
                 }
@@ -102,23 +98,23 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nI
 
     if ( !pF )
     {
-        // Factory an der Application suchen
-        DBG_ASSERT( pAppData_Impl, "Keine AppDaten!" );
-        DBG_ASSERT( pAppData_Impl->pFactArr, "Keine Factories!" );
+        // Search for Factory in the Application
+        DBG_ASSERT( pAppData_Impl, "No AppData!" );
+        DBG_ASSERT( pAppData_Impl->pFactArr, "No Factories!" );
 
         pFactories = pAppData_Impl->pFactArr;
-        USHORT nCount = pFactories->Count();
-        for (USHORT nFactory=0; nFactory<nCount; ++nFactory)
+        sal_uInt16 nCount = pFactories->Count();
+        for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
         {
             SfxChildWinFactory *pFac = (*pFactories)[nFactory];
             if ( nId == pFac->nId )
             {
                 if ( pMod )
                 {
-                    // Wenn der Context von einem Modul registriert wurde,
-                    // mu\s die ChildwindowFactory auch dort zur Verf"ugung
-                    // stehen, sonst m"u\ste sich die Contextfactory im DLL-Exit
-                    // wieder abmelden !
+                    // If the context of a module has been registered, then the
+                    // ChildWindowFactory must also be available there,
+                    // else the ContextFactory would have be unsubscribed on
+                    // DLL-exit
                     pF = new SfxChildWinFactory( pFac->pCtor, pFac->nId,
                             pFac->nPos );
                     pMod->RegisterChildWindow( pF );
@@ -138,7 +134,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nI
         return;
     }
 
-    DBG_ERROR( "Kein ChildWindow fuer diesen Context!" );
+    OSL_FAIL( "No ChildWindow for this Context!" );
 }
 
 //--------------------------------------------------------------------

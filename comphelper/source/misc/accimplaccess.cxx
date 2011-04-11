@@ -166,7 +166,7 @@ namespace comphelper
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OAccessibleImplementationAccess::setAccessibleParent: caught an exception while retrieving the implementation!" );
+            OSL_FAIL( "OAccessibleImplementationAccess::setAccessibleParent: caught an exception while retrieving the implementation!" );
         }
         return pImplementation;
     }

@@ -48,7 +48,7 @@ private:
 
 public:
     TYPEINFO();
-                        ScHint( ULONG n, const ScAddress& a, ScBaseCell* p )
+                        ScHint( sal_uLong n, const ScAddress& a, ScBaseCell* p )
                             : SfxSimpleHint( n ), aAddress( a ), pCell( p ) {}
     ScBaseCell*         GetCell() const { return pCell; }
     void                SetCell( ScBaseCell* p )    { pCell = p; }

@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <rubydialog.hxx>
+#include <svx/rubydialog.hxx>
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -74,10 +74,8 @@ static const sal_Char cRubyIsAbove[] = "RubyIsAbove";
 static const sal_Char cDisplayName[] = "DisplayName";
 static const sal_Char cRubyCharStyleName[] = "RubyCharStyleName";
 static const sal_Char cRubies[] = "Rubies";
-/* -----------------------------09.01.01 17:24--------------------------------
 
- ---------------------------------------------------------------------------*/
-SvxRubyChildWindow::SvxRubyChildWindow( Window* _pParent, USHORT nId,
+SvxRubyChildWindow::SvxRubyChildWindow( Window* _pParent, sal_uInt16 nId,
     SfxBindings* pBindings, SfxChildWinInfo* pInfo) :
     SfxChildWindow(_pParent, nId)
 {
@@ -91,16 +89,12 @@ SvxRubyChildWindow::SvxRubyChildWindow( Window* _pParent, USHORT nId,
 
     pDlg->Initialize( pInfo );
 }
-/* -----------------------------10.01.01 13:53--------------------------------
 
- ---------------------------------------------------------------------------*/
 SfxChildWinInfo SvxRubyChildWindow::GetInfo() const
 {
     return SfxChildWindow::GetInfo();
 }
-/* -----------------------------09.01.01 17:17--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SvxRubyData_Impl : public cppu::WeakImplHelper1
                                 <  ::com::sun::star::view::XSelectionChangeListener >
 {
@@ -208,9 +202,7 @@ void  SvxRubyData_Impl::AssertOneEntry()
         pValues[4].Name = C2U(cRubyCharStyleName);
     }
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
                                     Window* _pParent, const ResId& rResId ) :
     SfxModelessDialog( pBind, pCW, _pParent, rResId ),
@@ -240,12 +232,12 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     aHelpPB(this,               ResId(PB_HELP,*rResId.GetResMgr()           )),
     nLastPos(0),
     nCurrentEdit(0),
-    bModified(FALSE),
+    bModified(sal_False),
     pBindings(pBind)
 {
     xImpl = pImpl = new SvxRubyData_Impl;
     FreeResource();
-    //#85638# automatic detection not yet available
+    // automatic detection not yet available
     aAutoDetectionCB.Hide();
     aEditArr[0] = &aLeft1ED; aEditArr[1] = &aRight1ED;
     aEditArr[2] = &aLeft2ED; aEditArr[3] = &aRight2ED;
@@ -267,7 +259,7 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     Link aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
     Link aScrollLk(LINK(this, SvxRubyDialog, EditScrollHdl_Impl));
     Link aJumpLk(LINK(this, SvxRubyDialog, EditJumpHdl_Impl));
-    for(USHORT i = 0; i < 8; i++)
+    for(sal_uInt16 i = 0; i < 8; i++)
     {
         aEditArr[i]->SetModifyHdl(aEditLk);
         aEditArr[i]->SetJumpHdl(aJumpLk);
@@ -276,41 +268,41 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
     }
 
     UpdateColors();
-}
-/* -----------------------------09.01.01 17:17--------------------------------
 
- ---------------------------------------------------------------------------*/
+    String leftLabelName = aLeftFT.GetText(), rightLabelName = aRightFT.GetText();
+    aLeft2ED.SetAccessibleName(leftLabelName);
+    aLeft3ED.SetAccessibleName(leftLabelName);
+    aLeft4ED.SetAccessibleName(leftLabelName);
+    aRight2ED.SetAccessibleName(rightLabelName);
+    aRight3ED.SetAccessibleName(rightLabelName);
+    aRight4ED.SetAccessibleName(rightLabelName);
+}
+
 SvxRubyDialog::~SvxRubyDialog()
 {
     ClearCharStyleList();
     EventObject aEvent;
     xImpl->disposing(aEvent);
 }
-/* -----------------------------01.02.01 10:29--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxRubyDialog::ClearCharStyleList()
 {
-    for(USHORT i = 0; i < aCharStyleLB.GetEntryCount(); i++)
+    for(sal_uInt16 i = 0; i < aCharStyleLB.GetEntryCount(); i++)
     {
         void* pData = aCharStyleLB.GetEntryData(i);
         delete (OUString*)pData;
     }
     aCharStyleLB.Clear();
 }
-/* -----------------------------09.01.01 17:17--------------------------------
 
- ---------------------------------------------------------------------------*/
-BOOL    SvxRubyDialog::Close()
+sal_Bool    SvxRubyDialog::Close()
 {
     pBindings->GetDispatcher()->Execute( SID_RUBY_DIALOG,
                               SFX_CALLMODE_ASYNCHRON |
                               SFX_CALLMODE_RECORD);
-    return TRUE;
+    return sal_True;
 }
-/* -----------------------------29.01.01 15:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxRubyDialog::Activate()
 {
     SfxModelessDialog::Activate();
@@ -371,7 +363,7 @@ void SvxRubyDialog::Activate()
                             }
                             if(sName.getLength())
                             {
-                                USHORT nPos = aCharStyleLB.InsertEntry(sName);
+                                sal_uInt16 nPos = aCharStyleLB.InsertEntry(sName);
                                 aCharStyleLB.SetEntryData( nPos, new OUString(sCoreName) );
 
                             }
@@ -380,7 +372,7 @@ void SvxRubyDialog::Activate()
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("exception in style access");
+                    OSL_FAIL("exception in style access");
                 }
                 if(sCharStyleSelect.Len())
                     aCharStyleLB.SelectEntry(sCharStyleSelect);
@@ -392,21 +384,17 @@ void SvxRubyDialog::Activate()
         aPreviewWin.Invalidate();
     }
 }
-/* -----------------------------29.01.01 15:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SvxRubyDialog::Deactivate()
 {
     SfxModelessDialog::Deactivate();
 }
-/* -----------------------------30.01.01 15:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxRubyDialog::SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
 {
     OUString sLeft, sRight;
     const Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
-    BOOL bEnable = aRubyValues.getLength() > nPos;
+    sal_Bool bEnable = aRubyValues.getLength() > nPos;
     if(bEnable)
     {
         const Sequence<PropertyValue> aProps = aRubyValues.getConstArray()[nPos];
@@ -420,7 +408,7 @@ void SvxRubyDialog::SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
         }
     }
     else if(!nPos)
-        bEnable = TRUE;
+        bEnable = sal_True;
     rLeft.Enable(bEnable);
     rRight.Enable(bEnable);
     rLeft.SetText(sLeft);
@@ -440,7 +428,7 @@ void SvxRubyDialog::GetText()
         {
             Sequence<PropertyValues>& aRubyValues = pImpl->GetRubyValues();
             DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nTempLastPos), "wrong index" );
-            SetModified(TRUE);
+            SetModified(sal_True);
             Sequence<PropertyValue> &rProps = aRubyValues.getArray()[i / 2 + nTempLastPos];
             PropertyValue* pProps = rProps.getArray();
             for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
@@ -462,7 +450,7 @@ void SvxRubyDialog::Update()
     aScrollSB.SetRange( Range(0, nLen > 4 ? nLen - 4 : 0));
     aScrollSB.SetThumbPos(0);
     SetLastPos(0);
-    SetModified(FALSE);
+    SetModified(sal_False);
 
     sal_Int16 nAdjust = -1;
     sal_Int16 nPosition = -1;
@@ -520,7 +508,7 @@ void SvxRubyDialog::Update()
         sCharStyleName = C2U(cRubies);
     if(sCharStyleName.getLength())
     {
-        for(USHORT i = 0; i < aCharStyleLB.GetEntryCount(); i++)
+        for(sal_uInt16 i = 0; i < aCharStyleLB.GetEntryCount(); i++)
         {
             const OUString* pCoreName = (const OUString*)aCharStyleLB.GetEntryData(i);
             if(pCoreName && sCharStyleName == *pCoreName)
@@ -535,17 +523,13 @@ void SvxRubyDialog::Update()
 
     ScrollHdl_Impl(&aScrollSB);
 }
-/* -----------------------------16.02.01 14:01--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SvxRubyDialog::GetCurrentText(String& rBase, String& rRuby)
 {
     rBase = aEditArr[nCurrentEdit * 2]->GetText();
     rRuby = aEditArr[nCurrentEdit * 2 + 1]->GetText();
 }
-/* -----------------------------31.01.01 14:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
 {
     long nPos = pScroll->GetThumbPos();
@@ -561,9 +545,7 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
     aPreviewWin.Invalidate();
     return 0;
 }
-/* -----------------------------30.01.01 14:48--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
 {
     const Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
@@ -587,22 +569,18 @@ IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
         }
         catch(Exception& )
         {
-            DBG_ERROR("Exception caught");
+            OSL_FAIL("Exception caught");
         }
     }
     return 0;
 }
-/* -----------------------------29.01.01 09:38--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, CloseHdl_Impl, PushButton*, EMPTYARG)
 {
     Close();
     return 0;
 }
-/* -----------------------------29.01.01 15:10--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, StylistHdl_Impl, PushButton*, EMPTYARG)
 {
     SfxPoolItem* pState = 0;
@@ -615,18 +593,14 @@ IMPL_LINK(SvxRubyDialog, StylistHdl_Impl, PushButton*, EMPTYARG)
     }
     return 0;
 }
-/* -----------------------------30.01.01 15:32--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, AutomaticHdl_Impl, CheckBox*, pBox)
 {
     pImpl->UpdateRubyValues(pBox->IsChecked());
     Update();
     return 0;
 }
-/* -----------------------------31.01.01 16:37--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
 {
     AssertOneEntry();
@@ -641,14 +615,12 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
             if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyAdjust)))
                 pProps[nProp].Value <<= nAdjust;
         }
-        SetModified(TRUE);
+        SetModified(sal_True);
     }
     aPreviewWin.Invalidate();
     return 0;
 }
-/* -----------------------------01.06.01 10:24--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
 {
     AssertOneEntry();
@@ -664,14 +636,12 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
             if(pProps[nProp].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cRubyIsAbove)))
                 pProps[nProp].Value.setValue(&bAbove, rType);
         }
-        SetModified(TRUE);
+        SetModified(sal_True);
     }
     aPreviewWin.Invalidate();
     return 0;
 }
-/* -----------------------------01.02.01 10:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, CharStyleHdl_Impl, ListBox*, EMPTYARG )
 {
     AssertOneEntry();
@@ -690,16 +660,14 @@ IMPL_LINK(SvxRubyDialog, CharStyleHdl_Impl, ListBox*, EMPTYARG )
                 pProps[nProp].Value <<= sStyleName;
             }
         }
-        SetModified(TRUE);
+        SetModified(sal_True);
     }
     return 0;
 }
-/* -----------------------------16.02.01 08:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit*, pEdit)
 {
-    for(USHORT i = 0; i < 8; i++)
+    for(sal_uInt16 i = 0; i < 8; i++)
     {
         if(pEdit == aEditArr[i])
         {
@@ -710,9 +678,7 @@ IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit*, pEdit)
     aPreviewWin.Invalidate();
     return 0;
 }
-/* -----------------------------17.07.01 09:11--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
 {
     long nRet = 0;
@@ -740,13 +706,11 @@ IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
     }
     return nRet;
 }
-/* -----------------------------20.07.2001 15:18------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32*, pParam)
 {
-    USHORT nIndex = USHRT_MAX;
-    for(USHORT i = 0; i < 8; i++)
+    sal_uInt16 nIndex = USHRT_MAX;
+    for(sal_uInt16 i = 0; i < 8; i++)
     {
         if(aEditArr[i]->HasFocus())
             nIndex = i;
@@ -770,9 +734,7 @@ IMPL_LINK(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32*, pParam)
     }
     return 0;
 };
-/* -----------------------------19.06.01 11:33--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxRubyDialog::AssertOneEntry()
 {
     pImpl->AssertOneEntry();
@@ -810,9 +772,6 @@ void SvxRubyDialog::DataChanged( const DataChangedEvent& rDCEvt )
         UpdateColors();
 }
 
-/* -----------------------------29.01.01 15:44--------------------------------
-
- ---------------------------------------------------------------------------*/
 void lcl_MoveBox(long nOffset, Edit& rLeft, Edit& rRight)
 {
     Size aLeftSz(rLeft.GetSizePixel());
@@ -825,9 +784,7 @@ void lcl_MoveBox(long nOffset, Edit& rLeft, Edit& rRight)
     rRight.SetPosSizePixel(aRightPos, aRightSz);
 
 }
-/* -----------------------------16.02.01 08:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 RubyPreview::RubyPreview(SvxRubyDialog& rParent, const ResId& rResId) :
         Window(&rParent, rResId),
         rParentDlg(rParent)
@@ -841,9 +798,7 @@ RubyPreview::RubyPreview(SvxRubyDialog& rParent, const ResId& rResId) :
 
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
-/* -----------------------------29.01.01 14:05--------------------------------
 
- ---------------------------------------------------------------------------*/
 void RubyPreview::Paint( const Rectangle& /* rRect */ )
 {
     Font aRubyFont = GetFont();
@@ -865,7 +820,7 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
     long nRubyWidth = GetTextWidth(sRubyText);
     SetFont(aSaveFont);
 
-    USHORT nAdjust = rParentDlg.aAdjustLB.GetSelectEntryPos();
+    sal_uInt16 nAdjust = rParentDlg.aAdjustLB.GetSelectEntryPos();
     //use center if no adjustment is available
     if(nAdjust > 4)
         nAdjust = 1;
@@ -881,7 +836,7 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
     long nYBase = aWinSize.Height() * 3 / 4 - nTextHeight / 2;
 
     //use above also if no selection is set
-    BOOL bAbove = rParentDlg.aPositionLB.GetSelectEntryPos() != 1;
+    sal_Bool bAbove = rParentDlg.aPositionLB.GetSelectEntryPos() != 1;
     if(!bAbove)
     {
         long nTmp = nYRuby;
@@ -950,17 +905,13 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
     }
     SetFont(aSaveFont);
 }
-/* -----------------------------16.02.01 15:12--------------------------------
 
- ---------------------------------------------------------------------------*/
 void RubyEdit::GetFocus()
 {
     GetModifyHdl().Call(this);
     Edit::GetFocus();
 }
-/* -----------------------------17.07.01 09:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 long  RubyEdit::PreNotify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
@@ -968,8 +919,8 @@ long  RubyEdit::PreNotify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const KeyCode&  rKeyCode = pKEvt->GetKeyCode();
-        USHORT nMod = rKeyCode.GetModifier();
-        USHORT nCode = rKeyCode.GetCode();
+        sal_uInt16 nMod = rKeyCode.GetModifier();
+        sal_uInt16 nCode = rKeyCode.GetCode();
         if( nCode == KEY_TAB && (!nMod || KEY_SHIFT == nMod))
         {
             sal_Int32 nParam = KEY_SHIFT == nMod ? -1 : 1;

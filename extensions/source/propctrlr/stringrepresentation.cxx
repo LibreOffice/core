@@ -44,7 +44,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbconversion.hxx>
-#include "modulepcr.hxx"
 #include "formresid.hrc"
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
@@ -182,7 +181,7 @@ uno::Sequence< ::rtl::OUString >  SAL_CALL StringRepresentation::getSupportedSer
             ::rtl::OString sMessage( "StringRepresentation::convertPropertyValueToStringRepresentation: cannot convert values of type '" );
             sMessage += ::rtl::OString( PropertyValue.getValueType().getTypeName().getStr(), PropertyValue.getValueType().getTypeName().getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += ::rtl::OString( "'!" );
-            DBG_ERROR( sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
         }
 #endif
     }
@@ -227,7 +226,7 @@ uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const ::rtl::OUSt
             ::rtl::OString sMessage( "StringRepresentation::convertStringRepresentationToPropertyValue: cannot convert into values of type '" );
             sMessage += ::rtl::OString( ControlValueType.getTypeName().getStr(), ControlValueType.getTypeName().getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += ::rtl::OString( "'!" );
-            DBG_ERROR( sMessage.getStr() );
+            OSL_FAIL( sMessage.getStr() );
         }
     #endif
     }
@@ -429,7 +428,7 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
 
     // some structs
     case uno::TypeClass_STRUCT:
-        OSL_ENSURE( false, "StringRepresentation::convertGenericValueToString(STRUCT): this is dead code - isn't it?" );
+        OSL_FAIL( "StringRepresentation::convertGenericValueToString(STRUCT): this is dead code - isn't it?" );
         if ( _rValue.getValueType().equals( ::getCppuType( static_cast< util::Date* >( NULL ) ) ) )
         {
             // weird enough, the string representation of dates, as used
@@ -573,7 +572,7 @@ bool StringRepresentation::convertStringToGenericValue( const ::rtl::OUString& _
     break;
 
     case uno::TypeClass_STRUCT:
-        OSL_ENSURE( false, "StringRepresentation::convertStringToGenericValue(STRUCT): this is dead code - isn't it?" );
+        OSL_FAIL( "StringRepresentation::convertStringToGenericValue(STRUCT): this is dead code - isn't it?" );
         if ( _rTargetType.equals( ::getCppuType( static_cast< util::Date* >( NULL ) ) ) )
         {
             // weird enough, the string representation of dates, as used

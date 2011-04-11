@@ -30,7 +30,7 @@
 #include "precompiled_connectivity.hxx"
 #include <connectivity/virtualdbtools.hxx>
 #include "staticdbtools_s.hxx"
-#include <connectivity/dbconversion.hxx>
+#include "connectivity/dbconversion.hxx"
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 
@@ -62,23 +62,23 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    double ODataAccessStaticTools::getValue(const Reference< XColumn>& _rxVariant, const Date& rNullDate, sal_Int16 nKeyType) const
+    double ODataAccessStaticTools::getValue(const Reference< XColumn>& _rxVariant, const Date& rNullDate ) const
     {
-        return ::dbtools::DBTypeConversion::getValue(_rxVariant, rNullDate, nKeyType);
+        return ::dbtools::DBTypeConversion::getValue( _rxVariant, rNullDate );
     }
 
     //----------------------------------------------------------------
-    ::rtl::OUString ODataAccessStaticTools::getValue(const Reference< XColumn >& _rxColumn, const Reference< XNumberFormatter >& _rxFormatter,
+    ::rtl::OUString ODataAccessStaticTools::getFormattedValue(const Reference< XColumn >& _rxColumn, const Reference< XNumberFormatter >& _rxFormatter,
         const Date& _rNullDate, sal_Int32 _nKey, sal_Int16 _nKeyType) const
     {
-        return ::dbtools::DBTypeConversion::getValue(_rxColumn, _rxFormatter, _rNullDate, _nKey, _nKeyType);
+        return ::dbtools::DBTypeConversion::getFormattedValue(_rxColumn, _rxFormatter, _rNullDate, _nKey, _nKeyType);
     }
 
     //----------------------------------------------------------------
-    ::rtl::OUString ODataAccessStaticTools::getValue( const Reference< XPropertySet>& _rxColumn, const Reference< XNumberFormatter>& _rxFormatter,
+    ::rtl::OUString ODataAccessStaticTools::getFormattedValue( const Reference< XPropertySet>& _rxColumn, const Reference< XNumberFormatter>& _rxFormatter,
         const Locale& _rLocale, const Date& _rNullDate ) const
     {
-        return ::dbtools::DBTypeConversion::getValue( _rxColumn, _rxFormatter, _rLocale, _rNullDate );
+        return ::dbtools::DBTypeConversion::getFormattedValue( _rxColumn, _rxFormatter, _rLocale, _rNullDate );
     }
 
     //----------------------------------------------------------------

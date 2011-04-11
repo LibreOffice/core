@@ -232,19 +232,19 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
     if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:standardimage" ) ) )
     {
         rtl::OUString sImageName( rResourceURL.copy( nIndex ) );
-        if ( sImageName.equalsAscii( "info" ) )
+        if ( sImageName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("info")) )
         {
             xRet = InfoBox::GetStandardImage().GetXGraphic();
         }
-        else if ( sImageName.equalsAscii( "warning" ) )
+        else if ( sImageName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("warning")) )
         {
             xRet = WarningBox::GetStandardImage().GetXGraphic();
         }
-        else if ( sImageName.equalsAscii( "error" ) )
+        else if ( sImageName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("error")) )
         {
             xRet = ErrorBox::GetStandardImage().GetXGraphic();
         }
-        else if ( sImageName.equalsAscii( "query" ) )
+        else if ( sImageName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("query")) )
         {
             xRet = QueryBox::GetStandardImage().GetXGraphic();
         }
@@ -338,7 +338,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const :
 
                         if( 0 < nImageId )
                         {
-                            const Image aImage( aImageList.GetImage( sal::static_int_cast< USHORT >(nImageId) ) );
+                            const Image aImage( aImageList.GetImage( sal::static_int_cast< sal_uInt16 >(nImageId) ) );
                             aBmpEx = aImage.GetBitmapEx();
                         }
                         else

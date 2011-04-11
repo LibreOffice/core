@@ -428,7 +428,7 @@ namespace accessibility
 
     ::rtl::OUString AccessibleTabBarPageList::getImplementationName() throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( "com.sun.star.comp.svtools.AccessibleTabBarPageList" );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleTabBarPageList" ));
     }
 
     // -----------------------------------------------------------------------------
@@ -449,7 +449,7 @@ namespace accessibility
     Sequence< ::rtl::OUString > AccessibleTabBarPageList::getSupportedServiceNames() throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aNames(1);
-        aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleTabBarPageList" );
+        aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleTabBarPageList" ));
         return aNames;
     }
 
@@ -489,7 +489,7 @@ namespace accessibility
         {
             if ( m_pTabBar )
             {
-                sal_uInt16 nPageId = m_pTabBar->GetPageId( (USHORT)i );
+                sal_uInt16 nPageId = m_pTabBar->GetPageId( (sal_uInt16)i );
 
                 xChild = new AccessibleTabBarPage( m_pTabBar, nPageId, this );
 
@@ -716,7 +716,7 @@ namespace accessibility
 
         if ( m_pTabBar )
         {
-            m_pTabBar->SetCurPageId( m_pTabBar->GetPageId( (USHORT)nChildIndex ) );
+            m_pTabBar->SetCurPageId( m_pTabBar->GetPageId( (sal_uInt16)nChildIndex ) );
             m_pTabBar->Update();
             m_pTabBar->ActivatePage();
             m_pTabBar->Select();
@@ -733,7 +733,7 @@ namespace accessibility
             throw IndexOutOfBoundsException();
 
         sal_Bool bSelected = sal_False;
-        if ( m_pTabBar && m_pTabBar->GetCurPageId() == m_pTabBar->GetPageId( (USHORT)nChildIndex ) )
+        if ( m_pTabBar && m_pTabBar->GetCurPageId() == m_pTabBar->GetPageId( (sal_uInt16)nChildIndex ) )
             bSelected = sal_True;
 
         return bSelected;

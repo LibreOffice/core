@@ -1088,7 +1088,7 @@ sal_Int32 SAL_CALL rtl_string_getToken( rtl_String ** newStr , rtl_String * str,
     its value should be 0x00.  Depending on where this macro is used, the nature
     of the supplied expression might be further restricted.
 */
-#define RTL_CONSTASCII_STRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)sizeof(constAsciiStr)-1)
+#define RTL_CONSTASCII_STRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)SAL_N_ELEMENTS(constAsciiStr)-1)
 
 /** Supply the length of an ASCII string literal.
 
@@ -1103,7 +1103,7 @@ sal_Int32 SAL_CALL rtl_string_getToken( rtl_String ** newStr , rtl_String * str,
     its value should be 0x00.  Depending on where this macro is used, the nature
     of the supplied expression might be further restricted.
 */
-#define RTL_CONSTASCII_LENGTH( constAsciiStr ) ((sal_Int32)(sizeof(constAsciiStr)-1))
+#define RTL_CONSTASCII_LENGTH( constAsciiStr ) ((sal_Int32)(SAL_N_ELEMENTS(constAsciiStr)-1))
 
 /* ======================================================================= */
 

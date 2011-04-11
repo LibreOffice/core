@@ -128,7 +128,7 @@ SV_IMPL_PTRARR( _SwTableAutoFmtTbl, SwTableAutoFmt* )
 const char cDBFldStart  = '<';
 const char cDBFldEnd    = '>';
 
-// Hilfsstruktur fuers einfuegen von Datenbankspalten als Felder oder Text
+// Helper structure for adding database rows as fields or text
 struct _DB_Column
 {
     enum ColType { DB_FILLTEXT, DB_COL_FIELD, DB_COL_TEXT, DB_SPLITPARA } eColType;
@@ -136,7 +136,7 @@ struct _DB_Column
     union {
         String* pText;
         SwField* pField;
-        ULONG nFormat;
+        sal_uLong nFormat;
     } DB_ColumnData;
     const SwInsDBColumn* pColInfo;
 
@@ -154,7 +154,7 @@ struct _DB_Column
         eColType = DB_FILLTEXT;
     }
 
-    _DB_Column( const SwInsDBColumn& rInfo, ULONG nFormat )
+    _DB_Column( const SwInsDBColumn& rInfo, sal_uLong nFormat )
     {
         pColInfo = &rInfo;
         DB_ColumnData.nFormat = nFormat;
@@ -193,15 +193,15 @@ struct _DB_ColumnConfigData
 {
     SwInsDBColumns aDBColumns;
     rtl::OUString sSource, sTable, sEdit, sTblList, sTmplNm, sTAutoFmtNm;
-    BOOL bIsTable : 1,
+    sal_Bool bIsTable : 1,
          bIsField : 1,
          bIsHeadlineOn : 1,
          bIsEmptyHeadln : 1;
 
     _DB_ColumnConfigData()
     {
-        bIsTable = bIsHeadlineOn = TRUE;
-        bIsField = bIsEmptyHeadln = FALSE;
+        bIsTable = bIsHeadlineOn = sal_True;
+        bIsField = bIsEmptyHeadln = sal_False;
     }
 
     ~_DB_ColumnConfigData();
@@ -304,7 +304,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         long nCount = aColNames.getLength();
         for (long n = 0; n < nCount; n++)
         {
-            SwInsDBColumn* pNew = new SwInsDBColumn( pColNames[n], (USHORT)n );
+            SwInsDBColumn* pNew = new SwInsDBColumn( pColNames[n], (sal_uInt16)n );
             Any aCol = xCols->getByName(pColNames[n]);
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
@@ -328,7 +328,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                 case DataType::TIME:
                 case DataType::TIMESTAMP:
                 {
-                    pNew->bHasFmt = TRUE;
+                    pNew->bHasFmt = sal_True;
                     Any aFormat = xCol->getPropertyValue(C2U("FormatKey"));
                     if(aFormat.hasValue())
                     {
@@ -354,7 +354,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                             }
                             catch(const Exception& )
                             {
-                                OSL_ENSURE(false, "illegal number format key");
+                                OSL_FAIL("illegal number format key");
                             }
                         }
                     }
@@ -375,7 +375,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         }
     }
 
-    // Absatzvorlagen-ListBox fuellen
+    // fill paragraph templates-ListBox
     {
         SfxStyleSheetBasePool* pPool = pView->GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
@@ -390,19 +390,19 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         aLbDbParaColl.SelectEntryPos( 0 );
     }
 
-    // steht der Cursor in einer Tabelle, darf NIE Tabelle auswaehlbar sein
+    // when the cursor is inside of a table, table must NEVER be selectable
     if( pView->GetWrtShell().GetTableFmt() )
     {
-        aRbAsTable.Enable( FALSE );
-        aRbAsField.Check( TRUE );
-        aRbDbFmtFromDb.Check( TRUE );
+        aRbAsTable.Enable( sal_False );
+        aRbAsField.Check( sal_True );
+        aRbDbFmtFromDb.Check( sal_True );
     }
     else
     {
-        aRbAsTable.Check( TRUE );
-        aRbDbFmtFromDb.Check( TRUE );
-        aIbDbcolOneFrom.Enable( FALSE );
-        aIbDbcolAllFrom.Enable( FALSE );
+        aRbAsTable.Check( sal_True );
+        aRbDbFmtFromDb.Check( sal_True );
+        aIbDbcolOneFrom.Enable( sal_False );
+        aIbDbcolAllFrom.Enable( sal_False );
     }
 
     aRbAsTable.SetClickHdl( LINK(this, SwInsertDBColAutoPilot, PageHdl ));
@@ -434,7 +434,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     aLbTblDbColumn.SetDoubleClickHdl( LINK( this, SwInsertDBColAutoPilot, DblClickHdl ));
     aLbTableCol.SetDoubleClickHdl( LINK( this, SwInsertDBColAutoPilot, DblClickHdl ));
 
-    for( USHORT n = 0; n < aDBColumns.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aDBColumns.Count(); ++n )
     {
         const String& rS = aDBColumns[ n ]->sColumn;
         aLbTblDbColumn.InsertEntry( rS, n );
@@ -446,7 +446,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     // read configuration
     Load();
 
-    // Controls initialisieren:
+    // initialise Controls:
     PageHdl( aRbAsTable.IsChecked() ? &aRbAsTable : &aRbAsField );
 }
 
@@ -455,13 +455,12 @@ SwInsertDBColAutoPilot::~SwInsertDBColAutoPilot()
     delete pTblSet;
     delete pRep;
 
-//  delete pConfig;
     delete pTAutoFmt;
 }
 
 IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton )
 {
-    BOOL bShowTbl = pButton == &aRbAsTable;
+    sal_Bool bShowTbl = pButton == &aRbAsTable;
 
     String sTxt( pButton->GetText() );
     aFlHead.SetText( MnemonicGenerator::EraseAllMnemonicChars( sTxt ) );
@@ -495,7 +494,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton )
 
 IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton )
 {
-    USHORT nFndPos;
+    sal_uInt16 nFndPos;
     ListBox& rBox = aRbAsTable.IsChecked()
                         ? ( 0 == aLbTableCol.GetEntryData( 0 )
                             ? aLbTblDbColumn
@@ -505,7 +504,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton )
     SwInsDBColumn aSrch( rBox.GetSelectEntry(), 0 );
     aDBColumns.Seek_Entry( &aSrch, &nFndPos );
 
-    BOOL bFromDB = &aRbDbFmtFromDb == pButton;
+    sal_Bool bFromDB = &aRbDbFmtFromDb == pButton;
     aDBColumns[ nFndPos ]->bIsDBFmt = bFromDB;
     aLbDbFmtFromUsr.Enable( !bFromDB );
 
@@ -514,15 +513,15 @@ IMPL_LINK( SwInsertDBColAutoPilot, DBFormatHdl, Button*, pButton )
 
 IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
 {
-    BOOL bChgEnable = TRUE, bEnableTo = TRUE, bEnableFrom = TRUE;
-    aLbTblDbColumn.SetUpdateMode( FALSE );
-    aLbTableCol.SetUpdateMode( FALSE );
+    sal_Bool bChgEnable = sal_True, bEnableTo = sal_True, bEnableFrom = sal_True;
+    aLbTblDbColumn.SetUpdateMode( sal_False );
+    aLbTableCol.SetUpdateMode( sal_False );
 
     if( pButton == &aIbDbcolAllTo )
     {
-        bEnableTo = FALSE;
+        bEnableTo = sal_False;
 
-        USHORT n, nInsPos = aLbTableCol.GetSelectEntryPos(),
+        sal_uInt16 n, nInsPos = aLbTableCol.GetSelectEntryPos(),
                nCnt = aLbTblDbColumn.GetEntryCount();
         if( LISTBOX_APPEND == nInsPos )
             for( n = 0; n < nCnt; ++n )
@@ -538,7 +537,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
     else if( pButton == &aIbDbcolOneTo &&
             LISTBOX_ENTRY_NOTFOUND != aLbTblDbColumn.GetSelectEntryPos() )
     {
-        USHORT nInsPos = aLbTableCol.GetSelectEntryPos(),
+        sal_uInt16 nInsPos = aLbTableCol.GetSelectEntryPos(),
                nDelPos = aLbTblDbColumn.GetSelectEntryPos(),
                nTopPos = aLbTblDbColumn.GetTopEntry();
         aLbTableCol.InsertEntry( aLbTblDbColumn.GetEntry( nDelPos ), nInsPos );
@@ -556,11 +555,11 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
     {
         if( LISTBOX_ENTRY_NOTFOUND != aLbTableCol.GetSelectEntryPos() )
         {
-            USHORT nFndPos, nInsPos,
+            sal_uInt16 nFndPos, nInsPos,
                     nDelPos = aLbTableCol.GetSelectEntryPos(),
                     nTopPos = aLbTableCol.GetTopEntry();
 
-            // die richtige InsertPos suchen!!
+            // look for the right InsertPos!!
             SwInsDBColumn aSrch( aLbTableCol.GetEntry( nDelPos ), 0 );
             aDBColumns.Seek_Entry( &aSrch, &nFndPos );
             if( !nFndPos || nFndPos == aDBColumns.Count()-1 )
@@ -593,39 +592,39 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
     }
     else if( pButton == &aIbDbcolAllFrom )
     {
-        bEnableFrom = FALSE;
+        bEnableFrom = sal_False;
 
         aLbTblDbColumn.Clear();
         aLbTableCol.Clear();
-        for( USHORT n = 0; n < aDBColumns.Count(); ++n )
+        for( sal_uInt16 n = 0; n < aDBColumns.Count(); ++n )
             aLbTblDbColumn.InsertEntry( aDBColumns[ n ]->sColumn, n );
         aLbTblDbColumn.SelectEntryPos( 0 );
     }
     else if( pButton == &aIbDbcolToEdit )
     {
-        bChgEnable = FALSE;
-        // Daten ins Edit moven:
+        bChgEnable = sal_False;
+        // move data to Edit:
         String aFld( aLbTxtDbColumn.GetSelectEntry() );
         if( aFld.Len() )
         {
             String aStr( aEdDbText.GetText() );
-            USHORT nPos = (USHORT)aEdDbText.GetSelection().Min();
-            USHORT nSel = USHORT(aEdDbText.GetSelection().Max()) - nPos;
+            sal_uInt16 nPos = (sal_uInt16)aEdDbText.GetSelection().Min();
+            sal_uInt16 nSel = sal_uInt16(aEdDbText.GetSelection().Max()) - nPos;
             if( nSel )
-                // dann loesche erstmal die bestehende Selektion
+                // first delete the existing selection
                 aStr.Erase( nPos, nSel );
 
             aFld.Insert( cDBFldStart, 0 );
             aFld += cDBFldEnd;
             if( aStr.Len() )
             {
-                if( nPos )                          // ein Space davor
+                if( nPos )                          // one blank in front
                 {
                     sal_Unicode c = aStr.GetChar( nPos-1 );
                     if( '\n' != c && '\r' != c )
                         aFld.Insert( ' ', 0 );
                 }
-                if( nPos < aStr.Len() )             // ein Space dahinter
+                if( nPos < aStr.Len() )             // one blank behind
                 {
                     sal_Unicode c = aStr.GetChar( nPos );
                     if( '\n' != c && '\r' != c )
@@ -647,14 +646,14 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblToFromHdl, Button*, pButton )
         aIbDbcolOneFrom.Enable( bEnableFrom );
         aIbDbcolAllFrom.Enable( bEnableFrom );
 
-        aRbDbFmtFromDb.Enable( FALSE );
-        aRbDbFmtFromUsr.Enable( FALSE );
-        aLbDbFmtFromUsr.Enable( FALSE );
+        aRbDbFmtFromDb.Enable( sal_False );
+        aRbDbFmtFromUsr.Enable( sal_False );
+        aLbDbFmtFromUsr.Enable( sal_False );
 
         aPbTblFormat.Enable( bEnableFrom );
     }
-    aLbTblDbColumn.SetUpdateMode( TRUE );
-    aLbTableCol.SetUpdateMode( TRUE );
+    aLbTblDbColumn.SetUpdateMode( sal_True );
+    aLbTableCol.SetUpdateMode( sal_True );
 
     return 0;
 }
@@ -678,13 +677,13 @@ IMPL_LINK( SwInsertDBColAutoPilot, DblClickHdl, ListBox*, pBox )
 IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
 {
     SwWrtShell& rSh = pView->GetWrtShell();
-    BOOL bNewSet = FALSE;
+    sal_Bool bNewSet = sal_False;
     if( !pTblSet )
     {
-        bNewSet = TRUE;
+        bNewSet = sal_True;
         pTblSet = new SfxItemSet( rSh.GetAttrPool(), SwuiGetUITableAttrRange() );
 
-        //Ersteinmal die einfachen Attribute besorgen.
+        // At first acquire the simple attributes
         pTblSet->Put( SfxStringItem( FN_PARAM_TABLE_NAME, rSh.GetUniqueTblName() ));
         pTblSet->Put( SfxUInt16Item( FN_PARAM_TABLE_HEADLINE, 1 ) );
 
@@ -697,20 +696,20 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
         pTblSet->Put( aBrush, SID_ATTR_BRUSH_TABLE );
 
         SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
-            // Tabellenvariante, wenn mehrere Tabellenzellen selektiert
-        aBoxInfo.SetTable( TRUE );
-            // Abstandsfeld immer anzeigen
-        aBoxInfo.SetDist( TRUE);
-            // Minimalgroesse in Tabellen und Absaetzen setzen
-        aBoxInfo.SetMinDist( FALSE );
-            // Default-Abstand immer setzen
+            // table variant, when multiple table cells are selected
+        aBoxInfo.SetTable( sal_True );
+            // always show gap field
+        aBoxInfo.SetDist( sal_True);
+            // set minimum size in tables and paragraphs
+        aBoxInfo.SetMinDist( sal_False );
+            // always set default-gap
         aBoxInfo.SetDefDist( MIN_BORDER_DIST );
-            // Einzelne Linien koennen nur in Tabellen DontCare-Status haben
-        aBoxInfo.SetValid( VALID_DISABLE, TRUE );
+            // Single lines can have DontCare-status only in tables
+        aBoxInfo.SetValid( VALID_DISABLE, sal_True );
         pTblSet->Put( aBoxInfo );
 
         SwGetCurColNumPara aPara;
-        const USHORT nNum = rSh.GetCurColNum( &aPara );
+        const sal_uInt16 nNum = rSh.GetCurColNum( &aPara );
         long nWidth;
 
         if( nNum )
@@ -719,15 +718,15 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
             const SwFmtCol& rCol = aPara.pFrmFmt->GetCol();
             const SwColumns& rCols = rCol.GetColumns();
 
-            //nStart und nEnd initialisieren fuer nNum == 0
+            // initialise nStart und nEnd for nNum == 0
             long nWidth1 = 0,
                 nStart1 = 0,
                 nEnd1 = nWidth;
-            for( USHORT i = 0; i < nNum; ++i )
+            for( sal_uInt16 i = 0; i < nNum; ++i )
             {
                 SwColumn* pCol = rCols[i];
                 nStart1 = pCol->GetLeft() + nWidth1;
-                nWidth1 += (long)rCol.CalcColWidth( i, (USHORT)nWidth );
+                nWidth1 += (long)rCol.CalcColWidth( i, (sal_uInt16)nWidth );
                 nEnd1 = nWidth1 - pCol->GetRight();
             }
             if(nStart1 || nEnd1 != nWidth)
@@ -735,14 +734,14 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
         }
         else
             nWidth = rSh.GetAnyCurRect(
-                                FRMTYPE_FLY_ANY & rSh.GetFrmType( 0, TRUE )
+                                FRMTYPE_FLY_ANY & rSh.GetFrmType( 0, sal_True )
                                               ? RECT_FLY_PRT_EMBEDDED
                                               : RECT_PAGE_PRT ).Width();
 
         SwTabCols aTabCols;
         aTabCols.SetRight( nWidth );
         aTabCols.SetRightMax( nWidth );
-        pRep = new SwTableRep( aTabCols, FALSE );
+        pRep = new SwTableRep( aTabCols, sal_False );
         pRep->SetAlign( text::HoriOrientation::NONE );
         pRep->SetSpace( nWidth );
         pRep->SetWidth( nWidth );
@@ -755,21 +754,20 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
 
     if( aLbTableCol.GetEntryCount() != pRep->GetAllColCount() )
     {
-        // Anzahl der Spalten hat sich geaendert: dann muessen die
-        // TabCols angepasst werden
+        // Number of columns has changed: then the TabCols have to be adjusted
         long nWidth = pRep->GetWidth();
-        USHORT nCols = aLbTableCol.GetEntryCount() - 1;
+        sal_uInt16 nCols = aLbTableCol.GetEntryCount() - 1;
         SwTabCols aTabCols( nCols );
         aTabCols.SetRight( nWidth  );
         aTabCols.SetRightMax( nWidth );
         if( nCols )
-            for( USHORT n = 0, nStep = (USHORT)(nWidth / (nCols+1)), nW = nStep;
+            for( sal_uInt16 n = 0, nStep = (sal_uInt16)(nWidth / (nCols+1)), nW = nStep;
                     n < nCols; ++n, nW = nW + nStep )
             {
-                aTabCols.Insert( nW, FALSE, n );
+                aTabCols.Insert( nW, sal_False, n );
             }
         delete pRep;
-        pRep = new SwTableRep( aTabCols, FALSE );
+        pRep = new SwTableRep( aTabCols, sal_False );
         pRep->SetAlign( text::HoriOrientation::NONE );
         pRep->SetSpace( nWidth );
         pRep->SetWidth( nWidth );
@@ -799,7 +797,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, AutoFmtHdl, PushButton*, pButton )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(),DLG_AUTOFMT_TABLE, FALSE, pTAutoFmt);
+    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(),DLG_AUTOFMT_TABLE, sal_False, pTAutoFmt);
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFmtOfIndex( pTAutoFmt );
@@ -817,7 +815,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
                                     : &aLbTxtDbColumn )
                             : pBox;
 
-    USHORT nFndPos;
+    sal_uInt16 nFndPos;
     SwInsDBColumn aSrch( pGetBox->GetSelectEntry(), 0 );
     aDBColumns.Seek_Entry( &aSrch, &nFndPos );
 
@@ -831,18 +829,18 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
     }
     else
     {
-        // an der FormatGroupBox den ausgewaehlten FeldNamen setzen, damit
-        // klar ist, welches Feld ueber das Format eingestellt wird!
+        // set the selected FieldName at the FormatGroupBox, so that
+        // it's clear what field is configured by the format!
         String sTxt( aFlFormat.GetText().Copy( 0, nGBFmtLen ));
         if( !aSrch.sColumn.getLength() )
         {
-            aRbDbFmtFromDb.Enable( FALSE );
-            aRbDbFmtFromUsr.Enable( FALSE );
-            aLbDbFmtFromUsr.Enable( FALSE );
+            aRbDbFmtFromDb.Enable( sal_False );
+            aRbDbFmtFromUsr.Enable( sal_False );
+            aLbDbFmtFromUsr.Enable( sal_False );
         }
         else
         {
-            BOOL bEnableFmt = aDBColumns[ nFndPos ]->bHasFmt;
+            sal_Bool bEnableFmt = aDBColumns[ nFndPos ]->bHasFmt;
             aRbDbFmtFromDb.Enable( bEnableFmt );
             aRbDbFmtFromUsr.Enable( bEnableFmt );
 
@@ -851,7 +849,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
                 (( sTxt += C2S(" (" )) += String(aSrch.sColumn) ) += (sal_Unicode)')';
             }
 
-            BOOL bIsDBFmt = aDBColumns[ nFndPos ]->bIsDBFmt;
+            sal_Bool bIsDBFmt = aDBColumns[ nFndPos ]->bIsDBFmt;
             aRbDbFmtFromDb.Check( bIsDBFmt );
             aRbDbFmtFromUsr.Check( !bIsDBFmt );
             aLbDbFmtFromUsr.Enable( !bIsDBFmt );
@@ -861,8 +859,8 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
 
         aFlFormat.SetText( sTxt );
 
-        // um spaeter zu wissen, welche ListBox die "aktive" war, wird sich
-        // im 1. Eintrag ein Flag gemerkt,
+        // to know later on, what ListBox was the "active", a Flag
+        // is remembered in the 1st entry
         void* pPtr = pBox == &aLbTableCol ? &aLbTableCol : 0;
         aLbTableCol.SetEntryData( 0, pPtr );
     }
@@ -873,7 +871,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, HeaderHdl, Button*, pButton )
 {
     if( pButton == &aCbTableHeadon )
     {
-        BOOL bEnable = aCbTableHeadon.IsChecked();
+        sal_Bool bEnable = aCbTableHeadon.IsChecked();
 
         aRbHeadlColnms.Enable( bEnable );
         aRbHeadlEmpty.Enable( bEnable );
@@ -884,7 +882,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, HeaderHdl, Button*, pButton )
 static void lcl_InsTextInArr( const String& rTxt, _DB_Columns& rColArr )
 {
     _DB_Column* pNew;
-    USHORT nSttPos = 0, nFndPos;
+    sal_uInt16 nSttPos = 0, nFndPos;
     while( STRING_NOTFOUND != ( nFndPos = rTxt.Search( '\x0A', nSttPos )) )
     {
         if( 1 < nFndPos )
@@ -903,28 +901,27 @@ static void lcl_InsTextInArr( const String& rTxt, _DB_Columns& rColArr )
     }
 }
 
-BOOL SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
+sal_Bool SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
                                 _DB_Columns& rColArr,
-                                BOOL bInsField )
+                                sal_Bool bInsField )
 {
-    // aus dem Text wieder die einzelnen Datenbank - Spalten erzeugen
-    // und dann in einem Array speichern
-    // Die Datenbankspalten stehen in <> und muessen im Array der Spalten
-    // vorhanden sein:
+    // create each of the database columns from the text again
+    // and then save in an array
+    // database columns are in <> and must be present in the columns' array:
     String sTxt( rTxt );
-    USHORT nFndPos, nEndPos, nSttPos = 0;
+    sal_uInt16 nFndPos, nEndPos, nSttPos = 0;
 
     while( STRING_NOTFOUND != ( nFndPos = sTxt.Search( cDBFldStart, nSttPos )))
     {
         nSttPos = nFndPos + 1;
         if( STRING_NOTFOUND != ( nEndPos = sTxt.Search( cDBFldEnd, nSttPos+1 )))
         {
-            // Text in <> geklammert gefunden: was ist es denn:
+            // Text in <> brackets found: what is it:
             SwInsDBColumn aSrch( sTxt.Copy( nSttPos, nEndPos - nSttPos ), 0);
             if( aDBColumns.Seek_Entry( &aSrch, &nFndPos ) )
             {
-                // das ist ein gueltiges Feld
-                // also sicher den Text "davor":
+                // that is a valid field
+                // so surely the text "before":
                 const SwInsDBColumn& rFndCol = *aDBColumns[ nFndPos ];
 
                 _DB_Column* pNew;
@@ -938,8 +935,8 @@ BOOL SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
                 sTxt.Erase( 0, (xub_StrLen)(rFndCol.sColumn.getLength() + 2) );
                 nSttPos = 0;
 
-                USHORT nSubType = 0;
-                ULONG nFormat;
+                sal_uInt16 nSubType = 0;
+                sal_uLong nFormat;
                 if( rFndCol.bHasFmt )
                 {
                     if( rFndCol.bIsDBFmt )
@@ -972,7 +969,7 @@ BOOL SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
         }
     }
 
-    // den letzten Text nicht vergessen
+    // don't forget the last text
     if( sTxt.Len() )
         ::lcl_InsTextInArr( sTxt, rColArr );
 
@@ -988,7 +985,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     SwWrtShell& rSh = pView->GetWrtShell();
 
     //with the drag and drop interface no result set is initially available
-    BOOL bDisposeResultSet = FALSE;
+    sal_Bool bDisposeResultSet = sal_False;
     // we don't have a cursor, so we have to create our own RowSet
     if ( !xResultSet.is() )
     {
@@ -1001,11 +998,11 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         return;
 
     rSh.StartAllAction();
-    BOOL bUndo = rSh.DoesUndo();
+    sal_Bool bUndo = rSh.DoesUndo();
     if( bUndo )
         rSh.StartUndo( UNDO_EMPTY );
 
-    BOOL bAsTable = aRbAsTable.IsChecked();
+    sal_Bool bAsTable = aRbAsTable.IsChecked();
     SvNumberFormatter& rNumFmtr = *rSh.GetNumberFormatter();
 
     if( rSh.HasSelection() )
@@ -1019,22 +1016,22 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     do{                                 // middle checked loop!!
     if( bAsTable )          // Daten als Tabelle einfuegen
     {
-        rSh.DoUndo( FALSE );
+        rSh.DoUndo( sal_False );
 
-        USHORT n, nRows = 0, nCols = aLbTableCol.GetEntryCount();
+        sal_uInt16 n, nRows = 0, nCols = aLbTableCol.GetEntryCount();
         if( aCbTableHeadon.IsChecked() )
             nRows++;
 
         if( pSelection )
-            nRows = nRows + (USHORT)rSelection.getLength();
+            nRows = nRows + (sal_uInt16)rSelection.getLength();
         else
             ++nRows;
 
-        // bereite das Array fuer die ausgewaehlten Spalten auf
-        SwInsDBColumns_SAR aColFlds( 255 >= nCols ? (BYTE)nCols : 255, 5 );
+        // prepare the array for the selected columns
+        SwInsDBColumns_SAR aColFlds( 255 >= nCols ? (sal_uInt8)nCols : 255, 5 );
         for( n = 0; n < nCols; ++n )
         {
-            USHORT nFndPos;
+            sal_uInt16 nFndPos;
             SwInsDBColumn aSrch( aLbTableCol.GetEntry( n ), 0 );
             if( aDBColumns.Seek_Entry( &aSrch, &nFndPos ) )
                 aColFlds.Insert( aDBColumns[ nFndPos ], n );
@@ -1057,7 +1054,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
         const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-        BOOL bHTML = 0 != (::GetHtmlMode( pView->GetDocShell() ) & HTMLMODE_ON);
+        sal_Bool bHTML = 0 != (::GetHtmlMode( pView->GetDocShell() ) & HTMLMODE_ON);
         rSh.InsertTable(
             pModOpt->GetInsTblFlags(bHTML),
             nRows, nCols, text::HoriOrientation::FULL, (pSelection ? pTAutoFmt : 0) );
@@ -1068,8 +1065,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
         SfxItemSet aTblSet( rSh.GetAttrPool(), RES_BOXATR_FORMAT,
                                                 RES_BOXATR_VALUE );
-        BOOL bIsAutoUpdateCells = rSh.IsAutoUpdateCells();
-        rSh.SetAutoUpdateCells( FALSE );
+        sal_Bool bIsAutoUpdateCells = rSh.IsAutoUpdateCells();
+        rSh.SetAutoUpdateCells( sal_False );
 
 
         if( aCbTableHeadon.IsChecked() )
@@ -1088,7 +1085,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
         for( sal_Int32 i = 0 ; ; ++i )
         {
-            BOOL bBreak = FALSE;
+            sal_Bool bBreak = sal_False;
             try
             {
                 if(pSelection)
@@ -1102,16 +1099,16 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             }
             catch(const Exception& )
             {
-                bBreak = TRUE;
+                bBreak = sal_True;
             }
             if(bBreak)
                 break;
 
             for( n = 0; n < nCols; ++n )
             {
-                // beim aller erstenmal KEIN GoNextCell, weil wir schon
-                // drin stehen. Auch nicht nach dem Insert das GoNextCell,
-                // weil am Ende eine leere Zeile einfuegt wird.
+                // at the very first time, NO GoNextCell, because we're
+                // already in it. Also no GoNextCell after the Insert,
+                // because an empty line is added at the end.
                 if( i || n )
                     rSh.GoNextCell();
 
@@ -1187,7 +1184,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 )
                 {
 #if OSL_DEBUG_LEVEL > 1
-                    OSL_ENSURE(false, ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer());
+                    OSL_FAIL(ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer());
 #endif
                 }
             }
@@ -1201,7 +1198,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 break;
 
             if( 10 == i )
-                pWait = ::std::auto_ptr<SwWait>(new SwWait( *pView->GetDocShell(), TRUE ));
+                pWait = ::std::auto_ptr<SwWait>(new SwWait( *pView->GetDocShell(), sal_True ));
         }
 
         rSh.MoveTable( GetfnTableCurr(), GetfnTableStart() );
@@ -1215,13 +1212,13 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
         }
         rSh.SetAutoUpdateCells( bIsAutoUpdateCells );
     }
-    else                            // Daten als Felder/Text einfuegen
+    else                            // add data as fields/text
     {
         _DB_Columns aColArr;
         if( SplitTextToColArr( aEdDbText.GetText(), aColArr, aRbAsField.IsChecked() ) )
         {
-            // jetzt kann bei jedem Datensatz einfach ueber das Array iteriert
-            // und die Daten eingefuegt werden
+            // now for each data set, we can iterate over the array
+            // and add the data
 
             if( !rSh.IsSttPara() )
                 rSh.SwEditShell::SplitNode();
@@ -1231,7 +1228,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 rSh.SwCrsrShell::Left(1,CRSR_SKIP_CHARS);
             }
 
-            rSh.DoUndo( FALSE );
+            rSh.DoUndo( sal_False );
 
             SwTxtFmtColl* pColl = 0;
             {
@@ -1241,7 +1238,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     pColl = rSh.FindTxtFmtCollByName( sTmplNm );
                     if( !pColl )
                     {
-                        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( sTmplNm, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+                        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sTmplNm, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
                         if( USHRT_MAX != nId )
                             pColl = rSh.GetTxtCollFromPool( nId );
                         else
@@ -1251,8 +1248,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 }
             }
 
-            // fuers Einfuegen als Felder -> nach jedem Datensatz ein
-            // "NextField" einfuegen
+            // for adding as fields -> insert a "NextField" after
+            // every data set
             SwDBFormatData aDBFormatData;
             Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
             if( xMgr.is() )
@@ -1285,12 +1282,12 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                         C2S("1"), aEmptyStr, aDBData );
 
 
-            BOOL bSetCrsr = TRUE;
-            USHORT n = 0, nCols = aColArr.Count();
+            sal_Bool bSetCrsr = sal_True;
+            sal_uInt16 n = 0, nCols = aColArr.Count();
             ::sw::mark::IMark* pMark = NULL;
             for( sal_Int32 i = 0 ; ; ++i )
             {
-                BOOL bBreak = FALSE;
+                sal_Bool bBreak = sal_False;
                 try
                 {
                     if(pSelection)
@@ -1304,7 +1301,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 }
                 catch(Exception&)
                 {
-                    bBreak = TRUE;
+                    bBreak = sal_True;
                 }
 
                 if(bBreak)
@@ -1323,8 +1320,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
                     case _DB_Column::DB_SPLITPARA:
                         rSh.SplitNode();
-                        // wenn nicht die gleiche Vorlage die Follow Vorlage
-                        // ist, dann muss die ausgewaehlte neu gesetzt werden
+                        // when the template is not the same as the follow template,
+                        // the selected has to be set newly
                         if( pColl && &pColl->GetNextTxtFmtColl() != pColl )
                             rSh.SetTxtFmtColl( pColl );
                         break;
@@ -1358,7 +1355,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                     if(aStandard != aCompare)
                                         nValue += (aStandard - aCompare);
                                 }
-                                pFld->ChgValue( nValue, TRUE );
+                                pFld->ChgValue( nValue, sal_True );
                             }
                             pFld->SetInitialized();
 
@@ -1399,27 +1396,25 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
                     if( bSetCrsr && sIns.Len() )
                     {
-                        // zum Anfang und eine Mark setzen, damit der
-                        // Cursor am Ende wieder auf Anfangsposition
-                        // gesetzt werden kann.
+                        // to the beginning and set a mark, so that
+                        // the cursor can be set to the initial position
+                        // at the end.
 
-                        // rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
                         rSh.SwCrsrShell::MovePara(
                             GetfnParaCurr(), GetfnParaStart() );
                         pMark = rSh.SetBookmark(
                             KeyCode(),
                             ::rtl::OUString(),
                             ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
-                        // rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaEnd );
                         rSh.SwCrsrShell::MovePara(
                             GetfnParaCurr(), GetfnParaEnd() );
-                        bSetCrsr = FALSE;
+                        bSetCrsr = sal_False;
                     }
                 }
 
                 if( !pSelection )
                 {
-                    BOOL bNext = xResultSet->next();
+                    sal_Bool bNext = xResultSet->next();
                     if(!bNext)
                         break;
                 }
@@ -1433,7 +1428,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     rSh.SwEditShell::SplitNode();
 
                 if( 10 == i )
-                    pWait = ::std::auto_ptr<SwWait>(new SwWait( *pView->GetDocShell(), TRUE ));
+                    pWait = ::std::auto_ptr<SwWait>(new SwWait( *pView->GetDocShell(), sal_True ));
             }
 
             if( !bSetCrsr && pMark != NULL)
@@ -1447,11 +1442,11 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     }
     // write configuration
     Commit();
-    }while( FALSE );                    // middle checked loop
+    }while( sal_False );                    // middle checked loop
 
     if( bUndo )
     {
-        rSh.DoUndo( TRUE );
+        rSh.DoUndo( sal_True );
         rSh.AppendUndoForInsertFromDB( bAsTable );
         rSh.EndUndo( UNDO_EMPTY );
     }
@@ -1471,7 +1466,7 @@ void SwInsertDBColAutoPilot::SetTabSet()
     {
         if( pTAutoFmt->IsFrame() )
         {
-            // Umrandung kommt vom AutoFormat
+            // border is from AutoFormat
             pTblSet->ClearItem( RES_BOX );
             pTblSet->ClearItem( SID_ATTR_BORDER_INNER );
         }
@@ -1484,17 +1479,17 @@ void SwInsertDBColAutoPilot::SetTabSet()
     }
     else
     {
-        // die Defaults wieder entfernen, es macht keinen Sinn sie zu setzen
+        // remove the defaults again, it makes no sense to set them
         SvxBrushItem aBrush( RES_BACKGROUND );
-        static USHORT __READONLY_DATA aIds[3] =
+        static sal_uInt16 aIds[3] =
             { RES_BACKGROUND, SID_ATTR_BRUSH_ROW, SID_ATTR_BRUSH_TABLE };
         for( int i = 0; i < 3; ++i )
             if( SFX_ITEM_SET == pTblSet->GetItemState( aIds[ i ],
-                FALSE, &pItem ) && *pItem == aBrush )
+                sal_False, &pItem ) && *pItem == aBrush )
                 pTblSet->ClearItem( aIds[ i ] );
     }
 
-    if( SFX_ITEM_SET == pTblSet->GetItemState( FN_PARAM_TABLE_NAME, FALSE,
+    if( SFX_ITEM_SET == pTblSet->GetItemState( FN_PARAM_TABLE_NAME, sal_False,
         &pItem ) && ((const SfxStringItem*)pItem)->GetValue() ==
                     rSh.GetTableFmt()->GetName() )
         pTblSet->ClearItem( FN_PARAM_TABLE_NAME );
@@ -1635,7 +1630,7 @@ void SwInsertDBColAutoPilot::Commit()
     pValues[3].Value <<= rtl::OUString(aEdDbText.GetText());
 
     String sTmp;
-    for( USHORT n = 0, nCnt = aLbTableCol.GetEntryCount(); n < nCnt; ++n )
+    for( sal_uInt16 n = 0, nCnt = aLbTableCol.GetEntryCount(); n < nCnt; ++n )
         ( sTmp += aLbTableCol.GetEntry( n ) ) += '\x0a';
 
     if( sTmp.Len() )
@@ -1669,7 +1664,7 @@ void SwInsertDBColAutoPilot::Commit()
     rtl::OUString sPrevLang;
 
     SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
-    for(USHORT nCol = 0; nCol < aDBColumns.Count(); nCol++)
+    for(sal_uInt16 nCol = 0; nCol < aDBColumns.Count(); nCol++)
     {
         rtl::OUString sColumnNode = sNewNode;
          SwInsDBColumn* pColumn = aDBColumns[nCol];
@@ -1778,7 +1773,7 @@ void SwInsertDBColAutoPilot::Load()
                 sal_Bool bFound = sal_False;
                 for(sal_Int32 nRealColumn = 0; nRealColumn < aDBColumns.Count(); nRealColumn++)
                 {
-                    if(aDBColumns[(USHORT)nRealColumn]->sColumn == sColumn)
+                    if(aDBColumns[(sal_uInt16)nRealColumn]->sColumn == sColumn)
                     {
                         bFound = sal_True;
                         break;
@@ -1806,11 +1801,10 @@ void SwInsertDBColAutoPilot::Load()
                 pInsDBColumn->nUsrNumFmt = rNFmtr.GetEntryKey( pInsDBColumn->sUsrNumFmt,
                                                         pInsDBColumn->eUsrNumFmtLng );
 
-//              pInsDBColumn->nDBNumFmt
 
                 pNewData->aDBColumns.Insert(pInsDBColumn);
             }
-            USHORT n = 0;
+            sal_uInt16 n = 0;
             String sTmp( pNewData->sTblList );
             if( sTmp.Len() )
             {
@@ -1826,11 +1820,11 @@ void SwInsertDBColAutoPilot::Load()
 
                 if( !aLbTblDbColumn.GetEntryCount() )
                 {
-                    aIbDbcolAllTo.Enable( FALSE );
-                    aIbDbcolOneTo.Enable( FALSE );
+                    aIbDbcolAllTo.Enable( sal_False );
+                    aIbDbcolOneTo.Enable( sal_False );
                 }
-                aIbDbcolOneFrom.Enable( TRUE );
-                aIbDbcolAllFrom.Enable( TRUE );
+                aIbDbcolOneFrom.Enable( sal_True );
+                aIbDbcolAllFrom.Enable( sal_True );
             }
             aEdDbText.SetText( pNewData->sEdit );
 
@@ -1845,10 +1839,10 @@ void SwInsertDBColAutoPilot::Load()
             sTmp = pNewData->sTAutoFmtNm;
             if( sTmp.Len() )
             {
-                // dann erstmal die AutoFmt-Datei laden und das Autoformat suchen
+                // then load the AutoFmt file and look for Autoformat first
                 SwTableAutoFmtTbl aAutoFmtTbl;
                 aAutoFmtTbl.Load();
-                for( USHORT nAutoFmt = aAutoFmtTbl.Count(); nAutoFmt; )
+                for( sal_uInt16 nAutoFmt = aAutoFmtTbl.Count(); nAutoFmt; )
                     if( sTmp == aAutoFmtTbl[ --nAutoFmt ]->GetName() )
                     {
                         pTAutoFmt = new SwTableAutoFmt( *aAutoFmtTbl[ nAutoFmt ] );
@@ -1865,19 +1859,19 @@ void SwInsertDBColAutoPilot::Load()
             aRbHeadlEmpty.Check( pNewData->bIsEmptyHeadln );
             HeaderHdl(&aCbTableHeadon);
 
-            // jetzt noch die benutzerdefinierten Numberformat Strings in die
-            // Shell kopieren. Nur diese sind dann als ID verfuegbar
+            // now copy the user defined Numberformat strings to the
+            // Shell. Then only these are available as ID
             for( n = 0; n < aDBColumns.Count() ; ++n )
             {
                 SwInsDBColumn& rSet = *aDBColumns[ n ];
-                for( USHORT m = 0; m < pNewData->aDBColumns.Count() ; ++m )
+                for( sal_uInt16 m = 0; m < pNewData->aDBColumns.Count() ; ++m )
                 {
                     SwInsDBColumn& rGet = *pNewData->aDBColumns[ m ];
                     if(rGet.sColumn == rSet.sColumn)
                     {
                         if( rGet.bHasFmt && !rGet.bIsDBFmt )
                         {
-                            rSet.bIsDBFmt = FALSE;
+                            rSet.bIsDBFmt = sal_False;
                             rSet.nUsrNumFmt = rNFmtr.GetEntryKey( rGet.sUsrNumFmt,
                                                                     rGet.eUsrNumFmtLng );
                             if( NUMBERFORMAT_ENTRY_NOT_FOUND == rSet.nUsrNumFmt )
@@ -1895,9 +1889,9 @@ void SwInsertDBColAutoPilot::Load()
                 }
             }
 
-            // steht der Cursor in einer Tabelle, darf NIE Tabelle auswaehlbar sein
+            // when the cursor is inside of a table, table must NEVER be selectable
             if( !aRbAsTable.IsEnabled() && aRbAsTable.IsChecked() )
-                aRbAsField.Check( TRUE );
+                aRbAsField.Check( sal_True );
             delete pNewData;
             break;
         }

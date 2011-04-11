@@ -121,7 +121,7 @@ published service PathSettings
   /** The path to the Office help files. */
   [property] string Help;
 
-  /** The files that are necessary for the spellcheck are saved here. */
+  /** The files that are necessary for the spell check are saved here. */
   [property] string Linguistic;
 
   /** This is the path for the modules. */

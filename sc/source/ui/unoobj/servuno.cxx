@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 #include <tools/debug.hxx>
 #include <sal/macros.h>
 #include <svtools/unoimap.hxx>
@@ -57,12 +55,13 @@
 #include "chart2uno.hxx"
 #include "tokenuno.hxx"
 
-// #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+// Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
@@ -122,7 +121,9 @@ public:
         ScDocument* pDoc = mpDocShell->GetDocument();
         if ( !pDoc )
             throw uno::RuntimeException();
-        if ( sName == pDoc->GetCodeName() )
+        // aName ( sName ) is generated from the stream name which can be different ( case-wise )
+        // from the code name
+        if( sName.EqualsIgnoreCaseAscii( pDoc->GetCodeName() ) )
             maCachedObject = maWorkbook;
         else
         {
@@ -131,7 +132,9 @@ public:
             for( SCTAB i = 0; i < nCount; i++ )
             {
                 pDoc->GetCodeName( i, sCodeName );
-                if( sCodeName == sName )
+                // aName ( sName ) is generated from the stream name which can be different ( case-wise )
+                // from the code name
+                if( sCodeName.EqualsIgnoreCaseAscii( sName ) )
                 {
                     String sSheetName;
                     if( pDoc->GetName( i, sSheetName ) )
@@ -247,7 +250,7 @@ struct ProvNamesId_Type
     sal_uInt16      nType;
 };
 
-static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
+static const ProvNamesId_Type aProvNamesId[] =
 {
     { "com.sun.star.sheet.Spreadsheet",                 SC_SERVICE_SHEET },
     { "com.sun.star.text.TextField.URL",                SC_SERVICE_URLFIELD },
@@ -277,7 +280,7 @@ static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.image.ImageMapCircleObject",        SC_SERVICE_IMAP_CIRC },
     { "com.sun.star.image.ImageMapPolygonObject",       SC_SERVICE_IMAP_POLY },
 
-        // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
     { "com.sun.star.document.ExportGraphicObjectResolver",  SC_SERVICE_EXPORT_GOR },
     { "com.sun.star.document.ImportGraphicObjectResolver",  SC_SERVICE_IMPORT_GOR },
     { "com.sun.star.document.ExportEmbeddedObjectResolver", SC_SERVICE_EXPORT_EOR },
@@ -315,7 +318,7 @@ static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
 //  in case some macro is still using them
 //
 
-static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
+static const sal_Char* aOldNames[SC_SERVICE_COUNT] =
     {
         "",                                         // SC_SERVICE_SHEET
         "stardiv.one.text.TextField.URL",           // SC_SERVICE_URLFIELD
@@ -345,7 +348,7 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_IMAP_CIRC
         "",                                         // SC_SERVICE_IMAP_POLY
 
-        // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
         "",                                         // SC_SERVICE_EXPORT_GOR
         "",                                         // SC_SERVICE_IMPORT_GOR
         "",                                         // SC_SERVICE_EXPORT_EOR
@@ -387,13 +390,13 @@ sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
             }
         }
 
-        USHORT i;
+        sal_uInt16 i;
         for (i=0; i<SC_SERVICE_COUNT; i++)
         {
             DBG_ASSERT( aOldNames[i], "ScServiceProvider::GetProviderType: no oldname => crash");
             if (rServiceName.EqualsAscii( aOldNames[i] ))
             {
-                DBG_ERROR("old service name used");
+                OSL_FAIL("old service name used");
                 return i;
             }
         }
@@ -497,7 +500,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             xRet.set(SvUnoImageMapPolygonObject_createInstance( ScShapeObj::GetSupportedMacroItems() ));
             break;
 
-        // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
         case SC_SERVICE_EXPORT_GOR:
             xRet.set((::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE ));
             break;
@@ -588,6 +591,11 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                     BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
                     if ( pAppMgr )
                         pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
+
+                    // create the VBA document event processor
+                    uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents(
+                        ::ooo::vba::createVBAUnoAPIServiceWithArgs( pDocShell, "com.sun.star.script.vba.VBASpreadsheetEventProcessor", aArgs ), uno::UNO_QUERY );
+                    pDocShell->GetDocument()->SetVbaEventProcessor( xVbaEvents );
                 }
             }
         break;

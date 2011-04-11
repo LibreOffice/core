@@ -72,7 +72,8 @@
  */
 
 // Hack:
-#define U2S(x)  ((x)-HID_START)
+//#define   U2S(x)  ((x)-HID_START)
+#define U2S(x) x
 // Macro U2S: unsigned to signed
 // is needed because the resource compiler only knows signed short int in
 // ExtraData, but the HID_XXX are unsigned and exceed 32k. Code reading the
@@ -7893,7 +7894,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Extracts value(s) from a DataPilot table.";
+            Text [ en-US ] = "Extracts value(s) from a pivot table.";
         };
         ExtraData =
         {
@@ -7909,15 +7910,15 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "The name of the data pilot field to extract.";
+            Text [ en-US ] = "The name of the pivot table field to extract.";
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "DataPilot";
+            Text [ en-US ] = "Pivot Table";
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "A reference to a cell or range in the DataPilot table.";
+            Text [ en-US ] = "A reference to a cell or range in the pivot table.";
         };
         String 6 // Name of Parameter 3
         {

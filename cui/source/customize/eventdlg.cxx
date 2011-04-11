@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ***************************************************************
 #include <svtools/svmedit.hxx>
 #include <tools/diagnose_ex.h>
@@ -44,7 +41,6 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/evntconf.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
@@ -72,7 +68,7 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     _SvxMacroTabPage( pParent, CUI_RES(RID_SVXPAGE_EVENTS), rSet ),
     aSaveInText( this, CUI_RES( TXT_SAVEIN ) ),
     aSaveInListBox( this, CUI_RES( LB_SAVEIN ) ),
-    bAppConfig  ( TRUE )
+    bAppConfig  ( sal_True )
 {
     mpImpl->pStrEvent           = new String( CUI_RES( STR_EVENT ));
     mpImpl->pAssignedMacro      = new String( CUI_RES( STR_ASSMACRO ));
@@ -82,8 +78,6 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     mpImpl->pDeletePB           = new PushButton( this, CUI_RES( PB_DELETE ));
     mpImpl->pMacroImg           = new Image( CUI_RES( IMG_MACRO) );
     mpImpl->pComponentImg       = new Image( CUI_RES( IMG_COMPONENT) );
-    mpImpl->pMacroImg_h         = new Image( CUI_RES( IMG_MACRO_H) );
-    mpImpl->pComponentImg_h     = new Image( CUI_RES( IMG_COMPONENT_H) );
 
     FreeResource();
 
@@ -97,14 +91,13 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
 
     uno::Reference< document::XEventsSupplier > xSupplier;
 
-//    xSupplier = uno::Reference< document::XEventsSupplier >( new GlobalEventConfig());
     xSupplier = uno::Reference< document::XEventsSupplier > (
         ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString::createFromAscii(
-                "com.sun.star.frame.GlobalEventBroadcaster" ) ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.frame.GlobalEventBroadcaster" )) ),
         uno::UNO_QUERY );
 
-    USHORT nPos(0);
+    sal_uInt16 nPos(0);
     if ( xSupplier.is() )
     {
         m_xAppEvents = xSupplier->getEvents();
@@ -113,7 +106,7 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
             utl::ConfigManager::PRODUCTNAME ) >>= label;
         nPos = aSaveInListBox.InsertEntry( label );
         aSaveInListBox.SetEntryData( nPos, new bool(true) );
-        aSaveInListBox.SelectEntryPos( nPos, TRUE );
+        aSaveInListBox.SelectEntryPos( nPos, sal_True );
     }
 }
 
@@ -169,10 +162,10 @@ void SvxEventConfigPage::ImplInitDocument()
             m_xDocumentModifiable = m_xDocumentModifiable.query( xModel );
 
             OUString aTitle = ::comphelper::DocumentInfo::getDocumentTitle( xModel );
-            USHORT nPos = aSaveInListBox.InsertEntry( aTitle );
+            sal_uInt16 nPos = aSaveInListBox.InsertEntry( aTitle );
 
             aSaveInListBox.SetEntryData( nPos, new bool(false) );
-            aSaveInListBox.SelectEntryPos( nPos, TRUE );
+            aSaveInListBox.SelectEntryPos( nPos, sal_True );
 
             bAppConfig = false;
         }
@@ -192,20 +185,20 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
     bool* bApp = (bool*) aSaveInListBox.GetEntryData(
             aSaveInListBox.GetSelectEntryPos());
 
-    mpImpl->pEventLB->SetUpdateMode( FALSE );
+    mpImpl->pEventLB->SetUpdateMode( sal_False );
     bAppConfig = *bApp;
     if ( *bApp )
     {
-        SetReadOnly( FALSE );
+        SetReadOnly( sal_False );
         _SvxMacroTabPage::DisplayAppEvents( true );
     }
     else
     {
-        bool isReadonly = FALSE;
+        bool isReadonly = sal_False;
 
         uno::Reference< frame::XFramesSupplier > xFramesSupplier(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
             uno::UNO_QUERY );
 
         uno::Reference< frame::XFrame > xFrame =
@@ -228,13 +221,13 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
         _SvxMacroTabPage::DisplayAppEvents( false );
     }
 
-    mpImpl->pEventLB->SetUpdateMode( TRUE );
-    return TRUE;
+    mpImpl->pEventLB->SetUpdateMode( sal_True );
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SvxEventConfigPage::FillItemSet( SfxItemSet& rSet )
 {
     return _SvxMacroTabPage::FillItemSet( rSet );
 }

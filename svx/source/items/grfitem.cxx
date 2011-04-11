@@ -45,13 +45,13 @@ using namespace ::com::sun::star;
  *  Implementierung     class SwCropGrf
  ******************************************************************************/
 
-SvxGrfCrop::SvxGrfCrop( USHORT nItemId )
+SvxGrfCrop::SvxGrfCrop( sal_uInt16 nItemId )
     : SfxPoolItem( nItemId ),
     nLeft( 0 ), nRight( 0 ), nTop( 0 ), nBottom( 0 )
 {}
 
 SvxGrfCrop::SvxGrfCrop( sal_Int32 nL, sal_Int32 nR,
-                        sal_Int32 nT, sal_Int32 nB, USHORT nItemId )
+                        sal_Int32 nT, sal_Int32 nB, sal_uInt16 nItemId )
     : SfxPoolItem( nItemId ),
     nLeft( nL ), nRight( nR ), nTop( nT ), nBottom( nB )
 {}
@@ -77,7 +77,7 @@ SfxPoolItem* SvxGrfCrop::Clone( SfxItemPool* ) const
 */
 
 /*
-USHORT SvxGrfCrop::GetVersion( USHORT nFFVer ) const
+sal_uInt16 SvxGrfCrop::GetVersion( sal_uInt16 nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
                 SOFFICE_FILEFORMAT_40==nFFVer ||
@@ -87,9 +87,9 @@ USHORT SvxGrfCrop::GetVersion( USHORT nFFVer ) const
 }
 */
 
-SfxPoolItem* SvxGrfCrop::Create( SvStream& rStrm, USHORT nVersion ) const
+SfxPoolItem* SvxGrfCrop::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
 {
-    INT32 top, left, right, bottom;
+    sal_Int32 top, left, right, bottom;
     rStrm >> top >> left >> right >> bottom;
 
     if( GRFCROP_VERSION_SWDEFAULT == nVersion )
@@ -104,9 +104,9 @@ SfxPoolItem* SvxGrfCrop::Create( SvStream& rStrm, USHORT nVersion ) const
 }
 
 
-SvStream& SvxGrfCrop::Store( SvStream& rStrm, USHORT nVersion ) const
+SvStream& SvxGrfCrop::Store( SvStream& rStrm, sal_uInt16 nVersion ) const
 {
-    INT32 left = GetLeft(), right = GetRight(),
+    sal_Int32 left = GetLeft(), right = GetRight(),
             top = GetTop(), bottom = GetBottom();
     if( GRFCROP_VERSION_SWDEFAULT == nVersion )
         top = -top, bottom = -bottom, left = -left, right = -right;
@@ -118,7 +118,7 @@ SvStream& SvxGrfCrop::Store( SvStream& rStrm, USHORT nVersion ) const
 
 
 
-bool SvxGrfCrop::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxGrfCrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -141,7 +141,7 @@ bool SvxGrfCrop::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return true;
 }
 
-bool SvxGrfCrop::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxGrfCrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;

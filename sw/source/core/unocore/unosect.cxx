@@ -51,6 +51,7 @@
 #include <unocrsr.hxx>
 #include <section.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <docary.hxx>
@@ -61,10 +62,8 @@
 #include <doctxm.hxx>
 #include <fmtftntx.hxx>
 #include <fmtclbl.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <editeng/frmdiritem.hxx>
 #include <fmtcntnt.hxx>
-/* #109700# */
 #include <editeng/lrspitem.hxx>
 
 
@@ -86,15 +85,13 @@ struct SwTextSectionProperties_Impl
     ::std::auto_ptr<SvXMLAttrContainerItem> m_pXMLAttr;
     ::std::auto_ptr<SwFmtNoBalancedColumns> m_pNoBalanceItem;
     ::std::auto_ptr<SvxFrameDirectionItem>  m_pFrameDirItem;
-    ::std::auto_ptr<SvxLRSpaceItem>         m_pLRSpaceItem; // #109700#
+    ::std::auto_ptr<SvxLRSpaceItem>         m_pLRSpaceItem;
 
     bool m_bDDE;
     bool m_bHidden;
     bool m_bCondHidden;
     bool m_bProtect;
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     bool m_bEditInReadonly;
-    // <--
     bool m_bUpdateType;
 
     SwTextSectionProperties_Impl()
@@ -102,9 +99,7 @@ struct SwTextSectionProperties_Impl
         , m_bHidden(false)
         , m_bCondHidden(false)
         , m_bProtect(false)
-        // --> FME 2004-06-22 #114856# edit in readonly sections
         , m_bEditInReadonly(false)
-        // <--
         , m_bUpdateType(true)
     {
     }
@@ -164,13 +159,13 @@ public:
             const uno::Sequence< ::rtl::OUString >& rPropertyNames)
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 uno::RuntimeException);
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXTextSection::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTextSection::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if (!GetRegisteredIn())
@@ -294,7 +289,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     //das muss jetzt sal_True liefern
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aCont(pDoc);
-    pDoc->StartUndo( UNDO_INSSECTION, NULL );
+    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, NULL );
 
     if (!m_pImpl->m_sName.getLength())
     {
@@ -348,15 +343,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     aSect.SetHidden(m_pImpl->m_pProps->m_bHidden);
     aSect.SetProtectFlag(m_pImpl->m_pProps->m_bProtect);
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     aSect.SetEditInReadonlyFlag(m_pImpl->m_pProps->m_bEditInReadonly);
-    // <--
 
     SfxItemSet aSet(pDoc->GetAttrPool(),
                 RES_COL, RES_COL,
                 RES_BACKGROUND, RES_BACKGROUND,
                 RES_FTN_AT_TXTEND, RES_FRAMEDIR,
-                RES_LR_SPACE, RES_LR_SPACE, // #109700#
+                RES_LR_SPACE, RES_LR_SPACE,
                 RES_UNKNOWNATR_CONTAINER,RES_UNKNOWNATR_CONTAINER,
                 0);
     if (m_pImpl->m_pProps->m_pBrushItem.get())
@@ -387,7 +380,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         aSet.Put(*m_pImpl->m_pProps->m_pFrameDirItem);
     }
-    /* #109700# */
     if (m_pImpl->m_pProps->m_pLRSpaceItem.get())
     {
         aSet.Put(*m_pImpl->m_pProps->m_pLRSpaceItem);
@@ -403,7 +395,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     pRet->GetFmt()->Add(m_pImpl.get());
     pRet->GetFmt()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
 
-    // #97450# XML import must hide sections depending on their old
+    // XML import must hide sections depending on their old
     //         condition status
     if (m_pImpl->m_pProps->m_sCondition.getLength() != 0)
     {
@@ -417,13 +409,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         {
             pRet->CreateLink(CREATE_CONNECT);
         }
-        pRet->SetUpdateType( static_cast< USHORT >(
+        pRet->SetUpdateType( static_cast< sal_uInt16 >(
             (m_pImpl->m_pProps->m_bUpdateType) ?
                 sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL) );
     }
 
     // Undo-Klammerung hier beenden
-    pDoc->EndUndo( UNDO_INSSECTION, NULL );
+    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, NULL );
     m_pImpl->m_pProps.reset();
     m_pImpl->m_bIsDescriptor = false;
 }
@@ -437,9 +429,8 @@ SwXTextSection::getAnchor() throw (uno::RuntimeException)
     SwSectionFmt *const pSectFmt = m_pImpl->GetSectionFmt();
     if(pSectFmt)
     {
-        const SwSection* pSect;
         const SwNodeIndex* pIdx;
-        if( 0 != ( pSect = pSectFmt->GetSection() ) &&
+        if( 0 != ( pSectFmt->GetSection() ) &&
             0 != ( pIdx = pSectFmt->GetCntnt().GetCntntIdx() ) &&
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {
@@ -513,7 +504,7 @@ lcl_UpdateLinkType(SwSection & rSection, bool const bLinkUpdateAlways = true)
         {
             rSection.CreateLink(CREATE_CONNECT);
         }
-        rSection.SetUpdateType( static_cast< USHORT >((bLinkUpdateAlways)
+        rSection.SetUpdateType( static_cast< sal_uInt16 >((bLinkUpdateAlways)
             ? sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL) );
     }
 }
@@ -797,7 +788,6 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 }
             }
             break;
-            // --> FME 2004-06-22 #114856# edit in readonly sections
             case WID_SECT_EDIT_IN_READONLY:
             {
                 sal_Bool bVal(sal_False);
@@ -814,7 +804,6 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     pSectionData->SetEditInReadonlyFlag(bVal);
                 }
             }
-            // <--
             break;
             case WID_SECT_PASSWORD:
             {
@@ -908,7 +897,6 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     }
                     else if (RES_LR_SPACE == pEntry->nWID)
                     {
-                        // #109700#
                         if (!m_pProps->m_pLRSpaceItem.get())
                         {
                             m_pProps->m_pLRSpaceItem.reset(
@@ -1033,7 +1021,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case WID_SECT_DDE_AUTOUPDATE:
             {
                 // GetUpdateType() returns .._ALWAYS or .._ONCALL
-                if (pSect && pSect->IsLinkType() && pSect->IsConnected())  // lijian i73247
+                if (pSect && pSect->IsLinkType() && pSect->IsConnected())  // #i73247#
                 {
                     const sal_Bool bTemp =
                         (pSect->GetUpdateType() == sfx2::LINKUPDATE_ALWAYS);
@@ -1100,7 +1088,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 pRet[nProperty] <<= bTemp;
             }
             break;
-            // --> FME 2004-06-22 #114856# edit in readonly sections
             case WID_SECT_EDIT_IN_READONLY:
             {
                 const sal_Bool bTemp = (m_bIsDescriptor)
@@ -1108,7 +1095,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 pRet[nProperty] <<= bTemp;
             }
             break;
-            // <--
             case  FN_PARAM_LINK_DISPLAY_NAME:
             {
                 if (pFmt)
@@ -1157,7 +1143,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case FN_UNO_REDLINE_NODE_END:
             {
                 if (!pFmt)
-                    break;      // lijian i73247
+                    break;      // #i73247#
                 SwNode* pSectNode = pFmt->GetSectionNode();
                 if (FN_UNO_REDLINE_NODE_END == pEntry->nWID)
                 {
@@ -1165,11 +1151,11 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 }
                 const SwRedlineTbl& rRedTbl =
                     pFmt->GetDoc()->GetRedlineTbl();
-                for (USHORT nRed = 0; nRed < rRedTbl.Count(); nRed++)
+                for (sal_uInt16 nRed = 0; nRed < rRedTbl.Count(); nRed++)
                 {
                     const SwRedline* pRedline = rRedTbl[nRed];
-                    SwNode const*const pRedPointNode = pRedline->GetNode(TRUE);
-                    SwNode const*const pRedMarkNode = pRedline->GetNode(FALSE);
+                    SwNode const*const pRedPointNode = pRedline->GetNode(sal_True);
+                    SwNode const*const pRedMarkNode = pRedline->GetNode(sal_False);
                     if ((pRedPointNode == pSectNode) ||
                         (pRedMarkNode == pSectNode))
                     {
@@ -1263,7 +1249,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                         }
                         pQueryItem = m_pProps->m_pFrameDirItem.get();
                     }
-                    /* -> #109700# */
                     else if (RES_LR_SPACE == pEntry->nWID)
                     {
                         if (!m_pProps->m_pLRSpaceItem.get())
@@ -1273,7 +1258,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                         }
                         pQueryItem = m_pProps->m_pLRSpaceItem.get();
                     }
-                    /* <- #109700# */
                     if (pQueryItem)
                     {
                         pQueryItem->QueryValue(pRet[nProperty],
@@ -1332,16 +1316,14 @@ void SAL_CALL SwXTextSection::addPropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
 throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::addPropertiesChangeListener(): not implemented");
+    OSL_FAIL("SwXTextSection::addPropertiesChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXTextSection::removePropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
 throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::removePropertiesChangeListener(): not implemented");
+    OSL_FAIL("SwXTextSection::removePropertiesChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXTextSection::firePropertiesChangeEvent(
@@ -1349,8 +1331,7 @@ void SAL_CALL SwXTextSection::firePropertiesChangeEvent(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
         throw(uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::firePropertiesChangeEvent(): not implemented");
+    OSL_FAIL("SwXTextSection::firePropertiesChangeEvent(): not implemented");
 }
 
 void SAL_CALL
@@ -1360,8 +1341,7 @@ SwXTextSection::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXTextSection::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1371,8 +1351,7 @@ SwXTextSection::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXTextSection::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1382,8 +1361,7 @@ SwXTextSection::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXTextSection::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1393,8 +1371,7 @@ SwXTextSection::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXTextSection::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXTextSection::removeVetoableChangeListener(): not implemented");
 }
 
 beans::PropertyState SAL_CALL
@@ -1446,9 +1423,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             case WID_SECT_REGION :
             case WID_SECT_VISIBLE:
             case WID_SECT_PROTECTED:
-            // --> FME 2004-06-22 #114856# edit in readonly sections
             case WID_SECT_EDIT_IN_READONLY:
-            // <--
             case  FN_PARAM_LINK_DISPLAY_NAME:
             case  FN_UNO_ANCHOR_TYPES:
             case  FN_UNO_TEXT_WRAP:
@@ -1592,7 +1567,6 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
         }
         break;
-        // --> FME 2004-06-22 #114856# edit in readonly sections
         case WID_SECT_EDIT_IN_READONLY:
         {
             if (m_pImpl->m_bIsDescriptor)
@@ -1680,9 +1654,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         }
         break;
         case WID_SECT_PROTECTED:
-        // --> FME 2004-06-22 #114856# edit in readonly sections
         case WID_SECT_EDIT_IN_READONLY:
-        // <--
         {
             sal_Bool bTemp = sal_False;
             aRet.setValue( &bTemp, ::getCppuBooleanType());

@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::XExternalDocLink
 
-    @since OOo 3.1.0
+    @since OOo 3.1
  */
 service ExternalDocLink : XExternalDocLink
 {

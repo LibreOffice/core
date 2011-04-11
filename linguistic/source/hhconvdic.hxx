@@ -36,7 +36,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <tools/string.hxx>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 #include "convdic.hxx"
 

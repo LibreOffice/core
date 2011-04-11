@@ -7,3 +7,4 @@
 
 mkdir: %_DEST%\inc%_EXT%\animations
 ..\inc\animations\animationnodehelper.hxx %_DEST%\inc%_EXT%\animations\animationnodehelper.hxx
+..\%__SRC%\misc\animcore.component %_DEST%\xml%_EXT%\animcore.component

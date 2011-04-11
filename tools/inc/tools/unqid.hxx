@@ -37,8 +37,8 @@
 
 struct ImpUniqueId
 {
-    ULONG    nId;
-    USHORT   nRefCount;
+    sal_uIntPtr    nId;
+    sal_uInt16   nRefCount;
     void     Release()
              {
                 nRefCount--;
@@ -72,7 +72,7 @@ public:
                             pId = rId.pId;
                             return *this;
                         }
-    ULONG           GetId() const { return pId ? pId->nId : 0; }
+    sal_uIntPtr           GetId() const { return pId ? pId->nId : 0; }
 };
 
 // ---------------------
@@ -81,30 +81,30 @@ public:
 
 class TOOLS_DLLPUBLIC UniqueIdContainer : private UniqueIndex
 {
-    USHORT              nCollectCount;
+    sal_uInt16              nCollectCount;
 
 public: // Irgend etwas mit protected falsch
-    void                Clear( BOOL bAll );
-    UniqueItemId        CreateIdProt( ULONG nId );
+    void                Clear( sal_Bool bAll );
+    UniqueItemId        CreateIdProt( sal_uIntPtr nId );
 
 public:
-                        UniqueIdContainer( ULONG _nStartIndex,
-                                           ULONG _nInitSize = 16,
-                                           ULONG _nReSize = 16 )
+                        UniqueIdContainer( sal_uIntPtr _nStartIndex,
+                                           sal_uIntPtr _nInitSize = 16,
+                                           sal_uIntPtr _nReSize = 16 )
                             : UniqueIndex( _nStartIndex, _nInitSize, _nReSize )
                             , nCollectCount( 0 )
                             {}
                         UniqueIdContainer( const UniqueIdContainer& );
 
                         ~UniqueIdContainer()
-                            { Clear( TRUE ); }
+                            { Clear( sal_True ); }
     UniqueIdContainer&  operator = ( const UniqueIdContainer & );
 
-    BOOL                IsIndexValid( ULONG nIndex ) const
+    sal_Bool                IsIndexValid( sal_uIntPtr nIndex ) const
                             { return UniqueIndex::IsIndexValid( nIndex ); }
 
     UniqueItemId        CreateId();
-    static UniqueItemId CreateFreeId( ULONG nId ); // freies Id
+    static UniqueItemId CreateFreeId( sal_uIntPtr nId ); // freies Id
 };
 
 #endif // _UNQID_HXX

@@ -36,9 +36,9 @@
 #include "../customshapes/EnhancedCustomShapeEngine.hxx"
 
 #include <svx/xtable.hxx>
-#include "unoshcol.hxx"
+#include "svx/unoshcol.hxx"
 #include "recoveryui.hxx"
-#include "xmlgrhlp.hxx"
+#include "svx/xmlgrhlp.hxx"
 #include "tbunocontroller.hxx"
 #include "tbunosearchcontrollers.hxx"
 
@@ -101,11 +101,11 @@ sal_Bool SAL_CALL SvxUnoColorTable::supportsService( const  OUString& ServiceNam
     uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
     const OUString * pArray = aSNL.getConstArray();
 
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 OUString SAL_CALL SvxUnoColorTable::getImplementationName() throw( uno::RuntimeException )
@@ -133,7 +133,7 @@ void SAL_CALL SvxUnoColorTable::insertByName( const OUString& aName, const uno::
     if( hasByName( aName ) )
         throw container::ElementExistException();
 
-    INT32 nColor = 0;
+    sal_Int32 nColor = 0;
     if( !(aElement >>= nColor) )
         throw lang::IllegalArgumentException();
 
@@ -158,7 +158,7 @@ void SAL_CALL SvxUnoColorTable::removeByName( const OUString& Name )
 void SAL_CALL SvxUnoColorTable::replaceByName( const OUString& aName, const uno::Any& aElement )
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    INT32 nColor = 0;
+    sal_Int32 nColor = 0;
     if( !(aElement >>= nColor) )
         throw lang::IllegalArgumentException();
 
@@ -260,60 +260,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-static void writeInfo (
-    registry::XRegistryKey * pRegistryKey,
-    const OUString& rImplementationName,
-    const uno::Sequence< OUString >& rServices)
-{
-    uno::Reference< registry::XRegistryKey > xNewKey(
-        pRegistryKey->createKey(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + rImplementationName + OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) ) );
-
-    for( sal_Int32 i = 0; i < rServices.getLength(); i++ )
-        xNewKey->createKey( rServices.getConstArray()[i]);
-}
-
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
-    void * , void * pRegistryKey)
-{
-    if( pRegistryKey )
-    {
-        try
-        {
-            registry::XRegistryKey *pKey = reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
-
-            writeInfo( pKey, SvxShapeCollection::getImplementationName_Static(), SvxShapeCollection::getSupportedServiceNames_Static() );
-            writeInfo( pKey, SvxUnoColorTable::getImplementationName_Static(), SvxUnoColorTable::getSupportedServiceNames_Static() );
-            writeInfo( pKey, EnhancedCustomShapeEngine_getImplementationName(), EnhancedCustomShapeEngine_getSupportedServiceNames() );
-            writeInfo( pKey, svx::RecoveryUI::st_getImplementationName(), svx::RecoveryUI::st_getSupportedServiceNames() );
-            writeInfo( pKey, svx::GraphicExporter_getImplementationName(), svx::GraphicExporter_getSupportedServiceNames() );
-            writeInfo( pKey, svx::FontHeightToolBoxControl::getImplementationName_Static(), svx::FontHeightToolBoxControl::getSupportedServiceNames_Static() );
-
-            writeInfo( pKey, svx::FindTextToolbarController::getImplementationName_Static(), svx::FindTextToolbarController::getSupportedServiceNames_Static() );
-            writeInfo( pKey, svx::DownSearchToolboxController::getImplementationName_Static(), svx::DownSearchToolboxController::getSupportedServiceNames_Static() );
-            writeInfo( pKey, svx::UpSearchToolboxController::getImplementationName_Static(), svx::UpSearchToolboxController::getSupportedServiceNames_Static() );
-            writeInfo( pKey, svx::FindbarDispatcher::getImplementationName_Static(), svx::FindbarDispatcher::getSupportedServiceNames_Static() );
-
-            writeInfo( pKey, ::unogallery::GalleryThemeProvider_getImplementationName(),::unogallery::GalleryThemeProvider_getSupportedServiceNames() );
-
-            // XPrimitiveFactory2D
-            writeInfo( pKey,
-                drawinglayer::primitive2d::PrimitiveFactory2D::getImplementationName_Static(),
-                drawinglayer::primitive2d::PrimitiveFactory2D::getSupportedServiceNames_Static() );
-
-            writeInfo( pKey, ::svx::SvXMLGraphicImportHelper_getImplementationName(),::svx::SvXMLGraphicImportHelper_getSupportedServiceNames() );
-            writeInfo( pKey, ::svx::SvXMLGraphicExportHelper_getImplementationName(),::svx::SvXMLGraphicExportHelper_getSupportedServiceNames() );
-//          writeInfo( pKey, ::svx::ExtrusionDepthController_getImplementationName(),::svx::ExtrusionDepthController_getSupportedServiceNames() );
-        }
-        catch (registry::InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-
-    return sal_True;
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (

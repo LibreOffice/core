@@ -26,11 +26,6 @@
 ************************************************************************/
 
 #include "../inc/helpids.hrc"
-#include "../inc/rptui_slotid.hrc"
-
-#ifndef _SBASLTID_HRC
-#include <svx/svxids.hrc>
-#endif
 
 hidspecial UID_RPT_RPT_APP_VIEW                                 { HelpId = UID_RPT_RPT_APP_VIEW     ; };
 hidspecial UID_RPT_SCROLLWINDOW                                 { HelpId = UID_RPT_SCROLLWINDOW ; };
@@ -45,6 +40,7 @@ hidspecial HID_RPT_HORZ_SCROLLBAR                               { HelpId = HID_R
 hidspecial HID_RPT_VERT_SCROLLBAR                               { HelpId = HID_RPT_VERT_SCROLLBAR   ; };
 hidspecial HID_RPT_STARTMARKER                                  { HelpId = HID_RPT_STARTMARKER      ; };
 
+/*
 hidspecial SID_RPT_SHOWREPORTEXPLORER                       { HelpId = SID_RPT_SHOWREPORTEXPLORER   ; };
 hidspecial SID_PAGEHEADERFOOTER                             { HelpId = SID_PAGEHEADERFOOTER         ; };
 hidspecial SID_REPORTHEADERFOOTER                           { HelpId = SID_REPORTHEADERFOOTER       ; };
@@ -54,6 +50,9 @@ hidspecial SID_CONDITIONALFORMATTING                        { HelpId = SID_CONDI
 hidspecial SID_PAGEDIALOG                                   { HelpId = SID_PAGEDIALOG               ; };
 hidspecial SID_SETCONTROLDEFAULTS                           { HelpId = SID_SETCONTROLDEFAULTS       ; };
 hidspecial SID_INSERTBREAK                                  { HelpId = SID_INSERTBREAK              ; };
+hidspecial SID_ESCAPE                                       { HelpId = SID_ESCAPE                   ; };
+*/
+
 hidspecial HID_RPT_FIELDEXPRESSION                              { HelpId = HID_RPT_FIELDEXPRESSION          ; };
 hidspecial HID_RPT_SORTORDER                                    { HelpId = HID_RPT_SORTORDER                ; };
 hidspecial HID_RPT_GROUPSBRW                                    { HelpId = HID_RPT_GROUPSBRW                ; };
@@ -65,7 +64,6 @@ hidspecial HID_RPT_CRTL_FORMAT_PREVIEW                          { HelpId = HID_R
 hidspecial HID_RPT_COND_DLG                                     { HelpId = HID_RPT_COND_DLG                 ; };
 hidspecial HID_RPT_POPUP_COLOR_CTRL                         { HelpId = HID_RPT_POPUP_COLOR_CTRL     ; };
 hidspecial HID_RPT_POPUP_COLOR                              { HelpId = HID_RPT_POPUP_COLOR          ; };
-hidspecial SID_ESCAPE                                       { HelpId = SID_ESCAPE                   ; };
 hidspecial HID_RPT_PROPDLG_TAB_GENERAL                          { HelpId = HID_RPT_PROPDLG_TAB_GENERAL      ; };
 hidspecial HID_RPT_PROPDLG_TAB_DATA                             { HelpId = HID_RPT_PROPDLG_TAB_DATA         ; };
 
@@ -93,15 +91,18 @@ hidspecial HID_RPT_PROP_RPT_WIDTH { HelpId = HID_RPT_PROP_RPT_WIDTH; };
 hidspecial HID_RPT_PROP_RPT_HEIGHT { HelpId = HID_RPT_PROP_RPT_HEIGHT; };
 hidspecial HID_RPT_START_TITLE { HelpId = HID_RPT_START_TITLE; };
 hidspecial HID_RPT_START_IMAGE { HelpId = HID_RPT_START_IMAGE; };
-hidspecial SID_EXECUTE_REPORT { HelpId = SID_EXECUTE_REPORT; };
 
+/*
+hidspecial SID_EXECUTE_REPORT { HelpId = SID_EXECUTE_REPORT; };
 hidspecial SID_RPT_TEXTDOCUMENT { HelpId = SID_RPT_TEXTDOCUMENT; };
 hidspecial SID_RPT_SPREADSHEET { HelpId = SID_RPT_SPREADSHEET; };
+hidspecial SID_RPT_NEW_FUNCTION { HelpId = SID_RPT_NEW_FUNCTION; };
+*/
+
 hidspecial HID_RPT_PROP_DEEPTRAVERSING { HelpId = HID_RPT_PROP_DEEPTRAVERSING; };
 hidspecial HID_RPT_PROP_PREEVALUATED { HelpId = HID_RPT_PROP_PREEVALUATED; };
 hidspecial HID_RPT_NAVIGATOR_DLG { HelpId = HID_RPT_NAVIGATOR_DLG; };
 hidspecial HID_REPORT_NAVIGATOR_TREE { HelpId = HID_REPORT_NAVIGATOR_TREE; };
-hidspecial SID_RPT_NEW_FUNCTION { HelpId = SID_RPT_NEW_FUNCTION; };
 hidspecial HID_RPT_PROP_FORMULA { HelpId = HID_RPT_PROP_FORMULA; };
 hidspecial HID_RPT_PROP_INITIALFORMULA { HelpId = HID_RPT_PROP_INITIALFORMULA; };x
 hidspecial HID_RPT_PROP_DATAFIELD { HelpId = HID_RPT_PROP_DATAFIELD; };
@@ -110,14 +111,17 @@ hidspecial UID_RPT_RPT_PROP_DLG_FONT_TYPE { HelpId = UID_RPT_RPT_PROP_DLG_FONT_T
 hidspecial HID_RPT_PROP_BACKCOLOR { HelpId = HID_RPT_PROP_BACKCOLOR; };
 hidspecial HID_RPT_PROP_PRESERVEIRI { HelpId = HID_RPT_PROP_PRESERVEIRI; };
 
+/*
 hidspecial SID_OBJECT_SMALLESTWIDTH     { HelpId = SID_OBJECT_SMALLESTWIDTH; };
 hidspecial SID_OBJECT_SMALLESTHEIGHT    { HelpId = SID_OBJECT_SMALLESTHEIGHT; };
 hidspecial SID_OBJECT_GREATESTWIDTH     { HelpId = SID_OBJECT_GREATESTWIDTH; };
 hidspecial SID_OBJECT_GREATESTHEIGHT    { HelpId = SID_OBJECT_GREATESTHEIGHT; };
+*/
 
 hidspecial HID_RPT_PROP_BACKTRANSPARENT    { HelpId = HID_RPT_PROP_BACKTRANSPARENT; };
 hidspecial HID_RPT_PROP_CONTROLBACKGROUNDTRANSPARENT    { HelpId = HID_RPT_PROP_CONTROLBACKGROUNDTRANSPARENT; };
 
+/*
 hidspecial SID_ARRANGEMENU    { HelpId = SID_ARRANGEMENU; };
 hidspecial SID_SELECTALL_IN_SECTION    { HelpId = SID_SELECTALL_IN_SECTION; };
 hidspecial SID_SECTION_ALIGN { HelpId = SID_SECTION_ALIGN; };
@@ -129,10 +133,10 @@ hidspecial SID_SECTION_ALIGN_MIDDLE { HelpId = SID_SECTION_ALIGN_MIDDLE; };
 hidspecial SID_SECTION_ALIGN_DOWN { HelpId = SID_SECTION_ALIGN_DOWN; };
 hidspecial SID_NEXT_MARK { HelpId = SID_NEXT_MARK; };
 hidspecial SID_PREV_MARK { HelpId = SID_PREV_MARK; };
-
 hidspecial SID_SECTION_SHRINK { HelpId = SID_SECTION_SHRINK; };
 hidspecial SID_SECTION_SHRINK_TOP { HelpId = SID_SECTION_SHRINK_TOP; };
 hidspecial SID_SECTION_SHRINK_BOTTOM { HelpId = SID_SECTION_SHRINK_BOTTOM; };
+*/
 
 hidspecial UID_RPT_PROP_CHARTTYPE_DLG { HelpId = UID_RPT_PROP_CHARTTYPE_DLG; };
 hidspecial HID_RPT_PROP_CHARTTYPE { HelpId = HID_RPT_PROP_CHARTTYPE; };

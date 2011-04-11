@@ -46,7 +46,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 #define SERVICENAME1 "example.ExampleComponent1"
 #define IMPLNAME1   "example.ExampleComponent1.Impl"
@@ -129,7 +130,7 @@ Sequence<OUString> SAL_CALL ExampleComponent1Impl::getSupportedServiceNames_Stat
 OUString SAL_CALL ExampleComponent1Impl::getMessage() throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
-    return OUString::createFromAscii("Lalelu nur der Mann im Mond schaut zu ...");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("Lalelu nur der Mann im Mond schaut zu ..."));
 }
 
 
@@ -182,7 +183,7 @@ sal_Bool SAL_CALL component_writeInfo(
         }
         catch (InvalidRegistryException &)
         {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
+            OSL_FAIL( "### InvalidRegistryException!" );
         }
     }
     return sal_False;

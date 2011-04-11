@@ -35,7 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "PropType.hxx"
 #include "DeepTContext.hxx"
 #include "ProcAttrTContext.hxx"
@@ -495,7 +495,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                 case XML_ATACTION_DRAW_MIRROR_OASIS: // renames style:mirror to draw:mirror and adapts values
                     {
                         // keep original for writer graphic objects
-                        // --> OD 2005-05-12 #i49139# - adapts attribute values,
+                        // Adapts attribute values (#i49139#)
                         OUString aNewAttrValue;
                         SvXMLTokenEnumerator aTokenEnum( rAttrValue );
                         OUString aToken;
@@ -503,7 +503,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         {
                             if ( aNewAttrValue.getLength() > 0 )
                             {
-                                aNewAttrValue += rtl::OUString::createFromAscii( " " );
+                                aNewAttrValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
                             }
 
                             if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_EVEN ) )
@@ -707,7 +707,7 @@ OUString XMLPropertiesTContext_Impl::MergeUnderline(
             eUnderline = XML_BOLD_WAVE;
             break;
         default:
-            OSL_ENSURE( false, "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
+            OSL_FAIL( "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
             break;
         }
     }
@@ -722,7 +722,7 @@ OUString XMLPropertiesTContext_Impl::MergeUnderline(
             eUnderline = XML_NONE;
             break;
         default:
-            OSL_ENSURE( false, "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
+            OSL_FAIL( "xmloff::XMLPropertiesTContext_Impl::MergeUnderline(), missing underline case!" );
             break;
         }
     }

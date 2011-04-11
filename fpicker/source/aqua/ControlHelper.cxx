@@ -86,7 +86,7 @@ ControlHelper::~ControlHelper()
         [m_pUserPane release];
     }
 
-    for(std::list<NSControl *>::iterator control = m_aActiveControls.begin(); control != m_aActiveControls.end(); control++) {
+    for(std::list<NSControl *>::iterator control = m_aActiveControls.begin(); control != m_aActiveControls.end(); ++control) {
         NSControl* pControl = (*control);
         NSString* sLabelName = m_aMapListLabels[pControl];
         if (sLabelName != nil) {
@@ -341,8 +341,8 @@ void ControlHelper::createUserPane()
     int currentHeight = kAquaSpaceBoxFrameViewDiffTop + kAquaSpaceBoxFrameViewDiffBottom;
     int currentWidth = 300;
 
-    BOOL bPopupControlPresent = NO;
-    BOOL bButtonControlPresent = NO;
+    sal_Bool bPopupControlPresent = NO;
+    sal_Bool bButtonControlPresent = NO;
 
     int nCheckboxMaxWidth = 0;
     int nPopupMaxWidth = 0;

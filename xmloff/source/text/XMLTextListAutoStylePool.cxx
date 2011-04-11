@@ -35,7 +35,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlnume.hxx>
-#include "XMLTextListAutoStylePool.hxx"
+#include "xmloff/XMLTextListAutoStylePool.hxx"
 #include <xmloff/xmlexp.hxx>
 
 using ::rtl::OUString;
@@ -186,7 +186,15 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
 
 XMLTextListAutoStylePool::~XMLTextListAutoStylePool()
 {
+    // The XMLTextListAutoStylePoolEntry_Impl object in the pool need delete explicitly in dtor.
+    sal_uLong nCount = pPool->Count();
+    while ( nCount-- )
+        delete pPool->Remove(nCount);
     delete pPool;
+
+    nCount = pNames->Count();
+    while ( nCount-- )
+        delete pNames->Remove(nCount);
     delete pNames;
 }
 
@@ -204,7 +212,7 @@ sal_Bool XMLTextListAutoStylePool::HasName( const OUString& rName ) const
 
 sal_uInt32 XMLTextListAutoStylePool::Find( XMLTextListAutoStylePoolEntry_Impl* pEntry ) const
 {
-    ULONG nPos;
+    sal_uLong nPos;
     if( !pEntry->IsNamed() && mxNumRuleCompare.is() )
     {
         const sal_uInt32 nCount = pPool->Count();

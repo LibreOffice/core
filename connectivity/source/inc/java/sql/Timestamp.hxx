@@ -42,7 +42,7 @@ namespace connectivity
     class java_sql_Date : public java_util_Date
     {
     protected:
-    // statische Daten fuer die Klasse
+    // static data for the class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
@@ -63,7 +63,7 @@ namespace connectivity
     class java_sql_Time : public java_util_Date
     {
     protected:
-    // statische Daten fuer die Klasse
+    // static data for the class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
@@ -81,7 +81,7 @@ namespace connectivity
     class java_sql_Timestamp : public java_util_Date
     {
     protected:
-    // statische Daten fuer die Klasse
+    // static data for the class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
@@ -91,8 +91,6 @@ namespace connectivity
         java_sql_Timestamp( const ::com::sun::star::util::DateTime& _rOut);
         operator ::com::sun::star::util::DateTime();
 
-        sal_Int32 getNanos();
-        void  setNanos(sal_Int32 n);
         static jclass st_getMyClass();
     };
 }

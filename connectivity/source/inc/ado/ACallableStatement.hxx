@@ -50,7 +50,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
             virtual ~OCallableStatement() {} ;
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OCallableStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const ::rtl::OUString& sql );
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

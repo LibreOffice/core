@@ -101,10 +101,6 @@ protected:
             ::com::sun::star::chart2::XDiagram > & xDiagram );
 
     virtual sal_Int32 getAxisCountByDimension( sal_Int32 nDimension );
-//     virtual void createAxes(
-//         const ::com::sun::star::uno::Sequence<
-//             ::com::sun::star::uno::Reference<
-//                 ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys );
 
     virtual void adaptAxes(
         const ::com::sun::star::uno::Sequence<

@@ -34,13 +34,13 @@
 #include <vcl/msgbox.hxx>
 
 
-BOOL GHEditWindow::Close()
+sal_Bool GHEditWindow::Close()
 {
     if (aInhalt.IsModified())
     {
     }
     delete(this);
-    return TRUE;
+    return sal_True;
 }
 
 void GHEditWindow::Resize()
@@ -64,7 +64,7 @@ void GHEditWindow::Clear()
     aInhalt.SetText(String());
 }
 
-void GHEditWindow::AddText( String aNew, BOOL bMoveToEnd)
+void GHEditWindow::AddText( String aNew, sal_Bool bMoveToEnd)
 {
     String aOld = aInhalt.GetText();
 
@@ -110,11 +110,11 @@ void EditFileWindow::LoadFile()
 
     All.ConvertLineEnd();
 
-    AddText(All,FALSE);
+    AddText(All,sal_False);
 
 }
 
-BOOL EditFileWindow::Close()
+sal_Bool EditFileWindow::Close()
 {
 
     if (aInhalt.IsModified() && QueryBox(this,WB_DEF_YES | WB_YES_NO_CANCEL, String(aFileName).AppendAscii("\nhas been changed.\n\nSave file?")).Execute())

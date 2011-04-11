@@ -116,7 +116,6 @@
 #include "spelldialog.hxx"
 #include <svx/fontwork.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
 
@@ -132,7 +131,7 @@
 
 //------------------------------------------------------------------
 
-ScResId::ScResId( USHORT nId ) :
+ScResId::ScResId( sal_uInt16 nId ) :
     ResId( nId, *SC_MOD()->GetResMgr() )
 {
 }
@@ -152,9 +151,7 @@ void ScDLL::Init()
     ScModule* pMod = new ScModule( &ScDocShell::Factory() );
     (*ppShlPtr) = pMod;
 
-//REMOVE        ScDocShell::RegisterFactory( SDT_SC_DOCFACTPRIO );
-
-    ScDocShell::Factory().SetDocumentServiceName( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) );
+    ScDocShell::Factory().SetDocumentServiceName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" )) );
 
     ScGlobal::Init();       // erst wenn der ResManager initialisiert ist
                             //  erst nach ScGlobal::Init duerfen die App-Optionen
@@ -239,7 +236,7 @@ void ScDLL::Init()
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
 
     // common SFX controller
-    ::sfx2::TaskPaneWrapper::RegisterChildWindow( FALSE, pMod );
+    ::sfx2::TaskPaneWrapper::RegisterChildWindow( false, pMod );
 
     // Svx-StatusBar-Controller
     SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);
@@ -265,51 +262,42 @@ void ScDLL::Init()
     ScInputWindowWrapper        ::RegisterChildWindow(42, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK);
     ScNavigatorDialogWrapper    ::RegisterChildWindowContext(
             sal::static_int_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
-    ScSolverDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
-    ScOptSolverDlgWrapper       ::RegisterChildWindow(FALSE, pMod);
-    ScNameDlgWrapper            ::RegisterChildWindow(FALSE, pMod);
-    ScPivotLayoutWrapper        ::RegisterChildWindow(FALSE, pMod);
-    ScTabOpDlgWrapper           ::RegisterChildWindow(FALSE, pMod);
-    ScFilterDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
-    ScSpecialFilterDlgWrapper   ::RegisterChildWindow(FALSE, pMod);
-    ScDbNameDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
-    ScConsolidateDlgWrapper     ::RegisterChildWindow(FALSE, pMod);
-    ScPrintAreasDlgWrapper      ::RegisterChildWindow(FALSE, pMod);
-    ScCondFormatDlgWrapper      ::RegisterChildWindow(FALSE, pMod);
-    ScColRowNameRangesDlgWrapper::RegisterChildWindow(FALSE, pMod);
-    ScFormulaDlgWrapper         ::RegisterChildWindow(FALSE, pMod);
+    ScSolverDlgWrapper          ::RegisterChildWindow(false, pMod);
+    ScOptSolverDlgWrapper       ::RegisterChildWindow(false, pMod);
+    ScNameDlgWrapper            ::RegisterChildWindow(false, pMod);
+    ScPivotLayoutWrapper        ::RegisterChildWindow(false, pMod);
+    ScTabOpDlgWrapper           ::RegisterChildWindow(false, pMod);
+    ScFilterDlgWrapper          ::RegisterChildWindow(false, pMod);
+    ScSpecialFilterDlgWrapper   ::RegisterChildWindow(false, pMod);
+    ScDbNameDlgWrapper          ::RegisterChildWindow(false, pMod);
+    ScConsolidateDlgWrapper     ::RegisterChildWindow(false, pMod);
+    ScPrintAreasDlgWrapper      ::RegisterChildWindow(false, pMod);
+    ScCondFormatDlgWrapper      ::RegisterChildWindow(false, pMod);
+    ScColRowNameRangesDlgWrapper::RegisterChildWindow(false, pMod);
+    ScFormulaDlgWrapper         ::RegisterChildWindow(false, pMod);
 
     // First docking Window for Calc
-    ScFunctionChildWindow       ::RegisterChildWindow(FALSE, pMod);
+    ScFunctionChildWindow       ::RegisterChildWindow(false, pMod);
 
     // Redlining- Window
-    ScAcceptChgDlgWrapper       ::RegisterChildWindow(FALSE, pMod);
-    ScSimpleRefDlgWrapper       ::RegisterChildWindow(FALSE, pMod, SFX_CHILDWIN_ALWAYSAVAILABLE|SFX_CHILDWIN_NEVERHIDE );
-    ScHighlightChgDlgWrapper    ::RegisterChildWindow(FALSE, pMod);
+    ScAcceptChgDlgWrapper       ::RegisterChildWindow(false, pMod);
+    ScSimpleRefDlgWrapper       ::RegisterChildWindow(false, pMod, SFX_CHILDWIN_ALWAYSAVAILABLE|SFX_CHILDWIN_NEVERHIDE );
+    ScHighlightChgDlgWrapper    ::RegisterChildWindow(false, pMod);
 
-    SvxSearchDialogWrapper      ::RegisterChildWindow(FALSE, pMod);
-    SvxHlinkDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
-    SvxFontWorkChildWindow      ::RegisterChildWindow(FALSE, pMod);
-    SvxHyperlinkDlgWrapper      ::RegisterChildWindow(FALSE, pMod, SFX_CHILDWIN_FORCEDOCK);
-    SvxIMapDlgChildWindow       ::RegisterChildWindow(FALSE, pMod);
-    GalleryChildWindow          ::RegisterChildWindow(FALSE, pMod);
-    ScSpellDialogChildWindow    ::RegisterChildWindow(FALSE, pMod);
-    ::avmedia::MediaPlayer      ::RegisterChildWindow(FALSE, pMod);
+    SvxSearchDialogWrapper      ::RegisterChildWindow(false, pMod);
+    SvxHlinkDlgWrapper          ::RegisterChildWindow(false, pMod);
+    SvxFontWorkChildWindow      ::RegisterChildWindow(false, pMod);
+    SvxIMapDlgChildWindow       ::RegisterChildWindow(false, pMod);
+    GalleryChildWindow          ::RegisterChildWindow(false, pMod);
+    ScSpellDialogChildWindow    ::RegisterChildWindow(false, pMod);
 
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
-    ScValidityRefChildWin::RegisterChildWindow(FALSE, pMod);
-    //-->Added by PengYunQuan for Validity Cell Range Picker
+    ScValidityRefChildWin::RegisterChildWindow(false, pMod);
 
     //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
 
     SvClassManager& rClassManager = SvxFieldItem::GetClassManager();
-//  rClassManager.SV_CLASS_REGISTER( SvxURLField );
-//  rClassManager.SV_CLASS_REGISTER( SvxDateField );
-//  rClassManager.SV_CLASS_REGISTER( SvxPageField );
     rClassManager.SV_CLASS_REGISTER( SvxPagesField );
-//  rClassManager.SV_CLASS_REGISTER( SvxTimeField );
     rClassManager.SV_CLASS_REGISTER( SvxFileField );
-//  rClassManager.SV_CLASS_REGISTER( SvxExtFileField );
     rClassManager.SV_CLASS_REGISTER( SvxTableField );
 
     SdrRegisterFieldClasses();      // SvDraw-Felder registrieren
@@ -320,7 +308,7 @@ void ScDLL::Init()
     // ::com::sun::star::form::component::Form-Objekt-Factory eintragen
     FmFormObjFactory();
 
-    pMod->PutItem( SfxUInt16Item( SID_ATTR_METRIC, sal::static_int_cast<UINT16>(pMod->GetAppOptions().GetAppMetric()) ) );
+    pMod->PutItem( SfxUInt16Item( SID_ATTR_METRIC, sal::static_int_cast<sal_uInt16>(pMod->GetAppOptions().GetAppMetric()) ) );
 
     //  StarOne Services are now handled in the registry
 }

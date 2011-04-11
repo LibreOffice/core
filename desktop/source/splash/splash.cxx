@@ -102,7 +102,7 @@ void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
         _bProgressEnd = sal_False;
         SolarMutexGuard aSolarGuard;
         if ( _eBitmapMode == BM_FULLSCREEN )
-            ShowFullScreenMode( TRUE );
+            ShowFullScreenMode( sal_True );
         Show();
         Paint(Rectangle());
         Flush();
@@ -129,7 +129,7 @@ void SAL_CALL SplashScreen::reset()
     if (_bVisible && !_bProgressEnd )
     {
         if ( _eBitmapMode == BM_FULLSCREEN )
-            ShowFullScreenMode( TRUE );
+            ShowFullScreenMode( sal_True );
         Show();
         updateStatus();
     }
@@ -146,7 +146,7 @@ void SAL_CALL SplashScreen::setText(const OUString& rText)
         if (_bVisible && !_bProgressEnd)
         {
             if ( _eBitmapMode == BM_FULLSCREEN )
-                ShowFullScreenMode( TRUE );
+                ShowFullScreenMode( sal_True );
             Show();
             updateStatus();
         }
@@ -162,7 +162,7 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     SolarMutexGuard aSolarGuard;
     if (_bVisible && !_bProgressEnd) {
         if ( _eBitmapMode == BM_FULLSCREEN )
-            ShowFullScreenMode( TRUE );
+            ShowFullScreenMode( sal_True );
         Show();
         if (nValue >= _iMax) _iProgress = _iMax;
     else _iProgress = nValue;
@@ -254,9 +254,7 @@ void SplashScreen::updateStatus()
 {
     if (!_bVisible || _bProgressEnd) return;
     if (!_bPaintProgress) _bPaintProgress = sal_True;
-    //_bPaintBitmap=sal_False;
     Paint(Rectangle());
-    //_bPaintBitmap=sal_True;
     Flush();
 }
 
@@ -265,7 +263,6 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
 {
     if ( inEvent != 0 )
     {
-        // Paint( Rectangle() );
         switch ( inEvent->GetId() )
         {
             case VCLEVENT_WINDOW_SHOW:
@@ -321,40 +318,36 @@ void SplashScreen::loadConfig()
 
     if ( sProgressFrameColor.getLength() )
     {
-        UINT8 nRed = 0;
-        UINT8 nGreen = 0;
-        UINT8 nBlue = 0;
+        sal_uInt8 nRed = 0;
         sal_Int32 idx = 0;
         sal_Int32 temp = sProgressFrameColor.getToken( 0, ',', idx ).toInt32();
         if ( idx != -1 )
         {
-            nRed = static_cast< UINT8 >( temp );
+            nRed = static_cast< sal_uInt8 >( temp );
             temp = sProgressFrameColor.getToken( 0, ',', idx ).toInt32();
         }
         if ( idx != -1 )
         {
-            nGreen = static_cast< UINT8 >( temp );
-            nBlue = static_cast< UINT8 >( sProgressFrameColor.getToken( 0, ',', idx ).toInt32() );
+            sal_uInt8 nGreen = static_cast< sal_uInt8 >( temp );
+            sal_uInt8 nBlue = static_cast< sal_uInt8 >( sProgressFrameColor.getToken( 0, ',', idx ).toInt32() );
             _cProgressFrameColor = Color( nRed, nGreen, nBlue );
         }
     }
 
     if ( sProgressBarColor.getLength() )
     {
-        UINT8 nRed = 0;
-        UINT8 nGreen = 0;
-        UINT8 nBlue = 0;
+        sal_uInt8 nRed = 0;
         sal_Int32 idx = 0;
         sal_Int32 temp = sProgressBarColor.getToken( 0, ',', idx ).toInt32();
         if ( idx != -1 )
         {
-            nRed = static_cast< UINT8 >( temp );
+            nRed = static_cast< sal_uInt8 >( temp );
             temp = sProgressBarColor.getToken( 0, ',', idx ).toInt32();
         }
         if ( idx != -1 )
         {
-            nGreen = static_cast< UINT8 >( temp );
-            nBlue = static_cast< UINT8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
+            sal_uInt8 nGreen = static_cast< sal_uInt8 >( temp );
+            sal_uInt8 nBlue = static_cast< sal_uInt8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
             _cProgressBarColor = Color( nRed, nGreen, nBlue );
         }
     }
@@ -411,8 +404,7 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     aStrBuf.append( "intro_" );
     if ( _sAppName.getLength() > 0 )
     {
-        aStrBuf.append( OString( _sAppName, _sAppName.getLength(),
-                                 RTL_TEXTENCODING_UTF8 ) );
+        aStrBuf.append( OUStringToOString(_sAppName, RTL_TEXTENCODING_UTF8) );
         aStrBuf.append( "_" );
     }
     aResBuf.append( OString::valueOf( nWidth ));
@@ -420,12 +412,12 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     aResBuf.append( OString::valueOf( nHeight ));
 
     aStrBuf.append( aResBuf.getStr() );
-    if (Application::LoadBrandBitmap (aStrBuf.makeStringAndClear(), rBitmap))
+    if (Application::LoadBrandBitmap (aStrBuf.makeStringAndClear().getStr(), rBitmap))
         return;
 
     aStrBuf.append( "intro_" );
     aStrBuf.append( aResBuf.getStr() );
-    if (Application::LoadBrandBitmap (aResBuf.makeStringAndClear(), rBitmap))
+    if (Application::LoadBrandBitmap (aResBuf.makeStringAndClear().getStr(), rBitmap))
         return;
 
     Application::LoadBrandBitmap ("intro", rBitmap);
@@ -507,7 +499,7 @@ void SplashScreen::Paint( const Rectangle&)
     if(!_bVisible) return;
 
     //native drawing
-    BOOL bNativeOK = FALSE;
+    sal_Bool bNativeOK = sal_False;
 
     // in case of native controls we need to draw directly to the window
     if( _bNativeProgress && IsNativeControlSupported( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL ) )
@@ -528,7 +520,7 @@ void SplashScreen::Paint( const Rectangle&)
         }
 
         if( (bNativeOK = DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
-                                            CTRL_STATE_ENABLED, aValue, _sProgressText )) != FALSE )
+                                            CTRL_STATE_ENABLED, aValue, _sProgressText )) != sal_False )
         {
             return;
         }
@@ -552,12 +544,7 @@ void SplashScreen::Paint( const Rectangle&)
         _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace, _tlx+_barspace+length, _tly+_barheight-_barspace));
         _vdev.DrawText( Rectangle(_tlx, _tly+_barheight+5, _tlx+_barwidth, _tly+_barheight+5+20), _sProgressText, TEXT_DRAW_CENTER );
     }
-    Size aSize =  GetOutputSizePixel();
-    Size bSize =  _vdev.GetOutputSizePixel();
-    //_vdev.Flush();
-    //_vdev.DrawOutDev(Point(), GetOutputSize(), Point(), GetOutputSize(), *((IntroWindow*)this) );
     DrawOutDev(Point(), GetOutputSizePixel(), Point(), _vdev.GetOutputSizePixel(), _vdev );
-    //Flush();
 }
 
 

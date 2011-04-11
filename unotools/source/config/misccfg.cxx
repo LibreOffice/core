@@ -46,10 +46,9 @@
 #define DEF_INCH    2540L
 #define DEF_RELTWIP 1440L
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+using ::rtl::OUString;
 
 namespace utl
 {
@@ -59,9 +58,9 @@ static sal_Int32 nRefCount = 0;
 
 class SfxMiscCfg : public utl::ConfigItem
 {
-    BOOL            bPaperSize;     // printer warnings
-    BOOL            bPaperOrientation;
-    BOOL            bNotFound;
+    sal_Bool            bPaperSize;     // printer warnings
+    sal_Bool            bPaperOrientation;
+    sal_Bool            bNotFound;
     sal_Int32       nYear2000;      // two digit year representation
 
     const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
@@ -74,14 +73,14 @@ public:
     virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
     virtual void            Commit();
 
-    BOOL        IsNotFoundWarning()     const {return bNotFound;}
-    void        SetNotFoundWarning( BOOL bSet);
+    sal_Bool        IsNotFoundWarning()     const {return bNotFound;}
+    void        SetNotFoundWarning( sal_Bool bSet);
 
-    BOOL        IsPaperSizeWarning()    const {return bPaperSize;}
-    void        SetPaperSizeWarning(BOOL bSet);
+    sal_Bool        IsPaperSizeWarning()    const {return bPaperSize;}
+    void        SetPaperSizeWarning(sal_Bool bSet);
 
-    BOOL        IsPaperOrientationWarning()     const {return bPaperOrientation;}
-    void        SetPaperOrientationWarning( BOOL bSet);
+    sal_Bool        IsPaperOrientationWarning()     const {return bPaperOrientation;}
+    void        SetPaperOrientationWarning( sal_Bool bSet);
 
                 // 0 ... 99
     sal_Int32   GetYear2000()           const { return nYear2000; }
@@ -89,60 +88,42 @@ public:
 
 };
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 SfxMiscCfg::SfxMiscCfg() :
-    ConfigItem(C2U("Office.Common") ),
-    bPaperSize(FALSE),
-    bPaperOrientation (FALSE),
-    bNotFound (FALSE),
+    ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common")) ),
+    bPaperSize(sal_False),
+    bPaperOrientation (sal_False),
+    bNotFound (sal_False),
     nYear2000( 1930 )
 {
     RTL_LOGFILE_CONTEXT(aLog, "svl SfxMiscCfg::SfxMiscCfg()");
 
     Load();
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 SfxMiscCfg::~SfxMiscCfg()
 {
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
-void SfxMiscCfg::SetNotFoundWarning( BOOL bSet)
+void SfxMiscCfg::SetNotFoundWarning( sal_Bool bSet)
 {
     if(bNotFound != bSet)
         SetModified();
     bNotFound = bSet;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-
-void SfxMiscCfg::SetPaperSizeWarning( BOOL bSet)
+void SfxMiscCfg::SetPaperSizeWarning( sal_Bool bSet)
 {
     if(bPaperSize != bSet)
         SetModified();
     bPaperSize = bSet;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
-void SfxMiscCfg::SetPaperOrientationWarning( BOOL bSet)
+void SfxMiscCfg::SetPaperOrientationWarning( sal_Bool bSet)
 {
     if(bPaperOrientation != bSet)
         SetModified();
     bPaperOrientation = bSet;
 }
-/*--------------------------------------------------------------------
-     Beschreibung:
- --------------------------------------------------------------------*/
 
 void SfxMiscCfg::SetYear2000( sal_Int32 nSet )
 {
@@ -150,9 +131,7 @@ void SfxMiscCfg::SetYear2000( sal_Int32 nSet )
         SetModified();
     nYear2000 = nSet;
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SfxMiscCfg::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -173,9 +152,7 @@ const Sequence<OUString>& SfxMiscCfg::GetPropertyNames()
     }
     return aNames;
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SfxMiscCfg::Load()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
@@ -200,16 +177,12 @@ void SfxMiscCfg::Load()
         }
     }
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SfxMiscCfg::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
 {
     Load();
 }
-/* -----------------------------02.03.01 15:31--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SfxMiscCfg::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
@@ -267,32 +240,32 @@ MiscCfg::~MiscCfg( )
     }
 }
 
-BOOL MiscCfg::IsNotFoundWarning()   const
+sal_Bool MiscCfg::IsNotFoundWarning()   const
 {
     return pImpl->IsNotFoundWarning();
 }
 
-void MiscCfg::SetNotFoundWarning(   BOOL bSet)
+void MiscCfg::SetNotFoundWarning(   sal_Bool bSet)
 {
     pImpl->SetNotFoundWarning( bSet );
 }
 
-BOOL MiscCfg::IsPaperSizeWarning()  const
+sal_Bool MiscCfg::IsPaperSizeWarning()  const
 {
     return pImpl->IsPaperSizeWarning();
 }
 
-void MiscCfg::SetPaperSizeWarning(BOOL bSet)
+void MiscCfg::SetPaperSizeWarning(sal_Bool bSet)
 {
     pImpl->SetPaperSizeWarning( bSet );
 }
 
-BOOL MiscCfg::IsPaperOrientationWarning()   const
+sal_Bool MiscCfg::IsPaperOrientationWarning()   const
 {
     return pImpl->IsPaperOrientationWarning();
 }
 
-void MiscCfg::SetPaperOrientationWarning(   BOOL bSet)
+void MiscCfg::SetPaperOrientationWarning(   sal_Bool bSet)
 {
     pImpl->SetPaperOrientationWarning( bSet );
 }

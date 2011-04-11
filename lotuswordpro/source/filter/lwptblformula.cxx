@@ -116,8 +116,8 @@ sal_Bool LwpFormulaInfo::ReadConst()
 */
 sal_Bool LwpFormulaInfo::ReadText()
 {
-    USHORT nDiskSize,nStrLen;
-    nDiskSize = m_pObjStrm->QuickReadInt16();
+    sal_uInt16 nStrLen;
+    m_pObjStrm->QuickReadInt16(); //Disk Size
     nStrLen = m_pObjStrm->QuickReadInt16();
 
     auto_ptr<char> pBuf(new char[nStrLen+1]);
@@ -212,7 +212,7 @@ sal_Bool LwpFormulaInfo::ReadExpression()
 
             case TK_CELLID:
                 if (!ReadCellID())
-                    readSucceeded = FALSE;
+                    readSucceeded = sal_False;
                 break;
 
             case TK_CELLRANGE:
@@ -228,7 +228,7 @@ sal_Bool LwpFormulaInfo::ReadExpression()
                 {
                     LwpFormulaFunc* pFunc = new LwpFormulaFunc(TokenType);
                     if (!ReadArguments(*pFunc))
-                        readSucceeded = FALSE;
+                        readSucceeded = sal_False;
                     m_aStack.push_back(pFunc);
                 }
                 break;
@@ -265,7 +265,7 @@ sal_Bool LwpFormulaInfo::ReadExpression()
             default:
                 // We don't know what to do with this token, so eat it.
                 m_pObjStrm->SeekRel(DiskLength);
-                readSucceeded = FALSE;
+                readSucceeded = sal_False;
                 break;
         }
         MarkUnsupported(TokenType);
@@ -628,7 +628,7 @@ String LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
 
     //Append args
     vector<LwpFormulaArg*>::iterator aItr;
-    for (aItr=m_aArgs.begin();aItr!=m_aArgs.end();aItr++)
+    for (aItr=m_aArgs.begin();aItr!=m_aArgs.end();++aItr)
     {
         aFormula.Append( (*aItr)->ToArgString(pCellsMap) );
         aFormula.AppendAscii("|");//separator
@@ -660,7 +660,7 @@ String LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
     if (2==m_aArgs.size())
     {
         vector<LwpFormulaArg*>::iterator aItr = m_aArgs.end();
-        aItr--;
+        --aItr;
         aFormula.Append( (*aItr)->ToArgString(pCellsMap) );
 
         aFormula.AppendAscii(" ");
@@ -670,7 +670,7 @@ String LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
 
         aFormula.AppendAscii(" ");
 
-        aItr--;
+        --aItr;
         aFormula.Append( (*aItr)->ToArgString(pCellsMap) );
     }
     else

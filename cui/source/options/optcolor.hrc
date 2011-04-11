@@ -186,6 +186,10 @@
 #define LB_SQLCOMMENT            193
 #define WN_SQLCOMMENT            194
 
+#define CB_SHADOWCOLOR          196
+#define LB_SHADOWCOLOR          197
+#define WN_SHADOWCOLOR          198
+
 #define ST_EXTENSION                166
 
 

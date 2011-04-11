@@ -134,7 +134,7 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #endif
 
-#define XML_STRING(i, x) sal_Char __READONLY_DATA i[sizeof(x)] = x
+#define XML_STRING(i, x) sal_Char const i[sizeof(x)] = x
 #define MAP_LEN(x) x, sizeof(x) - 1
 
 XML_STRING( sXML_metaStreamName,        "meta.xml");
@@ -268,7 +268,7 @@ sal_Int32 SchXMLWrapper::Import()
 
     if( !mxModel.is() )
     {
-        DBG_ERROR("Got NO Model in XMLImport");
+        OSL_FAIL("Got NO Model in XMLImport");
         return sal_False;
     }
 
@@ -276,7 +276,7 @@ sal_Int32 SchXMLWrapper::Import()
 
     if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.ChartDocument" ) ) ) )
     {
-        DBG_ERROR( "Model is no ChartDocument in XMLImport" );
+        OSL_FAIL( "Model is no ChartDocument in XMLImport" );
         return sal_False;
     }
 
@@ -284,18 +284,18 @@ sal_Int32 SchXMLWrapper::Import()
 
     if( !xServiceFactory.is() )
     {
-        DBG_ERROR( "XMLReader::Read: got no service manager" );
+        OSL_FAIL( "XMLReader::Read: got no service manager" );
         return sal_False;
     }
 
     // get the sax parser component
     uno::Reference< xml::sax::XParser > xXMLParser(
-        xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )),
+        xServiceFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
         uno::UNO_QUERY );
 
     if( ! xXMLParser.is() )
     {
-        DBG_ERROR( "com.sun.star.xml.sax.Parser service missing" );
+        OSL_FAIL( "com.sun.star.xml.sax.Parser service missing" );
         return sal_False;
     }
 
@@ -305,28 +305,28 @@ sal_Int32 SchXMLWrapper::Import()
 
     // import meta information
     ImportStream(
-        ::rtl::OUString::createFromAscii( sXML_metaStreamName ),
-        ::rtl::OUString::createFromAscii( sXML_import_chart_meta_service ),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_metaStreamName )),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_import_chart_meta_service )),
         xXMLParser, xServiceFactory, xGraphObjResolver );
 
     // import styles
     ImportStream(
-        ::rtl::OUString::createFromAscii( sXML_styleStreamName ),
-        ::rtl::OUString::createFromAscii( sXML_import_chart_styles_service ),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_styleStreamName )),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_import_chart_styles_service )),
         xXMLParser, xServiceFactory, xGraphObjResolver );
 
     // import content
     nWarning = ImportStream(
-        ::rtl::OUString::createFromAscii( sXML_contentStreamName ),
-        ::rtl::OUString::createFromAscii( sXML_import_chart_content_service ),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_contentStreamName )),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_import_chart_content_service )),
         xXMLParser, xServiceFactory, xGraphObjResolver );
 
     // import of "content.xml" didn't work - try old "Content.xml" stream
     if( nWarning != 0 )
     {
         nWarning = ImportStream(
-            ::rtl::OUString::createFromAscii( sXML_oldContentStreamName ),
-            ::rtl::OUString::createFromAscii( sXML_import_chart_old_content_service ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_oldContentStreamName )),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_import_chart_old_content_service )),
             xXMLParser, xServiceFactory, xGraphObjResolver );
     }
 
@@ -403,7 +403,7 @@ sal_Bool SchXMLWrapper::Export()
     {
         if( !mxModel.is() )
         {
-            DBG_ERROR("Got NO Model in XMLExport");
+            OSL_FAIL("Got NO Model in XMLExport");
             return sal_False;
         }
 
@@ -412,7 +412,7 @@ sal_Bool SchXMLWrapper::Export()
         if( ! xServiceInfo.is() || !xServiceInfo->supportsService(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart.ChartDocument" ) ) ) )
         {
-            DBG_ERROR( "Model is no ChartDocument in XMLExport" );
+            OSL_FAIL( "Model is no ChartDocument in XMLExport" );
             return sal_False;
         }
 
@@ -420,7 +420,7 @@ sal_Bool SchXMLWrapper::Export()
 
         if( !xServiceFactory.is() )
         {
-            DBG_ERROR( "got no service manager" );
+            OSL_FAIL( "got no service manager" );
             return sal_False;
         }
 
@@ -429,7 +429,7 @@ sal_Bool SchXMLWrapper::Export()
 
         if( !xWriter.is() )
         {
-            DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
+            OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
             return sal_False;
         }
         uno::Reference<xml::sax::XDocumentHandler > xHandler( xWriter, uno::UNO_QUERY );
@@ -474,8 +474,8 @@ sal_Bool SchXMLWrapper::Export()
 
         //export to one stream
         bRet = ExportStream(
-            ::rtl::OUString::createFromAscii( sXML_contentStreamName ),
-            ::rtl::OUString::createFromAscii( sXML_export_chart_allinone_service ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_contentStreamName )),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_export_chart_allinone_service )),
             xDataSource, xServiceFactory, aArgs );
 
         // graphics resolver has to be destroyed this way!

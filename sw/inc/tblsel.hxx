@@ -56,7 +56,7 @@ SV_DECL_PTRARR_SORT( SwSelBoxes, SwTableBoxPtr, 10, 20 )
 //erweitert.
 //Die Boxen werden ueber das Layout zusammengsucht, es wird auch bei
 //aufgespaltenen Tabellen korrekt gearbeitet (siehe: MakeSelUnions()).
-typedef USHORT SwTblSearchType;
+typedef sal_uInt16 SwTblSearchType;
 namespace nsSwTblSearchType
 {
     const SwTblSearchType TBLSEARCH_NONE = 0x1;       // keine Erweiterung
@@ -85,22 +85,22 @@ void GetTblSelCrs( const SwCrsrShell& rShell, SwSelBoxes& rBoxes );
 void GetTblSelCrs( const SwTableCursor& rTblCrsr, SwSelBoxes& rBoxes );
 
 // suche fuer eine AutoSumme die beteiligten Boxen zusammen
-BOOL GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
+sal_Bool GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
 
 // check if the SelBoxes contains protected Boxes
-BOOL HasProtectedCells( const SwSelBoxes& rBoxes );
+sal_Bool HasProtectedCells( const SwSelBoxes& rBoxes );
 
 // teste, ob die Selektion ausgeglichen ist
 SV_DECL_PTRARR( SwChartBoxes, SwTableBoxPtr, 16, 16)
 SV_DECL_PTRARR_DEL( SwChartLines, SwChartBoxes*, 25, 50)
 
-BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
+sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                     SwChartLines* pGetCLines = 0 );
 
 // teste ob die Celle in die SSelection gehoert
 // (wurde eine Funktion, damit GetTblSel() und MakeTblCrsr() immer
 // das "gleiche Verstaendnis" fuer die Selektion haben)
-BOOL IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell );
+sal_Bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell );
 
 // bestimme die Boxen, die zusammen gefasst werden sollen.
 // Dabei wird auf Layout Basis das Rechteck "angepasst". D.H. es
@@ -111,16 +111,16 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                   SwTableBox** ppMergeBox, SwUndoTblMerge* pUndo = 0 );
 
 // teste ob die selektierten Boxen ein gueltiges Merge erlauben
-USHORT CheckMergeSel( const SwPaM& rPam );
-USHORT CheckMergeSel( const SwSelBoxes& rBoxes );
+sal_uInt16 CheckMergeSel( const SwPaM& rPam );
+sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes );
 
-BOOL IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam );
+sal_Bool IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam );
 
 // teste ob ein Split oder InsertCol dazu fuehrt, das eine Box
 // kleiner als MINLAY wird.
-BOOL CheckSplitCells( const SwCrsrShell& rShell, USHORT nDiv,
+sal_Bool CheckSplitCells( const SwCrsrShell& rShell, sal_uInt16 nDiv,
                         const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
-BOOL CheckSplitCells( const SwCursor& rCrsr, USHORT nDiv,
+sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
                         const SwTblSearchType = nsSwTblSearchType::TBLSEARCH_NONE );
 
 //Fuer das Arbeiten auf TabSelektion auch fuer aufgespaltene Tabellen.
@@ -184,9 +184,9 @@ public:
     void SetTableLines( const SwTable &rTable );
     void DelFrms ( SwTable &rTable );
     void MakeFrms( SwTable &rTable );
-    void MakeNewFrms( SwTable &rTable, const USHORT nNumber,
-                                       const BOOL bBehind );
-    BOOL AreLinesToRestore( const SwTable &rTable ) const;
+    void MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
+                                       const sal_Bool bBehind );
+    sal_Bool AreLinesToRestore( const SwTable &rTable ) const;
 
     void ClearLineBehind() { pLineBehind = 0; }
 };
@@ -224,8 +224,8 @@ struct _FndPara
         : rBoxes(rPara.rBoxes), pFndLine(pFL), pFndBox(rPara.pFndBox) {}
 };
 
-BOOL _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara );
-SW_DLLPUBLIC BOOL _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara );
+sal_Bool _FndBoxCopyCol( const SwTableBox*& rpBox, void* pPara );
+SW_DLLPUBLIC sal_Bool _FndLineCopyCol( const SwTableLine*& rpLine, void* pPara );
 
 
 #endif  //  _TBLSEL_HXX

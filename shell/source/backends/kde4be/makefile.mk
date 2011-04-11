@@ -44,8 +44,6 @@ VISIBILITY_HIDDEN=TRUE
 CFLAGSCXX+=-Wno-shadow
 .ENDIF
 
-UNIXTEXT=$(MISC)/$(TARGET)1-ucd.txt
-
 # no "lib" prefix
 DLLPRE =
 
@@ -79,3 +77,11 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ---
 
 .INCLUDE : target.mk
+
+ALLTAR : $(MISC)/kde4be1.component
+
+$(MISC)/kde4be1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        kde4be1.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt kde4be1.component

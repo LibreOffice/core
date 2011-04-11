@@ -31,7 +31,7 @@
 
 #include <map>
 #include <memory>
-
+#include <vector>
 #include <oox/ole/oleobjecthelper.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -39,17 +39,21 @@ namespace com { namespace sun { namespace star {
     namespace awt { class XControlModel; }
     namespace drawing { class XDrawPage; }
     namespace drawing { class XShape; }
+    namespace drawing { class XShapes; }
 } } }
 
-namespace oox { namespace core { class XmlFilterBase; } }
-namespace oox { namespace ole { class EmbeddedForm; } }
+namespace oox {
+    namespace core { class XmlFilterBase; }
+    namespace ole { class EmbeddedControl; }
+    namespace ole { class EmbeddedForm; }
+}
 
 namespace oox {
 namespace vml {
 
 class ShapeBase;
 class ShapeContainer;
-struct ShapeClientData;
+struct ClientData;
 
 // ============================================================================
 
@@ -116,6 +120,9 @@ public:
     /** Returns the form object used to process ActiveX form controls. */
     ::oox::ole::EmbeddedForm& getControlForm() const;
 
+    /** Registers a block of shape identifiers reserved by this drawing. Block
+        size is 1024, shape identifiers are one-based (block 1 => 1025-2048). */
+    void                registerBlockId( sal_Int32 nBlockId );
     /** Registers the passed embedded OLE object. The related shape will then
         load the OLE object data from the specified fragment. */
     void                registerOleObject( const OleObjectInfo& rOleObject );
@@ -127,36 +134,65 @@ public:
     void                finalizeFragmentImport();
 
     /** Creates and inserts all UNO shapes into the passed container. The virtual
-        function notifyShapeInserted() will be called for each new shape. */
+        function notifyXShapeInserted() will be called for each new shape. */
     void                convertAndInsert() const;
 
+    /** Returns the local shape index from the passed global shape identifier. */
+    sal_Int32           getLocalShapeIndex( const ::rtl::OUString& rShapeId ) const;
     /** Returns the registered info structure for an OLE object, if extant. */
     const OleObjectInfo* getOleObjectInfo( const ::rtl::OUString& rShapeId ) const;
     /** Returns the registered info structure for a form control, if extant. */
     const ControlInfo*  getControlInfo( const ::rtl::OUString& rShapeId ) const;
 
+    /** Creates a new UNO shape object, inserts it into the passed UNO shape
+        container, and sets the shape position and size. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        createAndInsertXShape(
+                            const ::rtl::OUString& rService,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
+
+    /** Creates a new UNO shape object for a form control, inserts the control
+        model into the form, and the shape into the passed UNO shape container. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        createAndInsertXControlShape(
+                            const ::oox::ole::EmbeddedControl& rControl,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const ::com::sun::star::awt::Rectangle& rShapeRect,
+                            sal_Int32& rnCtrlIndex ) const;
+
     /** Derived classes may disable conversion of specific shapes. */
     virtual bool        isShapeSupported( const ShapeBase& rShape ) const;
 
+    /** Derived classes may return additional base names for automatic shape
+        name creation. */
+    virtual ::rtl::OUString getShapeBaseName( const ShapeBase& rShape ) const;
+
     /** Derived classes may calculate the shape rectangle from a non-standard
         anchor information string. */
-    virtual bool        convertShapeClientAnchor(
+    virtual bool        convertClientAnchor(
                             ::com::sun::star::awt::Rectangle& orShapeRect,
                             const ::rtl::OUString& rShapeAnchor ) const;
 
-    /** Derived classes may convert additional form control properties from the
-        passed VML shape client data. */
-    virtual void        convertControlClientData(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
-                            const ShapeClientData& rClientData ) const;
+    /** Derived classes create a UNO shape according to the passed shape model.
+        Called for shape models that specify being under host control. */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        createAndInsertClientXShape(
+                            const ShapeBase& rShape,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
 
-    /** Derived classes may want to know that a shape has been inserted. Will
-        be called from the convertAndInsert() implementation. */
-    virtual void        notifyShapeInserted(
+    /** Derived classes may want to know that a UNO shape has been inserted.
+        Will be called from the convertAndInsert() implementation.
+        @param bGroupChild  True = inserted into a group shape,
+            false = inserted directly into this drawing. */
+    virtual void        notifyXShapeInserted(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect );
+                            const ::com::sun::star::awt::Rectangle& rShapeRect,
+                            const ShapeBase& rShape, bool bGroupChild );
 
 private:
+    typedef ::std::vector< sal_Int32 >                      BlockIdVector;
     typedef ::std::auto_ptr< ::oox::ole::EmbeddedForm >     EmbeddedFormPtr;
     typedef ::std::auto_ptr< ShapeContainer >               ShapeContainerPtr;
     typedef ::std::map< ::rtl::OUString, OleObjectInfo >    OleObjectInfoMap;
@@ -165,7 +201,8 @@ private:
     ::oox::core::XmlFilterBase& mrFilter;   /// Filter object that imports/exports the VML drawing.
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
                         mxDrawPage;         /// UNO draw page used to insert the shapes.
-    mutable EmbeddedFormPtr mxCtrlForm;     /// The control form used to process ActiveX controls.
+    mutable EmbeddedFormPtr mxCtrlForm;     /// The control form used to process embedded controls.
+    mutable BlockIdVector maBlockIds;       /// Block identifiers used by this drawing.
     ShapeContainerPtr   mxShapes;           /// All shapes and shape templates.
     OleObjectInfoMap    maOleObjects;       /// Info about all embedded OLE objects, mapped by shape id.
     ControlInfoMap      maControls;         /// Info about all embedded form controls, mapped by control name.

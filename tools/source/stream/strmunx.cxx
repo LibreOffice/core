@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-// no include "precompiled_tools.hxx" because this file is included in strmsys.cxx
+// don't include "precompiled_tools.hxx" because this file is included in strmsys.cxx
 
 #include <stdio.h>
 #include <string.h>
@@ -40,6 +40,7 @@
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
+#include <vector>
 
 #include <osl/mutex.hxx>
 #include <osl/thread.h> // osl_getThreadTextEncoding
@@ -55,10 +56,6 @@ using namespace osl;
 // ----------------
 // - InternalLock -
 // ----------------
-
-class InternalStreamLock;
-DECLARE_LIST( InternalStreamLockList, InternalStreamLock* )
-namespace { struct LockList : public rtl::Static< InternalStreamLockList, LockList > {}; }
 
 #ifndef BOOTSTRAP
 namespace { struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {}; }
@@ -78,6 +75,9 @@ public:
     static void UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* );
 };
 
+typedef ::std::vector< InternalStreamLock* > InternalStreamLockList;
+namespace { struct LockList : public rtl::Static< InternalStreamLockList, LockList > {}; }
+
 InternalStreamLock::InternalStreamLock(
     sal_Size nStart,
     sal_Size nEnd,
@@ -88,7 +88,7 @@ InternalStreamLock::InternalStreamLock(
 {
     ByteString aFileName(m_pStream->GetFileName(), osl_getThreadTextEncoding());
     stat( aFileName.GetBuffer(), &m_aStat );
-    LockList::get().Insert( this, LIST_APPEND );
+    LockList::get().push_back( this );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "locked %s", aFileName.GetBuffer() );
     if( m_nStartPos || m_nEndPos )
@@ -99,7 +99,15 @@ InternalStreamLock::InternalStreamLock(
 
 InternalStreamLock::~InternalStreamLock()
 {
-    LockList::get().Remove( this );
+    for ( InternalStreamLockList::iterator it = LockList::get().begin();
+          it < LockList::get().end();
+          ++it
+    ) {
+        if ( this == *it ) {
+            LockList::get().erase( it );
+            break;
+        }
+    }
 #if OSL_DEBUG_LEVEL > 1
     ByteString aFileName(m_pStream->GetFileName(), osl_getThreadTextEncoding());
     fprintf( stderr, "unlocked %s", aFileName.GetBuffer() );
@@ -124,9 +132,9 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
 
     InternalStreamLock* pLock = NULL;
     InternalStreamLockList &rLockList = LockList::get();
-    for( ULONG i = 0; i < rLockList.Count(); ++i )
+    for( size_t i = 0; i < rLockList.size(); ++i )
     {
-        pLock = rLockList.GetObject( i );
+        pLock = rLockList[ i ];
         if( aStat.st_ino == pLock->m_aStat.st_ino )
         {
             sal_Bool bDenyByOptions = sal_False;
@@ -155,6 +163,7 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
             }
         }
     }
+    // hint: new InternalStreamLock() adds the entry to the global list
     pLock  = new InternalStreamLock( nStart, nEnd, pStream );
     return sal_True;
 }
@@ -168,26 +177,31 @@ void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStrea
     InternalStreamLockList &rLockList = LockList::get();
     if( nStart == 0 && nEnd == 0 )
     {
-        for( ULONG i = 0; i < rLockList.Count(); ++i )
+        // nStart & nEnd = 0, so delete all locks
+        for( size_t i = 0; i < rLockList.size(); ++i )
         {
-            if( ( pLock = rLockList.GetObject( i ) )->m_pStream == pStream )
+            if( ( pLock = rLockList[ i ] )->m_pStream == pStream )
             {
+                // hint: delete will remove pLock from the global list
                 delete pLock;
                 i--;
             }
         }
         return;
     }
-    for( ULONG i = 0; i < rLockList.Count(); ++i )
+    for( size_t i = 0; i < rLockList.size(); ++i )
     {
-        if( ( pLock = rLockList.GetObject( i ) )->m_pStream == pStream &&
-            nStart == pLock->m_nStartPos && nEnd == pLock->m_nEndPos )
-        {
+        if (  ( pLock = rLockList[ i ] )->m_pStream == pStream
+           && nStart == pLock->m_nStartPos
+           && nEnd == pLock->m_nEndPos
+        ) {
+            // hint: delete will remove pLock from the global list
             delete pLock;
             return;
         }
     }
 }
+
 
 // --------------
 // - StreamData -
@@ -210,8 +224,9 @@ static sal_uInt32 GetSvError( int nErrno )
         { 0,            SVSTREAM_OK },
         { EACCES,       SVSTREAM_ACCESS_DENIED },
         { EBADF,        SVSTREAM_INVALID_HANDLE },
-#if defined( RS6000 ) || defined( ALPHA ) || defined( HP9000 ) || defined( NETBSD ) || defined(FREEBSD) || defined(MACOSX) || \
-    defined(OPENBSD) || defined(__FreeBSD_kernel__) || defined ( AIX )
+#if defined(RS6000) || defined(ALPHA) || defined(NETBSD) || \
+    defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
+    defined(__FreeBSD_kernel__) || defined (AIX) || defined(DRAGONFLY)
         { EDEADLK,      SVSTREAM_LOCKING_VIOLATION },
 #else
         { EDEADLOCK,    SVSTREAM_LOCKING_VIOLATION },
@@ -225,8 +240,9 @@ static sal_uInt32 GetSvError( int nErrno )
         { EAGAIN,       SVSTREAM_LOCKING_VIOLATION },
         { EISDIR,       SVSTREAM_PATH_NOT_FOUND },
         { ELOOP,        SVSTREAM_PATH_NOT_FOUND },
-#if ! defined( RS6000 ) && ! defined( ALPHA ) && ! defined( NETBSD ) && ! defined (FREEBSD) && ! defined (MACOSX) && \
-    !defined(OPENBSD) && ! defined(__FreeBSD_kernel__)
+#if !defined(RS6000) && !defined(ALPHA) && !defined(NETBSD) && !defined (FREEBSD) && \
+    !defined(MACOSX) && !defined(OPENBSD) && !defined(__FreeBSD_kernel__) && \
+    !defined(DRAGONFLY)
         { EMULTIHOP,    SVSTREAM_PATH_NOT_FOUND },
         { ENOLINK,      SVSTREAM_PATH_NOT_FOUND },
 #endif
@@ -256,10 +272,6 @@ static sal_uInt32 GetSvError( int nErrno )
 |*
 |*    SvFileStream::SvFileStream()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 08.06.94
-|*    Letzte Aenderung  OV 08.06.94
-|*
 *************************************************************************/
 
 SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
@@ -284,10 +296,6 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
 |*
 |*    SvFileStream::SvFileStream()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 22.11.94
-|*    Letzte Aenderung  OV 22.11.94
-|*
 *************************************************************************/
 
 SvFileStream::SvFileStream()
@@ -302,10 +310,6 @@ SvFileStream::SvFileStream()
 /*************************************************************************
 |*
 |*    SvFileStream::~SvFileStream()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 22.11.94
-|*    Letzte Aenderung  OV 22.11.94
 |*
 *************************************************************************/
 
@@ -323,10 +327,6 @@ SvFileStream::~SvFileStream()
 |*
 |*    SvFileStream::GetFileHandle()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 22.11.94
-|*    Letzte Aenderung  OV 22.11.94
-|*
 *************************************************************************/
 
 sal_uInt32 SvFileStream::GetFileHandle() const
@@ -337,10 +337,6 @@ sal_uInt32 SvFileStream::GetFileHandle() const
 /*************************************************************************
 |*
 |*    SvFileStream::IsA()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 14.06.94
-|*    Letzte Aenderung  OV 14.06.94
 |*
 *************************************************************************/
 
@@ -353,10 +349,6 @@ sal_uInt16 SvFileStream::IsA() const
 |*
 |*    SvFileStream::GetData()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
-|*
 *************************************************************************/
 
 sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
@@ -366,7 +358,7 @@ sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
     aTraceStr += ByteString::CreateFromInt64(nSize);
     aTraceStr += " Bytes from ";
     aTraceStr += ByteString(aFilename, osl_getThreadTextEncoding());
-    DBG_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 
     int nRead = 0;
@@ -383,10 +375,6 @@ sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 |*
 |*    SvFileStream::PutData()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
-|*
 *************************************************************************/
 
 sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
@@ -396,7 +384,7 @@ sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
     aTraceStr += ByteString::CreateFromInt64(nSize);
     aTraceStr += " Bytes to ";
     aTraceStr += ByteString(aFilename, osl_getThreadTextEncoding());
-    DBG_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 
     int nWrite = 0;
@@ -414,10 +402,6 @@ sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
 /*************************************************************************
 |*
 |*    SvFileStream::SeekPos()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -449,10 +433,6 @@ sal_Size SvFileStream::SeekPos( sal_Size nPos )
 |*
 |*    SvFileStream::FlushData()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
-|*
 *************************************************************************/
 
 void SvFileStream::FlushData()
@@ -465,10 +445,6 @@ static char *pFileLockEnvVar = (char*)1;
 /*************************************************************************
 |*
 |*    SvFileStream::LockRange()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -528,8 +504,6 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     // NFS-2-Server (kein Lockdaemon) zu verhindern.
     // File-Locking ?ber NFS ist generell ein Performancekiller.
     //                      HR, 22.10.1997 fuer SOLARIS
-    //                      CP, 30.11.1997 fuer HPUX
-    //                      ER, 18.12.1997 fuer IRIX
     //                      HR, 18.05.1998 Environmentvariable
 
     if ( pFileLockEnvVar == (char*)1 )
@@ -540,17 +514,6 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     aflock.l_type = nLockMode;
     if (fcntl(pInstanceData->nHandle, F_GETLK, &aflock) == -1)
     {
-    #if ( defined HPUX && defined BAD_UNION )
-    #ifdef DBG_UTIL
-        fprintf( stderr, "***** FCNTL(lock):errno = %d\n", errno );
-    #endif
-        if ( errno == EINVAL || errno == ENOSYS )
-            return sal_True;
-    #endif
-    #if defined SINIX
-        if (errno == EINVAL)
-            return sal_True;
-    #endif
     #if defined SOLARIS
         if (errno == ENOSYS)
             return sal_True;
@@ -576,10 +539,6 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
 /*************************************************************************
 |*
 |*    SvFileStream::UnlockRange()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -608,18 +567,6 @@ sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
     if (fcntl(pInstanceData->nHandle, F_SETLK, &aflock) != -1)
         return sal_True;
 
-#if ( defined HPUX && defined BAD_UNION )
-#ifdef DBG_UTIL
-        fprintf( stderr, "***** FCNTL(unlock):errno = %d\n", errno );
-#endif
-        if ( errno == EINVAL || errno == ENOSYS )
-            return sal_True;
-#endif
-#if ( defined SINIX )
-    if (errno == EINVAL)
-        return sal_True;
-#endif
-
     SetError( ::GetSvError( errno ));
     return sal_False;
 }
@@ -627,10 +574,6 @@ sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
 /*************************************************************************
 |*
 |*    SvFileStream::LockFile()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -643,10 +586,6 @@ sal_Bool SvFileStream::LockFile()
 |*
 |*    SvFileStream::UnlockFile()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
-|*
 *************************************************************************/
 
 sal_Bool SvFileStream::UnlockFile()
@@ -657,10 +596,6 @@ sal_Bool SvFileStream::UnlockFile()
 /*************************************************************************
 |*
 |*    SvFileStream::Open()
-|*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -689,7 +624,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 #ifdef DBG_UTIL
     ByteString aTraceStr( "SvFileStream::Open(): " );
     aTraceStr +=  aLocalFilename;
-    DBG_TRACE( aTraceStr.GetBuffer() );
+    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 
     if ( lstat( aLocalFilename.GetBuffer(), &buf ) == 0 )
@@ -789,10 +724,6 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 |*
 |*    SvFileStream::ReOpen()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
-|*
 *************************************************************************/
 
 void SvFileStream::ReOpen()
@@ -805,10 +736,6 @@ void SvFileStream::ReOpen()
 |*
 |*    SvFileStream::Close()
 |*
-|*    Beschreibung      STREAM.SDW
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
-|*
 *************************************************************************/
 
 void SvFileStream::Close()
@@ -820,7 +747,7 @@ void SvFileStream::Close()
 #ifdef DBG_UTIL
         ByteString aTraceStr( "SvFileStream::Close(): " );
         aTraceStr += ByteString(aFilename, osl_getThreadTextEncoding());
-        DBG_TRACE( aTraceStr.GetBuffer() );
+        OSL_TRACE( "%s", aTraceStr.GetBuffer() );
 #endif
 
         Flush();
@@ -839,8 +766,6 @@ void SvFileStream::Close()
 |*    SvFileStream::ResetError()
 |*
 |*    Beschreibung      STREAM.SDW; Setzt Filepointer auf Dateianfang
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -855,8 +780,6 @@ void SvFileStream::ResetError()
 |*    SvFileStream::SetSize()
 |*
 |*    Beschreibung      STREAM.SDW;
-|*    Ersterstellung    OV 15.06.94
-|*    Letzte Aenderung  OV 15.06.94
 |*
 *************************************************************************/
 
@@ -919,6 +842,5 @@ void SvFileStream::SetSize (sal_Size nSize)
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

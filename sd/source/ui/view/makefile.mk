@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -85,7 +85,6 @@ SLOFILES =	\
         $(SLO)$/presvish.obj \
         $(SLO)$/outlview.obj \
         $(SLO)$/tabcontr.obj \
-        $(SLO)$/bmcache.obj	\
         $(SLO)$/drbezob.obj	\
         $(SLO)$/drtxtob.obj	\
         $(SLO)$/drtxtob1.obj	\

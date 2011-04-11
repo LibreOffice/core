@@ -183,7 +183,7 @@ public class SQLQueryComposer
             try
             {
                 XPropertySet xColumnPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xColumnIndexAccess.getByIndex(i));
-                String sName = (String) xColumnPropertySet.getPropertyValue("Name");
+                String sName = (String) xColumnPropertySet.getPropertyValue(PropertyNames.PROPERTY_NAME);
                 if (JavaTools.FieldInTable(CurDBMetaData.getSortFieldNames(), sName) == -1)
                 {
                     boolean bascend = AnyConverter.toBoolean(xColumnPropertySet.getPropertyValue("IsAscending"));

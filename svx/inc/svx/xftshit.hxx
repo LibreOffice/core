@@ -45,12 +45,12 @@ public:
                             XFormTextShadowItem(XFormTextShadow = XFTSHADOW_NONE);
                             XFormTextShadowItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
-    virtual USHORT          GetValueCount() const;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual sal_uInt16          GetValueCount() const;
     XFormTextShadow         GetValue() const { return (XFormTextShadow) SfxEnumItem::GetValue(); }
     // #FontWork#
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 #endif

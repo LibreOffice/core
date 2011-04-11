@@ -38,7 +38,7 @@ SV_DECL_REF(SbxMemoryStream)
 class SbxMemoryStream : public SbxBase, public SvMemoryStream
 {
   public:
-    SbxMemoryStream(ULONG nInitSize_=512, ULONG nResize_=64) :
+    SbxMemoryStream(sal_uIntPtr nInitSize_=512, sal_uIntPtr nResize_=64) :
         SvMemoryStream(nInitSize_,nResize_) {}
     ~SbxMemoryStream();
 

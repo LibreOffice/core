@@ -46,10 +46,11 @@
 #include "datman.hxx"
 #include "bibtools.hxx"
 
-using namespace rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
@@ -64,7 +65,7 @@ namespace bib
 
     using namespace ::com::sun::star::uno;
 
-    void HandleTaskPaneList( Window* pWindow, BOOL bAddToList )
+    void HandleTaskPaneList( Window* pWindow, sal_Bool bAddToList )
     {
         Window*             pParent = pWindow->GetParent();
 
@@ -178,7 +179,6 @@ namespace bib
                     m_xGridWin->setVisible( sal_True );
                     m_xControl->setDesignMode( sal_True );
                         // initially switch on the desing mode - switch it off _after_ loading the form
-                        // 17.10.2001 - 93107 - frank.schoenheit@sun.com
 
                     ::Size aSize = GetOutputSizePixel();
                     m_xGridWin->setPosSize(0, 0, aSize.Width(),aSize.Height(), awt::PosSize::POSSIZE);

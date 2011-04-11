@@ -103,7 +103,7 @@
 //________________________________________________________________________________________________________
 
 #include <sfx2/sfxbasecontroller.hxx>
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 #include "workwin.hxx"
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -115,7 +115,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objuno.hxx>
 #include <sfx2/printer.hxx>
-#include <basmgr.hxx>
+#include <sfx2/basmgr.hxx>
 #include <sfx2/event.hxx>
 #include <eventsupplier.hxx>
 #include <sfx2/evntconf.hxx>
@@ -126,12 +126,13 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include "sfx2/docstoragemodifylistener.hxx"
-#include "brokenpackageint.hxx"
+#include "sfx2/brokenpackageint.hxx"
 #include "graphhelp.hxx"
+#include "docundomanager.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 
-#include <sfxresid.hxx>
+#include <sfx2/sfxresid.hxx>
 
 //________________________________________________________________________________________________________
 //  namespaces
@@ -150,6 +151,10 @@ using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::document::XDocumentRecovery;
+using ::com::sun::star::document::XUndoManager;
+using ::com::sun::star::document::XUndoAction;
+using ::com::sun::star::document::UndoFailedException;
+using ::com::sun::star::frame::XModel;
 
 /** This Listener is used to get notified when the XDocumentProperties of the
     XModel change.
@@ -218,15 +223,17 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     sal_Bool                                                m_bSaving               ;
     sal_Bool                                                m_bSuicide              ;
     sal_Bool                                                m_bInitialized          ;
+    sal_Bool                                                m_bExternalTitle        ;
     sal_Bool                                                m_bModifiedSinceLastSave;
     uno::Reference< com::sun::star::view::XPrintable>       m_xPrintable            ;
     uno::Reference< script::provider::XScriptProvider >     m_xScriptProvider;
     uno::Reference< ui::XUIConfigurationManager >           m_xUIConfigurationManager;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >   m_pStorageModifyListen;
-    ::rtl::OUString                                 m_sModuleIdentifier;
+    ::rtl::OUString                                         m_sModuleIdentifier;
     css::uno::Reference< css::frame::XTitle >               m_xTitleHelper;
     css::uno::Reference< css::frame::XUntitledNumbers >     m_xNumberedControllers;
-    uno::Reference< rdf::XDocumentMetadataAccess>   m_xDocumentMetadata;
+    uno::Reference< rdf::XDocumentMetadataAccess>           m_xDocumentMetadata;
+    ::rtl::Reference< ::sfx2::DocumentUndoManager >         m_pDocumentUndoManager;
 
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
@@ -238,11 +245,13 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_bSaving               ( sal_False     )
             ,   m_bSuicide              ( sal_False     )
             ,   m_bInitialized          ( sal_False     )
+            ,   m_bExternalTitle        ( sal_False     )
             ,   m_bModifiedSinceLastSave( sal_False     )
             ,   m_pStorageModifyListen  ( NULL          )
             ,   m_xTitleHelper          ()
             ,   m_xNumberedControllers  ()
             ,   m_xDocumentMetadata     () // lazy
+            ,   m_pDocumentUndoManager  ()
     {
         // increase global instance counter.
         ++g_nInstanceCounter;
@@ -281,8 +290,8 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             const uno::Reference<frame::
                 XTransientDocumentsDocumentContentFactory> xTDDCF(
                     xMsf->createInstanceWithContext(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.frame."
-                            "TransientDocumentsDocumentContentFactory"),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame."
+                            "TransientDocumentsDocumentContentFactory")),
                     xContext),
                 uno::UNO_QUERY_THROW);
             const uno::Reference<ucb::XContent> xContent(
@@ -296,7 +305,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             OSL_ENSURE(uri.getLength(), "GetDMA: empty uri?");
             if (uri.getLength() && !uri.endsWithAsciiL("/", 1))
             {
-                uri = uri + ::rtl::OUString::createFromAscii("/");
+                uri = uri + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
             }
 
             m_xDocumentMetadata = new ::sfx2::DocumentMetadataAccess(
@@ -399,7 +408,7 @@ SfxOwnFramesLocker::SfxOwnFramesLocker( SfxObjectShell* pObjectShell )
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Not possible to lock the frame window!\n" );
+            OSL_FAIL( "Not possible to lock the frame window!\n" );
         }
     }
 }
@@ -443,7 +452,7 @@ void SfxOwnFramesLocker::UnlockFrames()
         }
         catch( uno::Exception& )
         {
-            OSL_ENSURE( sal_False, "Can't unlock the frame window!\n" );
+            OSL_FAIL( "Can't unlock the frame window!\n" );
         }
     }
 }
@@ -470,8 +479,8 @@ SfxSaveGuard::SfxSaveGuard(const uno::Reference< frame::XModel >&             xM
     , m_pData      (pData )
     , m_pFramesLock(0     )
 {
-    static ::rtl::OUString MSG_1 = ::rtl::OUString::createFromAscii("Object already disposed."                                       );
-    static ::rtl::OUString MSG_2 = ::rtl::OUString::createFromAscii("Concurrent save requests on the same document are not possible.");
+    static ::rtl::OUString MSG_1(RTL_CONSTASCII_USTRINGPARAM("Object already disposed."));
+    static ::rtl::OUString MSG_2(RTL_CONSTASCII_USTRINGPARAM("Concurrent save requests on the same document are not possible."));
 
     if ( m_pData->m_bClosed )
         throw ::com::sun::star::lang::DisposedException(
@@ -499,10 +508,10 @@ SfxSaveGuard::~SfxSaveGuard()
     m_pData->m_bSaving = sal_False;
 
     // m_bSuicide was set e.g. in case somewhere tried to close a document, while it was used for
-    // storing at the same time. Further m_bSuicide was set to TRUE only if close(TRUE) was called.
+    // storing at the same time. Further m_bSuicide was set to sal_True only if close(sal_True) was called.
     // So the owner ship was delegated to the place where a veto exception was thrown.
     // Now we have to call close() again and delegate the owner ship to the next one, which
-    // cant accept that. Close(FALSE) cant work in this case. Because then the document will may be never closed ...
+    // cant accept that. Close(sal_False) cant work in this case. Because then the document will may be never closed ...
 
     if ( m_pData->m_bSuicide )
     {
@@ -783,6 +792,12 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
         m_pData->m_pStorageModifyListen = NULL;
     }
 
+    if ( m_pData->m_pDocumentUndoManager.is() )
+    {
+        m_pData->m_pDocumentUndoManager->disposing();
+        m_pData->m_pDocumentUndoManager = NULL;
+    }
+
     lang::EventObject aEvent( (frame::XModel *)this );
     m_pData->m_aInterfaceContainer.disposeAndClear( aEvent );
 
@@ -790,8 +805,6 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
     {
         // as long as an SfxObjectShell is assigned to an SfxBaseModel it is still existing here
         // so we can't dispose the shared DocumentInfoObject here
-        // uno::Reference < lang::XComponent > xComp( m_pData->m_xDocumentInfo, uno::UNO_QUERY );
-        // xComp->dispose();
         m_pData->m_xDocumentInfo = 0;
     }
 
@@ -861,17 +874,17 @@ uno::Reference< document::XDocumentInfo > SAL_CALL SfxBaseModel::getDocumentInfo
         } catch (uno::RuntimeException &) {
             throw;
         } catch (uno::Exception & e) {
-            throw lang::WrappedTargetRuntimeException(::rtl::OUString::createFromAscii(
-                "SfxBaseModel::getDocumentInfo: cannot initialize"), *this,
+            throw lang::WrappedTargetRuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "SfxBaseModel::getDocumentInfo: cannot initialize")), *this,
                 uno::makeAny(e));
         }
         try {
-            rtl::OUString aName = rtl::OUString::createFromAscii("MediaType");
+            rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("MediaType"));
             uno::Reference < beans::XPropertySet > xSet(
-                getDocumentStorage(), uno::UNO_QUERY );
+                getDocumentStorage(), uno::UNO_QUERY_THROW );
             uno::Any aMediaType = xSet->getPropertyValue( aName );
             uno::Reference < beans::XPropertySet > xDocSet(
-                m_pData->m_xDocumentInfo, uno::UNO_QUERY );
+                m_pData->m_xDocumentInfo, uno::UNO_QUERY_THROW );
             xDocSet->setPropertyValue( aName, aMediaType );
         } catch (uno::Exception &) {
             //ignore
@@ -901,7 +914,6 @@ SfxBaseModel::getDocumentProperties()
             ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.document.DocumentProperties") ),
             uno::UNO_QUERY_THROW);
-//        xDocProps->initialize(uno::Sequence<uno::Any>());
         m_pData->m_xDocumentProperties.set(xDocProps, uno::UNO_QUERY_THROW);
         uno::Reference<util::XModifyBroadcaster> xMB(m_pData->m_xDocumentProperties, uno::UNO_QUERY_THROW);
         xMB->addModifyListener(new SfxDocInfoListener_Impl(*m_pData->m_pObjectShell));
@@ -943,7 +955,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   ::rtl::OUString&        
     throw(::com::sun::star::uno::RuntimeException)
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
-    if ( rURL.getLength() == 0 && rArgs.getLength() == 1 && rArgs[0].Name.equalsAscii( "SetEmbedded" ) )
+    if ( rURL.getLength() == 0 && rArgs.getLength() == 1 && rArgs[0].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SetEmbedded")) )
     {
         // allows to set a windowless document to EMBEDDED state
         // but _only_ before load() or initNew() methods
@@ -985,6 +997,8 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   ::rtl::OUString&        
         aArgs.remove( "InputStream" );
         aArgs.remove( "URL" );
         aArgs.remove( "Frame" );
+        aArgs.remove( "Password" );
+        aArgs.remove( "EncryptionData" );
 
         // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be removed here
 
@@ -1067,13 +1081,13 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs() throw(::c
         aRectSeq[3] = aTmpRect.Bottom();
 
         seqArgsNew.realloc( ++nNewLength );
-        seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString::createFromAscii( "WinExtent" );
+        seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WinExtent"));
         seqArgsNew[ nNewLength - 1 ].Value <<= aRectSeq;
 
         if ( m_pData->m_aPreusedFilterName.getLength() )
         {
             seqArgsNew.realloc( ++nNewLength );
-            seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString::createFromAscii( "PreusedFilterName" );
+            seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreusedFilterName"));
             seqArgsNew[ nNewLength - 1 ].Value <<= m_pData->m_aPreusedFilterName;
         }
 
@@ -1089,7 +1103,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs() throw(::c
             aBorderSeq[3] = aBorder.Bottom();
 
             seqArgsNew.realloc( ++nNewLength );
-            seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString::createFromAscii( "DocumentBorder" );
+            seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentBorder"));
             seqArgsNew[ nNewLength - 1 ].Value <<= aBorderSeq;
         }
 
@@ -1186,6 +1200,51 @@ void SAL_CALL SfxBaseModel::disconnectController( const uno::Reference< frame::X
         m_pData->m_xCurrent = uno::Reference< frame::XController > ();
 }
 
+namespace
+{
+    typedef ::cppu::WeakImplHelper1< XUndoAction > ControllerLockUndoAction_Base;
+    class ControllerLockUndoAction : public ControllerLockUndoAction_Base
+    {
+    public:
+        ControllerLockUndoAction( const Reference< XModel >& i_model, const bool i_undoIsUnlock )
+            :m_xModel( i_model )
+            ,m_bUndoIsUnlock( i_undoIsUnlock )
+        {
+        }
+
+        // XUndoAction
+        virtual ::rtl::OUString SAL_CALL getTitle() throw (RuntimeException);
+        virtual void SAL_CALL undo(  ) throw (UndoFailedException, RuntimeException);
+        virtual void SAL_CALL redo(  ) throw (UndoFailedException, RuntimeException);
+
+    private:
+        const Reference< XModel >   m_xModel;
+        const bool                  m_bUndoIsUnlock;
+    };
+
+    ::rtl::OUString SAL_CALL ControllerLockUndoAction::getTitle() throw (RuntimeException)
+    {
+        // this action is intended to be used within an UndoContext only, so nobody will ever see this title ...
+        return ::rtl::OUString();
+    }
+
+    void SAL_CALL ControllerLockUndoAction::undo(  ) throw (UndoFailedException, RuntimeException)
+    {
+        if ( m_bUndoIsUnlock )
+            m_xModel->unlockControllers();
+        else
+            m_xModel->lockControllers();
+    }
+
+    void SAL_CALL ControllerLockUndoAction::redo(  ) throw (UndoFailedException, RuntimeException)
+    {
+        if ( m_bUndoIsUnlock )
+            m_xModel->lockControllers();
+        else
+            m_xModel->unlockControllers();
+    }
+}
+
 //________________________________________________________________________________________________________
 //  frame::XModel
 //________________________________________________________________________________________________________
@@ -1195,6 +1254,14 @@ void SAL_CALL SfxBaseModel::lockControllers() throw(::com::sun::star::uno::Runti
     SfxModelGuard aGuard( *this );
 
     ++m_pData->m_nControllerLockCount ;
+
+    if  (   m_pData->m_pDocumentUndoManager.is()
+        &&  m_pData->m_pDocumentUndoManager->isInContext()
+        &&  !m_pData->m_pDocumentUndoManager->isLocked()
+        )
+    {
+        m_pData->m_pDocumentUndoManager->addUndoAction( new ControllerLockUndoAction( this, true ) );
+    }
 }
 
 //________________________________________________________________________________________________________
@@ -1206,6 +1273,14 @@ void SAL_CALL SfxBaseModel::unlockControllers() throw(::com::sun::star::uno::Run
     SfxModelGuard aGuard( *this );
 
     --m_pData->m_nControllerLockCount ;
+
+    if  (   m_pData->m_pDocumentUndoManager.is()
+        &&  m_pData->m_pDocumentUndoManager->isInContext()
+        &&  !m_pData->m_pDocumentUndoManager->isLocked()
+        )
+    {
+        m_pData->m_pDocumentUndoManager->addUndoAction( new ControllerLockUndoAction( this, false ) );
+    }
 }
 
 //________________________________________________________________________________________________________
@@ -1362,7 +1437,7 @@ void SAL_CALL SfxBaseModel::removeModifyListener(const uno::Reference< XMODIFYLI
 
 void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
 {
-    static ::rtl::OUString MSG_1 = ::rtl::OUString::createFromAscii("Cant close while saving.");
+    static ::rtl::OUString MSG_1(RTL_CONSTASCII_USTRINGPARAM("Cant close while saving."));
 
     SolarMutexGuard aGuard;
     if ( impl_isDisposed() || m_pData->m_bClosed || m_pData->m_bClosing )
@@ -1638,7 +1713,23 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   ::rtl::OUString&                
         uno::Sequence< beans::PropertyValue > aSequence ;
         TransformItems( SID_OPENDOC, *m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
         attachResource( rURL, aSequence );
+
+#if OSL_DEBUG_LEVEL > 0
+        SFX_ITEMSET_ARG( m_pData->m_pObjectShell->GetMedium()->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False);
+        OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
+#endif
     }
+}
+
+//________________________________________________________________________________________________________
+//  XUndoManagerSupplier
+//________________________________________________________________________________________________________
+Reference< XUndoManager > SAL_CALL SfxBaseModel::getUndoManager(  ) throw (RuntimeException)
+{
+    SfxModelGuard aGuard( *this );
+    if ( !m_pData->m_pDocumentUndoManager.is() )
+        m_pData->m_pDocumentUndoManager.set( new ::sfx2::DocumentUndoManager( *this ) );
+    return m_pData->m_pDocumentUndoManager.get();
 }
 
 //________________________________________________________________________________________________________
@@ -1770,22 +1861,8 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             throw frame::IllegalArgumentIOException();
         }
 
-        // !TODO: currently not working
-        //SFX_ITEMSET_ARG( pParams, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
-        //if( pFrameItem && pFrameItem->GetFrame() )
-        //{
-        //  SfxFrame* pFrame = pFrameItem->GetFrame();
-        //  pMedium->SetLoadTargetFrame( pFrame );
-        //}
-
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
         sal_Bool bSalvage = pSalvageItem ? sal_True : sal_False;
-
-        // SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
-        // sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
-        //
-        // does already happen in DoLoad call
-        //m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
 
         // load document
         sal_uInt32 nError = ERRCODE_NONE;
@@ -1800,13 +1877,12 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             if ( nError == ERRCODE_IO_BROKENPACKAGE && xHandler.is() )
             {
                 ::rtl::OUString aDocName = pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, FALSE );
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
                 if ( !pRepairItem || !pRepairItem->GetValue() )
                 {
-                    RequestPackageReparation* pRequest = new RequestPackageReparation( aDocName );
-                    com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest > xRequest ( pRequest );
-                    xHandler->handle( xRequest );
-                    if( pRequest->isApproved() )
+                    RequestPackageReparation aRequest( aDocName );
+                    xHandler->handle( aRequest.GetRequest() );
+                    if( aRequest.isApproved() )
                     {
                         // broken package: try second loading and allow repair
                         pMedium->GetItemSet()->Put( SfxBoolItem( SID_REPAIRPACKAGE, sal_True ) );
@@ -1826,9 +1902,8 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
                 if ( nError == ERRCODE_IO_BROKENPACKAGE )
                 {
                     // repair either not allowed or not successful
-                    NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocName );
-                    com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest > xRequest ( pNotifyRequest );
-                       xHandler->handle( xRequest );
+                    NotifyBrokenPackage aRequest( aDocName );
+                    xHandler->handle( aRequest.GetRequest() );
                 }
             }
         }
@@ -1861,12 +1936,12 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
 
         if ( nError )
         {
-            BOOL bSilent = FALSE;
+            sal_Bool bSilent = sal_False;
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
             if( pSilentItem )
                 bSilent = pSilentItem->GetValue();
 
-              BOOL bWarning = ((nError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+              sal_Bool bWarning = ((nError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
             if ( nError != ERRCODE_IO_BROKENPACKAGE && !bSilent )
             {
                 // broken package was handled already
@@ -1880,7 +1955,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             if ( m_pData->m_pObjectShell->GetMedium() != pMedium )
             {
                 // for whatever reason document now has another medium
-                DBG_ERROR("Document has rejected the medium?!");
+                OSL_FAIL("Document has rejected the medium?!");
                 delete pMedium;
             }
 
@@ -1892,10 +1967,15 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             }
         }
 
-        BOOL bHidden = FALSE;
+        sal_Bool bHidden = sal_False;
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
         if ( pHidItem )
             bHidden = pHidItem->GetValue();
+
+#if OSL_DEBUG_LEVEL > 0
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False);
+        OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
+#endif
         // !TODO: will be done by Framework!
         pMedium->SetUpdatePickList( !bHidden );
     }
@@ -1916,7 +1996,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" ) )
+        if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"")) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
@@ -1936,7 +2016,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 aDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
                 aDesc.maDragStartPos = Point();
                 aDesc.maDisplayName = String();
-                aDesc.mbCanLink = FALSE;
+                aDesc.mbCanLink = sal_False;
 
                 SvMemoryStream aMemStm( 1024, 1024 );
                 aMemStm << aDesc;
@@ -1945,14 +2025,14 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw datatransfer::UnsupportedFlavorException();
         }
-        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"" ) )
+        else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"")) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
                 try
                 {
                     utl::TempFile aTmp;
-                    aTmp.EnableKillingFile( TRUE );
+                    aTmp.EnableKillingFile( sal_True );
                     storeToURL( aTmp.GetURL(), uno::Sequence < beans::PropertyValue >() );
                     SvStream* pStream = aTmp.GetStream( STREAM_READ );
                     const sal_uInt32 nLen = pStream->Seek( STREAM_SEEK_TO_END );
@@ -1970,7 +2050,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw datatransfer::UnsupportedFlavorException();
         }
-        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) )
+        else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"")) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
@@ -1991,12 +2071,12 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw datatransfer::UnsupportedFlavorException();
         }
-        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) )
+        else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"")) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
                 ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                    m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( sal_True, sal_True );
+                    m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( sal_True );
 
                 if ( pMetaFile )
                 {
@@ -2011,7 +2091,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw datatransfer::UnsupportedFlavorException();
         }
-        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) )
+        else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-emf;windows_formatname=\"Image EMF\"")) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
@@ -2046,7 +2126,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw datatransfer::UnsupportedFlavorException();
         }
-        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) )
+        else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-wmf;windows_formatname=\"Image WMF\"")) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
@@ -2086,7 +2166,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw datatransfer::UnsupportedFlavorException();
         }
-        else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ) )
+        else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"")) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
@@ -2110,7 +2190,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
             else
                 throw datatransfer::UnsupportedFlavorException();
         }
-        else if ( aFlavor.MimeType.equalsAscii( "image/png" ) )
+        else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("image/png")) )
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
@@ -2220,25 +2300,17 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
 {
     SfxModelGuard aGuard( *this );
 
-    if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) )
+    if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"")) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
     }
-    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) )
+    else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"")) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
     }
-    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) )
-    {
-        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
-            return sal_True;
-        else if ( GraphicHelper::supportsMetaFileHandle_Impl()
-          && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
-            return sal_True;
-    }
-    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) )
+    else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-emf;windows_formatname=\"Image EMF\"")) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
@@ -2246,22 +2318,30 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
           && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
             return sal_True;
     }
-    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"" ) )
+    else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-wmf;windows_formatname=\"Image WMF\"")) )
+    {
+        if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
+            return sal_True;
+        else if ( GraphicHelper::supportsMetaFileHandle_Impl()
+          && aFlavor.DataType == getCppuType( (const sal_uInt64*) 0 ) )
+            return sal_True;
+    }
+    else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-objectdescriptor-xml;windows_formatname=\"Star Object Descriptor (XML)\"")) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
     }
-    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"" ) )
+    else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"")) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
     }
-    else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ) )
+    else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"")) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
     }
-    else if ( aFlavor.MimeType.equalsAscii( "image/png" ) )
+    else if ( aFlavor.MimeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("image/png")) )
     {
         if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             return sal_True;
@@ -2378,6 +2458,32 @@ void SAL_CALL SfxBaseModel::removeEventListener( const uno::Reference< XDOCEVENT
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< XDOCEVENTLISTENER >*)0), aListener );
 }
 
+//--------------------------------------------------------------------------------------------------------
+//  XDocumentEventBroadcaster
+//--------------------------------------------------------------------------------------------------------
+// ---------------------------------
+void SAL_CALL SfxBaseModel::addDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& aListener )
+    throw ( uno::RuntimeException )
+{
+    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
+    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< document::XDocumentEventListener >*)0), aListener );
+}
+
+// ---------------------------------
+void SAL_CALL SfxBaseModel::removeDocumentEventListener( const uno::Reference< document::XDocumentEventListener >& aListener )
+    throw ( uno::RuntimeException )
+{
+    SfxModelGuard aGuard( *this );
+    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< document::XDocumentEventListener >*)0), aListener );
+}
+
+// ---------------------------------
+void SAL_CALL SfxBaseModel::notifyDocumentEvent( const ::rtl::OUString&, const uno::Reference< frame::XController2 >&, const uno::Any& )
+    throw ( lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException )
+{
+    throw lang::NoSupportException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SfxBaseModel controlls all the sent notifications itself!" ) ), uno::Reference< uno::XInterface >() );
+}
+
 //________________________________________________________________________________________________________
 //  SfxListener
 //________________________________________________________________________________________________________
@@ -2390,7 +2496,7 @@ void addTitle_Impl( Sequence < ::com::sun::star::beans::PropertyValue >& rSeq, c
     for ( nArg = 0; nArg < nCount; nArg++ )
     {
         ::com::sun::star::beans::PropertyValue& rProp = rSeq[nArg];
-        if ( rProp.Name.equalsAscii("Title") )
+        if ( rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Title")) )
         {
             rProp.Value <<= rTitle;
             break;
@@ -2455,11 +2561,6 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             {
             case SFX_EVENT_STORAGECHANGED:
             {
-                // for now this event is sent only on creation of a new storage for new document
-                // and in case of reload of medium without document reload
-                // other events are used to detect storage change
-                // NotifyStorageListeners_Impl();
-
                 if ( m_pData->m_xUIConfigurationManager.is()
                   && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
@@ -2478,7 +2579,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     }
                     else
                     {
-                        OSL_ENSURE( sal_False, "Unexpected scenario!\n" );
+                        OSL_FAIL( "Unexpected scenario!\n" );
                     }
                 }
 
@@ -2521,7 +2622,9 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             break;
             }
 
-            postEvent_Impl( pNamedHint->GetEventName() );
+
+            SfxViewEventHint* pViewHint = PTR_CAST( SfxViewEventHint, &rHint );
+            postEvent_Impl( pNamedHint->GetEventName(), pViewHint ? pViewHint->GetController() : uno::Reference< frame::XController2 >() );
         }
 
         if ( pSimpleHint )
@@ -2536,14 +2639,6 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             {
                 postEvent_Impl( GlobalEventConfig::GetEventName( STR_EVENT_MODECHANGED ) );
             }
-/*
-            else if ( pSimpleHint->GetId() == SFX_HINT_DYING
-                || pSimpleHint->GetId() == SFX_HINT_DEINITIALIZING )
-            {
-                SfxObjectShellLock pShellLock = m_pData->m_pObjectShellLock;
-                m_pData->m_pObjectShellLock = SfxObjectShellLock();
-            }
-*/
         }
     }
 }
@@ -2604,20 +2699,23 @@ SfxObjectShell* SfxBaseModel::impl_getObjectShell() const
 //  public impl.
 //________________________________________________________________________________________________________
 
-sal_Bool SfxBaseModel::IsDisposed() const
-{
-    return ( m_pData == NULL ) ;
-}
-
 sal_Bool SfxBaseModel::IsInitialized() const
 {
     if ( !m_pData || !m_pData->m_pObjectShell )
     {
-        OSL_ENSURE( false, "SfxBaseModel::IsInitialized: this should have been caught earlier!" );
+        OSL_FAIL( "SfxBaseModel::IsInitialized: this should have been caught earlier!" );
         return sal_False;
     }
 
     return m_pData->m_pObjectShell->GetMedium() != NULL;
+}
+
+void SfxBaseModel::MethodEntryCheck( const bool i_mustBeInitialized ) const
+{
+    if ( impl_isDisposed() )
+        throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *const_cast< SfxBaseModel* >( this ) );
+    if ( i_mustBeInitialized && !IsInitialized() )
+        throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), *const_cast< SfxBaseModel* >( this ) );
 }
 
 sal_Bool SfxBaseModel::impl_isDisposed() const
@@ -2649,8 +2747,6 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
     if( !sURL.getLength() )
         throw frame::IllegalArgumentIOException();
 
-    //sal_Bool aSaveAsTemplate = sal_False;
-
     sal_Bool bSaved = sal_False;
     if ( !bSaveTo && m_pData->m_pObjectShell && sURL.getLength()
       && sURL.compareToAscii( "private:stream", 14 ) != COMPARE_EQUAL
@@ -2672,48 +2768,40 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                     aArgHash.erase( aFilterString );
                     aArgHash.erase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) );
 
-                    // if the password is changed SaveAs should be done
-                    // no password for encrypted document is also a change here
-                    sal_Bool bPassChanged = sal_False;
-
-                    ::comphelper::SequenceAsHashMap::iterator aNewPassIter
-                        = aArgHash.find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ) );
-                    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False );
-                    if ( pPasswordItem && aNewPassIter != aArgHash.end() )
+                    try
                     {
-                        ::rtl::OUString aNewPass;
-                        aNewPassIter->second >>= aNewPass;
-                        bPassChanged = !aNewPass.equals( pPasswordItem->GetValue() );
+                        storeSelf( aArgHash.getAsConstPropertyValueList() );
+                        bSaved = sal_True;
                     }
-                    else if ( pPasswordItem || aNewPassIter != aArgHash.end() )
-                        bPassChanged = sal_True;
-
-                    if ( !bPassChanged )
+                    catch( const lang::IllegalArgumentException& )
                     {
-                        try
+                        // some additional arguments do not allow to use saving, SaveAs should be done
+                        // but only for normal documents, the shared documents would be overwritten in this case
+                        // that would mean an information loss
+                        // TODO/LATER: need a new interaction for this case
+                        if ( m_pData->m_pObjectShell->IsDocShared() )
                         {
-                            storeSelf( aArgHash.getAsConstPropertyValueList() );
-                            bSaved = sal_True;
-                        }
-                        catch( const lang::IllegalArgumentException& )
-                        {
-                            // some additional arguments do not allow to use saving, SaveAs should be done
-                            // but only for normal documents, the shared documents would be overwritten in this case
-                            // that would mean an information loss
-                            // TODO/LATER: need a new interaction for this case
-                            if ( m_pData->m_pObjectShell->IsDocShared() )
-                            {
-                                m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't store shared document!" ) ) );
-                                m_pData->m_pObjectShell->StoreLog();
+                            m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't store shared document!" ) ) );
+                            m_pData->m_pObjectShell->StoreLog();
 
+                            uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionData" ) ), uno::Sequence< beans::NamedValue >() );
+                            if ( !aNewEncryptionData.getLength() )
+                            {
+                                ::rtl::OUString aNewPassword = aArgHash.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ), ::rtl::OUString() );
+                                aNewEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aNewPassword );
+                            }
+
+                            uno::Sequence< beans::NamedValue > aOldEncryptionData;
+                            GetEncryptionData_Impl( pMedium->GetItemSet(), aOldEncryptionData );
+
+                            if ( !aOldEncryptionData.getLength() && !aNewEncryptionData.getLength() )
                                 throw;
+                            else
+                            {
+                                // if the password is changed a special error should be used in case of shared document
+                                throw task::ErrorCodeIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant change password for shared document." ) ), uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
                             }
                         }
-                    }
-                    else if ( m_pData->m_pObjectShell->IsDocShared() )
-                    {
-                        // if the password is changed a special error should be used in case of shared document
-                        throw task::ErrorCodeIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant change password for shared document." ) ), uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
                     }
                 }
             }
@@ -2871,8 +2959,32 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
 }
 
 //********************************************************************************************************
+namespace {
+template< typename ListenerT, typename EventT >
+class NotifySingleListenerIgnoreRE
+{
+private:
+    typedef void ( SAL_CALL ListenerT::*NotificationMethod )( const EventT& );
+    NotificationMethod  m_pMethod;
+    const EventT&       m_rEvent;
+public:
+    NotifySingleListenerIgnoreRE( NotificationMethod method, const EventT& event ) : m_pMethod( method ), m_rEvent( event ) { }
 
-void SfxBaseModel::postEvent_Impl( ::rtl::OUString aName )
+    void operator()( const uno::Reference<ListenerT>& listener ) const
+    {
+        try
+        {
+            (listener.get()->*m_pMethod)( m_rEvent );
+        }
+        catch( uno::RuntimeException& )
+        {
+            // this exception is ignored to avoid problems with invalid listeners, the listener should be probably thrown away in future
+        }
+    }
+};
+} // anonymous namespace
+
+void SfxBaseModel::postEvent_Impl( const ::rtl::OUString& aName, const uno::Reference< frame::XController2 >& xController )
 {
     // object already disposed?
     if ( impl_isDisposed() )
@@ -2882,34 +2994,41 @@ void SfxBaseModel::postEvent_Impl( ::rtl::OUString aName )
     if (!aName.getLength())
         return;
 
-    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer(
-                                        ::getCppuType((const uno::Reference< XDOCEVENTLISTENER >*)0) );
-    if( pIC )
-
+    ::cppu::OInterfaceContainerHelper* pIC =
+        m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( (const uno::Reference< document::XDocumentEventListener >*)0 ) );
+    if ( pIC )
     {
 #ifdef DBG_UTIL
-        ByteString aTmp( "SfxEvent: ");
+        ByteString aTmp( "SfxDocumentEvent: " );
         aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
-        DBG_TRACE( aTmp.GetBuffer() );
+        OSL_TRACE( aTmp.GetBuffer() );
 #endif
-        document::EventObject aEvent( (frame::XModel *)this, aName );
-        ::cppu::OInterfaceContainerHelper aIC( m_aMutex );
-        uno::Sequence < uno::Reference < uno::XInterface > > aElements = pIC->getElements();
-        for ( sal_Int32 nElem=0; nElem<aElements.getLength(); nElem++ )
-            aIC.addInterface( aElements[nElem] );
-        ::cppu::OInterfaceIteratorHelper aIt( aIC );
-        while( aIt.hasMoreElements() )
-        {
-            try
-            {
-                ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
-            }
-            catch( uno::RuntimeException& )
-            {
-                aIt.remove();
-            }
-        }
+
+        document::DocumentEvent aDocumentEvent( (frame::XModel*)this, aName, xController, uno::Any() );
+
+        pIC->forEach< document::XDocumentEventListener, NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent > >(
+            NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent >(
+                &document::XDocumentEventListener::documentEventOccured,
+                aDocumentEvent ) );
     }
+
+    pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( (const uno::Reference< document::XEventListener >*)0 ) );
+    if ( pIC )
+    {
+#ifdef DBG_UTIL
+        ByteString aTmp( "SfxEvent: " );
+        aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
+        OSL_TRACE( "%s", aTmp.GetBuffer() );
+#endif
+
+        document::EventObject aEvent( (frame::XModel*)this, aName );
+
+        pIC->forEach< document::XEventListener, NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject > >(
+            NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject >(
+                &document::XEventListener::notifyEvent,
+                aEvent ) );
+    }
+
 }
 
 uno::Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() throw(::com::sun::star::uno::RuntimeException)
@@ -2944,7 +3063,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() 
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell ); pFrame;
                 pFrame = SfxViewFrame::GetNext( *pFrame, m_pData->m_pObjectShell ) )
         {
-            BOOL bIsActive = ( pFrame == pActFrame );
+            sal_Bool bIsActive = ( pFrame == pActFrame );
             pFrame->GetViewShell()->WriteUserDataSequence( aSeq );
             aAny <<= aSeq;
             xCont->insertByIndex( bIsActive ? 0 : nCount, aAny );
@@ -3005,8 +3124,6 @@ void SAL_CALL SfxBaseModel::addPrintJobListener( const uno::Reference< view::XPr
         if ( xPJB.is() )
             xPJB->addPrintJobListener( xListener );
     }
-//  else
-//      m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
 }
 
 void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::XPrintJobListener >& xListener ) throw (uno::RuntimeException)
@@ -3019,8 +3136,6 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::
         if ( xPJB.is() )
             xPJB->removePrintJobListener( xListener );
     }
-//  else
-//      m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
 }
 
 // simple declaration of class SvObject is enough
@@ -3092,7 +3207,6 @@ Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
     SfxModelGuard aGuard( *this );
 
     Sequence< ::rtl::OUString > aResult;
-    sal_Int32 nResultSize = 0;
     sal_Bool bSuccess = sal_False;
     if ( m_pData->m_pObjectShell.Is() )
     {
@@ -3101,6 +3215,7 @@ Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
         if ( xAccess.is() )
         {
             Sequence< ::rtl::OUString > aTemp = xAccess->getElementNames();
+            sal_Int32 nResultSize = 0;
             for ( sal_Int32 n = 0; n < aTemp.getLength(); n++ )
             {
                 if ( xStorage->isStorageElement( aTemp[n] ) )
@@ -3183,7 +3298,7 @@ static void GetCommandFromSequence( rtl::OUString& rCommand, sal_Int32& nIndex, 
 
     for ( sal_Int32 i = 0; i < rSeqPropValue.getLength(); i++ )
     {
-        if ( rSeqPropValue[i].Name.equalsAsciiL( "Command", 7 ))
+        if ( rSeqPropValue[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Command")) )
         {
             rSeqPropValue[i].Value >>= rCommand;
             nIndex = i;
@@ -3215,7 +3330,7 @@ static void ConvertSlotsToCommands( SfxObjectShell* pDoc, uno::Reference< contai
                     rtl::OUString aSlot( aCommand.copy( 5 ));
 
                     // We have to replace the old "slot-Command" with our new ".uno:-Command"
-                    const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( USHORT( aSlot.toInt32() ));
+                    const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( sal_uInt16( aSlot.toInt32() ));
                     if ( pSlot )
                     {
                         rtl::OUStringBuffer aStrBuf( aUnoCmd );
@@ -3240,7 +3355,7 @@ uno::Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfig
     {
         uno::Reference< ui::XUIConfigurationManager > xNewUIConfMan(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString::createFromAscii( "com.sun.star.ui.UIConfigurationManager" )),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.UIConfigurationManager"))),
                 uno::UNO_QUERY );
 
         Reference< ui::XUIConfigurationStorage > xUIConfigStorage( xNewUIConfMan, uno::UNO_QUERY );
@@ -3286,7 +3401,7 @@ uno::Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfig
                     uno::Reference< lang::XMultiServiceFactory > xServiceMgr( ::comphelper::getProcessServiceFactory() );
                     uno::Sequence< uno::Reference< container::XIndexContainer > > rToolbars;
 
-                    sal_Bool bImported = UIConfigurationImporterOOo1x::ImportCustomToolbars(
+                    sal_Bool bImported = framework::UIConfigurationImporterOOo1x::ImportCustomToolbars(
                                             xNewUIConfMan, rToolbars, xServiceMgr, xOOo1ConfigStorage );
                     if ( bImported )
                     {
@@ -3362,7 +3477,6 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
         Size aWinSize = pWindow->GetSizePixel();
         awt::Size aCurrent = getVisualAreaSize( nAspect );
         Size aDiff( aSize.Width-aCurrent.Width, aSize.Height-aCurrent.Height );
-        Size aWrongDiff = OutputDevice::LogicToLogic( aDiff , m_pData->m_pObjectShell->GetMapUnit(), pWindow->GetMapMode() );
         aDiff = pViewFrm->GetViewShell()->GetWindow()->LogicToPixel( aDiff );
         aWinSize.Width() += aDiff.Width();
         aWinSize.Height() += aDiff.Height();
@@ -3414,8 +3528,8 @@ embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentat
     SfxModelGuard aGuard( *this );
 
     datatransfer::DataFlavor aDataFlavor(
-            ::rtl::OUString::createFromAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
-            ::rtl::OUString::createFromAscii( "GDIMetaFile" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" )),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GDIMetaFile")),
             ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
 
     embed::VisualRepresentation aVisualRepresentation;
@@ -3451,12 +3565,12 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const uno::Reference< XSTORAGE >& x
     pMedium->GetItemSet()->Put( aSet );
 
     // allow to use an interactionhandler (if there is one)
-    pMedium->UseInteractionHandler( TRUE );
+    pMedium->UseInteractionHandler( sal_True );
 
     SFX_ITEMSET_ARG( &aSet, pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
-    BOOL bTemplate = pTemplateItem && pTemplateItem->GetValue();
+    sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
     m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
-    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = FALSE;
+    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = sal_False;
 
     // load document
     if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
@@ -3509,11 +3623,11 @@ void SAL_CALL SfxBaseModel::storeToStorage( const uno::Reference< XSTORAGE >& xS
 
         // BaseURL is part of the ItemSet
         SfxMedium aMedium( xStorage, String(), &aSet );
-        aMedium.CanDisposeStorage_Impl( FALSE );
+        aMedium.CanDisposeStorage_Impl( sal_False );
         if ( aMedium.GetFilter() )
         {
             // storing without a valid filter will often crash
-            bSuccess = m_pData->m_pObjectShell->DoSaveObjectAs( aMedium, TRUE );
+            bSuccess = m_pData->m_pObjectShell->DoSaveObjectAs( aMedium, sal_True );
             m_pData->m_pObjectShell->DoSaveCompleted( NULL );
         }
     }
@@ -3560,7 +3674,7 @@ void SAL_CALL SfxBaseModel::switchToStorage( const uno::Reference< XSTORAGE >& x
                 xUICfgMgrStorage->setStorage( xStorage );
         }
     }
-    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = FALSE;
+    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = sal_False;
 }
 
 uno::Reference< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentStorage()
@@ -3668,7 +3782,7 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
         m_pData->m_xNumberedControllers = css::uno::Reference< css::frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pHelper), css::uno::UNO_QUERY_THROW);
 
         pHelper->setOwner          (xThis);
-        pHelper->setUntitledPrefix (::rtl::OUString::createFromAscii(" : "));
+        pHelper->setUntitledPrefix (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" : ")));
     }
 
     return m_pData->m_xNumberedControllers;
@@ -3683,7 +3797,7 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
     SfxModelGuard aGuard( *this );
 
     ::rtl::OUString aResult = impl_getTitleHelper()->getTitle ();
-    if ( m_pData->m_pObjectShell )
+    if ( !m_pData->m_bExternalTitle && m_pData->m_pObjectShell )
     {
         SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
         if ( pMedium )
@@ -3693,7 +3807,7 @@ css::uno::Reference< css::frame::XUntitledNumbers > SfxBaseModel::impl_getUntitl
                 aResult += String( SfxResId(STR_REPAIREDDOCUMENT) );
         }
 
-        if ( m_pData->m_pObjectShell->IsReadOnlyUI() || (m_pData->m_pObjectShell->GetMedium() && m_pData->m_pObjectShell->GetMedium()->IsReadOnly()) )
+        if ( m_pData->m_pObjectShell->IsReadOnlyUI() || (pMedium && pMedium->IsReadOnly()) )
             aResult += ::rtl::OUString( String( SfxResId(STR_READONLY) ) );
         else if ( m_pData->m_pObjectShell->IsDocShared() )
             aResult += ::rtl::OUString( String( SfxResId(STR_SHARED) ) );
@@ -3714,6 +3828,7 @@ void SAL_CALL SfxBaseModel::setTitle( const ::rtl::OUString& sTitle )
     SfxModelGuard aGuard( *this );
 
     impl_getTitleHelper()->setTitle (sTitle);
+    m_pData->m_bExternalTitle = sal_True;
 }
 
 //=============================================================================
@@ -3808,10 +3923,10 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getAvailableViewCon
     SfxModelGuard aGuard( *this );
 
     const SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
-    const sal_Int32 nViewFactoryCount = rDocumentFactory.GetViewFactoryCount();
+    const sal_Int16 nViewFactoryCount = rDocumentFactory.GetViewFactoryCount();
 
     Sequence< ::rtl::OUString > aViewNames( nViewFactoryCount );
-    for ( sal_Int32 nViewNo = 0; nViewNo < nViewFactoryCount; ++nViewNo )
+    for ( sal_Int16 nViewNo = 0; nViewNo < nViewFactoryCount; ++nViewNo )
         aViewNames[nViewNo] = rDocumentFactory.GetViewFactory( nViewNo ).GetAPIViewName();
     return aViewNames;
 }
@@ -3885,9 +4000,9 @@ namespace sfx { namespace intern {
 SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame >& i_rFrame, ::sfx::intern::ViewCreationGuard& i_rGuard ) const
 {
     SfxViewFrame* pViewFrame = NULL;
-    for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), FALSE );
+    for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), sal_False );
             pViewFrame;
-            pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), FALSE )
+            pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), sal_False )
         )
     {
         if ( pViewFrame->GetFrame().GetFrameInterface() == i_rFrame )
@@ -3911,7 +4026,7 @@ SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame 
                     // destroyed later, and the new one, which we're going to create
                     continue;
 
-                OSL_ENSURE( false, "SfxBaseModel::FindOrCreateViewFrame_Impl: there already is an SfxFrame for the given XFrame, but no view in it!" );
+                OSL_FAIL( "SfxBaseModel::FindOrCreateViewFrame_Impl: there already is an SfxFrame for the given XFrame, but no view in it!" );
                     // nowadays, we're the only instance allowed to create an SfxFrame for an XFrame, so this case here should not happen
                 break;
             }
@@ -3994,18 +4109,18 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     // some initial view settings, coming from our most recent attachResource call
     ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs() );
     if ( aDocumentLoadArgs.getOrDefault( "ViewOnly", false ) )
-        pViewFrame->GetFrame().SetMenuBarOn_Impl( FALSE );
+        pViewFrame->GetFrame().SetMenuBarOn_Impl( sal_False );
 
     const sal_Int16 nPluginMode = aDocumentLoadArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode == 1 )
     {
-        pViewFrame->ForceOuterResize_Impl( FALSE );
-        pViewFrame->GetBindings().HidePopups( TRUE );
+        pViewFrame->ForceOuterResize_Impl( sal_False );
+        pViewFrame->GetBindings().HidePopups( sal_True );
 
         SfxFrame& rFrame = pViewFrame->GetFrame();
         // MBA: layoutmanager of inplace frame starts locked and invisible
-        rFrame.GetWorkWindow_Impl()->MakeVisible_Impl( FALSE );
-        rFrame.GetWorkWindow_Impl()->Lock_Impl( TRUE );
+        rFrame.GetWorkWindow_Impl()->MakeVisible_Impl( sal_False );
+        rFrame.GetWorkWindow_Impl()->Lock_Impl( sal_True );
 
         rFrame.GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
         pViewFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
@@ -4029,8 +4144,8 @@ SfxBaseModel::getRDFRepository() throw (uno::RuntimeException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getRDFRepository();
@@ -4044,8 +4159,8 @@ SfxBaseModel::getStringValue() throw (uno::RuntimeException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getStringValue();
@@ -4059,8 +4174,8 @@ SfxBaseModel::getNamespace() throw (uno::RuntimeException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getNamespace();
@@ -4073,8 +4188,8 @@ SfxBaseModel::getLocalName() throw (uno::RuntimeException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getLocalName();
@@ -4090,8 +4205,8 @@ throw (uno::RuntimeException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getElementByMetadataReference(i_rReference);
@@ -4105,8 +4220,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getElementByURI(i_xURI);
@@ -4121,8 +4236,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException)
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->getMetadataGraphsWithType(i_xType);
@@ -4138,8 +4253,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->addMetadataFile(i_rFileName, i_rTypes);
@@ -4159,8 +4274,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->importMetadataFile(i_Format,
@@ -4177,8 +4292,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->removeMetadataFile(i_xGraphName);
@@ -4193,8 +4308,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->addContentOrStylesFile(i_rFileName);
@@ -4209,8 +4324,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->removeContentOrStylesFile(i_rFileName);
@@ -4229,8 +4344,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(
         m_pData->CreateDMAUninitialized());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     try {
@@ -4256,8 +4371,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->storeMetadataToStorage(i_xStorage);
@@ -4274,8 +4389,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(
         m_pData->CreateDMAUninitialized());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     try {
@@ -4300,11 +4415,24 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(m_pData->GetDMA());
     if (!xDMA.is()) {
-        throw uno::RuntimeException( ::rtl::OUString::createFromAscii(
-            "model has no document metadata"), *this );
+        throw uno::RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "model has no document metadata")), *this );
     }
 
     return xDMA->storeMetadataToMedium(i_rMedium);
+}
+
+// =====================================================================================================================
+// = SfxModelSubComponent
+// =====================================================================================================================
+
+SfxModelSubComponent::~SfxModelSubComponent()
+{
+}
+
+void SfxModelSubComponent::disposing()
+{
+    // nothing to do here
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

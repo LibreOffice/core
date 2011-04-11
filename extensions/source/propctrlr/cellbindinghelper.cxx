@@ -198,7 +198,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "CellBindingHelper::doConvertAddressRepresentations: caught an exception!" );
+                OSL_FAIL( "CellBindingHelper::doConvertAddressRepresentations: caught an exception!" );
             }
         }
 
@@ -297,7 +297,7 @@ namespace pcr
             }
             catch ( const Exception& )
             {
-                OSL_ENSURE( sal_False, "CellBindingHelper::createDocumentDependentInstance: could not create the binding at the document!" );
+                OSL_FAIL( "CellBindingHelper::createDocumentDependentInstance: could not create the binding at the document!" );
             }
         }
         return xReturn;
@@ -326,7 +326,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "CellBindingHelper::getAddressFromCellBinding: caught an exception!" );
+            OSL_FAIL( "CellBindingHelper::getAddressFromCellBinding: caught an exception!" );
         }
 
         return bReturn;
@@ -376,7 +376,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "CellBindingHelper::getStringAddressFromCellListSource: caught an exception!" );
+            OSL_FAIL( "CellBindingHelper::getStringAddressFromCellListSource: caught an exception!" );
         }
 
         return sAddress;
@@ -452,7 +452,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "CellBindingHelper::isCellIntegerBindingAllowed: caught an exception!" );
+                OSL_FAIL( "CellBindingHelper::isCellIntegerBindingAllowed: caught an exception!" );
                     // are there really control models which survive isCellBindingAllowed, but don't have a ClassId
                     // property?
                 bAllow = false;
@@ -489,7 +489,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "CellBindingHelper::isCellBindingAllowed: caught an exception!" );
+                OSL_FAIL( "CellBindingHelper::isCellBindingAllowed: caught an exception!" );
                 bAllow = false;
             }
         }

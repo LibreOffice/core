@@ -27,21 +27,13 @@
 #ifndef __com_sun_star_container_XIdentifierReplace_idl__
 #define __com_sun_star_container_XIdentifierReplace_idl__
 
-#ifndef __com_sun_star_container_XIdentifierAccess_idl__
 #include <com/sun/star/container/XIdentifierAccess.idl>
-#endif
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
 
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
 #include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
 
 
 //=============================================================================

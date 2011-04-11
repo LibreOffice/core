@@ -34,6 +34,7 @@
 // own includes
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
+#include "helper/mischelper.hxx"
 
 #include <acceleratorconst.h>
 #include <services.h>
@@ -117,7 +118,8 @@ void GlobalAcceleratorConfiguration::impl_ts_fillCache()
         XCUBasedAcceleratorConfiguration::reload();
 
         css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, css::uno::UNO_QUERY_THROW);
-        xBroadcaster->addChangesListener(static_cast< css::util::XChangesListener* >(this));
+        m_xCfgListener = new WeakChangesListener(this);
+        xBroadcaster->addChangesListener(m_xCfgListener);
     }
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }

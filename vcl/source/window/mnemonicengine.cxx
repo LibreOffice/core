@@ -103,7 +103,7 @@ namespace vcl
     //--------------------------------------------------------------------
     bool MnemonicEngine::HandleKeyEvent( const KeyEvent& _rKEvt )
     {
-        BOOL bAccelKey = _rKEvt.GetKeyCode().IsMod2();
+        sal_Bool bAccelKey = _rKEvt.GetKeyCode().IsMod2();
         if ( !bAccelKey )
             return false;
 

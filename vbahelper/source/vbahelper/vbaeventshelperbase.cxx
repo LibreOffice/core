@@ -75,10 +75,6 @@ void SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const un
     EventQueue aEventQueue;
     aEventQueue.push_back( EventQueueEntry( nEventId, rArgs ) );
 
-    /*  bEnabled will track if event processing is enabled. Every event handler
-        may disable handling of other events. */
-    bool bEnabled = true;
-
     /*  bCancel will contain the current Cancel value. It is possible that
         multiple events will try to modify the Cancel value. Every event
         handler receives the Cancel value of the previous event handler. */
@@ -88,10 +84,10 @@ void SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const un
         executed successfully. */
     bool bSuccess = false;
 
-    /*  Loop as long as there are more events to be processed, and as event
-        handling is still enabled. Derived classes may add new events to be
-        processed in the virtual implPrepareEvent() function. */
-    while( bEnabled && !aEventQueue.empty() )
+    /*  Loop as long as there are more events to be processed. Derived classes
+        may add new events to be processed in the virtual implPrepareEvent()
+        function. */
+    while( !aEventQueue.empty() )
     {
         /*  Check that all class members are available, and that we are not
             disposed (this may have happened at any time during execution of
@@ -104,14 +100,14 @@ void SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const un
         uno::Sequence< uno::Any > aEventArgs = aEventQueue.front().maArgs;
         aEventQueue.pop_front();
 
-        // let derived classes decide whether event processing is still enabled
-        bEnabled = implEventsEnabled();
-        // let derived classes prepare the event, they may add new events for next iteration
-        if( bEnabled && implPrepareEvent( aEventQueue, rInfo, aEventArgs ) )
+        /*  Let derived classes prepare the event, they may add new events for
+            next iteration. If false is returned, the event handler must not be
+            called. */
+        bool bEventSuccess = false;
+        if( implPrepareEvent( aEventQueue, rInfo, aEventArgs ) )
         {
             // search the event handler macro in the document
             ::rtl::OUString aMacroPath = getEventHandlerPath( rInfo, aEventArgs );
-            bool bEventSuccess = false;
             if( aMacroPath.getLength() > 0 )
             {
                 // build the argument list
@@ -140,11 +136,11 @@ void SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const un
                         bCancel = nNewCancel != 0;
                 }
             }
-            // post processing (also, if event handler does not exist, or on error
-            implPostProcessEvent( aEventQueue, rInfo, bEventSuccess, bCancel );
             // global success, if at least one event handler succeeded
             bSuccess |= bEventSuccess;
         }
+        // post processing (also, if event handler does not exist, or disabled, or on error
+        implPostProcessEvent( aEventQueue, rInfo, bEventSuccess, bCancel );
     }
 
     // if event handlers want to cancel the event, do so regardless of any errors
@@ -201,7 +197,8 @@ const VbaEventsHelperBase::EventHandlerInfo& VbaEventsHelperBase::getEventHandle
                 append( sal_Unicode( '.' ) ).append( rInfo.maMacroName ).makeStringAndClear();
         break;
     }
-    return resolveVBAMacro( mpShell, aMacroName ).ResolvedMacro();
+    MacroResolvedInfo aMacroInfo = resolveVBAMacro( mpShell, aMacroName, false );
+    return aMacroInfo.mbFound ? ::rtl::OUString( aMacroInfo.msResolvedMacro ) : ::rtl::OUString();
 }
 
 void VbaEventsHelperBase::stopListening()

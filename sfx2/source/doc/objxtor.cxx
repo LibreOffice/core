@@ -49,7 +49,7 @@
 #include <svl/eitem.hxx>
 #include <tools/rtti.hxx>
 #include <svl/lstner.hxx>
-#include <sfxhelp.hxx>
+#include <sfx2/sfxhelp.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/stritem.hxx>
 #include <basic/sbx.hxx>
@@ -87,7 +87,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "objshimp.hxx"
 #include "appbas.hxx"
 #include "sfxtypes.hxx"
@@ -98,8 +98,8 @@
 #include "appdata.hxx"
 #include <sfx2/appuno.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "basmgr.hxx"
-#include "QuerySaveDocument.hxx"
+#include "sfx2/basmgr.hxx"
+#include "sfx2/QuerySaveDocument.hxx"
 #include "helpid.hrc"
 #include <sfx2/msg.hxx>
 #include "appbaslib.hxx"
@@ -152,15 +152,12 @@ void lcl_UpdateAppBasicDocVars(  const Reference< XInterface >& _rxComponent, bo
                     pAppMgr->SetGlobalUNOConstant( pAscii, aProp.Value );
 
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& )
             {
             }
         }
     }
 }
-
-//=========================================================================
-
 
 //=========================================================================
 
@@ -200,8 +197,8 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
 
     if ( mpDoc->Get_Impl()->bHiddenLockedByAPI )
     {
-        mpDoc->Get_Impl()->bHiddenLockedByAPI = FALSE;
-        mpDoc->OwnerLock(FALSE);
+        mpDoc->Get_Impl()->bHiddenLockedByAPI = sal_False;
+        mpDoc->OwnerLock(sal_False);
     }
     else if ( !mpDoc->Get_Impl()->bClosing )
         // GCC stuerzt ab, wenn schon im dtor, also vorher Flag abfragen
@@ -316,30 +313,28 @@ SfxObjectShell::SfxObjectShell( const sal_uInt64 i_nCreationFlags )
 
 SfxObjectShell::SfxObjectShell
 (
-    SfxObjectCreateMode eMode   /*  Zweck, zu dem die SfxObjectShell
-                                    erzeugt wird:
+    SfxObjectCreateMode eMode   /*  Purpose, io which the SfxObjectShell
+                                    is created:
 
                                     SFX_CREATE_MODE_EMBEDDED (default)
-                                        als SO-Server aus einem anderen
-                                        Dokument heraus
+                                        as SO-Server from within another
+                                        Document
 
                                     SFX_CREATE_MODE_STANDARD,
-                                        als normales, selbst"aendig ge"offnetes
-                                        Dokument
+                                        as a normal Document open stand-alone
 
                                     SFX_CREATE_MODE_PREVIEW
-                                        um ein Preview durchzuf"uhren,
-                                        ggf. werden weniger Daten ben"otigt
+                                        to enable a Preview, if possible are
+                                        only little information is needed
 
                                     SFX_CREATE_MODE_ORGANIZER
-                                        um im Organizer dargestellt zu
-                                        werden, hier werden keine Inhalte
-                                        ben"otigt */
+                                        to be displayed in the Organizer, here
+                                        notning of the contents is used  */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Konstruktor der Klasse SfxObjectShell.
+    Constructor of the class SfxObjectShell.
 */
 
 :   pImp( new SfxObjectShell_Impl( *this ) ),
@@ -353,7 +348,7 @@ SfxObjectShell::SfxObjectShell
 
 //--------------------------------------------------------------------
 
-// virtual dtor of typical base-class SfxObjectShell
+// virtual destructor of typical base-class SfxObjectShell
 
 SfxObjectShell::~SfxObjectShell()
 {
@@ -362,9 +357,8 @@ SfxObjectShell::~SfxObjectShell()
     if ( IsEnableSetModified() )
         EnableSetModified( sal_False );
 
-    // Niemals GetInPlaceObject() aufrufen, der Zugriff auf den
-    // Ableitungszweig SfxInternObject ist wegen eines Compiler Bugs nicht
-    // erlaubt
+    // Never call GetInPlaceObject(), the access to the derivative branch
+    // SfxInternObject is not allowed because of a compiler bug
     SfxObjectShell::Close();
     pImp->pBaseModel.set( NULL );
 
@@ -374,7 +368,7 @@ SfxObjectShell::~SfxObjectShell()
     if ( USHRT_MAX != pImp->nVisualDocumentNumber )
         pSfxApp->ReleaseIndex(pImp->nVisualDocumentNumber);
 
-    // Basic-Manager zerst"oren
+    // Destroy Basic-Manager
     pImp->pBasicManager->reset( NULL );
 
     if ( pSfxApp->GetDdeService() )
@@ -434,9 +428,9 @@ sal_Bool SfxObjectShell::Stamp_GetPrintCancelState() const
 
 void SfxObjectShell::ViewAssigned()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode wird gerufen, wenn eine View zugewiesen wird.
+    This method is called when a view is assigned.
 */
 
 {
@@ -451,7 +445,7 @@ sal_Bool SfxObjectShell::Close()
     SfxObjectShellRef aRef(this);
     if ( !pImp->bClosing )
     {
-        // falls noch ein Progress l"auft, nicht schlie\sen
+        // Do not close if a progress is still running
         if ( !pImp->bDisposing && GetProgress() )
             return sal_False;
 
@@ -472,7 +466,7 @@ sal_Bool SfxObjectShell::Close()
 
         if ( pImp->bClosing )
         {
-            // aus Document-Liste austragen
+            // remove from Document list
             SfxApplication *pSfxApp = SFX_APP();
             SfxObjectShellArr_Impl &rDocs = pSfxApp->GetObjectShells_Impl();
             const SfxObjectShell *pThis = this;
@@ -573,7 +567,8 @@ struct BoolEnv_Impl
 
 sal_uInt16 SfxObjectShell::PrepareClose
 (
-    sal_Bool    bUI,        // sal_True: Dialoge etc. erlaubt, sal_False: silent-mode
+    sal_Bool    bUI,  // sal_True: Dialog and so on is allowed
+                      // sal_False: silent-mode
     sal_Bool    bForBrowsing
 )
 {
@@ -593,7 +588,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
     for ( SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
           pFrm; pFrm = SfxViewFrame::GetNext( *pFrm, this ) )
     {
-        DBG_ASSERT(pFrm->GetViewShell(),"KeineShell");
+        DBG_ASSERT(pFrm->GetViewShell(),"No Shell");
         if ( pFrm->GetViewShell() )
         {
             sal_uInt16 nRet = pFrm->GetViewShell()->PrepareClose( bUI, bForBrowsing );
@@ -611,24 +606,20 @@ sal_uInt16 SfxObjectShell::PrepareClose
         return sal_True;
     }
 
-    // ggf. nachfragen, ob gespeichert werden soll
-        // nur fuer in sichtbaren Fenstern dargestellte Dokumente fragen
+    // Ask if possible if it should be saved
+    // only ask for the Document in the visable window
     SfxViewFrame *pFrame = SfxObjectShell::Current() == this
         ? SfxViewFrame::Current() : SfxViewFrame::GetFirst( this );
 
-    sal_Bool bClose = sal_False;
     if ( bUI && IsModified() && pFrame )
     {
-        // minimierte restoren
+        // restore minimized
         SfxFrame& rTop = pFrame->GetTopFrame();
         SfxViewFrame::SetViewFrame( rTop.GetCurrentViewFrame() );
         pFrame->GetFrame().Appear();
 
-        // fragen, ob gespeichert werden soll
+        // Ask if to save
         short nRet = RET_YES;
-        //TODO/CLEANUP
-        //brauchen wir UI=2 noch?
-        //if( SfxApplication::IsPlugin() == sal_False || bUI == 2 )
         {
             //initiate help agent to inform about "print modifies the document"
             SvtPrintWarningOptions aPrintOptions;
@@ -645,7 +636,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
 
         if ( RET_YES == nRet )
         {
-            // per Dispatcher speichern
+            // Save by each Dispatcher
             const SfxPoolItem *pPoolItem;
             if ( IsSaveVersionOnClose() )
             {
@@ -663,20 +654,13 @@ sal_uInt16 SfxObjectShell::PrepareClose
 
             if ( !pPoolItem || pPoolItem->ISA(SfxVoidItem) || ( pPoolItem->ISA(SfxBoolItem) && !( (const SfxBoolItem*) pPoolItem )->GetValue() ) )
                 return sal_False;
-            else
-                bClose = sal_True;
         }
         else if ( RET_CANCEL == nRet )
-            // abgebrochen
+            // Cancelled
             return sal_False;
         else if ( RET_NEWTASK == nRet )
         {
             return RET_NEWTASK;
-        }
-        else
-        {
-            // Bei Nein nicht noch Informationlost
-            bClose = sal_True;
         }
     }
 
@@ -790,7 +774,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
     if ( pBasMgr )
         return pBasMgr->GetDialogLibraryContainer().get();
 
-    OSL_ENSURE( false, "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?" );
+    OSL_FAIL( "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?" );
     return SFX_APP()->GetDialogContainer();
 }
 
@@ -805,7 +789,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
     if ( pBasMgr )
         return pBasMgr->GetScriptLibraryContainer().get();
 
-    OSL_ENSURE( false, "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?" );
+    OSL_FAIL( "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?" );
     return SFX_APP()->GetBasicContainer();
 }
 
@@ -819,24 +803,46 @@ StarBASIC* SfxObjectShell::GetBasic() const
 //--------------------------------------------------------------------
 
 void SfxObjectShell::InitBasicManager_Impl()
-/*  [Beschreibung]
+/*  [Description]
 
-    creates a document's BasicManager and loads it, if we are already based on
+    Creates a document's BasicManager and loads it, if we are already based on
     a storage.
 
-    [Anmerkung]
+    [Note]
 
-    Diese Methode mu"s aus den "Uberladungen von <SvPersist::Load()> (mit
-    dem pStor aus dem Parameter von Load()) sowie aus der "Uberladung
-    von <SvPersist::InitNew()> (mit pStor = 0) gerufen werden.
+    This method has to be called  through the overloading of
+    <SvPersist::Load()> (With the PStore from the parameters of load ())
+    and from the overloading of <SvPersist::InitNew()> (with PStore = 0).
 */
 
 {
-    DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
-    pImp->bBasicInitialized = TRUE;
+    /*  #163556# (DR) - Handling of recursive calls while creating the Bacic
+        manager.
 
+        It is possible that (while creating the Basic manager) the code that
+        imports the Basic storage wants to access the Basic manager again.
+        Especially in VBA compatibility mode, there is code that wants to
+        access the "VBA Globals" object which is stored as global UNO constant
+        in the Basic manager.
+
+        To achieve correct handling of the recursive calls of this function
+        from lcl_getBasicManagerForDocument(), the implementation of the
+        function BasicManagerRepository::getDocumentBasicManager() has been
+        changed to return the Basic manager currently under construction, when
+        called repeatedly.
+
+        The variable pImp->bBasicInitialized will be set to sal_True after
+        construction now, to ensure that the recursive call of the function
+        lcl_getBasicManagerForDocument() will be routed into this function too.
+
+        Calling BasicManagerHolder::reset() twice is not a big problem, as it
+        does not take ownership but stores only the raw pointer. Owner of all
+        Basic managers is the global BasicManagerRepository instance.
+     */
+    DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
     pImp->pBasicManager->reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
     DBG_ASSERT( pImp->pBasicManager->isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
+    pImp->bBasicInitialized = sal_True;
 }
 
 //--------------------------------------------------------------------
@@ -862,7 +868,7 @@ SfxObjectShell* SfxObjectShell::GetObjectShell()
 
 //--------------------------------------------------------------------
 
-SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
+uno::Sequence< ::rtl::OUString > SfxObjectShell::GetEventNames()
 {
     static uno::Sequence< ::rtl::OUString >* pEventNameContainer = NULL;
 
@@ -902,9 +908,7 @@ void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 {
     return pImp->pBaseModel.get();
 }
-/* -----------------------------10.09.2001 15:56------------------------------
 
- ---------------------------------------------------------------------------*/
 void SfxObjectShell::SetAutoStyleFilterIndex(sal_uInt16 nSet)
 {
     pImp->nStyleFilter = nSet;
@@ -934,11 +938,6 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
         lcl_UpdateAppBasicDocVars( _rxComponent );
         pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( _rxComponent ) );
     }
-
-#if OSL_DEBUG_LEVEL > 0
-    const char* pComponentImplName = _rxComponent.get() ? typeid( *_rxComponent.get() ).name() : "void";
-    OSL_TRACE( "current component is a %s\n", pComponentImplName );
-#endif
 }
 
 Reference< XInterface > SfxObjectShell::GetCurrentComponent()
@@ -954,7 +953,7 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
     String aPrefix = String::CreateFromAscii( "private:factory/" );
     if ( aPrefix.Len() == aFact.Match( aPrefix ) )
         aFact.Erase( 0, aPrefix.Len() );
-    USHORT nPos = aFact.Search( '?' );
+    sal_uInt16 nPos = aFact.Search( '?' );
     String aParam;
     if ( nPos != STRING_NOTFOUND )
     {
@@ -972,43 +971,43 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
 
     if ( aFact.EqualsAscii("swriter") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"));
     }
     else if ( aFact.EqualsAscii("sweb") || aFact.EqualsAscii("swriter/web") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.WebDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.WebDocument"));
     }
     else if ( aFact.EqualsAscii("sglobal") || aFact.EqualsAscii("swriter/globaldocument") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.GlobalDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.GlobalDocument"));
     }
     else if ( aFact.EqualsAscii("scalc") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sheet.SpreadsheetDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument"));
     }
     else if ( aFact.EqualsAscii("sdraw") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.drawing.DrawingDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
     }
     else if ( aFact.EqualsAscii("simpress") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.presentation.PresentationDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
     }
     else if ( aFact.EqualsAscii("schart") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.chart.ChartDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart.ChartDocument"));
     }
     else if ( aFact.EqualsAscii("smath") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.formula.FormulaProperties");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.formula.FormulaProperties"));
     }
     else if ( aFact.EqualsAscii("sbasic") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.script.BasicIDE");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.BasicIDE"));
     }
     else if ( aFact.EqualsAscii("sdatabase") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.OfficeDatabaseDocument");
+        aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"));
     }
 
     return aServiceName;
@@ -1053,10 +1052,10 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
 {
     uno::Sequence < beans::PropertyValue > aProps;
     TransformItems( SID_OPENDOC, rSet, aProps );
-    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE);
-    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, FALSE);
+    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False);
+    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, sal_False);
     ::rtl::OUString aURL;
-    ::rtl::OUString aTarget = rtl::OUString::createFromAscii("_blank");
+    ::rtl::OUString aTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
     if ( pFileNameItem )
         aURL = pFileNameItem->GetValue();
     if ( pTargetItem )
@@ -1069,7 +1068,7 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
     }
     else
         xLoader = uno::Reference < frame::XComponentLoader >( comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop") ), uno::UNO_QUERY );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), uno::UNO_QUERY );
 
     Reference <lang::XComponent> xComp;
     try

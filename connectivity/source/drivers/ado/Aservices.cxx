@@ -30,13 +30,11 @@
 #include "precompiled_connectivity.hxx"
 #include "ado/ADriver.hxx"
 #include <cppuhelper/factory.hxx>
-#include <osl/diagnose.h>
 
 using namespace connectivity::ado;
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
@@ -48,31 +46,6 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             const Sequence< OUString > & rServiceNames ,
             rtl_ModuleCount* _pT
         );
-
-//***************************************************************************************
-//
-// Die vorgeschriebene C-Api muss erfuellt werden!
-// Sie besteht aus drei Funktionen, die von dem Modul exportiert werden muessen.
-//
-
-//---------------------------------------------------------------------------------------
-void REGISTER_PROVIDER(
-        const OUString& aServiceImplName,
-        const Sequence< OUString>& Services,
-        const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
-{
-    OUString aMainKeyName;
-    aMainKeyName = OUString::createFromAscii("/");
-    aMainKeyName += aServiceImplName;
-    aMainKeyName += OUString::createFromAscii("/UNO/SERVICES");
-
-    Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
-    OSL_ENSURE(xNewKey.is(), "ADO::component_writeInfo : could not create a registry key !");
-
-    for (sal_Int32 i=0; i<Services.getLength(); ++i)
-        xNewKey->createKey(Services[i]);
-}
-
 
 //---------------------------------------------------------------------------------------
 struct ProviderRequest
@@ -86,7 +59,7 @@ struct ProviderRequest
         sal_Char const* pImplementationName
     )
     : xServiceManager(reinterpret_cast<XMultiServiceFactory*>(pServiceManager))
-    , sImplementationName(OUString::createFromAscii(pImplementationName))
+    , sImplementationName(OUString(RTL_CONSTASCII_USTRINGPARAM(pImplementationName)))
     {
     }
 
@@ -113,38 +86,12 @@ struct ProviderRequest
 };
 
 //---------------------------------------------------------------------------------------
-
 extern "C" void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment ** /*ppEnv*/
             )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ":affine";
-}
-
-//---------------------------------------------------------------------------------------
-extern "C" sal_Bool SAL_CALL component_writeInfo(
-                void* /*pServiceManager*/,
-                void* pRegistryKey
-            )
-{
-    if (pRegistryKey)
-    try
-    {
-        Reference< ::com::sun::star::registry::XRegistryKey > xKey(reinterpret_cast< ::com::sun::star::registry::XRegistryKey*>(pRegistryKey));
-
-        REGISTER_PROVIDER(
-            ODriver::getImplementationName_Static(),
-            ODriver::getSupportedServiceNames_Static(), xKey);
-
-        return sal_True;
-    }
-    catch (::com::sun::star::registry::InvalidRegistryException& )
-    {
-        OSL_ENSURE(sal_False, "ADO::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
-    }
-
-    return sal_False;
 }
 
 //---------------------------------------------------------------------------------------

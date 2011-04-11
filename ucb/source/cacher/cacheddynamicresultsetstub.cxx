@@ -40,7 +40,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 CachedDynamicResultSetStub::CachedDynamicResultSetStub(
         Reference< XDynamicResultSet > xOrigin
@@ -123,10 +124,10 @@ XTYPEPROVIDER_IMPL_5( CachedDynamicResultSetStub
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSetStub,
-                        OUString::createFromAscii(
-                        "com.sun.star.comp.ucb.CachedDynamicResultSetStub" ),
-                        OUString::createFromAscii(
-                        CACHED_DRS_STUB_SERVICE_NAME ) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.comp.ucb.CachedDynamicResultSetStub" )),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        CACHED_DRS_STUB_SERVICE_NAME )) );
 
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
@@ -167,10 +168,10 @@ XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetStubFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedDynamicResultSetStubFactory,
-                     OUString::createFromAscii(
-                     "com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory" ),
-                     OUString::createFromAscii(
-                     CACHED_DRS_STUB_FACTORY_NAME ) );
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                     "com.sun.star.comp.ucb.CachedDynamicResultSetStubFactory" )),
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                     CACHED_DRS_STUB_FACTORY_NAME )) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.
@@ -217,8 +218,8 @@ void SAL_CALL CachedDynamicResultSetStubFactory
         try
         {
             xSortFactory = Reference< XSortedDynamicResultSetFactory >(
-                m_xSMgr->createInstance( OUString::createFromAscii(
-                    "com.sun.star.ucb.SortedDynamicResultSetFactory" ) ),
+                m_xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.ucb.SortedDynamicResultSetFactory" )) ),
                 UNO_QUERY );
         }
         catch ( Exception const & )

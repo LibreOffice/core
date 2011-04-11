@@ -85,7 +85,7 @@ ScColBar::~ScColBar()
 {
 }
 
-inline BOOL ScColBar::UseNumericHeader() const
+inline sal_Bool ScColBar::UseNumericHeader() const
 {
     return pViewData->GetDocument()->GetAddressConvention() == formula::FormulaGrammar::CONV_XL_R1C1;
 }
@@ -95,15 +95,14 @@ SCCOLROW ScColBar::GetPos()
     return pViewData->GetPosX(eWhich);
 }
 
-USHORT ScColBar::GetEntrySize( SCCOLROW nEntryNo )
+sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
-    SCCOL nLastCol = -1;
-    if (pDoc->ColHidden(static_cast<SCCOL>(nEntryNo), nTab, nLastCol))
+    if (pDoc->ColHidden(static_cast<SCCOL>(nEntryNo), nTab))
         return 0;
     else
-        return (USHORT) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), pViewData->GetPPTX() );
+        return (sal_uInt16) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), pViewData->GetPPTX() );
 }
 
 String ScColBar::GetEntryText( SCCOLROW nEntryNo )
@@ -113,9 +112,9 @@ String ScColBar::GetEntryText( SCCOLROW nEntryNo )
         : ScColToAlpha( static_cast<SCCOL>(nEntryNo) );
 }
 
-void ScColBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
+void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
 {
-    USHORT nSizeTwips;
+    sal_uInt16 nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
     if (nNewSize>0 && nNewSize<10) nNewSize=10;             // (Pixel)
 
@@ -125,10 +124,9 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
         eMode = SC_SIZE_OPTIMAL;
     }
     else
-        nSizeTwips = (USHORT) ( nNewSize / pViewData->GetPPTX() );
+        nSizeTwips = (sal_uInt16) ( nNewSize / pViewData->GetPPTX() );
 
     ScMarkData& rMark = pViewData->GetMarkData();
-//  SCTAB nTab = pViewData->GetTabNo();
 
     SCCOLROW* pRanges = new SCCOLROW[MAXCOL+1];
     SCCOL nRangeCnt = 0;
@@ -162,7 +160,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
         nRangeCnt = 1;
     }
 
-    pViewData->GetView()->SetWidthOrHeight( TRUE, nRangeCnt, pRanges, eMode, nSizeTwips );
+    pViewData->GetView()->SetWidthOrHeight( sal_True, nRangeCnt, pRanges, eMode, nSizeTwips );
     delete[] pRanges;
 }
 
@@ -171,10 +169,10 @@ void ScColBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
     SCCOLROW nRange[2];
     nRange[0] = nStart;
     nRange[1] = nEnd;
-    pViewData->GetView()->SetWidthOrHeight( TRUE, 1, nRange, SC_SIZE_DIRECT, 0 );
+    pViewData->GetView()->SetWidthOrHeight( sal_True, 1, nRange, SC_SIZE_DIRECT, 0 );
 }
 
-void ScColBar::SetMarking( BOOL bSet )
+void ScColBar::SetMarking( sal_Bool bSet )
 {
     pViewData->GetMarkData().SetMarking( bSet );
     if (!bSet)
@@ -203,19 +201,19 @@ void ScColBar::SelectWindow()
     }
     pViewSh->ActivatePart( eActive );
 
-    pFuncSet->SetColumn( TRUE );
+    pFuncSet->SetColumn( sal_True );
     pFuncSet->SetWhich( eActive );
 
     pViewSh->ActiveGrabFocus();
 }
 
-BOOL ScColBar::IsDisabled()
+sal_Bool ScColBar::IsDisabled()
 {
     ScModule* pScMod = SC_MOD();
     return pScMod->IsFormulaMode() || pScMod->IsModalMode();
 }
 
-BOOL ScColBar::ResizeAllowed()
+sal_Bool ScColBar::ResizeAllowed()
 {
     return !pViewData->HasEditView( pViewData->GetActivePart() );
 }
@@ -235,7 +233,7 @@ String ScColBar::GetDragHelp( long nVal )
     return lcl_MetricString( nTwips, ScGlobal::GetRscString(STR_TIP_WIDTH) );
 }
 
-BOOL ScColBar::IsLayoutRTL()        // overloaded only for columns
+sal_Bool ScColBar::IsLayoutRTL()        // overloaded only for columns
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }
@@ -262,15 +260,15 @@ SCCOLROW ScRowBar::GetPos()
     return pViewData->GetPosY(eWhich);
 }
 
-USHORT ScRowBar::GetEntrySize( SCCOLROW nEntryNo )
+sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     SCROW nLastRow = -1;
-    if (pDoc->RowHidden(nEntryNo, nTab, nLastRow))
+    if (pDoc->RowHidden(nEntryNo, nTab, NULL, &nLastRow))
         return 0;
     else
-        return (USHORT) ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,
+        return (sal_uInt16) ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,
                     nTab ), pViewData->GetPPTY() );
 }
 
@@ -279,9 +277,9 @@ String ScRowBar::GetEntryText( SCCOLROW nEntryNo )
     return String::CreateFromInt32( nEntryNo + 1 );
 }
 
-void ScRowBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
+void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
 {
-    USHORT nSizeTwips;
+    sal_uInt16 nSizeTwips;
     ScSizeMode eMode = SC_SIZE_DIRECT;
     if (nNewSize>0 && nNewSize<10) nNewSize=10;             // (Pixel)
 
@@ -291,10 +289,9 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
         eMode = SC_SIZE_OPTIMAL;
     }
     else
-        nSizeTwips = (USHORT) ( nNewSize / pViewData->GetPPTY() );
+        nSizeTwips = (sal_uInt16) ( nNewSize / pViewData->GetPPTY() );
 
     ScMarkData& rMark = pViewData->GetMarkData();
-//  SCTAB nTab = pViewData->GetTabNo();
 
     SCCOLROW* pRanges = new SCCOLROW[MAXROW+1];
     SCROW nRangeCnt = 0;
@@ -328,7 +325,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, USHORT nNewSize )
         nRangeCnt = 1;
     }
 
-    pViewData->GetView()->SetWidthOrHeight( FALSE, nRangeCnt, pRanges, eMode, nSizeTwips );
+    pViewData->GetView()->SetWidthOrHeight( false, nRangeCnt, pRanges, eMode, nSizeTwips );
     delete[] pRanges;
 }
 
@@ -337,10 +334,10 @@ void ScRowBar::HideEntries( SCCOLROW nStart, SCCOLROW nEnd )
     SCCOLROW nRange[2];
     nRange[0] = nStart;
     nRange[1] = nEnd;
-    pViewData->GetView()->SetWidthOrHeight( FALSE, 1, nRange, SC_SIZE_DIRECT, 0 );
+    pViewData->GetView()->SetWidthOrHeight( false, 1, nRange, SC_SIZE_DIRECT, 0 );
 }
 
-void ScRowBar::SetMarking( BOOL bSet )
+void ScRowBar::SetMarking( sal_Bool bSet )
 {
     pViewData->GetMarkData().SetMarking( bSet );
     if (!bSet)
@@ -369,19 +366,19 @@ void ScRowBar::SelectWindow()
     }
     pViewSh->ActivatePart( eActive );
 
-    pFuncSet->SetColumn( FALSE );
+    pFuncSet->SetColumn( false );
     pFuncSet->SetWhich( eActive );
 
     pViewSh->ActiveGrabFocus();
 }
 
-BOOL ScRowBar::IsDisabled()
+sal_Bool ScRowBar::IsDisabled()
 {
     ScModule* pScMod = SC_MOD();
     return pScMod->IsFormulaMode() || pScMod->IsModalMode();
 }
 
-BOOL ScRowBar::ResizeAllowed()
+sal_Bool ScRowBar::ResizeAllowed()
 {
     return !pViewData->HasEditView( pViewData->GetActivePart() );
 }
@@ -410,7 +407,7 @@ SCROW ScRowBar::GetHiddenCount( SCROW nEntryNo )
     return pDoc->GetHiddenRowCount( nEntryNo, nTab );
 }
 
-BOOL ScRowBar::IsMirrored()         // overloaded only for rows
+sal_Bool ScRowBar::IsMirrored()         // overloaded only for rows
 {
     return pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
 }

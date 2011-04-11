@@ -43,7 +43,7 @@
 /****************************************************************************/
 IniManager::IniManager( ByteString &rDir, ByteString &rLocalDir )
 /****************************************************************************/
-            : bUpdate( TRUE )
+            : bUpdate( sal_True )
 {
     sLocalPath = ByteString( getenv( "LOCALINI" ));
     if ( !sLocalPath.Len())
@@ -60,7 +60,7 @@ IniManager::IniManager( ByteString &rDir, ByteString &rLocalDir )
 /****************************************************************************/
 IniManager::IniManager( ByteString &rDir )
 /****************************************************************************/
-            : bUpdate( TRUE )
+            : bUpdate( sal_True )
 {
     sLocalPath = GetLocalIni();
     sGlobalDir = rDir;
@@ -74,7 +74,7 @@ IniManager::IniManager( ByteString &rDir )
 /****************************************************************************/
 IniManager::IniManager()
 /****************************************************************************/
-            : bUpdate( TRUE )
+            : bUpdate( sal_True )
 {
     sLocalPath = GetLocalIni();
 
@@ -170,7 +170,7 @@ void IniManager::ForceUpdate()
     sLocalPath += "/";
 #endif
 
-    for ( USHORT i=0; i < aDir.Count(); i++ ) {
+    for ( sal_uInt16 i=0; i < aDir.Count(); i++ ) {
         ByteString sEntry( aDir[i].GetName(), gsl_getSystemTextEncoding());
         if (( sEntry != "." ) &&
             ( sEntry != ".." ))
@@ -206,7 +206,7 @@ void IniManager::Update()
     if ( bUpdate )
     {
         ForceUpdate();
-        bUpdate = FALSE;
+        bUpdate = sal_False;
     }
 }
 

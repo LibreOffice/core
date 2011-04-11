@@ -80,7 +80,7 @@ typedef ::std::list<rtl::OUString> FileNameList;
 class GalApp : public Application
 {
 public:
-    virtual void Main();
+    virtual int Main();
 
 protected:
     Reference<XMultiServiceFactory> xMSF;
@@ -108,12 +108,11 @@ static void createTheme( rtl::OUString aThemeName,
 
     if (!pGallery ) {
             fprintf( stderr, "Could't acquire '%s'\n",
-                     (const sal_Char *) rtl::OUStringToOString( aGalleryURL,
-                                                                RTL_TEXTENCODING_UTF8 ) );
+                     rtl::OUStringToOString(aGalleryURL, RTL_TEXTENCODING_UTF8).getStr() );
             exit( 1 );
     }
     fprintf( stderr, "Work on gallery '%s'\n",
-                     (const sal_Char *) rtl::OUStringToOString( aGalleryURL, RTL_TEXTENCODING_UTF8 ) );
+                     rtl::OUStringToOString(aGalleryURL, RTL_TEXTENCODING_UTF8).getStr() );
 
     fprintf( stderr, "Existing themes: %lu\n",
              sal::static_int_cast< unsigned long >(
@@ -141,7 +140,7 @@ static void createTheme( rtl::OUString aThemeName,
     }
 
     fprintf( stderr, "Using DestDir: %s\n",
-             (const sal_Char *) rtl::OUStringToOString( aDestDir, RTL_TEXTENCODING_UTF8 ) );
+             rtl::OUStringToOString(aDestDir, RTL_TEXTENCODING_UTF8).getStr() );
     pGalTheme->SetDestDir(String(aDestDir));
 
     FileNameList::const_iterator aIter;
@@ -158,10 +157,10 @@ static void createTheme( rtl::OUString aThemeName,
 #if 1
         if ( ! pGalTheme->InsertURL( *aIter ) )
             fprintf( stderr, "Failed to import '%s'\n",
-                     (const sal_Char *) rtl::OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ) );
+                     rtl::OUStringToOString(*aIter, RTL_TEXTENCODING_UTF8).getStr() );
         else
             fprintf( stderr, "Imported file '%s' (%lu)\n",
-                     (const sal_Char *) rtl::OUStringToOString( *aIter, RTL_TEXTENCODING_UTF8 ),
+                     rtl::OUStringToOString(*aIter, RTL_TEXTENCODING_UTF8).getStr(),
                      sal::static_int_cast< unsigned long >(
                          pGalTheme->GetObjectCount() ) );
 
@@ -240,7 +239,7 @@ void GalApp::Init()
             lastSlash = fileName.lastIndexOf( '\\' );
 #endif
         rtl::OUString baseBinDir = fileName.copy( 0, lastSlash );
-        rtl::OUString installPrefix = baseBinDir + rtl::OUString::createFromAscii( "/../.." );
+        rtl::OUString installPrefix = baseBinDir + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/../.."));
 
         rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("OOO_INSTALL_PREFIX"));
         osl_setEnvironment(envVar.pData, installPrefix.pData);
@@ -263,23 +262,23 @@ void GalApp::InitUCB()
     rtl::OUString aEmpty;
     Sequence< Any > aArgs(6);
     aArgs[0]
-        <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY1_LOCAL);
+        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_LOCAL));
     aArgs[1]
-        <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY2_OFFICE);
-    aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
+        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY2_OFFICE));
+    aArgs[2] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PIPE"));
     aArgs[3] <<= aEmpty;
-    aArgs[4] <<= rtl::OUString::createFromAscii("PORTAL");
+    aArgs[4] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PORTAL"));
     aArgs[5] <<= aEmpty;
 
     if (! ::ucbhelper::ContentBroker::initialize( xMSF, aArgs ) )
         fprintf( stderr, "Failed to init content broker\n" );
 }
 
-void GalApp::Main()
+int GalApp::Main()
 {
     bool bHelp = false;
     rtl::OUString aPath, aDestDir;
-    rtl::OUString aName = rtl::OUString::createFromAscii( "Default name" );
+    rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("Default name"));
     UINT32 nNumFrom = 0;
     FileNameList aFiles;
 
@@ -287,20 +286,20 @@ void GalApp::Main()
     {
         rtl::OUString aParam = GetCommandLineParam( i );
 
-        if( aParam.equalsAscii( "--help" ) ||
-            aParam.equalsAscii( "-h" ) )
+        if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--help" ) ) ||
+            aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) )
                 bHelp = true;
 
-        else if ( aParam.equalsAscii( "--name" ) )
+        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--name" ) ) )
             aName = GetCommandLineParam( ++i );
 
-        else if ( aParam.equalsAscii( "--path" ) )
+        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--path" ) ) )
             aPath = Smartify( GetCommandLineParam( ++i ) );
 
-        else if ( aParam.equalsAscii( "--destdir" ) )
+        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--destdir" ) ) )
             aDestDir = GetCommandLineParam( ++i );
 
-        else if ( aParam.equalsAscii( "--number-from" ) )
+        else if ( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--number-from" ) ) )
              nNumFrom = GetCommandLineParam( ++i ).ToInt32();
 
         else
@@ -310,10 +309,11 @@ void GalApp::Main()
     if( bHelp )
     {
         PrintHelp();
-        return;
+        return EXIT_SUCCESS;
     }
 
     createTheme( aName, aPath, aDestDir, nNumFrom, aFiles );
+    return EXIT_SUCCESS;
 }
 
 GalApp aGalApp;

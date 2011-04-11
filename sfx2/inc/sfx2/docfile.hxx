@@ -45,12 +45,13 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <svl/lstner.hxx>
 
 #include <tools/globname.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/content.hxx>
+
+#include <vector>
 
 class SvKeyValueIterator;
 class SfxObjectFactory;
@@ -63,7 +64,6 @@ class Timer;
 class SfxItemSet;
 class DateTime;
 class SvStringsDtor;
-class SvEaMgr;
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
@@ -77,7 +77,6 @@ class SvEaMgr;
 #define OWEAKOBJECT                 ::cppu::OWeakObject
 #define REFERENCE                   ::com::sun::star::uno::Reference
 #define XINTERFACE                  ::com::sun::star::uno::XInterface
-#define SEQUENCE                    ::com::sun::star::uno::Sequence
 #define EXCEPTION                   ::com::sun::star::uno::Exception
 #define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
 #define ANY                         ::com::sun::star::uno::Any
@@ -95,7 +94,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SvGlobalName        aFilterClass;
     SvStream*           pInStream;
     SvStream*           pOutStream;
-//REMOVE        SvStorageRef        aStorage;
     const SfxFilter*    pFilter;
     SfxItemSet*         pSet;
     SfxMedium_Impl*     pImp;
@@ -114,7 +112,7 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SAL_DLLPRIVATE void CloseStreams_Impl();
     DECL_DLLPRIVATE_STATIC_LINK( SfxMedium, UCBHdl_Impl, sal_uInt32 * );
 
-    SAL_DLLPRIVATE void SetPasswordToStorage_Impl();
+    SAL_DLLPRIVATE void SetEncryptionDataToStorage_Impl();
 #endif
 
 public:
@@ -124,7 +122,7 @@ public:
                         SfxMedium();
                         SfxMedium( const String &rName,
                                    StreamMode nOpenMode,
-                                   sal_Bool bDirect=FALSE,
+                                   sal_Bool bDirect=sal_False,
                                    const SfxFilter *pFilter = 0,
                                    SfxItemSet *pSet = 0 );
 
@@ -138,7 +136,7 @@ public:
 
                         ~SfxMedium();
 
-    void                UseInteractionHandler( BOOL );
+    void                UseInteractionHandler( sal_Bool );
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
                         GetInteractionHandler();
 
@@ -163,11 +161,7 @@ public:
     void                ReOpen();
     void                CompleteReOpen();
     const String&       GetName() const {return aLogicName;}
-#if defined SINIX && defined GCC && defined C272
-    const INetURLObject& GetURLObject();
-#else
     const INetURLObject& GetURLObject() const;
-#endif
 
     void                CheckFileDate( const ::com::sun::star::util::DateTime& aInitDate );
     sal_Bool            DocNeedsFileDateCheck();
@@ -186,7 +180,6 @@ public:
     void                SetDataAvailableLink( const Link& rLink );
     Link                GetDataAvailableLink( ) const;
 
-    sal_uInt32          GetMIMEAndRedirect( String& );
     sal_uInt32          GetErrorCode() const;
     sal_uInt32          GetError() const
                         { return ERRCODE_TOERROR(GetErrorCode()); }
@@ -208,8 +201,6 @@ public:
 
     SvStream*           GetInStream();
     SvStream*           GetOutStream();
-
-    SvEaMgr*            GetEaMgr();
 
     sal_Bool            Commit();
     sal_Bool            IsStorage();
@@ -244,7 +235,7 @@ public:
     ::rtl::OUString     GetBaseURL( bool bForSaving=false );
 
 #if _SOLAR__PRIVATE
-    SAL_DLLPRIVATE BOOL HasStorage_Impl() const;
+    SAL_DLLPRIVATE sal_Bool HasStorage_Impl() const;
 
     SAL_DLLPRIVATE void StorageBackup_Impl();
     SAL_DLLPRIVATE ::rtl::OUString GetBackup_Impl();
@@ -282,7 +273,6 @@ public:
     SAL_DLLPRIVATE void SetUpdatePickList(sal_Bool);
     SAL_DLLPRIVATE sal_Bool IsUpdatePickList() const;
 
-//REMOVE        void                SetStorage_Impl( SvStorage* pStor );
     SAL_DLLPRIVATE void SetLongName(const String &rName)
                         { aLongName = rName; }
     SAL_DLLPRIVATE const String & GetLongName() const { return aLongName; }
@@ -334,10 +324,7 @@ public:
 SV_DECL_IMPL_REF( SfxMedium )
 SV_DECL_COMPAT_WEAK( SfxMedium )
 
-#ifndef SFXMEDIUM_LIST
-#define SFXMEDIUM_LIST
-DECLARE_LIST( SfxMediumList, SfxMedium* )
-#endif
+typedef ::std::vector< SfxMedium* > SfxMediumList;
 
 #endif
 

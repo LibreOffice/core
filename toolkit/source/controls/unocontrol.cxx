@@ -51,6 +51,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/processfactory.hxx>
 #include <toolkit/helper/property.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -163,7 +164,26 @@ struct UnoControl_Data
 //  ----------------------------------------------------
 DBG_NAME( UnoControl )
 UnoControl::UnoControl()
-    : maDisposeListeners( *this )
+    :maContext( ::comphelper::getProcessServiceFactory() )
+    ,maDisposeListeners( *this )
+    ,maWindowListeners( *this )
+    ,maFocusListeners( *this )
+    ,maKeyListeners( *this )
+    ,maMouseListeners( *this )
+    ,maMouseMotionListeners( *this )
+    ,maPaintListeners( *this )
+    ,maModeChangeListeners( GetMutex() )
+    ,mpData( new UnoControl_Data )
+{
+    DBG_CTOR( UnoControl, NULL );
+    OSL_ENSURE( false, "UnoControl::UnoControl: not implemented. Well, not really." );
+    // just implemented to let the various FooImplInheritanceHelper compile, you should use the
+    // version taking a service factory
+}
+
+UnoControl::UnoControl( const Reference< XMultiServiceFactory >& i_factory )
+    : maContext( i_factory )
+    , maDisposeListeners( *this )
     , maWindowListeners( *this )
     , maFocusListeners( *this )
     , maKeyListeners( *this )
@@ -374,7 +394,7 @@ void UnoControl::disposeAccessibleContext()
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "UnoControl::disposeAccessibleContext: could not dispose my AccessibleContext!" );
+            OSL_FAIL( "UnoControl::disposeAccessibleContext: could not dispose my AccessibleContext!" );
         }
     }
 }
@@ -649,14 +669,13 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         aGuard.clear();
 
         // clear the guard before creating a new peer - as usual, our peer implementations use the SolarMutex
-        // #82300# - 2000-12-21 - fs@openoffice.org
+
         if (bNeedNewPeer && xParent.is())
         {
             SolarMutexGuard aVclGuard;
                 // and now this is the final withdrawal:
-                // With 83561, I have no other idea than locking the SolarMutex here ....
+                // I have no other idea than locking the SolarMutex here ....
                 // I really hate the fact that VCL is not theadsafe ....
-                // #83561# - 2001-03-01 - fs@openoffice.org
 
             // Funktioniert beim Container nicht!
             getPeer()->dispose();
@@ -674,7 +693,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         // model did not cause the listeners of the controls/peers to be called
         // Since the implementations for the listeners changed a lot towards 1.1, this
         // would not be the case anymore, if we would not do this listener-lock below
-        // #i14703# - 2003-05-23 - fs@openoffice.org
+        // #i14703#
         Window* pVclPeer = VCLUnoHelper::GetWindow( getPeer() );
         VCLXWindow* pPeer = pVclPeer ? pVclPeer->GetWindowPeer() : NULL;
         VclListenerLock aNoVclEventMultiplexing( pPeer );
@@ -682,7 +701,6 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         // setting peer properties may result in an attemp to acquire the solar mutex, 'cause the peers
         // usually don't have an own mutex but use the SolarMutex instead.
         // To prevent deadlocks resulting from this, we do this without our own mutex locked
-        // 2000-11-03 - fs@openoffice.org
         PropertyValueVectorIterator aEnd = aPeerPropertiesToSet.end();
         for (   PropertyValueVectorIterator aLoop = aPeerPropertiesToSet.begin();
                 aLoop != aEnd;
@@ -1119,7 +1137,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
     if ( !mxModel.is() )
     {
         RuntimeException aException;
-        aException.Message = ::rtl::OUString::createFromAscii( "createPeer: no model!" );
+        aException.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createPeer: no model!"));
         aException.Context = (XAggregation*)(::cppu::OWeakAggObject*)this;
         throw( aException );
     }
@@ -1428,7 +1446,7 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
         disposeAccessibleContext();
 
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = ::rtl::OUString::createFromAscii( mbDesignMode ? "design" : "alive" );
+        aModeChangeEvent.NewMode = mbDesignMode ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("design")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("alive" ));
     }
 
     // ajust the visibility of our window
@@ -1452,7 +1470,7 @@ sal_Bool UnoControl::isTransparent(  ) throw(RuntimeException)
 // XServiceInfo
 ::rtl::OUString UnoControl::getImplementationName(  ) throw(RuntimeException)
 {
-    DBG_ERROR( "This method should be overloaded!" );
+    OSL_FAIL( "This method should be overloaded!" );
     return ::rtl::OUString();
 }
 

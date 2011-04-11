@@ -49,7 +49,7 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
@@ -101,7 +101,7 @@ ScXMLTableSourceContext::~ScXMLTableSourceContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableSourceContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLTableSourceContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
@@ -117,9 +117,9 @@ void ScXMLTableSourceContext::EndElement()
         ScDocument* pDoc(GetScImport().GetDocument());
         if (xLinkable.is() && pDoc)
         {
-            GetScImport().LockSolarMutex();
+            ScXMLImport::MutexGuard aGuard(GetScImport());
             if (pDoc->RenameTab( static_cast<SCTAB>(GetScImport().GetTables().GetCurrentSheet()),
-                GetScImport().GetTables().GetCurrentSheetName(), sal_False, sal_True))
+                GetScImport().GetTables().GetCurrentSheetName(), false, sal_True))
             {
                  String aFileString(sLink);
                 String aFilterString(sFilterName);
@@ -128,9 +128,9 @@ void ScXMLTableSourceContext::EndElement()
 
                 aFileString = ScGlobal::GetAbsDocName( aFileString, pDoc->GetDocumentShell() );
                 if ( !aFilterString.Len() )
-                    ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString, FALSE, FALSE );
+                    ScDocumentLoader::GetFilterName( aFileString, aFilterString, aOptString, false, false );
 
-                BYTE nLinkMode = SC_LINK_NONE;
+                sal_uInt8 nLinkMode = SC_LINK_NONE;
                 if ( nMode == sheet::SheetLinkMode_NORMAL )
                     nLinkMode = SC_LINK_NORMAL;
                 else if ( nMode == sheet::SheetLinkMode_VALUE )
@@ -140,7 +140,6 @@ void ScXMLTableSourceContext::EndElement()
                     nLinkMode, aFileString, aFilterString, aOptString,
                     aSheetString, nRefresh );
             }
-            GetScImport().UnlockSolarMutex();
         }
     }
 }

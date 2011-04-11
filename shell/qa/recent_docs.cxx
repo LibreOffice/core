@@ -41,16 +41,17 @@
 
 //########################################
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace syssh = SystemShell;
 
 //########################################
-const OUString SXW_MIME_TYPE = OUString::createFromAscii("application/vnd.sun.xml.writer");
-const OUString SXC_MIME_TYPE = OUString::createFromAscii("application/vnd.sun.xml.calc");
-const OUString SXI_MIME_TYPE = OUString::createFromAscii("application/vnd.sun.xml.impress");
-const OUString SXD_MIME_TYPE = OUString::createFromAscii("application/vnd.sun.xml.draw");
-const OUString SXM_MIME_TYPE = OUString::createFromAscii("application/vnd.sun.xml.math");
+const OUString SXW_MIME_TYPE(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.writer"));
+const OUString SXC_MIME_TYPE(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.calc"));
+const OUString SXI_MIME_TYPE(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.impress"));
+const OUString SXD_MIME_TYPE(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.draw"));
+const OUString SXM_MIME_TYPE(RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.math"));
 
 class Test_AddToRecentDocs : public CppUnit::TestFixture
 {
@@ -66,19 +67,19 @@ public:
         system("rm $HOME/.recently-used");
         system("echo '<?xml version=\"1.0\"?>\n<RecentFiles>\n<RecentItem>\n<URI>file:///home/federico/gedit.txt</URI>\n<Mime-Type>text/plain</Mime-Type>\n<Timestamp>1046485966</Timestamp>\n<Groups>\n<Group>gedit</Group>\n</Groups>\n</RecentItem>\n</RecentFiles>' > $HOME/.recently-used");
 
-        rtl::OUString url = rtl::OUString::createFromAscii("file:///home_athene/test.sxw");
+        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxw"));
         syssh::AddToRecentDocumentList(url, SXW_MIME_TYPE);
 
-        url = rtl::OUString::createFromAscii("file:///home_athene/test.sxc");
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxc"));
         syssh::AddToRecentDocumentList(url, SXC_MIME_TYPE);
 
-        url = rtl::OUString::createFromAscii("file:///home_athene/test.sxi");
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxi"));
         syssh::AddToRecentDocumentList(url, SXI_MIME_TYPE);
 
-        url = rtl::OUString::createFromAscii("file:///home_athene/test.sxd");
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxd"));
         syssh::AddToRecentDocumentList(url, SXD_MIME_TYPE);
 
-        url = rtl::OUString::createFromAscii("file:///home_athene/test.sxm");
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxm"));
         syssh::AddToRecentDocumentList(url, SXM_MIME_TYPE);
     }
 
@@ -88,7 +89,7 @@ public:
         system("rm $HOME/.recently-used");
         system("echo '<?xml version=\"1.0\"?>\n<RecentFiles>\n<RecentItem>\n<URI>file:///home/federico/gedit.txt</URI>\n<Mime-Type>text/plain</Mime-Type>\n<Timestamp>1046485966</Timestamp>\n<Groups>\n<Group>gedit</Group>\n</Groups>\n<RecentItem>\n<URI>file:///home/federico/gedit2.txt</URI>\n<Mime-Type>text/plain</Mime-Type>\n<Timestamp>1046485966</Timestamp>\n<Groups>\n<Group>gedit</Group>\n</Groups>\n</RecentItem>\n</RecentFiles>' > $HOME/.recently-used");
 
-        rtl::OUString url = rtl::OUString::createFromAscii("file:///home_athene/test.sxw");
+        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxw"));
         syssh::AddToRecentDocumentList(url, SXW_MIME_TYPE);
     }
 
@@ -97,19 +98,19 @@ public:
     {
         int ret = system("rm $HOME/.recently-used");
 
-        rtl::OUString url = rtl::OUString::createFromAscii("file:///home_athene/test.sxw");
+        rtl::OUString url(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxw"));
         syssh::AddToRecentDocumentList(url, SXW_MIME_TYPE);
 
-        url = rtl::OUString::createFromAscii("file:///home_athene/test.sxc");
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxc"));
         syssh::AddToRecentDocumentList(url, SXC_MIME_TYPE);
 
-        url = rtl::OUString::createFromAscii("file:///home_athene/test.sxi");
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxi"));
         syssh::AddToRecentDocumentList(url, SXI_MIME_TYPE);
 
-        url = rtl::OUString::createFromAscii("file:///home_athene/test.sxd");
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxd"));
         syssh::AddToRecentDocumentList(url, SXD_MIME_TYPE);
 
-        url = rtl::OUString::createFromAscii("file:///home_athene/test.sxm");
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxm"));
         syssh::AddToRecentDocumentList(url, SXM_MIME_TYPE);
 
         ret = system("ls $HOME/.recently-used");
@@ -127,9 +128,9 @@ public:
 
         if ((recently_used_url.getLength() > 0) &&
             ('/' != recently_used_url.pData->buffer[recently_used_url.getLength() - 1]))
-            recently_used_url += rtl::OUString::createFromAscii("/");
+            recently_used_url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
-        recently_used_url += rtl::OUString::createFromAscii(".recently-used");
+        recently_used_url += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".recently-used"));
         return recently_used_url;
     }
 
@@ -137,7 +138,7 @@ public:
     void read_recently_used(void* buffer, size_t size)
     {
         File ruf(get_recently_used_url());
-        FileBase::RC rc = ruf.open(OpenFlag_Read);
+        FileBase::RC rc = ruf.open(osl_File_OpenFlag_Read);
 
         CPPUNIT_ASSERT_MESSAGE("Cannot open ~/.recently-used", FileBase::E_None == rc);
 
@@ -159,7 +160,7 @@ public:
         memset(cnt_before, 0, sizeof(cnt_before));
         read_recently_used(cnt_before, sizeof(cnt_before));
 
-        OUString url = OUString::createFromAscii("file:///home_athene/test.sxw");
+        OUString url(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxw"));
         syssh::AddToRecentDocumentList(url, SXW_MIME_TYPE);
 
         char cnt_after[128];
@@ -178,7 +179,7 @@ public:
         sprintf(cmd, "echo '%s' > $HOME/.recently-used", xml_unknown);
         system(cmd);
 
-        OUString url = OUString::createFromAscii("file:///home_athene/test.sxw");
+        OUString url(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxw"));
         syssh::AddToRecentDocumentList(url, SXW_MIME_TYPE);
 
         char buffer[256];
@@ -194,7 +195,7 @@ public:
         system("rm $HOME/.recently-used");
         system("touch $HOME/.recently-used");
 
-        OUString url = OUString::createFromAscii("file:///home_athene/test.sxw");
+        OUString url(RTL_CONSTASCII_USTRINGPARAM("file:///home_athene/test.sxw"));
         syssh::AddToRecentDocumentList(url, SXW_MIME_TYPE);
 
         char buffer[256];

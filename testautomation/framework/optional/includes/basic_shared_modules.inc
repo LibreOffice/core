@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@oracle.com
+'*  owner : gregor.hartmann@oracle.com
 '*
 '*  short description : Access modules below OpenOffice.org macros
 '*
@@ -37,7 +37,7 @@ testcase tBasicSharedModules
     dim iObjectPosition as integer
     dim iLibraryCount as integer
 
-    const EXPECTED_LIBRARY_COUNT     = 13 ' prebundled extensions add a library
+    const EXPECTED_LIBRARY_COUNT     = 14 ' prebundled extensions add a library
     const EXPECTED_LIBRARY_COUNT_OOO = 12
     
     hInitSingleDoc()

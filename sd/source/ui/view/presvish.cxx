@@ -60,7 +60,6 @@
 #include "ViewShellBase.hxx"
 #include "FactoryIds.hxx"
 
-// #110496#
 #include "slideshow.hxx"
 #include "fupoor.hxx"
 #include "Window.hxx"
@@ -126,14 +125,13 @@ void PresentationViewShell::FinishInitialization( FrameView* pFrameView )
         pFrameView->Connect();
     }
     SetRuler(false);
-//    SwitchPage (nPageNumber);
     WriteFrameViewData();
 
     GetActiveWindow()->GrabFocus();
 }
 
 
-SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*, BOOL)
+SvxRuler* PresentationViewShell::CreateHRuler(::sd::Window*, sal_Bool)
 {
     return NULL;
 }
@@ -144,14 +142,13 @@ SvxRuler* PresentationViewShell::CreateVRuler(::sd::Window*)
 }
 
 
-void PresentationViewShell::Activate( BOOL bIsMDIActivate )
+void PresentationViewShell::Activate( sal_Bool bIsMDIActivate )
 {
     DrawViewShell::Activate( bIsMDIActivate );
 
     if( bIsMDIActivate )
     {
-        //HMH::sd::View*     pView = GetView();
-        SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
+        SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
 
         GetViewFrame()->GetDispatcher()->Execute( SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 

@@ -108,7 +108,7 @@ using ::rtl::OUString;
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Document laden
+    Description: Load Document
  --------------------------------------------------------------------*/
 
 
@@ -121,11 +121,11 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     sal_Bool bHTMLTemplSet = sal_False;
     if( bRet )
     {
-        AddLink();      // pDoc / pIo ggf. anlegen
+        AddLink();      // create pDoc / pIo if applicable
 
         sal_Bool bWeb = ISA( SwWebDocShell );
         if ( bWeb )
-            bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );//Styles aus HTML.vor
+            bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );// Styles from HTML.vor
         else if( ISA( SwGlobalDocShell ) )
             GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);       // Globaldokument
 
@@ -160,30 +160,30 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         SfxPrinter* pPrt = pDoc->getPrinter( false );
 
         String sEntry;
-        USHORT aFontWhich[] =
+        sal_uInt16 aFontWhich[] =
         {   RES_CHRATR_FONT,
             RES_CHRATR_CJK_FONT,
             RES_CHRATR_CTL_FONT
         };
-        USHORT aFontHeightWhich[] =
+        sal_uInt16 aFontHeightWhich[] =
         {
             RES_CHRATR_FONTSIZE,
             RES_CHRATR_CJK_FONTSIZE,
             RES_CHRATR_CTL_FONTSIZE
         };
-        USHORT aFontIds[] =
+        sal_uInt16 aFontIds[] =
         {
             FONT_STANDARD,
             FONT_STANDARD_CJK,
             FONT_STANDARD_CTL
         };
-        USHORT nFontTypes[] =
+        sal_uInt16 nFontTypes[] =
         {
             DEFAULTFONT_LATIN_TEXT,
             DEFAULTFONT_CJK_TEXT,
             DEFAULTFONT_CTL_TEXT
         };
-        USHORT aLangTypes[] =
+        sal_uInt16 aLangTypes[] =
         {
             RES_CHRATR_LANGUAGE,
             RES_CHRATR_CJK_LANGUAGE,
@@ -192,29 +192,23 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
         for(sal_uInt8 i = 0; i < 3; i++)
         {
-            USHORT nFontWhich = aFontWhich[i];
-            USHORT nFontId = aFontIds[i];
+            sal_uInt16 nFontWhich = aFontWhich[i];
+            sal_uInt16 nFontId = aFontIds[i];
             SvxFontItem* pFontItem = 0;
             const SvxLanguageItem& rLang = (const SvxLanguageItem&)pDoc->GetDefault( aLangTypes[i] );
             LanguageType eLanguage = rLang.GetLanguage();
             if(!pStdFont->IsFontDefault(nFontId))
             {
                 sEntry = pStdFont->GetFontFor(nFontId);
-                sal_Bool bDelete = sal_False;
-                const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(sEntry): 0;
-                if(!pFnt)
+
+                Font aFont( sEntry, Size( 0, 10 ) );
+                if( pPrt )
                 {
-                    pFnt = new SfxFont( FAMILY_DONTKNOW, sEntry, PITCH_DONTKNOW,
-                                        ::gsl_getSystemTextEncoding() );
-                    bDelete = sal_True;
+                    aFont = pPrt->GetFontMetric( aFont );
                 }
-                pFontItem = new SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                                    aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich);
-                if(bDelete)
-                {
-                    delete (SfxFont*) pFnt;
-                    bDelete = sal_False;
-                }
+
+                pFontItem = new SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+                                            aEmptyStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich);
             }
             else
             {
@@ -256,7 +250,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             }
 
         }
-        USHORT aFontIdPoolId[] =
+        sal_uInt16 aFontIdPoolId[] =
         {
             FONT_OUTLINE,       RES_POOLCOLL_HEADLINE_BASE,
             FONT_LIST,          RES_POOLCOLL_NUMBUL_BASE,
@@ -272,8 +266,8 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             FONT_INDEX_CTL,     RES_POOLCOLL_REGISTER_BASE
         };
 
-        USHORT nFontWhich = RES_CHRATR_FONT;
-        USHORT nFontHeightWhich = RES_CHRATR_FONTSIZE;
+        sal_uInt16 nFontWhich = RES_CHRATR_FONT;
+        sal_uInt16 nFontHeightWhich = RES_CHRATR_FONTSIZE;
         LanguageType eLanguage = static_cast<const SvxLanguageItem&>(pDoc->GetDefault( RES_CHRATR_LANGUAGE )).GetLanguage();
         for(sal_uInt8 nIdx = 0; nIdx < 24; nIdx += 2)
         {
@@ -293,25 +287,18 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             if(!pStdFont->IsFontDefault(aFontIdPoolId[nIdx]))
             {
                 sEntry = pStdFont->GetFontFor(aFontIdPoolId[nIdx]);
-                sal_Bool bDelete = sal_False;
-                const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(sEntry): 0;
-                if(!pFnt)
-                {
-                    pFnt = new SfxFont( FAMILY_DONTKNOW, sEntry, PITCH_DONTKNOW,
-                                        ::gsl_getSystemTextEncoding() );
-                    bDelete = sal_True;
-                }
+
+                Font aFont( sEntry, Size( 0, 10 ) );
+                if( pPrt )
+                    aFont = pPrt->GetFontMetric( aFont );
+
                 pColl = pDoc->GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
                 if( !bHTMLTemplSet ||
                     SFX_ITEM_SET != pColl->GetAttrSet().GetItemState(
                                                     nFontWhich, sal_False ) )
                 {
-                    pColl->SetFmtAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                                        aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
-                }
-                if(bDelete)
-                {
-                    delete (SfxFont*) pFnt;
+                    pColl->SetFmtAttr(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+                                                  aEmptyStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
                 }
             }
             sal_Int32 nFontHeight = pStdFont->GetFontHeight( static_cast< sal_Int8 >(aFontIdPoolId[nIdx]), 0, eLanguage );
@@ -326,6 +313,12 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 pColl->SetFmtAttr( aFontHeight );
             }
         }
+
+        // the default for documents created via 'File/New' should be 'on'
+        // (old documents, where this property was not yet implemented, will get the
+        // value 'false' in the SwDoc c-tor)
+        pDoc->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT,
+                SW_MOD()->GetUsrPref( bWeb )->IsAlignMathObjectsToBaseline() );
     }
 
     /* #106748# If the default frame direction of a document is RTL
@@ -335,14 +328,14 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         pDoc->SetDefault( SvxAdjustItem(SVX_ADJUST_RIGHT, RES_PARATR_ADJUST ) );
 
     // OD 09.10.2003 #i18732# - set dynamic pool default for
-    // item RES_FOLLOW_TEXT_FLOW to FALSE for *new document*.
+    // item RES_FOLLOW_TEXT_FLOW to sal_False for *new document*.
     // Thus, redo this change in method <SwDoc::RemoveAllFmtLanguageDependencies()>,
     // which is called from <SwDocShell::ConvertFrom(..)> in order to restore
     // the static pool default.
-    pDoc->SetDefault( SwFmtFollowTextFlow( FALSE ) );
+    pDoc->SetDefault( SwFmtFollowTextFlow( sal_False ) );
 
 // --> collapsing borders FME 2005-05-27 #i29550#
-    pDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, TRUE ) );
+    pDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, sal_True ) );
 // <-- collapsing
 
     //#i16874# AutoKerning as default for new documents
@@ -358,7 +351,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Ctor mit SfxCreateMode ?????
+    Description:    Ctor with SfxCreateMode ?????
  --------------------------------------------------------------------*/
 
 
@@ -377,7 +370,7 @@ SwDocShell::SwDocShell( SfxObjectCreateMode eMode ) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Ctor / Dtor
+    Description: Ctor / Dtor
  --------------------------------------------------------------------*/
 
 
@@ -396,7 +389,7 @@ SwDocShell::SwDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Ctor / Dtor
+    Description: Ctor / Dtor
  --------------------------------------------------------------------*/
 
 
@@ -415,7 +408,7 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Dtor
+    Description:    Dtor
  --------------------------------------------------------------------*/
 
 
@@ -433,15 +426,15 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     RemoveLink();
     delete pFontList;
 
-    // wir als BroadCaster werden auch unser eigener Listener
-    // (fuer DocInfo/FileNamen/....)
+    // we, as BroadCaster also become our own Listener
+    // (for DocInfo/FileNames/....)
     EndListening( *this );
     SvxColorTableItem* pColItem = (SvxColorTableItem*)GetItem(SID_COLOR_TABLE);
-    // wird nur die DocInfo fuer den Explorer gelesen, ist das Item nicht da
+    // when only DocInfo is read for the Explorer, the Item is not there
     if(pColItem)
     {
         XColorTable* pTable = pColItem->GetColorTable();
-        // wurde eine neue Table angelegt, muss sie auch geloescht werden.
+        // when a new Table was created, it has to be deleted as well.
         if((void*)pTable  != (void*)(XColorTable::GetStdColorTable()) )
             delete pTable;
     }
@@ -453,8 +446,8 @@ void  SwDocShell::Init_Impl()
 {
     SetPool(&SW_MOD()->GetPool());
     SetBaseModel(new SwXTextDocument(this));
-    // wir als BroadCaster werden auch unser eigener Listener
-    // (fuer DocInfo/FileNamen/....)
+    // we, as BroadCaster also become our own Listener
+    // (for DocInfo/FileNames/....)
     StartListening( *this );
     //position of the "Automatic" style filter for the stylist (app.src)
     SetAutoStyleFilterIndex(3);
@@ -463,7 +456,7 @@ void  SwDocShell::Init_Impl()
     SetMapUnit( MAP_TWIP );
 }
 /*--------------------------------------------------------------------
-    Beschreibung: AddLink
+    Description: AddLink
  --------------------------------------------------------------------*/
 
 
@@ -478,18 +471,18 @@ void SwDocShell::AddLink()
     }
     else
         pDoc->acquire();
-    pDoc->SetDocShell( this );      // am Doc den DocShell-Pointer setzen
+    pDoc->SetDocShell( this );      // set the DocShell-Pointer for Doc
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Reactivate(this);
 
     SetPool(&pDoc->GetAttrPool());
 
-    // am besten erst wenn eine sdbcx::View erzeugt wird !!!
+    // most suitably not until a sdbcx::View is created!!!
     pDoc->SetOle2Link(LINK(this, SwDocShell, Ole2ModifiedHdl));
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   neue FontList erzeugen Aenderung Drucker
+    Description:    create new FontList Change Printer
  --------------------------------------------------------------------*/
 
 
@@ -510,13 +503,13 @@ void SwDocShell::UpdateFontList()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: RemoveLink
+    Description: RemoveLink
  --------------------------------------------------------------------*/
 
 
 void SwDocShell::RemoveLink()
 {
-    // Uno-Object abklemmen
+    // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Invalidate();
     aFinishedTimer.Stop();
@@ -532,24 +525,24 @@ void SwDocShell::RemoveLink()
         pDoc->SetDocShell( 0 );
         if( !nRefCt )
             delete pDoc;
-        pDoc = 0;       // wir haben das Doc nicht mehr !!
+        pDoc = 0;       // we don't have the Doc anymore!!
     }
 }
 void SwDocShell::InvalidateModel()
 {
-    // Uno-Object abklemmen
+    // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Invalidate();
 }
 void SwDocShell::ReactivateModel()
 {
-    // Uno-Object abklemmen
+    // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Reactivate(this);
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Laden, Default-Format
+    Description: Load, Default-Format
  --------------------------------------------------------------------*/
 
 
@@ -560,13 +553,13 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
     if( SfxObjectShell::Load( rMedium ))
     {
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "after SfxInPlaceObject::Load" );
-        if( pDoc )              // fuer Letzte Version !!
-            RemoveLink();       // das existierende Loslassen
+        if( pDoc )              // for last version!!
+            RemoveLink();       // release the existing
 
-        AddLink();      // Link setzen und Daten updaten !!
+        AddLink();      // set Link and update Data!!
 
-        // Das Laden
-        // fuer MD
+        // Loading
+        // for MD
             OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
             mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
             if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
@@ -584,10 +577,10 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
             {
                 if( ReadXML )
                 {
-                    ReadXML->SetOrganizerMode( TRUE );
+                    ReadXML->SetOrganizerMode( sal_True );
                     SwReader aRdr( rMedium, aEmptyStr, pDoc );
                     nErr = aRdr.Read( *ReadXML );
-                    ReadXML->SetOrganizerMode( FALSE );
+                    ReadXML->SetOrganizerMode( sal_False );
                 }
             }
             break;
@@ -595,12 +588,12 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         case SFX_CREATE_MODE_INTERNAL:
         case SFX_CREATE_MODE_EMBEDDED:
             {
-                // fuer MWERKS (Mac-Compiler): kann nicht selbststaendig casten
+                // for MWERKS (Mac-Compiler): can't cast autonomously
                 SwTransferable::InitOle( this, *pDoc );
             }
-            // SfxProgress unterdruecken, wenn man Embedded ist
+            // suppress SfxProgress, when we are Embedded
             SW_MOD()->SetEmbeddedLoadSave( sal_True );
-            // kein break;
+            // no break;
 
         case SFX_CREATE_MODE_STANDARD:
         case SFX_CREATE_MODE_PREVIEW:
@@ -608,7 +601,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
                 Reader *pReader = ReadXML;
                 if( pReader )
                 {
-                    // die DocInfo vom Doc am DocShell-Medium setzen
+                    // set Doc's DocInfo at DocShell-Medium
                     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before ReadDocInfo" );
                     SwReader aRdr( rMedium, aEmptyStr, pDoc );
                     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before Read" );
@@ -653,7 +646,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
             LoadingFinished();
         }
 
-        // SfxProgress unterdruecken, wenn man Embedded ist
+        // suppress SfxProgress, when we are Embedded
         SW_MOD()->SetEmbeddedLoadSave( sal_False );
     }
 
@@ -667,7 +660,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
     if( pDoc )
         RemoveLink();
 
-    AddLink();      // Link setzen und Daten updaten !!
+    AddLink();      // set Link and update Data!!
 
     do {        // middle check loop
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
@@ -676,23 +669,23 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
         uno::Reference < container::XNameAccess > xAccess( rMedium.GetStorage(), uno::UNO_QUERY );
         if ( xAccess->hasByName( aStreamName ) && rMedium.GetStorage()->isStreamElement( aStreamName ) )
         {
-            // Das Laden
+            // Loading
             SwWait aWait( *this, sal_True );
             {
                 OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
                 mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
                 if( ReadXML )
                 {
-                    ReadXML->SetOrganizerMode( TRUE );
+                    ReadXML->SetOrganizerMode( sal_True );
                     SwReader aRdr( rMedium, aEmptyStr, pDoc );
                     nErr = aRdr.Read( *ReadXML );
-                    ReadXML->SetOrganizerMode( FALSE );
+                    ReadXML->SetOrganizerMode( sal_False );
                 }
             }
         }
         else
         {
-            OSL_ENSURE(false, "Code removed!");
+            OSL_FAIL("Code removed!");
         }
 
         SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
@@ -748,12 +741,12 @@ void SwDocShell::SubInitNew()
     {
         SvxHyphenZoneItem aHyp( (SvxHyphenZoneItem&) pDoc->GetDefault(
                                                         RES_PARATR_HYPHENZONE) );
-        aHyp.GetMinLead()   = static_cast< BYTE >(aLinguOpt.nHyphMinLeading);
-        aHyp.GetMinTrail()  = static_cast< BYTE >(aLinguOpt.nHyphMinTrailing);
+        aHyp.GetMinLead()   = static_cast< sal_uInt8 >(aLinguOpt.nHyphMinLeading);
+        aHyp.GetMinTrail()  = static_cast< sal_uInt8 >(aLinguOpt.nHyphMinTrailing);
 
         aDfltSet.Put( aHyp );
 
-        sal_uInt16 nNewPos = static_cast< sal_uInt16 >(SW_MOD()->GetUsrPref(FALSE)->GetDefTab());
+        sal_uInt16 nNewPos = static_cast< sal_uInt16 >(SW_MOD()->GetUsrPref(sal_False)->GetDefTab());
         if( nNewPos )
             aDfltSet.Put( SvxTabStopItem( 1, nNewPos,
                                           SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP ) );
@@ -765,7 +758,7 @@ void SwDocShell::SubInitNew()
     //default page mode for text grid
     if(!bWeb)
     {
-        sal_Bool bSquaredPageMode = SW_MOD()->GetUsrPref(FALSE)->IsSquaredPageMode();
+        sal_Bool bSquaredPageMode = SW_MOD()->GetUsrPref(sal_False)->IsSquaredPageMode();
         pDoc->SetDefaultPageMode( bSquaredPageMode );
     }
 

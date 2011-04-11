@@ -832,7 +832,7 @@ public:
 
 protected:
     virtual Window* getEventWindow() const;
-    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
 
     // default implementations call our focus listeners, don't forget to call them if you override this
     virtual void onFocusGained( const ::com::sun::star::awt::FocusEvent& _rEvent );
@@ -948,7 +948,7 @@ public:
     virtual void SAL_CALL removeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XChangeListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
 
     virtual void onFocusGained( const ::com::sun::star::awt::FocusEvent& _rEvent );
     virtual void onFocusLost( const ::com::sun::star::awt::FocusEvent& _rEvent );
@@ -1000,7 +1000,7 @@ public:
 
 protected:
     virtual Window* getEventWindow() const;
-    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
 };
 
 //==================================================================
@@ -1052,7 +1052,7 @@ public:
     virtual void SAL_CALL SAL_CALL makeVisible(sal_Int16 nEntry) throw(::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
 
     DECL_LINK( OnDoubleClick, void* );
 };
@@ -1097,7 +1097,7 @@ public:
     virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 _Lines ) throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual void onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData );
+    virtual void onWindowEvent( const sal_uLong _nEventId, const Window& _rWindow, const void* _pEventData );
 };
 
 //==================================================================

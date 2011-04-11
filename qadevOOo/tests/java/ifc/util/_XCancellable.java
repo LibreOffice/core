@@ -46,7 +46,7 @@ public class _XCancellable extends MultiMethodTest {
 
     /**
      * Just calls the method. <p>
-     * Has <b>OK</b> status if no exception has occured. <p>
+     * Has <b>OK</b> status if no exception has occurred. <p>
      */
     public void _cancel() {
         oObj.cancel() ;

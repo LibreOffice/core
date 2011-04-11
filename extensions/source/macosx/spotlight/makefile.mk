@@ -74,7 +74,10 @@ ZIP1LIST = *
 
 .INCLUDE : target.mk
 
+.IF "$(ZIP1TARGETN)"!=""
 $(ZIP1TARGETN) : $(plistfiles) $(binaries) $(resources)
+
+.ENDIF          # "$(ZIP1TARGETN)"!=""
 
 # Info.plist is just versioned and copied into the bundle   
 $(CONTENTS)$/%.plist : mdimporter/%.plist

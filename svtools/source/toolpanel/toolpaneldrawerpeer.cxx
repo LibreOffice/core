@@ -39,6 +39,7 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/svapp.hxx>
 
 //......................................................................................................................
 namespace svt
@@ -134,7 +135,7 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessibleContext > ToolPanelDrawerPeer::CreateAccessibleContext()
     {
-        ::osl::SolarGuard aSolarGuard( GetMutex() );
+        SolarMutexGuard aSolarGuard;
         return new ToolPanelDrawerContext( *this );
     }
 

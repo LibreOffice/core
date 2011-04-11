@@ -60,7 +60,7 @@ published service AccessibleMenuSeparator
         <li>Description: There is no description.</li>
         <li>Children: There are no children.</li>
         <li>Parent: The parent of a menu separator is a menu bar,
-            a popup menu or a menu, whose accessible context supports the
+            a pop-up menu or a menu, whose accessible context supports the
             services <type>AccessibleMenuBar</type>,
             <type>AccessiblePopupMenu</type> or
             <type>AccessibleMenu</type>.</li>

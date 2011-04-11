@@ -61,7 +61,7 @@ SdXML3DObjectContext::SdXML3DObjectContext(
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mbSetTransform( FALSE )
+    mbSetTransform( sal_False )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -124,66 +124,6 @@ void SdXML3DObjectContext::EndElement()
     SdXMLShapeContext::EndElement();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*
-void SdXML3DObjectContext::AddShape(uno::Reference< drawing::XShape >& xShape)
-{
-    if(xShape.is() && mxShapes.is())
-    {
-        // set shape local
-        mxShape = xShape;
-
-        // add new shape to parent
-        mxShapes->add( xShape );
-    }
-}
-*/
-//////////////////////////////////////////////////////////////////////////////
-/*
-void SdXML3DObjectContext::SetStyle()
-{
-    // set style on shape
-    if(maDrawStyleName.getLength() && mxShape.is())
-    {
-        const SvXMLStyleContext* pStyle = 0L;
-        sal_Bool bAutoStyle(FALSE);
-
-        if(GetImport().GetShapeImport()->GetAutoStylesContext())
-            pStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(
-            XML_STYLE_FAMILY_SD_GRAPHICS_ID, maDrawStyleName);
-
-        if(pStyle)
-            bAutoStyle = TRUE;
-
-        if(!pStyle && GetImport().GetShapeImport()->GetStylesContext())
-            pStyle = GetImport().GetShapeImport()->GetStylesContext()->
-            FindStyleChildContext(XML_STYLE_FAMILY_SD_GRAPHICS_ID, maDrawStyleName);
-
-        if(pStyle && pStyle->ISA(XMLShapeStyleContext))
-        {
-            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
-            if(xPropSet.is())
-            {
-                XMLShapeStyleContext* pDocStyle = (XMLShapeStyleContext*)pStyle;
-
-                if(pDocStyle->GetStyle().is())
-                {
-                    // set style on object
-                    uno::Any aAny;
-                    aAny <<= pDocStyle->GetStyle();
-                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Style")), aAny);
-                }
-
-                if(bAutoStyle)
-                {
-                    // set PropertySet on object
-                    pDocStyle->FillPropertySet(xPropSet);
-                }
-            }
-        }
-    }
-}
-*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -199,8 +139,8 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maMinEdge(-2500.0, -2500.0, -2500.0),
     maMaxEdge(2500.0, 2500.0, 2500.0),
-    mbMinEdgeUsed(FALSE),
-    mbMaxEdgeUsed(FALSE)
+    mbMinEdgeUsed(sal_False),
+    mbMaxEdgeUsed(sal_False)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -221,7 +161,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                 if(aNewVec != maMinEdge)
                 {
                     maMinEdge = aNewVec;
-                    mbMinEdgeUsed = TRUE;
+                    mbMinEdgeUsed = sal_True;
                 }
                 break;
             }
@@ -233,7 +173,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                 if(aNewVec != maMaxEdge)
                 {
                     maMaxEdge = aNewVec;
-                    mbMaxEdgeUsed = TRUE;
+                    mbMaxEdgeUsed = sal_True;
                 }
                 break;
             }
@@ -310,8 +250,8 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maCenter(0.0, 0.0, 0.0),
     maSize(5000.0, 5000.0, 5000.0),
-    mbCenterUsed(FALSE),
-    mbSizeUsed(FALSE)
+    mbCenterUsed(sal_False),
+    mbSizeUsed(sal_False)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -332,7 +272,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                 if(aNewVec != maCenter)
                 {
                     maCenter = aNewVec;
-                    mbCenterUsed = TRUE;
+                    mbCenterUsed = sal_True;
                 }
                 break;
             }
@@ -344,7 +284,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                 if(aNewVec != maSize)
                 {
                     maSize = aNewVec;
-                    mbSizeUsed = TRUE;
+                    mbSizeUsed = sal_True;
                 }
                 break;
             }

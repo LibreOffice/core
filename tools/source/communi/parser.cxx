@@ -36,8 +36,6 @@
 #include "tools/iparser.hxx"
 #include "tools/geninfo.hxx"
 
-
-
 //
 // class InformationParser
 //
@@ -45,9 +43,9 @@
 #define cKeyLevelChar '\t'
 
 /*****************************************************************************/
-InformationParser::InformationParser( BOOL bReplace )
+InformationParser::InformationParser( sal_Bool bReplace )
 /*****************************************************************************/
-                : bRecover( FALSE ),
+                : bRecover( sal_False ),
                 sOldLine( "" ),
                 bReplaceVariables( bReplace ),
                 nLevel( 0 ),
@@ -74,24 +72,24 @@ ByteString &InformationParser::ReadLine()
     ByteString sLine;
 
     if ( bRecover ) {
-        bRecover = FALSE;
+        bRecover = sal_False;
     }
     else {
          if ( !pActStream->IsEof()) {
             pActStream->ReadLine( sLine );
             xub_StrLen nStart = 0;
             xub_StrLen nEnd = sLine.Len();
-            BOOL bCopy = FALSE;
+            sal_Bool bCopy = sal_False;
             while ( nStart < nEnd && ( sLine.GetChar( nStart ) == ' ' || sLine.GetChar( nStart ) == 0x09 ) )
             {
                 nStart++;
-                bCopy = TRUE;
+                bCopy = sal_True;
             }
 
             while ( nStart < nEnd && ( sLine.GetChar( nEnd-1 ) == ' ' || sLine.GetChar( nEnd-1 ) == 0x09 ) )
             {
                 nEnd--;
-                bCopy = TRUE;
+                bCopy = sal_True;
             }
 
             if ( bCopy )
@@ -165,7 +163,7 @@ GenericInformation *InformationParser::ReadKey(
     sCurrentComment = "";
 
     // key separated from value by tab?
-    USHORT nWSPos = sLine.Search( ' ' );
+    sal_uInt16 nWSPos = sLine.Search( ' ' );
     if ( sLine.Search( '\t' ) < nWSPos ) {
         nWSPos = sLine.Search( '\t' );
         sLine.SearchAndReplace( "\t", " " );
@@ -214,17 +212,17 @@ GenericInformation *InformationParser::ReadKey(
 void InformationParser::Recover()
 /*****************************************************************************/
 {
-    bRecover = TRUE;
+    bRecover = sal_True;
 }
 
 /*****************************************************************************/
-BOOL InformationParser::Save( SvStream &rOutStream,
+sal_Bool InformationParser::Save( SvStream &rOutStream,
                   const GenericInformationList *pSaveList,
-                  USHORT level, BOOL bStripped )
+                  sal_uInt16 level, sal_Bool bStripped )
 /*****************************************************************************/
 {
-    USHORT i;
-    ULONG nInfoListCount;
+    sal_uInt16 i;
+    sal_uIntPtr nInfoListCount;
     ByteString sTmpStr;
     GenericInformation *pGenericInfo;
     GenericInformationList *pGenericInfoList;
@@ -232,9 +230,9 @@ BOOL InformationParser::Save( SvStream &rOutStream,
      static ByteString aKeyLevel;
     aKeyLevel.Expand( level, cKeyLevelChar );
 
-    for ( nInfoListCount = 0; nInfoListCount < pSaveList->Count(); nInfoListCount++) {
+    for ( nInfoListCount = 0; nInfoListCount < pSaveList->size(); nInfoListCount++) {
         // Key-Value Paare schreiben
-        pGenericInfo = pSaveList->GetObject( nInfoListCount );
+        pGenericInfo = (*pSaveList)[ nInfoListCount ];
         sTmpStr = "";
         if ( !bStripped && level )
             sTmpStr.Append( aKeyLevel.GetBuffer(), level );
@@ -251,7 +249,7 @@ BOOL InformationParser::Save( SvStream &rOutStream,
         sTmpStr += ' ';
         sTmpStr += pGenericInfo->GetValue();
         if ( !rOutStream.WriteLine( sTmpStr ) )
-              return FALSE;
+              return sal_False;
 
         // wenn vorhanden, bearbeite recursive die Sublisten
         if (( pGenericInfoList = pGenericInfo->GetSubList() ) != NULL ) {
@@ -261,20 +259,20 @@ BOOL InformationParser::Save( SvStream &rOutStream,
                 sTmpStr.Append( aKeyLevel.GetBuffer(), level );
               sTmpStr += '{';
               if ( !rOutStream.WriteLine( sTmpStr ) )
-                return FALSE;
+                return sal_False;
               // recursiv die sublist abarbeiten
               if ( !Save( rOutStream, pGenericInfoList, level+1, bStripped ) )
-                return FALSE;
+                return sal_False;
                   // schliessende Klammer
               sTmpStr = "";
             if ( !bStripped && level )
                 sTmpStr.Append( aKeyLevel.GetBuffer(), level );
               sTmpStr += '}';
               if ( !rOutStream.WriteLine( sTmpStr ) )
-                return FALSE;
+                return sal_False;
         }
       }
-      return TRUE;
+      return sal_True;
 }
 
 /*****************************************************************************/
@@ -374,7 +372,7 @@ GenericInformationList *InformationParser::Execute( Dir &rDir,
     else
         pList = new GenericInformationList();
 
-    for ( USHORT i = 0; i < rDir.Count(); i++ ) {
+    for ( sal_uInt16 i = 0; i < rDir.Count(); i++ ) {
 
         // execute this dir
         UniString sNextFile( rDir[i].GetFull());
@@ -398,33 +396,33 @@ GenericInformationList *InformationParser::Execute( Dir &rDir,
 }
 
 /*****************************************************************************/
-BOOL InformationParser::Save( SvFileStream &rSourceStream,
+sal_Bool InformationParser::Save( SvFileStream &rSourceStream,
                   const GenericInformationList *pSaveList )
 /*****************************************************************************/
 {
-    if ( !rSourceStream.IsOpen() || !Save( (SvStream &)rSourceStream, pSaveList, 0, FALSE ))
+    if ( !rSourceStream.IsOpen() || !Save( (SvStream &)rSourceStream, pSaveList, 0, sal_False ))
     {
         printf( "ERROR saving file \"%s\"\n",ByteString( rSourceStream.GetFileName(), gsl_getSystemTextEncoding()).GetBuffer() );
-        return FALSE;
+        return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 /*****************************************************************************/
-BOOL InformationParser::Save( SvMemoryStream &rSourceStream,
+sal_Bool InformationParser::Save( SvMemoryStream &rSourceStream,
                   const GenericInformationList *pSaveList )
 /*****************************************************************************/
 {
     Time a;
-    BOOL bRet = Save( (SvStream &)rSourceStream, pSaveList, 0, TRUE );
+    sal_Bool bRet = Save( (SvStream &)rSourceStream, pSaveList, 0, sal_True );
     Time b;
     b = b - a;
     return bRet;
 }
 
 /*****************************************************************************/
-BOOL InformationParser::Save( const UniString &rSourceFile,
+sal_Bool InformationParser::Save( const UniString &rSourceFile,
                   const GenericInformationList *pSaveList )
 /*****************************************************************************/
 {
@@ -432,14 +430,14 @@ BOOL InformationParser::Save( const UniString &rSourceFile,
 
   if ( !Save( *pOutFile, pSaveList )) {
     delete pOutFile;
-    return FALSE;
+    return sal_False;
   }
   delete pOutFile;
-  return TRUE;
+  return sal_True;
 }
 
 /*****************************************************************************/
-USHORT InformationParser::GetErrorCode()
+sal_uInt16 InformationParser::GetErrorCode()
 /*****************************************************************************/
 {
     return nErrorCode;

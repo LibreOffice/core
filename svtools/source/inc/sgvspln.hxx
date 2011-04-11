@@ -39,16 +39,14 @@
 |*                      Polygons werden als StÅtzstellen angenommen.
 |*                      n liefert die Anzahl der Teilpolynome.
 |*                      Ist die Berechnung fehlerfrei verlaufen, so
-|*                      liefert die Funktion TRUE. Nur in diesem Fall
+|*                      liefert die Funktion sal_True. Nur in diesem Fall
 |*                      ist Speicher fÅr die Koeffizientenarrays
 |*                      allokiert, der dann spÑter vom Aufrufer mittels
 |*                      delete freizugeben ist.
-|*    Ersterstellung    JOE 17-08.93
-|*    Letzte Aenderung  JOE 17-08.93
 |*
 *************************************************************************/
 
-BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
+sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
                 double*& ax, double*& ay, double*& bx, double*& by,
                 double*& cx, double*& cy, double*& dx, double*& dy, double*& T);
 
@@ -59,17 +57,15 @@ BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
 |*    Beschreibung      Konvertiert einen parametrichen kubischen
 |*                      Polynomspline Spline (natÅrlich oder periodisch)
 |*                      in ein angenÑhertes Polygon.
-|*                      Die Funktion liefert FALSE, wenn ein Fehler bei
+|*                      Die Funktion liefert sal_False, wenn ein Fehler bei
 |*                      der Koeffizientenberechnung aufgetreten ist oder
-|*                      das Polygon zu gro· wird (>PolyMax=16380). Im 1.
+|*                      das Polygon zu gro?wird (>PolyMax=16380). Im 1.
 |*                      Fall hat das Polygon 0, im 2. Fall PolyMax Punkte.
 |*                      Um KoordinatenÅberlÑufe zu vermeiden werden diese
 |*                      auf +/-32000 begrenzt.
-|*    Ersterstellung    JOE 23.06.93
-|*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
-BOOL Spline2Poly(Polygon& rSpln, BOOL Periodic, Polygon& rPoly);
+sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly);
 
 #endif //_SGVSPLN_HXX
 

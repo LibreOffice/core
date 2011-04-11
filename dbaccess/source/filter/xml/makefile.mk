@@ -103,7 +103,6 @@ SHL1STDLIBS+= \
 SHL1DEPN=
 SHL1LIBS=$(LIB1TARGET)
 SHL1IMPLIB=	i$(SHL1TARGET)
-# SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
@@ -112,3 +111,11 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
+ALLTAR : $(MISC)/dbaxml.component
+
+$(MISC)/dbaxml.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        dbaxml.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt dbaxml.component

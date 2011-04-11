@@ -35,7 +35,7 @@
 #include "fmpgeimp.hxx"
 #include "svx/fmtools.hxx"
 #include "fmprop.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
 #include "fmtextcontrolshell.hxx"
@@ -44,7 +44,7 @@
 #include "fmvwimp.hxx"
 #include "formtoolbars.hxx"
 #include "gridcols.hxx"
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/dialogs.hrc"
 #include "svx/fmglob.hxx"
@@ -116,6 +116,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <vector>
 
 // wird fuer Invalidate verwendet -> mitpflegen
 sal_uInt16 DatabaseSlotMap[] =
@@ -390,8 +391,8 @@ namespace
         Sequence< Type> aModelListeners;
         Sequence< Type> aControlListeners;
 
-        Reference< XIntrospection> xModelIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
-        Reference< XIntrospection> xControlIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), UNO_QUERY);
+        Reference< XIntrospection> xModelIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection"))), UNO_QUERY);
+        Reference< XIntrospection> xControlIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection"))), UNO_QUERY);
 
         if (xModelIntrospection.is() && xModel.is())
         {
@@ -526,8 +527,8 @@ sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun
         {
             switch ( (TriState)xCheckBox->getState() )
             {
-                case STATE_NOCHECK: *_pCurrentText = ::rtl::OUString::createFromAscii( "0" ); break;
-                case STATE_CHECK: *_pCurrentText = ::rtl::OUString::createFromAscii( "1" ); break;
+                case STATE_NOCHECK: *_pCurrentText = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "0" )); break;
+                case STATE_CHECK: *_pCurrentText = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "1" )); break;
                 default: *_pCurrentText = ::rtl::OUString(); break;
             }
         }
@@ -540,7 +541,6 @@ sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun
 //------------------------------------------------------------------------------
 sal_Bool FmXBoundFormFieldIterator::ShouldStepInto(const Reference< XInterface>& _rContainer) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXBoundFormFieldIterator::ShouldStepInto" );
     if (_rContainer == m_xStartingPoint)
         // would be quite stupid to step over the root ....
         return sal_True;
@@ -551,7 +551,6 @@ sal_Bool FmXBoundFormFieldIterator::ShouldStepInto(const Reference< XInterface>&
 //------------------------------------------------------------------------------
 sal_Bool FmXBoundFormFieldIterator::ShouldHandleElement(const Reference< XInterface>& _rElement)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXBoundFormFieldIterator::ShouldHandleElement" );
     if (!_rElement.is())
         // NULL element
         return sal_False;
@@ -656,7 +655,7 @@ DBG_NAME(FmXFormShell);
 //------------------------------------------------------------------------
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
-        ,FmXFormShell_CFGBASE(::rtl::OUString::createFromAscii("Office.Common/Misc"), CONFIG_MODE_DELAYED_UPDATE)
+        ,FmXFormShell_CFGBASE(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Misc")), CONFIG_MODE_DELAYED_UPDATE)
         ,m_eNavigate( NavigationBarMode_NONE )
         ,m_nInvalidationEvent( 0 )
         ,m_nActivationEvent( 0 )
@@ -677,7 +676,6 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         ,m_bPreparedClose( sal_False )
         ,m_bFirstActivation( sal_True )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::FmXFormShell" );
     DBG_CTOR(FmXFormShell,NULL);
     m_aMarkTimer.SetTimeout(100);
     m_aMarkTimer.SetTimeoutHdl(LINK(this,FmXFormShell,OnTimeOut));
@@ -695,7 +693,7 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
     implAdjustConfigCache();
     // and register for changes on this settings
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormControlPilotsEnabled"));
     EnableNotification(aNames);
 }
 
@@ -709,7 +707,6 @@ FmXFormShell::~FmXFormShell()
 //------------------------------------------------------------------
 Reference< XModel > FmXFormShell::getContextDocument() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::getContextDocument" );
     Reference< XModel > xModel;
 
     // determine the type of document we live in
@@ -731,17 +728,15 @@ Reference< XModel > FmXFormShell::getContextDocument() const
 //------------------------------------------------------------------
 bool FmXFormShell::isEnhancedForm() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::isEnhancedForm" );
     return getDocumentType() == eEnhancedForm;
 }
 
 //------------------------------------------------------------------
 bool FmXFormShell::impl_checkDisposed() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::impl_checkDisposed" );
     if ( !m_pShell )
     {
-        OSL_ENSURE( false, "FmXFormShell::impl_checkDisposed: already disposed!" );
+        OSL_FAIL( "FmXFormShell::impl_checkDisposed: already disposed!" );
         return true;
     }
     return false;
@@ -750,7 +745,6 @@ bool FmXFormShell::impl_checkDisposed() const
 //------------------------------------------------------------------
 ::svxform::DocumentType FmXFormShell::getDocumentType() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::getDocumentType" );
     if ( m_eDocumentType != eUnknownDocumentType )
         return m_eDocumentType;
 
@@ -760,7 +754,7 @@ bool FmXFormShell::impl_checkDisposed() const
         m_eDocumentType = DocumentClassification::classifyDocument( xModel );
     else
     {
-        OSL_ENSURE( sal_False, "FmXFormShell::getDocumentType: can't determine the document type!" );
+        OSL_FAIL( "FmXFormShell::getDocumentType: can't determine the document type!" );
         m_eDocumentType = eTextDocument;
             // fallback, just to have a defined state
     }
@@ -771,7 +765,6 @@ bool FmXFormShell::impl_checkDisposed() const
 //------------------------------------------------------------------
 bool FmXFormShell::IsReadonlyDoc() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::IsReadonlyDoc" );
     if ( impl_checkDisposed() )
         return true;
 
@@ -784,19 +777,16 @@ bool FmXFormShell::IsReadonlyDoc() const
 //------------------------------------------------------------------
 Any SAL_CALL FmXFormShell::queryInterface( const Type& type) throw ( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::queryInterface" );
     return FmXFormShell_BASE::queryInterface(type);
 }
 //------------------------------------------------------------------------------
 Sequence< Type > SAL_CALL FmXFormShell::getTypes(  ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::getTypes" );
     return FmXFormShell_BASE::getTypes();
 }
 //------------------------------------------------------------------------------
 Sequence< sal_Int8 > SAL_CALL FmXFormShell::getImplementationId() throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::getImplementationId" );
     static ::cppu::OImplementationId* pId = 0;
     if (! pId)
     {
@@ -813,7 +803,6 @@ Sequence< sal_Int8 > SAL_CALL FmXFormShell::getImplementationId() throw(RuntimeE
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::disposing" );
     impl_checkDisposed();
 
     if (m_xActiveController == e.Source)
@@ -853,7 +842,6 @@ void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeExcept
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::propertyChange" );
     if ( impl_checkDisposed() )
         return;
 
@@ -890,7 +878,6 @@ void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw
 //------------------------------------------------------------------------------
 void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatures )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::invalidateFeatures" );
     if ( impl_checkDisposed() )
         return;
 
@@ -920,7 +907,6 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::formActivated" );
     if ( impl_checkDisposed() )
         return;
 
@@ -932,7 +918,6 @@ void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( Runt
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::formDeactivated" );
     if ( impl_checkDisposed() )
         return;
 
@@ -943,7 +928,6 @@ void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( Ru
 //------------------------------------------------------------------------------
 void FmXFormShell::disposing()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::disposing" );
     impl_checkDisposed();
 
     FmXFormShell_BASE::disposing();
@@ -954,7 +938,6 @@ void FmXFormShell::disposing()
         // if we're here, then we expect that PrepareClose has been called, and thus the user
         // got a chance to commit or reject any changes. So in case we're here and there
         // are still uncommitted changes, the user explicitly wanted this.
-        // 2002-11-11 - 104702 - fs@openoffice.org
 
     m_pTextShell->dispose();
 
@@ -1021,7 +1004,6 @@ void FmXFormShell::disposing()
 //------------------------------------------------------------------------------
 void FmXFormShell::UpdateSlot( sal_Int16 _nId )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::UpdateSlot" );
     if ( impl_checkDisposed() )
         return;
 
@@ -1029,7 +1011,7 @@ void FmXFormShell::UpdateSlot( sal_Int16 _nId )
 
     if ( m_nLockSlotInvalidation )
     {
-        OSL_ENSURE( sal_False, "FmXFormShell::UpdateSlot: cannot update if invalidation is currently locked!" );
+        OSL_FAIL( "FmXFormShell::UpdateSlot: cannot update if invalidation is currently locked!" );
         InvalidateSlot( _nId, sal_False );
     }
     else
@@ -1043,16 +1025,14 @@ void FmXFormShell::UpdateSlot( sal_Int16 _nId )
 //------------------------------------------------------------------------------
 void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::InvalidateSlot" );
     if ( impl_checkDisposed() )
         return;
 
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     if (m_nLockSlotInvalidation)
     {
-        m_arrInvalidSlots.Insert(nId, m_arrInvalidSlots.Count());
-        BYTE nFlags = ( bWithId ? 0x01 : 0 );
-        m_arrInvalidSlots_Flags.Insert(nFlags, m_arrInvalidSlots_Flags.Count());
+        sal_uInt8 nFlags = ( bWithId ? 0x01 : 0 );
+        m_arrInvalidSlots.push_back( InvalidSlotInfo(nId, nFlags) );
     }
     else
         if (nId)
@@ -1064,7 +1044,6 @@ void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
 //------------------------------------------------------------------------------
 void FmXFormShell::LockSlotInvalidation(sal_Bool bLock)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::LockSlotInvalidation" );
     if ( impl_checkDisposed() )
         return;
 
@@ -1090,28 +1069,20 @@ IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     m_nInvalidationEvent = 0;
 
-    DBG_ASSERT(m_arrInvalidSlots.Count() == m_arrInvalidSlots_Flags.Count(),
-        "FmXFormShell::OnInvalidateSlots : inconsistent slot arrays !");
-    BYTE nFlags;
-    for (sal_Int16 i=0; i<m_arrInvalidSlots.Count(); ++i)
+    for (std::vector<InvalidSlotInfo>::const_iterator i = m_arrInvalidSlots.begin(); i < m_arrInvalidSlots.end(); ++i)
     {
-        nFlags = m_arrInvalidSlots_Flags[i];
-
-        if (m_arrInvalidSlots[i])
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(m_arrInvalidSlots[i], sal_True, (nFlags & 0x01));
+        if (i->id)
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(i->id, sal_True, (i->flags & 0x01));
         else
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
     }
-
-    m_arrInvalidSlots.Remove(0, m_arrInvalidSlots.Count());
-    m_arrInvalidSlots_Flags.Remove(0, m_arrInvalidSlots_Flags.Count());
+    m_arrInvalidSlots.clear();
     return 0L;
 }
 
 //------------------------------------------------------------------------------
 void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::ForceUpdateSelection" );
     if ( impl_checkDisposed() )
         return;
 
@@ -1133,13 +1104,10 @@ void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
 //------------------------------------------------------------------------------
 PopupMenu* FmXFormShell::GetConversionMenu()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::GetConversionMenu" );
-    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    BOOL bIsHiContrastMode  = rSettings.GetHighContrastMode();
 
     PopupMenu* pNewMenu = new PopupMenu(SVX_RES( RID_FMSHELL_CONVERSIONMENU ));
 
-    ImageList aImageList( SVX_RES( bIsHiContrastMode ? RID_SVXIMGLIST_FMEXPL_HC : RID_SVXIMGLIST_FMEXPL) );
+    ImageList aImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL) );
     for ( size_t i = 0; i < SAL_N_ELEMENTS( nConvertSlots ); ++i )
     {
         // das entsprechende Image dran
@@ -1152,7 +1120,6 @@ PopupMenu* FmXFormShell::GetConversionMenu()
 //------------------------------------------------------------------------------
 bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::isControlConversionSlot" );
     for ( size_t i = 0; i < SAL_N_ELEMENTS( nConvertSlots ); ++i )
         if (nConvertSlots[i] == nSlotId)
             return true;
@@ -1162,7 +1129,6 @@ bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
 //------------------------------------------------------------------------------
 bool FmXFormShell::executeControlConversionSlot( sal_uInt16 _nSlotId )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::executeControlConversionSlot" );
     OSL_PRECOND( canConvertCurrentSelectionToControl( _nSlotId ), "FmXFormShell::executeControlConversionSlot: illegal call!" );
     InterfaceBag::const_iterator aSelectedElement = m_aCurrentSelection.begin();
     if ( aSelectedElement == m_aCurrentSelection.end() )
@@ -1174,7 +1140,6 @@ bool FmXFormShell::executeControlConversionSlot( sal_uInt16 _nSlotId )
 //------------------------------------------------------------------------------
 bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent >& _rxObject, sal_uInt16 _nSlotId )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::executeControlConversionSlot" );
     if ( impl_checkDisposed() )
         return false;
 
@@ -1263,7 +1228,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                             xIndexParent->replaceByIndex(nIndex, aNewModel);
                         else
                         {
-                            DBG_ERROR("FmXFormShell::executeControlConversionSlot: could not replace the model !");
+                            OSL_FAIL("FmXFormShell::executeControlConversionSlot: could not replace the model !");
                             Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
                             if (xNewComponent.is())
                                 xNewComponent->dispose();
@@ -1272,7 +1237,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FmXFormShell::executeControlConversionSlot: could not replace the model !");
+                        OSL_FAIL("FmXFormShell::executeControlConversionSlot: could not replace the model !");
                         Reference< ::com::sun::star::lang::XComponent> xNewComponent(xNewModel, UNO_QUERY);
                         if (xNewComponent.is())
                             xNewComponent->dispose();
@@ -1381,7 +1346,6 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
 //------------------------------------------------------------------------------
 bool FmXFormShell::canConvertCurrentSelectionToControl( sal_Int16 nConversionSlot )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::canConvertCurrentSelectionToControl" );
     if ( m_aCurrentSelection.empty() )
         return false;
 
@@ -1420,7 +1384,6 @@ bool FmXFormShell::canConvertCurrentSelectionToControl( sal_Int16 nConversionSlo
 //------------------------------------------------------------------------------
 void FmXFormShell::checkControlConversionSlotsForCurrentSelection( Menu& rMenu )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::checkControlConversionSlotsForCurrentSelection" );
     for (sal_Int16 i=0; i<rMenu.GetItemCount(); ++i)
         // der Context ist schon von einem Typ, der dem Eitnrag entspricht -> disable
         rMenu.EnableItem( rMenu.GetItemId(i), canConvertCurrentSelectionToControl( rMenu.GetItemId( i ) ) );
@@ -1429,7 +1392,6 @@ void FmXFormShell::checkControlConversionSlotsForCurrentSelection( Menu& rMenu )
 //------------------------------------------------------------------------------
 void FmXFormShell::LoopGrids(sal_Int16 nWhat)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::LoopGrids" );
     if ( impl_checkDisposed() )
         return;
 
@@ -1499,7 +1461,6 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
 //------------------------------------------------------------------------------
 Reference< XControlContainer > FmXFormShell::getControlContainerForView()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::getControlContainerForView" );
     if ( impl_checkDisposed() )
         return NULL;
 
@@ -1517,7 +1478,6 @@ Reference< XControlContainer > FmXFormShell::getControlContainerForView()
 //------------------------------------------------------------------------------
 void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >& _rxForForm )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::ExecuteTabOrderDialog" );
     if ( impl_checkDisposed() )
         return;
 
@@ -1559,14 +1519,13 @@ void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "FmXFormShell::ExecuteTabOrderDialog: caught an exception!" );
+        OSL_FAIL( "FmXFormShell::ExecuteTabOrderDialog: caught an exception!" );
     }
 }
 
 //------------------------------------------------------------------------------
 void FmXFormShell::ExecuteSearch()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::ExecuteSearch" );
     if ( impl_checkDisposed() )
         return;
 
@@ -1713,7 +1672,6 @@ void FmXFormShell::ExecuteSearch()
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::GetY2KState" );
     if ( impl_checkDisposed() )
         return sal_False;
 
@@ -1737,7 +1695,7 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
         {
             try
             {
-                Any aVal( xSet->getPropertyValue(::rtl::OUString::createFromAscii("TwoDigitDateStart")) );
+                Any aVal( xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TwoDigitDateStart"))) );
                 aVal >>= n;
                 return sal_True;
             }
@@ -1753,7 +1711,6 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
 //------------------------------------------------------------------------------
 void FmXFormShell::SetY2KState(sal_uInt16 n)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::SetY2KState" );
     if ( impl_checkDisposed() )
         return;
 
@@ -1771,11 +1728,11 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 {
                     Any aVal;
                     aVal <<= n;
-                    xSet->setPropertyValue(::rtl::OUString::createFromAscii("TwoDigitDateStart"), aVal);
+                    xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TwoDigitDateStart")), aVal);
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occured!");
+                    OSL_FAIL("FmXFormShell::SetY2KState: Exception occurred!");
                 }
 
             }
@@ -1812,11 +1769,11 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 {
                     Any aVal;
                     aVal <<= n;
-                    xSet->setPropertyValue(::rtl::OUString::createFromAscii("TwoDigitDateStart"), aVal);
+                    xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TwoDigitDateStart")), aVal);
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occured!");
+                    OSL_FAIL("FmXFormShell::SetY2KState: Exception occurred!");
                 }
 
             }
@@ -1828,7 +1785,6 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
 //------------------------------------------------------------------------------
 void FmXFormShell::CloseExternalFormViewer()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::CloseExternalFormViewer" );
     if ( impl_checkDisposed() )
         return;
 
@@ -1850,7 +1806,6 @@ void FmXFormShell::CloseExternalFormViewer()
 //------------------------------------------------------------------------------
 Reference< XResultSet> FmXFormShell::getInternalForm(const Reference< XResultSet>& _xForm) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::getInternalForm" );
     if ( impl_checkDisposed() )
         return NULL;
 
@@ -1866,7 +1821,6 @@ Reference< XResultSet> FmXFormShell::getInternalForm(const Reference< XResultSet
 //------------------------------------------------------------------------------
 Reference< XForm> FmXFormShell::getInternalForm(const Reference< XForm>& _xForm) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::getInternalForm" );
     if ( impl_checkDisposed() )
         return NULL;
 
@@ -1895,7 +1849,6 @@ namespace
 //------------------------------------------------------------------------------
 bool FmXFormShell::IsFormSlotEnabled( sal_Int32 _nSlot, FeatureState* _pCompleteState )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::IsFormSlotEnabled" );
     const ::svx::ControllerFeatures& rController =
             lcl_isNavigationRelevant( _nSlot )
         ?   getNavControllerFeatures()
@@ -1911,7 +1864,6 @@ bool FmXFormShell::IsFormSlotEnabled( sal_Int32 _nSlot, FeatureState* _pComplete
 //------------------------------------------------------------------------------
 void FmXFormShell::ExecuteFormSlot( sal_Int32 _nSlot )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::ExecuteFormSlot" );
     const ::svx::ControllerFeatures& rController =
             lcl_isNavigationRelevant( _nSlot )
         ?   getNavControllerFeatures()
@@ -1947,7 +1899,6 @@ void FmXFormShell::ExecuteFormSlot( sal_Int32 _nSlot )
 //------------------------------------------------------------------------------
 void FmXFormShell::impl_switchActiveControllerListening( const bool _bListen )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::impl_switchActiveControllerListening" );
     Reference< XComponent> xComp( m_xActiveController, UNO_QUERY );
     if ( !xComp.is() )
         return;
@@ -1961,7 +1912,6 @@ void FmXFormShell::impl_switchActiveControllerListening( const bool _bListen )
 //------------------------------------------------------------------------------
 void FmXFormShell::setActiveController( const Reference< runtime::XFormController >& xController, sal_Bool _bNoSaveOldContent )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::setActiveController" );
     if ( impl_checkDisposed() )
         return;
 
@@ -2070,14 +2020,12 @@ void FmXFormShell::setActiveController( const Reference< runtime::XFormControlle
 //------------------------------------------------------------------------------
 void FmXFormShell::getCurrentSelection( InterfaceBag& /* [out] */ _rSelection ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::getCurrentSelection" );
     _rSelection = m_aCurrentSelection;
 }
 
 //------------------------------------------------------------------------------
 bool FmXFormShell::setCurrentSelectionFromMark( const SdrMarkList& _rMarkList )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::setCurrentSelectionFromMark" );
     m_aLastKnownMarkedControls.clear();
 
     if ( ( _rMarkList.GetMarkCount() > 0 ) && isControlList( _rMarkList ) )
@@ -2089,14 +2037,12 @@ bool FmXFormShell::setCurrentSelectionFromMark( const SdrMarkList& _rMarkList )
 //------------------------------------------------------------------------------
 bool FmXFormShell::selectLastMarkedControls()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::selectLastMarkedControls" );
     return setCurrentSelection( m_aLastKnownMarkedControls );
 }
 
 //------------------------------------------------------------------------------
 bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::setCurrentSelection" );
     if ( impl_checkDisposed() )
         return false;
 
@@ -2178,14 +2124,12 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
 //------------------------------------------------------------------------------
 bool FmXFormShell::isSolelySelected( const Reference< XInterface >& _rxObject )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::isSolelySelected" );
     return ( m_aCurrentSelection.size() == 1 ) && ( *m_aCurrentSelection.begin() == _rxObject );
 }
 
 //------------------------------------------------------------------------------
 void FmXFormShell::forgetCurrentForm()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::forgetCurrentForm" );
     if ( !m_xCurrentForm.is() )
         return;
 
@@ -2200,7 +2144,6 @@ void FmXFormShell::forgetCurrentForm()
 //------------------------------------------------------------------------------
 void FmXFormShell::impl_updateCurrentForm( const Reference< XForm >& _rxNewCurForm )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::impl_updateCurrentForm" );
     if ( impl_checkDisposed() )
         return;
 
@@ -2219,7 +2162,6 @@ void FmXFormShell::impl_updateCurrentForm( const Reference< XForm >& _rxNewCurFo
 //------------------------------------------------------------------------------
 void FmXFormShell::startListening()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::startListening" );
     if ( impl_checkDisposed() )
         return;
 
@@ -2299,7 +2241,6 @@ void FmXFormShell::startListening()
 //------------------------------------------------------------------------------
 void FmXFormShell::stopListening()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::stopListening" );
     if ( impl_checkDisposed() )
         return;
 
@@ -2323,7 +2264,6 @@ void FmXFormShell::stopListening()
 //------------------------------------------------------------------------------
 void FmXFormShell::ShowSelectionProperties( sal_Bool bShow )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::ShowSelectionProperties" );
     if ( impl_checkDisposed() )
         return;
 
@@ -2362,7 +2302,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     }
     catch(const SQLException&)
     {
-        OSL_ENSURE(0,"Can position on bookmark!");
+        OSL_FAIL("Can position on bookmark!");
     }
 
     LoopGrids(GA_FORCE_SYNC);
@@ -2394,7 +2334,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     }
 
     // wenn das Feld sich in einem GridControl befindet, muss ich dort noch in die entsprechende Spalte gehen
-    sal_Int32 nGridColumn = m_arrRelativeGridColumn.GetObject(pfriWhere->nFieldPos);
+    sal_Int32 nGridColumn = m_arrRelativeGridColumn[pfriWhere->nFieldPos];
     if (nGridColumn != -1)
     {   // dummer weise muss ich mir das Control erst wieder besorgen
         Reference< XControl> xControl( impl_getControl( xControlModel, *pFormObject ) );
@@ -2445,7 +2385,7 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
     }
     catch(const SQLException&)
     {
-        OSL_ENSURE(0,"Can position on bookmark!");
+        OSL_FAIL("Can position on bookmark!");
     }
 
 
@@ -2470,7 +2410,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     // die Liste der zu involvierenden Felder zusammenstellen (sind die ControlSources aller Felder, die eine solche Eigenschaft habe)
     UniString strFieldList, sFieldDisplayNames;
     m_arrSearchedControls.Remove(0, m_arrSearchedControls.Count());
-    m_arrRelativeGridColumn.Remove(0, m_arrRelativeGridColumn.Count());
+    m_arrRelativeGridColumn.clear();
 
     // folgendes kleines Problem : Ich brauche, um gefundene Felder zu markieren, SdrObjekte. Um hier festzustellen, welche Controls
     // ich in die Suche einbeziehen soll, brauche ich Controls (also XControl-Interfaces). Ich muss also ueber eines von beiden
@@ -2579,7 +2519,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                             // und das SdrObjekt zum Feld
                             m_arrSearchedControls.C40_INSERT(SdrObject, pCurrent, m_arrSearchedControls.Count());
                             // die Nummer der Spalte
-                            m_arrRelativeGridColumn.Insert(nViewPos, m_arrRelativeGridColumn.Count());
+                            m_arrRelativeGridColumn.push_back(nViewPos);
                         }
                     }
                 } while (sal_False);
@@ -2608,7 +2548,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         m_arrSearchedControls.C40_INSERT(SdrObject, pCurrent, m_arrSearchedControls.Count());
 
                         // die Nummer der Spalte (hier ein Dummy, nur fuer GridControls interesant)
-                        m_arrRelativeGridColumn.Insert(-1, m_arrRelativeGridColumn.Count());
+                        m_arrRelativeGridColumn.push_back(-1);
 
                         // und fuer die formatierte Suche ...
                         pfmscContextInfo->arrFields.push_back(Reference< XInterface>(xControl, UNO_QUERY));
@@ -2654,7 +2594,6 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
 //------------------------------------------------------------------------------
 void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::elementInserted" );
     if ( impl_checkDisposed() )
         return;
 
@@ -2668,7 +2607,6 @@ void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::
 //------------------------------------------------------------------------------
 void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::elementReplaced" );
     if ( impl_checkDisposed() )
         return;
 
@@ -2682,7 +2620,6 @@ void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(::com::sun::
 //------------------------------------------------------------------------------
 void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::elementRemoved" );
     if ( impl_checkDisposed() )
         return;
 
@@ -2695,7 +2632,6 @@ void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::s
 //------------------------------------------------------------------------------
 void FmXFormShell::UpdateForms( sal_Bool _bInvalidate )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::UpdateForms" );
     if ( impl_checkDisposed() )
         return;
 
@@ -2721,7 +2657,6 @@ void FmXFormShell::UpdateForms( sal_Bool _bInvalidate )
 //------------------------------------------------------------------------------
 void FmXFormShell::AddElement(const Reference< XInterface>& _xElement)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::AddElement" );
     if ( impl_checkDisposed() )
         return;
     impl_AddElement_nothrow(_xElement);
@@ -2754,7 +2689,6 @@ void FmXFormShell::impl_AddElement_nothrow(const Reference< XInterface>& Element
 //------------------------------------------------------------------------------
 void FmXFormShell::RemoveElement(const Reference< XInterface>& Element)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::RemoveElement" );
     if ( impl_checkDisposed() )
         return;
     impl_RemoveElement_nothrow(Element);
@@ -2791,7 +2725,6 @@ void FmXFormShell::impl_RemoveElement_nothrow(const Reference< XInterface>& Elem
 //------------------------------------------------------------------------------
 void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::selectionChanged" );
     if ( impl_checkDisposed() )
         return;
 
@@ -2833,7 +2766,6 @@ IMPL_LINK(FmXFormShell, OnTimeOut, void*, /*EMPTYTAG*/)
 //------------------------------------------------------------------------
 void FmXFormShell::SetSelectionDelayed()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::SetSelectionDelayed" );
     if ( impl_checkDisposed() )
         return;
 
@@ -2844,7 +2776,6 @@ void FmXFormShell::SetSelectionDelayed()
 //------------------------------------------------------------------------
 void FmXFormShell::SetSelection(const SdrMarkList& rMarkList)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::SetSelection" );
     if ( impl_checkDisposed() )
         return;
 
@@ -2855,7 +2786,6 @@ void FmXFormShell::SetSelection(const SdrMarkList& rMarkList)
 //------------------------------------------------------------------------
 void FmXFormShell::DetermineSelection(const SdrMarkList& rMarkList)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::DetermineSelection" );
     if ( setCurrentSelectionFromMark( rMarkList ) && IsPropBrwOpen() )
         ShowSelectionProperties( sal_True );
 }
@@ -2863,7 +2793,6 @@ void FmXFormShell::DetermineSelection(const SdrMarkList& rMarkList)
 //------------------------------------------------------------------------------
 sal_Bool FmXFormShell::IsPropBrwOpen() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::IsPropBrwOpen" );
     if ( impl_checkDisposed() )
         return sal_False;
 
@@ -2900,7 +2829,6 @@ public:
 //------------------------------------------------------------------------------
 void FmXFormShell::SetDesignMode(sal_Bool bDesign)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::SetDesignMode" );
     if ( impl_checkDisposed() )
         return;
 
@@ -3033,7 +2961,6 @@ Reference< XControl> FmXFormShell::impl_getControl( const Reference< XControlMod
 void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInterface>& _rxStartingPoint,
     const ::rtl::OUString& _rCurrentLevelPrefix, FmFormArray& _out_rForms, ::std::vector< String >& _out_rNames )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::impl_collectFormSearchContexts_nothrow" );
     try
     {
         Reference< XIndexAccess> xContainer( _rxStartingPoint, UNO_QUERY );
@@ -3088,7 +3015,6 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInt
 //------------------------------------------------------------------------------
 void FmXFormShell::startFiltering()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::startFiltering" );
     if ( impl_checkDisposed() )
         return;
 
@@ -3105,12 +3031,14 @@ void FmXFormShell::startFiltering()
     else
         xContainer = getActiveController()->getContainer();
 
-    FmWinRecList::iterator i = pXView->findWindow(xContainer);
-    if (i != pXView->getWindowList().end())
+    PFormViewPageWindowAdapter pAdapter = pXView->findWindow( xContainer );
+    if ( pAdapter.is() )
     {
-        const ::std::vector< Reference< runtime::XFormController> >& rControllerList = (*i)->GetList();
-        for (::std::vector< Reference< runtime::XFormController> >::const_iterator j = rControllerList.begin();
-             j != rControllerList.end(); ++j)
+        const ::std::vector< Reference< runtime::XFormController> >& rControllerList = pAdapter->GetList();
+        for (   ::std::vector< Reference< runtime::XFormController> >::const_iterator j = rControllerList.begin();
+                j != rControllerList.end();
+                ++j
+            )
         {
             Reference< XModeSelector> xModeSelector(*j, UNO_QUERY);
             if (xModeSelector.is())
@@ -3163,7 +3091,6 @@ void saveFilter(const Reference< runtime::XFormController >& _rxController)
 //------------------------------------------------------------------------------
 void FmXFormShell::stopFiltering(sal_Bool bSave)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::stopFiltering" );
     if ( impl_checkDisposed() )
         return;
 
@@ -3181,10 +3108,10 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
     else
         xContainer = getActiveController()->getContainer();
 
-    FmWinRecList::iterator i = pXView->findWindow(xContainer);
-    if (i != pXView->getWindowList().end())
+    PFormViewPageWindowAdapter pAdapter = pXView->findWindow(xContainer);
+    if ( pAdapter.is() )
     {
-        const ::std::vector< Reference< runtime::XFormController > >& rControllerList = (*i)->GetList();
+        const ::std::vector< Reference< runtime::XFormController > >& rControllerList = pAdapter->GetList();
         ::std::vector < ::rtl::OUString >   aOriginalFilters;
         ::std::vector < sal_Bool >          aOriginalApplyFlags;
 
@@ -3203,7 +3130,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FmXFormShell::stopFiltering : could not get the original filter !");
+                        OSL_FAIL("FmXFormShell::stopFiltering : could not get the original filter !");
                         // put dummies into the arrays so the they have the right size
 
                         if (aOriginalFilters.size() == aOriginalApplyFlags.size())
@@ -3225,7 +3152,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
         }
         if (bSave)  // execute the filter
         {
-            const ::std::vector< Reference< runtime::XFormController > > & rControllers = (*i)->GetList();
+            const ::std::vector< Reference< runtime::XFormController > > & rControllers = pAdapter->GetList();
             for (::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllers.begin();
                  j != rControllers.end(); ++j)
             {
@@ -3240,7 +3167,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::stopFiltering: Exception occured!");
+                    OSL_FAIL("FmXFormShell::stopFiltering: Exception occurred!");
                 }
 
                 if (!isRowSetAlive(xFormSet))
@@ -3302,7 +3229,6 @@ void clearFilter(const Reference< runtime::XFormController >& _rxController)
 //------------------------------------------------------------------------------
 void FmXFormShell::clearFilter()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::clearFilter" );
     if ( impl_checkDisposed() )
         return;
 
@@ -3318,12 +3244,14 @@ void FmXFormShell::clearFilter()
     else
         xContainer = getActiveController()->getContainer();
 
-    FmWinRecList::iterator i = pXView->findWindow(xContainer);
-    if (i != pXView->getWindowList().end())
+    PFormViewPageWindowAdapter pAdapter = pXView->findWindow(xContainer);
+    if ( pAdapter.is() )
     {
-        const ::std::vector< Reference< runtime::XFormController > > & rControllerList = (*i)->GetList();
-        for (::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllerList.begin();
-             j != rControllerList.end(); ++j)
+        const ::std::vector< Reference< runtime::XFormController > > & rControllerList = pAdapter->GetList();
+        for (   ::std::vector< Reference< runtime::XFormController > > ::const_iterator j = rControllerList.begin();
+                j != rControllerList.end();
+                ++j
+            )
         {
             ::clearFilter(*j);
         }
@@ -3333,7 +3261,6 @@ void FmXFormShell::clearFilter()
 //------------------------------------------------------------------------------
 void FmXFormShell::CreateExternalView()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::CreateExternalView" );
     if ( impl_checkDisposed() )
         return;
 
@@ -3342,7 +3269,7 @@ void FmXFormShell::CreateExternalView()
     // the frame the external view is displayed in
     sal_Bool bAlreadyExistent = m_xExternalViewController.is();
     Reference< ::com::sun::star::frame::XFrame> xExternalViewFrame;
-    ::rtl::OUString sFrameName = ::rtl::OUString::createFromAscii("_beamer");
+    ::rtl::OUString sFrameName(RTL_CONSTASCII_USTRINGPARAM("_beamer"));
     sal_Int32 nSearchFlags = ::com::sun::star::frame::FrameSearchFlag::CHILDREN | ::com::sun::star::frame::FrameSearchFlag::CREATE;
 
     Reference< runtime::XFormController > xCurrentNavController( getNavController());
@@ -3426,7 +3353,7 @@ void FmXFormShell::CreateExternalView()
         URL aClearURL;
         aClearURL.Complete = FMURL_GRIDVIEW_CLEARVIEW;
 
-        Reference< ::com::sun::star::frame::XDispatch> xClear( xCommLink->queryDispatch(aClearURL, ::rtl::OUString::createFromAscii(""), 0));
+        Reference< ::com::sun::star::frame::XDispatch> xClear( xCommLink->queryDispatch(aClearURL, ::rtl::OUString(), 0));
         if (xClear.is())
             xClear->dispatch(aClearURL, Sequence< PropertyValue>());
     }
@@ -3443,10 +3370,10 @@ void FmXFormShell::CreateExternalView()
         // collect the dispatchers we will need
         URL aAddColumnURL;
         aAddColumnURL.Complete = FMURL_GRIDVIEW_ADDCOLUMN;
-        Reference< ::com::sun::star::frame::XDispatch> xAddColumnDispatch( xCommLink->queryDispatch(aAddColumnURL, ::rtl::OUString::createFromAscii(""), 0));
+        Reference< ::com::sun::star::frame::XDispatch> xAddColumnDispatch( xCommLink->queryDispatch(aAddColumnURL, ::rtl::OUString(), 0));
         URL aAttachURL;
         aAttachURL.Complete = FMURL_GRIDVIEW_ATTACHTOFORM;
-        Reference< ::com::sun::star::frame::XDispatch> xAttachDispatch( xCommLink->queryDispatch(aAttachURL, ::rtl::OUString::createFromAscii(""), 0));
+        Reference< ::com::sun::star::frame::XDispatch> xAttachDispatch( xCommLink->queryDispatch(aAttachURL, ::rtl::OUString(), 0));
 
         if (xAddColumnDispatch.is() && xAttachDispatch.is())
         {
@@ -3612,7 +3539,7 @@ void FmXFormShell::CreateExternalView()
                 aColumnProps.realloc(pColumnProps - aColumnProps.getArray());
 
                 // columns props are a dispatch argument
-                pDispatchArgs->Name = ::rtl::OUString::createFromAscii("ColumnProperties"); // TODO : fmurl.*
+                pDispatchArgs->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnProperties")); // TODO : fmurl.*
                 pDispatchArgs->Value = makeAny(aColumnProps);
                 ++pDispatchArgs;
                 DBG_ASSERT(nDispatchArgs == (pDispatchArgs - aDispatchArgs.getConstArray()),
@@ -3699,7 +3626,7 @@ void FmXFormShell::CreateExternalView()
                 ++pDispatchArgs;
 
                 // the
-                pDispatchArgs->Name = ::rtl::OUString::createFromAscii("ColumnProperties"); // TODO : fmurl.*
+                pDispatchArgs->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnProperties")); // TODO : fmurl.*
                 pDispatchArgs->Value = makeAny(aListBoxDescription);
                 ++pDispatchArgs;
                 DBG_ASSERT(nDispatchArgs == (pDispatchArgs - aDispatchArgs.getConstArray()),
@@ -3739,7 +3666,7 @@ void FmXFormShell::CreateExternalView()
 #ifdef DBG_UTIL
     else
     {
-        DBG_ERROR("FmXFormShell::CreateExternalView : could not create the external form view !");
+        OSL_FAIL("FmXFormShell::CreateExternalView : could not create the external form view !");
     }
 #endif
     InvalidateSlot( SID_FM_VIEW_AS_GRID, sal_False );
@@ -3748,10 +3675,9 @@ void FmXFormShell::CreateExternalView()
 //------------------------------------------------------------------------
 void FmXFormShell::implAdjustConfigCache()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::implAdjustConfigCache" );
     // get (cache) the wizard usage flag
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormControlPilotsEnabled"));
     Sequence< Any > aFlags = GetProperties(aNames);
     if (1 == aFlags.getLength())
         m_bUseWizards = ::cppu::any2bool(aFlags[0]);
@@ -3760,7 +3686,6 @@ void FmXFormShell::implAdjustConfigCache()
 //------------------------------------------------------------------------
 void FmXFormShell::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::Notify" );
     if ( impl_checkDisposed() )
         return;
 
@@ -3781,11 +3706,10 @@ void FmXFormShell::Commit()
 //------------------------------------------------------------------------
 void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::SetWizardUsing" );
     m_bUseWizards = _bUseThem;
 
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii("FormControlPilotsEnabled");
+    aNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormControlPilotsEnabled"));
     Sequence< Any > aValues(1);
     aValues[0] = ::cppu::bool2any(m_bUseWizards);
     PutProperties(aNames, aValues);
@@ -3794,7 +3718,6 @@ void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
 //------------------------------------------------------------------------
 void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeactivateController /* = sal_True */ )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::viewDeactivated" );
 
     if ( _rCurrentView.GetImpl() && !_rCurrentView.IsDesignMode() )
     {
@@ -3803,7 +3726,6 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, sal_Bool _bDeacti
 
     // if we have an async load operation pending for the 0-th page for this view,
     // we need to cancel this
-    // 103727 - 2002-09-26 - fs@openoffice.org
     FmFormPage* pPage = _rCurrentView.GetCurPage();
     if ( pPage )
     {
@@ -3866,7 +3788,6 @@ IMPL_LINK( FmXFormShell, OnFormsCreated, FmFormPage*, /*_pPage*/ )
 //------------------------------------------------------------------------
 void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncAction /* = sal_False */ )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::viewActivated" );
 
     FmFormPage* pPage = _rCurrentView.GetCurPage();
 
@@ -3915,7 +3836,6 @@ void FmXFormShell::viewActivated( FmFormView& _rCurrentView, sal_Bool _bSyncActi
 //------------------------------------------------------------------------------
 void FmXFormShell::impl_defaultCurrentForm_nothrow()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::impl_defaultCurrentForm_nothrow" );
     if ( impl_checkDisposed() )
         return;
 
@@ -3946,10 +3866,9 @@ void FmXFormShell::impl_defaultCurrentForm_nothrow()
 //------------------------------------------------------------------------------
 void FmXFormShell::smartControlReset( const Reference< XIndexAccess >& _rxModels )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::smartControlReset" );
     if (!_rxModels.is())
     {
-        DBG_ERROR("FmXFormShell::smartControlReset: invalid container!");
+        OSL_FAIL("FmXFormShell::smartControlReset: invalid container!");
         return;
     }
 
@@ -4054,7 +3973,6 @@ namespace
 //------------------------------------------------------------------------
 void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /* FORMS_LOAD | FORMS_SYNC */ )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::loadForms" );
     DBG_ASSERT( ( _nBehaviour & ( FORMS_ASYNC | FORMS_UNLOAD ) )  != ( FORMS_ASYNC | FORMS_UNLOAD ),
         "FmXFormShell::loadForms: async loading not supported - this will heavily fail!" );
 
@@ -4132,41 +4050,35 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
 //------------------------------------------------------------------------
 void FmXFormShell::ExecuteTextAttribute( SfxRequest& _rReq )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::ExecuteTextAttribute" );
     m_pTextShell->ExecuteTextAttribute( _rReq );
 }
 
 //------------------------------------------------------------------------
 void FmXFormShell::GetTextAttributeState( SfxItemSet& _rSet )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::GetTextAttributeState" );
     m_pTextShell->GetTextAttributeState( _rSet );
 }
 
 //------------------------------------------------------------------------
 bool FmXFormShell::IsActiveControl( bool _bCountRichTextOnly ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::IsActiveControl" );
     return m_pTextShell->IsActiveControl( _bCountRichTextOnly );
 }
 
 //------------------------------------------------------------------------
 void FmXFormShell::ForgetActiveControl()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::ForgetActiveControl" );
     m_pTextShell->ForgetActiveControl();
 }
 
 //------------------------------------------------------------------------
 void FmXFormShell::SetControlActivationHandler( const Link& _rHdl )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::SetControlActivationHandler" );
     m_pTextShell->SetControlActivationHandler( _rHdl );
 }
 //------------------------------------------------------------------------
 void FmXFormShell::handleShowPropertiesRequest()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::handleShowPropertiesRequest" );
     if ( onlyControlsAreMarked() )
         ShowSelectionProperties( sal_True );
 }
@@ -4174,7 +4086,6 @@ void FmXFormShell::handleShowPropertiesRequest()
 //------------------------------------------------------------------------
 void FmXFormShell::handleMouseButtonDown( const SdrViewEvent& _rViewEvent )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormShell::handleMouseButtonDown" );
     // catch simple double clicks
     if ( ( _rViewEvent.nMouseClicks == 2 ) && ( _rViewEvent.nMouseCode == MOUSE_LEFT ) )
     {
@@ -4286,7 +4197,6 @@ ControlConversionMenuController::ControlConversionMenuController( sal_uInt16 _nI
 //------------------------------------------------------------------------------
 ControlConversionMenuController::~ControlConversionMenuController()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "ControlConversionMenuController::~ControlConversionMenuController" );
     m_pMainMenu->SetPopupMenu(SID_FM_CHANGECONTROLTYPE, NULL);
     delete m_pConversionMenu;
 }
@@ -4307,10 +4217,10 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
             // We can't simply re-insert the item because we have a clear order for all the our items.
             // So first we have to determine the position of the item to insert.
             PopupMenu* pSource = FmXFormShell::GetConversionMenu();
-            USHORT nSourcePos = pSource->GetItemPos(nSID);
+            sal_uInt16 nSourcePos = pSource->GetItemPos(nSID);
             DBG_ASSERT(nSourcePos != MENU_ITEM_NOTFOUND, "ControlConversionMenuController::StateChanged : FmXFormShell supplied an invalid menu !");
-            USHORT nPrevInSource = nSourcePos;
-            USHORT nPrevInConversion = MENU_ITEM_NOTFOUND;
+            sal_uInt16 nPrevInSource = nSourcePos;
+            sal_uInt16 nPrevInConversion = MENU_ITEM_NOTFOUND;
             while (nPrevInSource>0)
             {
                 sal_Int16 nPrevId = pSource->GetItemId(--nPrevInSource);
@@ -4322,7 +4232,7 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
             }
             if (MENU_ITEM_NOTFOUND == nPrevInConversion)
                 // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
-                nPrevInConversion = sal::static_int_cast< USHORT >(-1); // put the item at the first position
+                nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); // put the item at the first position
             m_pConversionMenu->InsertItem(nSID, pSource->GetItemText(nSID), pSource->GetItemBits(nSID), ++nPrevInConversion);
             m_pConversionMenu->SetItemImage(nSID, pSource->GetItemImage(nSID));
             m_pConversionMenu->SetHelpId(nSID, pSource->GetHelpId(nSID));
@@ -4333,7 +4243,7 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
     }
     else
     {
-        DBG_ERROR("ControlConversionMenuController::StateChanged : unknown id !");
+        OSL_FAIL("ControlConversionMenuController::StateChanged : unknown id !");
     }
 }
 

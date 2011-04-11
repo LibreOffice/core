@@ -57,11 +57,6 @@
  * @file
  * Border object,now only used by paragraph object.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-14 create this file.
- * 2005-01-17 changed for the XFColor object.
- ************************************************************************/
 #ifndef     _XFBORDERS_HXX
 #define     _XFBORDERS_HXX
 
@@ -172,13 +167,13 @@ public:
      */
     void    SetWidthOutter(enumXFBorder side, double outer);
 
-    XFBorder * GetLeft() {return &m_aBorderLeft;};
+    XFBorder * GetLeft() {return &m_aBorderLeft;}
 
-    XFBorder * GetRight() {return &m_aBorderRight;};
+    XFBorder * GetRight() {return &m_aBorderRight;}
 
-    XFBorder * GetTop() {return &m_aBorderTop;};
+    XFBorder * GetTop() {return &m_aBorderTop;}
 
-    XFBorder * GetBottom() {return &m_aBorderBottom;};
+    XFBorder * GetBottom() {return &m_aBorderBottom;}
 
     void    ToXml(IXFStream *pStrm);
 

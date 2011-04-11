@@ -171,7 +171,7 @@ DBG_NAME(DirectSQLDialog)
         {
             m_aStatementHistory.pop_front();
             m_aNormalizedHistory.pop_front();
-            m_pSQLHistory->RemoveEntry((USHORT)0);
+            m_pSQLHistory->RemoveEntry((sal_uInt16)0);
         }
     }
 
@@ -299,7 +299,7 @@ DBG_NAME(DirectSQLDialog)
             if (_bUpdateListBox)
             {
                 // selecte the normalized statement in the list box
-                m_pSQLHistory->SelectEntryPos((USHORT)_nHistoryPos);
+                m_pSQLHistory->SelectEntryPos((sal_uInt16)_nHistoryPos);
                 OSL_ENSURE(m_pSQLHistory->GetSelectEntry() == m_aNormalizedHistory[_nHistoryPos],
                     "DirectSQLDialog::switchToHistory: inconsistent listbox entries!");
             }
@@ -308,7 +308,7 @@ DBG_NAME(DirectSQLDialog)
             m_aSQL.SetSelection(Selection(sStatement.Len(), sStatement.Len()));
         }
         else
-            OSL_ENSURE(sal_False, "DirectSQLDialog::switchToHistory: invalid position!");
+            OSL_FAIL("DirectSQLDialog::switchToHistory: invalid position!");
     }
 
     //--------------------------------------------------------------------

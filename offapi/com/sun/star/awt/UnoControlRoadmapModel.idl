@@ -58,7 +58,7 @@ service UnoControlRoadmapModel
         held in a sequence.
         When inserting such items their ID is set equal to the Index of their
         insertion by default.
-        After removing items the CurrentItem property is - when beyound the upper sequence
+        After removing items the CurrentItem property is - when beyond the upper sequence
         boundaries - set equal to last index of the RoadmapItem Array.
      */
     interface com::sun::star::container::XIndexContainer;
@@ -139,10 +139,10 @@ service UnoControlRoadmapModel
 
     //-------------------------------------------------------------------------
 
-    /** refers to the  ID of the currently selected item. Initially this property is set to '-1'
-        which is equal to 'undefined"
+    /** refers to the  ID of the currently selected item. Initially this property is set to "-1"
+        which is equal to "undefined"
         If the Roadmap Item that the CurrentItemID refers to is removed the property
-        'CurrentItemID' is set to -1
+        "CurrentItemID" is set to -1
      */
     [property] short CurrentItemID;
 

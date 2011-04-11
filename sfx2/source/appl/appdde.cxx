@@ -39,6 +39,7 @@
 #include <sfx2/linkmgr.hxx>
 
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/pathoptions.hxx>
 
 #include <sfx2/app.hxx>
@@ -73,14 +74,11 @@ public:
     ImplDdeService( const String& rNm )
         : DdeService( rNm )
     {}
-    virtual BOOL MakeTopic( const String& );
+    virtual sal_Bool MakeTopic( const String& );
 
     virtual String  Topics();
-//  virtual String  Formats();
-//  virtual String  SysItems();
-//  virtual String  Status();
 
-    virtual BOOL SysTopicExecute( const String* pStr );
+    virtual sal_Bool SysTopicExecute( const String* pStr );
 };
 
 class SfxDdeTriggerTopic_Impl : public DdeTopic
@@ -90,7 +88,7 @@ public:
     : DdeTopic( DEFINE_CONST_UNICODE("TRIGGER") )
     {}
 
-    virtual BOOL Execute( const String* );
+    virtual sal_Bool Execute( const String* );
 };
 
 class SfxDdeDocTopic_Impl : public DdeTopic
@@ -104,17 +102,11 @@ public:
         : DdeTopic( pShell->GetTitle(SFX_TITLE_FULLNAME) ), pSh( pShell )
     {}
 
-    virtual DdeData* Get( ULONG );
-    virtual BOOL Put( const DdeData* );
-    virtual BOOL Execute( const String* );
-    virtual BOOL StartAdviseLoop();
-    virtual BOOL MakeItem( const String& rItem );
-
-// wird benoetigt?
-//  virtual void Connect( long n );
-//  virtual void Disconnect( long n );
-//  virtual void StopAdviseLoop();
-
+    virtual DdeData* Get( sal_uIntPtr );
+    virtual sal_Bool Put( const DdeData* );
+    virtual sal_Bool Execute( const String* );
+    virtual sal_Bool StartAdviseLoop();
+    virtual sal_Bool MakeItem( const String& rItem );
 };
 
 
@@ -123,18 +115,17 @@ SV_IMPL_PTRARR( SfxDdeDocTopics_Impl, SfxDdeDocTopic_Impl *)
 
 //========================================================================
 
-BOOL SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
+sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
                        const String &rCmd, const String &rEvent )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Pr"uft, ob 'rCmd' das Event 'rEvent' ist (ohne '(') und baut
-    aus diesem dann ein <ApplicationEvent> zusammen, das per
-    <Application::AppEvent()> ausgef"uhrt werden kann. Ist 'rCmd' das
-    angegegeben Event 'rEvent', dann wird TRUE zur"uckgegeben, sonst FALSE.
+    Checks if 'rCmd' of the event 'rEvent' is (without '(') and then assemble
+    this data into a <ApplicationEvent>, which can be excecuted through
+    <Application::AppEvent()>. If 'rCmd' is the given event 'rEvent', then
+    TRUE is returned, otherwise FALSE.
 
-
-    [Beispiel]
+    [Example]
 
     rCmd = "Open(\"d:\doc\doc.sdw\")"
     rEvent = "Open"
@@ -149,9 +140,9 @@ BOOL SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
         aData.Erase( 0, aEvent.Len() );
         if ( aData.Len() > 2 )
         {
-            // in das ApplicationEvent-Format wandeln
+            // Transform into the ApplicationEvent Format
             aData.Erase( aData.Len()-1, 1 );
-            for ( USHORT n = 0; n < aData.Len(); ++n )
+            for ( sal_uInt16 n = 0; n < aData.Len(); ++n )
             {
                 if ( aData.GetChar(n) == 0x0022 ) // " = 22h
                     for ( ; aData.GetChar(++n) != 0x0022 ; )
@@ -162,45 +153,42 @@ BOOL SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
             aData.EraseAllChars( 0x0022 );
             ApplicationAddress aAddr;
             rAppEvent = ApplicationEvent( String(), aAddr, U2S(rEvent), aData );
-            return TRUE;
+            return sal_True;
         }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 //-------------------------------------------------------------------------
 
 long SfxApplication::DdeExecute
 (
-    const String&   rCmd        // in unserer BASIC-Syntax formuliert
+    const String&   rCmd  // Expressed in our BASIC-Syntax
 )
 
-/*  [Beschreibung]
+/*  Description]
 
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seine SfxApplication-Subklasse gerichtete DDE-Kommandos
-    zu empfangen.
+    This method can be overloaded by application developers, to receive
+    DDE-commands directed to thier SfxApplication subclass.
 
-    Die Basisimplementierung versteht die API-Funktionalit"at der
-    betreffenden SfxApplication-Subklasse in BASIC-Syntax. R"uckgabewerte
-    k"onnen dabei leider nicht "ubertragen werden.
+    The base implementation understands the API functionality of the
+    relevant SfxApplication subclass in BASIC syntax. Return values can
+    not be transferred, unfortunately.
 */
 
 {
-    // Print oder Open-Event?
+    // Print or Open-Event?
     ApplicationEvent aAppEvent;
     if ( SfxAppEvent_Impl( aAppEvent, rCmd, DEFINE_CONST_UNICODE("Print") ) ||
          SfxAppEvent_Impl( aAppEvent, rCmd, DEFINE_CONST_UNICODE("Open") ) )
         GetpApp()->AppEvent( aAppEvent );
     else
     {
-        // alle anderen per BASIC
-        EnterBasicCall();
+        // all others are BASIC
         StarBASIC* pBasic = GetBasic();
-        DBG_ASSERT( pBasic, "Wo ist mein Basic???" );
+        DBG_ASSERT( pBasic, "Where is the Basic???" );
         SbxVariable* pRet = pBasic->Execute( rCmd );
-        LeaveBasicCall();
         if( !pRet )
         {
             SbxBase::ResetError();
@@ -214,18 +202,17 @@ long SfxApplication::DdeExecute
 
 long SfxApplication::DdeGetData
 (
-    const String&,              // das anzusprechende Item
+    const String&,              // the Item to be addressed
     const String&,              // in: Format
-    ::com::sun::star::uno::Any& // out: angeforderte Daten
+    ::com::sun::star::uno::Any& // out: requested data
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seine SfxApplication-Subklasse gerichtete DDE-Daten-Anforderungen
-    zu empfangen.
+    This method can be overloaded by application developers, to receive
+    DDE-data-requests directed to thier SfxApplication subclass.
 
-    Die Basisimplementierung liefert keine Daten und gibt 0 zur"uck.
+    The base implementation provides no data and returns 0.
 */
 
 {
@@ -236,18 +223,17 @@ long SfxApplication::DdeGetData
 
 long SfxApplication::DdeSetData
 (
-    const String&,                    // das anzusprechende Item
+    const String&,                    // the Item to be addressed
     const String&,                    // in: Format
-    const ::com::sun::star::uno::Any& // out: angeforderte Daten
+    const ::com::sun::star::uno::Any& // out: requested data
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seine SfxApplication-Subklasse gerichtete DDE-Daten
-    zu empfangen.
+    This method can be overloaded by application developers, to receive
+    DDE-data directed to thier SfxApplication subclass.
 
-    Die Basisimplementierung nimmt keine Daten entgegen und liefert 0 zur"uck.
+    The base implementation is not receiving any data and returns 0.
 */
 
 {
@@ -258,15 +244,15 @@ long SfxApplication::DdeSetData
 
 ::sfx2::SvLinkSource* SfxApplication::DdeCreateLinkSource
 (
-    const String&      // das zu erzeugende Item
+    const String&  // the Item to be addressed
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seiner SfxApplication-Subklasse einen DDE-Hotlink einzurichten
+    This method can be overloaded by application developers, to establish
+    a DDE-hotlink to thier SfxApplication subclass.
 
-    Die Basisimplementierung erzeugt keinen und liefert 0 zur"uck.
+    The base implementation is not generate a link and returns 0.
 */
 
 {
@@ -277,21 +263,20 @@ long SfxApplication::DdeSetData
 
 long SfxObjectShell::DdeExecute
 (
-    const String&   rCmd        // in unserer BASIC-Syntax formuliert
+    const String&   rCmd  // Expressed in our BASIC-Syntax
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seine SfxObjectShell-Subklasse gerichtete DDE-Kommandos
-    zu empfangen.
+    This method can be overloaded by application developers, to receive
+    DDE-commands directed to the thier SfxApplication subclass.
 
-    Die Basisimplementierung f"uhrt nichts aus und liefert 0 zur"uck.
+    The base implementation does nothing and returns 0.
 */
 
 {
     StarBASIC* pBasic = GetBasic();
-    DBG_ASSERT( pBasic, "Wo ist mein Basic???" ) ;
+    DBG_ASSERT( pBasic, "Where is the Basic???" ) ;
     SbxVariable* pRet = pBasic->Execute( rCmd );
     if( !pRet )
     {
@@ -306,18 +291,17 @@ long SfxObjectShell::DdeExecute
 
 long SfxObjectShell::DdeGetData
 (
-    const String&,              // das anzusprechende Item
+    const String&,              // the Item to be addressed
     const String&,              // in: Format
-    ::com::sun::star::uno::Any& // out: angeforderte Daten
+    ::com::sun::star::uno::Any& // out: requested data
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seine SfxObjectShell-Subklasse gerichtete DDE-Daten-Anforderungen
-    zu empfangen.
+    This method can be overloaded by application developers, to receive
+    DDE-data-requests directed to thier SfxApplication subclass.
 
-    Die Basisimplementierung liefert keine Daten und gibt 0 zur"uck.
+    The base implementation provides no data and returns 0.
 */
 
 {
@@ -328,18 +312,17 @@ long SfxObjectShell::DdeGetData
 
 long SfxObjectShell::DdeSetData
 (
-    const String&,                    // das anzusprechende Item
+    const String&,                    // the Item to be addressed
     const String&,                    // in: Format
-    const ::com::sun::star::uno::Any& // out: angeforderte Daten
+    const ::com::sun::star::uno::Any& // out: requested data
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seine SfxObjectShell-Subklasse gerichtete DDE-Daten
-    zu empfangen.
+    This method can be overloaded by application developers, to receive
+    DDE-data directed to thier SfxApplication subclass.
 
-    Die Basisimplementierung nimmt keine Daten entgegen und liefert 0 zur"uck.
+    The base implementation is not receiving any data and returns 0.
 */
 
 {
@@ -349,15 +332,15 @@ long SfxObjectShell::DdeSetData
 //--------------------------------------------------------------------
 ::sfx2::SvLinkSource* SfxObjectShell::DdeCreateLinkSource
 (
-    const String&      // das zu erzeugende Item
+    const String&  // the Item to be addressed
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seiner SfxObjectShell-Subklasse einen DDE-Hotlink einzurichten
+    This method can be overloaded by application developers, to establish
+    a DDE-hotlink to thier SfxApplication subclass.
 
-    Die Basisimplementierung erzeugt keinen und liefert 0 zur"uck.
+    The base implementation is not generate a link and returns 0.
 */
 
 {
@@ -385,19 +368,18 @@ void SfxObjectShell::ReconnectDdeLinks(SfxObjectShell& rServer)
 
 long SfxViewFrame::DdeExecute
 (
-    const String&   rCmd        // in unserer BASIC-Syntax formuliert
+    const String&   rCmd  // Expressed in our BASIC-Syntax
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seine SfxViewFrame-Subklasse gerichtete DDE-Kommandos
-    zu empfangen.
+    This method can be overloaded by application developers, to receive
+    DDE-commands directed to the thier SfxApplication subclass.
 
-    Die Basisimplementierung versteht die API-Funktionalit"at des
-    betreffenden SfxViewFrame, der darin dargestellten SfxViewShell und
-    der betreffenden SfxObjectShell-Subklasse in BASIC-Syntax.
-    R"uckgabewerte k"onnen dabei leider nicht "ubertragen werden.
+    The base implementation understands the API functionality of the
+    relevant SfxViewFrame, which is shown and the relevant SfxViewShell
+    and the relevant SfxApplication subclass in BASIC syntax. Return
+    values can not be transferred, unfortunately.
 */
 
 {
@@ -411,18 +393,17 @@ long SfxViewFrame::DdeExecute
 
 long SfxViewFrame::DdeGetData
 (
-    const String&,              // das anzusprechende Item
+    const String&,              // the Item to be addressed
     const String&,              // in: Format
-    ::com::sun::star::uno::Any& // out: angeforderte Daten
+    ::com::sun::star::uno::Any& // out: requested data
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seine SfxViewFrame-Subklasse gerichtete DDE-Daten-Anforderungen
-    zu empfangen.
+    This method can be overloaded by application developers, to receive
+    DDE-data-requests directed to thier SfxApplication subclass.
 
-    Die Basisimplementierung liefert keine Daten und gibt 0 zur"uck.
+    The base implementation provides no data and returns 0.
 */
 
 {
@@ -433,18 +414,17 @@ long SfxViewFrame::DdeGetData
 
 long SfxViewFrame::DdeSetData
 (
-    const String& ,                     // das anzusprechende Item
-    const String& ,                     // in: Format
-    const ::com::sun::star::uno::Any&   // out: angeforderte Daten
+    const String&,                    // the Item to be addressed
+    const String&,                    // in: Format
+    const ::com::sun::star::uno::Any& // out: requested data
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seine SfxViewFrame-Subklasse gerichtete DDE-Daten
-    zu empfangen.
+    This method can be overloaded by application developers, to receive
+    DDE-data directed to thier SfxApplication subclass.
 
-    Die Basisimplementierung nimmt keine Daten entgegen und liefert 0 zur"uck.
+    The base implementation is not receiving any data and returns 0.
 */
 
 {
@@ -455,15 +435,15 @@ long SfxViewFrame::DdeSetData
 
 ::sfx2::SvLinkSource* SfxViewFrame::DdeCreateLinkSource
 (
-    const String& // das zu erzeugende Item
+    const String&  // the Item to be addressed
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode kann vom Applikationsentwickler "uberladen werden,
-    um an seiner SfxViewFrame-Subklasse einen DDE-Hotlink einzurichten
+    This method can be overloaded by application developers, to establish
+    a DDE-hotlink to thier SfxApplication subclass.
 
-    Die Basisimplementierung erzeugt keinen und liefert 0 zur"uck.
+    The base implementation is not generate a link and returns 0.
 */
 
 {
@@ -472,10 +452,10 @@ long SfxViewFrame::DdeSetData
 
 //========================================================================
 
-BOOL SfxApplication::InitializeDde()
+sal_Bool SfxApplication::InitializeDde()
 {
     DBG_ASSERT( !pAppData_Impl->pDdeService,
-                "Dde kann nicht mehrfach initialisiert werden" );
+                "Dde can not be initialized multiple times" );
 
     pAppData_Impl->pDdeService = new ImplDdeService( Application::GetAppName() );
     int nError = pAppData_Impl->pDdeService->GetError();
@@ -483,10 +463,10 @@ BOOL SfxApplication::InitializeDde()
     {
         pAppData_Impl->pDocTopics = new SfxDdeDocTopics_Impl;
 
-        // wir wollen auf jedenfall RTF unterstuetzen!
+        // we certainly want to support RTF!
         pAppData_Impl->pDdeService->AddFormat( FORMAT_RTF );
 
-        // Config-Pfad als Topic wegen Mehrfachstart
+        // Config path as a topic becauseof multiple starts
         INetURLObject aOfficeLockFile( SvtPathOptions().GetUserConfigPath() );
         aOfficeLockFile.insertName( DEFINE_CONST_UNICODE( "soffice.lck" ) );
         String aService( SfxDdeServiceName_Impl(
@@ -511,23 +491,21 @@ void SfxAppData_Impl::DeInitDDE()
 
 void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 {
-    DBG_ASSERT( pAppData_Impl->pDocTopics, "es gibt gar keinen Dde-Service" );
-    //OV: Im Serverbetrieb ist DDE abgeklemmt!
+    DBG_ASSERT( pAppData_Impl->pDocTopics, "There is no Dde-Service" );
+    //OV: DDE is disconnected in server mode!
     if( !pAppData_Impl->pDocTopics )
         return;
 
-    // doppeltes Eintragen verhindern
+    // prevent double submit
     String sShellNm;
-    BOOL bFnd = FALSE;
-    for( USHORT n = pAppData_Impl->pDocTopics->Count(); n; )
+    sal_Bool bFnd = sal_False;
+    for( sal_uInt16 n = pAppData_Impl->pDocTopics->Count(); n; )
         if( (*pAppData_Impl->pDocTopics)[ --n ]->pSh == pSh )
         {
-            // JP 18.03.96 - Bug 26470
-            //  falls das Document unbenannt wurde, ist trotzdem ein
-            //  neues Topics anzulegen!
+            // If the document is untitled, is still a new Topic is created!
             if( !bFnd )
             {
-                bFnd = TRUE;
+                bFnd = sal_True;
                 (sShellNm = pSh->GetTitle(SFX_TITLE_FULLNAME)).ToLowerAscii();
             }
             String sNm( (*pAppData_Impl->pDocTopics)[ n ]->GetName() );
@@ -543,13 +521,13 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 
 void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
 {
-    DBG_ASSERT( pAppData_Impl->pDocTopics, "es gibt gar keinen Dde-Service" );
-    //OV: Im Serverbetrieb ist DDE abgeklemmt!
+    DBG_ASSERT( pAppData_Impl->pDocTopics, "There is no Dde-Service" );
+    //OV: DDE is disconnected in server mode!
     if( !pAppData_Impl->pDocTopics )
         return;
 
     SfxDdeDocTopic_Impl* pTopic;
-    for( USHORT n = pAppData_Impl->pDocTopics->Count(); n; )
+    for( sal_uInt16 n = pAppData_Impl->pDocTopics->Count(); n; )
         if( ( pTopic = (*pAppData_Impl->pDocTopics)[ --n ])->pSh == pSh )
         {
             pAppData_Impl->pDdeService->RemoveTopic( *pTopic );
@@ -569,17 +547,17 @@ DdeService* SfxApplication::GetDdeService()
 
 //--------------------------------------------------------------------
 
-BOOL ImplDdeService::MakeTopic( const String& rNm )
+sal_Bool ImplDdeService::MakeTopic( const String& rNm )
 {
-    // Workaround gegen Event nach unserem Main() unter OS/2
-    // passierte wenn man beim Beenden aus dem OffMgr die App neu startet
+    // Workaround for Event after Main() under OS/2
+    // happens when exiting starts the App again
     if ( !Application::IsInExecute() )
-        return FALSE;
+        return sal_False;
 
-    // das Topic rNm wird gesucht, haben wir es ?
-    // erstmal nur ueber die ObjectShells laufen und die mit dem
-    // Namen heraussuchen:
-    BOOL bRet = FALSE;
+    // The Topic rNm is sought, do we have it?
+    // First only loop over the ObjectShells to find those
+    // with the specific name:
+    sal_Bool bRet = sal_False;
     String sNm( rNm );
     sNm.ToLowerAscii();
     TypeId aType( TYPE(SfxObjectShell) );
@@ -588,10 +566,10 @@ BOOL ImplDdeService::MakeTopic( const String& rNm )
     {
         String sTmp( pShell->GetTitle(SFX_TITLE_FULLNAME) );
         sTmp.ToLowerAscii();
-        if( sTmp == sNm )       // die wollen wir haben
+        if( sTmp == sNm )
         {
             SFX_APP()->AddDdeTopic( pShell );
-            bRet = TRUE;
+            bRet = sal_True;
             break;
         }
         pShell = SfxObjectShell::GetNext( *pShell, &aType );
@@ -604,13 +582,11 @@ BOOL ImplDdeService::MakeTopic( const String& rNm )
         if ( aWorkPath.GetNewAbsURL( rNm, &aFile ) &&
              SfxContentHelper::IsDocument( aFile.GetMainURL( INetURLObject::NO_DECODE ) ) )
         {
-            // File vorhanden
-
-            // dann versuche die Datei zu laden:
+            // File exists? then try to load it:
             SfxStringItem aName( SID_FILE_NAME, aFile.GetMainURL( INetURLObject::NO_DECODE ) );
-            SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, TRUE);
+            SfxBoolItem aNewView(SID_OPEN_NEW_VIEW, sal_True);
 
-            SfxBoolItem aSilent(SID_SILENT, TRUE);
+            SfxBoolItem aSilent(SID_SILENT, sal_True);
             SfxDispatcher* pDispatcher = SFX_APP()->GetDispatcher_Impl();
             const SfxPoolItem* pRet = pDispatcher->Execute( SID_OPENDOC,
                     SFX_CALLMODE_SYNCHRON,
@@ -623,7 +599,7 @@ BOOL ImplDdeService::MakeTopic( const String& rNm )
                     ->GetFrame()->GetObjectShell() ) )
             {
                 SFX_APP()->AddDdeTopic( pShell );
-                bRet = TRUE;
+                bRet = sal_True;
             }
         }
     }
@@ -653,20 +629,20 @@ String ImplDdeService::Topics()
     return sRet;
 }
 
-BOOL ImplDdeService::SysTopicExecute( const String* pStr )
+sal_Bool ImplDdeService::SysTopicExecute( const String* pStr )
 {
-    return (BOOL)SFX_APP()->DdeExecute( *pStr );
+    return (sal_Bool)SFX_APP()->DdeExecute( *pStr );
 }
 
 //--------------------------------------------------------------------
 
-BOOL SfxDdeTriggerTopic_Impl::Execute( const String* )
+sal_Bool SfxDdeTriggerTopic_Impl::Execute( const String* )
 {
-    return TRUE;
+    return sal_True;
 }
 
 //--------------------------------------------------------------------
-DdeData* SfxDdeDocTopic_Impl::Get( ULONG nFormat )
+DdeData* SfxDdeDocTopic_Impl::Get( sal_uIntPtr nFormat )
 {
     String sMimeType( SotExchange::GetFormatMimeType( nFormat ));
     ::com::sun::star::uno::Any aValue;
@@ -680,11 +656,11 @@ DdeData* SfxDdeDocTopic_Impl::Get( ULONG nFormat )
     return 0;
 }
 
-BOOL SfxDdeDocTopic_Impl::Put( const DdeData* pData )
+sal_Bool SfxDdeDocTopic_Impl::Put( const DdeData* pData )
 {
     aSeq = ::com::sun::star::uno::Sequence< sal_Int8 >(
                             (sal_Int8*)(const void*)*pData, (long)*pData );
-    BOOL bRet;
+    sal_Bool bRet;
     if( aSeq.getLength() )
     {
         ::com::sun::star::uno::Any aValue;
@@ -693,33 +669,33 @@ BOOL SfxDdeDocTopic_Impl::Put( const DdeData* pData )
         bRet = 0 != pSh->DdeSetData( GetCurItem(), sMimeType, aValue );
     }
     else
-        bRet = FALSE;
+        bRet = sal_False;
     return bRet;
 }
 
-BOOL SfxDdeDocTopic_Impl::Execute( const String* pStr )
+sal_Bool SfxDdeDocTopic_Impl::Execute( const String* pStr )
 {
     long nRet = pStr ? pSh->DdeExecute( *pStr ) : 0;
     return 0 != nRet;
 }
 
-BOOL SfxDdeDocTopic_Impl::MakeItem( const String& rItem )
+sal_Bool SfxDdeDocTopic_Impl::MakeItem( const String& rItem )
 {
     AddItem( DdeItem( rItem ) );
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SfxDdeDocTopic_Impl::StartAdviseLoop()
+sal_Bool SfxDdeDocTopic_Impl::StartAdviseLoop()
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     ::sfx2::SvLinkSource* pNewObj = pSh->DdeCreateLinkSource( GetCurItem() );
     if( pNewObj )
     {
-        // dann richten wir auch einen entsprechenden SvBaseLink ein
+        // then we also establish a corresponding SvBaseLink
         String sNm, sTmp( Application::GetAppName() );
         ::sfx2::MakeLnkName( sNm, &sTmp, pSh->GetTitle(SFX_TITLE_FULLNAME), GetCurItem() );
         new ::sfx2::SvBaseLink( sNm, OBJECT_DDE_EXTERN, pNewObj );
-        bRet = TRUE;
+        bRet = sal_True;
     }
     return bRet;
 }

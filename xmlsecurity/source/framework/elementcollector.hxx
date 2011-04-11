@@ -44,9 +44,6 @@ class ElementCollector : public ElementMark
  *  of the ElementMark class, this class also maintains the priority, and
  *  manages the notify process
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com

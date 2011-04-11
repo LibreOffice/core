@@ -79,7 +79,7 @@ typedef void (*DbgTestSolarMutexProc)();
 #define DBG_OUT_MSGBOX              4
 #define DBG_OUT_TESTTOOL            5
 #define DBG_OUT_DEBUGGER            6
-#define DBG_OUT_COREDUMP            7
+#define DBG_OUT_ABORT               7
 
 #define DBG_OUT_COUNT               8
 
@@ -92,15 +92,15 @@ typedef void (*DbgTestSolarMutexProc)();
 
 struct DbgData
 {
-    ULONG       nTestFlags;
-    ULONG       bOverwrite;
-    ULONG       nTraceOut;
-    ULONG       nWarningOut;
-    ULONG       nErrorOut;
-    ULONG       bHookOSLAssert;
-    BYTE        bMemInit;
-    BYTE        bMemBound;
-    BYTE        bMemFree;
+    sal_uIntPtr       nTestFlags;
+    sal_uIntPtr       bOverwrite;
+    sal_uIntPtr       nTraceOut;
+    sal_uIntPtr       nWarningOut;
+    sal_uIntPtr       nErrorOut;
+    sal_uIntPtr       bHookOSLAssert;
+    sal_uInt8        bMemInit;
+    sal_uInt8        bMemBound;
+    sal_uInt8        bMemFree;
     sal_Char    aDebugName[260];
     sal_Char    aInclFilter[512];
     sal_Char    aExclFilter[512];
@@ -136,8 +136,9 @@ struct DbgDataType
 #define DBG_FUNC_GETPRINTMSGBOX     17
 #define DBG_FUNC_FILTERMESSAGE      18          // new for #i38967
 #define DBG_FUNC_UPDATEOSLHOOK      19
+#define DBG_FUNC_SET_ABORT          20
 
-TOOLS_DLLPUBLIC void* DbgFunc( USHORT nAction, void* pData = NULL );
+TOOLS_DLLPUBLIC void* DbgFunc( sal_uInt16 nAction, void* pData = NULL );
 
 inline void DbgUpdateOslHook( DbgData* pData )
 {
@@ -179,7 +180,12 @@ inline void DbgSetPrintTestTool( DbgPrintLine pProc )
     DbgFunc( DBG_FUNC_SETPRINTTESTTOOL, (void*)(long)pProc );
 }
 
-typedef USHORT DbgChannelId;
+inline void DbgSetAbort( DbgPrintLine pProc )
+{
+    DbgFunc( DBG_FUNC_SET_ABORT, (void*)(long)pProc );
+}
+
+typedef sal_uInt16 DbgChannelId;
 /** registers a user-defined channel for emitting the diagnostic messages
 
     Note that such a user-defined channel cannot be revoked during the lifetime
@@ -198,9 +204,9 @@ typedef USHORT DbgChannelId;
 */
 TOOLS_DLLPUBLIC DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc );
 
-inline BOOL DbgFilterMessage( const char* pMsg )
+inline sal_Bool DbgFilterMessage( const char* pMsg )
 {
-    return (BOOL)(long) DbgFunc( DBG_FUNC_FILTERMESSAGE, (void*)pMsg );
+    return (sal_Bool)(long) DbgFunc( DBG_FUNC_FILTERMESSAGE, (void*)pMsg );
 }
 
 inline int DbgIsAllErrorOut()
@@ -218,34 +224,34 @@ inline void DbgSaveData( const DbgData& rData )
     DbgFunc( DBG_FUNC_SAVEDATA, (void*)&rData );
 }
 
-inline ULONG DbgIsTraceOut()
+inline sal_uIntPtr DbgIsTraceOut()
 {
     DbgData* pData = DbgGetData();
     if ( pData )
         return (pData->nTraceOut != DBG_OUT_NULL);
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline ULONG DbgIsWarningOut()
+inline sal_uIntPtr DbgIsWarningOut()
 {
     DbgData* pData = DbgGetData();
     if ( pData )
         return (pData->nWarningOut != DBG_OUT_NULL);
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline ULONG DbgIsErrorOut()
+inline sal_uIntPtr DbgIsErrorOut()
 {
     DbgData* pData = DbgGetData();
     if ( pData )
         return (pData->nErrorOut != DBG_OUT_NULL);
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline ULONG DbgGetErrorOut()   // Testtool: test wether to collect OSL_ASSERTions as well
+inline sal_uIntPtr DbgGetErrorOut()   // Testtool: test wether to collect OSL_ASSERTions as well
 {
     DbgData* pData = DbgGetData();
     if ( pData )
@@ -254,41 +260,41 @@ inline ULONG DbgGetErrorOut()   // Testtool: test wether to collect OSL_ASSERTio
         return DBG_OUT_NULL;
 }
 
-inline ULONG DbgIsAssertWarning()
+inline sal_uIntPtr DbgIsAssertWarning()
 {
     return DbgIsWarningOut();
 }
 
-inline ULONG DbgIsAssert()
+inline sal_uIntPtr DbgIsAssert()
 {
     return DbgIsErrorOut();
 }
 
-inline ULONG DbgIsResource()
+inline sal_uIntPtr DbgIsResource()
 {
     DbgData* pData = DbgGetData();
     if ( pData )
         return pData->nTestFlags & DBG_TEST_RESOURCE;
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline ULONG DbgIsDialog()
+inline sal_uIntPtr DbgIsDialog()
 {
     DbgData* pData = DbgGetData();
     if ( pData )
         return pData->nTestFlags & DBG_TEST_DIALOG;
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline ULONG DbgIsBoldAppFont()
+inline sal_uIntPtr DbgIsBoldAppFont()
 {
     DbgData* pData = DbgGetData();
     if ( pData )
         return pData->nTestFlags & DBG_TEST_BOLDAPPFONT;
     else
-        return FALSE;
+        return sal_False;
 }
 
 inline void DbgXtorInfo( sal_Char* pBuf )
@@ -325,8 +331,8 @@ inline void DbgPrintFile( const sal_Char* pLine )
 
 TOOLS_DLLPUBLIC void DbgStartStackTree();
 TOOLS_DLLPUBLIC void DbgEndStackTree();
-void* DbgGetStackTree( ULONG nAlloc = 0 );
-void DbgFreeStackTree( void* p, ULONG nAlloc = 0 );
+void* DbgGetStackTree( sal_uIntPtr nAlloc = 0 );
+void DbgFreeStackTree( void* p, sal_uIntPtr nAlloc = 0 );
 void DbgPrintStackTree( void* p );
 
 // --- Dbg-Output ---
@@ -335,27 +341,27 @@ void DbgPrintStackTree( void* p );
 #define DBG_OUT_WARNING             2
 #define DBG_OUT_ERROR               3
 
-TOOLS_DLLPUBLIC void DbgOut( const sal_Char* pMsg, USHORT nOutType = DBG_OUT_TRACE,
-             const sal_Char* pFile = NULL, USHORT nLine = 0 );
+TOOLS_DLLPUBLIC void DbgOut( const sal_Char* pMsg, sal_uInt16 nOutType = DBG_OUT_TRACE,
+             const sal_Char* pFile = NULL, sal_uInt16 nLine = 0 );
 TOOLS_DLLPUBLIC void DbgPrintShell(char const * message);
-TOOLS_DLLPUBLIC void DbgOutTypef( USHORT nOutType, const sal_Char* pFStr, ... );
+TOOLS_DLLPUBLIC void DbgOutTypef( sal_uInt16 nOutType, const sal_Char* pFStr, ... );
 TOOLS_DLLPUBLIC void DbgOutf( const sal_Char* pFStr, ... );
 TOOLS_DLLPUBLIC void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... );
 
 inline void DbgTrace( const sal_Char* pMsg,
-                      const sal_Char* pFile = NULL, USHORT nLine = 0 )
+                      const sal_Char* pFile = NULL, sal_uInt16 nLine = 0 )
 {
     DbgOut( pMsg, DBG_OUT_TRACE, pFile, nLine );
 }
 
 inline void DbgWarning( const sal_Char* pMsg,
-                        const sal_Char* pFile = NULL, USHORT nLine = 0 )
+                        const sal_Char* pFile = NULL, sal_uInt16 nLine = 0 )
 {
     DbgOut( pMsg, DBG_OUT_WARNING, pFile, nLine );
 }
 
 inline void DbgError( const sal_Char* pMsg,
-                      const sal_Char* pFile = NULL, USHORT nLine = 0 )
+                      const sal_Char* pFile = NULL, sal_uInt16 nLine = 0 )
 {
     DbgOut( pMsg, DBG_OUT_ERROR, pFile, nLine );
 }
@@ -372,7 +378,7 @@ inline void DbgMemTest( void* p = NULL )
 #define DBG_PROF_CONTINUE           3
 #define DBG_PROF_PAUSE              4
 
-TOOLS_DLLPUBLIC void DbgProf( USHORT nAction, DbgDataType* );
+TOOLS_DLLPUBLIC void DbgProf( sal_uInt16 nAction, DbgDataType* );
 
 #define DBG_XTOR_CTOR               1
 #define DBG_XTOR_DTOR               2
@@ -381,7 +387,7 @@ TOOLS_DLLPUBLIC void DbgProf( USHORT nAction, DbgDataType* );
 #define DBG_XTOR_DTOROBJ            0x8000
 
 TOOLS_DLLPUBLIC void DbgXtor( DbgDataType* pDbgData,
-              USHORT nAction, const void* pThis, DbgUsr fDbgUsr );
+              sal_uInt16 nAction, const void* pThis, DbgUsr fDbgUsr );
 
 class DbgXtorObj
 {
@@ -389,11 +395,11 @@ private:
     DbgDataType*    pDbgData;
     const void*     pThis;
     DbgUsr          fDbgUsr;
-    USHORT          nAction;
+    sal_uInt16          nAction;
 
 public:
                     DbgXtorObj( DbgDataType* pData,
-                                USHORT nAct, const void* pThs, DbgUsr fUsr )
+                                sal_uInt16 nAct, const void* pThs, DbgUsr fUsr )
                     {
                         DbgXtor( pData, nAct, pThs, fUsr );
                         pDbgData = pData;
@@ -503,64 +509,6 @@ do                                              \
 #define DBG_BF_ASSERT( sCon, aError ) ((void)0)
 #endif
 
-#define DBG_TRACE( aTrace )                         \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-        DbgTrace( aTrace );                         \
-} while(0)
-#define DBG_TRACE1( aTrace, x1 )                    \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1 );                          \
-    }                                               \
-} while(0)
-#define DBG_TRACE2( aTrace, x1, x2 )                \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1, x2 );                      \
-    }                                               \
-} while(0)
-#define DBG_TRACE3( aTrace, x1, x2, x3 )            \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1, x2, x3 );                  \
-    }                                               \
-} while(0)
-#define DBG_TRACE4( aTrace, x1, x2, x3, x4 )        \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1, x2, x3, x4 );              \
-    }                                               \
-} while(0)
-#define DBG_TRACE5( aTrace, x1, x2, x3, x4, x5 )    \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
-                     x1, x2, x3, x4, x5 );          \
-    }                                               \
-} while(0)
-#define DBG_TRACEFILE( aTrace )                     \
-do                                                  \
-{                                                   \
-    if ( DbgIsTraceOut() )                          \
-        DbgTrace( aTrace, __FILE__, __LINE__ );     \
-} while(0)
-
 #define DBG_WARNING( aWarning )                     \
 do                                                  \
 {                                                   \
@@ -619,57 +567,6 @@ do                                                  \
         DbgWarning( aWarning, __FILE__, __LINE__ ); \
 } while(0)
 
-#define DBG_ERROR( aError )                         \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-        DbgError( aError );                         \
-} while(0)
-#define DBG_ERROR1( aError, x1 )                    \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1 );                          \
-    }                                               \
-} while(0)
-#define DBG_ERROR2( aError, x1, x2 )                \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1, x2 );                      \
-    }                                               \
-} while(0)
-#define DBG_ERROR3( aError, x1, x2, x3 )            \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1, x2, x3 );                  \
-    }                                               \
-} while(0)
-#define DBG_ERROR4( aError, x1, x2, x3, x4 )        \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1, x2, x3, x4 );              \
-    }                                               \
-} while(0)
-#define DBG_ERROR5( aError, x1, x2, x3, x4, x5 )    \
-do                                                  \
-{                                                   \
-    if ( DbgIsErrorOut() )                          \
-    {                                               \
-        DbgOutTypef( DBG_OUT_ERROR, aError,         \
-                     x1, x2, x3, x4, x5 );          \
-    }                                               \
-} while(0)
 #define DBG_ERRORFILE( aError )                     \
 do                                                  \
 {                                                   \
@@ -743,13 +640,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_ASSERTWARNING( sCon, aWarning ) ((void)0)
 #define DBG_ASSERT( sCon, aError ) ((void)0)
 #define DBG_BF_ASSERT( sCon, aError ) ((void)0)
-#define DBG_TRACE( aTrace ) ((void)0)
-#define DBG_TRACE1( aTrace, x1 ) ((void)0)
-#define DBG_TRACE2( aTrace, x1, x2 ) ((void)0)
-#define DBG_TRACE3( aTrace, x1, x2, x3 ) ((void)0)
-#define DBG_TRACE4( aTrace, x1, x2, x3, x4 ) ((void)0)
-#define DBG_TRACE5( aTrace, x1, x2, x3, x4, x5 ) ((void)0)
-#define DBG_TRACEFILE( aTrace ) ((void)0)
 #define DBG_WARNING( aWarning ) ((void)0)
 #define DBG_WARNING1( aWarning, x1 ) ((void)0)
 #define DBG_WARNING2( aWarning, x1, x2 ) ((void)0)
@@ -757,12 +647,6 @@ typedef const sal_Char* (*DbgUsr)(const void* pThis );
 #define DBG_WARNING4( aWarning, x1, x2, x3, x4 ) ((void)0)
 #define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 ) ((void)0)
 #define DBG_WARNINGFILE( aWarning ) ((void)0)
-#define DBG_ERROR( aError ) ((void)0)
-#define DBG_ERROR1( aError, x1 ) ((void)0)
-#define DBG_ERROR2( aError, x1, x2 ) ((void)0)
-#define DBG_ERROR3( aError, x1, x2, x3 ) ((void)0)
-#define DBG_ERROR4( aError, x1, x2, x3, x4 ) ((void)0)
-#define DBG_ERROR5( aError, x1, x2, x3, x4, x5 ) ((void)0)
 #define DBG_ERRORFILE( aError ) ((void)0)
 
 #define DBG_TESTSOLARMUTEX() ((void)0)

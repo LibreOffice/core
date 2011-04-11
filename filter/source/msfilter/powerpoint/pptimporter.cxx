@@ -38,10 +38,6 @@
 
 #include <uno/mapping.hxx>
 
-// -----------------
-// - PptImporter -
-// -----------------
-
 NMSP_RTL::OUString PptImporter_getImplementationName()
     throw( NMSP_UNO::RuntimeException )
 {
@@ -64,8 +60,6 @@ SEQ( NMSP_RTL::OUString ) SAL_CALL PptImporter_getSupportedServiceNames()
 }
 #undef SERVICE_NAME
 
-// -----------------------------------------------------------------------------
-
 PptImporter::PptImporter( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr ) :
     xFact( rxMgr )
 {
@@ -80,20 +74,14 @@ PptImporter::PptImporter( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr ) 
     }
 }
 
-// -----------------------------------------------------------------------------
-
 PptImporter::~PptImporter()
 {
 }
-
-// -----------------------------------------------------------------------------
 
 void SAL_CALL PptImporter::acquire() throw()
 {
     OWeakObject::acquire();
 }
-
-// -----------------------------------------------------------------------------
 
 void SAL_CALL PptImporter::release() throw()
 {
@@ -116,15 +104,11 @@ sal_Bool SAL_CALL PptImporter::filter( const SEQ( NMSP_BEANS::PropertyValue )& a
     xDataSource->setOutputStream( xOutStream );
     aFilter.filter( aDescriptor, REF( NMSP_SAX::XDocumentHandler )( xWriter, NMSP_UNO::UNO_QUERY ) );
 
-//  REF( NMSP_BEANS::XPropertySet ) xPropSet( xServiceFactory->createInstance( B2UCONST( "com.sun.star.beans.PropertySet" ) ) );
-//  Any aAny;
-//  aAny <<= (sal_Bool)sal_True;
-//  xPropSet->setPropertyValue( B2UCONST( "UsePrettyPrinting" ), aAny );
-
 #endif
 
     return aFilter.filter( aDescriptor, xHdl );
 }
+
 void SAL_CALL PptImporter::cancel()
     throw ( NMSP_UNO::RuntimeException )
 {
@@ -150,11 +134,13 @@ NMSP_RTL::OUString SAL_CALL PptImporter::getImplementationName()
 {
     return PptImporter_getImplementationName();
 }
+
 sal_Bool SAL_CALL PptImporter::supportsService( const NMSP_RTL::OUString& rServiceName )
     throw( NMSP_UNO::RuntimeException )
 {
     return PptImporter_supportsService( rServiceName );
 }
+
 SEQ( NMSP_RTL::OUString ) SAL_CALL PptImporter::getSupportedServiceNames()
     throw ( NMSP_UNO::RuntimeException )
 {

@@ -71,8 +71,8 @@ public:
     virtual ~SvxAsianLayoutPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    static UINT16*      GetRanges();
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    static sal_uInt16*      GetRanges();
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 

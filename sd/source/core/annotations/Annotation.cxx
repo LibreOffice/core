@@ -376,7 +376,7 @@ UndoInsertOrRemoveAnnotation::UndoInsertOrRemoveAnnotation( Annotation& rAnnotat
         Reference< XAnnotation > xAnnotation( &rAnnotation );
 
         const AnnotationVector& rVec = pPage->getAnnotations();
-        for( AnnotationVector::const_iterator iter = rVec.begin(); iter != rVec.end(); iter++ )
+        for( AnnotationVector::const_iterator iter = rVec.begin(); iter != rVec.end(); ++iter )
         {
             if( (*iter) == xAnnotation )
                 break;

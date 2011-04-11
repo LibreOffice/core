@@ -310,7 +310,7 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
     @param      xListener
                     reference to a valid listener for state events
     @param      aURL
-                    URL about listener will be informed, if something occured
+                    URL about listener will be informed, if something occurred
 
     @modified   30.04.2002 14:49, as96863
 */

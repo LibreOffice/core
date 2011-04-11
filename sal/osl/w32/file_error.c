@@ -148,7 +148,7 @@ void _osl_warnFile( const char *message, rtl_uString *ustrFile )
 
         message = szBuffer;
     }
-    OSL_ENSURE( 0, message );
+    OSL_FAIL( message );
 }
 #endif /* OSL_DEBUG_LEVEL */
 

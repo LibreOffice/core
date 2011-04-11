@@ -1,4 +1,4 @@
-tc	stoc	:	rdbmaker cppuhelper cppu jvmaccess sal salhelper jvmfwk NULL
+tc	stoc	:	rdbmaker cppuhelper cppu jvmaccess sal salhelper jvmfwk xmlreader LIBXSTL:libxslt NULL
 tc	stoc									usr1	-	all	tc_mkout NULL
 tc	stoc\inc								nmake	-	all	tc_inc NULL
 tc	stoc\source\defaultregistry				nmake	-	all	tc_defr tc_boot tc_inc NULL

@@ -35,7 +35,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 /** === end UNO includes === **/
 
 #include <cppuhelper/factory.hxx>
@@ -140,28 +139,6 @@ namespace comphelper
         /** registers a component given by <type>ComponentDescription</type>
         */
         void registerImplementation( const ComponentDescription& _rComp );
-
-        /** write the registration information of all known components
-
-            Writes the registration information of all components which are currently registered into the
-            specified registry.
-
-            Usually used from within component_writeInfo.
-
-            @param_rxServiceManager
-                the service manager
-            @param _rRootKey
-                the registry key under which the information will be stored
-            @return
-                <TRUE/> if the registration of all implementations was successfull, <FALSE/> otherwise
-        */
-        sal_Bool writeComponentInfos(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceManager,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >& _rRootKey);
-
-        /** version of writeComponentInfos which directly takes the arguments you got in your component_writeInfo call
-        */
-        sal_Bool writeComponentInfos( void* pServiceManager, void* pRegistryKey );
 
         /** creates a Factory for the component with the given implementation name.
             <p>Usually used from within component_getFactory.<p/>
@@ -420,12 +397,6 @@ namespace comphelper
         const sal_Char **ppEnvTypeName, uno_Environment ** /*ppEnv*/ )  \
     {   \
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;    \
-    }   \
-    extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( \
-        void* pServiceManager, void* pRegistryKey ) \
-    {   \
-        initializer_function(); \
-        return module_class::getInstance().writeComponentInfos( pServiceManager, pRegistryKey );  \
     }   \
     extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( \
         const sal_Char* pImplementationName, void* pServiceManager, void* pRegistryKey ) \

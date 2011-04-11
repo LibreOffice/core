@@ -50,6 +50,7 @@
 #include <frmatr.hxx>
 #include <pagedesc.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagefrm.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -59,7 +60,7 @@
 #include <poolfmt.hxx>
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>
-#include <undobj.hxx>
+#include <UndoAttribute.hxx>
 #include <swundo.hxx>
 #include <mdiexp.hxx>
 #include <docary.hxx>
@@ -76,12 +77,13 @@
 #include <breakit.hxx>
 #include <editsh.hxx>
 #include <scriptinfo.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 
 const sal_Unicode cNumRepl      = '@';
 const sal_Unicode cEndPageNum   = '~';
-const sal_Char __FAR_DATA sPageDeli[] = ", ";
+const sal_Char sPageDeli[] = ", ";
 
 SV_IMPL_PTRARR(SwTOXSortTabBases, SwTOXSortTabBasePtr)
 
@@ -102,18 +104,18 @@ typedef LinkStruct* LinkStructPtr;
 SV_DECL_PTRARR(LinkStructArr, LinkStructPtr, 0, 5 )
 SV_IMPL_PTRARR(LinkStructArr, LinkStructPtr)
 
-USHORT SwDoc::GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const
+sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const
 {
     if( rArr.Count() )
-        rArr.Remove( USHORT(0), rArr.Count() );
+        rArr.Remove( sal_uInt16(0), rArr.Count() );
 
     // dann mal ueber den Pool und alle Primary oder Secondary heraussuchen
     const SwTxtTOXMark* pMark;
     const SfxPoolItem* pItem;
     const SwTOXType* pTOXType;
-    USHORT i, nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_TOXMARK );
+    sal_uInt32 i, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_TOXMARK );
     for( i = 0; i < nMaxItems; ++i )
-        if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_TOXMARK, i ) ) &&
+        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_TOXMARK, i ) ) &&
             0!= ( pTOXType = ((SwTOXMark*)pItem)->GetTOXType()) &&
             TOX_INDEX == pTOXType->GetType() &&
             0 != ( pMark = ((SwTOXMark*)pItem)->GetTxtTOXMark() ) &&
@@ -136,12 +138,11 @@ USHORT SwDoc::GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const
 /*--------------------------------------------------------------------
      Beschreibung: aktuelle Verzeichnismarkierungen ermitteln
  --------------------------------------------------------------------*/
-USHORT SwDoc::GetCurTOXMark( const SwPosition& rPos,
+sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
                                 SwTOXMarks& rArr ) const
 {
-    // suche an der Position rPos nach allen SwTOXMark's
-    SwTxtNode* pTxtNd = GetNodes()[ rPos.nNode ]->GetTxtNode();
-    // kein TextNode oder kein HintsArray vorhanden ??
+    // search on Position rPos for all SwTOXMarks
+    SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( !pTxtNd || !pTxtNd->GetpSwpHints() )
         return 0;
 
@@ -152,7 +153,7 @@ USHORT SwDoc::GetCurTOXMark( const SwPosition& rPos,
 
     xub_StrLen nAktPos = rPos.nContent.GetIndex();
 
-    for( USHORT n = 0; n < rHts.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rHts.Count(); ++n )
     {
         if( RES_TXTATR_TOXMARK != (pHt = rHts[n])->Which() )
             continue;
@@ -186,14 +187,13 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
     SwTxtNode& rTxtNd = const_cast<SwTxtNode&>(pTxtTOXMark->GetTxtNode());
     OSL_ENSURE( rTxtNd.GetpSwpHints(), "kann nicht geloescht werden" );
 
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        // fuers Undo die Attribute sichern
-        ClearRedo();
+        // save attributes for Undo
         SwUndoResetAttr* pUndo = new SwUndoResetAttr(
             SwPosition( rTxtNd, SwIndex( &rTxtNd, *pTxtTOXMark->GetStart() ) ),
             RES_TXTATR_TOXMARK );
-        AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo( pUndo );
 
         SwRegHistory aRHst( rTxtNd, &pUndo->GetHistory() );
         rTxtNd.GetpSwpHints()->Register( &aRHst );
@@ -201,7 +201,7 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
 
     rTxtNd.DeleteAttribute( const_cast<SwTxtTOXMark*>(pTxtTOXMark) );
 
-    if ( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         if( rTxtNd.GetpSwpHints() )
             rTxtNd.GetpSwpHints()->DeRegister();
@@ -214,32 +214,32 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
  --------------------------------------------------------------------*/
 class CompareNodeCntnt
 {
-    ULONG nNode;
+    sal_uLong nNode;
     xub_StrLen nCntnt;
 public:
-    CompareNodeCntnt( ULONG nNd, xub_StrLen nCnt )
+    CompareNodeCntnt( sal_uLong nNd, xub_StrLen nCnt )
         : nNode( nNd ), nCntnt( nCnt ) {}
 
-    int operator==( const CompareNodeCntnt& rCmp )
+    int operator==( const CompareNodeCntnt& rCmp ) const
         { return nNode == rCmp.nNode && nCntnt == rCmp.nCntnt; }
-    int operator!=( const CompareNodeCntnt& rCmp )
+    int operator!=( const CompareNodeCntnt& rCmp ) const
         { return nNode != rCmp.nNode || nCntnt != rCmp.nCntnt; }
-    int operator< ( const CompareNodeCntnt& rCmp )
+    int operator< ( const CompareNodeCntnt& rCmp ) const
         { return nNode < rCmp.nNode ||
             ( nNode == rCmp.nNode && nCntnt < rCmp.nCntnt); }
-    int operator<=( const CompareNodeCntnt& rCmp )
+    int operator<=( const CompareNodeCntnt& rCmp ) const
         { return nNode < rCmp.nNode ||
             ( nNode == rCmp.nNode && nCntnt <= rCmp.nCntnt); }
-    int operator> ( const CompareNodeCntnt& rCmp )
+    int operator> ( const CompareNodeCntnt& rCmp ) const
         { return nNode > rCmp.nNode ||
             ( nNode == rCmp.nNode && nCntnt > rCmp.nCntnt); }
-    int operator>=( const CompareNodeCntnt& rCmp )
+    int operator>=( const CompareNodeCntnt& rCmp ) const
         { return nNode > rCmp.nNode ||
             ( nNode == rCmp.nNode && nCntnt >= rCmp.nCntnt); }
 };
 
 const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
-                                    SwTOXSearch eDir, BOOL bInReadOnly )
+                                    SwTOXSearch eDir, sal_Bool bInReadOnly )
 {
     const SwTxtTOXMark* pMark = rCurTOXMark.GetTxtTOXMark();
     OSL_ENSURE(pMark, "pMark==0 Ungueltige TxtTOXMark");
@@ -256,19 +256,20 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
     const SwTOXMark*    pMax    = &rCurTOXMark;
     const SwTOXMark*    pMin    = &rCurTOXMark;
 
-    const SwModify* pType = rCurTOXMark.GetRegisteredIn();
-    SwClientIter    aIter( *(SwModify*)pType );
+    const SwTOXType* pType = rCurTOXMark.GetTOXType();
+    SwTOXMarks aMarks;
+    SwTOXMark::InsertTOXMarks( aMarks, *pType );
 
     const SwTOXMark* pTOXMark;
     const SwCntntFrm* pCFrm;
     Point aPt;
-    for( pTOXMark = (SwTOXMark*)aIter.First( TYPE( SwTOXMark )); pTOXMark;
-         pTOXMark = (SwTOXMark*)aIter.Next() )
+    for( sal_Int32 nMark=0; nMark<aMarks.Count(); nMark++ )
     {
+        pTOXMark = aMarks[nMark];
         if( pTOXMark != &rCurTOXMark &&
             0 != ( pMark = pTOXMark->GetTxtTOXMark()) &&
             0 != ( pTOXSrc = pMark->GetpTxtNd() ) &&
-            0 != ( pCFrm = pTOXSrc->GetFrm( &aPt, 0, FALSE )) &&
+            0 != ( pCFrm = pTOXSrc->getLayoutFrm( GetCurrentLayout(), &aPt, 0, sal_False )) &&
             ( bInReadOnly || !pCFrm->IsProtected() ))
         {
             CompareNodeCntnt aAbsNew( pTOXSrc->GetIndex(), *pMark->GetStart() );
@@ -287,12 +288,12 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
                 if ( (aAbsNew < aAbsIdx && aAbsNew > aPrevPos &&
                       aPrevPos != aAbsIdx && aAbsNew != aAbsIdx ) ||
                      (aAbsIdx == aAbsNew &&
-                      (ULONG(&rCurTOXMark) > ULONG(pTOXMark) &&
+                      (sal_uLong(&rCurTOXMark) > sal_uLong(pTOXMark) &&
                        (!pNew ||
                         (pNew && (aPrevPos < aAbsIdx ||
-                                  ULONG(pNew) < ULONG(pTOXMark)))))) ||
+                                  sal_uLong(pNew) < sal_uLong(pTOXMark)))))) ||
                      (aPrevPos == aAbsNew && aAbsIdx != aAbsNew &&
-                      ULONG(pTOXMark) > ULONG(pNew)) )
+                      sal_uLong(pTOXMark) > sal_uLong(pNew)) )
                 {
                     pNew = pTOXMark;
                     aPrevPos = aAbsNew;
@@ -312,12 +313,12 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
                 if ( (aAbsNew > aAbsIdx && aAbsNew < aNextPos &&
                       aNextPos != aAbsIdx && aAbsNew != aAbsIdx ) ||
                      (aAbsIdx == aAbsNew &&
-                      (ULONG(&rCurTOXMark) < ULONG(pTOXMark) &&
+                      (sal_uLong(&rCurTOXMark) < sal_uLong(pTOXMark) &&
                        (!pNew ||
                         (pNew && (aNextPos > aAbsIdx ||
-                                  ULONG(pNew) > ULONG(pTOXMark)))))) ||
+                                  sal_uLong(pNew) > sal_uLong(pTOXMark)))))) ||
                      (aNextPos == aAbsNew && aAbsIdx != aAbsNew &&
-                      ULONG(pTOXMark) < ULONG(pNew)) )
+                      sal_uLong(pTOXMark) < sal_uLong(pNew)) )
                 {
                     pNew = pTOXMark;
                     aNextPos = aAbsNew;
@@ -357,9 +358,9 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
 const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
                                                 const SwTOXBase& rTOX,
                                                 const SfxItemSet* pSet,
-                                                BOOL bExpand )
+                                                sal_Bool bExpand )
 {
-    StartUndo( UNDO_INSTOX, NULL );
+    GetIDocumentUndoRedo().StartUndo( UNDO_INSTOX, NULL );
 
     String sSectNm( rTOX.GetTOXName() );
     sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), &sSectNm );
@@ -374,7 +375,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
 
         if( bExpand )
         {
-            // OD 19.03.2003 #106329# - add value for 2nd parameter = true to
+            // add value for 2nd parameter = true to
             // indicate, that a creation of a new table of content has to be performed.
             // Value of 1st parameter = default value.
             pNewSection->Update( 0, true );
@@ -401,12 +402,12 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
         }
     }
 
-    EndUndo( UNDO_INSTOX, NULL );
+    GetIDocumentUndoRedo().EndUndo( UNDO_INSTOX, NULL );
 
     return pNewSection;
 }
 
-const SwTOXBaseSection* SwDoc::InsertTableOf( ULONG nSttNd, ULONG nEndNd,
+const SwTOXBaseSection* SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                                 const SwTOXBase& rTOX,
                                                 const SfxItemSet* pSet )
 {
@@ -479,7 +480,7 @@ const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
     return pFmt->GetAttrSet();
 }
 
-const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate )
+const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, sal_Bool bCreate )
 {
     SwTOXBase** prBase = 0;
     switch(eTyp)
@@ -522,17 +523,17 @@ void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
 /*--------------------------------------------------------------------
      Beschreibung: Verzeichnis loeschen
  --------------------------------------------------------------------*/
-BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
+sal_Bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, sal_Bool bDelNodes )
 {
     // its only delete the TOX, not the nodes
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
 
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
     SwSectionFmt* pFmt = rTOXSect.GetFmt();
     if( pFmt )
     {
-        StartUndo( UNDO_CLEARTOXRANGE, NULL );
+        GetIDocumentUndoRedo().StartUndo( UNDO_CLEARTOXRANGE, NULL );
 
         /* Save the start node of the TOX' section. */
         SwSectionNode * pMyNode = pFmt->GetSectionNode();
@@ -591,8 +592,8 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
         if( !bDelNodes )
         {
             SwSections aArr( 0, 4 );
-            USHORT nCnt = pFmt->GetChildSections( aArr, SORTSECT_NOT, FALSE );
-            for( USHORT n = 0; n < nCnt; ++n )
+            sal_uInt16 nCnt = pFmt->GetChildSections( aArr, SORTSECT_NOT, sal_False );
+            for( sal_uInt16 n = 0; n < nCnt; ++n )
             {
                 SwSection* pSect = aArr[ n ];
                 if( TOX_HEADER_SECTION == pSect->GetType() )
@@ -604,8 +605,8 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
 
         DelSectionFmt( pFmt, bDelNodes );
 
-        EndUndo( UNDO_CLEARTOXRANGE, NULL );
-        bRet = TRUE;
+        GetIDocumentUndoRedo().EndUndo( UNDO_CLEARTOXRANGE, NULL );
+        bRet = sal_True;
     }
 
     return bRet;
@@ -614,21 +615,21 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
 /*--------------------------------------------------------------------
      Beschreibung:  Verzeichnistypen verwalten
  --------------------------------------------------------------------*/
-USHORT SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
+sal_uInt16 SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
 {
     const SwTOXTypePtr * ppTTypes = pTOXTypes->GetData();
-    USHORT nCnt = 0;
-    for( USHORT n = 0; n < pTOXTypes->Count(); ++n, ++ppTTypes )
+    sal_uInt16 nCnt = 0;
+    for( sal_uInt16 n = 0; n < pTOXTypes->Count(); ++n, ++ppTTypes )
         if( eTyp == (*ppTTypes)->GetType() )
             ++nCnt;
     return nCnt;
 }
 
-const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, USHORT nId ) const
+const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, sal_uInt16 nId ) const
 {
     const SwTOXTypePtr * ppTTypes = pTOXTypes->GetData();
-    USHORT nCnt = 0;
-    for( USHORT n = 0; n < pTOXTypes->Count(); ++n, ++ppTTypes )
+    sal_uInt16 nCnt = 0;
+    for( sal_uInt16 n = 0; n < pTOXTypes->Count(); ++n, ++ppTTypes )
         if( eTyp == (*ppTTypes)->GetType() && nCnt++ == nId )
             return (*ppTTypes);
     return 0;
@@ -644,7 +645,7 @@ const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
                                     const String* pChkStr ) const
 {
-    USHORT n;
+    sal_uInt16 n;
     const SwSectionNode* pSectNd;
     const SwSection* pSect;
 
@@ -653,21 +654,21 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     String aName( rType.GetTypeName() );
     xub_StrLen nNmLen = aName.Len();
 
-    USHORT nNum = 0;
-    USHORT nTmp = 0;
-    USHORT nFlagSize = ( pSectionFmtTbl->Count() / 8 ) +2;
-    BYTE* pSetFlags = new BYTE[ nFlagSize ];
+    sal_uInt16 nNum = 0;
+    sal_uInt16 nTmp = 0;
+    sal_uInt16 nFlagSize = ( pSectionFmtTbl->Count() / 8 ) +2;
+    sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
     for( n = 0; n < pSectionFmtTbl->Count(); ++n )
-        if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( FALSE ) )&&
+        if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( sal_False ) )&&
              TOX_CONTENT_SECTION == (pSect = &pSectNd->GetSection())->GetType())
         {
             const String& rNm = pSect->GetSectionName();
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Nummer bestimmen und das Flag setzen
-                nNum = (USHORT)rNm.Copy( nNmLen ).ToInt32();
+                nNum = (sal_uInt16)rNm.Copy( nNmLen ).ToInt32();
                 if( nNum-- && nNum < pSectionFmtTbl->Count() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
@@ -695,14 +696,14 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     return aName += String::CreateFromInt32( ++nNum );
 }
 
-BOOL SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
+sal_Bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
 {
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ),
                     "keine TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOXBase;
 
     String sTmp = GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), &rName);
-    BOOL bRet = sTmp == rName;
+    sal_Bool bRet = sTmp == rName;
     if(bRet)
     {
         pTOX->SetTOXName(rName);
@@ -712,7 +713,7 @@ BOOL SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
     return bRet;
 }
 
-const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, BYTE nLvl = 0 )
+const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, sal_uInt8 nLvl = 0 )
 {
     const SwNode* pNd = &rNd;
     if( pNd->GetNodes().GetEndOfExtras().GetIndex() > pNd->GetIndex() )
@@ -720,7 +721,7 @@ const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, BYTE nLvl = 0 )
         // then find the "Anchor" (Body) position
         Point aPt;
         SwNode2Layout aNode2Layout( *pNd, pNd->GetIndex() );
-        const SwFrm* pFrm = aNode2Layout.GetFrm( &aPt, 0, FALSE );
+        const SwFrm* pFrm = aNode2Layout.GetFrm( &aPt, 0, sal_False );
 
         if( pFrm )
         {
@@ -747,9 +748,9 @@ SwTOXBaseSection::~SwTOXBaseSection()
 {
 }
 
-BOOL SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, BOOL bAtStart ) const
+sal_Bool SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart ) const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     const SwSectionNode* pSectNd = GetFmt()->GetSectionNode();
     if( pSectNd )
     {
@@ -767,7 +768,7 @@ BOOL SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, BOOL bAtStart ) const
             if( pCNd ) nC = pCNd->Len();
         }
         rPos.nContent.Assign( pCNd, nC );
-        bRet = TRUE;
+        bRet = sal_True;
     }
     return bRet;
 }
@@ -776,7 +777,7 @@ BOOL SwTOXBaseSection::SetPosAtStartEnd( SwPosition& rPos, BOOL bAtStart ) const
      Beschreibung: Verzeichnisinhalt zusammensammeln
  --------------------------------------------------------------------*/
 void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
-                              const bool        _bNewTOX )
+                              const bool        _bNewTOX )//swmodtest 080307
 {
     const SwSectionNode* pSectNd;
     if( !SwTOXBase::GetRegisteredIn()->GetDepends() ||
@@ -792,8 +793,8 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     if(pAttr && pDoc && GetFmt())
         pDoc->ChgFmt(*GetFmt(), *pAttr);
 
-    // OD 18.03.2003 #106329# - determine default page description, which
-    // will be used by the content nodes, if no approriate one is found.
+    // determine default page description, which will be used by the content nodes,
+    // if no approriate one is found.
     const SwPageDesc* pDefaultPageDesc;
     {
         pDefaultPageDesc =
@@ -803,14 +804,13 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             // determine page description of table-of-content
             sal_uInt32 nPgDescNdIdx = pSectNd->GetIndex() + 1;
             sal_uInt32* pPgDescNdIdx = &nPgDescNdIdx;
-            pDefaultPageDesc = pSectNd->FindPageDesc( FALSE, pPgDescNdIdx );
+            pDefaultPageDesc = pSectNd->FindPageDesc( sal_False, pPgDescNdIdx );
             if ( nPgDescNdIdx < pSectNd->GetIndex() )
             {
                 pDefaultPageDesc = 0;
             }
         }
-        // OD 28.04.2003 #109166# - consider end node of content section in the
-        // node array.
+        // consider end node of content section in the node array.
         if ( !pDefaultPageDesc &&
              ( pSectNd->EndOfSectionNode()->GetIndex() <
                  (pSectNd->GetNodes().GetEndOfContent().GetIndex() - 1) )
@@ -825,11 +825,10 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                     eBreak == SVX_BREAK_PAGE_BOTH )
                )
             {
-                pDefaultPageDesc = pNdAfterTOX->FindPageDesc( FALSE );
+                pDefaultPageDesc = pNdAfterTOX->FindPageDesc( sal_False );
             }
         }
-        // OD 28.04.2003 #109166# - consider start node of content section in
-        // the node array.
+        // consider start node of content section in the node array.
         if ( !pDefaultPageDesc &&
              ( pSectNd->GetIndex() >
                  (pSectNd->GetNodes().GetEndOfContent().StartOfSectionIndex() + 1) )
@@ -838,7 +837,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
             // determine page description of content before table-of-content
             SwNodeIndex aIdx( *pSectNd );
             pDefaultPageDesc =
-                pSectNd->GetNodes().GoPrevious( &aIdx )->FindPageDesc( FALSE );
+                pSectNd->GetNodes().GoPrevious( &aIdx )->FindPageDesc( sal_False );
 
         }
         if ( !pDefaultPageDesc )
@@ -894,7 +893,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         }
         aEndIdx--;
         SwPosition aPos( aEndIdx, SwIndex( pFirstEmptyNd, 0 ));
-        pDoc->CorrAbs( aSttIdx, aEndIdx, aPos, TRUE );
+        pDoc->CorrAbs( aSttIdx, aEndIdx, aPos, sal_True );
 
         // delete all before
         DelFlyInRange( aSttIdx, aEndIdx );
@@ -971,9 +970,9 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
     // sortierte Liste aller Verzeichnismarken und Verzeichnisbereiche
     void* p = 0;
     String* pStr = 0;
-    USHORT nCnt = 0, nFormMax = GetTOXForm().GetFormMax();
-    SvStringsDtor aStrArr( (BYTE)nFormMax );
-    SvPtrarr aCollArr( (BYTE)nFormMax );
+    sal_uInt16 nCnt = 0, nFormMax = GetTOXForm().GetFormMax();
+    SvStringsDtor aStrArr( (sal_uInt8)nFormMax );
+    SvPtrarr aCollArr( (sal_uInt8)nFormMax );
     for( ; nCnt < nFormMax; ++nCnt )
     {
         aCollArr.Insert( p, nCnt );
@@ -986,7 +985,7 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
         // setze den Text in das Verzeichniss
-        USHORT nLvl = aSortArr[ nCnt ]->GetLevel();
+        sal_uInt16 nLvl = aSortArr[ nCnt ]->GetLevel();
         SwTxtFmtColl* pColl = (SwTxtFmtColl*)aCollArr[ nLvl ];
         if( !pColl )
         {
@@ -1004,7 +1003,7 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
         //              fuer die Seitennummer eintragen
         //if it is a TOX_INDEX and the SwForm IsCommaSeparated()
         // then a range of entries must be generated into one paragraph
-        USHORT nRange = 1;
+        sal_uInt16 nRange = 1;
         if(TOX_INDEX == SwTOXBase::GetType() &&
                 GetTOXForm().IsCommaSeparated() &&
                 aSortArr[nCnt]->GetType() == TOX_SORT_INDEX)
@@ -1020,8 +1019,8 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
                     pNextMark->GetSecondaryKey() == sSecKey)
                 nRange++;
         }
-        // OD 18.03.2003 #106329# - pass node index of table-of-content section
-        // and default page description to method <GenerateText(..)>.
+        // pass node index of table-of-content section and default page description
+        // to method <GenerateText(..)>.
         GenerateText( nCnt, nRange, aStrArr, pSectNd->GetIndex(), pDefaultPageDesc );
         nCnt += nRange - 1;
     }
@@ -1034,7 +1033,7 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
         if( !aCorPam.Move( fnMoveForward ) )
             aCorPam.Move( fnMoveBackward );
         SwNodeIndex aEndIdx( aInsPos, 1 );
-        pDoc->CorrAbs( aInsPos, aEndIdx, *aCorPam.GetPoint(), TRUE );
+        pDoc->CorrAbs( aInsPos, aEndIdx, *aCorPam.GetPoint(), sal_True );
 
         // Task 70995 - save and restore PageDesc and Break Attributes
         if( pFirstEmptyNd->HasSwAttrSet() )
@@ -1050,14 +1049,17 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
     }
 
     // now create the new Frames
-    ULONG nIdx = pSectNd->GetIndex();
+    sal_uLong nIdx = pSectNd->GetIndex();
     // don't delete if index is empty
     if(nIdx + 2 < pSectNd->EndOfSectionIndex())
         pDoc->GetNodes().Delete( aInsPos, 1 );
 
     aN2L.RestoreUpperFrms( pDoc->GetNodes(), nIdx, nIdx + 1 );
-    if(pDoc->GetRootFrm())
-        SwFrm::CheckPageDescs( (SwPageFrm*)pDoc->GetRootFrm()->Lower() );
+    std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
+    for ( std::set<SwRootFrm*>::iterator pLayoutIter = aAllLayouts.begin(); pLayoutIter != aAllLayouts.end(); pLayoutIter++)
+    {
+        SwFrm::CheckPageDescs( (SwPageFrm*)(*pLayoutIter)->Lower() );
+    }//swmod 080310
 
     SetProtect( SwTOXBase::IsProtected() );
 }
@@ -1069,12 +1071,12 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
     String sDeli, sLastDeli;
-    USHORT  i = 0;
+    sal_uInt16  i = 0;
     while( i < aSortArr.Count() )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-        USHORT nLevel = aSortArr[i]->GetLevel();
+        sal_uInt16 nLevel = aSortArr[i]->GetLevel();
 
         // Alpha-Delimitter ueberlesen
         if( nLevel == FORM_ALPHA_DELIMITTER )
@@ -1109,14 +1111,14 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 /*--------------------------------------------------------------------
      Beschreibung: Template  auswerten
  --------------------------------------------------------------------*/
-SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( USHORT nLevel )
+SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( sal_uInt16 nLevel )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
     const String& rName = GetTOXForm().GetTemplate( nLevel );
     SwTxtFmtColl* pColl = rName.Len() ? pDoc->FindTxtFmtCollByName(rName) :0;
     if( !pColl )
     {
-        USHORT nPoolFmt = 0;
+        sal_uInt16 nPoolFmt = 0;
         const TOXTypes eMyType = SwTOXBase::GetType();
         switch( eMyType )
         {
@@ -1162,18 +1164,17 @@ SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( USHORT nLevel )
 void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                                     const SwTxtNode* pOwnChapterNode )
 {
-    const SwModify* pType = SwTOXBase::GetRegisteredIn();
+    const SwTOXType* pType = (SwTOXType*) SwTOXBase::GetRegisteredIn();
     if( !pType->GetDepends() )
         return;
 
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
     TOXTypes eTOXTyp = GetTOXType()->GetType();
-    SwClientIter aIter( *(SwModify*)pType );
+    SwIterator<SwTOXMark,SwTOXType> aIter( *pType );
 
     SwTxtTOXMark* pTxtMark;
     SwTOXMark* pMark;
-    for( pMark = (SwTOXMark*)aIter.First( TYPE( SwTOXMark )); pMark;
-        pMark = (SwTOXMark*)aIter.Next() )
+    for( pMark = aIter.First(); pMark; pMark = aIter.Next() )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
@@ -1187,7 +1188,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
             // if selected use marks from the same chapter only
             if( pTOXSrc->GetNodes().IsDocNodes() &&
                 pTOXSrc->GetTxt().Len() && pTOXSrc->GetDepends() &&
-                pTOXSrc->GetFrm() &&
+                pTOXSrc->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
                (!IsFromChapter() || ::lcl_FindChapterNode( *pTOXSrc, 0 ) == pOwnChapterNode ) &&
                !pTOXSrc->HasHiddenParaField() &&
                !SwScriptInfo::IsInHiddenRange( *pTOXSrc, *pTxtMark->GetStart() ) )
@@ -1241,14 +1242,13 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
     SwNodes& rNds = pDoc->GetNodes();
 
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
-    for( USHORT n = 0; n < rOutlNds.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rOutlNds.Count(); ++n )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
         if( pTxtNd && pTxtNd->Len() && pTxtNd->GetDepends() &&
-            //USHORT(pTxtNd->GetTxtColl()->GetOutlineLevel()+1) <= GetLevel() &&    //#outline level,zhaojianwei
-            USHORT( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() && //<-end,zhaojianwei
-            pTxtNd->GetFrm() &&
+            sal_uInt16( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() &&
+            pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
            !pTxtNd->HasHiddenParaField() &&
            !pTxtNd->HasHiddenCharAttribute( true ) &&
             ( !IsFromChapter() ||
@@ -1266,11 +1266,11 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
 void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
-    for(USHORT i = 0; i < MAXLEVEL; i++)
+    for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
         String sTmpStyleNames = GetStyleNames(i);
-        USHORT nTokenCount = sTmpStyleNames.GetTokenCount(TOX_STYLE_DELIMITER);
-        for( USHORT nStyle = 0; nStyle < nTokenCount; ++nStyle )
+        sal_uInt16 nTokenCount = sTmpStyleNames.GetTokenCount(TOX_STYLE_DELIMITER);
+        for( sal_uInt16 nStyle = 0; nStyle < nTokenCount; ++nStyle )
         {
             SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName(
                                     sTmpStyleNames.GetToken( nStyle,
@@ -1279,17 +1279,15 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
             if( !pColl ||
                 ( TOX_CONTENT == SwTOXBase::GetType() &&
                   GetCreateType() & nsSwTOXElement::TOX_OUTLINELEVEL &&
-                  //NO_NUMBERING != pColl->GetOutlineLevel() ) )//#outline level,zhaojianwei
-                    pColl->IsAssignedToListLevelOfOutlineStyle()) )//<-end,zhaojianwei
+                    pColl->IsAssignedToListLevelOfOutlineStyle()) )
                   continue;
 
-            SwClientIter aIter( *pColl );
-            SwTxtNode* pTxtNd = (SwTxtNode*)aIter.First( TYPE( SwTxtNode ));
-            for( ; pTxtNd; pTxtNd = (SwTxtNode*)aIter.Next() )
+            SwIterator<SwTxtNode,SwFmtColl> aIter( *pColl );
+            for( SwTxtNode* pTxtNd = aIter.First(); pTxtNd; pTxtNd = aIter.Next() )
             {
                 ::SetProgressState( 0, pDoc->GetDocShell() );
 
-                if( pTxtNd->GetTxt().Len() && pTxtNd->GetFrm() &&
+                if( pTxtNd->GetTxt().Len() && pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
                     pTxtNd->GetNodes().IsDocNodes() &&
                     ( !IsFromChapter() || pOwnChapterNode ==
                         ::lcl_FindChapterNode( *pTxtNd, 0 ) ) )
@@ -1302,7 +1300,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
     }
 }
 
-/* -----------------14.07.99 09:59-------------------
+/* --------------------------------------------------
     Description: generate content from sequence fields
  --------------------------------------------------*/
 void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
@@ -1312,9 +1310,8 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
     if(!pSeqFld)
         return;
 
-    SwClientIter aIter( *pSeqFld );
-    SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-    for( ; pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+    SwIterator<SwFmtFld,SwFieldType> aIter( *pSeqFld );
+    for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
     {
         const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
         if(!pTxtFld)
@@ -1322,7 +1319,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
         const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-        if( rTxtNode.GetTxt().Len() && rTxtNode.GetFrm() &&
+        if( rTxtNode.GetTxt().Len() && rTxtNode.getLayoutFrm( pDoc->GetCurrentLayout() ) &&
             rTxtNode.GetNodes().IsDocNodes() &&
             ( !IsFromChapter() ||
                 ::lcl_FindChapterNode( rTxtNode, 0 ) == pOwnChapterNode ) )
@@ -1350,9 +1347,8 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
     if(!pAuthFld)
         return;
 
-    SwClientIter aIter( *pAuthFld );
-    SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-    for( ; pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+    SwIterator<SwFmtFld,SwFieldType> aIter( *pAuthFld );
+    for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
     {
         const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
         //undo
@@ -1361,14 +1357,11 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
         const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-//      const SwTxtNode* pChapterCompareNode = 0;
-
-        if( rTxtNode.GetTxt().Len() && rTxtNode.GetFrm() &&
-            rTxtNode.GetNodes().IsDocNodes() /*&&
-            (!IsFromChapter() || pChapterCompareNode == pOwnChapterNode) */)
+        if( rTxtNode.GetTxt().Len() && rTxtNode.getLayoutFrm( pDoc->GetCurrentLayout() ) &&
+            rTxtNode.GetNodes().IsDocNodes() )
         {
             //#106485# the body node has to be used!
-            SwCntntFrm *pFrm = rTxtNode.GetFrm();
+            SwCntntFrm *pFrm = rTxtNode.getLayoutFrm( pDoc->GetCurrentLayout() );
             SwPosition aFldPos(rTxtNode);
             const SwTxtNode* pTxtNode = 0;
             if(pFrm && !pFrm->IsInDocBody())
@@ -1388,9 +1381,9 @@ long lcl_IsSOObject( const SvGlobalName& rFactoryNm )
         long nFlag;
         // GlobalNameId
         struct _GlobalNameIds {
-            UINT32 n1;
-            USHORT n2, n3;
-            BYTE b8, b9, b10, b11, b12, b13, b14, b15;
+            sal_uInt32 n1;
+            sal_uInt16 n2, n3;
+            sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
         } aGlNmIds[4];
     } aArr[] = {
         { nsSwTOOElements::TOO_MATH,
@@ -1437,7 +1430,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
     SwNodes& rNds = pDoc->GetNodes();
     // auf den 1. Node der 1. Section
-    ULONG nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 2,
+    sal_uLong nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 2,
          nEndIdx = rNds.GetEndOfAutotext().GetIndex();
 
     while( nIdx < nEndIdx )
@@ -1466,7 +1459,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
         case nsSwTOXElement::TOX_OLE:
             if( pNd->IsOLENode() )
             {
-                BOOL bInclude = TRUE;
+                sal_Bool bInclude = sal_True;
                 if(TOX_OBJECTS == SwTOXBase::GetType())
                 {
                     SwOLENode* pOLENode = pNd->GetOLENode();
@@ -1482,8 +1475,8 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                     }
                     else
                     {
-                        DBG_ERROR("OLE-object nicht geladen?");
-                        bInclude = FALSE;
+                        OSL_FAIL("OLE-object nicht geladen?");
+                        bInclude = sal_False;
                     }
                 }
 
@@ -1509,20 +1502,17 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                                                         MAXLEVEL - 1 );
                 if( pOutlNd )
                 {
-                    //USHORT nTmp = pOutlNd->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
-                    //if( nTmp < NO_NUMBERING )
-                    //  nSetLevel = nTmp + 1;
                     if( pOutlNd->GetTxtColl()->IsAssignedToListLevelOfOutlineStyle())
                         nSetLevel = pOutlNd->GetTxtColl()->GetAttrOutlineLevel() ;//<-end,zhaojianwei
                 }
             }
 
-            if( pCNd->GetFrm() && ( !IsFromChapter() ||
+            if( pCNd->getLayoutFrm( pDoc->GetCurrentLayout() ) && ( !IsFromChapter() ||
                     ::lcl_FindChapterNode( *pCNd, 0 ) == pOwnChapterNode ))
             {
                 SwTOXPara * pNew = new SwTOXPara( *pCNd, eMyType,
                             ( USHRT_MAX != nSetLevel )
-                            ? static_cast<USHORT>(nSetLevel)
+                            ? static_cast<sal_uInt16>(nSetLevel)
                             : FORM_ALPHA_DELIMITTER );
                 InsertSorted( pNew );
             }
@@ -1541,7 +1531,7 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
     SwNodes& rNds = pDoc->GetNodes();
     const SwFrmFmts& rArr = *pDoc->GetTblFrmFmts();
 
-    for( USHORT n = 0; n < rArr.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rArr.Count(); ++n )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
@@ -1557,7 +1547,7 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
             while( 0 != ( pCNd = rNds.GoNext( &aCntntIdx ) ) &&
                 aCntntIdx.GetIndex() < pTblNd->EndOfSectionIndex() )
             {
-                if( pCNd->GetFrm() && (!IsFromChapter() ||
+                if( pCNd->getLayoutFrm( pDoc->GetCurrentLayout() ) && (!IsFromChapter() ||
                     ::lcl_FindChapterNode( *pCNd, 0 ) == pOwnChapterNode ))
                 {
                     SwTOXTable * pNew = new SwTOXTable( *pCNd );
@@ -1567,13 +1557,10 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
                             ::lcl_FindChapterNode( *pCNd, MAXLEVEL - 1 );
                         if( pOutlNd )
                         {
-                            //USHORT nTmp = pOutlNd->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
-                            //if( nTmp < NO_NUMBERING )
-                            //  pNew->SetLevel( nTmp + 1 );
                             if( pOutlNd->GetTxtColl()->IsAssignedToListLevelOfOutlineStyle())
                             {
                                 const int nTmp = pOutlNd->GetTxtColl()->GetAttrOutlineLevel();
-                                pNew->SetLevel( static_cast<USHORT>(nTmp) );//<-end ,zhaojianwei
+                                pNew->SetLevel( static_cast<sal_uInt16>(nTmp) );//<-end ,zhaojianwei
                             }
                         }
                     }
@@ -1589,7 +1576,7 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
      Beschreibung:  String generieren anhand der Form
                     SonderZeichen 0-31 und 255 entfernen
  --------------------------------------------------------------------*/
-String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, BYTE nLevel )
+String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, sal_uInt8 nLevel )
 {
     String sRet;
 
@@ -1607,10 +1594,10 @@ String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, BYT
     return sRet;
 }
 
-// OD 18.03.2003 #106329# - add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc>
-// in order to control, which page description is used, no appropriate one is found.
-void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
-                                     USHORT nCount,
+// add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc> in order to control,
+// which page description is used, no appropriate one is found.
+void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
+                                     sal_uInt16 nCount,
                                      SvStringsDtor& ,
                                      const sal_uInt32   _nTOXSectNdIdx,
                                      const SwPageDesc*  _pDefaultPageDesc )
@@ -1623,13 +1610,13 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
     SwTxtNode* pTOXNd = (SwTxtNode*)aSortArr[nArrayIdx]->pTOXNd;
     String& rTxt = (String&)pTOXNd->GetTxt();
     rTxt.Erase();
-    for(USHORT nIndex = nArrayIdx; nIndex < nArrayIdx + nCount; nIndex++)
+    for(sal_uInt16 nIndex = nArrayIdx; nIndex < nArrayIdx + nCount; nIndex++)
     {
         if(nIndex > nArrayIdx)
             rTxt.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " )); // comma separation
         // String mit dem Pattern aus der Form initialisieren
         const SwTOXSortTabBase& rBase = *aSortArr[nIndex];
-        USHORT nLvl = rBase.GetLevel();
+        sal_uInt16 nLvl = rBase.GetLevel();
         OSL_ENSURE( nLvl < GetTOXForm().GetFormMax(), "ungueltiges FORM_LEVEL");
 
         SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
@@ -1649,7 +1636,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
             {
             case TOKEN_ENTRY_NO:
                 // fuer Inhaltsverzeichnis Numerierung
-                rTxt.Insert( lcl_GetNumString( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<BYTE>(aToken.nOutlineLevel - 1)) );
+                rTxt.Insert( lcl_GetNumString( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<sal_uInt8>(aToken.nOutlineLevel - 1)) );
                 break;
 
             case TOKEN_ENTRY_TEXT:
@@ -1678,7 +1665,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                 {
                     const SvxLRSpaceItem& rLR =
                         (SvxLRSpaceItem&)pTOXNd->
-                        SwCntntNode::GetAttr( RES_LR_SPACE, TRUE );
+                        SwCntntNode::GetAttr( RES_LR_SPACE, sal_True );
 
                     long nTabPosition = aToken.nTabStopPosition;
                     if( !GetTOXForm().IsRelTabPos() && rLR.GetTxtLeft() )
@@ -1693,29 +1680,28 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                     const SwPageDesc* pPageDesc = ((SwFmtPageDesc&)pTOXNd->
                                 SwCntntNode::GetAttr( RES_PAGEDESC )).GetPageDesc();
 
-                    BOOL bCallFindRect = TRUE;
+                    sal_Bool bCallFindRect = sal_True;
                     long nRightMargin;
                     if( pPageDesc )
                     {
-                        const SwFrm* pFrm = pTOXNd->GetFrm( 0, 0, TRUE );
+                        const SwFrm* pFrm = pTOXNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, sal_True );
                         if( !pFrm || 0 == ( pFrm = pFrm->FindPageFrm() ) ||
                             pPageDesc != ((SwPageFrm*)pFrm)->GetPageDesc() )
                             // dann muss man ueber den PageDesc gehen
-                            bCallFindRect = FALSE;
+                            bCallFindRect = sal_False;
                     }
 
                     SwRect aNdRect;
                     if( bCallFindRect )
-                        aNdRect = pTOXNd->FindLayoutRect( TRUE );
+                        aNdRect = pTOXNd->FindLayoutRect( sal_True );
 
                     if( aNdRect.IsEmpty() )
                     {
                         // dann hilft alles nichts, wir muessen ueber die Seiten-
                         // vorlage gehen.
-                        // OD 18.03.2003 #106329# - call
                         sal_uInt32 nPgDescNdIdx = pTOXNd->GetIndex() + 1;
                         sal_uInt32* pPgDescNdIdx = &nPgDescNdIdx;
-                        pPageDesc = pTOXNd->FindPageDesc( FALSE, pPgDescNdIdx );
+                        pPageDesc = pTOXNd->FindPageDesc( sal_False, pPgDescNdIdx );
                         if ( !pPageDesc ||
                              *pPgDescNdIdx < _nTOXSectNdIdx )
                         {
@@ -1757,11 +1743,11 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                 {
                     // Die Anzahl der gleichen Eintrage bestimmt die Seitennummern-Pattern
                     //
-                    USHORT nSize = rBase.aTOXSources.Count();
+                    sal_uInt16 nSize = rBase.aTOXSources.Count();
                     if( nSize > 0 )
                     {
                         String aInsStr( cNumRepl );
-                        for(USHORT i=1; i < nSize; ++i)
+                        for(sal_uInt16 i=1; i < nSize; ++i)
                         {
                             aInsStr.AppendAscii( sPageDeli );
                             aInsStr += cNumRepl;
@@ -1769,9 +1755,6 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                         aInsStr += cEndPageNum;
                         rTxt.Append( aInsStr );
                     }
-//                      // Tab entfernen, wenn keine Seitennummer
-//                  else if( rTxt.Len() && '\t' == rTxt.GetChar( rTxt.Len() - 1 ))
-//                      rTxt.Erase( rTxt.Len()-1, 1 );
                 }
                 break;
 
@@ -1782,27 +1765,23 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                     if(rBase.aTOXSources.Count())
                         pTOXSource = &rBase.aTOXSources[0];
 
-                    // --> OD 2008-02-14 #i53420#
-//                    if( pTOXSource && pTOXSource->pNd
-//                        pTOXSource->pNd->IsTxtNode() )
+                    // #i53420#
                     if ( pTOXSource && pTOXSource->pNd &&
                          pTOXSource->pNd->IsCntntNode() )
-                    // <--
                     {
-                        const SwCntntFrm* pFrm = pTOXSource->pNd->GetFrm();
+                        const SwCntntFrm* pFrm = pTOXSource->pNd->getLayoutFrm( pDoc->GetCurrentLayout() );
                         if( pFrm )
                         {
                             SwChapterFieldType aFldTyp;
                             SwChapterField aFld( &aFldTyp, aToken.nChapterFormat );
-                            aFld.SetLevel( static_cast<BYTE>(aToken.nOutlineLevel - 1) );
-                            // --> OD 2008-02-14 #i53420#
-//                            aFld.ChangeExpansion( pFrm, (SwTxtNode*)pTOXSource->pNd, TRUE );
+                            aFld.SetLevel( static_cast<sal_uInt8>(aToken.nOutlineLevel - 1) );
+                            // #i53420#
                             aFld.ChangeExpansion( pFrm,
                                 dynamic_cast<const SwCntntNode*>(pTOXSource->pNd),
-                                TRUE );
+                                sal_True );
                             // <--
-                            //---> i89791
-                            // OD 2008-06-26 - continue to support CF_NUMBER
+                            //---> #i89791#
+                            // continue to support CF_NUMBER
                             // and CF_NUM_TITLE in order to handle ODF 1.0/1.1
                             // written by OOo 3.x in the same way as OOo 2.x
                             // would handle them.
@@ -1849,7 +1828,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                     pNewLink->aINetFmt.SetINetFmt(sLinkCharacterStyle);
                     if(sLinkCharacterStyle.Len())
                     {
-                        USHORT nPoolId =
+                        sal_uInt16 nPoolId =
                             SwStyleNameMapper::GetPoolIdFromUIName( sLinkCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
                         pNewLink->aINetFmt.SetVisitedFmtId(nPoolId);
                         pNewLink->aINetFmt.SetINetFmtId(nPoolId);
@@ -1869,7 +1848,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                 {
                     ToxAuthorityField eField = (ToxAuthorityField)aToken.nAuthorityField;
                     SwIndex aIdx( pTOXNd, rTxt.Len() );
-                    rBase.FillText( *pTOXNd, aIdx, static_cast<USHORT>(eField) );
+                    rBase.FillText( *pTOXNd, aIdx, static_cast<sal_uInt16>(eField) );
                 }
                 break;
             case TOKEN_END: break;
@@ -1891,14 +1870,14 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                 }
             }
 
-            aIt++; // #i21237#
+            ++aIt; // #i21237#
         }
 
         pTOXNd->SetAttr( aTStops );
     }
 
     if(aLinkArr.Count())
-        for(USHORT i = 0; i < aLinkArr.Count(); ++i )
+        for(sal_uInt16 i = 0; i < aLinkArr.Count(); ++i )
         {
             LinkStruct* pTmp = aLinkArr.GetObject(i);
             pTOXNd->InsertItem( pTmp->aINetFmt, pTmp->nStartTextPos,
@@ -1917,7 +1896,7 @@ void SwTOXBaseSection::UpdatePageNum()
 
     // die aktuellen Seitennummern ins Verzeichnis eintragen
     SwPageFrm*  pAktPage    = 0;
-    USHORT      nPage       = 0;
+    sal_uInt16      nPage       = 0;
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
 
     SwTOXInternational aIntl( GetLanguage(),
@@ -1925,7 +1904,7 @@ void SwTOXBaseSection::UpdatePageNum()
                               GetOptions() : 0,
                               GetSortAlgorithm() );
 
-    for( USHORT nCnt = 0; nCnt < aSortArr.Count(); ++nCnt )
+    for( sal_uInt16 nCnt = 0; nCnt < aSortArr.Count(); ++nCnt )
     {
         // Schleife ueber alle SourceNodes
         SvUShorts aNums;        //Die Seitennummern
@@ -1933,7 +1912,7 @@ void SwTOXBaseSection::UpdatePageNum()
         SvUShorts* pMainNums = 0; // contains page numbers of main entries
 
         // process run in lines
-        USHORT nRange = 0;
+        sal_uInt16 nRange = 0;
         if(GetTOXForm().IsCommaSeparated() &&
                 aSortArr[nCnt]->GetType() == TOX_SORT_INDEX)
         {
@@ -1951,19 +1930,19 @@ void SwTOXBaseSection::UpdatePageNum()
         else
             nRange = 1;
 
-        for(USHORT nRunInEntry = nCnt; nRunInEntry < nCnt + nRange; nRunInEntry++)
+        for(sal_uInt16 nRunInEntry = nCnt; nRunInEntry < nCnt + nRange; nRunInEntry++)
         {
             SwTOXSortTabBase* pSortBase = aSortArr[nRunInEntry];
-            USHORT nSize = pSortBase->aTOXSources.Count();
-            USHORT i;
-            for( USHORT j = 0; j < nSize; ++j )
+            sal_uInt16 nSize = pSortBase->aTOXSources.Count();
+            sal_uInt16 i;
+            for( sal_uInt16 j = 0; j < nSize; ++j )
             {
                 ::SetProgressState( 0, pDoc->GetDocShell() );
 
                 SwTOXSource& rTOXSource = pSortBase->aTOXSources[j];
                 if( rTOXSource.pNd )
                 {
-                    SwCntntFrm* pFrm = rTOXSource.pNd->GetFrm();
+                    SwCntntFrm* pFrm = rTOXSource.pNd->getLayoutFrm( pDoc->GetCurrentLayout() );
                     OSL_ENSURE( pFrm || pDoc->IsUpdateTOX(), "TOX, no Frame found");
                     if( !pFrm )
                         continue;
@@ -2025,12 +2004,12 @@ void SwTOXBaseSection::UpdatePageNum()
      Beschreibung: Austausch der Seitennummer-Platzhalter
  --------------------------------------------------------------------*/
 // search for the page no in the array of main entry page numbers
-BOOL lcl_HasMainEntry( const SvUShorts* pMainEntryNums, USHORT nToFind )
+sal_Bool lcl_HasMainEntry( const SvUShorts* pMainEntryNums, sal_uInt16 nToFind )
 {
-    for(USHORT i = 0; pMainEntryNums && i < pMainEntryNums->Count(); ++i)
+    for(sal_uInt16 i = 0; pMainEntryNums && i < pMainEntryNums->Count(); ++i)
         if(nToFind == (*pMainEntryNums)[i])
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
@@ -2047,7 +2026,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     xub_StrLen nStartPos = pNd->GetTxt().Search( sSrchStr );
     ( sSrchStr = cNumRepl ) += cEndPageNum;
     xub_StrLen nEndPos = pNd->GetTxt().Search( sSrchStr );
-    USHORT i;
+    sal_uInt16 i;
 
     if( STRING_NOTFOUND == nEndPos || !rNums.Count() )
         return;
@@ -2055,14 +2034,14 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     if( STRING_NOTFOUND == nStartPos || nStartPos > nEndPos)
         nStartPos = nEndPos;
 
-    USHORT nOld = rNums[0],
+    sal_uInt16 nOld = rNums[0],
            nBeg = nOld,
            nCount  = 0;
     String aNumStr( SvxNumberType( ((SwPageDesc*)rDescs[0])->GetNumType() ).
                     GetNumStr( nBeg ) );
     if( pCharStyleIdx && lcl_HasMainEntry( pMainEntryNums, nBeg ))
     {
-        USHORT nTemp = 0;
+        sal_uInt16 nTemp = 0;
         pCharStyleIdx->Insert( nTemp, pCharStyleIdx->Count());
     }
 
@@ -2071,7 +2050,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     SwCharFmt* pPageNoCharFmt = 0;
     SwpHints* pHints = pNd->GetpSwpHints();
     if(pHints)
-        for(USHORT nHintIdx = 0; nHintIdx < pHints->GetStartCount(); nHintIdx++)
+        for(sal_uInt16 nHintIdx = 0; nHintIdx < pHints->GetStartCount(); nHintIdx++)
         {
             SwTxtAttr* pAttr = pHints->GetStart(nHintIdx);
             xub_StrLen nTmpEnd = pAttr->GetEnd() ? *pAttr->GetEnd() : 0;
@@ -2093,7 +2072,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
             // Alle folgenden aufaddieren
             // break up if main entry starts or ends and
             // insert a char style index
-            BOOL bMainEntryChanges = lcl_HasMainEntry(pMainEntryNums, nOld)
+            sal_Bool bMainEntryChanges = lcl_HasMainEntry(pMainEntryNums, nOld)
                     != lcl_HasMainEntry(pMainEntryNums, rNums[i]);
 
             if(nOld == rNums[i]-1 && !bMainEntryChanges &&
@@ -2132,7 +2111,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         }
         else
         {   // Alle Nummern eintragen
-            aNumStr += aType.GetNumStr( USHORT(rNums[i]) );
+            aNumStr += aType.GetNumStr( sal_uInt16(rNums[i]) );
             if(i != (rNums.Count()-1))
                 aNumStr.AppendAscii( sPageDeli );
         }
@@ -2176,7 +2155,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
 
         //search by name
         SwDoc* pDoc = pNd->GetDoc();
-        USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( GetMainEntryCharStyle(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( GetMainEntryCharStyle(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
         SwCharFmt* pCharFmt = 0;
         if(USHRT_MAX != nPoolId)
             pCharFmt = pDoc->GetCharFmtFromPool(nPoolId);
@@ -2188,7 +2167,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         //find the page numbers in aNumStr and set the character style
         xub_StrLen nOffset = pNd->GetTxt().Len() - aNumStr.Len();
         SwFmtCharFmt aCharFmt(pCharFmt);
-        for(USHORT j = 0; j < pCharStyleIdx->Count(); j += 2)
+        for(sal_uInt16 j = 0; j < pCharStyleIdx->Count(); j += 2)
         {
             xub_StrLen nStartIdx = (*pCharStyleIdx)[j] + nOffset;
             xub_StrLen nEndIdx = (*pCharStyleIdx)[j + 1]  + nOffset;
@@ -2279,7 +2258,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
             }
 #if OSL_DEBUG_LEVEL > 1
             else
-                DBG_ERROR("Bibliography entries cannot be found here");
+                OSL_FAIL("Bibliography entries cannot be found here");
 #endif
         }
         if(*pNew < *pOld)
@@ -2299,7 +2278,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
  --------------------------------------------------------------------*/
 Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReading,
                                     const SwTOXSortTabBase& rNew,
-                                    USHORT nLevel, const Range& rRange )
+                                    sal_uInt16 nLevel, const Range& rRange )
 {
     const SwTOXInternational& rIntl = *rNew.pTOXIntl;
     String sToCompare(rStr);
@@ -2313,10 +2292,10 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
 
     OSL_ENSURE(rRange.Min() >= 0 && rRange.Max() >= 0, "Min Max < 0");
 
-    const USHORT nMin = (USHORT)rRange.Min();
-    const USHORT nMax = (USHORT)rRange.Max();
+    const sal_uInt16 nMin = (sal_uInt16)rRange.Min();
+    const sal_uInt16 nMax = (sal_uInt16)rRange.Max();
 
-    USHORT i;
+    sal_uInt16 i;
 
     for( i = nMin; i < nMax; ++i)
     {
@@ -2327,8 +2306,7 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
 
         if( rIntl.IsEqual( sMyString, sMyStringReading, pBase->GetLocale(),
                            sToCompare, sToCompareReading, rNew.GetLocale() )  &&
-                    pBase->GetLevel() == nLevel &&
-                    pBase->GetType() == TOX_SORT_CUSTOM )
+                    pBase->GetLevel() == nLevel )
             break;
     }
     if(i == nMax)
@@ -2343,8 +2321,8 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
         }
         aSortArr.Insert(pKey, i );
     }
-    USHORT nStart = i+1;
-    USHORT nEnd   = aSortArr.Count();
+    sal_uInt16 nStart = i+1;
+    sal_uInt16 nEnd   = aSortArr.Count();
 
     // Ende des Bereiches suchen
     for(i = nStart; i < aSortArr.Count(); ++i)
@@ -2357,10 +2335,10 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
     return Range(nStart, nEnd);
 }
 
-BOOL SwTOXBase::IsTOXBaseInReadonly() const
+sal_Bool SwTOXBase::IsTOXBaseInReadonly() const
 {
     const SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     const SwSectionNode* pSectNode;
     if(pSect && pSect->GetFmt() &&
             0 != (pSectNode = pSect->GetFmt()->GetSectionNode()))
@@ -2390,7 +2368,7 @@ void SwTOXBase::SetAttrSet( const SfxItemSet& rSet )
         pSect->GetFmt()->SetFmtAttr( rSet );
 }
 
-BOOL SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
@@ -2400,9 +2378,9 @@ BOOL SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
             if( pSect && pSect->GetFmt() )
                 pSect->GetFmt()->GetInfo( rInfo );
         }
-        return FALSE;
+        return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,17 +24,13 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
-/* StarView ressource file */
 
-#include <sfx2/sfx.hrc>
-#include <svx/dialogs.hrc>
-#include "globals.hrc"
 #include "misc.hrc"
 #include "titlepage.hrc"
+#include "globals.hrc"
+#include "cmdid.h"
 #include "helpid.h"
-/**************************************************************************/
-/*                                                                        */
-/**************************************************************************/
+
 ModalDialog DLG_TITLEPAGE
 {
     HelpID = HID_TITLEPAGE ;

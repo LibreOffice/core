@@ -44,7 +44,7 @@
 #include <svl/numuno.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <i18npool/mslangid.hxx>
 #include <rtl/textenc.h>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -127,7 +127,7 @@ StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XMultiServiceF
 {
     SetNumberFormatter(m_pMyPrivateFormatter);
 
-    // #i29147# - 2004-06-18 - fs@openoffice.org
+    // #i29147#
     ::utl::DesktopTerminationObserver::registerTerminationListener( this );
 }
 
@@ -184,7 +184,7 @@ void StandardFormatsSupplier::notifyTermination()
     Reference< XNumberFormatsSupplier > xKeepAlive = this;
     // when the application is terminating, release our static reference so that we are cleared/destructed
     // earlier than upon unloading the library
-    // #i29147# - 2004-06-18 - fs@openoffice.org
+    // #i29147#
     s_xDefaultFormatsSupplier = WeakReference< XNumberFormatsSupplier >( );
 
     SetNumberFormatter( NULL );
@@ -480,14 +480,12 @@ void OFormattedModel::describeAggregateProperties( Sequence< Property >& _rAggre
     // same for FormatKey
     // (though the paragraph above for the TreatAsNumeric does not hold anymore - we do not have an UI for this.
     // But we have for the format key ...)
-    // 25.06.2001 - 87862 - frank.schoenheit@sun.com
     ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATKEY, 0, PropertyAttribute::TRANSIENT);
 
     RemoveProperty(_rAggregateProps, PROPERTY_STRICTFORMAT);
         // no strict format property for formatted fields: it does not make sense, 'cause
         // there is no general way to decide which characters/sub strings are allowed during the input of an
         // arbitraryly formatted control
-        // 81441 - 12/07/00 - FS
 }
 
 //------------------------------------------------------------------------------
@@ -661,7 +659,7 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
 
     if (!xNextParentForm.is())
     {
-        DBG_ERROR("OFormattedModel::calcFormFormatsSupplier : have no ancestor which is a form !");
+        OSL_FAIL("OFormattedModel::calcFormFormatsSupplier : have no ancestor which is a form !");
         return NULL;
     }
 
@@ -691,7 +689,6 @@ void OFormattedModel::loaded(const EventObject& rEvent) throw ( ::com::sun::star
     // property requests and one for our own code. This would need a lot of code rewriting
     // alternative b): The NumberFormatter has to be really threadsafe (with an own mutex), which is
     // the only "clean" solution for me.
-    // FS - 69603 - 02.11.99
 
     SolarMutexGuard aGuard;
     OEditBaseModel::loaded(rEvent);
@@ -790,7 +787,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
     Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
     m_bNumeric = getBOOL( getPropertyValue( PROPERTY_TREATASNUMERIC ) );
     m_nKeyType  = getNumberFormatType( xSupplier->getNumberFormats(), nFormatKey );
-    xSupplier->getNumberFormatSettings()->getPropertyValue( ::rtl::OUString::createFromAscii("NullDate") ) >>= m_aNullDate;
+    xSupplier->getNumberFormatSettings()->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate") ) ) >>= m_aNullDate;
 
     OEditBaseModel::onConnectedDbColumn( _rxForm );
 }
@@ -852,7 +849,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
         ::rtl::OUString         sFormatDescription;
         LanguageType    eFormatLanguage = LANGUAGE_DONTKNOW;
 
-        static const ::rtl::OUString s_aLocaleProp = ::rtl::OUString::createFromAscii("Locale");
+        static const ::rtl::OUString s_aLocaleProp (RTL_CONSTASCII_USTRINGPARAM("Locale") );
         Reference<com::sun::star::beans::XPropertySet>  xFormat = xFormats->getByKey(nKey);
         if (hasProperty(s_aLocaleProp, xFormat))
         {
@@ -865,7 +862,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
             }
         }
 
-        static const ::rtl::OUString s_aFormatStringProp = ::rtl::OUString::createFromAscii("FormatString");
+        static const ::rtl::OUString s_aFormatStringProp (RTL_CONSTASCII_USTRINGPARAM("FormatString") );
         if (hasProperty(s_aFormatStringProp, xFormat))
             xFormat->getPropertyValue(s_aFormatStringProp) >>= sFormatDescription;
 
@@ -980,7 +977,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
                         case 2:
                             break;
                         case 3:
-                            DBG_ERROR("FmXFormattedModel::read : unknown effective value type !");
+                            OSL_FAIL("FmXFormattedModel::read : unknown effective value type !");
                     }
                 }
 
@@ -1000,7 +997,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
         }
         break;
         default :
-            DBG_ERROR("OFormattedModel::read : unknown version !");
+            OSL_FAIL("OFormattedModel::read : unknown version !");
             // dann bleibt das Format des aggregierten Sets, wie es bei der Erzeugung ist : void
             defaultCommonEditProperties();
             break;
@@ -1200,7 +1197,7 @@ Any OFormattedModel::translateControlValueToExternalValue( ) const
 Any OFormattedModel::translateDbColumnToControlValue()
 {
     if ( m_bNumeric )
-        m_aSaveValue <<= DBTypeConversion::getValue( m_xColumn, m_aNullDate, m_nKeyType ); // #100056# OJ
+        m_aSaveValue <<= DBTypeConversion::getValue( m_xColumn, m_aNullDate ); // #100056# OJ
     else
         m_aSaveValue <<= m_xColumn->getString();
 

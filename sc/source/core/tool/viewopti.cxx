@@ -46,14 +46,15 @@
 #include "miscuno.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 
 TYPEINIT1(ScTpViewItem, SfxPoolItem);
 
-#define SC_VERSION ((USHORT)302)
+#define SC_VERSION ((sal_uInt16)302)
 
 
 //========================================================================
@@ -141,7 +142,7 @@ ScViewOptions::ScViewOptions( const ScViewOptions& rCpy )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScViewOptions::~ScViewOptions()
+ScViewOptions::~ScViewOptions()
 {
 }
 
@@ -152,7 +153,7 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_FORMULAS    ] =
     aOptArr[ VOPT_SYNTAX      ] =
     aOptArr[ VOPT_HELPLINES   ] =
-    aOptArr[ VOPT_BIGHANDLES  ] = FALSE;
+    aOptArr[ VOPT_BIGHANDLES  ] = false;
     aOptArr[ VOPT_NOTES       ] =
     aOptArr[ VOPT_NULLVALS    ] =
     aOptArr[ VOPT_VSCROLL     ] =
@@ -164,7 +165,7 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_ANCHOR      ] =
     aOptArr[ VOPT_PAGEBREAKS  ] =
     aOptArr[ VOPT_SOLIDHANDLES] =
-    aOptArr[ VOPT_CLIPMARKS   ] = TRUE;
+    aOptArr[ VOPT_CLIPMARKS   ] = sal_True;
 
     aModeArr[VOBJ_TYPE_OLE ]  =
     aModeArr[VOBJ_TYPE_CHART] =
@@ -190,7 +191,7 @@ Color ScViewOptions::GetGridColor( String* pStrName ) const
 
 const ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
 {
-    USHORT i;
+    sal_uInt16 i;
 
     for ( i=0; i<MAX_OPT; i++ )  aOptArr [i] = rCpy.aOptArr[i];
     for ( i=0; i<MAX_TYPE; i++ ) aModeArr[i] = rCpy.aModeArr[i];
@@ -206,8 +207,8 @@ const ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
 
 int ScViewOptions::operator==( const ScViewOptions& rOpt ) const
 {
-    BOOL    bEqual = TRUE;
-    USHORT  i;
+    sal_Bool    bEqual = sal_True;
+    sal_uInt16  i;
 
     for ( i=0; i<MAX_OPT && bEqual; i++ )  bEqual = (aOptArr [i] == rOpt.aOptArr[i]);
     for ( i=0; i<MAX_TYPE && bEqual; i++ ) bEqual = (aModeArr[i] == rOpt.aModeArr[i]);
@@ -221,7 +222,7 @@ int ScViewOptions::operator==( const ScViewOptions& rOpt ) const
 
 //------------------------------------------------------------------------
 
-SvxGridItem* ScViewOptions::CreateGridItem( USHORT nId /* = SID_ATTR_GRID_OPTIONS */ ) const
+SvxGridItem* ScViewOptions::CreateGridItem( sal_uInt16 nId /* = SID_ATTR_GRID_OPTIONS */ ) const
 {
     SvxGridItem* pItem = new SvxGridItem( nId );
 
@@ -245,7 +246,7 @@ SvxGridItem* ScViewOptions::CreateGridItem( USHORT nId /* = SID_ATTR_GRID_OPTION
 
 //------------------------------------------------------------------------
 
-ScTpViewItem::ScTpViewItem( USHORT nWhichP, const ScViewOptions& rOpt )
+ScTpViewItem::ScTpViewItem( sal_uInt16 nWhichP, const ScViewOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),
         theOptions  ( rOpt )
 {
@@ -261,20 +262,20 @@ ScTpViewItem::ScTpViewItem( const ScTpViewItem& rItem )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScTpViewItem::~ScTpViewItem()
+ScTpViewItem::~ScTpViewItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScTpViewItem::GetValueText() const
+String ScTpViewItem::GetValueText() const
 {
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("ScTpViewItem") );
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
+int ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -285,7 +286,7 @@ int __EXPORT ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScTpViewItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
 {
     return new ScTpViewItem( *this );
 }
@@ -406,10 +407,10 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
     //  adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
     {
-        pNames[SCGRIDOPT_RESOLU_X] = OUString::createFromAscii( "Resolution/XAxis/Metric" );
-        pNames[SCGRIDOPT_RESOLU_Y] = OUString::createFromAscii( "Resolution/YAxis/Metric" );
-        pNames[SCGRIDOPT_OPTION_X] = OUString::createFromAscii( "Option/XAxis/Metric" );
-        pNames[SCGRIDOPT_OPTION_Y] = OUString::createFromAscii( "Option/YAxis/Metric" );
+        pNames[SCGRIDOPT_RESOLU_X] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Resolution/XAxis/Metric" ));
+        pNames[SCGRIDOPT_RESOLU_Y] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Resolution/YAxis/Metric" ));
+        pNames[SCGRIDOPT_OPTION_X] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Option/XAxis/Metric" ));
+        pNames[SCGRIDOPT_OPTION_Y] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Option/YAxis/Metric" ));
     }
 
     return aNames;
@@ -417,9 +418,9 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
 
 
 ScViewCfg::ScViewCfg() :
-    aLayoutItem( OUString::createFromAscii( CFGPATH_LAYOUT ) ),
-    aDisplayItem( OUString::createFromAscii( CFGPATH_DISPLAY ) ),
-    aGridItem( OUString::createFromAscii( CFGPATH_GRID ) )
+    aLayoutItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_LAYOUT )) ),
+    aDisplayItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_DISPLAY )) ),
+    aGridItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_GRID )) )
 {
     sal_Int32 nIntVal = 0;
 

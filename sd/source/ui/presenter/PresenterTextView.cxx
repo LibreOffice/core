@@ -73,7 +73,7 @@ Reference<XInterface> SAL_CALL PresenterTextViewService_createInstance (
 
 ::rtl::OUString PresenterTextViewService_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterTextView");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterTextView"));
 }
 
 
@@ -83,7 +83,7 @@ Sequence<rtl::OUString> SAL_CALL PresenterTextViewService_getSupportedServiceNam
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.PresenterTextView"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterTextView")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -193,7 +193,7 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
     else
     {
         throw RuntimeException(
-            OUString::createFromAscii("PresenterTextView: invalid number of arguments"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterTextView: invalid number of arguments")),
                 static_cast<XWeak*>(this));
     }
 }
@@ -303,15 +303,15 @@ void PresenterTextView::ThrowIfDisposed (void)
 //===== PresenterTextView::Implementation =====================================
 
 PresenterTextView::Implementation::Implementation (void)
-    : msTextPropertyName(OUString::createFromAscii("Text")),
-      msBitmapPropertyName(OUString::createFromAscii("Bitmap")),
-      msSizePropertyName(OUString::createFromAscii("Size")),
-      msBackgroundColorPropertyName(OUString::createFromAscii("BackgroundColor")),
-      msTextColorPropertyName(OUString::createFromAscii("TextColor")),
-      msFontDescriptorPropertyName(OUString::createFromAscii("FontDescriptor")),
-      msTopPropertyName(OUString::createFromAscii("Top")),
-      msTopRelativePropertyName(OUString::createFromAscii("RelativeTop")),
-      msTotalHeightPropertyName(OUString::createFromAscii("TotalHeight")),
+    : msTextPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("Text"))),
+      msBitmapPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap"))),
+      msSizePropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("Size"))),
+      msBackgroundColorPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("BackgroundColor"))),
+      msTextColorPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("TextColor"))),
+      msFontDescriptorPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("FontDescriptor"))),
+      msTopPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("Top"))),
+      msTopRelativePropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("RelativeTop"))),
+      msTotalHeightPropertyName(OUString(RTL_CONSTASCII_USTRINGPARAM("TotalHeight"))),
       mxBitmap(),
       mpCanvas(),
       mpOutputDevice(new VirtualDevice(*Application::GetDefaultDevice(), 0, 0)),
@@ -362,12 +362,12 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
         //
         SvtLinguOptions aOpt;
         SvtLinguConfig().GetOptions( aOpt );
-        //
+
         struct FontDta {
-            INT16       nFallbackLang;
-            INT16       nLang;
-            USHORT      nFontType;
-            USHORT      nFontInfoId;
+            sal_Int16       nFallbackLang;
+            sal_Int16       nLang;
+            sal_uInt16      nFontType;
+            sal_uInt16      nFontInfoId;
             } aTable[3] =
         {
             // info to get western font to be used
@@ -383,7 +383,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
         aTable[0].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN);
         aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN);
         aTable[2].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
-        //
+
         for (int i = 0;  i < 3;  ++i)
         {
             const FontDta &rFntDta = aTable[i];
@@ -404,8 +404,8 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
 
         pEditEngine = new EditEngine (mpEditEngineItemPool);
 
-        pEditEngine->EnableUndo (TRUE);
-        pEditEngine->SetDefTab (USHORT(
+        pEditEngine->EnableUndo (sal_True);
+        pEditEngine->SetDefTab (sal_uInt16(
             Application::GetDefaultDevice()->GetTextWidth(
                 UniString::CreateFromAscii("XXXX"))));
 
@@ -459,8 +459,8 @@ void PresenterTextView::Implementation::SetBackgroundColor (const Color aColor)
     DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
     DBG_ASSERT(mpEditEngineItemPool!=NULL, "EditEngineItemPool missing");
     mpEditEngine->SetBackgroundColor(aColor);
-    mpEditEngine->EnableAutoColor(FALSE);
-    mpEditEngine->ForceAutoColor(FALSE);
+    mpEditEngine->EnableAutoColor(sal_False);
+    mpEditEngine->ForceAutoColor(sal_False);
 }
 
 
@@ -499,7 +499,7 @@ void PresenterTextView::Implementation::SetFontDescriptor (
     mpEditEngineItemPool->SetPoolDefaultItem( aFontHeight);
 
     SvxFontItem aSvxFontItem (EE_CHAR_FONTINFO);
-    aSvxFontItem.GetFamilyName() = rFontDescriptor.Name;
+    aSvxFontItem.SetFamilyName( rFontDescriptor.Name );
     mpEditEngineItemPool->SetPoolDefaultItem(aSvxFontItem);
 
     mnTotalHeight = -1;
@@ -577,7 +577,7 @@ Reference<rendering::XBitmap> PresenterTextView::Implementation::GetBitmap (void
             delete mpOutputDevice;
         mpOutputDevice = new VirtualDevice(*Application::GetDefaultDevice(), 0, 0);
         mpOutputDevice->SetMapMode(MAP_PIXEL);
-        mpOutputDevice->SetOutputSizePixel(maSize, TRUE);
+        mpOutputDevice->SetOutputSizePixel(maSize, sal_True);
         mpOutputDevice->SetLineColor();
         mpOutputDevice->SetFillColor();
         mpOutputDevice->SetBackground(Wallpaper());

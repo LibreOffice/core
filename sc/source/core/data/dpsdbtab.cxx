@@ -62,8 +62,6 @@
 using namespace com::sun::star;
 
 using ::std::vector;
-using ::std::hash_map;
-using ::std::hash_set;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
@@ -76,33 +74,10 @@ using ::com::sun::star::uno::UNO_QUERY;
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
-// -----------------------------------------------------------------------
-// Wang Xu Ming -- 2009-9-15
-// DataPilot Migration - Cache&&Performance
- ScDPTableDataCache* ScImportSourceDesc::GetExistDPObjectCache( ScDocument* pDoc ) const
-{
-    ScDPTableDataCache* pCache = NULL;
-    ScDPCollection* pDPCollection= pDoc->GetDPCollection();
-    USHORT nCount = pDPCollection->GetCount();
 
-    for ( short i=nCount-1; i>=0 ; i--)
-    {
-        if ( const ScImportSourceDesc* pUsedDesc = (*pDPCollection)[i]->GetImportSourceDesc() )
-            if ( *this == *pUsedDesc )
-            {
-                long nID = (*pDPCollection)[i]->GetCacheId();
-                if ( nID >= 0  )
-                    pCache= pDoc->GetDPObjectCache( nID );
-                if ( pCache )
-                    return pCache;
-            }
-    }
-    return NULL;
-}
-
-ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID  ) const
+ScDPCache* ScImportSourceDesc::CreateCache() const
 {
-    if ( !pDoc )
+    if (!mpDoc)
         return NULL;
 
     sal_Int32 nSdbType = -1;
@@ -116,21 +91,14 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
         return NULL;
     }
 
-
-   ScDPTableDataCache* pCache = GetExistDPObjectCache( pDoc );
-
-    if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
-        return pCache;
-
-    if ( pCache == NULL )
-        pCache = new ScDPTableDataCache( pDoc );
+    ScDPCache* pCache = new ScDPCache(mpDoc);
 
     uno::Reference<sdbc::XRowSet> xRowSet ;
     try
     {
         xRowSet = uno::Reference<sdbc::XRowSet>(
             comphelper::getProcessServiceFactory()->createInstance(
-            rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
             uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
         DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
@@ -142,32 +110,29 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
             uno::Any aAny;
             aAny <<= rtl::OUString( aDBName );
             xRowProp->setPropertyValue(
-                rtl::OUString::createFromAscii(SC_DBPROP_DATASOURCENAME), aAny );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_DATASOURCENAME)), aAny );
 
             aAny <<= rtl::OUString( aObject );
             xRowProp->setPropertyValue(
-                rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
 
             aAny <<= nSdbType;
             xRowProp->setPropertyValue(
-                rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
 
             uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
             if ( xExecute.is() )
             {
                 uno::Reference<task::XInteractionHandler> xHandler(
                     comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( SC_SERVICE_INTHANDLER ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_INTHANDLER )) ),
                     uno::UNO_QUERY);
                 xExecute->executeWithCompletion( xHandler );
             }
             else
                 xRowSet->execute();
-            SvNumberFormatter aFormat( pDoc->GetServiceManager(), ScGlobal::eLnge);
+            SvNumberFormatter aFormat(mpDoc->GetServiceManager(), ScGlobal::eLnge);
             pCache->InitFromDataBase( xRowSet, *aFormat.GetNullDate() );
-            pCache->SetId( nID );
-            pDoc->AddDPObjectCache( pCache );
-            DBG_TRACE1("Create a cache id = %d \n", pCache->GetId() );
         }
     }
     catch ( sdbc::SQLException& rError )
@@ -182,7 +147,7 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
     {
         delete pCache;
         pCache = NULL;
-        DBG_ERROR("Unexpected exception in database");
+        OSL_FAIL("Unexpected exception in database");
     }
 
 
@@ -190,34 +155,11 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
      return pCache;
 }
 
-ScDPTableDataCache* ScImportSourceDesc::GetCache( ScDocument* pDoc, long nID ) const
+ScDatabaseDPData::ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport) :
+    ScDPTableData(pDoc),
+    mrImport(rImport),
+    aCacheTable(rImport.CreateCache())
 {
-    ScDPTableDataCache* pCache = pDoc->GetDPObjectCache( nID );
-    if ( NULL == pCache && pDoc )
-        pCache = GetExistDPObjectCache( pDoc);
-    if ( NULL == pCache )
-        pCache = CreateCache( pDoc , nID );
-    return pCache;
-}
-
-long ScImportSourceDesc:: GetCacheId( ScDocument* pDoc, long nID ) const
-{
-    ScDPTableDataCache* pCache = GetCache( pDoc,  nID);
-    if ( NULL == pCache )
-        return -1;
-    else
-        return pCache->GetId();
-}
-
-// -----------------------------------------------------------------------
-
-ScDatabaseDPData::ScDatabaseDPData(
-    ScDocument* pDoc,
-    const ScImportSourceDesc& rImport, long nCacheId /*=-1 */ ) :
-    ScDPTableData(pDoc, rImport.GetCacheId( pDoc, nCacheId) ),
-    aCacheTable( pDoc, rImport.GetCacheId( pDoc, nCacheId))
-{
-
 }
 
 ScDatabaseDPData::~ScDatabaseDPData()
@@ -227,7 +169,7 @@ ScDatabaseDPData::~ScDatabaseDPData()
 void ScDatabaseDPData::DisposeData()
 {
     //! use OpenDatabase here?
-     aCacheTable.clear();
+    aCacheTable.clear();
 }
 
 long ScDatabaseDPData::GetColumnCount()
@@ -236,7 +178,6 @@ long ScDatabaseDPData::GetColumnCount()
     return GetCacheTable().getColSize();
 }
 
-// End Comments
 
 String ScDatabaseDPData::getDimensionName(long nColumn)
 {
@@ -251,18 +192,18 @@ String ScDatabaseDPData::getDimensionName(long nColumn)
     return aCacheTable.getFieldName((SCCOL)nColumn);
 }
 
-BOOL ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)
+sal_Bool ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)
 {
     return ( nColumn == GetCacheTable().getColSize());
 }
 
-BOOL ScDatabaseDPData::IsDateDimension(long /* nDim */)
+sal_Bool ScDatabaseDPData::IsDateDimension(long /* nDim */)
 {
     //! later...
-    return FALSE;
+    return false;
 }
 
-void ScDatabaseDPData::SetEmptyFlags( BOOL /* bIgnoreEmptyRows */, BOOL /* bRepeatIfEmpty */ )
+void ScDatabaseDPData::SetEmptyFlags( sal_Bool /* bIgnoreEmptyRows */, sal_Bool /* bRepeatIfEmpty */ )
 {
     //  not used for database data
     //! disable flags
@@ -273,17 +214,20 @@ void ScDatabaseDPData::CreateCacheTable()
     if (!aCacheTable.empty())
         return;
 
+    if (!aCacheTable.hasCache())
+        aCacheTable.setCache(mrImport.CreateCache());
+
     aCacheTable.fillTable();
 }
 
-void ScDatabaseDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
+void ScDatabaseDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
 {
     CreateCacheTable();
     aCacheTable.filterByPageDimension(
-        rCriteria, (IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>()));
+        rCriteria, (IsRepeatIfEmpty() ? rCatDims : boost::unordered_set<sal_Int32>()));
 }
 
-void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
+void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     CreateCacheTable();
     sal_Int32 nRowSize = aCacheTable.getRowSize();
@@ -291,7 +235,7 @@ void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>&
         return;
 
     aCacheTable.filterTable(
-        rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>());
+        rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : boost::unordered_set<sal_Int32>());
 }
 
 void ScDatabaseDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
@@ -306,9 +250,6 @@ const ScDPCacheTable& ScDatabaseDPData::GetCacheTable() const
 }
 
 // -----------------------------------------------------------------------
-
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

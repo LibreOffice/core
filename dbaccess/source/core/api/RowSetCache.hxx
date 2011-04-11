@@ -90,7 +90,6 @@ namespace dbaccess
         ORowSetMatrix*                  m_pInsertMatrix;        // represent the rows which should be inserted normally this is only one
         ORowSetMatrix::iterator         m_aInsertRow;           // represent a insert row
 
-        //  ORowSetRow                      m_aInsertRow;           // present the row that should be inserted
         sal_Int32                       m_nLastColumnIndex;     // the last column ask for, used for wasNull()
 
         connectivity::OSQLTable         m_aUpdateTable;         // used for updates/deletes and inserts
@@ -155,7 +154,8 @@ namespace dbaccess
                      sal_Bool&  _bModified,
                      sal_Bool&  _bNew,
                      const ORowSetValueVector& _aParameterValueForCache,
-                     const ::rtl::OUString& i_sRowSetFilter);
+                     const ::rtl::OUString& i_sRowSetFilter,
+                     sal_Int32 i_nMaxRows);
         ~ORowSetCache();
 
 
@@ -164,7 +164,7 @@ namespace dbaccess
         ORowSetCacheIterator createIterator(ORowSetBase* _pRowSet);
         void deleteIterator(const ORowSetBase* _pRowSet);
         // sets the size of the matrix
-        void setMaxRowSize(sal_Int32 _nSize);
+        void setFetchSize(sal_Int32 _nSize);
 
         TORowSetOldRowHelperRef registerOldRow();
         void deregisterOldRow(const TORowSetOldRowHelperRef& _rRow);

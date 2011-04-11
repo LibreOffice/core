@@ -163,7 +163,7 @@ static typelib_TypeClass cpp2uno_call(
     (*pThis->getUnoI()->pDispatcher)(
         pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-    // in case no exception occured...
+    // in case no exception occurred...
     if (pUnoExc)
     {
         // destruct temporary in/inout params
@@ -184,7 +184,7 @@ static typelib_TypeClass cpp2uno_call(
         // is here for dummy
         return typelib_TypeClass_VOID;
     }
-    else // else no exception occured...
+    else // else no exception occurred...
     {
         // temporary params
         for ( ; nTempIndizes--; )
@@ -260,13 +260,6 @@ static typelib_TypeClass cpp_mediate(
 
       OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex,
                 "### illegal vtable index!" );
-//      if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
-//      {
-//          RuntimeException aExc;
-//          aExc.Message = OUString::createFromAscii("illegal vtable index!");
-//          aExc.Context = (XInterface *)pThis;
-//          throw aExc;
-//      }
 
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
@@ -356,15 +349,6 @@ static typelib_TypeClass cpp_mediate(
         }
         break;
     }
-//      default:
-//      {
-//          RuntimeException aExc;
-//          aExc.Message = OUString::createFromAscii("no member description found!");
-//          aExc.Context = (XInterface *)pThis;
-//          throw aExc;
-//          // is here for dummy
-//          eRet = typelib_TypeClass_VOID;
-//      }
     }
 
     return eRet;

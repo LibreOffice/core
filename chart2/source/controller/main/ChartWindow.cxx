@@ -60,14 +60,14 @@ ChartWindow::ChartWindow( WindowController* pWindowController, Window* pParent, 
         , m_pWindowController( pWindowController )
         , m_bInPaint(false)
 {
-    this->SetSmartHelpId( SmartId( HID_SCH_WIN_DOCUMENT ) );
+    this->SetHelpId( HID_SCH_WIN_DOCUMENT );
     this->SetMapMode( MapMode(MAP_100TH_MM) );
     adjustHighContrastMode();
     // chart does not depend on exact pixel painting => enable antialiased drawing
     SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | GetAntialiasing() );
-    EnableRTL( FALSE );
+    EnableRTL( sal_False );
     if( pParent )
-        pParent->EnableRTL( FALSE );// #i96215# necessary for a correct position of the context menu in rtl mode
+        pParent->EnableRTL( sal_False );// #i96215# necessary for a correct position of the context menu in rtl mode
 }
 
 ChartWindow::~ChartWindow()
@@ -248,19 +248,19 @@ void ChartWindow::ForceInvalidate()
 {
     ::Window::Invalidate();
 }
-void ChartWindow::Invalidate( USHORT nFlags )
+void ChartWindow::Invalidate( sal_uInt16 nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
     ::Window::Invalidate( nFlags );
 }
-void ChartWindow::Invalidate( const Rectangle& rRect, USHORT nFlags )
+void ChartWindow::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
     ::Window::Invalidate( rRect, nFlags );
 }
-void ChartWindow::Invalidate( const Region& rRegion, USHORT nFlags )
+void ChartWindow::Invalidate( const Region& rRegion, sal_uInt16 nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;

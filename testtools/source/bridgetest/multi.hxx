@@ -59,7 +59,7 @@ public:
 
     virtual rtl::OUString SAL_CALL fn12(rtl::OUString const & arg)
         throw (com::sun::star::uno::RuntimeException)
-    { return rtl::OUString::createFromAscii("12") + arg; }
+    { return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("12")) + arg; }
 
     virtual sal_Int32 SAL_CALL fn21(sal_Int32 arg)
         throw (com::sun::star::uno::RuntimeException)
@@ -67,7 +67,7 @@ public:
 
     virtual rtl::OUString SAL_CALL fn22(rtl::OUString const & arg)
         throw (com::sun::star::uno::RuntimeException)
-    { return rtl::OUString::createFromAscii("22") + arg; }
+    { return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("22")) + arg; }
 
     virtual double SAL_CALL getatt3()
         throw (com::sun::star::uno::RuntimeException)
@@ -83,7 +83,7 @@ public:
 
     virtual rtl::OUString SAL_CALL fn32(rtl::OUString const & arg)
         throw (com::sun::star::uno::RuntimeException)
-    { return rtl::OUString::createFromAscii("32") + arg; }
+    { return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("32")) + arg; }
 
     virtual sal_Int32 SAL_CALL fn33()
         throw (com::sun::star::uno::RuntimeException)
@@ -99,7 +99,7 @@ public:
 
     virtual rtl::OUString SAL_CALL fn62(rtl::OUString const & arg)
         throw (com::sun::star::uno::RuntimeException)
-    { return rtl::OUString::createFromAscii("62") + arg; }
+    { return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("62")) + arg; }
 
     virtual sal_Int32 SAL_CALL fn71(sal_Int32 arg)
         throw (com::sun::star::uno::RuntimeException)
@@ -107,7 +107,7 @@ public:
 
     virtual rtl::OUString SAL_CALL fn72(rtl::OUString const & arg)
         throw (com::sun::star::uno::RuntimeException)
-    { return rtl::OUString::createFromAscii("72") + arg; }
+    { return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("72")) + arg; }
 
     virtual sal_Int32 SAL_CALL fn73()
         throw (com::sun::star::uno::RuntimeException)

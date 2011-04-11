@@ -56,11 +56,6 @@ public:
     virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
 
     virtual rtl::OUString GetScreenName( unsigned int nScreen );
-    // overload pure virtual methods
-    virtual int ShowNativeDialog( const String& rTitle,
-                                  const String& rMessage,
-                                  const std::list< String >& rButtons,
-                                  int nDefButton );
     virtual int ShowNativeMessageBox( const String& rTitle,
                                       const String& rMessage,
                                       int nButtonCombination,

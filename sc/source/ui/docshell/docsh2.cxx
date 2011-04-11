@@ -57,11 +57,6 @@
 #include <sfx2/app.hxx>
 
 // INCLUDE ---------------------------------------------------------------
-/*
-#include <svdrwetc.hxx>
-#include <svdrwobx.hxx>
-#include <sostor.hxx>
-*/
 #include "drwlayer.hxx"
 #include "stlpool.hxx"
 #include "docsh.hxx"
@@ -73,22 +68,22 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
+sal_Bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::InitNew" );
 
-    BOOL bRet = SfxObjectShell::InitNew( xStor );
+    sal_Bool bRet = SfxObjectShell::InitNew( xStor );
 
     aDocument.MakeTable(0);
     //  zusaetzliche Tabellen werden von der ersten View angelegt,
-    //  wenn bIsEmpty dann noch TRUE ist
+    //  wenn bIsEmpty dann noch sal_True ist
 
     if( bRet )
     {
         Size aSize( (long) ( STD_COL_WIDTH           * HMM_PER_TWIPS * OLE_STD_CELLS_X ),
                     (long) ( ScGlobal::nStdRowHeight * HMM_PER_TWIPS * OLE_STD_CELLS_Y ) );
         // hier muss auch der Start angepasst werden
-        SetVisAreaOrSize( Rectangle( Point(), aSize ), TRUE );
+        SetVisAreaOrSize( Rectangle( Point(), aSize ), sal_True );
     }
 
     aDocument.SetDrawDefaults();        // drawing layer defaults that are set only in InitNew
@@ -103,40 +98,19 @@ BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xSt
 
     InitItems();
     CalcOutputFactor();
-#if 0
-    uno::Any aGlobs;
-        uno::Sequence< uno::Any > aArgs(1);
-        aArgs[ 0 ] <<= GetModel();
-    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
-    GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-        // Fake ThisComponent being setup by Activate ( which is a view
-        // related thing ),
-        //  a) if another document is opened then in theory  ThisComponent
-        //     will be reset as before,
-        //  b) when this document is  'really' Activated then ThisComponent
-        //     again will be set as before
-        // The only wrinkle seems if this document is loaded 'InVisible'
-        // but.. I don't see that this is possible from the vba API
-        // I could be wrong though
-        // There may be implications setting the current component
-        // too early :-/ so I will just manually set the Basic Variables
-        BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
-        if ( pAppMgr )
-            pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
-#endif
 
     return bRet;
 }
 
 //------------------------------------------------------------------
 
-BOOL ScDocShell::IsEmpty() const
+sal_Bool ScDocShell::IsEmpty() const
 {
     return bIsEmpty;
 }
 
 
-void ScDocShell::SetEmpty(BOOL bSet)
+void ScDocShell::SetEmpty(sal_Bool bSet)
 {
     bIsEmpty = bSet;
 }
@@ -147,13 +121,8 @@ void ScDocShell::InitItems()
 {
     // AllItemSet fuer Controller mit benoetigten Items fuellen:
 
-    // if ( pImpl->pFontList )
-    //  delete pImpl->pFontList;
-
     //  Druck-Optionen werden beim Drucken und evtl. in GetPrinter gesetzt
 
-    // pImpl->pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
-    //PutItem( SvxFontListItem( pImpl->pFontList, SID_ATTR_CHAR_FONTLIST ) );
     UpdateFontList();
 
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
@@ -170,7 +139,6 @@ void ScDocShell::InitItems()
 
         pDrawLayer->SetNotifyUndoActionHdl( LINK( pDocFunc, ScDocFunc, NotifyDrawUndo ) );
 
-        //if (SfxObjectShell::HasSbxObject())
         pDrawLayer->UpdateBasic();          // DocShell-Basic in DrawPages setzen
     }
     else
@@ -183,7 +151,7 @@ void ScDocShell::InitItems()
             !aDocument.IsValidAsianCompression() || !aDocument.IsValidAsianKerning() )
     {
         //  get settings from SvxAsianConfig
-        SvxAsianConfig aAsian( sal_False );
+        SvxAsianConfig aAsian( false );
 
         if ( !aDocument.GetForbiddenCharacters().is() )
         {
@@ -200,7 +168,6 @@ void ScDocShell::InitItems()
                     i18n::ForbiddenCharacters aForbidden;
                     aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine );
                     LanguageType eLang = SvxLocaleToLanguage(pLocales[i]);
-                    //pDoc->SetForbiddenCharacters( eLang, aForbidden );
 
                     xForbiddenTable->SetForbiddenCharacters( eLang, aForbidden );
                 }
@@ -212,7 +179,7 @@ void ScDocShell::InitItems()
         if ( !aDocument.IsValidAsianCompression() )
         {
             // set compression mode from configuration if not already set (e.g. XML import)
-            aDocument.SetAsianCompression( sal::static_int_cast<BYTE>( aAsian.GetCharDistanceCompression() ) );
+            aDocument.SetAsianCompression( sal::static_int_cast<sal_uInt8>( aAsian.GetCharDistanceCompression() ) );
         }
 
         if ( !aDocument.IsValidAsianKerning() )
@@ -234,12 +201,12 @@ void ScDocShell::ResetDrawObjectShell()
 
 //------------------------------------------------------------------
 
-void __EXPORT ScDocShell::Activate()
+void ScDocShell::Activate()
 {
 }
 
 
-void __EXPORT ScDocShell::Deactivate()
+void ScDocShell::Deactivate()
 {
 }
 
@@ -258,7 +225,7 @@ ScDrawLayer* ScDocShell::MakeDrawLayer()
         InitItems();                                            // incl. Undo und Basic
         Broadcast( SfxSimpleHint( SC_HINT_DRWLAYER_NEW ) );
         if (nDocumentLock)
-            pDrawLayer->setLock(TRUE);
+            pDrawLayer->setLock(true);
     }
     return pDrawLayer;
 }

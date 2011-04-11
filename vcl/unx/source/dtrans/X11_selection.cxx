@@ -82,6 +82,12 @@
                               EnterWindowMask           |\
                               LeaveWindowMask
 
+namespace {
+
+namespace css = com::sun::star;
+
+}
+
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::lang;
@@ -89,9 +95,12 @@ using namespace com::sun::star::awt;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
 using namespace cppu;
-using namespace rtl;
 
 using namespace x11;
+
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
+using ::rtl::OStringToOUString;
 
 // stubs to satisfy solaris compiler's rather rigid linking warning
 extern "C"
@@ -209,9 +218,9 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
 
 // ------------------------------------------------------------------------
 
-::std::hash_map< OUString, SelectionManager*, OUStringHash >& SelectionManager::getInstances()
+::boost::unordered_map< OUString, SelectionManager*, OUStringHash >& SelectionManager::getInstances()
 {
-    static ::std::hash_map< OUString, SelectionManager*, OUStringHash > aInstances;
+    static ::boost::unordered_map< OUString, SelectionManager*, OUStringHash > aInstances;
     return aInstances;
 }
 
@@ -280,13 +289,14 @@ SelectionManager::SelectionManager() :
         m_nXdndActionMove( None ),
         m_nXdndActionLink( None ),
         m_nXdndActionAsk( None ),
-        m_nXdndActionPrivate( None )
+        m_nXdndActionPrivate( None ),
+        m_bShutDown( false )
 {
     m_aDropEnterEvent.data.l[0] = None;
     m_aDragRunning.reset();
 }
 
-XLIB_Cursor SelectionManager::createCursor( const char* pPointerData, const char* pMaskData, int width, int height, int hotX, int hotY )
+XLIB_Cursor SelectionManager::createCursor( const unsigned char* pPointerData, const unsigned char* pMaskData, int width, int height, int hotX, int hotY )
 {
     Pixmap aPointer;
     Pixmap aMask;
@@ -303,13 +313,13 @@ XLIB_Cursor SelectionManager::createCursor( const char* pPointerData, const char
     aPointer =
         XCreateBitmapFromData( m_pDisplay,
                                m_aWindow,
-                               pPointerData,
+                               reinterpret_cast<const char*>(pPointerData),
                                width,
                                height );
     aMask
         = XCreateBitmapFromData( m_pDisplay,
                                  m_aWindow,
-                                 pMaskData,
+                                 reinterpret_cast<const char*>(pMaskData),
                                  width,
                                  height );
     XLIB_Cursor aCursor =
@@ -387,7 +397,6 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             m_nCOMPOUNDAtom     = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("COMPOUND_TEXT")) );
             m_nMULTIPLEAtom     = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("MULTIPLE")) );
             m_nUTF16Atom        = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("ISO10646-1")) );
-//            m_nUTF16Atom      = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=ISO-10646-UCS-2")) );
             m_nImageBmpAtom     = getAtom( OUString(RTL_CONSTASCII_USTRINGPARAM("image/bmp")) );
 
             // Atoms for Xdnd protocol
@@ -479,7 +488,7 @@ SelectionManager::~SelectionManager()
     {
         osl::MutexGuard aGuard( *osl::Mutex::getGlobalMutex() );
 
-        ::std::hash_map< OUString, SelectionManager*, OUStringHash >::iterator it;
+        ::boost::unordered_map< OUString, SelectionManager*, OUStringHash >::iterator it;
         for( it = getInstances().begin(); it != getInstances().end(); ++it )
             if( it->second == this )
             {
@@ -544,7 +553,7 @@ SelectionManager::~SelectionManager()
 
 SelectionAdaptor* SelectionManager::getAdaptor( Atom selection )
 {
-    ::std::hash_map< Atom, Selection* >::iterator it =
+    ::boost::unordered_map< Atom, Selection* >::iterator it =
           m_aSelections.find( selection );
     return it != m_aSelections.end() ? it->second->m_pAdaptor : NULL;
 }
@@ -604,7 +613,7 @@ OString SelectionManager::convertToCompound( const OUString& rText )
         aRet = (char*)aProp.value;
         XFree( aProp.value );
 #ifdef SOLARIS
-        /*  #97070#
+        /*
          *  for currently unknown reasons XmbTextListToTextProperty on Solaris returns
          *  no data in ISO8859-n encodings (at least for n = 1, 15)
          *  in these encodings the directly converted text does the
@@ -623,7 +632,7 @@ OString SelectionManager::convertToCompound( const OUString& rText )
 // ------------------------------------------------------------------------
 
 bool SelectionManager::convertData(
-                                   const Reference< XTransferable >& xTransferable,
+                                   const css::uno::Reference< XTransferable >& xTransferable,
                                    Atom nType,
                                    Atom nSelection,
                                    int& rFormat,
@@ -711,7 +720,7 @@ SelectionManager& SelectionManager::get( const OUString& rDisplayName )
         aDisplayName = OStringToOUString( getenv( "DISPLAY" ), RTL_TEXTENCODING_ISO_8859_1 );
     SelectionManager* pInstance = NULL;
 
-    ::std::hash_map< OUString, SelectionManager*, OUStringHash >::iterator it = getInstances().find( aDisplayName );
+    ::boost::unordered_map< OUString, SelectionManager*, OUStringHash >::iterator it = getInstances().find( aDisplayName );
     if( it != getInstances().end() )
         pInstance = it->second;
     else pInstance = getInstances()[ aDisplayName ] = new SelectionManager();
@@ -725,7 +734,7 @@ const OUString& SelectionManager::getString( Atom aAtom )
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    ::std::hash_map< Atom, OUString >::const_iterator it;
+    ::boost::unordered_map< Atom, OUString >::const_iterator it;
     if( ( it = m_aAtomToString.find( aAtom ) ) == m_aAtomToString.end() )
     {
         static OUString aEmpty;
@@ -746,7 +755,7 @@ Atom SelectionManager::getAtom( const OUString& rString )
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    ::std::hash_map< OUString, Atom, OUStringHash >::const_iterator it;
+    ::boost::unordered_map< OUString, Atom, OUStringHash >::const_iterator it;
     if( ( it = m_aStringToAtom.find( rString ) ) == m_aStringToAtom.end() )
     {
         static Atom nNoDisplayAtoms = 1;
@@ -901,7 +910,7 @@ OUString SelectionManager::convertTypeFromNative( Atom nType, Atom selection, in
 bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_Int8 >& rData )
 {
     osl::ResettableMutexGuard aGuard(m_aMutex);
-    ::std::hash_map< Atom, Selection* >::iterator it;
+    ::boost::unordered_map< Atom, Selection* >::iterator it;
     bool bSuccess = false;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1039,10 +1048,9 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
 
 bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rType, Sequence< sal_Int8 >& rData )
 {
-    int nFormat;
     bool bSuccess = false;
 
-    ::std::hash_map< Atom, Selection* >::iterator it;
+    ::boost::unordered_map< Atom, Selection* >::iterator it;
     {
         osl::MutexGuard aGuard(m_aMutex);
 
@@ -1223,6 +1231,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
 
     if( ! bSuccess )
     {
+        int nFormat;
         ::std::list< Atom > aTypes;
         convertTypeToNative( rType, selection, nFormat, aTypes );
         ::std::list< Atom >::const_iterator type_it;
@@ -1237,7 +1246,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
             bSuccess = getPasteData( selection, nSelectedType, rData );
     }
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "getPasteData for selection %s and data type %s returns %s, returned sequence has length %ld\n",
+    fprintf( stderr, "getPasteData for selection %s and data type %s returns %s, returned sequence has length %" SAL_PRIdINT32 "\n",
              OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
              OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
              bSuccess ? "true" : "false",
@@ -1251,7 +1260,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
 
 bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >& rTypes )
 {
-    ::std::hash_map< Atom, Selection* >::iterator it;
+    ::boost::unordered_map< Atom, Selection* >::iterator it;
     {
         osl::MutexGuard aGuard(m_aMutex);
 
@@ -1442,7 +1451,6 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
     }
 
 #if OSL_DEBUG_LEVEL > 1
-//    if( selection != m_nCLIPBOARDAtom )
     {
         fprintf( stderr, "SelectionManager::getPasteDataTypes( %s ) = %s\n", OUStringToOString( getString( selection ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), bSuccess ? "true" : "false" );
         for( int i = 0; i < rTypes.getLength(); i++ )
@@ -1457,7 +1465,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
 
 PixmapHolder* SelectionManager::getPixmapHolder( Atom selection )
 {
-    std::hash_map< Atom, Selection* >::const_iterator it = m_aSelections.find( selection );
+    boost::unordered_map< Atom, Selection* >::const_iterator it = m_aSelections.find( selection );
     if( it == m_aSelections.end() )
         return NULL;
     if( ! it->second->m_pPixmap )
@@ -1514,7 +1522,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
 #if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "trying bitmap conversion\n" );
 #endif
-                        Reference<XBitmap> xBM( new BmpTransporter( aData ) );
+                        css::uno::Reference<XBitmap> xBM( new BmpTransporter( aData ) );
                         Sequence<Any> aArgs(2), aOutArgs;
                         Sequence<sal_Int16> aOutIndex;
                         aArgs.getArray()[0] = makeAny( xBM );
@@ -1579,10 +1587,10 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
         {
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "using INCR protocol\n" );
-            std::hash_map< XLIB_Window, std::hash_map< Atom, IncrementalTransfer > >::const_iterator win_it = m_aIncrementals.find( requestor );
+            boost::unordered_map< XLIB_Window, boost::unordered_map< Atom, IncrementalTransfer > >::const_iterator win_it = m_aIncrementals.find( requestor );
             if( win_it != m_aIncrementals.end() )
             {
-                std::hash_map< Atom, IncrementalTransfer >::const_iterator inc_it = win_it->second.find( property );
+                boost::unordered_map< Atom, IncrementalTransfer >::const_iterator inc_it = win_it->second.find( property );
                 if( inc_it != win_it->second.end() )
                 {
                     const IncrementalTransfer& rInc = inc_it->second;
@@ -1661,7 +1669,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
     if( pAdaptor &&
         XGetSelectionOwner( m_pDisplay, rRequest.selection ) == m_aWindow )
     {
-        Reference< XTransferable > xTrans( pAdaptor->getTransferable() );
+        css::uno::Reference< XTransferable > xTrans( pAdaptor->getTransferable() );
         if( rRequest.target == m_nTARGETSAtom )
         {
             // someone requests our types
@@ -1830,7 +1838,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
             dsde.DropAction         = DNDConstants::ACTION_NONE;
             dsde.DropSuccess        = sal_False;
         }
-        Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+        css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
         m_xDragSourceListener.clear();
         aGuard.clear();
         if( xListener.is() )
@@ -1853,7 +1861,7 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
 #endif
     bool bHandled = false;
 
-    ::std::hash_map< Atom, Selection* >::iterator it =
+    ::boost::unordered_map< Atom, Selection* >::iterator it =
           m_aSelections.find( rNotify.atom );
     if( it != m_aSelections.end() &&
         rNotify.state == PropertyNewValue &&
@@ -1978,13 +1986,13 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
     // feed incrementals
     if( rNotify.state == PropertyDelete )
     {
-        std::hash_map< XLIB_Window, std::hash_map< Atom, IncrementalTransfer > >::iterator it;
+        boost::unordered_map< XLIB_Window, boost::unordered_map< Atom, IncrementalTransfer > >::iterator it;
         it = m_aIncrementals.find( rNotify.window );
         if( it != m_aIncrementals.end() )
         {
             bHandled = true;
             int nCurrentTime = time( NULL );
-            std::hash_map< Atom, IncrementalTransfer >::iterator inc_it;
+            boost::unordered_map< Atom, IncrementalTransfer >::iterator inc_it;
             // throw out aborted transfers
             std::list< Atom > aTimeouts;
             for( inc_it = it->second.begin(); inc_it != it->second.end(); ++inc_it )
@@ -2082,7 +2090,7 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
     if( rNotify.requestor != m_aWindow && rNotify.requestor != m_aCurrentDropWindow )
         fprintf( stderr, "Warning: selection notify for unknown window 0x%lx\n", rNotify.requestor );
 #endif
-    ::std::hash_map< Atom, Selection* >::iterator it =
+    ::boost::unordered_map< Atom, Selection* >::iterator it =
           m_aSelections.find( rNotify.selection );
     if (
         (rNotify.requestor == m_aWindow || rNotify.requestor == m_aCurrentDropWindow) &&
@@ -2165,7 +2173,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
 
     bool bHandled = false;
 
-    ::std::hash_map< XLIB_Window, DropTargetEntry >::iterator it =
+    ::boost::unordered_map< XLIB_Window, DropTargetEntry >::iterator it =
           m_aDropTargets.find( aTarget );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -2190,7 +2198,7 @@ bool SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
         m_bDropWaitingForCompletion && m_aDropEnterEvent.data.l[0] )
     {
         bHandled = true;
-        OSL_ENSURE( 0, "someone forgot to call dropComplete ?" );
+        OSL_FAIL( "someone forgot to call dropComplete ?" );
         // some listener forgot to call dropComplete in the last operation
         // let us end it now and accept the new enter event
         aGuard.clear();
@@ -2351,7 +2359,7 @@ void SelectionManager::dropComplete( sal_Bool bSuccess, XLIB_Window aDropWindow,
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = getUserDragAction();
             dsde.DropSuccess        = bSuccess;
-            Reference< XDragSourceListener > xListener = m_xDragSourceListener;
+            css::uno::Reference< XDragSourceListener > xListener = m_xDragSourceListener;
             m_xDragSourceListener.clear();
 
             aGuard.clear();
@@ -2396,7 +2404,7 @@ void SelectionManager::dropComplete( sal_Bool bSuccess, XLIB_Window aDropWindow,
         m_bDropWaitingForCompletion = false;
     }
     else
-        OSL_ASSERT( "dropComplete from invalid DropTargetDropContext" );
+        OSL_FAIL( "dropComplete from invalid DropTargetDropContext" );
 }
 
 /*
@@ -2435,7 +2443,7 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
         dsde.DropAction         = m_nSourceActions;
         dsde.UserAction         = getUserDragAction();
 
-        Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+        css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
         // caution: do not change anything after this
         aGuard.clear();
         if( xListener.is() )
@@ -2541,7 +2549,7 @@ void SelectionManager::sendDropPosition( bool bForce, XLIB_Time eventTime )
     if( m_bDropSent )
         return;
 
-    ::std::hash_map< XLIB_Window, DropTargetEntry >::const_iterator it =
+    ::boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( m_aDropWindow );
     if( it != m_aDropTargets.end() )
     {
@@ -2604,7 +2612,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
     bool bHandled = false;
 
     // for shortcut
-    ::std::hash_map< XLIB_Window, DropTargetEntry >::const_iterator it =
+    ::boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( m_aDropWindow );
 #if OSL_DEBUG_LEVEL > 1
     switch( rMessage.type )
@@ -2613,7 +2621,6 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             fprintf( stderr, "handleDragEvent: %s\n", OUStringToOString( getString( rMessage.xclient.message_type ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
             break;
         case MotionNotify:
-//          fprintf( stderr, "handleDragEvent: MotionNotify\n" );
             break;
         case EnterNotify:
             fprintf( stderr, "handleDragEvent: EnterNotify\n" );
@@ -2697,7 +2704,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = m_nTargetAcceptAction;
             dsde.DropSuccess        = m_bDropSuccess;
-            Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+            css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
             m_xDragSourceListener.clear();
             aGuard.clear();
             xListener->dragDropEnd( dsde );
@@ -2763,7 +2770,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
             dsde.DropSuccess        = sal_False;
-            Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+            css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
             m_xDragSourceListener.clear();
             aGuard.clear();
             xListener->dragDropEnd( dsde );
@@ -2889,7 +2896,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
                     m_nDropTimeout                  = time( NULL );
                     // HACK :-)
                     aGuard.clear();
-                    static_cast< X11Clipboard* >( pAdaptor )->setContents( m_xDragSourceTransferable, Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >() );
+                    static_cast< X11Clipboard* >( pAdaptor )->setContents( m_xDragSourceTransferable, css::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >() );
                     aGuard.reset();
                     bCancel = false;
                 }
@@ -2904,7 +2911,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             dsde.DragSource         = static_cast< XDragSource* >(this);
             dsde.DropAction         = DNDConstants::ACTION_NONE;
             dsde.DropSuccess        = sal_False;
-            Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+            css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
             m_xDragSourceListener.clear();
             aGuard.clear();
             xListener->dragDropEnd( dsde );
@@ -3058,7 +3065,7 @@ void SelectionManager::updateDragWindow( int nX, int nY, XLIB_Window aRoot )
 {
     osl::ResettableMutexGuard aGuard( m_aMutex );
 
-    Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+    css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
 
     m_nLastDragX = nX;
     m_nLastDragY = nY;
@@ -3106,7 +3113,7 @@ void SelectionManager::updateDragWindow( int nX, int nY, XLIB_Window aRoot )
     dsde.DropAction         = nNewProtocolVersion >= 0 ? m_nUserDragAction : DNDConstants::ACTION_COPY;
     dsde.UserAction         = nNewProtocolVersion >= 0 ? m_nUserDragAction : DNDConstants::ACTION_COPY;
 
-    ::std::hash_map< XLIB_Window, DropTargetEntry >::const_iterator it;
+    ::boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it;
     if( aNewCurrentWindow != m_aDropWindow )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -3218,8 +3225,8 @@ void SelectionManager::startDrag(
                                  sal_Int8 sourceActions,
                                  sal_Int32,
                                  sal_Int32,
-                                 const Reference< XTransferable >& transferable,
-                                 const Reference< XDragSourceListener >& listener
+                                 const css::uno::Reference< XTransferable >& transferable,
+                                 const css::uno::Reference< XDragSourceListener >& listener
                                  ) throw()
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -3261,7 +3268,7 @@ void SelectionManager::startDrag(
         int root_x, root_y, win_x, win_y;
         unsigned int mask;
 
-        ::std::hash_map< XLIB_Window, DropTargetEntry >::const_iterator it;
+        ::boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it;
         it = m_aDropTargets.begin();
         while( it != m_aDropTargets.end() )
         {
@@ -3373,7 +3380,7 @@ void SelectionManager::startDrag(
                     GetX11SalData()->GetDisplay()->CaptureMouse( pCaptureFrame );
 #if OSL_DEBUG_LEVEL > 0
                 else
-                    OSL_ENSURE( 0, "failed to acquire SolarMutex to reset capture frame" );
+                    OSL_FAIL( "failed to acquire SolarMutex to reset capture frame" );
 #endif
             }
             return;
@@ -3462,7 +3469,7 @@ void SelectionManager::startDrag(
                 GetX11SalData()->GetDisplay()->CaptureMouse( pCaptureFrame );
 #if OSL_DEBUG_LEVEL > 0
             else
-                OSL_ENSURE( 0, "failed to acquire SolarMutex to reset capture frame" );
+                OSL_FAIL( "failed to acquire SolarMutex to reset capture frame" );
 #endif
         }
 
@@ -3503,8 +3510,8 @@ void SelectionManager::dragDoDispatch()
     {
         osl::ClearableMutexGuard aGuard(m_aMutex);
 
-        Reference< XDragSourceListener > xListener( m_xDragSourceListener );
-        Reference< XTransferable > xTransferable( m_xDragSourceTransferable );
+        css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+        css::uno::Reference< XTransferable > xTransferable( m_xDragSourceTransferable );
         m_xDragSourceListener.clear();
         m_xDragSourceTransferable.clear();
 
@@ -3641,7 +3648,7 @@ bool SelectionManager::handleXEvent( XEvent& rEvent )
      *  to get client messages it is essential not to dispatch
      *  events twice that we get on both connections
      *
-     *  #95201# between dispatching ButtonPress and startDrag
+     *  between dispatching ButtonPress and startDrag
      *  the user can already have released the mouse. The ButtonRelease
      *  will then be dispatched in VCLs queue and never turn up here.
      *  Which is not so good, since startDrag will XGrabPointer and
@@ -3666,7 +3673,7 @@ bool SelectionManager::handleXEvent( XEvent& rEvent )
                      );
 #endif
             SelectionAdaptor* pAdaptor = getAdaptor( rEvent.xselectionclear.selection );
-            std::hash_map< Atom, Selection* >::iterator it( m_aSelections.find( rEvent.xselectionclear.selection ) );
+            boost::unordered_map< Atom, Selection* >::iterator it( m_aSelections.find( rEvent.xselectionclear.selection ) );
             if( it != m_aSelections.end() )
                 it->second->m_bOwner = false;
             aGuard.clear();
@@ -3722,41 +3729,29 @@ bool SelectionManager::handleXEvent( XEvent& rEvent )
 
 void SelectionManager::dispatchEvent( int millisec )
 {
-    pollfd aPollFD;
-    XEvent event;
+    // acquire the mutex to prevent other threads
+    // from using the same X connection
+    osl::ResettableMutexGuard aGuard(m_aMutex);
 
-    // query socket handle to poll on
-    aPollFD.fd      = ConnectionNumber( m_pDisplay );
-    aPollFD.events  = POLLIN;
-    aPollFD.revents = 0;
-
-    // wait for activity (outside the xlib)
-    if( poll( &aPollFD, 1, millisec ) > 0 )
+    if( !XPending( m_pDisplay ))
+    { // wait for any events if none are already queued
+        pollfd aPollFD;
+        aPollFD.fd      = XConnectionNumber( m_pDisplay );
+        aPollFD.events  = POLLIN;
+        aPollFD.revents = 0;
+        // release mutex for the time of waiting for possible data
+        aGuard.clear();
+        if( poll( &aPollFD, 1, millisec ) <= 0 )
+            return;
+        aGuard.reset();
+    }
+    while( XPending( m_pDisplay ))
     {
-        // now acquire the mutex to prevent other threads
-        // from using the same X connection
-        osl::ResettableMutexGuard aGuard(m_aMutex);
-
-        // prevent that another thread already ate the input
-        // this can happen if e.g. another thread does
-        // an X request getting a response. the response
-        // would be removed from the queue and we would end up
-        // with an empty socket here
-        if( poll( &aPollFD, 1, 0 ) > 0 )
-        {
-            int nPending = 1;
-            while( nPending )
-            {
-                nPending = XPending( m_pDisplay );
-                if( nPending )
-                {
-                    XNextEvent( m_pDisplay, &event );
-                    aGuard.clear();
-                    handleXEvent( event );
-                    aGuard.reset();
-                }
-            }
-        }
+        XEvent event;
+        XNextEvent( m_pDisplay, &event );
+        aGuard.clear();
+        handleXEvent( event );
+        aGuard.reset();
     }
 }
 
@@ -3774,10 +3769,10 @@ void SelectionManager::run( void* pThis )
     timeval aLast;
     gettimeofday( &aLast, 0 );
 
-    Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
+    css::uno::Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
     if( xFact.is() )
     {
-        Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
+        css::uno::Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
         if( xDesktop.is() )
             xDesktop->addTerminateListener(This);
     }
@@ -3792,9 +3787,9 @@ void SelectionManager::run( void* pThis )
         if( (aNow.tv_sec - aLast.tv_sec) > 0 )
         {
             osl::ClearableMutexGuard aGuard(This->m_aMutex);
-            std::list< std::pair< SelectionAdaptor*, Reference< XInterface > > > aChangeList;
+            std::list< std::pair< SelectionAdaptor*, css::uno::Reference< XInterface > > > aChangeList;
 
-            for( std::hash_map< Atom, Selection* >::iterator it = This->m_aSelections.begin(); it != This->m_aSelections.end(); ++it )
+            for( boost::unordered_map< Atom, Selection* >::iterator it = This->m_aSelections.begin(); it != This->m_aSelections.end(); ++it )
             {
                 if( it->first != This->m_nXdndSelection && ! it->second->m_bOwner )
                 {
@@ -3802,7 +3797,7 @@ void SelectionManager::run( void* pThis )
                     if( aOwner != it->second->m_aLastOwner )
                     {
                         it->second->m_aLastOwner = aOwner;
-                        std::pair< SelectionAdaptor*, Reference< XInterface > >
+                        std::pair< SelectionAdaptor*, css::uno::Reference< XInterface > >
                             aKeep( it->second->m_pAdaptor, it->second->m_pAdaptor->getReference() );
                         aChangeList.push_back( aKeep );
                     }
@@ -3825,6 +3820,11 @@ void SelectionManager::run( void* pThis )
 void SelectionManager::shutdown() throw()
 {
     osl::ResettableMutexGuard aGuard(m_aMutex);
+    if( m_bShutDown )
+    {
+        return;
+    }
+    m_bShutDown = true;
     // stop dispatching
     if( m_aThread )
     {
@@ -3914,7 +3914,7 @@ void SAL_CALL SelectionManager::queryTermination( const ::com::sun::star::lang::
 void SAL_CALL SelectionManager::notifyTermination( const ::com::sun::star::lang::EventObject& rEvent )
     throw( ::com::sun::star::uno::RuntimeException )
 {
-    Reference< XDesktop > xDesktop( rEvent.Source, UNO_QUERY );
+    css::uno::Reference< XDesktop > xDesktop( rEvent.Source, UNO_QUERY );
     if( xDesktop.is() == sal_True )
         xDesktop->removeTerminateListener( this );
     #if OSL_DEBUG_LEVEL > 1
@@ -3941,7 +3941,7 @@ void SelectionManager::deregisterHandler( Atom selection )
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    ::std::hash_map< Atom, Selection* >::iterator it =
+    ::boost::unordered_map< Atom, Selection* >::iterator it =
           m_aSelections.find( selection );
     if( it != m_aSelections.end() )
     {
@@ -3970,10 +3970,10 @@ void SelectionManager::registerDropTarget( XLIB_Window aWindow, DropTarget* pTar
     osl::MutexGuard aGuard(m_aMutex);
 
     // sanity check
-    ::std::hash_map< XLIB_Window, DropTargetEntry >::const_iterator it =
+    ::boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( aWindow );
     if( it != m_aDropTargets.end() )
-        OSL_ASSERT( "attempt to register window as drop target twice" );
+        OSL_FAIL( "attempt to register window as drop target twice" );
     else if( aWindow && m_pDisplay )
     {
         DropTargetEntry aEntry( pTarget );
@@ -4004,7 +4004,7 @@ void SelectionManager::registerDropTarget( XLIB_Window aWindow, DropTarget* pTar
         m_aDropTargets[ aWindow ] = aEntry;
     }
     else
-        OSL_ASSERT( "attempt to register None as drop target" );
+        OSL_FAIL( "attempt to register None as drop target" );
 }
 
 // ------------------------------------------------------------------------
@@ -4017,7 +4017,7 @@ void SelectionManager::deregisterDropTarget( XLIB_Window aWindow )
     if( aWindow == m_aDragSourceWindow && m_aDragRunning.check() )
     {
         // abort drag
-        std::hash_map< XLIB_Window, DropTargetEntry >::const_iterator it =
+        boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it =
             m_aDropTargets.find( m_aDropWindow );
         if( it != m_aDropTargets.end() )
         {
@@ -4047,7 +4047,7 @@ void SelectionManager::deregisterDropTarget( XLIB_Window aWindow )
         dsde.DragSource         = static_cast< XDragSource* >(this);
         dsde.DropAction         = DNDConstants::ACTION_NONE;
         dsde.DropSuccess        = sal_False;
-        Reference< XDragSourceListener > xListener( m_xDragSourceListener );
+        css::uno::Reference< XDragSourceListener > xListener( m_xDragSourceListener );
         m_xDragSourceListener.clear();
         aGuard.clear();
         xListener->dragDropEnd( dsde );
@@ -4058,7 +4058,7 @@ void SelectionManager::deregisterDropTarget( XLIB_Window aWindow )
  *  SelectionAdaptor
  */
 
-Reference< XTransferable > SelectionManager::getTransferable() throw()
+css::uno::Reference< XTransferable > SelectionManager::getTransferable() throw()
 {
     return m_xDragSourceTransferable;
 }
@@ -4078,9 +4078,9 @@ void SelectionManager::fireContentsChanged() throw()
 
 // ------------------------------------------------------------------------
 
-Reference< XInterface > SelectionManager::getReference() throw()
+css::uno::Reference< XInterface > SelectionManager::getReference() throw()
 {
-    return Reference< XInterface >( static_cast<OWeakObject*>(this) );
+    return css::uno::Reference< XInterface >( static_cast<OWeakObject*>(this) );
 }
 
 // ------------------------------------------------------------------------
@@ -4111,7 +4111,7 @@ void SelectionManagerHolder::initialize( const Sequence< Any >& arguments ) thro
 
     if( arguments.getLength() > 0 )
     {
-        Reference< XDisplayConnection > xConn;
+        css::uno::Reference< XDisplayConnection > xConn;
         arguments.getConstArray()[0] >>= xConn;
         if( xConn.is() )
         {
@@ -4146,8 +4146,8 @@ sal_Int32 SelectionManagerHolder::getDefaultCursor( sal_Int8 dragAction ) throw(
 void SelectionManagerHolder::startDrag(
                                        const ::com::sun::star::datatransfer::dnd::DragGestureEvent& trigger,
                                        sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
-                                       const Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
-                                       const Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
+                                       const css::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& transferable,
+                                       const css::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >& listener
                                        ) throw()
 {
     if( m_xRealDragSource.is() )
@@ -4164,7 +4164,7 @@ void SelectionManagerHolder::startDrag(
 
 OUString SelectionManagerHolder::getImplementationName() throw()
 {
-    return OUString::createFromAscii(XDND_IMPLEMENTATION_NAME);
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(XDND_IMPLEMENTATION_NAME));
 }
 
 // ------------------------------------------------------------------------

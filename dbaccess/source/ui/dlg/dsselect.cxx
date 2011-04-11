@@ -149,7 +149,7 @@ IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, /*pButton*/ )
         if ( xCatalog.is() && m_pOutputSet )
         {
             Sequence< Any > aArgs(2);
-            aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("CreateCatalog"), 0,makeAny(xCatalog) , PropertyState_DIRECT_VALUE);
+            aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateCatalog")), 0, makeAny(xCatalog), PropertyState_DIRECT_VALUE);
             aArgs[1] <<= PropertyValue(PROPERTY_PARENTWINDOW, 0, makeAny(VCLUnoHelper::GetInterface(this)), PropertyState_DIRECT_VALUE);
 
             Reference< XExecutableDialog > xDialog(
@@ -182,7 +182,7 @@ IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, /*pButton*/ )
                     if ( xPropInfo->hasPropertyByName(PROPERTY_PASSWORD) )
                     {
                         m_pOutputSet->Put(SfxStringItem(DSID_PASSWORD, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_PASSWORD))));
-                        m_pOutputSet->Put(SfxBoolItem(DSID_PASSWORDREQUIRED, TRUE));
+                        m_pOutputSet->Put(SfxBoolItem(DSID_PASSWORDREQUIRED, sal_True));
                     }
                     if ( xPropInfo->hasPropertyByName(PROPERTY_CACHESIZE) )
                         m_pOutputSet->Put(SfxInt32Item(DSID_CONN_CACHESIZE, ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_CACHESIZE))));
@@ -197,11 +197,11 @@ IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, /*pButton*/ )
 }
 
 // -----------------------------------------------------------------------
-BOOL ODatasourceSelectDialog::Close()
+sal_Bool ODatasourceSelectDialog::Close()
 {
 #ifdef HAVE_ODBC_ADMINISTRATION
     if ( m_pODBCManagement.get() && m_pODBCManagement->isRunning() )
-        return FALSE;
+        return sal_False;
 #endif
 
     return ModalDialog::Close();

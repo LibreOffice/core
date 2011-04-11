@@ -75,6 +75,7 @@
 #include <vcl/waitobj.hxx>
 
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -152,7 +153,7 @@ bool ObjectCopySource::isView() const
         {
             ::rtl::OUString sObjectType;
             OSL_VERIFY( m_xObject->getPropertyValue( PROPERTY_TYPE ) >>= sObjectType );
-            bIsView = sObjectType.equalsAscii( "VIEW" );
+            bIsView = sObjectType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VIEW" ) );
         }
     }
     catch( const Exception& )
@@ -330,7 +331,7 @@ bool NamedTableCopySource::isView() const
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return sTableType.equalsAscii( "VIEW" );
+    return sTableType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VIEW" ) );
 }
 
 //------------------------------------------------------------------------
@@ -479,14 +480,14 @@ const DummyCopySource& DummyCopySource::Instance()
 //------------------------------------------------------------------------
 ::rtl::OUString DummyCopySource::getQualifiedObjectName() const
 {
-    OSL_ENSURE( false, "DummyCopySource::getQualifiedObjectName: not to be called!" );
+    OSL_FAIL( "DummyCopySource::getQualifiedObjectName: not to be called!" );
     return ::rtl::OUString();
 }
 
 //------------------------------------------------------------------------
 bool DummyCopySource::isView() const
 {
-    OSL_ENSURE( false, "DummyCopySource::isView: not to be called!" );
+    OSL_FAIL( "DummyCopySource::isView: not to be called!" );
     return false;
 }
 
@@ -508,27 +509,27 @@ Sequence< ::rtl::OUString > DummyCopySource::getColumnNames() const
 //------------------------------------------------------------------------
 Sequence< ::rtl::OUString > DummyCopySource::getPrimaryKeyColumnNames() const
 {
-    OSL_ENSURE( false, "DummyCopySource::getPrimaryKeyColumnNames: not to be called!" );
+    OSL_FAIL( "DummyCopySource::getPrimaryKeyColumnNames: not to be called!" );
     return Sequence< ::rtl::OUString >();
 }
 
 //------------------------------------------------------------------------
 OFieldDescription* DummyCopySource::createFieldDescription( const ::rtl::OUString& /*_rColumnName*/ ) const
 {
-    OSL_ENSURE( false, "DummyCopySource::createFieldDescription: not to be called!" );
+    OSL_FAIL( "DummyCopySource::createFieldDescription: not to be called!" );
     return NULL;
 }
 //------------------------------------------------------------------------
 ::rtl::OUString DummyCopySource::getSelectStatement() const
 {
-    OSL_ENSURE( false, "DummyCopySource::getSelectStatement: not to be called!" );
+    OSL_FAIL( "DummyCopySource::getSelectStatement: not to be called!" );
     return ::rtl::OUString();
 }
 
 //------------------------------------------------------------------------
 ::utl::SharedUNOComponent< XPreparedStatement > DummyCopySource::getPreparedSelectStatement() const
 {
-    OSL_ENSURE( false, "DummyCopySource::getPreparedSelectStatement: not to be called!" );
+    OSL_FAIL( "DummyCopySource::getPreparedSelectStatement: not to be called!" );
     return ::utl::SharedUNOComponent< XPreparedStatement >();
 }
 
@@ -616,8 +617,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     impl_loadSourceData();
 
     bool bAllowViews = true;
-    // if the source is a, don't allow creating views #100644# (oj)
-    // (fs: Hmm? A SELECT * FROM <view> would be created, where #100644# claims this is nonsense. Why?
+    // if the source is a, don't allow creating views
     if ( m_rSourceObject.isView() )
         bAllowViews = false;
     // no views if the target connection does not support creating them
@@ -931,7 +931,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                     if ( supportsPrimaryKey() )
                     {
                         ODatabaseExport::TColumns::iterator aFind = ::std::find_if(m_vDestColumns.begin(),m_vDestColumns.end()
-                            ,::std::compose1(::std::mem_fun(&OFieldDescription::IsPrimaryKey),::std::select2nd<ODatabaseExport::TColumns::value_type>()));
+                            ,::o3tl::compose1(::std::mem_fun(&OFieldDescription::IsPrimaryKey),::o3tl::select2nd<ODatabaseExport::TColumns::value_type>()));
                         if ( aFind == m_vDestColumns.end() && m_xInteractionHandler.is() )
                         {
 
@@ -974,7 +974,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                 break;
             default:
             {
-                OSL_ENSURE(sal_False, "OCopyTableWizard::ImplOKHdl: invalid creation style!");
+                OSL_FAIL("OCopyTableWizard::ImplOKHdl: invalid creation style!");
             }
         }
 
@@ -1025,7 +1025,7 @@ IMPL_LINK( OCopyTableWizard, ImplActivateHdl, WizardDialog*, EMPTYARG )
 void OCopyTableWizard::CheckButtons()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::CheckButtons" );
-    if(GetCurLevel() == 0) // erste Seite hat kein PrevButton
+    if(GetCurLevel() == 0) // the first page has no back button
     {
         if(m_nPageCount > 1)
             m_pbNext.Enable(sal_True);
@@ -1034,7 +1034,7 @@ void OCopyTableWizard::CheckButtons()
 
         m_pbPrev.Enable(sal_False);
     }
-    else if(GetCurLevel() == m_nPageCount-1) // letzte Seite hat keinen Next Button
+    else if(GetCurLevel() == m_nPageCount-1) // the last page has no next button
     {
         m_pbNext.Enable(sal_False);
         m_pbPrev.Enable(sal_True);
@@ -1042,14 +1042,13 @@ void OCopyTableWizard::CheckButtons()
     else
     {
         m_pbPrev.Enable(sal_True);
-        // next has already his state
+        // next already has its state
     }
 }
 // -----------------------------------------------------------------------
 void OCopyTableWizard::EnableButton(Wizard_Button_Style eStyle,sal_Bool bEnable)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::EnableButton" );
-//  CheckButtons();
     Button* pButton;
     if(eStyle == WIZARD_NEXT)
         pButton = &m_pbNext;
@@ -1230,7 +1229,7 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, co
             }
             else
             {
-                OSL_ENSURE(sal_False, "OCopyTableWizard::appendColumns: invalid field name!");
+                OSL_FAIL("OCopyTableWizard::appendColumns: invalid field name!");
             }
 
         }
@@ -1377,8 +1376,8 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                     ODatabaseExport::TPositions::iterator aPosFind = ::std::find_if(
                         m_vColumnPos.begin(),
                         m_vColumnPos.end(),
-                        ::std::compose1(    ::std::bind2nd( ::std::equal_to< sal_Int32 >(), nPos ),
-                                            ::std::select1st< ODatabaseExport::TPositions::value_type >()
+                        ::o3tl::compose1(    ::std::bind2nd( ::std::equal_to< sal_Int32 >(), nPos ),
+                                            ::o3tl::select1st< ODatabaseExport::TPositions::value_type >()
                         )
                     );
 

@@ -38,21 +38,14 @@
 #include <sys\stat.h>
 #include <direct.h>
 
-#include <tools/svwin.h>
-#ifdef _MSC_VER
-#pragma warning (push,1)
-#endif
-#include <winbase.h>
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
+#include <windows.h>
 #include <tools/solar.h>
 
 #include <tools/string.hxx>
 
 //--------------------------------------------------------------------
 
-#define FSYS_UNIX FALSE
+#define FSYS_UNIX sal_False
 
 #define DOS_DIRECT      _A_SUBDIR
 #define DOS_VOLUMEID    0x08
@@ -65,15 +58,6 @@
 #define dirent          _WIN32_FIND_DATAA
 #define d_name          cFileName
 #define d_type          dwFileAttributes
-
-#if defined (TCPP) || defined (tcpp)
-#define _mkdir          mkdir
-#define _rmdir          rmdir
-#define _chdir          chdir
-#define _unlink         unlink
-#define _getcwd         getcwd
-#define _access         access
-#endif
 
 typedef struct
 {
@@ -89,7 +73,7 @@ typedef struct
 
 #define START_DRV 'a'
 
-inline BOOL DRIVE_EXISTS(char c)
+inline sal_Bool DRIVE_EXISTS(char c)
 {
     ByteString aDriveRoot( c );
     aDriveRoot += ":\\";

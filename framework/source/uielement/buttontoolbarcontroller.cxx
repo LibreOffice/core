@@ -152,11 +152,11 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
         {
             if ( aArguments[i] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAscii( "Frame" ))
+                if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Frame" ) ))
                     m_xFrame.set(aPropValue.Value,UNO_QUERY);
-                else if ( aPropValue.Name.equalsAscii( "CommandURL" ))
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CommandURL" ) ))
                     aPropValue.Value >>= m_aCommandURL;
-                else if ( aPropValue.Name.equalsAscii( "ServiceManager" ))
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ServiceManager" ) ))
                     m_xServiceManager.set(aPropValue.Value,UNO_QUERY);
             }
         }
@@ -282,7 +282,7 @@ throw (::com::sun::star::uno::RuntimeException)
             aArgs[0].Value  <<= KeyModifier;
 
             if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                UiEventLogHelper(::rtl::OUString::createFromAscii("ButtonToolbarController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+                UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ButtonToolbarController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
             xDispatch->dispatch( aTargetURL, aArgs );
         }
         catch ( DisposedException& )

@@ -186,7 +186,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
     {
         MutexGuard aGuard(m_aMutex);
 
-        // extrat known arguments
+        // extract known arguments
         ::rtl::OUString sName, sPersistentName, sURL, sMediaType, sDocServiceName;
         Reference< XCommandProcessor > xCopyFrom;
         Reference< XConnection > xConnection;
@@ -421,7 +421,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         OpenCommandArgument2 aOpenCommand;
           if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -467,7 +467,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         InsertCommandArgument arg;
           if ( !( aCommand.Argument >>= arg ) )
         {
-              OSL_ENSURE( sal_False, "Wrong argument type!" );
+              OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -566,13 +566,12 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
             xComp.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);
         }
     }
-    catch(NoSuchElementException)
+    catch(const NoSuchElementException&)
     {
         throw IllegalArgumentException();
     }
-    catch(WrappedTargetException e)
+    catch(const WrappedTargetException&)
     {
-        // throw IllegalArgumentException();
         throw;
     }
     return xComp;
@@ -679,7 +678,7 @@ void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const ::rtl::OUStri
         if ( xUnoTunnel.is() )
             pContent = reinterpret_cast<OContentHelper*>(xUnoTunnel->getSomething(OContentHelper::getUnoTunnelImplementationId()));
     }
-    catch(Exception)
+    catch(const Exception&)
     {
     }
     return pContent;
@@ -751,8 +750,6 @@ void SAL_CALL ODocumentContainer::removeByName( const ::rtl::OUString& _rName ) 
 
     // do the removal
     implRemove(_rName);
-
-    //  disposeComponent(xContent); // no dispose here, the object may be inserted again under a different name
 
     notifyByName( aGuard, _rName, NULL, NULL, E_REMOVED, ContainerListemers );
 }

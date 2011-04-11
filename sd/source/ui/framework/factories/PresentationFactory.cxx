@@ -140,7 +140,7 @@ Sequence<rtl::OUString> SAL_CALL PresentationFactoryProvider_getSupportedService
 //===== PresentationFactory ===================================================
 
 const ::rtl::OUString PresentationFactory::msPresentationViewURL(
-    OUString::createFromAscii("private:resource/view/Presentation"));
+    RTL_CONSTASCII_USTRINGPARAM("private:resource/view/Presentation"));
 
 
 PresentationFactory::PresentationFactory (

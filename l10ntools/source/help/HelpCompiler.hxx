@@ -30,7 +30,7 @@
 #define HELPCOMPILER_HXX
 
 #include <string>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include <list>
 #include <fstream>
@@ -103,6 +103,14 @@ namespace fs
             HCDBG(std::cerr << "native_file_string is " << tmp.getStr() << std::endl);
             return std::string(tmp.getStr());
         }
+#ifdef WNT
+        wchar_t const * native_file_string_w() const
+        {
+            ::rtl::OUString ustrSystemPath;
+            osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
+            return ustrSystemPath.getStr();
+        }
+#endif
         std::string native_directory_string() const { return native_file_string(); }
         std::string toUTF8() const
         {
@@ -215,11 +223,11 @@ struct SuperFastHash
 
 #define pref_hash joaat_hash
 
-typedef std::hash_map<std::string, std::string, pref_hash> Stringtable;
+typedef boost::unordered_map<std::string, std::string, pref_hash> Stringtable;
 typedef std::list<std::string> LinkedList;
 typedef std::vector<std::string> HashSet;
 
-typedef std::hash_map<std::string, LinkedList, pref_hash> Hashtable;
+typedef boost::unordered_map<std::string, LinkedList, pref_hash> Hashtable;
 
 class StreamTable
 {
@@ -274,6 +282,7 @@ struct HelpProcessingException
     HelpProcessingException( HelpProcessingErrorClass eErrorClass, const std::string& aErrorMsg )
         : m_eErrorClass( eErrorClass )
         , m_aErrorMsg( aErrorMsg )
+        , m_nXMLParsingLine( 0 )
     {}
     HelpProcessingException( const std::string& aErrorMsg, const std::string& aXMLParsingFile, int nXMLParsingLine )
         : m_eErrorClass( HELPPROCESSING_XMLPARSING_ERROR )

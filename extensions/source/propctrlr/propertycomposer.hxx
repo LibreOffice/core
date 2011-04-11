@@ -30,7 +30,6 @@
 #define EXTENSIONS_SOURCE_PROPCTRLR_PROPERTYCOMPOSER_HXX
 
 #include "pcrcommon.hxx"
-#include "formbrowsertools.hxx"
 #include "composeduiupdate.hxx"
 #include "formbrowsertools.hxx"
 

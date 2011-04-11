@@ -36,10 +36,6 @@
  * Win32 surface backend for OpenOffice.org Cairo Canvas                *
  ************************************************************************/
 
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
-
 #include <osl/diagnose.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/virdev.hxx>
@@ -173,7 +169,7 @@ namespace cairo
      **/
     void Win32Surface::Resize( int /*width*/, int /*height*/ )
     {
-        OSL_ENSURE(false,"not supposed to be called!");
+        OSL_FAIL("not supposed to be called!");
     }
 
     void Win32Surface::flush() const

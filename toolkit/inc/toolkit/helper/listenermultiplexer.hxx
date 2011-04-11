@@ -42,6 +42,7 @@
 #include <com/sun/star/awt/XTextListener.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/awt/XItemListener.hpp>
+#include <com/sun/star/awt/XTabListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/awt/XSpinListener.hpp>
 #include <com/sun/star/awt/XAdjustmentListener.hpp>
@@ -56,6 +57,7 @@
 #include <toolkit/helper/mutexhelper.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <com/sun/star/awt/grid/XGridSelectionListener.hpp>
+#include <com/sun/star/awt/tab/XTabPageContainerListener.hpp>
 //  ----------------------------------------------------
 //  class ListenerMultiplexerBase
 //  ----------------------------------------------------
@@ -184,6 +186,17 @@ DECL_LISTENERMULTIPLEXER_START_DLLPUB( ItemListenerMultiplexer, ::com::sun::star
 DECL_LISTENERMULTIPLEXER_END
 
 //  ----------------------------------------------------
+//  class TabListenerMultiplexer
+//  ----------------------------------------------------
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener )
+    void SAL_CALL inserted( ::sal_Int32 ID ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removed( ::sal_Int32 ID ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL changed( ::sal_Int32 ID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Properties ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL activated( ::sal_Int32 ID ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL deactivated( ::sal_Int32 ID ) throw (::com::sun::star::uno::RuntimeException);
+DECL_LISTENERMULTIPLEXER_END
+
+//  ----------------------------------------------------
 //  class ContainerListenerMultiplexer
 //  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START( ContainerListenerMultiplexer, ::com::sun::star::container::XContainerListener )
@@ -250,6 +263,13 @@ DECL_LISTENERMULTIPLEXER_END
 //  ----------------------------------------------------
 DECL_LISTENERMULTIPLEXER_START_DLLPUB( SelectionListenerMultiplexer, ::com::sun::star::awt::grid::XGridSelectionListener )
     void SAL_CALL selectionChanged( const ::com::sun::star::awt::grid::GridSelectionEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+DECL_LISTENERMULTIPLEXER_END
+
+//  ----------------------------------------------------
+//  class TabPageListenerMultiplexer
+//  ----------------------------------------------------
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( TabPageListenerMultiplexer, ::com::sun::star::awt::tab::XTabPageContainerListener )
+    void SAL_CALL tabPageActivated( const ::com::sun::star::awt::tab::TabPageActivatedEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
 #endif // _TOOLKIT_HELPER_LISTENERMULTIPLEXER_HXX_

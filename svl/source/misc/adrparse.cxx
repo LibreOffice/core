@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 #include <tools/inetmime.hxx>
-#include <adrparse.hxx>
+#include <svl/adrparse.hxx>
 
 namespace unnamed_svl_adrparse {}
 using namespace unnamed_svl_adrparse;
@@ -701,10 +701,10 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                                         nLen);
                         }
                         if (pParser->m_bHasFirst)
-                            pParser->m_aRest.Insert(new SvAddressEntry_Impl(
+                            pParser->m_aRest.push_back(new SvAddressEntry_Impl(
                                                             aTheAddrSpec,
-                                                            aTheRealName),
-                                                    LIST_APPEND);
+                                                            aTheRealName)
+                                                      );
                         else
                         {
                             pParser->m_bHasFirst = true;
@@ -769,14 +769,15 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
 
 SvAddressParser::SvAddressParser(UniString const & rInput): m_bHasFirst(false)
 {
-    SvAddressParser_Impl(this, rInput);
+    SvAddressParser_Impl aDoParse(this, rInput);
 }
 
 //============================================================================
 SvAddressParser::~SvAddressParser()
 {
-    for (ULONG i = m_aRest.Count(); i != 0;)
-        delete m_aRest.Remove(--i);
+    for ( size_t i = m_aRest.size(); i > 0; )
+        delete m_aRest[ --i ];
+    m_aRest.clear();
 }
 
 //============================================================================

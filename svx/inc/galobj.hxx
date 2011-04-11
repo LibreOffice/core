@@ -84,13 +84,13 @@ protected:
     INetURLObject           aURL;
     String                  aUserName;
     String                  aTitle;
-    BOOL                    bIsValid;
-    BOOL                    bIsThumbBmp;
+    sal_Bool                    bIsValid;
+    sal_Bool                    bIsThumbBmp;
 
     virtual void            WriteData( SvStream& rOut, const String& rDestDir ) const;
-    virtual void            ReadData( SvStream& rIn, UINT16& rReadVersion );
+    virtual void            ReadData( SvStream& rIn, sal_uInt16& rReadVersion );
 
-    BOOL                    CreateThumb( const Graphic& rGraphic );
+    sal_Bool                    CreateThumb( const Graphic& rGraphic );
 
 public:
 
@@ -98,13 +98,13 @@ public:
     virtual                 ~SgaObject() {};
 
     virtual SgaObjKind      GetObjKind() const = 0;
-    virtual UINT16          GetVersion() const = 0;
+    virtual sal_uInt16          GetVersion() const = 0;
 
     virtual Bitmap          GetThumbBmp() const { return aThumbBmp; }
     const GDIMetaFile&      GetThumbMtf() const { return aThumbMtf; }
     const INetURLObject&    GetURL() const { return aURL; }
-    BOOL                    IsValid() const { return bIsValid; }
-    BOOL                    IsThumbBitmap() const { return bIsThumbBmp; }
+    sal_Bool                    IsValid() const { return bIsValid; }
+    sal_Bool                    IsThumbBitmap() const { return bIsThumbBmp; }
 
     const String            GetTitle() const;
     void                    SetTitle( const String& rTitle );
@@ -124,9 +124,9 @@ private:
     GalSoundType        eSoundType;
 
     virtual void        WriteData( SvStream& rOut, const String& rDestDir ) const;
-    virtual void        ReadData( SvStream& rIn, UINT16& rReadVersion );
+    virtual void        ReadData( SvStream& rIn, sal_uInt16& rReadVersion );
 
-    virtual UINT16      GetVersion() const { return 6; }
+    virtual sal_uInt16      GetVersion() const { return 6; }
 
 public:
 
@@ -151,12 +151,12 @@ class SgaObjectSvDraw : public SgaObject
 
 private:
 
-    BOOL                CreateThumb( const FmFormModel& rModel );
+    sal_Bool                CreateThumb( const FmFormModel& rModel );
 
     virtual void        WriteData( SvStream& rOut, const String& rDestDir ) const;
-    virtual void        ReadData( SvStream& rIn, UINT16& rReadVersion );
+    virtual void        ReadData( SvStream& rIn, sal_uInt16& rReadVersion );
 
-    virtual UINT16      GetVersion() const { return 5; }
+    virtual sal_uInt16      GetVersion() const { return 5; }
 
 public:
 
@@ -169,7 +169,7 @@ public:
 
 public:
 
-    static BOOL         DrawCentered( OutputDevice* pOut, const FmFormModel& rModel );
+    static sal_Bool         DrawCentered( OutputDevice* pOut, const FmFormModel& rModel );
 };
 
 // ----------------
@@ -183,9 +183,9 @@ private:
     void                Init( const Graphic& rGraphic, const INetURLObject& rURL );
 
     virtual void        WriteData( SvStream& rOut, const String& rDestDir ) const;
-    virtual void        ReadData( SvStream& rIn, UINT16& rReadVersion );
+    virtual void        ReadData( SvStream& rIn, sal_uInt16& rReadVersion );
 
-    virtual UINT16      GetVersion() const { return 5; }
+    virtual sal_uInt16      GetVersion() const { return 5; }
 
 public:
 

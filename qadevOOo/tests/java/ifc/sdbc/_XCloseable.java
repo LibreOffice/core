@@ -62,7 +62,7 @@ public class _XCloseable extends MultiMethodTest {
             oObj.close();
             res = true;
         } catch (SQLException e) {
-            log.println("Unexpected SQL Exception occured:" + e) ;
+            log.println("Unexpected SQL Exception occurred:" + e) ;
             res = false;
         }
 
@@ -72,10 +72,10 @@ public class _XCloseable extends MultiMethodTest {
         if (resSet != null) {
             try {
                 resSet.first();
-                log.println("Expected SQLException not occured !");
+                log.println("Expected SQLException not occurred !");
                 res = false;
             } catch(SQLException e) {
-                log.println("Expected SQLException occured");
+                log.println("Expected SQLException occurred");
                 res = true;
             }
         }

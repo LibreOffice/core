@@ -25,9 +25,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+#include "cpp.h"
+
 #include <stdlib.h>
 #include <string.h>
-#include "cpp.h"
 
 #define NSTAK   32
 #define SGN 0
@@ -737,10 +739,10 @@ struct value
                     }
                     else
                     {
-                        static char cvcon[]
-                        = "b\bf\fn\nr\rt\tv\v''\"\"??\\\\";
+                        static char cvcon[] = "b\bf\fn\nr\rt\tv\v''\"\"??\\\\";
+                        static int  cvlen = sizeof(cvcon) - 1;
 
-                        for (i = 0; i < (int)sizeof(cvcon); i += 2)
+                        for (i = 0; i < cvlen; i += 2)
                         {
                             if (*p == cvcon[i])
                             {
@@ -749,9 +751,8 @@ struct value
                             }
                         }
                         p += 1;
-                        if (i >= (int)sizeof(cvcon))
-                            error(WARNING,
-                               "Undefined escape in character constant");
+                        if (i >= cvlen)
+                            error(WARNING,"Undefined escape in character constant");
                     }
             }
             else

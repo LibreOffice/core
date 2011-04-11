@@ -34,7 +34,7 @@
 */
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -109,12 +109,12 @@ class WindowStateConfiguration :  private ThreadHelpBase                        
         virtual sal_Bool SAL_CALL hasElements()
             throw (::com::sun::star::uno::RuntimeException);
 
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  ::rtl::OUString,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > ModuleToWindowStateFileMap;
 
-        typedef ::std::hash_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< ::rtl::OUString,
                                  ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > ModuleToWindowStateConfigHashMap;

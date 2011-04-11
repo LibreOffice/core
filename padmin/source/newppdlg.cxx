@@ -51,7 +51,9 @@
 using namespace padmin;
 using namespace psp;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 PPDImportDialog::PPDImportDialog( Window* pParent ) :
         ModalDialog( pParent, PaResId( RID_PPDIMPORT_DLG ) ),
@@ -153,7 +155,7 @@ void PPDImportDialog::Import()
             continue;
         }
 
-        USHORT nPos = m_aDriverLB.InsertEntry( aPrinterName );
+        sal_uInt16 nPos = m_aDriverLB.InsertEntry( aPrinterName );
         m_aDriverLB.SetEntryData( nPos, new String( aPath.PathToFileName() ) );
     }
 }

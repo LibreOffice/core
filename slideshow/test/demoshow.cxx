@@ -54,6 +54,7 @@
 #include <ucbhelper/configurationkeys.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -199,6 +200,11 @@ private:
     {
     }
 
+    virtual awt::Rectangle SAL_CALL getCanvasArea(  ) throw (uno::RuntimeException)
+    {
+        return awt::Rectangle(0,0,maSize.Width(),maSize.Height());
+    }
+
     uno::Reference< rendering::XSpriteCanvas > mxCanvas;
     ::cppu::OInterfaceContainerHelper          maPaintListeners;
     ::cppu::OInterfaceContainerHelper          maTransformationListeners;
@@ -309,7 +315,7 @@ class DemoApp : public Application
 {
 public:
     virtual void Main();
-    virtual USHORT  Exception( USHORT nError );
+    virtual sal_uInt16  Exception( sal_uInt16 nError );
 };
 
 class ChildWindow : public Window
@@ -418,7 +424,7 @@ DemoWindow::DemoWindow() :
     maUpdateTimer(),
     mbSlideDisplayed( false )
 {
-    SetText( rtl::OUString::createFromAscii( "Slideshow Demo" ) );
+    SetText( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Slideshow Demo" )) );
     SetSizePixel( Size( 640, 480 ) );
     EnablePaint( true );
 
@@ -428,7 +434,7 @@ DemoWindow::DemoWindow() :
     Show();
 
     maUpdateTimer.SetTimeoutHdl(LINK(this, DemoWindow, updateHdl));
-    maUpdateTimer.SetTimeout( (ULONG)30 );
+    maUpdateTimer.SetTimeout( (sal_uLong)30 );
     maUpdateTimer.Start();
 }
 
@@ -456,11 +462,13 @@ void DemoWindow::init()
         if( mxShow.is() && !mbSlideDisplayed )
         {
             uno::Reference< drawing::XDrawPage > xSlide( new DummySlide );
+            uno::Reference< drawing::XDrawPages > xDrawPages;
             mxShow->displaySlide( xSlide,
+                                  uno::Reference< drawing::XDrawPagesSupplier >(),
                                   uno::Reference< animations::XAnimationNode >(),
                                   uno::Sequence< beans::PropertyValue >() );
             mxShow->setProperty( beans::PropertyValue(
-                                     rtl::OUString::createFromAscii("RehearseTimings"),
+                                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RehearseTimings")),
                                      0,
                                      uno::makeAny( sal_True ),
                                      beans::PropertyState_DIRECT_VALUE ));
@@ -479,8 +487,8 @@ IMPL_LINK( DemoWindow, updateHdl, Timer*, EMPTYARG )
 {
     init();
 
-    double nTimeout;
     if( mxShow.is() )
+        double nTimeout;
         mxShow->update(nTimeout);
 
     return 0;
@@ -496,7 +504,7 @@ void DemoWindow::Resize()
     // TODO
 }
 
-USHORT DemoApp::Exception( USHORT nError )
+sal_uInt16 DemoApp::Exception( sal_uInt16 nError )
 {
     switch( nError & EXC_MAJORTYPE )
     {
@@ -511,12 +519,12 @@ void DemoApp::Main()
 {
     bool bHelp = false;
 
-    for( USHORT i = 0; i < GetCommandLineParamCount(); i++ )
+    for( sal_uInt16 i = 0; i < GetCommandLineParamCount(); i++ )
     {
         ::rtl::OUString aParam = GetCommandLineParam( i );
 
-        if( aParam.equalsAscii( "--help" ) ||
-            aParam.equalsAscii( "-h" ) )
+        if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--help" ) ) ||
+            aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) )
                 bHelp = true;
     }
 
@@ -542,8 +550,7 @@ void DemoApp::Main()
     }
     catch( uno::Exception& )
     {
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
+        OSL_FAIL( rtl::OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }
@@ -556,8 +563,8 @@ void DemoApp::Main()
 
     // Create UCB.
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
     ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     DemoWindow pWindow;

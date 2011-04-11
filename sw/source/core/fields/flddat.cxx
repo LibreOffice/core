@@ -46,10 +46,6 @@ SwDateTimeFieldType::SwDateTimeFieldType(SwDoc* pInitDoc)
     : SwValueFieldType( pInitDoc, RES_DATETIMEFLD )
 {}
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwFieldType* SwDateTimeFieldType::Copy() const
 {
     SwDateTimeFieldType *pTmp = new SwDateTimeFieldType(GetDoc());
@@ -60,7 +56,7 @@ SwFieldType* SwDateTimeFieldType::Copy() const
     Beschreibung: Datum/Zeit-Feld
  --------------------------------------------------------------------*/
 
-SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, USHORT nSub, ULONG nFmt, USHORT nLng)
+SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub, sal_uLong nFmt, sal_uInt16 nLng)
     : SwValueField(pInitType, nFmt, nLng, 0.0),
     nSubType(nSub),
     nOffset(0)
@@ -80,10 +76,6 @@ SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, USHORT nSub, UL
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 String SwDateTimeField::Expand() const
 {
     double fVal;
@@ -102,10 +94,6 @@ String SwDateTimeField::Expand() const
     return ExpandValue(fVal, GetFormat(), GetLanguage());
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SwField* SwDateTimeField::Copy() const
 {
     SwDateTimeField *pTmp =
@@ -119,35 +107,20 @@ SwField* SwDateTimeField::Copy() const
     return pTmp;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-USHORT SwDateTimeField::GetSubType() const
+sal_uInt16 SwDateTimeField::GetSubType() const
 {
     return nSubType;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-void SwDateTimeField::SetSubType(USHORT nType)
+void SwDateTimeField::SetSubType(sal_uInt16 nType)
 {
     nSubType = nType;
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SwDateTimeField::SetPar2(const String& rStr)
 {
     nOffset = rStr.ToInt32();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 String SwDateTimeField::GetPar2() const
 {
@@ -157,18 +130,10 @@ String SwDateTimeField::GetPar2() const
         return aEmptyStr;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SwDateTimeField::SetDateTime(const DateTime& rDT)
 {
     SetValue(GetDateTime(GetDoc(), rDT));
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 double SwDateTimeField::GetDateTime(SwDoc* pDoc, const DateTime& rDT)
 {
@@ -180,10 +145,6 @@ double SwDateTimeField::GetDateTime(SwDoc* pDoc, const DateTime& rDT)
     return fResult;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 double SwDateTimeField::GetValue() const
 {
     if (IsFixed())
@@ -192,11 +153,7 @@ double SwDateTimeField::GetValue() const
         return GetDateTime(GetDoc(), DateTime());
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-Date SwDateTimeField::GetDate(BOOL bUseOffset) const
+Date SwDateTimeField::GetDate(sal_Bool bUseOffset) const
 {
     SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
     Date* pNullDate = pFormatter->GetNullDate();
@@ -211,11 +168,7 @@ Date SwDateTimeField::GetDate(BOOL bUseOffset) const
     return aDate;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-Time SwDateTimeField::GetTime(BOOL bUseOffset) const
+Time SwDateTimeField::GetTime(sal_Bool bUseOffset) const
 {
     double fDummy;
     double fFract = modf(GetValue(), &fDummy);
@@ -226,22 +179,19 @@ Time SwDateTimeField::GetTime(BOOL bUseOffset) const
     return (Time)aDT;
 }
 
-/*-----------------04.03.98 11:05-------------------
-
---------------------------------------------------*/
-bool SwDateTimeField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
+bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
         {
-            BOOL bTmp = IsFixed();
+            sal_Bool bTmp = IsFixed();
             rVal.setValue(&bTmp, ::getCppuBooleanType());
         }
         break;
     case FIELD_PROP_BOOL2:
         {
-            BOOL bTmp = IsDate();
+            sal_Bool bTmp = IsDate();
             rVal.setValue(&bTmp, ::getCppuBooleanType());
         }
         break;
@@ -271,10 +221,8 @@ bool SwDateTimeField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------04.03.98 11:05-------------------
 
---------------------------------------------------*/
-bool SwDateTimeField::PutValue( const uno::Any& rVal, USHORT nWhichId )
+bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
 {
     sal_Int32 nTmp = 0;
     switch( nWhichId )
@@ -301,7 +249,7 @@ bool SwDateTimeField::PutValue( const uno::Any& rVal, USHORT nWhichId )
         {
             util::DateTime aDateTimeValue;
             if(!(rVal >>= aDateTimeValue))
-                return FALSE;
+                return sal_False;
             DateTime aDateTime;
             aDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
             aDateTime.SetSec(aDateTimeValue.Seconds);

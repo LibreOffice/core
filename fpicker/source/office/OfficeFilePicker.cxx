@@ -476,7 +476,7 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 
     prepareExecute();
 
-    getDialog()->EnableAutocompletion( TRUE );
+    getDialog()->EnableAutocompletion( sal_True );
     // now we are ready to execute the dialog
     sal_Int16 nRet = getDialog()->Execute();
 
@@ -548,7 +548,7 @@ void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< ::com::sun::sta
     m_xDlgClosedListener = xListener;
     prepareDialog();
     prepareExecute();
-    getDialog()->EnableAutocompletion( TRUE );
+    getDialog()->EnableAutocompletion( sal_True );
     getDialog()->StartExecuteModal( LINK( this, SvtFilePicker, DialogClosedHdl ) );
 }
 
@@ -624,8 +624,8 @@ Sequence< rtl::OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeExcep
     // files first and then the list of the selected entries
 
     SvStringsDtor* pPathList = getDialog()->GetPathList();
-    USHORT i, nCount = pPathList->Count();
-    USHORT nTotal = nCount > 1 ? nCount+1: nCount;
+    sal_uInt16 i, nCount = pPathList->Count();
+    sal_uInt16 nTotal = nCount > 1 ? nCount+1: nCount;
 
     Sequence< rtl::OUString > aPath( nTotal );
 
@@ -1107,19 +1107,19 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
 //-------------------------------------------------------------------------
 sal_Bool SvtFilePicker::implHandleInitializationArgument( const ::rtl::OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
 {
-    if ( _rName.equalsAscii( "TemplateDescription" ) )
+    if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TemplateDescription" ) ) )
     {
         m_nServiceType = TemplateDescription::FILEOPEN_SIMPLE;
         OSL_VERIFY( _rValue >>= m_nServiceType );
         return sal_True;
     }
-    if ( _rName.equalsAscii( "StandardDir" ) )
+    if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StandardDir" ) ) )
     {
         OSL_VERIFY( _rValue >>= m_aStandardDir );
         return sal_True;
     }
 
-    if ( _rName.equalsAscii( "BlackList" ) )
+    if ( _rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BlackList" ) ) )
     {
         OSL_VERIFY( _rValue >>= m_aBlackList );
         return sal_True;
@@ -1166,14 +1166,14 @@ Sequence< rtl::OUString > SvtFilePicker::impl_getStaticSupportedServiceNames()
 {
     Sequence< rtl::OUString > seqServiceNames( 1 );
     rtl::OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFilePicker" );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.OfficeFilePicker" ));
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 rtl::OUString SvtFilePicker::impl_getStaticImplementationName()
 {
-    return rtl::OUString::createFromAscii( "com.sun.star.svtools.OfficeFilePicker" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.OfficeFilePicker" ));
 }
 
 /* Helper for registry */

@@ -71,8 +71,8 @@ testcase tFormatPage_29
     '/// Open test file testHeaderContent29.sxw
     '/// + (The test file include 2 pages , and the
     '/// + content in header are different )
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
 
     '/// formatPage , tabpage header , check 'same content left/right'
     fFormatPageWriter("TabKopfzeile")
@@ -159,8 +159,8 @@ testcase tFormatPage_30
     '/// Open test file testHeaderContent30.sxw
     '/// + (The test file include 2 pages , and the
     '/// + content in header is same )
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// formatPage , tabpage header , Uncheck 'same content left/right'
      fFormatPageWriter("TabKopfzeile")
@@ -226,8 +226,8 @@ testcase tFormatPage_31
     '/// Open test file testFooterContent31.sxw
     '/// + (The test file include 2 pages , and the content
     '/// + in footer are different )
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// + formatPage , tabpage footer , check 'same content left/right'
      fFormatPageWriter("TabFusszeile")
@@ -314,8 +314,8 @@ testcase tFormatPage_32
     '/// Open test file testFooterContent32.sxw
     '/// + (The test file include 2 pages , and the
     '/// + content in footer is same )
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// formatPage , tabpage footer , Uncheck 'same content left/right'
      fFormatPageWriter("TabFusszeile")
@@ -743,8 +743,8 @@ testcase tFormatPage_39
     '/// Open test file testColumnInPage.sxw
     '/// + (The test file includes 2 pages , some text
     '/// + is in 1st page and another is in 2nd page)
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// formatPage , tabpage columns , change column to 3 via controls
      fFormatPageWriter("TabSpalten")
@@ -808,8 +808,8 @@ testcase tFormatPage_40
     '/// Open test file testColumnInPage.sxw
     '/// + (The test file includes 2 pages , some text is
     '/// + in 1st page and another is in 2nd page)
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// formatPage , tabpage columns , change column to 3 via spinfield
      fFormatPageWriter("TabSpalten")
@@ -882,8 +882,8 @@ testcase tFormatPage_41
     '/// Open test file testColumnInPage2.sxw
     '/// + (The test file includes 2 pages , some text is
     '/// + in 1st page and another is in 2nd page)
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
 
     '/// Create 3 with different columns . formatPage ,
     '/// + tabpage columns , set 3 columns
@@ -973,8 +973,8 @@ testcase tFormatPage_42
     '/// Open test file testColumnInPage2.sxw
     '/// + (The test file includes 2 pages , some text is
     '/// + in 1st page and another is in 2nd page)
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
     '/// formatPage , tabpage columns , set 3 columns
      fFormatPageWriter("TabSpalten")
@@ -1136,8 +1136,8 @@ testcase tFormatPage_45
     '/// Open test file testSeparatorLine.sxw
     '/// + (The test file includes 6 columns , some
     '/// + test text lllll... is in 2nd column
-     Call hFileOpen(sTestFile)
-     Call sMakeReadOnlyDocumentEditable
+     hFileOpenLocally( sTestFile )
+     
 
      Kontext
      EditSearchAndReplace
@@ -1263,7 +1263,7 @@ testcase tFormatPage_46
      Call hCloseDocument
 
      Call hNewDocument
-     Call hFileOpen(gOfficepath + "user\work\tFormatPage_46.odt")
+     hFileOpen( gOfficepath + "user\work\tFormatPage_46.odt")
 
     '/// Check if the setting are still kept
      fFormatPageWriter("TabSpalten")

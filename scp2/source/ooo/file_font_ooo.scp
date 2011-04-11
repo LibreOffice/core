@@ -160,3 +160,30 @@ End
 #endif
 #endif
 
+#ifdef WNT
+#ifdef WITH_AGFA_MONOTYPE_FONTS
+STD_FONTWIN_FILE( gid_File_Fnt_albw, albw.ttf, AlbanyAMT)
+STD_FONTWIN_FILE( gid_File_Fnt_albwb, albwb.ttf, AlbanyAMT Bold)
+STD_FONTWIN_FILE( gid_File_Fnt_albwbi, albwbi.ttf, AlbanyAMT Bold Italic)
+STD_FONTWIN_FILE( gid_File_Fnt_albwi, albwi.ttf, AlbanyAMT Italic)
+STD_FONTWIN_FILE( gid_File_Fnt_andybol, andybol_.ttf, AndyMT Bold)
+STD_FONTWIN_FILE( gid_File_Fnt_andyreg, andyreg_.ttf, AndyMT)
+STD_FONTWIN_FILE( gid_File_Fnt_ans, ans_____.ttf, Andale Sans)
+STD_FONTWIN_FILE( gid_File_Fnt_ansb, ansb____.ttf, Andale Sans Bold)
+STD_FONTWIN_FILE( gid_File_Fnt_ansbi, ansbi___.ttf, Andale Sans Bold Italic)
+STD_FONTWIN_FILE( gid_File_Fnt_ansi, ansi____.ttf, Andale Sans Italic)
+STD_FONTWIN_FILE( gid_File_Fnt_bl, bl______.ttf, BellMT)
+STD_FONTWIN_FILE( gid_File_Fnt_blb, blb_____.ttf, BellMT Bold)
+STD_FONTWIN_FILE( gid_File_Fnt_blbi, blbi____.ttf, BellMT Bold Italic)
+STD_FONTWIN_FILE( gid_File_Fnt_bli, bli_____.ttf, BellMT Italic)
+STD_FONTWIN_FILE( gid_File_Fnt_cumbwb, cumbwb__.ttf, CumberlandAMT Bold)
+STD_FONTWIN_FILE( gid_File_Fnt_cumbwbi, cumbwbi_.ttf, CumberlandAMT Bold Italic)
+STD_FONTWIN_FILE( gid_File_Fnt_cumbwi, cumbwi__.ttf, CumberlandAMT Italic)
+STD_FONTWIN_FILE( gid_File_Fnt_cumbwr, cumbwr__.ttf, CumberlandAMT)
+STD_FONTWIN_FILE( gid_File_Fnt_mtsorts, mtsorts_.ttf, Monotype Sorts)
+STD_FONTWIN_FILE( gid_File_Fnt_thowb, thowb___.ttf, ThorndaleAMT Bold)
+STD_FONTWIN_FILE( gid_File_Fnt_thowbi, thowbi__.ttf, ThorndaleAMT Bold Italic)
+STD_FONTWIN_FILE( gid_File_Fnt_thowi, thowi___.ttf, ThorndaleAMT Italic)
+STD_FONTWIN_FILE( gid_File_Fnt_thowr, thowr___.ttf, ThorndaleAMT)
+#endif
+#endif

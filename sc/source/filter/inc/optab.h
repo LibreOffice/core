@@ -29,7 +29,7 @@
 #ifndef SC_OPTAB_H
 #define SC_OPTAB_H
 
-typedef void ( *OPCODE_FKT )( SvStream &aStream, USHORT nLaenge );
+typedef void ( *OPCODE_FKT )( SvStream &aStream, sal_uInt16 nLaenge );
 
 #define FKT_LIMIT   101
 

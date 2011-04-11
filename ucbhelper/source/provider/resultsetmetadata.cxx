@@ -56,7 +56,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace ucbhelper_impl {
 
@@ -412,8 +413,8 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
             {
                 Reference< XPropertySetInfo > xInfo(
                             m_xSMgr->createInstance(
-                                OUString::createFromAscii(
-                                    "com.sun.star.ucb.PropertiesManager" ) ),
+                                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.ucb.PropertiesManager" )) ),
                             UNO_QUERY );
                 if ( xInfo.is() )
                 {

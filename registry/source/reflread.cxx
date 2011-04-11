@@ -51,10 +51,6 @@ const sal_uInt32    magic = 0x12345678;
 const sal_uInt16 minorVersion = 0x0000;
 const sal_uInt16 majorVersion = 0x0001;
 
-#if defined ( GCC ) && ( defined ( SCO ) )
-ORealDynamicLoader* ODynamicLoader<RegistryTypeReader_Api>::m_pLoader = NULL;
-#endif
-
 /**************************************************************************
 
     class BlopObject

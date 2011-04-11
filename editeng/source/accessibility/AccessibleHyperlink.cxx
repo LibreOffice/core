@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: AccessibleEditableTextPara.cxx,v $
- * $Revision: 1.53 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -53,7 +50,7 @@ using namespace ::com::sun::star;
 namespace accessibility
 {
 
-    AccessibleHyperlink::AccessibleHyperlink( SvxAccessibleTextAdapter& r, SvxFieldItem* p, USHORT nP, USHORT nR, sal_Int32 nStt, sal_Int32 nEnd, const ::rtl::OUString& rD )
+    AccessibleHyperlink::AccessibleHyperlink( SvxAccessibleTextAdapter& r, SvxFieldItem* p, sal_uInt16 nP, sal_uInt16 nR, sal_Int32 nStt, sal_Int32 nEnd, const ::rtl::OUString& rD )
     : rTA( r )
     {
         pFld = p;

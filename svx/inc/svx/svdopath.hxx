@@ -94,9 +94,10 @@ public:
     virtual ~SdrPathObj();
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
-    virtual void operator=(const SdrObject& rObj);
+    virtual SdrPathObj* Clone() const;
+    SdrPathObj& operator=(const SdrPathObj& rObj);
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
@@ -155,7 +156,7 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 
 public:
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     // Bezierpolygon holen/setzen
     const basegfx::B2DPolyPolygon& GetPathPoly() const { return maPathPolygon; }

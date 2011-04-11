@@ -6,7 +6,6 @@ LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 TARGETTYPE=GUI
 USE_DEFFILE=TRUE
-#DYNAMIC_CRT:=
 NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -46,5 +45,3 @@ DLLPRE =
 .INCLUDE :	target.mk
 
 $(OBJ)$/stwrapper.obj: $(INCCOM)$/_version.h
-
-#$(RCFILES) : resource.rc

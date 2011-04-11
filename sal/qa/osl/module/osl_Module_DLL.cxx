@@ -29,9 +29,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
+#include <osl_Module_Const.h>
+
 #include <stdio.h>
 #include <sal/types.h>
-#include <testshl/simpleheader.hxx>
+
+// This module contains no tests. It is loaded as a dynamic library by
+// osl_Module.
+// But we instatiate a test plugin to fake the build process.
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 extern "C" sal_Bool SAL_CALL firstfunc( sal_Bool bRes )
 {

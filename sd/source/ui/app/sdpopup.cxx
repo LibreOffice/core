@@ -77,8 +77,8 @@ SdFieldPopup::~SdFieldPopup()
 
 void SdFieldPopup::Fill( LanguageType eLanguage )
 {
-    USHORT nID = 1;
-    USHORT nStyle = MIB_RADIOCHECK | MIB_AUTOCHECK;
+    sal_uInt16 nID = 1;
+    sal_uInt16 nStyle = MIB_RADIOCHECK | MIB_AUTOCHECK;
     InsertItem( nID++, String( SdResId( STR_FIX ) ), nStyle );
     InsertItem( nID++, String( SdResId( STR_VAR ) ), nStyle );
     InsertSeparator();
@@ -113,7 +113,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         aDateField.SetFormat( SVXDATEFORMAT_F );    // Dienstag, 13.Februar 1996
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
 
-        CheckItem( (USHORT) ( pDateField->GetFormat() ) + 1 ); // - 2 + 3 !
+        CheckItem( (sal_uInt16) ( pDateField->GetFormat() ) + 1 ); // - 2 + 3 !
     }
     else if( pField->ISA( SvxExtTimeField ) )
     {
@@ -147,7 +147,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         //SVXTIMEFORMAT_AM_HMS, // 01:49:38 PM
         //SVXTIMEFORMAT_AM_HMSH // 01:49:38.78 PM
 
-        CheckItem( (USHORT) ( pTimeField->GetFormat() ) + 1 ); // - 2 + 3 !
+        CheckItem( (sal_uInt16) ( pTimeField->GetFormat() ) + 1 ); // - 2 + 3 !
     }
     else if( pField->ISA( SvxExtFileField ) )
     {
@@ -164,7 +164,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         InsertItem( nID++, String( SdResId( STR_FILEFORMAT_PATH ) ), nStyle );
         InsertItem( nID++, String( SdResId( STR_FILEFORMAT_NAME ) ), nStyle );
 
-        CheckItem( (USHORT) ( pFileField->GetFormat() ) + 3 );
+        CheckItem( (sal_uInt16) ( pFileField->GetFormat() ) + 3 );
     }
     else if( pField->ISA( SvxAuthorField ) )
     {
@@ -176,12 +176,12 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         else
             CheckItem( 2 );
 
-        for( USHORT i = 0; i < 4; i++ )
+        for( sal_uInt16 i = 0; i < 4; i++ )
         {
             aAuthorField.SetFormat( (SvxAuthorFormat) i );
             InsertItem( nID++, aAuthorField.GetFormatted(), nStyle );
         }
-        CheckItem( (USHORT) ( pAuthorField->GetFormat() ) + 3 );
+        CheckItem( (sal_uInt16) ( pAuthorField->GetFormat() ) + 3 );
     }
 }
 
@@ -195,14 +195,14 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
 SvxFieldData* SdFieldPopup::GetField()
 {
     SvxFieldData* pNewField = NULL;
-    USHORT nCount = GetItemCount();
+    sal_uInt16 nCount = GetItemCount();
 
     if( pField->ISA( SvxDateField ) )
     {
         const SvxDateField* pDateField = (const SvxDateField*) pField;
         SvxDateType   eType;
         SvxDateFormat eFormat;
-        USHORT i;
+        sal_uInt16 i;
 
         if( IsItemChecked( 1 ) )
             eType = SVXDATETYPE_FIX;
@@ -235,7 +235,7 @@ SvxFieldData* SdFieldPopup::GetField()
         const SvxExtTimeField* pTimeField = (const SvxExtTimeField*) pField;
         SvxTimeType   eType;
         SvxTimeFormat eFormat;
-        USHORT i;
+        sal_uInt16 i;
 
         if( IsItemChecked( 1 ) )
             eType = SVXTIMETYPE_FIX;
@@ -269,7 +269,7 @@ SvxFieldData* SdFieldPopup::GetField()
         const SvxExtFileField* pFileField = (const SvxExtFileField*) pField;
         SvxFileType   eType;
         SvxFileFormat eFormat;
-        USHORT i;
+        sal_uInt16 i;
 
         if( IsItemChecked( 1 ) )
             eType = SVXFILETYPE_FIX;
@@ -297,7 +297,7 @@ SvxFieldData* SdFieldPopup::GetField()
                 if( pDocSh->HasName() )
                     aName = pDocSh->GetMedium()->GetName();
 
-                // #91225# Get current filename, not the one stored in the old field
+                // Get current filename, not the one stored in the old field
                 pNewField = new SvxExtFileField( aName );
                 ( (SvxExtFileField*) pNewField )->SetType( eType );
                 ( (SvxExtFileField*) pNewField )->SetFormat( eFormat );
@@ -309,7 +309,7 @@ SvxFieldData* SdFieldPopup::GetField()
         const SvxAuthorField* pAuthorField = (const SvxAuthorField*) pField;
         SvxAuthorType   eType;
         SvxAuthorFormat eFormat;
-        USHORT i;
+        sal_uInt16 i;
 
         if( IsItemChecked( 1 ) )
             eType = SVXAUTHORTYPE_FIX;
@@ -326,7 +326,7 @@ SvxFieldData* SdFieldPopup::GetField()
         if( pAuthorField->GetFormat() != eFormat ||
             pAuthorField->GetType() != eType )
         {
-            // #91225# Get current state of address, not the old one
+            // Get current state of address, not the old one
             SvtUserOptions aUserOptions;
             pNewField = new SvxAuthorField( aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() );
             ( (SvxAuthorField*) pNewField )->SetType( eType );

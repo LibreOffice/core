@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 
 #include <tools/shl.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdpool.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svxids.hrc>
@@ -38,7 +38,7 @@
 #include <svx/fmview.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/obj3d.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/e3ditem.hxx>
@@ -59,7 +59,7 @@
 |*
 \************************************************************************/
 
-void E3dView::ConvertMarkedToPolyObj(BOOL bLineToArea)
+void E3dView::ConvertMarkedToPolyObj(sal_Bool bLineToArea)
 {
     SdrObject* pNewObj = NULL;
 
@@ -69,7 +69,7 @@ void E3dView::ConvertMarkedToPolyObj(BOOL bLineToArea)
 
         if (pObj && pObj->ISA(E3dPolyScene))
         {
-            BOOL bBezier = FALSE;
+            sal_Bool bBezier = sal_False;
             pNewObj = ((E3dPolyScene*) pObj)->ConvertToPolyObj(bBezier, bLineToArea);
 
             if (pNewObj)
@@ -119,7 +119,7 @@ void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
     }
 }
 
-SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, BOOL /*bOnly3DAttr*/) const
+SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/) const
 {
     // ItemSet mit entspr. Bereich anlegen
     SfxItemSet aSet(
@@ -138,7 +138,7 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, BOOL /*bOnly3DAttr*/) co
     else
     {
         // get attributes from all selected objects
-        MergeAttrFromMarked(aSet, FALSE);
+        MergeAttrFromMarked(aSet, sal_False);
 
         // calc flags for SID_ATTR_3D_INTERN
         const SdrMarkList& rMarkList = GetMarkedObjectList();
@@ -180,7 +180,7 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, BOOL /*bOnly3DAttr*/) co
 |*
 \************************************************************************/
 
-void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, BOOL bReplaceAll)
+void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, sal_Bool bReplaceAll)
 {
     sal_uInt32 nSelectedItems(0L);
 

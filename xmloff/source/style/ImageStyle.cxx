@@ -28,12 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "ImageStyle.hxx"
+#include "xmloff/ImageStyle.hxx"
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include"xmlnmspe.hxx"
+#include"xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -56,8 +56,6 @@ enum SvXMLTokenMapAttrs
     XML_TOK_IMAGE_TYPE,
     XML_TOK_IMAGE_SHOW,
     XML_TOK_IMAGE_ACTUATE,
-    /* XML_TOK_IMAGE_SIZEW,
-       XML_TOK_IMAGE_SIZEH,*/
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
 
@@ -69,8 +67,6 @@ XMLImageStyle::XMLImageStyle()
 XMLImageStyle::~XMLImageStyle()
 {
 }
-
-#ifndef SVX_LIGHT
 
 sal_Bool XMLImageStyle::exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport )
 {
@@ -108,18 +104,7 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
             }
-/*
-            // size
-            awt::Size aSize = xBitmap->getSize();
 
-            rUnitConverter.convertNumber( aOut, aSize.Width );
-            aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH, aStrValue );
-
-            rUnitConverter.convertNumber( aOut, aSize.Height );
-            aStrValue = aOut.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, aStrValue );
-*/
             // Do Write
             SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, sal_True, sal_True );
 
@@ -133,8 +118,6 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
 
     return bRet;
 }
-
-#endif // #ifndef SVX_LIGHT
 
 sal_Bool XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport )
 {
@@ -152,7 +135,7 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
     OUString aDisplayName;
 
     {
-        static __FAR_DATA SvXMLTokenMapEntry aHatchAttrTokenMap[] =
+        static SvXMLTokenMapEntry aHatchAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_IMAGE_NAME },
     { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_IMAGE_DISPLAY_NAME },
@@ -160,8 +143,6 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
     { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_IMAGE_TYPE },
     { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_IMAGE_SHOW },
     { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_IMAGE_ACTUATE },
-    /*{ XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
-    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },*/
     XML_TOKEN_MAP_END
 };
 

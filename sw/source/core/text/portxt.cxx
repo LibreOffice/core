@@ -34,9 +34,7 @@
 
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <hintids.hxx>     // CH_TXTATR
-#include <errhdl.hxx>   // ASSERT
 #include <SwPortionHandler.hxx>
-#include <txtcfg.hxx>
 #include <porlay.hxx>
 #include <inftxt.hxx>
 #include <guess.hxx>    // SwTxtGuess, Zeilenumbruch
@@ -53,10 +51,6 @@
 #include <doc.hxx>
 #include <xmloff/odffields.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-const sal_Char *GetLangName( const MSHORT nLang );
-#endif
-
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
@@ -67,7 +61,7 @@ using namespace ::com::sun::star::i18n::ScriptType;
  * (for justified alignment).
  *************************************************************************/
 
-USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
+sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
                      const SwLinePortion& rPor )
 {
     xub_StrLen nPos, nEnd;
@@ -87,8 +81,8 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
         pSI = &((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
     }
 
-    USHORT nCnt = 0;
-    BYTE nScript = 0;
+    sal_uInt16 nCnt = 0;
+    sal_uInt8 nScript = 0;
 
     // If portion consists of Asian characters and language is not
     // Korean, we add extra space to each character.
@@ -96,7 +90,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
     if ( pSI )
         nScript = pSI->ScriptType( nPos );
     else if ( pBreakIt->GetBreakIter().is() )
-        nScript = (BYTE)pBreakIt->GetBreakIter()->getScriptType( *pStr, nPos );
+        nScript = (sal_uInt8)pBreakIt->GetBreakIter()->getScriptType( *pStr, nPos );
 
     // Note: rInf.GetIdx() can differ from nPos,
     // e.g., when rPor is a field portion. nPos referes to the string passed
@@ -134,7 +128,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
     {
         if ( SwScriptInfo::IsArabicText( *pStr, nPos, nEnd - nPos ) && pSI->CountKashida() )
         {
-            const USHORT nKashRes = pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
+            const sal_uInt16 nKashRes = pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
             // i60591: need to check result of KashidaJustify
             // determine if kashida justification is applicable
             if( nKashRes != STRING_LEN )
@@ -191,7 +185,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
     nPos = rInf.GetIdx() + rPor.GetLen();
     if ( nPos < rInf.GetTxt().Len() )
     {
-        BYTE nNextScript = 0;
+        sal_uInt8 nNextScript = 0;
         const SwLinePortion* pPor = rPor.GetPortion();
         if ( pPor && pPor->IsKernPortion() )
             pPor = pPor->GetPortion();
@@ -209,10 +203,10 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
             pPor->GetExpTxt( rInf, aStr );
             ((SwTxtSizeInfo &)rInf).SetOnWin( bOldOnWin );
 
-            nNextScript = (BYTE)pBreakIt->GetBreakIter()->getScriptType( aStr, 0 );
+            nNextScript = (sal_uInt8)pBreakIt->GetBreakIter()->getScriptType( aStr, 0 );
         }
         else
-            nNextScript = (BYTE)pBreakIt->GetBreakIter()->getScriptType( rInf.GetTxt(), nPos );
+            nNextScript = (sal_uInt8)pBreakIt->GetBreakIter()->getScriptType( rInf.GetTxt(), nPos );
 
         if( ASIAN == nNextScript )
         {
@@ -522,7 +516,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
     {
         // calculate number of blanks
         xub_StrLen nX = rInf.GetIdx() - 1;
-        USHORT nHoleLen = 1;
+        sal_uInt16 nHoleLen = 1;
         while( nX && nHoleLen < GetLen() && CH_BLANK == rInf.GetChar( --nX ) )
             nHoleLen++;
 
@@ -790,12 +784,12 @@ namespace {
     {
         const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
         sal_Int32 nCurrentIdx = 0;
-        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_RESULT));
+        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)));
         if(pResult != pParameters->end())
             pResult->second >>= nCurrentIdx;
         if(io_pCurrentText)
         {
-            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY));
+            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)));
             if(pListEntries != pParameters->end())
             {
                 uno::Sequence< ::rtl::OUString > vListEntries;
@@ -824,17 +818,18 @@ void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
 
     if ( pBM != NULL )
     {
-        if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
+        if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
         { // a checkbox...
-            ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
+            ICheckboxFieldmark* pCheckboxFm = reinterpret_cast< ICheckboxFieldmark* >(pBM);
             bool checked = pCheckboxFm->IsChecked();
             rInf.DrawCheckBox(*this, checked);
         }
-        else if ( pBM->GetFieldname( ).equalsAscii(  ODF_FORMDROPDOWN ) )
+        else if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) )
         { // a list...
             rtl::OUString aTxt;
+            getCurrentListIndex( pBM, &aTxt );
             rInf.DrawViewOpt( *this, POR_FLD );
-            rInf.DrawText( aTxt, *this, 0, 0/*aTxt.getLength()*/, false );
+            rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
         }
         else
         {
@@ -854,13 +849,13 @@ sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
     OSL_ENSURE( pBM != NULL, "Where is my form field bookmark???" );
     if ( pBM != NULL )
     {
-        if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
+        if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
         {
             Width( rInf.GetTxtHeight(  ) );
             Height( rInf.GetTxtHeight(  ) );
             SetAscent( rInf.GetAscent(  ) );
         }
-        else if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) )
+        else if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) )
         {
             ::rtl::OUString aTxt;
             getCurrentListIndex( pBM, &aTxt );

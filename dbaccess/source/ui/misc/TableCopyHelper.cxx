@@ -99,7 +99,7 @@ void OTableCopyHelper::insertTable( const ::rtl::OUString& i_rSourceDataSource, 
 {
     if ( CommandType::QUERY != i_nCommandType && CommandType::TABLE != i_nCommandType )
     {
-        DBG_ERROR( "OTableCopyHelper::insertTable: invalid call (no supported format found)!" );
+        OSL_FAIL( "OTableCopyHelper::insertTable: invalid call (no supported format found)!" );
         return;
     }
 
@@ -111,7 +111,7 @@ void OTableCopyHelper::insertTable( const ::rtl::OUString& i_rSourceDataSource, 
 
         if ( !xSrcConnection.is() || !i_rDestConnection.is() )
         {
-            OSL_ENSURE( false, "OTableCopyHelper::insertTable: no connection/s!" );
+            OSL_FAIL( "OTableCopyHelper::insertTable: no connection/s!" );
             return;
         }
 
@@ -223,7 +223,7 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
             aTrans.bHtml            = SOT_FORMATSTR_ID_HTML == _nFormatId;
             aTrans.sDefaultTableName = GetTableNameForAppend();
             if ( !copyTagTable(aTrans,sal_False,_xConnection) )
-                m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
+                m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")),0,Any()));
         }
         catch(const SQLException&)
         {
@@ -235,7 +235,7 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
         }
     }
     else
-        m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
+        m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")),0,Any()));
 }
 
 // -----------------------------------------------------------------------------
@@ -266,10 +266,9 @@ sal_Bool OTableCopyHelper::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc
     if ( _bCheck )
         pImport->enableCheckOnly();
 
-    //dyf add 20070601
     //set the selected tablename
     pImport->setSTableName(_rDesc.sDefaultTableName);
-    //dyf add end
+
     pImport->setStream(pStream);
     return pImport->Read();
 }
@@ -335,7 +334,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
     else if ( !_rDesc.bError )
         pasteTable(_rDesc.aDroppedData,i_rDestDataSource,_xConnection);
     else
-        m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString::createFromAscii("S1000") ,0,Any()));
+        m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")),0,Any()));
 }
 // -----------------------------------------------------------------------------
 //........................................................................

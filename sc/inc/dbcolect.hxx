@@ -36,16 +36,14 @@
 #include "refreshtimer.hxx"
 #include "address.hxx"
 #include "scdllapi.h"
+#include "subtotalparam.hxx"
 
-//------------------------------------------------------------------------
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScDocument;
 
-//------------------------------------------------------------------------
-
 class ScDBData : public ScDataObject, public ScRefreshTimer
 {
-
 private:
     // DBParam
     String          aName;
@@ -54,72 +52,59 @@ private:
     SCROW           nStartRow;
     SCCOL           nEndCol;
     SCROW           nEndRow;
-    BOOL            bByRow;
-    BOOL            bHasHeader;
-    BOOL            bDoSize;
-    BOOL            bKeepFmt;
-    BOOL            bStripData;
+    bool            bByRow;
+    bool            bHasHeader;
+    bool            bDoSize;
+    bool            bKeepFmt;
+    bool            bStripData;
     // SortParam
-    BOOL            bSortCaseSens;
-    BOOL            bSortNaturalSort;
-    BOOL            bIncludePattern;
-    BOOL            bSortInplace;
-    BOOL            bSortUserDef;
-    USHORT          nSortUserIndex;
+    bool            bSortCaseSens;
+    bool            bSortNaturalSort;
+    bool            bIncludePattern;
+    bool            bSortInplace;
+    bool            bSortUserDef;
+    sal_uInt16          nSortUserIndex;
     SCTAB           nSortDestTab;
     SCCOL           nSortDestCol;
     SCROW           nSortDestRow;
-    BOOL            bDoSort[MAXSORT];
+    bool            bDoSort[MAXSORT];
     SCCOLROW        nSortField[MAXSORT];
-    BOOL            bAscending[MAXSORT];
+    bool            bAscending[MAXSORT];
     ::com::sun::star::lang::Locale aSortLocale;
     String          aSortAlgorithm;
     // QueryParam
-    BOOL            bQueryInplace;
-    BOOL            bQueryCaseSens;
-    BOOL            bQueryRegExp;
-    BOOL            bQueryDuplicate;
+    bool            bQueryInplace;
+    bool            bQueryCaseSens;
+    bool            bQueryRegExp;
+    bool            bQueryDuplicate;
     SCTAB           nQueryDestTab;
     SCCOL           nQueryDestCol;
     SCROW           nQueryDestRow;
-    BOOL            bDoQuery[MAXQUERY];
+    bool            bDoQuery[MAXQUERY];
     SCCOLROW        nQueryField[MAXQUERY];
     ScQueryOp       eQueryOp[MAXQUERY];
-    BOOL            bQueryByString[MAXQUERY];
+    bool            bQueryByString[MAXQUERY];
     bool            bQueryByDate[MAXQUERY];
     String*         pQueryStr[MAXQUERY];
     double          nQueryVal[MAXQUERY];
     ScQueryConnect  eQueryConnect[MAXQUERY];
-    BOOL            bIsAdvanced;        // TRUE if created by advanced filter
+    bool            bIsAdvanced;        // sal_True if created by advanced filter
     ScRange         aAdvSource;         // source range
-    SCROW           nDynamicEndRow;
-    // SubTotalParam
-    BOOL            bSubRemoveOnly;
-    BOOL            bSubReplace;
-    BOOL            bSubPagebreak;
-    BOOL            bSubCaseSens;
-    BOOL            bSubDoSort;
-    BOOL            bSubAscending;
-    BOOL            bSubIncludePattern;
-    BOOL            bSubUserDef;
-    USHORT          nSubUserIndex;
-    BOOL            bDoSubTotal[MAXSUBTOTAL];
-    SCCOL           nSubField[MAXSUBTOTAL];
-    SCCOL           nSubTotals[MAXSUBTOTAL];
-    SCCOL*          pSubTotals[MAXSUBTOTAL];
-    ScSubTotalFunc* pFunctions[MAXSUBTOTAL];
-    // Datenbank-Import
-    BOOL            bDBImport;
+
+    ScSubTotalParam maSubTotal;
+
+    // data base import
+    bool            bDBImport;
     String          aDBName;
     String          aDBStatement;
-    BOOL            bDBNative;
-    BOOL            bDBSelection;       // nicht im Param: Wenn Selektion, Update sperren
-    BOOL            bDBSql;             // aDBStatement ist SQL und kein Name
-    BYTE            nDBType;            // enum DBObject (bisher nur dbTable, dbQuery)
+    bool            bDBNative;
+    bool            bDBSelection;       // not in Param: if selection, block update
+    bool            bDBSql;             // aDBStatement is SQL not a name
+    sal_uInt8           nDBType;            // enum DBObject (up to now only dbTable, dbQuery)
 
-    USHORT          nIndex;             // eindeutiger Index fuer Formeln
-    BOOL            bAutoFilter;        // AutoFilter? (nicht gespeichert)
-    BOOL            bModified;          // wird bei UpdateReference gesetzt/geloescht
+    sal_uInt16          nIndex;             // unique index formulas
+    bool            bAutoFilter;        // AutoFilter? (not saved)
+    bool            bModified;          // is set/cleared for/by(?) UpdateReference
 
     using ScRefreshTimer::operator==;
 
@@ -127,7 +112,7 @@ public:
             SC_DLLPUBLIC ScDBData(const String& rName,
                      SCTAB nTab,
                      SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                     BOOL bByR = TRUE, BOOL bHasH = TRUE);
+                     bool bByR = sal_True, bool bHasH = sal_True);
             ScDBData(const ScDBData& rData);
             ~ScDBData();
 
@@ -135,28 +120,27 @@ public:
 
             ScDBData&   operator= (const ScDBData& rData);
 
-            BOOL        operator== (const ScDBData& rData) const;
+            bool        operator== (const ScDBData& rData) const;
 
             const String& GetName() const               { return aName; }
             void        GetName(String& rName) const    { rName = aName; }
             void        SetName(const String& rName)    { aName = rName; }
-            void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2, bool bUseDynamicRange = false) const;
-            SC_DLLPUBLIC void       GetArea(ScRange& rRange, bool bUseDynamicRange = false) const;
+            void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
+            SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
             void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-            void        SetDynamicEndRow(SCROW nRow);
             void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-            BOOL        IsByRow() const                 { return bByRow; }
-            void        SetByRow(BOOL bByR)             { bByRow = bByR; }
-            BOOL        HasHeader() const               { return bHasHeader; }
-            void        SetHeader(BOOL bHasH)           { bHasHeader = bHasH; }
-            void        SetIndex(USHORT nInd)           { nIndex = nInd; }
-            USHORT      GetIndex() const                { return nIndex; }
-            BOOL        IsDoSize() const                { return bDoSize; }
-            void        SetDoSize(BOOL bSet)            { bDoSize = bSet; }
-            BOOL        IsKeepFmt() const               { return bKeepFmt; }
-            void        SetKeepFmt(BOOL bSet)           { bKeepFmt = bSet; }
-            BOOL        IsStripData() const             { return bStripData; }
-            void        SetStripData(BOOL bSet)         { bStripData = bSet; }
+            bool        IsByRow() const                 { return bByRow; }
+            void        SetByRow(bool bByR)             { bByRow = bByR; }
+            bool        HasHeader() const               { return bHasHeader; }
+            void        SetHeader(bool bHasH)           { bHasHeader = bHasH; }
+            void        SetIndex(sal_uInt16 nInd)           { nIndex = nInd; }
+            sal_uInt16  GetIndex() const                { return nIndex; }
+            bool        IsDoSize() const                { return bDoSize; }
+            void        SetDoSize(bool bSet)            { bDoSize = bSet; }
+            bool        IsKeepFmt() const               { return bKeepFmt; }
+            void        SetKeepFmt(bool bSet)           { bKeepFmt = bSet; }
+            bool        IsStripData() const             { return bStripData; }
+            void        SetStripData(bool bSet)         { bStripData = bSet; }
 
             String      GetSourceString() const;
             String      GetOperations() const;
@@ -166,7 +150,7 @@ public:
 
             SC_DLLPUBLIC void       GetQueryParam(ScQueryParam& rQueryParam) const;
             SC_DLLPUBLIC void       SetQueryParam(const ScQueryParam& rQueryParam);
-            SC_DLLPUBLIC BOOL       GetAdvancedQuerySource(ScRange& rSource) const;
+            SC_DLLPUBLIC bool       GetAdvancedQuerySource(ScRange& rSource) const;
             SC_DLLPUBLIC void       SetAdvancedQuerySource(const ScRange* pSource);
 
             void        GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
@@ -175,70 +159,87 @@ public:
             void        GetImportParam(ScImportParam& rImportParam) const;
             void        SetImportParam(const ScImportParam& rImportParam);
 
-            BOOL        IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly) const;
-            BOOL        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+            bool        IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
+            bool        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
-            BOOL        HasImportParam() const   { return bDBImport; }
-            BOOL        HasQueryParam() const    { return bDoQuery[0]; }
-            BOOL        HasSortParam() const     { return bDoSort[0]; }
-            BOOL        HasSubTotalParam() const { return bDoSubTotal[0]; }
+            bool        HasImportParam() const   { return bDBImport; }
+            bool        HasQueryParam() const    { return bDoQuery[0]; }
+            bool        HasSortParam() const     { return bDoSort[0]; }
+            bool        HasSubTotalParam() const { return maSubTotal.bGroupActive[0]; }
 
-            BOOL        HasImportSelection() const      { return bDBSelection; }
-            void        SetImportSelection(BOOL bSet)   { bDBSelection = bSet; }
+            bool        HasImportSelection() const      { return bDBSelection; }
+            void        SetImportSelection(bool bSet)   { bDBSelection = bSet; }
 
-            BOOL        HasAutoFilter() const       { return bAutoFilter; }
-            void        SetAutoFilter(BOOL bSet)    { bAutoFilter = bSet; }
+            bool        HasAutoFilter() const       { return bAutoFilter; }
+            void        SetAutoFilter(bool bSet)    { bAutoFilter = bSet; }
 
-            BOOL        IsModified() const          { return bModified; }
-            void        SetModified(BOOL bMod)      { bModified = bMod; }
+            bool        IsModified() const          { return bModified; }
+            void        SetModified(bool bMod)      { bModified = bMod; }
+
+            void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
+            void    UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
+                                SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
+
+            void ExtendDataArea(ScDocument* pDoc);
 };
 
 
 //------------------------------------------------------------------------
 class SC_DLLPUBLIC ScDBCollection : public ScSortedCollection
 {
+    typedef ::boost::ptr_vector<ScDBData> DBRangesType;
+public:
+    typedef DBRangesType AnonDBsType;
 
 private:
     Link        aRefreshHandler;
     ScDocument* pDoc;
-    USHORT nEntryIndex;         // Zaehler fuer die eindeutigen Indizes
+    sal_uInt16 nEntryIndex;         // counter for unique indices
+    AnonDBsType maAnonDBs;
 
 public:
-    ScDBCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE, ScDocument* pDocument = NULL) :
+    ScDBCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = false, ScDocument* pDocument = NULL) :
                     ScSortedCollection  ( nLim, nDel, bDup ),
                     pDoc                ( pDocument ),
-                    nEntryIndex         ( SC_START_INDEX_DB_COLL )  // oberhalb der Namen
+                    nEntryIndex         ( SC_START_INDEX_DB_COLL )  // see above for the names
                     {}
-    ScDBCollection(const ScDBCollection& rScDBCollection) :
-                    ScSortedCollection  ( rScDBCollection ),
-                    pDoc                ( rScDBCollection.pDoc ),
-                    nEntryIndex         ( rScDBCollection.nEntryIndex)
-                    {}
+
+    ScDBCollection(const ScDBCollection& r);
 
     virtual ScDataObject*   Clone() const { return new ScDBCollection(*this); }
-            ScDBData*   operator[]( const USHORT nIndex) const {return (ScDBData*)At(nIndex);}
+            ScDBData*   operator[]( const sal_uInt16 nIndex) const {return (ScDBData*)At(nIndex);}
     virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-    virtual BOOL        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
-            ScDBData*   GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly) const;
+    virtual sal_Bool        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
+            ScDBData*   GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const;
             ScDBData*   GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+            ScDBData*   GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
 
-    BOOL    SearchName( const String& rName, USHORT& rIndex ) const;
+    sal_Bool    SearchName( const String& rName, sal_uInt16& rIndex ) const;
 
     void    DeleteOnTab( SCTAB nTab );
     void    UpdateReference(UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
-    ScDBData* FindIndex(USHORT nIndex);
-    USHORT  GetEntryIndex()                 { return nEntryIndex; }
-    void    SetEntryIndex(USHORT nInd)      { nEntryIndex = nInd; }
-    virtual BOOL Insert(ScDataObject* pScDataObject);
+    ScDBData* FindIndex(sal_uInt16 nIndex);
+    sal_uInt16  GetEntryIndex()                 { return nEntryIndex; }
+    void    SetEntryIndex(sal_uInt16 nInd)      { nEntryIndex = nInd; }
+    virtual sal_Bool Insert(ScDataObject* pScDataObject);
 
     void            SetRefreshHandler( const Link& rLink )
                         { aRefreshHandler = rLink; }
     const Link&     GetRefreshHandler() const   { return aRefreshHandler; }
+
+    const ScDBData* findAnonAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
+    const ScDBData* findAnonByRange(const ScRange& rRange) const;
+    ScDBData* getAnonByRange(const ScRange& rRange);
+    void insertAnonRange(ScDBData* pData);
+
+    const AnonDBsType& getAnonRanges() const;
 };
 
 #endif

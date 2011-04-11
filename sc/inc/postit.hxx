@@ -80,9 +80,9 @@ public:
         @param bAlwaysCreateCaption  Instead of a pointer to an existing
             caption object, the passed note data structure may contain a
             reference to an ScCaptionInitData structure containing information
-            about how to construct a missing caption object. If TRUE is passed,
+            about how to construct a missing caption object. If sal_True is passed,
             the caption drawing object will be created immediately from that
-            data. If FALSE is passed and the note is not visible, it will
+            data. If sal_False is passed and the note is not visible, it will
             continue to cache that data until the caption object is requested.
      */
     explicit            ScPostIt(
@@ -94,9 +94,9 @@ public:
 
     /** Clones this note and its caption object, if specified.
 
-        @param bCloneCaption  If TRUE is passed, clones the caption object and
+        @param bCloneCaption  If sal_True is passed, clones the caption object and
             inserts it into the drawing layer of the destination document. If
-            FALSE is passed, the cloned note will refer to the old caption
+            sal_False is passed, the cloned note will refer to the old caption
             object (used e.g. in Undo documents to restore the pointer to the
             existing caption object).
      */
@@ -221,11 +221,11 @@ public:
             object. The rectangle may be empty, in this case the default
             position and size is used.
 
-        @param bAlwaysCreateCaption  If TRUE is passed, the caption drawing
-            object will be created immediately. If FALSE is passed, the caption
+        @param bAlwaysCreateCaption  If sal_True is passed, the caption drawing
+            object will be created immediately. If sal_False is passed, the caption
             drawing object will not be created if the note is not visible
-            (bShown = FALSE), but the cell note will cache the passed data.
-            MUST be set to FALSE outside of import filter implementations!
+            (bShown = sal_False), but the cell note will cache the passed data.
+            MUST be set to sal_False outside of import filter implementations!
 
         @return  Pointer to the new cell note object if insertion was
             successful (i.e. the passed cell position was valid), null
@@ -243,11 +243,11 @@ public:
         @param rNoteText  The text used to create the note caption object. Must
             not be empty.
 
-        @param bAlwaysCreateCaption  If TRUE is passed, the caption drawing
-            object will be created immediately. If FALSE is passed, the caption
+        @param bAlwaysCreateCaption  If sal_True is passed, the caption drawing
+            object will be created immediately. If sal_False is passed, the caption
             drawing object will not be created if the note is not visible
-            (bShown = FALSE), but the cell note will cache the passed data.
-            MUST be set to FALSE outside of import filter implementations!
+            (bShown = sal_False), but the cell note will cache the passed data.
+            MUST be set to sal_False outside of import filter implementations!
 
         @return  Pointer to the new cell note object if insertion was
             successful (i.e. the passed cell position was valid), null

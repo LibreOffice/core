@@ -46,7 +46,7 @@ module com { module sun { module star { module smarttags {
        that can be performed for a smart tag which has been recognized
        by a <type>SmartTagRecognizer</type> service.</p>
 
-    @since OOo 2.3.0
+    @since OOo 2.3
  */
 
 service SmartTagAction : XSmartTagAction {};

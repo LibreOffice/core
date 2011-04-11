@@ -261,8 +261,6 @@ static const CountryEntry pTable[] =
 
 const CountryEntry * const pEnd = pTable + SAL_N_ELEMENTS( pTable );
 
-// ----------------------------------------------------------------------------
-
 /** Predicate comparing a country ID with the member of a CountryEntry. */
 struct CountryEntryPred_Country
 {
@@ -274,8 +272,6 @@ struct CountryEntryPred_Country
     inline bool                 operator()( const CountryEntry& rCmp ) const
                                     { return rCmp.meCountry == meCountry; }
 };
-
-// ----------------------------------------------------------------------------
 
 /** Predicate comparing a language type with the member of a CountryEntry.
 
@@ -298,8 +294,6 @@ inline bool CountryEntryPred_Language::operator()( const CountryEntry& rCmp ) co
     return rCmp.mbUseSubLang ? (meLanguage == rCmp.meLanguage) :
                 ((meLanguage & 0x03FF) == (rCmp.meLanguage & 0x03FF));
 }
-
-// ----------------------------------------------------------------------------
 
 } // namespace
 
@@ -331,15 +325,11 @@ CountryId ConvertLanguageToCountry( LanguageType eLanguage )
 
 LanguageType ConvertCountryToLanguage( CountryId eCountry )
 {
-    // just find the first occurance of eCountry and return the language type
+    // just find the first occurrence of eCountry and return the language type
     const CountryEntry* pEntry = std::find_if( pTable, pEnd, CountryEntryPred_Country( eCountry ) );
     return (pEntry != pEnd) ? pEntry->meLanguage : LANGUAGE_DONTKNOW;
 }
 
-// ============================================================================
-
 } // namespace svx
-
-// ============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

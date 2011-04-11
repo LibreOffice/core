@@ -64,6 +64,7 @@
 #include "com/sun/star/ucb/UnsupportedCommandException.hpp"
 #include "boost/bind.hpp"
 #include "tools/urlobj.hxx"
+#include "unotools/tempfile.hxx"
 
 #include "osl/file.hxx"
 #include <vector>
@@ -371,6 +372,24 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         //No stamp file. We assume that bundled is always readonly. It must not be
         //modified from ExtensionManager but only by the installer
     }
+    else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled_prereg") )) {
+        //This is a bundled repository but the registration data
+        //is in the brand layer: share/prereg
+        //It is special because the registration data are copied at the first startup
+        //into the user installation. The processed help and xcu files are not
+        //copied. Instead the backenddb.xml for the help backend references the help
+        //by using $BUNDLED_EXTENSION_PREREG instead $BUNDLED_EXTENSIONS_USER. The
+        //configmgr.ini also used $BUNDLED_EXTENSIONS_PREREG to refer to the xcu file
+        //which contain the replacement for %origin%.
+        that->m_activePackages = OUSTR(
+            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS");
+        that->m_registrationData = OUSTR(
+            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_PREREG");
+        that->m_registryCache = OUSTR(
+            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_PREREG/registry");
+        logFile = OUSTR(
+            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_PREREG/log.txt");
+    }
     else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("tmp") )) {
         that->m_activePackages = OUSTR(
             "vnd.sun.star.expand:$TMP_EXTENSIONS/extensions");
@@ -603,7 +622,7 @@ OUString PackageManagerImpl::detectMediaType(
             if (throw_exc)
                 throw;
             (void) exc;
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
@@ -619,21 +638,12 @@ OUString PackageManagerImpl::insertToActivationLayer(
     ::ucbhelper::Content sourceContent(sourceContent_);
     Reference<XCommandEnvironment> xCmdEnv(
         sourceContent.getCommandEnvironment() );
-    OUString destFolder, tempEntry;
-    if (::osl::File::createTempFile(
-            m_activePackages_expanded.getLength() == 0
-            ? 0 : &m_activePackages_expanded,
-            0, &tempEntry ) != ::osl::File::E_None)
-        throw RuntimeException(
-            OUSTR("::osl::File::createTempFile() failed!"), 0 );
-    if (m_activePackages_expanded.getLength() == 0) {
-        destFolder = tempEntry;
-    }
-    else {
-        tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
-        // tweak user|share to macrofied url:
-        destFolder = makeURL( m_activePackages, tempEntry );
-    }
+
+    String baseDir(m_activePackages_expanded);
+    ::utl::TempFile aTemp(&baseDir, sal_False);
+    OUString tempEntry = aTemp.GetURL();
+    tempEntry = tempEntry.copy(tempEntry.lastIndexOf('/') + 1);
+    OUString destFolder = makeURL( m_activePackages, tempEntry);
     destFolder += OUSTR("_");
 
     // prepare activation folder:
@@ -950,6 +960,8 @@ void PackageManagerImpl::removePackage(
                 contentRemoved.writeStream( xData, true /* replace existing */ );
             }
             m_activePackagesDB->erase( id, fileName ); // to be removed upon next start
+            //remove any cached data hold by the backend
+            m_xRegistry->packageRemoved(xPackage->getURL(), xPackage->getPackageType()->getMediaType());
         }
         try_dispose( xPackage );
 
@@ -990,7 +1002,8 @@ OUString PackageManagerImpl::getDeployPath( ActivePackages::Data const & data )
     //The bundled extensions are not contained in an additional folder
     //with a unique name. data.temporaryName contains already the
     //UTF8 encoded folder name. See PackageManagerImpl::synchronize
-    if (!m_context.equals(OUSTR("bundled")))
+    if (!m_context.equals(OUSTR("bundled"))
+        && !m_context.equals(OUSTR("bundled_prereg")))
     {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("_/") );
         buf.append( ::rtl::Uri::encode( data.fileName, rtl_UriCharClassPchar,
@@ -1076,13 +1089,13 @@ PackageManagerImpl::getDeployedPackages_(
         catch (lang::IllegalArgumentException & exc) {
             // ignore
             (void) exc; // avoid warnings
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         catch (deployment::DeploymentException& exc) {
             // ignore
             (void) exc; // avoid warnings
-            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+            OSL_FAIL( ::rtl::OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
@@ -1261,7 +1274,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
     typedef ActivePackages::Entries::const_iterator ITActive;
     bool bShared = m_context.equals(OUSTR("shared"));
 
-    for (ITActive i = id2temp.begin(); i != id2temp.end(); i++)
+    for (ITActive i = id2temp.begin(); i != id2temp.end(); ++i)
     {
         try
         {
@@ -1305,7 +1318,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
                 //There may be another extensions at the same place
                 dp_misc::DescriptionInfoset infoset =
                     dp_misc::getDescriptionInfoset(url);
-                OSL_ENSURE(infoset.hasDescription(),
+                OSL_ENSURE(infoset.hasDescription() && infoset.getIdentifier(),
                            "Extension Manager: bundled and shared extensions "
                            "must have an identifer and a version");
                 if (infoset.hasDescription() &&
@@ -1342,6 +1355,8 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
 {
     bool bModified = false;
+    OSL_ASSERT(!m_context.equals(OUSTR("user")));
+
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
     //check if the folder exist at all. The shared extension folder
     //may not exist for a normal user.
@@ -1367,8 +1382,8 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
             //The temporary folders of user and shared have an '_' at then end.
             //But the name in ActivePackages.temporaryName is saved without.
             OUString title2 = title;
-            bool bNotBundled = !m_context.equals(OUSTR("bundled"));
-            if (bNotBundled)
+            bool bShared = m_context.equals(OUSTR("shared"));
+            if (bShared)
             {
                 OSL_ASSERT(title2[title2.getLength() -1] == '_');
                 title2 = title2.copy(0, title2.getLength() -1);
@@ -1390,7 +1405,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                 // an added extension
                 OUString url(m_activePackages_expanded + OUSTR("/") + titleEncoded);
                 OUString sExtFolder;
-                if (bNotBundled) //that is, shared
+                if (bShared) //that is, shared
                 {
                     //Check if the extension was not "deleted" already which is indicated
                     //by a xxx.tmpremoved file
@@ -1412,7 +1427,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                     ActivePackages::Data dbData;
 
                     dbData.temporaryName = titleEncoded;
-                    if (bNotBundled)
+                    if (bShared)
                         dbData.fileName = sExtFolder;
                     else
                         dbData.fileName = title;
@@ -1497,7 +1512,7 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
         ActivePackages::Entries::const_iterator i = id2temp.begin();
         bool bShared = m_context.equals(OUSTR("shared"));
 
-        for (; i != id2temp.end(); i++ )
+        for (; i != id2temp.end(); ++i )
         {
             //Get the database entry
             ActivePackages::Data const & dbData = i->second;
@@ -1604,7 +1619,6 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
     }
 }
 
-//##############################################################################
 
 //______________________________________________________________________________
 PackageManagerImpl::CmdEnvWrapperImpl::~CmdEnvWrapperImpl()

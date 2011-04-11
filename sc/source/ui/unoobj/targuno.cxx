@@ -136,7 +136,7 @@ sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const rtl::OUString& aName) th
     for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
         if ( aNames[i] == aNameStr )
             return sal_True;
-    return sal_False;
+    return false;
 }
 
 // container::XElementAccess
@@ -193,7 +193,7 @@ uno::Reference< container::XNameAccess > SAL_CALL  ScLinkTargetTypeObj::getLinks
                 xCollection.set(new ScDatabaseRangesObj(pDocShell));
                 break;
             default:
-                DBG_ERROR("invalid type");
+                OSL_FAIL("invalid type");
         }
     }
 
@@ -225,7 +225,6 @@ void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const rtl::OUString& /* aPro
     //! exception?
 }
 
-//  static
 void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType )
 {
     sal_uInt16 nImgId = 0;
@@ -243,8 +242,7 @@ void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType 
     }
     if (nImgId)
     {
-        BOOL bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-        ImageList aEntryImages( ScResId( bHighContrast ? RID_IMAGELIST_H_NAVCONT : RID_IMAGELIST_NAVCONT ) );
+        ImageList aEntryImages( ScResId( RID_IMAGELIST_NAVCONT ) );
         const Image& rImage = aEntryImages.GetImage( nImgId );
         rRet <<= uno::Reference< awt::XBitmap > (VCLUnoHelper::CreateBitmap( rImage.GetBitmapEx() ));
     }

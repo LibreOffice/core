@@ -26,11 +26,20 @@
  *
  ************************************************************************/
 
-#include "childlist.hxx"
+#include <childlist.hxx>
+
+#include <libxml/tree.h>
+
+#include <node.hxx>
+#include <document.hxx>
+
+
 namespace DOM
 {
-    CChildList::CChildList(const CNode* base)
-        : m_pNode(base->m_aNodePtr)
+    CChildList::CChildList(::rtl::Reference<CNode> const& pBase,
+                ::osl::Mutex & rMutex)
+        : m_pNode(pBase)
+        , m_rMutex(rMutex)
     {
     }
 
@@ -39,10 +48,15 @@ namespace DOM
     */
     sal_Int32 SAL_CALL CChildList::getLength() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         sal_Int32 length = 0;
         if (m_pNode != NULL)
         {
-            xmlNodePtr cur = m_pNode->children;
+            xmlNodePtr cur = m_pNode->GetNodePtr();
+            if (0 != cur) {
+                cur = cur->children;
+            }
             while (cur != NULL)
             {
                 length++;
@@ -55,20 +69,27 @@ namespace DOM
     /**
     Returns the indexth item in the collection.
     */
-    Reference< XNode > SAL_CALL CChildList::item(sal_Int32 index) throw (RuntimeException)
+    Reference< XNode > SAL_CALL CChildList::item(sal_Int32 index)
+        throw (RuntimeException)
     {
-        Reference< XNode >aNode;
+        ::osl::MutexGuard const g(m_rMutex);
+
         if (m_pNode != NULL)
         {
-            xmlNodePtr cur = m_pNode->children;
+            xmlNodePtr cur = m_pNode->GetNodePtr();
+            if (0 != cur) {
+                cur = cur->children;
+            }
             while (cur != NULL)
             {
-                if (index-- == 0)
-                    aNode = Reference< XNode >(CNode::get(cur));
+                if (index-- == 0) {
+                    return Reference< XNode >(
+                            m_pNode->GetOwnerDocument().GetCNode(cur).get());
+                }
                 cur = cur->next;
             }
         }
-        return aNode;
+        return 0;
     }
 }
 

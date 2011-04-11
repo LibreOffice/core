@@ -35,10 +35,8 @@
 #include "oox/ppt/slidefragmenthandler.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/ppt/timenodelistcontext.hxx"
 #include "buildlistcontext.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -73,12 +71,12 @@ Reference< XFastContextHandler > SlideTimingContext::createFastChildContext( sal
 
     switch( aElementToken )
     {
-    case NMSP_PPT|XML_bldLst:
+    case PPT_TOKEN( bldLst ):
         xRet.set( new BuildListContext( *this, xAttribs, maTimeNodeList ) );
         break;
-    case NMSP_PPT|XML_extLst:
+    case PPT_TOKEN( extLst ):
         return xRet;
-    case NMSP_PPT|XML_tnLst:
+    case PPT_TOKEN( tnLst ):
         // timing nodes
     {
         xRet.set( new TimeNodeListContext( *this, maTimeNodeList ) );

@@ -29,57 +29,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-
 #include "formel.hxx"
 
-
-
-
-_ScRangeList::~_ScRangeList()
+_ScRangeListTabs::_ScRangeListTabs()
 {
-    ScRange*    p = ( ScRange* ) First();
-
-    while( p )
-    {
-        delete p;
-        p = ( ScRange* ) Next();
-    }
 }
-
-
-
-
-_ScRangeListTabs::_ScRangeListTabs( void )
-{
-    ppTabLists = new _ScRangeList*[ MAXTAB + 1 ];
-
-    for( UINT16 n = 0 ; n <= MAXTAB ; n++ )
-        ppTabLists[ n ] = NULL;
-
-    bHasRanges = FALSE;
-    pAct = NULL;
-    nAct = 0;
-}
-
 
 _ScRangeListTabs::~_ScRangeListTabs()
 {
-    if( bHasRanges )
-    {
-        for( UINT16 n = 0 ; n <= MAXTAB ; n++ )
-        {
-            if( ppTabLists[ n ] )
-                delete ppTabLists[ n ];
-        }
-    }
-
-    delete[] ppTabLists;
 }
 
 
-void _ScRangeListTabs::Append( ScSingleRefData a, SCsTAB nTab, const BOOL b )
+void _ScRangeListTabs::Append( ScSingleRefData a, SCTAB nTab, const bool b )
 {
     if( b )
     {
@@ -97,30 +58,35 @@ void _ScRangeListTabs::Append( ScSingleRefData a, SCsTAB nTab, const BOOL b )
         DBG_ASSERT( ValidTab(a.nTab), "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
     }
 
-    bHasRanges = TRUE;
-
     if( nTab == SCTAB_MAX)
         return;
     if( nTab < 0)
         nTab = a.nTab;
 
-    if( nTab >= 0 && nTab <= MAXTAB)
+    if (nTab < 0 || MAXTAB < nTab)
+        return;
+
+    TabRangeType::iterator itr = maTabRanges.find(nTab);
+    if (itr == maTabRanges.end())
     {
-        _ScRangeList*   p = ppTabLists[ nTab ];
+        // No entry for this table yet.  Insert a new one.
+        std::pair<TabRangeType::iterator, bool> r =
+            maTabRanges.insert(nTab, new RangeListType);
 
-        if( !p )
-            p = ppTabLists[ nTab ] = new _ScRangeList;
+        if (!r.second)
+            // Insertion failed.
+            return;
 
-        p->Append( a );
+        itr = r.first;
     }
+    itr->second->push_back(ScRange(a.nCol,a.nRow,a.nTab));
 }
 
-
-void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
+void _ScRangeListTabs::Append( ScComplexRefData a, SCTAB nTab, bool b )
 {
     if( b )
     {
-        // #96263# ignore 3D ranges
+        // ignore 3D ranges
         if( a.Ref1.nTab != a.Ref2.nTab )
             return;
 
@@ -162,56 +128,58 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
             "+_ScRangeListTabs::Append(): 3D-Ranges werden in SC nicht unterstuetzt!" );
     }
 
-    bHasRanges = TRUE;
-
     if( nTab == SCTAB_MAX)
         return;
+
     if( nTab < -1)
         nTab = a.Ref1.nTab;
 
-    if( nTab >= 0 && nTab <= MAXTAB)
+    if (nTab < 0 || MAXTAB < nTab)
+        return;
+
+    TabRangeType::iterator itr = maTabRanges.find(nTab);
+    if (itr == maTabRanges.end())
     {
-        _ScRangeList*   p = ppTabLists[ nTab ];
+        // No entry for this table yet.  Insert a new one.
+        std::pair<TabRangeType::iterator, bool> r =
+            maTabRanges.insert(nTab, new RangeListType);
 
-        if( !p )
-            p = ppTabLists[ nTab ] = new _ScRangeList;
+        if (!r.second)
+            // Insertion failed.
+            return;
 
-        p->Append( a );
+        itr = r.first;
     }
+    itr->second->push_back(
+        ScRange(a.Ref1.nCol,a.Ref1.nRow,a.Ref1.nTab,
+                a.Ref2.nCol,a.Ref2.nRow,a.Ref2.nTab));
 }
 
-
-const ScRange* _ScRangeListTabs::First( const UINT16 n )
+const ScRange* _ScRangeListTabs::First( SCTAB n )
 {
     DBG_ASSERT( ValidTab(n), "-_ScRangeListTabs::First(): Und tschuessssssss!" );
 
-    if( ppTabLists[ n ] )
-    {
-        pAct = ppTabLists[ n ];
-        nAct = n;
-        return pAct->First();
-    }
-    else
-    {
-        pAct = NULL;
-        nAct = 0;
+    TabRangeType::iterator itr = maTabRanges.find(n);
+    if (itr == maTabRanges.end())
+        // No range list exists for this table.
         return NULL;
-    }
+
+    const RangeListType& rList = *itr->second;
+    maItrCur = rList.begin();
+    maItrCurEnd = rList.end();
+    return rList.empty() ? NULL : &(*maItrCur);
 }
 
-
-const ScRange* _ScRangeListTabs::Next( void )
+const ScRange* _ScRangeListTabs::Next ()
 {
-    if( pAct )
-        return pAct->Next();
-    else
+    ++maItrCur;
+    if (maItrCur == maItrCurEnd)
         return NULL;
+
+    return &(*maItrCur);
 }
 
-
-
-
-ConverterBase::ConverterBase( UINT16 nNewBuffer ) :
+ConverterBase::ConverterBase( sal_uInt16 nNewBuffer ) :
     aEingPos( 0, 0, 0 ),
     eStatus( ConvOK ),
     nBufferSize( nNewBuffer )
@@ -235,7 +203,7 @@ void ConverterBase::Reset()
 
 
 
-ExcelConverterBase::ExcelConverterBase( UINT16 nNewBuffer ) :
+ExcelConverterBase::ExcelConverterBase( sal_uInt16 nNewBuffer ) :
     ConverterBase( nNewBuffer )
 {
 }
@@ -259,7 +227,7 @@ void ExcelConverterBase::Reset()
 
 
 
-LotusConverterBase::LotusConverterBase( SvStream &rStr, UINT16 nNewBuffer ) :
+LotusConverterBase::LotusConverterBase( SvStream &rStr, sal_uInt16 nNewBuffer ) :
     ConverterBase( nNewBuffer ),
     aIn( rStr ),
     nBytesLeft( 0 )

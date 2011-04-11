@@ -30,12 +30,7 @@
 #include "precompiled_extensions.hxx"
 #include "res_services.hxx"
 
-/** === begin UNO includes === **/
-#include <com/sun/star/registry/XRegistryKey.hpp>
-/** === end UNO includes === **/
-
 /** === begin UNO using === **/
-using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
@@ -63,43 +58,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, XRegistryKey * pRegistryKey )
-{
-    try
-    {
-        ::std::vector< ::res::ComponentInfo > aComponentInfos( ::res::getComponentInfos() );
-        for (   ::std::vector< ::res::ComponentInfo >::const_iterator loop = aComponentInfos.begin();
-                loop != aComponentInfos.end();
-                ++loop
-            )
-        {
-            Reference< XRegistryKey > xNewKey =
-                pRegistryKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") )
-                    + loop->sImplementationName + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ) ) );
-
-            for( sal_Int32 i = 0; i < loop->aSupportedServices.getLength(); ++i )
-                xNewKey->createKey( loop->aSupportedServices.getConstArray()[i]);
-
-            if ( loop->sSingletonName.getLength() )
-            {
-                OSL_ENSURE( loop->aSupportedServices.getLength() == 1, "singletons must support exactly one service!" );
-                xNewKey = pRegistryKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") )
-                    + loop->sImplementationName + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SINGLETONS/" ) )
-                    + loop->sSingletonName );
-                xNewKey->setStringValue( loop->aSupportedServices[ 0 ] );
-            }
-        }
-
-        return sal_True;
-    }
-    catch (Exception &)
-    {
-        // not allowed to throw an exception over the c function.
-        //OSL_ENSURE( sal_False, "Exception cannot register component!" );
-        return sal_False;
-    }
 }
 
 void * SAL_CALL component_getFactory(

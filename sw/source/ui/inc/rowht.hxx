@@ -29,22 +29,17 @@
 #define _ROWHT_HXX
 
 #include <svx/stddlg.hxx>
-
 #include <vcl/field.hxx>
-
 #include <vcl/fixed.hxx>
-
-#include <vcl/button.hxx>
-
 #include <vcl/button.hxx>
 
 class SwWrtShell;
 
 class SwTableHeightDlg : public SvxStandardDialog
 {
+      FixedLine       aHeightFL;
     MetricField     aHeightEdit;
     CheckBox        aAutoHeightCB;
-    FixedLine       aHeightFL;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;

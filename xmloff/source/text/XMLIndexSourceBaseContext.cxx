@@ -39,7 +39,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -59,7 +59,7 @@ using ::com::sun::star::xml::sax::XAttributeList;
 const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
 const sal_Char sAPI_IsRelativeTabstops[] = "IsRelativeTabstops";
 
-static __FAR_DATA SvXMLTokenMapEntry aIndexSourceTokenMap[] =
+static SvXMLTokenMapEntry aIndexSourceTokenMap[] =
 {
     { XML_NAMESPACE_TEXT,
           XML_OUTLINE_LEVEL,

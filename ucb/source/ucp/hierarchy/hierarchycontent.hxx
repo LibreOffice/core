@@ -71,14 +71,14 @@ public:
     HierarchyContentProperties( const HierarchyEntryData::Type & rType )
     : m_aData( rType ),
       m_aContentType( rType == HierarchyEntryData::FOLDER
-        ? rtl::OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE )
-        : rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE ) ) {}
+        ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_FOLDER_CONTENT_TYPE ))
+        : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_LINK_CONTENT_TYPE )) ) {}
 
     HierarchyContentProperties( const HierarchyEntryData & rData )
     : m_aData( rData ),
       m_aContentType( rData.getType() == HierarchyEntryData::FOLDER
-        ? rtl::OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE )
-        : rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE ) ) {}
+        ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_FOLDER_CONTENT_TYPE ))
+        : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( HIERARCHY_LINK_CONTENT_TYPE )) ) {}
 
     const rtl::OUString & getName() const { return m_aData.getName(); }
     void setName( const rtl::OUString & rName ) { m_aData.setName( rName ); };

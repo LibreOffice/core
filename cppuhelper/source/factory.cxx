@@ -55,19 +55,17 @@
 
 
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::loader;
 using namespace com::sun::star::registry;
 
+using ::rtl::OUString;
+
 namespace cppu
 {
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 class OSingleFactoryHelper
     : public XServiceInfo
     , public XSingleServiceFactory
@@ -231,9 +229,17 @@ Reference< XInterface > OSingleFactoryHelper::createInstanceWithArgumentsAndCont
     else
     {
         if ( rArguments.getLength() )
+        {
+            // dispose the here created UNO object before throwing out exception
+            // to avoid risk of memory leaks #i113722#
+            Reference<XComponent> xComp( xRet, UNO_QUERY );
+            if (xComp.is())
+                xComp->dispose();
+
             throw lang::IllegalArgumentException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM("cannot pass arguments to component => no XInitialization implemented!") ),
                 Reference< XInterface >(), 0 );
+        }
     }
 
     return xRet;
@@ -267,10 +273,6 @@ Sequence< OUString > OSingleFactoryHelper::getSupportedServiceNames(void)
     return aServiceNames;
 }
 
-
-//----------------------------------------------------------------------
-//----------------------------------------------------------------------
-//----------------------------------------------------------------------
 struct OFactoryComponentHelper_Mutex
 {
     Mutex   aMutex;
@@ -543,10 +545,6 @@ sal_Bool SAL_CALL OFactoryComponentHelper::releaseOnNotification() throw(::com::
     return sal_True;
 }
 
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 class ORegistryFactoryHelper : public OFactoryComponentHelper,
                                public OPropertySetHelper
 
@@ -701,7 +699,7 @@ sal_Bool ORegistryFactoryHelper::convertFastPropertyValue(
     Any &, Any &, sal_Int32, Any const & )
     throw (lang::IllegalArgumentException)
 {
-    OSL_ENSURE( 0, "unexpected!" );
+    OSL_FAIL( "unexpected!" );
     return false;
 }
 
@@ -954,10 +952,6 @@ sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification() throw(::com::s
     return retVal;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 class OFactoryProxyHelper : public WeakImplHelper3< XServiceInfo, XSingleServiceFactory,
                                                     XUnloadingPreference >
 {
@@ -1047,10 +1041,6 @@ sal_Bool SAL_CALL OFactoryProxyHelper::releaseOnNotification() throw(::com::sun:
     return sal_True;
 }
 
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 // global function
 Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,

@@ -57,10 +57,6 @@
 * @file
 * Breaks override of Wordpro.
 ************************************************************************/
-/*************************************************************************
-* Change History
-* 2005-01-12 Create and implement.
-************************************************************************/
 #ifndef     _LWPBREAKSOVERRIDE_HXX
 #define     _LWPBREAKSOVERRIDE_HXX
 
@@ -74,6 +70,8 @@ class LwpBreaksOverride : public LwpOverride
 public:
     LwpBreaksOverride();
     virtual ~LwpBreaksOverride();
+
+    virtual LwpBreaksOverride* clone() const;
 
     enum
     {
@@ -92,8 +90,6 @@ public:
 
     //add by , 01/28/2005
     void Override(LwpBreaksOverride* pOther);
-
-    void operator=(const LwpOverride& rOther);
 
     inline sal_Bool IsPageBreakBefore();
     inline sal_Bool IsPageBreakAfter();
@@ -135,6 +131,12 @@ public:
 
     inline LwpAtomHolder* GetNextStyle();
     //end add
+
+protected:
+    LwpBreaksOverride(LwpBreaksOverride const& rOther);
+
+private:
+    LwpBreaksOverride& operator=(const LwpBreaksOverride& rOther); // not implemented
 
 private:
     LwpAtomHolder       *m_pNextStyle;

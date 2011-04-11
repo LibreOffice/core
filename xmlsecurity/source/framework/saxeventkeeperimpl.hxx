@@ -67,12 +67,6 @@ class SAXEventKeeperImpl : public cppu::WeakImplHelper6
  *  Controls SAX events to be bufferred, and controls bufferred SAX events
  *  to be released.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XSecuritySAXEventKeeper,
- *                  XReferenceResolvedBroadcaster,
- *                  XSAXEventKeeperStatusChangeBroadcaster,
- *                  XDocumentHandler, XInitialization, XServiceInfo
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com

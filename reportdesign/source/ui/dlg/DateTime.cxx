@@ -241,12 +241,10 @@ sal_Int32 ODateTimeDialog::getFormatKey(sal_Bool _bDate) const
     sal_Int32 nFormatKey;
     if ( _bDate )
     {
-         //     nFormat = m_aDateF1.IsChecked() ? i18n::NumberFormatIndex::DATE_SYSTEM_LONG : (m_aDateF2.IsChecked() ? i18n::NumberFormatIndex::DATE_SYS_DMMMYYYY : i18n::NumberFormatIndex::DATE_SYSTEM_SHORT);
          nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_aDateListBox.GetEntryData( m_aDateListBox.GetSelectEntryPos() )));
     }
     else
     {
-        //  nFormat = m_aTimeF1.IsChecked() ? i18n::NumberFormatIndex::TIME_HHMMSS : (m_aTimeF2.IsChecked() ? i18n::NumberFormatIndex::TIME_HHMMSSAMPM : i18n::NumberFormatIndex::TIME_HHMM);
          nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_aTimeListBox.GetEntryData( m_aTimeListBox.GetSelectEntryPos() )));
     }
     return nFormatKey;

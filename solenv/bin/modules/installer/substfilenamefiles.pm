@@ -34,15 +34,12 @@ use installer::pathanalyzer;
 use installer::systemactions;
 
 #########################################################
-# Analyzing files with flag SCPZIP_REPLACE
-# $item can be "File" or "ScpAction"
+# Analyzing files with flag SUBST_FILENAME
 #########################################################
 
 sub resolving_subst_filename_flag
 {
     my ($filesarrayref, $variableshashref, $languagestringref) = @_;
-
-    my $diritem = lc($item);
 
     my $replacedirbase = installer::systemactions::create_directories("change_filename", $languagestringref);
 
@@ -82,7 +79,6 @@ sub resolving_subst_filename_flag
 
             my $sourcepath = $onefile->{'sourcepath'};
 
-            # if ( $onefilename =~ /^\s*\Q$installer::globals::separator\E/ )   # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
             if ( $onefilename =~ /\Q$installer::globals::separator\E/ ) # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
             {
                 $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;

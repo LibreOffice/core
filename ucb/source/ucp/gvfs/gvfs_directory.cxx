@@ -135,10 +135,10 @@ struct gvfs::DataSupplier_Impl
         ResultList::const_iterator end = m_aResults.end();
 
         while ( it != end )
-            {
-                delete (*it);
-                it++;
-            }
+        {
+            delete (*it);
+            ++it;
+        }
     }
 };
 
@@ -175,7 +175,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         escaped_name = gnome_vfs_escape_string( m_pImpl->m_aResults[ nIndex ]->aInfo.name );
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += rtl::OUString::createFromAscii( "/" );
+            aId += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         aId += rtl::OUString::createFromAscii( escaped_name );
 

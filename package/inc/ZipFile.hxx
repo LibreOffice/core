@@ -66,7 +66,7 @@ protected:
     ::rtl::OUString sComment;       /* zip file comment */
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
-    Inflater        aInflater;
+    ZipUtils::Inflater aInflater;
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
     const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xFactory;

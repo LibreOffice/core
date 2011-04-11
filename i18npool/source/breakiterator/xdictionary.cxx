@@ -46,7 +46,8 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -61,12 +62,6 @@ xdictionary::xdictionary(const sal_Char *lang) :
     hModule( NULL ),
     boundary(),
     japaneseWordBreak( sal_False )
-#if USE_CELL_BOUNDARY_CODE
-    // For CTL breakiterator, where the word boundary should not be inside cell.
-    ,
-    useCellBoundary( sal_False ),
-    cellBoundary( NULL )
-#endif
 {
     index1 = 0;
 #ifdef SAL_DLLPREFIX
@@ -79,15 +74,15 @@ xdictionary::xdictionary(const sal_Char *lang) :
         hModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
         if( hModule ) {
             sal_IntPtr (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getExistMark").pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getExistMark")).pData );
             existMark = (sal_uInt8*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getIndex1").pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getIndex1")).pData );
             index1 = (sal_Int16*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getIndex2").pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getIndex2")).pData );
             index2 = (sal_Int32*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getLenArray").pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getLenArray")).pData );
             lenArray = (sal_Int32*) (*func)();
-            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString::createFromAscii("getDataArea").pData );
+            func = (sal_IntPtr(*)()) osl_getFunctionSymbol( hModule, OUString(RTL_CONSTASCII_USTRINGPARAM("getDataArea")).pData );
             dataArea = (sal_Unicode*) (*func)();
         }
         else
@@ -102,10 +97,6 @@ xdictionary::xdictionary(const sal_Char *lang) :
         for (sal_Int32 i = 0; i < CACHE_MAX; i++)
             cache[i].size = 0;
 
-#if USE_CELL_BOUNDARY_CODE
-        useCellBoundary = sal_False;
-        cellBoundary = NULL;
-#endif
         japaneseWordBreak = sal_False;
 }
 
@@ -295,28 +286,12 @@ WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary& wordBou
                 if (count) {
                     aCache.wordboundary[i+1] = aCache.wordboundary[i] + count;
                     i++;
-
-#if USE_CELL_BOUNDARY_CODE
-                    if (useCellBoundary) {
-                        sal_Int32 cBoundary = cellBoundary[aCache.wordboundary[i] + wordBoundary.startPos - 1];
-                        if (cBoundary > 0)
-                            aCache.wordboundary[i] = cBoundary - wordBoundary.startPos;
-                    }
-#endif
                 }
             }
 
             if (len) {
                 aCache.wordboundary[i+1] = aCache.wordboundary[i] + len;
                 i++;
-
-#if USE_CELL_BOUNDARY_CODE
-                if (useCellBoundary) {
-                    sal_Int32 cBoundary = cellBoundary[aCache.wordboundary[i] + wordBoundary.startPos - 1];
-                    if (cBoundary > 0)
-                        aCache.wordboundary[i] = cBoundary - wordBoundary.startPos;
-                }
-#endif
             }
         }
         aCache.wordboundary[i + 1] = aCache.length + 1;
@@ -391,14 +366,6 @@ Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, s
 
         return boundary;
 }
-
-#if USE_CELL_BOUNDARY_CODE
-void xdictionary::setCellBoundary(sal_Int32* cellArray)
-{
-        useCellBoundary = sal_True;
-        cellBoundary = cellArray;
-}
-#endif
 
 } } } }
 

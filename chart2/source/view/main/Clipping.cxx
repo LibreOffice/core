@@ -87,7 +87,7 @@ bool lcl_CLIPt(double fDenom,double fNum, double & fTE, double & fTL)
 }
 
 /** @descr  The line given by it's two endpoints rP0 and rP1 is clipped at the rectangle
-            rRectangle.  If there is at least a part of it visible then TRUE is returned and
+            rRectangle.  If there is at least a part of it visible then sal_True is returned and
             the endpoints of that part are stored in rP0 and rP1.  The points rP0 and rP1
             may have the same coordinates.
         @param  rP0 Start point of the line to clip.  Modified to contain a start point inside
@@ -96,7 +96,7 @@ bool lcl_CLIPt(double fDenom,double fNum, double & fTE, double & fTL)
             the clipping area if possible.
         @param  rRectangle Clipping area.
         @return If the line lies completely or partly inside the clipping area then TRUE
-            is returned.  If the line lies completely outside then FALSE is returned and rP0 and
+            is returned.  If the line lies completely outside then sal_False is returned and rP0 and
             rP1 are left unmodified.
 */
 bool lcl_clip2d(B2DTuple& rPoint0, B2DTuple& rPoint1, const B2DRectangle& rRectangle)
@@ -165,7 +165,7 @@ void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
 {
     if(nPolygonIndex<0)
     {
-        OSL_ENSURE( false, "The polygon index needs to be > 0");
+        OSL_FAIL( "The polygon index needs to be > 0");
         nPolygonIndex=0;
     }
 
@@ -191,7 +191,7 @@ void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
         if( nNewResultPointCount > nReallocLength )
         {
             nReallocLength = nNewResultPointCount;
-            DBG_ERROR("this should not be the case to avoid performance problems");
+            OSL_FAIL("this should not be the case to avoid performance problems");
         }
         pOuterSequenceX->realloc(nReallocLength);
         pOuterSequenceY->realloc(nReallocLength);

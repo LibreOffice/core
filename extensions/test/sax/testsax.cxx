@@ -51,9 +51,7 @@
 
 #include "factory.hxx"
 
-using namespace rtl;
 using namespace usr;
-
 
 #define BUILD_ERROR(expr, Message)\
         {\
@@ -109,11 +107,7 @@ using namespace usr;
 
 /****
 * test szenarios :
-*
-*
-*
 ****/
-
 
 
 class OSaxParserTest :
@@ -165,8 +159,6 @@ private:
 
 /**
 * for external binding
-*
-*
 **/
 XInterfaceRef OSaxParserTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception))
 {

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 
 #include "radiobtnbox.hxx"
@@ -54,7 +51,7 @@ void SvxRadioButtonListBox::SetTabs()
 {
     SvxSimpleTable::SetTabs();
 /*
-    USHORT nAdjust = SV_LBOXTAB_ADJUST_RIGHT | SV_LBOXTAB_ADJUST_LEFT |
+    sal_uInt16 nAdjust = SV_LBOXTAB_ADJUST_RIGHT | SV_LBOXTAB_ADJUST_LEFT |
                      SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_ADJUST_NUMERIC | SV_LBOXTAB_FORCE;
     if ( aTabs.Count() > 0 )
     {
@@ -89,7 +86,7 @@ void SvxRadioButtonListBox::KeyInput( const KeyEvent& rKEvt )
 
 void SvxRadioButtonListBox::HandleEntryChecked( SvLBoxEntry* _pEntry )
 {
-    Select( _pEntry, TRUE );
+    Select( _pEntry, sal_True );
     SvButtonState eState = GetCheckButtonState( _pEntry );
 
     if ( SV_BUTTON_CHECKED == eState )

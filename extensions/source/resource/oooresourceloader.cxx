@@ -447,7 +447,7 @@ namespace res
     Sequence< ::rtl::OUString > SAL_CALL OpenOfficeResourceBundle::getElementNames(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        OSL_ENSURE( false, "OpenOfficeResourceBundle::getElementNames: not implemented!" );
+        OSL_FAIL( "OpenOfficeResourceBundle::getElementNames: not implemented!" );
             // the (Simple)ResManager does not provide an API to enumerate the resources
         return Sequence< ::rtl::OUString >( );
     }
@@ -478,7 +478,7 @@ namespace res
     ::sal_Bool SAL_CALL OpenOfficeResourceBundle::hasElements(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        OSL_ENSURE( false, "OpenOfficeResourceBundle::hasElements: not implemented!" );
+        OSL_FAIL( "OpenOfficeResourceBundle::hasElements: not implemented!" );
             // the (Simple)ResManager does not provide an API to enumerate the resources
         return ::sal_Bool( );
     }

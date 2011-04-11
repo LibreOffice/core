@@ -65,7 +65,7 @@ public:
 
 protected:
     DrawViewShell*  pDrViewSh;
-    BOOL                bInternalMove;
+    sal_Bool                bInternalMove;
 
     // TabBar
     virtual void        Select();

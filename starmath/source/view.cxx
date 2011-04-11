@@ -35,6 +35,9 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/container/XChild.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -78,6 +81,7 @@
 #include "toolbox.hxx"
 #include "mathmlimport.hxx"
 #include "cursor.hxx"
+#include "accessibility.hxx"
 
 #define MINWIDTH        200
 #define MINHEIGHT       200
@@ -115,6 +119,9 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
 
     SetHelpId(HID_SMA_WIN_DOCUMENT);
     SetUniqueId(HID_SMA_WIN_DOCUMENT);
+
+    ShowLine(false);
+    CaretBlinkInit();
 }
 
 SmGraphicWindow::~SmGraphicWindow()
@@ -123,6 +130,7 @@ SmGraphicWindow::~SmGraphicWindow()
         pAccessible->ClearWin();    // make Accessible defunctional
     // Note: memory for pAccessible will be freed when the reference
     // xAccessible is released.
+    CaretBlinkStop();
 }
 
 void SmGraphicWindow::StateChanged( StateChangedType eType )
@@ -193,7 +201,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
             ESelection  aSel (aToken.nRow - 1, aToken.nCol - 1);
 
             if (rMEvt.GetClicks() != 1 || aToken.eType == TPLACE)
-                aSel.nEndPos = aSel.nEndPos + sal::static_int_cast< USHORT >(aToken.aText.Len());
+                aSel.nEndPos = aSel.nEndPos + sal::static_int_cast< sal_uInt16 >(aToken.aText.Len());
 
             pEdit->SetSelection(aSel);
             SetCursor(pNode);
@@ -207,10 +215,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
 bool SmGraphicWindow::IsInlineEditEnabled() const
 {
-    //Avoid crash on startup (happens when starmath is selected from splash screen)
-    if(pViewShell->GetEditWindow())
-        return pViewShell->GetEditWindow()->IsInlineEditEnabled();
-    return false;
+    return pViewShell->IsInlineEditEnabled();
 }
 
 void SmGraphicWindow::GetFocus()
@@ -219,7 +224,11 @@ void SmGraphicWindow::GetFocus()
         return;
     pViewShell->GetEditWindow()->Flush();
     //Let view shell know what insertions should be done in visual editor
-    pViewShell->SetInsertIntoEditWindow(FALSE);
+    pViewShell->SetInsertIntoEditWindow(false);
+    SetIsCursorVisible(true);
+    ShowLine(true);
+    CaretBlinkStart();
+    RepaintViewShellDoc();
 }
 
 void SmGraphicWindow::LoseFocus()
@@ -233,15 +242,60 @@ void SmGraphicWindow::LoseFocus()
         pAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,
                 aOldValue, aNewValue );
     }
+    if (!IsInlineEditEnabled())
+        return;
+    SetIsCursorVisible(false);
+    ShowLine(false);
+    CaretBlinkStop();
+    RepaintViewShellDoc();
 }
 
-void SmGraphicWindow::ShowCursor(BOOL bShow)
-    // shows or hides the formula-cursor depending on 'bShow' is TRUE or not
+void SmGraphicWindow::RepaintViewShellDoc()
+{
+    SmDocShell &rDoc = *pViewShell->GetDoc();
+    rDoc.Repaint();
+}
+
+IMPL_LINK( SmGraphicWindow, CaretBlinkTimerHdl, AutoTimer *, EMPTYARG )
+{
+    if (IsCursorVisible())
+        SetIsCursorVisible(false);
+    else
+        SetIsCursorVisible(true);
+
+    RepaintViewShellDoc();
+
+    return 0;
+}
+
+void SmGraphicWindow::CaretBlinkInit()
+{
+    aCaretBlinkTimer.SetTimeoutHdl(LINK(this, SmGraphicWindow, CaretBlinkTimerHdl));
+    aCaretBlinkTimer.SetTimeout( ScrollableWindow::GetSettings().GetStyleSettings().GetCursorBlinkTime() );
+}
+
+void SmGraphicWindow::CaretBlinkStart()
+{
+    if (!IsInlineEditEnabled())
+        return;
+    if ( aCaretBlinkTimer.GetTimeout() != STYLE_CURSOR_NOBLINKTIME )
+        aCaretBlinkTimer.Start();
+}
+
+void SmGraphicWindow::CaretBlinkStop()
+{
+    if (!IsInlineEditEnabled())
+        return;
+    aCaretBlinkTimer.Stop();
+}
+
+void SmGraphicWindow::ShowCursor(bool bShow)
+    // shows or hides the formula-cursor depending on 'bShow' is true or not
 {
     if (IsInlineEditEnabled())
         return;
 
-    BOOL  bInvert = bShow != IsCursorVisible();
+    bool  bInvert = bShow != IsCursorVisible();
 
     if (bInvert)
         InvertTracking(aCursorRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW);
@@ -249,6 +303,13 @@ void SmGraphicWindow::ShowCursor(BOOL bShow)
     SetIsCursorVisible(bShow);
 }
 
+void SmGraphicWindow::ShowLine(bool bShow)
+{
+    if (!IsInlineEditEnabled())
+        return;
+
+    bIsLineVisible = bShow;
+}
 
 void SmGraphicWindow::SetCursor(const SmNode *pNode)
 {
@@ -278,13 +339,13 @@ void SmGraphicWindow::SetCursor(const Rectangle &rRect)
     SmModule *pp = SM_MOD();
 
     if (IsCursorVisible())
-        ShowCursor(FALSE);      // clean up remainings of old cursor
+        ShowCursor(false);      // clean up remainings of old cursor
     aCursorRect = rRect;
     if (pp->GetConfig()->IsShowFormulaCursor())
-        ShowCursor(TRUE);       // draw new cursor
+        ShowCursor(true);       // draw new cursor
 }
 
-const SmNode * SmGraphicWindow::SetCursorPos(USHORT nRow, USHORT nCol)
+const SmNode * SmGraphicWindow::SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol)
     // looks for a VISIBLE node in the formula tree with it's token at
     // (or around) the position 'nRow', 'nCol' in the edit window
     // (row and column numbering starts with 1 there!).
@@ -304,7 +365,7 @@ const SmNode * SmGraphicWindow::SetCursorPos(USHORT nRow, USHORT nCol)
     if (pNode)
         SetCursor(pNode);
     else
-        ShowCursor(FALSE);
+        ShowCursor(false);
 
     return pNode;
 }
@@ -316,20 +377,20 @@ void SmGraphicWindow::Paint(const Rectangle&)
     SmDocShell &rDoc = *pViewShell->GetDoc();
     Point aPoint;
 
-    rDoc.DrawFormula(*this, aPoint, TRUE);  //! modifies aPoint to be the topleft
+    rDoc.DrawFormula(*this, aPoint, true);  //! modifies aPoint to be the topleft
                                 //! corner of the formula
     SetFormulaDrawPos(aPoint);
     if(IsInlineEditEnabled()) {
         //Draw cursor if any...
-        if(pViewShell->GetDoc()->HasCursor())
-            pViewShell->GetDoc()->GetCursor().Draw(*this, aPoint);
+        if(pViewShell->GetDoc()->HasCursor() && IsLineVisible())
+            pViewShell->GetDoc()->GetCursor().Draw(*this, aPoint, IsCursorVisible());
     } else {
-    SetIsCursorVisible(FALSE);  // (old) cursor must be drawn again
+    SetIsCursorVisible(false);  // (old) cursor must be drawn again
 
     const SmEditWindow *pEdit = pViewShell->GetEditWindow();
     if (pEdit)
     {   // get new position for formula-cursor (for possible altered formula)
-        USHORT  nRow, nCol;
+        sal_uInt16  nRow, nCol;
         SmGetLeftSelectionPart(pEdit->GetSelection(), nRow, nCol);
         nRow++;
         nCol++;
@@ -337,7 +398,7 @@ void SmGraphicWindow::Paint(const Rectangle&)
 
         SmModule  *pp = SM_MOD();
         if (pFound && pp->GetConfig()->IsShowFormulaCursor())
-            ShowCursor(TRUE);
+            ShowCursor(true);
     }
     }
 }
@@ -358,7 +419,7 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
             ScrollableWindow::KeyInput(rKEvt);
         return;
     }
-    USHORT nCode = rKEvt.GetKeyCode().GetCode();
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
     SmCursor& rCursor = pViewShell->GetDoc()->GetCursor();
     switch(nCode)
     {
@@ -393,13 +454,16 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
 #endif /* DEBUG_ENABLE_DUMPASDOT */
         }break;
         case KEY_DELETE:
-        case KEY_BACKSPACE:
         {
             if(!rCursor.HasSelection()){
                 rCursor.Move(this, nCode == KEY_DELETE ? MoveRight : MoveLeft, false);
                 if(rCursor.HasComplexSelection()) break;
             }
             rCursor.Delete();
+        }break;
+        case KEY_BACKSPACE:
+        {
+            rCursor.DeletePrev(this);
         }break;
         case KEY_ADD:
             rCursor.InsertElement(PlusElement);
@@ -455,6 +519,8 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
                 rCursor.InsertBrackets(CurlyBrackets);
             }else if(code == '!') {
                 rCursor.InsertElement(FactorialElement);
+            }else if(code == '%') {
+                rCursor.InsertElement(PercentElement);
             }else{
                 if(code != 0){
                     rCursor.InsertText(code);
@@ -463,12 +529,16 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
             }
         }
     }
+    CaretBlinkStop();
+    CaretBlinkStart();
+    SetIsCursorVisible(true);
+    RepaintViewShellDoc();
 }
 
 
 void SmGraphicWindow::Command(const CommandEvent& rCEvt)
 {
-    BOOL bCallBase = TRUE;
+    bool bCallBase = true;
     if ( !pViewShell->GetViewFrame()->GetFrame().IsInPlace() )
     {
         switch ( rCEvt.GetCommand() )
@@ -484,12 +554,12 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                     aPos = rCEvt.GetMousePosPixel();
                 OSL_ENSURE( pViewShell, "view shell missing" );
 
-                // added for replaceability of context menus #96085, #93782
+                // added for replaceability of context menus
                 pViewShell->GetViewFrame()->GetBindings().GetDispatcher()
                         ->ExecutePopup( aResId, this, &aPos );
 
                 delete pPopupMenu;
-                bCallBase = FALSE;
+                bCallBase = false;
             }
             break;
 
@@ -498,13 +568,13 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                 const CommandWheelData* pWData = rCEvt.GetWheelData();
                 if  ( pWData && COMMAND_WHEEL_ZOOM == pWData->GetMode() )
                 {
-                    USHORT nTmpZoom = GetZoom();
+                    sal_uInt16 nTmpZoom = GetZoom();
                     if( 0L > pWData->GetDelta() )
                         nTmpZoom -= 10;
                     else
                         nTmpZoom += 10;
                     SetZoom( nTmpZoom );
-                    bCallBase = FALSE;
+                    bCallBase = false;
                 }
             }
             break;
@@ -525,9 +595,9 @@ IMPL_LINK_INLINE_START( SmGraphicWindow, MenuSelectHdl, Menu *, pMenu )
 IMPL_LINK_INLINE_END( SmGraphicWindow, MenuSelectHdl, Menu *, pMenu )
 
 
-void SmGraphicWindow::SetZoom(USHORT Factor)
+void SmGraphicWindow::SetZoom(sal_uInt16 Factor)
 {
-    nZoom = Min(Max((USHORT) Factor, (USHORT) MINZOOM), (USHORT) MAXZOOM);
+    nZoom = Min(Max((sal_uInt16) Factor, (sal_uInt16) MINZOOM), (sal_uInt16) MAXZOOM);
     Fraction   aFraction (nZoom, 100);
     SetMapMode( MapMode(MAP_100TH_MM, Point(), aFraction, aFraction) );
     SetTotalSize();
@@ -552,7 +622,7 @@ void SmGraphicWindow::ZoomToFitInWindow()
     {
         long nVal = Min ((85 * aWindowSize.Width())  / aSize.Width(),
                       (85 * aWindowSize.Height()) / aSize.Height());
-        SetZoom ( sal::static_int_cast< USHORT >(nVal) );
+        SetZoom ( sal::static_int_cast< sal_uInt16 >(nVal) );
     }
 }
 
@@ -570,7 +640,7 @@ uno::Reference< XAccessible > SmGraphicWindow::CreateAccessible()
 
 
 SmGraphicController::SmGraphicController(SmGraphicWindow &rSmGraphic,
-                        USHORT          nId_,
+                        sal_uInt16          nId_,
                         SfxBindings     &rBindings) :
     SfxControllerItem(nId_, rBindings),
     rGraphic(rSmGraphic)
@@ -578,7 +648,7 @@ SmGraphicController::SmGraphicController(SmGraphicWindow &rSmGraphic,
 }
 
 
-void SmGraphicController::StateChanged(USHORT nSID, SfxItemState eState, const SfxPoolItem* pState)
+void SmGraphicController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     rGraphic.SetTotalSize();
     rGraphic.Invalidate();
@@ -590,7 +660,7 @@ void SmGraphicController::StateChanged(USHORT nSID, SfxItemState eState, const S
 
 
 SmEditController::SmEditController(SmEditWindow &rSmEdit,
-                     USHORT       nId_,
+                     sal_uInt16       nId_,
                      SfxBindings  &rBindings) :
     SfxControllerItem(nId_, rBindings),
     rEdit(rSmEdit)
@@ -605,7 +675,7 @@ SmEditController::~SmEditController()
 #endif
 
 
-void SmEditController::StateChanged(USHORT nSID, SfxItemState eState, const SfxPoolItem* pState)
+void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     const SfxStringItem *pItem = PTR_CAST(SfxStringItem, pState);
 
@@ -622,7 +692,7 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
     SfxDockingWindow(pBindings_, pChildWindow, pParent, SmResId(RID_CMDBOXWINDOW)),
     aEdit       (*this),
     aController (aEdit, SID_TEXT, *pBindings_),
-    bExiting    (FALSE)
+    bExiting    (false)
 {
     Hide ();
 
@@ -634,13 +704,14 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
 SmCmdBoxWindow::~SmCmdBoxWindow ()
 {
     aInitialFocusTimer.Stop();
-    bExiting = TRUE;
+    bExiting = true;
 }
 
 
 SmViewShell * SmCmdBoxWindow::GetView()
 {
-    SfxViewShell *pView = GetBindings().GetDispatcher()->GetFrame()->GetViewShell();
+    SfxDispatcher *pDispatcher = GetBindings().GetDispatcher();
+    SfxViewShell *pView = pDispatcher ? pDispatcher->GetFrame()->GetViewShell() : NULL;
     return PTR_CAST(SmViewShell, pView);
 }
 
@@ -749,10 +820,10 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
 {
     if (STATE_CHANGE_INITSHOW == nStateChange)
     {
-        Resize();   // #98848# avoid SmEditWindow not being painted correctly
+        Resize();   // avoid SmEditWindow not being painted correctly
 
         // set initial position of window in floating mode
-        if (TRUE == IsFloatingMode())
+        if (true == IsFloatingMode())
             AdjustPosition();   //! don't change pos in docking-mode !
 
         aInitialFocusTimer.Start();
@@ -764,7 +835,51 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
 
 IMPL_LINK( SmCmdBoxWindow, InitialFocusTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
 {
-    aEdit.GrabFocus();
+    // We want to have the focus in the edit window once Math has been opened
+    // to allow for immediate typing.
+    // Problem: There is no proper way to do this
+    // Thus: this timer based soultion has been implemented (see GrabFocus below)
+    //
+    // Follow-up problem (#i114910): grabing the focus may bust the help system since
+    // it relies on getting the current frame which conflicts with grabbing the focus.
+    // Thus aside from the 'GrabFocus' call everything else is to get the
+    // help reliably working despite using 'GrabFocus'.
+
+    try
+    {
+        uno::Reference< frame::XDesktop > xDesktop;
+        uno::Reference< lang::XMultiServiceFactory > xSMGR( comphelper::getProcessServiceFactory() );
+        if (xSMGR.is())
+        {
+            xDesktop = uno::Reference< frame::XDesktop >(
+                xSMGR->createInstance( rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" )), uno::UNO_QUERY_THROW );
+        }
+
+        aEdit.GrabFocus();
+
+        if (xDesktop.is())
+        {
+            bool bInPlace = GetView()->GetViewFrame()->GetFrame().IsInPlace();
+            uno::Reference< frame::XFrame > xFrame( GetBindings().GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface());
+            if ( bInPlace )
+            {
+                uno::Reference< container::XChild > xModel( GetView()->GetDoc()->GetModel(), uno::UNO_QUERY_THROW );
+                uno::Reference< frame::XModel > xParent( xModel->getParent(), uno::UNO_QUERY_THROW );
+                uno::Reference< frame::XController > xParentCtrler( xParent->getCurrentController() );
+                uno::Reference< frame::XFramesSupplier > xParentFrame( xParentCtrler->getFrame(), uno::UNO_QUERY_THROW );
+                xParentFrame->setActiveFrame( xFrame );
+            }
+            else
+            {
+                uno::Reference< frame::XFramesSupplier > xFramesSupplier( xDesktop, uno::UNO_QUERY );
+                xFramesSupplier->setActiveFrame( xFrame );
+            }
+        }
+    }
+    catch (uno::Exception &)
+    {
+        DBG_ASSERT( 0, "failed to properly set initial focus to edit window" );
+    }
     return 0;
 }
 
@@ -804,7 +919,7 @@ void SmCmdBoxWindow::GetFocus()
 
 SFX_IMPL_DOCKINGWINDOW(SmCmdBoxWrapper, SID_CMDBOXWINDOW);
 
-SmCmdBoxWrapper::SmCmdBoxWrapper(Window *pParentWindow, USHORT nId,
+SmCmdBoxWrapper::SmCmdBoxWrapper(Window *pParentWindow, sal_uInt16 nId,
                                  SfxBindings *pBindings,
                                  SfxChildWinInfo *pInfo) :
     SfxChildWindow(pParentWindow, nId)
@@ -851,7 +966,7 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD |
                                 SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
                                 SmResId(RID_MATH_TOOLBOX ));
-    //Dummy-Objectbar, damit es bei aktivieren nicht staendig zuppelt.
+    //Dummy-Objectbar, to avoid quiver while activating
 
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
     SFX_CHILDWINDOW_REGISTRATION(SmToolBoxWrapper::GetChildWindowId());
@@ -924,10 +1039,10 @@ void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SetZoomFactor" );
 
     const Fraction &rFrac = rX < rY ? rX : rY;
-    GetGraphicWindow().SetZoom( (USHORT) long(rFrac * Fraction( 100, 1 )) );
+    GetGraphicWindow().SetZoom( (sal_uInt16) long(rFrac * Fraction( 100, 1 )) );
 
-    //Um Rundungsfehler zu minimieren lassen wir von der Basisklasse ggf.
-    //auch die krummen Werte einstellen
+    //To avoid rounding errors base class regulates crooked values too
+    //if necessary
     SfxViewShell::SetZoomFactor( rX, rY );
 }
 
@@ -938,7 +1053,7 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
 
     String aText;
     Size   aSize(rDevice.GetTextWidth(rLine), rDevice.GetTextHeight());
-    USHORT nTabs = rLine.GetTokenCount('\t');
+    sal_uInt16 nTabs = rLine.GetTokenCount('\t');
 
     if (nTabs > 0)
     {
@@ -946,7 +1061,7 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
 
         aSize.Width() = 0;
 
-        for (USHORT i = 0; i < nTabs; i++)
+        for (sal_uInt16 i = 0; i < nTabs; i++)
         {
             if (i > 0)
                 aSize.Width() = ((aSize.Width() / TabPos) + 1) * TabPos;
@@ -970,9 +1085,9 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
     String  aLine;
     Size    TextSize;
     String  aText;
-    USHORT  nLines = rText.GetTokenCount('\n');
+    sal_uInt16  nLines = rText.GetTokenCount('\n');
 
-    for (USHORT i = 0; i < nLines; i++)
+    for (sal_uInt16 i = 0; i < nLines; i++)
     {
         aLine = rText.GetToken(i, '\n');
         aLine.EraseAllChars('\r');
@@ -1030,13 +1145,13 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
 
     String  aText;
     Point   aPoint (rPosition);
-    USHORT  nTabs = rLine.GetTokenCount('\t');
+    sal_uInt16  nTabs = rLine.GetTokenCount('\t');
 
     if (nTabs > 0)
     {
         long TabPos = rDevice.GetTextWidth('n') * 8;
 
-        for (USHORT i = 0; i < nTabs; i++)
+        for (sal_uInt16 i = 0; i < nTabs; i++)
         {
             if (i > 0)
                 aPoint.X() = ((aPoint.X() / TabPos) + 1) * TabPos;
@@ -1053,17 +1168,17 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
 }
 
 
-void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const String& rText, USHORT MaxWidth)
+void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const String& rText, sal_uInt16 MaxWidth)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::DrawText" );
 
-    USHORT  nLines = rText.GetTokenCount('\n');
+    sal_uInt16  nLines = rText.GetTokenCount('\n');
     Point   aPoint (rPosition);
     Size    aSize;
     String  aLine;
     String  aText;
 
-    for (USHORT i = 0; i < nLines; i++)
+    for (sal_uInt16 i = 0; i < nLines; i++)
     {
         aLine = rText.GetToken(i, '\n');
         aLine.EraseAllChars('\r');
@@ -1127,7 +1242,7 @@ void SmViewShell::Impl_Print(
     const bool bIsPrintFrame = rPrintUIOptions.getBoolValue( PRTUIOPT_BORDER, sal_True );
     const bool bIsPrintFormulaText = rPrintUIOptions.getBoolValue( PRTUIOPT_FORMULA_TEXT, sal_True );
     SmPrintSize ePrintSize( static_cast< SmPrintSize >( rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_FORMAT, PRINT_SIZE_NORMAL ) ));
-    const USHORT nZoomFactor = static_cast< USHORT >(rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_SCALE, 100 ));
+    const sal_uInt16 nZoomFactor = static_cast< sal_uInt16 >(rPrintUIOptions.getIntValue( PRTUIOPT_PRINT_SCALE, 100 ));
 
     rOutDev.Push();
     rOutDev.SetLineColor( Color(COL_BLACK) );
@@ -1165,7 +1280,7 @@ void SmViewShell::Impl_Print(
         Point aPoint(aOutRect.Left() + (aOutRect.GetWidth() - aTitleSize.Width())  / 2,
                      aOutRect.Top());
         DrawText(rOutDev, aPoint, GetDoc()->GetTitle(),
-                 sal::static_int_cast< USHORT >(aOutRect.GetWidth() - 200));
+                 sal::static_int_cast< sal_uInt16 >(aOutRect.GetWidth() - 200));
         aOutRect.Top() += aTitleSize.Height() + 200;
 
         // output description
@@ -1175,7 +1290,7 @@ void SmViewShell::Impl_Print(
         aPoint.X() = aOutRect.Left() + (aOutRect.GetWidth()  - aDescSize.Width())  / 2;
         aPoint.Y() = aOutRect.Top();
         DrawText(rOutDev, aPoint, GetDoc()->GetComment(),
-                 sal::static_int_cast< USHORT >(aOutRect.GetWidth() - 200));
+                 sal::static_int_cast< sal_uInt16 >(aOutRect.GetWidth() - 200));
         aOutRect.Top() += aDescSize.Height() + 300;
     }
 
@@ -1200,7 +1315,7 @@ void SmViewShell::Impl_Print(
         Point aPoint (aOutRect.Left() + (aOutRect.GetWidth()  - aSize.Width())  / 2,
                       aOutRect.Bottom() + 300);
         DrawText(rOutDev, aPoint, GetDoc()->GetText(),
-                 sal::static_int_cast< USHORT >(aOutRect.GetWidth() - 200));
+                 sal::static_int_cast< sal_uInt16 >(aOutRect.GetWidth() - 200));
         aOutRect.Bottom() -= 200;
     }
 
@@ -1230,9 +1345,9 @@ void SmViewShell::Impl_Print(
                 Size     OutputSize (rOutDev.LogicToPixel(Size(aOutRect.GetWidth(),
                                                             aOutRect.GetHeight()), MapMode(MAP_100TH_MM)));
                 Size     GraphicSize (rOutDev.LogicToPixel(aSize, MapMode(MAP_100TH_MM)));
-                USHORT   nZ = (USHORT) Min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
+                sal_uInt16   nZ = (sal_uInt16) Min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
                                               (long)Fraction(OutputSize.Height() * 100L, GraphicSize.Height()));
-                Fraction aFraction ((USHORT) Max ((USHORT) MINZOOM, Min((USHORT) MAXZOOM, (USHORT) (nZ - 10))), (USHORT) 100);
+                Fraction aFraction ((sal_uInt16) Max ((sal_uInt16) MINZOOM, Min((sal_uInt16) MAXZOOM, (sal_uInt16) (nZ - 10))), (sal_uInt16) 100);
 
                 OutputMapMode = MapMode(MAP_100TH_MM, aZeroPoint, aFraction, aFraction);
             }
@@ -1262,21 +1377,21 @@ void SmViewShell::Impl_Print(
 
     rOutDev.SetMapMode(OutputMapMode);
     rOutDev.SetClipRegion(Region(aOutRect));
-    GetDoc()->DrawFormula(rOutDev, aPos, FALSE);
+    GetDoc()->DrawFormula(rOutDev, aPos, false);
     rOutDev.SetClipRegion();
 
     rOutDev.Pop();
 }
 
-USHORT SmViewShell::Print(SfxProgress & /*rProgress*/, BOOL /*bIsAPI*/, PrintDialog * /*pPrintDialog*/)
+sal_uInt16 SmViewShell::Print(SfxProgress & /*rProgress*/, sal_Bool /*bIsAPI*/)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Print" );
-    OSL_ENSURE( 0, "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
+    OSL_FAIL( "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
     return 0;
 }
 
 
-SfxPrinter* SmViewShell::GetPrinter(BOOL bCreate)
+SfxPrinter* SmViewShell::GetPrinter(sal_Bool bCreate)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::GetPrinter" );
 
@@ -1287,7 +1402,7 @@ SfxPrinter* SmViewShell::GetPrinter(BOOL bCreate)
 }
 
 
-USHORT SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
+sal_uInt16 SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bool )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SetPrinter" );
     SfxPrinter *pOld = GetDoc()->GetPrinter();
@@ -1380,14 +1495,14 @@ void SmViewShell::PrevError()
 }
 
 
-BOOL SmViewShell::Insert( SfxMedium& rMedium )
+bool SmViewShell::Insert( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Insert" );
 
     SmDocShell *pDoc = GetDoc();
     String aText( pDoc->GetText() );
     String aTemp = aText;
-    BOOL bRet = FALSE, bChkOldVersion = TRUE;
+    bool bRet = false;
 
     uno::Reference < embed::XStorage > xStorage = rMedium.GetStorage();
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
@@ -1395,7 +1510,6 @@ BOOL SmViewShell::Insert( SfxMedium& rMedium )
     {
         if ( xNameAccess->hasByName( C2S( "content.xml" ) ) || xNameAccess->hasByName( C2S( "Content.xml" ) ))
         {
-            bChkOldVersion = FALSE;
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(pDoc->GetModel());
             SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
@@ -1411,13 +1525,13 @@ BOOL SmViewShell::Insert( SfxMedium& rMedium )
             pEditWin->InsertText( aText );
         else
         {
-            DBG_ERROR( "EditWindow missing" );
+            OSL_FAIL( "EditWindow missing" );
             aTemp += aText;
             aText  = aTemp;
         }
 
         pDoc->Parse();
-        pDoc->SetModified(TRUE);
+        pDoc->SetModified(true);
 
         SfxBindings &rBnd = GetViewFrame()->GetBindings();
         rBnd.Invalidate(SID_GAPHIC_SM);
@@ -1427,11 +1541,11 @@ BOOL SmViewShell::Insert( SfxMedium& rMedium )
 }
 
 
-BOOL SmViewShell::InsertFrom(SfxMedium &rMedium)
+bool SmViewShell::InsertFrom(SfxMedium &rMedium)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::InsertFrom" );
 
-    BOOL        bSuccess = FALSE;
+    bool        bSuccess = false;
     SmDocShell *pDoc = GetDoc();
     SvStream   *pStream = rMedium.GetInStream();
     String      aText( pDoc->GetText() );
@@ -1456,13 +1570,13 @@ BOOL SmViewShell::InsertFrom(SfxMedium &rMedium)
             pEditWin->InsertText( aText );
         else
         {
-            DBG_ERROR( "EditWindow missing" );
+            OSL_FAIL( "EditWindow missing" );
             aTemp += aText;
             aText  = aTemp;
         }
 
         pDoc->Parse();
-        pDoc->SetModified(TRUE);
+        pDoc->SetModified(true);
 
         SfxBindings &rBnd = GetViewFrame()->GetBindings();
         rBnd.Invalidate(SID_GAPHIC_SM);
@@ -1488,9 +1602,9 @@ void SmViewShell::Execute(SfxRequest& rReq)
             const SfxItemSet  *pArgs = rReq.GetArgs();
             const SfxPoolItem *pItem;
 
-            BOOL  bVal;
+            bool  bVal;
             if ( pArgs &&
-                 SFX_ITEM_SET == pArgs->GetItemState( SID_FORMULACURSOR, FALSE, &pItem))
+                 SFX_ITEM_SET == pArgs->GetItemState( SID_FORMULACURSOR, false, &pItem))
                 bVal = ((SfxBoolItem *) pItem)->GetValue();
             else
                 bVal = !pp->GetConfig()->IsShowFormulaCursor();
@@ -1532,7 +1646,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             break;
 
         case SID_ZOOMOUT:
-            OSL_ENSURE(aGraphic.GetZoom() >= 25, "Sm: incorrect USHORT argument");
+            OSL_ENSURE(aGraphic.GetZoom() >= 25, "Sm: incorrect sal_uInt16 argument");
             aGraphic.SetZoom(aGraphic.GetZoom() - 25);
             break;
 
@@ -1577,7 +1691,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 }
                 catch (uno::Exception &)
                 {
-                    DBG_ERROR( "SmViewShell::Execute (SID_PASTEOBJECT): failed to get storage from input stream" );
+                    OSL_FAIL( "SmViewShell::Execute (SID_PASTEOBJECT): failed to get storage from input stream" );
                 }
             }
         }
@@ -1605,7 +1719,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_PASTE:
             {
-                BOOL bCallExec = 0 == pWin;
+                bool bCallExec = 0 == pWin;
                 if( !bCallExec )
                 {
                     TransferableDataHelper aDataHelper(
@@ -1616,7 +1730,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                         aDataHelper.HasFormat( FORMAT_STRING ))
                         pWin->Paste();
                     else
-                        bCallExec = TRUE;
+                        bCallExec = true;
                 }
                 if( bCallExec )
                 {
@@ -1663,7 +1777,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             break;
         }
 
-        case SID_INSERT_FORMULA:
+        case SID_IMPORT_FORMULA:
         {
             delete pImpl->pRequest;
             pImpl->pRequest = new SfxRequest( rReq );
@@ -1735,10 +1849,10 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     {
                         pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet);
                         OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                        pDlg->SetLimits( MINZOOM, MAXZOOM );
+                        if( pDlg->Execute() != RET_CANCEL )
+                            pSet = pDlg->GetOutputItemSet();
                     }
-                    pDlg->SetLimits( MINZOOM, MAXZOOM );
-                    if( pDlg->Execute() != RET_CANCEL )
-                        pSet = pDlg->GetOutputItemSet();
                 }
                 if ( pSet )
                 {
@@ -1746,7 +1860,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     switch( rZoom.GetType() )
                     {
                         case SVX_ZOOM_PERCENT:
-                            aGraphic.SetZoom((USHORT)rZoom.GetValue ());
+                            aGraphic.SetZoom((sal_uInt16)rZoom.GetValue ());
                             break;
 
                         case SVX_ZOOM_OPTIMAL:
@@ -1757,13 +1871,13 @@ void SmViewShell::Execute(SfxRequest& rReq)
                         case SVX_ZOOM_WHOLEPAGE:
                         {
                             const MapMode aMap( MAP_100TH_MM );
-                            SfxPrinter *pPrinter = GetPrinter( TRUE );
+                            SfxPrinter *pPrinter = GetPrinter( true );
                             Point aPoint;
                             Rectangle  OutputRect(aPoint, pPrinter->GetOutputSize());
                             Size       OutputSize(pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
                                                                               OutputRect.GetHeight()), aMap));
                             Size       GraphicSize(pPrinter->LogicToPixel(GetDoc()->GetSize(), aMap));
-                            USHORT     nZ = (USHORT) Min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
+                            sal_uInt16     nZ = (sal_uInt16) Min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
                                                          (long)Fraction(OutputSize.Height() * 100L, GraphicSize.Height()));
                             aGraphic.SetZoom (nZ);
                             break;
@@ -1809,7 +1923,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
     SfxWhichIter aIter(rSet);
 
     SmEditWindow *pEditWin = GetEditWindow();
-    for (USHORT nWh = aIter.FirstWhich(); nWh != 0; nWh = aIter.NextWhich())
+    for (sal_uInt16 nWh = aIter.FirstWhich(); nWh != 0; nWh = aIter.NextWhich())
     {
         switch (nWh)
         {
@@ -1876,11 +1990,11 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
         case SID_TOOLBOX:
             {
-                BOOL bState = FALSE;
+                bool bState = false;
                 SfxChildWindow *pChildWnd = GetViewFrame()->
                         GetChildWindow( SmToolBoxWrapper::GetChildWindowId() );
                 if (pChildWnd  &&  pChildWnd->GetWindow()->IsVisible())
-                    bState = TRUE;
+                    bState = true;
                 rSet.Put(SfxBoolItem(SID_TOOLBOX, bState));
             }
             break;
@@ -1892,9 +2006,9 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
 SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
     SfxViewShell(pFrame_, SFX_VIEW_HAS_PRINTOPTIONS | SFX_VIEW_CAN_PRINT),
+    pImpl( new SmViewShell_Impl ),
     aGraphic(this),
-    aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame_->GetBindings()),
-    pImpl( new SmViewShell_Impl )
+    aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame_->GetBindings())
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SmViewShell" );
 
@@ -1919,7 +2033,7 @@ SmViewShell::~SmViewShell()
     delete pImpl;
 }
 
-void SmViewShell::Deactivate( BOOL bIsMDIActivate )
+void SmViewShell::Deactivate( sal_Bool bIsMDIActivate )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Deactivate" );
 
@@ -1931,7 +2045,7 @@ void SmViewShell::Deactivate( BOOL bIsMDIActivate )
 }
 
 
-void SmViewShell::Activate( BOOL bIsMDIActivate )
+void SmViewShell::Activate( sal_Bool bIsMDIActivate )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Activate" );
 
@@ -1978,7 +2092,7 @@ IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
         }
     }
 
-    pImpl->pRequest->SetReturnValue( SfxBoolItem( pImpl->pRequest->GetSlot(), TRUE ) );
+    pImpl->pRequest->SetReturnValue( SfxBoolItem( pImpl->pRequest->GetSlot(), true ) );
     pImpl->pRequest->Done();
     return 0;
 }
@@ -1991,7 +2105,7 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
         {
             case SFX_HINT_MODECHANGED:
             case SFX_HINT_DOCCHANGED:
-                GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+                GetViewFrame()->GetBindings().InvalidateAll(false);
                 break;
             default:
                 break;

@@ -164,7 +164,7 @@ void cpp2uno_call(
     (*pThis->getUnoI()->pDispatcher)(
         pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-    // in case an exception occured...
+    // in case an exception occurred...
     if (pUnoExc)
     {
         // destruct temporary in/inout params
@@ -183,7 +183,7 @@ void cpp2uno_call(
             &aUnoExc, pThis->getBridge()->getUno2Cpp() );
             // has to destruct the any
     }
-    else // else no exception occured...
+    else // else no exception occurred...
     {
         // temporary params
         for ( ; nTempIndizes--; )
@@ -253,7 +253,7 @@ extern "C" void cpp_vtable_call(
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
         throw RuntimeException(
-            rtl::OUString::createFromAscii("illegal vtable index!"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
             (XInterface *)pThis );
     }
 
@@ -342,7 +342,7 @@ extern "C" void cpp_vtable_call(
     default:
     {
         throw RuntimeException(
-            rtl::OUString::createFromAscii("no member description found!"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
             (XInterface *)pThis );
     }
     }
@@ -359,7 +359,8 @@ extern "C" typedef void (*PrivateSnippetExecutor)();
 
 int const codeSnippetSize = 16;
 
-#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX)
+#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX) || \
+    defined(DRAGONFLY)
 namespace
 {
     PrivateSnippetExecutor returnsInRegister(typelib_TypeDescriptionReference * pReturnTypeRef)
@@ -407,7 +408,8 @@ unsigned char * codeSnippet(
         break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
-#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX)
+#if defined(FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX) || \
+    defined(DRAGONFLY)
         exec = returnsInRegister(pReturnTypeRef);
         if (!exec)
         {

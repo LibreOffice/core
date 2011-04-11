@@ -76,7 +76,7 @@ public:
     virtual ~FormattedStringsConverter();
 
 protected:
-    virtual const USHORT * GetWhichPairs() const;
+    virtual const sal_uInt16 * GetWhichPairs() const;
 };
 
 // ----------------------------------------
@@ -110,7 +110,7 @@ FormattedStringsConverter::~FormattedStringsConverter()
 {
 }
 
-const USHORT * FormattedStringsConverter::GetWhichPairs() const
+const sal_uInt16 * FormattedStringsConverter::GetWhichPairs() const
 {
     return nCharacterPropertyWhichPairs;
 }
@@ -171,7 +171,7 @@ bool TitleItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const USHORT * TitleItemConverter::GetWhichPairs() const
+const sal_uInt16 * TitleItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nTitleWhichPairs;
@@ -191,7 +191,7 @@ bool TitleItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWi
 
 
 bool TitleItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
+    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -222,7 +222,7 @@ bool TitleItemConverter::ApplySpecialItem(
 }
 
 void TitleItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )

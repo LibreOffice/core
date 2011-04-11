@@ -56,7 +56,7 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
     SvxFontWorkDialog*  pDlg        = NULL;
     ScDrawView*         pDrView     = pViewData->GetScDrawView();
     const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
-    USHORT              nId = SvxFontWorkChildWindow::GetChildWindowId();
+    sal_uInt16              nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
     if ( pViewFrm->HasChildWindow(nId) )
@@ -69,7 +69,7 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
         !((SdrTextObj*) pObj)->HasText() )
     {
         if ( pDlg )
-            pDlg->SetActive(FALSE);
+            pDlg->SetActive(false);
 
         rSet.DisableItem(XATTR_FORMTXTSTYLE);
         rSet.DisableItem(XATTR_FORMTXTADJUST);
@@ -103,7 +103,7 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
                 if ( pColorTable )
                     pDlg->SetColorTable( pColorTable );
                 else
-                    { DBG_ERROR( "ColorList not found :-/" ); }
+                    { OSL_FAIL( "ColorList not found :-/" ); }
             }
         }
         SfxItemSet aViewAttr(pDrView->GetModel()->GetItemPool());

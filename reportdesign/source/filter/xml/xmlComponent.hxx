@@ -43,7 +43,7 @@ namespace rptxml
         ::rtl::OUString m_sTextStyleName;
 
         OXMLComponent(const OXMLComponent&);
-        void operator =(const OXMLComponent&);
+        OXMLComponent operator =(const OXMLComponent&);
     public:
 
         OXMLComponent( ORptFilter& rImport

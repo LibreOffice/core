@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <osl/mutex.hxx>
-#include <tools/list.hxx>
 #include <tools/color.hxx>
 #include <tools/string.hxx>
 #include <vcl/image.hxx>
@@ -82,8 +81,8 @@ class ValueSet;
 struct ValueSetItem
 {
     ValueSet&           mrParent;
-    USHORT              mnId;
-    USHORT              mnBits;
+    sal_uInt16              mnId;
+    sal_uInt16              mnBits;
     ValueSetItemType    meType;
     Image               maImage;
     Color               maColor;
@@ -100,9 +99,7 @@ struct ValueSetItem
      void               ClearAccessible();
 };
 
-// -----------------------------------------------------------------------------
-
-DECLARE_LIST( ValueItemList, ValueSetItem* )
+typedef ::std::vector< ValueSetItem* > ValueItemList;
 
 // -----------------------------------------------------------------------------
 
@@ -122,7 +119,7 @@ struct ValueSet_Impl
 // - ValueSetAcc -
 // ---------------
 
-typedef ::cppu::WeakComponentImplHelper6<
+typedef ::cppu::PartialWeakComponentImplHelper6<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -141,7 +138,7 @@ public:
     ~ValueSetAcc();
 
     void                FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
-    BOOL                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
+    sal_Bool                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
     static ValueSetAcc* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
 
@@ -157,14 +154,19 @@ public:
     */
     void LoseFocus (void);
 
+    // XComponent
+    virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException)
+        { WeakComponentImplHelperBase::dispose(); }
+    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+        { WeakComponentImplHelperBase::addEventListener(xListener); }
+    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+        { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleEventBroadcaster
-    using cppu::WeakComponentImplHelper6<com::sun::star::accessibility::XAccessible, com::sun::star::accessibility::XAccessibleEventBroadcaster, com::sun::star::accessibility::XAccessibleContext, com::sun::star::accessibility::XAccessibleComponent, com::sun::star::accessibility::XAccessibleSelection, com::sun::star::lang::XUnoTunnel>::addEventListener;
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    using cppu::WeakComponentImplHelper6<com::sun::star::accessibility::XAccessible, com::sun::star::accessibility::XAccessibleEventBroadcaster, com::sun::star::accessibility::XAccessibleContext, com::sun::star::accessibility::XAccessibleComponent, com::sun::star::accessibility::XAccessibleSelection, com::sun::star::lang::XUnoTunnel>::removeEventListener;
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleContext
@@ -220,7 +222,7 @@ private:
 
     /** Return the number of items.  This takes the None-Item into account.
     */
-    USHORT getItemCount (void) const;
+    sal_uInt16 getItemCount (void) const;
 
     /** Return the item associated with the given index.  The None-Item is
         taken into account which, when present, is taken to be the first
@@ -231,7 +233,7 @@ private:
         @return
             Returns NULL when the given index is out of range.
     */
-    ValueSetItem* getItem (USHORT nIndex) const;
+    ValueSetItem* getItem (sal_uInt16 nIndex) const;
 
     /** Check whether or not the object has been disposed (or is in the
         state of beeing disposed).  If that is the case then
@@ -286,7 +288,7 @@ public:
     void    ParentDestroyed();
 
     void    FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
-    BOOL    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
+    sal_Bool    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
     static ValueItemAcc* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
 

@@ -50,7 +50,7 @@ class SwDropPortionPart
     SwDropPortionPart* pFollow;
     SwFont* pFnt;
     xub_StrLen nLen;
-    USHORT nWidth;
+    sal_uInt16 nWidth;
 
 public:
     SwDropPortionPart( SwFont& rFont, const xub_StrLen nL )
@@ -61,8 +61,8 @@ public:
     inline void SetFollow( SwDropPortionPart* pNew ) { pFollow = pNew; };
     inline SwFont& GetFont() const { return *pFnt; }
     inline xub_StrLen GetLen() const { return nLen; }
-    inline USHORT GetWidth() const { return nWidth; }
-    inline void SetWidth( USHORT nNew )  { nWidth = nNew; }
+    inline sal_uInt16 GetWidth() const { return nWidth; }
+    inline void SetWidth( sal_uInt16 nNew )  { nWidth = nNew; }
 };
 
 /*************************************************************************

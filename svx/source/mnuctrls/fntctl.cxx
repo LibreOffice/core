@@ -29,13 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headern
+#include <string>
 #include <svtools/stdmenu.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <svx/fntctl.hxx>       //
+#include <svx/fntctl.hxx>
 #include <svx/svxids.hrc>
 #include "editeng/flstitem.hxx"
 #include "editeng/fontitem.hxx"
@@ -54,7 +54,7 @@ SFX_IMPL_MENU_CONTROL(SvxFontMenuControl, SvxFontItem);
 
 SvxFontMenuControl::SvxFontMenuControl
 (
-    USHORT          _nId,
+    sal_uInt16          _nId,
     Menu&           rMenu,
     SfxBindings&    rBindings
 ) :
@@ -103,7 +103,7 @@ void SvxFontMenuControl::FillMenu()
 
 void SvxFontMenuControl::StateChanged(
 
-    USHORT, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     rParent.EnableItem( GetId(), SFX_ITEM_DISABLED != eState );
@@ -149,7 +149,7 @@ void SvxFontMenuControl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 IMPL_LINK_INLINE_START( SvxFontMenuControl, MenuSelect, FontNameMenu *, pMen )
 {
     SvxFontItem aItem( GetId() );
-    aItem.GetFamilyName() = pMen->GetCurName();
+    aItem.SetFamilyName(pMen->GetCurName());
     GetBindings().GetDispatcher()->Execute( GetId(), SFX_CALLMODE_RECORD, &aItem, 0L );
     return 0;
 }

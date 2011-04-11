@@ -97,13 +97,10 @@ SdTpOptionsSnap::~SdTpOptionsSnap()
 
 // -----------------------------------------------------------------------
 
-BOOL SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
+sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 {
     SvxGridTabPage::FillItemSet(rAttrs);
     SdOptionsSnapItem* pOptsItem = NULL;
-//    if(SFX_ITEM_SET != rAttrs.GetItemState( ATTR_OPTIONS_SNAP, FALSE, (const SfxPoolItem**)&pOptsItem ))
-//        pExampleSet->GetItemState( ATTR_OPTIONS_SNAP, FALSE, (const SfxPoolItem**)&pOptsItem );
-
     SdOptionsSnapItem aOptsItem( ATTR_OPTIONS_SNAP );
 
     aOptsItem.GetOptionsSnap().SetSnapHelplines( aCbxSnapHelplines.IsChecked() );
@@ -113,16 +110,16 @@ BOOL SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
     aOptsItem.GetOptionsSnap().SetOrtho( aCbxOrtho.IsChecked() );
     aOptsItem.GetOptionsSnap().SetBigOrtho( aCbxBigOrtho.IsChecked() );
     aOptsItem.GetOptionsSnap().SetRotate( aCbxRotate.IsChecked() );
-    aOptsItem.GetOptionsSnap().SetSnapArea( (INT16) aMtrFldSnapArea.GetValue() );
-    aOptsItem.GetOptionsSnap().SetAngle( (INT16) aMtrFldAngle.GetValue() );
-    aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle( (INT16) aMtrFldBezAngle.GetValue() );
+    aOptsItem.GetOptionsSnap().SetSnapArea( (sal_Int16) aMtrFldSnapArea.GetValue() );
+    aOptsItem.GetOptionsSnap().SetAngle( (sal_Int16) aMtrFldAngle.GetValue() );
+    aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle( (sal_Int16) aMtrFldBezAngle.GetValue() );
 
     if( pOptsItem == NULL || !(aOptsItem == *pOptsItem) )
         rAttrs.Put( aOptsItem );
 
     // Evtl. vorhandenes GridItem wird geholt, um nicht versehentlich
     // irgendwelche Standardwerte einzustellen
-    return( TRUE );
+    return( sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -181,14 +178,13 @@ SdTpOptionsContents::~SdTpOptionsContents()
 
 // -----------------------------------------------------------------------
 
-BOOL SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
+sal_Bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
 
     if( aCbxRuler.GetSavedValue()           != aCbxRuler.IsChecked() ||
         aCbxMoveOutline.GetSavedValue()     != aCbxMoveOutline.IsChecked() ||
         aCbxDragStripes.GetSavedValue()     != aCbxDragStripes.IsChecked() ||
-        //aCbxHelplines.GetSavedValue()     != aCbxHelplines.IsChecked() ||
         aCbxHandlesBezier.GetSavedValue()   != aCbxHandlesBezier.IsChecked() )
     {
         SdOptionsLayoutItem aOptsItem( ATTR_OPTIONS_LAYOUT );
@@ -197,10 +193,9 @@ BOOL SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
         aOptsItem.GetOptionsLayout().SetMoveOutline( aCbxMoveOutline.IsChecked() );
         aOptsItem.GetOptionsLayout().SetDragStripes( aCbxDragStripes.IsChecked() );
         aOptsItem.GetOptionsLayout().SetHandlesBezier( aCbxHandlesBezier.IsChecked() );
-        //aOptsItem.GetOptionsLayout().SetHelplines( aCbxHelplines.IsChecked() );
 
         rAttrs.Put( aOptsItem );
-        bModified = TRUE;
+        bModified = sal_True;
     }
     return( bModified );
 }
@@ -219,13 +214,11 @@ void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
     aCbxMoveOutline.Check( aLayoutItem.GetOptionsLayout().IsMoveOutline() );
     aCbxDragStripes.Check( aLayoutItem.GetOptionsLayout().IsDragStripes() );
     aCbxHandlesBezier.Check( aLayoutItem.GetOptionsLayout().IsHandlesBezier() );
-    //aCbxHelplines.Check( aLayoutItem.GetOptionsLayout().IsHelplines() );
 
     aCbxRuler.SaveValue();
     aCbxMoveOutline.SaveValue();
     aCbxDragStripes.SaveValue();
     aCbxHandlesBezier.SaveValue();
-    //aCbxHelplines.SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -290,7 +283,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     // Metrik einstellen
     FieldUnit eFUnit;
 
-    USHORT nWhich = GetWhich( SID_ATTR_METRIC );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
     if ( rInAttrs.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
     {
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rInAttrs.Get( nWhich );
@@ -303,13 +296,13 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
 
     // ListBox mit Metriken f"ullen
     SvxStringArray aMetricArr( RID_SVXSTR_FIELDUNIT_TABLE );
-    USHORT i;
+    sal_uInt16 i;
 
     for ( i = 0; i < aMetricArr.Count(); ++i )
     {
         String sMetric = aMetricArr.GetStringByPos( i );
         long nFieldUnit = aMetricArr.GetValue( i );
-        USHORT nPos = aLbMetric.InsertEntry( sMetric );
+        sal_uInt16 nPos = aLbMetric.InsertEntry( sMetric );
         aLbMetric.SetEntryData( nPos, (void*)nFieldUnit );
     }
     aLbMetric.SetSelectHdl( LINK( this, SdTpOptionsMisc, SelectMetricHdl_Impl ) );
@@ -335,7 +328,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
     // Fuellen der CB
-    USHORT aTable[ TABLE_COUNT ] =
+    sal_uInt16 aTable[ TABLE_COUNT ] =
         { 1, 2, 4, 5, 8, 10, 16, 20, 30, 40, 50, 100 };
 
     for( i = 0; i < TABLE_COUNT; i++ )
@@ -358,7 +351,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     // Metrik ggfs. aendern (da TabPage im Dialog liegt,
     // wo die Metrik eingestellt werden kann
     const SfxPoolItem* pAttr = NULL;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , FALSE,
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , sal_False,
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SfxUInt16Item* pItem = (SfxUInt16Item*) pAttr;
@@ -369,11 +362,11 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
         {
             // Metriken einstellen
             sal_Int64 nVal = aMtrFldOriginalWidth.Denormalize( aMtrFldOriginalWidth.GetValue( FUNIT_TWIP ) );
-            SetFieldUnit( aMtrFldOriginalWidth, eFUnit, TRUE );
+            SetFieldUnit( aMtrFldOriginalWidth, eFUnit, sal_True );
             aMtrFldOriginalWidth.SetValue( aMtrFldOriginalWidth.Normalize( nVal ), FUNIT_TWIP );
 
             nVal = aMtrFldOriginalHeight.Denormalize( aMtrFldOriginalHeight.GetValue( FUNIT_TWIP ) );
-            SetFieldUnit( aMtrFldOriginalHeight, eFUnit, TRUE );
+            SetFieldUnit( aMtrFldOriginalHeight, eFUnit, sal_True );
             aMtrFldOriginalHeight.SetValue( aMtrFldOriginalHeight.Normalize( nVal ), FUNIT_TWIP );
 
 
@@ -399,7 +392,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
 int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 {
     // Parsercheck
-    INT32 nX, nY;
+    sal_Int32 nX, nY;
     if( SetScale( aCbScale.GetText(), nX, nY ) )
     {
         if( pActiveSet )
@@ -420,9 +413,9 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 
 // -----------------------------------------------------------------------
 
-BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
+sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
 
     if( aCbxStartWithTemplate.GetSavedValue()   != aCbxStartWithTemplate.IsChecked() ||
         aCbxMarkedHitMovesAlways.GetSavedValue()!= aCbxMarkedHitMovesAlways.IsChecked() ||
@@ -452,36 +445,36 @@ BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
             : ::com::sun::star::document::PrinterIndependentLayout::ENABLED);
         rAttrs.Put( aOptsItem );
 
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     // Metrik
-    const USHORT nMPos = aLbMetric.GetSelectEntryPos();
+    const sal_uInt16 nMPos = aLbMetric.GetSelectEntryPos();
     if ( nMPos != aLbMetric.GetSavedValue() )
     {
-        USHORT nFieldUnit = (USHORT)(long)aLbMetric.GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)(long)aLbMetric.GetEntryData( nMPos );
         rAttrs.Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ),
-                                     (UINT16)nFieldUnit ) );
-        bModified |= TRUE;
+                                     (sal_uInt16)nFieldUnit ) );
+        bModified |= sal_True;
     }
 
     // Tabulatorabstand
     if( aMtrFldTabstop.GetText() != aMtrFldTabstop.GetSavedValue() )
     {
-        USHORT nWh = GetWhich( SID_ATTR_DEFTABSTOP );
+        sal_uInt16 nWh = GetWhich( SID_ATTR_DEFTABSTOP );
         SfxMapUnit eUnit = rAttrs.GetPool()->GetMetric( nWh );
-        SfxUInt16Item aDef( nWh,(USHORT)GetCoreValue( aMtrFldTabstop, eUnit ) );
+        SfxUInt16Item aDef( nWh,(sal_uInt16)GetCoreValue( aMtrFldTabstop, eUnit ) );
         rAttrs.Put( aDef );
-        bModified |= TRUE;
+        bModified |= sal_True;
     }
 
-    INT32 nX, nY;
+    sal_Int32 nX, nY;
     if( SetScale( aCbScale.GetText(), nX, nY ) )
     {
         rAttrs.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
         rAttrs.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
 
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     return( bModified );
@@ -517,7 +510,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     aCbxUsePrinterMetrics.SaveValue();
 
     // Metrik
-    USHORT nWhich = GetWhich( SID_ATTR_METRIC );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
     aLbMetric.SetNoSelection();
 
     if ( rAttrs.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
@@ -525,7 +518,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rAttrs.Get( nWhich );
         long nFieldUnit = (long)rItem.GetValue();
 
-        for ( USHORT i = 0; i < aLbMetric.GetEntryCount(); ++i )
+        for ( sal_uInt16 i = 0; i < aLbMetric.GetEntryCount(); ++i )
         {
             if ( (long)aLbMetric.GetEntryData( i ) == nFieldUnit )
             {
@@ -546,9 +539,9 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     aLbMetric.SaveValue();
     aMtrFldTabstop.SaveValue();
     //Scale
-    INT32 nX = ( (const SfxInt32Item&) rAttrs.
+    sal_Int32 nX = ( (const SfxInt32Item&) rAttrs.
                  Get( ATTR_OPTIONS_SCALE_X ) ).GetValue();
-    INT32 nY = ( (const SfxInt32Item&) rAttrs.
+    sal_Int32 nY = ( (const SfxInt32Item&) rAttrs.
                  Get( ATTR_OPTIONS_SCALE_Y ) ).GetValue();
     nWidth = ( (const SfxUInt32Item&) rAttrs.
                     Get( ATTR_OPTIONS_SCALE_WIDTH ) ).GetValue();
@@ -557,7 +550,6 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
 
     aCbScale.SetText( GetScale( nX, nY ) );
 
-    // #92067# broken feature disabled for 6.0
     aFtOriginal.Hide();
     aFtEquivalent.Hide();
     aMtrFldOriginalWidth.Hide();
@@ -583,7 +575,7 @@ SfxTabPage* SdTpOptionsMisc::Create( Window* pWindow,
 
 IMPL_LINK( SdTpOptionsMisc, SelectMetricHdl_Impl, ListBox *, EMPTYARG )
 {
-    USHORT nPos = aLbMetric.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbMetric.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -696,11 +688,11 @@ void    SdTpOptionsMisc::SetDrawMode()
 IMPL_LINK( SdTpOptionsMisc, ModifyScaleHdl, void *, EMPTYARG )
 {
     // Originalgroesse berechnen
-    INT32 nX, nY;
+    sal_Int32 nX, nY;
     if( SetScale( aCbScale.GetText(), nX, nY ) )
     {
-        INT32 nW = nWidth * nY / nX;
-        INT32 nH = nHeight * nY / nX;
+        sal_Int32 nW = nWidth * nY / nX;
+        sal_Int32 nH = nHeight * nY / nX;
 
         SetMetricValue( aMtrFldOriginalWidth, nW, ePoolUnit );
         SetMetricValue( aMtrFldOriginalHeight, nH, ePoolUnit );
@@ -732,7 +724,7 @@ IMPL_LINK( SdTpOptionsMisc, ModifyOriginalScaleHdl, void *, EMPTYARG )
         aFract = Fraction( aFract1.GetDenominator(), aFract1.GetNumerator() );
         nValue = aFract;
 
-        // #92067# Swap nominator and denominator
+        // Swap nominator and denominator
         aCbScale.SetText( GetScale( nValue, 1 ) );
     }
     else
@@ -742,7 +734,7 @@ IMPL_LINK( SdTpOptionsMisc, ModifyOriginalScaleHdl, void *, EMPTYARG )
         if( fValue > (double)nValue )
             nValue++;
 
-        // #92067# Swap nominator and denominator
+        // Swap nominator and denominator
         aCbScale.SetText( GetScale( 1, nValue ) );
     }
     return( 0L );
@@ -750,7 +742,7 @@ IMPL_LINK( SdTpOptionsMisc, ModifyOriginalScaleHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-String SdTpOptionsMisc::GetScale( INT32 nX, INT32 nY )
+String SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
 {
     String aScale( UniString::CreateFromInt32( nX ) );
     aScale.Append( TOKEN );
@@ -761,28 +753,28 @@ String SdTpOptionsMisc::GetScale( INT32 nX, INT32 nY )
 
 // -----------------------------------------------------------------------
 
-BOOL SdTpOptionsMisc::SetScale( const String& aScale, INT32& rX, INT32& rY )
+sal_Bool SdTpOptionsMisc::SetScale( const String& aScale, sal_Int32& rX, sal_Int32& rY )
 {
     if( aScale.GetTokenCount( TOKEN ) != 2 )
-        return( FALSE );
+        return( sal_False );
 
     ByteString aTmp( aScale.GetToken( 0, TOKEN ), RTL_TEXTENCODING_ASCII_US );
     if( !aTmp.IsNumericAscii() )
-        return( FALSE );
+        return( sal_False );
 
     rX = (long) aTmp.ToInt32();
     if( rX == 0 )
-        return( FALSE );
+        return( sal_False );
 
     aTmp = ByteString( aScale.GetToken( 1, TOKEN ), RTL_TEXTENCODING_ASCII_US );
     if( !aTmp.IsNumericAscii() )
-        return( FALSE );
+        return( sal_False );
 
     rY = (long) aTmp.ToInt32();
     if( rY == 0 )
-        return( FALSE );
+        return( sal_False );
 
-    return( TRUE );
+    return( sal_True );
 }
 
 
@@ -805,7 +797,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
                 break;
 
             Reference<frame::XDesktop> xDesktop (xFactory->createInstance (
-                ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), UNO_QUERY);
             if ( ! xDesktop.is())
                 break;
 
@@ -849,7 +841,7 @@ void SdTpOptionsMisc::PageCreated (SfxAllItemSet aSet)
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG,sal_False);
     if (pFlagItem)
     {
-        UINT32 nFlags=pFlagItem->GetValue();
+        sal_uInt32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SD_DRAW_MODE ) == SD_DRAW_MODE )
             SetDrawMode();
         if ( ( nFlags & SD_IMPRESS_MODE ) == SD_IMPRESS_MODE )

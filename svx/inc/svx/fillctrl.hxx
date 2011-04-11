@@ -62,17 +62,17 @@ private:
     SvxFillTypeBox*     pFillTypeLB;
     SvxFillAttrBox*     pFillAttrLB;
 
-    BOOL                bUpdate;
-    BOOL                bIgnoreStatusUpdate;
-    USHORT              eLastXFS;
+    sal_Bool                bUpdate;
+    sal_Bool                bIgnoreStatusUpdate;
+    sal_uInt16              eLastXFS;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFillToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxFillToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxFillToolBoxControl();
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
     void                Update( const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );

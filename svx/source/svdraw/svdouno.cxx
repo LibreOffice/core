@@ -48,17 +48,17 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdmodel.hxx>
-#include "svdglob.hxx"  // Stringcache
-#include "svdstr.hrc"   // Objektname
+#include "svx/svdglob.hxx"  // Stringcache
+#include "svx/svdstr.hrc"   // Objektname
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx>
-#include "svdviter.hxx"
+#include "svx/svdviter.hxx"
 #include <rtl/ref.hxx>
 #include <set>
 #include <memory>
 #include <svx/sdrpagewindow.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <tools/diagnose_ex.h>
 #include <svx/svdograf.hxx>
 
@@ -165,11 +165,11 @@ namespace
 
 TYPEINIT1(SdrUnoObj, SdrRectObj);
 
-SdrUnoObj::SdrUnoObj(const String& rModelName, BOOL _bOwnUnoControlModel)
+SdrUnoObj::SdrUnoObj(const String& rModelName, sal_Bool _bOwnUnoControlModel)
 :   m_pImpl( new SdrUnoObjDataHolder ),
     bOwnUnoControlModel( _bOwnUnoControlModel )
 {
-    bIsUnoObj = TRUE;
+    bIsUnoObj = sal_True;
 
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
@@ -180,11 +180,11 @@ SdrUnoObj::SdrUnoObj(const String& rModelName, BOOL _bOwnUnoControlModel)
 
 SdrUnoObj::SdrUnoObj(const String& rModelName,
                      const uno::Reference< lang::XMultiServiceFactory >& rxSFac,
-                     BOOL _bOwnUnoControlModel)
+                     sal_Bool _bOwnUnoControlModel)
 :   m_pImpl( new SdrUnoObjDataHolder ),
     bOwnUnoControlModel( _bOwnUnoControlModel )
 {
-    bIsUnoObj = TRUE;
+    bIsUnoObj = sal_True;
 
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
@@ -211,7 +211,7 @@ SdrUnoObj::~SdrUnoObj()
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "SdrUnoObj::~SdrUnoObj: caught an exception!" );
+        OSL_FAIL( "SdrUnoObj::~SdrUnoObj: caught an exception!" );
     }
     delete m_pImpl;
 }
@@ -228,26 +228,26 @@ void SdrUnoObj::SetPage(SdrPage* pNewPage)
 
 void SdrUnoObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed        =   FALSE;
-    rInfo.bRotate90Allowed          =   FALSE;
-    rInfo.bMirrorFreeAllowed        =   FALSE;
-    rInfo.bMirror45Allowed          =   FALSE;
-    rInfo.bMirror90Allowed          =   FALSE;
-    rInfo.bTransparenceAllowed = FALSE;
-    rInfo.bGradientAllowed = FALSE;
-    rInfo.bShearAllowed             =   FALSE;
-    rInfo.bEdgeRadiusAllowed        =   FALSE;
-    rInfo.bNoOrthoDesired           =   FALSE;
-    rInfo.bCanConvToPath            =   FALSE;
-    rInfo.bCanConvToPoly            =   FALSE;
-    rInfo.bCanConvToPathLineToArea  =   FALSE;
-    rInfo.bCanConvToPolyLineToArea  =   FALSE;
-    rInfo.bCanConvToContour = FALSE;
+    rInfo.bRotateFreeAllowed        =   sal_False;
+    rInfo.bRotate90Allowed          =   sal_False;
+    rInfo.bMirrorFreeAllowed        =   sal_False;
+    rInfo.bMirror45Allowed          =   sal_False;
+    rInfo.bMirror90Allowed          =   sal_False;
+    rInfo.bTransparenceAllowed = sal_False;
+    rInfo.bGradientAllowed = sal_False;
+    rInfo.bShearAllowed             =   sal_False;
+    rInfo.bEdgeRadiusAllowed        =   sal_False;
+    rInfo.bNoOrthoDesired           =   sal_False;
+    rInfo.bCanConvToPath            =   sal_False;
+    rInfo.bCanConvToPoly            =   sal_False;
+    rInfo.bCanConvToPathLineToArea  =   sal_False;
+    rInfo.bCanConvToPolyLineToArea  =   sal_False;
+    rInfo.bCanConvToContour = sal_False;
 }
 
-UINT16 SdrUnoObj::GetObjIdentifier() const
+sal_uInt16 SdrUnoObj::GetObjIdentifier() const
 {
-    return UINT16(OBJ_UNO);
+    return sal_uInt16(OBJ_UNO);
 }
 
 void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
@@ -314,18 +314,25 @@ void SdrUnoObj::TakeObjNamePlural(XubString& rName) const
     rName = ImpGetResStr(STR_ObjNamePluralUno);
 }
 
-void SdrUnoObj::operator = (const SdrObject& rObj)
+SdrUnoObj* SdrUnoObj::Clone() const
 {
-    SdrRectObj::operator = (rObj);
+    return CloneHelper< SdrUnoObj >();
+}
+
+SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
+    SdrRectObj::operator= (rObj);
 
     // release the reference to the current control model
     SetUnoControlModel(uno::Reference< awt::XControlModel >());
 
-    aUnoControlModelTypeName = ((SdrUnoObj&) rObj).aUnoControlModelTypeName;
-    aUnoControlTypeName = ((SdrUnoObj&) rObj).aUnoControlTypeName;
+    aUnoControlModelTypeName = rObj.aUnoControlModelTypeName;
+    aUnoControlTypeName = rObj.aUnoControlTypeName;
 
     // copy the uno control model
-    uno::Reference< awt::XControlModel > xCtrl( ((SdrUnoObj&) rObj).GetUnoControlModel(), uno::UNO_QUERY );
+    uno::Reference< awt::XControlModel > xCtrl( rObj.GetUnoControlModel(), uno::UNO_QUERY );
     uno::Reference< util::XCloneable > xClone( xCtrl, uno::UNO_QUERY );
 
     if ( xClone.is() )
@@ -344,21 +351,21 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
         if ( xObj.is() && xFactory.is() )
         {
             // creating a pipe
-            uno::Reference< io::XOutputStream > xOutPipe(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), uno::UNO_QUERY);
+            uno::Reference< io::XOutputStream > xOutPipe(xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe"))), uno::UNO_QUERY);
             uno::Reference< io::XInputStream > xInPipe(xOutPipe, uno::UNO_QUERY);
 
             // creating the mark streams
-            uno::Reference< io::XInputStream > xMarkIn(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), uno::UNO_QUERY);
+            uno::Reference< io::XInputStream > xMarkIn(xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableInputStream"))), uno::UNO_QUERY);
             uno::Reference< io::XActiveDataSink > xMarkSink(xMarkIn, uno::UNO_QUERY);
 
-            uno::Reference< io::XOutputStream > xMarkOut(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), uno::UNO_QUERY);
+            uno::Reference< io::XOutputStream > xMarkOut(xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableOutputStream"))), uno::UNO_QUERY);
             uno::Reference< io::XActiveDataSource > xMarkSource(xMarkOut, uno::UNO_QUERY);
 
             // connect mark and sink
-            uno::Reference< io::XActiveDataSink > xSink(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), uno::UNO_QUERY);
+            uno::Reference< io::XActiveDataSink > xSink(xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.ObjectInputStream"))), uno::UNO_QUERY);
 
             // connect mark and source
-            uno::Reference< io::XActiveDataSource > xSource(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), uno::UNO_QUERY);
+            uno::Reference< io::XActiveDataSource > xSource(xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.ObjectOutputStream"))), uno::UNO_QUERY);
 
             uno::Reference< io::XObjectOutputStream > xOutStrm(xSource, uno::UNO_QUERY);
             uno::Reference< io::XObjectInputStream > xInStrm(xSink, uno::UNO_QUERY);
@@ -388,7 +395,7 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
     uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
     if (xSet.is())
     {
-        uno::Any aValue( xSet->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl")) );
+        uno::Any aValue( xSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultControl"))) );
         ::rtl::OUString aStr;
 
         if( aValue >>= aStr )
@@ -398,6 +405,7 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
     uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
     if (xComp.is())
         m_pImpl->pEventListener->StartListening(xComp);
+    return *this;
 }
 
 void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
@@ -475,7 +483,6 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
     // (relative to a layer. Remember that the visibility of a layer is a view attribute
     // - the same layer can be visible in one view, and invisible in another view, at the
     // same time)
-    // 2003-06-03 - #110592# - fs@openoffice.org
 
     // collect all views in which our old layer is visible
     ::std::set< SdrView* > aPreviouslyVisible;

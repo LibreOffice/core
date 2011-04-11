@@ -40,7 +40,7 @@
 #include <tools/debug.hxx>
 
 #include <salids.hrc>
-#include <vcl/salatype.hxx>
+#include <vcl/apptypes.hxx>
 #include <saldata.hxx>
 #include <salinst.h>
 #include <salframe.h>
@@ -295,10 +295,9 @@ void ImplSalAcquireYieldMutex( ULONG nCount )
 
 // -----------------------------------------------------------------------
 
-#ifdef DBG_UTIL
-
-void ImplDbgTestSolarMutex()
+bool Os2SalInstance::CheckYieldMutex()
 {
+    bool bRet = true;
     SalData*    pSalData = GetSalData();
     ULONG       nCurThreadId = GetCurrentThreadId();
     if ( pSalData->mnAppThreadId != nCurThreadId )
@@ -308,7 +307,7 @@ void ImplDbgTestSolarMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                DBG_ERROR( "SolarMutex not locked, and not thread save code in VCL is called from outside of the main thread" );
+                bRet = false;
             }
         }
     }
@@ -319,13 +318,12 @@ void ImplDbgTestSolarMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                DBG_ERROR( "SolarMutex not locked in the main thread" );
+                bRet = false;
             }
         }
     }
+    return bRet;
 }
-
-#endif
 
 // =======================================================================
 
@@ -356,7 +354,7 @@ void InitSalMain()
     HAB hAB;
     HMQ hMQ;
     SalData* pData = GetAppSalData();
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
 printf("InitSalMain\n");
 #endif
 
@@ -389,7 +387,7 @@ printf("InitSalMain\n");
 
 void DeInitSalMain()
 {
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
 printf("DeInitSalMain\n");
 #endif
 
@@ -443,7 +441,7 @@ SalInstance* CreateSalInstance()
     if ( !hComWnd )
         return NULL;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("CreateSalInstance hComWnd %x\n", hComWnd);
 #endif
     Os2SalInstance* pInst = new Os2SalInstance;
@@ -664,7 +662,7 @@ MRESULT EXPENTRY SalComWndProc( HWND hWnd, ULONG nMsg,
             //in the structure (GetWindowPtr()).
             if (WinDestroyWindow((HWND)nMP2) == 0)
             {
-                OSL_ENSURE(0, "DestroyWindow failed!");
+                OSL_FAIL("DestroyWindow failed!");
                 //Failure: We remove the SalFrame from the window structure. So we avoid that
                 // the window structure may contain an invalid pointer, once the SalFrame is deleted.
                SetWindowPtr((HWND)nMP2, 0);

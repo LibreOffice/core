@@ -38,10 +38,6 @@ import com.sun.star.form.validation.*;
 
 import integration.forms.DocumentHelper;
 
-/**
- *
- * @author  fs@openoffice.org
- */
 public class SingleControlValidation implements XFormComponentValidityListener
 {
     private DocumentHelper          m_document;         /// our current test document

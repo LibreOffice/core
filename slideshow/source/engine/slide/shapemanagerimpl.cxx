@@ -41,6 +41,8 @@
 
 #include <boost/bind.hpp>
 
+#include <o3tl/compat_functional.hxx>
+
 using namespace com::sun::star;
 
 namespace slideshow {
@@ -83,7 +85,7 @@ void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
                                     this,
                                     boost::cref(xDummyListener),
                                     boost::bind(
-                                        std::select1st<ShapeEventListenerMap::value_type>(),
+                                        o3tl::select1st<ShapeEventListenerMap::value_type>(),
                                         _1 )));
 
         // clone cursor map
@@ -92,10 +94,10 @@ void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
                        boost::bind( &ShapeManagerImpl::cursorChanged,
                                     this,
                                     boost::bind(
-                                        std::select1st<ShapeCursorMap::value_type>(),
+                                        o3tl::select1st<ShapeCursorMap::value_type>(),
                                         _1 ),
                                     boost::bind(
-                                        std::select2nd<ShapeCursorMap::value_type>(),
+                                        o3tl::select2nd<ShapeCursorMap::value_type>(),
                                         _1 )));
 
         if( mpLayerManager )

@@ -48,6 +48,14 @@ UWINAPILIB=
 
 CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS  
 
+.IF "$(COM)" == "MSC"
+# C4100: unreferenced formal parameter
+# C4131: uses old-style declarator
+# C4242: conversion from 'int' to 'char', possible loss of data
+# C4706: assignment within conditional expression
+CDEFS+=-wd4100 -wd4131 -wd4242 -wd4706
+.ENDIF
+
 OBJFILES=  \
         $(OBJ)$/cppsetup.obj \
         $(OBJ)$/ifparser.obj \

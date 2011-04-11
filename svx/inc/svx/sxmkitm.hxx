@@ -39,17 +39,17 @@ enum SdrMeasureKind     {SDRMEASURE_STD,SDRMEASURE_RADIUS}; // n.i.
 class SdrMeasureKindItem: public SfxEnumItem {
 public:
     TYPEINFO();
-    SdrMeasureKindItem(SdrMeasureKind eKind=SDRMEASURE_STD): SfxEnumItem(SDRATTR_MEASUREKIND,sal::static_int_cast< USHORT >(eKind)) {}
+    SdrMeasureKindItem(SdrMeasureKind eKind=SDRMEASURE_STD): SfxEnumItem(SDRATTR_MEASUREKIND,sal::static_int_cast< sal_uInt16 >(eKind)) {}
     SdrMeasureKindItem(SvStream& rIn)                      : SfxEnumItem(SDRATTR_MEASUREKIND,rIn)    {}
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem*   Create(SvStream& rIn, USHORT nVer) const;
-    virtual USHORT         GetValueCount() const; // { return 2; }
+    virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual sal_uInt16         GetValueCount() const; // { return 2; }
             SdrMeasureKind GetValue() const { return (SdrMeasureKind)SfxEnumItem::GetValue(); }
 
-    virtual bool           QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool           PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool           QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool           PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual String  GetValueTextByPos(USHORT nPos) const;
+    virtual String  GetValueTextByPos(sal_uInt16 nPos) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
 };
 

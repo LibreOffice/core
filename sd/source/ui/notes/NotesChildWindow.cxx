@@ -40,7 +40,7 @@ namespace sd { namespace notes {
 
 NotesChildWindow::NotesChildWindow (
     ::Window* _pParent,
-    USHORT nId,
+    sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)
     : SfxChildWindow (_pParent, nId)

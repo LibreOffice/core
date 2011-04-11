@@ -119,7 +119,7 @@ SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
 }
 
 
-SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, USHORT nVersion )
+SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
 {
     if( SVX_MACROTBL_VERSION40 <= nVersion )
         rStrm >> nVersion;
@@ -128,7 +128,7 @@ SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, USHORT nVersion )
 
     for( short i = 0; i < nMacro; ++i )
     {
-        USHORT nCurKey, eType = STARBASIC;
+        sal_uInt16 nCurKey, eType = STARBASIC;
         String aLibName, aMacName;
         rStrm >> nCurKey;
         SfxPoolItem::readByteString(rStrm, aLibName);
@@ -154,14 +154,14 @@ SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, USHORT nVersion )
 
 SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
 {
-    USHORT nVersion = SOFFICE_FILEFORMAT_31 == rStream.GetVersion()
+    sal_uInt16 nVersion = SOFFICE_FILEFORMAT_31 == rStream.GetVersion()
                                     ? SVX_MACROTBL_VERSION31
                                     : SVX_MACROTBL_AKTVERSION;
 
     if( SVX_MACROTBL_VERSION40 <= nVersion )
         rStream << nVersion;
 
-    rStream << (USHORT)Count();
+    rStream << (sal_uInt16)Count();
 
     SvxMacro* pMac = ((SvxMacroTableDtor*)this)->First();
     while( pMac && rStream.GetError() == SVSTREAM_OK )
@@ -171,7 +171,7 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
         SfxPoolItem::writeByteString(rStream, pMac->GetMacName());
 
         if( SVX_MACROTBL_VERSION40 <= nVersion )
-            rStream << (USHORT)pMac->GetScriptType();
+            rStream << (sal_uInt16)pMac->GetScriptType();
         pMac = ((SvxMacroTableDtor*)this)->Next();
     }
     return rStream;
@@ -201,20 +201,20 @@ int SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
 
     // Anzahl unterschiedlich => auf jeden Fall ungleich
     if ( rOwn.Count() != rOther.Count() )
-        return FALSE;
+        return sal_False;
 
     // einzeln verleichen; wegen Performance ist die Reihenfolge wichtig
-    for ( USHORT nNo = 0; nNo < rOwn.Count(); ++nNo )
+    for ( sal_uInt16 nNo = 0; nNo < rOwn.Count(); ++nNo )
     {
         const SvxMacro *pOwnMac = rOwn.GetObject(nNo);
         const SvxMacro *pOtherMac = rOther.GetObject(nNo);
         if (    rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
                 pOwnMac->GetLibName() != pOtherMac->GetLibName() ||
                 pOwnMac->GetMacName() != pOtherMac->GetMacName() )
-            return FALSE;
+            return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -255,14 +255,14 @@ SfxItemPresentation SvxMacroItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxMacroItem::Store( SvStream& rStrm , USHORT ) const
+SvStream& SvxMacroItem::Store( SvStream& rStrm , sal_uInt16 ) const
 {
     return aMacroTable.Write( rStrm );
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, USHORT nVersion ) const
+SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
 {
     SvxMacroItem* pAttr = new SvxMacroItem( Which() );
     pAttr->aMacroTable.Read( rStrm, nVersion );
@@ -271,7 +271,7 @@ SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, USHORT nVersion ) const
 
 // -----------------------------------------------------------------------
 
-void SvxMacroItem::SetMacro( USHORT nEvent, const SvxMacro& rMacro )
+void SvxMacroItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
     SvxMacro *pMacro;
     if ( 0 != (pMacro=aMacroTable.Get(nEvent)) )
@@ -285,7 +285,7 @@ void SvxMacroItem::SetMacro( USHORT nEvent, const SvxMacro& rMacro )
 
 // -----------------------------------------------------------------------
 
-USHORT SvxMacroItem::GetVersion( USHORT nFileFormatVersion ) const
+sal_uInt16 SvxMacroItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
 {
     return SOFFICE_FILEFORMAT_31 == nFileFormatVersion
                 ? 0 : aMacroTable.GetVersion();

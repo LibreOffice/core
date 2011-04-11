@@ -29,22 +29,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <svx/svdmodel.hxx>
 
+#include <svx/svdmodel.hxx>
 
 #include <calbck.hxx>
 #include <calc.hxx>
 #include <usrfld.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <editsh.hxx>
 #include <dpage.hxx>
 #include <unofldmid.h>
 
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
+
 /*--------------------------------------------------------------------
     Beschreibung: Benutzerfelder
  --------------------------------------------------------------------*/
@@ -71,17 +73,14 @@ SwField* SwUserField::Copy() const
     return pTmp;
 }
 
-String SwUserField::GetCntnt(sal_Bool bName) const
+String SwUserField::GetFieldName() const
 {
-    if ( bName )
-    {   String aStr(SwFieldType::GetTypeStr(TYP_USERFLD));
-        aStr += ' ';
-        aStr += GetTyp()->GetName();
-        aStr.AppendAscii(" = ");
-        aStr += ((SwUserFieldType*)GetTyp())->GetContent();
-        return aStr;
-    }
-    return Expand();
+    String aStr(SwFieldType::GetTypeStr(TYP_USERFLD));
+    aStr += ' ';
+    aStr += GetTyp()->GetName();
+    aStr.AppendAscii(" = ");
+    aStr += static_cast<SwUserFieldType*>(GetTyp())->GetContent();
+    return aStr;
 }
 
 double SwUserField::GetValue() const
@@ -128,22 +127,19 @@ void SwUserField::SetSubType(sal_uInt16 nSub)
     nSubType = nSub & 0xff00;
 }
 
-/*-----------------09.03.98 08:04-------------------
-
---------------------------------------------------*/
-bool SwUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL2:
         {
-            BOOL bTmp = 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
+            sal_Bool bTmp = 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
             rAny.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
     case FIELD_PROP_BOOL1:
         {
-            BOOL bTmp = 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
+            sal_Bool bTmp = 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
             rAny.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -155,10 +151,8 @@ bool SwUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------09.03.98 08:04-------------------
 
---------------------------------------------------*/
-bool SwUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -234,12 +228,12 @@ const String& SwUserFieldType::GetName() const
     return aName;
 }
 
-void SwUserFieldType::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwUserFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( !pOld && !pNew )
         ChgValid( sal_False );
 
-    SwModify::Modify( pOld, pNew );
+    NotifyClients( pOld, pNew );
     // und ggfs. am UserFeld haengende InputFelder updaten!
     GetDoc()->GetSysFldType( RES_INPUTFLD )->UpdateFlds();
 }
@@ -304,14 +298,13 @@ void SwUserFieldType::SetContent( const String& rStr, sal_uInt32 nFmt )
         sal_Bool bModified = GetDoc()->IsModified();
         GetDoc()->SetModified();
         if( !bModified )    // Bug 57028
-            GetDoc()->SetUndoNoResetModified();
+        {
+            GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
+        }
     }
 }
 
-/*-----------------04.03.98 17:05-------------------
-
---------------------------------------------------*/
-bool SwUserFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -323,19 +316,17 @@ bool SwUserFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         break;
     case FIELD_PROP_BOOL1:
         {
-            BOOL bExpression = 0 != (nsSwGetSetExpType::GSE_EXPR&nType);
+            sal_Bool bExpression = 0 != (nsSwGetSetExpType::GSE_EXPR&nType);
             rAny.setValue(&bExpression, ::getBooleanCppuType());
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
-/*-----------------04.03.98 17:05-------------------
 
---------------------------------------------------*/
-bool SwUserFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -368,7 +359,7 @@ bool SwUserFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }

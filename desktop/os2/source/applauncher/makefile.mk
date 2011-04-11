@@ -47,7 +47,7 @@ OBJFILES= \
     $(OBJ)$/sbase.obj \
     $(OBJ)$/smath.obj \
     $(OBJ)$/officeloader.obj \
-    $(OBJ)$/quickstart.obj
+    $(OBJ)$/os2quickstart.obj
 
 APP1TARGET=swriter
 APP1NOSAL=TRUE
@@ -106,13 +106,13 @@ APP7OBJS = \
         $(OBJ)$/launcher.obj\
         $(OBJ)$/officeloader.obj
 
-APP8TARGET=quickstart
+APP8TARGET=os2quickstart
 APP8NOSAL=TRUE
 APP8LINKRES=$(MISC)$/$(TARGET)8.res
 APP8ICON=$(SOLARRESDIR)$/icons$/ooo-main-app.ico
 APP8OBJS = \
         $(OBJ)$/launcher.obj\
-        $(OBJ)$/quickstart.obj
+        $(OBJ)$/os2quickstart.obj
 
 # --- Targets ------------------------------------------------------
 

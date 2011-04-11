@@ -26,6 +26,8 @@
  *
  ************************************************************************/
 
+#include <cstddef>
+
 #include <kdemodalityfilter.hxx>
 #include <kdefilepicker.hxx>
 #include <kdecommandthread.hxx>

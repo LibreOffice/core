@@ -48,7 +48,6 @@ namespace dbaui
 //.........................................................................
 
     class IDatabaseSettingsDialog;
-//      static  OGenericAdministrationPage* CreateDbaseTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
 
        //========================================================================
@@ -57,7 +56,7 @@ namespace dbaui
     class OSpreadSheetConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
         static  OGenericAdministrationPage* CreateSpreadSheetTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         OSpreadSheetConnectionPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs);
 
@@ -78,7 +77,7 @@ namespace dbaui
     class OTextConnectionPageSetup : public OConnectionTabPageSetup
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
            static   OGenericAdministrationPage* CreateTextTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         OTextConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs );
         OTextConnectionHelper*  m_pTextConnectionHelper;
@@ -102,7 +101,7 @@ namespace dbaui
     class OLDAPConnectionPageSetup : public OGenericAdministrationPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
         static  OGenericAdministrationPage* CreateLDAPTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         OLDAPConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs );
         virtual Link getControlModifiedLink() { return LINK(this, OLDAPConnectionPageSetup, OnEditModified); }
@@ -145,7 +144,7 @@ namespace dbaui
         virtual void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList );
         virtual void fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList );
 
-        virtual BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 
         virtual Link getControlModifiedLink();
@@ -161,18 +160,18 @@ namespace dbaui
     {
     public:
         OGeneralSpecialJDBCConnectionPageSetup(   Window* pParent
-                                        , USHORT _nResId
+                                        , sal_uInt16 _nResId
                                         , const SfxItemSet& _rCoreAttrs
-                                        , USHORT _nPortId
-                                        , USHORT _nDefaultPortResId
-                                        , USHORT _nHelpTextResId
-                                        , USHORT _nHeaderTextResId
-                                        , USHORT _nDriverClassId );
+                                        , sal_uInt16 _nPortId
+                                        , sal_uInt16 _nDefaultPortResId
+                                        , sal_uInt16 _nHelpTextResId
+                                        , sal_uInt16 _nHeaderTextResId
+                                        , sal_uInt16 _nDriverClassId );
     static  OGenericAdministrationPage* CreateMySQLJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
     static  OGenericAdministrationPage* CreateOracleJDBCTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
-        virtual BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -195,7 +194,7 @@ namespace dbaui
         PushButton          m_aPBTestJavaDriver;
 
         String              m_sDefaultJdbcDriverName;
-        USHORT              m_nPortId;
+        sal_uInt16              m_nPortId;
     };
 
 
@@ -211,7 +210,7 @@ namespace dbaui
     protected:
         virtual bool checkTestConnection();
 
-        virtual BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -251,7 +250,7 @@ namespace dbaui
 
 
     protected:
-        virtual BOOL FillItemSet(SfxItemSet& _rSet);
+        virtual sal_Bool FillItemSet(SfxItemSet& _rSet);
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -278,7 +277,7 @@ namespace dbaui
     class OAuthentificationPageSetup : public OGenericAdministrationPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
         static  OGenericAdministrationPage* CreateAuthentificationTabPage( Window* pParent, const SfxItemSet& _rAttrSet );
         OAuthentificationPageSetup(Window* pParent, const SfxItemSet& _rCoreAttrs);
 
@@ -305,7 +304,7 @@ namespace dbaui
     class OFinalDBPageSetup : public OGenericAdministrationPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
            static   OGenericAdministrationPage* CreateFinalDBTabPageSetup( Window* pParent, const SfxItemSet& _rAttrSet);
 
         FixedText   m_aFTFinalHeader;

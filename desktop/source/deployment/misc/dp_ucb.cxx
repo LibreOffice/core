@@ -161,7 +161,7 @@ bool create_folder(
             }
             catch (CommandFailedException &) {
                 // Interaction Handler already handled the error
-                // that has occured...
+                // that has occurred...
             }
             catch (Exception &) {
                 if (throw_exc)

@@ -132,7 +132,7 @@ namespace dbaccess
                 return !bHidden;
             }
         }
-        OSL_ENSURE( false, "OColumnSettings::isDefaulted: illegal property handle!" );
+        OSL_FAIL( "OColumnSettings::isDefaulted: illegal property handle!" );
         return sal_False;
     }
 

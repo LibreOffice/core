@@ -172,7 +172,7 @@ extern "C" { static void SAL_CALL s_Proxy_dispatch(
         break;
     }
     default:
-        OSL_ENSURE( sal_False, "### illegal member typeclass!" );
+        OSL_FAIL( "### illegal member typeclass!" );
         abort();
     }
 
@@ -493,7 +493,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
 
         *ppException = 0;
     }
-    else // exception occured
+    else // exception occurred
     {
         for (sal_Int32 nPos = 0; nPos < nParams; ++ nPos)
         {

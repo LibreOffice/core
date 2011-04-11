@@ -35,7 +35,7 @@
 #include <osl/diagnose.h>
 
 #include "XTDataObject.hxx"
-#include <com/sun/star/datatransfer/dataflavor.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include "..\misc\ImplHelper.hxx"
 #include "DTransHelper.hxx"
 #include "TxtCnvtHlp.hxx"
@@ -64,7 +64,8 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 // a helper class that will be thrown by the function validateFormatEtc
@@ -255,7 +256,7 @@ void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
     // so we must check the any
     if ( !aAny.hasValue( ) )
     {
-        OSL_ENSURE( sal_False, "XTransferable should throw an exception if ask for an unsupported flavor" );
+        OSL_FAIL( "XTransferable should throw an exception if ask for an unsupported flavor" );
         throw UnsupportedFlavorException( );
     }
 
@@ -292,7 +293,7 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
     // so we must check the any
     if ( !aAny.hasValue( ) )
     {
-        OSL_ENSURE( sal_False, "XTransferable should throw an exception if ask for an unsupported flavor" );
+        OSL_FAIL( "XTransferable should throw an exception if ask for an unsupported flavor" );
         throw UnsupportedFlavorException( );
     }
 
@@ -360,7 +361,7 @@ HRESULT SAL_CALL CXTDataObject::renderSynthesizedFormatAndSetupStgMedium( FORMAT
     }
     catch( CInvalidFormatEtcException& )
     {
-        OSL_ENSURE( sal_False, "Unexpected exception" );
+        OSL_FAIL( "Unexpected exception" );
     }
     catch( CStgTransferHelper::CStgTransferException& ex )
     {
@@ -389,7 +390,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedUnicodeAndSetupStgMedium( FORMATET
     // so we must check the any
     if ( !aAny.hasValue( ) )
     {
-        OSL_ENSURE( sal_False, "XTransferable should throw an exception if ask for an unsupported flavor" );
+        OSL_FAIL( "XTransferable should throw an exception if ask for an unsupported flavor" );
         throw UnsupportedFlavorException( );
     }
 
@@ -425,7 +426,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& 
     // so we must check the any
     if ( !aAny.hasValue( ) )
     {
-        OSL_ENSURE( sal_False, "XTransferable should throw an exception if ask for an unsupported flavor" );
+        OSL_FAIL( "XTransferable should throw an exception if ask for an unsupported flavor" );
         throw UnsupportedFlavorException( );
     }
 
@@ -454,7 +455,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& 
     DataFlavor aFlavor;
 
     // creating a DataFlavor on the fly
-    aFlavor.MimeType = OUString::createFromAscii( "text/html" );
+    aFlavor.MimeType = OUString(RTL_CONSTASCII_USTRINGPARAM("text/html"));
     aFlavor.DataType = getCppuType( (Sequence< sal_Int8 >*)0 );
 
     Any aAny = m_XTransferable->getTransferData( aFlavor );
@@ -464,7 +465,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedHtmlAndSetupStgMedium( FORMATETC& 
     // so we must check the any
     if ( !aAny.hasValue( ) )
     {
-        OSL_ENSURE( sal_False, "XTransferable should throw an exception if ask for an unsupported flavor" );
+        OSL_FAIL( "XTransferable should throw an exception if ask for an unsupported flavor" );
         throw UnsupportedFlavorException( );
     }
 

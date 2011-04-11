@@ -68,15 +68,13 @@ protected:
 
     virtual ~SwAccessibleTable();
 
-    // --> OD 2007-06-27 #i77106#
+    // #i77106#
     inline void SetDesc( ::rtl::OUString sNewDesc )
     {
         sDesc = sNewDesc;
     }
 
-    // --> OD 2007-06-28 #i77106#
-    virtual SwAccessibleTableData_Impl* CreateNewTableData();
-    // <--
+    virtual SwAccessibleTableData_Impl* CreateNewTableData(); // #i77106#
 
     // force update of table data
     void UpdateTableData();
@@ -90,11 +88,11 @@ protected:
     // Is table data evailable?
     sal_Bool HasTableData() const { return (mpTableData != 0); }
 
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
 
     SwAccessibleTable( SwAccessibleMap* pInitMap, const SwTabFrm* pTableFrm );
-
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //=====  XInterface  ======================================================
 
@@ -253,7 +251,7 @@ public:
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
 
-    // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
+    // index has to be treated as global child index.
     virtual void SAL_CALL deselectAccessibleChild(
         sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
@@ -268,8 +266,7 @@ inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()
     return *mpTableData;
 }
 
-// --> OD 2007-06-28 #i77106#
-// subclass to represent table column headers
+// #i77106# - subclass to represent table column headers
 class SwAccessibleTableColHeaders : public SwAccessibleTable
 {
 protected:
@@ -278,12 +275,11 @@ protected:
     {}
 
     virtual SwAccessibleTableData_Impl* CreateNewTableData();
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
 
     SwAccessibleTableColHeaders( SwAccessibleMap *pMap, const SwTabFrm *pTabFrm );
-
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //=====  XInterface  ======================================================
 

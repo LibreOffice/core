@@ -28,9 +28,8 @@
 #ifndef _SVTOOLS_IODLGIMPL_HRC
 #define _SVTOOLS_IODLGIMPL_HRC
 
-#ifndef _SVTOOLS_HRC
 #include "svtools/svtools.hrc"
-#endif
+#include "svtools/helpid.hrc"
 
 // ModalDialog DLG_SVT_EXPLORERFILE
 
@@ -71,6 +70,7 @@
 #define STR_PATHSELECT                      5
 #define STR_BUTTONSELECT                    6
 #define STR_ACTUALVERSION                   7
+#define STR_PREVIEW             8
 
 // DLG_SVT_QUERYFOLDERNAME -----------------------
 
@@ -85,23 +85,6 @@
 
 #define SID_SFX_START                       5000
 #define SID_OPENURL                     (SID_SFX_START + 596)
-
-#define HID_FILEDLG_STANDARD            (HID_SFX_START +  27)
-#define HID_FILEDLG_MANAGER             (HID_SFX_START +  28)
-#define HID_FILEDLG_URL                 (HID_SFX_START +  29)
-#define HID_FILEDLG_USE_PASSWD          (HID_SFX_START +  31)
-#define HID_FILEDLG_READ_ONLY           (HID_SFX_START +  32)
-
-#define HID_FILEDLG_AUTOCOMPLETEBOX     (HID_SFX_START + 218)
-#define HID_FILEDLG_SAVE_BTN            (HID_SFX_START + 219)
-#define HID_FILEDLG_SAVE_FILENAME       (HID_SFX_START + 220)
-#define HID_FILEDLG_SAVE_FILETYPE       (HID_SFX_START + 221)
-#define HID_FILEDLG_INSERT_BTN          (HID_SFX_START + 222)
-#define HID_FILEDLG_PATH_BTN            (HID_SFX_START + 223)
-#define HID_FILEDLG_PATH_FILENAME       (HID_SFX_START + 224)
-#define HID_FILEDLG_FOLDER_BTN          (HID_SFX_START + 225)
-#define HID_FILEDLG_FOLDER_FILENAME     (HID_SFX_START + 226)
-#define HID_FILEDLG_SRCHFOLDER_BTN      (HID_SFX_START + 227)
 
 #endif
 

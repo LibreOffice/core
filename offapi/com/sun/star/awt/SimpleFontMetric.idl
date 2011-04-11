@@ -41,7 +41,7 @@ published struct SimpleFontMetric
     /** specifies the portion of a lower case character that
         rises above the height of the character "x" of the font.
 
-        <p>For example, the letters 'b', 'd', 'h', 'k' and 'l'
+        <p>For example, the letters "b", "d", "h", "k" and "l"
         have an ascent unequal to 0.</p>
 
         <p>The ascent is measured in pixels, thus the font metric is
@@ -53,7 +53,7 @@ published struct SimpleFontMetric
 
     /** specifies the portion of a letter falling below the baseline.
 
-        <p>For example, the letters 'g', 'p', and 'y'
+        <p>For example, the letters "g", "p", and "y"
         have a descent unequal to 0.</p>
 
         <p>The descent is measured in pixels, thus the font metric is
@@ -64,7 +64,7 @@ published struct SimpleFontMetric
     //-------------------------------------------------------------------------
 
     /** specifies the vertical space between lines of this font;
-        it is also called internal linespacing.
+        it is also called internal line spacing.
 
         <p>The leading is measured in pixels, thus the font metric is
         device dependent.</p>

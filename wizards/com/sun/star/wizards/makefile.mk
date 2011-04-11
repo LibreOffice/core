@@ -32,7 +32,6 @@ PACKAGE = com$/sun$/star$/wizards
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
-#.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar java_uno_accessbridge 
 
@@ -55,6 +54,7 @@ JARTARGET	= commonwizards.jar
 # --- Files --------------------------------------------------------
 
 JAVAFILES=							\
+    common$/HelpIds.java	                		\
     common$/Desktop.java	                		\
     common$/NumberFormatter.java                 		\
     common$/FileAccess.java                 		\
@@ -63,6 +63,7 @@ JAVAFILES=							\
     common$/JavaTools.java                  		\
     common$/NoValidPathException.java       		\
     common$/Properties.java                 		\
+    common$/PropertyNames.java                 		\
     common$/Resource.java                   		\
     common$/SystemDialog.java				\
     common$/Configuration.java				\
@@ -140,9 +141,6 @@ JAVAFILES=							\
     text$/TextStyleHandler.java				\
     text$/TextTableHandler.java				\
     text$/ViewHandler.java
-
-
-#JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:s/.java/.class/))
 
 # --- Targets ------------------------------------------------------
 

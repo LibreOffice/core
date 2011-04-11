@@ -7,3 +7,4 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
+..\%__SRC%\misc\solver.component %_DEST%\xml%_EXT%\solver.component

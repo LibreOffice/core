@@ -159,7 +159,7 @@ void SAL_CALL CXNotifyingDataObject::lostOwnership( )
     }
     catch(RuntimeException&)
     {
-        OSL_ENSURE( sal_False, "RuntimeException caught" );
+        OSL_FAIL( "RuntimeException caught" );
     }
 }
 

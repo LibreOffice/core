@@ -57,6 +57,7 @@ TabPage TP_FLD_DOKINF
     };
     ListBox LB_DOKINFSELECTION
     {
+        HelpID = "sw:ListBox:TP_FLD_DOKINF:LB_DOKINFSELECTION";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 88 , 16 ) ;
         Size = MAP_APPFONT ( 76 , 163 ) ;
@@ -78,6 +79,7 @@ TabPage TP_FLD_DOKINF
     };
     ListBox LB_DOKINFFORMAT
     {
+        HelpID = "sw:ListBox:TP_FLD_DOKINF:LB_DOKINFFORMAT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 170 , 16 ) ;
         Size = MAP_APPFONT ( 84 , 148 ) ;
@@ -86,6 +88,7 @@ TabPage TP_FLD_DOKINF
     };
     CheckBox CB_DOKINFFIXEDCONTENT
     {
+        HelpID = "sw:CheckBox:TP_FLD_DOKINF:CB_DOKINFFIXEDCONTENT";
         Pos = MAP_APPFONT ( 170 , 170 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         TabStop = TRUE ;

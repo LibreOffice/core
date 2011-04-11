@@ -52,6 +52,7 @@ IDLFILES=\
     ChartAxisPosition.idl\
     ChartAxisLabelPosition.idl\
     ChartAxisMarkPosition.idl\
+    ChartAxisType.idl\
     ChartAxisXSupplier.idl\
     ChartAxisYSupplier.idl\
     ChartAxisZSupplier.idl\
@@ -72,6 +73,7 @@ IDLFILES=\
     ChartGrid.idl\
     ChartLegend.idl\
     ChartLegendPosition.idl\
+    ChartLegendExpansion.idl \
     ChartLine.idl\
     ChartPieSegmentProperties.idl\
     ChartRegressionCurveType.idl\
@@ -84,6 +86,7 @@ IDLFILES=\
     ChartTwoAxisXSupplier.idl\
     ChartTwoAxisYSupplier.idl\
     DataLabelPlacement.idl\
+    TimeIncrement.idl \
     Diagram.idl\
     Dim3DDiagram.idl\
     DonutDiagram.idl\
@@ -94,8 +97,12 @@ IDLFILES=\
     PieDiagram.idl\
     StackableDiagram.idl\
     StockDiagram.idl\
+    TimeUnit.idl\
+    TimeInterval.idl\
     X3DDefaultSetter.idl\
     X3DDisplay.idl\
+    XAxis.idl\
+    XAxisSupplier.idl\
     XAxisXSupplier.idl\
     XAxisYSupplier.idl\
     XAxisZSupplier.idl\
@@ -104,6 +111,7 @@ IDLFILES=\
     XChartDataChangeEventListener.idl\
     XChartDocument.idl\
     XComplexDescriptionAccess.idl\
+    XDateCategories.idl\
     XDiagram.idl\
     XDiagramPositioning.idl\
     XStatisticDisplay.idl\

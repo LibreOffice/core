@@ -82,7 +82,7 @@ void XclImpString::Read( XclImpStream& rStrm, XclStrFlags nFlags )
             sal_uInt16 nRunCount;
             sal_uInt32 nExtInf;
             rStrm.ReadUniStringExtHeader( b16Bit, bRich, bFarEast, nRunCount, nExtInf, nFlagField );
-            // #122185# ignore the flags, they may be wrong
+            // ignore the flags, they may be wrong
 
             // --- character array ---
             maString = rStrm.ReadRawUniString( nChars, b16Bit );

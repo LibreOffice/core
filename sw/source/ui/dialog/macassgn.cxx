@@ -60,30 +60,25 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;
 
-// SvStringsDtor* __EXPORT _GetRangeHdl( _SfxMacroTabPage*, const String& );
-
 SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 {
-    // const SfxItemSet& rSet = rPg.GetItemSet();
     SfxEventNamesItem aItem(SID_EVENTCONFIG);
 
-    BOOL bHtmlMode = FALSE;
-    USHORT nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
-    bHtmlMode = nHtmlMode & HTMLMODE_ON ? TRUE : FALSE;
+    sal_Bool bHtmlMode = sal_False;
+    sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
+    bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
 
     switch( eType )
     {
-    case MACASSGN_TEXTBAUST:            // Textbausteine
-        // rPg.SetGetRangeLink( &_GetRangeHdl );
+    case MACASSGN_AUTOTEXT:
         aItem.AddEvent( String( SW_RES(STR_EVENT_START_INS_GLOSSARY) ), String(),
                             SW_EVENT_START_INS_GLOSSARY );
         aItem.AddEvent( String( SW_RES(STR_EVENT_END_INS_GLOSSARY) ), String(),
                             SW_EVENT_END_INS_GLOSSARY);
-        // damit der neue Handler aktiv wird!
-        // rPg.Reset( rSet );
+        // in order for the new handler to become active!
         break;
     case MACASSGN_ALLFRM:
-    case MACASSGN_GRAPHIC:          // Grafiken
+    case MACASSGN_GRAPHIC:          // graphics
         {
             aItem.AddEvent( String( SW_RES(STR_EVENT_IMAGE_ERROR) ), String(),
                                 SVX_EVENT_IMAGE_ERROR);
@@ -92,8 +87,8 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
             aItem.AddEvent( String( SW_RES(STR_EVENT_IMAGE_LOAD) ), String(),
                                 SVX_EVENT_IMAGE_LOAD);
         }
-        // kein break;
-    case MACASSGN_FRMURL:           // Frm - URL-Attribute
+        // no break;
+    case MACASSGN_FRMURL:           // Frm - URL-Attributes
         {
             if( !bHtmlMode &&
                 (MACASSGN_FRMURL == eType || MACASSGN_ALLFRM == eType))
@@ -108,15 +103,15 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
                                 SW_EVENT_FRM_MOVE );
             }
         }
-        // kein break;
+        // no break;
     case MACASSGN_OLE:              // OLE
         {
             if( !bHtmlMode )
                 aItem.AddEvent( String( SW_RES(STR_EVENT_OBJECT_SELECT) ), String(),
                                 SW_EVENT_OBJECT_SELECT );
         }
-        // kein break;
-    case MACASSGN_INETFMT:          // INetFmt-Attribute
+        // no break;
+    case MACASSGN_INETFMT:          // INetFmt-Attributes
         {
             aItem.AddEvent( String( SW_RES(STR_EVENT_MOUSEOVER_OBJECT) ), String(),
                                 SFX_EVENT_MOUSEOVER_OBJECT );
@@ -132,10 +127,10 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 }
 
 
-BOOL SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
+sal_Bool SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
                                     SvxMacroItem*& rpINetItem )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     SfxItemSet aSet( rSh.GetAttrPool(), RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
     SvxMacroItem aItem( RES_FRMMACRO );
     if( !rpINetItem )
@@ -154,10 +149,10 @@ BOOL SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
     {
         const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pOutSet->GetItemState( RES_FRMMACRO, FALSE, &pItem ))
+        if( SFX_ITEM_SET == pOutSet->GetItemState( RES_FRMMACRO, sal_False, &pItem ))
         {
             rpINetItem->SetMacroTable( ((SvxMacroItem*)pItem)->GetMacroTable() );
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
     return bRet;

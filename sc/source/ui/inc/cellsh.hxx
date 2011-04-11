@@ -33,6 +33,7 @@
 #include "shellids.hxx"
 #include <sfx2/module.hxx>
 #include <svx/svdmark.hxx>
+#include <unotools/caserotate.hxx>
 #include <tools/link.hxx>
 #include "formatsh.hxx"
 #include "address.hxx"
@@ -59,15 +60,20 @@ class ScCellShell: public ScFormatShell
 {
 private:
     CellShell_Impl* pImpl;
-    BOOL            bPastePossible;
+    sal_Bool            bPastePossible;
 
     void        GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats );
     void        ExecuteExternalSource(
                     const String& _rFile, const String& _rFilter, const String& _rOptions,
-                    const String& _rSource, ULONG _nRefresh, SfxRequest& _rRequest );
+                    const String& _rSource, sal_uLong _nRefresh, SfxRequest& _rRequest );
+
+    void ExecuteDataPilotDialog();
+    void ExecuteSubtotals(SfxRequest& rReq);
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
     DECL_LINK( DialogClosed, AbstractScLinkedAreaDlg* );
+
+    RotateTransliteration m_aRotateCase;
 
 public:
 
@@ -82,6 +88,7 @@ public:
 
     void        ExecuteEdit( SfxRequest& rReq );
     void        ExecuteTrans( SfxRequest& rReq );
+    void                ExecuteRotateTrans( SfxRequest& rReq );
 
     void        GetBlockState( SfxItemSet& rSet );
     void        GetCellState( SfxItemSet& rSet );

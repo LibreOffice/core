@@ -38,7 +38,7 @@ namespace com { namespace star {
 class SwAccessibleTextFrame : public SwAccessibleFrameBase
 {
 private:
-    // --> OD 2009-07-14 #i73249#
+    // #i73249#
     ::rtl::OUString msTitle;
     ::rtl::OUString msDesc;
     // <--
@@ -47,17 +47,15 @@ protected:
 
     virtual ~SwAccessibleTextFrame();
 
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
 
     SwAccessibleTextFrame( SwAccessibleMap* pInitMap, const SwFlyFrm* pFlyFrm );
 
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-
-
     //=====  XAccessibleContext  ==============================================
 
-    // --> OD 2009-07-14 #i73249#
-    /// Return the object's current name.
+    // #i73249# - Return the object's current name.
     virtual ::rtl::OUString SAL_CALL
         getAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);

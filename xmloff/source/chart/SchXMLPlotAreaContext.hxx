@@ -127,12 +127,10 @@ public:
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext* CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
-
-    void CorrectAxisPositions();
 
 private:
     SchXMLImportHelper& mrImportHelper;
@@ -167,47 +165,6 @@ private:
     ::com::sun::star::awt::Size maChartSize;
 };
 
-// ----------------------------------------
-
-class SchXMLAxisContext : public SvXMLImportContext
-{
-private:
-    SchXMLImportHelper& mrImportHelper;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram > mxDiagram;
-    SchXMLAxis maCurrentAxis;
-    std::vector< SchXMLAxis >& maAxes;
-    rtl::OUString msAutoStyleName;
-    rtl::OUString& mrCategoriesAddress;
-    bool mbAddMissingXAxisForNetCharts; //to correct errors from older versions
-    bool mbAdaptWrongPercentScaleValues; //to correct errors from older versions
-    bool mbAdaptXAxisOrientationForOld2DBarCharts; //to correct different behaviour from older versions
-    bool& m_rbAxisPositionAttributeImported;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTitleShape();
-    void CreateGrid( ::rtl::OUString sAutoStyleName, sal_Bool bIsMajor );
-    void CreateAxis();
-    void SetAxisTitle();
-
-public:
-    SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
-                       SvXMLImport& rImport, const rtl::OUString& rLocalName,
-                       ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram > xDiagram,
-                       std::vector< SchXMLAxis >& aAxes,
-                       ::rtl::OUString& rCategoriesAddress,
-                       bool bAddMissingXAxisForNetCharts,
-                       bool bAdaptWrongPercentScaleValues,
-                       bool bAdaptXAxisOrientationForOld2DBarCharts,
-                       bool& rbAxisPositionAttributeImported );
-    virtual ~SchXMLAxisContext();
-
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-    virtual void EndElement();
-    virtual SvXMLImportContext* CreateChildContext(
-        USHORT nPrefix,
-        const rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-};
-
 //----------------------------------------
 
 class SchXMLDataPointContext : public SvXMLImportContext
@@ -229,24 +186,6 @@ public:
                                 bool bSymbolSizeForSeriesIsMissingInFile );
     virtual ~SchXMLDataPointContext();
 
-    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
-};
-
-// ----------------------------------------
-
-class SchXMLCategoriesContext : public SvXMLImportContext
-{
-private:
-    SchXMLImportHelper& mrImportHelper;
-    rtl::OUString& mrAddress;
-
-public:
-    SchXMLCategoriesContext( SchXMLImportHelper& rImpHelper,
-                                   SvXMLImport& rImport,
-                                   sal_uInt16 nPrefix,
-                                   const rtl::OUString& rLocalName,
-                                   rtl::OUString& rAddress );
-    virtual ~SchXMLCategoriesContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
@@ -349,7 +288,7 @@ public:
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext* CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 

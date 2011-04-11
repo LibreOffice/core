@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_io_SocketException_idl__
 #define __com_sun_star_io_SocketException_idl__
 
-#ifndef __com_sun_star_io_IOException_idl__
 #include <com/sun/star/io/IOException.idl>
-#endif
 
 //=============================================================================
 

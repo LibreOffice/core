@@ -743,7 +743,7 @@ sub package_is_up_to_date
         log_pool_info(0);
 
         # removing new package from installation set
-        if ( $newpackagepath ne "" ) { remove_package_from_installset($newpackagepath); }   # A file was copied and a problem occured with pooling
+        if ( $newpackagepath ne "" ) { remove_package_from_installset($newpackagepath); }   # A file was copied and a problem occurred with pooling
 
         $package_is_up_to_date = 4; # repeat this package
         return $package_is_up_to_date;
@@ -756,7 +756,7 @@ sub package_is_up_to_date
         log_pool_info(1);
 
         # removing new package from installation set
-        if ( $newpackagepath ne "" ) { remove_package_from_installset($newpackagepath); }   # A file was copied and a problem occured with pooling
+        if ( $newpackagepath ne "" ) { remove_package_from_installset($newpackagepath); }   # A file was copied and a problem occurred with pooling
 
         $package_is_up_to_date = 4; # repeat this package
         return $package_is_up_to_date;
@@ -914,7 +914,7 @@ sub put_content_into_pool
     }
 
     # Before the new package is renamed in the pool, it has to be checked, if this process still has the lock for this package.
-    # Check, if lock file still exists and if this process is the owner. Otherwise a pool error occured.
+    # Check, if lock file still exists and if this process is the owner. Otherwise a pool error occurred.
     if ( ! -f $installer::globals::poollockfilename )
     {
         unlink $uniquedestination;  # removing file from pool
@@ -936,7 +936,7 @@ sub put_content_into_pool
     push( @installer::globals::logfileinfo, $infoline);
 
     # Before the lock file in the pool can be removed, it has to be checked, if this process is still the owner of this lock file.
-    # Check, if lock file still exists and if this process is the owner. Otherwise a pool error occured.
+    # Check, if lock file still exists and if this process is the owner. Otherwise a pool error occurred.
     if ( ! -f $installer::globals::poollockfilename )
     {
         log_pool_info(0);

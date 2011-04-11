@@ -28,7 +28,7 @@
 #ifndef SVTOOLS_TABLEGEOMETRY_HXX
 #define SVTOOLS_TABLEGEOMETRY_HXX
 
-#include <svtools/table/tabletypes.hxx>
+#include "svtools/table/tabletypes.hxx"
 
 #include <tools/gen.hxx>
 
@@ -76,18 +76,25 @@ namespace svt { namespace table
     {
     protected:
         RowPos  m_nRowPos;
+        bool    m_bAllowVirtualRows;
 
     public:
         TableRowGeometry(
-            const TableControl_Impl& _rControl,
-            const Rectangle& _rBoundaries,
-            RowPos _nRow
+            TableControl_Impl const & _rControl,
+            Rectangle const & _rBoundaries,
+            RowPos const _nRow,
+            bool const i_allowVirtualRows = false
+                // allow rows >= getRowCount()?
         );
 
         // status
         RowPos              getRow() const  { return m_nRowPos; }
         // operations
         bool                moveDown();
+
+    private:
+        void    impl_initRect();
+        bool    impl_isValidRow( RowPos const i_row ) const;
     };
 
     //====================================================================
@@ -97,18 +104,24 @@ namespace svt { namespace table
     {
     protected:
         ColPos  m_nColPos;
+        bool    m_bAllowVirtualColumns;
 
     public:
         TableColumnGeometry(
-            const TableControl_Impl& _rControl,
-            const Rectangle& _rBoundaries,
-            ColPos _nCol
+            TableControl_Impl const & _rControl,
+            Rectangle const & _rBoundaries,
+            ColPos const _nCol,
+            bool const i_allowVirtualColumns = false
         );
 
         // status
         ColPos              getCol() const  { return m_nColPos; }
         // operations
         bool                moveRight();
+
+    private:
+        void    impl_initRect();
+        bool    impl_isValidColumn( ColPos const i_column ) const;
     };
 
     //====================================================================
@@ -124,13 +137,14 @@ namespace svt { namespace table
 
     public:
         TableCellGeometry(
-                const TableControl_Impl& _rControl,
-                const Rectangle& _rBoundaries,
-                ColPos _nCol,
-                RowPos _nRow
+                TableControl_Impl const & _rControl,
+                Rectangle const & _rBoundaries,
+                ColPos const _nCol,
+                RowPos const _nRow,
+                bool const i_alllowVirtualCells = false
             )
-            :m_aRow( _rControl, _rBoundaries, _nRow )
-            ,m_aCol( _rControl, _rBoundaries, _nCol )
+            :m_aRow( _rControl, _rBoundaries, _nRow, i_alllowVirtualCells )
+            ,m_aCol( _rControl, _rBoundaries, _nCol, i_alllowVirtualCells )
         {
         }
 

@@ -43,16 +43,16 @@ namespace dbaui
     {
     protected:
         OSelectionBrowseBox*    pOwner;
-        USHORT                  m_nColumnPostion;
+        sal_uInt16                  m_nColumnPostion;
 
         virtual void    Undo() = 0;
         virtual void    Redo() = 0;
 
     public:
-        OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, USHORT nCommentID);
+        OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID);
         virtual ~OQueryDesignFieldUndoAct();
 
-        inline void SetColumnPosition(USHORT _nColumnPostion)
+        inline void SetColumnPosition(sal_uInt16 _nColumnPostion)
         {
             m_nColumnPostion = _nColumnPostion;
             OSL_ENSURE(m_nColumnPostion != BROWSER_INVALIDID,"Column position was not set add the undo action!");
@@ -107,7 +107,7 @@ namespace dbaui
         OTableFieldDescRef      pDescr;     // geloeschte Spaltenbeschreibung
 
     public:
-        OTabFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, USHORT nCommentID) : OQueryDesignFieldUndoAct(pSelBrwBox, nCommentID) { }
+        OTabFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID) : OQueryDesignFieldUndoAct(pSelBrwBox, nCommentID) { }
 
         void SetTabFieldDescr(OTableFieldDescRef pDescription) { pDescr = pDescription; }
     };

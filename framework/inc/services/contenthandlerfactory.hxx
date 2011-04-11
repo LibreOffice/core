@@ -232,7 +232,6 @@ class ContentHandlerFactory :   // interfaces
 
         css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory              ;
         FilterCache                                                 m_aCache                ;
-//      ::cppu::OMultiTypeInterfaceContainerHelper                  m_aListenerContainer    ;
 
 };      //  class ContentHandlerFactory
 

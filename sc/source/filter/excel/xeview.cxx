@@ -35,7 +35,7 @@
 #include "xelink.hxx"
 #include "xestyle.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::rtl::OString;
 
@@ -353,7 +353,7 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
                 maData.mnSplitX = static_cast< sal_uInt16 >( nFreezeScCol ) - maData.maFirstXclPos.mnCol;
             SCROW nFreezeScRow = rTabSett.maFreezePos.Row();
             if( (0 < nFreezeScRow) && (nFreezeScRow <= GetXclMaxPos().Row()) )
-                maData.mnSplitY = static_cast< sal_uInt16 >( nFreezeScRow ) - maData.maFirstXclPos.mnRow;
+                maData.mnSplitY = static_cast< sal_uInt32 >( nFreezeScRow ) - maData.maFirstXclPos.mnRow;
             // if both splits are left out (address overflow), remove the frozen flag
             maData.mbFrozenPanes = maData.IsSplit();
 

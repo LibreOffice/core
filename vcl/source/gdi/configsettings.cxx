@@ -35,13 +35,14 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-using namespace rtl;
 using namespace utl;
 using namespace vcl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
 
 #define SETTINGS_CONFIGNODE "VCL/Settings"
 
@@ -89,7 +90,7 @@ void SettingsConfigItem::Commit()
     if( ! IsValidConfigMgr() )
         return;
 
-    std::hash_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group;
+    boost::unordered_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group;
 
     for( group = m_aSettings.begin(); group != m_aSettings.end(); ++group )
     {
@@ -134,12 +135,11 @@ void SettingsConfigItem::getValues()
     m_aSettings.clear();
 
     Sequence< OUString > aNames( GetNodeNames( OUString() ) );
-    m_aSettings.resize( aNames.getLength() );
 
     for( int j = 0; j < aNames.getLength(); j++ )
     {
 #if OSL_DEBUG_LEVEL > 2
-        fprintf( stderr, "found settings data for \"%s\"\n",
+        OSL_TRACE( "found settings data for \"%s\"\n",
                  OUStringToOString( aNames.getConstArray()[j], RTL_TEXTENCODING_ASCII_US ).getStr()
                  );
 #endif
@@ -165,7 +165,7 @@ void SettingsConfigItem::getValues()
                 if( pLine->getLength() )
                     m_aSettings[ aKeyName ][ pFrom[i] ] = *pLine;
 #if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "   \"%s\"=\"%.30s\"\n",
+                OSL_TRACE( "   \"%s\"=\"%.30s\"\n",
                          OUStringToOString( aKeys.getConstArray()[i], RTL_TEXTENCODING_ASCII_US ).getStr(),
                          OUStringToOString( *pLine, RTL_TEXTENCODING_ASCII_US ).getStr()
                          );
@@ -181,7 +181,7 @@ void SettingsConfigItem::getValues()
 
 const OUString& SettingsConfigItem::getValue( const OUString& rGroup, const OUString& rKey ) const
 {
-    ::std::hash_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group = m_aSettings.find( rGroup );
+    ::boost::unordered_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group = m_aSettings.find( rGroup );
     if( group == m_aSettings.end() || group->second.find( rKey ) == group->second.end() )
     {
         static OUString aEmpty;

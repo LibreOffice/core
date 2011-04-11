@@ -28,7 +28,7 @@
 #define BIB_HRC
 
 #include "bibliography.hrc"
-
+#include <svl/solar.hrc>
 #ifndef RID_BIB_START
 #define RID_BIB_START                   RID_EXTENSIONS_START
 #endif
@@ -45,9 +45,8 @@
 #define RID_BIB_CONTROLS            (RID_BIB_START + 100)
 #define RID_BIB_TOOLBAR             (RID_BIB_CONTROLS+ 1)
 #define RID_TOOLBAR_IMGLIST         (RID_BIB_CONTROLS+ 2)
-#define RID_TOOLBAR_IMGLIST_HC      (RID_BIB_CONTROLS+ 3)
+// free
 #define RID_TOOLBAR_BIGIMGLIST      (RID_BIB_CONTROLS+ 4)
-#define RID_TOOLBAR_BIGIMGLIST_HC   (RID_BIB_CONTROLS+ 5)
 
 //Menu(100)
 #define RID_BIB_MENU                (RID_BIB_CONTROLS + 100)

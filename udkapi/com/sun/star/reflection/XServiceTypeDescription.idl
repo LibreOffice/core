@@ -28,15 +28,9 @@
 #ifndef __com_sun_star_reflection_XServiceTypeDescription_idl__
 #define __com_sun_star_reflection_XServiceTypeDescription_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_reflection_XInterfaceTypeDescription_idl__
 #include <com/sun/star/reflection/XInterfaceTypeDescription.idl>
-#endif
-#ifndef __com_sun_star_reflection_XPropertyTypeDescription_idl__
 #include <com/sun/star/reflection/XPropertyTypeDescription.idl>
-#endif
 
 //=============================================================================
 

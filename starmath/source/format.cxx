@@ -38,7 +38,7 @@
 /////////////////////////////////////////////////////////////////
 
 // Latin default-fonts
-static const USHORT aLatinDefFnts[FNT_END] =
+static const sal_uInt16 aLatinDefFnts[FNT_END] =
 {
     DEFAULTFONT_SERIF,  // FNT_VARIABLE
     DEFAULTFONT_SERIF,  // FNT_FUNCTION
@@ -54,7 +54,7 @@ static const USHORT aLatinDefFnts[FNT_END] =
 //! we use non-asian fonts for variables, functions and numbers since they
 //! look better and even in asia only latin letters will be used for those.
 //! At least that's what I was told...
-static const USHORT aCJKDefFnts[FNT_END] =
+static const sal_uInt16 aCJKDefFnts[FNT_END] =
 {
     DEFAULTFONT_SERIF,          // FNT_VARIABLE
     DEFAULTFONT_SERIF,          // FNT_FUNCTION
@@ -67,7 +67,7 @@ static const USHORT aCJKDefFnts[FNT_END] =
 };
 
 // CTL default-fonts
-static const USHORT aCTLDefFnts[FNT_END] =
+static const sal_uInt16 aCTLDefFnts[FNT_END] =
 {
     DEFAULTFONT_CTL_TEXT,    // FNT_VARIABLE
     DEFAULTFONT_CTL_TEXT,    // FNT_FUNCTION
@@ -80,7 +80,7 @@ static const USHORT aCTLDefFnts[FNT_END] =
 };
 
 
-String GetDefaultFontName( LanguageType nLang, USHORT nIdent )
+String GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
 {
     OSL_ENSURE( /*FNT_BEGIN <= nIdent  &&*/  nIdent <= FNT_END,
             "index out opd range" );
@@ -89,7 +89,7 @@ String GetDefaultFontName( LanguageType nLang, USHORT nIdent )
         return String::CreateFromAscii( FNTNAME_MATH );
     else
     {
-        const USHORT *pTable;
+        const sal_uInt16 *pTable;
         switch ( SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ) )
         {
             case SCRIPTTYPE_LATIN :     pTable = aLatinDefFnts; break;
@@ -97,7 +97,7 @@ String GetDefaultFontName( LanguageType nLang, USHORT nIdent )
             case SCRIPTTYPE_COMPLEX :   pTable = aCTLDefFnts; break;
             default :
                 pTable = aLatinDefFnts;
-                DBG_ERROR( "unknown script-type" );
+                OSL_FAIL( "unknown script-type" );
         }
 
         return Application::GetDefaultDevice()->GetDefaultFont(
@@ -115,7 +115,7 @@ SmFormat::SmFormat()
 
     eHorAlign       = AlignCenter;
     nGreekCharStyle = 0;
-    bIsTextmode     = bScaleNormalBrackets = FALSE;
+    bIsTextmode     = bScaleNormalBrackets = false;
 
     vSize[SIZ_TEXT]     = 100;
     vSize[SIZ_INDEX]    = 60;
@@ -167,21 +167,21 @@ SmFormat::SmFormat()
     vFont[FNT_SANS]    .SetItalic(ITALIC_NONE);
     vFont[FNT_FIXED]   .SetItalic(ITALIC_NONE);
 
-    for ( USHORT i = FNT_BEGIN;  i <= FNT_END;  i++ )
+    for ( sal_uInt16 i = FNT_BEGIN;  i <= FNT_END;  i++ )
     {
         SmFace &rFace = vFont[i];
-        rFace.SetTransparent( TRUE );
+        rFace.SetTransparent( true );
         rFace.SetAlign( ALIGN_BASELINE );
         rFace.SetColor( COL_AUTO );
-        bDefaultFont[i] = FALSE;
+        bDefaultFont[i] = false;
     }
 }
 
 
-void SmFormat::SetFont(USHORT nIdent, const SmFace &rFont, BOOL bDefault )
+void SmFormat::SetFont(sal_uInt16 nIdent, const SmFace &rFont, bool bDefault )
 {
     vFont[nIdent] = rFont;
-    vFont[nIdent].SetTransparent( TRUE );
+    vFont[nIdent].SetTransparent( true );
     vFont[nIdent].SetAlign( ALIGN_BASELINE );
 
     bDefaultFont[nIdent] = bDefault;
@@ -196,7 +196,7 @@ SmFormat & SmFormat::operator = (const SmFormat &rFormat)
     SetGreekCharStyle(rFormat.GetGreekCharStyle());
     SetScaleNormalBrackets(rFormat.IsScaleNormalBrackets());
 
-    USHORT  i;
+    sal_uInt16  i;
     for (i = FNT_BEGIN;  i <= FNT_END;  i++)
     {
         SetFont(i, rFormat.GetFont(i));
@@ -211,30 +211,30 @@ SmFormat & SmFormat::operator = (const SmFormat &rFormat)
 }
 
 
-BOOL SmFormat::operator == (const SmFormat &rFormat) const
+bool SmFormat::operator == (const SmFormat &rFormat) const
 {
-    BOOL bRes = aBaseSize == rFormat.aBaseSize  &&
+    bool bRes = aBaseSize == rFormat.aBaseSize  &&
                 eHorAlign == rFormat.eHorAlign  &&
                 nGreekCharStyle == rFormat.nGreekCharStyle &&
                 bIsTextmode == rFormat.bIsTextmode  &&
                 bScaleNormalBrackets  == rFormat.bScaleNormalBrackets;
 
-    USHORT i;
+    sal_uInt16 i;
     for (i = 0;  i <= SIZ_END && bRes;  ++i)
     {
         if (vSize[i] != rFormat.vSize[i])
-            bRes = FALSE;
+            bRes = false;
     }
     for (i = 0;  i <= DIS_END && bRes;  ++i)
     {
         if (vDist[i] != rFormat.vDist[i])
-            bRes = FALSE;
+            bRes = false;
     }
     for (i = 0;  i <= FNT_END && bRes;  ++i)
     {
         if (vFont[i] != rFormat.vFont[i]  ||
             bDefaultFont[i] != rFormat.bDefaultFont[i])
-            bRes = FALSE;
+            bRes = false;
     }
 
     return bRes;

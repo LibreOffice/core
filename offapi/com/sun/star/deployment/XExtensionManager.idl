@@ -45,7 +45,7 @@ module com { module sun { module star { module deployment {
     in the user, shared and bundled repository.
 
     @see ExtensionManager
-    @since OOo 3.3.0
+    @since OOo 3.3
 */
 interface XExtensionManager
 {
@@ -218,7 +218,7 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::lang::IllegalArgumentException);
 
-    /** gets all extensions with the same identifer from all repositories.
+    /** gets all extensions with the same identifier from all repositories.
 
         The extension at the first position in the returned sequence represents
         the extension from the user repository. The next element is from the shared
@@ -238,7 +238,7 @@ interface XExtensionManager
     /** returns a sequence containing all installed extensions.
 
         The members of the returned sequence correspond to an extension with a
-        particular extension identifer. The members are also sequences which
+        particular extension identifier. The members are also sequences which
         contain as many elements as there are repositories. Those are ordered
         according to the priority of the repository. That is, the first member
         is the extension from the user repository, the second is from the shared
@@ -277,14 +277,16 @@ interface XExtensionManager
 
 
     /** synchronizes the extension database with the contents of the extensions
-       folder of shared and bundled extensinos.
+       folder of shared and bundled extensions.
 
        Added extensions will be added to the database and removed extensions
        will be removed from the database.
+       The active extensions are determined. That is, shared or bundled extensions
+       are not necessaryly registered (<member>XPackage::registerPackage</member>).
 
        @return
               If true - then at least one extension was removed or added. Otherwise
-              nothing was chaned.
+              nothing was changed.
     */
     boolean synchronize(
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
@@ -293,6 +295,25 @@ interface XExtensionManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
+
+
+    /** synchronizes the special bundled_prereg repository, which is based on
+       the bundled extensions and has its registration data folder at
+       $BUNDLED_EXTENSIONS_PREREG (for example openoffice.org3/share/prereg).
+
+       All bundled extensions are registered (<member>XPackage::registerPackage</member>).
+       The active extensions are NOT determined, because this function only works
+       with bundled extensions.
+
+       This function is intended to be called during the installation of OOo.
+       OOo will copy parts of the registration data folder to the user installation at the
+       first startup.
+    */
+
+    void synchronizeBundledPrereg(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException);
 
 
     /** returns all extensions which are currently not in use

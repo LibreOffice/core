@@ -41,9 +41,9 @@ namespace rtl
 
 // class SvxFmtSplitItem -------------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt eine logische Variable "Absatz trennen ja oder nein".
+/*  [Description]
+
+    This item describes a logical variable "split paragraph yes or no".
 */
 
 class EDITENG_DLLPUBLIC SvxFmtSplitItem : public SfxBoolItem
@@ -52,14 +52,14 @@ public:
     TYPEINFO();
     ~SvxFmtSplitItem();
 
-    inline SvxFmtSplitItem( const BOOL bSplit /*= TRUE*/,
-                            const USHORT nWh  );
+    inline SvxFmtSplitItem( const sal_Bool bSplit /*= sal_True*/,
+                            const sal_uInt16 nWh  );
     inline SvxFmtSplitItem& operator=( const SvxFmtSplitItem& rSplit );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream&, USHORT ) const;
-    virtual SvStream&       Store( SvStream& , USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 ) const;
+    virtual SvStream&       Store( SvStream& , sal_uInt16 nItemVersion ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -67,7 +67,7 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 };
 
-inline SvxFmtSplitItem::SvxFmtSplitItem( const BOOL bSplit, const USHORT nWh ) :
+inline SvxFmtSplitItem::SvxFmtSplitItem( const sal_Bool bSplit, const sal_uInt16 nWh ) :
     SfxBoolItem( nWh, bSplit )
 {}
 

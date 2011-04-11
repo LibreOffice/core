@@ -95,10 +95,10 @@
 #if defined(UNX)
 const sal_Char SwHTMLWriter::sNewLine = '\012';
 #else
-const sal_Char __FAR_DATA SwHTMLWriter::sNewLine[] = "\015\012";
+const sal_Char SwHTMLWriter::sNewLine[] = "\015\012";
 #endif
 
-static sal_Char __FAR_DATA sIndentTabs[MAX_INDENT_LEVEL+2] =
+static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
@@ -119,12 +119,12 @@ SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
 }
 
 
-__EXPORT SwHTMLWriter::~SwHTMLWriter()
+SwHTMLWriter::~SwHTMLWriter()
 {
     delete pNumRuleInfo;
 }
 
-ULONG SwHTMLWriter::WriteStream()
+sal_uLong SwHTMLWriter::WriteStream()
 {
     // neue Konfiguration setzen
     SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
@@ -157,7 +157,6 @@ ULONG SwHTMLWriter::WriteStream()
         nHTMLMode |= HTMLMODE_ABS_POS_FLY|HTMLMODE_ABS_POS_DRAW;
 
     if( HTML_CFG_WRITER==nExportMode )
-//      nHTMLMode |= HTMLMODE_FLY_MARGINS | HTMLMODE_FRSTLINE_IN_NUMBUL;
         nHTMLMode |= HTMLMODE_FLY_MARGINS;
 
     if( HTML_CFG_NS40==nExportMode )
@@ -192,14 +191,6 @@ ULONG SwHTMLWriter::WriteStream()
     const sal_Char *pCharSet =
         rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
     eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
-
-    // fuer Netscape optimieren heisst Spacer- und Multicol ausgeben
-//  bCfgMultiCol = pHtmlOptions->IsNetscape3();
-//  bCfgSpacer = pHtmlOptions->IsNetscape3();
-
-    // wenn Styles exportiert werden, wird ein Style einem HTML-Tag manchmal
-    // vorgezogen, wenn nicht fuer Netscape exportiert wird
-    // bCfgPreferStyles = bCfgOutStyles; // && !pHtmlOptions->IsNetscape3();
 
     // Nur noch fuer den MS-IE ziehen wir den Export von Styles vor.
     bCfgPreferStyles = HTML_CFG_MSIE==nExportMode;
@@ -495,7 +486,7 @@ const SwFmtCol *lcl_html_GetFmtCol( const SwHTMLWriter& rHTMLWrt,
     return pCol;
 }
 
-sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, ULONG nIndex )
+sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
 {
     sal_Bool bRet = sal_False;
     const SwSectionNode *pSectNd =
@@ -511,7 +502,7 @@ sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, ULONG nIndex )
     return bRet;
 }
 
-sal_Bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, ULONG nIndex )
+sal_Bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
 {
     sal_Bool bRet = sal_False;
     const SwEndNode *pEndNd = rHTMLWrt.pDoc->GetNodes()[nIndex]->GetEndNode();
@@ -874,8 +865,8 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
 
 sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 {
-    ULONG nIdx = pCurPam->GetPoint()->nNode.GetIndex();
-    ULONG nEndIdx = pCurPam->GetMark()->nNode.GetIndex();
+    sal_uLong nIdx = pCurPam->GetPoint()->nNode.GetIndex();
+    sal_uLong nEndIdx = pCurPam->GetMark()->nNode.GetIndex();
 
     SwTxtNode *pTxtNd = 0;
     while( nIdx<=nEndIdx &&
@@ -934,7 +925,6 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     // DokumentInfo
     ByteString sIndent;
     GetIndentString( sIndent );
-//  OutNewLine();
     using namespace ::com::sun::star;
     uno::Reference<document::XDocumentProperties> xDocProps;
     SwDocShell *pDocShell(pDoc->GetDocShell());
@@ -955,11 +945,10 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     OutFootEndNoteInfo();
 
     const SwPageDesc *pPageDesc = 0;
-    //if( !pDoc->IsHTMLMode() )
-    //{
+
         // In Nicht-HTML-Dokumenten wird die erste gesetzte Seitenvorlage
         // exportiert und wenn keine gesetzt ist die Standard-Vorlage
-        ULONG nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
+        sal_uLong nNodeIdx = pCurPam->GetPoint()->nNode.GetIndex();
 
         while( nNodeIdx < pDoc->GetNodes().Count() )
         {
@@ -982,12 +971,6 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         if( !pPageDesc )
             pPageDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
-    //}
-    //else
-    //{
-        // In HTML-Dokumenten nehmen wir immer die HTML-Vorlage
-    //  pPageDesc = pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML );
-    //}
 
     // und nun ... das Style-Sheet!!!
     if( bCfgOutStyles )
@@ -1148,7 +1131,6 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
                                   String& rEmbGrfNm, sal_Bool bGraphic )
 {
     const Color &rBackColor = pBrushItem->GetColor();
-    /// OD 02.09.2002 #99657#
     /// check, if background color is not "no fill"/"auto fill", instead of
     /// only checking, if transparency is not set.
     if( rBackColor.GetColor() != COL_TRANSPARENT )
@@ -1343,8 +1325,8 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
 
 // Struktur speichert die aktuellen Daten des Writers zwischen, um
 // einen anderen Dokument-Teil auszugeben, wie z.B. Header/Footer
-HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, ULONG nStt,
-                            ULONG nEnd, sal_Bool bSaveNum,
+HTMLSaveData::HTMLSaveData( SwHTMLWriter& rWriter, sal_uLong nStt,
+                            sal_uLong nEnd, sal_Bool bSaveNum,
                                 const SwFrmFmt *pFrmFmt ) :
     rWrt( rWriter ),
     pOldPam( rWrt.pCurPam ),

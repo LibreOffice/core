@@ -70,7 +70,7 @@ TitleBar::TitleBar ( ::Window* pParent, const String& rsTitle, TitleBarType eTyp
 , mpDevice(new VirtualDevice (*this))
 , mbIsExpandable (bIsExpandable)
 {
-    EnableMapMode (FALSE);
+    EnableMapMode (sal_False);
 
     SetBackground (Wallpaper());
 
@@ -252,23 +252,16 @@ bool TitleBar::HasExpansionIndicator (void) const
 Image TitleBar::GetExpansionIndicator (void) const
 {
     Image aIndicator;
-    bool bHighContrastMode (GetSettings().GetStyleSettings().GetHighContrastMode() != 0);
     if (mbIsExpandable)
     {
-        USHORT nResourceId = 0;
+        sal_uInt16 nResourceId = 0;
         switch (meType)
         {
             case TBT_SUB_CONTROL_HEADLINE:
                 if (mbExpanded)
-                    if (bHighContrastMode)
-                        nResourceId = BMP_COLLAPSE_H;
-                    else
-                        nResourceId = BMP_COLLAPSE;
+                    nResourceId = BMP_COLLAPSE;
                 else
-                    if (bHighContrastMode)
-                        nResourceId = BMP_EXPAND_H;
-                    else
-                        nResourceId = BMP_EXPAND;
+                    nResourceId = BMP_EXPAND;
 
                 aIndicator = IconCache::Instance().GetIcon(nResourceId);
                 break;
@@ -311,7 +304,7 @@ void TitleBar::PaintFocusIndicator (const Rectangle& rTextBox)
     if (mbFocused)
     {
         Rectangle aTextPixelBox (mpDevice->LogicToPixel (rTextBox));
-        mpDevice->EnableMapMode (FALSE);
+        mpDevice->EnableMapMode (sal_False);
         Rectangle aBox (rTextBox);
         aBox.Top() -= 1;
         aBox.Bottom() += 1;
@@ -328,7 +321,7 @@ void TitleBar::PaintFocusIndicator (const Rectangle& rTextBox)
 
         mpDevice->SetLineColor (COL_BLACK);
         mpDevice->DrawPolyLine (Polygon(aTextPixelBox), aDottedStyle);
-        mpDevice->EnableMapMode (FALSE);
+        mpDevice->EnableMapMode (sal_False);
     }
     else
         HideFocus ();
@@ -373,7 +366,7 @@ void TitleBar::PaintText (const Rectangle& rTextBox)
 
 
 
-USHORT TitleBar::GetTextStyle (void)
+sal_uInt16 TitleBar::GetTextStyle (void)
 {
      if(IsEnabled())
      {
@@ -404,9 +397,9 @@ void TitleBar::PaintBackground (const Rectangle& rTitleBarBox)
             if (mbExpanded)
             {
                 // Make the color a little bit darker.
-                aColor.SetRed(UINT8(((UINT16)aColor.GetRed()) * 8 / 10));
-                aColor.SetGreen(UINT8(((UINT16)aColor.GetGreen()) * 8 / 10));
-                aColor.SetBlue(UINT8(((UINT16)aColor.GetBlue()) * 8 / 10));
+                aColor.SetRed(sal_uInt8(((sal_uInt16)aColor.GetRed()) * 8 / 10));
+                aColor.SetGreen(sal_uInt8(((sal_uInt16)aColor.GetGreen()) * 8 / 10));
+                aColor.SetBlue(sal_uInt8(((sal_uInt16)aColor.GetBlue()) * 8 / 10));
             }
 
             mpDevice->SetFillColor (aColor);

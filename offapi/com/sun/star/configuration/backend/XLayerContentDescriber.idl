@@ -54,7 +54,7 @@ module com { module sun { module star { module configuration { module backend {
 //=============================================================================
 
 /**
-   describe the contents of a layer to an XLayerHander object. The contents of
+   describe the contents of a layer to an XLayerHandler object. The contents of
    the layer is contained in the sequence of PropertyInfo structures
    @see PropertyInfo
 

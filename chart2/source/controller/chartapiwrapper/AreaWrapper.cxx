@@ -58,31 +58,34 @@ namespace
 static const ::rtl::OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.Area" ));
 
-const Sequence< Property > & lcl_GetPropertySequence()
+struct StaticAreaWrapperPropertyArray_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    Sequence< Property >* operator()()
     {
-        // get properties
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
+        return &aPropSeq;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
-//         ::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticAreaWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticAreaWrapperPropertyArray_Initializer >
+{
+};
+
+
 } // anonymous namespace
 
 // --------------------------------------------------------------------------------
@@ -112,7 +115,7 @@ awt::Point SAL_CALL AreaWrapper::getPosition()
 void SAL_CALL AreaWrapper::setPosition( const awt::Point& /*aPosition*/ )
     throw (uno::RuntimeException)
 {
-    OSL_ENSURE( false, "trying to set position of chart area" );
+    OSL_FAIL( "trying to set position of chart area" );
 }
 
 awt::Size SAL_CALL AreaWrapper::getSize()
@@ -125,7 +128,7 @@ void SAL_CALL AreaWrapper::setSize( const awt::Size& /*aSize*/ )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "trying to set size of chart area" );
+    OSL_FAIL( "trying to set size of chart area" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
@@ -142,10 +145,8 @@ void SAL_CALL AreaWrapper::dispose()
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
 
-    // /--
     MutexGuard aGuard( GetMutex());
     clearWrappedPropertySet();
-    // \--
 }
 
 void SAL_CALL AreaWrapper::addEventListener(
@@ -170,13 +171,13 @@ Reference< beans::XPropertySet > AreaWrapper::getInnerPropertySet()
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     if( xChartDoc.is() )
         return xChartDoc->getPageBackground();
-    OSL_ENSURE(false,"AreaWrapper::getInnerPropertySet() is NULL");
+    OSL_FAIL("AreaWrapper::getInnerPropertySet() is NULL");
     return 0;
 }
 
 const Sequence< beans::Property >& AreaWrapper::getPropertySequence()
 {
-    return lcl_GetPropertySequence();
+    return *StaticAreaWrapperPropertyArray::get();
 }
 
 const std::vector< WrappedProperty* > AreaWrapper::createWrappedProperties()

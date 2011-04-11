@@ -73,7 +73,7 @@ using namespace ::com::sun::star::task;
 
 SFX_IMPL_TOOLBOX_CONTROL(SfxURLToolBoxControl_Impl,SfxStringItem)
 
-SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox )
+SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
     : SfxToolBoxControl( nSlotId, nId, rBox ),
     pAccExec( 0 )
 {
@@ -92,7 +92,7 @@ SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 
 //***************************************************************************
 
-void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL /*bNew*/ ) const
+void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, sal_Bool /*bNew*/ ) const
 {
     String aName;
     String aFilter;
@@ -114,7 +114,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL /*bNew*/ ) co
     if ( xDispatchProvider.is() && m_xServiceManager.is() )
     {
         URL             aTargetURL;
-        ::rtl::OUString aTarget( ::rtl::OUString::createFromAscii( "_default" ));
+        ::rtl::OUString aTarget( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")));
 
         aTargetURL.Complete = aName;
 
@@ -123,17 +123,17 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL /*bNew*/ ) co
         if ( xDispatch.is() )
         {
             Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name = ::rtl::OUString::createFromAscii( "Referer" );
-            aArgs[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
+            aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+            aArgs[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
             aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ));
             aArgs[1].Value = makeAny( ::rtl::OUString( aName ));
 
             if ( aFilter.Len() )
             {
                 aArgs.realloc( 4 );
-                aArgs[2].Name = ::rtl::OUString::createFromAscii( "FilterOptions" );
+                aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterOptions"));
                 aArgs[2].Value = makeAny( ::rtl::OUString( aOptions ));
-                aArgs[3].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+                aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
                 aArgs[3].Value = makeAny( ::rtl::OUString( aFilter ));
             }
 
@@ -181,7 +181,7 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, SelectHdl, void*, EMPTYARG )
     String aName( pURLBox->GetURL() );
 
     if ( !pURLBox->IsTravelSelect() && aName.Len() )
-        OpenURL( aName, FALSE );
+        OpenURL( aName, sal_False );
 
     return 1L;
 }
@@ -194,7 +194,7 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, OpenHdl, void*, EMPTYARG )
     if ( m_xServiceManager.is() )
     {
         Reference< XFramesSupplier > xDesktop( m_xServiceManager->createInstance(
-                                                ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" )),
+                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
                                              UNO_QUERY );
         Reference< XFrame > xFrame( xDesktop->getActiveFrame(), UNO_QUERY );
         if ( xFrame.is() )
@@ -231,14 +231,14 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEve
 
 void SfxURLToolBoxControl_Impl::StateChanged
 (
-    USHORT              nSID,
+    sal_uInt16              nSID,
     SfxItemState        eState,
     const SfxPoolItem*  pState
 )
 {
     if ( nSID == SID_OPENURL )
     {
-        // Disable URL box if command is disabled #111014#
+        // Disable URL box if command is disabled
         GetURLBox()->Enable( SFX_ITEM_DISABLED != eState );
     }
 

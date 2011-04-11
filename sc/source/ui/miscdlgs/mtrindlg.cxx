@@ -43,11 +43,11 @@
 //==================================================================
 
 ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
-                                    USHORT          nResId,
+                                    sal_uInt16          nResId,
                                     long            nCurrent,
                                     long            nDefault,
                                     FieldUnit       eFUnit,
-                                    USHORT          nDecimals,
+                                    sal_uInt16          nDecimals,
                                     long            nMaximum,
                                     long            nMinimum,
                                     long            nFirst,
@@ -87,7 +87,7 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
 
 //------------------------------------------------------------------------
 
-__EXPORT ScMetricInputDlg::~ScMetricInputDlg()
+ScMetricInputDlg::~ScMetricInputDlg()
 {
 }
 
@@ -99,14 +99,14 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
     mit Nachkommastellen:
 
     double  nVal    = aEdValue.GetValue( eUnit );
-    USHORT  nDecs   = aEdValue.GetDecimalDigits();
+    sal_uInt16  nDecs   = aEdValue.GetDecimalDigits();
     double  nFactor = 0.0;
 
-    // static long ImpPower10( USHORT nDecs )
+    // static long ImpPower10( sal_uInt16 nDecs )
     {
         nFactor = 1.0;
 
-        for ( USHORT i=0; i < nDecs; i++ )
+        for ( sal_uInt16 i=0; i < nDecs; i++ )
             nFactor *= 10.0;
     }
 
@@ -129,7 +129,7 @@ void ScMetricInputDlg::CalcPositions()
     Point   aNewPos;
 
     aFtSize.Width() = aFtEditTitle.GetTextWidth(aFtEditTitle.GetText());
-    // #95990# add mnemonic char width to fixed text width
+    // add mnemonic char width to fixed text width
     aFtSize.Width() += aFtEditTitle.GetTextWidth(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("(W)")));
     aFtEditTitle.SetSizePixel( aFtSize );
 

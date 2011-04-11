@@ -90,10 +90,10 @@ public:
     LwpTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTableLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_TABLE_LAYOUT;}
-    LwpObjectID * GetColumnLayoutHead(){return &m_ColumnLayout;};
+    LwpObjectID * GetColumnLayoutHead(){return &m_ColumnLayout;}
     void RegisterStyle();
     LwpTable *  GetTable();
-    LwpCellLayout * GetDefaultCellLayout(){return m_pDefaultCellLayout;};
+    LwpCellLayout * GetDefaultCellLayout(){return m_pDefaultCellLayout;}
     LwpSuperTableLayout * GetSuperTableLayout();
     LwpObjectID * SearchCellStoryMap(sal_uInt16 nRow, sal_uInt16 nCol);
     LwpCellLayout * GetCellByRowCol(sal_uInt16 nRow, sal_uInt16 nCol);
@@ -109,7 +109,7 @@ protected:
     void TraverseTable();
     void RegisterColumns();
     void RegisterRows();
-    void Parse();
+    void ParseTable();
     void PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_uInt16 nColID);
 
     sal_uInt16 m_nRows;
@@ -128,7 +128,6 @@ private:
     // column vector
     LwpColumnLayout ** m_pColumns;
 
-//add  by ,2005/4/1
 public:
     void XFConvert(XFContentContainer* pCont);
     void ConvertTable(XFTable* pXFTable,sal_uInt16 nStartRow,
@@ -164,7 +163,7 @@ public:
     LwpSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSuperTableLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_SUPERTABLE_LAYOUT;}
-    void RegisterStyle();
+    void RegisterNewStyle();
     // for table style
     // add by , 06/03/2005
     void ApplyPatternFill(XFTableStyle* pTableStyle);
@@ -202,10 +201,11 @@ public:
     LwpColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpColumnLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_COLUMN_LAYOUT;}
-    sal_uInt32 GetColumnID(){return ccolid;};
-    double GetWidth(){return LwpTools::ConvertFromUnitsToMetric(cwidth);};
+    sal_uInt32 GetColumnID(){return ccolid;}
+    double GetWidth(){return LwpTools::ConvertFromUnitsToMetric(cwidth);}
+    using LwpVirtualLayout::RegisterStyle;
     void RegisterStyle(double dCalculatedWidth);
-    sal_Bool IsJustifiable(){return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);};
+    sal_Bool IsJustifiable(){return (( m_nAttributes2 & STYLE2_JUSTIFIABLE) != 0);}
 protected:
     void Read();
     sal_uInt8 ccolid;

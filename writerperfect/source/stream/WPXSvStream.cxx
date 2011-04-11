@@ -147,7 +147,7 @@ WPXInputStream * WPXSvInputStream::getDocumentOLEStream(const char * name)
         return 0;
     }
 
-    mxChildStorage = new SotStorage( pStream, TRUE );
+    mxChildStorage = new SotStorage( pStream, sal_True );
 
     mxChildStream = mxChildStorage->OpenSotStream(
             rtl::OUString::createFromAscii( name ),

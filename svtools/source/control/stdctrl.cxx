@@ -81,7 +81,7 @@ namespace svt
         // make it transparent
         SetControlBackground();
         SetBackground();
-        SetPaintTransparent( TRUE );
+        SetPaintTransparent( sal_True );
     }
 
     // -----------------------------------------------------------------------

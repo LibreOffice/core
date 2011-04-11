@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include "svtools/genericunodialog.hxx"
-#include "addresstemplate.hxx"
-#include <cppuhelper/extract.hxx>
+#include <svtools/addresstemplate.hxx>
+#include <comphelper/extract.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -113,7 +113,7 @@ namespace svt
     OAddressBookSourceDialogUno::OAddressBookSourceDialogUno(const Reference< XMultiServiceFactory >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
-        registerProperty(::rtl::OUString::createFromAscii(UNODIALOG_PROPERTY_ALIASES), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
+        registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UNODIALOG_PROPERTY_ALIASES)), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
             &m_aAliases, getCppuType(&m_aAliases));
     }
 
@@ -139,7 +139,7 @@ namespace svt
     //-------------------------------------------------------------------------
     ::rtl::OUString OAddressBookSourceDialogUno::getImplementationName_Static() throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.svtools.OAddressBookSourceDialogUno");
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.OAddressBookSourceDialogUno" ));
     }
 
     //-------------------------------------------------------------------------
@@ -152,7 +152,7 @@ namespace svt
     ::comphelper::StringSequence OAddressBookSourceDialogUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.ui.AddressBookSourceDialog");
+        aSupported.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.AddressBookSourceDialog" ));
         return aSupported;
     }
 

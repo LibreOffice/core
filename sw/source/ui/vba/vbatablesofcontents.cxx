@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile:
- * $Revision:
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -80,7 +77,7 @@ public:
         for( sal_Int32 i = 0; i < nCount; i++ )
         {
             uno::Reference< text::XDocumentIndex > xToc( xDocIndexes->getByIndex(i), uno::UNO_QUERY_THROW );
-            if( xToc->getServiceName().equalsAscii("com.sun.star.text.ContentIndex") )
+            if( xToc->getServiceName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.ContentIndex")) )
             {
                 maToc.push_back( xToc );
             }
@@ -143,8 +140,6 @@ SwVbaTablesOfContents::Add( const uno::Reference< word::XRange >& Range, const u
     xToc->setUseFields( bUseFields );
 
     sal_Bool bUseOutlineLevels = sal_True;
-    //if( UseOutlineLevels.hasValue() )
-    //    UseOutlineLevels >>= bUseOutlineLevels;
     xToc->setUseOutlineLevels( bUseOutlineLevels );
 
     SwVbaRange* pVbaRange = dynamic_cast<SwVbaRange*>( Range.get() );

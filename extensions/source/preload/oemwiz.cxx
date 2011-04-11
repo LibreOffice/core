@@ -74,9 +74,7 @@ namespace preload
         }
         void WriteUserData();
     };
-/* -----------------------------14.11.2001 11:33------------------------------
 
- ---------------------------------------------------------------------------*/
     OEMPreloadDialog_Impl::OEMPreloadDialog_Impl(OEMPreloadDialog* pDialog)
         {
             SfxItemPool& rPool = SFX_APP()->GetPool();
@@ -93,18 +91,13 @@ namespace preload
             pWelcomePage = new OEMWelcomeTabPage(pDialog);
             pLicensePage = new OEMLicenseTabPage(pDialog);
         }
-/* -----------------------------14.11.2001 11:33------------------------------
 
- ---------------------------------------------------------------------------*/
         void OEMPreloadDialog_Impl::WriteUserData()
         {
             if ( pUserDataPage )
                 ((SfxTabPage*)pUserDataPage)->FillItemSet(*pSet);
         }
 
-/* -----------------------------14.11.2001 11:33------------------------------
-
- ---------------------------------------------------------------------------*/
     //=====================================================================
     //= OEMPreloadDialog
     //=====================================================================
@@ -123,7 +116,7 @@ namespace preload
     {
           FreeResource();
           aDlgTitle = GetText();
-          aPrevPB.Enable(FALSE);
+          aPrevPB.Enable(sal_False);
           aNextST = aNextPB.GetText();
           aPrevPB.SetClickHdl(LINK(this, OEMPreloadDialog, NextPrevPageHdl));
           aNextPB.SetClickHdl(LINK(this, OEMPreloadDialog, NextPrevPageHdl));
@@ -144,16 +137,12 @@ namespace preload
               SetPage( OEM_USERDATA, pImpl->pUserDataPage );
           ShowPage( OEM_WELCOME );
     }
-/* -----------------------------14.11.2001 11:33------------------------------
 
- ---------------------------------------------------------------------------*/
     OEMPreloadDialog::~OEMPreloadDialog( )
     {
         delete pImpl;
     }
-/* -----------------------------14.11.2001 11:33------------------------------
 
- ---------------------------------------------------------------------------*/
     IMPL_LINK(OEMPreloadDialog, NextPrevPageHdl, PushButton*, pButton)
     {
         if(pButton == &aPrevPB)
@@ -175,7 +164,7 @@ namespace preload
         {
             case OEM_WELCOME:
                 aNextPB.SetText(aNextST);
-                aNextPB.Enable(TRUE);
+                aNextPB.Enable(sal_True);
             break;
             case OEM_LICENSE:
                 sTitle += aLicense;
@@ -191,9 +180,7 @@ namespace preload
         aPrevPB.Enable(GetCurLevel() != OEM_WELCOME);
         return 0;
     }
-/* -----------------------------14.11.2001 11:33------------------------------
 
- ---------------------------------------------------------------------------*/
     sal_Bool OEMPreloadDialog::LoadFromLocalFile(const String& rFileName, String& rContent)
     {
         SvtPathOptions aPathOpt;
@@ -205,7 +192,7 @@ namespace preload
         sFileName = aURLObject.GetMainURL(INetURLObject::DECODE_TO_IURI);
         sFileName += rFileName;
 
-        SfxMedium aMedium( sFileName,STREAM_READ, TRUE );
+        SfxMedium aMedium( sFileName,STREAM_READ, sal_True );
         SvStream* pInStream = aMedium.GetInStream();
         if( !pInStream )
             return sal_False;
@@ -224,24 +211,17 @@ namespace preload
         aCancelPB.SetText(rText);
     }
 
-/* -----------------------------13.11.2001 12:29------------------------------
-
- ---------------------------------------------------------------------------*/
     OEMWelcomeTabPage::OEMWelcomeTabPage(Window* pParent) :
         TabPage(pParent, ModuleRes(RID_TP_WELCOME)),
         aInfoFT(this, ModuleRes(FT_INFO))
     {
         FreeResource();
     }
-/* -----------------------------13.11.2001 12:30------------------------------
 
- ---------------------------------------------------------------------------*/
     OEMWelcomeTabPage::~OEMWelcomeTabPage()
     {
     }
-/* -----------------------------13.11.2001 12:29------------------------------
 
- ---------------------------------------------------------------------------*/
     OEMLicenseTabPage::OEMLicenseTabPage(OEMPreloadDialog* pParent) :
         TabPage(pParent, ModuleRes(RID_TP_LICENSE)),
         aLicenseML(this, ModuleRes(ML_LICENSE)),
@@ -255,7 +235,7 @@ namespace preload
         aArrow(this, ModuleRes(IMG_ARROW)),
         aStrAccept( ModuleRes(LICENCE_ACCEPT) ),
         aStrNotAccept( ModuleRes(LICENCE_NOTACCEPT) ),
-        bEndReached(FALSE),
+        bEndReached(sal_False),
         pPreloadDialog(pParent)
     {
         FreeResource();
@@ -278,15 +258,11 @@ namespace preload
         aText.SearchAndReplaceAll( UniString::CreateFromAscii("%PAGEDOWN"), aPBPageDown.GetText() );
         aInfo2FT.SetText( aText );
     }
-/* -----------------------------13.11.2001 12:30------------------------------
 
- ---------------------------------------------------------------------------*/
     OEMLicenseTabPage::~OEMLicenseTabPage()
     {
     }
-/* ---------------------------14.11.2001 11:24----------------------------
 
-    -----------------------------------------------------------------------*/
     void OEMLicenseTabPage::ActivatePage()
     {
         if(!aLicenseML.GetText().Len())
@@ -321,7 +297,7 @@ namespace preload
     //------------------------------------------------------------------------
     IMPL_LINK( OEMLicenseTabPage, EndReachedHdl, LicenceView *, EMPTYARG )
     {
-        bEndReached = TRUE;
+        bEndReached = sal_True;
 
         EnableControls();
         aCBAccept.GrabFocus();
@@ -342,7 +318,7 @@ namespace preload
     {
         if( !bEndReached &&
             ( aLicenseML.IsEndReached() || !aLicenseML.GetText().Len() ) )
-            bEndReached = TRUE;
+            bEndReached = sal_True;
 
         if ( bEndReached )
         {
@@ -368,7 +344,7 @@ namespace preload
             if ( ! pNext->IsEnabled() )
             {
                 pPreloadDialog->SetCancelString( aOldCancelText );
-                pNext->Enable(TRUE);
+                pNext->Enable(sal_True);
             }
         }
         else
@@ -377,7 +353,7 @@ namespace preload
             if ( pNext->IsEnabled() )
             {
                 pPreloadDialog->SetCancelString( aStrNotAccept );
-                pNext->Enable(FALSE);
+                pNext->Enable(sal_False);
             }
         }
     }
@@ -414,20 +390,20 @@ namespace preload
     }
 
     //------------------------------------------------------------------------
-    BOOL LicenceView::IsEndReached() const
+    sal_Bool LicenceView::IsEndReached() const
     {
-        BOOL bEndReached;
+        sal_Bool bEndReached;
 
         ExtTextView*    pView = GetTextView();
         ExtTextEngine*  pEdit = GetTextEngine();
-        ULONG           nHeight = pEdit->GetTextHeight();
+        sal_uLong           nHeight = pEdit->GetTextHeight();
         Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
         Point           aBottom( 0, aOutSize.Height() );
 
-        if ( (ULONG) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
-            bEndReached = TRUE;
+        if ( (sal_uLong) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
+            bEndReached = sal_True;
         else
-            bEndReached = FALSE;
+            bEndReached = sal_False;
 
         return bEndReached;
     }
@@ -437,8 +413,8 @@ namespace preload
     {
         if ( rHint.IsA( TYPE(TextHint) ) )
         {
-            BOOL    bLastVal = EndReached();
-            ULONG   nId = ((const TextHint&)rHint).GetId();
+            sal_Bool    bLastVal = EndReached();
+            sal_uLong   nId = ((const TextHint&)rHint).GetId();
 
             if ( nId == TEXT_HINT_PARAINSERTED )
             {

@@ -34,13 +34,13 @@
 class TextUndoDelPara : public TextUndo
 {
 private:
-    BOOL            mbDelObject;
-    ULONG           mnPara;
+    sal_Bool            mbDelObject;
+    sal_uLong           mnPara;
     TextNode*       mpNode; // Zeigt auf das gueltige, nicht zerstoerte Objekt!
 
 public:
                     TYPEINFO();
-                    TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, ULONG nPara );
+                    TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uLong nPara );
                     ~TextUndoDelPara();
 
     virtual void    Undo();
@@ -51,12 +51,12 @@ public:
 class TextUndoConnectParas : public TextUndo
 {
 private:
-    ULONG           mnPara;
-    USHORT          mnSepPos;
+    sal_uLong           mnPara;
+    sal_uInt16          mnSepPos;
 
 public:
                     TYPEINFO();
-                    TextUndoConnectParas( TextEngine* pTextEngine, ULONG nPara, USHORT nSepPos );
+                    TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
                     ~TextUndoConnectParas();
 
     virtual void    Undo();
@@ -67,12 +67,12 @@ public:
 class TextUndoSplitPara : public TextUndo
 {
 private:
-    ULONG           mnPara;
-    USHORT          mnSepPos;
+    sal_uLong           mnPara;
+    sal_uInt16          mnSepPos;
 
 public:
                     TYPEINFO();
-                    TextUndoSplitPara( TextEngine* pTextEngine, ULONG nPara, USHORT nSepPos );
+                    TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nSepPos );
                     ~TextUndoSplitPara();
 
     virtual void    Undo();
@@ -96,7 +96,7 @@ public:
     virtual void    Undo();
     virtual void    Redo();
 
-    virtual BOOL    Merge( SfxUndoAction *pNextAction );
+    virtual sal_Bool    Merge( SfxUndoAction *pNextAction );
 };
 
 
@@ -124,9 +124,9 @@ private:
     TextSelection       maSelection;
 //  SfxItemSet          aNewAttribs;
 //  TextInfoArray       aPrevAttribs;
-//  BYTE                nSpecial;
-//  BOOL                bSetIsRemove;
-//  USHORT              nRemoveWhich;
+//  sal_uInt8               nSpecial;
+//  sal_Bool                bSetIsRemove;
+//  sal_uInt16              nRemoveWhich;
 //
 //  void                ImpSetSelection( TextView* pView );
 
@@ -138,9 +138,9 @@ public:
 
 //  TextInfoArray&      GetTextInfos()  { return aPrevAttribs; }
 //  SfxItemSet&         GetNewAttribs()     { return aNewAttribs; }
-//  void                SetSpecial( BYTE n )            { nSpecial = n; }
-//  void                SetRemoveAttribs( BOOL b )      { bSetIsRemove = b; }
-//  void                SetRemoveWhich( USHORT n )      { nRemoveWhich = n; }
+//  void                SetSpecial( sal_uInt8 n )           { nSpecial = n; }
+//  void                SetRemoveAttribs( sal_Bool b )      { bSetIsRemove = b; }
+//  void                SetRemoveWhich( sal_uInt16 n )      { nRemoveWhich = n; }
 
     virtual void        Undo();
     virtual void        Redo();

@@ -94,6 +94,7 @@ namespace dbaui
             { DSID_IGNORECURRENCY,          "IgnoreCurrency" },
             { DSID_ESCAPE_DATETIME,         "EscapeDateTime" },
             { DSID_PRIMARY_KEY_SUPPORT,     "PrimaryKeySupport" },
+            { DSID_MAX_ROW_SCAN,            "MaxRowScan" },
             { 0, NULL }
         };
         return s_aMappings;
@@ -151,9 +152,9 @@ namespace dbaui
                 {
                     ::rtl::OUString sAuth;
                     aMetaData.get("Authentication") >>= sAuth;
-                    if ( sAuth.equalsAscii("UserPassword") )
+                    if ( sAuth.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UserPassword")) )
                         aInit = AuthUserPwd;
-                    else if ( sAuth.equalsAscii("Password") )
+                    else if ( sAuth.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Password")) )
                         aInit = AuthPwd;
                 }
                 s_aSupport.insert(Supported::value_type(*pIter,aInit));

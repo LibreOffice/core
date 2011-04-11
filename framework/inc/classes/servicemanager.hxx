@@ -229,7 +229,7 @@ class ServiceManager
 
             @param      "sRegistryFile", file name of user registry.
             @return     A reference to a new initialized servicemanager with a valid registry.
-                        It can be NULL, if an error occured.
+                        It can be NULL, if an error occurred.
 
             @onerror    Return a NULL-reference.
         *//*-*****************************************************************************************************/

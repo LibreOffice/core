@@ -28,6 +28,7 @@
 #ifndef SD_SLIDESORTER_SLOT_MANAGER_HXX
 #define SD_SLIDESORTER_SLOT_MANAGER_HXX
 
+#include "model/SlsSharedPageDescriptor.hxx"
 #include <tools/link.hxx>
 #include <memory>
 #include <queue>
@@ -72,6 +73,21 @@ public:
 
     void ExecuteCommandAsynchronously (::std::auto_ptr<Command> pCommand);
 
+    /** Exclude or include one slide or all selected slides.
+        @param rpDescriptor
+            When the pointer is empty then apply the new state to all
+            selected pages.  Otherwise apply the new state to just the
+            specified state.
+    */
+    void ChangeSlideExclusionState (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const bool bExcludeSlide);
+
+    /** Call this after a change from normal mode to master mode or back.
+        The affected slots are invalidated.
+    */
+    void NotifyEditModeChange (void);
+
 private:
     /// The controller for which we manage the slot calls.
     SlideSorter& mrSlideSorter;
@@ -88,11 +104,18 @@ private:
     */
     void RenameSlide (void);
     DECL_LINK(RenameSlideHdl, AbstractSvxNameDialog*);
-    bool RenameSlideFromDrawViewShell( USHORT nPageId, const String& rName);
+    bool RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const String& rName);
 
     /** Handle SID_INSERTPAGE slot calls.
     */
     void InsertSlide (SfxRequest& rRequest);
+
+    void DuplicateSelectedSlides (SfxRequest& rRequest);
+
+    /** Use one of several ways to determine where to insert a new page.
+        This can be the current selection or the insertion indicator.
+    */
+    sal_Int32 GetInsertionPosition (void);
 
     DECL_LINK(UserEventCallback, void*);
 };

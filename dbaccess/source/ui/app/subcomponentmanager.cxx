@@ -45,7 +45,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-#include <hash_map>
 #include <algorithm>
 #include <functional>
 
@@ -180,7 +179,7 @@ namespace dbaui
         //..............................................................................................................
         struct SelectSubComponent : public ::std::unary_function< SubComponentDescriptor, Reference< XComponent > >
         {
-            Reference< XComponent > operator()( const SubComponentDescriptor _desc ) const
+            Reference< XComponent > operator()( const SubComponentDescriptor &_desc ) const
             {
                 if ( _desc.xModel.is() )
                     return _desc.xModel.get();

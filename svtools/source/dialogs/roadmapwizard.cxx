@@ -32,7 +32,7 @@
 #include <svtools/roadmapwizard.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
-#include "roadmap.hxx"
+#include <svtools/roadmap.hxx>
 #include <tools/debug.hxx>
 
 #include <stdarg.h>
@@ -136,7 +136,7 @@ namespace svt
     //====================================================================
     DBG_NAME( RoadmapWizard )
     //--------------------------------------------------------------------
-#if OSL_DEBUG_LEVEL > 0
+#ifdef DBG_UTIL
     const char* CheckInvariants( const void* pVoid )
     {
         return static_cast< const RoadmapWizard* >( pVoid )->checkInvariants();
@@ -240,15 +240,15 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void RoadmapWizard::SetRoadmapSmartHelpId( const SmartId& _rId, SmartIdUpdateMode _aMode )
+    void RoadmapWizard::SetRoadmapHelpId( const rtl::OString& _rId )
     {
-        m_pImpl->pRoadmap->SetSmartHelpId( _rId, _aMode );
+        m_pImpl->pRoadmap->SetHelpId( _rId );
     }
 
     //--------------------------------------------------------------------
-    SmartId RoadmapWizard::GetRoadmapSmartHelpId() const
+    const rtl::OString& RoadmapWizard::GetRoadmapHelpId() const
     {
-        return m_pImpl->pRoadmap->GetSmartHelpId();
+        return m_pImpl->pRoadmap->GetHelpId();
     }
 
     //--------------------------------------------------------------------
@@ -349,7 +349,7 @@ namespace svt
         {
             if ( m_pImpl->getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) <= nCurrentStatePathIndex )
             {
-                OSL_ENSURE( false, "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
+                OSL_FAIL( "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
                 return;
             }
         }

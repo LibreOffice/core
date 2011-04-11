@@ -59,10 +59,10 @@ public:
 
     int  operator ==( const SvXMLAttrContainerData& rCmp ) const;
 
-    BOOL AddAttr( const ::rtl::OUString& rLName, const rtl::OUString& rValue );
-    BOOL AddAttr( const ::rtl::OUString& rPrefix, const rtl::OUString& rNamespace,
+    sal_Bool AddAttr( const ::rtl::OUString& rLName, const rtl::OUString& rValue );
+    sal_Bool AddAttr( const ::rtl::OUString& rPrefix, const rtl::OUString& rNamespace,
                     const ::rtl::OUString& rLName, const rtl::OUString& rValue );
-    BOOL AddAttr( const ::rtl::OUString& rPrefix,
+    sal_Bool AddAttr( const ::rtl::OUString& rPrefix,
                   const ::rtl::OUString& rLName,
                   const ::rtl::OUString& rValue );
 
@@ -77,12 +77,12 @@ public:
     inline const ::rtl::OUString& GetNamespace( sal_uInt16 i ) const;
     inline const ::rtl::OUString& GetPrefix( sal_uInt16 i ) const;
 
-    BOOL SetAt( sal_uInt16 i,
+    sal_Bool SetAt( sal_uInt16 i,
                 const ::rtl::OUString& rLName, const rtl::OUString& rValue );
-    BOOL SetAt( sal_uInt16 i,
+    sal_Bool SetAt( sal_uInt16 i,
                 const ::rtl::OUString& rPrefix, const rtl::OUString& rNamespace,
                 const ::rtl::OUString& rLName, const rtl::OUString& rValue );
-    BOOL SetAt( sal_uInt16 i,
+    sal_Bool SetAt( sal_uInt16 i,
                 const ::rtl::OUString& rPrefix,
                 const ::rtl::OUString& rLName,
                 const ::rtl::OUString& rValue );

@@ -32,7 +32,6 @@ TARGET=dndTest
 TARGETTYPE=CUI
 LIBTARGET=NO
 
-#USE_DEFFILE=	TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ---
@@ -41,7 +40,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files ---
 
-# CFLAGS+=-GR -DUNICODE -D_UNICODE
 CFLAGS+= -D_WIN32_DCOM
 
 INCPRE+=	-I$(ATL_INCLUDE)
@@ -72,8 +70,6 @@ APP1STDLIBS= \
 APP1LIBS=	\
             $(SLB)$/dtobjfact.lib	\
             $(SLB)$/dtutils.lib
-
-#			$(SOLARLIBDIR)$/imtaolecb.lib\
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 

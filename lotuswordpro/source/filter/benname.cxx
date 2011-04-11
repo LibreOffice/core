@@ -56,7 +56,7 @@
 #include "first.hxx"
 namespace OpenStormBento
 {
-    // changed by  to remove warning 2004-06-24
+// changed to remove warning
 CBenNamedObject::CBenNamedObject(pLtcBenContainer pContainer,
   BenObjectID ObjectID, pCBenObject pPrevObject, const char * sName,
   pCBenNamedObjectListElmt pPrevNamedObjectListElmt) :

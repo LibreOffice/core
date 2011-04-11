@@ -44,7 +44,6 @@ using namespace connectivity::adabas;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -59,7 +58,7 @@ ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
     if(xResult.is())
     {
                 Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aD(::rtl::OUString::createFromAscii("D"));
+        ::rtl::OUString aD(RTL_CONSTASCII_USTRINGPARAM("D"));
         while(xResult->next())
         {
             if(xRow->getString(9) == _rName)

@@ -69,7 +69,7 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 
 # --- Library -----------------------------------
-#SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
+
 SHL1TARGET=	$(EVOAB_TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
@@ -107,6 +107,15 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 
 .ENDIF
+
 # --- Targets ----------------------------------
 
 .INCLUDE : $(PRJ)$/target.pmk
+
+ALLTAR : $(MISC)/evoab.component
+
+$(MISC)/evoab.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        evoab.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt evoab.component

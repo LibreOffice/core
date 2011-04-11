@@ -101,7 +101,7 @@ void ItemConverter::_disposing( const lang::EventObject& rSource )
 
 void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 {
-    const USHORT * pRanges = rOutItemSet.GetRanges();
+    const sal_uInt16 * pRanges = rOutItemSet.GetRanges();
     tPropertyNameWithMemberId aProperty;
     SfxItemPool & rPool = GetItemPool();
 
@@ -111,13 +111,13 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 
     while( (*pRanges) != 0)
     {
-        USHORT nBeg = (*pRanges);
+        sal_uInt16 nBeg = (*pRanges);
         ++pRanges;
-        USHORT nEnd = (*pRanges);
+        sal_uInt16 nEnd = (*pRanges);
         ++pRanges;
 
         OSL_ASSERT( nBeg <= nEnd );
-        for( USHORT nWhich = nBeg; nWhich <= nEnd; ++nWhich )
+        for( sal_uInt16 nWhich = nBeg; nWhich <= nEnd; ++nWhich )
         {
             if( GetItemProperty( nWhich, aProperty ))
             {
@@ -140,17 +140,17 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                             delete pItem;
                         }
                     }
-                    catch( beans::UnknownPropertyException ex )
+                    catch( beans::UnknownPropertyException &ex )
                     {
                         delete pItem;
-                        OSL_ENSURE( false,
+                        OSL_FAIL(
                                     ::rtl::OUStringToOString(
                                         ex.Message +
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                              " - unknown Property: " )) + aProperty.first,
                                         RTL_TEXTENCODING_ASCII_US ).getStr());
                     }
-                    catch( uno::Exception ex )
+                    catch( uno::Exception &ex )
                     {
                         ASSERT_EXCEPTION( ex );
                     }
@@ -162,7 +162,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                 {
                     FillSpecialItem( nWhich, rOutItemSet );
                 }
-                catch( uno::Exception ex )
+                catch( uno::Exception &ex )
                 {
                     ASSERT_EXCEPTION( ex );
                 }
@@ -172,17 +172,17 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 }
 
 void ItemConverter::FillSpecialItem(
-    USHORT /*nWhichId*/, SfxItemSet & /*rOutItemSet*/ ) const
+    sal_uInt16 /*nWhichId*/, SfxItemSet & /*rOutItemSet*/ ) const
     throw( uno::Exception )
 {
-    OSL_ENSURE( false, "ItemConverter: Unhandled special item found!" );
+    OSL_FAIL( "ItemConverter: Unhandled special item found!" );
 }
 
 bool ItemConverter::ApplySpecialItem(
-    USHORT /*nWhichId*/, const SfxItemSet & /*rItemSet*/ )
+    sal_uInt16 /*nWhichId*/, const SfxItemSet & /*rItemSet*/ )
     throw( uno::Exception )
 {
-    OSL_ENSURE( false, "ItemConverter: Unhandled special item found!" );
+    OSL_FAIL( "ItemConverter: Unhandled special item found!" );
     return false;
 }
 
@@ -198,7 +198,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 
     while( pItem )
     {
-        if( rItemSet.GetItemState( pItem->Which(), FALSE ) == SFX_ITEM_SET )
+        if( rItemSet.GetItemState( pItem->Which(), sal_False ) == SFX_ITEM_SET )
         {
             if( GetItemProperty( pItem->Which(), aProperty ))
             {
@@ -212,18 +212,18 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                         bItemsChanged = true;
                     }
                 }
-                catch( beans::UnknownPropertyException ex )
+                catch( beans::UnknownPropertyException &ex )
                 {
-                    OSL_ENSURE( false,
+                    OSL_FAIL(
                                 ::rtl::OUStringToOString(
                                     ex.Message +
                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                          " - unknown Property: " )) + aProperty.first,
                                     RTL_TEXTENCODING_ASCII_US).getStr());
                 }
-                catch( uno::Exception ex )
+                catch( uno::Exception &ex )
                 {
-                    OSL_ENSURE( false, ::rtl::OUStringToOString(
+                    OSL_FAIL( ::rtl::OUStringToOString(
                                     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
                 }
             }
@@ -239,18 +239,16 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 }
 
 // --------------------------------------------------------------------------------
-
-//static
 void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItemSet &rSourceSet )
 {
     SfxWhichIter      aIter (rSourceSet);
-    USHORT            nWhich     = aIter.FirstWhich ();
+    sal_uInt16            nWhich     = aIter.FirstWhich ();
     const SfxPoolItem *pPoolItem = NULL;
 
     while (nWhich)
     {
-        if ((rSourceSet.GetItemState(nWhich, TRUE, &pPoolItem) == SFX_ITEM_SET) &&
-            (rDestSet.GetItemState(nWhich, TRUE, &pPoolItem) == SFX_ITEM_SET))
+        if ((rSourceSet.GetItemState(nWhich, sal_True, &pPoolItem) == SFX_ITEM_SET) &&
+            (rDestSet.GetItemState(nWhich, sal_True, &pPoolItem) == SFX_ITEM_SET))
         {
             if (rSourceSet.Get(nWhich) != rDestSet.Get(nWhich))
             {
@@ -260,7 +258,7 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
                 }
             }
         }
-        else if( rSourceSet.GetItemState(nWhich, TRUE, &pPoolItem) == SFX_ITEM_DONTCARE )
+        else if( rSourceSet.GetItemState(nWhich, sal_True, &pPoolItem) == SFX_ITEM_DONTCARE )
             rDestSet.InvalidateItem(nWhich);
 
         nWhich = aIter.NextWhich ();

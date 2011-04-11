@@ -37,6 +37,7 @@
  *
  ************************************************************************/
 #include <osl/endian.h>
+#include <osl/diagnose.h>
 
 #include "cmdbasestream.hxx"
 #include "rcontrol.hxx"
@@ -50,7 +51,7 @@ CmdBaseStream::~CmdBaseStream()
 {
 }
 
-void CmdBaseStream::GenError (SmartId *pUId, comm_String *pString )
+void CmdBaseStream::GenError (rtl::OString *pUId, comm_String *pString )
 {
     Write(comm_USHORT(SIReturnError));
     Write(pUId);
@@ -65,46 +66,95 @@ void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_ULONG nUId )
     Write(comm_USHORT(PARAM_NONE));             // Typ der folgenden Parameter
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, SmartId *pUId, comm_ULONG nNr )
+void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_ULONG nNr )
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
-    Write(pUId);
+    if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
+        Write(comm_ULONG(0));
+    else
+        Write(pUId);
     Write(comm_USHORT(PARAM_ULONG_1));          // Typ der folgenden Parameter
     Write(nNr);
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, SmartId *pUId, comm_String *pString )
+void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_String *pString )
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
-    Write(pUId);
+    if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
+        Write(comm_ULONG(0));
+    else
+        Write(pUId);
     Write(comm_USHORT(PARAM_STR_1));                // Typ der folgenden Parameter
     Write(pString);
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, SmartId *pUId, comm_BOOL bBool )
+void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_BOOL bBool )
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
-    Write(pUId);
+    if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
+        Write(comm_ULONG(0));
+    else
+        Write(pUId);
     Write(comm_USHORT(PARAM_BOOL_1));           // Typ der folgenden Parameter
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn (comm_USHORT nRet, SmartId *pUId, comm_ULONG nNr, comm_String *pString, comm_BOOL bBool )
+void CmdBaseStream::GenReturn (comm_USHORT nRet, rtl::OString *pUId, comm_ULONG nNr, comm_String *pString, comm_BOOL bBool )
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
-    Write(pUId);
+    if ( pUId->equals( rtl::OString( "UID_ACTIVE" ) ) )
+        Write(comm_ULONG(0));
+    else
+        Write(pUId);
     Write(comm_USHORT(PARAM_ULONG_1|PARAM_STR_1|PARAM_BOOL_1));     // Typ der folgenden Parameter
     Write(nNr);
     Write(pString);
     Write(bBool);
 }
 
+void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_ULONG nNr )
+{
+    Write(comm_USHORT(SIReturn));
+    Write(nRet);
+    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
+    Write(comm_USHORT(PARAM_ULONG_1));          // Typ der folgenden Parameter
+    Write(nNr);
+}
+
+void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_String *pString )
+{
+    Write(comm_USHORT(SIReturn));
+    Write(nRet);
+    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
+    Write(comm_USHORT(PARAM_STR_1));                // Typ der folgenden Parameter
+    Write(pString);
+}
+
+void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_BOOL bBool )
+{
+    Write(comm_USHORT(SIReturn));
+    Write(nRet);
+    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
+    Write(comm_USHORT(PARAM_BOOL_1));           // Typ der folgenden Parameter
+    Write(bBool);
+}
+
+void CmdBaseStream::GenReturn (comm_USHORT nRet, comm_USHORT nMethod, comm_USHORT nNr )
+{
+    Write(comm_USHORT(SIReturn));
+    Write(nRet);
+    Write((comm_ULONG)nMethod); //HELPID BACKWARD (no sal_uLong needed)
+    Write(comm_USHORT(PARAM_USHORT_1));         // Typ der folgenden Parameter
+    Write(nNr);
+}
+
+
 // MacroRecorder
-void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMethod )
+void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod )
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
@@ -113,7 +163,7 @@ void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMet
     Write(nMethod);
 }
 
-void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMethod, comm_String *pString )
+void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_String *pString )
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
@@ -123,7 +173,7 @@ void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMet
     Write(pString);
 }
 
-void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMethod, comm_String *pString, comm_BOOL bBool )
+void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_String *pString, comm_BOOL bBool )
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
@@ -134,7 +184,7 @@ void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMet
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMethod, comm_BOOL bBool )
+void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_BOOL bBool )
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
@@ -144,7 +194,7 @@ void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMet
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn( comm_USHORT nRet, SmartId *pUId, comm_USHORT nMethod, comm_ULONG nNr )
+void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_ULONG nNr )
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);
@@ -161,8 +211,8 @@ void CmdBaseStream::Read (comm_USHORT &nNr)
     comm_USHORT nId;
     *pCommStream >> nId;
     if (pCommStream->IsEof()) return;
-#ifdef DBG_UTIL
-    if (nId != BinUSHORT) DBG_ERROR1( "Falscher Typ im Stream: Erwartet USHORT, gefunden :%hu", nId );
+#if OSL_DEBUG_LEVEL > 1
+    if (nId != BinUSHORT) OSL_TRACE( "Falscher Typ im Stream: Erwartet USHORT, gefunden :%hu", nId );
 #endif
     *pCommStream >> nNr;
 }
@@ -172,8 +222,8 @@ void CmdBaseStream::Read (comm_ULONG &nNr)
     comm_USHORT nId;
     *pCommStream >> nId;
     if (pCommStream->IsEof()) return;
-#ifdef DBG_UTIL
-    if (nId != BinULONG) DBG_ERROR1( "Falscher Typ im Stream: Erwartet ULONG, gefunden :%hu", nId );
+#if OSL_DEBUG_LEVEL > 1
+    if (nId != BinULONG) OSL_TRACE( "Falscher Typ im Stream: Erwartet ULONG, gefunden :%hu", nId );
 #endif
     *pCommStream >> nNr;
 }
@@ -182,8 +232,8 @@ void CmdBaseStream::Read (comm_UniChar* &aString, comm_USHORT &nLenInChars )
 {
     comm_USHORT nId;
     *pCommStream >> nId;
-#ifdef DBG_UTIL
-    if (nId != BinString) DBG_ERROR1( "Falscher Typ im Stream: Erwartet String, gefunden :%hu", nId );
+#if OSL_DEBUG_LEVEL > 1
+    if (nId != BinString) OSL_TRACE( "Falscher Typ im Stream: Erwartet String, gefunden :%hu", nId );
 #endif
 
     *pCommStream >> nLenInChars;
@@ -202,8 +252,8 @@ void CmdBaseStream::Read (comm_BOOL &bBool)
 {
     comm_USHORT nId;
     *pCommStream >> nId;
-#ifdef DBG_UTIL
-    if (nId != BinBool) DBG_ERROR1( "Falscher Typ im Stream: Erwartet BOOL, gefunden :%hu", nId );
+#if OSL_DEBUG_LEVEL > 1
+    if (nId != BinBool) OSL_TRACE( "Falscher Typ im Stream: Erwartet BOOL, gefunden :%hu", nId );
 #endif
     *pCommStream >> bBool;
 }
@@ -281,23 +331,23 @@ void CmdBaseStream::Write( comm_BOOL bBool )
 void CmdBaseStream::Read ( comm_String* &pString )
 {
     (void) pString; /* avoid warning about unused parameter */
-    DBG_ERROR("Read ( comm_String* &pString ) Not Implemented");
+    OSL_FAIL("Read ( comm_String* &pString ) Not Implemented");
 }
-void CmdBaseStream::Read ( SmartId* &pId )
+void CmdBaseStream::Read ( rtl::OString* &pId )
 {
     (void) pId; /* avoid warning about unused parameter */
-    DBG_ERROR("Read ( SmartId* &pId ) Not Implemented");
+    OSL_FAIL("Read ( rtl::OString* &pId ) Not Implemented");
 }
 
 void CmdBaseStream::Write( comm_String *pString )
 {
     (void) pString; /* avoid warning about unused parameter */
-    DBG_ERROR("Write( comm_String *pString ) Not Implemented");
+    OSL_FAIL("Write( comm_String *pString ) Not Implemented");
 }
-void CmdBaseStream::Write( SmartId* pId )
+void CmdBaseStream::Write( rtl::OString* pId )
 {
     (void) pId; /* avoid warning about unused parameter */
-    DBG_ERROR("Write( SmartId* pId ) Not Implemented");
+    OSL_FAIL("Write( rtl::OString* pId ) Not Implemented");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

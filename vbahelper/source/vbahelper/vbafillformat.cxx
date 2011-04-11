@@ -50,7 +50,7 @@ ScVbaFillFormat::setFillStyle( drawing::FillStyle nFillStyle ) throw (uno::Runti
     m_nFillStyle = nFillStyle;
     if( m_nFillStyle == drawing::FillStyle_GRADIENT )
     {
-        m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii("FillStyle"), uno::makeAny( drawing::FillStyle_GRADIENT ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle")), uno::makeAny( drawing::FillStyle_GRADIENT ) );
         awt::Gradient aGradient;
         // AXIAL
         // RADIAL
@@ -67,11 +67,11 @@ ScVbaFillFormat::setFillStyle( drawing::FillStyle nFillStyle ) throw (uno::Runti
         aGradient.StartIntensity = 100;
         aGradient.EndIntensity = 100;
         aGradient.StepCount = 1;
-        m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii("FillGradient"), uno::makeAny( aGradient ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillGradient")), uno::makeAny( aGradient ) );
     }
     else if( m_nFillStyle == drawing::FillStyle_SOLID )
     {
-        m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii("FillStyle"), uno::makeAny(drawing::FillStyle_SOLID) );
+        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle")), uno::makeAny(drawing::FillStyle_SOLID) );
     }
 }
 
@@ -87,7 +87,7 @@ sal_Bool SAL_CALL
 ScVbaFillFormat::getVisible() throw (uno::RuntimeException)
 {
     drawing::FillStyle nFillStyle;
-    m_xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("FillStyle") ) >>= nFillStyle;
+    m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle")) ) >>= nFillStyle;
     if( nFillStyle == drawing::FillStyle_NONE )
         return sal_False;
     return sal_True;
@@ -97,10 +97,10 @@ void SAL_CALL
 ScVbaFillFormat::setVisible( sal_Bool _visible ) throw (uno::RuntimeException)
 {
     drawing::FillStyle aFillStyle;
-    m_xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("FillStyle") ) >>= aFillStyle;
+    m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle")) ) >>= aFillStyle;
     if( !_visible )
     {
-        m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii("FillStyle"), uno::makeAny( drawing::FillStyle_NONE ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle")), uno::makeAny( drawing::FillStyle_NONE ) );
     }
     else
     {
@@ -116,7 +116,7 @@ ScVbaFillFormat::getTransparency() throw (uno::RuntimeException)
 {
     sal_Int16 nTransparence = 0;
     double dTransparence = 0;
-    m_xPropertySet->getPropertyValue( rtl::OUString::createFromAscii( "FillTransparence" ) ) >>= nTransparence;
+    m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillTransparence")) ) >>= nTransparence;
     dTransparence = static_cast<double>( nTransparence );
     dTransparence /= 100;
     return dTransparence;
@@ -126,7 +126,7 @@ void SAL_CALL
 ScVbaFillFormat::setTransparency( double _transparency ) throw (uno::RuntimeException)
 {
     sal_Int16 nTransparence = static_cast< sal_Int16 >( _transparency * 100 );
-    m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "FillTransparence" ), uno::makeAny( nTransparence ) );
+    m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillTransparence")), uno::makeAny( nTransparence ) );
 }
 
 

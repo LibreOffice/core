@@ -34,7 +34,7 @@
 #include <vcl/window.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#ifdef ENABLE_INIMANAGER//MUSTINI
+#ifdef ENABLE_INIMANAGER
 #include "inimgr.hxx"
 #endif
 #include <sfx2/shell.hxx>
@@ -47,11 +47,6 @@ class SfxShell;
 class SfxChildWindow;
 class SfxChildWindowContext;
 class SfxChildWinContextArr_Impl;
-
-//ASDBG #ifndef _XFRAME_REF
-//ASDBG #define _XFRAME_REF
-//ASDBG USR_DECLIMPL_REF( ::com::sun::star::frame::XFrame, ::com::sun::star::uno::XInterface );
-//ASDBG #endif
 
 #define SFX_CHILDWIN_ZOOMIN       0x01      // ganz eingeklapptes Float
 #define SFX_CHILDWIN_SMALL        0x02      // halb eingeklapptes Float
@@ -158,7 +153,7 @@ public:
 
     virtual void        Resizing( Size& rSize );
     virtual sal_Bool        Close();
-    static void         RegisterChildWindowContext(SfxModule*, USHORT, SfxChildWinContextFactory*);
+    static void         RegisterChildWindowContext(SfxModule*, sal_uInt16, SfxChildWinContextFactory*);
 };
 
 class SFX2_DLLPUBLIC SfxChildWindow
@@ -196,10 +191,8 @@ public:
     void                SetPosSizePixel(const Point& rPoint, Size& rSize);
     Point               GetPosPixel()
                         { return pWindow->GetPosPixel(); }
-//<!--Modified by PengYunQuan for Validity Cell Range Picker
     virtual void                Hide();
-    virtual void                Show( USHORT nFlags );
-//-->Modified by PengYunQuan for Validity Cell Range Picker
+    virtual void                Show( sal_uInt16 nFlags );
     sal_uInt16          GetFlags() const
                         { return GetInfo().nFlags; }
     sal_Bool                CanGetFocus() const;
@@ -227,7 +220,7 @@ public:
     void                SetHideAtToggle( sal_Bool bOn );
     sal_Bool                IsHideAtToggle() const;
     sal_Bool                IsVisible() const;
-    void                SetWantsFocus( BOOL );
+    void                SetWantsFocus( sal_Bool );
     sal_Bool            WantsFocus() const;
 
     virtual sal_Bool    QueryClose();
@@ -237,7 +230,6 @@ public:
     SAL_DLLPRIVATE static void InitializeChildWinFactory_Impl(sal_uInt16, SfxChildWinInfo&);
     SAL_DLLPRIVATE void SetVisible_Impl( sal_Bool bVis );
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
-    //SfxWorkWindow*        GetWorkWindow_Impl() const;
     SAL_DLLPRIVATE void Activate_Impl();
     SAL_DLLPRIVATE void Deactivate_Impl();
 
@@ -262,11 +254,11 @@ public:
 
 //! demn"achst hinf"allig !
 #define SFX_IMPL_CHILDWINDOW_CONTEXT(Class, MyID, ShellClass) \
-        SfxChildWindowContext* __EXPORT Class::CreateImpl( ::Window *pParent, \
+        SfxChildWindowContext* Class::CreateImpl( ::Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
         {   \
             SfxChildWindowContext *pContext = new Class(pParent, \
-                    /* cast is safe here! */static_cast< USHORT >(ShellClass::GetInterfaceId()), \
+                    /* cast is safe here! */static_cast< sal_uInt16 >(ShellClass::GetInterfaceId()), \
                     pBindings,pInfo); \
             return pContext; \
         } \
@@ -282,7 +274,7 @@ public:
 // CreateImpl mu\s noch als Parameter die Factory mitbekommen wg. ContextId
 // Solange wird diese Id auf 0 gesetzt und in SfxChildWindow::CreateContext gepatched
 #define SFX_IMPL_CHILDWINDOWCONTEXT(Class, MyID) \
-        SfxChildWindowContext* __EXPORT Class::CreateImpl( ::Window *pParent, \
+        SfxChildWindowContext* Class::CreateImpl( ::Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
         {   \
             SfxChildWindowContext *pContext = new Class(pParent,0,pBindings,pInfo);\
@@ -307,13 +299,13 @@ public:
         SFX_IMPL_POS_CHILDWINDOW(Class, MyID, CHILDWIN_NOPOS)
 
 #define SFX_IMPL_POS_CHILDWINDOW(Class, MyID, Pos) \
-        SfxChildWindow* __EXPORT Class::CreateImpl( ::Window *pParent, \
+        SfxChildWindow* Class::CreateImpl( ::Window *pParent, \
                 sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
                 {   \
                     SfxChildWindow *pWin = new Class(pParent, nId, pBindings, pInfo);\
                     return pWin; \
                 } \
-        sal_uInt16  __EXPORT Class::GetChildWindowId () \
+        sal_uInt16 Class::GetChildWindowId () \
                 { return MyID; } \
         void    Class::RegisterChildWindow (sal_Bool bVis, SfxModule *pMod, sal_uInt16 nFlags)   \
                 {   \
@@ -326,7 +318,7 @@ public:
 
 #define SFX_IMPL_FLOATINGWINDOW(Class, MyID)    \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo __EXPORT Class::GetInfo() const \
+        SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
             ((SfxFloatingWindow*)GetWindow())->FillInfo( aInfo );  \
@@ -334,7 +326,7 @@ public:
 
 #define SFX_IMPL_MODELESSDIALOG(Class, MyID)    \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo __EXPORT Class::GetInfo() const \
+        SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
             ((SfxModelessDialog*)GetWindow())->FillInfo( aInfo );  \
@@ -342,7 +334,7 @@ public:
 
 #define SFX_IMPL_DOCKINGWINDOW(Class, MyID) \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo __EXPORT Class::GetInfo() const \
+        SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
             ((SfxDockingWindow*)GetWindow())->FillInfo( aInfo );  \
@@ -350,7 +342,7 @@ public:
 
 #define SFX_IMPL_TOOLBOX(Class, MyID)   \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo __EXPORT Class::GetInfo() const \
+        SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
             ((SfxToolbox*)GetWindow())->FillInfo( aInfo );  \

@@ -43,7 +43,6 @@
 #include "rtl/uri.hxx"
 
 using namespace ::com::sun::star::uno;
-//using namespace ::com::sun::star;
 namespace css = ::com::sun::star;
 using rtl::OUString;
 
@@ -217,7 +216,7 @@ DocumentSignatureHelper::CreateElementList(
                 ImplFillElementList(aElements, rxStore, ::rtl::OUString(), false, mode);
 
                 // 2) Pictures...
-                rtl::OUString aSubStorageName( rtl::OUString::createFromAscii( "Pictures" ) );
+                rtl::OUString aSubStorageName( RTL_CONSTASCII_USTRINGPARAM("Pictures") );
                 try
                 {
                     Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -228,7 +227,7 @@ DocumentSignatureHelper::CreateElementList(
                     ; // Doesn't have to exist...
                 }
                 // 3) OLE....
-                aSubStorageName = rtl::OUString::createFromAscii( "ObjectReplacements" );
+                aSubStorageName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectReplacements"));
                 try
                 {
                     Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -236,7 +235,7 @@ DocumentSignatureHelper::CreateElementList(
                     xSubStore.clear();
 
                     // Object folders...
-                    rtl::OUString aMatchStr( rtl::OUString::createFromAscii( "Object " ) );
+                    rtl::OUString aMatchStr( RTL_CONSTASCII_USTRINGPARAM("Object ") );
                     Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
                     Sequence< ::rtl::OUString > aElementNames = xElements->getElementNames();
                     sal_Int32 nElements = aElementNames.getLength();
@@ -265,7 +264,7 @@ DocumentSignatureHelper::CreateElementList(
         case SignatureModeMacros:
         {
             // 1) Macros
-            rtl::OUString aSubStorageName( rtl::OUString::createFromAscii( "Basic" ) );
+            rtl::OUString aSubStorageName( RTL_CONSTASCII_USTRINGPARAM("Basic") );
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -277,7 +276,7 @@ DocumentSignatureHelper::CreateElementList(
             }
 
             // 2) Dialogs
-            aSubStorageName = rtl::OUString::createFromAscii( "Dialogs") ;
+            aSubStorageName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dialogs")) ;
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -288,7 +287,7 @@ DocumentSignatureHelper::CreateElementList(
                 ; // Doesn't have to exist...
             }
             // 3) Scripts
-            aSubStorageName = rtl::OUString::createFromAscii( "Scripts") ;
+            aSubStorageName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scripts")) ;
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -431,7 +430,7 @@ bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
         retVal = true;
         typedef std::vector<OUString>::const_iterator CIT;
         for (CIT i = vUriSegments.begin(), j = vPathSegments.begin();
-            i != vUriSegments.end(); i++, j++)
+            i != vUriSegments.end(); ++i, ++j)
         {
             //Decode the uri segment, so that %20 becomes ' ', etc.
             OUString sDecUri = ::rtl::Uri::decode(

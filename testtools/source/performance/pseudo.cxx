@@ -37,8 +37,7 @@
 #include <uno/mapping.h>
 #include <uno/lbnames.h>
 
-using namespace rtl;
-
+using ::rtl::OUString;
 
 namespace pseudo_uno
 {
@@ -245,7 +244,7 @@ pseudo_Mapping::~pseudo_Mapping()
 //##################################################################################################
 extern "C" void SAL_CALL uno_initEnvironment( uno_Environment * pUnoEnv )
 {
-    OSL_ENSURE( sal_False, "### no impl: unexpected call!" );
+    OSL_FAIL( "### no impl: unexpected call!" );
 }
 //##################################################################################################
 extern "C" void SAL_CALL uno_ext_getMapping(

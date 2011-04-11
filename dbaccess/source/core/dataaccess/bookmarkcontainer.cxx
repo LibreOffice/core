@@ -36,6 +36,7 @@
 #include "core_resource.hrc"
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
@@ -70,7 +71,7 @@ void OBookmarkContainer::dispose()
 {
     MutexGuard aGuard(m_rMutex);
 
-    // say our listeners goobye
+    // say goodbye to our listeners
     EventObject aEvt(*this);
     m_aContainerListeners.disposeAndClear(aEvt);
 
@@ -97,7 +98,7 @@ OBookmarkContainer::~OBookmarkContainer()
 // XServiceInfo
 ::rtl::OUString SAL_CALL OBookmarkContainer::getImplementationName(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.dba.OBookmarkContainer");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.OBookmarkContainer"));
 }
 
 sal_Bool SAL_CALL OBookmarkContainer::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
@@ -110,7 +111,7 @@ sal_Bool SAL_CALL OBookmarkContainer::supportsService( const ::rtl::OUString& _r
 Sequence< ::rtl::OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aReturn(1);
-    aReturn.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.DefinitionContainer");
+    aReturn.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DefinitionContainer"));
     return aReturn;
 }
 
@@ -329,7 +330,7 @@ void OBookmarkContainer::implRemove(const ::rtl::OUString& _rName)
 
     if (m_aBookmarks.end() == aMapPos)
     {
-        DBG_ERROR("OBookmarkContainer::implRemove: inconsistence!");
+        OSL_FAIL("OBookmarkContainer::implRemove: inconsistence!");
         return;
     }
 
@@ -348,7 +349,7 @@ void OBookmarkContainer::implAppend(const ::rtl::OUString& _rName, const ::rtl::
 void OBookmarkContainer::implReplace(const ::rtl::OUString& _rName, const ::rtl::OUString& _rNewLink)
 {
     MutexGuard aGuard(m_rMutex);
-    DBG_ASSERT(checkExistence(_rName), "OBookmarkContainer::implReplace : invalid name !");
+    OSL_ENSURE(checkExistence(_rName), "OBookmarkContainer::implReplace : invalid name !");
 
     m_aBookmarks[_rName] = _rNewLink;
 }

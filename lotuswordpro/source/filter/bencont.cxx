@@ -69,7 +69,7 @@ const char gsBenMagicBytes[] = BEN_MAGIC_BYTES;
 *   @param  pointer to pointer of Bento Container object
 *   @return error code
 */
-ULONG BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer)
+sal_uLong BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer)
 {
     BenError Err;
 
@@ -247,7 +247,7 @@ BenError LtcBenContainer::Read(BenDataPtr pBuffer, unsigned long MaxSize,
 */
 BenError LtcBenContainer::ReadKnownSize(BenDataPtr pBuffer, unsigned long Amt)
 {
-    ULONG ulLength;
+    sal_uLong ulLength;
     ulLength = cpStream->Read(pBuffer, Amt);
     if(ulLength == Amt)
     {
@@ -367,7 +367,7 @@ LtcUtBenValueStream * LtcBenContainer::FindObjectValueStreamWithObjectIDAndPrope
 *   @param  pointer to length of bento file
 *   @return BenError
 */
-BenError LtcBenContainer::GetSize(ULONG * pLength)
+BenError LtcBenContainer::GetSize(sal_uLong * pLength)
 {
     *pLength = m_ulLength;
     return BenErr_OK;
@@ -416,7 +416,7 @@ BenError LtcBenContainer::CreateGraphicStreams(std::vector<SvStream *> * pStream
 
     /* traverse the found properties and construct the stream vectors */
     std::vector<std::string>::iterator itor;
-    for (itor = aGrPropertyVector.begin(); itor != aGrPropertyVector.end(); itor ++)
+    for (itor = aGrPropertyVector.begin(); itor != aGrPropertyVector.end(); ++itor)
     {
         // get property names with suffix of S&D
         char sSName[32], sDName[32];
@@ -427,7 +427,7 @@ BenError LtcBenContainer::CreateGraphicStreams(std::vector<SvStream *> * pStream
 
         // erase strings in vector
         std::vector<std::string>::iterator itorSearch;
-        for (itorSearch = aGrPropertyVector.begin(); itorSearch != aGrPropertyVector.end(); itorSearch ++)
+        for (itorSearch = aGrPropertyVector.begin(); itorSearch != aGrPropertyVector.end(); ++itorSearch)
         {
             if( (*itorSearch == sSName) || (*itorSearch == sDName) )
             {

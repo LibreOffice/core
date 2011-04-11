@@ -45,36 +45,34 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include "dmapperLoggers.hxx"
+
 namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
-/*-- 23.04.2008 10:46:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 OLEHandler::OLEHandler() :
-    m_nDxaOrig(0),
-    m_nDyaOrig(0),
+LoggedProperties(dmapper_logger, "OLEHandler"),
+m_nDxaOrig(0),
+m_nDyaOrig(0),
     m_nWrapMode(1)
 {
 }
-/*-- 23.04.2008 10:46:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 OLEHandler::~OLEHandler()
 {
 }
-/*-- 23.04.2008 10:46:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void OLEHandler::attribute(Id rName, Value & rVal)
+
+void OLEHandler::lcl_attribute(Id rName, Value & rVal)
 {
     rtl::OUString sStringValue = rVal.getString();
     (void)rName;
-    /* WRITERFILTERSTATUS: table: OLEHandler_attributedata */
     switch( rName )
     {
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_OLEObject_Type:
             m_sObjectType = sStringValue;
         break;
@@ -103,7 +101,6 @@ void OLEHandler::attribute(Id rName, Value & rVal)
             m_nDyaOrig = rVal.getInt();
         break;
         case NS_ooxml::LN_shape:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         {
             uno::Reference< drawing::XShape > xTempShape;
             rVal.getAny() >>= xTempShape;
@@ -136,13 +133,12 @@ void OLEHandler::attribute(Id rName, Value & rVal)
         }
         break;
         default:
-            OSL_ENSURE( false, "unknown attribute");
+            OSL_FAIL( "unknown attribute");
     }
 }
-/*-- 23.04.2008 10:46:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void OLEHandler::sprm(Sprm & rSprm)
+
+void OLEHandler::lcl_sprm(Sprm & rSprm)
 {
     sal_uInt32 nSprmId = rSprm.getId();
     switch( nSprmId )
@@ -187,13 +183,12 @@ void OLEHandler::sprm(Sprm & rSprm)
         break;
         default:
         {
-            OSL_ENSURE( false, "unknown attribute");
+            OSL_FAIL( "unknown attribute");
         }
     }
 }
-/*-- 23.04.2008 11:15:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::rtl::OUString OLEHandler::copyOLEOStream( uno::Reference< text::XTextDocument > xTextDocument )
 {
     ::rtl::OUString sRet;
@@ -238,7 +233,7 @@ void OLEHandler::sprm(Sprm & rSprm)
     catch( const uno::Exception& rEx)
     {
         (void)rEx;
-        OSL_ENSURE(false, "exception in OLEHandler::createOLEObject");
+        OSL_FAIL("exception in OLEHandler::createOLEObject");
     }
     return sRet;
 }

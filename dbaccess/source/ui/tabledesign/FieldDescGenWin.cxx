@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 #include "FieldDescGenWin.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
 #include "TableDesignHelpBar.hxx"
 #include "TableFieldControl.hxx"
@@ -62,7 +62,7 @@ OFieldDescGenWin::~OFieldDescGenWin()
 //------------------------------------------------------------------------------
 void OFieldDescGenWin::Init()
 {
-    DBG_ASSERT(GetEditorCtrl() != NULL, "OFieldDescGenWin::Init : have no editor control !");
+    OSL_ENSURE(GetEditorCtrl() != NULL, "OFieldDescGenWin::Init : have no editor control !");
 
     m_pFieldControl->Init();
 }
@@ -109,11 +109,6 @@ OTableEditorCtrl* OFieldDescGenWin::GetEditorCtrl()
     return pDesignWin->GetEditorCtrl();
 }
 #endif
-//------------------------------------------------------------------------------
-//short OFieldDescGenWin::GetFormatCategory(OFieldDescription* pFieldDescr)
-//{
-//  return m_pFieldControl->GetFormatCategory(pFieldDescr);
-//}
 //------------------------------------------------------------------------------
 void OFieldDescGenWin::SaveData( OFieldDescription* pFieldDescr )
 {
@@ -183,9 +178,5 @@ void OFieldDescGenWin::paste()
         m_pFieldControl->paste();
 }
 // -----------------------------------------------------------------------------
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

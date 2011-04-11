@@ -67,12 +67,11 @@ SHL1STDLIBS=\
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+# MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SHL1STDLIBS+=$(UCBHELPERLIB)
 .ENDIF
 
-#SHL1DEPN=
 SHL1IMPLIB=	idbtools
 
 SHL1LIBS=	$(LIB1TARGET)
@@ -95,3 +94,11 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo _TI				>$@
     @echo _real				>>$@
 
+
+ALLTAR : $(MISC)/dbtools.component
+
+$(MISC)/dbtools.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        dbtools.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt dbtools.component

@@ -46,7 +46,7 @@ sal_Bool ReconnectingFile::reconnect()
     {
         disconnect();
         if ( m_aFile.open( m_nFlags ) == ::osl::FileBase::E_None
-          || m_aFile.open( OpenFlag_Read ) == ::osl::FileBase::E_None )
+          || m_aFile.open( osl_File_OpenFlag_Read ) == ::osl::FileBase::E_None )
         {
             m_bDisconnect = sal_False;
             bResult = sal_True;
@@ -61,8 +61,8 @@ sal_Bool ReconnectingFile::reconnect()
     ::osl::FileBase::RC nResult = m_aFile.open( uFlags );
     if ( nResult == ::osl::FileBase::E_None )
     {
-        if ( uFlags & OpenFlag_Create )
-            m_nFlags = (uFlags & ( ~OpenFlag_Create )) | OpenFlag_Write;
+        if ( uFlags & osl_File_OpenFlag_Create )
+            m_nFlags = (uFlags & ( ~osl_File_OpenFlag_Create )) | osl_File_OpenFlag_Write;
         else
             m_nFlags = uFlags;
 

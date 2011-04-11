@@ -10,6 +10,7 @@
 ..\%__SRC%\bin\x64\propertyhdl.dll %_DEST%\bin%_EXT%\propertyhdl_x64.dll
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\misc\cmdmail.component %_DEST%\xml%_EXT%\cmdmail.component
 
 ..\%__SRC%\bin\open-url %_DEST%\bin%_EXT%\open-url
 ..\%__SRC%\bin\cde-open-url %_DEST%\bin%_EXT%\cde-open-url
@@ -21,5 +22,13 @@
 
 ..\%__SRC%\misc\*.xml %_DEST%\xml%_EXT%\*.xml
 
-..\%__SRC%\misc\*-ucd.txt  %_DEST%\bin%_EXT%\*-ucd.txt
+..\%__SRC%\misc\desktopbe1.component  %_DEST%\xml%_EXT%\desktopbe1.component
+..\%__SRC%\misc\gconfbe1.component  %_DEST%\xml%_EXT%\gconfbe1.component
+..\%__SRC%\misc\kde4be1.component  %_DEST%\xml%_EXT%\kde4be1.component
+..\%__SRC%\misc\kdebe1.component  %_DEST%\xml%_EXT%\kdebe1.component
 ..\inc\kde_headers.h %_DEST%\inc%_EXT%\shell\kde_headers.h
+..\%__SRC%\misc\localebe1.component %_DEST%\xml%_EXT%\localebe1.component
+..\%__SRC%\misc\macbe1.component %_DEST%\xml%_EXT%\macbe1.component
+..\%__SRC%\misc\smplmail.component %_DEST%\xml%_EXT%\smplmail.component
+..\%__SRC%\misc\syssh.component %_DEST%\xml%_EXT%\syssh.component
+..\%__SRC%\misc\wininetbe1.component %_DEST%\xml%_EXT%\wininetbe1.component

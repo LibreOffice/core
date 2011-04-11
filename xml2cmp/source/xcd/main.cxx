@@ -233,7 +233,6 @@ StreamOut_TypeInfo( std::ostream &               o_rOut,
             if ( 0 == strcmp(pHeapTop->Key(), pLastHeapTop->Key()) )
                 continue;
             delete pLastHeapTop;
-            // pLastHeapTop = 0;
         }
         pLastHeapTop = pHeapTop;
 

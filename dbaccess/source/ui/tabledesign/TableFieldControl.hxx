@@ -44,9 +44,9 @@ namespace dbaui
         virtual void        ActivateAggregate( EControlType eType );
         virtual void        DeactivateAggregate( EControlType eType );
         // Sind von den abgeleiteten Klassen zu impl.
-        virtual void        CellModified(long nRow, USHORT nColId );
-        virtual BOOL        IsReadOnly();
-        virtual void        SetModified(BOOL bModified);
+        virtual void        CellModified(long nRow, sal_uInt16 nColId );
+        virtual sal_Bool        IsReadOnly();
+        virtual void        SetModified(sal_Bool bModified);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    GetFormatter() const;
 
         virtual ::com::sun::star::lang::Locale  GetLocale() const;

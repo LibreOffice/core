@@ -32,9 +32,9 @@
 #include <tools/stream.hxx>
 
 struct LZWTableEntry {
-    USHORT nPrevCode;
-    USHORT nDataCount;
-    BYTE nData;
+    sal_uInt16 nPrevCode;
+    sal_uInt16 nDataCount;
+    sal_uInt8 nData;
 };
 
 class LZWDecompressor {
@@ -46,32 +46,32 @@ public:
 
     void StartDecompression(SvStream & rIStream);
 
-    ULONG Decompress(BYTE * pTarget, ULONG nMaxCount);
+    sal_uLong Decompress(sal_uInt8 * pTarget, sal_uLong nMaxCount);
         // Liefert die Anzahl der geschriebenen Bytes, wenn < nMaxCount,
         // sind keine weiteren Daten zu entpacken, oder es ist ein
         // Fehler aufgetreten.
 
 private:
 
-    USHORT GetNextCode();
-    void AddToTable(USHORT nPrevCode, USHORT nCodeFirstData);
+    sal_uInt16 GetNextCode();
+    void AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData);
     void DecompressSome();
 
     SvStream * pIStream;
 
     LZWTableEntry * pTable;
-    USHORT nTableSize;
+    sal_uInt16 nTableSize;
 
-    BOOL bEOIFound, bInvert, bFirst;
+    sal_Bool bEOIFound, bInvert, bFirst;
 
-    USHORT nOldCode;
+    sal_uInt16 nOldCode;
 
-    BYTE * pOutBuf;
-    BYTE * pOutBufData;
-    USHORT nOutBufDataLen;
+    sal_uInt8 * pOutBuf;
+    sal_uInt8 * pOutBufData;
+    sal_uInt16 nOutBufDataLen;
 
-    BYTE nInputBitsBuf;
-    USHORT nInputBitsBufSize;
+    sal_uInt8 nInputBitsBuf;
+    sal_uInt16 nInputBitsBufSize;
 };
 
 

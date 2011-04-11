@@ -72,6 +72,8 @@
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XProgressBar.hpp>
 
+#include <vector>
+
 //____________________________________________________________________________________________________________
 //  includes of my own project
 //____________________________________________________________________________________________________________
@@ -120,10 +122,6 @@ struct IMPL_TextlistItem
     ::rtl::OUString sTopic  ;   /// Left site of textline in dialog
     ::rtl::OUString sText   ;   /// Right site of textline in dialog
 };
-
-/// Define a list-class for struct IMPL_TextlistItem
-class IMPL_Textlist ;
-DECLARE_LIST( IMPL_Textlist, IMPL_TextlistItem* )
 
 //____________________________________________________________________________________________________________
 //  class declaration
@@ -781,12 +779,11 @@ private:
 //____________________________________________________________________________________________________________
 
 private:
-
-    IMPL_Textlist*                              m_pTextlist_Top     ;   // Elements before progress
+    ::std::vector < IMPL_TextlistItem* >        maTextlist_Top;         // Elements before progress
     CSS_UNO::Reference< CSS_AWT::XFixedText >   m_xTopic_Top        ;   // (used, if parameter "beforeProgress"=sal_True in "addText, updateText, removeText")
     CSS_UNO::Reference< CSS_AWT::XFixedText >   m_xText_Top         ;
 
-    IMPL_Textlist*                              m_pTextlist_Bottom  ;   // Elements below of progress
+    ::std::vector < IMPL_TextlistItem* >        maTextlist_Bottom;      // Elements below of progress
     CSS_UNO::Reference< CSS_AWT::XFixedText >   m_xTopic_Bottom     ;   // (used, if parameter "beforeProgress"=sal_False in "addText, updateText, removeText")
     CSS_UNO::Reference< CSS_AWT::XFixedText >   m_xText_Bottom      ;
 

@@ -71,7 +71,6 @@
 #include <colmgr.hxx>
 #include <grfatr.hxx>
 #include <uiitems.hxx>
-// OD 19.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 
 #include <frmui.hrc>
@@ -93,16 +92,16 @@ struct FrmMap
 {
     SvxSwFramePosString::StringId eStrId;
     SvxSwFramePosString::StringId eMirrorStrId;
-    USHORT nAlign;
-    ULONG  nLBRelations;
+    sal_uInt16 nAlign;
+    sal_uLong  nLBRelations;
 };
 
 struct RelationMap
 {
     SvxSwFramePosString::StringId eStrId;
     SvxSwFramePosString::StringId eMirrorStrId;
-    ULONG  nLBRelation;
-    USHORT nRelation;
+    sal_uLong  nLBRelation;
+    sal_uInt16 nRelation;
 };
 
 struct StringIdPair_Impl
@@ -114,36 +113,33 @@ struct StringIdPair_Impl
 #define MAX_PERCENT_WIDTH   254L
 #define MAX_PERCENT_HEIGHT  254L
 
-// OD 19.09.2003 #i18732# - change order of alignments
-#define LB_FRAME                0x00000001L // Textbereich des Absatzes
-#define LB_PRTAREA              0x00000002L // Textbereich des Absatzes + Einzuege
-#define LB_VERT_FRAME           0x00000004L // Vertikaler Textbereich des Absatzes
-#define LB_VERT_PRTAREA         0x00000008L // Vertikaler Textbereich des Absatzes + Einzuege
-#define LB_REL_FRM_LEFT         0x00000010L // Linker Absatzrand
-#define LB_REL_FRM_RIGHT        0x00000020L // Rechter Absatzrand
+#define LB_FRAME                0x00000001L // text region of the paragraph
+#define LB_PRTAREA              0x00000002L // text region of the paragraph + indentions
+#define LB_VERT_FRAME           0x00000004L // vertical text region of the paragraph
+#define LB_VERT_PRTAREA         0x00000008L // vertival text region of the paragraph + indentions
+#define LB_REL_FRM_LEFT         0x00000010L // left paragraph edge
+#define LB_REL_FRM_RIGHT        0x00000020L // right paragraph edge
 
-#define LB_REL_PG_LEFT          0x00000040L // Linker Seitenrand
-#define LB_REL_PG_RIGHT         0x00000080L    // Rechter Seitenrand
-#define LB_REL_PG_FRAME         0x00000100L // Gesamte Seite
-#define LB_REL_PG_PRTAREA       0x00000200L    // Textbereich der Seite
+#define LB_REL_PG_LEFT          0x00000040L // left page edge
+#define LB_REL_PG_RIGHT         0x00000080L    // right page edge
+#define LB_REL_PG_FRAME         0x00000100L // whole page
+#define LB_REL_PG_PRTAREA       0x00000200L    // text region of the page
 
-#define LB_FLY_REL_PG_LEFT      0x00000400L    // Linker Rahmenrand
-#define LB_FLY_REL_PG_RIGHT     0x00000800L    // Rechter Rahmenrand
-#define LB_FLY_REL_PG_FRAME     0x00001000L    // Gesamte Rahmen
-#define LB_FLY_REL_PG_PRTAREA   0x00002000L    // Rahmeninneres
+#define LB_FLY_REL_PG_LEFT      0x00000400L    // left frame edge
+#define LB_FLY_REL_PG_RIGHT     0x00000800L    // right frame edge
+#define LB_FLY_REL_PG_FRAME     0x00001000L    // whole frame
+#define LB_FLY_REL_PG_PRTAREA   0x00002000L    // inside of the frame
 
-#define LB_REL_BASE             0x00010000L // Zeichenausrichtung Basis
-#define LB_REL_CHAR             0x00020000L // Zeichenausrichtung Zeichen
-#define LB_REL_ROW              0x00040000L // Zeichenausrichtung Zeile
+#define LB_REL_BASE             0x00010000L // character alignment Base
+#define LB_REL_CHAR             0x00020000L // character alignment Character
+#define LB_REL_ROW              0x00040000L // character alignment Row
 
-// OD 10.11.2003 #i22305#
 #define LB_FLY_VERT_FRAME       0x00100000L // vertical entire frame
 #define LB_FLY_VERT_PRTAREA     0x00200000L // vertical frame text area
 
-// OD 11.11.2003 #i22341#
 #define LB_VERT_LINE            0x00400000L // vertical text line
 
-static RelationMap __FAR_DATA aRelationMap[] =
+static RelationMap aRelationMap[] =
 {
     {SwFPos::FRAME,  SwFPos::FRAME, LB_FRAME, text::RelOrientation::FRAME},
     {SwFPos::PRTAREA,           SwFPos::PRTAREA,                LB_PRTAREA,             text::RelOrientation::PRINT_AREA},
@@ -163,15 +159,13 @@ static RelationMap __FAR_DATA aRelationMap[] =
     {SwFPos::REL_BORDER,        SwFPos::REL_BORDER,             LB_VERT_FRAME,          text::RelOrientation::FRAME},
     {SwFPos::REL_PRTAREA,       SwFPos::REL_PRTAREA,            LB_VERT_PRTAREA,        text::RelOrientation::PRINT_AREA},
 
-    // OD 10.11.2003 #i22305#
     {SwFPos::FLY_REL_PG_FRAME,      SwFPos::FLY_REL_PG_FRAME,   LB_FLY_VERT_FRAME,      text::RelOrientation::FRAME},
     {SwFPos::FLY_REL_PG_PRTAREA,    SwFPos::FLY_REL_PG_PRTAREA,     LB_FLY_VERT_PRTAREA,    text::RelOrientation::PRINT_AREA},
 
-    // OD 11.11.2003 #i22341#
     {SwFPos::REL_LINE,  SwFPos::REL_LINE,   LB_VERT_LINE,   text::RelOrientation::TEXT_LINE}
 };
 
-static RelationMap __FAR_DATA aAsCharRelationMap[] =
+static RelationMap aAsCharRelationMap[] =
 {
     {SwFPos::REL_BASE,  SwFPos::REL_BASE,   LB_REL_BASE,    text::RelOrientation::FRAME},
     {SwFPos::REL_CHAR,   SwFPos::REL_CHAR,   LB_REL_CHAR,   text::RelOrientation::FRAME},
@@ -179,12 +173,12 @@ static RelationMap __FAR_DATA aAsCharRelationMap[] =
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Seite verankert
+    Description: site anchored
  --------------------------------------------------------------------*/
 #define HORI_PAGE_REL   (LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_PG_LEFT| \
                         LB_REL_PG_RIGHT)
 
-static FrmMap __FAR_DATA aHPageMap[] =
+static FrmMap aHPageMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,      HORI_PAGE_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      text::HoriOrientation::RIGHT,     HORI_PAGE_REL},
@@ -192,14 +186,14 @@ static FrmMap __FAR_DATA aHPageMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   text::HoriOrientation::NONE,      HORI_PAGE_REL}
 };
 
-static FrmMap __FAR_DATA aHPageHtmlMap[] =
+static FrmMap aHPageHtmlMap[] =
 {
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   text::HoriOrientation::NONE,      LB_REL_PG_FRAME}
 };
 
 #define VERT_PAGE_REL   (LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
 
-static FrmMap __FAR_DATA aVPageMap[] =
+static FrmMap aVPageMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,       VERT_PAGE_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         text::VertOrientation::BOTTOM,    VERT_PAGE_REL},
@@ -207,18 +201,18 @@ static FrmMap __FAR_DATA aVPageMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        text::VertOrientation::NONE,      VERT_PAGE_REL}
 };
 
-static FrmMap __FAR_DATA aVPageHtmlMap[] =
+static FrmMap aVPageHtmlMap[] =
 {
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        text::VertOrientation::NONE,      LB_REL_PG_FRAME}
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Rahmen verankert
+    Description: frame anchored
  --------------------------------------------------------------------*/
 #define HORI_FRAME_REL  (LB_FLY_REL_PG_FRAME|LB_FLY_REL_PG_PRTAREA| \
                         LB_FLY_REL_PG_LEFT|LB_FLY_REL_PG_RIGHT)
 
-static FrmMap __FAR_DATA aHFrameMap[] =
+static FrmMap aHFrameMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,  HORI_FRAME_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      text::HoriOrientation::RIGHT,     HORI_FRAME_REL},
@@ -226,17 +220,16 @@ static FrmMap __FAR_DATA aHFrameMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   text::HoriOrientation::NONE,      HORI_FRAME_REL}
 };
 
-static FrmMap __FAR_DATA aHFlyHtmlMap[] =
+static FrmMap aHFlyHtmlMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,      LB_FLY_REL_PG_FRAME},
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   text::HoriOrientation::NONE,      LB_FLY_REL_PG_FRAME}
 };
 
-// OD 19.09.2003 #i18732# - own vertical alignment map for to frame anchored objects
-// OD 10.11.2003 #i22305#
+// own vertical alignment map for to frame anchored objects
 #define VERT_FRAME_REL   (LB_FLY_VERT_FRAME|LB_FLY_VERT_PRTAREA)
 
-static FrmMap __FAR_DATA aVFrameMap[] =
+static FrmMap aVFrameMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,       VERT_FRAME_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         text::VertOrientation::BOTTOM,    VERT_FRAME_REL},
@@ -244,21 +237,20 @@ static FrmMap __FAR_DATA aVFrameMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        text::VertOrientation::NONE,      VERT_FRAME_REL}
 };
 
-static FrmMap __FAR_DATA aVFlyHtmlMap[] =
+static FrmMap aVFlyHtmlMap[] =
 {
-    // OD 10.11.2003 #i22305#
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,       LB_FLY_VERT_FRAME},
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        text::VertOrientation::NONE,      LB_FLY_VERT_FRAME}
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Absatz verankert
+    Description: paragraph anchored
  --------------------------------------------------------------------*/
 #define HORI_PARA_REL   (LB_FRAME|LB_PRTAREA|LB_REL_PG_LEFT|LB_REL_PG_RIGHT| \
                         LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_FRM_LEFT| \
                         LB_REL_FRM_RIGHT)
 
-static FrmMap __FAR_DATA aHParaMap[] =
+static FrmMap aHParaMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,      HORI_PARA_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      text::HoriOrientation::RIGHT,     HORI_PARA_REL},
@@ -268,23 +260,23 @@ static FrmMap __FAR_DATA aHParaMap[] =
 
 #define HTML_HORI_PARA_REL  (LB_FRAME|LB_PRTAREA)
 
-static FrmMap __FAR_DATA aHParaHtmlMap[] =
+static FrmMap aHParaHtmlMap[] =
 {
     {SwFPos::LEFT,  SwFPos::LEFT,   text::HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
     {SwFPos::RIGHT, SwFPos::RIGHT,  text::HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
 };
 
-static FrmMap __FAR_DATA aHParaHtmlAbsMap[] =
+static FrmMap aHParaHtmlAbsMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      text::HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
 };
 
-// OD 19.09.2003 #i18732# - allow vertical alignment at page areas
+// allow vertical alignment at page areas
 #define VERT_PARA_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA| \
                          LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
 
-static FrmMap __FAR_DATA aVParaMap[] =
+static FrmMap aVParaMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,       VERT_PARA_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         text::VertOrientation::BOTTOM,    VERT_PARA_REL},
@@ -292,19 +284,19 @@ static FrmMap __FAR_DATA aVParaMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        text::VertOrientation::NONE,      VERT_PARA_REL}
 };
 
-static FrmMap __FAR_DATA aVParaHtmlMap[] =
+static FrmMap aVParaHtmlMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,       LB_VERT_PRTAREA}
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Relativ zum Zeichen verankert
+    Description: anchored relative to the character
  --------------------------------------------------------------------*/
 #define HORI_CHAR_REL   (LB_FRAME|LB_PRTAREA|LB_REL_PG_LEFT|LB_REL_PG_RIGHT| \
                         LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_FRM_LEFT| \
                         LB_REL_FRM_RIGHT|LB_REL_CHAR)
 
-static FrmMap __FAR_DATA aHCharMap[] =
+static FrmMap aHCharMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,      HORI_CHAR_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      text::HoriOrientation::RIGHT,     HORI_CHAR_REL},
@@ -314,27 +306,25 @@ static FrmMap __FAR_DATA aHCharMap[] =
 
 #define HTML_HORI_CHAR_REL  (LB_FRAME|LB_PRTAREA|LB_REL_CHAR)
 
-static FrmMap __FAR_DATA aHCharHtmlMap[] =
+static FrmMap aHCharHtmlMap[] =
 {
     {SwFPos::LEFT,          SwFPos::LEFT,           text::HoriOrientation::LEFT,      HTML_HORI_CHAR_REL},
     {SwFPos::RIGHT,         SwFPos::RIGHT,          text::HoriOrientation::RIGHT,     HTML_HORI_CHAR_REL}
 };
 
-static FrmMap __FAR_DATA aHCharHtmlAbsMap[] =
+static FrmMap aHCharHtmlAbsMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       text::HoriOrientation::LEFT,      LB_PRTAREA|LB_REL_CHAR},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      text::HoriOrientation::RIGHT,     LB_PRTAREA},
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   text::HoriOrientation::NONE,      LB_REL_PG_FRAME}
 };
 
-// OD 19.09.2003 #i18732# - allow vertical alignment at page areas
-// OD 12.11.2003 #i22341# - handle <LB_REL_CHAR> on its own
+// allow vertical alignment at page areas
 #define VERT_CHAR_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA| \
                          LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
 
-static FrmMap __FAR_DATA aVCharMap[] =
+static FrmMap aVCharMap[] =
 {
-    // OD 11.11.2003 #i22341#
     // introduce mappings for new vertical alignment at top of line <LB_VERT_LINE>
     // and correct mapping for vertical alignment at character for position <FROM_BOTTOM>
     // Note: Because of these adjustments the map becomes ambigous in its values
@@ -352,21 +342,21 @@ static FrmMap __FAR_DATA aVCharMap[] =
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    text::VertOrientation::LINE_CENTER,   LB_VERT_LINE}
 };
 
-static FrmMap __FAR_DATA aVCharHtmlMap[] =
+static FrmMap aVCharHtmlMap[] =
 {
     {SwFPos::BELOW,         SwFPos::BELOW,          text::VertOrientation::CHAR_BOTTOM,   LB_REL_CHAR}
 };
 
-static FrmMap __FAR_DATA aVCharHtmlAbsMap[] =
+static FrmMap aVCharHtmlAbsMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            text::VertOrientation::TOP,           LB_REL_CHAR},
     {SwFPos::BELOW,             SwFPos::BELOW,          text::VertOrientation::CHAR_BOTTOM,   LB_REL_CHAR}
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Als Zeichen verankert
+    Description: anchored as character
  --------------------------------------------------------------------*/
-static FrmMap __FAR_DATA aVAsCharMap[] =
+static FrmMap aVAsCharMap[] =
 {
     {SwFPos::TOP,               SwFPos::TOP,            text::VertOrientation::TOP,           LB_REL_BASE},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         text::VertOrientation::BOTTOM,        LB_REL_BASE},
@@ -383,7 +373,7 @@ static FrmMap __FAR_DATA aVAsCharMap[] =
     {SwFPos::FROMBOTTOM,    SwFPos::FROMBOTTOM,     text::VertOrientation::NONE,          LB_REL_BASE}
 };
 
-static FrmMap __FAR_DATA aVAsCharHtmlMap[] =
+static FrmMap aVAsCharHtmlMap[] =
 {
     {SwFPos::TOP,               SwFPos::TOP,            text::VertOrientation::TOP,           LB_REL_BASE},
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    text::VertOrientation::CENTER,        LB_REL_BASE},
@@ -395,14 +385,14 @@ static FrmMap __FAR_DATA aVAsCharHtmlMap[] =
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    text::VertOrientation::LINE_CENTER,   LB_REL_ROW}
 };
 
-static USHORT __FAR_DATA aPageRg[] = {
+static sal_uInt16 aPageRg[] = {
     RES_FRM_SIZE, RES_FRM_SIZE,
     RES_VERT_ORIENT, RES_ANCHOR,
     RES_COL, RES_COL,
     RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW,
     0
 };
-static USHORT __FAR_DATA aAddPgRg[] = {
+static sal_uInt16 aAddPgRg[] = {
     RES_PROTECT,            RES_PROTECT,
     RES_PRINT,              RES_PRINT,
     FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
@@ -435,7 +425,6 @@ size_t lcl_GetFrmMapCount( const FrmMap* pMap)
             return sizeof(aHParaMap) / aSizeOf;
         if ( pMap == aHFrameMap )
             return sizeof(aHFrameMap) / aSizeOf;
-        // OD 19.09.2003 #i18732# - own vertical alignment map for to frame anchored objects
         if ( pMap == aVFrameMap )
             return sizeof(aVFrameMap) / aSizeOf;
         if ( pMap == aHCharMap )
@@ -466,7 +455,7 @@ void lcl_InsertVectors(ListBox& rBox,
     const ::std::vector< String >& rNext, const ::std::vector< String >& rRemain)
 {
     ::std::vector< String >::const_iterator aIt;
-    USHORT nEntry = 0;
+    sal_uInt16 nEntry = 0;
     for(aIt = rPrev.begin(); aIt != rPrev.end(); aIt++)
         nEntry = rBox.InsertEntry(*aIt);
     for(aIt = rThis.begin(); aIt != rThis.end(); aIt++)
@@ -475,7 +464,7 @@ void lcl_InsertVectors(ListBox& rBox,
         nEntry = rBox.InsertEntry(*aIt);
     rBox.SetSeparatorPos(nEntry);
     //now insert all strings sorted
-    USHORT nStartPos = rBox.GetEntryCount();
+    sal_uInt16 nStartPos = rBox.GetEntryCount();
 
     for(aIt = rPrev.begin(); aIt != rPrev.end(); aIt++)
         ::InsertStringSorted(*aIt, rBox, nStartPos );
@@ -487,17 +476,32 @@ void lcl_InsertVectors(ListBox& rBox,
         ::InsertStringSorted(*aIt, rBox, nStartPos );
 }
 
-SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString::StringId eStringId, BOOL bVertical, BOOL bRTL)
+// --> OD 2009-08-31 #mongolianlayout#
+// add input parameter
+SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString::StringId eStringId, sal_Bool bVertical, sal_Bool bVerticalL2R, sal_Bool bRTL)
 {
     //special handling of STR_FROMLEFT
-    if(SwFPos::FROMLEFT == eStringId)
+    if ( SwFPos::FROMLEFT == eStringId )
     {
-        eStringId = bVertical ?
-            bRTL ? SwFPos::FROMBOTTOM : SwFPos::FROMTOP :
-            bRTL ? SwFPos::FROMRIGHT : SwFPos::FROMLEFT;
+        eStringId = bVertical
+                    ? ( bRTL
+                        ? SwFPos::FROMBOTTOM
+                        : SwFPos::FROMTOP )
+                    : ( bRTL
+                        ? SwFPos::FROMRIGHT
+                        : SwFPos::FROMLEFT );
         return eStringId;
     }
-    if(bVertical)
+    // --> OD 2009-08-31 #mongolianlayout#
+    // special handling of STR_FROMTOP in case of mongolianlayout (vertical left-to-right)
+    if ( SwFPos::FROMTOP == eStringId &&
+         bVertical && bVerticalL2R )
+    {
+        eStringId = SwFPos::FROMLEFT;
+        return eStringId;
+    }
+    // <--
+    if ( bVertical )
     {
         //exchange horizontal strings with vertical strings and vice versa
         static const StringIdPair_Impl aHoriIds[] =
@@ -522,7 +526,20 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString
             {SwFPos::REL_FRM_TOP,    SwFPos::REL_FRM_LEFT },
             {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
         };
-        USHORT nIndex;
+        // --> OD 2009-08-31 #monglianlayout#
+        static const StringIdPair_Impl aVertL2RIds[] =
+        {
+            {SwFPos::TOP,            SwFPos::LEFT },
+            {SwFPos::BOTTOM,         SwFPos::RIGHT },
+            {SwFPos::CENTER_VERT,    SwFPos::CENTER_HORI },
+            {SwFPos::FROMTOP,        SwFPos::FROMLEFT },
+            {SwFPos::REL_PG_TOP,     SwFPos::REL_PG_LEFT },
+            {SwFPos::REL_PG_BOTTOM,  SwFPos::REL_PG_RIGHT } ,
+            {SwFPos::REL_FRM_TOP,    SwFPos::REL_FRM_LEFT },
+            {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
+        };
+        // <--
+        sal_uInt16 nIndex;
         for(nIndex = 0; nIndex < sizeof(aHoriIds) / sizeof(StringIdPair_Impl); ++nIndex)
         {
             if(aHoriIds[nIndex].eHori == eStringId)
@@ -534,21 +551,34 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString
         nIndex = 0;
         for(nIndex = 0; nIndex < sizeof(aVertIds) / sizeof(StringIdPair_Impl); ++nIndex)
         {
-            if(aVertIds[nIndex].eHori == eStringId)
+            // --> OD 2009-08-31 #mongolianlayout#
+            if ( !bVerticalL2R )
             {
-                eStringId = aVertIds[nIndex].eVert;
-                break;
+                if(aVertIds[nIndex].eHori == eStringId)
+                {
+                    eStringId = aVertIds[nIndex].eVert;
+                    break;
+                }
             }
+            else
+            {
+                if(aVertL2RIds[nIndex].eHori == eStringId)
+                {
+                    eStringId = aVertL2RIds[nIndex].eVert;
+                    break;
+                }
+            }
+            // <--
         }
     }
     return eStringId;
 }
 
-// OD 12.11.2003 #i22341# - helper method in order to determine all possible
+// helper method in order to determine all possible
 // listbox relations in a relation map for a given relation
-ULONG lcl_GetLBRelationsForRelations( const USHORT _nRel )
+sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 {
-    ULONG nLBRelations = 0L;
+    sal_uLong nLBRelations = 0L;
 
     sal_uInt16 nRelMapSize = sizeof(aRelationMap) / sizeof(RelationMap);
     for ( sal_uInt16 nRelMapPos = 0; nRelMapPos < nRelMapSize; ++nRelMapPos )
@@ -562,13 +592,13 @@ ULONG lcl_GetLBRelationsForRelations( const USHORT _nRel )
     return nLBRelations;
 }
 
-// OD 14.11.2003 #i22341# - helper method on order to determine all possible
+// helper method on order to determine all possible
 // listbox relations in a relation map for a given string ID
-ULONG lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
+sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
                                   const SvxSwFramePosString::StringId _eStrId,
                                   const bool _bUseMirrorStr )
 {
-    ULONG nLBRelations = 0L;
+    sal_uLong nLBRelations = 0L;
 
     size_t nRelMapSize = lcl_GetFrmMapCount( _pMap );
     for ( size_t nRelMapPos = 0; nRelMapPos < nRelMapSize; ++nRelMapPos )
@@ -584,11 +614,11 @@ ULONG lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   StandardRahmenTabPage
+    Description:    standard frame TabPage
  --------------------------------------------------------------------*/
 namespace
 {
-    void HandleAutoCB( BOOL _bChecked, FixedText& _rFT_man, FixedText& _rFT_auto )
+    void HandleAutoCB( sal_Bool _bChecked, FixedText& _rFT_man, FixedText& _rFT_auto )
     {
         _rFT_man.Show( !_bChecked );
         _rFT_auto.Show( _bChecked );
@@ -598,6 +628,7 @@ namespace
 SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage      (pParent, SW_RES(TP_FRM_STD), rSet),
 
+    aSizeFL         (this, SW_RES(FL_SIZE)),
     aWidthFT        (this, SW_RES(FT_WIDTH)),
     aWidthAutoFT    (this, SW_RES(FT_WIDTH_AUTO)),
     aWidthED        (this, SW_RES(ED_WIDTH)),
@@ -610,16 +641,16 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aAutoHeightCB   (this, SW_RES(CB_AUTOHEIGHT)),
     aFixedRatioCB   (this, SW_RES(CB_FIXEDRATIO)),
     aRealSizeBT     (this, SW_RES(BT_REALSIZE)),
-    aSizeFL         (this, SW_RES(FL_SIZE)),
 
-    aTypeFL        (this, SW_RES(FL_TYPE)),
     aTypeSepFL     (this, SW_RES(FL_TYPE_SEP)),
+    aTypeFL        (this, SW_RES(FL_TYPE)),
     aAnchorAtPageRB (this, SW_RES(RB_ANCHOR_PAGE)),
     aAnchorAtParaRB (this, SW_RES(RB_ANCHOR_PARA)),
     aAnchorAtCharRB (this, SW_RES(RB_ANCHOR_AT_CHAR)),
     aAnchorAsCharRB (this, SW_RES(RB_ANCHOR_AS_CHAR)),
     aAnchorAtFrameRB(this, SW_RES(RB_ANCHOR_FRAME)),
 
+    aPositionFL     (this, SW_RES(FL_POSITION)),
     aHorizontalFT   (this, SW_RES(FT_HORIZONTAL)),
     aHorizontalDLB  (this, SW_RES(DLB_HORIZONTAL)),
     aAtHorzPosFT    (this, SW_RES(FT_AT_HORZ_POS)),
@@ -633,28 +664,27 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aAtVertPosED    (this, SW_RES(ED_AT_VERT_POS)),
     aVertRelationFT (this, SW_RES(FT_VERT_RELATION)),
     aVertRelationLB (this, SW_RES(LB_VERT_RELATION)),
-    // OD 19.09.2003 #i18732# - new checkbox
     aFollowTextFlowCB(this, SW_RES(CB_FOLLOWTEXTFLOW)),
-    aPositionFL     (this, SW_RES(FL_POSITION)),
 
     aExampleWN      (this, SW_RES(WN_BSP)),
 
-    bAtHorzPosModified( FALSE ),
-    bAtVertPosModified( FALSE ),
-
-    bFormat(FALSE),
-    bNew(TRUE),
-    bNoModifyHdl(TRUE),
-    bVerticalChanged(FALSE),
-    bIsVerticalFrame(FALSE),
-    bIsInRightToLeft(FALSE),
-    bHtmlMode(FALSE),
+    bAtHorzPosModified( sal_False ),
+    bAtVertPosModified( sal_False ),
+    bFormat(sal_False),
+    bNew(sal_True),
+    bNoModifyHdl(sal_True),
+    // --> OD 2009-08-31 #mongolianlayout# - no used
+//    bVerticalChanged(sal_False),
+    // <--
+    bIsVerticalFrame(sal_False),
+    bIsVerticalL2R(sal_False),
+    bIsInRightToLeft(sal_False),
+    bHtmlMode(sal_False),
     nHtmlMode(0),
     nDlgType(0),
     nUpperBorder(0),
     nLowerBorder(0),
     fWidthHeightRatio(1.0),
-    // OD 12.11.2003 #i22341#
     mpToCharCntntPos( NULL ),
 
     nOldH(text::HoriOrientation::CENTER),
@@ -662,17 +692,21 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     nOldV(text::VertOrientation::TOP),
     nOldVRel(text::RelOrientation::PRINT_AREA),
     pVMap( 0 ),
-    pHMap( 0 )
+    pHMap( 0 ),
+    m_bAllowVertPositioning( true ),
+    m_bIsMathOLE( false ),
+    m_bIsMathBaselineAlignment( true )
 {
     FreeResource();
     SetExchangeSupport();
+
+    aRealSizeBT.SetAccessibleRelationMemberOf(&aSizeFL);
 
     Link aLk = LINK(this, SwFrmPage, RangeModifyHdl);
     aWidthED.    SetLoseFocusHdl( aLk );
     aHeightED.   SetLoseFocusHdl( aLk );
     aAtHorzPosED.SetLoseFocusHdl( aLk );
     aAtVertPosED.SetLoseFocusHdl( aLk );
-    // OD 25.09.2003 #i18732# - click handler for new checkbox
     aFollowTextFlowCB.SetClickHdl( aLk );
 
     aLk = LINK(this, SwFrmPage, ModifyHdl);
@@ -705,7 +739,7 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Dtor
+    Description:    Dtor
  --------------------------------------------------------------------*/
 SwFrmPage::~SwFrmPage()
 {
@@ -728,7 +762,7 @@ namespace
 
 void SwFrmPage::EnableGraficMode( void )
 {
-    // #i39692# mustn't be called more than once
+    // i#39692 - mustn't be called more than once
     if(!aRealSizeBT.IsVisible())
     {
         long nOffset1 = aRelWidthCB.GetPosPixel().Y() - aAutoWidthCB.GetPosPixel().Y();
@@ -758,7 +792,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
             ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
 
     nHtmlMode = ::GetHtmlMode(pSh->GetView().GetDocShell());
-    bHtmlMode = nHtmlMode & HTMLMODE_ON ? TRUE : FALSE;
+    bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
 
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
     SetMetric( aWidthED, aMetric );
@@ -766,39 +800,48 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     SetMetric( aAtHorzPosED, aMetric );
     SetMetric( aAtVertPosED, aMetric );
 
-
+    const SfxPoolItem* pItem = NULL;
     const SwFmtAnchor& rAnchor = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
+
+    if (SFX_ITEM_SET == rSet.GetItemState(FN_OLE_IS_MATH, sal_False, &pItem))
+        m_bIsMathOLE = ((const SfxBoolItem*)pItem)->GetValue();
+    if (SFX_ITEM_SET == rSet.GetItemState(FN_MATH_BASELINE_ALIGNMENT, sal_False, &pItem))
+        m_bIsMathBaselineAlignment = ((const SfxBoolItem*)pItem)->GetValue();
+    EnableVerticalPositioning( !(m_bIsMathOLE && m_bIsMathBaselineAlignment
+            && FLY_AS_CHAR == rAnchor.GetAnchorId()) );
 
     if (bFormat)
     {
-        // Bei Formaten keine Ankerbearbeitung
-        aAnchorAtPageRB.Enable( FALSE );
-        aAnchorAtParaRB.Enable( FALSE );
-        aAnchorAtCharRB.Enable( FALSE );
-        aAnchorAsCharRB.Enable( FALSE );
-        aAnchorAtFrameRB.Enable( FALSE );
-        aTypeFL.Enable( FALSE );
-        aFixedRatioCB.Enable(FALSE);
+        // at formats no anchor editing
+        aAnchorAtPageRB.Enable( sal_False );
+        aAnchorAtParaRB.Enable( sal_False );
+        aAnchorAtCharRB.Enable( sal_False );
+        aAnchorAsCharRB.Enable( sal_False );
+        aAnchorAtFrameRB.Enable( sal_False );
+        aTypeFL.Enable( sal_False );
+        aFixedRatioCB.Enable(sal_False);
     }
     else
     {
         if (rAnchor.GetAnchorId() != FLY_AT_FLY && !pSh->IsFlyInFly())
             aAnchorAtFrameRB.Hide();
-        if(!bVerticalChanged && pSh->IsFrmVertical(TRUE, bIsInRightToLeft))
+        // --> OD 2009-08-31 #mongolianlayout#
+//        if ( !bVerticalChanged && pSh->IsFrmVertical(sal_True, bIsInRightToLeft) )
+        if ( pSh->IsFrmVertical( sal_True, bIsInRightToLeft, bIsVerticalL2R ) )
+        // <--
         {
             String sHLabel = aHorizontalFT.GetText();
             aHorizontalFT.SetText(aVerticalFT.GetText());
             aVerticalFT.SetText(sHLabel);
-            bIsVerticalFrame = TRUE;
+            bIsVerticalFrame = sal_True;
         }
     }
 
     if ( nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE )
     {
         OSL_ENSURE(pSh , "shell not found");
-        const SfxPoolItem* pItem;
-        //OS: nur fuer die Variante Einfuegen/Grafik/Eigenschaften
-        if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_GRF_REALSIZE, FALSE, &pItem))
+        //OS: only for the variant Insert/Graphic/Properties
+        if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_GRF_REALSIZE, sal_False, &pItem))
             aGrfSize = ((const SvxSizeItem*)pItem)->GetSize();
         else
             pSh->GetGrfSize( aGrfSize );
@@ -808,11 +851,9 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
             aRealSizeBT.SetClickHdl(LINK(this, SwFrmPage, RealSizeHdl));
             EnableGraficMode();
         }
-//      else
-//          aTypeFL.SetSizePixel(Size(aTypeFL.GetSizePixel().Width(), aSizeFL.GetSizePixel().Height()));
 
         if ( nDlgType == DLG_FRM_GRF )
-            aFixedRatioCB.Check( FALSE );
+            aFixedRatioCB.Check( sal_False );
         else
         {
             if ( bNew )
@@ -823,11 +864,10 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     }
     else
     {
-//      aTypeFL.SetSizePixel(Size(aTypeFL.GetSizePixel().Width(), aSizeFL.GetSizePixel().Height()));
         aGrfSize = ((const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE)).GetSize();
     }
 
-    //Prozenteingabe ermoeglichen.
+    // entering procent value made possible
     aWidthED. SetBaseValue( aWidthED.Normalize(aGrfSize.Width()), FUNIT_TWIP );
     aHeightED.SetBaseValue( aHeightED.Normalize(aGrfSize.Height()), FUNIT_TWIP );
     //the available space is not yet known so the RefValue has to be calculated from size and relative size values
@@ -849,7 +889,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         aHeightED.SetRefValue( nSpace );
     }
 
-    // Allgemeiner Initialisierungteil
+    // general initialisation part
     switch(rAnchor.GetAnchorId())
     {
         case FLY_AT_PAGE: aAnchorAtPageRB.Check(); break;
@@ -860,11 +900,11 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         default:; //prevent warning
     }
 
-    // OD 12.11.2003 #i22341# - determine content position of character
+    // i#22341 - determine content position of character
     // Note: content position can be NULL
     mpToCharCntntPos = rAnchor.GetCntntAnchor();
 
-    // OD 19.09.2003 #i18732# - init checkbox value
+    // i#18732 - init checkbox value
     {
         const bool bFollowTextFlow =
             static_cast<const SwFmtFollowTextFlow&>(rSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
@@ -876,9 +916,9 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         if(nDlgType == DLG_FRM_STD &&
                 0 == (nHtmlMode & HTMLMODE_FULL_ABS_POS))
         {
-            aHeightFT   .Enable( FALSE );
-            aHeightED   .Enable( FALSE );
-            aRelHeightCB.Enable( FALSE );
+            aHeightFT   .Enable( sal_False );
+            aHeightED   .Enable( sal_False );
+            aRelHeightCB.Enable( sal_False );
         }
         if( 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS))
         {
@@ -886,40 +926,39 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
             {
                 aAnchorAtParaRB.Check();
             }
-            aAnchorAtPageRB.Enable(FALSE);
+            aAnchorAtPageRB.Enable(sal_False);
         }
-        aAutoHeightCB.Enable(FALSE);
-        aAutoWidthCB.Enable(FALSE);
-        aMirrorPagesCB.Show(FALSE);
+        aAutoHeightCB.Enable(sal_False);
+        aAutoWidthCB.Enable(sal_False);
+        aMirrorPagesCB.Show(sal_False);
         if(nDlgType == DLG_FRM_STD)
-            aFixedRatioCB.Enable(FALSE);
-        // OD 19.09.2003 #i18732# - hide checkbox in HTML mode
-        aFollowTextFlowCB.Show(FALSE);
+            aFixedRatioCB.Enable(sal_False);
+        // i#18732 hide checkbox in HTML mode
+        aFollowTextFlowCB.Show(sal_False);
     }
     else
     {
-        // OD 06.11.2003 #i18732# correct enable/disable of check box 'Mirror on..'
+        // enable/disable of check box 'Mirror on..'
         aMirrorPagesCB.Enable(!aAnchorAsCharRB.IsChecked());
 
-        // OD 06.11.2003 #i18732# - enable/disable check box 'Follow text flow'.
-        // OD 10.11.2003 #i22305# - enable check box 'Follow text
+        // enable/disable check box 'Follow text flow'.
+        // enable check box 'Follow text
         // flow' also for anchor type to-frame.
         aFollowTextFlowCB.Enable( aAnchorAtParaRB.IsChecked() ||
                                   aAnchorAtCharRB.IsChecked() ||
                                   aAnchorAtFrameRB.IsChecked() );
     }
 
-    Init( rSet, TRUE );
+    Init( rSet, sal_True );
     aAtVertPosED.SaveValue();
     aAtHorzPosED.SaveValue();
-    // OD 19.09.2003 #i18732#
     aFollowTextFlowCB.SaveValue();
 
-    bNoModifyHdl = FALSE;
+    bNoModifyHdl = sal_False;
     //lock PercentFields
     aWidthED.LockAutoCalculation(sal_True);
     aHeightED.LockAutoCalculation(sal_True);
-    RangeModifyHdl(&aWidthED);  // Alle Maximalwerte initial setzen
+    RangeModifyHdl(&aWidthED);  // set all maximum values initially
     aHeightED.LockAutoCalculation(sal_False);
     aWidthED.LockAutoCalculation(sal_False);
 
@@ -932,11 +971,11 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Attribute in den Set stopfen bei OK
+    Description:    stuff attributes into the set when OK
  --------------------------------------------------------------------*/
-BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
+sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
                         : ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
     OSL_ENSURE( pSh , "shell not found");
@@ -960,7 +999,7 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
         SwFmtHoriOrient aHoriOrient( (const SwFmtHoriOrient&)
                                                 rOldSet.Get(RES_HORI_ORIENT) );
 
-        USHORT nMapPos = GetMapPos(pHMap, aHorizontalDLB);
+        sal_uInt16 nMapPos = GetMapPos(pHMap, aHorizontalDLB);
         short nAlign = GetAlignment(pHMap, nMapPos, aHorizontalDLB, aHoriRelationLB);
         short nRel = GetRelation(pHMap, aHoriRelationLB);
 
@@ -971,7 +1010,7 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
         aHoriOrient.SetRelationOrient( eRel );
         aHoriOrient.SetPosToggle(aMirrorPagesCB.IsChecked());
 
-        BOOL bMod = aAtHorzPosED.GetText() != aAtHorzPosED.GetSavedValue();
+        sal_Bool bMod = aAtHorzPosED.GetText() != aAtHorzPosED.GetSavedValue();
         bMod |= aMirrorPagesCB.GetState() != aMirrorPagesCB.GetSavedValue();
 
         if ( eHOri == text::HoriOrientation::NONE &&
@@ -982,10 +1021,10 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
         }
 
         pOldItem = GetOldItem(rSet, FN_HORI_ORIENT);
-        BOOL bSame = FALSE;
+        sal_Bool bSame = sal_False;
         if ((bNew == bFormat) && pOldItem)
         {
-             bSame = static_cast< BOOL >(aHoriOrient == (SwFmtHoriOrient&)*pOldItem);
+             bSame = static_cast< sal_Bool >(aHoriOrient == (SwFmtHoriOrient&)*pOldItem);
         }
         if ((bNew && !bFormat) || ((bAtHorzPosModified || bMod) && !bSame))
         {
@@ -995,11 +1034,11 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
 
     if ( pVMap )
     {
-        // Ausrichtung Vertikal
+        // alignment vertical
         SwFmtVertOrient aVertOrient( (const SwFmtVertOrient&)
                                                 rOldSet.Get(RES_VERT_ORIENT) );
 
-        USHORT nMapPos = GetMapPos(pVMap, aVerticalDLB);
+        sal_uInt16 nMapPos = GetMapPos(pVMap, aVerticalDLB);
         short nAlign = GetAlignment(pVMap, nMapPos, aVerticalDLB, aVertRelationLB);
         short nRel = GetRelation(pVMap, aVertRelationLB);
 
@@ -1009,13 +1048,13 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
         aVertOrient.SetVertOrient    ( eVOri);
         aVertOrient.SetRelationOrient( eRel );
 
-        BOOL bMod = aAtVertPosED.GetText() != aAtVertPosED.GetSavedValue();
+        sal_Bool bMod = aAtVertPosED.GetText() != aAtVertPosED.GetSavedValue();
 
         if ( eVOri == text::VertOrientation::NONE &&
              ( bNew || (bAtVertPosModified || bMod) || nOldV != eVOri) )
         {
-            // Vertikale Position
-            // fuer zeichengebundene Rahmen Offset umrechenen
+            // vertival position
+            // recalculate offset for character bound frames
             SwTwips nY = static_cast< SwTwips >(aAtVertPosED.Denormalize(aAtVertPosED.GetValue(FUNIT_TWIP)));
             if (eAnchorId == FLY_AS_CHAR)
             {
@@ -1024,10 +1063,10 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
             aVertOrient.SetPos( nY );
         }
         pOldItem = GetOldItem(rSet, FN_VERT_ORIENT);
-        BOOL bSame = FALSE;
+        sal_Bool bSame = sal_False;
         if((bNew == bFormat) && pOldItem)
         {
-             bSame = static_cast< BOOL >( bFormat ?
+             bSame = static_cast< sal_Bool >( bFormat ?
                 aVertOrient.GetVertOrient() == ((SwFmtVertOrient*)pOldItem)->GetVertOrient() &&
                 aVertOrient.GetRelationOrient() == ((SwFmtVertOrient*)pOldItem)->GetRelationOrient() &&
                 aVertOrient.GetPos() == ((SwFmtVertOrient*)pOldItem)->GetPos()
@@ -1040,25 +1079,19 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
         }
     }
 
-    //Size setzen
-    //Neuer Sonderfall: Ist die Groesse von pMgr(0, 0), so werden die
-    //Eigenschaften fuer eine Grafik festgelegt, die noch gar nicht geladen
-    //ist. Dann wird hier kein SetSize() gemacht, wenn die
-    //Groesseneinstellungen vom Anwender nicht veraendert wurden.
+    // set size
+    // new exception: when the size of pMgr(, 0), then the properties
+    // for a graphic that isn't even loaded, are set. Then no SetSize
+    // is done here when the size settings were not changed by the
+    // user.
     const SwFmtFrmSize& rOldSize = (const SwFmtFrmSize& )rOldSet.Get(RES_FRM_SIZE);
     SwFmtFrmSize aSz( rOldSize );
 
-/*  // Folgende Zeilen nur zum debuggen:
-    BOOL bModified = aWidthED.IsValueModified();
-    USHORT nOldWidth = rOldSize.GetWidth ();
-    USHORT nWidth = aWidthED .GetValue();
-    USHORT nMinWidth = aWidthED .GetMin();*/
-
-    BOOL bValueModified = (aWidthED.IsValueModified() || aHeightED.IsValueModified());
-    BOOL bCheckChanged = (aRelWidthCB.GetSavedValue() != aRelWidthCB.IsChecked()
+    sal_Bool bValueModified = (aWidthED.IsValueModified() || aHeightED.IsValueModified());
+    sal_Bool bCheckChanged = (aRelWidthCB.GetSavedValue() != aRelWidthCB.IsChecked()
                         || aRelHeightCB.GetSavedValue() != aRelHeightCB.IsChecked());
 
-    BOOL bLegalValue = !(!rOldSize.GetWidth () && !rOldSize.GetHeight() &&
+    sal_Bool bLegalValue = !(!rOldSize.GetWidth () && !rOldSize.GetHeight() &&
                             aWidthED .GetValue() == aWidthED .GetMin() &&
                             aHeightED.GetValue() == aHeightED.GetMin());
 
@@ -1071,12 +1104,12 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
 
         if (aRelWidthCB.IsChecked())
         {
-            aSz.SetWidthPercent((BYTE)Min( static_cast< sal_Int64 >(MAX_PERCENT_WIDTH), aWidthED.Convert(aWidthED.NormalizePercent(nNewWidth), FUNIT_TWIP, FUNIT_CUSTOM)));
+            aSz.SetWidthPercent((sal_uInt8)Min( static_cast< sal_Int64 >(MAX_PERCENT_WIDTH), aWidthED.Convert(aWidthED.NormalizePercent(nNewWidth), FUNIT_TWIP, FUNIT_CUSTOM)));
         }
         else
             aSz.SetWidthPercent(0);
         if (aRelHeightCB.IsChecked())
-            aSz.SetHeightPercent((BYTE)Min(static_cast< sal_Int64 >(MAX_PERCENT_HEIGHT), aHeightED.Convert(aHeightED.NormalizePercent(nNewHeight), FUNIT_TWIP, FUNIT_CUSTOM)));
+            aSz.SetHeightPercent((sal_uInt8)Min(static_cast< sal_Int64 >(MAX_PERCENT_HEIGHT), aHeightED.Convert(aHeightED.NormalizePercent(nNewHeight), FUNIT_TWIP, FUNIT_CUSTOM)));
         else
             aSz.SetHeightPercent(0);
 
@@ -1113,12 +1146,11 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
                 (aSz.GetWidth() > 0 || aSz.GetWidthPercent() > 0) &&
                     (aSz.GetHeight() > 0 || aSz.GetHeightPercent() > 0)))
     {
-        if (aSz.GetHeightSizeType() == ATT_VAR_SIZE)    // VAR_SIZE gibts nicht bei Rahmen
-            aSz.SetHeightSizeType(ATT_MIN_SIZE);        // Bug #45776 (Vorlagen ohne Breite/Hoehe)
+        if (aSz.GetHeightSizeType() == ATT_VAR_SIZE)    // there is no VAR_SIZE in frames
+            aSz.SetHeightSizeType(ATT_MIN_SIZE);
 
         bRet |= 0 != rSet.Put( aSz );
     }
-    // OD 19.09.2003 #i18732#
     if(aFollowTextFlowCB.IsChecked() != aFollowTextFlowCB.GetSavedValue())
     {
         bRet |= 0 != rSet.Put(SwFmtFollowTextFlow(aFollowTextFlowCB.IsChecked()));
@@ -1127,17 +1159,17 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Horizontale und vertikale Pos initialisieren
+    Description:    initialise horizonal and vertical Pos
  --------------------------------------------------------------------*/
 void SwFrmPage::InitPos(RndStdIds eId,
-                                USHORT nH,
-                                USHORT nHRel,
-                                USHORT nV,
-                                USHORT nVRel,
+                                sal_uInt16 nH,
+                                sal_uInt16 nHRel,
+                                sal_uInt16 nV,
+                                sal_uInt16 nVRel,
                                 long   nX,
                                 long   nY)
 {
-    USHORT nPos = aVerticalDLB.GetSelectEntryPos();
+    sal_uInt16 nPos = aVerticalDLB.GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND && pVMap )
     {
         nOldV    = pVMap[nPos].nAlign;
@@ -1157,7 +1189,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
             nOldHRel = ((RelationMap *)aHoriRelationLB.GetEntryData(nPos))->nRelation;
     }
 
-    BOOL bEnable = TRUE;
+    sal_Bool bEnable = sal_True;
     if ( eId == FLY_AT_PAGE )
     {
         pVMap = bHtmlMode ? aVPageHtmlMap : aVPageMap;
@@ -1165,7 +1197,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
     }
     else if ( eId == FLY_AT_FLY )
     {
-        // OD 19.09.2003 #i18732# - own vertical alignment map for to frame
+        // own vertical alignment map for to frame
         // anchored objects.
         pVMap = bHtmlMode ? aVFlyHtmlMap : aVFrameMap;
         pHMap = bHtmlMode ? aHFlyHtmlMap : aHFrameMap;
@@ -1200,33 +1232,30 @@ void SwFrmPage::InitPos(RndStdIds eId,
     {
         pVMap = bHtmlMode ? aVAsCharHtmlMap     : aVAsCharMap;
         pHMap = 0;
-        bEnable = FALSE;
+        bEnable = sal_False;
     }
     aHorizontalDLB.Enable( bEnable );
     aHorizontalFT.Enable( bEnable );
 
-    // aktuelle Pos selektieren
-    // Horizontal
+    // select current Pos
+    // horizontal
     if ( nH == USHRT_MAX )
     {
         nH    = nOldH;
         nHRel = nOldHRel;
     }
-    // OD 12.11.2003 #i22341# - pass <nHRel> as 3rd parameter to method <FillPosLB>
-    USHORT nMapPos = FillPosLB(pHMap, nH, nHRel, aHorizontalDLB);
+    sal_uInt16 nMapPos = FillPosLB(pHMap, nH, nHRel, aHorizontalDLB);
     FillRelLB(pHMap, nMapPos, nH, nHRel, aHoriRelationLB, aHoriRelationFT);
 
-    // Vertikal
+    // vertical
     if ( nV == USHRT_MAX )
     {
         nV    = nOldV;
         nVRel = nOldVRel;
     }
-    // OD 12.11.2003 #i22341# - pass <nVRel> as 3rd parameter to method <FillPosLB>
     nMapPos = FillPosLB(pVMap, nV, nVRel, aVerticalDLB);
     FillRelLB(pVMap, nMapPos, nV, nVRel, aVertRelationLB, aVertRelationFT);
 
-    // Edits init
     bEnable = nH == text::HoriOrientation::NONE && eId != FLY_AS_CHAR;
     if (!bEnable)
     {
@@ -1242,7 +1271,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
     aAtHorzPosFT.Enable( bEnable );
     aAtHorzPosED.Enable( bEnable );
 
-    bEnable = nV == text::VertOrientation::NONE && !bFormat;
+    bEnable = nV == text::VertOrientation::NONE;
     if ( !bEnable )
     {
         aAtVertPosED.SetValue( 0, FUNIT_TWIP );
@@ -1261,14 +1290,14 @@ void SwFrmPage::InitPos(RndStdIds eId,
         if ( nY != LONG_MAX )
             aAtVertPosED.SetValue( aAtVertPosED.Normalize(nY), FUNIT_TWIP );
     }
-    aAtVertPosFT.Enable( bEnable );
-    aAtVertPosED.Enable( bEnable );
+    aAtVertPosFT.Enable( bEnable && m_bAllowVertPositioning );
+    aAtVertPosED.Enable( bEnable && m_bAllowVertPositioning );
     UpdateExample();
 }
 
-USHORT SwFrmPage::FillPosLB(const FrmMap* _pMap,
-                            const USHORT _nAlign,
-                            const USHORT _nRel,
+sal_uInt16 SwFrmPage::FillPosLB(const FrmMap* _pMap,
+                            const sal_uInt16 _nAlign,
+                            const sal_uInt16 _nRel,
                             ListBox& _rLB )
 {
     String sSelEntry, sOldEntry;
@@ -1276,28 +1305,32 @@ USHORT SwFrmPage::FillPosLB(const FrmMap* _pMap,
 
     _rLB.Clear();
 
-    // OD 12.11.2003 #i22341# - determine all possible listbox relations for
+    // i#22341 determine all possible listbox relations for
     // given relation for map <aVCharMap>
-    const ULONG nLBRelations = (_pMap != aVCharMap)
+    const sal_uLong nLBRelations = (_pMap != aVCharMap)
                                ? 0L
                                : ::lcl_GetLBRelationsForRelations( _nRel );
 
-    // Listbox fuellen
+    // fill Listbox
     size_t nCount = ::lcl_GetFrmMapCount(_pMap);
     for (size_t i = 0; _pMap && i < nCount; ++i)
     {
-//      #61359# Warum nicht von links/von innen bzw. von oben?
-//      if (!bFormat || (pMap[i].eStrId != SwFPos::FROMLEFT && pMap[i].eStrId != SwFPos::FROMTOP))
+//      Why not from the left/from inside or from above?
         {
             SvxSwFramePosString::StringId eStrId = aMirrorPagesCB.IsChecked() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
-            eStrId = lcl_ChangeResIdToVerticalOrRTL(eStrId, bIsVerticalFrame, bIsInRightToLeft);
+            // --> OD 2009-08-31 #mongolianlayout#
+            eStrId = lcl_ChangeResIdToVerticalOrRTL( eStrId,
+                                                     bIsVerticalFrame,
+                                                     bIsVerticalL2R,
+                                                     bIsInRightToLeft);
+            // <--
             String sEntry(aFramePosString.GetString(eStrId));
             if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
             {
-                // bei zeichengebundenen Rahmen keine doppelten Eintraege einfuegen
+                // don't insert entries when frames are character bound
                 _rLB.InsertEntry(sEntry);
             }
-            // OD 12.11.2003 #i22341# - add condition to handle map <aVCharMap>
+            // i#22341 - add condition to handle map <aVCharMap>
             // that is ambigous in the alignment.
             if ( _pMap[i].nAlign == _nAlign &&
                  ( !(_pMap == aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )
@@ -1319,15 +1352,15 @@ USHORT SwFrmPage::FillPosLB(const FrmMap* _pMap,
     return GetMapPos(_pMap, _rLB);
 }
 
-ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
-                            const USHORT _nLBSelPos,
-                            const USHORT _nAlign,
-                            USHORT _nRel,
+sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
+                            const sal_uInt16 _nLBSelPos,
+                            const sal_uInt16 _nAlign,
+                            sal_uInt16 _nRel,
                             ListBox& _rLB,
                             FixedText& _rFT )
 {
     String sSelEntry;
-    ULONG  nLBRelations = 0;
+    sal_uLong  nLBRelations = 0;
     size_t nMapCount = ::lcl_GetFrmMapCount(_pMap);
 
     _rLB.Clear();
@@ -1337,7 +1370,7 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
         if (_pMap == aVAsCharHtmlMap || _pMap == aVAsCharMap)
         {
             String sOldEntry(_rLB.GetSelectEntry());
-            USHORT nRelCount = sizeof(aAsCharRelationMap) / sizeof(RelationMap);
+            sal_uInt16 nRelCount = sizeof(aAsCharRelationMap) / sizeof(RelationMap);
             SvxSwFramePosString::StringId eStrId = _pMap[_nLBSelPos].eStrId;
 
             for (size_t nMapPos = 0; nMapPos < nMapCount; nMapPos++)
@@ -1345,15 +1378,21 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
                 if (_pMap[nMapPos].eStrId == eStrId)
                 {
                     nLBRelations = _pMap[nMapPos].nLBRelations;
-                    for (USHORT nRelPos = 0; nRelPos < nRelCount; nRelPos++)
+                    for (sal_uInt16 nRelPos = 0; nRelPos < nRelCount; nRelPos++)
                     {
                         if (nLBRelations & aAsCharRelationMap[nRelPos].nLBRelation)
                         {
                             SvxSwFramePosString::StringId sStrId1 = aAsCharRelationMap[nRelPos].eStrId;
 
-                            sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, bIsVerticalFrame, bIsInRightToLeft);
+                            // --> OD 2009-08-31 #mongolianlayout#
+                            sStrId1 =
+                                lcl_ChangeResIdToVerticalOrRTL( sStrId1,
+                                                                bIsVerticalFrame,
+                                                                bIsVerticalL2R,
+                                                                bIsInRightToLeft);
+                            // <--
                             String sEntry = aFramePosString.GetString(sStrId1);
-                            USHORT nPos = _rLB.InsertEntry(sEntry);
+                            sal_uInt16 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
                             if (_pMap[nMapPos].nAlign == _nAlign)
                                 sSelEntry = sEntry;
@@ -1370,10 +1409,10 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
 
                 if (!_rLB.GetSelectEntryCount())
                 {
-                    for (USHORT i = 0; i < _rLB.GetEntryCount(); i++)
+                    for (sal_uInt16 i = 0; i < _rLB.GetEntryCount(); i++)
                     {
                         RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(i);
-                        if (pEntry->nLBRelation == LB_REL_CHAR) // Default
+                        if (pEntry->nLBRelation == LB_REL_CHAR) // default
                         {
                             _rLB.SelectEntryPos(i);
                             break;
@@ -1384,9 +1423,9 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
         }
         else
         {
-            USHORT nRelCount = sizeof(aRelationMap) / sizeof(RelationMap);
+            sal_uInt16 nRelCount = sizeof(aRelationMap) / sizeof(RelationMap);
 
-            // OD 14.11.2003 #i22341# - special handling for map <aVCharMap>,
+            // special handling for map <aVCharMap>,
             // because its ambigous in its <eStrId>/<eMirrorStrId>.
             if ( _pMap == aVCharMap )
             {
@@ -1401,19 +1440,25 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
                 nLBRelations = _pMap[_nLBSelPos].nLBRelations;
             }
 
-            for (ULONG nBit = 1; nBit < 0x80000000; nBit <<= 1)
+            for (sal_uLong nBit = 1; nBit < 0x80000000; nBit <<= 1)
             {
                 if (nLBRelations & nBit)
                 {
-                    for (USHORT nRelPos = 0; nRelPos < nRelCount; nRelPos++)
+                    for (sal_uInt16 nRelPos = 0; nRelPos < nRelCount; nRelPos++)
                     {
                         if (aRelationMap[nRelPos].nLBRelation == nBit)
                         {
                             SvxSwFramePosString::StringId eStrId1 = aMirrorPagesCB.IsChecked() ?
                                             aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
-                            eStrId1 = lcl_ChangeResIdToVerticalOrRTL(eStrId1, bIsVerticalFrame, bIsInRightToLeft);
+                            // --> OD 2009-08-31 #mongolianlayout#
+                            eStrId1 =
+                                lcl_ChangeResIdToVerticalOrRTL( eStrId1,
+                                                                bIsVerticalFrame,
+                                                                bIsVerticalL2R,
+                                                                bIsInRightToLeft);
+                            // <--
                             String sEntry = aFramePosString.GetString(eStrId1);
-                            USHORT nPos = _rLB.InsertEntry(sEntry);
+                            sal_uInt16 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
                             if (!sSelEntry.Len() && aRelationMap[nRelPos].nRelation == _nRel)
                                 sSelEntry = sEntry;
@@ -1425,7 +1470,7 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
                 _rLB.SelectEntry(sSelEntry);
             else
             {
-                // Warscheinlich Ankerwechsel. Daher aehnliche Relation suchen
+                // Probably anchor switch. So look for similar relation
                 switch (_nRel)
                 {
                     case text::RelOrientation::FRAME:           _nRel = text::RelOrientation::PAGE_FRAME;   break;
@@ -1446,7 +1491,7 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
                         break;
                 }
 
-                for (USHORT i = 0; i < _rLB.GetEntryCount(); i++)
+                for (sal_uInt16 i = 0; i < _rLB.GetEntryCount(); i++)
                 {
                     RelationMap *pEntry = (RelationMap *)_rLB.GetEntryData(i);
                     if (pEntry->nRelation == _nRel)
@@ -1462,8 +1507,10 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
         }
     }
 
-    _rLB.Enable(_rLB.GetEntryCount() != 0);
-    _rFT.Enable(_rLB.GetEntryCount() != 0);
+    const bool bEnable = _rLB.GetEntryCount() != 0
+            && (&_rLB != &aVertRelationLB || m_bAllowVertPositioning);
+    _rLB.Enable( bEnable );
+    _rFT.Enable( bEnable );
 
     RelHdl(&_rLB);
 
@@ -1473,7 +1520,7 @@ ULONG SwFrmPage::FillRelLB( const FrmMap* _pMap,
 short SwFrmPage::GetRelation(FrmMap * /*pMap*/, ListBox &rRelationLB)
 {
     short nRel = 0;
-    USHORT nPos = rRelationLB.GetSelectEntryPos();
+    sal_uInt16 nPos = rRelationLB.GetSelectEntryPos();
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -1484,19 +1531,19 @@ short SwFrmPage::GetRelation(FrmMap * /*pMap*/, ListBox &rRelationLB)
     return nRel;
 }
 
-short SwFrmPage::GetAlignment(FrmMap *pMap, USHORT nMapPos,
+short SwFrmPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos,
         ListBox &/*rAlignLB*/, ListBox &rRelationLB)
 {
     short nAlign = 0;
 
-    // OD 14.11.2003 #i22341# - special handling also for map <aVCharMap>,
+    // i#22341 special handling also for map <aVCharMap>,
     // because it contains ambigous items for alignment
     if ( pMap == aVAsCharHtmlMap || pMap == aVAsCharMap ||
          pMap == aVCharMap )
     {
         if (rRelationLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
         {
-            ULONG  nRel = ((RelationMap *)rRelationLB.GetEntryData(rRelationLB.GetSelectEntryPos()))->nLBRelation;
+            sal_uLong  nRel = ((RelationMap *)rRelationLB.GetEntryData(rRelationLB.GetSelectEntryPos()))->nLBRelation;
             size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
@@ -1504,7 +1551,7 @@ short SwFrmPage::GetAlignment(FrmMap *pMap, USHORT nMapPos,
             {
                 if (pMap[i].eStrId == eStrId)
                 {
-                    ULONG nLBRelations = pMap[i].nLBRelations;
+                    sal_uLong nLBRelations = pMap[i].nLBRelations;
                     if (nLBRelations & nRel)
                     {
                         nAlign = pMap[i].nAlign;
@@ -1520,10 +1567,10 @@ short SwFrmPage::GetAlignment(FrmMap *pMap, USHORT nMapPos,
     return nAlign;
 }
 
-USHORT SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
+sal_uInt16 SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
 {
-    USHORT nMapPos = 0;
-    USHORT nLBSelPos = rAlignLB.GetSelectEntryPos();
+    sal_uInt16 nMapPos = 0;
+    sal_uInt16 nLBSelPos = rAlignLB.GetSelectEntryPos();
 
     if (nLBSelPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -1541,7 +1588,7 @@ USHORT SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
 
                 if (sEntry == sSelEntry)
                 {
-                    nMapPos = static_cast< USHORT >(i);
+                    nMapPos = static_cast< sal_uInt16 >(i);
                     break;
                 }
             }
@@ -1576,17 +1623,17 @@ RndStdIds SwFrmPage::GetAnchor()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Bsp - Update
+    Description:    Bsp - Update
  --------------------------------------------------------------------*/
 void SwFrmPage::ActivatePage(const SfxItemSet& rSet)
 {
-    bNoModifyHdl = TRUE;
+    bNoModifyHdl = sal_True;
     Init(rSet);
-    bNoModifyHdl = FALSE;
+    bNoModifyHdl = sal_False;
     //lock PercentFields
     aWidthED.LockAutoCalculation(sal_True);
     aHeightED.LockAutoCalculation(sal_True);
-    RangeModifyHdl(&aWidthED);  // Alle Maximalwerte initial setzen
+    RangeModifyHdl(&aWidthED);  // set all maximum values initially
     aHeightED.LockAutoCalculation(sal_False);
     aWidthED.LockAutoCalculation(sal_False);
     aFollowTextFlowCB.SaveValue();
@@ -1598,9 +1645,8 @@ int SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
     {
         FillItemSet( *_pSet );
 
-        //FillItemSet setzt den Anker nicht in den Set, wenn er mit dem
-        //Original uebereinstimmt. Fuer die anderen Pages brauchen wir aber
-        //den aktuellen Anker.
+        //FillItemSet doesn't set the anchor into the set when it matches
+        //the original. But for the other pages we need the current anchor.
         SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
                             : ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
         RndStdIds eAnchorId = (RndStdIds)GetAnchor();
@@ -1608,11 +1654,11 @@ int SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
         _pSet->Put( aAnc );
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Links/rechts mit Innen/aussen tauschen
+    Description: swap left/right with inside/outside
  --------------------------------------------------------------------*/
 IMPL_LINK( SwFrmPage, MirrorHdl, CheckBox *, EMPTYARG )
 {
@@ -1637,8 +1683,8 @@ IMPL_LINK( SwFrmPage, RelSizeClickHdl, CheckBox *, pBtn )
             aHeightED.MetricField::SetMax(MAX_PERCENT_HEIGHT);
     }
 
-    if (pBtn)   // Nur wenn Handler durch Aenderung des Controllers gerufen wurde
-        RangeModifyHdl(&aWidthED);  // Werte wieder korrigieren
+    if (pBtn)   // only when Handler was called by change of the controller
+        RangeModifyHdl(&aWidthED);  // correct the values again
 
     if (pBtn == &aRelWidthCB)
         ModifyHdl(&aWidthED);
@@ -1649,7 +1695,7 @@ IMPL_LINK( SwFrmPage, RelSizeClickHdl, CheckBox *, pBtn )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Bereichspruefung
+    Description:    range check
  --------------------------------------------------------------------*/
 IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, EMPTYARG )
 {
@@ -1662,17 +1708,16 @@ IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, EMPTYARG )
     SwFlyFrmAttrMgr aMgr( bNew, pSh, (const SwAttrSet&)GetItemSet() );
     SvxSwFrameValidation        aVal;
 
-    aVal.nAnchorType = static_cast< USHORT >(GetAnchor());
+    aVal.nAnchorType = static_cast< sal_uInt16 >(GetAnchor());
     aVal.bAutoHeight = aAutoHeightCB.IsChecked();
     aVal.bAutoWidth = aAutoWidthCB.IsChecked();
     aVal.bMirror = aMirrorPagesCB.IsChecked();
-    // OD 18.09.2003 #i18732#
     aVal.bFollowTextFlow = aFollowTextFlowCB.IsChecked();
 
     if ( pHMap )
     {
-        // Ausrichtung Horizontal
-        USHORT nMapPos = GetMapPos(pHMap, aHorizontalDLB);
+        // alignment horizonal
+        sal_uInt16 nMapPos = GetMapPos(pHMap, aHorizontalDLB);
         short nAlign = GetAlignment(pHMap, nMapPos, aHorizontalDLB, aHoriRelationLB);
         short nRel = GetRelation(pHMap, aHoriRelationLB);
 
@@ -1684,8 +1729,8 @@ IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, EMPTYARG )
 
     if ( pVMap )
     {
-        // Ausrichtung Vertikal
-        USHORT nMapPos = GetMapPos(pVMap, aVerticalDLB);
+        // alignment vertical
+        sal_uInt16 nMapPos = GetMapPos(pVMap, aVerticalDLB);
         short nAlign = GetAlignment(pVMap, nMapPos, aVerticalDLB, aVertRelationLB);
         short nRel = GetRelation(pVMap, aVertRelationLB);
 
@@ -1703,41 +1748,41 @@ IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, EMPTYARG )
     aVal.nHPos = nAtHorzPosVal;
     aVal.nVPos = nAtVertPosVal;
 
-    aMgr.ValidateMetrics(aVal, mpToCharCntntPos, TRUE);   // Einmal, um Referenzwerte fuer prozentuale Werte zu erhalten
+    aMgr.ValidateMetrics(aVal, mpToCharCntntPos, sal_True);   // one time, to get reference values for percental values
 
-    // Referenzwerte fuer fuer Prozentwerte setzen (100%) ...
+    // set reference values for percental values (100%) ...
     aWidthED.SetRefValue(aVal.aPercentSize.Width());
     aHeightED.SetRefValue(aVal.aPercentSize.Height());
 
-    // ... und damit Breite und Hoehe korrekt umrechnen
+    // ... and correctly convert width and height with it
     SwTwips nWidth  = static_cast< SwTwips >(aWidthED. DenormalizePercent(aWidthED.GetValue(FUNIT_TWIP)));
     SwTwips nHeight = static_cast< SwTwips >(aHeightED.DenormalizePercent(aHeightED.GetValue(FUNIT_TWIP)));
     aVal.nWidth  = nWidth;
     aVal.nHeight = nHeight;
 
-    aMgr.ValidateMetrics(aVal, mpToCharCntntPos);    // Nochmal um mit korrekter Breite und Hoehe alle restlichen Werte zu ermitteln
+    aMgr.ValidateMetrics(aVal, mpToCharCntntPos);    // one more time, to determine all remaining values with correct width and height.
 
-    // alle Spalten muessen passen
+    // all columns have to be correct
     if(GetTabDialog()->GetExampleSet() &&
             SFX_ITEM_DEFAULT <= GetTabDialog()->GetExampleSet()->GetItemState(RES_COL))
     {
         const SwFmtCol& rCol = (const SwFmtCol&)GetTabDialog()->GetExampleSet()->Get(RES_COL);
         if ( rCol.GetColumns().Count() > 1 )
         {
-            for ( USHORT i = 0; i < rCol.GetColumns().Count(); ++i )
+            for ( sal_uInt16 i = 0; i < rCol.GetColumns().Count(); ++i )
             {
                 aVal.nMinWidth += rCol.GetColumns()[i]->GetLeft() +
                                   rCol.GetColumns()[i]->GetRight() +
                                   MINFLY;
             }
-            aVal.nMinWidth -= MINFLY;//einen hatten wir schon mit drin!
+            aVal.nMinWidth -= MINFLY;//one was already in there!
         }
     }
 
     nWidth = aVal.nWidth;
     nHeight = aVal.nHeight;
 
-    // Mindestbreite auch fuer Vorlage
+    // minimum range also for template
     aHeightED.SetMin(aHeightED.NormalizePercent(aVal.nMinHeight), FUNIT_TWIP);
     aWidthED. SetMin(aWidthED.NormalizePercent(aVal.nMinWidth), FUNIT_TWIP);
 
@@ -1783,9 +1828,9 @@ IMPL_LINK( SwFrmPage, AnchorTypeHdl, RadioButton *, EMPTYARG )
 {
     aMirrorPagesCB.Enable(!aAnchorAsCharRB.IsChecked());
 
-    // OD 06.11.2003 #i18732# - enable check box 'Follow text flow' for anchor
+    // i#18732 - enable check box 'Follow text flow' for anchor
     // type to-paragraph' and to-character
-    // OD 10.11.2003 #i22305# - enable check box 'Follow text
+    // i#22305 - enable check box 'Follow text
     // flow' also for anchor type to-frame.
     aFollowTextFlowCB.Enable( aAnchorAtParaRB.IsChecked() ||
                               aAnchorAtCharRB.IsChecked() ||
@@ -1801,36 +1846,40 @@ IMPL_LINK( SwFrmPage, AnchorTypeHdl, RadioButton *, EMPTYARG )
         PosHdl(&aHorizontalDLB);
         PosHdl(&aVerticalDLB);
     }
+
+    EnableVerticalPositioning( !(m_bIsMathOLE && m_bIsMathBaselineAlignment
+            && FLY_AS_CHAR == eId) );
+
     return 0;
 }
 
 IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
 {
-    BOOL bHori = pLB == &aHorizontalDLB;
+    sal_Bool bHori = pLB == &aHorizontalDLB;
     ListBox *pRelLB = bHori ? &aHoriRelationLB : &aVertRelationLB;
     FixedText *pRelFT = bHori ? &aHoriRelationFT : &aVertRelationFT;
     FrmMap *pMap = bHori ? pHMap : pVMap;
 
-    USHORT nMapPos = GetMapPos(pMap, *pLB);
+    sal_uInt16 nMapPos = GetMapPos(pMap, *pLB);
     short nAlign = GetAlignment(pMap, nMapPos, *pLB, *pRelLB);
 
     if (bHori)
     {
-        BOOL bEnable = text::HoriOrientation::NONE == nAlign;
+        sal_Bool bEnable = text::HoriOrientation::NONE == nAlign;
         aAtHorzPosED.Enable( bEnable );
         aAtHorzPosFT.Enable( bEnable );
     }
     else
     {
-        BOOL bEnable = text::VertOrientation::NONE == nAlign;
+        sal_Bool bEnable = text::VertOrientation::NONE == nAlign && m_bAllowVertPositioning;
         aAtVertPosED.Enable( bEnable );
         aAtVertPosFT.Enable( bEnable );
     }
 
-    if (pLB)    // Nur wenn Handler durch Aenderung des Controllers gerufen wurde
+    if (pLB)    // only when Handler was called by changing of the controller
         RangeModifyHdl( 0 );
 
-    USHORT nRel = 0;
+    sal_uInt16 nRel = 0;
     if (pLB->GetSelectEntryCount())
     {
 
@@ -1845,19 +1894,19 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
     UpdateExample();
 
     if (bHori)
-        bAtHorzPosModified = TRUE;
+        bAtHorzPosModified = sal_True;
     else
-        bAtVertPosModified = TRUE;
+        bAtVertPosModified = sal_True;
 
-    // Sonderbehandlung fuer HTML-Mode mit horz-vert-Abhaengigkeiten
+    // special treatment for HTML-Mode with horizonal-vertical-dependencies
     if(bHtmlMode && nHtmlMode&HTMLMODE_SOME_ABS_POS &&
             (FLY_AT_CHAR == GetAnchor()))
     {
-        BOOL bSet = FALSE;
+        sal_Bool bSet = sal_False;
         if(bHori)
         {
-            // rechts ist nur unterhalb erlaubt - von links nur oben
-            // von links am Zeichen -> unterhalb
+            // right is allowed only above - from the left only above
+            // from the left at character -> below
             if((text::HoriOrientation::LEFT == nAlign || text::HoriOrientation::RIGHT == nAlign) &&
                     0 == aVerticalDLB.GetSelectEntryPos())
             {
@@ -1865,17 +1914,17 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
                     aVerticalDLB.SelectEntryPos(1);
                 else
                     aVerticalDLB.SelectEntryPos(0);
-                bSet = TRUE;
+                bSet = sal_True;
             }
             else if(text::HoriOrientation::LEFT == nAlign && 1 == aVerticalDLB.GetSelectEntryPos())
             {
                 aVerticalDLB.SelectEntryPos(0);
-                bSet = TRUE;
+                bSet = sal_True;
             }
             else if(text::HoriOrientation::NONE == nAlign && 1 == aVerticalDLB.GetSelectEntryPos())
             {
                 aVerticalDLB.SelectEntryPos(0);
-                bSet = TRUE;
+                bSet = sal_True;
             }
             if(bSet)
                 PosHdl(&aVerticalDLB);
@@ -1887,7 +1936,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
                 if(1 == aHorizontalDLB.GetSelectEntryPos())
                 {
                     aHorizontalDLB.SelectEntryPos(0);
-                    bSet = TRUE;
+                    bSet = sal_True;
                 }
                 aHoriRelationLB.SelectEntryPos(1);
             }
@@ -1896,7 +1945,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
                 if(2 == aHorizontalDLB.GetSelectEntryPos())
                 {
                     aHorizontalDLB.SelectEntryPos(0);
-                    bSet = TRUE;
+                    bSet = sal_True;
                 }
                 aHoriRelationLB.SelectEntryPos(0) ;
             }
@@ -1909,24 +1958,24 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Horizontale Pos
+    Description:    horizonal Pos
  --------------------------------------------------------------------*/
 IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
 {
-    BOOL bHori = pLB == &aHoriRelationLB;
+    sal_Bool bHori = pLB == &aHoriRelationLB;
 
     UpdateExample();
 
     if (bHori)
-        bAtHorzPosModified = TRUE;
+        bAtHorzPosModified = sal_True;
     else
-        bAtVertPosModified = TRUE;
+        bAtVertPosModified = sal_True;
 
     if (bHtmlMode && (FLY_AT_CHAR == GetAnchor()))
     {
         if(bHori)
         {
-            USHORT nRel = GetRelation(pHMap, aHoriRelationLB);
+            sal_uInt16 nRel = GetRelation(pHMap, aHoriRelationLB);
             if(text::RelOrientation::PRINT_AREA == nRel && 0 == aVerticalDLB.GetSelectEntryPos())
             {
                 aVerticalDLB.SelectEntryPos(1);
@@ -1937,7 +1986,7 @@ IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
             }
         }
     }
-    if (pLB)    // Nur wenn Handler durch Aenderung des Controllers gerufen wurde
+    if (pLB)    // Only when Handler was called by changing of the controller
         RangeModifyHdl(0);
 
     return 0;
@@ -1991,10 +2040,10 @@ IMPL_LINK( SwFrmPage, ModifyHdl, Edit *, pEdit )
 
 void SwFrmPage::UpdateExample()
 {
-    USHORT nPos = aHorizontalDLB.GetSelectEntryPos();
+    sal_uInt16 nPos = aHorizontalDLB.GetSelectEntryPos();
     if ( pHMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        USHORT nMapPos = GetMapPos(pHMap, aHorizontalDLB);
+        sal_uInt16 nMapPos = GetMapPos(pHMap, aHorizontalDLB);
         short nAlign = GetAlignment(pHMap, nMapPos, aHorizontalDLB, aHoriRelationLB);
         short nRel = GetRelation(pHMap, aHoriRelationLB);
 
@@ -2005,7 +2054,7 @@ void SwFrmPage::UpdateExample()
     nPos = aVerticalDLB.GetSelectEntryPos();
     if ( pVMap && nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        USHORT nMapPos = GetMapPos(pVMap, aVerticalDLB);
+        sal_uInt16 nMapPos = GetMapPos(pVMap, aVerticalDLB);
         short nAlign = GetAlignment(pVMap, nMapPos, aVerticalDLB, aVertRelationLB);
         short nRel = GetRelation(pVMap, aVertRelationLB);
 
@@ -2013,23 +2062,23 @@ void SwFrmPage::UpdateExample()
         aExampleWN.SetVertRel(nRel);
     }
 
-    // Size
+    // size
     long nXPos = static_cast< long >(aAtHorzPosED.Denormalize(aAtHorzPosED.GetValue(FUNIT_TWIP)));
     long nYPos = static_cast< long >(aAtVertPosED.Denormalize(aAtVertPosED.GetValue(FUNIT_TWIP)));
     aExampleWN.SetRelPos(Point(nXPos, nYPos));
 
-    aExampleWN.SetAnchor( static_cast< USHORT >(GetAnchor()) );
+    aExampleWN.SetAnchor( static_cast< sal_uInt16 >(GetAnchor()) );
     aExampleWN.Invalidate();
 }
 
-void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
+void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
 {
     if(!bFormat)
     {
         SwWrtShell* pSh = ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
 
-        // Size
-        const BOOL bSizeFixed = pSh->IsSelObjProtected( FLYPROTECT_FIXED );
+        // size
+        const sal_Bool bSizeFixed = pSh->IsSelObjProtected( FLYPROTECT_FIXED );
 
         aWidthED .Enable( !bSizeFixed );
         aHeightED.Enable( !bSizeFixed );
@@ -2041,9 +2090,9 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
             const SvGlobalName& rFactNm( pSh->GetOLEObject()->getClassID() );
 
             struct _GlobalNameId {
-                UINT32 n1;
-                USHORT n2, n3;
-                BYTE b8, b9, b10, b11, b12, b13, b14, b15;
+                sal_uInt32 n1;
+                sal_uInt16 n2, n3;
+                sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
             } aGlbNmIds[4] = { { SO3_SM_CLASSID_60 }, { SO3_SM_CLASSID_50 },
                                { SO3_SM_CLASSID_40 }, { SO3_SM_CLASSID_30 } };
 
@@ -2083,8 +2132,8 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
     {
         if(!bReset)
         {
-            // Wert wurde von Umlauf-Tabpage geaendert und muss
-            // mit Modify-Flag gesetzt werden
+            // value was changed by circulation-Tabpage and
+            // has to be set with Modify-Flag
             aWidthED.SetUserValue(nWidth, FUNIT_TWIP);
         }
         else
@@ -2095,8 +2144,8 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
     {
         if (!bReset)
         {
-            // Wert wurde von Umlauf-Tabpage geaendert und muss
-            // mit Modify-Flag gesetzt werden
+            // values was changed by circulation-Tabpage and
+            // has to be set with Modify-Flag
             aHeightED.SetUserValue(nHeight, FUNIT_TWIP);
         }
         else
@@ -2106,7 +2155,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
     if (!IsInGraficMode())
     {
         SwFrmSize eSize = rSize.GetHeightSizeType();
-        BOOL bCheck = eSize != ATT_FIX_SIZE;
+        sal_Bool bCheck = eSize != ATT_FIX_SIZE;
         aAutoHeightCB.Check( bCheck );
         HandleAutoCB( bCheck, aHeightFT, aHeightAutoFT );
         if( eSize == ATT_VAR_SIZE )
@@ -2124,13 +2173,13 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
             SwWrtShell* pSh = ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
             const SwFrmFmt* pFmt = pSh->GetFlyFrmFmt();
             if( pFmt && pFmt->GetChain().GetNext() )
-                aAutoHeightCB.Enable( FALSE );
+                aAutoHeightCB.Enable( sal_False );
         }
     }
     else
         aAutoHeightCB.Hide();
 
-    // Umlauf-Abstand fuer zeichengebundene Rahmen organisieren
+    // organise circulation-gap for character bound frames
     const SvxULSpaceItem &rUL = (const SvxULSpaceItem &)rSet.Get(RES_UL_SPACE);
     nUpperBorder = rUL.GetUpper();
     nLowerBorder = rUL.GetLower();
@@ -2141,9 +2190,9 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
         aFixedRatioCB.SaveValue();
     }
 
-    // Spalten
+    // columns
     SwFmtCol aCol( (const SwFmtCol&)rSet.Get(RES_COL) );
-    ::FitToActualSize( aCol, (USHORT)rSize.GetWidth() );
+    ::FitToActualSize( aCol, (sal_uInt16)rSize.GetWidth() );
 
     RndStdIds eAnchorId = (RndStdIds)GetAnchor();
 
@@ -2182,10 +2231,10 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
                 rVert.GetPos());
     }
 
-    // Transparent fuers Bsp
-    // Umlauf fuers Bsp
+    // transparent for example
+    // circulation for example
     const SwFmtSurround& rSurround = (const SwFmtSurround&)rSet.Get(RES_SURROUND);
-    aExampleWN.SetWrap ( static_cast< USHORT >(rSurround.GetSurround()) );
+    aExampleWN.SetWrap ( static_cast< sal_uInt16 >(rSurround.GetSurround()) );
 
     if ( rSurround.GetSurround() == SURROUND_THROUGHT )
     {
@@ -2193,22 +2242,22 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
         aExampleWN.SetTransparent(!rOpaque.GetValue());
     }
 
-    // ggf auf Prozent umschalten
-    RangeModifyHdl(&aWidthED);  // Referenzwerte setzen (fuer 100%)
+    // switch to percent if applicable
+    RangeModifyHdl(&aWidthED);  // set reference values (for 100%)
 
     if (rSize.GetWidthPercent() == 0xff || rSize.GetHeightPercent() == 0xff)
-        aFixedRatioCB.Check(TRUE);
+        aFixedRatioCB.Check(sal_True);
     if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff &&
         !aRelWidthCB.IsChecked())
     {
-        aRelWidthCB.Check(TRUE);
+        aRelWidthCB.Check(sal_True);
         RelSizeClickHdl(&aRelWidthCB);
         aWidthED.SetPrcntValue(rSize.GetWidthPercent(), FUNIT_CUSTOM);
     }
     if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != 0xff &&
         !aRelHeightCB.IsChecked())
     {
-        aRelHeightCB.Check(TRUE);
+        aRelHeightCB.Check(sal_True);
         RelSizeClickHdl(&aRelHeightCB);
         aHeightED.SetPrcntValue(rSize.GetHeightPercent(), FUNIT_CUSTOM);
     }
@@ -2216,12 +2265,12 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
     aRelHeightCB.SaveValue();
 }
 
-USHORT* SwFrmPage::GetRanges()
+sal_uInt16* SwFrmPage::GetRanges()
 {
     return aPageRg;
 }
 
-void SwFrmPage::SetFormatUsed(BOOL bFmt)
+void SwFrmPage::SetFormatUsed(sal_Bool bFmt)
 {
     bFormat     = bFmt;
     if(bFormat)
@@ -2233,14 +2282,21 @@ void SwFrmPage::SetFormatUsed(BOOL bFmt)
         aAnchorAtFrameRB.Hide();
         aTypeFL.Hide();
         aTypeSepFL.Hide();
-
-//        Point aSizePos = aSizeFL.GetPosPixel();
-//        Size aSizeSize = aSizeFL.GetSizePixel();
-//        aSizeSize.Width() = aTypeFL.GetPosPixel().X() +
-//                    aTypeFL.GetSizePixel().Width() - aSizePos.X();
-//        aSizeFL.SetSizePixel(aSizeSize);
     }
 }
+
+
+void SwFrmPage::EnableVerticalPositioning( bool bEnable )
+{
+    m_bAllowVertPositioning = bEnable;
+    aVerticalFT.Enable( bEnable );
+    aVerticalDLB.Enable( bEnable );
+    aAtVertPosFT.Enable( bEnable );
+    aAtVertPosED.Enable( bEnable );
+    aVertRelationFT.Enable( bEnable );
+    aVertRelationLB.Enable( bEnable );
+}
+
 
 SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage( pParent, SW_RES(TP_GRF_EXT), rSet ),
@@ -2250,7 +2306,7 @@ SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
     aAllPagesRB     (this, SW_RES( RB_MIRROR_ALL_PAGES )),
     aLeftPagesRB    (this, SW_RES( RB_MIRROR_LEFT_PAGES )),
     aRightPagesRB   (this, SW_RES( RB_MIRROR_RIGHT_PAGES )),
-    aBmpWin         (this, WN_BMP, Graphic(), BitmapEx(SW_RES(BMP_EXAMPLE)), BitmapEx(SW_RES(BMP_EXAMPLE_HC)) ),
+    aBmpWin         (this, WN_BMP, Graphic(), BitmapEx(SW_RES(BMP_EXAMPLE))),
     aConnectFL      (this, SW_RES( FL_CONNECT )),
     aConnectFT      (this, SW_RES( FT_CONNECT )),
     aConnectED      (this, SW_RES( ED_CONNECT )),
@@ -2258,6 +2314,8 @@ SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
     pGrfDlg         ( 0 )
 {
     FreeResource();
+
+    aBrowseBT.SetAccessibleRelationMemberOf(&aConnectFL);
 
     SetExchangeSupport();
     aMirrorHorzBox.SetClickHdl( LINK(this, SwGrfExtPage, MirrorHdl));
@@ -2278,14 +2336,14 @@ SfxTabPage* SwGrfExtPage::Create( Window *pParent, const SfxItemSet &rSet )
 void SwGrfExtPage::Reset(const SfxItemSet &rSet)
 {
     const SfxPoolItem* pItem;
-    USHORT nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
-    bHtmlMode = nHtmlMode & HTMLMODE_ON ? TRUE : FALSE;
+    sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
+    bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_GRF_CONNECT, TRUE, &pItem)
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_GRF_CONNECT, sal_True, &pItem)
         && ((const SfxBoolItem *)pItem)->GetValue() )
     {
         aBrowseBT.Enable();
-        aConnectED.SetReadOnly(FALSE);
+        aConnectED.SetReadOnly(sal_False);
     }
 
     ActivatePage(rSet);
@@ -2294,34 +2352,34 @@ void SwGrfExtPage::Reset(const SfxItemSet &rSet)
 void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
 {
     const SvxProtectItem& rProt = (const SvxProtectItem& )rSet.Get(RES_PROTECT);
-    BOOL bProtCntnt = rProt.IsCntntProtected();
+    sal_Bool bProtCntnt = rProt.IsCntntProtected();
 
     const SfxPoolItem* pItem = 0;
-    BOOL bEnable = FALSE;
-    BOOL bEnableMirrorRB = FALSE;
+    sal_Bool bEnable = sal_False;
+    sal_Bool bEnableMirrorRB = sal_False;
 
-    SfxItemState eState = rSet.GetItemState(RES_GRFATR_MIRRORGRF, TRUE, &pItem);
+    SfxItemState eState = rSet.GetItemState(RES_GRFATR_MIRRORGRF, sal_True, &pItem);
     if( SFX_ITEM_UNKNOWN != eState && !bProtCntnt && !bHtmlMode )
     {
         if( SFX_ITEM_SET != eState )
             pItem = &rSet.Get( RES_GRFATR_MIRRORGRF );
 
-        bEnable = TRUE;
+        bEnable = sal_True;
 
         MirrorGraph eMirror = static_cast< MirrorGraph >(((const SwMirrorGrf* )pItem)->GetValue());
         switch( eMirror )
         {
         case RES_MIRROR_GRAPH_DONT: break;
-        case RES_MIRROR_GRAPH_VERT: aMirrorHorzBox.Check(TRUE); break;
-        case RES_MIRROR_GRAPH_HOR:  aMirrorVertBox.Check(TRUE); break;
-        case RES_MIRROR_GRAPH_BOTH: aMirrorHorzBox.Check(TRUE);
-                                    aMirrorVertBox.Check(TRUE);
+        case RES_MIRROR_GRAPH_VERT: aMirrorHorzBox.Check(sal_True); break;
+        case RES_MIRROR_GRAPH_HOR:  aMirrorVertBox.Check(sal_True); break;
+        case RES_MIRROR_GRAPH_BOTH: aMirrorHorzBox.Check(sal_True);
+                                    aMirrorVertBox.Check(sal_True);
                                     break;
         default:
             ;
         }
 
-        USHORT nPos = ((const SwMirrorGrf* )pItem)->IsGrfToggle() ? 1 : 0;
+        sal_uInt16 nPos = ((const SwMirrorGrf* )pItem)->IsGrfToggle() ? 1 : 0;
         nPos += (eMirror == RES_MIRROR_GRAPH_VERT || eMirror == RES_MIRROR_GRAPH_BOTH)
                  ? 2 : 0;
 
@@ -2329,14 +2387,14 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
 
         switch (nPos)
         {
-            case 1: // Auf linken bzw geraden Seiten spiegeln
+            case 1: // mirror at left / even pages
                 aLeftPagesRB.Check();
-                aMirrorHorzBox.Check(TRUE);
+                aMirrorHorzBox.Check(sal_True);
                 break;
-            case 2: // Auf allen Seiten spiegeln
+            case 2: // mirror on all pages
                 aAllPagesRB.Check();
                 break;
-            case 3: // Auf rechten bzw ungeraden Seiten spiegeln
+            case 3: // mirror on right / odd pages
                 aRightPagesRB.Check();
                 break;
             default:
@@ -2345,7 +2403,7 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         }
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, sal_False, &pItem ) )
     {
         const SvxBrushItem& rBrush = *(SvxBrushItem*)pItem;
         if( rBrush.GetGraphicLink() )
@@ -2376,22 +2434,22 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
     aBmpWin.Invalidate();
 }
 
-BOOL SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
+sal_Bool SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
     if ( aMirrorHorzBox.GetSavedValue() != aMirrorHorzBox.IsChecked() ||
          aMirrorVertBox.GetSavedValue() != aMirrorVertBox.IsChecked() ||
          aAllPagesRB .GetSavedValue() != aAllPagesRB .IsChecked() ||
          aLeftPagesRB.GetSavedValue() != aLeftPagesRB.IsChecked() ||
          aRightPagesRB.GetSavedValue() != aRightPagesRB.IsChecked())
     {
-        bModified = TRUE;
+        bModified = sal_True;
 
-        BOOL bHori = FALSE;
+        sal_Bool bHori = sal_False;
 
         if (aMirrorHorzBox.IsChecked() &&
                 !aLeftPagesRB.IsChecked())
-            bHori = TRUE;
+            bHori = sal_True;
 
         MirrorGraph eMirror;
         eMirror = aMirrorVertBox.IsChecked() && bHori ?
@@ -2399,7 +2457,7 @@ BOOL SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
                     RES_MIRROR_GRAPH_VERT : aMirrorVertBox.IsChecked() ?
                     RES_MIRROR_GRAPH_HOR  : RES_MIRROR_GRAPH_DONT;
 
-        BOOL bMirror = !aAllPagesRB.IsChecked();
+        sal_Bool bMirror = !aAllPagesRB.IsChecked();
         SwMirrorGrf aMirror( eMirror );
         aMirror.SetGrfToggle(bMirror );
         rSet.Put( aMirror );
@@ -2407,7 +2465,7 @@ BOOL SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
 
     if( aGrfName != aNewGrfName || aConnectED.IsModified() )
     {
-        bModified = TRUE;
+        bModified = sal_True;
         aGrfName = aConnectED.GetText();
         rSet.Put( SvxBrushItem( aGrfName, aFilterName, GPOS_LT,
                                 SID_ATTR_GRAF_GRAPHIC ));
@@ -2419,7 +2477,7 @@ int SwGrfExtPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if( _pSet )
         FillItemSet( *_pSet );
-    return TRUE;
+    return sal_True;
 }
 
 IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
@@ -2437,7 +2495,7 @@ IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
     xCtrlAcc->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aVal);
 
     if ( pGrfDlg->Execute() == ERRCODE_NONE )
-    {   // ausgewaehlten Filter merken
+    {   // remember selected filter
         aFilterName = pGrfDlg->GetCurrentFilter();
         aNewGrfName = INetURLObject::decode( pGrfDlg->GetPath(),
                                         INET_HEX_ESCAPE,
@@ -2445,22 +2503,21 @@ IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
                                         RTL_TEXTENCODING_UTF8 );
         aConnectED.SetModifyFlag();
         aConnectED.SetText( aNewGrfName );
-        //Spiegeln zuruecksetzen, da u. U. eine Bitmap
-        //gegen eine andere Art von Grafik ausgetauscht worden ist,
-        //die nicht gespiegelt werden kann.
-        aMirrorVertBox.Check(FALSE);
-        aMirrorHorzBox.Check(FALSE);
-        aAllPagesRB .Enable(FALSE);
-        aLeftPagesRB.Enable(FALSE);
-        aRightPagesRB.Enable(FALSE);
-        aBmpWin.MirrorHorz(FALSE);
-        aBmpWin.MirrorVert(FALSE);
+        //reset mirrors because maybe a Bitmap was swapped with
+        //another type of graphic that cannot be mirrored.
+        aMirrorVertBox.Check(sal_False);
+        aMirrorHorzBox.Check(sal_False);
+        aAllPagesRB .Enable(sal_False);
+        aLeftPagesRB.Enable(sal_False);
+        aRightPagesRB.Enable(sal_False);
+        aBmpWin.MirrorHorz(sal_False);
+        aBmpWin.MirrorVert(sal_False);
 
         Graphic aGraphic;
         GraphicFilter::LoadGraphic( pGrfDlg->GetPath(), aEmptyStr, aGraphic );
         aBmpWin.SetGraphic(aGraphic);
 
-        BOOL bEnable = GRAPHIC_BITMAP      == aGraphic.GetType() ||
+        sal_Bool bEnable = GRAPHIC_BITMAP      == aGraphic.GetType() ||
                             GRAPHIC_GDIMETAFILE == aGraphic.GetType();
         aMirrorVertBox.Enable(bEnable);
         aMirrorHorzBox.Enable(bEnable);
@@ -2473,7 +2530,7 @@ IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
 
 IMPL_LINK( SwGrfExtPage, MirrorHdl, CheckBox *, EMPTYARG )
 {
-    BOOL bEnable = aMirrorHorzBox.IsChecked();
+    sal_Bool bEnable = aMirrorHorzBox.IsChecked();
 
     aBmpWin.MirrorHorz( aMirrorVertBox.IsChecked() );
     aBmpWin.MirrorVert( bEnable );
@@ -2489,18 +2546,17 @@ IMPL_LINK( SwGrfExtPage, MirrorHdl, CheckBox *, EMPTYARG )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: BeispielWindow
+    Description: example window
  --------------------------------------------------------------------*/
-BmpWindow::BmpWindow( Window* pPar, USHORT nId,
-                        const Graphic& rGraphic, const BitmapEx& rBmp, const BitmapEx& rBmpHC ) :
+BmpWindow::BmpWindow( Window* pPar, sal_uInt16 nId,
+                        const Graphic& rGraphic, const BitmapEx& rBmp ) :
     Window(pPar, SW_RES(nId)),
     aGraphic(rGraphic),
     aBmp(rBmp),
-    aBmpHC(rBmpHC),
-    bHorz(FALSE),
-    bVert(FALSE),
-    bGraphic(FALSE),
-    bLeftAlign(FALSE)
+    bHorz(sal_False),
+    bVert(sal_False),
+    bGraphic(sal_False),
+    bLeftAlign(sal_False)
 {
     SetBackground();
 }
@@ -2543,8 +2599,7 @@ void BmpWindow::Paint( const Rectangle& )
         aGraphic.Draw( this, aPntPos, aPntSz );
     else
     {
-        bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-        DrawBitmapEx( aPntPos, aPntSz, bHC ? aBmpHC : aBmp );
+        DrawBitmapEx( aPntPos, aPntSz, aBmp );
     }
 }
 
@@ -2561,7 +2616,7 @@ void BmpWindow::SetGraphic(const Graphic& rGrf)
 }
 
 /***************************************************************************
-    Beschreibung:   URL und ImageMap an Rahmen einstellen
+    Description:    set URL and ImageMap at frames
 ***************************************************************************/
 SwFrmURLPage::SwFrmURLPage( Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage(pParent,     SW_RES(TP_FRM_URL), rSet),
@@ -2589,27 +2644,26 @@ SwFrmURLPage::~SwFrmURLPage()
 void SwFrmURLPage::Reset( const SfxItemSet &rSet )
 {
     const SfxPoolItem* pItem;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_DOCFRAME, TRUE, &pItem))
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_DOCFRAME, sal_True, &pItem))
     {
         TargetList* pList = new TargetList;
         ((const SfxFrameItem*)pItem)->GetFrame()->GetTargetList(*pList);
-        USHORT nCount = (USHORT)pList->Count();
-        if( nCount )
+        if( !pList->empty() )
         {
-            USHORT i;
-            for ( i = 0; i < nCount; i++ )
+            size_t nCount = pList->size();
+            for ( size_t i = 0; i < nCount; i++ )
             {
-                aFrameCB.InsertEntry(*pList->GetObject(i));
+                aFrameCB.InsertEntry( *pList->at( i ) );
             }
-            for ( i = nCount; i; i-- )
+            for ( size_t i = nCount; i; )
             {
-                delete pList->GetObject( i - 1 );
+                delete pList->at( --i );
             }
         }
         delete pList;
     }
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( RES_URL, TRUE, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( RES_URL, sal_True, &pItem ) )
     {
         const SwFmtURL* pFmtURL = (const SwFmtURL*)pItem;
         aURLED.SetText( INetURLObject::decode( pFmtURL->GetURL(),
@@ -2626,15 +2680,15 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
         aFrameCB.SaveValue();
     }
     else
-        aClientCB.Enable( FALSE );
+        aClientCB.Enable( sal_False );
 
     aServerCB.SaveValue();
     aClientCB.SaveValue();
 }
 
-BOOL SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
+sal_Bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
     const SwFmtURL* pOldURL = (SwFmtURL*)GetOldItem(rSet, RES_URL);
     SwFmtURL* pFmtURL;
     if(pOldURL)
@@ -2651,20 +2705,20 @@ BOOL SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
         {
             pFmtURL->SetURL( sText, aServerCB.IsChecked() );
             pFmtURL->SetName( aNameED.GetText() );
-            bModified = TRUE;
+            bModified = sal_True;
         }
     }
 
     if(!aClientCB.IsChecked() && pFmtURL->GetMap() != 0)
     {
         pFmtURL->SetMap(0);
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if(pFmtURL->GetTargetFrameName() != aFrameCB.GetText())
     {
         pFmtURL->SetTargetFrameName(aFrameCB.GetText());
-        bModified = TRUE;
+        bModified = sal_True;
     }
     rSet.Put(*pFmtURL);
     delete pFmtURL;
@@ -2709,6 +2763,7 @@ void lcl_Move(Window& rWin, sal_Int32 nDiff)
 SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage(pParent,     SW_RES(TP_FRM_ADD), rSet),
 
+    aNamesFL           (this, SW_RES(FL_NAME)),
     aNameFT            (this, SW_RES(FT_NAME)),
     aNameED            (this, SW_RES(ED_NAME)),
     aAltNameFT         (this, SW_RES(FT_ALT_NAME)),
@@ -2717,19 +2772,17 @@ SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     aPrevLB            (this, SW_RES(LB_PREV)),
     aNextFT            (this, SW_RES(FT_NEXT)),
     aNextLB            (this, SW_RES(LB_NEXT)),
-    aNamesFL           (this, SW_RES(FL_NAME)),
 
+    aProtectFL         (this, SW_RES(FL_PROTECT)),
     aProtectContentCB  (this, SW_RES(CB_PROTECT_CONTENT)),
     aProtectFrameCB    (this, SW_RES(CB_PROTECT_FRAME)),
     aProtectSizeCB     (this, SW_RES(CB_PROTECT_SIZE)),
-    aProtectFL         (this, SW_RES(FL_PROTECT)),
+    aExtFL             (this, SW_RES(FL_EXT)),
 
     aEditInReadonlyCB  (this, SW_RES(CB_EDIT_IN_READONLY)),
     aPrintFrameCB      (this, SW_RES(CB_PRINT_FRAME)),
     aTextFlowFT        (this, SW_RES(FT_TEXTFLOW)),
     aTextFlowLB        (this, SW_RES(LB_TEXTFLOW)),
-
-    aExtFL             (this, SW_RES(FL_EXT)),
 
     pWrtSh(0),
 
@@ -2754,8 +2807,8 @@ SfxTabPage* SwFrmAddPage::Create(Window *pParent, const SfxItemSet &rSet)
 void SwFrmAddPage::Reset(const SfxItemSet &rSet )
 {
     const SfxPoolItem* pItem;
-    USHORT nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
-    bHtmlMode = nHtmlMode & HTMLMODE_ON ? TRUE : FALSE;
+    sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
+    bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
     if(bHtmlMode)
     {
         aProtectContentCB .Hide();
@@ -2772,7 +2825,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         aPrintFrameCB.SetPosPixel(aEditInReadonlyCB.GetPosPixel());
     }
 
-    if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_ALT_NAME, FALSE, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_ALT_NAME, sal_False, &pItem))
     {
         aAltNameED.SetText(((const SfxStringItem*)pItem)->GetValue());
         aAltNameED.SaveValue();
@@ -2780,10 +2833,10 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
 
     if(!bFormat)
     {
-        // Grafik einfuegen - Eigenschaften
-        // bNew ist nicht gesetzt, deswegen ueber Selektion erkennen
+        // insert graphic - properties
+        // bNew is not set, so recognise by selection
         String aTmpName1;
-        if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_NAME, FALSE, &pItem))
+        if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_NAME, sal_False, &pItem))
         {
             aTmpName1 = ((const SfxStringItem*)pItem)->GetValue();
         }
@@ -2809,11 +2862,11 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     }
     else
     {
-        aNameED.Enable( FALSE );
-        aAltNameED.Enable(FALSE);
-        aNameFT.Enable( FALSE );
-        aAltNameFT.Enable(FALSE);
-        aNamesFL.Enable(FALSE);
+        aNameED.Enable( sal_False );
+        aAltNameED.Enable(sal_False);
+        aNameFT.Enable( sal_False );
+        aAltNameFT.Enable(sal_False);
+        aNamesFL.Enable(sal_False);
     }
     if(nDlgType == DLG_FRM_STD && aAltNameFT.IsVisible())
     {
@@ -2873,7 +2926,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
             ::std::vector< String > aThisPageFrames;
             ::std::vector< String > aNextPageFrames;
             ::std::vector< String > aRemainFrames;
-            pWrtSh->GetConnectableFrmFmts(*pFmt, sNextChain, FALSE,
+            pWrtSh->GetConnectableFrmFmts(*pFmt, sNextChain, sal_False,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
             lcl_InsertVectors(aPrevLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
             if(sPrevChain.Len())
@@ -2889,8 +2942,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
             aThisPageFrames.erase(aThisPageFrames.begin(), aThisPageFrames.end());
             aRemainFrames.erase(aRemainFrames.begin(), aRemainFrames.end());
 
-
-            pWrtSh->GetConnectableFrmFmts(*pFmt, sPrevChain, TRUE,
+            pWrtSh->GetConnectableFrmFmts(*pFmt, sPrevChain, sal_True,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
             lcl_InsertVectors(aNextLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
             if(sNextChain.Len())
@@ -2915,7 +2967,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     const SwFmtEditInReadonly& rEdit = (const SwFmtEditInReadonly& )rSet.Get(RES_EDIT_IN_READONLY);
     aEditInReadonlyCB.Check(rEdit.GetValue());          aEditInReadonlyCB.SaveValue();
 
-    // drucken
+    // print
     const SvxPrintItem& rPrt = (const SvxPrintItem&)rSet.Get(RES_PRINT);
     aPrintFrameCB.Check(rPrt.GetValue());               aPrintFrameCB.SaveValue();
 
@@ -2924,7 +2976,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     if( (!bHtmlMode || (0 != (nHtmlMode&HTMLMODE_SOME_STYLES)))
             && DLG_FRM_GRF != nDlgType && DLG_FRM_OLE != nDlgType &&
         SFX_ITEM_UNKNOWN != ( eState = rSet.GetItemState(
-                                        RES_FRAMEDIR, TRUE )) )
+                                        RES_FRAMEDIR, sal_True )) )
     {
         aTextFlowFT.Show();
         aTextFlowLB.Show();
@@ -2932,7 +2984,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         //vertical text flow is not possible in HTML
         if(bHtmlMode)
         {
-            ULONG nData = FRMDIR_VERT_TOP_RIGHT;
+            sal_uLong nData = FRMDIR_VERT_TOP_RIGHT;
             aTextFlowLB.RemoveEntry(aTextFlowLB.GetEntryPos((void*)nData));
         }
         sal_uInt16 nPos, nVal = ((SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR)).GetValue();
@@ -2949,9 +3001,9 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     }
 }
 
-BOOL SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
+sal_Bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if (aNameED.GetText() != aNameED.GetSavedValue())
         bRet |= 0 != rSet.Put(SfxStringItem(FN_SET_FRM_NAME, aNameED.GetText()));
     if (aAltNameED.GetText()  != aAltNameED.GetSavedValue())
@@ -2966,7 +3018,7 @@ BOOL SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
                 aProt != *pOldItem )
         bRet |= 0 != rSet.Put( aProt);
 
-    BOOL bChecked;
+    sal_Bool bChecked;
     if ( (bChecked = aEditInReadonlyCB.IsChecked()) != aEditInReadonlyCB.GetSavedValue() )
         bRet |= 0 != rSet.Put( SwFmtEditInReadonly( RES_EDIT_IN_READONLY, bChecked));
 
@@ -3011,34 +3063,34 @@ BOOL SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
     return bRet;
 }
 
-USHORT* SwFrmAddPage::GetRanges()
+sal_uInt16* SwFrmAddPage::GetRanges()
 {
     return aAddPgRg;
 }
 
 IMPL_LINK(SwFrmAddPage, EditModifyHdl, Edit*, EMPTYARG)
 {
-    BOOL bEnable = 0 != aNameED.GetText().Len();
+    sal_Bool bEnable = 0 != aNameED.GetText().Len();
     aAltNameED.Enable(bEnable);
     aAltNameFT.Enable(bEnable);
 
     return 0;
 }
 
-void    SwFrmAddPage::SetFormatUsed(BOOL bFmt)
+void    SwFrmAddPage::SetFormatUsed(sal_Bool bFmt)
 {
     bFormat  = bFmt;
     if(bFormat)
     {
-        aNameFT.Show(FALSE);
-        aNameED.Show(FALSE);
-        aAltNameFT.Show(FALSE);
-        aAltNameED.Show(FALSE);
-        aPrevFT.Show(FALSE);
-        aPrevLB.Show(FALSE);
-        aNextFT.Show(FALSE);
-        aNextLB.Show(FALSE);
-        aNamesFL.Show(FALSE);
+        aNameFT.Show(sal_False);
+        aNameED.Show(sal_False);
+        aAltNameFT.Show(sal_False);
+        aAltNameED.Show(sal_False);
+        aPrevFT.Show(sal_False);
+        aPrevLB.Show(sal_False);
+        aNextFT.Show(sal_False);
+        aNextLB.Show(sal_False);
+        aNamesFL.Show(sal_False);
 
         sal_Int32 nDiff = aExtFL.GetPosPixel().Y() - aNamesFL.GetPosPixel().Y();
         Window* aWindows[] =
@@ -3070,9 +3122,9 @@ IMPL_LINK(SwFrmAddPage, ChainModifyHdl, ListBox*, pBox)
     SwFrmFmt* pFmt = pWrtSh->GetFlyFrmFmt();
     if (pFmt)
     {
-        BOOL bNextBox = &aNextLB == pBox;
+        sal_Bool bNextBox = &aNextLB == pBox;
         ListBox& rChangeLB = bNextBox ? aPrevLB : aNextLB;
-        for(USHORT nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
+        for(sal_uInt16 nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
             rChangeLB.RemoveEntry(nEntry - 1);
         //determine chainable frames
         ::std::vector< String > aPrevPageFrames;

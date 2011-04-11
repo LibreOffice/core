@@ -45,23 +45,15 @@
 #include <vcl/svapp.hxx>
 
 #include "drawdoc.hxx"
-#ifndef SVX_LIGHT
 #include "DrawDocShell.hxx"
-#endif
 #include "unomodel.hxx"
 
-#ifndef SVX_LIGHT
 #include "optsitem.hxx"
 #include <sfx2/printer.hxx>
 #include "sdattr.hxx"
-#endif
 #include "../inc/ViewShell.hxx"
 #include "../inc/FrameView.hxx"
-#ifndef SVX_LIGHT
 #include "Outliner.hxx"
-#else
-#include <svx/svdoutl.hxx>
-#endif
 #include <editeng/editstat.hxx>
 #include <svx/unoapi.hxx>
 
@@ -143,9 +135,8 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
     HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT, HANDLE_UPDATEFROMTEMPLATE,
     HANDLE_PRINTER_INDEPENDENT_LAYOUT
-    // --> PB 2004-08-23 #i33095#
+    // #i33095#
     ,HANDLE_LOAD_READONLY, HANDLE_SAVE_VERSION
-    // <--
     ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL
 };
 
@@ -177,7 +168,6 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("DefaultTabStop"),        HANDLE_TABSTOP,             &::getCppuType((const sal_Int32*)0),    0,  0 },
             { MAP_LEN("PrinterName"),           HANDLE_PRINTERNAME,         &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("PrinterSetup"),          HANDLE_PRINTERJOB,          &::getCppuType((const uno::Sequence < sal_Int8 > *)0),  0, MID_PRINTER },
-#ifndef SVX_LIGHT
 
             { MAP_LEN("IsPrintPageName"),       HANDLE_PRINTPAGENAME,       &::getBooleanCppuType(),                0,  MID_PRINTER },
             { MAP_LEN("IsPrintDate"),           HANDLE_PRINTDATE,           &::getBooleanCppuType(),                0,  MID_PRINTER },
@@ -189,7 +179,6 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("IsPrintBookletFront"),   HANDLE_PRINTBOOKLETFRONT,   &::getBooleanCppuType(),                0,  MID_PRINTER },
             { MAP_LEN("IsPrintBookletBack"),    HANDLE_PRINTBOOKLETBACK,    &::getBooleanCppuType(),                0,  MID_PRINTER },
             { MAP_LEN("PrintQuality"),          HANDLE_PRINTQUALITY,        &::getCppuType((const sal_Int32*)0),    0,  MID_PRINTER },
-#endif
             { MAP_LEN("ColorTableURL"),         HANDLE_COLORTABLEURL,       &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("DashTableURL"),          HANDLE_DASHTABLEURL,        &::getCppuType((const OUString*)0),     0,  0 },
             { MAP_LEN("LineEndTableURL"),       HANDLE_LINEENDTABLEURL,     &::getCppuType((const OUString*)0),     0,  0 },
@@ -206,7 +195,7 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("IsKernAsianPunctuation"),HANDLE_ASIANPUNCT,          &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("UpdateFromTemplate"),    HANDLE_UPDATEFROMTEMPLATE,  &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,&::getCppuType((const sal_Int16*)0), 0,  0 },
-            // --> PB 2004-08-23 #i33095#
+            // --> #i33095#
             { MAP_LEN("LoadReadonly"),          HANDLE_LOAD_READONLY,       &::getBooleanCppuType(),                0,  0 },
             { MAP_LEN("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        &::getBooleanCppuType(),                0,  0 },
             // <--
@@ -246,11 +235,11 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
     SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
 
-    SfxPrinter* pPrinter = pDocSh->GetPrinter( FALSE );
+    SfxPrinter* pPrinter = pDocSh->GetPrinter( sal_False );
     if( pPrinter )
     {
         SdOptionsPrintItem* pPrinterOptions = NULL;
-        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
+        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, sal_False, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
             aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
     }
     else
@@ -467,7 +456,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     {
                         if( static_cast<sal_Int16>( aPrintOpts.GetHandoutPages() ) != nValue )
                         {
-                            aPrintOpts.SetHandoutPages( static_cast< UINT16 >( nValue ) );
+                            aPrintOpts.SetHandoutPages( static_cast< sal_uInt16 >( nValue ) );
                             bOptionsChanged = true;
                         }
                         bOk = sal_True;
@@ -732,16 +721,16 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
                         pDoc->SetSummationOfParagraphs( bIsSummationOfParagraphs );
                         SdDrawDocument* pDocument = pDocSh->GetDoc();
-                        SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
+                        SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
                         nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
                         rOutl.SetControlWord( nCntrl | nSum );
-                        ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
+                        ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
                         if( pOutl )
                         {
                             nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
                             pOutl->SetControlWord( nCntrl | nSum );
                         }
-                        pOutl = pDocument->GetInternalOutliner( FALSE );
+                        pOutl = pDocument->GetInternalOutliner( sal_False );
                         if( pOutl )
                         {
                             nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
@@ -759,19 +748,19 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 {
                     bOk = sal_True;
 
-                    pDoc->SetCharCompressType( (UINT16)nCharCompressType );
+                    pDoc->SetCharCompressType( (sal_uInt16)nCharCompressType );
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
-                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
-                    rOutl.SetAsianCompressionMode( (UINT16)nCharCompressType );
-                    ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
+                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
+                    rOutl.SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
+                    ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
                     if( pOutl )
                     {
-                        pOutl->SetAsianCompressionMode( (UINT16)nCharCompressType );
+                        pOutl->SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
                     }
-                    pOutl = pDocument->GetInternalOutliner( FALSE );
+                    pOutl = pDocument->GetInternalOutliner( sal_False );
                     if( pOutl )
                     {
-                        pOutl->SetAsianCompressionMode( (UINT16)nCharCompressType );
+                        pOutl->SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
                     }
                 }
                 break;
@@ -786,14 +775,14 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
                     pDoc->SetKernAsianPunctuation( bAsianPunct );
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
-                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
+                    SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
                     rOutl.SetKernAsianPunctuation( bAsianPunct );
-                    ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
+                    ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
                     if( pOutl )
                     {
                         pOutl->SetKernAsianPunctuation( bAsianPunct );
                     }
-                    pOutl = pDocument->GetInternalOutliner( FALSE );
+                    pOutl = pDocument->GetInternalOutliner( sal_False );
                     if( pOutl )
                     {
                         pOutl->SetKernAsianPunctuation( bAsianPunct );
@@ -831,7 +820,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             }
             break;
 
-            // --> PB 2004-08-23 #i33095#
+            // --> #i33095#
             case HANDLE_LOAD_READONLY:
             {
                 sal_Bool bNewValue = sal_False;
@@ -868,7 +857,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
     if( bOptionsChanged )
     {
         if( !pPrinter )
-            pPrinter = pDocSh->GetPrinter( TRUE );
+            pPrinter = pDocSh->GetPrinter( sal_True );
         SfxItemSet aNewOptions( pPrinter->GetOptions() );
         aNewOptions.Put( aOptionsPrintItem );
         pPrinter->SetOptions( aNewOptions );
@@ -889,11 +878,11 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
 
     SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
 
-    SfxPrinter* pPrinter = pDocSh->GetPrinter( FALSE );
+    SfxPrinter* pPrinter = pDocSh->GetPrinter( sal_False );
     if( pPrinter )
     {
         SdOptionsPrintItem* pPrinterOptions = NULL;
-        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
+        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, sal_False, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
             aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
     }
     else
@@ -1102,7 +1091,7 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
             }
             break;
 
-            // --> PB 2004-08-23 #i33095#
+            // --> #i33095#
             case HANDLE_LOAD_READONLY:
             {
                 *pValue <<= pDocSh->IsLoadReadonly();

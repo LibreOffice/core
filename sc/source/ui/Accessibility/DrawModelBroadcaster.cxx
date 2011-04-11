@@ -32,6 +32,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 
@@ -86,7 +87,7 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
 #if OSL_DEBUG_LEVEL > 1
             ByteString aError( "Runtime exception caught while notifying shape.:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR( aError.GetBuffer() );
+            OSL_FAIL( aError.GetBuffer() );
 #endif
         }
     }

@@ -42,8 +42,9 @@
 
 #include "cc50_solaris_intel.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 namespace
 {
@@ -213,7 +214,7 @@ static inline void cpp_call(
             nStackLongs
             );
 
-        // NO exception occured...
+        // NO exception occurred...
         *ppUnoExc = 0;
 
         // reconvert temporary params

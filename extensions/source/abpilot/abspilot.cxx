@@ -140,7 +140,7 @@ namespace abp
     //---------------------------------------------------------------------
     String OAddessBookSourcePilot::getStateDisplayName( WizardState _nState ) const
     {
-        USHORT nResId = 0;
+        sal_uInt16 nResId = 0;
         switch ( _nState )
         {
             case STATE_SELECT_ABTYPE:        nResId = STR_SELECT_ABTYPE; break;
@@ -205,7 +205,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    BOOL OAddessBookSourcePilot::Close()
+    sal_Bool OAddessBookSourcePilot::Close()
     {
         implCleanup();
 
@@ -319,7 +319,7 @@ namespace abp
             case AST_EVOLUTION_GROUPWISE:
             case AST_EVOLUTION_LDAP     : pGuess = "Personal"; break;
             default:
-                DBG_ERROR( "OAddessBookSourcePilot::implDefaultTableName: unhandled case!" );
+                OSL_FAIL( "OAddessBookSourcePilot::implDefaultTableName: unhandled case!" );
                 return;
         }
         const ::rtl::OUString sGuess = ::rtl::OUString::createFromAscii( pGuess );
@@ -398,7 +398,7 @@ namespace abp
                 break;
 
             case AST_INVALID:
-                DBG_ERROR( "OAddessBookSourcePilot::implCreateDataSource: illegal data source type!" );
+                OSL_FAIL( "OAddessBookSourcePilot::implCreateDataSource: illegal data source type!" );
                 break;
         }
         m_eNewDataSourceType = m_aSettings.eType;
@@ -437,7 +437,7 @@ namespace abp
                 return new FinalPage( this );
 
             default:
-                DBG_ERROR("OAddessBookSourcePilot::createPage: invalid state!");
+                OSL_FAIL("OAddessBookSourcePilot::createPage: invalid state!");
                 return NULL;
         }
     }

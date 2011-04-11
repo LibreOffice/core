@@ -35,8 +35,7 @@
 #include "collect.hxx"
 
 #include <vector>
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -50,25 +49,12 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class Date;
-
+class ScDPItemData;
+class ScDPCache;
 class ScDocument;
 class ScRange;
-class ScDPDimension;
-class ScDPCollection;
-struct ScDPCacheCell;
-struct ScQueryParam;
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
-class ScDPItemData;
-// End Comments
-class Date;
-
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
-class ScDPTableDataCache;
 struct ScDPValueData;
-// End Comments
-// ----------------------------------------------------------------------------
+struct ScQueryParam;
 
 class SC_DLLPUBLIC ScDPCacheTable
 {
@@ -76,18 +62,12 @@ public:
     /** individual filter item used in SingleFilter and GroupFilter. */
     struct FilterItem
     {
-        // Wang Xu Ming -- 2009-8-17
-        // DataPilot Migration - Cache&&Performance
-        String       maString;
-        // End Comments
+        String      maString;
         double      mfValue;
         bool        mbHasValue;
 
         FilterItem();
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
-    bool  match( const  ScDPItemData& rCellData ) const;
-// End Comments
+        bool match( const  ScDPItemData& rCellData ) const;
     };
 
     /** interface class used for filtering of rows. */
@@ -96,27 +76,19 @@ public:
     public:
         /** returns true if the matching condition is met for a single cell
             value, or false otherwise. */
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
         virtual bool match( const  ScDPItemData& rCellData ) const = 0;
-// End Comments
     };
 
     /** ordinary single-item filter. */
     class SingleFilter : public FilterBase
     {
     public:
-        // Wang Xu Ming -- 2009-8-17
-        // DataPilot Migration - Cache&&Performance
         explicit SingleFilter(String aString, double fValue, bool bHasValue);
-        // End Comments
-        virtual ~SingleFilter(){}
+        virtual ~SingleFilter() {}
 
-       // Wang Xu Ming -- 2009-8-17
-        // DataPilot Migration - Cache&&Performance
-         virtual bool match(const ScDPItemData& rCellData) const;
-         // End Comments
-        const String    getMatchString();
+        virtual bool match(const ScDPItemData& rCellData) const;
+
+        const String&   getMatchString();
         double          getMatchValue() const;
         bool            hasValue() const;
 
@@ -130,20 +102,13 @@ public:
     class GroupFilter : public FilterBase
     {
     public:
-        // Wang Xu Ming -- 2009-8-17
-        // DataPilot Migration - Cache&&Performance
         GroupFilter();
-        // End Comments
-        virtual ~GroupFilter(){}
-        // Wang Xu Ming -- 2009-8-17
-        // DataPilot Migration - Cache&&Performance
+        virtual ~GroupFilter() {}
         virtual bool match(  const  ScDPItemData& rCellData ) const;
-        // End Comments
         void addMatchItem(const String& rStr, double fVal, bool bHasValue);
         size_t getMatchItemCount() const;
 
     private:
-
         ::std::vector<FilterItem> maItems;
     };
 
@@ -155,26 +120,23 @@ public:
 
         Criterion();
     };
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
-    ScDPCacheTable( ScDocument* pDoc,long nId );
-    // End Comments
+
+    ScDPCacheTable(ScDPCache* pCache);
     ~ScDPCacheTable();
 
     sal_Int32 getRowSize() const;
     sal_Int32 getColSize() const;
 
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
-    ScDPTableDataCache* GetCache() const;
+    const ScDPCache* getCache() const;
+
     /** Fill the internal table from the cell range provided.  This function
-    assumes that the first row is the column header. */
-    void fillTable( const ScQueryParam& rQuery, BOOL* pSpecial,
+        assumes that the first row is the column header. */
+    void fillTable( const ScQueryParam& rQuery, bool* pSpecial,
         bool bIgnoreEmptyRows, bool bRepeatIfEmpty );
+
     /** Fill the internal table from database connection object.  This function
         assumes that the first row is the column header. */
     void fillTable();
-    // End Comments
 
     /** Check whether a specified row is active or not.  When a row is active,
         it is used in calculation of the results data.  A row becomes inactive
@@ -183,7 +145,7 @@ public:
 
     /** Set filter on/off flag to each row to control visibility.  The caller
         must ensure that the table is filled before calling this function. */
-    void filterByPageDimension(const ::std::vector<Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims);
+    void filterByPageDimension(const ::std::vector<Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
     /** Get the cell instance at specified location within the data grid. Note
         that the data grid doesn't include the header row.  Don't delete the
@@ -191,34 +153,30 @@ public:
     const ScDPItemData* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
     void  getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
     String getFieldName( SCCOL  nIndex) const;
-    //End Comments
 
-    /** Get the field index (i.e. column ID in the original data source) based
-        on the string value that corresponds with the column title.  It returns
-        -1 if no field matching the string value exists. */
-    sal_Int32 getFieldIndex(const String& rStr) const;
-
-  // Wang Xu Ming -- 2009-8-17
-  // DataPilot Migration - Cache&&Performance
    /** Get the unique entries for a field specified by index.  The caller must
-        make sure that the table is filled before calling function, or it will
-        get an empty collection. */
+       make sure that the table is filled before calling function, or it will
+       get an empty collection. */
     const ::std::vector<SCROW>& getFieldEntries( sal_Int32 nColumn ) const;
-    // End Comments
+
     /** Filter the table based on the specified criteria, and copy the
         result to rTabData.  This method is used, for example, to generate
         a drill-down data table. */
     void filterTable(const ::std::vector<Criterion>& rCriteria,
                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rTabData,
-                     const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims);
+                     const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
+    SCROW getOrder(long nDim, SCROW nIndex) const;
     void clear();
-    void swap(ScDPCacheTable& rOther);
     bool empty() const;
+    void setCache(ScDPCache* p);
+    bool hasCache() const;
 
 private:
     ScDPCacheTable();
     ScDPCacheTable(const ScDPCacheTable&);
+
+    ScDPCache* getCache();
 
     /**
      * Check if a given row meets all specified criteria.
@@ -226,26 +184,17 @@ private:
      * @param nRow index of row to be tested.
      * @param rCriteria a list of criteria
      */
-    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims) const;
-    void getValueData(ScDocument* pDoc, const ScAddress& rPos, ScDPCacheCell& rCell);
-   // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
-   void InitNoneCache( ScDocument* pDoc );
-    // End Comments
+    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
+
 private:
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
     /** unique field entires for each field (column). */
     ::std::vector< ::std::vector<SCROW> > maFieldEntries;
-    // End Comments
+
     /** used to track visibility of rows.  The first row below the header row
         has the index of 0. */
     ::std::vector<bool> maRowsVisible;
-    // Wang Xu Ming -- 2009-8-17
-    // DataPilot Migration - Cache&&Performance
-    ScDPTableDataCache* mpCache;
-    ScDPTableDataCache* mpNoneCache;
-    // End Comments
+
+    ScDPCache* mpCache;
 };
 #endif
 

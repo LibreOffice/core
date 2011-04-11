@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile:
- * $Revision:
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -119,7 +116,6 @@ void SwVbaListHelper::Init() throw( css::uno::RuntimeException )
         // insert this style into style family, or the property NumberingRules doesn't exist.
         mxStyleFamily->insertByName( msStyleName, uno::makeAny( mxStyleProps ) );
         mxStyleProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NumberingRules") ) ) >>= mxNumberingRules;
-        //mxNumberingRules.set( xDocMSF->createInstance(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.NumberingRules") ) ), uno::UNO_QUERY_THROW );
 
         CreateListTemplate();
 

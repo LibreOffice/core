@@ -31,7 +31,7 @@
 #include "ChartPlotAreaOOoTContext.hxx"
 #include "TransformerBase.hxx"
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "DeepTContext.hxx"
 #include "ActionMapTypesOOo.hxx"
@@ -114,7 +114,7 @@ void XMLAxisOOoContext::StartElement(
             }
             else
             {
-                OSL_ENSURE( false, "ChartAxis: Invalid attribute value" );
+                OSL_FAIL( "ChartAxis: Invalid attribute value" );
             }
 
             if( eToken != XML_TOKEN_INVALID )

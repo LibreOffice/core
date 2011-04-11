@@ -54,8 +54,7 @@ public:
 class ObjectCatalogToolBox_Impl: public ToolBox
 {
 public:
-    ObjectCatalogToolBox_Impl(Window * pParent, ResId const & rResId,
-                              ResId const & rImagesHighContrastId);
+    ObjectCatalogToolBox_Impl(Window * pParent, ResId const & rResId);
 
 private:
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
@@ -63,8 +62,6 @@ private:
     void setImages();
 
     ImageList m_aImagesNormal;
-    ImageList m_aImagesHighContrast;
-    bool m_bHighContrast;
 };
 
 class ObjectCatalog : public FloatingWindow
@@ -81,7 +78,7 @@ protected:
     DECL_LINK( TreeListHighlightHdl, SvTreeListBox * );
     void                UpdateFields();
     virtual void        Move();
-    virtual BOOL        Close();
+    virtual sal_Bool        Close();
     virtual void        Resize();
 
 public:

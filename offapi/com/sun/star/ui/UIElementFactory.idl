@@ -49,12 +49,12 @@ module com { module sun { module star { module ui {
     service to provide access to itself.
     </p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 service UIElementFactory
 {
-    /** this interface provides a function to create and initalize new
+    /** this interface provides a function to create and initialize new
         instances of user interface elements.
 
         @see XUIElementFactory

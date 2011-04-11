@@ -37,9 +37,9 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/xmlnumi.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
-#include "i18nmap.hxx"
+#include "xmloff/i18nmap.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlement.hxx>
@@ -343,7 +343,7 @@ void XMLSetVarFieldImportContext::EndElement()
         {
             // create field/Service
             Reference<XPropertySet> xPropSet;
-            if (CreateField(xPropSet, OUString::createFromAscii(sAPI_textfield_prefix) + GetServiceName()))
+            if (CreateField(xPropSet, OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_textfield_prefix)) + GetServiceName()))
             {
                 Reference<XDependentTextField> xDepTextField(xPropSet, UNO_QUERY);
                 if (xDepTextField.is())
@@ -813,7 +813,7 @@ SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
                 eElementName = XML_USER_FIELD_DECL;
                 break;
             default:
-                DBG_ERROR("unknown field type!");
+                OSL_FAIL("unknown field type!");
                 eElementName = XML_SEQUENCE_DECL;
                 break;
         }
@@ -948,7 +948,7 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
                 break;
             }
             default:
-                DBG_ERROR("unkown varfield type");
+                OSL_FAIL("unkown varfield type");
             } // switch
         } // else: no field master found/constructed
     } // else: no sequence-decl
@@ -966,7 +966,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
     // rename field
     // currently: no family in use! Use 0.
     OUString sName = rImportHelper.GetRenameMap().Get(
-        sal::static_int_cast< USHORT >(eVarType), sVarName);
+        sal::static_int_cast< sal_uInt16 >(eVarType), sVarName);
 
     // get text fields supplier and field masters
     Reference<XTextFieldsSupplier> xTextFieldsSupp(rImport.GetModel(),
@@ -995,7 +995,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
 
         aAny = xMaster->getPropertyValue(
             // sPropertySubType
-            OUString::createFromAscii(sAPI_sub_type)
+            OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type))
             );
         sal_Int16 nType = 0;
         aAny >>= nType;
@@ -1018,7 +1018,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
             sNew = aBuf.makeStringAndClear();
 
             rImportHelper.GetRenameMap().Add(
-                sal::static_int_cast< USHORT >(eVarType), sName, sNew);
+                sal::static_int_cast< sal_uInt16 >(eVarType), sName, sNew);
 
             // call FindFieldMaster recursively to create new master
             return FindFieldMaster(xMaster, rImport, rImportHelper,
@@ -1043,7 +1043,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
             sNew = aBuf.makeStringAndClear();
 
             rImportHelper.GetRenameMap().Add(
-                sal::static_int_cast< USHORT >(eVarType), sName, sNew);
+                sal::static_int_cast< sal_uInt16 >(eVarType), sName, sNew);
 
             // call FindFieldMaster recursively to create new master
             return FindFieldMaster(xMaster, rImport, rImportHelper,
@@ -1072,7 +1072,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
                 aAny <<= sName;
                 xMaster->setPropertyValue(
                     // sPropertyName
-                    OUString::createFromAscii(sAPI_name)
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_name))
                     , aAny);
 
                 if (eVarType != VarTypeUserField) {
@@ -1083,7 +1083,7 @@ sal_Bool XMLVariableDeclImportContext::FindFieldMaster(
                               SetVariableType::SEQUENCE);
                     xMaster->setPropertyValue(
                         // sPropertySubType
-                        OUString::createFromAscii(sAPI_sub_type)
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(sAPI_sub_type))
                         , aAny);
                 } // else : user field: no subtype
 
@@ -1250,7 +1250,7 @@ enum ValueType
     XML_VALUE_TYPE_BOOLEAN
 };
 
-static SvXMLEnumMapEntry __READONLY_DATA aValueTypeMap[] =
+static SvXMLEnumMapEntry const aValueTypeMap[] =
 {
     { XML_FLOAT,        XML_VALUE_TYPE_FLOAT },
     { XML_CURRENCY,     XML_VALUE_TYPE_CURRENCY },
@@ -1331,7 +1331,7 @@ void XMLValueImportHelper::ProcessAttribute(
                         break;
 
                     default:
-                        DBG_ERROR("unknown value type");
+                        OSL_FAIL("unknown value type");
                         bTypeOK = sal_False;
                 }
             }

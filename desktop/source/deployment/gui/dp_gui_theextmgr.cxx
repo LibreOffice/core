@@ -166,7 +166,7 @@ void TheExtensionManager::SetText( const ::rtl::OUString &rTitle )
 }
 
 //------------------------------------------------------------------------------
-void TheExtensionManager::ToTop( USHORT nFlags )
+void TheExtensionManager::ToTop( sal_uInt16 nFlags )
 {
     const SolarMutexGuard guard;
 
@@ -361,7 +361,7 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
     }
     catch ( uno::Exception & exc) {
         (void) exc;
-        OSL_ENSURE( 0, ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return NOT_AVAILABLE;
     }
 }

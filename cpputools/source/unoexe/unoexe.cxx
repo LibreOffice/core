@@ -74,7 +74,6 @@
 #endif
 
 using namespace std;
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -84,6 +83,11 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::connection;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
+using ::rtl::OUStringBuffer;
 
 namespace unoexe
 {
@@ -132,7 +136,7 @@ static sal_Bool s_quiet = false;
 static inline void out( const sal_Char * pText )
 {
     if (! s_quiet)
-        fprintf( stderr, pText );
+        fprintf( stderr, "%s", pText );
 }
 //--------------------------------------------------------------------------------------------------
 static inline void out( const OUString & rText )
@@ -140,7 +144,7 @@ static inline void out( const OUString & rText )
     if (! s_quiet)
     {
         OString aText( OUStringToOString( rText, RTL_TEXTENCODING_ASCII_US ) );
-        fprintf( stderr, aText.getStr() );
+        fprintf( stderr, "%s", aText.getStr() );
     }
 }
 
@@ -276,23 +280,14 @@ void createInstance(
                         OUString( RTL_CONSTASCII_USTRINGPARAM(
                                       "com.sun.star.comp.io.Connector") ),
                         xSF, Reference< XRegistryKey >() ) ) );
-                    // iiop bridge
-                    xSet->insert( makeAny( loadSharedLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "remotebridge.uno" SAL_DLLEXTENSION) ),
-                        OUString(),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "com.sun.star.comp.remotebridges."
-                                      "Bridge.various") ),
-                        xSF, Reference< XRegistryKey >() ) ) );
                     // bridge factory
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
                         OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "bridgefac.uno" SAL_DLLEXTENSION) ),
+                                      "binaryurp.uno" SAL_DLLEXTENSION) ),
                         OUString(),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "com.sun.star.comp.remotebridges."
-                                      "BridgeFactory") ),
+                        OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.comp.bridge.BridgeFactory") ),
                         xSF, Reference< XRegistryKey >() ) ) );
                 }
                 s_bSet = sal_True;

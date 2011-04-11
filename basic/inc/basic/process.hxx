@@ -46,22 +46,22 @@ class Process
     rtl_uString               **m_pEnvList;
     rtl::OUString               m_aProcessName;
     oslProcess                  m_pProcess;
-    BOOL ImplIsRunning();
+    sal_Bool ImplIsRunning();
     long ImplGetExitCode();
-    BOOL bWasGPF;
-    BOOL bHasBeenStarted;
+    sal_Bool bWasGPF;
+    sal_Bool bHasBeenStarted;
 
 public:
     Process();
     ~Process();
     // Methoden
     void SetImage( const String &aAppPath, const String &aAppParams, const Environment *pEnv = NULL );
-    BOOL Start();
-    ULONG GetExitCode();
-    BOOL IsRunning();
-    BOOL WasGPF();
+    sal_Bool Start();
+    sal_uIntPtr GetExitCode();
+    sal_Bool IsRunning();
+    sal_Bool WasGPF();
 
-    BOOL Terminate();
+    sal_Bool Terminate();
 };
 
 #endif

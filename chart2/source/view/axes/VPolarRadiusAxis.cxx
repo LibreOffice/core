@@ -33,6 +33,7 @@
 #include "VCartesianAxis.hxx"
 #include "PlottingPositionHelper.hxx"
 #include "CommonConverters.hxx"
+#include "Tickmarks_Equidistant.hxx"
 #include <rtl/math.hxx>
 
 //.............................................................................
@@ -71,7 +72,7 @@ void VPolarRadiusAxis::setTransformationSceneToScreen( const drawing::HomogenMat
     m_apAxisWithLabels->setTransformationSceneToScreen( rMatrix );
 }
 
-void SAL_CALL VPolarRadiusAxis::setExplicitScaleAndIncrement(
+void VPolarRadiusAxis::setExplicitScaleAndIncrement(
               const ExplicitScaleData& rScale
             , const ExplicitIncrementData& rIncrement )
             throw (uno::RuntimeException)
@@ -80,7 +81,7 @@ void SAL_CALL VPolarRadiusAxis::setExplicitScaleAndIncrement(
     m_apAxisWithLabels->setExplicitScaleAndIncrement( rScale, rIncrement );
 }
 
-void SAL_CALL VPolarRadiusAxis::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
+void VPolarRadiusAxis::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
        , const uno::Reference< drawing::XShapes >& xFinalTarget
        , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
        , const rtl::OUString& rCID )
@@ -90,15 +91,13 @@ void SAL_CALL VPolarRadiusAxis::initPlotter(  const uno::Reference< drawing::XSh
     m_apAxisWithLabels->initPlotter(  xLogicTarget, xFinalTarget, xShapeFactory, rCID );
 }
 
-void SAL_CALL VPolarRadiusAxis::setScales( const uno::Sequence< ExplicitScaleData >& rScales
-                                     , sal_Bool bSwapXAndYAxis )
-                            throw (uno::RuntimeException)
+void VPolarRadiusAxis::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
 {
     VPolarAxis::setScales( rScales, bSwapXAndYAxis );
     m_apAxisWithLabels->setScales( rScales, bSwapXAndYAxis );
 }
 
-void SAL_CALL VPolarRadiusAxis::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFontReferenceSize
+void VPolarRadiusAxis::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFontReferenceSize
                   , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels )
 {
     VPolarAxis::initAxisLabelProperties( rFontReferenceSize, rMaximumSpaceForLabels );
@@ -122,22 +121,22 @@ bool VPolarRadiusAxis::prepareShapeCreation()
     return true;
 }
 
-void SAL_CALL VPolarRadiusAxis::createMaximumLabels()
+void VPolarRadiusAxis::createMaximumLabels()
 {
     m_apAxisWithLabels->createMaximumLabels();
 }
 
-void SAL_CALL VPolarRadiusAxis::updatePositions()
+void VPolarRadiusAxis::updatePositions()
 {
     m_apAxisWithLabels->updatePositions();
 }
 
-void SAL_CALL VPolarRadiusAxis::createLabels()
+void VPolarRadiusAxis::createLabels()
 {
     m_apAxisWithLabels->createLabels();
 }
 
-void SAL_CALL VPolarRadiusAxis::createShapes()
+void VPolarRadiusAxis::createShapes()
 {
     if( !prepareShapeCreation() )
         return;
@@ -146,8 +145,8 @@ void SAL_CALL VPolarRadiusAxis::createShapes()
     const ExplicitIncrementData& rAngleIncrement = m_aIncrements[0];
 
     ::std::vector< ::std::vector< TickInfo > > aAngleTickInfos;
-    TickmarkHelper aAngleTickmarkHelper( rAngleScale, rAngleIncrement );
-    aAngleTickmarkHelper.getAllTicks( aAngleTickInfos );
+    TickFactory aAngleTickFactory( rAngleScale, rAngleIncrement );
+    aAngleTickFactory.getAllTicks( aAngleTickInfos );
 
     uno::Reference< XScaling > xInverseScaling( NULL );
     if( rAngleScale.Scaling.is() )
@@ -166,8 +165,8 @@ void SAL_CALL VPolarRadiusAxis::createShapes()
             continue;
         }
 
-        pTickInfo->updateUnscaledValue( xInverseScaling );
-        aAxisProperties.m_pfMainLinePositionAtOtherAxis = new double( pTickInfo->fUnscaledTickValue );
+        //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
+        aAxisProperties.m_pfMainLinePositionAtOtherAxis = new double( pTickInfo->getUnscaledTickValue() );
         aAxisProperties.m_bDisplayLabels=false;
 
         //-------------------

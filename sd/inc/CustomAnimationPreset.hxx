@@ -36,12 +36,12 @@
 #include <comphelper/stl_types.hxx>
 #include <CustomAnimationEffect.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace sd {
 
-typedef std::hash_map< rtl::OUString, CustomAnimationEffectPtr, comphelper::UStringHash, comphelper::UStringEqual > EffectsSubTypeMap;
-typedef std::hash_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
+typedef boost::unordered_map< rtl::OUString, CustomAnimationEffectPtr, comphelper::UStringHash, comphelper::UStringEqual > EffectsSubTypeMap;
+typedef boost::unordered_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
 typedef std::vector< rtl::OUString > UStringList;
 
 class CustomAnimationPreset
@@ -80,7 +80,7 @@ private:
 };
 
 typedef boost::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
-typedef std::hash_map<rtl::OUString, CustomAnimationPresetPtr, comphelper::UStringHash, comphelper::UStringEqual> EffectDescriptorMap;
+typedef boost::unordered_map<rtl::OUString, CustomAnimationPresetPtr, comphelper::UStringHash, comphelper::UStringEqual> EffectDescriptorMap;
 typedef std::vector< CustomAnimationPresetPtr > EffectDescriptorList;
 
 struct PresetCategory
@@ -107,8 +107,6 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
 
     SD_DLLPUBLIC CustomAnimationPresetPtr getEffectDescriptor( const rtl::OUString& rPresetId ) const;
-//  const AnimationEffect* getEffect( const rtl::OUString& rPresetId ) const;
-//  const AnimationEffect* getEffect( const rtl::OUString& rPresetId, const rtl::OUString& rPresetSubType ) const;
 
     const rtl::OUString& getUINameForPresetId( const rtl::OUString& rPresetId ) const;
     const rtl::OUString& getUINameForProperty( const rtl::OUString& rProperty ) const;

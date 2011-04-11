@@ -49,7 +49,6 @@ class OReportController;
 \************************************************************************/
 class ODateTimeDialog : public ModalDialog
 {
-    // FixedLine                            m_aFLDate;
     CheckBox                                m_aDate;
     FixedText                               m_aFTDateFormat;
     ListBox                                 m_aDateListBox;

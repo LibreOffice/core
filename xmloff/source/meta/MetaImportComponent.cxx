@@ -30,7 +30,7 @@
 #include "precompiled_xmloff.hxx"
 
 #include "MetaImportComponent.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetai.hxx>
@@ -65,13 +65,13 @@ SvXMLImportContext* XMLMetaImportComponent::CreateContext(
          IsXMLToken(rLocalName, XML_DOCUMENT_META) )
     {
         if (!mxDocProps.is()) {
-            throw uno::RuntimeException(::rtl::OUString::createFromAscii(
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "XMLMetaImportComponent::CreateContext: setTargetDocument "
-                "has not been called"), *this);
+                "has not been called")), *this);
         }
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
-                    "com.sun.star.xml.dom.SAXDocumentBuilder")),
+            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.xml.dom.SAXDocumentBuilder"))),
                  uno::UNO_QUERY_THROW);
         return new SvXMLMetaDocumentContext(
                         *this, nPrefix, rLocalName, mxDocProps, xDocBuilder);
@@ -88,9 +88,9 @@ void SAL_CALL XMLMetaImportComponent::setTargetDocument(
 {
     mxDocProps = uno::Reference< document::XDocumentProperties >::query( xDoc );
     if( !mxDocProps.is() )
-        throw lang::IllegalArgumentException(::rtl::OUString::createFromAscii(
+        throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "XMLMetaImportComponent::setTargetDocument: argument is no "
-            "XDocumentProperties"), uno::Reference<uno::XInterface>(*this), 0);
+            "XDocumentProperties")), uno::Reference<uno::XInterface>(*this), 0);
 }
 
 uno::Sequence< rtl::OUString > SAL_CALL
@@ -113,7 +113,6 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaImportComponent_createInstance
     throw( uno::Exception )
 {
     // #110680#
-    // return (cppu::OWeakObject*)new XMLMetaImportComponent;
     return (cppu::OWeakObject*)new XMLMetaImportComponent(rSMgr);
 }
 

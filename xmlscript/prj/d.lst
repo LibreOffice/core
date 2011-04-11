@@ -11,3 +11,4 @@ mkdir: %_DEST%\inc%_EXT%\xmlscript
 ..\inc\xmlscript\xmlns.h %_DEST%\inc%_EXT%\xmlscript\xmlns.h
 
 ..\dtd\*.dtd %_DEST%\bin%_EXT%\*.dtd
+..\%__SRC%\misc\xcr.component %_DEST%\xml%_EXT%\xcr.component

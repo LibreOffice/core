@@ -81,7 +81,7 @@ private:
     const SdrView*      pView;
     SfxMapUnit          eUnit;
 
-    BOOL                bPositionModified;
+    sal_Bool                bPositionModified;
 
 #ifdef _SVX_MEASURE_CXX
     void                FillUnitLB();
@@ -96,16 +96,16 @@ public:
     ~SvxMeasurePage();
 
     static SfxTabPage*  Create( Window*, const SfxItemSet& );
-    static  USHORT*     GetRanges();
+    static  sal_uInt16*     GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet & );
 
     virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void PageCreated (SfxAllItemSet aSet);
 };
 
 /*************************************************************************

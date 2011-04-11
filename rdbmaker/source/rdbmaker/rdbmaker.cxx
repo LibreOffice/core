@@ -53,8 +53,13 @@
 
 #define PATH_DELEMITTER '/'
 
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
 
 FileStream          listFile;
 RegistryKey         rootKey;
@@ -142,7 +147,7 @@ sal_Bool checkFilterTypes(const OString& type)
             return sal_True;
         }
 
-        iter++;
+        ++iter;
     }
 
     return sal_False;
@@ -185,12 +190,12 @@ void cleanUp( sal_Bool bError)
     StringList::reverse_iterator iter = dirEntries.rbegin();
     while ( iter != dirEntries.rend() )
     {
-           if (rmdir((char*)(*iter).getStr()) == -1)
+        if (rmdir((char*)(*iter).getStr()) == -1)
         {
             break;
         }
 
-        iter++;
+        ++iter;
     }
 }
 

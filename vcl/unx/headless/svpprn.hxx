@@ -33,88 +33,21 @@
 #include "vcl/printergfx.hxx"
 #include "vcl/printerjob.hxx"
 #include "vcl/salprn.hxx"
+#include "salprn.h"
 
 class PspGraphics;
 
-class PspSalInfoPrinter : public SalInfoPrinter
+class SvpSalInfoPrinter : public PspSalInfoPrinter
 {
 public:
-    PspGraphics*            m_pGraphics;
-    psp::JobData            m_aJobData;
-    psp::PrinterGfx         m_aPrinterGfx;
-
-    PspSalInfoPrinter();
-    virtual ~PspSalInfoPrinter();
-
-    // overload all pure virtual methods
-    virtual SalGraphics*            GetGraphics();
-    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
-    virtual BOOL                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
-    virtual BOOL                    SetPrinterData( ImplJobSetup* pSetupData );
-    virtual BOOL                    SetData( ULONG nFlags, ImplJobSetup* pSetupData );
-    virtual void                    GetPageInfo( const ImplJobSetup* pSetupData,
-                                                 long& rOutWidth, long& rOutHeight,
-                                                 long& rPageOffX, long& rPageOffY,
-                                                 long& rPageWidth, long& rPageHeight );
-    virtual ULONG                   GetCapabilities( const ImplJobSetup* pSetupData, USHORT nType );
-    virtual ULONG                   GetPaperBinCount( const ImplJobSetup* pSetupData );
-    virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, ULONG nPaperBin );
-    virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
-    virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
+    virtual sal_Bool                    Setup( SalFrame* pFrame, ImplJobSetup* pSetupData );
 };
 
-class PspSalPrinter : public SalPrinter
+class SvpSalPrinter : public PspSalPrinter
 {
 public:
-    String                  m_aFileName;
-    String                  m_aTmpFile;
-    String                  m_aFaxNr;
-    bool                    m_bFax:1;
-    bool                    m_bPdf:1;
-    bool                    m_bSwallowFaxNo:1;
-    PspGraphics*            m_pGraphics;
-    psp::PrinterJob         m_aPrintJob;
-    psp::JobData            m_aJobData;
-    psp::PrinterGfx         m_aPrinterGfx;
-    ULONG                   m_nCopies;
-    bool                    m_bCollate;
-    SalInfoPrinter*         m_pInfoPrinter;
-
-    PspSalPrinter( SalInfoPrinter* );
-    virtual ~PspSalPrinter();
-
-    // overload all pure virtual methods
-    using SalPrinter::StartJob;
-    virtual BOOL                    StartJob( const XubString* pFileName,
-                                              const XubString& rJobName,
-                                              const XubString& rAppName,
-                                              ULONG nCopies,
-                                              bool bCollate,
-                                              bool bDirect,
-                                              ImplJobSetup* pSetupData );
-    virtual BOOL                    EndJob();
-    virtual BOOL                    AbortJob();
-    virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData );
-    virtual BOOL                    EndPage();
-    virtual ULONG                   GetErrorCode();
+    SvpSalPrinter( SalInfoPrinter* pInfoPrinter ) : PspSalPrinter(pInfoPrinter) {}
 };
-
-class Timer;
-
-namespace vcl_sal {
-class VCL_DLLPUBLIC PrinterUpdate
-{
-    static Timer*           pPrinterUpdateTimer;
-    static int              nActiveJobs;
-
-    static void doUpdate();
-    DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, void* );
-public:
-    static void update();
-    static void jobStarted() { nActiveJobs++; }
-    static void jobEnded();
-};
-}
 
 #endif // _SVP_SVPPRN_HXX
 

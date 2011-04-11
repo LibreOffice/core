@@ -213,7 +213,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
 {
     // normally this is "
-    ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("\"");
+    ::rtl::OUString aVal(RTL_CONSTASCII_USTRINGPARAM("\""));
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -557,7 +557,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("sdbc:skeleton:");
+    ::rtl::OUString aValue(RTL_CONSTASCII_USTRINGPARAM("sdbc:skeleton:"));
     return aValue;
 }
 // -------------------------------------------------------------------------
@@ -878,7 +878,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern, const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
 {
-    OSL_ENSURE(0,"Not implemented yet!");
+    OSL_FAIL("Not implemented yet!");
     throw SQLException();
     return NULL;
 }

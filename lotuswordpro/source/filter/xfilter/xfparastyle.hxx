@@ -59,11 +59,6 @@
  * Styles for paragraph may include many style,include font,indent,margin,
  * shadow,line height,and so on.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-10 create this file.
- * 2005-01-20 move some structure out of this file.
- ************************************************************************/
 #ifndef     _XFPARASTYLE_HXX
 #define     _XFPARASTYLE_HXX
 
@@ -235,10 +230,7 @@ public:
 
     sal_uInt32 GetFlag(){ return m_nFlag; }
 
-    /**
-     * @descr   return margins.
-     */
-    XFMargins GetMargins(){return m_aMargin;}
+    XFMargins& GetMargins(){return m_aMargin;}
 
     virtual enumXFStyle GetStyleFamily();
 

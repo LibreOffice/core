@@ -243,8 +243,6 @@ public:
     virtual void SAL_CALL setSubtype( sal_Int16 _subtype ) throw (RuntimeException);
     virtual sal_Bool SAL_CALL getMode() throw (RuntimeException);
     virtual void SAL_CALL setMode( sal_Bool _mode ) throw (RuntimeException);
-//    virtual sal_Bool SAL_CALL getDirection() throw (RuntimeException);
-//    virtual void SAL_CALL setDirection( sal_Bool _direction ) throw (RuntimeException);
     virtual sal_Int32 SAL_CALL getFadeColor() throw (RuntimeException);
     virtual void SAL_CALL setFadeColor( sal_Int32 _fadecolor ) throw (RuntimeException);
 
@@ -255,7 +253,7 @@ public:
     virtual void SAL_CALL setVolume( double _volume ) throw (RuntimeException);
 
 
-    // XCommand
+    // XCommand - the following two shadowed by animate, unfortunately
 //    virtual Any SAL_CALL getTarget() throw (RuntimeException);
 //    virtual void SAL_CALL setTarget( const Any& _target ) throw (RuntimeException);
     virtual sal_Int16 SAL_CALL getCommand() throw (RuntimeException);

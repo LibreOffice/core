@@ -42,13 +42,13 @@ enum SwSortDirection    { SRT_COLUMNS, SRT_ROWS         };
 struct SW_DLLPUBLIC SwSortKey
 {
     SwSortKey();
-    SwSortKey( USHORT nId, const String& rSrtType, SwSortOrder eOrder );
+    SwSortKey( sal_uInt16 nId, const String& rSrtType, SwSortOrder eOrder );
     SwSortKey( const SwSortKey& rOld );
 
     String          sSortType;
     SwSortOrder     eSortOrder;
-    USHORT          nColumnId;
-    BOOL            bIsNumeric;
+    sal_uInt16          nColumnId;
+    sal_Bool            bIsNumeric;
 };
 
 SV_DECL_PTRARR(SwSortKeys, SwSortKey*, 3, 1)
@@ -62,9 +62,9 @@ struct SW_DLLPUBLIC SwSortOptions
     SwSortKeys      aKeys;
     SwSortDirection eDirection;
     sal_Unicode     cDeli;
-    USHORT          nLanguage;
-    BOOL            bTable;
-    BOOL            bIgnoreCase;
+    sal_uInt16          nLanguage;
+    sal_Bool            bTable;
+    sal_Bool            bIgnoreCase;
 };
 
 #endif  // _SORTOPT_HXX

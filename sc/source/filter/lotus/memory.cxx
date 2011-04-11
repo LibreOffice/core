@@ -55,8 +55,8 @@ sal_Char*               pPuffer;                    // -> flt_xxx.cxx
 sal_Char*               pDummy1;                    // -> flt_xxx.cxx, ScanVersion()
 sal_Char*               pDummy2;                    // -> tool.cxx, CreateTable()
 
-extern BYTE*            pFormelBuffer;              // -> tool.cxx, fuer OP_Formula()
-BYTE*                   pFormelBuffer;
+extern sal_uInt8*           pFormelBuffer;              // -> tool.cxx, fuer OP_Formula()
+sal_uInt8*                  pFormelBuffer;
 
 extern FormCache*       pValueFormCache;            // -> tool.cxx
 
@@ -72,8 +72,8 @@ sal_Char*               pAnsi;
 #endif
 sal_Char*               pErgebnis;                  // -> op.cxx
 
-extern BOOL             bFormInit;                  // -> tool.cxx, fuer GetFormHandle()
-BOOL                    bFormInit;
+extern sal_Bool             bFormInit;                  // -> tool.cxx, fuer GetFormHandle()
+sal_Bool                    bFormInit;
 
 extern SvxHorJustifyItem    *pAttrRight, *pAttrLeft, *pAttrCenter,
                             *pAttrRepeat, *pAttrStandard;   // -> tool.cxx, fuer GetFormAttr()
@@ -81,7 +81,7 @@ extern ScProtectionAttr*    pAttrUnprot;   // -> tool.cxx, fuer PutFormString()
 
 
 
-BOOL MemNew( void )
+sal_Bool MemNew( void )
 {
     pPuffer = new sal_Char [ 32L*1024L ];
 
@@ -100,20 +100,20 @@ BOOL MemNew( void )
 
     pPar = new sal_Char *[ nMaxPar ];
 
-    pFormelBuffer = new BYTE[ 4096 ];
+    pFormelBuffer = new sal_uInt8[ 4096 ];
 
     pValueFormCache = new FormCache( pDoc );
 
     // fuer tool.cxx::PutFormString()
-    pAttrUnprot = new ScProtectionAttr( TRUE );
+    pAttrUnprot = new ScProtectionAttr( sal_True );
     pAttrRight = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY );
     pAttrLeft = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY );
     pAttrCenter = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY );
     pAttrRepeat = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_REPEAT, ATTR_HOR_JUSTIFY );
     pAttrStandard = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
-    bFormInit = TRUE;
+    bFormInit = sal_True;
 
-    return TRUE;
+    return sal_True;
 }
 
 

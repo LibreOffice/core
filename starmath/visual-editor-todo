@@ -12,20 +12,19 @@ on IRC (jopsen) or e-mail me at jopsen@gmail.com.
 
 Easy
 ----
-1. Draw a non-blinking line under the visual line that the caret is in, in SmCaretDrawingVisitor.
-2. SmGraphicWindow::KeyInput relies on comparison of sal_Char, a better way must be available for CTRL+c
-3. Code style (missing spaces, linebreaks and a few renames)
-4. More documentation
-5. Replace j_assert with DBG_ASSERT (don't do this yet).
+1. SmGraphicWindow::KeyInput relies on comparison of sal_Char, a better way must be available for CTRL+c
+2. Code style (missing spaces, linebreaks and a few renames)
+3. More documentation
+4. Remove the CreateTextFromNode methods and replace calls to it with NodeToTextVisitor
+5. Extend NodeToTextVisitor to update token offsets so SmNode::GetRow and SmNode::GetColumn will work.
+   (These methods can be used to enable synchronization of caret positions between visual and non-visual editor).
 
 Medium
 ------
 1. SmCursor::InsertCol() method for added columns to matrices should be implemented.
 2. SmCursor` should support deletion of lines, rows, cols and sub-/superscripts.
 3. SmCursor::InsertSubSup() should wrap the body in a SmBraceNode if the body is an SmOperNode, SmBinVerNode, etc.
-4. Make caret in visual editor blink.
-5. Don't draw visual editor caret, when SmGraphicWindow doesn't have focus.
-6. When OpenOffice Math runs in standalone mode it centers the current formula, this is not nice for visual editing.
+4. When OpenOffice Math runs in standalone mode it centers the current formula, this is not nice for visual editing.
 
 Complex
 -------
@@ -36,9 +35,9 @@ Complex
 
 Complex and non-essential
 -------------------------
-1. Global clipboard integration
-2. Support undo/redo with UndoManager integration
-3. Consider improving GUI for "Formula Elements"-dialog, most buttons work with visual editor
-4. Consider allowing users to enter commands in visual editor, by prefixing the command...
-5. Optimize things, for instance SmCursor::AnnotateSelection() is called way too many places...
-6. Improve handling of MoveUp and MoveDown in SmCursor::Move, SmCaretPos2LineVisitor might need improvement.
+* Global clipboard integration
+* Consider improving GUI for "Formula Elements"-dialog, most buttons work with visual editor
+* Consider allowing users to enter commands in visual editor, by prefixing the command...
+* Optimize things, for instance SmCursor::AnnotateSelection() is called way too many places...
+* Improve handling of MoveUp and MoveDown in SmCursor::Move, SmCaretPos2LineVisitor might need improvement.
+* Synchronized command text caret and visual editor caret.

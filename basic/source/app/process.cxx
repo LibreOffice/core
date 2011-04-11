@@ -30,11 +30,6 @@
 #include "precompiled_basic.hxx"
 
 
-#ifdef WNT
-#include    <tools/prewin.h>
-#include "winbase.h"
-#include    <tools/postwin.h>
-#endif
 #include <tools/errcode.hxx>
 #include <basic/sbxcore.hxx>
 #include <tools/string.hxx>
@@ -42,13 +37,11 @@
 #include <osl/process.h>
 
 #include <basic/ttstrhlp.hxx>
-
-//#ifndef _BYTE_STRING_LIST
-//DECLARE_LIST( ByteStringList, ByteString * );
-//#define _BYTE_STRING_LIST
-//#endif
-
 #include <basic/process.hxx>
+
+#ifdef WNT
+#include <windows.h>
+#endif
 
 Process::Process()
 : m_nArgumentCount( 0 )
@@ -57,8 +50,8 @@ Process::Process()
 , m_pEnvList( NULL )
 , m_aProcessName()
 , m_pProcess( NULL )
-, bWasGPF( FALSE )
-, bHasBeenStarted( FALSE )
+, bWasGPF( sal_False )
+, bHasBeenStarted( sal_False )
 {
 }
 
@@ -84,19 +77,20 @@ Process::~Process()
 }
 
 
-BOOL Process::ImplIsRunning()
+sal_Bool Process::ImplIsRunning()
 {
     if ( m_pProcess && bHasBeenStarted )
     {
         oslProcessInfo aProcessInfo;
+        aProcessInfo.Size = sizeof(oslProcessInfo);
         osl_getProcessInfo(m_pProcess, osl_Process_EXITCODE, &aProcessInfo );
         if ( !(aProcessInfo.Fields & osl_Process_EXITCODE) )
-            return TRUE;
+            return sal_True;
         else
-            return FALSE;
+            return sal_False;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 long Process::ImplGetExitCode()
@@ -104,6 +98,7 @@ long Process::ImplGetExitCode()
     if ( m_pProcess )
     {
         oslProcessInfo aProcessInfo;
+        aProcessInfo.Size = sizeof(oslProcessInfo);
         osl_getProcessInfo(m_pProcess, osl_Process_EXITCODE, &aProcessInfo );
         if ( !(aProcessInfo.Fields & osl_Process_EXITCODE) )
             SbxBase::SetError( SbxERR_NO_ACTIVE_OBJECT );
@@ -115,7 +110,6 @@ long Process::ImplGetExitCode()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
 
 void Process::SetImage( const String &aAppPath, const String &aAppParams, const Environment *pEnv )
 { // Set image file of executable
@@ -159,31 +153,30 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams, const 
             while ( aIter != pEnv->end() )
             {
                 ::rtl::OUString aTemp = ::rtl::OUString( (*aIter).first );
-                aTemp += ::rtl::OUString::createFromAscii( "=" );
+                aTemp += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "=" ));
                 aTemp += ::rtl::OUString( (*aIter).second );
                 m_pEnvList[m_nEnvCount] = NULL;
                 rtl_uString_assign( &(m_pEnvList[m_nEnvCount]), aTemp.pData );
-                m_nEnvCount++;
-                aIter++;
+                ++m_nEnvCount;
+                ++aIter;
             }
         }
 
         ::rtl::OUString aNormalizedAppPath;
         osl::FileBase::getFileURLFromSystemPath( ::rtl::OUString(aAppPath), aNormalizedAppPath );
         m_aProcessName = aNormalizedAppPath;;
-        bHasBeenStarted = FALSE;
+        bHasBeenStarted = sal_False;
 
     }
 }
 
-BOOL Process::Start()
+sal_Bool Process::Start()
 { // Start program
-    BOOL bSuccess=FALSE;
+    sal_Bool bSuccess=sal_False;
     if ( m_aProcessName.getLength() && !ImplIsRunning() )
     {
-        bWasGPF = FALSE;
+        bWasGPF = sal_False;
 #ifdef WNT
-//      sal_uInt32 nErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_NOALIGNMENTFAULTEXCEPT | SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
         sal_uInt32 nErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_NOALIGNMENTFAULTEXCEPT | SEM_NOGPFAULTERRORBOX);
         try
         {
@@ -205,7 +198,7 @@ BOOL Process::Start()
         }
         catch( ... )
         {
-            bWasGPF = TRUE;
+            bWasGPF = sal_True;
             // TODO: Output debug message !!
         }
         nErrorMode = SetErrorMode(nErrorMode);
@@ -217,17 +210,17 @@ BOOL Process::Start()
     return bSuccess;
 }
 
-ULONG Process::GetExitCode()
+sal_uIntPtr Process::GetExitCode()
 { // ExitCode of program after execution
     return ImplGetExitCode();
 }
 
-BOOL Process::IsRunning()
+sal_Bool Process::IsRunning()
 {
     return ImplIsRunning();
 }
 
-BOOL Process::WasGPF()
+sal_Bool Process::WasGPF()
 { // Did the process fail?
 #ifdef WNT
     return ImplGetExitCode() == 3221225477;
@@ -236,11 +229,11 @@ BOOL Process::WasGPF()
 #endif
 }
 
-BOOL Process::Terminate()
+sal_Bool Process::Terminate()
 {
     if ( ImplIsRunning() )
         return osl_terminateProcess(m_pProcess) == osl_Process_E_None;
-    return TRUE;
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,7 +36,7 @@
 
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/decoview.hxx>
 #include "strload.hxx"
 #include "global.hxx"
@@ -57,7 +57,7 @@ using ::com::sun::star::accessibility::XAccessibleContext;
 using ::rtl::OUString;
 using ::rtl::OUStringHash;
 using ::std::vector;
-using ::std::hash_map;
+using ::boost::unordered_map;
 using ::std::auto_ptr;
 
 ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY, ScDocument* pDoc) :
@@ -307,7 +307,7 @@ IMPL_LINK( ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl, void*, EMPTYARG )
 
 size_t ScMenuFloatingWindow::MENU_NOT_SELECTED = 999;
 
-ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, USHORT nMenuStackLevel) :
+ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel) :
     PopupMenuFloatingWindow(pParent),
     maOpenTimer(this),
     maCloseTimer(this),
@@ -1010,7 +1010,6 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     Size aSize;
     getSectionPosSize(aPos, aSize, WHOLE);
     SetOutputSizePixel(aSize);
-    Size aOutSize = GetOutputSizePixel();
 
     getSectionPosSize(aPos, aSize, BTN_OK);
     maBtnOk.SetPosSizePixel(aPos, aSize);
@@ -1040,14 +1039,14 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
     maBtnSelectSingle.SetPosSizePixel(aPos, aSize);
     maBtnSelectSingle.SetQuickHelpText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_SELECT_CURRENT).GetString());
-    maBtnSelectSingle.SetModeImage(Image(ScResId(RID_IMG_SELECT_CURRENT)), BMP_COLOR_NORMAL);
+    maBtnSelectSingle.SetModeImage(Image(ScResId(RID_IMG_SELECT_CURRENT)));
     maBtnSelectSingle.SetClickHdl( LINK(this, ScDPFieldPopupWindow, ButtonHdl) );
     maBtnSelectSingle.Show();
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_UNSELECT);
     maBtnUnselectSingle.SetPosSizePixel(aPos, aSize);
     maBtnUnselectSingle.SetQuickHelpText(ScRscStrLoader(RID_POPUP_FILTER, STR_BTN_UNSELECT_CURRENT).GetString());
-    maBtnUnselectSingle.SetModeImage(Image(ScResId(RID_IMG_UNSELECT_CURRENT)), BMP_COLOR_NORMAL);
+    maBtnUnselectSingle.SetModeImage(Image(ScResId(RID_IMG_UNSELECT_CURRENT)));
     maBtnUnselectSingle.SetClickHdl( LINK(this, ScDPFieldPopupWindow, ButtonHdl) );
     maBtnUnselectSingle.Show();
 }
@@ -1161,7 +1160,7 @@ void ScDPFieldPopupWindow::setAllMemberState(bool bSet)
 {
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
-        maChecks.CheckEntryPos(static_cast< USHORT >( i ), bSet);
+        maChecks.CheckEntryPos(static_cast< sal_uInt16 >( i ), bSet);
 }
 
 void ScDPFieldPopupWindow::selectCurrentMemberOnly(bool bSet)
@@ -1357,7 +1356,7 @@ void ScDPFieldPopupWindow::initMembers()
     for (size_t i = 0; i < n; ++i)
     {
         maChecks.InsertEntry(maMembers[i].maName);
-        maChecks.CheckEntryPos(static_cast< USHORT >( i ), maMembers[i].mbVisible);
+        maChecks.CheckEntryPos(static_cast< sal_uInt16 >( i ), maMembers[i].mbVisible);
         if (maMembers[i].mbVisible)
             ++nVisMemCount;
     }
@@ -1385,14 +1384,14 @@ const Size& ScDPFieldPopupWindow::getWindowSize() const
     return maWndSize;
 }
 
-void ScDPFieldPopupWindow::getResult(hash_map<OUString, bool, OUStringHash>& rResult)
+void ScDPFieldPopupWindow::getResult(boost::unordered_map<OUString, bool, OUStringHash>& rResult)
 {
-    typedef hash_map<OUString, bool, OUStringHash> ResultMap;
+    typedef boost::unordered_map<OUString, bool, OUStringHash> ResultMap;
     ResultMap aResult;
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
     {
-        bool bState = maChecks.IsChecked(static_cast< USHORT >( i ));
+        bool bState = maChecks.IsChecked(static_cast< sal_uInt16 >( i ));
         aResult.insert(ResultMap::value_type(maMembers[i].maName, bState));
     }
     rResult.swap(aResult);

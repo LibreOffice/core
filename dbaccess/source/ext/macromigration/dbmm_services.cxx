@@ -41,15 +41,8 @@ namespace dbmm
 
     static void initializeModule()
     {
-        static bool bInitialized( false );
-        if ( !bInitialized )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !bInitialized )
-            {
-                createRegistryInfo_MacroMigrationDialogService();
-            }
-        }
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        createRegistryInfo_MacroMigrationDialogService();
     }
 
 //........................................................................

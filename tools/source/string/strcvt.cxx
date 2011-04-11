@@ -228,7 +228,7 @@ sal_Unicode* ImplGet1ByteUnicodeTab( rtl_TextEncoding eTextEncoding )
 
 static sal_uChar* ImplGet1ByteConvertTab( rtl_TextEncoding eSrcTextEncoding,
                                           rtl_TextEncoding eDestTextEncoding,
-                                          BOOL bReplace )
+                                          sal_Bool bReplace )
 {
 #ifndef BOOTSTRAP
     TOOLSINDATA*                pToolsData = ImplGetToolsInData();
@@ -354,7 +354,7 @@ void ImplDeleteCharTabData()
 // =======================================================================
 
 void ByteString::ImplStringConvert(
-    rtl_TextEncoding eSource, rtl_TextEncoding eTarget, BOOL bReplace )
+    rtl_TextEncoding eSource, rtl_TextEncoding eTarget, sal_Bool bReplace )
 {
     sal_uChar* pConvertTab = ImplGet1ByteConvertTab( eSource, eTarget, bReplace );
     if ( pConvertTab )
@@ -410,7 +410,7 @@ void ByteString::ImplStringConvert(
 
 // =======================================================================
 
-ByteString& ByteString::Convert( rtl_TextEncoding eSource, rtl_TextEncoding eTarget, BOOL bReplace )
+ByteString& ByteString::Convert( rtl_TextEncoding eSource, rtl_TextEncoding eTarget, sal_Bool bReplace )
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
@@ -443,7 +443,7 @@ ByteString& ByteString::Convert( rtl_TextEncoding eSource, rtl_TextEncoding eTar
 
 char ByteString::Convert( char c,
                           rtl_TextEncoding eSource, rtl_TextEncoding eTarget,
-                          BOOL bReplace )
+                          sal_Bool bReplace )
 {
     // TextEncoding Dontknow kann nicht konvertiert werden
     if ( (eSource == RTL_TEXTENCODING_DONTKNOW) || (eTarget == RTL_TEXTENCODING_DONTKNOW) )
@@ -481,7 +481,7 @@ sal_Unicode ByteString::ConvertToUnicode( char c, rtl_TextEncoding eTextEncoding
 
 // -----------------------------------------------------------------------
 
-char ByteString::ConvertFromUnicode( sal_Unicode c, rtl_TextEncoding eTextEncoding, BOOL bReplace )
+char ByteString::ConvertFromUnicode( sal_Unicode c, rtl_TextEncoding eTextEncoding, sal_Bool bReplace )
 {
     sal_Size    nLen;
     char        aBuf[30];
@@ -531,7 +531,7 @@ sal_Unicode ByteString::ConvertToUnicode( const char* pChar, sal_Size* pLen, rtl
 // -----------------------------------------------------------------------
 
 sal_Size ByteString::ConvertFromUnicode( sal_Unicode c, char* pBuf, sal_Size nBufLen, rtl_TextEncoding eTextEncoding,
-                                         BOOL bReplace )
+                                         sal_Bool bReplace )
 {
     // TextEncoding Dontknow wird nicht konvertiert
     if ( eTextEncoding == RTL_TEXTENCODING_DONTKNOW )

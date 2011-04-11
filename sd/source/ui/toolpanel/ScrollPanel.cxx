@@ -42,25 +42,6 @@
 namespace sd { namespace toolpanel {
 
 ScrollPanel::ScrollPanel (
-    TreeNode* pParent)
-    : Control (pParent->GetWindow(), WB_DIALOGCONTROL),
-      TreeNode(pParent),
-      maScrollWindow(this, WB_DIALOGCONTROL),
-      maVerticalScrollBar(this, WB_VERT),
-      maHorizontalScrollBar(this, WB_HORZ),
-      maScrollBarFiller(this),
-      maScrollWindowFiller(&maScrollWindow),
-      mbIsRearrangePending(true),
-      mbIsLayoutPending(true),
-      mnChildrenWidth(0),
-      mnVerticalBorder(2),
-      mnVerticalGap(3),
-      mnHorizontalBorder(2)
-{
-    Construct();
-}
-
-ScrollPanel::ScrollPanel (
     ::Window& i_rParentWindow)
     : Control (&i_rParentWindow, WB_DIALOGCONTROL),
       TreeNode(NULL),
@@ -82,7 +63,7 @@ ScrollPanel::ScrollPanel (
 void ScrollPanel::Construct()
 {
     SetAccessibleName (
-        ::rtl::OUString::createFromAscii("Sub Task Panel"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")));
     mpControlContainer->SetMultiSelection (true);
 
     SetBorderStyle (WINDOW_BORDER_NORMAL);
@@ -100,10 +81,10 @@ void ScrollPanel::Construct()
     // Initialize the scroll bars.
     maVerticalScrollBar.SetScrollHdl (
         LINK(this, ScrollPanel, ScrollBarHandler));
-    maVerticalScrollBar.EnableDrag (TRUE);
+    maVerticalScrollBar.EnableDrag (sal_True);
     maHorizontalScrollBar.SetScrollHdl (
         LINK(this, ScrollPanel, ScrollBarHandler));
-    maHorizontalScrollBar.EnableDrag (TRUE);
+    maHorizontalScrollBar.EnableDrag (sal_True);
 }
 
 
@@ -138,7 +119,7 @@ ScrollPanel::~ScrollPanel (void)
 TitledControl* ScrollPanel::AddControl (
     ::std::auto_ptr<TreeNode> pControl,
     const String& rTitle,
-    ULONG nHelpId)
+    const rtl::OString& rHelpId)
 {
     // We are interested only in the title.  The control itself is
     // managed by the content object.
@@ -148,7 +129,7 @@ TitledControl* ScrollPanel::AddControl (
         rTitle,
         TitledControlStandardClickHandler(GetControlContainer(), ControlContainer::ES_TOGGLE),
         TitleBar::TBT_SUB_CONTROL_HEADLINE);
-    pTitledControl->GetTitleBar()->SetHelpId(nHelpId);
+    pTitledControl->GetTitleBar()->SetHelpId(rHelpId);
 
     AddControl(::std::auto_ptr<TreeNode>(pTitledControl));
 
@@ -243,7 +224,7 @@ void ScrollPanel::Paint (const Rectangle& rRect)
         Point (mnHorizontalBorder,0),
         Size(mnChildrenWidth,0));
     StripeList::const_iterator iStripe;
-    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); iStripe++)
+    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); ++iStripe)
     {
         aStripeArea.Top() = iStripe->first;
         aStripeArea.Bottom() = iStripe->second;
@@ -676,14 +657,14 @@ IMPL_LINK(ScrollPanel, ScrollBarHandler, ScrollBar*, EMPTYARG)
 
 long ScrollPanel::Notify( NotifyEvent& rNEvt )
 {
-    long nRet = FALSE;
+    long nRet = sal_False;
     if( rNEvt.GetType() == EVENT_COMMAND )
     {
         // note: dynamic_cast is not possible as GetData() returns a void*
         CommandEvent* pCmdEvent = reinterpret_cast< CommandEvent* >(rNEvt.GetData());
         DBG_ASSERT( pCmdEvent!=0 &&
-                    ( pCmdEvent->IsMouseEvent() == TRUE ||
-                      pCmdEvent->IsMouseEvent() == FALSE ),
+                    ( pCmdEvent->IsMouseEvent() == sal_True ||
+                      pCmdEvent->IsMouseEvent() == sal_False ),
                     "Invalid CommandEvent" );
         if (pCmdEvent)
             switch (pCmdEvent->GetCommand())
@@ -714,8 +695,8 @@ long ScrollPanel::Notify( NotifyEvent& rNEvt )
 {
     return new ::accessibility::AccessibleScrollPanel (
         *this,
-        ::rtl::OUString::createFromAscii("Scroll Panel"),
-        ::rtl::OUString::createFromAscii("Scroll Panel"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scroll Panel")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scroll Panel")));
 }
 
 

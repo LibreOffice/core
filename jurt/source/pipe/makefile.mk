@@ -41,6 +41,7 @@ SHL1TARGET = jpipe
 .END
 
 SHL1CODETYPE = C
+SHL1CREATEJNILIB=TRUE
 SHL1IMPLIB = i$(SHL1TARGET)
 SHL1OBJS = $(SLO)/com_sun_star_lib_connections_pipe_PipeConnection.obj
 SHL1RPATH = URELIB

@@ -60,6 +60,8 @@ namespace xmloff
             case HIDDEN: return "hidden";
             case GRID: return "grid";
             case VALUERANGE: return "value-range";
+            case TIME: return "time";
+            case DATE: return "date";
 
             default: return "generic-control";
         }

@@ -39,9 +39,6 @@
 #include <vcl/virdev.hxx>
 
 #ifdef WNT
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
 #ifdef max
 #undef max
 #endif
@@ -82,7 +79,7 @@ namespace cairocanvas
                               sal_Int8      nTextDirection )
         {
             // TODO(P3): avoid if already correctly set
-            ULONG nLayoutMode;
+            sal_uLong nLayoutMode;
             switch( nTextDirection )
             {
                 default:
@@ -215,8 +212,8 @@ namespace cairocanvas
             return geometry::RealRectangle2D( 0, nAboveBaseline,
                                               aVDev.GetTextWidth(
                                                   maText.Text,
-                                                  ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-                                                  ::canvas::tools::numeric_cast<USHORT>(maText.Length) ),
+                                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) ),
                                               nBelowBaseline );
         }
     }
@@ -405,8 +402,8 @@ namespace cairocanvas
         }
 
         aSysLayoutData = rOutDev.GetSysTextLayoutData(rOutpos, maText.Text,
-                                                      ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-                                                      ::canvas::tools::numeric_cast<USHORT>(maText.Length),
+                                                      ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                                      ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
                                                       maLogicalAdvancements.getLength() ? aOffsets.get() : NULL);
 
         // Sort them so that all glyphs on the same glyph fallback level are consecutive
@@ -447,15 +444,15 @@ namespace cairocanvas
             if (maLogicalAdvancements.getLength())        // VCL FALLBACK - with glyph advances
             {
                 rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets.get(),
-                                       ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-                                       ::canvas::tools::numeric_cast<USHORT>(maText.Length) );
+                                       ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                       ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
                 return true;
             }
             else                                               // VCL FALLBACK - without advances
             {
                 rOutDev.DrawText( rOutpos, maText.Text,
-                                  ::canvas::tools::numeric_cast<USHORT>(maText.StartPosition),
-                                  ::canvas::tools::numeric_cast<USHORT>(maText.Length) );
+                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
+                                  ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
                 return true;
             }
         }

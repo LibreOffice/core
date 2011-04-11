@@ -51,11 +51,9 @@ private:
     sal_Bool            ImplGetURLObject( const String& rPath, const String& rBase, INetURLObject& aURLObject ) const;
     void                FillDocumentList ();
 
-    DECL_LINK (ClickNewHdl_Impl          , void * );        // Button : New
+    DECL_LINK (ClickNewHdl_Impl          , void * );
 
-    Image GetImage( USHORT nId );
-    void ReadURLFile( const String& rFile, String& rTitle, String& rURL, sal_Int32& rIconId, BOOL* pShowAsFolder);//, String* pFrame, String* pOpenAs, String* pDefTempl, String* pDefURL );
-    //String ReadURL_Impl( Config& rURLFile, const DirEntry& rFile );
+    Image GetImage( sal_uInt16 nId );
 
 protected:
     void FillDlgFields     ( String& aStrURL );
@@ -69,7 +67,7 @@ public:
 
     static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
 
-    virtual BOOL        AskApply ();
+    virtual sal_Bool        AskApply ();
     virtual void        DoApply ();
 
     virtual void        SetInitFocus();

@@ -39,7 +39,7 @@ class RscString : public RscTop
     RscTop * pRefClass;
     struct RscStringInst {
         char *  pStr;   // Zeiger auf String
-        BOOL    bDflt;  // Ist Default
+        sal_Bool    bDflt;  // Ist Default
         RscId   aRefId; // ReferenzName
     };
     sal_uInt32  nSize;
@@ -51,20 +51,20 @@ public:
     {
                         pRefClass = pClass;
                     };
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, BOOL );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, sal_Bool );
                     // Der zulaessige Bereich wird gesetzt
     void            Destroy( const RSCINST & rInst );
     sal_uInt32          Size(){ return nSize; }
     void            SetToDefault( const RSCINST & rInst )
                     {
-                        ((RscStringInst*)rInst.pData)->bDflt = TRUE;
+                        ((RscStringInst*)rInst.pData)->bDflt = sal_True;
                     }
-    BOOL            IsDefault( const RSCINST & rInst)
+    sal_Bool            IsDefault( const RSCINST & rInst)
                     {
                         return( ((RscStringInst*)rInst.pData)->bDflt );
                     };
                     // Als Default setzen
-    BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
     ERRTYPE         SetString( const RSCINST &, const char * pStr );
     ERRTYPE         GetString( const RSCINST &, char ** ppStr );
     ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
@@ -72,7 +72,7 @@ public:
     void            WriteSrc( const RSCINST &, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
     virtual void    WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 };

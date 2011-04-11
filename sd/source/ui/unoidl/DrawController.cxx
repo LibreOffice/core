@@ -166,7 +166,9 @@ void SAL_CALL DrawController::dispose (void)
         {
             mbDisposing = true;
 
-            boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
+            boost::shared_ptr<ViewShell> pViewShell;
+            if (mpBase)
+                pViewShell = mpBase->GetMainViewShell();
             if ( pViewShell )
             {
                 pViewShell->DeactivateCurrentFunction();
@@ -247,7 +249,7 @@ OUString SAL_CALL DrawController::getImplementationName(  ) throw(RuntimeExcepti
 
 
 
-static OUString ssServiceName (OUString::createFromAscii(
+static OUString ssServiceName (RTL_CONSTASCII_USTRINGPARAM(
     "com.sun.star.drawing.DrawingDocumentDrawView"));
 
 sal_Bool SAL_CALL DrawController::supportsService (
@@ -530,7 +532,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
         catch( uno::Exception& e )
         {
             (void)e;
-            DBG_ERROR(
+            OSL_FAIL(
                 (::rtl::OString("sd::SdUnoDrawView::FireSwitchCurrentPage(), "
                     "exception caught: ") +
                     ::rtl::OUStringToOString(
@@ -812,14 +814,16 @@ sal_Bool DrawController::convertFastPropertyValue (
     else if (mxSubController.is())
     {
         rConvertedValue = rValue;
-        rOldValue = mxSubController->getFastPropertyValue(nHandle);
-        bResult = (rOldValue != rConvertedValue);
-        /*        bResult = mpSubController->convertFastPropertyValue(
-            rConvertedValue,
-            rOldValue,
-            nHandle,
-            rValue);
-        */
+        try
+        {
+            rOldValue = mxSubController->getFastPropertyValue(nHandle);
+            bResult = (rOldValue != rConvertedValue);
+        }
+        catch(beans::UnknownPropertyException aException)
+        {
+            // The prperty is unknown and thus an illegal argument to this method.
+            throw com::sun::star::lang::IllegalArgumentException();
+        }
     }
 
     return bResult;

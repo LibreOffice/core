@@ -218,7 +218,7 @@ namespace frm
         }
         else
         {
-            OSL_ENSURE( false, "OReferenceValueComponent::translateExternalValueToControlValue: unexpected value type!" );
+            OSL_FAIL( "OReferenceValueComponent::translateExternalValueToControlValue: unexpected value type!" );
         }
 
         return makeAny( nState );
@@ -267,7 +267,7 @@ namespace frm
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OReferenceValueComponent::translateControlValueToExternalValue: caught an exception!" );
+            OSL_FAIL( "OReferenceValueComponent::translateControlValueToExternalValue: caught an exception!" );
         }
 
         return aExternalValue;

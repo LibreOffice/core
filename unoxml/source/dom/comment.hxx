@@ -26,13 +26,14 @@
  *
  ************************************************************************/
 
-#ifndef _COMMENT_HXX
-#define _COMMENT_HXX
+#ifndef DOM_COMMENT_HXX
+#define DOM_COMMENT_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XComment.hpp>
-#include "characterdata.hxx"
+
+#include <characterdata.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -40,16 +41,22 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CComment : public cppu::ImplInheritanceHelper1< CCharacterData, XComment >
+    typedef ::cppu::ImplInheritanceHelper1< CCharacterData, XComment >
+        CComment_Base;
+
+    class CComment
+        : public CComment_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
+
     protected:
-        CComment(const xmlNodePtr aNodePtr);
+        CComment(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlNodePtr const pNode);
 
     public:
 
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
          // --- delegations for XCharacterData
         virtual void SAL_CALL appendData(const OUString& arg)

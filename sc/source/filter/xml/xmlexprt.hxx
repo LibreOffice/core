@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class ScOutlineArray;
 class SvXMLExportPropertyMapper;
@@ -65,6 +65,7 @@ class ScChartListener;
 class SfxItemPool;
 class ScAddress;
 class ScBaseCell;
+class ScXMLCachedRowAttrAccess;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
@@ -87,7 +88,7 @@ class ScXMLExport : public SvXMLExport
     UniReference < SvXMLExportPropertyMapper >  xRowStylesExportPropertySetMapper;
     UniReference < SvXMLExportPropertyMapper >  xTableStylesExportPropertySetMapper;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
-    typedef ::std::hash_map<sal_Int32, sal_Int32>  NumberFormatIndexMap;
+    typedef ::boost::unordered_map<sal_Int32, sal_Int32>  NumberFormatIndexMap;
     NumberFormatIndexMap                aNumFmtIndexMap;
     ScMySharedData*                     pSharedData;
     ScColumnStyles*                 pColumnStyles;
@@ -160,13 +161,14 @@ class ScXMLExport : public SvXMLExport
     void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
         const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet);
     void WriteRowContent();
-    void WriteRowStartTag(sal_Int32 nRow, const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nEmptyRows);
+    void WriteRowStartTag(sal_Int32 nRow, const sal_Int32 nIndex, const sal_Int32 nEmptyRows, bool bHidden, bool bFiltered);
     void OpenHeaderRows();
     void CloseHeaderRows();
-    void OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
-    void OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag,
-        const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
-    void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow);
+    void OpenNewRow(const sal_Int32 nIndex, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows,
+                    bool bHidden, bool bFiltered);
+    void OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows,
+                         bool bHidden, bool bFiltered);
+    void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow, ScXMLCachedRowAttrAccess& rRowAttr);
     void CloseRow(const sal_Int32 nRow);
     void GetColumnRowHeader(sal_Bool& bHasColumnHeader, com::sun::star::table::CellRangeAddress& aColumnHeaderRange,
         sal_Bool& bHasRowHeader, com::sun::star::table::CellRangeAddress& aRowHeaderRange,
@@ -179,6 +181,7 @@ class ScXMLExport : public SvXMLExport
 
     sal_Bool GetCellText (ScMyCell& rMyCell, const ScAddress& aPos) const;
 
+    void WriteTable(sal_Int32 nTable, const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet>& xTable);
     void WriteCell (ScMyCell& aCell);
     void WriteAreaLink(const ScMyCell& rMyCell);
     void WriteAnnotation(ScMyCell& rMyCell);

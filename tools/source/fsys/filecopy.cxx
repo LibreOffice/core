@@ -30,10 +30,8 @@
 #include "precompiled_tools.hxx"
 
 #if defined WNT
-#ifndef _SVWIN_H
+#include <windows.h>
 #include <io.h>
-#include <tools/svwin.h>
-#endif
 
 #elif defined(OS2)
 #include <sys/types.h>
@@ -65,10 +63,6 @@ using namespace ::osl;
 /*************************************************************************
 |*
 |*    FileCopier::FileCopier()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  MI 13.04.94
 |*
 *************************************************************************/
 
@@ -115,10 +109,6 @@ FileCopier::FileCopier( const FileCopier& rCopier ) :
 |*
 |*    FileCopier::~FileCopier()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  MI 13.04.94
-|*
 *************************************************************************/
 
 FileCopier::~FileCopier()
@@ -129,10 +119,6 @@ FileCopier::~FileCopier()
 /*************************************************************************
 |*
 |*    FileCopier::operator =()
-|*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  MI 13.04.94
 |*
 *************************************************************************/
 
@@ -153,20 +139,16 @@ FileCopier& FileCopier::operator = ( const FileCopier &rCopier )
 |*
 |*    FileCopier::Progress()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  MI 13.04.94
-|*
 *************************************************************************/
 
-BOOL FileCopier::Progress()
+sal_Bool FileCopier::Progress()
 {
     if ( !aProgressLink )
-        return TRUE;
+        return sal_True;
     else
     {
         if ( aProgressLink.Call( this ) )
-            return TRUE;
+            return sal_True;
         return ( 0 == Error( ERRCODE_ABORT, 0, 0 ) );
     }
 }
@@ -229,10 +211,6 @@ const Link& FileCopier::GetErrorHdl() const
 |*
 |*    FileCopier::Execute()
 |*
-|*    Beschreibung      FSYS.SDW
-|*    Ersterstellung    MI 13.04.94
-|*    Letzte Aenderung  PB 16.06.00
-|*
 *************************************************************************/
 
 FSysError FileCopier::DoCopy_Impl(
@@ -244,7 +222,7 @@ FSysError FileCopier::DoCopy_Impl(
     // HPFS->FAT?
     FSysPathStyle eSourceStyle = DirEntry::GetPathStyle( rSource.ImpGetTopPtr()->GetName() );
     FSysPathStyle eTargetStyle = DirEntry::GetPathStyle( rTarget.ImpGetTopPtr()->GetName() );
-    BOOL bMakeShortNames = ( eSourceStyle == FSYS_STYLE_HPFS && eTargetStyle == FSYS_STYLE_FAT );
+    sal_Bool bMakeShortNames = ( eSourceStyle == FSYS_STYLE_HPFS && eTargetStyle == FSYS_STYLE_FAT );
 
     // Zieldateiname ggf. kuerzen
     DirEntry aTgt;
@@ -316,7 +294,7 @@ FSysError FileCopier::DoCopy_Impl(
         // recursive copy
         eRet = Error( aTgt.MakeDir() ? FSYS_ERR_OK : FSYS_ERR_UNKNOWN, 0, &aTgt );
         Dir aSourceDir( rSource, FSYS_KIND_DIR|FSYS_KIND_FILE );
-        for ( USHORT n = 0; ERRCODE_TOERROR(eRet) == FSYS_ERR_OK && n < aSourceDir.Count(); ++n )
+        for ( sal_uInt16 n = 0; ERRCODE_TOERROR(eRet) == FSYS_ERR_OK && n < aSourceDir.Count(); ++n )
         {
             const DirEntry &rSubSource = aSourceDir[n];
             DirEntryFlag eFlag = rSubSource.GetFlag();

@@ -37,11 +37,13 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <vector>
-#include <list>
 #include "XMLTableShapeResizer.hxx"
 #include "formula/grammar.hxx"
 #include "tabprotection.hxx"
+
+#include <vector>
+#include <list>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScXMLImport;
 
@@ -91,7 +93,6 @@ public:
     void                                SetChangedCols(const sal_Int32 nValue);
 };
 
-//*******************************************************************************************************************************
 
 struct ScMatrixRange
 {
@@ -127,21 +128,20 @@ private:
 
     ScXMLImport&                        rImport;
 
-    ScMyShapeResizer                    aResizeShapes;
+    ScMyOLEFixer                        aFixupOLEs;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > xCurrentSheet;
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > xCurrentCellRange;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
     ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShapes > xShapes;
     rtl::OUString                       sCurrentSheetName;
-    std::vector<ScMyTableData*>         aTableVec;
+    ::boost::ptr_vector<ScMyTableData>  maTables;
     ScXMLTabProtectionData              maProtectionData;
     ScMyMatrixRangeList                 aMatrixRangeList;
     com::sun::star::table::CellAddress  aRealCellPos;
     sal_Int32                           nCurrentColStylePos;
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
-    sal_Int32                           nTableCount;
     sal_Int32                           nCurrentSheet;
 
     sal_Bool                            IsMerged (const com::sun::star::uno::Reference <com::sun::star::table::XCellRange>& xCellRange,
@@ -163,7 +163,9 @@ public:
     void                                AddColumn(sal_Bool bIsCovered);
     void                                NewTable(sal_Int32 nTempSpannedCols);
     void                                UpdateRowHeights();
-    void                                ResizeShapes() { aResizeShapes.ResizeShapes(); }
+    void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
+    sal_Bool                            IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const
+        { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
     com::sun::star::table::CellAddress  GetRealCellPos();
     void                                AddColCount(sal_Int32 nTempColCount);
@@ -171,23 +173,20 @@ public:
     ScXMLTabProtectionData&             GetCurrentProtectionData() { return maProtectionData; }
     rtl::OUString                       GetCurrentSheetName() const { return sCurrentSheetName; }
     sal_Int32                           GetCurrentSheet() const { return nCurrentSheet; }
-    sal_Int32                           GetCurrentColumn() const { return aTableVec[nTableCount - 1]->GetColCount(); }
-    sal_Int32                           GetCurrentRow() const { return aTableVec[nTableCount - 1]->GetRow(); }
+    sal_Int32                           GetCurrentColumn() const { return maTables.back().GetColCount(); }
+    sal_Int32                           GetCurrentRow() const { return maTables.back().GetRow(); }
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
-                                        GetCurrentXSheet()  { return xCurrentSheet; }
+                                        GetCurrentXSheet() const { return xCurrentSheet; }
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
-                                        GetCurrentXCellRange()  { return xCurrentCellRange; }
+                                        GetCurrentXCellRange() const { return xCurrentCellRange; }
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
                                         GetCurrentXDrawPage();
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
                                         GetCurrentXShapes();
     sal_Bool                            HasDrawPage();
     sal_Bool                            HasXShapes();
-    void                                AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
-                                                rtl::OUString* pRangeList,
-                                                com::sun::star::table::CellAddress& rStartAddress,
-                                                com::sun::star::table::CellAddress& rEndAddress,
-                                                sal_Int32 nEndX, sal_Int32 nEndY);
+    void                                AddOLE(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
+                                               const rtl::OUString &rRangeList);
 
     void                                AddMatrixRange( sal_Int32 nStartColumn,
                                                 sal_Int32 nStartRow,

@@ -61,9 +61,9 @@ public:
     void        BeginDrag();
     void        CreateAnchor();
     void        DestroyAnchor();
-    BOOL        SetCursorAtPoint( const Point& rPoint,
-                    BOOL bDontSelectAtCursor=FALSE );
-    BOOL        IsSelectionAtPoint( const Point& rPoint );
+    sal_Bool        SetCursorAtPoint( const Point& rPoint,
+                    sal_Bool bDontSelectAtCursor=sal_False );
+    sal_Bool        IsSelectionAtPoint( const Point& rPoint );
     void        DeselectAtPoint( const Point& rPoint );
     void        DeselectAll();
 };
@@ -111,8 +111,6 @@ private:
 
     static Image*       s_pDefCollapsed;
     static Image*       s_pDefExpanded;
-    static Image*       s_pDefCollapsedHC;
-    static Image*       s_pDefExpandedHC;
     static oslInterlockedCount  s_nImageRefCount; /// When 0 all static images will be destroyed
 
     // Node Bitmaps
@@ -129,8 +127,6 @@ private:
 
     // all our images
     Image               m_aNodeAndEntryImages[ IT_IMAGE_COUNT ];
-    // plus the high contrast versions
-    Image               m_aNodeAndEntryImages_HC[ IT_IMAGE_COUNT ];
 
     // wg. kompat. hier
     Size                aOutputSize;
@@ -144,22 +140,22 @@ private:
     long                nNodeBmpWidth;
     long                nNextVerVisSize;
     long                nMostRight;
-    ULONG               nVisibleCount;  // Anzahl Zeilen im Control
-    ULONG               nCurUserEvent; //-1 == kein Userevent amn Laufen
+    sal_uLong               nVisibleCount;  // Anzahl Zeilen im Control
+    sal_uLong               nCurUserEvent; //-1 == kein Userevent amn Laufen
     short               nHorSBarHeight, nVerSBarWidth;
-    USHORT              nFlags;
-    USHORT              nCurTabPos;
+    sal_uInt16              nFlags;
+    sal_uInt16              nCurTabPos;
 
-    WinBits             nWinBits;
+    WinBits             m_nStyle;
     ExtendedWinBits     nExtendedWinBits;
-    BOOL                bSimpleTravel : 1; // ist TRUE bei SINGLE_SELECTION
-    BOOL                bUpdateMode : 1;
-    BOOL                bInVScrollHdl : 1;
-    BOOL                bAsyncBeginDrag : 1;
-    BOOL                bSubLstOpRet : 1;   // open/close sublist with return/enter, defaulted with FALSE
-    BOOL                bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with FALSE
-    BOOL                bContextMenuHandling : 1;
-    BOOL                bIsCellFocusEnabled : 1;
+    sal_Bool                bSimpleTravel : 1; // ist sal_True bei SINGLE_SELECTION
+    sal_Bool                bUpdateMode : 1;
+    sal_Bool                bInVScrollHdl : 1;
+    sal_Bool                bAsyncBeginDrag : 1;
+    sal_Bool                bSubLstOpRet : 1;   // open/close sublist with return/enter, defaulted with sal_False
+    sal_Bool                bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with sal_False
+    sal_Bool                bContextMenuHandling : 1;
+    sal_Bool                bIsCellFocusEnabled : 1;
 
     sal_Bool            bAreChildrenTransient;
 
@@ -183,16 +179,16 @@ private:
     void                ShowVerSBar();
     // setzt Thumb auf FirstEntryToDraw
     void                SyncVerThumb();
-    BOOL                IsLineVisible( long nY ) const;
+    sal_Bool                IsLineVisible( long nY ) const;
     long                GetEntryLine( SvLBoxEntry* pEntry ) const;
     void                FillView();
     void                CursorDown();
     void                CursorUp();
     void                KeyLeftRight( long nDiff );
-    void                PageDown( USHORT nDelta );
-    void                PageUp( USHORT nDelta );
+    void                PageDown( sal_uInt16 nDelta );
+    void                PageUp( sal_uInt16 nDelta );
 
-    void                SetCursor( SvLBoxEntry* pEntry, BOOL bForceNoSelect = FALSE );
+    void                SetCursor( SvLBoxEntry* pEntry, sal_Bool bForceNoSelect = sal_False );
 
     void                DrawNet();
 
@@ -206,39 +202,39 @@ private:
 
     // Selection-Engine
     SvLBoxEntry*        MakePointVisible( const Point& rPoint,
-                            BOOL bNotifyScroll=TRUE );
+                            sal_Bool bNotifyScroll=sal_True );
 
     void                SetAnchorSelection( SvLBoxEntry* pOld,
                             SvLBoxEntry* pNewCursor );
     void                BeginDrag();
-    BOOL                ButtonDownCheckCtrl( const MouseEvent& rMEvt,
+    sal_Bool                ButtonDownCheckCtrl( const MouseEvent& rMEvt,
                             SvLBoxEntry* pEntry, long nY    );
-    BOOL                MouseMoveCheckCtrl( const MouseEvent& rMEvt,
+    sal_Bool                MouseMoveCheckCtrl( const MouseEvent& rMEvt,
                             SvLBoxEntry* pEntry );
-    BOOL                ButtonUpCheckCtrl( const MouseEvent& rMEvt );
-    BOOL                ButtonDownCheckExpand( const MouseEvent&,
+    sal_Bool                ButtonUpCheckCtrl( const MouseEvent& rMEvt );
+    sal_Bool                ButtonDownCheckExpand( const MouseEvent&,
                             SvLBoxEntry*,long nY );
 
-    void                PositionScrollBars( Size& rOSize, USHORT nMask );
-    USHORT              AdjustScrollBars( Size& rSize );
+    void                PositionScrollBars( Size& rOSize, sal_uInt16 nMask );
+    sal_uInt16              AdjustScrollBars( Size& rSize );
 
     void                BeginScroll();
     void                EndScroll();
-    BOOL                InScroll() const { return (BOOL)(nFlags & F_IN_SCROLLING)!=0;}
+    sal_Bool                InScroll() const { return (sal_Bool)(nFlags & F_IN_SCROLLING)!=0;}
     Rectangle           GetVisibleArea() const;
-    BOOL                EntryReallyHit(SvLBoxEntry* pEntry,const Point& rPos,long nLine);
+    sal_Bool                EntryReallyHit(SvLBoxEntry* pEntry,const Point& rPos,long nLine);
     void                InitScrollBarBox();
     SvLBoxTab*          NextTab( SvLBoxTab* );
 
-    BOOL                SetMostRight( SvLBoxEntry* pEntry );
+    sal_Bool                SetMostRight( SvLBoxEntry* pEntry );
     void                FindMostRight( SvLBoxEntry* EntryToIgnore );
     void                FindMostRight( SvLBoxEntry* pParent, SvLBoxEntry* EntryToIgnore );
     void                FindMostRight_Impl( SvLBoxEntry* pParent,SvLBoxEntry* EntryToIgnore  );
     void                NotifyTabsChanged();
 
-    inline BOOL         IsExpandable() const        // if element at cursor can be expanded in general
+    inline sal_Bool         IsExpandable() const        // if element at cursor can be expanded in general
                             { return pCursor->HasChilds() || pCursor->HasChildsOnDemand(); }
-    inline BOOL         IsNowExpandable() const     // if element at cursor can be expanded at this moment
+    inline sal_Bool         IsNowExpandable() const     // if element at cursor can be expanded at this moment
                             { return IsExpandable() && !pView->IsExpanded( pCursor ); }
 
     static  void        implInitDefaultNodeImages();
@@ -261,7 +257,7 @@ public:
     ~SvImpLBox();
 
     void                Clear();
-    void                SetWindowBits( WinBits nWinStyle );
+    void                SetStyle( WinBits i_nWinStyle );
     void                SetExtendedWindowBits( ExtendedWinBits _nBits );
     ExtendedWinBits     GetExtendedWindowBits() const { return nExtendedWinBits; }
     void                SetModel( SvLBoxTreeList* pModel ) { pTree = pModel;}
@@ -277,170 +273,152 @@ public:
     void                EntryExpanded( SvLBoxEntry* pEntry );
     void                EntryCollapsed( SvLBoxEntry* pEntry );
     void                CollapsingEntry( SvLBoxEntry* pEntry );
-    void                EntrySelected( SvLBoxEntry*, BOOL bSelect );
+    void                EntrySelected( SvLBoxEntry*, sal_Bool bSelect );
 
     void                Paint( const Rectangle& rRect );
     void                RepaintSelectionItems();
     void                MouseButtonDown( const MouseEvent& );
     void                MouseButtonUp( const MouseEvent& );
     void                MouseMove( const MouseEvent&);
-    BOOL                KeyInput( const KeyEvent& );
+    sal_Bool                KeyInput( const KeyEvent& );
     void                Resize();
     void                GetFocus();
     void                LoseFocus();
     void                UpdateAll(
-                            BOOL bInvalidateCompleteView= TRUE,
-                            BOOL bUpdateVerSBar = TRUE );
+                            sal_Bool bInvalidateCompleteView= sal_True,
+                            sal_Bool bUpdateVerSBar = sal_True );
     void                SetEntryHeight( short nHeight );
     void                PaintEntry( SvLBoxEntry* pEntry );
     void                InvalidateEntry( SvLBoxEntry* );
     void                RecalcFocusRect();
 
-    inline void         SelectEntry( SvLBoxEntry* pEntry, BOOL bSelect );
+    inline void         SelectEntry( SvLBoxEntry* pEntry, sal_Bool bSelect );
     void                SetDragDropMode( DragDropMode eDDMode );
     void                SetSelectionMode( SelectionMode eSelMode  );
-    void                SetAddMode( BOOL ) { aSelEng.AddAlways(FALSE); }
-    BOOL                IsAddMode() const { return aSelEng.IsAlwaysAdding(); }
+    void                SetAddMode( sal_Bool ) { aSelEng.AddAlways(sal_False); }
+    sal_Bool                IsAddMode() const { return aSelEng.IsAlwaysAdding(); }
 
     SvLBoxEntry*        GetCurrentEntry() const { return pCursor; }
-    BOOL                IsEntryInView( SvLBoxEntry* ) const;
+    sal_Bool                IsEntryInView( SvLBoxEntry* ) const;
     SvLBoxEntry*        GetEntry( const Point& rPos ) const;
     // gibt letzten Eintrag zurueck, falls Pos unter letztem Eintrag
     SvLBoxEntry*        GetClickedEntry( const Point& ) const;
     SvLBoxEntry*        GetCurEntry() const { return pCursor; }
     void                SetCurEntry( SvLBoxEntry* );
     Point               GetEntryPosition( SvLBoxEntry* ) const;
-    void                MakeVisible( SvLBoxEntry* pEntry, BOOL bMoveToTop=FALSE );
+    void                MakeVisible( SvLBoxEntry* pEntry, sal_Bool bMoveToTop=sal_False );
 
     void                PaintDDCursor( SvLBoxEntry* );
 
     // Images
-    inline Image&       implGetImageLocation( const ImageType _eType, BmpColorMode _eMode );
-    inline Image&       implGetImageLocationWithFallback( const ImageType _eType, BmpColorMode _eMode ) const;
+    inline Image&       implGetImageLocation( const ImageType _eType );
 
-    inline void         SetExpandedNodeBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    inline void         SetCollapsedNodeBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL  );
-    inline void         SetDontKnowNodeBmp( const Image& rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    inline void         SetExpandedNodeBmp(  const Image& _rImg );
+    inline void         SetCollapsedNodeBmp( const Image& _rImg );
 
-    inline const Image& GetExpandedNodeBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
-    inline const Image& GetCollapsedNodeBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
-    inline const Image& GetDontKnowNodeBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    inline const Image& GetExpandedNodeBmp( );
+    inline const Image& GetCollapsedNodeBmp( );
+    inline const Image& GetDontKnowNodeBmp( );
 
-    inline void         SetDefaultEntryExpBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    inline void         SetDefaultEntryColBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    inline const Image& GetDefaultEntryExpBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    inline const Image& GetDefaultEntryColBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    inline void         SetDefaultEntryExpBmp( const Image& _rImg );
+    inline void         SetDefaultEntryColBmp( const Image& _rImg );
+    inline const Image& GetDefaultEntryExpBmp( );
+    inline const Image& GetDefaultEntryColBmp( );
 
-    static const Image& GetDefaultExpandedNodeImage( BmpColorMode _eMode = BMP_COLOR_NORMAL );
-    static const Image& GetDefaultCollapsedNodeImage( BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    static const Image& GetDefaultExpandedNodeImage( );
+    static const Image& GetDefaultCollapsedNodeImage( );
 
     const Size&         GetOutputSize() const { return aOutputSize;}
-    void                KeyUp( BOOL bPageUp, BOOL bNotifyScroll = TRUE );
-    void                KeyDown( BOOL bPageDown, BOOL bNotifyScroll = TRUE );
-    bool                Command( const CommandEvent& rCEvt );
+    void                KeyUp( sal_Bool bPageUp, sal_Bool bNotifyScroll = sal_True );
+    void                KeyDown( sal_Bool bPageDown, sal_Bool bNotifyScroll = sal_True );
+    void                Command( const CommandEvent& rCEvt );
 
     void                Invalidate();
     void                DestroyAnchor() { pAnchor=0; aSelEng.Reset(); }
-    void                SelAllDestrAnch( BOOL bSelect,
-                            BOOL bDestroyAnchor = TRUE,
-                            BOOL bSingleSelToo = FALSE );
-    void                ShowCursor( BOOL bShow );
+    void                SelAllDestrAnch( sal_Bool bSelect,
+                            sal_Bool bDestroyAnchor = sal_True,
+                            sal_Bool bSingleSelToo = sal_False );
+    void                ShowCursor( sal_Bool bShow );
 
-    BOOL                RequestHelp( const HelpEvent& rHEvt );
+    sal_Bool                RequestHelp( const HelpEvent& rHEvt );
     void                EndSelection();
-    BOOL                IsNodeButton( const Point& rPosPixel, SvLBoxEntry* pEntry ) const;
+    sal_Bool                IsNodeButton( const Point& rPosPixel, SvLBoxEntry* pEntry ) const;
     void                RepaintScrollBars();
-    void                EnableAsyncDrag( BOOL b) { bAsyncBeginDrag = b; }
-    void                SetUpdateMode( BOOL );
-    void                SetUpdateModeFast( BOOL );
-    BOOL                GetUpdateMode() const { return bUpdateMode; }
+    void                EnableAsyncDrag( sal_Bool b) { bAsyncBeginDrag = b; }
+    void                SetUpdateMode( sal_Bool );
+    void                SetUpdateModeFast( sal_Bool );
+    sal_Bool                GetUpdateMode() const { return bUpdateMode; }
     Rectangle           GetClipRegionRect() const;
-    BOOL                HasHorScrollBar() const { return aHorSBar.IsVisible(); }
+    sal_Bool                HasHorScrollBar() const { return aHorSBar.IsVisible(); }
     void                ShowFocusRect( const SvLBoxEntry* pEntry );
     void                SetTabBar( TabBar* pTabBar );
     void                CancelPendingEdit();
 
-    void                CallEventListeners( ULONG nEvent, void* pData = NULL );
+    void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
 
     /** Enables, that one cell of a tablistbox entry can be focused */
-    inline BOOL         IsCellFocusEnabled() const { return bIsCellFocusEnabled; }
-    inline void         EnableCellFocus() { bIsCellFocusEnabled = TRUE; }
-    bool                SetCurrentTabPos( USHORT _nNewPos );
-    inline USHORT       GetCurrentTabPos() const { return nCurTabPos; }
+    inline sal_Bool         IsCellFocusEnabled() const { return bIsCellFocusEnabled; }
+    inline void         EnableCellFocus() { bIsCellFocusEnabled = sal_True; }
+    bool                SetCurrentTabPos( sal_uInt16 _nNewPos );
+    inline sal_uInt16       GetCurrentTabPos() const { return nCurTabPos; }
 
     bool                IsSelectable( const SvLBoxEntry* pEntry );
 };
 
-inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType, BmpColorMode _eMode )
+inline Image& SvImpLBox::implGetImageLocation( const ImageType _eType )
 {
-    DBG_ASSERT( ( BMP_COLOR_HIGHCONTRAST == _eMode ) || ( BMP_COLOR_NORMAL == _eMode ),
-        "SvImpLBox::implGetImageLocation: invalid mode!" );
     DBG_ASSERT( ( _eType >= 0 ) && ( _eType < IT_IMAGE_COUNT ),
         "SvImpLBox::implGetImageLocation: invalid image index (will crash)!" );
 
-    Image* _pSet = ( BMP_COLOR_HIGHCONTRAST == _eMode ) ? m_aNodeAndEntryImages_HC : m_aNodeAndEntryImages;
+    Image* _pSet = m_aNodeAndEntryImages;
     return *( _pSet + (sal_Int32)_eType );
 }
 
-inline Image& SvImpLBox::implGetImageLocationWithFallback( const ImageType _eType, BmpColorMode _eMode ) const
+inline void SvImpLBox::SetExpandedNodeBmp( const Image& rImg )
 {
-    Image& rImage = const_cast< SvImpLBox* >( this )->implGetImageLocation( _eType, _eMode );
-    if ( !rImage )
-        // fallback to normal images in case the one for the special mode has not been set
-        rImage = const_cast< SvImpLBox* >( this )->implGetImageLocation( _eType, BMP_COLOR_NORMAL );
-    return rImage;
-}
-
-inline void SvImpLBox::SetDontKnowNodeBmp( const Image& rImg, BmpColorMode _eMode )
-{
-    implGetImageLocation( itNodeDontKnow, _eMode ) = rImg;
-}
-
-inline void SvImpLBox::SetExpandedNodeBmp( const Image& rImg, BmpColorMode _eMode )
-{
-    implGetImageLocation( itNodeExpanded, _eMode ) = rImg;
+    implGetImageLocation( itNodeExpanded ) = rImg;
     SetNodeBmpYOffset( rImg );
 }
 
-inline void SvImpLBox::SetCollapsedNodeBmp( const Image& rImg, BmpColorMode _eMode )
+inline void SvImpLBox::SetCollapsedNodeBmp( const Image& rImg )
 {
-    implGetImageLocation( itNodeCollapsed, _eMode ) = rImg;
+    implGetImageLocation( itNodeCollapsed ) = rImg;
     SetNodeBmpYOffset( rImg );
 }
 
-inline const Image& SvImpLBox::GetDontKnowNodeBmp( BmpColorMode _eMode ) const
+inline const Image& SvImpLBox::GetDontKnowNodeBmp( )
 {
-    return implGetImageLocationWithFallback( itNodeDontKnow, _eMode );
+    return implGetImageLocation( itNodeDontKnow );
 }
 
-inline const Image& SvImpLBox::GetExpandedNodeBmp( BmpColorMode _eMode ) const
+inline const Image& SvImpLBox::GetExpandedNodeBmp( )
 {
-    return implGetImageLocationWithFallback( itNodeExpanded, _eMode );
+    return implGetImageLocation( itNodeExpanded );
 }
 
-inline const Image& SvImpLBox::GetCollapsedNodeBmp( BmpColorMode _eMode ) const
+inline const Image& SvImpLBox::GetCollapsedNodeBmp( )
 {
-    return implGetImageLocationWithFallback( itNodeCollapsed, _eMode );
+    return implGetImageLocation( itNodeCollapsed );
 }
 
-inline void SvImpLBox::SetDefaultEntryExpBmp( const Image& _rImg, BmpColorMode _eMode )
+inline void SvImpLBox::SetDefaultEntryExpBmp( const Image& _rImg )
 {
-    implGetImageLocation( itEntryDefExpanded, _eMode ) = _rImg;
+    implGetImageLocation( itEntryDefExpanded ) = _rImg;
 }
 
-inline void SvImpLBox::SetDefaultEntryColBmp( const Image& _rImg, BmpColorMode _eMode )
+inline void SvImpLBox::SetDefaultEntryColBmp( const Image& _rImg )
 {
-    implGetImageLocation( itEntryDefCollapsed, _eMode ) = _rImg;
+    implGetImageLocation( itEntryDefCollapsed ) = _rImg;
 }
 
-inline const Image& SvImpLBox::GetDefaultEntryExpBmp( BmpColorMode _eMode )
+inline const Image& SvImpLBox::GetDefaultEntryExpBmp( )
 {
-    return implGetImageLocationWithFallback( itEntryDefExpanded, _eMode );
+    return implGetImageLocation( itEntryDefExpanded );
 }
 
-inline const Image& SvImpLBox::GetDefaultEntryColBmp( BmpColorMode _eMode )
+inline const Image& SvImpLBox::GetDefaultEntryColBmp( )
 {
-    return implGetImageLocationWithFallback( itEntryDefCollapsed, _eMode );
+    return implGetImageLocation( itEntryDefCollapsed );
 }
 
 inline Point SvImpLBox::GetEntryPosition( SvLBoxEntry* pEntry ) const
@@ -454,11 +432,11 @@ inline void SvImpLBox::PaintEntry( SvLBoxEntry* pEntry )
     pView->PaintEntry( pEntry, nY );
 }
 
-inline BOOL SvImpLBox::IsLineVisible( long nY ) const
+inline sal_Bool SvImpLBox::IsLineVisible( long nY ) const
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     if ( nY < 0 || nY >= aOutputSize.Height() )
-        bRet = FALSE;
+        bRet = sal_False;
     return bRet;
 }
 

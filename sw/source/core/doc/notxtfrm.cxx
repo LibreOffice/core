@@ -79,9 +79,7 @@
 
 #include <svtools/embedhlp.hxx>
 #include <svtools/chartprettypainter.hxx>
-// --> OD 2009-03-05 #i99665#
-#include <dview.hxx>
-// <--
+#include <dview.hxx> // #i99665#
 
 using namespace com::sun::star;
 
@@ -90,9 +88,9 @@ using namespace com::sun::star;
 extern void ClrContourCache( const SdrObject *pObj ); // TxtFly.Cxx
 
 
-inline BOOL GetRealURL( const SwGrfNode& rNd, String& rTxt )
+inline sal_Bool GetRealURL( const SwGrfNode& rNd, String& rTxt )
 {
-    BOOL bRet = rNd.GetFileFilterNms( &rTxt, 0 );
+    sal_Bool bRet = rNd.GetFileFilterNms( &rTxt, 0 );
     if( bRet )
         rTxt = URIHelper::removePassword( rTxt, INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
@@ -101,7 +99,7 @@ inline BOOL GetRealURL( const SwGrfNode& rNd, String& rTxt )
 
 void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
                            const ViewShell &rSh, const SwNoTxtFrm *pFrm,
-                           BOOL bDefect )
+                           sal_Bool bDefect )
 {
     static Font *pFont = 0;
     if ( !pFont )
@@ -112,7 +110,7 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
         pFont->SetName( String::CreateFromAscii(
                             RTL_CONSTASCII_STRINGPARAM( "Arial Unicode" )));
         pFont->SetFamily( FAMILY_SWISS );
-        pFont->SetTransparent( TRUE );
+        pFont->SetTransparent( sal_True );
     }
 
     Color aCol( COL_RED );
@@ -120,16 +118,16 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
     const SwFmtURL &rURL = pFrm->FindFlyFrm()->GetFmt()->GetURL();
     if( rURL.GetURL().Len() || rURL.GetMap() )
     {
-        BOOL bVisited = FALSE;
+        sal_Bool bVisited = sal_False;
         if ( rURL.GetMap() )
         {
             ImageMap *pMap = (ImageMap*)rURL.GetMap();
-            for( USHORT i = 0; i < pMap->GetIMapObjectCount(); i++ )
+            for( sal_uInt16 i = 0; i < pMap->GetIMapObjectCount(); i++ )
             {
                 IMapObject *pObj = pMap->GetIMapObject( i );
                 if( rSh.GetDoc()->IsVisitedURL( pObj->GetURL() ) )
                 {
-                    bVisited = TRUE;
+                    bVisited = sal_True;
                     break;
                 }
             }
@@ -146,7 +144,7 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
     pFont->SetUnderline( eUnderline );
     pFont->SetColor( aCol );
 
-    const BitmapEx& rBmp = ViewShell::GetReplacementBitmap( bDefect != FALSE );
+    const BitmapEx& rBmp = ViewShell::GetReplacementBitmap( bDefect != sal_False );
     Graphic::DrawEx( rSh.GetOut(), rText, *pFont, rBmp, rRect.Pos(), rRect.SSize() );
 }
 
@@ -154,15 +152,11 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
 |*
 |*    SwGrfFrm::SwGrfFrm(ViewShell * const,SwGrfNode *)
 |*
-|*    Beschreibung
-|*    Ersterstellung    JP 05.03.91
-|*    Letzte Aenderung  MA 03. Mar. 93
-|*
 *************************************************************************/
 
 
-SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode)
-    : SwCntntFrm(pNode)
+SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode, SwFrm* pSib )
+    : SwCntntFrm( pNode, pSib )
 {
     InitCtor();
 }
@@ -184,25 +178,17 @@ void SwNoTxtFrm::InitCtor()
 |*
 |*    SwNoTxtNode::MakeFrm()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JP 05.03.91
-|*    Letzte Aenderung  MA 03. Mar. 93
-|*
 *************************************************************************/
 
 
-SwCntntFrm *SwNoTxtNode::MakeFrm()
+SwCntntFrm *SwNoTxtNode::MakeFrm( SwFrm* pSib )
 {
-    return new SwNoTxtFrm(this);
+    return new SwNoTxtFrm(this, pSib);
 }
 
 /*************************************************************************
 |*
 |*    SwNoTxtFrm::~SwNoTxtFrm()
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 05.03.91
-|*    Letzte Aenderung  MA 30. Apr. 96
 |*
 *************************************************************************/
 
@@ -214,10 +200,6 @@ SwNoTxtFrm::~SwNoTxtFrm()
 /*************************************************************************
 |*
 |*    void SwNoTxtFrm::Modify( SwHint * pOld, SwHint * pNew )
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 05.03.91
-|*    Letzte Aenderung  JP 05.03.91
 |*
 *************************************************************************/
 
@@ -239,16 +221,15 @@ void lcl_ClearArea( const SwFrm &rFrm,
     if ( aRegion.Count() )
     {
         const SvxBrushItem *pItem; const Color *pCol; SwRect aOrigRect;
-        if ( rFrm.GetBackgroundBrush( pItem, pCol, aOrigRect, FALSE ) )
-            for( USHORT i = 0; i < aRegion.Count(); ++i )
+        if ( rFrm.GetBackgroundBrush( pItem, pCol, aOrigRect, sal_False ) )
+            for( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
                 ::DrawGraphic( pItem, &rOut, aOrigRect, aRegion[i] );
         else
         {
-            // OD 2004-04-23 #116347#
             rOut.Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
-            rOut.SetFillColor( rFrm.GetShell()->Imp()->GetRetoucheColor());
+            rOut.SetFillColor( rFrm.getRootFrm()->GetCurrShell()->Imp()->GetRetoucheColor());
             rOut.SetLineColor();
-            for( USHORT i = 0; i < aRegion.Count(); ++i )
+            for( sal_uInt16 i = 0; i < aRegion.Count(); ++i )
                 rOut.DrawRect( aRegion[i].SVRect() );
             rOut.Pop();
         }
@@ -259,22 +240,18 @@ void lcl_ClearArea( const SwFrm &rFrm,
 |*
 |*    void SwNoTxtFrm::Paint()
 |*
-|*    Beschreibung
-|*    Ersterstellung    JP 05.03.91
-|*    Letzte Aenderung  MA 10. Jan. 97
-|*
 *************************************************************************/
 
-void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ ) const
+void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     if ( Frm().IsEmpty() )
         return;
 
-    const ViewShell* pSh = GetShell();
+    const ViewShell* pSh = getRootFrm()->GetCurrShell();
     if( !pSh->GetViewOptions()->IsGraphic() )
     {
         StopAnimation();
-        // OD 10.01.2003 #i6467# - no paint of placeholder for page preview
+        // #i6467# - no paint of placeholder for page preview
         if ( pSh->GetWin() && !pSh->IsPreView() )
         {
             const SwNoTxtNode* pNd = GetNode()->GetNoTxtNode();
@@ -283,7 +260,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
                 GetRealURL( *(SwGrfNode*)pNd, aTxt );
             if( !aTxt.Len() )
                 aTxt = FindFlyFrm()->GetFmt()->GetName();
-            lcl_PaintReplacement( Frm(), aTxt, *pSh, this, FALSE );
+            lcl_PaintReplacement( Frm(), aTxt, *pSh, this, sal_False );
         }
         return;
     }
@@ -298,15 +275,15 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
 
     OutputDevice *pOut = pSh->GetOut();
     pOut->Push();
-    BOOL bClip = TRUE;
+    sal_Bool bClip = sal_True;
     PolyPolygon aPoly;
 
     SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
     if( pGrfNd )
-        pGrfNd->SetFrameInPaint( TRUE );
+        pGrfNd->SetFrameInPaint( sal_True );
 
-    // OD 16.04.2003 #i13147# - add 2nd parameter with value <sal_True> to
+    // #i13147# - add 2nd parameter with value <sal_True> to
     // method call <FindFlyFrm().GetContour(..)> to indicate that it is called
     // for paint in order to avoid load of the intrinsic graphic.
     if ( ( !pOut->GetConnectMetaFile() ||
@@ -315,7 +292,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
        )
     {
         pOut->SetClipRegion( aPoly );
-        bClip = FALSE;
+        bClip = sal_False;
     }
 
     SwRect aOrigPaint( rRect );
@@ -343,14 +320,14 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
 
         if ( bClip )
             pOut->IntersectClipRegion( aPaintArea.SVRect() );
-        /// OD 25.09.2002 #99739# - delete unused 3rd parameter
+        /// delete unused 3rd parameter
         PaintPicture( pOut, aGrfArea );
     }
     else
         // wenn nicht sichtbar, loesche einfach den angegebenen Bereich
         lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, SwRect() );
     if( pGrfNd )
-        pGrfNd->SetFrameInPaint( FALSE );
+        pGrfNd->SetFrameInPaint( sal_False );
 
     pOut->Pop();
     SfxProgress::LeaveLock();
@@ -359,7 +336,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
 /*************************************************************************
 |*
 |*    void lcl_CalcRect( Point & aPt, Size & aDim,
-|*                   USHORT nMirror )
+|*                   sal_uInt16 nMirror )
 |*
 |*    Beschreibung      Errechne die Position und die Groesse der Grafik im
 |*                      Frame, entsprechen der aktuellen Grafik-Attribute
@@ -367,13 +344,11 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
 |*    Parameter         Point&  die Position im Frame  ( auch Return-Wert )
 |*                      Size&   die Groesse der Grafik ( auch Return-Wert )
 |*                      MirrorGrf   akt. Spiegelungs-Attribut
-|*    Ersterstellung    JP 04.03.91
-|*    Letzte Aenderung  JP 31.08.94
 |*
 *************************************************************************/
 
 
-void lcl_CalcRect( Point& rPt, Size& rDim, USHORT nMirror )
+void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
 {
     if( nMirror == RES_MIRROR_GRAPH_VERT || nMirror == RES_MIRROR_GRAPH_BOTH )
     {
@@ -395,24 +370,20 @@ void lcl_CalcRect( Point& rPt, Size& rDim, USHORT nMirror )
 |*    Beschreibung      Errechne die Position und die Groesse der Bitmap
 |*                      innerhalb des uebergebenem Rechtecks.
 |*
-|*    Ersterstellung    JP 03.09.91
-|*    Letzte Aenderung  MA 11. Oct. 94
-|*
 *************************************************************************/
 
 void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
-                             BOOL ) const
+                             sal_Bool ) const
 {
-    // JP 23.01.2001: currently only used for scaling, cropping and mirroring
-    // the contour of graphics!
-    //                  all other is handled by the GraphicObject
+    //currently only used for scaling, cropping and mirroring the contour of graphics!
+    //all other is handled by the GraphicObject
 
     //In rRect wird das sichbare Rechteck der Grafik gesteckt.
     //In pOrigRect werden Pos+Size der Gesamtgrafik gesteck.
 
     const SwAttrSet& rAttrSet = GetNode()->GetSwAttrSet();
     const SwCropGrf& rCrop = rAttrSet.GetCropGrf();
-    USHORT nMirror = rAttrSet.GetMirrorGrf().GetValue();
+    sal_uInt16 nMirror = rAttrSet.GetMirrorGrf().GetValue();
 
     if( rAttrSet.GetMirrorGrf().IsGrfToggle() )
     {
@@ -523,8 +494,6 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
 |*
 |*    Beschreibung      Gebe die Groesse des umgebenen FLys und
 |*                      damit die der Grafik zurueck.
-|*    Ersterstellung    JP 04.03.91
-|*    Letzte Aenderung  JP 31.08.94
 |*
 *************************************************************************/
 
@@ -541,9 +510,6 @@ const Size& SwNoTxtFrm::GetSize() const
 /*************************************************************************
 |*
 |*    SwNoTxtFrm::MakeAll()
-|*
-|*    Ersterstellung    MA 29. Nov. 96
-|*    Letzte Aenderung  MA 29. Nov. 96
 |*
 *************************************************************************/
 
@@ -564,7 +530,7 @@ void SwNoTxtFrm::MakeAll()
         MakePrtArea( rAttrs );
 
         if ( !bValidSize )
-        {   bValidSize = TRUE;
+        {   bValidSize = sal_True;
             Format();
         }
     }
@@ -575,8 +541,6 @@ void SwNoTxtFrm::MakeAll()
 |*    SwNoTxtFrm::Format()
 |*
 |*    Beschreibung      Errechne die Groesse der Bitmap, wenn noetig
-|*    Ersterstellung    JP 11.03.91
-|*    Letzte Aenderung  MA 13. Mar. 96
 |*
 *************************************************************************/
 
@@ -599,18 +563,14 @@ void SwNoTxtFrm::Format( const SwBorderAttrs * )
 |*
 |*    SwNoTxtFrm::GetCharRect()
 |*
-|*    Beschreibung
-|*    Ersterstellung    SS 29-Apr-1991
-|*    Letzte Aenderung  MA 10. Oct. 94
-|*
 |*************************************************************************/
 
 
-BOOL SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
+sal_Bool SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
                               SwCrsrMoveState *pCMS ) const
 {
     if ( &rPos.nNode.GetNode() != (SwNode*)GetNode() )
-        return FALSE;
+        return sal_False;
 
     Calc();
     SwRect aFrameRect( Frm() );
@@ -639,17 +599,17 @@ BOOL SwNoTxtFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 
-BOOL SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
+sal_Bool SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
                              SwCrsrMoveState* ) const
 {
     SwCntntNode* pCNd = (SwCntntNode*)GetNode();
     pPos->nNode = *pCNd;
     pPos->nContent.Assign( pCNd, 0 );
-    return TRUE;
+    return sal_True;
 }
 
 #define CLEARCACHE( pNd ) {\
@@ -662,11 +622,11 @@ BOOL SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
     }\
 }
 
-void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    USHORT nWhich = pNew ? pNew->Which() : pOld ? pOld->Which() : 0;
+    sal_uInt16 nWhich = pNew ? pNew->Which() : pOld ? pOld->Which() : 0;
 
-    // --> OD 2007-03-06 #i73788#
+    // #i73788#
     // no <SwCntntFrm::Modify(..)> for RES_LINKED_GRAPHIC_STREAM_ARRIVED
     if ( RES_GRAPHIC_PIECE_ARRIVED != nWhich &&
          RES_GRAPHIC_ARRIVED != nWhich &&
@@ -677,7 +637,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         SwCntntFrm::Modify( pOld, pNew );
     }
 
-    BOOL bComplete = TRUE;
+    sal_Bool bComplete = sal_True;
 
     switch( nWhich )
     {
@@ -687,7 +647,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     case RES_GRF_REREAD_AND_INCACHE:
         if( ND_GRFNODE == GetNode()->GetNodeType() )
         {
-            bComplete = FALSE;
+            bComplete = sal_False;
             SwGrfNode* pNd = (SwGrfNode*) GetNode();
 
             ViewShell *pVSh = 0;
@@ -723,10 +683,10 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
     case RES_ATTRSET_CHG:
         {
-            USHORT n;
+            sal_uInt16 n;
             for( n = RES_GRFATR_BEGIN; n < RES_GRFATR_END; ++n )
                 if( SFX_ITEM_SET == ((SwAttrSetChg*)pOld)->GetChgSet()->
-                                GetItemState( n, FALSE ))
+                                GetItemState( n, sal_False ))
                 {
                     CLEARCACHE( (SwGrfNode*) GetNode() )
                     break;
@@ -738,13 +698,11 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
     case RES_GRAPHIC_PIECE_ARRIVED:
     case RES_GRAPHIC_ARRIVED:
-    // --> OD 2007-03-06 #i73788#
-    // handle RES_LINKED_GRAPHIC_STREAM_ARRIVED as RES_GRAPHIC_ARRIVED
+    // i73788# - handle RES_LINKED_GRAPHIC_STREAM_ARRIVED as RES_GRAPHIC_ARRIVED
     case RES_LINKED_GRAPHIC_STREAM_ARRIVED:
-    // <--
         if ( GetNode()->GetNodeType() == ND_GRFNODE )
         {
-            bComplete = FALSE;
+            bComplete = sal_False;
             SwGrfNode* pNd = (SwGrfNode*) GetNode();
 
             CLEARCACHE( pNd )
@@ -767,7 +725,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                 else if ( pSh->VisArea().IsOver( aRect ) &&
                    OUTDEV_WINDOW == pSh->GetOut()->GetOutDevType() )
                 {
-                    // OD 27.11.2002 #105519# - invalidate instead of painting
+                    //invalidate instead of painting
                     pSh->GetWin()->Invalidate( aRect.SVRect() );
                 }
 
@@ -820,23 +778,23 @@ void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, Out
 // Ausgabe der Grafik. Hier wird entweder eine QuickDraw-Bmp oder
 // eine Grafik vorausgesetzt. Ist nichts davon vorhanden, wird
 // eine Ersatzdarstellung ausgegeben.
-/// OD 25.09.2002 #99739# - delete unused 3rd parameter.
-/// OD 25.09.2002 #99739# - use aligned rectangle for drawing graphic.
-/// OD 25.09.2002 #99739# - pixel-align coordinations for drawing graphic.
+/// delete unused 3rd parameter.
+/// use aligned rectangle for drawing graphic.
+/// pixel-align coordinations for drawing graphic.
 void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) const
 {
-    ViewShell* pShell = GetShell();
+    ViewShell* pShell = getRootFrm()->GetCurrShell();
 
     SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
     SwOLENode* pOLENd = rNoTNd.GetOLENode();
 
-    const BOOL bPrn = pOut == rNoTNd.getIDocumentDeviceAccess()->getPrinter( false ) ||
+    const sal_Bool bPrn = pOut == rNoTNd.getIDocumentDeviceAccess()->getPrinter( false ) ||
                           pOut->GetConnectMetaFile();
 
     const bool bIsChart = pOLENd && ChartPrettyPainter::IsChart( pOLENd->GetOLEObj().GetObject() );
 
-    /// OD 25.09.2002 #99739# - calculate aligned rectangle from parameter <rGrfArea>.
+    /// calculate aligned rectangle from parameter <rGrfArea>.
     ///     Use aligned rectangle <aAlignedGrfArea> instead of <rGrfArea> in
     ///     the following code.
     SwRect aAlignedGrfArea = rGrfArea;
@@ -844,7 +802,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
     if( !bIsChart )
     {
-        /// OD 25.09.2002 #99739#
         /// Because for drawing a graphic left-top-corner and size coordinations are
         /// used, these coordinations have to be determined on pixel level.
         ::SwAlignGrfRect( &aAlignedGrfArea, *pOut );
@@ -861,7 +818,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
     if( pGrfNd )
     {
-        BOOL bForceSwap = FALSE, bContinue = TRUE;
+        sal_Bool bForceSwap = sal_False, bContinue = sal_True;
         GraphicObject& rGrfObj = pGrfNd->GetGrfObj();
 
         GraphicAttr aGrfAttr;
@@ -869,14 +826,13 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
         if( !bPrn )
         {
-            // --> OD 2007-01-02 #i73788#
+            // #i73788#
             if ( pGrfNd->IsLinkedInputStreamReady() )
             {
                 pGrfNd->UpdateLinkWithInputStream();
             }
             // <--
-            // --> OD 2008-01-30 #i85717#
-            // --> OD 2008-07-21 #i90395# - check, if asynchronous retrieval
+            // #i85717#, #i90395# - check, if asynchronous retrieval
             // if input stream for the graphic is possible
 //            else if( GRAPHIC_DEFAULT == rGrfObj.GetType() &&
             else if ( ( rGrfObj.GetType() == GRAPHIC_DEFAULT ||
@@ -892,15 +848,13 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     !(aTmpSz = pGrfNd->GetTwipSize()).Width() ||
                     !aTmpSz.Height() || !pGrfNd->GetAutoFmtLvl() )
                 {
-                    // --> OD 2006-12-22 #i73788#
-                    pGrfNd->TriggerAsyncRetrieveInputStream();
-                    // <--
+                    pGrfNd->TriggerAsyncRetrieveInputStream(); // #i73788#
                 }
                 String aTxt( pGrfNd->GetTitle() );
                 if ( !aTxt.Len() )
                     GetRealURL( *pGrfNd, aTxt );
-                ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, FALSE );
-                bContinue = FALSE;
+                ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, sal_False );
+                bContinue = sal_False;
             }
             else if( rGrfObj.IsCached( pOut, aAlignedGrfArea.Pos(),
                                     aAlignedGrfArea.SSize(), &aGrfAttr ))
@@ -908,17 +862,17 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 rGrfObj.DrawWithPDFHandling( *pOut,
                                              aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
                                              &aGrfAttr );
-                bContinue = FALSE;
+                bContinue = sal_False;
             }
         }
 
         if( bContinue )
         {
-            const BOOL bSwapped = rGrfObj.IsSwappedOut();
-            const BOOL bSwappedIn = 0 != pGrfNd->SwapIn( bPrn );
+            const sal_Bool bSwapped = rGrfObj.IsSwappedOut();
+            const sal_Bool bSwappedIn = 0 != pGrfNd->SwapIn( bPrn );
             if( bSwappedIn && rGrfObj.GetGraphic().IsSupportedGraphic())
             {
-                const BOOL bAnimate = rGrfObj.IsAnimated() &&
+                const sal_Bool bAnimate = rGrfObj.IsAnimated() &&
                                          !pShell->IsPreView() &&
                                          !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
                 // --> FME 2004-06-21 #i9684# Stop animation during printing/pdf export
@@ -952,7 +906,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             }
             else
             {
-                USHORT nResId = 0;
+                sal_uInt16 nResId = 0;
                 if( bSwappedIn )
                 {
                     if( GRAPHIC_NONE == rGrfObj.GetType() )
@@ -971,12 +925,12 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 if ( nResId )
                     aText = SW_RESSTR( nResId );
 
-                ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, TRUE );
+                ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, sal_True );
             }
 
             //Beim Drucken duerfen wir nicht die Grafiken sammeln...
             if( bSwapped && bPrn )
-                bForceSwap = TRUE;
+                bForceSwap = sal_True;
         }
         if( bForceSwap )
             pGrfNd->SwapOut();
@@ -992,13 +946,13 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     }
     else if( pOLENd )
     {
-        // --> OD 2009-03-05 #i99665#
+        // #i99665#
         // Adjust AntiAliasing mode at output device for chart OLE
-        const USHORT nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
+        const sal_uInt16 nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
         if ( pOLENd->IsChart() &&
              pShell->Imp()->GetDrawView()->IsAntiAliasing() )
         {
-            const USHORT nAntialiasingForChartOLE =
+            const sal_uInt16 nAntialiasingForChartOLE =
                     nFormerAntialiasingAtOutput | ANTIALIASING_PIXELSNAPHAIRLINE;
             pOut->SetAntialiasing( nAntialiasingForChartOLE );
         }
@@ -1010,23 +964,15 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         // Im BrowseModus gibt es nicht unbedingt einen Drucker und
         // damit kein JobSetup, also legen wir eines an ...
         const JobSetup* pJobSetup = pOLENd->getIDocumentDeviceAccess()->getJobsetup();
-        BOOL bDummyJobSetup = 0 == pJobSetup;
+        sal_Bool bDummyJobSetup = 0 == pJobSetup;
         if( bDummyJobSetup )
             pJobSetup = new JobSetup();
 
         // #i42323#
-        // The reason for #114233# is gone, so i remove it again
         //TODO/LATER: is it a problem that the JopSetup isn't used?
         //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
 
-        // get hi-contrast image, but never for printing
-        Graphic* pGraphic = NULL;
-        if (pOut && !bPrn && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-            pGraphic = pOLENd->GetHCGraphic();
-
-        // when it is not possible to get HC-representation, the original image should be used
-        if ( !pGraphic )
-               pGraphic = pOLENd->GetGraphic();
+        Graphic* pGraphic = pOLENd->GetGraphic();
 
         if ( pGraphic && pGraphic->GetType() != GRAPHIC_NONE )
         {
@@ -1054,7 +1000,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             ((SwFEShell*)pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
         }
 
-        // --> OD 2009-03-05 #i99665#
+        // #i99665#
         if ( pOLENd->IsChart() &&
              pShell->Imp()->GetDrawView()->IsAntiAliasing() )
         {
@@ -1065,18 +1011,18 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 }
 
 
-BOOL SwNoTxtFrm::IsTransparent() const
+sal_Bool SwNoTxtFrm::IsTransparent() const
 {
-    const ViewShell* pSh = GetShell();
+    const ViewShell* pSh = getRootFrm()->GetCurrShell();
     if ( !pSh || !pSh->GetViewOptions()->IsGraphic() )
-        return TRUE;
+        return sal_True;
 
     const SwGrfNode *pNd;
     if( 0 != (pNd = GetNode()->GetGrfNode()) )
         return pNd->IsTransparent();
 
     //#29381# OLE sind immer Transparent.
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -1089,7 +1035,7 @@ void SwNoTxtFrm::StopAnimation( OutputDevice* pOut ) const
 }
 
 
-BOOL SwNoTxtFrm::HasAnimation() const
+sal_Bool SwNoTxtFrm::HasAnimation() const
 {
     const SwGrfNode* pGrfNd = GetNode()->GetGrfNode();
     return pGrfNd && pGrfNd->IsAnimated();

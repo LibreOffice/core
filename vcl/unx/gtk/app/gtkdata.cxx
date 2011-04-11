@@ -64,8 +64,9 @@
 
 #include <vcl/svapp.hxx>
 
-using namespace rtl;
 using namespace vcl_sal;
+
+using ::rtl::OUString;
 
 /***************************************************************************
  * class GtkDisplay                                                        *
@@ -203,7 +204,7 @@ void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
         }
         else
         {
-            DBG_ERROR( "unknown screen changed size" );
+            OSL_FAIL( "unknown screen changed size" );
         }
     }
 }
@@ -232,7 +233,7 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
             }
             else
             {
-                DBG_ERROR( "monitors for non-default screen changed, extend-me" );
+                OSL_FAIL( "monitors for non-default screen changed, extend-me" );
             }
         }
     }
@@ -245,14 +246,15 @@ extern "C"
 
 int GtkSalDisplay::GetDefaultMonitorNumber() const
 {
+    int n = 0;
     GdkScreen* pScreen = gdk_display_get_screen( m_pGdkDisplay, m_nDefaultScreen );
 #if GTK_CHECK_VERSION(2,20,0)
-    return m_aXineramaScreenIndexMap[gdk_screen_get_primary_monitor(pScreen)];
+    n = gdk_screen_get_primary_monitor(pScreen);
 #else
     static screen_get_primary_monitor sym_gdk_screen_get_primary_monitor =
         (screen_get_primary_monitor)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_primary_monitor" );
     if (sym_gdk_screen_get_primary_monitor)
-        return m_aXineramaScreenIndexMap[sym_gdk_screen_get_primary_monitor(pScreen)];
+        n = sym_gdk_screen_get_primary_monitor( pScreen );
 #if GTK_CHECK_VERSION(2,14,0)
     //gdk_screen_get_primary_monitor unavailable, take the first laptop monitor
     //as the default
@@ -265,6 +267,9 @@ int GtkSalDisplay::GetDefaultMonitorNumber() const
 #endif
     return 0;
 #endif
+    if( n >= 0 && size_t(n) < m_aXineramaScreenIndexMap.size() )
+        n = m_aXineramaScreenIndexMap[n];
+    return n;
 }
 
 void GtkSalDisplay::initScreen( int nScreen ) const
@@ -316,17 +321,17 @@ long GtkSalDisplay::Dispatch( XEvent* pEvent )
     return GDK_FILTER_CONTINUE;
 }
 
-GdkCursor* GtkSalDisplay::getFromXPM( const char *pBitmap,
-                                      const char *pMask,
+GdkCursor* GtkSalDisplay::getFromXPM( const unsigned char *pBitmap,
+                                      const unsigned char *pMask,
                                       int nWidth, int nHeight,
                                       int nXHot, int nYHot )
 {
     GdkScreen *pScreen = gdk_display_get_default_screen( m_pGdkDisplay );
     GdkDrawable *pDrawable = GDK_DRAWABLE( gdk_screen_get_root_window (pScreen) );
     GdkBitmap *pBitmapPix = gdk_bitmap_create_from_data
-            ( pDrawable, pBitmap, nWidth, nHeight );
+            ( pDrawable, reinterpret_cast<const char*>(pBitmap), nWidth, nHeight );
     GdkBitmap *pMaskPix = gdk_bitmap_create_from_data
-            ( pDrawable, pMask, nWidth, nHeight );
+            ( pDrawable, reinterpret_cast<const char*>(pMask), nWidth, nHeight );
     GdkColormap *pColormap = gdk_drawable_get_colormap( pDrawable );
 
     GdkColor aWhite = { 0, 0xffff, 0xffff, 0xffff };
@@ -391,7 +396,7 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAP_BUILTIN( POINTER_HSIZEBAR, GDK_SB_H_DOUBLE_ARROW );
             MAP_BUILTIN( POINTER_VSIZEBAR, GDK_SB_V_DOUBLE_ARROW );
 
-            MAP_BUILTIN( POINTER_REFHAND, GDK_HAND1 );
+            MAP_BUILTIN( POINTER_REFHAND, GDK_HAND2 );
             MAP_BUILTIN( POINTER_HAND, GDK_HAND2 );
             MAP_BUILTIN( POINTER_PEN, GDK_PENCIL );
 
@@ -538,7 +543,7 @@ public:
                             YieldFunc   handle );
     virtual void    Remove( int fd );
 
-    virtual void    StartTimer( ULONG nMS );
+    virtual void    StartTimer( sal_uLong nMS );
     virtual void    StopTimer();
     virtual void    Wakeup();
     virtual void    PostUserEvent();
@@ -608,7 +613,7 @@ void GtkXLib::Init()
         osl_getCommandArg(i, &aParam.pData );
         OString aBParam( OUStringToOString( aParam, aEnc ) );
 
-        if( aParam.equalsAscii( "-display" ) || aParam.equalsAscii( "--display" ) )
+        if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-display" ) ) || aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--display" ) ) )
         {
             pCmdLineAry[i+1] = g_strdup( "--display" );
             osl_getCommandArg(i+1, &aParam.pData );
@@ -686,7 +691,7 @@ void GtkXLib::Init()
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
     XSync( pDisp, False );
 
-    pKbdExtension->UseExtension( ! HasXErrorOccured() );
+    pKbdExtension->UseExtension( ! HasXErrorOccurred() );
     PopXErrorLevel();
 
     m_pGtkSalDisplay->SetKbdExtension( pKbdExtension );
@@ -738,7 +743,7 @@ gboolean GtkXLib::timeoutFn(gpointer data)
     return FALSE;
 }
 
-void GtkXLib::StartTimer( ULONG nMS )
+void GtkXLib::StartTimer( sal_uLong nMS )
 {
     m_nTimeoutMS = nMS; // for restarting
 

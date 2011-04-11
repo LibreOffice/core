@@ -31,7 +31,7 @@
 
 
 #include <vcl/dialog.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include "scui_def.hxx"
 
@@ -43,7 +43,7 @@ public:
             ScColOrRowDlg( Window*          pParent,
                            const String&    rStrTitle,
                            const String&    rStrLabel,
-                           BOOL             bColDefault = TRUE );
+                           sal_Bool             bColDefault = sal_True );
             ~ScColOrRowDlg();
 
 private:

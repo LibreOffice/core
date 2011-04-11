@@ -42,7 +42,7 @@
 
 //=============================================================================
 
-/** specifies a service that provides acces to the settings of a text module.
+/** specifies a service that provides access to the settings of a text module.
  */
 published service GlobalSettings
 {

@@ -36,8 +36,9 @@
 #include <prtsetup.hxx>
 
 using namespace psp;
-using namespace rtl;
 using namespace padmin;
+
+using ::rtl::OUString;
 
 #define PRINTER_PERSISTENCE_GROUP "KnownPrinterCommands"
 #define FAX_PERSISTENCE_GROUP "KnownFaxCommands"
@@ -269,10 +270,10 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
     m_aPdfDirectoryButton.SetClickHdl( LINK( this, RTSCommandPage, ClickBtnHdl ) );
     m_aExternalCB.SetToggleHdl( LINK( this, RTSCommandPage, ClickBtnHdl ) );
 
-    m_aPdfDirectoryButton.Show( FALSE );
-    m_aPdfDirectoryEdit.Show( FALSE );
-    m_aPdfDirectoryText.Show( FALSE );
-    m_aFaxSwallowBox.Show( FALSE );
+    m_aPdfDirectoryButton.Show( sal_False );
+    m_aPdfDirectoryEdit.Show( sal_False );
+    m_aPdfDirectoryText.Show( sal_False );
+    m_aFaxSwallowBox.Show( sal_False );
     m_aCommandsCB.SetText( m_pParent->m_aJobData.m_aCommand );
     m_aQuickCB.SetText( m_pParent->m_aJobData.m_aQuickCommand );
 
@@ -286,9 +287,9 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
         if( ! aToken.compareToAscii( "fax", 3 ) )
         {
             m_bWasFax = true;
-            m_aFaxSwallowBox.Show( TRUE );
+            m_aFaxSwallowBox.Show( sal_True );
             sal_Int32 nPos = 0;
-            m_aFaxSwallowBox.Check( ! aToken.getToken( 1, '=', nPos ).compareToAscii( "swallow", 7 ) ? TRUE : FALSE );
+            m_aFaxSwallowBox.Check( ! aToken.getToken( 1, '=', nPos ).compareToAscii( "swallow", 7 ) ? sal_True : sal_False );
             m_aConfigureBox.SelectEntryPos( m_nFaxEntry );
         }
         else if( ! aToken.compareToAscii( "pdf=", 4 ) )
@@ -296,9 +297,9 @@ RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
             m_bWasPdf = true;
             sal_Int32 nPos = 0;
             m_aPdfDirectoryEdit.SetText( aToken.getToken( 1, '=', nPos ) );
-            m_aPdfDirectoryEdit.Show( TRUE );
-            m_aPdfDirectoryButton.Show( TRUE );
-            m_aPdfDirectoryText.Show( TRUE );
+            m_aPdfDirectoryEdit.Show( sal_True );
+            m_aPdfDirectoryButton.Show( sal_True );
+            m_aPdfDirectoryText.Show( sal_True );
             m_aConfigureBox.SelectEntryPos( m_nPdfEntry );
         }
         else if( ! aToken.compareToAscii( "external_dialog" ) )
@@ -333,7 +334,7 @@ void RTSCommandPage::save()
     String aOldPdfPath;
     bool bOldFaxSwallow = false;
     bool bFaxSwallow = m_aFaxSwallowBox.IsChecked() ? true : false;
-    bool bOldExternalDialog = false, bExternalDialog = m_aExternalCB.IsChecked() ? true : false;
+    bool bExternalDialog = m_aExternalCB.IsChecked() ? true : false;
 
     while( nIndex != -1 )
     {
@@ -359,10 +360,6 @@ void RTSCommandPage::save()
         {
             sal_Int32 nPos = 0;
             bOldFaxSwallow = aToken.getToken( 1, '=', nPos ).compareToAscii( "swallow", 7 ) ? false : true;
-        }
-        else if( ! aToken.compareToAscii( "external_dialog" ) )
-        {
-            bOldExternalDialog = true;
         }
     }
     ::std::list< String >* pList = &m_aPrinterCommands;
@@ -424,17 +421,17 @@ IMPL_LINK( RTSCommandPage, SelectHdl, Control*, pBox )
 {
     if( pBox == &m_aConfigureBox )
     {
-        BOOL bEnable = m_aConfigureBox.GetSelectEntryPos() == m_nPdfEntry ? TRUE : FALSE;
+        sal_Bool bEnable = m_aConfigureBox.GetSelectEntryPos() == m_nPdfEntry ? sal_True : sal_False;
         m_aPdfDirectoryButton.Show( bEnable );
         m_aPdfDirectoryEdit.Show( bEnable );
         m_aPdfDirectoryText.Show( bEnable );
-        bEnable = m_aConfigureBox.GetSelectEntryPos() == m_nFaxEntry ? TRUE : FALSE;
+        bEnable = m_aConfigureBox.GetSelectEntryPos() == m_nFaxEntry ? sal_True : sal_False;
         m_aFaxSwallowBox.Show( bEnable );
         UpdateCommands();
     }
     else if( pBox == &m_aCommandsCB )
     {
-        m_aRemovePB.Enable( TRUE );
+        m_aRemovePB.Enable( sal_True );
     }
 
     return 0;

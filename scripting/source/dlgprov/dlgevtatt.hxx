@@ -41,7 +41,7 @@
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //.........................................................................
 namespace dlgprov
@@ -51,7 +51,7 @@ namespace dlgprov
     // =============================================================================
     // class DialogEventsAttacherImpl
     // =============================================================================
-    typedef std::hash_map< rtl::OUString,
+    typedef boost::unordered_map< rtl::OUString,
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >,
         ::rtl::OUStringHash,
         ::std::equal_to< ::rtl::OUString > > ListenerHash;
@@ -69,6 +69,7 @@ namespace dlgprov
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacher > m_xEventAttacher;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener > getScriptListenerForKey( const rtl::OUString& sScriptName ) throw ( ::com::sun::star::uno::RuntimeException );
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsSupplier > getFakeVbaEventsSupplier( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl, rtl::OUString& sCodeName );
+        void nestedAttachEvents( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& Objects, const ::com::sun::star::uno::Any& Helper, rtl::OUString& sDialogCodeName );
         void  SAL_CALL attachEventsToControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl, const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsSupplier >& events, const ::com::sun::star::uno::Any& Helper  );
     public:
         DialogEventsAttacherImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,

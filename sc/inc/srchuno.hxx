@@ -64,7 +64,7 @@ public:
     virtual void SAL_CALL   setSearchString( const ::rtl::OUString& aString )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // Search/Replace muss von aussen (vom XSearchable) gerufen werden...
+                            // search/replace should be called from outside (from XSearchable)...
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >

@@ -50,6 +50,7 @@
 //  other includes
 
 #include <cppuhelper/weakref.hxx>
+#include <fwidllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -67,7 +68,7 @@ namespace framework{
  *  Further the derived and this base class share the same lock.
  *  So it's possible to be threadsafe if it's needed.
 */
-class PropertySetHelper : public css::beans::XPropertySet
+class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
                         , public css::beans::XPropertySetInfo
 {
     //-------------------------------------------------------------------------

@@ -372,7 +372,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 
     // append the filter
     if (bPrependSeparator) {
-        rtl::OUString dash = rtl::OUString::createFromAscii("-");
+        rtl::OUString dash(RTL_CONSTASCII_USTRINGPARAM("-"));
         OUStringList emptyList;
         m_pFilterList->push_back(FilterEntry(dash, emptyList));
     }
@@ -419,7 +419,7 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 
     {
         rtl::OUString aName = [sFilename OUString];
-        rtl::OUString allMatcher = rtl::OUString::createFromAscii(".*");
+        rtl::OUString allMatcher(RTL_CONSTASCII_USTRINGPARAM(".*"));
         for(OUStringList::iterator iter = suffixList.begin(); iter != suffixList.end(); iter++) {
             if (aName.matchIgnoreAsciiCase(*iter, aName.getLength() - (*iter).getLength()) || ((*iter).equals(allMatcher))) {
                 return sal_True;

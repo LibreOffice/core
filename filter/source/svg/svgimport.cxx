@@ -63,11 +63,11 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     const beans::PropertyValue* pAttribs = rDescriptor.getConstArray();
     for ( sal_Int32 i=0 ; i<nLength; ++i, ++pAttribs )
     {
-        if( pAttribs->Name.equalsAscii( "InputStream" ) )
+        if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
         {
             pAttribs->Value >>= xInputStream;
         }
-        else if( pAttribs->Name.equalsAscii( "StatusIndicator" ) )
+        else if( pAttribs->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ) ) )
             pAttribs->Value >>= xStatus;
     }
 

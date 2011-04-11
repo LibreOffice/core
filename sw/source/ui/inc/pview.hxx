@@ -55,8 +55,8 @@ class SwPagePreviewLayout;
 class SwPagePreViewWin : public Window
 {
     ViewShell*          mpViewShell;
-    USHORT              mnSttPage;
-    BYTE                mnRow, mnCol;
+    sal_uInt16              mnSttPage;
+    sal_uInt8                mnRow, mnCol;
     Size                maPxWinSize;
     Fraction            maScale;
     SwPagePreView&      mrView;
@@ -66,7 +66,7 @@ class SwPagePreViewWin : public Window
     // OD 12.12.2002 #103492#
     SwPagePreviewLayout* mpPgPrevwLayout;
 
-    void SetPagePreview( BYTE nRow, BYTE nCol );
+    void SetPagePreview( sal_uInt8 nRow, sal_uInt8 nCol );
 
     using Window::Scroll;
 
@@ -85,14 +85,14 @@ public:
 
     ViewShell* GetViewShell() const { return mpViewShell; }
 
-    BYTE    GetRow() const      { return mnRow; }
-    void    SetRow( BYTE n )    { if( n ) mnRow = n; }
+    sal_uInt8    GetRow() const      { return mnRow; }
+    void    SetRow( sal_uInt8 n )    { if( n ) mnRow = n; }
 
-    BYTE    GetCol() const      { return mnCol; }
-    void    SetCol( BYTE n )    { if( n ) mnCol = n; }
+    sal_uInt8    GetCol() const      { return mnCol; }
+    void    SetCol( sal_uInt8 n )    { if( n ) mnCol = n; }
 
-    USHORT  GetSttPage() const      { return mnSttPage; }
-    void    SetSttPage( USHORT n )  { mnSttPage = n; }
+    sal_uInt16  GetSttPage() const      { return mnSttPage; }
+    void    SetSttPage( sal_uInt16 n )  { mnSttPage = n; }
 
     /** get selected page number of document preview
 
@@ -116,9 +116,9 @@ public:
     void SetSelectedPage( sal_uInt16 _nSelectedPageNum );
 
     //JP 19.08.98: bei Einspaltigkeit gibt es keine 0. Seite!
-    USHORT  GetDefSttPage() const   { return 1 == mnCol ? 1 : 0; }
+    sal_uInt16  GetDefSttPage() const   { return 1 == mnCol ? 1 : 0; }
 
-    void CalcWish( BYTE nNewRow, BYTE nNewCol );
+    void CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol );
 
     const Size& GetWinSize() const  { return maPxWinSize; }
     void SetWinSize( const Size& rNewSize );
@@ -129,7 +129,7 @@ public:
     int MovePage( int eMoveMode );
 
     // erzeuge den String fuer die StatusLeiste
-    void GetStatusStr( String& rStr, USHORT nPageCount ) const;
+    void GetStatusStr( String& rStr, sal_uInt16 nPageCount ) const;
 
     void RepaintCoreRect( const SwRect& rRect );
 
@@ -150,7 +150,7 @@ public:
         return maPaintedPreviewDocRect;
     }
 
-    void Scroll(long nXMove, long nYMove, USHORT nFlags = 0);
+    void Scroll(long nXMove, long nYMove, sal_uInt16 nFlags = 0);
 
     /** method to enable/disable book preview
 
@@ -160,7 +160,7 @@ public:
 
         @param _bBookPreview
         input parameter - boolean indicating, if book preview mode has to
-        switch on <TRUE> or of <FALSE>
+        switch on <sal_True> or of <sal_False>
 
         @return boolean indicating, if book preview mode has changed.
     */
@@ -184,7 +184,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     //and the new cursor position if the user double click in the PagePreView
                             sNewCrsrPos;
     // to support keyboard the number of the page to go to can be set too
-    USHORT                  nNewPage;
+    sal_uInt16                  nNewPage;
     // Sichtbarer Bereich
     String                  sPageStr;
     Size                    aDocSz;
@@ -199,8 +199,8 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     // aktiv sind
     Window                  *pScrollFill;
 
-    USHORT                  mnPageCount;
-    BOOL                    bNormalPrint;
+    sal_uInt16                  mnPageCount;
+    sal_Bool                    bNormalPrint;
 
     // OD 09.01.2003 #106334#
     // new members to reset design mode at draw view for form shell on switching
@@ -211,20 +211,19 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     SW_DLLPRIVATE void            Init(const SwViewOption* = 0);
     SW_DLLPRIVATE Point           AlignToPixel(const Point& rPt) const;
 
-    SW_DLLPRIVATE int             _CreateScrollbar( BOOL bHori );
+    SW_DLLPRIVATE int             _CreateScrollbar( sal_Bool bHori );
     SW_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
     SW_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
     SW_DLLPRIVATE DECL_LINK( BtnPage, Button * );
-    SW_DLLPRIVATE int             ChgPage( int eMvMode, int bUpdateScrollbar = TRUE );
+    SW_DLLPRIVATE int             ChgPage( int eMvMode, int bUpdateScrollbar = sal_True );
 
 
-    SW_DLLPRIVATE virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
-    SW_DLLPRIVATE virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    SW_DLLPRIVATE virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
+    SW_DLLPRIVATE virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     SW_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent,
                                                 const SfxItemSet &rOptions );
-    SW_DLLPRIVATE virtual PrintDialog*    CreatePrintDialog( Window *pParent );
 
-    SW_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, BOOL bInner );
+    SW_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool bInner );
 
     /** help method to execute SfxRequest FN_PAGE_UP and FN_PAGE_DOWN
 
@@ -247,7 +246,7 @@ protected:
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
     virtual Size    GetOptimalSizePixel() const;
 
-    void         SetZoom(SvxZoomType eSet, USHORT nFactor);
+    void         SetZoom(SvxZoomType eSet, sal_uInt16 nFactor);
 
 public:
     SFX_DECL_VIEWFACTORY(SwPagePreView);
@@ -264,7 +263,7 @@ public:
     void            DocSzChgd(const Size& rNewSize);
     const Size&     GetDocSz() const { return aDocSz; }
 
-    virtual void    SetVisArea( const Rectangle&, BOOL bUpdateScrollbar = TRUE);
+    virtual void    SetVisArea( const Rectangle&, sal_Bool bUpdateScrollbar = sal_True);
 
     inline void     AdjustEditWin();
 
@@ -274,16 +273,16 @@ public:
 
     void            ShowVScrollbar(sal_Bool bShow);
 
-    USHORT          GetPageCount() const        { return mnPageCount; }
+    sal_uInt16          GetPageCount() const        { return mnPageCount; }
 
-    BOOL            HandleWheelCommands( const CommandEvent& );
+    sal_Bool            HandleWheelCommands( const CommandEvent& );
 
     const String&   GetPrevSwViewData() const       { return sSwViewData; }
     void            SetNewCrsrPos( const String& rStr ) { sNewCrsrPos = rStr; }
     const String&   GetNewCrsrPos() const           { return sNewCrsrPos; }
 
-    USHORT          GetNewPage() const {return nNewPage;}
-    void            SetNewPage(USHORT nSet)  {nNewPage = nSet;}
+    sal_uInt16          GetNewPage() const {return nNewPage;}
+    void            SetNewPage(sal_uInt16 nSet)  {nNewPage = nSet;}
 
         // Handler
     void            Execute(SfxRequest&);

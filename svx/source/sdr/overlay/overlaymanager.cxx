@@ -139,7 +139,7 @@ namespace sdr
             mnStripeLengthPixel(5),
             maDrawinglayerOpt(),
             maViewTransformation(),
-            maViewInformation2D(0),
+            maViewInformation2D(),
             mfDiscreteOne(0.0)
         {
             // set Property 'ReducedDisplayQuality' to true to allow simpler interaction

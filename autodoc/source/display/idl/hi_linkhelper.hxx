@@ -85,9 +85,7 @@ class LinkHelper
     const String &      XrefsSuffix() const;
 
   private:
-    // DATA
-    mutable HtmlEnvironment_Idl &
-                        rEnv;
+    HtmlEnvironment_Idl & rEnv;
 };
 
 inline const ary::idl::CodeEntity *

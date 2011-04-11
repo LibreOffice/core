@@ -114,7 +114,7 @@ static ByteString ConvertSystemPath( const ByteString& rPath )
 
 ByteString TranslateLayout::GetCommandLineParam( int i )
 {
-    return ByteString( OUSTRING_CSTR( Application::GetCommandLineParam( sal::static_int_cast< USHORT >( i ) ) ) );
+    return ByteString( OUSTRING_CSTR( Application::GetCommandLineParam( sal::static_int_cast< sal_uInt16 >( i ) ) ) );
 }
 
 ByteString TranslateLayout::GetOptionArgument( int const i )
@@ -166,9 +166,9 @@ void TranslateLayout::ParseCommandLine()
 static XMLAttribute*
 findAttribute( XMLAttributeList* lst, String const& name )
 {
-    for ( ULONG i = 0; i < lst->Count(); i++ )
-        if ( lst->GetObject( i )->Equals( name ) )
-            return lst->GetObject( i );
+    for ( size_t i = 0; i < lst->size(); i++ )
+        if ( (*lst)[ i ]->Equals( name ) )
+            return (*lst)[ i ];
     return 0;
 }
 
@@ -177,7 +177,17 @@ translateAttribute( XMLAttributeList* lst,
                     String const& name, String const& translation )
 {
     if ( XMLAttribute* a = findAttribute( lst, name ) )
-        return lst->Replace ( new XMLAttribute( name.Copy( 1 ), translation ), a );
+    {
+        for ( XMLAttributeList::iterator it = lst->begin(); it < lst->end(); ++it )
+        {
+            if ( *it == a )
+            {
+                delete *it;
+                *it = new XMLAttribute( name.Copy( 1 ), translation );
+                return *it;
+            }
+        }
+    }
     return 0;
 }
 
@@ -204,7 +214,6 @@ translateElement( XMLElement* element, ByteString const& lang,
             {
                 ByteString translation;
                 entry->GetText( translation, STRING_TYP_TEXT, lang, true );
-    //            ByteString original = removeContent( element );
                 if ( !translation.Len() )
                     translation = BSTRING( ( *i )->GetValue() );
                 delete translateAttribute( attributes, **i , STRING( translation ) );
@@ -240,17 +249,23 @@ static void make_directory( ByteString const& name )
 static void insertMarker( XMLParentNode *p, ByteString const& file )
 {
     if ( XMLChildNodeList* lst = p->GetChildList() )
-        if ( lst->Count() )
+        if ( !lst->empty() )
         {
-            ULONG i = 1;
+            size_t i = 1;
             // Skip newline, if possible.
-            if ( lst->Count() > 1
-                 && lst->GetObject( 2 )->GetNodeType() == XML_NODE_TYPE_DEFAULT )
+            if ( lst->size() > 2
+                 && (*lst)[ 2 ]->GetNodeType() == XML_NODE_TYPE_DEFAULT )
                 i++;
-            OUString marker = OUString::createFromAscii( "\n    NOTE: This file has been generated automagically by transex3/layout/tralay,\n          from source template: " )
+            OUString marker = OUString(RTL_CONSTASCII_USTRINGPARAM("\n    NOTE: This file has been generated automagically by transex3/layout/tralay,\n          from source template: "))
                 + STRING( file )
-                + OUString::createFromAscii( ".\n          Do not edit, changes will be lost.\n" );
-            lst->Insert( new XMLComment( marker, 0 ), i );
+                + OUString(RTL_CONSTASCII_USTRINGPARAM(".\n          Do not edit, changes will be lost.\n"));
+            if ( i < lst->size() ) {
+                XMLChildNodeList::iterator it = lst->begin();
+                ::std::advance( it, i );
+                lst->insert( it, new XMLComment( marker, 0 ) );
+            } else {
+                lst->push_back( new XMLComment( marker, 0 ) );
+            }
         }
 }
 
@@ -259,7 +274,7 @@ void TranslateLayout::MergeLanguage( ByteString const& language )
     ByteString xmlFile = mFiles.front();
 
     MergeDataFile mergeData( mLocalize, xmlFile,
-                             FALSE, RTL_TEXTENCODING_MS_1252 );
+                             sal_False, RTL_TEXTENCODING_MS_1252 );
 
     DirEntry aFile( xmlFile );
     SimpleXMLParser aParser;
@@ -361,14 +376,14 @@ void TranslateLayout::Main()
             aStr += OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US );
         }
         fprintf( stderr, "error: parsing: '%s'\n", aStr.getStr() );
-        OSL_ENSURE( 0, aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
     catch ( uno::Exception& rExc )
     {
         OString aStr( OUStringToOString( rExc.Message,
                                          RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "error: UNO: '%s'\n", aStr.getStr() );
-        OSL_ENSURE( 0, aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
 }
 

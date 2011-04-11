@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
@@ -35,10 +36,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
-#if STLPORT_VERSION>=321
-#include <math.h>   // prevent conflict between exception and std::exception
-#endif
+#include <math.h>
 #include <hintids.hxx>
 #include <svx/svdview.hxx>
 #include <sot/factory.hxx>
@@ -59,11 +59,11 @@
 #include <vcl/graph.hxx>
 #include <sfx2/printer.hxx>
 #include <unotools/charclass.hxx>
-
 #include <comphelper/storagehelper.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <frmfmt.hxx>
 #include <fmtftn.hxx>
 #include <fmtpdsc.hxx>
 #include <wdocsh.hxx>
@@ -73,6 +73,7 @@
 #include <view.hxx>
 #include <uitool.hxx>
 #include <cmdid.h>
+#include <cfgitems.hxx>
 #include <pagedesc.hxx>
 #include <frmmgr.hxx>
 #include <shellio.hxx>
@@ -96,19 +97,18 @@
 #include <ndtxt.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <IMark.hxx>
+#include <sfx2/bindings.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
 #include <comcore.hrc>
-#include <undobj.hxx>
 // <- #111827#
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <editeng/acorrcfg.hxx>
-
 #include "PostItMgr.hxx"
+#include <sfx2/msgpool.hxx>
 
 using namespace sw::mark;
 using namespace com::sun::star;
@@ -122,12 +122,13 @@ using namespace com::sun::star;
         ePageMove(MV_NO),\
         pCrsrStack(0),  \
         rView(rShell),\
-        bDestOnStack(FALSE), \
+        aNavigationMgr(this), \
+        bDestOnStack(sal_False), \
         fnLeaveSelect(&SwWrtShell::SttLeaveSelect)
 
 #define BITFLD_INI_LIST \
         bClearMark = \
-        bIns = TRUE;\
+        bIns = sal_True;\
         bAddMode = \
         bBlockMode = \
         bExtMode = \
@@ -138,7 +139,7 @@ using namespace com::sun::star;
         bSelWrd = \
         bSelLn = \
         bIsInClickToEdit = \
-        mbRetainSelection = FALSE;
+        mbRetainSelection = sal_False;
 
 
 SvxAutoCorrect* lcl_IsAutoCorr()
@@ -151,11 +152,11 @@ SvxAutoCorrect* lcl_IsAutoCorr()
     return pACorr;
 }
 
-void SwWrtShell::NoEdit(BOOL bHideCrsr)
+void SwWrtShell::NoEdit(sal_Bool bHideCrsr)
 {
     if(bHideCrsr)
         HideCrsr();
-    bNoEdit = TRUE;
+    bNoEdit = sal_True;
 }
 
 
@@ -165,17 +166,17 @@ void SwWrtShell::Edit()
     if (CanInsert())
     {
         ShowCrsr();
-        bNoEdit = FALSE;
+        bNoEdit = sal_False;
     }
 }
 
 
 
-BOOL SwWrtShell::IsEndWrd()
+sal_Bool SwWrtShell::IsEndWrd()
 {
     MV_KONTEXT(this);
     if(IsEndPara() && !IsSttPara())
-        return TRUE;
+        return sal_True;
 
     return IsEndWord();
 }
@@ -187,14 +188,14 @@ BOOL SwWrtShell::IsEndWrd()
 
 
 
-BOOL SwWrtShell::_CanInsert()
+sal_Bool SwWrtShell::_CanInsert()
 {
     if(!CanInsert())
     {
         Sound::Beep();
-        return FALSE;
+        return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 /*------------------------------------------------------------------------
  Beschreibung:  String einfuegen
@@ -204,11 +205,11 @@ void SwWrtShell::InsertByWord( const String & rStr)
 {
     if( rStr.Len() )
     {
-        BOOL bDelim = GetAppCharClass().isLetterNumeric( rStr, 0 );
+        sal_Bool bDelim = GetAppCharClass().isLetterNumeric( rStr, 0 );
         xub_StrLen nPos = 0, nStt = 0;
         for( ; nPos < rStr.Len(); nPos++ )
            {
-            BOOL bTmpDelim = GetAppCharClass().isLetterNumeric( rStr, nPos );
+            sal_Bool bTmpDelim = GetAppCharClass().isLetterNumeric( rStr, nPos );
             if( bTmpDelim != bDelim )
             {
                 Insert( rStr.Copy( nStt, nPos - nStt ));
@@ -227,7 +228,7 @@ void SwWrtShell::Insert( const String &rStr )
     if( !_CanInsert() )
         return;
 
-    BOOL bStarted = FALSE, bHasSel = HasSelection(),
+    sal_Bool bStarted = sal_False, bHasSel = HasSelection(),
         bCallIns = bIns /*|| bHasSel*/;
     bool bDeleted = false;
 
@@ -252,22 +253,10 @@ void SwWrtShell::Insert( const String &rStr )
         }
 
         StartUndo(UNDO_REPLACE, &aRewriter);
-        bStarted = TRUE;
+        bStarted = sal_True;
         bDeleted = DelRight() != 0;
     }
 
-    /*
-JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
-            naechste Zeichen.
-    if( bHasSel && !bIns && 1 < rStr.Len() )
-    {
-        // falls mehrere Zeichen anstehen, nur das erste einfuegen,
-        // der Rest muss dann aber Ueberschrieben werden.
-        SwEditShell::Insert( rStr.GetChar( 0 ) );
-        SwEditShell::Overwrite( rStr.Copy( 1 ) );
-    }
-    else
-*/
     bCallIns ?
         SwEditShell::Insert2( rStr, bDeleted ) : SwEditShell::Overwrite( rStr );
 
@@ -275,9 +264,8 @@ JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
     if( bStarted )
     {
         EndAllAction();
-        EndUndo(UNDO_REPLACE);
+        EndUndo();
     }
-//    delete pChgFlg;
 }
 
 /* Begrenzung auf maximale Hoehe geht nicht, da die maximale Hoehe
@@ -287,7 +275,7 @@ JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
 
 void SwWrtShell::Insert( const String &rPath, const String &rFilter,
                          const Graphic &rGrf, SwFlyFrmAttrMgr *pFrmMgr,
-                         BOOL bRule )
+                         sal_Bool bRule )
 {
     ResetCursorStack();
     if ( !_CanInsert() )
@@ -309,13 +297,13 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
 
     EnterSelFrmMode();
 
-    BOOL bSetGrfSize = TRUE;
-    BOOL bOwnMgr     = FALSE;
+    sal_Bool bSetGrfSize = sal_True;
+    sal_Bool bOwnMgr     = sal_False;
 
     if ( !pFrmMgr )
     {
-        bOwnMgr = TRUE;
-        pFrmMgr = new SwFlyFrmAttrMgr( TRUE, this, FRMMGR_TYPE_GRF );
+        bOwnMgr = sal_True;
+        pFrmMgr = new SwFlyFrmAttrMgr( sal_True, this, FRMMGR_TYPE_GRF );
 
         // VORSICHT
         // GetAttrSet nimmt einen Abgleich vor
@@ -333,7 +321,7 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
             pFrmMgr->SetSize( aSz );
         }
         else if ( aSz.Width() != DFLT_WIDTH && aSz.Height() != DFLT_HEIGHT )
-            bSetGrfSize = FALSE;
+            bSetGrfSize = sal_False;
 
         pFrmMgr->SetHeightSizeType(ATT_FIX_SIZE);
 
@@ -375,7 +363,7 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
     if ( bOwnMgr )
         delete pFrmMgr;
 
-    EndUndo(UNDO_INSERT);
+    EndUndo();
     EndAllAction();
 }
 
@@ -387,7 +375,7 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
 
 
 void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName *pName,
-                            BOOL bActivate, USHORT nSlotId )
+                            sal_Bool bActivate, sal_uInt16 nSlotId )
 {
     ResetCursorStack();
     if( !_CanInsert() )
@@ -398,7 +386,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
         // temporary storage
         svt::EmbeddedObjectRef xObj;
         uno::Reference < embed::XStorage > xStor = comphelper::OStorageHelper::GetTemporaryStorage();
-        BOOL bDoVerb = TRUE;
+        sal_Bool bDoVerb = sal_True;
         if ( pName )
         {
             comphelper::EmbeddedObjectContainer aCnt( xStor );
@@ -420,41 +408,15 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
                 // TODO/LATER: recording! Convert properties to items
                 case SID_INSERT_PLUGIN:
-                    /*
-                    if(pReq)
-                    {
-                        INetURLObject* pURL = aDlg.GetURL();
-                        if(pURL)
-                            pReq->AppendItem(SfxStringItem(FN_PARAM_2, pURL->GetMainURL(INetURLObject::NO_DECODE)));
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
-                    } */
-                case SID_INSERT_APPLET:
-                    /*
-                    if(pReq)
-                    {
-                        SvAppletObjectRef xApplet ( xIPObj );
-                        if(xApplet.Is())
-                            pReq->AppendItem(SfxStringItem(FN_PARAM_1 , xApplet->GetCodeBase()));
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_2 , aDlg.GetClass()));
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
-                    }*/
                 case SID_INSERT_FLOATINGFRAME:
-                    /*
-                    if(pReq && xFloatingFrame.Is())
-                    {
-                        const SfxFrameDescriptor* pDescriptor = xFloatingFrame->GetFrameDescriptor();
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_1, pDescriptor->GetName()));
-                        pReq->AppendItem(
-                                SfxStringItem( FN_PARAM_2,
-                                    pDescriptor->GetURL().GetMainURL(INetURLObject::NO_DECODE)));
-                        pReq->AppendItem(SvxSizeItem(FN_PARAM_3, pDescriptor->GetMargin()));
-                        pReq->AppendItem(SfxByteItem(FN_PARAM_4, pDescriptor->GetScrollingMode()));
-                        pReq->AppendItem(SfxBoolItem(FN_PARAM_5, pDescriptor->HasFrameBorder()));
-                    }*/
                 {
+                    SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
+                    const SfxSlot* pSlot = pSlotPool->GetSlot(nSlotId);
+                    rtl::OString aCmd(".uno:");
+                    aCmd += pSlot->GetUnoName();
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     SfxAbstractInsertObjectDialog* pDlg =
-                            pFact->CreateInsertObjectDialog( GetWin(), nSlotId, xStor, &aServerList );
+                            pFact->CreateInsertObjectDialog( GetWin(), rtl::OUString( aCmd, aCmd.getLength(), RTL_TEXTENCODING_UTF8 ), xStor, &aServerList );
                     if ( pDlg )
                     {
                         pDlg->Execute();
@@ -485,7 +447,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 if ( !pClient )
                 {
                     pClient = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
-                    SetCheckForOLEInCaption( TRUE );
+                    SetCheckForOLEInCaption( sal_True );
                 }
 
                 if ( xObj.GetViewAspect() == embed::Aspects::MSOLE_ICON )
@@ -506,8 +468,6 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 pClient->DoVerb( SVVERB_SHOW );
 
                 // TODO/LATER: set document name - should be done in Client
-                //if ( !ERRCODE_TOERROR( nErr ) )
-                //    xIPObj->SetDocumentName( GetView().GetDocShell()->GetTitle() );
             }
         }
     }
@@ -524,7 +484,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                  Vom ClipBoard oder Insert
 ------------------------------------------------------------------------*/
 
-BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFmt **pFlyFrmFmt )
+sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFmt **pFlyFrmFmt )
 {
     ResetCursorStack();
     StartAllAction();
@@ -538,9 +498,9 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
     //   break should be insertet. StarMath objects are character bound and
     //   no break should be inserted.
     //3. If an selektion is passed to a StarMath object, this object should
-    //   not be activated. FALSE should be returned then.
-    BOOL bStarMath = TRUE;
-    BOOL bActivate = TRUE;
+    //   not be activated. sal_False should be returned then.
+    sal_Bool bStarMath = sal_True;
+    sal_Bool bActivate = sal_True;
 
     // set parent to get correct VisArea(in case of object needing parent printer)
     uno::Reference < container::XChild > xChild( xRef.GetObject(), uno::UNO_QUERY );
@@ -564,7 +524,7 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
                     try
                     {
                         xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Formula")), uno::makeAny( ::rtl::OUString( aMathData ) ) );
-                        bActivate = FALSE;
+                        bActivate = sal_False;
                     }
                     catch ( uno::Exception& )
                     {
@@ -576,11 +536,11 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
     }
 
     if ( !bStarMath )
-        SwFEShell::SplitNode( FALSE, FALSE );
+        SwFEShell::SplitNode( sal_False, sal_False );
 
     EnterSelFrmMode();
 
-    SwFlyFrmAttrMgr aFrmMgr( TRUE, this, FRMMGR_TYPE_OLE );
+    SwFlyFrmAttrMgr aFrmMgr( sal_True, this, FRMMGR_TYPE_OLE );
     aFrmMgr.SetHeightSizeType(ATT_FIX_SIZE);
 
     SwRect aBound;
@@ -600,8 +560,38 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
     aFrmMgr.SetSize( aSz );
     SwFlyFrmFmt *pFmt = SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
 
+    // --> #i972#
+    if ( bStarMath && pDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) )
+        AlignFormulaToBaseline( xRef.GetObject() );
+    // <--
+
     if (pFlyFrmFmt)
         *pFlyFrmFmt = pFmt;
+
+    if ( SotExchange::IsChart( aCLSID ) )
+    {
+        uno::Reference< embed::XEmbeddedObject > xEmbeddedObj( xRef.GetObject(), uno::UNO_QUERY );
+        if ( xEmbeddedObj.is() )
+        {
+            bool bDisableDataTableDialog = false;
+            svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
+            uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
+            if ( xProps.is() &&
+                 ( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bDisableDataTableDialog ) &&
+                 bDisableDataTableDialog )
+            {
+                xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ),
+                    uno::makeAny( sal_False ) );
+                xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ),
+                    uno::makeAny( sal_False ) );
+                uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
+                if ( xModifiable.is() )
+                {
+                    xModifiable->setModified( sal_True );
+                }
+            }
+        }
+    }
 
     EndAllAction();
     GetView().AutoCaption(OLE_CAP, &aCLSID);
@@ -640,12 +630,12 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
         if ( !pCli )
             pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xRef );
 
-        ((SwOleClient*)pCli)->SetInDoVerb( TRUE );
+        ((SwOleClient*)pCli)->SetInDoVerb( sal_True );
 
         CalcAndSetScale( xRef );
         pCli->DoVerb( nVerb );
 
-        ((SwOleClient*)pCli)->SetInDoVerb( FALSE );
+        ((SwOleClient*)pCli)->SetInDoVerb( sal_False );
         CalcAndSetScale( xRef );
     }
 }
@@ -724,7 +714,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                     bool bResetEnableSetModified(false);
                     if ( GetDoc()->GetDocShell()->IsEnableSetModified() )
                     {
-                        GetDoc()->GetDocShell()->EnableSetModified( FALSE );
+                        GetDoc()->GetDocShell()->EnableSetModified( sal_False );
                         bResetEnableSetModified = true;
                     }
 
@@ -737,7 +727,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
                     if ( bResetEnableSetModified )
                     {
-                        GetDoc()->GetDocShell()->EnableSetModified( TRUE );
+                        GetDoc()->GetDocShell()->EnableSetModified( sal_True );
                     }
                 }
                 // <--
@@ -760,6 +750,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         if ( (embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY & nMisc) || bLinkingChart
             // TODO/LATER: ResizeOnPrinterChange
              //|| SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->GetMiscStatus()
+             || nMisc & embed::EmbedMisc::EMBED_NEVERRESIZE // non-resizable objects need to be
+                                                            // set the size back by this method
              )
         {
             pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xObj );
@@ -778,13 +770,13 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     }
     catch( embed::NoVisualAreaSizeException& )
     {
-        OSL_ENSURE(false, "Can't get visual area size!\n" );
+        OSL_FAIL("Can't get visual area size!\n" );
         // the scaling will not be done
     }
     catch( uno::Exception& )
     {
         // TODO/LATER: handle the error
-        OSL_ENSURE(false, "Can't get visual area size!\n" );
+        OSL_FAIL("Can't get visual area size!\n" );
         return;
     }
 
@@ -870,6 +862,17 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
 
     if ( bUseObjectSize )
     {
+        // --> this moves non-resizable object so that when adding borders the baseline remains the same
+        const SwFlyFrmFmt *pFlyFrmFmt = dynamic_cast< const SwFlyFrmFmt * >( GetFlyFrmFmt() );
+        OSL_ENSURE( pFlyFrmFmt, "Could not find fly frame." );
+        if ( pFlyFrmFmt )
+        {
+            const Point &rPoint = pFlyFrmFmt->GetLastFlyFrmPrtRectPos();
+            SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
+                        : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, xObj.GetObject() ));
+            aArea += rPoint - aRect.Pos(); // adjust area by diff of printing area position in order to keep baseline alignment correct.
+        }
+        // <--
         aArea.Width ( _aVisArea.Width() );
         aArea.Height( _aVisArea.Height() );
         RequestObjectResize( aArea, xObj.GetObject() );
@@ -901,7 +904,7 @@ void SwWrtShell::ConnectObj( svt::EmbeddedObjectRef& xObj, const SwRect &rPrt,
 
 
 
-void SwWrtShell::InsertPageBreak(const String *pPageDesc, USHORT nPgNum )
+void SwWrtShell::InsertPageBreak(const String *pPageDesc, sal_uInt16 nPgNum )
 {
     ResetCursorStack();
     if( _CanInsert() )
@@ -919,7 +922,7 @@ void SwWrtShell::InsertPageBreak(const String *pPageDesc, USHORT nPgNum )
         }
 
         const SwPageDesc *pDesc = pPageDesc
-                                ? FindPageDescByName( *pPageDesc, TRUE ) : 0;
+                                ? FindPageDescByName( *pPageDesc, sal_True ) : 0;
         if( pDesc )
         {
             SwFmtPageDesc aDesc( pDesc );
@@ -971,7 +974,7 @@ void SwWrtShell::InsertColumnBreak()
         {
             if(HasSelection())
                 DelRight();
-            SwFEShell::SplitNode( FALSE, FALSE );
+            SwFEShell::SplitNode( sal_False, sal_False );
         }
         SetAttr(SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE, RES_BREAK));
 
@@ -985,7 +988,7 @@ void SwWrtShell::InsertColumnBreak()
 ------------------------------------------------------------------------*/
 
 
-void SwWrtShell::InsertFootnote(const String &rStr, BOOL bEndNote, BOOL bEdit )
+void SwWrtShell::InsertFootnote(const String &rStr, sal_Bool bEndNote, sal_Bool bEdit )
 {
     ResetCursorStack();
     if( _CanInsert() )
@@ -997,7 +1000,7 @@ void SwWrtShell::InsertFootnote(const String &rStr, BOOL bEndNote, BOOL bEdit )
                 SwapPam();
             ClearMark();
         }
-
+        SwPosition aPos = *GetCrsr()->GetPoint();
         SwFmtFtn aFootNote( bEndNote );
         if(rStr.Len())
             aFootNote.SetNumStr( rStr );
@@ -1007,9 +1010,10 @@ void SwWrtShell::InsertFootnote(const String &rStr, BOOL bEndNote, BOOL bEdit )
         if( bEdit )
         {
             // zur Bearbeiung des Fussnotentextes
-            Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
+            Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
             GotoFtnTxt();
         }
+        aNavigationMgr.addEntry(aPos);
     }
 }
 /*------------------------------------------------------------------------
@@ -1019,7 +1023,7 @@ void SwWrtShell::InsertFootnote(const String &rStr, BOOL bEndNote, BOOL bEdit )
 ------------------------------------------------------------------------*/
 
 
-void SwWrtShell::SplitNode( BOOL bAutoFmt, BOOL bCheckTableStart )
+void SwWrtShell::SplitNode( sal_Bool bAutoFmt, sal_Bool bCheckTableStart )
 {
     ResetCursorStack();
     if( _CanInsert() )
@@ -1027,7 +1031,7 @@ void SwWrtShell::SplitNode( BOOL bAutoFmt, BOOL bCheckTableStart )
         ACT_KONTEXT(this);
 
         rView.GetEditWin().FlushInBuffer();
-        BOOL bHasSel = HasSelection();
+        sal_Bool bHasSel = HasSelection();
         if( bHasSel )
         {
             StartUndo( UNDO_INSERT );
@@ -1052,13 +1056,12 @@ void SwWrtShell::SplitNode( BOOL bAutoFmt, BOOL bCheckTableStart )
 // extern void SetNumChrFmt( SwWrtShell*, SwNumRules& );
 
 // -> #i40041#
-// --> OD 2005-10-25 #b6340308#
 // Preconditions (as far as OD has figured out):
-// - <SwEditShell::HasNumber()> is FALSE, if <bNum> is TRUE
-// - <SwEditShell::HasBullet()> is FALSE, if <bNum> is FALSE
+// - <SwEditShell::HasNumber()> is sal_False, if <bNum> is sal_True
+// - <SwEditShell::HasBullet()> is sal_False, if <bNum> is sal_False
 // Behavior of method is determined by the current situation at the current
 // cursor position in the document.
-void SwWrtShell::NumOrBulletOn(BOOL bNum)
+void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
 {
     // determine numbering rule found at current cursor position in the docment.
     const SwNumRule* pCurRule = GetCurNumRule();
@@ -1067,18 +1070,17 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
 
     const SwNumRule * pNumRule = pCurRule;
 
-    // --> OD 2005-10-25 #b6340308#
     // - activate outline rule respectively turning on outline rule for
-    //   current text node. But, only for turning on a numbering (<bNum> == TRUE).
+    //   current text node. But, only for turning on a numbering (<bNum> == sal_True).
     // - overwrite found numbering rule at current cursor position, if
     //   no numbering rule can be retrieved from the paragraph style.
     bool bContinueFoundNumRule( false );
     bool bActivateOutlineRule( false );
-    int nActivateOutlineLvl( MAXLEVEL );    // only relevant, if <bActivateOutlineRule> == TRUE
+    int nActivateOutlineLvl( MAXLEVEL );    // only relevant, if <bActivateOutlineRule> == sal_True
     SwTxtFmtColl * pColl = GetCurTxtFmtColl();
     if ( pColl )
     {
-        // --> OD 2005-10-25 #b6340308# - retrieve numbering rule at paragraph
+        // retrieve numbering rule at paragraph
         // style, which is found at current cursor position in the document.
         SwNumRule* pCollRule = pDoc->FindNumRulePtr(pColl->GetNumRule().GetValue());
         // --> OD 2005-10-25 #125993# - The outline numbering rule isn't allowed
@@ -1088,35 +1090,21 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         if ( pCollRule && pCollRule == GetDoc()->GetOutlineNumRule() )
         {
             const SwNumRule* pDirectCollRule =
-                    pDoc->FindNumRulePtr(pColl->GetNumRule( FALSE ).GetValue());
+                    pDoc->FindNumRulePtr(pColl->GetNumRule( sal_False ).GetValue());
             if ( !pDirectCollRule )
             {
                 pCollRule = 0;
             }
         }
-        // --> OD 2006-11-20 #i71764#
-        // Document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE has no influence
-        // any more.
-//        if ( pCollRule == NULL &&
-//             NO_NUMBERING != pColl->GetOutlineLevel() &&
-//             GetDoc()->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE) )
-//        {
-//            pCollRule = GetDoc()->GetOutlineNumRule();
-//        }
-        // <--
 
-        // <--
-        // --> OD 2005-10-25 #b6340308#
         if ( !pCollRule )
         {
             pNumRule = pCollRule;
         }
-        // --> OD 2006-06-12 #b6435904#
         // no activation or continuation of outline numbering in Writer/Web document
         else if ( bNum &&
                   !dynamic_cast<SwWebDocShell*>(GetDoc()->GetDocShell()) &&
                   pCollRule == GetDoc()->GetOutlineNumRule() )
-        // <--
         {
             if ( pNumRule == pCollRule )
             {
@@ -1133,7 +1121,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                     OSL_ENSURE( pColl->IsAssignedToListLevelOfOutlineStyle(),
                             "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
                     if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&
-                         pCollRule->Get( static_cast<USHORT>(nActivateOutlineLvl) ).GetNumberingType()
+                         pCollRule->Get( static_cast<sal_uInt16>(nActivateOutlineLvl) ).GetNumberingType()
                             == SVX_NUM_NUMBER_NONE )
                     {
                         // activate outline numbering
@@ -1149,7 +1137,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 {
                     // --> OD 2009-08-27 #i101234#
                     // activate outline numbering, because from the precondition
-                    // it's known, that <SwEdit::HasNumber()> == FALSE
+                    // it's known, that <SwEdit::HasNumber()> == sal_False
                     bActivateOutlineRule = true;
                     nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
                 }
@@ -1160,11 +1148,11 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 // Check, if corresponding list level of the outline numbering
                 // has already a numbering format set.
                 nActivateOutlineLvl = pColl->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei,need further consideration
-                if ( pCollRule->Get( static_cast<USHORT>(nActivateOutlineLvl) ).GetNumberingType()
+                if ( pCollRule->Get( static_cast<sal_uInt16>(nActivateOutlineLvl) ).GetNumberingType()
                                 == SVX_NUM_NUMBER_NONE )
                 {
                     // activate outline numbering, because from the precondition
-                    // it's known, that <SwEdit::HasNumber()> == FALSE
+                    // it's known, that <SwEdit::HasNumber()> == sal_False
                     bActivateOutlineRule = true;
                 }
                 else
@@ -1182,7 +1170,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 OSL_ENSURE( pColl->IsAssignedToListLevelOfOutlineStyle(),
                         "<SwWrtShell::NumOrBulletOn(..)> - paragraph style with outline rule, but no outline level" );
                 if ( pColl->IsAssignedToListLevelOfOutlineStyle() &&
-                     pCollRule->Get( static_cast<USHORT>(nActivateOutlineLvl) ).GetNumberingType()
+                     pCollRule->Get( static_cast<sal_uInt16>(nActivateOutlineLvl) ).GetNumberingType()
                         == SVX_NUM_NUMBER_NONE )
                 {
                     // activate outline numbering
@@ -1198,7 +1186,6 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         }
     }
 
-    // --> OD 2005-10-25 #b6340308#
     // Only automatic numbering/bullet rules should be changed.
     // Note: The outline numbering rule is also an automatic one. It's only
     //       changed, if it has to be activated.
@@ -1214,11 +1201,8 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             pNumRule = 0;
         }
     }
-    // <--
 
-    // --> OD 2005-10-25 #b6340308#
     // Search for a previous numbering/bullet rule to continue it.
-    // --> OD 2008-03-18 #refactorlists#
     String sContinuedListId;
     if ( !pNumRule )
     {
@@ -1227,13 +1211,11 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                                             sContinuedListId );
         bContinueFoundNumRule = pNumRule != 0;
     }
-    // <--
 
     if (pNumRule)
     {
         SwNumRule aNumRule(*pNumRule);
 
-        // --> OD 2005-10-25 #b6340308#
         // do not change found numbering/bullet rule, if it should only be continued.
         if ( !bContinueFoundNumRule )
         {
@@ -1241,12 +1223,10 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
 
             if (pTxtNode)
             {
-                // --> OD 2005-10-26 #b6340308# - use above retrieve outline
-                // level, if outline numbering has to be activated.
-                int nLevel = bActivateOutlineRule  ////#outline level,zhaojianwei,need more consideration
+                // use above retrieve outline level, if outline numbering has to be activated.
+                int nLevel = bActivateOutlineRule
                               ? nActivateOutlineLvl
                               : pTxtNode->GetActualListLevel();
-                // <--
 
                 if (nLevel < 0)
                     nLevel = 0;
@@ -1254,42 +1234,37 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 if (nLevel >= MAXLEVEL)
                     nLevel = MAXLEVEL - 1;
 
-                SwNumFmt aFmt(aNumRule.Get(static_cast<USHORT>(nLevel)));
+                SwNumFmt aFmt(aNumRule.Get(static_cast<sal_uInt16>(nLevel)));
 
                 if (bNum)
                     aFmt.SetNumberingType(SVX_NUM_ARABIC);
                 else
                 {
-                    // --> OD 2008-06-03 #i63395#
-                    // Only apply user defined default bullet font
+                    // #i63395# Only apply user defined default bullet font
                     if ( numfunc::IsDefBulletFontUserDefined() )
                     {
                         const Font* pFnt = &numfunc::GetDefBulletFont();
                         aFmt.SetBulletFont( pFnt );
                     }
-                    // <--
-                    aFmt.SetBulletChar( numfunc::GetBulletChar(static_cast<BYTE>(nLevel)));
+                    aFmt.SetBulletChar( numfunc::GetBulletChar(static_cast<sal_uInt8>(nLevel)));
                     aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                    // #i93908# clear suffix for bullet lists
+                    aFmt.SetPrefix(::rtl::OUString());
+                    aFmt.SetSuffix(::rtl::OUString());
                 }
-                aNumRule.Set(static_cast<USHORT>(nLevel), aFmt);
+                aNumRule.Set(static_cast<sal_uInt16>(nLevel), aFmt);
             }
         }
-        // <--
 
-        // --> OD 2008-02-08 #newlistlevelattrs#
         // reset indent attribute on applying list style
-        // --> OD 2008-03-27 #refactorlists#
         SetCurNumRule( aNumRule, false, sContinuedListId, true );
-        // <--
     }
     else
     {
         // --> OD 2009-08-27 #i95907#
         const SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode(
                                     numfunc::GetDefaultPositionAndSpaceMode() );
-        // --> OD 2008-02-11 #newlistlevelattrs#
         SwNumRule aNumRule( GetUniqueNumRuleName(), ePosAndSpaceMode );
-        // <--
         // <--
         // Zeichenvorlage an die Numerierung haengen
         SwCharFmt* pChrFmt;
@@ -1318,7 +1293,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
 
         const bool bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
         const bool bRightToLeft = IsInRightToLeftText();
-        for( BYTE nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
+        for( sal_uInt8 nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
         {
             SwNumFmt aFmt( aNumRule.Get( nLvl ) );
             aFmt.SetCharFmt( pChrFmt );
@@ -1333,6 +1308,9 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 }
                 aFmt.SetBulletChar( numfunc::GetBulletChar(nLvl) );
                 aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                // #i93908# clear suffix for bullet lists
+                aFmt.SetPrefix(::rtl::OUString());
+                aFmt.SetSuffix(::rtl::OUString());
             }
 
             // --> OD 2009-08-26 #i95907#
@@ -1366,11 +1344,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         if ( pTxtNode &&
              ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            // --> OD 2010-01-05 #b6884103#
-//            short nTxtNodeFirstLineOffset( 0 );
-//            pTxtNode->GetFirstLineOfsWithNum( nTxtNodeFirstLineOffset );
-//            const SwTwips nTxtNodeIndent = pTxtNode->GetLeftMarginForTabCalculation() +
-//                                           nTxtNodeFirstLineOffset;
+
             const SwTwips nTxtNodeIndent = pTxtNode->GetAdditionalIndentForStartingNewList();
             // <--
             if ( ( nTxtNodeIndent + nWidthOfTabs ) != 0 )
@@ -1393,12 +1367,9 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             }
         }
         // <--
-        // --> OD 2008-02-08 #newlistlevelattrs#
         // reset indent attribute on applying list style
-        // --> OD 2008-03-17 #refactorlists#
         // start new list
         SetCurNumRule( aNumRule, true, String(), true );
-        // <--
     }
 
     EndUndo(UNDO_NUMORNONUM);
@@ -1407,7 +1378,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
 
 void SwWrtShell::NumOn()
 {
-    NumOrBulletOn(TRUE);
+    NumOrBulletOn(sal_True);
 }
 
 void SwWrtShell::NumOrBulletOff()
@@ -1431,10 +1402,8 @@ void SwWrtShell::NumOrBulletOff()
                 aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
                 aNumRule.Set(nLevel, aFmt);
 
-                // --> OD 2008-03-17 #refactorlists#
                 // no start or continuation of a list - the outline style is only changed.
                 SetCurNumRule( aNumRule, false );
-                // <--
             }
         }
         else
@@ -1444,7 +1413,7 @@ void SwWrtShell::NumOrBulletOff()
 
         // --> OD 2005-10-24 #126346# - Cursor can not be anymore in front of
         // a label, because numbering/bullet is switched off.
-        SetInFrontOfLabel( FALSE );
+        SetInFrontOfLabel( sal_False );
         // <--
     }
 }
@@ -1456,13 +1425,11 @@ void SwWrtShell::NumOrBulletOff()
 
 void SwWrtShell::BulletOn()
 {
-    NumOrBulletOn(FALSE);
+    NumOrBulletOn(sal_False);
 }
 
 
-/*--------------------------------------------------
 
---------------------------------------------------*/
 SelectionType SwWrtShell::GetSelectionType() const
 {
     // ContentType kann nicht ermittelt werden innerhalb einer
@@ -1472,9 +1439,6 @@ SelectionType SwWrtShell::GetSelectionType() const
 
     if ( BasicActionPend() )
         return IsSelFrmMode() ? nsSelectionType::SEL_FRM : nsSelectionType::SEL_TXT;
-
-//  if ( IsTableMode() )
-//      return nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS;
 
     SwView &_rView = ((SwView&)GetView());
     if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->HasActiveSidebarWin() )
@@ -1541,9 +1505,7 @@ SelectionType SwWrtShell::GetSelectionType() const
         const SwTxtNode* pTxtNd =
             GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
 
-        // --> OD 2008-03-19 #refactorlists#
         if ( pTxtNd && pTxtNd->IsInList() )
-        // <--
         {
             const SwNumFmt& rFmt = pNumRule->Get(sal::static_int_cast< sal_uInt8, sal_Int32>(pTxtNd->GetActualListLevel()));
             if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
@@ -1568,7 +1530,7 @@ SwTxtFmtColl *SwWrtShell::GetParaStyle(const String &rCollName, GetStyle eCreate
     SwTxtFmtColl* pColl = FindTxtFmtCollByName( rCollName );
     if( !pColl && GETSTYLE_NOCREATE != eCreate )
     {
-        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( rCollName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rCollName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
         if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
             pColl = GetTxtCollFromPool( nId );
     }
@@ -1588,7 +1550,7 @@ SwCharFmt *SwWrtShell::GetCharStyle(const String &rFmtName, GetStyle eCreate )
     SwCharFmt* pFmt = FindCharFmtByName( rFmtName );
     if( !pFmt && GETSTYLE_NOCREATE != eCreate )
     {
-        USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( rFmtName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rFmtName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
         if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
             pFmt = (SwCharFmt*)GetFmtFromPool( nId );
     }
@@ -1607,14 +1569,21 @@ SwCharFmt *SwWrtShell::GetCharStyle(const String &rFmtName, GetStyle eCreate )
 SwFrmFmt *SwWrtShell::GetTblStyle(const String &rFmtName)
 {
     SwFrmFmt *pFmt = 0;
-    for( USHORT i = GetTblFrmFmtCount(); i; )
+    for( sal_uInt16 i = GetTblFrmFmtCount(); i; )
         if( !( pFmt = &GetTblFrmFmt( --i ) )->IsDefault() &&
             pFmt->GetName() == rFmtName && IsUsed( *pFmt ) )
             return pFmt;
     return 0;
 }
 
+SwNavigationMgr& SwWrtShell::GetNavigationMgr() {
+    return aNavigationMgr;
+}
 
+void SwWrtShell::addCurrentPosition() {
+    SwPaM* pPaM = GetCrsr();
+    aNavigationMgr.addEntry(*pPaM->GetPoint());
+}
 /*------------------------------------------------------------------------
  Beschreibung:  Anwenden der Vorlagen
 ------------------------------------------------------------------------*/
@@ -1625,7 +1594,7 @@ void SwWrtShell::SetPageStyle(const String &rCollName)
 {
     if( !SwCrsrShell::HasSelection() && !IsSelFrmMode() && !IsObjSelected() )
     {
-        SwPageDesc* pDesc = FindPageDescByName( rCollName, TRUE );
+        SwPageDesc* pDesc = FindPageDescByName( rCollName, sal_True );
         if( pDesc )
             ChgCurPageDesc( *pDesc );
     }
@@ -1637,7 +1606,7 @@ void SwWrtShell::SetPageStyle(const String &rCollName)
 
 
 
-String SwWrtShell::GetCurPageStyle( const BOOL bCalcFrm ) const
+String SwWrtShell::GetCurPageStyle( const sal_Bool bCalcFrm ) const
 {
     return GetPageDesc(GetCurPageDesc( bCalcFrm )).GetName();
 }
@@ -1676,19 +1645,19 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
             SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,
             0   );
     GetCurAttr( aCoreSet );
-    BOOL bReset = FALSE;
+    sal_Bool bReset = sal_False;
     SfxItemIter aParaIter( aCoreSet );
     const SfxPoolItem* pParaItem = aParaIter.FirstItem();
     while( pParaItem )
     {
         if(!IsInvalidItem(pParaItem))
         {
-            USHORT nWhich = pParaItem->Which();
+            sal_uInt16 nWhich = pParaItem->Which();
             if(SFX_ITEM_SET == aCoreSet.GetItemState(nWhich) &&
                SFX_ITEM_SET == rStyleSet.GetItemState(nWhich))
             {
                 aCoreSet.ClearItem(nWhich);
-                bReset = TRUE;
+                bReset = sal_True;
             }
         }
         pParaItem = aParaIter.NextItem();
@@ -1702,10 +1671,6 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
     pDoc->ChgFmt(*pColl, rStyleSet );
     EndAction();
 }
-
-/*-----------------12.03.97 12.24-------------------
-
---------------------------------------------------*/
 
 void SwWrtShell::AutoUpdateFrame( SwFrmFmt* pFmt, const SfxItemSet& rStyleSet )
 {
@@ -1723,14 +1688,14 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
     ResetCursorStack();
     if(_CanInsert())
     {
-        BOOL bStarted = FALSE;
+        sal_Bool bStarted = sal_False;
         if(HasSelection())
         {
                 // nur hier klammern, da das normale Insert schon an der
                 // Editshell geklammert ist
             StartAllAction();
             StartUndo(UNDO_INSERT);
-            bStarted = TRUE;
+            bStarted = sal_True;
             DelRight();
         }
         SwEditShell::AutoCorrect( rACorr, IsInsMode(), cChar );
@@ -1794,14 +1759,14 @@ SwWrtShell::~SwWrtShell()
     SET_CURR_SHELL( this );
     while(IsModePushed())
         PopMode();
-    while(PopCrsr(FALSE))
+    while(PopCrsr(sal_False))
         ;
     SwTransferable::ClearSelection( *this );
 }
 
-BOOL SwWrtShell::Pop( BOOL bOldCrsr )
+sal_Bool SwWrtShell::Pop( sal_Bool bOldCrsr )
 {
-    BOOL bRet = SwCrsrShell::Pop( bOldCrsr );
+    sal_Bool bRet = SwCrsrShell::Pop( bOldCrsr );
     if( bRet && IsSelection() )
     {
         fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
@@ -1810,10 +1775,7 @@ BOOL SwWrtShell::Pop( BOOL bOldCrsr )
     return bRet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-BOOL SwWrtShell::CanInsert()
+sal_Bool SwWrtShell::CanInsert()
 {
     return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));
 }
@@ -1863,5 +1825,13 @@ String SwWrtShell::GetSelDescr() const
 
     return aResult;
 }
+
+void SwWrtShell::ApplyViewOptions( const SwViewOption &rOpt )
+{
+    SwFEShell::ApplyViewOptions( rOpt );
+    //#i115062# invalidate meta character slot
+    GetView().GetViewFrame()->GetBindings().Invalidate( FN_VIEW_META_CHARS );
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

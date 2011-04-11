@@ -299,7 +299,7 @@ void
 }
 
 void *
-    domalloc(int size)
+    domalloc(size_t size)
 {
     void *p = malloc(size);
 

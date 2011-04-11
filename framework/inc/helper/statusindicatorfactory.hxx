@@ -146,14 +146,6 @@ struct IndicatorInfo
             return (m_xIndicator == xIndicator);
         }
 };
-/*
-    //---------------------------------------------------------------------------------------------------------
-    // norm nValue to fit range of 0..100%
-    sal_Int32 calcPercentage()
-    {
-    return ::std::min( (( m_nValue * 100 )/ ::std::max( m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 );
-    }
-*/
 
 //===============================================
 /** @descr  Define a lits of child indicator objects and her data. */
@@ -213,7 +205,7 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
         WakeUpThread* m_pWakeUp;
 
         /** Our WakeUpThread calls us in our interface method "XUpdatable::update().
-            There we set this member m_bAllowReschedule to TRUE. Next time if our impl_reschedule()
+            There we set this member m_bAllowReschedule to sal_True. Next time if our impl_reschedule()
             method is called, we know, that an Application::Reschedule() should be made.
             Because the last made Reschedule can be was taken long time ago ... may be.*/
         sal_Bool m_bAllowReschedule;

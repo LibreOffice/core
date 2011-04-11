@@ -70,16 +70,29 @@ public:
 
     void SelectAllPages (void);
     void DeselectAllPages (void);
+
     /** Update the selection state of all page descriptors to be the same as
-        that of the pages of the SdDrawDocument they describe and issue
+        that of the corresponding pages of the SdPage objects and issue
         redraw requests where necessary.
     */
-    void UpdateAllPages (void);
+    void GetCoreSelection (void);
 
+    /** Update the selection state of the SdPage objects to be the same as
+        that of the correspinding page descriptors.
+    */
+    void SetCoreSelection (void);
+
+    /** Select the specified descriptor.  The selection state of the other
+        descriptors is not affected.
+    */
     void SelectPage (int nPageIndex);
-    /** Select the descriptor that is associated with the given page.
+    /** Select the descriptor that is associated with the given page.  The
+        selection state of the other descriptors is not affected.
     */
     void SelectPage (const SdPage* pPage);
+    /** Select the specified descriptor.  The selection state of the other
+        descriptors is not affected.
+    */
     void SelectPage (const model::SharedPageDescriptor& rpDescriptor);
 
     /** Return whether the specified page is selected.  This convenience
@@ -90,9 +103,19 @@ public:
     bool IsPageSelected (int nPageIndex);
 
     /** Deselect the descriptor that is associated with the given page.
+        @param bUpdateCurrentPage
+            When <TRUE/> then the current page is updated to the first slide
+            of the remaining selection.
     */
-    void DeselectPage (int nPageIndex);
-    void DeselectPage (const model::SharedPageDescriptor& rpDescriptor);
+    void DeselectPage (
+        int nPageIndex,
+        const bool bUpdateCurrentPage = true);
+    void DeselectPage (
+        const SdPage* pPage,
+        const bool bUpdateCurrentPage = true);
+    void DeselectPage (
+        const model::SharedPageDescriptor& rpDescriptor,
+        const bool bUpdateCurrentPage = true);
 
     /** This convenience method returns the same number of pages that
         SlideSorterModel.GetPageCount() returns.  It is included here so
@@ -101,35 +124,6 @@ public:
     */
     int GetPageCount (void) const;
     int GetSelectedPageCount (void) const;
-
-    void PrepareModelChange (void);
-    void HandleModelChange (void);
-
-    /** Enable the broadcasting of selection change events.  This calls the
-        SlideSorterController::SelectionHasChanged() method to do the actual
-        work.  When EnableBroadcasting has been called as many times as
-        DisableBroadcasting() was called before and the selection has been
-        changed in the mean time, this change will be broadcasted.
-    */
-    void EnableBroadcasting (bool bMakeSelectionVisible = true);
-
-    /** Disable the broadcasting o selectio change events.  Subsequent
-        changes of the selection will set a flag that triggers the sending
-        of events when EnableBroadcasting() is called.
-    */
-    void DisableBroadcasting (void);
-
-    /** Return the descriptor of the most recently selected page.  This
-        works only when the page has not been de-selected in the mean time.
-        This method helps the view when it scrolls the selection into the
-        visible area.
-        @return
-            When the selection is empty or when the most recently selected
-            page has been deselected already (but other pages are still
-            selected) then NULL is returned, even when a selection did exist
-            but has been cleared.
-    */
-    model::SharedPageDescriptor GetMostRecentlySelectedPage (void) const;
 
     /** Return the anchor for a range selection.  This usually is the first
         selected page after all pages have been deselected.
@@ -157,10 +151,46 @@ public:
             the last call to GetPageSelection() it is still valid to call
             this method with the selection.  When pages have been inserted
             or removed the result may be unexpected.
+        @param bUpdateCurrentPage
+            When <TRUE/> (the default value) then after setting the
+            selection update the current page to the first page of the
+            selection.
+            When called from withing UpdateCurrentPage() then this flag is
+            used to prevent a recursion loop.
     */
-    void SetPageSelection (const ::boost::shared_ptr<PageSelection>& rSelection);
+    void SetPageSelection (
+        const ::boost::shared_ptr<PageSelection>& rSelection,
+        const bool bUpdateCurrentPage = true);
 
-    void UpdateCurrentPage (const model::SharedPageDescriptor& rCurrentPageDescriptor);
+    /** Call this method after the the model has changed to set the number
+        of selected pages.
+    */
+    void CountSelectedPages (void);
+
+    /** Use the UpdateLock whenever you do a complex selection, i.e. call
+        more than one method in a row.  An active lock prevents intermediate
+        changes of the current slide.
+    */
+    class UpdateLock
+    {
+    public:
+        UpdateLock (SlideSorter& rSlideSorter);
+        UpdateLock (PageSelector& rPageSelector);
+        ~UpdateLock (void);
+        void Release (void);
+    private:
+        PageSelector* mpSelector;
+    };
+
+    class BroadcastLock
+    {
+    public:
+        BroadcastLock (SlideSorter& rSlideSorter);
+        BroadcastLock (PageSelector& rPageSelector);
+        ~BroadcastLock (void);
+    private:
+        PageSelector& mrSelector;
+    };
 
 private:
     model::SlideSorterModel& mrModel;
@@ -173,8 +203,26 @@ private:
     /// Anchor for a range selection.
     model::SharedPageDescriptor mpSelectionAnchor;
     model::SharedPageDescriptor mpCurrentPage;
+    sal_Int32 mnUpdateLockCount;
+    bool mbIsUpdateCurrentPagePending;
 
-    void CountSelectedPages (void);
+    /** Enable the broadcasting of selection change events.  This calls the
+        SlideSorterController::SelectionHasChanged() method to do the actual
+        work.  When EnableBroadcasting has been called as many times as
+        DisableBroadcasting() was called before and the selection has been
+        changed in the mean time, this change will be broadcasted.
+    */
+    void EnableBroadcasting (void);
+
+    /** Disable the broadcasting of selection change events.  Subsequent
+        changes of the selection will set a flag that triggers the sending
+        of events when EnableBroadcasting() is called.
+    */
+    void DisableBroadcasting (void);
+
+    void UpdateCurrentPage (const bool bUpdateOnlyWhenPending = false);
+
+    void CheckConsistency (void) const;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

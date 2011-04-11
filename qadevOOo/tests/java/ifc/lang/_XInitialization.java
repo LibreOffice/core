@@ -77,20 +77,20 @@ public class _XInitialization extends MultiMethodTest {
                     result = false;
                     xInit.initialize(ExArgs);
                 } catch (com.sun.star.uno.Exception e) {
-                    log.println("Expected Exception 'com.sun.star.uno.Exception' occured -> OK") ;
+                    log.println("Expected Exception 'com.sun.star.uno.Exception' occurred -> OK") ;
                     result = true ;
                 } catch (com.sun.star.uno.RuntimeException e) {
-                    log.println("Expected Exception 'com.sun.star.uno.RuntimeException' occured -> OK") ;
+                    log.println("Expected Exception 'com.sun.star.uno.RuntimeException' occurred -> OK") ;
                     result = true ;
                 } catch (Exception e) {
-                    log.println("Un-Expected Exception occured -> FALSE") ;
+                    log.println("Un-Expected Exception occurred -> FALSE") ;
                     log.println(e.toString());
                     e.printStackTrace();
                 }
             }
 
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured while method calling.") ;
+            log.println("Exception occurred while method calling.") ;
             log.println(e) ;
             result = false ;
         }

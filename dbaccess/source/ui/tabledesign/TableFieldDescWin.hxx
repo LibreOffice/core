@@ -40,7 +40,7 @@ namespace dbaui
     class OFieldDescription;
     //==================================================================
     // Ableitung von TabPage ist ein Trick von TH,
-    // um Aenderungen der Systemfarben zu bemerken (Bug #53905)
+    // um Aenderungen der Systemfarben zu bemerken
     class OTableFieldDescWin : public TabPage
                                 ,public IClipboardTest
     {
@@ -70,16 +70,16 @@ namespace dbaui
 
         void DisplayData( OFieldDescription* pFieldDescr );
         void SaveData( OFieldDescription* pFieldDescr );
-        void SetReadOnly( BOOL bReadOnly );
+        void SetReadOnly( sal_Bool bReadOnly );
 
         // window overloads
         virtual long PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
         virtual void LoseFocus();
 
-        void SetControlText( USHORT nControlId, const String& rText )
+        void SetControlText( sal_uInt16 nControlId, const String& rText )
                 { m_pGenPage->SetControlText(nControlId,rText); }
-        String GetControlText( USHORT nControlId )
+        String GetControlText( sal_uInt16 nControlId )
                 { return m_pGenPage->GetControlText(nControlId); }
 
         //  short GetFormatCategory(OFieldDescription* pFieldDescr) { return m_pGenPage ? m_pGenPage->GetFormatCategory(pFieldDescr) : -1; }

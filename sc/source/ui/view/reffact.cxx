@@ -45,9 +45,7 @@
 #include "acredlin.hxx"
 #include "simpref.hxx"
 #include "scmod.hxx"
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 #include "validate.hxx"
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 
 // -----------------------------------------------------------------------
 
@@ -72,10 +70,8 @@ SFX_IMPL_CHILDWINDOW(ScFunctionDlgWrapper, SID_OPENDLG_FUNCTION )
 SFX_IMPL_CHILDWINDOW(ScEditFunctionDlgWrapper, SID_OPENDLG_EDITFUNCTION )
 SFX_IMPL_CHILDWINDOW(ScArgumentDlgWrapper, SID_OPENDLG_ARGUMENT )
 */
-//<!--Added by PengYunQuan for Validity Cell Range Picker
-//SFX_IMPL_MODELESSDIALOG(ScValidityRefChildWin, SID_VALIDITY_REFERENCE )
 SFX_IMPL_CHILDWINDOW(ScValidityRefChildWin, SID_VALIDITY_REFERENCE)
-SfxChildWinInfo __EXPORT ScValidityRefChildWin::GetInfo() const
+SfxChildWinInfo ScValidityRefChildWin::GetInfo() const
 {
     SfxChildWinInfo anInfo = SfxChildWindow::GetInfo();
 
@@ -92,16 +88,14 @@ SfxChildWinInfo __EXPORT ScValidityRefChildWin::GetInfo() const
 }
 
 namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 
 #define IMPL_CHILD_CTOR(Class,sid) \
     Class::Class( Window*               pParentP,                   \
-                    USHORT              nId,                        \
+                    sal_uInt16              nId,                        \
                     SfxBindings*        p,                          \
                     SfxChildWinInfo*    pInfo )                     \
         : SfxChildWindow(pParentP, nId)                             \
     {                                                               \
-        /*//<!--Added by PengYunQuan for Validity Cell Range Picker*/\
         /************************************************************************************/\
         /*      When a new document is creating, the SfxViewFrame may be ready,             */\
         /*      But the ScTabViewShell may have not been activated yet. In this             */\
@@ -109,14 +103,13 @@ namespace { ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings ); }
         /*      and we should lcl_GetTabViewShell( p ) instead of SfxViewShell::Current()   */\
         /************************************************************************************/\
         ScTabViewShell* pViewShell = lcl_GetTabViewShell( p );      \
-        /*//-->Added by PengYunQuan for Validity Cell Range Picker*/\
         if (!pViewShell)                                            \
             pViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() ); \
         DBG_ASSERT( pViewShell, "missing view shell :-(" );         \
         pWindow = pViewShell ?                                      \
             pViewShell->CreateRefDialog( p, this, pInfo, pParentP, sid ) : NULL;    \
         if (pViewShell && !pWindow)                                             \
-            pViewShell->GetViewFrame()->SetChildWindow( nId, FALSE );           \
+            pViewShell->GetViewFrame()->SetChildWindow( nId, false );           \
     }
 
 
@@ -205,21 +198,19 @@ IMPL_CHILD_CTOR( ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 // ScSimpleRefDlgWrapper
 //-------------------------------------------------------------------------
 
-static BOOL     bScSimpleRefFlag;
+static sal_Bool     bScSimpleRefFlag;
 static long     nScSimpleRefHeight;
 static long     nScSimpleRefWidth;
 static long     nScSimpleRefX;
 static long     nScSimpleRefY;
-static BOOL     bAutoReOpen=TRUE;
+static sal_Bool     bAutoReOpen=sal_True;
 
 ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,
-                                USHORT              nId,
+                                sal_uInt16              nId,
                                 SfxBindings*        p,
                                 SfxChildWinInfo*    pInfo )
         : SfxChildWindow(pParentP, nId)
 {
-//  ScTabViewShell* pViewShell =
-//      PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
 
     ScTabViewShell* pViewShell = NULL;
     SfxDispatcher* pDisp = p->GetDispatcher();
@@ -246,11 +237,11 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,
 
     if (!pWindow)
     {
-        SC_MOD()->SetRefDialog( nId, FALSE );
+        SC_MOD()->SetRefDialog( nId, false );
     }
 }
 
-void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize, BOOL bSet)
+void ScSimpleRefDlgWrapper::SetDefaultPosSize(Point aPos, Size aSize, sal_Bool bSet)
 {
     bScSimpleRefFlag=bSet;
     if(bScSimpleRefFlag)
@@ -273,7 +264,7 @@ String ScSimpleRefDlgWrapper::GetRefString()
     return aResult;
 }
 
-void ScSimpleRefDlgWrapper::SetAutoReOpen(BOOL bFlag)
+void ScSimpleRefDlgWrapper::SetAutoReOpen(sal_Bool bFlag)
 {
     bAutoReOpen=bFlag;
 }
@@ -303,7 +294,7 @@ void ScSimpleRefDlgWrapper::SetUnoLinks( const Link& rDone,
     }
 }
 
-void ScSimpleRefDlgWrapper::SetFlags( BOOL bCloseOnButtonUp, BOOL bSingleCell, BOOL bMultiSelection )
+void ScSimpleRefDlgWrapper::SetFlags( sal_Bool bCloseOnButtonUp, sal_Bool bSingleCell, sal_Bool bMultiSelection )
 {
     if(pWindow!=NULL)
     {
@@ -326,7 +317,7 @@ void ScSimpleRefDlgWrapper::StartRefInput()
 //-------------------------------------------------------------------------
 
 ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParentP,
-                                            USHORT nId,
+                                            sal_uInt16 nId,
                                             SfxBindings* pBindings,
                                             SfxChildWinInfo* pInfo ) :
                                             SfxChildWindow( pParentP, nId )
@@ -342,7 +333,7 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParentP,
             ((ScAcceptChgDlg*)pWindow)->Initialize( pInfo );
         }
         if (pViewShell && !pWindow)
-            pViewShell->GetViewFrame()->SetChildWindow( nId, FALSE );
+            pViewShell->GetViewFrame()->SetChildWindow( nId, false );
 }
 
 void ScAcceptChgDlgWrapper::ReInitDlg()
@@ -363,30 +354,7 @@ void ScAcceptChgDlgWrapper::ReInitDlg()
 
 IMPL_CHILD_CTOR( ScHighlightChgDlgWrapper, FID_CHG_SHOW )
 
-/*------------------------------------------------------------------------*/
-/*@@@
-        //-------------------------------------------------------------------------
-        // ScFunctionDlgWrapper
-        //-------------------------------------------------------------------------
 
-        IMPL_CHILD_CTOR( ScFunctionDlgWrapper, SID_OPENDLG_FUNCTION )
-
-        //-------------------------------------------------------------------------
-        // ScEditFunctionDlgWrapper
-        //-------------------------------------------------------------------------
-
-        IMPL_CHILD_CTOR( ScEditFunctionDlgWrapper, SID_OPENDLG_EDITFUNCTION )
-
-        //-------------------------------------------------------------------------
-        // ScArgumentDlgWrapper
-        //-------------------------------------------------------------------------
-
-        IMPL_CHILD_CTOR( ScArgumentDlgWrapper, SID_OPENDLG_ARGUMENT )
-@@@*/
-/*------------------------------------------------------------------------*/
-
-
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 namespace
 {
     ScTabViewShell * lcl_GetTabViewShell( SfxBindings *pBindings )
@@ -402,7 +370,7 @@ namespace
 }
 
 ScValidityRefChildWin::ScValidityRefChildWin( Window*               pParentP,                   \
-                                             USHORT             nId,                        \
+                                             sal_uInt16             nId,                        \
                                              SfxBindings*       p,                          \
                                              SfxChildWinInfo*   /*pInfo*/ )                     \
                                              : SfxChildWindow(pParentP, nId),
@@ -410,7 +378,7 @@ ScValidityRefChildWin::ScValidityRefChildWin( Window*               pParentP,   
                                              m_bFreeWindowLock( false ),
                                              m_pSavedWndParent( NULL )
 {
-    SetWantsFocus( FALSE );\
+    SetWantsFocus( false );\
         ScTabViewShell* pViewShell =                                \
             NULL != ( pWindow =  ScValidationDlg::Find1AliveObject( pParentP ) ) ? static_cast<ScValidationDlg*>(pWindow)->GetTabViewShell() :
             lcl_GetTabViewShell( p );
@@ -418,9 +386,7 @@ ScValidityRefChildWin::ScValidityRefChildWin( Window*               pParentP,   
             pViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
         DBG_ASSERT( pViewShell, "missing view shell :-(" );         \
         if (pViewShell && !pWindow)                                             \
-            pViewShell->GetViewFrame()->SetChildWindow( nId, FALSE );           \
-        else if( pWindow /*&& pWindow->ISA(ScValidationDlg)*/ )
-        {}//pWindow = new Window( pParentP, WB_HIDE );
+            pViewShell->GetViewFrame()->SetChildWindow( nId, false );           \
 
     if( pWindow ) m_pSavedWndParent = pWindow->GetParent();
 }
@@ -432,6 +398,5 @@ ScValidityRefChildWin::~ScValidityRefChildWin()
     if( m_bFreeWindowLock )
         pWindow = NULL;
 }
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

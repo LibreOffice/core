@@ -305,7 +305,6 @@ sal_Bool AstUnion::dump(RegistryKey& rKey)
         AstUnionLabel*  pLabel = NULL;
         AstExprValue*   pExprValue = NULL;
         RTConstValue    aConst;
-        RTFieldAccess   access = RT_ACCESS_READWRITE;
         OUString    docu;
         sal_uInt16  index = 0;
         if ( pDefault )
@@ -345,7 +344,6 @@ sal_Bool AstUnion::dump(RegistryKey& rKey)
 
         if ( pDefault )
         {
-            access = RT_ACCESS_DEFAULT;
             aConst.m_type = RT_TYPE_INT64;
             aConst.m_value.aHyper = disc + 1;
             aBlob.setFieldData(

@@ -110,9 +110,9 @@ XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_B
       m_nErrorCode( TASKHANDLER_NO_ERROR ),
       m_nMinorErrorCode( TASKHANDLER_NO_ERROR )
 {
-    sal_uInt32 nFlags = ( OpenFlag_Read | OpenFlag_Write );
+    sal_uInt32 nFlags = ( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
     if ( !bLock )
-        nFlags |= OpenFlag_NoLock;
+        nFlags |= osl_File_OpenFlag_NoLock;
 
     osl::FileBase::RC err = m_aFile.open( nFlags );
     if(  err != osl::FileBase::E_None )
@@ -136,11 +136,11 @@ XStream_impl::~XStream_impl()
     }
     catch (io::IOException const &)
     {
-        OSL_ENSURE(false, "unexpected situation");
+        OSL_FAIL("unexpected situation");
     }
     catch (uno::RuntimeException const &)
     {
-        OSL_ENSURE(false, "unexpected situation");
+        OSL_FAIL("unexpected situation");
     }
 }
 
@@ -303,8 +303,8 @@ XStream_impl::closeStream(
 
         if( err != osl::FileBase::E_None ) {
             io::IOException ex;
-            ex.Message = rtl::OUString::createFromAscii(
-                "could not close file");
+            ex.Message = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "could not close file"));
             throw ex;
         }
 

@@ -69,10 +69,8 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
     aOffset.Y() -= pDoc->GetRowHeight( 0, nY1-1, nTab );
 
     long nDataWidth = 0;
-    long nDataHeight = 0;
     for (nCol=nX1; nCol<=nX2; nCol++)
         nDataWidth += pDoc->GetColWidth( nCol, nTab );
-    nDataHeight += pDoc->GetRowHeight( nY1, nY2, nTab );
 
     if ( bLayoutRTL )
         aOffset.X() += nDataWidth;
@@ -212,7 +210,7 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 
     pModel->UseHyphenator();
 
-    ULONG nOldDrawMode = pDev->GetDrawMode();
+    sal_uLong nOldDrawMode = pDev->GetDrawMode();
     if ( bUseStyleColor && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         pDev->SetDrawMode( nOldDrawMode | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
@@ -246,8 +244,7 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 // #109985#
 void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
 {
-    BOOL    bHad    = FALSE;
-    long    nPosY   = nScrY;
+    sal_Bool    bHad    = false;
     SCSIZE  nArrY;
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -257,15 +254,14 @@ void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
         {
             if (!bHad)
             {
-                bHad = TRUE;
+                bHad = sal_True;
             }
         }
         else if (bHad)
         {
             DrawSelectiveObjects( nLayer );
-            bHad = FALSE;
+            bHad = false;
         }
-        nPosY += pRowInfo[nArrY].nHeight;
     }
 
     if (bHad)

@@ -28,10 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
+#ifdef WNT
+#include <windows.h>
+#endif
 #include <osl/module.h>
 #include <rtl/ustring.hxx>
-#include <tools/prewin.h>
-#include <tools/postwin.h>
 #include "odma_lib.hxx"
 
 
@@ -80,9 +81,6 @@ namespace odma
             return bLoaded;
 
         ::rtl::OUString sPath;
-    #ifdef WIN
-        sPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ODMA.DLL"));
-    #endif
     #ifdef WNT
         sPath = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ODMA32.DLL"));
     #endif

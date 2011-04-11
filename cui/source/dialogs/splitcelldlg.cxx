@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -39,28 +36,26 @@
 
 SvxSplitTableDlg::SvxSplitTableDlg( Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )
 : SvxStandardDialog(pParent, CUI_RES(RID_SVX_SPLITCELLDLG))
+, maCountFL(this, CUI_RES(FL_COUNT))
 , maCountLbl(this, CUI_RES(FT_COUNT))
 , maCountEdit(this, CUI_RES(ED_COUNT))
-, maCountFL(this, CUI_RES(FL_COUNT))
+, maDirFL(this, CUI_RES(FL_DIR))
 , maHorzBox(this, CUI_RES(RB_HORZ))
 , maVertBox(this, CUI_RES(RB_VERT))
 , maPropCB(this, CUI_RES(CB_PROP))
-, maDirFL(this, CUI_RES(FL_DIR))
 , maOKBtn(this, CUI_RES(BT_OK))
 , maCancelBtn(this, CUI_RES(BT_CANCEL))
 , maHelpBtn( this, CUI_RES( BT_HELP ) )
 , mnMaxVertical( nMaxVertical )
 , mnMaxHorizontal( nMaxHorizontal )
 {
-    maVertBox.SetModeRadioImage(Image(CUI_RES(BMP_SPLIT_VERT)), BMP_COLOR_HIGHCONTRAST);
-    maHorzBox.SetModeRadioImage(Image(CUI_RES(BMP_SPLIT_HORZ)), BMP_COLOR_HIGHCONTRAST);
     FreeResource();
     maHorzBox.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
     maPropCB.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
     maVertBox.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
 
     if( mnMaxVertical < 2 )
-        maVertBox.Enable(FALSE);
+        maVertBox.Enable(sal_False);
 
     //exchange the meaning of horizontal and vertical for vertical text
     if(bIsTableVertical)

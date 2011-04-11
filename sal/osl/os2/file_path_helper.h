@@ -160,7 +160,7 @@
 
  /*****************************************
     osl_systemPathGetParent
-    Replaces the last occurrance of a path
+    Replaces the last occurrence of a path
     separator with '\0' and returns the
     position where the '/' was replaced
 

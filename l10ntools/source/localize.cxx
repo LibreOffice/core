@@ -31,7 +31,6 @@
 
 #include "srciter.hxx"
 #include "export.hxx"
-#include "treeconfig.hxx"
 #include <string>
 #include <vector>
 #include <stdio.h>
@@ -43,6 +42,8 @@
 #define L10NTOOLS_FILE_HXX
 #include <l10ntools/file.hxx>
 #endif
+
+using namespace std;
 
 namespace transex3
 {
@@ -65,7 +66,7 @@ const char *ExeTable[][5] = {
     { "xcs", "cfgex", "-UTF8 -e -f", "negative", "iso" },
     { "xrm", "xrmex", "-UTF8 -e", "negative", "iso" },
     { "xhp", "helpex", " -e", "negative", "noiso" },
-       { "properties", "jpropex", " -e", "negative", "noiso" },
+// unused       { "properties", "jpropex", " -e", "negative", "noiso" },
     { "NULL", "NULL", "NULL", "NULL", "NULL" }
 };
 
@@ -75,10 +76,6 @@ const char *NegativeList[] = {
     "officecfg/data/org/openoffice/Office/SFX.xcd",
     "officecfg/data/org/openoffice/Office/Accelerators.xcu",
     "hidother.src",
-    "dictionaries/da_DK/help/da/help.tree",
-    "dictionaries/da_DK/help/da/org.openoffice.da.hunspell.dictionaries/page1.xph",
-    "dictionaries/hu_HU/help/hu/help.tree",
-    "dictionaries/hu_HU/help/hu/org.openoffice.hu.hunspell.dictionaries/page1.xph",
     "NULL"
 };
 
@@ -122,6 +119,56 @@ const char *PositiveList[] = {
     "NULL"
 };
 
+const char *ModuleList[] = {
+    "accessibility",
+    "avmedia",
+    "basctl",
+    "basic",
+    "chart2",
+    "connectivity",
+    "crashrep",
+    "cui",
+    "dbaccess",
+    "desktop",
+    "editeng",
+    "extensions",
+    "filter",
+    "forms",
+    "formula",
+    "fpicker",
+    "framework",
+    "helpcontent2",
+    "instsetoo_native",
+    "mysqlc",
+    "officecfg",
+    "padmin",
+    "readlicense_oo",
+    "reportbuilder",
+    "reportdesign",
+    "sc",
+    "scaddins",
+    "sccomp",
+    "scp2",
+    "sd",
+    "sdext",
+    "setup_native",
+    "sfx2",
+    "shell",
+    "starmath",
+    "svl",
+    "svtools",
+    "svx",
+    "sw",
+    "swext",
+    "sysui",
+    "ucbhelper",
+    "uui",
+    "vcl",
+    "wizards",
+    "xmlsecurity",
+    "NULL",
+};
+
 
 const char PRJ_DIR_NAME[] = "prj";
 const char DLIST_NAME[] = "d.lst";
@@ -134,7 +181,7 @@ class SourceTreeLocalizer : public SourceTreeIterator
 {
 private:
     SvFileStream aSDF;
-    USHORT nMode;
+    sal_uInt16 nMode;
 
     ByteString sLanguageRestriction;
 
@@ -142,12 +189,12 @@ private:
 
     int nFileCnt;
 
-    const ByteString GetProjectName( BOOL bAbs = FALSE );
+    const ByteString GetProjectName( sal_Bool bAbs = sal_False );
     const ByteString GetProjectRootRel();
 
 
-    BOOL CheckNegativeList( const ByteString &rFileName );
-    BOOL CheckPositiveList( const ByteString &rFileName );
+    sal_Bool CheckNegativeList( const ByteString &rFileName );
+    sal_Bool CheckPositiveList( const ByteString &rFileName );
 
     void WorkOnFile(
         const ByteString &rFileName,
@@ -163,8 +210,8 @@ private:
         const ByteString &rCollectMode
     );
     void WorkOnDirectory( const ByteString &rDirectory );
-    BOOL ExecuteMerge();
-    BOOL MergeSingleFile(
+    sal_Bool ExecuteMerge();
+    sal_Bool MergeSingleFile(
         const ByteString &rPrj,
         const ByteString &rFile,
         const ByteString &rSDFFile
@@ -179,8 +226,8 @@ public:
     void SetLanguageRestriction( const ByteString& rRestrictions )
         { sLanguageRestriction = rRestrictions; }
     int getFileCnt();
-    BOOL Extract( const ByteString &rDestinationFile );
-    BOOL Merge( const ByteString &rSourceFile , const ByteString &rOutput );
+    sal_Bool Extract( const ByteString &rDestinationFile );
+    sal_Bool Merge( const ByteString &rSourceFile , const ByteString &rOutput );
     int GetFileCnt();
     virtual void OnExecuteDirectory( const rtl::OUString &rDirectory );
 };
@@ -203,10 +250,10 @@ SourceTreeLocalizer::~SourceTreeLocalizer()
 }
 
 /*****************************************************************************/
-const ByteString SourceTreeLocalizer::GetProjectName( BOOL bAbs )
+const ByteString SourceTreeLocalizer::GetProjectName( sal_Bool bAbs )
 /*****************************************************************************/
 {
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     DirEntry aCur;
     aCur.ToAbs();
 
@@ -234,7 +281,7 @@ int SourceTreeLocalizer::GetFileCnt(){
 const ByteString SourceTreeLocalizer::GetProjectRootRel()
 /*****************************************************************************/
 {
-    ByteString sProjectRoot( GetProjectName( TRUE ));
+    ByteString sProjectRoot( GetProjectName( sal_True ));
     DirEntry aCur;
     aCur.ToAbs();
     ByteString sCur( aCur.GetFull(), RTL_TEXTENCODING_ASCII_US );
@@ -247,10 +294,10 @@ const ByteString SourceTreeLocalizer::GetProjectRootRel()
 
     sCur.SearchAndReplaceAll( sDelimiter, "/" );
     sCur.EraseLeadingChars( '/' );
-    ULONG nCount = sCur.GetTokenCount( '/' );
+    sal_uLong nCount = sCur.GetTokenCount( '/' );
 
     ByteString sProjectRootRel;
-    for ( ULONG i = 0; i < nCount; i++ ) {
+    for ( sal_uLong i = 0; i < nCount; i++ ) {
         if ( sProjectRootRel.Len())
             sProjectRootRel += sDelimiter;
         sProjectRootRel += "..";
@@ -263,8 +310,16 @@ const ByteString SourceTreeLocalizer::GetProjectRootRel()
 
 bool skipProject( ByteString sPrj )
 {
-    static const ByteString READLICENSE( "readlicense" );
-    return sPrj.EqualsIgnoreCaseAscii( READLICENSE );
+    int nIndex = 0;
+    bool bReturn = true;
+    ByteString sModule( ModuleList[ nIndex ] );
+    while( !sModule.Equals( "NULL" ) && bReturn ) {
+        if( sPrj.Equals ( sModule ) )
+            bReturn = false;
+        nIndex++;
+        sModule = ModuleList[ nIndex ];
+    }
+    return bReturn;
 }
 
 /*****************************************************************************/
@@ -299,13 +354,14 @@ void SourceTreeLocalizer::WorkOnFile(
             ByteString sPath1( Export::GetEnv("SOLARVER") );
             ByteString sPath2( Export::GetEnv("INPATH") );
             ByteString sPath3( "bin" );
-            ByteString sPath4( Export::GetEnv("UPDMINOREXT") );
             ByteString sExecutable( sPath1 );
+#if defined(WNT) || defined(OS2)
+            sExecutable.SearchAndReplaceAll( "/", sDel );
+#endif
             sExecutable += sDel ;
             sExecutable += sPath2 ;
             sExecutable += sDel;
             sExecutable += sPath3 ;
-            sExecutable += sPath4 ;
             sExecutable += sDel ;
             sExecutable += rExecutable ;
 
@@ -363,11 +419,11 @@ ByteString SourceTreeLocalizer::getSourceLanguages( ByteString sLanguageRestrict
 }
 
 /*****************************************************************************/
-BOOL SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
+sal_Bool SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
 /*****************************************************************************/
 {
-    ULONG nIndex = 0;
-    BOOL bReturn  = TRUE;
+    sal_uLong nIndex = 0;
+    sal_Bool bReturn  = sal_True;
 
     ByteString sDelimiter(
         DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
@@ -382,7 +438,7 @@ BOOL SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
         sNegative.ToLowerAscii();
 
         if( sFileName.Search( sNegative ) == sFileName.Len() - sNegative.Len())
-            bReturn = FALSE;
+            bReturn = sal_False;
 
         nIndex++;
         sNegative = NegativeList[ nIndex ];
@@ -392,11 +448,11 @@ BOOL SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
 }
 
 /*****************************************************************************/
-BOOL SourceTreeLocalizer::CheckPositiveList( const ByteString &rFileName )
+sal_Bool SourceTreeLocalizer::CheckPositiveList( const ByteString &rFileName )
 /*****************************************************************************/
 {
-    ULONG nIndex = 0;
-    BOOL bReturn  = FALSE;
+    sal_uLong nIndex = 0;
+    sal_Bool bReturn  = sal_False;
 
     ByteString sDelimiter(
         DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
@@ -411,7 +467,7 @@ BOOL SourceTreeLocalizer::CheckPositiveList( const ByteString &rFileName )
         sNegative.ToLowerAscii();
 
         if( sFileName.Search( sNegative ) == sFileName.Len() - sNegative.Len())
-            bReturn = TRUE;
+            bReturn = sal_True;
 
         nIndex++;
         sNegative = PositiveList[ nIndex ];
@@ -436,11 +492,11 @@ void SourceTreeLocalizer::WorkOnFileType(
     DirEntry aEntry( sWild );
     Dir aDir( sWild, FSYS_KIND_FILE );
 
-    for ( USHORT i = 0; i < aDir.Count(); i++ ) {
+    for ( sal_uInt16 i = 0; i < aDir.Count(); i++ ) {
         DirEntry aFile( aDir[ i ] );
         ByteString sFile( aFile.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
-        BOOL bAllowed = TRUE;
+        sal_Bool bAllowed = sal_True;
 
         if ( rCollectMode.Equals( "negative" ))
             bAllowed = CheckNegativeList( sFile );
@@ -457,7 +513,7 @@ void SourceTreeLocalizer::WorkOnDirectory( const ByteString &rDirectory )
 /*****************************************************************************/
 {
     //printf("Working on Directory %s\n",rDirectory.GetBuffer());
-    ULONG nIndex = 0;
+    sal_uLong nIndex = 0;
     ByteString sExtension( ExeTable[ nIndex ][ 0 ] );
     ByteString sExecutable( ExeTable[ nIndex ][ 1 ] );
     ByteString sParameter( ExeTable[ nIndex ][ 2 ] );
@@ -491,7 +547,7 @@ void SourceTreeLocalizer::OnExecuteDirectory( const rtl::OUString &aDirectory )
 }
 
 /*****************************************************************************/
-BOOL SourceTreeLocalizer::Extract( const ByteString &rDestinationFile )
+sal_Bool SourceTreeLocalizer::Extract( const ByteString &rDestinationFile )
 /*****************************************************************************/
 {
     nMode = LOCALIZE_EXTRACT;
@@ -499,7 +555,7 @@ BOOL SourceTreeLocalizer::Extract( const ByteString &rDestinationFile )
     aSDF.Open( String( rDestinationFile , RTL_TEXTENCODING_ASCII_US ) , STREAM_STD_WRITE );
     aSDF.SetLineDelimiter( LINEEND_CRLF );
 
-    BOOL bReturn = aSDF.IsOpen();
+    sal_Bool bReturn = aSDF.IsOpen();
     if ( bReturn ) {
         aSDF.Seek( STREAM_SEEK_TO_END );
         bReturn = StartExecute();
@@ -514,7 +570,7 @@ BOOL SourceTreeLocalizer::Extract( const ByteString &rDestinationFile )
 }
 
 /*****************************************************************************/
-BOOL SourceTreeLocalizer::MergeSingleFile(
+sal_Bool SourceTreeLocalizer::MergeSingleFile(
     const ByteString &rPrj,
     const ByteString &rFile,
     const ByteString &rSDFFile
@@ -523,7 +579,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
 {
     //printf("MergeSingleFile(%s,%s,%s)",rPrj.GetBuffer(),rFile.GetBuffer(),rSDFFile.GetBuffer());
     if ( !rFile.Len())
-        return TRUE;
+        return sal_True;
 
     ByteString sRoot( Export::GetEnv( "SRC_ROOT" ));
     DirEntry aEntry( String( sRoot, RTL_TEXTENCODING_ASCII_US ));
@@ -541,7 +597,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
 
     ByteString sBCur( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
-    ULONG nIndex = 0;
+    sal_uLong nIndex = 0;
     ByteString sExtension( aEntry.GetExtension(), RTL_TEXTENCODING_ASCII_US );
     ByteString sCandidate( ExeTable[ nIndex ][ 0 ] );
 
@@ -553,18 +609,18 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
             DirEntryKind theDir=FSYS_KIND_FILE;
             Dir myDir( aEntry.GetPath(), theDir);
             DirEntry current;
-            BOOL found=FALSE;
-            for( USHORT x=0; x < myDir.Count() && !found;){
+            sal_Bool found=sal_False;
+            for( sal_uInt16 x=0; x < myDir.Count() && !found;){
                 current=myDir[x++];
                 StringCompare result=current.GetName().CompareIgnoreCaseToAscii( aEntry.GetName() );
                 if( result==COMPARE_EQUAL ){
                     fprintf(stderr,"WARNING: %s not found\n", ByteString(aEntry.GetFull(),RTL_TEXTENCODING_ASCII_US).GetBuffer() );
                     fprintf(stderr,"but use  %s instead \n" , ByteString(current.GetFull(), RTL_TEXTENCODING_ASCII_US).GetBuffer() );
                     aEntry=current;
-                    found=TRUE;
+                    found=sal_True;
                 }
             }
-            if(!found)  return TRUE;
+            if(!found)  return sal_True;
 
         }
 
@@ -603,7 +659,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
                 sOutput.GetBuffer());
         }
         else {
-            FileStat::SetReadOnlyFlag( aEntry, FALSE );
+            FileStat::SetReadOnlyFlag( aEntry, sal_False );
             String myStr2(aEntry.GetFull());
             String aTemp22 = String::CreateFromAscii("_tmp");
             myStr2.Append(aTemp22);
@@ -648,14 +704,14 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
                 aOut.Kill();
             }   // else
         }
-    return TRUE;
+    return sal_True;
 }
 /*****************************************************************************/
-BOOL SourceTreeLocalizer::ExecuteMerge( )
+sal_Bool SourceTreeLocalizer::ExecuteMerge( )
 /*****************************************************************************/
 {
     DirEntry aEntry( Export::GetTempFile());
-    BOOL bReturn = TRUE;
+    sal_Bool bReturn = sal_True;
     bool bMerged = false;
 
     ByteString sFileName;
@@ -717,18 +773,18 @@ BOOL SourceTreeLocalizer::ExecuteMerge( )
         // Test
 
         if( bLocal ){
-            USHORT nPos = sFile.SearchBackward( '\\' );
+            sal_uInt16 nPos = sFile.SearchBackward( '\\' );
             ByteString sTmp = sFile.Copy( nPos+1 , sFile.Len()-nPos-1 );
             //printf("'%s'='%s'\n",sTmp.GetBuffer(), sOutputFileName.GetBuffer());
             if( sTmp.CompareTo(sOutputFileName) == COMPARE_EQUAL ){
                     bMerged = true;
                     if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
-                        bReturn = FALSE;
+                        bReturn = sal_False;
             }else{
                 bMerged = true;
                 //printf("MergeSingleFile('%s','%s','%s')\n",sPrj.GetBuffer(),sFile.GetBuffer(),sSDFFile.GetBuffer());
                 if ( !MergeSingleFile( sPrj, sFile, sSDFFile ))
-                    bReturn = FALSE;
+                    bReturn = sal_False;
             }
         }
     }
@@ -747,7 +803,7 @@ BOOL SourceTreeLocalizer::ExecuteMerge( )
 }
 
 /*****************************************************************************/
-BOOL SourceTreeLocalizer::Merge( const ByteString &rSourceFile , const ByteString &rOutput )
+sal_Bool SourceTreeLocalizer::Merge( const ByteString &rSourceFile , const ByteString &rOutput )
 /*****************************************************************************/
 {
     sOutputFile = rOutput;
@@ -755,10 +811,9 @@ BOOL SourceTreeLocalizer::Merge( const ByteString &rSourceFile , const ByteStrin
     aSDF.Open( String( rSourceFile, RTL_TEXTENCODING_ASCII_US ),
         STREAM_STD_READ );
 
-    BOOL bReturn = aSDF.IsOpen();
+    sal_Bool bReturn = aSDF.IsOpen();
     if ( bReturn ) {
         bReturn = ExecuteMerge();
-//      aSDF.Close();
     }
     aSDF.Close();
     nMode = LOCALIZE_NONE;
@@ -785,7 +840,8 @@ void Help()
         "====================================\n" );
     fprintf( stdout,
         "As part of the L10N framework, localize extracts and merges translations\n"
-        "out of and into the whole source tree.\n\n"
+        "out of and into the toplevel modules defined in ModuleList array in\n"
+        "l10ntools/source/localize.cxx.\n\n"
         "Syntax: localize -e -l en-US -f FileName \n"
         "Parameter:\n"
         "\t-e: Extract mode\n"
@@ -799,7 +855,7 @@ void Help()
         "\nExample 1:\n"
         "==========\n"
         "localize -e -l en-US -f MyFile\n\n"
-        "All strings will be extracted for language de and language en-US.\n"
+        "All strings will be extracted for language en-US.\n"
     );
 }
 
@@ -812,7 +868,7 @@ int Error()
 }
 
 /*****************************************************************************/
-BOOL CheckLanguages( ByteString &rLanguages )
+sal_Bool CheckLanguages( ByteString &rLanguages )
 /*****************************************************************************/
 {
     ByteString sTmp( rLanguages );
@@ -829,17 +885,17 @@ int _cdecl main( int argc, char *argv[] )
 {
     String sTempBase( String::CreateFromAscii( "loc" ));
     DirEntry::SetTempNameBase( sTempBase );
-    USHORT nState   = STATE_NONE;
+    sal_uInt16 nState   = STATE_NONE;
 
-    BOOL bExport    = FALSE;
-    BOOL bMerge     = FALSE;
+    sal_Bool bExport    = sal_False;
+    sal_Bool bMerge     = sal_False;
     bool bSkipLinks = false;
 
     ByteString sLanguages;
     ByteString sFileName;
     ByteString sOutput;
 
-    bExport = TRUE;
+    bExport = sal_True;
 
     for( int i = 1; i < argc; i++ ) {
         ByteString sSwitch( argv[ i ] );
@@ -849,7 +905,7 @@ int _cdecl main( int argc, char *argv[] )
             nState = STATE_EXPORT;
             if ( bMerge )
                 return Error();
-            bExport = TRUE;
+            bExport = sal_True;
         }
         else if ( sSwitch.Equals( "-I" ) )
             nState = STATE_ISOCODE;
@@ -914,62 +970,16 @@ int _cdecl main( int argc, char *argv[] )
     //printf("B %s\nA %s\n",rDestinationFile.GetBuffer(), sFile.GetBuffer());
     sFileName = sFileABS;
 
-    Treeconfig treeconfig;
-    vector<string> repos;
-    bool hasPwd = treeconfig.getActiveRepositories( repos );
-    if( hasPwd ) cout << "Found special path!\n";
-
-    string minor_ext;
-    bool has_minor_ext;
-
-    if( Export::GetEnv("UPDMINOREXT") != NULL )
-    {
-        minor_ext     = string( Export::GetEnv("UPDMINOREXT") );
-        has_minor_ext = minor_ext.size();
+    string pwd;
+    Export::getCurrentDir( pwd );
+    cout << "Localizing directory " << pwd << "\n";
+    SourceTreeLocalizer aIter( ByteString( pwd.c_str() ) , sVersion , (sOutput.Len() > 0) , bSkipLinks );
+    aIter.SetLanguageRestriction( sLanguages );
+    if ( bExport ){
+        fflush( stdout );
+        aIter.Extract( sFileName );
+        printf("\n%d files found!\n",aIter.GetFileCnt());
     }
-    else
-        has_minor_ext = false;
-
-    // localize through all repositories
-    for( vector<string>::iterator iter = repos.begin(); iter != repos.end() ; ++iter )
-    {
-        string curRepository;
-        if( has_minor_ext )
-            curRepository = string( Export::GetEnv("SOURCE_ROOT_DIR") ) + "/" + *iter + minor_ext;
-        else
-            curRepository = string( Export::GetEnv("SOURCE_ROOT_DIR") ) + "/" + *iter;
-        cout << "Localizing repository " << curRepository << "\n";
-        SourceTreeLocalizer aIter( ByteString( curRepository.c_str() ) , sVersion , (sOutput.Len() > 0) , bSkipLinks );
-        aIter.SetLanguageRestriction( sLanguages );
-        if ( bExport ){
-            fflush( stdout );
-            if( *iter == "ooo" )
-                aIter.Extract( sFileName );
-            else
-            {
-                ByteString sFileNameWithExt( sFileName );
-                sFileNameWithExt += ByteString( "." );
-                sFileNameWithExt += ByteString( (*iter).c_str() );
-                aIter.Extract( sFileNameWithExt );
-            }
-            printf("\n%d files found!\n",aIter.GetFileCnt());
-        }
-    }
-    if( hasPwd )
-    {
-        string pwd;
-        Export::getCurrentDir( pwd );
-        cout << "Localizing repository " << pwd << "\n";
-        SourceTreeLocalizer aIter( ByteString( pwd.c_str() ) , sVersion , (sOutput.Len() > 0) , bSkipLinks );
-        aIter.SetLanguageRestriction( sLanguages );
-        if ( bExport ){
-            fflush( stdout );
-            aIter.Extract( sFileName );
-            printf("\n%d files found!\n",aIter.GetFileCnt());
-        }
-
-    }
-
     return 0;
 }
 

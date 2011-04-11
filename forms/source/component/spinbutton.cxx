@@ -187,14 +187,14 @@ namespace frm
     //------------------------------------------------------------------------------
     Any OSpinButtonModel::translateDbColumnToControlValue( )
     {
-        OSL_ENSURE( sal_False, "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
+        OSL_FAIL( "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return Any();
     }
 
     //------------------------------------------------------------------------------
     sal_Bool OSpinButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
-        OSL_ENSURE( sal_False, "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
+        OSL_FAIL( "OSpinButtonModel::commitControlValueToDbColumn: never to be called (we're not bound)!" );
         return sal_True;
     }
 

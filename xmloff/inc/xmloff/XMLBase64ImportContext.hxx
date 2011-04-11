@@ -46,7 +46,7 @@ class XMLOFF_DLLPUBLIC XMLBase64ImportContext : public SvXMLImportContext
 public:
     TYPEINFO();
 
-    XMLBase64ImportContext( SvXMLImport& rImport, USHORT nPrfx,
+    XMLBase64ImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                             const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList,

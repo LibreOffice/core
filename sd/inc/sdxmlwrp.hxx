@@ -50,7 +50,7 @@ public:
         ::sd::DrawDocShell& rDocShell,
         sal_Bool bShowProgress,
         SdXMLFilterMode eFilterMode = SDXMLMODE_Normal,
-        ULONG nStoreVer = SOFFICE_FILEFORMAT_8 );
+        sal_uLong nStoreVer = SOFFICE_FILEFORMAT_8 );
     virtual ~SdXMLFilter (void);
 
     sal_Bool        Import( ErrCode& nError );
@@ -58,7 +58,7 @@ public:
 
 private:
     SdXMLFilterMode meFilterMode;
-    ULONG mnStoreVer;
+    sal_uLong mnStoreVer;
 };
 
 #endif  // _SDXMLWRP_HXX

@@ -51,7 +51,7 @@ CRetStream::~CRetStream()
 void CRetStream::Read ( String &aString )
 {
     comm_UniChar* pStr;
-    USHORT nLenInChars;
+    sal_uInt16 nLenInChars;
     CmdBaseStream::Read( pStr, nLenInChars );
 
     aString = String( pStr, nLenInChars );
@@ -63,7 +63,7 @@ void CRetStream::Read( SbxValue &aValue )
     *pSammel >> nId;
     if (nId != BinSbxValue)
     {
-        DBG_ERROR1( "Falscher Typ im Stream: Erwartet SbxValue, gefunden :%hu", nId );
+        OSL_TRACE( "Falscher Typ im Stream: Erwartet SbxValue, gefunden :%hu", nId );
     }
     SbxBaseRef xBase = SbxBase::Load( *pSammel );
     if ( IS_TYPE( SbxValue, xBase ) )

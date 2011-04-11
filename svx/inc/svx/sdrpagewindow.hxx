@@ -117,6 +117,7 @@ public:
     void PrepareRedraw(const Region& rReg);
     void RedrawAll(sdr::contact::ViewObjectContactRedirector* pRedirector) const;
     void RedrawLayer(const SdrLayerID* pId, sdr::contact::ViewObjectContactRedirector* pRedirector) const;
+    void PostPaint();
 
     // Invalidate call, used from ObjectContact(OfPageView) in InvalidatePartOfView(...)
     void InvalidatePageWindow(const basegfx::B2DRange& rRange);

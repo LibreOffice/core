@@ -46,14 +46,13 @@
 #include <cmdid.h>
 #include <helpid.h>
 #include <swtypes.hxx>
-#include <errhdl.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <uitool.hxx>
 #include <fmtinfmt.hxx>
 #include <macassgn.hxx>
-#include <chrdlg.hxx>       // der Dialog
+#include <chrdlg.hxx>       // the dialog
 #include <swmodule.hxx>
 #include <poolfmt.hxx>
 
@@ -77,7 +76,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::sfx2;
 
 SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
-                     const String* pStr, BOOL bIsDrwTxtDlg) :
+                     const String* pStr, sal_Bool bIsDrwTxtDlg) :
     SfxTabDialog(pParent, SW_RES(DLG_CHAR), &rCoreSet, pStr != 0),
     rView(rVw),
     bIsDrwTxtMode(bIsDrwTxtDlg)
@@ -117,10 +116,10 @@ SwCharDlg::~SwCharDlg()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   FontList setzen
+    Description:    set FontList
  --------------------------------------------------------------------*/
 
-void SwCharDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch( nId )
@@ -177,18 +176,20 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
     aNotVisitedFT(  this, SW_RES(FT_NOT_VISITED)),
     aNotVisitedLB(  this, SW_RES(LB_NOT_VISITED)),
     pINetItem(0),
-    bModified(FALSE)
+    bModified(sal_False)
 
 {
     FreeResource();
 
+    aEventPB.SetAccessibleRelationMemberOf(&aURLFL);
+
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_HTML_MODE, FALSE, &pItem) ||
+    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_HTML_MODE, sal_False, &pItem) ||
         ( 0 != ( pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
-        USHORT nHtmlMode = ((const SfxUInt16Item*)pItem)->GetValue();
+        sal_uInt16 nHtmlMode = ((const SfxUInt16Item*)pItem)->GetValue();
         if(HTMLMODE_ON & nHtmlMode)
         {
             aStyleFL.Hide();
@@ -209,18 +210,18 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
     TargetList* pList = new TargetList;
     const SfxFrame& rFrame = pView->GetViewFrame()->GetTopFrame();
     rFrame.GetTargetList(*pList);
-    USHORT nCount = (USHORT)pList->Count();
-    if( nCount )
+    if ( !pList->empty() )
     {
-        USHORT i;
+        size_t nCount = pList->size();
+        size_t i;
 
         for ( i = 0; i < nCount; i++ )
         {
-            aTargetFrmLB.InsertEntry(*pList->GetObject(i));
+            aTargetFrmLB.InsertEntry( *pList->at( i ) );
         }
-        for ( i = nCount; i; i-- )
+        for ( i = nCount; i; )
         {
-            delete pList->GetObject( i - 1 );
+            delete pList->at( --i );
         }
     }
     delete pList;
@@ -234,7 +235,7 @@ SwCharURLPage::~SwCharURLPage()
 void SwCharURLPage::Reset(const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState(RES_TXTATR_INETFMT, FALSE, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(RES_TXTATR_INETFMT, sal_False, &pItem))
     {
         const SwFmtINetFmt* pINetFmt = (const SwFmtINetFmt*)pItem;
         aURLED.SetText( INetURLObject::decode( pINetFmt->GetValue(),
@@ -261,15 +262,15 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
         if( pINetFmt->GetMacroTbl() )
             pINetItem->SetMacroTable( *pINetFmt->GetMacroTbl() );
     }
-    if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_SELECTION, FALSE, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_SELECTION, sal_False, &pItem))
     {
         aTextED.SetText(((const SfxStringItem*)pItem)->GetValue());
-        aTextFT.Enable( FALSE );
-        aTextED.Enable( FALSE );
+        aTextFT.Enable( sal_False );
+        aTextED.Enable( sal_False );
     }
 }
 
-BOOL SwCharURLPage::FillItemSet(SfxItemSet& rSet)
+sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 {
    ::rtl::OUString sURL = aURLED.GetText();
    if(sURL.getLength())
@@ -288,9 +289,9 @@ BOOL SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     bModified |= aNameED.IsModified();
     bModified |= aTargetFrmLB.GetSavedValue() != aTargetFrmLB.GetText();
 
-    //zuerst die gueltigen Einstellungen setzen
+    // set valid settings first
     String sEntry = aVisitedLB.GetSelectEntry();
-    USHORT nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+    sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
     aINetFmt.SetVisitedFmtId(nId);
     aINetFmt.SetVisitedFmt(nId == RES_POOLCHR_INET_VISIT ? aEmptyStr : sEntry);
 
@@ -303,14 +304,14 @@ BOOL SwCharURLPage::FillItemSet(SfxItemSet& rSet)
         aINetFmt.SetMacroTbl( &pINetItem->GetMacroTable() );
 
     if(aVisitedLB.GetSavedValue() != aVisitedLB.GetSelectEntryPos())
-        bModified = TRUE;
+        bModified = sal_True;
 
     if(aNotVisitedLB.GetSavedValue() != aNotVisitedLB.GetSelectEntryPos())
-        bModified = TRUE;
+        bModified = sal_True;
 
     if(aTextED.IsModified())
     {
-        bModified = TRUE;
+        bModified = sal_True;
         rSet.Put(SfxStringItem(FN_PARAM_SELECTION, aTextED.GetText()));
     }
     if(bModified)

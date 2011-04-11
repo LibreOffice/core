@@ -142,22 +142,22 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw
     sShapeType = xShapeDescriptor->getShapeType();
     OSL_TRACE("ScVbaShape::getType: %s", rtl::OUStringToOString( sShapeType, RTL_TEXTENCODING_UTF8 ).getStr() );
     // office::MsoShapeType::msoDiagram to "com.sun.star.drawing.GroupShape"
-    if( sShapeType.equals( rtl::OUString::createFromAscii( "com.sun.star.drawing.GroupShape" ) ) )
+    if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GroupShape")) ) )
         return office::MsoShapeType::msoGroup;
-    else if( sShapeType.equals( rtl::OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) ) )
+    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape")) ) )
         return office::MsoShapeType::msoPicture;
-    else if( sShapeType.equals( rtl::OUString::createFromAscii( "com.sun.star.drawing.ControlShape" ) ) ||
-            sShapeType.equals( rtl::OUString::createFromAscii( "FrameShape" ) ) )
+    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape")) ) ||
+            sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameShape")) ) )
         return office::MsoShapeType::msoOLEControlObject;
     // OOo don't support office::MsoShapeType::msoComment as a Shape.
-    else if( sShapeType.equals( rtl::OUString::createFromAscii( "com.sun.star.drawing.OLE2Shape" ) ) )
+    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.OLE2Shape")) ) )
         return office::MsoShapeType::msoChart;
     // Art characters office::MsoShapeType::msoTextEffect, in OOo corresponding to "com.sun.star.drawing.CustomShape"
-    else if( sShapeType.equals( rtl::OUString::createFromAscii( "com.sun.star.drawing.ConnectorShape" ) ) )
+    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ConnectorShape")) ) )
     {
         enum drawing::ConnectorType connectorType;
         uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY_THROW );
-        xPropertySet->getPropertyValue( rtl::OUString::createFromAscii("EdgeKind")) >>= connectorType;
+        xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeKind"))) >>= connectorType;
         if( connectorType == drawing::ConnectorType_CURVE )
             return office::MsoShapeType::msoFreeform;
         else if( connectorType == drawing::ConnectorType_LINE )
@@ -165,15 +165,15 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw
         else
             return office::MsoShapeType::msoAutoShape;
     }
-    else if( sShapeType.equals( rtl::OUString::createFromAscii( "com.sun.star.drawing.LineShape" ) ) )
+    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape")) ) )
         return office::MsoShapeType::msoLine;
-    else if( sShapeType.equals( rtl::OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) ) ||
-            sShapeType.equals( rtl::OUString::createFromAscii( "com.sun.star.drawing.RectangleShape") ) )
+    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape")) ) ||
+            sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.RectangleShape")) ) )
         return office::MsoShapeType::msoAutoShape;
-    else if( sShapeType.equals( rtl::OUString::createFromAscii( "com.sun.star.drawing.TextShape" ) ) )
+    else if( sShapeType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TextShape")) ) )
         return office::MsoShapeType::msoTextBox;
     else
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "the shape type do not be supported: " ) + sShapeType, uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("the shape type do not be supported: ")) + sShapeType, uno::Reference< uno::XInterface >() );
 }
 
 // Attributes
@@ -246,7 +246,7 @@ ScVbaShape::setLeft( double _left ) throw (uno::RuntimeException)
     {
         sal_Int32 nLeft = 0;
         nLeft = Millimeter::getInHundredthsOfOneMillimeter( _left );
-        m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "HoriOrientPosition" ), uno::makeAny( nLeft ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), uno::makeAny( nLeft ) );
     }
 }
 
@@ -278,7 +278,7 @@ ScVbaShape::setTop( double _top ) throw (uno::RuntimeException)
     {
         sal_Int32 nTop = 0;
         nTop = Millimeter::getInHundredthsOfOneMillimeter( _top );
-        m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "VertOrientPosition" ), uno::makeAny( nTop ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), uno::makeAny( nTop ) );
     }
 }
 
@@ -299,7 +299,7 @@ sal_Int32 SAL_CALL
 ScVbaShape::getZOrderPosition() throw (uno::RuntimeException)
 {
     sal_Int32 nZOrderPosition = 0;
-    uno::Any aZOrderPosition =  m_xPropertySet->getPropertyValue( rtl::OUString::createFromAscii( "ZOrder" ) );
+    uno::Any aZOrderPosition =  m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")) );
     aZOrderPosition >>= nZOrderPosition;
     return nZOrderPosition + 1;
 }
@@ -315,7 +315,7 @@ ScVbaShape::getRotation() throw (uno::RuntimeException)
 {
     double dRotation = 0;
     sal_Int32 nRotation = 0;
-    m_xPropertySet->getPropertyValue( rtl::OUString::createFromAscii( "RotateAngle" ) ) >>= nRotation;
+    m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RotateAngle")) ) >>= nRotation;
     dRotation = static_cast< double >( nRotation /100 );
     return dRotation;
 }
@@ -324,7 +324,7 @@ void SAL_CALL
 ScVbaShape::setRotation( double _rotation ) throw (uno::RuntimeException)
 {
     sal_Int32 nRotation = static_cast < sal_Int32 > ( _rotation * 100 );
-    m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "RotateAngle" ), uno::makeAny( nRotation ) );
+    m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RotateAngle")), uno::makeAny( nRotation ) );
 }
 
 uno::Reference< msforms::XLineFormat > SAL_CALL
@@ -375,33 +375,33 @@ void SAL_CALL
 ScVbaShape::ZOrder( sal_Int32 ZOrderCmd ) throw (uno::RuntimeException)
 {
     sal_Int32 nOrderPositon;
-    uno::Any aOrderPostion = m_xPropertySet->getPropertyValue( rtl::OUString::createFromAscii( "ZOrder" ) );
+    uno::Any aOrderPostion = m_xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")) );
     aOrderPostion >>= nOrderPositon;
     switch( ZOrderCmd )
     {
     case office::MsoZOrderCmd::msoBringToFront:
-        m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "ZOrder" ), uno::makeAny( SAL_MAX_INT32 ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")), uno::makeAny( SAL_MAX_INT32 ) );
         break;
     case office::MsoZOrderCmd::msoSendToBack:
-        m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "ZOrder" ), uno::makeAny( (sal_Int32)0 ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")), uno::makeAny( (sal_Int32)0 ) );
         break;
     case office::MsoZOrderCmd::msoBringForward:
         nOrderPositon += 1;
-        m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "ZOrder" ), uno::makeAny( nOrderPositon ) );
+        m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")), uno::makeAny( nOrderPositon ) );
         break;
     case office::MsoZOrderCmd::msoSendBackward:
         if( nOrderPositon > 0 )
         {
             nOrderPositon -= 1;
-            m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "ZOrder" ), uno::makeAny( nOrderPositon ) );
+            m_xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")), uno::makeAny( nOrderPositon ) );
         }
         break;
     // below two commands use with Writer for text and image object.
     case office::MsoZOrderCmd::msoBringInFrontOfText:
     case office::MsoZOrderCmd::msoSendBehindText:
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "This ZOrderCmd is not implemented, it is use with writer." ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This ZOrderCmd is not implemented, it is use with writer.")), uno::Reference< uno::XInterface >() );
     default:
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "Invalid Parameter." ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid Parameter.")), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -454,7 +454,7 @@ ScVbaShape::ScaleHeight( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "ScaleHeight.Scale wrong value is given." ) , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScaleHeight.Scale wrong value is given.")) , uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -483,7 +483,7 @@ ScVbaShape::ScaleWidth( double Factor, sal_Bool /*RelativeToOriginalSize*/, sal_
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "ScaleHeight.Scale wrong value is given." ) , uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScaleHeight.Scale wrong value is given.")) , uno::Reference< uno::XInterface >() );
     }
 }
 

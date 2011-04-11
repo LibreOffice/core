@@ -147,24 +147,15 @@ void OComponentEventThread::addEvent( const EventObject* _pEvt,
     m_aCond.set();
 }
 
-//---------------------------------------------------------------------
-//--- 22.08.01 15:48:15 -----------------------------------------------
-
 void OComponentEventThread::implStarted( )
 {
     acquire( );
 }
 
-//---------------------------------------------------------------------
-//--- 22.08.01 15:48:16 -----------------------------------------------
-
 void OComponentEventThread::implTerminated( )
 {
     release( );
 }
-
-//---------------------------------------------------------------------
-//--- 22.08.01 15:47:31 -----------------------------------------------
 
 void SAL_CALL OComponentEventThread::kill()
 {
@@ -173,9 +164,6 @@ void SAL_CALL OComponentEventThread::kill()
 
     implTerminated( );
 }
-
-//---------------------------------------------------------------------
-//--- 22.08.01 15:47:33 -----------------------------------------------
 
 void SAL_CALL OComponentEventThread::onTerminated()
 {

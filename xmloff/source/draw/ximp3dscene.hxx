@@ -58,7 +58,7 @@ public:
 
     SdXML3DSceneShapeContext(
         SvXMLImport& rImport,
-        USHORT nPrfx,
+        sal_uInt16 nPrfx,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
@@ -69,7 +69,7 @@ public:
     virtual void EndElement();
 
     virtual SvXMLImportContext *CreateChildContext(
-        USHORT nPrefix, const rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& GetLocalShapesContext() const

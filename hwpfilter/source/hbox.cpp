@@ -85,13 +85,13 @@ hunit HBox::Height(CharShape *csty)
 
 
 // skip block
-SkipBlock::SkipBlock(hchar hch):HBox(hch)
+SkipData::SkipData(hchar hch):HBox(hch)
 {
     data_block = 0;
 }
 
 
-SkipBlock::~SkipBlock(void)
+SkipData::~SkipData(void)
 {
     delete[]data_block;
 }

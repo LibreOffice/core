@@ -91,7 +91,7 @@ public:
         IMediaSample *pSample) = 0;
     virtual HRESULT __stdcall BufferCB(
         double SampleTime,
-        WIN_BYTE *pBuffer,
+        BYTE *pBuffer,
         long BufferLen) = 0;
 };
 
@@ -104,13 +104,13 @@ ISampleGrabber : public IUnknown
 {
 public:
     virtual HRESULT __stdcall SetOneShot(
-        WIN_BOOL OneShot) = 0;
+        BOOL OneShot) = 0;
     virtual HRESULT __stdcall SetMediaType(
         const AM_MEDIA_TYPE *pType) = 0;
     virtual HRESULT __stdcall GetConnectedMediaType(
         AM_MEDIA_TYPE *pType) = 0;
     virtual HRESULT __stdcall SetBufferSamples(
-        WIN_BOOL BufferThem) = 0;
+        BOOL BufferThem) = 0;
     virtual HRESULT __stdcall GetCurrentBuffer(
          long *pBufferSize,
          long *pBuffer) = 0;

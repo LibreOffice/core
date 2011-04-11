@@ -62,7 +62,7 @@ using ::rtl::OUString;
 /******************************************************************
  * SwXTextPortion
  ******************************************************************/
-static void init(SwXTextPortion & rPortion, const SwUnoCrsr* pPortionCursor)
+void SwXTextPortion::init(const SwUnoCrsr* pPortionCursor)
 {
     SwUnoCrsr* pUnoCursor =
         pPortionCursor->GetDoc()->CreateUnoCrsr(*pPortionCursor->GetPoint());
@@ -71,7 +71,7 @@ static void init(SwXTextPortion & rPortion, const SwUnoCrsr* pPortionCursor)
         pUnoCursor->SetMark();
         *pUnoCursor->GetMark() = *pPortionCursor->GetMark();
     }
-    pUnoCursor->Add(& rPortion);
+    pUnoCursor->Add(this);
 }
 
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
@@ -93,7 +93,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
     , m_ePortionType(eType)
     , m_bIsCollapsed(false)
 {
-    init(*this, pPortionCrsr);
+    init( pPortionCrsr);
 }
 
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
@@ -112,7 +112,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
     , m_ePortionType(PORTION_FRAME)
     , m_bIsCollapsed(false)
 {
-    init(*this, pPortionCrsr);
+    init( pPortionCrsr);
 }
 
 SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
@@ -132,7 +132,7 @@ SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
     , m_ePortionType( bIsEnd ? PORTION_RUBY_END : PORTION_RUBY_START )
     , m_bIsCollapsed(false)
 {
-    init(*this, pPortionCrsr);
+    init( pPortionCrsr);
 
     if (!bIsEnd)
     {
@@ -291,7 +291,7 @@ void SwXTextPortion::GetPropertyValue(
 
                 OUString sRet;
                 if( pRet )
-                    sRet = C2U( pRet );
+                    sRet = rtl::OUString::createFromAscii( pRet );
                 rVal <<= sRet;
             }
             break;
@@ -340,7 +340,7 @@ void SwXTextPortion::GetPropertyValue(
             break;
             case FN_UNO_IS_START:
             {
-                BOOL bStart = TRUE, bPut = TRUE;
+                sal_Bool bStart = sal_True, bPut = sal_True;
                 switch (m_ePortionType)
                 {
                     case PORTION_REFMARK_START:
@@ -357,10 +357,10 @@ void SwXTextPortion::GetPropertyValue(
                     case PORTION_REDLINE_END:
                     case PORTION_RUBY_END:
                     case PORTION_FIELD_END:
-                        bStart = FALSE;
+                        bStart = sal_False;
                     break;
                     default:
-                        bPut = FALSE;
+                        bPut = sal_False;
                 }
                 if(bPut)
                     rVal.setValue(&bStart, ::getBooleanCppuType());
@@ -382,7 +382,7 @@ void SwXTextPortion::GetPropertyValue(
             break;
             default:
                 beans::PropertyState eTemp;
-                BOOL bDone = SwUnoCursorHelper::getCrsrPropertyValue(
+                sal_Bool bDone = SwUnoCursorHelper::getCrsrPropertyValue(
                                     rEntry, *pUnoCrsr, &(rVal), eTemp );
                 if(!bDone)
                 {
@@ -570,7 +570,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            DBG_ERROR( "unexpected exception catched" );
+            OSL_FAIL( "unexpected exception catched" );
             pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)
@@ -682,7 +682,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
         catch (beans::UnknownPropertyException &)
         {
             // should not occur because property was searched for before
-            DBG_ERROR( "unexpected exception catched" );
+            OSL_FAIL( "unexpected exception catched" );
             aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
         catch (lang::IllegalArgumentException &)
@@ -967,7 +967,7 @@ throw( uno::RuntimeException )
     return aRet;
 }
 
-void SwXTextPortion::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTextPortion::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if (!m_FrameDepend.GetRegisteredIn())

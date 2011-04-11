@@ -98,7 +98,7 @@ String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
     return sRet;
 }
 
-String IndexEntrySupplierWrapper::GetFollowingText( BOOL bMorePages ) const
+String IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
 {
     String sRet;
     try {

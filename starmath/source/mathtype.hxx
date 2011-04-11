@@ -108,12 +108,12 @@ private:
         sal_uInt8 nTag,sal_uInt8 nSelector,sal_uInt8 nVariation,
         sal_Bool bSilent);
     void HandleNudge();
-    int xfLMOVE(sal_uInt8 nTest) {return nTest&0x80;}
-    int xfAUTO(sal_uInt8 nTest) {return nTest&0x10;}
-    int xfEMBELL(sal_uInt8 nTest) {return nTest&0x20;}
-    int xfNULL(sal_uInt8 nTest) {return nTest&0x10;}
-    int xfLSPACE(sal_uInt8 nTest) {return nTest&0x40;}
-    int xfRULER(sal_uInt8 nTest) {return nTest&0x20;}
+    int xfLMOVE(sal_uInt8 nTest) const {return nTest&0x80;}
+    int xfAUTO(sal_uInt8 nTest) const {return nTest&0x10;}
+    int xfEMBELL(sal_uInt8 nTest) const {return nTest&0x20;}
+    int xfNULL(sal_uInt8 nTest) const {return nTest&0x10;}
+    int xfLSPACE(sal_uInt8 nTest) const {return nTest&0x40;}
+    int xfRULER(sal_uInt8 nTest) const {return nTest&0x20;}
 
     sal_uInt8 HandleNodes(SmNode *pNode,int nLevel=0);
     int StartTemplate(sal_uInt16 nSelector,sal_uInt16 nVariation=0);
@@ -123,7 +123,7 @@ private:
     void HandleRoot(SmNode *pNode,int nLevel);
     void HandleSubSupScript(SmNode *pNode,int nLevel);
     sal_uInt8 HandleCScript(SmNode *pNode,SmNode *pContent,int nLevel,
-        ULONG *pPos=NULL,sal_Bool bTest=TRUE);
+        sal_uLong *pPos=NULL,sal_Bool bTest=sal_True);
     void HandleFractions(SmNode *pNode,int nLevel);
     void HandleBrace(SmNode *pNode,int nLevel);
     void HandleVerticalBrace(SmNode *pNode,int nLevel);
@@ -142,7 +142,7 @@ private:
     sal_uInt8 nVAlign;
 
     int nPendingAttributes;
-    ULONG nInsertion;
+    sal_uLong nInsertion;
 
     sal_Int16 aSizeTable[7];
     sal_Int16 nDefaultSize;

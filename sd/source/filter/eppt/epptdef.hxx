@@ -133,7 +133,7 @@
 #define EPP_PST_ExtendedParagraphMasterAtom     4013
 #define EPP_PST_ExtendedPresRuleContainer       4014    // consist of 4012, 4015,
 #define EPP_PST_ExtendedParagraphHeaderAtom     4015    // the instance of this atom indices the current presobj
-                                                        // the first UINT32 in this atom indices the current slideId
+                                                        // the first sal_uInt32 in this atom indices the current slideId
 
 #define EPP_FontEnityAtom               4023
 #define EPP_FontEmbedData               4024

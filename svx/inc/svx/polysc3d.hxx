@@ -45,7 +45,8 @@ public:
     E3dPolyScene();
     E3dPolyScene(E3dDefaultAttributes& rDefault);
 
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual E3dPolyScene* Clone() const;
 };
 
 #endif          // _E3D_POLYSC3D_HXX

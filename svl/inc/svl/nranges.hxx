@@ -36,12 +36,12 @@
 
 #ifndef NUMTYPE
 
-#define NUMTYPE USHORT
+#define NUMTYPE sal_uInt16
 #define SfxNumRanges SfxUShortRanges
 #include <svl/nranges.hxx>
 
 #undef NUMTYPE
-#define NUMTYPE ULONG
+#define NUMTYPE sal_uLong
 #define SfxNumRanges SfxULongRanges
 #include <svl/nranges.hxx>
 
@@ -67,8 +67,8 @@ public:
                                 ~SfxNumRanges()
                                 { delete [] _pRanges; }
 
-    BOOL                        operator == ( const SfxNumRanges & ) const;
-    BOOL                        operator != ( const SfxNumRanges & rRanges ) const
+    sal_Bool                        operator == ( const SfxNumRanges & ) const;
+    sal_Bool                        operator != ( const SfxNumRanges & rRanges ) const
                                 { return !( *this == rRanges ); }
 
     SfxNumRanges&               operator = ( const SfxNumRanges & );
@@ -78,10 +78,10 @@ public:
     SfxNumRanges&               operator /= ( const SfxNumRanges & );
 
     NUMTYPE                     Count() const;
-    BOOL                        IsEmpty() const
+    sal_Bool                        IsEmpty() const
                                 { return !_pRanges || 0 == *_pRanges; }
-    BOOL                        Contains( NUMTYPE n ) const;
-    BOOL                        Intersects( const SfxNumRanges & ) const;
+    sal_Bool                        Contains( NUMTYPE n ) const;
+    sal_Bool                        Intersects( const SfxNumRanges & ) const;
 
                                 operator const NUMTYPE* () const
                                 { return _pRanges; }

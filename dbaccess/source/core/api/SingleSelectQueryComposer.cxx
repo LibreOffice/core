@@ -63,6 +63,7 @@
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <unotools/configmgr.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
@@ -578,7 +579,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< 
 ::rtl::OUString OSingleSelectQueryComposer::composeStatementFromParts( const ::std::vector< ::rtl::OUString >& _rParts )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::composeStatementFromParts" );
-    DBG_ASSERT( _rParts.size() == (size_t)SQLPartCount, "OSingleSelectQueryComposer::composeStatementFromParts: invalid parts array!" );
+    OSL_ENSURE( _rParts.size() == (size_t)SQLPartCount, "OSingleSelectQueryComposer::composeStatementFromParts: invalid parts array!" );
 
     ::rtl::OUStringBuffer aSql( m_aPureSelectSQL );
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
@@ -625,7 +626,7 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const ::rtl::OUStr
     catch( const Exception& e )
     {
         (void)e;
-        DBG_ERROR( "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
+        OSL_FAIL( "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks
     }
@@ -703,7 +704,7 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
     catch( const Exception& e )
     {
         (void)e;
-        DBG_ERROR( "OSingleSelectQueryComposer::setSingleAdditiveClause: there should be no error anymore for the additive statement!" );
+        OSL_FAIL( "OSingleSelectQueryComposer::setSingleAdditiveClause: there should be no error anymore for the additive statement!" );
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks
     }
@@ -789,7 +790,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         aSQL.append( STR_WHERE );
 
         // preserve the original WHERE clause
-        // #i102234# / 2009-06-02 / frank.schoenheit@sun.com
+        // #i102234#
         ::rtl::OUString sOriginalWhereClause = getSQLPart( Where, m_aSqlIterator, sal_False );
         if ( sOriginalWhereClause.getLength() )
         {
@@ -810,7 +811,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         // normalize the statement so that it doesn't contain any application-level features anymore
         ::rtl::OUString sError;
         const ::std::auto_ptr< OSQLParseNode > pStatementTree( m_aSqlParser.parseTree( sError, sSQL, false ) );
-        DBG_ASSERT( pStatementTree.get(), "OSingleSelectQueryComposer::getColumns: could not parse the column retrieval statement!" );
+        OSL_ENSURE( pStatementTree.get(), "OSingleSelectQueryComposer::getColumns: could not parse the column retrieval statement!" );
         if ( pStatementTree.get() )
             if ( !pStatementTree->parseNodeToExecutableStatement( sSQL, m_xConnection, m_aSqlParser, NULL ) )
                 break;
@@ -990,7 +991,6 @@ sal_Bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OS
         {
             // Ist das erste Element wieder eine OR-Verknuepfung?
             // Dann rekursiv absteigen ...
-            //if (!i && SQL_ISRULE(pCondition->getChild(i),search_condition))
             if (SQL_ISRULE(pCondition->getChild(i),search_condition))
                 bResult = setORCriteria(pCondition->getChild(i), _rIterator, rFilters, xFormatter);
             else
@@ -1016,7 +1016,7 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
     if (SQL_ISRULE(pCondition,boolean_primary))
     {
         // this should not occur
-        DBG_ERROR("boolean_primary in And-Criteria");
+        OSL_FAIL("boolean_primary in And-Criteria");
         return sal_False;
     }
     // Das erste Element ist (wieder) eine AND-Verknuepfung
@@ -1042,9 +1042,7 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
             ::rtl::OUString aColumnName;
 
 
-            //  pCondition->parseNodeToStr(aValue,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
             pCondition->parseNodeToStr( aValue, m_xConnection, NULL );
-            //  pCondition->getChild(0)->parseNodeToStr(aColumnName,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
             pCondition->getChild(0)->parseNodeToStr( aColumnName, m_xConnection, NULL );
 
             // don't display the column name
@@ -1063,22 +1061,22 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
             }
             else if (SQL_ISRULE(pCondition,test_for_null))
             {
-                if (SQL_ISTOKEN(pCondition->getChild(1)->getChild(2),NOT) )
+                if (SQL_ISTOKEN(pCondition->getChild(1)->getChild(1),NOT) )
                     aItem.Handle = SQLFilterOperator::NOT_SQLNULL;
                 else
                     aItem.Handle = SQLFilterOperator::SQLNULL;
             }
             else if (SQL_ISRULE(pCondition,in_predicate))
             {
-                OSL_ENSURE( false, "OSingleSelectQueryComposer::setANDCriteria: in_predicate not implemented!" );
+                OSL_FAIL( "OSingleSelectQueryComposer::setANDCriteria: in_predicate not implemented!" );
             }
             else if (SQL_ISRULE(pCondition,all_or_any_predicate))
             {
-                OSL_ENSURE( false, "OSingleSelectQueryComposer::setANDCriteria: all_or_any_predicate not implemented!" );
+                OSL_FAIL( "OSingleSelectQueryComposer::setANDCriteria: all_or_any_predicate not implemented!" );
             }
             else if (SQL_ISRULE(pCondition,between_predicate))
             {
-                OSL_ENSURE( false, "OSingleSelectQueryComposer::setANDCriteria: between_predicate not implemented!" );
+                OSL_FAIL( "OSingleSelectQueryComposer::setANDCriteria: between_predicate not implemented!" );
             }
 
             rFilter.push_back(aItem);
@@ -1124,7 +1122,7 @@ sal_Int32 OSingleSelectQueryComposer::getPredicateType(OSQLParseNode * _pPredica
             nPredicate = SQLFilterOperator::GREATER_EQUAL;
             break;
         default:
-            OSL_ENSURE(0,"Wrong NodeType!");
+            OSL_FAIL("Wrong NodeType!");
     }
     return nPredicate;
 }
@@ -1133,7 +1131,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
                                             ::std::vector < PropertyValue >& rFilter, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setComparsionPredicate" );
-    DBG_ASSERT(SQL_ISRULE(pCondition, comparison_predicate),"setComparsionPredicate: pCondition ist kein ComparsionPredicate");
+    OSL_ENSURE(SQL_ISRULE(pCondition, comparison_predicate),"setComparsionPredicate: pCondition ist kein ComparsionPredicate");
     if (SQL_ISRULE(pCondition->getChild(0), column_ref) ||
         SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref))
     {
@@ -1314,7 +1312,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
 
         if(!aTable.getLength())
-        { // we don't found a table name, now we must search every table for this column
+        { // we haven't found a table name, now we must search every table for this column
             for(;pBegin != pEnd;++pBegin)
             {
                 Reference<XColumnsSupplier> xColumnsSupp;
@@ -1322,10 +1320,6 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
 
                 if(xColumnsSupp.is() && xColumnsSupp->getColumns()->hasByName(aColumnName))
                 {
-//                  Reference<XPropertySet> xTableProp(xColumnsSupp,UNO_QUERY);
-//                  xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
-//                  xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
-//                  xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable;
                     aTable = *pBegin;
                     break;
                 }
@@ -1799,7 +1793,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
     switch(_ePart)
     {
         default:
-            OSL_ENSURE( 0, "OSingleSelectQueryComposer::getKeyWord: Invalid enum value!" );
+            OSL_FAIL( "OSingleSelectQueryComposer::getKeyWord: Invalid enum value!" );
             // no break, fallback to WHERE
         case Where:
             sKeyword = STR_WHERE;
@@ -1837,7 +1831,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
             F_tmp = TGetParseNode(&OSQLParseTreeIterator::getSimpleOrderTree);
             break;
         default:
-            OSL_ENSURE(0,"Invalid enum value!");
+            OSL_FAIL("Invalid enum value!");
     }
 
     ::rtl::OUString sRet = getStatementPart( F_tmp, _rIterator );

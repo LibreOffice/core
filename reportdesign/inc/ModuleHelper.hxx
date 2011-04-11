@@ -90,7 +90,7 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC ModuleRes : public ::ResId
     {
     public:
-        inline ModuleRes(USHORT _nId) : ResId(_nId, *OModule::getResManager()) { }
+        inline ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
 //.........................................................................
 }   // namespace rptui

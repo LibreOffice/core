@@ -54,32 +54,32 @@ private:
     String              aComment;
     ScRangeList         aRangeList;
     ScChgsDateMode      eDateMode;
-    BOOL                bShowIt;
-    BOOL                bIsDate;
-    BOOL                bIsAuthor;
-    BOOL                bIsComment;
-    BOOL                bIsRange;
-    BOOL                bEveryoneButMe;
-    BOOL                bShowAccepted;
-    BOOL                bShowRejected;
+    sal_Bool                bShowIt;
+    sal_Bool                bIsDate;
+    sal_Bool                bIsAuthor;
+    sal_Bool                bIsComment;
+    sal_Bool                bIsRange;
+    sal_Bool                bEveryoneButMe;
+    sal_Bool                bShowAccepted;
+    sal_Bool                bShowRejected;
     bool                mbIsActionRange;
-    ULONG               mnFirstAction;
-    ULONG               mnLastAction;
+    sal_uLong               mnFirstAction;
+    sal_uLong               mnLastAction;
 
 public:
 
                         ScChangeViewSettings()
                         {
                             pCommentSearcher=NULL;
-                            bIsDate=FALSE;
-                            bIsAuthor=FALSE;
-                            bIsRange=FALSE;
-                            bIsComment=FALSE;
-                            bShowIt=FALSE;
+                            bIsDate=false;
+                            bIsAuthor=false;
+                            bIsRange=false;
+                            bIsComment=false;
+                            bShowIt=false;
                             eDateMode=SCDM_DATE_BEFORE;
-                            bEveryoneButMe=FALSE;
-                            bShowAccepted=FALSE;
-                            bShowRejected=FALSE;
+                            bEveryoneButMe=false;
+                            bShowAccepted=false;
+                            bShowRejected=false;
                             mbIsActionRange = false;
                         }
 
@@ -87,11 +87,11 @@ public:
 
                         ~ScChangeViewSettings();
 
-    BOOL                ShowChanges() const {return bShowIt;}
-    void                SetShowChanges(BOOL nFlag=TRUE){bShowIt=nFlag;}
+    sal_Bool                ShowChanges() const {return bShowIt;}
+    void                SetShowChanges(sal_Bool nFlag=sal_True){bShowIt=nFlag;}
 
-    BOOL                HasDate() const {return bIsDate;}
-    void                SetHasDate(BOOL nFlag=TRUE) {bIsDate=nFlag;}
+    sal_Bool                HasDate() const {return bIsDate;}
+    void                SetHasDate(sal_Bool nFlag=sal_True) {bIsDate=nFlag;}
 
     void                SetTheDateMode(ScChgsDateMode eDatMod){ eDateMode=eDatMod; }
     ScChgsDateMode      GetTheDateMode() const { return eDateMode; }
@@ -103,35 +103,35 @@ public:
     const DateTime&     GetTheLastDateTime()const {return aLastDateTime;}
 
 
-    BOOL                HasAuthor() const {return bIsAuthor;}
-    void                SetHasAuthor(BOOL nFlag=TRUE) {bIsAuthor=nFlag;}
+    sal_Bool                HasAuthor() const {return bIsAuthor;}
+    void                SetHasAuthor(sal_Bool nFlag=sal_True) {bIsAuthor=nFlag;}
 
     String              GetTheAuthorToShow()const {return aAuthorToShow;}
     void                SetTheAuthorToShow(const String& aString){aAuthorToShow=aString;}
 
-    BOOL                HasComment() const {return bIsComment;}
-    void                SetHasComment(BOOL nFlag=TRUE) {bIsComment=nFlag;}
+    sal_Bool                HasComment() const {return bIsComment;}
+    void                SetHasComment(sal_Bool nFlag=sal_True) {bIsComment=nFlag;}
 
     String              GetTheComment()const {return aComment;}
     void                SetTheComment(const String& aString);
 
-    BOOL                IsValidComment(const String* pCommentStr) const;
+    sal_Bool                IsValidComment(const String* pCommentStr) const;
 
-    BOOL                IsEveryoneButMe() const {return bEveryoneButMe;}
-    void                SetEveryoneButMe(BOOL nFlag=TRUE) {bEveryoneButMe=nFlag;}
+    sal_Bool                IsEveryoneButMe() const {return bEveryoneButMe;}
+    void                SetEveryoneButMe(sal_Bool nFlag=sal_True) {bEveryoneButMe=nFlag;}
 
 
-    BOOL                HasRange() const {return bIsRange;}
-    void                SetHasRange(BOOL nFlag=TRUE) {bIsRange=nFlag;}
+    sal_Bool                HasRange() const {return bIsRange;}
+    void                SetHasRange(sal_Bool nFlag=sal_True) {bIsRange=nFlag;}
 
     const ScRangeList&  GetTheRangeList()const {return aRangeList;}
     void                SetTheRangeList(const ScRangeList& aRl){aRangeList=aRl;}
 
-    BOOL                IsShowAccepted() const { return bShowAccepted; }
-    void                SetShowAccepted( BOOL bVal ) { bShowAccepted = bVal; }
+    sal_Bool                IsShowAccepted() const { return bShowAccepted; }
+    void                SetShowAccepted( sal_Bool bVal ) { bShowAccepted = bVal; }
 
-    BOOL                IsShowRejected() const { return bShowRejected; }
-    void                SetShowRejected( BOOL bVal ) { bShowRejected = bVal; }
+    sal_Bool                IsShowRejected() const { return bShowRejected; }
+    void                SetShowRejected( sal_Bool bVal ) { bShowRejected = bVal; }
 
     ScChangeViewSettings&   operator=   ( const ScChangeViewSettings& r );
 
@@ -140,8 +140,8 @@ public:
 
     bool                HasActionRange() const { return mbIsActionRange; }
     void                SetHasActionRange( bool nFlag = true ) { mbIsActionRange = nFlag; }
-    void                GetTheActionRange( ULONG& nFirst, ULONG& nLast ) const { nFirst = mnFirstAction; nLast = mnLastAction; }
-    void                SetTheActionRange( ULONG nFirst, ULONG nLast ) { mnFirstAction = nFirst; mnLastAction = nLast; }
+    void                GetTheActionRange( sal_uLong& nFirst, sal_uLong& nLast ) const { nFirst = mnFirstAction; nLast = mnLastAction; }
+    void                SetTheActionRange( sal_uLong nFirst, sal_uLong nLast ) { mnFirstAction = nFirst; mnLastAction = nLast; }
 };
 
 

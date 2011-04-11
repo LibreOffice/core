@@ -34,7 +34,9 @@
 //------------------------------------------------------------------------
 #include <osl_Socket_Const.h>
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include <osl/socket.hxx>
 //------------------------------------------------------------------------
 // helper functions
@@ -64,7 +66,7 @@ namespace osl_Socket
         CPPUNIT_TEST_SUITE_END();
     };
 
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Socket::tests, "osl_SocketTest");
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Socket::tests);
 }
 
 
@@ -84,7 +86,7 @@ void RegisterAdditionalFunctions( FktRegFuncPtr _pFunc )
 
 #else*/
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 //#endif
 

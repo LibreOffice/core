@@ -40,6 +40,8 @@
 #include <threadhelp/writeguard.hxx>
 #include <services.h>
 
+#include "helper/mischelper.hxx"
+
 // ______________________________________________
 // interface includes
 #include <com/sun/star/beans/Property.hpp>
@@ -57,6 +59,8 @@
 
 #include <comphelper/configurationhelper.hxx>
 #include <unotools/configpathes.hxx>
+
+#include <fwkdllapi.h>
 
 // ______________________________________________
 //  non exported const
@@ -159,6 +163,9 @@ PathSettings::PathSettings( const css::uno::Reference< css::lang::XMultiServiceF
 //-----------------------------------------------------------------------------
 PathSettings::~PathSettings()
 {
+    css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfgNew, css::uno::UNO_QUERY);
+    if (xBroadcaster.is())
+        xBroadcaster->removeChangesListener(m_xCfgNewListener);
     if (m_pPropHelp)
        delete m_pPropHelp;
 }
@@ -168,10 +175,6 @@ void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEven
     throw (css::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::changesOccurred" );
-    /*
-    if (m_bIgnoreEvents)
-        return;
-    */
 
     sal_Int32 c                 = aEvent.Changes.getLength();
     sal_Int32 i                 = 0;
@@ -205,14 +208,12 @@ void SAL_CALL PathSettings::disposing(const css::lang::EventObject& aSource)
     throw(css::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::disposing" );
-    // SAFE ->
     WriteGuard aWriteLock(m_aLock);
 
     if (aSource.Source == m_xCfgNew)
         m_xCfgNew.clear();
 
     aWriteLock.unlock();
-    // <- SAFE
 }
 
 //-----------------------------------------------------------------------------
@@ -246,21 +247,24 @@ void PathSettings::impl_readAll()
 OUStringList PathSettings::impl_readOldFormat(const ::rtl::OUString& sPath)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PathSettings::impl_readOldFormat" );
-    css::uno::Reference< css::container::XNameAccess > xCfg = fa_getCfgOld();
-    css::uno::Any                                      aVal = xCfg->getByName(sPath);
+    css::uno::Reference< css::container::XNameAccess > xCfg( fa_getCfgOld() );
+    OUStringList aPathVal;
 
-    ::rtl::OUString                       sStringVal;
-    css::uno::Sequence< ::rtl::OUString > lStringListVal;
-    OUStringList                          aPathVal;
+    if( xCfg->hasByName(sPath) )
+    {
+        css::uno::Any aVal( xCfg->getByName(sPath) );
 
-    if (aVal >>= sStringVal)
-    {
-        aPathVal.push_back(sStringVal);
-    }
-    else
-    if (aVal >>= lStringListVal)
-    {
-        aPathVal << lStringListVal;
+        ::rtl::OUString                       sStringVal;
+        css::uno::Sequence< ::rtl::OUString > lStringListVal;
+
+        if (aVal >>= sStringVal)
+        {
+            aPathVal.push_back(sStringVal);
+        }
+        else if (aVal >>= lStringListVal)
+        {
+            aPathVal << lStringListVal;
+        }
     }
 
     return aPathVal;
@@ -302,7 +306,6 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
     {
         css::beans::Property aInfo = xInfo->getAsProperty();
         sal_Bool bFinalized = ((aInfo.Attributes & css::beans::PropertyAttribute::READONLY  ) == css::beans::PropertyAttribute::READONLY  );
-        //sal_Bool bMandatory = ((aInfo.Attributes & css::beans::PropertyAttribute::REMOVEABLE) != css::beans::PropertyAttribute::REMOVEABLE);
 
         // Note: Till we support finalized / mandatory on our API more in detail we handle
         // all states simple as READONLY ! But because all realy needed pathes are "mandatory" by default
@@ -940,17 +943,6 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
 
     // TODO check if path has at least one path value set
     // At least it depends from the feature using this path, if an empty path list is allowed.
-    /*
-    if (impl_isPathEmpty(aChangePath))
-    {
-        ::rtl::OUStringBuffer sMsg(256);
-        sMsg.appendAscii("The path '"    );
-        sMsg.append     (aChangePath.sPathName);
-        sMsg.appendAscii("' is empty now ... Not a real good idea.");
-        throw css::uno::Exception(sMsg.makeStringAndClear(),
-                                  static_cast< ::cppu::OWeakObject* >(this));
-    }
-    */
 
     // first we should try to store the changed (copied!) path ...
     // In case an error occure on saving time an exception is thrown ...
@@ -979,6 +971,13 @@ sal_Bool PathSettings::impl_isValidPath(const OUStringList& lPath) const
 //-----------------------------------------------------------------------------
 sal_Bool PathSettings::impl_isValidPath(const ::rtl::OUString& sPath) const
 {
+    // allow empty path to reset a path.
+// idea by LLA to support empty pathes
+//    if (sPath.getLength() == 0)
+//    {
+//        return sal_True;
+//    }
+
     return (! INetURLObject(sPath).HasError());
 }
 
@@ -1169,10 +1168,11 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
         // SAFE ->
         WriteGuard aWriteLock(m_aLock);
         m_xCfgNew = xCfg;
+        m_xCfgNewListener = new WeakChangesListener(this);
         aWriteLock.unlock();
 
         css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(xCfg, css::uno::UNO_QUERY_THROW);
-        xBroadcaster->addChangesListener(static_cast< css::util::XChangesListener* >(this));
+        xBroadcaster->addChangesListener(m_xCfgNewListener);
     }
 
     return xCfg;

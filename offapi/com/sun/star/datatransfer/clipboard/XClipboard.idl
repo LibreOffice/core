@@ -88,7 +88,7 @@ published interface XClipboard: com::sun::star::uno::XInterface
         @returns
         The name of this clipboard object.
         <p>If the returned string is empty the
-        clipboard instance ist the system clipboard.</p>
+        clipboard instance is the system clipboard.</p>
     */
     string getName();
 };

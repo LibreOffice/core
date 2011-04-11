@@ -40,14 +40,14 @@ class EditWindow
 {
 protected:
     ImpWorkWindow   *pImpWorkWindow;
-    BOOL check();
+    sal_Bool check();
 
     WorkWindow  *pMemParent;
     String      aMemName;
     WinBits     iMemWstyle;
 
     String      aMemPreWinText;
-    BOOL        bShowWin;
+    sal_Bool        bShowWin;
 
     xub_StrLen      nTextLen;   // aus Performanzgründen eigene Länge mitführen
 
@@ -61,9 +61,9 @@ public:
     void AddText( const String &rNew );
     void AddText( const sal_Char* rNew );
 
-    virtual BOOL Close(); // derived
-    BOOL bQuiet;
-    BOOL Check();
+    virtual sal_Bool Close(); // derived
+    sal_Bool bQuiet;
+    sal_Bool Check();
 };
 
 #endif

@@ -48,8 +48,6 @@ public:
 
 private:
 
-    SAL_DLLPRIVATE void implTestJavaException( void* pEnv );
-
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE      JavaChildWindow (const JavaChildWindow &);
     SAL_DLLPRIVATE      JavaChildWindow & operator= (const JavaChildWindow &);

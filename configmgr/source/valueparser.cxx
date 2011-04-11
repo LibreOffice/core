@@ -41,16 +41,17 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "xmlreader/span.hxx"
+#include "xmlreader/xmlreader.hxx"
 
 #include "localizedvaluenode.hxx"
 #include "node.hxx"
 #include "nodemap.hxx"
+#include "parsemanager.hxx"
 #include "propertynode.hxx"
-#include "span.hxx"
 #include "type.hxx"
 #include "valueparser.hxx"
 #include "xmldata.hxx"
-#include "xmlreader.hxx"
 
 namespace configmgr {
 
@@ -75,7 +76,7 @@ bool parseHexDigit(char c, int * value) {
     return false;
 }
 
-bool parseValue(Span const & text, sal_Bool * value) {
+bool parseValue(xmlreader::Span const & text, sal_Bool * value) {
     OSL_ASSERT(text.is() && value != 0);
     if (text.equals(RTL_CONSTASCII_STRINGPARAM("true")) ||
         text.equals(RTL_CONSTASCII_STRINGPARAM("1")))
@@ -92,7 +93,7 @@ bool parseValue(Span const & text, sal_Bool * value) {
     return false;
 }
 
-bool parseValue(Span const & text, sal_Int16 * value) {
+bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
     OSL_ASSERT(text.is() && value != 0);
     // For backwards compatibility, support hexadecimal values:
     sal_Int32 n =
@@ -111,7 +112,7 @@ bool parseValue(Span const & text, sal_Int16 * value) {
     return false;
 }
 
-bool parseValue(Span const & text, sal_Int32 * value) {
+bool parseValue(xmlreader::Span const & text, sal_Int32 * value) {
     OSL_ASSERT(text.is() && value != 0);
     // For backwards compatibility, support hexadecimal values:
     *value =
@@ -126,7 +127,7 @@ bool parseValue(Span const & text, sal_Int32 * value) {
     return true;
 }
 
-bool parseValue(Span const & text, sal_Int64 * value) {
+bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
     OSL_ASSERT(text.is() && value != 0);
     // For backwards compatibility, support hexadecimal values:
     *value =
@@ -141,20 +142,22 @@ bool parseValue(Span const & text, sal_Int64 * value) {
     return true;
 }
 
-bool parseValue(Span const & text, double * value) {
+bool parseValue(xmlreader::Span const & text, double * value) {
     OSL_ASSERT(text.is() && value != 0);
     *value = rtl::OString(text.begin, text.length).toDouble();
         //TODO: check valid lexical representation
     return true;
 }
 
-bool parseValue(Span const & text, rtl::OUString * value) {
+bool parseValue(xmlreader::Span const & text, rtl::OUString * value) {
     OSL_ASSERT(text.is() && value != 0);
-    *value = xmldata::convertFromUtf8(text);
+    *value = text.convertFromUtf8();
     return true;
 }
 
-bool parseValue(Span const & text, css::uno::Sequence< sal_Int8 > * value) {
+bool parseValue(
+    xmlreader::Span const & text, css::uno::Sequence< sal_Int8 > * value)
+{
     OSL_ASSERT(text.is() && value != 0);
     if ((text.length & 1) != 0) {
         return false;
@@ -174,7 +177,9 @@ bool parseValue(Span const & text, css::uno::Sequence< sal_Int8 > * value) {
     return true;
 }
 
-template< typename T > css::uno::Any parseSingleValue(Span const & text) {
+template< typename T > css::uno::Any parseSingleValue(
+    xmlreader::Span const & text)
+{
     T val;
     if (!parseValue(text, &val)) {
         throw css::uno::RuntimeException(
@@ -185,21 +190,23 @@ template< typename T > css::uno::Any parseSingleValue(Span const & text) {
 }
 
 template< typename T > css::uno::Any parseListValue(
-    rtl::OString const & separator, Span const & text)
+    rtl::OString const & separator, xmlreader::Span const & text)
 {
     comphelper::SequenceAsVector< T > seq;
-    Span sep;
+    xmlreader::Span sep;
     if (separator.getLength() == 0) {
-        sep = Span(RTL_CONSTASCII_STRINGPARAM(" "));
+        sep = xmlreader::Span(RTL_CONSTASCII_STRINGPARAM(" "));
     } else {
-        sep = Span(separator.getStr(), separator.getLength());
+        sep = xmlreader::Span(separator.getStr(), separator.getLength());
     }
     if (text.length != 0) {
-        for (Span t(text);;) {
+        for (xmlreader::Span t(text);;) {
             sal_Int32 i = rtl_str_indexOfStr_WithLength(
                 t.begin, t.length, sep.begin, sep.length);
             T val;
-            if (!parseValue(Span(t.begin, i == -1 ? t.length : i), &val)) {
+            if (!parseValue(
+                    xmlreader::Span(t.begin, i == -1 ? t.length : i), &val))
+            {
                 throw css::uno::RuntimeException(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid value")),
                     css::uno::Reference< css::uno::XInterface >());
@@ -216,7 +223,7 @@ template< typename T > css::uno::Any parseListValue(
 }
 
 css::uno::Any parseValue(
-    rtl::OString const & separator, Span const & text, Type type)
+    rtl::OString const & separator, xmlreader::Span const & text, Type type)
 {
     switch (type) {
     case TYPE_ANY:
@@ -267,7 +274,7 @@ ValueParser::ValueParser(int layer): layer_(layer) {}
 
 ValueParser::~ValueParser() {}
 
-XmlReader::Text ValueParser::getTextMode() const {
+xmlreader::XmlReader::Text ValueParser::getTextMode() const {
     if (node_.is()) {
         switch (state_) {
         case STATE_TEXT:
@@ -279,23 +286,24 @@ XmlReader::Text ValueParser::getTextMode() const {
             return
                 (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST ||
                  separator_.getLength() != 0)
-                ? XmlReader::TEXT_RAW : XmlReader::TEXT_NORMALIZED;
+                ? xmlreader::XmlReader::TEXT_RAW
+                : xmlreader::XmlReader::TEXT_NORMALIZED;
         default:
             break;
         }
     }
-    return XmlReader::TEXT_NONE;
+    return xmlreader::XmlReader::TEXT_NONE;
 }
 
 bool ValueParser::startElement(
-    XmlReader & reader, XmlReader::Namespace ns, Span const & name)
+    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name)
 {
     if (!node_.is()) {
         return false;
     }
     switch (state_) {
     case STATE_TEXT:
-        if (ns == XmlReader::NAMESPACE_NONE &&
+        if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("it")) &&
             isListType(type_) && separator_.getLength() == 0)
         {
@@ -307,18 +315,18 @@ bool ValueParser::startElement(
         }
         // fall through
     case STATE_IT:
-        if (ns == XmlReader::NAMESPACE_NONE &&
+        if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("unicode")) &&
             (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST))
         {
             sal_Int32 scalar = -1;
             for (;;) {
-                XmlReader::Namespace attrNs;
-                Span attrLn;
-                if (!reader.nextAttribute(&attrNs, &attrLn)) {
+                int attrNsId;
+                xmlreader::Span attrLn;
+                if (!reader.nextAttribute(&attrNsId, &attrLn)) {
                     break;
                 }
-                if (attrNs == XmlReader::NAMESPACE_OOR &&
+                if (attrNsId == ParseManager::NAMESPACE_OOR &&
                     attrLn.equals(RTL_CONSTASCII_STRINGPARAM("scalar")))
                 {
                     if (!parseValue(reader.getAttributeValue(true), &scalar)) {
@@ -353,7 +361,7 @@ bool ValueParser::startElement(
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
-         xmldata::convertFromUtf8(name) +
+         name.convertFromUtf8() +
          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) + reader.getUrl()),
         css::uno::Reference< css::uno::XInterface >());
 }
@@ -440,7 +448,7 @@ bool ValueParser::endElement() {
     return true;
 }
 
-void ValueParser::characters(Span const & text) {
+void ValueParser::characters(xmlreader::Span const & text) {
     if (node_.is()) {
         OSL_ASSERT(state_ == STATE_TEXT || state_ == STATE_IT);
         pad_.add(text.begin, text.length);

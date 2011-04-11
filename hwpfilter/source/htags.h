@@ -26,15 +26,6 @@
  *
  ************************************************************************/
 
-/* NAME $Id: htags.h,v 1.3 2008-04-10 12:08:00 rt Exp $
- * PURPOSE
- *
- * NOTES
- *
- * HISTORY
- *        frog - Aug 6, 1998: Created.
- */
-
 #ifndef _HTAGS_H_
 #define _HTAGS_H_
 

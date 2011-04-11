@@ -45,18 +45,14 @@
 /****************** C o d e **********************************************/
 /****************** keyword sort function ********************************/
 extern "C" {
-#if defined( ZTC ) && defined( PM2 )
-    int __CLIB KeyCompare( const void * pFirst, const void * pSecond );
-#else
-#if defined( WNT ) && !defined( WTC ) && !defined (ICC)
+#if defined( WNT ) && !defined (ICC)
     int _cdecl KeyCompare( const void * pFirst, const void * pSecond );
 #else
     int KeyCompare( const void * pFirst, const void * pSecond );
 #endif
-#endif
 }
 
-#if defined( WNT ) && !defined( WTC ) && !defined(ICC)
+#if defined( WNT ) && !defined(ICC)
 int _cdecl KeyCompare( const void * pFirst, const void * pSecond ){
 #else
 int KeyCompare( const void * pFirst, const void * pSecond ){
@@ -73,13 +69,9 @@ int KeyCompare( const void * pFirst, const void * pSecond ){
 |*
 |*    RscNameTable::RscNameTable()
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 28.02.91
-|*    Letzte Aenderung  MM 28.02.91
-|*
 *************************************************************************/
 RscNameTable::RscNameTable() {
-    bSort    = TRUE;
+    bSort    = sal_True;
     nEntries = 0;
     pTable   = NULL;
 };
@@ -87,10 +79,6 @@ RscNameTable::RscNameTable() {
 /*************************************************************************
 |*
 |*    RscNameTable::~RscNameTable()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.05.91
-|*    Letzte Aenderung  MM 15.05.91
 |*
 *************************************************************************/
 RscNameTable::~RscNameTable() {
@@ -103,12 +91,8 @@ RscNameTable::~RscNameTable() {
 |*
 |*    RscNameTable::SetSort()
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 28.02.91
-|*    Letzte Aenderung  MM 28.02.91
-|*
 *************************************************************************/
-void RscNameTable::SetSort( BOOL bSorted ){
+void RscNameTable::SetSort( sal_Bool bSorted ){
     bSort = bSorted;
     if( bSort && pTable){
         // Schluesselwort Feld sortieren
@@ -120,10 +104,6 @@ void RscNameTable::SetSort( BOOL bSorted ){
 /*************************************************************************
 |*
 |*    RscNameTable::Put()
-|*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 28.02.91
-|*    Letzte Aenderung  MM 28.02.91
 |*
 *************************************************************************/
 Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, long nValue ){
@@ -176,12 +156,8 @@ Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp, RscTop * pClass )
 |*
 |*    RscNameTable::Get()
 |*
-|*    Beschreibung      RES.DOC
-|*    Ersterstellung    MM 28.02.91
-|*    Letzte Aenderung  MM 28.02.91
-|*
 *************************************************************************/
-BOOL RscNameTable::Get( Atom nName, KEY_STRUCT * pEle ){
+sal_Bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle ){
     KEY_STRUCT * pKey = NULL;
     KEY_STRUCT  aSearchName;
     sal_uInt32  i;
@@ -208,9 +184,9 @@ BOOL RscNameTable::Get( Atom nName, KEY_STRUCT * pEle ){
 
     if( pKey ){ // Schluesselwort gefunden
         *pEle = *pKey;
-        return( TRUE );
+        return( sal_True );
     };
-    return( FALSE );
+    return( sal_False );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

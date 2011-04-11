@@ -41,12 +41,13 @@
 #include <IMark.hxx>
 #include <crossrefbookmark.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <comcore.hrc>
-#include <undobj.hxx>
+#include <SwRewriter.hxx>
 #include <docsh.hxx>
-
+#include <xmloff/odffields.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -90,13 +91,13 @@ public:
     }
 
     void registerInMark(SwXBookmark & rThis, ::sw::mark::IMark *const pBkmk);
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXBookmark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXBookmark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if (!GetRegisteredIn())
@@ -263,8 +264,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     // if the PaM isn't a valid one for cross-reference bookmarks.
     if (!m_pImpl->m_pRegisteredBookmark)
     {
-        OSL_ENSURE(false,
-            "<SwXBookmark::attachToRange(..)>"
+        OSL_FAIL("<SwXBookmark::attachToRange(..)>"
             " - could not create Mark.");
         throw lang::IllegalArgumentException();
     }
@@ -380,9 +380,11 @@ throw (uno::RuntimeException)
     aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
     aRewriter.AddRule(UNDO_ARG3, lcl_QuoteName(rName));
 
-    m_pImpl->m_pDoc->StartUndo(UNDO_BOOKMARK_RENAME, &aRewriter);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(
+            UNDO_BOOKMARK_RENAME, &aRewriter);
     pMarkAccess->renameMark(m_pImpl->m_pRegisteredBookmark, rName);
-    m_pImpl->m_pDoc->EndUndo(UNDO_BOOKMARK_RENAME, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(
+            UNDO_BOOKMARK_RENAME, &aRewriter);
 }
 
 OUString SAL_CALL
@@ -479,8 +481,7 @@ SwXBookmark::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXBookmark::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXBookmark::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -490,8 +491,7 @@ SwXBookmark::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXBookmark::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXBookmark::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -501,8 +501,7 @@ SwXBookmark::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXBookmark::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXBookmark::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -512,8 +511,7 @@ SwXBookmark::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXBookmark::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXBookmark::removeVetoableChangeListener(): not implemented");
 }
 
 /******************************************************************
@@ -598,7 +596,7 @@ uno::Type SwXFieldmarkParameters::getElementType()
     return !getCoreParameters()->empty();
 }
 
-void SwXFieldmarkParameters::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXFieldmarkParameters::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -617,6 +615,7 @@ IFieldmark::parameter_map_t* SwXFieldmarkParameters::getCoreParameters()
 void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTextRange )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
+
     attachToRangeEx( xTextRange,
                      ( isReplacementObject ? IDocumentMarkAccess::CHECKBOX_FIELDMARK : IDocumentMarkAccess::TEXT_FIELDMARK ) );
 }
@@ -675,6 +674,61 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark & rMark)
         pXBkmk->registerInMark(*pXBkmk, pMarkBase);
     }
     return xMark;
+}
+
+::sw::mark::ICheckboxFieldmark*
+SwXFieldmark::getCheckboxFieldmark()
+{
+    ::sw::mark::ICheckboxFieldmark* pCheckboxFm = NULL;
+    if ( getFieldType() == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX) ) )
+        // evil #TODO #FIXME casting away the const-ness
+        pCheckboxFm = const_cast<sw::mark::ICheckboxFieldmark*>(reinterpret_cast< const ::sw::mark::ICheckboxFieldmark* >( GetBookmark()));
+    return  pCheckboxFm;
+
+}
+
+// support 'hidden' "Checked" property ( note: this property is just for convenience to support
+// docx import filter thus not published via PropertySet info )
+
+void SAL_CALL
+SwXFieldmark::setPropertyValue(const OUString& PropertyName,
+        const uno::Any& rValue)
+throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+    lang::IllegalArgumentException, lang::WrappedTargetException,
+    uno::RuntimeException)
+{
+    SolarMutexGuard g;
+    if ( PropertyName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Checked") ) ) )
+    {
+        ::sw::mark::ICheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
+        sal_Bool bChecked( sal_False );
+        if ( pCheckboxFm && ( rValue >>= bChecked ) )
+            pCheckboxFm->SetChecked( bChecked );
+        else
+            throw uno::RuntimeException();
+
+    }
+    else
+        SwXFieldmark_Base::setPropertyValue( PropertyName, rValue );
+}
+
+// support 'hidden' "Checked" property ( note: this property is just for convenience to support
+// docx import filter thus not published via PropertySet info )
+
+uno::Any SAL_CALL SwXFieldmark::getPropertyValue(const OUString& rPropertyName)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+        uno::RuntimeException)
+{
+    SolarMutexGuard g;
+    if ( rPropertyName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Checked") ) ) )
+    {
+        ::sw::mark::ICheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
+        if ( pCheckboxFm )
+            return uno::makeAny( pCheckboxFm->IsChecked() );
+        else
+            throw uno::RuntimeException();
+    }
+    return SwXFieldmark_Base::getPropertyValue( rPropertyName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

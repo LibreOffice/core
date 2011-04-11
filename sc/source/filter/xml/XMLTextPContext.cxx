@@ -49,7 +49,7 @@ class ScXMLTextTContext : public SvXMLImportContext
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
-    ScXMLTextTContext( ScXMLImport& rImport, USHORT nPrfx,
+    ScXMLTextTContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -60,7 +60,7 @@ public:
 
 
 ScXMLTextTContext::ScXMLTextTContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -92,7 +92,7 @@ ScXMLTextTContext::~ScXMLTextTContext()
 //------------------------------------------------------------------
 
 ScXMLTextPContext::ScXMLTextPContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xTempAttrList,
@@ -129,7 +129,7 @@ void ScXMLTextPContext::AddSpaces(sal_Int32 nSpaceCount)
     pContentBuffer->appendAscii(pChars, nSpaceCount);
 }
 
-SvXMLImportContext *ScXMLTextPContext::CreateChildContext( USHORT nTempPrefix,
+SvXMLImportContext *ScXMLTextPContext::CreateChildContext( sal_uInt16 nTempPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xTempAttrList )

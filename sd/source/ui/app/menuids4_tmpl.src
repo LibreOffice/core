@@ -36,7 +36,7 @@
     MenuItem\
     {\
         Identifier = MN_SUB_GRAPHIC ; \
-        HelpID = MN_SUB_GRAPHIC ; \
+        HelpID = HID_MN_SUB_GRAPHIC ; \
         Text [ en-US ] = "~Graphics" ; \
         SubMenu = Menu\
         {\

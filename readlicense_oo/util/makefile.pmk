@@ -30,10 +30,8 @@
 .IF "$(GUI)"=="UNX"
 # uppercase and no filename extension for txt
 SYSTEXTDOCS=$(foreach,i,$(alllangiso) $(MISC)$/$(GUI)$/README_$i)
-SYSHTMLDOCS=$(SYSTEXTDOCS:+".html")
 .ELSE		# "$(GUI)"=="UNX"
 SYSTEXTDOCS=$(foreach,i,$(alllangiso) $(MISC)$/$(GUI)$/readme_$i.txt)
-SYSHTMLDOCS=$(SYSTEXTDOCS:s/.txt/.html/)
 .ENDIF		# "$(GUI)"=="UNX"
 
 .IF "$(WITH_LANG)"!=""
@@ -44,7 +42,7 @@ MERGEDXRM=.$/readme.xrm
 
 .INCLUDE : target.mk
 
-ALLTAR : $(SYSTEXTDOCS) $(SYSHTMLDOCS)
+ALLTAR : $(SYSTEXTDOCS)
 
 $(COMMONMISC)$/readme.dtd : ..$/readme.dtd  
     $(MKDIRHIER) $(MISC)$/$(GUI)
@@ -55,24 +53,6 @@ virtual : $(MERGEDXRM) $(COMMONMISC)$/readme.dtd $(PRJ)$/docs/readme.xsl
 $(MISC)$/readme_text.xsl : virtual
      $(SED) '' < ..$/readme.xsl > $@
 
-$(MISC)$/$(GUI)$/$(eq,$(GUI),WNT readme README)_%.html : 'virtual'
-    @@-$(MKDIRHIER) $(@:d)
-    $(XSLTPROC) --nonet --novalid -o $@ \
-    --stringparam os1 $(OS)	--stringparam gui1 $(GUI)	--stringparam com1  $(COM) \
-    --stringparam cp1 $(CPUNAME)	--stringparam type html	--stringparam lang1 $* \
-    ..$/readme.xsl	$(MERGEDXRM)
-.IF "$(GUI)"=="UNX"
-    chmod g+w $(MISC)$/$(GUI)
-.ENDIF			# "$(GUI)"=="UNX"
-
-$(MISC)$/$(GUI)$/$(eq,$(GUI),OS2 readme README)_%.html : 'virtual'
-    @@-$(MKDIRHIER) $(@:d)
-    $(XSLTPROC) --nonet --novalid -o $@ \
-    --stringparam os1 $(OS)	--stringparam gui1 $(GUI)	--stringparam com1  $(COM) \
-    --stringparam cp1 $(CPUNAME)	--stringparam type html	--stringparam lang1 $* \
-    ..$/readme.xsl	$(MERGEDXRM)
-
-# no percent-rule to avoid ambiguous inference chains for README_<lang>.html 
 $(SYSTEXTDOCS) : $(MISC)$/readme_text.xsl
     @@-$(MKDIRHIER) $(@:d)
     $(XSLTPROC) --nonet --novalid -o $@ \

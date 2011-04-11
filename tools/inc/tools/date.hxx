@@ -55,7 +55,7 @@ public:
                     Date( sal_uInt32 _nDate ) { Date::nDate = _nDate; }
                     Date( const Date& rDate )
                         { nDate = rDate.nDate; }
-                    Date( USHORT nDay, USHORT nMonth, USHORT nYear )
+                    Date( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
                         { nDate = (   sal_uInt32( nDay   % 100 ) ) +
                                   ( ( sal_uInt32( nMonth % 100 ) ) * 100 ) +
                                   ( ( sal_uInt32( nYear  % 10000 ) ) * 10000); }
@@ -63,40 +63,40 @@ public:
     void            SetDate( sal_uInt32 nNewDate ) { nDate = nNewDate; }
     sal_uInt32      GetDate() const { return nDate; }
 
-    void            SetDay( USHORT nNewDay );
-    void            SetMonth( USHORT nNewMonth );
-    void            SetYear( USHORT nNewYear );
-    USHORT          GetDay() const { return (USHORT)(nDate % 100); }
-    USHORT          GetMonth() const { return (USHORT)((nDate / 100) % 100); }
-    USHORT          GetYear() const { return (USHORT)(nDate / 10000); }
+    void            SetDay( sal_uInt16 nNewDay );
+    void            SetMonth( sal_uInt16 nNewMonth );
+    void            SetYear( sal_uInt16 nNewYear );
+    sal_uInt16          GetDay() const { return (sal_uInt16)(nDate % 100); }
+    sal_uInt16          GetMonth() const { return (sal_uInt16)((nDate / 100) % 100); }
+    sal_uInt16          GetYear() const { return (sal_uInt16)(nDate / 10000); }
 
     DayOfWeek       GetDayOfWeek() const;
-    USHORT          GetDayOfYear() const;
+    sal_uInt16          GetDayOfYear() const;
     /** nMinimumNumberOfDaysInWeek: how many days of a week must reside in the
         first week of a year. */
-    USHORT          GetWeekOfYear( DayOfWeek eStartDay = MONDAY,
+    sal_uInt16          GetWeekOfYear( DayOfWeek eStartDay = MONDAY,
                                    sal_Int16 nMinimumNumberOfDaysInWeek = 4 ) const;
 
-    USHORT          GetDaysInMonth() const;
-    USHORT          GetDaysInYear() const { return (IsLeapYear()) ? 366 : 365; }
-    BOOL            IsLeapYear() const;
-    BOOL            IsValid() const;
+    sal_uInt16          GetDaysInMonth() const;
+    sal_uInt16          GetDaysInYear() const { return (IsLeapYear()) ? 366 : 365; }
+    sal_Bool            IsLeapYear() const;
+    sal_Bool            IsValid() const;
 
-    BOOL            IsBetween( const Date& rFrom, const Date& rTo ) const
+    sal_Bool            IsBetween( const Date& rFrom, const Date& rTo ) const
                         { return ((nDate >= rFrom.nDate) &&
                                  (nDate <= rTo.nDate)); }
 
-    BOOL            operator ==( const Date& rDate ) const
+    sal_Bool            operator ==( const Date& rDate ) const
                         { return (nDate == rDate.nDate); }
-    BOOL            operator !=( const Date& rDate ) const
+    sal_Bool            operator !=( const Date& rDate ) const
                         { return (nDate != rDate.nDate); }
-    BOOL            operator  >( const Date& rDate ) const
+    sal_Bool            operator  >( const Date& rDate ) const
                         { return (nDate > rDate.nDate); }
-    BOOL            operator  <( const Date& rDate ) const
+    sal_Bool            operator  <( const Date& rDate ) const
                         { return (nDate < rDate.nDate); }
-    BOOL            operator >=( const Date& rDate ) const
+    sal_Bool            operator >=( const Date& rDate ) const
                         { return (nDate >= rDate.nDate); }
-    BOOL            operator <=( const Date& rDate ) const
+    sal_Bool            operator <=( const Date& rDate ) const
                         { return (nDate <= rDate.nDate); }
 
     Date&           operator =( const Date& rDate )
@@ -114,7 +114,7 @@ public:
     TOOLS_DLLPUBLIC friend Date     operator -( const Date& rDate, long nDays );
     TOOLS_DLLPUBLIC friend long     operator -( const Date& rDate1, const Date& rDate2 );
 
-    static long DateToDays( USHORT nDay, USHORT nMonth, USHORT nYear );
+    static long DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
 
 };
 

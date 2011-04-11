@@ -37,7 +37,8 @@
 |*
 \************************************************************************/
 
-#define COL_DEFAULT_SHAPE_FILLING   RGB_COLORDATA( 153, 204, 255 )  // blue 8
+#define COL_DEFAULT_SHAPE_FILLING   RGB_COLORDATA( 0xCF, 0xE7, 0xE5 )
+#define COL_DEFAULT_SHAPE_STROKE    RGB_COLORDATA( 128, 128, 128 )
 
 #define XATTR_START             1000
 

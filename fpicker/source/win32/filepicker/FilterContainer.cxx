@@ -145,7 +145,7 @@ sal_Bool SAL_CALL CFilterContainer::getFilter( const OUString& aName, OUString& 
     }
     catch( std::out_of_range& )
     {
-        OSL_ENSURE( sal_False, "Filter not in filter container" );
+        OSL_FAIL( "Filter not in filter container" );
         pos = -1;
     }
 
@@ -166,7 +166,7 @@ sal_Bool SAL_CALL CFilterContainer::getFilter( sal_Int32 aIndex, OUString& theFi
     }
     catch( std::out_of_range& )
     {
-        OSL_ENSURE( sal_False, "Filter index out of range" );
+        OSL_FAIL( "Filter index out of range" );
         bRet = sal_False;
     }
 

@@ -61,7 +61,7 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/basicmanagerrepository.hxx>
-#include "modsizeexceeded.hxx"
+#include "basic/modsizeexceeded.hxx"
 #include <xmlscript/xmlmod_imexp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/util/VetoException.hpp>
@@ -80,10 +80,11 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 
-using com::sun::star::uno::Reference;
+using ::rtl::OUString;
+
+using ::rtl::OUString;
 
 //============================================================================
 // Implementation class SfxScriptLibraryContainer
@@ -197,7 +198,7 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
     if( !xHandler.is() )
     {
-        OSL_ENSURE( 0, "### couln't create sax-writer component\n" );
+        OSL_FAIL( "### couln't create sax-writer component\n" );
         return;
     }
 
@@ -254,7 +255,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
     if( !xParser.is() )
     {
-        OSL_ENSURE( 0, "### couln't create sax parser component\n" );
+        OSL_FAIL( "### couln't create sax parser component\n" );
         return aRetAny;
     }
 
@@ -299,7 +300,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     catch( Exception& )
     {
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFile );
-        ULONG nErrorCode = ERRCODE_IO_GENERAL;
+        sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
     }
 
@@ -310,24 +311,21 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     // aMod.aName ignored
     if( aMod.aModuleType.getLength() > 0 )
     {
-        if( !getVBACompatibilityMode() )
+        /*  If in VBA compatibility mode, force creation of the VBA Globals
+            object. Each application will create an instance of its own
+            implementation and store it in its Basic manager. Implementations
+            will do all necessary additional initialization, such as
+            registering the global "This***Doc" UNO constant, starting the
+            document events processor etc.
+         */
+        if( getVBACompatibilityMode() ) try
         {
-            setVBACompatibilityMode( sal_True );
-
-            Any aGlobs;
-            Sequence< Any > aArgs(1);
-            Reference<frame::XModel > xModel( mxOwnerDocument );
-            aArgs[ 0 ] <<= xModel;
-
-            BasicManager* pBasicMgr = getBasicManager();
-            if( pBasicMgr )
-            {
-                aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
-                pBasicMgr->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-            }
-            pBasicMgr = BasicManagerRepository::getApplicationBasicManager( sal_False );
-            if( pBasicMgr )
-                pBasicMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[0] );
+            Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
+            Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
+            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+        }
+        catch( Exception& )
+        {
         }
 
         script::ModuleInfo aModInfo;
@@ -352,25 +350,21 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
                     RTL_CONSTASCII_STRINGPARAM("document") ))
         {
             aModInfo.ModuleType = ModuleType::DOCUMENT;
-            Reference<frame::XModel > xModel( mxOwnerDocument );
-            Reference< XMultiServiceFactory> xSF( xModel, UNO_QUERY);
-            Reference< container::XNameAccess > xVBACodeNameAccess;
-            if( xSF.is() )
+
+            // #163691# use the same codename access instance for all document modules
+            if( !mxCodeNameAccess.is() ) try
             {
-                try
-                {
-                    xVBACodeNameAccess.set( xSF->createInstance(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "ooo.vba.VBAObjectModuleObjectProvider"))),
-                        UNO_QUERY );
-                }
-                catch(uno::Exception&) {}
+                Reference<frame::XModel > xModel( mxOwnerDocument );
+                Reference< XMultiServiceFactory> xSF( xModel, UNO_QUERY_THROW );
+                mxCodeNameAccess.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider" ) ) ), UNO_QUERY );
             }
-            if( xVBACodeNameAccess.is() )
+            catch( Exception& ) {}
+
+            if( mxCodeNameAccess.is() )
             {
                 try
                 {
-                    aModInfo.ModuleObject.set( xVBACodeNameAccess->getByName( aElementName), uno::UNO_QUERY );
+                    aModInfo.ModuleObject.set( mxCodeNameAccess->getByName( aElementName), uno::UNO_QUERY );
                 }
                 catch(uno::Exception&)
                 {
@@ -402,8 +396,6 @@ void SAL_CALL SfxScriptLibraryContainer::importFromOldStorage( const ::rtl::OUSt
     SotStorageRef xStorage = new SotStorage( sal_False, aFile );
     if( xStorage.Is() && xStorage->GetError() == ERRCODE_NONE )
     {
-        // We need a BasicManager to avoid problems
-        // StarBASIC* pBas = new StarBASIC();
         BasicManager* pBasicManager = new BasicManager( *(SotStorage*)xStorage, aFile );
 
         // Set info
@@ -647,7 +639,6 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
             SbModule* pMod = pBasicLib->FindModule( aElementName );
             if( pMod )
             {
-                //OUString aCodeStreamName( RTL_CONSTASCII_USTRINGPARAM("code.bin") );
                 OUString aCodeStreamName = aElementName;
                 aCodeStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".bin") );
 
@@ -660,7 +651,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                         throw uno::RuntimeException();
 
                     SvMemoryStream aMemStream;
-                    /*BOOL bStore = */pMod->StoreBinaryData( aMemStream );
+                    /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
 
                     sal_Int32 nSize = (sal_Int32)aMemStream.Tell();
                     Sequence< sal_Int8 > aBinSeq( nSize );
@@ -682,7 +673,6 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
 
             if( pLib->mbPasswordVerified || pLib->mbDoc50Password )
             {
-                /*Any aElement = pLib->getByName( aElementName );*/
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
                 #if OSL_DEBUG_LEVEL > 0
@@ -690,7 +680,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     aMessage.append( "invalid library element '" );
                     aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
                     aMessage.append( "'." );
-                    OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                    OSL_FAIL( aMessage.makeStringAndClear().getStr() );
                 #endif
                     continue;
                 }
@@ -716,12 +706,10 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     Reference< XOutputStream > xOutput = xSourceStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );
                     writeLibraryElement( xLib, aElementName, xOutput );
-                    // writeLibraryElement should have the stream already closed
-                    // xOutput->closeOutput();
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_ENSURE( sal_False, "Problem on storing of password library!\n" );
+                    OSL_FAIL( "Problem on storing of password library!\n" );
                     // TODO: error handling
                 }
             }
@@ -768,7 +756,6 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 aElementInetObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM("pba") ) );
                 String aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
-                /*Any aElement = pLib->getByName( aElementName );*/
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
                 #if OSL_DEBUG_LEVEL > 0
@@ -776,7 +763,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     aMessage.append( "invalid library element '" );
                     aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
                     aMessage.append( "'." );
-                    OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+                    OSL_FAIL( aMessage.makeStringAndClear().getStr() );
                 #endif
                     continue;
                 }
@@ -801,7 +788,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                                             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
                         SvMemoryStream aMemStream;
-                        /*BOOL bStore = */pMod->StoreBinaryData( aMemStream );
+                        /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
 
                         sal_Int32 nSize = (sal_Int32)aMemStream.Tell();
                         Sequence< sal_Int8 > aBinSeq( nSize );
@@ -867,13 +854,10 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     // TODO: handle error
                 }
 
-                // Storage Dtor commits too, that makes problems
-                // xElementRootStorage->Commit();
             }
         }
         catch( Exception& )
         {
-            //throw e;
         }
     }
     return sal_True;
@@ -942,7 +926,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             }
             catch( uno::Exception& )
             {
-                OSL_ENSURE( 0, "### couln't open sub storage for library\n" );
+                OSL_FAIL( "### couln't open sub storage for library\n" );
                 return sal_False;
             }
         }
@@ -958,10 +942,9 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 if( !pMod )
                 {
                     pMod = pBasicLib->MakeModule( aElementName, String() );
-                    pBasicLib->SetModified( FALSE );
+                    pBasicLib->SetModified( sal_False );
                 }
 
-                //OUString aCodeStreamName( RTL_CONSTASCII_USTRINGPARAM("code.bin") );
                 OUString aCodeStreamName= aElementName;
                 aCodeStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".bin") );
 
@@ -980,7 +963,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nError );
                     }
 
-                    /*BOOL bRet = */pMod->LoadBinaryData( *pStream );
+                    /*sal_Bool bRet = */pMod->LoadBinaryData( *pStream );
                     // TODO: Check return value
 
                     delete pStream;
@@ -1070,7 +1053,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         if( !pMod )
                         {
                             pMod = pBasicLib->MakeModule( aElementName, String() );
-                            pBasicLib->SetModified( FALSE );
+                            pBasicLib->SetModified( sal_False );
                         }
 
                         try {
@@ -1089,7 +1072,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                                                     nError );
                             }
 
-                            /*BOOL bRet = */pMod->LoadBinaryData( *pStream );
+                            /*sal_Bool bRet = */pMod->LoadBinaryData( *pStream );
                             // TODO: Check return value
 
                             delete pStream;
@@ -1151,11 +1134,6 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
         }
     }
 
-//REMOVE        // If the password is verified the library must remain modified, because
-//REMOVE        // otherwise for saving the storage would be copied and that doesn't work
-//REMOVE        // with mtg's storages when the password is verified
-//REMOVE        if( !pLib->mbPasswordVerified )
-//REMOVE            pLib->mbModified = sal_False;
     return bRet;
 }
 
@@ -1195,9 +1173,9 @@ Sequence< ::rtl::OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServ
 Sequence< OUString > SfxScriptLibraryContainer::getSupportedServiceNames_static()
 {
     Sequence< OUString > aServiceNames( 2 );
-    aServiceNames[0] = OUString::createFromAscii( "com.sun.star.script.DocumentScriptLibraryContainer" );
+    aServiceNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DocumentScriptLibraryContainer" ));
     // plus, for compatibility:
-    aServiceNames[1] = OUString::createFromAscii( "com.sun.star.script.ScriptLibraryContainer" );
+    aServiceNames[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.ScriptLibraryContainer" ));
     return aServiceNames;
 }
 
@@ -1209,7 +1187,7 @@ OUString SfxScriptLibraryContainer::getImplementationName_static()
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     if( bNeedsInit )
     {
-        aImplName = OUString::createFromAscii( "com.sun.star.comp.sfx2.ScriptLibraryContainer" );
+        aImplName = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.sfx2.ScriptLibraryContainer" ));
         bNeedsInit = sal_False;
     }
     return aImplName;

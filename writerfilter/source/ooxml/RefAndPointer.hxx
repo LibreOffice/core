@@ -48,10 +48,6 @@ public:
     RefAndPointer()
     : mpHandler(NULL)
     {
-#ifdef DEBUG_MEMORY
-        clog << "MEMORY:" << mpHandler->getInstanceNumber() << ":RefAndPointer"
-             << endl;
-#endif
     }
 
     RefAndPointer(ChildClass * pHandler)
@@ -66,17 +62,12 @@ public:
     RefAndPointer(uno::Reference<Interface> xRef)
     : mRef(xRef)
     {
-#if 0
-        uno::Reference<lang::XUnoTunnel> xTunnel( xRef, uno::UNO_QUERY);
-
-        if (xTunnel.is())
-            mpHandler = reinterpret_cast<ChildClass *>(xTunnel->getSomething(ChildClass::getUnoTunnelId()));
-#else
         mpHandler = dynamic_cast<ChildClass *>(xRef.get());
-#endif
+#ifdef DEBUG_MEMORY
         if (mpHandler != NULL)
             clog << "MEMORY:" << mpHandler->getInstanceNumber()
                  << ":RefAndPointer" << endl;
+#endif
     }
 
     virtual ~RefAndPointer()

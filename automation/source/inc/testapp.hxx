@@ -31,7 +31,6 @@
 
 #include <basic/sbmod.hxx>
 #include <basic/testtool.hxx>
-#include <vcl/smartid.hxx>
 
 class CommunicationLink;
 class CommunicationManagerClientViaSocketTT;
@@ -56,10 +55,10 @@ class MyBasic;
 class ErrorEntry
 {
 public:
-    ErrorEntry(ULONG nNr, String aStr = String()) : nError(nNr),aText(aStr),nLine(0),nCol1(0),nCol2(0) {}
-    ErrorEntry(ULONG nNr, String aStr, xub_StrLen l, xub_StrLen c1, xub_StrLen c2 )
+    ErrorEntry(sal_uLong nNr, String aStr = String()) : nError(nNr),aText(aStr),nLine(0),nCol1(0),nCol2(0) {}
+    ErrorEntry(sal_uLong nNr, String aStr, xub_StrLen l, xub_StrLen c1, xub_StrLen c2 )
         : nError(nNr),aText(aStr),nLine(l),nCol1(c1),nCol2(c2) {}
-    ULONG nError;
+    sal_uLong nError;
     String aText;
     xub_StrLen nLine;
     xub_StrLen nCol1;
@@ -70,7 +69,7 @@ SV_DECL_PTRARR_DEL(CErrors, ErrorEntry*, 1, 1)
 
 struct ControlDefLoad {
     const char* Kurzname;
-    ULONG nUId;
+    sal_uLong nUId;
 };
 
 class TestToolObj: public SbxObject
@@ -82,24 +81,24 @@ public:
     TestToolObj( String aName, MyBasic* pBas ); // Pfade aus INI, IPC benutzen
     ~TestToolObj();
     void LoadIniFile();             // Laden der IniEinstellungen, die durch den ConfigDialog geändert werden können
-    void DebugFindNoErrors( BOOL bDebugFindNoErrors );
+    void DebugFindNoErrors( sal_Bool bDebugFindNoErrors );
 
 private:
-    BOOL bWasPrecompilerError;  // True wenn beim letzten Precompile ein Fehler auftrat
-    BOOL CError( ULONG, const String&, xub_StrLen, xub_StrLen, xub_StrLen );
+    sal_Bool bWasPrecompilerError;  // True wenn beim letzten Precompile ein Fehler auftrat
+    sal_Bool CError( sal_uLong, const String&, xub_StrLen, xub_StrLen, xub_StrLen );
     void CalcPosition( String const &aSource, xub_StrLen nPos, xub_StrLen &l, xub_StrLen &c );
     xub_StrLen ImplSearch( const String &aSource, const xub_StrLen nStart, const xub_StrLen nEnd, const String &aSearch, const xub_StrLen nSearchStart = 0 );
-    xub_StrLen PreCompilePart( String &aSource, xub_StrLen nStart, xub_StrLen nEnd, String aFinalErrorLabel, USHORT &nLabelCount );
+    xub_StrLen PreCompilePart( String &aSource, xub_StrLen nStart, xub_StrLen nEnd, String aFinalErrorLabel, sal_uInt16 &nLabelCount );
     void PreCompileDispatchParts( String &aSource, String aStart, String aEnd, String aFinalLable );
 public:
     String GetRevision(String const &aSourceIn);    // find Revision in the sourcecode
     String PreCompile(String const &aSourceIn); // try catch; testcase endcase ..
-    BOOL WasPrecompilerError(); // True wenn beim letzten Precompile ein Fehler auftrat
+    sal_Bool WasPrecompilerError(); // True wenn beim letzten Precompile ein Fehler auftrat
     void            SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
     virtual SbxVariable* Find( const String&, SbxClassType );
 //  String aKeyPlusClasses;     // Pfad für keycodes & classes & res_type (Aus Configdatei)
     DECL_LINK( ReturnResultsLink, CommunicationLink* );
-    BOOL            ReturnResults( SvStream *pIn ); // Rücklieferung des Antwortstreams über IPC oder TCP/IP oder direkt
+    sal_Bool            ReturnResults( SvStream *pIn ); // Rücklieferung des Antwortstreams über IPC oder TCP/IP oder direkt
 
     void            SetLogHdl( const Link& rLink ) { aLogHdl = rLink; }
     const Link&     GetLogHdl() const { return aLogHdl; }
@@ -121,25 +120,25 @@ public:
 private:
     ImplTestToolObj *pImpl;     // Alles was von der Implementation abhängt
     static const CErrors* GetFehlerListe() { return pFehlerListe; }
-    BOOL bUseIPC;
+    sal_Bool bUseIPC;
     Link aLogHdl;               // Zum Logen der Fehlermeldungen im Testtool
     Link aWinInfoHdl;           // Anzeigen der Windows/Controls der zu testenden App
     Link aModuleWinExistsHdl;   // Prüft ob das Modul schon im Editor geladen ist
     Link aCErrorHdl;            // Melden von Compilererror
     Link aWriteStringHdl;       // Schreiben von text (e.g. MakroRecorder)
-    BOOL bReturnOK;             // Bricht WaitForAnswer ab
+    sal_Bool bReturnOK;             // Bricht WaitForAnswer ab
     CRevNames *pShortNames;     // Aktuell verwendete Controls, zur gewinnung des Namens aus Fehlermeldung
-    ULONG nSequence;            // Sequence um Antwort und Anfrage zu syncronisieren
-    SmartId aNextReturnId;  // Id des Returnwertes i.e. UId
+    sal_uLong nSequence;            // Sequence um Antwort und Anfrage zu syncronisieren
+    rtl::OString aNextReturnId; // Id des Returnwertes i.e. UId
     void ReplaceNumbers(String &aText); // Zahlen im String mit speziellem Format in Namen umwandeln
 
     String aLastRecordedKontext;//  Keeps the last kontext recorded by the Macro Recorder
 
-#define FLAT TRUE
+#define FLAT sal_True
     String ProgPath;            // Dateiname der zu Testenden APP; Gesetzt über Start
     String aLogFileName;        // Momentaner Logfilename (Wie Programmdatei aber mit .res)
-    BOOL IsBlock;               // Innerhalb Begin/EndBlock
-    BOOL SingleCommandBlock;    // Implizit um jedes kommando ein Begin/EndBlock
+    sal_Bool IsBlock;               // Innerhalb Begin/EndBlock
+    sal_Bool SingleCommandBlock;    // Implizit um jedes kommando ein Begin/EndBlock
     CmdStream *In;
 
     void AddName(String &aBisher, String &aNeu );   // Name eventuell mit / anhängen
@@ -153,31 +152,31 @@ private:
     CNames *m_pReverseUIds;     // Langnamen nach Nummer
 
 
-    USHORT nMyVar;              // Wievielte Var aus Pool ist dran
+    sal_uInt16 nMyVar;              // Wievielte Var aus Pool ist dran
 
     void InitTestToolObj();
     CommunicationManagerClientViaSocketTT *pCommunicationManager;
     void SendViaSocket();
 
-    BOOL Load( String aFileName, SbModule *pMod );
+    sal_Bool Load( String aFileName, SbModule *pMod );
 
-    void ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, BOOL bIsFlat = FALSE );
-    void ReadFlat( String Filename, CNames *&pNames, BOOL bSortByName );
-    BOOL ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pControls );
-    BOOL WriteNamesBin( String Filename, CNames *pSIds, CNames *pControls );
+    void ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, sal_Bool bIsFlat = sal_False );
+    void ReadFlat( String Filename, CNames *&pNames, sal_Bool bSortByName );
+    sal_Bool ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pControls );
+    sal_Bool WriteNamesBin( String Filename, CNames *pSIds, CNames *pControls );
     void ReadHidLstByNumber();
-    void SortControlsByNumber( BOOL bIncludeActive = FALSE );
+    void SortControlsByNumber( sal_Bool bIncludeActive = sal_False );
 
-    String GetMethodName( ULONG nMethodId );
-    String GetKeyName( USHORT nKeyCode );
+    String GetMethodName( sal_uLong nMethodId );
+    String GetKeyName( sal_uInt16 nKeyCode );
 
     void WaitForAnswer ();
     DECL_LINK( IdleHdl,   Application* );
     DECL_LINK( CallDialogHandler,   Application* );
     String aDialogHandlerName;
-    USHORT nWindowHandlerCallLevel;
+    sal_uInt16 nWindowHandlerCallLevel;
 
-    USHORT nIdleCount;
+    sal_uInt16 nIdleCount;
     // wenn DialogHandler gesetzt wird er im IdleHandler inkrementiert und
     // in WaitForAnswer rückgesetzt. Übersteigt er einen gewissen wert, gehe ich davon aus,
     // daß WaitForAnswer still ligt und rufe die DialogHander Sub im BASIC auf.
@@ -185,7 +184,7 @@ private:
     void BeginBlock();
     void EndBlock();
 
-    SbTextType GetSymbolType( const String &rSymbol, BOOL bWasControl );
+    SbTextType GetSymbolType( const String &rSymbol, sal_Bool bWasControl );
     static ControlDefLoad const arR_Cmds[];
     static CNames *pRCommands;
 

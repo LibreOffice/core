@@ -82,9 +82,9 @@ public:
     bool    IsValid() const { return 0 != GetRegisteredIn(); }
     void    InsertRefMark( SwPaM & rPam, SwXTextCursor const*const pCursor );
     void    Invalidate();
-
+protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void    Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 };
 
@@ -99,7 +99,7 @@ void SwXReferenceMark::Impl::Invalidate()
     m_pMarkFmt = 0;
 }
 
-void SwXReferenceMark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXReferenceMark::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 
@@ -113,7 +113,7 @@ void SwXReferenceMark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
         {
             case RES_REFMARK_DELETED:
                 if (static_cast<const void*>(m_pMarkFmt) ==
-                        static_cast<SwPtrMsgPoolItem *>(pOld)->pObject)
+                        static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject)
                 {
                     Invalidate();
                 }
@@ -261,8 +261,10 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     }
     else
     {
-        pTxtAttr = rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
-                rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK);
+        SwTxtNode *pTxtNd = rPam.GetNode()->GetTxtNode();
+        OSL_ASSERT(pTxtNd);
+        pTxtAttr = pTxtNd ? rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+                rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK) : NULL;
     }
 
     if (!pTxtAttr)
@@ -497,8 +499,7 @@ void SAL_CALL SwXReferenceMark::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXReferenceMark::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXReferenceMark::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXReferenceMark::removePropertyChangeListener(
@@ -507,8 +508,7 @@ void SAL_CALL SwXReferenceMark::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXReferenceMark::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXReferenceMark::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXReferenceMark::addVetoableChangeListener(
@@ -517,8 +517,7 @@ void SAL_CALL SwXReferenceMark::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXReferenceMark::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXReferenceMark::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXReferenceMark::removeVetoableChangeListener(
@@ -527,8 +526,7 @@ void SAL_CALL SwXReferenceMark::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXReferenceMark::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXReferenceMark::removeVetoableChangeListener(): not implemented");
 }
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -567,9 +565,9 @@ public:
 
     // XInterface
     virtual void SAL_CALL acquire() throw()
-        { OSL_ENSURE(false, "ERROR: SwXMetaText::acquire"); }
+        { OSL_FAIL("ERROR: SwXMetaText::acquire"); }
     virtual void SAL_CALL release() throw()
-        { OSL_ENSURE(false, "ERROR: SwXMetaText::release"); }
+        { OSL_FAIL("ERROR: SwXMetaText::release"); }
 
     // XTypeProvider
     virtual uno::Sequence< sal_Int8 > SAL_CALL
@@ -697,9 +695,9 @@ public:
     inline const ::sw::Meta * GetMeta() const;
     // only for SwXMetaField!
     inline const ::sw::MetaField * GetMetaField() const;
-
+protected:
     // SwClient
-    virtual void Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 };
 
@@ -709,7 +707,7 @@ inline const ::sw::Meta * SwXMeta::Impl::GetMeta() const
 }
 
 // SwModify
-void SwXMeta::Impl::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwXMeta::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     m_pTextPortions.reset(); // throw away cache (SwTxtNode changed)
 
@@ -767,7 +765,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
             // ??? is this necessary?
             if (pXMeta->m_pImpl->m_xParentText.get() != i_xParent.get())
             {
-                OSL_ENSURE(false, "SwXMeta with different parent?");
+                OSL_FAIL("SwXMeta with different parent?");
                 pXMeta->m_pImpl->m_xParentText.set(i_xParent);
             }
         }
@@ -809,7 +807,7 @@ bool SwXMeta::SetContentRange(
         SwTxtMeta const * const pTxtAttr( pMeta->GetTxtAttr() );
         if (pTxtAttr)
         {
-            rpNode = pTxtAttr->GetTxtNode();
+            rpNode = pMeta->GetTxtNode();
             if (rpNode)
             {
                 // rStart points at the first position _within_ the meta!
@@ -990,7 +988,7 @@ SwXMeta::dispose() throw (uno::RuntimeException)
 
 void SAL_CALL
 SwXMeta::AttachImpl(const uno::Reference< text::XTextRange > & i_xTextRange,
-        const USHORT i_nWhich)
+        const sal_uInt16 i_nWhich)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard g;
@@ -1062,7 +1060,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
     if (!pTxtAttr)
     {
-        OSL_ENSURE(false, "meta inserted, but has no text attribute?");
+        OSL_FAIL("meta inserted, but has no text attribute?");
         throw uno::RuntimeException(
             C2S("SwXMeta::attach(): cannot create meta"),
                 static_cast< ::cppu::OWeakObject* >(this));
@@ -1430,7 +1428,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     if (!pMeta)
         throw lang::DisposedException();
 
-    if (rPropertyName.equalsAscii("NumberFormat"))
+    if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("NumberFormat")))
     {
         sal_Int32 nNumberFormat(0);
         if (rValue >>= nNumberFormat)
@@ -1438,7 +1436,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             pMeta->SetNumberFormat(static_cast<sal_uInt32>(nNumberFormat));
         }
     }
-    else if (rPropertyName.equalsAscii("IsFixedLanguage"))
+    else if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsFixedLanguage")))
     {
         bool b(false);
         if (rValue >>= b)
@@ -1465,12 +1463,12 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
     uno::Any any;
 
-    if (rPropertyName.equalsAscii("NumberFormat"))
+    if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("NumberFormat")))
     {
         const ::rtl::OUString text( getPresentation(sal_False) );
         any <<= static_cast<sal_Int32>(pMeta->GetNumberFormat(text));
     }
-    else if (rPropertyName.equalsAscii("IsFixedLanguage"))
+    else if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsFixedLanguage")))
     {
         any <<= pMeta->IsFixedLanguage();
     }
@@ -1489,8 +1487,7 @@ SwXMetaField::addPropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXMetaField::addPropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXMetaField::addPropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1500,8 +1497,7 @@ SwXMetaField::removePropertyChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXMetaField::removePropertyChangeListener(): not implemented");
+    OSL_FAIL("SwXMetaField::removePropertyChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1511,8 +1507,7 @@ SwXMetaField::addVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXMetaField::addVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXMetaField::addVetoableChangeListener(): not implemented");
 }
 
 void SAL_CALL
@@ -1522,8 +1517,7 @@ SwXMetaField::removeVetoableChangeListener(
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
-    OSL_ENSURE(false,
-        "SwXMetaField::removeVetoableChangeListener(): not implemented");
+    OSL_FAIL("SwXMetaField::removeVetoableChangeListener(): not implemented");
 }
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>

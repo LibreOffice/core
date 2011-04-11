@@ -47,6 +47,7 @@
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 
+#include <sal/macros.h>
 #include <rtl/math.hxx>
 #include <svl/itemset.hxx>
 #include <svx/xfillit0.hxx>
@@ -330,6 +331,24 @@ XclChLabelRange::XclChLabelRange() :
 
 // ----------------------------------------------------------------------------
 
+XclChDateRange::XclChDateRange() :
+    mnMinDate( 0 ),
+    mnMaxDate( 0 ),
+    mnMajorStep( 0 ),
+    mnMajorUnit( EXC_CHDATERANGE_DAYS ),
+    mnMinorStep( 0 ),
+    mnMinorUnit( EXC_CHDATERANGE_DAYS ),
+    mnBaseUnit( EXC_CHDATERANGE_DAYS ),
+    mnCross( 0 ),
+    mnFlags( EXC_CHDATERANGE_AUTOMIN | EXC_CHDATERANGE_AUTOMAX |
+        EXC_CHDATERANGE_AUTOMAJOR | EXC_CHDATERANGE_AUTOMINOR |
+        EXC_CHDATERANGE_AUTOBASE | EXC_CHDATERANGE_AUTOCROSS |
+        EXC_CHDATERANGE_AUTODATE )
+{
+}
+
+// ----------------------------------------------------------------------------
+
 XclChValueRange::XclChValueRange() :
     mfMin( 0.0 ),
     mfMax( 0.0 ),
@@ -337,7 +356,8 @@ XclChValueRange::XclChValueRange() :
     mfMinorStep( 0.0 ),
     mfCross( 0.0 ),
     mnFlags( EXC_CHVALUERANGE_AUTOMIN | EXC_CHVALUERANGE_AUTOMAX |
-        EXC_CHVALUERANGE_AUTOMAJOR | EXC_CHVALUERANGE_AUTOMINOR | EXC_CHVALUERANGE_AUTOCROSS | EXC_CHVALUERANGE_BIT8 )
+        EXC_CHVALUERANGE_AUTOMAJOR | EXC_CHVALUERANGE_AUTOMINOR |
+        EXC_CHVALUERANGE_AUTOCROSS | EXC_CHVALUERANGE_BIT8 )
 {
 }
 
@@ -405,7 +425,7 @@ sal_uInt16 XclChartHelper::GetSeriesLineAutoColorIdx( sal_uInt16 nFormatIdx )
         17, 18, 19, 20, 21, 22, 23, 24,
         25, 26, 27, 28, 29, 30, 31, 63
     };
-    return spnLineColors[ nFormatIdx % STATIC_TABLE_SIZE( spnLineColors ) ];
+    return spnLineColors[ nFormatIdx % SAL_N_ELEMENTS( spnLineColors ) ];
 }
 
 sal_uInt16 XclChartHelper::GetSeriesFillAutoColorIdx( sal_uInt16 nFormatIdx )
@@ -420,13 +440,13 @@ sal_uInt16 XclChartHelper::GetSeriesFillAutoColorIdx( sal_uInt16 nFormatIdx )
          8,  9, 10, 11, 12, 13, 14, 15,
         16, 17, 18, 19, 20, 21, 22, 23
     };
-    return spnFillColors[ nFormatIdx % STATIC_TABLE_SIZE( spnFillColors ) ];
+    return spnFillColors[ nFormatIdx % SAL_N_ELEMENTS( spnFillColors ) ];
 }
 
 sal_uInt8 XclChartHelper::GetSeriesFillAutoTransp( sal_uInt16 nFormatIdx )
 {
     static const sal_uInt8 spnTrans[] = { 0x00, 0x40, 0x20, 0x60, 0x70 };
-    return spnTrans[ (nFormatIdx / 56) % STATIC_TABLE_SIZE( spnTrans ) ];
+    return spnTrans[ (nFormatIdx / 56) % SAL_N_ELEMENTS( spnTrans ) ];
 }
 
 sal_uInt16 XclChartHelper::GetAutoMarkerType( sal_uInt16 nFormatIdx )
@@ -435,14 +455,14 @@ sal_uInt16 XclChartHelper::GetAutoMarkerType( sal_uInt16 nFormatIdx )
         EXC_CHMARKERFORMAT_DIAMOND, EXC_CHMARKERFORMAT_SQUARE, EXC_CHMARKERFORMAT_TRIANGLE,
         EXC_CHMARKERFORMAT_CROSS, EXC_CHMARKERFORMAT_STAR, EXC_CHMARKERFORMAT_CIRCLE,
         EXC_CHMARKERFORMAT_PLUS, EXC_CHMARKERFORMAT_DOWJ, EXC_CHMARKERFORMAT_STDDEV };
-    return spnSymbols[ nFormatIdx % STATIC_TABLE_SIZE( spnSymbols ) ];
+    return spnSymbols[ nFormatIdx % SAL_N_ELEMENTS( spnSymbols ) ];
 }
 
 bool XclChartHelper::HasMarkerFillColor( sal_uInt16 nMarkerType )
 {
     static const bool spbFilled[] = {
         false, true, true, true, false, false, false, false, true, false };
-    return (nMarkerType < STATIC_TABLE_SIZE( spbFilled )) && spbFilled[ nMarkerType ];
+    return (nMarkerType < SAL_N_ELEMENTS( spbFilled )) && spbFilled[ nMarkerType ];
 }
 
 OUString XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
@@ -1054,19 +1074,19 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
         const XclChEscherFormat& rEscherFmt, const XclChPicFormat& rPicFmt,
         XclChPropertyMode ePropMode )
 {
-    if( rEscherFmt.mxItemSet.is() )
+    if( rEscherFmt.mxItemSet )
     {
-        if( const XFillStyleItem* pStyleItem = static_cast< const XFillStyleItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLSTYLE, FALSE ) ) )
+        if( const XFillStyleItem* pStyleItem = static_cast< const XFillStyleItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLSTYLE, false ) ) )
         {
             switch( pStyleItem->GetValue() )
             {
                 case XFILL_SOLID:
                     // #i84812# Excel 2007 writes Escher properties for solid fill
-                    if( const XFillColorItem* pColorItem = static_cast< const XFillColorItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLCOLOR, FALSE ) ) )
+                    if( const XFillColorItem* pColorItem = static_cast< const XFillColorItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLCOLOR, false ) ) )
                     {
                         namespace cssd = ::com::sun::star::drawing;
                         // get solid transparence too
-                        const XFillTransparenceItem* pTranspItem = static_cast< const XFillTransparenceItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLTRANSPARENCE, FALSE ) );
+                        const XFillTransparenceItem* pTranspItem = static_cast< const XFillTransparenceItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLTRANSPARENCE, false ) );
                         sal_uInt16 nTransp = pTranspItem ? pTranspItem->GetValue() : 0;
                         ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
                         rAreaHlp.InitializeWrite();
@@ -1075,7 +1095,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                     }
                 break;
                 case XFILL_GRADIENT:
-                    if( const XFillGradientItem* pGradItem = static_cast< const XFillGradientItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLGRADIENT, FALSE ) ) )
+                    if( const XFillGradientItem* pGradItem = static_cast< const XFillGradientItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLGRADIENT, false ) ) )
                     {
                         Any aGradientAny;
                         if( pGradItem->QueryValue( aGradientAny, MID_FILLGRADIENT ) )
@@ -1093,7 +1113,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                     }
                 break;
                 case XFILL_BITMAP:
-                    if( const XFillBitmapItem* pBmpItem = static_cast< const XFillBitmapItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLBITMAP, FALSE ) ) )
+                    if( const XFillBitmapItem* pBmpItem = static_cast< const XFillBitmapItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLBITMAP, false ) ) )
                     {
                         Any aBitmapAny;
                         if( pBmpItem->QueryValue( aBitmapAny, MID_GRAFURL ) )

@@ -136,7 +136,7 @@ namespace dbaui
             @param  _bHiContast
                 <TRUE/> when in high contrast mode.
         */
-        virtual ImageList getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const;
+        virtual ImageList getImageList(sal_Int16 _eBitmapSet) const;
 
         /** will be called when the controls need to be resized.
         */

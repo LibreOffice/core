@@ -40,12 +40,12 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtURL: public SfxPoolItem
 {
-    String    sTargetFrameName; // in diesen Frame soll die URL
-    String    sURL;             //Einfache URL
-    String    sName;            // Name des Anchors
-    ImageMap *pMap;             //ClientSide Images
+    String    sTargetFrameName; // Target frame for URL.
+    String    sURL;             // Simple URL.
+    String    sName;            // Name of the anchor.
+    ImageMap *pMap;             // ClientSide images.
 
-    BOOL      bIsServerMap;     //mit der URL eine ServerSideImageMap
+    sal_Bool      bIsServerMap;     // A ServerSideImageMap with the URL.
 
     SwFmtURL& operator=( const SwFmtURL& );
 
@@ -57,7 +57,7 @@ public:
 
     virtual ~SwFmtURL();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -65,16 +65,16 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     void SetTargetFrameName( const String& rStr ) { sTargetFrameName = rStr; }
-    void SetURL( const String &rURL, BOOL bServerMap );
-    void SetMap( const ImageMap *pM );  //Pointer wird kopiert!
+    void SetURL( const String &rURL, sal_Bool bServerMap );
+    void SetMap( const ImageMap *pM );  // Pointer will be copied.
 
     const String   &GetTargetFrameName()const { return sTargetFrameName; }
     const String   &GetURL()            const { return sURL; }
-          BOOL      IsServerMap()       const { return bIsServerMap; }
+          sal_Bool      IsServerMap()       const { return bIsServerMap; }
     const ImageMap *GetMap()            const { return pMap; }
           ImageMap *GetMap()                  { return pMap; }
 
@@ -83,10 +83,10 @@ public:
 };
 
 
-inline const SwFmtURL &SwAttrSet::GetURL(BOOL bInP) const
+inline const SwFmtURL &SwAttrSet::GetURL(sal_Bool bInP) const
     { return (const SwFmtURL&)Get( RES_URL,bInP); }
 
-inline const SwFmtURL &SwFmt::GetURL(BOOL bInP) const
+inline const SwFmtURL &SwFmt::GetURL(sal_Bool bInP) const
     { return aSet.GetURL(bInP); }
 
 #endif

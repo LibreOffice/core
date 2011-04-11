@@ -29,15 +29,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#define _SVSTDARR_LONGS
 #define _SVSTDARR_USHORTS
 
 #include <ctype.h>
 #include <hintids.hxx>
 
 #include <svl/svstdarr.hxx>
+
 #include <unotools/charclass.hxx>
+
+#include <vcl/msgbox.hxx>
+
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/brkitem.hxx>
@@ -47,19 +49,20 @@
 #include <editeng/langitem.hxx>
 #include <editeng/cscoitem.hxx>
 #include <editeng/unolingu.hxx>
-
 #include <editeng/acorrcfg.hxx>
+
 #include <swwait.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <index.hxx>
 #include <pam.hxx>
 #include <edimp.hxx>
 #include <fesh.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>       // for the UndoId's
 #include <poolfmt.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
@@ -75,7 +78,6 @@
 #include <mdiexp.hxx>
 #include <statstr.hrc>
 #include <comcore.hrc>
-#include <vcl/msgbox.hxx>
 #include <numrule.hxx>
 
 using namespace ::com::sun::star;
@@ -96,28 +98,28 @@ const sal_Unicode cStarSymbolEmDash = 0x2014;
 
 SvxSwAutoFmtFlags* SwEditShell::pAutoFmtFlags = 0;
 
-// Anzahl von Num-/Bullet-Absatzvorlagen. MAXLEVEL wird demnaechst auf
-// x erhoeht, die Anzahl Vorlagen aber nicht (Ueberbleibsel aus <= 4.0)
-const USHORT cnNumBullColls = 4;
+// Number of num-/bullet-paragraph templates. MAXLEVEL will soon be raised
+// to x, but not the number of templates. (Artifact from <= 4.0)
+const sal_uInt16 cnNumBullColls = 4;
 
 class SwAutoFormat
 {
     SvxSwAutoFmtFlags aFlags;
-    SwPaM aDelPam;              // ein Pam der benutzt werden kann
-    SwNodeIndex aNdIdx;         // der Index auf den akt. TextNode
-    SwNodeIndex aEndNdIdx;      // Index auf das Ende vom Bereich
+    SwPaM aDelPam;              // a Pam that can be used
+    SwNodeIndex aNdIdx;         // the index on the current TextNode
+    SwNodeIndex aEndNdIdx;      // index on the end of the area
 
     SwEditShell* pEditShell;
     SwDoc* pDoc;
-    SwTxtNode* pAktTxtNd;       // der akt. TextNode
-    SwTxtFrm* pAktTxtFrm;       // Frame vom akt. TextNode
+    SwTxtNode* pAktTxtNd;       // the current TextNode
+    SwTxtFrm* pAktTxtFrm;       // frame of the current TextNode
     CharClass* pCharClass;      // Character classification
-    ULONG nEndNdIdx;            // fuer die Prozent-Anzeige
+    sal_uLong nEndNdIdx;            // for the percentage-display
     LanguageType eCharClassLang;
 
-    USHORT nLastHeadLvl, nLastCalcHeadLvl;
-    USHORT nLastEnumLvl, nLastCalcEnumLvl;
-    USHORT nRedlAutoFmtSeqId;
+    sal_uInt16 nLastHeadLvl, nLastCalcHeadLvl;
+    sal_uInt16 nLastEnumLvl, nLastCalcEnumLvl;
+    sal_uInt16 nRedlAutoFmtSeqId;
 
     enum
     {
@@ -147,11 +149,11 @@ class SwAutoFormat
         IS_ENDE
     } eStat;
 
-    BOOL bEnde : 1;
-    BOOL bEmptyLine : 1;
-    BOOL bMoreLines : 1;
+    sal_Bool bEnde : 1;
+    sal_Bool bEmptyLine : 1;
+    sal_Bool bMoreLines : 1;
 
-    static BOOL  m_bAskForCancelUndoWhileBufferOverflow;
+    static sal_Bool  m_bAskForCancelUndoWhileBufferOverflow;
     static short m_nActionWhileAutoformatUndoBufferOverflow;
 
 
@@ -168,25 +170,25 @@ class SwAutoFormat
     }
 
 
-    BOOL IsSpace( const sal_Unicode c ) const
-        { return (' ' == c || '\t' == c || 0x0a == c|| 0x3000 == c /* Jap. space */) ? TRUE : FALSE; }
+    sal_Bool IsSpace( const sal_Unicode c ) const
+        { return (' ' == c || '\t' == c || 0x0a == c|| 0x3000 == c /* Jap. space */) ? sal_True : sal_False; }
 
-    void SetColl( USHORT nId, BOOL bHdLineOrText = FALSE );
+    void SetColl( sal_uInt16 nId, sal_Bool bHdLineOrText = sal_False );
     String GoNextPara();
-    BOOL HasObjects( const SwNode& rNd );
+    sal_Bool HasObjects( const SwNode& rNd );
 
-    // TxtNode Methoden
+    // TxtNode methods
     const SwTxtNode* GetNextNode() const;
-    BOOL IsEmptyLine( const SwTxtNode& rNd ) const
+    sal_Bool IsEmptyLine( const SwTxtNode& rNd ) const
         {   return 0 == rNd.GetTxt().Len() ||
                 rNd.GetTxt().Len() == GetLeadingBlanks( rNd.GetTxt() ); }
 
-    BOOL IsOneLine( const SwTxtNode& ) const;
-    BOOL IsFastFullLine( const SwTxtNode& ) const;
-    BOOL IsNoAlphaLine( const SwTxtNode&) const;
-    BOOL IsEnumericChar( const SwTxtNode&) const;
-    BOOL IsBlanksInString( const SwTxtNode&) const;
-    USHORT CalcLevel( const SwTxtNode&, USHORT *pDigitLvl = 0 ) const;
+    sal_Bool IsOneLine( const SwTxtNode& ) const;
+    sal_Bool IsFastFullLine( const SwTxtNode& ) const;
+    sal_Bool IsNoAlphaLine( const SwTxtNode&) const;
+    sal_Bool IsEnumericChar( const SwTxtNode&) const;
+    sal_Bool IsBlanksInString( const SwTxtNode&) const;
+    sal_uInt16 CalcLevel( const SwTxtNode&, sal_uInt16 *pDigitLvl = 0 ) const;
     xub_StrLen GetBigIndent( xub_StrLen& rAktSpacePos ) const;
 
     String& DelLeadingBlanks( String& rStr ) const;
@@ -194,36 +196,36 @@ class SwAutoFormat
     xub_StrLen GetLeadingBlanks( const String& rStr ) const;
     xub_StrLen GetTrailingBlanks( const String& rStr ) const;
 
-    BOOL IsFirstCharCapital( const SwTxtNode& rNd ) const;
-    USHORT GetDigitLevel( const SwTxtNode& rTxtNd, xub_StrLen& rPos,
+    sal_Bool IsFirstCharCapital( const SwTxtNode& rNd ) const;
+    sal_uInt16 GetDigitLevel( const SwTxtNode& rTxtNd, xub_StrLen& rPos,
                             String* pPreFix = 0, String* pPostFix = 0,
                             String* pNumTypes = 0 ) const;
-        // hole den FORMATIERTEN TextFrame
+        // get the FORMATED TextFrame
     SwTxtFrm* GetFrm( const SwTxtNode& rTxtNd ) const;
 
     void BuildIndent();
     void BuildText();
     void BuildTextIndent();
-    void BuildEnum( USHORT nLvl, USHORT nDigitLevel );
+    void BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel );
     void BuildNegIndent( SwTwips nSpaces );
-    void BuildHeadLine( USHORT nLvl );
+    void BuildHeadLine( sal_uInt16 nLvl );
 
-    BOOL HasSelBlanks( SwPaM& rPam ) const;
-    BOOL HasBreakAttr( const SwTxtNode& ) const;
+    sal_Bool HasSelBlanks( SwPaM& rPam ) const;
+    sal_Bool HasBreakAttr( const SwTxtNode& ) const;
     void DeleteSel( SwPaM& rPam );
-    BOOL DeleteAktNxtPara( const String& rNxtPara );
-    // loesche im Node Anfang oder/und Ende
-    void DeleteAktPara( BOOL bStart = TRUE, BOOL nEnd = TRUE );
-    void DelEmptyLine( BOOL bTstNextPara = TRUE );
-        // loesche bei mehrzeiligen Absaetzen die "linken" und/oder
-        // "rechten" Raender
-    void DelMoreLinesBlanks( BOOL bWithLineBreaks = FALSE );
-        // loesche den vorherigen Absatz
+    sal_Bool DeleteAktNxtPara( const String& rNxtPara );
+    // delete in the node start and/or end
+    void DeleteAktPara( sal_Bool bStart = sal_True, sal_Bool nEnd = sal_True );
+    void DelEmptyLine( sal_Bool bTstNextPara = sal_True );
+        // when using multiline paragraphs delete the "left" and/or
+        // "right" margins
+    void DelMoreLinesBlanks( sal_Bool bWithLineBreaks = sal_False );
+        // delete the previous paragraph
     void DelPrevPara();
-        // dann lasse doch mal das AutoCorrect auf den akt. TextNode los
+        // execute AutoCorrect on current TextNode
     void AutoCorrect( xub_StrLen nSttPos = 0 );
 
-    BOOL CanJoin( const SwTxtNode* pTxtNd ) const
+    sal_Bool CanJoin( const SwTxtNode* pTxtNd ) const
     {
         return !bEnde && pTxtNd &&
              !IsEmptyLine( *pTxtNd ) &&
@@ -234,17 +236,17 @@ class SwAutoFormat
              !HasBreakAttr( *pTxtNd );
     }
 
-    // ist ein Punkt am Ende ??
-    BOOL IsSentenceAtEnd( const SwTxtNode& rTxtNd ) const;
+    // is a dot at the end ??
+    sal_Bool IsSentenceAtEnd( const SwTxtNode& rTxtNd ) const;
 
-    BOOL DoUnderline();
-    BOOL DoTable();
+    sal_Bool DoUnderline();
+    sal_Bool DoTable();
 
-    void _SetRedlineTxt( USHORT nId );
-    BOOL SetRedlineTxt( USHORT nId )
-        { if( aFlags.bWithRedlining )   _SetRedlineTxt( nId );  return TRUE; }
-    BOOL ClearRedlineTxt()
-        { if( aFlags.bWithRedlining )   pDoc->SetAutoFmtRedlineComment(0);  return TRUE; }
+    void _SetRedlineTxt( sal_uInt16 nId );
+    sal_Bool SetRedlineTxt( sal_uInt16 nId )
+        { if( aFlags.bWithRedlining )   _SetRedlineTxt( nId );  return sal_True; }
+    sal_Bool ClearRedlineTxt()
+        { if( aFlags.bWithRedlining )   pDoc->SetAutoFmtRedlineComment(0);  return sal_True; }
 
 public:
     SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
@@ -254,7 +256,7 @@ public:
     }
 };
 
-BOOL  SwAutoFormat::m_bAskForCancelUndoWhileBufferOverflow     = TRUE;
+sal_Bool  SwAutoFormat::m_bAskForCancelUndoWhileBufferOverflow     = sal_True;
 short SwAutoFormat::m_nActionWhileAutoformatUndoBufferOverflow = RET_YES;
 
 const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
@@ -266,8 +268,8 @@ const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
 
 SwTxtFrm* SwAutoFormat::GetFrm( const SwTxtNode& rTxtNd ) const
 {
-    // besorge mal den Frame
-    const SwCntntFrm *pFrm = rTxtNd.GetFrm();
+    // get the Frame
+    const SwCntntFrm *pFrm = rTxtNd.getLayoutFrm( pEditShell->GetLayout() );
     OSL_ENSURE( pFrm, "zum Autoformat muss das Layout vorhanden sein" );
     if( aFlags.bAFmtByInput && !pFrm->IsValid() )
     {
@@ -288,10 +290,10 @@ void SwAutoFormat::_GetCharClass( LanguageType eLang )
     eCharClassLang = eLang;
 }
 
-void SwAutoFormat::_SetRedlineTxt( USHORT nActionId )
+void SwAutoFormat::_SetRedlineTxt( sal_uInt16 nActionId )
 {
     String sTxt;
-    USHORT nSeqNo = 0;
+    sal_uInt16 nSeqNo = 0;
     if( STR_AUTOFMTREDL_END > nActionId )
     {
         sTxt = *ViewShell::GetShellRes()->GetAutoFmtNameLst()[ nActionId ];
@@ -331,26 +333,26 @@ String SwAutoFormat::GoNextPara()
         //has to be checed twice before and after incrementation
         if( aNdIdx.GetIndex() >= aEndNdIdx.GetIndex() )
         {
-            bEnde = TRUE;
+            bEnde = sal_True;
             return aEmptyStr;
         }
 
         aNdIdx++;
         if( aNdIdx.GetIndex() >= aEndNdIdx.GetIndex() )
         {
-            bEnde = TRUE;
+            bEnde = sal_True;
             return aEmptyStr;
         }
         else
             pNewNd = &aNdIdx.GetNode();
 
-        // kein TextNode ->
-        //      TableNode   : Tabelle ueberspringen
-        //      NoTxtNode   : Nodes ueberspringen
-        //      EndNode     : Ende erreicht, beenden
+        // not a TextNode ->
+        //      TableNode   : skip table
+        //      NoTxtNode   : skip nodes
+        //      EndNode     : at the end, terminate
         if( pNewNd->IsEndNode() )
         {
-            bEnde = TRUE;
+            bEnde = sal_True;
             return aEmptyStr;
         }
         else if( pNewNd->IsTableNode() )
@@ -372,20 +374,20 @@ String SwAutoFormat::GoNextPara()
     return pAktTxtNd->GetTxt();
 }
 
-BOOL SwAutoFormat::HasObjects( const SwNode& rNd )
+sal_Bool SwAutoFormat::HasObjects( const SwNode& rNd )
 {
-    // haengt irgend etwas absatzgebundenes am Absatz?
-    // z.B. Rahmen, DrawObjecte, ..
-    BOOL bRet = FALSE;
+    // Is there something bound to the paragraph in the paragraph
+    // like borders, DrawObjects, ...
+    sal_Bool bRet = sal_False;
     const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
-    for( USHORT n = 0; n < rFmts.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
     {
         const SwFmtAnchor& rAnchor = rFmts[ n ]->GetAnchor();
         if ((FLY_AT_PAGE != rAnchor.GetAnchorId()) &&
             rAnchor.GetCntntAnchor() &&
             &rAnchor.GetCntntAnchor()->nNode.GetNode() == &rNd )
         {
-            bRet = TRUE;
+            bRet = sal_True;
             break;
         }
     }
@@ -400,16 +402,16 @@ const SwTxtNode* SwAutoFormat::GetNextNode() const
 }
 
 
-BOOL SwAutoFormat::IsOneLine( const SwTxtNode& rNd ) const
+sal_Bool SwAutoFormat::IsOneLine( const SwTxtNode& rNd ) const
 {
     SwTxtFrmInfo aFInfo( GetFrm( rNd ) );
     return aFInfo.IsOneLine();
 }
 
 
-BOOL SwAutoFormat::IsFastFullLine( const SwTxtNode& rNd ) const
+sal_Bool SwAutoFormat::IsFastFullLine( const SwTxtNode& rNd ) const
 {
-    BOOL bRet = aFlags.bRightMargin;
+    sal_Bool bRet = aFlags.bRightMargin;
     if( bRet )
     {
         SwTxtFrmInfo aFInfo( GetFrm( rNd ) );
@@ -419,24 +421,24 @@ BOOL SwAutoFormat::IsFastFullLine( const SwTxtNode& rNd ) const
 }
 
 
-BOOL SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
+sal_Bool SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
 {
     const String& rTxt = rNd.GetTxt();
     String sTmp( rTxt );
     xub_StrLen nBlnks = GetLeadingBlanks( sTmp );
     xub_StrLen nLen = rTxt.Len() - nBlnks;
     if( !nLen )
-        return FALSE;
+        return sal_False;
 
-    // -, +, * getrennt durch Blank ??
+    // -, +, * separated by blank ??
     if( 2 < nLen && IsSpace( rTxt.GetChar( nBlnks + 1 ) ) )
     {
         if( StrChr( pBulletChar, rTxt.GetChar( nBlnks ) ) )
-            return TRUE;
-        // sollte an der Position ein Symbolfont existieren ?
+            return sal_True;
+        // Should there be a symbol font at the position?
         SwTxtFrmInfo aFInfo( GetFrm( rNd ) );
         if( aFInfo.IsBullet( nBlnks ))
-            return TRUE;
+            return sal_True;
     }
 
     // 1.) / 1. / 1.1.1 / (1). / (1) / ....
@@ -444,9 +446,9 @@ BOOL SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
 }
 
 
-BOOL SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
+sal_Bool SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
 {
-    // suche im String mehr als 5 Blanks/Tabs
+    // Search more that 5 blanks/tabs in the string.
     String sTmp( rNd.GetTxt() );
     DelTrailingBlanks( DelLeadingBlanks( sTmp ));
     const sal_Unicode* pTmp = sTmp.GetBuffer();
@@ -454,13 +456,13 @@ BOOL SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
     {
         if( IsSpace( *pTmp ) )
         {
-            if( IsSpace( *++pTmp ))     // 2 Space nach einander
+            if( IsSpace( *++pTmp ))     // 2 spaces after each other
             {
                 const sal_Unicode* pStt = pTmp;
                 while( *pTmp && IsSpace( *++pTmp ))
                     ;
                 if( 5 <= pTmp - pStt )
-                    return TRUE;
+                    return sal_True;
             }
             else
                 ++pTmp;
@@ -468,13 +470,13 @@ BOOL SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
         else
             ++pTmp;
     }
-    return FALSE;
+    return sal_False;
 }
 
 
-USHORT SwAutoFormat::CalcLevel( const SwTxtNode& rNd, USHORT *pDigitLvl ) const
+sal_uInt16 SwAutoFormat::CalcLevel( const SwTxtNode& rNd, sal_uInt16 *pDigitLvl ) const
 {
-    USHORT nLvl = 0, nBlnk = 0;
+    sal_uInt16 nLvl = 0, nBlnk = 0;
     const String& rTxt = rNd.GetTxt();
     if( pDigitLvl )
         *pDigitLvl = USHRT_MAX;
@@ -503,7 +505,7 @@ USHORT SwAutoFormat::CalcLevel( const SwTxtNode& rNd, USHORT *pDigitLvl ) const
                     break;
         default:
             if( pDigitLvl )
-                // Teste auf 1.) / 1. / 1.1.1 / (1). / (1) / ....
+                // test 1.) / 1. / 1.1.1 / (1). / (1) / ....
                 *pDigitLvl = GetDigitLevel( rNd, n );
             return nLvl;
         }
@@ -531,11 +533,11 @@ xub_StrLen SwAutoFormat::GetBigIndent( xub_StrLen& rAktSpacePos ) const
 }
 
 
-BOOL SwAutoFormat::IsNoAlphaLine( const SwTxtNode& rNd ) const
+sal_Bool SwAutoFormat::IsNoAlphaLine( const SwTxtNode& rNd ) const
 {
     const String& rStr = rNd.GetTxt();
     if( !rStr.Len() )
-        return FALSE;
+        return sal_False;
     // oder besser: ueber die Anzahl von Alpha/Num- und !AN-Zeichen
     //              bestimmen.
     xub_StrLen nANChar = 0, nBlnk = 0;
@@ -547,30 +549,27 @@ BOOL SwAutoFormat::IsNoAlphaLine( const SwTxtNode& rNd ) const
         else if( rCC.isLetterNumeric( rStr, n ))
             ++nANChar;
 
-    // sind zu 75% keine Alpha-Nummerische-Zeichen, dann TRUE
-    ULONG nLen = rStr.Len() - nBlnk;
-    nLen = ( nLen * 3 ) / 4;            // long overflow, if the strlen > USHORT
+    // sind zu 75% keine Alpha-Nummerische-Zeichen, dann sal_True
+    sal_uLong nLen = rStr.Len() - nBlnk;
+    nLen = ( nLen * 3 ) / 4;            // long overflow, if the strlen > sal_uInt16
     return xub_StrLen(nLen) < (rStr.Len() - nANChar - nBlnk);
 }
 
 
 
-BOOL SwAutoFormat::DoUnderline()
+sal_Bool SwAutoFormat::DoUnderline()
 {
     if( !aFlags.bSetBorder )
-        return FALSE;
+        return sal_False;
 
     const sal_Unicode* pStr = pAktTxtNd->GetTxt().GetBuffer();
     int eState = 0;
     xub_StrLen nCnt = 0;
     while( *pStr )
     {
-//JP 29.03.96: Spaces unterbrechen die Umrandung!
-//      if( !IsSpace( *pStr ) )
+        int eTmp = 0;
+        switch( *pStr )
         {
-            int eTmp = 0;
-            switch( *pStr )
-            {
             case '-': eTmp = 1; break;
             case '_': eTmp = 2; break;
             case '=': eTmp = 3; break;
@@ -578,61 +577,57 @@ BOOL SwAutoFormat::DoUnderline()
             case '~': eTmp = 5; break;
             case '#': eTmp = 6; break;
             default:
-                return FALSE;
-            }
-            if( 0 == eState )
-                eState = eTmp;
-            else if( eState != eTmp )
-                return FALSE;
-            ++nCnt;
+                return sal_False;
         }
+        if( 0 == eState )
+            eState = eTmp;
+        else if( eState != eTmp )
+            return sal_False;
+        ++nCnt;
+
         ++pStr;
     }
 
     if( 2 < nCnt )
     {
         // dann unterstreiche mal den vorherigen Absatz, wenn es diesen gibt!
-        DelEmptyLine( FALSE );
+        DelEmptyLine( sal_False );
         aDelPam.SetMark();
         aDelPam.GetMark()->nContent = 0;
-//JP 19.03.96: kein Underline sondern eine Umrandung setzen!
-//      pDoc->Insert( aDelPam, SvxUnderlineItem( eState ) );
 
-        SvxBorderLine aLine;
+        editeng::SvxBorderLine aLine;
         switch( eState )
         {
         case 1:         // einfach, 0,05 pt
-            aLine.SetOutWidth( DEF_LINE_WIDTH_0 );
+            aLine.SetStyle( editeng::SOLID );
+            aLine.SetWidth( DEF_LINE_WIDTH_0 );
             break;
         case 2:         // einfach, 1,0 pt
-            aLine.SetOutWidth( DEF_LINE_WIDTH_1 );
+            aLine.SetStyle( editeng::SOLID );
+            aLine.SetWidth( DEF_LINE_WIDTH_1 );
             break;
         case 3:         // doppelt, 1,1 pt
-            aLine.SetOutWidth( DEF_DOUBLE_LINE0_OUT );
-            aLine.SetInWidth( DEF_DOUBLE_LINE0_IN );
-            aLine.SetDistance( DEF_DOUBLE_LINE0_DIST );
+            aLine.SetStyle( editeng::DOUBLE );
+            aLine.SetWidth( DEF_LINE_WIDTH_0 );
             break;
         case 4:         // doppelt, 4,5 pt
-            aLine.SetOutWidth( DEF_DOUBLE_LINE4_OUT );
-            aLine.SetInWidth( DEF_DOUBLE_LINE4_IN );
-            aLine.SetDistance( DEF_DOUBLE_LINE4_DIST );
+            aLine.SetStyle( editeng::THICKTHIN_SMALLGAP );
+            aLine.SetWidth( DEF_LINE_WIDTH_1  );
             break;
         case 5:         // doppelt, 6,0 pt
-            aLine.SetOutWidth( DEF_DOUBLE_LINE5_OUT );
-            aLine.SetInWidth( DEF_DOUBLE_LINE5_IN );
-            aLine.SetDistance( DEF_DOUBLE_LINE5_DIST );
+            aLine.SetStyle( editeng::THINTHICK_SMALLGAP );
+            aLine.SetWidth( DEF_LINE_WIDTH_2 );
             break;
         case 6:         // doppelt, 9,0 pt
-            aLine.SetOutWidth( DEF_DOUBLE_LINE6_OUT );
-            aLine.SetInWidth( DEF_DOUBLE_LINE6_IN );
-            aLine.SetDistance( DEF_DOUBLE_LINE6_DIST );
+            aLine.SetStyle( editeng::DOUBLE );
+            aLine.SetWidth( DEF_LINE_WIDTH_2 );
             break;
         }
         SfxItemSet aSet(pDoc->GetAttrPool(),
                     RES_PARATR_CONNECT_BORDER, RES_PARATR_CONNECT_BORDER,
                     RES_BOX, RES_BOX,
                     0);
-        aSet.Put( SwParaConnectBorderItem( FALSE ) );
+        aSet.Put( SwParaConnectBorderItem( sal_False ) );
         SvxBoxItem aBox( RES_BOX );
         aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
         aBox.SetDistance( 42 );     // ~0,75 mm
@@ -645,11 +640,11 @@ BOOL SwAutoFormat::DoUnderline()
 }
 
 
-BOOL SwAutoFormat::DoTable()
+sal_Bool SwAutoFormat::DoTable()
 {
     if( !aFlags.bCreateTable || !aFlags.bAFmtByInput ||
         pAktTxtNd->FindTableNode() )
-        return FALSE;
+        return sal_False;
 
     const String& rTmp = pAktTxtNd->GetTxt();
     xub_StrLen nSttPlus = GetLeadingBlanks( rTmp );
@@ -659,7 +654,7 @@ BOOL SwAutoFormat::DoTable()
     if( 2 > nEndPlus - nSttPlus ||
         ( '+' != ( cChar = rTmp.GetChar( nSttPlus )) && '|' != cChar ) ||
         ( '+' != ( cChar = rTmp.GetChar( nEndPlus - 1)) && '|' != cChar ))
-        return FALSE;
+        return sal_False;
 
     SwTxtFrmInfo aInfo( pAktTxtFrm );
 
@@ -680,11 +675,11 @@ BOOL SwAutoFormat::DoTable()
 
         case '+':
         case '|':
-            aPosArr.Insert( static_cast<USHORT>(aInfo.GetCharPos(n)), aPosArr.Count() );
+            aPosArr.Insert( static_cast<sal_uInt16>(aInfo.GetCharPos(n)), aPosArr.Count() );
             break;
 
         default:
-            return FALSE;
+            return sal_False;
         }
         if( ++n == nEndPlus )
             break;
@@ -695,7 +690,7 @@ BOOL SwAutoFormat::DoTable()
     if( 1 < aPosArr.Count() )
     {
         // Ausrichtung vom Textnode besorgen:
-        USHORT nColCnt = aPosArr.Count() - 1;
+        sal_uInt16 nColCnt = aPosArr.Count() - 1;
         SwTwips nSttPos = aPosArr[ 0 ];
         sal_Int16 eHori;
         switch( pAktTxtNd->GetSwAttrSet().GetAdjust().GetAdjust() )
@@ -709,7 +704,7 @@ BOOL SwAutoFormat::DoTable()
                 eHori = text::HoriOrientation::NONE;
                 // dann muss als letztes noch die akt. FrameBreite
                 // ins Array
-                aPosArr.Insert( static_cast<USHORT>(pAktTxtFrm->Frm().Width()), aPosArr.Count() );
+                aPosArr.Insert( static_cast<sal_uInt16>(pAktTxtFrm->Frm().Width()), aPosArr.Count() );
             }
             else
                 eHori = text::HoriOrientation::LEFT;
@@ -779,7 +774,7 @@ xub_StrLen SwAutoFormat::GetTrailingBlanks( const String& rStr ) const
 }
 
 
-BOOL SwAutoFormat::IsFirstCharCapital( const SwTxtNode& rNd ) const
+sal_Bool SwAutoFormat::IsFirstCharCapital( const SwTxtNode& rNd ) const
 {
     const String& rTxt = rNd.GetTxt();
     for( xub_StrLen n = 0, nEnd = rTxt.Len(); n < nEnd; ++n )
@@ -792,11 +787,11 @@ BOOL SwAutoFormat::IsFirstCharCapital( const SwTxtNode& rNd ) const
                    0 != ( i18n::KCharacterType::UPPER &
                                                     nCharType );
         }
-    return FALSE;
+    return sal_False;
 }
 
 
-USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
+sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
         String* pPreFix, String* pPostFix, String* pNumTypes ) const
 {
     // Teste auf 1.) / 1. / 1.1.1 / (1). / (1) / ....
@@ -804,11 +799,11 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
     xub_StrLen nPos = rPos;
     int eScan = NONE;
 
-    USHORT nStart = 0;
-    BYTE nDigitLvl = 0, nDigitCnt = 0;
+    sal_uInt16 nStart = 0;
+    sal_uInt8 nDigitLvl = 0, nDigitCnt = 0;
     //count number of parenthesis to assure a sensible order is found
-    USHORT nOpeningParentheses = 0;
-    USHORT nClosingParentheses = 0;
+    sal_uInt16 nOpeningParentheses = 0;
+    sal_uInt16 nClosingParentheses = 0;
 
     CharClass& rCC = GetCharClass( rNd.GetSwAttrSet().GetLanguage().GetLanguage() );
 
@@ -848,7 +843,7 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
         }
         else if( rCC.isAlpha( rTxt, nPos ) )
         {
-            BOOL bIsUpper =
+            sal_Bool bIsUpper =
                 0 != ( i18n::KCharacterType::UPPER &
                                         rCC.getCharacterType( rTxt, nPos ));
             sal_Unicode cLow = rCC.toLower( rTxt, nPos, 1 ).GetChar(0), cNumTyp;
@@ -857,7 +852,6 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
             // roemische Zeichen sind "mdclxvi". Da man aber eher mal eine
             // Numerierung mit c oder d anfangen will, werden diese erstmal
             // zu chars und spaeter ggfs. zu romischen Zeichen!
-//          if( strchr( "mdclxvi", cLow ))
 #ifdef WITH_ALPHANUM_AS_NUMFMT
             //detection of 'c' and 'd' a ROMAN numbering should not be done here
             if( 256 > cLow  &&( (eScan & (LOWER_ROMAN|UPPER_ROMAN))
@@ -927,8 +921,8 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
             else
             {
                 // roemische Zahlen: checke ob das gueltige Zeichen sind
-                USHORT nVal;
-                BOOL bError = FALSE;
+                sal_uInt16 nVal;
+                sal_Bool bError = sal_False;
                 switch( cLow )
                 {
                 case 'm':   nVal = 1000; goto CHECK_ROMAN_1;
@@ -947,43 +941,43 @@ CHECK_ROMAN_1:
                         if( nMod5 == ((3 * nVal) + n10 ) ||
                             nMod5 == ((4 * nVal) + n10 ) ||
                             nLast == n10 )
-                            nStart = static_cast<USHORT>(nStart + (n10 * 8));
+                            nStart = static_cast<sal_uInt16>(nStart + (n10 * 8));
                         else if( nMod5 == 0 ||
                                  nMod5 == (1 * nVal) ||
                                  nMod5 == (2 * nVal) )
                             nStart = nStart + nVal;
                         else
-                            bError = TRUE;
+                            bError = sal_True;
                     }
                     break;
 
 CHECK_ROMAN_5:
                     {
                         if( ( nStart / nVal ) & 1 )
-                            bError = TRUE;
+                            bError = sal_True;
                         else
                         {
                             int nMod = nStart % nVal;
                             int n10 = nVal / 5;
                             if( n10 == nMod )
-                                nStart = static_cast<USHORT>(nStart + (3 * n10));
+                                nStart = static_cast<sal_uInt16>(nStart + (3 * n10));
                             else if( 0 == nMod )
                                 nStart = nStart + nVal;
                             else
-                                bError = TRUE;
+                                bError = sal_True;
                         }
                     }
                     break;
 
                 case 'i':
                         if( nStart % 5 >= 3 )
-                            bError = TRUE;
+                            bError = sal_True;
                         else
                             nStart += 1;
                         break;
 
                 default:
-                    bError = TRUE;
+                    bError = sal_True;
                 }
 
                 if( bError )
@@ -1038,7 +1032,7 @@ CHECK_ROMAN_5:
 }
 
 
-void SwAutoFormat::SetColl( USHORT nId, BOOL bHdLineOrText )
+void SwAutoFormat::SetColl( sal_uInt16 nId, sal_Bool bHdLineOrText )
 {
     aDelPam.DeleteMark();
     aDelPam.GetPoint()->nNode = aNdIdx;
@@ -1061,7 +1055,7 @@ void SwAutoFormat::SetColl( USHORT nId, BOOL bHdLineOrText )
         // sonst nur den Blocksatz
         SvxAdjustItem* pAdj;
         if( SFX_ITEM_SET == aSet.GetItemState( RES_PARATR_ADJUST,
-                        FALSE, (const SfxPoolItem**)&pAdj ))
+                        sal_False, (const SfxPoolItem**)&pAdj ))
         {
             SvxAdjust eAdj = pAdj->GetAdjust();
             if( bHdLineOrText ? (SVX_ADJUST_RIGHT != eAdj &&
@@ -1075,7 +1069,7 @@ void SwAutoFormat::SetColl( USHORT nId, BOOL bHdLineOrText )
 }
 
 
-BOOL SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
+sal_Bool SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
 {
     // noch ein Blank am Anfang oder Ende ?
     // nicht loeschen, wird wieder eingefuegt.
@@ -1084,8 +1078,6 @@ BOOL SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
     SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
     if( nBlnkPos && nBlnkPos-- < pTxtNd->GetTxt().Len() &&
         ( ' ' == pTxtNd->GetTxt().GetChar( nBlnkPos ) ))
-// JP 23.08.95: keine Tabs stehen lassen, diese in Blanks wandeln
-//        ( ' ' == ( cCh = pTxtNd->GetTxt()[ nBlnkPos ] ) || '\t' == cCh ))
         pPos->nContent--;
     else
     {
@@ -1094,42 +1086,40 @@ BOOL SwAutoFormat::HasSelBlanks( SwPaM& rPam ) const
         pTxtNd = pPos->nNode.GetNode().GetTxtNode();
         if( nBlnkPos < pTxtNd->GetTxt().Len() &&
             ( ' ' == pTxtNd->GetTxt().GetChar( nBlnkPos )))
-// JP 23.08.95: keine Tabs stehen lassen, diese in Blanks wandeln
-//            ( ' ' == ( cCh = pTxtNd->GetTxt()[ nBlnkPos ] ) || '\t' == cCh ))
             pPos->nContent++;
         else
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 
-BOOL SwAutoFormat::HasBreakAttr( const SwTxtNode& rTxtNd ) const
+sal_Bool SwAutoFormat::HasBreakAttr( const SwTxtNode& rTxtNd ) const
 {
     const SfxItemSet* pSet = rTxtNd.GetpSwAttrSet();
     if( !pSet )
-        return FALSE;
+        return sal_False;
 
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, FALSE, &pItem )
+    if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, sal_False, &pItem )
         && SVX_BREAK_NONE != ((SvxFmtBreakItem*)pItem)->GetBreak() )
-        return TRUE;
+        return sal_True;
 
-    if( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, FALSE, &pItem )
+    if( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, sal_False, &pItem )
         && ((SwFmtPageDesc*)pItem)->GetPageDesc()
         && nsUseOnPage::PD_NONE != ((SwFmtPageDesc*)pItem)->GetPageDesc()->GetUseOn() )
-        return TRUE;
-    return FALSE;
+        return sal_True;
+    return sal_False;
 }
 
 
 // ist ein Punkt am Ende ??
-BOOL SwAutoFormat::IsSentenceAtEnd( const SwTxtNode& rTxtNd ) const
+sal_Bool SwAutoFormat::IsSentenceAtEnd( const SwTxtNode& rTxtNd ) const
 {
     const String& rStr = rTxtNd.GetTxt();
     xub_StrLen n = rStr.Len();
     if( !n )
-        return TRUE;
+        return sal_True;
 
     while( --n && IsSpace( rStr.GetChar( n  ) ) )
         ;
@@ -1138,7 +1128,7 @@ BOOL SwAutoFormat::IsSentenceAtEnd( const SwTxtNode& rTxtNd ) const
 
 
 // loesche im Node Anfang oder/und Ende
-void SwAutoFormat::DeleteAktPara( BOOL bStart, BOOL bEnd )
+void SwAutoFormat::DeleteAktPara( sal_Bool bStart, sal_Bool bEnd )
 {
     if( aFlags.bAFmtByInput
         ? aFlags.bAFmtByInpDelSpacesAtSttEnd
@@ -1197,7 +1187,7 @@ void SwAutoFormat::DeleteSel( SwPaM& rDelPam )
         pEditShell->DeleteSel( rDelPam );
 }
 
-BOOL SwAutoFormat::DeleteAktNxtPara( const String& rNxtPara )
+sal_Bool SwAutoFormat::DeleteAktNxtPara( const String& rNxtPara )
 {
     // Loesche Blanks am Ende vom akt. und am Anfang vom naechsten
     aDelPam.DeleteMark();
@@ -1220,7 +1210,7 @@ BOOL SwAutoFormat::DeleteAktNxtPara( const String& rNxtPara )
 
     // noch ein Blank am Anfang oder Ende ?
     // nicht loeschen, wird wieder eingefuegt.
-    BOOL bHasBlnks = HasSelBlanks( aDelPam );
+    sal_Bool bHasBlnks = HasSelBlanks( aDelPam );
 
     if( *aDelPam.GetPoint() != *aDelPam.GetMark() )
         DeleteSel( aDelPam );
@@ -1230,7 +1220,7 @@ BOOL SwAutoFormat::DeleteAktNxtPara( const String& rNxtPara )
 }
 
 
-void SwAutoFormat::DelEmptyLine( BOOL bTstNextPara )
+void SwAutoFormat::DelEmptyLine( sal_Bool bTstNextPara )
 {
     SetRedlineTxt( STR_AUTOFMTREDL_DEL_EMPTY_PARA );
     // Loesche Blanks den leeren Absatz
@@ -1240,7 +1230,7 @@ void SwAutoFormat::DelEmptyLine( BOOL bTstNextPara )
     aDelPam.SetMark();
 
     aDelPam.GetMark()->nNode--;
-    SwTxtNode* pTNd = aDelPam.GetNode( FALSE )->GetTxtNode();
+    SwTxtNode* pTNd = aDelPam.GetNode( sal_False )->GetTxtNode();
     if( pTNd )
         // erstmal den vorherigen Textnode benutzen.
         aDelPam.GetMark()->nContent.Assign( pTNd, pTNd->GetTxt().Len() );
@@ -1249,7 +1239,7 @@ void SwAutoFormat::DelEmptyLine( BOOL bTstNextPara )
         // dann versuche den naechsten (am Anfang vom Dok, Tabellen-Zellen,
         // Rahmen, ...
         aDelPam.GetMark()->nNode += 2;
-        pTNd = aDelPam.GetNode( FALSE )->GetTxtNode();
+        pTNd = aDelPam.GetNode( sal_False )->GetTxtNode();
         if( pTNd )
         {
             aDelPam.GetMark()->nContent.Assign( pTNd, 0 );
@@ -1270,7 +1260,7 @@ void SwAutoFormat::DelEmptyLine( BOOL bTstNextPara )
 }
 
 
-void SwAutoFormat::DelMoreLinesBlanks( BOOL bWithLineBreaks )
+void SwAutoFormat::DelMoreLinesBlanks( sal_Bool bWithLineBreaks )
 {
     if( aFlags.bAFmtByInput
         ? aFlags.bAFmtByInpDelSpacesBetweenLines
@@ -1289,7 +1279,7 @@ void SwAutoFormat::DelMoreLinesBlanks( BOOL bWithLineBreaks )
             pNxt = (SwPaM*)aDelPam.GetNext();
             if( pNxt->HasMark() && *pNxt->GetPoint() != *pNxt->GetMark() )
             {
-                BOOL bHasBlnks = HasSelBlanks( *pNxt );
+                sal_Bool bHasBlnks = HasSelBlanks( *pNxt );
                 DeleteSel( *pNxt );
                 if( !bHasBlnks )
                 {
@@ -1300,7 +1290,7 @@ void SwAutoFormat::DelMoreLinesBlanks( BOOL bWithLineBreaks )
             if( pNxt == &aDelPam )
                 break;
             delete pNxt;
-        } while( TRUE );
+        } while( sal_True );
 
         aDelPam.DeleteMark();
     }
@@ -1332,9 +1322,9 @@ void SwAutoFormat::BuildIndent()
     SetRedlineTxt( STR_AUTOFMTREDL_SET_TMPL_INDENT );
 
     // lese alle nachfolgenden Absaetze die zu diesem Einzug gehoeren
-    BOOL bBreak = TRUE;
+    sal_Bool bBreak = sal_True;
     if( bMoreLines )
-        DelMoreLinesBlanks( TRUE );
+        DelMoreLinesBlanks( sal_True );
     else
         bBreak = !IsFastFullLine( *pAktTxtNd ) ||
                 IsBlanksInString( *pAktTxtNd ) ||
@@ -1361,7 +1351,7 @@ void SwAutoFormat::BuildIndent()
                     !CalcLevel( *pNxtNd ) );
         }
     }
-    DeleteAktPara( TRUE, TRUE );
+    DeleteAktPara( sal_True, sal_True );
     AutoCorrect();
 }
 
@@ -1370,16 +1360,16 @@ void SwAutoFormat::BuildTextIndent()
 {
     SetRedlineTxt( STR_AUTOFMTREDL_SET_TMPL_TEXT_INDENT);
     // lese alle nachfolgenden Absaetze die zu diesem Einzug gehoeren
-    BOOL bBreak = TRUE;
+    sal_Bool bBreak = sal_True;
     if( bMoreLines )
-        DelMoreLinesBlanks( TRUE );
+        DelMoreLinesBlanks( sal_True );
     else
         bBreak = !IsFastFullLine( *pAktTxtNd ) ||
                     IsBlanksInString( *pAktTxtNd ) ||
                     IsSentenceAtEnd( *pAktTxtNd );
 
     if( aFlags.bAFmtByInput )
-        pAktTxtNd->SetAutoFmtLvl( (BYTE)CalcLevel( *pAktTxtNd ) );
+        pAktTxtNd->SetAutoFmtLvl( (sal_uInt8)CalcLevel( *pAktTxtNd ) );
 
     SetColl( RES_POOLCOLL_TEXT_MOVE );
     if( !bBreak )
@@ -1400,7 +1390,7 @@ void SwAutoFormat::BuildTextIndent()
             pNxtNd = GetNextNode();
         }
     }
-    DeleteAktPara( TRUE, TRUE );
+    DeleteAktPara( sal_True, sal_True );
     AutoCorrect();
 }
 
@@ -1410,14 +1400,14 @@ void SwAutoFormat::BuildText()
     SetRedlineTxt( STR_AUTOFMTREDL_SET_TMPL_TEXT );
     // lese alle nachfolgenden Absaetze die zu diesem Text
     // ohne Einzug gehoeren
-    BOOL bBreak = TRUE;
+    sal_Bool bBreak = sal_True;
     if( bMoreLines )
         DelMoreLinesBlanks();
     else
         bBreak = !IsFastFullLine( *pAktTxtNd ) ||
                     IsBlanksInString( *pAktTxtNd ) ||
                     IsSentenceAtEnd( *pAktTxtNd );
-    SetColl( RES_POOLCOLL_TEXT, TRUE );
+    SetColl( RES_POOLCOLL_TEXT, sal_True );
     if( !bBreak )
     {
         SetRedlineTxt( STR_AUTOFMTREDL_DEL_MORELINES );
@@ -1439,16 +1429,16 @@ void SwAutoFormat::BuildText()
                 break;
         }
     }
-    DeleteAktPara( TRUE, TRUE );
+    DeleteAktPara( sal_True, sal_True );
     AutoCorrect();
 }
 
 
-void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
+void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 {
     SetRedlineTxt( STR_AUTOFMTREDL_SET_NUMBULET );
 
-    BOOL bBreak = TRUE;
+    sal_Bool bBreak = sal_True;
 
     // als erstes den akt. Einzug bestimmen und die Framebreite bestimmen
     SwTwips nFrmWidth = pAktTxtFrm->Prt().Width();;
@@ -1470,19 +1460,17 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                     IsBlanksInString( *pAktTxtNd ) ||
                     IsSentenceAtEnd( *pAktTxtNd );
     sal_Bool bRTL = pEditShell->IsInRightToLeftText();
-//  SetColl( RES_POOLCOLL_NUM_LEVEL1 + ( nLvl * 4 ) );
-    DeleteAktPara( TRUE, TRUE );
+    DeleteAktPara( sal_True, sal_True );
 
-    BOOL bChgBullet = FALSE, bChgEnum = FALSE;
+    sal_Bool bChgBullet = sal_False, bChgEnum = sal_False;
     xub_StrLen nAutoCorrPos = 0;
 
     // falls die Numerierung gesetzt werden, die akt. besorgen
-    // --> OD 2008-02-11 #newlistlevelattrs#
     SwNumRule aRule( pDoc->GetUniqueNumRuleName(),
                      // --> OD 2008-06-06 #i89178#
                      numfunc::GetDefaultPositionAndSpaceMode() );
                      // <--
-    // <--
+
     const SwNumRule* pCur = 0;
     if( aFlags.bSetNumRule && 0 != (pCur = pAktTxtNd->GetNumRule()) )
         aRule = *pCur;
@@ -1491,7 +1479,6 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
     const String& rStr = pAktTxtNd->GetTxt();
     xub_StrLen nTxtStt = 0, nOrigTxtStt = 0;
     const sal_Unicode* pFndBulletChr;
-//  if( aFlags.bAFmtByInput ? aFlags.bSetNumRule : aFlags.bChgEnumNum &&
     if( aFlags.bChgEnumNum &&
         2 < rStr.Len() &&
         0 != ( pFndBulletChr = StrChr( pBulletChar, rStr.GetChar( nTxtStt ) ))
@@ -1503,7 +1490,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
             {
                 SwCharFmt* pCFmt = pDoc->GetCharFmtFromPool(
                                             RES_POOLCHR_BUL_LEVEL );
-                bChgBullet = TRUE;
+                bChgBullet = sal_True;
                 // wurde das Format schon mal angepasst?
                 if( !aRule.GetNumFmt( nLvl ) )
                 {
@@ -1529,16 +1516,19 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                         // <--
                     }
 
-                    USHORT nAbsPos = lBullIndent;
-                    USHORT nSpaceSteps = nLvl
-                                            ? USHORT(nLeftTxtPos / nLvl)
+                    sal_uInt16 nAbsPos = lBullIndent;
+                    sal_uInt16 nSpaceSteps = nLvl
+                                            ? sal_uInt16(nLeftTxtPos / nLvl)
                                             : lBullIndent;
-                    for( BYTE n = 0; n < MAXLEVEL; ++n, nAbsPos = nAbsPos + nSpaceSteps )
+                    for( sal_uInt8 n = 0; n < MAXLEVEL; ++n, nAbsPos = nAbsPos + nSpaceSteps )
                     {
                         SwNumFmt aFmt( aRule.Get( n ) );
                         aFmt.SetBulletFont( pBullFnt );
                         aFmt.SetBulletChar( cBullChar );
                         aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                        // #i93908# clear suffix for bullet lists
+                        aFmt.SetPrefix(::rtl::OUString());
+                        aFmt.SetSuffix(::rtl::OUString());
                         aFmt.SetFirstLineOffset( lBullFirstLineOffset );
                         aFmt.SetAbsLSpace( nAbsPos );
                         if( !aFmt.GetCharFmt() )
@@ -1550,7 +1540,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
 
                         if( n == nLvl &&
                             nFrmWidth < ( nSpaceSteps * MAXLEVEL ) )
-                            nSpaceSteps = static_cast<USHORT>(( nFrmWidth - nLeftTxtPos ) /
+                            nSpaceSteps = static_cast<sal_uInt16>(( nFrmWidth - nLeftTxtPos ) /
                                                 ( MAXLEVEL - nLvl ));
                     }
                 }
@@ -1558,8 +1548,8 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
         }
         else
         {
-            bChgBullet = TRUE;
-            SetColl( static_cast<USHORT>(RES_POOLCOLL_BUL_LEVEL1 + ( Min( nLvl, cnNumBullColls ) * 4 )) );
+            bChgBullet = sal_True;
+            SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_BUL_LEVEL1 + ( Min( nLvl, cnNumBullColls ) * 4 )) );
         }
     }
     else
@@ -1574,13 +1564,13 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
         if( USHRT_MAX != ( nDigitLevel = GetDigitLevel( *pAktTxtNd, nTxtStt,
                                         &aPreFix, &aPostFix, &aNumTypes )) )
         {
-            bChgEnum = TRUE;
+            bChgEnum = sal_True;
 
             // Ebene 0 und Einrueckung dann wird die Ebene durch den linken
             // Einzug und der default NumEinrueckung bestimmt.
             if( !nDigitLevel && nLeftTxtPos )
-                nLvl = Min( USHORT( nLeftTxtPos / lNumIndent ),
-                            USHORT( MAXLEVEL - 1 ) );
+                nLvl = Min( sal_uInt16( nLeftTxtPos / lNumIndent ),
+                            sal_uInt16( MAXLEVEL - 1 ) );
             else
                 nLvl = nDigitLevel;
         }
@@ -1594,7 +1584,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                 if( !nDigitLevel )
                 {
                     SwNumFmt aFmt( aRule.Get( nLvl ) );
-                    aFmt.SetStart( static_cast<USHORT>(aPreFix.GetToken( 1,
+                    aFmt.SetStart( static_cast<sal_uInt16>(aPreFix.GetToken( 1,
                                             (sal_Unicode)1 ).ToInt32()));
                     aFmt.SetPrefix( aPreFix.GetToken( 0, (sal_Unicode)1 ));
                     aFmt.SetSuffix( aPostFix.GetToken( 0, (sal_Unicode)1 ));
@@ -1612,13 +1602,13 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                 }
                 else
                 {
-                    USHORT nSpaceSteps = nLvl ? USHORT(nLeftTxtPos / nLvl) : 0;
-                    BYTE n;
+                    sal_uInt16 nSpaceSteps = nLvl ? sal_uInt16(nLeftTxtPos / nLvl) : 0;
+                    sal_uInt8 n;
                     for( n = 0; n <= nLvl; ++n )
                     {
                         SwNumFmt aFmt( aRule.Get( n ) );
 
-                        aFmt.SetStart( static_cast<USHORT>(aPreFix.GetToken( n+1,
+                        aFmt.SetStart( static_cast<sal_uInt16>(aPreFix.GetToken( n+1,
                                                     (sal_Unicode)1 ).ToInt32() ));
                         if( !n )
                             aFmt.SetPrefix( aPreFix.GetToken( n, (sal_Unicode)1 ));
@@ -1627,7 +1617,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                         if( n < aNumTypes.Len() )
                             aFmt.SetNumberingType((aNumTypes.GetChar( n ) - '0'));
 
-                        aFmt.SetAbsLSpace( USHORT( nSpaceSteps * n )
+                        aFmt.SetAbsLSpace( sal_uInt16( nSpaceSteps * n )
                                             + lNumIndent );
 
                         if( !aFmt.GetCharFmt() )
@@ -1639,16 +1629,16 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                     }
 
                     // passt alles vollstaendig in den Frame?
-                    BOOL bDefStep = nFrmWidth < (nSpaceSteps * MAXLEVEL);
+                    sal_Bool bDefStep = nFrmWidth < (nSpaceSteps * MAXLEVEL);
                     for( ; n < MAXLEVEL; ++n )
                     {
                         SwNumFmt aFmt( aRule.Get( n ) );
                         aFmt.SetIncludeUpperLevels( MAXLEVEL );
                         if( bDefStep )
-                            aFmt.SetAbsLSpace( USHORT( (nLeftTxtPos +
-                                SwNumRule::GetNumIndent(static_cast<BYTE>(n-nLvl)))));
+                            aFmt.SetAbsLSpace( sal_uInt16( (nLeftTxtPos +
+                                SwNumRule::GetNumIndent(static_cast<sal_uInt8>(n-nLvl)))));
                         else
-                            aFmt.SetAbsLSpace( USHORT( nSpaceSteps * n )
+                            aFmt.SetAbsLSpace( sal_uInt16( nSpaceSteps * n )
                                                 + lNumIndent );
                         aRule.Set( n, aFmt );
                     }
@@ -1656,9 +1646,9 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
             }
         }
         else if( !aFlags.bAFmtByInput )
-            SetColl( static_cast<USHORT>(RES_POOLCOLL_NUM_LEVEL1 + ( Min( nLvl, cnNumBullColls ) * 4 ) ));
+            SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_NUM_LEVEL1 + ( Min( nLvl, cnNumBullColls ) * 4 ) ));
         else
-            bChgEnum = FALSE;
+            bChgEnum = sal_False;
     }
 
     if( bChgEnum || bChgBullet )
@@ -1672,16 +1662,14 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
             {
                 aDelPam.SetMark();
                 aDelPam.GetMark()->nNode++;
-                aDelPam.GetNode(FALSE)->GetTxtNode()->SetAttrListLevel( nLvl );
+                aDelPam.GetNode(sal_False)->GetTxtNode()->SetAttrListLevel( nLvl );
             }
 
             pAktTxtNd->SetAttrListLevel(nLvl);
-            pAktTxtNd->SetNumLSpace( TRUE );
+            pAktTxtNd->SetNumLSpace( sal_True );
 
-            // --> OD 2008-03-17 #refactorlists#
             // start new list
             pDoc->SetNumRule( aDelPam, aRule, true );
-            // <--
             aDelPam.DeleteMark();
 
             aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, 0 );
@@ -1755,7 +1743,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
         if(!pNxtNd || pCurrNode == pNxtNd)
             break;
     }
-    DeleteAktPara( FALSE, TRUE );
+    DeleteAktPara( sal_False, sal_True );
     AutoCorrect( nAutoCorrPos );
 }
 
@@ -1768,28 +1756,28 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
     //   Einrueckung in der 2.Zeile)
 
     // lese alle nachfolgenden Absaetze die zu dieser Aufzaehlung gehoeren
-    BOOL bBreak = TRUE;
+    sal_Bool bBreak = sal_True;
     xub_StrLen nSpacePos, nTxtPos = GetBigIndent( nSpacePos );
     if( bMoreLines )
-        DelMoreLinesBlanks( TRUE );
+        DelMoreLinesBlanks( sal_True );
     else
         bBreak = !IsFastFullLine( *pAktTxtNd ) ||
                     ( !nTxtPos && IsBlanksInString( *pAktTxtNd )) ||
                     IsSentenceAtEnd( *pAktTxtNd );
 
-    SetColl( static_cast<USHORT>( nTxtPos
+    SetColl( static_cast<sal_uInt16>( nTxtPos
                 ? RES_POOLCOLL_CONFRONTATION
                 : RES_POOLCOLL_TEXT_NEGIDENT ) );
 
     if( nTxtPos )
     {
         const String& rStr = pAktTxtNd->GetTxt();
-        BOOL bInsTab = TRUE;
+        sal_Bool bInsTab = sal_True;
 
         if( '\t' == rStr.GetChar( nSpacePos+1 ))       // ein Tab, das belassen wir
         {
             --nSpacePos;
-            bInsTab = FALSE;
+            bInsTab = sal_False;
         }
 
         xub_StrLen nSpaceStt = nSpacePos;
@@ -1800,7 +1788,7 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
         if( bInsTab && '\t' == rStr.GetChar( nSpaceStt ) )      // ein Tab, das belassen wir
         {
             ++nSpaceStt;
-            bInsTab = FALSE;
+            bInsTab = sal_False;
         }
 
 
@@ -1843,12 +1831,12 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
             pNxtNd = GetNextNode();
         }
     }
-    DeleteAktPara( TRUE, TRUE );
+    DeleteAktPara( sal_True, sal_True );
     AutoCorrect();
 }
 
 
-void SwAutoFormat::BuildHeadLine( USHORT nLvl )
+void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
 {
     if( aFlags.bWithRedlining )
     {
@@ -1860,14 +1848,14 @@ void SwAutoFormat::BuildHeadLine( USHORT nLvl )
         pDoc->SetAutoFmtRedlineComment( &sTxt );
     }
 
-    SetColl( static_cast<USHORT>(RES_POOLCOLL_HEADLINE1 + nLvl ), TRUE );
+    SetColl( static_cast<sal_uInt16>(RES_POOLCOLL_HEADLINE1 + nLvl ), sal_True );
     if( aFlags.bAFmtByInput )
     {
         SwTxtFmtColl& rNxtColl = pAktTxtNd->GetTxtColl()->GetNextTxtFmtColl();
 
         DelPrevPara();
 
-        DeleteAktPara( TRUE, FALSE );
+        DeleteAktPara( sal_True, sal_False );
         DeleteAktNxtPara( aEmptyStr );
 
         aDelPam.DeleteMark();
@@ -1877,7 +1865,7 @@ void SwAutoFormat::BuildHeadLine( USHORT nLvl )
     }
     else
     {
-        DeleteAktPara( TRUE, TRUE );
+        DeleteAktPara( sal_True, sal_True );
         AutoCorrect();
     }
 }
@@ -1903,7 +1891,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
     if( nPos >= pTxt->Len() )
         return;
 
-    BOOL bGetLanguage = aFlags.bChgOrdinalNumber ||
+    sal_Bool bGetLanguage = aFlags.bChgOrdinalNumber ||
                         aFlags.bChgToEnEmDash || aFlags.bSetINetAttr ||
                         aFlags.bCptlSttWrd || aFlags.bCptlSttSntnc ||
                         aFlags.bAddNonBrkSpace;
@@ -1918,7 +1906,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
     SwTxtFrmInfo aFInfo( 0 );
 
     xub_StrLen nSttPos, nLastBlank = nPos;
-    BOOL bFirst = aFlags.bCptlSttSntnc, bFirstSent = bFirst;
+    sal_Bool bFirst = aFlags.bCptlSttSntnc, bFirstSent = bFirst;
     sal_Unicode cChar = 0;
 
     CharClass& rAppCC = GetAppCharClass();
@@ -1941,17 +1929,17 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
             {
                 SetRedlineTxt( STR_AUTOFMTREDL_TYPO );
                 aDelPam.GetPoint()->nContent = nPos;
-                BOOL bSetHardBlank = FALSE;
+                sal_Bool bSetHardBlank = sal_False;
 
                 String sReplace( pATst->GetQuote( aACorrDoc,
-                                    nPos, cChar, TRUE ));
+                                    nPos, cChar, sal_True ));
 
                 aDelPam.SetMark();
                 aDelPam.GetPoint()->nContent = nPos+1;
                 if( 2 == sReplace.Len() && ' ' == sReplace.GetChar( 1 ))
                 {
                     sReplace.Erase( 1 );
-                    bSetHardBlank = TRUE;
+                    bSetHardBlank = sal_True;
                 }
                 pDoc->ReplaceRange( aDelPam, sReplace, false );
 
@@ -1974,7 +1962,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
             }
         }
 
-        int bCallACorr = FALSE;
+        int bCallACorr = sal_False;
         int bBreak = 0;
         if( nPos && IsSpace( pTxt->GetChar( nPos-1 )))
             nLastBlank = nPos;
@@ -1992,15 +1980,15 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                     if( !aFInfo.IsBullet( nPos ))
                     {
                         SetRedlineTxt( STR_AUTOFMTREDL_TYPO );
-                        BOOL bSetHardBlank = FALSE;
+                        sal_Bool bSetHardBlank = sal_False;
                         aDelPam.GetPoint()->nContent = nPos;
                         String sReplace( pATst->GetQuote( aACorrDoc,
-                                                    nPos, cChar, FALSE ));
+                                                    nPos, cChar, sal_False ));
 
                         if( 2 == sReplace.Len() && ' ' == sReplace.GetChar( 0 ))
                         {
                             sReplace.Erase( 0, 1 );
-                            bSetHardBlank = TRUE;
+                            bSetHardBlank = sal_True;
                         }
 
                         aDelPam.SetMark();
@@ -2085,13 +2073,8 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
             case '!':
             case '?':
                 if( aFlags.bCptlSttSntnc )
-                    bFirstSent = TRUE;
-//alle Wortrenner loesen die Autokorrektur aus!
-//              break;
+                    bFirstSent = sal_True;
             default:
-//alle Wortrenner loesen die Autokorrektur aus!
-//          case ' ':
-//          case '\t':
                 if( !( rAppCC.isLetterNumeric( *pTxt, nPos )
                         || '/' == cChar )) //  '/' should not be a word seperator (e.g. '1/2' needs to be handled as one word for replacement)
                 {
@@ -2104,15 +2087,15 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
         if( nPos == nSttPos )
         {
             if( ++nPos == pTxt->Len() )
-                bCallACorr = TRUE;
+                bCallACorr = sal_True;
         }
         else
-            bCallACorr = TRUE;
+            bCallACorr = sal_True;
 
 
         if( bCallACorr )
         {
-            bCallACorr = FALSE;
+            bCallACorr = sal_False;
             aDelPam.GetPoint()->nContent = nPos;
             SetRedlineTxt( STR_AUTOFMTREDL_USE_REPLACE );
             if( aFlags.bAutoCorrect &&
@@ -2165,12 +2148,12 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                 if( aFlags.bCptlSttSntnc && bFirst )
                 {
                     SetRedlineTxt( STR_AUTOFMTREDL_CPTL_STT_SENT );
-                    pATst->FnCptlSttSntnc( aACorrDoc, *pTxt, TRUE, nSttPos, nPos, eLang);
-                    bFirst = FALSE;
+                    pATst->FnCptlSttSntnc( aACorrDoc, *pTxt, sal_True, nSttPos, nPos, eLang);
+                    bFirst = sal_False;
                 }
 
                 bFirst = bFirstSent;
-                bFirstSent = FALSE;
+                bFirstSent = sal_False;
 
                 if( aFlags.bWithRedlining )
                 {
@@ -2203,14 +2186,14 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
             "Kein Bereich angegeben" );
 
     if( aFlags.bSetNumRule && !aFlags.bAFmtByInput )
-        aFlags.bSetNumRule = FALSE;
+        aFlags.bSetNumRule = sal_False;
 
-    BOOL bReplaceStyles = !aFlags.bAFmtByInput || aFlags.bReplaceStyles;
+    sal_Bool bReplaceStyles = !aFlags.bAFmtByInput || aFlags.bReplaceStyles;
 
     const SwTxtNode* pNxtNd = 0;
-    BOOL bNxtEmpty = FALSE;
-    BOOL bNxtAlpha = FALSE;
-    USHORT nNxtLevel = 0;
+    sal_Bool bNxtEmpty = sal_False;
+    sal_Bool bNxtAlpha = sal_False;
+    sal_uInt16 nNxtLevel = 0;
 
     // setze den Bereich zum Autoformatieren
     if( pSttNd )
@@ -2227,9 +2210,9 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     IsNoAlphaLine( *pNxtNd );
     }
     else
-        bEmptyLine = TRUE;      // am Dokument Anfang
+        bEmptyLine = sal_True;      // am Dokument Anfang
 
-    bEnde = FALSE;
+    bEnde = sal_False;
 
     // setze die Werte fuer die Prozent-Anzeige
     nEndNdIdx = aEndNdIdx.GetIndex();
@@ -2242,7 +2225,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     RedlineMode_t eRedlMode = pDoc->GetRedlineMode(), eOldMode = eRedlMode;
     if( aFlags.bWithRedlining )
     {
-        pDoc->SetAutoFmtRedline( TRUE );
+        pDoc->SetAutoFmtRedline( sal_True );
         eRedlMode = (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT);
     }
     else
@@ -2250,16 +2233,16 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     pDoc->SetRedlineMode( eRedlMode );
 
     // save undo state (might be turned off)
-    sal_Bool bUndoState = pDoc->DoesUndo();
+    bool const bUndoState = pDoc->GetIDocumentUndoRedo().DoesUndo();
 
     // wenn mehrere Zeilen, dann erstmal nicht mit
     // dem nachfolgenden Absatz zusammenfassen.
-    bMoreLines = FALSE;
+    bMoreLines = sal_False;
 
     nLastCalcHeadLvl = nLastCalcEnumLvl = 0;
     nLastHeadLvl = nLastEnumLvl = USHRT_MAX;
-    USHORT nLevel = 0;
-    USHORT nDigitLvl = 0;
+    sal_uInt16 nLevel = 0;
+    sal_uInt16 nDigitLvl = 0;
 
     // defaulten
     SwTxtFrmInfo aFInfo( 0 );
@@ -2268,51 +2251,6 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     eStat = READ_NEXT_PARA;
     while( !bEnde )
     {
-        // #95884# limit redline array size to prevent overflow and to conserve
-        // memory
-        if( pDoc->HasTooManyUndos() )
-        {
-            DBG_ASSERT( bUndoState, "undo overflow without undo?" );
-
-            //ask user
-            short nResult = m_nActionWhileAutoformatUndoBufferOverflow; // TODO: #102007# read the last decision of the user from configuration
-            if(m_bAskForCancelUndoWhileBufferOverflow) // #102007# TODO: read the last decision of the user from configuration
-            {
-                Window* pParent = pEditShell?pEditShell->GetWin():NULL;
-                WarningBox aWarning( pParent,SW_RES(MSG_DISABLE_UNDO_QUESTION));
-                aWarning.SetDefaultCheckBoxText();
-                USHORT nDefaultButton = nResult==RET_YES?BUTTONID_YES:(nResult==RET_NO?BUTTONID_NO:BUTTONID_CANCEL);
-                aWarning.SetFocusButton(nDefaultButton);
-                nResult     = aWarning.Execute();
-                m_bAskForCancelUndoWhileBufferOverflow = !aWarning.GetCheckBoxState();
-                m_nActionWhileAutoformatUndoBufferOverflow = nResult;
-                // TODO: #102007# store m_bAskForCancelUndoWhileBufferOverflow in configuration
-                // TODO: #102007# store m_nActionWhileAutoformatUndoBufferOverflow in configuration
-            }
-
-            DBG_ASSERT( (nResult == RET_YES) || (nResult == RET_CANCEL) || (nResult == RET_NO),
-                        "unexpected result" );
-
-            if( nResult == RET_YES )
-            {
-                // turn off undo and continue
-                pDoc->DoUndo( sal_False );
-                pDoc->DelAllUndoObj();
-            }
-            else if( nResult == RET_NO )
-            {
-                //stop autoformatting and keep changes
-                eStat = IS_ENDE;
-            }
-            else if( nResult == RET_CANCEL )
-            {
-                //cancel autoformatting and undo changes
-                eStat = IS_ENDE;
-
-                // TODO: #102004# undo changes
-            }
-        }
-
         switch( eStat )
         {
         case READ_NEXT_PARA:
@@ -2327,8 +2265,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
             {
                 if( aFlags.bDelEmptyNode && !HasObjects( *pAktTxtNd ) )
                 {
-                    bEmptyLine = TRUE;
-                    ULONG nOldCnt = pDoc->GetNodes().Count();
+                    bEmptyLine = sal_True;
+                    sal_uLong nOldCnt = pDoc->GetNodes().Count();
                     DelEmptyLine();
                     // wurde wiklich ein Node geloescht ?
                     if( nOldCnt != pDoc->GetNodes().Count() )
@@ -2348,7 +2286,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 {
                     //JP 30.09.96: das DoTable() verlaesst sich auf das
                     //              Pop und Move - Crsr nach dem AutoFormat!
-                    pEdShell->Pop( FALSE );
+                    pEdShell->Pop( sal_False );
                     *pEdShell->GetCrsr() = aDelPam;
                     pEdShell->Push();
 
@@ -2361,8 +2299,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 // geloescht werden!
                 if( !DoUnderline() && bReplaceStyles )
                 {
-                    SetColl( RES_POOLCOLL_STANDARD, TRUE );
-                    bEmptyLine = TRUE;
+                    SetColl( RES_POOLCOLL_STANDARD, sal_True );
+                    bEmptyLine = sal_True;
                 }
                 eStat = READ_NEXT_PARA;
             }
@@ -2375,12 +2313,12 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 if( pAktTxtNd->GetNumRule() )
                 {
                     // in Numerierung nichts machen, zum naechsten
-                    bEmptyLine = FALSE;
+                    bEmptyLine = sal_False;
                     eStat = READ_NEXT_PARA;
                     // loesche alle Blanks am Anfang/Ende
                     // und alle mitten drin
                     //JP 29.04.98: erstmal nur alle "mitten drin".
-                    DelMoreLinesBlanks( FALSE );
+                    DelMoreLinesBlanks( sal_False );
                     break;
                 }
 
@@ -2389,7 +2327,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 // erstmal: wurden schon mal entsprechende Vorlagen
                 //          vergeben, so behalte die bei, gehe zum
                 //          naechsten Node.
-                USHORT nPoolId = pAktTxtNd->GetTxtColl()->GetPoolFmtId();
+                sal_uInt16 nPoolId = pAktTxtNd->GetTxtColl()->GetPoolFmtId();
                 if( IsPoolUserFmt( nPoolId )
                         ? !aFlags.bChgUserColl
                         : ( RES_POOLCOLL_STANDARD != nPoolId &&
@@ -2408,7 +2346,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     short nSz;
                     SvxLRSpaceItem* pLRSpace;
                     if( SFX_ITEM_SET == pAktTxtNd->GetSwAttrSet().
-                        GetItemState( RES_LR_SPACE, TRUE,
+                        GetItemState( RES_LR_SPACE, sal_True,
                                         (const SfxPoolItem**)&pLRSpace ) &&
                         ( 0 != (nSz = pLRSpace->GetTxtFirstLineOfst()) ||
                             0 != pLRSpace->GetTxtLeft() ) )
@@ -2428,7 +2366,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
 
                         // nie zusammenfassen, so belassen
                         // (Opt. vielleicht als Ausnahmen nur Einzug)
-                        bMoreLines = TRUE;
+                        bMoreLines = sal_True;
 
                         if( bReplaceStyles )
                         {
@@ -2455,19 +2393,15 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     nNxtLevel = CalcLevel( *pNxtNd );
 
                     if( !bEmptyLine && HasBreakAttr( *pAktTxtNd ) )
-                        bEmptyLine = TRUE;
+                        bEmptyLine = sal_True;
                     if( !bNxtEmpty && HasBreakAttr( *pNxtNd ) )
-                        bNxtEmpty = TRUE;
+                        bNxtEmpty = sal_True;
 
-                    // fuer z.B. selbst definierte Einzuege oder
-                    // rechts/zentierte Ausrichtung
-//                  if( !nLevel && 0 != aFInfo.GetLineStart() )
-//                      nLevel = 1;
                 }
                 else
                 {
-                    bNxtEmpty = FALSE; // TRUE;
-                    bNxtAlpha = FALSE;
+                    bNxtEmpty = sal_False; // sal_True;
+                    bNxtAlpha = sal_False;
                     nNxtLevel = 0;
                 }
                 eStat = !bMoreLines ? IS_ONE_LINE : TST_ENUMERIC;
@@ -2484,7 +2418,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
 
                 if( !DelLeadingBlanks( sClrStr ).Len() )
                 {
-                    bEmptyLine = TRUE;
+                    bEmptyLine = sal_True;
                     eStat = READ_NEXT_PARA;
                     break;      // naechsten Absatz lesen
                 }
@@ -2494,20 +2428,13 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     IsBlanksInString( *pAktTxtNd ) )
                     break;
 
-                bEmptyLine = FALSE;
+                bEmptyLine = sal_False;
                 String sEndClrStr( sClrStr );
                 xub_StrLen nLen = DelTrailingBlanks( sEndClrStr ).Len();
 
                 // nicht, dann teste auf Ueberschrift
                 if( ':' == sEndClrStr.GetChar( nLen - 1 ) )
                 {
-//---------------------------------------------------------------------------
-// Wie ist denn nun die Bedingung fuer die Ueberschrift auf Ebene 3 ??
-// Zur Zeit: generell wenn am Ende ein ':' ist.
-//
-//                  if( bNxtEmpty || bNxtAlpha )
-//                      !IsEnumericChar( *pNxtNd ) )
-//---------------------------------------------------------------------------
                     {
                         BuildHeadLine( 2 );
                         eStat = READ_NEXT_PARA;
@@ -2520,16 +2447,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     if( bNxtEmpty || bNxtAlpha
                         || ( pNxtNd && IsEnumericChar( *pNxtNd ))
 
-//---------------------------------------------------------------------------
-// ist zum Verwechseln mit neg. Einzug !!
-                        /*|| nLevel < nNxtLevel*/
-//---------------------------------------------------------------------------
-
                         )
                     {
-                        // wurde Level vom Text vorgegeben ?
-//                      if( USHRT_MAX != nDigitLvl )
-//                          nLevel = nDigitLvl;
 
                         // eine Ebene runter ?
                         if( nLevel >= MAXLEVEL )
@@ -2563,7 +2482,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
 
         case TST_ENUMERIC:
             {
-                bEmptyLine = FALSE;
+                bEmptyLine = sal_False;
                 if( IsEnumericChar( *pAktTxtNd ))
                 {
                     if( nLevel >= MAXLEVEL )
@@ -2571,9 +2490,6 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     BuildEnum( nLevel, nDigitLvl );
                     eStat = READ_NEXT_PARA;
                 }
-//JP 25.03.96: Vorlagen fuer Einzug zulassen
-//              else if( aFlags.bAFmtByInput )
-//                  eStat = READ_NEXT_PARA;
                 else if( bReplaceStyles )
                     eStat = nLevel ? TST_IDENT : TST_NEG_IDENT;
                 else
@@ -2660,12 +2576,12 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 // erstmal: wurden schon mal entsprechende Vorlagen
                 //          vergeben, so behalte die bei, gehe zum
                 //          naechsten Node.
-                bEmptyLine = FALSE;
+                bEmptyLine = sal_False;
                 eStat = READ_NEXT_PARA;
                 // loesche alle Blanks am Anfang/Ende
                 // und alle mitten drin
                 //JP 29.04.98: erstmal nur alle "mitten drin".
-                DelMoreLinesBlanks( FALSE );
+                DelMoreLinesBlanks( sal_False );
 
                 // behandel die harte Attributierung
                 if( pAktTxtNd->HasSwAttrSet() )
@@ -2674,7 +2590,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     SvxLRSpaceItem* pLRSpace;
                     if( bReplaceStyles &&
                         SFX_ITEM_SET == pAktTxtNd->GetSwAttrSet().
-                        GetItemState( RES_LR_SPACE, FALSE,
+                        GetItemState( RES_LR_SPACE, sal_False,
                                         (const SfxPoolItem**)&pLRSpace ) &&
                         ( 0 != (nSz = pLRSpace->GetTxtFirstLineOfst()) ||
                             0 != pLRSpace->GetTxtLeft() ) )
@@ -2696,17 +2612,17 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
             break;
 
         case IS_ENDE:
-            bEnde = TRUE;
+            bEnde = sal_True;
             break;
         }
     }
 
     if( aFlags.bWithRedlining )
-        pDoc->SetAutoFmtRedline( FALSE );
+        pDoc->SetAutoFmtRedline( sal_False );
     pDoc->SetRedlineMode( eOldMode );
 
     // restore undo (in case it has been changed)
-    pDoc->DoUndo( bUndoState );
+    pDoc->GetIDocumentUndoRedo().DoUndo(bUndoState);
 
     // Prozent-Anzeige wieder abschalten
     if( !aFlags.bAFmtByInput )
@@ -2726,7 +2642,7 @@ void SwEditShell::AutoFormat( const SvxSwAutoFmtFlags* pAFlags )
     {
         aAFFlags = *pAFlags;
         if( !aAFFlags.bAFmtByInput )
-            pWait = new SwWait( *GetDoc()->GetDocShell(), TRUE );
+            pWait = new SwWait( *GetDoc()->GetDocShell(), sal_True );
     }
 
     SwPaM* pCrsr = GetCrsr();
@@ -2762,13 +2678,13 @@ void SwEditShell::AutoFmtBySplitNode()
         StartAllAction();
         StartUndo( UNDO_AUTOFORMAT );
 
-        BOOL bRange = FALSE;
+        sal_Bool bRange = sal_False;
         pCrsr->SetMark();
         SwIndex* pCntnt = &pCrsr->GetMark()->nContent;
         if( pCntnt->GetIndex() )
         {
             *pCntnt = 0;
-            bRange = TRUE;
+            bRange = sal_True;
         }
         else
         {
@@ -2779,7 +2695,7 @@ void SwEditShell::AutoFmtBySplitNode()
             {
                 pCntnt->Assign( pTxtNd, 0 );
                 pCrsr->GetMark()->nNode = aNdIdx;
-                bRange = TRUE;
+                bRange = sal_True;
             }
         }
 
@@ -2794,7 +2710,7 @@ void SwEditShell::AutoFmtBySplitNode()
 
             //JP 30.09.96: das DoTable() verlaesst sich auf das PopCrsr
             //              und MoveCrsr!
-            Pop( FALSE );
+            Pop( sal_False );
             pCrsr = GetCrsr();
         }
         pCrsr->DeleteMark();

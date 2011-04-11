@@ -27,14 +27,26 @@
  ************************************************************************/
 
 #include "oox/helper/propertymap.hxx"
-#include <osl/mutex.hxx>
-#include <cppuhelper/implbase2.hxx>
+
+#if OSL_DEBUG_LEVEL > 0
+# include <cstdio>
+# include <com/sun/star/style/LineSpacing.hpp>
+# include <com/sun/star/style/LineSpacingMode.hpp>
+# include <com/sun/star/text/WritingMode.hpp>
+# define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
+using ::com::sun::star::style::LineSpacing;
+using ::com::sun::star::text::WritingMode;
+#endif
+
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include "properties.hxx"
-#include "oox/token/propertylist.hxx"
-
+#include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <cppuhelper/implbase2.hxx>
+#include <osl/mutex.hxx>
+#include "oox/token/propertynames.hxx"
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
@@ -50,6 +62,7 @@ using ::com::sun::star::beans::XPropertyChangeListener;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::beans::XVetoableChangeListener;
+using ::com::sun::star::container::XIndexReplace;
 
 #if OSL_DEBUG_LEVEL > 0
 #include <cstdio>
@@ -70,24 +83,32 @@ using ::com::sun::star::drawing::TextVerticalAdjust;
 #endif
 
 namespace oox {
+using ::com::sun::star::container::XIndexReplace;
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::uno;
+using ::com::sun::star::drawing::TextHorizontalAdjust;
+using ::com::sun::star::drawing::TextVerticalAdjust;
+
+using ::rtl::OString;
+using ::rtl::OUString;
 
 // ============================================================================
 
 namespace {
 
-/** Thread-save singleton of a vector of all supported property names. */
-struct StaticPropertyList : public ::rtl::Static< PropertyList, StaticPropertyList > {};
-
-// ----------------------------------------------------------------------------
-
-typedef ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo > GenericPropertySetImplBase;
+typedef ::cppu::WeakImplHelper2< XPropertySet, XPropertySetInfo > GenericPropertySetBase;
 
 /** This class implements a generic XPropertySet.
 
     Properties of all names and types can be set and later retrieved.
     TODO: move this to comphelper or better find an existing implementation
  */
-class GenericPropertySet : public GenericPropertySetImplBase, private ::osl::Mutex
+class GenericPropertySet : public GenericPropertySetBase, private ::osl::Mutex
 {
 public:
     explicit            GenericPropertySet();
@@ -120,7 +141,7 @@ GenericPropertySet::GenericPropertySet()
 
 GenericPropertySet::GenericPropertySet( const PropertyMap& rPropMap )
 {
-    const PropertyList& rPropNames = StaticPropertyList::get();
+    const PropertyNameVector& rPropNames = StaticPropertyNameVector::get();
     for( PropertyMap::const_iterator aIt = rPropMap.begin(), aEnd = rPropMap.end(); aIt != aEnd; ++aIt )
         maPropMap[ rPropNames[ aIt->first ] ] = aIt->second;
 }
@@ -188,7 +209,7 @@ sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rProper
 // ============================================================================
 
 PropertyMap::PropertyMap() :
-    mpPropNames( &StaticPropertyList::get() )
+    mpPropNames( &StaticPropertyNameVector::get() ) // pointer instead reference to get compiler generated copy c'tor and operator=
 {
 }
 
@@ -199,7 +220,7 @@ PropertyMap::~PropertyMap()
 /*static*/ const OUString& PropertyMap::getPropertyName( sal_Int32 nPropId )
 {
     OSL_ENSURE( (0 <= nPropId) && (nPropId < PROP_COUNT), "PropertyMap::getPropertyName - invalid property identifier" );
-    return StaticPropertyList::get()[ nPropId ];
+    return StaticPropertyNameVector::get()[ nPropId ];
 }
 
 const Any* PropertyMap::getProperty( sal_Int32 nPropId ) const
@@ -219,7 +240,7 @@ Sequence< PropertyValue > PropertyMap::makePropertyValueSequence() const
             OSL_ENSURE( (0 <= aIt->first) && (aIt->first < PROP_COUNT), "PropertyMap::makePropertyValueSequence - invalid property identifier" );
             pValues->Name = (*mpPropNames)[ aIt->first ];
             pValues->Value = aIt->second;
-            pValues->State = ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
+            pValues->State = PropertyState_DIRECT_VALUE;
         }
     }
     return aSeq;
@@ -248,31 +269,21 @@ Reference< XPropertySet > PropertyMap::makePropertySet() const
 }
 
 #if OSL_DEBUG_LEVEL > 0
-void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
+static void lclDumpAnyValue( Any value)
 {
-    Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
-    Sequence< beans::Property > props = info->getProperties ();
-
-    OSL_TRACE("dump props, len: %d", props.getLength ());
-
-    for (int i=0; i < props.getLength (); i++) {
-        OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
-        fprintf (stderr,"%30s = ", name.getStr() );
-
-    try {
-        Any value = rXPropSet->getPropertyValue( props [i].Name );
-
         OUString strValue;
         sal_Int32 intValue = 0;
         sal_uInt32 uintValue = 0;
         sal_Int16 int16Value = 0;
         sal_uInt16 uint16Value = 0;
+        float floatValue = 0;
         bool boolValue = false;
     LineSpacing spacing;
 //         RectanglePoint pointValue;
     WritingMode aWritingMode;
     TextVerticalAdjust aTextVertAdj;
     TextHorizontalAdjust aTextHorizAdj;
+    Reference< XIndexReplace > xNumRule;
 
         if( value >>= strValue )
             fprintf (stderr,"\"%s\"\n", USS( strValue ) );
@@ -284,13 +295,27 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
             fprintf (stderr,"%d            (hex: %x)\n", int16Value, int16Value);
         else if( value >>= uint16Value )
             fprintf (stderr,"%d            (hex: %x)\n", uint16Value, uint16Value);
+        else if( value >>= floatValue )
+            fprintf (stderr,"%f\n", floatValue);
         else if( value >>= boolValue )
             fprintf (stderr,"%d            (bool)\n", boolValue);
-    else if( value >>= aWritingMode )
-        fprintf (stderr, "%d writing mode\n", aWritingMode);
-    else if( value >>= aTextVertAdj ) {
-        const char* s = "uknown";
-        switch( aTextVertAdj ) {
+        else if( value >>= xNumRule ) {
+            fprintf (stderr, "XIndexReplace\n");
+            for (int k=0; k<xNumRule->getCount(); k++) {
+                Sequence< PropertyValue > aBulletPropSeq;
+                fprintf (stderr, "level %d\n", k);
+                if (xNumRule->getByIndex (k) >>= aBulletPropSeq) {
+                    for (int j=0; j<aBulletPropSeq.getLength(); j++) {
+                        fprintf(stderr, "%46s = ", USS (aBulletPropSeq[j].Name));
+                        lclDumpAnyValue (aBulletPropSeq[j].Value);
+                    }
+                }
+            }
+        } else if( value >>= aWritingMode )
+            fprintf (stderr, "%d writing mode\n", aWritingMode);
+        else if( value >>= aTextVertAdj ) {
+            const char* s = "uknown";
+            switch( aTextVertAdj ) {
             case TextVerticalAdjust_TOP:
                 s = "top";
                 break;
@@ -337,9 +362,24 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
 //             fprintf (stderr,"%d            (RectanglePoint)\n", pointValue);
         else
       fprintf (stderr,"???           <unhandled type %s>\n", USS(value.getValueTypeName()));
-    } catch(Exception e) {
-        fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
-    }
+}
+
+void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
+{
+    Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
+    Sequence< Property > props = info->getProperties ();
+
+    OSL_TRACE("dump props, len: %d", props.getLength ());
+
+    for (int i=0; i < props.getLength (); i++) {
+        OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
+        fprintf (stderr,"%30s = ", name.getStr() );
+
+        try {
+            lclDumpAnyValue (rXPropSet->getPropertyValue( props [i].Name ));
+        } catch(Exception e) {
+            fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
+        }
     }
 }
 

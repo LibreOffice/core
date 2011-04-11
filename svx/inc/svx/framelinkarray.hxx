@@ -30,6 +30,7 @@
 #define SVX_FRAMELINKARRAY_HXX
 
 #include <svx/framelink.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
 #include <memory>
 
@@ -506,6 +507,13 @@ public:
         @param pForceColor
             If not NULL, only this color will be used to draw all frame borders. */
     void                DrawCell( OutputDevice& rDev, size_t nCol, size_t nRow,
+                            const Color* pForceColor = 0 ) const;
+    /** Draws the part of the specified range, that is inside the clipping range.
+        @param pForceColor
+            If not NULL, only this color will be used to draw all frame borders. */
+    void                DrawRange( drawinglayer::processor2d::BaseProcessor2D* rDev,
+                            size_t nFirstCol, size_t nFirstRow,
+                            size_t nLastCol, size_t nLastRow,
                             const Color* pForceColor = 0 ) const;
 
     /** Draws the part of the specified range, that is inside the clipping range.

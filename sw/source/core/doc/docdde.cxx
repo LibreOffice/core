@@ -92,7 +92,7 @@ struct _FindItem
     {}
 };
 
-BOOL lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs, bool bCaseSensitive )
+sal_Bool lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs, bool bCaseSensitive )
 {
     _FindItem * const pItem( static_cast<_FindItem*>(pArgs) );
     SwSection* pSect = rpSectFmt->GetSection();
@@ -113,26 +113,26 @@ BOOL lcl_FindSection( const SwSectionFmtPtr& rpSectFmt, void* pArgs, bool bCaseS
             {
                 // eine Tabelle im normalen NodesArr
                 pItem->pSectNd = pIdx->GetNode().GetSectionNode();
-                return FALSE;
+                return sal_False;
             }
 //nein!!            // sollte der Namen schon passen, der Rest aber nicht, dann haben wir
             // sie nicht. Die Namen sind immer eindeutig.
         }
     }
-    return TRUE;        // dann weiter
+    return sal_True;        // dann weiter
 }
-BOOL lcl_FindSectionCaseSensitive( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
+sal_Bool lcl_FindSectionCaseSensitive( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
 {
     return lcl_FindSection( rpSectFmt, pArgs, true );
 }
-BOOL lcl_FindSectionCaseInsensitive( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
+sal_Bool lcl_FindSectionCaseInsensitive( const SwSectionFmtPtr& rpSectFmt, void* pArgs )
 {
     return lcl_FindSection( rpSectFmt, pArgs, false );
 }
 
 
 
-BOOL lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
+sal_Bool lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
 {
     _FindItem * const pItem( static_cast<_FindItem*>(pArgs) );
     String sNm( GetAppCharClass().lower( rpTableFmt->GetName() ));
@@ -148,12 +148,12 @@ BOOL lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
             // eine Tabelle im normalen NodesArr
             pItem->pTblNd = (SwTableNode*)
                                         pFBox->GetSttNd()->FindTableNode();
-            return FALSE;
+            return sal_False;
         }
 //nein!     // sollte der Namen schon passen, der Rest aber nicht, dann haben wir
         // sie nicht. Die Namen sind immer eindeutig.
     }
-    return TRUE;        // dann weiter
+    return sal_True;        // dann weiter
 }
 
 
@@ -192,7 +192,7 @@ bool SwDoc::GetData( const String& rItem, const String& rMimeType,
         return SwServerObject( *aPara.pTblNd ).GetData( rValue, rMimeType );
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -230,7 +230,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
         return SwServerObject( *aPara.pTblNd ).SetData( rMimeType, rValue );
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -288,7 +288,7 @@ bool SwDoc::SetData( const String& rItem, const String& rMimeType,
     return pObj;
 }
 
-BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
+sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const
 {
     // haben wir ueberhaupt das Item vorraetig?
@@ -307,7 +307,7 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
     // sondern auch Rahmen(Text!), Tabellen, Gliederungen:
     if( STRING_NOTFOUND != nPos )
     {
-        BOOL bWeiter = FALSE;
+        sal_Bool bWeiter = sal_False;
         String sName( sItem.Copy( 0, nPos ) );
         String sCmp( sItem.Copy( nPos + 1 ));
         rCC.toLower( sItem );
@@ -323,7 +323,7 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             {
                 rpRange = new SwNodeRange( *aPara.pTblNd, 0,
                                 *aPara.pTblNd->EndOfSectionNode(), 1 );
-                return TRUE;
+                return sal_True;
             }
         }
         else if( sCmp.EqualsAscii( pMarkToFrame ) )
@@ -336,13 +336,13 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                 !( pNd = &pIdx->GetNode())->IsNoTxtNode() )
             {
                 rpRange = new SwNodeRange( *pNd, 1, *pNd->EndOfSectionNode() );
-                return TRUE;
+                return sal_True;
             }
         }
         else if( sCmp.EqualsAscii( pMarkToRegion ) )
         {
             sItem = sName;              // wird unten behandelt !
-            bWeiter = TRUE;
+            bWeiter = sal_True;
         }
         else if( sCmp.EqualsAscii( pMarkToOutline ) )
         {
@@ -350,11 +350,11 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             if( GotoOutline( aPos, sName ))
             {
                 SwNode* pNd = &aPos.nNode.GetNode();
-                //BYTE nLvl = pNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
+                //sal_uInt8 nLvl = pNd->GetTxtNode()->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
                 const int nLvl = pNd->GetTxtNode()->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
 
                 const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
-                USHORT nTmpPos;
+                sal_uInt16 nTmpPos;
                 rOutlNds.Seek_Entry( pNd, &nTmpPos );
                 rpRange = new SwNodeRange( aPos.nNode, 0, aPos.nNode );
 
@@ -371,12 +371,12 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                     rpRange->aEnd = *rOutlNds[ nTmpPos ];
                 else
                     rpRange->aEnd = GetNodes().GetEndOfContent();
-                return TRUE;
+                return sal_True;
             }
         }
 
         if( !bWeiter )
-            return FALSE;
+            return sal_False;
     }
 
     //search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
@@ -404,7 +404,7 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             {
                 rpRange = new SwNodeRange( *aPara.pSectNd, 1,
                                         *aPara.pSectNd->EndOfSectionNode() );
-                return TRUE;
+                return sal_True;
 
             }
         }
@@ -412,7 +412,7 @@ BOOL SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             break;
         bCaseSensitive = false;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

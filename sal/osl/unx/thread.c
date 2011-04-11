@@ -37,6 +37,13 @@
 #include <rtl/textenc.h>
 #include <sal/macros.h>
 
+#if defined LINUX
+#include <sys/prctl.h>
+#ifndef PR_SET_NAME
+#define PR_SET_NAME 15
+#endif
+#endif
+
 /****************************************************************************
  * @@@ TODO @@@
  *
@@ -588,6 +595,18 @@ void SAL_CALL osl_waitThread(const TimeValue* pDelay)
 void SAL_CALL osl_yieldThread()
 {
     sched_yield();
+}
+
+void SAL_CALL osl_setThreadName(char const * name) {
+#if defined LINUX
+    if (prctl(PR_SET_NAME, (unsigned long) name, 0, 0, 0) != 0) {
+        OSL_TRACE(
+            "%s prctl(PR_SET_NAME) failed with errno %d", OSL_LOG_PREFIX,
+            errno);
+    }
+#else
+    (void) name;
+#endif
 }
 
 /*****************************************************************************/

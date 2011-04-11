@@ -44,12 +44,12 @@ class SotStorage;
 
 class MSFILTER_DLLPUBLIC SvxMSExportOLEObjects
 {
-    UINT32 nConvertFlags;
+    sal_uInt32 nConvertFlags;
 public:
-    SvxMSExportOLEObjects( UINT32 nCnvrtFlgs ) : nConvertFlags(nCnvrtFlgs) {}
+    SvxMSExportOLEObjects( sal_uInt32 nCnvrtFlgs ) : nConvertFlags(nCnvrtFlgs) {}
 
-    void SetFlags( UINT32 n )       { nConvertFlags = n; }
-    UINT32 GetFlags() const         { return nConvertFlags; }
+    void SetFlags( sal_uInt32 n )       { nConvertFlags = n; }
+    sal_uInt32 GetFlags() const         { return nConvertFlags; }
 
     void ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotStorage& rDestStg );
     void ExportOLEObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg );

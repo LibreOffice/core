@@ -49,9 +49,7 @@ public:
     SvxAutocorrWordList     *pAutocorr_List;
     SvxAutoCorrect          &rAutoCorrect;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStorage;
-    //SvStorageRef            &rStorage;
 
-    // #110680#
     SvXMLAutoCorrectImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SvxAutocorrWordList *pNewAutocorr_List,
@@ -105,7 +103,6 @@ protected:
 public:
     SvStringsISortDtor  &rList;
 
-    // #110680#
     SvXMLExceptionListImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SvStringsISortDtor & rNewList );

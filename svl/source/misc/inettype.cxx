@@ -301,6 +301,7 @@ MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
         { CONTENT_TYPE_STR_AUDIO_MIDI, CONTENT_TYPE_AUDIO_MIDI, "mid" },
         { CONTENT_TYPE_STR_AUDIO_VORBIS, CONTENT_TYPE_AUDIO_VORBIS, "ogg" },
         { CONTENT_TYPE_STR_AUDIO_WAV, CONTENT_TYPE_AUDIO_WAV, "wav" },
+        { CONTENT_TYPE_STR_AUDIO_WEBM, CONTENT_TYPE_AUDIO_WEBM, "webm" },
         { CONTENT_TYPE_STR_IMAGE_GENERIC, CONTENT_TYPE_IMAGE_GENERIC, "tmp" },
         { CONTENT_TYPE_STR_IMAGE_GIF, CONTENT_TYPE_IMAGE_GIF, "gif" },
         { CONTENT_TYPE_STR_IMAGE_JPEG, CONTENT_TYPE_IMAGE_JPEG, "jpg" },
@@ -330,9 +331,10 @@ MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
         { CONTENT_TYPE_STR_TEXT_VCALENDAR, CONTENT_TYPE_TEXT_VCALENDAR,
           "vcs" },
         { CONTENT_TYPE_STR_TEXT_VCARD, CONTENT_TYPE_TEXT_VCARD, "vcf" },
+        { CONTENT_TYPE_STR_VIDEO_MSVIDEO, CONTENT_TYPE_VIDEO_MSVIDEO, "avi" },
         { CONTENT_TYPE_STR_VIDEO_THEORA, CONTENT_TYPE_VIDEO_THEORA, "ogg" },
         { CONTENT_TYPE_STR_VIDEO_VDO, CONTENT_TYPE_VIDEO_VDO, "vdo" },
-        { CONTENT_TYPE_STR_VIDEO_MSVIDEO, CONTENT_TYPE_VIDEO_MSVIDEO, "avi" },
+        { CONTENT_TYPE_STR_VIDEO_WEBM, CONTENT_TYPE_VIDEO_WEBM, "webm" },
         { CONTENT_TYPE_STR_X_STARMAIL, CONTENT_TYPE_X_STARMAIL, "smd" },
         { CONTENT_TYPE_STR_X_VRML, CONTENT_TYPE_X_VRML, "wrl" }
 };
@@ -340,7 +342,7 @@ MediaTypeEntry const aStaticTypeNameMap[CONTENT_TYPE_LAST + 1]
 //============================================================================
 /** A mapping from type IDs to presentation resource IDs.  Sorted by type ID.
  */
-USHORT const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
+sal_uInt16 const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
     = { STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_UNKNOWN
         STR_SVT_MIMETYPE_APP_OCTSTREAM, // CONTENT_TYPE_APP_OCTSTREAM
         STR_SVT_MIMETYPE_APP_PDF, // CONTENT_TYPE_APP_PDF
@@ -361,6 +363,7 @@ USHORT const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
         STR_SVT_MIMETYPE_AUDIO_MIDI, // CONTENT_TYPE_AUDIO_MIDI
         STR_SVT_MIMETYPE_AUDIO_VORBIS, // CONTENT_TYPE_AUDIO_VORBIS
         STR_SVT_MIMETYPE_AUDIO_WAV, // CONTENT_TYPE_AUDIO_WAV
+        STR_SVT_MIMETYPE_AUDIO_WEBM, // CONTENT_TYPE_AUDIO_WEBM
         STR_SVT_MIMETYPE_IMAGE_GIF, // CONTENT_TYPE_IMAGE_GIF
         STR_SVT_MIMETYPE_IMAGE_JPEG, // CONTENT_TYPE_IMAGE_JPEG
         STR_SVT_MIMETYPE_IMAGE_PCX, // CONTENT_TYPE_IMAGE_PCX
@@ -371,9 +374,10 @@ USHORT const aStaticResourceIDMap[CONTENT_TYPE_LAST + 1]
         STR_SVT_MIMETYPE_TEXT_PLAIN, // CONTENT_TYPE_TEXT_PLAIN
         STR_SVT_MIMETYPE_TEXT_URL, // CONTENT_TYPE_TEXT_URL
         STR_SVT_MIMETYPE_TEXT_VCARD, // CONTENT_TYPE_TEXT_VCARD
+        STR_SVT_MIMETYPE_VIDEO_MSVIDEO, // CONTENT_TYPE_VIDEO_MSVIDEO
         STR_SVT_MIMETYPE_VIDEO_THEORA, // CONTENT_TYPE_VIDEO_THEORA
         STR_SVT_MIMETYPE_VIDEO_VDO, // CONTENT_TYPE_VIDEO_VDO
-        STR_SVT_MIMETYPE_VIDEO_MSVIDEO, // CONTENT_TYPE_VIDEO_MSVIDEO
+        STR_SVT_MIMETYPE_VIDEO_WEBM, // CONTENT_TYPE_VIDEO_WEBM
         STR_SVT_MIMETYPE_CNT_MSG, // CONTENT_TYPE_X_CNT_MESSAGE
         STR_SVT_MIMETYPE_CNT_DOCUMENT, // CONTENT_TYPE_X_CNT_DOCUMENT
         STR_SVT_MIMETYPE_CNT_POP3BOX, // CONTENT_TYPE_X_CNT_POP3BOX
@@ -555,6 +559,7 @@ MediaTypeEntry const aStaticExtensionMap[]
         { "vdo", CONTENT_TYPE_VIDEO_VDO, "" },
         { "vor", CONTENT_TYPE_APP_VND_TEMPLATE, "" },
         { "wav", CONTENT_TYPE_AUDIO_WAV, "" },
+        { "webm", CONTENT_TYPE_VIDEO_WEBM, "" },
         { "wmf", CONTENT_TYPE_IMAGE_GENERIC, "" },
         { "wrl", CONTENT_TYPE_X_VRML, "" },
         { "xbm", CONTENT_TYPE_IMAGE_GENERIC, "" },
@@ -639,19 +644,19 @@ Registration * Registration::m_pRegistration = 0;
 //============================================================================
 Registration::~Registration()
 {
-    {for (ULONG i = 0; i < m_aTypeIDMap.Count(); ++i)
+    {for (sal_uLong i = 0; i < m_aTypeIDMap.Count(); ++i)
         delete static_cast< TypeIDMapEntry * >(m_aTypeIDMap.GetObject(i));
     }
     m_aTypeIDMap.Clear();
-    {for (USHORT i = 0; i < m_aTypeNameMap.Count(); ++i)
+    {for (sal_uInt16 i = 0; i < m_aTypeNameMap.Count(); ++i)
         delete static_cast< TypeNameMapEntry * >(m_aTypeNameMap.GetObject(i));
     }
-    m_aTypeNameMap.Remove(USHORT(0), m_aTypeNameMap.Count());
-    {for (USHORT i = 0; i < m_aExtensionMap.Count(); ++i)
+    m_aTypeNameMap.Remove(sal_uInt16(0), m_aTypeNameMap.Count());
+    {for (sal_uInt16 i = 0; i < m_aExtensionMap.Count(); ++i)
         delete
             static_cast< ExtensionMapEntry * >(m_aExtensionMap.GetObject(i));
     }
-    m_aExtensionMap.Remove(USHORT(0), m_aExtensionMap.Count());
+    m_aExtensionMap.Remove(sal_uInt16(0), m_aExtensionMap.Count());
 }
 
 //============================================================================
@@ -663,7 +668,7 @@ TypeNameMapEntry * Registration::getExtensionEntry(UniString const &
     {
         UniString aTheTypeName = rTypeName;
         aTheTypeName.ToLowerAscii();
-        USHORT nPos;
+        sal_uInt16 nPos;
         if (m_pRegistration->m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos))
             return static_cast< TypeNameMapEntry * >(m_pRegistration->
                                                          m_aTypeNameMap.
@@ -726,7 +731,7 @@ INetContentType Registration::GetContentType(UniString const & rTypeName)
 
     UniString aTheTypeName = rTypeName;
     aTheTypeName.ToLowerAscii();
-    USHORT nPos;
+    sal_uInt16 nPos;
     return m_pRegistration->m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos) ?
                static_cast< TypeNameMapEntry * >(m_pRegistration->
                                                      m_aTypeNameMap.
@@ -770,7 +775,7 @@ UniString Registration::GetExtension(UniString const & rTypeName)
 
     UniString aTheTypeName = rTypeName;
     aTheTypeName.ToLowerAscii();
-    USHORT nPos;
+    sal_uInt16 nPos;
     return m_pRegistration->m_aTypeNameMap.Seek_Entry(&aTheTypeName, &nPos) ?
                static_cast< TypeNameMapEntry * >(m_pRegistration->
                                                      m_aTypeNameMap.
@@ -787,7 +792,7 @@ INetContentType Registration::GetContentType4Extension(UniString const &
     if (!m_pRegistration)
         m_pRegistration = new Registration;
 
-    USHORT nPos;
+    sal_uInt16 nPos;
     return m_pRegistration->
                    m_aExtensionMap.
                        Seek_Entry(const_cast< UniString * >(&rExtension),
@@ -936,7 +941,7 @@ UniString INetContentTypes::GetContentType(INetContentType eTypeID)
                               Registration::GetContentType(eTypeID);
     if (aTypeName.Len() == 0)
     {
-        DBG_ERROR("INetContentTypes::GetContentType(): Bad ID");
+        OSL_FAIL("INetContentTypes::GetContentType(): Bad ID");
         return
             UniString::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(
                                            CONTENT_TYPE_STR_APP_OCTSTREAM));
@@ -949,7 +954,7 @@ UniString INetContentTypes::GetContentType(INetContentType eTypeID)
 UniString INetContentTypes::GetPresentation(INetContentType eTypeID,
                                             const ::com::sun::star::lang::Locale& aLocale)
 {
-    USHORT nResID = USHORT();
+    sal_uInt16 nResID = sal_uInt16();
     if (eTypeID <= CONTENT_TYPE_LAST)
         nResID = aStaticResourceIDMap[eTypeID];
     else

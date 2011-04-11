@@ -51,13 +51,13 @@
 #include "bibtools.hxx"
 #include "bibliography.hrc"
 #include <tools/debug.hxx>
-#include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <algorithm>
 #include <functional>
 #include <vector>
+#include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -93,9 +93,7 @@ OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos )
         }
     return sRet;
 }
-/* -----------------------------04.01.00 10:54--------------------------------
 
- ---------------------------------------------------------------------------*/
 class BibPosListener    :public cppu::WeakImplHelper1 <sdbc::XRowSetListener>
 {
     BibGeneralPage*     pParentPage;
@@ -111,16 +109,12 @@ public:
     virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( uno::RuntimeException );
 
 };
-/* -----------------------------04.01.00 10:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 BibPosListener::BibPosListener(BibGeneralPage* pParent) :
     pParentPage(pParent)
 {
 }
-/* -----------------------------04.01.00 10:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno::RuntimeException )
 {
     try
@@ -190,19 +184,14 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
     catch(Exception& rEx)
     {
         (void) rEx; // make compiler happy
-        DBG_ERROR("BibPosListener::positioned: something went wrong !");
+        OSL_FAIL("BibPosListener::positioned: something went wrong !");
     }
 }
-/* -----------------------------04.01.00 11:28--------------------------------
 
- ---------------------------------------------------------------------------*/
 void BibPosListener::disposing(const lang::EventObject& /*Source*/) throw( uno::RuntimeException )
 {
 }
 
-/* -----------------16.11.99 13:06-------------------
-
- --------------------------------------------------*/
 BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     BibTabPage(pParent,BibResId(RID_TP_GENERAL)),
     aControlParentWin(this, WB_DIALOGCONTROL),
@@ -278,8 +267,8 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
 
     aBasePos = aIdentifierFT.GetPosPixel();
 
-    INT16* pMap = nFT2CtrlMap;
-    for( USHORT i = 0 ; i < FIELD_COUNT ; ++i, ++pMap )
+    sal_Int16* pMap = nFT2CtrlMap;
+    for( sal_uInt16 i = 0 ; i < FIELD_COUNT ; ++i, ++pMap )
     {
         aControls[ i ] = 0;
         *pMap = -1;
@@ -432,12 +421,10 @@ BibGeneralPage::~BibGeneralPage()
             xRowSet->removeRowSetListener(xPosListener);
     }
 }
- /* -----------------------------14.04.00 13:11--------------------------------
 
-  ---------------------------------------------------------------------------*/
- void BibGeneralPage::RemoveListeners()
- {
-    for(USHORT i = 0; i < FIELD_COUNT; i++)
+void BibGeneralPage::RemoveListeners()
+{
+    for(sal_uInt16 i = 0; i < FIELD_COUNT; i++)
     {
         if(aControls[i].is())
         {
@@ -446,10 +433,8 @@ BibGeneralPage::~BibGeneralPage()
             aControls[i] = 0;
         }
     }
- }
-/* -----------------------------21.01.00 17:05--------------------------------
+}
 
- ---------------------------------------------------------------------------*/
 void BibGeneralPage::CommitActiveControl()
 {
     uno::Reference< form::runtime::XFormController > xFormCtrl = pDatMan->GetFormController();
@@ -464,12 +449,12 @@ void BibGeneralPage::CommitActiveControl()
 }
 //-----------------------------------------------------------------------------
 void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::Point& rPos, const ::Size& rSize,
-                                String& rErrorString, String aColumnUIName, sal_uInt16 nHelpId, sal_uInt16 nIndexInFTArray )
+                                String& rErrorString, String aColumnUIName, const rtl::OString& sHelpId, sal_uInt16 nIndexInFTArray )
 {
     // adds also the XControl and creates a map entry in nFT2CtrlMap[] for mapping between control and FT
 
-    INT16                                   nIndex = -1;
-    uno::Reference< awt::XControlModel >    xTmp = AddXControl(rColumnName, rPos, rSize, nHelpId, nIndex );
+    sal_Int16                                   nIndex = -1;
+    uno::Reference< awt::XControlModel >    xTmp = AddXControl(rColumnName, rPos, rSize, sHelpId, nIndex );
     if( xTmp.is() )
     {
         DBG_ASSERT( nIndexInFTArray < FIELD_COUNT, "*BibGeneralPage::AddControlWithError(): wrong array index!" );
@@ -488,7 +473,7 @@ void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::P
 //-----------------------------------------------------------------------------
 uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
         const String& rName,
-        ::Point rPos, ::Size rSize, sal_uInt16 nHelpId, INT16& rIndex )
+        ::Point rPos, ::Size rSize, const rtl::OString& sHelpId, sal_Int16& rIndex )
 {
     uno::Reference< awt::XControlModel >  xCtrModel;
     try
@@ -510,11 +495,10 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                 rtl::OUString uProp(C2U("HelpURL"));
                 if(xPropInfo->hasPropertyByName(uProp))
                 {
-                    String sId(C2S("HID:"));
-                    sId += String::CreateFromInt32(nHelpId);
-                    rtl::OUString uId(sId) ;
-                    uno::Any aVal; aVal <<= uId;
-                    xPropSet->setPropertyValue(uProp, aVal);
+                    ::rtl::OUString sId = ::rtl::OUString::createFromAscii( INET_HID_SCHEME );
+                    DBG_ASSERT( INetURLObject( rtl::OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
+                    sId += ::rtl::OUString( sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8 );
+                    xPropSet->setPropertyValue( uProp, makeAny( sId ) );
                 }
 
                 if(bTypeListBox)
@@ -546,7 +530,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
 
                     xPropSet->setPropertyValue(C2U("StringItemList"), aAny);
 
-                    BOOL bTrue = sal_True;
+                    sal_Bool bTrue = sal_True;
                     aAny.setValue( &bTrue, ::getBooleanCppuType() );
                     xPropSet->setPropertyValue( C2U("Dropdown"), aAny );
 
@@ -565,17 +549,16 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     uno::Reference< awt::XWindow >  xCtrWin(xControl, UNO_QUERY );
                     xCtrWin->addFocusListener( this );
                     rIndex = -1;    // -> implies, that not found
-                    for(USHORT i = 0; i < FIELD_COUNT; i++)
+                    for(sal_uInt16 i = 0; i < FIELD_COUNT; i++)
                         if(!aControls[i].is())
                         {
                             aControls[i] = xCtrWin;
-                            rIndex = INT16( i );
+                            rIndex = sal_Int16( i );
                             break;
                         }
                     xCtrWin->setVisible( sal_True );
                     xControl->setDesignMode( sal_True );
                         // initially switch on the desing mode - switch it off _after_ loading the form
-                        // 17.10.2001 - 93107 - frank.schoenheit@sun.com
 
                     xCtrWin->setPosSize(rPos.X(), rPos.Y(), rSize.Width(),
                         rSize.Height(), awt::PosSize::POSSIZE);
@@ -586,7 +569,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     catch(Exception& rEx)
     {
         (void) rEx; // make compiler happy
-        DBG_ERROR("BibGeneralPage::AddXControl: something went wrong !");
+        OSL_FAIL("BibGeneralPage::AddXControl: something went wrong !");
     }
     return xCtrModel;
 }
@@ -596,8 +579,8 @@ void BibGeneralPage::AdjustScrollbars()
     long nVertScrollWidth = aVertScroll.GetSizePixel().Width();
     long nHoriScrollHeight = aHoriScroll.GetSizePixel().Height();
     ::Size aOutSize(GetOutputSizePixel());
-    BOOL bHoriVisible = aOutSize.Width() <= aStdSize.Width();
-    BOOL bVertVisible = (aOutSize.Height()-(bHoriVisible ? nHoriScrollHeight : 0)) <= (aStdSize.Height());
+    sal_Bool bHoriVisible = aOutSize.Width() <= aStdSize.Width();
+    sal_Bool bVertVisible = (aOutSize.Height()-(bHoriVisible ? nHoriScrollHeight : 0)) <= (aStdSize.Height());
     aHoriScroll.Show(bHoriVisible);
     aVertScroll.Show(bVertVisible);
 
@@ -733,7 +716,7 @@ void BibGeneralPage::InitFixedTexts( void )
 
 IMPL_LINK(BibGeneralPage, ScrollHdl, ScrollBar*, pScroll)
 {
-    BOOL bVertical = &aVertScroll == pScroll;
+    sal_Bool bVertical = &aVertScroll == pScroll;
     long nOffset = 0;
     long nCurrentOffset = 0;
     if(bVertical)
@@ -742,7 +725,7 @@ IMPL_LINK(BibGeneralPage, ScrollHdl, ScrollBar*, pScroll)
         nCurrentOffset = aFixedTexts[0]->GetPosPixel().X() - aBasePos.X();
     nOffset = pScroll->IsVisible() ? pScroll->GetThumbPos() + nCurrentOffset : nCurrentOffset;;
 
-    for(USHORT i = 0; i < FIELD_COUNT; i++)
+    for(sal_uInt16 i = 0; i < FIELD_COUNT; i++)
     {
         ::Point aPos = aFixedTexts[i]->GetPosPixel();
         if(bVertical)
@@ -827,13 +810,13 @@ void BibGeneralPage::GetFocus()
     aControlParentWin.GrabFocus();
 }
 
-BOOL BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
+sal_Bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
 {
     DBG_ASSERT( KEY_MOD2 == rKeyEvent.GetKeyCode().GetModifier(), "+BibGeneralPage::HandleShortCutKey(): this is not for me!" );
 
     const vcl::I18nHelper&      rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
     const xub_Unicode           c = rKeyEvent.GetCharCode();
-    BOOL                        bHandled = FALSE;
+    sal_Bool                        bHandled = sal_False;
 
     sal_Int16                   i;
 
@@ -848,7 +831,7 @@ BOOL BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
     {
         if( rI18nHelper.MatchMnemonic( aFixedTexts[ i ]->GetText(), c ) )
         {
-            bHandled = TRUE;
+            bHandled = sal_True;
             sal_Int16           nCtrlIndex = nFT2CtrlMap[ i ];
 
             if( nCtrlIndex >= 0 )

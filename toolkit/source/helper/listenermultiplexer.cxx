@@ -154,6 +154,21 @@ IMPL_LISTENERMULTIPLEXER_BASEMETHODS( ItemListenerMultiplexer, ::com::sun::star:
 IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ItemListenerMultiplexer, ::com::sun::star::awt::XItemListener, itemStateChanged, ::com::sun::star::awt::ItemEvent )
 
 //  ----------------------------------------------------
+//  class TabListenerMultiplexer
+//  ----------------------------------------------------
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener )
+void TabListenerMultiplexer::inserted( sal_Int32 evt ) throw(::com::sun::star::uno::RuntimeException)
+IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, inserted, ::sal_Int32 )
+void TabListenerMultiplexer::removed( sal_Int32 evt ) throw(::com::sun::star::uno::RuntimeException)
+IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, removed, ::sal_Int32 )
+void TabListenerMultiplexer::changed( sal_Int32 evt, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& evt2 ) throw(::com::sun::star::uno::RuntimeException)
+IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_2PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, changed, ::sal_Int32, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > )
+void TabListenerMultiplexer::activated( sal_Int32 evt ) throw(::com::sun::star::uno::RuntimeException)
+IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, activated, ::sal_Int32 )
+void TabListenerMultiplexer::deactivated( sal_Int32 evt ) throw(::com::sun::star::uno::RuntimeException)
+IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, ::com::sun::star::awt::XTabListener, deactivated, ::sal_Int32 )
+
+//  ----------------------------------------------------
 //  class ContainerListenerMultiplexer
 //  ----------------------------------------------------
 IMPL_LISTENERMULTIPLEXER_BASEMETHODS( ContainerListenerMultiplexer, ::com::sun::star::container::XContainerListener )
@@ -212,4 +227,9 @@ IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TreeEditListenerMultiplexer, ::com::sun::s
 IMPL_LISTENERMULTIPLEXER_BASEMETHODS( SelectionListenerMultiplexer, ::com::sun::star::awt::grid::XGridSelectionListener )
 IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( SelectionListenerMultiplexer, ::com::sun::star::awt::grid::XGridSelectionListener, selectionChanged, ::com::sun::star::awt::grid::GridSelectionEvent )
 
+//  ----------------------------------------------------
+//  class SelectionListenerMultiplexer
+//  ----------------------------------------------------
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TabPageListenerMultiplexer, ::com::sun::star::awt::tab::XTabPageContainerListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TabPageListenerMultiplexer, ::com::sun::star::awt::tab::XTabPageContainerListener, tabPageActivated, ::com::sun::star::awt::tab::TabPageActivatedEvent )
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

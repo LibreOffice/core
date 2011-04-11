@@ -34,7 +34,7 @@ module com { module sun { module star { module rendering {
     This structure is used from the <type>XTextLayout</type> interface
     to transport information regarding hit tests.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 struct TextHit
 {
@@ -55,8 +55,8 @@ struct TextHit
         edge.<p>
 
         Each character is divided in two halves, the leading and the
-        trailing part. The leading edge is the part of the glyph on
-        encounteres first when reading text of the corresponding
+        trailing part. The leading edge is the part of the glyph
+        encountered first when reading text of the corresponding
         language (i.e. the leading edge of an Arabic glyph is the
         right half of it, whereas it is the left half of a Latin
         character). If the hit was on the leading edge, this member is

@@ -82,11 +82,11 @@ public:
     virtual void notifyChange();
     virtual void fill();
     virtual bool calculateValue(const String& _sExpression,String& _rResult);
-    virtual void doClose(BOOL _bOk);
+    virtual void doClose(sal_Bool _bOk);
     virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc);
     virtual void showReference(const String& _sFormula);
-    virtual void dispatch(BOOL _bOK,BOOL _bMartixChecked);
-    virtual void setDispatcherLock( BOOL bLock );
+    virtual void dispatch(sal_Bool _bOK,sal_Bool _bMartixChecked);
+    virtual void setDispatcherLock( sal_Bool bLock );
     virtual void setReferenceInput(const formula::FormEditData* _pData);
     virtual void deleteFormData();
     virtual void clear();
@@ -103,31 +103,31 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const;
     virtual ::com::sun::star::table::CellAddress getReferencePosition() const;
 
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
     // sc::IAnyRefDialog
     virtual void ShowReference(const String& _sRef);
-    virtual void HideReference( BOOL bDoneRefMode = TRUE );
+    virtual void HideReference( sal_Bool bDoneRefMode = sal_True );
     virtual void SetReference( const ScRange& rRef, ScDocument* pD );
 
     virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    virtual void RefInputDone( BOOL bForced = FALSE );
-    virtual BOOL IsTableLocked() const;
-    virtual BOOL IsRefInputMode() const;
+    virtual void RefInputDone( sal_Bool bForced = false );
+    virtual sal_Bool IsTableLocked() const;
+    virtual sal_Bool IsRefInputMode() const;
 
-    virtual BOOL IsDocAllowed( SfxObjectShell* pDocSh ) const;
+    virtual sal_Bool IsDocAllowed( SfxObjectShell* pDocSh ) const;
     virtual void AddRefEntry();
     virtual void SetActive();
     virtual void ViewShellChanged( ScTabViewShell* pScViewShell );
 protected:
 
     virtual void RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    ULONG        FindFocusWin(Window *pWin);
+    sal_uLong        FindFocusWin(Window *pWin);
     void         SaveLRUEntry(const ScFuncDesc* pFuncDesc);
     void         HighlightFunctionParas(const String& aFormula);
 
-    BOOL        IsInputHdl(ScInputHandler* pHdl);
+    sal_Bool        IsInputHdl(ScInputHandler* pHdl);
     ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh);
 };
 

@@ -29,15 +29,10 @@
 '*
 '* short description :
 '*
-'*******************************************************************
-'*
-' #1 tFormatStylistBackground
-' #1 fGetSetPageBackground
-'*
 '\*******************************************************************
 
 testcase tFormatStylistBackground
-'/// special test for BUG # 96364 "Background style looses functionality over PPT Ex/import" ///'
+    printlog " special test for BUG # 96364 Background style looses functionality over PPT Ex/import"
     dim sFilter (50) as string
     dim sFileList (30) as string
     dim i as integer
@@ -59,7 +54,7 @@ testcase tFormatStylistBackground
         goto endsub
     endif
 
-    '/// if not exists : gOfficePath + '\\user\\impress\\optional\\', create it ///'
+    printlog " if not exists : gOfficePath + '\\user\\impress\\optional\\', create it"
     if app.dir (ConvertPath ( gOfficePath + "user/work/impress") ) = "" then
         app.mkdir ConvertPath ( gOfficePath + "user/work/impress")
     endif
@@ -67,23 +62,23 @@ testcase tFormatStylistBackground
         app.mkdir ConvertPath ( gOfficePath + "user/work/impress/optional")
     endif
 
-    '/// open application ///'
+    printlog " open application"
     Call  hNewDocument
 
     iColor = 10
-    '/// change background color via stylist ///'
+    printlog " change background color via stylist"
     if (iColor <> fGetSetPageBackground (iColor,0)) then
         warnlog "Stylist background was not changed as expected :-( "+iColor
     endif
-    '/// check if it is the same in Format -> Page ///'
+    printlog " check if it is the same in Format -> Page"
     if fGetSetPageBackground (0,1) <> iColor then
         warnlog " First stage error! Difference between stylist and menu entry :-( "+iColor
     endif
 
-    '/// save this in 3 formats: ///'
-    '///+  - StarImpress 5.0 ///'
-    '///+  - StarOffice 6.0 Presentation ///'
-    '///+  - Microsoft PowerPoint 97/2000/XP ///'
+    printlog " save this in 3 formats:"
+    printlog "+  - StarImpress 5.0"
+    printlog "+  - StarOffice 6.0 Presentation"
+    printlog "+  - Microsoft PowerPoint 97/2000/XP"
     FileSaveAs
     sleep 2
     Kontext "SpeichernDlg"
@@ -110,14 +105,14 @@ testcase tFormatStylistBackground
       printlog " saved with filter ("+i+"/3): "+ sFilter(i)
     next i
 
-    '/// close impress ///'
+    printlog "close impress"
     FileClose
     sleep 1
-    kontext ' active about information loss ?
+    kontext 
     if active.exists (5) then active.yes
     sleep 10
 
-    '/// open just saved files ///'
+    printlog " open just saved files"
     sFileName = ConvertPath ( gOfficePath + "user/work/impress/optional/" )
     GetFileList ( sFileName, "isty_*", sFileList() )
 
@@ -127,23 +122,23 @@ testcase tFormatStylistBackground
       hFileOpen ( sFileList(i) )
       Sleep 5
       If hIsNamedDocLoaded (sFileList(i)) Then
-         printlog "  used filter: " + hGetUsedFilter()
+         printlog "used filter: " + hGetUsedFilter()
       else
          warnlog "document didn't get loaded"
       endif
       sleep 5
-      '/// check if stylist, menue and prediction are as expected ///'
+      printlog " check if stylist, menue and prediction are as expected"
      iColor = 10
       if ((fGetSetPageBackground (0,0) <> iColor) OR (fGetSetPageBackground (0,1) <> iColor)) then
          warnlog "Background was not as expected on loading :-( "+iColor
       endif
       iColor = 20
-      '/// change background in stylist ///'
+      printlog " change background in stylist"
       if (fGetSetPageBackground (iColor,0) <> iColor) then
          warnlog "Stylist background was not changed as expected :-( "+iColor
       endif
       sleep 1
-      '/// check if background is same in format menu ///'
+      printlog " check if background is same in format menu"
       if (fGetSetPageBackground (0,1) <> iColor) then
          warnlog "Format menu background is wrong :-( "+iColor
       endif
@@ -151,7 +146,7 @@ testcase tFormatStylistBackground
       hCloseDocument
       sleep 2
     next i
-endcase
+endcase 'tFormatStylistBackground
 
 '------------------------------------------------------------------------------
 

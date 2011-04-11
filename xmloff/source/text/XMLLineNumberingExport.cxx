@@ -34,7 +34,7 @@
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnume.hxx>
 
@@ -65,7 +65,7 @@ XMLLineNumberingExport::XMLLineNumberingExport(SvXMLExport& rExp)
 {
 }
 
-SvXMLEnumMapEntry __READONLY_DATA aLineNumberPositionMap[] =
+SvXMLEnumMapEntry const aLineNumberPositionMap[] =
 {
     { XML_LEFT,     style::LineNumberPosition::LEFT },
     { XML_RIGHT,    style::LineNumberPosition::RIGHT },

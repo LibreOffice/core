@@ -44,7 +44,7 @@ Container::Container( Context const* context, char const* pId )
 {
     if ( !mxContainer.is() )
     {
-        DBG_ERROR1( "Error: failed to associate container with '%s'", pId );
+        OSL_TRACE( "Error: failed to associate container with '%s'", pId );
     }
 }
 

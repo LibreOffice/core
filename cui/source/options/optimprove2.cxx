@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 
 #define _SVX_OPTIMPROVE_CXX
@@ -53,6 +50,7 @@
 #include <comphelper/synchronousdispatch.hxx>
 #include <comphelper/uieventslogger.hxx>
 #include <tools/testtoolloader.hxx>
+#include <osl/file.hxx>
 
 #define C2S(s)  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
@@ -62,14 +60,16 @@ namespace uno   = ::com::sun::star::uno;
 namespace util  = ::com::sun::star::util;
 using namespace com::sun::star::system;
 
-// class SvxEmptyPage ----------------------------------------------------
 
-SvxEmptyPage::SvxEmptyPage( Window* pParent ) :
-
-    TabPage( pParent, CUI_RES( RID_SVXPAGE_IMPROVEMENT ) )
-
+namespace
 {
-    FreeResource();
+    bool lcl_doesLogfileExist(const ::rtl::OUString& sLogPath)
+    {
+        ::rtl::OUString sLogFile( sLogPath );
+        sLogFile += C2S("/Current.csv");
+        ::osl::File aLogFile(sLogFile);
+        return aLogFile.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None;
+    }
 }
 
 // class SvxImprovementOptionsPage ---------------------------------------
@@ -144,17 +144,20 @@ IMPL_LINK( SvxImprovementOptionsPage, HandleShowData, PushButton*, EMPTYARG )
         ::rtl::OUString sLogFile( m_sLogPath );
         sLogFile += C2S("/Current.csv");
         uno::Sequence< beans::PropertyValue > aArgs(3);
-        aArgs[0].Name = ::rtl::OUString::createFromAscii("FilterName");
-        aArgs[0].Value = uno::makeAny(::rtl::OUString::createFromAscii("Text - txt - csv (StarCalc)"));
-        aArgs[1].Name = ::rtl::OUString::createFromAscii("FilterOptions");
-        aArgs[1].Value = uno::makeAny(::rtl::OUString::createFromAscii("44,34,12,1,"));
-        aArgs[2].Name = ::rtl::OUString::createFromAscii("ReadOnly");
+        aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterName") );
+        aArgs[0].Value = uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text - txt - csv (StarCalc)") ) );
+        aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FilterOptions") );
+        aArgs[1].Value = uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("44,34,12,1,") ) );
+        aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly") );
         aArgs[2].Value = uno::makeAny(true);
 
         uno::Reference< lang::XComponent > xDoc = ::comphelper::SynchronousDispatch::dispatch(
             xDesktop, sLogFile, C2S("_default"), 0, aArgs );
         if ( xDoc.is() )
+        {
+            dynamic_cast<Dialog*>(GetParent())->EndDialog( RET_CANCEL );
             return 1;
+        }
     }
 
     return 0;
@@ -163,11 +166,6 @@ IMPL_LINK( SvxImprovementOptionsPage, HandleShowData, PushButton*, EMPTYARG )
 SfxTabPage* SvxImprovementOptionsPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SvxImprovementOptionsPage( pParent, rSet );
-}
-
-sal_uInt16* SvxImprovementOptionsPage::GetRanges()
-{
-    return NULL;
 }
 
 sal_Bool SvxImprovementOptionsPage::FillItemSet( SfxItemSet& /*rSet*/ )
@@ -183,7 +181,7 @@ sal_Bool SvxImprovementOptionsPage::FillItemSet( SfxItemSet& /*rSet*/ )
         ::comphelper::ConfigurationHelper::writeRelativeKey(
             xConfig, C2S("Participation"), C2S("ShowedInvitation"), uno::makeAny( true ) );
         ::comphelper::ConfigurationHelper::writeRelativeKey(
-            xConfig, C2S("Participation"), C2S("InvitationAccepted"), uno::makeAny( m_aYesRB.IsChecked() != FALSE ) );
+            xConfig, C2S("Participation"), C2S("InvitationAccepted"), uno::makeAny( m_aYesRB.IsChecked() != sal_False ) );
         ::comphelper::ConfigurationHelper::flush( xConfig );
         // TODO: refactor
         ::comphelper::UiEventsLogger::reinit();
@@ -260,11 +258,13 @@ void SvxImprovementOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
                 if ( xSubst.is() )
                     sPath = xSubst->substituteVariables( sPath, sal_False );
                 m_sLogPath = sPath;
+                m_aShowDataPB.Enable(lcl_doesLogfileExist(m_sLogPath));
             }
         }
     }
     catch( uno::Exception& )
     {
+        m_aShowDataPB.Enable(false);
     }
 }
 

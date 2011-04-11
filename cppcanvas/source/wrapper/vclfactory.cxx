@@ -296,7 +296,7 @@ namespace cppcanvas
         if( !pSpriteCanvas )
             return SpriteSharedPtr();
 
-        const USHORT nBitmaps( rAnim.Count() );
+        const sal_uInt16 nBitmaps( rAnim.Count() );
         uno::Sequence< uno::Reference< rendering::XBitmap > > aBitmapSequence( nBitmaps );
         uno::Reference< rendering::XBitmap >* pBitmaps = aBitmapSequence.getArray();
 
@@ -311,7 +311,7 @@ namespace cppcanvas
 
         for( i=0; i<nBitmaps; ++i )
         {
-            const AnimationBitmap& rAnimBmp( rAnim.Get((USHORT)i) );
+            const AnimationBitmap& rAnimBmp( rAnim.Get((sal_uInt16)i) );
 
             // Handle dispose according to GIF spec: a
             // DISPOSE_PREVIOUS does _not_ mean to revert to the

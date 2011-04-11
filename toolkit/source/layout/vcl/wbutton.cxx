@@ -64,7 +64,7 @@ class ImageImpl
     {
         if ( !mxGraphic.is() )
         {
-            DBG_ERROR1( "ERROR: failed to load image: `%s'\n", pName );
+            OSL_TRACE( "ERROR: failed to load image: `%s'\n", pName );
         }
     }
 };
@@ -166,9 +166,9 @@ bool Button::SetModeImage (Image const& image)
     return getImpl().SetModeImage (image.getImpl().mxGraphic);
 }
 
-bool Button::SetModeImage (::Image const& image, BmpColorMode mode)
+bool Button::SetModeImage (::Image const& image)
 {
-    return GetButton ()->SetModeImage (image, mode);
+    return GetButton ()->SetModeImage (image);
 }
 
 void Button::SetImageAlign( ImageAlign eAlign )
@@ -491,7 +491,7 @@ protected:
     Window* Remove( std::list< Window*> lst, Window* w )
     {
         for ( std::list< Window*>::iterator it = maAdvanced.begin();
-              it != maAdvanced.end(); it++ )
+              it != maAdvanced.end(); ++it )
             if ( *it == w )
             {
                 lst.erase( it );
@@ -507,8 +507,8 @@ public:
           // TODO: i18n
           // Button::GetStandardText( BUTTON_ADVANCED );
           // Button::GetStandardText( BUTTON_SIMPLE );
-        , mAdvancedLabel( rtl::OUString::createFromAscii( "Advanced..." ) )
-        , mSimpleLabel( rtl::OUString::createFromAscii( "Simple..." ) )
+        , mAdvancedLabel( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Advanced...")) )
+        , mSimpleLabel( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Simple...")) )
     {
     }
     void Click()
@@ -534,10 +534,10 @@ public:
         if (mSimpleLabel.getLength ())
             b->SetText (mSimpleLabel);
         for ( std::list< Window*>::iterator it = maAdvanced.begin();
-              it != maAdvanced.end(); it++ )
+              it != maAdvanced.end(); ++it )
             ( *it )->Show();
         for ( std::list< Window*>::iterator it = maSimple.begin();
-              it != maSimple.end(); it++ )
+              it != maSimple.end(); ++it )
             ( *it )->Hide();
 
         redraw ();
@@ -551,10 +551,10 @@ public:
             b->SetText (mAdvancedLabel);
         setAlign ();
         for ( std::list< Window*>::iterator it = maAdvanced.begin();
-              it != maAdvanced.end(); it++ )
+              it != maAdvanced.end(); ++it )
             ( *it )->Hide();
         for ( std::list< Window*>::iterator it = maSimple.begin();
-              it != maSimple.end(); it++ )
+              it != maSimple.end(); ++it )
             ( *it )->Show();
 
         redraw (true);

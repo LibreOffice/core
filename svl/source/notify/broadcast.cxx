@@ -31,9 +31,9 @@
 
 #include <tools/debug.hxx>
 
-#include "listener.hxx"
-#include "listeneriter.hxx"
-#include "broadcast.hxx"
+#include <svl/listener.hxx>
+#include <svl/listeneriter.hxx>
+#include <svl/broadcast.hxx>
 #include <svl/smplhint.hxx>
 
 
@@ -92,7 +92,7 @@ void SvtBroadcaster::Broadcast( const SfxHint &rHint )
     if( HasListeners() /* && !IsModifyLocked()*/ )
     {
 //      LockModify();
-//      bInModify = TRUE;
+//      bInModify = sal_True;
 
         SvtListenerIter aIter( *this );
         SvtListener* pLast = aIter.GoStart();
@@ -103,7 +103,7 @@ void SvtBroadcaster::Broadcast( const SfxHint &rHint )
                     break;
             } while( 0 != ( pLast = aIter.GoNext() ));
 
-//      bInModify = FALSE;
+//      bInModify = sal_False;
 //      UnlockModify();
     }
 }
@@ -127,7 +127,7 @@ void SvtBroadcaster::Forward( SvtBroadcaster& rBC, const SfxHint& rHint )
     if( rBC.HasListeners() /* && !IsModifyLocked()*/ )
     {
 //      LockModify();
-//      bInModify = TRUE;
+//      bInModify = sal_True;
 
         SvtListenerIter aIter( rBC );
         SvtListener* pLast = aIter.GoStart();
@@ -138,7 +138,7 @@ void SvtBroadcaster::Forward( SvtBroadcaster& rBC, const SfxHint& rHint )
                     break;
             } while( 0 != ( pLast = aIter.GoNext() ));
 
-//      bInModify = FALSE;
+//      bInModify = sal_False;
 //      UnlockModify();
     }
 }

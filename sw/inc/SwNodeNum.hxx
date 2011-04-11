@@ -39,10 +39,9 @@ class SwNumFmt;
 class SW_DLLPUBLIC SwNodeNum : public SwNumberTreeNode
 {
 public:
-    // --> OD 2008-02-19 #refactorlists#
+
     explicit SwNodeNum( SwTxtNode* pTxtNode );
     explicit SwNodeNum( SwNumRule* pNumRule );
-    // <--
     virtual ~SwNodeNum();
 
     SwNumRule* GetNumRule() const;
@@ -61,11 +60,8 @@ public:
 
     virtual SwNumberTree::tSwNumTreeNumber GetStartValue() const;
 
-//    String ToString() const;
-
     SwPosition GetPosition() const;
 
-    // --> OD 2006-03-07 #131436#
     // The number tree root node is deleted, when the corresponding numbering
     // rule is deleted. In this situation the number tree should be empty -
     // still registered text nodes aren't allowed. But it is possible, that
@@ -74,11 +70,10 @@ public:
     // Text nodes of the document nodes array aren't allowed to be registered
     // in this situation - this will be asserted.
     static void HandleNumberTreeRootNodeDelete( SwNodeNum& rNodeNum );
-    // <--
 
     /** determines the <SwNodeNum> instance, which is preceding the given text node
 
-        OD 2007-09-06 #i81002#
+        #i81002#
 
         @author OD
     */
@@ -87,24 +82,20 @@ public:
 protected:
     virtual SwNumberTreeNode * Create() const;
 
-    // --> OD 2006-04-26 #i64010#
+    // --> #i64010#
     virtual bool HasCountedChildren() const;
     virtual bool IsCountedForNumbering() const;
     // <--
 
-    // --> OD 2008-02-19 #refactorlists#
     // method called before this tree node has been added to the list tree
     virtual void PreAdd();
     // method called at a child after this child has been removed from the list tree
     virtual void PostRemove();
-    // <--
 private:
     SwTxtNode * mpTxtNode;
     SwNumRule * mpNumRule;
 
-    // --> OD 2006-03-07 #131436#
     static void _UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum );
-    // <--
 
     SwNodeNum( const SwNodeNum& );              // no copy constructor
     SwNodeNum& operator=( const SwNodeNum& );   // no assignment operator

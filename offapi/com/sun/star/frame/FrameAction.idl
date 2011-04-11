@@ -37,7 +37,7 @@
     of the desktop
 
     <p>
-    Interest listener can get informations about loaded/realoed or unloaded
+    Interest listener can get informations about loaded/reloaded or unloaded
     components into a <type>Frame</type>.
     </p>
 
@@ -92,7 +92,7 @@ published enum FrameAction
         activated
 
         <p>
-        Activations are broacast from the top component which was
+        Activations are broadcast from the top component which was
         not active before, down to the inner most component.
         </p>
 

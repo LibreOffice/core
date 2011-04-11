@@ -6,10 +6,6 @@
 *
 * OpenOffice.org - a multi-platform office productivity suite
 *
-* $RCSfile: mysqlc_services.cxx,v $
-*
-* $Revision: 1.1.2.5 $
-*
 * This file is part of OpenOffice.org.
 *
 * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -138,7 +134,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void * /* 
 
             return sal_True;
         } catch (::com::sun::star::registry::InvalidRegistryException& ) {
-            OSL_ENSURE(sal_False, "SKELETON::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
+            OSL_FAIL("SKELETON::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
         }
     }
     return sal_False;

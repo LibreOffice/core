@@ -508,6 +508,10 @@ rtl_cache_slab_alloc (
             addr = (void*)rtl_cache_hash_insert (cache, bufctl);
         else
             addr = bufctl;
+
+        /* DEBUG ONLY: mark allocated, undefined */
+        OSL_DEBUG_ONLY(memset(addr, 0x77777777, cache->m_type_size));
+        VALGRIND_MEMPOOL_ALLOC(cache, addr, cache->m_type_size);
     }
 
     RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
@@ -529,6 +533,11 @@ rtl_cache_slab_free (
     rtl_cache_slab_type   * slab;
 
     RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_slab_lock));
+
+    /* DEBUG ONLY: mark unallocated, undefined */
+    VALGRIND_MEMPOOL_FREE(cache, addr);
+    /* OSL_DEBUG_ONLY() */ VALGRIND_MAKE_MEM_UNDEFINED(addr, cache->m_type_size);
+    OSL_DEBUG_ONLY(memset(addr, 0x33333333, cache->m_type_size));
 
     /* determine slab from addr */
     if (cache->m_features & RTL_CACHE_FEATURE_HASH)
@@ -636,8 +645,13 @@ rtl_cache_magazine_clear (
         void * obj = mag->m_objects[mag->m_mag_used - 1];
         mag->m_objects[mag->m_mag_used - 1] = 0;
 
+        /* DEBUG ONLY: mark cached object allocated, undefined */
+        VALGRIND_MEMPOOL_ALLOC(cache, obj, cache->m_type_size);
         if (cache->m_destructor != 0)
         {
+            /* DEBUG ONLY: keep constructed object defined */
+            VALGRIND_MAKE_MEM_DEFINED(obj, cache->m_type_size);
+
             /* destruct object */
             (cache->m_destructor)(obj, cache->m_userarg);
         }
@@ -966,10 +980,16 @@ rtl_cache_deactivate (
     rtl_cache_type * cache
 )
 {
+    int active = 1;
+
     /* remove from cache list */
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
+    active = QUEUE_STARTED_NAMED(cache, cache_) == 0;
     QUEUE_REMOVE_NAMED(cache, cache_);
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
+
+    OSL_PRECOND(active, "rtl_cache_deactivate(): orphaned cache.");
+    (void)active;
 
     /* cleanup magazine layer */
     if (cache->m_magazine_cache != 0)
@@ -1122,6 +1142,7 @@ try_alloc:
     if (result != 0)
     {
         rtl_cache_type * cache = result;
+        VALGRIND_CREATE_MEMPOOL(cache, 0, 0);
         (void) rtl_cache_constructor (cache);
 
         if (!source)
@@ -1149,6 +1170,7 @@ try_alloc:
             /* activation failed */
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
+            VALGRIND_DESTROY_MEMPOOL(cache);
             rtl_arena_free (gp_cache_arena, cache, size);
         }
     }
@@ -1173,6 +1195,7 @@ void SAL_CALL rtl_cache_destroy (
     {
         rtl_cache_deactivate (cache);
         rtl_cache_destructor (cache);
+        VALGRIND_DESTROY_MEMPOOL(cache);
         rtl_arena_free (gp_cache_arena, cache, sizeof(rtl_cache_type));
     }
 }
@@ -1189,10 +1212,9 @@ SAL_CALL rtl_cache_alloc (
     if (cache == 0)
         return (0);
 
+    RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
     if (cache->m_cpu_curr != 0)
     {
-        RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
-
         for (;;)
         {
             /* take object from magazine layer */
@@ -1202,6 +1224,14 @@ SAL_CALL rtl_cache_alloc (
             if ((curr != 0) && (curr->m_mag_used > 0))
             {
                 obj = curr->m_objects[--curr->m_mag_used];
+#if defined(HAVE_VALGRIND_MEMCHECK_H)
+                VALGRIND_MEMPOOL_ALLOC(cache, obj, cache->m_type_size);
+                if (cache->m_constructor != 0)
+                {
+                    /* keep constructed object defined */
+                    VALGRIND_MAKE_MEM_DEFINED(obj, cache->m_type_size);
+                }
+#endif /* HAVE_VALGRIND_MEMCHECK_H */
                 cache->m_cpu_stats.m_alloc += 1;
                 RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
 
@@ -1230,9 +1260,8 @@ SAL_CALL rtl_cache_alloc (
             /* no full magazine: fall through to slab layer */
             break;
         }
-
-        RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
     }
+    RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
 
     /* alloc buffer from slab layer */
     obj = rtl_cache_slab_alloc (cache);
@@ -1245,7 +1274,6 @@ SAL_CALL rtl_cache_alloc (
             rtl_cache_slab_free (cache, obj), obj = 0;
         }
     }
-
     return (obj);
 }
 
@@ -1270,6 +1298,9 @@ SAL_CALL rtl_cache_free (
             if ((curr != 0) && (curr->m_mag_used < curr->m_mag_size))
             {
                 curr->m_objects[curr->m_mag_used++] = obj;
+#if defined(HAVE_VALGRIND_MEMCHECK_H)
+                VALGRIND_MEMPOOL_FREE(cache, obj);
+#endif /* HAVE_VALGRIND_MEMCHECK_H */
                 cache->m_cpu_stats.m_free += 1;
                 RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
 
@@ -1583,6 +1614,7 @@ rtl_cache_once_init (void)
         static rtl_cache_type g_cache_magazine_cache;
 
         OSL_ASSERT(gp_cache_magazine_cache == 0);
+        VALGRIND_CREATE_MEMPOOL(&g_cache_magazine_cache, 0, 0);
         (void) rtl_cache_constructor (&g_cache_magazine_cache);
 
         gp_cache_magazine_cache = rtl_cache_activate (
@@ -1607,6 +1639,7 @@ rtl_cache_once_init (void)
         static rtl_cache_type g_cache_slab_cache;
 
         OSL_ASSERT(gp_cache_slab_cache == 0);
+        VALGRIND_CREATE_MEMPOOL(&g_cache_slab_cache, 0, 0);
         (void) rtl_cache_constructor (&g_cache_slab_cache);
 
         gp_cache_slab_cache = rtl_cache_activate (
@@ -1628,6 +1661,7 @@ rtl_cache_once_init (void)
         static rtl_cache_type g_cache_bufctl_cache;
 
         OSL_ASSERT(gp_cache_bufctl_cache == 0);
+        VALGRIND_CREATE_MEMPOOL(&g_cache_bufctl_cache, 0, 0);
         (void) rtl_cache_constructor (&g_cache_bufctl_cache);
 
         gp_cache_bufctl_cache = rtl_cache_activate (
@@ -1658,7 +1692,18 @@ rtl_cache_init (void)
 
 /* ================================================================= */
 
-#if defined(__GNUC__)
+/*
+  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
+
+  Mac OS X does not seem to support "__cxa__atexit", thus leading
+  to the situation that "__attribute__((destructor))__" functions
+  (in particular "rtl_{memory|cache|arena}_fini") become called
+  _before_ global C++ object d'tors.
+
+  Delegated the call to "rtl_cache_fini()" into a dummy C++ object,
+  see alloc_fini.cxx .
+*/
+#if defined(__GNUC__) && !defined(MACOSX)
 static void rtl_cache_fini (void) __attribute__((destructor));
 #elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
 #pragma fini(rtl_cache_fini)
@@ -1679,18 +1724,21 @@ rtl_cache_fini (void)
             cache = gp_cache_bufctl_cache, gp_cache_bufctl_cache = 0;
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
+            VALGRIND_DESTROY_MEMPOOL(cache);
         }
         if (gp_cache_slab_cache != 0)
         {
             cache = gp_cache_slab_cache, gp_cache_slab_cache = 0;
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
+            VALGRIND_DESTROY_MEMPOOL(cache);
         }
         if (gp_cache_magazine_cache != 0)
         {
             cache = gp_cache_magazine_cache, gp_cache_magazine_cache = 0;
             rtl_cache_deactivate (cache);
             rtl_cache_destructor (cache);
+            VALGRIND_DESTROY_MEMPOOL(cache);
         }
         if (gp_cache_arena != 0)
         {

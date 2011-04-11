@@ -52,7 +52,7 @@ sal_Bool HeaderFooterHelper::isHeaderFooter( const uno::Reference< text::XText >
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( xText, uno::UNO_QUERY_THROW );
     rtl::OUString aImplName = xServiceInfo->getImplementationName();
-    if( aImplName.equalsAscii("SwXHeadFootText") )
+    if( aImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SwXHeadFootText")) )
         return sal_True;
     return sal_False;
 }
@@ -187,24 +187,5 @@ sal_Bool HeaderFooterHelper::isEvenPagesFooter( const uno::Reference< frame::XMo
     }
     return sal_False;
 }
-#ifdef TOMORROW
-sal_Bool HeaderFooterHelper::isPrimaryHeader( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XText >& xCurrentText ) throw (uno::RuntimeException)
-{
-    if( isHeader( xModel ) )
-    {
-        return( !( isFirstPageHeader( xModel ) && isEvenPagesHeader( xModel ) ) );
-    }
-    return sal_False;
-}
-
-sal_Bool HeaderFooterHelper::isPrimaryFooter( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
-{
-    if( isHeader( xModel ) )
-    {
-        return( !( isFirstPageFooter( xModel ) && isEvenPagesFooter( xModel ) ) );
-    }
-    return sal_False;
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

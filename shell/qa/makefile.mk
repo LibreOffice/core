@@ -28,8 +28,6 @@ PRJ=..
 
 PRJNAME=shell
 TARGET=qa
-# this is removed at the moment because we need some enhancements
-# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -44,7 +42,7 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SHL1OBJS=$(SLO)$/recent_docs.obj $(SLO)$/xml_parser.obj
 SHL1TARGET=recent_docs
-SHL1STDLIBS=$(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+SHL1STDLIBS=$(SALLIB) $(CPPUNITLIB)
 
 .IF "$(GUI)" == "UNX"
 ..$/unxsols4.pro$/slb$/libsysshell.a \

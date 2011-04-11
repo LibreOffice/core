@@ -29,6 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
 
+#include <cstddef>
+#include <stdio.h>
+
 #include "cppu/macros.hxx"
 
 #include "osl/mutex.hxx"
@@ -106,7 +109,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
 #if OSL_DEBUG_LEVEL > 1
         OUStringBuffer buf( 128 );
         buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("### exception occured querying for interface ") );
+            RTL_CONSTASCII_STRINGPARAM("### exception occurred querying for interface ") );
         buf.append( * reinterpret_cast< OUString const * >( &pDestType->pTypeName ) );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(": [") );
         buf.append( * reinterpret_cast< OUString const * >( &pExc->pType->pTypeName ) );
@@ -115,7 +118,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
         buf.append( * reinterpret_cast< OUString const * >( pExc->pData ) );
         OString cstr(
             OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr.getStr() );
+        OSL_FAIL( cstr.getStr() );
 #endif
         uno_any_destruct( pExc, 0 );
     }
@@ -274,7 +277,7 @@ sal_Bool SAL_CALL uno_type_equalData(
 {
     return _equalData(
         pVal1, pVal1Type, 0,
-        pVal2, pVal2Type, 0,
+        pVal2, pVal2Type,
         queryInterface, release );
 }
 //##################################################################################################
@@ -286,7 +289,7 @@ sal_Bool SAL_CALL uno_equalData(
 {
     return _equalData(
         pVal1, pVal1TD->pWeakRef, pVal1TD,
-        pVal2, pVal2TD->pWeakRef, pVal2TD,
+        pVal2, pVal2TD->pWeakRef,
         queryInterface, release );
 }
 //##################################################################################################
@@ -351,8 +354,6 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 
 #if OSL_DEBUG_LEVEL > 1
 
-#include <stdio.h>
-
 #if defined( SAL_W32)
 #pragma pack(push, 8)
 #elif defined(SAL_OS2)
@@ -360,34 +361,21 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #endif
 
 #if defined(INTEL) \
-    && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(OS2) || \
-    defined(OPENBSD)) || defined(MACOSX) \
+    && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(OS2) \
+        || defined(NETBSD) || defined(OPENBSD)) || defined(MACOSX) || defined(DRAGONFLY) \
         || defined(__SUNPRO_CC) && defined(SOLARIS))
 #define MAX_ALIGNMENT_4
 #endif
 
-#define OFFSET_OF( s, m ) ((sal_Size)((char *)&((s *)16)->m -16))
+#define OFFSET_OF( s, m ) reinterpret_cast< std::size_t >((char *)&((s *)16)->m -16)
 
 #define BINTEST_VERIFY( c ) \
-    if (! (c)) { fprintf( stderr, "### binary compatibility test failed: " #c " [line %d]!!!\n", __LINE__ ); abort(); }
+    if (! (c)) { fprintf( stderr, "### binary compatibility test failed: %s [line %d]!!!\n", #c, __LINE__ ); abort(); }
 #define BINTEST_VERIFYOFFSET( s, m, n ) \
-    if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %d instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
+    if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %" SAL_PRI_SIZET "u instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
 
-#if OSL_DEBUG_LEVEL > 1
-#if defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(OPENBSD)) && \
-    (defined(INTEL) || defined(POWERPC) || defined(X86_64) || defined(S390))
-#define BINTEST_VERIFYSIZE( s, n ) \
-    fprintf( stderr, "> sizeof(" #s ") = %d; __alignof__ (" #s ") = %d\n", sizeof(s), __alignof__ (s) ); \
-    if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
-#else // ! GNUC
-#define BINTEST_VERIFYSIZE( s, n ) \
-    fprintf( stderr, "> sizeof(" #s ") = %d\n", sizeof(s) ); \
-    if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
-#endif
-#else // ! OSL_DEBUG_LEVEL
 #define BINTEST_VERIFYSIZE( s, n ) \
     if (sizeof(s) != n) { fprintf( stderr, "### sizeof(" #s ") = %d instead of expected %d!!!\n", sizeof(s), n ); abort(); }
-#endif
 
 struct C1
 {

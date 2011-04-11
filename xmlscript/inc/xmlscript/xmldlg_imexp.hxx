@@ -78,7 +78,7 @@ SAL_CALL exportDialogModel(
 //==============================================================================
 void SAL_CALL importDialogModel(
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::io::XInputStream > xInput,
+    ::com::sun::star::io::XInputStream > const & xInput,
     ::com::sun::star::uno::Reference<
     ::com::sun::star::container::XNameContainer > const & xDialogModel,
     ::com::sun::star::uno::Reference<

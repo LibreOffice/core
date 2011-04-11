@@ -41,6 +41,8 @@
 #include <tools/simplerm.hxx>
 #include <tools/config.hxx>
 #include <basic/basrdll.hxx>
+#include <basic/sbmeth.hxx>
+#include <basic/sbmod.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/sound.hxx>
@@ -75,18 +77,15 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
-
 #include <basic/basmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-
 #include <rtl/logfile.hxx>
-
 #include <sfx2/appuno.hxx>
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include <sfx2/request.hxx>
 #include "sfxtypes.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/progress.hxx>
 #include <sfx2/objsh.hxx>
@@ -112,16 +111,17 @@
 #include <sfx2/module.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include "stbitem.hxx"
+#include "sfx2/stbitem.hxx"
 #include "eventsupplier.hxx"
 #include <sfx2/dockwin.hxx>
+#include <tools/svlibrary.hxx>
 
 #ifdef DBG_UTIL
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/mnuitem.hxx>
 #endif
 
-#if defined( WIN ) || defined( WNT ) || defined( OS2 )
+#if defined( WNT ) || defined( OS2 )
 #define DDE_AVAILABLE
 #endif
 
@@ -226,7 +226,7 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
                             String aFactory = String::CreateFromAscii("private:factory/");
                             if ( pArgs && *pArgs )
                             {
-                                SFX_ITEMSET_ARG( &aSet, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, FALSE );
+                                SFX_ITEMSET_ARG( &aSet, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, sal_False );
                                 if ( pFactoryName )
                                     aFactory += pFactoryName->GetValue();
                                 else
@@ -259,18 +259,6 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
                 }
             }
             break;
-/*
-            case TT_PR_IMG:
-            {
-                SvDataMemberObjectRef aDataObject = new SvDataMemberObject();
-                SvData* pDataBmp = new SvData( FORMAT_BITMAP );
-                pDataBmp->SetData( pTTProperties->mpBmp );
-                aDataObject->Append( pDataBmp );
-                aDataObject->CopyClipboard();
-                pTTProperties->nActualPR = 0;
-            }
-            break;
-*/
             default:
             {
                 pTTProperties->nPropertyVersion = 0;
@@ -283,7 +271,7 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
 #include <framework/imageproducer.hxx>
 #include <framework/acceleratorinfo.hxx>
 #include <framework/sfxhelperfunctions.hxx>
-#include "imagemgr.hxx"
+#include "sfx2/imagemgr.hxx"
 #include "fwkhelper.hxx"
 
 ::osl::Mutex SfxApplication::gMutex;
@@ -297,15 +285,16 @@ SfxApplication* SfxApplication::GetOrCreate()
         SfxApplication *pNew = new SfxApplication;
 
         //TODO/CLEANUP
-        //ist das Mutex-Handling OK?
+        // Is the Mutex-Handling OK?
         static ::osl::Mutex aProtector;
         ::osl::MutexGuard aGuard2( aProtector );
 
         RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SetApp" );
         pApp = pNew;
 
-        // at the moment a bug may occur when Initialize_Impl returns FALSE, but this is only temporary because all code that may cause such a
-        // fault will be moved outside the SFX
+        // at the moment a bug may occur when Initialize_Impl returns FALSE,
+        // but this is only temporary because all code that may cause such
+        // a fault will be moved outside the SFX
         pApp->Initialize_Impl();
 
         ::framework::SetImageProducer( GetImage );
@@ -353,7 +342,7 @@ SfxApplication::SfxApplication()
 #else
     if( !InitializeDde() )
     {
-        ByteString aStr( "Kein DDE-Service moeglich. Fehler: " );
+        ByteString aStr( "No DDE-Service possible. Error: " );
         if( GetDdeService() )
             aStr += ByteString::CreateFromInt32(GetDdeService()->GetError());
         else
@@ -363,20 +352,15 @@ SfxApplication::SfxApplication()
 #endif
 #endif
 
-    if ( !InitLabelResMgr( "iso" ) )
-        // no "iso" resource -> search for "ooo" resource
-        InitLabelResMgr( "ooo", true );
     pBasic   = new BasicDLL;
-
     StarBASIC::SetGlobalErrorHdl( LINK( this, SfxApplication, GlobalBasicErrorHdl_Impl ) );
-
-
-
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} initialize DDE" );
 }
 
 SfxApplication::~SfxApplication()
 {
+    OSL_ENSURE( GetObjectShells_Impl().Count() == 0, "Memory leak: some object shells were not removed!" );
+
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     SfxModule::DestroyModules_Impl();
@@ -396,16 +380,15 @@ SfxApplication::~SfxApplication()
 
 const String& SfxApplication::GetLastDir_Impl() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Interne Methode, mit der im SFx das zuletzt mit der Methode
-    <SfxApplication::SetLastDir_Impl()> gesetzte Verzeichnis
-    zurueckgegeben wird.
+    Internal method by which the last set directory with the method
+    <SfxApplication::SetLastDir_Impl()> in SFX is returned.
 
-    Dieses ist i.d.R. das zuletzt durch den SfxFileDialog
-    angesprochene Verzeichnis.
+    This is usually the most recently addressed by the
+    SfxFileDialog directory.
 
-    [Querverweis]
+    [Cross-reference]
     <SfxApplication::SetLastDir_Impl()>
 */
 
@@ -415,11 +398,11 @@ const String& SfxApplication::GetLastDir_Impl() const
 
 const String& SfxApplication::GetLastSaveDirectory() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Wie <SfxApplication::GetLastDir_Impl()>, nur extern
+    As <SfxApplication::GetLastDir_Impl()>, only external
 
-    [Querverweis]
+    [Cross-reference]
     <SfxApplication::GetLastDir_Impl()>
 */
 
@@ -431,15 +414,15 @@ const String& SfxApplication::GetLastSaveDirectory() const
 
 void SfxApplication::SetLastDir_Impl
 (
-    const String&   rNewDir     /*  kompletter Verzeichnis-Pfad als String */
-    )
+    const String&   rNewDir     /* Complete directory path as a string */
+)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Interne Methode, mit der ein Verzeichnis-Pfad gesetzt wird, der
-    zuletzt (z.B. durch den SfxFileDialog) angesprochen wurde.
+    Internal Method, by which a directory path is set that was last addressed
+    (eg by the SfxFileDialog).
 
-    [Querverweis]
+    [Cross-reference]
     <SfxApplication::GetLastDir_Impl()>
 */
 
@@ -477,15 +460,13 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 
         // DocWinActivate : both frames belong to the same TopWindow
         // TopWinActivate : both frames belong to different TopWindows
-// not used anymore!
-//      BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
-//                  pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
-        BOOL bTaskActivate = pOldContainerFrame != pNewContainerFrame;
+
+        sal_Bool bTaskActivate = pOldContainerFrame != pNewContainerFrame;
 
         if ( pOldContainerFrame )
         {
             if ( bTaskActivate )
-                NotifyEvent( SfxEventHint( SFX_EVENT_DEACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_DEACTIVATEDOC), pOldContainerFrame->GetObjectShell() ) );
+                NotifyEvent( SfxViewEventHint( SFX_EVENT_DEACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_DEACTIVATEDOC), pOldContainerFrame->GetObjectShell(), pOldContainerFrame->GetFrame().GetController() ) );
             pOldContainerFrame->DoDeactivate( bTaskActivate, pFrame );
 
             if( pOldContainerFrame->GetProgress() )
@@ -494,22 +475,13 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 
         pAppData_Impl->pViewFrame = pFrame;
 
-        //const SfxObjectShell* pSh = pViewFrame ? pViewFrame->GetObjectShell() : 0;
-        //if ( !pSh )
-        //{
-        //    // otherwise BaseURL is set in activation of document
-        //    INetURLObject aObject( SvtPathOptions().GetWorkPath() );
-        //    aObject.setFinalSlash();
-        //    INetURLObject::SetBaseURL( aObject.GetMainURL( INetURLObject::NO_DECODE ) );
-        //}
-
         if( pNewContainerFrame )
         {
             pNewContainerFrame->DoActivate( bTaskActivate );
             if ( bTaskActivate && pNewContainerFrame->GetObjectShell() )
             {
                 pNewContainerFrame->GetObjectShell()->PostActivateEvent_Impl( pNewContainerFrame );
-                NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_ACTIVATEDOC), pNewContainerFrame->GetObjectShell() ) );
+                NotifyEvent(SfxViewEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_ACTIVATEDOC), pNewContainerFrame->GetObjectShell(), pNewContainerFrame->GetFrame().GetController() ) );
             }
 
             SfxProgress *pProgress = pNewContainerFrame->GetProgress();
@@ -562,8 +534,7 @@ short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool /*bAutoSave
 
 ResMgr* SfxApplication::CreateResManager( const char *pPrefix )
 {
-    String aMgrName = String::CreateFromAscii( pPrefix );
-    return ResMgr::CreateResMgr(U2S(aMgrName));
+    return ResMgr::CreateResMgr(pPrefix);
 }
 
 //---------------------------------------------------------------------
@@ -583,13 +554,6 @@ SimpleResMgr* SfxApplication::CreateSimpleResManager()
 ResMgr* SfxApplication::GetSfxResManager()
 {
     return SfxResId::GetResMgr();
-}
-
-//--------------------------------------------------------------------
-
-ResMgr* SfxApplication::GetLabelResManager() const
-{
-    return pAppData_Impl->pLabelResMgr;
 }
 
 //--------------------------------------------------------------------
@@ -710,7 +674,7 @@ SfxObjectShellArr_Impl&     SfxApplication::GetObjectShells_Impl() const
     return *pAppData_Impl->pObjShells;
 }
 
-void SfxApplication::Invalidate( USHORT nId )
+void SfxApplication::Invalidate( sal_uInt16 nId )
 {
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )
         Invalidate_Impl( pFrame->GetBindings(), nId );
@@ -720,17 +684,15 @@ void SfxApplication::Invalidate( USHORT nId )
 #define STRING( x )                         DOSTRING( x )
 
 typedef long (SAL_CALL *basicide_handle_basic_error)(void*);
-typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(void*, BOOL, rtl_uString*);
-typedef void* (SAL_CALL *basicide_macro_organizer)(INT16);
+typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(void*, sal_Bool, rtl_uString*);
+typedef void* (SAL_CALL *basicide_macro_organizer)(sal_Int16);
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
 IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 {
     // get basctl dllname
-    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
-    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
-    ::rtl::OUString aLibName( sLibName );
+    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
@@ -748,7 +710,7 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 
 sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
 {
-    sal_Bool result = FALSE;
+    sal_Bool result = sal_False;
 
     ::com::sun::star::uno::Reference
         < ::com::sun::star::lang::XMultiServiceFactory > xSMgr =
@@ -757,8 +719,8 @@ sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
     ::com::sun::star::uno::Reference
         < ::com::sun::star::uri::XUriReferenceFactory >
             xFactory( xSMgr->createInstance(
-                ::rtl::OUString::createFromAscii(
-                    "com.sun.star.uri.UriReferenceFactory" ) ),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.uri.UriReferenceFactory" )) ),
                 ::com::sun::star::uno::UNO_QUERY );
 
     if ( xFactory.is() )
@@ -772,7 +734,7 @@ sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
 
             if ( xUrl.is() )
             {
-                result = TRUE;
+                result = sal_True;
             }
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
@@ -798,11 +760,11 @@ SfxApplication::ChooseScript()
         uno::Reference< frame::XFrame > xFrame( pFrame ? pFrame->GetFrameInterface() : uno::Reference< frame::XFrame >() );
 
           AbstractScriptSelectorDialog* pDlg =
-            pFact->CreateScriptSelectorDialog( NULL, FALSE, xFrame );
+            pFact->CreateScriptSelectorDialog( NULL, sal_False, xFrame );
 
         OSL_TRACE("done, now exec it");
 
-          USHORT nRet = pDlg->Execute();
+          sal_uInt16 nRet = pDlg->Execute();
 
         OSL_TRACE("has returned");
 
@@ -816,12 +778,10 @@ SfxApplication::ChooseScript()
     return aScriptURL;
 }
 
-void SfxApplication::MacroOrganizer( INT16 nTabId )
+void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 {
     // get basctl dllname
-    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
-    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
-    ::rtl::OUString aLibName( sLibName );
+    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
@@ -833,6 +793,11 @@ void SfxApplication::MacroOrganizer( INT16 nTabId )
 
     // call basicide_choose_macro in basctl
     pSymbol( nTabId );
+}
+
+ErrCode SfxApplication::CallBasic( const String& rCode, BasicManager* pMgr, SbxArray* pArgs, SbxValue* pRet )
+{
+    return pMgr->ExecuteMacro( rCode, pArgs, pRet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

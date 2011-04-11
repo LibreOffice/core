@@ -24,6 +24,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
 LINKFLAGSDEFS=""
 
 PRJ=..$/..
@@ -55,9 +56,6 @@ LIB!:=$(LIB);$(PERLLIBS)
 .ENDIF
 
 # --- Files --------------------------------------------------------
-
-#CFLAGS +=   -DVERSION=\"0.01\" -DXS_VERSION=\"0.01\" -fPIC -I/develop6/update/dev/solenv/unxlngi3/lib/perl5/5.6.0/i686-linux/CORE/
-#CFLAGS += -I/usr/local/include -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DVERSION=\"0.01\" -DXS_VERSION=\"0.01\" -KPIC -I/develop6/update/dev/solenv/unxsols2/lib/perl5/5.6.0/sun4-solaris/CORE  
 
 SLOFILES= $(SLO)$/defbootstrap_lib.obj
 

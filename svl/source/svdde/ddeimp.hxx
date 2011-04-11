@@ -33,34 +33,25 @@
 
 #include "ddemlos2.h"
 
-#define WORD USHORT
-#define DWORD ULONG
-#define LPBYTE BYTE*
-#define LPWORD USHORT*
-#define LPDWORD ULONG*
+#define WORD sal_uInt16
+#define DWORD sal_uLong
+#define LPBYTE sal_uInt8*
+#define LPWORD sal_uInt16*
+#define LPDWORD sal_uLong*
 #define LPCTSTR PCSZ
 
 #else
 
-#include <tools/prewin.h>
+#include <windows.h>
 #include <ddeml.h>
-#include <tools/postwin.h>
 #include "ddewrap.hxx"
 
-/*
-extern "C"
-{
-#define BOOL WIN_BOOL
-#define BYTE WIN_BYTE
-#undef BOOL
-#undef BYTE
-};
-*/
-
 #endif
+
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/shl.hxx>
+#include <vector>
 
 class DdeService;
 class DdeTopic;
@@ -78,7 +69,7 @@ struct Conversation
     DdeTopic*   pTopic;
 };
 
-DECLARE_LIST( ConvList, Conversation* );
+typedef ::std::vector< Conversation* > ConvList;
 
 // ---------------
 // - DdeInternal -
@@ -95,12 +86,12 @@ public:
     static HDDEDATA CALLBACK InfCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
 #else
-#if defined ( MTW ) || ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
-    static HDDEDATA CALLBACK __EXPORT CliCallback
+#if (defined ( GCC ) && defined ( OS2 )) || defined( ICC )
+    static HDDEDATA CALLBACK CliCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
-    static HDDEDATA CALLBACK __EXPORT SvrCallback
+    static HDDEDATA CALLBACK SvrCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
-    static HDDEDATA CALLBACK __EXPORT InfCallback
+    static HDDEDATA CALLBACK InfCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
 #else
     static HDDEDATA CALLBACK _export CliCallback
@@ -144,7 +135,7 @@ struct DdeDataImp
     HDDEDATA        hData;
     LPBYTE          pData;
     long            nData;
-    ULONG           nFmt;
+    sal_uLong           nFmt;
 };
 
 class DdeConnections;
@@ -152,15 +143,15 @@ class DdeServices;
 
 struct DdeInstData
 {
-    USHORT          nRefCount;
+    sal_uInt16          nRefCount;
     DdeConnections* pConnections;
     // Server
     long            hCurConvSvr;
-    ULONG           hDdeInstSvr;
+    DWORD           hDdeInstSvr;
     short           nInstanceSvr;
     DdeServices*    pServicesSvr;
     // Client
-    ULONG           hDdeInstCli;
+    DWORD           hDdeInstCli;
     short           nInstanceCli;
 };
 

@@ -205,17 +205,6 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
         xListener->dispatchFinished( aEvent );
     }
 
-/*
-    // Try to initialize player.
-    m_xListener = xListener;
-    if (m_aPlayer.SetSoundName(aURL.Complete))
-    {
-        // OK- we can start async playing ...
-        // Count this request and initialize self-holder against dieing by uno ref count ...
-        m_xSelfHold = css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-        m_aPlayer.Play();
-    }
-*/
     // } SAFE
     aLock.unlock();
 }
@@ -269,7 +258,7 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = ::rtl::OUString::createFromAscii("oxt_OpenOffice_Extension");
+        sTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oxt_OpenOffice_Extension"));
         aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }

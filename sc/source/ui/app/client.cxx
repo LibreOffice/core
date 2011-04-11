@@ -38,7 +38,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sot/sotref.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
@@ -64,7 +63,7 @@ ScClient::ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrMod
     SetObject( pObj->GetObjRef() );
 }
 
-__EXPORT ScClient::~ScClient()
+ScClient::~ScClient()
 {
 }
 
@@ -74,8 +73,8 @@ SdrOle2Obj* ScClient::GetDrawObj()
     SdrOle2Obj* pOle2Obj = NULL;
     String aName = GetViewShell()->GetObjectShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
 
-    USHORT nPages = pModel->GetPageCount();
-    for (USHORT nPNr=0; nPNr<nPages && !pOle2Obj; nPNr++)
+    sal_uInt16 nPages = pModel->GetPageCount();
+    for (sal_uInt16 nPNr=0; nPNr<nPages && !pOle2Obj; nPNr++)
     {
         SdrPage* pPage = pModel->GetPage(nPNr);
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -94,13 +93,13 @@ SdrOle2Obj* ScClient::GetDrawObj()
     return pOle2Obj;
 }
 
-void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
+void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
     if (!pViewSh)
     {
-        DBG_ERROR("Wrong ViewShell");
+        OSL_FAIL("Wrong ViewShell");
         return;
     }
 
@@ -115,7 +114,7 @@ void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
             aLogicRect.SetPos( aOldRect.TopLeft() );
     }
 
-    USHORT nTab = pViewSh->GetViewData()->GetTabNo();
+    sal_uInt16 nTab = pViewSh->GetViewData()->GetTabNo();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
     if ( pPage && aLogicRect != aOldRect )
     {
@@ -156,13 +155,13 @@ void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
     }
 }
 
-void __EXPORT ScClient::ObjectAreaChanged()
+void ScClient::ObjectAreaChanged()
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
     if (!pViewSh)
     {
-        DBG_ERROR("Wrong ViewShell");
+        OSL_FAIL("Wrong ViewShell");
         return;
     }
 
@@ -184,7 +183,7 @@ void __EXPORT ScClient::ObjectAreaChanged()
         pViewSh->ScrollToObject( pDrawObj );
 }
 
-void __EXPORT ScClient::ViewChanged()
+void ScClient::ViewChanged()
 {
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
     {
@@ -203,7 +202,7 @@ void __EXPORT ScClient::ViewChanged()
         aSz = xObj->getVisualAreaSize( GetAspect() );
     } catch ( embed::NoVisualAreaSizeException& )
     {
-        DBG_ERROR("The visual area size must be available!\n");
+        OSL_FAIL("The visual area size must be available!\n");
     }
 
     MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( GetAspect() ) );
@@ -243,7 +242,7 @@ void __EXPORT ScClient::ViewChanged()
     }
 }
 
-void __EXPORT ScClient::MakeVisible()
+void ScClient::MakeVisible()
 {
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)

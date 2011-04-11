@@ -52,12 +52,6 @@ CFLAGS += -Ob0
 
 .ENDIF
 
-.IF "$(COM)" == "MSC"
-.IF "$(cppu_no_leak)" == ""
-.IF "$(bndchk)" == ""
-# msvc++: workaround for strange crash at exit: just don't do the
-# cleanup of types and whatnot...
+.IF "$(COM)$(CPU)" == "MSCX"
 CFLAGS += -DCPPU_LEAK_STATIC_DATA
-.ENDIF
-.ENDIF
 .ENDIF

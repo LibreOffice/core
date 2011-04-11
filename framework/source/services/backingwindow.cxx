@@ -87,7 +87,7 @@ DecoToolBox::DecoToolBox( Window* pParent, WinBits nStyle ) :
     ToolBox( pParent, nStyle )
 {
         SetBackground();
-        SetPaintTransparent( TRUE );
+        SetPaintTransparent( sal_True );
 }
 
 void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
@@ -98,17 +98,17 @@ void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
     {
         calcMinSize();
         SetBackground();
-        SetPaintTransparent( TRUE );
+        SetPaintTransparent( sal_True );
     }
 }
 
 void DecoToolBox::calcMinSize()
 {
     ToolBox aTbx( GetParent() );
-    USHORT nItems = GetItemCount();
-    for( USHORT i = 0; i < nItems; i++ )
+    sal_uInt16 nItems = GetItemCount();
+    for( sal_uInt16 i = 0; i < nItems; i++ )
     {
-        USHORT nId = GetItemId( i );
+        sal_uInt16 nId = GetItemId( i );
         aTbx.InsertItem( nId, GetItemImage( nId ) );
     }
     aTbx.SetOutStyle( TOOLBOX_STYLE_FLAT );
@@ -196,8 +196,8 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     // clean up resource stack
     FreeResource();
 
-    maWelcome.SetPaintTransparent( TRUE );
-    maProduct.SetPaintTransparent( TRUE );
+    maWelcome.SetPaintTransparent( sal_True );
+    maProduct.SetPaintTransparent( sal_True );
     EnableChildTransparentMode();
 
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
@@ -229,15 +229,15 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     if( mxDesktop.is() )
         mxDesktopDispatchProvider = Reference< XDispatchProvider >( mxDesktop, UNO_QUERY );
 
-    maWriterButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:WriterButton" ) ) ) );
-    maCalcButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:CalcButton" ) ) ) );
-    maImpressButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:ImpressButton" ) ) ) );
-    maDrawButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:DrawButton" ) ) ) );
-    maDBButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:DBButton" ) ) ) );
-    maMathButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:MathButton" ) ) ) );
-    maTemplateButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:TemplateButton" ) ) ) );
-    maOpenButton.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:OpenButton" ) ) ) );
-    maToolbox.SetSmartHelpId( SmartId( String( RTL_CONSTASCII_USTRINGPARAM( ".HelpId:StartCenter:Toolbox" ) ) ) );
+    maWriterButton.SetHelpId( ".HelpId:StartCenter:WriterButton" );
+    maCalcButton.SetHelpId( ".HelpId:StartCenter:CalcButton" );
+    maImpressButton.SetHelpId( ".HelpId:StartCenter:ImpressButton" );
+    maDrawButton.SetHelpId( ".HelpId:StartCenter:DrawButton" );
+    maDBButton.SetHelpId( ".HelpId:StartCenter:DBButton" );
+    maMathButton.SetHelpId( ".HelpId:StartCenter:MathButton" );
+    maTemplateButton.SetHelpId( ".HelpId:StartCenter:TemplateButton" );
+    maOpenButton.SetHelpId( ".HelpId:StartCenter:OpenButton" );
+    maToolbox.SetHelpId( ".HelpId:StartCenter:Toolbox" );
 
     // init background
     initBackground();
@@ -384,7 +384,7 @@ void BackingWindow::prepareRecentFileMenu()
                 aBuf.append( i+1 );
             aBuf.appendAscii( ": " );
             aBuf.append( aMenuTitle );
-            mpRecentMenu->InsertItem( static_cast<USHORT>(i+1), aBuf.makeStringAndClear() );
+            mpRecentMenu->InsertItem( static_cast<sal_uInt16>(i+1), aBuf.makeStringAndClear() );
         }
     }
     else
@@ -397,7 +397,7 @@ void BackingWindow::prepareRecentFileMenu()
 
 void BackingWindow::initBackground()
 {
-    SetBackground( GetSettings().GetStyleSettings().GetWorkspaceGradient() );
+    SetBackground();
 
     bool bDark = GetSettings().GetStyleSettings().GetHighContrastMode();
     if( bDark )
@@ -410,7 +410,7 @@ void BackingWindow::initBackground()
     Color aTextBGColor( bDark ? COL_BLACK : COL_WHITE );
 
     // select image set
-    ImageContainerRes aRes( FwkResId( bDark ? RES_BACKING_IMAGES_HC : RES_BACKING_IMAGES ) );
+    ImageContainerRes aRes( FwkResId( RES_BACKING_IMAGES ) );
 
     // scale middle segment
     Size aMiddleSize;
@@ -562,9 +562,9 @@ void BackingWindow::initControls()
         MenuBar* pMBar = pSysWin->GetMenuBar();
         if( pMBar )
         {
-            for( USHORT i = 0; i < pMBar->GetItemCount(); i++ )
+            for( sal_uInt16 i = 0; i < pMBar->GetItemCount(); i++ )
             {
-                USHORT nItemId = pMBar->GetItemId( i );
+                sal_uInt16 nItemId = pMBar->GetItemId( i );
                 String aItemText( pMBar->GetItemText( nItemId ) );
                 if( aItemText.Len() )
                     aMnemns.RegisterMnemonic( aItemText );
@@ -673,13 +673,13 @@ void BackingWindow::layoutButton(
                           const String& i_rStr
                           )
 {
-    rtl::OUString aURL( rtl::OUString::createFromAscii( i_pURL ? i_pURL : "" ) );
+    rtl::OUString aURL( i_pURL ? rtl::OUString::createFromAscii( i_pURL ) : rtl::OUString() );
     // setup button
-    i_rBtn.SetPaintTransparent( TRUE );
+    i_rBtn.SetPaintTransparent( sal_True );
     i_rBtn.SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
     if( i_pURL && (! i_rOpt.IsModuleInstalled( i_eMod ) || i_rURLS.find( aURL ) == i_rURLS.end()) )
     {
-        i_rBtn.Enable( FALSE );
+        i_rBtn.Enable( sal_False );
     }
 
     // setup text
@@ -705,36 +705,39 @@ void BackingWindow::layoutButton(
 
 void BackingWindow::Paint( const Rectangle& )
 {
+    Wallpaper aBack( GetSettings().GetStyleSettings().GetWorkspaceGradient() );
+    Region aClip( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+    Rectangle aBmpRect(maControlRect);
+    aBmpRect.Left()   -= nShadowLeft;
+    aBmpRect.Top()    -= nShadowTop;
+    aBmpRect.Right()  += nShadowRight;
+    aBmpRect.Bottom() += nShadowBottom;
+    aClip.Exclude( aBmpRect );
+    Push( PUSH_CLIPREGION );
+    IntersectClipRegion( aClip );
+    DrawWallpaper( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ), aBack );
+    Pop();
+
+    VirtualDevice aDev( *this );
+    aDev.EnableRTL( IsRTLEnabled() );
+    aDev.SetOutputSizePixel( aBmpRect.GetSize() );
+    Point aOffset( Point( 0, 0 ) - aBmpRect.TopLeft() );
+    aDev.DrawWallpaper( Rectangle( aOffset, GetOutputSizePixel() ), aBack );
 
     // draw bitmap
-    if( GetSettings().GetLayoutRTL() )
+    Point aTL( 0, 0 );
+    aDev.DrawBitmapEx( aTL, maBackgroundLeft );
+    aTL.X() += maBackgroundLeft.GetSizePixel().Width();
+    if( !!maBackgroundMiddle )
     {
-        Point aTL( maControlRect.TopLeft() );
-        aTL.X() -= nShadowRight;
-        aTL.Y() -= nShadowTop;
-        DrawBitmapEx( aTL, maBackgroundLeft );
-        aTL.X() += maBackgroundLeft.GetSizePixel().Width();
-        if( !!maBackgroundMiddle )
-        {
-            DrawBitmapEx( aTL, maBackgroundMiddle );
-            aTL.X() += maBackgroundMiddle.GetSizePixel().Width();
-        }
-        DrawBitmapEx( aTL, maBackgroundRight );
+        aDev.DrawBitmapEx( aTL, maBackgroundMiddle );
+        aTL.X() += maBackgroundMiddle.GetSizePixel().Width();
     }
-    else
-    {
-        Point aTL( maControlRect.TopLeft() );
-        aTL.X() -= nShadowLeft;
-        aTL.Y() -= nShadowTop;
-        DrawBitmapEx( aTL, maBackgroundLeft );
-        aTL.X() += maBackgroundLeft.GetSizePixel().Width();
-        if( !!maBackgroundMiddle )
-        {
-            DrawBitmapEx( aTL, maBackgroundMiddle );
-            aTL.X() += maBackgroundMiddle.GetSizePixel().Width();
-        }
-        DrawBitmapEx( aTL, maBackgroundRight );
-    }
+    aDev.DrawBitmapEx( aTL, maBackgroundRight );
+
+    DrawOutDev( aBmpRect.TopLeft(), aBmpRect.GetSize(),
+                Point( 0, 0 ), aBmpRect.GetSize(),
+                aDev );
 }
 
 long BackingWindow::Notify( NotifyEvent& rNEvt )
@@ -993,8 +996,8 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-        pArg[0].Value <<= rtl::OUString::createFromAscii("private:user");
+        pArg[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+        pArg[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:user"));
 
         dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(OPEN_URL) ), rtl::OUString(), xFrame, aArgs );
     }
@@ -1004,8 +1007,8 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
         Sequence< com::sun::star::beans::PropertyValue > aArgs(1);
         PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-        pArg[0].Value <<= rtl::OUString::createFromAscii("private:user");
+        pArg[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+        pArg[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:user"));
 
         dispatchURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(TEMPLATE_URL) ), rtl::OUString(), xFrame, aArgs );
     }
@@ -1084,7 +1087,7 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
     aDispatchURL.Complete = i_rURL;
 
     Reference < com::sun::star::util::XURLTransformer > xURLTransformer(
-        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ),
+        comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ),
         com::sun::star::uno::UNO_QUERY );
     if ( xURLTransformer.is() )
     {
@@ -1100,7 +1103,7 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
             if ( xDispatch.is() )
             {
                 ImplDelayedDispatch* pDisp = new ImplDelayedDispatch( xDispatch, aDispatchURL, i_rArgs );
-                ULONG nEventId = 0;
+                sal_uLong nEventId = 0;
                 if( ! Application::PostUserEvent( nEventId, Link( NULL, implDispatchDelayed ), pDisp ) )
                     delete pDisp; // event could not be posted for unknown reason, at least don't leak
             }

@@ -93,13 +93,13 @@ interface XSprite : ::com::sun::star::uno::XInterface
         The new position, in user coordinate space, to move the sprite to.
 
         @param aViewState
-        The viewstate to be used when interpreting aNewPos.
+        The view state to be used when interpreting aNewPos.
 
         @param aRenderState
-        The renderstate to be used when interpreting aNewPos.
+        The render state to be used when interpreting aNewPos.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>
-        if one of the view and renderstate parameters are outside the
+        if one of the view and render state parameters are outside the
         specified range.
      */
     void move( [in] ::com::sun::star::geometry::RealPoint2D aNewPos, [in] ViewState aViewState, [in] RenderState aRenderState )

@@ -64,6 +64,9 @@
 #ifndef _LWPBULLETSTYLEMGR_HXX
 #define _LWPBULLETSTYLEMGR_HXX
 
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+
 #include "lwpheader.hxx"
 #include "lwpfoundry.hxx"
 #include "lwpobjid.hxx"
@@ -112,7 +115,7 @@ private:
 
 private:
 //  std::vector <XFListStyle*> m_aBulletStyleList;
-    typedef std::pair<LwpBulletOverride, LwpObjectID> OverridePair;
+    typedef std::pair<boost::shared_ptr<LwpBulletOverride>, LwpObjectID> OverridePair;
     std::vector <rtl::OUString> m_vStyleNameList;
     std::vector <OverridePair> m_vIDsPairList;
     rtl::OUString m_aCurrentStyleName;
@@ -124,7 +127,7 @@ private:
     sal_Bool m_bContinue;
     sal_Bool m_bIsBulletSkipped;
     LwpObjectID m_aCurrentNumberingID;
-    LwpNumberingOverride m_aCurrentNumOverride;
+    boost::scoped_ptr<LwpNumberingOverride> m_pCurrentNumOverride;
     sal_uInt16 m_nCurrentPos;
 
 };
@@ -159,11 +162,11 @@ inline sal_uInt16 LwpBulletStyleMgr::GetCurrentPos() const
 
 inline void LwpBulletStyleMgr::SetCurrentNumOver(const LwpNumberingOverride& rOther)
 {
-    m_aCurrentNumOverride = rOther;
+    m_pCurrentNumOverride.reset(rOther.clone());
 }
 inline LwpNumberingOverride* LwpBulletStyleMgr::GetCurrentNumOver()
 {
-    return &m_aCurrentNumOverride;
+    return m_pCurrentNumOverride.get();
 }
 
 #endif

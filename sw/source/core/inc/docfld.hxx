@@ -48,7 +48,7 @@ struct SwPosition;
 // Update an den Expression Feldern
 class _SetGetExpFld
 {
-    ULONG nNode;
+    sal_uLong nNode;
     xub_StrLen nCntnt;
     union {
         const SwTxtFld* pTxtFld;
@@ -85,11 +85,11 @@ public:
 
     _SetGetExpFld( const SwFlyFrmFmt& rFlyFmt, const SwPosition* pPos = 0 );
 
-    BOOL operator==( const _SetGetExpFld& rFld ) const
+    sal_Bool operator==( const _SetGetExpFld& rFld ) const
     {   return nNode == rFld.nNode && nCntnt == rFld.nCntnt &&
                 ( !CNTNT.pTxtFld || !rFld.CNTNT.pTxtFld ||
                     CNTNT.pTxtFld == rFld.CNTNT.pTxtFld ); }
-    BOOL operator<( const _SetGetExpFld& rFld ) const;
+    sal_Bool operator<( const _SetGetExpFld& rFld ) const;
 
     const SwTxtFld* GetFld() const
         { return TEXTFIELD == eSetGetExpFldType ? CNTNT.pTxtFld : 0; }
@@ -104,7 +104,7 @@ public:
     const SwFlyFrmFmt* GetFlyFmt() const
         { return FLYFRAME == eSetGetExpFldType ? CNTNT.pFlyFmt : 0; }
 
-    ULONG GetNode() const { return nNode; }
+    sal_uLong GetNode() const { return nNode; }
     xub_StrLen GetCntnt() const { return nCntnt; }
     const void* GetPointer() const { return CNTNT.pTxtFld; }
 
@@ -139,8 +139,8 @@ struct SwCalcFldType : public SwHash
 
 // Suche nach dem String, der unter dem Namen in der HashTabelle abgelegt
 // wurde
-void LookString( SwHash** ppTbl, USHORT nSize, const String& rName,
-                    String& rRet, USHORT* pPos = 0 );
+void LookString( SwHash** ppTbl, sal_uInt16 nSize, const String& rName,
+                    String& rRet, sal_uInt16* pPos = 0 );
 
 
 // --------
@@ -158,14 +158,14 @@ class SwDocUpdtFld
     long nFldUpdtPos;               // ab dieser Position mit Update starten
     SwCntntNode* pCNode;            // der TxtNode zur UpdatePos.
 
-    ULONG nNodes;                   // sollte die NodesAnzahl unterschiedlich sein
-    BYTE nFldLstGetMode;
+    sal_uLong nNodes;                   // sollte die NodesAnzahl unterschiedlich sein
+    sal_uInt8 nFldLstGetMode;
 
-    BOOL bInUpdateFlds : 1;         // zur Zeit laeuft ein UpdateFlds,
-    BOOL bFldsDirty : 1;            // irgendwelche Felder sind ungueltig
+    sal_Bool bInUpdateFlds : 1;         // zur Zeit laeuft ein UpdateFlds,
+    sal_Bool bFldsDirty : 1;            // irgendwelche Felder sind ungueltig
 
     void _MakeFldList( SwDoc& pDoc, int eGetMode );
-    void GetBodyNode( const SwTxtFld& , USHORT nFldWhich );
+    void GetBodyNode( const SwTxtFld& , sal_uInt16 nFldWhich );
     void GetBodyNode( const SwSectionNode&);
 public:
     SwDocUpdtFld();
@@ -175,16 +175,16 @@ public:
 
     void MakeFldList( SwDoc& rDoc, int bAll, int eGetMode );
 
-    void InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld );
+    void InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld );
 
     void InsertFldType( const SwFieldType& rType );
     void RemoveFldType( const SwFieldType& rType );
 
-    BOOL IsInUpdateFlds() const         { return bInUpdateFlds; }
-    void SetInUpdateFlds( BOOL b )      { bInUpdateFlds = b; }
+    sal_Bool IsInUpdateFlds() const         { return bInUpdateFlds; }
+    void SetInUpdateFlds( sal_Bool b )      { bInUpdateFlds = b; }
 
-    BOOL IsFieldsDirty() const          { return bFldsDirty; }
-    void SetFieldsDirty( BOOL b )       { bFldsDirty = b; }
+    sal_Bool IsFieldsDirty() const          { return bFldsDirty; }
+    void SetFieldsDirty( sal_Bool b )       { bFldsDirty = b; }
 
     SwHash**    GetFldTypeTable() const { return (SwHash**)aFldTypeTable; }
 };

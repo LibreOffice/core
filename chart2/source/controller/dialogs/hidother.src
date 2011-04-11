@@ -25,9 +25,6 @@
  *
  ************************************************************************/
 #include "HelpIds.hrc"
-#include "SchSlotIds.hxx"
-
-hidspecial SID_INSERT_GRIDS {HelpId= SID_INSERT_GRIDS; };
 
 hidspecial HID_SCH_CB_XAXIS {HelpId= HID_SCH_CB_XAXIS; };
 hidspecial HID_SCH_CB_YAXIS {HelpId= HID_SCH_CB_YAXIS; };

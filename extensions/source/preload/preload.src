@@ -31,6 +31,7 @@
 
 ModalDialog RID_DLG_OEMWIZARD
 {
+    HelpID = "extensions:ModalDialog:RID_DLG_OEMWIZARD";
     Text = "%PRODUCTNAME %PRODUCTVERSION";
 
     OutputSize      = TRUE ;
@@ -40,11 +41,13 @@ ModalDialog RID_DLG_OEMWIZARD
     Hide            = TRUE;
     PushButton PB_PREV
     {
+        HelpID = "extensions:PushButton:RID_DLG_OEMWIZARD:PB_PREV";
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "<< Back" ;
     };
     PushButton PB_NEXT
     {
+        HelpID = "extensions:PushButton:RID_DLG_OEMWIZARD:PB_NEXT";
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "Next >>" ;
     };
@@ -72,6 +75,7 @@ ModalDialog RID_DLG_OEMWIZARD
 };
 TabPage RID_TP_WELCOME
 {
+    HelpID = "extensions:TabPage:RID_TP_WELCOME";
 //    HelpId = ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -130,6 +134,7 @@ TabPage RID_TP_WELCOME
 
 TabPage RID_TP_LICENSE
 {
+    HelpID = "extensions:TabPage:RID_TP_LICENSE";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;
@@ -138,6 +143,7 @@ TabPage RID_TP_LICENSE
 
     MultiLineEdit ML_LICENSE
     {
+        HelpID = "extensions:MultiLineEdit:RID_TP_LICENSE:ML_LICENSE";
         PosSize = MAP_APPFONT ( LICENSE_COL_1 , LICENSE_ROW_1 , LICENSE_WIDTH , LICENCE_HEIGHT ) ;
         Border = TRUE ;
         VScroll = TRUE ;
@@ -185,6 +191,7 @@ TabPage RID_TP_LICENSE
 
     PushButton PB_PAGEDOWN
     {
+        HelpID = "extensions:PushButton:RID_TP_LICENSE:PB_PAGEDOWN";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_4 , LICENSE_ROW_3 ) ;
         Size = MAP_APPFONT ( PD_WIDTH , PB_HEIGHT ) ;
@@ -209,6 +216,7 @@ TabPage RID_TP_LICENSE
 
     CheckBox CB_ACCEPT
     {
+        HelpID = "extensions:CheckBox:RID_TP_LICENSE:CB_ACCEPT";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_3, LICENSE_ROW_5 ) ;
         Size = MAP_APPFONT ( COL3_WIDTH, FT_HEIGHT ) ;

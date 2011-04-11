@@ -49,8 +49,8 @@ class CommandEvent;
 
 /**************************************************************************/
 
-    void SmGetLeftSelectionPart(const ESelection aSelection,
-                                USHORT &nPara, USHORT &nPos);
+    void SmGetLeftSelectionPart(const ESelection &rSelection,
+                                sal_uInt16 &nPara, sal_uInt16 &nPos);
 
 /**************************************************************************/
 
@@ -114,27 +114,27 @@ public:
     ESelection          GetSelection() const;
     void                SetSelection(const ESelection &rSel);
 
-    BOOL                IsEmpty() const;
-    BOOL                IsSelected() const;
-    BOOL                IsAllSelected() const;
+    bool                IsEmpty() const;
+    bool                IsSelected() const;
+    bool                IsAllSelected() const;
     void                Cut();
     void                Copy();
     void                Paste();
     void                Delete();
     void                SelectAll();
     void                InsertText(const String &rText);
-    void                InsertCommand(USHORT nCommand);
+    void                InsertCommand(sal_uInt16 nCommand);
     void                MarkError(const Point &rPos);
     void                SelNextMark();
     void                SelPrevMark();
-    BOOL                HasMark(const String &rText) const;
+    bool                HasMark(const String &rText) const;
 
     void                Flush();
     void                DeleteEditView( SmViewShell &rView );
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
-    BOOL                HandleWheelCommands( const CommandEvent &rCEvt );
+    bool                HandleWheelCommands( const CommandEvent &rCEvt );
     bool                IsInlineEditEnabled();
     void                StartCursorMove();
 

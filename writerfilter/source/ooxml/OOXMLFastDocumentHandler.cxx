@@ -131,7 +131,7 @@ OOXMLFastDocumentHandler::getContextHandler() const
         (new OOXMLFastContextHandler(m_xContext));
         mpContextHandler->setStream(mpStream);
         mpContextHandler->setDocument(mpDocument);
-        mpContextHandler->setXNoteId(msXNoteId);
+        mpContextHandler->setXNoteId(mnXNoteId);
         mpContextHandler->setForwardEvents(true);
     }
 
@@ -218,9 +218,9 @@ void OOXMLFastDocumentHandler::setDocument(OOXMLDocument * pDocument)
     mpDocument = pDocument;
 }
 
-void OOXMLFastDocumentHandler::setXNoteId(const ::rtl::OUString & rXNoteId)
+void OOXMLFastDocumentHandler::setXNoteId(const sal_Int32 nXNoteId)
 {
-    msXNoteId = rXNoteId;
+    mnXNoteId = nXNoteId;
 }
 
 void OOXMLFastDocumentHandler::setIsSubstream( bool bSubstream )

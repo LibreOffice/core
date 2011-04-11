@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 
-#include <errhdl.hxx>
 #include <dpage.hxx>
 #include <dobjfac.hxx>
 #include <dflyobj.hxx>

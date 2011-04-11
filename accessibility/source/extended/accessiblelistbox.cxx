@@ -307,7 +307,7 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry, TRUE );
+        getListBox()->Select( pEntry, sal_True );
     }
     // -----------------------------------------------------------------------------
     sal_Bool SAL_CALL AccessibleListBox::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
@@ -335,7 +335,7 @@ namespace accessibility
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( i );
             if ( getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry, FALSE );
+                getListBox()->Select( pEntry, sal_False );
         }
     }
     // -----------------------------------------------------------------------------
@@ -351,7 +351,7 @@ namespace accessibility
         {
             SvLBoxEntry* pEntry = getListBox()->GetEntry( i );
             if ( !getListBox()->IsSelected( pEntry ) )
-                getListBox()->Select( pEntry, TRUE );
+                getListBox()->Select( pEntry, sal_True );
         }
     }
     // -----------------------------------------------------------------------------
@@ -411,7 +411,7 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        getListBox()->Select( pEntry, FALSE );
+        getListBox()->Select( pEntry, sal_False );
     }
     // -----------------------------------------------------------------------------
     void AccessibleListBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )

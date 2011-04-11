@@ -167,11 +167,7 @@ bool LinkSequence::createFromXML( const rtl::OString & rInData,
                       rInData.getStr() + nStart,
                       nEnd - nStart + TOKEN_LENGTH );
 
-#if NEON_VERSION >= 0x0250
         success = !ne_xml_failed( parser );
-#else
-        success = !!ne_xml_valid( parser );
-#endif
 
         ne_xml_destroy( parser );
 
@@ -204,9 +200,9 @@ bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
     sal_Int32 nCount = rInData.getLength();
     if ( nCount )
     {
-        rtl::OUString aPre( rtl::OUString::createFromAscii( "<link><src>" ) );
-        rtl::OUString aMid( rtl::OUString::createFromAscii( "</src><dst>" ) );
-        rtl::OUString aEnd( rtl::OUString::createFromAscii( "</dst></link>" ) );
+        rtl::OUString aPre( RTL_CONSTASCII_USTRINGPARAM("<link><src>") );
+        rtl::OUString aMid( RTL_CONSTASCII_USTRINGPARAM("</src><dst>") );
+        rtl::OUString aEnd( RTL_CONSTASCII_USTRINGPARAM("</dst></link>") );
 
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {

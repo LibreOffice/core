@@ -199,7 +199,7 @@ public class WeakBase_Test
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
         if (bOk == false)
-            System.out.println("Errors occured!");
+            System.out.println("Errors occurred!");
         else
             System.out.println("No errors.");
 

@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/weakref.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 

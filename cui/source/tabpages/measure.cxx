@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
@@ -53,7 +50,7 @@
 #include <sfx2/request.hxx>
 #include "svx/ofaitem.hxx"
 
-static USHORT pRanges[] =
+static sal_uInt16 pRanges[] =
 {
     SDRATTR_MEASURE_FIRST,
     SDRATTR_MEASURE_LAST,
@@ -129,8 +126,9 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
         aAttrSet                ( *rInAttrs.GetPool() ),
         pView( 0 ),
 
-        bPositionModified       ( FALSE )
+        bPositionModified       ( sal_False )
 {
+    aCtlPreview.SetAccessibleName(aCtlPreview.GetHelpText());
     FillUnitLB();
 
     FreeResource();
@@ -169,6 +167,9 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
     aTsbParallel.SetClickHdl( aLink );
     aTsbShowUnit.SetClickHdl( aLink );
     aLbUnit.SetSelectHdl( aLink );
+    aLbUnit.SetAccessibleName(GetNonMnemonicString(aTsbShowUnit.GetText()));
+    aCtlPosition.SetAccessibleRelationMemberOf( &aFlLabel );
+    aLbUnit.SetAccessibleRelationLabeledBy( &aTsbShowUnit );
 }
 
 /*************************************************************************
@@ -187,7 +188,7 @@ SvxMeasurePage::~SvxMeasurePage()
 |*
 \************************************************************************/
 
-void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
+void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 {
     SfxItemPool* pPool = rAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -274,7 +275,7 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     {
         aTsbBelowRefEdge.SetState( ( ( const SdrMeasureBelowRefEdgeItem& )rAttrs.Get( SDRATTR_MEASUREBELOWREFEDGE ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        aTsbBelowRefEdge.EnableTriState( FALSE );
+        aTsbBelowRefEdge.EnableTriState( sal_False );
     }
     else
     {
@@ -288,7 +289,7 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREDECIMALPLACES );
     if( pItem )
     {
-        INT16 nValue = ( ( const SdrMeasureDecimalPlacesItem* )pItem )->GetValue();
+        sal_Int16 nValue = ( ( const SdrMeasureDecimalPlacesItem* )pItem )->GetValue();
         aMtrFldDecimalPlaces.SetValue( nValue );
     }
     else
@@ -303,7 +304,7 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     {
         aTsbParallel.SetState( ( ( const SdrMeasureTextRota90Item& )rAttrs.Get( SDRATTR_MEASURETEXTROTA90 ) ).
                         GetValue() ? STATE_NOCHECK : STATE_CHECK );
-        aTsbParallel.EnableTriState( FALSE );
+        aTsbParallel.EnableTriState( sal_False );
     }
     else
     {
@@ -316,7 +317,7 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     {
         aTsbShowUnit.SetState( ( ( const SdrMeasureShowUnitItem& )rAttrs.Get( SDRATTR_MEASURESHOWUNIT ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        aTsbShowUnit.EnableTriState( FALSE );
+        aTsbShowUnit.EnableTriState( sal_False );
     }
     else
     {
@@ -330,7 +331,7 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
         long nFieldUnit = (long) ( ( const SdrMeasureUnitItem& )rAttrs.
                                     Get( SDRATTR_MEASUREUNIT ) ).GetValue();
 
-        for( USHORT i = 0; i < aLbUnit.GetEntryCount(); ++i )
+        for( sal_uInt16 i = 0; i < aLbUnit.GetEntryCount(); ++i )
         {
             if ( (long)aLbUnit.GetEntryData( i ) == nFieldUnit )
             {
@@ -353,8 +354,8 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
         {
             if ( rAttrs.GetItemState( SDRATTR_MEASURETEXTHPOS ) != SFX_ITEM_DONTCARE )
             {
-                aTsbAutoPosV.EnableTriState( FALSE );
-                aTsbAutoPosH.EnableTriState( FALSE );
+                aTsbAutoPosV.EnableTriState( sal_False );
+                aTsbAutoPosH.EnableTriState( sal_False );
 
                 SdrMeasureTextHPos eHPos = (SdrMeasureTextHPos)
                             ( ( const SdrMeasureTextHPosItem& )rAttrs.Get( SDRATTR_MEASURETEXTHPOS ) ).GetValue();
@@ -432,7 +433,7 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     ChangeAttrHdl_Impl( &aTsbShowUnit );
     aCtlPreview.SetAttributes( rAttrs );
 
-    bPositionModified = FALSE;
+    bPositionModified = sal_False;
 }
 
 /*************************************************************************
@@ -441,91 +442,88 @@ void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 |*
 \************************************************************************/
 
-BOOL SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
+sal_Bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
 {
-    BOOL     bModified = FALSE;
-    INT32    nValue;
+    sal_Bool     bModified = sal_False;
+    sal_Int32    nValue;
     TriState eState;
 
     if( aMtrFldLineDist.GetText() != aMtrFldLineDist.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldLineDist, eUnit );
         rAttrs.Put( SdrMeasureLineDistItem( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( aMtrFldHelplineOverhang.GetText() != aMtrFldHelplineOverhang.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldHelplineOverhang, eUnit );
         rAttrs.Put( SdrMeasureHelplineOverhangItem( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( aMtrFldHelplineDist.GetText() != aMtrFldHelplineDist.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldHelplineDist, eUnit );
         rAttrs.Put( SdrMeasureHelplineDistItem( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( aMtrFldHelpline1Len.GetText() != aMtrFldHelpline1Len.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldHelpline1Len, eUnit );
         rAttrs.Put( SdrMeasureHelpline1LenItem( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( aMtrFldHelpline2Len.GetText() != aMtrFldHelpline2Len.GetSavedValue() )
     {
         nValue = GetCoreValue( aMtrFldHelpline2Len, eUnit );
         rAttrs.Put( SdrMeasureHelpline2LenItem( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     eState = aTsbBelowRefEdge.GetState();
     if( eState != aTsbBelowRefEdge.GetSavedValue() )
     {
-        rAttrs.Put( SdrMeasureBelowRefEdgeItem( (BOOL) STATE_CHECK == eState ) );
-        bModified = TRUE;
+        rAttrs.Put( SdrMeasureBelowRefEdgeItem( (sal_Bool) STATE_CHECK == eState ) );
+        bModified = sal_True;
     }
 
     if( aMtrFldDecimalPlaces.GetText() != aMtrFldDecimalPlaces.GetSavedValue() )
     {
-        nValue = static_cast<INT32>(aMtrFldDecimalPlaces.GetValue());
+        nValue = static_cast<sal_Int32>(aMtrFldDecimalPlaces.GetValue());
         rAttrs.Put(
             SdrMeasureDecimalPlacesItem(
-                sal::static_int_cast< INT16 >( nValue ) ) );
-        bModified = TRUE;
+                sal::static_int_cast< sal_Int16 >( nValue ) ) );
+        bModified = sal_True;
     }
 
     eState = aTsbParallel.GetState();
     if( eState != aTsbParallel.GetSavedValue() )
     {
-        rAttrs.Put( SdrMeasureTextRota90Item( (BOOL) STATE_NOCHECK == eState ) );
-        bModified = TRUE;
+        rAttrs.Put( SdrMeasureTextRota90Item( (sal_Bool) STATE_NOCHECK == eState ) );
+        bModified = sal_True;
     }
 
     eState = aTsbShowUnit.GetState();
     if( eState != aTsbShowUnit.GetSavedValue() )
     {
-        rAttrs.Put( SdrMeasureShowUnitItem( (BOOL) STATE_CHECK == eState ) );
-        bModified = TRUE;
+        rAttrs.Put( SdrMeasureShowUnitItem( (sal_Bool) STATE_CHECK == eState ) );
+        bModified = sal_True;
     }
 
-    USHORT nPos = aLbUnit.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbUnit.GetSelectEntryPos();
     if( nPos != aLbUnit.GetSavedValue() )
     {
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            USHORT nFieldUnit = (USHORT)(long)aLbUnit.GetEntryData( nPos );
+            sal_uInt16 nFieldUnit = (sal_uInt16)(long)aLbUnit.GetEntryData( nPos );
             FieldUnit _eUnit = (FieldUnit) nFieldUnit;
             rAttrs.Put( SdrMeasureUnitItem( _eUnit ) );
-            bModified = TRUE;
+            bModified = sal_True;
         }
     }
-
-//enum SdrMeasureTextHPos {SDRMEASURE_TEXTHAUTO,SDRMEASURE_TEXTLEFTOUTSIDE,SDRMEASURE_TEXTINSIDE,SDRMEASURE_TEXTRIGHTOUTSIDE};
-//enum SdrMeasureTextVPos {SDRMEASURE_TEXTVAUTO,SDRMEASURE_ABOVE,SDRMEASURETEXT_VERTICALCENTERED,SDRMEASURE_BELOW};
 
     if( bPositionModified )
     {
@@ -569,13 +567,13 @@ BOOL SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
             if( eOldVPos != eVPos )
             {
                 rAttrs.Put( SdrMeasureTextVPosItem( eVPos ) );
-                bModified = TRUE;
+                bModified = sal_True;
             }
         }
         else
         {
             rAttrs.Put( SdrMeasureTextVPosItem( eVPos ) );
-            bModified = TRUE;
+            bModified = sal_True;
         }
 
         if ( rAttrs.GetItemState( SDRATTR_MEASURETEXTHPOS ) != SFX_ITEM_DONTCARE )
@@ -585,13 +583,13 @@ BOOL SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
             if( eOldHPos != eHPos )
             {
                 rAttrs.Put( SdrMeasureTextHPosItem( eHPos ) );
-                bModified = TRUE;
+                bModified = sal_True;
             }
         }
         else
         {
             rAttrs.Put( SdrMeasureTextHPosItem( eHPos ) );
-            bModified = TRUE;
+            bModified = sal_True;
         }
     }
 
@@ -631,7 +629,7 @@ SfxTabPage* SvxMeasurePage::Create( Window* pWindow,
 |*
 \************************************************************************/
 
-USHORT* SvxMeasurePage::GetRanges()
+sal_uInt16* SvxMeasurePage::GetRanges()
 {
     return( pRanges );
 }
@@ -713,31 +711,31 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
 
     if( p == &aMtrFldLineDist )
     {
-        INT32 nValue = GetCoreValue( aMtrFldLineDist, eUnit );
+        sal_Int32 nValue = GetCoreValue( aMtrFldLineDist, eUnit );
         aAttrSet.Put( SdrMeasureLineDistItem( nValue ) );
     }
 
     if( p == &aMtrFldHelplineOverhang )
     {
-        INT32 nValue = GetCoreValue( aMtrFldHelplineOverhang, eUnit );
+        sal_Int32 nValue = GetCoreValue( aMtrFldHelplineOverhang, eUnit );
         aAttrSet.Put( SdrMeasureHelplineOverhangItem( nValue) );
     }
 
     if( p == &aMtrFldHelplineDist )
     {
-        INT32 nValue = GetCoreValue( aMtrFldHelplineDist, eUnit );
+        sal_Int32 nValue = GetCoreValue( aMtrFldHelplineDist, eUnit );
         aAttrSet.Put( SdrMeasureHelplineDistItem( nValue) );
     }
 
     if( p == &aMtrFldHelpline1Len )
     {
-        INT32 nValue = GetCoreValue( aMtrFldHelpline1Len, eUnit );
+        sal_Int32 nValue = GetCoreValue( aMtrFldHelpline1Len, eUnit );
         aAttrSet.Put( SdrMeasureHelpline1LenItem( nValue ) );
     }
 
     if( p == &aMtrFldHelpline2Len )
     {
-        INT32 nValue = GetCoreValue( aMtrFldHelpline2Len, eUnit );
+        sal_Int32 nValue = GetCoreValue( aMtrFldHelpline2Len, eUnit );
         aAttrSet.Put( SdrMeasureHelpline2LenItem( nValue ) );
     }
 
@@ -745,12 +743,12 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
     {
         TriState eState = aTsbBelowRefEdge.GetState();
         if( eState != STATE_DONTKNOW )
-            aAttrSet.Put( SdrMeasureBelowRefEdgeItem( (BOOL) STATE_CHECK == eState ) );
+            aAttrSet.Put( SdrMeasureBelowRefEdgeItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
     if( p == &aMtrFldDecimalPlaces )
     {
-        INT16 nValue = sal::static_int_cast< INT16 >(
+        sal_Int16 nValue = sal::static_int_cast< sal_Int16 >(
             aMtrFldDecimalPlaces.GetValue() );
         aAttrSet.Put( SdrMeasureDecimalPlacesItem( nValue ) );
     }
@@ -759,22 +757,22 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
     {
         TriState eState = aTsbParallel.GetState();
         if( eState != STATE_DONTKNOW )
-            aAttrSet.Put( SdrMeasureTextRota90Item( (BOOL) !STATE_CHECK == eState ) );
+            aAttrSet.Put( SdrMeasureTextRota90Item( (sal_Bool) !STATE_CHECK == eState ) );
     }
 
     if( p == &aTsbShowUnit )
     {
         TriState eState = aTsbShowUnit.GetState();
         if( eState != STATE_DONTKNOW )
-            aAttrSet.Put( SdrMeasureShowUnitItem( (BOOL) STATE_CHECK == eState ) );
+            aAttrSet.Put( SdrMeasureShowUnitItem( (sal_Bool) STATE_CHECK == eState ) );
     }
 
     if( p == &aLbUnit )
     {
-        USHORT nPos = aLbUnit.GetSelectEntryPos();
+        sal_uInt16 nPos = aLbUnit.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            USHORT nFieldUnit = (USHORT)(long)aLbUnit.GetEntryData( nPos );
+            sal_uInt16 nFieldUnit = (sal_uInt16)(long)aLbUnit.GetEntryData( nPos );
             FieldUnit _eUnit = (FieldUnit) nFieldUnit;
             aAttrSet.Put( SdrMeasureUnitItem( _eUnit ) );
         }
@@ -782,7 +780,7 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
 
     if( p == &aTsbAutoPosV || p == &aTsbAutoPosH || p == &aCtlPosition )
     {
-        bPositionModified = TRUE;
+        bPositionModified = sal_True;
 
         // Position
         RECT_POINT eRP = aCtlPosition.GetActualRP();
@@ -852,10 +850,10 @@ void SvxMeasurePage::FillUnitLB()
 
     long nUnit = FUNIT_NONE;
     String aStrMetric( CUI_RES( STR_MEASURE_AUTOMATIC ) );
-    USHORT nPos = aLbUnit.InsertEntry( aStrMetric );
+    sal_uInt16 nPos = aLbUnit.InsertEntry( aStrMetric );
     aLbUnit.SetEntryData( nPos, (void*)nUnit );
 
-    for( USHORT i = 0; i < aMetricArr.Count(); ++i )
+    for( sal_uInt16 i = 0; i < aMetricArr.Count(); ++i )
     {
         aStrMetric = aMetricArr.GetStringByPos( i );
         nUnit = aMetricArr.GetValue( i );

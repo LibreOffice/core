@@ -95,7 +95,7 @@ namespace sd { namespace colortoolpanel
         const PropertyValue* pArgEnd = i_rArgs.getConstArray() + i_rArgs.getLength();
         for ( ; pArg != pArgEnd; ++pArg )
         {
-            if ( pArg->Name.equalsAscii( "ParentWindow" ) )
+            if ( pArg->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ParentWindow" ) ) )
             {
                 xParentWindow.set( pArg->Value, UNO_QUERY );
                 break;
@@ -103,7 +103,7 @@ namespace sd { namespace colortoolpanel
         }
         if ( !xParentWindow.is() )
         {
-            OSL_ENSURE( false, "ToolPanelFactory::createUIElement: no parent window in the args!" );
+            OSL_FAIL( "ToolPanelFactory::createUIElement: no parent window in the args!" );
             throw IllegalArgumentException(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No parent window provided in the creation arguments. Cannot create tool panel." ) ),
                 *this,

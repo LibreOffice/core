@@ -130,12 +130,12 @@ published service CaptionShape
     */
     [property] boolean CaptionIsEscapeRelative;
 
-    /** This property specifies the relativ escape distance for
+    /** This property specifies the relative escape distance for
         the line of a caption.
     */
     [property] long CaptionEscapeRelative;
 
-    /** This property specifies the absolut escape distance for
+    /** This property specifies the absolute escape distance for
         the line of a caption.
     */
     [property] long CaptionEscapeAbsolute;

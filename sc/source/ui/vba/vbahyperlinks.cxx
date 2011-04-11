@@ -46,11 +46,11 @@ namespace {
 bool lclContains( const ScRangeList& rScOuter, const uno::Reference< excel::XRange >& rxInner ) throw (uno::RuntimeException)
 {
     const ScRangeList& rScInner = ScVbaRange::getScRangeList( rxInner );
-    if( (rScInner.Count() == 0) || (rScOuter.Count() == 0) )
+    if( (rScInner.size() == 0) || (rScOuter.size() == 0) )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Empty range objects" ) ), uno::Reference< uno::XInterface >() );
 
-    for( ULONG nIndex = 0, nCount = rScInner.Count(); nIndex < nCount; ++nIndex )
-        if( !rScOuter.In( *rScInner.GetObject( nIndex ) ) )
+    for( size_t nIndex = 0, nCount = rScInner.size(); nIndex < nCount; ++nIndex )
+        if( !rScOuter.In( *rScInner[ nIndex ] ) )
             return false;
     return true;
 }
@@ -97,7 +97,7 @@ bool EqualAnchorFunctor::operator()( const uno::Reference< excel::XHyperlink >& 
             uno::Reference< excel::XRange > xAnchorRange( rxHlink->getRange(), uno::UNO_QUERY_THROW );
             const ScRangeList& rScRanges1 = ScVbaRange::getScRangeList( xAnchorRange );
             const ScRangeList& rScRanges2 = ScVbaRange::getScRangeList( mxAnchorRange );
-            return (rScRanges1.Count() == 1) && (rScRanges2.Count() == 1) && (*rScRanges1.GetObject( 0 ) == *rScRanges2.GetObject( 0 ));
+            return (rScRanges1.size() == 1) && (rScRanges2.size() == 1) && (*rScRanges1[ 0 ] == *rScRanges2[ 0 ]);
         }
         case office::MsoHyperlinkType::msoHyperlinkShape:
         case office::MsoHyperlinkType::msoHyperlinkInlineShape:

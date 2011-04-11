@@ -59,7 +59,7 @@ struct EndDockingEvent: com::sun::star::lang::EventObject
 
     //-------------------------------------------------------------------------
 
-    /** specifies that the docking procedure was cancelled
+    /** specifies that the docking procedure was canceled
      */
     boolean bCancelled;
 

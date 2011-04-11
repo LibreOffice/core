@@ -45,11 +45,6 @@
 #include <ole2.h>
 #include <objidl.h>
 
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
 class EnumFormatEtc;
 
 class CXTDataObject : public IDataObject
@@ -98,10 +93,6 @@ private:
     //friend class CWinClipboard;
     friend class CEnumFormatEtc;
 };
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
 
 class CEnumFormatEtc : public IEnumFORMATETC
 {

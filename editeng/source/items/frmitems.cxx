@@ -63,6 +63,7 @@
 #include <svl/memberid.hrc>
 #include <svtools/wallitem.hxx>
 #include <svl/cntwall.hxx>
+#include <svtools/borderhelper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svtools/filter.hxx>
@@ -93,18 +94,18 @@
 #include <editeng/memberids.hrc>
 #include <editeng/editerr.hxx>
 
+using namespace ::editeng;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
 
-// Konvertierung fuer UNO
+// Conversion for UNO
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 #define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
 #define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
 
 // STATIC DATA -----------------------------------------------------------
-
 
 inline void SetValueProp( XubString& rStr, const sal_uInt16 nValue,
                           const sal_uInt16 nProp )
@@ -141,7 +142,6 @@ TYPEINIT1_FACTORY(SvxFmtBreakItem, SfxEnumItem, new SvxFmtBreakItem(SVX_BREAK_NO
 TYPEINIT1_FACTORY(SvxFmtKeepItem, SfxBoolItem, new SvxFmtKeepItem(sal_False, 0));
 TYPEINIT1_FACTORY(SvxLineItem, SfxPoolItem, new SvxLineItem(0));
 TYPEINIT1_FACTORY(SvxFrameDirectionItem, SfxUInt16Item, new SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, 0));
-
 
 // class SvxPaperBinItem ------------------------------------------------
 
@@ -189,7 +189,7 @@ SfxItemPresentation SvxPaperBinItem::GetPresentation
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            BYTE nValue = GetValue();
+            sal_uInt8 nValue = GetValue();
 
             if ( PAPERBIN_PRINTER_SETTINGS == nValue )
                 rText = EE_RESSTR(RID_SVXSTR_PAPERBIN_SETTINGS);
@@ -219,7 +219,7 @@ SvxSizeItem::SvxSizeItem( const sal_uInt16 nId, const Size& rSize ) :
 }
 
 // -----------------------------------------------------------------------
-bool SvxSizeItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxSizeItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -236,13 +236,13 @@ bool SvxSizeItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_SIZE_SIZE:  rVal <<= aTmp; break;
         case MID_SIZE_WIDTH: rVal <<= aTmp.Width; break;
         case MID_SIZE_HEIGHT: rVal <<= aTmp.Height;  break;
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     return true;
 }
 // -----------------------------------------------------------------------
-bool SvxSizeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxSizeItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -285,7 +285,7 @@ bool SvxSizeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             aSize.Height() = bConvert ? MM100_TO_TWIP(nVal) : nVal;
         }
         break;
-        default: DBG_ERROR("Wrong MemberId!");
+        default: OSL_FAIL("Wrong MemberId!");
             return false;
     }
     return true;
@@ -325,7 +325,6 @@ SfxItemPresentation SvxSizeItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -351,7 +350,6 @@ SfxItemPresentation SvxSizeItem::GetPresentation
         default: ;//prevent warning
 
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -381,7 +379,6 @@ bool SvxSizeItem::HasMetrics() const
 }
 
 // -----------------------------------------------------------------------
-
 
 SfxPoolItem* SvxSizeItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
@@ -431,14 +428,14 @@ SvxLRSpaceItem::SvxLRSpaceItem( const long nLeft, const long nRight,
 }
 
 // -----------------------------------------------------------------------
-bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
-        //  jetzt alles signed
+        // now all signed
         case MID_L_MARGIN:
             rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nLeftMargin) : nLeftMargin);
             break;
@@ -470,13 +467,13 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
         default:
             bRet = false;
-            DBG_ERROR("unknown MemberId");
+            OSL_FAIL("unknown MemberId");
     }
     return bRet;
 }
 
 // -----------------------------------------------------------------------
-bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -506,9 +503,9 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if((rVal >>= nRel) && nRel >= 0 && nRel < USHRT_MAX)
             {
                 if(MID_L_REL_MARGIN== nMemberId)
-                    nPropLeftMargin = (USHORT)nRel;
+                    nPropLeftMargin = (sal_uInt16)nRel;
                 else
-                    nPropRightMargin = (USHORT)nRel;
+                    nPropRightMargin = (sal_uInt16)nRel;
             }
             else
                 return false;
@@ -519,7 +516,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             break;
 
         case MID_FIRST_LINE_REL_INDENT:
-            SetPropTxtFirstLineOfst ( (USHORT)nVal );
+            SetPropTxtFirstLineOfst ( (sal_uInt16)nVal );
             break;
 
         case MID_FIRST_AUTO:
@@ -527,7 +524,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             break;
 
         default:
-            DBG_ERROR("unknown MemberId");
+            OSL_FAIL("unknown MemberId");
             return false;
     }
     return true;
@@ -535,7 +532,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 // -----------------------------------------------------------------------
 
-// nLeftMargin und nTxtLeft anpassen.
+// Adapt nLeftMargin and nTxtLeft.
 
 void SvxLRSpaceItem::AdjustLeft()
 {
@@ -578,7 +575,6 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
     XubString&          rText, const IntlWrapper* pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -644,21 +640,19 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
 // -----------------------------------------------------------------------
 
-// MT: BulletFI: Vor 501 wurde im Outliner das Bullet nicht auf der Position des
-// FI positioniert, deshalb muss in aelteren Dokumenten der FI auf 0 stehen.
-
+// BulletFI: Before 501 in the Outliner the bullet was not on the position of
+// the FI, so in older documents one must set FI to 0.
 #define BULLETLR_MARKER 0x599401FE
 
 SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
     short nSaveFI = nFirstLineOfst;
-    ((SvxLRSpaceItem*)this)->SetTxtFirstLineOfst( 0 );  // nLeftMargin wird mitmanipuliert, siehe Create()
+    ((SvxLRSpaceItem*)this)->SetTxtFirstLineOfst( 0 );  // nLeftMargin is manipulated together with this, see Create()
 
     sal_uInt16 nMargin = 0;
     if( nLeftMargin > 0 )
@@ -686,8 +680,8 @@ SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) con
             nAutoFirst |= 0x80;
         rStrm << nAutoFirst;
 
-        // Ab 6.0 keine Magicnumber schreiben...
-        DBG_ASSERT( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_50, "MT: Fileformat SvxLRSpaceItem aendern!" );
+        // From 6.0 onwards, do not write Magic numbers...
+        DBG_ASSERT( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_50, "Change File format SvxLRSpaceItem!" );
         rStrm << (sal_uInt32) BULLETLR_MARKER;
         rStrm << nSaveFI;
 
@@ -723,7 +717,7 @@ SfxPoolItem* SvxLRSpaceItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) cons
         {
             rStrm >> firstline;
             if ( firstline < 0 )
-                left = left + static_cast<sal_uInt16>(firstline);   // s.u.: txtleft = ...
+                left = left + static_cast<sal_uInt16>(firstline);   // see below: txtleft = ...
         }
         else
             rStrm.Seek( nPos );
@@ -825,13 +819,13 @@ SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
 }
 
 // -----------------------------------------------------------------------
-bool SvxULSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool    SvxULSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
-        //  jetzt alles signed
+        // now all signed
         case 0:
         {
             ::com::sun::star::frame::status::UpperLowerMarginScale aUpperLowerMarginScale;
@@ -851,7 +845,7 @@ bool SvxULSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 }
 
 // -----------------------------------------------------------------------
-bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -876,12 +870,12 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_UP_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
                 return false;
-            SetUpper((USHORT)(bConvert ? MM100_TO_TWIP(nVal) : nVal));
+            SetUpper((sal_uInt16)(bConvert ? MM100_TO_TWIP(nVal) : nVal));
             break;
         case MID_LO_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
                 return false;
-            SetLower((USHORT)(bConvert ? MM100_TO_TWIP(nVal) : nVal));
+            SetLower((sal_uInt16)(bConvert ? MM100_TO_TWIP(nVal) : nVal));
             break;
         case MID_UP_REL_MARGIN:
         case MID_LO_REL_MARGIN:
@@ -890,18 +884,17 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if((rVal >>= nRel) && nRel > 1 )
             {
                 if(MID_UP_REL_MARGIN == nMemberId)
-                    nPropUpper = (USHORT)nRel;
+                    nPropUpper = (sal_uInt16)nRel;
                 else
-                    nPropLower = (USHORT)nRel;
+                    nPropLower = (sal_uInt16)nRel;
             }
             else
                 return false;
         }
         break;
 
-
         default:
-            DBG_ERROR("unknown MemberId");
+            OSL_FAIL("unknown MemberId");
             return false;
     }
     return true;
@@ -936,7 +929,6 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -978,7 +970,6 @@ SfxItemPresentation SvxULSpaceItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1040,7 +1031,6 @@ bool SvxULSpaceItem::HasMetrics() const
     return true;
 }
 
-
 // class SvxPrintItem ----------------------------------------------------
 
 SfxPoolItem* SvxPrintItem::Clone( SfxItemPool* ) const
@@ -1075,7 +1065,6 @@ SfxItemPresentation SvxPrintItem::GetPresentation
     XubString&          rText, const IntlWrapper *
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1094,7 +1083,6 @@ SfxItemPresentation SvxPrintItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1132,7 +1120,6 @@ SfxItemPresentation SvxOpaqueItem::GetPresentation
     XubString&          rText, const IntlWrapper *
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1151,7 +1138,6 @@ SfxItemPresentation SvxOpaqueItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1166,11 +1152,8 @@ int SvxProtectItem::operator==( const SfxPoolItem& rAttr ) const
              bPos   == ( (SvxProtectItem&)rAttr ).bPos );
 }
 
-/*-----------------16.03.98 12:42-------------------
---------------------------------------------------*/
-bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxProtectItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bValue;
     switch(nMemberId)
@@ -1179,19 +1162,16 @@ bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_PROTECT_SIZE    :  bValue = bSize; break;
         case MID_PROTECT_POSITION:  bValue = bPos; break;
         default:
-            DBG_ERROR("falsche MemberId");
+            OSL_FAIL("Wrong MemberId");
             return false;
     }
 
     rVal = Bool2Any( bValue );
     return true;
 }
-/*-----------------16.03.98 12:42-------------------
 
---------------------------------------------------*/
-bool    SvxProtectItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool    SvxProtectItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bVal( Any2Bool(rVal) );
     switch(nMemberId)
@@ -1200,7 +1180,7 @@ bool    SvxProtectItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_PROTECT_SIZE    :  bSize  = bVal;  break;
         case MID_PROTECT_POSITION:  bPos   = bVal;  break;
         default:
-            DBG_ERROR("falsche MemberId");
+            OSL_FAIL("Wrong MemberId");
             return false;
     }
     return true;
@@ -1223,7 +1203,6 @@ SfxItemPresentation SvxProtectItem::GetPresentation
     XubString&          rText, const IntlWrapper *
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1254,7 +1233,6 @@ SfxItemPresentation SvxProtectItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1285,8 +1263,8 @@ SfxPoolItem* SvxProtectItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 // class SvxShadowItem ---------------------------------------------------
 
-SvxShadowItem::SvxShadowItem( const USHORT nId,
-                 const Color *pColor, const USHORT nW,
+SvxShadowItem::SvxShadowItem( const sal_uInt16 nId,
+                 const Color *pColor, const sal_uInt16 nW,
                  const SvxShadowLocation eLoc ) :
     SfxEnumItemInterface( nId ),
     aShadowColor(COL_GRAY),
@@ -1298,7 +1276,7 @@ SvxShadowItem::SvxShadowItem( const USHORT nId,
 }
 
 // -----------------------------------------------------------------------
-bool SvxShadowItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxShadowItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1325,13 +1303,13 @@ bool SvxShadowItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_TRANSPARENT: rVal <<= aShadow.IsTransparent; break;
         case MID_BG_COLOR: rVal <<= aShadow.Color; break;
         case 0: rVal <<= aShadow; break;
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     return true;
 }
 // -----------------------------------------------------------------------
-bool SvxShadowItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1358,7 +1336,7 @@ bool SvxShadowItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_TRANSPARENT: rVal >>= aShadow.IsTransparent; break;
         case MID_BG_COLOR: rVal >>= aShadow.Color; break;
         case 0: rVal >>= aShadow; break;
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 
     if ( bRet )
@@ -1433,7 +1411,7 @@ sal_uInt16 SvxShadowItem::CalcShadowSpace( sal_uInt16 nShadow ) const
             break;
 
         default:
-            DBG_ERROR( "wrong shadow" );
+            OSL_FAIL( "wrong shadow" );
     }
     return nSpace;
 }
@@ -1448,7 +1426,6 @@ SfxItemPresentation SvxShadowItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -1489,7 +1466,6 @@ SfxItemPresentation SvxShadowItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -1564,180 +1540,6 @@ sal_uInt16 SvxShadowItem::GetEnumValue() const
 void SvxShadowItem::SetEnumValue( sal_uInt16 nVal )
 {
     SetLocation( (const SvxShadowLocation)nVal );
-}
-
-// class SvxBorderLine  --------------------------------------------------
-
-SvxBorderLine::SvxBorderLine( const Color *pCol, sal_uInt16 nOut, sal_uInt16 nIn, sal_uInt16 nDist,
-       SvxBorderStyle nStyle )
-: nOutWidth( nOut )
-, nInWidth ( nIn )
-, nDistance( nDist )
-, m_nStyle( nStyle )
-{
-    if ( pCol )
-        aColor = *pCol;
-}
-
-// -----------------------------------------------------------------------
-
-SvxBorderLine::SvxBorderLine( const SvxBorderLine& r )
-{
-    *this = r;
-}
-
-// -----------------------------------------------------------------------
-
-SvxBorderLine& SvxBorderLine::operator=( const SvxBorderLine& r )
-{
-    aColor = r.aColor;
-    nOutWidth = r.nOutWidth;
-    nInWidth = r.nInWidth;
-    nDistance = r.nDistance;
-    m_nStyle = r.m_nStyle;
-    return *this;
-}
-
-// -----------------------------------------------------------------------
-
-void SvxBorderLine::ScaleMetrics( long nMult, long nDiv )
-{
-    nOutWidth = (sal_uInt16)Scale( nOutWidth, nMult, nDiv );
-    nInWidth = (sal_uInt16)Scale( nInWidth, nMult, nDiv );
-    nDistance = (sal_uInt16)Scale( nDistance, nMult, nDiv );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool SvxBorderLine::operator==( const SvxBorderLine& rCmp ) const
-{
-    return ( ( aColor    == rCmp.GetColor() )    &&
-             ( nInWidth  == rCmp.GetInWidth() )  &&
-             ( nOutWidth == rCmp.GetOutWidth() ) &&
-             ( nDistance == rCmp.GetDistance() ) &&
-             ( m_nStyle == rCmp.GetStyle() ) );
-}
-
-// -----------------------------------------------------------------------
-
-XubString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
-                                      SfxMapUnit eDestUnit,
-                                      const IntlWrapper* pIntl,
-                                      sal_Bool bMetricStr) const
-{
-#ifndef SVX_LIGHT
-    sal_uInt16 nResId = 0;
-
-    if ( 0 == nDistance )
-    {
-        // einfach Linie
-        if ( DEF_LINE_WIDTH_0 == nOutWidth )
-            nResId = RID_SINGLE_LINE0;
-        else if ( DEF_LINE_WIDTH_1 == nOutWidth )
-            nResId = RID_SINGLE_LINE1;
-        else if ( DEF_LINE_WIDTH_2 == nOutWidth )
-            nResId = RID_SINGLE_LINE2;
-        else if ( DEF_LINE_WIDTH_3 == nOutWidth )
-            nResId = RID_SINGLE_LINE3;
-        else if ( DEF_LINE_WIDTH_4 == nOutWidth )
-            nResId = RID_SINGLE_LINE4;
-    }
-    else if ( DEF_LINE_WIDTH_1 == nDistance )
-    {
-        // doppelte Linie, kleiner Abstand
-        if ( DEF_LINE_WIDTH_0 == nOutWidth && DEF_LINE_WIDTH_0 == nInWidth )
-            nResId = RID_DOUBLE_LINE0;
-        else if ( DEF_LINE_WIDTH_1 == nOutWidth &&
-                  DEF_LINE_WIDTH_1 == nInWidth )
-            nResId = RID_DOUBLE_LINE2;
-        else if ( DEF_LINE_WIDTH_1 == nOutWidth &&
-                  DEF_LINE_WIDTH_2 == nInWidth )
-            nResId = RID_DOUBLE_LINE8;
-    }
-    else if ( DEF_LINE_WIDTH_2 == nDistance )
-    {
-        // doppelte Linie, gro\ser Abstand
-        if ( DEF_LINE_WIDTH_0 == nOutWidth && DEF_LINE_WIDTH_0 == nInWidth )
-            nResId = RID_DOUBLE_LINE1;
-        else if ( DEF_LINE_WIDTH_2 == nOutWidth &&
-                  DEF_LINE_WIDTH_2 == nInWidth )
-            nResId = RID_DOUBLE_LINE3;
-        else if ( DEF_LINE_WIDTH_1 == nOutWidth &&
-                  DEF_LINE_WIDTH_0 == nInWidth )
-            nResId = RID_DOUBLE_LINE4;
-        else if ( DEF_LINE_WIDTH_2 == nOutWidth &&
-                  DEF_LINE_WIDTH_0 == nInWidth )
-            nResId = RID_DOUBLE_LINE5;
-        else if ( DEF_LINE_WIDTH_3 == nOutWidth &&
-                  DEF_LINE_WIDTH_0 == nInWidth )
-            nResId = RID_DOUBLE_LINE6;
-        else if ( DEF_LINE_WIDTH_2 == nOutWidth &&
-                  DEF_LINE_WIDTH_1 == nInWidth )
-            nResId = RID_DOUBLE_LINE7;
-        else if ( DEF_LINE_WIDTH_3 == nOutWidth &&
-                  DEF_LINE_WIDTH_2 == nInWidth )
-            nResId = RID_DOUBLE_LINE9;
-        else if ( DEF_LINE_WIDTH_2 == nOutWidth &&
-                  DEF_LINE_WIDTH_3 == nInWidth )
-            nResId = RID_DOUBLE_LINE10;
-    }
-    String aStr;
-    aStr += sal_Unicode('(');
-    aStr += ::GetColorString( aColor );
-    aStr += cpDelim;
-
-    if ( nResId )
-        aStr += EE_RESSTR(nResId);
-    else
-    {
-        String sMetric = EE_RESSTR(GetMetricId( eDestUnit ));
-        aStr += GetMetricText( (long)nInWidth, eSrcUnit, eDestUnit, pIntl );
-        if ( bMetricStr )
-            aStr += sMetric;
-        aStr += cpDelim;
-        aStr += GetMetricText( (long)nOutWidth, eSrcUnit, eDestUnit, pIntl );
-        if ( bMetricStr )
-            aStr += sMetric;
-        aStr += cpDelim;
-        aStr += GetMetricText( (long)nDistance, eSrcUnit, eDestUnit, pIntl );
-        if ( bMetricStr )
-            aStr += sMetric;
-    }
-    aStr += sal_Unicode(')');
-    return aStr;
-#else
-    return UniString();
-#endif
-}
-
-bool SvxBorderLine::HasPriority( const SvxBorderLine& rOtherLine ) const
-{
-    const USHORT nThisSize = GetOutWidth() + GetDistance() + GetInWidth();
-    const USHORT nOtherSize = rOtherLine.GetOutWidth() + rOtherLine.GetDistance() + rOtherLine.GetInWidth();
-
-    if (nThisSize > nOtherSize)
-    {
-        return true;
-    }
-    else if (nThisSize < nOtherSize)
-    {
-        return false;
-    }
-    else
-    {
-        if ( rOtherLine.GetInWidth() && !GetInWidth() )
-        {
-            return true;
-        }
-        else if ( GetInWidth() && !rOtherLine.GetInWidth() )
-        {
-            return false;
-        }
-        else
-        {
-            return false;
-        }
-    }
 }
 
 // class SvxBoxItem ------------------------------------------------------
@@ -1842,20 +1644,20 @@ table::BorderLine2 SvxBoxItem::SvxLineToLine(const SvxBorderLine* pLine, sal_Boo
         aLine.OuterLineWidth = sal_uInt16( bConvert ? TWIP_TO_MM100_UNSIGNED(pLine->GetOutWidth()): pLine->GetOutWidth() );
         aLine.LineDistance   = sal_uInt16( bConvert ? TWIP_TO_MM100_UNSIGNED(pLine->GetDistance()): pLine->GetDistance() );
         aLine.LineStyle      = pLine->GetStyle( );
+        aLine.LineWidth      = sal_uInt32( bConvert ? TWIP_TO_MM100( pLine->GetWidth( ) ) : pLine->GetWidth( ) );
     }
     else
         aLine.Color          = aLine.InnerLineWidth = aLine.OuterLineWidth = aLine.LineDistance  = 0;
     return aLine;
 }
 // -----------------------------------------------------------------------
-bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
+bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     table::BorderLine2 aRetLine;
     sal_uInt16 nDist = 0;
     sal_Bool bDistMember = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bSerialize = sal_False;
     switch(nMemberId)
     {
         case 0:
@@ -1875,22 +1677,18 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
             return sal_True;
         }
         case MID_LEFT_BORDER:
-            bSerialize = sal_True;      // intentionally no break!
         case LEFT_BORDER:
             aRetLine = SvxBoxItem::SvxLineToLine(GetLeft(), bConvert);
             break;
         case MID_RIGHT_BORDER:
-            bSerialize = sal_True;      // intentionally no break!
         case RIGHT_BORDER:
             aRetLine = SvxBoxItem::SvxLineToLine(GetRight(), bConvert);
             break;
         case MID_BOTTOM_BORDER:
-            bSerialize = sal_True;      // intentionally no break!
         case BOTTOM_BORDER:
             aRetLine = SvxBoxItem::SvxLineToLine(GetBottom(), bConvert);
             break;
         case MID_TOP_BORDER:
-            bSerialize = sal_True;      // intentionally no break!
         case TOP_BORDER:
             aRetLine = SvxBoxItem::SvxLineToLine(GetTop(), bConvert);
             break;
@@ -1919,21 +1717,7 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
     if( bDistMember )
         rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(nDist) : nDist);
     else
-    {
-/*
-        if ( bSerialize )
-        {
-            ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aSeq(4);
-            aSeq[0] <<= aRetLine.Color;
-            aSeq[1] <<= aRetLine.InnerLineWidth;
-            aSeq[2] <<= aRetLine.OuterLineWidth;
-            aSeq[3] <<= aRetLine.LineDistance;
-            rVal <<= aSeq;
-        }
-        else
-*/
-            rVal <<= aRetLine;
-    }
+        rVal <<= aRetLine;
 
     return true;
 }
@@ -1942,14 +1726,18 @@ namespace
 {
 
 sal_Bool
-lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
+lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert, sal_Bool bGuessWidth)
 {
     rSvxLine.SetColor(   Color(rLine.Color));
-    rSvxLine.SetInWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ));
-    rSvxLine.SetOutWidth( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ));
-    rSvxLine.SetDistance( sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance   )  : rLine.LineDistance  ));
+    if ( bGuessWidth )
+    {
+        rSvxLine.GuessLinesWidths( rSvxLine.GetStyle(),
+                sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.OuterLineWidth) : rLine.OuterLineWidth  ),
+                sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.InnerLineWidth) : rLine.InnerLineWidth  ),
+                sal_uInt16( bConvert ? MM100_TO_TWIP(rLine.LineDistance )  : rLine.LineDistance  ));
+    }
 
-    sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
+    sal_Bool bRet = !rSvxLine.isEmpty();
     return bRet;
 }
 
@@ -1958,29 +1746,69 @@ lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_B
 // -----------------------------------------------------------------------
 sal_Bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
-    return lcl_lineToSvxLine(rLine, rSvxLine, bConvert);
+    return lcl_lineToSvxLine(rLine, rSvxLine, bConvert, sal_True);
 }
 
 sal_Bool
 SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert)
 {
-    const bool bRet(lcl_lineToSvxLine(rLine, rSvxLine, bConvert));
-
+    SvxBorderStyle nStyle = NO_STYLE;
     switch ( rLine.LineStyle )
     {
         default:
         case table::BorderLineStyle::SOLID:
-            rSvxLine.SetStyle( SOLID );
+            nStyle = SOLID;
             break;
         case table::BorderLineStyle::DOTTED:
-            rSvxLine.SetStyle( DOTTED );
+            nStyle = DOTTED;
             break;
         case table::BorderLineStyle::DASHED:
-            rSvxLine.SetStyle( DASHED );
+            nStyle = DASHED;
+            break;
+        case table::BorderLineStyle::DOUBLE:
+            nStyle = DOUBLE;
+            break;
+        case table::BorderLineStyle::THINTHICK_SMALLGAP:
+            nStyle = THINTHICK_SMALLGAP;
+            break;
+        case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
+            nStyle = THINTHICK_MEDIUMGAP;
+            break;
+        case table::BorderLineStyle::THINTHICK_LARGEGAP:
+            nStyle = THINTHICK_LARGEGAP;
+            break;
+        case table::BorderLineStyle::THICKTHIN_SMALLGAP:
+            nStyle = THICKTHIN_SMALLGAP;
+            break;
+        case table::BorderLineStyle::THICKTHIN_MEDIUMGAP:
+            nStyle = THICKTHIN_MEDIUMGAP;
+            break;
+        case table::BorderLineStyle::THICKTHIN_LARGEGAP:
+            nStyle = THICKTHIN_LARGEGAP;
+            break;
+        case table::BorderLineStyle::EMBOSSED:
+            nStyle = EMBOSSED;
+            break;
+        case table::BorderLineStyle::ENGRAVED:
+            nStyle = ENGRAVED;
+            break;
+        case table::BorderLineStyle::OUTSET:
+            nStyle = OUTSET;
+            break;
+        case table::BorderLineStyle::INSET:
+            nStyle = INSET;
             break;
     }
+    rSvxLine.SetStyle( nStyle );
 
-    return bRet;
+    sal_Bool bGuessWidth = sal_True;
+    if ( rLine.LineWidth )
+    {
+        rSvxLine.SetWidth( bConvert? MM100_TO_TWIP_UNSIGNED( rLine.LineWidth ) : rLine.LineWidth );
+        bGuessWidth = sal_False;
+    }
+
+    return lcl_lineToSvxLine(rLine, rSvxLine, bConvert, bGuessWidth);
 }
 
 // -----------------------------------------------------------------------
@@ -2010,7 +1838,7 @@ lcl_extractBorderLine(const uno::Any& rAny, table::BorderLine2& rLine)
 
 template<typename Item>
 bool
-lcl_setLine(const uno::Any& rAny, Item& rItem, USHORT nLine, const bool bConvert)
+lcl_setLine(const uno::Any& rAny, Item& rItem, sal_uInt16 nLine, const bool bConvert)
 {
     bool bDone = false;
     table::BorderLine2 aBorderLine;
@@ -2026,7 +1854,7 @@ lcl_setLine(const uno::Any& rAny, Item& rItem, USHORT nLine, const bool bConvert
 
 }
 
-bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     sal_uInt16 nLine = BOX_LINE_TOP;
@@ -2127,7 +1955,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             // serialization for basic macro recording
             uno::Reference < script::XTypeConverter > xConverter
-                    ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+                    ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
                     uno::UNO_QUERY );
             uno::Sequence < uno::Any > aSeq;
             uno::Any aNew;
@@ -2177,7 +2005,6 @@ SfxItemPresentation SvxBoxItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -2306,7 +2133,6 @@ SfxItemPresentation SvxBoxItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -2410,7 +2236,8 @@ SfxPoolItem* SvxBoxItem::Create( SvStream& rStrm, sal_uInt16 nIVersion ) const
         sal_uInt16 nOutline, nInline, _nDistance;
         Color aColor;
         rStrm >> aColor >> nOutline >> nInline >> _nDistance;
-        SvxBorderLine aBorder( &aColor, nOutline, nInline, _nDistance );
+        SvxBorderLine aBorder( &aColor );
+        aBorder.GuessLinesWidths( NO_STYLE, nOutline, nInline, _nDistance );
 
         pAttr->SetLine( &aBorder, aLineMap[cLine] );
     }
@@ -2453,7 +2280,7 @@ const SvxBorderLine *SvxBoxItem::GetLine( sal_uInt16 nLine ) const
             pRet = pRight;
             break;
         default:
-            DBG_ERROR( "wrong line" );
+            OSL_FAIL( "wrong line" );
             break;
     }
 
@@ -2485,7 +2312,7 @@ void SvxBoxItem::SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine )
             pRight = pTmp;
             break;
         default:
-            DBG_ERROR( "wrong line" );
+            OSL_FAIL( "wrong line" );
     }
 }
 
@@ -2525,7 +2352,7 @@ sal_uInt16 SvxBoxItem::GetDistance( sal_uInt16 nLine ) const
             nDist = nRightDist;
             break;
         default:
-            DBG_ERROR( "wrong line" );
+            OSL_FAIL( "wrong line" );
     }
 
     return nDist;
@@ -2550,7 +2377,7 @@ void SvxBoxItem::SetDistance( sal_uInt16 nNew, sal_uInt16 nLine )
             nRightDist = nNew;
             break;
         default:
-            DBG_ERROR( "wrong line" );
+            OSL_FAIL( "wrong line" );
     }
 }
 
@@ -2579,7 +2406,7 @@ sal_uInt16 SvxBoxItem::CalcLineSpace( sal_uInt16 nLine, sal_Bool bIgnoreLine ) c
         nDist = nRightDist;
         break;
     default:
-        DBG_ERROR( "wrong line" );
+        OSL_FAIL( "wrong line" );
     }
 
     if( pTmp )
@@ -2682,10 +2509,9 @@ void SvxBoxInfoItem::SetLine( const SvxBorderLine* pNew, sal_uInt16 nLine )
     }
     else
     {
-        DBG_ERROR( "wrong line" );
+        OSL_FAIL( "wrong line" );
     }
 }
-
 
 // -----------------------------------------------------------------------
 
@@ -2704,39 +2530,7 @@ SfxItemPresentation SvxBoxInfoItem::GetPresentation
     XubString&          rText, const IntlWrapper *
 )   const
 {
-#ifndef SVX_LIGHT
-/*!!!
-    ResMgr* pMgr = DIALOG_MGR();
-    if ( pHori )
-    {
-        rText += pHori->GetValueString();
-        rText += cpDelim;
-    }
-    if ( pVert )
-    {
-        rText += pVert->GetValueString();
-        rText += cpDelim;
-    }
-    if ( bTable )
-        rText += String( ResId( RID_SVXITEMS_BOXINF_TABLE_TRUE, pMgr ) );
-    else
-        rText += String( ResId( RID_SVXITEMS_BOXINF_TABLE_FALSE, pMgr ) );
-    rText += cpDelim;
-    if ( bDist )
-        rText += String( ResId( RID_SVXITEMS_BOXINF_DIST_TRUE, pMgr ) );
-    else
-        rText += String( ResId( RID_SVXITEMS_BOXINF_DIST_FALSE, pMgr ) );
-    rText += cpDelim;
-    if ( bMinDist )
-        rText += String( ResId( RID_SVXITEMS_BOXINF_MDIST_TRUE, pMgr ) );
-    else
-        rText += String( ResId( RID_SVXITEMS_BOXINF_MDIST_FALSE, pMgr ) );
-    rText += cpDelim;
-    rText += nDefDist;
-    return SFX_ITEM_PRESENTATION_NAMELESS;
-*/
     rText.Erase();
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -2816,7 +2610,8 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
         short nOutline, nInline, nDistance;
         Color aColor;
         rStrm >> aColor >> nOutline >> nInline >> nDistance;
-        SvxBorderLine aBorder( &aColor, nOutline, nInline, nDistance );
+        SvxBorderLine aBorder( &aColor );
+        aBorder.GuessLinesWidths( NO_STYLE, nOutline, nInline, nDistance );
 
         switch( cLine )
         {
@@ -2831,17 +2626,16 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 void SvxBoxInfoItem::ResetFlags()
 {
-    nValidFlags = 0x7F; // alles g"ultig au/ser Disable
+    nValidFlags = 0x7F; // all valid except Disable
 }
 
-bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
+bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId  ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     table::BorderLine2 aRetLine;
     sal_Int16 nVal=0;
     sal_Bool bIntMember = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bSerialize = sal_False;
     switch(nMemberId)
     {
         case 0:
@@ -2865,11 +2659,9 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
         }
 
         case MID_HORIZONTAL:
-            bSerialize = sal_True;
             aRetLine = SvxBoxItem::SvxLineToLine( pHori, bConvert);
             break;
         case MID_VERTICAL:
-            bSerialize = sal_True;
             aRetLine = SvxBoxItem::SvxLineToLine( pVert, bConvert);
             break;
         case MID_FLAGS:
@@ -2891,36 +2683,20 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
             bIntMember = sal_True;
             rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(GetDefDist()) : GetDefDist());
             break;
-        default: DBG_ERROR("Wrong MemberId!"); return false;
+        default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 
     if( !bIntMember )
-    {
-/*
-        if ( bSerialize )
-        {
-            ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aSeq(4);
-            aSeq[0] <<= aRetLine.Color;
-            aSeq[1] <<= aRetLine.InnerLineWidth;
-            aSeq[2] <<= aRetLine.OuterLineWidth;
-            aSeq[3] <<= aRetLine.LineDistance;
-            rVal <<= aSeq;
-        }
-        else
- */
-            rVal <<= aRetLine;
-    }
+        rVal <<= aRetLine;
 
     return true;
 }
 
 // -----------------------------------------------------------------------
 
-bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
-//  sal_uInt16 nLine = BOX_LINE_TOP;
-//  sal_Bool bDistMember = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet;
     switch(nMemberId)
@@ -2947,14 +2723,14 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 else
                     return sal_False;
                 if ( aSeq[3] >>= nFlags )
-                    nValidFlags = (BYTE)nFlags;
+                    nValidFlags = (sal_uInt8)nFlags;
                 else
                     return sal_False;
                 if (( aSeq[4] >>= nVal ) && ( nVal >= 0 ))
                 {
                     if( bConvert )
                         nVal = MM100_TO_TWIP(nVal);
-                    SetDefDist( (USHORT)nVal );
+                    SetDefDist( (sal_uInt16)nVal );
                 }
             }
             return sal_True;
@@ -2975,7 +2751,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             {
                 // serialization for basic macro recording
                 uno::Reference < script::XTypeConverter > xConverter
-                        ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+                        ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
                         uno::UNO_QUERY );
                 uno::Any aNew;
                 uno::Sequence < uno::Any > aSeq;
@@ -3039,7 +2815,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             sal_Int16 nFlags = sal_Int16();
             bRet = (rVal >>= nFlags);
             if ( bRet )
-                nValidFlags = (BYTE)nFlags;
+                nValidFlags = (sal_uInt8)nFlags;
             break;
         }
         case MID_DISTANCE:
@@ -3050,11 +2826,11 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             {
                 if( bConvert )
                     nVal = MM100_TO_TWIP(nVal);
-                SetDefDist( (USHORT)nVal );
+                SetDefDist( (sal_uInt16)nVal );
             }
             break;
         }
-        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+        default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 
     return sal_True;
@@ -3079,7 +2855,6 @@ SfxItemPresentation SvxFmtBreakItem::GetPresentation
     XubString&          rText, const IntlWrapper *
 )   const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -3092,7 +2867,6 @@ SfxItemPresentation SvxFmtBreakItem::GetPresentation
             return ePres;
         default: ;//prevent warning
     }
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -3106,7 +2880,7 @@ XubString SvxFmtBreakItem::GetValueTextByPos( sal_uInt16 nPos ) const
 }
 
 // -----------------------------------------------------------------------
-bool SvxFmtBreakItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxFmtBreakItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     style::BreakType eBreak = style::BreakType_NONE;
     switch ( (SvxBreak)GetValue() )
@@ -3123,7 +2897,7 @@ bool SvxFmtBreakItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
     return true;
 }
 // -----------------------------------------------------------------------
-bool SvxFmtBreakItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxFmtBreakItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     style::BreakType nBreak;
 
@@ -3176,7 +2950,7 @@ sal_uInt16 SvxFmtBreakItem::GetVersion( sal_uInt16 nFFVer ) const
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
             SOFFICE_FILEFORMAT_50==nFFVer,
-            "SvxFmtBreakItem: Gibt es ein neues Fileformat?" );
+            "SvxFmtBreakItem: Is there a new file format? ");
     return SOFFICE_FILEFORMAT_31==nFFVer ||
            SOFFICE_FILEFORMAT_40==nFFVer ? 0 : FMTBREAK_NOAUTO;
 }
@@ -3233,7 +3007,6 @@ SfxItemPresentation SvxFmtKeepItem::GetPresentation
     XubString&          rText, const IntlWrapper *
     ) const
 {
-#ifndef SVX_LIGHT
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
@@ -3252,7 +3025,6 @@ SfxItemPresentation SvxFmtKeepItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -3274,7 +3046,6 @@ SvxLineItem::SvxLineItem( const SvxLineItem& rCpy ) :
 {
     pLine = rCpy.GetLine() ? new SvxBorderLine( *rCpy.GetLine() ) : 0;
 }
-
 
 // -----------------------------------------------------------------------
 
@@ -3308,7 +3079,7 @@ SfxPoolItem* SvxLineItem::Clone( SfxItemPool* ) const
     return new SvxLineItem( *this );
 }
 
-bool SvxLineItem::QueryValue( uno::Any& rVal, BYTE nMemId ) const
+bool SvxLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemId ) const
 {
     sal_Bool bConvert = 0!=(nMemId&CONVERT_TWIPS);
     nMemId &= ~CONVERT_TWIPS;
@@ -3326,7 +3097,7 @@ bool SvxLineItem::QueryValue( uno::Any& rVal, BYTE nMemId ) const
             case MID_INNER_WIDTH:   rVal <<= sal_Int32(pLine->GetInWidth( ));   break;
             case MID_DISTANCE:      rVal <<= sal_Int32(pLine->GetDistance());   break;
             default:
-                DBG_ERROR( "Wrong MemberId" );
+                OSL_FAIL( "Wrong MemberId" );
                 return false;
         }
     }
@@ -3336,7 +3107,7 @@ bool SvxLineItem::QueryValue( uno::Any& rVal, BYTE nMemId ) const
 
 // -----------------------------------------------------------------------
 
-bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
+bool SvxLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemId )
 {
     sal_Bool bConvert = 0!=(nMemId&CONVERT_TWIPS);
     nMemId &= ~CONVERT_TWIPS;
@@ -3362,12 +3133,9 @@ bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
         switch ( nMemId )
         {
             case MID_FG_COLOR:      pLine->SetColor( Color(nVal) ); break;
-            case MID_OUTER_WIDTH:   pLine->SetOutWidth((USHORT)nVal);   break;
-            case MID_INNER_WIDTH:   pLine->SetInWidth((USHORT)nVal);   break;
-            case MID_DISTANCE:      pLine->SetDistance((USHORT)nVal);   break;
             case MID_LINE_STYLE:    pLine->SetStyle((SvxBorderStyle)nVal); break;
             default:
-                DBG_ERROR( "Wrong MemberId" );
+                OSL_FAIL( "Wrong MemberId" );
                 return sal_False;
         }
 
@@ -3387,7 +3155,6 @@ SfxItemPresentation SvxLineItem::GetPresentation
     XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
-#ifndef SVX_LIGHT
     rText.Erase();
 
     switch ( ePres )
@@ -3404,7 +3171,6 @@ SfxItemPresentation SvxLineItem::GetPresentation
         }
         default: ;//prevent warning
     }
-#endif
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -3450,7 +3216,8 @@ SfxPoolItem* SvxLineItem::Create( SvStream& rStrm, sal_uInt16 ) const
     rStrm >> aColor >> nOutline >> nInline >> nDistance;
     if( nOutline )
     {
-        SvxBorderLine aLine( &aColor, nOutline, nInline, nDistance );
+        SvxBorderLine aLine( &aColor );
+        aLine.GuessLinesWidths( NO_STYLE, nOutline, nInline, nDistance );
         _pLine->SetLine( &aLine );
     }
     return _pLine;
@@ -3681,7 +3448,7 @@ SvxBrushItem::SvxBrushItem( SvStream& rStream, sal_uInt16 nVersion,
             rStream.ReadByteString(aRel);
 
             // TODO/MBA: how can we get a BaseURL here?!
-            DBG_ERROR("No BaseURL!");
+            OSL_FAIL("No BaseURL!");
             String aAbs = INetURLObject::GetAbsURL( String(), aRel );
             DBG_ASSERT( aAbs.Len(), "Invalid URL!" );
             pStrLink = new String( aAbs );
@@ -3744,9 +3511,8 @@ inline sal_Int8 lcl_TransparencyToPercent(sal_Int32 nTrans)
     return (sal_Int8)((nTrans * 100 + 127) / 254);
 }
 
-bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId)
     {
@@ -3806,9 +3572,8 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 // -----------------------------------------------------------------------
 
-bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId)
     {
@@ -3866,7 +3631,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 if( 0 == sLink.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX,
                                   sizeof(UNO_NAME_GRAPHOBJ_URLPKGPREFIX)-1 ) )
                 {
-                    DBG_ERROR( "package urls aren't implemented" );
+                    OSL_FAIL( "package urls aren't implemented" );
                 }
                 else if( 0 == sLink.compareToAscii( UNO_NAME_GRAPHOBJ_URLPREFIX,
                                    sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1 ) )
@@ -4066,7 +3831,7 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
         rStream << pImpl->pGraphicObject->GetGraphic();
     if ( pStrLink )
     {
-        DBG_ERROR("No BaseURL!");
+        OSL_FAIL("No BaseURL!");
         // TODO/MBA: how to get a BaseURL?!
         String aRel = INetURLObject::GetRelURL( String(), *pStrLink );
         // UNICODE: rStream << aRel;
@@ -4082,9 +3847,9 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
 }
 
 // -----------------------------------------------------------------------
-// const wegcasten, da const als logisches const zu verstehen ist
-// wenn GetGraphic() gerufen wird, soll sich das Item darum kuemmern,
-// eine gelinkte Grafik zu holen.
+// cast away const, since const is to be understood as a logical const
+// if GetGraphic() is called, the item should take care of getting a linked
+// graphic.
 // -----------------------------------------------------------------------
 
 void SvxBrushItem::PurgeGraphic() const
@@ -4105,26 +3870,11 @@ void SvxBrushItem::PurgeMedium() const
 const GraphicObject* SvxBrushItem::GetGraphicObject() const
 {
     if ( bLoadAgain && pStrLink && !pImpl->pGraphicObject )
-    // wenn Grafik schon geladen, als Cache benutzen
+    // when graphics already loaded, use as a cache
     {
-        //JP 29.6.2001: only with "valid" names - empty names now allowed
+        // only with "valid" names - empty names now allowed
         if( pStrLink->Len() )
         {
-            // currently we don't have asynchronous processing
-/*          if( pImpl->aDoneLink.IsSet() )
-            {
-                // Auf besonderen Wunsch des Writers wird der synchrone und der
-                // asynchrone Fall was die Benachrichtigung angeht unterschiedlich
-                // behandelt. Der Callback erfolgt nur bei asynchronem Eintreffen
-                // der Daten
-
-                Link aTmp = pImpl->aDoneLink;
-                pImpl->aDoneLink = Link();
-                pImpl->xMedium->DownLoad(
-                    STATIC_LINK( this, SvxBrushItem, DoneHdl_Impl ) );
-                pImpl->aDoneLink = aTmp;
-            } */
-
             pImpl->pStream = utl::UcbStreamHelper::CreateStream( *pStrLink, STREAM_STD_READ );
             if( pImpl->pStream && !pImpl->pStream->GetError() )
             {
@@ -4150,9 +3900,6 @@ const GraphicObject* SvxBrushItem::GetGraphicObject() const
             {
                 const_cast < SvxBrushItem*> (this)->bLoadAgain = sal_False;
             }
-
-            // currently we don't have asynchronous processing
-//          pThis->pImpl->aDoneLink.Call( pThis );
         }
     }
 
@@ -4183,7 +3930,7 @@ void SvxBrushItem::SetGraphicPos( SvxGraphicPosition eNew )
     {
         if ( !pImpl->pGraphicObject && !pStrLink )
         {
-            pImpl->pGraphicObject = new GraphicObject; // dummy anlegen
+            pImpl->pGraphicObject = new GraphicObject; // Creating a dummy
         }
     }
 }
@@ -4202,11 +3949,11 @@ void SvxBrushItem::SetGraphic( const Graphic& rNew )
         ApplyGraphicTransparency_Impl();
 
         if ( GPOS_NONE == eGraphicPos )
-            eGraphicPos = GPOS_MM; // None waere Brush, also Default: Mitte
+            eGraphicPos = GPOS_MM; // None would be brush, then Default: middle
     }
     else
     {
-        DBG_ERROR( "SetGraphic() on linked graphic! :-/" );
+        OSL_FAIL( "SetGraphic() on linked graphic! :-/" );
     }
 }
 
@@ -4224,11 +3971,11 @@ void SvxBrushItem::SetGraphicObject( const GraphicObject& rNewObj )
         ApplyGraphicTransparency_Impl();
 
         if ( GPOS_NONE == eGraphicPos )
-            eGraphicPos = GPOS_MM; // None waere Brush, also Default: Mitte
+            eGraphicPos = GPOS_MM; // None would be brush, then Default: middle
     }
     else
     {
-        DBG_ERROR( "SetGraphic() on linked graphic! :-/" );
+        OSL_FAIL( "SetGraphic() on linked graphic! :-/" );
     }
 }
 
@@ -4268,7 +4015,7 @@ void SvxBrushItem::SetGraphicFilter( const String& rNew )
 SvxGraphicPosition SvxBrushItem::WallpaperStyle2GraphicPos( WallpaperStyle eStyle )
 {
     SvxGraphicPosition eResult;
-    // der Switch ist nicht der schnellste, dafuer aber am sichersten
+    // The switch is not the fastest, but the safest
     switch( eStyle )
     {
         case WALLPAPER_NULL: eResult = GPOS_NONE; break;
@@ -4311,7 +4058,6 @@ WallpaperStyle SvxBrushItem::GraphicPos2WallpaperStyle( SvxGraphicPosition ePos 
     return eResult;
 }
 
-
 SvxBrushItem::SvxBrushItem( const CntWallpaperItem& rItem, sal_uInt16 _nWhich ) :
     SfxPoolItem( _nWhich ),
     pImpl( new SvxBrushItem_Impl( 0 ) ),
@@ -4332,7 +4078,7 @@ CntWallpaperItem* SvxBrushItem::CreateCntWallpaperItem() const
 {
     CntWallpaperItem* pItem = new CntWallpaperItem( 0 );
     pItem->SetColor( aColor.GetColor() );
-    pItem->SetStyle( (USHORT)GraphicPos2WallpaperStyle( GetGraphicPos() ) );
+    pItem->SetStyle( (sal_uInt16)GraphicPos2WallpaperStyle( GetGraphicPos() ) );
     sal_Bool bLink = (pStrLink != 0);
     if( bLink )
     {
@@ -4343,7 +4089,6 @@ CntWallpaperItem* SvxBrushItem::CreateCntWallpaperItem() const
     {
         DBG_ERRORFILE( "Don't know what to do with a graphic" );
     }
-//      pItem->SetGraphic( *pImpl->pGraphic, bLink );
 
     return pItem;
 }
@@ -4351,9 +4096,7 @@ CntWallpaperItem* SvxBrushItem::CreateCntWallpaperItem() const
 #ifdef _MSC_VER
 #pragma optimize ( "", on )
 #endif
-/* -----------------------------16.08.2002 09:18------------------------------
 
- ---------------------------------------------------------------------------*/
 void  SvxBrushItem::ApplyGraphicTransparency_Impl()
 {
     DBG_ASSERT(pImpl->pGraphicObject, "no GraphicObject available" );
@@ -4367,14 +4110,14 @@ void  SvxBrushItem::ApplyGraphicTransparency_Impl()
 }
 // class SvxFrameDirectionItem ----------------------------------------------
 
-SvxFrameDirectionItem::SvxFrameDirectionItem( USHORT _nWhich )
-    : SfxUInt16Item( _nWhich, (UINT16)FRMDIR_HORI_LEFT_TOP )
+SvxFrameDirectionItem::SvxFrameDirectionItem( sal_uInt16 _nWhich )
+    : SfxUInt16Item( _nWhich, (sal_uInt16)FRMDIR_HORI_LEFT_TOP )
 {
 }
 
 SvxFrameDirectionItem::SvxFrameDirectionItem( SvxFrameDirection nValue ,
-                                            USHORT _nWhich )
-    : SfxUInt16Item( _nWhich, (UINT16)nValue )
+                                            sal_uInt16 _nWhich )
+    : SfxUInt16Item( _nWhich, (sal_uInt16)nValue )
 {
 }
 
@@ -4394,21 +4137,21 @@ SfxPoolItem* SvxFrameDirectionItem::Clone( SfxItemPool * ) const
     return new SvxFrameDirectionItem( *this );
 }
 
-SfxPoolItem* SvxFrameDirectionItem::Create( SvStream & rStrm, USHORT /*nVer*/ ) const
+SfxPoolItem* SvxFrameDirectionItem::Create( SvStream & rStrm, sal_uInt16 /*nVer*/ ) const
 {
     sal_uInt16 nValue;
     rStrm >> nValue;
     return new SvxFrameDirectionItem( (SvxFrameDirection)nValue, Which() );
 }
 
-SvStream& SvxFrameDirectionItem::Store( SvStream & rStrm, USHORT /*nIVer*/ ) const
+SvStream& SvxFrameDirectionItem::Store( SvStream & rStrm, sal_uInt16 /*nIVer*/ ) const
 {
     sal_uInt16 nValue = GetValue();
     rStrm << nValue;
     return rStrm;
 }
 
-USHORT SvxFrameDirectionItem::GetVersion( USHORT nFVer ) const
+sal_uInt16 SvxFrameDirectionItem::GetVersion( sal_uInt16 nFVer ) const
 {
     return SOFFICE_FILEFORMAT_50 > nFVer ? USHRT_MAX : 0;
 }
@@ -4438,7 +4181,7 @@ SfxItemPresentation SvxFrameDirectionItem::GetPresentation(
 }
 
 bool SvxFrameDirectionItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                             BYTE )
+                                             sal_uInt8 )
 {
     sal_Int16 nVal = sal_Int16();
     sal_Bool bRet = ( rVal >>= nVal );
@@ -4472,7 +4215,7 @@ bool SvxFrameDirectionItem::PutValue( const com::sun::star::uno::Any& rVal,
 }
 
 bool SvxFrameDirectionItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                            BYTE ) const
+                                            sal_uInt8 ) const
 {
     // translate SvxFrameDirection into WritingDirection2
     sal_Int16 nVal;
@@ -4495,7 +4238,7 @@ bool SvxFrameDirectionItem::QueryValue( com::sun::star::uno::Any& rVal,
             nVal = text::WritingMode2::PAGE;
             break;
         default:
-            DBG_ERROR("Unknown SvxFrameDirection value!");
+            OSL_FAIL("Unknown SvxFrameDirection value!");
             bRet = false;
             break;
     }

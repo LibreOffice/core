@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#include "sores.hxx"
+#include <svtools/sores.hxx>
 
 String STR_FORMAT_STRING
 {
@@ -291,4 +291,3 @@ String STR_FORMAT_ID_HTML_NO_COMMENT
 {
     Text [ en-US ] = "HTML format without comments";
 };
-

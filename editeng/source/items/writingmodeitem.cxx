@@ -39,11 +39,10 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 
-// class SvxWritingModeItem -------------------------------------------------
 
 TYPEINIT1_FACTORY(SvxWritingModeItem, SfxUInt16Item, new SvxWritingModeItem(com::sun::star::text::WritingMode_LR_TB, 0));
 
-SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, USHORT _nWhich )
+SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, sal_uInt16 _nWhich )
     : SfxUInt16Item( _nWhich, (sal_uInt16)eValue )
 {
 }
@@ -64,19 +63,19 @@ SfxPoolItem* SvxWritingModeItem::Clone( SfxItemPool * ) const
     return new SvxWritingModeItem( *this );
 }
 
-SfxPoolItem* SvxWritingModeItem::Create( SvStream & , USHORT  ) const
+SfxPoolItem* SvxWritingModeItem::Create( SvStream & , sal_uInt16  ) const
 {
-    DBG_ERROR("SvxWritingModeItem should not be streamed!");
+    OSL_FAIL("SvxWritingModeItem should not be streamed!");
     return NULL;
 }
 
-SvStream& SvxWritingModeItem::Store( SvStream & rStrm, USHORT  ) const
+SvStream& SvxWritingModeItem::Store( SvStream & rStrm, sal_uInt16  ) const
 {
-    DBG_ERROR("SvxWritingModeItem should not be streamed!");
+    OSL_FAIL("SvxWritingModeItem should not be streamed!");
     return rStrm;
 }
 
-USHORT SvxWritingModeItem::GetVersion( USHORT /*nFVer*/ ) const
+sal_uInt16 SvxWritingModeItem::GetVersion( sal_uInt16 /*nFVer*/ ) const
 {
     return USHRT_MAX;
 }
@@ -105,7 +104,7 @@ SfxItemPresentation SvxWritingModeItem::GetPresentation( SfxItemPresentation ePr
     return eRet;
 }
 
-bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     sal_Int32 nVal = 0;
     bool bRet = ( rVal >>= nVal );
@@ -141,7 +140,7 @@ bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
 }
 
 bool SvxWritingModeItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                            BYTE ) const
+                                            sal_uInt8 ) const
 {
     rVal <<= (WritingMode)GetValue();
     return true;

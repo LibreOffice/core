@@ -8,6 +8,7 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\accessibility
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\awt
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\tree
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\grid
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\tab
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\beans
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\bridge
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\bridge\oleautomation
@@ -134,6 +135,21 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper
 #i20156 - end
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf
 
+mkdir: %_DEST%\inc%_EXT%\offuh\ooo
+mkdir: %_DEST%\inc%_EXT%\offuh\ooo\vba
+mkdir: %_DEST%\inc%_EXT%\offuh\ooo\vba\access
+mkdir: %_DEST%\inc%_EXT%\offuh\ooo\vba\adodb
+mkdir: %_DEST%\inc%_EXT%\offuh\ooo\vba\dao
+mkdir: %_DEST%\inc%_EXT%\offuh\ooo\vba\excel
+mkdir: %_DEST%\inc%_EXT%\offuh\ooo\vba\msforms
+mkdir: %_DEST%\inc%_EXT%\offuh\ooo\vba\office
+mkdir: %_DEST%\inc%_EXT%\offuh\ooo\vba\powerpoint
+mkdir: %_DEST%\inc%_EXT%\offuh\ooo\vba\stdole
+mkdir: %_DEST%\inc%_EXT%\offuh\ooo\vba\word
+mkdir: %_DEST%\inc%_EXT%\offuh\msforms
+
+
+
 ..\%__SRC%\inc\offuh\com\sun\star\auth\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\auth\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\auth\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\auth\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\accessibility\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\accessibility\*.hpp
@@ -144,6 +160,8 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf
 ..\%__SRC%\inc\offuh\com\sun\star\awt\tree\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\tree\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\awt\grid\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\grid\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\awt\grid\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\grid\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\awt\tab\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\tab\*.hdl
+..\%__SRC%\inc\offuh\com\sun\star\awt\tab\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\tab\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\beans\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\beans\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\beans\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\beans\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\bridge\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\bridge\*.hdl
@@ -377,3 +395,29 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf
 
 ..\%__SRC%\inc\offuh\com\sun\star\rdf\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\rdf\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\rdf\*.hdl
+
+..\%__SRC%\inc\offuh\ooo\vba\*.hpp %_DEST%\inc%_EXT%\offuh\ooo\vba\*.hpp
+..\%__SRC%\inc\offuh\ooo\vba\*.hdl %_DEST%\inc%_EXT%\offuh\ooo\vba\*.hdl
+..\%__SRC%\inc\offuh\ooo\vba\*.hpp %_DEST%\inc%_EXT%\offuh\ooo\vba\*.hpp
+..\%__SRC%\inc\offuh\ooo\vba\*.hdl %_DEST%\inc%_EXT%\offuh\ooo\vba\*.hdl
+..\%__SRC%\inc\offuh\ooo\vba\access\*.hpp %_DEST%\inc%_EXT%\offuh\ooo\vba\access\*.hpp
+..\%__SRC%\inc\offuh\ooo\vba\access\*.hdl %_DEST%\inc%_EXT%\offuh\ooo\vba\access\*.hdl
+..\%__SRC%\inc\offuh\ooo\vba\adodb\*.hpp %_DEST%\inc%_EXT%\offuh\ooo\vba\adodb\*.hpp
+..\%__SRC%\inc\offuh\ooo\vba\adodb\*.hdl %_DEST%\inc%_EXT%\offuh\ooo\vba\adodb\*.hdl
+..\%__SRC%\inc\offuh\ooo\vba\dao\*.hpp %_DEST%\inc%_EXT%\offuh\ooo\vba\dao\*.hpp
+..\%__SRC%\inc\offuh\ooo\vba\dao\*.hdl %_DEST%\inc%_EXT%\offuh\ooo\vba\dao\*.hdl
+..\%__SRC%\inc\offuh\ooo\vba\excel\*.hpp %_DEST%\inc%_EXT%\offuh\ooo\vba\excel\*.hpp
+..\%__SRC%\inc\offuh\ooo\vba\excel\*.hdl %_DEST%\inc%_EXT%\offuh\ooo\vba\excel\*.hdl
+..\%__SRC%\inc\offuh\ooo\vba\msforms\*.hpp %_DEST%\inc%_EXT%\offuh\ooo\vba\msforms\*.hpp
+..\%__SRC%\inc\offuh\ooo\vba\msforms\*.hdl %_DEST%\inc%_EXT%\offuh\ooo\vba\msforms\*.hdl
+..\%__SRC%\inc\offuh\ooo\vba\office\*.hpp %_DEST%\inc%_EXT%\offuh\ooo\vba\office\*.hpp
+..\%__SRC%\inc\offuh\ooo\vba\office\*.hdl %_DEST%\inc%_EXT%\offuh\ooo\vba\office\*.hdl
+..\%__SRC%\inc\offuh\ooo\vba\powerpoint\*.hpp %_DEST%\inc%_EXT%\offuh\ooo\vba\powerpoint\*.hpp
+..\%__SRC%\inc\offuh\ooo\vba\powerpoint\*.hdl %_DEST%\inc%_EXT%\offuh\ooo\vba\powerpoint\*.hdl
+..\%__SRC%\inc\offuh\ooo\vba\stdole\*.hpp %_DEST%\inc%_EXT%\offuh\ooo\vba\stdole\*.hpp
+..\%__SRC%\inc\offuh\ooo\vba\stdole\*.hdl %_DEST%\inc%_EXT%\offuh\ooo\vba\stdole\*.hdl
+..\%__SRC%\inc\offuh\ooo\vba\word\*.hpp %_DEST%\inc%_EXT%\offuh\ooo\vba\word\*.hpp
+..\%__SRC%\inc\offuh\ooo\vba\word\*.hdl %_DEST%\inc%_EXT%\offuh\ooo\vba\word\*.hdl
+..\%__SRC%\inc\offuh\msforms\*.hpp %_DEST%\inc%_EXT%\offuh\msforms\*.hpp
+..\%__SRC%\inc\offuh\msforms\*.hdl %_DEST%\inc%_EXT%\offuh\msforms\*.hdl
+

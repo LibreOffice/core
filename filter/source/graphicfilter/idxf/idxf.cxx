@@ -38,45 +38,19 @@
 
 //================== GraphicImport - die exportierte Funktion ================
 
-extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
+extern "C" sal_Bool __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool )
 {
     DXFRepresentation aDXF;
     DXF2GDIMetaFile aConverter;
     GDIMetaFile aMTF;
 
-    if ( aDXF.Read( rStream, 0, 60 ) == FALSE )
-        return FALSE;
-    if ( aConverter.Convert( aDXF, aMTF, 60, 100 ) == FALSE )
-        return FALSE;
+    if ( aDXF.Read( rStream, 0, 60 ) == sal_False )
+        return sal_False;
+    if ( aConverter.Convert( aDXF, aMTF, 60, 100 ) == sal_False )
+        return sal_False;
     rGraphic=Graphic(aMTF);
 
-    return TRUE;
+    return sal_True;
 }
-
-//============================= fuer Windows ==================================
-
-#ifdef WIN
-
-static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
-{
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

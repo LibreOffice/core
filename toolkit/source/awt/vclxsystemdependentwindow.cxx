@@ -40,16 +40,13 @@
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#ifdef WNT
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
-#elif defined ( QUARTZ )
+#ifdef QUARTZ
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
 #include "postmac.h"
 #endif
 
+#include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
@@ -80,7 +77,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Any VCLXSystemDependentWindow::getWindowHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     // TODO, check the process id
     ::com::sun::star::uno::Any aRet;

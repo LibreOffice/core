@@ -40,11 +40,8 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <vcl/window.hxx>
-#include <vcl/javachild.hxx>
+#include <vcl/syschild.hxx>
 #include <vcl/salbtype.hxx>
-#ifdef GSTREAMER
-#include <vcl/sysdata.hxx>
-#endif
 
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -115,7 +112,7 @@ namespace slideshow
             }
             catch (uno::Exception &)
             {
-                OSL_ENSURE( false, rtl::OUStringToOString(
+                OSL_FAIL( rtl::OUStringToOString(
                                 comphelper::anyToString(
                                     cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -157,11 +154,7 @@ namespace slideshow
                 mxPlayerWindow.clear();
             }
 
-#ifdef GSTREAMER
             mpMediaWindow = ::std::auto_ptr< SystemChildWindow >();
-#else
-            mpMediaWindow = ::std::auto_ptr< JavaChildWindow >();
-#endif
 
             // shutdown player
             if( mxPlayer.is() )
@@ -232,7 +225,7 @@ namespace slideshow
             if( xPropSet.is() &&
                 getPropertyValue( xParentWindow,
                                   xPropSet,
-                                  ::rtl::OUString::createFromAscii( "Window" )) )
+                                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window" ))) )
             {
                 const awt::Rectangle aRect( xParentWindow->getPosSize() );
 
@@ -335,8 +328,7 @@ namespace slideshow
                     }
                     catch( uno::Exception& )
                     {
-                        OSL_ENSURE( false,
-                                    rtl::OUStringToOString(
+                        OSL_FAIL( rtl::OUStringToOString(
                                         comphelper::anyToString( cppu::getCaughtException() ),
                                         RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
@@ -447,40 +439,28 @@ namespace slideshow
                                                                     rRangePix.getMaxX() - rRangePix.getMinX(),
                                                                     rRangePix.getMaxY() - rRangePix.getMinY() );
 
-#ifdef GSTREAMER
-                                                        OSL_TRACE( "created sys child window for viewmediashape" );
+                            mpMediaWindow = ::std::auto_ptr< SystemChildWindow >( new
+                                                SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
                             mpMediaWindow = ::std::auto_ptr< SystemChildWindow >( new SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
-#else
-                            mpMediaWindow = ::std::auto_ptr< JavaChildWindow >( new JavaChildWindow( pWindow, WB_CLIPCHILDREN ) );
-#endif
                             mpMediaWindow->SetBackground( Color( COL_BLACK ) );
-                            mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X,
-                                                                   aAWTRect.Y ),
-                                                            Size( aAWTRect.Width,
-                                                                  aAWTRect.Height ));
+                            mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
+                                                           Size( aAWTRect.Width, aAWTRect.Height ) );
                             mpMediaWindow->SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-                            mpMediaWindow->EnableEraseBackground( FALSE );
-                            mpMediaWindow->EnablePaint( FALSE );
-                            mpMediaWindow->SetForwardKey( TRUE );
-                            mpMediaWindow->SetMouseTransparent( TRUE );
+                            mpMediaWindow->EnableEraseBackground( sal_False );
+                            mpMediaWindow->EnablePaint( sal_False );
+                            mpMediaWindow->SetForwardKey( sal_True );
+                            mpMediaWindow->SetMouseTransparent( sal_True );
                             mpMediaWindow->Show();
 
                             if( mxPlayer.is() )
                             {
-#ifndef GSTREAMER
                                 aArgs[ 0 ] = uno::makeAny(
-                                    sal::static_int_cast<sal_IntPtr>(
-                                        mpMediaWindow->getParentWindowHandleForJava()) );
-#else
-                                                                aArgs[ 0 ] = uno::makeAny ( (sal_Int32) 0 );
-#endif
+                                    sal::static_int_cast< sal_IntPtr >( mpMediaWindow->GetParentWindowHandle() ) );
+
                                 aAWTRect.X = aAWTRect.Y = 0;
                                 aArgs[ 1 ] = uno::makeAny( aAWTRect );
-#ifdef GSTREAMER
-                                                                const SystemEnvData *pSystemData = mpMediaWindow->GetSystemData();
-                                                                OSL_TRACE( "xwindow id: %ld", pSystemData->aWindow );
-                                aArgs[ 2 ] = uno::makeAny( pSystemData->aWindow );
-#endif
+
+                                aArgs[ 2 ] = uno::makeAny( reinterpret_cast< sal_IntPtr >( mpMediaWindow.get() ) );
 
                                 mxPlayerWindow.set( mxPlayer->createPlayerWindow( aArgs ) );
 
@@ -499,8 +479,7 @@ namespace slideshow
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_ENSURE( false,
-                                rtl::OUStringToOString(
+                    OSL_FAIL( rtl::OUStringToOString(
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
@@ -543,9 +522,7 @@ namespace slideshow
 
                                 if( mxPlayer.is() )
                                 {
-                                    aArgs[ 0 ] = uno::makeAny(
-                                        sal::static_int_cast<sal_Int32>(
-                                            aWNDVal) );
+                                    aArgs[ 0 ] = uno::makeAny( sal::static_int_cast< sal_Int32 >( aWNDVal) );
                                     aArgs[ 1 ] = uno::makeAny( aAWTRect );
 
                                     mxPlayerWindow.set( mxPlayer->createPlayerWindow( aArgs ) );
@@ -560,8 +537,7 @@ namespace slideshow
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_ENSURE( false,
-                                rtl::OUStringToOString(
+                    OSL_FAIL( rtl::OUStringToOString(
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }

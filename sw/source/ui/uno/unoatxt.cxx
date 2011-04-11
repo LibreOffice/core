@@ -116,7 +116,7 @@ uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     sal_uInt16 nCount = pGlossaries->GetGroupCnt();
     if ( 0 <= nIndex && nIndex < nCount )
-        aRet = getByName(pGlossaries->GetGroupName( static_cast< USHORT >(nIndex) ));
+        aRet = getByName(pGlossaries->GetGroupName( static_cast< sal_uInt16 >(nIndex) ));
     else
         throw lang::IndexOutOfBoundsException();
     return aRet;
@@ -141,8 +141,8 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
 
     uno::Reference< text::XAutoTextGroup > xGroup;
     if ( pGlossaries && hasByName( GroupName ) )    // group name already known?
-        // TRUE = create group if not already available
-        xGroup = pGlossaries->GetAutoTextGroup( GroupName, TRUE );
+        // sal_True = create group if not already available
+        xGroup = pGlossaries->GetAutoTextGroup( GroupName, sal_True );
 
     if ( !xGroup.is() )
         throw container::NoSuchElementException();
@@ -166,7 +166,7 @@ uno::Sequence< OUString > SwXAutoTextContainer::getElementNames(void) throw( uno
     }
     return aGroupNames;
 }
-/*-- 21.12.98 12:42:19---------------------------------------------------
+/*-----------------------------------------------------------------------
     findet Gruppennamen mit und ohne Pfadindex
   -----------------------------------------------------------------------*/
 sal_Bool SwXAutoTextContainer::hasByName(const OUString& Name)
@@ -240,15 +240,15 @@ OUString SwXAutoTextContainer::getImplementationName(void) throw( uno::RuntimeEx
     return SwXAutoTextContainer_getImplementationName();
 }
 
-BOOL SwXAutoTextContainer::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXAutoTextContainer::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     const uno::Sequence< OUString > aNames = SwXAutoTextContainer_getSupportedServiceNames();
     for(sal_Int32 nService = 0; nService < aNames.getLength(); nService++)
     {
         if(aNames.getConstArray()[nService] == rServiceName)
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 uno::Sequence< OUString > SwXAutoTextContainer::getSupportedServiceNames(void) throw( uno::RuntimeException )
@@ -395,10 +395,6 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     String sLongName(aTitle);
     if(pGlosGroup && !pGlosGroup->GetError())
     {
-        /*if( pGlosGroup->IsOld() && pGlosGroup->ConvertToNew())
-        {
-            throw uno::RuntimeException();
-        } */
         uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
         SwXTextRange* pxRange = 0;
         OTextCursorHelper* pxCursor = 0;
@@ -738,7 +734,7 @@ OUString SwXAutoTextGroup::getImplementationName(void) throw( uno::RuntimeExcept
     return C2U("SwXAutoTextGroup");
 }
 
-BOOL SwXAutoTextGroup::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXAutoTextGroup::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.AutoTextGroup") == rServiceName;
 }
@@ -843,7 +839,7 @@ void SwXAutoTextEntry::GetBodyText ()
 {
     SolarMutexGuard aGuard;
 
-    xDocSh = pGlossaries->EditGroupDoc ( sGroupName, sEntryName, FALSE );
+    xDocSh = pGlossaries->EditGroupDoc ( sGroupName, sEntryName, sal_False );
     OSL_ENSURE( xDocSh.Is(), "SwXAutoTextEntry::GetBodyText: unexpected: no doc returned by EditGroupDoc!" );
 
     // start listening at the document
@@ -1015,7 +1011,7 @@ OUString SwXAutoTextEntry::getImplementationName(void) throw( uno::RuntimeExcept
     return C2U("SwXAutoTextEntry");
 }
 
-BOOL SwXAutoTextEntry::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXAutoTextEntry::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.text.AutoTextEntry") == rServiceName;
 }
@@ -1061,7 +1057,7 @@ OUString SwAutoTextEventDescriptor::getImplementationName()
 }
 
 void SwAutoTextEventDescriptor::replaceByName(
-    const USHORT nEvent,
+    const sal_uInt16 nEvent,
     const SvxMacro& rMacro)
             throw(
                 lang::IllegalArgumentException,
@@ -1083,7 +1079,7 @@ void SwAutoTextEventDescriptor::replaceByName(
 
     if( pBlocks && !pBlocks->GetError())
     {
-        USHORT nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
+        sal_uInt16 nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
         if( nIndex != USHRT_MAX )
         {
             SvxMacroTableDtor aMacroTable;
@@ -1102,7 +1098,7 @@ void SwAutoTextEventDescriptor::replaceByName(
 
 void SwAutoTextEventDescriptor::getByName(
     SvxMacro& rMacro,
-    const USHORT nEvent )
+    const sal_uInt16 nEvent )
             throw(
                 container::NoSuchElementException,
                 lang::WrappedTargetException,
@@ -1126,7 +1122,7 @@ void SwAutoTextEventDescriptor::getByName(
 
     if ( pBlocks &&  !pBlocks->GetError())
     {
-        USHORT nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
+        sal_uInt16 nIndex = pBlocks->GetIndex( rAutoTextEntry.GetEntryName() );
         if( nIndex != USHRT_MAX )
         {
             SvxMacroTableDtor aMacroTable;

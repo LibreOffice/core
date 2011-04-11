@@ -67,7 +67,7 @@ public:
 
     static sal_Bool             MakeFolder( const String& rFolder );
     static ErrCode              QueryDiskSpace( const String& rPath, sal_Int64& rFreeBytes );
-    static ULONG                GetSize( const String& rContent );
+    static sal_uIntPtr              GetSize( const String& rContent );
 
     // please don't use this!
     static sal_Bool             Exists( const String& rContent );

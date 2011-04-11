@@ -172,7 +172,7 @@ void OResultSet::methodEntry()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     if ( !m_pTable )
     {
-        OSL_ENSURE( false, "OResultSet::methodEntry: looks like we're disposed, but how is this possible?" );
+        OSL_FAIL( "OResultSet::methodEntry: looks like we're disposed, but how is this possible?" );
         throw DisposedException( ::rtl::OUString(), *this );
     }
 }
@@ -411,7 +411,7 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 cardNumber, sal_Int32 columnI
 {
     if ( fetchRow( cardNumber ) == sal_False )
     {
-        OSL_ASSERT("fetchRow() returned False" );
+        OSL_FAIL("fetchRow() returned False" );
         m_bWasNull = sal_True;
         return *ODatabaseMetaDataResultSet::getEmptyValue();
     }
@@ -642,7 +642,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
                             const Any& /*rValue*/ )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    OSL_ENSURE( false, "OResultSet::convertFastPropertyValue: not implemented!" );
+    OSL_FAIL( "OResultSet::convertFastPropertyValue: not implemented!" );
     switch(nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
@@ -663,7 +663,7 @@ void OResultSet::setFastPropertyValue_NoBroadcast(
                                                  )
                                                  throw (Exception)
 {
-    OSL_ENSURE( false, "OResultSet::setFastPropertyValue_NoBroadcast: not implemented!" );
+    OSL_FAIL( "OResultSet::setFastPropertyValue_NoBroadcast: not implemented!" );
     switch(nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
@@ -836,7 +836,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             queryExpression.setExpressionCondition( MQueryExpression::AND );
         }
         else {
-            OSL_ASSERT("analyseSQL: Error in Parse Tree");
+            OSL_FAIL("analyseSQL: Error in Parse Tree");
         }
     }
     else if (SQL_ISRULE(parseTree,comparison_predicate))
@@ -898,8 +898,9 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         OSQLParseNode *pOptEscape;
         const OSQLParseNode* pPart2 = parseTree->getChild(1);
         pColumn     = parseTree->getChild(0);                        // Match Item
-        pAtom       = pPart2->getChild(parseTree->count()-2);     // Match String
-        pOptEscape  = pPart2->getChild(parseTree->count()-1);     // Opt Escape Rule
+        pAtom       = pPart2->getChild(pPart2->count()-2);     // Match String
+        pOptEscape  = pPart2->getChild(pPart2->count()-1);     // Opt Escape Rule
+        (void)pOptEscape;
         const bool bNot = SQL_ISTOKEN(pPart2->getChild(0), NOT);
 
         if (!(pAtom->getNodeType() == SQL_NODE_STRING ||
@@ -981,7 +982,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                   && matchString.indexOf( MATCHCHAR ) == -1
                 )
             {
-                // One occurance of '%' - no '_' matches...
+                // One occurrence of '%' - no '_' matches...
                 if ( matchString.indexOf ( WILDCARD ) == 0 )
                 {
                     op = MQueryOp::EndsWith;
@@ -1224,7 +1225,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
             else
             {
                 sal_Bool bDistinct = sal_False;
-                sal_Bool bWasSorted = sal_False;
                 OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
                 if (pDistinct && pDistinct->getTokenID() == SQL_TOKEN_DISTINCT)
                 {
@@ -1233,8 +1233,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                         m_aOrderbyColumnNumber.push_back(m_aColMapping[1]);
                         m_aOrderbyAscending.push_back(SQL_DESC);
                     }
-                    else
-                        bWasSorted = sal_True;
                     bDistinct = sal_True;
                 }
 
@@ -1265,11 +1263,10 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                             eKeyType[i] = SQL_ORDERBYKEY_DOUBLE;
                             break;
 
-                    // Andere Typen sind nicht implementiert (und damit immer
-                    // FALSE)
+                    // Other types aren't implemented (so they are always FALSE)
                         default:
                             eKeyType[i] = SQL_ORDERBYKEY_NONE;
-                            OSL_ASSERT("MResultSet::executeQuery: Order By Data Type not implemented");
+                            OSL_FAIL("MResultSet::executeQuery: Order By Data Type not implemented");
                             break;
                     }
                 }
@@ -1375,7 +1372,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                                    const Reference<XDatabaseMetaData>& _xMetaData,
                                    ::std::vector<sal_Int32>& _rColMapping)
 {
-    ::comphelper::UStringMixEqual aCase(_xMetaData->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual aCase(_xMetaData->supportsMixedCaseQuotedIdentifiers());
 
     Reference<XPropertySet> xTableColumn;
     ::rtl::OUString sTableColumnName, sSelectColumnRealName;
@@ -1442,7 +1439,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
         }
         catch (Exception&)
         {
-            OSL_ENSURE(sal_False, "OResultSet::setBoundedColumns: caught an Exception!");
+            OSL_FAIL("OResultSet::setBoundedColumns: caught an Exception!");
         }
     }
 }

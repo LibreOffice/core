@@ -31,7 +31,7 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
-#include <unoapi.hxx>
+#include <svx/unoapi.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

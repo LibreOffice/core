@@ -27,7 +27,6 @@
  ************************************************************************/
 #ifndef _SWRECT_HXX
 #define _SWRECT_HXX
-#include "errhdl.hxx"
 #include <osl/diagnose.h>
 #include <tools/gen.hxx>
 class SvStream;
@@ -45,10 +44,10 @@ public:
     inline SwRect( const Point& rLT, const Point& rRB );
     inline SwRect( long X, long Y, long Width, long Height );
 
-        //SV-SS z.B. SwRect( pWin->GetClipRect() );
+        //SV-SS e.g. SwRect( pWin->GetClipRect() );
     SwRect( const Rectangle &rRect );
 
-    //Set-Methoden
+    //Set-Methods
     inline void Chg( const Point& rNP, const Size &rNS );
     inline void Pos(  const Point& rNew );
     inline void Pos( const long nNewX, const long nNewY );
@@ -61,7 +60,7 @@ public:
     inline void Top( const long nTop );
     inline void Bottom( const long nBottom );
 
-    //Get-Methoden
+    //Get-Methods
     inline const Point &Pos()  const;
     inline const Size  &SSize() const;
     inline long Width()  const;
@@ -86,18 +85,18 @@ public:
            SwRect &_Intersection( const SwRect &rRect );
     inline SwRect  GetIntersection( const SwRect& rRect ) const;
 
-           BOOL IsInside( const Point& rPOINT ) const;
-           BOOL IsNear(const Point& rPoint, long nTolerance ) const;
-           BOOL IsInside( const SwRect& rRect ) const;
-           BOOL IsOver( const SwRect& rRect ) const;
-    inline BOOL HasArea() const;
-    inline BOOL IsEmpty() const;
+           sal_Bool IsInside( const Point& rPOINT ) const;
+           sal_Bool IsNear(const Point& rPoint, long nTolerance ) const;
+           sal_Bool IsInside( const SwRect& rRect ) const;
+           sal_Bool IsOver( const SwRect& rRect ) const;
+    inline sal_Bool HasArea() const;
+    inline sal_Bool IsEmpty() const;
     inline void Clear();
 
     inline SwRect &operator = ( const SwRect &rRect );
 
-    inline BOOL operator == ( const SwRect& rRect ) const;
-    inline BOOL operator != ( const SwRect& rRect ) const;
+    inline sal_Bool operator == ( const SwRect& rRect ) const;
+    inline sal_Bool operator != ( const SwRect& rRect ) const;
 
     inline SwRect &operator+=( const Point &rPt );
     inline SwRect &operator-=( const Point &rPt );
@@ -105,12 +104,8 @@ public:
     inline SwRect &operator+=( const Size &rSz );
     inline SwRect &operator-=( const Size &rSz );
 
-    //SV-SS z.B. pWin->DrawRect( aSwRect.SVRect() );
+    //SV-SS e.g. pWin->DrawRect( aSwRect.SVRect() );
     inline Rectangle  SVRect() const;
-
-    //Zortech wuerde hier fehlerhaften Code erzeugen.
-//  inline operator SRectangle()  const;
-//  inline operator Rectangle() const { return Rectangle( aPos, aSize ); }
 
     // Ausgabeoperator fuer die Debugging-Gemeinde
     friend SvStream &operator<<( SvStream &rStream, const SwRect &rRect );
@@ -153,25 +148,25 @@ public:
     long GetBottomDistance( long ) const;
     long GetRightDistance( long ) const;
     long GetTopDistance( long ) const;
-    BOOL OverStepLeft( long ) const;
-    BOOL OverStepBottom( long ) const;
-    BOOL OverStepTop( long ) const;
-    BOOL OverStepRight( long ) const;
+    sal_Bool OverStepLeft( long ) const;
+    sal_Bool OverStepBottom( long ) const;
+    sal_Bool OverStepTop( long ) const;
+    sal_Bool OverStepRight( long ) const;
 };
 
-// Implementation in in swrect.cxx
+// Implementation in swrect.cxx
 extern SvStream &operator<<( SvStream &rStream, const SwRect &rRect );
 
 typedef void (SwRect:: *SwRectSet)( const long nNew );
 typedef long (SwRect:: *SwRectGet)() const;
 typedef const Point (SwRect:: *SwRectPoint)() const;
 typedef const Size (SwRect:: *SwRectSize)() const;
-typedef BOOL (SwRect:: *SwRectMax)( long ) const;
+typedef sal_Bool (SwRect:: *SwRectMax)( long ) const;
 typedef long (SwRect:: *SwRectDist)( long ) const;
 typedef void (SwRect:: *SwRectSetTwice)( long, long );
 typedef void (SwRect:: *SwRectSetPos)( const Point& );
 
-//---------------------------------- Set-Methoden
+//  Set-Methods
 inline void SwRect::Chg( const Point& rNP, const Size &rNS )
 {
     m_Point = rNP;
@@ -222,7 +217,7 @@ inline void SwRect::Bottom( const long nBottom )
     m_Size.setHeight(nBottom - m_Point.getY() + 1);
 }
 
-//----------------------------------- Get-Methoden
+// Get-Methods
 inline const Point &SwRect::Pos()  const
 {
     return m_Point;
@@ -264,18 +259,18 @@ inline long SwRect::Bottom() const
     return m_Size.getHeight() ? m_Point.getY() + m_Size.getHeight() - 1 : m_Point.getY();
 }
 
-//----------------------------------- operatoren
+// operators
 inline SwRect &SwRect::operator = ( const SwRect &rRect )
 {
     m_Point = rRect.m_Point;
     m_Size = rRect.m_Size;
     return *this;
 }
-inline BOOL SwRect::operator == ( const SwRect& rRect ) const
+inline sal_Bool SwRect::operator == ( const SwRect& rRect ) const
 {
     return (m_Point == rRect.m_Point && m_Size == rRect.m_Size);
 }
-inline BOOL SwRect::operator != ( const SwRect& rRect ) const
+inline sal_Bool SwRect::operator != ( const SwRect& rRect ) const
 {
     return (m_Point != rRect.m_Point || m_Size != rRect.m_Size);
 }
@@ -305,7 +300,7 @@ inline SwRect &SwRect::operator-=( const Size &rSz )
 }
 
 
-//--------------------------- Sonstiges
+// other
 inline Rectangle SwRect::SVRect() const
 {
     OSL_ENSURE( !IsEmpty(), "SVRect() without Width or Height" );
@@ -319,11 +314,11 @@ inline SwRect SwRect::GetIntersection( const SwRect& rRect ) const
     return SwRect( *this ).Intersection( rRect );
 }
 
-inline BOOL SwRect::HasArea() const
+inline sal_Bool SwRect::HasArea() const
 {
     return !IsEmpty();
 }
-inline BOOL SwRect::IsEmpty() const
+inline sal_Bool SwRect::IsEmpty() const
 {
     return !(m_Size.getHeight() && m_Size.getWidth());
 }
@@ -335,7 +330,7 @@ inline void SwRect::Clear()
     m_Size.setHeight(0);
 }
 
-//-------------------------- CToren
+// constructors
 inline SwRect::SwRect() :
     m_Point( 0, 0 ),
     m_Size( 0, 0 )

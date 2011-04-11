@@ -74,12 +74,13 @@ const SfxItemPropertyMapEntry* lcl_GetShapeMap()
         {MAP_CHAR_LEN(SC_UNONAME_MOVEPROTECT), 0, &getCppuType((sal_Bool*)0), 0, 0 },
         // #i66550 HLINK_FOR_SHAPES
         {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK), 0, &getCppuType((rtl::OUString*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_URL), 0, &getCppuType((rtl::OUString*)0), 0, 0 },
+
         {0,0,0,0,0,0}
     };
     return aShapeMap_Impl;
 }
 
-// static
 const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
@@ -89,7 +90,7 @@ const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
     return aMacroDescriptionsImpl;
 }
 // #i66550 HLINK_FOR_SHAPES
-ScMacroInfo* lcl_getShapeHyperMacroInfo( ScShapeObj* pShape, BOOL bCreate = FALSE )
+ScMacroInfo* lcl_getShapeHyperMacroInfo( ScShapeObj* pShape, sal_Bool bCreate = false )
 {
         if( pShape )
             if( SdrObject* pObj = pShape->GetSdrObject() )
@@ -114,7 +115,7 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape ) :
       pShapePropertySet(NULL),
       pShapePropertyState(NULL),
       pImplementationId(NULL),
-      bIsTextShape(FALSE),
+      bIsTextShape(false),
       bInitializedNotifier(false)
 {
     comphelper::increment( m_refCount );
@@ -261,31 +262,31 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo(
     return mxPropSetInfo;
 }
 
-BOOL lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
+sal_Bool lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
 {
-    USHORT nCount = rModel.GetPageCount();
-    for (USHORT i=0; i<nCount; i++)
+    sal_uInt16 nCount = rModel.GetPageCount();
+    for (sal_uInt16 i=0; i<nCount; i++)
         if ( rModel.GetPage(i) == pPage )
         {
             rNum = static_cast<SCTAB>(i);
-            return TRUE;
+            return sal_True;
         }
 
-    return FALSE;
+    return false;
 }
 
-BOOL lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point& rCaptionPoint )
+sal_Bool lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point& rCaptionPoint )
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = false;
     rtl::OUString sType(xShape->getShapeType());
-    sal_Bool bCaptionShape(sType.equalsAscii("com.sun.star.drawing.CaptionShape"));
+    sal_Bool bCaptionShape(sType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CaptionShape")));
     if (bCaptionShape)
     {
         uno::Reference < beans::XPropertySet > xShapeProp (xShape, uno::UNO_QUERY);
         if (xShapeProp.is())
         {
             xShapeProp->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" )) ) >>= rCaptionPoint;
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
     }
     return bReturn;
@@ -331,22 +332,10 @@ awt::Point lcl_GetRelativePos( uno::Reference< drawing::XShape >& xShape, ScDocu
 {
     awt::Point aUnoPoint;
     rRange = lcl_GetAnchorCell(xShape, pDoc, nTab, aUnoPoint, rUnoSize, rCaptionPoint);
-    if (pDoc->IsNegativePage(nTab))
-    {
-        Rectangle aRect(pDoc->GetMMRect( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab() ));
-        Point aPoint(aRect.TopRight());
-        aUnoPoint.X -= aPoint.X();
-        aUnoPoint.Y -= aPoint.Y();
-    }
-    else
-    {
-        ScRange aRange = pDoc->GetRange( nTab, Rectangle( VCLPoint(aUnoPoint), VCLPoint(aUnoPoint) ));
-        Rectangle aRect(pDoc->GetMMRect( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab() ));
-        Point aPoint(aRect.TopLeft());
-        aUnoPoint.X -= aPoint.X();
-        aUnoPoint.Y -= aPoint.Y();
-    }
-
+    Rectangle aRect(pDoc->GetMMRect( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab() ));
+    Point aPoint = pDoc->IsNegativePage(nTab) ? aRect.TopRight() : aRect.TopLeft();
+    aUnoPoint.X -= aPoint.X();
+    aUnoPoint.Y -= aPoint.Y();
     return aUnoPoint;
 }
 
@@ -385,20 +374,9 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                                 table::CellRangeAddress aAddress = xRangeAdd->getRangeAddress();
                                 if (nTab == aAddress.Sheet)
                                 {
-                                    if (aAddress.StartRow != aAddress.EndRow) //should be a Spreadsheet
-                                    {
-                                        DBG_ASSERT(aAddress.StartRow == 0 && aAddress.EndRow == MAXROW &&
-                                            aAddress.StartColumn == 0 && aAddress.EndColumn == MAXCOL, "here should be a XSpreadsheet");
-                                        ScDrawLayer::SetAnchor(pObj, SCA_PAGE);
-                                    }
-                                    else
-                                    {
-                                        DBG_ASSERT(aAddress.StartRow == aAddress.EndRow &&
-                                            aAddress.StartColumn == aAddress.EndColumn, "here should be a XCell");
-                                        ScDrawLayer::SetAnchor(pObj, SCA_CELL);
-                                    }
                                     Rectangle aRect(pDoc->GetMMRect( static_cast<SCCOL>(aAddress.StartColumn), static_cast<SCROW>(aAddress.StartRow),
                                         static_cast<SCCOL>(aAddress.EndColumn), static_cast<SCROW>(aAddress.EndRow), aAddress.Sheet ));
+                                    awt::Point aRelPoint;
                                     uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
                                     if (xShape.is())
                                     {
@@ -417,7 +395,8 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                                         awt::Size aUnoSize;
                                         awt::Point aCaptionPoint;
                                         ScRange aRange;
-                                        awt::Point aUnoPoint(lcl_GetRelativePos( xShape, pDoc, nTab, aRange, aUnoSize, aCaptionPoint ));
+                                        aRelPoint = lcl_GetRelativePos( xShape, pDoc, nTab, aRange, aUnoSize, aCaptionPoint );
+                                        awt::Point aUnoPoint(aRelPoint);
 
                                         aUnoPoint.X += aPoint.X();
                                         aUnoPoint.Y += aPoint.Y();
@@ -445,6 +424,24 @@ void SAL_CALL ScShapeObj::setPropertyValue(
 
                                         xShape->setPosition(aUnoPoint);
                                         pDocSh->SetModified();
+                                    }
+
+                                    if (aAddress.StartRow != aAddress.EndRow) //should be a Spreadsheet
+                                    {
+                                        DBG_ASSERT(aAddress.StartRow == 0 && aAddress.EndRow == MAXROW &&
+                                            aAddress.StartColumn == 0 && aAddress.EndColumn == MAXCOL, "here should be a XSpreadsheet");
+                                        ScDrawLayer::SetPageAnchored(*pObj);
+                                    }
+                                    else
+                                    {
+                                        DBG_ASSERT(aAddress.StartRow == aAddress.EndRow &&
+                                            aAddress.StartColumn == aAddress.EndColumn, "here should be a XCell");
+                                        ScDrawObjData aAnchor;
+                                        aAnchor.maStart = ScAddress(aAddress.StartColumn, aAddress.StartRow, aAddress.Sheet);
+                                        aAnchor.maStartOffset = Point(aRelPoint.X, aRelPoint.Y);
+                                        ScDrawLayer::SetCellAnchored(*pObj, aAnchor);
+                                        //Currently we've only got a start anchor, not an end-anchor, so generate that now
+                                        ScDrawLayer::UpdateCellAnchorFromPositionEnd(*pObj, *pDoc, aAddress.Sheet);
                                     }
                                 }
                             }
@@ -505,7 +502,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                                 uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
                                 if (xShape.is())
                                 {
-                                    if (ScDrawLayer::GetAnchor(pObj) == SCA_PAGE)
+                                    if (ScDrawLayer::GetAnchorType(*pObj) == SCA_PAGE)
                                     {
                                         awt::Point aPoint(xShape->getPosition());
                                         awt::Size aSize(xShape->getSize());
@@ -532,7 +529,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                                         xShape->setPosition(aPoint);
                                         pDocSh->SetModified();
                                     }
-                                    else if (ScDrawLayer::GetAnchor(pObj) == SCA_CELL)
+                                    else if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL)
                                     {
                                         awt::Size aUnoSize;
                                         awt::Point aCaptionPoint;
@@ -568,7 +565,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                                     }
                                     else
                                     {
-                                        DBG_ERROR("unknown anchor type");
+                                        OSL_FAIL("unknown anchor type");
                                     }
                                 }
                             }
@@ -603,7 +600,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                                 uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
                                 if (xShape.is())
                                 {
-                                    if (ScDrawLayer::GetAnchor(pObj) == SCA_PAGE)
+                                    if (ScDrawLayer::GetAnchorType(*pObj) == SCA_PAGE)
                                     {
                                         awt::Point aPoint = xShape->getPosition();
                                         awt::Point aCaptionPoint;
@@ -616,7 +613,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                                         xShape->setPosition(aPoint);
                                         pDocSh->SetModified();
                                     }
-                                    else if (ScDrawLayer::GetAnchor(pObj) == SCA_CELL)
+                                    else if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL)
                                     {
                                         awt::Size aUnoSize;
                                         awt::Point aCaptionPoint;
@@ -637,7 +634,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                                     }
                                     else
                                     {
-                                        DBG_ERROR("unknown anchor type");
+                                        OSL_FAIL("unknown anchor type");
                                     }
                                 }
                             }
@@ -647,10 +644,11 @@ void SAL_CALL ScShapeObj::setPropertyValue(
             }
         }
     }
-    else if  ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) )
+    else if  ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) ||
+               aNameString.EqualsAscii( SC_UNONAME_URL) )
     {
         rtl::OUString sHlink;
-        ScMacroInfo* pInfo = lcl_getShapeHyperMacroInfo(this, TRUE);
+        ScMacroInfo* pInfo = lcl_getShapeHyperMacroInfo(this, true);
         if ( ( aValue >>= sHlink ) && pInfo )
             pInfo->SetHlink( sHlink );
     }
@@ -699,23 +697,10 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
                         {
                             ScDocShell* pDocSh = (ScDocShell*)pObjSh;
                             uno::Reference< uno::XInterface > xAnchor;
-                            if (ScDrawLayer::GetAnchor(pObj) == SCA_CELL)
-                            {
-                                uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
-                                if (xShape.is())
-                                {
-                                    awt::Size aUnoSize;
-                                    awt::Point aCaptionPoint;
-                                    ScRange aRange;
-                                    awt::Point aUnoPoint(lcl_GetRelativePos( xShape, pDoc, nTab, aRange, aUnoSize, aCaptionPoint ));
-
-                                    xAnchor.set(static_cast<cppu::OWeakObject*>(new ScCellObj( pDocSh, aRange.aStart )));
-                                }
-                            }
+                            if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjDataTab(pObj, nTab))
+                                xAnchor.set(static_cast<cppu::OWeakObject*>(new ScCellObj( pDocSh, pAnchor->maStart)));
                             else
-                            {
                                 xAnchor.set(static_cast<cppu::OWeakObject*>(new ScTableSheetObj( pDocSh, nTab )));
-                            }
                             aAny <<= xAnchor;
                         }
                     }
@@ -758,7 +743,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
                         uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
                         if (xShape.is())
                         {
-                            if (ScDrawLayer::GetAnchor(pObj) == SCA_CELL)
+                            if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL)
                             {
                                 awt::Size aUnoSize;
                                 awt::Point aCaptionPoint;
@@ -818,7 +803,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
                         if (xShape.is())
                         {
                             uno::Reference< uno::XInterface > xAnchor;
-                            if (ScDrawLayer::GetAnchor(pObj) == SCA_CELL)
+                            if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL)
                             {
                                 awt::Size aUnoSize;
                                 awt::Point aCaptionPoint;
@@ -844,7 +829,8 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
             }
         }
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) )
+    else if ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) ||
+              aNameString.EqualsAscii( SC_UNONAME_URL ) )
     {
         rtl::OUString sHlink;
         if ( ScMacroInfo* pInfo = lcl_getShapeHyperMacroInfo(this) )
@@ -1128,7 +1114,7 @@ void lcl_CopyOneProperty( beans::XPropertySet& rDest, beans::XPropertySet& rSour
     }
     catch (uno::Exception&)
     {
-        DBG_ERROR("Exception in text field");
+        OSL_FAIL("Exception in text field");
     }
 }
 
@@ -1144,7 +1130,7 @@ void SAL_CALL ScShapeObj::insertTextContent( const uno::Reference<text::XTextRan
     ScCellFieldObj* pCellField = ScCellFieldObj::getImplementation( xContent );
     if ( pCellField )
     {
-        //  #105585# createInstance("TextField.URL") from the document creates a ScCellFieldObj.
+        //  createInstance("TextField.URL") from the document creates a ScCellFieldObj.
         //  To insert it into drawing text, a SvxUnoTextField is needed instead.
         //  The ScCellFieldObj object is left in non-inserted state.
 
@@ -1359,7 +1345,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScShapeObj::getImplementationId()
     }
     if( NULL == pImplementationId )
     {
-        DBG_ERROR( "Could not create an implementation id for a ScXShape!" );
+        OSL_FAIL( "Could not create an implementation id for a ScXShape!" );
         return uno::Sequence< sal_Int8 > ();
     }
     else
@@ -1390,7 +1376,7 @@ class ShapeUnoEventAccessImpl : public ShapeUnoEventAcess_BASE
 private:
     ScShapeObj* mpShape;
 
-    ScMacroInfo* getInfo( BOOL bCreate = FALSE )
+    ScMacroInfo* getInfo( sal_Bool bCreate = false )
     {
         return lcl_getShapeHyperMacroInfo( mpShape, bCreate );
     }
@@ -1423,7 +1409,7 @@ public:
                 rtl::OUString sValue;
                 if ( pProperties->Value >>= sValue )
                 {
-                    ScMacroInfo* pInfo = getInfo( TRUE );
+                    ScMacroInfo* pInfo = getInfo( sal_True );
                     DBG_ASSERT( pInfo, "shape macro info could not be created!" );
                     if ( !pInfo )
                         break;
@@ -1506,7 +1492,7 @@ ScShapeObj::getEvents(  ) throw(uno::RuntimeException)
         )
         if ( _ServiceName == *pSupported )
             return sal_True;
-    return sal_False;
+    return false;
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL ScShapeObj::getSupportedServiceNames(  ) throw (uno::RuntimeException)

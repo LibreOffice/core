@@ -43,9 +43,9 @@ namespace rtl
 
 // class SvxFontItem -----------------------------------------------------
 
-/*
-    [Beschreibung]
-    Dieses Item beschreibt einen Font.
+/*  [Description]
+
+    This item describes a Font.
 */
 
 class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
@@ -56,58 +56,51 @@ class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
     FontPitch ePitch;
     rtl_TextEncoding eTextEncoding;
 
-    static BOOL bEnableStoreUnicodeNames;
+    static sal_Bool bEnableStoreUnicodeNames;
 
 public:
     TYPEINFO();
 
-    SvxFontItem( const USHORT nId  );
+    SvxFontItem( const sal_uInt16 nId  );
     SvxFontItem( const FontFamily eFam, const String& rFamilyName,
         const String& rStyleName,
         const FontPitch eFontPitch /*= PITCH_DONTKNOW*/,
         const rtl_TextEncoding eFontTextEncoding /*= RTL_TEXTENCODING_DONTKNOW*/,
-        const USHORT nId  );
+        const sal_uInt16 nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    // ZugriffsMethoden:
-    inline String &GetFamilyName() { return aFamilyName; }
+    // Access methods:
+    void SetFamilyName( const String& rFamilyName ) { aFamilyName = rFamilyName; }
     inline const String &GetFamilyName() const { return aFamilyName; }
 
-    inline String &GetStyleName() { return aStyleName; }
+    void SetStyleName(const String &rStyleName ) { aStyleName = rStyleName; }
     inline const String &GetStyleName() const { return aStyleName; }
 
-    inline FontFamily &GetFamily() { return eFamily; }
+    void SetFamily( FontFamily _eFamily ) { eFamily = _eFamily; }
     inline FontFamily GetFamily() const { return eFamily; }
 
-    inline FontPitch &GetPitch() { return ePitch; }
+    void SetPitch(FontPitch _ePitch ) { ePitch = _ePitch; }
     inline FontPitch GetPitch() const { return ePitch; }
 
-    inline rtl_TextEncoding &GetCharSet() { return eTextEncoding; }
+    void SetCharSet(rtl_TextEncoding _eEncoding) { eTextEncoding = _eEncoding; }
+
     inline rtl_TextEncoding GetCharSet() const { return eTextEncoding; }
 
-    inline SvxFontItem& operator=(const SvxFontItem& rFont)
-    {
-        aFamilyName =  rFont.GetFamilyName();
-        aStyleName =   rFont.GetStyleName();
-        eFamily =      rFont.GetFamily();
-        ePitch =   rFont.GetPitch();
-        eTextEncoding = rFont.GetCharSet();
-        return *this;
-    }
+    SvxFontItem& operator=(const SvxFontItem& rFont);
 
-    static void EnableStoreUnicodeNames( BOOL bEnable );
+    static void EnableStoreUnicodeNames( sal_Bool bEnable );
 
 };
 

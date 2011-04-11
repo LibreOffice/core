@@ -350,11 +350,6 @@ SwVbaBorders::getItemByIntIndex( const sal_Int32 nIndex )  throw (uno::RuntimeEx
 
 sal_Bool SAL_CALL SwVbaBorders::getShadow() throw (uno::RuntimeException)
 {
-    /*
-    table::ShadowFormat aShadowFormat;
-    m_xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ShadowFormat") ) ) >>= aShadowFormat;
-    return ( aShadowFormat.Location != table::ShadowLocation_NONE );
-    */
     // always return False for table border in MS Word
     return sal_False;
 }

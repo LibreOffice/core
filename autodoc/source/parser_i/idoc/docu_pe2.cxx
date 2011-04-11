@@ -31,6 +31,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <cctype>
 #include <ary/doc/d_oldidldocu.hxx>
 #include <ary_i/d_token.hxx>
 #include <parser/parserinfo.hxx>
@@ -129,7 +130,7 @@ SapiDocu_PE::Process_AtTag( const Tok_AtTag & i_rToken )
     else if (i_rToken.Id() == Tok_AtTag::since)
     {
         pCurAtTag = new DT_SinceAtTag;
-        fCurTokenAddFunction = &SapiDocu_PE::SetCurSinceAtTagVersion;
+        fCurTokenAddFunction = &SapiDocu_PE::SetCurSinceAtTagVersion_OOo;
     }
     else
     {
@@ -496,10 +497,11 @@ SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_3( DYN ary::inf::DocuToken & let_drNewTo
     fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
 }
 
-
+const String
+    C_sSinceFormat("Correct version format: \"OOo <major>.<minor>[.<micro> if micro is not 0]\".");
 
 void
-SapiDocu_PE::SetCurSinceAtTagVersion( DYN ary::inf::DocuToken & let_drNewToken )
+SapiDocu_PE::SetCurSinceAtTagVersion_OOo( DYN ary::inf::DocuToken & let_drNewToken )
 {
     csv_assert(pCurAtTag);
 
@@ -512,26 +514,62 @@ SapiDocu_PE::SetCurSinceAtTagVersion( DYN ary::inf::DocuToken & let_drNewToken )
 
     const String
         sVersion(pToken->GetText());
-    const char
-        cFirst = *sVersion.begin();
-    const char
-        cCiphersend = '9' + 1;
+    if (NOT CheckVersionSyntax_OOo(sVersion))
+    {
+        Cerr() << "Version information in @since tag has incorrect format.\n"
+               << "Found: \"" << sVersion << "\"\n"
+               << C_sSinceFormat
+               << Endl();
+        exit(1);
+    }
+
     const autodoc::CommandLine &
         rCommandLine = autodoc::CommandLine::Get_();
+    if (NOT rCommandLine.DoesTransform_SinceTag())
+        pCurAtTag->AddToken(let_drNewToken);
 
+    fCurTokenAddFunction = &SapiDocu_PE::SetCurSinceAtTagVersion_Number;
+}
 
+void
+SapiDocu_PE::SetCurSinceAtTagVersion_Number( DYN ary::inf::DocuToken & let_drNewToken )
+{
+    csv_assert(pCurAtTag);
+
+    DT_TextToken * pToken = dynamic_cast< DT_TextToken* >(&let_drNewToken);
+    if (pToken == 0)
+    {
+        if (dynamic_cast< DT_White* >(&let_drNewToken) != 0)
+        {
+            String &
+                sValue = pCurAtTag->Access_Text().Access_TextOfFirstToken();
+            StreamLock
+                sHelp(1000);
+            sValue = sHelp() << sValue << " " << c_str;
+        }
+
+        delete &let_drNewToken;
+        return;
+    }
+
+    const String
+        sVersion(pToken->GetText());
+    if (NOT CheckVersionSyntax_Number(sVersion))
+    {
+        Cerr() << "Version information in @since tag has incorrect format.\n"
+               << "Found: \"" << sVersion << "\"\n"
+               << C_sSinceFormat
+               << Endl();
+        exit(1);
+    }
+
+    const autodoc::CommandLine &
+        rCommandLine = autodoc::CommandLine::Get_();
     if ( rCommandLine.DoesTransform_SinceTag())
     {
-        // The @since version number shall be interpreted,
+        pCurAtTag->AddToken(let_drNewToken);
 
-        if ( NOT csv::in_range('0', cFirst, cCiphersend) )
-        {
-            // But this is a non-number-part, so we wait for
-            // the next one.
-            delete &let_drNewToken;
-            return;
-        }
-        else if (rCommandLine.DisplayOf_SinceTagValue(sVersion).empty())
+        if (rCommandLine.DisplayOf_SinceTagValue(sVersion).empty())
         {
             // This is the numbered part, but we don't know it.
             delete &let_drNewToken;
@@ -545,10 +583,10 @@ SapiDocu_PE::SetCurSinceAtTagVersion( DYN ary::inf::DocuToken & let_drNewToken )
             throw X_Docu("since", sl().c_str());
         }
     }
-
-    // Either since tags are not specially interpreted, or
-    // we got a known one.
-    pCurAtTag->AddToken(let_drNewToken);
+    else
+    {
+        AddDocuToken2SinceAtTag(let_drNewToken);
+    }
     fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2SinceAtTag;
 }
 
@@ -572,6 +610,54 @@ SapiDocu_PE::AddDocuToken2SinceAtTag( DYN ary::inf::DocuToken & let_drNewToken )
         sValue = sHelp() << sValue << " " << c_str;
     }
       delete &let_drNewToken;
+}
+
+bool
+SapiDocu_PE::CheckVersionSyntax_OOo(const String & i_versionPart1)
+{
+    return      i_versionPart1 == "OOo"
+            OR  i_versionPart1 == "OpenOffice.org";
+}
+
+bool
+SapiDocu_PE::CheckVersionSyntax_Number(const String & i_versionPart2)
+{
+    if (i_versionPart2.length () == 0)
+        return false;
+
+    const char
+        pt = '.';
+    unsigned int countDigit = 0;
+    unsigned int countPoint = 0;
+    const char *
+        pFirstPoint = 0;
+    const char *
+        pLastPoint = 0;
+
+    for ( const char * p = i_versionPart2.begin();
+          *p != 0;
+          ++p )
+    {
+        if ( std::isdigit(*p) )
+            ++countDigit;
+        else if (*p == pt)
+        {
+            if (countPoint == 0)
+                pFirstPoint = p;
+            pLastPoint = p;
+            ++countPoint;
+        }
+    }
+
+    if (    countDigit + countPoint == i_versionPart2.length()         // only digits and points
+        AND pFirstPoint != 0 AND countPoint < 3                         // 1 or 2 points
+        AND pFirstPoint + 1 != pLastPoint                               // there are digits between two points
+        AND *i_versionPart2.begin() != pt AND *(pLastPoint + 1) != 0    // points are surrounded by digits
+        AND (*(pLastPoint + 1) != '0' OR pLastPoint == pFirstPoint) )   // the first micro-digit is not 0
+    {
+        return true;
+    }
+    return false;
 }
 
 const char *

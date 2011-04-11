@@ -130,9 +130,7 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList )
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//static
+
 void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -144,9 +142,7 @@ void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property 
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
-//static
 void WrappedAutomaticPositionProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList )
 {
     lcl_addWrappedProperties( rList );

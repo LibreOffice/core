@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _DOCUFLD_HXX
-#define _DOCUFLD_HXX
+#ifndef SW_DOCUFLD_HXX
+#define SW_DOCUFLD_HXX
 
 
 #include <tools/date.hxx>
@@ -54,7 +54,7 @@ enum SwAuthorFormat
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Untertyp der Dokumentstatistik
+    Subtype of document statistics.
  --------------------------------------------------------------------*/
 
 enum SwDocStatSubType
@@ -99,7 +99,7 @@ namespace nsSwDocInfoSubType
 }
 
 
-enum RegInfoFormat  // Nur noch zum laden alter Dokumente!!!
+enum RegInfoFormat  // Only for loading of old documents!!!
 {
     RF_AUTHOR,
     RF_TIME,
@@ -116,18 +116,18 @@ enum SwPageNumSubType
 
 enum SwExtUserSubType
 {
-    EU_COMPANY      /*EU_FIRMA*/,
-    EU_FIRSTNAME    /*EU_VORNAME*/,
-    EU_NAME         /*EU_NAME*/,
-    EU_SHORTCUT     /*EU_ABK*/,
-    EU_STREET       /*EU_STRASSE*/,
-    EU_COUNTRY      /*EU_LAND*/,
-    EU_ZIP          /*EU_PLZ*/,
-    EU_CITY         /*EU_ORT*/,
-    EU_TITLE        /*EU_TITEL*/,
-    EU_POSITION     /*EU_POS*/,
-    EU_PHONE_PRIVATE /*EU_TELPRIV*/,
-    EU_PHONE_COMPANY /*EU_TELFIRMA*/,
+    EU_COMPANY,
+    EU_FIRSTNAME,
+    EU_NAME,
+    EU_SHORTCUT,
+    EU_STREET,
+    EU_COUNTRY,
+    EU_ZIP,
+    EU_CITY,
+    EU_TITLE,
+    EU_POSITION,
+    EU_PHONE_PRIVATE,
+    EU_PHONE_COMPANY,
     EU_FAX,
     EU_EMAIL,
     EU_STATE,
@@ -145,36 +145,36 @@ enum SwJumpEditFormat
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Seitennummer
+    Page number.
  --------------------------------------------------------------------*/
 
 class SwPageNumberFieldType : public SwFieldType
 {
     sal_Int16   nNumberingType;
-    USHORT          nNum, nMax;
-    BOOL            bVirtuell;
+    sal_uInt16          nNum, nMax;
+    sal_Bool            bVirtuell;
 
 public:
     SwPageNumberFieldType();
 
     String& Expand( sal_uInt32 nFmt, short nOff, const String&, String& rRet ) const;
-    void ChangeExpansion( SwDoc* pDoc, USHORT nNum, USHORT nMax,
-                            BOOL bVirtPageNum, const sal_Int16* pNumFmt = 0 );
+    void ChangeExpansion( SwDoc* pDoc, sal_uInt16 nNum, sal_uInt16 nMax,
+                            sal_Bool bVirtPageNum, const sal_Int16* pNumFmt = 0 );
     virtual SwFieldType* Copy() const;
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Seitennummerierung
+    Page numbering.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwPageNumberField : public SwField
 {
     String  sUserStr;
-    USHORT  nSubType;
+    sal_uInt16  nSubType;
     short   nOffset;
 
 public:
-    SwPageNumberField(SwPageNumberFieldType*, USHORT nSub = PG_RANDOM,
+    SwPageNumberField(SwPageNumberFieldType*, sal_uInt16 nSub = PG_RANDOM,
                       sal_uInt32 nFmt = 0, short nOff = 0);
 
     virtual String      Expand() const;
@@ -183,17 +183,16 @@ public:
     virtual String      GetPar2() const;
     virtual void        SetPar2(const String& rStr);
 
-    virtual USHORT      GetSubType() const;
-    // virtual void        SetSubType(USHORT nSub); // OM: entfernt, da unbenoetigt und gefaehrlich
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual sal_uInt16      GetSubType() const;
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 
     const String& GetUserString() const         { return sUserStr; }
     void SetUserString( const String& rS )      { sUserStr = rS; }
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Autoren
+    Authors.
  --------------------------------------------------------------------*/
 
 class SwAuthorFieldType : public SwFieldType
@@ -201,12 +200,12 @@ class SwAuthorFieldType : public SwFieldType
 public:
     SwAuthorFieldType();
 
-    String                  Expand(ULONG) const;
+    String                  Expand(sal_uLong) const;
     virtual SwFieldType*    Copy() const;
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: AutorenFeld
+    Author field.
  --------------------------------------------------------------------*/
 
 class SwAuthorField : public SwField
@@ -222,12 +221,12 @@ public:
     inline void         SetExpansion(const String& rStr) { aContent = rStr; }
     inline const String& GetContent() const { return aContent; }
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Filename
+    Filename
  --------------------------------------------------------------------*/
 
 class SwFileNameFieldType : public SwFieldType
@@ -236,12 +235,12 @@ class SwFileNameFieldType : public SwFieldType
 public:
     SwFileNameFieldType(SwDoc*);
 
-    String                  Expand(ULONG) const;
+    String                  Expand(sal_uLong) const;
     virtual SwFieldType*    Copy() const;
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: FileName
+    FileNameField
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwFileNameField : public SwField
@@ -257,12 +256,12 @@ public:
     inline void         SetExpansion(const String& rStr) { aContent = rStr; }
     inline const String& GetContent() const { return aContent; }
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: TemplName
+    TemplName
  --------------------------------------------------------------------*/
 
 class SwTemplNameFieldType : public SwFieldType
@@ -271,12 +270,12 @@ class SwTemplNameFieldType : public SwFieldType
 public:
     SwTemplNameFieldType(SwDoc*);
 
-    String                  Expand(ULONG) const;
+    String                  Expand(sal_uLong) const;
     virtual SwFieldType*    Copy() const;
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: TemplName
+    TemplNameField
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwTemplNameField : public SwField
@@ -286,13 +285,13 @@ public:
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Docstatistik
+    Document statistics
  --------------------------------------------------------------------*/
 
 class SwDocStatFieldType : public SwFieldType
@@ -302,89 +301,90 @@ class SwDocStatFieldType : public SwFieldType
 
 public:
     SwDocStatFieldType(SwDoc*);
-    String                  Expand(USHORT nSubType, sal_uInt32 nFmt) const;
+    String                  Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const;
     virtual SwFieldType*    Copy() const;
 
     inline void             SetNumFormat( sal_Int16 eFmt )  { nNumberingType = eFmt; }
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Dokumentstatistik
+    DocStatField
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDocStatField : public SwField
 {
-    USHORT nSubType;
+    sal_uInt16 nSubType;
 
 public:
     SwDocStatField( SwDocStatFieldType*,
-                    USHORT nSubType = 0, sal_uInt32 nFmt = 0);
+                    sal_uInt16 nSubType = 0, sal_uInt32 nFmt = 0);
 
     void ChangeExpansion( const SwFrm* pFrm );
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
 
-    virtual USHORT      GetSubType() const;
-    virtual void        SetSubType(USHORT nSub);
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual sal_uInt16      GetSubType() const;
+    virtual void        SetSubType(sal_uInt16 nSub);
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: versteckter Text
+    Hidden text.
  --------------------------------------------------------------------*/
 
 class SwHiddenTxtFieldType : public SwFieldType
 {
-    BOOL bHidden;
+    sal_Bool bHidden;
 public:
-    SwHiddenTxtFieldType(BOOL bSetHidden = TRUE);
+    SwHiddenTxtFieldType(sal_Bool bSetHidden = sal_True);
 
     virtual SwFieldType*    Copy() const;
 
-    void                    SetHiddenFlag( BOOL bSetHidden = TRUE );
-    inline BOOL             GetHiddenFlag() const { return bHidden; }
+    void                    SetHiddenFlag( sal_Bool bSetHidden = sal_True );
+    inline sal_Bool             GetHiddenFlag() const { return bHidden; }
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Versteckter Text
+    HiddenTxtField
  --------------------------------------------------------------------*/
 
 class SwHiddenTxtField : public SwField
 {
-    String  aTRUETxt;           // Text wenn Bedingung TRUE
+    String  aTRUETxt;           // Text wenn Bedingung sal_True
     String  aFALSETxt;          // Wenn Bedingung falsch
     String  aContent;           // Ausgewerteter DB-Text
 
     String  aCond;              // Bedingung
-    USHORT  nSubType;
+    sal_uInt16  nSubType;
 
-    BOOL    bCanToggle : 1;     // kann das Feld einzeln getoggelt werden?
-    BOOL    bIsHidden  : 1;     // ist es nicht sichtbar?
-    BOOL    bValid     : 1;     // DB-Feld evaluiert?
+    sal_Bool    bCanToggle : 1;     // kann das Feld einzeln getoggelt werden?
+    sal_Bool    bIsHidden  : 1;     // ist es nicht sichtbar?
+    sal_Bool    bValid     : 1;     // DB-Feld evaluiert?
+
+    virtual String      Expand() const;
+    virtual SwField*    Copy() const;
 
 public:
     SwHiddenTxtField( SwHiddenTxtFieldType*,
-                     BOOL   bConditional,
+                     sal_Bool   bConditional,
                      const  String& rCond,
                      const  String& rTxt,
-                     BOOL   bHidden  = FALSE,
-                     USHORT nSubType = TYP_HIDDENTXTFLD);
+                     sal_Bool   bHidden  = sal_False,
+                     sal_uInt16 nSubType = TYP_HIDDENTXTFLD);
 
     SwHiddenTxtField( SwHiddenTxtFieldType*,
                       const String& rCond,
                       const String& rTrue,
                       const String& rFalse,
-                      USHORT nSubType = TYP_HIDDENTXTFLD);
+                      sal_uInt16 nSubType = TYP_HIDDENTXTFLD);
 
-    virtual String      GetCntnt(BOOL bName = FALSE) const;
-    virtual String      Expand() const;
-    virtual SwField*    Copy() const;
+    virtual String      GetFieldName() const;
 
     void                Evaluate(SwDoc*);
 
-    inline void         SetValue(BOOL bHidden)  { bIsHidden = bHidden; }
+    inline void         SetValue(sal_Bool bHidden)  { bIsHidden = bHidden; }
     String              GetColumnName(const String& rName);
     String              GetDBName(const String& rName, SwDoc *pDoc);
 
@@ -397,14 +397,14 @@ public:
     virtual String      GetPar2() const;
 
 
-    virtual USHORT      GetSubType() const;
-    // virtual void        SetSubType(USHORT nSub); // OM: entfernt, da unbenoetigt und gefaehrlich
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual sal_uInt16      GetSubType() const;
+
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Feld das zu einer Leerzeile (ohne Hoehe) expandiert
+    Field that expands to an empty line (without height).
  --------------------------------------------------------------------*/
 
 class SwHiddenParaFieldType : public SwFieldType
@@ -416,32 +416,32 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Versteckter Absatz
+    Hidded paragraph.
  --------------------------------------------------------------------*/
 
 class SwHiddenParaField : public SwField
 {
     String              aCond;
-    BOOL                bIsHidden:1;
+    sal_Bool                bIsHidden:1;
 public:
-    // Direkte Eingabe alten Wert loeschen
+    // Direct input, delete old value.
     SwHiddenParaField(SwHiddenParaFieldType*, const String& rCond);
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
 
-    void                SetHidden(BOOL bHidden)     { bIsHidden = bHidden; }
-    BOOL                IsHidden() const            { return bIsHidden;    }
+    void                SetHidden(sal_Bool bHidden)     { bIsHidden = bHidden; }
+    sal_Bool                IsHidden() const            { return bIsHidden;    }
 
-    // Bedingung erfragen/setzen
+    //Query, set condition.
     virtual const String& GetPar1() const;
     virtual void        SetPar1(const String& rStr);
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Macro ausfuehren
+    Run Macro.
  --------------------------------------------------------------------*/
 
 class SwMacroFieldType : public SwFieldType
@@ -455,17 +455,20 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Macrofeld
+    MacroField.
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwMacroField : public SwField
 {
     String  aMacro;
     String  aText;
-    BOOL      bIsScriptURL;
+    sal_Bool      bIsScriptURL;
+
+    virtual String   Expand() const;
+    virtual SwField* Copy() const;
 
 public:
-    // Direkte Eingabe alten Wert loeschen
+    // Direct input, delete old value.
     SwMacroField( SwMacroFieldType*, const String& rLibAndName,
                   const String& rTxt);
 
@@ -474,30 +477,28 @@ public:
     String           GetMacroName() const;
     SvxMacro         GetSvxMacro() const;
 
-    virtual String   GetCntnt(BOOL bName = FALSE) const;
-    virtual String   Expand() const;
-    virtual SwField* Copy() const;
+    virtual String   GetFieldName() const;
 
-    // Library und FileName
+    // Library and FileName
     virtual const String& GetPar1() const;
     virtual void    SetPar1(const String& rStr);
 
     // Macrotext
     virtual String  GetPar2() const;
     virtual void    SetPar2(const String& rStr);
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 
     static void CreateMacroString( String& rMacro,
                                    const String& rMacroName,
                                    const String& rLibraryName );
 
-    static BOOL isScriptURL( const String& str );
+    static sal_Bool isScriptURL( const String& str );
 };
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: PostIts
+    PostIts
  --------------------------------------------------------------------*/
 
 class SwPostItFieldType : public SwFieldType
@@ -512,14 +513,14 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: PostIt
+    PostItField
  --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwPostItField : public SwField
 {
-    String      sTxt;       // die Anmerkung
-    String      sAuthor;    // der Author
-    DateTime    aDateTime;  // Datum und Zeit der Anmerkung
+    String      sTxt;
+    String      sAuthor;
+    DateTime    aDateTime;
     OutlinerParaObject* mpText;
     SwTextAPIObject* m_pTextObject;
 
@@ -548,13 +549,13 @@ public:
 
     sal_uInt32 GetNumberOfParagraphs() const;
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
     virtual String      GetDescription() const;
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: DokumentInfo
+    DocumentInfo
  --------------------------------------------------------------------*/
 
 class SwDocInfoFieldType : public SwValueFieldType
@@ -562,35 +563,36 @@ class SwDocInfoFieldType : public SwValueFieldType
 public:
     SwDocInfoFieldType(SwDoc* pDc);
 
-    String                  Expand(USHORT nSubType, sal_uInt32 nFormat, USHORT nLang, const String& rName) const;
+    String                  Expand(sal_uInt16 nSubType, sal_uInt32 nFormat, sal_uInt16 nLang, const String& rName) const;
     virtual SwFieldType*    Copy() const;
 };
 
 class SW_DLLPUBLIC SwDocInfoField : public SwValueField
 {
-    USHORT  nSubType;
+    sal_uInt16  nSubType;
     String  aContent;
     String  aName;
 
-public:
-    SwDocInfoField(SwDocInfoFieldType*, USHORT nSub, const String& rName, sal_uInt32 nFmt=0);
-    SwDocInfoField(SwDocInfoFieldType*, USHORT nSub, const String& rName, const String& rValue, sal_uInt32 nFmt=0);
-
-    virtual void            SetSubType(USHORT);
-    virtual USHORT          GetSubType() const;
-    virtual void            SetLanguage(USHORT nLng);
     virtual String          Expand() const;
-    virtual String          GetCntnt(BOOL bName = FALSE) const;
     virtual SwField*        Copy() const;
+
+public:
+    SwDocInfoField(SwDocInfoFieldType*, sal_uInt16 nSub, const String& rName, sal_uInt32 nFmt=0);
+    SwDocInfoField(SwDocInfoFieldType*, sal_uInt16 nSub, const String& rName, const String& rValue, sal_uInt32 nFmt=0);
+
+    virtual void            SetSubType(sal_uInt16);
+    virtual sal_uInt16          GetSubType() const;
+    virtual void            SetLanguage(sal_uInt16 nLng);
+    virtual String          GetFieldName() const;
     String                  GetName() const { return aName; }
     void                    SetName( const String& rName ) { aName = rName; }
     inline void             SetExpansion(const String& rStr) { aContent = rStr; }
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: erweiterte Benutzereinstellung
+    Extended User settings.
  --------------------------------------------------------------------*/
 
 
@@ -602,33 +604,33 @@ public:
 
     inline void             SetData(const String& rStr)     { aData = rStr; }
 
-    String                  Expand(USHORT nSubType, sal_uInt32 nFormat) const;
+    String                  Expand(sal_uInt16 nSubType, sal_uInt32 nFormat) const;
     virtual SwFieldType*    Copy() const;
 };
 
 class SwExtUserField : public SwField
 {
     String  aContent;
-    USHORT  nType;
+    sal_uInt16  nType;
 
 public:
-    SwExtUserField(SwExtUserFieldType*, USHORT nSub, sal_uInt32 nFmt=0);
+    SwExtUserField(SwExtUserFieldType*, sal_uInt16 nSub, sal_uInt32 nFmt=0);
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
 
-    virtual USHORT      GetSubType() const;
-    virtual void        SetSubType(USHORT nSub);
+    virtual sal_uInt16      GetSubType() const;
+    virtual void        SetSubType(sal_uInt16 nSub);
 
     inline void         SetExpansion(const String& rStr) { aContent = rStr; }
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Relatives Seitennummern - Feld
+    Relative page numbers - field.
  --------------------------------------------------------------------*/
 
 class SwRefPageSetFieldType : public SwFieldType
@@ -637,22 +639,24 @@ public:
     SwRefPageSetFieldType();
 
     virtual SwFieldType*    Copy() const;
-    // ueberlagert, weil es nichts zum Updaten gibt!
-    virtual void            Modify( SfxPoolItem *, SfxPoolItem * );
+
+protected:
+   // Overlay, because there is nothing to update!
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Relative Seitennummerierung
+    Relative page numbering.
  --------------------------------------------------------------------*/
 
 class SwRefPageSetField : public SwField
 {
     short   nOffset;
-    BOOL    bOn;
+    sal_Bool    bOn;
 
 public:
     SwRefPageSetField( SwRefPageSetFieldType*, short nOff = 0,
-                        BOOL bOn = TRUE );
+                        sal_Bool bOn = sal_True );
 
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
@@ -660,16 +664,16 @@ public:
     virtual String  GetPar2() const;
     virtual void    SetPar2(const String& rStr);
 
-    BOOL IsOn() const               { return bOn; }
+    sal_Bool IsOn() const               { return bOn; }
 
     short GetOffset() const         { return nOffset; }
     void SetOffset( short nOff )    { nOffset = nOff; }
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: relatives Seitennummern - Abfrage Feld
+    Relative page numbers - query field.
  --------------------------------------------------------------------*/
 
 class SwRefPageGetFieldType : public SwFieldType
@@ -678,20 +682,18 @@ class SwRefPageGetFieldType : public SwFieldType
     sal_Int16       nNumberingType;
 
     void UpdateField( SwTxtFld* pTxtFld, _SetGetExpFlds& rSetList );
-
+protected:
+    // ueberlagert, um alle RefPageGet-Felder zu updaten
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 public:
     SwRefPageGetFieldType( SwDoc* pDoc );
     virtual SwFieldType*    Copy() const;
-
-    // ueberlagert, um alle RefPageGet-Felder zu updaten
-    virtual void Modify( SfxPoolItem *, SfxPoolItem * );
-    USHORT MakeSetList( _SetGetExpFlds& rTmpLst );
-
+    sal_uInt16 MakeSetList( _SetGetExpFlds& rTmpLst );
     SwDoc*  GetDoc() const                  { return pDoc; }
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Relative Seitennummerierung Abfragen
+    Query relative page numbering.
  --------------------------------------------------------------------*/
 
 class SwRefPageGetField : public SwField
@@ -706,12 +708,12 @@ public:
     void SetText( const String& rTxt )      { sTxt = rTxt; }
 
     void ChangeExpansion( const SwFrm* pFrm, const SwTxtFld* pFld );
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Feld zum Anspringen und Editieren
+    Field to jump to and edit.
  --------------------------------------------------------------------*/
 
 class SwJumpEditFieldType : public SwFieldType
@@ -736,22 +738,22 @@ public:
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
 
-    // Platzhalter-Text
+    // Placeholder-Text
     virtual const String& GetPar1() const;
     virtual void    SetPar1(const String& rStr);
 
-    // HinweisText
+    // Hint-Text
     virtual String  GetPar2() const;
     virtual void    SetPar2(const String& rStr);
 
     SwCharFmt* GetCharFmt() const
         { return ((SwJumpEditFieldType*)GetTyp())->GetCharFmt(); }
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Script Fieldtype
+    Script Fieldtype.
  --------------------------------------------------------------------*/
 
 class SwScriptFieldType : public SwFieldType
@@ -764,20 +766,20 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Script Field
+    ScriptField.
  --------------------------------------------------------------------*/
 
 class SwScriptField : public SwField
 {
-    String  sType;      // Type von Code (Java/VBScript/...)
-    String  sCode;      // der Code als Text
-                        // der Code als JavaCode ?
+    String  sType;      // Type of Code (Java/VBScript/...)
+    String  sCode;      // Code as text.
+                        // Code as JavaCode ?
 
-    BOOL    bCodeURL;   // Code enthaelt URL eines Scripts
+    sal_Bool    bCodeURL;   // Code contains URL of a script.
 
 public:
     SwScriptField( SwScriptFieldType*, const String& rType,
-                   const String& rCode, BOOL bURL=FALSE );
+                   const String& rCode, sal_Bool bURL=sal_False );
 
     virtual String          GetDescription() const;
 
@@ -791,14 +793,14 @@ public:
     virtual String          GetPar2() const;
     virtual void            SetPar2(const String& rStr);
 
-    BOOL                    IsCodeURL() const { return bCodeURL; }
-    void                    SetCodeURL( BOOL bURL ) { bCodeURL = bURL; }
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    sal_Bool                    IsCodeURL() const { return bCodeURL; }
+    void                    SetCodeURL( sal_Bool bURL ) { bCodeURL = bURL; }
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Combined Character Fieldtype
+    Combined Character Fieldtype
  --------------------------------------------------------------------*/
 
 class SwCombinedCharFieldType : public SwFieldType
@@ -810,7 +812,7 @@ public:
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Script Field
+    ScriptField
  --------------------------------------------------------------------*/
 
 #define MAX_COMBINED_CHARACTERS     6
@@ -829,11 +831,11 @@ public:
     virtual const String&   GetPar1() const;
     virtual void            SetPar1(const String& rStr);
 
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
 
 
-#endif // _DOCUFLD_HXX
+#endif // SW_DOCUFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

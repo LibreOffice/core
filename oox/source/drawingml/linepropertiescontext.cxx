@@ -31,8 +31,6 @@
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -89,7 +87,7 @@ Reference< XFastContextHandler > LinePropertiesContext::createFastChildContext( 
         case A_TOKEN( round ):
         case A_TOKEN( bevel ):
         case A_TOKEN( miter ):
-            mrLineProperties.moLineJoint = getToken( nElement );
+            mrLineProperties.moLineJoint = getBaseToken( nElement );
         break;
 
         case A_TOKEN( headEnd ):  // CT_LineEndProperties

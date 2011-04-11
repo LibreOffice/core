@@ -57,6 +57,8 @@
 #include "resource/hsqldb_res.hrc"
 #include "resource/sharedresources.hxx"
 
+#include <o3tl/compat_functional.hxx>
+
 //........................................................................
 namespace connectivity
 {
@@ -190,11 +192,11 @@ namespace connectivity
 
                 for (;pIter != pEnd; ++pIter)
                 {
-                    if ( pIter->Name.equalsAscii("Storage") )
+                    if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Storage")) )
                     {
                         xStorage.set(pIter->Value,UNO_QUERY);
                     }
-                    else if ( pIter->Name.equalsAscii("URL") )
+                    else if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) )
                     {
                         pIter->Value >>= sURL;
                     }
@@ -274,22 +276,38 @@ namespace connectivity
                             if ( pStream.get() )
                             {
                                 ByteString sLine;
+                                ByteString sVersionString;
                                 while ( pStream->ReadLine(sLine) )
                                 {
-                                    if ( sLine.Equals("version=",0,sizeof("version=")-1) )
+                                    if ( sLine.Len() == 0 )
+                                        continue;
+                                    const ByteString sIniKey = sLine.GetToken( 0, '=' );
+                                    const ByteString sValue = sLine.GetToken( 1, '=' );
+                                    if ( sIniKey.Equals( "hsqldb.compatible_version" ) )
                                     {
-                                        sLine = sLine.GetToken(1,'=');
-                                        const sal_Int32 nMajor = sLine.GetToken(0,'.').ToInt32();
-                                        const sal_Int32 nMinor = sLine.GetToken(1,'.').ToInt32();
-                                        const sal_Int32 nMicro = sLine.GetToken(2,'.').ToInt32();
-                                        if (     nMajor > 1
-                                            || ( nMajor == 1 && nMinor > 8 )
-                                            || ( nMajor == 1 && nMinor == 8 && nMicro > 0 ) )
+                                        sVersionString = sValue;
+                                    }
+                                    else
+                                    {
+                                        if  (   sIniKey.Equals( "version" )
+                                            &&  ( sVersionString.Len() == 0 )
+                                            )
                                         {
-                                            ::connectivity::SharedResources aResources;
-                                            sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
+                                            sVersionString = sValue;
                                         }
-                                        break;
+                                    }
+                                }
+                                if ( sVersionString.Len() )
+                                {
+                                    const sal_Int32 nMajor = sVersionString.GetToken(0,'.').ToInt32();
+                                    const sal_Int32 nMinor = sVersionString.GetToken(1,'.').ToInt32();
+                                    const sal_Int32 nMicro = sVersionString.GetToken(2,'.').ToInt32();
+                                    if (     nMajor > 1
+                                        || ( nMajor == 1 && nMinor > 8 )
+                                        || ( nMajor == 1 && nMinor == 8 && nMicro > 0 ) )
+                                    {
+                                        ::connectivity::SharedResources aResources;
+                                        sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
                                     }
                                 }
                             }
@@ -478,14 +496,14 @@ namespace connectivity
     //------------------------------------------------------------------------------
     rtl::OUString ODriverDelegator::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return rtl::OUString::createFromAscii("com.sun.star.sdbcx.comp.hsqldb.Driver");
+        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.comp.hsqldb.Driver"));
     }
     //------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > ODriverDelegator::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSNS( 2 );
         aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
-        aSNS[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Driver");
+        aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Driver"));
         return aSNS;
     }
     //------------------------------------------------------------------
@@ -573,9 +591,9 @@ namespace connectivity
             if ( xStorage.is() )
             {
                 ::rtl::OUString sKey = StorageContainer::getRegisteredKey(xStorage);
-                TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::std::compose1(
+                TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::o3tl::compose1(
                                 ::std::bind2nd(::std::equal_to< ::rtl::OUString >(),sKey)
-                                ,::std::compose1(::std::select1st<TWeakConnectionPair>(),::std::select2nd< TWeakPair >())));
+                                ,::o3tl::compose1(::o3tl::select1st<TWeakConnectionPair>(),::o3tl::select2nd< TWeakPair >())));
                 if ( i != m_aConnections.end() )
                     shutdownConnection(i);
             }
@@ -609,9 +627,9 @@ namespace connectivity
         ::rtl::OUString sKey = StorageContainer::getRegisteredKey(xStorage);
         if ( sKey.getLength() )
         {
-            TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::std::compose1(
+            TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::o3tl::compose1(
                             ::std::bind2nd(::std::equal_to< ::rtl::OUString >(),sKey)
-                            ,::std::compose1(::std::select1st<TWeakConnectionPair>(),::std::select2nd< TWeakPair >())));
+                            ,::o3tl::compose1(::o3tl::select1st<TWeakConnectionPair>(),::o3tl::select2nd< TWeakPair >())));
             OSL_ENSURE( i != m_aConnections.end(), "ODriverDelegator::preCommit: they're committing a storage which I do not know!" );
             if ( i != m_aConnections.end() )
             {
@@ -636,7 +654,7 @@ namespace connectivity
                 }
                 catch(Exception&)
                 {
-                    OSL_ENSURE( false, "ODriverDelegator::preCommit: caught an exception!" );
+                    OSL_FAIL( "ODriverDelegator::preCommit: caught an exception!" );
                 }
             }
         }
@@ -787,7 +805,7 @@ namespace connectivity
                 // second round, this time without matching the country
                 return lcl_getCollationForLocale( _rLocaleString, true );
 
-            OSL_ENSURE( false, "lcl_getCollationForLocale: unknown locale string, falling back to Latin1_General!" );
+            OSL_FAIL( "lcl_getCollationForLocale: unknown locale string, falling back to Latin1_General!" );
             return "Latin1_General";
         }
 
@@ -799,7 +817,7 @@ namespace connectivity
             {
                 //.........................................................
                 Reference< XMultiServiceFactory > xConfigProvider(
-                    _rxORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    _rxORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")) ),
                     UNO_QUERY
                 );
                 OSL_ENSURE( xConfigProvider.is(), "lcl_getSystemLocale: could not create the config provider!" );
@@ -811,13 +829,13 @@ namespace connectivity
                 // arguments for creating the config access
                 Sequence< Any > aArguments(2);
                 // the path to the node to open
-                ::rtl::OUString sNodePath = ::rtl::OUString::createFromAscii ("/org.openoffice.Setup/L10N" );
-                aArguments[0] <<= PropertyValue( ::rtl::OUString::createFromAscii( "nodepath"), 0,
+                ::rtl::OUString sNodePath(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/L10N" ));
+                aArguments[0] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), 0,
                     makeAny( sNodePath ), PropertyState_DIRECT_VALUE
                 );
                 // the depth: -1 means unlimited
                 aArguments[1] <<= PropertyValue(
-                    ::rtl::OUString::createFromAscii( "depth"), 0,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")), 0,
                     makeAny( (sal_Int32)-1 ), PropertyState_DIRECT_VALUE
                 );
 
@@ -825,7 +843,7 @@ namespace connectivity
                 // create the access
                 Reference< XPropertySet > xNode(
                     xConfigProvider->createInstanceWithArguments(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
                         aArguments ),
                     UNO_QUERY );
                 OSL_ENSURE( xNode.is(), "lcl_getSystemLocale: invalid access returned (should throw an exception instead)!" );
@@ -837,7 +855,7 @@ namespace connectivity
             }
             catch( const Exception& )
             {
-                OSL_ENSURE( sal_False, "lcl_getSystemLocale: caught an exception!" );
+                OSL_FAIL( "lcl_getSystemLocale: caught an exception!" );
             }
             if ( !sLocaleString.getLength() )
             {
@@ -875,7 +893,7 @@ namespace connectivity
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ODriverDelegator::onConnectedNewDatabase: caught an exception!" );
+            OSL_FAIL( "ODriverDelegator::onConnectedNewDatabase: caught an exception!" );
         }
     }
 

@@ -47,16 +47,20 @@
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 
-
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringToOString;
+
 ///////////////////////////////////////////////////////////////////////////
 // dbg_dump for development
 #if OSL_DEBUG_LEVEL > 1
@@ -93,11 +97,10 @@ const sal_Char *dbg_dump(rtl_uString *pStr)
 MacSpellChecker::MacSpellChecker() :
     aEvtListeners   ( GetLinguMutex() )
 {
-//    aDicts = NULL;
     aDEncs = NULL;
     aDLocs = NULL;
     aDNames = NULL;
-    bDisposing = FALSE;
+    bDisposing = sal_False;
     pPropHelper = NULL;
     numdict = 0;
     NSApplicationLoad();
@@ -110,14 +113,6 @@ MacSpellChecker::MacSpellChecker() :
 
 MacSpellChecker::~MacSpellChecker()
 {
-  // if (aDicts) {
-  //    for (int i = 0; i < numdict; i++) {
-  //           if (aDicts[i]) delete aDicts[i];
-  //           aDicts[i] = NULL;
-  //    }
-  //    delete[] aDicts;
-  // }
-  // aDicts = NULL;
   numdict = 0;
   if (aDEncs) delete[] aDEncs;
   aDEncs = NULL;
@@ -162,7 +157,6 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
 
         std::vector<objc_object *> postspdict;
-        //std::vector<dictentry *> postspdict;
         std::vector<dictentry *> postupdict;
 
 
@@ -224,11 +218,7 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
                     numlocs++;
                 }
                 aDLocs[k] = nLoc;
-                //pointer to Hunspell dictionary - not needed for MAC
-                //aDicts[k] = NULL;
                 aDEncs[k] = 0;
-                // Dictionary file names not valid for Mac Spell
-                //aDNames[k] = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(postspdict[i]->filename);
                 k++;
             }
 
@@ -237,7 +227,6 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         } else {
             /* no dictionary.lst found so register no dictionaries */
             numdict = 0;
-            //aDicts = NULL;
                 aDEncs  = NULL;
                 aDLocs = NULL;
                 aDNames = NULL;
@@ -260,17 +249,17 @@ sal_Bool SAL_CALL MacSpellChecker::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!aSuppLocales.getLength())
         getLocales();
 
-    INT32 nLen = aSuppLocales.getLength();
-    for (INT32 i = 0;  i < nLen;  ++i)
+    sal_Int32 nLen = aSuppLocales.getLength();
+    for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         const Locale *pLocale = aSuppLocales.getConstArray();
         if (rLocale == pLocale[i])
         {
-            bRes = TRUE;
+            bRes = sal_True;
             break;
         }
     }
@@ -278,7 +267,7 @@ sal_Bool SAL_CALL MacSpellChecker::hasLocale(const Locale& rLocale)
 }
 
 
-INT16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
+sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
 {
     rtl_TextEncoding aEnc;
 
@@ -286,7 +275,7 @@ INT16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLo
         // (note: mutex is held higher up in isValid)
 
 
-    INT16 nRes = -1;
+    sal_Int16 nRes = -1;
 
         // first handle smart quotes both single and double
     OUStringBuffer rBuf(rWord);
@@ -315,7 +304,7 @@ INT16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLo
         }
 
         int aCount;
-        NSRange range = [macSpell checkSpellingOfString:aNSStr startingAt:0 language:aLang wrap:FALSE inSpellDocumentWithTag:macTag wordCount:&aCount];
+        NSRange range = [macSpell checkSpellingOfString:aNSStr startingAt:0 language:aLang wrap:sal_False inSpellDocumentWithTag:macTag wordCount:&aCount];
         int rVal = 0;
         if(range.length>0)
         {
@@ -346,13 +335,13 @@ sal_Bool SAL_CALL
     MutexGuard  aGuard( GetLinguMutex() );
 
      if (rLocale == Locale()  ||  !rWord.getLength())
-        return TRUE;
+        return sal_True;
 
     if (!hasLocale( rLocale ))
 #ifdef LINGU_EXCEPTIONS
         throw( IllegalArgumentException() );
 #else
-        return TRUE;
+        return sal_True;
 #endif
 
     // Get property values to be used.
@@ -365,10 +354,10 @@ sal_Bool SAL_CALL
     PropertyHelper_Spell &rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
 
-    INT16 nFailure = GetSpellFailure( rWord, rLocale );
+    sal_Int16 nFailure = GetSpellFailure( rWord, rLocale );
     if (nFailure != -1)
     {
-        INT16 nLang = LocaleToLanguage( rLocale );
+        sal_Int16 nLang = LocaleToLanguage( rLocale );
         // postprocess result for errors that should be ignored
         if (   (!rHelper.IsSpellUpperCase()  && IsUpper( rWord, nLang ))
             || (!rHelper.IsSpellWithDigits() && HasDigits( rWord ))
@@ -392,7 +381,7 @@ Reference< XSpellAlternatives >
     Reference< XSpellAlternatives > xRes;
         // note: mutex is held by higher up by spell which covers both
 
-    INT16 nLang = LocaleToLanguage( rLocale );
+    sal_Int16 nLang = LocaleToLanguage( rLocale );
     int count;
     Sequence< OUString > aStr( 0 );
 
@@ -495,7 +484,7 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
         bRes = GetPropHelper().addLinguServiceEventListener( rxLstnr );
@@ -511,7 +500,7 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
         DBG_ASSERT( xPropHelper.is(), "xPropHelper non existent" );
@@ -538,7 +527,7 @@ void SAL_CALL
 
     if (!pPropHelper)
     {
-        INT32 nLen = rArguments.getLength();
+        sal_Int32 nLen = rArguments.getLength();
         if (2 == nLen)
         {
             Reference< XPropertySet >   xPropSet;
@@ -554,7 +543,7 @@ void SAL_CALL
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else
-            DBG_ERROR( "wrong number of arguments in sequence" );
+            OSL_FAIL( "wrong number of arguments in sequence" );
 
     }
 }
@@ -568,7 +557,7 @@ void SAL_CALL
 
     if (!bDisposing)
     {
-        bDisposing = TRUE;
+        bDisposing = sal_True;
         EventObject aEvtObj( (XSpellChecker *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
@@ -617,10 +606,10 @@ sal_Bool SAL_CALL MacSpellChecker::supportsService( const OUString& ServiceName 
 
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 
@@ -642,32 +631,6 @@ Sequence< OUString > MacSpellChecker::getSupportedServiceNames_Static()
     aSNS.getArray()[0] = A2OU( SN_SPELLCHECKER );
     return aSNS;
 }
-
-
-sal_Bool SAL_CALL MacSpellChecker_writeInfo(
-            void * /*pServiceManager*/, registry::XRegistryKey * pRegistryKey )
-{
-
-    try
-    {
-        String aImpl( '/' );
-        aImpl += MacSpellChecker::getImplementationName_Static().getStr();
-        aImpl.AppendAscii( "/UNO/SERVICES" );
-        Reference< registry::XRegistryKey > xNewKey =
-                pRegistryKey->createKey( aImpl );
-        Sequence< OUString > aServices =
-                MacSpellChecker::getSupportedServiceNames_Static();
-        for( INT32 i = 0; i < aServices.getLength(); i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-        return sal_True;
-    }
-    catch(Exception &)
-    {
-        return sal_False;
-    }
-}
-
 
 void * SAL_CALL MacSpellChecker_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )

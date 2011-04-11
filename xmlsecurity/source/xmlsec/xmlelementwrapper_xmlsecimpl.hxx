@@ -52,10 +52,6 @@ class XMLElementWrapper_XmlSecImpl : public cppu::WeakImplHelper3
  *  Used as a wrapper class to transfer a libxml2 node structure
  *  between different UNO components.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XXMLElementWrapper, XUnoTunnel
- *          XServiceInfo
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com

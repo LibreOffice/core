@@ -539,13 +539,13 @@ sal_Bool XMLColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
         Sequence< double > aHSL;
         if( (rValue >>= aHSL) && (aHSL.getLength() == 3) )
         {
-            aOut.append( OUString::createFromAscii("hsl(") );
+            aOut.append( OUString(RTL_CONSTASCII_USTRINGPARAM("hsl(")) );
             aOut.append( aHSL[0] );
-            aOut.append( OUString::createFromAscii(",") );
+            aOut.append( OUString(RTL_CONSTASCII_USTRINGPARAM(",")) );
             aOut.append( aHSL[1] * 100.0 );
-            aOut.append( OUString::createFromAscii("%,") );
+            aOut.append( OUString(RTL_CONSTASCII_USTRINGPARAM("%,")) );
             aOut.append( aHSL[2] * 100.0 );
-            aOut.append( OUString::createFromAscii("%)") );
+            aOut.append( OUString(RTL_CONSTASCII_USTRINGPARAM("%)")) );
             rStrExpValue = aOut.makeStringAndClear();
 
             bRet = sal_True;

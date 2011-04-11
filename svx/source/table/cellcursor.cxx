@@ -34,8 +34,8 @@
 #include "tablelayouter.hxx"
 #include "cell.hxx"
 #include "svx/svdmodel.hxx"
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 
 // -----------------------------------------------------------------------------
 
@@ -250,7 +250,7 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
     }
     catch( Exception& )
     {
-        DBG_ERROR("sdr::table::SvmxTableController::GetMergedSelection(), exception caught!");
+        OSL_FAIL("sdr::table::SvmxTableController::GetMergedSelection(), exception caught!");
     }
     return false;
 }
@@ -280,7 +280,7 @@ void SAL_CALL CellCursor::merge(  ) throw (NoSupportException, RuntimeException)
     }
     catch( Exception& )
     {
-        DBG_ERROR("sdr::table::CellCursor::merge(), exception caught!");
+        OSL_FAIL("sdr::table::CellCursor::merge(), exception caught!");
     }
 
     if( bUndo )
@@ -550,7 +550,7 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
     }
     catch( Exception& )
     {
-        DBG_ERROR("sdr::table::CellCursor::split(), exception caught!");
+        OSL_FAIL("sdr::table::CellCursor::split(), exception caught!");
         throw NoSupportException();
     }
 

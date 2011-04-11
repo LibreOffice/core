@@ -194,7 +194,7 @@ namespace ucb { namespace ucp { namespace ext
             }
             break;
             default:
-                OSL_ENSURE( false, "DataSupplier::fetchData: unimplemented content type!" );
+                OSL_FAIL( "DataSupplier::fetchData: unimplemented content type!" );
                 break;
             }
         }
@@ -221,7 +221,7 @@ namespace ucb { namespace ucp { namespace ext
                 return sId;
         }
 
-        OSL_ENSURE( false, "DataSupplier::queryContentIdentifierString: illegal index, or illegal result entry id!" );
+        OSL_FAIL( "DataSupplier::queryContentIdentifierString: illegal index, or illegal result entry id!" );
         return ::rtl::OUString();
     }
 
@@ -344,7 +344,7 @@ namespace ucb { namespace ucp { namespace ext
         }
         break;
         default:
-            OSL_ENSURE( false, "DataSupplier::queryPropertyValues: unhandled case!" );
+            OSL_FAIL( "DataSupplier::queryPropertyValues: unhandled case!" );
             break;
         }
 

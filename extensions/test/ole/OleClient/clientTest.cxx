@@ -60,9 +60,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::script;
 using namespace com::sun::star::bridge::oleautomation;
 using namespace cppu;
-using namespace rtl;
 
-
+using ::rtl::OUString;
 
 Reference<XInvocation> convertComObject( IUnknown* pUnk);
 Reference<XInvocation> getComObject( OUString progId);
@@ -1239,12 +1238,6 @@ HRESULT doTest()
 
     aAny <<= OUString( L" A string in an any");
     aAny=invMfc->invoke( OUString(L"inVariant"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
-
-    // Tests with Sequences later.
-    //  OUString arStr4[]= {L"string0", L"string1", L"string2"};
-    //  Sequence<OUString> seqStr4( arStr4, 3);
-    //  aAny <<= seqStr4;
-    //  invMfc->invoke( OUString(L"inArray"), Sequence< Any > ( &aAny, 1), seqIndices, seqOut);
 
 
     Reference < XInvocation > inv5= getComObject(L"AxTestComponents.Basic");

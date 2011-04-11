@@ -35,9 +35,8 @@
 
 // class SvxContourItem --------------------------------------------------
 
-/*
-    [Beschreibung]
-    Dieses Item beschreibt, ob Konturschrift eingestellt ist.
+/*  [Description]
+    This item describes, if contour is employed.
 */
 
 class EDITENG_DLLPUBLIC SvxContourItem : public SfxBoolItem
@@ -45,13 +44,13 @@ class EDITENG_DLLPUBLIC SvxContourItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxContourItem( const BOOL bContoured /*= FALSE*/,
-                    const USHORT nId );
+    SvxContourItem( const sal_Bool bContoured /*= sal_False*/,
+                    const sal_uInt16 nId );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

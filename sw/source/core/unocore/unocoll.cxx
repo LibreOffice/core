@@ -69,15 +69,15 @@
 #include <unochart.hxx>
 #include <comphelper/makesequence.hxx>
 #include <comphelper/sequence.hxx>
-#include <slist>
+#include <list>
 #include <iterator>
-
 #include <unosection.hxx>
 #include <unoparagraph.hxx>
 #include <unobookmark.hxx>
 #include <unorefmark.hxx>
 #include <unometa.hxx>
 #include "docsh.hxx"
+#include <switerator.hxx>
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
@@ -145,7 +145,7 @@ public:
             // need to find the page ( and index )  for this control
             uno::Reference< drawing::XDrawPageSupplier > xSupplier( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
-            sal_Int32 nLen = xIndex->getCount();
+
             bool bMatched = false;
             uno::Sequence< script::ScriptEventDescriptor > aFakeEvents;
                 try
@@ -173,7 +173,7 @@ public:
     }
 };
 
-typedef std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > StringHashMap;
+typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > StringHashMap;
 class SwVbaProjectNameProvider : public ::cppu::WeakImplHelper1< container::XNameContainer >
 {
     SwDocShell* mpDocShell;
@@ -284,7 +284,7 @@ struct  ProvNamesId_Type
 };
 
 // note: this thing is indexed as an array, so do not insert/remove entries!
-const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
+const ProvNamesId_Type aProvNamesId[] =
 {
     { "com.sun.star.text.TextTable",                          SW_SERVICE_TYPE_TEXTTABLE },
     { "com.sun.star.text.TextFrame",                          SW_SERVICE_TYPE_TEXTFRAME },
@@ -482,7 +482,7 @@ OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
     OUString sRet;
     sal_uInt16 nEntries = SAL_N_ELEMENTS(aProvNamesId);
     if(nObjectType < nEntries)
-        sRet = C2U(aProvNamesId[nObjectType].pName);
+        sRet = rtl::OUString::createFromAscii(aProvNamesId[nObjectType].pName);
     return sRet;
 }
 
@@ -494,7 +494,7 @@ uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
     sal_uInt16 n = 0;
     for(sal_uInt16 i = 0; i < nEntries; i++)
     {
-        String sProv(C2U(aProvNamesId[i].pName));
+        String sProv(rtl::OUString::createFromAscii(aProvNamesId[i].pName));
         if(sProv.Len())
         {
             pArray[n] = sProv;
@@ -790,8 +790,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             }
             else
             {
-                SwClientIter aIter( *pType );
-                SwXFieldMaster* pMaster = (SwXFieldMaster*)aIter.First( TYPE( SwXFieldMaster ));
+                SwXFieldMaster* pMaster = SwIterator<SwXFieldMaster,SwFieldType>::FirstElement( *pType );
                 if(pMaster)
                     xRet = (cppu::OWeakObject*)pMaster;
             }
@@ -997,8 +996,7 @@ uno::Sequence< OUString > SwXTextTables::getSupportedServiceNames(void) throw( u
 XTextTable* SwXTextTables::GetObject( SwFrmFmt& rFmt )
 {
     SolarMutexGuard aGuard;
-    SwXTextTable* pTbl = (SwXTextTable*)SwClientIter( rFmt ).
-                                    First( TYPE( SwXTextTable ));
+    SwXTextTable* pTbl = SwIterator<SwXTextTable,SwFmt>::FirstElement( rFmt );
     if( !pTbl )
         pTbl = new SwXTextTable(rFmt);
     return pTbl ;
@@ -1038,7 +1036,7 @@ namespace
     template<FlyCntType T>
     static uno::Any lcl_UnoWrapFrame(SwFrmFmt* pFmt)
     {
-        SwXFrame* pFrm = static_cast<SwXFrame*>(SwClientIter(*pFmt).First(TYPE(SwXFrame)));
+        SwXFrame* pFrm = SwIterator<SwXFrame,SwFmt>::FirstElement( *pFmt );
         if(!pFrm)
             pFrm = new typename UnoFrameWrap_traits<T>::core_frame_t(*pFmt);
         Reference< typename UnoFrameWrap_traits<T>::uno_frame_t > xFrm =
@@ -1067,7 +1065,7 @@ namespace
         : public SwSimpleEnumeration_Base
     {
         private:
-            typedef ::std::slist< Any > frmcontainer_t;
+            typedef ::std::list< Any > frmcontainer_t;
             frmcontainer_t m_aFrames;
         protected:
             virtual ~SwXFrameEnumeration() {};
@@ -1095,12 +1093,12 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
         return;
     // --> OD 2009-09-10 #i104937#
 //    const SwFrmFmt* const pFmtsEnd = (*pFmts)[pFmts->Count()];
-    const USHORT nSize = pFmts->Count();
+    const sal_uInt16 nSize = pFmts->Count();
     // <--
     ::std::insert_iterator<frmcontainer_t> pInserter = ::std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
     // --> OD 2009-09-10 #i104937#
     SwFrmFmt* pFmt( 0 );
-    for( USHORT i = 0; i < nSize; ++i )
+    for( sal_uInt16 i = 0; i < nSize; ++i )
 //    for(SwFrmFmt* pFmt = (*pFmts)[0]; pFmt < pFmtsEnd; ++pFmt)
     // <--
     {
@@ -1162,7 +1160,7 @@ OUString SwXFrames::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXFrames");
 }
 
-BOOL SwXFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextFrames") == rServiceName;
 }
@@ -1306,7 +1304,7 @@ sal_Bool SwXFrames::hasElements(void) throw(uno::RuntimeException)
 
 SwXFrame* SwXFrames::GetObject(SwFrmFmt& rFmt, FlyCntType eType)
 {
-    SwXFrame* pFrm = (SwXFrame*)SwClientIter(rFmt).First(TYPE(SwXFrame));
+    SwXFrame* pFrm = SwIterator<SwXFrame,SwFmt>::FirstElement( rFmt );
     if(pFrm) return pFrm;
     switch(eType)
     {
@@ -1329,7 +1327,7 @@ OUString SwXTextFrames::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXTextFrames");
 }
 
-BOOL SwXTextFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextFrames") == rServiceName;
 }
@@ -1354,13 +1352,12 @@ SwXTextFrames::~SwXTextFrames()
 /******************************************************************
  *  SwXTextGraphicObjects
  ******************************************************************/
-//SMART_UNO_IMPLEMENTATION( SwXTextGraphicObjects, UsrObject );
 OUString SwXTextGraphicObjects::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXTextGraphicObjects");
 }
 
-BOOL SwXTextGraphicObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextGraphicObjects") == rServiceName;
 }
@@ -1390,7 +1387,7 @@ OUString SwXTextEmbeddedObjects::getImplementationName(void) throw( RuntimeExcep
     return C2U("SwXTextEmbeddedObjects");
 }
 
-BOOL SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextEmbeddedObjects") == rServiceName;
 }
@@ -1413,13 +1410,12 @@ SwXTextEmbeddedObjects::~SwXTextEmbeddedObjects()
 }
 
 #define PASSWORD_STD_TIMEOUT 1000
-
 OUString SwXTextSections::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXTextSections");
 }
 
-BOOL SwXTextSections::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextSections::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextSections") == rServiceName;
 }
@@ -1608,7 +1604,7 @@ OUString SwXBookmarks::getImplementationName(void) throw( RuntimeException )
     return OUString(RTL_CONSTASCII_USTRINGPARAM("SwXBookmarks"));
 }
 
-BOOL SwXBookmarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXBookmarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Bookmarks")) == rServiceName;
 }
@@ -1742,7 +1738,7 @@ uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
         uno::Reference< XIndexReplace >  xRef;
         if ( nIndex < GetDoc()->GetNumRuleTbl().Count() )
         {
-            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ static_cast< USHORT >(nIndex) ] );
+            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ static_cast< sal_uInt16 >(nIndex) ] );
             aRet.setValue(&xRef, ::getCppuType((uno::Reference<XIndexReplace>*)0));
         }
 
@@ -1772,7 +1768,7 @@ OUString SwXFootnotes::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXFootnotes");
 }
 
-BOOL SwXFootnotes::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXFootnotes::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.Footnotes") == rServiceName;
 }
@@ -1819,12 +1815,12 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    sal_Int32 nCount = 0;
     if(IsValid())
     {
         sal_uInt16 n, nFtnCnt = GetDoc()->GetFtnIdxs().Count();
         SwTxtFtn* pTxtFtn;
         uno::Reference< XFootnote >  xRef;
+        sal_Int32 nCount = 0;
         for( n = 0; n < nFtnCnt; ++n )
         {
             pTxtFtn = GetDoc()->GetFtnIdxs()[ n ];
@@ -1871,7 +1867,7 @@ OUString SwXReferenceMarks::getImplementationName(void) throw( RuntimeException 
     return C2U("SwXReferenceMarks");
 }
 
-BOOL SwXReferenceMarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXReferenceMarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.ReferenceMarks") == rServiceName;
 }
@@ -1990,9 +1986,7 @@ SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark*
     return SwXReferenceMark::CreateXReferenceMark(*pDoc, *pMark);
 }
 
-/*-----------------11.03.98 11:18-------------------
-    Gueltigkeitspruefung
---------------------------------------------------*/
+
 void SwUnoCollection::Invalidate()
 {
     bObjectValid = sal_False;

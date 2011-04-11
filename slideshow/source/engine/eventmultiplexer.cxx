@@ -62,7 +62,7 @@
 #include <boost/bind.hpp>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -475,7 +475,7 @@ UnoViewSharedPtr EventMultiplexerImpl::findUnoView(
                                  boost::cref( xView ),
                                  boost::bind( &UnoView::getUnoView, _1 )))) == aEnd )
     {
-        OSL_ENSURE(false, "EventMultiplexer::findUnoView(): unexpected message source" );
+        OSL_FAIL("EventMultiplexer::findUnoView(): unexpected message source" );
         return UnoViewSharedPtr();
     }
 

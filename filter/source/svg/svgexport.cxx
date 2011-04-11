@@ -132,9 +132,9 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
     for ( sal_Int32 i = 0 ; i < nLength; ++i)
     {
-        if( pValue[ i ].Name.equalsAscii( "OutputStream" ) )
+        if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "OutputStream" ) ) )
             pValue[ i ].Value >>= xOStm;
-        else if( pValue[ i ].Name.equalsAscii( "FileName" ) )
+        else if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FileName" ) ) )
         {
             ::rtl::OUString aFileName;
 
@@ -144,7 +144,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             if( pOStm )
                 xOStm = Reference< XOutputStream >( new ::utl::OOutputStreamWrapper ( *pOStm ) );
         }
-        else if( pValue[ i ].Name.equalsAscii( "PagePos" ) )
+        else if( pValue[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PagePos" ) ) )
             pValue[ i ].Value >>= nPageToExport;
    }
 
@@ -221,7 +221,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     catch( ... )
                     {
                         delete mpSVGDoc, mpSVGDoc = NULL;
-                        DBG_ERROR( "Exception caught" );
+                        OSL_FAIL( "Exception caught" );
                     }
 
                     if( mpSdrModel )
@@ -327,7 +327,7 @@ sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterP
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns", B2UCONST( "http://www.w3.org/2000/svg" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:xlink", B2UCONST( "http://www.w3.org/1999/xlink" ) );
 
-    mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", TRUE, TRUE );
+    mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", sal_True, sal_True );
 
     while( ( nCurPage <= nLastPage ) && ( -1 == nVisible ) )
     {
@@ -410,7 +410,7 @@ sal_Bool SVGFilter::implGenerateMetaData( const Reference< XDrawPages >& /* rxMa
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "numberOfSlides", OUString::valueOf( rxDrawPages->getCount() ) );
 
         {
-            SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "ooo:slidesInfo", TRUE, TRUE );
+            SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "ooo:slidesInfo", sal_True, sal_True );
             const OUString      aId( B2UCONST( "meta_slide" ) );
 
             for( sal_Int32 i = 0, nCount = rxDrawPages->getCount(); i < nCount; ++i )
@@ -443,7 +443,7 @@ sal_Bool SVGFilter::implGenerateMetaData( const Reference< XDrawPages >& /* rxMa
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "master-visibility", aMasterVisibility );
 
                 {
-                    SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "ooo:slideInfo", TRUE, TRUE );
+                    SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "ooo:slideInfo", sal_True, sal_True );
                 }
             }
         }
@@ -463,7 +463,7 @@ sal_Bool SVGFilter::implGenerateScript( const Reference< XDrawPages >& /* rxMast
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "type", B2UCONST( "text/ecmascript" ) );
 
     {
-        SvXMLElementExport                      aExp( *mpSVGExport, XML_NAMESPACE_NONE, "script", TRUE, TRUE );
+        SvXMLElementExport                      aExp( *mpSVGExport, XML_NAMESPACE_NONE, "script", sal_True, sal_True );
         Reference< XExtendedDocumentHandler >   xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
         if( xExtDocHandler.is() )
@@ -510,25 +510,24 @@ sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxPages,
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", implGetValidIDFromInterface( xShapes ) );
 
                 {
-                    SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
-                    const Point         aNullPt;
-
                     {
                         Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
                         if( xExtDocHandler.is() )
                         {
-                            SvXMLElementExport  aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
-                            OUString            aDesc;
+                            OUString aDesc;
 
                             if( bMaster )
-                                aDesc = B2UCONST( "Master slide" );
+                                aDesc = B2UCONST( "Master_Slide" );
                             else
                                 aDesc = B2UCONST( "Slide" );
 
-                            xExtDocHandler->unknown( aDesc );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", aDesc );
                         }
                     }
+
+                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
+                    const Point        aNullPt;
 
                     if( bMaster )
                     {
@@ -639,14 +638,8 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
 
                 if( xShapes.is() )
                 {
-                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
-
-                    {
-                        SvXMLElementExport                      aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
-                        Reference< XExtendedDocumentHandler >   xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
-
-                        xExtDocHandler->unknown( B2UCONST( "Group" ) );
-                    }
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "Group" ) );
+                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
 
                     bRet = implExportShapes( xShapes );
                 }
@@ -663,33 +656,31 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                 const Size  aSize( aBoundRect.Width, aBoundRect.Height );
 
                 {
-                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", implGetClassFromShape( rxShape ) );
+                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
 
+                    Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
+
+                    OUString aTitle;
+                    xShapePropSet->getPropertyValue( B2UCONST( "Title" ) ) >>= aTitle;
+                    if( aTitle.getLength() )
                     {
-                        SvXMLElementExport                      aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
-                        Reference< XExtendedDocumentHandler >   xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
+                        SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "title", sal_True, sal_True );
+                        xExtDocHandler->characters( aTitle );
+                    }
 
-                        xExtDocHandler->unknown( implGetDescriptionFromShape( rxShape ) );
+                    OUString aDescription;
+                    xShapePropSet->getPropertyValue( B2UCONST( "Description" ) ) >>= aDescription;
+                    if( aDescription.getLength() )
+                    {
+                        SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", sal_True, sal_True );
+                        xExtDocHandler->characters( aDescription );
                     }
 
                     if( rMtf.GetActionCount() )
                     {
-                        if( ( aShapeType.lastIndexOf( B2UCONST( "drawing.OLE2Shape" ) ) != -1 ) ||
-                            ( aShapeType.lastIndexOf( B2UCONST( "drawing.GraphicObjectShape" ) ) != -1 ) )
-                        {
-                            SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
-                            mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_ALL);
-                        }
-                        else
-                        {
-                            // write geometries
-                            SvXMLElementExport aGeometryExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
-                            mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_FILL );
-
-                            // write text separately
-                            SvXMLElementExport aTextExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
-                            mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_TEXT );
-                        }
+                        SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
+                        mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_ALL);
                     }
                 }
 
@@ -882,7 +873,7 @@ sal_Bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage 
 
 // -----------------------------------------------------------------------------
 
-OUString SVGFilter::implGetDescriptionFromShape( const Reference< XShape >& rxShape )
+OUString SVGFilter::implGetClassFromShape( const Reference< XShape >& rxShape )
 {
     OUString            aRet;
     const OUString      aShapeType( rxShape->getShapeType() );
@@ -900,7 +891,7 @@ OUString SVGFilter::implGetDescriptionFromShape( const Reference< XShape >& rxSh
     else if( aShapeType.lastIndexOf( B2UCONST( "presentation.DateTimeShape" ) ) != -1 )
         aRet = B2UCONST( "Date/Time" );
     else if( aShapeType.lastIndexOf( B2UCONST( "presentation.SlideNumberShape" ) ) != -1 )
-        aRet = B2UCONST( "Slide Number" );
+        aRet = B2UCONST( "Slide_Number" );
     else
         aRet = B2UCONST( "Drawing" );
 

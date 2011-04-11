@@ -58,10 +58,10 @@ const rtl::OUString UIELEMENT_PROPNAME_RESOURCEURL( RTL_CONSTASCII_USTRINGPARAM(
 const rtl::OUString UIELEMENT_PROPNAME_TYPE( RTL_CONSTASCII_USTRINGPARAM( "Type" ));
 const rtl::OUString UIELEMENT_PROPNAME_FRAME( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
+using ::rtl::OUString;
 
 namespace framework
 {
@@ -137,9 +137,9 @@ throw ( Exception, RuntimeException )
             PropertyValue aPropValue;
             if ( aArguments[n] >>= aPropValue )
             {
-                if ( aPropValue.Name.equalsAscii( "ResourceURL" ))
+                if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ResourceURL" ) ))
                     aPropValue.Value >>= m_aResourceURL;
-                else if ( aPropValue.Name.equalsAscii( "Frame" ))
+                else if ( aPropValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Frame" ) ))
                 {
                     Reference< XFrame > xFrame;
                     aPropValue.Value >>= xFrame;
@@ -181,7 +181,7 @@ sal_Bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*a
                                                                   sal_Int32  /*nHandle*/         ,
                                                                   const Any& /*aValue*/             ) throw( com::sun::star::lang::IllegalArgumentException )
 {
-    //  Initialize state with FALSE !!!
+    //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
     return sal_False ;
 }

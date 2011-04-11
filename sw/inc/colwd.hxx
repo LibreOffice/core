@@ -40,11 +40,11 @@ class SwTableFUNC;
 
 class SwTableWidthDlg : public SvxStandardDialog
 {
+    FixedLine        aWidthFL;
     FixedText       aColFT;
     NumericField    aColEdit;
     FixedText       aWidthFT;
     MetricField     aWidthEdit;
-    FixedLine        aWidthFL;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;

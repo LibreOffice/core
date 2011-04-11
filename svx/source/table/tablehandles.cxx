@@ -43,7 +43,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -89,7 +89,7 @@ void TableEdgeHdl::SetEdge( sal_Int32 nEdge, sal_Int32 nStart, sal_Int32 nEnd, T
     }
     else
     {
-        OSL_ENSURE( false, "sdr::table::TableEdgeHdl::SetEdge(), invalid edge!" );
+        OSL_FAIL( "sdr::table::TableEdgeHdl::SetEdge(), invalid edge!" );
     }
 }
 

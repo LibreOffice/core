@@ -38,14 +38,14 @@ class SbiDisas {
     const SbiImage& rImg;
     SbModule* pMod;
     char     cLabels[ MAX_LABELS ];     // Bitvektor fuer Labels
-    UINT32   nOff;                  // aktuelle Position
-    UINT32   nPC;                   // Position des Opcodes
+    sal_uInt32   nOff;                  // aktuelle Position
+    sal_uInt32   nPC;                   // Position des Opcodes
     SbiOpcode eOp;                  // Opcode
-    UINT32   nOp1, nOp2;            // Operanden
-    UINT32   nParts;                // 1, 2 oder 3
-    UINT32   nLine;                 // aktuelle Zeile
-    BOOL     DisasLine( String& );
-    BOOL     Fetch();               // naechster Opcode
+    sal_uInt32   nOp1, nOp2;            // Operanden
+    sal_uInt32   nParts;                // 1, 2 oder 3
+    sal_uInt32   nLine;                 // aktuelle Zeile
+    sal_Bool     DisasLine( String& );
+    sal_Bool     Fetch();               // naechster Opcode
 public:
     SbiDisas( SbModule*, const SbiImage* );
     void Disas( SvStream& );

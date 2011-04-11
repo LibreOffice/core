@@ -61,7 +61,7 @@
                 pFrame->CallCallback(SALEVENT_MENUDEACTIVATE, &aMenuEvt);
             }
             else
-                DBG_ERROR( "unconnected menu" );
+                OSL_FAIL( "unconnected menu" );
         }
     }
 }
@@ -121,7 +121,7 @@
             pPopupMenu->ImplSelectWithStart( pCurMenu );
         }
         else
-            DBG_ERROR( "menubar item without frame !" );
+            OSL_FAIL( "menubar item without frame !" );
     }
 }
 @end

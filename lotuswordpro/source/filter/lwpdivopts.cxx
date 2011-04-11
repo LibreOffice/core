@@ -82,7 +82,7 @@ void LwpHyphenOptions::Read(LwpObjectStream *pStrm)
 
 
 
-LwpTextLanguage::LwpTextLanguage(){};
+LwpTextLanguage::LwpTextLanguage(){}
 LwpTextLanguage::~LwpTextLanguage(){}
 
 void LwpTextLanguage::Read(LwpObjectStream *pStrm)

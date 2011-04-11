@@ -66,14 +66,9 @@ namespace
         ::comphelper::MakeItemPropertyMap
         IPM_MAP_ENTRY( XATTR_FILLSTYLE, "FillStyle", 0 )
         IPM_MAP_ENTRY( XATTR_FILLCOLOR, "Color", 0 )
-//         IPM_MAP_ENTRY( XATTR_FILLTRANSPARENCE, "Transparency", 0 )
-//         IPM_MAP_ENTRY( XATTR_FILLGRADIENT, "Gradient", 0 )
-//         IPM_MAP_ENTRY( XATTR_FILLHATCH, "Hatch", 0 )
         IPM_MAP_ENTRY( XATTR_LINECOLOR, "BorderColor", 0 )
         IPM_MAP_ENTRY( XATTR_LINESTYLE, "BorderStyle", 0 )
         IPM_MAP_ENTRY( XATTR_LINEWIDTH, "BorderWidth", 0 )
-//         IPM_MAP_ENTRY( XATTR_LINEDASH, "BorderDash", 0 )
-//         IPM_MAP_ENTRY( XATTR_LINETRANSPARENCE, "BorderTransparency", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBACKGROUND, "FillBackground", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBMP_POS, "FillBitmapRectanglePoint", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBMP_SIZEX, "FillBitmapSizeX", 0 )
@@ -92,10 +87,8 @@ namespace
     static ::comphelper::ItemPropertyMapType aDataPointPropertyLineMap(
         ::comphelper::MakeItemPropertyMap
         IPM_MAP_ENTRY( XATTR_LINECOLOR, "Color", 0 )
-//         IPM_MAP_ENTRY( XATTR_LINETRANSPARENCE, "Transparency", 0 )
         IPM_MAP_ENTRY( XATTR_LINESTYLE, "LineStyle", 0 )
         IPM_MAP_ENTRY( XATTR_LINEWIDTH, "LineWidth", 0 )
-//         IPM_MAP_ENTRY( XATTR_LINEDASH, "LineDash", 0 )
         );
 
     return aDataPointPropertyLineMap;
@@ -106,9 +99,7 @@ namespace
         ::comphelper::MakeItemPropertyMap
         IPM_MAP_ENTRY( XATTR_LINESTYLE, "LineStyle", 0 )
         IPM_MAP_ENTRY( XATTR_LINEWIDTH, "LineWidth", 0 )
-//         IPM_MAP_ENTRY( XATTR_LINEDASH, "LineDash", 0 )
         IPM_MAP_ENTRY( XATTR_LINECOLOR, "LineColor", 0 )
-//         IPM_MAP_ENTRY( XATTR_LINETRANSPARENCE, "LineTransparence", 0 )
         IPM_MAP_ENTRY( XATTR_LINEJOINT, "LineJoint", 0 )
         );
 
@@ -120,10 +111,6 @@ namespace
         ::comphelper::MakeItemPropertyMap
         IPM_MAP_ENTRY( XATTR_FILLSTYLE, "FillStyle", 0 )
         IPM_MAP_ENTRY( XATTR_FILLCOLOR, "FillColor", 0 )
-//         IPM_MAP_ENTRY( XATTR_FILLTRANSPARENCE, "FillTransparence", 0 )
-//         IPM_MAP_ENTRY( XATTR_FILLBITMAP, "FillBitmapName", MID_NAME )
-//         IPM_MAP_ENTRY( XATTR_FILLGRADIENT, "FillGradient", 0 )
-//         IPM_MAP_ENTRY( XATTR_FILLHATCH, "FillHatch", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBACKGROUND, "FillBackground", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBMP_POS, "FillBitmapRectanglePoint", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBMP_SIZEX, "FillBitmapSizeX", 0 )
@@ -153,7 +140,7 @@ bool lcl_supportsLineProperties( ::chart::wrapper::GraphicPropertyItemConverter:
 bool lcl_SetContentForNamedProperty(
     const uno::Reference< lang::XMultiServiceFactory > & xFactory,
     const ::rtl::OUString & rTableName,
-    NameOrIndex & rItem, BYTE nMemberId )
+    NameOrIndex & rItem, sal_uInt8 nMemberId )
 {
     bool bResult = false;
     if( xFactory.is())
@@ -197,9 +184,9 @@ GraphicPropertyItemConverter::GraphicPropertyItemConverter(
 GraphicPropertyItemConverter::~GraphicPropertyItemConverter()
 {}
 
-const USHORT * GraphicPropertyItemConverter::GetWhichPairs() const
+const sal_uInt16 * GraphicPropertyItemConverter::GetWhichPairs() const
 {
-    const USHORT * pResult = NULL;
+    const sal_uInt16 * pResult = NULL;
 
     switch( m_eGraphicObjectType )
     {
@@ -264,13 +251,9 @@ bool GraphicPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tProp
 }
 
 void GraphicPropertyItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
-//     if( m_eGraphicObjectType == LINE_DATA_POINT ||
-//         m_eGraphicObjectType == LINE_PROPERTIES )
-//         return;
-
     switch( nWhichId )
     {
         // bitmap property
@@ -311,13 +294,13 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                         if( (aValue >>= aName) &&
                             aName.getLength())
                         {
-                            aItem.SetEnabled( TRUE );
+                            aItem.SetEnabled( sal_True );
                             rOutItemSet.Put( aItem );
                         }
                     }
                 }
             }
-            catch( beans::UnknownPropertyException ex )
+            catch( beans::UnknownPropertyException &ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
@@ -331,11 +314,10 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                     ? C2U( "GradientStepCount" )
                     : C2U( "FillGradientStepCount" );
 
-                sal_Int16 nStepCount = 0;
                 uno::Any aValue( GetPropertySet()->getPropertyValue( aPropName ) );
                 if( hasLongOrShortValue(aValue) )
                 {
-                    nStepCount = getShortForLongAlso(aValue);
+                    sal_Int16 nStepCount = getShortForLongAlso(aValue);
                     rOutItemSet.Put( XGradientStepCountItem( nStepCount ));
                 }
             }
@@ -471,7 +453,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 }
 
 bool GraphicPropertyItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
+    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -562,7 +544,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     }
                 }
             }
-            catch( beans::UnknownPropertyException ex )
+            catch( beans::UnknownPropertyException &ex )
             {
                 ASSERT_EXCEPTION( ex );
             }
@@ -751,7 +733,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     }
                     else
                     {
-                        OSL_ENSURE( false, "Wrong type in Transparency Any" );
+                        OSL_FAIL( "Wrong type in Transparency Any" );
                     }
                 }
             }
@@ -796,7 +778,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     }
                     else
                     {
-                        OSL_ENSURE( false, "Wrong type in Transparency Any" );
+                        OSL_FAIL( "Wrong type in Transparency Any" );
                     }
                 }
             }

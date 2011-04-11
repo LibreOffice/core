@@ -55,145 +55,11 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxControl, TbxImageItem )
 
 /*************************************************************************
 |*
-|* PopUp-Window
-|*
-\************************************************************************/
-/*
-SdPopupWindowTbx::SdPopupWindowTbx( USHORT nId, WindowAlign eAlign,
-                                    SdResId aRIdWin, SdResId aRIdTbx,
-                                    SfxBindings& rBindings ) :
-                SfxPopupWindow  ( nId, aRIdWin, rBindings ),
-                aTbx            ( this, GetBindings(), aRIdTbx ),
-                aSdResIdWin       ( aRIdWin ),
-                aSdResIdTbx       ( aRIdTbx ),
-                eTbxAlign       ( eAlign )
-{
-    aTbx.UseDefault();
-    aSelectLink = aTbx.GetToolBox().GetSelectHdl();
-    aTbx.GetToolBox().SetSelectHdl( LINK( this, SdPopupWindowTbx, TbxSelectHdl ) );
-
-    FreeResource();
-
-    if( ( eAlign == WINDOWALIGN_TOP ) || ( eAlign == WINDOWALIGN_BOTTOM ) )
-    {
-        if ( aSdResIdWin.GetId() != RID_TEXT )
-            aTbx.GetToolBox().SetAlign( WINDOWALIGN_LEFT );
-
-        SetText( String() );
-    }
-
-    AdaptToCTL();
-}
-
-
-void SdPopupWindowTbx::AdaptToCTL (void)
-{
-    Size aSize = aTbx.CalcWindowSizePixel();
-    if (aSdResIdWin.GetId() == RID_TEXT)
-    {
-        SvtCJKOptions aCJKOptions;
-        if ( ! aCJKOptions.IsVerticalTextEnabled())
-        {
-            ToolBox& aToolBox = aTbx.GetToolBox();
-
-            // Iterate over all tool box items and remove those that are
-            // specific to complex text layout.
-            USHORT i=0;
-            while (i < aToolBox.GetItemCount())
-            {
-                USHORT nIndex = aToolBox.GetItemId(i);
-                switch (nIndex)
-                {
-                    case 0: // Line break.
-                    case SID_ATTR_CHAR_VERTICAL:
-                    case SID_TEXT_FITTOSIZE_VERTICAL:
-                    case SID_DRAW_CAPTION_VERTICAL:
-                    case SID_DRAW_FONTWORK_VERTICAL:
-                        aToolBox.RemoveItem (i);
-                        break;
-
-                    default:
-                        // Leave the item unmodified.  Advance to the next one.
-                        i+=1;
-                }
-            }
-            aToolBox.RecalcItems();
-            // Why is this necessary?
-            aToolBox.SetLineCount(1);
-            USHORT nLineCount = aToolBox.GetLineCount();
-            aSize = aToolBox.CalcWindowSizePixel(nLineCount);
-        }
-    }
-    aTbx.SetPosSizePixel( Point(), aSize );
-    SetOutputSizePixel( aSize );
-}
-*/
-
-/*-------------------------------------------------------------------------*/
-/*
-SdPopupWindowTbx::~SdPopupWindowTbx()
-{
-}
-*/
-/*-------------------------------------------------------------------------*/
-/*
-SfxPopupWindow* SdPopupWindowTbx::Clone() const
-{
-    SfxBindings& rBindings = (SfxBindings&)GetBindings();
-
-    return( new SdPopupWindowTbx( GetId(), eTbxAlign,
-                    aSdResIdWin, aSdResIdTbx, rBindings ) );
-
-    //return( SfxPopupWindow::Clone() );
-}
-*/
-/*-------------------------------------------------------------------------*/
-/*
-void SdPopupWindowTbx::Update()
-{
-    AdaptToCTL();
-
-    ToolBox *pBox = &aTbx.GetToolBox();
-    aTbx.Activate( pBox );
-    aTbx.Deactivate( pBox );
-}
-*/
-/*-------------------------------------------------------------------------*/
-/*
-void SdPopupWindowTbx::PopupModeEnd()
-{
-    aTbx.GetToolBox().EndSelection();
-
-    SfxPopupWindow::PopupModeEnd();
-}
-*/
-/*-------------------------------------------------------------------------*/
-/*
-IMPL_LINK( SdPopupWindowTbx, TbxSelectHdl, ToolBox*, pBox)
-{
-    if( IsInPopupMode() )
-        EndPopupMode();
-
-    aSelectLink.Call( &aTbx.GetToolBox() );
-
-    if ( pBox->GetModifier() & KEY_MOD1 )
-    {
-        //  #99013# if selected with control key, return focus to current view
-        Window* pShellWnd = SfxViewShell::Current()->GetWindow();
-        if ( pShellWnd )
-            pShellWnd->GrabFocus();
-    }
-
-    return( 0L );
-}
-*/
-/*************************************************************************
-|*
 |* Klasse fuer Toolbox
 |*
 \************************************************************************/
 
-SdTbxControl::SdTbxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SdTbxControl::SdTbxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
@@ -280,7 +146,7 @@ SfxPopupWindow* SdTbxControl::CreatePopupWindow()
 
 /*-------------------------------------------------------------------------*/
 
-void SdTbxControl::StateChanged( USHORT nSId,
+void SdTbxControl::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     SfxToolBoxControl::StateChanged( nSId, eState, pState );
@@ -288,17 +154,16 @@ void SdTbxControl::StateChanged( USHORT nSId,
     if( eState == SFX_ITEM_AVAILABLE )
     {
         TbxImageItem* pItem = PTR_CAST( TbxImageItem, pState );
-        //DBG_ASSERT( pItem, "TbxImageItem erwartet!" );
         // Im StarDesktop kann jetzt auch ein anderes Item ankommen,
-        // das nicht ausgewertet werden darf (#33802# und #33838#)
+        // das nicht ausgewertet werden darf
         if( pItem )
         {
             ToolBox& rTbx = GetToolBox();
-            USHORT nImage = pItem->GetValue();
+            sal_uInt16 nImage = pItem->GetValue();
             if( nImage == 0 )
             {
                 if( rTbx.IsItemChecked( nSId ) )
-                    rTbx.CheckItem( nSId, FALSE );
+                    rTbx.CheckItem( nSId, sal_False );
             }
             else
             {
@@ -306,8 +171,8 @@ void SdTbxControl::StateChanged( USHORT nSId,
                 aSlotURL += rtl::OUString::valueOf( sal_Int32( nImage ));
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
-                                         hasBigImages(),
-                                         GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
+                                         hasBigImages()
+                                       );
 
                 // !-Operator prueft, ob Image nicht vorhanden ist
                 if( !!aImage )
@@ -322,28 +187,28 @@ void SdTbxControl::StateChanged( USHORT nSId,
                     {
                         if( nSId != SID_OBJECT_CHOOSE_MODE &&
                             rTbx.IsItemChecked( SID_OBJECT_CHOOSE_MODE ) )
-                            rTbx.CheckItem( SID_OBJECT_CHOOSE_MODE, FALSE );
+                            rTbx.CheckItem( SID_OBJECT_CHOOSE_MODE, sal_False );
                         if( nSId != SID_DRAWTBX_TEXT &&
                             rTbx.IsItemChecked( SID_DRAWTBX_TEXT ) )
-                             rTbx.CheckItem( SID_DRAWTBX_TEXT, FALSE );
+                             rTbx.CheckItem( SID_DRAWTBX_TEXT, sal_False );
                         if( nSId != SID_DRAWTBX_RECTANGLES &&
                             rTbx.IsItemChecked( SID_DRAWTBX_RECTANGLES ) )
-                               rTbx.CheckItem( SID_DRAWTBX_RECTANGLES, FALSE );
+                               rTbx.CheckItem( SID_DRAWTBX_RECTANGLES, sal_False );
                         if( nSId != SID_DRAWTBX_ELLIPSES &&
                             rTbx.IsItemChecked( SID_DRAWTBX_ELLIPSES ) )
-                               rTbx.CheckItem( SID_DRAWTBX_ELLIPSES, FALSE );
+                               rTbx.CheckItem( SID_DRAWTBX_ELLIPSES, sal_False );
                         if( nSId != SID_DRAWTBX_LINES &&
                             rTbx.IsItemChecked( SID_DRAWTBX_LINES ) )
-                            rTbx.CheckItem( SID_DRAWTBX_LINES, FALSE );
+                            rTbx.CheckItem( SID_DRAWTBX_LINES, sal_False );
                         if( nSId != SID_DRAWTBX_ARROWS &&
                             rTbx.IsItemChecked( SID_DRAWTBX_ARROWS ) )
-                            rTbx.CheckItem( SID_DRAWTBX_ARROWS, FALSE );
+                            rTbx.CheckItem( SID_DRAWTBX_ARROWS, sal_False );
                         if( nSId != SID_DRAWTBX_3D_OBJECTS &&
                             rTbx.IsItemChecked( SID_DRAWTBX_3D_OBJECTS ) )
-                            rTbx.CheckItem( SID_DRAWTBX_3D_OBJECTS, FALSE );
+                            rTbx.CheckItem( SID_DRAWTBX_3D_OBJECTS, sal_False );
                         if( nSId != SID_DRAWTBX_CONNECTORS &&
                             rTbx.IsItemChecked( SID_DRAWTBX_CONNECTORS ) )
-                            rTbx.CheckItem( SID_DRAWTBX_CONNECTORS, FALSE );
+                            rTbx.CheckItem( SID_DRAWTBX_CONNECTORS, sal_False );
                     }
                 }
             }
@@ -353,7 +218,7 @@ void SdTbxControl::StateChanged( USHORT nSId,
 
 /*-------------------------------------------------------------------------*/
 
-BOOL SdTbxControl::IsCheckable( USHORT nSId )
+sal_Bool SdTbxControl::IsCheckable( sal_uInt16 nSId )
 {
     switch( nSId )
     {
@@ -459,12 +324,9 @@ BOOL SdTbxControl::IsCheckable( USHORT nSId )
         case SID_CONNECTOR_LINES_CIRCLE_END:
         case SID_CONNECTOR_LINES_CIRCLES:
 
-
-
-        //case SID_ZOOM_OUT:
-            return( TRUE );
+            return( sal_True );
     }
-    return( FALSE );
+    return( sal_False );
 }
 
 

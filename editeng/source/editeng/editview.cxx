@@ -46,7 +46,7 @@
 
 #include <svl/srchitem.hxx>
 
-#define _SVSTDARR_USHORTS
+#define _SVSTDARR_sal_uIt16S
 #include <svl/svstdarr.hxx>
 
 #include <impedit.hxx>
@@ -150,10 +150,10 @@ LanguageType lcl_CheckLanguage(
         lang::Locale a3( SvxCreateLocale( aLangList[3] ) );
 #endif
 
-        INT32   nCount = SAL_N_ELEMENTS(aLangList);
-        for (INT32 i = 0;  i < nCount;  i++)
+        sal_Int32   nCount = SAL_N_ELEMENTS(aLangList);
+        for (sal_Int32 i = 0;  i < nCount;  i++)
         {
-            INT16 nTmpLang = aLangList[i];
+            sal_Int16 nTmpLang = aLangList[i];
             if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
             {
                 if (xSpell->hasLanguage( nTmpLang ) &&
@@ -233,8 +233,8 @@ void EditView::SetSelection( const ESelection& rESel )
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
-    // Falls jemand gerade ein leeres Attribut hinterlassen hat,
-    // und dann der Outliner die Selektion manipulitert:
+    // If someone has just left an empty attribute, and then the outliner
+    // manipulates the selection:
     if ( !pImpEditView->GetEditSelection().HasRange() )
     {
         ContentNode* pNode = pImpEditView->GetEditSelection().Max().GetNode();
@@ -242,10 +242,10 @@ void EditView::SetSelection( const ESelection& rESel )
     }
     EditSelection aNewSelection( PIMPEE->ConvertSelection( rESel.nStartPara, rESel.nStartPos, rESel.nEndPara, rESel.nEndPos ) );
 
-    // Wenn nach einem KeyInput die Selection manipuliert wird:
+    // If the selection is manipulated after a KeyInput:
     PIMPEE->CheckIdleFormatter();
 
-    // Selektion darf nicht bei einem unsichtbaren Absatz Starten/Enden:
+    // Selection may not start/end at an invisible paragraph:
     ParaPortion* pPortion = PIMPEE->FindParaPortion( aNewSelection.Min().GetNode() );
     if ( !pPortion->IsVisible() )
     {
@@ -261,7 +261,7 @@ void EditView::SetSelection( const ESelection& rESel )
         aNewSelection.Max() = EditPaM( pNode, pNode->Len() );
     }
 
-    pImpEditView->DrawSelection();  // alte Selektion 'weg-zeichnen'
+    pImpEditView->DrawSelection();
     pImpEditView->SetEditSelection( aNewSelection );
     pImpEditView->DrawSelection();
     sal_Bool bGotoCursor = pImpEditView->DoAutoScroll();
@@ -297,7 +297,7 @@ void EditView::DeleteSelected()
     pImpEditView->DeleteSelected();
 }
 
-USHORT EditView::GetSelectedScriptType() const
+sal_uInt16 EditView::GetSelectedScriptType() const
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -354,7 +354,7 @@ void EditView::SetOutputArea( const Rectangle& rRec )
     DBG_CHKTHIS( EditView, 0 );
     pImpEditView->SetOutputArea( rRec );
 
-    // Rest nur hier, wenn API-Aufruf:
+    // the rest here only if it is an API call:
     pImpEditView->CalcAnchorPoint();
     if ( PIMPEE->GetStatus().AutoPageSize() )
         pImpEditView->RecalcOutputArea();
@@ -414,7 +414,7 @@ void EditView::InsertText( const XubString& rStr, sal_Bool bSelect )
 
     if ( bSelect )
     {
-        DBG_ASSERT( !aPaM1.DbgIsBuggy( pImpEE->GetEditDoc() ), "Insert: PaM kaputt" );
+        DBG_ASSERT( !aPaM1.DbgIsBuggy( pImpEE->GetEditDoc() ), "Insert: PaM broken" );
         pImpEditView->SetEditSelection( EditSelection( aPaM1, aPaM2 ) );
     }
     else
@@ -463,13 +463,9 @@ void EditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor )
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
-// Draw vertraegt die Assertion nicht, spaeter mal aktivieren
-//  DBG_ASSERT( pImpEditView->pEditEngine->HasView( this ), "ShowCursor - View nicht angemeldet!" );
-//  DBG_ASSERT( !GetWindow()->IsInPaint(), "ShowCursor - Why in Paint ?!" );
-
     if ( pImpEditView->pEditEngine->HasView( this ) )
     {
-        // Das ControlWord hat mehr Gewicht:
+        // The control word is more important:
         if ( !pImpEditView->DoAutoScroll() )
             bGotoCursor = sal_False;
         pImpEditView->ShowCursor( bGotoCursor, bForceVisCursor );
@@ -482,7 +478,7 @@ void EditView::HideCursor()
     pImpEditView->GetCursor()->Hide();
 }
 
-Pair EditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
+Pair EditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -500,9 +496,8 @@ void EditView::SetAttribs( const SfxItemSet& rSet )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blinde Selection in ...." );
+    DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blind Selection in ...." );
 
-    // Kein Undo-Kappseln noetig...
     pImpEditView->DrawSelection();
     PIMPEE->SetAttribs( pImpEditView->GetEditSelection(), rSet, ATTRSPECIAL_WHOLEWORD );
     PIMPEE->FormatAndUpdate( this );
@@ -512,9 +507,8 @@ void EditView::SetParaAttribs( const SfxItemSet& rSet, sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    // Kein Undo-Kappseln noetig...
     PIMPEE->SetParaAttribs( nPara, rSet );
-    // Beim Aendern von Absatzattributen muss immer formatiert werden...
+    // When you change paragraph attributes you must always format...
     PIMPEE->FormatAndUpdate( this );
 }
 
@@ -566,7 +560,7 @@ SfxItemSet EditView::GetAttribs()
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blinde Selection in ...." );
+    DBG_ASSERT( !pImpEditView->aEditSelection.IsInvalid(), "Blind Selection in ...." );
     return PIMPEE->GetAttribs( pImpEditView->GetEditSelection() );
 }
 
@@ -584,7 +578,7 @@ void EditView::Redo()
     PIMPEE->Redo( this );
 }
 
-ULONG EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
+sal_uLong EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -607,8 +601,7 @@ ULONG EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFo
     return rInput.GetError();
 }
 
-#ifndef SVX_LIGHT
-ULONG EditView::Write( SvStream& rOutput, EETextFormat eFormat )
+sal_uLong EditView::Write( SvStream& rOutput, EETextFormat eFormat )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -616,7 +609,6 @@ ULONG EditView::Write( SvStream& rOutput, EETextFormat eFormat )
     ShowCursor();
     return rOutput.GetError();
 }
-#endif
 
 void EditView::Cut()
 {
@@ -741,7 +733,7 @@ void EditView::MoveParagraphs( long nDiff )
         nDest++;
     DBG_ASSERT( ( nDest >= 0 ) && ( nDest <= pImpEditView->pEditEngine->GetParagraphCount() ), "MoveParagraphs - wrong Parameters!" );
     MoveParagraphs( aRange,
-        sal::static_int_cast< USHORT >( nDest ) );
+        sal::static_int_cast< sal_uInt16 >( nDest ) );
 }
 
 void EditView::SetBackgroundColor( const Color& rColor )
@@ -787,12 +779,12 @@ void EditView::InsertText( const EditTextObject& rTextObject )
     EditSelection aTextSel( PIMPEE->InsertText( rTextObject, pImpEditView->GetEditSelection() ) );
     PIMPEE->UndoActionEnd( EDITUNDO_INSERT );
 
-    aTextSel.Min() = aTextSel.Max();    // Selektion nicht behalten.
+    aTextSel.Min() = aTextSel.Max();    // Selection not retained.
     pImpEditView->SetEditSelection( aTextSel );
     PIMPEE->FormatAndUpdate( this );
 }
 
-void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const String& rBaseURL, BOOL bUseSpecial )
+void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const String& rBaseURL, sal_Bool bUseSpecial )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -802,25 +794,25 @@ void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::d
     EditSelection aTextSel( PIMPEE->InsertText( xDataObj, rBaseURL, pImpEditView->GetEditSelection().Max(), bUseSpecial ) );
     PIMPEE->UndoActionEnd( EDITUNDO_INSERT );
 
-    aTextSel.Min() = aTextSel.Max();    // Selektion nicht behalten.
+    aTextSel.Min() = aTextSel.Max();    // Selection not retained.
     pImpEditView->SetEditSelection( aTextSel );
     PIMPEE->FormatAndUpdate( this );
 }
 
 sal_Bool EditView::Drop( const DropEvent& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 ESelection EditView::GetDropPos()
 {
-    DBG_ERROR( "GetDropPos - Why?!" );
+    OSL_FAIL( "GetDropPos - Why?!" );
     return ESelection();
 }
 
 sal_Bool EditView::QueryDrop( DropEvent& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 void EditView::SetEditEngineUpdateMode( sal_Bool bUpdate )
@@ -864,7 +856,7 @@ SfxStyleSheet* EditView::GetStyleSheet() const
     {
         SfxStyleSheet* pTmpStyle = PIMPEE->GetStyleSheet( n );
         if ( ( n != nStartPara ) && ( pStyle != pTmpStyle ) )
-            return NULL;    // Nicht eindeutig.
+            return NULL;    // Not unique.
         pStyle = pTmpStyle;
     }
     return pStyle;
@@ -901,7 +893,7 @@ void EditView::TransliterateText( sal_Int32 nTransliterationMode )
     EditSelection aNewSel = PIMPEE->TransliterateText( pImpEditView->GetEditSelection(), nTransliterationMode );
     if ( aNewSel != aOldSel )
     {
-        pImpEditView->DrawSelection();  // alte Selektion 'weg-zeichnen'
+        pImpEditView->DrawSelection();
         pImpEditView->SetEditSelection( aNewSel );
         pImpEditView->DrawSelection();
     }
@@ -933,7 +925,6 @@ void EditView::CompleteAutoCorrect( Window* pFrameWin )
         pImpEditView->DrawSelection();
         EditSelection aSel = pImpEditView->GetEditSelection();
         aSel = PIMPEE->EndOfWord( aSel.Max() );
-        // MT 06/00: Why pass EditSelection to AutoCorrect, not EditPaM?!
         aSel = PIMPEE->AutoCorrect( aSel, 0, !IsInsertMode(), pFrameWin );
         pImpEditView->SetEditSelection( aSel );
         if ( PIMPEE->IsModified() )
@@ -943,43 +934,32 @@ void EditView::CompleteAutoCorrect( Window* pFrameWin )
 
 EESpellState EditView::StartSpeller( sal_Bool bMultipleDoc )
 {
-#ifdef SVX_LIGHT
-    return EE_SPELL_NOSPELLER;
-#else
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     if ( !PIMPEE->GetSpeller().is() )
         return EE_SPELL_NOSPELLER;
 
     return PIMPEE->Spell( this, bMultipleDoc );
-#endif
 }
 
 EESpellState EditView::StartThesaurus()
 {
-#ifdef SVX_LIGHT
-    return EE_SPELL_NOSPELLER;
-#else
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     if ( !PIMPEE->GetSpeller().is() )
         return EE_SPELL_NOSPELLER;
 
     return PIMPEE->StartThesaurus( this );
-#endif
 }
 
 
 void EditView::StartTextConversion(
         LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
-        INT32 nOptions, BOOL bIsInteractive, BOOL bMultipleDoc )
+        sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc )
 {
-#ifdef SVX_LIGHT
-#else
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     PIMPEE->Convert( this, nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc );
-#endif
 }
 
 
@@ -1035,7 +1015,6 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
 
 void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 {
-#ifndef SVX_LIGHT
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
@@ -1054,7 +1033,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         EditPaM aPaM2( aPaM );
         aPaM2.GetIndex()++;
 
-        // Gibt es Replace-Vorschlaege?
+        // Are there any replace suggestions?
         String aSelected( GetSelected() );
         //
         // restrict the maximal number of suggestions displayed
@@ -1069,10 +1048,10 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         // implementation here by providing an additional parameter.
         Sequence< PropertyValue > aPropVals(1);
         PropertyValue &rVal = aPropVals.getArray()[0];
-        rVal.Name = OUString::createFromAscii( UPN_MAX_NUMBER_OF_SUGGESTIONS );
-        rVal.Value <<= (INT16) 7;
+        rVal.Name = OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_MAX_NUMBER_OF_SUGGESTIONS ));
+        rVal.Value <<= (sal_Int16) 7;
         //
-        // Gibt es Replace-Vorschlaege?
+        // Are there any replace suggestions?
         Reference< XSpellAlternatives >  xSpellAlt =
                 xSpeller->spell( aSelected, PIMPEE->GetLanguage( aPaM2 ), aPropVals );
 
@@ -1091,7 +1070,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             }
             else
             {
-                DBG_ERROR( "content node is NULL" );
+                OSL_FAIL( "content node is NULL" );
             }
 
             nGuessLangWord = lcl_CheckLanguage( xSpellAlt->getWord(), xSpeller, xLangGuesser, sal_False );
@@ -1130,7 +1109,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         if (xSpellAlt.is())
             aAlt = xSpellAlt->getAlternatives();
         const OUString *pAlt = aAlt.getConstArray();
-        sal_uInt16 nWords = (USHORT) aAlt.getLength();
+        sal_uInt16 nWords = (sal_uInt16) aAlt.getLength();
         if ( nWords )
         {
             for ( sal_uInt16 nW = 0; nW < nWords; nW++ )
@@ -1142,10 +1121,9 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             aPopupMenu.InsertSeparator( nWords );
         }
         else
-            aPopupMenu.RemoveItem( MN_AUTOCORR );   // Loeschen?
+            aPopupMenu.RemoveItem( MN_AUTOCORR );   // delete?
 
         SvtLinguConfig aCfg;
-        const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
         Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
         Sequence< Reference< XDictionary >  > aDics;
@@ -1162,7 +1140,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             aDics = xDicList->getDictionaries();
             pDic  = aDics.getConstArray();
             sal_uInt16 nCheckedLanguage = PIMPEE->GetLanguage( aPaM2 );
-            sal_uInt16 nDicCount = (USHORT)aDics.getLength();
+            sal_uInt16 nDicCount = (sal_uInt16)aDics.getLength();
             for (sal_uInt16 i = 0; i < nDicCount; i++)
             {
                 uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
@@ -1178,14 +1156,14 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                 {
                     // the extra 1 is because of the (possible) external
                     // linguistic entry above
-                    USHORT nPos = MN_DICTSTART + i;
+                    sal_uInt16 nPos = MN_DICTSTART + i;
                     pInsertMenu->InsertItem( nPos, xDicTmp->getName() );
 
                     uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
                     if (xSvcInfo.is())
                     {
                         OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
-                                xSvcInfo->getImplementationName(), bHC) );
+                                xSvcInfo->getImplementationName()) );
                         if (aDictionaryImageUrl.getLength() > 0)
                         {
                             Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
@@ -1250,12 +1228,12 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         {
             if ( !pCallBack )
             {
-                // Cursor vor das Wort setzen...
+                // Set Cursor before word...
                 EditPaM aCursor = pImpEditView->GetEditSelection().Min();
-                pImpEditView->DrawSelection();  // alte Selektion 'weg-zeichnen'
+                pImpEditView->DrawSelection();
                 pImpEditView->SetEditSelection( EditSelection( aCursor, aCursor ) );
                 pImpEditView->DrawSelection();
-                // Stuerzt ab, wenn keine SfxApp
+                // Crashes when no SfxApp
                 PIMPEE->Spell( this, sal_False );
             }
             else
@@ -1310,7 +1288,6 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             SetSelection( aOldSel );
         }
     }
-#endif
 }
 
 void EditView::SpellIgnoreWord()
@@ -1375,7 +1352,8 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
 {
     EditSelection aSel( pImpEditView->GetEditSelection() );
     aSel.Adjust( pImpEditView->pEditEngine->pImpEditEngine->GetEditDoc() );
-    // Nur wenn Cursor vor Feld, keine Selektion, oder nur Feld selektiert
+    // Only when cursor is in font of field, no selection,
+    // or only selecting field
     if ( ( aSel.Min().GetNode() == aSel.Max().GetNode() ) &&
          ( ( aSel.Max().GetIndex() == aSel.Min().GetIndex() ) ||
            ( aSel.Max().GetIndex() == aSel.Min().GetIndex()+1 ) ) )
@@ -1389,7 +1367,7 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
             if ( pAttr->GetStart() == nXPos )
                 if ( pAttr->Which() == EE_FEATURE_FIELD )
                 {
-                    DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "Kein FeldItem..." );
+                    DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "No FeldItem..." );
                     return (const SvxFieldItem*)pAttr->GetItem();
                 }
         }
@@ -1427,7 +1405,7 @@ XubString EditView::GetWordUnderMousePointer( Rectangle& rWordRect ) const
         Rectangle aBottomRightRec( pImpEE->PaMtoEditCursor( aWordSel.Max() ) );
 
 #if OSL_DEBUG_LEVEL > 1
-        DBG_ASSERT( aTopLeftRec.Top() == aBottomRightRec.Top(), "Top() in einer Zeile unterschiedlich?" );
+        DBG_ASSERT( aTopLeftRec.Top() == aBottomRightRec.Top(), "Top () is different in one line?");
 #endif
 
         Point aPnt1( pImpEditView->GetWindowPos( aTopLeftRec.TopLeft() ) );
@@ -1484,7 +1462,7 @@ void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
 
     if( aSel.HasRange() )
     {
-        for( USHORT nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
+        for( sal_uInt16 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
         {
             SvUShorts aPortions;
             rEditEngine.GetPortions( nPara, aPortions );
@@ -1492,13 +1470,13 @@ void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
             if( aPortions.Count() == 0 )
                 aPortions.Insert( rEditEngine.GetTextLen(nPara), 0 );
 
-            const USHORT nBeginPos = (nPara == aSel.nStartPara) ? aSel.nStartPos : 0;
-            const USHORT nEndPos = (nPara == aSel.nEndPara) ? aSel.nEndPos : 0xffff;
+            const sal_uInt16 nBeginPos = (nPara == aSel.nStartPara) ? aSel.nStartPos : 0;
+            const sal_uInt16 nEndPos = (nPara == aSel.nEndPara) ? aSel.nEndPos : 0xffff;
 
-            for ( USHORT nPos = 0; nPos < aPortions.Count(); ++nPos )
+            for ( sal_uInt16 nPos = 0; nPos < aPortions.Count(); ++nPos )
             {
-                USHORT nPortionEnd   = aPortions.GetObject( nPos );
-                USHORT nPortionStart = nPos > 0 ? aPortions.GetObject( nPos - 1 ) : 0;
+                sal_uInt16 nPortionEnd   = aPortions.GetObject( nPos );
+                sal_uInt16 nPortionStart = nPos > 0 ? aPortions.GetObject( nPos - 1 ) : 0;
 
                 if( (nPortionEnd < nBeginPos) || (nPortionStart > nEndPos) )
                     continue;

@@ -37,12 +37,12 @@
 class VCL_DLLPUBLIC TaskPaneList
 {
     ::std::vector<Window *> mTaskPanes;
-    Window *FindNextPane( Window *pWindow, BOOL bForward = TRUE );
-    Window *FindNextFloat( Window *pWindow, BOOL bForward = TRUE );
-    Window *FindNextSplitter( Window *pWindow, BOOL bForward = TRUE );
+    Window *FindNextPane( Window *pWindow, sal_Bool bForward = sal_True );
+    Window *FindNextFloat( Window *pWindow, sal_Bool bForward = sal_True );
+    Window *FindNextSplitter( Window *pWindow, sal_Bool bForward = sal_True );
 
 public:
-    BOOL IsInList( Window *pWindow );
+    sal_Bool IsInList( Window *pWindow );
 
 public:
     TaskPaneList();
@@ -50,7 +50,7 @@ public:
 
     void AddWindow( Window *pWindow );
     void RemoveWindow( Window *pWindow );
-    BOOL HandleKeyEvent( KeyEvent aKeyEvent );
+    sal_Bool HandleKeyEvent( KeyEvent aKeyEvent );
 };
 
 #endif

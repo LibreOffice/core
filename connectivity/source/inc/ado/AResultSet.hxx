@@ -79,7 +79,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             ::std::vector<OLEVariant>       m_aBookmarks;
             OLEVariant                      m_aValue;
-            sal_Int32                       m_nRowPos;
+            ADO_LONGPTR                     m_nRowPos;
             sal_Bool                        m_bWasNull;
             sal_Bool                        m_bEOF;
             sal_Bool                        m_bOnFirstAfterOpen;
@@ -118,7 +118,7 @@ namespace connectivity
                                          ) const;
             virtual ~OResultSet();
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OResultSet( ADORecordset* _pRecordSet,OStatement_Base* pStmt);
             OResultSet( ADORecordset* _pRecordSet);
 

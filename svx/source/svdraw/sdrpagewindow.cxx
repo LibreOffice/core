@@ -40,7 +40,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <osl/mutex.hxx>
@@ -80,8 +80,8 @@ using namespace ::com::sun::star;
             // , thus it seems not necessary to make
             // it visible her at all.
             // #58917# Das Show darf nicht am VCL-Fenster landen, weil dann Assertion vom SFX
-            // BOOL bVis = pWindow->IsVisible();
-            // xC->setVisible(TRUE);
+            // sal_Bool bVis = pWindow->IsVisible();
+            // xC->setVisible(sal_True);
             // if ( !bVis )
             //  pWindow->Hide();
             //  if( !mxContext.is() && bVisible )
@@ -105,8 +105,8 @@ using namespace ::com::sun::star;
             uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
             if( xFactory.is() )
             {
-                const_cast< SdrPageWindow* >( this )->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlContainer")), uno::UNO_QUERY);
-                uno::Reference< awt::XControlModel > xModel(xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlContainerModel")), uno::UNO_QUERY);
+                const_cast< SdrPageWindow* >( this )->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlContainer"))), uno::UNO_QUERY);
+                uno::Reference< awt::XControlModel > xModel(xFactory->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlContainerModel"))), uno::UNO_QUERY);
                 uno::Reference< awt::XControl > xControl(mxControlContainer, uno::UNO_QUERY);
                 if (xControl.is())
                     xControl->setModel(xModel);
@@ -191,6 +191,10 @@ void SdrPageWindow::PrePaint()
     {
         GetObjectContact().PrepareProcessDisplay();
     }
+}
+
+void SdrPageWindow::PostPaint()
+{
 }
 
 void SdrPageWindow::PrepareRedraw(const Region& rReg)
@@ -285,8 +289,6 @@ namespace
                         Color aColor(rand()%255, rand()%255, rand()%255);
                         impPaintStrokePolygon(aResult.getB2DPolygon(a), rOutDev, aColor);
                     }
-
-                    bool bBla = true;
                 }
             }
         }

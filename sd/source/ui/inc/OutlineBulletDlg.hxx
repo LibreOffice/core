@@ -55,14 +55,14 @@ public:
     const SfxItemSet* GetOutputItemSet() const;
 
 protected:
-    virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 private:
     using SfxTabDialog::GetOutputItemSet;
 
     SfxItemSet  aInputSet;
     SfxItemSet  *pOutputSet;
-    BOOL        bTitle;
+    sal_Bool        bTitle;
     ::sd::View      *pSdView;
 };
 

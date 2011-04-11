@@ -2,8 +2,8 @@
 # a simple email mailmerge component
 
 # manual installation for hackers, not necessary for users
-# cp mailmerge.py /usr/lib/openoffice.org2.0/program
-# cd /usr/lib/openoffice.org2.0/program
+# cp mailmerge.py /usr/lib/libreoffice/program
+# cd /usr/lib/libreoffice/program
 # ./unopkg add --shared mailmerge.py
 # edit ~/.openoffice.org2/user/registry/data/org/openoffice/Office/Writer.xcu
 # and change EMailSupported to as follows...
@@ -42,7 +42,6 @@ from email.Utils import formatdate
 from email.Utils import parseaddr
 
 import sys, smtplib, imaplib, poplib
-
 dbg = False
 
 class PyMailSMTPService(unohelper.Base, XSmtpService):
@@ -178,7 +177,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		if xMailMessage.ReplyToAddress != '':
 			msg['Reply-To'] = xMailMessage.ReplyToAddress
 
-		mailerstring = "OpenOffice.org 2.0 via Caolan's mailmerge component"
+		mailerstring = "LibreOffice via Caolan's mailmerge component"
 		try:
 			ctx = uno.getComponentContext() 
 			aConfigProvider = ctx.ServiceManager.createInstance("com.sun.star.configuration.ConfigurationProvider")
@@ -232,6 +231,7 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 		self.supportedtypes = ('Insecure', 'Ssl')
 		self.server = None
 		self.connectioncontext = None
+		self.notify = EventObject()
 		if dbg:
 			print >> sys.stderr, "PyMailIMAPService init"
 	def addConnectionListener(self, xListener):
@@ -300,6 +300,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 		self.supportedtypes = ('Insecure', 'Ssl')
 		self.server = None
 		self.connectioncontext = None
+		self.notify = EventObject()
 		if dbg:
 			print >> sys.stderr, "PyMailPOP3Service init"
 	def addConnectionListener(self, xListener):

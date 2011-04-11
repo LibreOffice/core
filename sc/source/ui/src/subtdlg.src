@@ -41,6 +41,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     };
     CheckBox BTN_PAGEBREAK
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SUBT_OPTIONS:BTN_PAGEBREAK";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
         Text [ en-US ] = "~Page break between groups" ;
@@ -48,14 +49,15 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     };
     CheckBox BTN_CASE
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SUBT_OPTIONS:BTN_CASE";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Groß-/Kleinschreibung beachten : ~Gro˜-/Kleinschreibung beachten */
         Text [ en-US ] = "~Case sensitive" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_SORT
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SUBT_OPTIONS:BTN_SORT";
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
         Text [ en-US ] = "Pre-~sort area according to groups" ;
@@ -63,14 +65,15 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     };
     CheckBox BTN_FORMATS
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SUBT_OPTIONS:BTN_FORMATS";
         Pos = MAP_APPFONT ( 12 , 101 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Formate einschließen : ~Formate einschlie˜en */
         Text [ en-US ] = "I~nclude formats" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_USERDEF
     {
+        HelpID = "sc:CheckBox:RID_SCPAGE_SUBT_OPTIONS:BTN_USERDEF";
         Pos = MAP_APPFONT ( 12 , 115 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
         Text [ en-US ] = "C~ustom sort order" ;
@@ -78,6 +81,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     };
     ListBox LB_USERDEF
     {
+        HelpID = "sc:ListBox:RID_SCPAGE_SUBT_OPTIONS:LB_USERDEF";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 20 , 127 ) ;
         Size = MAP_APPFONT ( 231 , 90 ) ;
@@ -86,6 +90,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     };
     RadioButton BTN_ASCENDING
     {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SUBT_OPTIONS:BTN_ASCENDING";
         Pos = MAP_APPFONT ( 12 , 69 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
         Text [ en-US ] = "~Ascending" ;
@@ -93,6 +98,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     };
     RadioButton BTN_DESCENDING
     {
+        HelpID = "sc:RadioButton:RID_SCPAGE_SUBT_OPTIONS:BTN_DESCENDING";
         Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
         Text [ en-US ] = "D~escending" ;
@@ -134,7 +140,6 @@ TabPage RID_SUBTBASE
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Teilergebnisse berechnen für : ~Teilergebnisse berechnen f³r */
         Text [ en-US ] = "~Calculate subtotals for" ;
     };
     Control WND_COLUMNS
@@ -181,10 +186,12 @@ TabPage RID_SCPAGE_SUBT_GROUP1 < RID_SUBTBASE
 {
     HelpId = HID_SCPAGE_SUBT_GROUP1 ;
 };
+
 TabPage RID_SCPAGE_SUBT_GROUP2 < RID_SUBTBASE
 {
     HelpId = HID_SCPAGE_SUBT_GROUP2 ;
 };
+
 TabPage RID_SCPAGE_SUBT_GROUP3 < RID_SUBTBASE
 {
     HelpId = HID_SCPAGE_SUBT_GROUP3 ;
@@ -232,60 +239,7 @@ TabDialog RID_SCDLG_SUBTOTALS
     {
         Pos = MAP_APPFONT ( 143 , 160 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

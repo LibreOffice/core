@@ -63,7 +63,7 @@ namespace dbaui
     //====================================================================
     //= SetItemPropertyStorage
     //====================================================================
-    typedef USHORT  ItemId;
+    typedef sal_uInt16  ItemId;
 
     /** a PropertyStorage implementation which stores the value in an item set
     */

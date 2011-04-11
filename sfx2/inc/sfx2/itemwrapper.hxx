@@ -48,20 +48,20 @@ class SFX2_DLLPUBLIC ItemWrapperHelper
 {
 public:
     /** Returns the WID of the passed SID in the item set. */
-    static USHORT       GetWhichId( const SfxItemSet& rItemSet, USHORT nSlot );
+    static sal_uInt16       GetWhichId( const SfxItemSet& rItemSet, sal_uInt16 nSlot );
 
     /** Returns true, if the passed item set supports the SID. */
-    static bool         IsKnownItem( const SfxItemSet& rItemSet, USHORT nSlot );
+    static bool         IsKnownItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot );
 
     /** Returns an item from an item set, if it is not in "don't know" state.
         @return  Pointer to item, or 0 if it has "don't know" state. */
-    static const SfxPoolItem* GetUniqueItem( const SfxItemSet& rItemSet, USHORT nSlot );
+    static const SfxPoolItem* GetUniqueItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot );
 
     /** Returns the default item from the pool of the passed item set. */
-    static const SfxPoolItem& GetDefaultItem( const SfxItemSet& rItemSet, USHORT nSlot );
+    static const SfxPoolItem& GetDefaultItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot );
 
     /** Removes an item from rDestSet, if it is default in rOldSet. */
-    static void         RemoveDefaultItem( SfxItemSet& rDestSet, const SfxItemSet& rOldSet, USHORT nSlot );
+    static void         RemoveDefaultItem( SfxItemSet& rDestSet, const SfxItemSet& rOldSet, sal_uInt16 nSlot );
 };
 
 // ============================================================================
@@ -103,10 +103,10 @@ public:
     typedef ValueT                              ItemValueType;
     typedef SingleItemWrapper< ItemT, ValueT >  SingleItemWrapperType;
 
-    inline explicit     SingleItemWrapper( USHORT nSlot ) : mnSlot( nSlot ) {}
+    inline explicit     SingleItemWrapper( sal_uInt16 nSlot ) : mnSlot( nSlot ) {}
 
     /** Returns the SID this wrapper works on. */
-    inline USHORT       GetSlotId() const { return mnSlot; }
+    inline sal_uInt16       GetSlotId() const { return mnSlot; }
 
     /** Returns the item from an item set, if it is not in "don't know" state.
         @descr  Similar to ItemWrapperHelper::GetUniqueItem(), but works always
@@ -124,7 +124,7 @@ public:
     virtual void        SetItemValue( ItemT& rItem, ValueT aValue ) const = 0;
 
 private:
-    USHORT              mnSlot;     /// The SID of this item wrapper.
+    sal_uInt16              mnSlot;     /// The SID of this item wrapper.
 };
 
 // ============================================================================
@@ -143,7 +143,7 @@ template< typename ItemT, typename ValueT, typename InternalValueT = ValueT >
 class ValueItemWrapper : public SingleItemWrapper< ItemT, ValueT >
 {
 public:
-    inline explicit     ValueItemWrapper( USHORT nSlot ) :
+    inline explicit     ValueItemWrapper( sal_uInt16 nSlot ) :
                             SingleItemWrapper< ItemT, ValueT >( nSlot ) {}
 
     virtual ValueT      GetItemValue( const ItemT& rItem ) const
@@ -154,11 +154,11 @@ public:
 
 // ----------------------------------------------------------------------------
 
-typedef ValueItemWrapper< SfxBoolItem,   BOOL >          BoolItemWrapper;
-typedef ValueItemWrapper< SfxInt16Item,  INT16 >         Int16ItemWrapper;
-typedef ValueItemWrapper< SfxUInt16Item, UINT16 >        UInt16ItemWrapper;
-typedef ValueItemWrapper< SfxInt32Item,  INT32 >         Int32ItemWrapper;
-typedef ValueItemWrapper< SfxUInt32Item, UINT32 >        UInt32ItemWrapper;
+typedef ValueItemWrapper< SfxBoolItem,   sal_Bool >          BoolItemWrapper;
+typedef ValueItemWrapper< SfxInt16Item,  sal_Int16 >         Int16ItemWrapper;
+typedef ValueItemWrapper< SfxUInt16Item, sal_uInt16 >        UInt16ItemWrapper;
+typedef ValueItemWrapper< SfxInt32Item,  sal_Int32 >         Int32ItemWrapper;
+typedef ValueItemWrapper< SfxUInt32Item, sal_uInt32 >        UInt32ItemWrapper;
 typedef ValueItemWrapper< SfxStringItem, const String& > StringItemWrapper;
 
 // ============================================================================
@@ -168,7 +168,7 @@ template< typename ItemT >
 class IdentItemWrapper : public SingleItemWrapper< ItemT, const ItemT& >
 {
 public:
-    inline explicit     IdentItemWrapper( USHORT nSlot ) :
+    inline explicit     IdentItemWrapper( sal_uInt16 nSlot ) :
                             SingleItemWrapper< ItemT, const ItemT& >( nSlot ) {}
 
     virtual const ItemT& GetItemValue( const ItemT& rItem ) const

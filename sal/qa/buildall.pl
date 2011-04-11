@@ -272,7 +272,7 @@ sub giveOutFailures($$)
     if ($nFailures > 0)
     {
         # extra return for a better output
-        print "\nFailures occured: $nFailures\n";
+        print "\nFailures occurred: $nFailures\n";
         print "The whole output can be found in $sFailureFile\n";
         print "\n";
 
@@ -488,7 +488,7 @@ $/)
 
     if ($nGlobalFailures > 0)
     {
-        print "\nFailures over all occured: $nGlobalFailures\n";
+        print "\nFailures over all occurred: $nGlobalFailures\n";
         print "\nPASSED FAILED.\n";
     }
     else

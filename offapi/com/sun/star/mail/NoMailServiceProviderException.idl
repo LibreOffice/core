@@ -41,7 +41,7 @@ module com { module sun { module star { module mail {
 
    @see com::sun::star::mail::MailService
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 exception NoMailServiceProviderException: com::sun::star::mail::MailException
 {

@@ -110,7 +110,7 @@ public:
 double ScrollTextAnimNode::GetStateAtRelativeTime(
     sal_uInt32 nRelativeTime) const
 {
-    // #151174# Avoid division by zero.
+    // Avoid division by zero.
     if( mnDuration == 0 )
         return mfStop;
 
@@ -359,7 +359,7 @@ sal_uInt32 ActivityImpl::GetStepWidthLogic() const
     {
         // step 1 pixel, canned value
 
-        // #128389# with very high DPIs like in PDF export, this can
+        // with very high DPIs like in PDF export, this can
         // still get zero.  for that cases, set a default, too (taken
         // from ainfoscrolltext.cxx)
         nRetval = 100L;
@@ -376,7 +376,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
         sal_uInt32 nLoopTime;
         double fZeroLogic, fOneLogic, fInitLogic, fDistanceLogic;
         double fZeroLogicAlternate = 0.0, fOneLogicAlternate = 0.0;
-        double fZeroRelative, fOneRelative, fInitRelative,fDistanceRelative;
+        double fZeroRelative, fOneRelative, fInitRelative;
 
         if(ScrollHorizontal())
         {
@@ -429,13 +429,11 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
                 (fZeroLogicAlternate - fZeroLogic) / fDistanceLogic;
             fOneRelative =
                 (fOneLogicAlternate - fZeroLogic) / fDistanceLogic;
-            fDistanceRelative = fOneRelative - fZeroRelative;
         }
         else
         {
             fZeroRelative = 0.0;
             fOneRelative = 1.0;
-            fDistanceRelative = 1.0;
         }
 
         if(mnStartTime)
@@ -971,8 +969,7 @@ boost::shared_ptr<Activity> createDrawingLayerAnimActivity(
     catch( uno::Exception& )
     {
         // translate any error into empty factory product.
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
+        OSL_FAIL( rtl::OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }

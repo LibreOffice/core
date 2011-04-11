@@ -163,8 +163,8 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 // class SfxDocumentPage -------------------------------------------------
@@ -174,6 +174,7 @@ class SfxDocumentPage : public SfxTabPage
 private:
     FixedImage                  aBmp1;
     Edit                        aNameED;
+    PushButton                  aChangePassBtn;
 
     FixedLine                   aLine1FL;
     FixedText                   aTypeFT;
@@ -208,17 +209,19 @@ private:
     String                      aUnknownSize;
     String                      aMultiSignedStr;
 
-    BOOL                        bEnableUseUserData  : 1,
+    sal_Bool                        bEnableUseUserData  : 1,
                                 bHandleDelete       : 1;
 
     DECL_LINK(          DeleteHdl, PushButton * );
     DECL_LINK(          SignatureHdl, PushButton * );
+    DECL_LINK( ChangePassHdl, PushButton * );
     void                ImplUpdateSignatures();
+    void                ImplCheckPasswordState();
 
 protected:
     SfxDocumentPage( Window* pParent, const SfxItemSet& );
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
 public:
@@ -245,7 +248,7 @@ private:
 protected:
     SfxDocumentDescPage( Window* pParent, const SfxItemSet& );
 
-    virtual BOOL            FillItemSet( SfxItemSet& );
+    virtual sal_Bool            FillItemSet( SfxItemSet& );
     virtual void            Reset( const SfxItemSet& );
 
 public:
@@ -254,7 +257,6 @@ public:
 
 // class SfxInternetPage -------------------------------------------------
 
-class TargetList;
 namespace sfx2
 {
     class FileDialogHelper;
@@ -291,9 +293,9 @@ private:
 
     void                    ChangeState( STATE eNewState );     // S_Init is not a valid value here
                                                                 // also checks corresponding radiobutton
-    void                    EnableNoUpdate( BOOL bEnable );
-    void                    EnableReload( BOOL bEnable );
-    void                    EnableForward( BOOL bEnable );
+    void                    EnableNoUpdate( sal_Bool bEnable );
+    void                    EnableReload( sal_Bool bEnable );
+    void                    EnableForward( sal_Bool bEnable );
 
     DECL_LINK( ClickHdlNoUpdate, Control* );
     DECL_LINK( ClickHdlReload, Control* );
@@ -307,7 +309,7 @@ protected:
     SfxInternetPage( Window* pParent, const SfxItemSet& );
     ~SfxInternetPage();
 
-    virtual BOOL            FillItemSet( SfxItemSet& );
+    virtual sal_Bool            FillItemSet( SfxItemSet& );
     virtual void            Reset( const SfxItemSet& );
     virtual int                     DeactivatePage( SfxItemSet* pSet = 0 );
 
@@ -320,7 +322,7 @@ public:
 class SFX2_DLLPUBLIC SfxDocumentInfoDialog : public SfxTabDialog
 {
 protected:
-    virtual void    PageCreated( USHORT nId, SfxTabPage& rPage );
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage& rPage );
 
 public:
     SfxDocumentInfoDialog(  Window* pParent, const SfxItemSet& );
@@ -431,7 +433,7 @@ public:
 
     inline void     CheckYes() { m_aYesButton.Check(); }
     inline void     CheckNo() { m_aNoButton.Check(); }
-    inline bool     IsYesChecked() const { return m_aYesButton.IsChecked() != FALSE; }
+    inline bool     IsYesChecked() const { return m_aYesButton.IsChecked() != sal_False; }
 };
 
 // struct CustomPropertyLine ---------------------------------------------
@@ -503,7 +505,7 @@ public:
     ~CustomPropertiesWindow();
 
     void                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
-    USHORT              GetVisibleLineCount() const;
+    sal_uInt16              GetVisibleLineCount() const;
     inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
     void                AddLine( const ::rtl::OUString& sName, com::sun::star::uno::Any& rAny );
     bool                AreAllLinesValid() const;
@@ -553,9 +555,9 @@ public:
 class SfxCustomPropertiesPage : public SfxTabPage
 {
 private:
-    FixedText               m_aPropertiesFT;
     CustomPropertiesControl m_aPropertiesCtrl;
     PushButton              m_aAddBtn;
+    FixedText               m_aPropertiesFT; // Sym2_5121----, Moved by Steve Yin
 
     DECL_LINK(  AddHdl, PushButton* );
 
@@ -564,7 +566,7 @@ private:
 protected:
     SfxCustomPropertiesPage( Window* pParent, const SfxItemSet& );
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
 

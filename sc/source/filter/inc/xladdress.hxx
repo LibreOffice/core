@@ -42,13 +42,13 @@ class XclExpStream;
 struct XclAddress
 {
     sal_uInt16          mnCol;
-    sal_uInt16          mnRow;
+    sal_uInt32          mnRow;
 
     inline explicit     XclAddress( ScAddress::Uninitialized ) {}
     inline explicit     XclAddress() : mnCol( 0 ), mnRow( 0 ) {}
-    inline explicit     XclAddress( sal_uInt16 nCol, sal_uInt16 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
+    inline explicit     XclAddress( sal_uInt16 nCol, sal_uInt32 nRow ) : mnCol( nCol ), mnRow( nRow ) {}
 
-    inline void         Set( sal_uInt16 nCol, sal_uInt16 nRow ) { mnCol = nCol; mnRow = nRow; }
+    inline void         Set( sal_uInt16 nCol, sal_uInt32 nRow ) { mnCol = nCol; mnRow = nRow; }
 
     void                Read( XclImpStream& rStrm, bool bCol16Bit = true );
     void                Write( XclExpStream& rStrm, bool bCol16Bit = true ) const;
@@ -88,16 +88,16 @@ struct XclRange
     inline explicit     XclRange() {}
     inline explicit     XclRange( const XclAddress& rPos ) : maFirst( rPos ), maLast( rPos ) {}
     inline explicit     XclRange( const XclAddress& rFirst, const XclAddress& rLast ) : maFirst( rFirst ), maLast( rLast ) {}
-    inline explicit     XclRange( sal_uInt16 nCol1, sal_uInt16 nRow1, sal_uInt16 nCol2, sal_uInt16 nRow2 ) :
+    inline explicit     XclRange( sal_uInt16 nCol1, sal_uInt32 nRow1, sal_uInt16 nCol2, sal_uInt32 nRow2 ) :
                             maFirst( nCol1, nRow1 ), maLast( nCol2, nRow2 ) {}
 
     inline void         Set( const XclAddress& rFirst, const XclAddress& rLast )
                             { maFirst = rFirst; maLast = rLast; }
-    inline void         Set( sal_uInt16 nCol1, sal_uInt16 nRow1, sal_uInt16 nCol2, sal_uInt16 nRow2 )
+    inline void         Set( sal_uInt16 nCol1, sal_uInt32 nRow1, sal_uInt16 nCol2, sal_uInt32 nRow2 )
                             { maFirst.Set( nCol1, nRow1 ); maLast.Set( nCol2, nRow2 ); }
 
     inline sal_uInt16   GetColCount() const { return maLast.mnCol - maFirst.mnCol + 1; }
-    inline sal_uInt16   GetRowCount() const { return maLast.mnRow - maFirst.mnRow + 1; }
+    inline sal_uInt32   GetRowCount() const { return maLast.mnRow - maFirst.mnRow + 1; }
     bool                Contains( const XclAddress& rPos ) const;
 
     void                Read( XclImpStream& rStrm, bool bCol16Bit = true );
@@ -186,7 +186,7 @@ protected:
     XclTracer&          mrTracer;       /// Tracer for invalid addresses.
     ScAddress           maMaxPos;       /// Default maximum position.
     sal_uInt16          mnMaxCol;       /// Maximum column index, as 16-bit value.
-    sal_uInt16          mnMaxRow;       /// Maximum row index, as 16-bit value.
+    sal_uInt32          mnMaxRow;       /// Maximum row index.
     bool                mbColTrunc;     /// Flag for "columns truncated" warning box.
     bool                mbRowTrunc;     /// Flag for "rows truncated" warning box.
     bool                mbTabTrunc;     /// Flag for "tables truncated" warning box.

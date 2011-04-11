@@ -56,7 +56,7 @@
 #include "xestyle.hxx"
 #include "xename.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
@@ -263,8 +263,8 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
         return;
 
     sax_fastparser::FSHelperPtr pSst = rStrm.CreateOutputStream(
-            OUString::createFromAscii( "xl/sharedStrings.xml" ),
-            OUString::createFromAscii( "sharedStrings.xml" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "xl/sharedStrings.xml") ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "sharedStrings.xml" )),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" );
@@ -332,12 +332,15 @@ void XclExpMergedcells::AppendRange( const ScRange& rRange, sal_uInt32 nBaseXFId
 
 sal_uInt32 XclExpMergedcells::GetBaseXFId( const ScAddress& rPos ) const
 {
-    DBG_ASSERT( maBaseXFIds.size() == maMergedRanges.Count(), "XclExpMergedcells::GetBaseXFId - invalid lists" );
+    DBG_ASSERT( maBaseXFIds.size() == maMergedRanges.size(), "XclExpMergedcells::GetBaseXFId - invalid lists" );
     ScfUInt32Vec::const_iterator aIt = maBaseXFIds.begin();
     ScRangeList& rNCRanges = const_cast< ScRangeList& >( maMergedRanges );
-    for( const ScRange* pScRange = rNCRanges.First(); pScRange; pScRange = rNCRanges.Next(), ++aIt )
+    for ( size_t i = 0, nRanges = rNCRanges.size(); i < nRanges; ++i, ++aIt )
+    {
+        const ScRange* pScRange = rNCRanges[ i ];
         if( pScRange->In( rPos ) )
             return *aIt;
+    }
     return EXC_XFID_NOTFOUND;
 }
 
@@ -363,16 +366,16 @@ void XclExpMergedcells::Save( XclExpStream& rStrm )
 
 void XclExpMergedcells::SaveXml( XclExpXmlStream& rStrm )
 {
-    ULONG nCount = maMergedRanges.Count();
+    size_t nCount = maMergedRanges.size();
     if( !nCount )
         return;
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_mergeCells,
             XML_count,  OString::valueOf( (sal_Int32) nCount ).getStr(),
             FSEND );
-    for( ULONG i = 0; i < nCount; ++i )
+    for( size_t i = 0; i < nCount; ++i )
     {
-        if( const ScRange* pRange = maMergedRanges.GetObject( i ) )
+        if( const ScRange* pRange = maMergedRanges[ i ] )
         {
             rWorksheet->singleElement( XML_mergeCell,
                     XML_ref,    XclXmlUtils::ToOString( *pRange ).getStr(),
@@ -410,11 +413,19 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     }
 
     // file link or URL
-    if( eProtocol == INET_PROT_FILE )
+    if( eProtocol == INET_PROT_FILE || eProtocol == INET_PROT_SMB )
     {
         sal_uInt16 nLevel;
         bool bRel;
         String aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot ) );
+
+        if( eProtocol == INET_PROT_SMB )
+        {
+            // #n382718# (and #n261623#) Convert smb notation to '\\'
+            aFileName = aUrlObj.GetMainURL( INetURLObject::NO_DECODE );
+            aFileName = String( aFileName.GetBuffer() + 4 ); // skip the 'smb:' part
+            aFileName.SearchAndReplaceAll( '/', '\\' );
+        }
 
         if( !bRel )
             mnFlags |= EXC_HLINK_ABS;
@@ -568,9 +579,12 @@ XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
     // row label ranges
     FillRangeList( maRowRanges, rRoot.GetDoc().GetRowNameRangesRef(), nScTab );
     // row labels only over 1 column (restriction of Excel97/2000/XP)
-    for( ScRange* pScRange = maRowRanges.First(); pScRange; pScRange = maRowRanges.Next() )
+    for ( size_t i = 0, nRanges = maRowRanges.size(); i < nRanges; ++i )
+    {
+        ScRange* pScRange = maRowRanges[ i ];
         if( pScRange->aStart.Col() != pScRange->aEnd.Col() )
             pScRange->aEnd.SetCol( pScRange->aStart.Col() );
+    }
     // col label ranges
     FillRangeList( maColRanges, rRoot.GetDoc().GetColNameRangesRef(), nScTab );
 }
@@ -578,8 +592,9 @@ XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
 void XclExpLabelranges::FillRangeList( ScRangeList& rScRanges,
         ScRangePairListRef xLabelRangesRef, SCTAB nScTab )
 {
-    for( const ScRangePair* pRangePair = xLabelRangesRef->First(); pRangePair; pRangePair = xLabelRangesRef->Next() )
+    for ( size_t i = 0, nPairs = xLabelRangesRef->size(); i < nPairs; ++i )
     {
+        ScRangePair* pRangePair = (*xLabelRangesRef)[i];
         const ScRange& rScRange = pRangePair->GetRange( 0 );
         if( rScRange.aStart.Tab() == nScTab )
             rScRanges.Append( rScRange );
@@ -838,7 +853,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     GetAddressConverter().ConvertRangeList( maXclRanges, aScRanges, true );
     if( !maXclRanges.empty() )
     {
-        for( USHORT nIndex = 0, nCount = rCondFormat.Count(); nIndex < nCount; ++nIndex )
+        for( sal_uInt16 nIndex = 0, nCount = rCondFormat.Count(); nIndex < nCount; ++nIndex )
             if( const ScCondFormatEntry* pEntry = rCondFormat.GetEntry( nIndex ) )
                 maCFList.AppendNewRecord( new XclExpCF( GetRoot(), *pEntry ) );
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
@@ -981,7 +996,7 @@ const char* lcl_GetOperatorType( sal_uInt32 nFlags )
 
 // ----------------------------------------------------------------------------
 
-XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
+XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
     XclExpRecord( EXC_ID_DV ),
     XclExpRoot( rRoot ),
     mnFlags( 0 ),
@@ -991,7 +1006,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
     {
         // prompt box - empty string represented by single NUL character
         String aTitle, aText;
-        bool bShowPrompt = (pValData->GetInput( aTitle, aText ) == TRUE);
+        bool bShowPrompt = (pValData->GetInput( aTitle, aText ) == sal_True);
         if( aTitle.Len() )
             maPromptTitle.Assign( aTitle );
         else
@@ -1003,7 +1018,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
 
         // error box - empty string represented by single NUL character
         ScValidErrorStyle eScErrorStyle;
-        bool bShowError = (pValData->GetErrMsg( aTitle, aText, eScErrorStyle ) == TRUE);
+        bool bShowError = (pValData->GetErrMsg( aTitle, aText, eScErrorStyle ) == sal_True);
         if( aTitle.Len() )
             maErrorTitle.Assign( aTitle );
         else
@@ -1046,7 +1061,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
             case SC_VALERR_WARNING:     mnFlags |= EXC_DV_ERROR_WARNING;    break;
             case SC_VALERR_INFO:        mnFlags |= EXC_DV_ERROR_INFO;       break;
             case SC_VALERR_MACRO:
-                // #111781# set INFO for validity with macro call, delete title
+                // set INFO for validity with macro call, delete title
                 mnFlags |= EXC_DV_ERROR_INFO;
                 maErrorTitle.Assign( '\0' );    // contains macro name
             break;
@@ -1207,7 +1222,7 @@ XclExpDval::~XclExpDval()
 {
 }
 
-void XclExpDval::InsertCellRange( const ScRange& rRange, ULONG nScHandle )
+void XclExpDval::InsertCellRange( const ScRange& rRange, sal_uLong nScHandle )
 {
     if( GetBiff() == EXC_BIFF8 )
     {
@@ -1252,7 +1267,7 @@ void XclExpDval::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_dataValidations );
 }
 
-XclExpDV& XclExpDval::SearchOrCreateDv( ULONG nScHandle )
+XclExpDV& XclExpDval::SearchOrCreateDv( sal_uLong nScHandle )
 {
     // test last found record
     if( mxLastFoundDV.get() && (mxLastFoundDV->GetScHandle() == nScHandle) )
@@ -1265,7 +1280,7 @@ XclExpDV& XclExpDval::SearchOrCreateDv( ULONG nScHandle )
         size_t nFirstPos = 0;
         size_t nLastPos = maDVList.GetSize() - 1;
         bool bLoop = true;
-        ULONG nCurrScHandle = ::std::numeric_limits< ULONG >::max();
+        sal_uLong nCurrScHandle = ::std::numeric_limits< sal_uLong >::max();
         while( (nFirstPos <= nLastPos) && bLoop )
         {
             nCurrPos = (nFirstPos + nLastPos) / 2;
@@ -1451,7 +1466,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
                     String aRangeName;
                     ScRange aScDestRange;
                     ScUnoConversion::FillScRange( aScDestRange, aDestRange );
-                    if( const ScRangeData* pRangeData = rRoot.GetNamedRanges().GetRangeAtBlock( aScDestRange ) )
+                    if( const ScRangeData* pRangeData = rRoot.GetNamedRanges().findByRange( aScDestRange ) )
                     {
                         aRangeName = pRangeData->GetName();
                     }

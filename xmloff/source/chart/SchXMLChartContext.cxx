@@ -31,6 +31,7 @@
 
 #include "SchXMLChartContext.hxx"
 #include "SchXMLImport.hxx"
+#include "SchXMLLegendContext.hxx"
 #include "SchXMLPlotAreaContext.hxx"
 #include "SchXMLParagraphContext.hxx"
 #include "SchXMLTableContext.hxx"
@@ -41,7 +42,7 @@
 #include <tools/debug.hxx>
 // header for class ByteString
 #include <tools/string.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -53,7 +54,6 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagram.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/util/XStringMapping.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -61,10 +61,8 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -79,48 +77,6 @@ using namespace ::SchXMLTools;
 
 namespace
 {
-uno::Reference< chart2::XChartTypeTemplate > lcl_getTemplate( const uno::Reference< chart2::XChartDocument > & xDoc )
-{
-    uno::Reference< chart2::XChartTypeTemplate > xResult;
-    try
-    {
-        if( !xDoc.is())
-            return xResult;
-        uno::Reference< lang::XMultiServiceFactory > xChartTypeManager( xDoc->getChartTypeManager(), uno::UNO_QUERY );
-        if( !xChartTypeManager.is())
-            return xResult;
-        uno::Reference< chart2::XDiagram > xDiagram( xDoc->getFirstDiagram());
-        if( !xDiagram.is())
-            return xResult;
-
-        uno::Sequence< ::rtl::OUString > aServiceNames( xChartTypeManager->getAvailableServiceNames());
-        const sal_Int32 nLength = aServiceNames.getLength();
-
-        for( sal_Int32 i = 0; i < nLength; ++i )
-        {
-            try
-            {
-                uno::Reference< chart2::XChartTypeTemplate > xTempl(
-                    xChartTypeManager->createInstance( aServiceNames[ i ] ), uno::UNO_QUERY_THROW );
-
-                if( xTempl->matchesTemplate( xDiagram, sal_True ))
-                {
-                    xResult.set( xTempl );
-                    break;
-                }
-            }
-            catch( uno::Exception & )
-            {
-                DBG_ERROR( "Exception during determination of chart type template" );
-            }
-        }
-    }
-    catch( uno::Exception & )
-    {
-        DBG_ERROR( "Exception during import lcl_getTemplate" );
-    }
-    return xResult;
-}
 
 void lcl_setRoleAtLabeledSequence(
     const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq,
@@ -132,7 +88,7 @@ void lcl_setRoleAtLabeledSequence(
     {
         uno::Reference< beans::XPropertySet > xProp( xValues, uno::UNO_QUERY );
         if( xProp.is())
-            xProp->setPropertyValue(OUString::createFromAscii("Role"), uno::makeAny( rRole ));
+            xProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM( "Role" )), uno::makeAny( rRole ));
     }
 }
 
@@ -161,7 +117,7 @@ void lcl_MoveDataToCandleStickSeries(
     }
     catch( uno::Exception & )
     {
-        OSL_ENSURE( false, "Exception caught while moving data to candlestick series" );
+        OSL_FAIL( "Exception caught while moving data to candlestick series" );
     }
 }
 
@@ -221,7 +177,7 @@ void lcl_removeEmptyChartTypeGroups( const uno::Reference< chart2::XChartDocumen
     {
         String aStr( ex.Message );
         ByteString aBStr( aStr, RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR1( "Exception caught while removing empty chart types: %s", aBStr.GetBuffer());
+        OSL_TRACE( "Exception caught while removing empty chart types: %s", aBStr.GetBuffer());
     }
 }
 
@@ -278,19 +234,6 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const ::rtl::OUStrin
 
 } // anonymous namespace
 
-static __FAR_DATA SvXMLEnumMapEntry aXMLLegendAlignmentMap[] =
-{
-//  { XML_LEFT,         chart::ChartLegendPosition_LEFT     },
-    // #i35421#
-    { XML_START,        chart::ChartLegendPosition_LEFT     },
-    { XML_TOP,          chart::ChartLegendPosition_TOP      },
-//  { XML_RIGHT,        chart::ChartLegendPosition_RIGHT    },
-    // #i35421#
-    { XML_END,          chart::ChartLegendPosition_RIGHT    },
-    { XML_BOTTOM,       chart::ChartLegendPosition_BOTTOM   },
-    { XML_TOKEN_INVALID, 0 }
-};
-
 // ----------------------------------------
 
 SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
@@ -333,7 +276,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
@@ -401,7 +344,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
     if( aOldChartTypeName.getLength()<= 0 )
     {
-        DBG_ERROR( "need a charttype to create a diagram" );
+        OSL_FAIL( "need a charttype to create a diagram" );
         //set a fallback value:
         ::rtl::OUString aChartClass_Bar( GetXMLToken(XML_BAR ) );
         aOldChartTypeName = SchXMLTools::GetChartTypeByClassName( aChartClass_Bar, true /* bUseOldNames */ );
@@ -423,13 +366,13 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         {
             try
             {
-                xDocProp->getPropertyValue( ::rtl::OUString::createFromAscii("BaseDiagram")) >>= aOldChartTypeName;
+                xDocProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "BaseDiagram" ))) >>= aOldChartTypeName;
                 maChartTypeServiceName =  SchXMLTools::GetNewChartTypeName( aOldChartTypeName );
-                xDocProp->setPropertyValue( rtl::OUString::createFromAscii( "RefreshAddInAllowed" ) , uno::makeAny( sal_False) );
+                xDocProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RefreshAddInAllowed" )) , uno::makeAny( sal_False) );
             }
             catch( uno::Exception & )
             {
-                DBG_ERROR( "Exception during import SchXMLChartContext::StartElement" );
+                OSL_FAIL( "Exception during import SchXMLChartContext::StartElement" );
             }
         }
     }
@@ -547,23 +490,6 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
         }
         nOldSeriesCount = nMaxOldSeriesIndex+1;
     }
-    /*
-    sal_Int32 nOldSeriesCount = 0;
-    {
-        sal_Int32 nMaxOldSeriesIndex = 0;
-        sal_Int32 nOldSeriesIndex = 0;
-        for( aIt = rStyleList.begin(); aIt != aEnd; ++aIt )
-        {
-            DataRowPointStyle aStyle(*aIt);
-            if(aStyle.meType == DataRowPointStyle::DATA_SERIES )
-            {
-                nMaxOldSeriesIndex = nOldSeriesIndex;
-                nOldSeriesIndex++;
-            }
-        }
-        nOldSeriesCount = nMaxOldSeriesIndex+1;
-    }
-    */
 
 
     //initialize new series styles
@@ -686,10 +612,6 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
     if( !xNewDia.is() || !xDataProvider.is() )
         return;
 
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate( lcl_getTemplate( xNewDoc ));
-    if(!xTemplate.is())
-        return;
-
     sal_Bool bFirstCellAsLabel =
         (eDataRowSource==chart::ChartDataRowSource_COLUMNS)? bRowHasLabels : bColHasLabels;
     sal_Bool bHasCateories =
@@ -703,15 +625,15 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
 
     uno::Sequence< beans::PropertyValue > aArgs( 3 );
     aArgs[0] = beans::PropertyValue(
-        ::rtl::OUString::createFromAscii("CellRangeRepresentation"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellRangeRepresentation" )),
         -1, uno::makeAny( rRectangularRange ),
         beans::PropertyState_DIRECT_VALUE );
     aArgs[1] = beans::PropertyValue(
-        ::rtl::OUString::createFromAscii("DataRowSource"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )),
         -1, uno::makeAny( eDataRowSource ),
         beans::PropertyState_DIRECT_VALUE );
     aArgs[2] = beans::PropertyValue(
-        ::rtl::OUString::createFromAscii("FirstCellAsLabel"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FirstCellAsLabel" )),
         -1, uno::makeAny( bFirstCellAsLabel ),
         beans::PropertyState_DIRECT_VALUE );
 
@@ -719,7 +641,7 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
     {
         aArgs.realloc( aArgs.getLength() + 1 );
         aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
-            ::rtl::OUString::createFromAscii("SequenceMapping"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SequenceMapping" )),
             -1, uno::makeAny( sColTrans.getLength()
                 ? lcl_getNumberSequenceFromString( sColTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() )
                 : lcl_getNumberSequenceFromString( sRowTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() ) ),
@@ -745,7 +667,7 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
         {
             aArgs.realloc( aArgs.getLength() + 1 );
             aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
-                ::rtl::OUString::createFromAscii("ChartOleObjectName"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ChartOleObjectName" )),
                 -1, uno::makeAny( aChartOleObjectName ),
                 beans::PropertyState_DIRECT_VALUE );
         }
@@ -755,13 +677,17 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
     uno::Reference< chart2::data::XDataSource > xDataSource(
         xDataProvider->createDataSource( aArgs ));
 
-    aArgs.realloc( aArgs.getLength() + 1 );
-    aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
-        ::rtl::OUString::createFromAscii("HasCategories"),
+    aArgs.realloc( aArgs.getLength() + 2 );
+    aArgs[ aArgs.getLength() - 2 ] = beans::PropertyValue(
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasCategories" )),
         -1, uno::makeAny( bHasCateories ),
         beans::PropertyState_DIRECT_VALUE );
+    aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
+        ::rtl::OUString::createFromAscii("UseCategoriesAsX"),
+        -1, uno::makeAny( sal_False ),//categories in ODF files are not to be used as x values (independent from what is offered in our ui)
+        beans::PropertyState_DIRECT_VALUE );
 
-    xTemplate->changeDiagramData( xNewDia, xDataSource, aArgs );
+    xNewDia->setDiagramData( xDataSource, aArgs );
 }
 
 void SchXMLChartContext::EndElement()
@@ -785,7 +711,7 @@ void SchXMLChartContext::EndElement()
                 }
                 catch( beans::UnknownPropertyException )
                 {
-                    DBG_ERROR( "Property String for Title not available" );
+                    OSL_FAIL( "Property String for Title not available" );
                 }
             }
         }
@@ -802,7 +728,7 @@ void SchXMLChartContext::EndElement()
                 }
                 catch( beans::UnknownPropertyException )
                 {
-                    DBG_ERROR( "Property String for Title not available" );
+                    OSL_FAIL( "Property String for Title not available" );
                 }
             }
         }
@@ -811,8 +737,7 @@ void SchXMLChartContext::EndElement()
     // cleanup: remove empty chart type groups
     lcl_removeEmptyChartTypeGroups( xNewDoc );
 
-    // set stack mode before a potential template detection (in case we have a
-    // rectangular range)
+    // set stack mode before a potential chart type detection (in case we have a rectangular range)
     uno::Reference< chart::XDiagram > xDiagram( xDoc->getDiagram() );
     uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
     if( xDiaProp.is())
@@ -836,9 +761,9 @@ void SchXMLChartContext::EndElement()
         return;
 
     bool bHasOwnData = false;
-    if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAscii( "." ) ) //data comes from the chart itself
+    if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "." ) ) ) //data comes from the chart itself
         bHasOwnData = true;
-    else if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAscii( ".." ) ) //data comes from the parent application
+    else if( m_aXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".." ) ) ) //data comes from the parent application
         bHasOwnData = false;
     else if( m_aXLinkHRefAttributeToIndicateDataProvider.getLength() ) //not supported so far to get the data by sibling objects -> fall back to chart itself if data are available
         bHasOwnData = m_bHasTableElement;
@@ -847,7 +772,7 @@ void SchXMLChartContext::EndElement()
 
     if( xNewDoc->hasInternalDataProvider())
     {
-        if( !m_bHasTableElement && !m_aXLinkHRefAttributeToIndicateDataProvider.equalsAscii( "." ) )
+        if( !m_bHasTableElement && !m_aXLinkHRefAttributeToIndicateDataProvider.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "." ) ) )
         {
             //#i103147# ODF, workaround broken files with a missing table:cell-range-address at the plot-area
             bool bSwitchSuccessful = SchXMLTools::switchBackToDataProviderFromParent( xNewDoc, maLSequencesPerIndex );
@@ -861,7 +786,7 @@ void SchXMLChartContext::EndElement()
         xNewDoc->createInternalDataProvider( sal_False /* bCloneExistingData */ );
     }
     if( bHasOwnData )
-        msChartAddress = ::rtl::OUString::createFromAscii("all");
+        msChartAddress = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "all" ));
 
     bool bSwitchRangesFromOuterToInternalIfNecessary = false;
     if( !bHasOwnData && mbAllRangeAddressesAvailable )
@@ -891,8 +816,7 @@ void SchXMLChartContext::EndElement()
         {
             //apply data from rectangular range
 
-            // create datasource from data provider with rectangular range
-            // parameters and change the diagram via template mechanism
+            // create datasource from data provider with rectangular range parameters and change the diagram setDiagramData
             try
             {
                 if( bOlderThan2_3 && xDiaProp.is() )//for older charts the hidden cells were removed by calc on the fly
@@ -905,11 +829,11 @@ void SchXMLChartContext::EndElement()
             catch( uno::Exception & )
             {
                 //try to fallback to internal data
-                DBG_ERROR( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram try to fallback to internal data" );
+                OSL_FAIL( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram try to fallback to internal data" );
                 if(!bHasOwnData)
                 {
                     bHasOwnData = true;
-                    msChartAddress = ::rtl::OUString::createFromAscii("all");
+                    msChartAddress = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "all" ));
                     if( !xNewDoc->hasInternalDataProvider() )
                     {
                         xNewDoc->createInternalDataProvider( sal_False /* bCloneExistingData */ );
@@ -920,7 +844,7 @@ void SchXMLChartContext::EndElement()
                         }
                         catch( uno::Exception & )
                         {
-                            DBG_ERROR( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram fallback to internal data failed also" );
+                            OSL_FAIL( "Exception during import SchXMLChartContext::lcl_ApplyDataFromRectangularRangeToDiagram fallback to internal data failed also" );
                         }
                     }
                 }
@@ -929,7 +853,7 @@ void SchXMLChartContext::EndElement()
     }
     else
     {
-        DBG_ERROR( " Must not get here" );
+        OSL_FAIL( " Must not get here" );
     }
 
     // now all series and data point properties are available and can be set
@@ -994,7 +918,7 @@ void SchXMLChartContext::EndElement()
     }
 
     if( xProp.is())
-        xProp->setPropertyValue( rtl::OUString::createFromAscii( "RefreshAddInAllowed" ) , uno::makeAny( sal_True) );
+        xProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RefreshAddInAllowed" )) , uno::makeAny( sal_True) );
 }
 
 void SchXMLChartContext::MergeSeriesForStockChart()
@@ -1023,7 +947,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
                 {
                     xDSContainer.set( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );
                     uno::Reference< beans::XPropertySet > xCTProp( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );
-                    xCTProp->getPropertyValue( ::rtl::OUString::createFromAscii("Japanese")) >>= bHasJapaneseCandlestick;
+                    xCTProp->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Japanese" ))) >>= bHasJapaneseCandlestick;
                     break;
                 }
             }
@@ -1045,39 +969,39 @@ void SchXMLChartContext::MergeSeriesForStockChart()
                 if( bHasJapaneseCandlestick )
                 {
                     // open values
-                    lcl_setRoleAtFirstSequence( aSeriesSeq[ nSeriesIndex ], OUString::createFromAscii("values-first"));
+                    lcl_setRoleAtFirstSequence( aSeriesSeq[ nSeriesIndex ], OUString(RTL_CONSTASCII_USTRINGPARAM( "values-first" )));
                     aNewSeries[i] = aSeriesSeq[ nSeriesIndex ];
                     // low values
                     lcl_MoveDataToCandleStickSeries(
                         uno::Reference< chart2::data::XDataSource >( aSeriesSeq[ ++nSeriesIndex ], uno::UNO_QUERY_THROW ),
-                        aNewSeries[i], OUString::createFromAscii("values-min"));
+                        aNewSeries[i], OUString(RTL_CONSTASCII_USTRINGPARAM( "values-min" )));
                 }
                 else
                 {
                     // low values
-                    lcl_setRoleAtFirstSequence( aSeriesSeq[ nSeriesIndex ], OUString::createFromAscii("values-min"));
+                    lcl_setRoleAtFirstSequence( aSeriesSeq[ nSeriesIndex ], OUString(RTL_CONSTASCII_USTRINGPARAM( "values-min" )));
                     aNewSeries[i] = aSeriesSeq[ nSeriesIndex ];
                 }
                 // high values
                 lcl_MoveDataToCandleStickSeries(
                     uno::Reference< chart2::data::XDataSource >( aSeriesSeq[ ++nSeriesIndex ], uno::UNO_QUERY_THROW ),
-                    aNewSeries[i], OUString::createFromAscii("values-max"));
+                    aNewSeries[i], OUString(RTL_CONSTASCII_USTRINGPARAM( "values-max" )));
                 // close values
                 lcl_MoveDataToCandleStickSeries(
                     uno::Reference< chart2::data::XDataSource >( aSeriesSeq[ ++nSeriesIndex ], uno::UNO_QUERY_THROW ),
-                    aNewSeries[i], OUString::createFromAscii("values-last"));
+                    aNewSeries[i], OUString(RTL_CONSTASCII_USTRINGPARAM( "values-last" )));
             }
             xDSContainer->setDataSeries( aNewSeries );
         }
     }
     catch( uno::Exception & )
     {
-        DBG_ERROR( "Exception while merging series for stock chart" );
+        OSL_FAIL( "Exception while merging series for stock chart" );
     }
 }
 
 SvXMLImportContext* SchXMLChartContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -1108,7 +1032,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
             {
                 if( xProp.is())
                 {
-                    xProp->setPropertyValue( rtl::OUString::createFromAscii( "HasMainTitle" ), aTrueBool );
+                    xProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasMainTitle" )), aTrueBool );
                 }
                 uno::Reference< drawing::XShape > xTitleShape( xDoc->getTitle(), uno::UNO_QUERY );
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
@@ -1121,7 +1045,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
             {
                 if( xProp.is())
                 {
-                    xProp->setPropertyValue( rtl::OUString::createFromAscii( "HasSubTitle" ), aTrueBool );
+                    xProp->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HasSubTitle" )), aTrueBool );
                 }
                 uno::Reference< drawing::XShape > xTitleShape( xDoc->getSubTitle(), uno::UNO_QUERY );
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
@@ -1256,7 +1180,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_SVG )
         {
@@ -1301,7 +1225,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
 }
 
 SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
@@ -1320,116 +1244,5 @@ SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
 
 // ----------------------------------------
 
-SchXMLLegendContext::SchXMLLegendContext( SchXMLImportHelper& rImpHelper,
-                                          SvXMLImport& rImport, const rtl::OUString& rLocalName ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
-        mrImportHelper( rImpHelper )
-{
-}
-
-void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
-{
-    uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
-    if( ! xDoc.is())
-        return;
-
-    // turn on legend
-    uno::Reference< beans::XPropertySet > xDocProp( xDoc, uno::UNO_QUERY );
-    if( xDocProp.is())
-    {
-        uno::Any aTrueBool;
-        aTrueBool <<= (sal_Bool)(sal_True);
-        try
-        {
-            xDocProp->setPropertyValue( rtl::OUString::createFromAscii( "HasLegend" ), aTrueBool );
-        }
-        catch( beans::UnknownPropertyException )
-        {
-            DBG_ERROR( "Property HasLegend not found" );
-        }
-    }
-
-    // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetLegendAttrTokenMap();
-
-    awt::Point aLegendPos;
-    bool bHasXPosition=false;
-    bool bHasYPosition=false;
-
-    rtl::OUString sAutoStyleName;
-
-    for( sal_Int16 i = 0; i < nAttrCount; i++ )
-    {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
-        rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
-        {
-            case XML_TOK_LEGEND_POSITION:
-                {
-                    // set anchor position
-                    uno::Reference< beans::XPropertySet > xProp( xDoc->getLegend(), uno::UNO_QUERY );
-                    if( xProp.is())
-                    {
-                        try
-                        {
-                            USHORT nEnumVal;
-                            if( GetImport().GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLLegendAlignmentMap ))
-                            {
-                                uno::Any aAny;
-                                aAny <<= (chart::ChartLegendPosition)(nEnumVal);
-                                xProp->setPropertyValue( rtl::OUString::createFromAscii( "Alignment" ), aAny );
-                            }
-                        }
-                        catch( beans::UnknownPropertyException )
-                        {
-                            DBG_ERROR( "Property Alignment (legend) not found" );
-                        }
-                    }
-                }
-                break;
-
-            case XML_TOK_LEGEND_X:
-                GetImport().GetMM100UnitConverter().convertMeasure( aLegendPos.X, aValue );
-                bHasXPosition = true;
-                break;
-            case XML_TOK_LEGEND_Y:
-                GetImport().GetMM100UnitConverter().convertMeasure( aLegendPos.Y, aValue );
-                bHasYPosition = true;
-                break;
-            case XML_TOK_LEGEND_STYLE_NAME:
-                sAutoStyleName = aValue;
-        }
-    }
-
-    uno::Reference< drawing::XShape > xLegendShape( xDoc->getLegend(), uno::UNO_QUERY );
-    if( xLegendShape.is() && bHasXPosition && bHasYPosition )
-        xLegendShape->setPosition( aLegendPos );
-
-    // set auto-styles for Legend
-    uno::Reference< beans::XPropertySet > xProp( xLegendShape, uno::UNO_QUERY );
-    if( xProp.is())
-    {
-        // the fill style has the default "none" in XML, but "solid" in the model.
-        xProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" )),
-                                 uno::makeAny( drawing::FillStyle_NONE ));
-        const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
-        if( pStylesCtxt )
-        {
-            const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                mrImportHelper.GetChartFamilyID(), sAutoStyleName );
-
-            if( pStyle && pStyle->ISA( XMLPropStyleContext ))
-                (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
-        }
-    }
-}
-
-SchXMLLegendContext::~SchXMLLegendContext()
-{
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

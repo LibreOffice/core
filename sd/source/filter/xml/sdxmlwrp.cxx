@@ -67,7 +67,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <unotools/saveopt.hxx>
 
-// #80365# include necessary for XML progress bar at load time
+// include necessary for XML progress bar at load time
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/sfxecode.hxx>
@@ -101,7 +101,7 @@ extern void TransformOOo2xDocument( SdDrawDocument* pDocument );
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
-#define XML_STRING(i, x) sal_Char __READONLY_DATA i[sizeof(x)] = x
+#define XML_STRING(i, x) sal_Char const i[sizeof(x)] = x
 
 XML_STRING( sXML_metaStreamName, "meta.xml");
 XML_STRING( sXML_styleStreamName, "styles.xml" );
@@ -174,7 +174,7 @@ struct XML_SERVICES
     const sal_Char* mpSettings;
 };
 
-XML_SERVICES* getServices( bool bImport, bool bDraw, ULONG nStoreVer )
+XML_SERVICES* getServices( bool bImport, bool bDraw, sal_uLong nStoreVer )
 {
     static XML_SERVICES gServices[] =
     {
@@ -197,7 +197,7 @@ XML_SERVICES* getServices( bool bImport, bool bDraw, ULONG nStoreVer )
 // - SdXMLWrapper -
 // ----------------
 
-SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress, SdXMLFilterMode eFilterMode, ULONG nStoreVer ) :
+SdXMLFilter::SdXMLFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress, SdXMLFilterMode eFilterMode, sal_uLong nStoreVer ) :
     SdFilter( rMedium, rDocShell, bShowProgress ), meFilterMode( eFilterMode ), mnStoreVer( nStoreVer )
 {
 }
@@ -232,7 +232,7 @@ sal_Int32 ReadThroughComponent(
     // get parser
     Reference< xml::sax::XParser > xParser(
         rFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
         UNO_QUERY );
     DBG_ASSERT( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
@@ -287,7 +287,7 @@ sal_Int32 ReadThroughComponent(
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "SAX parse exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
 
         String sErr( String::CreateFromInt32( r.LineNumber ));
@@ -321,7 +321,7 @@ sal_Int32 ReadThroughComponent(
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "SAX exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return SD_XML_READERROR;
     }
@@ -331,7 +331,7 @@ sal_Int32 ReadThroughComponent(
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "Zip exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return ERRCODE_IO_BROKENPACKAGE;
     }
@@ -341,7 +341,7 @@ sal_Int32 ReadThroughComponent(
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "IO exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return SD_XML_READERROR;
     }
@@ -351,7 +351,7 @@ sal_Int32 ReadThroughComponent(
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "uno exception catched while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return SD_XML_READERROR;
     }
@@ -493,7 +493,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     /** property map for export info set */
     PropertyMapEntry aImportInfoMap[] =
     {
-        // #80365# necessary properties for XML progress bar at load time
+        // necessary properties for XML progress bar at load time
         { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -518,7 +518,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     };
 
     uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-    xInfoSet->setPropertyValue( OUString::createFromAscii( "Preview" ), uno::makeAny( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
+    xInfoSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Preview" )), uno::makeAny( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
 
     // ---- get BuildId from parent container if available
 
@@ -550,7 +550,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 
     // -------------------------------------
 
-    // #80365# try to get an XStatusIndicator from the Medium
+    // try to get an XStatusIndicator from the Medium
     if( mbShowProgress )
     {
         SfxItemSet* pSet = mrMedium.GetItemSet();
@@ -622,7 +622,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
                 aName = pDocHierarchItem->GetValue();
         }
         else
-            aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+            aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "dummyObjectName" ));
 
         if( aName.getLength() )
         {
@@ -709,7 +709,6 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     switch( nRet )
     {
     case 0: break;
-    // case ERRCODE_SFX_WRONGPASSWORD: break;
     case SD_XML_READERROR: break;
     case ERRCODE_IO_BROKENPACKAGE:
         if( xStorage.is() )
@@ -762,7 +761,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sd::SdXMLFilter::Import(), exception during clearing of unused named items");
+            OSL_FAIL("sd::SdXMLFilter::Import(), exception during clearing of unused named items");
         }
     }
 
@@ -843,12 +842,12 @@ sal_Bool SdXMLFilter::Export()
 
     SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
     SvXMLGraphicHelper*         pGraphicHelper = NULL;
-    sal_Bool                    bDocRet = FALSE;
+    sal_Bool                    bDocRet = sal_False;
 
     if( !mxModel.is() )
     {
-        DBG_ERROR("Got NO Model in XMLExport");
-        return FALSE;
+        OSL_FAIL("Got NO Model in XMLExport");
+        return sal_False;
     }
 
     sal_Bool bLocked = mxModel->hasControllersLocked();
@@ -861,31 +860,30 @@ sal_Bool SdXMLFilter::Export()
 
         if( !xServiceInfo.is() || !xServiceInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GenericDrawingDocument" ) ) ) )
         {
-            DBG_ERROR( "Model is no DrawingDocument in XMLExport" );
-            return FALSE;
+            OSL_FAIL( "Model is no DrawingDocument in XMLExport" );
+            return sal_False;
         }
 
         uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
 
         if( !xServiceFactory.is() )
         {
-            DBG_ERROR( "got no service manager" );
-            return FALSE;
+            OSL_FAIL( "got no service manager" );
+            return sal_False;
         }
 
         uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
 
         if( !xWriter.is() )
         {
-            DBG_ERROR( "com.sun.star.xml.sax.Writer service missing" );
-            return FALSE;
+            OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
+            return sal_False;
         }
         uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
 
         /** property map for export info set */
         PropertyMapEntry aExportInfoMap[] =
         {
-            // #82003#
             { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -965,11 +963,10 @@ sal_Bool SdXMLFilter::Export()
                 pObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *mrDocShell.GetDoc()->GetPersist(), EMBEDDEDOBJECTHELPER_MODE_WRITE, sal_False );
                 xObjectResolver = pObjectHelper;
 
-                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
+                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, sal_False );
                 xGrfResolver = pGraphicHelper;
             }
 
-            // #82003#
             if(mbShowProgress)
             {
                 CreateStatusIndicator();
@@ -1084,7 +1081,6 @@ sal_Bool SdXMLFilter::Export()
             }
             while( bDocRet && pServices->mpService );
 
-            // #82003#
             if(mbShowProgress)
             {
                 if(mxStatusIndicator.is())
@@ -1092,12 +1088,12 @@ sal_Bool SdXMLFilter::Export()
             }
         }
     }
-    catch(uno::Exception e)
+    catch(uno::Exception &e)
     {
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "uno Exception caught while exporting:\n" );
         aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         bDocRet = sal_False;
     }

@@ -31,19 +31,19 @@
 
 #include "svtools/svtdllapi.h"
 #include <svtools/svparser.hxx>
-#include <svl/svarray.hxx>
+#include <stack>
 
 struct RtfParserState_Impl
 {
     rtl_TextEncoding eCodeSet;
-    BYTE nUCharOverread;
+    sal_uInt8 nUCharOverread;
 
-    RtfParserState_Impl( BYTE nUOverread, rtl_TextEncoding eCdSt )
+    RtfParserState_Impl( sal_uInt8 nUOverread, rtl_TextEncoding eCdSt )
         : eCodeSet( eCdSt ), nUCharOverread( nUOverread )
     {}
 };
 
-SV_DECL_VARARR( RtfParserStates_Impl, RtfParserState_Impl, 16, 16 )
+typedef std::stack< RtfParserState_Impl > RtfParserStates_Impl;
 
 class SVT_DLLPUBLIC SvRTFParser : public SvParser
 {
@@ -51,7 +51,7 @@ class SVT_DLLPUBLIC SvRTFParser : public SvParser
 
     int nOpenBrakets;
     rtl_TextEncoding eCodeSet, eUNICodeSet;
-    BYTE nUCharOverread;
+    sal_uInt8 nUCharOverread;
 
 private:
     static short _inSkipGroup;
@@ -77,7 +77,7 @@ protected:
     void SetUNICodeSet( rtl_TextEncoding eSet )     { eUNICodeSet = eSet; }
 
 public:
-    SvRTFParser( SvStream& rIn, BYTE nStackSize = 3 );
+    SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize = 3 );
 
     virtual SvParserState CallParser();   // Aufruf des Parsers
 

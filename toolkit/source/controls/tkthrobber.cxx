@@ -45,7 +45,8 @@ namespace toolkit
     //= UnoThrobberControlModel
     //====================================================================
     //--------------------------------------------------------------------
-    UnoThrobberControlModel::UnoThrobberControlModel()
+    UnoThrobberControlModel::UnoThrobberControlModel( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
+        :UnoControlModel( i_factory )
     {
         ImplRegisterProperty( BASEPROPERTY_BORDER );
         ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
@@ -118,14 +119,15 @@ namespace toolkit
     //= UnoThrobberControl
     //====================================================================
     //--------------------------------------------------------------------
-    UnoThrobberControl::UnoThrobberControl()
+    UnoThrobberControl::UnoThrobberControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
+        :UnoControlBase( i_factory )
     {
     }
 
     //--------------------------------------------------------------------
     ::rtl::OUString UnoThrobberControl::GetComponentServiceName()
     {
-        return ::rtl::OUString::createFromAscii( "Throbber" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Throbber"));
     }
 
     //--------------------------------------------------------------------

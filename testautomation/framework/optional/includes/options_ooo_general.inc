@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : joerg.skottke@oracle.com
+'* owner : gregor.hartmann@oracle.com
 '*
 '* short description : 1. test for general group userdata
 '*
@@ -33,99 +33,167 @@
 
 testcase tOOoGeneral
 
-   dim lsSave (4) as String
-   dim lbSave (3) as Boolean
+    dim lsSave (4) as String
+    dim lbSave (3) as Boolean
 
-   hNewDocument
+    hNewDocument
 
-   ToolsOptions
-   hToolsOptions ( "StarOffice", "General" )
+    ToolsOptions
+    hToolsOptions ( "StarOffice", "General" )
 
-   printlog " - save old data"
-   lsSave ( 1 ) = Zweistellig.GetText
-   lbSave ( 1 ) = Aktivieren.IsChecked
-   Aktivieren.Check
-   if gPlatgroup = "w95" then
-      lbSave (2) = StarOfficeDialogeBenutzen.IsChecked
-   end if
-   lbSave ( 3 ) = DruckenStatus.IsChecked
-   lsSave ( 3 ) = StyleSheet.GetSelText
+    printlog " - save old data"
+    lsSave ( 1 ) = Zweistellig.GetText
+    lbSave ( 1 ) = Aktivieren.IsChecked
+    Aktivieren.Check
 
-   printlog " - invert/change data"
-   Zweistellig.SetText "1950"
-   Zuruecksetzen.Click
-   if gPlatgroup = "w95" then
-      if lbSave (2) = TRUE then StarOfficeDialogeBenutzen.Uncheck else StarOfficeDialogeBenutzen.Check
-   end if
-   If lbSave ( 3 ) = TRUE then DruckenStatus.Uncheck else DruckenStatus.Check
-   StyleSheet.Select 3
+    if gPlatgroup = "w95" then
+        lbSave (2) = StarOfficeDialogeBenutzen.IsChecked
+    endif
 
-   Kontext "ExtrasOptionenDlg"
+    lbSave ( 3 ) = DruckenStatus.IsChecked
+    lsSave ( 3 ) = StyleSheet.GetSelText
 
-   hCloseDialog( ExtrasOptionenDlg, "ok" )
-   hCloseDocument
+    printlog " - invert/change data"
+    Zweistellig.SetText "1950"
+    Zuruecksetzen.Click
 
-   printlog " - exit/restart StarOffice"
-   ExitRestartTheOffice
+    if gPlatgroup = "w95" then
+        if lbSave (2) then
+            StarOfficeDialogeBenutzen.Uncheck
+        else
+            StarOfficeDialogeBenutzen.Check
+        endif
+    endif
 
-   printlog " - check data"
-   ToolsOptions
-   hToolsOptions ( "StarOffice", "General" )
+    If lbSave ( 3 ) then
+        DruckenStatus.Uncheck
+    else
+        DruckenStatus.Check
+    endif
+    
+    StyleSheet.Select 3
 
-   if Zweistellig.GetText <> "1950" then Warnlog "Year ( 2 digits ) => changes not saved: '" + Zweistellig.GetText +"' #i29810"
-   if Aktivieren.IsChecked <> TRUE then Warnlog "Enable HelpAgent => changes not saved"
-   Zuruecksetzen.Click
-   if gPlatgroup = "w95" then
-      if StarOfficeDialogeBenutzen.IsChecked = lbSave (2) then Warnlog "Use StarOffice dialogs => changes not saved!"
-   end if
-   If DruckenStatus.IsChecked = lbSave ( 3 ) then Warnlog "Printing sets 'Document modified' status => changes not saved!"
+    Kontext "ExtrasOptionenDlg"
+    hCloseDialog( ExtrasOptionenDlg, "ok" )
+    hCloseDocument
 
-   printlog " - 2. change data"
-   Zweistellig.SetText "1800"
-   DruckenStatus.UnCheck
+    printlog " - exit/restart StarOffice"
+    ExitRestartTheOffice
 
-   Kontext "ExtrasOptionenDlg"
-   hCloseDialog( ExtrasOptionenDlg, "ok" )
+    printlog " - check data"
+    ToolsOptions
+    hToolsOptions ( "StarOffice", "General" )
 
-   printlog " - check data"
-   ToolsOptions
-   hToolsOptions ( "StarOffice", "General" )
+    if Zweistellig.GetText <> "1950" then
+        '#i29810# 
+        Warnlog "Year ( 2 digits ) => changes not saved: " + Zweistellig.GetText
+    endif
 
-   if Zweistellig.GetText <> "1800" then Warnlog "Year ( 2 digits ) => changes not saved : '" + Zweistellig.GetText +"'"
-   If DruckenStatus.IsChecked <> FALSE then Warnlog "Printing sets 'Document modified' status => changes not saved!"
-   if StyleSheet.GetSelIndex <> 3 then Warnlog "Style sheet for StarOffice Help => changes not saved!"
+    if not Aktivieren.IsChecked then
+        Warnlog "Enable HelpAgent => changes not saved"
+    endif
 
-   printlog " - reset to saved data"
-   Zweistellig.SetText lsSave ( 1 )
-   Aktivieren.Check
-   Zuruecksetzen.Click
-   if lbSave (1) = TRUE then Aktivieren.Check else Aktivieren.Uncheck
-   if gPlatgroup = "w95" then
-      if lbSave (2) = TRUE then StarOfficeDialogeBenutzen.Check else StarOfficeDialogeBenutzen.UnCheck
-   end if
-   If lbSave(3)= TRUE then DruckenStatus.Check else DruckenStatus.UnCheck
-   StyleSheet.Select lsSave(3)
+    Zuruecksetzen.Click
 
-   Kontext "ExtrasOptionenDlg"
-   hCloseDialog( ExtrasOptionenDlg, "ok" )
+    if gPlatgroup = "w95" then
+        if StarOfficeDialogeBenutzen.IsChecked = lbSave (2) then
+            Warnlog "Use StarOffice dialogs => changes not saved!"
+        endif
+    endif
 
-   ToolsOptions
-   hToolsOptions ( "StarOffice", "General" )
+    If DruckenStatus.IsChecked = lbSave ( 3 ) then
+        Warnlog "Printing sets 'Document modified' status => changes not saved!"
+    endif
 
-   printlog " - check the reset data"
-   if Zweistellig.GetText <> lsSave ( 1 ) then Warnlog "Year ( 2 digits ) => changes not saved"
-   if Aktivieren.IsChecked <> lbSave (1) then Warnlog "Enable HelpAgent => changes not saved"
-   Aktivieren.Check
-   Zuruecksetzen.Click
-   if lbSave (1) = TRUE then Aktivieren.Check else Aktivieren.Uncheck
-   if gPlatgroup = "w95" then
-      if StarOfficeDialogeBenutzen.IsChecked <> lbSave (2) then Warnlog "Use StarOffice dialogs => changes not saved!"
-   end if
-   If DruckenStatus.IsChecked <> lbSave(3) then Warnlog "Printing sets 'Document modified' status => changes not saved!"
-   if StyleSheet.GetSelText <> lsSave (3) then Warnlog "Style sheet for StarOffice Help => changes not saved!"
+    printlog " - 2. change data"
+    Zweistellig.SetText "1800"
+    DruckenStatus.UnCheck
 
-   Kontext "ExtrasOptionenDlg"
-   hCloseDialog( ExtrasOptionenDlg, "ok" )
+    Kontext "ExtrasOptionenDlg"
+    hCloseDialog( ExtrasOptionenDlg, "ok" )
+
+    printlog " - check data"
+    ToolsOptions
+    hToolsOptions ( "StarOffice", "General" )
+
+    if ( Zweistellig.GetText <> "1800" ) then
+        '#i29810# 
+        Warnlog( "Year ( 2 digits ) => changes not saved : " & Zweistellig.GetText() )
+    endif
+
+    If DruckenStatus.IsChecked  then
+        Warnlog "Printing sets 'Document modified' status => changes not saved!"
+    endif
+
+    if StyleSheet.GetSelIndex <> 3 then
+        Warnlog "Style sheet for StarOffice Help => changes not saved!"
+    endif
+
+    printlog " - reset to saved data"
+    Zweistellig.SetText lsSave ( 1 )
+    Aktivieren.Check
+    Zuruecksetzen.Click
+
+    if lbSave (1) then
+        Aktivieren.Check
+    else
+        Aktivieren.Uncheck
+    endif
+
+    if gPlatgroup = "w95" then
+        if lbSave (2) then
+            StarOfficeDialogeBenutzen.Check
+        else
+            StarOfficeDialogeBenutzen.UnCheck
+        endif
+    endif
+
+    If lbSave(3) then
+        DruckenStatus.Check
+    else
+        DruckenStatus.UnCheck
+    endif
+
+    StyleSheet.Select lsSave(3)
+
+    Kontext "ExtrasOptionenDlg"
+    hCloseDialog( ExtrasOptionenDlg, "ok" )
+
+    ToolsOptions
+    hToolsOptions ( "StarOffice", "General" )
+
+    printlog " - check the reset data"
+    if Zweistellig.GetText <> lsSave ( 1 ) then
+        Warnlog "Year ( 2 digits ) => changes not saved"
+    endif
+
+    if Aktivieren.IsChecked <> lbSave (1) then
+        Warnlog "Enable HelpAgent => changes not saved"
+    endif
+
+    Aktivieren.Check
+    Zuruecksetzen.Click
+
+    if lbSave (1) then
+        Aktivieren.Check else Aktivieren.Uncheck
+    endif
+
+    if gPlatgroup = "w95" then
+        if StarOfficeDialogeBenutzen.IsChecked <> lbSave (2) then
+            Warnlog "Use StarOffice dialogs => changes not saved!"
+        endif
+    endif
+
+    If DruckenStatus.IsChecked <> lbSave(3) then
+        Warnlog "Printing sets 'Document modified' status => changes not saved!"
+    endif
+
+    if StyleSheet.GetSelText <> lsSave (3) then
+        Warnlog "Style sheet for StarOffice Help => changes not saved!"
+    endif
+
+    Kontext "ExtrasOptionenDlg"
+    hCloseDialog( ExtrasOptionenDlg, "ok" )
 
 endcase
 

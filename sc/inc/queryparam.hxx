@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: interpre.hxx,v $
- * $Revision: 1.35.44.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -51,6 +48,8 @@ struct ScQueryParamBase
 
     virtual ~ScQueryParamBase();
 
+    virtual bool IsValidFieldIndex() const;
+
     SC_DLLPUBLIC SCSIZE GetEntryCount() const;
     SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n) const;
     void Resize(SCSIZE nNew);
@@ -83,12 +82,10 @@ struct ScQueryParamTable
 
 struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamTable
 {
-    BOOL            bDestPers;          // nicht gespeichert
+    bool            bDestPers;          // not saved
     SCTAB           nDestTab;
     SCCOL           nDestCol;
     SCROW           nDestRow;
-    SCROW           nDynamicEndRow;
-    bool            bUseDynamicRange;
 
     ScQueryParam();
     ScQueryParam( const ScQueryParam& r );
@@ -96,7 +93,7 @@ struct SC_DLLPUBLIC ScQueryParam : public ScQueryParamBase, public ScQueryParamT
     virtual ~ScQueryParam();
 
     ScQueryParam&   operator=   ( const ScQueryParam& r );
-    BOOL            operator==  ( const ScQueryParam& rOther ) const;
+    sal_Bool            operator==  ( const ScQueryParam& rOther ) const;
     void            Clear();
     void            ClearDestParams();
     void            MoveToDest();
@@ -130,6 +127,8 @@ struct ScDBQueryParamInternal : public ScDBQueryParamBase, public ScQueryParamTa
 {
     ScDBQueryParamInternal();
     virtual ~ScDBQueryParamInternal();
+
+    virtual bool IsValidFieldIndex() const;
 };
 
 // ============================================================================
@@ -140,6 +139,8 @@ struct ScDBQueryParamMatrix : public ScDBQueryParamBase
 
     ScDBQueryParamMatrix();
     virtual ~ScDBQueryParamMatrix();
+
+    virtual bool IsValidFieldIndex() const;
 };
 
 #endif

@@ -67,16 +67,6 @@
 
 using namespace x86_64;
 
-typedef struct
-{
-    /* Registers for argument passing.  */
-    long gpr[MAX_GPR_REGS];
-    __int128_t sse[MAX_SSE_REGS];
-
-    /* Stack space for arguments.  */
-    char argspace[0];
-} stackLayout;
-
 /* Register class used for passing given 64bit part of the argument.
    These represent classes as documented by the PS ABI, with the exception
    of SSESF, SSEDF classes, that are basically SSE class, just gcc will

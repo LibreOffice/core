@@ -55,18 +55,23 @@ public:
 
 class SvxDefaultColorOptPage : public SfxTabPage
 {
+
 private:
-    FixedLine               aGbChartColors;
-    ChartColorLB            aLbChartColors;
-    FixedLine               aGbColorBox;
-    ValueSet                aValSetColorBox;
-    PushButton              aPBDefault;
+    FixedLine                           aGbChartColors;
+    ChartColorLB                        aLbChartColors;
+    FixedLine                           aGbColorBox;
+    ValueSet                            aValSetColorBox;
+    PushButton                          aPBDefault;
+    PushButton                          aPBAdd;
+    PushButton                          aPBRemove;
 
     SvxChartOptions*        pChartOptions;
     SvxChartColorTableItem* pColorConfig;
     XColorTable*            pColorTab;
 
     DECL_LINK( ResetToDefaults, void * );
+    DECL_LINK( AddChartColor, void * );
+    DECL_LINK( RemoveChartColor, PushButton * );
     DECL_LINK( ListClickedHdl, ChartColorLB * );
     DECL_LINK( BoxClickedHdl, ValueSet * );
 
@@ -80,7 +85,7 @@ public:
     void    Construct();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual BOOL        FillItemSet( SfxItemSet& rOutAttrs );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rOutAttrs );
     virtual void        Reset( const SfxItemSet& rInAttrs );
 };
 

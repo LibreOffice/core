@@ -186,7 +186,7 @@ public class XMLExporter extends TestCase {
     /**
      * This class checks the XML for tags and data required and returns
      * checking result to <code>XFilter</code> interface test. All
-     * the information about errors occured in XML data is written
+     * the information about errors occurred in XML data is written
      * to log specified.
      * @see ifc.document._XFilter
      */
@@ -205,7 +205,7 @@ public class XMLExporter extends TestCase {
          * which returns the result of XML checking.
          * @return <code>true</code> if the XML data exported was
          * valid (i.e. all necessary tags and character data exists),
-         * <code>false</code> if some errors occured.
+         * <code>false</code> if some errors occurred.
          */
         public boolean checkFilter() {
             return check();

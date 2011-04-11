@@ -153,10 +153,10 @@ class BasicTreeListBox  :public SvTreeListBox
                         ,public ::basctl::DocumentEventListener
 {
 private:
-    USHORT                          nMode;
+    sal_uInt16                          nMode;
     ::basctl::DocumentEventNotifier m_aNotifier;
 
-    void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage, const Image& rImageHC );
+    void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage );
 
 protected:
     virtual void            RequestingChilds( SvLBoxEntry* pParent );
@@ -189,10 +189,10 @@ public:
     void            ScanAllEntries();
     void            UpdateEntries();
 
-    BOOL            IsEntryProtected( SvLBoxEntry* pEntry );
+    sal_Bool            IsEntryProtected( SvLBoxEntry* pEntry );
 
-    void            SetMode( USHORT nM ) { nMode = nM; }
-    USHORT          GetMode() const { return nMode; }
+    void            SetMode( sal_uInt16 nM ) { nMode = nM; }
+    sal_uInt16          GetMode() const { return nMode; }
 
     SbModule*       FindModule( SvLBoxEntry* pEntry );
     SbxVariable*    FindVariable( SvLBoxEntry* pEntry );
@@ -201,15 +201,15 @@ public:
 
     BasicEntryDescriptor    GetEntryDescriptor( SvLBoxEntry* pEntry );
 
-    USHORT          ConvertType( BasicEntryType eType );
+    sal_uInt16          ConvertType( BasicEntryType eType );
     bool            IsValidEntry( SvLBoxEntry* pEntry );
 
-    SvLBoxEntry*    AddEntry( const String& rText, const Image& rImage, const Image& rImageHC,
+    SvLBoxEntry*    AddEntry( const String& rText, const Image& rImage,
                               SvLBoxEntry* pParent, bool bChildrenOnDemand,
                               std::auto_ptr< BasicEntry > aUserData );
 
     String          GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
-    void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage, Image& rImageHC );
+    void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
 
     void            SetCurrentEntry( BasicEntryDescriptor& rDesc );
 

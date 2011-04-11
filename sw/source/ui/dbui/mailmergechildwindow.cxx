@@ -60,7 +60,7 @@ using namespace ::com::sun::star;
 SFX_IMPL_FLOATINGWINDOW( SwMailMergeChildWindow, FN_MAILMERGE_CHILDWINDOW )
 
 SwMailMergeChildWindow::SwMailMergeChildWindow( Window* _pParent,
-                                USHORT nId,
+                                sal_uInt16 nId,
                                 SfxBindings* pBindings,
                                 SfxChildWinInfo* pInfo ) :
                                 SfxChildWindow( _pParent, nId )
@@ -92,8 +92,7 @@ SwMailMergeChildWin::SwMailMergeChildWin( SfxBindings* _pBindings,
     m_aBackTB(this, SW_RES( TB_BACK ))
 {
     m_aBackTB.SetSelectHdl(LINK(this, SwMailMergeChildWin, BackHdl));
-    sal_uInt16 nIResId =  GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        ILIST_TBX_HC : ILIST_TBX;
+    sal_uInt16 nIResId = ILIST_TBX;
     ResId aResId( nIResId, *pSwResMgr );
     ImageList aIList(aResId);
     FreeResource();
@@ -325,7 +324,6 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_bCancel(false),
     m_bDesctructionEnabled(false),
     m_aImageList( SW_RES( ILIST ) ),
-    m_aImageListHC( SW_RES( ILIST_HC ) ),
     m_pImpl(new SwSendMailDialog_Impl),
     m_pConfigItem(&rConfigItem),
     m_nSendCount(0),
@@ -368,7 +366,7 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
 
     m_aStatusLB.SetHelpId(HID_MM_MAILSTATUS_TLB);
     static long nTabs[] = {3, 0, nPos1, aSz.Width() };
-    m_aStatusLB.SetWindowBits( WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
+    m_aStatusLB.SetStyle( m_aStatusLB.GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_aStatusLB.SetSelectionMode( SINGLE_SELECTION );
     m_aStatusLB.SetTabs(&nTabs[0], MAP_PIXEL);
     m_aStatusLB.SetSpaceBetweenEntries(3);
@@ -527,7 +525,7 @@ void  SwSendMailDialog::SendMails()
 {
     if(!m_pConfigItem)
     {
-        OSL_ENSURE(false, "config item not set");
+        OSL_FAIL("config item not set");
         return;
     }
     String sErrorMessage;
@@ -542,7 +540,7 @@ void  SwSendMailDialog::SendMails()
     LeaveWait();
     if(!bIsLoggedIn)
     {
-        OSL_ENSURE(false, "create error message");
+        OSL_FAIL("create error message");
         return;
     }
     m_pImpl->xMailDispatcher.set( new MailDispatcher(xSmtpServer));
@@ -562,9 +560,7 @@ void  SwSendMailDialog::IterateMails()
     {
         if(!SwMailMergeHelper::CheckMailAddress( pCurrentMailDescriptor->sEMail ))
         {
-            ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
-                                        m_aImageListHC : m_aImageList;
-            Image aInsertImg =   rImgLst.GetImage( FN_FORMULA_CANCEL );
+            Image aInsertImg = m_aImageList.GetImage( FN_FORMULA_CANCEL );
 
             String sMessage = m_sSendingTo;
             String sTmp(pCurrentMailDescriptor->sEMail);
@@ -578,8 +574,8 @@ void  SwSendMailDialog::IterateMails()
             pCurrentMailDescriptor = m_pImpl->GetNextDescriptor();
             continue;
         }
-        SwMailMessage* pMessage = 0;
-        uno::Reference< mail::XMailMessage > xMessage = pMessage = new SwMailMessage;
+        SwMailMessage* pMessage = new SwMailMessage;
+        uno::Reference< mail::XMailMessage > xMessage = pMessage;
         if(m_pConfigItem->IsMailReplyTo())
             pMessage->setReplyToAddress(m_pConfigItem->GetMailReplyTo());
         pMessage->addRecipient( pCurrentMailDescriptor->sEMail );
@@ -663,9 +659,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
         Application::PostUserEvent( STATIC_LINK( this, SwSendMailDialog,
                                                     StopSendMails ), this );
     }
-    ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
-                                m_aImageListHC : m_aImageList;
-    Image aInsertImg =   rImgLst.GetImage( bResult ? FN_FORMULA_APPLY : FN_FORMULA_CANCEL );
+    Image aInsertImg = m_aImageList.GetImage( bResult ? FN_FORMULA_APPLY : FN_FORMULA_CANCEL );
 
     String sMessage = m_sSendingTo;
     String sTmp(xMessage->getRecipients()[0]);
@@ -698,7 +692,7 @@ void SwSendMailDialog::UpdateTransferStatus()
     m_aErrorStatusFT.SetText(sStatus);
 
     if(m_pImpl->aDescriptors.size())
-        m_aProgressBar.SetValue((USHORT)(m_nSendCount * 100 / m_pImpl->aDescriptors.size()));
+        m_aProgressBar.SetValue((sal_uInt16)(m_nSendCount * 100 / m_pImpl->aDescriptors.size()));
     else
         m_aProgressBar.SetValue(0);
 }

@@ -29,7 +29,7 @@
 #ifndef _FRAMEWORK_SCRIPT_PROVIDER_PROVIDERCACHE_HXX_
 #define _FRAMEWORK_SCRIPT_PROVIDER_PROVIDERCACHE_HXX_
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -58,7 +58,7 @@ struct ProviderDetails
     css::uno::Reference< css::lang::XSingleComponentFactory > factory;
     css::uno::Reference< css::script::provider::XScriptProvider > provider;
 };
-typedef ::std::hash_map < ::rtl::OUString, ProviderDetails , ::rtl::OUStringHash,
+typedef ::boost::unordered_map < ::rtl::OUString, ProviderDetails , ::rtl::OUStringHash,
             ::std::equal_to< ::rtl::OUString > > ProviderDetails_hash;
 
 

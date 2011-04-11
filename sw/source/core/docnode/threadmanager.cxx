@@ -27,7 +27,6 @@
  ************************************************************************/
 #include "precompiled_sw.hxx"
 #include <threadmanager.hxx>
-#include <errhdl.hxx>
 
 #include <algorithm>
 
@@ -35,7 +34,7 @@ using namespace ::com::sun::star;
 
 /** class to manage threads
 
-    OD 2007-01-29 #i73788#
+    #i73788#
 
     @author OD
 */
@@ -148,7 +147,7 @@ void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
             }
             else
             {
-                OSL_ENSURE( false, "<ThreadManager::RemoveThread(..)> - ThreadJoiner already gone!" );
+                OSL_FAIL( "<ThreadManager::RemoveThread(..)> - ThreadJoiner already gone!" );
             }
         }
 
@@ -201,7 +200,7 @@ bool ThreadManager::StartThread( const tThreadData& rThreadData )
         }
         else
         {
-            OSL_ENSURE( false, "<ThreadManager::StartThread(..)> - ThreadJoiner already gone!" );
+            OSL_FAIL( "<ThreadManager::StartThread(..)> - ThreadJoiner already gone!" );
         }
     }
     else

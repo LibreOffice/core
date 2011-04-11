@@ -34,13 +34,12 @@
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/svtdata.hxx>
-
 #include <filedlg2.hxx>
-#include <filedlg.hxx>
-#include <filedlg2.hrc>
+#include <svtools/filedlg.hxx>
+#include <svtools/filedlg2.hrc>
 #include <vcl/msgbox.hxx>
 #include <osl/security.hxx>
-#include <com/sun/star/i18n/XCollator.hpp>
+#include <comphelper/string.hxx>
 
 #include <svtools/stdctrl.hxx>
 
@@ -53,8 +52,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-
-DECLARE_LIST( UniStringList, UniString* )
+typedef ::std::vector< UniString* > UniStringList;
 
 #define STD_BTN_WIDTH   80
 #define STD_BTN_HEIGHT  26
@@ -67,17 +65,17 @@ DECLARE_LIST( UniStringList, UniString* )
 //      #define STD_BTN_WIDTH   90
 //      #define STD_BTN_HEIGHT  35
 
-#define INITCONTROL( p, ControlClass, nBits, aPos, aSize, aTitel, nHelpId ) \
+#define INITCONTROL( p, ControlClass, nBits, aPos, aSize, aTitel, rHelpId ) \
     p = new ControlClass( GetPathDialog(), WinBits( nBits ) ); \
-    p->SetHelpId( nHelpId ); \
+    p->SetHelpId( rHelpId ); \
     p->SetPosSizePixel( aPos, aSize ); \
     p->SetText( aTitel ); \
     p->Show();
 
 
-inline BOOL IsPrintable( sal_Unicode c )
+inline sal_Bool IsPrintable( sal_Unicode c )
 {
-    return c >= 32 && c != 127 ? TRUE : FALSE;
+    return c >= 32 && c != 127 ? sal_True : sal_False;
 }
 
 long
@@ -90,10 +88,10 @@ KbdListBox::PreNotify( NotifyEvent& rNEvt )
 
         if ( IsPrintable ( cCharCode ) )
         {
-            USHORT nCurrentPos = GetSelectEntryPos();
-            USHORT nEntries    = GetEntryCount();
+            sal_uInt16 nCurrentPos = GetSelectEntryPos();
+            sal_uInt16 nEntries    = GetEntryCount();
 
-            for ( USHORT i = 1; i < nEntries; i++ )
+            for ( sal_uInt16 i = 1; i < nEntries; i++ )
             {
                 UniString aEntry = GetEntry ( (i + nCurrentPos) % nEntries );
                 aEntry.EraseLeadingChars( ' ' );
@@ -118,7 +116,7 @@ KbdListBox::PreNotify( NotifyEvent& rNEvt )
     return ListBox::PreNotify ( rNEvt );
 }
 
-ImpPathDialog::ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, BOOL bCreateDir )
+ImpPathDialog::ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, sal_Bool bCreateDir )
 {
     pSvPathDialog = pDlg;
     nDirCount = 0;
@@ -132,12 +130,6 @@ ImpPathDialog::ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, BOOL bCreat
     }
 
     pDlg->SetHelpId( HID_FILEDLG_PATHDLG );
-
-    lang::Locale aLocale = Application::GetSettings().GetLocale();
-    xCollator = ::vcl::unohelper::CreateCollator();
-    if( xCollator.is() )
-        xCollator->loadDefaultCollator( aLocale, 1 );
-    DBG_ASSERT( xCollator.is(), "not collator service for path dialog" );
 }
 
 ImpPathDialog::~ImpPathDialog()
@@ -225,10 +217,10 @@ void ImpPathDialog::InitControls()
     aPnt.X() = 2 * a6Siz.Width() + aEDSiz.Width();
     aPnt.Y() = a6Siz.Height();
     INITCONTROL( pOkBtn, PushButton, WB_DEFBUTTON,
-                 aPnt, aBtnSiz, aOkStr, 0 );
+                 aPnt, aBtnSiz, aOkStr, "" );
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pCancelBtn, CancelButton, 0,
-                 aPnt, aBtnSiz, aCancelStr, 0 );
+                 aPnt, aBtnSiz, aCancelStr, "" );
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pNewDirBtn, PushButton, WB_DEFBUTTON,
                  aPnt, aBtnSiz, aNewDirStr, HID_FILEDLG_NEWDIR );
@@ -289,14 +281,14 @@ IMPL_LINK( ImpPathDialog, SelectHdl, ListBox *, p )
         UniString aEntry( pDirList->GetSelectEntry() );
 
         aEntry.EraseLeadingChars( ' ' );
-        USHORT nPos = aEntry.Search( '/' );
+        sal_uInt16 nPos = aEntry.Search( '/' );
         aEntry.Erase( nPos );
 
         // build the absolute path to the selected item
         DirEntry aNewPath;
         aNewPath.ToAbs();
 
-        USHORT nCurPos = pDirList->GetSelectEntryPos();
+        sal_uInt16 nCurPos = pDirList->GetSelectEntryPos();
 
         // Wird nach oben gewechselt
         if( nCurPos < nDirCount )
@@ -323,7 +315,7 @@ IMPL_LINK( ImpPathDialog, ClickHdl, Button*, pBtn )
             // Ja, dann kompletten Pfad mit Filenamen merken und Dialog beenden
             aPath = aFile;
             aPath.ToAbs();
-            GetPathDialog()->EndDialog( TRUE );
+            GetPathDialog()->EndDialog( sal_True );
         }
         else
         {
@@ -340,7 +332,7 @@ IMPL_LINK( ImpPathDialog, ClickHdl, Button*, pBtn )
     else
     if ( pBtn == pCancelBtn )
     {
-        GetPathDialog()->EndDialog( FALSE );
+        GetPathDialog()->EndDialog( sal_False );
     }
     else
     if ( pBtn == pHomeBtn )
@@ -382,7 +374,7 @@ IMPL_LINK( ImpPathDialog, DblClickHdl, ListBox*, pBox )
     UniString aEntry( pBox->GetSelectEntry() );
 
     aEntry.EraseLeadingChars( ' ' );
-    USHORT nPos = aEntry.Search( '/' );
+    sal_uInt16 nPos = aEntry.Search( '/' );
     aEntry.Erase( nPos );
 
     // build the absolute path to the selected item
@@ -390,7 +382,7 @@ IMPL_LINK( ImpPathDialog, DblClickHdl, ListBox*, pBox )
     aNewPath.ToAbs();
     if( pBox == pDirList )
     {
-        USHORT nCurPos = pDirList->GetSelectEntryPos();
+        sal_uInt16 nCurPos = pDirList->GetSelectEntryPos();
 
         // Wenn es schon das aktuelle ist, dann mache nichts
         if( nCurPos == nDirCount-1 )
@@ -411,22 +403,22 @@ IMPL_LINK( ImpPathDialog, DblClickHdl, ListBox*, pBox )
     {
         // Neuen Pfad setzen und Listboxen updaten
         aPath = aNewPath;
-        if( !aPath.SetCWD( TRUE ) )
+        if( !aPath.SetCWD( sal_True ) )
         {
             ErrorBox aBox( GetPathDialog(),
                            WB_OK_CANCEL | WB_DEF_OK,
                            UniString( SvtResId( STR_FILEDLG_CANTCHDIR ) ) );
             if( aBox.Execute() == RET_CANCEL )
-                GetPathDialog()->EndDialog( FALSE );
+                GetPathDialog()->EndDialog( sal_False );
         }
-        UpdateEntries( TRUE );
+        UpdateEntries( sal_True );
     }
 
     pSvPathDialog->LeaveWait();
     return 0;
 }
 
-void ImpPathDialog::UpdateEntries( const BOOL )
+void ImpPathDialog::UpdateEntries( const sal_Bool )
 {
     UniString aTabString;
     DirEntry aTmpPath;
@@ -434,10 +426,10 @@ void ImpPathDialog::UpdateEntries( const BOOL )
 
     nDirCount = aTmpPath.Level();
 
-    pDirList->SetUpdateMode( FALSE );
+    pDirList->SetUpdateMode( sal_False );
     pDirList->Clear();
 
-    for( USHORT i = nDirCount; i > 0; i-- )
+    for( sal_uInt16 i = nDirCount; i > 0; i-- )
     {
         UniString aName( aTabString );
         aName += aTmpPath[i-1].GetName();
@@ -451,11 +443,13 @@ void ImpPathDialog::UpdateEntries( const BOOL )
 
     Dir aDir( aCurrent, FSYS_KIND_DIR|FSYS_KIND_FILE );
 
-    USHORT nEntries = aDir.Count();
+    sal_uInt16 nEntries = aDir.Count();
     if( nEntries )
     {
         UniStringList aSortDirList;
-        for ( USHORT n = 0; n < nEntries; n++ )
+        const comphelper::string::NaturalStringSorter& rSorter =
+            ::vcl::unohelper::getNaturalStringSorterForAppLocale();
+        for ( sal_uInt16 n = 0; n < nEntries; n++ )
         {
             DirEntry& rEntry = aDir[n];
             UniString aName( rEntry.GetName() );
@@ -463,24 +457,27 @@ void ImpPathDialog::UpdateEntries( const BOOL )
             {
                 if( FileStat( rEntry ).GetKind() & FSYS_KIND_DIR )
                 {
-                    ULONG l = 0;
-                    if( xCollator.is() )
-                    {
-                        for( l = 0; l < aSortDirList.Count(); l++ )
-                            if( xCollator->compareString( *aSortDirList.GetObject(l), aName ) > 0 )
-                                break;
+                    size_t l = 0;
+                    for( l = 0; l < aSortDirList.size(); l++ )
+                        if( rSorter.compare( *aSortDirList[ l ], aName ) > 0 )
+                            break;
+                    if ( l < aSortDirList.size() ) {
+                        UniStringList::iterator it = aSortDirList.begin();
+                        ::std::advance( it, l );
+                        aSortDirList.insert( it, new UniString( aName ) );
+                    } else {
+                        aSortDirList.push_back( new UniString( aName ) );
                     }
-                    aSortDirList.Insert( new UniString( aName ), l );
                 }
             }
         }
 
-        for( ULONG l = 0; l < aSortDirList.Count(); l++ )
+        for( size_t l = 0; l < aSortDirList.size(); l++ )
         {
             UniString aEntryStr( aTabString );
-            aEntryStr += *aSortDirList.GetObject(l);
+            aEntryStr += *aSortDirList[ l ];
             pDirList->InsertEntry( aEntryStr );
-            delete aSortDirList.GetObject(l);
+            delete aSortDirList[ l ];
         }
     }
 
@@ -493,7 +490,7 @@ void ImpPathDialog::UpdateDirs( const DirEntry& rTmpPath )
     pDirList->SetTopEntry( nDirCount > 1
                            ? nDirCount - 2
                            : nDirCount - 1 );
-    pDirList->SetUpdateMode( TRUE );
+    pDirList->SetUpdateMode( sal_True );
     pDirList->Invalidate();
     pDirList->Update();
 
@@ -504,10 +501,10 @@ void ImpPathDialog::UpdateDirs( const DirEntry& rTmpPath )
         pEdit->SetText( aDirName );
 }
 
-BOOL ImpPathDialog::IsFileOk( const DirEntry& rDirEntry )
+sal_Bool ImpPathDialog::IsFileOk( const DirEntry& rDirEntry )
 {
     if( FileStat( rDirEntry ).GetKind() & (FSYS_KIND_WILD | FSYS_KIND_DEV) )
-        return FALSE;
+        return sal_False;
     else
     {
         // Datei vorhanden ?
@@ -521,7 +518,7 @@ BOOL ImpPathDialog::IsFileOk( const DirEntry& rDirEntry )
             if( aQuery.Execute() == RET_YES )
                 rDirEntry.MakeDir();
             else
-                return FALSE;
+                return sal_False;
         }
         if( !FileStat( rDirEntry ).IsKind( FSYS_KIND_DIR ) )
         {
@@ -531,7 +528,7 @@ BOOL ImpPathDialog::IsFileOk( const DirEntry& rDirEntry )
             aBoxText.AppendAscii( "]" );
             InfoBox aBox( GetPathDialog(), aBoxText );
             aBox.Execute();
-            return FALSE;
+            return sal_False;
         }
     }
     return GetPathDialog()->OK() != 0;
@@ -541,8 +538,8 @@ BOOL ImpPathDialog::IsFileOk( const DirEntry& rDirEntry )
 void ImpPathDialog::PreExecute()
 {
     // Neues Verzeichnis setzen und Listboxen updaten
-    aPath.SetCWD( TRUE );
-    UpdateEntries( TRUE );
+    aPath.SetCWD( sal_True );
+    UpdateEntries( sal_True );
 
     // Zusaetzliche Buttons anordnen
     Point   aPos;
@@ -565,8 +562,8 @@ void ImpPathDialog::PreExecute()
     long nMaxWidth = 0;
 
     // Maximale Breite ermitteln
-    USHORT nChilds = GetPathDialog()->GetChildCount();
-    USHORT n;
+    sal_uInt16 nChilds = GetPathDialog()->GetChildCount();
+    sal_uInt16 n;
     for ( n = nOwnChilds; n < nChilds; n++ )
     {
         Window* pChild = GetPathDialog()->GetChild( n );
@@ -626,11 +623,11 @@ void ImpPathDialog::PreExecute()
         DirEntry aTmpDirEntry;
         Dir aDir( aTmpDirEntry, FSYS_KIND_BLOCK );
 
-        USHORT nCount = aDir.Count(), i;
+        sal_uInt16 nCount = aDir.Count(), i;
         for( i = 0; i < nCount; ++i )
         {
             DirEntry& rEntry = aDir[i];
-            UniString aStr    = rEntry.GetFull( FSYS_STYLE_HOST, FALSE );
+            UniString aStr    = rEntry.GetFull( FSYS_STYLE_HOST, sal_False );
 
             UniString aVolume = rEntry.GetVolume() ;
             aStr.ToUpperAscii();
@@ -676,8 +673,8 @@ void ImpPathDialog::SetPath( UniString const & rPath )
 
     // Neue Maske und neues Verzeichnis setzen, und Listboxen updaten
     pEdit->SetText( rPath );
-    aFile.SetCWD( TRUE );
-    UpdateEntries( TRUE );
+    aFile.SetCWD( sal_True );
+    UpdateEntries( sal_True );
 
     pSvPathDialog->LeaveWait();
 }
@@ -699,7 +696,7 @@ UniString ImpPathDialog::GetPath() const
 
 
 ImpFileDialog::ImpFileDialog( PathDialog* pDlg, WinBits nWinBits, RESOURCE_TYPE nType ) :
-  ImpPathDialog( pDlg, nType, FALSE )
+  ImpPathDialog( pDlg, nType, sal_False )
 {
     bOpen = (nWinBits & WB_SAVEAS) == 0;
 
@@ -719,12 +716,10 @@ ImpFileDialog::ImpFileDialog( PathDialog* pDlg, WinBits nWinBits, RESOURCE_TYPE 
 
 ImpFileDialog::~ImpFileDialog()
 {
-    ImpFilterItem* pItem = aFilterList.First();
-    while( pItem )
-    {
-        delete pItem;
-        pItem = aFilterList.Next();
+    for ( size_t i = 0, n = aFilterList.size(); i < n; ++i ) {
+        delete aFilterList[ i ];
     }
+    aFilterList.clear();
 
     delete pFileTitel;
     if (pFileList && ( pFileList != pDirList ) )
@@ -781,10 +776,10 @@ void ImpFileDialog::InitControls()
     const long nButtonStartX = 2*nW+20+15;
     INITCONTROL( pOkBtn, PushButton, WB_DEFBUTTON,
         Point(nButtonStartX, 10), Size(STD_BTN_WIDTH, STD_BTN_HEIGHT),
-        Button::GetStandardText( BUTTON_OK ), 0 );
+        Button::GetStandardText( BUTTON_OK ), "" );
     INITCONTROL( pCancelBtn, CancelButton, 0,
         Point(nButtonStartX, 45 ), Size(STD_BTN_WIDTH, STD_BTN_HEIGHT),
-        Button::GetStandardText( BUTTON_CANCEL ), 0 );
+        Button::GetStandardText( BUTTON_CANCEL ), "" );
 
     pLoadBtn = 0;
 
@@ -840,7 +835,7 @@ IMPL_LINK( ImpFileDialog, DblClickHdl, ListBox *, pBox )
     UniString aEntry( pBox->GetSelectEntry() );
 
     aEntry.EraseLeadingChars( ' ' );
-    USHORT nPos = aEntry.Search( '/' );
+    sal_uInt16 nPos = aEntry.Search( '/' );
     aEntry.Erase( nPos );
 
     // build the absolute path to the selected item
@@ -850,7 +845,7 @@ IMPL_LINK( ImpFileDialog, DblClickHdl, ListBox *, pBox )
     if( ( pDirList != pFileList ) && ( pBox == pDirList ) )
     {
         // SVLOOK
-        USHORT nCurPos = pDirList->GetSelectEntryPos();
+        sal_uInt16 nCurPos = pDirList->GetSelectEntryPos();
 
         // Wenn es schon das aktuelle ist, dann mache nichts
         if( nCurPos == nDirCount-1 )
@@ -879,7 +874,7 @@ IMPL_LINK( ImpFileDialog, DblClickHdl, ListBox *, pBox )
         {
             // dann kompletten Pfad mit Filenamen merken und Dialog beenden
             aPath = aNewPath;
-            GetFileDialog()->EndDialog( TRUE );
+            GetFileDialog()->EndDialog( sal_True );
         }
     }
 
@@ -892,35 +887,32 @@ IMPL_LINK( ImpFileDialog, DblClickHdl, ListBox *, pBox )
     {
         // Neuen Pfad setzen und Listboxen updaten
         aPath = aNewPath;
-        if( !aPath.SetCWD( TRUE ) )
+        if( !aPath.SetCWD( sal_True ) )
         {
             if( ErrorBox( GetFileDialog(), WB_OK_CANCEL|WB_DEF_OK,
                                 UniString( SvtResId( STR_FILEDLG_CANTCHDIR ) ) ).Execute() == RET_CANCEL )
             {
-                GetFileDialog()->EndDialog( FALSE );
+                GetFileDialog()->EndDialog( sal_False );
             }
         }
-        UpdateEntries( TRUE );
+        UpdateEntries( sal_True );
         GetFileDialog()->FileSelect();
     }
 
     if( pBox == pTypeList )
     {
         // Neue Maske setzen, und Listboxen updaten
-        USHORT nCurPos = pTypeList->GetSelectEntryPos();
-        if( nCurPos+1 > (USHORT)aFilterList.Count() )
+        size_t nCurPos = pTypeList->GetSelectEntryPos();
+        if( nCurPos+1 > aFilterList.size() )
             aMask = UniString::CreateFromAscii( ALLFILES );
         else
         {
-            UniString aFilterListMask = aFilterList.GetObject( nCurPos )->aMask;
-//                      if( aFilterListMask.Search( ';' ) == STRING_NOTFOUND ) // kein ; in der Maske
-//                              aMask = WildCard( aFilterListMask, '\0' );
-//                      else // ; muss beruecksichtigt werden
-                aMask = WildCard( aFilterListMask, ';' );
+            UniString aFilterListMask = aFilterList[ nCurPos ]->aMask;
+            aMask = WildCard( aFilterListMask, ';' );
         }
 
         pEdit->SetText( aMask() );
-        UpdateEntries( FALSE );
+        UpdateEntries( sal_False );
         GetFileDialog()->FilterSelect();
     }
 
@@ -941,7 +933,7 @@ IMPL_LINK( ImpFileDialog, ClickHdl, Button*, pBtn )
             // Ja, dann kompletten Pfad mit Filenamen merken und Dialog beenden
             aPath = aFile;
             aPath.ToAbs();
-            GetFileDialog()->EndDialog( TRUE );
+            GetFileDialog()->EndDialog( sal_True );
         }
         else
         {
@@ -956,19 +948,19 @@ IMPL_LINK( ImpFileDialog, ClickHdl, Button*, pBtn )
 
             // Neue Maske und neues Verzeichnis setzen, und Listboxen updaten
             pEdit->SetText( aMask() );
-            aFile.SetCWD( TRUE );
-            UpdateEntries( TRUE );
+            aFile.SetCWD( sal_True );
+            UpdateEntries( sal_True );
 
             GetFileDialog()->LeaveWait();
         }
     }
     else if( pBtn == pCancelBtn )
-        GetFileDialog()->EndDialog( FALSE );
+        GetFileDialog()->EndDialog( sal_False );
 
     return 0;
 }
 
-void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
+void ImpFileDialog::UpdateEntries( const sal_Bool bWithDirs )
 {
     GetFileDialog()->EnterWait();
 
@@ -979,16 +971,16 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
 
     if( pFileList )
     {
-    pFileList->SetUpdateMode( FALSE );
+    pFileList->SetUpdateMode( sal_False );
         pFileList->Clear();
     }
 
     if( bWithDirs && (pDirList != pFileList) )
     {
-        pDirList->SetUpdateMode( FALSE );
+        pDirList->SetUpdateMode( sal_False );
         pDirList->Clear();
 
-        for( USHORT i = nDirCount; i > 0; i-- )
+        for( sal_uInt16 i = nDirCount; i > 0; i-- )
         {
             UniString aEntryStr( aTabString );
             aEntryStr += aTmpPath[i-1].GetName();
@@ -1007,18 +999,20 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
     DirEntry aCurrent;
     aCurrent.ToAbs();
     Dir aDir( aCurrent, FSYS_KIND_DIR|FSYS_KIND_FILE );
-    USHORT nEntries = aDir.Count();
+    sal_uInt16 nEntries = aDir.Count();
 
     // TempMask, weil Vergleich case-sensitiv
-    BOOL bMatchCase = FALSE; //aCurrent.IsCaseSensitive();
+    sal_Bool bMatchCase = sal_False; //aCurrent.IsCaseSensitive();
     UniString aWildCard( aMask.GetWildCard() );
     if ( !bMatchCase )
         aWildCard.ToLowerAscii();
     WildCard aTmpMask( aWildCard, ';' );
     if ( nEntries )
     {
-        UniStringList   aSortDirList;
-        for ( USHORT n = 0; n < nEntries; n++ )
+        UniStringList aSortDirList;
+        const comphelper::string::NaturalStringSorter& rSorter =
+            ::vcl::unohelper::getNaturalStringSorterForAppLocale();
+        for ( sal_uInt16 n = 0; n < nEntries; n++ )
         {
             DirEntry& rEntry = aDir[n];
             UniString aName( rEntry.GetName() );
@@ -1047,25 +1041,28 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
                     }
                     else
                     {
-                        ULONG l = 0;
-                        if( xCollator.is() )
-                        {
-                            for( l = 0; l < aSortDirList.Count(); l++ )
-                                if( xCollator->compareString( *aSortDirList.GetObject(l), aName ) > 0 )
-                                    break;
+                        size_t l = 0;
+                        for( l = 0; l < aSortDirList.size(); l++ )
+                            if( rSorter.compare( *aSortDirList[ l ], aName ) > 0 )
+                                break;
+                        if ( l < aSortDirList.size() ) {
+                            UniStringList::iterator it = aSortDirList.begin();
+                            ::std::advance( it, l );
+                            aSortDirList.insert( it, new UniString( aName ) );
+                        } else {
+                            aSortDirList.push_back( new UniString( aName ) );
                         }
-                        aSortDirList.Insert( new UniString( aName ), l );
+                    }
+                }
             }
         }
-        }
-    }
-    for( ULONG l = 0; l < aSortDirList.Count(); l++ )
+        for( size_t l = 0; l < aSortDirList.size(); l++ )
         {
             UniString aEntryStr( aTabString );
-            aEntryStr += *aSortDirList.GetObject(l);
-        pDirList->InsertEntry( aEntryStr );
-        delete aSortDirList.GetObject(l);
-    }
+            aEntryStr += *aSortDirList[ l ];
+            pDirList->InsertEntry( aEntryStr );
+            delete aSortDirList[ l ];
+        }
     }
 
     if( bWithDirs )
@@ -1077,7 +1074,7 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
         pFileList->SelectEntryPos( 1 );
     else
         pFileList->SetNoSelection();
-    pFileList->SetUpdateMode( TRUE );
+    pFileList->SetUpdateMode( sal_True );
     pFileList->Invalidate();
     pFileList->Update();
     }
@@ -1096,14 +1093,14 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
   GetFileDialog()->LeaveWait();
 }
 
-BOOL ImpFileDialog::IsFileOk( const DirEntry& rDirEntry )
+sal_Bool ImpFileDialog::IsFileOk( const DirEntry& rDirEntry )
 {
     if( FileStat( rDirEntry ).GetKind() & (FSYS_KIND_WILD | FSYS_KIND_DEV) )
-    return FALSE;
+    return sal_False;
     if( FileStat( rDirEntry ).GetKind() & FSYS_KIND_DIR )
     {
         if( pFileList )
-            return FALSE;
+            return sal_False;
     }
     else if( bOpen )
     {
@@ -1117,7 +1114,7 @@ BOOL ImpFileDialog::IsFileOk( const DirEntry& rDirEntry )
             InfoBox aBox( GetFileDialog(),
                           aErrorString );
             aBox.Execute();
-        return FALSE;
+        return sal_False;
     }
     }
     else
@@ -1133,7 +1130,7 @@ BOOL ImpFileDialog::IsFileOk( const DirEntry& rDirEntry )
                            WinBits( WB_YES_NO | WB_DEF_NO ),
                            aQueryString );
             if( aBox.Execute() != RET_YES )
-                return FALSE;
+                return sal_False;
     }
     }
     return GetFileDialog()->OK() != 0;
@@ -1162,9 +1159,9 @@ void ImpFileDialog::SetPath( UniString const & rPath )
             pEdit->SetText( rPath );
     }
 
-    aFile.SetCWD( TRUE );
+    aFile.SetCWD( sal_True );
 
-    UpdateEntries( TRUE );
+    UpdateEntries( sal_True );
 
     GetFileDialog()->LeaveWait();
 }
@@ -1179,7 +1176,7 @@ void ImpFileDialog::SetPath( Edit const& rEdit )
 
 void ImpFileDialog::AddFilter( const UniString& rFilter, const UniString& rMask )
 {
-    aFilterList.Insert( new ImpFilterItem( rFilter, rMask ), LIST_APPEND );
+    aFilterList.push_back( new ImpFilterItem( rFilter, rMask ) );
     if( pTypeList )
         pTypeList->InsertEntry( rFilter, LISTBOX_APPEND );
 
@@ -1189,27 +1186,24 @@ void ImpFileDialog::AddFilter( const UniString& rFilter, const UniString& rMask 
 
 void ImpFileDialog::RemoveFilter( const UniString& rFilter )
 {
-    ImpFilterItem* pItem = aFilterList.First();
-    while( pItem && pItem->aName != rFilter )
-        pItem = aFilterList.Next();
-
-    if( pItem )
-    {
-        delete aFilterList.Remove();
-        if( pTypeList )
-            pTypeList->RemoveEntry( rFilter );
+    for ( ImpFilterList::iterator it = aFilterList.begin(); it < aFilterList.end(); ++it ) {
+        if ( (*it)->aName == rFilter ) {
+            delete *it;
+            aFilterList.erase( it );
+            if ( pTypeList ) {
+                pTypeList->RemoveEntry( rFilter );
+            }
+            break;
+        }
     }
 }
 
 void ImpFileDialog::RemoveAllFilter()
 {
-    ImpFilterItem* pItem = aFilterList.First();
-    while( pItem )
-    {
-        delete pItem;
-        pItem = aFilterList.Next();
+    for ( size_t i = 0, n = aFilterList.size(); i < n ; ++i ) {
+        delete aFilterList[ i ];
     }
-    aFilterList.Clear();
+    aFilterList.clear();
 
     if( pTypeList )
         pTypeList->Clear();
@@ -1220,14 +1214,14 @@ void ImpFileDialog::SetCurFilter( const UniString& rFilter )
     if( !pTypeList )
         return;
 
-    ImpFilterItem* pItem = aFilterList.First();
-    while( pItem && pItem->aName != rFilter )
-        pItem = aFilterList.Next();
+    for ( size_t i = 0, n = aFilterList.size(); i < n; ++i ) {
+        if ( aFilterList[ i ]->aName == rFilter ) {
+            pTypeList->SelectEntryPos( sal_uInt16( i ) );
+            return;
+        }
+    }
 
-    if( pItem )
-        pTypeList->SelectEntryPos( (USHORT)aFilterList.GetCurPos() );
-    else
-        pTypeList->SetNoSelection();
+    pTypeList->SetNoSelection();
 }
 
 UniString ImpFileDialog::GetCurFilter() const
@@ -1256,10 +1250,10 @@ void ImpFileDialog::PreExecute()
 
     if( pTypeList )
     {
-        USHORT nCurType = pTypeList->GetSelectEntryPos();
-        if( nCurType < aFilterList.Count() )
+        sal_uInt16 nCurType = pTypeList->GetSelectEntryPos();
+        if( nCurType < aFilterList.size() )
         {
-            UniString aFilterListMask = aFilterList.GetObject( nCurType )->aMask;
+            UniString aFilterListMask = aFilterList[ nCurType ]->aMask;
             if( aFilterListMask.Search( ';' ) == STRING_NOTFOUND ) // kein ; in der Maske
                 aMask = WildCard( aFilterListMask, '\0' );
             else // ; in der Maske, muss in der Wildcard beruecksichtigt werden
@@ -1296,7 +1290,7 @@ UniString ImpFileDialog::ExtendFileName( DirEntry aEntry ) const
         UniString aPostfix; // hier kommt die ausgesuchte Extension herein
 
         // ist ein Filter mit Extension gesetzt?
-        USHORT nChosenFilterPos = pTypeList->GetSelectEntryPos();
+        sal_uInt16 nChosenFilterPos = pTypeList->GetSelectEntryPos();
         if( nChosenFilterPos != LISTBOX_ENTRY_NOTFOUND )
         {
             UniString aExtensionMask = GetFileDialog()->GetFilterType( nChosenFilterPos );
@@ -1349,7 +1343,7 @@ UniString ImpFileDialog::ExtendFileName( DirEntry aEntry ) const
 }
 
 
-void ImpSvFileDlg::CreateDialog( PathDialog* pSvDlg, WinBits nStyle, RESOURCE_TYPE nType, BOOL bCreate )
+void ImpSvFileDlg::CreateDialog( PathDialog* pSvDlg, WinBits nStyle, RESOURCE_TYPE nType, sal_Bool bCreate )
 {
     delete pDlg;
     if ( nType == WINDOW_PATHDIALOG )

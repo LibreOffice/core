@@ -76,11 +76,11 @@ namespace svx
 
         void Clear();
         void InsertEntry( const XubString& rStr );
-        void SelectEntryPos( USHORT nPos );
+        void SelectEntryPos( sal_uInt16 nPos );
 
-        USHORT GetEntryCount() const;
+        sal_uInt16 GetEntryCount() const;
 
-        XubString GetEntry( USHORT nPos ) const;
+        XubString GetEntry( sal_uInt16 nPos ) const;
         XubString GetSelectEntry() const;
 
         virtual void StateChanged( StateChangedType nStateChange );
@@ -153,7 +153,6 @@ namespace svx
         void    SetIgnoreAllHdl( const Link& _rHdl );
         void    SetChangeHdl( const Link& _rHdl );
         void    SetChangeAllHdl( const Link& _rHdl );
-        void    SetOptionsHdl( const Link& _rHdl );
 
         void    SetClickByCharacterHdl( const Link& _rHdl );
         void    SetConversionFormatChangedHdl( const Link& _rHdl );
@@ -175,8 +174,6 @@ namespace svx
         editeng::HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const;
 
         void            SetByCharacter( sal_Bool _bByCharacter );
-        sal_Bool        GetByCharacter( ) const;
-
         void            SetConversionDirectionState( sal_Bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
 
         // should text which does not match the primary conversion direction be ignored?

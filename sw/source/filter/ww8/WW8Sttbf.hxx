@@ -36,7 +36,7 @@
 
 namespace ww8
 {
-    typedef boost::shared_array<BYTE> DataArray_t;
+    typedef boost::shared_array<sal_uInt8> DataArray_t;
 
 class WW8Struct : public ::sw::ExternalData
     {
@@ -73,7 +73,7 @@ typedef ::std::vector<rtl::OUString> StringVector_t;
         ExtrasVector_t m_Extras;
 
     public:
-        WW8Sttb(SvStream& rSt, INT32 nPos, sal_uInt32 nSize);
+        WW8Sttb(SvStream& rSt, sal_Int32 nPos, sal_uInt32 nSize);
         virtual ~WW8Sttb();
 
         sal_uInt32 getCount() const;
@@ -94,7 +94,7 @@ typedef ::std::vector<rtl::OUString> StringVector_t;
     };
 
     template <class T>
-    WW8Sttb<T>::WW8Sttb(SvStream& rSt, INT32 nPos, sal_uInt32 nSize)
+    WW8Sttb<T>::WW8Sttb(SvStream& rSt, sal_Int32 nPos, sal_uInt32 nSize)
     : WW8Struct(rSt, nPos, nSize), bDoubleByteCharacters(false)
     {
         sal_uInt32 nOffset = 0;

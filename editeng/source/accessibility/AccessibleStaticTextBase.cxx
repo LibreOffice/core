@@ -103,8 +103,8 @@ namespace accessibility
                    nEndIndex >= 0 && nEndIndex <= USHRT_MAX ,
                    "AccessibleStaticTextBase_Impl::MakeSelection: index value overflow");
 
-        return ESelection( static_cast< USHORT >(nStartPara), static_cast< USHORT >(nStartIndex),
-                           static_cast< USHORT >(nEndPara), static_cast< USHORT >(nEndIndex) );
+        return ESelection( static_cast< sal_uInt16 >(nStartPara), static_cast< sal_uInt16 >(nStartIndex),
+                           static_cast< sal_uInt16 >(nEndPara), static_cast< sal_uInt16 >(nEndIndex) );
     }
 
     //------------------------------------------------------------------------
@@ -345,7 +345,7 @@ namespace accessibility
 
         sal_Int32 nIndex = 0;
         if( mpTextParagraph )
-            nIndex = mpTextParagraph->GetTextForwarder().GetLineCount( static_cast< USHORT >(nParagraph) );
+            nIndex = mpTextParagraph->GetTextForwarder().GetLineCount( static_cast< sal_uInt16 >(nParagraph) );
         return nIndex;
     }
 
@@ -399,7 +399,7 @@ namespace accessibility
                            nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
                            "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
-                return EPosition( static_cast< USHORT >(nCurrPara), static_cast< USHORT >(nFlatIndex - nCurrIndex + nCurrCount) );
+                return EPosition( static_cast< sal_uInt16 >(nCurrPara), static_cast< sal_uInt16 >(nFlatIndex - nCurrIndex + nCurrCount) );
             }
         }
 
@@ -411,7 +411,7 @@ namespace accessibility
                        nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
                        "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
-            return EPosition( static_cast< USHORT >(nCurrPara-1), static_cast< USHORT >(nFlatIndex - nCurrIndex + nCurrCount) );
+            return EPosition( static_cast< sal_uInt16 >(nCurrPara-1), static_cast< sal_uInt16 >(nFlatIndex - nCurrIndex + nCurrCount) );
         }
 
         // not found? Out of bounds
@@ -727,8 +727,8 @@ namespace accessibility
 
             // #112814# Use correct index offset
             if ( ( nIndex = rPara.getIndexAtPoint( aPoint ) ) != -1 )
-                return mpImpl->Internal2Index( EPosition(sal::static_int_cast<USHORT>(i),
-                                                         sal::static_int_cast<USHORT>(nIndex)) );
+                return mpImpl->Internal2Index( EPosition(sal::static_int_cast<sal_uInt16>(i),
+                                                         sal::static_int_cast<sal_uInt16>(nIndex)) );
         }
 
         return -1;

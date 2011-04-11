@@ -51,22 +51,22 @@ public:
 
     void        SetAppMetric( FieldUnit eUnit ) { eMetric = eUnit;      }
     FieldUnit   GetAppMetric() const            { return eMetric;       }
-    void        SetZoom( USHORT nNew )          { nZoom = nNew;         }
-    USHORT      GetZoom() const                 { return nZoom;         }
+    void        SetZoom( sal_uInt16 nNew )          { nZoom = nNew;         }
+    sal_uInt16      GetZoom() const                 { return nZoom;         }
     void        SetZoomType( SvxZoomType eNew ) { eZoomType = eNew;     }
     SvxZoomType GetZoomType() const             { return eZoomType;     }
-    void        SetSynchronizeZoom( BOOL bNew ) { bSynchronizeZoom = bNew; }
-    BOOL        GetSynchronizeZoom() const      { return bSynchronizeZoom; }
-    USHORT      GetLRUFuncListCount() const     { return nLRUFuncCount; }
-    USHORT*     GetLRUFuncList() const          { return pLRUList;      }
-    void        SetLRUFuncList( const USHORT* pList,
-                                const USHORT  nCount );
-    void        SetStatusFunc( USHORT nNew )    { nStatusFunc = nNew;   }
-    USHORT      GetStatusFunc() const           { return nStatusFunc;   }
-    void        SetAutoComplete( BOOL bNew )    { bAutoComplete = bNew; }
-    BOOL        GetAutoComplete() const         { return bAutoComplete; }
-    void        SetDetectiveAuto( BOOL bNew )   { bDetectiveAuto = bNew; }
-    BOOL        GetDetectiveAuto() const        { return bDetectiveAuto; }
+    void        SetSynchronizeZoom( sal_Bool bNew ) { bSynchronizeZoom = bNew; }
+    sal_Bool        GetSynchronizeZoom() const      { return bSynchronizeZoom; }
+    sal_uInt16      GetLRUFuncListCount() const     { return nLRUFuncCount; }
+    sal_uInt16*     GetLRUFuncList() const          { return pLRUList;      }
+    void        SetLRUFuncList( const sal_uInt16* pList,
+                                const sal_uInt16  nCount );
+    void        SetStatusFunc( sal_uInt16 nNew )    { nStatusFunc = nNew;   }
+    sal_uInt16      GetStatusFunc() const           { return nStatusFunc;   }
+    void        SetAutoComplete( sal_Bool bNew )    { bAutoComplete = bNew; }
+    sal_Bool        GetAutoComplete() const         { return bAutoComplete; }
+    void        SetDetectiveAuto( sal_Bool bNew )   { bDetectiveAuto = bNew; }
+    sal_Bool        GetDetectiveAuto() const        { return bDetectiveAuto; }
 
     void        SetTrackContentColor(sal_uInt32 nNew) { nTrackContentColor = nNew; }
     sal_uInt32  GetTrackContentColor() const     { return nTrackContentColor; }
@@ -80,13 +80,13 @@ public:
     ScLkUpdMode GetLinkMode() const             { return eLinkMode ;}
     void        SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}
 
-    void        SetDefaultObjectSizeWidth(INT32 nNew)   { nDefaultObjectSizeWidth = nNew; }
-    INT32       GetDefaultObjectSizeWidth() const       { return nDefaultObjectSizeWidth; }
-    void        SetDefaultObjectSizeHeight(INT32 nNew)  { nDefaultObjectSizeHeight = nNew; }
-    INT32       GetDefaultObjectSizeHeight() const      { return nDefaultObjectSizeHeight; }
+    void        SetDefaultObjectSizeWidth(sal_Int32 nNew)   { nDefaultObjectSizeWidth = nNew; }
+    sal_Int32       GetDefaultObjectSizeWidth() const       { return nDefaultObjectSizeWidth; }
+    void        SetDefaultObjectSizeHeight(sal_Int32 nNew)  { nDefaultObjectSizeHeight = nNew; }
+    sal_Int32       GetDefaultObjectSizeHeight() const      { return nDefaultObjectSizeHeight; }
 
-    void        SetShowSharedDocumentWarning( BOOL bNew )   { mbShowSharedDocumentWarning = bNew; }
-    BOOL        GetShowSharedDocumentWarning() const        { return mbShowSharedDocumentWarning; }
+    void        SetShowSharedDocumentWarning( sal_Bool bNew )   { mbShowSharedDocumentWarning = bNew; }
+    sal_Bool        GetShowSharedDocumentWarning() const        { return mbShowSharedDocumentWarning; }
 
 
     const ScAppOptions& operator=   ( const ScAppOptions& rOpt );
@@ -94,22 +94,22 @@ public:
 private:
     sal_Int16   nTabCountInNewSpreadsheet;
     FieldUnit   eMetric;
-    USHORT      nLRUFuncCount;
-    USHORT*     pLRUList;
+    sal_uInt16      nLRUFuncCount;
+    sal_uInt16*     pLRUList;
     SvxZoomType eZoomType;
-    USHORT      nZoom;
-    BOOL        bSynchronizeZoom;
-    USHORT      nStatusFunc;
-    BOOL        bAutoComplete;
-    BOOL        bDetectiveAuto;
+    sal_uInt16      nZoom;
+    sal_Bool        bSynchronizeZoom;
+    sal_uInt16      nStatusFunc;
+    sal_Bool        bAutoComplete;
+    sal_Bool        bDetectiveAuto;
     sal_uInt32  nTrackContentColor;
     sal_uInt32  nTrackInsertColor;
     sal_uInt32  nTrackDeleteColor;
     sal_uInt32  nTrackMoveColor;
     ScLkUpdMode eLinkMode;
-    INT32       nDefaultObjectSizeWidth;
-    INT32       nDefaultObjectSizeHeight;
-    BOOL        mbShowSharedDocumentWarning;
+    sal_Int32       nDefaultObjectSizeWidth;
+    sal_Int32       nDefaultObjectSizeHeight;
+    sal_Bool        mbShowSharedDocumentWarning;
 };
 
 

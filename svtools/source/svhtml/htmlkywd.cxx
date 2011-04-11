@@ -35,8 +35,8 @@
 #include <limits.h>
 
 #include <svtools/svparser.hxx>
-#include "htmlkywd.hxx"
-#include "htmltokn.h"
+#include <svtools/htmlkywd.hxx>
+#include <svtools/htmltokn.h>
 
 // die Tabelle muss noch sortiert werden
 struct HTML_TokenEntry
@@ -50,9 +50,9 @@ struct HTML_TokenEntry
 };
 
 // Flag: RTF-Token Tabelle wurde schon sortiert
-static int __FAR_DATA bSortKeyWords = FALSE;
+static int bSortKeyWords = sal_False;
 
-static HTML_TokenEntry __FAR_DATA aHTMLTokenTab[] = {
+static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_area},            HTML_AREA}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_base},            HTML_BASE}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_comment},     HTML_COMMENT},
@@ -245,7 +245,7 @@ int GetHTMLToken( const String& rName )
                 sizeof( aHTMLTokenTab ) / sizeof( HTML_TokenEntry ),
                 sizeof( HTML_TokenEntry ),
                 HTMLKeyCompare );
-        bSortKeyWords = TRUE;
+        bSortKeyWords = sal_True;
     }
 
     int nRet = 0;
@@ -280,9 +280,9 @@ struct HTML_CharEntry
 };
 
 // Flag: RTF-Token Tabelle wurde schon sortiert
-static int __FAR_DATA bSortCharKeyWords = FALSE;
+static int bSortCharKeyWords = sal_False;
 
-static HTML_CharEntry __FAR_DATA aHTMLCharNameTab[] = {
+static HTML_CharEntry aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_C_lt},             60},
     {{OOO_STRING_SVTOOLS_HTML_C_gt},             62},
     {{OOO_STRING_SVTOOLS_HTML_C_amp},        38},
@@ -600,7 +600,7 @@ sal_Unicode GetHTMLCharName( const String& rName )
                 sizeof( aHTMLCharNameTab ) / sizeof( HTML_CharEntry ),
                 sizeof( HTML_CharEntry ),
                 HTMLCharNameCompare );
-        bSortCharKeyWords = TRUE;
+        bSortCharKeyWords = sal_True;
     }
 
     sal_Unicode cRet = 0;
@@ -621,9 +621,9 @@ sal_Unicode GetHTMLCharName( const String& rName )
 /**/
 
 // Flag: Optionen-Tabelle wurde schon sortiert
-static int __FAR_DATA bSortOptionKeyWords = FALSE;
+static int bSortOptionKeyWords = sal_False;
 
-static HTML_TokenEntry __FAR_DATA aHTMLOptionTab[] = {
+static HTML_TokenEntry aHTMLOptionTab[] = {
 
 // Attribute ohne Wert
     {{OOO_STRING_SVTOOLS_HTML_O_box},       HTML_O_BOX},
@@ -833,7 +833,7 @@ int GetHTMLOption( const String& rName )
                 sizeof( aHTMLOptionTab ) / sizeof( HTML_TokenEntry ),
                 sizeof( HTML_TokenEntry ),
                 HTMLKeyCompare );
-        bSortOptionKeyWords = TRUE;
+        bSortOptionKeyWords = sal_True;
     }
 
     int nRet = HTML_O_UNKNOWN;
@@ -861,10 +861,10 @@ struct HTML_ColorEntry
         const sal_Char* sName;
         const String *pUName;
     };
-    ULONG nColor;
+    sal_uLong nColor;
 };
 
-static int __FAR_DATA bSortColorKeyWords = FALSE;
+static int bSortColorKeyWords = sal_False;
 
 #define HTML_NO_COLOR 0xffffffffUL
 
@@ -873,7 +873,7 @@ static int __FAR_DATA bSortColorKeyWords = FALSE;
 // und scheinen im Gegensatz zu denen aus
 // "http://www.infi.net/wwwimages/colorindex.html"
 // zu stimmen
-static HTML_ColorEntry __FAR_DATA aHTMLColorNameTab[] = {
+static HTML_ColorEntry aHTMLColorNameTab[] = {
     { { "ALICEBLUE" }, 0x00f0f8ffUL },
     { { "ANTIQUEWHITE" }, 0x00faebd7UL },
     { { "AQUA" }, 0x0000ffffUL },
@@ -1053,7 +1053,7 @@ static int
 
 }
 
-ULONG GetHTMLColor( const String& rName )
+sal_uLong GetHTMLColor( const String& rName )
 {
     if( !bSortColorKeyWords )
     {
@@ -1061,10 +1061,10 @@ ULONG GetHTMLColor( const String& rName )
                 sizeof( aHTMLColorNameTab ) / sizeof( HTML_ColorEntry ),
                 sizeof( HTML_ColorEntry ),
                 HTMLColorNameCompare );
-        bSortColorKeyWords = TRUE;
+        bSortColorKeyWords = sal_True;
     }
 
-    ULONG nRet = ULONG_MAX;
+    sal_uLong nRet = ULONG_MAX;
     void* pFound;
     HTML_ColorEntry aSrch;
     aSrch.pUName = &rName;

@@ -239,7 +239,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::commitLinkPairs: caught an exception while setting the properties!" );
+            OSL_FAIL( "FormLinkDialog::commitLinkPairs: caught an exception while setting the properties!" );
         }
     }
 
@@ -343,7 +343,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::initializeLinks: caught an exception!" );
+            OSL_FAIL( "FormLinkDialog::initializeLinks: caught an exception!" );
         }
     }
 
@@ -353,7 +353,7 @@ namespace pcr
         // in all rows, there must be either two valid selections, or none at all
         // If there is at least one row with exactly one valid selection, then the
         // OKButton needs to be disabled
-        BOOL bEnable = TRUE;
+        sal_Bool bEnable = sal_True;
 
         const FieldLinkRow* aRows[] = {
             m_aRow1.get(), m_aRow2.get(), m_aRow3.get(), m_aRow4.get()
@@ -365,7 +365,7 @@ namespace pcr
             if  (  aRows[ i ]->GetFieldName( FieldLinkRow::eDetailField, sNotInterestedInRightNow )
                 != aRows[ i ]->GetFieldName( FieldLinkRow::eMasterField, sNotInterestedInRightNow )
                 )
-                bEnable = FALSE;
+                bEnable = sal_False;
         }
 
         m_aOK.Enable( bEnable );
@@ -394,7 +394,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::getFormDataSourceType: caught an exception!" );
+            OSL_FAIL( "FormLinkDialog::getFormDataSourceType: caught an exception!" );
         }
         return sReturn;
     }
@@ -433,7 +433,7 @@ namespace pcr
         catch (const SQLException& e ) { aErrorInfo = e; }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::getFormFields: caught a non-SQL exception!" );
+            OSL_FAIL( "FormLinkDialog::getFormFields: caught a non-SQL exception!" );
         }
 
         if ( aErrorInfo.isValid() )
@@ -500,7 +500,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::getCanonicUnderlyingTable: caught an exception!" );
+            OSL_FAIL( "FormLinkDialog::getCanonicUnderlyingTable: caught an exception!" );
         }
         return xTable;
     }
@@ -565,7 +565,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::getExistingRelation: caught an exception!" );
+            OSL_FAIL( "FormLinkDialog::getExistingRelation: caught an exception!" );
         }
 
         return ( _rLeftFields.getLength() > 0 ) && ( _rLeftFields[ 0 ].getLength() > 0 );
@@ -641,7 +641,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormLinkDialog::initializeSuggest: caught an exception!" );
+            OSL_FAIL( "FormLinkDialog::initializeSuggest: caught an exception!" );
         }
     }
 

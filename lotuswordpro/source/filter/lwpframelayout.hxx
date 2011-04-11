@@ -190,7 +190,7 @@ class LwpDropcapLayout : public LwpFrameLayout
 {
 public:
     LwpDropcapLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDropcapLayout(){};
+    virtual ~LwpDropcapLayout(){}
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_DROPCAP_LAYOUT;}
     virtual void Parse(IXFStream* pOutputStream);
     virtual void XFConvert(XFContentContainer* pCont);
@@ -211,7 +211,7 @@ class LwpRubyLayout : public LwpFrameLayout
 {
 public:
     LwpRubyLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpRubyLayout(){};
+    virtual ~LwpRubyLayout(){}
     LwpRubyMarker* GetMarker();
     void ConvertContentText();
     LwpStory* GetContentStory();

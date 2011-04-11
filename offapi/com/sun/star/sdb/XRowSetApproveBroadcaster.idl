@@ -37,7 +37,7 @@
 
 
 /** provides the possibility of reviving an event before changing the content
-    of a rowset.
+    of a row set.
  */
 published interface XRowSetApproveBroadcaster: com::sun::star::uno::XInterface
 {

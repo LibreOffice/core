@@ -51,13 +51,13 @@
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Core-Notify
+    Description:    Core-Notify
  --------------------------------------------------------------------*/
 
 
 
 void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
-                USHORT nRangeX, USHORT nRangeY)
+                sal_uInt16 nRangeX, sal_uInt16 nRangeY)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if (pSfxVwSh && pSfxVwSh->ISA(SwView))
@@ -65,21 +65,21 @@ void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Docmdi - verschiebbar
+    Description:    Docmdi - movable
  --------------------------------------------------------------------*/
 
 
 
-BOOL IsScrollMDI( ViewShell* pVwSh, const SwRect &rRect )
+sal_Bool IsScrollMDI( ViewShell* pVwSh, const SwRect &rRect )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if (pSfxVwSh && pSfxVwSh->ISA(SwView))
         return (((SwView *)pSfxVwSh)->IsScroll(rRect.SVRect()));
-    return FALSE;
+    return sal_False;
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Notify fuer Groessen-Aenderung
+    Description:    Notify for size change
  --------------------------------------------------------------------*/
 
 
@@ -97,12 +97,12 @@ void SizeNotify(ViewShell* pVwSh, const Size &rSize)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Notify fuer Seitenzahl-Update
+    Description:    Notify for page number update
  --------------------------------------------------------------------*/
 
 
 
-void PageNumNotify( ViewShell* pVwSh, USHORT nPhyNum, USHORT nVirtNum,
+void PageNumNotify( ViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
                                                     const String& rPgStr)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
@@ -112,10 +112,8 @@ void PageNumNotify( ViewShell* pVwSh, USHORT nPhyNum, USHORT nVirtNum,
 }
 
 /******************************************************************************
- *  Methode     :   void FrameNotify( DocMDIBase *pWin, FlyMode eMode )
- *  Beschreibung:
- *  Erstellt    :   OK 08.02.94 13:49
- *  Aenderung   :
+ *  Method      :   void FrameNotify( DocMDIBase *pWin, FlyMode eMode )
+ *  Description:
  ******************************************************************************/
 
 
@@ -127,9 +125,9 @@ void FrameNotify( ViewShell* pVwSh, FlyMode eMode )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Notify fuer Seitenzahl-Update
+    Description:    Notify for page number update
  --------------------------------------------------------------------*/
-BOOL SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, BOOL bVerticalMode)
+sal_Bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVerticalMode)
 {
     SvxRuler& rRuler = bVerticalMode ?  rView.GetVLineal() : rView.GetHLineal();
     return (!rRuler.StartDocDrag( rMEvt, RULER_TYPE_BORDER ) &&
@@ -138,15 +136,14 @@ BOOL SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, BOOL bVerticalMode)
 }
 
 // #i23726#
-// --> OD 2005-02-18 #i42921# - add 3rd parameter <bVerticalMode> in order
+// #i42921# - add 3rd parameter <bVerticalMode> in order
 // to consider vertical layout
-BOOL SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
+sal_Bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
                                  const bool bVerticalMode )
 {
     SvxRuler& rRuler = bVerticalMode ?  rView.GetVLineal() : rView.GetHLineal();
     return !rRuler.StartDocDrag( rMEvt, RULER_TYPE_INDENT);
 }
-// <--
 
 LAYOUT_NS Dialog* GetSearchDialog()
 {
@@ -166,12 +163,12 @@ void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect )
         ((SwPagePreView *)pSfxVwSh)->RepaintCoreRect( rRect );
 }
 
-BOOL JumpToSwMark( ViewShell* pVwSh, const String& rMark )
+sal_Bool JumpToSwMark( ViewShell* pVwSh, const String& rMark )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if( pSfxVwSh && pSfxVwSh->ISA( SwView ) )
         return ((SwView *)pSfxVwSh)->JumpToSwMark( rMark );
-    return FALSE;
+    return sal_False;
 }
 
 void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
@@ -179,25 +176,25 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 
     SwWrtShell* pSh = GetView().GetWrtShellPtr();
-    //#99906#   DataChanged() is sometimes called prior to creating
-    //          the SwWrtShell
+    // DataChanged() is sometimes called prior to creating
+    // the SwWrtShell
     if(!pSh)
         return;
-    BOOL bViewWasLocked = pSh->IsViewLocked(), bUnlockPaint = FALSE;
-    pSh->LockView( TRUE );
+    sal_Bool bViewWasLocked = pSh->IsViewLocked(), bUnlockPaint = sal_False;
+    pSh->LockView( sal_True );
     switch( rDCEvt.GetType() )
     {
     case DATACHANGED_SETTINGS:
-        // ScrollBars neu anordnen bzw. Resize ausloesen, da sich
-        // ScrollBar-Groesse geaendert haben kann. Dazu muss dann im
-        // Resize-Handler aber auch die Groesse der ScrollBars aus
-        // den Settings abgefragt werden.
+        // rearrange ScrollBars, respectively trigger resize, because
+        // the ScrollBar size can have change. For that, in the reset
+        // handler, the size of the ScrollBars also has to be queried
+        // from the settings.
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
         {
             pSh->LockPaint();
-            bUnlockPaint = TRUE;
+            bUnlockPaint = sal_True;
             ViewShell::DeleteReplacementBitmaps();
-            GetView().InvalidateBorder();               //Scrollbarbreiten
+            GetView().InvalidateBorder();               //Scrollbar work
         }
         break;
 
@@ -206,8 +203,8 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     case DATACHANGED_FONTS:
     case DATACHANGED_FONTSUBSTITUTION:
         pSh->LockPaint();
-        bUnlockPaint = TRUE;
-        GetView().GetDocShell()->UpdateFontList();  //z.B. Druckerwechsel
+        bUnlockPaint = sal_True;
+        GetView().GetDocShell()->UpdateFontList();  //e.g. printer change
         break;
     }
     pSh->LockView( bViewWasLocked );

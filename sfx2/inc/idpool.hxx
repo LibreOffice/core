@@ -36,25 +36,25 @@
 class IdPool: private BitSet
 {
 private:
-    USHORT nNextFree;
-    USHORT nRange;
-    USHORT nOffset;
+    sal_uInt16 nNextFree;
+    sal_uInt16 nRange;
+    sal_uInt16 nOffset;
 public:
-    BOOL Lock( const BitSet& rLockSet );
-    BOOL IsLocked( USHORT nId ) const;
-    IdPool( USHORT nMin = 1, USHORT nMax = USHRT_MAX );
-    USHORT Get();
-    BOOL Put( USHORT nId );
-    BOOL Lock( const Range& rRange );
-    BOOL Lock( USHORT nId );
+    sal_Bool Lock( const BitSet& rLockSet );
+    sal_Bool IsLocked( sal_uInt16 nId ) const;
+    IdPool( sal_uInt16 nMin = 1, sal_uInt16 nMax = USHRT_MAX );
+    sal_uInt16 Get();
+    sal_Bool Put( sal_uInt16 nId );
+    sal_Bool Lock( const Range& rRange );
+    sal_Bool Lock( sal_uInt16 nId );
 
 };
 
 //------------------------------------------------------------------------
 
-// returns TRUE if the id is locked
+// returns sal_True if the id is locked
 
-inline BOOL IdPool::IsLocked( USHORT nId ) const
+inline sal_Bool IdPool::IsLocked( sal_uInt16 nId ) const
 {
     return ( this->Contains(nId-nOffset) );
 }

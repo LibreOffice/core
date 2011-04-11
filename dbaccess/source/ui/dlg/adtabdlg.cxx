@@ -190,7 +190,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
                     m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
             }
             sTables = xTables->getElementNames();
-        } // if ( xTables.is() )
+        }
 
         xViewSupp.set( xTableSupp, UNO_QUERY );
         if ( xViewSupp.is() )
@@ -298,13 +298,10 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
     try
     {
         ImageProvider aImageProvider( m_xConnection );
-        Image aQueryImage( aImageProvider.getDefaultImage( DatabaseObject::QUERY, false ) );
-        Image aQueryImageHC( aImageProvider.getDefaultImage( DatabaseObject::QUERY, true ) );
+        Image aQueryImage( aImageProvider.getDefaultImage( DatabaseObject::QUERY ) );
 
-        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage, BMP_COLOR_NORMAL );
-        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage, BMP_COLOR_NORMAL );
-        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImageHC, BMP_COLOR_HIGHCONTRAST );
-        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImageHC, BMP_COLOR_HIGHCONTRAST );
+        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage );
+        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage );
 
         Reference< XQueriesSupplier > xSuppQueries( m_xConnection, UNO_QUERY_THROW );
         Reference< XNameAccess > xQueries( xSuppQueries->getQueries(), UNO_QUERY_THROW );
@@ -377,15 +374,15 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
     m_aQueryList.SetSelectHdl( LINK( this, OAddTableDlg, TableListSelectHdl ) );
 
     //////////////////////////////////////////////////////////////////////
-    m_aTableList.EnableInplaceEditing( FALSE );
-    m_aTableList.SetWindowBits(WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
+    m_aTableList.EnableInplaceEditing( sal_False );
+    m_aTableList.SetStyle(m_aTableList.GetStyle() | WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_SORT | WB_HSCROLL );
     m_aTableList.EnableCheckButton( NULL ); // do not show any buttons
     m_aTableList.SetSelectionMode( SINGLE_SELECTION );
     m_aTableList.notifyHiContrastChanged();
     m_aTableList.suppressEmptyFolders();
 
     //////////////////////////////////////////////////////////////////////
-    m_aQueryList.EnableInplaceEditing( FALSE );
+    m_aQueryList.EnableInplaceEditing( sal_False );
     m_aQueryList.SetSelectionMode( SINGLE_SELECTION );
 
     //////////////////////////////////////////////////////////////////////
@@ -422,15 +419,15 @@ void OAddTableDlg::impl_switchTo( ObjectList _eList )
     switch ( _eList )
     {
     case Tables:
-        m_aTableList.Show( TRUE );  m_aCaseTables.Check( TRUE );
-        m_aQueryList.Show( FALSE ); m_aCaseQueries.Check( FALSE );
+        m_aTableList.Show( sal_True );  m_aCaseTables.Check( sal_True );
+        m_aQueryList.Show( sal_False ); m_aCaseQueries.Check( sal_False );
         m_pCurrentList.reset( new TableListFacade( m_aTableList, m_rContext.getConnection() ) );
         m_aTableList.GrabFocus();
         break;
 
     case Queries:
-        m_aTableList.Show( FALSE ); m_aCaseTables.Check( FALSE );
-        m_aQueryList.Show( TRUE );  m_aCaseQueries.Check( TRUE );
+        m_aTableList.Show( sal_False ); m_aCaseTables.Check( sal_False );
+        m_aQueryList.Show( sal_True );  m_aCaseQueries.Check( sal_True );
         m_pCurrentList.reset( new QueryListFacade( m_aQueryList, m_rContext.getConnection() ) );
         m_aQueryList.GrabFocus();
         break;
@@ -504,7 +501,7 @@ IMPL_LINK( OAddTableDlg, OnTypeSelected, void*, /*EMPTY_ARG*/ )
 }
 
 //------------------------------------------------------------------------------
-BOOL OAddTableDlg::Close()
+sal_Bool OAddTableDlg::Close()
 {
     m_rContext.onWindowClosing( this );
     return ModelessDialog::Close();

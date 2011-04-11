@@ -167,7 +167,7 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
         /** @short  open the special BackingComponent (now StartModule)
 
             @return [bool]
-                    TRUE if operation was successfully.
+                    sal_True if operation was successfully.
          */
         ::sal_Bool implts_establishBackingMode();
 

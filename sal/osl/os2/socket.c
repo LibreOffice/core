@@ -1605,7 +1605,7 @@ void SAL_CALL osl_releaseSocket( oslSocket pSocket )
 #if defined(LINUX)
     if ( pSocket->m_bIsAccepting == sal_True )
     {
-        OSL_ENSURE(0, "osl_destroySocket : attempt to destroy socket while accepting\n");
+        OSL_FAIL("osl_destroySocket : attempt to destroy socket while accepting\n");
         return;
     }
 #endif /* LINUX */
@@ -2249,7 +2249,7 @@ sal_Int32 SAL_CALL osl_readSocket (
 
     OSL_ASSERT( pSocket);
 
-    /* loop until all desired bytes were read or an error occured */
+    /* loop until all desired bytes were read or an error occurred */
     while (BytesToRead > 0)
     {
         sal_Int32 RetVal;
@@ -2258,7 +2258,7 @@ sal_Int32 SAL_CALL osl_readSocket (
                                    BytesToRead,
                                    osl_Socket_MsgNormal);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;
@@ -2278,7 +2278,7 @@ sal_Int32 SAL_CALL osl_readSocket (
 sal_Int32 SAL_CALL osl_writeSocket(
     oslSocket pSocket, const void *pBuffer, sal_Int32 n )
 {
-    /* loop until all desired bytes were send or an error occured */
+    /* loop until all desired bytes were send or an error occurred */
     sal_uInt32 BytesSend= 0;
     sal_uInt32 BytesToSend= n;
     sal_uInt8 *Ptr = ( sal_uInt8 * )pBuffer;
@@ -2291,7 +2291,7 @@ sal_Int32 SAL_CALL osl_writeSocket(
 
         RetVal= osl_sendSocket( pSocket,Ptr,BytesToSend,osl_Socket_MsgNormal);
 
-        /* error occured? */
+        /* error occurred? */
         if(RetVal <= 0)
         {
             break;

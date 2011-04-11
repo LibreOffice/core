@@ -37,6 +37,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 
 class SfxObjectShell;
 
@@ -46,17 +47,17 @@ class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
 {
     SfxObjectShell*     pObjShell;
     ::rtl::OUString     aEventName;
-    USHORT              nEventId;
+    sal_uInt16              nEventId;
 
 public:
     TYPEINFO();
-    SfxEventHint( USHORT nId, const ::rtl::OUString& aName, SfxObjectShell *pObj = 0 )
+    SfxEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj = 0 )
                         :   pObjShell(pObj),
                             aEventName(aName),
                             nEventId(nId)
                         {}
 
-    USHORT              GetEventId() const
+    sal_uInt16              GetEventId() const
                         { return nEventId; }
 
     ::rtl::OUString     GetEventName() const
@@ -64,6 +65,29 @@ public:
 
     SfxObjectShell*     GetObjShell() const
                         { return pObjShell; }
+};
+
+//-------------------------------------------------------------------
+
+class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > xViewController;
+
+public:
+    TYPEINFO();
+
+    SfxViewEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
+                        : SfxEventHint( nId, aName, pObj )
+                        , xViewController( xController, ::com::sun::star::uno::UNO_QUERY )
+                        {}
+
+    SfxViewEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& xController )
+                        : SfxEventHint( nId, aName, pObj )
+                        , xViewController( xController )
+                        {}
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > GetController() const
+                        { return xViewController; }
 };
 
 //-------------------------------------------------------------------
@@ -96,7 +120,6 @@ public:
     SfxObjectShell*     GetObjShell() const { return _pObjShell; }
 };
 
-class PrintDialog;
 class Printer;
 class SfxPrintingHint : public SfxHint
 {

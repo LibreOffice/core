@@ -65,12 +65,6 @@ enum SectionType { CONTENT_SECTION,
                     TOX_CONTENT_SECTION,
                     DDE_LINK_SECTION    = OBJECT_CLIENT_DDE,
                     FILE_LINK_SECTION   = OBJECT_CLIENT_FILE
-/*
-// verbleiben noch:
-    OBJECT_CLIENT_SO            = 0x80,
-    OBJECT_CLIENT_OLE           = 0x82,
-    OBJECT_CLIENT_OLE_CACHE     = 0x83,
-*/
                     };
 
 enum LinkCreateType
@@ -88,7 +82,7 @@ private:
     String m_sSectionName;
     String m_sCondition;
     String m_sLinkFileName;
-    String m_sLinkFilePassword; // JP 27.02.2001: must be changed to Sequence
+    String m_sLinkFilePassword; // must be changed to Sequence
     ::com::sun::star::uno::Sequence <sal_Int8> m_Password;
 
     /// it seems this flag caches the current final "hidden" state
@@ -98,9 +92,9 @@ private:
     /// format attr has value for this section, while flag is
     /// effectively ORed with parent sections!
     bool m_bProtectFlag         : 1;
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // edit in readonly sections
     bool m_bEditInReadonlyFlag  : 1;
-    // <--
+
     bool m_bHidden              : 1; // all paragraphs hidden?
     bool m_bCondHiddenFlag      : 1; // Hiddenflag for condition
     bool m_bConnectFlag         : 1; // connected to server?
@@ -127,11 +121,9 @@ public:
     bool IsProtectFlag() const { return m_bProtectFlag; }
     SW_DLLPRIVATE void
         SetProtectFlag(bool const bFlag) { m_bProtectFlag = bFlag; }
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     bool IsEditInReadonlyFlag() const { return m_bEditInReadonlyFlag; }
     void SetEditInReadonlyFlag(bool const bFlag)
         { m_bEditInReadonlyFlag = bFlag; }
-    // <--
 
     void SetCondHidden(bool const bFlag = true) { m_bCondHiddenFlag = bFlag; };
     bool IsCondHidden() const { return m_bCondHiddenFlag; }
@@ -162,7 +154,6 @@ public:
 
 class SW_DLLPUBLIC SwSection
     : public SwClient
-    , private ::boost::noncopyable
 {
     // damit beim Anlegen/Loeschen von Frames das Flag richtig gepflegt wird!
     friend class SwSectionNode;
@@ -177,6 +168,9 @@ private:
 
     SW_DLLPRIVATE void ImplSetHiddenFlag(
             bool const bHidden, bool const bCondition);
+
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
 public:
     TYPEINFO();     // rtti
@@ -194,10 +188,8 @@ public:
     SectionType GetType() const             { return m_Data.GetType(); }
     void SetType(SectionType const eType)   { return m_Data.SetType(eType); }
 
-    SwSectionFmt* GetFmt()          { return (SwSectionFmt*)pRegisteredIn; }
-    SwSectionFmt* GetFmt() const    { return (SwSectionFmt*)pRegisteredIn; }
-
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
+    SwSectionFmt* GetFmt()          { return (SwSectionFmt*)GetRegisteredIn(); }
+    SwSectionFmt* GetFmt() const    { return (SwSectionFmt*)GetRegisteredIn(); }
 
     // setze die Hidden/Protected -> gesamten Baum updaten !
     // (Attribute/Flags werden gesetzt/erfragt)
@@ -205,23 +197,19 @@ public:
     void SetHidden (bool const bFlag = true);
     bool IsProtect() const;
     void SetProtect(bool const bFlag = true);
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     bool IsEditInReadonly() const;
     void SetEditInReadonly(bool const bFlag = true);
-    // <--
 
     // erfrage die internen Flags (Zustand inklusive Parents nicht, was
     // aktuell an der Section gesetzt ist!!)
     bool IsHiddenFlag()  const { return m_Data.IsHiddenFlag(); }
     bool IsProtectFlag() const { return m_Data.IsProtectFlag(); }
-    // --> FME 2004-06-22 #114856# edit in readonly sections
     bool IsEditInReadonlyFlag() const { return m_Data.IsEditInReadonlyFlag(); }
-    // <--
 
     void SetCondHidden(bool const bFlag = true);
     bool IsCondHidden() const { return m_Data.IsCondHidden(); }
     // erfrage (auch ueber die Parents), ob diese Section versteckt sein soll.
-    BOOL CalcHiddenFlag() const;
+    sal_Bool CalcHiddenFlag() const;
 
 
     inline SwSection* GetParent() const;
@@ -250,8 +238,8 @@ public:
     bool IsServer() const                   {  return m_RefObj.Is(); }
 
     // Methoden fuer gelinkte Bereiche
-    USHORT GetUpdateType() const    { return m_RefLink->GetUpdateMode(); }
-    void SetUpdateType(USHORT const nType )
+    sal_uInt16 GetUpdateType() const    { return m_RefLink->GetUpdateMode(); }
+    void SetUpdateType(sal_uInt16 const nType )
         { m_RefLink->SetUpdateMode(nType); }
 
     bool IsConnected() const        { return m_RefLink.Is(); }
@@ -275,9 +263,7 @@ public:
     // return the TOX base class if the section is a TOX section
     const SwTOXBase* GetTOXBase() const;
 
-    // --> OD 2007-02-14 #b6521322#
     void BreakLink();
-    // <--
 
 };
 
@@ -301,6 +287,7 @@ class SW_DLLPUBLIC SwSectionFmt
 
 protected:
     SwSectionFmt( SwSectionFmt* pDrvdFrm, SwDoc *pDoc );
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 
 public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
@@ -312,9 +299,8 @@ public:
     //Erzeugt die Ansichten
     virtual void MakeFrms();
 
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
         // erfrage vom Format Informationen
-    virtual BOOL GetInfo( SfxPoolItem& ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
     SwSection* GetSection() const;
     inline SwSectionFmt* GetParent() const;
@@ -323,13 +309,13 @@ public:
     // alle Sections, die von dieser abgeleitet sind
     //  - sortiert nach : Name oder Position oder unsortiert
     //  - alle oder nur die, die sich im normalten Nodes-Array befinden
-    USHORT GetChildSections( SwSections& rArr,
+    sal_uInt16 GetChildSections( SwSections& rArr,
                             SectionSort eSort = SORTSECT_NOT,
-                            BOOL bAllSections = TRUE ) const;
+                            sal_Bool bAllSections = sal_True ) const;
 
     // erfrage, ob sich die Section im Nodes-Array oder UndoNodes-Array
     // befindet.
-    BOOL IsInNodesArr() const;
+    sal_Bool IsInNodesArr() const;
 
           SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false);
     const SwSectionNode* GetSectionNode(bool const bEvenIfInUndo = false) const

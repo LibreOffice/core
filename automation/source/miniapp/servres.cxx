@@ -35,7 +35,7 @@
 #include "servres.hxx"
 
 
-ModalDialogGROSSER_TEST_DLG::ModalDialogGROSSER_TEST_DLG( Window * pParent, const ResId & rResId, BOOL bFreeRes )
+ModalDialogGROSSER_TEST_DLG::ModalDialogGROSSER_TEST_DLG( Window * pParent, const ResId & rResId, sal_Bool bFreeRes )
     : ModalDialog( pParent, rResId ),
     aCheckBox1( this, ResId( 1, *rResId.GetResMgr() ) ),
     aTriStateBox1( this, ResId( 1, *rResId.GetResMgr() ) ),
@@ -53,7 +53,7 @@ ModalDialogGROSSER_TEST_DLG::ModalDialogGROSSER_TEST_DLG( Window * pParent, cons
     if( bFreeRes ) FreeResource();
 }
 
-MenuMENU_CLIENT::MenuMENU_CLIENT( const ResId & rResId, BOOL )
+MenuMENU_CLIENT::MenuMENU_CLIENT( const ResId & rResId, sal_Bool )
     : MenuBar( rResId )
 {
     // No subresources, automatic free resource

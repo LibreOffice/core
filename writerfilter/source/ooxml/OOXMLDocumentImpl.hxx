@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 class OOXMLDocumentImpl : public OOXMLDocument
 {
     OOXMLStream::Pointer_t mpStream;
-    rtl::OUString msXNoteId;
+    sal_Int32 mnXNoteId;
     Id mXNoteType;
 
     uno::Reference<frame::XModel> mxModel;
@@ -66,7 +66,7 @@ protected:
     writerfilter::Reference<Stream>::Pointer_t
     getXNoteStream(OOXMLStream::StreamType_t nType,
                    const Id & rType,
-                   const rtl::OUString & rNoteId);
+                   const sal_Int32 nNoteId);
 
     void setIsSubstream( bool bSubstream ) { mbIsSubstream = bSubstream; };
 
@@ -80,10 +80,10 @@ public:
 
     virtual void resolveFootnote(Stream & rStream,
                                  const Id & rType,
-                                 const rtl::OUString & rNoteId);
+                                 const sal_Int32 nNoteId);
     virtual void resolveEndnote(Stream & rStream,
                                 const Id & rType,
-                                const rtl::OUString & rNoteId);
+                                const sal_Int32 nNoteId);
     virtual void resolveHeader(Stream & rStream,
                                const sal_Int32 type,
                                const rtl::OUString & rId);
@@ -91,7 +91,7 @@ public:
                                const sal_Int32 type,
                                const rtl::OUString & rId);
 
-    virtual void resolveComment(Stream & rStream, const rtl::OUString & rId);
+    virtual void resolveComment(Stream & rStream, const sal_Int32 nId);
 
     virtual OOXMLPropertySet * getPicturePropSet
     (const ::rtl::OUString & rId);
@@ -106,8 +106,8 @@ public:
     virtual uno::Reference<io::XInputStream> getInputStream();
     virtual uno::Reference<io::XInputStream> getStorageStream();
     virtual uno::Reference<io::XInputStream> getInputStreamForId(const rtl::OUString & rId);
-    virtual void setXNoteId(const rtl::OUString & rId);
-    virtual const ::rtl::OUString & getXNoteId() const;
+    virtual void setXNoteId(const sal_Int32 nId);
+    virtual sal_Int32 getXNoteId() const;
     virtual void setXNoteType(const Id & rId);
     virtual const Id & getXNoteType() const;
     virtual const ::rtl::OUString & getTarget() const;

@@ -29,14 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <vcl/bitmap.hxx>
-#include <vcl/impbmpconv.hxx>
-#include <vcl/svapp.hxx>
+#include "vcl/bitmap.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/salctype.hxx"
 #include <osl/mutex.hxx>
-#include <tools/stream.hxx>
-#include <com/sun/star/script/XInvocation.hpp>
-#include <com/sun/star/awt/XBitmap.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include "tools/stream.hxx"
+#include "com/sun/star/script/XInvocation.hpp"
+#include "com/sun/star/awt/XBitmap.hpp"
+#include "cppuhelper/compbase1.hxx"
 
 
 using namespace com::sun::star::uno;
@@ -44,7 +44,8 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::awt;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace vcl {
 
@@ -119,7 +120,7 @@ Any SAL_CALL BmpConverter::getValue( const OUString& ) throw( UnknownPropertyExc
 
 sal_Bool SAL_CALL BmpConverter::hasMethod( const OUString& rName ) throw()
 {
-    return rName.equalsIgnoreAsciiCase( OUString::createFromAscii( "convert-bitmap-depth" ) );
+    return rName.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM("convert-bitmap-depth")) );
 }
 
 sal_Bool SAL_CALL BmpConverter::hasProperty( const OUString& ) throw()
@@ -136,7 +137,7 @@ Any SAL_CALL BmpConverter::invoke(
 {
     Any aRet;
 
-    if( rFunction.equalsIgnoreAsciiCase( OUString::createFromAscii( "convert-bitmap-depth" ) ) )
+    if( rFunction.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM("convert-bitmap-depth")) ) )
     {
         Reference< XBitmap > xBM;
         sal_uInt16 nTargetDepth = 0;
@@ -154,7 +155,7 @@ Any SAL_CALL BmpConverter::invoke(
 
         SvMemoryStream aStream( aDIB.getArray(), aDIB.getLength(), STREAM_READ | STREAM_WRITE );
         Bitmap aBM;
-        aBM.Read( aStream, TRUE );
+        aBM.Read( aStream, sal_True );
         if( nTargetDepth < 4 )
             nTargetDepth = 1;
         else if( nTargetDepth < 8 )
@@ -189,7 +190,7 @@ BmpTransporter::BmpTransporter( const Bitmap& rBM )
     m_aSize.Width = rBM.GetSizePixel().Width();
     m_aSize.Height = rBM.GetSizePixel().Height();
     SvMemoryStream aStream;
-    rBM.Write( aStream, FALSE, TRUE );
+    rBM.Write( aStream, sal_False, sal_True );
     m_aBM = Sequence<sal_Int8>(static_cast<const sal_Int8*>(aStream.GetData()),
                 aStream.GetEndOfData());
 }

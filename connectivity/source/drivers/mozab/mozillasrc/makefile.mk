@@ -46,7 +46,7 @@ VISIBILITY_HIDDEN=TRUE
 
 .IF  ("$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO" || "$(OS)" == "OS2"
 dummy:
-    @echo "		Not building the mozillasrc stuff in OpenOffice.org build"
+    @echo "		Not building the mozillasrc stuff in LibreOffice build"
     @echo "		dependency to Mozilla developer snapshots not feasable at the moment"
     @echo "         see http://bugzilla.mozilla.org/show_bug.cgi?id=135137"
 .ELSE

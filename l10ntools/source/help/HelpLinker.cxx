@@ -51,17 +51,16 @@
 
 #define DBHELP_ONLY
 
-
 class IndexerPreProcessor
 {
 private:
-    std::string             m_aModuleName;
-    fs::path                m_fsIndexBaseDir;
-    fs::path                m_fsCaptionFilesDirName;
-    fs::path                m_fsContentFilesDirName;
+    std::string       m_aModuleName;
+    fs::path          m_fsIndexBaseDir;
+    fs::path          m_fsCaptionFilesDirName;
+    fs::path          m_fsContentFilesDirName;
 
-    xsltStylesheetPtr       m_xsltStylesheetPtrCaption;
-    xsltStylesheetPtr       m_xsltStylesheetPtrContent;
+    xsltStylesheetPtr m_xsltStylesheetPtrCaption;
+    xsltStylesheetPtr m_xsltStylesheetPtrContent;
 
 public:
     IndexerPreProcessor( const std::string& aModuleName, const fs::path& fsIndexBaseDir,
@@ -124,7 +123,13 @@ void IndexerPreProcessor::processDocument
         {
             fs::path fsCaptionPureTextFile_docURL = m_fsCaptionFilesDirName / aStdStr_EncodedDocPathURL;
             std::string aCaptionPureTextFileStr_docURL = fsCaptionPureTextFile_docURL.native_file_string();
-            FILE* pFile_docURL = fopen( aCaptionPureTextFileStr_docURL.c_str(), "w" );
+#ifdef WNT     //We need _wfopen to support long file paths on Windows XP
+            FILE* pFile_docURL = _wfopen(
+                fsCaptionPureTextFile_docURL.native_file_string_w(), L"w" );
+#else
+            FILE* pFile_docURL = fopen(
+                fsCaptionPureTextFile_docURL.native_file_string().c_str(), "w" );
+#endif
             if( pFile_docURL )
             {
                 fprintf( pFile_docURL, "%s\n", pResNodeCaption->content );
@@ -141,8 +146,13 @@ void IndexerPreProcessor::processDocument
         if( pResNodeContent )
         {
             fs::path fsContentPureTextFile_docURL = m_fsContentFilesDirName / aStdStr_EncodedDocPathURL;
-            std::string aContentPureTextFileStr_docURL = fsContentPureTextFile_docURL.native_file_string();
-            FILE* pFile_docURL = fopen( aContentPureTextFileStr_docURL.c_str(), "w" );
+#ifdef WNT     //We need _wfopen to support long file paths on Windows XP
+            FILE* pFile_docURL = _wfopen(
+                fsContentPureTextFile_docURL.native_file_string_w(), L"w" );
+#else
+            FILE* pFile_docURL = fopen(
+                fsContentPureTextFile_docURL.native_file_string().c_str(), "w" );
+#endif
             if( pFile_docURL )
             {
                 fprintf( pFile_docURL, "%s\n", pResNodeContent->content );
@@ -200,7 +210,7 @@ void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const std::s
 class HelpKeyword
 {
 private:
-    typedef std::hash_map<std::string, Data, pref_hash> DataHashtable;
+    typedef boost::unordered_map<std::string, Data, pref_hash> DataHashtable;
     DataHashtable _hash;
 
 public:
@@ -232,9 +242,13 @@ public:
         }
     }
 
-    void dump_DBHelp( const std::string& rFileName )
+    void dump_DBHelp( const fs::path& rFileName )
     {
-        FILE* pFile = fopen( rFileName.c_str(), "wb" );
+#ifdef WNT     //We need _wfopen to support long file paths on Windows XP
+        FILE* pFile = _wfopen( rFileName.native_file_string_w(), L"wb" );
+#else
+        FILE* pFile = fopen( rFileName.native_file_string().c_str(), "wb" );
+#endif
         if( pFile == NULL )
             return;
 
@@ -250,7 +264,6 @@ class HelpLinker
 {
 public:
     void main(std::vector<std::string> &args,
-//      std::string* pExtensionPath = NULL, const rtl::OUString* pOfficeHelpPath = NULL )
               std::string* pExtensionPath = NULL,
               std::string* pDestination = NULL,
               const rtl::OUString* pOfficeHelpPath = NULL )
@@ -278,12 +291,10 @@ private:
     std::string extdestination;
     std::string module;
     std::string lang;
-    std::string hid;
     std::string extensionPath;
     std::string extensionDestination;
     bool bExtensionMode;
     fs::path indexDirName;
-    Stringtable hidlistTranslation;
     fs::path indexDirParentName;
     bool init;
     IndexerPreProcessor* m_pIndexerPreProcessor;
@@ -323,13 +334,6 @@ void HelpLinker::addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishi
 {
     HCDBG(std::cerr << "HelpLinker::addBookmark " << thishid << " " <<
         fileB << " " << anchorB << " " << jarfileB << " " << titleB << std::endl);
-
-    std::string temp = thishid;
-    std::transform (temp.begin(), temp.end(), temp.begin(), toupper);
-    std::replace(temp.begin(), temp.end(), ':', '_');
-    const std::string& translatedHid = hidlistTranslation[temp];
-    if (!translatedHid.empty())
-        thishid = translatedHid;
 
     thishid = URLEncoder::encode(thishid);
 
@@ -396,7 +400,6 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     if( bExtensionMode )
     {
-        //indexDirParentName = sourceRoot;
         indexDirParentName = extensionDestination;
     }
     else
@@ -434,9 +437,15 @@ void HelpLinker::link() throw( HelpProcessingException )
 #endif
 
     fs::path helpTextFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".ht_" : ".ht")));
+#ifdef WNT
+    //We need _wfopen to support long file paths on Windows XP
+    FILE* pFileHelpText_DBHelp = _wfopen
+        ( helpTextFileName_DBHelp.native_file_string_w(), L"wb" );
+#else
+
     FILE* pFileHelpText_DBHelp = fopen
         ( helpTextFileName_DBHelp.native_file_string().c_str(), "wb" );
-
+#endif
     DB* dbBase(0);
 #ifndef DBHELP_ONLY
     fs::path dbBaseFileName(indexDirParentName / (mod + ".db"));
@@ -446,8 +455,14 @@ void HelpLinker::link() throw( HelpProcessingException )
 #endif
 
     fs::path dbBaseFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".db_" : ".db")));
+#ifdef WNT
+    //We need _wfopen to support long file paths on Windows XP
+    FILE* pFileDbBase_DBHelp = _wfopen
+        ( dbBaseFileName_DBHelp.native_file_string_w(), L"wb" );
+#else
     FILE* pFileDbBase_DBHelp = fopen
         ( dbBaseFileName_DBHelp.native_file_string().c_str(), "wb" );
+#endif
 
 #ifndef DBHELP_ONLY
     DB* keyWord(0);
@@ -464,20 +479,6 @@ void HelpLinker::link() throw( HelpProcessingException )
     // catch HelpProcessingException to avoid locking data bases
     try
     {
-
-    std::ifstream fileReader(hid.c_str());
-    while (fileReader)
-    {
-        std::string key;
-        fileReader >> key;
-        std::transform (key.begin(), key.end(), key.begin(), toupper);
-        std::replace(key.begin(), key.end(), ':', '_');
-        std::string data;
-        fileReader >> data;
-        if (!key.empty() && !data.empty())
-            hidlistTranslation[key] = data;
-    }
-    fileReader.close();
 
     // lastly, initialize the indexBuilder
     if ( (!bExtensionMode || bIndexForExtension) && !helpFiles.empty())
@@ -637,13 +638,6 @@ void HelpLinker::link() throw( HelpProcessingException )
                 std::string helpTextId = helpTextIter->first;
                 const std::string& helpTextText = helpTextIter->second;
 
-                std::string temp = helpTextId;
-                std::transform (temp.begin(), temp.end(), temp.begin(), toupper);
-                std::replace(temp.begin(), temp.end(), ':', '_');
-
-                const std::string& tHid = hidlistTranslation[temp];
-                if (!tHid.empty())
-                    helpTextId = tHid;
                 helpTextId = URLEncoder::encode(helpTextId);
 
                 DBT keyDbt;
@@ -683,8 +677,8 @@ void HelpLinker::link() throw( HelpProcessingException )
     if( !bExtensionMode )
         std::cout << std::endl;
 
-    }   // try
-    catch( HelpProcessingException& )
+    } // try
+    catch( const HelpProcessingException& )
     {
         // catch HelpProcessingException to avoid locking data bases
 #ifndef DBHELP_ONLY
@@ -710,7 +704,7 @@ void HelpLinker::link() throw( HelpProcessingException )
     if( pFileDbBase_DBHelp != NULL )
         fclose( pFileDbBase_DBHelp );
 
-    helpKeyword.dump_DBHelp( keyWordFileName_DBHelp.native_file_string() );
+    helpKeyword.dump_DBHelp( keyWordFileName_DBHelp);
 
     if( !bExtensionMode )
     {
@@ -732,16 +726,6 @@ void HelpLinker::link() throw( HelpProcessingException )
             fs::copy( fsAdditionalFileName, fsTargetName );
         }
     }
-
-/*
-    /////////////////////////////////////////////////////////////////////////
-    /// remove temprary directory for index creation
-    /////////////////////////////////////////////////////////////////////////
-#ifndef CMC_DEBUG
-    if( !bExtensionMode )
-        fs::remove_all( indexDirParentName );
-#endif
-*/
 }
 
 
@@ -898,14 +882,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         else if (args[i].compare("-hid") == 0)
         {
             ++i;
-            if (i >= args.size())
-            {
-                std::stringstream aStrStream;
-                aStrStream << "hid list missing" << std::endl;
-                throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
-            }
-
-            hid = args[i];
+            throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, "obsolete -hid argument used" );
         }
         else if (args[i].compare("-add") == 0)
         {
@@ -999,7 +976,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         //This part is used when compileExtensionHelp is called from the extensions manager.
         //If extension help is compiled using helplinker in the build process
         rtl::OUString aIdxCaptionPathFileURL( *pOfficeHelpPath );
-        aIdxCaptionPathFileURL += rtl::OUString::createFromAscii( "/idxcaption.xsl" );
+        aIdxCaptionPathFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/idxcaption.xsl"));
 
         rtl::OString aOStr_IdxCaptionPathFileURL( rtl::OUStringToOString
             ( aIdxCaptionPathFileURL, fs::getThreadTextEncoding() ) );
@@ -1024,7 +1001,7 @@ void HelpLinker::main( std::vector<std::string> &args,
         //then  -idxcontent must be supplied
         //This part is used when compileExtensionHelp is called from the extensions manager.
         rtl::OUString aIdxContentPathFileURL( *pOfficeHelpPath );
-        aIdxContentPathFileURL += rtl::OUString::createFromAscii( "/idxcontent.xsl" );
+        aIdxContentPathFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/idxcontent.xsl"));
 
         rtl::OString aOStr_IdxContentPathFileURL( rtl::OUStringToOString
             ( aIdxContentPathFileURL, fs::getThreadTextEncoding() ) );
@@ -1062,13 +1039,6 @@ void HelpLinker::main( std::vector<std::string> &args,
         aStrStream << "language missing" << std::endl;
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
-    if (!bExtensionMode && hid.empty())
-    {
-        std::stringstream aStrStream;
-        aStrStream << "hid list missing" << std::endl;
-        throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
-    }
-
     link();
 }
 
@@ -1131,7 +1101,7 @@ HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpPr
 // Returns true in case of success, false in case of error
 HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 (
-     const rtl::OUString& aOfficeHelpPath,
+    const rtl::OUString& aOfficeHelpPath,
     const rtl::OUString& aExtensionName,
     const rtl::OUString& aExtensionLanguageRoot,
     sal_Int32 nXhpFileCount, const rtl::OUString* pXhpFiles,
@@ -1189,7 +1159,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 
     // i83624: Tree files
     ::rtl::OUString aTreeFileURL = aExtensionLanguageRoot;
-    aTreeFileURL += rtl::OUString::createFromAscii( "/help.tree" );
+    aTreeFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/help.tree"));
     osl::DirectoryItem aTreeFileItem;
     osl::FileBase::RC rcGet = osl::DirectoryItem::get( aTreeFileURL, aTreeFileItem );
     osl::FileStatus aFileStatus( FileStatusMask_FileSize );
@@ -1200,7 +1170,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
         sal_uInt64 ret, len = aFileStatus.getFileSize();
         char* s = new char[ int(len) ];  // the buffer to hold the installed files
         osl::File aFile( aTreeFileURL );
-        aFile.open( OpenFlag_Read );
+        aFile.open( osl_File_OpenFlag_Read );
         aFile.read( s, len, ret );
         aFile.close();
 
@@ -1223,7 +1193,5 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 
     return bSuccess;
 }
-
-// vnd.sun.star.help://swriter/52821?Language=en-US&System=UNIX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

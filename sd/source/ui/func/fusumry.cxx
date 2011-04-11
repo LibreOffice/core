@@ -81,10 +81,10 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 {
     ::sd::Outliner* pOutl = NULL;
     SdPage* pSummaryPage = NULL;
-    USHORT i = 0;
-    USHORT nFirstPage = SDRPAGE_NOTFOUND;
-    USHORT nSelectedPages = 0;
-    USHORT nCount = mpDoc->GetSdPageCount(PK_STANDARD);
+    sal_uInt16 i = 0;
+    sal_uInt16 nFirstPage = SDRPAGE_NOTFOUND;
+    sal_uInt16 nSelectedPages = 0;
+    sal_uInt16 nCount = mpDoc->GetSdPageCount(PK_STANDARD);
 
     while (i < nCount && nSelectedPages <= 1)
     {
@@ -139,7 +139,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
                     // Seite mit Titel & Gliederung!
-                    pSummaryPage = (SdPage*) mpDoc->AllocPage(FALSE);
+                    pSummaryPage = (SdPage*) mpDoc->AllocPage(sal_False);
                     pSummaryPage->SetSize(pActualPage->GetSize() );
                     pSummaryPage->SetBorder(pActualPage->GetLftBorder(),
                                      pActualPage->GetUppBorder(),
@@ -154,12 +154,12 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     // MasterPage der aktuellen Seite verwenden
                     pSummaryPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
                     pSummaryPage->SetLayoutName(pActualPage->GetLayoutName());
-                    pSummaryPage->SetAutoLayout(AUTOLAYOUT_ENUM, TRUE);
+                    pSummaryPage->SetAutoLayout(AUTOLAYOUT_ENUM, sal_True);
                     pSummaryPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                     pSummaryPage->setHeaderFooterSettings(pActualPage->getHeaderFooterSettings());
 
                     // Notiz-Seite
-                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(FALSE);
+                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(sal_False);
                     pNotesPage->SetSize(pActualNotesPage->GetSize());
                     pNotesPage->SetBorder(pActualNotesPage->GetLftBorder(),
                                           pActualNotesPage->GetUppBorder(),
@@ -176,13 +176,13 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     // MasterPage der aktuellen Seite verwenden
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
                     pNotesPage->SetLayoutName(pActualNotesPage->GetLayoutName());
-                    pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), TRUE);
+                    pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), sal_True);
                     pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                     pNotesPage->setHeaderFooterSettings(pActualNotesPage->getHeaderFooterSettings());
 
                     pOutl = new ::sd::Outliner( mpDoc, OUTLINERMODE_OUTLINEOBJECT );
-                    pOutl->SetUpdateMode(FALSE);
-                    pOutl->EnableUndo(FALSE);
+                    pOutl->SetUpdateMode(sal_False);
+                    pOutl->EnableUndo(sal_False);
 
                     if (mpDocSh)
                         pOutl->SetRefDevice(SD_MOD()->GetRefDevice( *mpDocSh ));
@@ -209,9 +209,9 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 
         // Harte Absatz- und Zeichenattribute entfernen
         SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
-        ULONG nParaCount = pOutl->GetParagraphCount();
+        sal_uLong nParaCount = pOutl->GetParagraphCount();
 
-        for (USHORT nPara = 0; nPara < nParaCount; nPara++)
+        for (sal_uInt16 nPara = 0; nPara < nParaCount; nPara++)
         {
             pOutl->SetStyleSheet( nPara, pStyle );
             pOutl->QuickRemoveCharAttribs(nPara);
@@ -220,9 +220,9 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         }
 
         pTextObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
-        pTextObj->SetEmptyPresObj(FALSE);
+        pTextObj->SetEmptyPresObj(sal_False);
 
-        // Harte Attribute entfernen (Flag auf TRUE)
+        // Harte Attribute entfernen (Flag auf sal_True)
         SfxItemSet aAttr(mpDoc->GetPool());
         aAttr.Put(XLineStyleItem(XLINE_NONE));
         aAttr.Put(XFillStyleItem(XFILL_NONE));

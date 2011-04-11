@@ -37,13 +37,12 @@ public:
     TYPEINFO();
     AppError( BasicFrame*, String );
     ~AppError();
-//  long Command( short nID );
     virtual long InitMenu( Menu* );
     virtual long DeInitMenu( Menu* );
-    USHORT GetLineNr();
+    sal_uInt16 GetLineNr();
     FileType GetFileType();
     MsgEdit* GetMsgTree()           { return ((MsgEdit*)pDataEdit); }
-    virtual BOOL ReloadAllowed(){ return !StarBASIC::IsRunning(); }
+    virtual sal_Bool ReloadAllowed(){ return !StarBASIC::IsRunning(); }
     virtual void LoadIniFile();     // (re)load ini file after change
     DirEntry aBaseDir;
 };

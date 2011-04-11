@@ -69,7 +69,7 @@ public class _XRowLocate extends MultiMethodTest {
         try {
             bookmark1 = oObj.getBookmark() ;
         } catch (SQLException e) {
-            log.println("Exception occured :" + e) ;
+            log.println("Exception occurred :" + e) ;
         }
 
         tRes.tested("getBookmark()", bookmark1 != null) ;
@@ -90,7 +90,7 @@ public class _XRowLocate extends MultiMethodTest {
     * </ul> <p>
     * Has OK status difference between positions of bookmarks (where
     * cursor was moved to and created new one) equals to 0 and no
-    * exceptions occured, FAILED otherwise.
+    * exceptions occurred, FAILED otherwise.
     */
     public void _moveToBookmark() {
         requiredMethod("getBookmark()") ;
@@ -105,7 +105,7 @@ public class _XRowLocate extends MultiMethodTest {
             }
             comparison = oObj.compareBookmarks(bookmark1, tmpBookmark) ;
         } catch (SQLException e) {
-            log.println("Exception occured :" + e) ;
+            log.println("Exception occurred :" + e) ;
         }
 
         tRes.tested("moveToBookmark()", comparison == 0) ;
@@ -119,7 +119,7 @@ public class _XRowLocate extends MultiMethodTest {
     * <ul>
     * <li> <code>getBookmark()</code> : to have a bookmark to move to.</li>
     * </ul> <p>
-    * Has OK status if no exceptions occured while method call.
+    * Has OK status if no exceptions occurred while method call.
     */
     public void _moveRelativeToBookmark() {
         requiredMethod("getBookmark()") ;
@@ -131,7 +131,7 @@ public class _XRowLocate extends MultiMethodTest {
                 bookmark2 = oObj.getBookmark() ;
             }
         } catch (SQLException e) {
-            log.println("Exception occured :" + e) ;
+            log.println("Exception occurred :" + e) ;
             result = false ;
         }
 
@@ -159,7 +159,7 @@ public class _XRowLocate extends MultiMethodTest {
             comparison = oObj.compareBookmarks(bookmark1, bookmark2) ;
             comparison1 = oObj.compareBookmarks(bookmark1, bookmark1) ;
         } catch (SQLException e) {
-            log.println("Exception occured :" + e) ;
+            log.println("Exception occurred :" + e) ;
         }
 
         if (comparison != -1) {
@@ -187,7 +187,7 @@ public class _XRowLocate extends MultiMethodTest {
         try {
             res = oObj.hasOrderedBookmarks() ;
         } catch (SQLException e) {
-            log.println("Exception occured :" + e) ;
+            log.println("Exception occurred :" + e) ;
             result = false ;
         }
 
@@ -223,7 +223,7 @@ public class _XRowLocate extends MultiMethodTest {
 
             result = hash1 != hash2 ;
         } catch (SQLException e) {
-            log.println("Exception occured :" + e) ;
+            log.println("Exception occurred :" + e) ;
             result = false ;
         }
 

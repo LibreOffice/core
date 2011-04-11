@@ -44,14 +44,14 @@ private:
 public:
                                 ScXMLLabelRangesContext(
                                     ScXMLImport& rImport,
-                                    USHORT nPrefix,
+                                    sal_uInt16 nPrefix,
                                     const ::rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList
                                     );
     virtual                     ~ScXMLLabelRangesContext();
 
     virtual SvXMLImportContext* CreateChildContext(
-                                    USHORT nPrefix,
+                                    sal_uInt16 nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList
                                     );
@@ -74,14 +74,14 @@ private:
 public:
                                 ScXMLLabelRangeContext(
                                     ScXMLImport& rImport,
-                                    USHORT nPrefix,
+                                    sal_uInt16 nPrefix,
                                     const ::rtl::OUString& rLName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList
                                     );
     virtual                     ~ScXMLLabelRangeContext();
 
     virtual SvXMLImportContext* CreateChildContext(
-                                    USHORT nPrefix,
+                                    sal_uInt16 nPrefix,
                                     const ::rtl::OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList
                                     );

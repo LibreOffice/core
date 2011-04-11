@@ -52,7 +52,7 @@ published service CachedContentResultSet
     service com::sun::star::ucb::ContentResultSet;
 
     //-------------------------------------------------------------------------
-    /** contains the number of result set rows that should be fethched from
+    /** contains the number of result set rows that should be fetched from
     an underlying database.
 
     <p>The default fetch size is implementation specific.

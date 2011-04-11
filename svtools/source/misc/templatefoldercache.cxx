@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include "templatefoldercache.hxx"
+#include <svtools/templatefoldercache.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -117,8 +117,8 @@ namespace svt
     //=====================================================================
     struct TemplateContent;
     typedef ::std::vector< ::rtl::Reference< TemplateContent > >    TemplateFolderContent;
-        typedef TemplateFolderContent::const_iterator           ConstFolderIterator;
-        typedef TemplateFolderContent::iterator                 FolderIterator;
+    typedef TemplateFolderContent::const_iterator           ConstFolderIterator;
+    typedef TemplateFolderContent::iterator                 FolderIterator;
 
     /** a struct describing one content in one of the template dirs (or at least it's relevant aspects)
     */
@@ -263,7 +263,7 @@ namespace svt
         {
             if ( !_rLHS.is() || !_rRHS.is() )
             {
-                DBG_ERROR( "TemplateContentEqual::operator(): invalid contents!" );
+                OSL_FAIL( "TemplateContentEqual::operator(): invalid contents!" );
                 return true;
                     // this is not strictly true, in case only one is invalid - but this is a heavy error anyway
             }
@@ -490,7 +490,6 @@ namespace svt
         void        storeState( sal_Bool _bForceRetrieval );
 
     private:
-        void        initTemplDirs( ::std::vector< String >& _rRootDirs );
         sal_Bool    openCacheStream( sal_Bool _bForRead );
         void        closeCacheStream( );
 
@@ -635,10 +634,10 @@ namespace svt
             // create a content for the current folder root
             Reference< XResultSet > xResultSet;
             Sequence< ::rtl::OUString > aContentProperties( 4);
-            aContentProperties[0] = ::rtl::OUString::createFromAscii( "Title" );
-            aContentProperties[1] = ::rtl::OUString::createFromAscii( "DateModified" );
-            aContentProperties[2] = ::rtl::OUString::createFromAscii( "DateCreated" );
-            aContentProperties[3] = ::rtl::OUString::createFromAscii( "IsFolder" );
+            aContentProperties[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
+            aContentProperties[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ));
+            aContentProperties[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateCreated" ));
+            aContentProperties[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ));
 
             // get the set of sub contents in the folder
             try
@@ -692,7 +691,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "TemplateFolderCacheImpl::implReadFolder: caught an exception!" );
+            OSL_FAIL( "TemplateFolderCacheImpl::implReadFolder: caught an exception!" );
             return sal_False;
         }
         return sal_True;
@@ -707,15 +706,18 @@ namespace svt
         m_aCurrentState.swap( aTemplateFolderContent );
 
         // the template directories from the config
-        String      aDirs = SvtPathOptions().GetTemplatePath();
+        const SvtPathOptions aPathOptions;
+        String      aDirs = aPathOptions.GetTemplatePath();
         sal_uInt16  nDirs = aDirs.GetTokenCount( ';' );
 
         m_aCurrentState.reserve( nDirs );
         // loop through all the root-level template folders
         for ( sal_uInt16 i=0; i<nDirs; ++i)
         {
+            String sTemplatePath( aDirs.GetToken( i, ';' ) );
+            sTemplatePath = aPathOptions.ExpandMacros( sTemplatePath );
             // create a new entry
-            m_aCurrentState.push_back( new TemplateContent( INetURLObject( aDirs.GetToken( i, ';' ) ) ) );
+            m_aCurrentState.push_back( new TemplateContent( INetURLObject( sTemplatePath ) ) );
             TemplateFolderContent::iterator aCurrentRoot = m_aCurrentState.end();
             --aCurrentRoot;
 
@@ -789,7 +791,7 @@ namespace svt
         INetURLObject aStorageURL( sStorageURL );
         if ( INET_PROT_NOT_VALID == aStorageURL.GetProtocol() )
         {
-            DBG_ERROR( "TemplateFolderCacheImpl::openCacheStream: invalid storage path!" );
+            OSL_FAIL( "TemplateFolderCacheImpl::openCacheStream: invalid storage path!" );
             return sal_False;
         }
 
@@ -836,11 +838,6 @@ namespace svt
             }
         }
         return m_bNeedsUpdate;
-    }
-
-    //---------------------------------------------------------------------
-    void TemplateFolderCacheImpl::initTemplDirs( ::std::vector< String >& )
-    {
     }
 
     //---------------------------------------------------------------------

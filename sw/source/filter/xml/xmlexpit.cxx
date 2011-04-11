@@ -68,6 +68,7 @@
 #include "fmtrowsplt.hxx"
 
 
+using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
@@ -342,7 +343,7 @@ void SvXMLExportItemMapper::handleSpecialItem( SvXMLAttributeList& /*rAttrList*/
                                     const SvXMLNamespaceMap& /*rNamespaceMap*/,
                                     const SfxItemSet* /*pSet*/ /* = NULL */ ) const
 {
-    DBG_ERROR( "special item not handled in xml export" );
+    OSL_FAIL( "special item not handled in xml export" );
 }
 
 /** this method is called for every item that has the
@@ -353,7 +354,7 @@ void SvXMLExportItemMapper::handleNoItem( SvXMLAttributeList& /*rAttrList*/,
                                const SvXMLNamespaceMap& /*rNamespaceMap*/,
                                const SfxItemSet& /*rSet*/ ) const
 {
-    DBG_ERROR( "no item not handled in xml export" );
+    OSL_FAIL( "no item not handled in xml export" );
 }
 
 /** this method is called for every item that has the
@@ -366,9 +367,28 @@ void SvXMLExportItemMapper::handleElementItem(
                         const SfxItemSet& /*rSet*/,
                         sal_uInt16 /*nFlags*/ ) const
 {
-    DBG_ERROR( "element item not handled in xml export" );
+    OSL_FAIL( "element item not handled in xml export" );
 }
 
+bool lcl_isOdfDoubleLine( const SvxBorderLine* pLine )
+{
+    bool bIsOdfDouble = false;
+    switch ( pLine->GetStyle() )
+    {
+        case ::editeng::DOUBLE:
+        case ::editeng::THINTHICK_SMALLGAP:
+        case ::editeng::THINTHICK_MEDIUMGAP:
+        case ::editeng::THINTHICK_LARGEGAP:
+        case ::editeng::THICKTHIN_SMALLGAP:
+        case ::editeng::THICKTHIN_MEDIUMGAP:
+        case ::editeng::THICKTHIN_LARGEGAP:
+            bIsOdfDouble = true;
+            break;
+        default:
+            break;
+    }
+    return bIsOdfDouble;
+}
 
 sal_Bool SvXMLExportItemMapper::QueryXMLValue(
     const SfxPoolItem& rItem,
@@ -425,7 +445,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     break;
 
                 default:
-                    DBG_ERROR( "unknown member id!");
+                    OSL_FAIL( "unknown member id!");
                     bOk = sal_False;
                     break;
             }
@@ -454,7 +474,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                     break;
 
                 default:
-                    DBG_ERROR("unknown MemberId");
+                    OSL_FAIL("unknown MemberId");
             };
 
             bOk = sal_True;
@@ -595,42 +615,51 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                         const sal_uInt16 nDistance = pTop->GetDistance();
                         const sal_uInt16 nInWidth  = pTop->GetInWidth();
                         const sal_uInt16 nOutWidth = pTop->GetOutWidth();
+                        const sal_uInt16 nWidth = pTop->GetWidth();
 
                         bEqual = nDistance == pLeft->GetDistance() &&
                                  nInWidth  == pLeft->GetInWidth()  &&
                                  nOutWidth == pLeft->GetOutWidth() &&
+                                 nWidth == pLeft->GetWidth() &&
                                  nDistance == pRight->GetDistance()  &&
                                  nInWidth  == pRight->GetInWidth()   &&
                                  nOutWidth == pRight->GetOutWidth()  &&
+                                 nWidth == pRight->GetWidth()  &&
                                  nDistance == pBottom->GetDistance()  &&
                                  nInWidth  == pBottom->GetInWidth()   &&
-                                 nOutWidth == pBottom->GetOutWidth();
+                                 nOutWidth == pBottom->GetOutWidth() &&
+                                 nWidth == pBottom->GetWidth();
                     }
 
                     switch( nMemberId )
                     {
                         case ALL_BORDER_LINE_WIDTH:
-                            if( !bEqual || pTop->GetDistance() == 0 )
+                            if( !bEqual || pTop->GetDistance() == 0 ||
+                                !lcl_isOdfDoubleLine( pTop ) )
                                 return sal_False;
                             break;
                         case LEFT_BORDER_LINE_WIDTH:
                             if( bEqual || NULL == pLeft ||
-                                0 == pLeft->GetDistance() )
+                                0 == pLeft->GetDistance() ||
+                                !lcl_isOdfDoubleLine( pLeft ) )
                                 return sal_False;
                             break;
                         case RIGHT_BORDER_LINE_WIDTH:
                             if( bEqual || NULL == pRight ||
-                                0 == pRight->GetDistance() )
+                                0 == pRight->GetDistance() ||
+                                !lcl_isOdfDoubleLine( pRight ) )
                                 return sal_False;
                             break;
                         case TOP_BORDER_LINE_WIDTH:
                             if( bEqual || NULL == pTop ||
-                                0 == pTop->GetDistance() )
+                                0 == pTop->GetDistance() ||
+                                !lcl_isOdfDoubleLine( pTop ) )
                                 return sal_False;
                             break;
                         case BOTTOM_BORDER_LINE_WIDTH:
                             if( bEqual || NULL == pBottom ||
-                                0 == pBottom->GetDistance() )
+                                0 == pBottom->GetDistance() ||
+                                !lcl_isOdfDoubleLine( pBottom ) )
                                 return sal_False;
                             break;
                     }
@@ -686,33 +715,55 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
 
                     if( NULL != pLine )
                     {
-                        sal_Int32 nWidth = pLine->GetOutWidth();
-                        const sal_uInt16 nDistance = pLine->GetDistance();
-                        if( 0 != nDistance )
-                        {
-                            nWidth += nDistance;
-                            nWidth += pLine->GetInWidth();
-                        }
+                        sal_Int32 nWidth = pLine->GetWidth();
 
                         enum XMLTokenEnum eStyle = XML_SOLID;
+                        bool bNoBorder = false;
                         switch ( pLine->GetStyle( ) )
                         {
-                            case DOTTED:
-                               eStyle = XML_DOTTED;
-                               break;
-                            case DASHED:
-                               eStyle = XML_DASHED;
-                               break;
+                            case ::editeng::SOLID:
+                                eStyle = XML_SOLID;
+                                break;
+                            case ::editeng::DOTTED:
+                                eStyle = XML_DOTTED;
+                                break;
+                            case ::editeng::DASHED:
+                                eStyle = XML_DASHED;
+                                break;
+                            case ::editeng::DOUBLE:
+                            case ::editeng::THINTHICK_SMALLGAP:
+                            case ::editeng::THINTHICK_MEDIUMGAP:
+                            case ::editeng::THINTHICK_LARGEGAP:
+                            case ::editeng::THICKTHIN_SMALLGAP:
+                            case ::editeng::THICKTHIN_MEDIUMGAP:
+                            case ::editeng::THICKTHIN_LARGEGAP:
+                                eStyle = XML_DOUBLE;
+                                break;
+                            case ::editeng::EMBOSSED:
+                                eStyle = XML_RIDGE;
+                                break;
+                            case ::editeng::ENGRAVED:
+                                eStyle = XML_GROOVE;
+                                break;
+                            case ::editeng::INSET:
+                                eStyle = XML_INSET;
+                                break;
+                            case ::editeng::OUTSET:
+                                eStyle = XML_OUTSET;
+                                break;
                             default:
-                            eStyle = (0 == nDistance) ? XML_SOLID : XML_DOUBLE;
+                                bNoBorder = true;
                         }
 
-                        rUnitConverter.convertMeasure( aOut, nWidth );
-                        aOut.append( sal_Unicode( ' ' ) );
-                        aOut.append( GetXMLToken( eStyle ) );
-                        aOut.append( sal_Unicode( ' ' ) );
-                        rUnitConverter.convertColor( aOut, pLine->GetColor() );
-
+                        if ( !bNoBorder )
+                        {
+                            rUnitConverter.convertMeasure( aOut, nWidth,
+                                   MAP_TWIP, MAP_POINT );
+                            aOut.append( sal_Unicode( ' ' ) );
+                            aOut.append( GetXMLToken( eStyle ) );
+                            aOut.append( sal_Unicode( ' ' ) );
+                            rUnitConverter.convertColor( aOut, pLine->GetColor() );
+                        }
                     }
                     else
                     {
@@ -1046,7 +1097,7 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
         break;
 
         default:
-            DBG_ERROR("GetXMLValue not implemented for this item.");
+            OSL_FAIL("GetXMLValue not implemented for this item.");
             break;
     }
 

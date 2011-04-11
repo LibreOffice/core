@@ -218,7 +218,6 @@ sal_Bool SAL_CALL OImageControl::supportsService(const ::rtl::OUString& ServiceN
 REPORTCOMPONENT_IMPL(OImageControl,m_aProps.aComponent)
 REPORTCOMPONENT_IMPL2(OImageControl,m_aProps.aComponent)
 REPORTCOMPONENT_NOMASTERDETAIL(OImageControl)
-//REPORTCONTROLFORMAT_IMPL(OImageControl,m_aProps.aFormatProperties)
 NO_REPORTCONTROLFORMAT_IMPL(OImageControl)
 ::rtl::OUString SAL_CALL OImageControl::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException)
 {

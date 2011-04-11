@@ -61,14 +61,14 @@ public:
     virtual void MarkListHasChanged();
     void CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
 
-    virtual BOOL SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
+    virtual sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll = sal_False);
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
-    void    BlockPageOrderChangedHint(BOOL bBlock);
+    void    BlockPageOrderChangedHint(sal_Bool bBlock);
 
-    BOOL    SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr = FALSE);
-    virtual BOOL IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
+    sal_Bool    SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr = sal_False);
+    virtual sal_Bool IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const;
 
     virtual void MakeVisible(const Rectangle& rRect, ::Window& rWin);
     virtual void HideSdrPage(); // SdrPageView* pPV);
@@ -86,7 +86,7 @@ private:
     DrawViewShell*  mpDrawViewShell;
     VirtualDevice*  mpVDev;
 
-    USHORT          mnPOCHSmph; // zum blockieren des PageOrderChangedHint
+    sal_uInt16          mnPOCHSmph; // zum blockieren des PageOrderChangedHint
 };
 
 } // end of namespace sd

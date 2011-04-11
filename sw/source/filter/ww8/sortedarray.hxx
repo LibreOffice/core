@@ -30,7 +30,6 @@
 #define WW_SORTEDARRAY_HXX
 
 #include <algorithm>
-#include <errhdl.hxx>       // OSL_ENSURE()
 #include <tools/debug.hxx>
 
 //simple template that manages a static [] array by sorting at construction
@@ -109,7 +108,7 @@ namespace ww
             }
             if (bBroken)
             {
-               DBG_ERROR(rtl::OUStringToOString(sError, RTL_TEXTENCODING_ASCII_US));
+               OSL_FAIL( rtl::OUStringToOString( sError, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
 #endif
         }

@@ -44,7 +44,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
@@ -74,8 +73,6 @@ public:
     inline const ::rtl::OUString&                   getName() const { return msName; }
     inline const uno::Reference< awt::XControl >&   getControl() const { return mxControl; }
 };
-
-//DECLARE_LIST( UnoControlHolderList, UnoControlHolder* );
 
 class UnoControlHolderList
 {
@@ -413,13 +410,16 @@ void SAL_CALL DialogStepChangedListener::propertyChange( const  beans::PropertyC
 //  ----------------------------------------------------
 //  class UnoControlContainer
 //  ----------------------------------------------------
-UnoControlContainer::UnoControlContainer() : maCListeners( *this )
+UnoControlContainer::UnoControlContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+    :UnoControlContainer_Base( i_factory )
+    ,maCListeners( *this )
 {
     mpControls = new UnoControlHolderList;
 }
 
-UnoControlContainer::UnoControlContainer( uno::Reference< awt::XWindowPeer >  xP )
-    :   maCListeners( *this )
+UnoControlContainer::UnoControlContainer( const uno::Reference< lang::XMultiServiceFactory >& i_factory, const uno::Reference< awt::XWindowPeer >& xP )
+    :UnoControlContainer_Base( i_factory )
+    ,maCListeners( *this )
 {
     setPeer( xP );
     mbDisposePeer = sal_False;
@@ -809,8 +809,8 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
                 aCtrls.getArray()[n]->createPeer( rxToolkit, getPeer() );
 
             uno::Reference< awt::XVclContainerPeer >  xC( getPeer(), uno::UNO_QUERY );
-
-            xC->enableDialogControl( sal_True );
+            if ( xC.is() )
+                xC->enableDialogControl( sal_True );
             ImplActivateTabControllers();
         }
 

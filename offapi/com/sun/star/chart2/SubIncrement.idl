@@ -11,15 +11,11 @@ struct SubIncrement
 {
     /** should contain nothing for <em>auto</em>, or an integer value
         for an explicit interval count.
-
-        @see <type>ExplicitSubIncrement</type>
      */
     any         IntervalCount;
 
     /** should contain nothing for <em>auto</em>, or a boolean value
         for an explicit setting.
-
-        @see <type>ExplicitSubIncrement</type>
      */
     any         PostEquidistant;
 };

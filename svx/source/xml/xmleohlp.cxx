@@ -53,7 +53,7 @@
 
 #include <sot/clsids.hxx>
 #include <map>
-#include "xmleohlp.hxx"
+#include "svx/xmleohlp.hxx"
 
 // -----------
 // - Defines -
@@ -190,7 +190,7 @@ SvXMLEmbeddedObjectHelper::~SvXMLEmbeddedObjectHelper()
     {
         SvXMLEmbeddedObjectHelper_Impl::iterator aIter = mpStreamMap->begin();
         SvXMLEmbeddedObjectHelper_Impl::iterator aEnd = mpStreamMap->end();
-        for( ; aIter != aEnd; aIter++ )
+        for( ; aIter != aEnd; ++aIter )
         {
             if( aIter->second )
             {
@@ -349,7 +349,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
 
     if( -1 != rContainerStorageName.indexOf( '/' ) )
     {
-        DBG_ERROR( "SvXMLEmbeddedObjectHelper: invalid path name" );
+        OSL_FAIL( "SvXMLEmbeddedObjectHelper: invalid path name" );
         return sal_False;
     }
 

@@ -33,10 +33,6 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
-#if defined (WNT) && defined (tcpp)
-#define _spawnvp spawnvp
-#define _P_WAIT P_WAIT
-#endif
 
 #ifdef UNX
 #include <unistd.h>
@@ -48,7 +44,7 @@
 #if defined ( OS2 ) && !defined ( GCC )
 #include <direct.h>
 #endif
-#if !defined ( CSET ) && !defined ( OS2 )
+#if !defined ( OS2 )
 #include <dos.h>
 #endif
 
@@ -90,11 +86,11 @@
 |*
 |*    Beschreibung
 *************************************************************************/
-static BOOL CallPrePro( const ByteString& rPrePro,
+static sal_Bool CallPrePro( const ByteString& rPrePro,
                         const ByteString& rInput,
                         const ByteString& rOutput,
                         RscPtrPtr * pCmdLine,
-                        BOOL bResponse )
+                        sal_Bool bResponse )
 {
     RscPtrPtr       aNewCmdL;   // Kommandozeile
     RscPtrPtr       aRespCmdL;   // Kommandozeile
@@ -175,14 +171,8 @@ static BOOL CallPrePro( const ByteString& rPrePro,
         }
     }
 
-#if ((defined OS2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
+#if defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, rPrePro.GetBuffer(), (char* const*)pCmdL->GetBlock() );
-#elif defined CSET
-    nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char**)pCmdL->GetBlock() );
-#elif defined WTC
-    nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char* const*)pCmdL->GetBlock() );
-#elif defined MTW
-    nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (char**)pCmdL->GetBlock() );
 #else
     nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char**)pCmdL->GetBlock() );
 #endif
@@ -194,9 +184,9 @@ static BOOL CallPrePro( const ByteString& rPrePro,
         unlink( aRspFileName.GetBuffer() );
         #endif
     if ( nExit )
-        return FALSE;
+        return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -205,12 +195,12 @@ static BOOL CallPrePro( const ByteString& rPrePro,
 |*
 |*    Beschreibung
 *************************************************************************/
-static BOOL CallRsc2( ByteString aRsc2Name,
+static sal_Bool CallRsc2( ByteString aRsc2Name,
                       RscStrList * pInputList,
                       ByteString aSrsName,
                       RscPtrPtr * pCmdLine )
 {
-    int             i, nExit;
+    int nExit;
     ByteString*     pString;
     ByteString      aRspFileName;   // Response-Datei
     FILE *          fRspFile;       // Response-Datei
@@ -221,7 +211,7 @@ static BOOL CallRsc2( ByteString aRsc2Name,
     RscVerbosity eVerbosity = RscVerbosityNormal;
     if( fRspFile )
     {
-        for( i = 1; i < (int)(pCmdLine->GetCount() -1); i++ )
+        for (int i = 1; i < (int)(pCmdLine->GetCount() -1); ++i)
         {
             if ( !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-verbose" ) )
             {
@@ -262,15 +252,14 @@ static BOOL CallRsc2( ByteString aRsc2Name,
         fprintf( fRspFile, "%s", aSrsName.GetBuffer() );
 #endif
 
-        pString = pInputList->First();
-        while( pString )
+        for ( size_t i = 0, n = pInputList->size(); i < n; ++i )
         {
+            pString = (*pInputList)[ i ];
 #ifdef OS2
             fprintf( fRspFile, "%s\n", pString->GetBuffer() );
 #else
             fprintf( fRspFile, " %s", pString->GetBuffer() );
 #endif
-            pString = pInputList->Next();
         };
 
         fclose( fRspFile );
@@ -292,14 +281,8 @@ static BOOL CallRsc2( ByteString aRsc2Name,
         printf( "\n" );
     }
 
-#if ((defined OS2 || defined WNT) && (defined TCPP || defined tcpp)) || defined UNX || defined OS2
+#if defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, aRsc2Name.GetBuffer(), (char* const*)aNewCmdL.GetBlock() );
-#elif defined CSET
-    nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (char **)(const char**)aNewCmdL.GetBlock() );
-#elif defined WTC
-    nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (const char* const*)aNewCmdL.GetBlock() );
-#elif defined MTW
-    nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (char**)aNewCmdL.GetBlock() );
 #else
     nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (const char**)aNewCmdL.GetBlock() );
 #endif
@@ -311,26 +294,21 @@ static BOOL CallRsc2( ByteString aRsc2Name,
         unlink( aRspFileName.GetBuffer() );
         #endif
     if( nExit )
-        return( FALSE );
-    return( TRUE );
+        return( sal_False );
+    return( sal_True );
 }
 
 /*************************************************************************
 |*
 |*    main()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 05.09.91
-|*    Letzte Aenderung  MM 05.09.91
-|*
 *************************************************************************/
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    BOOL            bPrePro  = TRUE;
-    BOOL            bResFile = TRUE;
-    BOOL            bHelp    = FALSE;
-    BOOL            bError   = FALSE;
-    BOOL            bResponse = FALSE;
+    sal_Bool            bPrePro  = sal_True;
+    sal_Bool            bHelp    = sal_False;
+    sal_Bool            bError   = sal_False;
+    sal_Bool            bResponse = sal_False;
     ByteString      aSolarbin(getenv("SOLARBINDIR"));
     ByteString      aDelim("/");
     ByteString      aPrePro; //( aSolarbin + aDelim + ByteString("rscpp"));
@@ -363,7 +341,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     ppStr  = (char **)aCmdLine.GetBlock();
     ppStr++;
     i = 1;
-    BOOL bSetSrs = FALSE;
+    sal_Bool bSetSrs = sal_False;
     while( ppStr && i < (aCmdLine.GetCount() -1) )
     {
         if( '-' == **ppStr )
@@ -371,20 +349,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             if( !rsc_stricmp( (*ppStr) + 1, "p" )
               || !rsc_stricmp( (*ppStr) + 1, "l" ) )
             { // kein Preprozessor
-                bPrePro = FALSE;
-            }
-            else if( !rsc_stricmp( (*ppStr) + 1, "r" )
-              || !rsc_stricmp( (*ppStr) + 1, "s" ) )
-            { // erzeugt kein .res-file
-                bResFile = FALSE;
+                bPrePro = sal_False;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "h" ) )
             { // Hilfe anzeigen
-                bHelp = TRUE;
+                bHelp = sal_True;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "presponse", 9 ) )
             { // anderer Name fuer den Preprozessor
-                bResponse = TRUE;
+                bResponse = sal_True;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "pp=", 3 ) )
             { // anderer Name fuer den Preprozessor
@@ -400,52 +373,48 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
             { // anderer Name fuer .srs-file
-                bSetSrs  = TRUE;
+                bSetSrs  = sal_True;
                 aSrsName = (*ppStr);
             }
         }
         else
         {
             // Eingabedatei
-            aInputList.Insert( new ByteString( *ppStr ), CONTAINER_APPEND );
+            aInputList.push_back( new ByteString( *ppStr ) );
         }
         ppStr++;
         i++;
     }
 
-    if( aInputList.Count() )
+    if( !aInputList.empty() )
     {
         /* build the output file names          */
         if( ! aResName.Len() )
-            aResName = OutputFile( *aInputList.First(), "res" );
+            aResName = OutputFile( *aInputList[ 0 ], "res" );
         if( ! bSetSrs )
         {
             aSrsName = "-fp=";
-            aSrsName += OutputFile( *aInputList.First(), "srs" );
+            aSrsName += OutputFile( *aInputList[ 0 ], "srs" );
         }
     };
 
     if( bHelp )
-    {
-        bPrePro = FALSE;
-        bResFile = FALSE;
-    };
-    if( bPrePro && aInputList.Count() )
+        bPrePro = sal_False;
+    if( bPrePro && !aInputList.empty() )
     {
         ByteString aTmpName;
 
-        pString = aInputList.First();
-        while( pString )
+        for ( size_t k = 0, n = aInputList.size(); k < n; ++k )
         {
+            pString = aInputList[ k ];
             aTmpName = ::GetTmpFileName();
             if( !CallPrePro( aPrePro, *pString, aTmpName, &aCmdLine, bResponse ) )
             {
                 printf( "Error starting preprocessor\n" );
-                bError = TRUE;
+                bError = sal_True;
                 break;
             }
-            aTmpList.Insert( new ByteString( aTmpName ), CONTAINER_APPEND );
-            pString = aInputList.Next();
+            aTmpList.push_back( new ByteString( aTmpName ) );
         };
     };
 
@@ -457,21 +426,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             if( !bHelp )
             {
                 printf( "Error starting rsc2 compiler\n" );
-                bError = TRUE;
+                bError = sal_True;
             }
         };
     };
 
-    pString = aTmpList.First();
-    while( pString )
-    {
-        #if OSL_DEBUG_LEVEL > 5
-        fprintf( stderr, "leaving temp file %s\n", pString->GetBuffer() );
-        #else
-        unlink( pString->GetBuffer() );
-        #endif
-        pString = aTmpList.Next();
-    };
+    for ( size_t k = 0, n = aTmpList.size(); k < n; ++k )
+        unlink( aTmpList[ k ]->GetBuffer() );
 
     return( bError );
 }

@@ -62,7 +62,7 @@
 
 //=============================================================================
 
-/** This service is for a closed bezier shape.
+/** This service is for a closed Bezier shape.
  */
 published service ClosedBezierShape
 {

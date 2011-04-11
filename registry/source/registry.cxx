@@ -47,10 +47,6 @@
 #include <unistd.h>
 #endif
 
-#if defined ( GCC ) && ( defined ( SCO ) )
-ORealDynamicLoader* ODynamicLoader<Registry_Api>::m_pLoader = NULL;
-#endif
-
 extern "C" {
 
 //*********************************************************************

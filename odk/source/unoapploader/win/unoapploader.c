@@ -282,7 +282,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
  * Gets the path of a UNO installation.
  *
  * @return the installation path or NULL, if no installation was specified or
- *         found, or if an error occured
+ *         found, or if an error occurred
  */
 char const* getPath()
 {
@@ -305,7 +305,7 @@ char const* getPath()
  *                 the executable name
  *
  * @return the command line for the application process or NULL, if an error
- *         occured
+ *         occurred
  */
 char* createCommandLine( char* appendix )
 {

@@ -39,7 +39,7 @@ published enum DataEditorEventType
      */
     DONE,
 
-    /** specifies that the data editing was cancelled by the user (data not stored).
+    /** specifies that the data editing was canceled by the user (data not stored).
      */
     CANCELED
 };

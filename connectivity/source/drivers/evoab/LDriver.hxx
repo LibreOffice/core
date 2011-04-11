@@ -73,8 +73,8 @@ namespace connectivity
 
             inline rtl::OUString    getEvoFolderListName()          const { return m_aFolderListName;}
             inline rtl::OUString    getFileExt()                    const { return m_aFileExt;}
-            inline rtl::OUString    getEvoFolderListFileName()      const { return m_aFolderListName + ::rtl::OUString::createFromAscii(".") + m_aFileExt;}
-            inline rtl::OUString    getEvoVersionFileName()         const { return m_aVersionName + ::rtl::OUString::createFromAscii(".") + m_aFileExt;}
+            inline rtl::OUString    getEvoFolderListFileName()      const { return m_aFolderListName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + m_aFileExt;}
+            inline rtl::OUString    getEvoVersionFileName()         const { return m_aVersionName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + m_aFileExt;}
             inline rtl::OUString    getWorkingDirURL()              const { return m_aWorkingDirURL;}
             inline rtl::OUString    getEvoab_CLI_FullPathCommand()  const { return m_aEvoab_CLI_FullPathCommand;}
             inline rtl::OUString    getEvoab_CLI_EffectiveCommand() const { return m_aEvoab_CLI_EffectiveCommand;}

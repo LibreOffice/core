@@ -53,7 +53,6 @@ namespace abp
         m_aInvokeDialog.SetClickHdl( LINK( this, FieldMappingPage, OnInvokeDialog ) );
 
         // check the size of the InvokeDialog button - some languages are very ... gossipy here ....
-        // 96349 - 09.01.2002 - fs@openoffice.org
         sal_Int32 nTextWidth = m_aInvokeDialog.GetTextWidth( m_aInvokeDialog.GetText() );
 
         sal_Int32 nBorderSpace = m_aInvokeDialog.LogicToPixel( Point( 4, 0 ), MAP_APPFONT ).X();

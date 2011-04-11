@@ -42,7 +42,6 @@ using namespace x11;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::script;
 using namespace com::sun::star::awt;
-using namespace rtl;
 
 /*
  *  helper functions

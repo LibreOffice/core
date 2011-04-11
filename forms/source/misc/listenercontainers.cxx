@@ -60,7 +60,7 @@ namespace frm
             _rxListener->resetted( _rEvent );
             break;
         default:
-            OSL_ENSURE( sal_False, "ResetListeners::implNotify: invalid notification type!" );
+            OSL_FAIL( "ResetListeners::implNotify: invalid notification type!" );
         }
         return true;
     }

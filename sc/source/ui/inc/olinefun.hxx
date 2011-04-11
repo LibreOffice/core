@@ -46,21 +46,21 @@ public:
                 ScOutlineDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
                 ~ScOutlineDocFunc() {}
 
-    BOOL        MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL bRecord, BOOL bApi );
-    BOOL        RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL bRecord, BOOL bApi );
-    BOOL        RemoveAllOutlines( SCTAB nTab, BOOL bRecord, BOOL bApi );
-    BOOL        AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bApi );
+    sal_Bool        MakeOutline( const ScRange& rRange, sal_Bool bColumns, sal_Bool bRecord, sal_Bool bApi );
+    sal_Bool        RemoveOutline( const ScRange& rRange, sal_Bool bColumns, sal_Bool bRecord, sal_Bool bApi );
+    sal_Bool        RemoveAllOutlines( SCTAB nTab, sal_Bool bRecord, sal_Bool bApi );
+    sal_Bool        AutoOutline( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi );
 
-    BOOL        SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
-                                    BOOL bRecord, BOOL bPaint, BOOL bApi );
+    sal_Bool        SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel,
+                                    sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
 
-    BOOL        ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, BOOL bApi );
-    BOOL        HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, BOOL bApi );
+    sal_Bool        ShowMarkedOutlines( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi );
+    sal_Bool        HideMarkedOutlines( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi );
 
-    BOOL        ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
-                                    BOOL bRecord, BOOL bPaint, BOOL bApi );
-    BOOL        HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
-                                    BOOL bRecord, BOOL bPaint, BOOL bApi );
+    sal_Bool        ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
+                                    sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
+    sal_Bool        HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
+                                    sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
 };
 
 

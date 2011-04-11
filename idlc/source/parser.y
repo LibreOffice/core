@@ -104,10 +104,14 @@
 #include <algorithm>
 #include <vector>
 
-using namespace rtl;
 
 #define YYDEBUG 1
 #define YYERROR_VERBOSE 1
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OStringBuffer;
 
 extern int yylex(void);
 void yyerror(char const *);

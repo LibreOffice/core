@@ -93,7 +93,7 @@ sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
         bool bRowFiltered = mpDoc->RowFiltered(maCellAddress.Row(), maCellAddress.Tab());
 
         if (bColHidden || bColFiltered || bRowHidden || bRowFiltered)
-            bVisible = sal_False;
+            bVisible = false;
     }
     return bVisible;
 }
@@ -260,7 +260,7 @@ sal_Bool SAL_CALL
      SolarMutexGuard aGuard;
     IsObjectValid();
     double fValue = 0;
-    sal_Bool bResult(sal_False);
+    sal_Bool bResult(false);
     if((aNumber >>= fValue) && mpDoc && mpDoc->GetDocumentShell())
     {
         uno::Reference<XAccessibleStateSet> xParentStates;
@@ -273,7 +273,7 @@ sal_Bool SAL_CALL
         {
             ScDocShell* pDocShell = (ScDocShell*) mpDoc->GetDocumentShell();
             ScDocFunc aFunc(*pDocShell);
-            bResult = aFunc.PutCell( maCellAddress, new ScValueCell(fValue), TRUE );
+            bResult = aFunc.PutCell( maCellAddress, new ScValueCell(fValue), sal_True );
         }
     }
     return bResult;
@@ -333,7 +333,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 sal_Bool ScAccessibleCellBase::IsEditable(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    sal_Bool bEditable(sal_False);
+    sal_Bool bEditable(false);
     if (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::EDITABLE))
         bEditable = sal_True;
     return bEditable;

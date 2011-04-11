@@ -136,7 +136,6 @@ public:
         {
             // Characters, ParagraphCount & WordCount are available from
             // the model ( and addtionally these also update the statics object )
-            //return mxProps->getPropertyValue( rPropName );
             return mxModelProps->getPropertyValue( rPropName );
         }
         catch( uno::Exception& )
@@ -151,7 +150,7 @@ public:
                 SwFEShell* pFEShell = mpDocShell->GetFEShell();
                 if(pFEShell)
                 {
-                    aReturn <<= pFEShell->GetLineCount(FALSE);
+                    aReturn <<= pFEShell->GetLineCount(sal_False);
                 }
             }
         }
@@ -237,7 +236,7 @@ public:
 };
 
 
-typedef std::hash_map< sal_Int32, DocPropInfo > MSOIndexToOODocPropInfo;
+typedef boost::unordered_map< sal_Int32, DocPropInfo > MSOIndexToOODocPropInfo;
 
 class BuiltInIndexHelper
 {
@@ -483,7 +482,7 @@ typedef ::cppu::WeakImplHelper3< com::sun::star::container::XIndexAccess
         ,com::sun::star::container::XEnumerationAccess
         > PropertiesImpl_BASE;
 
-typedef std::hash_map< sal_Int32, uno::Reference< XDocumentProperty > > DocProps;
+typedef boost::unordered_map< sal_Int32, uno::Reference< XDocumentProperty > > DocProps;
 
 typedef ::cppu::WeakImplHelper1< com::sun::star::container::XEnumeration > DocPropEnumeration_BASE;
 class DocPropEnumeration : public DocPropEnumeration_BASE
@@ -505,7 +504,7 @@ public:
     }
 };
 
-typedef std::hash_map< rtl::OUString, uno::Reference< XDocumentProperty >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > DocPropsByName;
+typedef boost::unordered_map< rtl::OUString, uno::Reference< XDocumentProperty >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > DocPropsByName;
 
 class BuiltInPropertiesImpl : public PropertiesImpl_BASE
 {

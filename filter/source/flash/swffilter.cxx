@@ -76,7 +76,7 @@ public:
     OslOutputStreamWrapper(const OUString& sFileName) : mrFile(sFileName)
     {
         osl_removeFile(sFileName.pData);
-        mrFile.open(OpenFlag_Create|OpenFlag_Write);
+        mrFile.open( osl_File_OpenFlag_Create|osl_File_OpenFlag_Write );
     }
 
     // stario::XOutputStream
@@ -154,8 +154,6 @@ class FlashExportFilter : public cppu::WeakImplHelper4
     Reference< XComponent > mxDoc;
     Reference< XMultiServiceFactory > mxMSF;
     Reference< XStatusIndicator> mxStatusIndicator;
-
-    osl::File* mpFile;
 
 public:
     FlashExportFilter( const Reference< XMultiServiceFactory > &rxMSF);
@@ -276,7 +274,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
     if(!xDrawPages.is())
         return sal_False;
 
-    Reference< XDesktop > rDesktop( mxMSF->createInstance(OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY);
+    Reference< XDesktop > rDesktop( mxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY);
     if (!rDesktop.is())
         return sal_False;
 
@@ -334,6 +332,9 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
         sal_uInt64 bytesWritten;
         err = osl_writeFile(xBackgroundConfig, "slides=", strlen("slides="), &bytesWritten);
     }
+
+    // TODO: check for errors
+    (void) err;
 
     FlashExporter aFlashExporter( mxMSF, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
                                          findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));

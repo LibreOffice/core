@@ -34,7 +34,7 @@
 #include <editeng/charscaleitem.hxx>
 #include <txtatr.hxx>
 #include <sfx2/printer.hxx>
-#include <editeng/lrspitem.hxx>
+#include <svx/svdobj.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtanchr.hxx>
@@ -63,6 +63,8 @@
 #include <breakit.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
+#include <editeng/lrspitem.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -332,7 +334,7 @@ xub_StrLen SwAttrIter::GetNextAttr( ) const
     if (m_pTxtNode!=NULL) {
         //TODO maybe use hints like FieldHints for this instead of looking at the text...
         int l=(nNext<m_pTxtNode->Len()?nNext:m_pTxtNode->Len());
-        USHORT p=nPos;
+        sal_uInt16 p=nPos;
         const sal_Unicode *txt=m_pTxtNode->GetTxt().GetBuffer();
         while(p<l && txt[p]!=CH_TXT_ATR_FIELDSTART && txt[p]!=CH_TXT_ATR_FIELDEND && txt[p]!=CH_TXT_ATR_FORMELEMENT) p++;
         if ((p<l && p>nPos) || nNext<=p)
@@ -362,17 +364,17 @@ class SwMinMaxArgs
 public:
     OutputDevice* pOut;
     ViewShell* pSh;
-    ULONG &rMin;
-    ULONG &rMax;
-    ULONG &rAbsMin;
+    sal_uLong &rMin;
+    sal_uLong &rMax;
+    sal_uLong &rAbsMin;
     long nRowWidth;
     long nWordWidth;
     long nWordAdd;
     xub_StrLen nNoLineBreak;
-    SwMinMaxArgs( OutputDevice* pOutI, ViewShell* pShI, ULONG& rMinI, ULONG &rMaxI, ULONG &rAbsI )
+    SwMinMaxArgs( OutputDevice* pOutI, ViewShell* pShI, sal_uLong& rMinI, sal_uLong &rMaxI, sal_uLong &rAbsI )
         : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rMax( rMaxI ), rAbsMin( rAbsI )
         { nRowWidth = nWordWidth = nWordAdd = 0; nNoLineBreak = STRING_LEN; }
-    void Minimum( long nNew ) { if( (long)rMin < nNew ) rMin = nNew; }
+    void Minimum( long nNew ) const { if( (long)rMin < nNew ) rMin = nNew; }
     void NewWord() { nWordAdd = nWordWidth = 0; }
 };
 
@@ -390,7 +392,7 @@ sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rT
             bClear = CH_BLANK == rTxt.GetChar( nStop );
             Boundary aBndry( pBreakIt->GetBreakIter()->getWordBoundary( rTxt, nIdx,
                              pBreakIt->GetLocale( eLang ),
-                             WordType::DICTIONARY_WORD, TRUE ) );
+                             WordType::DICTIONARY_WORD, sal_True ) );
             nStop = (xub_StrLen)aBndry.endPos;
             if( nIdx <= aBndry.startPos && nIdx && nIdx-1 != rArg.nNoLineBreak )
                 rArg.NewWord();
@@ -430,27 +432,25 @@ sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rT
     return bRet;
 }
 
-sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const
+sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const//swmodtest 080307
 {
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     aIter.Seek( nBegin );
-    const SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetRootFrm();
-    return aIter.GetFnt()->IsSymbol( pTmpRootFrm ?
-                                     pTmpRootFrm->GetCurrShell() :
-                                     0 );
+    return aIter.GetFnt()->IsSymbol(
+        const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()) );//swmod 080311
 }
 
 class SwMinMaxNodeArgs
 {
 public:
-    ULONG nMaxWidth;    // Summe aller Rahmenbreite
+    sal_uLong nMaxWidth;    // Summe aller Rahmenbreite
     long nMinWidth;     // Breitester Rahmen
     long nLeftRest;     // noch nicht von Rahmen ueberdeckter Platz im l. Rand
     long nRightRest;    // noch nicht von Rahmen ueberdeckter Platz im r. Rand
     long nLeftDiff;     // Min/Max-Differenz des Rahmens im linken Rand
     long nRightDiff;    // Min/Max-Differenz des Rahmens im rechten Rand
-    ULONG nIndx;        // Indexnummer des Nodes
+    sal_uLong nIndx;        // Indexnummer des Nodes
     void Minimum( long nNew ) { if( nNew > nMinWidth ) nMinWidth = nNew; }
 };
 
@@ -484,7 +484,7 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
             // Enthaelt der Rahmen zu Beginn oder am Ende eine Tabelle?
             const SwNodes& rNodes = static_cast<SwFrmFmt*>(rpNd)->GetDoc()->GetNodes();
             const SwFmtCntnt& rFlyCntnt = ((SwFrmFmt*)rpNd)->GetCntnt();
-            ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
+            sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
             SwTableNode* pTblNd = rNodes[nStt+1]->GetTableNode();
             if( !pTblNd )
             {
@@ -590,8 +590,8 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
 
 // changing this method very likely requires changing of
 // "GetScalingOfSelectedText"
-void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
-                               ULONG& rAbsMin, OutputDevice* pOut ) const
+void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax,
+                               sal_uLong& rAbsMin, OutputDevice* pOut ) const
 {
     ViewShell* pSh = 0;
     GetDoc()->GetEditShell( &pSh );
@@ -703,10 +703,8 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
             case CHAR_HARDHYPHEN:
             {
                 XubString sTmp( cChar );
-                const SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetRootFrm();
-                SwDrawTextInfo aDrawInf( pTmpRootFrm ?
-                                         pTmpRootFrm->GetCurrShell() :
-                                         0, *pOut, 0, sTmp, 0, 1, 0, sal_False );
+                SwDrawTextInfo aDrawInf( const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()),
+                    *pOut, 0, sTmp, 0, 1, 0, sal_False );//swmod 080311
                 nAktWidth = aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
                 aArg.nWordWidth += nAktWidth;
                 aArg.nRowWidth += nAktWidth;
@@ -745,7 +743,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                             if( RES_FLYFRMFMT == pFrmFmt->Which()
                                 && rTmpSize.GetWidthPercent() )
                             {
-/*-----------------24.01.97 14:09----------------------------------------------
+/*-----------------------------------------------------------------------------
  * Hier ein HACK fuer folgende Situation: In dem Absatz befindet sich
  * ein Textrahmen mit relativer Groesse. Dann nehmen wir mal als minimale
  * Breite 0,5 cm und als maximale KSHRT_MAX.
@@ -780,7 +778,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                     case RES_TXTATR_FIELD :
                     {
                         SwField *pFld = (SwField*)pHint->GetFld().GetFld();
-                        const String aTxt = pFld->GetCntnt( FALSE );
+                        const String aTxt = pFld->ExpandField(true);
                         if( lcl_MinMaxString( aArg, aIter.GetFnt(), aTxt, 0,
                             aTxt.Len() ) )
                             nAdd = 20;
@@ -828,7 +826,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
  * changing this method very likely requires changing of "GetMinMaxSize"
  *************************************************************************/
 
-USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
+sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     const
 {
     ViewShell* pSh = NULL;
@@ -840,7 +838,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     else
     {
         //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
-        if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) )
             pOut = GetpApp()->GetDefaultDevice();
         else
             pOut = getIDocumentDeviceAccess()->getReferenceDevice( true );
@@ -896,8 +894,8 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
 
     xub_StrLen nIdx = nStt;
 
-    ULONG nWidth = 0;
-    ULONG nProWidth = 0;
+    sal_uLong nWidth = 0;
+    sal_uLong nProWidth = 0;
 
     while( nIdx < nEnd )
     {
@@ -983,7 +981,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
                 case RES_TXTATR_FIELD :
                 {
                     SwField *pFld = (SwField*)pHint->GetFld().GetFld();
-                    const String aTxt = pFld->GetCntnt( FALSE );
+                    String const aTxt = pFld->ExpandField(true);
                     SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTxt, 0, aTxt.Len() );
 
                     nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
@@ -1001,15 +999,10 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     nWidth = Max( nWidth, nProWidth );
 
     // search for a text frame this node belongs to
-    SwClientIter aClientIter( *(SwTxtNode*)this );
-    SwClient* pLastFrm = aClientIter.GoStart();
+    SwIterator<SwTxtFrm,SwTxtNode> aFrmIter( *this );
     SwTxtFrm* pFrm = 0;
-
-    while( pLastFrm )
+    for( SwTxtFrm* pTmpFrm = aFrmIter.First(); pTmpFrm; pTmpFrm = aFrmIter.Next() )
     {
-        if ( pLastFrm->ISA( SwTxtFrm ) )
-        {
-            SwTxtFrm* pTmpFrm = ( SwTxtFrm* )pLastFrm;
             if ( pTmpFrm->GetOfst() <= nStt &&
                 ( !pTmpFrm->GetFollow() ||
                    pTmpFrm->GetFollow()->GetOfst() > nStt ) )
@@ -1018,8 +1011,6 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
                 break;
             }
         }
-        pLastFrm = ++aClientIter;
-    }
 
     // search for the line containing nStt
     if ( pFrm && pFrm->HasPara() )
@@ -1028,7 +1019,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
         SwTxtIter aLine( pFrm, &aInf );
         aLine.CharToLine( nStt );
         pOut->SetMapMode( aOldMap );
-        return (USHORT)( nWidth ?
+        return (sal_uInt16)( nWidth ?
             ( ( 100 * aLine.GetCurr()->Height() ) / nWidth ) : 0 );
     }
     // no frame or no paragraph, we take the height of the character
@@ -1038,13 +1029,13 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     pOut->SetMapMode( aOldMap );
 
     SwDrawTextInfo aDrawInf( pSh, *pOut, 0, GetTxt(), nStt, 1 );
-    return (USHORT)
+    return (sal_uInt16)
            ( nWidth ? ((100 * aIter.GetFnt()->_GetTxtSize( aDrawInf ).Height()) / nWidth ) : 0 );
 }
 
-USHORT SwTxtNode::GetWidthOfLeadingTabs() const
+sal_uInt16 SwTxtNode::GetWidthOfLeadingTabs() const
 {
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
 
     xub_StrLen nIdx = 0;
     sal_Unicode cCh;
@@ -1060,26 +1051,21 @@ USHORT SwTxtNode::GetWidthOfLeadingTabs() const
         aPos.nContent += nIdx;
 
         // Find the non-follow text frame:
-        SwClientIter aClientIter( (SwTxtNode&)*this );
-        SwClient* pLastFrm = aClientIter.GoStart();
-
-        while( pLastFrm )
+        SwIterator<SwTxtFrm,SwTxtNode> aIter( *this );
+        for( SwTxtFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
         {
             // Only consider master frames:
-            if ( pLastFrm->ISA(SwTxtFrm) &&
-                 !static_cast<SwTxtFrm*>(pLastFrm)->IsFollow() )
+            if ( !pFrm->IsFollow() )
             {
-                const SwTxtFrm* pFrm = static_cast<SwTxtFrm*>(pLastFrm);
                 SWRECTFN( pFrm )
                 SwRect aRect;
                 pFrm->GetCharRect( aRect, aPos );
-                nRet = (USHORT)
+                nRet = (sal_uInt16)
                        ( pFrm->IsRightToLeft() ?
                             (pFrm->*fnRect->fnGetPrtRight)() - (aRect.*fnRect->fnGetRight)() :
                             (aRect.*fnRect->fnGetLeft)() - (pFrm->*fnRect->fnGetPrtLeft)() );
                 break;
             }
-            pLastFrm = ++aClientIter;
         }
     }
 

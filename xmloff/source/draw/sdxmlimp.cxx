@@ -37,7 +37,7 @@
 
 #include <xmloff/xmlmetai.hxx>
 #include "ximpstyl.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
@@ -48,7 +48,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 
@@ -127,14 +127,14 @@ protected:
 public:
     SdXMLDocContext_Impl(
         SdXMLImport& rImport,
-        USHORT nPrfx,
+        sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList);
     virtual ~SdXMLDocContext_Impl();
 
     TYPEINFO();
 
-    virtual SvXMLImportContext *CreateChildContext(USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList);
 };
@@ -143,7 +143,7 @@ public:
 
 SdXMLDocContext_Impl::SdXMLDocContext_Impl(
     SdXMLImport& rImport,
-    USHORT nPrfx,
+    sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference<xml::sax::XAttributeList>&)
 :   SvXMLImportContext(rImport, nPrfx, rLName)
@@ -161,7 +161,7 @@ TYPEINIT1( SdXMLDocContext_Impl, SvXMLImportContext );
 //////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
@@ -251,7 +251,7 @@ class SdXMLFlatDocContext_Impl
 {
 public:
     SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
-        USHORT i_nPrefix, const OUString & i_rLName,
+        sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder);
@@ -259,12 +259,12 @@ public:
     virtual ~SdXMLFlatDocContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
-        USHORT i_nPrefix, const OUString& i_rLocalName,
+        sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList);
 };
 
 SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
-        USHORT i_nPrefix, const OUString & i_rLName,
+        sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
@@ -278,7 +278,7 @@ SdXMLFlatDocContext_Impl::SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
 SdXMLFlatDocContext_Impl::~SdXMLFlatDocContext_Impl() { }
 
 SvXMLImportContext *SdXMLFlatDocContext_Impl::CreateChildContext(
-    USHORT i_nPrefix, const OUString& i_rLocalName,
+    sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
     // behave like meta base class iff we encounter office:meta
@@ -451,15 +451,6 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
 SdXMLImport::~SdXMLImport() throw ()
 {
-// #80365# removed ending of progress bar here, this was an old implementation
-// and maybe removed on demand
-//  // stop progress view
-//  if(mxStatusIndicator.is())
-//  {
-//      mxStatusIndicator->end();
-//      mxStatusIndicator->reset();
-//  }
-
     // Styles or AutoStyles context?
     if(mpMasterStylesContext)
         mpMasterStylesContext->ReleaseRef();
@@ -502,7 +493,7 @@ const SvXMLTokenMap& SdXMLImport::GetDocElemTokenMap()
 {
     if(!mpDocElemTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
+        static SvXMLTokenMapEntry aDocElemTokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS       },
     { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES          },
@@ -527,7 +518,7 @@ const SvXMLTokenMap& SdXMLImport::GetBodyElemTokenMap()
 {
     if(!mpBodyElemTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aBodyElemTokenMap[] =
+        static SvXMLTokenMapEntry aBodyElemTokenMap[] =
 {
     { XML_NAMESPACE_DRAW,   XML_PAGE,               XML_TOK_BODY_PAGE   },
     { XML_NAMESPACE_PRESENTATION, XML_SETTINGS,     XML_TOK_BODY_SETTINGS   },
@@ -550,7 +541,7 @@ const SvXMLTokenMap& SdXMLImport::GetStylesElemTokenMap()
 {
     if(!mpStylesElemTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aStylesElemTokenMap[] =
+        static SvXMLTokenMapEntry aStylesElemTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT,                XML_TOK_STYLES_PAGE_MASTER              },
     { XML_NAMESPACE_STYLE,  XML_PRESENTATION_PAGE_LAYOUT,   XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT },
@@ -570,7 +561,7 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageElemTokenMap()
 {
     if(!mpMasterPageElemTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aMasterPageElemTokenMap[] =
+        static SvXMLTokenMapEntry aMasterPageElemTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,          XML_STYLE,      XML_TOK_MASTERPAGE_STYLE    },
     { XML_NAMESPACE_PRESENTATION,   XML_NOTES,      XML_TOK_MASTERPAGE_NOTES    },
@@ -589,7 +580,7 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageAttrTokenMap()
 {
     if(!mpMasterPageAttrTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aMasterPageAttrTokenMap[] =
+        static SvXMLTokenMapEntry aMasterPageAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_NAME,                       XML_TOK_MASTERPAGE_NAME },
     { XML_NAMESPACE_STYLE,  XML_DISPLAY_NAME,               XML_TOK_MASTERPAGE_DISPLAY_NAME },
@@ -614,7 +605,7 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterAttrTokenMap()
 {
     if(!mpPageMasterAttrTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aPageMasterAttrTokenMap[] =
+        static SvXMLTokenMapEntry aPageMasterAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,          XML_NAME,               XML_TOK_PAGEMASTER_NAME                 },
     XML_TOKEN_MAP_END
@@ -632,7 +623,7 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterStyleAttrTokenMap()
 {
     if(!mpPageMasterStyleAttrTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aPageMasterStyleAttrTokenMap[] =
+        static SvXMLTokenMapEntry aPageMasterStyleAttrTokenMap[] =
 {
     { XML_NAMESPACE_FO,             XML_MARGIN_TOP,         XML_TOK_PAGEMASTERSTYLE_MARGIN_TOP          },
     { XML_NAMESPACE_FO,             XML_MARGIN_BOTTOM,      XML_TOK_PAGEMASTERSTYLE_MARGIN_BOTTOM       },
@@ -656,7 +647,7 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageAttrTokenMap()
 {
     if(!mpDrawPageAttrTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aDrawPageAttrTokenMap[] =
+        static SvXMLTokenMapEntry aDrawPageAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW,           XML_NAME,                           XML_TOK_DRAWPAGE_NAME               },
     { XML_NAMESPACE_DRAW,           XML_STYLE_NAME,                     XML_TOK_DRAWPAGE_STYLE_NAME         },
@@ -684,7 +675,7 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageElemTokenMap()
 {
     if(!mpDrawPageElemTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aDrawPageElemTokenMap[] =
+        static SvXMLTokenMapEntry aDrawPageElemTokenMap[] =
 {
     { XML_NAMESPACE_PRESENTATION,   XML_NOTES,              XML_TOK_DRAWPAGE_NOTES      },
     { XML_NAMESPACE_ANIMATION,      XML_PAR,                XML_TOK_DRAWPAGE_PAR        },
@@ -704,7 +695,7 @@ const SvXMLTokenMap& SdXMLImport::GetPresentationPlaceholderAttrTokenMap()
 {
     if(!mpPresentationPlaceholderAttrTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aPresentationPlaceholderAttrTokenMap[] =
+        static SvXMLTokenMapEntry aPresentationPlaceholderAttrTokenMap[] =
 {
     { XML_NAMESPACE_PRESENTATION,   XML_OBJECT,     XML_TOK_PRESENTATIONPLACEHOLDER_OBJECTNAME  },
     { XML_NAMESPACE_SVG,            XML_X,          XML_TOK_PRESENTATIONPLACEHOLDER_X           },
@@ -722,7 +713,7 @@ const SvXMLTokenMap& SdXMLImport::GetPresentationPlaceholderAttrTokenMap()
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext *SdXMLImport::CreateContext(USHORT nPrefix,
+SvXMLImportContext *SdXMLImport::CreateContext(sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
@@ -740,8 +731,8 @@ SvXMLImportContext *SdXMLImport::CreateContext(USHORT nPrefix,
     } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
                 ( IsXMLToken(rLocalName, XML_DOCUMENT)) ) {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
-                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.xml.dom.SAXDocumentBuilder"))),
                 uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
@@ -765,8 +756,8 @@ SvXMLImportContext *SdXMLImport::CreateMetaContext(const OUString& rLocalName,
     if (!IsStylesOnlyMode() && (getImportFlags() & IMPORT_META))
     {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
-                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.xml.dom.SAXDocumentBuilder"))),
                 uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
@@ -802,7 +793,7 @@ SvXMLStylesContext *SdXMLImport::CreateStylesContext(const OUString& rLocalName,
         return GetShapeImport()->GetStylesContext();
 
     GetShapeImport()->SetStylesContext(new SdXMLStylesContext(
-        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, FALSE));
+        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, sal_False));
 
     return GetShapeImport()->GetStylesContext();
 }
@@ -816,7 +807,7 @@ SvXMLStylesContext *SdXMLImport::CreateAutoStylesContext(const OUString& rLocalN
         return GetShapeImport()->GetAutoStylesContext();
 
     GetShapeImport()->SetAutoStylesContext(new SdXMLStylesContext(
-        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, TRUE));
+        *this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, sal_True));
 
     return GetShapeImport()->GetAutoStylesContext();
 }
@@ -912,10 +903,12 @@ void SdXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
     {
         xPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ), uno::makeAny( aVisArea )  );
     }
-    catch( com::sun::star::uno::Exception e )
+    catch( com::sun::star::uno::Exception /*e*/ )
     {
+/* #i79978# since old documents may contain invalid view settings, this is nothing to worry the user about.
         uno::Sequence<OUString> aSeq(0);
         SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
+*/
     }
 }
 
@@ -973,7 +966,7 @@ void SdXMLImport::SetStatistics(
                 if (i_rStats[i].Value >>= val) {
                     nCount = val;
                 } else {
-                    DBG_ERROR("SdXMLImport::SetStatistics: invalid entry");
+                    OSL_FAIL("SdXMLImport::SetStatistics: invalid entry");
                 }
             }
         }

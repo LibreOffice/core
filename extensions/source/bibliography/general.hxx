@@ -136,12 +136,12 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
     BibDataManager*     pDatMan;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
-                                AddXControl( const String& rName, Point aPos, Size aSize, sal_uInt16 nHelpId,
+                                AddXControl( const String& rName, Point aPos, Size aSize, const rtl::OString& sHelpId,
                                             sal_Int16& rIndex );
 
     void                        AddControlWithError( const rtl::OUString& rColumnName, const Point& rPos,
                                             const Size& rSize, String& rErrorString, String aColumnUIName,
-                                            sal_uInt16 nHelpId, sal_uInt16 nIndexInFTArray );
+                                            const rtl::OString& sHelpId, sal_uInt16 nIndexInFTArray );
 
     void                        AdjustScrollbars();
 
@@ -175,7 +175,7 @@ public:
 
     virtual void                GetFocus();
 
-    virtual BOOL                HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
+    virtual sal_Bool                HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
 };
 
 

@@ -31,7 +31,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
 
@@ -41,11 +41,11 @@ class ScMetricInputDlg : public ModalDialog
 {
 public:
             ScMetricInputDlg( Window*       pParent,
-                              USHORT        nResId,     // Ableitung fuer jeden Dialog!
+                              sal_uInt16        nResId,     // Ableitung fuer jeden Dialog!
                               long          nCurrent,
                               long          nDefault,
                               FieldUnit     eFUnit    = FUNIT_MM,
-                              USHORT        nDecimals = 2,
+                              sal_uInt16        nDecimals = 2,
                               long          nMaximum  = 1000,
                               long          nMinimum  = 0,
                               long          nFirst    = 1,

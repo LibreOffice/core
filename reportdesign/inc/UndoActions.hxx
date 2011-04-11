@@ -29,8 +29,9 @@
 #define RPTUI_UNDOACTIONS_HXX
 
 #include "dllapi.h"
-#include <svx/svdundo.hxx>
-#include <tools/string.hxx>
+
+#include "RptModel.hxx"
+
 /** === begin UNO includes === **/
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -44,13 +45,16 @@
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XGroup.hpp>
+#include <com/sun/star/document/XUndoManager.hpp>
 /** === end UNO includes === **/
+
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
 #include <svl/lstner.hxx>
 #include <svx/svdouno.hxx>
-#include "RptModel.hxx"
+#include <svx/svdundo.hxx>
+#include <tools/string.hxx>
 
 #include <functional>
 #include <memory>
@@ -120,23 +124,51 @@ namespace rptui
         static ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OReportHelper> getMemberFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
     };
 
-    class REPORTDESIGN_DLLPUBLIC UndoManagerListAction
+    //==================================================================================================================
+    //= UndoContext
+    //==================================================================================================================
+    class UndoContext
     {
-    private:
-        SfxUndoManager& m_rManager;
-
     public:
-        UndoManagerListAction( SfxUndoManager& _rManager, const String& _rListActionComment )
-            :m_rManager( _rManager )
+        UndoContext( SfxUndoManager& i_undoManager, const ::rtl::OUString& i_undoTitle )
+            :m_rUndoManager( i_undoManager )
         {
-            m_rManager.EnterListAction( _rListActionComment, String() );
+            m_rUndoManager.EnterListAction( i_undoTitle, String() );
         }
-        ~UndoManagerListAction()
+
+        ~UndoContext()
         {
-            m_rManager.LeaveListAction();
+            m_rUndoManager.LeaveListAction();
         }
+
+    private:
+        SfxUndoManager& m_rUndoManager;
     };
 
+    //==================================================================================================================
+    //= UndoSuppressor
+    //==================================================================================================================
+    class UndoSuppressor
+    {
+    public:
+        UndoSuppressor( SfxUndoManager& i_undoManager )
+            :m_rUndoManager( i_undoManager )
+        {
+            m_rUndoManager.EnableUndo( false );
+        }
+
+        ~UndoSuppressor()
+        {
+            m_rUndoManager.EnableUndo( true );
+        }
+
+    private:
+        SfxUndoManager& m_rUndoManager;
+    };
+
+    //==================================================================================================================
+    //= OCommentUndoAction
+    //==================================================================================================================
     class REPORTDESIGN_DLLPUBLIC OCommentUndoAction : public SdrUndoAction
     {
     protected:
@@ -146,7 +178,7 @@ namespace rptui
     public:
         TYPEINFO();
         OCommentUndoAction( SdrModel& rMod
-                            ,USHORT nCommentID);
+                            ,sal_uInt16 nCommentID);
         virtual ~OCommentUndoAction();
 
         virtual UniString   GetComment() const { return m_strComment; }
@@ -176,7 +208,7 @@ namespace rptui
                             ,Action _eAction
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > _xContainer
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElem
-                            ,USHORT _nCommentId);
+                            ,sal_uInt16 _nCommentId);
         virtual ~OUndoContainerAction();
 
         virtual void Undo();
@@ -202,7 +234,7 @@ namespace rptui
                                 ,OReportHelper> _pMemberFunction
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReport
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElem
-                            ,USHORT _nCommentId);
+                            ,sal_uInt16 _nCommentId);
 
     protected:
         virtual void    implReInsert( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
@@ -224,7 +256,7 @@ namespace rptui
                                             ,OGroupHelper> _pMemberFunction
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xGroup
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElem
-                            ,USHORT _nCommentId);
+                            ,sal_uInt16 _nCommentId);
 
     protected:
         virtual void    implReInsert( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );

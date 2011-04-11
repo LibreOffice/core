@@ -40,7 +40,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/extract.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "ximpshow.hxx"
@@ -211,7 +211,7 @@ SdXMLShowsContext::~SdXMLShowsContext()
     delete mpImpl;
 }
 
-SvXMLImportContext * SdXMLShowsContext::CreateChildContext( USHORT p_nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
+SvXMLImportContext * SdXMLShowsContext::CreateChildContext( sal_uInt16 p_nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
 {
     if( mpImpl && p_nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SHOW ) )
     {

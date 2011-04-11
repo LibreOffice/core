@@ -39,6 +39,13 @@ Directory gid_Dir_Brand_Root
 End
 #endif
 
+File gid_Brand_File_ServicesRdb
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = "/ooo/services.rdb";
+    Styles = (PACKED);
+End
+
 ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
     ProfileID = gid_Brand_Profile_Bootstrap_Ini;
     ModuleID = gid_Module_Root_Brand;
@@ -52,4 +59,3 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
   #endif
 End
 
-BRAND_RES_FILE( gid_Brand_File_Res_Ooo, ooo )

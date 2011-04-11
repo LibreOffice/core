@@ -102,10 +102,12 @@ String STR_QRY_TITLE
 {
     Text [ en-US ] = "Query #" ;
 };
+
 String STR_TBL_TITLE
 {
     Text [ en-US ] = "Table #" ;
 };
+
 String STR_VIEW_TITLE
 {
     Text [ en-US ] = "View #" ;
@@ -122,7 +124,7 @@ String STR_NO_COLUMNNAME_MATCHING
     Text [ en-US ] = "No matching column names were found.";
 };
 
-String STR_ERROR_OCCURED_WHILE_COPYING
+String STR_ERROR_OCCURRED_WHILE_COPYING
 {
     Text [ en-US ] = "An error occurred. Do you want to continue copying?";
 };
@@ -136,4 +138,3 @@ String STR_DATASOURCE_GRIDCONTROL_DESC
 {
     Text [ en-US ] = "Shows the selected table or query.";
 };
-

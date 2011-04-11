@@ -43,13 +43,9 @@
 #define SF_PB_HELP                      9
 
 #define IMG_HARDDISK                    1
-#define IMG_HARDDISK_HC                 2
 #define IMG_LIB                         3
-#define IMG_LIB_HC                      4
 #define IMG_MACRO                       5
-#define IMG_MACRO_HC                    6
 #define IMG_DOCUMENT                    7
-#define IMG_DOCUMENT_HC                 8
 
 #define RID_IMGLST_OBJECTS              ( RID_BASICIDE_START +  7 )
 #define RID_IMGLST_OBJECTS_HC (RID_BASICIDE_START + 13)

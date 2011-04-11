@@ -30,7 +30,7 @@
 
 #include "TResultSetHelper.hxx"
 #include <rtl/alloc.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include "connectivity/dbtoolsdllapi.hxx"
 
@@ -99,7 +99,7 @@ namespace connectivity
             @return the last position
         */
         inline sal_Int32    getLastPosition() const { return m_aBookmarksPositions.size(); }
-        inline void SetDeleted(bool _bDeletedVisible) { m_bDeletedVisible = _bDeletedVisible; }
+        inline void SetDeletedVisible(bool _bDeletedVisible) { m_bDeletedVisible = _bDeletedVisible; }
     };
 }
 #endif // CONNECTIVITY_SKIPDELETEDSSET_HXX

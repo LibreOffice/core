@@ -77,7 +77,7 @@ public:
     { return aNameEd.GetText().EraseLeadingChars(); }
     String GetTemplatePath();
     void NewTemplate(const String &rPath);
-    USHORT GetRegion() const { return aRegionLb.GetSelectEntryPos(); }
+    sal_uInt16 GetRegion() const { return aRegionLb.GetSelectEntryPos(); }
     String GetRegionName() const { return aRegionLb.GetSelectEntry(); }
 };
 

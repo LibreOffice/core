@@ -82,7 +82,6 @@ namespace avmedia
         const ::rtl::OUString&  getURL() const;
 
         bool                isValid() const;
-//
         bool                hasPreferredSize() const;
         Size                getPreferredSize() const;
 

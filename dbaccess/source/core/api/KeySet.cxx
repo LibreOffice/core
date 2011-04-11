@@ -104,8 +104,10 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  const Reference< XIndexAccess>& _xTableKeys,
                  const ::rtl::OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
                  const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
-                 const ORowSetValueVector& _aParameterValueForCache)
-            :m_aParameterValueForCache(_aParameterValueForCache)
+                 const ORowSetValueVector& _aParameterValueForCache,
+                 sal_Int32 i_nMaxRows)
+            :OCacheSet(i_nMaxRows)
+            ,m_aParameterValueForCache(_aParameterValueForCache)
             ,m_pKeyColumnNames(NULL)
             ,m_pColumnNames(NULL)
             ,m_pParameterNames(NULL)
@@ -133,7 +135,7 @@ OKeySet::~OKeySet()
     }
     catch(...)
     {
-        OSL_ENSURE(0,"Unknown Exception occured");
+        OSL_FAIL("Unknown Exception occurred");
     }
     m_xComposer = NULL;
 
@@ -142,7 +144,7 @@ OKeySet::~OKeySet()
 void OKeySet::initColumns()
 {
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-    bool bCase = (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers()) ? true : false;
+    bool bCase = (xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers()) ? true : false;
     m_pKeyColumnNames.reset( new SelectColumnsMetaData(bCase) );
     m_pColumnNames.reset( new SelectColumnsMetaData(bCase) );
     m_pParameterNames.reset( new SelectColumnsMetaData(bCase) );
@@ -176,7 +178,7 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
     ::rtl::OUString sUpdateTableName( i_rUpdateTableName );
     if ( sUpdateTableName.getLength() == 0 )
     {
-        OSL_ENSURE( false, "OKeySet::findTableColumnsMatching_throw: This is a fallback only - it won't work when the table has an alias name." );
+        OSL_FAIL( "OKeySet::findTableColumnsMatching_throw: This is a fallback only - it won't work when the table has an alias name." );
         // If i_aTable originates from a query composer, and is a table which appears with an alias in the SELECT statement,
         // then the below code will not produce correct results.
         // For instance, imagine a "SELECT alias.col FROM table AS alias". Now i_aTable would be the table named
@@ -288,15 +290,12 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
                 for(SelectColumnsMetaData::iterator aPosIter = (*m_pForeignColumnNames).begin();aPosIter != aPosEnd;++aPosIter)
                 {
                     // look for columns not in the source columns to use them as filter as well
-                    // if ( !xSourceColumns->hasByName(aPosIter->first) )
-                    {
                         if ( aFilter.getLength() )
                             aFilter.append(aAnd);
                         aFilter.append(::dbtools::quoteName( aQuote,sSelectTableName));
                         aFilter.append(s_sDot);
                         aFilter.append(::dbtools::quoteName( aQuote,aPosIter->second.sRealName));
                         aFilter.append(s_sParam);
-                    }
                 }
                 break;
             }
@@ -327,7 +326,7 @@ void OKeySet::executeStatement(::rtl::OUStringBuffer& io_aFilter,const ::rtl::OU
             for(;pAnd != pAndEnd;++pAnd)
             {
                 ::rtl::OUString sValue;
-                if ( !(pAnd->Value >>= sValue) || !(sValue.equalsAscii("?") || sValue.matchAsciiL(":",1,0)) )
+                if ( !(pAnd->Value >>= sValue) || !(sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("?")) || sValue.matchAsciiL(":",1,0)) )
                 { // we have a criteria which has to be taken into account for updates
                     m_aFilterColumns.push_back(pAnd->Name);
                 }
@@ -519,7 +518,6 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
     for(;aIter != aEnd;++aIter,++i)
     {
-        //if(xKeyColumns.is() && xKeyColumns->hasByName(aIter->first))
         if ( m_pKeyColumnNames->find(aIter->first) != m_pKeyColumnNames->end() )
         {
             sKeyCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));
@@ -768,7 +766,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
         }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"Could not execute GeneratedKeys() stmt");
+            OSL_FAIL("Could not execute GeneratedKeys() stmt");
         }
     }
 
@@ -827,7 +825,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString
             }
             catch(SQLException&)
             {
-                OSL_ENSURE(0,"Could not fetch with MAX() ");
+                OSL_FAIL("Could not fetch with MAX() ");
             }
         }
     }
@@ -933,8 +931,8 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sa
     SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
     for(;aPosIter != aPosEnd;++aPosIter,++aIter)
     {
+        impl_convertValue_throw(_rInsertRow,aPosIter->second);
         *aIter = (_rInsertRow->get())[aPosIter->second.nPosition];
-        impl_convertValue_throw(_rKeyRow,aPosIter->second);
         aIter->setTypeKind(aPosIter->second.nType);
     }
 }
@@ -979,7 +977,7 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
             aSql.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));
             if((_rDeleteRow->get())[aIter->second.nPosition].isNull())
             {
-                OSL_ENSURE(0,"can a primary key be null");
+                OSL_FAIL("can a primary key be null");
                 aSql.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NULL")));
             }
             else
@@ -1331,7 +1329,7 @@ sal_Bool OKeySet::fetchRow()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::fetchRow" );
     // fetch the next row and append on the keyset
     sal_Bool bRet = sal_False;
-    if ( !m_bRowCountFinal )
+    if ( !m_bRowCountFinal && (!m_nMaxRows || sal_Int32(m_aKeyMap.size()) < m_nMaxRows) )
         bRet = m_xDriverSet->next();
     if ( bRet )
     {

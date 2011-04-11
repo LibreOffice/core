@@ -50,9 +50,9 @@ public:
     void Show( bool bShow );
     void Enable( bool bEnable );
 
-    USHORT GetSelectEntryCount() const;
-    USHORT GetSelectEntryPos() const;
-    void SelectEntryPos( USHORT nPos );
+    sal_uInt16 GetSelectEntryCount() const;
+    sal_uInt16 GetSelectEntryPos() const;
+    void SelectEntryPos( sal_uInt16 nPos );
 
     void SetSelectHdl( const Link& rLink );
 

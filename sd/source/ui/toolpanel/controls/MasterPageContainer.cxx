@@ -189,7 +189,7 @@ private:
         const String& sFileName,
         SfxObjectShellLock& rxDocumentShell);
 
-    Image GetPreviewSubstitution (USHORT nId, PreviewSize ePreviewSize);
+    Image GetPreviewSubstitution (sal_uInt16 nId, PreviewSize ePreviewSize);
 
     void CleanContainer (void);
 };
@@ -711,8 +711,11 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel (void)
         if (*iDescriptor!=NULL && (*iDescriptor)->mpMasterPage != NULL)
         {
             Size aPageSize ((*iDescriptor)->mpMasterPage->GetSize());
-            nWidth = aPageSize.Width();
-            nHeight = aPageSize.Height();
+            OSL_ASSERT(aPageSize.Width() > 0 && aPageSize.Height() > 0);
+            if (aPageSize.Width() > 0)
+                nWidth = aPageSize.Width();
+            if (aPageSize.Height() > 0)
+                nHeight = aPageSize.Height();
             mbFirstPageObjectSeen = true;
             break;
         }
@@ -1063,7 +1066,7 @@ SdDrawDocument* MasterPageContainer::Implementation::GetDocument (void)
 
 
 Image MasterPageContainer::Implementation::GetPreviewSubstitution (
-    USHORT nId,
+    sal_uInt16 nId,
     PreviewSize ePreviewSize)
 {
     const ::osl::MutexGuard aGuard (maMutex);

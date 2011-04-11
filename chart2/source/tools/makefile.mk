@@ -43,10 +43,6 @@ CDEFS += -DOOO_DLLIMPLEMENTATION_CHARTTOOLS
 
 # --- export library -------------------------------------------------
 
-#You can use several library macros of this form to build libraries that
-#do not consist of all object files in a directory or to merge different libraries.
-#LIB1TARGET=		$(SLB)$/_$(TARGET).lib
-
 #Specifies object files to bind into linked libraries.
 SLOFILES=	\
     $(SLO)$/ErrorBar.obj \
@@ -70,6 +66,7 @@ SLOFILES=	\
     $(SLO)$/LinearRegressionCurveCalculator.obj \
     $(SLO)$/LogarithmicRegressionCurveCalculator.obj \
     $(SLO)$/MeanValueRegressionCurveCalculator.obj \
+    $(SLO)$/NumberFormatterWrapper.obj \
     $(SLO)$/OPropertySet.obj \
     $(SLO)$/WrappedPropertySet.obj \
     $(SLO)$/WrappedProperty.obj \
@@ -149,12 +146,6 @@ SHL1STDLIBS=    \
                 $(BASEGFXLIB) 		\
                 $(UNOTOOLSLIB)
 
-#				$(SVLIB)			\
-#				$(SVTOOLLIB)		\
-#				$(SVXLIB)			\
-#				$(TKLIB)			\
-#			    $(SFXLIB)
-
 #--------exports
 
 #specifies the exported symbols for Windows only:
@@ -162,9 +153,6 @@ SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 #Specifies the library name to parse for symbols. For Win32 only.
 DEFLIB1NAME=	$(TARGET)
-
-#A file of symbols to export.
-#DEF1EXPORTFILE=	$(PRJ)$/source$/inc$/exports.dxp
 
 #--------definition file
 
@@ -187,3 +175,11 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk \
                             exports.flt
     $(TYPE) exports.flt > $@
 
+
+ALLTAR : $(MISC)/charttools.component
+
+$(MISC)/charttools.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        charttools.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt charttools.component

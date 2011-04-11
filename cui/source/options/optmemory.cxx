@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include <svtools/langtab.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/grfmgr.hxx>
@@ -62,7 +60,6 @@
 #include <svx/xpool.hxx>
 #include <svx/dlgutil.hxx>
 #include "cuitabarea.hxx"
-#include <cuires.hrc>
 #include "optmemory.hrc"
 #include "optmemory.hxx"
 #include <svx/ofaitem.hxx>
@@ -180,15 +177,15 @@ SfxTabPage* OfaMemoryOptionsPage::Create( Window* pParent, const SfxItemSet& rAt
 
 // -----------------------------------------------------------------------
 
-BOOL OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
 
     SvtCacheOptions aCacheOptions;
 
     // Undo-Schritte
     if ( aUndoEdit.GetText() != aUndoEdit.GetSavedValue() )
-        SvtUndoOptions().SetUndoCount((UINT16)aUndoEdit.GetValue());
+        SvtUndoOptions().SetUndoCount((sal_uInt16)aUndoEdit.GetValue());
 
     // GraphicCache
     aCacheOptions.SetGraphicManagerTotalCacheSize( GetNfGraphicCacheVal() );
@@ -202,7 +199,7 @@ BOOL OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     GraphicManager&     rGrfMgr = aDummyObject.GetGraphicManager();
 
     rGrfMgr.SetMaxCacheSize( aCacheOptions.GetGraphicManagerTotalCacheSize() );
-    rGrfMgr.SetMaxObjCacheSize( aCacheOptions.GetGraphicManagerObjectCacheSize(), TRUE );
+    rGrfMgr.SetMaxObjCacheSize( aCacheOptions.GetGraphicManagerObjectCacheSize(), sal_True );
     rGrfMgr.SetCacheTimeout( aCacheOptions.GetGraphicManagerObjectReleaseTime() );
 
     // OLECache
@@ -212,7 +209,7 @@ BOOL OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
     if( aQuickLaunchCB.IsChecked() != aQuickLaunchCB.GetSavedValue())
     {
         rSet.Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, aQuickLaunchCB.IsChecked()));
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     return bModified;
@@ -235,7 +232,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     SetNfGraphicObjectCacheVal( Min( static_cast<sal_Int32>(GetNfGraphicCacheVal()), aCacheOptions.GetGraphicManagerObjectCacheSize() ) );
 
     sal_Int32 nTime = aCacheOptions.GetGraphicManagerObjectReleaseTime();
-    Time aTime( (USHORT)( nTime / 3600 ), (USHORT)( ( nTime % 3600 ) / 60 ), (USHORT)( ( nTime % 3600 ) % 60 ) );
+    Time aTime( (sal_uInt16)( nTime / 3600 ), (sal_uInt16)( ( nTime % 3600 ) / 60 ), (sal_uInt16)( ( nTime % 3600 ) % 60 ) );
     aTfGraphicObjectTime.SetTime( aTime );
 
     GraphicCacheConfigHdl( &aNfGraphicCache );
@@ -243,7 +240,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     // OLECache
     aNfOLECache.SetValue( Max( aCacheOptions.GetWriterOLE_Objects(), aCacheOptions.GetDrawingEngineOLE_Objects() ) );
 
-    SfxItemState eState = rSet.GetItemState( SID_ATTR_QUICKLAUNCHER, FALSE, &pItem );
+    SfxItemState eState = rSet.GetItemState( SID_ATTR_QUICKLAUNCHER, sal_False, &pItem );
     if ( SFX_ITEM_SET == eState )
         aQuickLaunchCB.Check( ( (SfxBoolItem*)pItem )->GetValue() );
     else if ( SFX_ITEM_DISABLED == eState )

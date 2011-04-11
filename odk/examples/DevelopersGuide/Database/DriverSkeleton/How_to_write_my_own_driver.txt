@@ -1,7 +1,7 @@
 How to write my own sdbc driver
 
 Pre implementation steps
-- search all occurances of skeleton and replace them to a name which you prefer
+- search all occurrences of skeleton and replace them to a name which you prefer
 
 1. Implement a class called driver or modify the existing skeleton	-> have a look at SDriver.?xx 
 2. Implement a class called connection					-> have a look at SConnection.?xx 	

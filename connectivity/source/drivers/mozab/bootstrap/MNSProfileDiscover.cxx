@@ -90,9 +90,9 @@ static NS_DEFINE_CID(kCharsetConverterManagerCID, NS_ICHARSETCONVERTERMANAGER_CI
 
 // Registry Keys
 
-static ::rtl::OUString szProfileSubtreeString=::rtl::OUString::createFromAscii("Profiles");
-static ::rtl::OUString szCurrentProfileString= ::rtl::OUString::createFromAscii("CurrentProfile");
-static ::rtl::OUString szDirectoryString =::rtl::OUString::createFromAscii("directory");
+static ::rtl::OUString szProfileSubtreeString( RTL_CONSTASCII_USTRINGPARAM( "Profiles" ));
+static ::rtl::OUString szCurrentProfileString( RTL_CONSTASCII_USTRINGPARAM( "CurrentProfile" ));
+static ::rtl::OUString szDirectoryString( RTL_CONSTASCII_USTRINGPARAM( "directory" ));
 
 #ifndef MAXPATHLEN
 #define MAXPATHLEN 1024
@@ -144,11 +144,8 @@ namespace connectivity
 
         sal_Int32 ProfileAccess::LoadProductsInfo()
         {
-#ifndef MINIMAL_PROFILEDISCOVER
-            //load mozilla profiles to m_ProductProfileList
-            LoadMozillaProfiles();
-#endif
-            sal_Int32 count=static_cast<sal_Int32>(m_ProductProfileList[MozillaProductType_Mozilla].mProfileList.size());
+            //load SeaMonkey 2 profiles to m_ProductProfileList
+            sal_Int32 count = LoadXPToolkitProfiles(MozillaProductType_Mozilla);
 
             //load thunderbird profiles to m_ProductProfileList
             count += LoadXPToolkitProfiles(MozillaProductType_Thunderbird);
@@ -158,117 +155,6 @@ namespace connectivity
             count += LoadXPToolkitProfiles(MozillaProductType_Firefox);
             return count;
         }
-#ifndef MINIMAL_PROFILEDISCOVER
-        nsresult ProfileAccess::LoadMozillaProfiles()
-        {
-            sal_Int32 index=MozillaProductType_Mozilla;
-            ProductStruct &m_Product = m_ProductProfileList[index];
-            nsresult rv = NS_OK;
-
-            //step 1 : get mozilla registry file
-            nsCOMPtr<nsILocalFile>  localFile;
-            ::rtl::OUString regDir( getRegistryFileName( MozillaProductType_Mozilla ) );
-            // PRUnichar != sal_Unicode in mingw
-            nsAutoString registryDir(reinterpret_cast_mingw_only<const PRUnichar *>(regDir.getStr()));
-            rv = NS_NewLocalFile(registryDir, PR_TRUE,
-                                getter_AddRefs(localFile));
-            NS_ENSURE_SUCCESS(rv,rv);
-            PRBool bExist;
-            rv = localFile->Exists(&bExist);
-            NS_ENSURE_SUCCESS(rv,rv);
-            if (!bExist)
-                return rv;
-            nsCOMPtr<nsIRegistry> registry(do_CreateInstance(NS_REGISTRY_CONTRACTID, &rv));
-            NS_ENSURE_SUCCESS(rv,rv);
-            //step 2: open mozilla registry file
-            rv = registry->Open(localFile);
-            NS_ENSURE_SUCCESS(rv,rv);
-
-            nsCOMPtr<nsIEnumerator> enumKeys;
-            nsRegistryKey profilesTreeKey;
-
-            //step 3:Enumerator it
-            rv = registry->GetKey(nsIRegistry::Common,
-                        // PRUnichar != sal_Unicode in mingw
-                        reinterpret_cast_mingw_only<const PRUnichar *>(szProfileSubtreeString.getStr()),
-                        &profilesTreeKey);
-            if (NS_FAILED(rv)) return rv;
-
-            nsXPIDLString tmpCurrentProfile;
-
-            // Get the current profile
-            rv = registry->GetString(profilesTreeKey,
-                            // PRUnichar != sal_Unicode in mingw
-                            reinterpret_cast_mingw_only<const PRUnichar *>(szCurrentProfileString.getStr()),
-                            getter_Copies(tmpCurrentProfile));
-
-            if (tmpCurrentProfile)
-            {
-                // PRUnichar != sal_Unicode in mingw
-                m_Product.setCurrentProfile ( reinterpret_cast_mingw_only<const sal_Unicode *>(NS_STATIC_CAST(const PRUnichar*, tmpCurrentProfile)));
-            }
-
-
-            rv = registry->EnumerateSubtrees( profilesTreeKey, getter_AddRefs(enumKeys));
-            NS_ENSURE_SUCCESS(rv,rv);
-
-            rv = enumKeys->First();
-            NS_ENSURE_SUCCESS(rv,rv);
-
-            while (NS_OK != enumKeys->IsDone())
-            {
-                nsCOMPtr<nsISupports> base;
-
-                rv = enumKeys->CurrentItem( getter_AddRefs(base) );
-                NS_ENSURE_SUCCESS(rv,rv);
-                rv = enumKeys->Next();
-                NS_ENSURE_SUCCESS(rv,rv);
-
-                // Get specific interface.
-                nsCOMPtr <nsIRegistryNode> node;
-                nsIID nodeIID = NS_IREGISTRYNODE_IID;
-
-                rv = base->QueryInterface( nodeIID, getter_AddRefs(node));
-                if (NS_FAILED(rv)) continue;
-
-                // Get node name.
-                nsXPIDLString profile;
-                rv = node->GetName(getter_Copies(profile));
-                if (NS_FAILED(rv)) continue;
-
-                nsRegistryKey profKey;
-                rv = node->GetKey(&profKey);
-                if (NS_FAILED(rv)) continue;
-
-
-                nsCOMPtr<nsILocalFile> tempLocal;
-
-                nsXPIDLString regData;
-                rv = registry->GetString(profKey,
-                        // PRUnichar != sal_Unicode in mingw
-                        reinterpret_cast_mingw_only<const PRUnichar *>(szDirectoryString.getStr()),
-                        getter_Copies(regData));
-                if (NS_FAILED(rv)) continue;
-
-#if defined(XP_MAC) || defined(XP_MACOSX) || defined(MACOSX)
-                    rv = NS_NewNativeLocalFile(nsCString(), PR_TRUE, getter_AddRefs(tempLocal));
-                if (NS_SUCCEEDED(rv))
-                    rv = tempLocal->SetPersistentDescriptor(NS_LossyConvertUCS2toASCII(regData));
-#else
-                rv = NS_NewLocalFile(regData, PR_TRUE, getter_AddRefs(tempLocal));
-#endif
-                //Add found profile to profile lists
-                if (NS_SUCCEEDED(rv) && tempLocal)
-                {
-                    // PRUnichar != sal_Unicode in mingw
-                    ProfileStruct*  profileItem     = new ProfileStruct(MozillaProductType_Mozilla,reinterpret_cast_mingw_only<const sal_Unicode *>(NS_STATIC_CAST(const PRUnichar*, profile)),tempLocal);
-                    m_Product.mProfileList[profileItem->getProfileName()] = profileItem;
-                }
-
-            }
-            return rv;
-        }
-#endif
         //Thunderbird and firefox profiles are saved in profiles.ini
         sal_Int32 ProfileAccess::LoadXPToolkitProfiles(MozillaProductType product)
         {
@@ -280,13 +166,13 @@ namespace connectivity
 #endif
             ::rtl::OUString regDir = getRegistryDir(product);
             ::rtl::OUString profilesIni( regDir );
-            profilesIni += ::rtl::OUString::createFromAscii( "profiles.ini" );
+            profilesIni += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("profiles.ini"));
             IniParser parser( profilesIni );
             IniSectionMap &mAllSection = *(parser.getAllSection());
 
             IniSectionMap::iterator iBegin = mAllSection.begin();
             IniSectionMap::iterator iEnd = mAllSection.end();
-            for(;iBegin != iEnd;iBegin++)
+            for(;iBegin != iEnd;++iBegin)
             {
                 ini_Section *aSection = &(*iBegin).second;
                 ::rtl::OUString profileName;
@@ -296,35 +182,35 @@ namespace connectivity
 
                 for(NameValueList::iterator itor=aSection->lList.begin();
                     itor != aSection->lList.end();
-                    itor++)
+                    ++itor)
                 {
                         struct ini_NameValue * aValue = &(*itor);
-                        if (aValue->sName.equals(::rtl::OUString::createFromAscii("Name")))
+                        if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))))
                         {
                             profileName = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString::createFromAscii("IsRelative")))
+                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRelative"))))
                         {
                             sIsRelative = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString::createFromAscii("Path")))
+                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Path"))))
                         {
                             profilePath = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString::createFromAscii("Default")))
+                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Default"))))
                         {
                             sIsDefault = aValue->sValue;
                         }
                 }
                 if (profileName.getLength() != 0 || profilePath.getLength() != 0)
                 {
+#ifndef MINIMAL_PROFILEDISCOVER
                     sal_Int32 isRelative = 0;
                     if (sIsRelative.getLength() != 0)
                     {
                         isRelative = sIsRelative.toInt32();
                     }
 
-#ifndef MINIMAL_PROFILEDISCOVER
                     nsCOMPtr<nsILocalFile> rootDir;
                     rv = NS_NewLocalFile(EmptyString(), PR_TRUE,
                                             getter_AddRefs(rootDir));

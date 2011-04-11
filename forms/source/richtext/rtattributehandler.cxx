@@ -34,7 +34,7 @@
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 
@@ -112,7 +112,7 @@ namespace frm
     //--------------------------------------------------------------------
     AttributeCheckState AttributeHandler::implGetCheckState( const SfxPoolItem& /*_rItem*/ ) const
     {
-        OSL_ENSURE( sal_False, "AttributeHandler::implGetCheckState: not to be called!" );
+        OSL_FAIL( "AttributeHandler::implGetCheckState: not to be called!" );
         return eIndetermined;
     }
 
@@ -121,7 +121,7 @@ namespace frm
     {
         SvxScriptSetItem aSetItem( (WhichId)getAttributeId(), *_rAttribs.GetPool() );
         aSetItem.PutItemForScriptType( _nForScriptType, _rItem );
-        _rAttribs.Put( aSetItem.GetItemSet(), FALSE );
+        _rAttribs.Put( aSetItem.GetItemSet(), sal_False );
     }
 
     //--------------------------------------------------------------------
@@ -231,7 +231,7 @@ namespace frm
             case SID_ATTR_PARA_ADJUST_RIGHT : m_eAdjust = SVX_ADJUST_RIGHT;   break;
             case SID_ATTR_PARA_ADJUST_BLOCK : m_eAdjust = SVX_ADJUST_BLOCK;   break;
             default:
-                OSL_ENSURE( sal_False, "ParaAlignmentHandler::ParaAlignmentHandler: invalid slot!" );
+                OSL_FAIL( "ParaAlignmentHandler::ParaAlignmentHandler: invalid slot!" );
                 break;
         }
     }
@@ -266,7 +266,7 @@ namespace frm
             case SID_ATTR_PARA_LINESPACE_15: m_nLineSpace = 150; break;
             case SID_ATTR_PARA_LINESPACE_20: m_nLineSpace = 200; break;
             default:
-                OSL_ENSURE( sal_False, "LineSpacingHandler::LineSpacingHandler: invalid slot!" );
+                OSL_FAIL( "LineSpacingHandler::LineSpacingHandler: invalid slot!" );
                 break;
         }
     }
@@ -275,7 +275,7 @@ namespace frm
     AttributeCheckState LineSpacingHandler::implGetCheckState( const SfxPoolItem& _rItem ) const
     {
         OSL_ENSURE( _rItem.ISA( SvxLineSpacingItem ), "LineSpacingHandler::implGetCheckState: invalid pool item!" );
-        USHORT nLineSpace = static_cast< const SvxLineSpacingItem& >( _rItem ).GetPropLineSpace();
+        sal_uInt16 nLineSpace = static_cast< const SvxLineSpacingItem& >( _rItem ).GetPropLineSpace();
         return ( nLineSpace == m_nLineSpace ) ? eChecked : eUnchecked;
     }
 
@@ -290,7 +290,7 @@ namespace frm
         if ( 100 == m_nLineSpace )
             aLineSpacing.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
         else
-            aLineSpacing.SetPropLineSpace( (BYTE)m_nLineSpace );
+            aLineSpacing.SetPropLineSpace( (sal_uInt8)m_nLineSpace );
 
         _rNewAttribs.Put( aLineSpacing );
     }
@@ -308,7 +308,7 @@ namespace frm
             case SID_SET_SUPER_SCRIPT   : m_eEscapement = SVX_ESCAPEMENT_SUPERSCRIPT; break;
             case SID_SET_SUB_SCRIPT     : m_eEscapement = SVX_ESCAPEMENT_SUBSCRIPT;   break;
             default:
-                OSL_ENSURE( sal_False, "EscapementHandler::EscapementHandler: invalid slot!" );
+                OSL_FAIL( "EscapementHandler::EscapementHandler: invalid slot!" );
                 break;
         }
     }
@@ -372,7 +372,7 @@ namespace frm
             DELETEZ( pCorrectWich );
         }
         else
-            OSL_ENSURE( sal_False, "SlotHandler::executeAttribute: need attributes to do something!" );
+            OSL_FAIL( "SlotHandler::executeAttribute: need attributes to do something!" );
     }
 
     //====================================================================
@@ -398,7 +398,7 @@ namespace frm
         if ( pFontHeightItem )
         {
             // by definition, the item should have the unit twip
-            ULONG nHeight = pFontHeightItem->GetHeight();
+            sal_uLong nHeight = pFontHeightItem->GetHeight();
             if ( _rAttribs.GetPool()->GetMetric( getWhich() ) != SFX_MAPUNIT_TWIP )
             {
                 nHeight = OutputDevice::LogicToLogic(
@@ -426,7 +426,7 @@ namespace frm
         {
             // corect measurement units
             SfxMapUnit eItemMapUnit = pFontHeightItem->GetPropUnit(); (void)eItemMapUnit;
-            ULONG nHeight = pFontHeightItem->GetHeight();
+            sal_uLong nHeight = pFontHeightItem->GetHeight();
             if ( _rNewAttribs.GetPool()->GetMetric( getWhich() ) != SFX_MAPUNIT_TWIP )
             {
                 nHeight = OutputDevice::LogicToLogic(
@@ -461,7 +461,7 @@ namespace frm
             case SID_ATTR_PARA_LEFT_TO_RIGHT: m_eParagraphDirection = FRMDIR_HORI_LEFT_TOP; m_eDefaultAdjustment = SVX_ADJUST_LEFT; break;
             case SID_ATTR_PARA_RIGHT_TO_LEFT: m_eParagraphDirection = FRMDIR_HORI_RIGHT_TOP; m_eDefaultAdjustment = SVX_ADJUST_RIGHT; break;
             default:
-                OSL_ENSURE( sal_False, "ParagraphDirectionHandler::ParagraphDirectionHandler: invalid attribute id!" );
+                OSL_FAIL( "ParagraphDirectionHandler::ParagraphDirectionHandler: invalid attribute id!" );
         }
 
         if ( SVX_ADJUST_RIGHT == m_eDefaultAdjustment )
@@ -487,7 +487,7 @@ namespace frm
         // then we toggle the adjustment, too
         SvxAdjust eCurrentAdjustment = SVX_ADJUST_LEFT;
         const SfxPoolItem* pCurrentAdjustment = NULL;
-        if ( SFX_ITEM_ON == _rCurrentAttribs.GetItemState( EE_PARA_JUST, TRUE, &pCurrentAdjustment ) )
+        if ( SFX_ITEM_ON == _rCurrentAttribs.GetItemState( EE_PARA_JUST, sal_True, &pCurrentAdjustment ) )
             eCurrentAdjustment = static_cast< const SvxAdjustItem* >( pCurrentAdjustment )->GetAdjust();
 
         if ( eCurrentAdjustment == m_eOppositeDefaultAdjustment )

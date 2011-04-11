@@ -35,7 +35,6 @@
 #include "sbcomp.hxx"
 #include "expr.hxx"
 
-//////////////////////////////////////////////////////////////////////////
 
 SbiExprNode::SbiExprNode( void )
 {
@@ -52,9 +51,9 @@ SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, SbiToken t, SbiExprNode*
     pRight    = r;
     eTok      = t;
     nVal      = 0;
-    eType     = SbxVARIANT;     // Nodes sind immer Variant
+    eType     = SbxVARIANT;     // Nodes are always Variant
     eNodeType = SbxNODE;
-    bComposite= TRUE;
+    bComposite= sal_True;
 }
 
 SbiExprNode::SbiExprNode( SbiParser* p, double n, SbxDataType t )
@@ -86,12 +85,12 @@ SbiExprNode::SbiExprNode( SbiParser* p, const SbiSymDef& r, SbxDataType t, SbiEx
     aVar.pvMorePar = NULL;
     aVar.pNext= NULL;
 
-    // Funktionsergebnisse sind nie starr
-    bComposite= BOOL( aVar.pDef->GetProcDef() != NULL );
+    // Results of functions are at no time fixed
+    bComposite= sal_Bool( aVar.pDef->GetProcDef() != NULL );
 }
 
 // #120061 TypeOf
-SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, USHORT nId )
+SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, sal_uInt16 nId )
 {
     BaseInit( p );
 
@@ -102,7 +101,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, USHORT nId )
 }
 
 // new <type>
-SbiExprNode::SbiExprNode( SbiParser* p, USHORT nId )
+SbiExprNode::SbiExprNode( SbiParser* p, sal_uInt16 nId )
 {
     BaseInit( p );
 
@@ -111,7 +110,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, USHORT nId )
     nTypeStrId = nId;
 }
 
-// AB: 17.12.95, Hilfsfunktion fuer Ctor fuer einheitliche Initialisierung
+// From 1995-12-17, auxiliary function for Ctor for the uniform initialisation
 void SbiExprNode::BaseInit( SbiParser* p )
 {
     pGen = &p->aGen;
@@ -119,8 +118,8 @@ void SbiExprNode::BaseInit( SbiParser* p )
     pLeft       = NULL;
     pRight      = NULL;
     pWithParent = NULL;
-    bComposite  = FALSE;
-    bError      = FALSE;
+    bComposite  = sal_False;
+    bError      = sal_False;
 }
 
 SbiExprNode::~SbiExprNode()
@@ -159,7 +158,7 @@ SbiSymDef* SbiExprNode::GetRealVar()
         return NULL;
 }
 
-// AB: 18.12.95
+// From 1995-12-18
 SbiExprNode* SbiExprNode::GetRealNode()
 {
     if( eNodeType == SbxVARVAL )
@@ -173,9 +172,9 @@ SbiExprNode* SbiExprNode::GetRealNode()
         return NULL;
 }
 
-// Diese Methode setzt den Typ um, falls er in den Integer-Bereich hineinpasst
+// This method transform the type, if it fits into the Integer range
 
-BOOL SbiExprNode::IsIntConst()
+sal_Bool SbiExprNode::IsIntConst()
 {
     if( eNodeType == SbxNUMVAL )
     {
@@ -186,34 +185,34 @@ BOOL SbiExprNode::IsIntConst()
             {
                 nVal = (double) (short) nVal;
                 eType = SbxINTEGER;
-                return TRUE;
+                return sal_True;
             }
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SbiExprNode::IsNumber()
+sal_Bool SbiExprNode::IsNumber()
 {
-    return BOOL( eNodeType == SbxNUMVAL );
+    return sal_Bool( eNodeType == SbxNUMVAL );
 }
 
-BOOL SbiExprNode::IsString()
+sal_Bool SbiExprNode::IsString()
 {
-    return BOOL( eNodeType == SbxSTRVAL );
+    return sal_Bool( eNodeType == SbxSTRVAL );
 }
 
-BOOL SbiExprNode::IsVariable()
+sal_Bool SbiExprNode::IsVariable()
 {
-    return BOOL( eNodeType == SbxVARVAL );
+    return sal_Bool( eNodeType == SbxVARVAL );
 }
 
-BOOL SbiExprNode::IsLvalue()
+sal_Bool SbiExprNode::IsLvalue()
 {
     return IsVariable();
 }
 
-// Ermitteln der Tiefe eines Baumes
+// Identify of the depth of a tree
 
 short SbiExprNode::GetDepth()
 {
@@ -227,11 +226,11 @@ short SbiExprNode::GetDepth()
 }
 
 
-// Abgleich eines Baumes:
+// Adjustment of a tree:
 // 1. Constant Folding
-// 2. Typabgleich
-// 3. Umwandlung der Operanden in Strings
-// 4. Hochziehen der Composite- und Error-Bits
+// 2. Type-Adjustment
+// 3. Conversion of the operans into Strings
+// 4. Lifting of the composite- and error-bits
 
 void SbiExprNode::Optimize()
 {
@@ -239,7 +238,7 @@ void SbiExprNode::Optimize()
     CollectBits();
 }
 
-// Hochziehen der Composite- und Fehlerbits
+// Lifting of the composite- and error-bits
 
 void SbiExprNode::CollectBits()
 {
@@ -257,8 +256,8 @@ void SbiExprNode::CollectBits()
     }
 }
 
-// Kann ein Zweig umgeformt werden, wird TRUE zurueckgeliefert. In diesem
-// Fall ist das Ergebnis im linken Zweig.
+// If a twig can be converted, True will be returned. In this case
+// the result is in the left twig.
 
 void SbiExprNode::FoldConstants()
 {
@@ -273,10 +272,10 @@ void SbiExprNode::FoldConstants()
         {
             CollectBits();
             if( eTok == CAT )
-                // CAT verbindet auch zwei Zahlen miteinander!
+                // CAT affiliate also two numbers!
                 eType = SbxSTRING;
             if( pLeft->eType == SbxSTRING )
-                // Kein Type Mismatch!
+                // No Type Mismatch!
                 eType = SbxSTRING;
             if( eType == SbxSTRING )
             {
@@ -284,11 +283,11 @@ void SbiExprNode::FoldConstants()
                 String rr( pRight->GetString() );
                 delete pLeft; pLeft = NULL;
                 delete pRight; pRight = NULL;
-                bComposite = FALSE;
+                bComposite = sal_False;
                 if( eTok == PLUS || eTok == CAT )
                 {
                     eTok = CAT;
-                    // Verkettung:
+                    // Linking:
                     aStrVal = rl;
                     aStrVal += rr;
                     eType = SbxSTRING;
@@ -321,7 +320,7 @@ void SbiExprNode::FoldConstants()
                             break;
                         default:
                             pGen->GetParser()->Error( SbERR_CONVERSION );
-                            bError = TRUE;
+                            bError = sal_True;
                     }
                 }
             }
@@ -334,51 +333,51 @@ void SbiExprNode::FoldConstants()
                 if( ( eTok >= AND && eTok <= IMP )
                    || eTok == IDIV || eTok == MOD )
                 {
-                    // Integer-Operationen
-                    BOOL err = FALSE;
-                    if( nl > SbxMAXLNG ) err = TRUE, nl = SbxMAXLNG;
+                    // Integer operations
+                    sal_Bool err = sal_False;
+                    if( nl > SbxMAXLNG ) err = sal_True, nl = SbxMAXLNG;
                     else
-                    if( nl < SbxMINLNG ) err = TRUE, nl = SbxMINLNG;
-                    if( nr > SbxMAXLNG ) err = TRUE, nr = SbxMAXLNG;
+                    if( nl < SbxMINLNG ) err = sal_True, nl = SbxMINLNG;
+                    if( nr > SbxMAXLNG ) err = sal_True, nr = SbxMAXLNG;
                     else
-                    if( nr < SbxMINLNG ) err = TRUE, nr = SbxMINLNG;
+                    if( nr < SbxMINLNG ) err = sal_True, nr = SbxMINLNG;
                     ll = (long) nl; lr = (long) nr;
                     llMod = (long) (nl < 0 ? nl - 0.5 : nl + 0.5);
                     lrMod = (long) (nr < 0 ? nr - 0.5 : nr + 0.5);
                     if( err )
                     {
                         pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
-                        bError = TRUE;
+                        bError = sal_True;
                     }
                 }
-                BOOL bBothInt = BOOL( pLeft->eType < SbxSINGLE
+                sal_Bool bBothInt = sal_Bool( pLeft->eType < SbxSINGLE
                                    && pRight->eType < SbxSINGLE );
                 delete pLeft; pLeft = NULL;
                 delete pRight; pRight = NULL;
                 nVal = 0;
                 eType = SbxDOUBLE;
                 eNodeType = SbxNUMVAL;
-                bComposite = FALSE;
-                BOOL bCheckType = FALSE;
+                bComposite = sal_False;
+                sal_Bool bCheckType = sal_False;
                 switch( eTok )
                 {
                     case EXPON:
                         nVal = pow( nl, nr ); break;
                     case MUL:
-                        bCheckType = TRUE;
+                        bCheckType = sal_True;
                         nVal = nl * nr; break;
                     case DIV:
                         if( !nr )
                         {
                             pGen->GetParser()->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
-                            bError = TRUE;
+                            bError = sal_True;
                         } else nVal = nl / nr;
                         break;
                     case PLUS:
-                        bCheckType = TRUE;
+                        bCheckType = sal_True;
                         nVal = nl + nr; break;
                     case MINUS:
-                        bCheckType = TRUE;
+                        bCheckType = sal_True;
                         nVal = nl - nr; break;
                     case EQ:
                         nVal = ( nl == nr ) ? SbxTRUE : SbxFALSE;
@@ -402,14 +401,14 @@ void SbiExprNode::FoldConstants()
                         if( !lr )
                         {
                             pGen->GetParser()->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
-                            bError = TRUE;
+                            bError = sal_True;
                         } else nVal = ll / lr;
                         eType = SbxLONG; break;
                     case MOD:
                         if( !lr )
                         {
                             pGen->GetParser()->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
-                            bError = TRUE;
+                            bError = sal_True;
                         } else nVal = llMod % lrMod;
                         eType = SbxLONG; break;
                     case AND:
@@ -428,12 +427,11 @@ void SbiExprNode::FoldConstants()
                 if( !::rtl::math::isFinite( nVal ) )
                     pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
 
-                // Den Datentyp wiederherstellen, um Rundungsfehler
-                // zu killen
+                // Recover the data type to kill rounding error
                 if( bCheckType && bBothInt
                  && nVal >= SbxMINLNG && nVal <= SbxMAXLNG )
                 {
-                    // NK-Stellen weg
+                    // Decimal place away
                     long n = (long) nVal;
                     nVal = n;
                     eType = ( n >= SbxMININT && n <= SbxMAXINT )
@@ -449,21 +447,21 @@ void SbiExprNode::FoldConstants()
         pLeft = NULL;
         eType = SbxDOUBLE;
         eNodeType = SbxNUMVAL;
-        bComposite = FALSE;
+        bComposite = sal_False;
         switch( eTok )
         {
             case NEG:
                 nVal = -nVal; break;
             case NOT: {
-                // Integer-Operation!
-                BOOL err = FALSE;
-                if( nVal > SbxMAXLNG ) err = TRUE, nVal = SbxMAXLNG;
+                // Integer operation!
+                sal_Bool err = sal_False;
+                if( nVal > SbxMAXLNG ) err = sal_True, nVal = SbxMAXLNG;
                 else
-                if( nVal < SbxMINLNG ) err = TRUE, nVal = SbxMINLNG;
+                if( nVal < SbxMINLNG ) err = sal_True, nVal = SbxMINLNG;
                 if( err )
                 {
                     pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
-                    bError = TRUE;
+                    bError = sal_True;
                 }
                 nVal = (double) ~((long) nVal);
                 eType = SbxLONG;
@@ -473,7 +471,7 @@ void SbiExprNode::FoldConstants()
     }
     if( eNodeType == SbxNUMVAL )
     {
-        // Evtl auf INTEGER falten (wg. besserem Opcode)?
+        // Potentially convolve in INTEGER (because of better opcode)?
         if( eType == SbxSINGLE || eType == SbxDOUBLE )
         {
             double x;

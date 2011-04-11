@@ -129,7 +129,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleButton, VCLXAccessibleTextCompon
 
 ::rtl::OUString VCLXAccessibleButton::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleButton" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleButton") );
 }
 
 // -----------------------------------------------------------------------------
@@ -137,7 +137,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleButton, VCLXAccessibleTextCompon
 Sequence< ::rtl::OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleButton" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleButton") );
     return aNames;
 }
 
@@ -293,7 +293,7 @@ sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (Runt
         else if ( nValue > 1 )
             nValue = 1;
 
-        pButton->SetPressed( (BOOL) nValue );
+        pButton->SetPressed( (sal_Bool) nValue );
         bReturn = sal_True;
     }
 

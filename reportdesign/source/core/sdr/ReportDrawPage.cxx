@@ -119,7 +119,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
                 /**************************************************
                 * Das leere OLE-Objekt bekommt ein neues IPObj
                 **************************************************/
-                pObj->SetEmptyPresObj(FALSE);
+                pObj->SetEmptyPresObj(sal_False);
                 pOle2Obj->SetOutlinerParaObject(NULL);
                 pOle2Obj->SetObjRef(xObj);
                 pOle2Obj->SetPersistName(sName);
@@ -134,7 +134,6 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
             SvxOle2Shape* pShape = new SvxOle2Shape( pObj );
             xShape.set(*pShape,uno::UNO_QUERY);
             pShape->setShapeKind(pObj->GetObjIdentifier());
-            //xShape = new SvxOle2Shape( pOle2Obj );
         }
 
         if ( !xShape.is() )

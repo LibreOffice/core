@@ -62,9 +62,8 @@ namespace css = ::com::sun::star;
 // enable/disable special handling for CSV/TXT problem
 #define WORKAROUND_CSV_TXT_BUG_i60158
 
-/*-----------------------------------------------
-    03.07.2003 11:25
------------------------------------------------*/
+
+
 TypeDetection::TypeDetection(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     BaseContainer::init(xSMGR                                         ,
@@ -73,16 +72,14 @@ TypeDetection::TypeDetection(const css::uno::Reference< css::lang::XMultiService
                         FilterCache::E_TYPE                           );
 }
 
-/*-----------------------------------------------
-    03.07.2003 10:36
------------------------------------------------*/
+
+
 TypeDetection::~TypeDetection()
 {
 }
 
-/*-----------------------------------------------
-    03.11.2003 08:43
------------------------------------------------*/
+
+
 ::rtl::OUString SAL_CALL TypeDetection::queryTypeByURL(const ::rtl::OUString& sURL)
     throw (css::uno::RuntimeException)
 {
@@ -122,9 +119,8 @@ TypeDetection::~TypeDetection()
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    31.10.2003 09:36
------------------------------------------------*/
+
+
 ::rtl::OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
                                                               sal_Bool                                         bAllowDeep )
     throw (css::uno::RuntimeException)
@@ -140,8 +136,8 @@ TypeDetection::~TypeDetection()
     ::rtl::OUString sURL = stlDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_URL(), ::rtl::OUString());
 
 #if OSL_DEBUG_LEVEL > 0
-    if (stlDescriptor.find(::rtl::OUString::createFromAscii("FileName")) != stlDescriptor.end())
-        OSL_ENSURE(sal_False, "Detect using of deprecated and already unsupported MediaDescriptor property \"FileName\"!");
+    if (stlDescriptor.find(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ))) != stlDescriptor.end())
+        OSL_FAIL("Detect using of deprecated and already unsupported MediaDescriptor property \"FileName\"!");
 #endif
 
     css::util::URL  aURL;
@@ -173,7 +169,7 @@ TypeDetection::~TypeDetection()
         // by calling its registered deep detection service.
         // But break this loop if a type match to the given descriptor
         // by an URL pattern(!) or if deep detection isnt allowed from
-        // outside (bAllowDeep=FALSE) or break the whole detection by
+        // outside (bAllowDeep=sal_False) or break the whole detection by
         // throwing an exception if creation of the might needed input
         // stream failed by e.g. an IO exception ...
         OUStringList lUsedDetectors;
@@ -182,7 +178,7 @@ TypeDetection::~TypeDetection()
 
         //*******************************************
         // if no flat detected (nor preselected!) type could be
-        // verified and no error occured during creation of
+        // verified and no error occurred during creation of
         // the might needed input stream, start detection
         // which uses all registered deep detection services.
         if (
@@ -206,7 +202,7 @@ TypeDetection::~TypeDetection()
         // update descriptor and set last chance for return.
         if (!sType.getLength() && sLastChance.getLength())
         {
-            OSL_ENSURE(sal_False, "set first flat detected type without a registered deep detection service as \"last chance\" ... nevertheless some other deep detections said \"NO\". I TRY IT!");
+            OSL_FAIL("set first flat detected type without a registered deep detection service as \"last chance\" ... nevertheless some other deep detections said \"NO\". I TRY IT!");
             sType = sLastChance;
         }
     }
@@ -225,9 +221,8 @@ TypeDetection::~TypeDetection()
     return sType;
 }
 
-/*-----------------------------------------------
-    03.07.2003 10:36
------------------------------------------------*/
+
+
 void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescriptor& rDescriptor,
                                                       ::rtl::OUString&               sType      )
 {
@@ -259,22 +254,22 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
             // But then we loose automatic opening of CSV files in calc instead of opening these files
             // inside writer.
             if (
-                (sDocumentService.equalsAscii("com.sun.star.sheet.SpreadsheetDocument")) &&
+                (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument"))) &&
                 (
-                    (sRealType.equalsAscii("writer_Text"        )) ||
-                    (sRealType.equalsAscii("writer_Text_encoded"))
+                    (sRealType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("writer_Text"))) ||
+                    (sRealType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("writer_Text_encoded")))
                 )
                )
             {
-                sRealType = ::rtl::OUString::createFromAscii("calc_Text_txt_csv_StarCalc");
+                sRealType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "calc_Text_txt_csv_StarCalc" ));
             }
             else
             if (
-                (sDocumentService.equalsAscii("com.sun.star.text.TextDocument")) &&
-                (sRealType.equalsAscii("calc_Text_txt_csv_StarCalc"           ))
+                (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument"))) &&
+                (sRealType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc_Text_txt_csv_StarCalc")))
                )
             {
-                sRealType = ::rtl::OUString::createFromAscii("writer_Text");
+                sRealType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_Text" ));
             }
             #endif // WORKAROUND_CSV_TXT_BUG_i60158
 
@@ -411,9 +406,8 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
         {}
 }
 
-/*-----------------------------------------------
-    14.11.2003 12:06
------------------------------------------------*/
+
+
 sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreSelType,
                                                     const css::util::URL&  aParsedURL ,
                                                           FlatDetection&   rFlatTypes )
@@ -509,19 +503,6 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
                 }
             }
         }
-
-        /*
-            Comment ... why the following line of code should be comened out .-)
-
-            This type does not seem to fit the requirements
-            But its an existing and well known type.
-            At least - [because may be the extension was missing :-( ]
-            we should try to detect this type deep ...
-            So we accept it here :-)
-
-        if (!bBreakDetection)
-            sType = ::rtl::OUString();
-        */
     }
 
     // if its a valid type - set it on all return values!
@@ -545,9 +526,8 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     return sal_False;
 }
 
-/*-----------------------------------------------
-    14.11.2003 12:09
------------------------------------------------*/
+
+
 sal_Bool TypeDetection::impl_getPreselectionForFilter(const ::rtl::OUString& sPreSelFilter,
                                                       const css::util::URL&  aParsedURL   ,
                                                             FlatDetection&   rFlatTypes   )
@@ -605,9 +585,8 @@ sal_Bool TypeDetection::impl_getPreselectionForFilter(const ::rtl::OUString& sPr
         return sal_False;
 }
 
-/*-----------------------------------------------
-    14.11.2003 12:11
------------------------------------------------*/
+
+
 sal_Bool TypeDetection::impl_getPreselectionForDocumentService(const ::rtl::OUString& sPreSelDocumentService,
                                                                const css::util::URL&  aParsedURL            ,
                                                                      FlatDetection&   rFlatTypes            )
@@ -683,9 +662,8 @@ sal_Bool TypeDetection::impl_getPreselectionForDocumentService(const ::rtl::OUSt
     return sal_True;
 }
 
-/*-----------------------------------------------
-    14.11.2003 12:21
------------------------------------------------*/
+
+
 void TypeDetection::impl_getPreselection(const css::util::URL&                aParsedURL ,
                                                ::comphelper::MediaDescriptor& rDescriptor,
                                                FlatDetection&                 rFlatTypes )
@@ -722,9 +700,8 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
         impl_getPreselectionForDocumentService(sSelectedDoc, aParsedURL, rFlatTypes);
 }
 
-/*-----------------------------------------------
-    03.11.2003 09:17
------------------------------------------------*/
+
+
 ::rtl::OUString TypeDetection::impl_detectTypeFlatAndDeep(      ::comphelper::MediaDescriptor& rDescriptor   ,
                                                           const FlatDetection&                 lFlatTypes    ,
                                                                 sal_Bool                       bAllowDeep    ,
@@ -741,7 +718,7 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     // a) no types                                => no detection
     // b) deep detection not allowed              => return first valid type of list (because its the preferred or the first valid one)
     //    or(!) match by URLPattern               => in such case a deep detection will be supressed!
-    // c) type has no detect service              => safe the first occured type without a detect service
+    // c) type has no detect service              => safe the first occurred type without a detect service
     //                                               as "last chance"(!). It will be used outside of this method
     //                                               if no further type could be detected.
     //                                               It must be the first one, because it can be a preferred type.
@@ -827,9 +804,8 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    03.11.2003 09:19
------------------------------------------------*/
+
+
 ::rtl::OUString TypeDetection::impl_detectTypeDeepOnly(      ::comphelper::MediaDescriptor& rDescriptor          ,
                                                        const OUStringList&                  lOutsideUsedDetectors)
 {
@@ -957,9 +933,8 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     return ::rtl::OUString();
 }
 
-/*-----------------------------------------------
-    07.03.2005 11:13
------------------------------------------------*/
+
+
 void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescriptor)
 {
     // try to seek to 0 ...
@@ -981,9 +956,8 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     }
 }
 
-/*-----------------------------------------------
-    30.10.2003 15:12
------------------------------------------------*/
+
+
 ::rtl::OUString TypeDetection::impl_askDetectService(const ::rtl::OUString&               sDetectService,
                                                            ::comphelper::MediaDescriptor& rDescriptor   )
 {
@@ -1007,13 +981,21 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     aLock.clear();
     // <- SAFE
 
-    // Attention! If e.g. an office module was not installed sometimes we find a
-    // registered detect service, which is referred inside the configuration ... but not realy
-    // installed. On the other side we use third party components here, which can make trouble anyway.
-    // So we should handle errors during creation of such services more gracefully .-)
-    xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(
-            xSMGR->createInstance(sDetectService),
-            css::uno::UNO_QUERY);
+    try
+    {
+        // Attention! If e.g. an office module was not installed sometimes we
+        // find a registered detect service, which is referred inside the
+        // configuration ... but not realy installed. On the other side we use
+        // third party components here, which can make trouble anyway.  So we
+        // should handle errors during creation of such services more
+        // gracefully .-)
+        xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(
+                xSMGR->createInstance(sDetectService),
+                css::uno::UNO_QUERY_THROW);
+    }
+    catch (...)
+    {
+    }
 
     if ( ! xDetector.is())
         return ::rtl::OUString();
@@ -1061,9 +1043,8 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     return ::rtl::OUString();
 }
 
-/*-----------------------------------------------
-    17.12.2004 13:47
------------------------------------------------*/
+
+
 ::rtl::OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(::comphelper::MediaDescriptor& rDescriptor)
 {
     // SAFE ->
@@ -1102,12 +1083,11 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     try
     {
         // create a new request to ask user for it's decision about the usable filter
-        ::framework::RequestFilterSelect* pRequest = new ::framework::RequestFilterSelect(sURL);
-        css::uno::Reference< css::task::XInteractionRequest > xRequest(static_cast< css::task::XInteractionRequest* >(pRequest), css::uno::UNO_QUERY_THROW);
-        xInteraction->handle(xRequest);
+        ::framework::RequestFilterSelect aRequest(sURL);
+        xInteraction->handle(aRequest.GetRequest());
 
         // "Cancel" pressed? => return with error
-        if (pRequest->isAbort())
+        if (aRequest.isAbort())
             return ::rtl::OUString();
 
         // "OK" pressed => verify the selected filter, get it's coressponding
@@ -1116,7 +1096,7 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
         // a type here only. But we must be shure, that the selected filter is used
         // too and no ambigous filter registration disturb us .-)
 
-        ::rtl::OUString sFilter = pRequest->getFilter();
+        ::rtl::OUString sFilter = aRequest.getFilter();
         if (!impl_validateAndSetFilterOnDescriptor(rDescriptor, sFilter))
             return ::rtl::OUString();
 
@@ -1130,9 +1110,8 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     return ::rtl::OUString();
 }
 
-/*-----------------------------------------------
-    10.03.2004 10:30
------------------------------------------------*/
+
+
 void TypeDetection::impl_openStream(::comphelper::MediaDescriptor& rDescriptor)
     throw (css::uno::Exception)
 {
@@ -1160,9 +1139,8 @@ void TypeDetection::impl_openStream(::comphelper::MediaDescriptor& rDescriptor)
     }
 }
 
-/*-----------------------------------------------
-    04.07.2003 13:47
------------------------------------------------*/
+
+
 void TypeDetection::impl_removeTypeFilterFromDescriptor(::comphelper::MediaDescriptor& rDescriptor)
 {
     ::comphelper::MediaDescriptor::iterator pItType   = rDescriptor.find(::comphelper::MediaDescriptor::PROP_TYPENAME()  );
@@ -1173,9 +1151,8 @@ void TypeDetection::impl_removeTypeFilterFromDescriptor(::comphelper::MediaDescr
         rDescriptor.erase(pItFilter);
 }
 
-/*-----------------------------------------------
-    14.10.2003 11:15
------------------------------------------------*/
+
+
 sal_Bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      ::comphelper::MediaDescriptor& rDescriptor,
                                                             const ::rtl::OUString&               sType      )
 {
@@ -1194,9 +1171,8 @@ sal_Bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      ::comphelper::
     return sal_False;
 }
 
-/*-----------------------------------------------
-    04.07.2003 14:01
------------------------------------------------*/
+
+
 sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      ::comphelper::MediaDescriptor& rDescriptor,
                                                               const ::rtl::OUString&               sFilter    )
 {
@@ -1225,27 +1201,24 @@ sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      ::comphelper
     return sal_False;
 }
 
-/*-----------------------------------------------
-    03.07.2003 10:36
------------------------------------------------*/
+
+
 ::rtl::OUString TypeDetection::impl_getImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.filter.config.TypeDetection");
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.TypeDetection" ));
 }
 
-/*-----------------------------------------------
-    03.07.2003 11:27
------------------------------------------------*/
+
+
 css::uno::Sequence< ::rtl::OUString > TypeDetection::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
-    lServiceNames[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection");
+    lServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ));
     return lServiceNames;
 }
 
-/*-----------------------------------------------
-    09.07.2003 08:02
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL TypeDetection::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     TypeDetection* pNew = new TypeDetection(xSMGR);

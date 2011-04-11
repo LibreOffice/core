@@ -1,0 +1,67 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart_TimeIncrement_idl
+#define com_sun_star_chart_TimeIncrement_idl
+
+#include <com/sun/star/chart/TimeInterval.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** A TimeIncrement describes how tickmarks are positioned on the scale of a date-time axis.
+@since OOo 3.4
+*/
+published struct TimeIncrement
+{
+    /** if the any contains a struct of type <type>::com::sun::star::chart::TimeInterval</type>
+        this is used as a fixed distance value for the major tickmarks.  Otherwise, if the any is empty or contains an
+        incompatible type, the distance between major tickmarks is calculated automatically by the application.
+     */
+    any     MajorTimeInterval;
+
+    /** if the any contains a struct of type <type>::com::sun::star::chart::TimeInterval</type>
+        this is used as a fixed distance value for the minor tickmarks.  Otherwise, if the any is empty or contains an
+        incompatible type, the distance between minor tickmarks is calculated automatically by the application.
+     */
+    any     MinorTimeInterval;
+
+    /** if the any contains a constant of type <type>::com::sun::star::chart::TimeUnit</type>
+        this is the smallest time unit that is displayed on the date-time axis.
+        Otherwise, if the any is empty or contains an incompatible type,
+        the resolution is choosen automatically by the application.
+     */
+    any     TimeResolution;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

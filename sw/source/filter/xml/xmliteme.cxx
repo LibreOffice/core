@@ -41,7 +41,7 @@
 #include "xmlbrshe.hxx"
 #include <editeng/tstpitem.hxx>
 #include <editeng/brshitem.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include "fmtornt.hxx"
@@ -232,7 +232,6 @@ inline void SwXMLTableItemMapper_Impl::SetAbsWidth( sal_uInt32 nAbs )
 
 void SwXMLExport::_InitItemExport()
 {
-    // #110680#
     pTwipUnitConv = new SvXMLUnitConverter( MAP_TWIP,
         GetMM100UnitConverter().getXMLMeasureUnit(), getServiceFactory() );
 

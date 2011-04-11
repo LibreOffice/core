@@ -44,9 +44,6 @@ AppError::AppError( BasicFrame* pParent, String aFileName )
     bHasFile = pDataEdit->Load( aFileName );
     DirEntry aEntry( aFileName );
     UpdateFileInfo( HAS_BEEN_LOADED );
-    // Define icon
-//  pIcon = new Icon( ResId( RID_WORKICON ) );
-//  if( pIcon ) SetIcon( *pIcon );
 
     pDataEdit->Show();
     GrabFocus();
@@ -64,10 +61,10 @@ long AppError::InitMenu( Menu* pMenu )
 {
     AppWin::InitMenu (pMenu );
 
-    pMenu->EnableItem( RID_EDITUNDO,    FALSE );
-    pMenu->EnableItem( RID_EDITREDO,    FALSE );
+    pMenu->EnableItem( RID_EDITUNDO,    sal_False );
+    pMenu->EnableItem( RID_EDITREDO,    sal_False );
 
-    return TRUE;
+    return sal_True;
 }
 
 long AppError::DeInitMenu( Menu* pMenu )
@@ -77,10 +74,10 @@ long AppError::DeInitMenu( Menu* pMenu )
     pMenu->EnableItem( RID_EDITUNDO );
     pMenu->EnableItem( RID_EDITREDO );
 
-    return TRUE;
+    return sal_True;
 }
 
-USHORT AppError::GetLineNr(){ return pDataEdit->GetLineNr(); }
+sal_uInt16 AppError::GetLineNr(){ return pDataEdit->GetLineNr(); }
 
 FileType AppError::GetFileType()
 {
@@ -102,14 +99,10 @@ void AppError::LoadIniFile()
     String aFontStyle = String( aConf.ReadKey( "ScriptFontStyle", "normal" ), RTL_TEXTENCODING_UTF8 );
     String aFontSize = String( aConf.ReadKey( "ScriptFontSize", "12" ), RTL_TEXTENCODING_UTF8 );
     Font aFont = aFontList.Get( aFontName, aFontStyle );
-//    ULONG nFontSize = aFontSize.GetValue( FUNIT_POINT );
-    ULONG nFontSize = aFontSize.ToInt32();
-//    aFont.SetSize( Size( nFontSize, nFontSize ) );
+    sal_uIntPtr nFontSize = aFontSize.ToInt32();
     aFont.SetHeight( nFontSize );
 
-    aFont.SetTransparent( FALSE );
-//    aFont.SetAlign( ALIGN_BOTTOM );
-//    aFont.SetHeight( aFont.GetHeight()+2 );
+    aFont.SetTransparent( sal_False );
     pDataEdit->SetFont( aFont );
 }
 

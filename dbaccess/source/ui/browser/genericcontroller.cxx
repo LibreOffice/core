@@ -35,8 +35,8 @@
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "dataview.hxx"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "dbustrings.hrc"
 #include <vcl/stdtext.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -64,7 +64,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
 #include <algorithm>
-#include <hash_map>
+#include <o3tl/compat_functional.hxx>
+#include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <limits>
 
@@ -90,7 +91,7 @@ using namespace ::comphelper;
 #define LAST_USER_DEFINED_FEATURE   ( ::std::numeric_limits< sal_uInt16 >::max()        )
 
 // -------------------------------------------------------------------------
-typedef ::std::hash_map< sal_Int16, sal_Int16 > CommandHashMap;
+typedef ::boost::unordered_map< sal_Int16, sal_Int16 > CommandHashMap;
 typedef ::std::list< DispatchInformation > DispatchInfoList;
 
 
@@ -151,7 +152,7 @@ void UserDefinedFeatures::execute( const URL& _rFeatureURL, const Sequence< Prop
 
         if ( xDispatch == xController )
         {
-            OSL_ENSURE( false, "UserDefinedFeatures::execute: the controller shouldn't be the dispatcher here!" );
+            OSL_FAIL( "UserDefinedFeatures::execute: the controller shouldn't be the dispatcher here!" );
             xDispatch.clear();
         }
 
@@ -209,7 +210,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 
     try
     {
-        m_xUrlTransformer = Reference< XURLTransformer > (_rM->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
+        m_xUrlTransformer = Reference< XURLTransformer > (_rM->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY);
     }
     catch(Exception&)
     {
@@ -232,7 +233,7 @@ OGenericUnoController::OGenericUnoController()
     ,m_bReadOnly(sal_False)
     ,m_bCurrentlyModified(sal_False)
 {
-    OSL_ENSURE( false, "OGenericUnoController::OGenericUnoController: illegal call!" );
+    OSL_FAIL( "OGenericUnoController::OGenericUnoController: illegal call!" );
     // This ctor only exists because the MSVC compiler complained about an unresolved external
     // symbol. It should not be used at all. Since using it yields strange runtime problems,
     // we simply abort here.
@@ -262,14 +263,14 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     fillSupportedFeatures();
 
     // create the database context
-    DBG_ASSERT(getORB().is(), "OGenericUnoController::Construct need a service factory!");
+    OSL_ENSURE(getORB().is(), "OGenericUnoController::Construct need a service factory!");
     try
     {
         m_xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
     }
     catch(Exception&)
     {
-        DBG_ERROR("OGenericUnoController::Construct: could not create (or start listening at) the database context!");
+        OSL_FAIL("OGenericUnoController::Construct: could not create (or start listening at) the database context!");
     }
 
     if (!m_xDatabaseContext.is())
@@ -308,12 +309,6 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         {
             xFrame.set(aValue.Value,UNO_QUERY_THROW);
         }
-        /* #i42316#
-        else if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "ReadOnly" ) ) )
-        {
-            aValue.Value >>= m_bReadOnly;
-        }
-        */
         else if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "Preview" ) ) )
         {
             aValue.Value >>= m_bPreview;
@@ -330,7 +325,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
         if (!pParentWin)
         {
-            throw IllegalArgumentException( ::rtl::OUString::createFromAscii( "Parent window is null" ), *this, 1 );
+            throw IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent window is null")), *this, 1 );
         }
 
         m_aInitParameters.assign( aArguments );
@@ -338,10 +333,10 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 
         ODataView* pView = getView();
         if ( !pView )
-            throw RuntimeException( ::rtl::OUString::createFromAscii( "unable to create a view" ), *this );
+            throw RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unable to create a view")), *this );
 
         if ( m_bReadOnly || m_bPreview )
-            pView->EnableInput( FALSE );
+            pView->EnableInput( sal_False );
 
         impl_initialize();
     }
@@ -483,7 +478,6 @@ namespace
         // #i67882# is the bug which was caused by the real fix which we did in framework
         // #i68216# is the bug which requests to fix the code in Draw which relies on
         //          framework's implementation details
-        // 2006-08-07 / frank.schoenheit@sun.com
         if ( !!_rFeatureState.sTitle )
             _out_rStates.push_back( makeAny( *_rFeatureState.sTitle ) );
         if ( !!_rFeatureState.bChecked )
@@ -545,7 +539,6 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
         // it is possible that listeners are registered or revoked while
         // we are notifying them, so we must use a copy of m_arrStatusListener, not
         // m_arrStatusListener itself
-        // #121276# / 2005-05-19 / frank.schoenheit@sun.com
         Dispatch aNotifyLoop( m_arrStatusListener );
         DispatchIterator iterSearch = aNotifyLoop.begin();
         DispatchIterator iterEnd = aNotifyLoop.end();
@@ -619,7 +612,7 @@ void OGenericUnoController::InvalidateFeature_Impl()
                 ::rtl::OString sMessage( "OGenericUnoController::InvalidateFeature_Impl: feature id " );
                 sMessage += ::rtl::OString::valueOf( aNextFeature.nId );
                 sMessage += ::rtl::OString( " has been invalidated, but is not supported!" );
-                OSL_ENSURE( false, sMessage.getStr() );
+                OSL_FAIL( sMessage.getStr() );
             }
 #endif
             if ( m_aSupportedFeatures.end() != aFeaturePos )
@@ -642,6 +635,18 @@ void OGenericUnoController::InvalidateFeature_Impl()
 // -----------------------------------------------------------------------
 void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Reference< XStatusListener >& _xListener, sal_Bool _bForceBroadcast )
 {
+#if OSL_DEBUG_LEVEL > 0
+    if ( _nId != -1 )
+    {
+        SupportedFeatures::iterator aFeaturePos = ::std::find_if(
+            m_aSupportedFeatures.begin(),
+            m_aSupportedFeatures.end(),
+            ::std::bind2nd( CompareFeatureById(), _nId )
+        );
+        OSL_ENSURE( aFeaturePos != m_aSupportedFeatures.end(), "OGenericUnoController::ImplInvalidateFeature: invalidating an unsupported feature is suspicious, at least!" );
+    }
+#endif
+
     FeatureListener aListener;
     aListener.nId               = _nId;
     aListener.xListener         = _xListener;
@@ -674,7 +679,7 @@ void OGenericUnoController::InvalidateAll()
 void OGenericUnoController::InvalidateAll_Impl()
 {
     // ---------------------------------
-    // invalidate all aupported features
+    // invalidate all supported features
 
     for (   SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
             aIter != m_aSupportedFeatures.end();
@@ -684,7 +689,7 @@ void OGenericUnoController::InvalidateAll_Impl()
 
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
-        DBG_ASSERT(m_aFeaturesToInvalidate.size(), "OGenericUnoController::InvalidateAll_Impl: to be called from within InvalidateFeature_Impl only!");
+        OSL_ENSURE(m_aFeaturesToInvalidate.size(), "OGenericUnoController::InvalidateAll_Impl: to be called from within InvalidateFeature_Impl only!");
         m_aFeaturesToInvalidate.pop_front();
         if(!m_aFeaturesToInvalidate.empty())
             m_aAsyncInvalidateAll.Call();
@@ -768,12 +773,12 @@ void OGenericUnoController::setMasterDispatchProvider(const Reference< XDispatch
 void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyValue >& aArgs) throw(RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
-    // Since the fix for #123967#, the SolarMutex is not locked anymore when the framework calls into
+    // The SolarMutex is not locked anymore when the framework calls into
     // here. So, lock it ourself. The real solution would be to lock it only in the places
     // where it's needed, but a) this might turn out difficult, since we then also need to care
     // for locking in the proper order (SolarMutex and m_aMutex), and b) this would be too many places
     // for the time frame of the fix.
-    // #i52602# / frank.schoenheit@sun.com / 2005-07-29
+    // #i52602#
 
 #ifdef TIMELOG
     ::rtl::OString sLog( "OGenericUnoController::dispatch( '" );
@@ -793,12 +798,12 @@ void OGenericUnoController::addStatusListener(const Reference< XStatusListener >
     if ( m_xUrlTransformer.is() )
         m_xUrlTransformer->parseStrict( aParsedURL );
 
-    // remeber the listener together with the URL
+    // remember the listener together with the URL
     m_arrStatusListener.insert( m_arrStatusListener.end(), DispatchTarget( aParsedURL, aListener ) );
 
     // initially broadcast the state
     ImplBroadcastFeatureState( aParsedURL.Complete, aListener, sal_True );
-        // force the new state to be broadcasted to the new listener
+        // force the new state to be broadcast to the new listener
 }
 
 // -----------------------------------------------------------------------
@@ -920,7 +925,7 @@ void OGenericUnoController::implDescribeSupportedFeature( const sal_Char* _pAsci
         sal_uInt16 _nFeatureId, sal_Int16 _nCommandGroup )
 {
 #ifdef DBG_UTIL
-    DBG_ASSERT( m_bDescribingSupportedFeatures, "OGenericUnoController::implDescribeSupportedFeature: bad timing for this call!" );
+    OSL_ENSURE( m_bDescribingSupportedFeatures, "OGenericUnoController::implDescribeSupportedFeature: bad timing for this call!" );
 #endif
     OSL_PRECOND( _nFeatureId < FIRST_USER_DEFINED_FEATURE, "OGenericUnoController::implDescribeSupportedFeature: invalid feature id!" );
 
@@ -1162,7 +1167,7 @@ Reference< XFrame > SAL_CALL OGenericUnoController::getFrame(void) throw( Runtim
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > & /*xModel*/) throw( RuntimeException )
 {
-    OSL_ENSURE( false, "OGenericUnoController::attachModel: not supported!" );
+    OSL_FAIL( "OGenericUnoController::attachModel: not supported!" );
     return sal_False;
 }
 
@@ -1293,7 +1298,7 @@ namespace
                     pReturn = "sbasic";
                 else
                 {
-                    OSL_ENSURE( sal_False, "lcl_getModuleHelpModuleName: no installed module found" );
+                    OSL_FAIL( "lcl_getModuleHelpModuleName: no installed module found" );
                 }
             }
         }
@@ -1314,7 +1319,7 @@ namespace
 void OGenericUnoController::openHelpAgent(rtl::OUString const& _suHelpStringURL )
 {
     rtl::OUString suURL(_suHelpStringURL);
-    rtl::OUString sLanguage = rtl::OUString::createFromAscii("Language=");
+    rtl::OUString sLanguage(RTL_CONSTASCII_USTRINGPARAM("Language="));
     if (suURL.indexOf(sLanguage) == -1)
     {
         AppendConfigToken(suURL, sal_False /* sal_False := add '&' */ );
@@ -1325,9 +1330,9 @@ void OGenericUnoController::openHelpAgent(rtl::OUString const& _suHelpStringURL 
     openHelpAgent( aURL );
 }
 
-void OGenericUnoController::openHelpAgent(sal_Int32 _nHelpId)
+void OGenericUnoController::openHelpAgent(const rtl::OString& _sHelpId)
 {
-    openHelpAgent( createHelpAgentURL( lcl_getModuleHelpModuleName( getFrame() ), _nHelpId ) );
+    openHelpAgent( createHelpAgentURL( lcl_getModuleHelpModuleName( getFrame() ), _sHelpId ) );
 }
 
 void OGenericUnoController::openHelpAgent( const URL& _rURL )
@@ -1494,7 +1499,7 @@ sal_uInt16 OGenericUnoController::registerCommandURL( const ::rtl::OUString& _rC
         ++nFeatureId;
     if ( nFeatureId == LAST_USER_DEFINED_FEATURE )
     {
-        OSL_ENSURE( false, "OGenericUnoController::registerCommandURL: no more space for user defined features!" );
+        OSL_FAIL( "OGenericUnoController::registerCommandURL: no more space for user defined features!" );
         return 0L;
     }
 
@@ -1565,10 +1570,20 @@ Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroup
     ::std::transform( aCmdHashMap.begin(),
         aCmdHashMap.end(),
         aCommandGroups.getArray(),
-        ::std::select1st< CommandHashMap::value_type >()
+        ::o3tl::select1st< CommandHashMap::value_type >()
     );
 
     return aCommandGroups;
+}
+
+namespace
+{
+    //Current c++0x draft (apparently) has std::identity, but not operator()
+    template<typename T> struct SGI_identity : public std::unary_function<T,T>
+    {
+        T& operator()(T& x) const { return x; }
+        const T& operator()(const T& x) const { return x; }
+    };
 }
 
 // -----------------------------------------------------------------------------
@@ -1592,7 +1607,7 @@ Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableD
     ::std::transform( aInformationList.begin(),
         aInformationList.end(),
         aInformation.getArray(),
-        ::std::identity< DispatchInformation >()
+        SGI_identity< DispatchInformation >()
     );
 
     return aInformation;

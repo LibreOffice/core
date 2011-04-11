@@ -31,7 +31,7 @@
 
 #include <vcl/dllapi.h>
 
-class VCL_DLLPUBLIC SalI18NImeStatus
+class VCL_PLUGIN_PUBLIC SalI18NImeStatus
 {
 public:
     SalI18NImeStatus() {}

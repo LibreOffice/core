@@ -1530,6 +1530,31 @@ SfxVoidItem ChangeCaseToToggleCase SID_TRANSLITERATE_TOGGLE_CASE
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem ChangeCaseRotateCase SID_TRANSLITERATE_ROTATE_CASE
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem ChangeCaseToLower SID_TRANSLITERATE_LOWER
 ()
 [
@@ -6202,33 +6227,6 @@ SfxVoidItem PreviousAnnotation SID_PREVIOUS_POSTIT
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem InsertApplet SID_INSERT_APPLET
-(SfxStringItem Class FN_PARAM_1,
- SfxStringItem ClassLocation FN_PARAM_2,
- SfxStringItem Commands FN_PARAM_3)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-        AccelConfig = FALSE,
-        MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-        ToolBoxConfig = FALSE,
-    GroupId = GID_INSERT;
 ]
 
 //--------------------------------------------------------------------------
@@ -15135,3 +15133,31 @@ SfxVoidItem InsertRowDialog SID_TABLE_INSERT_ROW_DLG
     ToolBoxConfig = FALSE,
     GroupId = GID_TABLE;
 ]
+//--------------------------------------------------------------------------
+SfxVoidItem PrepareMailExport SID_MAIL_PREPAREEXPORT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EXPLORER;
+]
+

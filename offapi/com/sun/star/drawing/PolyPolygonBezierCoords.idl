@@ -43,7 +43,7 @@
 //=============================================================================
 
 // DocMerge from xml: struct com::sun::star::drawing::PolyPolygonBezierCoords
-/** specifies the coordinates for a poly polygon bezier.
+/** specifies the coordinates for a poly polygon Bezier.
  */
 published struct PolyPolygonBezierCoords
 {

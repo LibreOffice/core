@@ -39,14 +39,13 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-/* -----------------11.11.99 14:34-------------------
 
- --------------------------------------------------*/
+using ::rtl::OUString;
+
 typedef Mapping* MappingPtr;
 SV_DECL_PTRARR_DEL(MappingArray, MappingPtr, 2, 2)
 SV_IMPL_PTRARR(MappingArray, MappingPtr);
@@ -54,9 +53,7 @@ SV_IMPL_PTRARR(MappingArray, MappingPtr);
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
 const char* cDataSourceHistory = "DataSourceHistory";
-/* -----------------------------13.11.00 12:21--------------------------------
 
- ---------------------------------------------------------------------------*/
 Sequence<OUString> BibConfig::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -75,9 +72,7 @@ Sequence<OUString> BibConfig::GetPropertyNames()
     }
     return aNames;
 }
-/* -----------------------------13.11.00 11:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 BibConfig::BibConfig() :
     ConfigItem(C2U("Office.DataAccess/Bibliography"), CONFIG_MODE_DELAYED_UPDATE),
     pMappingsArr(new MappingArray),
@@ -211,18 +206,14 @@ BibConfig::BibConfig() :
         }
     }
 }
-/* -----------------------------13.11.00 11:00--------------------------------
 
- ---------------------------------------------------------------------------*/
 BibConfig::~BibConfig()
 {
     if(IsModified())
         Commit();
     delete pMappingsArr;
 }
-/* -----------------------------13.11.00 12:08--------------------------------
 
- ---------------------------------------------------------------------------*/
 BibDBDescriptor BibConfig::GetBibliographyURL()
 {
     BibDBDescriptor aRet;
@@ -231,9 +222,7 @@ BibDBDescriptor BibConfig::GetBibliographyURL()
     aRet.nCommandType = nTblOrQuery;
     return aRet;
 };
-/* -----------------------------13.11.00 12:20--------------------------------
 
- ---------------------------------------------------------------------------*/
 void BibConfig::SetBibliographyURL(const BibDBDescriptor& rDesc)
 {
     sDataSource = rDesc.sDataSource;
@@ -280,7 +269,7 @@ void    BibConfig::Commit()
     OUString sCommandType(C2U("CommandType"));
     for(sal_Int32 i = 0; i < pMappingsArr->Count(); i++)
     {
-        const Mapping* pMapping = pMappingsArr->GetObject((USHORT)i);
+        const Mapping* pMapping = pMappingsArr->GetObject((sal_uInt16)i);
         OUString sPrefix(C2U(cDataSourceHistory));
         sPrefix += C2U("/_");
         sPrefix += OUString::valueOf(i);
@@ -321,9 +310,7 @@ void    BibConfig::Commit()
         }
     }
 }
-/* -----------------------------13.11.00 12:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
 {
     for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
@@ -335,9 +322,7 @@ const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
     }
     return 0;
 }
-/* -----------------------------13.11.00 12:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapping)
 {
     for(sal_uInt16 i = 0; i < pMappingsArr->Count(); i++)
@@ -354,21 +339,15 @@ void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapp
     pMappingsArr->Insert(pNew, pMappingsArr->Count());
     SetModified();
 }
-/* -----------------------------20.11.00 11:56--------------------------------
 
- ---------------------------------------------------------------------------*/
 DBChangeDialogConfig_Impl::DBChangeDialogConfig_Impl()
 {
 }
-/* -----------------------------20.11.00 11:57--------------------------------
 
- ---------------------------------------------------------------------------*/
 DBChangeDialogConfig_Impl::~DBChangeDialogConfig_Impl()
 {
 }
-/* -----------------------------14.03.01 12:53--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Sequence<OUString>& DBChangeDialogConfig_Impl::GetDataSourceNames()
 {
     if(!aSourceNames.getLength())

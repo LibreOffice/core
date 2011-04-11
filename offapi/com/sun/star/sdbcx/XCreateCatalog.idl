@@ -51,7 +51,7 @@
 published interface XCreateCatalog: com::sun::star::uno::XInterface
 {
 
-    /** creates the catolog by using a sequence of property values. The kind
+    /** creates the catalog by using a sequence of property values. The kind
         of properties depends on the provider.
 
         @param info

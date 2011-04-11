@@ -28,14 +28,16 @@
 #ifndef SVTOOLS_TABLECONTROL_IMPL_HXX
 #define SVTOOLS_TABLECONTROL_IMPL_HXX
 
-#include <svtools/table/tablemodel.hxx>
+#include "svtools/table/tablemodel.hxx"
+#include "svtools/table/tablecontrolinterface.hxx"
 
-#include <svtools/table/abstracttablecontrol.hxx>
+#include "svtaccessiblefactory.hxx"
 
-#include <svtools/table/tablemodel.hxx>
-#include <vector>
 #include <vcl/seleng.hxx>
 
+#include <vector>
+
+#include <boost/scoped_ptr.hpp>
 
 class ScrollBar;
 class ScrollBarBox;
@@ -45,7 +47,42 @@ namespace svt { namespace table
 {
 //........................................................................
 
-    typedef ::std::vector< long >   ArrayOfLong;
+    struct MutableColumnMetrics : protected ColumnMetrics
+    {
+        MutableColumnMetrics()
+            :ColumnMetrics()
+        {
+        }
+
+        MutableColumnMetrics( long const i_startPixel, long const i_endPixel )
+            :ColumnMetrics( i_startPixel, i_endPixel )
+        {
+        }
+
+        long getStart() const { return nStartPixel; }
+        long getEnd() const { return nEndPixel; }
+
+        void setEnd( long const i_end ) { nEndPixel = i_end; }
+        void move( long const i_offset ) { nStartPixel += i_offset; nEndPixel += i_offset; }
+
+        long getWidth() const { return nEndPixel - nStartPixel; }
+
+        ColumnMetrics const & operator()() { return *this; }
+    };
+
+    struct ColumnInfoPositionLess
+    {
+        bool operator()( MutableColumnMetrics const& i_colInfo, long const i_position )
+        {
+            return i_colInfo.getEnd() < i_position;
+        }
+        bool operator()( long const i_position, MutableColumnMetrics const& i_colInfo )
+        {
+            return i_position < i_colInfo.getStart();
+        }
+    };
+
+    typedef ::std::vector< MutableColumnMetrics >    ColumnPositions;
 
     class TableControl;
     class TableDataWindow;
@@ -54,13 +91,14 @@ namespace svt { namespace table
     //====================================================================
     //= TableControl_Impl
     //====================================================================
-    class TableControl_Impl : public IAbstractTableControl
+    class TableControl_Impl :public ITableControl
+                            ,public ITableModelListener
     {
         friend class TableGeometry;
         friend class TableRowGeometry;
         friend class TableColumnGeometry;
         friend class SuspendInvariants;
-    friend class TableFunctionSet;
+
     private:
         /// the control whose impl-instance we implemnt
         TableControl&           m_rAntiImpl;
@@ -68,14 +106,9 @@ namespace svt { namespace table
         PTableModel             m_pModel;
         /// the input handler to use, usually the input handler as provided by ->m_pModel
         PTableInputHandler      m_pInputHandler;
-        /// the widths of the single columns, measured in pixel
-        ArrayOfLong             m_aColumnWidthsPixel;
-        /** the accumulated widths of the single columns, i.e. their exclusive right borders,
-            <strong<not</strong> counting the space for a possible row header column
-        */
-        ArrayOfLong             m_aAccColumnWidthsPixel;
+        /// info about the widths of our columns
+        ColumnPositions         m_aColumnWidths;
 
-    ArrayOfLong     m_aVisibleColumnWidthsPixel;
         /// the height of a single row in the table, measured in pixels
         long                    m_nRowHeightPixel;
         /// the height of the column header row in the table, measured in pixels
@@ -85,8 +118,12 @@ namespace svt { namespace table
 
         /// the number of columns in the table control. Cached model value.
         TableSize               m_nColumnCount;
+
         /// the number of rows in the table control. Cached model value.
         TableSize               m_nRowCount;
+
+        /// denotes whether or not the columns fitted into the available width, last time we checked
+        long                    m_bColumnsFit;
 
         ColPos                  m_nCurColumn;
         RowPos                  m_nCurRow;
@@ -100,24 +137,27 @@ namespace svt { namespace table
             The window's upper left corner is at position (0,0), relative to the
             table control, which is the direct parent of the data window.
         */
-        TableDataWindow*        m_pDataWindow;
+        ::boost::scoped_ptr< TableDataWindow >
+                                m_pDataWindow;
         /// the vertical scrollbar, if any
         ScrollBar*              m_pVScroll;
         /// the horizontal scrollbar, if any
-        ScrollBar*          m_pHScroll;
+        ScrollBar*              m_pHScroll;
         ScrollBarBox*           m_pScrollCorner;
-    //selection engine - for determining selection range, e.g. single, multiple
-    SelectionEngine*        m_pSelEngine;
-    //vector which contains the selected rows
-    std::vector<RowPos>     m_nRowSelected;
-    //part of selection engine
-    TableFunctionSet*       m_pTableFunctionSet;
-    //part of selection engine
-    RowPos              m_nAnchor;
-    bool            m_bResizing;
-    ColPos          m_nResizingColumn;
-    bool            m_bResizingGrid;
-    rtl::OUString   m_aTooltipText;
+        //selection engine - for determining selection range, e.g. single, multiple
+        SelectionEngine*        m_pSelEngine;
+        //vector which contains the selected rows
+        std::vector<RowPos>     m_aSelectedRows;
+        //part of selection engine
+        TableFunctionSet*       m_pTableFunctionSet;
+        //part of selection engine
+        RowPos                  m_nAnchor;
+        bool                    m_bUpdatingColWidths;
+
+        Link                    m_aSelectHdl;
+
+        AccessibleFactoryAccess     m_aFactoryAccess;
+        IAccessibleTableControl*    m_pAccessibleTable;
 
 #if DBG_UTIL
     #define INV_SCROLL_POSITION     1
@@ -130,21 +170,18 @@ namespace svt { namespace table
 #endif
 
     public:
-
-
-        PTableModel getModel() const;
         void        setModel( PTableModel _pModel );
 
         inline  const PTableInputHandler&   getInputHandler() const { return m_pInputHandler; }
 
-        inline  ColPos  getCurColumn() const    { return m_nCurColumn; }
-        inline  RowPos  getCurRow() const       { return m_nCurRow; }
-        inline  void    setCurRow(RowPos curRow){ m_nCurRow = curRow; }
-        inline  RowPos  getTopRow() const       { return m_nTopRow; }
-        inline  long    getRowCount() const     { return m_nRowCount; }
-        inline  long    getColumnCount() const  { return m_nColumnCount; }
+        inline  RowPos  getCurRow() const           { return m_nCurRow; }
+        inline  void    setCurRow( RowPos i_curRow ){ m_nCurRow = i_curRow; }
 
-        inline  long    getColHeaderHightPixel() const  { return m_nColHeaderHeightPixel; }
+        RowPos  getAnchor() const { return m_nAnchor; }
+        void    setAnchor( RowPos const i_anchor ) { m_nAnchor = i_anchor; }
+
+        inline  RowPos  getTopRow() const       { return m_nTopRow; }
+        inline  ColPos  getLeftColumn() const { return m_nLeftColumn; }
 
         inline  const TableControl&   getAntiImpl() const { return m_rAntiImpl; }
         inline        TableControl&   getAntiImpl()       { return m_rAntiImpl; }
@@ -182,45 +219,115 @@ namespace svt { namespace table
                 <TRUE/> if it's okay that the given cooordinate is only partially visible
         */
         void    ensureVisible( ColPos _nColumn, RowPos _nRow, bool _bAcceptPartialVisibility );
-    /** returns the row, which contains the input point*/
-    virtual RowPos  getCurrentRow (const Point& rPoint);
 
-    void setCursorAtCurrentCell(const Point& rPoint);
-    /** checks whether the vector with the selected rows contains the current row*/
-    BOOL    isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current);
+        /** retrieves the content of the given cell, converted to a string
+        */
+        ::rtl::OUString getCellContentAsString( RowPos const i_row, ColPos const i_col );
 
-    bool    isRowSelected(RowPos current);
-    /** returns the position of the current row in the selection vector */
-    int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
-    /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
-    void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
-    /** to be called when a new row is added to the control*/
-    void    invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect );
-    /** returns the vector, which contains the selected rows*/
-    std::vector<RowPos>& getSelectedRows();
-    /** updates the vector, which contains the selected rows after removing the row nRowPos*/
-    void    removeSelectedRow(RowPos _nRowPos);
-    void    invalidateRows();
-    void    clearSelection();
-        // IAbstractTableControl
-        virtual void    hideCursor();
-        virtual void    showCursor();
-        virtual bool    dispatchAction( TableControlAction _eAction );
-    virtual SelectionEngine* getSelEngine();
-    virtual bool isTooltipActive();
-    virtual rtl::OUString& setTooltip(const Point& rPoint );
-    virtual void resizeColumn(const Point& rPoint);
-    virtual bool startResizeColumn(const Point& rPoint);
-    virtual bool endResizeColumn(const Point& rPoint);
+        /** returns the position of the current row in the selection vector */
+        int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
 
-    TableDataWindow* getDataWindow();
-    ScrollBar* getHorzScrollbar();
-    ScrollBar* getVertScrollbar();
+        /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
+        void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
 
-    ::rtl::OUString convertToString(const ::com::sun::star::uno::Any& _value);
-    Rectangle calcHeaderRect(bool bColHeader);
-    Rectangle calcTableRect();
+        /** invalidates the part of the data window which is covered by the given row
+            @param i_firstRow
+                the index of the first row to include in the invalidation
+            @param i_lastRow
+                the index of the last row to include in the invalidation, or ROW_INVALID if the invalidation
+                should happen down to the bottom of the data window.
+        */
+        void    invalidateRowRange( RowPos const i_firstRow, RowPos const i_lastRow );
+
+        void    checkCursorPosition();
+
+        bool    hasRowSelection() const { return !m_aSelectedRows.empty(); }
+        size_t  getSelectedRowCount() const { return m_aSelectedRows.size(); }
+        RowPos  getSelectedRowIndex( size_t const i_selectionIndex ) const;
+
+        /** removes the given row index from m_aSelectedRows
+
+            @return
+                <TRUE/> if and only if the row was previously marked as selected
+        */
+        bool        markRowAsDeselected( RowPos const i_rowIndex );
+
+        /** marks the given row as selectged, by putting it into m_aSelectedRows
+            @return
+                <TRUE/> if and only if the row was previously <em>not</em> marked as selected
+        */
+        bool        markRowAsSelected( RowPos const i_rowIndex );
+
+        /** marks all rows as deselected
+            @return
+                <TRUE/> if and only if the selection actually changed by this operation
+        */
+        bool        markAllRowsAsDeselected();
+
+        /** marks all rows as selected
+            @return
+                <FALSE/> if and only if all rows were selected already.
+        */
+        bool        markAllRowsAsSelected();
+
+        void        setSelectHandler( Link const & i_selectHandler ) { m_aSelectHdl = i_selectHandler; }
+        Link const& getSelectHandler() const { return m_aSelectHdl; }
+
+        // ITableControl
+        virtual void                hideCursor();
+        virtual void                showCursor();
+        virtual bool                dispatchAction( TableControlAction _eAction );
+        virtual SelectionEngine*    getSelEngine();
+        virtual PTableModel         getModel() const;
+        virtual ColPos              getCurrentColumn() const;
+        virtual RowPos              getCurrentRow() const;
+        virtual bool                activateCell( ColPos const i_col, RowPos const i_row );
+        virtual ::Size              getTableSizePixel() const;
+        virtual void                setPointer( Pointer const & i_pointer );
+        virtual void                captureMouse();
+        virtual void                releaseMouse();
+        virtual void                invalidate( TableArea const i_what );
+        virtual long                pixelWidthToAppFont( long const i_pixels ) const;
+        virtual void                hideTracking();
+        virtual void                showTracking( Rectangle const & i_location, sal_uInt16 const i_flags );
+        virtual RowPos              getRowAtPoint( const Point& rPoint ) const;
+        virtual ColPos              getColAtPoint( const Point& rPoint ) const;
+        virtual TableCell           hitTest( const Point& rPoint ) const;
+        virtual ColumnMetrics       getColumnMetrics( ColPos const i_column ) const;
+        virtual bool                isRowSelected( RowPos i_row ) const;
+
+
+        TableDataWindow&        getDataWindow()       { return *m_pDataWindow; }
+        const TableDataWindow&  getDataWindow() const { return *m_pDataWindow; }
+        ScrollBar* getHorzScrollbar();
+        ScrollBar* getVertScrollbar();
+
+        Rectangle calcHeaderRect(bool bColHeader);
+        Rectangle calcTableRect();
+
+        // A11Y
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+                        getAccessible( Window& i_parentWindow );
+        void            disposeAccessible();
+
+        // ITableModelListener
+        virtual void    rowsInserted( RowPos first, RowPos last );
+        virtual void    rowsRemoved( RowPos first, RowPos last );
+        virtual void    columnInserted( ColPos const i_colIndex );
+        virtual void    columnRemoved( ColPos const i_colIndex );
+        virtual void    allColumnsRemoved();
+        virtual void    cellsUpdated( ColPos const i_firstCol, ColPos i_lastCol, RowPos const i_firstRow, RowPos const i_lastRow );
+        virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup );
+        virtual void    tableMetricsChanged();
+
     private:
+        bool            impl_isAccessibleAlive() const;
+        void            impl_commitAccessibleEvent(
+                            sal_Int16 const i_eventID,
+                            ::com::sun::star::uno::Any const & i_newValue,
+                            ::com::sun::star::uno::Any const & i_oldValue
+                        );
+
         /** toggles the cursor visibility
 
             The method is not bound to the classes public invariants, as it's used in
@@ -248,7 +355,7 @@ namespace svt { namespace table
                 specifies whether a possible only partially visible last row is
                 counted, too.
         */
-        TableSize   impl_getVisibleColumns( bool _bAcceptPartialRow ) const;
+        TableSize   impl_getVisibleColumns( bool _bAcceptPartialCol ) const;
 
         /** determines the rectangle occupied by the given cell
         */
@@ -261,15 +368,20 @@ namespace svt { namespace table
         */
         void        impl_ni_updateCachedModelValues();
 
-        /** updates ->m_aColumnWidthsPixel with the current pixel widths of all model columns
+        /** updates the cached table metrics (row height etc.)
+        */
+        void        impl_ni_updateCachedTableMetrics();
 
-            The method takes into account the current zoom factor and map mode of the table
-            control, plus any possible COLWIDTH_FIT_TO_VIEW widths in the model columns.
+        /** updates ->m_aColumnWidthsPixel with the current pixel widths of all model columns
 
             The method is not bound to the classes public invariants, as it's used in
             situations where the they must not necessarily be fullfilled.
+
+            @param i_assumeInflexibleColumnsUpToIncluding
+                the index of a column up to which all columns should be considered as inflexible, or
+                <code>COL_INVALID</code>.
         */
-        void        impl_ni_updateColumnWidths();
+        void        impl_ni_updateColumnWidths( ColPos const i_assumeInflexibleColumnsUpToIncluding = COL_INVALID );
 
         /** updates the scrollbars of the control
 
@@ -293,6 +405,10 @@ namespace svt { namespace table
         */
         TableSize   impl_ni_ScrollRows( TableSize _nRowDelta );
 
+        /** equivalent to impl_ni_ScrollRows, but checks the instances invariants beforehand (in a non-product build only)
+        */
+        TableSize   impl_scrollRows( TableSize const i_rowDelta );
+
         /** scrolls the view by the given number of columns
 
             The method is not bound to the classes public invariants, as it's used in
@@ -303,8 +419,13 @@ namespace svt { namespace table
                 from the given numbers to scroll in case the begin or the end of the
                 column range were reached.
         */
-        TableSize   impl_ni_ScrollColumns( TableSize _nRowDelta );
-            /** retrieves the area occupied by the totality of (at least partially) visible cells
+        TableSize   impl_ni_ScrollColumns( TableSize _nColumnDelta );
+
+        /** equivalent to impl_ni_ScrollColumns, but checks the instances invariants beforehand (in a non-product build only)
+        */
+        TableSize   impl_scrollColumns( TableSize const i_columnDelta );
+
+        /** retrieves the area occupied by the totality of (at least partially) visible cells
 
             The returned area includes row and column headers. Also, it takes into
             account the the fact that there might be less columns than would normally
@@ -313,27 +434,37 @@ namespace svt { namespace table
             As a result of respecting the partial visibility of rows and columns,
             the returned area might be larger than the data window's output size.
         */
-        void        impl_getAllVisibleCellsArea( Rectangle& _rCellArea ) const;
+        Rectangle   impl_getAllVisibleCellsArea() const;
 
         /** retrieves the area occupied by all (at least partially) visible data cells.
 
             Effectively, the returned area is the same as returned by ->impl_getAllVisibleCellsArea,
             minus the row and column header areas.
         */
-        void        impl_getAllVisibleDataCellArea( Rectangle& _rCellArea ) const;
+        Rectangle   impl_getAllVisibleDataCellArea() const;
 
-        void impl_ni_getAccVisibleColWidths();
-        void impl_updateLeftColumn();
+        /** retrieves the column which covers the given ordinate
+        */
+        ColPos      impl_getColumnForOrdinate( long const i_ordinate ) const;
+
+        /** retrieves the row which covers the given abscissa
+        */
+        RowPos      impl_getRowForAbscissa( long const i_abscissa ) const;
+
+        /// invalidates the window area occupied by the given column
+        void        impl_invalidateColumn( ColPos const i_column );
 
         DECL_LINK( OnScroll, ScrollBar* );
+        DECL_LINK( OnUpdateScrollbars, void* );
     };
+
     //see seleng.hxx, seleng.cxx, FunctionSet overridables, part of selection engine
     class TableFunctionSet : public FunctionSet
     {
-        friend class TableDataWindow;
     private:
-        TableControl_Impl* m_pTableControl;
-        RowPos m_nCurrentRow;
+        TableControl_Impl*  m_pTableControl;
+        RowPos              m_nCurrentRow;
+
     public:
         TableFunctionSet(TableControl_Impl* _pTableControl);
         virtual ~TableFunctionSet();
@@ -341,8 +472,8 @@ namespace svt { namespace table
        virtual void BeginDrag();
        virtual void CreateAnchor();
        virtual void DestroyAnchor();
-       virtual BOOL SetCursorAtPoint(const Point& rPoint, BOOL bDontSelectAtCursor);
-       virtual BOOL IsSelectionAtPoint( const Point& rPoint );
+       virtual sal_Bool SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelectAtCursor);
+       virtual sal_Bool IsSelectionAtPoint( const Point& rPoint );
        virtual void DeselectAtPoint( const Point& rPoint );
        virtual void DeselectAll();
     };

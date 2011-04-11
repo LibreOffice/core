@@ -83,8 +83,6 @@ namespace util
 
   void ExternalViewLoggerImpl::endTree()
   {
-    //dumpNodeContainer(mFileName + string(".dmp"));
-
     mFile << "digraph {" << endl;
     mFile << "Root [shape=box, color=grey];" << endl;
 

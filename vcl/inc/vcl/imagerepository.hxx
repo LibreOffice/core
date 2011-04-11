@@ -59,7 +59,12 @@ namespace vcl
         static bool loadImage(
             const ::rtl::OUString& _rName,
             BitmapEx& _out_rImage,
-            bool bSearchLanguageDependent
+            bool bSearchLanguageDependent,
+            bool loadMissing = false
+        );
+
+        static bool loadDefaultImage(
+            BitmapEx& _out_rImage
         );
     };
 

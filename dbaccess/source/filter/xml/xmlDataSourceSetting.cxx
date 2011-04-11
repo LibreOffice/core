@@ -73,7 +73,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
             case XML_TOK_DATA_SOURCE_SETTING_IS_LIST:
-                m_bIsList = sValue.equalsAscii("true");
+                m_bIsList = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true"));
                 break;
             case XML_TOK_DATA_SOURCE_SETTING_TYPE:
                 {
@@ -220,7 +220,7 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
             }
         case TypeClass_HYPER:
         {
-            OSL_ENSURE(sal_False, "OXMLDataSourceSetting::convertString: 64-bit integers not implemented yet!");
+            OSL_FAIL("OXMLDataSourceSetting::convertString: 64-bit integers not implemented yet!");
         }
         break;
         case TypeClass_DOUBLE:
@@ -241,7 +241,7 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
             aReturn <<= _rReadCharacters;
             break;
         default:
-            OSL_ENSURE(sal_False, "OXMLDataSourceSetting::convertString: invalid type class!");
+            OSL_FAIL("OXMLDataSourceSetting::convertString: invalid type class!");
     }
 
     return aReturn;

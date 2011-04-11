@@ -30,7 +30,8 @@
 #include "precompiled_rsc.hxx"
 #include <rschash.hxx>
 
-using namespace rtl;
+using ::rtl::OString;
+using ::rtl::OStringHash;
 
 AtomContainer::AtomContainer()
 {
@@ -46,7 +47,7 @@ AtomContainer::~AtomContainer()
 Atom AtomContainer::getID( const OString& rStr, bool bOnlyIfExists )
 {
     OString aKey = rStr.toAsciiLowerCase();
-    std::hash_map< OString, Atom, OStringHash >::const_iterator it =
+    boost::unordered_map< OString, Atom, OStringHash >::const_iterator it =
         m_aStringToID.find( aKey );
     if( it != m_aStringToID.end() )
         return it->second;
@@ -63,7 +64,7 @@ Atom AtomContainer::getID( const OString& rStr, bool bOnlyIfExists )
 
 const OString& AtomContainer::getString( Atom nAtom )
 {
-    std::hash_map< Atom, OString >::const_iterator it =
+    boost::unordered_map< Atom, OString >::const_iterator it =
         m_aIDToString.find( nAtom );
     return (it != m_aIDToString.end()) ? it->second : m_aIDToString[0];
 }

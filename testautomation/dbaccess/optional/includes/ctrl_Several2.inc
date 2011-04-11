@@ -293,7 +293,7 @@ testcase tImageControl
         sleep(2)
     '/// set HelpURL 
         printlog "set HelpURL"
-        fsetControlProperty("ImageControl","HelpURL","HID:1234567")    
+        fsetControlProperty("ImageControl","HelpURL","customcontrol2")
     '/// save the document
         printlog "save the document"
         hFileSaveAsKill ( gOfficePath + ConvertPath("user/work/TT_ImageControl.odt"))
@@ -315,7 +315,7 @@ testcase tImageControl
     Kontext "TabGeneralControl"	
         dim bScrOK as boolean       'control variable if all properties are correct
         bScrOK = true           
-    if fgetControlProperty("ImageControl","HelpURL") <> "HID:1234567" then
+    if fgetControlProperty("ImageControl","HelpURL") <> "customcontrol2" then
         warnlog "the imagecontrol is not saved with property: HelpURL"
         bScrOK = false
     endif

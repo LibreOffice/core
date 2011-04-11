@@ -53,14 +53,8 @@ TYPEINIT1(PresentationViewShellBase, ViewShellBase);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new PresentationViewShellBase object has been constructed.
 
-/*
-SFX_IMPL_VIEWFACTORY(PresentationViewShellBase, SdResId(STR_DEFAULTVIEW))
-{
-    SFX_VIEW_REGISTRATION(DrawDocShell);
-}
-*/
 SfxViewFactory* PresentationViewShellBase::pFactory;
-SfxViewShell* __EXPORT PresentationViewShellBase::CreateInstance (
+SfxViewShell* PresentationViewShellBase::CreateInstance (
     SfxViewFrame *_pFrame, SfxViewShell *pOldView)
 {
     PresentationViewShellBase* pBase =
@@ -68,7 +62,7 @@ SfxViewShell* __EXPORT PresentationViewShellBase::CreateInstance (
     pBase->LateInit(framework::FrameworkHelper::msPresentationViewURL);
     return pBase;
 }
-void PresentationViewShellBase::RegisterFactory( USHORT nPrio )
+void PresentationViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"FullScreenPresentation");
@@ -98,12 +92,12 @@ PresentationViewShellBase::PresentationViewShellBase (
         if (xFrameSet.is())
         {
             Reference<beans::XPropertySet> xLayouterSet (
-                xFrameSet->getPropertyValue(::rtl::OUString::createFromAscii("LayoutManager")),
+                xFrameSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))),
                 UNO_QUERY);
             if (xLayouterSet.is())
             {
                 xLayouterSet->setPropertyValue(
-                    ::rtl::OUString::createFromAscii("AutomaticToolbars"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutomaticToolbars")),
                     makeAny(sal_False));
             }
         }
@@ -116,7 +110,6 @@ PresentationViewShellBase::PresentationViewShellBase (
 PresentationViewShellBase::~PresentationViewShellBase (void)
 {
 }
-
 
 
 

@@ -37,7 +37,7 @@
 
 //=============================================================================
 
-/** Execution of the XCommand animation node causes the slideshow component
+/** Execution of the XCommand animation node causes the slide show component
     to call back the application to perform the command.
 */
 interface XCommand : XAnimationNode

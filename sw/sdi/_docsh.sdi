@@ -121,15 +121,9 @@ interface BaseTextDocument
         StateMethod = GetState ;
     ]
 
-    SID_BROWSER_MODE
+    SID_MAIL_PREPAREEXPORT
     [
-        ExecMethod = Execute;
-        StateMethod = GetState;
-    ]
-
-    FN_PRINT_LAYOUT
-    [
-        ExecMethod = Execute;
+        ExecMethod = Execute ;
         StateMethod = GetState;
     ]
 }

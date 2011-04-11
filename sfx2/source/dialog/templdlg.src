@@ -42,22 +42,11 @@ ImageList DLG_STYLE_DESIGNER
     };
     IdCount = { 3 ; };
 };
-ImageList IMG_LST_STYLE_DESIGNER_HC
-{
-    Prefix = "sch";
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-    IdList =
-    {
-        SID_STYLE_WATERCAN ;
-        SID_STYLE_NEW_BY_EXAMPLE ;
-        SID_STYLE_UPDATE_BY_EXAMPLE ;
-    };
-    IdCount = { 3 ; };
-};
+
  // RID_STYLECATALOG ------------------------------------------------------
 ModalDialog RID_STYLECATALOG
 {
-    HelpId = SID_STYLE_CATALOG ;
+    HelpId = CMD_SID_STYLE_CATALOG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 181 , 134 ) ;
@@ -78,6 +67,7 @@ ModalDialog RID_STYLECATALOG
     };
     PushButton BT_ORG
     {
+        HelpID = "sfx2:PushButton:RID_STYLECATALOG:BT_ORG";
         Pos = MAP_APPFONT ( 123 , 97 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Organizer..." ;
@@ -85,6 +75,7 @@ ModalDialog RID_STYLECATALOG
     };
     PushButton BT_DEL
     {
+        HelpID = "sfx2:PushButton:RID_STYLECATALOG:BT_DEL";
         Pos = MAP_APPFONT ( 123 , 78 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete..." ;
@@ -92,6 +83,7 @@ ModalDialog RID_STYLECATALOG
     };
     PushButton BT_EDIT
     {
+        HelpID = "sfx2:PushButton:RID_STYLECATALOG:BT_EDIT";
         Pos = MAP_APPFONT ( 123 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Modify..." ;
@@ -99,6 +91,7 @@ ModalDialog RID_STYLECATALOG
     };
     PushButton BT_NEW
     {
+        HelpID = "sfx2:PushButton:RID_STYLECATALOG:BT_NEW";
         Pos = MAP_APPFONT ( 123 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~New..." ;
@@ -112,6 +105,7 @@ ModalDialog RID_STYLECATALOG
     };
     ListBox BT_TOOL
     {
+        HelpID = "sfx2:ListBox:RID_STYLECATALOG:BT_TOOL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 110 , 55 ) ;
@@ -128,6 +122,7 @@ ModalDialog RID_STYLECATALOG
     };
     ListBox BT_FLIST
     {
+        HelpID = "sfx2:ListBox:RID_STYLECATALOG:BT_FLIST";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 114 ) ;
         Size = MAP_APPFONT ( 110 , 77 ) ;
@@ -136,17 +131,23 @@ ModalDialog RID_STYLECATALOG
         DropDown = TRUE ;
     };
 };
+
  // Strings ---------------------------------------------------------------
+String STR_STYLE_ELEMTLIST
+{
+    Text [ en-US ] = "Style List" ;
+};
 String STR_STYLE_FILTER_HIERARCHICAL
 {
     Text [ en-US ] = "Hierarchical" ;
 };
+
  // DLG_STYLE_DESIGNER ----------------------------------------------------
 DockingWindow DLG_STYLE_DESIGNER
 {
     Text [ en-US ] = "Styles and Formatting" ;
 
-    HelpId = SID_STYLE_DESIGNER ;
+    HelpId = CMD_SID_STYLE_DESIGNER ;
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -157,7 +158,6 @@ DockingWindow DLG_STYLE_DESIGNER
     Sizeable = TRUE ;
     Dockable = TRUE ;
     EnableResizing = TRUE ;
-     // HideWhenDeactivate = TRUE;
     Border = TRUE ;
     Moveable = TRUE ;
     ToolBox TB_ACTION

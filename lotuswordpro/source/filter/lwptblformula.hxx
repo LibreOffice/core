@@ -202,7 +202,7 @@ public:
     LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     ~LwpFormulaInfo();
     sal_Bool IsFormula(){return sal_True;}
-    void SetRow(USHORT nRow){ m_nFormulaRow = nRow;}
+    void SetRow(sal_uInt16 nRow){ m_nFormulaRow = nRow;}
     String Convert(LwpTableLayout* pCellsMap);
     void Convert(XFCell * pCell, LwpTableLayout* pCellsMap);
 protected:
@@ -218,7 +218,7 @@ private:
     sal_Bool ReadConst();
     void MarkUnsupported(sal_uInt16 TokenType);
 
-    USHORT m_nFormulaRow;
+    sal_uInt16 m_nFormulaRow;
 };
 
 #endif

@@ -101,7 +101,7 @@ osl::Mutex* SfxPickList::GetOrCreateMutex()
     return pMutex;
 }
 
-void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const String& aURLString, sal_uInt32 nNo )
+void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const String& aURLString, sal_uInt32 nNo )
 {
     String aPickEntry;
 
@@ -125,8 +125,6 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const St
         // Do handle file URL differently => convert it to a system
         // path and abbreviate it with a special function:
         String aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
-
-//      ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURLString, aPhysicalName );
 
         ::rtl::OUString aSystemPath( aFileSystemPath );
         ::rtl::OUString aCompactedSystemPath;
@@ -220,7 +218,7 @@ void SfxPickList::CreatePickListEntries()
 {
     RemovePickListEntries();
 
-    // Einlesen der Pickliste
+    // Reading the pick list
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
 
     sal_uInt32 nCount   = seqPicklist.getLength();
@@ -293,8 +291,8 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
     {
         PickListEntry* pEntry = GetPickListEntry( i );
 
-        pMenu->InsertItem( (USHORT)(START_ITEMID_PICKLIST + i), aEmptyString );
-        CreatePicklistMenuTitle( pMenu, (USHORT)(START_ITEMID_PICKLIST + i), pEntry->aName, i );
+        pMenu->InsertItem( (sal_uInt16)(START_ITEMID_PICKLIST + i), aEmptyString );
+        CreatePicklistMenuTitle( pMenu, (sal_uInt16)(START_ITEMID_PICKLIST + i), pEntry->aName, i );
     }
 
     bPickListMenuInitializing = sal_False;
@@ -315,7 +313,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
         String aFilter( pPick->aFilter );
         aGuard.clear();
 
-        USHORT nPos=aFilter.Search('|');
+        sal_uInt16 nPos=aFilter.Search('|');
         if( nPos != STRING_NOTFOUND )
         {
             String aOptions(aFilter.Copy( nPos ).GetBuffer()+1);
@@ -329,7 +327,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
     }
 }
 
-void SfxPickList::ExecuteMenuEntry( USHORT nId )
+void SfxPickList::ExecuteMenuEntry( sal_uInt16 nId )
 {
     ExecuteEntry( (sal_uInt32)( nId - START_ITEMID_PICKLIST ) );
 }
@@ -357,7 +355,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.IsA( TYPE( SfxEventHint )))
     {
         SfxEventHint* pEventHint = PTR_CAST(SfxEventHint,&rHint);
-        // nur ObjectShell-bezogene Events mit Medium interessieren
+        // only ObjectShell-related events with media interest
         SfxObjectShell* pDocSh = pEventHint->GetObjShell();
         if( !pDocSh )
             return;
@@ -393,12 +391,12 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if( !pMed )
                     return;
 
-                // unbenannt-Docs und embedded-Docs nicht in History
+                // Unnamed Documents and embedded-Documents not in History
                 if ( !pDocSh->HasName() ||
                      SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
                     return;
 
-                // Hilfe nicht in History
+                // Help not in History
                 INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
                 if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
                     return;
@@ -424,12 +422,12 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if( !pMed )
                     return;
 
-                // unbenannt-Docs und embedded-Docs nicht in Pickliste
+                // Unnamed Documents and embedded-Documents not im Pickliste
                 if ( !pDocSh->HasName() ||
                      SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
                     return;
 
-                // Hilfe nicht in History
+                // Help not in History
                 INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
                 if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
                     return;
@@ -447,7 +445,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     return;
 
                 // ignore hidden documents
-                if ( !SfxViewFrame::GetFirst( pDocSh, TRUE ) )
+                if ( !SfxViewFrame::GetFirst( pDocSh, sal_True ) )
                     return;
 
                 ::rtl::OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);

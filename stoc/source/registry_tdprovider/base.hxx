@@ -62,13 +62,14 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 using namespace std;
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::reflection;
+
+using ::rtl::OUString;
 
 //--------------------------------------------------------------------------------------------------
 
@@ -134,7 +135,7 @@ inline sal_Int32 getRTValueAsInt32( const RTConstValue & rVal )
     case RT_TYPE_UINT32:
         return rVal.m_value.aULong;
     default:
-        OSL_ENSURE( sal_False, "### unexpected value type!" );
+        OSL_FAIL( "### unexpected value type!" );
         return 0;
     }
 }
@@ -169,7 +170,7 @@ inline Any getRTValue( const RTConstValue & rVal )
         return Any( &aStr, ::getCppuType( (const OUString *)0 ) );
     }
     default:
-        OSL_ENSURE( sal_False, "### unexpected RTValue!" );
+        OSL_FAIL( "### unexpected RTValue!" );
         return Any();
     }
 }

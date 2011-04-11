@@ -57,8 +57,9 @@
 
 #include <stdio.h>
 
-#ifdef KDE_HAVE_GLIB
 #if QT_VERSION >= QT_VERSION_CHECK( 4, 8, 0 )
+#define QT_UNIX_EVENT_LOOP_SUPPORT
+#ifdef KDE_HAVE_GLIB
 #define GLIB_EVENT_LOOP_SUPPORT
 #endif
 #endif
@@ -130,7 +131,7 @@ void KDEXLib::Init()
     //kAboutData->setProgramIconName("OpenOffice");
 
     m_nFakeCmdLineArgs = 2;
-    USHORT nIdx;
+    sal_uInt16 nIdx;
 
     int nParams = osl_getCommandArgCount();
     rtl::OString aDisplay;
@@ -139,7 +140,7 @@ void KDEXLib::Init()
     for ( nIdx = 0; nIdx < nParams; ++nIdx )
     {
         osl_getCommandArg( nIdx, &aParam.pData );
-        if ( !m_pFreeCmdLineArgs && aParam.equalsAscii( "-display" ) && nIdx + 1 < nParams )
+        if ( !m_pFreeCmdLineArgs && aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-display" ) ) && nIdx + 1 < nParams )
         {
             osl_getCommandArg( nIdx + 1, &aParam.pData );
             aDisplay = rtl::OUStringToOString( aParam, osl_getThreadTextEncoding() );
@@ -168,9 +169,6 @@ void KDEXLib::Init()
 
     KCmdLineArgs::init( m_nFakeCmdLineArgs, m_pAppCmdLineArgs, kAboutData );
 
-#if QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 )
-    QApplication::setGraphicsSystem( "native" ); // fdo#30991
-#endif
     m_pApplication = new VCLKDEApplication();
     kapp->disableSessionManagement();
     KApplication::setQuitOnLastWindowClosed(false);
@@ -187,7 +185,7 @@ void KDEXLib::Init()
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
     XSync( pDisp, False );
 
-    pKbdExtension->UseExtension( ! HasXErrorOccured() );
+    pKbdExtension->UseExtension( ! HasXErrorOccurred() );
     PopXErrorLevel();
 
     pSalDisplay->SetKbdExtension( pKbdExtension );
@@ -204,6 +202,22 @@ void KDEXLib::Init()
 static GPollFunc old_gpoll = NULL;
 static gint gpoll_wrapper( GPollFD*, guint, gint );
 #endif
+#ifdef QT_UNIX_EVENT_LOOP_SUPPORT
+static int (*qt_select)(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
+   const struct timeval *orig_timeout);
+static int lo_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
+   const struct timeval *orig_timeout);
+#endif
+
+static bool ( *old_qt_event_filter )( void* );
+static bool qt_event_filter( void* m )
+{
+    if( old_qt_event_filter != NULL && old_qt_event_filter( m ))
+        return true;
+    if( SalKDEDisplay::self() && SalKDEDisplay::self()->checkDirectInputEvent( static_cast< XEvent* >( m )))
+        return true;
+    return false;
+}
 
 static bool ( *old_qt_event_filter )( void* );
 static bool qt_event_filter( void* m )
@@ -235,7 +249,24 @@ void KDEXLib::setupEventLoop()
         return;
     }
 #endif
-    // TODO handle also Qt's own event loop (requires fixing Qt too)
+#ifdef QT_UNIX_EVENT_LOOP_SUPPORT
+// When Qt does not use Glib support, it uses its own Unix event dispatcher.
+// That one has aboutToBlock() and awake() signals, but they are broken (either
+// functionality or semantics), as e.g. awake() is not emitted right after the dispatcher
+// is woken up from sleep again, but only later (which is too late for re-acquiring SolarMutex).
+// This should be fixed with Qt-4.8.0 (?) where support for adding custom select() function
+// has been added too (http://bugreports.qt.nokia.com/browse/QTBUG-16934).
+    if( QAbstractEventDispatcher::instance()->inherits( "QEventDispatcherUNIX" ))
+    {
+        eventLoopType = QtUnixEventLoop;
+        QInternal::callFunction( QInternal::GetUnixSelectFunction, reinterpret_cast< void** >( &qt_select ));
+        QInternal::callFunction( QInternal::SetUnixSelectFunction, reinterpret_cast< void** >( lo_select ));
+        // set QClipboard to use event loop, otherwise the main thread will hold
+        // SolarMutex locked, which will prevent the clipboard thread from answering
+        m_pApplication->clipboard()->setProperty( "useEventLoopWhenWaiting", true );
+        return;
+    }
+#endif
 }
 
 #ifdef GLIB_EVENT_LOOP_SUPPORT
@@ -243,6 +274,15 @@ gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
 {
     YieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
     return old_gpoll( ufds, nfds, timeout );
+}
+#endif
+
+#ifdef QT_UNIX_EVENT_LOOP_SUPPORT
+int lo_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
+   const struct timeval *orig_timeout)
+{
+    YieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
+    return qt_select( nfds, fdread, fdwrite, fdexcept, orig_timeout );
 }
 #endif
 
@@ -315,7 +355,7 @@ bool KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
     return wasEvent;
 }
 
-void KDEXLib::StartTimer( ULONG nMS )
+void KDEXLib::StartTimer( sal_uLong nMS )
 {
     if( eventLoopType == LibreOfficeEventLoop )
         return SalXLib::StartTimer( nMS );

@@ -34,7 +34,7 @@
 #include <utility>
 #include <vector>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
@@ -138,7 +138,7 @@ bool ImplImageTree::checkStyle(rtl::OUString const & style)
         // skip brand-specific icon themes; they are incomplete and thus not useful for this check
         if (nFromIndex < 0 || !aZipURL.match(sBrandURLSuffix, nFromIndex)) {
             osl::File aZip(aZipURL);
-            if (aZip.open(OpenFlag_Read) == ::osl::FileBase::E_None) {
+            if (aZip.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
                 aZip.close();
                 exists = true;
             }
@@ -150,6 +150,41 @@ bool ImplImageTree::checkStyle(rtl::OUString const & style)
 }
 
 bool ImplImageTree::loadImage(
+    rtl::OUString const & name, rtl::OUString const & style, BitmapEx & bitmap,
+    bool localized, bool loadMissing )
+{
+    bool found = false;
+    try {
+        found = doLoadImage(name, style, bitmap, localized);
+    } catch (css::uno::RuntimeException &) {
+        if (!loadMissing)
+            throw;
+    }
+    if (found || !loadMissing)
+        return found;
+
+    try {
+        OSL_TRACE(
+            "ImplImageTree::loadImage exception couldn't load \"%s\", fetching missing_icon.png",
+            rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
+        found = loadDefaultImage(style, bitmap);
+    } catch (css::uno::RuntimeException &) {
+        throw;
+    }
+    return found;
+}
+
+bool ImplImageTree::loadDefaultImage(
+    rtl::OUString const & style,
+    BitmapEx& bitmap)
+{
+    return doLoadImage(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("res/grafikde.png")),
+        style, bitmap, false);
+}
+
+
+bool ImplImageTree::doLoadImage(
     rtl::OUString const & name, rtl::OUString const & style, BitmapEx & bitmap,
     bool localized)
 {
@@ -273,7 +308,7 @@ void ImplImageTree::resetZips() {
                 u.GetMainURL(INetURLObject::NO_DECODE),
                 css::uno::Reference< css::container::XNameAccess >()));
     }
-    if ( m_style.equals(::rtl::OUString::createFromAscii("default")) )
+    if ( m_style.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default"))) )
     {
         rtl::OUString url(
             RTL_CONSTASCII_USTRINGPARAM(

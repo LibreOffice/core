@@ -41,7 +41,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::linguistic2;
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -49,7 +50,7 @@ TextConversion_zh::TextConversion_zh( const Reference < XMultiServiceFactory >& 
 {
     Reference < XInterface > xI;
     xI = xMSF->createInstance(
-        OUString::createFromAscii( "com.sun.star.linguistic2.ConversionDictionaryList" ));
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ConversionDictionaryList")));
     if ( xI.is() )
         xI->queryInterface( getCppuType((const Reference< XConversionDictionaryList>*)0) ) >>= xCDL;
 
@@ -242,7 +243,7 @@ TextConversion_zh::getConversion( const OUString& aText, sal_Int32 nStartPos, sa
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
-    if (rLocale.Language.equalsAscii("zh") &&
+    if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) &&
             ( nConversionType == TextConversionType::TO_SCHINESE ||
             nConversionType == TextConversionType::TO_TCHINESE) ) {
 
@@ -266,7 +267,7 @@ TextConversion_zh::getConversionWithOffset( const OUString& aText, sal_Int32 nSt
     const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions, Sequence<sal_Int32>& offset)
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
-    if (rLocale.Language.equalsAscii("zh") &&
+    if (rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) &&
             ( nConversionType == TextConversionType::TO_SCHINESE ||
             nConversionType == TextConversionType::TO_TCHINESE) ) {
 

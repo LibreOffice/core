@@ -41,7 +41,7 @@ module com { module sun { module star { module ui {
 /** supplies functions to change or get information about the storage
     of a user interface configuration manager.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 interface XUIConfigurationStorage : ::com::sun::star::uno::XInterface

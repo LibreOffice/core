@@ -39,7 +39,7 @@
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include "metadata.hxx"
 
 //........................................................................
@@ -47,7 +47,6 @@ namespace rptui
 {
 //........................................................................
 using namespace ::com::sun::star;
-// using namespace comphelper;
 
 ReportComponentHandler::ReportComponentHandler(uno::Reference< uno::XComponentContext > const & context)
     :ReportComponentHandler_Base(m_aMutex)

@@ -40,7 +40,6 @@ using namespace connectivity;
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -65,7 +64,7 @@ Reference< XPropertySet > OGroups::createDescriptor()
 // XAppend
 sdbcx::ObjectType OGroups::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& /*descriptor*/ )
 {
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE USERGROUP ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "CREATE USERGROUP " ));
     ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
 
     aSql = aSql + aQuote + _rForName + aQuote;
@@ -80,7 +79,7 @@ sdbcx::ObjectType OGroups::appendObject( const ::rtl::OUString& _rForName, const
 // XDrop
 void OGroups::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
 {
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP USERGROUP ");
+    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP USERGROUP " ));
     ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
 
     aSql = aSql + aQuote + _sElementName + aQuote;

@@ -46,7 +46,7 @@
 
 //------------------------------------------------------------------------
 
-ScNavigatorControllerItem::ScNavigatorControllerItem( USHORT          nIdP,
+ScNavigatorControllerItem::ScNavigatorControllerItem( sal_uInt16          nIdP,
                                                       ScNavigatorDlg& rDlg,
                                                       SfxBindings&    rBindings )
     :   SfxControllerItem   ( nIdP, rBindings ),
@@ -56,7 +56,7 @@ ScNavigatorControllerItem::ScNavigatorControllerItem( USHORT          nIdP,
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScNavigatorControllerItem::StateChanged( USHORT /* nSID */, SfxItemState /* eState */,
+void ScNavigatorControllerItem::StateChanged( sal_uInt16 /* nSID */, SfxItemState /* eState */,
                                                           const SfxPoolItem* pItem )
 {
     switch( GetId() )
@@ -64,7 +64,6 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( USHORT /* nSID */, SfxIte
         case SID_CURRENTCELL:
             if ( pItem )
             {
-//              const SfxPointItem* pCellPosItem = PTR_CAST(SfxPointItem, pItem);
                 const SfxStringItem* pCellPosItem = PTR_CAST(SfxStringItem, pItem);
 
                 DBG_ASSERT( pCellPosItem, "SfxStringItem expected!" );
@@ -77,9 +76,6 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( USHORT /* nSID */, SfxIte
 
                     SCCOL nCol = aScAddress.Col()+1;
                     SCROW nRow = aScAddress.Row()+1;
-
-//                  SCCOL nCol = (USHORT)pCellPosItem->GetValue().X()+1;
-//                  SCROW nRow = (USHORT)pCellPosItem->GetValue().Y()+1;
 
                     rNavigatorDlg.UpdateColumn( &nCol );
                     rNavigatorDlg.UpdateRow   ( &nRow );

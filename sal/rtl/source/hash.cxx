@@ -113,10 +113,9 @@ rtl_str_hash_insert_nonequal (StringHashTable   *pHash,
 {
     sal_uInt32  nHash = hashString (pString);
     sal_uInt32  n;
-    rtl_uString *pHashStr;
 
     n = nHash % pHash->nSize;
-    while ((pHashStr = pHash->pData[n]) != NULL) {
+    while (pHash->pData[n] != NULL) {
         n++;
         if (n >= pHash->nSize)
             n = 0;

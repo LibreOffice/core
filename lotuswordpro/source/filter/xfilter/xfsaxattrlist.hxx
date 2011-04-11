@@ -57,10 +57,6 @@
  * @file
  * Wrapper the attibute list of a xml element.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
 #ifndef     _XFSAXATTRLIST_HXX
 #define     _XFSAXATTRLIST_HXX
 
@@ -84,7 +80,7 @@ public:
 
     virtual void    Clear();
 
-    Reference<XAttributeList>   GetAttributeList();
+    Reference<XAttributeList>   GetAttributeList() const;
 
     friend class XFSaxStream;
 private:
@@ -93,7 +89,7 @@ private:
 
 };
 
-inline Reference<XAttributeList>    XFSaxAttrList::GetAttributeList()
+inline Reference<XAttributeList>    XFSaxAttrList::GetAttributeList() const
 {
     return m_xAttrList;
 }

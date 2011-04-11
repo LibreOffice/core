@@ -35,7 +35,6 @@
 
 #include "migration.hxx"
 #include "migration_impl.hxx"
-#include "cfgfilter.hxx"
 
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
@@ -66,7 +65,6 @@
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 
-using namespace rtl;
 using namespace osl;
 using namespace std;
 using namespace com::sun::star::task;
@@ -76,6 +74,9 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::container;
 using com::sun::star::uno::Exception;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 namespace desktop {
 
@@ -111,7 +112,7 @@ static const ::rtl::OUString MIGRATION_STAMP_NAME(RTL_CONSTASCII_USTRINGPARAM("/
                 {
                     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
                     {
-                        if ( aPropSeq[i].Name.equalsAscii( "Label" ))
+                        if ( aPropSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Label" ) ))
                         {
                             aPropSeq[i].Value >>= aStr;
                             break;
@@ -134,19 +135,6 @@ static const ::rtl::OUString MIGRATION_STAMP_NAME(RTL_CONSTASCII_USTRINGPARAM("/
     }
 
     return sLabel;
-}
-
-::rtl::OUString stripHotKey( const ::rtl::OUString& str )
-{
-    sal_Int32 index = str.indexOf( '~' );
-    if ( index == -1 )
-    {
-        return str;
-    }
-    else
-    {
-        return str.replaceAt( index, 1, ::rtl::OUString() );
-    }
 }
 
 ::rtl::OUString mapModuleShortNameToIdentifier(const ::rtl::OUString& sShortName)
@@ -243,9 +231,10 @@ void Migration::migrateSettingsIfNecessary()
     {
         OString aMsg("doMigration() exception: ");
         aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+        OSL_FAIL(aMsg.getStr());
     }
     OSL_ENSURE(bResult, "Migration has not been successfull");
+    (void)bResult;
 }
 
 MigrationImpl::MigrationImpl(const uno::Reference< XMultiServiceFactory >& xFactory)
@@ -345,7 +334,7 @@ sal_Bool MigrationImpl::doMigration()
         OString aMsg("An unexpected exception was thrown during migration");
         aMsg += "\nOldVersion: " + OUStringToOString(m_aInfo.productname, RTL_TEXTENCODING_ASCII_US);
         aMsg += "\nDataPath  : " + OUStringToOString(m_aInfo.userdata, RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+        OSL_FAIL(aMsg.getStr());
     }
 
     // prevent running the migration multiple times
@@ -360,7 +349,7 @@ void MigrationImpl::refresh()
     if (xRefresh.is())
         xRefresh->refresh();
     else
-        OSL_ENSURE(sal_False, "could not get XRefresh interface from default config provider. No refresh done.");
+        OSL_FAIL("could not get XRefresh interface from default config provider. No refresh done.");
 
 }
 
@@ -465,7 +454,6 @@ migrations_vr MigrationImpl::readMigrationSteps(const ::rtl::OUString& rMigratio
     {
         // get current migration step
         theNameAccess->getByName(seqMigrations[i]) >>= tmpAccess;
-        // tmpStepPtr = new migration_step();
         migration_step tmpStep;
         tmpStep.name = seqMigrations[i];
 
@@ -635,9 +623,9 @@ strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& 
             end = (xub_StrLen)(i_set->getLength());
             if (ts.SearchFrwrd(*i_set, &start, &end))
                 vrResult->push_back(*i_set);
-            i_set++;
+            ++i_set;
         }
-        i_pat++;
+        ++i_pat;
     }
     return vrResult;
 }
@@ -674,7 +662,7 @@ strings_vr MigrationImpl::getAllFiles(const OUString& baseURL) const
         {
             vrSubResult = getAllFiles(*i);
             vrResult->insert(vrResult->end(), vrSubResult->begin(), vrSubResult->end());
-            i++;
+            ++i;
         }
     }
     return vrResult;
@@ -704,7 +692,7 @@ strings_vr MigrationImpl::compileFileList()
         vrExclude = applyPatterns(*vrFiles, i_migr->excludeFiles);
         subtract(*vrInclude, *vrExclude);
         vrResult->insert(vrResult->end(), vrInclude->begin(), vrInclude->end());
-        i_migr++;
+        ++i_migr;
     }
     return vrResult;
 }
@@ -838,9 +826,9 @@ void MigrationImpl::subtract(strings_v& va, const strings_v& vb_c) const
                 break;
             }
             else
-                i_in++;
+                ++i_in;
         }
-        i_ex++;
+        ++i_ex;
     }
 }
 
@@ -871,7 +859,7 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
     } catch (com::sun::star::uno::Exception& e)
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, aMsg.getStr());
+        OSL_FAIL(aMsg.getStr());
     }
     return xNameAccess;
 }
@@ -901,14 +889,14 @@ void MigrationImpl::copyFiles()
                 OString msg("Cannot copy ");
                 msg += OUStringToOString(*i_file, RTL_TEXTENCODING_UTF8) + " to "
                     +  OUStringToOString(destName, RTL_TEXTENCODING_UTF8);
-                OSL_ENSURE(sal_False, msg.getStr());
+                OSL_FAIL(msg.getStr());
             }
-            i_file++;
+            ++i_file;
         }
     }
     else
     {
-        OSL_ENSURE(sal_False, "copyFiles: UserInstall does not exist");
+        OSL_FAIL("copyFiles: UserInstall does not exist");
     }
 }
 
@@ -957,17 +945,17 @@ void MigrationImpl::runServices()
                 OString aMsg("Execution of migration service failed (Exception caught).\nService: ");
                 aMsg += OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US) + "\nMessage: ";
                 aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-                OSL_ENSURE(sal_False, aMsg.getStr());
+                OSL_FAIL(aMsg.getStr());
             } catch (...)
             {
                 OString aMsg("Execution of migration service failed (Exception caught).\nService: ");
                 aMsg += OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US) +
                     "\nNo message available";
-                OSL_ENSURE(sal_False, aMsg.getStr());
+                OSL_FAIL(aMsg.getStr());
             }
 
         }
-        i_mig++;
+        ++i_mig;
     }
 }
 

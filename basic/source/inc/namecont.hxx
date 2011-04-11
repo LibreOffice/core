@@ -29,7 +29,7 @@
 #ifndef BASIC_NAMECONTAINER_HXX
 #define BASIC_NAMECONTAINER_HXX
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -101,7 +101,7 @@ struct eqName_Impl
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     ::rtl::OUString,
     sal_Int32,
@@ -225,6 +225,7 @@ class SfxLibraryContainer   :public LibraryContainerHelper
                             ,public ::utl::OEventListenerAdapter
 {
     sal_Bool mbVBACompat;
+    rtl::OUString msProjectName;
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >   mxMSF;
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >       mxSFI;
@@ -514,6 +515,8 @@ public:
     // Methods XVBACompatibility
     virtual ::sal_Bool SAL_CALL getVBACompatibilityMode() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getProjectName() throw (::com::sun::star::uno::RuntimeException) { return msProjectName; }
+    virtual void SAL_CALL setProjectName( const ::rtl::OUString& _projectname ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 class LibraryContainerMethodGuard

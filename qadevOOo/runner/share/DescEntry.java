@@ -73,7 +73,7 @@ public class DescEntry {
     public String ErrorMsg;
 
     /**
-     * Contains information if errors occured while gaining the Description
+     * Contains information if errors occurred while gaining the Description
      */
     public boolean hasErrorMsg;
 

@@ -36,18 +36,12 @@
 #include <EnhancedPDFExportHelper.hxx>
 #include <viewopt.hxx>  // SwViewOptions
 #include <viewsh.hxx>
-#include <errhdl.hxx>
-#include <txtcfg.hxx>
 #include <SwPortionHandler.hxx>
 #include <porhyph.hxx>  //
 #include <inftxt.hxx>
 #include <itrform2.hxx> //
 #include <guess.hxx>    //
 #include <splargs.hxx>  // SwInterHyphInfo
-
-#if OSL_DEBUG_LEVEL > 1
-extern const sal_Char *GetLangName( const MSHORT nLang );
-#endif
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -65,7 +59,6 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 {
     if( rTxt.Len() < 4 || pFnt->IsSymbol(pVsh) )
         return 0;
-// OSL_ENSURE( IsHyphenate(), "SwTxtFormatter::HyphWord: why?" );
     Reference< XHyphenator >  xHyph = ::GetHyphenator();
     Reference< XHyphenatedWord > xHyphWord;
 
@@ -124,7 +117,6 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
         const xub_StrLen nEnd = rHyphInf.GetEnd();
         while( !bRet && aLine.GetStart() < nEnd )
         {
-            DBG_LOOP;
             bRet = aLine.Hyphenate( rHyphInf );
             if( !aLine.Next() )
                 break;
@@ -260,22 +252,6 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         if( bRet )
         {
             XubString aSelTxt( rInf.GetTxt().Copy(nWrdStart, nLen) );
-            xub_StrLen nCnt = 0;
-
-// these things should be handled by the dialog
-//            for( xub_StrLen i = 0; i < nLen; ++i )
-//            {
-//                sal_Unicode cCh = aSelTxt.GetChar(i);
-//                if( (CH_TXTATR_BREAKWORD == cCh || CH_TXTATR_INWORD == cCh )
-//                     && rInf.HasHint( nWrdStart + i ) )
-//                {
-//                    aSelTxt.Erase( i , 1 );
-//                    nCnt++;
-//                    --nLen;
-//                    if( i )
-//                        --i;
-//                }
-//            }
 
             {
                 MSHORT nMinTrail = 0;
@@ -293,21 +269,10 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
             {
                 rHyphInf.SetHyphWord( xHyphWord );
                 rHyphInf.nWordStart = nWrdStart;
-                rHyphInf.nWordLen   = nLen+nCnt;
+                rHyphInf.nWordLen = nLen;
                 rHyphInf.SetNoLang( sal_False );
                 rHyphInf.SetCheck( sal_True );
             }
-#ifdef DEBUGGY
-            if( OPTDBG( rInf ) )
-            {
-                OSL_ENSURE( aSelTxt == aHyphWord,
-                        "!SwTxtFormatter::Hyphenate: different words, different planets" );
-                aDbstream << "Diff: \"" << aSelTxt.GetStr() << "\" != \""
-                          << aHyphWord.GetStr() << "\"" << endl;
-                OSL_ENSURE( bRet, "!SwTxtFormatter::Hyphenate: three of a perfect pair" );
-                aDbstream << "Hyphenate: ";
-            }
-#endif
         }
     }
     return bRet;
@@ -667,7 +632,7 @@ sal_Bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTx
 void SwSoftHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     const String aString( '-' );
-    const USHORT nWhich = ! Width() ?
+    const sal_uInt16 nWhich = ! Width() ?
                           POR_SOFTHYPH_COMP :
                           GetWhichPor();
     rPH.Special( GetLen(), aString, nWhich );

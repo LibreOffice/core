@@ -42,10 +42,10 @@ class RscFileInst
     ERRTYPE             aFirstError;// Erster Fehler
     sal_uInt32              nErrorLine; // Zeile des ersten Fehlers
     sal_uInt32              nErrorPos;  // Position des ersten Fehlers
-    BOOL                bIncLine;   // Muss Zeilennummer incrementiert werden
+    sal_Bool                bIncLine;   // Muss Zeilennummer incrementiert werden
     sal_uInt32              nLineNo;    // Zeile in der Eingabedatei
-    ULONG               lFileIndex; // Index auf Eingabedatei
-    ULONG               lSrcIndex;  // Index auf Basisdatei
+    sal_uLong               lFileIndex; // Index auf Eingabedatei
+    sal_uLong               lSrcIndex;  // Index auf Basisdatei
     FILE *              fInputFile; // Eingabedatei
     char *              pInput;     // Lesepuffer
     sal_uInt32              nInputBufLen; // Laenge des Lesepuffers
@@ -55,20 +55,20 @@ class RscFileInst
     sal_uInt32              nLineBufLen;//Lange des Zeilenpuffres
     sal_uInt32              nScanPos;   // Position in der Zeile
     int                 cLastChar;
-    BOOL                bEof;
+    sal_Bool                bEof;
 
 public:
     RscTypCont *        pTypCont;
     void    Init();  // ctor initialisieren
-            RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
-                         ULONG lFileIndex, FILE * fFile );
-            RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
-                         ULONG lFileIndex, const ByteString & );
+            RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
+                         sal_uLong lFileIndex, FILE * fFile );
+            RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
+                         sal_uLong lFileIndex, const ByteString & );
             ~RscFileInst();
-    BOOL    IsEof() const { return bEof; }
-    void    SetFileIndex( ULONG lFIndex ) { lFileIndex = lFIndex;  }
-    ULONG   GetFileIndex()                { return( lFileIndex );  }
-    ULONG   GetSrcIndex()                 { return( lSrcIndex );   }
+    sal_Bool    IsEof() const { return bEof; }
+    void    SetFileIndex( sal_uLong lFIndex ) { lFileIndex = lFIndex;  }
+    sal_uLong   GetFileIndex()                { return( lFileIndex );  }
+    sal_uLong   GetSrcIndex()                 { return( lSrcIndex );   }
     void    SetLineNo( sal_uInt32 nLine )     { nLineNo = nLine;       }
     sal_uInt32  GetLineNo()                   { return( nLineNo );     }
     sal_uInt32  GetScanPos()                  { return( nScanPos );    }

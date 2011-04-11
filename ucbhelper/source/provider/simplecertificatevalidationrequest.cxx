@@ -83,7 +83,7 @@ sal_Int32 SimpleCertificateValidationRequest::getResponse() const
         if ( xDisapprove.is() )
             return 8;
 
-        OSL_ENSURE( sal_False, "CertificateValidationRequest - Unknown continuation!" );
+        OSL_FAIL( "CertificateValidationRequest - Unknown continuation!" );
     }
     return 0;
 }

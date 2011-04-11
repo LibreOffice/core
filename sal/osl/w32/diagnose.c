@@ -33,6 +33,8 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
+#include "printtrace.h"
+
 #define NO_DEBUG_CRT
 
 static pfunc_osl_printDebugMessage  _pPrintDebugMessage = NULL;
@@ -62,46 +64,21 @@ void SAL_CALL osl_breakDebug(void)
     DebugBreak();
 }
 
-
-
-/* Uncomment this define to get profiling time output */
-/* #define OSL_PROFILING */
-/* comment this define to stop output thread identifier*/
-#define OSL_TRACE_THREAD 1
-void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
-{
+void osl_trace(char const * pszFormat, ...) {
     va_list args;
-    int written = 0;
-
-    va_start(args, lpszFormat);
-
-#if defined(OSL_PROFILING)
-    fprintf(stderr, "time : %06lu : ", osl_getGlobalTimer() );
-#else
-#if defined(OSL_TRACE_THREAD)
-    fprintf(stderr,"Thread: %6d :",osl_getThreadIdentifier(NULL));
-#else
-    fprintf(stderr,"Trace Message : ");
-#endif
-#endif
-
+    va_start(args, pszFormat);
     if ( IsDebuggerPresent() )
     {
         sal_Char    szMessage[512];
-        written = _vsnprintf( szMessage, sizeof(szMessage) - 2, lpszFormat, args );
+        int written = _vsnprintf(
+            szMessage, sizeof(szMessage) - 2, pszFormat, args );
         if ( written == -1 )
             written = sizeof(szMessage) - 2;
         szMessage[ written++ ] = '\n';
         szMessage[ written ] = 0;
         OutputDebugString( szMessage );
     }
-
-    vfprintf(stderr,lpszFormat, args);
-
-    fprintf(stderr,"\n");
-
-    fflush(stderr);
-
+    printTrace((unsigned long) _getpid(), pszFormat, args);
     va_end(args);
 }
 
@@ -112,11 +89,11 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
 #else
     HWND hWndParent;
     UINT nFlags;
-    int  nCode;
 
     /* get app name or NULL if unknown (don't call assert) */
     LPCSTR lpszAppName = "Error";
     sal_Char   szMessage[512];
+    char const * env = getenv( "SAL_DIAGNOSE_ABORT" );
 
     /* format message into buffer */
     szMessage[sizeof(szMessage)-1] = '\0';  /* zero terminate always */
@@ -129,39 +106,45 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
         _pPrintDetailedDebugMessage( pszFileName, nLine, pszMessage );
     else if ( _pPrintDebugMessage )
         _pPrintDebugMessage( szMessage );
-    else if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
+    else
     {
-        TCHAR   szBoxMessage[1024];
+        if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
+        {
+            TCHAR   szBoxMessage[1024];
+            int     nCode;
 
-        /* active popup window for the current thread */
-        hWndParent = GetActiveWindow();
-        if (hWndParent != NULL)
-            hWndParent = GetLastActivePopup(hWndParent);
+            /* active popup window for the current thread */
+            hWndParent = GetActiveWindow();
+            if (hWndParent != NULL)
+                hWndParent = GetLastActivePopup(hWndParent);
 
-        /* set message box flags */
-        nFlags = MB_TASKMODAL | MB_ICONWARNING | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_SETFOREGROUND;
-        if (hWndParent == NULL)
-            nFlags |= MB_SERVICE_NOTIFICATION;
+            /* set message box flags */
+            nFlags = MB_TASKMODAL | MB_ICONWARNING | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_SETFOREGROUND;
+            if (hWndParent == NULL)
+                nFlags |= MB_SERVICE_NOTIFICATION;
 
-        /* display the assert */
+            /* display the assert */
 
-        szBoxMessage[sizeof(szBoxMessage)-1] = 0;
-        _snprintf(szBoxMessage, sizeof(szBoxMessage)-1, "%s\n( Yes=Abort / No=Ignore / Cancel=Debugger )",
-                   szMessage);
+            szBoxMessage[sizeof(szBoxMessage)-1] = 0;
+            _snprintf(szBoxMessage, sizeof(szBoxMessage)-1, "%s\n( Yes=Abort / No=Ignore / Cancel=Debugger )",
+                       szMessage);
 
-        nCode = MessageBox(hWndParent, szBoxMessage, "Assertion Failed!", nFlags);
+            nCode = MessageBox(hWndParent, szBoxMessage, "Assertion Failed!", nFlags);
 
-        if (nCode == IDYES)
-            FatalExit(-1);
+            if (nCode == IDYES)
+                FatalExit(-1);
 
-        if (nCode == IDNO)
-            return sal_False;   /* ignore */
+            if (nCode == IDNO)
+                return sal_False;   /* ignore */
 
-        if (nCode == IDCANCEL)
-            return sal_True;    /* will cause oslDebugBreak */
+            if (nCode == IDCANCEL)
+                return sal_True;    /* will cause oslDebugBreak */
+        }
+        return ( ( env != NULL ) && ( *env != '\0' ) );
     }
+
+    return sal_False;
 #endif /* NO_DEBUG_CRT */
-    return sal_False;  /* not shure, not care */
 }
 
 sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)
@@ -174,8 +157,6 @@ sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)
     if (hWndParent != NULL)
         hWndParent = GetLastActivePopup(hWndParent);
 
-    nType = nType; /* avoid warnings */
-
     /* set message box flags */
     nFlags = MB_TASKMODAL | MB_ICONERROR | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_SETFOREGROUND;
     if (hWndParent == NULL)
@@ -183,7 +164,7 @@ sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)
 
     // display the assert
     nDisposition = MessageBox(hWndParent, pszMessage, "Exception!", nFlags);
-
+    (void)nType; //unused, but part of public API/ABI
     return nDisposition;
 }
 

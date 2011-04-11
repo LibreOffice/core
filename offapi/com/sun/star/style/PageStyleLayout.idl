@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module style {
 
 //=============================================================================
 
-/** spefifies the pages for which a page layout is valid.
+/** specifies the pages for which a page layout is valid.
  */
 published enum PageStyleLayout
 {

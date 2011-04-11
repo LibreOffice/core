@@ -40,32 +40,29 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
 static SvxAutoCorrCfg* pAutoCorrCfg = 0;
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Ctor Dtor
- --------------------------------------------------------------------*/
-
 SvxAutoCorrCfg::SvxAutoCorrCfg() :
     aBaseConfig(*this),
     aSwConfig(*this),
-    bFileRel(TRUE),
-    bNetRel(TRUE),
-    bAutoTextTip(TRUE),
-    bAutoTextPreview(FALSE),
-    bAutoFmtByInput(TRUE),
-    bSearchInAllCategories(FALSE)
+    bFileRel(sal_True),
+    bNetRel(sal_True),
+    bAutoTextTip(sal_True),
+    bAutoTextPreview(sal_False),
+    bAutoFmtByInput(sal_True),
+    bSearchInAllCategories(sal_False)
 {
     SvtPathOptions aPathOpt;
     String sSharePath, sUserPath, sAutoPath( aPathOpt.GetAutoCorrectPath() );
 
     String* pS = &sSharePath;
-    for( USHORT n = 0; n < 2; ++n, pS = &sUserPath )
+    for( sal_uInt16 n = 0; n < 2; ++n, pS = &sUserPath )
     {
         *pS = sAutoPath.GetToken( n, ';' );
         INetURLObject aPath( *pS );
@@ -96,9 +93,7 @@ void SvxAutoCorrCfg::SetAutoCorrect( SvxAutoCorrect* pNew )
         pAutoCorrect = pNew;
     }
 }
-/*-- 12.10.00 11:44:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
 {
     static const char* aPropNames[] =
@@ -129,9 +124,7 @@ Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
     return aNames;
 }
-/*-- 12.10.00 11:44:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -142,7 +135,7 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
-        long nFlags = 0;        // default alles aus
+        long nFlags = 0;        // default all off
         sal_Int32 nTemp = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
@@ -230,28 +223,22 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
             }
         }
         if( nFlags )
-            rParent.pAutoCorrect->SetAutoCorrFlag( nFlags, TRUE );
-        rParent.pAutoCorrect->SetAutoCorrFlag( ( 0xffff & ~nFlags ), FALSE );
+            rParent.pAutoCorrect->SetAutoCorrFlag( nFlags, sal_True );
+        rParent.pAutoCorrect->SetAutoCorrFlag( ( 0xffff & ~nFlags ), sal_False );
 
     }
 }
-/*-- 12.10.00 11:44:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxBaseAutoCorrCfg::SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rPar) :
     utl::ConfigItem(C2U("Office.Common/AutoCorrect")),
     rParent(rPar)
 {
 }
-/*-- 12.10.00 11:44:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxBaseAutoCorrCfg::~SvxBaseAutoCorrCfg()
 {
 }
-/*-- 12.10.00 11:44:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxBaseAutoCorrCfg::Commit()
 {
     Sequence<OUString> aNames( GetPropertyNames() );
@@ -260,7 +247,7 @@ void SvxBaseAutoCorrCfg::Commit()
     Any* pValues = aValues.getArray();
 
     const Type& rType = ::getBooleanCppuType();
-    BOOL bVal;
+    sal_Bool bVal;
     const long nFlags = rParent.pAutoCorrect->GetFlags();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
@@ -338,16 +325,12 @@ void SvxBaseAutoCorrCfg::Commit()
     }
     PutProperties(aNames, aValues);
 }
-/*-- 12.10.00 11:44:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxBaseAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */)
 {
     Load(sal_False);
 }
-/*-- 12.10.00 11:51:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
 {
     static const char* aPropNames[] =
@@ -407,9 +390,7 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
     return aNames;
 }
-/*-- 12.10.00 11:51:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -480,7 +461,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nRightMargin =
-                            sal::static_int_cast< BYTE >(nVal);
+                            sal::static_int_cast< sal_uInt8 >(nVal);
                     }
                     break; // "Format/Option/CombineValue",
                     case  23: rSwFlags.bAFmtDelSpacesAtSttEnd =  *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelSpacesAtStartEnd",
@@ -498,14 +479,14 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nAutoCmpltWordLen =
-                            sal::static_int_cast< USHORT >(nVal);
+                            sal::static_int_cast< sal_uInt16 >(nVal);
                     }
                     break; // "Completion/MinWordLen",
                     case  35:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nAutoCmpltListLen =
-                            sal::static_int_cast< USHORT >(nVal);
+                            sal::static_int_cast< sal_uInt16 >(nVal);
                     }
                     break; // "Completion/MaxListLen",
                     case  36: rSwFlags.bAutoCmpltCollectWords = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/CollectWords",
@@ -516,7 +497,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nAutoCmpltExpandKey =
-                            sal::static_int_cast< USHORT >(nVal);
+                            sal::static_int_cast< sal_uInt16 >(nVal);
                     }
                     break; // "Completion/AcceptKey"
                     case 41 :rSwFlags.bAutoCmpltKeepList = *(sal_Bool*)pValues[nProp].getValue(); break;//"Completion/KeepList"
@@ -556,23 +537,17 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
         }
     }
 }
-/*-- 12.10.00 11:51:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxSwAutoCorrCfg::SvxSwAutoCorrCfg(SvxAutoCorrCfg& rPar) :
     utl::ConfigItem(C2U("Office.Writer/AutoFunction")),
     rParent(rPar)
 {
 }
-/*-- 12.10.00 11:51:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxSwAutoCorrCfg::~SvxSwAutoCorrCfg()
 {
 }
-/*-- 12.10.00 11:51:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxSwAutoCorrCfg::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
@@ -581,7 +556,7 @@ void SvxSwAutoCorrCfg::Commit()
     Any* pValues = aValues.getArray();
 
     const Type& rType = ::getBooleanCppuType();
-    BOOL bVal;
+    sal_Bool bVal;
     SvxSwAutoFmtFlags& rSwFlags = rParent.pAutoCorrect->GetSwFlags();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
@@ -669,9 +644,7 @@ void SvxSwAutoCorrCfg::Commit()
     }
     PutProperties(aNames, aValues);
 }
-/*-- 12.10.00 11:51:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxSwAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
 {
     Load(sal_False);

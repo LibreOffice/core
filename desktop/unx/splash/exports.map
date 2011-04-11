@@ -3,7 +3,6 @@ UDK_3_0_0 {
         GetVersionInfo;
         component_getImplementationEnvironment;
         component_getFactory;
-        component_writeInfo;
 
     local:
         *;

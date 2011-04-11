@@ -190,7 +190,7 @@ private:
 
 inline sal_Bool LwpDocument::IsChildDoc()
 {
-    return (sal_Bool) ((m_nPersistentFlags & DOC_CHILDDOC) ? TRUE : FALSE);
+    return (sal_Bool) ((m_nPersistentFlags & DOC_CHILDDOC) ? sal_True : sal_False);
 }
 inline sal_Bool LwpDocument::HonorProtection()
 {
@@ -236,7 +236,7 @@ class LwpDocSock : public LwpDLNFVList
 {
 public:
     LwpDocSock(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpDocSock(){};
+    ~LwpDocSock(){}
 private:
     LwpObjectID m_Doc;
 protected:

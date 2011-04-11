@@ -36,7 +36,7 @@
 #pragma warning (push,1)
 #pragma warning (disable:4548)
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1300) && !defined(_STLP_DEBUG)
+#if defined(_MSC_VER) && (_MSC_VER >= 1300) && !defined(_DEBUG_RUNTIME)
 #undef _DEBUG
 #endif
 #ifdef __MINGW32__

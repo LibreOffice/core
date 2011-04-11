@@ -59,7 +59,7 @@ namespace toolkit
         case IMAGEALIGN_BOTTOM_RIGHT:   nReturn = BelowRight; break;
         case IMAGEALIGN_CENTER:         nReturn = Centered; break;
         default:
-            OSL_ENSURE( sal_False, "translateImagePosition: unknown IMAGEALIGN value!" );
+            OSL_FAIL( "translateImagePosition: unknown IMAGEALIGN value!" );
         }
         return nReturn;
     }
@@ -83,7 +83,7 @@ namespace toolkit
         case BelowRight:  nReturn = IMAGEALIGN_BOTTOM_RIGHT; break;
         case Centered:    nReturn = IMAGEALIGN_CENTER; break;
         default:
-            OSL_ENSURE( sal_False, "translateImagePosition: unknown css.awt.ImagePosition value!" );
+            OSL_FAIL( "translateImagePosition: unknown css.awt.ImagePosition value!" );
         }
         return nReturn;
     }
@@ -111,7 +111,7 @@ namespace toolkit
 
         case IMAGEALIGN_CENTER:         nReturn = TOP; break;
         default:
-            OSL_ENSURE( sal_False, "getCompatibleImageAlign: unknown IMAGEALIGN value!" );
+            OSL_FAIL( "getCompatibleImageAlign: unknown IMAGEALIGN value!" );
         }
         return nReturn;
     }
@@ -126,7 +126,7 @@ namespace toolkit
         case RIGHT:  nReturn = RightCenter; break;
         case BOTTOM: nReturn = BelowCenter; break;
         default:
-            OSL_ENSURE( sal_False, "getExtendedImagePosition: unknown ImageAlign value!" );
+            OSL_FAIL( "getExtendedImagePosition: unknown ImageAlign value!" );
         }
         return nReturn;
     }

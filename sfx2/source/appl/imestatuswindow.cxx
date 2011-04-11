@@ -78,7 +78,7 @@ void ImeStatusWindow::init()
         }
         catch (css::uno::Exception &)
         {
-            OSL_ENSURE(false, "com.sun.star.uno.Exception");
+            OSL_FAIL("com.sun.star.uno.Exception");
             // Degrade gracefully and use the VCL-supplied default if no
             // configuration is available.
         }
@@ -96,7 +96,7 @@ bool ImeStatusWindow::isShowing()
     }
     catch (css::uno::Exception &)
     {
-        OSL_ENSURE(false, "com.sun.star.uno.Exception");
+        OSL_FAIL("com.sun.star.uno.Exception");
         // Degrade gracefully and use the VCL-supplied default if no
         // configuration is available.
     }
@@ -122,7 +122,7 @@ void ImeStatusWindow::show(bool bShow)
     }
     catch (css::uno::Exception &)
     {
-        OSL_ENSURE(false, "com.sun.star.uno.Exception");
+        OSL_FAIL("com.sun.star.uno.Exception");
     }
 }
 
@@ -143,7 +143,7 @@ ImeStatusWindow::~ImeStatusWindow()
         }
         catch (css::uno::Exception &)
         {
-            OSL_ENSURE(false, "com.sun.star.uno.RuntimeException");
+            OSL_FAIL("com.sun.star.uno.RuntimeException");
         }
 }
 

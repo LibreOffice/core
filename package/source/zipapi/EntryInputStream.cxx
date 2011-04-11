@@ -34,15 +34,16 @@
 #include <rtl/digest.h>
 #include <memory.h> // for memcpy
 
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
+using ::rtl::OUString;
+
 /** Provides access to the compressed data in a zipfile.
  *
- * 04/12/00 - uncompresses the stream into memory and seeks on it 'in memory'
+ * uncompresses the stream into memory and seeks on it 'in memory'
  * This and the ZipPackageBuffer used in the ZipOutputStream are memory hogs
  * and will hopefully be replaced eventually
  *

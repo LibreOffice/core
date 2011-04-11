@@ -56,6 +56,7 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 #include "global.hxx"
+#include "globalnames.hxx"
 #include "scmod.hxx"
 #include "docsh.hxx"
 #include "document.hxx"
@@ -68,10 +69,6 @@
 #include "pvlaydlg.hxx"
 #include "validat.hxx"
 #include "scresid.hxx"
-#include "pivot.hxx"
-#include "dpobject.hxx"
-#include "dpsdbtab.hxx"     // ScImportSourceDesc
-#include "dpshttab.hxx"     // ScSheetSourceDesc
 
 #include "validate.hrc" // ScValidationDlg
 #include "scui_def.hxx"
@@ -81,7 +78,7 @@
 using namespace com::sun::star;
 
 #define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
+    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
 
 //------------------------------------------------------------------
 
@@ -125,14 +122,14 @@ bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange )
     return bRet;
 }
 
-BOOL lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
+sal_Bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
 {
     ScTabViewShell* pTabViewShell   = pData->GetViewShell();
     ScDBData*   pDBData             = pTabViewShell->GetDBData();
     ScDocument* pDoc                = pData->GetDocument();
     SCTAB nTab                      = pData->GetTabNo();
     ScDirection eFillDir            = DIR_TOP;
-    BOOL  bSort                     = TRUE;
+    sal_Bool  bSort                     = sal_True;
     ScRange aExternalRange;
 
     if( rSortParam.nCol1 != rSortParam.nCol2 )
@@ -151,7 +148,7 @@ BOOL lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
     SCCOL nStartCol = aExternalRange.aStart.Col();
     SCROW nEndRow   = aExternalRange.aEnd.Row();
     SCCOL nEndCol   = aExternalRange.aEnd.Col();
-    pDoc->GetDataArea( aExternalRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow, FALSE, false );
+    pDoc->GetDataArea( aExternalRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow, false, false );
     aExternalRange.aStart.SetRow( nStartRow );
     aExternalRange.aStart.SetCol( nStartCol );
     aExternalRange.aEnd.SetRow( nEndRow );
@@ -160,7 +157,7 @@ BOOL lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
     if(( rSortParam.nCol1 == rSortParam.nCol2 && aExternalRange.aStart.Col() != aExternalRange.aEnd.Col() ) ||
         ( rSortParam.nRow1 == rSortParam.nRow2 && aExternalRange.aStart.Row() != aExternalRange.aEnd.Row() ) )
     {
-        USHORT nFmt = SCA_VALID;
+        sal_uInt16 nFmt = SCA_VALID;
         String aExtendStr,aCurrentStr;
 
         pTabViewShell->AddHighlightRange( aExternalRange,Color( COL_LIGHTBLUE ) );
@@ -180,13 +177,13 @@ BOOL lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
         {
             if( bResult == BTN_EXTEND_RANGE )
             {
-                pTabViewShell->MarkRange( aExternalRange, FALSE );
+                pTabViewShell->MarkRange( aExternalRange, false );
                 pDBData->SetArea( nTab, aExternalRange.aStart.Col(), aExternalRange.aStart.Row(), aExternalRange.aEnd.Col(), aExternalRange.aEnd.Row() );
             }
         }
         else
         {
-            bSort = FALSE;
+            bSort = false;
             pData->GetDocShell()->CancelAutoDBRange();
         }
 
@@ -196,7 +193,6 @@ BOOL lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
     return bSort;
 }
 
-//<!-- Added by PengYunQuan for Validity Cell Range Picker
 //after end execute from !IsModalInputMode, it is safer to delay deleting
 namespace
 {
@@ -206,12 +202,11 @@ namespace
         return 0;
     }
 }
-//--> Added by PengYunQuan for Validity Cell Range Picker
 
 void ScCellShell::ExecuteDB( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    USHORT nSlotId = rReq.GetSlot();
+    sal_uInt16 nSlotId = rReq.GetSlot();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     ScModule*           pScMod      = SC_MOD();
 
@@ -230,14 +225,14 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 //  check if database beamer is open
 
                 SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
-                BOOL bWasOpen = FALSE;
+                sal_Bool bWasOpen = false;
                 {
                     uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
                     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
-                                                        rtl::OUString::createFromAscii("_beamer"),
+                                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_beamer")),
                                                         frame::FrameSearchFlag::CHILDREN);
                     if ( xBeamerFrame.is() )
-                        bWasOpen = TRUE;
+                        bWasOpen = sal_True;
                 }
 
                 if ( bWasOpen )
@@ -250,12 +245,12 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     //  show database beamer: SfxViewFrame call must be synchronous
 
-                    pViewFrame->ExecuteSlot( rReq, (BOOL) FALSE );      // FALSE = synchronous
+                    pViewFrame->ExecuteSlot( rReq, (sal_Bool) false );      // sal_False = synchronous
 
                     //  select current database in database beamer
 
                     ScImportParam aImportParam;
-                    ScDBData* pDBData = pTabViewShell->GetDBData(TRUE,SC_DB_OLD);       // don't create if none found
+                    ScDBData* pDBData = pTabViewShell->GetDBData(sal_True,SC_DB_OLD);       // don't create if none found
                     if (pDBData)
                         pDBData->GetImportParam( aImportParam );
 
@@ -267,8 +262,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
         case SID_REIMPORT_DATA:
             {
-                BOOL bOk = FALSE;
-                ScDBData* pDBData = pTabViewShell->GetDBData(TRUE,SC_DB_OLD);
+                sal_Bool bOk = false;
+                ScDBData* pDBData = pTabViewShell->GetDBData(sal_True,SC_DB_OLD);
                 if (pDBData)
                 {
                     ScImportParam aImportParam;
@@ -277,7 +272,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     {
                         pTabViewShell->ImportData( aImportParam );
                         pDBData->SetImportParam( aImportParam );    //! Undo ??
-                        bOk = TRUE;
+                        bOk = sal_True;
                     }
                 }
 
@@ -291,12 +286,12 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
         case SID_REFRESH_DBAREA:
             {
-                ScDBData* pDBData = pTabViewShell->GetDBData(TRUE,SC_DB_OLD);
+                ScDBData* pDBData = pTabViewShell->GetDBData(sal_True,SC_DB_OLD);
                 if (pDBData)
                 {
                     //  Import wiederholen wie SID_REIMPORT_DATA
 
-                    BOOL bContinue = TRUE;
+                    sal_Bool bContinue = sal_True;
                     ScImportParam aImportParam;
                     pDBData->GetImportParam( aImportParam );
                     if (aImportParam.bImport && !pDBData->HasImportSelection())
@@ -310,7 +305,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         pTabViewShell->MarkRange(aNewRange);
                     }
 
-                    if ( bContinue )        // #41905# Fehler beim Import -> Abbruch
+                    if ( bContinue )        // Fehler beim Import -> Abbruch
                     {
                         //  interne Operationen, wenn welche gespeichert
 
@@ -331,17 +326,17 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
         case SID_SBA_BRW_INSERT:
             {
-                DBG_ERROR( "Deprecated Slot" );
+                OSL_FAIL( "Deprecated Slot" );
             }
             break;
 
         case SID_DATA_FORM:
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
                 AbstractScDataFormDlg* pDlg = pFact->CreateScDataFormDlg( pTabViewShell->GetDialogParent(),RID_SCDLG_DATAFORM, pTabViewShell);
-                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+                DBG_ASSERT(pDlg, "Dialog create fail!");
 
                 pDlg->Execute();
 
@@ -350,65 +345,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             break;
 
         case SID_SUBTOTALS:
-            {
-                const SfxItemSet* pArgs = rReq.GetArgs();
-                if ( pArgs )
-                {
-                    pTabViewShell->DoSubTotals( ((const ScSubTotalItem&) pArgs->Get( SCITEM_SUBTDATA )).
-                                    GetSubTotalData() );
-                    rReq.Done();
-                }
-                else
-                {
-                    SfxAbstractTabDialog * pDlg = NULL;
-                    ScSubTotalParam aSubTotalParam;
-                    SfxItemSet      aArgSet( GetPool(), SCITEM_SUBTDATA, SCITEM_SUBTDATA );
-
-                    ScDBData* pDBData = pTabViewShell->GetDBData();
-                    pDBData->GetSubTotalParam( aSubTotalParam );
-                    aSubTotalParam.bRemoveOnly = FALSE;
-
-                    aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA, GetViewData(), &aSubTotalParam ) );
-                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
-
-                    pDlg = pFact->CreateScSubTotalDlg( pTabViewShell->GetDialogParent(), &aArgSet, RID_SCDLG_SUBTOTALS );
-                    DBG_ASSERT(pDlg, "Dialog create fail!");
-                    pDlg->SetCurPageId(1);
-
-                    short bResult = pDlg->Execute();
-
-                    if ( (bResult == RET_OK) || (bResult == SCRET_REMOVE) )
-                    {
-                        const SfxItemSet* pOutSet = NULL;
-
-                        if ( bResult == RET_OK )
-                        {
-                            pOutSet = pDlg->GetOutputItemSet();
-                            aSubTotalParam =
-                                ((const ScSubTotalItem&)
-                                    pOutSet->Get( SCITEM_SUBTDATA )).
-                                        GetSubTotalData();
-                        }
-                        else // if (bResult == SCRET_REMOVE)
-                        {
-                            pOutSet = &aArgSet;
-                            aSubTotalParam.bRemoveOnly = TRUE;
-                            aSubTotalParam.bReplace    = TRUE;
-                            aArgSet.Put( ScSubTotalItem( SCITEM_SUBTDATA,
-                                                         GetViewData(),
-                                                         &aSubTotalParam ) );
-                        }
-
-                        pTabViewShell->DoSubTotals( aSubTotalParam );
-                        rReq.Done( *pOutSet );
-                    }
-                    else
-                        GetViewData()->GetDocShell()->CancelAutoDBRange();
-
-                    delete pDlg;
-                }
-            }
+            ExecuteSubtotals(rReq);
             break;
 
         case SID_SORT_DESCENDING:
@@ -430,7 +367,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScDocument* pDoc    = GetViewData()->GetDocument();
 
                     pDBData->GetSortParam( aSortParam );
-                    BOOL bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab );
+                    sal_Bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab );
 
                     if( nCol < aSortParam.nCol1 )
                         nCol = aSortParam.nCol1;
@@ -438,17 +375,17 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         nCol = aSortParam.nCol2;
 
                     aSortParam.bHasHeader       = bHasHeader;
-                    aSortParam.bByRow           = TRUE;
-                    aSortParam.bCaseSens        = FALSE;
-                    aSortParam.bNaturalSort     = FALSE;
-                    aSortParam.bIncludePattern  = TRUE;
-                    aSortParam.bInplace         = TRUE;
-                    aSortParam.bDoSort[0]       = TRUE;
+                    aSortParam.bByRow           = true;
+                    aSortParam.bCaseSens        = false;
+                    aSortParam.bNaturalSort     = false;
+                    aSortParam.bIncludePattern  = true;
+                    aSortParam.bInplace         = true;
+                    aSortParam.bDoSort[0]       = true;
                     aSortParam.nField[0]        = nCol;
                     aSortParam.bAscending[0]    = (nSlotId == SID_SORT_ASCENDING);
 
-                    for ( USHORT i=1; i<MAXSORT; i++ )
-                        aSortParam.bDoSort[i] = FALSE;
+                    for ( sal_uInt16 i=1; i<MAXSORT; i++ )
+                        aSortParam.bDoSort[i] = false;
 
                     aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
 
@@ -479,51 +416,51 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         ScDocument* pDoc = GetViewData()->GetDocument();
 
                         pDBData->GetSortParam( aSortParam );
-                        BOOL bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
+                        sal_Bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
-                        aSortParam.bInplace = TRUE;             // von Basic immer
+                        aSortParam.bInplace = sal_True;             // von Basic immer
 
                         const SfxPoolItem* pItem;
-                        if ( pArgs->GetItemState( SID_SORT_BYROW, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( SID_SORT_BYROW, sal_True, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bByRow = ((const SfxBoolItem*)pItem)->GetValue();
-                        if ( pArgs->GetItemState( SID_SORT_HASHEADER, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( SID_SORT_HASHEADER, sal_True, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bHasHeader = ((const SfxBoolItem*)pItem)->GetValue();
-                        if ( pArgs->GetItemState( SID_SORT_CASESENS, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( SID_SORT_CASESENS, sal_True, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bCaseSens = ((const SfxBoolItem*)pItem)->GetValue();
-                    if ( pArgs->GetItemState( SID_SORT_NATURALSORT, TRUE, &pItem ) == SFX_ITEM_SET )
+                    if ( pArgs->GetItemState( SID_SORT_NATURALSORT, true, &pItem ) == SFX_ITEM_SET )
                         aSortParam.bNaturalSort = ((const SfxBoolItem*)pItem)->GetValue();
-                        if ( pArgs->GetItemState( SID_SORT_ATTRIBS, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( SID_SORT_ATTRIBS, true, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bIncludePattern = ((const SfxBoolItem*)pItem)->GetValue();
-                        if ( pArgs->GetItemState( SID_SORT_USERDEF, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( SID_SORT_USERDEF, sal_True, &pItem ) == SFX_ITEM_SET )
                         {
-                            USHORT nUserIndex = ((const SfxUInt16Item*)pItem)->GetValue();
+                            sal_uInt16 nUserIndex = ((const SfxUInt16Item*)pItem)->GetValue();
                             aSortParam.bUserDef = ( nUserIndex != 0 );
                             if ( nUserIndex )
                                 aSortParam.nUserIndex = nUserIndex - 1;     // Basic: 1-basiert
                         }
 
                         SCCOLROW nField0 = 0;
-                        if ( pArgs->GetItemState( FN_PARAM_1, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( FN_PARAM_1, sal_True, &pItem ) == SFX_ITEM_SET )
                             nField0 = ((const SfxInt32Item*)pItem)->GetValue();
                         aSortParam.bDoSort[0] = ( nField0 != 0 );
                         aSortParam.nField[0] = nField0 > 0 ? (nField0-1) : 0;
-                        if ( pArgs->GetItemState( FN_PARAM_2, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( FN_PARAM_2, sal_True, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bAscending[0] = ((const SfxBoolItem*)pItem)->GetValue();
                         SCCOLROW nField1 = 0;
-                        if ( pArgs->GetItemState( FN_PARAM_3, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( FN_PARAM_3, sal_True, &pItem ) == SFX_ITEM_SET )
                             nField1 = ((const SfxInt32Item*)pItem)->GetValue();
                         aSortParam.bDoSort[1] = ( nField1 != 0 );
                         aSortParam.nField[1] = nField1 > 0 ? (nField1-1) : 0;
-                        if ( pArgs->GetItemState( FN_PARAM_4, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( FN_PARAM_4, sal_True, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bAscending[1] = ((const SfxBoolItem*)pItem)->GetValue();
                         SCCOLROW nField2 = 0;
-                        if ( pArgs->GetItemState( FN_PARAM_5, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( FN_PARAM_5, sal_True, &pItem ) == SFX_ITEM_SET )
                             nField2 = ((const SfxInt32Item*)pItem)->GetValue();
                         aSortParam.bDoSort[2] = ( nField2 != 0 );
                         aSortParam.nField[2] = nField2 > 0 ? (nField2-1) : 0;
-                        if ( pArgs->GetItemState( FN_PARAM_6, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pArgs->GetItemState( FN_PARAM_6, sal_True, &pItem ) == SFX_ITEM_SET )
                             aSortParam.bAscending[2] = ((const SfxBoolItem*)pItem)->GetValue();
 
                         // Teilergebnisse bei Bedarf neu
@@ -546,7 +483,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         SfxItemSet  aArgSet( GetPool(), SCITEM_SORTDATA, SCITEM_SORTDATA );
 
                         pDBData->GetSortParam( aSortParam );
-                        BOOL bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
+                        sal_Bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, pData->GetTabNo() );
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
@@ -580,7 +517,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                                 rOutParam.bNaturalSort ) );
                                 rReq.AppendItem( SfxBoolItem( SID_SORT_ATTRIBS,
                                     rOutParam.bIncludePattern ) );
-                                USHORT nUser = rOutParam.bUserDef ? ( rOutParam.nUserIndex + 1 ) : 0;
+                                sal_uInt16 nUser = rOutParam.bUserDef ? ( rOutParam.nUserIndex + 1 ) : 0;
                                 rReq.AppendItem( SfxUInt16Item( SID_SORT_USERDEF, nUser ) );
                                 if ( rOutParam.bDoSort[0] )
                                 {
@@ -621,18 +558,18 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 if ( pArgs )
                 {
-                    DBG_ERROR("SID_FILTER with arguments?");
+                    OSL_FAIL("SID_FILTER with arguments?");
                     pTabViewShell->Query( ((const ScQueryItem&)
-                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), NULL, TRUE );
+                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), NULL, sal_True );
                     rReq.Done();
                 }
                 else
                 {
-                    USHORT          nId  = ScFilterDlgWrapper::GetChildWindowId();
+                    sal_uInt16          nId  = ScFilterDlgWrapper::GetChildWindowId();
                     SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                     SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                    pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
+                    pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
                 }
             }
             break;
@@ -642,18 +579,18 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 if ( pArgs )
                 {
-                    DBG_ERROR("SID_SPECIAL_FILTER with arguments?");
+                    OSL_FAIL("SID_SPECIAL_FILTER with arguments?");
                     pTabViewShell->Query( ((const ScQueryItem&)
-                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), NULL, TRUE );
+                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), NULL, sal_True );
                     rReq.Done();
                 }
                 else
                 {
-                    USHORT          nId  = ScSpecialFilterDlgWrapper::GetChildWindowId();
+                    sal_uInt16          nId  = ScSpecialFilterDlgWrapper::GetChildWindowId();
                     SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                     SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                    pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
+                    pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
                 }
             }
             break;
@@ -662,7 +599,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && SFX_ITEM_SET ==
-                        pReqArgs->GetItemState( SCITEM_QUERYDATA, TRUE, &pItem ) )
+                        pReqArgs->GetItemState( SCITEM_QUERYDATA, sal_True, &pItem ) )
                 {
                     const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(*pItem);
 
@@ -680,9 +617,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     ScRange aAdvSource;
                     if (rQueryItem.GetAdvancedQuerySource(aAdvSource))
-                        pTabViewShell->Query( rQueryItem.GetQueryData(), &aAdvSource, TRUE );
+                        pTabViewShell->Query( rQueryItem.GetQueryData(), &aAdvSource, sal_True );
                     else
-                        pTabViewShell->Query( rQueryItem.GetQueryData(), NULL, TRUE );
+                        pTabViewShell->Query( rQueryItem.GetQueryData(), NULL, sal_True );
                     rReq.Done( *pReqArgs );
                 }
             }
@@ -696,9 +633,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 pDBData->GetQueryParam( aParam );
                 SCSIZE nEC = aParam.GetEntryCount();
                 for (SCSIZE i=0; i<nEC; i++)
-                    aParam.GetEntry(i).bDoQuery = FALSE;
-                aParam.bDuplicate = TRUE;
-                pTabViewShell->Query( aParam, NULL, TRUE );
+                    aParam.GetEntry(i).bDoQuery = false;
+                aParam.bDuplicate = sal_True;
+                pTabViewShell->Query( aParam, NULL, sal_True );
                 rReq.Done();
             }
             break;
@@ -717,7 +654,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && SFX_ITEM_SET ==
-                        pReqArgs->GetItemState( SCITEM_PIVOTDATA, TRUE, &pItem ) )
+                        pReqArgs->GetItemState( SCITEM_PIVOTDATA, sal_True, &pItem ) )
                 {
                     SCTAB nCurTab = GetViewData()->GetTabNo();
                     SCTAB nRefTab = GetViewData()->GetRefTabNo();
@@ -748,151 +685,16 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             break;
 
         case SID_OPENDLG_PIVOTTABLE:
-            {
-                ScViewData* pData = GetViewData();
-                ScDocument* pDoc = pData->GetDocument();
-
-                ScDPObject* pNewDPObject = NULL;
-
-                // ScPivot is no longer used...
-                ScDPObject* pDPObj = pDoc->GetDPAtCursor(
-                                            pData->GetCurX(), pData->GetCurY(),
-                                            pData->GetTabNo() );
-                if ( pDPObj )   // on an existing table?
-                {
-                    pNewDPObject = new ScDPObject( *pDPObj );
-                }
-                else            // create new table
-                {
-                    //  select database range or data
-                    pTabViewShell->GetDBData( TRUE, SC_DB_OLD );
-                    ScMarkData& rMark = GetViewData()->GetMarkData();
-                    if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
-                        pTabViewShell->MarkDataArea( FALSE );
-
-                    //  output to cursor position for non-sheet data
-                    ScAddress aDestPos( pData->GetCurX(), pData->GetCurY(),
-                                            pData->GetTabNo() );
-
-                    //  first select type of source data
-
-                    BOOL bEnableExt = ScDPObject::HasRegisteredSources();
-
-                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
-
-                    AbstractScDataPilotSourceTypeDlg* pTypeDlg = pFact->CreateScDataPilotSourceTypeDlg( pTabViewShell->GetDialogParent(), bEnableExt, RID_SCDLG_DAPITYPE );
-                    DBG_ASSERT(pTypeDlg, "Dialog create fail!");
-                    if ( pTypeDlg->Execute() == RET_OK )
-                    {
-                        if ( pTypeDlg->IsExternal() )
-                        {
-                            uno::Sequence<rtl::OUString> aSources = ScDPObject::GetRegisteredSources();
-                            AbstractScDataPilotServiceDlg* pServDlg = pFact->CreateScDataPilotServiceDlg( pTabViewShell->GetDialogParent(), aSources, RID_SCDLG_DAPISERVICE );
-                            DBG_ASSERT(pServDlg, "Dialog create fail!");
-                            if ( pServDlg->Execute() == RET_OK )
-                            {
-                                ScDPServiceDesc aServDesc(
-                                        pServDlg->GetServiceName(),
-                                        pServDlg->GetParSource(),
-                                        pServDlg->GetParName(),
-                                        pServDlg->GetParUser(),
-                                        pServDlg->GetParPass() );
-                                pNewDPObject = new ScDPObject( pDoc );
-                                pNewDPObject->SetServiceData( aServDesc );
-                            }
-                            delete pServDlg;
-                        }
-                        else if ( pTypeDlg->IsDatabase() )
-                        {
-                            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
-
-                            AbstractScDataPilotDatabaseDlg* pDataDlg = pFact->CreateScDataPilotDatabaseDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_DAPIDATA);
-                            DBG_ASSERT(pDataDlg, "Dialog create fail!");
-                            if ( pDataDlg->Execute() == RET_OK )
-                            {
-                                ScImportSourceDesc aImpDesc;
-                                pDataDlg->GetValues( aImpDesc );
-                                pNewDPObject = new ScDPObject( pDoc );
-                                pNewDPObject->SetImportDesc( aImpDesc );
-                            }
-                            delete pDataDlg;
-                        }
-                        else        // selection
-                        {
-                            //! use database ranges (select before type dialog?)
-                            ScRange aRange;
-                            ScMarkType eType = GetViewData()->GetSimpleArea(aRange);
-                            if ( (eType & SC_MARK_SIMPLE) == SC_MARK_SIMPLE )
-                            {
-                                // Shrink the range to the data area.
-                                SCCOL nStartCol = aRange.aStart.Col(), nEndCol = aRange.aEnd.Col();
-                                SCROW nStartRow = aRange.aStart.Row(), nEndRow = aRange.aEnd.Row();
-                                if (pDoc->ShrinkToDataArea(aRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow))
-                                {
-                                    aRange.aStart.SetCol(nStartCol);
-                                    aRange.aStart.SetRow(nStartRow);
-                                    aRange.aEnd.SetCol(nEndCol);
-                                    aRange.aEnd.SetRow(nEndRow);
-                                    rMark.SetMarkArea(aRange);
-                                    pTabViewShell->MarkRange(aRange);
-                                }
-
-                                BOOL bOK = TRUE;
-                                if ( pDoc->HasSubTotalCells( aRange ) )
-                                {
-                                    //  confirm selection if it contains SubTotal cells
-
-                                    QueryBox aBox( pTabViewShell->GetDialogParent(),
-                                                    WinBits(WB_YES_NO | WB_DEF_YES),
-                                                    ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) );
-                                    if (aBox.Execute() == RET_NO)
-                                        bOK = FALSE;
-                                }
-                                if (bOK)
-                                {
-                                    ScSheetSourceDesc aShtDesc;
-                                    aShtDesc.aSourceRange = aRange;
-                                    pNewDPObject = new ScDPObject( pDoc );
-                                    pNewDPObject->SetSheetDesc( aShtDesc );
-
-                                    //  output below source data
-                                    if ( aRange.aEnd.Row()+2 <= MAXROW - 4 )
-                                        aDestPos = ScAddress( aRange.aStart.Col(),
-                                                                aRange.aEnd.Row()+2,
-                                                                aRange.aStart.Tab() );
-                                }
-                            }
-                        }
-                    }
-                    delete pTypeDlg;
-
-                    if ( pNewDPObject )
-                        pNewDPObject->SetOutRange( aDestPos );
-                }
-
-                pTabViewShell->SetDialogDPObject( pNewDPObject );   // is copied
-                if ( pNewDPObject )
-                {
-                    //  start layout dialog
-
-                    USHORT nId  = ScPivotLayoutWrapper::GetChildWindowId();
-                    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
-                    SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
-                    pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
-                }
-                delete pNewDPObject;
-            }
+            ExecuteDataPilotDialog();
             break;
-
         case SID_DEFINE_DBNAME:
             {
 
-                USHORT          nId  = ScDbNameDlgWrapper::GetChildWindowId();
+                sal_uInt16          nId  = ScDbNameDlgWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
-                pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
+                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
 
             }
             break;
@@ -911,7 +713,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     }
                     else
                     {
-                        DBG_ERROR("NULL");
+                        OSL_FAIL("NULL");
                     }
                 }
                 else
@@ -921,13 +723,13 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     if ( pDBCol )
                     {
-                        const String    aStrNoName( ScGlobal::GetRscString(STR_DB_NONAME) );
+                        const String    aStrNoName( RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME) );
                         List            aList;
-                        USHORT          nDBCount = pDBCol->GetCount();
+                        sal_uInt16          nDBCount = pDBCol->GetCount();
                         ScDBData*       pDbData  = NULL;
                         String*         pDBName  = NULL;
 
-                        for ( USHORT i=0; i < nDBCount; i++ )
+                        for ( sal_uInt16 i=0; i < nDBCount; i++ )
                         {
                             pDbData = (ScDBData*)(pDBCol->At( i ));
                             if ( pDbData )
@@ -979,7 +781,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 if ( pArgs )
                 {
-                    DBG_ERROR("spaeter...");
+                    OSL_FAIL("spaeter...");
                 }
                 else
                 {
@@ -991,11 +793,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScValidationMode eMode = SC_VALID_ANY;
                     ScConditionMode eOper = SC_COND_EQUAL;
                     String aExpr1, aExpr2;
-                    BOOL bBlank = TRUE;
+                    sal_Bool bBlank = sal_True;
                     sal_Int16 nListType = ValidListType::UNSORTED;
-                    BOOL bShowHelp = FALSE;
+                    sal_Bool bShowHelp = false;
                     String aHelpTitle, aHelpText;
-                    BOOL bShowError = FALSE;
+                    sal_Bool bShowError = false;
                     ScValidErrorStyle eErrStyle = SC_VALERR_STOP;
                     String aErrTitle, aErrText;
 
@@ -1004,7 +806,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     SCROW nCurY = GetViewData()->GetCurY();
                     SCTAB nTab = GetViewData()->GetTabNo();
                     ScAddress aCursorPos( nCurX, nCurY, nTab );
-                    ULONG nIndex = ((SfxUInt32Item*)pDoc->GetAttr(
+                    sal_uLong nIndex = ((SfxUInt32Item*)pDoc->GetAttr(
                                 nCurX, nCurY, nTab, ATTR_VALIDDATA ))->GetValue();
                     if ( nIndex )
                     {
@@ -1013,7 +815,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         {
                             eMode = pOldData->GetDataMode();
                             eOper = pOldData->GetOperation();
-                            ULONG nNumFmt = 0;
+                            sal_uLong nNumFmt = 0;
                             if ( eMode == SC_VALID_DATE || eMode == SC_VALID_TIME )
                             {
                                 short nType = ( eMode == SC_VALID_DATE ) ? NUMBERFORMAT_DATE
@@ -1029,8 +831,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             bShowHelp = pOldData->GetInput( aHelpTitle, aHelpText );
                             bShowError = pOldData->GetErrMsg( aErrTitle, aErrText, eErrStyle );
 
-                            aArgSet.Put( SfxAllEnumItem( FID_VALID_MODE,        sal::static_int_cast<USHORT>(eMode) ) );
-                            aArgSet.Put( SfxAllEnumItem( FID_VALID_CONDMODE,    sal::static_int_cast<USHORT>(eOper) ) );
+                            aArgSet.Put( SfxAllEnumItem( FID_VALID_MODE,        sal::static_int_cast<sal_uInt16>(eMode) ) );
+                            aArgSet.Put( SfxAllEnumItem( FID_VALID_CONDMODE,    sal::static_int_cast<sal_uInt16>(eOper) ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_VALUE1,      aExpr1 ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_VALUE2,      aExpr2 ) );
                             aArgSet.Put( SfxBoolItem(    FID_VALID_BLANK,       bBlank ) );
@@ -1039,7 +841,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aArgSet.Put( SfxStringItem(  FID_VALID_HELPTITLE,   aHelpTitle ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_HELPTEXT,    aHelpText ) );
                             aArgSet.Put( SfxBoolItem(    FID_VALID_SHOWERR,     bShowError ) );
-                            aArgSet.Put( SfxAllEnumItem( FID_VALID_ERRSTYLE,    sal::static_int_cast<USHORT>(eErrStyle) ) );
+                            aArgSet.Put( SfxAllEnumItem( FID_VALID_ERRSTYLE,    sal::static_int_cast<sal_uInt16>(eErrStyle) ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_ERRTITLE,    aErrTitle ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_ERRTEXT,     aErrText ) );
                         }
@@ -1056,11 +858,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     {
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
-                        if ( pOutSet->GetItemState( FID_VALID_MODE, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_MODE, sal_True, &pItem ) == SFX_ITEM_SET )
                             eMode = (ScValidationMode) ((const SfxAllEnumItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_CONDMODE, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_CONDMODE, sal_True, &pItem ) == SFX_ITEM_SET )
                             eOper = (ScConditionMode) ((const SfxAllEnumItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_VALUE1, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_VALUE1, sal_True, &pItem ) == SFX_ITEM_SET )
                         {
                             String aTemp1 = ((const SfxStringItem*)pItem)->GetValue();
                             if (eMode == SC_VALID_DATE || eMode == SC_VALID_TIME)
@@ -1070,14 +872,14 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 if (pDoc->GetFormatTable()->IsNumberFormat(aTemp1, nNumIndex, nVal))
                                     aExpr1 =String( ::rtl::math::doubleToUString( nVal,
                                             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                            ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE));
+                                            ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), sal_True));
                                 else
                                     aExpr1 = aTemp1;
                             }
                             else
                                 aExpr1 = aTemp1;
                         }
-                        if ( pOutSet->GetItemState( FID_VALID_VALUE2, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_VALUE2, sal_True, &pItem ) == SFX_ITEM_SET )
                         {
                             String aTemp2 = ((const SfxStringItem*)pItem)->GetValue();
                             if (eMode == SC_VALID_DATE || eMode == SC_VALID_TIME)
@@ -1087,7 +889,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 if (pDoc->GetFormatTable()->IsNumberFormat(aTemp2, nNumIndex, nVal))
                                     aExpr2 =String( ::rtl::math::doubleToUString( nVal,
                                             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
-                                            ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE));
+                                            ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), sal_True));
                                 else
                                     aExpr2 = aTemp2;
                             }
@@ -1095,25 +897,25 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 aExpr2 = aTemp2;
                         }
 
-                        if ( pOutSet->GetItemState( FID_VALID_BLANK, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_BLANK, sal_True, &pItem ) == SFX_ITEM_SET )
                             bBlank = ((const SfxBoolItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_LISTTYPE, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_LISTTYPE, sal_True, &pItem ) == SFX_ITEM_SET )
                             nListType = ((const SfxInt16Item*)pItem)->GetValue();
 
-                        if ( pOutSet->GetItemState( FID_VALID_SHOWHELP, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_SHOWHELP, sal_True, &pItem ) == SFX_ITEM_SET )
                             bShowHelp = ((const SfxBoolItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_HELPTITLE, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_HELPTITLE, sal_True, &pItem ) == SFX_ITEM_SET )
                             aHelpTitle = ((const SfxStringItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_HELPTEXT, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_HELPTEXT, sal_True, &pItem ) == SFX_ITEM_SET )
                             aHelpText = ((const SfxStringItem*)pItem)->GetValue();
 
-                        if ( pOutSet->GetItemState( FID_VALID_SHOWERR, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_SHOWERR, sal_True, &pItem ) == SFX_ITEM_SET )
                             bShowError = ((const SfxBoolItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_ERRSTYLE, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_ERRSTYLE, sal_True, &pItem ) == SFX_ITEM_SET )
                             eErrStyle = (ScValidErrorStyle) ((const SfxAllEnumItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_ERRTITLE, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_ERRTITLE, sal_True, &pItem ) == SFX_ITEM_SET )
                             aErrTitle = ((const SfxStringItem*)pItem)->GetValue();
-                        if ( pOutSet->GetItemState( FID_VALID_ERRTEXT, TRUE, &pItem ) == SFX_ITEM_SET )
+                        if ( pOutSet->GetItemState( FID_VALID_ERRTEXT, sal_True, &pItem ) == SFX_ITEM_SET )
                             aErrText = ((const SfxStringItem*)pItem)->GetValue();
 
                         ScValidationData aData( eMode, eOper, aExpr1, aExpr2, pDoc, aCursorPos );
@@ -1131,11 +933,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         pTabViewShell->SetValidation( aData );
                         rReq.Done( *pOutSet );
                     }
-                    //<!-- Modified by PengYunQuan for Validity Cell Range Picker
                     //after end execute from !IsModalInputMode, it is safer to delay deleting
                     //delete pDlg;
                     Application::PostUserEvent( Link( pDlg, &DelayDeleteAbstractDialog ) );
-                    //--> Modified by PengYunQuan for Validity Cell Range Picker
                 }
             }
             break;
@@ -1194,7 +994,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         }
 }
 
-void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
+void ScCellShell::GetDBState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     ScViewData* pData       = GetViewData();
@@ -1204,11 +1004,11 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
     SCROW       nPosY       = pData->GetCurY();
     SCTAB       nTab        = pData->GetTabNo();
 
-    BOOL bAutoFilter = FALSE;
-    BOOL bAutoFilterTested = FALSE;
+    sal_Bool bAutoFilter = false;
+    sal_Bool bAutoFilterTested = false;
 
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while (nWhich)
     {
         switch (nWhich)
@@ -1217,8 +1017,8 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                 {
                     //  importierte Daten ohne Selektion
                     //  oder Filter,Sortierung,Teilergebis (auch ohne Import)
-                    BOOL bOk = FALSE;
-                    ScDBData* pDBData = pTabViewShell->GetDBData(FALSE,SC_DB_OLD);
+                    sal_Bool bOk = false;
+                    ScDBData* pDBData = pTabViewShell->GetDBData(false,SC_DB_OLD);
                     if (pDBData && pDoc->GetChangeTrack() == NULL)
                     {
                         if ( pDBData->HasImportParam() )
@@ -1268,7 +1068,7 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
             case SID_REIMPORT_DATA:
                 {
                     //  nur importierte Daten ohne Selektion
-                    ScDBData* pDBData = pTabViewShell->GetDBData(FALSE,SC_DB_OLD);
+                    ScDBData* pDBData = pTabViewShell->GetDBData(false,SC_DB_OLD);
                     if (!pDBData || !pDBData->HasImportParam() || pDBData->HasImportSelection() ||
                         pDoc->GetChangeTrack()!=NULL)
                     {
@@ -1280,7 +1080,7 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
             case SID_VIEW_DATA_SOURCE_BROWSER:
                 {
                     if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
-                        rSet.Put(SfxVisibilityItem(nWhich, sal_False));
+                        rSet.Put(SfxVisibilityItem(nWhich, false));
                     else
                         //  get state (BoolItem) from SfxViewFrame
                         pTabViewShell->GetViewFrame()->GetSlotState( nWhich, NULL, &rSet );
@@ -1288,9 +1088,9 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                 break;
             case SID_SBA_BRW_INSERT:
                 {
-                    //  SBA will ein BOOL-Item, damit ueberhaupt enabled
+                    //  SBA will ein sal_Bool-Item, damit ueberhaupt enabled
 
-                    BOOL bEnable = TRUE;
+                    sal_Bool bEnable = sal_True;
                     rSet.Put(SfxBoolItem(nWhich, bEnable));
                 }
                 break;
@@ -1301,7 +1101,7 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                     if (!bAutoFilterTested)
                     {
                         bAutoFilter = pDoc->HasAutoFilter( nPosX, nPosY, nTab );
-                        bAutoFilterTested = TRUE;
+                        bAutoFilterTested = sal_True;
                     }
                     if ( nWhich == SID_AUTO_FILTER )
                     {
@@ -1329,16 +1129,16 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                     SCCOL nStartCol, nEndCol;
                     SCROW  nStartRow, nEndRow;
                     SCTAB  nStartTab, nEndTab;
-                    BOOL bAnyQuery = FALSE;
+                    sal_Bool bAnyQuery = false;
 
-                    BOOL bSelected = (GetViewData()->GetSimpleArea(
+                    sal_Bool bSelected = (GetViewData()->GetSimpleArea(
                                 nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab )
                             == SC_MARK_SIMPLE);
 
                     if ( bSelected )
                     {
                         if (nStartCol==nEndCol && nStartRow==nEndRow)
-                            bSelected = FALSE;
+                            bSelected = false;
                     }
                     else
                     {
@@ -1356,7 +1156,7 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                         ScQueryParam aParam;
                         pDBData->GetQueryParam( aParam );
                         if ( aParam.GetEntry(0).bDoQuery )
-                            bAnyQuery = TRUE;
+                            bAnyQuery = sal_True;
                     }
 
                     if ( !bAnyQuery )

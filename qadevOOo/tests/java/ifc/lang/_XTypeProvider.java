@@ -49,7 +49,7 @@ public class _XTypeProvider extends MultiMethodTest {
 
     /**
     * Just calls the method.<p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getImplementationId() {
         boolean result = true;

@@ -56,10 +56,6 @@ class SwDoc;
 class SwFmt;
 class SwFlyFrmFmt;
 
-
-/*-----------------12.02.98 11:21-------------------
-
---------------------------------------------------*/
 class BaseFrameProperties_Impl;
 class SwXFrame : public cppu::WeakImplHelper6
 <
@@ -80,7 +76,7 @@ class SwXFrame : public cppu::WeakImplHelper6
 
     // Descriptor-interface
     BaseFrameProperties_Impl*       pProps;
-    sal_Bool                        bIsDescriptor;
+    bool bIsDescriptor;
     String                          sName;
 
     SwPaM*                          m_pCopySource;
@@ -88,6 +84,7 @@ class SwXFrame : public cppu::WeakImplHelper6
 protected:
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxStyleData;
     com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  mxStyleFamily;
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
     virtual ~SwXFrame();
 public:
@@ -133,7 +130,7 @@ public:
     //XShapeDescriptor
     virtual rtl::OUString SAL_CALL getShapeType(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    //Basisimplementierung
+    //Base implementation
     //XComponent
     virtual void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -143,11 +140,8 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
-
-    //SwClient
-    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
     void attach( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xTextRange ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -158,15 +152,13 @@ public:
     }
     FlyCntType      GetFlyCntType()const {return eType;}
 
-    sal_Bool            IsDescriptor() const {return bIsDescriptor;}
+    bool IsDescriptor() const {return bIsDescriptor;}
     void            ResetDescriptor();
     //copy text from a given source PaM
     void            SetSelection(SwPaM& rCopySource);
     static SW_DLLPUBLIC SdrObject *GetOrCreateSdrObject( SwFlyFrmFmt *pFmt );
 };
-/*-----------------20.02.98 11:28-------------------
 
---------------------------------------------------*/
 typedef cppu::WeakImplHelper3
 <
     ::com::sun::star::text::XTextFrame,
@@ -230,7 +222,7 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     // XEventsSupplier
@@ -245,9 +237,7 @@ public:
     void * SAL_CALL operator new( size_t ) throw();
     void SAL_CALL operator delete( void * ) throw();
 };
-/*-----------------20.02.98 11:28-------------------
 
---------------------------------------------------*/
 typedef cppu::WeakImplHelper2
 <
     ::com::sun::star::text::XTextContent,
@@ -283,7 +273,7 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     // XEventsSupplier
@@ -291,9 +281,7 @@ public:
     void * SAL_CALL operator new( size_t ) throw();
     void SAL_CALL operator delete( void * ) throw();
 };
-/*-----------------20.02.98 11:28-------------------
 
---------------------------------------------------*/
 class SwOLENode;
 typedef cppu::WeakImplHelper3
 <
@@ -339,7 +327,7 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     // XEventsSupplier
@@ -357,8 +345,7 @@ class SwXOLEListener : public cppu::WeakImplHelper1
     public SwClient
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLEModel;
-//    SfxObjectShell* GetObjShell( const SwFmt& rFmt,
-//                                    SwOLENode** ppNd = 0 ) const;
+
     SwFmt*       GetFmt() const    {  return (SwFmt*)GetRegisteredIn(); }
 public:
     SwXOLEListener(SwFmt& rOLEFmt, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLE);
@@ -371,7 +358,8 @@ public:
 // ::com::sun::star::util::XModifyListener
     virtual void SAL_CALL modified( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
 
-    void Modify( SfxPoolItem*, SfxPoolItem* );
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
 

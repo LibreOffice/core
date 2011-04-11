@@ -48,7 +48,7 @@
 #include <redline.hxx>
 #include <scriptinfo.hxx>
 #include <editeng/charhiddenitem.hxx>
-
+#include <switerator.hxx>
 
 namespace {
 
@@ -94,9 +94,8 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
     SwCntntNode* pNode = rPos.nNode.GetNode().GetCntntNode();   // getfirstcontentnode // getnext...
     if( !pNode )
         return aRet;
-    SwClientIter aIter( *pNode );
-    SwTxtFrm *pTxtFrm;
-    for( pTxtFrm = (SwTxtFrm*)aIter.First( TYPE( SwTxtFrm )); pTxtFrm; pTxtFrm = (SwTxtFrm*)aIter.Next() )
+    SwIterator<SwTxtFrm,SwCntntNode> aIter( *pNode );
+    for( SwTxtFrm* pTxtFrm = aIter.First(); pTxtFrm; pTxtFrm = aIter.Next() )
     {
         if( !pTxtFrm->IsFollow() )
         {
@@ -205,22 +204,5 @@ sw::sidebarwindows::SwSidebarWin* SwAnnotationItem::GetSidebarWindow(
                                                 *this,
                                                 pFmtFld );
 }
-
-/*
-SwPosition SwRedCommentItem::GetAnchorPosition()
-{
-    return *pRedline->Start();
-}
-
-SwSidebarWin* SwRedCommentItem::GetSidebarWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits)
-{
-    return new SwRedComment(pParent,nBits,aMgr,aBits,pRedline);
-}
-
-bool SwRedCommentItem::UseElement()
-{
-    return true;
-}
-*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -113,13 +113,6 @@ void CharacterProperties::AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-    // CharBackColor
-//     rOutProperties.push_back(
-//         Property( C2U( "CharBackColor" ),
-//                   PROP_CHAR_BACKGROUND_COLOR,
-//                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT));
     // CharEscapement
     rOutProperties.push_back(
         Property( C2U( "CharEscapement" ),
@@ -156,6 +149,28 @@ void CharacterProperties::AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+    // CharOverline (see awt.FontUnderline)
+    rOutProperties.push_back(
+        Property( C2U( "CharOverline" ),
+                  PROP_CHAR_OVERLINE,
+                  ::getCppuType( reinterpret_cast< const sal_Int16* >( 0 ) ),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ) );
+    // CharOverlineColor
+    rOutProperties.push_back(
+        Property( C2U( "CharOverlineColor" ),
+                  PROP_CHAR_OVERLINE_COLOR,
+                  ::getCppuType( reinterpret_cast< const sal_Int32* >( 0 ) ),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT
+                  | beans::PropertyAttribute::MAYBEVOID ) );
+    // CharOverlineHasColor
+    rOutProperties.push_back(
+        Property( C2U( "CharOverlineHasColor" ),
+                  PROP_CHAR_OVERLINE_HAS_COLOR,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ) );
     // CharWeight (see awt.FontWeight)
     rOutProperties.push_back(
         Property( C2U( "CharWeight" ),
@@ -184,30 +199,6 @@ void CharacterProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
-    // CharCaseMap (see style.CaseMap)
-//     rOutProperties.push_back(
-//         Property( C2U( "CharCaseMap" ),
-//                   PROP_CHAR_CASE_MAPPING,
-//                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-
-    // CharRotation
-//     rOutProperties.push_back(
-//         Property( C2U( "CharRotation" ),
-//                   PROP_CHAR_ROTATION,
-//                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-
-//     // CharScaleWidth
-//     rOutProperties.push_back(
-//         Property( C2U( "CharScaleWidth" ),
-//                   PROP_CHAR_SCALE_WIDTH,
-//                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharEscapementHeight
     rOutProperties.push_back(
         Property( C2U( "CharEscapementHeight" ),
@@ -215,14 +206,6 @@ void CharacterProperties::AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int8 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
-
-    // CharCrossedOut
-//     rOutProperties.push_back(
-//         Property( C2U( "CharCrossedOut" ),
-//                   PROP_CHAR_CROSSED_OUT,
-//                   ::getBooleanCppuType(),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharStrikeout (see awt.FontStrikeout)
     rOutProperties.push_back(
         Property( C2U( "CharStrikeout" ),
@@ -237,13 +220,6 @@ void CharacterProperties::AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-    // CharFlash
-//     rOutProperties.push_back(
-//         Property( C2U( "CharFlash" ),
-//                   PROP_CHAR_FLASH,
-//                   ::getBooleanCppuType(),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
     // CharLocale
     rOutProperties.push_back(
         Property( C2U( "CharLocale" ),
@@ -280,42 +256,6 @@ void CharacterProperties::AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-//     // RubyText
-//     rOutProperties.push_back(
-//         Property( C2U( "RubyText" ),
-//                   PROP_CHAR_RUBY_TEXT,
-//                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-//     // RubyAdjust (see text.RubyAdjust)
-//     rOutProperties.push_back(
-//         Property( C2U( "RubyAdjust" ),
-//                   PROP_CHAR_RUBY_ADJUST,
-//                   ::getCppuType( reinterpret_cast< const sal_Int16 * >(0)),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-//     // RubyCharStyleName
-//     rOutProperties.push_back(
-//         Property( C2U( "RubyStyleName" ),
-//                   PROP_CHAR_RUBY_STYLE_NAME,
-//                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-//     // RubyIsAbove
-//     rOutProperties.push_back(
-//         Property( C2U( "RubyIsAbove" ),
-//                   PROP_CHAR_RUBY_IS_ABOVE,
-//                   ::getBooleanCppuType(),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-//     // CharNoHyphenation
-//     rOutProperties.push_back(
-//         Property( C2U( "InhibitHyphenation" ),
-//                   PROP_CHAR_INHIBIT_HYPHENATION,
-//                   ::getBooleanCppuType(),
-//                   beans::PropertyAttribute::BOUND
-//                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-
     // CharacterPropertiesAsian
     // =====
     // CharFontNameAsian
@@ -498,31 +438,20 @@ void CharacterProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_UNDERLINE, awt::FontUnderline::NONE );
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_CHAR_UNDERLINE_COLOR, -1 ); //automatic color (COL_AUTO)
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_UNDERLINE_HAS_COLOR, false );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_OVERLINE, awt::FontUnderline::NONE );
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_CHAR_OVERLINE_COLOR, -1 ); //automatic color (COL_AUTO)
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_OVERLINE_HAS_COLOR, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_WEIGHT, awt::FontWeight::NORMAL );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_POSTURE, awt::FontSlant_NONE );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_AUTO_KERNING, true );
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_KERNING, 0 );
-
-//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CASE_MAPPING, style::CaseMap::NONE );
-//     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_ROTATION, 0 );
-//     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_SCALE_WIDTH, 71 );
-
-//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CROSSED_OUT, false );
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_CHAR_STRIKE_OUT, awt::FontStrikeout::NONE );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_WORD_MODE, false );
-//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_FLASH, false );
-
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_LOCALE, aDefaultLocale );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_SHADOWED, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_CONTOURED, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_RELIEF, text::FontRelief::NONE );
-
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_EMPHASIS, text::FontEmphasis::NONE );
-
-//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_RUBY_ADJUST, text::RubyAdjust_INDENT_BLOCK );
-//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_RUBY_STYLE_NAME, ?? );
-//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_RUBY_IS_ABOVE, true );
-//     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_INHIBIT_HYPHENATION, false );
 
     // Asian (com.sun.star.style.CharacterPropertiesAsian)
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_CHAR_ASIAN_CHAR_HEIGHT, fDefaultFontHeight );
@@ -556,7 +485,6 @@ bool CharacterProperties::IsCharacterPropertyHandle( sal_Int32 nHandle )
              nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
 }
 
-// static
 awt::FontDescriptor CharacterProperties::createFontDescriptorFromPropertySet(
     const uno::Reference< beans::XMultiPropertySet > & xMultiPropSet )
 {

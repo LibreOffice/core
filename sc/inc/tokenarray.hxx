@@ -30,6 +30,7 @@
 #define SC_TOKENARRAY_HXX
 
 #include "formula/token.hxx"
+#include "scmatrix.hxx"
 #include <tools/solar.h>
 #include "scdllapi.h"
 #include <formula/tokenarray.hxx>
@@ -42,7 +43,7 @@ class ScMatrix;
 class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
 {
     friend class ScCompiler;
-    BOOL                    ImplGetReference( ScRange& rRange, BOOL bValidOnly ) const;
+    sal_Bool                    ImplGetReference( ScRange& rRange, sal_Bool bValidOnly ) const;
 
 public:
     ScTokenArray();
@@ -52,15 +53,15 @@ public:
     ScTokenArray* Clone() const;    /// True copy!
 
     /// Exactly and only one range (valid or deleted)
-    BOOL    IsReference( ScRange& rRange ) const;
+    sal_Bool    IsReference( ScRange& rRange ) const;
     /// Exactly and only one valid range (no #REF!s)
-    BOOL    IsValidReference( ScRange& rRange ) const;
+    sal_Bool    IsValidReference( ScRange& rRange ) const;
 
 
                             /** Determines the extent of direct adjacent
                                 references. Only use with real functions, e.g.
                                 GetOuterFuncOpCode() == ocSum ! */
-    BOOL                    GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
+    sal_Bool                    GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                                 const ScAddress& rPos, ScDirection );
 
     formula::FormulaToken* AddRawToken( const ScRawToken& );
@@ -71,10 +72,11 @@ public:
     /** ScSingleRefOpToken with ocMatRef. */
     formula::FormulaToken* AddMatrixSingleReference( const ScSingleRefData& rRef );
     formula::FormulaToken* AddDoubleReference( const ScComplexRefData& rRef );
+    formula::FormulaToken* AddRangeName( sal_uInt16 n, bool bGlobal );
     formula::FormulaToken* AddExternalName( sal_uInt16 nFileId, const String& rName );
     formula::FormulaToken* AddExternalSingleReference( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
     formula::FormulaToken* AddExternalDoubleReference( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
-    formula::FormulaToken* AddMatrix( ScMatrix* p );
+    formula::FormulaToken* AddMatrix( const ScMatrixRef& p );
     /** ScSingleRefOpToken with ocColRowName. */
     formula::FormulaToken* AddColRowName( const ScSingleRefData& rRef );
     virtual formula::FormulaToken* MergeArray( );

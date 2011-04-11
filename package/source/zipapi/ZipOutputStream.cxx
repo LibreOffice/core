@@ -129,7 +129,7 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 {
                     if (pEntry->nSize != aDeflater.getTotalIn())
                     {
-                        OSL_ENSURE(false,"Invalid entry size");
+                        OSL_FAIL("Invalid entry size");
                     }
                     if (pEntry->nCompressedSize != aDeflater.getTotalOut())
                     {
@@ -139,7 +139,7 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                     }
                     if (pEntry->nCrc != aCRC.getValue())
                     {
-                        OSL_ENSURE(false,"Invalid entry CRC-32");
+                        OSL_FAIL("Invalid entry CRC-32");
                     }
                 }
                 else
@@ -156,10 +156,10 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 break;
             case STORED:
                 if (!((pEntry->nFlag & 8) == 0))
-                    OSL_ENSURE ( false, "Serious error, one of compressed size, size or CRC was -1 in a STORED stream");
+                    OSL_FAIL( "Serious error, one of compressed size, size or CRC was -1 in a STORED stream");
                 break;
             default:
-                OSL_ENSURE(false,"Invalid compression method");
+                OSL_FAIL("Invalid compression method");
                 break;
         }
 
@@ -174,6 +174,7 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                                                  reinterpret_cast < sal_uInt8 * > ( pCurrentEncryptData->aDigest.getArray() ),
                                                  RTL_DIGEST_LENGTH_SHA1 );
             OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
+            (void)aDigestResult;
             rtl_digest_destroySHA1 ( aDigest );
         }
         pCurrentEntry = NULL;
@@ -229,7 +230,7 @@ void SAL_CALL ZipOutputStream::finish(  )
         closeEntry();
 
     if (aZipList.size() < 1)
-        OSL_ENSURE(false,"Zip file must have at least one entry!\n");
+        OSL_FAIL("Zip file must have at least one entry!\n");
 
     sal_Int32 nOffset= static_cast < sal_Int32 > (aChucker.GetPosition());
     for (sal_Int32 i =0, nEnd = aZipList.size(); i < nEnd; i++)
@@ -260,6 +261,7 @@ void ZipOutputStream::doDeflate()
                 mnDigested = mnDigested + nEat;
             }
             OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
+            (void)aDigestResult;
 
             aEncryptionBuffer.realloc ( nLength );
 
@@ -267,6 +269,7 @@ void ZipOutputStream::doDeflate()
             aCipherResult = rtl_cipher_encode ( aCipher, pTmpBuffer,
                                             nLength, reinterpret_cast < sal_uInt8 * > (aEncryptionBuffer.getArray()),  nLength );
             OSL_ASSERT( aCipherResult == rtl_Cipher_E_None );
+            (void)aCipherResult;
 
             aChucker.WriteBytes( aEncryptionBuffer );
             aCRC.update ( aEncryptionBuffer );

@@ -30,26 +30,22 @@
 #define SC_FORMEL_HXX
 
 #include <tools/solar.h>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
-#include "tokstack.hxx"
-#include "root.hxx"
-#include <global.hxx>
+
 #include <compiler.hxx>
+#include <global.hxx>
 
+#include "root.hxx"
+#include "tokstack.hxx"
 
-// ----- forwards --------------------------------------------------------
+#include <boost/ptr_container/ptr_map.hpp>
+#include <vector>
 
 class XclImpStream;
 class ScTokenArray;
 class ScFormulaCell;
 struct ScSingleRefData;
 struct ScComplexRefData;
-
-
-
-
-//------------------------------------------------------------------------
 
 enum ConvErr
 {
@@ -60,7 +56,6 @@ enum ConvErr
     ConvErrCount    // Nicht alle Bytes der Formel 'erwischt'
 };
 
-
 enum FORMULA_TYPE
 {
     FT_CellFormula,
@@ -68,115 +63,26 @@ enum FORMULA_TYPE
     FT_SharedFormula
 };
 
-
-
-
-//--------------------------------------------------------- class ScRangeList -
-
-class _ScRangeList : protected List
-{
-private:
-protected:
-public:
-    virtual                 ~_ScRangeList();
-    inline void             Append( const ScRange& rRange );
-    inline void             Append( ScRange* pRange );
-    inline void             Append( const ScSingleRefData& rSRD );
-    inline void             Append( const ScComplexRefData& rCRD );
-
-    using                   List::Count;
-    inline BOOL             HasRanges( void ) const;
-
-    inline const ScRange*   First( void );
-    inline const ScRange*   Next( void );
-};
-
-
-inline void _ScRangeList::Append( const ScRange& r )
-{
-    List::Insert( new ScRange( r ), LIST_APPEND );
-}
-
-
-inline void _ScRangeList::Append( ScRange* p )
-{
-    List::Insert( p, LIST_APPEND );
-}
-
-
-inline BOOL _ScRangeList::HasRanges( void ) const
-{
-    return Count() > 0;
-}
-
-
-inline const ScRange* _ScRangeList::First( void )
-{
-    return ( const ScRange* ) List::First();
-}
-
-
-inline const ScRange* _ScRangeList::Next( void )
-{
-    return ( const ScRange* ) List::Next();
-}
-
-
-inline void _ScRangeList::Append( const ScSingleRefData& r )
-{
-    List::Insert( new ScRange( r.nCol, r.nRow, r.nTab ), LIST_APPEND );
-}
-
-
-inline void _ScRangeList::Append( const ScComplexRefData& r )
-{
-    List::Insert(   new ScRange(    r.Ref1.nCol, r.Ref1.nRow, r.Ref1.nTab,
-                                    r.Ref2.nCol, r.Ref2.nRow, r.Ref2.nTab ),
-                    LIST_APPEND );
-}
-
-
-
-
-//----------------------------------------------------- class ScRangeListTabs -
-
 class _ScRangeListTabs
 {
-private:
-protected:
-    BOOL                        bHasRanges;
-    _ScRangeList**              ppTabLists;
-    _ScRangeList*               pAct;
-    UINT16                      nAct;
+    typedef ::std::vector<ScRange> RangeListType;
+    typedef ::boost::ptr_map<SCTAB, RangeListType> TabRangeType;
+    TabRangeType maTabRanges;
+    RangeListType::const_iterator maItrCur;
+    RangeListType::const_iterator maItrCurEnd;
+
 public:
-                                _ScRangeListTabs( void );
-    virtual                     ~_ScRangeListTabs();
+    _ScRangeListTabs ();
+    ~_ScRangeListTabs();
 
-    void                        Append( ScSingleRefData aSRD, SCsTAB nTab, const BOOL bLimit = TRUE );
-    void                        Append( ScComplexRefData aCRD, SCsTAB nTab, const BOOL bLimit = TRUE );
+    void Append( ScSingleRefData aSRD, SCTAB nTab, bool bLimit = true );
+    void Append( ScComplexRefData aCRD, SCTAB nTab, bool bLimit = true );
 
-    inline BOOL                 HasRanges( void ) const;
+    const ScRange* First ( SCTAB nTab = 0 );
+    const ScRange* Next ();
 
-    const ScRange*              First( const UINT16 nTab = 0 );
-    const ScRange*              Next( void );
-//      const ScRange*              NextContinue( void );
-    inline const _ScRangeList*  GetActList( void ) const;
+    bool HasRanges () const { return !maTabRanges.empty(); }
 };
-
-
-inline BOOL _ScRangeListTabs::HasRanges( void ) const
-{
-    return bHasRanges;
-}
-
-
-inline const _ScRangeList* _ScRangeListTabs::GetActList( void ) const
-{
-    return pAct;
-}
-
-
-
 
 class ConverterBase
 {
@@ -186,9 +92,9 @@ protected:
     ScAddress           aEingPos;
     ConvErr             eStatus;
     sal_Char*           pBuffer;        // Universal-Puffer
-    UINT16              nBufferSize;    // ...und seine Groesse
+    sal_uInt16              nBufferSize;    // ...und seine Groesse
 
-                        ConverterBase( UINT16 nNewBuffer );
+                        ConverterBase( sal_uInt16 nNewBuffer );
     virtual             ~ConverterBase();
 
     void                Reset();
@@ -205,7 +111,7 @@ public:
 class ExcelConverterBase : public ConverterBase
 {
 protected:
-                        ExcelConverterBase( UINT16 nNewBuffer );
+                        ExcelConverterBase( sal_uInt16 nNewBuffer );
     virtual             ~ExcelConverterBase();
 
 public:
@@ -224,23 +130,23 @@ class LotusConverterBase : public ConverterBase
 {
 protected:
     SvStream&           aIn;
-    INT32               nBytesLeft;
+    sal_Int32               nBytesLeft;
 
     inline void         Ignore( const long nSeekRel );
     inline void         Read( sal_Char& nByte );
-    inline void         Read( BYTE& nByte );
-    inline void         Read( UINT16& nUINT16 );
-    inline void         Read( INT16& nINT16 );
+    inline void         Read( sal_uInt8& nByte );
+    inline void         Read( sal_uInt16& nUINT16 );
+    inline void         Read( sal_Int16& nINT16 );
     inline void         Read( double& fDouble );
-        inline void                     Read( UINT32& nUINT32 );
+        inline void                     Read( sal_uInt32& nUINT32 );
 
-                        LotusConverterBase( SvStream& rStr, UINT16 nNewBuffer );
+                        LotusConverterBase( SvStream& rStr, sal_uInt16 nNewBuffer );
     virtual             ~LotusConverterBase();
 
 public:
     void                Reset( const ScAddress& rEingPos );
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpErg, INT32& nRest,
+    virtual ConvErr     Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 
 protected:
@@ -260,19 +166,19 @@ inline void LotusConverterBase::Read( sal_Char& nByte )
     nBytesLeft--;
 }
 
-inline void LotusConverterBase::Read( BYTE& nByte )
+inline void LotusConverterBase::Read( sal_uInt8& nByte )
 {
     aIn >> nByte;
     nBytesLeft--;
 }
 
-inline void LotusConverterBase::Read( UINT16& nUINT16 )
+inline void LotusConverterBase::Read( sal_uInt16& nUINT16 )
 {
     aIn >> nUINT16;
     nBytesLeft -= 2;
 }
 
-inline void LotusConverterBase::Read( INT16& nINT16 )
+inline void LotusConverterBase::Read( sal_Int16& nINT16 )
 {
     aIn >> nINT16;
     nBytesLeft -= 2;
@@ -284,7 +190,7 @@ inline void LotusConverterBase::Read( double& fDouble )
     nBytesLeft -= 8;
 }
 
-inline void LotusConverterBase::Read( UINT32& nUINT32 )
+inline void LotusConverterBase::Read( sal_uInt32& nUINT32 )
 {
     aIn >> nUINT32;
     nBytesLeft -= 4;

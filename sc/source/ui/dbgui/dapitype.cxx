@@ -41,24 +41,36 @@
 #include "dapitype.hrc"
 
 using namespace com::sun::star;
+using ::rtl::OUString;
 
 //-------------------------------------------------------------------------
 
-ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnableExternal ) :
+ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, sal_Bool bEnableExternal ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPITYPE ) ),
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aBtnSelection   ( this, ScResId( BTN_SELECTION ) ),
+    aBtnNamedRange  ( this, ScResId( BTN_NAMED_RANGE ) ),
     aBtnDatabase    ( this, ScResId( BTN_DATABASE ) ),
     aBtnExternal    ( this, ScResId( BTN_EXTERNAL ) ),
+    aLbNamedRange   ( this, ScResId( LB_NAMED_RANGE ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
+    aBtnSelection.SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+    aBtnNamedRange.SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+    aBtnDatabase.SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+    aBtnExternal.SetClickHdl( LINK(this, ScDataPilotSourceTypeDlg, RadioClickHdl) );
+
     if (!bEnableExternal)
         aBtnExternal.Disable();
 
     aBtnSelection.Check();
+
+    // Disabled unless at least one named range exists.
+    aLbNamedRange.Disable();
+    aBtnNamedRange.Disable();
 
     FreeResource();
 }
@@ -67,14 +79,42 @@ ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
 {
 }
 
-BOOL ScDataPilotSourceTypeDlg::IsDatabase() const
+bool ScDataPilotSourceTypeDlg::IsDatabase() const
 {
     return aBtnDatabase.IsChecked();
 }
 
-BOOL ScDataPilotSourceTypeDlg::IsExternal() const
+bool ScDataPilotSourceTypeDlg::IsExternal() const
 {
     return aBtnExternal.IsChecked();
+}
+
+bool ScDataPilotSourceTypeDlg::IsNamedRange() const
+{
+    return aBtnNamedRange.IsChecked();
+}
+
+OUString ScDataPilotSourceTypeDlg::GetSelectedNamedRange() const
+{
+    sal_uInt16 nPos = aLbNamedRange.GetSelectEntryPos();
+    return aLbNamedRange.GetEntry(nPos);
+}
+
+void ScDataPilotSourceTypeDlg::AppendNamedRange(const OUString& rName)
+{
+    aLbNamedRange.InsertEntry(rName);
+    if (aLbNamedRange.GetEntryCount() == 1)
+    {
+        // Select position 0 only for the first time.
+        aLbNamedRange.SelectEntryPos(0);
+        aBtnNamedRange.Enable();
+    }
+}
+
+IMPL_LINK( ScDataPilotSourceTypeDlg, RadioClickHdl, RadioButton*, pBtn )
+{
+    aLbNamedRange.Enable(pBtn == &aBtnNamedRange);
+    return 0;
 }
 
 //-------------------------------------------------------------------------

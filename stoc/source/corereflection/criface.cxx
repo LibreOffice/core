@@ -335,7 +335,7 @@ void IdlAttributeFieldImpl::checkException(
             throw WrappedTargetRuntimeException(
                 OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "non-RuntimeException occured when accessing an"
+                        "non-RuntimeException occurred when accessing an"
                         " interface type attribute")),
                 context, e);
         }
@@ -749,7 +749,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
 
             InvocationTargetException aExc;
             aExc.Context = *(const Reference< XInterface > *)rObj.getValue();
-            aExc.Message = OUString( RTL_CONSTASCII_USTRINGPARAM("exception occured during invocation!") );
+            aExc.Message = OUString( RTL_CONSTASCII_USTRINGPARAM("exception occurred during invocation!") );
             uno_any_destruct(
                 &aExc.TargetException,
                 reinterpret_cast< uno_ReleaseFunc >(cpp_release) );

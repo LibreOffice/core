@@ -81,7 +81,7 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport,
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(0,"Exception catched while putting Function props!");
+        OSL_FAIL("Exception catched while putting Function props!");
     }
 }
 // -----------------------------------------------------------------------------

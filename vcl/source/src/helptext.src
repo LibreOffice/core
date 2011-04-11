@@ -138,26 +138,3 @@ String SV_SHORTCUT_SPLITTER
 {
     Text [ en-US ] = "Split window separator" ;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

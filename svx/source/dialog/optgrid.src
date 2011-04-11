@@ -45,6 +45,7 @@ TabPage RID_SVXPAGE_GRID
     };
     CheckBox CBX_USE_GRIDSNAP
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_GRID:CBX_USE_GRIDSNAP";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 204 , 10 ) ;
         TabStop = TRUE ;
@@ -52,6 +53,7 @@ TabPage RID_SVXPAGE_GRID
     };
     CheckBox CBX_GRID_VISIBLE
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_GRID:CBX_GRID_VISIBLE";
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 204 , 10 ) ;
         TabStop = TRUE ;
@@ -77,6 +79,7 @@ TabPage RID_SVXPAGE_GRID
     };
     MetricField MTR_FLD_DRAW_X
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_GRID:MTR_FLD_DRAW_X";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 75 , 54 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
@@ -94,6 +97,7 @@ TabPage RID_SVXPAGE_GRID
     };
     MetricField MTR_FLD_DRAW_Y
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_GRID:MTR_FLD_DRAW_Y";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 75 , 69 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
@@ -129,12 +133,14 @@ TabPage RID_SVXPAGE_GRID
     };
     NumericField NUM_FLD_DIVISION_X
     {
+        HelpID = "svx:NumericField:RID_SVXPAGE_GRID:NUM_FLD_DIVISION_X";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 195 , 54 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
+        Minimum = 1 ;
         Maximum = 99 ;
         Last = 99 ;
         StrictFormat = TRUE ;
@@ -144,16 +150,18 @@ TabPage RID_SVXPAGE_GRID
     {
         Pos = MAP_APPFONT ( 223 , 56 ) ;
         Size = MAP_APPFONT ( 29 , 8 ) ;
-        Text [ en-US ] = "point(s)" ;
+        Text [ en-US ] = "space(s)" ;
     };
     NumericField NUM_FLD_DIVISION_Y
     {
+        HelpID = "svx:NumericField:RID_SVXPAGE_GRID:NUM_FLD_DIVISION_Y";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 195 , 69 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
+        Minimum = 1 ;
         Maximum = 99 ;
         Last = 99 ;
         StrictFormat = TRUE ;
@@ -167,6 +175,7 @@ TabPage RID_SVXPAGE_GRID
     };
     CheckBox CBX_SYNCHRONIZE
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_GRID:CBX_SYNCHRONIZE";
         Pos = MAP_APPFONT ( 12 , 84 ) ;
         Size = MAP_APPFONT ( 127 , 10 ) ;
         TabStop = TRUE ;
@@ -182,6 +191,7 @@ TabPage RID_SVXPAGE_GRID
 
     CheckBox CBX_SNAP_HELPLINES
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_GRID:CBX_SNAP_HELPLINES";
         Pos = MAP_APPFONT ( 12 , 111  ) ;
         Size = MAP_APPFONT ( 106 , 10 ) ;
         Hide = TRUE;
@@ -190,6 +200,7 @@ TabPage RID_SVXPAGE_GRID
     };
     CheckBox CBX_SNAP_BORDER
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_GRID:CBX_SNAP_BORDER";
         Hide = TRUE;
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 125  ) ;
@@ -198,6 +209,7 @@ TabPage RID_SVXPAGE_GRID
     };
     CheckBox CBX_SNAP_FRAME
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_GRID:CBX_SNAP_FRAME";
         Pos = MAP_APPFONT ( 12 , 139  ) ;
         Size = MAP_APPFONT ( 106 , 10 ) ;
         Hide = TRUE;
@@ -206,6 +218,7 @@ TabPage RID_SVXPAGE_GRID
     };
     CheckBox CBX_SNAP_POINTS
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_GRID:CBX_SNAP_POINTS";
         Pos = MAP_APPFONT ( 12 , 153  ) ;
         Size = MAP_APPFONT ( 106 , 10 ) ;
         Hide = TRUE;
@@ -221,6 +234,7 @@ TabPage RID_SVXPAGE_GRID
     };
     MetricField MTR_FLD_SNAP_AREA
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_GRID:MTR_FLD_SNAP_AREA";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 83 , 167  ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
@@ -252,6 +266,7 @@ TabPage RID_SVXPAGE_GRID
     };
     CheckBox CBX_ORTHO
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_GRID:CBX_ORTHO";
         Pos = MAP_APPFONT ( 136 , 111  ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
         Hide = TRUE;
@@ -260,6 +275,7 @@ TabPage RID_SVXPAGE_GRID
     };
     CheckBox CBX_BIGORTHO
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_GRID:CBX_BIGORTHO";
         Pos = MAP_APPFONT ( 136 , 125  ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
         Hide = TRUE;
@@ -268,6 +284,7 @@ TabPage RID_SVXPAGE_GRID
     };
     CheckBox CBX_ROTATE
     {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_GRID:CBX_ROTATE";
         Pos = MAP_APPFONT ( 136 , 139  ) ;
          // 136, 111
         Size = MAP_APPFONT ( 55 , 10 ) ;
@@ -277,6 +294,7 @@ TabPage RID_SVXPAGE_GRID
     };
     MetricField MTR_FLD_ANGLE
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_GRID:MTR_FLD_ANGLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 194 , 137  ) ;
          // 190, 111
@@ -302,6 +320,7 @@ TabPage RID_SVXPAGE_GRID
     };
     MetricField MTR_FLD_BEZ_ANGLE
     {
+        HelpID = "svx:MetricField:RID_SVXPAGE_GRID:MTR_FLD_BEZ_ANGLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 194 , 154  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;

@@ -83,13 +83,11 @@ uno::Reference<sheet::XSolver> lcl_CreateSolver( const uno::Reference<uno::XInte
     return xSolver;
 }
 
-// static
 void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
                                        uno::Sequence<rtl::OUString>& rDescriptions )
 {
     rImplNames.realloc(0);      // clear
     rDescriptions.realloc(0);
-    sal_Int32 nCount = 0;
 
     uno::Reference<uno::XComponentContext> xCtx;
     uno::Reference<lang::XMultiServiceFactory> xMSF = comphelper::getProcessServiceFactory();
@@ -109,6 +107,7 @@ void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
                         xEnAc->createContentEnumeration( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCSOLVER_SERVICE)) );
         if ( xEnum.is() )
         {
+            sal_Int32 nCount = 0;
             while ( xEnum->hasMoreElements() )
             {
                 uno::Any aAny = xEnum->nextElement();
@@ -142,7 +141,6 @@ void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
     }
 }
 
-// static
 uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const rtl::OUString& rImplName )
 {
     uno::Reference<sheet::XSolver> xSolver;
@@ -188,7 +186,6 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const rtl::OUString& rIm
     return xSolver;
 }
 
-// static
 uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( const rtl::OUString& rImplName )
 {
     uno::Sequence<beans::PropertyValue> aDefaults;

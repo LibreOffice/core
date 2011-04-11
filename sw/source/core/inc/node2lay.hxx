@@ -30,7 +30,7 @@
 
 #include <tools/solar.h>
 
-/* -----------------23.02.99 11:33-------------------
+/* --------------------------------------------------
  * Die Klasse SwNode2Layout stellt die Verbindung von Nodes zum Layout her.
  * Sie liefert einen intelligenten Iterator ueber die zum Node oder Nodebereich
  * gehoerenden Frames. Je nach Zweck der Iteration, z.B. um vor oder hinter
@@ -68,15 +68,15 @@ public:
     SwNode2Layout( const SwNode& rNd );
     // Dieser Ctor ist fuer das Einfuegen vor oder hinter rNd gedacht,
     // nIdx ist der Index des einzufuegenden Nodes
-    SwNode2Layout( const SwNode& rNd, ULONG nIdx );
+    SwNode2Layout( const SwNode& rNd, sal_uLong nIdx );
     ~SwNode2Layout();
     SwFrm* NextFrm();
     SwLayoutFrm* UpperFrm( SwFrm* &rpFrm, const SwNode& rNode );
-    void RestoreUpperFrms( SwNodes& rNds, ULONG nStt, ULONG nEnd );
+    void RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
 
     SwFrm *GetFrm( const Point* pDocPos = 0,
                     const SwPosition *pPos = 0,
-                    const BOOL bCalcFrm = TRUE ) const;
+                    const sal_Bool bCalcFrm = sal_True ) const;
 };
 
 #endif

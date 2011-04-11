@@ -38,8 +38,9 @@
 #include "miscuno.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
@@ -64,8 +65,8 @@ ScPrintOptions::~ScPrintOptions()
 
 void ScPrintOptions::SetDefaults()
 {
-    bSkipEmpty = TRUE;
-    bAllSheets = FALSE;
+    bSkipEmpty = sal_True;
+    bAllSheets = false;
 }
 
 const ScPrintOptions& ScPrintOptions::operator=( const ScPrintOptions& rCpy )
@@ -89,7 +90,7 @@ int ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
 // -----------------------------------------------------------------------
 
 
-ScTpPrintItem::ScTpPrintItem( USHORT nWhichP, const ScPrintOptions& rOpt ) :
+ScTpPrintItem::ScTpPrintItem( sal_uInt16 nWhichP, const ScPrintOptions& rOpt ) :
     SfxPoolItem ( nWhichP ),
     theOptions  ( rOpt )
 {
@@ -147,11 +148,10 @@ Sequence<OUString> ScPrintCfg::GetPropertyNames()
 }
 
 ScPrintCfg::ScPrintCfg() :
-    ConfigItem( OUString::createFromAscii( CFGPATH_PRINT ) )
+    ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_PRINT )) )
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
-//  EnableNotification(aNames);
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
@@ -205,6 +205,6 @@ void ScPrintCfg::SetOptions( const ScPrintOptions& rNew )
     SetModified();
 }
 
-void ScPrintCfg::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void ScPrintCfg::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

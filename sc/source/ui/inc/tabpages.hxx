@@ -40,8 +40,8 @@ class ScTabPageProtection : public SfxTabPage
 public:
     static  SfxTabPage* Create          ( Window*               pParent,
                                           const SfxItemSet&     rAttrSet );
-    static  USHORT*     GetRanges       ();
-    virtual BOOL        FillItemSet     ( SfxItemSet& rCoreAttrs );
+    static  sal_uInt16*     GetRanges       ();
+    virtual sal_Bool        FillItemSet     ( SfxItemSet& rCoreAttrs );
     virtual void        Reset           ( const SfxItemSet& );
 
 protected:
@@ -65,12 +65,12 @@ private:
     FixedInfo   aTxtHint2;
 
                                     // aktueller Status:
-    BOOL        bTriEnabled;        //  wenn vorher Dont-Care
-    BOOL        bDontCare;          //  alles auf TriState
-    BOOL        bProtect;           //  einzelne Einstellungen ueber TriState sichern
-    BOOL        bHideForm;
-    BOOL        bHideCell;
-    BOOL        bHidePrint;
+    sal_Bool        bTriEnabled;        //  wenn vorher Dont-Care
+    sal_Bool        bDontCare;          //  alles auf TriState
+    sal_Bool        bProtect;           //  einzelne Einstellungen ueber TriState sichern
+    sal_Bool        bHideForm;
+    sal_Bool        bHideCell;
+    sal_Bool        bHidePrint;
 
     // Handler:
     DECL_LINK( ButtonClickHdl, TriStateBox* pBox );

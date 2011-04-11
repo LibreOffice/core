@@ -53,31 +53,31 @@ TriState lclConvertToTriState( bool bKnown, bool bIsKnownFlag, bool bIsUnknownFl
 
 // ----------------------------------------------------------------------------
 
-USHORT ItemWrapperHelper::GetWhichId( const SfxItemSet& rItemSet, USHORT nSlot )
+sal_uInt16 ItemWrapperHelper::GetWhichId( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
 {
     return rItemSet.GetPool()->GetWhich( nSlot );
 }
 
-bool ItemWrapperHelper::IsKnownItem( const SfxItemSet& rItemSet, USHORT nSlot )
+bool ItemWrapperHelper::IsKnownItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
 {
-    return rItemSet.GetItemState( GetWhichId( rItemSet, nSlot ), TRUE ) != SFX_ITEM_UNKNOWN;
+    return rItemSet.GetItemState( GetWhichId( rItemSet, nSlot ), sal_True ) != SFX_ITEM_UNKNOWN;
 }
 
-const SfxPoolItem* ItemWrapperHelper::GetUniqueItem( const SfxItemSet& rItemSet, USHORT nSlot )
+const SfxPoolItem* ItemWrapperHelper::GetUniqueItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
 {
-    USHORT nWhich = GetWhichId( rItemSet, nSlot );
-    return (rItemSet.GetItemState( nWhich, TRUE ) >= SFX_ITEM_DEFAULT) ? rItemSet.GetItem( nWhich, TRUE ) : 0;
+    sal_uInt16 nWhich = GetWhichId( rItemSet, nSlot );
+    return (rItemSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_DEFAULT) ? rItemSet.GetItem( nWhich, sal_True ) : 0;
 }
 
-const SfxPoolItem& ItemWrapperHelper::GetDefaultItem( const SfxItemSet& rItemSet, USHORT nSlot )
+const SfxPoolItem& ItemWrapperHelper::GetDefaultItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
 {
     return rItemSet.GetPool()->GetDefaultItem( GetWhichId( rItemSet, nSlot ) );
 }
 
-void ItemWrapperHelper::RemoveDefaultItem( SfxItemSet& rDestSet, const SfxItemSet& rOldSet, USHORT nSlot )
+void ItemWrapperHelper::RemoveDefaultItem( SfxItemSet& rDestSet, const SfxItemSet& rOldSet, sal_uInt16 nSlot )
 {
-    USHORT nWhich = GetWhichId( rDestSet, nSlot );
-    if( rOldSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_DEFAULT )
+    sal_uInt16 nWhich = GetWhichId( rDestSet, nSlot );
+    if( rOldSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_DEFAULT )
         rDestSet.ClearItem( nWhich );
 }
 
@@ -134,12 +134,12 @@ void CheckBoxWrapper::SetControlDontKnow( bool bSet )
     GetControl().SetState( bSet ? STATE_DONTKNOW : STATE_NOCHECK );
 }
 
-BOOL CheckBoxWrapper::GetControlValue() const
+sal_Bool CheckBoxWrapper::GetControlValue() const
 {
     return GetControl().IsChecked();
 }
 
-void CheckBoxWrapper::SetControlValue( BOOL bValue )
+void CheckBoxWrapper::SetControlValue( sal_Bool bValue )
 {
     GetControl().Check( bValue );
 }
@@ -303,7 +303,7 @@ TriState ItemConnectionBase::GetShowState( bool bKnown ) const
 // Standard connections
 // ============================================================================
 
-DummyItemConnection::DummyItemConnection( USHORT nSlot, Window& rWindow, ItemConnFlags nFlags ) :
+DummyItemConnection::DummyItemConnection( sal_uInt16 nSlot, Window& rWindow, ItemConnFlags nFlags ) :
     ItemConnectionBase( nFlags ),
     DummyWindowWrapper( rWindow ),
     mnSlot( nSlot )

@@ -47,8 +47,8 @@ testcase tToolsOutlineNumbering1
     Dim i as integer
     PrintLog "- Tools / Outline Numbering: Part 1 - Numbering"
 
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\number\numbering1.sxw" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\number\numbering1.sxw" )
+    
     
     ToolsOutlineNumbering
     Kontext
@@ -240,10 +240,10 @@ testcase tToolsOutlineNumbering1
         Select Case i
             Case 1
                 printlog "- Load sxw and check formattings"
-                Call hFileOpen ( gOfficePath + "user\work\tToolsOutlineNumbering1.sxw" )
+                hFileOpen( gOfficePath & "user\work\tToolsOutlineNumbering1.sxw" )
             Case 2
                 printlog "- Load odt and check formattings"
-                Call hFileOpen ( gOfficePath + "user\work\tToolsOutlineNumbering1.odt" )
+                hFileOpen( gOfficePath & "user\work\tToolsOutlineNumbering1.odt" )
         end select
         call wTypeKeys "<PageUp>", 8
         call wTypeKeys "<Up>", 10
@@ -343,8 +343,8 @@ testcase tToolsOutlineNumbering2
 
     PrintLog "- Tools / Outline Numbering: Part 2 - Tabpage Position"
 
-    Call hFileOpen ( gTesttoolPath + "writer\optional\input\number\numbering1.sxw" )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(  gTesttoolPath + "writer\optional\input\number\numbering1.sxw" )
+    
     
     ToolsOutlineNumbering
     Kontext
@@ -463,7 +463,7 @@ testcase tToolsOutlineNumbering2
     printlog "  - check saved Numbering"
     Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\tToolsOutlineNumbering2.odt", "writer8" )
     Call hCloseDocument
-    Call hFileOpen ( gOfficePath + "user\work\tToolsOutlineNumbering2.odt" )
+    hFileOpen( gOfficePath & "user\work\tToolsOutlineNumbering2.odt" )
 
     ToolsOutlineNumbering
     Kontext
@@ -638,7 +638,7 @@ testcase tToolsOutlineNumbering3
     printlog "  - check saved Numbering"
     Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\tToolsOutlineNumbering3.odt", "writer8" )
     Call hCloseDocument
-    Call hFileOpen ( gOfficePath + "user\work\tToolsOutlineNumbering3.odt" )
+    hFileOpen( gOfficePath & "user\work\tToolsOutlineNumbering3.odt" )
     ToolsOutlineNumbering
     Kontext
     Active.SetPage TabKapitelnumerierung
@@ -840,7 +840,7 @@ testcase tToolsFootnoteEndnote
     printlog "  - Save and reload"
     Call hFileSaveAsWithFilterKill ( gOfficePath + "user\work\tToolsFootnoteEndnote.odt", "writer8" )
     Call hCloseDocument
-    Call hFileOpen ( gOfficePath + "user\work\tToolsFootnoteEndnote.odt" )
+    hFileOpen( gOfficePath & "user\work\tToolsFootnoteEndnote.odt" )
     printlog "    - check saved properties"
     ToolsFootnote
     Kontext
@@ -866,7 +866,7 @@ testcase tToolsFootnoteEndnote
     if Davor.GetText <> "Hihi " then Warnlog "Endnote: 'Before' is wrong. Not 'Hihi ' but " +  Davor.GetText
     if Dahinter.GetText <> " HaHa" then Warnlog "Endnote: Text after is wrong. Not ' HaHa' but " +  Dahinter.GetText
     if Absatz.GetSelIndex <> 3 then Warnlog "Endnote: Wrong entry selected in paragraph. Not 3 but " + Absatz.GetSelIndex
-    if Seite.GetSelIndex <> 2 then Warnlog "#i40579#Endnote: Wrong Page entry selected. Not 2 but " + Seite.GetSelIndex
+    if Seite.GetSelIndex <> 2 then Warnlog "Endnote: Wrong Page entry selected. Not 2 but " + Seite.GetSelIndex
     if ZeichenvorlageTextbereich.GetSelIndex <> 4 then Warnlog "Endnote: Text area has been changed!"
     if ZeichenvorlageEndnotenbereich.GetSelIndex <> 5 then Warnlog "Endnote: Endnote area has been changed!"
     TabEndnoten.Cancel

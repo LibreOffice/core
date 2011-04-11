@@ -53,7 +53,7 @@ module com {  module sun {  module star {  module awt {
 interface XMenuExtended2
 {
     /** specifies some extended menu functions, like setting a command URL and a help command for a menu item.<br>
-        These functions are available for both menu bar and popup menu.
+        These functions are available for both menu bar and pop-up menu.
     */
     interface com::sun::star::awt::XMenuExtended;
 

@@ -94,7 +94,7 @@ static String impl_GetFilterFromExt( OUString aUrl, SfxFilterFlags nFlags,
 {
     String aFilter;
     SfxMedium* pMedium = new SfxMedium( aUrl,
-                                        STREAM_STD_READ, FALSE );
+                                        STREAM_STD_READ, sal_False );
     const SfxFilter *pSfxFilter = NULL;
     SfxFilterMatcher aMatcher;
     if( nFlags == SFX_FILTER_EXPORT )
@@ -176,7 +176,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
     sal_Bool                        bSetInputFilter = sal_False;
     ::rtl::OUString                 aForcedInputFilter;
 
-    for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); p++ )
+    for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); ++p )
     {
         const DispatchRequest&  aDispatchRequest = *p;
 
@@ -340,7 +340,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 {
                     OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "Desktop::OpenDefault() IllegalArgumentException while calling XNotifyingDispatch: "));
-                    OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                    OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
                 }
             }
         }
@@ -364,7 +364,6 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             }
 
             // if we are called in viewmode, open document read-only
-            // #95425#
             if(aDispatchRequest.aRequestType == REQUEST_VIEW) {
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc(nIndex+1);
@@ -393,21 +392,20 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             try
             {
                 xDoc = Reference < XPrintable >( ::comphelper::SynchronousDispatch::dispatch( xDesktop, aName, aTarget, 0, aArgs ), UNO_QUERY );
-                //xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
             }
             catch ( ::com::sun::star::lang::IllegalArgumentException& iae)
             {
                 OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "Dispatchwatcher IllegalArgumentException while calling loadComponentFromURL: "))
                     + iae.Message;
-                OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
             }
             catch (com::sun::star::io::IOException& ioe)
             {
                 OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "Dispatchwatcher IOException while calling loadComponentFromURL: "))
                     + ioe.Message;
-                OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+                OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
             }
             if ( aDispatchRequest.aRequestType == REQUEST_OPEN ||
                  aDispatchRequest.aRequestType == REQUEST_VIEW ||
@@ -455,7 +453,6 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             rtl::OUString aOutFile = aFilterOut+
                                                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ))+
                                                      aOutFilename.getName();
-                            //FileBase::getFileURLFromSystemPath( aOutFile, aOutFile );
 
                             if ( bGuess )
                             {
@@ -482,7 +479,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             {
                                 xStorable->storeToURL( aOutFile, conversionProperties );
                             }
-                            catch ( Exception& )
+                            catch ( Exception& e )
                             {
                                 fprintf( stderr, "Error: Please reverify input parameters...\n" );
                             }
@@ -639,18 +636,6 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) th
     sal_Int16 nCount = --m_nRequestCount;
     aGuard.clear();
     OfficeIPCThread::RequestsCompleted( 1 );
-/*
-    // Find request in our hash map and remove it as a pending request
-    DispatchWatcherHashMap::iterator pDispatchEntry = m_aRequestContainer.find( rEvent.FeatureURL.Complete ) ;
-    if ( pDispatchEntry != m_aRequestContainer.end() )
-    {
-        m_aRequestContainer.erase( pDispatchEntry );
-        aGuard.clear();
-        OfficeIPCThread::RequestsCompleted( 1 );
-    }
-    else
-        aGuard.clear();
-*/
     if ( !nCount && !OfficeIPCThread::AreRequestsPending() )
     {
         // We have to check if we have an open task otherwise we have to shutdown the office.

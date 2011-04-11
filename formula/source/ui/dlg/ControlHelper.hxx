@@ -59,7 +59,7 @@ private:
     MultiLineEdit*  pMEdit;
     Link            aSelChangedLink;
     Selection       aOldSel;
-    BOOL            bMouseFlag;
+    sal_Bool            bMouseFlag;
                     DECL_LINK( ChangedHdl, EditBox* );
 
 protected:
@@ -94,7 +94,7 @@ public:
             ArgEdit( Window* pParent, const ResId& rResId );
 
     void    Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
-                  ScrollBar& rArgSlider, USHORT nArgCount );
+                  ScrollBar& rArgSlider, sal_uInt16 nArgCount );
 
 protected:
     virtual void    KeyInput( const KeyEvent& rKEvt );
@@ -103,7 +103,7 @@ private:
     ArgEdit*    pEdPrev;
     ArgEdit*    pEdNext;
     ScrollBar*  pSlider;
-    USHORT      nArgs;
+    sal_uInt16      nArgs;
 };
 
 

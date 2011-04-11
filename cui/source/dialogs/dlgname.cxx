@@ -26,11 +26,7 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <tools/ref.hxx>
-#include <tools/list.hxx>
 #include <tools/shl.hxx>
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
@@ -214,7 +210,7 @@ IMPL_LINK_INLINE_END( SvxMessDialog, Button2Hdl, Button *, EMPTYARG )
 
 /*************************************************************************/
 
-void SvxMessDialog::SetButtonText( USHORT nBtnId, const String& rNewTxt )
+void SvxMessDialog::SetButtonText( sal_uInt16 nBtnId, const String& rNewTxt )
 {
     switch ( nBtnId )
     {
@@ -227,7 +223,7 @@ void SvxMessDialog::SetButtonText( USHORT nBtnId, const String& rNewTxt )
             break;
 
         default:
-            DBG_ERROR( "Falsche Button-Nummer!!!" );
+            OSL_FAIL( "Falsche Button-Nummer!!!" );
     }
 }
 

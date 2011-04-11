@@ -74,7 +74,7 @@ FullScreenPane::FullScreenPane (
         return;
 
     // Create a new top-leve window that is displayed full screen.
-    mpWorkWindow->ShowFullScreenMode(TRUE, nScreenNumber);
+    mpWorkWindow->ShowFullScreenMode(sal_True, nScreenNumber);
     // For debugging (non-fullscreen) use mpWorkWindow->SetScreenNumber(nScreenNumber);
     mpWorkWindow->SetMenuBarMode(MENUBAR_MODE_HIDE);
     mpWorkWindow->SetBorderStyle(WINDOW_BORDER_REMOVEBORDER);
@@ -179,7 +179,7 @@ Reference<accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessible (vo
     ThrowIfDisposed();
 
     if (mpWorkWindow != NULL)
-        return mpWorkWindow->GetAccessible(FALSE);
+        return mpWorkWindow->GetAccessible(sal_False);
     else
         return NULL;
 }
@@ -255,7 +255,7 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas (void)
             mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
         return Reference<rendering::XCanvas>(
             xFactory->createInstanceWithArguments(
-                OUString::createFromAscii("com.sun.star.rendering.SpriteCanvas.VCL"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.SpriteCanvas.VCL")),
                 aArg),
             UNO_QUERY);
     }

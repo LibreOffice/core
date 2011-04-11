@@ -32,7 +32,7 @@
 #include "XFormsModelContext.hxx"
 #include <vector>
 #include <utility>
-#include "xformsimport.hxx"
+#include "xmloff/xformsimport.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
@@ -69,7 +69,7 @@ using rtl::OUString;
 
 SvXMLImportContext* createXFormsModelContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName )
 {
     return new XFormsModelContext( rImport, nPrefix, rLocalName );
@@ -158,7 +158,7 @@ void applyXFormsSettings( const Reference< XNameAccess >& _rXForms, const Sequen
     Reference< XNameAccess > xModelSettings( aSettings.get( "XFormModels" ), UNO_QUERY );
     if ( !xModelSettings.is() )
     {
-        OSL_ENSURE( false, "applyXFormsSettings: wrong type for the XFormModels settings!" );
+        OSL_FAIL( "applyXFormsSettings: wrong type for the XFormModels settings!" );
         return;
     }
 
@@ -177,7 +177,7 @@ void applyXFormsSettings( const Reference< XNameAccess >& _rXForms, const Sequen
             // the model itself
             if ( !_rXForms->hasByName( *pModelName ) )
             {
-                OSL_ENSURE( false, "applyXFormsSettings: have settings for a non-existent XForms model!" );
+                OSL_FAIL( "applyXFormsSettings: have settings for a non-existent XForms model!" );
                 continue;
             }
 
@@ -192,7 +192,7 @@ void applyXFormsSettings( const Reference< XNameAccess >& _rXForms, const Sequen
             {
                 if ( !xModelPSI->hasPropertyByName( pSetting->Name ) )
                 {
-                    OSL_ENSURE( false, "applyXFormsSettings: non-existent model property!" );
+                    OSL_FAIL( "applyXFormsSettings: non-existent model property!" );
                     continue;
                 }
 

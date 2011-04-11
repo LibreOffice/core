@@ -30,7 +30,7 @@
 
 #include "KDESalFrame.hxx"
 
-SalFrame* KDESalInstance::CreateFrame( SalFrame *pParent, ULONG nState )
+SalFrame* KDESalInstance::CreateFrame( SalFrame *pParent, sal_uLong nState )
 {
     return new KDESalFrame( pParent, nState );
 }

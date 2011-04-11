@@ -62,20 +62,20 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
 {
     uno::Any aAny;
 
-    ULONG nT = SotExchange::GetFormat( rFlavor );
+    sal_uLong nT = SotExchange::GetFormat( rFlavor );
     if ( nT == SOT_FORMAT_STRING )
     {
         aAny <<= (::rtl::OUString)GetString();
     }
     else if ( ( nT == SOT_FORMATSTR_ID_EDITENGINE ) || ( nT == SOT_FORMAT_RTF ) )
     {
-        // MT 01/2002: No RTF on demand any more:
+        // No RTF on demand any more:
         // 1) Was not working, because I had to flush() the clipboard immediately anyway
         // 2) Don't have the old pool defaults and the StyleSheetPool here.
 
         SvMemoryStream* pStream = ( nT == SOT_FORMATSTR_ID_EDITENGINE ) ? &GetStream() : &GetRTFStream();
         pStream->Seek( STREAM_SEEK_TO_END );
-        ULONG nLen = pStream->Tell();
+        sal_uLong nLen = pStream->Tell();
         pStream->Seek(0);
 
         uno::Sequence< sal_Int8 > aSeq( nLen );
@@ -105,8 +105,8 @@ sal_Bool EditDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& 
 {
     sal_Bool bSupported = sal_False;
 
-    ULONG nT = SotExchange::GetFormat( rFlavor );
-    if ( ( nT == SOT_FORMAT_STRING ) || ( nT == SOT_FORMAT_RTF ) /* || ( nT == SOT_FORMAT_XML ) */ || ( nT == SOT_FORMATSTR_ID_EDITENGINE ) )
+    sal_uLong nT = SotExchange::GetFormat( rFlavor );
+    if ( ( nT == SOT_FORMAT_STRING ) || ( nT == SOT_FORMAT_RTF ) || ( nT == SOT_FORMATSTR_ID_EDITENGINE ) )
         bSupported = sal_True;
 
     return bSupported;

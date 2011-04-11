@@ -308,19 +308,19 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
     switch (pCurrAct->GetType()) {
     case META_TEXT_ACTION: {
         MetaTextAction * pAct = static_cast<MetaTextAction *>(pCurrAct);
-        return (pAct->GetLen() == (USHORT)STRING_LEN
+        return (pAct->GetLen() == (sal_uInt16)STRING_LEN
                 ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen());
     }
     case META_TEXTARRAY_ACTION: {
         MetaTextArrayAction * pAct =
             static_cast<MetaTextArrayAction *>(pCurrAct);
-        return (pAct->GetLen() == (USHORT)STRING_LEN
+        return (pAct->GetLen() == (sal_uInt16)STRING_LEN
                 ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen());
     }
     case META_STRETCHTEXT_ACTION: {
         MetaStretchTextAction * pAct =
             static_cast<MetaStretchTextAction *>(pCurrAct);
-        return (pAct->GetLen() == (USHORT)STRING_LEN
+        return (pAct->GetLen() == (sal_uInt16)STRING_LEN
                 ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen());
     }
     case META_FLOATTRANSPARENT_ACTION: {
@@ -358,12 +358,12 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
     // update modes)
     VirtualDevice aVDev;
     aVDev.SetOutputSizePixel( aAnimSize );
-    aVDev.EnableMapMode( FALSE );
+    aVDev.EnableMapMode( sal_False );
 
     // setup mask VDev (alpha VDev is currently rather slow)
     VirtualDevice aVDevMask;
     aVDevMask.SetOutputSizePixel( aAnimSize );
-    aVDevMask.EnableMapMode( FALSE );
+    aVDevMask.EnableMapMode( sal_False );
 
     switch( aAnimation.GetCycleMode() )
     {
@@ -392,7 +392,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             break;
     }
 
-    for( USHORT i=0, nCount=aAnimation.Count(); i<nCount; ++i )
+    for( sal_uInt16 i=0, nCount=aAnimation.Count(); i<nCount; ++i )
     {
         const AnimationBitmap& rAnimBmp( aAnimation.Get(i) );
         switch(rAnimBmp.eDisposal)
@@ -481,7 +481,6 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         pMtf->SetPrefMapMode( MapMode() );
         pMtf->SetPrefSize( aAnimSize );
 
-        // #115934#
         // Take care of special value for MultiPage TIFFs. ATM these shall just
         // show their first page for _quite_ some time.
         sal_Int32 nWaitTime100thSeconds( rAnimBmp.nWait );
@@ -492,9 +491,10 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             nWaitTime100thSeconds = 100 * 60 * 60 * 24;
         }
 
-        // There are animated GIFs with no WaitTime set. Take 1 sec, then.
+        // There are animated GIFs with no WaitTime set. Take 0.1 sec, the
+        // same duration that is used by the edit view.
         if( nWaitTime100thSeconds == 0 )
-            nWaitTime100thSeconds = 100;
+            nWaitTime100thSeconds = 10;
 
         o_rFrames.push_back( MtfAnimationFrame( pMtf,
                                                 nWaitTime100thSeconds / 100.0 ) );

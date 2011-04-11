@@ -146,6 +146,7 @@ class ToolBarMerger
             const ::rtl::OUString& rControlType );
 
         static void CreateToolbarItem( ToolBox* pToolbox,
+                                       CommandToInfoMap& rCommandMap,
                                        sal_uInt16 nPos,
                                        sal_uInt16 nItemId,
                                        const AddonToolbarItem& rAddonToolbarItem );

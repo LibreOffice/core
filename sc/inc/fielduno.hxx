@@ -55,9 +55,6 @@ class ScHeaderFooterContentObj;
 class ScDocShell;
 
 
-//------------------------------------------------------------------
-
-
 class ScCellFieldsObj : public cppu::WeakImplHelper5<
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::container::XIndexAccess,
@@ -75,7 +72,7 @@ private:
     /// mutex to lock the InterfaceContainerHelper
     osl::Mutex              aMutex;
 
-    ScCellFieldObj*         GetObjectByIndex_Impl(INT32 Index) const;
+    ScCellFieldObj*         GetObjectByIndex_Impl(sal_Int32 Index) const;
 
 public:
                             ScCellFieldsObj(ScDocShell* pDocSh, const ScAddress& rPos);
@@ -142,7 +139,7 @@ private:
     SvxEditSource*          pEditSource;
     ESelection              aSelection;
 
-    String                  aUrl;               // Inhalt, wenn noch nicht eingefuegt (nur dann!)
+    String                  aUrl;               // content, only iff not already inserted
     String                  aRepresentation;
     String                  aTarget;
 
@@ -154,9 +151,9 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-                            // per getImplementation gerufen:
+                            // called by getImplementation:
     void                    DeleteField();
-    BOOL                    IsInserted() const      { return pEditSource != NULL; }
+    sal_Bool                    IsInserted() const      { return pEditSource != NULL; }
     SvxFieldItem            CreateFieldItem();
     void                    InitDoc( ScDocShell* pDocSh, const ScAddress& rPos,
                                         const ESelection& rSel );
@@ -267,8 +264,8 @@ class ScHeaderFieldsObj : public cppu::WeakImplHelper5<
 {
 private:
     ScHeaderFooterContentObj*   pContentObj;
-    USHORT                      nPart;
-    UINT16                      nType;
+    sal_uInt16                      nPart;
+    sal_uInt16                      nType;
     SvxEditSource*              pEditSource;
 
     /// List of refresh listeners.
@@ -276,11 +273,11 @@ private:
     /// mutex to lock the InterfaceContainerHelper
     osl::Mutex                  aMutex;
 
-    ScHeaderFieldObj*       GetObjectByIndex_Impl(INT32 Index) const;
+    ScHeaderFieldObj*       GetObjectByIndex_Impl(sal_Int32 Index) const;
 
 public:
                             ScHeaderFieldsObj(ScHeaderFooterContentObj* pContent,
-                                                USHORT nP, USHORT nT);
+                                                sal_uInt16 nP, sal_uInt16 nT);
     virtual                 ~ScHeaderFieldsObj();
 
                             // XIndexAccess
@@ -337,23 +334,23 @@ class ScHeaderFieldObj : public ScMutexHelper,
 private:
     const SfxItemPropertySet*   pPropSet;
     ScHeaderFooterContentObj*   pContentObj;
-    USHORT                      nPart;
-    UINT16                      nType;
+    sal_uInt16                      nPart;
+    sal_uInt16                      nType;
     SvxEditSource*              pEditSource;
     ESelection                  aSelection;
     sal_Int16                   nFileFormat;        // enum SvxFileFormat, valid if not inserted
 
     ScHeaderFieldObj(); // disabled
 public:
-                            ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, USHORT nP,
-                                            USHORT nT, const ESelection& rSel);
+                            ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, sal_uInt16 nP,
+                                            sal_uInt16 nT, const ESelection& rSel);
     virtual                 ~ScHeaderFieldObj();
 
-                            // per getImplementation gerufen:
+                            // called by getImplementation:
     void                    DeleteField();
-    BOOL                    IsInserted() const      { return pEditSource != NULL; }
+    sal_Bool                    IsInserted() const      { return pEditSource != NULL; }
     SvxFieldItem            CreateFieldItem();
-    void                    InitDoc( ScHeaderFooterContentObj* pContent, USHORT nP,
+    void                    InitDoc( ScHeaderFooterContentObj* pContent, sal_uInt16 nP,
                                         const ESelection& rSel );
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(

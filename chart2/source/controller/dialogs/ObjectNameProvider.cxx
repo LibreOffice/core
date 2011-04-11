@@ -41,7 +41,7 @@
 #include "AxisIndexDefines.hxx"
 #include "ExplicitCategoriesProvider.hxx"
 #include "CommonConverters.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "RegressionCurveHelper.hxx"
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
@@ -192,14 +192,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
     if( aX.getLength() == 0 )
     {
-        rtl::OUString aCategory = ::rtl::OUString( String(SchResId(STR_TIP_CATEGORY_VALUE)));
-
-        replaceParamterInString( aCategory
-            , C2U("%CATEGORYVALUE")
-            , ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, xChartModel, nPointIndex )
-            );
-
-        aRet = aCategory;
+        aRet = ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, xChartModel, nPointIndex );
     }
     else
     {
@@ -317,7 +310,6 @@ rtl::OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural 
             }
                 break;
         case OBJECTTYPE_DATA_STOCK_RANGE:
-                //aRet=String(SchResId());
                 break;
         case OBJECTTYPE_DATA_STOCK_LOSS:
                 aRet=String(SchResId(STR_OBJECT_STOCK_LOSS));
@@ -333,7 +325,7 @@ rtl::OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural 
     }
     return aRet;
 }
-//static
+
 rtl::OUString ObjectNameProvider::getAxisName( const rtl::OUString& rObjectCID
                         , const uno::Reference< frame::XModel >& xChartModel  )
 {
@@ -374,7 +366,6 @@ rtl::OUString ObjectNameProvider::getAxisName( const rtl::OUString& rObjectCID
     return aRet;
 }
 
-//static
 OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
 {
     OUString aRet;
@@ -403,7 +394,7 @@ OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
             aRet=String(SchResId(STR_OBJECT_TITLE_SECONDARY_Y_AXIS));
             break;
         default:
-            DBG_ERROR("unknown title type");
+            OSL_FAIL("unknown title type");
             break;
     }
 
@@ -413,7 +404,6 @@ OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
     return aRet;
 }
 
-//static
 OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
                         , const Reference< frame::XModel >& xChartModel )
 {
@@ -433,7 +423,6 @@ OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
     return aRet;
 }
 
-//static
 rtl::OUString ObjectNameProvider::getGridName( const rtl::OUString& rObjectCID
                         , const uno::Reference< frame::XModel >& xChartModel )
 {
@@ -578,13 +567,6 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), lcl_getDataSeriesName( rObjectCID, xChartModel ) );
         }
     }
-    /*
-    else if( OBJECTTYPE_DIAGRAM == eObjectType )
-    {
-        //todo different names for different diagram types ???
-        //or different names for series of diferent charttypes
-    }
-    */
     else if( OBJECTTYPE_DATA_CURVE == eObjectType )
     {
         if( bVerbose )
@@ -615,12 +597,6 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                         if( nIndex != -1 )
                         {
                             sal_Unicode aDecimalSep( '.' );
-                            //@todo: enable this code when a localized decimal
-                            //separator is also available for the formula
-//                             SvtSysLocale aSysLocale;
-//                             OUString aSep( aSysLocale.GetLocaleData().getNumDecimalSep());
-//                             if( aSep.getLength() == 1 )
-//                                 aDecimalSep = aSep.toChar();
                             double fR( xCalculator->getCorrelationCoefficient());
                             aRet = aRet.replaceAt(
                                 nIndex, aWildcard.getLength(),
@@ -659,11 +635,6 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
                         sal_Unicode aDecimalSep( '.' );
-                        // replace average value
-//                             SvtSysLocale aSysLocale;
-//                             OUString aSep( aSysLocale.GetLocaleData().getNumDecimalSep());
-//                             if( aSep.getLength() == 1 )
-//                                 aDecimalSep = aSep.toChar();
 
                         sal_Int32 nIndex = -1;
                         OUString aWildcard( C2U("%AVERAGE_VALUE") );
@@ -710,7 +681,6 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
     return aRet;
 }
 
-// static
 rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument )
 {
     rtl::OUString aRet;
@@ -764,7 +734,6 @@ rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & r
 }
 
 
-// static
 rtl::OUString ObjectNameProvider::getNameForCID(
     const rtl::OUString& rObjectCID,
     const uno::Reference< chart2::XChartDocument >& xChartDocument )
@@ -783,7 +752,6 @@ rtl::OUString ObjectNameProvider::getNameForCID(
             return getGridName( rObjectCID, xModel );
         case OBJECTTYPE_DATA_SERIES:
             return lcl_getFullSeriesName( rObjectCID, xModel );
-        //case OBJECTTYPE_LEGEND_ENTRY:
         case OBJECTTYPE_DATA_POINT:
         case OBJECTTYPE_DATA_LABELS:
         case OBJECTTYPE_DATA_LABEL:
@@ -821,7 +789,6 @@ rtl::OUString ObjectNameProvider::getNameForCID(
     return getName( eType );
 }
 
-//static
 rtl::OUString ObjectNameProvider::getName_ObjectForSeries(
         ObjectType eObjectType,
         const rtl::OUString& rSeriesCID,
@@ -840,7 +807,6 @@ rtl::OUString ObjectNameProvider::getName_ObjectForSeries(
         return ObjectNameProvider::getName_ObjectForAllSeries( eObjectType );
 }
 
-//static
 rtl::OUString ObjectNameProvider::getName_ObjectForAllSeries( ObjectType eObjectType )
 {
     OUString aRet = String(SchResId(STR_OBJECT_FOR_ALL_SERIES));

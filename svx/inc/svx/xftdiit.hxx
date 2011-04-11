@@ -45,7 +45,7 @@ public:
                             XFormTextDistanceItem(long nDist = 0);
                             XFormTextDistanceItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
 };
 
 #endif

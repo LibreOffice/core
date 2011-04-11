@@ -39,7 +39,7 @@
 +(id)positionAttributeForElement:(AquaA11yWrapper *)wrapper;
 +(id)descriptionAttributeForElement:(AquaA11yWrapper *)wrapper;
 +(void)addAttributeNamesTo:(NSMutableArray *)attributeNames;
-+(MacOSBOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
++(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
 +(void)setFocusedAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
 @end
 

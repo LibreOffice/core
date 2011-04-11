@@ -50,7 +50,7 @@ public:
 
     inline void                 setLineBreak() { mbIsLineBreak = true; }
 
-    virtual void                insertAt(
+    virtual sal_Int32               insertAt(
                                     const ::oox::core::XmlFilterBase& rFilterBase,
                                     const ::com::sun::star::uno::Reference < ::com::sun::star::text::XText >& xText,
                                     const ::com::sun::star::uno::Reference < ::com::sun::star::text::XTextCursor >& xAt,

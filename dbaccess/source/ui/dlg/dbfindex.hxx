@@ -126,7 +126,7 @@ protected:
     String              m_aDSN;
     TableInfoList       m_aTableInfoList;
     TableIndexList      m_aFreeIndexList;
-    BOOL                m_bCaseSensitiv;
+    sal_Bool                m_bCaseSensitiv;
 
     void        Init();
     void        SetCtrls();

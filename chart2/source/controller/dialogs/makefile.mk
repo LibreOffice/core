@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ GEN_HID_OTHER=TRUE
 
 # i26518 the gcc-3.0.4 requires to enhance the template-depth
 # this seems to be a compiler issue, so we recommend not to use 3.0.x anymore
-.IF "$(COM)"=="GCC" 
+.IF "$(COM)"=="GCC"
     CFLAGS+=-ftemplate-depth-128
 .ENDIF
 
@@ -66,7 +66,6 @@ SLOFILES=   	\
                 $(SLO)$/tp_ChartType.obj \
                 $(SLO)$/tp_RangeChooser.obj \
                 $(SLO)$/tp_Wizard_TitlesAndObjects.obj \
-                $(SLO)$/tp_Location.obj \
                 $(SLO)$/tp_AxisLabel.obj \
                 $(SLO)$/tp_AxisPositions.obj \
                 $(SLO)$/tp_DataLabel.obj \
@@ -108,17 +107,12 @@ SLOFILES=   	\
 
 # --- Resources ---------------------------------------------------------------
 
-#               Bitmaps.src
-#               Bitmaps_HC.src
-
-
 SRC1FILES=		\
                 res_TextSeparator.src \
                 res_BarGeometry.src \
                 tp_ChartType.src \
                 tp_RangeChooser.src \
                 tp_Wizard_TitlesAndObjects.src \
-                tp_Location.src \
                 tp_AxisLabel.src \
                 tp_AxisPositions.src \
                 tp_DataLabel.src \
@@ -141,7 +135,6 @@ SRC1FILES=		\
                 Strings_AdditionalControls.src \
                 Strings.src \
                 Bitmaps.src \
-                Bitmaps_HC.src \
                 dlg_DataEditor.src \
                 dlg_DataSource.src \
                 dlg_View3D.src \
@@ -159,7 +152,7 @@ SRC1FILES=		\
 SRS1NAME=$(TARGET)
 
 # --- Targets -----------------------------------------------------------------
-LOCALIZE_ME=res_DataLabel_tmpl.hrc res_LegendPosition_tmpl.hrc res_Trendline_tmpl.hrc res_ErrorBar_tmpl.hrc res_Titlesx_tmpl.hrc res_SecondaryAxisCheckBoxes_tmpl.hrc 
+LOCALIZE_ME=res_DataLabel_tmpl.hrc res_LegendPosition_tmpl.hrc res_Trendline_tmpl.hrc res_ErrorBar_tmpl.hrc res_Titlesx_tmpl.hrc res_SecondaryAxisCheckBoxes_tmpl.hrc
 .INCLUDE: target.mk
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_DataLabel.hrc
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_LegendPosition.hrc
@@ -172,7 +165,6 @@ $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_SecondaryAxisCheckBoxes.hrc
 
 $(SRS)$/chcdialogs.srs: \
         Bitmaps.hrc \
-        Bitmaps_HC.hrc \
         CommonResources.hrc \
         ResourceIds.hrc \
         ..$/..$/inc$/Strings.hrc \
@@ -193,13 +185,8 @@ $(SRS)$/chcdialogs.srs: \
         tp_PolarOptions.hrc \
         tp_ChartType.hrc \
         tp_DataSource.hrc \
-        tp_Location.hrc \
         tp_RangeChooser.hrc \
         tp_Wizard_TitlesAndObjects.hrc
-
-#        res_DataLabel.hrc \
-#        res_LegendPosition.hrc \
-#        res_Statistic.hrc \
 
 #$(SRS)$/chcdialogs.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
 

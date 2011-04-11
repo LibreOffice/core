@@ -47,7 +47,8 @@
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace
 {
@@ -285,8 +286,8 @@ bool ContentBroker_Impl::initialize()
                 try
                 {
                     xIfc = m_xSMgr->createInstance(
-                            OUString::createFromAscii(
-                                "com.sun.star.ucb.UniversalContentBroker" ) );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.ucb.UniversalContentBroker" )) );
                 }
                 catch ( Exception const & )
                 {
@@ -319,8 +320,8 @@ bool ContentBroker_Impl::initialize()
                 try
                 {
                     xIfc = m_xSMgr->createInstanceWithArguments(
-                            OUString::createFromAscii(
-                                "com.sun.star.ucb.UniversalContentBroker" ),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.ucb.UniversalContentBroker" )),
                             m_aArguments );
                 }
                 catch ( Exception const & )

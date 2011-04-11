@@ -49,19 +49,19 @@ private:
     AssistentDlgImpl* mpImpl;
 
 public:
-    AssistentDlg(Window* pParent, BOOL bAutoPilot);
+    AssistentDlg(Window* pParent, sal_Bool bAutoPilot);
     ~AssistentDlg();
 
     DECL_LINK( FinishHdl, OKButton * );
 
     SfxObjectShellLock GetDocument();
     OutputType GetOutputMedium() const;
-    BOOL IsSummary() const;
+    sal_Bool IsSummary() const;
     StartType GetStartType() const;
     String GetDocPath() const;
-    BOOL GetStartWithFlag() const;
+    sal_Bool GetStartWithFlag() const;
 
-    BOOL IsDocEmpty() const;
+    sal_Bool IsDocEmpty() const;
     String GetPassword();
 };
 

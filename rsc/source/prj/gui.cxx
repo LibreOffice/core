@@ -43,14 +43,10 @@ static RscCompiler * pRscCompiler = NULL;
 /*                                                              */
 /*  Description :   Gibt die Temporaeren Dateien frei.          */
 /****************************************************************/
-#if defined( UNX ) || ( defined( OS2 ) && ( defined( TCPP ) || defined ( GCC )) ) ||  defined (WTC) || defined (MTW) || defined(__MINGW32__)
+#if defined( UNX ) || defined ( GCC ) || defined(__MINGW32__)
         void ExitProgram( void ){
 #else
-#if defined( CSET )
-    void _Optlink ExitProgram( void ){
-#else
     void cdecl ExitProgram( void ){
-#endif
 #endif
     if( pRscCompiler )
         delete pRscCompiler;
@@ -72,11 +68,7 @@ RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 #ifndef UNX
-#ifdef CSET
     atexit( ExitProgram );
-#else
-    atexit( ExitProgram );
-#endif
 #endif
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "debugging %s\n", argv[0] );
@@ -86,11 +78,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 
     InitRscCompiler();
     RscError*   pErrHdl    = new RscError( lcl_determineVerbosity( argc, argv ) );
-#ifdef MTW
-    RscCmdLine* pCmdLine   = new RscCmdLine( argc, (char **)argv, pErrHdl );
-#else
     RscCmdLine* pCmdLine   = new RscCmdLine( argc, argv, pErrHdl );
-#endif
     RscTypCont* pTypCont   = new RscTypCont( pErrHdl,
                                              pCmdLine->nByteOrder,
                                              pCmdLine->aPath,

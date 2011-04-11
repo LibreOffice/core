@@ -91,7 +91,7 @@ namespace preload
     };
     class LicenceView : public MultiLineEdit, public SfxListener
     {
-        BOOL            mbEndReached;
+        sal_Bool            mbEndReached;
         Link            maEndReachedHdl;
         Link            maScrolledHdl;
 
@@ -101,9 +101,9 @@ namespace preload
 
         void            ScrollDown( ScrollType eScroll );
 
-        BOOL            IsEndReached() const;
-        BOOL            EndReached() const { return mbEndReached; }
-        void            SetEndReached( BOOL bEnd ) { mbEndReached = bEnd; }
+        sal_Bool            IsEndReached() const;
+        sal_Bool            EndReached() const { return mbEndReached; }
+        void            SetEndReached( sal_Bool bEnd ) { mbEndReached = bEnd; }
 
         void            SetEndReachedHdl( const Link& rHdl )  { maEndReachedHdl = rHdl; }
         const Link&     GetAutocompleteHdl() const { return maEndReachedHdl; }
@@ -129,7 +129,7 @@ namespace preload
         String          aStrAccept;
         String          aStrNotAccept;
         String          aOldCancelText;
-        BOOL            bEndReached;
+        sal_Bool            bEndReached;
 
         OEMPreloadDialog* pPreloadDialog;
 

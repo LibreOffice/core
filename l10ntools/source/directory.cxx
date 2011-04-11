@@ -29,6 +29,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_l10ntools.hxx"
+
+#ifdef WNT
+#include <windows.h>
+#endif
+
 #include <l10ntools/directory.hxx>
 #include "tools/string.hxx"
 #include <iostream>
@@ -102,13 +107,10 @@ void Directory::readDirectory()
 }
 
 #ifdef WNT
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
 
 void Directory::readDirectory ( const rtl::OUString& sFullpath )
 {
-    BOOL            fFinished;
+    sal_Bool            fFinished;
     HANDLE          hList;
     TCHAR           szDir[MAX_PATH+1];
     TCHAR           szSubDir[MAX_PATH+1];
@@ -129,7 +131,7 @@ void Directory::readDirectory ( const rtl::OUString& sFullpath )
     }
     else
     {
-        fFinished = FALSE;
+        fFinished = sal_False;
         while (!fFinished)
         {
 
@@ -158,7 +160,7 @@ void Directory::readDirectory ( const rtl::OUString& sFullpath )
             {
                 if (GetLastError() == ERROR_NO_MORE_FILES)
                 {
-                    fFinished = TRUE;
+                    fFinished = sal_True;
                 }
             }
         }

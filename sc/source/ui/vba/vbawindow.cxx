@@ -47,7 +47,7 @@
 #include <tabvwsh.hxx>
 #include <docuno.hxx>
 #include <sc.hrc>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
 #include "unonames.hxx"
@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlWindowState;
 
-typedef  std::hash_map< rtl::OUString,
+typedef  boost::unordered_map< rtl::OUString,
 SCTAB, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
 
@@ -270,19 +270,6 @@ ScVbaWindow::ScrollWorkbookTabs( const uno::Any& /*Sheets*/, const uno::Any& /*P
 {
 // #TODO #FIXME need some implementation to scroll through the tabs
 // but where is this done?
-/*
-    sal_Int32 nSheets = 0;
-    sal_Int32 nPosition = 0;
-    throw uno::RuntimeException( rtl::OUString::createFromAscii("No Implemented" ), uno::Reference< uno::XInterface >() );
-    sal_Bool bSheets = ( Sheets >>= nSheets );
-    sal_Bool bPosition = ( Position >>= nPosition );
-    if ( bSheets || bPosition ) // at least one param specified
-        if ( bSheets )
-            ;// use sheets
-        else if ( bPosition )
-            ; //use position
-*/
-
 }
 uno::Reference< beans::XPropertySet >
 getPropsFromModel( const uno::Reference< frame::XModel >& xModel )
@@ -696,14 +683,14 @@ double SAL_CALL
 ScVbaWindow::getSplitVertical() throw (uno::RuntimeException)
 {
     double fSplitVertical = m_xViewSplitable->getSplitVertical();
-    double fVertiPoints = PixelsToPoints( m_xDevice, fSplitVertical, sal_False );
+    double fVertiPoints = PixelsToPoints( m_xDevice, fSplitVertical, false );
     return fVertiPoints;
 }
 
 void SAL_CALL
 ScVbaWindow::setSplitVertical(double _splitvertical ) throw (uno::RuntimeException)
 {
-    double fVertiPixels = PointsToPixels( m_xDevice, _splitvertical, sal_False );
+    double fVertiPixels = PointsToPixels( m_xDevice, _splitvertical, false );
     m_xViewSplitable->splitAtPosition( 0, static_cast<sal_Int32>( fVertiPixels ) );
 }
 
@@ -774,7 +761,7 @@ ScVbaWindow::setView( const uno::Any& _view) throw (uno::RuntimeException)
 {
     sal_Int32 nWindowView = excel::XlWindowView::xlNormalView;
     _view >>= nWindowView;
-    USHORT nSlot = FID_NORMALVIEWMODE;
+    sal_uInt16 nSlot = FID_NORMALVIEWMODE;
     switch ( nWindowView )
     {
         case excel::XlWindowView::xlNormalView:

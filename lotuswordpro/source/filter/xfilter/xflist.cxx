@@ -57,10 +57,6 @@
  * @file
  * List object.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-17 create this file.
- ************************************************************************/
 #include    "xflist.hxx"
 #include    "xflistitem.hxx"
 #include    "ixfstream.hxx"
@@ -77,6 +73,7 @@ XFList::XFList(sal_Bool ordered)
 {
     m_bOrdered = ordered;
     m_bContinueNumber = sal_False;
+    m_pHeader = NULL;
 }
 
 XFList::~XFList()

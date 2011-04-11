@@ -38,12 +38,12 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <tools/config.hxx>
-#include <tools/list.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <vector>
 
 class SbxVariable;
 
@@ -81,7 +81,6 @@ public:
     ReplaceDialog (Window*, const ResId&, String&, String&);
 };
 
-////////////////////////////////////////////////////////////////////
 
 class ConfEdit : public PushButton
 {
@@ -93,8 +92,8 @@ protected:
     void Init( Config &aConf );
 
 public:
-    ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf );
-    ConfEdit( Window* pParent, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf );
+    ConfEdit( Window* pParent, sal_uInt16 nResText, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, Config &aConf );
+    ConfEdit( Window* pParent, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, Config &aConf );
     void Save( Config &aConf );
     void Reload( Config &aConf );
     void Click();
@@ -110,7 +109,7 @@ protected:
     ConfEdit& rBase;
     DECL_LINK( ToggleHdl, CheckBox* );
 public:
-    OptConfEdit( Window* pParent, USHORT nResCheck, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, ConfEdit& rBaseEdit, Config& aConf );
+    OptConfEdit( Window* pParent, sal_uInt16 nResCheck, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, ConfEdit& rBaseEdit, Config& aConf );
     void Reload( Config &aConf );
     DECL_LINK( BaseModifyHdl, Edit* );
 };
@@ -130,7 +129,7 @@ private:
 public:
     OptionsDialog( Window* pParent, const ResId& );
     ~OptionsDialog();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
 
     DECL_LINK( ActivatePageHdl, TabControl * );
@@ -239,8 +238,7 @@ public:
     void Save( Config &aConfig );
 };
 
-
-DECLARE_LIST( StringList, String * )
+typedef ::std::vector< String* > StringList;
 #define C_KEY_ALLE          CByteString("All")
 #define C_KEY_AKTUELL       CByteString("Current")
 #define C_KEY_TYPE          CByteString("Type")
@@ -262,7 +260,7 @@ class GenericOptions : public TabPage
     PushButton aPbDelValue;
 
     int nMoveButtons;
-    BOOL bShowSelectPath;
+    sal_Bool bShowSelectPath;
     AutoTimer aMoveTimer;
     DECL_LINK( MoveButtons, AutoTimer* );
 
@@ -273,7 +271,7 @@ class GenericOptions : public TabPage
     StringList* GetAllGroups();
     void LoadData();
 
-    void ShowSelectPath( const String aType );
+    void ShowSelectPath( const String& rType );
 
     DECL_LINK( LoadGroup, ComboBox* );
     DECL_LINK( DelGroup, Button* );
@@ -310,7 +308,7 @@ protected:
     DockingWindow* pSlots;
     SplitWindow *pSplit;
 
-    ULONG nDisplayMode;
+    sal_uIntPtr nDisplayMode;
 
     DECL_LINK( Select, void* );
     DECL_LINK( SelectAll, PushButton* );
@@ -348,9 +346,6 @@ protected:
     SbxVariable *pVar;
 
     DECL_LINK( OKClick, Button * );
-
-//  BOOL bCompare = FALSE;
-//  String aCompareString;
 
 public:
     VarEditDialog( Window * pParent, SbxVariable *pPVar );

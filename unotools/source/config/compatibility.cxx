@@ -41,9 +41,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 #include <itemholder1.hxx>
 
@@ -225,7 +223,7 @@ class SvtCompatibility
             return lEntries.size();
         }
 
-        const SvtCompatibilityEntry& operator[]( int i )
+        const SvtCompatibilityEntry& operator[]( int i ) const
         {
             return lEntries[i];
         }
@@ -431,8 +429,9 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
         {
             SvtSysLocale aSysLocale;
             com::sun::star::lang::Locale aLocale = aSysLocale.GetLocale();
-            if ( aLocale.Language.equalsAscii( "zh" ) || aLocale.Language.equalsAscii( "ja" ) ||
-                    aLocale.Language.equalsAscii( "ko" ) )
+            if ( aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) ||
+                 aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja")) ||
+                 aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko")) )
                 aItem.bExpandWordSpace = false;
 
             m_aDefOptions = aItem;

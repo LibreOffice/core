@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_lang_WrappedTargetRuntimeException_idl__
 #define __com_sun_star_lang_WrappedTargetRuntimeException_idl__
 
-#ifndef __com_sun_star_uno_RuntimeException_idl__
 #include <com/sun/star/uno/RuntimeException.idl>
-#endif
 
 //=============================================================================
 

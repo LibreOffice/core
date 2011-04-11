@@ -34,9 +34,10 @@
 #include "gnujre.hxx"
 #include "util.hxx"
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
+using ::rtl::OUString;
+using ::rtl::Reference;
 
 namespace jfw_plugin
 {
@@ -51,6 +52,12 @@ char const* const* GnuInfo::getJavaExePaths(int * size)
     static char const * ar[] = {
         "gij",
         "bin/gij",
+        "gij-4.3",
+        "bin/gij-4.3",
+        "gij-4.2",
+        "bin/gij-4.2",
+        "gij-4.1",
+        "bin/gij-4.1"
     };
     *size = sizeof (ar) / sizeof (char*);
     return ar;
@@ -68,6 +75,20 @@ char const* const* GnuInfo::getRuntimePaths(int * size)
         "/libjvm.so",
         "/lib/" GCJ_JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/gcj-4.1.1/libjvm.so",
+        "/gcj-4.3-90/libjvm.so",
+        "/gcj-4.2-81/libjvm.so",
+        "/gcj-4.2/libjvm.so",
+        "/gcj-4.2.1/libjvm.so",
+        "/gcj-4.2.2/libjvm.so",
+        "/gcj-4.2.3/libjvm.so",
+        "/gcj-4.1-71/libjvm.so",
+        "/gcj-4_1/libjvm.so",
+        "/gcj-4.1/libjvm.so",
+        "/libgcj.so.81",
+        "/libgcj.so.80",
+        "/libgcj.so.8",
+        "/libgcj.so.71",
+        "/libgcj.so.70",
         "/libgcj.so.7",
         "/libgcj.so.6"
     };
@@ -104,7 +125,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     bool bAccess = false;
 
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
-    for (it_prop i = props.begin(); i != props.end(); i++)
+    for (it_prop i = props.begin(); i != props.end(); ++i)
     {
         if(! bVendor && sVendorProperty.equals(i->first))
         {
@@ -171,7 +192,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
 
     bool bRt = false;
     typedef vector<OUString>::const_iterator i_path;
-    for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
+    for(i_path ip = libpaths.begin(); ip != libpaths.end(); ++ip)
     {
         //Construct an absolute path to the possible runtime
         OUString usRt= m_sHome + *ip;
@@ -188,7 +209,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     if (!bRt)
     {
         m_sHome = m_sJavaHome;
-        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
+        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ++ip)
         {
             //Construct an absolute path to the possible runtime
             OUString usRt= m_sHome + *ip;
@@ -207,7 +228,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     if (!bRt && m_sJavaHome != sJavaLibraryPath)
     {
         m_sHome = sJavaLibraryPath;
-        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
+        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ++ip)
         {
             //Construct an absolute path to the possible runtime
             OUString usRt= m_sHome + *ip;
@@ -227,7 +248,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     if (!bRt && m_sJavaHome != rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib")))
     {
         m_sHome = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///usr/lib64"));
-        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
+        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ++ip)
         {
             //Construct an absolute path to the possible runtime
             OUString usRt= m_sHome + *ip;
@@ -256,7 +277,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     OUString sPathSep= OUString::createFromAscii(arSep);
     bool bLdPath = true;
     int c = 0;
-    for(i_path il = ld_paths.begin(); il != ld_paths.end(); il ++, c++)
+    for(i_path il = ld_paths.begin(); il != ld_paths.end(); ++il, ++c)
     {
         OUString usAbsUrl= m_sHome + *il;
         // convert to system path

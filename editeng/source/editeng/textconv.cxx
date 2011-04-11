@@ -63,7 +63,7 @@ TextConvWrapper::TextConvWrapper( Window* pWindow,
         const Font* pTargetFont,
         sal_Int32 nOptions,
         sal_Bool bIsInteractive,
-        BOOL bIsStart,
+        sal_Bool bIsStart,
         EditView* pView ) :
     HangulHanjaConversion( pWindow, rxMSF, rSourceLocale, rTargetLocale, pTargetFont, nOptions, bIsInteractive )
 {
@@ -101,7 +101,7 @@ sal_Bool TextConvWrapper::ConvNext_impl()
 
     if ( bStartDone && bEndDone )
     {
-        if ( ConvMore_impl() )  // ein weiteres Dokument pruefen?
+        if ( ConvMore_impl() )  // examine another document?
         {
             bStartDone = sal_True;
             bEndDone  = sal_False;
@@ -112,12 +112,11 @@ sal_Bool TextConvWrapper::ConvNext_impl()
 
     }
 
-    //ResMgr* pMgr = DIALOG_MGR();
     sal_Bool bGoOn = sal_False;
 
     if ( bStartDone && bEndDone )
     {
-        if ( ConvMore_impl() )  // ein weiteres Dokument pruefen?
+        if ( ConvMore_impl() )  // examine another document?
         {
             bStartDone = sal_True;
             bEndDone  = sal_False;
@@ -125,34 +124,11 @@ sal_Bool TextConvWrapper::ConvNext_impl()
             return sal_True;
         }
     }
-    else
+    else if (!aConvSel.HasRange())
     {
-        // Ein BODY_Bereich erledigt, Frage nach dem anderen BODY_Bereich
-/*
-        pWin->LeaveWait();
-
-        sal_uInt16 nResId = bReverse ? RID_SVXQB_BW_CONTINUE : RID_SVXQB_CONTINUE;
-        QueryBox aBox( pWin, ResId( nResId, pMgr ) );
-        if ( aBox.Execute() != RET_YES )
-        {
-            // Verzicht auf den anderen Bereich, ggf. Frage nach Sonderbereich
-            pWin->EnterWait();
-            bStartDone = bEndDone = sal_True;
-            return ConvNext_impl();
-        }
-        else
-        {
-*/
-            if (!aConvSel.HasRange())
-            {
-                bStartChk = !bStartDone;
-                ConvStart_impl( bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
-                bGoOn = sal_True;
-            }
-/*
-        }
-        pWin->EnterWait();
-*/
+        bStartChk = !bStartDone;
+        ConvStart_impl( bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
+        bGoOn = sal_True;
     }
     return bGoOn;
 }
@@ -161,8 +137,6 @@ sal_Bool TextConvWrapper::ConvNext_impl()
 sal_Bool TextConvWrapper::FindConvText_impl()
 {
     // modified version of SvxSpellWrapper::FindSpellError
-
-    //ShowLanguageErrors();
 
     sal_Bool bFound = sal_False;
 
@@ -199,7 +173,7 @@ sal_Bool TextConvWrapper::ConvMore_impl()
         bMore = pImpEE->GetEditEnginePtr()->ConvertNextDocument();
         if ( bMore )
         {
-            // Der Text wurde in diese Engine getreten...
+            // The text has been entered in this engine ...
             pEditView->GetImpEditView()->SetEditSelection(
                         pImpEE->GetEditDoc().GetStartPaM() );
         }
@@ -217,8 +191,7 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
 
     if ( eArea == SVX_SPELL_BODY_START )
     {
-        // Wird gerufen, wenn Spell-Forwad am Ende angekomment ist
-        // und soll von vorne beginnen
+        // Is called when Spell-forward has reached the end, and to start over
         if ( bEndDone )
         {
             pConvInfo->bConvToEnd = sal_False;
@@ -236,7 +209,7 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
     }
     else if ( eArea == SVX_SPELL_BODY_END )
     {
-        // Wird gerufen, wenn Spell-Forwad gestartet wird
+        // Is called when Spell-forward starts
         pConvInfo->bConvToEnd = sal_True;
         if (aConvSel.HasRange())
         {
@@ -258,11 +231,10 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
         pConvInfo->aConvContinue = pConvInfo->aConvStart;
         pConvInfo->aConvTo = pImpEE->CreateEPaM(
             pImpEE->GetEditDoc().GetEndPaM() );
-        // pSpellInfo->bSpellToEnd = sal_True;
     }
     else
     {
-        DBG_ERROR( "ConvStart_impl: Unknown Area!" );
+        OSL_FAIL( "ConvStart_impl: Unknown Area!" );
     }
 }
 
@@ -287,8 +259,8 @@ sal_Bool TextConvWrapper::ConvContinue_impl()
 
 
 void TextConvWrapper::SetLanguageAndFont( const ESelection &rESel,
-    LanguageType nLang, USHORT nLangWhichId,
-    const Font *pFont,  USHORT nFontWhichId )
+    LanguageType nLang, sal_uInt16 nLangWhichId,
+    const Font *pFont,  sal_uInt16 nFontWhichId )
 {
     ESelection aOldSel = pEditView->GetSelection();
     pEditView->SetSelection( rESel );
@@ -303,11 +275,11 @@ void TextConvWrapper::SetLanguageAndFont( const ESelection &rESel,
     {
         // set new font attribute
         SvxFontItem aFontItem = (SvxFontItem&) aNewSet.Get( nFontWhichId );
-        aFontItem.GetFamilyName()   = pFont->GetName();
-        aFontItem.GetFamily()       = pFont->GetFamily();
-        aFontItem.GetStyleName()    = pFont->GetStyleName();
-        aFontItem.GetPitch()        = pFont->GetPitch();
-        aFontItem.GetCharSet()      = pFont->GetCharSet();
+        aFontItem.SetFamilyName( pFont->GetName());
+        aFontItem.SetFamily( pFont->GetFamily());
+        aFontItem.SetStyleName( pFont->GetStyleName());
+        aFontItem.SetPitch( pFont->GetPitch());
+        aFontItem.SetCharSet(pFont->GetCharSet());
         aNewSet.Put( aFontItem );
     }
 
@@ -322,7 +294,7 @@ void TextConvWrapper::SelectNewUnit_impl(
         const sal_Int32 nUnitStart,
         const sal_Int32 nUnitEnd )
 {
-    BOOL bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
+    sal_Bool bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
     DBG_ASSERT( bOK, "invalid arguments" );
     if (!bOK)
         return;
@@ -330,8 +302,8 @@ void TextConvWrapper::SelectNewUnit_impl(
     ESelection  aSelection = pEditView->GetSelection();
     DBG_ASSERT( aSelection.nStartPara == aSelection.nEndPara,
         "paragraph mismatch in selection" );
-    aSelection.nStartPos = (USHORT) (nLastPos + nUnitOffset + nUnitStart);
-    aSelection.nEndPos   = (USHORT) (nLastPos + nUnitOffset + nUnitEnd);
+    aSelection.nStartPos = (sal_uInt16) (nLastPos + nUnitOffset + nUnitStart);
+    aSelection.nEndPos   = (sal_uInt16) (nLastPos + nUnitOffset + nUnitEnd);
     pEditView->SetSelection( aSelection );
 }
 
@@ -373,7 +345,7 @@ void TextConvWrapper::ReplaceUnit(
         ReplacementAction eAction,
         LanguageType *pNewUnitLanguage )
 {
-    BOOL bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
+    sal_Bool bOK = 0 <= nUnitStart && 0 <= nUnitEnd && nUnitStart <= nUnitEnd;
     DBG_ASSERT( bOK, "invalid arguments" );
     if (!bOK)
         return;
@@ -401,12 +373,12 @@ void TextConvWrapper::ReplaceUnit(
         case eOriginalAbove :
         case eReplacementBelow :
         case eOriginalBelow :
-            DBG_ERROR( "Rubies not supported" );
+            OSL_FAIL( "Rubies not supported" );
             break;
         default:
-            DBG_ERROR( "unexpected case" );
+            OSL_FAIL( "unexpected case" );
     }
-    nUnitOffset = sal::static_int_cast< USHORT >(
+    nUnitOffset = sal::static_int_cast< sal_uInt16 >(
         nUnitOffset + nUnitStart + aNewTxt.getLength());
 
     // remember current original language for kater use
@@ -439,7 +411,6 @@ void TextConvWrapper::ReplaceUnit(
         ESelection aNewSel( aOldSel );
         aNewSel.nStartPos = sal::static_int_cast< xub_StrLen >(
             aNewSel.nStartPos - aNewTxt.getLength());
-//      DBG_ASSERT( aOldSel.nEndPos >= 0, "error while building selection" );
 
         if (pNewUnitLanguage)
         {
@@ -460,13 +431,13 @@ void TextConvWrapper::ReplaceUnit(
     {
         // Note: replacement is always done in the current paragraph
         // which is the one ConvContinue points to
-        pConvInfo->aConvContinue.nIndex = sal::static_int_cast< USHORT >(
+        pConvInfo->aConvContinue.nIndex = sal::static_int_cast< sal_uInt16 >(
             pConvInfo->aConvContinue.nIndex + nDelta);
 
         // if that is the same as the one where the conversions ends
         // the end needs to be updated also
         if (pConvInfo->aConvTo.nPara == pConvInfo->aConvContinue.nPara)
-            pConvInfo->aConvTo.nIndex = sal::static_int_cast< USHORT >(
+            pConvInfo->aConvTo.nIndex = sal::static_int_cast< sal_uInt16 >(
                 pConvInfo->aConvTo.nIndex + nDelta);
     }
 }

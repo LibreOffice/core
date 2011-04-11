@@ -74,10 +74,8 @@ extern "C"
 #ifndef _OSL_SOCKET_CONST_H_
 
 #if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
 #include <winsock.h>
 #include <string.h>
-#include <tools/postwin.h>
 #endif
 
 #endif
@@ -85,6 +83,24 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
+
+/** test output if SILENT_TEST is 0
+*/
+#if OSL_DEBUG_LEVEL > 0
+#   define SILENT_TEST 0
+#else
+#   define SILENT_TEST 1
+#endif
+
+#if SILENT_TEST
+#   define t_print(...) { }
+#else
+#   define t_print printf
+#endif
+
+/** convert UString and OUString to std::string
+*/
+#define STD_STRING(s) (std::string((const char *)s.getStr()))
 
 /** compare two OUString.
 */

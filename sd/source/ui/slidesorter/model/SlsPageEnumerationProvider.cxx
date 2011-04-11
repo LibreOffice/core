@@ -41,7 +41,7 @@ namespace {
 class AllPagesPredicate
 {
 public:
-    bool operator() (const SharedPageDescriptor& rpDescriptor)
+    bool operator() (const SharedPageDescriptor& rpDescriptor) const
     {
         (void)rpDescriptor;
         return true;
@@ -57,7 +57,7 @@ class SelectedPagesPredicate
 public:
     bool operator() (const SharedPageDescriptor& rpDescriptor)
     {
-        return rpDescriptor->IsSelected();
+        return rpDescriptor->HasState(PageDescriptor::ST_Selected);
     }
 };
 
@@ -69,7 +69,7 @@ class VisiblePagesPredicate
 public:
     bool operator() (const SharedPageDescriptor& rpDescriptor)
     {
-        return rpDescriptor->IsVisible();
+        return rpDescriptor->HasState(PageDescriptor::ST_Visible);
     }
 };
 
@@ -81,7 +81,6 @@ public:
 PageEnumeration PageEnumerationProvider::CreateAllPagesEnumeration (
     const SlideSorterModel& rModel)
 {
-//    AllPagesPredicate aPredicate; // spurious warning on unxsoli4 debug=t
     return PageEnumeration::Create(rModel, AllPagesPredicate());
 }
 

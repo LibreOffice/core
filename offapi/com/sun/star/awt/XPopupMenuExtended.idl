@@ -65,7 +65,7 @@ module com {  module sun {  module star {  module awt {
  */
 interface XPopupMenuExtended
 {
-    /** specifies basic functions for a popup menu.
+    /** specifies basic functions for a pop-up menu.
     */
     interface ::com::sun::star::awt::XPopupMenu;
 

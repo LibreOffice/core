@@ -29,9 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#include <tools/debug.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "AdabasStat.hxx"
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/XStatement.hpp>
@@ -84,7 +84,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
 
     FreeResource();
 
-    DBG_ASSERT(m_xConnection.is(),"No connection");
+    OSL_ENSURE(m_xConnection.is(),"No connection");
     if(m_xConnection.is())
     {
         Reference<XStatement> xStmt;
@@ -99,14 +99,14 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
         try
         {
             xMetaData = m_xConnection->getMetaData();
-            bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("SERVERDBSTATISTICS"),sSchema);
+            bCanSelect = checkSystemTable(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SERVERDBSTATISTICS")), sSchema);
 
             if(bCanSelect)
             {
-                aStmt = ::rtl::OUString::createFromAscii("SELECT SERVERDBSIZE, UNUSEDPAGES FROM ");
+                aStmt = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT SERVERDBSIZE, UNUSEDPAGES FROM "));
 
                 aStmt += ::dbtools::quoteTableName(xMetaData,sSchema,::dbtools::eInDataManipulation);
-                aStmt += ::rtl::OUString::createFromAscii(".\"SERVERDBSTATISTICS\"");
+                aStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".\"SERVERDBSTATISTICS\""));
 
                 xStmt = m_xConnection->createStatement();
                 xRes = xStmt->executeQuery(aStmt);
@@ -119,8 +119,8 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                     double nUsedPages = xRow->getInt(1) / 256;
                     double nFreePages = xRow->getInt(2) / 256;
 
-                    m_ET_SIZE.SetText(::rtl::OUString::valueOf((INT32)nUsedPages));
-                    m_ET_FREESIZE.SetText(::rtl::OUString::valueOf((INT32)nFreePages));
+                    m_ET_SIZE.SetText(::rtl::OUString::valueOf((sal_Int32)nUsedPages));
+                    m_ET_FREESIZE.SetText(::rtl::OUString::valueOf((sal_Int32)nFreePages));
                     m_ET_MEMORYUSING.SetValue(static_cast<sal_Int32>(((nUsedPages-nFreePages)/nUsedPages)*100));
                 }
                 else
@@ -153,14 +153,14 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
         {
             try
             {
-                bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("DATADEVSPACES"),sSchema);
+                bCanSelect = checkSystemTable(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATADEVSPACES")), sSchema);
 
                 if(bCanSelect)
                 {
                     // then the db files
-                    aStmt = ::rtl::OUString::createFromAscii("SELECT DEVSPACENAME FROM ");
+                    aStmt = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT DEVSPACENAME FROM "));
                     aStmt += ::dbtools::quoteTableName(xMetaData,sSchema,::dbtools::eInDataManipulation);
-                    aStmt += ::rtl::OUString::createFromAscii(".\"DATADEVSPACES\"");
+                    aStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".\"DATADEVSPACES\""));
                     xStmt = m_xConnection->createStatement();
                     xRes = xStmt->executeQuery(aStmt);
 
@@ -197,13 +197,13 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
             {
                 try
                 {
-                    bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("CONFIGURATION"),sSchema);
+                    bCanSelect = checkSystemTable(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CONFIGURATION")), sSchema);
 
                     if(bCanSelect)
                     {
-                        aStmt = ::rtl::OUString::createFromAscii("SELECT * FROM ");
+                        aStmt = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
                         aStmt += ::dbtools::quoteTableName(xMetaData,sSchema,::dbtools::eInDataManipulation);
-                        aStmt += ::rtl::OUString::createFromAscii(".CONFIGURATION WHERE DESCRIPTION LIKE 'SYS%DEVSPACE%NAME'");
+                        aStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".CONFIGURATION WHERE DESCRIPTION LIKE 'SYS%DEVSPACE%NAME'"));
                         xStmt = m_xConnection->createStatement();
                         xRes = xStmt->executeQuery(aStmt);
                         if(xRes.is() && xRes->next())
@@ -214,9 +214,9 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                         else
                             showError();
 
-                        aStmt = ::rtl::OUString::createFromAscii("SELECT * FROM ");
+                        aStmt = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
                         aStmt += ::dbtools::quoteTableName(xMetaData,sSchema,::dbtools::eInDataManipulation);
-                        aStmt += ::rtl::OUString::createFromAscii(".CONFIGURATION WHERE DESCRIPTION = 'TRANSACTION LOG NAME'");
+                        aStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".CONFIGURATION WHERE DESCRIPTION = 'TRANSACTION LOG NAME'"));
                         xRes = xStmt->executeQuery(aStmt);
                         if(xRes.is() && xRes->next())
                         {
@@ -268,11 +268,11 @@ sal_Bool OAdabasStatistics::checkSystemTable(const ::rtl::OUString& _rsSystemTab
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     if ( xMeta.is() )
     {
-        Reference<XResultSet> xRes = xMeta->getTablePrivileges(Any(),::rtl::OUString::createFromAscii("%"),  _rsSystemTable);
+        Reference<XResultSet> xRes = xMeta->getTablePrivileges(Any(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")), _rsSystemTable);
         if(xRes.is())
         {
             Reference<XRow> xRow(xRes,UNO_QUERY);
-            static const ::rtl::OUString sSelect = ::rtl::OUString::createFromAscii("SELECT");
+            static const ::rtl::OUString sSelect(RTL_CONSTASCII_USTRINGPARAM("SELECT"));
             // first the db sizes
             while( xRow.is() && xRes->next() )
             {

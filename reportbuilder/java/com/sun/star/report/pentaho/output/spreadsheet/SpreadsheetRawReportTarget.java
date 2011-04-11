@@ -845,6 +845,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         setElementBoundaryCollectionPass(false);
         resetTableCounter();
         columnCounter = 0;
+        copyMeta();
     }
 
     private boolean isElementBoundaryCollectionPass()

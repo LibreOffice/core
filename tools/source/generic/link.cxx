@@ -34,28 +34,24 @@
 |*
 |*    Link::operator==()
 |*
-|*    Beschreibung      LINK.SDW
-|*    Ersterstellung    AM 14.02.91
-|*    Letzte Aenderung  TH 07.11.95
-|*
 *************************************************************************/
 
-BOOL Link::operator==( const Link& rLink ) const
+sal_Bool Link::operator==( const Link& rLink ) const
 {
     if ( pFunc == rLink.pFunc )
     {
         if ( pFunc )
         {
             if ( pInst == rLink.pInst )
-                return TRUE;
+                return sal_True;
             else
-                return FALSE;
+                return sal_False;
         }
         else
-            return TRUE;
+            return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

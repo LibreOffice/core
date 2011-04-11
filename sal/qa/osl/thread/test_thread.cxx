@@ -31,7 +31,9 @@
 
 #include "sal/config.h"
 
-#include "testshl/simpleheader.hxx"
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include "osl/conditn.hxx"
 #include "osl/thread.hxx"
 #include "osl/time.h"
@@ -83,10 +85,10 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

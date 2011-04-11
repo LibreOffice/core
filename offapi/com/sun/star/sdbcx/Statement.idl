@@ -47,7 +47,7 @@ published service Statement
 
     /** returns
         <TRUE/>
-        if a resultset should allow navigation with bookmarks or not.
+        if a result set should allow navigation with bookmarks or not.
         The default is
         <FALSE/>
         .

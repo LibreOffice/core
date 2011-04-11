@@ -37,8 +37,9 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star;
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
 
 // ---------------------------------------------------
 ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManVector )
@@ -135,7 +136,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
     else if ( aStack.size() > 1 )
     {
         ManifestStack::reverse_iterator aIter = aStack.rbegin();
-        aIter++;
+        ++aIter;
 
         if ( aIter->m_aConvertedName.equals( sFileEntryElement ) )
         {
@@ -317,7 +318,7 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
 ::rtl::OUString ManifestImport::ConvertName( const ::rtl::OUString& aName )
 {
     ::rtl::OUString aConvertedName;
-    for ( ManifestStack::reverse_iterator aIter = aStack.rbegin(); !aConvertedName.getLength() && aIter != aStack.rend(); aIter++ )
+    for ( ManifestStack::reverse_iterator aIter = aStack.rbegin(); !aConvertedName.getLength() && aIter != aStack.rend(); ++aIter )
     {
         if ( !aIter->m_aNamespaces.empty() )
             aConvertedName = ConvertNameWithNamespace( aName, aIter->m_aNamespaces );

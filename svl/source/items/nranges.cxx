@@ -64,7 +64,7 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
 
 /** <H3>Description</H3>
 
-    Creates an USHORT-ranges-array in 'rpRanges' using 'nWh1' and 'nWh2' as
+    Creates an sal_uInt16-ranges-array in 'rpRanges' using 'nWh1' and 'nWh2' as
     first range, 'nNull' as terminator or start of 2nd range and 'pArgs' as
     remaider.
 
@@ -74,7 +74,7 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
 
 {
     NUMTYPE nSize = 0, nIns = 0;
-    USHORT nCnt = 0;
+    sal_uInt16 nCnt = 0;
     SvNums aNumArr( 11, 8 );
     aNumArr.Insert( nWh1, nCnt++ );
     aNumArr.Insert( nWh2, nCnt++ );
@@ -233,20 +233,20 @@ SfxNumRanges::SfxNumRanges( const NUMTYPE* pArr )
 
 //------------------------------------------------------------------------
 
-BOOL SfxNumRanges::operator==( const SfxNumRanges &rOther ) const
+sal_Bool SfxNumRanges::operator==( const SfxNumRanges &rOther ) const
 {
     // Object pointers equal?
     if ( this == &rOther )
-        return TRUE;
+        return sal_True;
 
     // Ranges pointers equal?
     if ( _pRanges == rOther._pRanges )
-        return TRUE;
+        return sal_True;
 
     // Counts equal?
     NUMTYPE nCount = Count();
     if ( nCount != rOther.Count() )
-        return FALSE;
+        return sal_False;
 
     // Check arrays.
     NUMTYPE n = 0;
@@ -254,12 +254,12 @@ BOOL SfxNumRanges::operator==( const SfxNumRanges &rOther ) const
     {
         // Elements at current position equal?
         if ( _pRanges[ n ] != rOther._pRanges[ n ] )
-            return FALSE;
+            return sal_False;
 
         ++n;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -576,7 +576,7 @@ SfxNumRanges& SfxNumRanges::operator -=
         }
 
         // we should never be here
-        DBG_ERROR( "SfxNumRanges::operator-=: internal error" );
+        OSL_FAIL( "SfxNumRanges::operator-=: internal error" );
     } // while
 
     pTarget[ nTargetPos ] = 0;
@@ -595,64 +595,6 @@ SfxNumRanges& SfxNumRanges::operator -=
 
     delete [] pTarget;
     return *this;
-
-    /* untested code from MI commented out (MDA, 28.01.97)
-    do
-    {
-        // 1st range is smaller than 2nd range?
-        if ( pRange1[1] < pRange2[0] )
-            // => keep 1st range
-            pRange1 += 2;
-
-        // 2nd range is smaller than 1st range?
-        else if ( pRange2[1] < pRange1[0] )
-            // => skip 2nd range
-            pRange2 += 2;
-
-        // 2nd range totally overlaps the 1st range?
-        else if ( pRange2[0] <= pRange1[0] && pRange2[1] >= pRange1[1] )
-            // => remove 1st range
-            memmove( pRange1, pRange1+2, sizeof(NUMTYPE) * (pEndOfTarget-pRange1+2) );
-
-        // 2nd range overlaps only the beginning of 1st range?
-        else if ( pRange2[0] <= pRange1[0] && pRange2[1] < pRange1[1] )
-        {
-            // => cut the beginning of 1st range and goto next 2nd range
-            pRange1[0] = pRange2[1] + 1;
-            pRange2 += 2;
-        }
-
-        // 2nd range overlaps only the end of 1st range?
-        else if ( pRange2[0] > pRange1[0] && pRange2[1] >= pRange1[0] )
-            // => cut the beginning of 1st range
-            pRange1[0] = pRange2[1]+1;
-
-        // 2nd range is a real subset of 1st range
-        else
-        {
-            // => split 1st range and goto next 2nd range
-            memmove( pRange1+3, pRange1+1, sizeof(NUMTYPE) * (pEndOfTarget-pRange1-1) );
-            pRange1[1] = pRange2[0] - 1;
-            pRange1[2] = pRange2[1] + 1;
-            pRange1 += 2;
-            pRange2 += 2;
-        }
-    }
-    while ( *pRange1 && *pRange2 );
-
-    // assign the differentiated ranges
-    delete[] _pRanges;
-    NUMTYPE nUShorts = Count_Impl(pTarget) + 1;
-    if ( 1 != nUShorts )
-    {
-        _pRanges = new NUMTYPE[ nUShorts ];
-        memcpy( _pRanges, pTarget, nUShorts * sizeof(NUMTYPE) );
-        _pRanges[ nUShorts-1 ] = 0;
-    }
-    else
-        _pRanges = 0;
-    return *this;
-    */
 }
 
 //------------------------------------------------------------------------
@@ -777,21 +719,21 @@ SfxNumRanges& SfxNumRanges::operator /=
 
 //------------------------------------------------------------------------
 
-BOOL SfxNumRanges::Intersects( const SfxNumRanges &rRanges ) const
+sal_Bool SfxNumRanges::Intersects( const SfxNumRanges &rRanges ) const
 
 /** <H3>Description</H3>
 
     Determines if at least one range in 'rRanges' intersects with one
     range in '*this'.
 
-    TRUE, if there is at least one with:
+    sal_True, if there is at least one with:
         this->Contains( n ) && rRanges.Contains( n )
 */
 
 {
     // special cases: one is empty
     if ( rRanges.IsEmpty() || IsEmpty() )
-        return FALSE;
+        return sal_False;
 
     // find at least one intersecting range
     const NUMTYPE *pRange1 = _pRanges;
@@ -811,12 +753,12 @@ BOOL SfxNumRanges::Intersects( const SfxNumRanges &rRanges ) const
 
         // the ranges are overlappung
         else
-            return TRUE;
+            return sal_True;
     }
     while ( *pRange2 );
 
     // no intersection found
-    return FALSE;
+    return sal_False;
 }
 
 //------------------------------------------------------------------------
@@ -835,7 +777,7 @@ NUMTYPE SfxNumRanges::Count() const
 
 //------------------------------------------------------------------------
 
-BOOL SfxNumRanges::Contains( NUMTYPE n ) const
+sal_Bool SfxNumRanges::Contains( NUMTYPE n ) const
 
 /** <H3>Description</H3>
 
@@ -845,8 +787,8 @@ BOOL SfxNumRanges::Contains( NUMTYPE n ) const
 {
     for ( NUMTYPE *pRange = _pRanges; *pRange && *pRange <= n; pRange += 2 )
         if ( pRange[0] <= n && n <= pRange[1] )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 
 }
 

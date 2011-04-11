@@ -61,10 +61,10 @@
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if( !pProperties )
         {
-            static ::com::sun::star::beans::Property __FAR_DATA aPropTable[] =
+            static ::com::sun::star::beans::Property aPropTable[] =
             {
-                ::com::sun::star::beans::Property( ::rtl::OUString::createFromAscii( "Orientation" ), PROPERTY_Orientation, ::getCppuType((const sal_Int16*)0), 0 ),
-                ::com::sun::star::beans::Property( ::rtl::OUString::createFromAscii( "Horizontal" ), PROPERTY_Horizontal, ::getBooleanCppuType(), 0 )
+                ::com::sun::star::beans::Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")), PROPERTY_Orientation, ::getCppuType((const sal_Int16*)0), 0 ),
+                ::com::sun::star::beans::Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Horizontal")), PROPERTY_Horizontal, ::getBooleanCppuType(), 0 )
             };
             pProperties = aPropTable;
             nElements = sizeof( aPropTable ) / sizeof( ::com::sun::star::beans::Property );
@@ -178,7 +178,7 @@ sal_Bool VCLXPrinterPropertySet::convertFastPropertyValue( ::com::sun::star::uno
         break;
         default:
         {
-            DBG_ERROR( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
+            OSL_FAIL( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
         }
     }
     return bDifferent;
@@ -202,7 +202,7 @@ void VCLXPrinterPropertySet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle
         break;
         default:
         {
-            DBG_ERROR( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
+            OSL_FAIL( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
         }
     }
 }
@@ -221,7 +221,7 @@ void VCLXPrinterPropertySet::getFastPropertyValue( ::com::sun::star::uno::Any& r
         break;
         default:
         {
-            DBG_ERROR( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
+            OSL_FAIL( "VCLXPrinterPropertySet_Impl::convertFastPropertyValue - invalid Handle" );
         }
     }
 }

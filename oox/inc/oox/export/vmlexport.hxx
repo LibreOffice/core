@@ -78,6 +78,9 @@ protected:
     /// added attribute is preserved.
     void                AddShapeAttribute( sal_Int32 nAttribute, const rtl::OString& sValue );
 
+    using EscherEx::StartShape;
+    using EscherEx::EndShape;
+
     /// Start the shape for which we just collected the information.
     ///
     /// Returns the element's tag number, -1 means we wrote nothing.
@@ -92,13 +95,13 @@ protected:
 
 private:
 
-    virtual void OpenContainer( UINT16 nEscherContainer, int nRecInstance = 0 );
+    virtual void OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance = 0 );
     virtual void CloseContainer();
 
-    virtual UINT32 EnterGroup( const String& rShapeName, const Rectangle* pBoundRect = 0 );
+    virtual sal_uInt32 EnterGroup( const String& rShapeName, const Rectangle* pBoundRect = 0 );
     virtual void LeaveGroup();
 
-    virtual void AddShape( UINT32 nShapeType, UINT32 nShapeFlags, UINT32 nShapeId = 0 );
+    virtual void AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0 );
 
 private:
     /// Create an OString representing the id from a numerical id.

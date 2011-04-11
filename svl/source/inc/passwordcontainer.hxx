@@ -216,7 +216,7 @@ public:
     {
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aNode( 1 );
         *aNode.getArray()  = path;
-        *aNode.getArray() += ::rtl::OUString::createFromAscii( "/Store" );
+        *aNode.getArray() += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Store"));
         EnableNotification( aNode );
     }
 
@@ -412,13 +412,13 @@ public:
 
 class RW_SvMemoryStream : public SvMemoryStream {
 public:
-    RW_SvMemoryStream( void* Buf, ULONG Size, StreamMode eMode ):
+    RW_SvMemoryStream( void* Buf, sal_uLong Size, StreamMode eMode ):
             SvMemoryStream( Buf, Size, eMode){}
 
-    RW_SvMemoryStream( ULONG InitSize=512, ULONG Resize=64 ):
+    RW_SvMemoryStream( sal_uLong InitSize=512, sal_uLong Resize=64 ):
             SvMemoryStream( InitSize, Resize ){}
 
-    ULONG getActualSize(){ return nEndOfData; }
+    sal_uLong getActualSize(){ return nEndOfData; }
 };
 
 

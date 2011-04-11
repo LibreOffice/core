@@ -43,7 +43,7 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFmtCharFmt: public SfxPoolItem, public SwClient
 {
     friend class SwTxtCharFmt;
-    SwTxtCharFmt* pTxtAttr;     // mein TextAttribut
+    SwTxtCharFmt* pTxtAttr;     // My text attribute.
 
 public:
     SwFmtCharFmt() : pTxtAttr(0) {}
@@ -54,6 +54,9 @@ public:
 
     // @@@ public copy ctor, but no copy assignment?
     SwFmtCharFmt( const SwFmtCharFmt& rAttr );
+protected:
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+
 private:
     // @@@ public copy ctor, but no copy assignment?
     SwFmtCharFmt & operator= (const SwFmtCharFmt &);
@@ -61,7 +64,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -70,12 +73,10 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    // an das SwTxtCharFmt weiterleiten (vom SwClient)
-    virtual void    Modify( SfxPoolItem*, SfxPoolItem* );
-    virtual BOOL    GetInfo( SfxPoolItem& rInfo ) const;
+    virtual sal_Bool    GetInfo( SfxPoolItem& rInfo ) const;
 
     void SetCharFmt( SwFmt* pFmt ) { pFmt->Add(this); }
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }

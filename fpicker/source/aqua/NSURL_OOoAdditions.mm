@@ -92,8 +92,8 @@ NSString* resolveAlias( NSString* i_pSystemPath )
         FSRef rFS;
         if( CFURLGetFSRef( rUrl, &rFS ) )
         {
-            MacOSBoolean bIsFolder = false;
-            MacOSBoolean bAlias = false;
+            Boolean bIsFolder = false;
+            Boolean bAlias = false;
             OSErr err = FSResolveAliasFile( &rFS, true, &bIsFolder, &bAlias);
             if( (err == noErr) && bAlias )
             {

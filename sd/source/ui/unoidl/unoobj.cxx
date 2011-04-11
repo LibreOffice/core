@@ -72,9 +72,7 @@
 #include "ViewShell.hxx"
 #include "unokywds.hxx"
 #include "unopage.hxx"
-#ifndef SVX_LIGHT
 #include "DrawDocShell.hxx"
-#endif
 #include "helpids.h"
 #include "glob.hxx"
 #include "glob.hrc"
@@ -144,6 +142,7 @@ static SdTypesCache gImplTypesCache;
 
 #define WID_THAT_NEED_ANIMINFO 19
 
+#define WID_PLACEHOLDERTEXT 24
 
 
         #define IMPRESS_MAP_ENTRIES \
@@ -168,6 +167,7 @@ static SdTypesCache gImplTypesCache;
         { MAP_CHAR_LEN(UNO_NAME_OBJ_VERB),          WID_VERB,            &::getCppuType((const sal_Int32*)0),                       0, 0},\
         { MAP_CHAR_LEN("IsAnimation"),              WID_ISANIMATION,     &::getBooleanCppuType(),                                   0, 0},\
         { MAP_CHAR_LEN("NavigationOrder"),          WID_NAVORDER,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
+        { MAP_CHAR_LEN("PlaceholderText"),          WID_PLACEHOLDERTEXT, &::getCppuType((const OUString*)0),                        0, 0},\
         { 0,0,0,0,0,0}
 
 
@@ -607,7 +607,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     if(!(aValue >>= nVerb))
                         throw lang::IllegalArgumentException();
 
-                    pInfo->mnVerb = (USHORT)nVerb;
+                    pInfo->mnVerb = (sal_uInt16)nVerb;
                     break;
                 }
                 case WID_DIMCOLOR:
@@ -777,6 +777,9 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
         case WID_ISANIMATION:
             aRet <<= (sal_Bool)( pInfo && pInfo->mbIsMovie);
             break;
+        case WID_PLACEHOLDERTEXT:
+            aRet <<= GetPlaceholderText();
+            break;
         case WID_BOOKMARK:
         {
             OUString aString;
@@ -784,7 +787,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             {
                 SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
                 // is the bookmark a page?
-                BOOL bIsMasterPage;
+                sal_Bool bIsMasterPage;
                 if(pDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage ) != SDRPAGE_NOTFOUND)
                 {
                     aString = SdDrawPage::getPageApiNameFromUiName( pInfo->GetBookmark() );
@@ -964,6 +967,24 @@ sal_Bool SdXShape::IsEmptyPresObj() const throw()
 
     return sal_False;
 }
+
+OUString SdXShape::GetPlaceholderText() const
+{
+    // only possible if this actually *is* a presentation object
+    if( !IsPresObj() )
+        return OUString();
+
+    SdrObject* pObj = mpShape->GetSdrObject();
+    if( pObj == NULL )
+        return OUString();
+
+    SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
+    DBG_ASSERT( pPage, "no page?" );
+    if( pPage == NULL )
+        return OUString();
+
+    return pPage->GetPresObjText( pPage->GetPresObjKind(pObj) );
+ }
 
 /** sets/reset the empty status of a presentation object
 */
@@ -1398,7 +1419,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             case presentation::ClickAction_VERB:
                 if( nFound & FOUND_VERB )
                 {
-                    pInfo->mnVerb = (USHORT)nVerb;
+                    pInfo->mnVerb = (sal_uInt16)nVerb;
                     bOk = sal_True;
                 }
                 break;

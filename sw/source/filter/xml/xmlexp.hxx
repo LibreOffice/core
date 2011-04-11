@@ -33,6 +33,7 @@
 #include "xmlitmap.hxx"
 #include <xmloff/uniref.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <vector>
 
 class SwPaM;
 class SwFmt;
@@ -45,12 +46,14 @@ class SwTableLines;
 class SwTableBox;
 class SwXMLTableColumn_Impl;
 class SwXMLTableLines_Impl;
-class SwXMLTableLinesCache_Impl;
 class SwXMLTableColumnsSortByWidth_Impl;
 class SwXMLTableFrmFmtsSort_Impl;
 class SwXMLTableInfo_Impl;
 class SwTableNode;
 class XMLPropertySetMapper;
+class SwXMLTableLines_Impl;
+
+typedef ::std::vector< SwXMLTableLines_Impl* > SwXMLTableLinesCache_Impl;
 
 class SwXMLExport : public SvXMLExport
 {
@@ -61,10 +64,9 @@ class SwXMLExport : public SvXMLExport
     SwPaM                       *pOrigPaM;      // the original PaM
 #endif
 
-    SvXMLUnitConverter          *pTwipUnitConv;
-
-    SvXMLExportItemMapper       *pTableItemMapper;
-    SwXMLTableLinesCache_Impl   *pTableLines;
+    SvXMLUnitConverter*         pTwipUnitConv;
+    SvXMLExportItemMapper*      pTableItemMapper;
+    SwXMLTableLinesCache_Impl*  pTableLines;
 
     SvXMLItemMapEntriesRef      xTableItemMap;
     SvXMLItemMapEntriesRef      xTableRowItemMap;
@@ -101,7 +103,7 @@ class SwXMLExport : public SvXMLExport
                           SwXMLTableInfo_Impl& rTblInfo );
     void ExportTableLines( const SwTableLines& rLines,
                            SwXMLTableInfo_Impl& rTblInfo,
-                           USHORT nHeaderRows = 0 );
+                           sal_uInt16 nHeaderRows = 0 );
 
     virtual void _ExportMeta();
     virtual void _ExportFontDecls();
@@ -124,7 +126,8 @@ class SwXMLExport : public SvXMLExport
     const ::rtl::OUString sCell;
 
     void setBlockMode();
-
+private:
+    void DeleteTableLines();
 protected:
 
     virtual XMLTextParagraphExport* CreateTextParagraphExport();
@@ -134,14 +137,11 @@ protected:
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
 
 public:
-
-    // #110680#
     SwXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nExportFlags = EXPORT_ALL);
 
 #ifdef XML_CORE_API
-    // #110680#
     SwXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,

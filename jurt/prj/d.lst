@@ -3,5 +3,6 @@
 ..\%__SRC%\bin\jpipx.dll %_DEST%\bin%_EXT%\jpipx.dll
 ..\%__SRC%\lib\libjpipe*.so %_DEST%\lib%_EXT%\libjpipe*.so
 ..\%__SRC%\lib\libjpipe.jnilib %_DEST%\lib%_EXT%\libjpipe.jnilib
+..\%__SRC%\lib\libjpipe*.jnilib %_DEST%\lib%_EXT%\libjpipe*.jnilib
 
 ..\%__SRC%\bin\jurt_src.zip %COMMON_DEST%\bin%_EXT%\jurt_src.zip

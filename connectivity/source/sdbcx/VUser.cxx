@@ -176,7 +176,7 @@ void SAL_CALL OUser::revokePrivileges( const ::rtl::OUString& /*objName*/, sal_I
 // -----------------------------------------------------------------------------
 void SAL_CALL OUser::setName( const ::rtl::OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSURE( false, "OUser::setName: not implemented!" );
+    OSL_FAIL( "OUser::setName: not implemented!" );
         // not allowed to throw an SQLException here ...
 }
 // -----------------------------------------------------------------------------

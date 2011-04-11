@@ -31,8 +31,7 @@
 #include "oox/drawingml/table/tablepartstylecontext.hxx"
 #include "oox/drawingml/table/tablestyletextstylecontext.hxx"
 #include "oox/drawingml/table/tablestylecellstylecontext.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
+
 using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -60,10 +59,10 @@ TablePartStyleContext::createFastChildContext( ::sal_Int32 aElementToken, const 
 
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML|XML_tcTxStyle:  // CT_TableStyleTextStyle
+        case A_TOKEN( tcTxStyle ):  // CT_TableStyleTextStyle
             xRet.set( new TableStyleTextStyleContext( *this, xAttribs, mrTableStylePart ) );
             break;
-        case NMSP_DRAWINGML|XML_tcStyle:    // CT_TableStyleCellStyle
+        case A_TOKEN( tcStyle ):    // CT_TableStyleCellStyle
             xRet.set( new TableStyleCellStyleContext( *this,  mrTableStylePart ) );
             break;
     }

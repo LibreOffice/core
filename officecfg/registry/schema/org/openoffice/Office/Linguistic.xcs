@@ -91,21 +91,9 @@
                     <label>Spell and grammar dialog image</label>
                 </info>
             </prop>
-            <prop oor:name="SpellAndGrammarDialogImage_HC" oor:type="xs:string">
-                <info>
-                    <desc>The path to the image for the spell and grammar checking dialog in high contrast mode.</desc>
-                    <label>Spell and grammar dialog image</label>
-                </info>
-            </prop>
             <prop oor:name="SpellAndGrammarContextMenuSuggestionImage" oor:type="xs:string">
                 <info>
                     <desc>The path to the image for the spell and grammar checking suggestions in the context menu context menu.</desc>
-                    <label>Spell and grammar context menu suggestions image</label>
-                </info>
-            </prop>
-            <prop oor:name="SpellAndGrammarContextMenuSuggestionImage_HC" oor:type="xs:string">
-                <info>
-                    <desc>The path to the image for the spell and grammar checking suggestions in the context menu context menu in high contrast mode.</desc>
                     <label>Spell and grammar context menu suggestions image</label>
                 </info>
             </prop>
@@ -115,21 +103,9 @@
                     <label>Spell and grammar context menu dictionary image</label>
                 </info>
             </prop>
-            <prop oor:name="SpellAndGrammarContextMenuDictionaryImage_HC" oor:type="xs:string">
-                <info>
-                    <desc>The path to the image for the spell and grammar checking context menu in high contrast mode.</desc>
-                    <label>Spell and grammar context menu dictionary image</label>
-                </info>
-            </prop>
             <prop oor:name="ThesaurusDialogImage" oor:type="xs:string">
                 <info>
                     <desc>The path to the image for the thesaurus dialog.</desc>
-                    <label>Thesaurus dialog image</label>
-                </info>
-            </prop>
-            <prop oor:name="ThesaurusDialogImage_HC" oor:type="xs:string">
-                <info>
-                    <desc>The path to the image for the thesaurus dialog in high contrast mode.</desc>
                     <label>Thesaurus dialog image</label>
                 </info>
             </prop>
@@ -139,13 +115,6 @@
                     <label>Synonyms context menu image</label>
                 </info>
             </prop>
-            <prop oor:name="SynonymsContextMenuImage_HC" oor:type="xs:string">
-                <info>
-                    <desc>The path to the image for the synonyms context menu in high contrast mode.</desc>
-                    <label>Synonyms context menu image</label>
-                </info>
-            </prop>
-
         </group>
 
         <group oor:name="GrammarCheckerEntry">

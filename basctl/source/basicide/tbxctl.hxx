@@ -31,33 +31,6 @@
 #include <sfx2/tbxctrl.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
-/*
-#ifdef _BASIDE_POPUPWINDOWTBX
-
-// class PopupWindowTbx --------------------------------------------------
-
-class PopupWindowTbx : public SfxPopupWindow
-{
-private:
-    SfxToolBoxManager   aTbx;
-    Link                aSelectLink;
-
-    DECL_LINK( SelectHdl, void* );
-
-public:
-    PopupWindowTbx( USHORT nId, WindowAlign eAlign,
-                    ResId aRIdWin, ResId aRIdTbx, SfxBindings& rBind );
-    ~PopupWindowTbx();
-
-    void                    StartSelection()
-                                { aTbx.GetToolBox().StartSelection(); }
-    void                    Update();
-
-    virtual SfxPopupWindow* Clone() const;
-    virtual void            PopupModeEnd();
-};
-#endif
-*/
 //-------------------
 // class TbxControls
 //-------------------
@@ -71,22 +44,22 @@ private:
         bool bDisabled;
     };
 
-    USHORT                  nLastSlot;
+    sal_uInt16                  nLastSlot;
 
 protected:
-    virtual void            StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                           const SfxPoolItem* pState );
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    TbxControls(USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    TbxControls(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~TbxControls() {}
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
 
     using                       SfxToolBoxControl::Select;
-    void                        Select( USHORT nModifier );
+    void                        Select( sal_uInt16 nModifier );
 };
 
 

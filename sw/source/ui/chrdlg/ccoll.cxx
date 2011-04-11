@@ -29,16 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "cmdid.h"
-#include <tools/list.hxx>
 #include "swmodule.hxx"
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "globals.hrc"
 #include "helpid.h"
-
 
 #include <sfx2/styfitem.hxx>
 
@@ -109,7 +105,7 @@ rtl::OUString GetCommandContextByIndex( sal_Int16 nIndex )
     rtl::OUString aRes;
     if (0 <= nIndex  &&  nIndex < COND_COMMAND_COUNT)
     {
-        aRes = C2U( aCommandContext[ nIndex ] );
+        aRes = rtl::OUString::createFromAscii( aCommandContext[ nIndex ] );
     }
     return aRes;
 }
@@ -153,11 +149,11 @@ CommandStruct SwCondCollItem::aCmds[] =
 TYPEINIT1_AUTOFACTORY(SwCondCollItem, SfxPoolItem)
 
 /****************************************************************************
-    Item fuer den Transport der Bedingungstabelle
+    Item for the transport of the condition table
 ****************************************************************************/
 
 
-SwCondCollItem::SwCondCollItem(USHORT _nWhich ) :
+SwCondCollItem::SwCondCollItem(sal_uInt16 _nWhich ) :
     SfxPoolItem(_nWhich)
 {
 
@@ -175,23 +171,23 @@ SfxPoolItem*   SwCondCollItem::Clone( SfxItemPool * /*pPool*/ ) const
 int SwCondCollItem::operator==( const SfxPoolItem& rItem) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rItem), "different types" );
-    BOOL bReturn = TRUE;
-    for(USHORT i = 0; i < COND_COMMAND_COUNT; i++)
+    sal_Bool bReturn = sal_True;
+    for(sal_uInt16 i = 0; i < COND_COMMAND_COUNT; i++)
         if(sStyles[i] != ((SwCondCollItem&)rItem).sStyles[i])
         {
-            bReturn = FALSE;
+            bReturn = sal_False;
             break;
         }
 
     return bReturn;
 }
 
-const String&   SwCondCollItem::GetStyle(USHORT nPos) const
+const String&   SwCondCollItem::GetStyle(sal_uInt16 nPos) const
 {
     return nPos < COND_COMMAND_COUNT ? sStyles[nPos] : aEmptyStr;
 }
 
-void SwCondCollItem::SetStyle(const String* pStyle, USHORT nPos)
+void SwCondCollItem::SetStyle(const String* pStyle, sal_uInt16 nPos)
 {
     if( nPos < COND_COMMAND_COUNT )
         sStyles[nPos] = pStyle ? *pStyle : aEmptyStr;

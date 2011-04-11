@@ -3,3 +3,4 @@
 
 mkdir: %_DEST%\inc%_EXT%\hunspell
 ..\%__SRC%\inc\*.hxx         %_DEST%\inc%_EXT%\hunspell\*.hxx
+..\%__SRC%\inc\*.h         %_DEST%\inc%_EXT%\hunspell\*.h

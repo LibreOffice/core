@@ -254,16 +254,18 @@ checkForUpdates(
 bool storeExtensionUpdateInfos( const uno::Reference< uno::XComponentContext > & rxContext,
                                 const uno::Sequence< uno::Sequence< rtl::OUString > > &rUpdateInfos )
 {
+    bool bNotify = false;
+
     if ( rUpdateInfos.hasElements() )
     {
         rtl::Reference< UpdateCheckConfig > aConfig = UpdateCheckConfig::get( rxContext );
 
         for ( sal_Int32 i = rUpdateInfos.getLength() - 1; i >= 0; i-- )
         {
-            aConfig->storeExtensionVersion( rUpdateInfos[i][0], rUpdateInfos[i][1] );
+            bNotify |= aConfig->storeExtensionVersion( rUpdateInfos[i][0], rUpdateInfos[i][1] );
         }
     }
-    return rUpdateInfos.hasElements();
+    return bNotify;
 }
 
 //------------------------------------------------------------------------------
@@ -282,15 +284,15 @@ bool checkForExtensionUpdates( const uno::Reference< uno::XComponentContext > & 
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( false, "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
+        OSL_FAIL( "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
     }
 
     if ( !xInfoProvider.is() ) return false;
 
     aUpdateList = xInfoProvider->isUpdateAvailable( ::rtl::OUString() );
-    storeExtensionUpdateInfos( rxContext, aUpdateList );
+    bool bNotify = storeExtensionUpdateInfos( rxContext, aUpdateList );
 
-    return aUpdateList.hasElements();
+    return bNotify;
 }
 
 //------------------------------------------------------------------------------
@@ -308,7 +310,7 @@ bool checkForPendingUpdates( const uno::Reference< uno::XComponentContext > & rx
     }
     catch( const uno::Exception& )
     {
-        OSL_ENSURE( false, "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
+        OSL_FAIL( "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
     }
 
     if ( !xInfoProvider.is() ) return false;

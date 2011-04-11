@@ -47,14 +47,11 @@ CXXFLAGS+= $(LFS_CFLAGS)
 CFLAGSCXX+=-Wno-unused-parameter -Wno-return-type
 .ENDIF
 
-.IF "$(COMEX)"=="9"
-.IF "$(PSDK_HOME)"!=""
-# Since the 02/2003 PSDK the "new" linker is needed here.
-LINK=$(WRAPCMD) "$(PSDK_HOME)$/Bin$/Win64$/LINK.EXE"
-.ENDIF
-.ENDIF
+SLOFILES=
 
-SLOFILES=\
+.IF "$(CPU)"=="I"
+
+SLOFILES+=\
         $(SLO)$/CheckTokenMembership.obj\
         $(SLO)$/CommandLineToArgvW.obj\
         $(SLO)$/CopyFileExA.obj\
@@ -79,8 +76,6 @@ SLOFILES=\
         $(SLO)$/DllMain.obj\
         $(SLO)$/ResolveThunk.obj\
         $(SLO)$/ResolveUnicows.obj\
-        $(SLO)$/snprintf.obj\
-        $(SLO)$/snwprintf.obj\
         $(SLO)$/FindFirstVolumeA.obj\
         $(SLO)$/FindFirstVolumeW.obj\
         $(SLO)$/FindNextVolumeA.obj\
@@ -111,25 +106,21 @@ SLOFILES=\
         $(SLO)$/PathSetDlgItemPathW.obj\
         $(SLO)$/PathStripToRootW.obj\
         $(SLO)$/SHCreateItemFromParsingName.obj
-        
+
+.ENDIF
+
+SLOFILES+=\
+        $(SLO)$/snprintf.obj\
+        $(SLO)$/snwprintf.obj
+
 SHL1TARGET=$(TARGET)
 SHL1IMPLIB=$(SHL1TARGET)
 SHL1DEF=$(MISC)/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-.IF "$(COM)"=="GCC"
-DEF1EXPORTFILE=\
-    $(SHL1TARGET)_mingw.dxp\
-    unicows_mingw.dxp
-.ELSE
-DEF1EXPORTFILE=\
-    $(SHL1TARGET).dxp\
-    unicows.dxp
-.ENDIF
 DEF1DEPN=\
         $(DEF1EXPORTFILE)\
         makefile.mk
 
-#SHL1VERINFO=$(SHL1TARGET).rc
 SHL1OBJS=$(SLOFILES)
 
 #No default libraries
@@ -141,9 +132,6 @@ SHL1STDLIBS=\
         $(MINGW_LIBGCC)
 MINGWSSTDOBJ=
 MINGWSSTDENDOBJ=
-.ELSE
-SHL1STDLIBS=\
-        unicows.lib
 .ENDIF
 
 SHL1STDLIBS+=\

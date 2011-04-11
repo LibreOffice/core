@@ -92,7 +92,7 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
                 m_sHelpMessage = sValue;
                 break;
             case XML_TOK_COLUMN_VISIBILITY:
-                m_bHidden = !sValue.equalsAscii("visible");
+                m_bHidden = !sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("visible"));
                 break;
             case XML_TOK_COLUMN_TYPE_NAME:
                 sType = sValue;
@@ -101,10 +101,9 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
             case XML_TOK_COLUMN_DEFAULT_VALUE:
                 if ( sValue.getLength() && sType.getLength() )
                     m_aDefaultValue <<= sValue;
-                //    SvXMLUnitConverter::convertAny(m_aDefaultValue,sType,sValue);
                 break;
             case XML_TOK_COLUMN_VISIBLE:
-                m_bHidden = sValue.equalsAscii("false");
+                m_bHidden = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("false"));
                 break;
             case XML_TOK_DEFAULT_CELL_STYLE_NAME:
                 m_sCellStyleName = sValue;
@@ -152,7 +151,7 @@ void OXMLColumn::EndElement()
                         pAutoStyle->FillPropertySet(xProp);
                     }
                 }
-            } // if ( m_sStyleName.getLength() )
+            }
             if ( m_sCellStyleName.getLength() )
             {
                 const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
@@ -169,7 +168,7 @@ void OXMLColumn::EndElement()
             }
 
         }
-    } // if ( xFac.is() && m_sName.getLength() )
+    }
     else if ( m_sCellStyleName.getLength() )
     {
         const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();

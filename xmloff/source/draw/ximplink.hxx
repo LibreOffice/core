@@ -51,13 +51,13 @@ class SdXMLShapeLinkContext : public SvXMLShapeContext
 public:
     TYPEINFO();
 
-    SdXMLShapeLinkContext( SvXMLImport& rImport, USHORT nPrfx, const rtl::OUString& rLocalName,
+    SdXMLShapeLinkContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLShapeLinkContext();
 
     virtual SvXMLImportContext *CreateChildContext(
-        USHORT nPrefix, const rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual void EndElement();

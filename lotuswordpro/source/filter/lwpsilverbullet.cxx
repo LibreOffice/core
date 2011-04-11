@@ -118,22 +118,12 @@ void LwpSilverBullet::RegisterStyle()
 
     if (this->IsBulletOrdered() && this->HasName())
     {
-        ParaNumbering aParaNumbering;
-        XFNumFmt aFmt;
-
         //todo: find the flag in the file
         sal_Bool bCumulative = sal_False;
 
-        //get the numbeing format of level-1
-        m_pBulletPara->GetParaNumber(1, &aParaNumbering);
-        if (aParaNumbering.pPrefix)
-        {
-            aFmt.SetPrefix(aParaNumbering.pPrefix->GetText());
-        }
-
-
         for (sal_uInt8 nPos = 1; nPos < 10; nPos++)
         {
+            ParaNumbering aParaNumbering;
             //get numbering format according to the position.
             m_pBulletPara->GetParaNumber(nPos, &aParaNumbering);
             LwpFribParaNumber* pParaNumber = aParaNumbering.pParaNumber;
@@ -181,24 +171,13 @@ void LwpSilverBullet::RegisterStyle()
                     }
 
                     pListStyle->SetListBullet(nPos, this->GetNumCharByStyleID(pParaNumber).toChar(),
-                        rtl::OUString::createFromAscii("Times New Roman"), aPrefix, aSuffix);
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Times New Roman")), aPrefix, aSuffix);
                 }
 
                 pListStyle->SetListPosition(nPos, 0.0, 0.635, 0.0);
                 aParaNumbering.clear();
             }
         }
-    }
-    else
-    {
-        //register bullet style-list
-/*      for (sal_uInt8 nC = 1; nC < 11; nC++)
-        {
-            pListStyle->SetListBullet(nC, this->GetBulletChar(), this->GetBulletFontName(),
-                this->GetPrefix(), this->GetSuffix());
-            pListStyle->SetListPosition(nC, 0.0, 0.635, 0.0);
-        }*/
-
     }
 
     //add style-list to style manager.
@@ -215,13 +194,13 @@ rtl::OUString LwpSilverBullet::GetBulletFontName()
     //foundry has been set?
     if (!m_pFoundry)
     {
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
     LwpFontManager* pFontMgr = m_pFoundry->GetFontManger();
     if (!pFontMgr)
     {
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
     sal_uInt32 nBulletFontID = m_pBulletPara->GetBulletFontID();
@@ -230,7 +209,7 @@ rtl::OUString LwpSilverBullet::GetBulletFontName()
     //final fontid is valid?
     if (nFinalFont > 255 || nFinalFont == 0)
     {
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
     //get font name from font manager.
@@ -252,12 +231,12 @@ UChar32 LwpSilverBullet::GetBulletChar()
 
 rtl::OUString LwpSilverBullet::GetPrefix()
 {
-    return rtl::OUString::createFromAscii("");
+    return rtl::OUString();
 }
 
 rtl::OUString LwpSilverBullet::GetSuffix()
 {
-    return rtl::OUString::createFromAscii("");
+    return rtl::OUString();
 }
 /**
  * @short:   Get the LwpPara object through story id.
@@ -290,10 +269,10 @@ rtl::OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumbe
     if (!pParaNumber)
     {
         assert(false);
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
-    rtl::OUString strNumChar = rtl::OUString::createFromAscii("1");
+    rtl::OUString strNumChar(RTL_CONSTASCII_USTRINGPARAM("1"));
     sal_uInt16 nStyleID = pParaNumber->GetStyleID();
     UChar32 uC = 0x0000;
 
@@ -302,19 +281,19 @@ rtl::OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumbe
     case NUMCHAR_1:
     case NUMCHAR_01:
     case NUMCHAR_Chinese4:
-        strNumChar =  rtl::OUString::createFromAscii("1");
+        strNumChar =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
         break;
     case NUMCHAR_A :
-        strNumChar =  rtl::OUString::createFromAscii("A");
+        strNumChar =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("A"));
         break;
     case NUMCHAR_a:
-        strNumChar = rtl::OUString::createFromAscii("a");
+        strNumChar = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a"));
         break;
     case NUMCHAR_I:
-        strNumChar = rtl::OUString::createFromAscii("I");
+        strNumChar = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("I"));
         break;
     case NUMCHAR_i:
-        strNumChar = rtl::OUString::createFromAscii("i");
+        strNumChar = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("i"));
         break;
     case NUMCHAR_other:
         uC = static_cast<UChar32>(pParaNumber->GetNumberChar());
@@ -339,7 +318,7 @@ rtl::OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumbe
         }
         break;
     case NUMCHAR_none:
-        strNumChar = rtl::OUString::createFromAscii("");
+        strNumChar = rtl::OUString();
         break;
     default:
         break;
@@ -390,7 +369,7 @@ sal_uInt16 LwpSilverBullet::GetDisplayLevel(sal_uInt8 nPos)
  */
 rtl::OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
 {
-    rtl::OUString aRet = rtl::OUString::createFromAscii("");
+    rtl::OUString aRet = rtl::OUString();
     sal_uInt16 nHideBit = (1 << nPos);
     sal_Bool bDivisionName = sal_False;
     sal_Bool bSectionName = sal_False;
@@ -398,7 +377,7 @@ rtl::OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
     LwpFrib* pParaFrib = m_pBulletPara->GetFribs()->GetFribs();
     if (!pParaFrib)
     {
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
     while (pParaFrib)
@@ -408,7 +387,7 @@ rtl::OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
             ModifierInfo* pMoInfo = pParaFrib->GetModifiers();
             if (!pMoInfo)
             {
-                return rtl::OUString::createFromAscii("");
+                return rtl::OUString();
             }
             sal_uInt16 nHideLevels = pMoInfo->aTxtAttrOverride.GetHideLevels();
             sal_uInt16 nType = static_cast<LwpFribDocVar*>(pParaFrib)->GetType();
@@ -444,10 +423,10 @@ rtl::OUString LwpSilverBullet::GetDivisionName()
 {
     if (!m_pFoundry)
     {
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
-    rtl::OUString aRet = rtl::OUString::createFromAscii("");
+    rtl::OUString aRet = rtl::OUString();
 
     LwpDocument* pDoc = m_pFoundry->GetDocument();
     if (pDoc)
@@ -467,7 +446,7 @@ rtl::OUString LwpSilverBullet::GetSectionName()
     LwpStory* pStory = static_cast<LwpStory*>(m_aStory.obj(VO_STORY));
     if (!pStory)
     {
-        return rtl::OUString::createFromAscii("");
+        return rtl::OUString();
     }
 
     return pStory->GetSectionName();

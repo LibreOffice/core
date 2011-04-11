@@ -36,18 +36,18 @@ struct SbiParseStack {              // "Stack" fuer Statement-Blocks
     SbiParseStack* pNext;           // Chain
     SbiExprNode* pWithVar;          // Variable fuer WITH
     SbiToken eExitTok;              // Exit-Token
-    UINT32  nChain;                 // JUMP-Chain
+    sal_uInt32  nChain;                 // JUMP-Chain
 };
 
 struct SbiStatement {
     SbiToken eTok;
     void( SbiParser::*Func )();     // Verarbeitungsroutine
-    BOOL  bMain;                    // TRUE: ausserhalb SUBs OK
-    BOOL  bSubr;                    // TRUE: in SUBs OK
+    sal_Bool  bMain;                    // sal_True: ausserhalb SUBs OK
+    sal_Bool  bSubr;                    // sal_True: in SUBs OK
 };
 
-#define Y   TRUE
-#define N   FALSE
+#define Y   sal_True
+#define N   sal_False
 
 static SbiStatement StmntTable [] = {
 { ATTRIBUTE, &SbiParser::Attribute, Y, Y, }, // ATTRIBUTE
@@ -143,7 +143,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     bGblDefs =
     bNewGblDefs =
     bSingleLineIf =
-    bExplicit = FALSE;
+    bExplicit = sal_False;
     bClassModule = ( pm->GetModuleType() == com::sun::star::script::ModuleType::CLASS );
     OSL_TRACE("Parser - %s, bClassModule %d", rtl::OUStringToOString( pm->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), bClassModule );
     pPool    = &aPublics;
@@ -189,13 +189,12 @@ SbiSymDef* SbiParser::CheckRTLForSym( const String& rSym, SbxDataType eType )
 
 // Globale Chainkette schliessen
 
-BOOL SbiParser::HasGlobalCode()
+sal_Bool SbiParser::HasGlobalCode()
 {
     if( bGblDefs && nGblChain )
     {
         aGen.BackChain( nGblChain );
         aGen.Gen( _LEAVE );
-        // aGen.Gen( _STOP );
         nGblChain = 0;
     }
     return bGblDefs;
@@ -254,49 +253,49 @@ void SbiParser::Exit()
         Error( SbERR_BAD_EXIT );
 }
 
-BOOL SbiParser::TestSymbol( BOOL bKwdOk )
+sal_Bool SbiParser::TestSymbol( sal_Bool bKwdOk )
 {
     Peek();
     if( eCurTok == SYMBOL || ( bKwdOk && IsKwd( eCurTok ) ) )
     {
-        Next(); return TRUE;
+        Next(); return sal_True;
     }
     Error( SbERR_SYMBOL_EXPECTED );
-    return FALSE;
+    return sal_False;
 }
 
 // Testen auf ein bestimmtes Token
 
-BOOL SbiParser::TestToken( SbiToken t )
+sal_Bool SbiParser::TestToken( SbiToken t )
 {
     if( Peek() == t )
     {
-        Next(); return TRUE;
+        Next(); return sal_True;
     }
     else
     {
         Error( SbERR_EXPECTED, t );
-        return FALSE;
+        return sal_False;
     }
 }
 
 // Testen auf Komma oder EOLN
 
-BOOL SbiParser::TestComma()
+sal_Bool SbiParser::TestComma()
 {
     SbiToken eTok = Peek();
     if( IsEoln( eTok ) )
     {
         Next();
-        return FALSE;
+        return sal_False;
     }
     else if( eTok != COMMA )
     {
         Error( SbERR_EXPECTED, COMMA );
-        return FALSE;
+        return sal_False;
     }
     Next();
-    return TRUE;
+    return sal_True;
 }
 
 // Testen, ob EOLN vorliegt
@@ -322,16 +321,16 @@ void SbiParser::StmntBlock( SbiToken eEnd )
     if( IsEof() )
     {
         Error( SbERR_BAD_BLOCK, eEnd );
-        bAbort = TRUE;
+        bAbort = sal_True;
     }
 }
 
 // Die Hauptroutine. Durch wiederholten Aufrufs dieser Routine wird
-// die Quelle geparst. Returnwert FALSE bei Ende/Fehlern.
+// die Quelle geparst. Returnwert sal_False bei Ende/Fehlern.
 
-BOOL SbiParser::Parse()
+sal_Bool SbiParser::Parse()
 {
-    if( bAbort ) return FALSE;
+    if( bAbort ) return sal_False;
 
     EnableErrors();
 
@@ -347,16 +346,16 @@ BOOL SbiParser::Parse()
         // ein nGblChain vorhanden sein, daher vorher abfragen
         if( bNewGblDefs && nGblChain == 0 )
             nGblChain = aGen.Gen( _JUMP, 0 );
-        return FALSE;
+        return sal_False;
     }
 
     // Leerstatement?
     if( IsEoln( eCurTok ) )
     {
-        Next(); return TRUE;
+        Next(); return sal_True;
     }
 
-    if( !bSingleLineIf && MayBeLabel( TRUE ) )
+    if( !bSingleLineIf && MayBeLabel( sal_True ) )
     {
         // Ist ein Label
         if( !pProc )
@@ -367,7 +366,7 @@ BOOL SbiParser::Parse()
         // Leerstatement?
         if( IsEoln( eCurTok ) )
         {
-            Next(); return TRUE;
+            Next(); return sal_True;
         }
     }
 
@@ -380,13 +379,13 @@ BOOL SbiParser::Parse()
         Next();
         if( eCurTok != NIL )
             aGen.Statement();
-        return FALSE;
+        return sal_False;
     }
 
     // Kommentar?
     if( eCurTok == REM )
     {
-        Next(); return TRUE;
+        Next(); return sal_True;
     }
 
         // In vba it's possible to do Error.foobar ( even if it results in
@@ -442,7 +441,7 @@ BOOL SbiParser::Parse()
                     ( eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY ) )
                 {
                     nGblChain = aGen.Gen( _JUMP, 0 );
-                    bNewGblDefs = FALSE;
+                    bNewGblDefs = sal_False;
                 }
                 // Statement-Opcode bitte auch am Anfang einer Sub
                 if( ( p->bSubr && (eCurTok != STATIC || Peek() == SUB || Peek() == FUNCTION ) ) ||
@@ -473,7 +472,7 @@ BOOL SbiParser::Parse()
     }
     // Der Parser bricht am Ende ab, das naechste Token ist noch nicht
     // geholt!
-    return TRUE;
+    return sal_True;
 }
 
 // Innerste With-Variable liefern
@@ -515,7 +514,6 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
         if( aRtlName.EqualsIgnoreCaseAscii("Mid") )
         {
             SbiExprNode* pExprNode = aVar.GetExprNode();
-            // SbiNodeType eNodeType;
             if( pExprNode && pExprNode->GetNodeType() == SbxVARVAL )
             {
                 SbiExprList* pPar = pExprNode->GetParameters();
@@ -549,7 +547,6 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
             SbiExpression aExpr( this );
             aExpr.Gen();
             SbiOpcode eOp = _PUT;
-            // SbiSymDef* pDef = aVar.GetRealVar();
             if( pDef )
             {
                 if( pDef->GetConstDef() )
@@ -578,7 +575,7 @@ void SbiParser::Assign()
     SbiExpression aExpr( this );
     aLvalue.Gen();
     aExpr.Gen();
-    USHORT nLen = 0;
+    sal_uInt16 nLen = 0;
     SbiSymDef* pDef = aLvalue.GetRealVar();
     {
         if( pDef->GetConstDef() )
@@ -609,10 +606,9 @@ void SbiParser::Set()
         Next();
         String aStr;
         SbiSymDef* pTypeDef = new SbiSymDef( aStr );
-        TypeDecl( *pTypeDef, TRUE );
+        TypeDecl( *pTypeDef, sal_True );
 
         aLvalue.Gen();
-        // aGen.Gen( _CLASS, pDef->GetTypeId() | 0x8000 );
         aGen.Gen( _CREATE, pDef->GetId(), pTypeDef->GetTypeId() );
         aGen.Gen( _SETCLASS, pDef->GetTypeId() );
     }
@@ -641,7 +637,6 @@ void SbiParser::Set()
                 aGen.Gen( _SET );
         }
     }
-    // aGen.Gen( _SET );
 }
 
 // JSM 07.10.95
@@ -695,7 +690,6 @@ void SbiParser::DefXXX()
             else
             {
                 ch2 = aSym.ToUpperAscii().GetBuffer()[0];
-                //ch2 = aSym.Upper();
                 if( ch2 < ch1 ) Error( SbERR_SYNTAX ), ch2 = 0;
             }
         }
@@ -761,7 +755,7 @@ void SbiParser::EnableCompatibility()
 {
     if( !bCompatible )
         AddConstants();
-    bCompatible = TRUE;
+    bCompatible = sal_True;
 }
 
 // OPTION
@@ -771,7 +765,7 @@ void SbiParser::Option()
     switch( Next() )
     {
         case EXPLICIT:
-            bExplicit = TRUE; break;
+            bExplicit = sal_True; break;
         case BASE:
             if( Next() == NUMBER )
             {
@@ -794,9 +788,9 @@ void SbiParser::Option()
         {
             SbiToken eTok = Next();
             if( eTok == BINARY )
-                bText = FALSE;
+                bText = sal_False;
             else if( eTok == SYMBOL && GetSym().EqualsIgnoreCaseAscii("text") )
-                bText = TRUE;
+                bText = sal_True;
             else
                 Error( SbERR_EXPECTED, "Text/Binary" );
             break;
@@ -806,7 +800,7 @@ void SbiParser::Option()
             break;
 
         case CLASSMODULE:
-            bClassModule = TRUE;
+            bClassModule = sal_True;
             aGen.GetModule().SetModuleType( com::sun::star::script::ModuleType::CLASS );
             break;
         case VBASUPPORT: // Option VBASupport used to override the module mode ( in fact this must reset the mode

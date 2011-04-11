@@ -38,6 +38,7 @@
 
 #define PLATFORM_ALL                "all"
 #define PLATFORM_WIN_X86            "windows_x86"
+#define PLATFORM_WIN_X86_64         "windows_x86_64"
 #define PLATFORM_LINUX_X86          "linux_x86"
 #define PLATFORM_LINUX_X86_64       "linux_x86_64"
 #define PLATFORM_KFREEBSD_X86       "kfreebsd_x86"
@@ -70,6 +71,8 @@
 #define PLATFORM_OS2_X86            "os2_x86"
 #define PLATFORM_OPENBSD_X86        "openbsd_x86"
 #define PLATFORM_OPENBSD_X86_64     "openbsd_x86_64"
+#define PLATFORM_DRAGONFLY_X86      "dragonfly_x86"
+#define PLATFORM_DRAGONFLY_X86_64   "dragonfly_x86_64"
 
 
 #define PLATFORM_AIX_POWERPC        "aix_powerpc"
@@ -113,9 +116,7 @@ namespace
                 ::rtl::OUStringBuffer buf;
                 buf.append( StrOperatingSystem::get() );
                 buf.append( static_cast<sal_Unicode>('_') );
-                OUString arch( RTL_CONSTASCII_USTRINGPARAM("$_ARCH") );
-                ::rtl::Bootstrap::expandMacros( arch );
-                buf.append( arch );
+                buf.append( StrCPU::get() );
                 return buf.makeStringAndClear();
             }
     };
@@ -133,6 +134,8 @@ namespace
             ret = true;
         else if (token.equals(OUSTR(PLATFORM_WIN_X86)))
             ret = checkOSandCPU(OUSTR("Windows"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_WIN_X86_64)))
+            ret = checkOSandCPU(OUSTR("Windows"), OUSTR("x86_64"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_X86)))
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_X86_64)))
@@ -193,9 +196,13 @@ namespace
             ret = checkOSandCPU(OUSTR("OpenBSD"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_OPENBSD_X86_64)))
             ret = checkOSandCPU(OUSTR("OpenBSD"), OUSTR("X86_64"));
+        else if (token.equals(OUSTR(PLATFORM_DRAGONFLY_X86)))
+            ret = checkOSandCPU(OUSTR("DragonFly"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_DRAGONFLY_X86_64)))
+            ret = checkOSandCPU(OUSTR("DragonFly"), OUSTR("X86_64"));
         else
         {
-            OSL_ENSURE(0, "Extension Manager: The extension supports an unknown platform. "
+            OSL_FAIL("Extension Manager: The extension supports an unknown platform. "
             "Check the platform element in the description.xml");
             ret = false;
         }

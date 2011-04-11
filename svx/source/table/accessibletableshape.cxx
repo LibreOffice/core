@@ -72,7 +72,7 @@ struct hash
     }
 };
 
-typedef std::hash_map< Reference< XCell >, rtl::Reference< AccessibleCell >, hash > AccessibleCellMap;
+typedef boost::unordered_map< Reference< XCell >, rtl::Reference< AccessibleCell >, hash > AccessibleCellMap;
 
 //-----------------------------------------------------------------------------
 // AccessibleTableShapeImpl
@@ -229,14 +229,14 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
         // all accessible cell instances still left in aTempChildMap must be disposed
         // as they are no longer part of the table
 
-        for( AccessibleCellMap::iterator iter( aTempChildMap.begin() ); iter != aTempChildMap.end(); iter++ )
+        for( AccessibleCellMap::iterator iter( aTempChildMap.begin() ); iter != aTempChildMap.end(); ++iter )
         {
             (*iter).second->dispose();
         }
     }
     catch( Exception& )
     {
-        DBG_ERROR("svx::AccessibleTableShape::modified(), exception caught!");
+        OSL_FAIL("svx::AccessibleTableShape::modified(), exception caught!");
     }
 }
 
@@ -277,7 +277,7 @@ void AccessibleTableShape::Init()
     }
     catch( Exception& )
     {
-        DBG_ERROR("AccessibleTableShape::init(), exception caught?");
+        OSL_FAIL("AccessibleTableShape::init(), exception caught?");
     }
 
     AccessibleTableShape_Base::Init();

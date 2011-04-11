@@ -90,7 +90,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     else
     if( mxSrcDoc.is() )
     {
-        uno::Reference< frame::XDesktop > xDesktop( mxMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
+        uno::Reference< frame::XDesktop > xDesktop( mxMSF->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
                                                     uno::UNO_QUERY);
         if( xDesktop.is() )
         {
@@ -173,7 +173,7 @@ rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescrip
     const sal_Int32 nAttribs = io_rDescriptor.getLength();
     for( sal_Int32 i = 0; i < nAttribs; i++ )
     {
-        if( pAttribs[i].Name.equalsAscii( "InputStream" ) )
+        if( pAttribs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
             pAttribs[i].Value >>= xInput;
     }
 
@@ -207,9 +207,9 @@ rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescrip
 // -----------------------------------------------------------------------------
 
 class FilterConfigItem;
-extern "C" SAL_DLLPUBLIC_EXPORT BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     try
     {
         bRet = importSvg( rStream, rGraphic );

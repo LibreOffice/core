@@ -141,16 +141,16 @@ protected:
 public:
     TYPEINFO();
 
-    SvLockBytes(): m_pStream(0), m_bOwner(FALSE), m_bSync(FALSE) {}
+    SvLockBytes(): m_pStream(0), m_bOwner(sal_False), m_bSync(sal_False) {}
 
-    SvLockBytes(SvStream * pTheStream, sal_Bool bTheOwner = FALSE):
-        m_pStream(pTheStream), m_bOwner(bTheOwner), m_bSync(FALSE) {}
+    SvLockBytes(SvStream * pTheStream, sal_Bool bTheOwner = sal_False):
+        m_pStream(pTheStream), m_bOwner(bTheOwner), m_bSync(sal_False) {}
 
     virtual ~SvLockBytes() { close(); }
 
     virtual const SvStream * GetStream() const { return m_pStream; }
 
-    virtual void SetSynchronMode(sal_Bool bTheSync = TRUE) { m_bSync = bTheSync; }
+    virtual void SetSynchronMode(sal_Bool bTheSync = sal_True) { m_bSync = bTheSync; }
 
     virtual sal_Bool IsSynchronMode() const { return m_bSync; }
 
@@ -182,7 +182,7 @@ class TOOLS_DLLPUBLIC SvOpenLockBytes: public SvLockBytes
 public:
     TYPEINFO();
 
-    SvOpenLockBytes(): SvLockBytes(0, FALSE) {}
+    SvOpenLockBytes(): SvLockBytes(0, sal_False) {}
 
     SvOpenLockBytes(SvStream * pStream, sal_Bool bOwner):
         SvLockBytes(pStream, bOwner) {}
@@ -212,7 +212,7 @@ public:
     TYPEINFO();
 
     SvAsyncLockBytes(SvStream * pStream, sal_Bool bOwner):
-        SvOpenLockBytes(pStream, bOwner), m_nSize(0), m_bTerminated(FALSE) {}
+        SvOpenLockBytes(pStream, bOwner), m_nSize(0), m_bTerminated(sal_False) {}
 
     virtual ErrCode ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
                            sal_Size * pRead) const;
@@ -227,7 +227,7 @@ public:
 
     virtual sal_Size Seek(sal_Size nPos);
 
-    virtual void Terminate() { m_bTerminated = TRUE; }
+    virtual void Terminate() { m_bTerminated = sal_True; }
 };
 
 SV_DECL_IMPL_REF(SvAsyncLockBytes);
@@ -256,8 +256,8 @@ private:
     unsigned int    eIOMode:2;      // STREAM_IO_*
 
     // Error-Codes, Konvertierung, Komprimierung, ...
-    int             bIsDirty:1;     // TRUE: Stream != Pufferinhalt
-    int             bIsConsistent:1;// FALSE: Buffer enthaelt Daten, die NICHT
+    int             bIsDirty:1;     // sal_True: Stream != Pufferinhalt
+    int             bIsConsistent:1;// sal_False: Buffer enthaelt Daten, die NICHT
                                     // per PutData in den abgeleiteten Stream
                                     // geschrieben werden duerfen (siehe PutBack)
     int             bSwap:1;
@@ -354,6 +354,7 @@ public:
 
     SvStream&       operator>>( sal_uInt16& rUInt16 );
     SvStream&       operator>>( sal_uInt32& rUInt32 );
+    SvStream&       operator>>( sal_uInt64& rUInt64 );
     SvStream&       operator>>( long& rLong );
     SvStream&       operator>>( short& rShort );
     SvStream&       operator>>( int& rInt );
@@ -372,6 +373,7 @@ public:
 
     SvStream&       operator<<( sal_uInt16 nUInt16 );
     SvStream&       operator<<( sal_uInt32 nUInt32 );
+    SvStream&       operator<<( sal_uInt64 nuInt64 );
     SvStream&       operator<<( long nLong );
     SvStream&       operator<<( short nShort );
     SvStream&       operator<<( int nInt );
@@ -459,9 +461,20 @@ public:
 
                 /// Switch to no endian swapping and write 0xfeff
     sal_Bool        StartWritingUnicodeText();
-                /// Read 16bit, if 0xfeff do nothing, if 0xfffe switch
-                /// endian swapping, if none of them put back
-    sal_Bool        StartReadingUnicodeText();
+
+                /** If eReadBomCharSet==RTL_TEXTENCODING_DONTKNOW: read 16bit,
+                    if 0xfeff do nothing (UTF-16), if 0xfffe switch endian
+                    swapping (UTF-16), if 0xefbb or 0xbbef read another byte
+                    and check for UTF-8. If no UTF-* BOM was detected put all
+                    read bytes back. This means that if 2 bytes were read it
+                    was an UTF-16 BOM, if 3 bytes were read it was an UTF-8
+                    BOM. There is no UTF-7, UTF-32 or UTF-EBCDIC BOM detection!
+
+                    If eReadBomCharSet!=RTL_TEXTENCODING_DONTKNOW: only read a
+                    BOM of that encoding and switch endian swapping if UTF-16
+                    and 0xfffe.
+                 */
+    sal_Bool        StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet );
 
                 /// Read a line of Unicode
     sal_Bool        ReadUniStringLine( String& rStr );
@@ -647,7 +660,7 @@ inline SvStream& SvStream::ReadNumber( int& rInt )
 /*
 inline SvStream& SvStream::ReadNumber( unsigned int& rUInt )
 {
-    ULONG nTmp;
+    sal_uIntPtr nTmp;
     ReadNumber( nTmp );
     rUInt = (unsigned int)nTmp;
     return *this;
@@ -683,7 +696,7 @@ inline SvStream& SvStream::WriteNumber( int nInt )
 /*
 inline SvStream& SvStream::WriteNumber( unsigned int nUInt )
 {
-    WriteNumber( (ULONG)nUInt );
+    WriteNumber( (sal_uIntPtr)nUInt );
     return *this;
 }
 */
@@ -823,7 +836,7 @@ public:
 
     void*           SwitchBuffer( sal_Size nInitSize=512, sal_Size nResize=64 );
     void*           SetBuffer( void* pBuf, sal_Size nSize,
-                               sal_Bool bOwnsData=TRUE, sal_Size nEOF=0 );
+                               sal_Bool bOwnsData=sal_True, sal_Size nEOF=0 );
 
     void            ObjectOwnsMemory( sal_Bool bOwn ) { bOwnsData = bOwn; }
     sal_Bool            IsObjectMemoryOwner() { return bOwnsData; }
@@ -842,9 +855,7 @@ public:
 class TOOLS_DLLPUBLIC SvDataCopyStream
 {
 public:
-    /*-----------------MM 30.04.96 11:01-----------------
-     mehrfaches Aufrufen von Load und Assign erlaubt
-    --------------------------------------------------*/
+    // mehrfaches Aufrufen von Load und Assign erlaubt
                     TYPEINFO();
     virtual         ~SvDataCopyStream(){}
     virtual void    Load( SvStream & ) = 0;

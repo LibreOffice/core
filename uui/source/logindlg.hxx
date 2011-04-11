@@ -73,15 +73,15 @@ class LoginDialog : public ModalDialog
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
 
-    void            HideControls_Impl( USHORT nFlags );
-    void            EnableUseSysCredsControls_Impl( BOOL bUseSysCredsEnabled );
+    void            HideControls_Impl( sal_uInt16 nFlags );
+    void            EnableUseSysCredsControls_Impl( sal_Bool bUseSysCredsEnabled );
 
     DECL_LINK( OKHdl_Impl, OKButton * );
     DECL_LINK( PathHdl_Impl, PushButton * );
     DECL_LINK( UseSysCredsHdl_Impl, CheckBox * );
 
 public:
-    LoginDialog( Window* pParent, USHORT nFlags,
+    LoginDialog( Window* pParent, sal_uInt16 nFlags,
                  const String& rServer, const String* pRealm,
                  ResMgr * pResMgr );
     virtual ~LoginDialog();
@@ -94,11 +94,11 @@ public:
     void            SetPassword( const String& rNew )           { aPasswordED.SetText( rNew ); }
     String          GetAccount() const                          { return aAccountED.GetText(); }
     void            SetAccount( const String& rNew )            { aAccountED.SetText( rNew ); }
-    BOOL            IsSavePassword() const                      { return aSavePasswdBtn.IsChecked(); }
-    void            SetSavePassword( BOOL bSave )               { aSavePasswdBtn.Check( bSave ); }
+    sal_Bool            IsSavePassword() const                      { return aSavePasswdBtn.IsChecked(); }
+    void            SetSavePassword( sal_Bool bSave )               { aSavePasswdBtn.Check( bSave ); }
     void            SetSavePasswordText( const String& rTxt )   { aSavePasswdBtn.SetText( rTxt ); }
-    BOOL            IsUseSystemCredentials() const              { return aUseSysCredsCB.IsChecked(); }
-    void            SetUseSystemCredentials( BOOL bUse );
+    sal_Bool            IsUseSystemCredentials() const              { return aUseSysCredsCB.IsChecked(); }
+    void            SetUseSystemCredentials( sal_Bool bUse );
     void            SetErrorText( const String& rTxt )          { aErrorInfo.SetText( rTxt ); }
     void            SetLoginRequestText( const String& rTxt )   { aRequestInfo.SetText( rTxt ); }
     void            ClearPassword();

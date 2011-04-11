@@ -20,10 +20,6 @@ do while( lines())
 	if l = '_component_getDescriptionFunc' then l = ''
 	if l = '_GetVersionInfo' then l = ''
 
-	/* remove GLOBAL symbols */
-/*
-	if WORDPOS( l, '_GLOBAL_') > 0 then l = ''
-*/
 
 	say l
 

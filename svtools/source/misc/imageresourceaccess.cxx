@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "imageresourceaccess.hxx"
+#include <svtools/imageresourceaccess.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/io/NotConnectedException.hpp>
@@ -192,7 +192,7 @@ namespace svt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "GraphicAccess::getImageStream: caught an exception!" );
+            OSL_FAIL( "GraphicAccess::getImageStream: caught an exception!" );
         }
 
         return pReturn;

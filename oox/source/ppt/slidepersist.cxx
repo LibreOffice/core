@@ -32,9 +32,7 @@
 #include "oox/ppt/slidepersist.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/vml/vmldrawing.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
-#include "tokens.hxx"
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -75,7 +73,14 @@ SlidePersist::SlidePersist( XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool b
     */
         maOtherTextStylePtr->apply( *pDefaultTextStyle.get() );
     }
+#if OSL_DEBUG_LEVEL > 0
+    mxDebugPage = mxPage;
+#endif
 }
+
+#if OSL_DEBUG_LEVEL > 0
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SlidePersist::mxDebugPage;
+#endif
 
 SlidePersist::~SlidePersist()
 {
@@ -130,7 +135,7 @@ sal_Int16 SlidePersist::getLayoutFromValueToken()
     return nLayout;
 }
 
-void SlidePersist::createXShapes( const XmlFilterBase& rFilterBase )
+void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
 {
     applyTextStyles( rFilterBase );
 
@@ -174,12 +179,17 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
     {
         try
         {
+            sal_Int32 nPhClr = API_RGB_TRANSPARENT;
+            if ( maBackgroundColorRef.isUsed() )
+                nPhClr = maBackgroundColorRef.getColor( rFilterBase.getGraphicHelper() );
+
             PropertyMap aPropMap;
             static const rtl::OUString sBackground( RTL_CONSTASCII_USTRINGPARAM( "Background" ) );
             uno::Reference< beans::XPropertySet > xPagePropSet( mxPage, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xPropertySet( aPropMap.makePropertySet() );
             PropertySet aPropSet( xPropertySet );
-            mpBackgroundPropertiesPtr->pushToPropSet( aPropSet, rFilterBase.getModelObjectHelper(), rFilterBase.getGraphicHelper() );
+            mpBackgroundPropertiesPtr->pushToPropSet( aPropSet, rFilterBase.getModelObjectHelper(),
+                rFilterBase.getGraphicHelper(), oox::drawingml::FillProperties::DEFAULT_IDS, 0, nPhClr );
             xPagePropSet->setPropertyValue( sBackground, Any( xPropertySet ) );
         }
         catch( Exception )

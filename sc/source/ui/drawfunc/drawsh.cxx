@@ -90,7 +90,7 @@ SFX_IMPL_INTERFACE(ScDrawShell, SfxShell, ScResId(SCSTR_DRAWSHELL) )
 void ScDrawShell::StateDisableItems( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
 
     while (nWhich)
     {
@@ -111,14 +111,13 @@ void lcl_setModified( SfxObjectShell*  pShell )
 
 void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 {
-    USHORT              nSlot       = rReq.GetSlot();
+    sal_uInt16              nSlot       = rReq.GetSlot();
     Window*             pWin        = pViewData->GetActiveWin();
-//  SfxViewFrame*       pViewFrame  = SfxViewShell::Current()->GetViewFrame(); //!!! koennte knallen
     ScDrawView*         pView       = pViewData->GetScDrawView();
     SdrModel*           pDoc        = pViewData->GetDocument()->GetDrawLayer();
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    ULONG nMarkCount = rMarkList.GetMarkCount();
+    sal_uLong nMarkCount = rMarkList.GetMarkCount();
     SdrObject* pSingleSelectedObj = NULL;
     if ( nMarkCount > 0 )
         pSingleSelectedObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
@@ -135,7 +134,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
         case SID_TEXT_STANDARD: // Harte Textattributierung loeschen
             {
                 SfxItemSet aEmptyAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
-                pView->SetAttributes(aEmptyAttr, TRUE);
+                pView->SetAttributes(aEmptyAttr, sal_True);
             }
             break;
 
@@ -187,9 +186,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 }
 
                 if( pView->AreObjectsMarked() )
-                    pView->SetAttrToMarked( *rReq.GetArgs(), FALSE );
+                    pView->SetAttrToMarked( *rReq.GetArgs(), false );
                 else
-                    pView->SetDefaultAttr( *rReq.GetArgs(), FALSE);
+                    pView->SetDefaultAttr( *rReq.GetArgs(), false);
                 pView->InvalidateAttribs();
             }
             break;
@@ -242,7 +241,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
                     if( !pArgs )
                     {
-                        // const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                         if( rMarkList.GetMark(0) != 0 )
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -254,13 +252,12 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 // --------- Itemset fuer Groesse und Position --------
                                 SfxItemSet aNewGeoAttr(pView->GetGeoAttrFromMarked());
 
-                                //SvxCaptionTabDialog* pDlg = new SvxCaptionTabDialog(pWin, pView);
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 if ( pFact )
                                 {
                                     SfxAbstractTabDialog *pDlg = pFact->CreateCaptionDialog( pWin, pView );
 
-                                    const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
+                                    const sal_uInt16* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                                     SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
                                     aCombSet.Put( aNewAttr );
                                     aCombSet.Put( aNewGeoAttr );
@@ -310,7 +307,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
 {
     SvxMacroItem aItem ( SFX_APP()->GetPool().GetWhich( SID_ATTR_MACROITEM ) );
-    ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, TRUE );
+    ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, sal_True );
     if ( pInfo->GetMacro().getLength() > 0 )
     {
         SvxMacroTableDtor aTab;
@@ -337,7 +334,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
     {
         const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pOutSet->GetItemState( SID_ATTR_MACROITEM, FALSE, &pItem ))
+        if( SFX_ITEM_SET == pOutSet->GetItemState( SID_ATTR_MACROITEM, false, &pItem ))
         {
             rtl::OUString sMacro;
             SvxMacro* pMacro = ((SvxMacroItem*)pItem)->GetMacroTable().Get( SFX_EVENT_MOUSECLICK_OBJECT );
@@ -347,10 +344,10 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
             if ( pObj->IsGroupObject() )
             {
                 SdrObjList* pOL = pObj->GetSubList();
-                ULONG nObj = pOL->GetObjCount();
-                for ( ULONG index=0; index<nObj; ++index )
+                sal_uLong nObj = pOL->GetObjCount();
+                for ( sal_uLong index=0; index<nObj; ++index )
                 {
-                    pInfo = ScDrawLayer::GetMacroInfo( pOL->GetObj(index), TRUE );
+                    pInfo = ScDrawLayer::GetMacroInfo( pOL->GetObj(index), sal_True );
                     pInfo->SetMacro( sMacro );
                 }
             }
@@ -364,10 +361,10 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
     delete pItemSet;
 }
 
-void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
+void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 {
     ScDrawView*         pView       = pViewData->GetScDrawView();
-    BOOL                bHasMarked  = pView->AreObjectsMarked();
+    sal_Bool                bHasMarked  = pView->AreObjectsMarked();
     const SdrObject*    pObj        = NULL;
     const SdrMarkList&  rMarkList   = pView->GetMarkedObjectList();
 
@@ -376,7 +373,7 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
 
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
-        pView->MergeAttrFromMarked( aNewAttr, FALSE );
+        pView->MergeAttrFromMarked( aNewAttr, false );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
@@ -392,9 +389,9 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
     if ( pDlg->Execute() == RET_OK )
     {
         if( bHasMarked )
-            pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), FALSE );
+            pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), false );
         else
-            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), FALSE );
+            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
         pView->InvalidateAttribs();
         rReq.Done();
@@ -403,14 +400,14 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
     delete pDlg;
 }
 
-void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
+void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
-    BOOL        bHasMarked  = pView->AreObjectsMarked();
+    sal_Bool        bHasMarked  = pView->AreObjectsMarked();
 
     SfxItemSet  aNewAttr( pView->GetDefaultAttr() );
     if( bHasMarked )
-        pView->MergeAttrFromMarked( aNewAttr, FALSE );
+        pView->MergeAttrFromMarked( aNewAttr, false );
 
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -434,9 +431,9 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
     if ( pDlg->Execute() == RET_OK )
     {
         if( bHasMarked )
-            pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), FALSE );
+            pView->SetAttrToMarked( *pDlg->GetOutputItemSet(), false );
         else
-            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), FALSE );
+            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
         pView->InvalidateAttribs();
         rReq.Done();
@@ -445,26 +442,26 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
     delete pDlg;
 }
 
-void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT /* nTabPage */ )
+void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 /* nTabPage */ )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
-    BOOL        bHasMarked  = pView->AreObjectsMarked();
+    sal_Bool        bHasMarked  = pView->AreObjectsMarked();
     SfxItemSet  aNewAttr    ( pView->GetDefaultAttr() );
 
     if( bHasMarked )
-        pView->MergeAttrFromMarked( aNewAttr, FALSE );
+        pView->MergeAttrFromMarked( aNewAttr, false );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aNewAttr, pView );
 
-    USHORT nResult = pDlg->Execute();
+    sal_uInt16 nResult = pDlg->Execute();
 
     if ( RET_OK == nResult )
     {
         if ( bHasMarked )
             pView->SetAttributes( *pDlg->GetOutputItemSet() );
         else
-            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), FALSE );
+            pView->SetDefaultAttr( *pDlg->GetOutputItemSet(), false );
 
         pView->InvalidateAttribs();
         rReq.Done();
@@ -476,7 +473,7 @@ void ScDrawShell::SetHlinkForObject( SdrObject* pObj, const rtl::OUString& rHlnk
 {
     if ( pObj )
     {
-        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, TRUE );
+        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, sal_True );
         pInfo->SetHlink( rHlnk );
         lcl_setModified( GetObjectShell() );
     }

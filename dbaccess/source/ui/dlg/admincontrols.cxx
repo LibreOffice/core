@@ -79,7 +79,7 @@ namespace dbaui
     private:
         const String    m_sDisabledText;
               String    m_sUserText;
-              BOOL      m_bLastKnownEnabledState;
+              sal_Bool      m_bLastKnownEnabledState;
     };
 
     //--------------------------------------------------------------------
@@ -108,7 +108,7 @@ namespace dbaui
             break;
 
         default:
-            OSL_ENSURE( false, "TextResetOperator::operateOn: unexpected event ID!" );
+            OSL_FAIL( "TextResetOperator::operateOn: unexpected event ID!" );
             // all those IDs should have been filtered out by payAttentionTo
             break;
         }
@@ -151,7 +151,7 @@ namespace dbaui
     //====================================================================
     //--------------------------------------------------------------------
     MySQLNativeSettings::MySQLNativeSettings( Window& _rParent, const Link& _rControlModificationLink )
-        :Control( &_rParent, ModuleRes( RID_MYSQL_NATIVE_SETTINGS ).SetAutoRelease( FALSE ) )
+        :Control( &_rParent, ModuleRes( RID_MYSQL_NATIVE_SETTINGS ).SetAutoRelease( sal_False ) )
         ,m_aDatabaseNameLabel   ( this, ModuleRes( FT_MYSQL_DATABASE_NAME ) )
         ,m_aDatabaseName        ( this, ModuleRes( ED_MYSQL_DATABASE_NAME ) )
         ,m_aHostPortRadio       ( this, ModuleRes( RB_MYSQL_HOST_PORT ) )
@@ -219,7 +219,7 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    BOOL MySQLNativeSettings::FillItemSet( SfxItemSet& _rSet )
+    sal_Bool MySQLNativeSettings::FillItemSet( SfxItemSet& _rSet )
     {
         sal_Bool bChangedSomething = sal_False;
 

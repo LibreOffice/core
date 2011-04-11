@@ -120,7 +120,7 @@ TabWindowService::TabWindowService( const css::uno::Reference< css::lang::XMulti
         ,   PropertySetHelper       ( xFactory                      ,
                                       &m_aLock                      ,
                                       &m_aTransactionManager        ,
-                                      sal_False                     ) // FALSE => dont release shared mutex on calling us!
+                                      sal_False                     ) // sal_False => dont release shared mutex on calling us!
         ,   OWeakObject             (                               )
 
         // Init member
@@ -369,7 +369,7 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
     if ( !pEvent && !pEvent->ISA(VclWindowEvent))
         return 0;
 
-    ULONG           nEventId = pEvent->GetId();
+    sal_uLong           nEventId = pEvent->GetId();
     VclWindowEvent* pWinEvt  = static_cast< VclWindowEvent* >(pEvent);
 
     css::uno::Reference< css::uno::XInterface > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
@@ -400,19 +400,19 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
             switch (nEventId)
             {
                 case VCLEVENT_TABPAGE_ACTIVATE :
-                    pListener->activated( (sal_Int32)(ULONG)pWinEvt->GetData() );
+                    pListener->activated( (sal_Int32)(sal_uLong)pWinEvt->GetData() );
                     break;
 
                 case VCLEVENT_TABPAGE_DEACTIVATE :
-                    pListener->deactivated( (sal_Int32)(ULONG)pWinEvt->GetData() );
+                    pListener->deactivated( (sal_Int32)(sal_uLong)pWinEvt->GetData() );
                     break;
 
                 case VCLEVENT_TABPAGE_INSERTED :
-                    pListener->inserted( (sal_Int32)(ULONG)pWinEvt->GetData() );
+                    pListener->inserted( (sal_Int32)(sal_uLong)pWinEvt->GetData() );
                     break;
 
                 case VCLEVENT_TABPAGE_REMOVED :
-                    pListener->removed( (sal_Int32)(ULONG)pWinEvt->GetData() );
+                    pListener->removed( (sal_Int32)(sal_uLong)pWinEvt->GetData() );
                     break;
 
                 case VCLEVENT_TABPAGE_PAGETEXTCHANGED :
@@ -441,7 +441,7 @@ void TabWindowService::impl_checkTabIndex (::sal_Int32 nID)
        )
     {
         throw css::lang::IndexOutOfBoundsException(
-                ::rtl::OUString::createFromAscii("Tab index out of bounds."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tab index out of bounds.")),
                 css::uno::Reference< css::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY ));
     }
 }
@@ -455,7 +455,7 @@ TTabPageInfoHash::iterator TabWindowService::impl_getTabPageInfo(::sal_Int32 nID
     TTabPageInfoHash::iterator pIt = m_lTabPageInfos.find(nID);
     if (pIt == m_lTabPageInfos.end ())
         throw css::lang::IndexOutOfBoundsException(
-                ::rtl::OUString::createFromAscii("Tab index out of bounds."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tab index out of bounds.")),
                 css::uno::Reference< css::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY ));
     return pIt;
 }

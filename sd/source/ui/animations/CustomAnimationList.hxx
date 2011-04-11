@@ -45,7 +45,7 @@ class ICustomAnimationListController
 public:
     virtual void onSelect() = 0;
     virtual void onDoubleClick() = 0;
-    virtual void onContextMenu( USHORT nSelectedPopupEntry ) = 0;
+    virtual void onContextMenu( sal_uInt16 nSelectedPopupEntry ) = 0;
     virtual ~ICustomAnimationListController() {}
 };
 
@@ -67,13 +67,7 @@ public:
     /** populates the list with all effects from the given MainSequence */
     void update( MainSequencePtr pMainSequence );
 
-    /** updates the given effect in the list */
-//  void update( CustomAnimationEffectPtr pEffect );
-
     void update();
-
-    /** removes the given effect to the list*/
-//  void remove( CustomAnimationEffectPtr pEffect );
 
     EffectSequence getSelection() const;
 
@@ -82,21 +76,20 @@ public:
 
     // overrides
     virtual void    SelectHdl();
-    virtual BOOL    DoubleClickHdl();
+    virtual sal_Bool    DoubleClickHdl();
 
     virtual void    Paint( const Rectangle& rRect );
 
     virtual PopupMenu* CreateContextMenu( void );
-    virtual void    ExcecuteContextMenuAction( USHORT nSelectedPopupEntry );
+    virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
 
     virtual void KeyInput( const KeyEvent& rKEvt );
 
-//  virtual SvLBoxEntry* CreateEntry() const;
     virtual void    SetTabs();
 
     virtual void notify_change();
 
-    const Image& getImage( USHORT nId, bool bHighContrast );
+    const Image& getImage( sal_uInt16 nId );
 
     bool isExpanded( const CustomAnimationEffectPtr& pEffect ) const;
 
@@ -115,7 +108,7 @@ private:
 
     Image maImgEmpty;
 
-    Image maImages[ IMG_CUSTOMANIMATION_MEDIA_STOP_H - IMG_CUSTOMANIMATION_ON_CLICK + 1];
+    Image maImages[ IMG_CUSTOMANIMATION_MEDIA_STOP - IMG_CUSTOMANIMATION_ON_CLICK + 1];
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxLastTargetShape;
     sal_Int32 mnLastGroupId;

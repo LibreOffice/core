@@ -140,9 +140,7 @@ public:
     void                    SetShowColumnAssignmentWarning(sal_Bool bSet)
                                 { bShowColumnAssignmentWarning = bSet;}
 };
-/* -----------------------------20.11.00 11:47--------------------------------
 
- ---------------------------------------------------------------------------*/
 class DBChangeDialogConfig_Impl
 {
     com::sun::star::uno::Sequence<rtl::OUString> aSourceNames;

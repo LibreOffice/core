@@ -40,5 +40,5 @@
 #define FT_OPTIONS             10
 #define CLB_OPTIONS            11
 
-#define ST_SELECT_LOCKED_CELLS          50
-#define ST_SELECT_UNLOCKED_CELLS        51
+#define ST_SELECT_PROTECTED_CELLS          50
+#define ST_SELECT_UNPROTECTED_CELLS        51

@@ -52,7 +52,7 @@
 published struct FrameActionEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
-    /** contains the frame in which the event occured
+    /** contains the frame in which the event occurred
      */
     XFrame Frame;
 

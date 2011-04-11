@@ -35,8 +35,7 @@
 #include <olectl.h>
 #include <vector>
 #include <list>
-#include <hash_map>
-#include "comifaces.hxx"
+#include <boost/unordered_map.hpp>
 #include <tools/postsys.h>
 
 
@@ -67,7 +66,6 @@
 #include "servprov.hxx"
 
 using namespace std;
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -78,7 +76,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge::ModelDependent;
 using namespace com::sun::star::reflection;
 
-
+using ::rtl::OUString;
 
 #if _MSC_VER < 1200
 extern "C" const GUID IID_IDispatchEx;
@@ -86,7 +84,7 @@ extern "C" const GUID IID_IDispatchEx;
 
 namespace ole_adapter
 {
-hash_map<sal_uInt32, WeakReference<XInterface> > UnoObjToWrapperMap;
+boost::unordered_map<sal_uInt32, WeakReference<XInterface> > UnoObjToWrapperMap;
 static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource);
 static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource);
 static HRESULT mapCannotConvertException( CannotConvertException e, unsigned int * puArgErr);
@@ -456,7 +454,7 @@ sal_Bool  InterfaceOleWrapper_Impl::getInvocationInfoForCall( DISPID id, Invocat
         typedef NameToIdMap::const_iterator cit;
         OUString sMemberName;
 
-        for(cit ci1= m_nameToDispIdMap.begin(); ci1 != m_nameToDispIdMap.end(); ci1++)
+        for(cit ci1= m_nameToDispIdMap.begin(); ci1 != m_nameToDispIdMap.end(); ++ci1)
         {
             if( (*ci1).second == id) // iterator is a pair< OUString, DISPID>
             {
@@ -915,7 +913,7 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
     HRESULT ret= S_OK;
     try
     {
-        Sequence<INT16>     outIndex;
+        Sequence<sal_Int16>     outIndex;
         Sequence<Any>   outParams;
         Any                 returnValue;
 
@@ -931,7 +929,7 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
         // try to write back out parameter
         if (outIndex.getLength() > 0)
         {
-            const INT16* pOutIndex = outIndex.getConstArray();
+            const sal_Int16* pOutIndex = outIndex.getConstArray();
             const Any* pOutParams = outParams.getConstArray();
 
             for (sal_Int32 i = 0; i < outIndex.getLength(); i++)
@@ -1125,7 +1123,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
             sal_Bool bStruct= sal_False;
 
 
-            Reference<XInterface> xIntCore= m_smgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection"));
+            Reference<XInterface> xIntCore= m_smgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")));
             Reference<XIdlReflection> xRefl( xIntCore, UNO_QUERY);
             if( xRefl.is() )
             {

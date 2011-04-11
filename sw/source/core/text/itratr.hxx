@@ -68,7 +68,7 @@ private:
     MSHORT nChgCnt;
     SwRedlineItr *pRedln;
     xub_StrLen nStartIndex, nEndIndex, nPos;
-    BYTE nPropFont;
+    sal_uInt8 nPropFont;
     void SeekFwd( const xub_StrLen nPos );
     inline void SetFnt( SwFont* pNew ) { pFnt = pNew; }
     const void* aMagicNo[ SW_SCRIPTS ];
@@ -80,7 +80,9 @@ protected:
     void Rst( SwTxtAttr *pHt );
     void CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm = 0 );
     inline SwAttrIter(SwTxtNode* pTxtNode)
-        : pShell(0), pFnt(0), pLastOut(0),  nChgCnt(0), pRedln(0), nPropFont(0), m_pTxtNode(pTxtNode) {}
+        : pShell(0), pFnt(0), pHints(0), pAttrSet(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0), nPropFont(0), m_pTxtNode(pTxtNode) {
+            aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
+        }
 
 public:
     // Konstruktor, Destruktor
@@ -119,8 +121,8 @@ public:
     inline SwFont *GetFnt() { return pFnt; }
     inline const SwFont *GetFnt() const { return pFnt; }
 
-    inline BYTE GetPropFont() const { return nPropFont; }
-    inline void SetPropFont( const BYTE nNew ) { nPropFont = nNew; }
+    inline sal_uInt8 GetPropFont() const { return nPropFont; }
+    inline void SetPropFont( const sal_uInt8 nNew ) { nPropFont = nNew; }
 
     inline SwAttrHandler& GetAttrHandler() { return aAttrHandler; }
 

@@ -46,13 +46,13 @@
 published constants SizeType
 {
     //-------------------------------------------------------------------------
-    // The height of the object is determind by the content only.
+    // The height of the object is determined by the content only.
 
     // DocMerge: empty anyway
     const short VARIABLE = 0;
 
     //-------------------------------------------------------------------------
-    // The height property determins the height of the object.
+    // The height property determines the height of the object.
 
     // DocMerge: empty anyway
     const short FIX = 1;

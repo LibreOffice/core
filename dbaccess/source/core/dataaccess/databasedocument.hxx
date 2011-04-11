@@ -146,7 +146,7 @@ private:
 //============================================================
 //= ODatabaseDocument
 //============================================================
-typedef ::comphelper::WeakComponentImplHelper17 <   ::com::sun::star::frame::XModel2
+typedef ::comphelper::PartialWeakComponentImplHelper17 <   ::com::sun::star::frame::XModel2
                                                 ,   ::com::sun::star::util::XModifiable
                                                 ,   ::com::sun::star::frame::XStorable
                                                 ,   ::com::sun::star::document::XEventBroadcaster
@@ -292,7 +292,7 @@ private:
     // Do NOT create those documents directly, always use ODatabaseModelImpl::getModel. Reason is that
     // ODatabaseDocument requires clear ownership, and in turn lifetime synchronisation with the ModelImpl.
     // If you create a ODatabaseDocument directly, you might easily create a leak.
-    // #i50905# / 2005-06-20 / frank.schonheit@sun.com
+    // #i50905#
 
 protected:
     virtual void SAL_CALL disposing();

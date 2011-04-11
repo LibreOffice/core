@@ -53,7 +53,7 @@
 module com { module sun { module star { module linguistic2 {
 
 //=============================================================================
-/** This interface allows for spellchecking.
+/** This interface allows for spell checking.
 
     <P>It is possible to simply check if a word, in a specified language,
     is correct or additionally, if it was misspelled, some proposals

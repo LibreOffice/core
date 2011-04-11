@@ -75,9 +75,9 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
     mpImplData = new ImplData;
 
-    mpWindowImpl->mbFloatWin = TRUE;
-    mbInCleanUp = FALSE;
-    mbGrabFocus = FALSE;
+    mpWindowImpl->mbFloatWin = sal_True;
+    mbInCleanUp = sal_False;
+    mbGrabFocus = sal_False;
 
     DBG_ASSERT( pParent, "FloatWindow::FloatingWindow(): - pParent == NULL!" );
 
@@ -89,7 +89,7 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     // no Border, then we dont need a border window
     if ( !nStyle )
     {
-        mpWindowImpl->mbOverlapWin = TRUE;
+        mpWindowImpl->mbOverlapWin = sal_True;
         nStyle |= WB_DIALOGCONTROL;
         SystemWindow::ImplInit( pParent, nStyle, NULL );
     }
@@ -104,14 +104,14 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
             WinBits nFloatWinStyle = nStyle;
             // #99154# floaters are not closeable by default anymore, eg fullscreen floater
             // nFloatWinStyle |= WB_CLOSEABLE;
-            mpWindowImpl->mbFrame = TRUE;
-            mpWindowImpl->mbOverlapWin = TRUE;
+            mpWindowImpl->mbFrame = sal_True;
+            mpWindowImpl->mbOverlapWin = sal_True;
             SystemWindow::ImplInit( pParent, nFloatWinStyle & ~WB_BORDER, NULL );
         }
         else
         {
             ImplBorderWindow*   pBorderWin;
-            USHORT              nBorderStyle = BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT;
+            sal_uInt16              nBorderStyle = BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT;
 
             if( nStyle & WB_OWNERDRAWDECORATION ) nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
             else                                  nBorderStyle |= BORDERWINDOW_STYLE_OVERLAP;
@@ -125,7 +125,7 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
             SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
             pBorderWin->mpWindowImpl->mpClientWindow = this;
             pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
-            pBorderWin->SetDisplayActive( TRUE );
+            pBorderWin->SetDisplayActive( sal_True );
             mpWindowImpl->mpBorderWindow  = pBorderWin;
             mpWindowImpl->mpRealParent    = pParent;
         }
@@ -138,11 +138,11 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     mnTitle                 = (nStyle & (WB_MOVEABLE | WB_POPUP)) ? FLOATWIN_TITLE_NORMAL : FLOATWIN_TITLE_NONE;
     mnOldTitle              = mnTitle;
     mnPopupModeFlags        = 0;
-    mbInPopupMode           = FALSE;
-    mbPopupMode             = FALSE;
-    mbPopupModeCanceled     = FALSE;
-    mbPopupModeTearOff      = FALSE;
-    mbMouseDown             = FALSE;
+    mbInPopupMode           = sal_False;
+    mbPopupMode             = sal_False;
+    mbPopupModeCanceled     = sal_False;
+    mbPopupModeTearOff      = sal_False;
+    mbMouseDown             = sal_False;
 
     ImplInitSettings();
 }
@@ -191,7 +191,7 @@ void FloatingWindow::ImplLoadRes( const ResId& rResId )
 {
     SystemWindow::ImplLoadRes( rResId );
 
-    ULONG nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
 
     if ( (RSC_FLOATINGWINDOW_WHMAPMODE | RSC_FLOATINGWINDOW_WIDTH |
           RSC_FLOATINGWINDOW_HEIGHT) & nObjMask )
@@ -237,7 +237,7 @@ FloatingWindow::~FloatingWindow()
 
 // -----------------------------------------------------------------------
 
-Point FloatingWindow::CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, ULONG nFlags, USHORT& rArrangeIndex )
+Point FloatingWindow::CalcFloatingPosition( Window* pWindow, const Rectangle& rRect, sal_uLong nFlags, sal_uInt16& rArrangeIndex )
 {
     return ImplCalcPos( pWindow, rRect, nFlags, rArrangeIndex );
 }
@@ -245,8 +245,8 @@ Point FloatingWindow::CalcFloatingPosition( Window* pWindow, const Rectangle& rR
 // -----------------------------------------------------------------------
 
 Point FloatingWindow::ImplCalcPos( Window* pWindow,
-                                   const Rectangle& rRect, ULONG nFlags,
-                                   USHORT& rArrangeIndex )
+                                   const Rectangle& rRect, sal_uLong nFlags,
+                                   sal_uInt16& rArrangeIndex )
 {
     // Fenster-Position ermitteln
     Point       aPos;
@@ -262,7 +262,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     Rectangle normRect( rRect );  // rRect is already relative to top-level window
     normRect.SetPos( pW->ScreenToOutputPixel( normRect.TopLeft() ) );
 
-    BOOL bRTL = Application::GetSettings().GetLayoutRTL();
+    sal_Bool bRTL = Application::GetSettings().GetLayoutRTL();
 
     Rectangle devRect(  pW->OutputToAbsoluteScreenPixel( normRect.TopLeft() ),
                         pW->OutputToAbsoluteScreenPixel( normRect.BottomRight() ) );
@@ -276,9 +276,9 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
             Application::GetBestScreen( bRTL ? devRectRTL : devRect ) );
 
 
-    USHORT      nArrangeAry[5];
-    USHORT      nArrangeIndex;
-    BOOL        bBreak;
+    sal_uInt16      nArrangeAry[5];
+    sal_uInt16      nArrangeIndex;
+    sal_Bool        bBreak;
     Point       e1,e2;  // the common edge between the item rect and the floating window
 
     if ( nFlags & FLOATWIN_POPUPMODE_LEFT )
@@ -320,7 +320,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
 
     for ( ; nArrangeIndex < 5; nArrangeIndex++ )
     {
-        bBreak = TRUE;
+        bBreak = sal_True;
         switch ( nArrangeAry[nArrangeIndex] )
         {
 
@@ -331,12 +331,12 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 if( bRTL ) // --- RTL --- we're comparing screen coordinates here
                 {
                     if( (devRectRTL.Right()+aSize.Width()) > aScreenRect.Right() )
-                        bBreak = FALSE;
+                        bBreak = sal_False;
                 }
                 else
                 {
                     if ( aPos.X() < aScreenRect.Left() )
-                        bBreak = FALSE;
+                        bBreak = sal_False;
                 }
                 if( bBreak )
                 {
@@ -355,12 +355,12 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 if( bRTL ) // --- RTL --- we're comparing screen coordinates here
                 {
                     if( (devRectRTL.Left() - aSize.Width()) < aScreenRect.Left() )
-                        bBreak = FALSE;
+                        bBreak = sal_False;
                 }
                 else
                 {
                     if ( aPos.X()+aSize.Width() > aScreenRect.Right() )
-                        bBreak = FALSE;
+                        bBreak = sal_False;
                 }
                 if( bBreak )
                 {
@@ -377,7 +377,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
                 aPos.X() = devRect.Left();
                 aPos.Y() = devRect.Top()-aSize.Height()+1;
                 if ( aPos.Y() < aScreenRect.Top() )
-                    bBreak = FALSE;
+                    bBreak = sal_False;
                 if( bBreak )
                 {
                     e1 = devRect.TopLeft();
@@ -392,7 +392,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
             case FLOATWIN_POPUPMODE_DOWN:
                 aPos = devRect.BottomLeft();
                 if ( aPos.Y()+aSize.Height() > aScreenRect.Bottom() )
-                    bBreak = FALSE;
+                    bBreak = sal_False;
                 if( bBreak )
                 {
                     e1 = devRect.BottomLeft();
@@ -463,7 +463,7 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
 
 // -----------------------------------------------------------------------
 
-FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Point& rPos, USHORT& rHitTest )
+FloatingWindow* FloatingWindow::ImplFloatHitTest( Window* pReference, const Point& rPos, sal_uInt16& rHitTest )
 {
     FloatingWindow* pWin = this;
 
@@ -538,20 +538,20 @@ FloatingWindow* FloatingWindow::ImplFindLastLevelFloat()
 
 // -----------------------------------------------------------------------
 
-BOOL FloatingWindow::ImplIsFloatPopupModeWindow( const Window* pWindow )
+sal_Bool FloatingWindow::ImplIsFloatPopupModeWindow( const Window* pWindow )
 {
     FloatingWindow* pWin = this;
 
     do
     {
         if ( pWin->mpFirstPopupModeWin == pWindow )
-            return TRUE;
+            return sal_True;
 
         pWin = pWin->mpNextFloat;
     }
     while ( pWin );
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -560,7 +560,7 @@ IMPL_LINK( FloatingWindow, ImplEndPopupModeHdl, void*, EMPTYARG )
 {
     mnPostId            = 0;
     mnPopupModeFlags    = 0;
-    mbPopupMode         = FALSE;
+    mbPopupMode         = sal_False;
     PopupModeEnd();
     return 0;
 }
@@ -577,12 +577,12 @@ long FloatingWindow::Notify( NotifyEvent& rNEvt )
         {
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             KeyCode         aKeyCode = pKEvt->GetKeyCode();
-            USHORT          nKeyCode = aKeyCode.GetCode();
+            sal_uInt16          nKeyCode = aKeyCode.GetCode();
 
             if ( (nKeyCode == KEY_ESCAPE) && (GetStyle() & WB_CLOSEABLE) )
             {
                 Close();
-                return TRUE;
+                return sal_True;
             }
         }
     }
@@ -622,7 +622,7 @@ void FloatingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 void FloatingWindow::ImplCallPopupModeEnd()
 {
     // PopupMode wurde beendet
-    mbInPopupMode = FALSE;
+    mbInPopupMode = sal_False;
 
     // Handler asyncron rufen
     if ( !mnPostId )
@@ -638,13 +638,13 @@ void FloatingWindow::PopupModeEnd()
 
 // -----------------------------------------------------------------------
 
-void FloatingWindow::SetTitleType( USHORT nTitle )
+void FloatingWindow::SetTitleType( sal_uInt16 nTitle )
 {
     if ( (mnTitle != nTitle) && mpWindowImpl->mpBorderWindow )
     {
         mnTitle = nTitle;
         Size aOutSize = GetOutputSizePixel();
-        USHORT nTitleStyle;
+        sal_uInt16 nTitleStyle;
         if ( nTitle == FLOATWIN_TITLE_NORMAL )
             nTitleStyle = BORDERWINDOW_TITLE_SMALL;
         else if ( nTitle == FLOATWIN_TITLE_TEAROFF )
@@ -660,11 +660,11 @@ void FloatingWindow::SetTitleType( USHORT nTitle )
 
 // -----------------------------------------------------------------------
 
-void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
+void FloatingWindow::StartPopupMode( const Rectangle& rRect, sal_uLong nFlags )
 {
     // avoid flickering
     if ( IsVisible() )
-        Show( FALSE, SHOW_NOFOCUSCHANGE );
+        Show( sal_False, SHOW_NOFOCUSCHANGE );
 
     if ( IsRollUp() )
         RollDown();
@@ -688,7 +688,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
         nFlags |= FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
 
     // compute window position according to flags and arrangement
-    USHORT nArrangeIndex;
+    sal_uInt16 nArrangeIndex;
     SetPosPixel( ImplCalcPos( this, rRect, nFlags, nArrangeIndex ) );
 
     // set data and display window
@@ -709,11 +709,11 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
     maFloatRect.Right()    += 2;
     maFloatRect.Bottom()   += 2;
     mnPopupModeFlags        = nFlags;
-    mbInPopupMode           = TRUE;
-    mbPopupMode             = TRUE;
-    mbPopupModeCanceled     = FALSE;
-    mbPopupModeTearOff      = FALSE;
-    mbMouseDown             = FALSE;
+    mbInPopupMode           = sal_True;
+    mbPopupMode             = sal_True;
+    mbPopupModeCanceled     = sal_False;
+    mbPopupModeTearOff      = sal_False;
+    mbMouseDown             = sal_False;
 
     mbOldSaveBackMode       = IsSaveBackgroundEnabled();
     EnableSaveBackground();
@@ -725,22 +725,22 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
     if( nFlags & FLOATWIN_POPUPMODE_GRABFOCUS )
     {
         // force key input even without focus (useful for menues)
-        mbGrabFocus = TRUE;
+        mbGrabFocus = sal_True;
     }
-    Show( TRUE, SHOW_NOACTIVATE );
+    Show( sal_True, SHOW_NOACTIVATE );
 }
 
 // -----------------------------------------------------------------------
 
-void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
+void FloatingWindow::StartPopupMode( ToolBox* pBox, sal_uLong nFlags )
 {
     // get selected button
-    USHORT nItemId = pBox->GetDownItemId();
+    sal_uInt16 nItemId = pBox->GetDownItemId();
     if ( !nItemId )
         return;
 
     mpImplData->mpBox = pBox;
-    pBox->ImplFloatControl( TRUE, this );
+    pBox->ImplFloatControl( sal_True, this );
 
     // retrieve some data from the ToolBox
     Rectangle aRect = pBox->GetItemRect( nItemId );
@@ -779,14 +779,14 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, ULONG nFlags )
 
 // -----------------------------------------------------------------------
 
-void FloatingWindow::ImplEndPopupMode( USHORT nFlags, ULONG nFocusId )
+void FloatingWindow::ImplEndPopupMode( sal_uInt16 nFlags, sal_uLong nFocusId )
 {
     if ( !mbInPopupMode )
         return;
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    mbInCleanUp = TRUE; // prevent killing this window due to focus change while working with it
+    mbInCleanUp = sal_True; // prevent killing this window due to focus change while working with it
 
     // Bei allen nachfolgenden PopupMode-Fenster den Modus auch beenden
     while ( pSVData->maWinData.mpFirstFloat && pSVData->maWinData.mpFirstFloat != this )
@@ -797,13 +797,13 @@ void FloatingWindow::ImplEndPopupMode( USHORT nFlags, ULONG nFocusId )
     pSVData->maWinData.mpFirstFloat = mpNextFloat;
     mpNextFloat = NULL;
 
-    ULONG nPopupModeFlags = mnPopupModeFlags;
+    sal_uLong nPopupModeFlags = mnPopupModeFlags;
 
     // Wenn nicht abgerissen wurde, dann Fenster wieder Hiden
     if ( !(nFlags & FLOATWIN_POPUPMODEEND_TEAROFF) ||
          !(nPopupModeFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF) )
     {
-        Show( FALSE, SHOW_NOFOCUSCHANGE );
+        Show( sal_False, SHOW_NOFOCUSCHANGE );
 
         // Focus evt. auf ein entsprechendes FloatingWindow weiterschalten
         if ( nFocusId )
@@ -811,13 +811,13 @@ void FloatingWindow::ImplEndPopupMode( USHORT nFlags, ULONG nFocusId )
         else if ( pSVData->maWinData.mpFocusWin && pSVData->maWinData.mpFirstFloat &&
                   ImplIsWindowOrChild( pSVData->maWinData.mpFocusWin ) )
             pSVData->maWinData.mpFirstFloat->GrabFocus();
-        mbPopupModeTearOff = FALSE;
+        mbPopupModeTearOff = sal_False;
     }
     else
     {
-        mbPopupModeTearOff = TRUE;
+        mbPopupModeTearOff = sal_True;
         if ( nFocusId )
-            Window::EndSaveFocus( nFocusId, FALSE );
+            Window::EndSaveFocus( nFocusId, sal_False );
     }
     EnableSaveBackground( mbOldSaveBackMode );
 
@@ -829,7 +829,7 @@ void FloatingWindow::ImplEndPopupMode( USHORT nFlags, ULONG nFocusId )
     // ToolBox wieder auf normal schalten
     if ( mpImplData->mpBox )
     {
-        mpImplData->mpBox->ImplFloatControl( FALSE, this );
+        mpImplData->mpBox->ImplFloatControl( sal_False, this );
         mpImplData->mpBox = NULL;
     }
 
@@ -850,12 +850,12 @@ void FloatingWindow::ImplEndPopupMode( USHORT nFlags, ULONG nFocusId )
         }
     }
 
-    mbInCleanUp = FALSE;
+    mbInCleanUp = sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-void FloatingWindow::EndPopupMode( USHORT nFlags )
+void FloatingWindow::EndPopupMode( sal_uInt16 nFlags )
 {
     ImplEndPopupMode( nFlags );
 }

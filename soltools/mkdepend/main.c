@@ -33,6 +33,10 @@ in this Software without prior written authorization from the X Consortium.
 #include <sys/stat.h>
 #endif
 
+#ifdef _WIN32
+#include <io.h>
+#endif
+
 #ifdef _MSC_VER     /* Define ssize_t */
 
 #if !defined(_W64)
@@ -347,7 +351,6 @@ int main(argc, argv)
             break;
         default:
             if (endmarker) break;
-    /*      fatalerr("unknown opt = %s\n", argv[0]); */
             warning("ignoring option %s\n", argv[0]);
         }
     }

@@ -188,7 +188,7 @@ protected:
 
 
     void onWMSize();
-    void onWMShow(BOOL bShow);
+    void onWMShow(sal_Bool bShow);
     void onWMWindowPosChanged();
     void onCustomControlHelpRequest(LPHELPINFO lphi);
 

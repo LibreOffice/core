@@ -64,6 +64,7 @@
 #include <sfx2/signaturestate.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/errcode.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/sharedunocomponent.hxx>
@@ -440,9 +441,9 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >&
 {
     // some kind of default
     DBG_CTOR(ODatabaseModelImpl,NULL);
-    m_sConnectURL = ::rtl::OUString::createFromAscii("jdbc:");
+    m_sConnectURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jdbc:"));
     m_aTableFilter.realloc(1);
-    m_aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
+    m_aTableFilter[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"));
     impl_construct_nothrow();
 }
 
@@ -680,7 +681,7 @@ void SAL_CALL ODatabaseModelImpl::disposing( const ::com::sun::star::lang::Event
     }
     else
     {
-        OSL_ENSURE( false, "ODatabaseModelImpl::disposing: where does this come from?" );
+        OSL_FAIL( "ODatabaseModelImpl::disposing: where does this come from?" );
     }
 }
 
@@ -777,7 +778,7 @@ const Reference< XNumberFormatsSupplier > & ODatabaseModelImpl::getNumberFormats
 
         m_xNumberFormatsSupplier.set(
             m_aContext.createComponentWithArguments( "com.sun.star.util.NumberFormatsSupplier", aArguments ), UNO_QUERY_THROW );
-        DBG_ASSERT(m_xNumberFormatsSupplier.is(), "ODatabaseModelImpl::getNumberFormatsSupplier : could not instantiate the formats supplier !");
+        OSL_ENSURE(m_xNumberFormatsSupplier.is(), "ODatabaseModelImpl::getNumberFormatsSupplier : could not instantiate the formats supplier !");
     }
     return m_xNumberFormatsSupplier;
 }
@@ -1004,7 +1005,7 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
             // However, in case that the document is implicitly created by asking the data source for the document,
             // then nobody would call the doc's attachResource. So, we do it here, to ensure it's in a proper
             // state, fires all events, and so on.
-            // #i105505# / 2009-10-02 / frank.schoenheit@sun.com
+            // #i105505#
             xModel->attachResource( xModel->getURL(), m_aMediaDescriptor.getPropertyValues() );
         }
 
@@ -1413,7 +1414,7 @@ sal_Bool ODatabaseModelImpl::hasTrustedScriptingSignature( sal_Bool /*bAllowUITo
 
 void ODatabaseModelImpl::showBrokenSignatureWarning( const Reference< XInteractionHandler >& /*_rxInteraction*/ ) const
 {
-    OSL_ENSURE( false, "ODatabaseModelImpl::showBrokenSignatureWarning: signatures can't be broken - we do not support them!" );
+    OSL_FAIL( "ODatabaseModelImpl::showBrokenSignatureWarning: signatures can't be broken - we do not support them!" );
 }
 
 void ODatabaseModelImpl::storageIsModified()

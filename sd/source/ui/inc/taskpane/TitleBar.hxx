@@ -153,7 +153,7 @@ private:
 
     void PaintText (const Rectangle& rTextBox);
 
-    USHORT GetTextStyle (void);
+    sal_uInt16 GetTextStyle (void);
 
     const static int snIndentationWidth;
 

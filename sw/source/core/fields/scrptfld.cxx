@@ -57,7 +57,7 @@ SwFieldType* SwScriptFieldType::Copy() const
 
 SwScriptField::SwScriptField( SwScriptFieldType* pInitType,
                                 const String& rType, const String& rCode,
-                                BOOL bURL )
+                                sal_Bool bURL )
     : SwField( pInitType ), sType( rType ), sCode( rCode ), bCodeURL( bURL )
 {
 }
@@ -105,10 +105,8 @@ String SwScriptField::GetPar2() const
 {
     return sCode;
 }
-/*-----------------05.03.98 15:00-------------------
 
---------------------------------------------------*/
-bool SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -122,14 +120,12 @@ bool SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny.setValue(&bCodeURL, ::getBooleanCppuType());
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
-/*-----------------05.03.98 15:00-------------------
 
---------------------------------------------------*/
-bool SwScriptField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -143,7 +139,7 @@ bool SwScriptField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         bCodeURL = *(sal_Bool*)rAny.getValue();
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }

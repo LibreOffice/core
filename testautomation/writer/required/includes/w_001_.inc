@@ -773,9 +773,7 @@ testcase tFileSaveAsExport
     Call hNewDocument
 
     PrintLog "Open document '..\writer\required\input\st1_1.sxw"
-    Call hFileOpen(xExport)
-
-    Call sMakeReadOnlyDocumentEditable
+    Call hFileOpenLocally(xExport)
 
     PrintLog "Select Save as .. and choose 'Microsoft Word 97/2000/XP' as export-filter"
     xExportFile = gOfficepath + "user\work\ecksport.doc"
@@ -943,7 +941,7 @@ testcase tFileSaveWithPassword
             if ( gPlatgroup = "unx" ) then
                 QAErrorlog "#i73968#Opening a password protected file looses focus after loading"
             else
-                Warnlog "#i36015#Checkbox 'Save with password' is not checked in file-dialog !"
+                Warnlog "Checkbox 'Save with password' is not checked in file-dialog !"
                 Passwort.Check
             end if
             SpeichernDlg.Cancel
@@ -1029,7 +1027,7 @@ testcase tFileReload
     Wait (500)
 
     PrintLog "Open previous saved document"
-    Call hFileOpen ( gOfficePath + "user\work\" + sFile$ )
+    hFileOpen(  gOfficePath + "user\work\" + sFile$ )
     PrintLog "Insert a table in document"
     Call hTabelleEinfuegen
     PrintLog "File / Reload"

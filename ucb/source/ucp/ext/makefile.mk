@@ -6,10 +6,6 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.4 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -63,3 +59,11 @@ SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE : target.mk
+
+ALLTAR : $(MISC)/ucpext.component
+
+$(MISC)/ucpext.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ucpext.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ucpext.component

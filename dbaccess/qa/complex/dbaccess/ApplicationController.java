@@ -27,26 +27,29 @@
 package complex.dbaccess;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
 import connectivity.tools.HsqlColumnDescriptor;
 import connectivity.tools.HsqlDatabase;
 import connectivity.tools.HsqlTableDescriptor;
-import helper.URLHelper;
-import java.io.File;
 import java.io.IOException;
+
+
+// ---------- junit imports -----------------
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+// ------------------------------------------
 
 /** complex test case for Base's application UI
  */
@@ -60,16 +63,6 @@ public class ApplicationController extends TestCase
     public ApplicationController()
     {
         super();
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-
-    public String[] getTestMethodNames()
-    {
-        return new String[]
-                {
-                    "checkSaveAs"
-                };
     }
 
     // --------------------------------------------------------------------------------------------------------
@@ -98,16 +91,16 @@ public class ApplicationController extends TestCase
 
         // create/load the new database document
         m_database = (_documentURL == null)
-                ? new HsqlDatabase(getORB())
-                : new HsqlDatabase(getORB(), _documentURL);
+                ? new HsqlDatabase(getMSF())
+                : new HsqlDatabase(getMSF(), _documentURL);
         m_databaseDocument = m_database.getDatabaseDocument();
 
         // load it into a frame
-        final Object object = getORB().createInstance("com.sun.star.frame.Desktop");
+        final Object object = getMSF().createInstance("com.sun.star.frame.Desktop");
         final XComponentLoader xComponentLoader = UnoRuntime.queryInterface(XComponentLoader.class, object);
         final XComponent loadedComponent = xComponentLoader.loadComponentFromURL(m_database.getDocumentURL(), "_blank", FrameSearchFlag.ALL, new PropertyValue[0]);
 
-        assure("too many document instances!",
+        assertTrue("too many document instances!",
                 UnoRuntime.areSame(loadedComponent, m_databaseDocument));
 
         // get the controller, which provides access to various UI operations
@@ -118,6 +111,8 @@ public class ApplicationController extends TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
+    @Before
+    @Override
     public void before() throws java.lang.Exception
     {
         super.before();
@@ -125,6 +120,8 @@ public class ApplicationController extends TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
+    @After
+    @Override
     public void after() throws java.lang.Exception
     {
         impl_closeDocument();
@@ -132,6 +129,7 @@ public class ApplicationController extends TestCase
     }
     // --------------------------------------------------------------------------------------------------------
 
+    @Test
     public void checkSaveAs() throws Exception, IOException, java.lang.Exception
     {
         // issue 93737 describes the problem that when you save-as a database document, and do changes to it,
@@ -146,7 +144,7 @@ public class ApplicationController extends TestCase
 
         // connect
         m_documentUI.connect();
-        assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
+        assertTrue("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
 
         // create a table in the database
         m_database.createTable(new HsqlTableDescriptor("abc", new HsqlColumnDescriptor[]
@@ -159,18 +157,18 @@ public class ApplicationController extends TestCase
         // load the old document, and verify there is *no* table therein
         impl_switchToDocument(oldDocumentURL);
         m_documentUI.connect();
-        assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
+        assertTrue("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
         XTablesSupplier suppTables = UnoRuntime.queryInterface( XTablesSupplier.class, m_documentUI.getActiveConnection() );
         XNameAccess tables = suppTables.getTables();
-        assure("the table was created in the wrong database", !tables.hasByName("abc"));
+        assertTrue("the table was created in the wrong database", !tables.hasByName("abc"));
 
         // load the new document, and verify there *is* a table therein
         impl_switchToDocument(newDocumentURL);
         m_documentUI.connect();
-        assure("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
+        assertTrue("could not connect to " + m_database.getDocumentURL(), m_documentUI.isConnected());
 
         suppTables = UnoRuntime.queryInterface( XTablesSupplier.class, m_documentUI.getActiveConnection() );
         tables = suppTables.getTables();
-        assure("the newly created table has not been written", tables.hasByName("abc"));
+        assertTrue("the newly created table has not been written", tables.hasByName("abc"));
     }
 }

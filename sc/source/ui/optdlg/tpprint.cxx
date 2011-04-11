@@ -42,7 +42,7 @@
 
 // -----------------------------------------------------------------------
 
-static USHORT pPrintOptRanges[] =
+static sal_uInt16 pPrintOptRanges[] =
 {
     SID_SCPRINTOPTIONS,
     SID_SCPRINTOPTIONS,
@@ -68,7 +68,7 @@ ScTpPrintOptions::~ScTpPrintOptions()
 {
 }
 
-USHORT* ScTpPrintOptions::GetRanges()
+sal_uInt16* ScTpPrintOptions::GetRanges()
 {
     return pPrintOptRanges;
 }
@@ -93,7 +93,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
     ScPrintOptions aOptions;
 
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCPRINTOPTIONS, FALSE , &pItem))
+    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCPRINTOPTIONS, false , &pItem))
         aOptions = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
     else
     {
@@ -101,9 +101,9 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
         aOptions = SC_MOD()->GetPrintOptions();
     }
 
-    if ( SFX_ITEM_SET == rCoreSet.GetItemState( SID_PRINT_SELECTEDSHEET, FALSE , &pItem ) )
+    if ( SFX_ITEM_SET == rCoreSet.GetItemState( SID_PRINT_SELECTEDSHEET, false , &pItem ) )
     {
-        BOOL bChecked = ( (const SfxBoolItem*)pItem )->GetValue();
+        sal_Bool bChecked = ( (const SfxBoolItem*)pItem )->GetValue();
         aSelectedSheetsCB.Check( bChecked );
     }
     else
@@ -118,7 +118,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
 
 // -----------------------------------------------------------------------
 
-BOOL ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
+sal_Bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     rCoreAttrs.ClearItem( SID_PRINT_SELECTEDSHEET );
 
@@ -135,11 +135,11 @@ BOOL ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
         {
             rCoreAttrs.Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, aSelectedSheetsCB.IsChecked() ) );
         }
-        return TRUE;
+        return sal_True;
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 

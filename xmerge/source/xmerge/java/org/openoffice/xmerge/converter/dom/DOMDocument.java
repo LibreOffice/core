@@ -157,7 +157,7 @@ public class DOMDocument
      *  Sets the Content of the <code>Document</code> to the contents of the
      *  supplied <code>Node</code> list.
      *
-     *  @return  DOM <code>Document</code> object.
+     *  @param newDom DOM <code>Document</code> object.
      */
     public void setContentDOM( Node newDom) {
     contentDoc=(Document)newDom;
@@ -202,7 +202,6 @@ public class DOMDocument
             builder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException ex) {
         System.out.println("Error:"+ ex);
-            //throw new OfficeDocumentException(ex);
         }
     try {
 
@@ -211,7 +210,6 @@ public class DOMDocument
 
         } catch (SAXException ex) {
         System.out.println("Error:"+ ex);
-            //throw new OfficeDocumentException(ex);
         }
     }
 

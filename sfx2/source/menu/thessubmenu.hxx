@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: thessubmenu.hxx,v $
- * $Revision: 1.0 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -45,23 +42,17 @@ class Menu;
 
 namespace css = ::com::sun::star;
 
-////////////////////////////////////////////////////////////
-
-String GetThesaurusReplaceText_Impl( const ::rtl::OUString &rText );
-
-////////////////////////////////////////////////////////////
-
 class SfxThesSubMenuControl : public SfxMenuControl
 {
     PopupMenu*          pMenu;
     Menu&               rParent;
 
 private:
-    virtual void    StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
+    virtual void    StateChanged( sal_uInt16, SfxItemState, const SfxPoolItem* pState );
     DECL_LINK( MenuSelect, Menu * );
 
 public:
-    SfxThesSubMenuControl(USHORT, Menu&, SfxBindings&);
+    SfxThesSubMenuControl(sal_uInt16, Menu&, SfxBindings&);
     ~SfxThesSubMenuControl();
 
     virtual PopupMenu*  GetPopup() const;
@@ -69,7 +60,6 @@ public:
     SFX_DECL_MENU_CONTROL();
 };
 
-////////////////////////////////////////////////////////////
 
 class SfxThesSubMenuHelper
 {
@@ -78,7 +68,7 @@ class SfxThesSubMenuHelper
 
 private:
 
-    // don't use copy c-tor and assignment operator
+    // don't use copy constructor and assignment operator
     SfxThesSubMenuHelper( const SfxThesSubMenuHelper & );
     SfxThesSubMenuHelper & operator = ( const SfxThesSubMenuHelper & );
 
@@ -100,7 +90,6 @@ public:
     String  GetThesImplName( const css::lang::Locale &rLocale ) const;
 };
 
-////////////////////////////////////////////////////////////
 
 
 #endif

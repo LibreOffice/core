@@ -129,8 +129,9 @@ static void debug_i18n_cal_dump( const ::icu::Calendar & r )
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::i18n;
-using namespace ::rtl;
+using ::rtl::OUString;
+
+namespace com { namespace sun { namespace star { namespace i18n {
 
 #define ERROR RuntimeException()
 
@@ -190,7 +191,7 @@ Calendar_hanja::getDisplayName( sal_Int16 displayIndex, sal_Int16 idx, sal_Int16
         if ( displayIndex == CalendarDisplayIndex::AM_PM ) {
             // Am/Pm string for Korean Hanja calendar will refer to Japanese locale
             com::sun::star::lang::Locale jaLocale =
-                com::sun::star::lang::Locale(OUString::createFromAscii("ja"), OUString(), OUString());
+                com::sun::star::lang::Locale(OUString(RTL_CONSTASCII_USTRINGPARAM("ja")), OUString(), OUString());
             if (idx == 0) return LocaleData().getLocaleItem(jaLocale).timeAM;
             else if (idx == 1) return LocaleData().getLocaleItem(jaLocale).timePM;
             else throw ERROR;
@@ -204,7 +205,7 @@ Calendar_hanja::loadCalendar( const OUString& /*uniqueID*/, const com::sun::star
 {
         // Since this class could be called by service name 'hanja_yoil', we have to
         // rename uniqueID to get right calendar defined in locale data.
-        Calendar_gregorian::loadCalendar(OUString::createFromAscii("hanja"), rLocale);
+        Calendar_gregorian::loadCalendar(OUString(RTL_CONSTASCII_USTRINGPARAM("hanja")), rLocale);
 }
 
 static Era gengou_eraArray[] = {
@@ -795,9 +796,9 @@ static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& 
         nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR) && value >= 100) ||
         nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
         nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER;
-    sal_Bool isChinese = aLocale.Language.equalsAscii("zh");
-    sal_Bool isJapanese = aLocale.Language.equalsAscii("ja");
-    sal_Bool isKorean = aLocale.Language.equalsAscii("ko");
+    sal_Bool isChinese = aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh"));
+    sal_Bool isJapanese = aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ja"));
+    sal_Bool isKorean = aLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ko"));
 
     if (isChinese || isJapanese || isKorean) {
         switch (nNativeNumberMode) {
@@ -983,7 +984,7 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 sprintf(aStr, "%d", value);     // #100211# - checked
                 break;
             case CalendarDisplayCode::LONG_YEAR:
-                if (aCalendar.Name.equalsAscii("gengou"))
+                if (aCalendar.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gengou")))
                     sprintf(aStr, "%02d", value);     // #100211# - checked
                 else
                     sprintf(aStr, "%d", value);     // #100211# - checked
@@ -993,9 +994,11 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
                 sprintf(aStr, "%02d", value);   // #100211# - checked
                 break;
             case CalendarDisplayCode::SHORT_YEAR:
-                // Take last 2 digits, or only one if vallue<10, for example,
+                // Take last 2 digits, or only one if value<10, for example,
                 // in case of the Gengou calendar.
-                if (value < 100)
+                // #i116701# For values in non-Gregorian era years use all
+                // digits.
+                if (value < 100 || eraArray)
                     sprintf(aStr, "%d", value); // #100211# - checked
                 else
                     sprintf(aStr, "%02d", value % 100); // #100211# - checked
@@ -1085,5 +1088,7 @@ Calendar_gregorian::getSupportedServiceNames(void) throw( RuntimeException )
         aRet[0] = OUString::createFromAscii(cCalendar);
         return aRet;
 }
+
+}}}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

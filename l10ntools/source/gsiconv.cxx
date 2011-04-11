@@ -40,12 +40,12 @@
 #define GSI_FILE_L10NFRAMEWORK  0x0002
 
 /*****************************************************************************/
-USHORT GetGSIFileType( SvStream &rStream )
+sal_uInt16 GetGSIFileType( SvStream &rStream )
 /*****************************************************************************/
 {
-    USHORT nFileType = GSI_FILE_UNKNOWN;
+    sal_uInt16 nFileType = GSI_FILE_UNKNOWN;
 
-    ULONG nPos( rStream.Tell());
+    sal_uLong nPos( rStream.Tell());
     rStream.Seek( STREAM_SEEK_TO_BEGIN );
 
     ByteString sLine;
@@ -65,7 +65,7 @@ USHORT GetGSIFileType( SvStream &rStream )
 }
 
 /*****************************************************************************/
-ByteString GetGSILineId( const ByteString &rLine, USHORT nFileType )
+ByteString GetGSILineId( const ByteString &rLine, sal_uInt16 nFileType )
 /*****************************************************************************/
 {
     ByteString sId;
@@ -90,7 +90,7 @@ ByteString GetGSILineId( const ByteString &rLine, USHORT nFileType )
 }
 
 /*****************************************************************************/
-ByteString GetGSILineLangId( const ByteString &rLine, USHORT nFileType )
+ByteString GetGSILineLangId( const ByteString &rLine, sal_uInt16 nFileType )
 /*****************************************************************************/
 {
     ByteString sLangId;
@@ -109,8 +109,8 @@ ByteString GetGSILineLangId( const ByteString &rLine, USHORT nFileType )
 }
 
 /*****************************************************************************/
-void ConvertGSILine( BOOL bToUTF8, ByteString &rLine,
-        rtl_TextEncoding nEncoding, USHORT nFileType )
+void ConvertGSILine( sal_Bool bToUTF8, ByteString &rLine,
+        rtl_TextEncoding nEncoding, sal_uInt16 nFileType )
 /*****************************************************************************/
 {
     switch ( nFileType ) {
@@ -123,7 +123,7 @@ void ConvertGSILine( BOOL bToUTF8, ByteString &rLine,
 
         case GSI_FILE_L10NFRAMEWORK: {
             ByteString sConverted;
-            for ( USHORT i = 0; i < rLine.GetTokenCount( '\t' ); i++ ) {
+            for ( sal_uInt16 i = 0; i < rLine.GetTokenCount( '\t' ); i++ ) {
                 ByteString sToken = rLine.GetToken( i, '\t' );
                 if (( i > 9 ) && ( i < 14 )) {
                     if( bToUTF8 )
@@ -232,9 +232,9 @@ int _cdecl main( int argc, char *argv[] )
                 exit ( 3 );
             }
 
-            USHORT nFileType( GetGSIFileType( aGSI ));
+            sal_uInt16 nFileType( GetGSIFileType( aGSI ));
 
-            ULONG nMaxLines = (ULONG) ByteString( argv[ 2 ] ).ToInt64();
+            sal_uLong nMaxLines = (sal_uLong) ByteString( argv[ 2 ] ).ToInt64();
             if ( !nMaxLines ) {
                 fprintf( stderr, "\nERROR: Linecount must be at least 1!\n\n" );
                 exit ( 3 );
@@ -242,8 +242,8 @@ int _cdecl main( int argc, char *argv[] )
 
             ByteString sGSILine;
             ByteString sOldId;
-            ULONG nLine = 0;
-            ULONG nOutputFile = 1;
+            sal_uLong nLine = 0;
+            sal_uLong nOutputFile = 1;
 
             String sOutput( sBase );
             sOutput += String( "_", RTL_TEXTENCODING_ASCII_US );
@@ -346,7 +346,7 @@ int _cdecl main( int argc, char *argv[] )
                 fprintf( stderr, "\nERROR: Could not open GSI-File %s!\n\n", ByteString( argv[ 3 ] ).GetBuffer());
                 exit ( 3 );
             }
-            USHORT nFileType( GetGSIFileType( aGSI ));
+            sal_uInt16 nFileType( GetGSIFileType( aGSI ));
 
             ByteString sGSILine;
             while ( !aGSI.IsEof()) {

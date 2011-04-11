@@ -48,7 +48,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 
 #include "xmloff/table/XMLTableExport.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlexp.hxx>
@@ -186,10 +186,6 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)),
         mxRowExportPropertySetMapper.get(),
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX)));
-//  mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE
-//      OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME)),
-//      xTableStylesExportPropertySetMapper,
-//      OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX)));
     mrExport.GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL,
         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)),
         mxCellExportPropertySetMapper.get(),
@@ -214,7 +210,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         {
             if( aIter->mnIndex != -1 )
                 return true;
-            aIter++;
+            ++aIter;
         }
     }
     return false;
@@ -248,7 +244,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         }
         catch( Exception& )
         {
-            DBG_ERROR("xmloff::XMLTableExport::collectTableAutoStyles(), exception during column style collection!");
+            OSL_FAIL("xmloff::XMLTableExport::collectTableAutoStyles(), exception during column style collection!");
         }
 
         Reference< XIndexAccess > xIndexAccessRows( xColumnRowRange->getRows(), UNO_QUERY_THROW );
@@ -316,12 +312,12 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
         }
         catch( Exception& )
         {
-            DBG_ERROR("xmloff::XMLTableExport::collectTableAutoStyles(), exception during column style collection!");
+            OSL_FAIL("xmloff::XMLTableExport::collectTableAutoStyles(), exception during column style collection!");
         }
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::XMLTableExport::collectTableAutoStyles(), exception caught!");
+        OSL_FAIL("xmloff::XMLTableExport::collectTableAutoStyles(), exception caught!");
     }
  }
 
@@ -387,7 +383,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
      }
      catch( Exception )
     {
-         DBG_ERROR( "XMLTableExport::exportTable(), exception cought!" );
+         OSL_FAIL( "XMLTableExport::exportTable(), exception cought!" );
      }
  }
 
@@ -452,7 +448,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
     }
     catch ( Exception )
     {
-        DBG_ERROR( "exception while exporting a table cell" );
+        OSL_FAIL( "exception while exporting a table cell" );
     }
 
     // table:number-columns-repeated
@@ -496,7 +492,7 @@ void XMLTableExport::exportTableStyles()
     XMLStyleExport aStEx(mrExport, OUString(), mrExport.GetAutoStylePool().get());
 
     // write graphic family styles
-    aStEx.exportStyleFamily("cell", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)), mxCellExportPropertySetMapper.get(), TRUE, XML_STYLE_FAMILY_TABLE_CELL);
+    aStEx.exportStyleFamily("cell", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)), mxCellExportPropertySetMapper.get(), sal_True, XML_STYLE_FAMILY_TABLE_CELL);
 
     exportTableTemplates();
 }
@@ -575,7 +571,7 @@ void XMLTableExport::exportTableTemplates()
                 }
                 catch( Exception& )
                 {
-                    DBG_ERROR("xmloff::XMLTableExport::exportTableTemplates(), exception caught!");
+                    OSL_FAIL("xmloff::XMLTableExport::exportTableTemplates(), exception caught!");
                 }
 
                 pElements++;
@@ -583,12 +579,12 @@ void XMLTableExport::exportTableTemplates()
         }
         catch( Exception& )
         {
-            DBG_ERROR("xmloff::XMLTableExport::exportTableDesigns(), exception caught while exporting a table design!");
+            OSL_FAIL("xmloff::XMLTableExport::exportTableDesigns(), exception caught while exporting a table design!");
         }
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::XMLTableExport::exportTableDesigns(), exception caught!");
+        OSL_FAIL("xmloff::XMLTableExport::exportTableDesigns(), exception caught!");
     }
 }
 

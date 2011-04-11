@@ -70,7 +70,7 @@ namespace cppu_threadpool
 
         sal_Bool isEmpty();
         sal_Bool isCallstackEmpty();
-        sal_Bool isBusy();
+        sal_Bool isBusy() const;
 
     private:
         ::osl::Mutex m_mutex;

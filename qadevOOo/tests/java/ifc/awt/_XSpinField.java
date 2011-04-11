@@ -82,7 +82,7 @@ public class _XSpinField extends MultiMethodTest {
 
     /**
     * Just adds a listener. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _addSpinListener() {
         oObj.addSpinListener(listener) ;
@@ -193,7 +193,7 @@ public class _XSpinField extends MultiMethodTest {
 
     /**
     * Enables then disables repeating. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _enableRepeat() {
         oObj.enableRepeat(true) ;

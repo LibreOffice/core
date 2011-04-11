@@ -134,7 +134,7 @@ bool ChartPrettyPainter::DoPrettyPaintChart( uno::Reference< frame::XModel > xCh
     catch( uno::Exception& e )
     {
         (void)e;
-        DBG_ERROR( "Chart cannot be painted pretty!" );
+        OSL_FAIL( "Chart cannot be painted pretty!" );
     }
     return false;
 }

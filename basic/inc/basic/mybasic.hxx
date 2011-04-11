@@ -30,32 +30,35 @@
 #define _MYBASIC_HXX
 
 #include <basic/sbstar.hxx>
+#include <vector>
 
 class BasicApp;
 class AppBasEd;
 class ErrorEntry;
 
-class BasicError {
-    AppBasEd* pWin;
-    USHORT  nLine, nCol1, nCol2;
-    String aText;
-public:
-    BasicError( AppBasEd*, USHORT, const String&, USHORT, USHORT, USHORT );
-    void Show();
-};
-
-DECLARE_LIST( ErrorList, BasicError* )
-
 #define SBXID_MYBASIC   0x594D      // MyBasic: MY
 #define SBXCR_TEST      0x54534554  // TEST
 
+//-----------------------------------------------------------------------------
+class BasicError {
+    AppBasEd* pWin;
+    sal_uInt16  nLine, nCol1, nCol2;
+    String aText;
+public:
+    BasicError( AppBasEd*, sal_uInt16, const String&, sal_uInt16, sal_uInt16, sal_uInt16 );
+    void Show();
+};
+
+//-----------------------------------------------------------------------------
 class MyBasic : public StarBASIC
 {
     SbError nError;
-    virtual BOOL ErrorHdl();
-    virtual USHORT BreakHdl();
+    virtual sal_Bool ErrorHdl();
+    virtual sal_uInt16 BreakHdl();
 
 protected:
+    ::std::vector< BasicError* > aErrors;
+    size_t CurrentError;
     Link GenLogHdl();
     Link GenWinInfoHdl();
     Link GenModuleWinExistsHdl();
@@ -68,23 +71,26 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_TEST,SBXID_MYBASIC,1);
     TYPEINFO();
-    ErrorList aErrors;
     MyBasic();
     virtual ~MyBasic();
-    virtual BOOL Compile( SbModule* );
+    virtual sal_Bool Compile( SbModule* );
     void Reset();
     SbError GetErrors() { return nError; }
+    size_t GetCurrentError() { return CurrentError; }
+    BasicError* FirstError();
+    BasicError* NextError();
+    BasicError* PrevError();
 
-        // Do not use #ifdefs here because this header file is both used for testtool and basic
+    // Do not use #ifdefs here because this header file is both used for testtool and basic
     SbxObject *pTestObject; // for Testool; otherwise NULL
 
     virtual void LoadIniFile();
 
     // Determines the extended symbol type for syntax highlighting
-    virtual SbTextType GetSymbolType( const String &Symbol, BOOL bWasTTControl );
+    virtual SbTextType GetSymbolType( const String &Symbol, sal_Bool bWasTTControl );
     virtual const String GetSpechialErrorText();
     virtual void ReportRuntimeError( AppBasEd *pEditWin );
-    virtual void DebugFindNoErrors( BOOL bDebugFindNoErrors );
+    virtual void DebugFindNoErrors( sal_Bool bDebugFindNoErrors );
 
     static void SetCompileModule( SbModule *pMod );
     static SbModule *GetCompileModule();

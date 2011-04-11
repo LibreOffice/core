@@ -62,12 +62,7 @@ namespace oox { namespace drawingml {
         sal_Int32 toMargin( float fFontSize ) const
             {
                 if ( nUnit == PERCENT )
-                {
-                    double fMargin = ( fFontSize * 2540 + 36 ) / 72;
-                    fMargin *= nValue;
-                    fMargin /= 100000;
-                    return static_cast< sal_Int32 >( fMargin );
-                }
+                    return (sal_Int32) ((((fFontSize*nValue)/1000)*254 + 360)/720);
                 else
                     return nValue;
             }

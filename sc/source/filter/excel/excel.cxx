@@ -32,6 +32,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/request.hxx>
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
 #include <tools/globname.hxx>
@@ -93,17 +95,24 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
         aArgs[ 0 ] <<= getProcessServiceFactory();
         aArgs[ 1 ] <<= aArgSeq;
         uno::Reference< document::XImporter > xImporter( ScfApiHelper::CreateInstanceWithArgs(
-            CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelBiffFilter" ), aArgs ), uno::UNO_QUERY_THROW );
+            CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelBiffFilter" ), aArgs ), uno::UNO_QUERY_THROW );
         xImporter->setTargetDocument( xComponent );
 
         MediaDescriptor aMediaDesc;
         SfxItemSet* pItemSet = rMedium.GetItemSet();
         if( pItemSet )
         {
-            if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
-                aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pItem->GetValue() );
-            if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_PASSWORD ) ) )
-                aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pItem->GetValue() );
+            SFX_ITEMSET_ARG( pItemSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, false);
+            if( pFileNameItem )
+                aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pFileNameItem->GetValue() );
+
+            SFX_ITEMSET_ARG( pItemSet, pPasswordItem, SfxStringItem, SID_PASSWORD, false);
+            if( pPasswordItem )
+                aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pPasswordItem->GetValue() );
+
+            SFX_ITEMSET_ARG( pItemSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false);
+            if( pEncryptionDataItem )
+                aMediaDesc[ MediaDescriptor::PROP_ENCRYPTIONDATA() ] = pEncryptionDataItem->GetValue();
         }
         aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
         aMediaDesc[ MediaDescriptor::PROP_INTERACTIONHANDLER() ] <<= rMedium.GetInteractionHandler();
@@ -136,7 +145,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
     SotStorageStreamRef xStrgStrm;
     if( SotStorage::IsStorageFile( pMedStrm ) )
     {
-        xRootStrg = new SotStorage( pMedStrm, FALSE );
+        xRootStrg = new SotStorage( pMedStrm, false );
         if( xRootStrg->GetError() )
             xRootStrg = 0;
     }
@@ -209,10 +218,10 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
 
 
 static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
-        SvStream* pMedStrm, BOOL bBiff8, CharSet eNach )
+        SvStream* pMedStrm, sal_Bool bBiff8, CharSet eNach )
 {
     // try to open an OLE storage
-    SotStorageRef xRootStrg = new SotStorage( pMedStrm, FALSE );
+    SotStorageRef xRootStrg = new SotStorage( pMedStrm, false );
     if( xRootStrg->GetError() ) return eERR_OPEN;
 
     // create BIFF dependent strings

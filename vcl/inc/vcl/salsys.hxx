@@ -59,7 +59,7 @@ const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO     = 7;
 // - SalSystem -
 // -------------
 
-class VCL_DLLPUBLIC SalSystem
+class VCL_PLUGIN_PUBLIC SalSystem
 {
 public:
             SalSystem() {}

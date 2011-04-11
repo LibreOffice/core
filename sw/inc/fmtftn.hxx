@@ -35,17 +35,17 @@
 class SwDoc;
 class SwTxtFtn;
 
-// ATT_FTN **********************************************************
+// ATT_FTN
 
 class SW_DLLPUBLIC SwFmtFtn: public SfxPoolItem
 {
     friend class SwTxtFtn;
-    SwTxtFtn* pTxtAttr;     //mein TextAttribut
-    String  aNumber;        //Benutzerdefinierte 'Nummer'
-    USHORT  nNumber;        //Automatische Nummerierung
-    bool    m_bEndNote;     // is it an End note?
+    SwTxtFtn* pTxtAttr;     // My TextAttribute.
+    String  aNumber;        // User-defined 'Number'.
+    sal_uInt16  nNumber;        //Automatische Nummerierung
+    bool    m_bEndNote;     // Is it an End note?
 
-    // geschuetzter CopyCtor
+    // Protected CopyCtor.
     SwFmtFtn& operator=(const SwFmtFtn& rFtn);
     SwFmtFtn( const SwFmtFtn& );
 
@@ -53,16 +53,16 @@ public:
     SwFmtFtn( bool bEndNote = false );
     virtual ~SwFmtFtn();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
     const String &GetNumStr() const { return aNumber; }
-    const USHORT &GetNumber() const { return nNumber; }
+    const sal_uInt16 &GetNumber() const { return nNumber; }
           bool    IsEndNote() const { return m_bEndNote;}
 
     void SetNumStr( const String& rStr )    { aNumber = rStr; }
-    void SetNumber( USHORT nNo )            { nNumber = nNo; }
+    void SetNumber( sal_uInt16 nNo )            { nNumber = nNo; }
     void SetEndNote( bool b );
 
     void SetNumber( const SwFmtFtn& rFtn )
@@ -73,8 +73,8 @@ public:
 
     void GetFtnText( String& rStr ) const;
 
-    // returnt den anzuzeigenden String der Fuss-/Endnote
-    String GetViewNumStr( const SwDoc& rDoc, BOOL bInclStrs = FALSE ) const;
+    // Returns string to be displayed of footnote / endnote.
+    String GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrs = sal_False ) const;
 };
 
 

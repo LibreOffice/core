@@ -153,7 +153,7 @@ void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > 
 
 void Writer::storeTo( Reference< XOutputStream > &xOutStream )
 {
-    for(FontMap::iterator i = maFonts.begin(); i != maFonts.end(); i++)
+    for(FontMap::iterator i = maFonts.begin(); i != maFonts.end(); ++i)
     {
         FlashFont* pFont = (*i);
         pFont->write( *mpFontsStream );
@@ -355,7 +355,6 @@ sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x, sal_Int16 
     Impl_writeActions( rMtf );
 
     sal_uInt16 nId = 0;
-    sal_uInt16 iDepth = 1;
     {
         CharacterIdVector::iterator aIter( maShapeIds.begin() );
         const CharacterIdVector::iterator aEnd( maShapeIds.end() );
@@ -366,6 +365,7 @@ sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x, sal_Int16 
         {
             nId = startSprite();
 
+            sal_uInt16 iDepth = 1;
             while( aIter != aEnd )
             {
                 placeShape( *aIter, iDepth++, x, y );
@@ -515,7 +515,6 @@ sal_Bool Writer::streamSound( const char * filename )
         if (ret_code < 0)
             throw 0;
 
-        int lame_frame_size = lame_get_framesize(m_lame_flags);
         int samples_per_frame = 22050 / 12; // AS: (samples/sec) / (frames/sec) = samples/frame
         int mp3buffer_size = static_cast<int>(samples_per_frame*1.25 + 7200 + 7200);
 
@@ -550,7 +549,7 @@ sal_Bool Writer::streamSound( const char * filename )
 // not the sum of the number of samples in the L and R channels.
 //
 // The return code = number of bytes output in mp3buffer.  This can be 0.
-// If it is <0, an error occured.
+// If it is <0, an error occurred.
 
 
         for (int samples_written = 0; samples_written < info.frames; samples_written += samples_per_frame)
@@ -583,7 +582,7 @@ sal_Bool Writer::streamSound( const char * filename )
 
             SvMemoryStream strm(mp3buffer, ret + ret2, STREAM_READWRITE);
 
-            mpTag->addUI16(samples_to_write); //lame_frame_size);
+            mpTag->addUI16(samples_to_write);
             mpTag->addUI16(0);
             mpTag->addStream(strm);
 
@@ -596,7 +595,7 @@ sal_Bool Writer::streamSound( const char * filename )
         delete[] mp3buffer;
 
         delete[] sample_buff;
-        int err = sf_close(sf);
+        sf_close(sf);
 
         // 8. free the internal data structures.
         lame_close(m_lame_flags);

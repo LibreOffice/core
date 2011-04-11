@@ -106,7 +106,6 @@ class SwEditRegionDlg : public SfxModalDialog
     PushButton      aDismiss;
     HelpButton      aHelp;
     ImageList       aImageIL;
-    ImageList       aImageILH;
 
     SwWrtShell&             rSh;
     SectReprArr             aSectReprArr;
@@ -115,14 +114,14 @@ class SwEditRegionDlg : public SfxModalDialog
     sfx2::DocumentInserter* m_pDocInserter;
     Window*                 m_pOldDefDlgParent;
 
-    BOOL            bDontCheckPasswd :1;
-    BOOL            bWeb            :1;
+    sal_Bool            bDontCheckPasswd :1;
+    sal_Bool            bWeb            :1;
 
 
-    Image  BuildBitmap(BOOL bProtect,BOOL bHidden,BOOL bHighContrast);
+    Image  BuildBitmap(sal_Bool bProtect,sal_Bool bHidden);
 
     void    RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry);
-    USHORT  FindArrPos(const SwSectionFmt* pFmt);
+    sal_uInt16  FindArrPos(const SwSectionFmt* pFmt);
 
     DECL_LINK( GetFirstEntryHdl, SvTreeListBox * );
     DECL_LINK( DeselectHdl, SvTreeListBox * );
@@ -146,7 +145,7 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
     DECL_LINK( SubRegionEventHdl, VclWindowEvent * );
 
-    BOOL CheckPasswd(CheckBox* pBox = 0);
+    sal_Bool CheckPasswd(CheckBox* pBox = 0);
 
 public:
     SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh );
@@ -217,7 +216,7 @@ public:
 
     void    SetWrtShell(SwWrtShell& rSh);
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
     static SfxTabPage*  Create( Window* pParent,
@@ -256,13 +255,13 @@ class SwSectionFtnEndTabPage : public SfxTabPage
 
 
     DECL_LINK( FootEndHdl, CheckBox * );
-    void ResetState( BOOL bFtn, const SwFmtFtnEndAtTxtEnd& );
+    void ResetState( sal_Bool bFtn, const SwFmtFtnEndAtTxtEnd& );
 
 public:
     SwSectionFtnEndTabPage( Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionFtnEndTabPage();
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
     static SfxTabPage*  Create( Window* pParent,
@@ -284,7 +283,7 @@ public:
     SwSectionIndentTabPage( Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SwSectionIndentTabPage();
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
     static SfxTabPage*  Create( Window* pParent,
@@ -299,7 +298,7 @@ class SwInsertSectionTabDialog : public SfxTabDialog
     ::std::auto_ptr<SwSectionData> m_pSectionData;
 
 protected:
-    virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
     virtual short   Ok();
 public:
     SwInsertSectionTabDialog(Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
@@ -313,7 +312,7 @@ class SwSectionPropertyTabDialog : public SfxTabDialog
 {
     SwWrtShell& rWrtSh;
 protected:
-    virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 public:
     SwSectionPropertyTabDialog(Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwSectionPropertyTabDialog();

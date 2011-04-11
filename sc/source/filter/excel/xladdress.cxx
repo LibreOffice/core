@@ -37,7 +37,7 @@
 
 void XclAddress::Read( XclImpStream& rStrm, bool bCol16Bit )
 {
-    rStrm >> mnRow;
+    mnRow = rStrm.ReaduInt16();
     if( bCol16Bit )
         rStrm >> mnCol;
     else
@@ -46,7 +46,7 @@ void XclAddress::Read( XclImpStream& rStrm, bool bCol16Bit )
 
 void XclAddress::Write( XclExpStream& rStrm, bool bCol16Bit ) const
 {
-    rStrm << mnRow;
+    rStrm << static_cast<sal_uInt16> (mnRow);
     if( bCol16Bit )
         rStrm << mnCol;
     else
@@ -63,7 +63,9 @@ bool XclRange::Contains( const XclAddress& rPos ) const
 
 void XclRange::Read( XclImpStream& rStrm, bool bCol16Bit )
 {
-    rStrm >> maFirst.mnRow >> maLast.mnRow;
+    maFirst.mnRow = rStrm.ReaduInt16();
+    maLast.mnRow = rStrm.ReaduInt16();
+
     if( bCol16Bit )
         rStrm >> maFirst.mnCol >> maLast.mnCol;
     else
@@ -75,7 +77,7 @@ void XclRange::Read( XclImpStream& rStrm, bool bCol16Bit )
 
 void XclRange::Write( XclExpStream& rStrm, bool bCol16Bit ) const
 {
-    rStrm << maFirst.mnRow << maLast.mnRow;
+    rStrm << static_cast<sal_uInt16>(maFirst.mnRow) << static_cast<sal_uInt16>(maLast.mnRow);
     if( bCol16Bit )
         rStrm << maFirst.mnCol << maLast.mnCol;
     else
@@ -140,7 +142,7 @@ XclAddressConverterBase::XclAddressConverterBase( XclTracer& rTracer, const ScAd
     mbTabTrunc( false )
 {
     DBG_ASSERT( static_cast< size_t >( rMaxPos.Col() ) <= SAL_MAX_UINT16, "XclAddressConverterBase::XclAddressConverterBase - invalid max column" );
-    DBG_ASSERT( static_cast< size_t >( rMaxPos.Row() ) <= SAL_MAX_UINT16, "XclAddressConverterBase::XclAddressConverterBase - invalid max row" );
+    DBG_ASSERT( static_cast< size_t >( rMaxPos.Row() ) <= SAL_MAX_UINT32, "XclAddressConverterBase::XclAddressConverterBase - invalid max row" );
 }
 
 XclAddressConverterBase::~XclAddressConverterBase()

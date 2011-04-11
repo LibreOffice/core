@@ -122,7 +122,7 @@ void SwDbtoolsClient::registerClient()
 
             if (NULL == getDbToolsClientFactoryFunction())
             {   // did not find the symbol
-                OSL_ENSURE(sal_False, "SwDbtoolsClient::registerClient: could not find the symbol for creating the factory!");
+                OSL_FAIL("SwDbtoolsClient::registerClient: could not find the symbol for creating the factory!");
                 osl_unloadModule(getDbToolsClientModule());
                 getDbToolsClientModule() = NULL;
             }
@@ -211,7 +211,7 @@ sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
     return nRet;
 }
 
-::rtl::OUString SwDbtoolsClient::getValue(
+::rtl::OUString SwDbtoolsClient::getFormattedValue(
         const uno::Reference< beans::XPropertySet>& _rxColumn,
         const uno::Reference< util::XNumberFormatter>& _rxFormatter,
         const lang::Locale& _rLocale,
@@ -223,7 +223,7 @@ sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
                     getAccessTypeConversion();
     rtl::OUString sRet;
     if(xConversion.is())
-        sRet = xConversion->getValue(_rxColumn, _rxFormatter, _rLocale, _rNullDate);
+        sRet = xConversion->getFormattedValue(_rxColumn, _rxFormatter, _rLocale, _rNullDate);
     return sRet;
 }
 

@@ -41,24 +41,28 @@ TabPage TP_TEXTGRID_PAGE
     };
     RadioButton     RB_NOGRID
     {
+        HelpID = "sw:RadioButton:TP_TEXTGRID_PAGE:RB_NOGRID";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text [ en-US ] = "No grid" ;
     };
     RadioButton     RB_LINESGRID
     {
+        HelpID = "sw:RadioButton:TP_TEXTGRID_PAGE:RB_LINESGRID";
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text [ en-US ] = "Grid (lines only)" ;
     };
     RadioButton     RB_CHARSGRID
     {
+        HelpID = "sw:RadioButton:TP_TEXTGRID_PAGE:RB_CHARSGRID";
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text [ en-US ] = "Grid (lines and characters)" ;
     };
     CheckBox        CB_SNAPTOCHARS
     {
+        HelpID = "sw:CheckBox:TP_TEXTGRID_PAGE:CB_SNAPTOCHARS";
         Pos = MAP_APPFONT ( 14 , 53 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text [ en-US ] = "~Snap to characters" ;
@@ -83,6 +87,7 @@ TabPage TP_TEXTGRID_PAGE
     };
     NumericField    NF_LINESPERPAGE
     {
+        HelpID = "sw:NumericField:TP_TEXTGRID_PAGE:NF_LINESPERPAGE";
         Pos = MAP_APPFONT ( 74 , 80 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         Border = TRUE ;
@@ -111,6 +116,7 @@ TabPage TP_TEXTGRID_PAGE
     };
     MetricField     MF_TEXTSIZE
     {
+        HelpID = "sw:MetricField:TP_TEXTGRID_PAGE:MF_TEXTSIZE";
         Pos = MAP_APPFONT ( 216 , 80 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
         Border = TRUE ;
@@ -134,6 +140,7 @@ TabPage TP_TEXTGRID_PAGE
     };
     NumericField    NF_CHARSPERLINE
     {
+        HelpID = "sw:NumericField:TP_TEXTGRID_PAGE:NF_CHARSPERLINE";
         Pos = MAP_APPFONT ( 74 , 96 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         Border = TRUE ;
@@ -157,6 +164,7 @@ TabPage TP_TEXTGRID_PAGE
     };
     MetricField     MF_CHARWIDTH
     {
+        HelpID = "sw:MetricField:TP_TEXTGRID_PAGE:MF_CHARWIDTH";
         Pos = MAP_APPFONT ( 216 , 96 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
         Border = TRUE ;
@@ -186,6 +194,7 @@ TabPage TP_TEXTGRID_PAGE
     };
     MetricField     MF_RUBYSIZE
     {
+        HelpID = "sw:MetricField:TP_TEXTGRID_PAGE:MF_RUBYSIZE";
         Pos = MAP_APPFONT ( 216 , 96 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
         Border = TRUE ;
@@ -203,6 +212,7 @@ TabPage TP_TEXTGRID_PAGE
     };
     CheckBox        CB_RUBYBELOW
     {
+        HelpID = "sw:CheckBox:TP_TEXTGRID_PAGE:CB_RUBYBELOW";
         Pos = MAP_APPFONT ( 14 , 112 ) ;
         Size = MAP_APPFONT ( 237 , 10 ) ;
         Text [ en-US ] = "Ruby text below/left from base text" ;
@@ -215,12 +225,14 @@ TabPage TP_TEXTGRID_PAGE
     };
     CheckBox        CB_DISPLAY
     {
+        HelpID = "sw:CheckBox:TP_TEXTGRID_PAGE:CB_DISPLAY";
         Pos = MAP_APPFONT ( 12 , 139 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ en-US ] = "Display grid" ;
     };
     CheckBox        CB_PRINT
     {
+        HelpID = "sw:CheckBox:TP_TEXTGRID_PAGE:CB_PRINT";
         Pos = MAP_APPFONT ( 18 , 154 ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
         Text [ en-US ] = "Print grid" ;
@@ -233,6 +245,7 @@ TabPage TP_TEXTGRID_PAGE
     };
     ListBox         LB_COLOR
     {
+        HelpID = "sw:ListBox:TP_TEXTGRID_PAGE:LB_COLOR";
         Pos = MAP_APPFONT ( 191 , 137 ) ;
         Size = MAP_APPFONT ( 60 , 50 ) ;
         TabStop = TRUE;

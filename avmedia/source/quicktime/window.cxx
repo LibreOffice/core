@@ -76,7 +76,6 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& i_rxMgr, Pla
 
     ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
 
-
     if( mpParentView ) // sanity check
     {
 
@@ -296,7 +295,6 @@ void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintList
 {
     maListeners.removeInterface( getCppuType( &xListener ), xListener );
 }
-
 
 // XComponent
 // ------------------------------------------------------------------------------

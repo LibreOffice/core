@@ -76,13 +76,6 @@ FloatingWindow DLG_MAILMERGECHILD\
         MaskColor = IMAGE_MASK_COLOR;
         IMGLIST1_IDS;
     };
-
-    ImageList ILIST_TBX_HC
-    {
-        Prefix = "sch";
-        MaskColor = IMAGE_MASK_COLOR ;
-        IMGLIST1_IDS;
-    };
 };
 
 //FloatingWindow DLG_MM_SENDMAILS
@@ -196,13 +189,6 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
         MaskColor = IMAGE_MASK_COLOR;
         IMGLIST2_IDS;
     };
-
-    ImageList ILIST_HC
-    {
-        Prefix = "sch";
-        MaskColor = IMAGE_MASK_COLOR ;
-        IMGLIST2_IDS;
-    };
     String ST_TASK
     {
         Text[ en-US ] = "Task";
@@ -258,6 +244,7 @@ ModalDialog DLG_MM_SENDWARNING
     };
     MultiLineEdit ED_DETAILS
     {
+        HelpID = "sw:MultiLineEdit:DLG_MM_SENDWARNING:ED_DETAILS";
         Pos = MAP_APPFONT ( 40 , 50 ) ;
         Size = MAP_APPFONT ( 194 , 50 ) ;
         Border = TRUE;

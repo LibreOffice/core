@@ -60,6 +60,7 @@
 #include <svx/fmview.hxx>
 
 #include "fmexch.hxx"
+#include <vector>
 
 class SdrObjListIter;
 class FmFormShell;
@@ -157,7 +158,6 @@ private:
 
 protected:
     Image               m_aNormalImage;
-    Image               m_aHCImage;
     ::rtl::OUString     aText;
 
     FmEntryDataList*    pChildList;
@@ -178,7 +178,6 @@ public:
     void    SetParent( FmEntryData* pParentData ){ pParent = pParentData; }
 
     const Image&    GetNormalImage() const { return m_aNormalImage; }
-    const Image&    GetHCImage() const { return m_aHCImage; }
 
     ::rtl::OUString          GetText() const { return aText; }
     FmEntryData*    GetParent() const { return pParent; }
@@ -206,13 +205,24 @@ public:
 };
 
 //========================================================================
-DECLARE_LIST( FmEntryDataBaseList, FmEntryData* )
+typedef ::std::vector< FmEntryData* > FmEntryDataBaseList;
 
-class FmEntryDataList : public FmEntryDataBaseList
+class FmEntryDataList
 {
+private:
+    FmEntryDataBaseList maEntryDataList;
+
 public:
     FmEntryDataList();
     virtual ~FmEntryDataList();
+
+    FmEntryData*    at( size_t Index )
+        { return ( Index < maEntryDataList.size() ) ? maEntryDataList[ Index ] : NULL; }
+
+    size_t          size() const { return maEntryDataList.size(); }
+    FmEntryData*    remove( FmEntryData* pItem );
+    void            insert( FmEntryData* pItem, size_t Index );
+    void            clear();
 };
 
 //========================================================================
@@ -249,7 +259,6 @@ public:
     FmFormData(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
         const ImageList& _rNormalImages,
-        const ImageList& _rHCImages,
         FmFormData* _pParent = NULL
     );
 
@@ -284,7 +293,6 @@ public:
     FmControlData(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxComponent,
         const ImageList& _rNormalImages,
-        const ImageList& _rHCImages,
         FmFormData* _pParent
     );
     FmControlData( const FmControlData& rControlData );
@@ -296,8 +304,7 @@ public:
 
     void ModelReplaced(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& _rxNew,
-        const ImageList& _rNormalImages,
-        const ImageList& _rHCImages
+        const ImageList& _rNormalImages
     );
 };
 
@@ -362,7 +369,6 @@ namespace svxform
         OFormComponentObserver*     m_pPropChangeList;
 
         ImageList                   m_aNormalImages;
-        ImageList                   m_aHCImages;
 
         void UpdateContent( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xForms );
         FmControlData* CreateControlData( ::com::sun::star::form::XFormComponent* pFormComponent );
@@ -384,14 +390,14 @@ namespace svxform
             // Rueckgabe sal_True, wenn das Objekt eine FormComponent ist (oder rekursiv nur aus solchen besteht)
 
     public:
-        NavigatorTreeModel( const ImageList& _rNormalImages, const ImageList& _rHCImages );
+        NavigatorTreeModel( const ImageList& _rNormalImages );
         virtual ~NavigatorTreeModel();
 
         void FillBranch( FmFormData* pParentData );
         void ClearBranch( FmFormData* pParentData );
         void UpdateContent( FmFormShell* pNewShell );
 
-        void Insert( FmEntryData* pEntryData, ULONG nRelPos = LIST_APPEND,
+        void Insert( FmEntryData* pEntryData, sal_uLong nRelPos = LIST_APPEND,
                                               sal_Bool bAlterModel = sal_False );
         void Remove( FmEntryData* pEntryData, sal_Bool bAlterModel = sal_False );
 
@@ -432,7 +438,6 @@ namespace svxform
         ListBoxEntrySet         m_aCutEntries;
         // die Images, die ich brauche (und an FormDatas und EntryDatas weiterreiche)
         ImageList           m_aNavigatorImages;
-        ImageList           m_aNavigatorImagesHC;
 
         ::svxform::OControlExchangeHelper   m_aControlExchange;
 
@@ -441,7 +446,7 @@ namespace svxform
         SvLBoxEntry*        m_pRootEntry;
         SvLBoxEntry*        m_pEditEntry;
 
-        ULONG               nEditEvent;
+        sal_uLong               nEditEvent;
 
         SELDATA_ITEMS       m_sdiState;
         Point               m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
@@ -466,7 +471,7 @@ namespace svxform
         sal_Bool        IsDeleteAllowed();
         FmControlData*  NewControl( const ::rtl::OUString& rServiceName, SvLBoxEntry* pParentEntry, sal_Bool bEditName = sal_True );
         void            NewForm( SvLBoxEntry* pParentEntry );
-        SvLBoxEntry*    Insert( FmEntryData* pEntryData, ULONG nRelPos=LIST_APPEND );
+        SvLBoxEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos=LIST_APPEND );
         void            Remove( FmEntryData* pEntryData );
 
 

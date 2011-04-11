@@ -207,8 +207,6 @@ Namespace::Search_LocalOperations( std::vector<Ce_id> & o_result,
     if ( (*itLower).first != i_sName )
         return;
 
-    operations_citer
-        itEnd = aLocalOperations.end();
     for ( operations_citer it = itLower;
           it != aLocalOperations.end() ? (*itLower).first == i_sName : false;
           ++it )

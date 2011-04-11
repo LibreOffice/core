@@ -57,6 +57,8 @@ Resource STRRES_NUMTYPES
             < "а, б, .., аа, аб, ... (Serbian)" ;       49 /*CHARS_CYRILLIC_LOWER_LETTER_SR     */; > ;
             < "А, Б, .., Аа, Бб, ... (Serbian)" ;       50 /*CHARS_CYRILLIC_UPPER_LETTER_N_SR   */; > ;
             < "а, б, .., аа, бб, ... (Serbian)" ;       51 /*CHARS_CYRILLIC_LOWER_LETTER_N_SR   */; > ;
+            < "Α, Β, Γ, ... (Greek Upper Letter)";       52 /*CHARS_GREEK_UPPER_LETTER           */; > ;
+            < "α, β, γ, ... (Greek Lower Letter)";       53 /*CHARS_GREEK_LOWER_LETTER           */; > ;
         };
     };
 };

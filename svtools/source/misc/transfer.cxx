@@ -29,16 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #ifdef WNT
-#include <tools/prewin.h>
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#pragma warning(disable: 4917)
-#endif
+#include <prewin.h>
+#include <postwin.h>
 #include <shlobj.h>
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-#include <tools/postwin.h>
 #endif
 #include <osl/mutex.hxx>
 #include <rtl/memory.h>
@@ -155,20 +148,20 @@ const ::rtl::OUString aQuotedParamChars = ::rtl::OUString( RTL_CONSTASCII_USTRIN
 
 static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescriptor& rObjDesc )
 {
-    const ::rtl::OUString   aChar( ::rtl::OUString::createFromAscii( "\"" ) );
+    const ::rtl::OUString   aChar( RTL_CONSTASCII_USTRINGPARAM( "\"" ));
     const ::rtl::OUString   aClassName( rObjDesc.maClassName.GetHexName() );
     ::rtl::OUString         aParams;
 
     if( aClassName.getLength() )
     {
-        aParams += ::rtl::OUString::createFromAscii( ";classname=\"" );
+        aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";classname=\"" ));
         aParams += aClassName;
         aParams += aChar;
     }
 
     if( rObjDesc.maTypeName.Len() )
     {
-        aParams += ::rtl::OUString::createFromAscii( ";typename=\"" );
+        aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";typename=\"" ));
         aParams += rObjDesc.maTypeName;
         aParams += aChar;
     }
@@ -188,28 +181,28 @@ static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescripto
                 pToAccept[nChar] = sal_True;
         }
 
-        aParams += ::rtl::OUString::createFromAscii( ";displayname=\"" );
+        aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";displayname=\"" ));
         aParams += ::rtl::Uri::encode( rObjDesc.maDisplayName, pToAccept, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8 );
         aParams += aChar;
     }
 
-    aParams += ::rtl::OUString::createFromAscii( ";viewaspect=\"" );
+    aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";viewaspect=\"" ));
     aParams += ::rtl::OUString::valueOf( static_cast< sal_Int32 >( rObjDesc.mnViewAspect ) );
     aParams += aChar;
 
-    aParams += ::rtl::OUString::createFromAscii( ";width=\"" );
+    aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";width=\"" ));
     aParams += ::rtl::OUString::valueOf( rObjDesc.maSize.Width() );
     aParams += aChar;
 
-    aParams += ::rtl::OUString::createFromAscii( ";height=\"" );
+    aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";height=\"" ));
     aParams += ::rtl::OUString::valueOf( rObjDesc.maSize.Height() );
     aParams += aChar;
 
-    aParams += ::rtl::OUString::createFromAscii( ";posx=\"" );
+    aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";posx=\"" ));
     aParams += ::rtl::OUString::valueOf( rObjDesc.maDragStartPos.X() );
     aParams += aChar;
 
-    aParams += ::rtl::OUString::createFromAscii( ";posy=\"" );
+    aParams += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ";posy=\"" ));
     aParams += ::rtl::OUString::valueOf( rObjDesc.maDragStartPos.X() );
     aParams += aChar;
 
@@ -227,8 +220,7 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
     {
         if( xFact.is() )
         {
-            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii(
-                                                              "com.sun.star.datatransfer.MimeContentTypeFactory" ) ),
+            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.datatransfer.MimeContentTypeFactory" )) ),
                                                               UNO_QUERY );
         }
 
@@ -238,14 +230,14 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
 
             if( xMimeType.is() )
             {
-                const ::rtl::OUString aClassNameString( ::rtl::OUString::createFromAscii( "classname" ) );
-                const ::rtl::OUString aTypeNameString( ::rtl::OUString::createFromAscii( "typename" ) );
-                const ::rtl::OUString aDisplayNameString( ::rtl::OUString::createFromAscii( "displayname" ) );
-                const ::rtl::OUString aViewAspectString( ::rtl::OUString::createFromAscii( "viewaspect" ) );
-                const ::rtl::OUString aWidthString( ::rtl::OUString::createFromAscii( "width" ) );
-                const ::rtl::OUString aHeightString( ::rtl::OUString::createFromAscii( "height" ) );
-                const ::rtl::OUString aPosXString( ::rtl::OUString::createFromAscii( "posx" ) );
-                const ::rtl::OUString aPosYString( ::rtl::OUString::createFromAscii( "posy" ) );
+                const ::rtl::OUString aClassNameString(RTL_CONSTASCII_USTRINGPARAM( "classname" ));
+                const ::rtl::OUString aTypeNameString(RTL_CONSTASCII_USTRINGPARAM( "typename" ));
+                const ::rtl::OUString aDisplayNameString(RTL_CONSTASCII_USTRINGPARAM( "displayname" ));
+                const ::rtl::OUString aViewAspectString(RTL_CONSTASCII_USTRINGPARAM( "viewaspect" ));
+                const ::rtl::OUString aWidthString(RTL_CONSTASCII_USTRINGPARAM( "width" ));
+                const ::rtl::OUString aHeightString(RTL_CONSTASCII_USTRINGPARAM( "height" ));
+                const ::rtl::OUString aPosXString(RTL_CONSTASCII_USTRINGPARAM( "posx" ));
+                const ::rtl::OUString aPosYString(RTL_CONSTASCII_USTRINGPARAM( "posy" ));
 
                 if( xMimeType->hasParameter( aClassNameString ) )
                 {
@@ -433,7 +425,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                         SvMemoryStream  aDstStm( 65535, 65535 );
 
                         // taking wmf without file header
-                        if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, NULL, FALSE ) )
+                        if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, NULL, sal_False ) )
                         {
                             maAny <<= ( aSeq = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aDstStm.GetData() ),
                                                                      aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
@@ -540,7 +532,7 @@ void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >&,
 
             if( xFact.is() )
             {
-                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
 
                 if( xDesktop.is() )
                     xDesktop->removeTerminateListener( mxTerminateListener );
@@ -635,7 +627,7 @@ void TransferableHelper::ImplFlush()
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
-            DBG_ERROR( "Could not flush clipboard" );
+            OSL_FAIL( "Could not flush clipboard" );
         }
 
         Application::AcquireSolarMutex( nRef );
@@ -937,7 +929,7 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
             rFDesc1.dwFlags = FD_LINKUI;
 
             ByteString aStr( rBmk.GetDescription(), eSysCSet );
-            for( USHORT nChar = 0; nChar < aStr.Len(); ++nChar )
+            for( sal_uInt16 nChar = 0; nChar < aStr.Len(); ++nChar )
                 if( strchr( "\\/:*?\"<>|", aStr.GetChar( nChar ) ) )
                     aStr.Erase( nChar--, 1 );
 
@@ -951,7 +943,7 @@ sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
 
         case SOT_FORMATSTR_ID_FILECONTENT:
         {
-            String aStr( RTL_CONSTASCII_STRINGPARAM( "[InternetShortcut]\x0aURL=" ) );
+            String aStr( RTL_CONSTASCII_USTRINGPARAM( "[InternetShortcut]\x0aURL=" ) );
             maAny <<= ::rtl::OUString( aStr += rBmk.GetURL() );
         }
         break;
@@ -1039,7 +1031,7 @@ sal_Bool TransferableHelper::SetInterface( const ::com::sun::star::uno::Referenc
 
 sal_Bool TransferableHelper::WriteObject( SotStorageStreamRef&, void*, sal_uInt32, const DataFlavor& )
 {
-    DBG_ERROR( "TransferableHelper::WriteObject( ... ) not implemented" );
+    OSL_FAIL( "TransferableHelper::WriteObject( ... ) not implemented" );
     return sal_False;
 }
 
@@ -1090,7 +1082,7 @@ void TransferableHelper::CopyToClipboard( Window *pWindow ) const
 
             if( xFact.is() )
             {
-                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
 
                 if( xDesktop.is() )
                     xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
@@ -1127,7 +1119,7 @@ void TransferableHelper::CopyToSelection( Window *pWindow ) const
 
             if( xFact.is() )
             {
-                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
 
                 if( xDesktop.is() )
                     xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
@@ -1416,11 +1408,10 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
         Reference< XMultiServiceFactory >       xFact( ::comphelper::getProcessServiceFactory() );
         Reference< XMimeContentTypeFactory >    xMimeFact;
         DataFlavorEx                            aFlavorEx;
-        const ::rtl::OUString                   aCharsetStr( ::rtl::OUString::createFromAscii( "charset" ) );
+        const ::rtl::OUString                   aCharsetStr(RTL_CONSTASCII_USTRINGPARAM( "charset" ));
 
         if( xFact.is() )
-            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii(
-                                                              "com.sun.star.datatransfer.MimeContentTypeFactory" ) ),
+            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.datatransfer.MimeContentTypeFactory" )) ),
                                                               UNO_QUERY );
 
         for( sal_Int32 i = 0; i < rDataFlavorSeq.getLength(); i++ )
@@ -1468,35 +1459,35 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                 aFlavorEx.mnSotId = SOT_FORMATSTR_ID_HTML_NO_COMMENT;
                 rDataFlavorExVector.push_back( aFlavorEx );
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/plain" ) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/plain" )) ) )
             {
                 // add, if it is a UTF-8 byte buffer
                 if( xMimeType->hasParameter( aCharsetStr ) )
                 {
                     const ::rtl::OUString aCharset( xMimeType->getParameterValue( aCharsetStr ) );
 
-                    if( xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "unicode" ) ) ||
-                        xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "utf-16" ) ) )
+                    if( xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unicode" )) ) ||
+                        xMimeType->getParameterValue( aCharsetStr ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "utf-16" )) ) )
                     {
                         rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = FORMAT_STRING;
 
                     }
                 }
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/rtf" ) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/rtf" )) ) )
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = FORMAT_RTF;
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/html" ) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/html" )) ) )
 
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMATSTR_ID_HTML;
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/uri-list" ) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/uri-list" )) ) )
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMAT_FILE_LIST;
             }
-            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-openoffice-objectdescriptor-xml" ) ) )
+            else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-objectdescriptor-xml" )) ) )
             {
                 rDataFlavorExVector[ rDataFlavorExVector.size() - 1 ].mnSotId = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR;
             }
@@ -1845,7 +1836,7 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIM
         if( GraphicConverter::Import( *xStm, aGraphic ) == ERRCODE_NONE )
         {
             rMtf = aGraphic.GetGDIMetaFile();
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
 
@@ -1859,7 +1850,7 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIM
         if( GraphicConverter::Import( *xStm, aGraphic ) == ERRCODE_NONE )
         {
             rMtf = aGraphic.GetGDIMetaFile();
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
 
@@ -2145,7 +2136,7 @@ sal_Bool TransferableDataHelper::GetFileList(
 
             if( GetSotStorageStream( aFlavor, xStm ) )
             {
-                if( aFlavor.MimeType.indexOf( ::rtl::OUString::createFromAscii( "text/uri-list" ) ) > -1 )
+                if( aFlavor.MimeType.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/uri-list" )) ) > -1 )
                 {
                     ByteString aByteString;
 
@@ -2303,7 +2294,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
             {
                 aRet = TransferableDataHelper( xTransferable );
                    aRet.mxClipboard = xClipboard;
-                    // also copy the clipboard - 99030 - 23.05.2002 - fs@openoffice.org
+                    // also copy the clipboard
             }
            }
         catch( const ::com::sun::star::uno::Exception& )
@@ -2363,8 +2354,7 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
     try
     {
         if( xFact.is() )
-            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString::createFromAscii(
-                                                              "com.sun.star.datatransfer.MimeContentTypeFactory" ) ),
+            xMimeFact = Reference< XMimeContentTypeFactory >( xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.datatransfer.MimeContentTypeFactory" )) ),
                                                               UNO_QUERY );
 
         if( xMimeFact.is() )
@@ -2376,22 +2366,22 @@ sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::
             {
                 if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( xRequestType2->getFullMediaType() ) )
                 {
-                    if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/plain" ) ) )
+                    if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "text/plain" )) ) )
                     {
                         // special handling for text/plain media types
-                        const ::rtl::OUString aCharsetString( ::rtl::OUString::createFromAscii( "charset" ) );
+                        const ::rtl::OUString aCharsetString(RTL_CONSTASCII_USTRINGPARAM( "charset" ));
 
                         if( !xRequestType2->hasParameter( aCharsetString ) ||
-                            xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "utf-16" ) ) ||
-                            xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "unicode" ) ) )
+                            xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "utf-16" )) ) ||
+                            xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unicode" )) ) )
                         {
                             bRet = sal_True;
                         }
                     }
-                    else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-openoffice" ) ) )
+                    else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice" )) ) )
                     {
                         // special handling for application/x-openoffice media types
-                        const ::rtl::OUString aFormatString( ::rtl::OUString::createFromAscii( "windows_formatname" ) );
+                        const ::rtl::OUString aFormatString(RTL_CONSTASCII_USTRINGPARAM( "windows_formatname" ));
 
                         if( xRequestType1->hasParameter( aFormatString ) &&
                             xRequestType2->hasParameter( aFormatString ) &&

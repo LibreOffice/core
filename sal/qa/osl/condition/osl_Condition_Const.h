@@ -26,14 +26,8 @@
  *
  ************************************************************************/
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifndef _OSL_CONDITION_CONST_H_
 #define _OSL_CONDITION_CONST_H_
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -57,7 +51,9 @@
 #include <unistd.h>
 #endif
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #define OSLTEST_DECLARE_USTRING( str_name, str_value ) \
     ::rtl::OUString a##str_name = rtl::OUString::createFromAscii( str_value )

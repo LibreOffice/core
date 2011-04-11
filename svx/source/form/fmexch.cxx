@@ -33,7 +33,7 @@
 #include <sot/storage.hxx>
 #include <svl/itempool.hxx>
 
-#include <dbexch.hrc>
+#include <svx/dbexch.hrc>
 #include <sot/formats.hxx>
 #include <svtools/svtreebx.hxx>
 #include <tools/diagnose_ex.h>
@@ -163,7 +163,7 @@ namespace svxform
             }
             else
             {
-                DBG_ERROR( "OControlTransferData::OControlTransferData: invalid data for the control path format (2)!" );
+                OSL_FAIL( "OControlTransferData::OControlTransferData: invalid data for the control path format (2)!" );
             }
         }
         if ( OControlExchange::hasHiddenControlModelsFormat( aExchangedData.GetDataFlavorExVector() ) )

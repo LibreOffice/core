@@ -36,7 +36,7 @@
 #include "SlideSorter.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
-#include "controller/SlsSelectionManager.hxx"
+#include "controller/SlsCurrentSlideManager.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
@@ -105,7 +105,6 @@ sal_Bool SAL_CALL SdUnoSlideView::select (const Any& aSelection)
             }
         }
     }
-    rSlideSorterController.GetSelectionManager()->MakeSelectionVisible();
 
     return bOk;
 }
@@ -162,19 +161,30 @@ void SAL_CALL SdUnoSlideView::removeSelectionChangeListener (
 //----- XDrawView -------------------------------------------------------------
 
 void SAL_CALL SdUnoSlideView::setCurrentPage (
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& )
-    throw(::com::sun::star::uno::RuntimeException)
+    const css::uno::Reference<css::drawing::XDrawPage>& rxDrawPage)
+    throw(css::uno::RuntimeException)
 {
+    Reference<beans::XPropertySet> xProperties (rxDrawPage, UNO_QUERY);
+    if (xProperties.is())
+    {
+        sal_uInt16 nPageNumber(0);
+        if (xProperties->getPropertyValue(::rtl::OUString::createFromAscii("Number")) >>= nPageNumber)
+        {
+            mrSlideSorter.GetController().GetCurrentSlideManager()->SwitchCurrentSlide(
+                nPageNumber-1,
+                true);
+        }
+    }
 }
 
 
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL
+css::uno::Reference<css::drawing::XDrawPage > SAL_CALL
     SdUnoSlideView::getCurrentPage (void)
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(css::uno::RuntimeException)
 {
-    return Reference<drawing::XDrawPage>();
+    return mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide()->GetXDrawPage();
 }
 
 

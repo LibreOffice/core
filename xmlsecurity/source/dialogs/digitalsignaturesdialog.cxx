@@ -221,14 +221,6 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     maSigsNotvalidatedFI.SetText( String( XMLSEC_RES( STR_NO_INFO_TO_VERIFY ) ) );
 
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        // high contrast mode needs other images
-        maSigsValidImg.SetImage( Image( XMLSEC_RES( IMG_STATE_VALID_HC ) ) );
-        maSigsInvalidImg.SetImage( Image( XMLSEC_RES( IMG_STATE_BROKEN_HC ) ) );
-        maSigsNotvalidatedImg.SetImage( Image( XMLSEC_RES( IMG_STATE_NOTVALIDATED_HC ) ) );
-    }
-
     FreeResource();
 
     mbVerifySignatures = true;
@@ -267,7 +259,7 @@ DigitalSignaturesDialog::~DigitalSignaturesDialog()
 {
 }
 
-BOOL DigitalSignaturesDialog::Init( const rtl::OUString& rTokenName )
+sal_Bool DigitalSignaturesDialog::Init( const rtl::OUString& rTokenName )
 {
     bool bInit = maSignatureHelper.Init( rTokenName );
 
@@ -399,8 +391,8 @@ IMPL_LINK( DigitalSignaturesDialog, OKButtonHdl, void*, EMPTYARG )
     uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler =
         maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-    int nInfos = maCurrentSignatureInformations.size();
-    for( int n = 0 ; n < nInfos ; ++n )
+    size_t nInfos = maCurrentSignatureInformations.size();
+    for( size_t n = 0 ; n < nInfos ; ++n )
         maSignatureHelper.ExportSignature(
         xDocumentHandler, maCurrentSignatureInformations[ n ] );
 
@@ -452,7 +444,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
             rtl::OUString aCertSerial = xSerialNumberAdapter->toString( xCert->getSerialNumber() );
             if ( !aCertSerial.getLength() )
             {
-                DBG_ERROR( "Error in Certificate, problem with serial number!" );
+                OSL_FAIL( "Error in Certificate, problem with serial number!" );
                 return -1;
             }
 
@@ -493,8 +485,8 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
             // Export old signatures...
-             int nInfos = maCurrentSignatureInformations.size();
-            for ( int n = 0; n < nInfos; n++ )
+            size_t nInfos = maCurrentSignatureInformations.size();
+            for ( size_t n = 0; n < nInfos; n++ )
                 maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[n]);
 
             // Create a new one...
@@ -527,7 +519,7 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR( "Exception while adding a signature!" );
+        OSL_FAIL( "Exception while adding a signature!" );
         // Don't keep invalid entries...
         ImplGetSignatureInformations(true);
         ImplFillSignaturesBox();
@@ -544,7 +536,7 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
     {
         try
         {
-            USHORT nSelected = (USHORT) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
+            sal_uInt16 nSelected = (sal_uInt16) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
             maCurrentSignatureInformations.erase( maCurrentSignatureInformations.begin()+nSelected );
 
             // Export all other signatures...
@@ -555,8 +547,8 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
             Reference< css::xml::sax::XDocumentHandler> xDocumentHandler =
                 maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-            int nInfos = maCurrentSignatureInformations.size();
-            for( int n = 0 ; n < nInfos ; ++n )
+            size_t nInfos = maCurrentSignatureInformations.size();
+            for( size_t n = 0 ; n < nInfos ; ++n )
                 maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[ n ] );
 
             maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
@@ -569,7 +561,7 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR( "Exception while removing a signature!" );
+            OSL_FAIL( "Exception while removing a signature!" );
             // Don't keep invalid entries...
             ImplGetSignatureInformations(true);
             ImplFillSignaturesBox();
@@ -595,13 +587,13 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     uno::Reference< ::com::sun::star::security::XCertificate > xCert;
 
     String aNullStr;
-    int nInfos = maCurrentSignatureInformations.size();
-    int nValidSigs = 0, nValidCerts = 0;
+    size_t nInfos = maCurrentSignatureInformations.size();
+    size_t nValidSigs = 0, nValidCerts = 0;
     bool bAllNewSignatures = true;
 
     if( nInfos )
     {
-        for( int n = 0; n < nInfos; ++n )
+        for( size_t n = 0; n < nInfos; ++n )
         {
             DocumentSignatureAlgorithm mode = DocumentSignatureHelper::getDocumentAlgorithm(
                 m_sODFVersion, maCurrentSignatureInformations[n]);
@@ -648,13 +640,13 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                         nValidCerts++;
 
                 } catch (css::uno::SecurityException& ) {
-                    OSL_ENSURE(0, "Verification of certificate failed");
+                    OSL_FAIL("Verification of certificate failed");
                     bCertValid = false;
                 }
 
                 aSubject = XmlSec::GetContentPart( xCert->getSubjectName() );
                 aIssuer = XmlSec::GetContentPart( xCert->getIssuerName() );
-                // --> PB 2004-10-12 #i20172# String with date and time information
+                // String with date and time information (#i20172#)
                 aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
             }
             bSigValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
@@ -695,7 +687,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             else if (meSignatureMode == SignatureModeMacros
                 && bSigValid && bCertValid)
             {
-                aImage = aImage = maSigsValidImg.GetImage();
+                aImage = maSigsValidImg.GetImage();
             }
 
             SvLBoxEntry* pEntry = maSignaturesLB.InsertEntry( aNullStr, aImage, aImage );
@@ -753,7 +745,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
 {
     if( maSignaturesLB.FirstSelected() )
     {
-        USHORT nSelected = (USHORT) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
+        sal_uInt16 nSelected = (sal_uInt16) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
         const SignatureInformation& rInfo = maCurrentSignatureInformations[ nSelected ];
         css::uno::Reference<css::xml::crypto::XSecurityEnvironment > xSecEnv =
             maSignatureHelper.GetSecurityEnvironment();
@@ -770,7 +762,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         DBG_ASSERT( xCert.is(), "Error getting cCertificate!" );
         if ( xCert.is() )
         {
-            CertificateViewer aViewer( this, maSignatureHelper.GetSecurityEnvironment(), xCert, FALSE );
+            CertificateViewer aViewer( this, maSignatureHelper.GetSecurityEnvironment(), xCert, sal_False );
             aViewer.Execute();
         }
     }

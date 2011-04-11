@@ -64,14 +64,14 @@ private:
 
     ScViewData*     pViewData;
     ScDocument*     pDoc;
-    BOOL            bRefInputMode;
+    sal_Bool            bRefInputMode;
 
     ScRange         theCurArea;
-    BOOL            bCloseFlag;
-    BOOL            bAutoReOpen;
-    BOOL            bCloseOnButtonUp;
-    BOOL            bSingleCell;
-    BOOL            bMultiSelection;
+    sal_Bool            bCloseFlag;
+    sal_Bool            bAutoReOpen;
+    sal_Bool            bCloseOnButtonUp;
+    sal_Bool            bSingleCell;
+    sal_Bool            bMultiSelection;
 
     void            Init();
 
@@ -81,7 +81,7 @@ private:
 
 protected:
 
-    virtual void    RefInputDone( BOOL bForced = FALSE );
+    virtual void    RefInputDone( sal_Bool bForced = false );
 
 public:
                     ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
@@ -90,9 +90,9 @@ public:
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual BOOL    IsRefInputMode() const;
+    virtual sal_Bool    IsRefInputMode() const;
     virtual void    SetActive();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
     void            StartRefInput();
 
@@ -104,9 +104,9 @@ public:
     void            SetUnoLinks( const Link& rDone, const Link& rAbort,
                                 const Link& rChange );
 
-    void            SetFlags( BOOL bSetCloseOnButtonUp, BOOL bSetSingleCell, BOOL bSetMultiSelection );
+    void            SetFlags( sal_Bool bSetCloseOnButtonUp, sal_Bool bSetSingleCell, sal_Bool bSetMultiSelection );
 
-    void            SetAutoReOpen(BOOL bFlag) {bAutoReOpen=bFlag;}
+    void            SetAutoReOpen(sal_Bool bFlag) {bAutoReOpen=bFlag;}
 };
 
 

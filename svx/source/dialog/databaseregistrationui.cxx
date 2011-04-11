@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 
 // === includes (declaration) ============================================
-#include "databaseregistrationui.hxx"
+#include "svx/databaseregistrationui.hxx"
 
 // === includes (project) ================================================
 #include <svx/svxdlg.hxx>
@@ -44,9 +44,9 @@
 
 namespace svx
 {
-    USHORT administrateDatabaseRegistration( Window* _parentWindow )
+    sal_uInt16 administrateDatabaseRegistration( Window* _parentWindow )
     {
-        USHORT nResult = RET_CANCEL;
+        sal_uInt16 nResult = RET_CANCEL;
 
         SfxItemSet aRegistrationItems( SFX_APP()->GetPool(), SID_SB_DB_REGISTER, SID_SB_DB_REGISTER, 0 );
 

@@ -38,19 +38,19 @@
 #include <tools/string.hxx>
 
 #define BR 0x8000
-BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVerschieben )
+sal_Bool FileMove_Impl( const String & rFile1, const String & rFile2, sal_Bool bImmerVerschieben )
 {
     //printf( "Move from %s to %s\n", rFile2.GetStr(), rFile1.GetStr() );
-    ULONG nC1 = 0;
-    ULONG nC2 = 1;
+    sal_uLong nC1 = 0;
+    sal_uLong nC2 = 1;
     if( !bImmerVerschieben )
     {
         SvFileStream aOutStm1( rFile1, STREAM_STD_READ );
         SvFileStream aOutStm2( rFile2, STREAM_STD_READ );
         if( aOutStm1.GetError() == SVSTREAM_OK )
         {
-            BYTE * pBuf1 = new BYTE[ BR ];
-            BYTE * pBuf2 = new BYTE[ BR ];
+            sal_uInt8 * pBuf1 = new sal_uInt8[ BR ];
+            sal_uInt8 * pBuf2 = new sal_uInt8[ BR ];
             nC1 = aOutStm1.Read( pBuf1, BR );
             nC2 = aOutStm2.Read( pBuf2, BR );
             while( nC1 == nC2 )
@@ -74,50 +74,29 @@ BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVer
     }
     DirEntry aF2( rFile2 );
     if( nC1 != nC2 )
-    {// es hat sich etwas geaendert
+    {// something has changed
         DirEntry aF1( rFile1 );
         aF1.Kill();
-        // Datei verschieben
+        // move file
         if( aF2.MoveTo( aF1 ) )
         {
-            // Beide Dateien loeschen
+            // delete both files
             aF1.Kill();
             aF2.Kill();
-            return FALSE;
+            return sal_False;
         }
-/*
-        else
-        {
-            printf( "%s to %s moved\n",
-                     rFile2.GetStr(), rFile1.GetStr() );
-        }
-*/
-        return TRUE;
+        return sal_True;
     }
     return 0 == aF2.Kill();
 }
 
-/*************************************************************************
-|*    main()
-|*
-|*    Beschreibung
-*************************************************************************/
-#if defined( UNX ) || (defined( PM2 ) && defined( CSET )) || defined (WTC) || defined (MTW) || defined (__MINGW32__) || defined( OS2 )
+#if defined( UNX ) || defined( PM2 ) || defined (__MINGW32__) || defined( OS2 )
 int main ( int argc, char ** argv)
 {
 #else
 int cdecl main ( int argc, char ** argv)
 {
 #endif
-
-/*
-    pStr = ::ResponseFile( &aCmdLine, argv, argc );
-    if( pStr )
-    {
-        printf( "Cannot open response file <%s>\n", pStr );
-        return( 1 );
-    };
-*/
 
     String aTmpListFile;
     String aTmpSlotMapFile;
@@ -247,74 +226,14 @@ int cdecl main ( int argc, char ** argv)
                 fprintf( stderr, "%s\n", aStr.GetBuffer() );
             }
         }
-/*
-        if( nExit == 0 && aCommand.aCallingFile.Len() )
-        {
-            DirEntry aDE( aCommand.aCallingFile );
-            aDE.ToAbs();
-            aTmpCallingFile = aDE.GetPath().TempName().GetFull();
-            SvFileStream aOutStm( aTmpCallingFile, STREAM_READWRITE | STREAM_TRUNC );
-            pDataBase->WriteSbx( aOutStm );
-            //pDataBase->Save( aOutStm, aCommand.nFlags | IDL_WRITE_CALLING );
-            if( aOutStm.GetError() != SVSTREAM_OK )
-            {
-                nExit = -1;
-                ByteString aStr = "cannot write calling file: ";
-                aStr += aCommand.aCallingFile;
-                fprintf( stderr, "%s\n", aStr.GetStr() );
-            }
-        }
-        if( nExit == 0 && aCommand.aCxxFile.Len() )
-        {
-            DirEntry aDE( aCommand.aCxxFile );
-            aDE.ToAbs();
-            aTmpCxxFile = aDE.GetPath().TempName().GetFull();
-            SvFileStream aOutStm( aTmpCxxFile, STREAM_READWRITE | STREAM_TRUNC );
-
-            aOutStm << "#pragma hdrstop" << endl;
-            aOutStm << "#include <";
-            if( aCommand.aHxxFile.Len() )
-                aOutStm << DirEntry(aCommand.aHxxFile).GetName().GetBuffer();
-            else
-            {
-                DirEntry aDE( aCommand.aCxxFile );
-                aDE.SetExtension( "hxx" );
-                aOutStm << aDE.GetName().GetBuffer);
-            }
-            aOutStm << '>' << endl;
-            if( !pDataBase->WriteCxx( aOutStm ) )
-            {
-                nExit = -1;
-                ByteString aStr = "cannot write cxx file: ";
-                aStr += ByteString( aCommand.aCxxFile, RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "%s\n", aStr.GetBuffer() );
-            }
-        }
-        if( nExit == 0 && aCommand.aHxxFile.Len() )
-        {
-            DirEntry aDE( aCommand.aHxxFile );
-            aDE.ToAbs();
-            aTmpHxxFile = aDE.GetPath().TempName().GetFull();
-            SvFileStream aOutStm( aTmpHxxFile, STREAM_READWRITE | STREAM_TRUNC );
-
-            aOutStm << "#include <somisc.hxx>" << endl;
-            if( !pDataBase->WriteHxx( aOutStm ) )
-            {
-                nExit = -1;
-                ByteString aStr = "cannot write cxx file: ";
-                aStr += ByteString( aCommand.aHxxFile, RTL_TEXTENCODING_UTF8 );
-                fprintf( stderr, "%s\n", aStr.GetBuffer() );
-            }
-        }
- */
     }
     else
         nExit = -1;
 
     if( nExit == 0 )
     {
-        BOOL bErr = FALSE;
-        BOOL bDoMove = aCommand.aTargetFile.Len() == 0;
+        sal_Bool bErr = sal_False;
+        sal_Bool bDoMove = aCommand.aTargetFile.Len() == 0;
         String aErrFile, aErrFile2;
         if( !bErr && aCommand.aListFile.Len() )
         {
@@ -414,7 +333,7 @@ int cdecl main ( int argc, char ** argv)
                 DirEntry aT(aCommand.aTargetFile);
                 aT.Kill();
 #endif
-                // Datei stempeln, da idl korrekt durchlaufen wurde
+                // stamp file, because idl passed through correctly
                 SvFileStream aOutStm( aCommand.aTargetFile,
                                 STREAM_READWRITE | STREAM_TRUNC );
             }

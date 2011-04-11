@@ -35,21 +35,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-#building with stlport, but cppunit was not built with stlport
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGSCXX+=-DADAPT_EXT_STL
-.ENDIF
-.ENDIF
-
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 DLLPRE = # no leading "lib" on .so files
 
 # --- Libs ---------------------------------------------------------
 
 SHL1OBJS=  \
-    $(SLO)/test_metadatable.obj \
-
+    $(SLO)/test_metadatable.obj
 
 SHL1STDLIBS= \
      $(CPPUNITLIB) \
@@ -57,21 +49,18 @@ SHL1STDLIBS= \
      $(CPPULIB) \
      $(CPPUHELPERLIB) \
      $(VCLLIB) \
-     $(SFXLIB) \
-
+     $(SFXLIB)
 
 SHL1TARGET= test_metadatable
 SHL1RPATH = NONE
 SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF= $(MISC)/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP= version.map
 
 # --- All object files ---------------------------------------------
 
 SLOFILES= \
-    $(SHL1OBJS) \
+    $(SHL1OBJS)
 
 
 # --- Targets ------------------------------------------------------

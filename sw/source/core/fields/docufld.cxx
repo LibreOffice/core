@@ -68,7 +68,6 @@
 #include <tools/datetime.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 
@@ -104,6 +103,7 @@
 
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
+#include <switerator.hxx>
 
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
 
@@ -172,19 +172,16 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc, sal_uInt16 nPage,
         // es NIE zurueck
         const SfxItemPool &rPool = pDoc->GetAttrPool();
         const SwFmtPageDesc *pDesc;
-        sal_uInt16 nMaxItems = rPool.GetItemCount( RES_PAGEDESC );
-        for( sal_uInt16 n = 0; n < nMaxItems; ++n )
-            if( 0 != (pDesc = (SwFmtPageDesc*)rPool.GetItem( RES_PAGEDESC, n ) )
+        sal_uInt32 nMaxItems = rPool.GetItemCount2( RES_PAGEDESC );
+        for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+            if( 0 != (pDesc = (SwFmtPageDesc*)rPool.GetItem2( RES_PAGEDESC, n ) )
                 && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
             {
-                if( pDesc->GetDefinedIn()->ISA( SwCntntNode ))
+                SwCntntNode* pNd = PTR_CAST( SwCntntNode, pDesc->GetDefinedIn() );
+                if( pNd )
                 {
-                    SwClientIter aIter( *(SwModify*)pDesc->GetDefinedIn() );
-                    if( aIter.First( TYPE( SwFrm ) ) )
-                    {
+                    if ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*pNd) )
                         bVirtuell = sal_True;
-                        break;
-                    }
                 }
                 else if( pDesc->GetDefinedIn()->ISA( SwFmt ))
                 {
@@ -250,10 +247,7 @@ sal_uInt16 SwPageNumberField::GetSubType() const
     return nSubType;
 }
 
-/*-----------------05.03.98 10:25-------------------
-
---------------------------------------------------*/
-bool SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -279,14 +273,12 @@ bool SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
-/*-----------------05.03.98 10:25-------------------
 
---------------------------------------------------*/
-bool SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwPageNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = true;
     sal_Int16 nSet = 0;
@@ -299,8 +291,6 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         if(nSet <= SVX_NUM_PAGEDESC )
             SetFormat(nSet);
         else {
-            //exception(wrong_value)
-            ;
         }
         break;
     case FIELD_PROP_USHORT1:
@@ -328,7 +318,7 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return bRet;
 }
@@ -341,7 +331,7 @@ SwAuthorFieldType::SwAuthorFieldType()
 {
 }
 
-String SwAuthorFieldType::Expand(ULONG nFmt) const
+String SwAuthorFieldType::Expand(sal_uLong nFmt) const
 {
     String sRet;
     SvtUserOptions&  rOpt = SW_MOD()->GetUserOptions();
@@ -384,10 +374,7 @@ SwField* SwAuthorField::Copy() const
     return pTmp;
 }
 
-/*-----------------05.03.98 11:15-------------------
-
---------------------------------------------------*/
-bool SwAuthorField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwAuthorField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     bool bVal;
     switch( nWhichId )
@@ -407,14 +394,12 @@ bool SwAuthorField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
-/*-----------------05.03.98 11:15-------------------
 
---------------------------------------------------*/
-bool SwAuthorField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -434,7 +419,7 @@ bool SwAuthorField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -449,7 +434,7 @@ SwFileNameFieldType::SwFileNameFieldType(SwDoc *pDocument)
     pDoc = pDocument;
 }
 
-String SwFileNameFieldType::Expand(ULONG nFmt) const
+String SwFileNameFieldType::Expand(sal_uLong nFmt) const
 {
     String aRet;
     const SwDocShell* pDShell = pDoc->GetDocShell();
@@ -464,8 +449,8 @@ String SwFileNameFieldType::Expand(ULONG nFmt) const
                     {
                         INetURLObject aTemp(rURLObj);
                         aTemp.removeSegment();
-                        // #101947# last slash should belong to the pathname
-                        aRet = aTemp.PathToFileName();//GetFull();
+                        // last slash should belong to the pathname
+                        aRet = aTemp.PathToFileName();
                     }
                     else
                     {
@@ -479,7 +464,7 @@ String SwFileNameFieldType::Expand(ULONG nFmt) const
                 break;
 
             case FF_NAME:
-                aRet = rURLObj.GetLastName( URL_DECODE );
+                aRet = rURLObj.GetLastName( INetURLObject::DECODE_WITH_CHARSET );
                 break;
 
             case FF_NAME_NOEXT:
@@ -530,10 +515,7 @@ SwField* SwFileNameField::Copy() const
     return pTmp;
 }
 
-/*-----------------05.03.98 08:59-------------------
-
---------------------------------------------------*/
-bool SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwFileNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -559,7 +541,7 @@ bool SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 
     case FIELD_PROP_BOOL2:
         {
-            BOOL bVal = IsFixed();
+            sal_Bool bVal = IsFixed();
             rAny.setValue(&bVal, ::getBooleanCppuType());
         }
         break;
@@ -568,14 +550,12 @@ bool SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= OUString(GetContent());
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
-/*-----------------05.03.98 09:01-------------------
 
---------------------------------------------------*/
-bool SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -586,7 +566,7 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             //              here only a int16
             sal_Int32 nType = 0;
             rAny >>= nType;
-            BOOL bFixed = IsFixed();
+            sal_Bool bFixed = IsFixed();
             switch( nType )
             {
                 case text::FilenameDisplayFormat::PATH:
@@ -618,7 +598,7 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -632,7 +612,7 @@ SwTemplNameFieldType::SwTemplNameFieldType(SwDoc *pDocument)
     pDoc = pDocument;
 }
 
-String SwTemplNameFieldType::Expand(ULONG nFmt) const
+String SwTemplNameFieldType::Expand(sal_uLong nFmt) const
 {
     OSL_ENSURE( nFmt < FF_END, "Expand: kein guelt. Fmt!" );
 
@@ -648,7 +628,7 @@ String SwTemplNameFieldType::Expand(ULONG nFmt) const
 
         if( FF_UI_NAME == nFmt )
             aRet = xDocProps->getTemplateName();
-        else if( !xDocProps->getTemplateURL().equalsAscii("") )
+        else if( xDocProps->getTemplateURL().getLength() )
         {
             if( FF_UI_RANGE == nFmt )
             {
@@ -706,10 +686,7 @@ SwField* SwTemplNameField::Copy() const
     return pTmp;
 }
 
-/*-----------------05.03.98 08:59-------------------
-
---------------------------------------------------*/
-bool SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwTemplNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch ( nWhichId )
     {
@@ -730,14 +707,12 @@ bool SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
-/*-----------------05.03.98 09:01-------------------
 
---------------------------------------------------*/
-bool SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwTemplNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch ( nWhichId )
     {
@@ -770,7 +745,7 @@ bool SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -797,14 +772,14 @@ String SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
         case DS_WORD: nVal = rDStat.nWord;  break;
         case DS_CHAR: nVal = rDStat.nChar;  break;
         case DS_PAGE:
-            if( pDoc->GetRootFrm() )
-                ((SwDocStat &)rDStat).nPage = pDoc->GetRootFrm()->GetPageNum();
+            if( pDoc->GetCurrentLayout() )//swmod 080218
+                ((SwDocStat &)rDStat).nPage = pDoc->GetCurrentLayout()->GetPageNum();   //swmod 080218
             nVal = rDStat.nPage;
             if( SVX_NUM_PAGEDESC == nFmt )
                 nFmt = (sal_uInt32)nNumberingType;
             break;
         default:
-            OSL_ENSURE( sal_False, "SwDocStatFieldType::Expand: unbekannter SubType" );
+            OSL_FAIL( "SwDocStatFieldType::Expand: unbekannter SubType" );
     }
 
     String sRet;
@@ -861,10 +836,7 @@ void SwDocStatField::ChangeExpansion( const SwFrm* pFrm )
                 pFrm->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType() );
 }
 
-/*-----------------05.03.98 11:38-------------------
-
---------------------------------------------------*/
-bool SwDocStatField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDocStatField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch ( nWhichId )
     {
@@ -872,14 +844,12 @@ bool SwDocStatField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= (sal_Int16)GetFormat();
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
-/*-----------------05.03.98 11:38-------------------
 
---------------------------------------------------*/
-bool SwDocStatField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDocStatField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     bool bRet = false;
     switch ( nWhichId )
@@ -899,7 +869,7 @@ bool SwDocStatField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return bRet;
 }
@@ -913,16 +883,13 @@ SwDocInfoFieldType::SwDocInfoFieldType(SwDoc* pDc)
 {
 }
 
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 SwFieldType* SwDocInfoFieldType::Copy() const
 {
     SwDocInfoFieldType* pTyp = new SwDocInfoFieldType(GetDoc());
     return pTyp;
 }
 
-void lcl_GetLocalDataWrapper( ULONG nLang,
+void lcl_GetLocalDataWrapper( sal_uLong nLang,
                               const LocaleDataWrapper **ppAppLocalData,
                               const LocaleDataWrapper **ppLocalData )
 {
@@ -935,9 +902,6 @@ void lcl_GetLocalDataWrapper( ULONG nLang,
                         SvxCreateLocale( static_cast<LanguageType>(nLang) ) );
 }
 
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                                     sal_uInt16 nLang, const String& rName ) const
 {
@@ -1085,9 +1049,6 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
     return aStr;
 }
 
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
 SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const String& rName, sal_uInt32 nFmt) :
     SwValueField(pTyp, nFmt), nSubType(nSub)
 {
@@ -1102,9 +1063,7 @@ SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const 
     aContent = rValue;
 }
 
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 template<class T>
 double lcl_TimeToDouble( const T& rTime )
 {
@@ -1196,37 +1155,33 @@ String SwDocInfoField::Expand() const
 
     return aContent;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
-String SwDocInfoField::GetCntnt(sal_Bool bName) const
+String SwDocInfoField::GetFieldName() const
 {
-    if ( bName )
+    String aStr(SwFieldType::GetTypeStr(GetTypeId()));
+    aStr += ':';
+
+    sal_uInt16 const nSub = nSubType & 0xff;
+
+    switch (nSub)
     {
-        String aStr(SwFieldType::GetTypeStr(GetTypeId()));
-        aStr += ':';
+        case DI_CUSTOM:
+            aStr += aName;
+            break;
 
-        sal_uInt16 nSub = nSubType & 0xff;
-
-        switch(nSub)
-        {
-            case DI_CUSTOM:
-                aStr += aName;
-                break;
-
-            default:
-                aStr += *ViewShell::GetShellRes()->aDocInfoLst[ nSub - DI_SUBTYPE_BEGIN ];
-                break;
-        }
-        if( IsFixed() )
-            ( aStr += ' ' ) += ViewShell::GetShellRes()->aFixedStr;
-        return aStr;
+        default:
+            aStr += *ViewShell::GetShellRes()
+                        ->aDocInfoLst[ nSub - DI_SUBTYPE_BEGIN ];
+            break;
     }
-    return Expand();
+    if (IsFixed())
+    {
+        aStr += ' ';
+        aStr += ViewShell::GetShellRes()->aFixedStr;
+    }
+    return aStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwDocInfoField::Copy() const
 {
     SwDocInfoField* pFld = new SwDocInfoField((SwDocInfoFieldType*)GetTyp(), nSubType, aName, GetFormat());
@@ -1235,23 +1190,17 @@ SwField* SwDocInfoField::Copy() const
 
     return pFld;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt16 SwDocInfoField::GetSubType() const
 {
     return nSubType;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDocInfoField::SetSubType(sal_uInt16 nSub)
 {
     nSubType = nSub;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDocInfoField::SetLanguage(sal_uInt16 nLng)
 {
     if (!GetFormat())
@@ -1259,10 +1208,8 @@ void SwDocInfoField::SetLanguage(sal_uInt16 nLng)
     else
         SwValueField::SetLanguage(nLng);
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
-bool SwDocInfoField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -1309,10 +1256,8 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
-bool SwDocInfoField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     sal_Int32 nValue = 0;
     switch( nWhichId )
@@ -1373,9 +1318,7 @@ SwFieldType* SwHiddenTxtFieldType::Copy() const
 {
     return new SwHiddenTxtFieldType( bHidden );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwHiddenTxtFieldType::SetHiddenFlag( sal_Bool bSetHidden )
 {
     if( bHidden != bSetHidden )
@@ -1384,9 +1327,7 @@ void SwHiddenTxtFieldType::SetHiddenFlag( sal_Bool bSetHidden )
         UpdateFlds();       // alle HiddenText benachrichtigen
     }
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
                                     sal_Bool    bConditional,
                                     const   String& rCond,
@@ -1414,9 +1355,7 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
     else
         aTRUETxt = rStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
                                     const String& rCond,
                                     const String& rTrue,
@@ -1427,9 +1366,7 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
 {
     bCanToggle  = aCond.Len() > 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwHiddenTxtField::Expand() const
 {
     // Type: !Hidden  -> immer anzeigen
@@ -1470,7 +1407,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
         else
             sTmpName = aFALSETxt;
 
-// OS 21.08.97: #42943# Datenbankausdruecke muessen sich von
+// Datenbankausdruecke muessen sich von
 //              einfachem Text unterscheiden. also wird der einfache Text
 //              bevorzugt in Anfuehrungszeichen gesetzt.
 //              Sind diese vorhanden werden umschliessende entfernt.
@@ -1515,32 +1452,23 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
         }
     }
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
-String SwHiddenTxtField::GetCntnt(sal_Bool bName) const
+String SwHiddenTxtField::GetFieldName() const
 {
-    if ( bName )
+    String aStr(SwFieldType::GetTypeStr(nSubType));
+    aStr += ' ';
+    aStr += aCond;
+    aStr += ' ';
+    aStr += aTRUETxt;
+
+    if (nSubType == TYP_CONDTXTFLD)
     {
-        String aStr(SwFieldType::GetTypeStr(nSubType));
-        aStr += ' ';
-        aStr += aCond;
-        aStr += ' ';
-        aStr += aTRUETxt;
-
-        if(nSubType == TYP_CONDTXTFLD)
-        {
-static char __READONLY_DATA cTmp[] = " : ";
-            aStr.AppendAscii(cTmp);
-            aStr += aFALSETxt;
-        }
-        return aStr;
+        aStr.AppendAscii(" : ");
+        aStr += aFALSETxt;
     }
-    return Expand();
+    return aStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwHiddenTxtField::Copy() const
 {
     SwHiddenTxtField* pFld =
@@ -1564,9 +1492,7 @@ void SwHiddenTxtField::SetPar1(const String& rStr)
     aCond = rStr;
     bCanToggle = aCond.Len() > 0;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 const String& SwHiddenTxtField::GetPar1() const
 {
     return aCond;
@@ -1589,9 +1515,7 @@ void SwHiddenTxtField::SetPar2(const String& rStr)
     else
         aTRUETxt = rStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwHiddenTxtField::GetPar2() const
 {
     String aRet(aTRUETxt);
@@ -1602,17 +1526,13 @@ String SwHiddenTxtField::GetPar2() const
     }
     return aRet;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt16 SwHiddenTxtField::GetSubType() const
 {
     return nSubType;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
-bool SwHiddenTxtField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwHiddenTxtField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     const String* pOut = 0;
     switch( nWhichId )
@@ -1636,16 +1556,14 @@ bool SwHiddenTxtField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     if( pOut )
         rAny <<= OUString( *pOut );
     return true;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
-bool SwHiddenTxtField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwHiddenTxtField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -1666,10 +1584,10 @@ bool SwHiddenTxtField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_PAR4:
         ::GetString( rAny, aContent);
-        bValid = TRUE;
+        bValid = sal_True;
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -1732,16 +1650,12 @@ SwHiddenParaField::SwHiddenParaField(SwHiddenParaFieldType* pTyp, const String& 
 {
     bIsHidden = sal_False;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwHiddenParaField::Expand() const
 {
     return aEmptyStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwHiddenParaField::Copy() const
 {
     SwHiddenParaField* pFld = new SwHiddenParaField((SwHiddenParaFieldType*)GetTyp(), aCond);
@@ -1749,10 +1663,8 @@ SwField* SwHiddenParaField::Copy() const
 
     return pFld;
 }
-/*-----------------05.03.98 13:25-------------------
 
---------------------------------------------------*/
-bool SwHiddenParaField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwHiddenParaField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch ( nWhichId )
     {
@@ -1767,14 +1679,12 @@ bool SwHiddenParaField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
-/*-----------------05.03.98 13:25-------------------
 
---------------------------------------------------*/
-bool SwHiddenParaField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwHiddenParaField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch ( nWhichId )
     {
@@ -1786,7 +1696,7 @@ bool SwHiddenParaField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
 
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -1799,9 +1709,7 @@ void SwHiddenParaField::SetPar1(const String& rStr)
 {
     aCond = rStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 const String& SwHiddenParaField::GetPar1() const
 {
     return aCond;
@@ -1814,9 +1722,7 @@ const String& SwHiddenParaField::GetPar1() const
 SwPostItFieldType::SwPostItFieldType(SwDoc *pDoc)
     : SwFieldType( RES_POSTITFLD ),mpDoc(pDoc)
 {}
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFieldType* SwPostItFieldType::Copy() const
 {
     return new SwPostItFieldType(mpDoc);
@@ -1843,9 +1749,7 @@ SwPostItField::~SwPostItField()
     }
 }
 
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwPostItField::Expand() const
 {
     return aEmptyStr;
@@ -1857,9 +1761,7 @@ String SwPostItField::GetDescription() const
     return SW_RES(STR_NOTE);
 }
 
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwPostItField::Copy() const
 {
     SwPostItField* pRet = new SwPostItField( (SwPostItFieldType*)GetTyp(), sAuthor,
@@ -1890,9 +1792,7 @@ void SwPostItField::SetPar2(const String& rStr)
 {
     sTxt = rStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwPostItField::GetPar2() const
 {
         return sTxt;
@@ -1914,10 +1814,7 @@ sal_uInt32 SwPostItField::GetNumberOfParagraphs() const
     return (mpText) ? mpText->Count() : 1;
 }
 
-/*-----------------05.03.98 13:42-------------------
-
---------------------------------------------------*/
-bool SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -1972,16 +1869,12 @@ bool SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
 
-
-/*-----------------05.03.98 13:42-------------------
-
---------------------------------------------------*/
-bool SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -1998,8 +1891,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         }
         break;
     case FIELD_PROP_TEXT:
-        DBG_ERROR("Not implemented!");
-        // ::GetString( rAny, sTxt );
+        OSL_FAIL("Not implemented!");
         break;
     case FIELD_PROP_DATE:
         if( rAny.getValueType() == ::getCppuType((util::Date*)0) )
@@ -2012,7 +1904,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     {
         util::DateTime aDateTimeValue;
         if(!(rAny >>= aDateTimeValue))
-            return FALSE;
+            return sal_False;
         aDateTime.Set100Sec(aDateTimeValue.HundredthSeconds);
         aDateTime.SetSec(aDateTimeValue.Seconds);
         aDateTime.SetMin(aDateTimeValue.Minutes);
@@ -2023,7 +1915,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     }
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2035,17 +1927,13 @@ SwExtUserFieldType::SwExtUserFieldType()
     : SwFieldType( RES_EXTUSERFLD )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFieldType* SwExtUserFieldType::Copy() const
 {
     SwExtUserFieldType* pTyp = new SwExtUserFieldType;
     return pTyp;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
 {
     String aRet;
@@ -2079,17 +1967,13 @@ String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
     }
     return aRet;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal_uInt32 nFmt) :
     SwField(pTyp, nFmt), nType(nSubTyp)
 {
     aContent = ((SwExtUserFieldType*)GetTyp())->Expand(nType, GetFormat());
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwExtUserField::Expand() const
 {
     if (!IsFixed())
@@ -2097,9 +1981,7 @@ String SwExtUserField::Expand() const
 
     return aContent;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwExtUserField::Copy() const
 {
     SwExtUserField* pFld = new SwExtUserField((SwExtUserFieldType*)GetTyp(), nType, GetFormat());
@@ -2107,25 +1989,18 @@ SwField* SwExtUserField::Copy() const
 
     return pFld;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt16 SwExtUserField::GetSubType() const
 {
     return nType;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwExtUserField::SetSubType(sal_uInt16 nSub)
 {
     nType = nSub;
 }
 
-/*-----------------05.03.98 14:14-------------------
-
---------------------------------------------------*/
-bool SwExtUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwExtUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -2146,14 +2021,12 @@ bool SwExtUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
-/*-----------------05.03.98 14:14-------------------
 
---------------------------------------------------*/
-bool SwExtUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwExtUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -2175,7 +2048,7 @@ bool SwExtUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             SetFormat(GetFormat() & ~AF_FIXED);
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2189,18 +2062,14 @@ SwRefPageSetFieldType::SwRefPageSetFieldType()
     : SwFieldType( RES_REFPAGESETFLD )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFieldType* SwRefPageSetFieldType::Copy() const
 {
     return new SwRefPageSetFieldType;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 // ueberlagert, weil es nichts zum Updaten gibt!
-void SwRefPageSetFieldType::Modify( SfxPoolItem *, SfxPoolItem * )
+void SwRefPageSetFieldType::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {
 }
 
@@ -2213,39 +2082,28 @@ SwRefPageSetField::SwRefPageSetField( SwRefPageSetFieldType* pTyp,
     : SwField( pTyp ), nOffset( nOff ), bOn( bFlag )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwRefPageSetField::Expand() const
 {
     return aEmptyStr;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwRefPageSetField::Copy() const
 {
     return new SwRefPageSetField( (SwRefPageSetFieldType*)GetTyp(), nOffset, bOn );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwRefPageSetField::GetPar2() const
 {
     return String::CreateFromInt32( GetOffset() );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwRefPageSetField::SetPar2(const String& rStr)
 {
     SetOffset( (short) rStr.ToInt32() );
 }
 
-/*-----------------05.03.98 14:52-------------------
-
---------------------------------------------------*/
-bool SwRefPageSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwRefPageSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -2256,14 +2114,12 @@ bool SwRefPageSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         rAny <<= (sal_Int16)nOffset;
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
-/*-----------------05.03.98 14:52-------------------
 
---------------------------------------------------*/
-bool SwRefPageSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwRefPageSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -2274,7 +2130,7 @@ bool SwRefPageSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         rAny >>=nOffset;
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2286,19 +2142,15 @@ SwRefPageGetFieldType::SwRefPageGetFieldType( SwDoc* pDc )
     : SwFieldType( RES_REFPAGEGETFLD ), pDoc( pDc ), nNumberingType( SVX_NUM_ARABIC )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFieldType* SwRefPageGetFieldType::Copy() const
 {
     SwRefPageGetFieldType* pNew = new SwRefPageGetFieldType( pDoc );
     pNew->nNumberingType = nNumberingType;
     return pNew;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
-void SwRefPageGetFieldType::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwRefPageGetFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     // Update auf alle GetReferenz-Felder
     if( !pNew && !pOld && GetDepends() )
@@ -2307,30 +2159,24 @@ void SwRefPageGetFieldType::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         _SetGetExpFlds aTmpLst( 10, 5 );
         if( MakeSetList( aTmpLst ) )
         {
-            SwClientIter aIter( *this );
-            if( aIter.GoStart() )
-                do {
+            SwIterator<SwFmtFld,SwFieldType> aIter( *this );
+            for ( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
                     // nur die GetRef-Felder Updaten
-                    SwFmtFld* pFmtFld = (SwFmtFld*)aIter();
                     if( pFmtFld->GetTxtFld() )
                         UpdateField( pFmtFld->GetTxtFld(), aTmpLst );
-                } while( aIter++ );
         }
     }
 
     // weiter an die Text-Felder, diese "Expandieren" den Text
-    SwModify::Modify( pOld, pNew );
+    NotifyClients( pOld, pNew );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 {
-    SwClientIter aIter( *pDoc->GetSysFldType( RES_REFPAGESETFLD));
-    if( aIter.GoStart() )
-        do {
+    SwIterator<SwFmtFld,SwFieldType> aIter(*pDoc->GetSysFldType( RES_REFPAGESETFLD));
+    for ( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+    {
             // nur die GetRef-Felder Updaten
-            SwFmtFld* pFmtFld = (SwFmtFld*)aIter();
             const SwTxtFld* pTFld = pFmtFld->GetTxtFld();
             if( pTFld )
             {
@@ -2338,7 +2184,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 
                 // immer den ersten !! (in Tab-Headline, Kopf-/Fuss )
                 Point aPt;
-                const SwCntntFrm* pFrm = rTxtNd.GetFrm( &aPt, 0, sal_False );
+                const SwCntntFrm* pFrm = rTxtNd.getLayoutFrm( rTxtNd.GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
 
                 _SetGetExpFld* pNew;
 
@@ -2370,13 +2216,11 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
                 if( !rTmpLst.Insert( pNew ))
                     delete pNew;
             }
-        } while( aIter++ );
+    }
 
     return rTmpLst.Count();
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
                                         _SetGetExpFlds& rSetList )
 {
@@ -2403,8 +2247,8 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
             {
                 // dann bestimme mal den entsp. Offset
                 Point aPt;
-                const SwCntntFrm* pFrm = pTxtNode->GetFrm( &aPt, 0, sal_False );
-                const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().GetFrm( &aPt, 0, sal_False );
+                const SwCntntFrm* pFrm = pTxtNode->getLayoutFrm( pTxtNode->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
+                const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pRefTxtFld->GetTxtNode().GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
                 const SwPageFrm* pPgFrm = 0;
                 sal_uInt16 nDiff = ( pFrm && pRefFrm )
                         ?   (pPgFrm = pFrm->FindPageFrm())->GetPhyPageNum() -
@@ -2422,7 +2266,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
         }
     }
     // dann die Formatierung anstossen
-    ((SwFmtFld&)pTxtFld->GetFld()).Modify( 0, 0 );
+    ((SwFmtFld&)pTxtFld->GetFld()).ModifyNotification( 0, 0 );
 }
 
 /*--------------------------------------------------------------------
@@ -2434,16 +2278,12 @@ SwRefPageGetField::SwRefPageGetField( SwRefPageGetFieldType* pTyp,
     : SwField( pTyp, nFmt )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwRefPageGetField::Expand() const
 {
     return sTxt;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwRefPageGetField::Copy() const
 {
     SwRefPageGetField* pCpy = new SwRefPageGetField(
@@ -2451,9 +2291,7 @@ SwField* SwRefPageGetField::Copy() const
     pCpy->SetText( sTxt );
     return pCpy;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
                                         const SwTxtFld* pFld )
 {
@@ -2497,7 +2335,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     const SwRefPageSetField* pSetFld =
                         (SwRefPageSetField*)pRefTxtFld->GetFld().GetFld();
     Point aPt;
-    const SwCntntFrm* pRefFrm = pRefTxtFld ? pRefTxtFld->GetTxtNode().GetFrm( &aPt, 0, sal_False ) : 0;
+    const SwCntntFrm* pRefFrm = pRefTxtFld ? pRefTxtFld->GetTxtNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, sal_False ) : 0;
     if( pSetFld->IsOn() && pRefFrm )
     {
         // dann bestimme mal den entsp. Offset
@@ -2513,10 +2351,8 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
         pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
     }
 }
-/*-----------------05.03.98 14:52-------------------
 
---------------------------------------------------*/
-bool SwRefPageGetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwRefPageGetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -2527,14 +2363,12 @@ bool SwRefPageGetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             rAny <<= OUString(sTxt);
         break;
         default:
-            DBG_ERROR("illegal property");
+            OSL_FAIL("illegal property");
     }
     return true;
 }
-/*-----------------05.03.98 14:52-------------------
 
---------------------------------------------------*/
-bool SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -2545,8 +2379,6 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             if(nSet <= SVX_NUM_PAGEDESC )
                 SetFormat(nSet);
             else {
-                //exception(wrong_value)
-                ;
             }
         }
         break;
@@ -2558,7 +2390,7 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         }
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2571,16 +2403,12 @@ SwJumpEditFieldType::SwJumpEditFieldType( SwDoc* pD )
     : SwFieldType( RES_JUMPEDITFLD ), pDoc( pD ), aDep( this, 0 )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwFieldType* SwJumpEditFieldType::Copy() const
 {
     return new SwJumpEditFieldType( pDoc );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwCharFmt* SwJumpEditFieldType::GetCharFmt()
 {
     SwCharFmt* pFmt = pDoc->GetCharFmtFromPool( RES_POOLCHR_JUMPEDIT );
@@ -2591,68 +2419,51 @@ SwCharFmt* SwJumpEditFieldType::GetCharFmt()
 
     return pFmt;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, sal_uInt32 nForm,
                                 const String& rTxt, const String& rHelp )
     : SwField( pTyp, nForm ), sTxt( rTxt ), sHelp( rHelp )
 {
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwJumpEditField::Expand() const
 {
     String sTmp( '<' );
     sTmp += sTxt;
     return sTmp += '>';
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwField* SwJumpEditField::Copy() const
 {
     return new SwJumpEditField( (SwJumpEditFieldType*)GetTyp(), GetFormat(),
                                 sTxt, sHelp );
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 // Platzhalter-Text
 
 const String& SwJumpEditField::GetPar1() const
 {
     return sTxt;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwJumpEditField::SetPar1(const String& rStr)
 {
     sTxt = rStr;
 }
 
 // HinweisText
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 String SwJumpEditField::GetPar2() const
 {
     return sHelp;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwJumpEditField::SetPar2(const String& rStr)
 {
     sHelp = rStr;
 }
 
-/*-----------------05.03.98 15:00-------------------
-
---------------------------------------------------*/
-bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+bool SwJumpEditField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -2665,7 +2476,6 @@ bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             case JE_FMT_FRAME:  nRet = text::PlaceholderType::TEXTFRAME; break;
             case JE_FMT_GRAPHIC:nRet = text::PlaceholderType::GRAPHIC; break;
             case JE_FMT_OLE:    nRet = text::PlaceholderType::OBJECT; break;
-//          case JE_FMT_TEXT:
             default:
                 nRet = text::PlaceholderType::TEXT; break;
             }
@@ -2679,14 +2489,12 @@ bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
          rAny <<= OUString(sTxt);
          break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
-/*-----------------05.03.98 15:00-------------------
 
---------------------------------------------------*/
-bool SwJumpEditField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+bool SwJumpEditField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -2714,7 +2522,7 @@ bool SwJumpEditField::PutValue( const uno::Any& rAny, USHORT nWhichId )
          ::GetString( rAny, sTxt);
          break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
@@ -2765,7 +2573,7 @@ void SwCombinedCharField::SetPar1(const String& rStr)
 }
 
 bool SwCombinedCharField::QueryValue( uno::Any& rAny,
-                                        USHORT nWhichId ) const
+                                        sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -2773,13 +2581,13 @@ bool SwCombinedCharField::QueryValue( uno::Any& rAny,
         rAny <<= rtl::OUString( sCharacters );
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }
 
 bool SwCombinedCharField::PutValue( const uno::Any& rAny,
-                                        USHORT nWhichId )
+                                        sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -2787,7 +2595,7 @@ bool SwCombinedCharField::PutValue( const uno::Any& rAny,
         ::GetString( rAny, sCharacters ).Erase( MAX_COMBINED_CHARACTERS );
         break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     return true;
 }

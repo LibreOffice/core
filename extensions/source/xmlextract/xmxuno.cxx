@@ -53,27 +53,6 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * /*pServiceManager*/, void * pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            REF( NMSP_REGISTRY::XRegistryKey ) xNewKey(
-                reinterpret_cast< NMSP_REGISTRY::XRegistryKey * >( pRegistryKey )->createKey(
-                    NMSP_RTL::OUString( RTL_CONSTASCII_USTRINGPARAM("/com.sun.star.comp.io.XMLExtractor/UNO/SERVICES/com.sun.star.io.XMLExtractor") ) ) );
-
-            return sal_True;
-        }
-        catch (NMSP_REGISTRY::InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
-}
-//==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {

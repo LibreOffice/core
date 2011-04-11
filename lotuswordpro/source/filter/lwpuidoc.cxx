@@ -76,7 +76,7 @@ LwpUIDocument::LwpUIDocument(LwpObjectStream *pStrm)
 }
 
 LwpUIDocument::~LwpUIDocument()
-{};
+{}
 
 void LwpUIDocument::Read(LwpObjectStream *pStrm)
 {

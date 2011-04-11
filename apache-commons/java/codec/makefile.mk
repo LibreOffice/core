@@ -49,8 +49,6 @@ TARFILE_ROOTDIR=commons-codec-1.3
 
 PATCH_FILES=$(PRJ)$/patches$/codec.patch
 
-#CONVERTFILES=build.xml
-                
 OUT2CLASS=dist$/commons-codec-1.3.jar
 
 ANT_OPTS+="-Dfile.encoding=ISO-8859-1"

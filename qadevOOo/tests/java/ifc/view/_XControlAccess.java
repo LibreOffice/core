@@ -109,13 +109,13 @@ public class _XControlAccess extends MultiMethodTest {
 
             bResult &= oControl != null;
         } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Exception occured calling the method: " + e);
+            log.println("Exception occurred calling the method: " + e);
             bResult = false;
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception occured calling the method: " + e);
+            log.println("Exception occurred calling the method: " + e);
             bResult = false;
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured calling the method: " + e);
+            log.println("Exception occurred calling the method: " + e);
             bResult = false;
         }
         tRes.tested("getControl()", bResult);

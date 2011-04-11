@@ -29,11 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "hintids.hxx"
 #include "cntfrm.hxx"       // _GetFly
 #include "doc.hxx"
+#include <IDocumentUndoRedo.hxx>
 #include "pam.hxx"          // fuer SwTxtFlyCnt
 #include "flyfrm.hxx"       // fuer SwTxtFlyCnt
 #include "ndtxt.hxx"        // SwFlyFrmFmt
@@ -44,9 +43,8 @@
 #include "swfont.hxx"
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
-// --> OD 2004-11-09 #i26945#
 #include <objectformatter.hxx>
-// <--
+#include <switerator.hxx>
 
 SwFmtFlyCnt::SwFmtFlyCnt( SwFrmFmt *pFrmFmt )
     : SfxPoolItem( RES_TXTATR_FLYCNT ),
@@ -55,7 +53,7 @@ SwFmtFlyCnt::SwFmtFlyCnt( SwFrmFmt *pFrmFmt )
 {
 }
 
-int __EXPORT SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
+int SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return( pTxtAttr && ((SwFmtFlyCnt&)rAttr).pTxtAttr &&
@@ -63,7 +61,7 @@ int __EXPORT SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
             pFmt == ((SwFmtFlyCnt&)rAttr).GetFrmFmt() );
 }
 
-SfxPoolItem* __EXPORT SwFmtFlyCnt::Clone( SfxItemPool* ) const
+SfxPoolItem* SwFmtFlyCnt::Clone( SfxItemPool* ) const
 {
     return new SwFmtFlyCnt( pFmt );
 }
@@ -118,9 +116,8 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
     // In CopyLayoutFmt (siehe doclay.cxx) wird das FlyFrmFmt erzeugt
     // und der Inhalt dupliziert.
 
-    // fuers kopieren vom Attribut das Undo immer abschalten
-    BOOL bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    // disable undo while copying attribute
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     SwFmtAnchor aAnchor( pFmt->GetAnchor() );
     if ((FLY_AT_PAGE != aAnchor.GetAnchorId()) &&
         (pDoc != pFmt->GetDoc()))   // different documents?
@@ -147,7 +144,6 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
     }
 
     SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
-    pDoc->DoUndo( bUndo );
     ((SwFmtFlyCnt&)GetFlyCnt()).SetFlyFmt( pNew );
 }
 
@@ -194,16 +190,13 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
     // stehen wir noch im falschen Dokument ?
     if( pDoc != pFmt->GetDoc() )
     {
-        // fuers kopieren vom Attribut das Undo immer abschalten
-        BOOL bUndo = pDoc->DoesUndo();
-        pDoc->DoUndo( FALSE );
+        // disable undo while copying attribute
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
-        pDoc->DoUndo( bUndo );
 
-        bUndo = pFmt->GetDoc()->DoesUndo();
-        pFmt->GetDoc()->DoUndo( FALSE );
+        ::sw::UndoGuard const undoGuardFmt(
+            pFmt->GetDoc()->GetIDocumentUndoRedo());
         pFmt->GetDoc()->DelLayoutFmt( pFmt );
-        pFmt->GetDoc()->DoUndo( bUndo );
         ((SwFmtFlyCnt&)GetFlyCnt()).SetFlyFmt( pNew );
     }
     else if( pNode->GetpSwpHints() &&
@@ -239,17 +232,15 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
         return NULL;
     }
 
-    SwClientIter aIter( *GetFlyCnt().pFmt );
+    SwIterator<SwFlyFrm,SwFmt> aIter( *GetFlyCnt().pFmt );
     OSL_ENSURE( pCurrFrm->IsTxtFrm(), "SwTxtFlyCnt::_GetFlyFrm for TxtFrms only." );
-
-    if( aIter.GoStart() )
+    SwFrm* pFrm = aIter.First();
+    if ( pFrm )
     {
         SwTxtFrm *pFirst = (SwTxtFrm*)pCurrFrm;
         while ( pFirst->IsFollow() )
             pFirst = pFirst->FindMaster();
         do
-        {   SwFrm * pFrm = PTR_CAST( SwFrm, aIter() );
-            if ( pFrm )
             {
                 SwTxtFrm *pTmp = pFirst;
                 do
@@ -264,8 +255,10 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
                     }
                     pTmp = pTmp->GetFollow();
                 } while ( pTmp );
-            }
-        } while( aIter++ );
+
+                pFrm = aIter.Next();
+
+        } while( pFrm );
     }
 
     // Wir haben keinen passenden FlyFrm gefunden, deswegen wird ein
@@ -273,8 +266,9 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
     // Dabei wird eine sofortige Neuformatierung von pCurrFrm angestossen.
     // Die Rekursion wird durch den Lockmechanismus in SwTxtFrm::Format()
     // abgewuergt.
-    SwFlyInCntFrm *pFly = new SwFlyInCntFrm( (SwFlyFrmFmt*)pFrmFmt, (SwFrm*)pCurrFrm );
-    ((SwFrm*)pCurrFrm)->AppendFly( pFly );
+    SwFrm* pCurrFrame = const_cast< SwFrm* >(pCurrFrm);
+    SwFlyInCntFrm *pFly = new SwFlyInCntFrm( (SwFlyFrmFmt*)pFrmFmt, pCurrFrame, pCurrFrame );
+    pCurrFrame->AppendFly( pFly );
     pFly->RegistFlys();
 
     // 7922: Wir muessen dafuer sorgen, dass der Inhalt des FlyInCnt

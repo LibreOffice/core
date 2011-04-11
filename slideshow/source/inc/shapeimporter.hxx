@@ -103,6 +103,8 @@ public:
     */
     bool isImportDone() const;
     PolyPolygonVector getPolygons();
+
+    double getImportedShapesCount() { return mnAscendingPrio; }
 private:
     bool isSkip( ::com::sun::star::uno::Reference<
                  ::com::sun::star::beans::XPropertySet> const& xPropSet,

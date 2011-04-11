@@ -13,3 +13,11 @@ mkdir: %_DEST%\pck%_EXT%
 REM ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
+..\%__SRC%\misc\agenda.component %_DEST%\xml%_EXT%\agenda.component
+..\%__SRC%\misc\fax.component %_DEST%\xml%_EXT%\fax.component
+..\%__SRC%\misc\form.component %_DEST%\xml%_EXT%\form.component
+..\%__SRC%\misc\letter.component %_DEST%\xml%_EXT%\letter.component
+..\%__SRC%\misc\query.component %_DEST%\xml%_EXT%\query.component
+..\%__SRC%\misc\report.component %_DEST%\xml%_EXT%\report.component
+..\%__SRC%\misc\table.component %_DEST%\xml%_EXT%\table.component
+..\%__SRC%\misc\web.component %_DEST%\xml%_EXT%\web.component

@@ -56,15 +56,12 @@
 #include <svl/svarray.hxx>
 #include <svl/lstner.hxx>
 
-#define _SVSTDARR_BOOLS
-#define _SVSTDARR_BYTES
-#define _SVSTDARR_LONGS
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #include <sfx2/mnuitem.hxx>
 #include "svx/fmtools.hxx"
-#include "fmsrccfg.hxx"
+#include "svx/fmsrccfg.hxx"
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <cppuhelper/component.hxx>
@@ -86,7 +83,7 @@ SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32, 16)
 DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > ,FmFormArray);
 
 // catch databse exceptions if occur
-#define DO_SAFE(statement) try { statement; } catch( const Exception& ) { DBG_ERROR("unhandled exception (I tried to move a cursor (or something like that).)"); }
+#define DO_SAFE(statement) try { statement; } catch( const Exception& ) { OSL_FAIL("unhandled exception (I tried to move a cursor (or something like that).)"); }
 
 #define GA_DISABLE_SYNC     1
 #define GA_FORCE_SYNC       2
@@ -121,11 +118,11 @@ class FmFormPage;
 struct SAL_DLLPRIVATE FmLoadAction
 {
     FmFormPage* pPage;
-    ULONG       nEventId;
+    sal_uLong       nEventId;
     sal_uInt16  nFlags;
 
     FmLoadAction( ) : pPage( NULL ), nEventId( 0 ), nFlags( 0 ) { }
-    FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, ULONG _nEventId )
+    FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, sal_uLong _nEventId )
         :pPage( _pPage ), nEventId( _nEventId ), nFlags( _nFlags )
     {
     }
@@ -180,8 +177,12 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
         // We enable a permanent cursor for the grid we found a searched text, it's disabled in the next "found" event.
     FmFormArray         m_aSearchForms;
 
-    SvUShorts   m_arrInvalidSlots;
-    SvBytes     m_arrInvalidSlots_Flags;
+    struct InvalidSlotInfo {
+        sal_uInt16 id;
+        sal_uInt8   flags;
+        inline InvalidSlotInfo(sal_uInt16 slotId, sal_uInt8 flgs) : id(slotId), flags(flgs) {};
+    };
+    std::vector<InvalidSlotInfo> m_arrInvalidSlots;
         // we explicitly switch off the propbrw before leaving the design mode
         // this flag tells us if we have to switch it on again when reentering
 
@@ -195,11 +196,11 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
         // da ich beim Suchen fuer die Behandlung des "gefunden" ein SdrObject markieren will, besorge ich mir vor dem
         // Hochreissen des Suchen-Dialoges alle relevanten Objekte
         // (das Array ist damit auch nur waehrend des Suchvorganges gueltig)
-    SvLongs             m_arrRelativeGridColumn;
+    std::vector<long> m_arrRelativeGridColumn;
 
     ::osl::Mutex    m_aMutex;
-    ULONG           m_nInvalidationEvent;
-    ULONG           m_nActivationEvent;
+    sal_uLong           m_nInvalidationEvent;
+    sal_uLong           m_nActivationEvent;
     ::std::queue< FmLoadAction >
                     m_aLoadingPages;
 

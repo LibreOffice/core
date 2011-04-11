@@ -35,7 +35,6 @@
 #include <hintids.hxx>
 #include <swtypes.hxx>
 #include <ndtxt.hxx>
-#include <errhdl.hxx>
 
 SwFmtChg::SwFmtChg( SwFmt *pFmt )
     : SwMsgPoolItem( RES_FMT_CHG ),
@@ -67,7 +66,7 @@ SwDelTxt::SwDelTxt( xub_StrLen nS, xub_StrLen nL )
 
 
 
-SwUpdateAttr::SwUpdateAttr( xub_StrLen nS, xub_StrLen nE, USHORT nW )
+SwUpdateAttr::SwUpdateAttr( xub_StrLen nS, xub_StrLen nE, sal_uInt16 nW )
     : SwMsgPoolItem( RES_UPDATE_ATTR ),
     nStart( nS ),
     nEnd( nE ),
@@ -102,7 +101,7 @@ SwTableFmlUpdate::SwTableFmlUpdate( const SwTable* pNewTbl )
     eFlags( TBL_CALC )
 {
     DATA.pDelTbl = 0;
-    bModified = bBehindSplitLine = FALSE;
+    bModified = bBehindSplitLine = sal_False;
     OSL_ENSURE( pTbl, "es muss ein Table-Pointer gesetzt werden!" );
 }
 
@@ -115,7 +114,7 @@ SwAutoFmtGetDocNode::SwAutoFmtGetDocNode( const SwNodes* pNds )
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet )
     : SwMsgPoolItem( RES_ATTRSET_CHG ),
-    bDelSet( FALSE ),
+    bDelSet( sal_False ),
     pChgSet( &rSet ),
     pTheChgdSet( &rTheSet )
 {}
@@ -123,7 +122,7 @@ SwAttrSetChg::SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet )
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSetChg& rChgSet )
     : SwMsgPoolItem( RES_ATTRSET_CHG ),
-    bDelSet( TRUE ),
+    bDelSet( sal_True ),
     pTheChgdSet( rChgSet.pTheChgdSet )
 {
     pChgSet = new SwAttrSet( *rChgSet.pChgSet );
@@ -139,7 +138,7 @@ SwAttrSetChg::~SwAttrSetChg()
 
 #if OSL_DEBUG_LEVEL > 1
 
-void SwAttrSetChg::ClearItem( USHORT nWhch )
+void SwAttrSetChg::ClearItem( sal_uInt16 nWhch )
 {
     OSL_ENSURE( bDelSet, "der Set darf nicht veraendert werden!" );
     pChgSet->ClearItem( nWhch );
@@ -148,7 +147,7 @@ void SwAttrSetChg::ClearItem( USHORT nWhch )
 #endif
 
 
-SwMsgPoolItem::SwMsgPoolItem( USHORT nWhch )
+SwMsgPoolItem::SwMsgPoolItem( sal_uInt16 nWhch )
     : SfxPoolItem( nWhch )
 {}
 
@@ -156,14 +155,14 @@ SwMsgPoolItem::SwMsgPoolItem( USHORT nWhch )
 // "Overhead" vom SfxPoolItem
 int SwMsgPoolItem::operator==( const SfxPoolItem& ) const
 {
-    OSL_ENSURE( FALSE, "SwMsgPoolItem kennt kein ==" );
+    OSL_FAIL( "SwMsgPoolItem kennt kein ==" );
     return 0;
 }
 
 
 SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
 {
-    OSL_ENSURE( FALSE, "SwMsgPoolItem kennt kein Clone" );
+    OSL_FAIL( "SwMsgPoolItem kennt kein Clone" );
     return 0;
 }
 
@@ -174,17 +173,16 @@ SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
  * Used to be inlined (hintids.hxx) in PRODUCT.
  ******************************************************************************/
 #if OSL_DEBUG_LEVEL > 1
-const SfxPoolItem* GetDfltAttr( USHORT nWhich )
+const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
 {
-    ASSERT_ID( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN,
-               ERR_OUTOFSCOPE );
+    OSL_ASSERT( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN );
 
     SfxPoolItem *pHt = aAttrTab[ nWhich - POOLATTR_BEGIN ];
     OSL_ENSURE( pHt, "GetDfltFmtAttr(): Dflt == 0" );
     return pHt;
 }
 #else
-const SfxPoolItem* GetDfltAttr( USHORT nWhich )
+const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
 {
     return aAttrTab[ nWhich - POOLATTR_BEGIN ];
 }
@@ -206,17 +204,6 @@ SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
 {
 }
 
-// --> OD 2008-02-19 #refactorlists#
-//SwNumRuleInfo::SwNumRuleInfo( const String& rRuleName )
-//    : SwMsgPoolItem( RES_GETNUMNODES ), rName( rRuleName )
-//{
-//}
-
-//void SwNumRuleInfo::AddNode( SwTxtNode& rNd )
-//{
-//    aList.Insert(rNd.GetIndex(), &rNd);
-//}
-
 
 SwFindNearestNode::SwFindNearestNode( const SwNode& rNd )
     : SwMsgPoolItem( RES_FINDNEARESTNODE ), pNd( &rNd ), pFnd( 0 )
@@ -227,7 +214,7 @@ void SwFindNearestNode::CheckNode( const SwNode& rNd )
 {
     if( &pNd->GetNodes() == &rNd.GetNodes() )
     {
-        ULONG nIdx = rNd.GetIndex();
+        sal_uLong nIdx = rNd.GetIndex();
         if( nIdx < pNd->GetIndex() &&
             ( !pFnd || nIdx > pFnd->GetIndex() ) &&
             nIdx > rNd.GetNodes().GetEndOfExtras().GetIndex() )
@@ -237,20 +224,20 @@ void SwFindNearestNode::CheckNode( const SwNode& rNd )
 
 
 
-USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript )
+sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript )
 {
-    static const USHORT aLangMap[3] =
+    static const sal_uInt16 aLangMap[3] =
         { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE };
-    static const USHORT aFontMap[3] =
+    static const sal_uInt16 aFontMap[3] =
         { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,  RES_CHRATR_CTL_FONT};
-    static const USHORT aFontSizeMap[3] =
+    static const sal_uInt16 aFontSizeMap[3] =
         { RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE,  RES_CHRATR_CTL_FONTSIZE };
-    static const USHORT aWeightMap[3] =
+    static const sal_uInt16 aWeightMap[3] =
         { RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT,  RES_CHRATR_CTL_WEIGHT};
-    static const USHORT aPostureMap[3] =
+    static const sal_uInt16 aPostureMap[3] =
         { RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE,  RES_CHRATR_CTL_POSTURE};
 
-    const USHORT* pM;
+    const sal_uInt16* pM;
     switch( nWhich )
     {
     case RES_CHRATR_LANGUAGE:
@@ -286,13 +273,13 @@ USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript )
         pM = 0;
     }
 
-    USHORT nRet;
+    sal_uInt16 nRet;
     if( pM )
     {
         using namespace ::com::sun::star::i18n;
         {
             if( ScriptType::WEAK == nScript )
-                nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
+                nScript = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
             switch( nScript)
             {
             case ScriptType::COMPLEX:   ++pM;  // no break;

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <vcl/settings.hxx>
 #include <unotools/viewoptions.hxx>
@@ -49,7 +46,7 @@ using ::com::sun::star::frame::XFrame;
 //#                                                                      #
 //########################################################################
 
-SvxHlinkCtrl::SvxHlinkCtrl( USHORT _nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg )
+SvxHlinkCtrl::SvxHlinkCtrl( sal_uInt16 _nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg )
 : SfxControllerItem ( _nId, rBindings )
   ,aOnlineForwarder  ( SID_INTERNET_ONLINE , *this )
   ,aRdOnlyForwarder  ( SID_READONLY_MODE, *this )
@@ -57,7 +54,7 @@ SvxHlinkCtrl::SvxHlinkCtrl( USHORT _nId, SfxBindings & rBindings, SvxHpLinkDlg* 
     pParent = pDlg;
 }
 
-void SvxHlinkCtrl::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState )
 {
     if ( eState == SFX_ITEM_AVAILABLE )
@@ -76,7 +73,7 @@ void SvxHlinkCtrl::StateChanged( USHORT nSID, SfxItemState eState,
             break;
             case SID_READONLY_MODE :
             {
-                pParent->SetReadOnlyMode( ( (SfxBoolItem*)pState)->GetValue() == TRUE );
+                pParent->SetReadOnlyMode( ( (SfxBoolItem*)pState)->GetValue() == sal_True );
             }
             break;
         }
@@ -112,33 +109,25 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     mbGrabFocus = sal_True;
     // insert pages
     Image aImage;
-    Image aImageHC;
     String aStrTitle;
     SvxIconChoiceCtrlEntry* pEntry = NULL;
 
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLINETTP ) );
-    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLINETTP_H ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, aImageHC, SvxHyperlinkInternetTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, SvxHyperlinkInternetTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLMAILTP ) );
-    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLMAILTP_H ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, aImageHC, SvxHyperlinkMailTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, SvxHyperlinkMailTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCTP ) );
-    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLDOCTP_H ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkDocTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, SvxHyperlinkDocTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP ) );
-    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP_H ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkNewDocTp::Create );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, SvxHyperlinkNewDocTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
-
-    // all tab pages set -> create mnemonics
-    //  CreateIconTextAutoMnemonics();  #99671# not useful, because this is not what user expects when using mnemonics on the pages
 
     // create itemset for tabpages
     mpItemSet = new SfxItemSet( SFX_APP()->GetPool(), SID_HYPERLINK_GETLINK,
@@ -150,7 +139,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     SetInputSet (mpItemSet);
 
     // Init Dialog
-    Start (FALSE);
+    Start (sal_False);
 
     pBindings->Update( SID_READONLY_MODE );
 
@@ -177,12 +166,12 @@ SvxHpLinkDlg::~SvxHpLinkDlg ()
 |*
 |************************************************************************/
 
-BOOL SvxHpLinkDlg::Close()
+sal_Bool SvxHpLinkDlg::Close()
 {
     GetDispatcher()->Execute( SID_HYPERLINK_DIALOG,
                               SFX_CALLMODE_ASYNCHRON |
                               SFX_CALLMODE_RECORD);
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -209,13 +198,13 @@ void SvxHpLinkDlg::Move()
         // Size of Extrawindow
         Size aExtraWndSize( pCurrentPage->GetSizeExtraWnd() );
 
-        BOOL bDoInvalid ;
+        sal_Bool bDoInvalid ;
         if( aDlgPos.X()+(1.02*aDlgSize.Width())+aExtraWndSize.Width() > aWindowSize.Width() )
         {
             if( aDlgPos.X() - ( 0.02*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
             {
                 // Pos Extrawindow anywhere
-                bDoInvalid = pCurrentPage->MoveToExtraWnd( Point( 1, long(1.1*aDlgPos.Y()) ), TRUE );
+                bDoInvalid = pCurrentPage->MoveToExtraWnd( Point( 1, long(1.1*aDlgPos.Y()) ), sal_True );
             }
             else
             {
@@ -237,26 +226,6 @@ void SvxHpLinkDlg::Move()
 
     Window::Move();
 }
-
-/*long SvxHpLinkDlg::PreNotify( NotifyEvent& rNEvt )
-{
-    long nRet = 0;
-
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
-    {
-        DBG_ASSERT( rNEvt.GetKeyEvent(), "-SvxHpLinkDlg::PreNotify(): no KeyEvent for key event?!" );
-
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-
-        if( KEY_MOD2 == pKEvt->GetKeyCode().GetModifier() && pKEvt->GetCharCode() && HandleShortCutKey( *pKEvt ) )
-            nRet = 1;
-    }
-
-    if( !nRet )
-        nRet = IconChoiceDialog::PreNotify( rNEvt );
-
-    return nRet;
-}*/
 
 /*************************************************************************
 |*
@@ -309,9 +278,9 @@ IMPL_LINK ( SvxHpLinkDlg, ClickCloseHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-USHORT SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
+sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 {
-    USHORT nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
+    sal_uInt16 nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
 
     String aStrURL ( pItem->GetURL() );
     INetURLObject aURL ( aStrURL );
@@ -405,7 +374,7 @@ void SvxHpLinkDlg::SetReadOnlyMode( sal_Bool bRdOnly )
 |*
 |************************************************************************/
 
-void SvxHpLinkDlg::PageCreated( USHORT /*nId*/, IconChoicePage& rPage )
+void SvxHpLinkDlg::PageCreated( sal_uInt16 /*nId*/, IconChoicePage& rPage )
 {
     SvxHyperlinkTabPageBase& rHyperlinkPage = dynamic_cast< SvxHyperlinkTabPageBase& >( rPage );
     Reference< XFrame > xDocumentFrame;

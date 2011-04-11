@@ -50,7 +50,7 @@ interface XStringRepresentation
     */
     string  convertToControlValue([in]any PropertyValue) raises( com::sun::star::uno::Exception );
 
-    /** converts a string into an any with the type defined by the target tpye.
+    /** converts a string into an any with the type defined by the target type.
         @param ControlValue
             The to-be-converted control value.
         @param ControlValueType

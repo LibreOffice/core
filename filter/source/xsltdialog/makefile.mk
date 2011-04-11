@@ -31,7 +31,6 @@ TARGET=xsltdlg
 
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
-#GEN_HID=TRUE
 GEN_HID_OTHER=TRUE
 
 # --- Settings ----------------------------------
@@ -92,3 +91,11 @@ DEF1EXPORTFILE=exports.dxp
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
+ALLTAR : $(MISC)/xsltdlg.component
+
+$(MISC)/xsltdlg.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        xsltdlg.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt xsltdlg.component

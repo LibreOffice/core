@@ -37,7 +37,7 @@
 
 /* [Description]
 
-    This item describe the scriptype of the selected text and is only
+    This item describe the script type of the selected text and is only
     used for the user interface.
 */
 
@@ -50,8 +50,8 @@ public:
                         const sal_uInt16 nId  );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual USHORT          GetVersion( USHORT nFileVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

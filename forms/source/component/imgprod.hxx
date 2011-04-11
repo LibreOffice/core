@@ -29,9 +29,10 @@
 #ifndef _PRODUCE_HXX
 #define _PRODUCE_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <tools/link.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <com/sun/star/awt/ImageStatus.hpp>
 #include <com/sun/star/awt/XImageConsumer.hpp>
 #include <com/sun/star/awt/XImageProducer.hpp>
@@ -61,8 +62,10 @@ class ImageProducer :   public ::com::sun::star::awt::XImageProducer,
 {
 private:
 
+    typedef boost::ptr_vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > > ConsumerList_t;
+
     ::rtl::OUString maURL;
-    List            maConsList;
+    ConsumerList_t  maConsList;
     Graphic*        mpGraphic;
     SvStream*       mpStm;
     sal_uInt32      mnTransIndex;

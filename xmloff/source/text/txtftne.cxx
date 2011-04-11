@@ -52,7 +52,7 @@
 #include <com/sun/star/text/FootnoteNumbering.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlnumfe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>

@@ -58,7 +58,6 @@ OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWind
     ,m_rBorderWin( _rBorderWindow )
 {
     DBG_CTOR(OApplicationSwapWindow,NULL);
-//  SetCompoundControl( TRUE );
 
     ImplInitSettings( sal_True, sal_True, sal_True );
 
@@ -66,7 +65,6 @@ OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWind
     m_aIconControl.setControlActionListener( &m_rBorderWin.getView()->getAppController() );
     m_aIconControl.SetHelpId(HID_APP_SWAP_ICONCONTROL);
     m_aIconControl.Show();
-    //m_aIconControl.Enable(TRUE);
 }
 // -----------------------------------------------------------------------------
 OApplicationSwapWindow::~OApplicationSwapWindow()
@@ -126,7 +124,7 @@ void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
 void OApplicationSwapWindow::clearSelection()
 {
     m_aIconControl.SetNoSelection();
-    ULONG nPos = 0;
+    sal_uLong nPos = 0;
     SvxIconChoiceCtrlEntry* pEntry = m_aIconControl.GetSelectedEntry(nPos);
     if ( pEntry )
         m_aIconControl.InvalidateEntry(pEntry);
@@ -153,7 +151,7 @@ bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
 // -----------------------------------------------------------------------------
 ElementType OApplicationSwapWindow::getElementType() const
 {
-    ULONG nPos = 0;
+    sal_uLong nPos = 0;
     SvxIconChoiceCtrlEntry* pEntry = m_aIconControl.GetSelectedEntry(nPos);
     return ( pEntry ) ? *static_cast<ElementType*>(pEntry->GetUserData()) : E_NONE;
 }
@@ -169,7 +167,7 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
         if ( _eType != E_NONE )
             m_eLastType = _eType;
         return true;
-    } // if ( m_rBorderWin.getView()->getAppController().onContainerSelect( _eType ) )
+    }
 
     PostUserEvent( LINK( this, OApplicationSwapWindow, ChangeToLastSelected ) );
     return false;
@@ -178,7 +176,7 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
 // -----------------------------------------------------------------------------
 IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pControl)
 {
-    ULONG nPos = 0;
+    sal_uLong nPos = 0;
     SvxIconChoiceCtrlEntry* pEntry = _pControl->GetSelectedEntry( nPos );
     ElementType eType = E_NONE;
     if ( pEntry )
@@ -198,9 +196,9 @@ IMPL_LINK(OApplicationSwapWindow, ChangeToLastSelected, void*, EMPTYARG)
 // -----------------------------------------------------------------------------
 void OApplicationSwapWindow::selectContainer(ElementType _eType)
 {
-    ULONG nCount = m_aIconControl.GetEntryCount();
+    sal_uLong nCount = m_aIconControl.GetEntryCount();
     SvxIconChoiceCtrlEntry* pEntry = NULL;
-    for (ULONG i=0; i < nCount; ++i)
+    for (sal_uLong i=0; i < nCount; ++i)
     {
         pEntry = m_aIconControl.GetEntry(i);
         if ( pEntry && *static_cast<ElementType*>(pEntry->GetUserData()) == _eType )

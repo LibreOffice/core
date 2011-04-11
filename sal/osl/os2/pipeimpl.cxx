@@ -121,10 +121,6 @@ public:
     virtual Pipe *AcceptConnection();
 };
 
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
-
 HANDLE  Pipe::CreatePipeDataMapping( LPCTSTR lpName )
 {
     HANDLE  hMapping = NULL;
@@ -187,10 +183,6 @@ HANDLE  Pipe::CreatePipeDataMapping( LPCTSTR lpName )
     return hMapping;
 }
 
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
-
 HANDLE  Pipe::OpenPipeDataMapping( LPCTSTR lpName )
 {
     HANDLE  hMapping = NULL;
@@ -207,10 +199,6 @@ HANDLE  Pipe::OpenPipeDataMapping( LPCTSTR lpName )
     return hMapping;
 }
 
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
-
 HANDLE  Pipe::CreatePipeDataMutex( LPCTSTR lpName, BOOL bInitialOwner )
 {
     HANDLE  hMutex = NULL;
@@ -226,10 +214,6 @@ HANDLE  Pipe::CreatePipeDataMutex( LPCTSTR lpName, BOOL bInitialOwner )
 
     return hMutex;
 }
-
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
 
 HANDLE Pipe::CreatePipeConnectionSemaphore( LPCTSTR lpName, LONG lInitialCount, LONG lMaximumCount )
 {

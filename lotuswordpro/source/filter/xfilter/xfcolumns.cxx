@@ -57,11 +57,6 @@
  * @file
  * Columns styles for section, or paragraph.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-17 create this file.
- ************************************************************************/
-
 #include    "xfcolumns.hxx"
 
 void    XFColumn::SetRelWidth(sal_Int32 width)
@@ -205,7 +200,7 @@ void    XFColumns::ToXml(IXFStream *pStrm)
     if(!(m_nFlag&XFCOLUMNS_FLAG_GAP) )
     {
         std::vector<XFColumn>::iterator it;
-        for( it = m_aColumns.begin(); it != m_aColumns.end(); it++ )
+        for( it = m_aColumns.begin(); it != m_aColumns.end(); ++it )
         {
             (*it).ToXml(pStrm);
         }

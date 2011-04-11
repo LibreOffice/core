@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <tools/list.hxx>
 #include <svx/svdobj.hxx>
 #include <init.hxx>
 #include <fesh.hxx>
@@ -56,14 +55,10 @@
 #include <edimp.hxx>
 #include <pagedesc.hxx>
 #include <fmtanchr.hxx>
-// OD 29.10.2003 #113049#
 #include <environmentofanchoredobject.hxx>
-// OD 12.11.2003 #i22341#
-#include <ndtxt.hxx>
-// OD 27.11.2003 #112045#
+#include <ndtxt.hxx> // #i22341#
 #include <dflyobj.hxx>
-// OD 2004-03-29 #i26791#
-#include <dcontact.hxx>
+#include <dcontact.hxx> // #i26791#
 
 
 using namespace com::sun::star;
@@ -74,9 +69,6 @@ TYPEINIT1(SwFEShell,SwEditShell)
 /***********************************************************************
 #*  Class      :  SwFEShell
 #*  Methode    :  EndAllActionAndCall()
-#*
-#*  Datum      :  MA 03. May. 93
-#*  Update     :  MA 31. Oct. 95
 #***********************************************************************/
 
 void SwFEShell::EndAllActionAndCall()
@@ -98,11 +90,9 @@ void SwFEShell::EndAllActionAndCall()
 #*  Class       :  SwFEShell
 #*  Methode     :  GetCntntPos
 #*  Beschreibung:  Ermitteln des Cntnt's der dem Punkt am naechsten liegt
-#*  Datum       :  MA 02. Jun. 92
-#*  Update      :  MA 02. May. 95
 #***********************************************************************/
 
-Point SwFEShell::GetCntntPos( const Point& rPoint, BOOL bNext ) const
+Point SwFEShell::GetCntntPos( const Point& rPoint, sal_Bool bNext ) const
 {
     SET_CURR_SHELL( (ViewShell*)this );
     return GetLayout()->GetNextPrevCntntPos( rPoint, bNext );
@@ -125,19 +115,26 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
             Point aPt( *pPt );
             GetLayout()->GetCrsrOfst( &aPos, aPt );
             SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
-            pFrm = pNd->GetFrm( pPt );
+            pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
         }
         else
+        {
+            const bool bOldCallbackActionEnabled = GetLayout()->IsCallbackActionEnabled();
+            if( bOldCallbackActionEnabled )
+                GetLayout()->SetCallbackActionEnabled( sal_False );
             pFrm = GetCurrFrm();
+            if( bOldCallbackActionEnabled )
+                GetLayout()->SetCallbackActionEnabled( sal_True );
+        }
     }
 
     if( !pFrm )
         return GetLayout()->Frm();
 
-    BOOL  bFrm  = TRUE;
+    sal_Bool  bFrm  = sal_True;
     switch ( eType )
     {
-        case RECT_PAGE_PRT:         bFrm = FALSE; /* no break */
+        case RECT_PAGE_PRT:         bFrm = sal_False; /* no break */
         case RECT_PAGE :            pFrm = pFrm->FindPageFrm();
                                     break;
 
@@ -146,7 +143,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                     pFrm->Calc();
                                     break;
 
-        case RECT_FLY_PRT_EMBEDDED: bFrm = FALSE; /* no break */
+        case RECT_FLY_PRT_EMBEDDED: bFrm = sal_False; /* no break */
         case RECT_FLY_EMBEDDED:     pFrm = xObj.is() ? FindFlyFrm( xObj )
                                                 : pFrm->IsFlyFrm()
                                                     ? pFrm
@@ -157,22 +154,22 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
         case RECT_OUTTABSECTION :   if( pFrm->IsInTab() )
                                         pFrm = pFrm->FindTabFrm();
                                     else {
-                                        OSL_ENSURE( FALSE, "Missing Table" );
+                                        OSL_FAIL( "Missing Table" );
                                     }
                                     /* KEIN BREAK */
         case RECT_SECTION_PRT:
         case RECT_SECTION:          if( pFrm->IsInSct() )
                                         pFrm = pFrm->FindSctFrm();
                                     else {
-                                        OSL_ENSURE( FALSE, "Missing section" );
+                                        OSL_FAIL( "Missing section" );
                                     }
 
                                     if( RECT_OUTTABSECTION_PRT == eType ||
                                         RECT_SECTION_PRT == eType )
-                                        bFrm = FALSE;
+                                        bFrm = sal_False;
                                     break;
 
-        case RECT_HEADERFOOTER_PRT: bFrm = FALSE; /* no break */
+        case RECT_HEADERFOOTER_PRT: bFrm = sal_False; /* no break */
         case RECT_HEADERFOOTER:     if( 0 == (pFrm = pFrm->FindFooterOrHeader()) )
                                         return GetLayout()->Frm();
                                     break;
@@ -185,7 +182,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
 }
 
 
-USHORT SwFEShell::GetPageNumber( const Point &rPoint ) const
+sal_uInt16 SwFEShell::GetPageNumber( const Point &rPoint ) const
 {
     const SwFrm *pPage = GetLayout()->Lower();
     while ( pPage && !pPage->Frm().IsInside( rPoint ) )
@@ -197,13 +194,13 @@ USHORT SwFEShell::GetPageNumber( const Point &rPoint ) const
 }
 
 
-BOOL SwFEShell::GetPageNumber( long nYPos, BOOL bAtCrsrPos, USHORT& rPhyNum, USHORT& rVirtNum, String &rDisplay) const
+sal_Bool SwFEShell::GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, String &rDisplay) const
 {
     const SwFrm *pPage;
 
     if ( bAtCrsrPos )                   //Seite vom Crsr besorgen
     {
-        pPage = GetCurrFrm( FALSE );
+        pPage = GetCurrFrm( sal_False );
         if ( pPage )
             pPage = pPage->FindPageFrm();
     }
@@ -242,7 +239,7 @@ BOOL SwFEShell::GetPageNumber( long nYPos, BOOL bAtCrsrPos, USHORT& rPhyNum, USH
 
 bool SwFEShell::IsDirectlyInSection() const
 {
-    SwFrm* pFrm = GetCurrFrm( FALSE );
+    SwFrm* pFrm = GetCurrFrm( sal_False );
     return pFrm && pFrm->GetUpper() && pFrm->GetUpper()->IsSctFrm();
 }
 
@@ -250,14 +247,11 @@ bool SwFEShell::IsDirectlyInSection() const
 |*
 |*  SwFEShell::GetFrmType()
 |*
-|*  Ersterstellung      MA 12. Jan. 93
-|*  Letzte Aenderung    AMA 25. Nov. 98
-|*
 *************************************************************************/
 
-USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
+sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
 {
-    USHORT nReturn = FRMTYPE_NONE;
+    sal_uInt16 nReturn = FRMTYPE_NONE;
     const SwFrm *pFrm;
     if ( pPt )
     {
@@ -265,10 +259,10 @@ USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
         Point aPt( *pPt );
         GetLayout()->GetCrsrOfst( &aPos, aPt );
         SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
-        pFrm = pNd->GetFrm( pPt );
+        pFrm = pNd->getLayoutFrm( GetLayout(), pPt );
     }
     else
-        pFrm = GetCurrFrm( FALSE );
+        pFrm = GetCurrFrm( sal_False );
     while ( pFrm )
     {
         switch ( pFrm->GetType() )
@@ -326,12 +320,9 @@ USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
 |*
 |*  SwFEShell::ShLooseFcs(), ShGetFcs()
 |*
-|*  Ersterstellung      MA 10. May. 93
-|*  Letzte Aenderung    MA 09. Sep. 98
-|*
 *************************************************************************/
 
-void SwFEShell::ShGetFcs( BOOL bUpdate )
+void SwFEShell::ShGetFcs( sal_Bool bUpdate )
 {
     ::SetShell( this );
     SwCrsrShell::ShGetFcs( bUpdate );
@@ -353,7 +344,6 @@ void SwFEShell::ShLooseFcs()
         Imp()->GetDrawView()->hideMarkHandles();
         FrameNotify( this, FLY_DRAG_END );
     }
-//  ::ResetShell();
 }
 
 /*************************************************************************
@@ -361,12 +351,9 @@ void SwFEShell::ShLooseFcs()
 |*  SwFEShell::GetPhyPageNum()
 |*  SwFEShell::GetVirtPageNum()
 |*
-|*  Ersterstellung      OK 07.07.93 08:20
-|*  Letzte Aenderung    MA 03. Jan. 94
-|*
 *************************************************************************/
 
-USHORT SwFEShell::GetPhyPageNum()
+sal_uInt16 SwFEShell::GetPhyPageNum()
 {
     SwFrm *pFrm = GetCurrFrm();
     if ( pFrm )
@@ -374,7 +361,7 @@ USHORT SwFEShell::GetPhyPageNum()
     return 0;
 }
 
-USHORT SwFEShell::GetVirtPageNum( const BOOL bCalcFrm )
+sal_uInt16 SwFEShell::GetVirtPageNum( const sal_Bool bCalcFrm )
 {
     SwFrm *pFrm = GetCurrFrm( bCalcFrm );
     if ( pFrm )
@@ -387,14 +374,11 @@ USHORT SwFEShell::GetVirtPageNum( const BOOL bCalcFrm )
 |*  void lcl_SetAPageOffset()
 |*  void SwFEShell::SetNewPageOffset()
 |*  void SwFEShell::SetPageOffset()
-|*  USHORT SwFEShell::GetPageOffset() const
-|*
-|*  Ersterstellung      OK 07.07.93 08:20
-|*  Letzte Aenderung    MA 30. Mar. 95
+|*  sal_uInt16 SwFEShell::GetPageOffset() const
 |*
 *************************************************************************/
 
-void lcl_SetAPageOffset( USHORT nOffset, SwPageFrm* pPage, SwFEShell* pThis )
+void lcl_SetAPageOffset( sal_uInt16 nOffset, SwPageFrm* pPage, SwFEShell* pThis )
 {
     pThis->StartAllAction();
     OSL_ENSURE( pPage->FindFirstBodyCntnt(),
@@ -403,7 +387,7 @@ void lcl_SetAPageOffset( USHORT nOffset, SwPageFrm* pPage, SwFEShell* pThis )
     SwFmtPageDesc aDesc( pPage->GetPageDesc() );
     aDesc.SetNumOffset( nOffset );
 
-    SwFrm *pFrm = pThis->GetCurrFrm( FALSE );
+    SwFrm *pFrm = pThis->GetCurrFrm( sal_False );
     if ( pFrm->IsInTab() )
         pThis->GetDoc()->SetAttr( aDesc, *pFrm->FindTabFrm()->GetFmt() );
     else
@@ -414,17 +398,17 @@ void lcl_SetAPageOffset( USHORT nOffset, SwPageFrm* pPage, SwFEShell* pThis )
     pThis->EndAllAction();
 }
 
-void SwFEShell::SetNewPageOffset( USHORT nOffset )
+void SwFEShell::SetNewPageOffset( sal_uInt16 nOffset )
 {
-    GetLayout()->SetVirtPageNum( TRUE );
-    const SwPageFrm *pPage = GetCurrFrm( FALSE )->FindPageFrm();
+    GetLayout()->SetVirtPageNum( sal_True );
+    const SwPageFrm *pPage = GetCurrFrm( sal_False )->FindPageFrm();
     lcl_SetAPageOffset( nOffset, (SwPageFrm*)pPage, this );
 }
 
-void SwFEShell::SetPageOffset( USHORT nOffset )
+void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
 {
-    const SwPageFrm *pPage = GetCurrFrm( FALSE )->FindPageFrm();
-    const SwRootFrm* pLayout = GetLayout();
+    const SwPageFrm *pPage = GetCurrFrm( sal_False )->FindPageFrm();
+    const SwRootFrm* pDocLayout = GetLayout();
     while ( pPage )
     {
         const SwFrm *pFlow = pPage->FindFirstBodyCntnt();
@@ -435,7 +419,7 @@ void SwFEShell::SetPageOffset( USHORT nOffset )
             const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
             if ( rPgDesc.GetNumOffset() )
             {
-                pLayout->SetVirtPageNum( TRUE );
+                pDocLayout->SetVirtPageNum( sal_True );
                 lcl_SetAPageOffset( nOffset, (SwPageFrm*)pPage, this );
                 break;
             }
@@ -444,7 +428,7 @@ void SwFEShell::SetPageOffset( USHORT nOffset )
     }
 }
 
-USHORT SwFEShell::GetPageOffset() const
+sal_uInt16 SwFEShell::GetPageOffset() const
 {
     const SwPageFrm *pPage = GetCurrFrm()->FindPageFrm();
     while ( pPage )
@@ -454,7 +438,7 @@ USHORT SwFEShell::GetPageOffset() const
         {
             if ( pFlow->IsInTab() )
                 pFlow = pFlow->FindTabFrm();
-            const USHORT nOffset = pFlow->GetAttrSet()->GetPageDesc().GetNumOffset();
+            const sal_uInt16 nOffset = pFlow->GetAttrSet()->GetPageDesc().GetNumOffset();
             if ( nOffset )
                 return nOffset;
         }
@@ -467,25 +451,22 @@ USHORT SwFEShell::GetPageOffset() const
 |*
 |*  SwFEShell::InsertLabel()
 |*
-|*  Ersterstellung      MA 10. Feb. 94
-|*  Letzte Aenderung    MA 10. Feb. 94
-|*
 *************************************************************************/
 
 void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
                              const String& rNumberSeparator,
-                             const BOOL bBefore, const USHORT nId,
+                             const sal_Bool bBefore, const sal_uInt16 nId,
                              const String& rCharacterStyle,
-                             const BOOL bCpyBrd )
+                             const sal_Bool bCpyBrd )
 {
     //NodeIndex der CrsrPosition besorgen, den Rest kann das Dokument
     //selbst erledigen.
-    SwCntntFrm *pCnt = LTYPE_DRAW==eType ? 0 : GetCurrFrm( FALSE );
+    SwCntntFrm *pCnt = LTYPE_DRAW==eType ? 0 : GetCurrFrm( sal_False );
     if( LTYPE_DRAW==eType || pCnt )
     {
         StartAllAction();
 
-        ULONG nIdx = 0;
+        sal_uLong nIdx = 0;
         SwFlyFrmFmt* pFlyFmt = 0;
         switch( eType )
         {
@@ -496,7 +477,6 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                 //Bei Flys den Index auf den StartNode herunterreichen.
                 nIdx = pCnt->FindFlyFrm()->
                             GetFmt()->GetCntnt().GetCntntIdx()->GetIndex();
-//warum?? Bug 61913     ParkCrsr( GetCrsr()->GetPoint()->nNode );
             }
             break;
         case LTYPE_TABLE:
@@ -515,13 +495,14 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                 const SdrMarkList& rMrkList = pDView->GetMarkedObjectList();
                 StartUndo();
 
-                // OD 27.11.2003 #112045# - copy marked drawing objects to
+                // copy marked drawing objects to
                 // local list to perform the corresponding action for each object
                 std::vector<SdrObject*> aDrawObjs;
                 {
-                    for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
+                    for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
                     {
                         SdrObject* pDrawObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
+                        if( pDrawObj )
                         aDrawObjs.push_back( pDrawObj );
                     }
                 }
@@ -555,7 +536,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
         SwFlyFrm* pFrm;
         const Point aPt( GetCrsrDocPos() );
         if( pFlyFmt && 0 != ( pFrm = pFlyFmt->GetFrm( &aPt )))
-            SelectFlyFrm( *pFrm, TRUE );
+            SelectFlyFrm( *pFrm, sal_True );
 
         EndAllActionAndCall();
     }
@@ -565,23 +546,21 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
 /***********************************************************************
 #*  Class       :  SwFEShell
 #*  Methoden    :  Sort
-#*  Datum       :  ??
-#*  Update      :  ??
 #***********************************************************************/
 
-BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
+sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
 {
     if( !HasSelection() )
-        return FALSE;
+        return sal_False;
 
     SET_CURR_SHELL( this );
-    BOOL bRet;
+    sal_Bool bRet;
     StartAllAction();
     if(IsTableMode())
     {
         // Tabelle sortieren
         // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
-        SwFrm *pFrm = GetCurrFrm( FALSE );
+        SwFrm *pFrm = GetCurrFrm( sal_False );
         OSL_ENSURE( pFrm->FindTabFrm(), "Crsr nicht in Tabelle." );
 
         // lasse ueber das Layout die Boxen suchen
@@ -594,7 +573,7 @@ BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
         while( !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
         {
-            /* #107993# ParkCursor->ParkCursorTab */
+            /* ParkCursor->ParkCursorTab */
             ParkCursorInTab();
         }
 
@@ -612,7 +591,7 @@ BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
             SwPosition* pEnd   = pPam->End();
 
             SwNodeIndex aPrevIdx( pStart->nNode, -1 );
-            ULONG nOffset = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
+            sal_uLong nOffset = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
             xub_StrLen nCntStt  = pStart->nContent.GetIndex();
 
             // Das Sortieren
@@ -643,15 +622,12 @@ BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
 |*
 |*  SwFEShell::GetCurColNum(), _GetColNum()
 |*
-|*  Ersterstellung      MA 03. Feb. 95
-|*  Letzte Aenderung    MA 20. Apr. 95
-|
 |*************************************************************************/
 
-USHORT SwFEShell::_GetCurColNum( const SwFrm *pFrm,
+sal_uInt16 SwFEShell::_GetCurColNum( const SwFrm *pFrm,
                                 SwGetCurColNumPara* pPara ) const
 {
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     while ( pFrm )
     {
         pFrm = pFrm->GetUpper();
@@ -691,15 +667,15 @@ USHORT SwFEShell::_GetCurColNum( const SwFrm *pFrm,
     return nRet;
 }
 
-USHORT SwFEShell::GetCurColNum( SwGetCurColNumPara* pPara ) const
+sal_uInt16 SwFEShell::GetCurColNum( SwGetCurColNumPara* pPara ) const
 {
     OSL_ENSURE( GetCurrFrm(), "Crsr geparkt?" );
     return _GetCurColNum( GetCurrFrm(), pPara );
 }
 
-USHORT SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
+sal_uInt16 SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
 {
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     SwFrm* pFrm = GetCurrFrm();
     OSL_ENSURE( pFrm, "Crsr geparkt?" );
     if( pFrm )
@@ -715,13 +691,13 @@ USHORT SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
 
 SwFEShell::SwFEShell( SwDoc& rDoc, Window *pWindow, const SwViewOption *pOptions )
     : SwEditShell( rDoc, pWindow, pOptions ),
-    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( FALSE )
+    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( sal_False )
 {
 }
 
 SwFEShell::SwFEShell( SwEditShell& rShell, Window *pWindow )
     : SwEditShell( rShell, pWindow ),
-    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( FALSE )
+    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( sal_False )
 {
 }
 
@@ -731,11 +707,11 @@ SwFEShell::~SwFEShell()
     delete pChainTo;
 }
 
-// OD 18.09.2003 #i17567#, #108749#, #110354# - adjustments for allowing
+// #i17567# - adjustments for allowing
 //          negative vertical positions for fly frames anchored to paragraph/to character.
-// OD 06.11.2003 #i22305# - adjustments for option 'Follow text flow'
+// #i22305# - adjustments for option 'Follow text flow'
 //          for to frame anchored objects.
-// OD 12.11.2003 #i22341# - adjustments for vertical alignment at top of line
+// #i22341# - adjustments for vertical alignment at top of line
 //          for to character anchored objects.
 void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                const RndStdIds _nAnchorId,
@@ -773,8 +749,11 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     _bMirror = _bMirror && !pPage->OnRightPage();
 
     Point aPos;
-    BOOL bVertic = FALSE;
-    BOOL bRTL = FALSE;
+    bool bVertic = false;
+    sal_Bool bRTL = sal_False;
+    // --> OD 2009-09-01 #mongolianlayout#
+    bool bVerticalL2R = false;
+    // <--
 
     if ((FLY_AT_PAGE == _nAnchorId) || (FLY_AT_FLY == _nAnchorId)) // LAYER_IMPL
     {
@@ -799,9 +778,14 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         else
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
 
-        if( bVert )
+        // --> OD 2009-09-01 #mongolianlayout#
+        if( bVert || bVertL2R )
+        // <--
         {
-            bVertic = TRUE;
+            // --> OD 2009-09-01 #mongolianlayout#
+            bVertic = bVert ? true : false;
+            bVerticalL2R = bVertL2R ? true : false;
+            // <--
             _bMirror = false; // no mirroring in vertical environment
             switch ( _eHoriRelOrient )
             {
@@ -850,8 +834,9 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 default:break;
             }
         }
-        // --> OD 2006-12-12 #i67221# - proposed patch
-        if( bVert )
+        // --> OD 2009-09-01 #mongolianlayout#
+        if ( bVert && !bVertL2R )
+        // <--
         {
             switch ( _eVertRelOrient )
             {
@@ -863,6 +848,20 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 break;
             }
         }
+        // --> OD 2009-09-01 #mongolianlayout#
+        else if ( bVertL2R )
+        {
+            switch ( _eVertRelOrient )
+            {
+                case text::RelOrientation::PRINT_AREA:
+                case text::RelOrientation::PAGE_PRINT_AREA:
+                {
+                    aPos.X() += pFrm->GetLeftMargin();
+                }
+                break;
+            }
+        }
+        // <--
         else
         {
             switch ( _eVertRelOrient )
@@ -900,7 +899,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             aPos = pFrm->Frm().TopRight();
         else
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
-        // OD 08.09.2003 #i17567#, #108749#, #110354# - allow negative positions
+        // #i17567# - allow negative positions
         // for fly frames anchor to paragraph/to character.
         if ((_nAnchorId == FLY_AT_PARA) || (_nAnchorId == FLY_AT_CHAR))
         {
@@ -909,7 +908,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // and vertically by the printing area of the vertical environment,
             // if the object follows the text flow, or by the frame area of the
             // vertical environment, if the object doesn't follow the text flow.
-            // OD 29.10.2003 #113049# - new class <SwEnvironmentOfAnchoredObject>
+            // new class <SwEnvironmentOfAnchoredObject>
             objectpositioning::SwEnvironmentOfAnchoredObject aEnvOfObj(
                                                             _bFollowTextFlow );
             const SwLayoutFrm& rHoriEnvironLayFrm =
@@ -922,14 +921,21 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             {
                 aVertEnvironRect = rVertEnvironLayFrm.Prt();
                 aVertEnvironRect.Pos() += rVertEnvironLayFrm.Frm().Pos();
-                // OD 19.09.2003 #i18732# - adjust vertical 'virtual' anchor position
+                // #i18732# - adjust vertical 'virtual' anchor position
                 // (<aPos.Y()> respectively <aPos.X()>), if object is vertical aligned
                 // to page areas.
                 if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                 {
-                    if ( bVert )
+                    // --> OD 2009-09-01 #mongolianlayout#
+                    if ( bVert && !bVertL2R )
+                    // <--
                     {
                         aPos.X() = aVertEnvironRect.Right();
+                    }
+                    // --> OD 2009-09-01 #mongolianlayout#
+                    else if ( bVertL2R )
+                    {
+                        aPos.X() = aVertEnvironRect.Left();
                     }
                     else
                     {
@@ -947,7 +953,9 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 // to page areas.
                 if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
                 {
-                    if ( bVert )
+                    // --> OD 2009-09-01 #mongolianlayout#
+                    if ( bVert && !bVertL2R )
+                    // <--
                     {
                         aPos.X() = aVertEnvironRect.Right();
                         if ( _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
@@ -955,6 +963,16 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                             aPos.X() -= rVertEnvironLayFrm.GetRightMargin();
                         }
                     }
+                    // --> OD 2009-09-01 #mongolianlayout#
+                    else if ( bVertL2R )
+                    {
+                        aPos.X() = aVertEnvironRect.Left();
+                        if ( _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
+                        {
+                            aPos.X() += rVertEnvironLayFrm.GetLeftMargin();
+                        }
+                    }
+                    // <--
                     else
                     {
                         aPos.Y() = aVertEnvironRect.Top();
@@ -972,7 +990,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 }
             }
 
-            // OD 12.11.2003 #i22341# - adjust vertical 'virtual' anchor position
+            // #i22341# - adjust vertical 'virtual' anchor position
             // (<aPos.Y()> respectively <aPos.X()>), if object is anchored to
             // character and vertical aligned at character or top of line
             // --> OD 2005-12-29 #125800#
@@ -1014,10 +1032,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                         pTxtFrm->GetTopOfLine( nTop, aDefaultCntntPos );
                     }
                 }
-                if ( bVert )
+                // --> OD 2009-09-01 #mongolianlayout#
+                if ( bVert || bVertL2R )
                 {
                     aPos.X() = nTop;
                 }
+                // <--
                 else
                 {
                     aPos.Y() = nTop;
@@ -1044,10 +1064,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                     pTxtFrm->GetAutoPos( aChRect, aDefaultCntntPos );
                 }
                 nLeft = (aChRect.*fnRect->fnGetLeft)();
-                if ( bVert )
+                // --> OD 2009-09-01 #mongolianlayout#
+                if ( bVert || bVertL2R )
                 {
                     aPos.Y() = nLeft;
                 }
+                // <--
                 else
                 {
                     aPos.X() = nLeft;
@@ -1055,7 +1077,9 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
             // <--
 
-            if ( bVert )
+            // --> OD 2009-09-01 #mongolianlayout#
+            if ( bVert || bVertL2R )
+            // <--
             {
                 _orRect = SwRect( aVertEnvironRect.Left(),
                                   aHoriEnvironRect.Top(),
@@ -1089,7 +1113,9 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             }
             // bei zeichengebundenen lieber nur 90% der Hoehe ausnutzen
             {
-                if( bVert )
+                // --> OD 2009-09-01 #mongolianlayout#
+                if( bVert || bVertL2R )
+                // <--
                     _orRect.Width( (_orRect.Width()*9)/10 );
                 else
                     _orRect.Height( (_orRect.Height()*9)/10 );
@@ -1099,26 +1125,51 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         const SwTwips nBaseOfstForFly = ( pFrm->IsTxtFrm() && pFly ) ?
                                         ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( !bWrapThrough ) :
                                          0;
-        if( bVert )
+        // --> OD 2009-09-01 #mongolianlayout#
+        if( bVert || bVertL2R )
+        // <--
         {
-            bVertic = TRUE;
+            // --> OD 2009-09-01 #mongolianlayout#
+            bVertic = bVert ? true : false;
+            bVerticalL2R = bVertL2R ? true : false;
+            // <--
             _bMirror = false;
 
             switch ( _eHoriRelOrient )
             {
-                case text::RelOrientation::FRAME_RIGHT: aPos.Y() += pFrm->Prt().Height();
-                                    aPos += (pFrm->Prt().*fnRect->fnGetPos)();
-                                    break;
-                case text::RelOrientation::PRINT_AREA: aPos += (pFrm->Prt().*fnRect->fnGetPos)();
-                              aPos.Y() += nBaseOfstForFly;
-                              break;
-                case text::RelOrientation::PAGE_RIGHT: aPos.Y() = pPage->Frm().Top()
-                                            + pPage->Prt().Bottom(); break;
-                case text::RelOrientation::PAGE_PRINT_AREA: aPos.Y() = pPage->Frm().Top()
-                                              + pPage->Prt().Top(); break;
+                case text::RelOrientation::FRAME_RIGHT:
+                {
+                    aPos.Y() += pFrm->Prt().Height();
+                    aPos += (pFrm->Prt().*fnRect->fnGetPos)();
+                    break;
+                }
+                case text::RelOrientation::PRINT_AREA:
+                {
+                    aPos += (pFrm->Prt().*fnRect->fnGetPos)();
+                    aPos.Y() += nBaseOfstForFly;
+                    break;
+                }
+                case text::RelOrientation::PAGE_RIGHT:
+                {
+                    aPos.Y() = pPage->Frm().Top() + pPage->Prt().Bottom();
+                    break;
+                }
+                case text::RelOrientation::PAGE_PRINT_AREA:
+                {
+                    aPos.Y() = pPage->Frm().Top() + pPage->Prt().Top();
+                    break;
+                }
                 case text::RelOrientation::PAGE_LEFT:
-                case text::RelOrientation::PAGE_FRAME: aPos.Y() = pPage->Frm().Top(); break;
-                case text::RelOrientation::FRAME: aPos.Y() += nBaseOfstForFly; break;
+                case text::RelOrientation::PAGE_FRAME:
+                {
+                    aPos.Y() = pPage->Frm().Top();
+                    break;
+                }
+                case text::RelOrientation::FRAME:
+                {
+                    aPos.Y() += nBaseOfstForFly;
+                    break;
+                }
                 default: break;
             }
         }
@@ -1176,19 +1227,27 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         {
             switch ( _eHoriRelOrient )
             {
-                case text::RelOrientation::FRAME_RIGHT:   aPos.X() += pFrm->Prt().Width();
-                                    aPos += pFrm->Prt().Pos();
-                                    break;
-                case text::RelOrientation::PRINT_AREA: aPos += pFrm->Prt().Pos();
-                              aPos.X() += nBaseOfstForFly;
-                              break;
-                case text::RelOrientation::PAGE_RIGHT: aPos.X() = pPage->Frm().Left()
-                                            + pPage->Prt().Right(); break;
-                case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() = pPage->Frm().Left()
-                                              + pPage->Prt().Left(); break;
+                case text::RelOrientation::FRAME_RIGHT:
+                    aPos.X() += pFrm->Prt().Width();
+                    aPos += pFrm->Prt().Pos();
+                    break;
+                case text::RelOrientation::PRINT_AREA:
+                    aPos += pFrm->Prt().Pos();
+                    aPos.X() += nBaseOfstForFly;
+                    break;
+                case text::RelOrientation::PAGE_RIGHT:
+                    aPos.X() = pPage->Frm().Left() + pPage->Prt().Right();
+                    break;
+                case text::RelOrientation::PAGE_PRINT_AREA:
+                    aPos.X() = pPage->Frm().Left() + pPage->Prt().Left();
+                    break;
                 case text::RelOrientation::PAGE_LEFT:
-                case text::RelOrientation::PAGE_FRAME: aPos.X() = pPage->Frm().Left(); break;
-                case text::RelOrientation::FRAME: aPos.X() += nBaseOfstForFly; break;
+                case text::RelOrientation::PAGE_FRAME:
+                    aPos.X() = pPage->Frm().Left();
+                    break;
+                case text::RelOrientation::FRAME:
+                    aPos.X() += nBaseOfstForFly;
+                    break;
                 default: break;
             }
         }
@@ -1196,8 +1255,12 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     }
     if( !_opRef )
     {
-        if( bVertic )
+        if( bVertic && !bVerticalL2R )
             _orRect.Pos( aPos.X() - _orRect.Width() - _orRect.Left(), _orRect.Top() - aPos.Y() );
+        // --> OD 2009-09-01 #mongolianlayout#
+        else if( bVerticalL2R )
+            _orRect.Pos( _orRect.Left() - aPos.X(), _orRect.Top() - aPos.Y() );
+        // <--
         else if ( bRTL )
             _orRect.Pos( - ( _orRect.Right() - aPos.X() ), _orRect.Top() - aPos.Y() );
         else
@@ -1237,13 +1300,14 @@ Size SwFEShell::GetGraphicDefaultSize() const
     }
     return aRet;
 }
-/* -----------------------------12.08.2002 12:51------------------------------
 
- ---------------------------------------------------------------------------*/
-BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
+// --> OD 2009-08-31 #mongolianlayou#
+// add output parameter <bVertL2R>
+sal_Bool SwFEShell::IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRTL, sal_Bool& bVertL2R) const
 {
-    BOOL bVert = FALSE;
-    bRTL = FALSE;
+    sal_Bool bVert = sal_False;
+    bRTL = sal_False;
+    bVertL2R = sal_False;
 
     if ( Imp()->HasDrawView() )
     {
@@ -1252,43 +1316,36 @@ BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
             return bVert;
 
         SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pObj )
         {
-            OSL_ENSURE( false,
-                    "<SwFEShell::IsFrmVertical(..)> - missing SdrObject instance in marked object list -> This is a serious situation, please inform OD" );
+            OSL_FAIL( "<SwFEShell::IsFrmVertical(..)> - missing SdrObject instance in marked object list -> This is a serious situation, please inform OD" );
             return bVert;
         }
-        // <--
-        // OD 2004-03-29 #i26791#
+        // #i26791#
         SwContact* pContact = static_cast<SwContact*>(GetUserCall( pObj ));
-        // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pContact )
         {
-            OSL_ENSURE( false,
-                    "<SwFEShell::IsFrmVertical(..)> - missing SwContact instance at marked object -> This is a serious situation, please inform OD" );
+            OSL_FAIL( "<SwFEShell::IsFrmVertical(..)> - missing SwContact instance at marked object -> This is a serious situation, please inform OD" );
             return bVert;
         }
-        // <--
         const SwFrm* pRef = pContact->GetAnchoredObj( pObj )->GetAnchorFrm();
-        // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pRef )
         {
-            OSL_ENSURE( false,
-                    "<SwFEShell::IsFrmVertical(..)> - missing anchor frame at marked object -> This is a serious situation, please inform OD" );
+            OSL_FAIL( "<SwFEShell::IsFrmVertical(..)> - missing anchor frame at marked object -> This is a serious situation, please inform OD" );
             return bVert;
         }
-        // <--
 
         if ( pObj->ISA(SwVirtFlyDrawObj) && !bEnvironment )
             pRef = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
 
         bVert = pRef->IsVertical();
         bRTL = pRef->IsRightToLeft();
+        bVertL2R = pRef->IsVertLR();
     }
 
     return bVert;
 }
+// <--
 
 void SwFEShell::MoveObjectIfActive( svt::EmbeddedObjectRef&, const Point& )
 {

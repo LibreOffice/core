@@ -31,6 +31,7 @@
 
 #include "curledit.hxx"
 #include <vcl/svapp.hxx>
+#include <osl/diagnose.h>
 
 //.........................................................................
 namespace dbaui
@@ -40,7 +41,7 @@ namespace dbaui
 //=========================================================================
 //= OConnectionURLEdit
 //=========================================================================
-OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,BOOL _bShowPrefix)
+OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,sal_Bool _bShowPrefix)
     :Edit(_pParent, _rResId)
     ,m_pTypeCollection(NULL)
     ,m_pForcedPrefix(NULL)
@@ -63,7 +64,7 @@ OConnectionURLEdit::~OConnectionURLEdit()
 //-------------------------------------------------------------------------
 void OConnectionURLEdit::SetTextNoPrefix(const String& _rText)
 {
-    DBG_ASSERT(GetSubEdit(), "OConnectionURLEdit::SetTextNoPrefix: have no current type, not changing the text!");
+    OSL_ENSURE(GetSubEdit(), "OConnectionURLEdit::SetTextNoPrefix: have no current type, not changing the text!");
     if (GetSubEdit())
         GetSubEdit()->SetText(_rText);
 }
@@ -143,7 +144,7 @@ String OConnectionURLEdit::GetText() const
     return Edit::GetText();
 }
 // -----------------------------------------------------------------------------
-void OConnectionURLEdit::ShowPrefix(BOOL _bShowPrefix)
+void OConnectionURLEdit::ShowPrefix(sal_Bool _bShowPrefix)
 {
     m_bShowPrefix = _bShowPrefix;
     if ( m_pForcedPrefix )

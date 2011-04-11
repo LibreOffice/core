@@ -35,17 +35,9 @@ PACKAGE = com$/sun$/star$/filter$/config$/tools$/merge
 .INCLUDE: settings.mk
 
 #----- compile .java files -----------------------------------------
-#.IF "$(L10N_framework)"==""
 
 OWNCOPY         =   \
                     $(MISC)$/$(TARGET)_copied.done
-
-#JARFILES        =   \
-#                    ridl.jar        \
-#                    unoil.jar       \
-#                    jurt.jar        \
-#                    juh.jar         \
-#                    java_uno.jar
 
 CFGFILES        =   \
                     FCFGMerge.cfg
@@ -85,8 +77,3 @@ $(OWNCOPY) : $(CFGFILES)
     $(COPY) $? $(CLASSDIR)$/$(PACKAGE) && $(TOUCH) $@
 
 .ENDIF # "$(SOLAR_JAVA)" != ""
-
-#.ELSE
-#pseudo:
-
-#.ENDIF

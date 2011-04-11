@@ -73,7 +73,7 @@ namespace sdr
             // Default implementation has to assert a missing implementation. It cannot
             // be useful to have overlay object derivations which have no visualisation
             // at all
-            OSL_ENSURE(false, "OverlayObject derivation without visualisation definition (missing createOverlayObjectPrimitive2DSequence implementation) (!)");
+            OSL_FAIL("OverlayObject derivation without visualisation definition (missing createOverlayObjectPrimitive2DSequence implementation) (!)");
             return drawinglayer::primitive2d::Primitive2DSequence();
         }
 

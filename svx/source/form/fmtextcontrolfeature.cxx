@@ -66,7 +66,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmTextControlFeature::FmTextControlFeature: caught an exception!" );
+            OSL_FAIL( "FmTextControlFeature::FmTextControlFeature: caught an exception!" );
         }
         osl_decrementInterlockedCount( &m_refCount );
     }
@@ -92,7 +92,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmTextControlFeature::dispatch: caught an exception!" );
+            OSL_FAIL( "FmTextControlFeature::dispatch: caught an exception!" );
         }
     }
 
@@ -122,7 +122,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmTextControlFeature::dispose: caught an exception!" );
+            OSL_FAIL( "FmTextControlFeature::dispose: caught an exception!" );
         }
     }
 

@@ -43,8 +43,9 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
 
 TypeDetectionImporter::TypeDetectionImporter( Reference< XMultiServiceFactory >& xMSF )
 :   mxMSF(xMSF),
@@ -72,7 +73,7 @@ void TypeDetectionImporter::doImport( Reference< XMultiServiceFactory >& xMSF, R
 {
     try
     {
-        Reference< XParser > xParser( xMSF->createInstance(OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ) ), UNO_QUERY );
+        Reference< XParser > xParser( xMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) ), UNO_QUERY );
         if( xParser.is() )
         {
             TypeDetectionImporter* pImporter = new TypeDetectionImporter( xMSF );
@@ -90,7 +91,7 @@ void TypeDetectionImporter::doImport( Reference< XMultiServiceFactory >& xMSF, R
     }
     catch( Exception& /* e */ )
     {
-        DBG_ERROR( "TypeDetectionImporter::doImport exception catched!" );
+        OSL_FAIL( "TypeDetectionImporter::doImport exception catched!" );
     }
 }
 
@@ -153,7 +154,7 @@ Node* TypeDetectionImporter::findTypeNode( const OUString& rType )
         if( (*aIter)->maName == rType )
             return (*aIter);
 
-        aIter++;
+        ++aIter;
     }
 
     return NULL;
@@ -255,7 +256,7 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
     if( maStack.empty() )
     {
         // #109668# support legacy name as well on import
-        if( aName == sRootNode || aName.equalsAscii("oor:node") )
+        if( aName == sRootNode || aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("oor:node")) )
         {
             eNewState = e_Root;
         }

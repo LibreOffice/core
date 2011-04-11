@@ -27,30 +27,81 @@
  ************************************************************************/
 
 #include "oox/xls/querytablefragment.hxx"
-#include "oox/xls/webquerybuffer.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
+#include "oox/xls/biffinputstream.hxx"
+#include "oox/xls/querytablebuffer.hxx"
 
 namespace oox {
 namespace xls {
 
-OoxQueryTableFragment::OoxQueryTableFragment(
-        const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxWorkbookFragmentBase( rHelper, rFragmentPath )
+// ============================================================================
+
+using namespace ::oox::core;
+
+using ::rtl::OUString;
+
+// ============================================================================
+
+QueryTableFragment::QueryTableFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
+    WorksheetFragmentBase( rHelper, rFragmentPath ),
+    mrQueryTable( getQueryTables().createQueryTable() )
 {
 }
 
-ContextHandlerRef OoxQueryTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef QueryTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            if( nElement == XLS_TOKEN( queryTable ) ) getWebQueries().importQueryTable( rAttribs );
+            if( nElement == XLS_TOKEN( queryTable ) )
+                mrQueryTable.importQueryTable( rAttribs );
         break;
     }
     return 0;
 }
+
+ContextHandlerRef QueryTableFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
+{
+    switch( getCurrentElement() )
+    {
+        case XML_ROOT_CONTEXT:
+            if( nRecId == BIFF12_ID_QUERYTABLE )
+                mrQueryTable.importQueryTable( rStrm );
+        break;
+    }
+    return 0;
+}
+
+const RecordInfo* QueryTableFragment::getRecordInfos() const
+{
+    static const RecordInfo spRecInfos[] =
+    {
+        { BIFF12_ID_QUERYTABLE,         BIFF12_ID_QUERYTABLE + 1        },
+        { BIFF12_ID_QUERYTABLEREFRESH,  BIFF12_ID_QUERYTABLEREFRESH + 1 },
+        { -1,                           -1                              }
+    };
+    return spRecInfos;
+}
+
+// ============================================================================
+
+BiffQueryTableContext::BiffQueryTableContext( const WorksheetHelper& rHelper ) :
+    BiffWorksheetContextBase( rHelper ),
+    mrQueryTable( getQueryTables().createQueryTable() )
+{
+}
+
+void BiffQueryTableContext::importRecord( BiffInputStream& rStrm )
+{
+    switch( rStrm.getRecId() )
+    {
+        case BIFF_ID_QUERYTABLE:            mrQueryTable.importQueryTable( rStrm );         break;
+        case BIFF_ID_QUERYTABLEREFRESH:     mrQueryTable.importQueryTableRefresh( rStrm );  break;
+        case BIFF_ID_QUERYTABLESETTINGS:    mrQueryTable.importQueryTableSettings( rStrm ); break;
+    }
+}
+
+// ============================================================================
 
 } // namespace xls
 } // namespace oox

@@ -34,6 +34,7 @@
 #include "ximppage.hxx"
 #include <xmloff/xmlstyle.hxx>
 #include <com/sun/star/view/PaperOrientation.hpp>
+#include <vector>
 
 class SvNumberFormatter;
 class SvXMLNumFmtHelper;
@@ -134,7 +135,7 @@ public:
     const rtl::OUString& GetDisplayName() const { return msDisplayName; }
 
 };
-DECLARE_LIST(ImpMasterPageList, SdXMLMasterPageContext*)
+typedef ::std::vector< SdXMLMasterPageContext* > ImpMasterPageList;
 
 //////////////////////////////////////////////////////////////////////////////
 // presentation:placeholder context
@@ -164,7 +165,7 @@ public:
     sal_Int32 GetWidth() const { return mnWidth; }
     sal_Int32 GetHeight() const { return mnHeight; }
 };
-DECLARE_LIST(ImpPlaceholderList, SdXMLPresentationPlaceholderContext*)
+typedef ::std::vector< SdXMLPresentationPlaceholderContext* > ImpPlaceholderList;
 
 //////////////////////////////////////////////////////////////////////////////
 // style:presentation-page-layout context
@@ -288,7 +289,7 @@ public:
         const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    virtual BOOL IsTransient() const;
+    virtual sal_Bool IsTransient() const;
     virtual void EndElement();
     virtual void Characters( const ::rtl::OUString& rChars );
 

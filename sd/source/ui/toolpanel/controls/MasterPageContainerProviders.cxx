@@ -131,8 +131,8 @@ Image TemplatePreviewProvider::operator() (
         {
             uno::Reference<lang::XSingleServiceFactory> xStorageFactory(
                 xServiceManager->createInstance(
-                    ::rtl::OUString::createFromAscii(
-                        "com.sun.star.embed.StorageFactory")),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.embed.StorageFactory"))),
                 uno::UNO_QUERY);
 
             if (xStorageFactory.is())
@@ -150,14 +150,14 @@ Image TemplatePreviewProvider::operator() (
                     {
                         uno::Reference<embed::XStorage> xStorage (
                             xDocStorage->openStorageElement(
-                                ::rtl::OUString::createFromAscii("Thumbnails"),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Thumbnails")),
                                 embed::ElementModes::READ));
                         if (xStorage.is())
                         {
                             uno::Reference<io::XStream> xThumbnailCopy (
                                 xStorage->cloneStreamElement(
-                                    ::rtl::OUString::createFromAscii(
-                                        "thumbnail.png")));
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "thumbnail.png"))));
                             if (xThumbnailCopy.is())
                                 xIStream = xThumbnailCopy->getInputStream();
                         }
@@ -183,14 +183,14 @@ Image TemplatePreviewProvider::operator() (
                     {
                         uno::Reference<embed::XStorage> xStorage (
                             xDocStorage->openStorageElement(
-                                ::rtl::OUString::createFromAscii("Thumbnail"),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Thumbnail")),
                                 embed::ElementModes::READ));
                         if (xStorage.is())
                         {
                             uno::Reference<io::XStream> xThumbnailCopy (
                                 xStorage->cloneStreamElement(
-                                    ::rtl::OUString::createFromAscii(
-                                        "thumbnail.png")));
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "thumbnail.png"))));
                             if (xThumbnailCopy.is())
                                 xIStream = xThumbnailCopy->getInputStream();
                         }
@@ -307,9 +307,9 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
 {
     SfxApplication* pSfxApp = SFX_APP();
     SfxItemSet* pSet = new SfxAllItemSet (pSfxApp->GetPool());
-    pSet->Put (SfxBoolItem (SID_TEMPLATE, TRUE));
-    pSet->Put (SfxBoolItem (SID_PREVIEW, TRUE));
-    if (pSfxApp->LoadTemplate (mxDocumentShell, sFileName, TRUE, pSet))
+    pSet->Put (SfxBoolItem (SID_TEMPLATE, sal_True));
+    pSet->Put (SfxBoolItem (SID_PREVIEW, sal_True));
+    if (pSfxApp->LoadTemplate (mxDocumentShell, sFileName, sal_True, pSet))
     {
         mxDocumentShell = NULL;
     }
@@ -356,7 +356,7 @@ SdPage* DefaultPageObjectProvider::operator () (SdDrawDocument* pContainerDocume
     if (pContainerDocument != NULL)
     {
         sal_Int32 nIndex (0);
-        SdPage* pLocalSlide = pContainerDocument->GetSdPage((USHORT)nIndex, PK_STANDARD);
+        SdPage* pLocalSlide = pContainerDocument->GetSdPage((sal_uInt16)nIndex, PK_STANDARD);
         if (pLocalSlide!=NULL && pLocalSlide->TRG_HasMasterPage())
             pLocalMasterPage = dynamic_cast<SdPage*>(&pLocalSlide->TRG_GetMasterPage());
     }

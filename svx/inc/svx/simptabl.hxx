@@ -67,11 +67,11 @@ private:
     SvxSimpTblContainer aPrivContainer;
     HeaderBar           aHeaderBar;
     long                nOldPos;
-    USHORT              nHeaderItemId;
-    BOOL                bResizeFlag;
-    BOOL                bPaintFlag;
-    BOOL                bSortDirection;
-    USHORT              nSortCol;
+    sal_uInt16              nHeaderItemId;
+    sal_Bool                bResizeFlag;
+    sal_Bool                bPaintFlag;
+    sal_Bool                bSortDirection;
+    sal_uInt16              nSortCol;
     Window*             pMyParentWin;
 
     DECL_LINK( StartDragHdl, HeaderBar* );
@@ -107,7 +107,7 @@ public:
     ~SvxSimpleTable();
 
     void            InsertHeaderEntry(const XubString& rText,
-                            USHORT nCol=HEADERBAR_APPEND,
+                            sal_uInt16 nCol=HEADERBAR_APPEND,
                             HeaderBarItemBits nBits = HIB_STDSTYLE);
 
     void            SetTabs( long* pTabs, MapUnit = MAP_APPFONT );
@@ -132,11 +132,11 @@ public:
 
     void            ShowTable();
     void            HideTable();
-    BOOL            IsVisible() const;
+    sal_Bool            IsVisible() const;
 
     void            EnableTable();
     void            DisableTable();
-    BOOL            IsEnabled() const;
+    sal_Bool            IsEnabled() const;
 
     void            TableToTop();
     void            SetPosPixel( const Point& rNewPos );
@@ -149,11 +149,11 @@ public:
     Size            GetSizePixel() const;
     Size            GetOutputSizePixel() const;
 
-    USHORT          GetSelectedCol();
-    void            SortByCol(USHORT,BOOL bDir=TRUE);
-    BOOL            GetSortDirection(){ return bSortDirection;}
-    USHORT          GetSortedCol(){ return nSortCol;}
-    SvLBoxItem*     GetEntryAtPos( SvLBoxEntry* pEntry, USHORT nPos ) const;
+    sal_uInt16          GetSelectedCol();
+    void            SortByCol(sal_uInt16,sal_Bool bDir=sal_True);
+    sal_Bool            GetSortDirection(){ return bSortDirection;}
+    sal_uInt16          GetSortedCol(){ return nSortCol;}
+    SvLBoxItem*     GetEntryAtPos( SvLBoxEntry* pEntry, sal_uInt16 nPos ) const;
 
     CommandEvent    GetCommandEvent()const;
     inline sal_Bool IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }
@@ -167,7 +167,7 @@ public:
     void            SetHeaderBarDblClickHdl( const Link& rLink ) { aHeaderBarDblClickLink = rLink; }
     const Link&     GetHeaderBarDblClickHdl() const { return aHeaderBarDblClickLink; }
 
-    void            SetHeaderBarHelpId(ULONG nHelpId) {aHeaderBar.SetHelpId(nHelpId);}
+    void            SetHeaderBarHelpId(const rtl::OString& rHelpId) {aHeaderBar.SetHelpId(rHelpId);}
 };
 
 

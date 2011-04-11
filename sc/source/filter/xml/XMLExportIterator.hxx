@@ -71,6 +71,8 @@ struct ScMyShape
 {
     ScAddress   aAddress;
     ScAddress   aEndAddress;
+    sal_Int32       nEndX;
+    sal_Int32       nEndY;
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape;
 
     sal_Bool operator<(const ScMyShape& aShape) const;
@@ -91,7 +93,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     void                        AddNewShape(const ScMyShape& aShape);
     sal_Bool                    HasShapes() { return !aShapeList.empty(); }
-    const ScMyShapeList*        GetShapes() { return &aShapeList; }
+    const ScMyShapeList*        GetShapes() const { return &aShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
     void                        SkipTable(SCTAB nSkip);
@@ -120,7 +122,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     void                        AddNewNote(const ScMyNoteShape& aNote);
     sal_Bool                    HasNotes() { return !aNoteShapeList.empty(); }
-    const ScMyNoteShapeList*    GetNotes() { return &aNoteShapeList; }
+    const ScMyNoteShapeList*    GetNotes() const { return &aNoteShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
     void                        SkipTable(SCTAB nSkip);

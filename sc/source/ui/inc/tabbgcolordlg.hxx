@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: tabbgcolordlg.hxx,v $
- * $Revision: 1.0 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -33,7 +30,8 @@
 #define SC_TABBGCOLORDLG_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
 #include <svtools/valueset.hxx>
 
 //------------------------------------------------------------------------
@@ -45,7 +43,7 @@ public:
                      const String& rTitle,
                      const String& rTabBgColorNoColorText,
                      const Color& rDefaultColor,
-                     ULONG nHelpId );
+                     const rtl::OString& nHelpId );
     ~ScTabBgColorDlg();
 
     void GetSelectedColor( Color& rColor ) const;
@@ -68,7 +66,7 @@ private:
     HelpButton              aBtnHelp;
     Color                   aTabBgColor;
     const String            aTabBgColorNoColorText;
-    ULONG                   mnHelpId;
+    rtl::OString            msHelpId;
 
     void            FillColorValueSets_Impl();
 

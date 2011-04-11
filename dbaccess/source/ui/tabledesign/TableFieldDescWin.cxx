@@ -30,7 +30,7 @@
 #include "precompiled_dbaccess.hxx"
 
 #include "TableFieldDescWin.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
 #include "dbu_tbl.hrc"
 #include "FieldDescriptions.hxx"
@@ -111,7 +111,7 @@ OTableFieldDescWin::~OTableFieldDescWin()
 //------------------------------------------------------------------------------
 void OTableFieldDescWin::Init()
 {
-    DBG_ASSERT(getGenPage() != NULL, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
+    OSL_ENSURE(getGenPage() != NULL, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
     getGenPage()->Init();
 }
 
@@ -303,7 +303,7 @@ void OTableFieldDescWin::LoseFocus()
 // -----------------------------------------------------------------------------
 long OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
 {
-    BOOL bHandled = FALSE;
+    sal_Bool bHandled = sal_False;
     switch(rNEvt.GetType())
     {
         case EVENT_GETFOCUS:
@@ -316,6 +316,5 @@ long OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
 
     return bHandled ? 1L : TabPage::PreNotify(rNEvt);
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

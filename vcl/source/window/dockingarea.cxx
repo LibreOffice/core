@@ -127,7 +127,7 @@ void DockingAreaWindow::StateChanged( StateChangedType nType )
 
 // -----------------------------------------------------------------------
 
-BOOL DockingAreaWindow::IsHorizontal() const
+sal_Bool DockingAreaWindow::IsHorizontal() const
 {
     return ( mpImplData->meAlign == WINDOWALIGN_TOP || mpImplData->meAlign == WINDOWALIGN_BOTTOM );
 }
@@ -150,7 +150,7 @@ WindowAlign DockingAreaWindow::GetAlign() const
 
 void DockingAreaWindow::Paint( const Rectangle& )
 {
-    EnableNativeWidget( TRUE ); // only required because the toolkit curently switches this flag off
+    EnableNativeWidget( sal_True ); // only required because the toolkit curently switches this flag off
     if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
     {
         ToolbarValue        aControlValue;
@@ -159,7 +159,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
         {
             // give NWF a hint that this dockingarea is adjacent to the menubar
             // useful for special gradient effects that should cover both windows
-            aControlValue.mbIsTopDockingArea = TRUE;
+            aControlValue.mbIsTopDockingArea = sal_True;
         }
         ControlState        nState = CTRL_STATE_ENABLED;
 
@@ -173,8 +173,8 @@ void DockingAreaWindow::Paint( const Rectangle& )
                                aCtrlRegion, nState, aControlValue, rtl::OUString() );
 
             // each toolbar gets a thin border to better recognize its borders on the homogeneous docking area
-            USHORT nChildren = GetChildCount();
-            for( USHORT n = 0; n < nChildren; n++ )
+            sal_uInt16 nChildren = GetChildCount();
+            for( sal_uInt16 n = 0; n < nChildren; n++ )
             {
                 Window* pChild = GetChild( n );
                 if ( pChild->IsVisible() )
@@ -198,8 +198,8 @@ void DockingAreaWindow::Paint( const Rectangle& )
             // create map to find toolbar lines
             Size aOutSz = GetOutputSizePixel();
             std::map< int, int > ranges;
-            USHORT nChildren = GetChildCount();
-            for( USHORT n = 0; n < nChildren; n++ )
+            sal_uInt16 nChildren = GetChildCount();
+            for( sal_uInt16 n = 0; n < nChildren; n++ )
             {
                 Window* pChild = GetChild( n );
                 Point aPos = pChild->GetPosPixel();

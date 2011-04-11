@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,11 +27,13 @@
 #ifndef _SVX_FMGROUP_HXX
 #define _SVX_FMGROUP_HXX
 
+#ifndef _SVX_FMCPONT_HXX
 #include "fmcpont.hxx"
+#endif
 
+#ifndef __DBFORM_HXX
 #include <dbform.hxx>
-
-DECLARE_LIST( FmCtrlModelList, XInterface* );
+#endif
 
 struct FmXGroupModel_Impl;
 
@@ -60,9 +61,9 @@ public:
     virtual XIdlClassRef    getIdlClass();
 
     // XGroup
-    virtual INT32 getFormControlCount();
+    virtual sal_Int32 getFormControlCount();
     virtual XFormControlRef getFormControlByName( const XubString& sName ) const;
-    virtual XFormControlRef getFormControlByIndex( INT32 Index ) const;
+    virtual XFormControlRef getFormControlByIndex( sal_Int32 Index ) const;
     virtual void appendFormControl( const XFormControlRef& FormControl );
     virtual XFormControlRef removeFormControl( const XFormControlRef& FormControl );
 
@@ -90,11 +91,11 @@ public:
 
     // PropertySetInterface
     virtual FmXPropertySetInfo* createPropertySetInfo() const;
-    virtual BOOL setPropertyValue( UINT16 nId, const XubString& aPropertyName,
+    virtual sal_Bool setPropertyValue( sal_uInt16 nId, const XubString& aPropertyName,
                                    const UsrAny& aValue,
                                    PropertyChangeEventSequence* pSeq,
-                                   INT32 nIndex );
-    virtual UsrAny getPropertyValue( UINT16 nId, const XubString& aPropertyName ) const;
+                                   sal_Int32 nIndex );
+    virtual UsrAny getPropertyValue( sal_uInt16 nId, const XubString& aPropertyName ) const;
     virtual void addPropertyChangeListener( const XubString& aPropertyName, const XPropertyChangeListenerRef& aListener );
     virtual void removePropertyChangeListener( const XubString& aPropertyName, const XPropertyChangeListenerRef& aListener );
 };
@@ -109,10 +110,9 @@ class FmXGroupModelInfo : public FmXControlModelInfo
 
 protected:
     FmXGroupModelInfo( const FmXGroupModel* pCp );
-    virtual void fillProperties( UINT32& nIndex, PropertySequence& aSeq ) const;
+    virtual void fillProperties( sal_uInt32& nIndex, PropertySequence& aSeq ) const;
 };
 
 
 #endif // _SVX_FMGROUP_HXX
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

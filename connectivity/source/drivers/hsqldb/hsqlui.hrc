@@ -29,7 +29,6 @@
 #define CONNECTIVITY_HSQLUI_HRC
 
 #define LINKED_TEXT_TABLE_IMAGE_RESOURCE        "linked_text_table.png"
-#define LINKED_TEXT_TABLE_IMAGE_RESOURCE_HC     "linked_text_table_hc.png"
 
 #endif // CONNECTIVITY_HSQLUI_HRC
 

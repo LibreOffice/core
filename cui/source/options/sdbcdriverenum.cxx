@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include "sdbcdriverenum.hxx"
 #include <comphelper/stl_types.hxx>
 #include <comphelper/processfactory.hxx>
@@ -64,7 +62,7 @@ namespace offapp
         try
         {
             Reference< XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
-            Reference< XInterface > xDM = xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager"));
+            Reference< XInterface > xDM = xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager") ) );
             OSL_ENSURE(xDM.is(), "ODriverEnumerationImpl::ODriverEnumerationImpl: no access to the SDBC driver manager!");
 
             Reference< XEnumerationAccess > xEnumAccess(xDM, UNO_QUERY);
@@ -86,7 +84,7 @@ namespace offapp
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(sal_False, "ODriverEnumerationImpl::ODriverEnumerationImpl: caught an exception while enumerating the drivers!");
+            OSL_FAIL("ODriverEnumerationImpl::ODriverEnumerationImpl: caught an exception while enumerating the drivers!");
         }
     }
 
@@ -116,13 +114,6 @@ namespace offapp
     {
         return m_pImpl->getDriverImplNames().end();
     }
-
-    //--------------------------------------------------------------------
-    sal_Int32 ODriverEnumeration::size() const throw()
-    {
-        return m_pImpl->getDriverImplNames().size();
-    }
-
 //........................................................................
 }   // namespace offapp
 //........................................................................

@@ -146,9 +146,9 @@ public:
 
     void mark(const Id & rId, OOXMLValue::Pointer_t pVal);
 
-    void resolveFootnote(const rtl::OUString & rId);
-    void resolveEndnote(const rtl::OUString & rId);
-    void resolveComment(const rtl::OUString & rId);
+    void resolveFootnote(const sal_Int32 nId);
+    void resolveEndnote(const sal_Int32 nId);
+    void resolveComment(const sal_Int32 nId);
     void resolvePicture(const rtl::OUString & rId);
     void resolveHeader(const sal_Int32 type,
                                 const rtl::OUString & rId);
@@ -166,8 +166,8 @@ public:
     void setDocument(OOXMLDocument * pDocument);
     OOXMLDocument * getDocument();
     void setXNoteId(OOXMLValue::Pointer_t pValue);
-    void setXNoteId(const ::rtl::OUString & rId);
-    const rtl::OUString & getXNoteId() const;
+    void setXNoteId(const sal_Int32 nId);
+    sal_Int32 getXNoteId() const;
     void setForwardEvents(bool bForwardEvents);
     bool isForwardEvents() const;
     virtual void setParent(OOXMLFastContextHandler * pParent);
@@ -225,24 +225,18 @@ public:
 
     void sendPropertyToParent();
 
-#ifdef DEBUG
-    static XMLTag::Pointer_t toPropertiesTag(OOXMLPropertySet::Pointer_t);
-    virtual XMLTag::Pointer_t toTag() const;
-    virtual string toString() const;
+#if OSL_DEBUG_LEVEL > 1
+    virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
 
-#ifdef DEBUG_MEMORY
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
-#endif
-
+    sal_uInt32 getInstanceNumber() { return mnInstanceNumber; }
 protected:
     OOXMLFastContextHandler * mpParent;
     Id mId;
     Id mnDefine;
     Token_t mnToken;
 
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_CONTEXT_HANDLER
     string msTokenString;
 #endif
 
@@ -316,8 +310,6 @@ public:
 
 protected:
     virtual void resolvePropertySetAttrs();
-    virtual void lcl_characters(const ::rtl::OUString & aChars)
-                throw (uno::RuntimeException, xml::sax::SAXException);
 
 private:
     mutable OOXMLPropertySet::Pointer_t mpPropertySetAttrs;
@@ -344,8 +336,8 @@ public:
     virtual void setPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const;
 
-#ifdef DEBUG
-    virtual XMLTag::Pointer_t toTag() const;
+#if OSL_DEBUG_LEVEL > 1
+    virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
 
 protected:
@@ -440,7 +432,7 @@ public:
 
 private:
     bool mbForwardEventsSaved;
-    ::rtl::OUString msMyXNoteId;
+    sal_Int32 mnMyXNoteId;
 
     virtual void lcl_startFastElement
     (Token_t Element,

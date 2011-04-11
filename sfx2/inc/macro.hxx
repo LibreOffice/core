@@ -17,17 +17,17 @@ class SfxMacro;
 
 class SfxMacroStatement
 {
-    USHORT              nSlotId;    // ausgef"uhrte Slot-Id oder 0, wenn manuell
+    sal_uInt16              nSlotId;    // ausgef"uhrte Slot-Id oder 0, wenn manuell
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs;      // aktuelle Parameter, falls nSlotId != 0
     String              aStatement; // Statement in BASIC-Syntax (ggf. mit CR/LF)
-    BOOL                bDone;      // auskommentieren wenn kein Done() gerufen
+    sal_Bool                bDone;      // auskommentieren wenn kein Done() gerufen
     void*               pDummy;     // f"ur alle F"alle zum kompatibel bleiben
 
 #ifdef _SFXMACRO_HXX
 private:
     void                GenerateNameAndArgs_Impl( SfxMacro *pMacro,
                                                   const SfxSlot &rSlot,
-                                                  BOOL bRequestDone,
+                                                  sal_Bool bRequestDone,
                                                   ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aArgs );
 #endif
 
@@ -36,28 +36,28 @@ public:
 
                         SfxMacroStatement( const String &rTarget,
                                            const SfxSlot &rSlot,
-                                           BOOL bRequestDone,
+                                           sal_Bool bRequestDone,
                                            ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aArgs );
 
                         SfxMacroStatement( const SfxShell &rShell,
                                            const String &rTarget,
-                                           BOOL bAbsolute,
+                                           sal_Bool bAbsolute,
                                            const SfxSlot &rSlot,
-                                           BOOL bRequestDone,
+                                           sal_Bool bRequestDone,
                                            ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& aArgs );
 
                         SfxMacroStatement( const String &rStatment );
                         ~SfxMacroStatement();
 
-    USHORT              GetSlotId() const;
+    sal_uInt16              GetSlotId() const;
     const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& GetArgs() const;
-    BOOL                IsDone() const;
+    sal_Bool                IsDone() const;
     const String&       GetStatement() const;
 };
 
 //--------------------------------------------------------------------
 
-inline USHORT SfxMacroStatement::GetSlotId() const
+inline sal_uInt16 SfxMacroStatement::GetSlotId() const
 
 /*  [Beschreibung]
 
@@ -90,7 +90,7 @@ inline const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::Property
 
 //--------------------------------------------------------------------
 
-inline BOOL SfxMacroStatement::IsDone() const
+inline sal_Bool SfxMacroStatement::IsDone() const
 
 /*  [Beschreibung]
 

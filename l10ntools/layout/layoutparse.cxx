@@ -45,11 +45,15 @@ LayoutXMLFile::SearchL10NElements( XMLParentNode* pCur, int )
 
     /* Recurse int children, SearchL10NElements does not do that for us.  */
     if ( XMLChildNodeList* lst = pCur->GetChildList() )
-        for ( ULONG i = 0; i < lst->Count(); i++ )
-            if ( lst->GetObject( i )->GetNodeType() == XML_NODE_TYPE_ELEMENT )
-                HandleElement( ( XMLElement* )lst->GetObject( i ) );
-            else if ( lst->GetObject( i )->GetNodeType() == XML_NODE_TYPE_COMMENT )
-                lst->Remove( i-- );
+        for ( size_t i = 0; i < lst->size(); i++ )
+            if ( (*lst)[ i ]->GetNodeType() == XML_NODE_TYPE_ELEMENT )
+                HandleElement( ( XMLElement* )(*lst)[ i ] );
+            else if ( (*lst)[ i ]->GetNodeType() == XML_NODE_TYPE_COMMENT ) {
+                XMLChildNodeList::iterator it = lst->begin();
+                ::std::advance( it, i );
+                lst->erase( it );
+                i--;
+            }
 }
 
 std::vector<XMLAttribute*>
@@ -57,11 +61,11 @@ interestingAttributes( XMLAttributeList* lst )
 {
     std::vector<XMLAttribute*> interesting;
     if ( lst )
-        for ( ULONG i = 0; i < lst->Count(); i++ )
-            if ( lst->GetObject( i )->Equals( STRING( "id" ) ) )
-                interesting.insert( interesting.begin(), lst->GetObject( i ) );
-            else if ( ! BSTRING( *lst->GetObject( i ) ).CompareTo( "_", 1 ) )
-                interesting.push_back( lst->GetObject( i ) );
+        for ( size_t i = 0; i < lst->size(); i++ )
+            if ( (*lst)[ i ]->Equals( STRING( "id" ) ) )
+                interesting.insert( interesting.begin(), (*lst)[ i ] );
+            else if ( ! BSTRING( *(*lst)[ i ]).CompareTo( "_", 1 ) )
+                interesting.push_back( (*lst)[ i ] );
     return interesting;
 }
 
@@ -117,7 +121,7 @@ void LayoutXMLFile::InsertL10NElement( ByteString const& id, XMLElement* element
     (*languageMap)[ language ] = element;
 }
 
-BOOL LayoutXMLFile::Write( ByteString &aFilename )
+sal_Bool LayoutXMLFile::Write( ByteString &aFilename )
 {
 
     if ( aFilename.Len() )

@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: $
- * $Revision: $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -62,7 +59,7 @@ public:
 
 private:
     ViewShellBase& mrBase;
-    ULONG mnUpdateTagsEvent;
+    sal_uLong mnUpdateTagsEvent;
 
     ViewTagVector   maTagVector;
 };

@@ -35,7 +35,7 @@
 #include <pattern/frame.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
-#include <classes/framelistanalyzer.hxx>
+#include <framework/framelistanalyzer.hxx>
 #include <services.h>
 #include <general.h>
 
@@ -238,7 +238,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     sal_Bool bIsSynchron = sal_False;
     for (sal_Int32 nArgs=0; nArgs<lArguments.getLength(); nArgs++ )
     {
-        if ( lArguments[nArgs].Name.equalsAscii("SynchronMode") )
+        if ( lArguments[nArgs].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SynchronMode")) )
         {
             lArguments[nArgs].Value >>= bIsSynchron;
             break;
@@ -452,7 +452,6 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
     }
     catch(const css::lang::DisposedException&)
     {
-        LOG_ERROR("CloseDispatcher::impl_asyncCallback", "Congratulation! You found the reason for bug #120310#. Please contact the right developer and show him a scenario, which trigger this bug. THX.")
     }
 
     return 0;

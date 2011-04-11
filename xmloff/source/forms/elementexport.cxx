@@ -31,12 +31,13 @@
 
 #include "elementexport.hxx"
 #include "strings.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "eventexport.hxx"
 #include "formenums.hxx"
 #include "formcellbinding.hxx"
 #include "formcellbinding.hxx"
-#include "xformsexport.hxx"
+#include "xmloff/xformsexport.hxx"
+#include "property_meta_data.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/text/XText.hpp>
@@ -180,7 +181,7 @@ namespace xmloff
         Reference< XPersistObject > xPersistence(m_xProps, UNO_QUERY);
         if (!xPersistence.is())
         {
-            OSL_ENSURE(sal_False, "OElementExport::exportServiceNameAttribute: no XPersistObject!");
+            OSL_FAIL("OElementExport::exportServiceNameAttribute: no XPersistObject!");
             return;
         }
 
@@ -323,6 +324,9 @@ namespace xmloff
         #endif
         }
 
+        // "new-style" properties ...
+        exportGenericHandlerAttributes();
+
         // common control attributes
         exportCommonControlAttributes();
 
@@ -385,7 +389,7 @@ namespace xmloff
             // (the strikeout type), the latter hasn't. But, when the CharCrossedOut is exported and
             // later on imported, it overwrites anything which has previously been imported for
             // CharStrikeout.
-            // 2004-04-14 - #i27729# - fs@openoffice.org
+            // #i27729#
             exportedProperty( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharCrossedOut" ) ) );
         }
 
@@ -414,7 +418,7 @@ namespace xmloff
             case LISTBOX:
                 // don't export the list entries if the are not provided by the user, but obtained implicitly
                 // from other sources
-                // #i26944# - 2004-05-17 - fs@openoffice.org
+                // #i26944#
                 if ( controlHasUserSuppliedListEntries() )
                     exportListSourceAsElements();
                 break;
@@ -432,7 +436,7 @@ namespace xmloff
 
                 // don't export the list entries if the are not provided by the user, but obtained implicitly
                 // from other sources
-                // #i26944# - 2004-05-17 - fs@openoffice.org
+                // #i26944#
                 if ( controlHasUserSuppliedListEntries() )
                 {
                     // get the item list
@@ -472,6 +476,84 @@ namespace xmloff
             default:
                 // nothing do to
                 break;
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OControlExport::exportGenericHandlerAttributes()
+    {
+        const Sequence< Property > aProperties = m_xPropertyInfo->getProperties();
+        for (   const Property* prop = aProperties.getConstArray();
+                prop != aProperties.getConstArray() + aProperties.getLength();
+                ++prop
+            )
+        {
+            try
+            {
+                // see if this property can already be handled with an IPropertyHandler (which, on the long
+                // term, should be the case for most, if not all, properties)
+                const PropertyDescription* propDescription = metadata::getPropertyDescription( prop->Name );
+                if ( propDescription == NULL )
+                    continue;
+
+                // let the factory provide the concrete handler. Note that caching, if desired, is the task
+                // of the factory
+                PPropertyHandler handler = (*propDescription->factory)( propDescription->propertyId );
+                ENSURE_OR_CONTINUE( handler.get() != NULL,
+                    "OControlExport::exportGenericHandlerAttributes: invalid property handler provided by the factory!" );
+
+                ::rtl::OUString attributeValue;
+                if ( propDescription->propertyGroup == NO_GROUP )
+                {
+                    // that's a property which has a direct mapping to an attribute
+                    if ( !shouldExportProperty( prop->Name ) )
+                        // TODO: in the future, we surely need a more sophisticated approach to this, involving the property
+                        // handler, or the property description
+                    {
+                        exportedProperty( prop->Name );
+                        continue;
+                    }
+
+                    const Any propValue = m_xProps->getPropertyValue( prop->Name );
+                    attributeValue = handler->getAttributeValue( propValue );
+                }
+                else
+                {
+                    // that's a property which is part of a group of properties, whose values, in their entity, comprise
+                    // a single attribute value
+
+                    // retrieve the descriptions of all other properties which add to the attribute value
+                    PropertyDescriptionList descriptions;
+                    metadata::getPropertyGroup( propDescription->propertyGroup, descriptions );
+
+                    // retrieve the values for all those properties
+                    PropertyValues aValues;
+                    for (   PropertyDescriptionList::iterator desc = descriptions.begin();
+                            desc != descriptions.end();
+                            ++desc
+                        )
+                    {
+                        // TODO: XMultiPropertySet?
+                        const Any propValue = m_xProps->getPropertyValue( (*desc)->propertyName );
+                        aValues[ (*desc)->propertyId ] = propValue;
+                    }
+
+                    // let the handler translate into an XML attribute value
+                    attributeValue = handler->getAttributeValue( aValues );
+                }
+
+                AddAttribute(
+                    propDescription->attribute.namespacePrefix,
+                    token::GetXMLToken( propDescription->attribute.attributeToken ),
+                    attributeValue
+                );
+
+                exportedProperty( prop->Name );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
     }
 
@@ -743,7 +825,7 @@ namespace xmloff
             if (pCurrentValuePropertyName && (CCA_CURRENT_VALUE & m_nIncludeCommon))
             {
                 // don't export the current-value if this value originates from a data binding
-                // #i26944# - 2004-05-17 - fs@openoffice.org
+                // #i26944#
                 if ( controlHasActiveDataBinding() )
                     exportedProperty( ::rtl::OUString::createFromAscii( pCurrentValuePropertyName ) );
                 else
@@ -1007,7 +1089,7 @@ namespace xmloff
                 else if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_SPIN_INCREMENT ) )
                     sPropertyName = PROPERTY_SPIN_INCREMENT;
                 else
-                    OSL_ENSURE( sal_False, "OControlExport::exportSpecialAttributes: not property which can be mapped to step-size attribute!" );
+                    OSL_FAIL( "OControlExport::exportSpecialAttributes: not property which can be mapped to step-size attribute!" );
 
                 if ( sPropertyName.getLength() )
                     exportInt32PropertyAttribute(
@@ -1414,21 +1496,35 @@ namespace xmloff
         m_nClassId = FormComponentType::CONTROL;
         DBG_CHECK_PROPERTY( PROPERTY_CLASSID, sal_Int16 );
         m_xProps->getPropertyValue(PROPERTY_CLASSID) >>= m_nClassId;
+        bool knownType = false;
         switch (m_nClassId)
         {
             case FormComponentType::DATEFIELD:
+                m_eType = DATE;
+                knownType = true;
+                // NO BREAK
             case FormComponentType::TIMEFIELD:
+                if ( !knownType )
+                {
+                    m_eType = TIME;
+                    knownType = true;
+                }
+                m_nIncludeSpecial |= SCA_VALIDATION;
+                // NO BREAK
             case FormComponentType::NUMERICFIELD:
             case FormComponentType::CURRENCYFIELD:
             case FormComponentType::PATTERNFIELD:
-                m_eType = FORMATTED_TEXT;
+                if ( !knownType )
+                {
+                    m_eType = FORMATTED_TEXT;
+                    knownType = true;
+                }
                 // NO BREAK
             case FormComponentType::TEXTFIELD:
             {   // it's some kind of edit. To know which type we need further investigation
 
-                if (FORMATTED_TEXT != m_eType)
-                {   // not coming from the previous cases which had a class id .ne. TEXTFIELD
-
+                if ( !knownType )
+                {
                     // check if it's a formatted field
                     if (m_xPropertyInfo->hasPropertyByName(PROPERTY_FORMATKEY))
                     {
@@ -1464,13 +1560,20 @@ namespace xmloff
                                 m_eType = TEXT;
                         }
                     }
+                    knownType = true;
                 }
 
-                // attributes which are common to all the four types:
+                // attributes which are common to all the types:
                 // common attributes
                 m_nIncludeCommon =
-                    CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED | CCA_VALUE |
+                    CCA_NAME | CCA_SERVICE_NAME | CCA_DISABLED |
                     CCA_PRINTABLE | CCA_TAB_INDEX | CCA_TAB_STOP | CCA_TITLE;
+
+                if  (   ( m_nClassId != FormComponentType::DATEFIELD )
+                    &&  ( m_nClassId != FormComponentType::TIMEFIELD )
+                    )
+                    // date and time field values are handled differently nowadays
+                    m_nIncludeCommon |= CCA_VALUE;
 
                 // database attributes
                 m_nIncludeDatabase = DA_DATA_FIELD | DA_INPUT_REQUIRED;
@@ -1495,8 +1598,7 @@ namespace xmloff
                 // max and min values and validation:
                 if (FORMATTED_TEXT == m_eType)
                 {   // in general all controls represented as formatted-text have these props
-                    if (FormComponentType::PATTERNFIELD != m_nClassId)
-                        // but the PatternField does not have value limits
+                    if  ( FormComponentType::PATTERNFIELD != m_nClassId )   // except the PatternField
                         m_nIncludeSpecial |= SCA_MAX_VALUE | SCA_MIN_VALUE;
 
                     if (FormComponentType::TEXTFIELD != m_nClassId)
@@ -1505,8 +1607,13 @@ namespace xmloff
                 }
 
                 // if it's not a password field or rich text control, the CurrentValue needs to be stored, too
-                if ( PASSWORD != m_eType )
+                if  (   ( PASSWORD != m_eType )
+                    &&  ( DATE != m_eType )
+                    &&  ( TIME != m_eType )
+                    )
+                {
                     m_nIncludeCommon |= CCA_CURRENT_VALUE;
+                }
             }
             break;
 
@@ -1650,7 +1757,7 @@ namespace xmloff
                 break;
 
             default:
-                OSL_ENSURE(sal_False, "OControlExport::examineControl: unknown control type (class id)!");
+                OSL_FAIL("OControlExport::examineControl: unknown control type (class id)!");
                 // NO break!
 
             case FormComponentType::NAVIGATIONBAR:
@@ -1751,7 +1858,7 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OControlExport::exportCellBindingAttributes: caught an exception!" );
+            OSL_FAIL( "OControlExport::exportCellBindingAttributes: caught an exception!" );
         }
     }
 
@@ -1796,7 +1903,7 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OControlExport::exportCellListSourceRange: caught an exception!" );
+            OSL_FAIL( "OControlExport::exportCellListSourceRange: caught an exception!" );
         }
     }
 
@@ -1870,7 +1977,7 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OColumnExport::controlHasActiveDataBinding: caught an exception!" );
+            OSL_FAIL( "OColumnExport::controlHasActiveDataBinding: caught an exception!" );
         }
 
         return false;
@@ -1901,10 +2008,10 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OControlExport::controlHasUserSuppliedListEntries: caught an exception!" );
+            OSL_FAIL( "OControlExport::controlHasUserSuppliedListEntries: caught an exception!" );
         }
 
-        OSL_ENSURE( sal_False, "OControlExport::controlHasUserSuppliedListEntries: unreachable code!" );
+        OSL_FAIL( "OControlExport::controlHasUserSuppliedListEntries: unreachable code!" );
             // this method should be called for list and combo boxes only
         return true;
     }

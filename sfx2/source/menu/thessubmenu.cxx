@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: thessubmenu.cxx,v $
- * $Revision: 1.0 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -60,47 +57,13 @@ using ::rtl::OUString;
 
 SFX_IMPL_MENU_CONTROL(SfxThesSubMenuControl, SfxStringItem);
 
-////////////////////////////////////////////////////////////
-
-String GetThesaurusReplaceText_Impl( const ::rtl::OUString &rText )
-{
-    // The strings returned by the thesaurus sometimes have some
-    // explanation text put in between '(' and ')' or a trailing '*'.
-    // These parts should not be put in the ReplaceEdit Text that may get
-    // inserted into the document. Thus we strip them from the text.
-
-    String aText( rText );
-
-    xub_StrLen nPos = aText.Search( sal_Unicode('(') );
-    while (STRING_NOTFOUND != nPos)
-    {
-        xub_StrLen nEnd = aText.Search( sal_Unicode(')'), nPos );
-        if (STRING_NOTFOUND != nEnd)
-            aText.Erase( nPos, nEnd-nPos+1 );
-        else
-            break;
-        nPos = aText.Search( sal_Unicode('(') );
-    }
-
-    nPos = aText.Search( sal_Unicode('*') );
-    if (STRING_NOTFOUND != nPos)
-        aText.Erase( nPos );
-
-    // remove any possible remaining ' ' that may confuse the thesaurus
-    // when it gets called with the text
-    aText.EraseLeadingAndTrailingChars( sal_Unicode(' ') );
-
-    return aText;
-}
-
-////////////////////////////////////////////////////////////
 
 
 /*
-    Ctor; setzt Select-Handler am Menu und traegt Menu
-    in seinen Parent ein.
+    Constructor; sets the Select-Handler for the Menu and inserts it into
+    its Parent.
  */
-SfxThesSubMenuControl::SfxThesSubMenuControl( USHORT nSlotId, Menu &rMenu, SfxBindings &rBindings )
+SfxThesSubMenuControl::SfxThesSubMenuControl( sal_uInt16 nSlotId, Menu &rMenu, SfxBindings &rBindings )
     : SfxMenuControl( nSlotId, rBindings ),
     pMenu(new PopupMenu),
     rParent(rMenu)
@@ -108,7 +71,7 @@ SfxThesSubMenuControl::SfxThesSubMenuControl( USHORT nSlotId, Menu &rMenu, SfxBi
     rMenu.SetPopupMenu(nSlotId, pMenu);
     pMenu->SetSelectHdl(LINK(this, SfxThesSubMenuControl, MenuSelect));
     pMenu->Clear();
-    rParent.EnableItem( GetId(), FALSE );
+    rParent.EnableItem( GetId(), sal_False );
 }
 
 
@@ -119,12 +82,12 @@ SfxThesSubMenuControl::~SfxThesSubMenuControl()
 
 
 /*
-    Statusbenachrichtigung;
-    Ist die Funktionalit"at disabled, wird der entsprechende
-    Menueeintrag im Parentmenu disabled, andernfalls wird er enabled.
+    Status notification:
+    If the functionality is disabled, the corresponding
+    menu entry in Parentmenu is disabled, otherwise it is enabled.
  */
 void SfxThesSubMenuControl::StateChanged(
-    USHORT /*nSID*/,
+    sal_uInt16 /*nSID*/,
     SfxItemState eState,
     const SfxPoolItem* /*pState*/ )
 {
@@ -133,12 +96,12 @@ void SfxThesSubMenuControl::StateChanged(
 
 
 /*
-    Select-Handler des Menus;
-    das selektierte Verb mit ausgef"uhrt,
+    Select-Handler for Menus;
+    run the selected Verb,
  */
 IMPL_LINK_INLINE_START( SfxThesSubMenuControl, MenuSelect, Menu *, pSelMenu )
 {
-    const USHORT nSlotId = pSelMenu->GetCurItemId();
+    const sal_uInt16 nSlotId = pSelMenu->GetCurItemId();
     if( nSlotId )
         GetBindings().Execute(nSlotId);
     return 1;
@@ -152,7 +115,6 @@ PopupMenu* SfxThesSubMenuControl::GetPopup() const
 }
 
 
-////////////////////////////////////////////////////////////
 
 OUString SfxThesSubMenuHelper::GetText(
     const String &rLookUpString,
@@ -261,7 +223,7 @@ String SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) cons
     if (m_xLngMgr.is())
     {
         uno::Sequence< OUString > aServiceNames = m_xLngMgr->getConfiguredServices(
-                OUString::createFromAscii("com.sun.star.linguistic2.Thesaurus"), rLocale );
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.Thesaurus")), rLocale );
         // there should be at most one thesaurus configured for each language
         DBG_ASSERT( aServiceNames.getLength() <= 1, "more than one thesaurus found. Should not be possible" );
         if (aServiceNames.getLength() == 1)
@@ -270,7 +232,6 @@ String SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) cons
     return aRes;
 }
 
-////////////////////////////////////////////////////////////
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

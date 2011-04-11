@@ -58,7 +58,9 @@ SHL1STDLIBS=		$(COMMON_LIBS) \
             $(OLEAUT32LIB)\
             $(COMDLG32LIB)\
             $(KERNEL32LIB)\
-            $(UUIDLIB)
+            $(UUIDLIB)\
+            Delayimp.lib\
+            /DELAYLOAD:shell32.dll
 
 SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)
@@ -100,3 +102,16 @@ DEF2EXPORTFILE=	exports.dxp
 
 .INCLUDE :  target.mk
 
+ALLTAR : $(MISC)/fop.component $(MISC)/fps.component
+
+$(MISC)/fop.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        fop.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt fop.component
+
+$(MISC)/fps.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        fps.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt fps.component

@@ -86,7 +86,7 @@ published service AccessibleSpreadsheet
             the order on the screen. This means that the first cell is the
             cell in the left top edge of the table and the last one is the
             cell in the right bottom edge of the table. The second is the
-            cell in the first row and second xolumn and so on.</li>
+            cell in the first row and second column and so on.</li>
         </ul>
         <li>The description is ???.</li>
         <li>The name is the given table name.</li>

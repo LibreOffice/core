@@ -45,7 +45,7 @@ public:
     TYPEINFO();
     TTBasic();
    ~TTBasic();
-    BOOL Compile( SbModule* );
+    sal_Bool Compile( SbModule* );
     static MyBasic* CreateMyBasic();
 
     // nicht mit #ifdefs klammern, da diese Headerdatei für testtool und basic
@@ -54,10 +54,10 @@ public:
 //  SbxObject *pTestObject;         // für das Testtool; ansonsten NULL
 
     void LoadIniFile();
-    SbTextType GetSymbolType( const String &Symbol, BOOL bWasTTControl );   // Besimmt den erweiterten Symboltyp für das Syntaxhighlighting
+    SbTextType GetSymbolType( const String &Symbol, sal_Bool bWasTTControl );   // Besimmt den erweiterten Symboltyp für das Syntaxhighlighting
     virtual const String GetSpechialErrorText();
     virtual void ReportRuntimeError( AppBasEd *pEditWin );
-    virtual void DebugFindNoErrors( BOOL bDebugFindNoErrors );
+    virtual void DebugFindNoErrors( sal_Bool bDebugFindNoErrors );
 };
 
 SV_DECL_IMPL_REF(TTBasic)

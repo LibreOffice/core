@@ -34,6 +34,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <tools/color.hxx>
 #include <comphelper/types.hxx>
 #include "ftools.hxx"
@@ -101,9 +102,9 @@ public:
                             const ::rtl::OUString& rServiceName,
                             const UnoAnySequence& rArgs );
 
-    /** Opens a password dialog and returns the entered password.
-        @return  The entered password or an empty string on 'Cancel' or any error. */
-    static String       QueryPasswordForMedium( SfxMedium& rMedium,
+    /** Opens a password dialog and returns the encryption data.
+        @return  The encryption data or an empty sequence on 'Cancel' or any error. */
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > QueryEncryptionDataForMedium( SfxMedium& rMedium,
                             ::comphelper::IDocPasswordVerifier& rVerifier,
                             const ::std::vector< ::rtl::OUString >* pDefaultPasswords = 0 );
 };
@@ -183,7 +184,7 @@ public:
                             { UnoAny aAny; return GetAnyProperty( aAny, rPropName ) && (aAny >>= rValue); }
 
     /** Gets the specified Boolean property from the property set.
-        @return  true = property contains true; false = property contains false or error occured. */
+        @return  true = property contains true; false = property contains false or error occurred. */
     bool                GetBoolProperty( const ::rtl::OUString& rPropName ) const;
 
     /** Gets the specified Boolean property from the property set.
@@ -323,7 +324,8 @@ bool ScfPropSetHelper::ReadValue( Type& rValue )
 template< typename Type >
 void ScfPropSetHelper::WriteValue( const Type& rValue )
 {
-    if( UnoAny* pAny = GetNextAny() )
+    UnoAny* pAny = GetNextAny();
+    if( pAny )
         *pAny <<= rValue;
 }
 

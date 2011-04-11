@@ -30,7 +30,7 @@
 #ifndef _CONNECTIVITY_OFUNCTIONDEFS_HXX_
 #define _CONNECTIVITY_OFUNCTIONDEFS_HXX_
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -107,13 +107,11 @@
 #define SQL_FETCH_PRIOR SQL_FETCH_PREV
 #define SQL_NO_TOTAL (-4)
 
-//  #include "odbc3defs.hxx"
-
 #endif
 
 // In der ODBC.H von Watcom werden Strings als char * erwartet
 // (nicht, wie sonst bei ODBC ueblich, als UCHAR *).
-#if defined( ICC ) || defined( WTC )
+#if defined( ICC )
 #define SDB_ODBC_CHAR unsigned char
 #else
 #define SDB_ODBC_CHAR char

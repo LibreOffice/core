@@ -60,15 +60,15 @@ private:
     long                nRightMargin;
     short               nFirstLineOfst;
     // distances
-    USHORT              nUpper;
-    USHORT              nLower;
+    sal_uInt16              nUpper;
+    sal_uInt16              nLower;
     // adjustment
     SvxAdjust           eAdjust;
     // last line in justification
     SvxAdjust           eLastLine;
     // line distance
     SvxPrevLineSpace    eLine;
-    USHORT              nLineVal;
+    sal_uInt16              nLineVal;
 
     String              aText;
     Rectangle           Lines[9];
@@ -76,7 +76,7 @@ private:
 protected:
     virtual void Paint( const Rectangle& rRect );
 
-    void DrawParagraph( BOOL bAll );
+    void DrawParagraph( sal_Bool bAll );
 
 public:
     SvxParaPrevWindow( Window* pParent, const ResId& rId );
@@ -84,11 +84,11 @@ public:
     void        SetFirstLineOfst( short nNew ) { nFirstLineOfst = nNew; }
     void        SetLeftMargin( long nNew )  { nLeftMargin = nNew; }
     void        SetRightMargin( long nNew ) { nRightMargin = nNew; }
-    void        SetUpper( USHORT nNew )         { nUpper = nNew; }
-    void        SetLower( USHORT nNew )         { nLower = nNew; }
+    void        SetUpper( sal_uInt16 nNew )         { nUpper = nNew; }
+    void        SetLower( sal_uInt16 nNew )         { nLower = nNew; }
     void        SetAdjust( SvxAdjust eNew )     { eAdjust = eNew; }
     void        SetLastLine( SvxAdjust eNew )   { eLastLine = eNew; }
-    void        SetLineSpace( SvxPrevLineSpace eNew, USHORT nNew = 0 )
+    void        SetLineSpace( SvxPrevLineSpace eNew, sal_uInt16 nNew = 0 )
                     {   eLine = eNew; nLineVal = nNew; }
     void        SetText( const String& rStr )   { aText = rStr; }
     void        SetSize( Size aNew )            { aSize = aNew; }
@@ -96,18 +96,18 @@ public:
     short       GetFirstLineOfst() const        { return nFirstLineOfst; }
     long        GetLeftMargin() const           { return nLeftMargin; }
     long        GetRightMargin() const          { return nRightMargin; }
-    USHORT      GetUpper() const                { return nUpper; }
-    USHORT      GetLower() const                { return nLower; }
+    sal_uInt16      GetUpper() const                { return nUpper; }
+    sal_uInt16      GetLower() const                { return nLower; }
     SvxAdjust   GetAdjust() const               { return eAdjust; }
 
     SvxPrevLineSpace    GetLineEnum() const     { return eLine; }
-    USHORT              GetLineValue() const    { return nLineVal; }
+    sal_uInt16              GetLineValue() const    { return nLineVal; }
     String              GetText() const         { return aText; }
     Size                GetSize() const         { return aSize; }
 
     void        OutputSizeChanged();
 
-    void        Draw( BOOL bAll )               { DrawParagraph( bAll ); }
+    void        Draw( sal_Bool bAll )               { DrawParagraph( bAll ); }
 };
 
 #endif

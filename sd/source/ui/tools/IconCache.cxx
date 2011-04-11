@@ -32,7 +32,7 @@
 #include "tools/IconCache.hxx"
 
 #include "sdresid.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 
@@ -51,17 +51,17 @@ private:
     */
     static IconCache* mpInstance;
 
-    typedef ::std::hash_map<USHORT,Image> ImageContainer;
+    typedef ::boost::unordered_map<sal_uInt16,Image> ImageContainer;
     ImageContainer maContainer;
 
-    Image GetIcon (USHORT nResourceId);
+    Image GetIcon (sal_uInt16 nResourceId);
 };
 
 IconCache* IconCache::Implementation::mpInstance = NULL;
 
 
 
-Image IconCache::Implementation::GetIcon (USHORT nResourceId)
+Image IconCache::Implementation::GetIcon (sal_uInt16 nResourceId)
 {
     Image aResult;
     ImageContainer::iterator iImage;
@@ -110,7 +110,7 @@ IconCache& IconCache::Instance (void)
 
 
 
-Image IconCache::GetIcon (USHORT nResourceId)
+Image IconCache::GetIcon (sal_uInt16 nResourceId)
 {
     return mpImpl->GetIcon (nResourceId);
 }

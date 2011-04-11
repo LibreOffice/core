@@ -58,10 +58,6 @@
  * Font declaration for OOo xml file.This is needed for every font that was
  * used.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-24 create this file.
- ************************************************************************/
 #ifndef     _XFFONTDECL_HXX
 #define     _XFFONTDECL_HXX
 

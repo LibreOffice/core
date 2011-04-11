@@ -41,18 +41,18 @@ class PivotTableFilter;
 
 // ============================================================================
 
-class OoxPivotTableFieldContext : public OoxWorksheetContextBase
+class PivotTableFieldContext : public WorksheetContextBase
 {
 public:
-    explicit            OoxPivotTableFieldContext(
-                            OoxWorksheetFragmentBase& rFragment,
+    explicit            PivotTableFieldContext(
+                            WorksheetFragmentBase& rFragment,
                             PivotTableField& rTableField );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        onStartRecord( RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual void        onStartRecord( SequenceInputStream& rStrm );
 
 private:
     PivotTableField&    mrTableField;
@@ -60,18 +60,18 @@ private:
 
 // ============================================================================
 
-class OoxPivotTableFilterContext : public OoxWorksheetContextBase
+class PivotTableFilterContext : public WorksheetContextBase
 {
 public:
-    explicit            OoxPivotTableFilterContext(
-                            OoxWorksheetFragmentBase& rFragment,
+    explicit            PivotTableFilterContext(
+                            WorksheetFragmentBase& rFragment,
                             PivotTableFilter& rTableFilter );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        onStartRecord( RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual void        onStartRecord( SequenceInputStream& rStrm );
 
 private:
     PivotTableFilter&   mrTableFilter;
@@ -79,16 +79,16 @@ private:
 
 // ============================================================================
 
-class OoxPivotTableFragment : public OoxWorksheetFragmentBase
+class PivotTableFragment : public WorksheetFragmentBase
 {
 public:
-    explicit            OoxPivotTableFragment(
+    explicit            PivotTableFragment(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
 
 private:
@@ -101,10 +101,10 @@ private:
 class BiffPivotTableContext : public BiffWorksheetContextBase
 {
 public:
-    explicit            BiffPivotTableContext( const BiffWorksheetFragmentBase& rFragment, PivotTable& rPivotTable );
+    explicit            BiffPivotTableContext( const WorksheetHelper& rHelper );
 
     /** Imports all records related to the current pivot table. */
-    virtual void        importRecord();
+    virtual void        importRecord( BiffInputStream& rStrm );
 
 private:
     PivotTable&         mrPivotTable;

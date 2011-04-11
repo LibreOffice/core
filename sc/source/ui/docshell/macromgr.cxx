@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: document.hxx,v $
- * $Revision: 1.115.36.9 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -50,7 +47,7 @@ using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
 using ::rtl::OUStringHash;
-using ::std::hash_map;
+using ::boost::unordered_map;
 using ::std::list;
 using ::std::for_each;
 using ::std::pair;
@@ -106,7 +103,7 @@ public:
     }
 
 private:
-    typedef hash_map<OUString, list<ScFormulaCell*>, OUStringHash> ModuleCellMap;
+    typedef boost::unordered_map<OUString, list<ScFormulaCell*>, OUStringHash> ModuleCellMap;
     ModuleCellMap maCells;
 };
 
@@ -149,7 +146,7 @@ public:
 
 void ScMacroManager::InitUserFuncData()
 {
-    // Clear hash_map
+    // Clear boost::unordered_map
     mhFuncToVolatile.clear();
     String sProjectName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
 

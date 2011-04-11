@@ -58,15 +58,15 @@ public:
                         SfxListener( const SfxListener &rCopy );
     virtual             ~SfxListener();
 
-    BOOL                StartListening( SfxBroadcaster& rBroadcaster, BOOL bPreventDups = FALSE );
-    BOOL                EndListening( SfxBroadcaster& rBroadcaster, BOOL bAllDups = FALSE );
-    void                EndListening( USHORT nNo );
+    sal_Bool                StartListening( SfxBroadcaster& rBroadcaster, sal_Bool bPreventDups = sal_False );
+    sal_Bool                EndListening( SfxBroadcaster& rBroadcaster, sal_Bool bAllDups = sal_False );
+    void                EndListening( sal_uInt16 nNo );
     void                EndListeningAll();
-    BOOL                IsListening( SfxBroadcaster& rBroadcaster ) const;
+    sal_Bool                IsListening( SfxBroadcaster& rBroadcaster ) const;
 
-    USHORT              GetBroadcasterCount() const
+    sal_uInt16              GetBroadcasterCount() const
                         { return aBCs.Count(); }
-    SfxBroadcaster*     GetBroadcasterJOE( USHORT nNo ) const
+    SfxBroadcaster*     GetBroadcasterJOE( sal_uInt16 nNo ) const
                         { return (SfxBroadcaster*) aBCs.GetObject(nNo); }
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

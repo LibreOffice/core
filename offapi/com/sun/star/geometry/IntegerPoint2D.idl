@@ -34,7 +34,7 @@ module com {  module sun {  module star {  module geometry {
     This structure contains x and y integer-valued coordinates of a
     two-dimensional point.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 struct IntegerPoint2D
 {

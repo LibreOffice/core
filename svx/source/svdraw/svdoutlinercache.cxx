@@ -34,7 +34,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
 
-extern SdrOutliner* SdrMakeOutliner( USHORT nOutlinerMode, SdrModel* pModel );
+extern SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pModel );
 
 SdrOutlinerCache::SdrOutlinerCache( SdrModel* pModel )
 :   mpModel( pModel ),
@@ -86,7 +86,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
 {
     if( pOutliner )
     {
-        USHORT nOutlMode = pOutliner->GetOutlinerMode();
+        sal_uInt16 nOutlMode = pOutliner->GetOutlinerMode();
 
         if( (OUTLINERMODE_OUTLINEOBJECT == nOutlMode) && (NULL == mpModeOutline) )
         {

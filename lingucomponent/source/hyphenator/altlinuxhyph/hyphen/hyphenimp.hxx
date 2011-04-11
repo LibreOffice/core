@@ -66,7 +66,7 @@ struct HDInfo {
   HyphenDict *     aPtr;
   OUString         aName;
   Locale           aLoc;
-  rtl_TextEncoding aEnc;
+  rtl_TextEncoding eEnc;
   CharClass *      apCC;
 };
 
@@ -84,14 +84,14 @@ class Hyphenator :
     >
 {
     Sequence< Locale >                      aSuppLocales;
-        HDInfo * aDicts;
-        sal_Int32 numdict;
+    HDInfo * aDicts;
+    sal_Int32 numdict;
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
-    Reference< XMultiServiceFactory > rSMgr;
+    Reference< XMultiServiceFactory >       rSMgr;
     linguistic::PropertyHelper_Hyphen *     pPropHelper;
-    BOOL                                    bDisposing;
+    sal_Bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     Hyphenator(const Hyphenator &);
@@ -109,87 +109,37 @@ public:
     virtual ~Hyphenator();
 
     // XSupportedLocales (for XHyphenator)
-    virtual Sequence< Locale > SAL_CALL getLocales()
-        throw(RuntimeException);
-    virtual sal_Bool SAL_CALL hasLocale( const Locale& rLocale )
-        throw(RuntimeException);
+    virtual Sequence< Locale > SAL_CALL getLocales() throw(RuntimeException);
+    virtual sal_Bool SAL_CALL hasLocale( const Locale& rLocale ) throw(RuntimeException);
 
     // XHyphenator
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
-    hyphenate( const ::rtl::OUString& aWord,
-           const ::com::sun::star::lang::Locale& aLocale,
-           sal_Int16 nMaxLeading,
-           const ::com::sun::star::beans::PropertyValues& aProperties )
-        throw(::com::sun::star::lang::IllegalArgumentException,
-              ::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
-    queryAlternativeSpelling( const ::rtl::OUString& aWord,
-                  const ::com::sun::star::lang::Locale& aLocale,
-                  sal_Int16 nIndex,
-                  const ::com::sun::star::beans::PropertyValues& aProperties )
-        throw(::com::sun::star::lang::IllegalArgumentException,
-              ::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XPossibleHyphens > SAL_CALL
-    createPossibleHyphens( const ::rtl::OUString& aWord,
-                   const ::com::sun::star::lang::Locale& aLocale,
-                   const ::com::sun::star::beans::PropertyValues& aProperties )
-        throw(::com::sun::star::lang::IllegalArgumentException,
-              ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL hyphenate( const ::rtl::OUString& aWord, const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nMaxLeading, const ::com::sun::star::beans::PropertyValues& aProperties ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL queryAlternativeSpelling( const ::rtl::OUString& aWord, const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nIndex, const ::com::sun::star::beans::PropertyValues& aProperties ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XPossibleHyphens > SAL_CALL createPossibleHyphens( const ::rtl::OUString& aWord, const ::com::sun::star::lang::Locale& aLocale, const ::com::sun::star::beans::PropertyValues& aProperties ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // XLinguServiceEventBroadcaster
-    virtual sal_Bool SAL_CALL
-        addLinguServiceEventListener(
-            const Reference< XLinguServiceEventListener >& rxLstnr )
-            throw(RuntimeException);
-    virtual sal_Bool SAL_CALL
-        removeLinguServiceEventListener(
-            const Reference< XLinguServiceEventListener >& rxLstnr )
-            throw(RuntimeException);
+    virtual sal_Bool SAL_CALL addLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) throw(RuntimeException);
+    virtual sal_Bool SAL_CALL removeLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) throw(RuntimeException);
 
     // XServiceDisplayName
-    virtual OUString SAL_CALL
-        getServiceDisplayName( const Locale& rLocale )
-            throw(RuntimeException);
+    virtual OUString SAL_CALL getServiceDisplayName( const Locale& rLocale ) throw(RuntimeException);
 
     // XInitialization
-    virtual void SAL_CALL
-        initialize( const Sequence< Any >& rArguments )
-            throw(Exception, RuntimeException);
+    virtual void SAL_CALL initialize( const Sequence< Any >& rArguments ) throw(Exception, RuntimeException);
 
     // XComponent
-    virtual void SAL_CALL
-        dispose()
-            throw(RuntimeException);
-    virtual void SAL_CALL
-        addEventListener( const Reference< XEventListener >& rxListener )
-            throw(RuntimeException);
-    virtual void SAL_CALL
-        removeEventListener( const Reference< XEventListener >& rxListener )
-            throw(RuntimeException);
-
-    ////////////////////////////////////////////////////////////
-    // Service specific part
-    //
+    virtual void SAL_CALL dispose() throw(RuntimeException);
+    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& rxListener ) throw(RuntimeException);
+    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& rxListener ) throw(RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL
-        getImplementationName()
-            throw(RuntimeException);
-    virtual sal_Bool SAL_CALL
-        supportsService( const OUString& rServiceName )
-            throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw(RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw(RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
 
-    static inline OUString
-        getImplementationName_Static() throw();
-    static Sequence< OUString >
-        getSupportedServiceNames_Static() throw();
-
+    static inline OUString  getImplementationName_Static() throw();
+    static Sequence< OUString > getSupportedServiceNames_Static() throw();
 
 
 private:

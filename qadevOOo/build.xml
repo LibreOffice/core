@@ -19,7 +19,7 @@
 
   <!-- target for building the runner -->
   <target name="qadevOOo_runner_build">
-    <javac srcdir="${qadevOOo.runner}" destdir="${qadevOOo.class}" includes="**/*.java" debug="${debug}" source="${build.source}">
+    <javac srcdir="${qadevOOo.runner}" destdir="${qadevOOo.class}" includes="**/*.java" debug="${debug}" source="${build.source}" encoding="utf-8" fork="true">
         <classpath>
             <pathelement location="${qadevOOo.class}"/>
             <fileset dir="${qadevOOo.office_jars}">

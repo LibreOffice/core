@@ -77,7 +77,7 @@ void SdrText::CheckPortionInfo( SdrOutliner& rOutliner )
 
 void SdrText::ReformatText()
 {
-    mbPortionInfoChecked=FALSE;
+    mbPortionInfoChecked=sal_False;
     mpOutlinerParaObject->ClearPortionInfo();
 }
 
@@ -141,7 +141,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
 
     if( mpOutlinerParaObject && pOldModel!=NULL && pNewModel!=NULL)
     {
-        bool bHgtSet = GetObjectItemSet().GetItemState(EE_CHAR_FONTHEIGHT, TRUE) == SFX_ITEM_SET;
+        bool bHgtSet = GetObjectItemSet().GetItemState(EE_CHAR_FONTHEIGHT, sal_True) == SFX_ITEM_SET;
 
         MapUnit aOldUnit(pOldModel->GetScaleUnit());
         MapUnit aNewUnit(pNewModel->GetScaleUnit());
@@ -150,10 +150,10 @@ void SdrText::SetModel( SdrModel* pNewModel )
         // !!! Hier muss noch DefTab und RefDevice der beiden Models
         // !!! verglichen werden und dann ggf. AutoGrow zuschlagen !!!
         // !!! fehlende Implementation !!!
-        ULONG nOldFontHgt=pOldModel->GetDefaultFontHeight();
-        ULONG nNewFontHgt=pNewModel->GetDefaultFontHeight();
-        BOOL bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
-        BOOL bSetHgtItem=bDefHgtChanged && !bHgtSet;
+        sal_uIntPtr nOldFontHgt=pOldModel->GetDefaultFontHeight();
+        sal_uIntPtr nNewFontHgt=pNewModel->GetDefaultFontHeight();
+        sal_Bool bDefHgtChanged=nNewFontHgt!=nOldFontHgt;
+        sal_Bool bSetHgtItem=bDefHgtChanged && !bHgtSet;
         if (bSetHgtItem)
         { // #32665#
             // zunaechst das HeightItem festklopfen, damit
@@ -173,7 +173,7 @@ void SdrText::SetModel( SdrModel* pNewModel )
             // Funktioniert nicht richtig:
             // Geht am Outliner leider nur in %
             // double nPercFloat=double(aMetricFactor)*100+0.5;
-            // USHORT nPerc=(USHORT)nPercFloat;
+            // sal_uInt16 nPerc=(sal_uInt16)nPercFloat;
             // rOutliner.DoStretchChars(100,nPerc);
 
             if (bSetHgtItem)
@@ -185,12 +185,12 @@ void SdrText::SetModel( SdrModel* pNewModel )
         }
         SetOutlinerParaObject(rOutliner.CreateParaObject()); // #34494#
         mpOutlinerParaObject->ClearPortionInfo();
-        mbPortionInfoChecked=FALSE;
+        mbPortionInfoChecked=sal_False;
         rOutliner.Clear();
     }
 }
 
-void SdrText::ForceOutlinerParaObject( USHORT nOutlMode )
+void SdrText::ForceOutlinerParaObject( sal_uInt16 nOutlMode )
 {
     if( mpModel && !mpOutlinerParaObject )
     {

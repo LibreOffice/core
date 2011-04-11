@@ -53,10 +53,9 @@ public:
     /** Derived classes return a clone of the decoder for usage in new streams. */
     inline BiffDecoderBase* clone() { return implClone(); }
 
-    /** Implementation of the ::comphelper::IDocPasswordVerifier interface,
-        calls the new virtual function implVerify(). */
-    virtual ::comphelper::DocPasswordVerifierResult
-                        verifyPassword( const ::rtl::OUString& rPassword );
+    /** Implementation of the ::comphelper::IDocPasswordVerifier interface. */
+    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const ::rtl::OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData );
+    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData );
 
     /** Returns true, if the decoder has been initialized correctly. */
     inline bool         isValid() const { return mbValid; }
@@ -74,7 +73,8 @@ private:
 
     /** Derived classes implement password verification and initialization of
         the decoder. */
-    virtual bool        implVerify( const ::rtl::OUString& rPassword ) = 0;
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > implVerifyPassword( const ::rtl::OUString& rPassword ) = 0;
+    virtual bool implVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) = 0;
 
     /** Implementation of decryption of a memory block. */
     virtual void        implDecode(
@@ -105,7 +105,9 @@ private:
     virtual BiffDecoder_XOR* implClone();
 
     /** Implements password verification and initialization of the decoder. */
-    virtual bool        implVerify( const ::rtl::OUString& rPassword );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > implVerifyPassword( const ::rtl::OUString& rPassword );
+    virtual bool implVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
+
 
     /** Implementation of decryption of a memory block. */
     virtual void        implDecode(
@@ -116,7 +118,7 @@ private:
 
 private:
     ::oox::core::BinaryCodec_XOR maCodec;   /// Cipher algorithm implementation.
-    ::std::vector< sal_uInt8 > maPassword;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > maEncryptionData;
     sal_uInt16          mnKey;
     sal_uInt16          mnHash;
 };
@@ -140,7 +142,8 @@ private:
     virtual BiffDecoder_RCF* implClone();
 
     /** Implements password verification and initialization of the decoder. */
-    virtual bool        implVerify( const ::rtl::OUString& rPassword );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > implVerifyPassword( const ::rtl::OUString& rPassword );
+    virtual bool implVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
 
     /** Implementation of decryption of a memory block. */
     virtual void        implDecode(
@@ -151,7 +154,7 @@ private:
 
 private:
     ::oox::core::BinaryCodec_RCF maCodec;   /// Cipher algorithm implementation.
-    ::std::vector< sal_uInt16 > maPassword;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > maEncryptionData;
     ::std::vector< sal_uInt8 > maSalt;
     ::std::vector< sal_uInt8 > maVerifier;
     ::std::vector< sal_uInt8 > maVerifierHash;

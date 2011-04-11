@@ -34,10 +34,10 @@
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/uielementtypenames.hxx>
-#include <xml/menuconfiguration.hxx>
-#include <xml/toolboxconfiguration.hxx>
+#include <framework/menuconfiguration.hxx>
+#include <framework/toolboxconfiguration.hxx>
 
-#include <xml/statusbarconfiguration.hxx>
+#include <framework/statusbarconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -225,7 +225,7 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
                         aUIElementData.bModified    = false;
                         aUIElementData.bDefault     = false;
 
-                        // Create hash_map entries for all user interface elements inside the storage. We don't load the
+                        // Create boost::unordered_map entries for all user interface elements inside the storage. We don't load the
                         // settings to speed up the process.
                         rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
                     }
@@ -344,7 +344,7 @@ UIConfigurationManager::UIElementData* UIConfigurationManager::impl_findUIElemen
     // preload list of element types on demand
     impl_preloadUIElementTypeList( nElementType );
 
-    // try to look into our document vector/hash_map combination
+    // try to look into our document vector/boost::unordered_map combination
     UIElementDataHashMap& rUserHashMap = m_aUIElements[nElementType].aElementsHashMap;
     UIElementDataHashMap::iterator pIter = rUserHashMap.find( aResourceURL );
     if ( pIter != rUserHashMap.end() )
@@ -697,7 +697,6 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
     if ( isReadOnly() )
         return;
 
-    bool bResetStorage( false );
     if ( m_xDocConfigStorage.is() )
     {
         try
@@ -737,7 +736,6 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
                 if ( xTransactedObject.is() )
                     xTransactedObject->commit();
             }
-            bResetStorage = true;
 
             // remove settings from user defined layer and notify listener about removed settings data!
             // Try to access our module sub folder
@@ -1107,7 +1105,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getShortCutManager() th
     Reference< XInitialization > xInit      (xAccConfig, UNO_QUERY_THROW);
 
     PropertyValue aProp;
-    aProp.Name    = ::rtl::OUString::createFromAscii("DocumentRoot");
+    aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentRoot"));
     aProp.Value <<= xDocumentRoot;
 
     Sequence< Any > lArgs(1);

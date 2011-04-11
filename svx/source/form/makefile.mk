@@ -40,13 +40,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(ENABLE_VBA)"=="YES"
-    CDEFS+=-DENABLE_VBA
-.ENDIF
-
-.IF "$(ENABLE_VBA)"=="YES"
-    CDEFS+=-DENABLE_VBA
-.ENDIF
+CDEFS+=-DENABLE_VBA
 
 SRS1NAME=form
 SRC1FILES= \

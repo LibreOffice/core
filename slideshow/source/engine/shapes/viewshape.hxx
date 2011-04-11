@@ -228,7 +228,7 @@ namespace slideshow
                 {
                 }
 
-                ::cppcanvas::CanvasSharedPtr getDestinationCanvas()
+                ::cppcanvas::CanvasSharedPtr getDestinationCanvas() const
                 {
                     return mpDestinationCanvas;
                 }

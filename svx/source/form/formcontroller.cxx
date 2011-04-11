@@ -37,7 +37,7 @@
 #include "formcontrolling.hxx"
 #include "fmprop.hrc"
 #include "svx/dialmgr.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmservs.hxx"
 #include "svx/fmtools.hxx"
 #include "fmurl.hxx"
@@ -63,6 +63,7 @@
 #include <com/sun/star/sdb/RowChangeAction.hpp>
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/form/runtime/FormOperations.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
@@ -81,6 +82,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
+#include <comphelper/flagguard.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/controls/unocontrol.hxx>
@@ -94,7 +96,8 @@
 #include <rtl/logfile.hxx>
 
 #include <algorithm>
-#include <functional>
+
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -209,6 +212,7 @@ namespace svxform
     namespace FocusChangeReason = ::com::sun::star::awt::FocusChangeReason;
     namespace RowChangeAction = ::com::sun::star::sdb::RowChangeAction;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
+    namespace DataType = ::com::sun::star::sdbc::DataType;
 
 //==============================================================================
 // ColumnInfo
@@ -477,9 +481,12 @@ class FmXAutoControl: public UnoControl
     friend Reference< XInterface > SAL_CALL FmXAutoControl_NewInstance_Impl();
 
 public:
-    FmXAutoControl(){}
+    FmXAutoControl( const ::comphelper::ComponentContext& i_context )
+        :UnoControl( i_context.getLegacyServiceFactory() )
+    {
+    }
 
-    virtual ::rtl::OUString GetComponentServiceName() {return ::rtl::OUString::createFromAscii("Edit");}
+    virtual ::rtl::OUString GetComponentServiceName() {return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Edit"));}
     virtual void SAL_CALL createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw( RuntimeException );
 
 protected:
@@ -522,7 +529,7 @@ struct UpdateAllListeners : public ::std::unary_function< Reference< XDispatch >
     bool operator()( const Reference< XDispatch >& _rxDispatcher ) const
     {
         static_cast< ::svx::OSingleFeatureDispatcher* >( _rxDispatcher.get() )->updateAllListeners();
-        // the return is a dummy only so we can use this struct in a std::compose1 call
+        // the return is a dummy only so we can use this struct in a o3tl::compose1 call
         return true;
     }
 };
@@ -584,6 +591,7 @@ FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB 
                   ,m_bAttachEvents(sal_True)
                   ,m_bDetachEvents(sal_True)
                   ,m_bAttemptedHandlerCreation( false )
+                  ,m_bSuspendFilterTextListening( false )
 {
     DBG_CTOR( FormController, NULL );
 
@@ -709,7 +717,7 @@ sal_Bool SAL_CALL FormController::supportsService(const ::rtl::OUString& Service
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FormController::getImplementationName() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii( "org.openoffice.comp.svx.FormController" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.svx.FormController"));
 }
 
 //------------------------------------------------------------------------------
@@ -747,7 +755,7 @@ Sequence< ::rtl::OUString> FormController::getSupportedServiceNames_Static(void)
     {
         aServices.realloc(2);
         aServices.getArray()[0] = FM_FORM_CONTROLLER;
-        aServices.getArray()[1] = ::rtl::OUString::createFromAscii("com.sun.star.awt.control.TabController");
+        aServices.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.control.TabController"));
     }
     return aServices;
 }
@@ -783,6 +791,9 @@ namespace
 // -----------------------------------------------------------------------------
 void FormController::impl_setTextOnAllFilter_throw()
 {
+    m_bSuspendFilterTextListening = true;
+    ::comphelper::FlagGuard aResetFlag( m_bSuspendFilterTextListening );
+
     // reset the text for all controls
     ::std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), ResetComponentText() );
 
@@ -856,32 +867,38 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                         if ( rRow.empty() )
                             continue;
 
-                        if ( aFilter.getLength() )
-                            aFilter.appendAscii( " OR " );
-
-                        aFilter.appendAscii( "( " );
+                        ::rtl::OUStringBuffer aRowFilter;
                         for ( FmFilterRow::const_iterator condition = rRow.begin(); condition != rRow.end(); ++condition )
                         {
                             // get the field of the controls map
                             Reference< XControl > xControl( condition->first, UNO_QUERY_THROW );
                             Reference< XPropertySet > xModelProps( xControl->getModel(), UNO_QUERY_THROW );
                             Reference< XPropertySet > xField( xModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ), UNO_QUERY_THROW );
-                            if ( condition != rRow.begin() )
-                                aFilter.appendAscii( " AND " );
 
                             ::rtl::OUString sFilterValue( condition->second );
 
                             ::rtl::OUString sErrorMsg, sCriteria;
-                            ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree( sErrorMsg, sFilterValue, xFormatter, xField );
+                            const ::rtl::Reference< ISQLParseNode > xParseNode =
+                                predicateTree( sErrorMsg, sFilterValue, xFormatter, xField );
                             OSL_ENSURE( xParseNode.is(), "FormController::getFastPropertyValue: could not parse the field value predicate!" );
                             if ( xParseNode.is() )
                             {
                                 // don't use a parse context here, we need it unlocalized
                                 xParseNode->parseNodeToStr( sCriteria, xConnection, NULL );
-                                aFilter.append( sCriteria );
+                                if ( condition != rRow.begin() )
+                                    aRowFilter.appendAscii( " AND " );
+                                aRowFilter.append( sCriteria );
                             }
                         }
-                        aFilter.appendAscii( " )" );
+                        if ( aRowFilter.getLength() > 0 )
+                        {
+                            if ( aFilter.getLength() )
+                                aFilter.appendAscii( " OR " );
+
+                            aFilter.appendAscii( "( " );
+                            aFilter.append( aRowFilter.makeStringAndClear() );
+                            aFilter.appendAscii( " )" );
+                        }
                     }
                 }
                 catch( const Exception& )
@@ -1223,7 +1240,7 @@ void FormController::disposing(void)
 
     // clean up our children
     for (FmFormControllers::const_iterator i = m_aChilds.begin();
-        i != m_aChilds.end(); i++)
+        i != m_aChilds.end(); ++i)
     {
         // search the position of the model within the form
         Reference< XFormComponent >  xForm((*i)->getModel(), UNO_QUERY);
@@ -1439,7 +1456,7 @@ void FormController::toggleAutoFields(sal_Bool bAutoFields)
                         &&  ::comphelper::getBOOL( xField->getPropertyValue( FM_PROP_AUTOINCREMENT ) )
                         )
                     {
-                        replaceControl( xControl, new FmXAutoControl );
+                        replaceControl( xControl, new FmXAutoControl( m_aContext ) );
                     }
                 }
             }
@@ -1495,50 +1512,54 @@ void SAL_CALL FormController::textChanged(const TextEvent& e) throw( RuntimeExce
     // SYNCHRONIZED -->
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    if (m_bFiltering)
+    if ( !m_bFiltering )
     {
-        Reference< XTextComponent >  xText(e.Source,UNO_QUERY);
-        ::rtl::OUString aText = xText->getText();
-
-        if ( m_aFilterRows.empty() )
-            appendEmptyDisjunctiveTerm();
-
-        // Suchen der aktuellen Row
-        if ( ( (size_t)m_nCurrentFilterPosition >= m_aFilterRows.size() ) || ( m_nCurrentFilterPosition < 0 ) )
-        {
-            OSL_ENSURE( false, "FormController::textChanged: m_nCurrentFilterPosition is wrong!" );
-            return;
-        }
-
-        FmFilterRow& rRow = m_aFilterRows[ m_nCurrentFilterPosition ];
-
-        // do we have a new filter
-        if (aText.getLength())
-            rRow[xText] = aText;
-        else
-        {
-            // do we have the control in the row
-            FmFilterRow::iterator iter = rRow.find(xText);
-            // erase the entry out of the row
-            if (iter != rRow.end())
-                rRow.erase(iter);
-        }
-
-        // multiplex the event to our FilterControllerListeners
-        FilterEvent aEvent;
-        aEvent.Source = *this;
-        aEvent.FilterComponent = ::std::find( m_aFilterComponents.begin(), m_aFilterComponents.end(), xText ) - m_aFilterComponents.begin();
-        aEvent.DisjunctiveTerm = getActiveTerm();
-        aEvent.PredicateExpression = aText;
-
-        aGuard.clear();
-        // <-- SYNCHRONIZED
-
-        // notify the changed filter expression
-        m_aFilterListeners.notifyEach( &XFilterControllerListener::predicateExpressionChanged, aEvent );
-    }
-    else
         impl_onModify();
+        return;
+    }
+
+    if ( m_bSuspendFilterTextListening )
+        return;
+
+    Reference< XTextComponent >  xText(e.Source,UNO_QUERY);
+    ::rtl::OUString aText = xText->getText();
+
+    if ( m_aFilterRows.empty() )
+        appendEmptyDisjunctiveTerm();
+
+    // Suchen der aktuellen Row
+    if ( ( (size_t)m_nCurrentFilterPosition >= m_aFilterRows.size() ) || ( m_nCurrentFilterPosition < 0 ) )
+    {
+        OSL_ENSURE( false, "FormController::textChanged: m_nCurrentFilterPosition is wrong!" );
+        return;
+    }
+
+    FmFilterRow& rRow = m_aFilterRows[ m_nCurrentFilterPosition ];
+
+    // do we have a new filter
+    if (aText.getLength())
+        rRow[xText] = aText;
+    else
+    {
+        // do we have the control in the row
+        FmFilterRow::iterator iter = rRow.find(xText);
+        // erase the entry out of the row
+        if (iter != rRow.end())
+            rRow.erase(iter);
+    }
+
+    // multiplex the event to our FilterControllerListeners
+    FilterEvent aEvent;
+    aEvent.Source = *this;
+    aEvent.FilterComponent = ::std::find( m_aFilterComponents.begin(), m_aFilterComponents.end(), xText ) - m_aFilterComponents.begin();
+    aEvent.DisjunctiveTerm = getActiveTerm();
+    aEvent.PredicateExpression = aText;
+
+    aGuard.clear();
+    // <-- SYNCHRONIZED
+
+    // notify the changed filter expression
+    m_aFilterListeners.notifyEach( &XFilterControllerListener::predicateExpressionChanged, aEvent );
 }
 
 // XItemListener
@@ -2651,9 +2672,9 @@ void FormController::updateAllDispatchers() const
     ::std::for_each(
         m_aFeatureDispatchers.begin(),
         m_aFeatureDispatchers.end(),
-        ::std::compose1(
+        ::o3tl::compose1(
             UpdateAllListeners(),
-            ::std::select2nd< DispatcherContainer::value_type >()
+            ::o3tl::select2nd< DispatcherContainer::value_type >()
         )
     );
 }
@@ -3176,7 +3197,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         xQueryColumns->getByName(pRefValues[j].Name) >>= xSet;
 
                         // get the RealName
-                        xSet->getPropertyValue(::rtl::OUString::createFromAscii("RealName")) >>= aRealName;
+                        xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RealName"))) >>= aRealName;
 
                         // compare the condition field name and the RealName
                         if (aCompare(aRealName, pRefValues[j].Name))
@@ -3189,7 +3210,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         for (sal_Int32 n = 0, nCount = xColumnsByIndex->getCount(); n < nCount; n++)
                         {
                             xColumnsByIndex->getByIndex(n) >>= xSet;
-                            xSet->getPropertyValue(::rtl::OUString::createFromAscii("RealName")) >>= aRealName;
+                            xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RealName"))) >>= aRealName;
                             if (aCompare(aRealName, pRefValues[j].Name))
                             {
                                 // get the column by its alias
@@ -3217,10 +3238,10 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         if (aRow.find((*iter).xText) != aRow.end())
                         {
                             ::rtl::OUString aCompText = aRow[(*iter).xText];
-                            aCompText += ::rtl::OUString::createFromAscii(" ");
+                            aCompText += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
                             ::rtl::OString aVal = m_xParser->getContext().getIntlKeywordAscii(OParseContext::KEY_AND);
                             aCompText += ::rtl::OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US);
-                            aCompText += ::rtl::OUString::createFromAscii(" ");
+                            aCompText += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
                             aCompText += ::comphelper::getString(pRefValues[j].Value);
                             aRow[(*iter).xText] = aCompText;
                         }
@@ -3272,7 +3293,6 @@ void FormController::startFiltering()
     Reference< XConnection >  xConnection( aStaticTools.getRowSetConnection( Reference< XRowSet >( m_xModelAsIndex, UNO_QUERY ) ) );
     if ( !xConnection.is() )
         // nothing to do - can't filter a form which is not connected
-        // 98023 - 19.03.2002 - fs@openoffice.org
         return;
 
     // stop listening for controls
@@ -3367,9 +3387,9 @@ void FormController::startFiltering()
                 {
                     // create a filter control
                     Sequence< Any > aCreationArgs( 3 );
-                    aCreationArgs[ 0 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "MessageParent" ), makeAny( VCLUnoHelper::GetInterface( getDialogParentWindow() ) ) );
-                    aCreationArgs[ 1 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "NumberFormatter" ), makeAny( xFormatter ) );
-                    aCreationArgs[ 2 ] <<= NamedValue( ::rtl::OUString::createFromAscii( "ControlModel" ), makeAny( xModel ) );
+                    aCreationArgs[ 0 ] <<= NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MessageParent")), makeAny( VCLUnoHelper::GetInterface( getDialogParentWindow() ) ) );
+                    aCreationArgs[ 1 ] <<= NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormatter")), makeAny( xFormatter ) );
+                    aCreationArgs[ 2 ] <<= NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlModel")), makeAny( xModel ) );
                     Reference< XControl > xFilterControl(
                         m_aContext.createComponentWithArguments( "com.sun.star.form.control.FilterControl", aCreationArgs ),
                         UNO_QUERY
@@ -3506,7 +3526,7 @@ void FormController::setMode(const ::rtl::OUString& Mode) throw( NoSupportExcept
 
     m_aMode = Mode;
 
-    if ( Mode.equalsAscii( "FilterMode" ) )
+    if ( Mode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FilterMode" ) ) )
         startFiltering();
     else
         stopFiltering();
@@ -3639,7 +3659,7 @@ Reference< XControl > FormController::locateControl( const Reference< XControlMo
                     return *pControls;
             }
         }
-        OSL_ENSURE( sal_False, "FormController::locateControl: did not find a control for this model!" );
+        OSL_FAIL( "FormController::locateControl: did not find a control for this model!" );
     }
     catch( const Exception& )
     {
@@ -3970,7 +3990,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
             Sequence< PropertyValue > aFinalValues = pParamValues->getValues();
             if (aFinalValues.getLength() != aRequest.Parameters->getCount())
             {
-                DBG_ERROR("FormController::approveParameter: the InteractionHandler returned nonsense!");
+                OSL_FAIL("FormController::approveParameter: the InteractionHandler returned nonsense!");
                 return sal_False;
             }
             const PropertyValue* pFinalValues = aFinalValues.getConstArray();
@@ -3988,7 +4008,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
                     try { xParam->setPropertyValue(FM_PROP_VALUE, pFinalValues->Value); }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FormController::approveParameter: setting one of the properties failed!");
+                        OSL_FAIL("FormController::approveParameter: setting one of the properties failed!");
                     }
                 }
             }
@@ -4107,7 +4127,7 @@ void SAL_CALL FormController::invalidateAllFeatures(  ) throw (RuntimeException)
         m_aFeatureDispatchers.begin(),
         m_aFeatureDispatchers.end(),
         aInterceptedFeatures.getArray(),
-        ::std::select1st< DispatcherContainer::value_type >()
+        ::o3tl::select1st< DispatcherContainer::value_type >()
     );
 
     aGuard.clear();
@@ -4125,7 +4145,7 @@ FormController::interceptedQueryDispatch( const URL& aURL,
     Reference< XDispatch >  xReturn;
     // dispatches handled by ourself
     if  (   ( aURL.Complete == FMURL_CONFIRM_DELETION )
-        ||  (   ( aURL.Complete.equalsAscii( "private:/InteractionHandler" ) )
+        ||  (   ( aURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:/InteractionHandler" ) ) )
             &&  ensureInteractionHandler()
             )
         )
@@ -4162,11 +4182,11 @@ void SAL_CALL FormController::dispatch( const URL& _rURL, const Sequence< Proper
 {
     if ( _rArgs.getLength() != 1 )
     {
-        DBG_ERROR( "FormController::dispatch: no arguments -> no dispatch!" );
+        OSL_FAIL( "FormController::dispatch: no arguments -> no dispatch!" );
         return;
     }
 
-    if ( _rURL.Complete.equalsAscii( "private:/InteractionHandler" ) )
+    if ( _rURL.Complete.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:/InteractionHandler" ) ) )
     {
         Reference< XInteractionRequest > xRequest;
         OSL_VERIFY( _rArgs[0].Value >>= xRequest );
@@ -4177,12 +4197,12 @@ void SAL_CALL FormController::dispatch( const URL& _rURL, const Sequence< Proper
 
     if  ( _rURL.Complete == FMURL_CONFIRM_DELETION )
     {
-        DBG_ERROR( "FormController::dispatch: How do you expect me to return something via this call?" );
+        OSL_FAIL( "FormController::dispatch: How do you expect me to return something via this call?" );
             // confirmDelete has a return value - dispatch hasn't
         return;
     }
 
-    DBG_ERROR( "FormController::dispatch: unknown URL!" );
+    OSL_FAIL( "FormController::dispatch: unknown URL!" );
 }
 
 //------------------------------------------------------------------------------
@@ -4200,7 +4220,7 @@ void SAL_CALL FormController::addStatusListener( const Reference< XStatusListene
         }
     }
     else
-        OSL_ENSURE(sal_False, "FormController::addStatusListener: invalid (unsupported) URL!");
+        OSL_FAIL("FormController::addStatusListener: invalid (unsupported) URL!");
 }
 
 //------------------------------------------------------------------------------
@@ -4235,7 +4255,7 @@ Reference< XDispatchProviderInterceptor >  FormController::createInterceptor(con
         )
     {
         if ((*aIter)->getIntercepted() == _xInterception)
-            DBG_ERROR("FormController::createInterceptor : we already do intercept this objects dispatches !");
+            OSL_FAIL("FormController::createInterceptor : we already do intercept this objects dispatches !");
     }
 #endif
 

@@ -94,13 +94,13 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
     if (IsSuperOverridden())
     {
         if(Is(SUPERSCRIPT))
-            pFont->SetPosition(TRUE);
+            pFont->SetPosition(sal_True);
     }
 
     if (IsSubOverridden())
     {
         if(Is(SUBSCRIPT))
-            pFont->SetPosition(FALSE);
+            pFont->SetPosition(sal_False);
     }
 
     if (IsUnderlineOverridden())
@@ -168,50 +168,50 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
     //  pFont->SetTightness(cTightness);*/
 }
 
-BOOL LwpFontAttrEntry::Is(sal_uInt16 Attr)
+sal_Bool LwpFontAttrEntry::Is(sal_uInt16 Attr)
 {
     return (0 != (m_nAttrBits & Attr));
 }
 
-BOOL LwpFontAttrEntry::IsBoldOverridden()
+sal_Bool LwpFontAttrEntry::IsBoldOverridden()
 {
     return (0 != (m_nAttrOverrideBits & BOLD));
 }
 
-BOOL LwpFontAttrEntry::IsItalicOverridden()
+sal_Bool LwpFontAttrEntry::IsItalicOverridden()
 {
     return (0 != (m_nAttrOverrideBits & ITALIC));
 }
-BOOL LwpFontAttrEntry::IsStrikeThruOverridden()
+sal_Bool LwpFontAttrEntry::IsStrikeThruOverridden()
 {
     return (0 != (m_nAttrOverrideBits & STRIKETHRU));
 }
-BOOL LwpFontAttrEntry::IsSmallCapsOverridden()
+sal_Bool LwpFontAttrEntry::IsSmallCapsOverridden()
 {
     return (0 != (m_nAttrOverrideBits & SMALLCAPS));
 }
-BOOL LwpFontAttrEntry::IsSuperOverridden()
+sal_Bool LwpFontAttrEntry::IsSuperOverridden()
 {
     return (0 != (m_nAttrOverrideBits & SUPERSCRIPT));
 
 }
-BOOL LwpFontAttrEntry::IsSubOverridden()
+sal_Bool LwpFontAttrEntry::IsSubOverridden()
 {
     return (0 != (m_nAttrOverrideBits & SUBSCRIPT));
 
 }
 
-BOOL LwpFontAttrEntry::IsSuperSubOverridden()
+sal_Bool LwpFontAttrEntry::IsSuperSubOverridden()
 {
     return (0 != (m_nAttrOverrideBits
         & (SUPERSCRIPT | SUBSCRIPT)));
 }
 
-BOOL LwpFontAttrEntry::IsUnderlineOverridden()
+sal_Bool LwpFontAttrEntry::IsUnderlineOverridden()
 {
     return (0 != (m_nAttrOverrideBits2 & UNDER));
 }
-BOOL LwpFontAttrEntry::IsCaseOverridden()
+sal_Bool LwpFontAttrEntry::IsCaseOverridden()
 {
     return (0 != (m_nAttrOverrideBits2 & CASE));
 }
@@ -268,8 +268,8 @@ void LwpFontTable::Read(LwpObjectStream *pStrm)
 OUString LwpFontTable::GetFaceName(sal_uInt16 index) //index: start from 1
 {
     assert(index>0);
-    if (index < 1)//add by , for fix crash,2005/12/20
-        return OUString::createFromAscii("");//add end
+    if (index < 1)//add for fix crash
+        return OUString();
     return m_pFontEntries[index-1].GetFaceName();
 }
 
@@ -330,40 +330,41 @@ void LwpFontNameEntry::Override(XFFont* pFont)
     //  pFont->SetTightness(cTightness);
 }
 
-BOOL LwpFontNameEntry::IsFaceNameOverridden()
+sal_Bool LwpFontNameEntry::IsFaceNameOverridden()
 {
     return (0 != (m_nOverrideBits & FACENAME));
 }
 
-BOOL LwpFontNameEntry::IsAltFaceNameOverridden()
+sal_Bool LwpFontNameEntry::IsAltFaceNameOverridden()
 {
     return (0 != (m_nOverrideBits & ALTFACENAME));
 }
 
-BOOL LwpFontNameEntry::IsPointSizeOverridden()
+sal_Bool LwpFontNameEntry::IsPointSizeOverridden()
 {
     return (0 != (m_nOverrideBits & POINTSIZE));
 }
 
-BOOL LwpFontNameEntry::IsColorOverridden()
+sal_Bool LwpFontNameEntry::IsColorOverridden()
 {
     return (0 != (m_nOverrideBits & COLOR));
 }
 
-BOOL LwpFontNameEntry::IsBackgroundColorOverridden()
+sal_Bool LwpFontNameEntry::IsBackgroundColorOverridden()
 {
     return (0 != (m_nOverrideBits & BKCOLOR));
 }
 
-BOOL LwpFontNameEntry::IsTightnessOverridden()
-{
-    return (0 != (m_nOverrideBits & TIGHTNESS));
-}
+//TODO
+//sal_Bool LwpFontNameEntry::IsTightnessOverridden()
+//{
+//    return (0 != (m_nOverrideBits & TIGHTNESS));
+//}
 
-BOOL LwpFontNameEntry::IsAnythingOverridden()
-{
-    return (0 != (m_nOverrideBits & ALL_BITS));
-}
+//sal_Bool LwpFontNameEntry::IsAnythingOverridden()
+//{
+//    return (0 != (m_nOverrideBits & ALL_BITS));
+//}
 
 
 LwpFontNameManager::LwpFontNameManager()
@@ -553,7 +554,7 @@ void LwpFontManager::SetDfltFont(XFFont* /*pFont*/)
 
 OUString LwpFontManager::GetNameByID(sal_uInt32 fontID)
 {
-    return ( m_FNMgr.GetNameByIndex(GetFontNameIndex(fontID)) );//use font id for bullet? note by ,2005/7/5
+    return ( m_FNMgr.GetNameByIndex(GetFontNameIndex(fontID)) );//use font id for bullet?
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

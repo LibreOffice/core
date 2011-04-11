@@ -9,11 +9,7 @@ mkdir: %_DEST%\inc%_EXT%\external\unicode
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 
-..\%__SRC%\bin\icudt40.dll %_DEST%\bin%_EXT%\icudt40.dll
-..\%__SRC%\bin\icuin40.dll %_DEST%\bin%_EXT%\icuin40.dll
-..\%__SRC%\bin\icule40.dll %_DEST%\bin%_EXT%\icule40.dll
-..\%__SRC%\bin\icutu40.dll %_DEST%\bin%_EXT%\icutu40.dll
-..\%__SRC%\bin\icuuc40.dll %_DEST%\bin%_EXT%\icuuc40.dll
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 
 ..\%__SRC%\bin\genccode     %_DEST%\bin%_EXT%\genccode
 ..\%__SRC%\bin\genccode.exe %_DEST%\bin%_EXT%\genccode.exe

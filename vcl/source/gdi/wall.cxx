@@ -112,7 +112,7 @@ void ImplWallpaper::ImplReleaseCachedBitmap()
 SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
-    UINT16          nTmp16;
+    sal_uInt16          nTmp16;
 
     delete rImplWallpaper.mpRect;
     rImplWallpaper.mpRect = NULL;
@@ -130,7 +130,7 @@ SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
     // version 2
     if( aCompat.GetVersion() >= 2 )
     {
-        BOOL bRect, bGrad, bBmp, bDummy;
+        sal_Bool bRect, bGrad, bBmp, bDummy;
 
         rIStm >> bRect >> bGrad >> bBmp >> bDummy >> bDummy >> bDummy;
 
@@ -155,7 +155,7 @@ SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
         // version 3 (new color format)
         if( aCompat.GetVersion() >= 3 )
         {
-            rImplWallpaper.maColor.Read( rIStm, TRUE );
+            rImplWallpaper.maColor.Read( rIStm, sal_True );
         }
     }
 
@@ -167,13 +167,13 @@ SvStream& operator>>( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 SvStream& operator<<( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
 {
     VersionCompat   aCompat( rOStm, STREAM_WRITE, 3 );
-    BOOL            bRect = ( rImplWallpaper.mpRect != NULL );
-    BOOL            bGrad = ( rImplWallpaper.mpGradient != NULL );
-    BOOL            bBmp = ( rImplWallpaper.mpBitmap != NULL );
-    BOOL            bDummy = FALSE;
+    sal_Bool            bRect = ( rImplWallpaper.mpRect != NULL );
+    sal_Bool            bGrad = ( rImplWallpaper.mpGradient != NULL );
+    sal_Bool            bBmp = ( rImplWallpaper.mpBitmap != NULL );
+    sal_Bool            bDummy = sal_False;
 
     // version 1
-    rOStm << rImplWallpaper.maColor << (UINT16) rImplWallpaper.meStyle;
+    rOStm << rImplWallpaper.maColor << (sal_uInt16) rImplWallpaper.meStyle;
 
     // version 2
     rOStm << bRect << bGrad << bBmp << bDummy << bDummy << bDummy;
@@ -188,14 +188,14 @@ SvStream& operator<<( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
         rOStm << *rImplWallpaper.mpBitmap;
 
     // version 3 (new color format)
-    ( (Color&) rImplWallpaper.maColor ).Write( rOStm, TRUE );
+    ( (Color&) rImplWallpaper.maColor ).Write( rOStm, sal_True );
 
     return rOStm;
 }
 
 // -----------------------------------------------------------------------
 
-inline void Wallpaper::ImplMakeUnique( BOOL bReleaseCache )
+inline void Wallpaper::ImplMakeUnique( sal_Bool bReleaseCache )
 {
     // Falls noch andere Referenzen bestehen, dann kopieren
     if ( mpImplWallpaper->mnRefCount != 1 )
@@ -314,7 +314,7 @@ void Wallpaper::SetStyle( WallpaperStyle eStyle )
 {
     DBG_CHKTHIS( Wallpaper, NULL );
 
-    ImplMakeUnique( FALSE );
+    ImplMakeUnique( sal_False );
 
     if( eStyle == WALLPAPER_APPLICATIONGRADIENT )
         // set a dummy gradient, the correct gradient
@@ -392,7 +392,7 @@ BitmapEx Wallpaper::GetBitmap() const
 
 // -----------------------------------------------------------------------
 
-BOOL Wallpaper::IsBitmap() const
+sal_Bool Wallpaper::IsBitmap() const
 {
     DBG_CHKTHIS( Wallpaper, NULL );
 
@@ -450,7 +450,7 @@ Gradient Wallpaper::GetGradient() const
 
 // -----------------------------------------------------------------------
 
-BOOL Wallpaper::IsGradient() const
+sal_Bool Wallpaper::IsGradient() const
 {
     DBG_CHKTHIS( Wallpaper, NULL );
 
@@ -480,7 +480,7 @@ void Wallpaper::SetRect( const Rectangle& rRect )
 {
     DBG_CHKTHIS( Wallpaper, NULL );
 
-    ImplMakeUnique( FALSE );
+    ImplMakeUnique( sal_False );
 
     if ( rRect.IsEmpty() )
     {
@@ -507,7 +507,7 @@ void Wallpaper::SetRect()
 
     if ( mpImplWallpaper->mpRect )
     {
-        ImplMakeUnique( FALSE );
+        ImplMakeUnique( sal_False );
         delete mpImplWallpaper->mpRect;
         mpImplWallpaper->mpRect = NULL;
     }
@@ -530,7 +530,7 @@ Rectangle Wallpaper::GetRect() const
 
 // -----------------------------------------------------------------------
 
-BOOL Wallpaper::IsRect() const
+sal_Bool Wallpaper::IsRect() const
 {
     DBG_CHKTHIS( Wallpaper, NULL );
 
@@ -540,26 +540,26 @@ BOOL Wallpaper::IsRect() const
 
 // -----------------------------------------------------------------------
 
-BOOL Wallpaper::IsFixed() const
+sal_Bool Wallpaper::IsFixed() const
 {
     if ( mpImplWallpaper->meStyle == WALLPAPER_NULL )
-        return FALSE;
+        return sal_False;
     else
         return (!mpImplWallpaper->mpBitmap && !mpImplWallpaper->mpGradient);
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Wallpaper::IsScrollable() const
+sal_Bool Wallpaper::IsScrollable() const
 {
     if ( mpImplWallpaper->meStyle == WALLPAPER_NULL )
-        return FALSE;
+        return sal_False;
     else if ( !mpImplWallpaper->mpBitmap && !mpImplWallpaper->mpGradient )
-        return TRUE;
+        return sal_True;
     else if ( mpImplWallpaper->mpBitmap )
         return (mpImplWallpaper->meStyle == WALLPAPER_TILE);
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -591,37 +591,37 @@ Wallpaper& Wallpaper::operator=( const Wallpaper& rWallpaper )
 
 // -----------------------------------------------------------------------
 
-BOOL Wallpaper::operator==( const Wallpaper& rWallpaper ) const
+sal_Bool Wallpaper::operator==( const Wallpaper& rWallpaper ) const
 {
     DBG_CHKTHIS( Wallpaper, NULL );
     DBG_CHKOBJ( &rWallpaper, Wallpaper, NULL );
 
     if ( mpImplWallpaper == rWallpaper.mpImplWallpaper )
-        return TRUE;
+        return sal_True;
 
     if ( ( mpImplWallpaper->meStyle != rWallpaper.mpImplWallpaper->meStyle ) ||
          ( mpImplWallpaper->maColor != rWallpaper.mpImplWallpaper->maColor ) )
-        return FALSE;
+        return sal_False;
 
     if ( mpImplWallpaper->mpRect != rWallpaper.mpImplWallpaper->mpRect
          && ( !mpImplWallpaper->mpRect
               || !rWallpaper.mpImplWallpaper->mpRect
               || *(mpImplWallpaper->mpRect) != *(rWallpaper.mpImplWallpaper->mpRect) ) )
-        return FALSE;
+        return sal_False;
 
     if ( mpImplWallpaper->mpBitmap != rWallpaper.mpImplWallpaper->mpBitmap
          && ( !mpImplWallpaper->mpBitmap
               || !rWallpaper.mpImplWallpaper->mpBitmap
               || *(mpImplWallpaper->mpBitmap) != *(rWallpaper.mpImplWallpaper->mpBitmap) ) )
-        return FALSE;
+        return sal_False;
 
     if ( mpImplWallpaper->mpGradient != rWallpaper.mpImplWallpaper->mpGradient
          && ( !mpImplWallpaper->mpGradient
               || !rWallpaper.mpImplWallpaper->mpGradient
               || *(mpImplWallpaper->mpGradient) != *(rWallpaper.mpImplWallpaper->mpGradient) ) )
-        return FALSE;
+        return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------

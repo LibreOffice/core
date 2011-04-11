@@ -111,9 +111,6 @@ void SAXEventKeeperImpl::setCurrentBufferNode(BufferNode* pBufferNode)
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -158,9 +155,6 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
  *   RESULT
  *  pBufferNode - the BufferNode that has been connected with both new
  *                ElementCollectors and new Blocker.
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -246,9 +240,6 @@ ElementMark* SAXEventKeeperImpl::findElementMarkBuffer(sal_Int32 nId) const
  *  pElementMark - the ElementMark with the particular Id, or NULL when
  *                 no such Id exists.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -287,9 +278,6 @@ void SAXEventKeeperImpl::removeElementMarkBuffer(sal_Int32 nId)
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -362,9 +350,6 @@ rtl::OUString SAXEventKeeperImpl::printBufferNode(
  *
  *   RESULT
  *  info - the information string
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -446,9 +431,6 @@ cssu::Sequence< cssu::Reference< cssxw::XXMLElementWrapper > >
  *   RESULT
  *  list - the child Elements list.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -506,9 +488,6 @@ void SAXEventKeeperImpl::smashBufferNode(
  *  cleared, with a stop flag seting at the next Blocking BufferNode. This
  *  operation can delete all useless bufferred SAX events which are only
  *  needed by the Blocker to be deleted.
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -652,9 +631,6 @@ BufferNode* SAXEventKeeperImpl::findNextBlockingBufferNode(
  *  pBufferNode - the next blocking BufferNode, or NULL if no such
  *                BufferNode exists.
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -699,9 +675,6 @@ void SAXEventKeeperImpl::diffuse(BufferNode* pBufferNode) const
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -735,9 +708,6 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -898,9 +868,6 @@ void SAXEventKeeperImpl::markElementMarkBuffer(sal_Int32 nId)
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -942,9 +909,6 @@ sal_Int32 SAXEventKeeperImpl::createElementCollector(
  *
  *   RESULT
  *  nId - the Id of the new ElementCollector
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -990,9 +954,6 @@ sal_Int32 SAXEventKeeperImpl::createBlocker(sal_Int32 nSecurityId)
  *
  *   RESULT
  *  nId - the Id of the new Blocker
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi

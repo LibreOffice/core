@@ -29,7 +29,7 @@
 #ifndef OOX_XLS_RICHSTRING_HXX
 #define OOX_XLS_RICHSTRING_HXX
 
-#include "oox/helper/containerhelper.hxx"
+#include "oox/helper/refvector.hxx"
 #include "oox/xls/stylesbuffer.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -115,7 +115,7 @@ struct FontPortionModel
     explicit inline     FontPortionModel( sal_Int32 nPos, sal_Int32 nFontId ) :
                             mnPos( nPos ), mnFontId( nFontId ) {}
 
-    void                read( RecordInputStream& rStrm );
+    void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, BiffFontPortionMode eMode );
 };
 
@@ -130,7 +130,7 @@ public:
     /** Appends a rich-string font identifier. */
     void                appendPortion( const FontPortionModel& rPortion );
     /** Reads count and font identifiers from the passed stream. */
-    void                importPortions( RecordInputStream& rStrm );
+    void                importPortions( SequenceInputStream& rStrm );
     /** Reads nCount font identifiers from the passed stream. */
     void                importPortions( BiffInputStream& rStrm, sal_uInt16 nCount, BiffFontPortionMode eMode );
     /** Reads count and font identifiers from the passed stream. */
@@ -148,7 +148,7 @@ struct PhoneticDataModel
     explicit            PhoneticDataModel();
 
     /** Sets the passed data from binary import. */
-    void                setBinData( sal_Int32 nType, sal_Int32 nAlignment );
+    void                setBiffData( sal_Int32 nType, sal_Int32 nAlignment );
 };
 
 // ----------------------------------------------------------------------------
@@ -161,12 +161,12 @@ public:
     /** Imports phonetic settings from the phoneticPr element. */
     void                importPhoneticPr( const AttributeList& rAttribs );
     /** Imports phonetic settings from the PHONETICPR record. */
-    void                importPhoneticPr( RecordInputStream& rStrm );
+    void                importPhoneticPr( SequenceInputStream& rStrm );
     /** Imports phonetic settings from the PHONETICPR record. */
     void                importPhoneticPr( BiffInputStream& rStrm );
 
     /** Imports phonetic settings from a rich string. */
-    void                importStringData( RecordInputStream& rStrm );
+    void                importStringData( SequenceInputStream& rStrm );
     /** Imports phonetic settings from a rich string. */
     void                importStringData( BiffInputStream& rStrm );
 
@@ -211,7 +211,7 @@ struct PhoneticPortionModel
     explicit inline     PhoneticPortionModel( sal_Int32 nPos, sal_Int32 nBasePos, sal_Int32 nBaseLen ) :
                             mnPos( nPos ), mnBasePos( nBasePos ), mnBaseLen( nBaseLen ) {}
 
-    void                read( RecordInputStream& rStrm );
+    void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm );
 };
 
@@ -226,7 +226,7 @@ public:
     /** Appends a rich-string phonetic portion. */
     void                appendPortion( const PhoneticPortionModel& rPortion );
     /** Reads all phonetic portions from the passed stream. */
-    void                importPortions( RecordInputStream& rStrm );
+    void                importPortions( SequenceInputStream& rStrm );
     /** Reads phonetic portion data from the passed stream. */
     ::rtl::OUString     importPortions( BiffInputStream& rStrm, sal_Int32 nPhoneticSize );
 };
@@ -249,7 +249,7 @@ public:
     void                importPhoneticPr( const AttributeList& rAttribs );
 
     /** Imports a Unicode rich-string from the passed record stream. */
-    void                importString( RecordInputStream& rStrm, bool bRich );
+    void                importString( SequenceInputStream& rStrm, bool bRich );
 
     /** Imports a byte string from the passed BIFF stream. */
     void                importByteString( BiffInputStream& rStrm, rtl_TextEncoding eDefaultTextEnc, BiffStringFlags nFlags = BIFF_STR_DEFAULT );

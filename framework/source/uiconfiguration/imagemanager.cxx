@@ -30,7 +30,7 @@
 #include "precompiled_framework.hxx"
 #include <uiconfiguration/imagemanager.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <xml/imagesconfiguration.hxx>
+#include <framework/imagesconfiguration.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
 #include <services.h>
 #include "imagemanagerimpl.hxx"
@@ -108,7 +108,7 @@ DEFINE_INIT_SERVICE                     (   ImageManager, {} )
 
 ImageManager::ImageManager( uno::Reference< XMultiServiceFactory > xServiceManager ) :
     ThreadHelpBase( &Application::GetSolarMutex() )
-    , m_pImpl( new ImageManagerImpl(xServiceManager,static_cast< OWeakObject* >(this),false) )
+    , m_pImpl( new ImageManagerImpl(xServiceManager,this,false) )
 {
 }
 

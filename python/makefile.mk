@@ -41,14 +41,13 @@ all:
     @echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
-
 # --- Files --------------------------------------------------------
-
 
 TARFILE_NAME=Python-$(PYVERSION)
 TARFILE_MD5=e81c2f0953aa60f8062c05a4673f2be0
 PATCH_FILES=\
     Python-$(PYVERSION).patch \
+    Python-parallel-make.patch \
     Python-ssl.patch \
     Python-aix.patch \
     Python-2.6.1-urllib.patch
@@ -67,10 +66,6 @@ python_LDFLAGS+=-L$(SYSBASE)/usr/lib
 CC+:=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 .ENDIF			# "$(SYSBASE)"!=""
-
-.IF "$(OS)$(COM)"=="LINUXGCC"
-python_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
 
 .IF "$(OS)$(CPU)"=="SOLARISU"
 CC+:=$(ARCH_FLAGS)
@@ -106,19 +101,6 @@ python_LDFLAGS+=-shared-libgcc -Wl,--enable-runtime-pseudo-reloc-v2
 CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CC="$(CC:s/guw.exe //)" CXX="$(CXX:s/guw.exe //)" MACHDEP=MINGW32 LN="cp -p" CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 BUILD_ACTION=$(ENV_BUILD) make && make install
 .ELSE
-#PYTHONPATH:=..$/Lib
-#.EXPORT : PYTHONPATH
-
-#.IF "$(CCNUMVER)" <= "001400000000"
-#EXFLAGS="/GX /YX"
-#.ELSE
-#.IF "$(WINDOWS_VISTA_PSDK)"!=""
-#EXFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
-#ADDITIONALLIBS=ws2_32.lib
-#.ELSE  #"$(WINDOWS_VISTA_PSDK)"!=""
-#EXFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
-#.ENDIF #"$(WINDOWS_VISTA_PSDK)"!=""
-#.ENDIF
 
 .IF "$(CCNUMVER)" >= "001600000000"
 PATCH_FILES+=Python-$(PYVERSION)-vc10.patch
@@ -133,13 +115,25 @@ BUILD_DIR=PC/VS7.1
 BUILD_DIR=PC/VC6
 .ENDIF
 
+.IF "$(CPU)" == "I"
+ARCH=Win32
+.ELSE
+ARCH=x64
+.ENDIF
+
+.IF "$(debug)"!=""
+CONF=Debug
+.ELSE
+CONF=Release
+.ENDIF
+
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
 # solver during registration in insetoo_native
 .IF "$(CCNUMVER)" >= "001600000000"
-BUILD_ACTION=MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /ToolsVersion:4.0
+BUILD_ACTION=MSBuild.exe pcbuild.sln /t:Build /p:Configuration=$(CONF) /ToolsVersion:4.0
 .ELSE
-BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe pcbuild.sln "Release|Win32"
+BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe pcbuild.sln "$(CONF)|$(ARCH)"
 .ENDIF
 .ENDIF
 .ENDIF
@@ -164,6 +158,17 @@ $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PYCONFIG)
 $(PYCONFIG) : $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h
     -rm -f $@
     cat $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h > $@
+# We know that the only thing guarded with #ifdef _DEBUG in PC/pyconfig.h is
+# the line defining Py_DEBUG.
+.IF "$(debug)"!=""
+# If Python is built with debugging, then the modules we build need to be built with
+# Py_DEBUG defined too because of the Py_InitModule4 redefining magic in modsupport.h
+    sed -e 's/^#ifdef _DEBUG$/#if 1/' <$@ >$@.new && mv $@.new $@
+.ELSE
+# Correspondingly, if Python is not built with debugging, it won't use the Py_InitModule4 redefining
+# magic, so our Python modules should not be built to provide that either.
+    sed -e 's/^#ifdef _DEBUG$/#if 0/' <$@ >$@.new && mv $@.new $@
+.ENDIF
 .ENDIF
 .ENDIF
 

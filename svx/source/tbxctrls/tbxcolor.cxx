@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "tbxcolor.hxx"
+#include "svx/tbxcolor.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -103,7 +103,7 @@ namespace svx
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ToolboxAccess::toggleToolbox: caught an exception!" );
+            OSL_FAIL( "ToolboxAccess::toggleToolbox: caught an exception!" );
         }
     }
 

@@ -90,7 +90,7 @@ Reference<XAccessibleStateSet> ScAccessibleFilterMenuItem::getAccessibleStateSet
 OUString ScAccessibleFilterMenuItem::getImplementationName()
     throw (RuntimeException)
 {
-    return OUString::createFromAscii("ScAccessibleFilterMenuItem");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("ScAccessibleFilterMenuItem"));
 }
 
 // XAccessibleAction
@@ -110,7 +110,7 @@ sal_Bool ScAccessibleFilterMenuItem::doAccessibleAction(sal_Int32 /*nIndex*/)
 OUString ScAccessibleFilterMenuItem::getAccessibleActionDescription(sal_Int32 /*nIndex*/)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
-    return OUString::createFromAscii("click");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("click"));
 }
 
 Reference<XAccessibleKeyBinding> ScAccessibleFilterMenuItem::getAccessibleActionKeyBinding(

@@ -101,14 +101,42 @@ struct BigStruct
     hyper                      h;
 };
 /**
+ * two floats, BSDs/MacOSX on intel handle returning small
+ * structs differently than Linux
+ */
+struct TwoFloats
+{
+    float                      a;
+    float                      b;
+};
+/**
  * all floats, ia64 handles them specially
  */
-struct AllFloats
+struct FourFloats
 {
     float                      a;
     float                      b;
     float                      c;
     float                      d;
+};
+/**
+ * Small struct with mixed float and integers.
+ * Should return in registers on BSDs/MACOSx
+ */
+struct MixedFloatAndInteger
+{
+    float                      a;
+    long                       b;
+};
+/**
+ * Small struct with three bytes.  Should *not* return in registers on
+ * BSDs/MACOSx
+ */
+struct ThreeByteStruct
+{
+    byte                       a;
+    byte                       b;
+    byte                       c;
 };
 /**
  * complex types adding string, inteface, any
@@ -264,10 +292,25 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
     /**
      * register return test 4
      */
-    AllFloats echoAllFloats( [in] AllFloats aStruct );
+    TwoFloats echoTwoFloats( [in] TwoFloats aStruct );
 
     /**
-     * register return test 4 (i107182)
+     * register return test 5
+     */
+    FourFloats echoFourFloats( [in] FourFloats aStruct );
+
+    /**
+     * register return test 6
+     */
+    MixedFloatAndInteger echoMixedFloatAndInteger( [in] MixedFloatAndInteger aStruct );
+
+    /**
+     * register return test 7
+     */
+    ThreeByteStruct echoThreeByteStruct( [in] ThreeByteStruct aStruct );
+
+    /**
+     * PPC Alignment test (#i107182#)
      */
     long testPPCAlignment( [in] hyper l1, [in] hyper l2, [in] long i1, [in] hyper l3, [in] long i2 );
 

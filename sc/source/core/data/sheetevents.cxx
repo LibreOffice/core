@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: sheetdata.cxx,v $
- * $Revision: 1.69.32.3 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -40,7 +37,6 @@
 
 // -----------------------------------------------------------------------
 
-// static
 rtl::OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
 {
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
@@ -62,7 +58,6 @@ rtl::OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
     return rtl::OUString::createFromAscii(aEventNames[nEvent]);
 }
 
-// static
 sal_Int32 ScSheetEvents::GetVbaSheetEventId(sal_Int32 nEvent)
 {
     using namespace ::com::sun::star::script::vba::VBAEventId;
@@ -85,7 +80,6 @@ sal_Int32 ScSheetEvents::GetVbaSheetEventId(sal_Int32 nEvent)
     return nVbaEventIds[nEvent];
 }
 
-// static
 sal_Int32 ScSheetEvents::GetVbaDocumentEventId(sal_Int32 nEvent)
 {
     using namespace ::com::sun::star::script::vba::VBAEventId;

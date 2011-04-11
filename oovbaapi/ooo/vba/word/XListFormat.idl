@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile:
- * $Revision:
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -30,13 +27,8 @@
 #ifndef __ooo_vba_word_XListFormat_idl__
 #define __ooo_vba_word_XListFormat_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 
 module ooo {  module vba {  module word {
 

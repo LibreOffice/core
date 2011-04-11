@@ -65,7 +65,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <editeng/editstat.hxx>
-#include <unoapi.hxx>
+#include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
 
@@ -274,7 +274,7 @@ namespace
         {
             // prepare BreakIterator
             Reference < XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-            Reference < XInterface > xInterface = xMSF->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator"));
+            Reference < XInterface > xInterface = xMSF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")));
 
             if(xInterface.is())
             {
@@ -569,7 +569,7 @@ namespace
                             }
                         }
 
-                        // consume from portion // no += here, xub_StrLen is USHORT and the compiler will gererate a warning here
+                        // consume from portion // no += here, xub_StrLen is sal_uInt16 and the compiler will gererate a warning here
                         nUsedTextLength = nUsedTextLength + nNextGlyphLen;
 
                         // consume from polygon
@@ -593,7 +593,7 @@ namespace
         const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute,
         std::vector< drawinglayer::primitive2d::BasePrimitive2D* >& rTarget)
     {
-        for(basegfx::B2DPolyPolygonVector::const_iterator aPolygon(rB2DPolyPolyVector.begin()); aPolygon != rB2DPolyPolyVector.end(); aPolygon++)
+        for(basegfx::B2DPolyPolygonVector::const_iterator aPolygon(rB2DPolyPolyVector.begin()); aPolygon != rB2DPolyPolyVector.end(); ++aPolygon)
         {
             // prepare PolyPolygons
             basegfx::B2DPolyPolygon aB2DPolyPolygon = *aPolygon;

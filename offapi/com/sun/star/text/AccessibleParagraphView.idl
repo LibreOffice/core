@@ -126,7 +126,7 @@ published service AccessibleParagraphView
                         >AccessibleStateType::FOCUSED</const>
                 </ul>
             <li>Depending of the application's region setting, the locale is
-                the western, asian or complex language of the paragraph.
+                the western, Asian or complex language of the paragraph.
         </ul>
 
      */
@@ -149,8 +149,8 @@ published service AccessibleParagraphView
         >XAccessibleText::getCharacterAttributes</method>
         are a sub set of the properties described by the service
         <type scope="::com::sun::star::style">CharacterProperties</type>. For
-        properties that have asian and complex counterparts, the value that
-        is visible is returned. This can be in fact the western, asian or
+        properties that have Asian and complex counterparts, the value that
+        is visible is returned. This can be in fact the western, Asian or
         complex value.  Its not possible to change the value of any property
         by using
         <method scope="::com::sun::star::accessibility"
@@ -176,8 +176,8 @@ published service AccessibleParagraphView
         >XAccessibleText::getCharacterAttributes</method> are a sub set of the properties
         described by the service
         <type scope="::com::sun::star::style">CharacterProperties</type>. For
-        properties that have asian and complex counterparts, the value that
-        is visible is returned. This can be in fact the western, asian or
+        properties that have Asian and complex counterparts, the value that
+        is visible is returned. This can be in fact the western, Asian or
         complex value.
         <p><em>TODO: If there is a demand, some attributes might be added
         that tells whether the character at a certain index is changeable or

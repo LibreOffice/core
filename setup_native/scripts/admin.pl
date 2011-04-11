@@ -1127,7 +1127,7 @@ sub register_extensions_sync
 
     $preregdir =~ s/\/\s*$//g;
 
-    my $systemcall = $executable . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file:///" . $preregdir . "\"" . " -env:UserInstallation=file:///" . $localtemppath . " 2\>\&1 |";
+    my $systemcall = $executable . " sync --verbose 2\>\&1 |";
 
     print "... $systemcall\n";
 

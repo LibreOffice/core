@@ -151,7 +151,7 @@ namespace svxform
             }
 
             // last: uhm, there is no last resort
-            OSL_ENSURE( false, "DocumentClassification::classifyDocument: unknown document!" );
+            OSL_FAIL( "DocumentClassification::classifyDocument: unknown document!" );
         }
         catch( const Exception& )
         {
@@ -175,7 +175,7 @@ namespace svxform
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "DocumentClassification::classifyHostDocument: caught an exception!" );
+            OSL_FAIL( "DocumentClassification::classifyHostDocument: caught an exception!" );
         }
 
         return eType;

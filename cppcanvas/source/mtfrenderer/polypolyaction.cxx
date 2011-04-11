@@ -169,20 +169,6 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( maState );
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
-#ifdef SPECIAL_DEBUG
-                aLocalState.Clip.clear();
-                aLocalState.DeviceColor =
-                    ::vcl::unotools::colorToDoubleSequence( mpCanvas->getUNOCanvas()->getDevice(),
-                                                            ::Color( 0x80FF0000 ) );
-
-                if( maState.Clip.is() )
-                    mpCanvas->getUNOCanvas()->fillPolyPolygon( maState.Clip,
-                                                               mpCanvas->getViewState(),
-                                                               aLocalState );
-
-                aLocalState.DeviceColor = maState.DeviceColor;
-#endif
-
                 if( maFillColor.getLength() )
                 {
                     // TODO(E3): Use DBO's finalizer here,

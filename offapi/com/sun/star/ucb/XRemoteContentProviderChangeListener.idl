@@ -53,7 +53,7 @@ published interface XRemoteContentProviderChangeListener:
         occur.
 
         @param Event
-        describes the change that has occured.
+        describes the change that has occurred.
      */
     void
     remoteContentProviderChange([in] RemoteContentProviderChangeEvent Event);

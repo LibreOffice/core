@@ -37,12 +37,11 @@
 
 
 class SfxViewShell;
-//class SfxProgress;
 struct SfxPrintProgress_Impl;
 
 // ------------------------------------------------------------------------
 
-#define PAGE_MAX    9999        //max. Anzahl der Seiten die gedruckt werden
+#define PAGE_MAX    9999    // max. Number of pages to be printed
 
 // ------------------------------------------------------------------------
 
@@ -64,7 +63,7 @@ public:
                                                    const SfxItemSet *rOptions );
     virtual                 ~SfxPrintOptionsDialog();
 
-    BOOL                    Construct();
+    sal_Bool                    Construct();
     virtual short           Execute();
     virtual long            Notify( NotifyEvent& rNEvt );
 

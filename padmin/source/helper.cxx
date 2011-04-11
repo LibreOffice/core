@@ -47,11 +47,13 @@
 
 
 using namespace osl;
-using namespace rtl;
 using namespace padmin;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ui::dialogs;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 #define MAX_PATH 1024
 
@@ -65,21 +67,17 @@ ResId padmin::PaResId( sal_uInt32 nId )
     if( ! pPaResMgr )
     {
         ::com::sun::star::lang::Locale aLocale;
-//      LanguageType nLang = LANGUAGE_SYSTEM;
 
         utl::OConfigurationNode aNode =
             utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
                     vcl::unohelper::GetMultiServiceFactory(),
-                    OUString::createFromAscii( "org.openoffice.Setup/L10N" ) );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/L10N")) );
         if ( aNode.isValid() )
         {
             rtl::OUString aLoc;
-            Any aValue = aNode.getNodeValue( OUString::createFromAscii( "ooLocale" ) );
+            Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale")) );
             if( aValue >>= aLoc )
             {
-//                LanguageType nTmpLang = MsLangId::convertIsoStringToLanguage( aLoc );
-//                if( nTmpLang != LANGUAGE_DONTKNOW )
-//                    nLang = nTmpLang;
                 sal_Int32 nIndex = 0;
                 aLocale.Language = aLoc.getToken( 0, '-', nIndex );
                 aLocale.Country = aLoc.getToken( 0, '-', nIndex );
@@ -88,7 +86,6 @@ ResId padmin::PaResId( sal_uInt32 nId )
         }
         pPaResMgr = ResMgr::SearchCreateResMgr( "spa", aLocale );
         AllSettings aSettings = Application::GetSettings();
-//        aSettings.SetUILanguage( nLang );
         aSettings.SetUILocale( aLocale );
         Application::SetSettings( aSettings );
     }
@@ -218,13 +215,13 @@ QueryString::QueryString( Window* pParent, String& rQuery, String& rRet, const :
         m_aComboBox.InsertEntry( m_rReturnValue );
         for( ::std::list<String>::const_iterator it = rChoices.begin(); it != rChoices.end(); ++it )
             m_aComboBox.InsertEntry( *it );
-        m_aEdit.Show( FALSE );
+        m_aEdit.Show( sal_False );
         m_bUseEdit = false;
     }
     else
     {
         m_aEdit.SetText( m_rReturnValue );
-        m_aComboBox.Show( FALSE );
+        m_aComboBox.Show( sal_False );
         m_bUseEdit = true;
     }
     SetText( Application::GetDisplayName() );
@@ -250,13 +247,13 @@ IMPL_LINK( QueryString, ClickBtnHdl, Button*, pButton )
  *  AreYouSure
  */
 
-BOOL padmin::AreYouSure( Window* pParent, int nRid )
+sal_Bool padmin::AreYouSure( Window* pParent, int nRid )
 {
     if( nRid == -1 )
         nRid = RID_YOU_SURE;
     QueryBox aQueryBox( pParent, WB_YES_NO | WB_DEF_NO,
                         String( PaResId( nRid ) ) );
-    return aQueryBox.Execute() == RET_NO ? FALSE : TRUE;
+    return aQueryBox.Execute() == RET_NO ? sal_False : sal_True;
 }
 
 /*

@@ -50,11 +50,11 @@
 struct SvParser_Impl
 {
     String          aToken;             // gescanntes Token
-    ULONG           nFilePos;           // akt. Position im Stream
-    ULONG           nlLineNr;           // akt. Zeilen Nummer
-    ULONG           nlLinePos;          // akt. Spalten Nummer
+    sal_uLong           nFilePos;           // akt. Position im Stream
+    sal_uLong           nlLineNr;           // akt. Zeilen Nummer
+    sal_uLong           nlLinePos;          // akt. Spalten Nummer
     long            nTokenValue;        // zusaetzlicher Wert (RTF)
-    BOOL            bTokenHasValue;     // indicates whether nTokenValue is valid
+    sal_Bool            bTokenHasValue;     // indicates whether nTokenValue is valid
     int             nToken;             // akt. Token
     sal_Unicode     nNextCh;            // akt. Zeichen
 
@@ -77,7 +77,7 @@ struct SvParser_Impl
 
 
 // Konstruktor
-SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
+SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     : rInput( rIn )
     , nlLineNr( 1 )
     , nlLinePos( 1 )
@@ -86,11 +86,11 @@ SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
     , bTokenHasValue( false )
     , eState( SVPAR_NOTSTARTED )
     , eSrcEnc( RTL_TEXTENCODING_DONTKNOW )
-    , bDownloadingFile( FALSE )
+    , bDownloadingFile( sal_False )
     , nTokenStackSize( nStackSize )
     , nTokenStackPos( 0 )
 {
-    bUCS2BSrcEnc = bSwitchToUCS2 = FALSE;
+    bUCS2BSrcEnc = bSwitchToUCS2 = sal_False;
     eState = SVPAR_NOTSTARTED;
     if( nTokenStackSize < 3 )
         nTokenStackSize = 3;
@@ -191,11 +191,11 @@ sal_Unicode SvParser::GetNextChar()
     // When reading muliple bytes, we don't have to care about the file
     // position when we run inti the pending state. The file position is
     // maintained by SaveState/RestoreState.
-    BOOL bErr;
+    sal_Bool bErr;
     if( bSwitchToUCS2 && 0 == rInput.Tell() )
     {
         sal_uChar c1, c2;
-        BOOL bSeekBack = TRUE;
+        sal_Bool bSeekBack = sal_True;
 
         rInput >> c1;
         bErr = rInput.IsEof() || rInput.GetError();
@@ -210,14 +210,14 @@ sal_Unicode SvParser::GetNextChar()
                     if( 0xfe == c1 && 0xff == c2 )
                     {
                         eSrcEnc = RTL_TEXTENCODING_UCS2;
-                        bUCS2BSrcEnc = TRUE;
-                        bSeekBack = FALSE;
+                        bUCS2BSrcEnc = sal_True;
+                        bSeekBack = sal_False;
                     }
                     else if( 0xff == c1 && 0xfe == c2 )
                     {
                         eSrcEnc = RTL_TEXTENCODING_UCS2;
-                        bUCS2BSrcEnc = FALSE;
-                        bSeekBack = FALSE;
+                        bUCS2BSrcEnc = sal_False;
+                        bSeekBack = sal_False;
                     }
                 }
             }
@@ -225,7 +225,7 @@ sal_Unicode SvParser::GetNextChar()
         if( bSeekBack )
             rInput.Seek( 0 );
 
-        bSwitchToUCS2 = FALSE;
+        bSwitchToUCS2 = sal_False;
     }
 
     nNextChPos = rInput.Tell();
@@ -480,7 +480,7 @@ int SvParser::SkipToken( short nCnt )       // n Tokens zurueck "skippen"
         nTmp = 0;
     else if( nTmp > nTokenStackSize )
         nTmp = nTokenStackSize;
-    nTokenStackPos = BYTE(nTmp);
+    nTokenStackPos = sal_uInt8(nTmp);
 
     // und die Werte zurueck
     aToken = pTokenStackPos->sToken;
@@ -492,15 +492,15 @@ int SvParser::SkipToken( short nCnt )       // n Tokens zurueck "skippen"
 
 SvParser::TokenStackType* SvParser::GetStackPtr( short nCnt )
 {
-    BYTE nAktPos = BYTE(pTokenStackPos - pTokenStack );
+    sal_uInt8 nAktPos = sal_uInt8(pTokenStackPos - pTokenStack );
     if( nCnt > 0 )
     {
         if( nCnt >= nTokenStackSize )
             nCnt = (nTokenStackSize-1);
         if( nAktPos + nCnt < nTokenStackSize )
-            nAktPos = sal::static_int_cast< BYTE >(nAktPos + nCnt);
+            nAktPos = sal::static_int_cast< sal_uInt8 >(nAktPos + nCnt);
         else
-            nAktPos = sal::static_int_cast< BYTE >(
+            nAktPos = sal::static_int_cast< sal_uInt8 >(
                 nAktPos + (nCnt - nTokenStackSize));
     }
     else if( nCnt < 0 )
@@ -508,9 +508,9 @@ SvParser::TokenStackType* SvParser::GetStackPtr( short nCnt )
         if( -nCnt >= nTokenStackSize )
             nCnt = -nTokenStackSize+1;
         if( -nCnt <= nAktPos )
-            nAktPos = sal::static_int_cast< BYTE >(nAktPos + nCnt);
+            nAktPos = sal::static_int_cast< sal_uInt8 >(nAktPos + nCnt);
         else
-            nAktPos = sal::static_int_cast< BYTE >(
+            nAktPos = sal::static_int_cast< sal_uInt8 >(
                 nAktPos + (nCnt + nTokenStackSize));
     }
     return pTokenStack + nAktPos;
@@ -574,32 +574,32 @@ void SvParser::Continue( int )
 }
 
 void SvParser::BuildWhichTbl( SvUShorts &rWhichMap,
-                              USHORT *pWhichIds,
-                              USHORT nWhichIds )
+                              sal_uInt16 *pWhichIds,
+                              sal_uInt16 nWhichIds )
 {
-    USHORT aNewRange[2];
+    sal_uInt16 aNewRange[2];
 
-    for( USHORT nCnt = 0; nCnt < nWhichIds; ++nCnt, ++pWhichIds )
+    for( sal_uInt16 nCnt = 0; nCnt < nWhichIds; ++nCnt, ++pWhichIds )
         if( *pWhichIds )
         {
             aNewRange[0] = aNewRange[1] = *pWhichIds;
-            BOOL bIns = TRUE;
+            sal_Bool bIns = sal_True;
 
             // Position suchen
-            for ( USHORT nOfs = 0; rWhichMap[nOfs]; nOfs += 2 )
+            for ( sal_uInt16 nOfs = 0; rWhichMap[nOfs]; nOfs += 2 )
             {
                 if( *pWhichIds < rWhichMap[nOfs] - 1 )
                 {
                     // neuen Range davor
                     rWhichMap.Insert( aNewRange, 2, nOfs );
-                    bIns = FALSE;
+                    bIns = sal_False;
                     break;
                 }
                 else if( *pWhichIds == rWhichMap[nOfs] - 1 )
                 {
                     // diesen Range nach unten erweitern
                     rWhichMap[nOfs] = *pWhichIds;
-                    bIns = FALSE;
+                    bIns = sal_False;
                     break;
                 }
                 else if( *pWhichIds == rWhichMap[nOfs+1] + 1 )
@@ -613,7 +613,7 @@ void SvParser::BuildWhichTbl( SvUShorts &rWhichMap,
                     else
                         // diesen Range nach oben erweitern
                         rWhichMap[nOfs+1] = *pWhichIds;
-                    bIns = FALSE;
+                    bIns = sal_False;
                     break;
                 }
             }
@@ -691,7 +691,7 @@ SvKeyValueIterator::~SvKeyValueIterator (void)
 /*
  * GetFirst.
  */
-BOOL SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
+sal_Bool SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
 {
     m_nPos = m_pList->Count();
     return GetNext (rKeyVal);
@@ -700,17 +700,17 @@ BOOL SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
 /*
  * GetNext.
  */
-BOOL SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
+sal_Bool SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
 {
     if (m_nPos > 0)
     {
         rKeyVal = *m_pList->GetObject(--m_nPos);
-        return TRUE;
+        return sal_True;
     }
     else
     {
         // Nothing to do.
-        return FALSE;
+        return sal_False;
     }
 }
 

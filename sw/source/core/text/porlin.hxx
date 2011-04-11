@@ -201,7 +201,7 @@ public:
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
 
 #if OSL_DEBUG_LEVEL > 1
-    void dumpPortionAsXml(USHORT ofs, String& aText, xmlTextWriter* writer);
+    void dumpPortionAsXml(sal_uInt16 ofs, String& aText, xmlTextWriter* writer);
 #endif
     OUTPUT_OPERATOR
 };
@@ -245,14 +245,7 @@ inline void SwLinePortion::Truncate()
 
 
 //$ ostream
-#ifdef DBGTXT
-#define CLASSIO( class ) \
-    inline SvStream &operator<<( SvStream &rOs, const class &rClass ) {\
-            return rClass.operator<<( rOs );\
-    }
-#else
 #define CLASSIO( class )
-#endif
 
 CLASSIO( SwLinePortion )
 

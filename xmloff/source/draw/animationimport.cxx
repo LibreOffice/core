@@ -68,7 +68,7 @@
 #include "sdpropls.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <osl/mutex.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -166,7 +166,7 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeTokenMap()
 {
     if( mpAnimationNodeTokenMap == NULL )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aAnimationNodeTokenMap[] =
+        static SvXMLTokenMapEntry aAnimationNodeTokenMap[] =
         {
             { XML_NAMESPACE_ANIMATION,  XML_PAR,                (sal_uInt16)AnimationNodeType::PAR },
             { XML_NAMESPACE_ANIMATION,  XML_SEQ,                (sal_uInt16)AnimationNodeType::SEQ },
@@ -245,7 +245,7 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeAttributeTokenM
 {
     if( mpAnimationNodeAttributeTokenMap == NULL )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aAnimationNodeAttributeTokenMap[] =
+        static SvXMLTokenMapEntry aAnimationNodeAttributeTokenMap[] =
         {
             { XML_NAMESPACE_SMIL, XML_BEGIN,                    (sal_uInt16)ANA_Begin },
             { XML_NAMESPACE_SMIL, XML_DUR,                      (sal_uInt16)ANA_Dur },
@@ -397,7 +397,7 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsImportImpl::convertTarget(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsImportImpl::convertTarget(), RuntimeException catched!" );
     }
 
     Any aAny;
@@ -481,38 +481,6 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
             pHandler->importXML( rValue, aAny, mrImport.GetMM100UnitConverter() );
 
         return aAny;
-
-/*
-        if( rValue.getLength() == 0 )
-        {
-            Any aAny;
-            return aAny;
-        }
-        else if( rValue.indexOf( '#' ) == 0 )
-        {
-            // color
-            Color aColor;
-            SvXMLUnitConverter::convertColor( aColor, rValue );
-
-            return makeAny( static_cast< sal_Int32 >( aColor.GetRGBColor() ) );
-        }
-        else if( rValue.indexOf( '$' ) != -1 )
-        {
-            // formula
-            return makeAny( rValue );
-        }
-        else
-        {
-            if( isDouble( rValue ) )
-            {
-                return makeAny( rValue.toDouble() );
-            }
-            else
-            {
-                return makeAny( rValue );
-            }
-        }
-*/
     }
 }
 
@@ -530,8 +498,8 @@ Sequence< Any > AnimationsImportHelperImpl::convertValueSequence( XMLTokenEnum e
 
         // fill the sequence
         Any* pValues = aValues.getArray();
-        sal_Int32 nIndex, nElement;
-        for( nIndex = 0, nElement = 0; nElements && (nIndex >= 0); nElements-- )
+        sal_Int32 nIndex;
+        for( nIndex = 0; nElements && (nIndex >= 0); nElements-- )
         {
             *pValues++ = convertValue( eAttributeName, rValue.getToken( 0, ';', nIndex ) );
         }
@@ -599,7 +567,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
                 }
                 else
                 {
-                    DBG_ERROR("AnimationsImportHelperImpl::convertTiming(), unknown event trigger!");
+                    OSL_FAIL("AnimationsImportHelperImpl::convertTiming(), unknown event trigger!");
                 }
 
                 aAny <<= aEvent;
@@ -773,7 +741,7 @@ AnimationNodeContext::AnimationNodeContext(
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationsImportImpl::AnimationsImportImpl(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationsImportImpl::AnimationsImportImpl(), RuntimeException catched!" );
     }
 }
 
@@ -1291,11 +1259,11 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
     }
     catch( RuntimeException& )
     {
-        DBG_ERROR( "xmloff::AnimationNodeContext::StartElement(), RuntimeException catched!" );
+        OSL_FAIL( "xmloff::AnimationNodeContext::StartElement(), RuntimeException catched!" );
     }
 }
 
-SvXMLImportContext * AnimationNodeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+SvXMLImportContext * AnimationNodeContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     if( mxNode.is())
@@ -1312,7 +1280,7 @@ public:
     AnimationsImport( const Reference< XMultiServiceFactory > & rSMgr );
     ~AnimationsImport() throw ();
 
-    SvXMLImportContext* CreateContext(USHORT nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList);
+    SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList);
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException);
@@ -1381,7 +1349,7 @@ void SAL_CALL AnimationsImport::release() throw ()
     SvXMLImport::release();
 }
 
-SvXMLImportContext *AnimationsImport::CreateContext(USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList)
+SvXMLImportContext *AnimationsImport::CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList)
 {
     SvXMLImportContext* pContext = 0;
 
@@ -1478,7 +1446,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
     }
     catch( Exception& )
     {
-        DBG_ERROR("xmloff::AnimationsImport::postProcessRootNode(), exception caught!");
+        OSL_FAIL("xmloff::AnimationsImport::postProcessRootNode(), exception caught!");
     }
 }
 
@@ -1512,7 +1480,7 @@ OUString SAL_CALL AnimationsImport::getImplementationName() throw(RuntimeExcepti
 
 sal_Bool SAL_CALL AnimationsImport::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return ServiceName.equalsAscii( "com.sun.star.comp.Xmloff.AnimationsImport" );
+    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.comp.Xmloff.AnimationsImport" ) );
 }
 
 Sequence< OUString > SAL_CALL AnimationsImport::getSupportedServiceNames() throw(RuntimeException)

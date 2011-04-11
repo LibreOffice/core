@@ -27,7 +27,11 @@
 
 # mk file for Unix Linux Intel (X86) using GCC, please make generic modifications to unxlng.mk
 CDEFAULTOPT=-Os
+.IF "$(GCCNUMVER)" >= "000400050000"
+ARCH_FLAGS*=-mtune=atom
+.ELSE
 ARCH_FLAGS*=-mtune=pentiumpro
+.ENDIF
 .INCLUDE : unxlng.mk
 CDEFS+=-DX86
 DLLPOST=.so

@@ -34,10 +34,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
-#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -78,7 +76,7 @@ void CreateTableRows( uno::Reference< XTableRows > xTableRows, const std::vector
         static const rtl::OUString  sHeight( RTL_CONSTASCII_USTRINGPARAM ( "Height" ) );
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sHeight, Any( static_cast< sal_Int32 >( aTableRowIter->getHeight() / 360 ) ) );
-        aTableRowIter++;
+        ++aTableRowIter;
     }
 }
 

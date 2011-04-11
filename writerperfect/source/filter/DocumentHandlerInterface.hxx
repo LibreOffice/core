@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Copyright (C) 2004 William Lachance (wlach@interlog.com)
  * Copyright (C) 2004 Net Integration Technologies (http://www.net-itech.com)
@@ -43,3 +44,5 @@ public:
         virtual void characters(const WPXString &sCharacters) = 0;
 };
 #endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

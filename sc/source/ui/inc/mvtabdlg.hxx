@@ -32,9 +32,10 @@
 
 #include "address.hxx"
 #include <vcl/dialog.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/edit.hxx>
 
 #include <layout/layout.hxx>
 #include <layout/layout-pre.hxx>
@@ -44,33 +45,60 @@
 class ScMoveTableDlg : public ModalDialog
 {
 public:
-                    ScMoveTableDlg( Window* pParent );
+                    ScMoveTableDlg( Window* pParent, const String& rDefault );
                     ~ScMoveTableDlg();
 
-    USHORT  GetSelectedDocument     () const;
+    sal_uInt16  GetSelectedDocument     () const;
     SCTAB   GetSelectedTable        () const;
-    BOOL    GetCopyTable            () const;
-    void    SetCopyTable            (BOOL bFlag=TRUE);
-    void    EnableCopyTable         (BOOL bFlag=TRUE);
+    bool    GetCopyTable            () const;
+    bool    GetRenameTable          () const;
+    void    GetTabNameString( String& rString ) const;
+    void    SetForceCopyTable       ();
+    void    EnableCopyTable         (sal_Bool bFlag=true);
+    void    EnableRenameTable       (sal_Bool bFlag=true);
 
 private:
+    void ResetRenameInput();
+    void CheckNewTabName();
+    ScDocument* GetSelectedDoc();
+
+private:
+    FixedLine       aFlAction;
+    RadioButton     aBtnMove;
+    RadioButton     aBtnCopy;
+    FixedLine       aFlLocation;
     FixedText       aFtDoc;
     ListBox         aLbDoc;
     FixedText       aFtTable;
     ListBox         aLbTable;
-    CheckBox        aBtnCopy;
+    FixedLine       aFlName;
+    FixedText       aFtTabName;
+    Edit            aEdTabName;
+    FixedText       aFtWarn;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
-    USHORT          nDocument;
+    String          maStrTabNameUsed;
+    String          maStrTabNameEmpty;
+    String          maStrTabNameInvalid;
+
+    const String&   mrDefaultName;
+
+    sal_uInt16          nDocument;
     SCTAB           nTable;
-    BOOL            bCopyTable;
+    bool            bCopyTable:1;
+    bool            bRenameTable:1;
+    bool            mbEverEdited:1;
+
     //--------------------------------------
     void    Init            ();
+    void    InitBtnRename   ();
     void    InitDocListBox  ();
     DECL_LINK( OkHdl, void * );
     DECL_LINK( SelHdl, ListBox * );
+    DECL_LINK( CheckBtnHdl, void * );
+    DECL_LINK( CheckNameHdl, Edit * );
 };
 
 #include <layout/layout-post.hxx>

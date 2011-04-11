@@ -54,10 +54,11 @@
 
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::xml::sax;
+
+using ::rtl::OUString;
 
 
 static SvtAcceleratorConfig_Impl* pOptions = NULL;
@@ -71,7 +72,7 @@ public:
     bool            bModified;
 
                     SvtAcceleratorConfig_Impl()
-                        : bModified( FALSE )
+                        : bModified( sal_False )
                     {}
 
                     SvtAcceleratorConfig_Impl( Reference< XInputStream >& xInputStream );
@@ -84,7 +85,7 @@ SvtAcceleratorConfig_Impl::SvtAcceleratorConfig_Impl( Reference< XInputStream >&
         : bModified( false )
 {
     Reference< XParser > xParser( ::comphelper::getProcessServiceFactory()->createInstance(
-                                    ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )),
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
                                   UNO_QUERY);
 
     // connect stream to input stream to the parser
@@ -104,7 +105,7 @@ bool SvtAcceleratorConfig_Impl::Commit( Reference< XOutputStream >& rOutputStrea
     Reference< XDocumentHandler > xWriter;
 
     xWriter = Reference< XDocumentHandler >( ::comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))), UNO_QUERY) ;
 
     Reference< ::com::sun::star::io::XActiveDataSource> xDataSource( xWriter , UNO_QUERY );
     xDataSource->setOutputStream( rOutputStream );
@@ -235,7 +236,7 @@ SvtAcceleratorConfiguration::~SvtAcceleratorConfiguration()
         nCode = rKeyEvent.KeyFunc;
 
     std::list< SvtAcceleratorConfigItem>::const_iterator p;
-    for ( p = pImp->aList.begin(); p != pImp->aList.end(); p++ )
+    for ( p = pImp->aList.begin(); p != pImp->aList.end(); ++p )
         if ( p->nCode == nCode && p->nModifier == nModifier )
             return p->aCommand;
 
@@ -250,7 +251,7 @@ const SvtAcceleratorItemList& SvtAcceleratorConfiguration::GetItems()
 void SvtAcceleratorConfiguration::SetCommand( const SvtAcceleratorConfigItem& rItem )
 {
     std::list< SvtAcceleratorConfigItem>::iterator p;
-    for ( p = pImp->aList.begin(); p != pImp->aList.end(); p++ )
+    for ( p = pImp->aList.begin(); p != pImp->aList.end(); ++p )
         if ( p->nCode == rItem.nCode && p->nModifier == rItem.nModifier )
         {
             p->aCommand = rItem.aCommand;
@@ -270,7 +271,7 @@ void SvtAcceleratorConfiguration::SetItems( const SvtAcceleratorItemList& rItems
     else
     {
         std::list< SvtAcceleratorConfigItem>::const_iterator p;
-        for ( p = rItems.begin(); p != rItems.end(); p++ )
+        for ( p = rItems.begin(); p != rItems.end(); ++p )
             SetCommand( *p );
     }
 }

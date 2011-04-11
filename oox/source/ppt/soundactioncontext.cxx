@@ -33,10 +33,7 @@
 
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/embeddedwavaudiofile.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -64,7 +61,7 @@ namespace oox { namespace ppt {
 
     void SoundActionContext::endFastElement( sal_Int32 aElement ) throw (SAXException, RuntimeException)
     {
-        if ( aElement == ( NMSP_PPT|XML_sndAc ) )
+        if ( aElement == PPT_TOKEN( sndAc ) )
         {
             if( mbHasStartSound )
             {
@@ -107,7 +104,7 @@ namespace oox { namespace ppt {
 
         switch( aElement )
         {
-        case NMSP_PPT|XML_snd:
+        case PPT_TOKEN( snd ):
             if( mbHasStartSound )
             {
                 drawingml::EmbeddedWAVAudioFile aAudio;
@@ -116,11 +113,11 @@ namespace oox { namespace ppt {
                 msSndName = ( aAudio.mbBuiltIn ? aAudio.msName : aAudio.msEmbed );
             }
             break;
-        case NMSP_PPT|XML_endSnd:
+        case PPT_TOKEN( endSnd ):
             // CT_Empty
             mbStopSound = true;
             break;
-        case NMSP_PPT|XML_stSnd:
+        case PPT_TOKEN( stSnd ):
             mbHasStartSound = true;
             mbLoopSound = attribs.getBool( XML_loop, false );
         default:

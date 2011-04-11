@@ -57,10 +57,6 @@
  * @file
  * Text content, it's an adapter for string to IXFObject.
  ************************************************************************/
-/*************************************************************************
- * Change History
-   2005-02-02   create and implemente.
- ************************************************************************/
 #include    "xftextcontent.hxx"
 #include    "ixfstream.hxx"
 
@@ -90,8 +86,8 @@ rtl::OUString XFTextContent::GetText()
 void    XFTextContent::ToXml(IXFStream *pStrm)
 {
 //  pStrm->Characters(m_strText);
-    rtl::OUString sSpaceToken = rtl::OUString::createFromAscii(" ");
-    sSpaceToken += rtl::OUString::createFromAscii(" ");
+    rtl::OUString sSpaceToken(RTL_CONSTASCII_USTRINGPARAM(" "));
+    sSpaceToken += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
     rtl::OUString sSubString;
     sal_Int32 nIndex = 0;
     sal_Int32 nSize = m_strText.getLength();

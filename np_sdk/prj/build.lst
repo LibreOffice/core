@@ -1,3 +1,3 @@
-np  np_sdk : soltools stlport NULL
+np  np_sdk : soltools NULL
 np	np_sdk			usr1	-	all	np_sdk NULL
 np	np_sdk\mozsrc	nmake	-	all	np_mozsrc NULL

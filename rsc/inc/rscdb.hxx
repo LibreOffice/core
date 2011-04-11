@@ -57,7 +57,7 @@ struct WriteRcContext
 
 /****************** R s c T y p C o n ************************************/
 // Liste die alle Basistypen enthaelt
-DECLARE_LIST( RscBaseList, RscTop * )
+typedef ::std::vector< RscTop* > RscBaseList;
 
 // Tabelle fuer Systemabhaengige Resourcen
 struct RscSysEntry
@@ -68,7 +68,8 @@ struct RscSysEntry
     sal_uInt32      nTyp;
     sal_uInt32      nRefId;
 };
-DECLARE_LIST( RscSysList, RscSysEntry * )
+
+typedef ::std::vector< RscSysEntry* > RscSysList;
 
 class RscTypCont
 {
@@ -80,7 +81,7 @@ class RscTypCont
     ByteString          aSearchPath;        // Suchen der Bitmap, Icon, Pointer
     ByteString          aSysSearchPath;     // aSearchPath plus language specific paths
     sal_uInt32              nUniqueId;          // eindeutiger Id fuer Systemresourcen
-    ULONG               nFilePos;           // Position in der Datei ( MTF )
+    sal_uLong               nFilePos;           // Position in der Datei ( MTF )
     sal_uInt32              nPMId;              // eindeutiger Id fuer PM-Rseourcefile
                                             // muss groesser als RSC_VERSIONCONTROL_ID sein
     RscTop  *           pRoot;              // Zeiger auf die Wurzel vom Typenbaum
@@ -144,12 +145,11 @@ class RscTypCont
     Atom                nTopImageId;
     Atom                nNoLabelId;
     Atom                nVertId;
-    Atom                nSingleLineId;
     Atom                nSysWinId;
 
     void        Init();         // Initialisiert Klassen und Tabelle
-    void        SETCONST( RscConst *, const char *, UINT32 );
-    void        SETCONST( RscConst *, Atom, UINT32 );
+    void        SETCONST( RscConst *, const char *, sal_uInt32 );
+    void        SETCONST( RscConst *, Atom, sal_uInt32 );
     RscEnum *   InitLangType();
     RscEnum *   InitFieldUnitsType();
     RscEnum *   InitTimeFieldFormat();
@@ -268,7 +268,7 @@ class RscTypCont
 
     void        InsWinBit( RscTop * pClass, const ByteString & rName,
                            Atom nVal );
-    void        WriteInc( FILE * fOutput, ULONG lKey );
+    void        WriteInc( FILE * fOutput, sal_uLong lKey );
 
 public:
     RscBool             aBool;
@@ -287,6 +287,7 @@ public:
     RscRange            a0to9999Short;
     RscIdRange          aIdLong;
     RscString           aString;
+    RscString           aStringLiteral;
     RscFlag             aWinBits;
     RscLangEnum         aLangType;
     RscLangArray        aLangString;
@@ -298,7 +299,7 @@ public:
     RscNameTable        aNmTb;      // Tabelle fuer Namen
     RscFileTab          aFileTab;   // Tabelle der Dateinamen
     sal_uInt32              nFlags;
-    std::map<sal_uInt64, ULONG> aIdTranslator; //Ordnet Resourcetypen und Id's einen Id zu
+    std::map<sal_uInt64, sal_uLong> aIdTranslator; //Ordnet Resourcetypen und Id's einen Id zu
                                        //(unter PM), oder eine Dateiposition (MTF)
 
     RscTypCont( RscError *, RSCBYTEORDER_TYPE, const ByteString & rSearchPath, sal_uInt32 nFlags );
@@ -306,14 +307,14 @@ public:
 
     Atom AddLanguage( const char* );
 
-    BOOL            IsPreload() const
-                    { return (nFlags & PRELOAD_FLAG) ? TRUE : FALSE; }
-    BOOL            IsSmart() const
-                    { return (nFlags & SMART_FLAG) ? TRUE : FALSE; }
-    BOOL            IsSysResTest() const
-                    { return (nFlags & NOSYSRESTEST_FLAG) ? FALSE : TRUE; }
-    BOOL            IsSrsDefault() const
-                    { return (nFlags & SRSDEFAULT_FLAG) ? TRUE : FALSE; }
+    sal_Bool            IsPreload() const
+                    { return (nFlags & PRELOAD_FLAG) ? sal_True : sal_False; }
+    sal_Bool            IsSmart() const
+                    { return (nFlags & SMART_FLAG) ? sal_True : sal_False; }
+    sal_Bool            IsSysResTest() const
+                    { return (nFlags & NOSYSRESTEST_FLAG) ? sal_False : sal_True; }
+    sal_Bool            IsSrsDefault() const
+                    { return (nFlags & SRSDEFAULT_FLAG) ? sal_True : sal_False; }
     ByteString      ChangeLanguage( const ByteString& rNewLang );
     const std::vector< sal_uInt32 >& GetFallbacks() const
     { return aLangFallbacks; }
@@ -332,30 +333,30 @@ public:
     ByteString      GetSysSearchPath() const { return aSysSearchPath; }
     void        InsertType( RscTop * pType )
                 {
-                    aBaseLst.Insert( pType, LIST_APPEND );
+                    aBaseLst.push_back( pType );
                 }
     RscTop  *   SearchType( Atom nTypId );
     RscTop  *   Search( Atom typ );
     CLASS_DATA  Search( Atom typ, const RscId & rId );
     void        Delete( Atom typ, const RscId & rId );
                 // loescht alle Resourceobjekte diese Datei
-    void        Delete( ULONG lFileKey );
+    void        Delete( sal_uLong lFileKey );
     RscTop  *   GetRoot()         { return( pRoot ); };
     sal_uInt32      PutSysName( sal_uInt32 nRscTyp, char * pName, sal_uInt32 nConst,
-                            sal_uInt32 nId, BOOL bFirst );
+                            sal_uInt32 nId, sal_Bool bFirst );
     void        ClearSysNames();
     ERRTYPE     WriteRc( WriteRcContext& rContext );
-    void        WriteSrc( FILE * fOutput, ULONG nFileIndex,
-                          CharSet nCharSet, BOOL bName = TRUE );
-    ERRTYPE     WriteHxx( FILE * fOutput, ULONG nFileKey);
-    ERRTYPE     WriteCxx( FILE * fOutput, ULONG nFileKey,
+    void        WriteSrc( FILE * fOutput, sal_uLong nFileIndex,
+                          CharSet nCharSet, sal_Bool bName = sal_True );
+    ERRTYPE     WriteHxx( FILE * fOutput, sal_uLong nFileKey);
+    ERRTYPE     WriteCxx( FILE * fOutput, sal_uLong nFileKey,
                           const ByteString & rHxxName );
     void        WriteSyntax( FILE * fOutput );
     void        WriteRcCtor( FILE * fOutput );
-    void        FillNameIdList( REResourceList * pList, ULONG lFileKey );
-    BOOL        MakeConsistent( RscInconsList * pList );
+    void        FillNameIdList( REResourceList * pList, sal_uLong lFileKey );
+    sal_Bool        MakeConsistent();
     sal_uInt32      PutTranslatorKey( sal_uInt64 nKey );
-    void        IncFilePos( ULONG nOffset ){ nFilePos += nOffset; }
+    void        IncFilePos( sal_uLong nOffset ){ nFilePos += nOffset; }
 };
 
 #endif

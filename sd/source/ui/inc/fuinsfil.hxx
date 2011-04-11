@@ -61,9 +61,9 @@ private:
     String          aFile;          // gewaehlter Dateiname
 
     void            InsTextOrRTFinOlMode(SfxMedium* pMedium);
-    BOOL            InsSDDinOlMode(SfxMedium* pMedium);
+    sal_Bool            InsSDDinOlMode(SfxMedium* pMedium);
     void            InsTextOrRTFinDrMode(SfxMedium* pMedium);
-    BOOL            InsSDDinDrMode(SfxMedium* pMedium);
+    sal_Bool            InsSDDinDrMode(SfxMedium* pMedium);
 };
 
 } // end of namespace sd

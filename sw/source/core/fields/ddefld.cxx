@@ -33,7 +33,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <doc.hxx>
 #include <editsh.hxx>
-#include <errhdl.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
@@ -57,7 +56,7 @@ class SwIntrnlRefLink : public SwBaseLink
 {
     SwDDEFieldType& rFldType;
 public:
-    SwIntrnlRefLink( SwDDEFieldType& rType, USHORT nUpdateType, USHORT nFmt )
+    SwIntrnlRefLink( SwDDEFieldType& rType, sal_uInt16 nUpdateType, sal_uInt16 nFmt )
         : SwBaseLink( nUpdateType, nFmt ),
         rFldType( rType )
     {}
@@ -67,7 +66,7 @@ public:
                                 const uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
-    virtual BOOL IsInRange( ULONG nSttNd, ULONG nEndNd, xub_StrLen nStt = 0,
+    virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
                             xub_StrLen nEnd = STRING_NOTFOUND ) const;
 };
 
@@ -94,7 +93,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
             if( n && 0x0d == sStr.GetChar( n-1 ) )
                 --n;
 
-            BOOL bDel = n != sStr.Len();
+            sal_Bool bDel = n != sStr.Len();
             if( bDel )
                 sStr.Erase( n );
 
@@ -120,10 +119,10 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
         // dann suchen wir uns mal alle Felder. Wird kein gueltiges
         // gefunden, dann Disconnecten wir uns!
         SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-        int bCallModify = FALSE;
+        int bCallModify = sal_False;
         rFldType.LockModify();
 
-        SwClientIter aIter( rFldType );
+        SwClientIter aIter( rFldType );     // TODO
         SwClient * pLast = aIter.GoStart();
         if( pLast )     // konnte zum Anfang gesprungen werden ??
             do {
@@ -138,8 +137,8 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
                         else if( pSh )
                             pSh->StartAction();
                     }
-                    pLast->Modify( 0, &aUpdateDDE );
-                    bCallModify = TRUE;
+                    pLast->ModifyNotification( 0, &aUpdateDDE );
+                    bCallModify = sal_True;
                 }
             } while( 0 != ( pLast = aIter++ ));
 
@@ -185,7 +184,7 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 {
     // hier sollte irgend ein Anchor aus dem normalen Nodes-Array reichen
     const SwNode* pNd = 0;
-    SwClientIter aIter( rFldType );
+    SwClientIter aIter( rFldType );     // TODO
     SwClient * pLast = aIter.GoStart();
     if( pLast )     // konnte zum Anfang gesprungen werden ??
         do {
@@ -207,12 +206,12 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
     return pNd;
 }
 
-BOOL SwIntrnlRefLink::IsInRange( ULONG nSttNd, ULONG nEndNd,
+sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                 xub_StrLen nStt, xub_StrLen nEnd ) const
 {
     // hier sollte irgend ein Anchor aus dem normalen Nodes-Array reichen
     SwNodes* pNds = &rFldType.GetDoc()->GetNodes();
-    SwClientIter aIter( rFldType );
+    SwClientIter aIter( rFldType );         // TODO
     SwClient * pLast = aIter.GoStart();
     if( pLast )     // konnte zum Anfang gesprungen werden ??
         do {
@@ -226,7 +225,7 @@ BOOL SwIntrnlRefLink::IsInRange( ULONG nSttNd, ULONG nEndNd,
                 if( pTblNd->GetNodes().IsDocNodes() &&
                     nSttNd < pTblNd->EndOfSectionIndex() &&
                     nEndNd > pTblNd->GetIndex() )
-                    return TRUE;
+                    return sal_True;
             }
             else if( ((SwFmtFld*)pLast)->GetTxtFld() )
             {
@@ -234,24 +233,24 @@ BOOL SwIntrnlRefLink::IsInRange( ULONG nSttNd, ULONG nEndNd,
                 const SwTxtNode* pNd = pTFld->GetpTxtNode();
                 if( pNd && pNds == &pNd->GetNodes() )
                 {
-                    ULONG nNdPos = pNd->GetIndex();
+                    sal_uLong nNdPos = pNd->GetIndex();
                     if( nSttNd <= nNdPos && nNdPos <= nEndNd &&
                         ( nNdPos != nSttNd || *pTFld->GetStart() >= nStt ) &&
                         ( nNdPos != nEndNd || *pTFld->GetStart() < nEnd ))
-                        return TRUE;
+                        return sal_True;
                 }
             }
         } while( 0 != ( pLast = aIter++ ));
 
-    return FALSE;
+    return sal_False;
 }
 
 SwDDEFieldType::SwDDEFieldType(const String& rName,
-                                const String& rCmd, USHORT nUpdateType )
+                                const String& rCmd, sal_uInt16 nUpdateType )
     : SwFieldType( RES_DDEFLD ),
     aName( rName ), pDoc( 0 ), nRefCnt( 0 )
 {
-    bCRLFFlag = bDeleted = FALSE;
+    bCRLFFlag = bDeleted = sal_False;
     refLink = new SwIntrnlRefLink( *this, nUpdateType, FORMAT_STRING );
     SetCmd( rCmd );
 }
@@ -318,7 +317,7 @@ void SwDDEFieldType::_RefCntChgd()
     {
         refLink->SetVisible( pDoc->IsVisibleLinks() );
         pDoc->GetLinkManager().InsertDDELink( refLink );
-        if( pDoc->GetRootFrm() )
+        if( pDoc->GetCurrentViewShell() )   //swmod 071108//swmod 071225
             UpdateNow();
     }
     else
@@ -327,12 +326,10 @@ void SwDDEFieldType::_RefCntChgd()
         pDoc->GetLinkManager().Remove( refLink );
     }
 }
-/* -----------------------------28.08.00 16:23--------------------------------
 
- ---------------------------------------------------------------------------*/
-bool SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
+bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
-    BYTE nPart = 0;
+    sal_uInt8 nPart = 0;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR2:      nPart = 3; break;
@@ -340,7 +337,7 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
     case FIELD_PROP_SUBTYPE:   nPart = 1; break;
     case FIELD_PROP_BOOL1:
         {
-            sal_Bool bSet = GetType() == sfx2::LINKUPDATE_ALWAYS ? TRUE : FALSE;
+            sal_Bool bSet = GetType() == sfx2::LINKUPDATE_ALWAYS ? sal_True : sal_False;
             rVal.setValue(&bSet, ::getBooleanCppuType());
         }
         break;
@@ -348,25 +345,23 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
         rVal <<= ::rtl::OUString(aExpansion);
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     if( nPart )
         rVal <<= OUString(GetCmd().GetToken(nPart-1, sfx2::cTokenSeperator));
     return true;
 }
-/* -----------------------------28.08.00 16:23--------------------------------
 
- ---------------------------------------------------------------------------*/
-bool SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
+bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
 {
-    BYTE nPart = 0;
+    sal_uInt8 nPart = 0;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR2:      nPart = 3; break;
     case FIELD_PROP_PAR4:      nPart = 2; break;
     case FIELD_PROP_SUBTYPE:   nPart = 1; break;
     case FIELD_PROP_BOOL1:
-        SetType( static_cast<USHORT>(*(sal_Bool*)rVal.getValue() ?
+        SetType( static_cast<sal_uInt16>(*(sal_Bool*)rVal.getValue() ?
                                      sfx2::LINKUPDATE_ALWAYS :
                                      sfx2::LINKUPDATE_ONCALL ) );
         break;
@@ -378,7 +373,7 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
     }
     break;
     default:
-        DBG_ERROR("illegal property");
+        OSL_FAIL("illegal property");
     }
     if( nPart )
     {
@@ -390,9 +385,7 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
     }
     return true;
 }
-/* ---------------------------------------------------------------------------
 
- ---------------------------------------------------------------------------*/
 SwDDEField::SwDDEField( SwDDEFieldType* pInitType )
     : SwField(pInitType)
 {
@@ -400,8 +393,8 @@ SwDDEField::SwDDEField( SwDDEFieldType* pInitType )
 
 SwDDEField::~SwDDEField()
 {
-    if( GetTyp()->IsLastDepend() )                      // der Letzte mach das
-        ((SwDDEFieldType*)GetTyp())->Disconnect();      // Licht aus
+    if( GetTyp()->IsLastDepend() )
+        ((SwDDEFieldType*)GetTyp())->Disconnect();
 }
 
 String SwDDEField::Expand() const

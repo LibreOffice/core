@@ -71,11 +71,11 @@ interface XFunction
     */
     [attribute,bound] string Name;
 
-    /** defines the formular of this function
+    /** defines the formula of this function
     */
     [attribute,bound] string Formula;
 
-    /** defines the formular for the intial value
+    /** defines the formula for the initial value
     */
     [attribute,bound] com::sun::star::beans::Optional<string> InitialFormula;
 };

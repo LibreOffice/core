@@ -66,6 +66,7 @@
 
 ModalDialog DLG_CHINESEDICTIONARY
 {
+    HelpID = "svx:ModalDialog:DLG_CHINESEDICTIONARY";
     //HelpId = ;
     Size = MAP_APPFONT( FULL_WIDTH, FULL_HEIGHT );
     OutputSize = TRUE;
@@ -79,6 +80,7 @@ ModalDialog DLG_CHINESEDICTIONARY
 
     CheckBox CB_REVERSE
     {
+        HelpID = "svx:CheckBox:DLG_CHINESEDICTIONARY:CB_REVERSE";
         Pos = MAP_APPFONT ( COL_1, ROW_3 ) ;
         Size = MAP_APPFONT ( FULL_WIDTH - COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT , RSC_CD_CHECKBOX_HEIGHT ) ;
 
@@ -93,6 +95,7 @@ ModalDialog DLG_CHINESEDICTIONARY
     };
     Edit ED_TERM
     {
+        HelpID = "svx:Edit:DLG_CHINESEDICTIONARY:ED_TERM";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_1 , ROW_5 ) ;
         Size = MAP_APPFONT ( COL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -107,6 +110,7 @@ ModalDialog DLG_CHINESEDICTIONARY
     };
     Edit ED_MAPPING
     {
+        HelpID = "svx:Edit:DLG_CHINESEDICTIONARY:ED_MAPPING";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_2 , ROW_5 ) ;
         Size = MAP_APPFONT ( COL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -120,6 +124,7 @@ ModalDialog DLG_CHINESEDICTIONARY
     };
     ListBox LB_PROPERTY
     {
+        HelpID = "svx:ListBox:DLG_CHINESEDICTIONARY:LB_PROPERTY";
         Border = TRUE ;
         Pos = MAP_APPFONT ( COL_3 , ROW_5 ) ;
         Size = MAP_APPFONT ( REST_COL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
@@ -154,6 +159,7 @@ ModalDialog DLG_CHINESEDICTIONARY
 
     PushButton PB_ADD
     {
+        HelpID = "svx:PushButton:DLG_CHINESEDICTIONARY:PB_ADD";
         Pos = MAP_APPFONT( COL_4, ROW_5 );
         Size = MAP_APPFONT( BUTTONCOL_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT );
 
@@ -161,6 +167,7 @@ ModalDialog DLG_CHINESEDICTIONARY
     };
     PushButton PB_MODIFY
     {
+        HelpID = "svx:PushButton:DLG_CHINESEDICTIONARY:PB_MODIFY";
         Pos = MAP_APPFONT( COL_4, ROW_5a );
         Size = MAP_APPFONT( BUTTONCOL_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT );
 
@@ -168,6 +175,7 @@ ModalDialog DLG_CHINESEDICTIONARY
     };
     PushButton PB_DELETE
     {
+        HelpID = "svx:PushButton:DLG_CHINESEDICTIONARY:PB_DELETE";
         Pos = MAP_APPFONT( COL_4, ROW_5b );
         Size = MAP_APPFONT( BUTTONCOL_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT );
 

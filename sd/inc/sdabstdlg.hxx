@@ -81,8 +81,8 @@ public:
 class AbstractSdCustomShowDlg : public VclAbstractDialog  //add for SdCustomShowDlg
 {
 public:
-    virtual BOOL        IsModified() const = 0;
-    virtual BOOL        IsCustomShow() const = 0;
+    virtual sal_Bool        IsModified() const = 0;
+    virtual sal_Bool        IsCustomShow() const = 0;
 };
 
 class AbstractAssistentDlg : public VclAbstractDialog  //add for AssistentDlg
@@ -90,11 +90,11 @@ class AbstractAssistentDlg : public VclAbstractDialog  //add for AssistentDlg
 public:
     virtual SfxObjectShellLock GetDocument() = 0;
     virtual OutputType GetOutputMedium() const = 0;
-    virtual BOOL IsSummary() const = 0;
+    virtual sal_Bool IsSummary() const = 0;
     virtual StartType GetStartType() const = 0;
     virtual String GetDocPath() const = 0;
-    virtual BOOL GetStartWithFlag() const = 0;
-    virtual BOOL IsDocEmpty() const = 0;
+    virtual sal_Bool GetStartWithFlag() const = 0;
+    virtual sal_Bool IsDocEmpty() const = 0;
     virtual String GetPassword() = 0;
 };
 
@@ -111,7 +111,7 @@ public:
     virtual void GetAttr(SfxItemSet& rOutAttrs) = 0;
     virtual void HideRadioGroup() = 0;
     virtual void HideDeleteBtn() = 0;
-    virtual void SetInputFields(BOOL bEnableX, BOOL bEnableY) = 0;
+    virtual void SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY) = 0;
     //from class ::Window
     virtual void    SetText( const XubString& rStr ) = 0;
 };
@@ -121,31 +121,31 @@ class AbstractSdInsertLayerDlg : public VclAbstractDialog  //add for SdInsertLay
 public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) = 0;
     //from class ::Window
-    virtual void    SetHelpId( ULONG nHelpId ) = 0;
+    virtual void    SetHelpId( const rtl::OString& rHelpId ) = 0;
 };
 
 class AbstractSdInsertPasteDlg : public VclAbstractDialog  //add for SdInsertPasteDlg
 {
 public:
-    virtual BOOL            IsInsertBefore() const = 0;
+    virtual sal_Bool            IsInsertBefore() const = 0;
 };
 
 class AbstractSdInsertPagesObjsDlg : public VclAbstractDialog  //add for SdInsertPagesObjsDlg
 {
 public:
     virtual ::Window*   GetWindow() = 0;  //this method is added for return a ::Window type pointer
-    virtual List*       GetList( USHORT nType ) = 0;
-    virtual BOOL        IsLink() = 0;
-    virtual BOOL        IsRemoveUnnessesaryMasterPages() const = 0;
+    virtual List*       GetList( sal_uInt16 nType ) = 0;
+    virtual sal_Bool        IsLink() = 0;
+    virtual sal_Bool        IsRemoveUnnessesaryMasterPages() const = 0;
 };
 
 class AbstractMorphDlg : public VclAbstractDialog  //add for MorphDlg
 {
 public:
     virtual void            SaveSettings() const = 0;
-    virtual USHORT          GetFadeSteps() const = 0;
-    virtual BOOL            IsAttributeFade() const = 0;
-    virtual BOOL            IsOrientationFade() const = 0;
+    virtual sal_uInt16          GetFadeSteps() const = 0;
+    virtual sal_Bool            IsAttributeFade() const = 0;
+    virtual sal_Bool            IsOrientationFade() const = 0;
 };
 
 class AbstractSdStartPresDlg : public VclAbstractDialog  //add for SdStartPresentationDlg
@@ -186,12 +186,12 @@ class SdAbstractDialogFactory
 public:
     static SdAbstractDialogFactory*     Create();
 
-    virtual VclAbstractDialog*          CreateBreakDlg(::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, ULONG nSumActionCount, ULONG nObjCount ) = 0;
+    virtual VclAbstractDialog*          CreateBreakDlg(::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount ) = 0;
     virtual AbstractCopyDlg*            CreateCopyDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, XColorTable* pColTab, ::sd::View* pView ) = 0;
     virtual AbstractSdCustomShowDlg*    CreateSdCustomShowDlg( ::Window* pWindow, SdDrawDocument& rDrawDoc ) = 0;
     virtual SfxAbstractTabDialog*       CreateSdTabCharDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell ) = 0;
-    virtual SfxAbstractTabDialog*       CreateSdTabPageDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, BOOL bAreaPage = TRUE ) = 0;
-    virtual AbstractAssistentDlg*       CreateAssistentDlg( ::Window* pParent, BOOL bAutoPilot) = 0;
+    virtual SfxAbstractTabDialog*       CreateSdTabPageDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, sal_Bool bAreaPage = sal_True ) = 0;
+    virtual AbstractAssistentDlg*       CreateAssistentDlg( ::Window* pParent, sal_Bool bAutoPilot) = 0;
     virtual AbstractSdModifyFieldDlg*   CreateSdModifyFieldDlg( ::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) = 0;
     virtual AbstractSdSnapLineDlg*      CreateSdSnapLineDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView) = 0;
     virtual AbstractSdInsertLayerDlg*   CreateSdInsertLayerDlg( ::Window* pWindow, const SfxItemSet& rInAttrs, bool bDeletable, String aStr ) = 0;

@@ -44,7 +44,7 @@ namespace dbmm
     //--------------------------------------------------------------------
     String getScriptTypeDisplayName( const ScriptType _eType )
     {
-        USHORT nResId( 0 );
+        sal_uInt16 nResId( 0 );
 
         switch ( _eType )
         {

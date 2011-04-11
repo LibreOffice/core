@@ -24,13 +24,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#define RB_NO_WRAP          2
-#define RB_WRAP_LEFT        3
-#define RB_WRAP_RIGHT       4
-#define RB_WRAP_PARALLEL    5
-#define RB_WRAP_THROUGH     6
-#define RB_WRAP_IDEAL       7
-#define CB_ANCHOR_ONLY      8
+#define RB_NO_WRAP           2
+#define RB_WRAP_LEFT         3
+#define RB_WRAP_RIGHT        4
+#define RB_WRAP_PARALLEL     5
+#define RB_WRAP_THROUGH      6
+#define RB_WRAP_IDEAL        7
+#define CB_ANCHOR_ONLY       8
 #define FT_LEFT_MARGIN      13
 #define ED_LEFT_MARGIN      14
 #define FT_RIGHT_MARGIN     15
@@ -39,28 +39,25 @@
 #define ED_TOP_MARGIN       18
 #define ED_BOTTOM_MARGIN    19
 #define FT_BOTTOM_MARGIN    20
-#define FL_MARGIN                       21
+#define FL_MARGIN           21
 #define CB_TRANSPARENT      22
 #define CB_OUTLINE          23
-#define FL_OPTION                       24
+#define FL_OPTION           24
 #define CB_ONLYOUTSIDE      25
-#define FL_OPTION_SEP                       26
-#define C_WRAP_FL                      31
+#define FL_OPTION_SEP       26
+#define C_WRAP_FL           31
 
 #define IL_WRAP             32
-#define ILH_WRAP            33
 // nur fuer die ImageList
-#define IMG_BEGIN       1
-#define IMG_NONE        (IMG_BEGIN)
-#define IMG_LEFT        (IMG_BEGIN + 1)
-#define IMG_RIGHT               (IMG_BEGIN + 2)
-#define IMG_PARALLEL            (IMG_BEGIN + 3)
-#define IMG_THROUGH             (IMG_BEGIN + 4)
-#define IMG_IDEAL       (IMG_BEGIN + 5)
-#define IMG_KON_NONE        (IMG_BEGIN + 6)
-#define IMG_KON_LEFT            (IMG_BEGIN + 7)
-#define IMG_KON_RIGHT           (IMG_BEGIN + 8)
-#define IMG_KON_PARALLEL        (IMG_BEGIN + 9)
-#define IMG_KON_IDEAL           (IMG_BEGIN + 10)
-
-
+#define IMG_BEGIN           1
+#define IMG_NONE            (IMG_BEGIN)
+#define IMG_LEFT            (IMG_BEGIN +  1)
+#define IMG_RIGHT           (IMG_BEGIN +  2)
+#define IMG_PARALLEL        (IMG_BEGIN +  3)
+#define IMG_THROUGH         (IMG_BEGIN +  4)
+#define IMG_IDEAL           (IMG_BEGIN +  5)
+#define IMG_KON_NONE        (IMG_BEGIN +  6)
+#define IMG_KON_LEFT        (IMG_BEGIN +  7)
+#define IMG_KON_RIGHT       (IMG_BEGIN +  8)
+#define IMG_KON_PARALLEL    (IMG_BEGIN +  9)
+#define IMG_KON_IDEAL       (IMG_BEGIN + 10)

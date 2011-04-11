@@ -81,10 +81,10 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
         Add( rFont.GetFamilyName(), rFont.GetStyleName(),
              static_cast< sal_uInt16 >(rFont.GetFamily()), static_cast< sal_uInt16 >(rFont.GetPitch()),
              rFont.GetCharSet() );
-        sal_uInt16 nItems = rPool.GetItemCount( nWhichId );
-        for( sal_uInt16 j = 0; j < nItems; ++j )
+        sal_uInt32 nItems = rPool.GetItemCount2( nWhichId );
+        for( sal_uInt32 j = 0; j < nItems; ++j )
         {
-            if( 0 != (pItem = rPool.GetItem( nWhichId, j ) ) )
+            if( 0 != (pItem = rPool.GetItem2( nWhichId, j ) ) )
             {
                 const SvxFontItem *pFont =
                             (const SvxFontItem *)pItem;

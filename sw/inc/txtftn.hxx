@@ -34,6 +34,7 @@ class SwNodeIndex;
 class SwTxtNode;
 class SwNodes;
 class SwDoc;
+class SwFrm;
 
 // ATT_FTN **********************************************************
 
@@ -41,15 +42,15 @@ class SW_DLLPUBLIC SwTxtFtn : public SwTxtAttr
 {
     SwNodeIndex * m_pStartNode;
     SwTxtNode * m_pTxtNode;
-    USHORT m_nSeqNo;
+    sal_uInt16 m_nSeqNo;
 
 public:
     SwTxtFtn( SwFmtFtn& rAttr, xub_StrLen nStart );
     virtual ~SwTxtFtn();
 
     inline SwNodeIndex *GetStartNode() const { return m_pStartNode; }
-    void SetStartNode( const SwNodeIndex *pNode, BOOL bDelNodes = TRUE );
-    void SetNumber( const USHORT nNumber, const String* = 0 );
+    void SetStartNode( const SwNodeIndex *pNode, sal_Bool bDelNodes = sal_True );
+    void SetNumber( const sal_uInt16 nNumber, const String* = 0 );
     void CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const;
 
     // get and set TxtNode pointer
@@ -60,14 +61,14 @@ public:
     void MakeNewTextSection( SwNodes& rNodes );
 
         // loesche die FtnFrame aus der Seite
-    void DelFrms();
+    void DelFrms( const SwFrm* );
         // bedingten Absatzvorlagen checken
     void CheckCondColl();
 
         // fuer die Querverweise auf Fussnoten
-    USHORT SetSeqRefNo();
-    void SetSeqNo( USHORT n )       { m_nSeqNo = n; }   // for Readers
-    USHORT GetSeqRefNo() const      { return m_nSeqNo; }
+    sal_uInt16 SetSeqRefNo();
+    void SetSeqNo( sal_uInt16 n )       { m_nSeqNo = n; }   // for Readers
+    sal_uInt16 GetSeqRefNo() const      { return m_nSeqNo; }
 
     static void SetUniqueSeqRefNo( SwDoc& rDoc );
 };

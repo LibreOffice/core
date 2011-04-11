@@ -78,16 +78,17 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
 
     Reference< data::XLabeledDataSequence > xCategories;
     bool bHasCategories = HasCategories( aArguments, aData );
+    bool bUseCategoriesAsX = UseCategoriesAsX( aArguments );
 
-    bool bHasXValues = false;
+    bool bSetXValues = false;
     sal_Int32 nDataSeqCount = aData.getLength();
 
-    bHasXValues = bHasCategories ? ( (nDataSeqCount-1) > 2 && (nDataSeqCount-1) % 2 != 0 )
+    bSetXValues = bHasCategories ? ( (nDataSeqCount-1) > 2 && (nDataSeqCount-1) % 2 != 0 )
                                  :( nDataSeqCount > 2 && nDataSeqCount % 2 != 0 );
 
     bool bCategoriesUsed = false;
     bool bNextIsYValues = bHasCategories ? nDataSeqCount>2 : nDataSeqCount>1;
-    for( sal_Int32 nDataIdx = 0; nDataIdx < aData.getLength(); ++nDataIdx )
+    for( sal_Int32 nDataIdx = 0; nDataIdx < nDataSeqCount; ++nDataIdx )
     {
         try
         {
@@ -95,10 +96,17 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
             {
                 xCategories.set( aData[nDataIdx] );
                 if( xCategories.is())
+                {
                     SetRole( xCategories->getValues(), C2U("categories"));
+                    if( bUseCategoriesAsX )
+                    {
+                        bSetXValues = false;
+                        bNextIsYValues = nDataSeqCount > 2;
+                    }
+                }
                 bCategoriesUsed = true;
             }
-            else if( !xValuesX.is() && bHasXValues )
+            else if( !xValuesX.is() && bSetXValues )
             {
                 xValuesX.set( aData[nDataIdx] );
                 if( xValuesX.is())
@@ -116,7 +124,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
                 aSizeValuesVector.push_back( aData[nDataIdx] );
                 if( aData[nDataIdx].is())
                     SetRole( aData[nDataIdx]->getValues(), C2U("values-size"));
-                bNextIsYValues = true;
+                bNextIsYValues = (nDataSeqCount-(nDataIdx+1)) >= 2;//two or more left
             }
         }
         catch( uno::Exception & ex )
@@ -133,26 +141,19 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
     Reference< data::XLabeledDataSequence > xClonedXValues = xValuesX;
     Reference< util::XCloneable > xCloneableX( xValuesX, uno::UNO_QUERY );
 
-    for( size_t nCount = 0; nCount < aSizeValuesVector.size(); ++nCount, ++nSeriesIndex )
+    for( size_t nN = 0; nN < aSizeValuesVector.size(); ++nN, ++nSeriesIndex )
     {
-        sal_Int32 nDataSequenceCount = 2;
-        if( xValuesX.is() )
-            nDataSequenceCount = 3;
-        else if( aYValuesVector.empty() )
-            nDataSequenceCount = 1;
-
-        Sequence< Reference< data::XLabeledDataSequence > > aNewData( nDataSequenceCount );
-        sal_Int32 nDataIndex = 0;
+        vector< Reference< data::XLabeledDataSequence > > aNewData;
         if( xValuesX.is() )
         {
-            if( nCount > 0 && xCloneableX.is() )
+            if( nN > 0 && xCloneableX.is() )
                 xClonedXValues.set( xCloneableX->createClone(), uno::UNO_QUERY );
-            aNewData[nDataIndex++] = xClonedXValues;
+            aNewData.push_back( xClonedXValues );
         }
-        if( aYValuesVector.size() > nCount )
-            aNewData[nDataIndex++] = aYValuesVector[nCount];
-        if( aSizeValuesVector.size() > nCount )
-            aNewData[nDataIndex++] = aSizeValuesVector[nCount];
+        if( aYValuesVector.size() > nN )
+            aNewData.push_back( aYValuesVector[nN] );
+        if( aSizeValuesVector.size() > nN )
+            aNewData.push_back( aSizeValuesVector[nN] );
 
         Reference< XDataSeries > xSeries;
         if( nSeriesIndex < aSeriesToReUse.getLength())
@@ -162,7 +163,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
         OSL_ASSERT( xSeries.is() );
         Reference< data::XDataSink > xSink( xSeries, uno::UNO_QUERY );
         OSL_ASSERT( xSink.is() );
-        xSink->setData( aNewData );
+        xSink->setData( ContainerHelper::ContainerToSequence( aNewData ) );
 
         aSeriesVec.push_back( xSeries );
     }

@@ -29,8 +29,8 @@
 #ifndef SW_WRITERWORDGLUE
 #define SW_WRITERWORDGLUE
 
-#   include "needed_cast.hxx"
-#   include "types.hxx"
+#include "needed_cast.hxx"
+#include "types.hxx"
 
 class SwFrmFmt;
 class SfxItemSet;

@@ -34,12 +34,10 @@
 
 namespace svx {
 
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SpellDialogChildWindow::SpellDialogChildWindow (
     Window* _pParent,
-    USHORT nId,
+    sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* /*pInfo*/)
     : SfxChildWindow (_pParent, nId)
@@ -53,69 +51,53 @@ SpellDialogChildWindow::SpellDialogChildWindow (
                                             this );
     pWindow = m_pAbstractSpellDialog->GetWindow();
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    SetHideNotDelete (TRUE);
+    SetHideNotDelete (sal_True);
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SpellDialogChildWindow::~SpellDialogChildWindow (void)
 {
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxBindings& SpellDialogChildWindow::GetBindings (void) const
 {
     OSL_ASSERT (m_pAbstractSpellDialog != NULL);
     return m_pAbstractSpellDialog->GetBindings();
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SpellDialogChildWindow::InvalidateSpellDialog()
 {
     OSL_ASSERT (m_pAbstractSpellDialog != NULL);
     if(m_pAbstractSpellDialog)
         m_pAbstractSpellDialog->Invalidate();
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool SpellDialogChildWindow::HasAutoCorrection()
 {
     return false;
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SpellDialogChildWindow::AddAutoCorrection(
         const String& /*rOld*/,
         const String& /*rNew*/,
         LanguageType /*eLanguage*/)
 {
-    DBG_ERROR("AutoCorrection should have been overloaded - if available");
+    OSL_FAIL("AutoCorrection should have been overloaded - if available");
 }
-/*-- 16.06.2008 10:11:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool SpellDialogChildWindow::HasGrammarChecking()
 {
     return false;
 }
-/*-- 18.06.2008 12:26:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool SpellDialogChildWindow::IsGrammarChecking()
 {
-    DBG_ERROR("Grammar checking should have been overloaded - if available");
+    OSL_FAIL("Grammar checking should have been overloaded - if available");
     return false;
 }
-/*-- 18.06.2008 12:26:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SpellDialogChildWindow::SetGrammarChecking(bool )
 {
-    DBG_ERROR("Grammar checking should have been overloaded - if available");
+    OSL_FAIL("Grammar checking should have been overloaded - if available");
 }
 } // end of namespace ::svx
 

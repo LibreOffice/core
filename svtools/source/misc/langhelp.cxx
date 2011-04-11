@@ -38,7 +38,7 @@ void localizeWebserviceURI( ::rtl::OUString& rURI )
     if ( aLang.equalsIgnoreAsciiCaseAscii( "pt" )
          && Application::GetSettings().GetUILocale().Country.equalsIgnoreAsciiCaseAscii("br") )
     {
-        aLang = ::rtl::OUString::createFromAscii("pt-br");
+        aLang = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pt-br" ));
     }
 
     rURI += aLang;

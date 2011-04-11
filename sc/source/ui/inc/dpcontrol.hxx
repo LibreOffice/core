@@ -40,7 +40,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <memory>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace com { namespace sun { namespace star {
 
@@ -115,7 +115,7 @@ public:
         virtual void execute() = 0;
     };
 
-    explicit ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, USHORT nMenuStackLevel = 0);
+    explicit ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sal_uInt16 nMenuStackLevel = 0);
     virtual ~ScMenuFloatingWindow();
 
     virtual void MouseMove(const MouseEvent& rMEvt);
@@ -282,7 +282,7 @@ public:
 
     const Size& getWindowSize() const;
 
-    void getResult(::std::hash_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rResult);
+    void getResult(::boost::unordered_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rResult);
     void close(bool bOK);
 
     /**

@@ -55,7 +55,7 @@ void OFlatCatalog::refreshTables()
     TStringVector aVector;
     Sequence< ::rtl::OUString > aTypes;
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        ::rtl::OUString::createFromAscii("%"),::rtl::OUString::createFromAscii("%"),aTypes);
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),aTypes);
 
     if(xResult.is())
     {

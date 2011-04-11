@@ -47,17 +47,18 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include "hhconvdic.hxx"
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+using ::rtl::OUString;
 
 #define SN_HH_CONV_DICTIONARY   "com.sun.star.linguistic2.HangulHanjaConversionDictionary"
 
@@ -87,13 +88,13 @@ sal_Int16 SAL_CALL checkScriptType(sal_Unicode c) throw (RuntimeException)
 
 
 
-BOOL TextIsAllScriptType( const OUString &rTxt, INT16 nScriptType )
+sal_Bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
 {
-    BOOL bIsAll = TRUE;
-    for (INT32 i = 0;  i < rTxt.getLength() && bIsAll;  ++i)
+    sal_Bool bIsAll = sal_True;
+    for (sal_Int32 i = 0;  i < rTxt.getLength() && bIsAll;  ++i)
     {
         if (checkScriptType( rTxt.getStr()[i]) != nScriptType)
-            bIsAll = FALSE;
+            bIsAll = sal_False;
     }
     return bIsAll;
 }
@@ -102,7 +103,7 @@ BOOL TextIsAllScriptType( const OUString &rTxt, INT16 nScriptType )
 ///////////////////////////////////////////////////////////////////////////
 
 HHConvDic::HHConvDic( const String &rName, const String &rMainURL ) :
-    ConvDic( rName, LANGUAGE_KOREAN, ConversionDictionaryType::HANGUL_HANJA, TRUE, rMainURL )
+    ConvDic( rName, LANGUAGE_KOREAN, ConversionDictionaryType::HANGUL_HANJA, sal_True, rMainURL )
 {
 }
 
@@ -140,8 +141,8 @@ sal_Bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     sal_Bool bRes = sal_False;
-    if (rServiceName.equalsAscii( SN_CONV_DICTIONARY )||
-        rServiceName.equalsAscii( SN_HH_CONV_DICTIONARY ))
+    if (rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_CONV_DICTIONARY)) ||
+        rServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SN_HH_CONV_DICTIONARY)))
         bRes = sal_True;
     return bRes;
 }

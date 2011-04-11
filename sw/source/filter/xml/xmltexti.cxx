@@ -64,6 +64,7 @@
 #include <ndole.hxx>
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>
+#include <switerator.hxx>
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
@@ -153,7 +154,7 @@ static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObjec
         }
         catch( uno::Exception& )
         {
-            OSL_ASSERT( "Couldn't set visual area of the object!\n" );
+            OSL_FAIL( "Couldn't set visual area of the object!\n" );
         }
     }
 }
@@ -176,8 +177,8 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
 
 SwXMLTextImportHelper::~SwXMLTextImportHelper()
 {
-    // #90463# the redline helper destructor sets properties on the document
-    //         and may through an exception while doing so... catch this
+    // the redline helper destructor sets properties on the document
+    // and may through an exception while doing so... catch this
     try
     {
         delete pRedlineHelper;
@@ -321,9 +322,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     {
         // check whether an object with this name already exists in the document
         String aName;
-        SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
-        for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-                pNd; pNd = (SwCntntNode*)aIter.Next() )
+        SwIterator<SwCntntNode,SwFmtColl> aIter( *pDoc->GetDfltGrfFmtColl() );
+        for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
         {
             SwOLENode* pExistingOLENd = pNd->GetOLENode();
             if( pExistingOLENd )
@@ -331,7 +331,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                 ::rtl::OUString aExistingName = pExistingOLENd->GetOLEObj().GetCurrentPersistName();
                 if ( aExistingName.equals( aObjName ) )
                 {
-                    OSL_ENSURE( sal_False, "The document contains duplicate object references, means it is partially broken, please let developers know how this document was generated!\n" );
+                    OSL_FAIL( "The document contains duplicate object references, means it is partially broken, please let developers know how this document was generated!\n" );
 
                     ::rtl::OUString aTmpName = pDoc->GetPersist()->GetEmbeddedObjectContainer().CreateUniqueObjectName();
                     try
@@ -343,7 +343,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     }
                     catch ( uno::Exception& )
                     {
-                        OSL_ENSURE( sal_False, "Couldn't create a copy of the object!\n" );
+                        OSL_FAIL( "Couldn't create a copy of the object!\n" );
                     }
 
                     break;

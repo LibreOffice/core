@@ -37,9 +37,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 #include <itemholder1.hxx>
 
@@ -541,7 +539,7 @@ void SvtDynamicMenuOptions_Impl::Notify( const Sequence< OUString >& )
 //*****************************************************************************************************************
 void SvtDynamicMenuOptions_Impl::Commit()
 {
-    DBG_ERROR( "SvtDynamicMenuOptions_Impl::Commit()\nNot implemented yet!\n" );
+    OSL_FAIL( "SvtDynamicMenuOptions_Impl::Commit()\nNot implemented yet!\n" );
     /*
     // Write all properties!
     // Delete complete sets first.

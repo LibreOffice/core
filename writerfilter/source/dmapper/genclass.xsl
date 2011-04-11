@@ -30,9 +30,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: PropertyMap.hxx,v $
- * $Revision: 1.18 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -560,7 +557,6 @@
 	<xsl:text>&#xa;    case </xsl:text>
 	<xsl:value-of select="@id"/>
 	<xsl:text>:</xsl:text>
-	<xsl:text>&#xa;    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */</xsl:text>
 	<xsl:call-template name="sprmaction">
 	  <xsl:with-param name="valuePrefix">r_Sprm.getValue()-&gt;</xsl:with-param>
 	</xsl:call-template>
@@ -613,7 +609,6 @@
 	<xsl:text>&#xa;    case </xsl:text>
 	<xsl:value-of select="@id"/>
 	<xsl:text>:</xsl:text>
-	<xsl:text>&#xa;    /* WRITERFILTERSTATUS done: 100, planned: 2, spent: 0 */</xsl:text>
 	<xsl:call-template name="sprmactionset">
 	  <xsl:with-param name="valuePrefix">val.</xsl:with-param>
 	</xsl:call-template>

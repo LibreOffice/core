@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+    /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -72,11 +72,8 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdview.hxx>
-#include "misc.hxx"
 #include "View.hxx"
-#ifndef SVX_LIGHT
 #include "DrawDocShell.hxx"
-#endif
 #include "ViewShell.hxx"
 #include "DrawViewShell.hxx"
 #include "unoobj.hxx"
@@ -126,7 +123,7 @@ enum WID_PAGE
  #endif
 #endif
 
-static sal_Char __FAR_DATA sEmptyPageName[sizeof("page")] = "page";
+static sal_Char sEmptyPageName[sizeof("page")] = "page";
 
 /** this function stores the property maps for draw pages in impress and draw */
 const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKind ePageKind )
@@ -241,7 +238,6 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
         GRAPHIC_PAGE_PROPERTIES
     };
 
-    //
     bool bWithoutBackground = ePageKind != PK_STANDARD && ePageKind != PK_HANDOUT;
     const SvxItemPropertySet* pRet = 0;
     if( bImpress )
@@ -372,9 +368,6 @@ sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const ::com::sun::star::uno:
         }
 }
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPage, const SvxItemPropertySet* _pSet ) throw()
 :       SvxFmDrawPage( (SdrPage*) pInPage ),
         SdUnoSearchReplaceShape(this),
@@ -475,11 +468,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     }
     else if( aType.EqualsAscii( "GraphicObjectShape" ) )
     {
-#ifdef STARIMAGE_AVAILABLE
-        eObjKind = PRESOBJ_IMAGE;
-#else
         eObjKind = PRESOBJ_GRAPHIC;
-#endif
     }
     else if( aType.EqualsAscii( "OrgChartShape" ) )
     {
@@ -543,7 +532,7 @@ SdrObject * SdGenericDrawPage::_CreateSdrObject( const Reference< drawing::XShap
     }
     else
     {
-        pPresObj = GetPage()->CreatePresObj( eObjKind, FALSE, aRect, sal_True );
+        pPresObj = GetPage()->CreatePresObj( eObjKind, sal_False, aRect, sal_True );
     }
 
     if( pPresObj )
@@ -678,7 +667,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
                 const PageKind ePageKind = GetPage()->GetPageKind();
 
-                USHORT i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+                sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
                 for (i = 0; i < nPageCnt; i++)
                 {
                     SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
@@ -721,7 +710,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             sal_Bool    bVisible = sal_False;
             if( ! ( aValue >>= bVisible ) )
                 throw lang::IllegalArgumentException();
-            GetPage()->SetExcluded( bVisible == FALSE );
+            GetPage()->SetExcluded( bVisible == sal_False );
             break;
         }
         case WID_PAGE_SOUNDFILE :
@@ -777,7 +766,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 {
                     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                     SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE), bVisible);
+                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False), bVisible);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
@@ -797,7 +786,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 {
                     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                     SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE), bVisible);
+                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False), bVisible);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
@@ -995,9 +984,6 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
     GetModel()->SetModified();
 }
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -1076,9 +1062,8 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     }
     case WID_PAGE_LDBITMAP:
         {
-            BOOL bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
             Reference< awt::XBitmap > xBitmap(
-                VCLUnoHelper::CreateBitmap( BitmapEx( SdResId( bHC ? BMP_PAGE_H : BMP_PAGE ) ) ) );
+                VCLUnoHelper::CreateBitmap( BitmapEx( SdResId( BMP_PAGE ) ) ) );
             aAny <<= xBitmap;
         }
         break;
@@ -1107,7 +1092,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                     {
                         Point   aPoint;
                         Size    aSize( GetPage()->GetSize() );
-                        pMetaFile->AddAction( (MetaAction*) new MetaFillColorAction( COL_WHITE, TRUE ), 0 );
+                        pMetaFile->AddAction( (MetaAction*) new MetaFillColorAction( COL_WHITE, sal_True ), 0 );
                         pMetaFile->AddAction( (MetaAction*) new MetaRectAction( Rectangle( aPoint, aSize ) ), 1 );
                         pMetaFile->SetPrefMapMode( MAP_100TH_MM );
                         pMetaFile->SetPrefSize( aSize );
@@ -1145,7 +1130,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                                                                   aBitmap ) )
                     {
                         SvMemoryStream aMemStream;
-                        aBitmap.GetBitmap().Write( aMemStream, FALSE, FALSE );
+                        aBitmap.GetBitmap().Write( aMemStream, sal_False, sal_False );
                         uno::Sequence<sal_Int8> aSeq( (sal_Int8*)aMemStream.GetData(), aMemStream.Tell() );
                         aAny <<= aSeq;
                     }
@@ -1156,7 +1141,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
     case WID_PAGE_VISIBLE :
     {
-        sal_Bool bVisible = GetPage()->IsExcluded() == FALSE;
+        sal_Bool bVisible = GetPage()->IsExcluded() == sal_False;
         aAny <<= Any( &bVisible, ::getBooleanCppuType() );
         break;
     }
@@ -1197,7 +1182,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                 SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE));
+                aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False));
             }
             else
             {
@@ -1216,7 +1201,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                 SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
+                aAny <<= (sal_Bool)aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False));
             }
             else
             {
@@ -1516,14 +1501,14 @@ Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  )
 
 void SdGenericDrawPage::setBackground( const Any& ) throw(lang::IllegalArgumentException)
 {
-    DBG_ERROR( "Don't call me, I'm useless!" );
+    OSL_FAIL( "Don't call me, I'm useless!" );
 }
 
 //----------------------------------------------------------------------
 
 void SdGenericDrawPage::getBackground( Any& ) throw()
 {
-    DBG_ERROR( "Don't call me, I'm useless!" );
+    OSL_FAIL( "Don't call me, I'm useless!" );
 }
 
 //----------------------------------------------------------------------
@@ -1684,7 +1669,7 @@ void SdGenericDrawPage::SetLftBorder( sal_Int32 nValue )
         SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
         const PageKind ePageKind = GetPage()->GetPageKind();
 
-        USHORT i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+        sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
         for (i = 0; i < nPageCnt; i++)
         {
             SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
@@ -1708,7 +1693,7 @@ void SdGenericDrawPage::SetRgtBorder( sal_Int32 nValue )
         SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
         const PageKind ePageKind = GetPage()->GetPageKind();
 
-        USHORT i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+        sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
         for (i = 0; i < nPageCnt; i++)
         {
             SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
@@ -1732,7 +1717,7 @@ void SdGenericDrawPage::SetUppBorder( sal_Int32 nValue )
         SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
         const PageKind ePageKind = GetPage()->GetPageKind();
 
-        USHORT i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+        sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
         for (i = 0; i < nPageCnt; i++)
         {
             SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
@@ -1756,7 +1741,7 @@ void SdGenericDrawPage::SetLwrBorder( sal_Int32 nValue )
         SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
         const PageKind ePageKind = GetPage()->GetPageKind();
 
-        USHORT i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+        sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
         for (i = 0; i < nPageCnt; i++)
         {
             SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
@@ -1794,7 +1779,7 @@ static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
 
             pDoc->SetMaxObjSize(aViewSize);
 
-            pViewSh->InitWindows(aPageOrg, aViewSize, Point(-1, -1), TRUE);
+            pViewSh->InitWindows(aPageOrg, aViewSize, Point(-1, -1), sal_True);
 
             pViewSh->UpdateScrollBars();
         }
@@ -1811,7 +1796,7 @@ void SdGenericDrawPage::SetWidth( sal_Int32 nWidth )
         SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
         const PageKind ePageKind = GetPage()->GetPageKind();
 
-        USHORT i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+        sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
         for (i = 0; i < nPageCnt; i++)
         {
             SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
@@ -1840,7 +1825,7 @@ void SdGenericDrawPage::SetHeight( sal_Int32 nHeight )
         SdDrawDocument* pDoc = (SdDrawDocument*)GetPage()->GetModel();
         const PageKind ePageKind = GetPage()->GetPageKind();
 
-        USHORT i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
+        sal_uInt16 i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
         for (i = 0; i < nPageCnt; i++)
         {
             SdPage* pPage = pDoc->GetMasterSdPage(i, ePageKind);
@@ -2003,9 +1988,6 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasByName( const OUString& aName )
     return FindObject( aName ) != NULL;
 }
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 SdrObject* SdPageLinkTargets::FindObject( const String& rName ) const throw()
 {
     SdPage* pPage = mpUnoPage->GetPage();
@@ -2334,7 +2316,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
 
         GetPage()->SetName( aName );
 
-        USHORT nNotesPageNum = (GetPage()->GetPageNum()-1)>>1;
+        sal_uInt16 nNotesPageNum = (GetPage()->GetPageNum()-1)>>1;
         if( GetModel()->GetDoc()->GetSdPageCount( PK_NOTES ) > nNotesPageNum )
         {
             SdPage* pNotesPage = GetModel()->GetDoc()->GetSdPage( nNotesPageNum, PK_NOTES );
@@ -2353,7 +2335,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
             EditMode eMode = pDrawViewSh->GetEditMode();
             if( eMode == EM_PAGE )
             {
-                BOOL bLayer = pDrawViewSh->IsLayerModeActive();
+                sal_Bool bLayer = pDrawViewSh->IsLayerModeActive();
 
                 pDrawViewSh->ChangeEditMode( eMode, !bLayer );
                 pDrawViewSh->ChangeEditMode( eMode, bLayer );
@@ -2558,7 +2540,6 @@ void SdDrawPage::setBackground( const Any& rValue )
         pBackground->fillItemSet( (SdDrawDocument*)GetPage()->GetModel(), aSet );
     }
 
-//-/    pObj->NbcSetAttributes( aSet, sal_False );
     if( aSet.Count() == 0 )
     {
         // no background fill, represent by setting XFILL_NONE
@@ -2573,7 +2554,6 @@ void SdDrawPage::setBackground( const Any& rValue )
 
     // repaint only
     SvxFmDrawPage::mpPage->ActionChanged();
-    // pPage->SendRepaintBroadcast();
 }
 
 // XAnnotationAccess:
@@ -2992,7 +2972,7 @@ void SdMasterPage::setBackground( const Any& rValue )
     }
     catch( Exception& )
     {
-        DBG_ERROR("sd::SdMasterPage::setBackground(), exception caught!");
+        OSL_FAIL("sd::SdMasterPage::setBackground(), exception caught!");
     }
 }
 
@@ -3048,7 +3028,7 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
     catch( Exception& )
     {
         rValue.clear();
-        DBG_ERROR("sd::SdMasterPage::getBackground(), exception caught!");
+        OSL_FAIL("sd::SdMasterPage::getBackground(), exception caught!");
     }
 }
 
@@ -3079,7 +3059,7 @@ void SAL_CALL SdMasterPage::setName( const OUString& aName )
             EditMode eMode = pDrawViewSh->GetEditMode();
             if( eMode == EM_MASTERPAGE )
             {
-                BOOL bLayer = pDrawViewSh->IsLayerModeActive();
+                sal_Bool bLayer = pDrawViewSh->IsLayerModeActive();
 
                 pDrawViewSh->ChangeEditMode( eMode, !bLayer );
                 pDrawViewSh->ChangeEditMode( eMode, bLayer );

@@ -39,8 +39,11 @@
 
 #include "share.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 namespace
 {
@@ -413,7 +416,7 @@ static void cpp_call(
             pReturnTypeDescr->eTypeClass,
             (sal_Int32 *)pCppStackStart,
              nStackLongs);
-        // NO exception occured...
+        // NO exception occurred...
         *ppUnoExc = 0;
 
         // reconvert temporary params

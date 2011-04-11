@@ -56,7 +56,7 @@ namespace connectivity
         protected:
             virtual ~OResultSetMetaData();
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OResultSetMetaData(const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable* _pTable);
 
             /// Avoid ambigous cast error from the compiler.

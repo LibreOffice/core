@@ -74,27 +74,27 @@ class SwImplEnterLeave;
 
 class SwProtocol
 {
-    static ULONG nRecord;
+    static sal_uLong nRecord;
     static SwImplProtocol* pImpl;
-    static BOOL Start() { return 0 != ( PROT_INIT & nRecord ); }
+    static sal_Bool Start() { return 0 != ( PROT_INIT & nRecord ); }
 public:
-    static ULONG Record() { return nRecord; }
-    static void SetRecord( ULONG nNew ) { nRecord = nNew; }
-    static BOOL Record( ULONG nFunc ) { return 0 != (( nFunc | PROT_INIT ) & nRecord); }
-    static void Record( const SwFrm* pFrm, ULONG nFunction, ULONG nAction, void* pParam );
+    static sal_uLong Record() { return nRecord; }
+    static void SetRecord( sal_uLong nNew ) { nRecord = nNew; }
+    static sal_Bool Record( sal_uLong nFunc ) { return 0 != (( nFunc | PROT_INIT ) & nRecord); }
+    static void Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAction, void* pParam );
     static void Init();
     static void Stop();
-    static void SnapShot( const SwFrm* pFrm, ULONG nFlags );
-    static void GetVar( const USHORT nNo, long& rVar );
+    static void SnapShot( const SwFrm* pFrm, sal_uLong nFlags );
+    static void GetVar( const sal_uInt16 nNo, long& rVar );
 };
 
 class SwEnterLeave
 {
     SwImplEnterLeave* pImpl;
-    void Ctor( const SwFrm* pFrm, ULONG nFunc, ULONG nAct, void* pPar );
+    void Ctor( const SwFrm* pFrm, sal_uLong nFunc, sal_uLong nAct, void* pPar );
     void Dtor();
 public:
-    SwEnterLeave( const SwFrm* pFrm, ULONG nFunc, ULONG nAct, void* pPar )
+    SwEnterLeave( const SwFrm* pFrm, sal_uLong nFunc, sal_uLong nAct, void* pPar )
         { if( SwProtocol::Record( nFunc ) ) Ctor( pFrm, nFunc, nAct, pPar ); else pImpl = NULL; }
     ~SwEnterLeave() { if( pImpl ) Dtor(); }
 };

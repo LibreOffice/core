@@ -37,9 +37,6 @@
 
 namespace dbaui
 {
-//  class OTableRow;
-//  friend SvStream& operator<<( SvStream& rStr, OTableRow& _rRow );
-
     class OFieldDescription;
     class OTypeInfo;
     class OTableRow
@@ -62,8 +59,8 @@ namespace dbaui
 
         void SetFieldType( const TOTypeInfoSP& _pType, sal_Bool _bForce = sal_False );
 
-        void SetPrimaryKey( BOOL bSet );
-        BOOL IsPrimaryKey() const;
+        void SetPrimaryKey( sal_Bool bSet );
+        sal_Bool IsPrimaryKey() const;
 
         /** returns the current position in the table.
             @return

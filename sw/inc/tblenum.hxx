@@ -29,7 +29,7 @@
 #define _TBLENUM_HXX
 
 //fuers aendern der Tabellen/Spalten/Zeilen Breiten/Hoehen
-typedef USHORT TblChgWidthHeightType;
+typedef sal_uInt16 TblChgWidthHeightType;
 
 namespace nsTblChgWidthHeightType
 {

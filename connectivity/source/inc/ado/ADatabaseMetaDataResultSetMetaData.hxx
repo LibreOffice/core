@@ -74,7 +74,7 @@ namespace connectivity
             void setTypeInfoMap();
             void setProceduresMap();
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             ODatabaseMetaDataResultSetMetaData( ADORecordset* _pRecordSet ,ODatabaseMetaDataResultSet* _pRes)
                     :   m_pRecordSet(_pRecordSet),m_vMapping(_pRes->getColumnMapping()),
                         m_nColCount(m_vMapping.size()-1)

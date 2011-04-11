@@ -30,19 +30,19 @@
 
 #include "svl/solar.hrc"
 
-#define RID_FWK_START               260
+#define RID_FWK_START                       260
 
-#define RID_GROUPS_OFFSET           32000
-#define RID_GROUPS_END              32767
+#define RID_GROUPS_OFFSET                   32000
+#define RID_GROUPS_END                      32767
 
 #define RID_FWK_DIALOG_START_CORRECT        (RID_FWK_START + 2048)
 
-#define DLG_FILTER_SELECT           (RID_FWK_DIALOG_START_CORRECT + 0)
+#define DLG_FILTER_SELECT                   (RID_FWK_DIALOG_START_CORRECT + 0)
 
-#define STR_FILTER_DOWNLOAD         (RID_FWK_START+0)
-#define STR_FILTER_CHOOSER          (RID_FWK_START+1)
-#define STR_FILTER_OTHERS           (RID_FWK_START+2)
-#define STR_FILTER_ZIPPED           (RID_FWK_START+3)
+#define STR_FILTER_DOWNLOAD                 (RID_FWK_START+0)
+#define STR_FILTER_CHOOSER                  (RID_FWK_START+1)
+#define STR_FILTER_OTHERS                   (RID_FWK_START+2)
+#define STR_FILTER_ZIPPED                   (RID_FWK_START+3)
 
 // ResIds for BackingWindow
 #define DLG_BACKING                         (RID_FWK_DIALOG_START_CORRECT+100)
@@ -57,13 +57,7 @@
 #define STR_BACKING_TPLREP                  9
 
 #define RES_BACKING_IMAGES                  (DLG_BACKING+1)
-#define RES_BACKING_IMAGES_HC               (DLG_BACKING+2)
 
-#define BMP_BACKING_BACKGROUND_LEFT         1
-#define BMP_BACKING_BACKGROUND_MIDDLE       2
-#define BMP_BACKING_BACKGROUND_RIGHT        3
-#define BMP_BACKING_BACKGROUND_RTL_LEFT     4
-#define BMP_BACKING_BACKGROUND_RTL_RIGHT    5
 #define BMP_BACKING_EXT                     6
 #define BMP_BACKING_REG                     7
 #define BMP_BACKING_INFO                    8

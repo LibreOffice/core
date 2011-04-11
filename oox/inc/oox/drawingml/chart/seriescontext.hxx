@@ -48,7 +48,7 @@ public:
     virtual             ~DataLabelContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onEndElement( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const ::rtl::OUString& rChars );
 };
 
 // ============================================================================
@@ -64,7 +64,7 @@ public:
     virtual             ~DataLabelsContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onEndElement( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const ::rtl::OUString& rChars );
 };
 
 // ============================================================================
@@ -125,7 +125,7 @@ public:
     virtual             ~TrendlineContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onEndElement( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const ::rtl::OUString& rChars );
 };
 
 // ============================================================================

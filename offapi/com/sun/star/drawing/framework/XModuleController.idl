@@ -45,7 +45,7 @@ module com { module sun { module star { module drawing { module framework {
 
 interface XView;
 
-/** The module controller is responsible for loading a module (addon,
+/** The module controller is responsible for loading a module (ad-don,
     plugin, whatever the name) when it is first used.
     <p>For this there is a
     list in the office configuration which associates resource URLs with

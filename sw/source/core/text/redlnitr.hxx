@@ -75,7 +75,7 @@ class SwRedlineItr
     SwAttrHandler& rAttrHandler;
     SfxItemSet *pSet;
     SwExtend *pExt;
-    ULONG nNdIdx;
+    sal_uLong nNdIdx;
     xub_StrLen nFirst;
     xub_StrLen nAct;
     xub_StrLen nStart;

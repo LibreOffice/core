@@ -28,5 +28,3 @@
 #define RID_TOOLBOX_INSERT      1
 #define RID_TOOLBOX_INSCELLS    2
 #define RID_TOOLBOX_INSOBJ      3
-
-

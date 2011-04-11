@@ -33,12 +33,11 @@
 #include "propertyexport.hxx"
 #include <xmloff/xmlexp.hxx>
 #include "strings.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/families.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -73,6 +72,8 @@ namespace xmloff
     OPropertyExport::OPropertyExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxProps)
         :m_rContext(_rContext)
         ,m_xProps(_rxProps)
+        ,m_xPropertyInfo( m_xProps->getPropertySetInfo() )
+        ,m_xPropertyState( _rxProps, UNO_QUERY )
     {
         // caching
         ::rtl::OUStringBuffer aBuffer;
@@ -81,11 +82,22 @@ namespace xmloff
         m_rContext.getGlobalContext().GetMM100UnitConverter().convertBool(aBuffer, sal_False);
         m_sValueFalse = aBuffer.makeStringAndClear();
 
-        m_xPropertyInfo = m_xProps->getPropertySetInfo();
         OSL_ENSURE(m_xPropertyInfo.is(), "OPropertyExport::OPropertyExport: need an XPropertySetInfo!");
 
         // collect the properties which need to be exported
         examinePersistence();
+    }
+
+    //---------------------------------------------------------------------
+    bool OPropertyExport::shouldExportProperty( const ::rtl::OUString& i_propertyName ) const
+    {
+        // if the property state is DEFAULT, it does not need to be written - at least
+        // if it's a built-in property, and not a dynamically-added one.
+        bool bIsDefaultValue =    m_xPropertyState.is()
+                            &&  ( PropertyState_DEFAULT_VALUE == m_xPropertyState->getPropertyState( i_propertyName ) );
+        bool bIsDynamicProperty =  m_xPropertyInfo.is()
+                                && ( ( m_xPropertyInfo->getPropertyByName( i_propertyName ).Attributes & PropertyAttribute::REMOVEABLE ) != 0 );
+        return ( !bIsDefaultValue || bIsDynamicProperty );
     }
 
     //---------------------------------------------------------------------
@@ -96,9 +108,6 @@ namespace xmloff
 
         try
         {
-            Reference< XPropertyState > xPropertyState( m_xProps, UNO_QUERY );
-            Reference< XPropertySetInfo > xPSI( m_xProps->getPropertySetInfo() );
-
             Any aValue;
             ::rtl::OUString sValue;
 
@@ -113,13 +122,7 @@ namespace xmloff
     #if OSL_DEBUG_LEVEL > 0
                 const ::rtl::OUString sPropertyName = *aProperty; (void)sPropertyName;
     #endif
-                // if the property state is DEFAULT, it does not need to be written - at least
-                // if it's a built-in property, and not a dynamically-added one.
-                bool bIsDefaultValue =    xPropertyState.is()
-                                    &&  ( PropertyState_DEFAULT_VALUE == xPropertyState->getPropertyState( *aProperty ) );
-                bool bIsDynamicProperty =  xPSI.is()
-                                        && ( ( xPSI->getPropertyByName( *aProperty ).Attributes & PropertyAttribute::REMOVEABLE ) != 0 );
-                if ( bIsDefaultValue && !bIsDynamicProperty )
+                if ( !shouldExportProperty( *aProperty ) )
                     continue;
 
                 // now that we have the first sub-tag we need the form:properties element
@@ -211,7 +214,7 @@ namespace xmloff
                         pSequenceIterator = new OSequenceIterator< sal_Int64 >(aValue);
                         break;
                     default:
-                        OSL_ENSURE(sal_False, "OPropertyExport::exportRemainingProperties: unsupported sequence tyoe !");
+                        OSL_FAIL("OPropertyExport::exportRemainingProperties: unsupported sequence tyoe !");
                         break;
                 }
                 if (pSequenceIterator)
@@ -570,7 +573,7 @@ namespace xmloff
                 break;
             case TypeClass_HYPER:
                 // TODO
-                OSL_ENSURE(sal_False, "OPropertyExport::implConvertAny: missing implementation for sal_Int64!");
+                OSL_FAIL("OPropertyExport::implConvertAny: missing implementation for sal_Int64!");
                 break;
             case TypeClass_ENUM:
             {
@@ -612,7 +615,7 @@ namespace xmloff
                     // if any other types are added here, please remember to adjust implGetPropertyXMLType accordingly
 
                     // no more options ...
-                    OSL_ENSURE(sal_False, "OPropertyExport::implConvertAny: unsupported value type!");
+                    OSL_FAIL("OPropertyExport::implConvertAny: unsupported value type!");
                     break;
                 }
                 // let the unit converter format is as string
@@ -702,8 +705,7 @@ namespace xmloff
             // the property must exist
             if (!m_xPropertyInfo->hasPropertyByName(_rPropertyName))
             {
-                OSL_ENSURE(sal_False,
-                    ::rtl::OString("OPropertyExport::dbg_implCheckProperty: no property with the name ") +=
+                OSL_FAIL(::rtl::OString("OPropertyExport::dbg_implCheckProperty: no property with the name ") +=
                     ::rtl::OString(_rPropertyName.getStr(), _rPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US) +=
                     ::rtl::OString("!"));
                 return;
@@ -718,7 +720,7 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OPropertyExport::dbg_implCheckProperty: caught an exception, could not check the property!");
+            OSL_FAIL("OPropertyExport::dbg_implCheckProperty: caught an exception, could not check the property!");
         }
     }
 #endif // DBG_UTIL - dbg_implCheckProperty

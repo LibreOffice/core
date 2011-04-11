@@ -92,8 +92,8 @@ class JPEGWriter
     SvStream&           rOStm;
     Bitmap              aBmp;
     BitmapReadAccess*   pAcc;
-    BYTE*               pBuffer;
-    BOOL                bNative;
+    sal_uInt8*              pBuffer;
+    sal_Bool                bNative;
 
     sal_Bool            bGreys;
     sal_Int32           nQuality;
@@ -110,7 +110,7 @@ public:
                                     bool* pExportWasGrey = NULL );
                         ~JPEGWriter() {};
 
-    BOOL                Write( const Graphic& rGraphic );
+    sal_Bool                Write( const Graphic& rGraphic );
 };
 
 #endif // _JPEGPRIVATE
@@ -119,9 +119,9 @@ public:
 // - Import/ExportJPEG -
 // ---------------------
 
-BOOL ImportJPEG( SvStream& rStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
+sal_Bool ImportJPEG( SvStream& rStream, Graphic& rGraphic, void* pCallerData, sal_Int32 nImportFlags );
 
-BOOL ExportJPEG( SvStream& rStream,
+sal_Bool ExportJPEG( SvStream& rStream,
                  const Graphic& rGraphic,
                  const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData,
                  bool* pExportWasGrey = NULL

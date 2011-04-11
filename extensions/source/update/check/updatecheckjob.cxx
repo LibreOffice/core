@@ -201,14 +201,14 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
 {
     for ( sal_Int32 n=namedValues.getLength(); n-- > 0; )
     {
-        if ( namedValues[ n ].Name.equalsAscii( "DynamicData" ) )
+        if ( namedValues[ n ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "DynamicData" ) ) )
         {
             uno::Sequence<beans::NamedValue> aListProp;
             if ( namedValues[n].Value >>= aListProp )
             {
                 for ( sal_Int32 i=aListProp.getLength(); i-- > 0; )
                 {
-                    if ( aListProp[ i ].Name.equalsAscii( "updateList" ) )
+                    if ( aListProp[ i ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "updateList" ) ) )
                     {
                         handleExtensionUpdates( aListProp );
                         return uno::Any();
@@ -233,7 +233,7 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
     m_pInitThread.reset(
         new InitUpdateCheckJobThread(
             m_xContext, aConfig,
-            !aEventName.equalsAscii("onFirstVisibleTask")));
+            !aEventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("onFirstVisibleTask"))));
 
     return uno::Any();
 }
@@ -328,13 +328,14 @@ void SAL_CALL UpdateCheckJob::queryTermination( lang::EventObject const & )
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & rEvt )
+void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & )
     throw ( uno::RuntimeException )
 {
     if ( m_pInitThread.get() != 0 )
+    {
         m_pInitThread->setTerminating();
-
-    disposing( rEvt );
+        m_pInitThread->join();
+    }
 }
 
 } // anonymous namespace
@@ -384,18 +385,6 @@ extern "C" void SAL_CALL
 component_getImplementationEnvironment( const sal_Char **aEnvTypeName, uno_Environment **)
 {
     *aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
-}
-
-//------------------------------------------------------------------------------
-
-extern "C" sal_Bool SAL_CALL
-component_writeInfo(void *pServiceManager, void *pRegistryKey)
-{
-    return cppu::component_writeInfoHelper(
-        pServiceManager,
-        pRegistryKey,
-        kImplementations_entries
-    );
 }
 
 //------------------------------------------------------------------------------

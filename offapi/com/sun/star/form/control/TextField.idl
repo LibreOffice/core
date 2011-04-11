@@ -45,7 +45,7 @@
 
 //=============================================================================
 
-/** describes a control for entering arbiotrary text which can (but not necessarily has to) be bound
+/** describes a control for entering arbitrary text which can (but not necessarily has to) be bound
     to a database field.
 
     <p>The model of the control has to support the <type scope="com::sun::star::form::component">TextField</type>

@@ -50,14 +50,14 @@ E3dDefaultAttributes::E3dDefaultAttributes()
 void E3dDefaultAttributes::Reset()
 {
     // Compound-Objekt
-    bDefaultCreateNormals = TRUE;
-    bDefaultCreateTexture = TRUE;
+    bDefaultCreateNormals = sal_True;
+    bDefaultCreateTexture = sal_True;
 
     // Cube-Objekt
     aDefaultCubePos = basegfx::B3DPoint(-500.0, -500.0, -500.0);
     aDefaultCubeSize = basegfx::B3DVector(1000.0, 1000.0, 1000.0);
     nDefaultCubeSideFlags = CUBE_FULL;
-    bDefaultCubePosIsCenter = FALSE;
+    bDefaultCubePosIsCenter = sal_False;
 
     // Sphere-Objekt
     aDefaultSphereCenter = basegfx::B3DPoint(0.0, 0.0, 0.0);
@@ -65,18 +65,18 @@ void E3dDefaultAttributes::Reset()
 
     // Lathe-Objekt
     nDefaultLatheEndAngle = 3600;
-    bDefaultLatheSmoothed = TRUE;
-    bDefaultLatheSmoothFrontBack = FALSE;
-    bDefaultLatheCharacterMode = FALSE;
-    bDefaultLatheCloseFront = TRUE;
-    bDefaultLatheCloseBack = TRUE;
+    bDefaultLatheSmoothed = sal_True;
+    bDefaultLatheSmoothFrontBack = sal_False;
+    bDefaultLatheCharacterMode = sal_False;
+    bDefaultLatheCloseFront = sal_True;
+    bDefaultLatheCloseBack = sal_True;
 
     // Extrude-Objekt
-    bDefaultExtrudeSmoothed = TRUE;
-    bDefaultExtrudeSmoothFrontBack = FALSE;
-    bDefaultExtrudeCharacterMode = FALSE;
-    bDefaultExtrudeCloseFront = TRUE;
-    bDefaultExtrudeCloseBack = TRUE;
+    bDefaultExtrudeSmoothed = sal_True;
+    bDefaultExtrudeSmoothFrontBack = sal_False;
+    bDefaultExtrudeCharacterMode = sal_False;
+    bDefaultExtrudeCloseFront = sal_True;
+    bDefaultExtrudeCloseBack = sal_True;
 }
 
 // eof

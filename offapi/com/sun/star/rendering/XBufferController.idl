@@ -42,13 +42,13 @@ module com { module sun { module star { module rendering {
     This interface provides methods to enable and control
     double/multi-buffering facilities on screen devices.<p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 interface XBufferController : ::com::sun::star::uno::XInterface
 {
     /** Create the given number of background buffers.<p>
 
-        There's one buffer implicitely available, which is the canvas
+        There's one buffer implicitly available, which is the canvas
         surface itself. Thus, calling <code>createBuffers(1)</code>
         creates a double-buffered object.<p>
 

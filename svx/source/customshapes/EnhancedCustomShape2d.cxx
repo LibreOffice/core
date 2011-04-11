@@ -28,9 +28,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "EnhancedCustomShape2d.hxx"
-#include "EnhancedCustomShapeGeometry.hxx"
-#include "EnhancedCustomShapeTypeNames.hxx"
+#include "svx/EnhancedCustomShape2d.hxx"
+#include "svx/EnhancedCustomShapeGeometry.hxx"
+#include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include <svx/svdoashp.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdocirc.hxx>
@@ -462,7 +462,6 @@ sal_Bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
             const rtl::OUString sMirroredY          ( RTL_CONSTASCII_USTRINGPARAM( "MirroredY" ) );
             const rtl::OUString sSwitched           ( RTL_CONSTASCII_USTRINGPARAM( "Switched" ) );
             const rtl::OUString sPolar              ( RTL_CONSTASCII_USTRINGPARAM( "Polar" ) );
-//          const rtl::OUString sMap                ( RTL_CONSTASCII_USTRINGPARAM( "Map" ) );
             const rtl::OUString sRefX               ( RTL_CONSTASCII_USTRINGPARAM( "RefX" ) );
             const rtl::OUString sRefY               ( RTL_CONSTASCII_USTRINGPARAM( "RefY" ) );
             const rtl::OUString sRefAngle           ( RTL_CONSTASCII_USTRINGPARAM( "RefAngle" ) );
@@ -999,7 +998,7 @@ sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedC
         {
             if ( rParameter.Value.getValueTypeClass() == TypeClass_DOUBLE )
             {
-                double fValue;
+                double fValue(0.0);
                 if ( rParameter.Value >>= fValue )
                 {
                     rRetValue = fValue;
@@ -1714,7 +1713,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 {
                     ByteString aString( "CustomShapes::unknown PolyFlagValue :" );
                     aString.Append( ByteString::CreateFromInt32( nCommand ) );
-                    DBG_ERROR( aString.GetBuffer() );
+                    OSL_FAIL( aString.GetBuffer() );
                 }
                 break;
 #endif
@@ -2140,8 +2139,6 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
     if ( eSpType == mso_sptRectangle )
     {
         pRet = new SdrRectObj( aLogicRect );
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//      pRet->SetModel( pCustomShapeObj->GetModel() );
         pRet->SetMergedItemSet( *this );
     }
     if ( !pRet )
@@ -2161,14 +2158,6 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
 
             aGluePoint.SetPos( GetPoint( seqGluePoints[ i ], sal_True, sal_True ) );
             aGluePoint.SetPercent( sal_False );
-
-//          const Point& rPoint = GetPoint( seqGluePoints[ i ], sal_True, sal_True );
-//          double fXRel = rPoint.X();
-//          double fYRel = rPoint.Y();
-//          fXRel = aLogicRect.GetWidth() == 0 ? 0.0 : fXRel / aLogicRect.GetWidth() * 10000;
-//          fYRel = aLogicRect.GetHeight() == 0 ? 0.0 : fYRel / aLogicRect.GetHeight() * 10000;
-//          aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
-//          aGluePoint.SetPercent( sal_True );
             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
             aGluePoint.SetEscDir( SDRESC_SMART );
             SdrGluePointList* pList = pObj->ForceGluePointList();

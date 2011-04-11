@@ -42,9 +42,8 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "moduledbu.hxx"
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/dbtools.hxx>
@@ -269,7 +268,7 @@ sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const String& _rSelectedPredicate
         nPredicateType = SQLFilterOperator::NOT_SQLNULL;
         break;
     default:
-        OSL_ENSURE( false, "DlgFilterCrit::GetOSQLPredicateType: unknown predicate string!" );
+        OSL_FAIL( "DlgFilterCrit::GetOSQLPredicateType: unknown predicate string!" );
         break;
     }
 
@@ -363,7 +362,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
                     sTableName += _rFilter.Name;
                     _rFilter.Name = sTableName;
                 }
-            } // if ( !bFunction )
+            }
         }
     }
     catch(Exception)
@@ -455,7 +454,7 @@ Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueI
         sField = aLB_WHEREFIELD3.GetSelectEntry();
     }
     else {
-        DBG_ERROR( "DlgFilterCrit::getMatchingColumn: invalid event source!" );
+        OSL_FAIL( "DlgFilterCrit::getMatchingColumn: invalid event source!" );
     }
 
     // the field itself
@@ -465,7 +464,7 @@ Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueI
 //------------------------------------------------------------------------------
 IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
 {
-    DBG_ASSERT( _pField, "DlgFilterCrit::PredicateLoseFocus: invalid event source!" );
+    OSL_ENSURE( _pField, "DlgFilterCrit::PredicateLoseFocus: invalid event source!" );
     if ( _pField )
     {
         // retrieve the field affected
@@ -586,11 +585,9 @@ void DlgFilterCrit::SelectField( ListBox& rBox, const String& rField )
 {
     DBG_CHKTHIS(DlgFilterCrit,NULL);
     sal_uInt16 nCnt = rBox.GetEntryCount();
-    //  sal_Bool bCase = m_rIterator.TablesAreSensitive();
 
     for( sal_uInt16 i=0 ; i<nCnt ; i++ )
     {
-        //  if(bCase ? rBox.GetEntry(i) == rField : rBox.GetEntry(i).EqualsIgnoreCaseAscii(rField))
         if(rBox.GetEntry(i) == rField)
         {
             rBox.SelectEntryPos(i);
@@ -756,7 +753,7 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
         }
         else
         {
-            DBG_ASSERT(0,"DlgFilterCrit::ListSelectHdl: Diese Column d�rfte garnicht vorhanden sein!");
+            OSL_FAIL("DlgFilterCrit::ListSelectHdl: Diese Column d�rfte garnicht vorhanden sein!");
         }
     }
     pComp->SelectEntryPos(0);
@@ -781,7 +778,6 @@ void DlgFilterCrit::BuildWherePart()
     Sequence<Sequence<PropertyValue> > aFilter,aHaving;
     aFilter.realloc(1);
     aHaving.realloc(1);
-    //  ::rtl::OUString aFilter;
 
     if( LbPos(aLB_WHEREFIELD1) != 0 )
     {

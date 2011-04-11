@@ -58,12 +58,14 @@ TabPage TP_DROPCAPS
     Hide = TRUE ;
     CheckBox CB_SWITCH
     {
+        HelpID = "sw:CheckBox:TP_DROPCAPS:CB_SWITCH";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "Display drop caps" ;
     };
     CheckBox CB_WORD
     {
+        HelpID = "sw:CheckBox:TP_DROPCAPS:CB_WORD";
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "~Whole word" ;
@@ -76,6 +78,7 @@ TabPage TP_DROPCAPS
     };
     NumericField FLD_DROPCAPS
     {
+        HelpID = "sw:NumericField:TP_DROPCAPS:FLD_DROPCAPS";
         Border = TRUE ;
         First = 1 ;
         Last = 9 ;
@@ -97,6 +100,7 @@ TabPage TP_DROPCAPS
     };
     NumericField FLD_LINES
     {
+        HelpID = "sw:NumericField:TP_DROPCAPS:FLD_LINES";
         Border = TRUE ;
         First = 2 ;
         Last = 9 ;
@@ -118,6 +122,7 @@ TabPage TP_DROPCAPS
     };
     MetricField FLD_DISTANCE
     {
+        HelpID = "sw:MetricField:TP_DROPCAPS:FLD_DISTANCE";
         Border = TRUE ;
         DecimalDigits = 2 ;
         First = 0 ;
@@ -154,6 +159,7 @@ TabPage TP_DROPCAPS
     };
     Edit EDT_TEXT
     {
+        HelpID = "sw:Edit:TP_DROPCAPS:EDT_TEXT";
         Border = TRUE ;
         Left = TRUE ;
         Pos = MAP_APPFONT ( 143 , 100 ) ;
@@ -170,6 +176,7 @@ TabPage TP_DROPCAPS
     };
     ListBox BOX_TEMPLATE
     {
+        HelpID = "sw:ListBox:TP_DROPCAPS:BOX_TEMPLATE";
         Border = TRUE ;
         DropDown = TRUE ;
         Pos = MAP_APPFONT ( 143 , 116 ) ;

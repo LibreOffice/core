@@ -5,36 +5,36 @@
 ' Minimieren SID_WIN_MINIMIZED
 
 ' ** Kontextmenue Calc
-ZeilenLoeschen SID_DEL_ROWS
-SpaltenLoeschen SID_DEL_COLS
-' AnhaengenTabelle FID_TAB_APPEND       ' ist zur 541 rausgenommen worden
-NotizAnzeigen FID_NOTE_VISIBLE
+ZeilenLoeschen .uno:DeleteRows
+SpaltenLoeschen .uno:DeleteColumns
+' AnhaengenTabelle .uno:Add       ' ist zur 541 rausgenommen worden
+NotizAnzeigen .uno:NoteVisible
 
 ' Kontextmenue: Tabelle Calc
-AlleTabellenAuswaehlen FID_TAB_SELECTALL
-SetTabColor FID_TAB_MENU_SET_TAB_BG_COLOR
+AlleTabellenAuswaehlen .uno:TableSelectAll
+SetTabColor .uno:SetTabBgColor
 
 ' ** Kontextmenue im Gestalter/Stylist
-Stylist_Neu HID_STYLIST_NEW
-Stylist_Aendern HID_STYLIST_EDIT
-Stylist_Loeschen HID_STYLIST_DELETE
+Stylist_Neu sym:SFX2_HID_STYLIST_NEW
+Stylist_Aendern sym:SFX2_HID_STYLIST_EDIT
+Stylist_Loeschen sym:SFX2_HID_STYLIST_DELETE
 
 'Open
 
 ' ** Kontextmenue Objekte
-Obj_Originalgroesse SID_ORIGINALSIZE
+Obj_Originalgroesse .uno:OriginalSize
 
 ' ** Kontextmenue SeitenUmbruchvorschau Calc
-Skalierungaufheben FID_RESET_PRINTZOOM
+Skalierungaufheben .uno:ResetPrintZoom
 
 ' ** Kontextmenue automatische Rechtschreibung pruefen
-ARP_Ersetzung HID_LINGU_REPLACE
-ARP_Rechtschreibung HID_LINGU_SPELLING_DLG
-ARP_Aufnehmen HID_LINGU_ADD_WORD
-ARP_AlleIgnorieren HID_LINGU_IGNORE_WORD
-ARP_Autokorrektur HID_LINGU_AUTOCORR
+ARP_Ersetzung sym:SW_HID_LINGU_REPLACE
+ARP_Rechtschreibung sym:SW_HID_LINGU_SPELLING_DLG
+ARP_Aufnehmen sym:SW_HID_LINGU_ADD_WORD
+ARP_AlleIgnorieren sym:SW_HID_LINGU_IGNORE_WORD
+ARP_Autokorrektur sym:SW_HID_LINGU_AUTOCORR
 
 
 ' ** Kontextmenue IMPRESS/DRAW
-VorlageBearbeiten SID_STYLE_EDIT
-ContextOriginalSize SID_ORIGINAL_SIZE
+VorlageBearbeiten .uno:EditStyle
+ContextOriginalSize .uno:OriginalSize

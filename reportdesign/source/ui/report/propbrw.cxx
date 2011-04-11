@@ -121,12 +121,12 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
         if (m_xMeAsFrame.is())
         {
             m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
-            m_xMeAsFrame->setName(::rtl::OUString::createFromAscii("report property browser"));  // change name!
+            m_xMeAsFrame->setName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("report property browser")));  // change name!
         }
     }
     catch (Exception&)
     {
-        DBG_ERROR("PropBrw::PropBrw: could not create/initialize my frame!");
+        OSL_FAIL("PropBrw::PropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
     }
 
@@ -141,9 +141,6 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
                 xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
                 UNO_QUERY_THROW );
 
-            /*uno::Reference< XComponent> xModel = new OContextHelper(m_xORB,uno::Reference< XComponent>(m_pDesignView->getController().getModel(),uno::UNO_QUERY) );
-            uno::Reference< XComponent> xDialogParentWindow = new OContextHelper(m_xORB,uno::Reference< XComponent>(VCLUnoHelper::GetInterface ( this ),uno::UNO_QUERY) );
-            uno::Reference< XComponent> xConnection = new OContextHelper(m_xORB,uno::Reference< XComponent>(m_pDesignView->getController().getConnection(),uno::UNO_QUERY) );*/
             // a ComponentContext for the
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
             {
@@ -182,7 +179,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
         }
         catch (Exception&)
         {
-            DBG_ERROR("PropBrw::PropBrw: could not create/initialize the browser controller!");
+            OSL_FAIL("PropBrw::PropBrw: could not create/initialize the browser controller!");
             try
             {
                 ::comphelper::disposeComponent(m_xBrowserController);
@@ -272,7 +269,7 @@ void PropBrw::implDetachController()
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "PropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
+        OSL_FAIL( "PropBrw::getCurrentPage: caught an exception while retrieving the current page!" );
     }
     return sCurrentPage;
 }
@@ -292,7 +289,7 @@ sal_Bool PropBrw::Close()
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::Close: caught an exception while asking the controller!" );
+            OSL_FAIL( "FmPropBrw::Close: caught an exception while asking the controller!" );
         }
     }
     implDetachController();
@@ -302,7 +299,7 @@ sal_Bool PropBrw::Close()
 
     m_pDesignView->getController().executeUnChecked(SID_PROPERTYBROWSER_LAST_PAGE,uno::Sequence< beans::PropertyValue>());
 
-    return TRUE;
+    return sal_True;
 }
 
 //----------------------------------------------------------------------------
@@ -349,10 +346,8 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+            OSL_FAIL( "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
         }
-
-        //Resize();
     }
     SetText( GetHeadlineName(_aObjects) );
 }
@@ -368,13 +363,13 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
     }
     else if ( _aObjects.getLength() == 1 )    // single selection
     {
-        sal_uInt16 nResId = 0;
         aName = String(ModuleRes(RID_STR_BRWTITLE_PROPERTIES));
 
         uno::Reference< container::XNameContainer > xNameCont(_aObjects[0],uno::UNO_QUERY);
         Reference< lang::XServiceInfo > xServiceInfo( xNameCont->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReportComponent"))), UNO_QUERY );
         if ( xServiceInfo.is() )
         {
+            sal_uInt16 nResId = 0;
             if ( xServiceInfo->supportsService( SERVICE_FIXEDTEXT ) )
             {
                 nResId = RID_STR_PROPTITLE_FIXEDTEXT;
@@ -413,7 +408,7 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
             }
             else
             {
-                OSL_ENSURE(0,"Unknown service name!");
+                OSL_FAIL("Unknown service name!");
                 nResId = RID_STR_CLASS_FORMATTEDFIELD;
             }
 
@@ -524,7 +519,7 @@ void PropBrw::Update( OSectionView* pNewView )
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
+                    OSL_FAIL( "FmPropBrw::StateChanged: caught an exception while setting the initial page!" );
                 }
             }
         }
@@ -536,8 +531,8 @@ void PropBrw::Update( OSectionView* pNewView )
 
         uno::Sequence< Reference<uno::XInterface> > aMarkedObjects;
         OViewsWindow* pViews = m_pView->getReportSection()->getSectionWindow()->getViewsWindow();
-        const USHORT nSectionCount = pViews->getSectionCount();
-        for (USHORT i = 0; i < nSectionCount; ++i)
+        const sal_uInt16 nSectionCount = pViews->getSectionCount();
+        for (sal_uInt16 i = 0; i < nSectionCount; ++i)
         {
             ::boost::shared_ptr<OSectionWindow> pSectionWindow = pViews->getSectionWindow(i);
             if ( pSectionWindow )
@@ -567,7 +562,7 @@ void PropBrw::Update( OSectionView* pNewView )
     }
     catch ( Exception& )
     {
-        DBG_ERROR( "PropBrw::Update: Exception occured!" );
+        OSL_FAIL( "PropBrw::Update: Exception occurred!" );
     }
 }
 //----------------------------------------------------------------------------
@@ -582,14 +577,14 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
             {
                 EndListening( *(m_pView->GetModel()) );
                 m_pView = NULL;
-            } // if ( m_pView )
+            }
 
             uno::Reference< uno::XInterface> xTemp(CreateComponentPair(_xReportComponent,_xReportComponent));
             implSetNewObject( uno::Sequence< uno::Reference< uno::XInterface> >(&xTemp,1) );
         }
         catch ( Exception& )
         {
-            DBG_ERROR( "PropBrw::Update: Exception occured!" );
+            OSL_FAIL( "PropBrw::Update: Exception occurred!" );
         }
     }
 }

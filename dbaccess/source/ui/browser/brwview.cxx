@@ -41,13 +41,13 @@
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include "UITools.hxx"
+#include <osl/diagnose.h>
 
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::form;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -105,7 +105,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
 
         // create the (UNO-) control
         m_xGrid = new SbaXGridControl(getORB());
-        DBG_ASSERT(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
+        OSL_ENSURE(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
         // in design mode (for the moment)
         m_xGrid->setDesignMode(sal_True);
 
@@ -123,7 +123,7 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
         m_pVclControl = NULL;
         getVclControl();
 
-        DBG_ASSERT(m_pVclControl != NULL, "UnoDataBrowserView::Construct : no real grid control !");
+        OSL_ENSURE(m_pVclControl != NULL, "UnoDataBrowserView::Construct : no real grid control !");
     }
     catch(Exception&)
     {
@@ -334,8 +334,8 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
         {
             const KeyEvent* pKeyEvt = rNEvt.GetKeyEvent();
             const KeyCode& rKeyCode = pKeyEvt->GetKeyCode();
-            if (  ( rKeyCode == KeyCode( KEY_E, TRUE, TRUE, FALSE, FALSE ) )
-               || ( rKeyCode == KeyCode( KEY_TAB, TRUE, FALSE, FALSE, FALSE ) )
+            if (  ( rKeyCode == KeyCode( KEY_E, sal_True, sal_True, sal_False, sal_False ) )
+               || ( rKeyCode == KeyCode( KEY_TAB, sal_True, sal_False, sal_False, sal_False ) )
                )
             {
                 if ( m_pTreeView && m_pVclControl && m_pTreeView->HasChildPathFocus() )

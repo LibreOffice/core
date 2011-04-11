@@ -219,7 +219,7 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
                       ! listener.updateCalled ;
         }
         catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured during removeUpdateListener()");
+            log.println("Exception occurred during removeUpdateListener()");
             e.printStackTrace(log);
             bResult = false;
         }

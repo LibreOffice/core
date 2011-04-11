@@ -47,7 +47,6 @@ ADDITIONAL_FILES += posix$/readdir_r.c
 
 PATCH_FILES=$(PRJ)$/glibc-2.1.3.patch
 
-#CONFIGURE_DIR=glibc-2.1.3/posix
 CONFIGURE_ACTION=
 
 BUILD_DIR=posix

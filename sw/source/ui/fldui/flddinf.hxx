@@ -57,17 +57,17 @@ class SwFldDokInfPage : public SwFldPage
 
     String              aInfoStr;
 
-    USHORT              nOldSel;
-    ULONG               nOldFormat;
+    sal_uInt16              nOldSel;
+    sal_uLong               nOldFormat;
     ::rtl::OUString     m_sOldCustomFieldName;
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
 
-    USHORT              FillSelectionLB(USHORT nSubTypeId);
+    sal_uInt16              FillSelectionLB(sal_uInt16 nSubTypeId);
 
 protected:
-    virtual USHORT      GetGroup();
+    virtual sal_uInt16      GetGroup();
 
 public:
                         SwFldDokInfPage(Window* pWindow, const SfxItemSet& rSet);
@@ -76,7 +76,7 @@ public:
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     virtual void        FillUserData();

@@ -104,7 +104,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleMenu, VCLXAccessibleMenuItem, VC
 
 ::rtl::OUString VCLXAccessibleMenu::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleMenu" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleMenu") );
 }
 
 // -----------------------------------------------------------------------------
@@ -112,7 +112,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleMenu, VCLXAccessibleMenuItem, VC
 Sequence< ::rtl::OUString > VCLXAccessibleMenu::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleMenu" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleMenu") );
     return aNames;
 }
 

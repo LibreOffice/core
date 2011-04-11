@@ -40,7 +40,7 @@ class ScAuditingShell : public SfxShell
 {
 private:
     ScViewData* pViewData;
-    USHORT      nFunction;
+    sal_uInt16      nFunction;
 
 public:
     TYPEINFO();

@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "fmgridif.hxx"
+#include "svx/fmgridif.hxx"
 #include "fmprop.hrc"
 #include "fmservs.hxx"
 #include "svx/fmtools.hxx"
@@ -39,6 +39,7 @@
 #include "sdbdatacolumn.hxx"
 #include "svx/fmgridcl.hxx"
 #include "svx/svxids.hrc"
+#include <tools/urlobj.hxx>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/PosSize.hpp>
@@ -366,7 +367,8 @@ Reference< XInterface > SAL_CALL FmXGridControl_NewInstance_Impl(const Reference
 DBG_NAME(FmXGridControl )
 //------------------------------------------------------------------------------
 FmXGridControl::FmXGridControl(const Reference< XMultiServiceFactory >& _rxFactory)
-               :m_aModifyListeners(*this, GetMutex())
+               :UnoControl( _rxFactory)
+               ,m_aModifyListeners(*this, GetMutex())
                ,m_aUpdateListeners(*this, GetMutex())
                ,m_aContainerListeners(*this, GetMutex())
                ,m_aSelectionListeners(*this, GetMutex())
@@ -431,7 +433,7 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& Service
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL FmXGridControl::getImplementationName() throw()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.form.FmXGridControl");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.FmXGridControl"));
 }
 
 //------------------------------------------------------------------------------
@@ -439,7 +441,7 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& Service
 {
     Sequence< ::rtl::OUString > aServiceNames(2);
     aServiceNames[0] = FM_SUN_CONTROL_GRIDCONTROL;
-    aServiceNames[1] = ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControl");
+    aServiceNames[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControl"));
     return aServiceNames;
 }
 
@@ -460,7 +462,7 @@ void SAL_CALL FmXGridControl::dispose() throw( RuntimeException )
 //------------------------------------------------------------------------------
 ::rtl::OUString FmXGridControl::GetComponentServiceName()
 {
-    ::rtl::OUString aName = ::rtl::OUString::createFromAscii("DBGrid");
+    ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("DBGrid"));
     return aName;
 }
 
@@ -802,7 +804,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
 
         // prepare firing an event
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = ::rtl::OUString::createFromAscii( mbDesignMode ? "design" : "alive" );
+        aModeChangeEvent.NewMode = mbDesignMode ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "design" )) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "alive" ));
     }
 
     // --- </mutex_lock> ---
@@ -1352,7 +1354,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
         sal_uInt16 nModelPos = pGrid->GetModelColumnPos(pGrid->GetColumnIdFromViewPos((sal_uInt16)i));
         DBG_ASSERT(nModelPos != (sal_uInt16)-1, "FmXGridPeer::queryFieldDataType : no model pos !");
 
-        pCol = aColumns.GetObject(nModelPos);
+        pCol = aColumns[ nModelPos ];
         const DbGridRowRef xRow = pGrid->GetSeekRow();
         xFieldContent = (xRow.Is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< ::com::sun::star::sdb::XColumn > ();
         if (!xFieldContent.is())
@@ -1415,7 +1417,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
 
         // don't use GetCurrentFieldValue to determine the field content as this isn't affected by the above SeekRow
         // FS - 30.09.99 - 68644
-        pCol = aColumns.GetObject(nModelPos);
+        pCol = aColumns[ nModelPos ];
         xFieldContent = xPaintRow->HasField( pCol->GetFieldPos() )
                     ?   xPaintRow->GetField( pCol->GetFieldPos() ).getColumn()
                     :   Reference< XColumn > ();
@@ -1435,7 +1437,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
                 // Strings werden direkt ueber das GetFieldText abgehandelt
                 case TypeClass_STRING           :
                 {
-                    String sText = aColumns.GetObject(nModelPos)->GetCellText( xPaintRow, pGrid->getNumberFormatter() );
+                    String sText = aColumns[ nModelPos ]->GetCellText( xPaintRow, pGrid->getNumberFormatter() );
                     pReturnArray[i] <<= ::rtl::OUString(sText);
                 }
                 break;
@@ -1548,7 +1550,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw( RuntimeE
             // it design mode it doesn't matter
             if (!isDesignMode())
             {
-                DbGridColumn* pCol = pGrid->GetColumns().GetObject(i);
+                DbGridColumn* pCol = pGrid->GetColumns().at( i );
 
                 pCol->SetAlignmentFromModel(-1);
                 bInvalidateColumn = sal_True;
@@ -1832,7 +1834,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt) throw( RuntimeExcep
     pGrid->AppendColumn(aName, (sal_uInt16)nWidth, (sal_Int16)::comphelper::getINT32(evt.Accessor));
 
     // jetzt die Spalte setzen
-    DbGridColumn* pCol = pGrid->GetColumns().GetObject(::comphelper::getINT32(evt.Accessor));
+    DbGridColumn* pCol = pGrid->GetColumns().at( ::comphelper::getINT32(evt.Accessor) );
     pCol->setModel(xNewColumn);
 
     Any aHidden = xNewColumn->getPropertyValue(FM_PROP_HIDDEN);
@@ -1876,7 +1878,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
     sal_uInt16 nNewPos = pGrid->GetModelColumnPos(nNewId);
 
     // set the model of the new column
-    DbGridColumn* pCol = pGrid->GetColumns().GetObject(nNewPos);
+    DbGridColumn* pCol = pGrid->GetColumns().at( nNewPos );
 
     // for initializong this grid column, we need the fields of the grid's data source
     Reference< XColumnsSupplier > xSuppColumns;
@@ -1941,9 +1943,9 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
 
         // need to forward this to the columns
         DbGridColumns& rColumns = const_cast<DbGridColumns&>(pGrid->GetColumns());
-        DbGridColumn* pLoop = rColumns.First();
-        while (pLoop)
+        for ( size_t i = 0, n = rColumns.size(); i < n; ++i )
         {
+            DbGridColumn* pLoop = rColumns[ i ];
             FmXGridCell* pXCell = pLoop->GetCell();
             if (pXCell)
             {
@@ -1952,8 +1954,6 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
                 else
                     pXCell->SetTextLineColor(aTextLineColor);
             }
-
-            pLoop = rColumns.Next();
         }
 
         if (isDesignMode())
@@ -1975,14 +1975,12 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_HELPURL ) )
     {
-        String sHelpURL(::comphelper::getString(Value));
-        String sPattern;
-        sPattern.AssignAscii("HID:");
-        if (sHelpURL.Equals(sPattern, 0, sPattern.Len()))
-        {
-            String sID = sHelpURL.Copy(sPattern.Len());
-            pGrid->SetHelpId(sID.ToInt32());
-        }
+        ::rtl::OUString sHelpURL;
+        OSL_VERIFY( Value >>= sHelpURL );
+        INetURLObject aHID( sHelpURL );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+            sHelpURL = aHID.GetURLPath();
+        pGrid->SetHelpId( rtl::OUStringToOString( sHelpURL, RTL_TEXTENCODING_UTF8 ) );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_DISPLAYSYNCHRON ) )
     {
@@ -2078,25 +2076,28 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_HASNAVIGATION ) )
     {
-        if (Value.getValueType() == ::getBooleanCppuType())
-            pGrid->EnableNavigationBar(*(sal_Bool*)Value.getValue());
+        sal_Bool bValue( sal_True );
+        OSL_VERIFY( Value >>= bValue );
+        pGrid->EnableNavigationBar( bValue );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_RECORDMARKER ) )
     {
-        if (Value.getValueType() == ::getBooleanCppuType())
-            pGrid->EnableHandle(*(sal_Bool*)Value.getValue());
+        sal_Bool bValue( sal_True );
+        OSL_VERIFY( Value >>= bValue );
+        pGrid->EnableHandle( bValue );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_ENABLED ) )
     {
-        if (Value.getValueType() == ::getBooleanCppuType())
-        {
-            // Im DesignModus nur das Datenfenster disablen
-            // Sonst kann das Control nicht mehr konfiguriert werden
-            if (isDesignMode())
-                pGrid->GetDataWindow().Enable(*(sal_Bool*)Value.getValue());
-            else
-                pGrid->Enable(*(sal_Bool*)Value.getValue());
-        }
+        sal_Bool bValue( sal_True );
+        OSL_VERIFY( Value >>= bValue );
+        pGrid->EnableHandle( bValue );
+
+        // Im DesignModus nur das Datenfenster disablen
+        // Sonst kann das Control nicht mehr konfiguriert werden
+        if (isDesignMode())
+            pGrid->GetDataWindow().Enable( bValue );
+        else
+            pGrid->Enable( bValue );
     }
     else
         VCLXWindow::setProperty( PropertyName, Value );
@@ -2111,7 +2112,7 @@ Reference< XAccessibleContext > FmXGridPeer::CreateAccessibleContext()
     Window* pGrid = GetWindow();
     if ( pGrid )
     {
-        Reference< XAccessible > xAcc( pGrid->GetAccessible( TRUE ) );
+        Reference< XAccessible > xAcc( pGrid->GetAccessible( sal_True ) );
         if ( xAcc.is() )
             xContext = xAcc->getAccessibleContext();
         // TODO: this has a slight conceptual problem:
@@ -2191,7 +2192,6 @@ void FmXGridPeer::dispose() throw( RuntimeException )
     VCLXWindow::dispose();
 
     // release all interceptors
-    // discovered during #100312# - 2002-10-23 - fs@openoffice.org
     Reference< XDispatchProviderInterceptor > xInterceptor( m_xFirstDispatchInterceptor );
     m_xFirstDispatchInterceptor.clear();
     while ( xInterceptor.is() )
@@ -2442,8 +2442,7 @@ Any FmXGridPeer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException,
     // get the list position
     sal_uInt16 nPos = pGrid->GetModelColumnPos(nId);
 
-    DbGridColumn* pCol = pGrid->GetColumns().GetObject(nPos);
-//  DBG_ASSERT(pCol && pCol->GetCell(), "FmXGridPeer::getByIndex(): Invalid cell");
+    DbGridColumn* pCol = pGrid->GetColumns().at( nPos );
     Reference< ::com::sun::star::awt::XControl >  xControl(pCol->GetCell());
     aElement <<= xControl;
 
@@ -2798,7 +2797,7 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
         // let an ::com::sun::star::util::URL-transformer normalize the URLs
         Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
             UNO_QUERY);
         pSupported = aSupported.getArray();
         if (xTransformer.is())

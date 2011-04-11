@@ -37,13 +37,13 @@ namespace vcl
 {
     struct UserEvent
     {
-        ULONG           m_nWhich;
+        sal_uLong           m_nWhich;
         void*           m_pData;
     };
 
     class VCL_DLLPUBLIC EventPoster
     {
-        ULONG           m_nId;
+        sal_uLong           m_nId;
         Link            m_aLink;
 
         DECL_DLLPRIVATE_LINK( DoEvent_Impl, UserEvent* );

@@ -53,6 +53,7 @@ using namespace ::com::sun::star::lang;
 
 // --------------------------------------------------------------------------------
 OFlatConnection::OFlatConnection(ODriver*   _pDriver) : OConnection(_pDriver)
+    ,m_nMaxRowsToScan(50)
     ,m_bHeaderLine(sal_True)
     ,m_cFieldDelimiter(';')
     ,m_cStringDelimiter('"')
@@ -105,10 +106,15 @@ void OFlatConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cThousandDelimiter = aVal.toChar();
         }
+        else if ( !pBegin->Name.compareToAscii("MaxRowScan") )
+        {
+            pBegin->Value >>= m_nMaxRowsToScan;
+        }
     }
 
     osl_decrementInterlockedCount( &m_refCount );
     OConnection::construct(url,info);
+    m_bShowDeleted = sal_True; // we do not supported rows for this type
 }
 // --------------------------------------------------------------------------------
 Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(SQLException, RuntimeException)

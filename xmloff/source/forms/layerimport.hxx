@@ -55,27 +55,6 @@ namespace xmloff
     class OAttribute2Property;
 
     //=====================================================================
-    //= ControlReference
-    //=====================================================================
-    /// a structure containing a property set (the referred control) and a string (the list of referring controls)
-/*  struct ControlReference
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                    xReferredControl;
-        ::rtl::OUString
-                    sReferringControls;
-
-        ControlReference(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxReferredControl,
-                const ::rtl::OUString& _rReferringControls)
-            :xReferredControl(_rxReferredControl)
-            ,sReferringControls(_rReferringControls)
-        {
-        }
-    };
-*/
-
-    //=====================================================================
     //= OFormLayerXMLImport_Impl
     //=====================================================================
     class OFormLayerXMLImport_Impl
@@ -93,10 +72,6 @@ namespace xmloff
         SvXMLStylesContext*                 m_pAutoStyles;
 
     protected:
-        // style handling
-        ::rtl::Reference< XMLPropertyHandlerFactory >   m_xPropertyHandlerFactory;
-        ::rtl::Reference< SvXMLImportPropertyMapper >   m_xImportMapper;
-
         DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, MapString2PropertySet );
         DECLARE_STL_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >, MapString2PropertySet, ODrawPageCompare, MapDrawPage2Map);
 
@@ -168,10 +143,6 @@ namespace xmloff
     protected:
         OFormLayerXMLImport_Impl(SvXMLImport& _rImporter);
         virtual ~OFormLayerXMLImport_Impl();
-
-        /** retrieves the property mapper form form related auto styles.
-        */
-        ::rtl::Reference< SvXMLImportPropertyMapper > getStylePropertyMapper() const;
 
         /** start importing the forms of the given page
         */

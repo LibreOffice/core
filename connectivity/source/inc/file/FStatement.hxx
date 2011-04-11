@@ -135,8 +135,8 @@ namespace connectivity
             void GetAssignValues();
             void SetAssignValue(const String& aColumnName,
                                    const String& aValue,
-                                   BOOL bSetNull = FALSE,
-                                   UINT32 nParameter=SQL_NO_PARAMETER);
+                                   sal_Bool bSetNull = sal_False,
+                                   sal_uInt32 nParameter=SQL_NO_PARAMETER);
             void ParseAssignValues( const ::std::vector< String>& aColumnNameList,
                                     connectivity::OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex);
 
@@ -204,7 +204,7 @@ namespace connectivity
             // factory method for resultset's
             virtual OResultSet* createResultSet();
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // a Constructor, that is needed for when Returning the Object is needed:
             OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}
             DECLARE_SERVICE_INFO();
 

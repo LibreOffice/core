@@ -47,9 +47,9 @@ class ImplRemoteControl
 {
     friend class StatementFlow;
 
-    BOOL         m_bIdleInserted;
+    sal_Bool         m_bIdleInserted;
     AutoTimer    m_aIdleTimer;
-    BOOL         m_bInsideExecutionLoop;
+    sal_Bool         m_bInsideExecutionLoop;
 #if OSL_DEBUG_LEVEL > 1
     EditWindow *m_pDbgWin;
 #endif
@@ -57,7 +57,7 @@ class ImplRemoteControl
 public:
     ImplRemoteControl();
     ~ImplRemoteControl();
-    BOOL QueCommands( ULONG nServiceId, SvStream *pIn );
+    sal_Bool QueCommands( sal_uLong nServiceId, SvStream *pIn );
     SvStream* GetReturnStream();
 
     DECL_LINK( IdleHdl,   Application* );

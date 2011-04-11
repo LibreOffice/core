@@ -78,7 +78,7 @@ public class TextStyle extends Style implements Cloneable {
     /**
      *  Constructor for use when going from DOM to client device format.
      *
-     *  @param  Node  The <i>style:style</i> <code>Node</code> containing
+     *  @param  node  The <i>style:style</i> <code>Node</code> containing
      *                the <code>Style</code>.  (This <code>Node</code> is
      *                assumed have a <i>family</i> attribute of <i>text</i>).
      *  @param  sc    The <code>StyleCatalog</code>, which is used for

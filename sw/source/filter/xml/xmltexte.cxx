@@ -227,7 +227,7 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
     SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
     if( !pGrfNd->IsGrfLink() )
     {
-        String aNewURL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.Package:") );
+        String aNewURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.Package:") );
         aNewURL += String(rURL);
         pGrfNd->SetNewStreamName( aNewURL );
 
@@ -236,13 +236,6 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
         pGrfNd->SwapOut();
     }
 }
-/*
-static void lcl_addParam ( SvXMLExport &rExport, const SvCommand &rCommand )
-{
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rCommand.GetCommand() );
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, rCommand.GetArgument() );
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
-}*/
 
 static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
                          sal_Bool bToRel = sal_True )
@@ -292,22 +285,18 @@ void lcl_addOutplaceProperties(
         if( aSize.Width() && aSize.Height() )
         {
             Any aAny;
-            //aAny <<= (sal_Int32)rVisArea.Left();
             aAny <<= 0L;
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), aAny );
             pStates++;
 
-            //aAny <<= (sal_Int32)rVisArea.Top();
             aAny <<= 0L;
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), aAny );
             pStates++;
 
-            //aAny <<= (sal_Int32)rVisArea.GetWidth();
             aAny <<= (sal_Int32)aSize.Width();
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), aAny );
             pStates++;
 
-            //aAny <<= (sal_Int32)rVisArea.GetHeight();
             aAny <<= (sal_Int32)aSize.Height();
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), aAny );
             pStates++;
@@ -520,7 +509,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 catch( uno::Exception )
                 {
                     // TODO/LATER: error handling
-                    DBG_ERROR( "Link detection or retrieving of the URL of OOo link is failed!\n" );
+                    OSL_FAIL( "Link detection or retrieving of the URL of OOo link is failed!\n" );
                 }
             }
 
@@ -605,7 +594,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 while ( i > 0 )
                 {
                     beans::PropertyValue& aProp = aProps[--i];
-                    USHORT nType2 = SwApplet_Impl::GetOptionType( aProp.Name, TRUE );
+                    sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_True );
                     if ( nType2 == SWHTML_OPTTYPE_TAG)
                     {
                         ::rtl::OUString aStr2;
@@ -701,7 +690,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     while ( i > 0 )
                     {
                         beans::PropertyValue& aProp = aProps[--i];
-                        USHORT nType2 = SwApplet_Impl::GetOptionType( aProp.Name, TRUE );
+                        sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_True );
                         if (SWHTML_OPTTYPE_PARAM == nType2 || SWHTML_OPTTYPE_SIZE == nType2 )
                         {
                             ::rtl::OUString aStr;
@@ -727,7 +716,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     while ( i > 0 )
                     {
                         beans::PropertyValue& aProp = aProps[--i];
-                        USHORT nType2 = SwApplet_Impl::GetOptionType( aProp.Name, FALSE );
+                        sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_False );
                         if ( nType2 == SWHTML_OPTTYPE_TAG)
                         {
                             ::rtl::OUString aStr;
@@ -763,9 +752,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
 
     // Lastly the stuff common to each of Applet/Plugin/Floating Frame
     exportEvents( rPropSet );
-    // --> OD 2009-07-22 #i73249#
-    exportTitleAndDescription( rPropSet, rPropSetInfo );
-    // <--
+    exportTitleAndDescription( rPropSet, rPropSetInfo );  // #i73249#
     exportContour( rPropSet, rPropSetInfo );
 }
 

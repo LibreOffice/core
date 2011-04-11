@@ -29,11 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
+#ifdef WNT
+#include <windows.h>
+#endif
 #include <ucbhelper/contentidentifier.hxx>
 #include "odma_provider.hxx"
 #include "odma_content.hxx"
@@ -43,6 +41,8 @@
 #include <rtl/uri.hxx>
 #include <algorithm>
 #include <osl/file.hxx>
+
+#include <o3tl/compat_functional.hxx>
 
 using namespace com::sun::star;
 using namespace odma;
@@ -151,8 +151,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 // @@@ Adjust implementation name. Keep the prefix "com.sun.star.comp."!
 // @@@ Adjust service name.
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString::createFromAscii(
-                            "com.sun.star.comp.odma.ContentProvider" ),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.comp.odma.ContentProvider" )),
                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODMA_CONTENT_PROVIDER_SERVICE_NAME) ) );
 
 //=========================================================================
@@ -505,9 +505,9 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
     ::rtl::Reference<ContentProperties> aReturn;
     ContentsMap::const_iterator aFind = ::std::find_if( m_aContents.begin(),
                                                         m_aContents.end(),
-                                                        ::std::compose1(
+                                                        ::o3tl::compose1(
                                                             ::std::bind2nd(_aFunctor,_sName),
-                                                            ::std::select2nd<ContentsMap::value_type>()
+                                                            ::o3tl::select2nd<ContentsMap::value_type>()
                                                         )
                                                     );
     if(aFind != m_aContents.end())

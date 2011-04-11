@@ -26,10 +26,10 @@
  *
  ************************************************************************/
 
-#include "tokens.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/drawingml.hxx"
 #include "oox/export/utils.hxx"
+#include <oox/token/tokens.hxx>
 
 #include <cstdio>
 #include <com/sun/star/awt/CharSet.hpp>
@@ -134,22 +134,19 @@ void lcl_dump_pset(Reference< XPropertySet > rXPropSet)
         sal_Int32 intValue;
         bool boolValue;
     LineSpacing spacing;
-//         RectanglePoint pointValue;
 
         if( value >>= strValue )
             fprintf (stderr,"\"%s\"\n", USS( strValue ) );
         else if( value >>= intValue )
-            fprintf (stderr,"%d            (hex: %x)\n", intValue, intValue);
+            fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
         else if( value >>= boolValue )
             fprintf (stderr,"%d            (bool)\n", boolValue);
     else if( value >>= spacing ) {
         fprintf (stderr, "mode: %d value: %d\n", spacing.Mode, spacing.Height);
     }
-//         else if( value >>= pointValue )
-//             fprintf (stderr,"%d            (RectanglePoint)\n", pointValue);
         else
             fprintf (stderr,"???           <unhandled type>\n");
-    } catch(Exception e) {
+    } catch(const Exception &) {
         fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
     }
     }
@@ -172,7 +169,7 @@ bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, String aName )
         mAny = rXPropSet->getPropertyValue( aName );
         if ( mAny.hasValue() )
             bRetValue = true;
-    } catch( Exception& ) { /* printf ("exception when trying to get value of property: %s\n", ST(aName)); */ }
+    } catch( const Exception& ) { /* printf ("exception when trying to get value of property: %s\n", ST(aName)); */ }
 
     return bRetValue;
 }
@@ -187,7 +184,7 @@ bool DrawingML::GetPropertyAndState( Reference< XPropertySet > rXPropSet, Refere
             bRetValue = true;
             eState = rXPropState->getPropertyState( aName );
         }
-    } catch( Exception& ) { /* printf ("exception when trying to get value of property: %s\n", ST(aName)); */ }
+    } catch( const Exception& ) { /* printf ("exception when trying to get value of property: %s\n", ST(aName)); */ }
 
     return bRetValue;
 }
@@ -371,10 +368,10 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
     sal_uInt32 nLineWidth = 0;
     sal_uInt32 nColor = 0;
-    sal_Bool bColorSet = FALSE;
+    sal_Bool bColorSet = sal_False;
     const char* cap = NULL;
     drawing::LineDash aLineDash;
-    sal_Bool bDashSet = FALSE;
+    sal_Bool bDashSet = sal_False;
 
     GET( nLineWidth, LineWidth );
 
@@ -382,7 +379,7 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
         case drawing::LineStyle_DASH:
             if( GETA( LineDash ) ) {
                 aLineDash = *(drawing::LineDash*) mAny.getValue();
-                bDashSet = TRUE;
+                bDashSet = sal_True;
                 if( aLineDash.Style == DashStyle_ROUND || aLineDash.Style == DashStyle_ROUNDRELATIVE )
                     cap = "rnd";
 
@@ -394,7 +391,7 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
         default:
             if ( GETA( LineColor ) ) {
                 nColor = *((sal_uInt32*) mAny.getValue()) & 0xffffff;
-                bColorSet = TRUE;
+                bColorSet = sal_True;
             }
             break;
     }
@@ -854,7 +851,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
     if( sURL.getLength() ) {
         OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
                               US( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" ),
-                              sURL, US( "External" ) );
+                              sURL, true );
 
         mpFS->singleElementNS( XML_a, XML_hlinkClick,
                    FSNS( XML_r,XML_id ), USS( sRelId ),
@@ -883,7 +880,7 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
         bIsField = sal_True;
             rXPropSet.set( rXTextField, UNO_QUERY );
             if( rXPropSet.is() ) {
-                String aFieldKind( rXTextField->getPresentation( TRUE ) );
+                String aFieldKind( rXTextField->getPresentation( sal_True ) );
                 DBG(printf ("field kind: %s\n", ST(aFieldKind) ));
                 if( aFieldKind == S( "Page" ) ) {
                     return "slidenum";
@@ -940,8 +937,19 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
     sal_Bool bIsField = sal_False;
     OUString sText = rRun->getString();
 
-    if( sText.getLength() < 1)
-        return;
+    if( sText.getLength() < 1) {
+        Reference< XPropertySet > xPropSet( rRun, UNO_QUERY );
+
+        try {
+        if( !xPropSet.is() || !( xPropSet->getPropertyValue( S( "PlaceholderText" ) ) >>= sText ) )
+            return;
+        if( sText.getLength() < 1 )
+            return;
+        }
+        catch (const Exception &) {
+            return;
+        }
+    }
 
     if( ( sFieldType = GetFieldType( rRun, bIsField ) ) ) {
         OStringBuffer sUUID(39);
@@ -1162,15 +1170,8 @@ void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
     if( !rXPropSet.is() || !rXPropState.is() )
         return;
 
-    //OSL_TRACE("write paragraph properties pset");
-    //DBG(lcl_dump_pset(rXPropSet));
-
     sal_Int16 nLevel = -1;
     GET( nLevel, NumberingLevel );
-
-    sal_Int32 nLeftMargin = 0;
-    // fix coordinates
-    //GET( nLeftMargin, ParaLeftMargin );
 
     sal_Int16 nAlignment( style::ParagraphAdjust_LEFT );
     GET( nAlignment, ParaAdjust );
@@ -1181,12 +1182,11 @@ void DrawingML::WriteParagraphProperties( Reference< XTextContent > rParagraph )
         bHasLinespacing = ( mAny >>= aLineSpacing );
 
     if( nLevel != -1
-        || nLeftMargin > 0
         || nAlignment != style::ParagraphAdjust_LEFT
         || bHasLinespacing ) {
         mpFS->startElementNS( XML_a, XML_pPr,
                               XML_lvl, nLevel > 0 ? I32S( nLevel ) : NULL,
-                              XML_marL, nLeftMargin > 0 ? IS( nLeftMargin ) : NULL,
+                              XML_marL, NULL,
                               XML_algn, GetAlignment( nAlignment ),
                               FSEND );
 
@@ -1214,15 +1214,15 @@ void DrawingML::WriteParagraph( Reference< XTextContent > rParagraph )
 
     mpFS->startElementNS( XML_a, XML_p, FSEND );
 
-    sal_Bool bPropertiesWritten = FALSE;
+    sal_Bool bPropertiesWritten = sal_False;
     while( enumeration->hasMoreElements() ) {
         Reference< XTextRange > run;
         Any any ( enumeration->nextElement() );
 
         if (any >>= run) {
-            if( !bPropertiesWritten && run->getString().getLength() ) {
+            if( !bPropertiesWritten ) {
                 WriteParagraphProperties( rParagraph );
-                bPropertiesWritten = TRUE;
+                bPropertiesWritten = sal_True;
             }
             WriteRun( run );
         }
@@ -1287,12 +1287,11 @@ void DrawingML::WriteText( Reference< XShape > rXShape  )
     else if( bVertical && eHorizontalAlignment == TextHorizontalAdjust_LEFT )
         sVerticalAlignment = "b";
 
-    sal_Bool bHasWrap = FALSE;
-    sal_Bool bWrap = FALSE;
+    sal_Bool bHasWrap = sal_False;
+    sal_Bool bWrap = sal_False;
     if( GETA( TextWordWrap ) ) {
         mAny >>= bWrap;
-        bHasWrap = TRUE;
-        //DBG(printf("wrap: %d\n", bWrap));
+        bHasWrap = sal_True;
     }
 
     mpFS->singleElementNS( XML_a, XML_bodyPr,
@@ -1380,11 +1379,11 @@ void DrawingML::WritePolyPolygon( const PolyPolygon& rPolyPolygon )
 
     mpFS->startElementNS( XML_a, XML_pathLst, FSEND );
 
-    for( USHORT i = 0; i < rPolyPolygon.Count(); i ++ ) {
+    for( sal_uInt16 i = 0; i < rPolyPolygon.Count(); i ++ ) {
 
         const Polygon& rPoly = rPolyPolygon[ i ];
         Rectangle aRect( rPoly.GetBoundRect() );
-        sal_Bool bBezier = FALSE;
+        sal_Bool bBezier = sal_False;
 
         mpFS->startElementNS( XML_a, XML_path,
                               XML_w, I64S( aRect.GetWidth() ),
@@ -1403,13 +1402,13 @@ void DrawingML::WritePolyPolygon( const PolyPolygon& rPolyPolygon )
             mpFS->endElementNS( XML_a, XML_moveTo );
         }
 
-        for( USHORT j = 1; j < rPoly.GetSize(); j ++ )
+        for( sal_uInt16 j = 1; j < rPoly.GetSize(); j ++ )
         {
             enum PolyFlags flags = rPoly.GetFlags(j);
             if( flags == POLY_CONTROL && !bBezier )
             {
                 mpFS->startElementNS( XML_a, XML_cubicBezTo, FSEND );
-                bBezier = TRUE;
+                bBezier = sal_True;
             }
             else if( flags == POLY_NORMAL && !bBezier )
                 mpFS->startElementNS( XML_a, XML_lnTo, FSEND );
@@ -1422,7 +1421,7 @@ void DrawingML::WritePolyPolygon( const PolyPolygon& rPolyPolygon )
             if( ( flags == POLY_NORMAL || flags == POLY_SYMMTR ) && bBezier )
             {
                 mpFS->endElementNS( XML_a, XML_cubicBezTo );
-                bBezier = FALSE;
+                bBezier = sal_False;
             }
             else if( flags == POLY_NORMAL && !bBezier )
                 mpFS->endElementNS( XML_a, XML_lnTo );
@@ -1433,21 +1432,6 @@ void DrawingML::WritePolyPolygon( const PolyPolygon& rPolyPolygon )
                 mpFS->endElementNS( XML_a, XML_cubicBezTo );
                 mpFS->startElementNS( XML_a, XML_cubicBezTo, FSEND );
             }
-//             switch( rPoly.GetFlags(j) ) {
-//                 case POLY_NORMAL:
-//                     DBG(printf("normal\n"));
-//                     break;
-//                 case POLY_SMOOTH:
-//                     DBG(printf("smooth\n"));
-//                     break;
-//                 case POLY_CONTROL:
-//                     DBG(printf("control\n"));
-//                     break;
-//                 case POLY_SYMMTR:
-//                     DBG(printf("symmtr\n"));
-//                         break;
-//             }
-//             DBG(printf("point %ld %ld\n", rPoly[j].X() - aRect.Left(), rPoly[j].Y() - aRect.Top()));
         }
 
         mpFS->endElementNS( XML_a, XML_path );
@@ -1463,12 +1447,12 @@ void DrawingML::WriteConnectorConnections( EscherConnectorListEntry& rConnectorE
     if( nStartID != -1 )
         mpFS->singleElementNS( XML_a, XML_stCxn,
                                XML_id, I32S( nStartID ),
-                               XML_idx, I64S( rConnectorEntry.GetConnectorRule( TRUE ) ),
+                               XML_idx, I64S( rConnectorEntry.GetConnectorRule( sal_True ) ),
                                FSEND );
     if( nEndID != -1 )
         mpFS->singleElementNS( XML_a, XML_endCxn,
                                XML_id, I32S( nEndID ),
-                               XML_idx, I64S( rConnectorEntry.GetConnectorRule( FALSE ) ),
+                               XML_idx, I64S( rConnectorEntry.GetConnectorRule( sal_False ) ),
                                FSEND );
 }
 
@@ -1554,12 +1538,6 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
         return;
     FillStyle aFillStyle( FillStyle_NONE );
     xPropSet->getPropertyValue( S( "FillStyle" ) ) >>= aFillStyle;
-
-    if( aFillStyle == FillStyle_BITMAP )
-    {
-        //DBG(printf ("FillStyle_BITMAP properties\n"));
-        //DBG(dump_pset(rXPropSet));
-    }
 
     if( aFillStyle == FillStyle_NONE ||
         aFillStyle == FillStyle_HATCH )

@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/seriesconverter.hxx"
+
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
@@ -39,25 +40,20 @@
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include "oox/drawingml/chart/typegroupconverter.hxx"
 #include "oox/drawingml/chart/typegroupmodel.hxx"
-#include "properties.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::chart2::DataPointLabel;
-using ::com::sun::star::chart2::XDataSeries;
-using ::com::sun::star::chart2::XRegressionCurve;
-using ::com::sun::star::chart2::XRegressionCurveContainer;
-using ::com::sun::star::chart2::data::XDataSequence;
-using ::com::sun::star::chart2::data::XDataSink;
-using ::com::sun::star::chart2::data::XLabeledDataSequence;
+#include "oox/helper/containerhelper.hxx"
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2::data;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -293,7 +289,7 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
                 aBarProp.setProperty( PROP_ErrorBarStyle, cssc::ErrorBarStyle::STANDARD_ERROR );
             break;
             default:
-                OSL_ENSURE( false, "ErrorBarConverter::convertFromModel - unknown error bar type" );
+                OSL_FAIL( "ErrorBarConverter::convertFromModel - unknown error bar type" );
                 xErrorBar.clear();
         }
 
@@ -307,13 +303,13 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
             {
                 case XML_x: aSeriesProp.setProperty( PROP_ErrorBarX, xErrorBar );   break;
                 case XML_y: aSeriesProp.setProperty( PROP_ErrorBarY, xErrorBar );   break;
-                default:    OSL_ENSURE( false, "ErrorBarConverter::convertFromModel - invalid error bar direction" );
+                default:    OSL_FAIL( "ErrorBarConverter::convertFromModel - invalid error bar direction" );
             }
         }
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "ErrorBarConverter::convertFromModel - error while creating error bars" );
+        OSL_FAIL( "ErrorBarConverter::convertFromModel - error while creating error bars" );
     }
 }
 
@@ -385,7 +381,7 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             case XML_movingAvg: /* #i66819# moving average trendlines not supported */                              break;
             case XML_poly:      /* #i20819# polynomial trendlines not supported */                                  break;
             case XML_power:     aServiceName = CREATE_OUSTRING( "com.sun.star.chart2.PotentialRegressionCurve" );   break;
-            default:            OSL_ENSURE( false, "TrendlineConverter::convertFromModel - unknown trendline type" );
+            default:            OSL_FAIL( "TrendlineConverter::convertFromModel - unknown trendline type" );
         }
         if( aServiceName.getLength() > 0 )
         {
@@ -416,7 +412,7 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "TrendlineConverter::convertFromModel - error while creating trendline" );
+        OSL_FAIL( "TrendlineConverter::convertFromModel - error while creating trendline" );
     }
 }
 

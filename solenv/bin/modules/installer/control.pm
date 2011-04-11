@@ -77,7 +77,6 @@ sub check_system_path
 {
     # The following files have to be found in the environment variable PATH
     # All platforms: zip
-    # Windows only: msvcp70.dll, msvcr70.dll for regcomp.exe
     # Windows only: "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe" for msi database and packaging
 
     my $onefile;
@@ -105,19 +104,6 @@ sub check_system_path
     if (($installer::globals::iswin) && ($installer::globals::iswindowsbuild))
     {
         @needed_files_in_path = ("zip.exe", "msiinfo.exe", "msidb.exe", "uuidgen.exe", "makecab.exe", "msitran.exe", "expand.exe");
-
-        if ( $installer::globals::compiler eq "wntmsci8" )
-        {
-            push(@needed_files_in_path, "msvcp70.dll");
-            push(@needed_files_in_path, "msvcr70.dll");
-        }
-
-        if ( $installer::globals::compiler eq "wntmsci10" )
-        {
-            push(@needed_files_in_path, "msvcp71.dll");
-            push(@needed_files_in_path, "msvcr71.dll");
-        }
-
     }
     elsif ($installer::globals::iswin)
     {
@@ -334,6 +320,11 @@ sub check_logfile
     my @output = ();
     my $contains_error = 0;
 
+    my $ignore_error = 0;
+    my $make_error_to_warning = 0;
+
+    if (( ! $installer::globals::pro ) && ( $installer::globals::ignore_error_in_logfile )) { $ignore_error = 1; }
+
     for ( my $i = 0; $i <= $#{$logfile}; $i++ )
     {
         my $line = ${$logfile}[$i];
@@ -341,16 +332,22 @@ sub check_logfile
         # Errors are all errors, but not the Windows installer table "Error.idt"
 
         my $compareline = $line;
-        $compareline =~ s/Error\.idt//g;    # removing all occurences of "Error.idt"
-        $compareline =~ s/Error\.mlf//g;    # removing all occurences of "Error.mlf"
-        $compareline =~ s/Error\.ulf//g;    # removing all occurences of "Error.ulf"
-        $compareline =~ s/Error\.idl//g;    # removing all occurences of "Error.idl"
-        $compareline =~ s/Error\.html//g;   # removing all occurences of "Error.html"
+        $compareline =~ s/Error\.idt//g;    # removing all occurrences of "Error.idt"
+        $compareline =~ s/Error\.mlf//g;    # removing all occurrences of "Error.mlf"
+        $compareline =~ s/Error\.ulf//g;    # removing all occurrences of "Error.ulf"
+        $compareline =~ s/Error\.idl//g;    # removing all occurrences of "Error.idl"
+        $compareline =~ s/Error\.html//g;   # removing all occurrences of "Error.html"
 
         if ( $compareline =~ /\bError\b/i )
         {
             $contains_error = 1;
             push(@errors, $line);
+
+            if ( $ignore_error )
+            {
+                $contains_error = 0;
+                $make_error_to_warning = 1;
+            }
         }
     }
 
@@ -358,7 +355,7 @@ sub check_logfile
     {
         my $line = "\n*********************************************************************\n";
         push(@output, $line);
-        $line = "ERROR: The following errors occured in packaging process:\n\n";
+        $line = "ERROR: The following errors occurred in packaging process:\n\n";
         push(@output, $line);
 
         for ( my $i = 0; $i <= $#errors; $i++ )
@@ -369,11 +366,29 @@ sub check_logfile
 
         $line = "*********************************************************************\n";
         push(@output, $line);
-#       exit(-1);
     }
     else
     {
-        my $line = "\n***********************************************************\n";
+        my $line = "";
+
+        if ( $make_error_to_warning )
+        {
+            $line = "\n*********************************************************************\n";
+            push(@output, $line);
+            $line = "The following errors in the log file were ignored:\n\n";
+            push(@output, $line);
+
+            for ( my $i = 0; $i <= $#errors; $i++ )
+            {
+                $line = "$errors[$i]";
+                push(@output, $line);
+            }
+
+            $line = "*********************************************************************\n";
+            push(@output, $line);
+        }
+
+        $line = "\n***********************************************************\n";
         push(@output, $line);
         $line = "Successful packaging process!\n";
         push(@output, $line);
@@ -415,7 +430,6 @@ sub determine_ship_directory
     {
         my $number_of_languages = installer::systemactions::get_number_of_langs($languagestring);
         chomp(my $shorter = `echo $languagestring | md5sum | sed -e "s/ .*//g"`);
-        # $languagestring = $shorter;
         my $id = substr($shorter, 0, 8); # taking only the first 8 digits
         $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
     }
@@ -630,11 +644,6 @@ sub read_encodinglist
 
     $installer::globals::msiencoding = \%msiencoding;
     $installer::globals::msilanguage = \%msilanguage;
-
-    # my $key;
-    # foreach $key (keys %{$installer::globals::msiencoding}) { print "A Key: $key : Value: $installer::globals::msiencoding->{$key}\n"; }
-    # foreach $key (keys %{$installer::globals::msilanguage}) { print "B Key: $key : Value: $installer::globals::msilanguage->{$key}\n"; }
-
 }
 
 #############################################################
@@ -693,25 +702,6 @@ sub set_addchildprojects
     }
 
     my $infoline = "Value of \$installer::globals::addchildprojects: $installer::globals::addchildprojects\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-}
-
-####################################################################
-# Setting global variable "$installer::globals::addjavainstaller"
-####################################################################
-
-sub set_addjavainstaller
-{
-    my ($allvariables) = @_;
-
-    if ( $allvariables->{'JAVAINSTALLER'} ) { $installer::globals::addjavainstaller = 1; }
-
-    if ( $installer::globals::patch ) { $installer::globals::addjavainstaller = 0; }
-    if ( $installer::globals::languagepack ) { $installer::globals::addjavainstaller = 0; }
-    if ( $installer::globals::helppack ) { $installer::globals::addjavainstaller = 0; }
-    if ( $allvariableshashref->{'XPDINSTALLER'} ) { $installer::globals::addjavainstaller = 0; }
-
-    my $infoline = "Value of \$installer::globals::addjavainstaller: $installer::globals::addjavainstaller\n";
     push( @installer::globals::globallogfileinfo, $infoline);
 }
 

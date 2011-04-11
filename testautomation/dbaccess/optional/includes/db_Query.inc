@@ -45,7 +45,9 @@ function db_Query( sFileName , optional sType , optional sPassword)
             case "ODBC", "JDBC"
                 sType = "2"
             case "HSQLDB"
-                sType = "2"   
+                sType = "2"
+            case "MYSQL_JDBC"
+                sType = "3"
             case else
                 sType = "1"
         end select
@@ -56,6 +58,10 @@ function db_Query( sFileName , optional sType , optional sPassword)
     if sType <> "1" then 'run only with database from type >1  
         call tQueryJoin( sFileName , sType, sPassword )
         call tQueriesInQueries(sFileName)
+    endif
+
+    if sType = "3" then 'run only with database type MYSQL_JDBC
+        call tCastQuery( sFileName , sPassword )
     endif
     
     call tSortQueryWithAlias(sFileName , sPassword)
@@ -823,6 +829,46 @@ sub tTest8
             warnlog "Execution of a query failed!"
         end if  
     sleep(2)
+end sub
+'--------------------------------------------------------------------
+sub tCastQuery( sFileName , sPassword )
+
+    fOpenDatabase(sFileName,sPassword)
+
+    if ( fOpenNewQueryDesign ) then
+        if ( fChooseTableInQueryAddTableDialog("TT_Query3") ) then
+            Kontext "QueryDesignCriterion"
+                sleep(1)
+                QueryDesignCriterion.TypeKeys "<MOD1 PAGEUP>" , true
+                sleep(1)
+                QueryDesignCriterion.TypeKeys "cast(f_date_s as date)" , true
+                sleep(1)
+                QueryDesignCriterion.TypeKeys "<RETURN>" , true
+                sleep(1)
+            Kontext "Toolbar"
+                printlog "- Executing query"
+                ExecuteBtn.Click
+                sleep(5)
+
+            Kontext "TableView"
+                    if TableView.Exists(3) then
+
+                            DataWindow.TypeKeys "<MOD1 C>"
+                            if GetClipboard <> "40219" then 
+                                warnlog "the result should be 40219 but it is " + GetClipboard 
+                            else
+                                printlog "the result is OK"
+                            endif
+                    else
+                        warnlog "Execution of a query failed!"
+                    end if
+
+            call fCloseQueryDesign
+
+        endif
+    endif
+    call fCloseDatabase
+
 end sub
 '--------------------------------------------------------------------
 function tSortQueryWithAlias(sFileName, optional sPassword) ' test for isse 27832

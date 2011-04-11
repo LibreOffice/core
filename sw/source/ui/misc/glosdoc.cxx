@@ -47,7 +47,6 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <swtypes.hxx>
-#include <errhdl.hxx>       // ASSERT
 #include <uitool.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
@@ -80,7 +79,7 @@ String lcl_CheckFileName( const String& rNewFilePath,
     sRet.EraseLeadingChars();
     sRet.EraseTrailingChars();
 
-    BOOL bOk = FALSE;
+    sal_Bool bOk = sal_False;
     if( sRet.Len() )
     {
         String sTmpDir(rNewFilePath);
@@ -252,7 +251,7 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
         sOldFileURL += INET_PATH_TOKEN;
         sOldFileURL += rOldGroup.GetToken(0, GLOS_DELIM);
         sOldFileURL += SwGlossaries::GetExtension();
-        BOOL bExist = FStatHelper::IsDocument( sOldFileURL );
+        sal_Bool bExist = FStatHelper::IsDocument( sOldFileURL );
         OSL_ENSURE(bExist, "group doesn't exist!");
         if(bExist)
         {
@@ -262,7 +261,6 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
                 String sNewFilePath(*(*m_pPathArr)[nNewPath]);
                 String sNewFileName = lcl_CheckFileName(
                                     sNewFilePath, rNewGroup.GetToken(0, GLOS_DELIM));
-                //String aTmp( rNewGroup.GetToken(0, GLOS_DELIM));
                 const sal_uInt16 nFileNameLen = sNewFileName.Len();
                 sNewFileName += SwGlossaries::GetExtension();
                 String sTempNewFilePath(sNewFilePath);
@@ -272,8 +270,8 @@ sal_Bool    SwGlossaries::RenameGroupDoc(
                 OSL_ENSURE(!bExist, "group already exists!");
                 if(!bExist)
                 {
-                    BOOL bCopyCompleted = SWUnoHelper::UCB_CopyFile(
-                                        sOldFileURL, sTempNewFilePath, TRUE );
+                    sal_Bool bCopyCompleted = SWUnoHelper::UCB_CopyFile(
+                                        sOldFileURL, sTempNewFilePath, sal_True );
                     if(bCopyCompleted)
                     {
                         bRet = sal_True;
@@ -321,7 +319,7 @@ sal_Bool SwGlossaries::DelGroupDoc(const String &rName)
         // Auch, wenn das File nicht existiert, muss es aus der Liste
         // der Textbausteinbereiche entfernt werden
     // Kein && wegen CFfront
-    BOOL bRemoved = SWUnoHelper::UCB_DeleteFile( sFileURL );
+    sal_Bool bRemoved = SWUnoHelper::UCB_DeleteFile( sFileURL );
     OSL_ENSURE(bRemoved, "file has not been removed");
     RemoveFileFromList( aName );
     return bRemoved;
@@ -367,7 +365,7 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const String &rName, sal_Bool bCreate ) 
         sFileURL += INET_PATH_TOKEN;
         sFileURL += aTmp;
 
-        BOOL bExist = FALSE;
+        sal_Bool bExist = sal_False;
         if(!bCreate)
             bExist = FStatHelper::IsDocument( sFileURL );
 
@@ -404,7 +402,7 @@ SvStrings* SwGlossaries::GetNameList()
 
             SWUnoHelper::UCB_GetFileListOfFolder( *(*m_pPathArr)[i], aFiles,
                                                     &sExt );
-            for( USHORT nFiles = 0, nFEnd = aFiles.Count();
+            for( sal_uInt16 nFiles = 0, nFEnd = aFiles.Count();
                     nFiles < nFEnd; ++nFiles )
             {
                 String* pTitle = aFiles[ nFiles ];
@@ -444,7 +442,7 @@ SwGlossaries::SwGlossaries() :
     Beschreibung: Neuen Pfad einstellen und internes Array neu aufbauen
 ------------------------------------------------------------------------*/
 
-/* -----------------21.01.99 15:36-------------------
+/* --------------------------------------------------
 *   #61050# Doppelte Pfade fuehren zu Verwirrung - als raus damit
  * --------------------------------------------------*/
 sal_Bool lcl_FindSameEntry(const SvStrings& rDirArr, const String& rEntryURL)
@@ -498,7 +496,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
         aDirArr.DeleteAndDestroy(0, aDirArr.Count());
 
         if(!nTokenCount ||
-            m_sErrPath.Len() && (bPathChanged || m_sOldErrPath != m_sErrPath) )
+            (m_sErrPath.Len() && (bPathChanged || m_sOldErrPath != m_sErrPath)) )
         {
             m_sOldErrPath = m_sErrPath;
             // Falscher Pfad, d.h. AutoText-Verzeichnis existiert nicht

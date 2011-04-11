@@ -26,12 +26,12 @@
  *
  ************************************************************************/
 
-#include <tools/prewin.h>
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
 #endif
-#include <windows.h>
+#include <prewin.h>
+#include <postwin.h>
 #include <objbase.h>
 #include <strmif.h>
 #include <Amvideo.h>
@@ -44,7 +44,6 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <tools/postwin.h>
 
 #include "framegrabber.hxx"
 #include "player.hxx"

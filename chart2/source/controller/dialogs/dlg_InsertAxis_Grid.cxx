@@ -64,7 +64,7 @@ InsertAxisOrGridDialogData::InsertAxisOrGridDialogData()
 //==============================
 
 SchAxisDlg::SchAxisDlg( Window* pWindow
-                       , const InsertAxisOrGridDialogData& rInput, BOOL bAxisDlg )
+                       , const InsertAxisOrGridDialogData& rInput, sal_Bool bAxisDlg )
                        :
         ModalDialog( pWindow, SchResId( DLG_AXIS_OR_GRID )),
 
@@ -89,7 +89,7 @@ SchAxisDlg::SchAxisDlg( Window* pWindow
     FreeResource();
     if(!bAxisDlg)
     {
-        SetHelpId( SID_INSERT_GRIDS );
+        SetHelpId( HID_INSERT_GRIDS );
         SetText( ObjectNameProvider::getName(OBJECTTYPE_GRID,true) );
 
         aCbPrimaryX.SetHelpId( HID_SCH_CB_XGRID );
@@ -113,7 +113,6 @@ SchAxisDlg::SchAxisDlg( Window* pWindow
             aCbSecondaryZ.Hide();
 
             Size aSize( GetSizePixel() );
-            //aSize.Height() -= aCbSecondaryZ.GetSizePixel().Height();
             aSize.Height() -= ( aCbSecondaryZ.GetPosPixel().Y() - aCbSecondaryY.GetPosPixel().Y() );
             SetSizePixel(aSize);
         }

@@ -79,7 +79,7 @@ namespace {
 /** Returns the scaling factor to calculate coordinates from twips. */
 double lclGetTwipsScale( MapUnit eMapUnit )
 {
-    /*  #111027# We cannot use OutputDevice::LogicToLogic() or the XclTools
+    /*  We cannot use OutputDevice::LogicToLogic() or the XclTools
         conversion functions to calculate drawing layer coordinates due to
         Calc's strange definition of a point (1 inch == 72.27 points, instead
         of 72 points). */
@@ -130,20 +130,20 @@ void lclGetColFromX(
 
 /** Calculates an object row position from a drawing layer Y position (in twips). */
 void lclGetRowFromY(
-        ScDocument& rDoc, SCTAB nScTab, sal_uInt16& rnXclRow,
-        sal_uInt16& rnOffset, sal_uInt16 nXclStartRow, sal_uInt16 nXclMaxRow,
+        ScDocument& rDoc, SCTAB nScTab, sal_uInt32& rnXclRow,
+        sal_uInt32& rnOffset, sal_uInt32 nXclStartRow, sal_uInt32 nXclMaxRow,
         long& rnStartH, long nY, double fScale )
 {
     // rnStartH in conjunction with nXclStartRow is used as buffer for previously calculated height
     long nTwipsY = static_cast< long >( nY / fScale + 0.5 );
     long nRowH = 0;
     bool bFound = false;
-    for( SCROW nRow = static_cast< SCROW >( nXclStartRow ); nRow <= nXclMaxRow; ++nRow )
+    for( SCROW nRow = static_cast< SCROW >( nXclStartRow ); static_cast<unsigned>(nRow) <= nXclMaxRow; ++nRow )
     {
         nRowH = rDoc.GetRowHeight( nRow, nScTab );
         if( rnStartH + nRowH > nTwipsY )
         {
-            rnXclRow = static_cast< sal_uInt16 >( nRow );
+            rnXclRow = static_cast< sal_uInt32 >( nRow );
             bFound = true;
             break;
         }
@@ -151,7 +151,7 @@ void lclGetRowFromY(
     }
     if( !bFound )
         rnXclRow = nXclMaxRow;
-    rnOffset = static_cast< sal_uInt16 >( nRowH ? ((nTwipsY - rnStartH) * 256.0 / nRowH + 0.5) : 0 );
+    rnOffset = static_cast< sal_uInt32 >( nRowH ? ((nTwipsY - rnStartH) * 256.0 / nRowH + 0.5) : 0 );
 }
 
 /** Mirrors a rectangle (from LTR to RTL layout or vice versa). */
@@ -189,7 +189,7 @@ Rectangle XclObjAnchor::GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMa
         lclGetXFromCol( rDoc, nScTab, maLast.mnCol,  mnRX + 1, fScale ),
         lclGetYFromRow( rDoc, nScTab, maLast.mnRow,  mnBY, fScale ) );
 
-    // #106948# adjust coordinates in mirrored sheets
+    // adjust coordinates in mirrored sheets
     if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );
     return aRect;
@@ -201,7 +201,7 @@ void XclObjAnchor::SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle&
     sal_uInt16 nXclMaxCol = rRoot.GetXclMaxPos().Col();
     sal_uInt16 nXclMaxRow = static_cast<sal_uInt16>( rRoot.GetXclMaxPos().Row());
 
-    // #106948# adjust coordinates in mirrored sheets
+    // adjust coordinates in mirrored sheets
     Rectangle aRect( rRect );
     if( rDoc.IsLayoutRTL( nScTab ) )
         lclMirrorRectangle( aRect );

@@ -51,7 +51,7 @@ namespace svx
     StringListResource::StringListResource( const ResId& _rResId )
         :Resource( _rResId )
     {
-        USHORT nLocalID = 1;
+        sal_uInt16 nLocalID = 1;
         ResId aLocalID( nLocalID, *_rResId.GetResMgr() );
         while ( IsAvailableRes( aLocalID.SetRT( RSC_STRING ) ) )
         {

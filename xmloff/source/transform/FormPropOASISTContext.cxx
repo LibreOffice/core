@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include "MutableAttrList.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include "ActionMapTypesOASIS.hxx"
 #include "AttrTransformerAction.hxx"
@@ -52,7 +52,7 @@ XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType(
     sal_Bool bNeg = sal_False;
     sal_uInt32 nVal = 0;
 
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     sal_Int32 nLen = rValue.getLength();
 
     // skip white space

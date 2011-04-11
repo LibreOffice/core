@@ -53,34 +53,32 @@ OApplicationIconControl::OApplicationIconControl(Window* _pParent)
 
     struct CategoryDescriptor
     {
-        USHORT      nLabelResId;
+        sal_uInt16      nLabelResId;
         ElementType eType;
-        USHORT      nImageResId;
-        USHORT      nImageResIdHC;
+        sal_uInt16      nImageResId;
     }   aCategories[] = {
-        { RID_STR_TABLES_CONTAINER,     E_TABLE,    IMG_TABLEFOLDER_TREE_L, IMG_TABLEFOLDER_TREE_LHC    },
-        { RID_STR_QUERIES_CONTAINER,    E_QUERY,    IMG_QUERYFOLDER_TREE_L, IMG_QUERYFOLDER_TREE_LHC    },
-        { RID_STR_FORMS_CONTAINER,      E_FORM,     IMG_FORMFOLDER_TREE_L,  IMG_FORMFOLDER_TREE_LHC     },
-        { RID_STR_REPORTS_CONTAINER,    E_REPORT,   IMG_REPORTFOLDER_TREE_L,IMG_REPORTFOLDER_TREE_LHC   }
+        { RID_STR_TABLES_CONTAINER,     E_TABLE,    IMG_TABLEFOLDER_TREE_L  },
+        { RID_STR_QUERIES_CONTAINER,    E_QUERY,    IMG_QUERYFOLDER_TREE_L  },
+        { RID_STR_FORMS_CONTAINER,      E_FORM,     IMG_FORMFOLDER_TREE_L   },
+        { RID_STR_REPORTS_CONTAINER,    E_REPORT,   IMG_REPORTFOLDER_TREE_L }
     };
     for ( size_t i=0; i < SAL_N_ELEMENTS(aCategories); ++i)
     {
         SvxIconChoiceCtrlEntry* pEntry = InsertEntry(
-            String( ModuleRes( aCategories[i].nLabelResId ) ),
-            Image( ModuleRes( aCategories[i].nImageResId ) ),
-            Image( ModuleRes( aCategories[i].nImageResIdHC ) ) );
+            String( ModuleRes( aCategories[i].nLabelResId ) ) ,
+            Image(  ModuleRes( aCategories[i].nImageResId ) ) );
         if ( pEntry )
             pEntry->SetUserData( new ElementType( aCategories[i].eType ) );
     }
 
-    SetChoiceWithCursor( TRUE );
+    SetChoiceWithCursor( sal_True );
     SetSelectionMode(SINGLE_SELECTION);
 }
 // -----------------------------------------------------------------------------
 OApplicationIconControl::~OApplicationIconControl()
 {
-    ULONG nCount = GetEntryCount();
-    for ( ULONG i = 0; i < nCount; ++i )
+    sal_uLong nCount = GetEntryCount();
+    for ( sal_uLong i = 0; i < nCount; ++i )
     {
         SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
         if ( pEntry )

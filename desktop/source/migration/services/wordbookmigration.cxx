@@ -177,7 +177,7 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
                 bRet = true;
             else
             {
-                USHORT nLen;
+                sal_uInt16 nLen;
                 pStream->Seek (nSniffPos);
                 *pStream >> nLen;
                 if ( nLen < MAX_HEADER_LENGTH )
@@ -224,7 +224,7 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
                         ::rtl::OString aMsg( "WordbookMigration::copyFiles: cannot copy " );
                         aMsg += ::rtl::OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 ) + " to "
                              +  ::rtl::OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
-                        OSL_ENSURE( sal_False, aMsg.getStr() );
+                        OSL_FAIL( aMsg.getStr() );
                     }
                 }
                 ++aI;
@@ -232,7 +232,7 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
         }
         else
         {
-            OSL_ENSURE( sal_False, "WordbookMigration::copyFiles: no user installation!" );
+            OSL_FAIL( "WordbookMigration::copyFiles: no user installation!" );
         }
     }
 
@@ -279,11 +279,11 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
         {
             beans::NamedValue aValue;
             *pIter >>= aValue;
-            if ( aValue.Name.equalsAscii( "UserData" ) )
+            if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserData" ) ) )
             {
                 if ( !(aValue.Value >>= m_sSourceDir) )
                 {
-                    OSL_ENSURE( false, "WordbookMigration::initialize: argument UserData has wrong type!" );
+                    OSL_FAIL( "WordbookMigration::initialize: argument UserData has wrong type!" );
                 }
                 m_sSourceDir += sSourceSubDir;
                 break;

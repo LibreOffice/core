@@ -52,9 +52,6 @@ class SwPaM;
 class SwUnoCrsr;
 class SwFrmFmt;
 
-/* -----------------29.04.98 07:35-------------------
- *
- * --------------------------------------------------*/
 class SwUnoInternalPaM
     : public SwPaM
 {
@@ -82,7 +79,7 @@ namespace sw {
         CreateParentXText(SwDoc & rDoc, const SwPosition& rPos);
 
     bool GetDefaultTextContentValue(::com::sun::star::uno::Any& rAny,
-        const ::rtl::OUString& rPropertyName, USHORT nWID = 0);
+        const ::rtl::OUString& rPropertyName, sal_uInt16 nWID = 0);
 
 } // namespace sw
 
@@ -274,10 +271,6 @@ public:
                 ::com::sun::star::uno::RuntimeException);
 
 };
-
-/* -----------------15.05.98 08:29-------------------
- *
- * --------------------------------------------------*/
 
 typedef ::cppu::WeakImplHelper3
 <   ::com::sun::star::lang::XUnoTunnel

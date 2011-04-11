@@ -54,11 +54,6 @@ module addin
     */
     interface XAnalysis : com::sun::star::uno::XInterface
     {
-        /// _test.
-//      double get_Test(
-//                  [in] com::sun::star::beans::XPropertySet xOptions,
-//                  [in] long Mode, [in] double f1, [in] double f2, [in] double f3 );
-
         /// workday.
         long getWorkday(
                     [in] com::sun::star::beans::XPropertySet xOptions,

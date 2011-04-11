@@ -38,6 +38,7 @@
 #include <svtools/dialogcontrolling.hxx>
 
 #include <vcl/lstbox.hxx>
+#include <vcl/field.hxx>
 
 #include <vector>
 
@@ -77,15 +78,19 @@ namespace dbaui
         FixedText*          m_pBooleanComparisonModeLabel;
         ListBox*            m_pBooleanComparisonMode;
 
+        FixedText*          m_pMaxRowScanLabel;
+        NumericField*       m_pMaxRowScan;
+
         ::svt::ControlDependencyManager
                             m_aControlDependencies;
 
         BooleanSettingDescs m_aBooleanSettings;
 
         bool                m_bHasBooleanComparisonMode;
+        bool                m_bHasMaxRowScan;
 
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         SpecialSettingsPage(Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta );
 
@@ -123,7 +128,7 @@ namespace dbaui
                     m_aControlDependencies;
 
     public:
-        virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual sal_Bool        FillItemSet (SfxItemSet& _rCoreAttrs);
 
         GeneratedValuesPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:

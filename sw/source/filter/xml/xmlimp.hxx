@@ -113,14 +113,11 @@ protected:
     virtual XMLShapeImportHelper* CreateShapeImport();
 
 public:
-
-    // #110680#
     SwXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nImportFlags = IMPORT_ALL);
 
 #ifdef XML_CORE_API
-    // #110680#
     SwXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SwDoc& rDoc,

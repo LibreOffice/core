@@ -335,6 +335,12 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         css::uno::Reference< css::container::XNameAccess > m_xRecoveryCFG;
 
         //---------------------------------------
+        /** @short  proxy weak binding to forward Events to ourself without
+                    an ownership cycle
+          */
+        css::uno::Reference< css::util::XChangesListener > m_xRecoveryCFGListener;
+
+        //---------------------------------------
         /** @short  points to the used configuration package or.openoffice.Setup
             @descr  This instance does not cache - it calls directly the
                     configuration API!
@@ -346,6 +352,12 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     where we listen for new created documents.
           */
         css::uno::Reference< css::document::XEventBroadcaster > m_xNewDocBroadcaster;
+
+        //---------------------------------------
+        /** @short  proxy weak binding to forward Events to ourself without
+                    an ownership cycle
+          */
+        css::uno::Reference< css::document::XEventListener > m_xNewDocBroadcasterListener;
 
         //---------------------------------------
         /** @short  because we stop/restart listening sometimes, it's a good idea to know
@@ -655,9 +667,9 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     the new document, which should be deregistered.
 
             @param  bStopListening
-                    FALSE: must be used in case this method is called withion disposing() of the document,
+                    sal_False: must be used in case this method is called withion disposing() of the document,
                            where it make no sense to deregister our listener. The container dies ...
-                    TRUE : must be used in case this method is used on "dergistration" of this document, where
+                    sal_True : must be used in case this method is used on "dergistration" of this document, where
                            we must deregister our listener .-)
 
             @threadsafe
@@ -724,11 +736,11 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                                  will be postponed if there exists other unsaved
                                  documents. This feature was implemented, because
                                  we dont wish to disturb the user on it's work.
-                                 ... bAllowUserIdleLoop should be set to TRUE
+                                 ... bAllowUserIdleLoop should be set to sal_True
                     EMERGENCY_SAVE / SESSION_SAVE =>
                                  Here we must finish our work ASAP! It's not allowed
                                  to postpone any document.
-                                 ... bAllowUserIdleLoop must(!) be set to FALSE
+                                 ... bAllowUserIdleLoop must(!) be set to sal_False
 
             @param  pParams
                     sometimes this method is required inside an external dispatch request.

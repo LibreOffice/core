@@ -91,7 +91,6 @@ OFormattedField::~OFormattedField()
     DBG_DTOR( rpt_OFormattedField,NULL);
 }
 // -----------------------------------------------------------------------------
-//IMPLEMENT_FORWARD_XINTERFACE2(OFormattedField,FormattedFieldBase,FormattedFieldPropertySet)
 IMPLEMENT_FORWARD_REFCOUNT( OFormattedField, FormattedFieldBase )
 // --------------------------------------------------------------------------------
 uno::Any SAL_CALL OFormattedField::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)

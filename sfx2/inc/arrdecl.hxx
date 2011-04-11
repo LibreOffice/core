@@ -28,9 +28,9 @@
 #ifndef _SFX_ARRDECL_HXX
 #define _SFX_ARRDECL_HXX
 
-#include <tools/list.hxx>
 #include <svl/svarray.hxx>
 #include <sfx2/minarray.hxx>
+#include <vector>
 
 struct CntUpdateResult;
 
@@ -71,19 +71,11 @@ class SfxFrame;
 typedef SfxFrame* SfxFramePtr;
 SV_DECL_PTRARR( SfxFrameArr_Impl, SfxFramePtr, 4, 4 )
 
-DECLARE_LIST( SfxFilterList_Impl, SfxFilter* )
+typedef ::std::vector< SfxFilter* > SfxFilterList_Impl;
 
 struct SfxExternalLib_Impl;
 typedef SfxExternalLib_Impl* SfxExternalLibPtr;
 SV_DECL_PTRARR_DEL( SfxExternalLibArr_Impl, SfxExternalLibPtr, 2, 2 )
-
-//class XEventListenerRef;
-//typedef XEventListenerRef* XEventListenerPtr;
-//SV_DECL_PTRARR_DEL( XEventListenerArr_Impl, XEventListenerPtr, 4, 4 )
-
-//class XFrameRef;
-//typedef XFrameRef* XFramePtr;
-//SV_DECL_PTRARR_DEL( XFrameArr_Impl, XFramePtr, 4, 4 )
 
 class SfxSlot;
 typedef SfxSlot* SfxSlotPtr;

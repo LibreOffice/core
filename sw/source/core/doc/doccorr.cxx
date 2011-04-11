@@ -44,8 +44,6 @@
 #include <swundo.hxx>
 #include <hints.hxx>
 
-/*  */
-
 /*
  * MACROS um ueber alle CrsrShells zu iterieren
  */
@@ -74,9 +72,9 @@
 
 namespace
 {
-    // find the relevant section in which the SwUnoCrsr may wander. returns NULL if
-    // no restrictions apply
-    const SwStartNode* lcl_FindUnoCrsrSection( const SwNode& rNode )
+    // find the relevant section in which the SwUnoCrsr may wander.
+    // returns NULL if no restrictions apply
+    static const SwStartNode* lcl_FindUnoCrsrSection( const SwNode& rNode )
     {
         const SwStartNode* pStartNode = rNode.StartOfSectionNode();
         while( ( pStartNode != NULL ) &&
@@ -87,45 +85,28 @@ namespace
         return pStartNode;
     }
 
-    static inline void lcl_PaMCorrAbs1(SwPaM * pPam,
-        SwNode const * const pOldNode,
-        const SwPosition& rNewPos,
-        const xub_StrLen nOffset)
-    {
-        for(int nb = 0; nb < 2; ++nb)
-            if(&((pPam)->GetBound(BOOL(nb)).nNode.GetNode()) == pOldNode)
-            {
-                (pPam)->GetBound(BOOL(nb)) = rNewPos;
-                (pPam)->GetBound(BOOL(nb)).nContent += nOffset;
-            }
-    };
-
-    static inline bool lcl_PaMCorrAbs2(SwPaM* pPam,
-        const SwPosition& rNewPos,
-        ULONG nSttNode,
-        ULONG nEndNode)
-    {
-        bool bRet = false;
-
-        for(int nb = 0; nb < 2; ++nb)
-            if((pPam)->GetBound(BOOL(nb)).nNode >= nSttNode &&
-                (pPam)->GetBound(BOOL(nb)).nNode <= nEndNode)
-            {
-                (pPam)->GetBound(BOOL(nb)) = rNewPos;
-                bRet = true;
-            }
-        return bRet;
-    };
-
-    static inline void lcl_PaMCorrAbs3(SwPaM * pPam,
+    static inline bool lcl_PosCorrAbs(SwPosition & rPos,
         const SwPosition& rStart,
         const SwPosition& rEnd,
         const SwPosition& rNewPos)
     {
-        for(int nb = 0; nb < 2; ++nb)
-            if(rStart <= (pPam)->GetBound(BOOL(nb)) &&
-                (pPam)->GetBound(BOOL(nb)) <= rEnd )
-                (pPam)->GetBound(BOOL(nb)) = rNewPos;
+        if ((rStart <= rPos) && (rPos <= rEnd))
+        {
+            rPos = rNewPos;
+            return true;
+        }
+        return false;
+    };
+
+    static inline bool lcl_PaMCorrAbs(SwPaM & rPam,
+        const SwPosition& rStart,
+        const SwPosition& rEnd,
+        const SwPosition& rNewPos)
+    {
+        bool bRet = false;
+        bRet |= lcl_PosCorrAbs(rPam.GetBound(true ), rStart, rEnd, rNewPos);
+        bRet |= lcl_PosCorrAbs(rPam.GetBound(false), rStart, rEnd, rNewPos);
+        return bRet;
     };
 
     static inline void lcl_PaMCorrRel1(SwPaM * pPam,
@@ -134,135 +115,13 @@ namespace
         const xub_StrLen nCntIdx)
     {
         for(int nb = 0; nb < 2; ++nb)
-            if(&((pPam)->GetBound(BOOL(nb)).nNode.GetNode()) == pOldNode)
+            if(&((pPam)->GetBound(sal_Bool(nb)).nNode.GetNode()) == pOldNode)
             {
-                (pPam)->GetBound(BOOL(nb)).nNode = rNewPos.nNode;
-                (pPam)->GetBound(BOOL(nb)).nContent.Assign(
+                (pPam)->GetBound(sal_Bool(nb)).nNode = rNewPos.nNode;
+                (pPam)->GetBound(sal_Bool(nb)).nContent.Assign(
                     const_cast<SwIndexReg*>(rNewPos.nContent.GetIdxReg()),
-                    nCntIdx + (pPam)->GetBound(BOOL(nb)).nContent.GetIndex());
+                    nCntIdx + (pPam)->GetBound(sal_Bool(nb)).nContent.GetIndex());
             }
-    }
-}
-
-void PaMCorrAbs( const SwNodeIndex &rOldNode,
-                const SwPosition &rNewPos,
-                const xub_StrLen nOffset)
-{
-    const SwNode* pOldNode = &rOldNode.GetNode();
-    const SwPosition aNewPos( rNewPos );
-    const SwDoc* pDoc = pOldNode->GetDoc();
-    SwCrsrShell* pShell = pDoc->GetEditShell();
-
-    if( pShell )
-    {
-        FOREACHSHELL_START( pShell )
-            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
-            if( _pStkCrsr )
-            do {
-                lcl_PaMCorrAbs1( _pStkCrsr, pOldNode, aNewPos, nOffset );
-            } while ( (_pStkCrsr != 0 ) &&
-                ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
-
-            FOREACHPAM_START( PCURSH->_GetCrsr() )
-                lcl_PaMCorrAbs1( PCURCRSR, pOldNode, aNewPos, nOffset );
-            FOREACHPAM_END()
-
-            if( PCURSH->IsTableMode() )
-                lcl_PaMCorrAbs1( PCURSH->GetTblCrs(), pOldNode, aNewPos, nOffset );
-
-        FOREACHSHELL_END( pShell )
-    }
-
-    {
-        SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
-        for( USHORT n = 0; n < rTbl.Count(); ++n )
-        {
-            FOREACHPAM_START( rTbl[ n ] )
-                lcl_PaMCorrAbs1( PCURCRSR, pOldNode, aNewPos, nOffset );
-            FOREACHPAM_END()
-
-            SwUnoTableCrsr* pUnoTblCrsr =
-                dynamic_cast<SwUnoTableCrsr*>(rTbl[ n ]);
-            if( pUnoTblCrsr )
-            {
-                FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                    lcl_PaMCorrAbs1( PCURCRSR, pOldNode, aNewPos, nOffset );
-                FOREACHPAM_END()
-            }
-        }
-    }
-}
-
-
-void PaMCorrAbs( const SwNodeIndex &rStartNode,
-                 const SwNodeIndex &rEndNode,
-                 const SwPosition &rNewPos )
-{
-    const ULONG nSttNode = rStartNode.GetIndex();
-    const ULONG nEndNode = rEndNode.GetIndex();
-    const SwPosition aNewPos( rNewPos );
-    SwDoc* pDoc = rStartNode.GetNode().GetDoc();
-
-    SwCrsrShell* pShell = pDoc->GetEditShell();
-    if( pShell )
-    {
-        FOREACHSHELL_START( pShell )
-            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
-            if( _pStkCrsr )
-            do {
-                lcl_PaMCorrAbs2( _pStkCrsr, aNewPos, nSttNode, nEndNode );
-            } while ( (_pStkCrsr != 0 ) &&
-                ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
-
-            FOREACHPAM_START( PCURSH->_GetCrsr() )
-                lcl_PaMCorrAbs2( PCURCRSR, aNewPos, nSttNode, nEndNode );
-            FOREACHPAM_END()
-
-            if( PCURSH->IsTableMode() )
-                lcl_PaMCorrAbs2( PCURSH->GetTblCrs(), aNewPos, nSttNode, nEndNode );
-
-        FOREACHSHELL_END( pShell )
-    }
-
-    {
-        SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
-        for( USHORT n = 0; n < rTbl.Count(); ++n )
-        {
-            bool bChange = false;
-
-            SwUnoCrsr* pUnoCursor = rTbl[ n ];
-
-            // determine whether the UNO cursor will leave it's designated
-            // section
-            bool bLeaveSection =
-                pUnoCursor->IsRemainInSection() &&
-                ( lcl_FindUnoCrsrSection( aNewPos.nNode.GetNode() ) !=
-                  lcl_FindUnoCrsrSection(
-                      pUnoCursor->GetPoint()->nNode.GetNode() ) );
-
-            FOREACHPAM_START( pUnoCursor )
-                bChange |= lcl_PaMCorrAbs2(PCURCRSR, aNewPos, nSttNode, nEndNode);
-            FOREACHPAM_END()
-
-            SwUnoTableCrsr* pUnoTblCrsr =
-                dynamic_cast<SwUnoTableCrsr*>(pUnoCursor);
-            if( pUnoTblCrsr )
-            {
-                FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                    bChange |=
-                        lcl_PaMCorrAbs2( PCURCRSR, aNewPos, nSttNode, nEndNode );
-                FOREACHPAM_END()
-            }
-
-            // if a UNO cursor leaves its designated section, we must inform
-            // (and invalidate) said cursor
-            if( bChange && bLeaveSection )
-            {
-                // the UNO cursor has left its section. We need to notify it!
-                SwMsgPoolItem aHint( RES_UNOCURSOR_LEAVES_SECTION );
-                pUnoCursor->Modify( &aHint, NULL );
-            }
-        }
     }
 }
 
@@ -270,11 +129,11 @@ void PaMCorrAbs( const SwNodeIndex &rStartNode,
 void PaMCorrAbs( const SwPaM& rRange,
                 const SwPosition& rNewPos )
 {
-    SwPosition aStart( *rRange.Start() );
-    SwPosition aEnd( *rRange.End() );
-    SwPosition aNewPos( rNewPos );
-    SwDoc* pDoc = aStart.nNode.GetNode().GetDoc();
-    SwCrsrShell* pShell = pDoc->GetEditShell();
+    SwPosition const aStart( *rRange.Start() );
+    SwPosition const aEnd( *rRange.End() );
+    SwPosition const aNewPos( rNewPos );
+    SwDoc *const pDoc = aStart.nNode.GetNode().GetDoc();
+    SwCrsrShell *const pShell = pDoc->GetEditShell();
 
     if( pShell )
     {
@@ -282,34 +141,57 @@ void PaMCorrAbs( const SwPaM& rRange,
             SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
             if( _pStkCrsr )
             do {
-                lcl_PaMCorrAbs3( _pStkCrsr, aStart, aEnd, aNewPos );
+                lcl_PaMCorrAbs( *_pStkCrsr, aStart, aEnd, aNewPos );
             } while ( (_pStkCrsr != 0 ) &&
                 ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
             FOREACHPAM_START( PCURSH->_GetCrsr() )
-                lcl_PaMCorrAbs3( PCURCRSR, aStart, aEnd, aNewPos );
+                lcl_PaMCorrAbs( *PCURCRSR, aStart, aEnd, aNewPos );
             FOREACHPAM_END()
 
             if( PCURSH->IsTableMode() )
-                lcl_PaMCorrAbs3( PCURSH->GetTblCrs(), aStart, aEnd, aNewPos );
+                lcl_PaMCorrAbs( *PCURSH->GetTblCrs(), aStart, aEnd, aNewPos );
 
         FOREACHSHELL_END( pShell )
     }
     {
-        SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
-        for( USHORT n = 0; n < rTbl.Count(); ++n )
+        SwUnoCrsrTbl& rTbl = const_cast<SwUnoCrsrTbl&>(pDoc->GetUnoCrsrTbl());
+
+        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
         {
-            FOREACHPAM_START( rTbl[ n ] )
-                lcl_PaMCorrAbs3( PCURCRSR, aStart, aEnd, aNewPos );
+            SwUnoCrsr *const pUnoCursor = rTbl[ n ];
+
+            bool bChange = false; // has the UNO cursor been corrected?
+
+            // determine whether the UNO cursor will leave it's designated
+            // section
+            bool const bLeaveSection =
+                pUnoCursor->IsRemainInSection() &&
+                ( lcl_FindUnoCrsrSection( aNewPos.nNode.GetNode() ) !=
+                  lcl_FindUnoCrsrSection(
+                      pUnoCursor->GetPoint()->nNode.GetNode() ) );
+
+            FOREACHPAM_START( pUnoCursor )
+                bChange |= lcl_PaMCorrAbs( *PCURCRSR, aStart, aEnd, aNewPos );
             FOREACHPAM_END()
 
-            SwUnoTableCrsr* pUnoTblCrsr =
-                dynamic_cast<SwUnoTableCrsr*>(rTbl[ n ]);
+            SwUnoTableCrsr *const pUnoTblCrsr =
+                dynamic_cast<SwUnoTableCrsr *>(rTbl[ n ]);
             if( pUnoTblCrsr )
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                    lcl_PaMCorrAbs3( PCURCRSR, aStart, aEnd, aNewPos );
+                    bChange |=
+                        lcl_PaMCorrAbs( *PCURCRSR, aStart, aEnd, aNewPos );
                 FOREACHPAM_END()
+            }
+
+            // if a UNO cursor leaves its designated section, we must inform
+            // (and invalidate) said cursor
+            if (bChange && bLeaveSection)
+            {
+                // the UNO cursor has left its section. We need to notify it!
+                SwMsgPoolItem aHint( RES_UNOCURSOR_LEAVES_SECTION );
+                pUnoCursor->ModifyNotification( &aHint, NULL );
             }
         }
     }
@@ -318,25 +200,33 @@ void PaMCorrAbs( const SwPaM& rRange,
 void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     const SwPosition& rNewPos,
     const xub_StrLen nOffset,
-    BOOL bMoveCrsr)
+    sal_Bool bMoveCrsr)
 {
+    SwCntntNode *const pCntntNode( rOldNode.GetNode().GetCntntNode() );
+    SwPaM const aPam(rOldNode, 0,
+                     rOldNode, (pCntntNode) ? pCntntNode->Len() : 0);
+    SwPosition aNewPos(rNewPos);
+    aNewPos.nContent += nOffset;
+
     getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
-    { // fix readlines
+    {   // fix redlines
         SwRedlineTbl& rTbl = *pRedlineTbl;
-        for( USHORT n = 0; n < rTbl.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
         {
             // is on position ??
-            lcl_PaMCorrAbs1( rTbl[ n ], &rOldNode.GetNode(), SwPosition(rNewPos), nOffset );
+            lcl_PaMCorrAbs(*rTbl[ n ], *aPam.Start(), *aPam.End(), aNewPos);
         }
     }
 
     if(bMoveCrsr)
-        ::PaMCorrAbs(rOldNode, rNewPos, nOffset);
+    {
+        ::PaMCorrAbs(aPam, aNewPos);
+    }
 }
 
 void SwDoc::CorrAbs(const SwPaM& rRange,
     const SwPosition& rNewPos,
-    BOOL bMoveCrsr)
+    sal_Bool bMoveCrsr)
 {
     SwPosition aStart(*rRange.Start());
     SwPosition aEnd(*rRange.End());
@@ -351,14 +241,17 @@ void SwDoc::CorrAbs(const SwPaM& rRange,
 void SwDoc::CorrAbs(const SwNodeIndex& rStartNode,
      const SwNodeIndex& rEndNode,
      const SwPosition& rNewPos,
-     BOOL bMoveCrsr)
+     sal_Bool bMoveCrsr)
 {
-    SwPosition aNewPos(rNewPos);
-
     _DelBookmarks(rStartNode, rEndNode);
 
     if(bMoveCrsr)
-        ::PaMCorrAbs(rStartNode, rEndNode, rNewPos);
+    {
+        SwCntntNode *const pCntntNode( rEndNode.GetNode().GetCntntNode() );
+        SwPaM const aPam(rStartNode, 0,
+                         rEndNode, (pCntntNode) ? pCntntNode->Len() : 0);
+        ::PaMCorrAbs(aPam, rNewPos);
+    }
 }
 
 
@@ -397,7 +290,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
     }
     {
         SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
-        for( USHORT n = 0; n < rTbl.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
         {
             FOREACHPAM_START( rTbl[ n ] )
                 lcl_PaMCorrRel1( PCURCRSR, pOldNode, aNewPos, nCntIdx );
@@ -418,14 +311,14 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
 void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
     const SwPosition& rNewPos,
     const xub_StrLen nOffset,
-    BOOL bMoveCrsr)
+    sal_Bool bMoveCrsr)
 {
     getIDocumentMarkAccess()->correctMarksRelative(rOldNode, rNewPos, nOffset);
 
     { // dann die Redlines korrigieren
         SwRedlineTbl& rTbl = *pRedlineTbl;
         SwPosition aNewPos(rNewPos);
-        for( USHORT n = 0; n < rTbl.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
         {
             // liegt auf der Position ??
             lcl_PaMCorrRel1( rTbl[ n ], &rOldNode.GetNode(), aNewPos, aNewPos.nContent.GetIndex() + nOffset );
@@ -440,9 +333,9 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
 SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
 {
     // Layout und OLE-Shells sollten vorhanden sein!
-    if( pLayout && pLayout->GetCurrShell() )
+    if( pCurrentView )
     {
-        ViewShell *pSh = pLayout->GetCurrShell(), *pVSh = pSh;
+        ViewShell *pSh = pCurrentView, *pVSh = pSh;
         if( ppSh )
             *ppSh = pSh;
 
@@ -454,10 +347,14 @@ SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
         } while( pVSh != ( pSh = (ViewShell*)pSh->GetNext() ));
     }
     else if( ppSh )
-        *ppSh = 0;
+        *ppSh = 0;  //swmod 071029//swmod 071225
 
     return 0;
 }
 
+::sw::IShellCursorSupplier * SwDoc::GetIShellCursorSupplier()
+{
+    return GetEditShell(0);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

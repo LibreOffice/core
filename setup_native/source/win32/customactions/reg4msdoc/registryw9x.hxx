@@ -30,7 +30,6 @@
 #define _REGISTRYW9X_HXX_
 
 #include "registry.hxx"
-#include "registry.hxx"
 
 //---------------------------------------
 // constants

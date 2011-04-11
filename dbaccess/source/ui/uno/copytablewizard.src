@@ -66,14 +66,17 @@ String STR_CTW_ERROR_DURING_INITIALIZATION
 {
     Text [ en-US ] = "An error occurred during initialization.";
 };
+
 String STR_CTW_ERROR_UNSUPPORTED_SETTING
 {
     Text [ en-US ] = "Unsupported setting in the copy source descriptor: $name$.";
 };
+
 String STR_CTW_ERROR_NO_QUERY
 {
     Text [ en-US ] = "To copy a query, your connection must be able to provide queries.";
 };
+
 String STR_CTW_ERROR_INVALID_INTERACTIONHANDLER
 {
     Text [ en-US ] = "The given interaction handler is invalid.";

@@ -45,7 +45,7 @@ namespace sd {
 
 /*************************************************************************
 |*
-|* Konstruktor
+|* Constructor
 |*
 \************************************************************************/
 
@@ -59,19 +59,19 @@ ZoomList::ZoomList(ViewShell* pViewShell)
 
 /*************************************************************************
 |*
-|* Destruktor
+|* Destructor
 |*
 \************************************************************************/
 
 ZoomList::~ZoomList()
 {
 #if ( defined GCC && defined C272 )
-    for (ULONG nObject=0; nObject<List::Count(); nObject++)
+    for (sal_uLong nObject=0; nObject<List::Count(); nObject++)
 #else
-    for (ULONG nObject=0; nObject<Count(); nObject++)
+    for (sal_uLong nObject=0; nObject<Count(); nObject++)
 #endif
     {
-        // Ggf. ZoomRects loeschen
+        // delete ZoomRects if necessary
         delete ((Rectangle*) GetObject(nObject));
     }
 }
@@ -79,18 +79,18 @@ ZoomList::~ZoomList()
 
 /*************************************************************************
 |*
-|* Neues ZoomRect aufnehmen
+|* Insert new ZoomRect
 |*
 \************************************************************************/
 
 void ZoomList::InsertZoomRect(const Rectangle& rRect)
 {
-    ULONG nRectCount = Count();
+    sal_uLong nRectCount = Count();
 
     if (nRectCount >= MAX_ENTRYS)
     {
         delete ((Rectangle*) GetObject(0));
-        Remove((ULONG) 0);
+        Remove((sal_uLong) 0);
     }
     else if (nRectCount == 0)
     {
@@ -111,14 +111,14 @@ void ZoomList::InsertZoomRect(const Rectangle& rRect)
 
 /*************************************************************************
 |*
-|* Naechstes ZoomRect herausgeben
+|* Return next ZoomRect
 |*
 \************************************************************************/
 
 Rectangle ZoomList::GetNextZoomRect()
 {
     mnCurPos++;
-    ULONG nRectCount = Count();
+    sal_uLong nRectCount = Count();
 
     if (nRectCount > 0 && mnCurPos > nRectCount - 1)
     {
@@ -135,7 +135,7 @@ Rectangle ZoomList::GetNextZoomRect()
 
 /*************************************************************************
 |*
-|* Letztes ZoomRect herausgeben
+|* Return last ZoomRect
 |*
 \************************************************************************/
 
@@ -156,18 +156,18 @@ Rectangle ZoomList::GetPreviousZoomRect()
 
 /*************************************************************************
 |*
-|* Gibt es ein naechstes ZoomRect?
+|* Is there a next ZoomRect?
 |*
 \************************************************************************/
 
-BOOL ZoomList::IsNextPossible() const
+sal_Bool ZoomList::IsNextPossible() const
 {
-    BOOL bPossible = FALSE;
-    ULONG nRectCount = Count();
+    sal_Bool bPossible = sal_False;
+    sal_uLong nRectCount = Count();
 
     if (nRectCount > 0 && mnCurPos < nRectCount - 1)
     {
-        bPossible = TRUE;
+        bPossible = sal_True;
     }
 
     return (bPossible);
@@ -175,17 +175,17 @@ BOOL ZoomList::IsNextPossible() const
 
 /*************************************************************************
 |*
-|* Gibt es ein vorheriges ZoomRect?
+|* Is there a previous ZoomRect?
 |*
 \************************************************************************/
 
-BOOL ZoomList::IsPreviousPossible() const
+sal_Bool ZoomList::IsPreviousPossible() const
 {
-    BOOL bPossible = FALSE;
+    sal_Bool bPossible = sal_False;
 
     if (mnCurPos > 0)
     {
-        bPossible = TRUE;
+        bPossible = sal_True;
     }
 
     return (bPossible);

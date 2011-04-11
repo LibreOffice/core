@@ -47,7 +47,6 @@
 #define RB_ARG3             18
 #define RB_ARG4             19
 #define WND_SLIDER          20
-#define IMG_FX_H            30
 
 #define STR_OPTIONAL        1
 #define STR_REQUIRED        2

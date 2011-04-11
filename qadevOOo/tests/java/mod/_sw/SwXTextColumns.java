@@ -120,16 +120,16 @@ public class SwXTextColumns extends TestCase {
             oStyle = (XStyle) AnyConverter.toObject(
                     new Type(XStyle.class),oSFNA.getByName("Standard"));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Error, exception occured while getting style.");
+            log.println("Error, exception occurred while getting style.");
             e.printStackTrace(log);
         } catch ( com.sun.star.lang.IndexOutOfBoundsException e ) {
-            log.println("Error, exception occured while getting style.");
+            log.println("Error, exception occurred while getting style.");
             e.printStackTrace(log);
         } catch ( com.sun.star.container.NoSuchElementException e ) {
-            log.println("Error, exception occured while getting style.");
+            log.println("Error, exception occurred while getting style.");
             e.printStackTrace(log);
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error, exception occured while getting style.");
+            log.println("Error, exception occurred while getting style.");
             e.printStackTrace(log);
         }
 
@@ -141,13 +141,13 @@ public class SwXTextColumns extends TestCase {
             oObj = (XTextColumns) AnyConverter.toObject(
                 new Type(XTextColumns.class),xProps.getPropertyValue("TextColumns"));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
-            log.println("Exception occured while getting style property");
+            log.println("Exception occurred while getting style property");
             e.printStackTrace(log);
         } catch ( com.sun.star.beans.UnknownPropertyException e ) {
-            log.println("Exception occured while getting style property");
+            log.println("Exception occurred while getting style property");
             e.printStackTrace(log);
         } catch ( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Exception occured while getting style property");
+            log.println("Exception occurred while getting style property");
             e.printStackTrace(log);
         }
 
@@ -172,7 +172,7 @@ public class SwXTextColumns extends TestCase {
                     ControlCharacter.LINE_BREAK, false );
             }
         } catch ( com.sun.star.lang.IllegalArgumentException e ){
-            log.println("Exception occured while inserting Text");
+            log.println("Exception occurred while inserting Text");
             e.printStackTrace(log);
         }
 

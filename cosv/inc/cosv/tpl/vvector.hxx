@@ -132,7 +132,7 @@ class VirtualVector
     typedef VirtualVector<XX,PTRDEL>            self;
     typedef std::vector< DYN XX* >              impl_type;
     typedef typename impl_type::size_type       size_type;
-    typedef ptrdiff_t                           difference_type;
+    typedef std::ptrdiff_t                      difference_type;
 
     class const_iterator;
     class iterator;

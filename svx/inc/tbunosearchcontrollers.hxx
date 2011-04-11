@@ -140,8 +140,8 @@ private:
 
     FindTextFieldControl* m_pFindTextFieldControl;
 
-    USHORT m_nDownSearchId; // item position of findbar
-    USHORT m_nUpSearchId;   // item position of findbar
+    sal_uInt16 m_nDownSearchId; // item position of findbar
+    sal_uInt16 m_nUpSearchId;   // item position of findbar
 
 };
 

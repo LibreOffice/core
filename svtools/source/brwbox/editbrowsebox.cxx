@@ -57,13 +57,6 @@ namespace svt
     namespace
     {
         //..............................................................
-        sal_Bool isHiContrast(Window* _pWindow)
-        {
-            OSL_ENSURE(_pWindow,"Window must be not null!");
-            return _pWindow && _pWindow->GetSettings().GetStyleSettings().GetHighContrastMode();
-        }
-
-        //..............................................................
         sal_uInt16 getRealGetFocusFlags( Window* _pWindow )
         {
             sal_uInt16 nFlags = 0;
@@ -137,7 +130,6 @@ namespace svt
     void EditBrowseBox::impl_construct()
     {
         m_aImpl = ::std::auto_ptr<EditBrowseBoxImpl>(new EditBrowseBoxImpl());
-        m_aImpl->m_bHiContrast = isHiContrast(&GetDataWindow());
 
         SetCompoundControl(sal_True);
         SetGridLineColor( Color( COL_LIGHTGRAY ) );
@@ -302,11 +294,9 @@ namespace svt
     //------------------------------------------------------------------------------
     Image EditBrowseBox::GetImage(RowStatus eStatus) const
     {
-        sal_Bool bHiContrast = isHiContrast(&GetDataWindow());
-        if ( !m_aStatusImages.GetImageCount() || (bHiContrast != m_aImpl->m_bHiContrast) )
+        if ( !m_aStatusImages.GetImageCount() )
         {
-            m_aImpl->m_bHiContrast = bHiContrast;
-            const_cast<EditBrowseBox*>(this)->m_aStatusImages = ImageList(SvtResId(bHiContrast ? RID_SVTOOLS_IMAGELIST_EDITBWSEBOX_H : RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX));
+            const_cast<EditBrowseBox*>(this)->m_aStatusImages = ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX ) );
         }
 
         Image aImage;
@@ -511,7 +501,6 @@ namespace svt
 
         // we are about to leave the current cell. If there is a "this cell has been modified" notification
         // pending (asynchronously), this may be deadly -> do it synchronously
-        // 95826 - 2002-10-14 - fs@openoffice.org
         if ( nCellModifiedEvent )
         {
             Application::RemoveUserEvent( nCellModifiedEvent );
@@ -522,7 +511,6 @@ namespace svt
         if (0 == rEvt.GetColumnId())
         {   // it was the handle column. save the current cell content if necessary
             // (clicking on the handle column results in selecting the current row)
-            // 23.01.2001 - 82797 - FS
             if (IsEditing() && aController->IsModified())
                 SaveModified();
         }
@@ -622,7 +610,7 @@ namespace svt
             {
                 while ( GetSelectColumnCount( ) )
                     SelectColumnPos(
-                        sal::static_int_cast< USHORT >(FirstSelectedColumn()),
+                        sal::static_int_cast< sal_uInt16 >(FirstSelectedColumn()),
                         sal_False );
                 Select();
             }

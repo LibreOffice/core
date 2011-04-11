@@ -373,12 +373,11 @@ bool parseParameters(ParameterList const & rInput,
                         break;
                 };
             }
-            pOutput->Insert(new INetContentTypeParameter(p->m_aAttribute,
+            pOutput->Append(new INetContentTypeParameter(p->m_aAttribute,
                                                              p->m_aCharset,
                                                              p->m_aLanguage,
                                                              aValue,
-                                                             !bBadEncoding),
-                                LIST_APPEND);
+                                                             !bBadEncoding));
             p = pNext;
         }
     return true;
@@ -1145,8 +1144,6 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
 
         bool bPresent;
         Parameter ** pPos = aList.find(aAttribute, nSection, bPresent);
-        if (bPresent)
-            break;
 
         bool bExtended = false;
         if (p != pEnd && *p == '*')
@@ -1303,7 +1300,8 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                     pTokenBegin, static_cast< xub_StrLen >(p - pTokenBegin));
         }
 
-        *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
+        if (!bPresent)
+            *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
                               nSection, bExtended);
     }
     return parseParameters(aList, pParameters) ? pParameterBegin : pBegin;
@@ -1550,7 +1548,7 @@ const sal_Char * INetMIME::getCharsetName(rtl_TextEncoding eEncoding)
                 return "ISO-10646-UCS-2";
 
             default:
-                DBG_ERROR("INetMIME::getCharsetName(): Unsupported encoding");
+                OSL_FAIL("INetMIME::getCharsetName(): Unsupported encoding");
                 return 0;
         }
 }
@@ -2040,7 +2038,7 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             break;
 
         default: //@@@ more cases are missing!
-            DBG_ERROR("INetMIME::createPreferredCharsetList():"
+            OSL_FAIL("INetMIME::createPreferredCharsetList():"
                           " Unsupported encoding");
             break;
     }
@@ -3066,7 +3064,7 @@ ByteString INetMIME::decodeUTF8(const ByteString & rText,
     ByteString sDecoded;
     while (p != pEnd)
     {
-        sal_uInt32 nCharacter;
+        sal_uInt32 nCharacter = 0;
         if (translateUTF8Char(p, pEnd, eEncoding, nCharacter))
             sDecoded += sal_Char(nCharacter);
         else
@@ -3499,7 +3497,7 @@ UniString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
             {
                 const sal_Char * pUTF8Begin = p - 1;
                 const sal_Char * pUTF8End = pUTF8Begin;
-                sal_uInt32 nCharacter;
+                sal_uInt32 nCharacter = 0;
                 if (translateUTF8Char(pUTF8End, pEnd, RTL_TEXTENCODING_UCS4,
                                       nCharacter))
                 {
@@ -4545,21 +4543,21 @@ INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
 
 void INetContentTypeParameterList::Clear()
 {
-    while (Count() > 0)
-        delete static_cast< INetContentTypeParameter * >(Remove(Count() - 1));
+    maEntries.clear();
 }
 
 //============================================================================
 const INetContentTypeParameter *
 INetContentTypeParameterList::find(const ByteString & rAttribute) const
 {
-    for (ULONG i = 0; i < Count(); ++i)
+    boost::ptr_vector<INetContentTypeParameter>::const_iterator iter;
+    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
     {
-        const INetContentTypeParameter * pParameter = GetObject(i);
-        if (pParameter->m_sAttribute.EqualsIgnoreCaseAscii(rAttribute))
-            return pParameter;
+        if (iter->m_sAttribute.EqualsIgnoreCaseAscii(rAttribute))
+            return &(*iter);
     }
-    return 0;
+
+    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

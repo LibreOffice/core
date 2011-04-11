@@ -37,28 +37,23 @@ TARGET=so_icu
 
 .INCLUDE :	icuversion.mk
 
-.IF "$(ICU_MICRO)"!="0"
-TARFILE_NAME=icu4c-$(ICU_MAJOR)_$(ICU_MINOR)_$(ICU_MICRO)-src
-TARFILE_MD5=2f6ecca935948f7db92d925d88d0d078
-.ELSE
-TARFILE_NAME=icu4c-$(ICU_MAJOR)_$(ICU_MINOR)-src
-TARFILE_MD5=
-.ENDIF
+TARFILE_NAME=icu4c-4_4_2-src
+TARFILE_MD5=314e582264c36b3735466c522899aa07
 TARFILE_ROOTDIR=icu
 
-PATCH_FILES=\
-    ${TARFILE_NAME}.patch \
-    icu4c-aix.patch
+#icu4c.8320.freeserif.crash.patch, see
+#http://bugs.icu-project.org/trac/ticket/8320 for crash with FreeSerif
 
-# ADDITIONAL_FILES=
+PATCH_FILES=\
+    icu4c-build.patch \
+    icu4c-rpath.patch \
+    icu4c.8320.freeserif.crash.patch \
+    icu4c-aix.patch \
+    icu4c-4_4_2-wchar_t.patch \
+    icu4c-warnings.patch \
+    icu4c-escapespace.patch
 
 .IF "$(GUI)"=="UNX"
-.IF "$(COMNAME)"=="sunpro5"
-#.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-#CC:=$(COMPATH)$/bin$/cc
-#CXX:=$(COMPATH)$/bin$/CC
-#.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-.ENDIF          # "$(COMNAME)"=="sunpro5"
 
 .IF "$(SYSBASE)"!=""
 icu_CFLAGS+=-I$(SYSBASE)$/usr$/include
@@ -79,11 +74,6 @@ CC:=gcc $(EXTRA_CFLAGS)
 .EXPORT : CPP
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(OS)"=="MACOSX"
-
-# Disable executable stack
-.IF "$(OS)$(COM)"=="LINUXGCC"
-icu_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
 
 icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
 icu_LDFLAGS+=$(EXTRA_LINKFLAGS)
@@ -112,9 +102,9 @@ LDFLAGSADD += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-
 
 CONFIGURE_DIR=source
 
-CONFIGURE_ACTION+=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" ./configure --enable-layout --enable-static --enable-shared=yes $(DISABLE_64BIT)'
+CONFIGURE_ACTION+=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" \
+./configure --enable-layout --disable-static --enable-shared $(DISABLE_64BIT)'
 
-#CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=
 
 # Use of
@@ -125,7 +115,7 @@ CONFIGURE_FLAGS=
 # note the position of the single quotes.
 
 BUILD_DIR=$(CONFIGURE_DIR)
-BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
+BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) -j$(EXTMAXPROCESS)
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
@@ -161,14 +151,14 @@ icu_LDFLAGS+=-shared-libgcc
 icu_LDFLAGS+=-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api
 .ENDIF
 icu_LDFLAGS+=-L$(COMPATH)$/lib
-icu_LIBS=-lmingwthrd
+icu_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-icu_LIBS+=-lstdc++_s
+icu_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 icu_LDFLAGS+=-Wl,--enable-runtime-pseudo-reloc-v2
-CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" \
+./configure --build=i586-pc-mingw32 --enable-layout --disable-static --enable-shared --enable-64bit-libs=no'
 
-#CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=
 
 # Use of
@@ -221,16 +211,20 @@ ICU_BUILD_VERSION=Release
 ICU_BUILD_LIBPOST=
 .ENDIF
 
-CONFIGURE_ACTION+= $(PERL) ..$/..$/..$/..$/..$/createmak.pl ..$/..$/..$/..$/..$/createmak.cfg .
-
-.IF "$(CCNUMVER)"<="001400000000"
-BUILD_ACTION=cd allinone && nmake /f all.mak EXFLAGS="-EHsc" && cd ..$/..
+.IF "$(CPU)" == "I"
+ICU_BUILD_ARCH=Win32
 .ELSE
-BUILD_ACTION=cd allinone && nmake /f all.mak EXFLAGS="-EHa -Zc:wchar_t-" && cd ..$/..
+ICU_BUILD_ARCH=x64
+.ENDIF
+
+.IF "$(CCNUMVER)" >= "001600000000"
+BUILD_ACTION=cd allinone && MSBuild.exe allinone.sln /p:Configuration=$(ICU_BUILD_VERSION) /p:Platform=$(ICU_BUILD_ARCH)
+.ELSE
+BUILD_ACTION=cd allinone && $(COMPATH)$/vcpackages$/vcbuild.exe allinone.sln "$(ICU_BUILD_VERSION)|$(ICU_BUILD_ARCH)"
 .ENDIF
 
 OUT2LIB= \
-    $(BUILD_DIR)$/..$/lib$/icudata.lib \
+    $(BUILD_DIR)$/..$/lib$/icudt.lib \
     $(BUILD_DIR)$/..$/lib$/icuin$(ICU_BUILD_LIBPOST).lib \
     $(BUILD_DIR)$/..$/lib$/icuuc$(ICU_BUILD_LIBPOST).lib \
     $(BUILD_DIR)$/..$/lib$/icule$(ICU_BUILD_LIBPOST).lib \
@@ -263,6 +257,30 @@ $(PACKAGE_DIR)$/so_add_binary :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary
 
+.ENDIF
+
+.IF "$(GUI)$(COM)"=="WNTGCC"
+ALLTAR : \
+    $(LB)$/icudata.lib \
+    $(LB)$/icuin$(ICU_BUILD_LIBPOST).lib \
+    $(LB)$/icuuc$(ICU_BUILD_LIBPOST).lib \
+    $(LB)$/icule$(ICU_BUILD_LIBPOST).lib \
+    $(LB)$/icutu$(ICU_BUILD_LIBPOST).lib
+
+$(LB)$/icudata.lib : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+    $(TOUCH) $@
+
+$(LB)$/icuin$(ICU_BUILD_LIBPOST).lib : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+    $(TOUCH) $@
+
+$(LB)$/icuuc$(ICU_BUILD_LIBPOST).lib : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+    $(TOUCH) $@
+
+$(LB)$/icule$(ICU_BUILD_LIBPOST).lib : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+    $(TOUCH) $@
+
+$(LB)$/icutu$(ICU_BUILD_LIBPOST).lib : $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
+    $(TOUCH) $@
 .ENDIF
 
 # Since you never know what will be in a patch (for example, it may already

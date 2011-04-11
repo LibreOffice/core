@@ -28,11 +28,7 @@
 
 #include "timeanimvaluecontext.hxx"
 
-#include "oox/core/namespaces.hxx"
 #include "animvariantcontext.hxx"
-
-#include "tokens.hxx"
-
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -58,7 +54,7 @@ namespace oox { namespace ppt {
     void SAL_CALL TimeAnimValueListContext::endFastElement( sal_Int32 aElement )
         throw ( SAXException, RuntimeException)
     {
-        if( aElement == ( NMSP_PPT|XML_tav ) )
+        if( aElement == PPT_TOKEN( tav ) )
         {
             mbInValue = false;
         }
@@ -73,7 +69,7 @@ namespace oox { namespace ppt {
 
         switch ( aElementToken )
         {
-        case NMSP_PPT|XML_tav:
+        case PPT_TOKEN( tav ):
         {
             mbInValue = true;
             TimeAnimationValue val;
@@ -82,7 +78,7 @@ namespace oox { namespace ppt {
             maTavList.push_back( val );
             break;
         }
-        case NMSP_PPT|XML_val:
+        case PPT_TOKEN( val ):
             if( mbInValue )
             {
                 // CT_TLAnimVariant

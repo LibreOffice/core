@@ -102,7 +102,7 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
     const int nCount = SAL_N_ELEMENTS( aTranslitNames );
     Sequence< ::rtl::OUString > aNames( nCount );
     ::rtl::OUString* pNames = aNames.getArray();
-    for (INT32 i = 0;  i < nCount;  ++i)
+    for (sal_Int32 i = 0;  i < nCount;  ++i)
         pNames[i] = ::rtl::OUString::createFromAscii( aTranslitNames[i] );
 
     return aNames;
@@ -112,7 +112,7 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
 SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
-    ConfigItem( ::rtl::OUString::createFromAscii( CFG_ROOT_NODE ) ),
+    ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFG_ROOT_NODE )) ),
 
     aSearchOpt      (   SearchAlgorithms_ABSOLUTE,
                         SearchFlags::LEV_RELAXED,
@@ -132,7 +132,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     bBackward       ( sal_False ),
     bPattern        ( sal_False ),
     bContent        ( sal_False ),
-    bAsianOptions   ( FALSE )
+    bAsianOptions   ( sal_False )
 {
     EnableNotification( lcl_GetNotifyNames() );
 
@@ -149,7 +149,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     if (aOpt.IsWholeWordsOnly())
         aSearchOpt.searchFlag |= SearchFlags::NORM_WORD_ONLY;
 
-    INT32 &rFlags = aSearchOpt.transliterateFlags;
+    sal_Int32 &rFlags = aSearchOpt.transliterateFlags;
 
     if (!aOpt.IsMatchCase())
         rFlags |= TransliterationModules_IGNORE_CASE;
@@ -200,7 +200,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 
     SfxPoolItem ( rItem ),
-    ConfigItem( ::rtl::OUString::createFromAscii( CFG_ROOT_NODE ) ),
+    ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFG_ROOT_NODE )) ),
 
     aSearchOpt      ( rItem.aSearchOpt ),
     eFamily         ( rItem.eFamily ),
@@ -234,7 +234,7 @@ SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 // -----------------------------------------------------------------------
 
 //! used below
-static BOOL operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
+static sal_Bool operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
 {
     return rItem1.algorithmType         == rItem2.algorithmType &&
            rItem1.searchFlag            == rItem2.searchFlag    &&
@@ -431,7 +431,7 @@ void SvxSearchItem::SetTransliterationFlags( sal_Int32 nFlags )
     aSearchOpt.transliterateFlags = nFlags;
 }
 
-bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -523,7 +523,7 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId )
 
 // -----------------------------------------------------------------------
 
-bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = false;
@@ -538,12 +538,12 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMember
                 sal_Int16 nConvertedCount( 0 );
                 for ( sal_Int32 i = 0; i < aSeq.getLength(); ++i )
                 {
-                    if ( aSeq[i].Name.equalsAscii( SRCH_PARA_OPTIONS ) )
+                    if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_OPTIONS ) ) )
                     {
                         if ( ( aSeq[i].Value >>= aSearchOpt ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_FAMILY ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_FAMILY ) ) )
                     {
                         sal_uInt16 nTemp( 0 );
                         if ( ( aSeq[i].Value >>= nTemp ) == sal_True )
@@ -552,52 +552,52 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMember
                             ++nConvertedCount;
                         }
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_COMMAND ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_COMMAND ) ) )
                     {
                         if ( ( aSeq[i].Value >>= nCommand ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_CELLTYPE ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_CELLTYPE ) ) )
                     {
                         if ( ( aSeq[i].Value >>= nCellType ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_APPFLAG ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_APPFLAG ) ) )
                     {
                         if ( ( aSeq[i].Value >>= nAppFlag ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_ROWDIR ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_ROWDIR ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bRowDirection ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_ALLTABLES ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_ALLTABLES ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bAllTables ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_SEARCHFILTERED ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_SEARCHFILTERED ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bSearchFiltered ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_BACKWARD ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_BACKWARD ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bBackward ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_PATTERN ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_PATTERN ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bPattern ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_CONTENT ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_CONTENT ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bContent ) == sal_True )
                             ++nConvertedCount;
                     }
-                    else if ( aSeq[i].Name.equalsAscii( SRCH_PARA_ASIANOPT ) )
+                    else if ( aSeq[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SRCH_PARA_ASIANOPT ) ) )
                     {
                         if ( ( aSeq[i].Value >>= bAsianOptions ) == sal_True )
                             ++nConvertedCount;
@@ -661,7 +661,7 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMember
             break;
         }
         default:
-            DBG_ERROR( "Unknown MemberId" );
+            OSL_FAIL( "Unknown MemberId" );
     }
 
     return bRet;

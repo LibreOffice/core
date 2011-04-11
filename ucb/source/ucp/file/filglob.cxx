@@ -222,10 +222,10 @@ namespace fileaccess {
         rtl::OUString aParent = aFileName.copy( 0,lastIndex );
 
         if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
-            aParent += rtl::OUString::createFromAscii( "/" );
+            aParent += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
-        if( 0 == aParent.compareToAscii( "file://" ) )
-            aParent = rtl::OUString::createFromAscii( "file:///" );
+        if( aParent.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file://")) )
+            aParent = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
 
         return aParent;
     }
@@ -389,7 +389,7 @@ namespace fileaccess {
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "an error occured during file opening")),
+                        "an error occurred during file opening")),
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_OPEN_FOR_DIRECTORYLISTING  ||
@@ -444,7 +444,7 @@ namespace fileaccess {
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "an error occured during opening a directory")),
+                        "an error occurred during opening a directory")),
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_NOTCONNECTED_FOR_WRITE          ||
@@ -461,7 +461,7 @@ namespace fileaccess {
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "an error occured writing or reading from a file")),
+                        "an error occurred writing or reading from a file")),
                 xComProc );
         }
         else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_NO_SPACE )
@@ -527,7 +527,7 @@ namespace fileaccess {
                 xEnv,
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
-                        "an error occured during opening a file")),
+                        "an error occurred during opening a file")),
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND ||
@@ -536,8 +536,8 @@ namespace fileaccess {
             Sequence< ::rtl::OUString > aSeq( 1 );
             aSeq[0] =
                 ( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND )  ?
-                rtl::OUString::createFromAscii( "Title" )               :
-                rtl::OUString::createFromAscii( "ContentType" );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"))               :
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType"));
 
             aAny <<= MissingPropertiesException(
                 rtl::OUString(
@@ -603,7 +603,7 @@ namespace fileaccess {
             InteractiveAugmentedIOException excep;
             excep.Code = IOErrorCode_INVALID_CHARACTER;
             PropertyValue prop;
-            prop.Name = rtl::OUString::createFromAscii("ResourceName");
+            prop.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ResourceName"));
             prop.Handle = -1;
             rtl::OUString m_aClashingName(
                 rtl::Uri::decode(

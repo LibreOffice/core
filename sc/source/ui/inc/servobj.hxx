@@ -55,7 +55,7 @@ private:
     ScDocShell*     pDocSh;
     ScRange         aRange;
     String          aItemStr;
-    BOOL            bRefreshListener;
+    sal_Bool            bRefreshListener;
 
     void    Clear();
 
@@ -63,9 +63,9 @@ public:
             ScServerObject( ScDocShell* pShell, const String& rItem );
     virtual ~ScServerObject();
 
-    virtual BOOL GetData( ::com::sun::star::uno::Any & rData /*out param*/,
+    virtual sal_Bool GetData( ::com::sun::star::uno::Any & rData /*out param*/,
                              const String & rMimeType,
-                             BOOL bSynchron = FALSE );
+                             sal_Bool bSynchron = false );
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
             void    EndListeningAll();

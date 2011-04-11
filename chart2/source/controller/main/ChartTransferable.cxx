@@ -65,7 +65,7 @@ ChartTransferable::ChartTransferable( SdrModel* pDrawModel, SdrObject* pSelected
         pExchgView->MarkObj( pSelectedObj, pPv );
     else
         pExchgView->MarkAllObj( pPv );
-    Graphic aGraphic( pExchgView->GetMarkedObjMetaFile( TRUE ));
+    Graphic aGraphic( pExchgView->GetMarkedObjMetaFile( sal_True ));
     m_xMetaFileGraphic.set( aGraphic.GetXGraphic());
     if ( m_bDrawing )
     {
@@ -128,7 +128,6 @@ sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                 {
                     rxOStm->SetBufferSize( 0xff00 );
 
-                    // #108584#
                     // for the changed pool defaults from drawing layer pool set those
                     // attributes as hard attributes to preserve them for saving
                     const SfxItemPool& rItemPool = pMarkedObjModel->GetItemPool();
@@ -163,7 +162,7 @@ sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
             break;
         default:
             {
-                DBG_ERROR( "ChartTransferable::WriteObject: unknown object id" );
+                OSL_FAIL( "ChartTransferable::WriteObject: unknown object id" );
             }
             break;
     }

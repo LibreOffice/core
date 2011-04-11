@@ -32,10 +32,10 @@
 #include "TaskPaneFocusManager.hxx"
 
 #include <vcl/window.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
-#include <hash_map>
+#include <rtl/instance.hxx>
+#include <boost/unordered_map.hpp>
 
 namespace {
 
@@ -65,22 +65,29 @@ namespace sd { namespace toolpanel {
 
 
 class FocusManager::LinkMap
-    : public ::std::hash_multimap< ::Window*, EventDescriptor, WindowHash>
+    : public ::boost::unordered_multimap< ::Window*, EventDescriptor, WindowHash>
 {
 };
 
 
 
-FocusManager* FocusManager::spInstance = NULL;
-
-
 FocusManager& FocusManager::Instance (void)
 {
+    static FocusManager* spInstance = NULL;
+
     if (spInstance == NULL)
     {
-        SolarMutexGuard aGuard;
+        ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
         if (spInstance == NULL)
-            spInstance = new FocusManager ();
+        {
+            static FocusManager aInstance;
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            spInstance = &aInstance;
+        }
+    }
+    else
+    {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
     }
     return *spInstance;
 }

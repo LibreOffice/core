@@ -87,7 +87,6 @@ using ::rtl::OUString;
 namespace framework
 {
 
-////////////////////////////////////////////////////////////
 
 DEFINE_XSERVICEINFO_MULTISERVICE        (   LangSelectionStatusbarController            ,
                                             OWeakObject                             ,
@@ -202,9 +201,7 @@ throw (::com::sun::star::uno::RuntimeException)
     FillLangItems( aLangItems, aLanguageTable, m_xFrame, m_aLangGuessHelper,
             m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedTextLang );
 
-    //
     // add first few entries to main menu
-    //
     sal_Int16 nItemId = static_cast< sal_Int16 >(MID_LANG_SEL_1);
     const OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));  // multiple languages in current selection
     const OUString sEmpty;  // 'no language found' from language guessing
@@ -223,7 +220,7 @@ throw (::com::sun::star::uno::RuntimeException)
             if ( rStr == m_aCurLang )
             {
                 //make a sign for the current language
-                xPopupMenu->checkItem( nItemId, TRUE );
+                xPopupMenu->checkItem( nItemId, sal_True );
             }
             aLangMap[ nItemId ] = rStr;
             ++nItemId;
@@ -233,9 +230,7 @@ throw (::com::sun::star::uno::RuntimeException)
     xPopupMenu->insertItem( MID_LANG_SEL_RESET, String( FwkResId( STR_RESET_TO_DEFAULT_LANGUAGE )), css::awt::MenuItemStyle::RADIOCHECK, MID_LANG_SEL_RESET );
     xPopupMenu->insertItem( MID_LANG_SEL_MORE,  String( FwkResId( STR_LANGSTATUS_MORE )), css::awt::MenuItemStyle::RADIOCHECK, MID_LANG_SEL_MORE );
 
-    //
     // add entries to submenu ('set language for paragraph')
-    //
     nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
@@ -255,17 +250,13 @@ throw (::com::sun::star::uno::RuntimeException)
     subPopupMenu->insertItem( MID_LANG_PARA_RESET, String( FwkResId( STR_RESET_TO_DEFAULT_LANGUAGE )), css::awt::MenuItemStyle::RADIOCHECK, MID_LANG_PARA_RESET );
     subPopupMenu->insertItem( MID_LANG_PARA_MORE,  String( FwkResId( STR_LANGSTATUS_MORE )), css::awt::MenuItemStyle::RADIOCHECK, MID_LANG_PARA_MORE );
 
-    //
     // add last two entries to main menu
-    //
     xPopupMenu->insertSeparator( MID_LANG_PARA_SEPERATOR );
     xPopupMenu->insertItem( MID_LANG_PARA_STRING, String( FwkResId( STR_SET_LANGUAGE_FOR_PARAGRAPH )), css::awt::MenuItemStyle::RADIOCHECK, MID_LANG_PARA_STRING );
     xPopupMenu->setPopupMenu( MID_LANG_PARA_STRING, subPopupMenu );
 
 
-    //
     // now display the popup menu and execute every command ...
-    //
 
     Reference< awt::XWindowPeer > xParent( m_xParentWindow, UNO_QUERY );
 
@@ -285,55 +276,55 @@ throw (::com::sun::star::uno::RuntimeException)
         {
             //set selected language as current language for selection
             String aSelectedLang = aLangMap[nId];
-            aURL.Complete += OUString::createFromAscii(".uno:LanguageStatus?Language:string=Current_");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LanguageStatus?Language:string=Current_"));
             aURL.Complete += aSelectedLang;
         }
         else if (nId == MID_LANG_SEL_NONE)
         {
             //set None as current language for selection
-            aURL.Complete += OUString::createFromAscii(".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE"));
         }
         else if (nId == MID_LANG_SEL_RESET)
         {
             // reset language attributes for selection
-            aURL.Complete += OUString::createFromAscii(".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES"));
         }
         else if (nId == MID_LANG_SEL_MORE)
         {
             //open the dialog "format/character" for current selection
-            aURL.Complete += OUString::createFromAscii(".uno:FontDialog?Language:string=*");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FontDialog?Language:string=*"));
         }
         else if (MID_LANG_PARA_1 <= nId && nId <= MID_LANG_PARA_9)
         {
             //set selected language for current paragraph
             String aSelectedLang = aLangMap[nId];
-            aURL.Complete += OUString::createFromAscii(".uno:LanguageStatus?Language:string=Paragraph_");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LanguageStatus?Language:string=Paragraph_"));
             aURL.Complete += aSelectedLang;
         }
         else if (nId == MID_LANG_PARA_NONE)
         {
             //set None as language for current paragraph
-            aURL.Complete += OUString::createFromAscii(".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE"));
         }
         else if (nId == MID_LANG_PARA_RESET)
         {
             // reset language attributes for paragraph
-            aURL.Complete += OUString::createFromAscii(".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES"));
         }
         else if (nId == MID_LANG_PARA_MORE)
         {
             //open the dialog "format/character" for current paragraph
-            aURL.Complete += OUString::createFromAscii(".uno:FontDialogForParagraph");
+            aURL.Complete += OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FontDialogForParagraph"));
         }
 
-        uno::Reference< util::XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( OUString::createFromAscii("com.sun.star.util.URLTransformer" )), uno::UNO_QUERY );
+        uno::Reference< util::XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), uno::UNO_QUERY );
         xURLTransformer->parseStrict( aURL );
         uno::Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL, OUString(), 0);
         if( xDispatch.is() )
         {
             uno::Sequence< beans::PropertyValue > aPV;
             if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                UiEventLogHelper( OUString::createFromAscii("ButtonToolbarController")).log(m_xServiceManager, m_xFrame, aURL, aPV);
+                UiEventLogHelper( OUString(RTL_CONSTASCII_USTRINGPARAM("ButtonToolbarController"))).log(m_xServiceManager, m_xFrame, aURL, aPV);
             xDispatch->dispatch( aURL, aPV);
         }
     }

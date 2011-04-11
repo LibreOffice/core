@@ -87,13 +87,13 @@ namespace svt
         virtual void MouseButtonDown( const MouseEvent& i_rMouseEvent );
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                     GetComponentInterface( BOOL i_bCreate );
+                     GetComponentInterface( sal_Bool i_bCreate );
 
     private:
         Rectangle   impl_calcTextBoundingBox() const;
         Rectangle   impl_calcTitleBarBox( const Rectangle& i_rTextBox ) const;
         void        impl_paintBackground( const Rectangle& i_rTitleBarBox );
-        USHORT      impl_getTextStyle() const;
+        sal_uInt16      impl_getTextStyle() const;
         void        impl_paintFocusIndicator( const Rectangle& i_rTextBox );
         Rectangle   impl_paintExpansionIndicator( const Rectangle& i_rTextBox );
         Image       impl_getExpansionIndicator() const;

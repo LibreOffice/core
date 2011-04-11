@@ -31,14 +31,13 @@
 
 // include ---------------------------------------------------------------
 
-#include "modctrl.hxx"
-
 #include <vcl/status.hxx>
 #include <vcl/image.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/app.hxx>
 
 #include <svx/dialogs.hrc>
+#include <svx/modctrl.hxx>
 #include <svx/dialmgr.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -66,8 +65,8 @@ struct SvxModifyControl::ImplData
     }
 };
 
-SvxModifyControl::SvxModifyControl( USHORT _nSlotId,
-                                    USHORT _nId,
+SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId,
+                                    sal_uInt16 _nId,
                                     StatusBar& rStb ) :
 
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
@@ -77,7 +76,7 @@ SvxModifyControl::SvxModifyControl( USHORT _nSlotId,
 
 // -----------------------------------------------------------------------
 
-void SvxModifyControl::StateChanged( USHORT, SfxItemState eState,
+void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
                                      const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState )
@@ -122,7 +121,6 @@ Point centerImage(const Rectangle& rBoundingRect, const Image& rImg)
 }
 void SvxModifyControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    const Rectangle     aControlRect = getControlRect();
     OutputDevice*       pDev =  rUsrEvt.GetDevice();
     Rectangle           aRect = rUsrEvt.GetRect();
 
@@ -145,10 +143,10 @@ void SvxModifyControl::DoubleClick()
         return;
 
     Sequence<PropertyValue> aArgs;
-    execute(OUString::createFromAscii(".uno:Save"), aArgs);
+    execute(OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save")), aArgs);
 }
 
-ULONG SvxModifyControl::GetDefItemWidth(const StatusBar& rStb)
+sal_uIntPtr SvxModifyControl::GetDefItemWidth(const StatusBar& rStb)
 {
     return rStb.GetTextWidth(String::CreateFromAscii("XX"));
 }

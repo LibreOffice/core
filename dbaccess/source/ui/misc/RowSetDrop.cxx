@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
@@ -48,7 +49,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::lang;
-//  using namespace ::com::sun::star::sdbcx;
 
 // export data
 ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
@@ -84,7 +84,7 @@ void ORowSetImportExport::initialize()
     m_aColumnTypes.reserve(nCount);
     for (sal_Int32 i = 1;i <= nCount; ++i)
     {
-        sal_Int32 nPos = -1; // -1 means column is autoincrement or doesn't exists
+        sal_Int32 nPos = -1; // -1 means column is autoincrement or doesn't exist
         if(!m_xTargetResultSetMetaData->isAutoIncrement(i))
         {
             try
@@ -95,7 +95,7 @@ void ORowSetImportExport::initialize()
             catch(const SQLException&)
             {
                 if(m_xTargetResultSetMetaData->isNullable(i))
-                    nPos = 0; // column doesn't exists but we could set it to null
+                    nPos = 0; // column doesn't exist but we could set it to null
             }
         }
 
@@ -107,21 +107,19 @@ void ORowSetImportExport::initialize()
     }
 }
 // -----------------------------------------------------------------------------
-BOOL ORowSetImportExport::Write()
+sal_Bool ORowSetImportExport::Write()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::Write" );
-    return TRUE;
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
-BOOL ORowSetImportExport::Read()
+sal_Bool ORowSetImportExport::Read()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::Read" );
     // check if there is any column to copy
     if(::std::find_if(m_aColumnMapping.begin(),m_aColumnMapping.end(),
                         ::std::bind2nd(::std::greater<sal_Int32>(),0)) == m_aColumnMapping.end())
-        return FALSE;
-    sal_Int32 nCurrentRow = 0;
-    sal_Int32 nRowFilterIndex = 0;
+        return sal_False;
     sal_Bool bContinue = sal_True;
     if(m_aSelection.getLength())
     {
@@ -131,7 +129,7 @@ BOOL ORowSetImportExport::Read()
         {
             sal_Int32 nPos = -1;
             *pBegin >>= nPos;
-            OSL_ENSURE(nPos != -1,"Invalid posiotion!");
+            OSL_ENSURE(nPos != -1,"Invalid position!");
             bContinue = (m_xResultSet.is() && m_xResultSet->absolute(nPos) && insertNewRow());
         }
     }
@@ -139,6 +137,8 @@ BOOL ORowSetImportExport::Read()
     {
         Reference<XPropertySet> xProp(m_xResultSet,UNO_QUERY);
         sal_Int32 nRowCount = 0;
+        sal_Int32 nCurrentRow = 0;
+        sal_Int32 nRowFilterIndex = 0;
         if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISROWCOUNTFINAL) )
         {
             sal_Bool bFinal = sal_False;
@@ -165,7 +165,7 @@ BOOL ORowSetImportExport::Read()
             }
         }
     }
-    return TRUE;
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 sal_Bool ORowSetImportExport::insertNewRow()
@@ -242,7 +242,7 @@ sal_Bool ORowSetImportExport::insertNewRow()
                         aValue <<= m_xRow->getClob(*aIter);
                         break;
                     default:
-                        OSL_ENSURE(0,"Unknown type");
+                        OSL_FAIL("Unknown type");
                 }
                 if(m_xRow->wasNull())
                     m_xTargetRowUpdate->updateNull(i);
@@ -258,7 +258,7 @@ sal_Bool ORowSetImportExport::insertNewRow()
     {
         if(!m_bAlreadyAsked)
         {
-            String sAskIfContinue = String(ModuleRes(STR_ERROR_OCCURED_WHILE_COPYING));
+            String sAskIfContinue = String(ModuleRes(STR_ERROR_OCCURRED_WHILE_COPYING));
             OSQLWarningBox aDlg( m_pParent, sAskIfContinue, WB_YES_NO | WB_DEF_YES );
             if(aDlg.Execute() == RET_YES)
                 m_bAlreadyAsked = sal_True;

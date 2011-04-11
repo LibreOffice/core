@@ -31,7 +31,7 @@
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/rcid.h>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #if defined(OS2)
@@ -41,13 +41,13 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/svtdata.hxx>
 #include <svtools/svtools.hrc>
-#include "sfxecode.hxx"
+#include <svtools/sfxecode.hxx>
 
 //=========================================================================
 
-static USHORT aWndFunc(
+static sal_uInt16 aWndFunc(
     Window *pWin,            // Parent des Dialoges
-    USHORT nFlags,
+    sal_uInt16 nFlags,
     const String &rErr,      // Fehlertext
     const String &rAction)   // Actiontext
 
@@ -130,7 +130,7 @@ static USHORT aWndFunc(
         }
     }
 
-    USHORT nRet = RET_CANCEL;
+    sal_uInt16 nRet = RET_CANCEL;
     switch ( pBox->Execute() )
     {
         case RET_OK:
@@ -158,7 +158,7 @@ static USHORT aWndFunc(
 
 //-------------------------------------------------------------------------
 
-SfxErrorHandler::SfxErrorHandler(USHORT nIdP, ULONG lStartP, ULONG lEndP, ResMgr *pMgrP) :
+SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong lEndP, ResMgr *pMgrP) :
 
     lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP), pFreeMgr( NULL )
 
@@ -181,8 +181,8 @@ SfxErrorHandler::~SfxErrorHandler()
 
 //-------------------------------------------------------------------------
 
-BOOL SfxErrorHandler::CreateString(
-    const ErrorInfo *pErr, String &rStr, USHORT& nFlags) const
+sal_Bool SfxErrorHandler::CreateString(
+    const ErrorInfo *pErr, String &rStr, sal_uInt16& nFlags) const
 
 /*  [Beschreibung]
 
@@ -191,9 +191,9 @@ BOOL SfxErrorHandler::CreateString(
     */
 
 {
-    ULONG nErrCode = pErr->GetErrorCode() & ERRCODE_ERROR_MASK;
+    sal_uLong nErrCode = pErr->GetErrorCode() & ERRCODE_ERROR_MASK;
     if( nErrCode>=lEnd || nErrCode<=lStart )
-        return FALSE;
+        return sal_False;
     MessageInfo *pMsgInfo=PTR_CAST(MessageInfo,pErr);
     if(pMsgInfo)
     {
@@ -207,7 +207,7 @@ BOOL SfxErrorHandler::CreateString(
                     break;
                 i = i + pMsgInfo->GetMessageArg().Len();
             }
-            return TRUE;
+            return sal_True;
         }
     }
     else if(GetErrorString(nErrCode, rStr, nFlags))
@@ -227,10 +227,10 @@ BOOL SfxErrorHandler::CreateString(
             TwoStringErrorInfo * pTwoStringInfo = PTR_CAST(TwoStringErrorInfo,
                                                            pErr);
             if (pTwoStringInfo)
-                for (USHORT i = 0; i < rStr.Len();)
+                for (sal_uInt16 i = 0; i < rStr.Len();)
                 {
-                    USHORT nArg1Pos = rStr.Search(String::CreateFromAscii( "$(ARG1)" ), i);
-                    USHORT nArg2Pos = rStr.Search(String::CreateFromAscii( "$(ARG2)" ), i);
+                    sal_uInt16 nArg1Pos = rStr.Search(String::CreateFromAscii( "$(ARG1)" ), i);
+                    sal_uInt16 nArg2Pos = rStr.Search(String::CreateFromAscii( "$(ARG2)" ), i);
                     if (nArg1Pos < nArg2Pos)
                     {
                         rStr.Replace(nArg1Pos, 7, pTwoStringInfo->GetArg1());
@@ -244,9 +244,9 @@ BOOL SfxErrorHandler::CreateString(
                     else break;
                 }
         }
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 //-------------------------------------------------------------------------
@@ -261,9 +261,9 @@ class ResString: public String
     */
 
 {
-    USHORT nFlags;
+    sal_uInt16 nFlags;
   public:
-    USHORT GetFlags() const {return nFlags;}
+    sal_uInt16 GetFlags() const {return nFlags;}
     const String & GetString() const {return *this;}
     ResString( ResId &rId);
 };
@@ -271,14 +271,14 @@ class ResString: public String
 //-------------------------------------------------------------------------
 
 ResString::ResString(ResId & rId):
-    String(rId.SetAutoRelease(FALSE)),
+    String(rId.SetAutoRelease(sal_False)),
     nFlags(0)
 {
     ResMgr * pResMgr = rId.GetResMgr();
      // String ctor temporarily sets global ResManager
     if (pResMgr->GetRemainSize())
-        nFlags = USHORT(pResMgr->ReadShort());
-    rId.SetAutoRelease(TRUE);
+        nFlags = sal_uInt16(pResMgr->ReadShort());
+    rId.SetAutoRelease(sal_True);
     pResMgr->PopContext();
 }
 
@@ -295,18 +295,18 @@ struct ErrorResource_Impl : private Resource
 
     ResId aResId;
 
-    ErrorResource_Impl(ResId& rErrIdP, USHORT nId)
+    ErrorResource_Impl(ResId& rErrIdP, sal_uInt16 nId)
         : Resource(rErrIdP),aResId(nId,*rErrIdP.GetResMgr()){}
 
     ~ErrorResource_Impl() { FreeResource(); }
 
     operator ResString(){ return ResString( aResId ); }
-    operator BOOL(){return IsAvailableRes(aResId.SetRT(RSC_STRING));}
+    operator sal_Bool(){return IsAvailableRes(aResId.SetRT(RSC_STRING));}
 
 };
 
 
-BOOL SfxErrorHandler::GetClassString(ULONG lClassId, String &rStr) const
+sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, String &rStr) const
 
 /*  [Beschreibung]
 
@@ -316,17 +316,17 @@ BOOL SfxErrorHandler::GetClassString(ULONG lClassId, String &rStr) const
     */
 
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     com::sun::star::lang::Locale aLocale( Application::GetSettings().GetUILocale() );
     ResMgr* pResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(ofa), aLocale );
     if( pResMgr )
     {
         ResId aId(RID_ERRHDL, *pResMgr );
-        ErrorResource_Impl aEr(aId, (USHORT)lClassId);
+        ErrorResource_Impl aEr(aId, (sal_uInt16)lClassId);
         if(aEr)
         {
             rStr=((ResString)aEr).GetString();
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
     delete pResMgr;
@@ -335,8 +335,8 @@ BOOL SfxErrorHandler::GetClassString(ULONG lClassId, String &rStr) const
 
 //-------------------------------------------------------------------------
 
-BOOL SfxErrorHandler::GetMessageString(
-    ULONG lErrId, String &rStr, USHORT &nFlags) const
+sal_Bool SfxErrorHandler::GetMessageString(
+    sal_uLong lErrId, String &rStr, sal_uInt16 &nFlags) const
 
 /*  [Beschreibung]
 
@@ -345,18 +345,18 @@ BOOL SfxErrorHandler::GetMessageString(
     */
 
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     ResId *pResId= new ResId(nId, *pMgr);
 
-    ErrorResource_Impl aEr(*pResId, (USHORT)lErrId);
+    ErrorResource_Impl aEr(*pResId, (sal_uInt16)lErrId);
     if(aEr)
     {
         ResString aErrorString(aEr);
-        USHORT nResFlags = aErrorString.GetFlags();
+        sal_uInt16 nResFlags = aErrorString.GetFlags();
         if( nResFlags )
             nFlags=aErrorString.GetFlags();
         rStr = aErrorString.GetString();
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     delete pResId;
@@ -365,8 +365,8 @@ BOOL SfxErrorHandler::GetMessageString(
 
 //-------------------------------------------------------------------------
 
-BOOL SfxErrorHandler::GetErrorString(
-    ULONG lErrId, String &rStr, USHORT &nFlags) const
+sal_Bool SfxErrorHandler::GetErrorString(
+    sal_uLong lErrId, String &rStr, sal_uInt16 &nFlags) const
 
 /*  [Beschreibung]
     Erzeugt den Fehlerstring fuer den eigentlichen Fehler ohne
@@ -377,25 +377,25 @@ BOOL SfxErrorHandler::GetErrorString(
 {
     SolarMutexGuard aGuard;
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     rStr=String(SvtResId(RID_ERRHDL_CLASS));
     ResId aResId(nId, *pMgr);
 
     {
-        ErrorResource_Impl aEr(aResId, (USHORT)lErrId);
+        ErrorResource_Impl aEr(aResId, (sal_uInt16)lErrId);
         if(aEr)
         {
             ResString aErrorString(aEr);
 
-            USHORT nResFlags = aErrorString.GetFlags();
+            sal_uInt16 nResFlags = aErrorString.GetFlags();
             if ( nResFlags )
                 nFlags = nResFlags;
             rStr.SearchAndReplace(
                 String::CreateFromAscii("$(ERROR)"), aErrorString.GetString());
-            bRet = TRUE;
+            bRet = sal_True;
         }
         else
-            bRet = FALSE;
+            bRet = sal_False;
     }
 
     if( bRet )
@@ -414,7 +414,7 @@ BOOL SfxErrorHandler::GetErrorString(
 //-------------------------------------------------------------------------
 
 SfxErrorContext::SfxErrorContext(
-    USHORT nCtxIdP, Window *pWindow, USHORT nResIdP, ResMgr *pMgrP)
+    sal_uInt16 nCtxIdP, Window *pWindow, sal_uInt16 nResIdP, ResMgr *pMgrP)
 :   ErrorContext(pWindow), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP)
 {
     if( nResId==USHRT_MAX )
@@ -424,8 +424,8 @@ SfxErrorContext::SfxErrorContext(
 //-------------------------------------------------------------------------
 
 SfxErrorContext::SfxErrorContext(
-    USHORT nCtxIdP, const String &aArg1P, Window *pWindow,
-    USHORT nResIdP, ResMgr *pMgrP)
+    sal_uInt16 nCtxIdP, const String &aArg1P, Window *pWindow,
+    sal_uInt16 nResIdP, ResMgr *pMgrP)
 :   ErrorContext(pWindow), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP),
     aArg1(aArg1P)
 {
@@ -435,7 +435,7 @@ SfxErrorContext::SfxErrorContext(
 
 //-------------------------------------------------------------------------
 
-BOOL SfxErrorContext::GetString(ULONG nErrId, String &rStr)
+sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, String &rStr)
 
 /*  [Beschreibung]
 
@@ -471,7 +471,7 @@ BOOL SfxErrorContext::GetString(ULONG nErrId, String &rStr)
 
         if ( bRet )
         {
-            USHORT nId = ( nErrId & ERRCODE_WARNING_MASK ) ? ERRCTX_WARNING : ERRCTX_ERROR;
+            sal_uInt16 nId = ( nErrId & ERRCODE_WARNING_MASK ) ? ERRCTX_WARNING : ERRCTX_ERROR;
             ResId aSfxResId( RID_ERRCTX, *pMgr );
             ErrorResource_Impl aEr( aSfxResId, nId );
             rStr.SearchAndReplace( String::CreateFromAscii( "$(ERR)" ), ( (ResString)aEr ).GetString() );

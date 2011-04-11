@@ -31,14 +31,11 @@
 #include "DiagramWrapper.hxx"
 #include "macros.hxx"
 #include "servicenames_charttypes.hxx"
-#include "TitleWrapper.hxx"
 #include "DataSeriesPointWrapper.hxx"
 #include "AxisWrapper.hxx"
 #include "AxisHelper.hxx"
 #include "Chart2ModelContact.hxx"
 #include "PositionAndSizeHelper.hxx"
-#include "TitleHelper.hxx"
-#include "GridWrapper.hxx"
 #include "WallFloorWrapper.hxx"
 #include "MinMaxLineWrapper.hxx"
 #include "UpDownBarWrapper.hxx"
@@ -89,6 +86,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
+using ::com::sun::star::chart::XAxis;
 using ::osl::MutexGuard;
 using ::rtl::OUString;
 
@@ -435,15 +433,17 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-const uno::Sequence< Property > & lcl_GetPropertySequence()
+struct StaticDiagramWrapperPropertyArray_Initializer
 {
-    static uno::Sequence< Property > aPropSeq;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    Sequence< Property >* operator()()
     {
-        // get properties
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
+        return &aPropSeq;
+    }
+
+private:
+    uno::Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
@@ -457,16 +457,16 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
         WrappedStockProperties::addProperties( aProperties );
         WrappedAutomaticPositionProperties::addProperties( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticDiagramWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticDiagramWrapperPropertyArray_Initializer >
+{
+};
 
 bool lcl_isXYChart( const Reference< chart2::XDiagram > xDiagram )
 {
@@ -564,14 +564,14 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         if( aName.indexOf( C2U("Line") ) != -1 || aName.indexOf( C2U("Symbol") ) != -1 )
             return C2U( "com.sun.star.chart.LineDiagram" );
 
-        OSL_ENSURE( false, "unknown template" );
+        OSL_FAIL( "unknown template" );
     }
 
     return OUString();
 }
 
 typedef ::comphelper::MakeMap< ::rtl::OUString, ::rtl::OUString > tMakeStringStringMap;
-//static
+
 const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
     static tMakeStringStringMap g_aChartTypeNameMap =
@@ -758,7 +758,7 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
         aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
         if( aRelativePosition.Primary < 0 || aRelativePosition.Secondary < 0 || aRelativePosition.Primary > 1 || aRelativePosition.Secondary > 1 )
         {
-            DBG_ERROR("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
+            OSL_FAIL("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
             uno::Any aEmpty;
             xProp->setPropertyValue( C2U( "RelativePosition" ), aEmpty );
             return;
@@ -791,7 +791,7 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 
         if( aRelativeSize.Primary > 1 || aRelativeSize.Secondary > 1 )
         {
-            DBG_ERROR("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
+            OSL_FAIL("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
             uno::Any aEmpty;
             xProp->setPropertyValue( C2U( "RelativeSize" ), aEmpty );
             return;
@@ -884,193 +884,209 @@ void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( cons
     return m_spChart2ModelContact->GetDiagramRectangleIncludingTitle();
 }
 
+// ____ XAxisSupplier ____
+Reference< XAxis > SAL_CALL DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )
+    throw (uno::RuntimeException)
+{
+    Reference< XAxis > xAxis;
+    if(!nDimensionIndex)
+    {
+        if( !m_xXAxis.is() )
+            m_xXAxis = new AxisWrapper( AxisWrapper::X_AXIS, m_spChart2ModelContact );
+        xAxis = m_xXAxis;
+    }
+    else if(1==nDimensionIndex)
+    {
+        if( !m_xYAxis.is() )
+            m_xYAxis = new AxisWrapper( AxisWrapper::Y_AXIS, m_spChart2ModelContact );
+        xAxis = m_xYAxis;
+    }
+    else if(2==nDimensionIndex)
+    {
+        if( !m_xZAxis.is() )
+            m_xZAxis = new AxisWrapper( AxisWrapper::Z_AXIS, m_spChart2ModelContact );
+        xAxis = m_xZAxis;
+    }
+    return xAxis;
+}
+
+Reference< XAxis > SAL_CALL DiagramWrapper::getSecondaryAxis( sal_Int32 nDimensionIndex )
+    throw (uno::RuntimeException)
+{
+    Reference< XAxis > xAxis;
+    if(!nDimensionIndex)
+    {
+        if( !m_xSecondXAxis.is() )
+            m_xSecondXAxis = new AxisWrapper( AxisWrapper::SECOND_X_AXIS, m_spChart2ModelContact );
+        xAxis = m_xSecondXAxis;
+    }
+    else if(1==nDimensionIndex)
+    {
+        if( !m_xSecondYAxis.is() )
+            m_xSecondYAxis = new AxisWrapper( AxisWrapper::SECOND_Y_AXIS, m_spChart2ModelContact );
+        xAxis = m_xSecondYAxis;
+    }
+    return xAxis;
+}
+
 // ____ XAxisZSupplier ____
-Reference<
-    drawing::XShape > SAL_CALL DiagramWrapper::getZAxisTitle()
+Reference< drawing::XShape > SAL_CALL DiagramWrapper::getZAxisTitle()
     throw (uno::RuntimeException)
 {
-    if( !m_xZAxisTitle.is() )
-    {
-        m_xZAxisTitle = new TitleWrapper( TitleHelper::Z_AXIS_TITLE, m_spChart2ModelContact );
-    }
-    return m_xZAxisTitle;
+    Reference< drawing::XShape > xRet;
+    Reference< XAxis > xAxis( getAxis(2) );
+    if( xAxis.is() )
+        xRet = Reference< drawing::XShape >( xAxis->getAxisTitle(), uno::UNO_QUERY );
+    return xRet;
 }
 
-Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getZMainGrid()
+Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZMainGrid()
     throw (uno::RuntimeException)
 {
-    if( ! m_xZMainGrid.is())
-    {
-        m_xZMainGrid = new GridWrapper( GridWrapper::Z_MAIN_GRID, m_spChart2ModelContact );
-    }
-    return m_xZMainGrid;
+    Reference< beans::XPropertySet > xRet;
+    Reference< XAxis > xAxis( getAxis(2) );
+    if( xAxis.is() )
+        xRet = xAxis->getMajorGrid();
+    return xRet;
 }
 
-Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getZHelpGrid()
+Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZHelpGrid()
     throw (uno::RuntimeException)
 {
-    if( !m_xZHelpGrid.is() )
-    {
-        m_xZHelpGrid = new GridWrapper( GridWrapper::Z_SUB_GRID, m_spChart2ModelContact );
-    }
-    return m_xZHelpGrid;
+    Reference< beans::XPropertySet > xRet;
+    Reference< XAxis > xAxis( getAxis(2) );
+    if( xAxis.is() )
+        xRet = xAxis->getMinorGrid();
+    return xRet;
 }
 
-Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getZAxis()
+Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZAxis()
     throw (uno::RuntimeException)
 {
     if( ! m_xZAxis.is())
-    {
         m_xZAxis = new AxisWrapper( AxisWrapper::Z_AXIS, m_spChart2ModelContact );
-    }
-    return m_xZAxis;
+    return Reference< beans::XPropertySet >( m_xZAxis, uno::UNO_QUERY );
 }
 
 
 // ____ XTwoAxisXSupplier ____
-Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryXAxis()
+Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryXAxis()
     throw (uno::RuntimeException)
 {
     if( ! m_xSecondXAxis.is())
-    {
         m_xSecondXAxis = new AxisWrapper( AxisWrapper::SECOND_X_AXIS, m_spChart2ModelContact );
-    }
-    return m_xSecondXAxis;
+    return Reference< beans::XPropertySet >( m_xSecondXAxis, uno::UNO_QUERY );
 }
 
 
 // ____ XAxisXSupplier (base of XTwoAxisXSupplier) ____
-Reference<
-    drawing::XShape > SAL_CALL DiagramWrapper::getXAxisTitle()
+Reference< drawing::XShape > SAL_CALL DiagramWrapper::getXAxisTitle()
     throw (uno::RuntimeException)
 {
-
-    if( !m_xXAxisTitle.is() )
-    {
-        m_xXAxisTitle = new TitleWrapper( TitleHelper::X_AXIS_TITLE, m_spChart2ModelContact );
-    }
-    return m_xXAxisTitle;
+    Reference< drawing::XShape > xRet;
+    Reference< XAxis > xAxis( getAxis(0) );
+    if( xAxis.is() )
+        xRet = Reference< drawing::XShape >( xAxis->getAxisTitle(), uno::UNO_QUERY );
+    return xRet;
 }
 
-Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getXAxis()
+Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXAxis()
     throw (uno::RuntimeException)
 {
     if( ! m_xXAxis.is())
-    {
         m_xXAxis = new AxisWrapper( AxisWrapper::X_AXIS, m_spChart2ModelContact );
-    }
-
-    return m_xXAxis;
+    return Reference< beans::XPropertySet >( m_xXAxis, uno::UNO_QUERY );
 }
 
-Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getXMainGrid()
+Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXMainGrid()
     throw (uno::RuntimeException)
 {
-    if( ! m_xXMainGrid.is())
-    {
-        m_xXMainGrid = new GridWrapper( GridWrapper::X_MAIN_GRID, m_spChart2ModelContact );
-    }
-
-    return m_xXMainGrid;
+    Reference< beans::XPropertySet > xRet;
+    Reference< XAxis > xAxis( getAxis(0) );
+    if( xAxis.is() )
+        xRet = xAxis->getMajorGrid();
+    return xRet;
 }
 
-Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getXHelpGrid()
+Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXHelpGrid()
     throw (uno::RuntimeException)
 {
-    if( ! m_xXHelpGrid.is())
-    {
-        m_xXHelpGrid = new GridWrapper( GridWrapper::X_SUB_GRID, m_spChart2ModelContact );
-    }
-    return m_xXHelpGrid;
+    Reference< beans::XPropertySet > xRet;
+    Reference< XAxis > xAxis( getAxis(0) );
+    if( xAxis.is() )
+        xRet = xAxis->getMinorGrid();
+    return xRet;
 }
 
 
 // ____ XTwoAxisYSupplier ____
-Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryYAxis()
+Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryYAxis()
     throw (uno::RuntimeException)
 {
     if( ! m_xSecondYAxis.is())
-    {
         m_xSecondYAxis = new AxisWrapper( AxisWrapper::SECOND_Y_AXIS, m_spChart2ModelContact );
-    }
-    return m_xSecondYAxis;
+    return Reference< beans::XPropertySet >( m_xSecondYAxis, uno::UNO_QUERY );
 }
 
 
 // ____ XAxisYSupplier (base of XTwoAxisYSupplier) ____
-Reference<
-    drawing::XShape > SAL_CALL DiagramWrapper::getYAxisTitle()
+Reference< drawing::XShape > SAL_CALL DiagramWrapper::getYAxisTitle()
     throw (uno::RuntimeException)
 {
-    if( !m_xYAxisTitle.is() )
-    {
-        m_xYAxisTitle = new TitleWrapper( TitleHelper::Y_AXIS_TITLE, m_spChart2ModelContact );
-    }
-    return m_xYAxisTitle;
+    Reference< drawing::XShape > xRet;
+    Reference< XAxis > xAxis( getAxis(1) );
+    if( xAxis.is() )
+        xRet = Reference< drawing::XShape >( xAxis->getAxisTitle(), uno::UNO_QUERY );
+    return xRet;
 }
 
-Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getYAxis()
+Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYAxis()
     throw (uno::RuntimeException)
 {
     if( ! m_xYAxis.is())
-    {
         m_xYAxis = new AxisWrapper( AxisWrapper::Y_AXIS, m_spChart2ModelContact );
-    }
-    return m_xYAxis;
+    return Reference< beans::XPropertySet >( m_xYAxis, uno::UNO_QUERY );
 }
 
-Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getYHelpGrid()
+Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYMainGrid()
     throw (uno::RuntimeException)
 {
-    if( ! m_xYHelpGrid.is())
-    {
-        m_xYHelpGrid = new GridWrapper( GridWrapper::Y_SUB_GRID, m_spChart2ModelContact );
-    }
-    return m_xYHelpGrid;
+    Reference< beans::XPropertySet > xRet;
+    Reference< XAxis > xAxis( getAxis(1) );
+    if( xAxis.is() )
+        xRet = xAxis->getMajorGrid();
+    return xRet;
 }
 
-Reference<
-    beans::XPropertySet > SAL_CALL DiagramWrapper::getYMainGrid()
+Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYHelpGrid()
     throw (uno::RuntimeException)
 {
-    if( ! m_xYMainGrid.is())
-    {
-        m_xYMainGrid = new GridWrapper( GridWrapper::Y_MAIN_GRID, m_spChart2ModelContact );
-    }
-    return m_xYMainGrid;
+    Reference< beans::XPropertySet > xRet;
+    Reference< XAxis > xAxis( getAxis(1) );
+    if( xAxis.is() )
+        xRet = xAxis->getMinorGrid();
+    return xRet;
 }
 
 // ____ XSecondAxisTitleSupplier ____
-Reference<
-    drawing::XShape > SAL_CALL DiagramWrapper::getSecondXAxisTitle()
+Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondXAxisTitle()
     throw (uno::RuntimeException)
 {
-    if( !m_xSecondXAxisTitle.is() )
-    {
-        m_xSecondXAxisTitle = new TitleWrapper( TitleHelper::SECONDARY_X_AXIS_TITLE, m_spChart2ModelContact );
-    }
-    return m_xSecondXAxisTitle;
+    Reference< drawing::XShape > xRet;
+    Reference< XAxis > xAxis( getSecondaryAxis(0) );
+    if( xAxis.is() )
+        xRet = Reference< drawing::XShape >( xAxis->getAxisTitle(), uno::UNO_QUERY );
+    return xRet;
 }
 
-Reference<
-    drawing::XShape > SAL_CALL DiagramWrapper::getSecondYAxisTitle()
+Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondYAxisTitle()
     throw (uno::RuntimeException)
 {
-    if( !m_xSecondYAxisTitle.is() )
-    {
-        m_xSecondYAxisTitle = new TitleWrapper( TitleHelper::SECONDARY_Y_AXIS_TITLE, m_spChart2ModelContact );
-    }
-    return m_xSecondYAxisTitle;
+    Reference< drawing::XShape > xRet;
+    Reference< XAxis > xAxis( getSecondaryAxis(1) );
+    if( xAxis.is() )
+        xRet = Reference< drawing::XShape >( xAxis->getAxisTitle(), uno::UNO_QUERY );
+    return xRet;
 }
 
 // ____ XStatisticDisplay ____
@@ -1160,25 +1176,13 @@ void SAL_CALL DiagramWrapper::dispose()
 {
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
 
-    // /--
     MutexGuard aGuard( GetMutex());
 
-    DisposeHelper::DisposeAndClear( m_xXAxisTitle );
-    DisposeHelper::DisposeAndClear( m_xYAxisTitle );
-    DisposeHelper::DisposeAndClear( m_xZAxisTitle );
-    DisposeHelper::DisposeAndClear( m_xSecondXAxisTitle );
-    DisposeHelper::DisposeAndClear( m_xSecondYAxisTitle );
     DisposeHelper::DisposeAndClear( m_xXAxis );
     DisposeHelper::DisposeAndClear( m_xYAxis );
     DisposeHelper::DisposeAndClear( m_xZAxis );
     DisposeHelper::DisposeAndClear( m_xSecondXAxis );
     DisposeHelper::DisposeAndClear( m_xSecondYAxis );
-    DisposeHelper::DisposeAndClear( m_xXMainGrid );
-    DisposeHelper::DisposeAndClear( m_xYMainGrid );
-    DisposeHelper::DisposeAndClear( m_xZMainGrid );
-    DisposeHelper::DisposeAndClear( m_xXHelpGrid );
-    DisposeHelper::DisposeAndClear( m_xYHelpGrid );
-    DisposeHelper::DisposeAndClear( m_xZHelpGrid );
     DisposeHelper::DisposeAndClear( m_xWall );
     DisposeHelper::DisposeAndClear( m_xFloor );
     DisposeHelper::DisposeAndClear( m_xMinMaxLineWrapper );
@@ -1186,7 +1190,6 @@ void SAL_CALL DiagramWrapper::dispose()
     DisposeHelper::DisposeAndClear( m_xDownBarWrapper );
 
     clearWrappedPropertySet();
-    // \--
 }
 
 void SAL_CALL DiagramWrapper::addEventListener(
@@ -1203,14 +1206,6 @@ void SAL_CALL DiagramWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// ____ XEventListener ____
-// void SAL_CALL DiagramWrapper::disposing( const lang::EventObject& Source )
-//     throw (uno::RuntimeException)
-// {
-// }
-
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_DATAROW_SOURCE
@@ -1314,9 +1309,6 @@ Any WrappedDataRowSourceProperty::getPropertyDefault( const Reference< beans::XP
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-
 
 //PROP_DIAGRAM_STACKED
 //PROP_DIAGRAM_DEEP
@@ -1363,7 +1355,7 @@ WrappedStackingProperty::WrappedStackingProperty( StackMode eStackMode, ::boost:
         m_aOuterName = C2U( "Deep" );
         break;
     default:
-        OSL_ENSURE( false, "unexpected stack mode" );
+        OSL_FAIL( "unexpected stack mode" );
         break;
     }
 }
@@ -1432,8 +1424,6 @@ Any WrappedStackingProperty::getPropertyDefault( const Reference< beans::XProper
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_THREE_D
@@ -1507,8 +1497,6 @@ Any WrappedDim3DProperty::getPropertyDefault( const Reference< beans::XPropertyS
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_VERTICAL
@@ -1587,8 +1575,6 @@ Any WrappedVerticalProperty::getPropertyDefault( const Reference< beans::XProper
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_NUMBER_OF_LINES
@@ -1714,12 +1700,11 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
         {
             try
             {
-                // /-- locked controllers
+                // locked controllers
                 ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
                 uno::Reference< beans::XPropertySet > xProp( xTemplate, uno::UNO_QUERY );
                 xProp->setPropertyValue( C2U( "NumberOfLines" ), uno::makeAny(nNewValue) );
                 xTemplate->changeDiagram( xDiagram );
-                // \-- locked controllers
             }
             catch( uno::Exception & ex )
             {
@@ -1746,8 +1731,6 @@ Any WrappedNumberOfLinesProperty::getPropertyDefault( const Reference< beans::XP
     return aRet;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_ATTRIBUTED_DATA_POINTS
@@ -1868,8 +1851,6 @@ Any WrappedAttributedDataPointsProperty::getPropertyDefault( const Reference< be
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_SOLIDTYPE
 class WrappedSolidTypeProperty : public WrappedProperty
@@ -1946,8 +1927,6 @@ Any WrappedSolidTypeProperty::getPropertyDefault( const Reference< beans::XPrope
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 class WrappedAutomaticSizeProperty : public WrappedProperty
 {
@@ -2021,8 +2000,6 @@ Any WrappedAutomaticSizeProperty::getPropertyDefault( const Reference< beans::XP
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 //PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS
 class WrappedIncludeHiddenCellsProperty : public WrappedProperty
@@ -2059,8 +2036,6 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
 }
 
 //-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------
 
 // ____ XDiagramProvider ____
 Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
@@ -2074,7 +2049,7 @@ void SAL_CALL DiagramWrapper::setDiagram(
     throw (uno::RuntimeException)
 {
     //@todo: remove this method from interface
-    DBG_ERROR("DiagramWrapper::setDiagram is not implemented, should be removed and not be called" );
+    OSL_FAIL("DiagramWrapper::setDiagram is not implemented, should be removed and not be called" );
 }
 
 // ================================================================================
@@ -2086,7 +2061,7 @@ Reference< beans::XPropertySet > DiagramWrapper::getInnerPropertySet()
 
 const Sequence< beans::Property >& DiagramWrapper::getPropertySequence()
 {
-    return lcl_GetPropertySequence();
+    return *StaticDiagramWrapperPropertyArray::get();
 }
 
 const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
@@ -2135,9 +2110,6 @@ uno::Sequence< OUString > DiagramWrapper::getSupportedServiceNames_Static()
     aServices[ 5 ] = C2U( "com.sun.star.chart.ChartAxisZSupplier" );
     aServices[ 6 ] = C2U( "com.sun.star.chart.ChartTwoAxisXSupplier" );
     aServices[ 7 ] = C2U( "com.sun.star.chart.ChartTwoAxisYSupplier" );
-//     aServices[ x ] = C2U( "com.sun.star.beans.PropertySet" );
-//     aServices[ x ] = C2U( "com.sun.star.drawing.FillProperties" );
-//     aServices[ x ] = C2U( "com.sun.star.drawing.LineProperties" );
 
     return aServices;
 }

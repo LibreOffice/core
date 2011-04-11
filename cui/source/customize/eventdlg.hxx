@@ -49,7 +49,7 @@ class SvxEventConfigPage : public _SvxMacroTabPage
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace >   m_xDocumentEvents;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable >         m_xDocumentModifiable;
 
-    BOOL            bAppConfig;
+    sal_Bool            bAppConfig;
 
     DECL_LINK(      SelectHdl_Impl, ListBox* );
 
@@ -66,7 +66,7 @@ public:
     void            LateInit( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
 
 protected:
-    virtual BOOL    FillItemSet( SfxItemSet& );
+    virtual sal_Bool    FillItemSet( SfxItemSet& );
     virtual void    Reset( const SfxItemSet& );
     using _SvxMacroTabPage::Reset;
 

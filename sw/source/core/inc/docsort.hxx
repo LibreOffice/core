@@ -64,11 +64,11 @@ SV_DECL_PTRARR(SwMovedBoxes,        SwMovedBoxPtr, 10, 10 )
  --------------------------------------------------------------------*/
 
 void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox,
-             USHORT nS, USHORT nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=0);
+             sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=0);
 void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox,
-             USHORT nS, USHORT nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=0);
+             sal_uInt16 nS, sal_uInt16 nT, SwMovedBoxes& rMovedList, SwUndoSort* pUD=0);
 void MoveCell(SwDoc* pDoc, const SwTableBox* pSource,
-              const SwTableBox* pTar, BOOL bMovedBefore, SwUndoSort* pUD=0);
+              const SwTableBox* pTar, sal_Bool bMovedBefore, SwUndoSort* pUD=0);
 
 /*-------------------------------------------------------------------
     Beschreibung: Elemente zum Sortieren von Text und Tabellen-Inhalt
@@ -89,11 +89,11 @@ struct SwSortElement
 
     virtual ~SwSortElement();
 
-    virtual String GetKey(USHORT nKey ) const = 0;
-    virtual double GetValue(USHORT nKey ) const;
+    virtual String GetKey(sal_uInt16 nKey ) const = 0;
+    virtual double GetValue(sal_uInt16 nKey ) const;
 
-    BOOL operator==(const SwSortElement& );
-    BOOL operator<(const SwSortElement& );
+    sal_Bool operator==(const SwSortElement& );
+    sal_Bool operator<(const SwSortElement& );
 
     double StrToDouble(const String& rStr) const;
 };
@@ -105,13 +105,13 @@ struct SwSortElement
 struct SwSortTxtElement : public SwSortElement
 {
     // fuer Text
-    ULONG           nOrg;
+    sal_uLong           nOrg;
     SwNodeIndex     aPos;
 
     SwSortTxtElement( const SwNodeIndex& rPos );
     virtual ~SwSortTxtElement();
 
-    virtual String GetKey( USHORT nKey ) const;
+    virtual String GetKey( sal_uInt16 nKey ) const;
 };
 
 /*--------------------------------------------------------------------
@@ -120,13 +120,13 @@ struct SwSortTxtElement : public SwSortElement
 
 struct SwSortBoxElement : public SwSortElement
 {
-    USHORT                      nRow;
+    sal_uInt16                      nRow;
 
-    SwSortBoxElement( USHORT nRC );
+    SwSortBoxElement( sal_uInt16 nRC );
     virtual ~SwSortBoxElement();
 
-    virtual String GetKey( USHORT nKey ) const;
-    virtual double GetValue( USHORT nKey ) const;
+    virtual String GetKey( sal_uInt16 nKey ) const;
+    virtual double GetValue( sal_uInt16 nKey ) const;
 };
 
 
@@ -141,39 +141,39 @@ public:
     FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox);
     ~FlatFndBox();
 
-    BOOL                IsSymmetric() const { return bSym;  }
-    USHORT              GetRows()     const { return nRows; }
-    USHORT              GetCols()     const { return nCols; }
+    sal_Bool                IsSymmetric() const { return bSym;  }
+    sal_uInt16              GetRows()     const { return nRows; }
+    sal_uInt16              GetCols()     const { return nCols; }
 
-    const _FndBox*      GetBox(USHORT nCol, USHORT nRow) const;
+    const _FndBox*      GetBox(sal_uInt16 nCol, sal_uInt16 nRow) const;
 
-    inline BOOL         HasItemSets() const;
-    const SfxItemSet*   GetItemSet(USHORT nCol, USHORT nRow) const;
+    inline sal_Bool         HasItemSets() const;
+    const SfxItemSet*   GetItemSet(sal_uInt16 nCol, sal_uInt16 nRow) const;
 
 private:
 
-    BOOL                CheckLineSymmetry(const _FndBox& rBox);
-    BOOL                CheckBoxSymmetry(const _FndLine& rLn);
-    USHORT              GetColCount(const _FndBox& rBox);
-    USHORT              GetRowCount(const _FndBox& rBox);
-    void                FillFlat(const _FndBox&, BOOL bLastBox=FALSE);
+    sal_Bool                CheckLineSymmetry(const _FndBox& rBox);
+    sal_Bool                CheckBoxSymmetry(const _FndLine& rLn);
+    sal_uInt16              GetColCount(const _FndBox& rBox);
+    sal_uInt16              GetRowCount(const _FndBox& rBox);
+    void                FillFlat(const _FndBox&, sal_Bool bLastBox=sal_False);
 
     SwDoc*              pDoc;
     const _FndBox&      rBoxRef;
     _FndBoxPtr*         pArr;
     SfxItemSet**        ppItemSets;
 
-    USHORT              nRows;
-    USHORT              nCols;
+    sal_uInt16              nRows;
+    sal_uInt16              nCols;
 
-    USHORT              nRow;
-    USHORT              nCol;
+    sal_uInt16              nRow;
+    sal_uInt16              nCol;
 
-    BOOL                bSym;
+    sal_Bool                bSym;
 };
 
 
-inline BOOL FlatFndBox::HasItemSets() const { return 0 != ppItemSets; }
+inline sal_Bool FlatFndBox::HasItemSets() const { return 0 != ppItemSets; }
 
 #endif // _NDSORT_HXX
 

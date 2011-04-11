@@ -46,7 +46,7 @@ TYPEINIT1( XMLBase64ImportContext, SvXMLImportContext );
 
 
 XMLBase64ImportContext::XMLBase64ImportContext(
-        SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName,
+        SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList >&,
         const Reference< XOutputStream >& rOut ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -70,7 +70,7 @@ void XMLBase64ImportContext::Characters( const ::rtl::OUString& rChars )
     if( sTrimmedChars.getLength() )
     {
         OUString sChars;
-        if( sBase64CharsLeft )
+        if( sBase64CharsLeft.getLength() )
         {
             sChars = sBase64CharsLeft;
             sChars += sTrimmedChars;

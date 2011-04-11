@@ -29,9 +29,6 @@
 #ifndef SC_PFILTDLG_HXX
 #define SC_PFILTDLG_HXX
 
-#ifndef _SV_HXX
-#endif
-
 #include <vcl/morebtn.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>
@@ -93,21 +90,20 @@ private:
     HelpButton      aBtnHelp;
     MoreButton      aBtnMore;
     const String    aStrUndefined;
-    const String    aStrNoName;
     const String    aStrNone;
     const String    aStrEmpty;
     const String    aStrNotEmpty;
     const String    aStrRow;
     const String    aStrColumn;
 
-    const USHORT        nWhichQuery;
+    const sal_uInt16        nWhichQuery;
     const ScQueryParam  theQueryData;
     ScQueryItem*        pOutItem;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
     SCTAB               nSrcTab;
 
-    USHORT              nFieldCount;
+    sal_uInt16              nFieldCount;
     ComboBox*           aValueEdArr[3];
     ListBox*            aFieldLbArr[3];
     ListBox*            aCondLbArr[3];
@@ -118,9 +114,9 @@ private:
 private:
     void    Init            ( const SfxItemSet& rArgSet );
     void    FillFieldLists  ();
-    void    UpdateValueList ( USHORT nList );
-    void    ClearValueList  ( USHORT nList );
-    USHORT  GetFieldSelPos  ( SCCOL nField );
+    void    UpdateValueList ( sal_uInt16 nList );
+    void    ClearValueList  ( sal_uInt16 nList );
+    sal_uInt16  GetFieldSelPos  ( SCCOL nField );
 
     // Handler:
     DECL_LINK( LbSelectHdl, ListBox* );

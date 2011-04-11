@@ -210,28 +210,6 @@ namespace sdr
                     aTopLeft, aSize, // destination
                     aTopLeft, aSize, // source
                     rSource);
-
-#ifdef DBG_UTIL
-                // #i72754# possible graphical region test only with non-pro
-                static bool bDoPaintForVisualControl(false);
-                if(bDoPaintForVisualControl)
-                {
-                    const bool bMapModeWasEnabledTest(getOutputDevice().IsMapModeEnabled());
-                    getOutputDevice().EnableMapMode(false);
-                    getOutputDevice().SetLineColor(COL_LIGHTRED);
-                    getOutputDevice().SetFillColor();
-                    getOutputDevice().DrawRect(aRegionRectanglePixel);
-                    getOutputDevice().EnableMapMode(bMapModeWasEnabledTest);
-                }
-
-                static bool bDoSaveForVisualControl(false);
-                if(bDoSaveForVisualControl)
-                {
-                    const Bitmap aBitmap(maBufferDevice.GetBitmap(aTopLeft, aSize));
-                    SvFileStream aNew((const String&)String(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
-                    aNew << aBitmap;
-                }
-#endif
             }
 
             aRegion.EndEnumRects(aRegionHandle);

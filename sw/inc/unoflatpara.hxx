@@ -123,8 +123,9 @@ public:
     virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaBefore(const css::uno::Reference< css::text::XFlatParagraph > & xPara) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
     virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaAfter(const css::uno::Reference< css::text::XFlatParagraph > & xPara) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
 
+protected:
     // SwClient
-    virtual void    Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
 private:
     SwXFlatParagraphIterator( const SwXFlatParagraphIterator & ); // not defined
@@ -137,9 +138,9 @@ private:
     const sal_Int32 mnType;
     const sal_Bool mbAutomatic;
 
-    ULONG mnCurrentNode;    // used for non-automatic mode
-    ULONG mnStartNode;      // used for non-automatic mode
-    ULONG mnEndNode;        // used for non-automatic mode
+    sal_uLong mnCurrentNode;    // used for non-automatic mode
+    sal_uLong mnStartNode;      // used for non-automatic mode
+    sal_uLong mnEndNode;        // used for non-automatic mode
     sal_Bool mbWrapped;     // used for non-automatic mode
 };
 

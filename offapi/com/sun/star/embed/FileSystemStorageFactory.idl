@@ -50,7 +50,7 @@ published service FileSystemStorageFactory
         <p>
         In case
         <method scope="com::sun::star::lang">XSingleServiceFactory::createInstance</method>
-        call is used the result storage will be open in readwrite mode based
+        call is used the result storage will be open in read-write mode based
         on an arbitrary file system folder.
         </p>
 
@@ -75,7 +75,7 @@ published service FileSystemStorageFactory
 
             <dt>parameter 3</dt>
             <dd>
-                      allowes to provide
+                      allows to provide
                       <type scope="com::sun::star::document">MediaDescryptor</type>
                       to the storage so some parts can be used for
                       initialization, it can be for example

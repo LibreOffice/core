@@ -63,7 +63,7 @@ class ST_List            /// Soltools-List.
     void                insert(
                             iterator            i_aPos,
                             const XX &          elem_ )
-                                                { Insert(i_aPos-begin(), elem_); }
+                                                { Insert((unsigned)(i_aPos-begin()), elem_); }
     virtual void        Insert(
                             unsigned            pos,
                             const XX &          elem );
@@ -72,7 +72,7 @@ class ST_List            /// Soltools-List.
                                                 { Insert(size(),elem_); }
     void                remove(
                             iterator            i_aPos )
-                                                { Remove(i_aPos-begin()); }
+                                                { Remove((int)(i_aPos-begin())); }
     virtual void        Remove(
                             unsigned            pos );
     void                pop_back()              { Remove(size()-1); }

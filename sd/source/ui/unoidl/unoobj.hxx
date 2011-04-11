@@ -72,6 +72,7 @@ private:
     void SetMasterDepend( sal_Bool bDepend ) throw();
 
     SdrObject* GetSdrObject() const throw();
+    ::rtl::OUString GetPlaceholderText() const;
 
     com::sun::star::uno::Sequence< sal_Int8 >* mpImplementationId;
 

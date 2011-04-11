@@ -102,14 +102,14 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString DefaultFormComponentInspectorModel::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( "org.openoffice.comp.extensions.DefaultFormComponentInspectorModel");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.extensions.DefaultFormComponentInspectorModel"));
     }
 
     //------------------------------------------------------------------------
     Sequence< ::rtl::OUString > DefaultFormComponentInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString::createFromAscii( "com.sun.star.form.inspection.DefaultFormComponentInspectorModel" );
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.inspection.DefaultFormComponentInspectorModel"));
         return aSupported;
     }
 
@@ -182,8 +182,8 @@ namespace pcr
         struct
         {
             const sal_Char* programmaticName;
-            USHORT          uiNameResId;
-            sal_uInt32      helpId;
+            sal_uInt16          uiNameResId;
+            const sal_Char* helpId;
         } aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_FM_PROPDLG_TAB_GENERAL },
             { "Data",       RID_STR_PROPPAGE_DATA,      HID_FM_PROPDLG_TAB_DATA },

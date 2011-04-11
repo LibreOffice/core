@@ -52,7 +52,7 @@ class VCL_DLLPUBLIC X11SalBitmap : public SalBitmap
 private:
 
     static BitmapBuffer*        ImplCreateDIB( const Size& rSize,
-                                               USHORT nBitCount,
+                                               sal_uInt16 nBitCount,
                                                const BitmapPalette& rPal );
     static BitmapBuffer*        ImplCreateDIB( Drawable aDrawable,
                                                int nScreen,
@@ -64,7 +64,7 @@ private:
 public:
 
     static ImplSalBitmapCache*  mpCache;
-    static ULONG                mnCacheInstCount;
+    static sal_uIntPtr              mnCacheInstCount;
 
     static void                 ImplCreateCache();
     static void                 ImplDestroyCache();
@@ -106,13 +106,13 @@ public:
 
     // overload pure virtual methods
     virtual bool            Create( const Size& rSize,
-                            USHORT nBitCount,
+                            sal_uInt16 nBitCount,
                             const BitmapPalette& rPal );
     virtual bool            Create( const SalBitmap& rSalBmp );
     virtual bool            Create( const SalBitmap& rSalBmp,
                                     SalGraphics* pGraphics );
     virtual bool            Create( const SalBitmap& rSalBmp,
-                                    USHORT nNewBitCount );
+                                    sal_uInt16 nNewBitCount );
     virtual bool            Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
                                     Size& rSize,
                                     bool bMask = false );
@@ -120,7 +120,7 @@ public:
     virtual void            Destroy();
 
     virtual Size            GetSize() const;
-    virtual USHORT          GetBitCount() const;
+    virtual sal_uInt16          GetBitCount() const;
 
     virtual BitmapBuffer*   AcquireBuffer( bool bReadOnly );
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
@@ -167,7 +167,7 @@ public:
     long            ImplGetWidth() const { return maTwoRect.mnDestWidth; }
     long            ImplGetHeight() const { return maTwoRect.mnDestHeight; }
     long            ImplGetDepth() const { return mnDepth; }
-    ULONG           ImplGetMemSize() const { return( ( maTwoRect.mnDestWidth * maTwoRect.mnDestHeight * mnDepth ) >> 3 ); }
+    sal_uIntPtr         ImplGetMemSize() const { return( ( maTwoRect.mnDestWidth * maTwoRect.mnDestHeight * mnDepth ) >> 3 ); }
     int             ImplGetScreen() const { return mnScreen; }
 
     bool            ImplMatches( int nScreen, long nDepth, const SalTwoRect& rTwoRect ) const;
@@ -184,14 +184,14 @@ class ImplSalBitmapCache
 private:
 
     List            maBmpList;
-    ULONG           mnTotalSize;
+    sal_uIntPtr         mnTotalSize;
 
 public:
 
                     ImplSalBitmapCache();
                     ~ImplSalBitmapCache();
 
-    void            ImplAdd( X11SalBitmap* pBmp, ULONG nMemSize = 0UL, ULONG nFlags = 0UL );
+    void            ImplAdd( X11SalBitmap* pBmp, sal_uIntPtr nMemSize = 0UL, sal_uIntPtr nFlags = 0UL );
     void            ImplRemove( X11SalBitmap* pBmp );
     void            ImplClear();
 };

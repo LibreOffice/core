@@ -31,15 +31,15 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "FillStyleContext.hxx"
 #include <xmloff/xmlimp.hxx>
-#include "GradientStyle.hxx"
-#include "HatchStyle.hxx"
-#include "ImageStyle.hxx"
+#include "xmloff/GradientStyle.hxx"
+#include "xmloff/HatchStyle.hxx"
+#include "xmloff/ImageStyle.hxx"
 #include "TransGradientStyle.hxx"
-#include "MarkerStyle.hxx"
-#include "DashStyle.hxx"
+#include "xmloff/MarkerStyle.hxx"
+#include "xmloff/DashStyle.hxx"
 #include <xmloff/families.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/XMLBase64ImportContext.hxx>
 
 using namespace ::com::sun::star;
@@ -57,8 +57,6 @@ XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport, sal_uInt
                                               const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
-    // set Family
-//  SetFamily( XML_STYLE_FAMILY_FILLSTYLE_GRADIENT_ID );
 
     // start import
     XMLGradientStyleImport aGradientStyle( GetImport() );
@@ -91,7 +89,7 @@ void XMLGradientStyleContext::EndElement()
     {}
 }
 
-BOOL XMLGradientStyleContext::IsTransient() const
+sal_Bool XMLGradientStyleContext::IsTransient() const
 {
     return sal_True;
 }
@@ -137,7 +135,7 @@ void XMLHatchStyleContext::EndElement()
     {}
 }
 
-BOOL XMLHatchStyleContext::IsTransient() const
+sal_Bool XMLHatchStyleContext::IsTransient() const
 {
     return sal_True;
 }
@@ -217,7 +215,7 @@ void XMLBitmapStyleContext::EndElement()
     {}
 }
 
-BOOL XMLBitmapStyleContext::IsTransient() const
+sal_Bool XMLBitmapStyleContext::IsTransient() const
 {
     return sal_True;
 }
@@ -264,7 +262,7 @@ void XMLTransGradientStyleContext::EndElement()
     {}
 }
 
-BOOL XMLTransGradientStyleContext::IsTransient() const
+sal_Bool XMLTransGradientStyleContext::IsTransient() const
 {
     return sal_True;
 }
@@ -310,7 +308,7 @@ void XMLMarkerStyleContext::EndElement()
     {}
 }
 
-BOOL XMLMarkerStyleContext::IsTransient() const
+sal_Bool XMLMarkerStyleContext::IsTransient() const
 {
     return sal_True;
 }
@@ -356,7 +354,7 @@ void XMLDashStyleContext::EndElement()
     {}
 }
 
-BOOL XMLDashStyleContext::IsTransient() const
+sal_Bool XMLDashStyleContext::IsTransient() const
 {
     return sal_True;
 }

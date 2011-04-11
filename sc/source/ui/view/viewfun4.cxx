@@ -86,7 +86,7 @@ using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-BOOL bPasteIsDrop = FALSE;
+sal_Bool bPasteIsDrop = false;
 
 //==================================================================
 
@@ -104,11 +104,11 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = GetViewData()->GetTabNo();
-        const BOOL bRecord (pDoc->IsUndoEnabled());
+        const sal_Bool bRecord (pDoc->IsUndoEnabled());
 
         const ScPatternAttr* pPattern = pDoc->GetPattern( nStartCol, nStartRow, nTab );
         ScTabEditEngine* pEngine = new ScTabEditEngine( *pPattern, pDoc->GetEnginePool() );
-        pEngine->EnableUndo( FALSE );
+        pEngine->EnableUndo( false );
 
         Window* pActWin = GetActiveWin();
         if (pActWin)
@@ -120,10 +120,10 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
 
             // same method now for clipboard or drag&drop
             // mba: clipboard always must contain absolute URLs (could be from alien source)
-            aEditView.InsertText( rxTransferable, String(), TRUE );
+            aEditView.InsertText( rxTransferable, String(), sal_True );
         }
 
-        ULONG nParCnt = pEngine->GetParagraphCount();
+        sal_uLong nParCnt = pEngine->GetParagraphCount();
         if (nParCnt)
         {
             SCROW nEndRow = nStartRow + static_cast<SCROW>(nParCnt) - 1;
@@ -134,14 +134,14 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             {
                 pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
                 pUndoDoc->InitUndo( pDoc, nTab, nTab );
-                pDoc->CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, IDF_ALL, FALSE, pUndoDoc );
+                pDoc->CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, IDF_ALL, false, pUndoDoc );
             }
 
             SCROW nRow = nStartRow;
-            for( USHORT n = 0; n < nParCnt; n++ )
+            for( sal_uInt16 n = 0; n < nParCnt; n++ )
             {
                 EditTextObject* pObject = pEngine->CreateTextObject( n );
-                EnterData( nStartCol, nRow, nTab, pObject, FALSE, TRUE );
+                EnterData( nStartCol, nRow, nTab, pObject, false, sal_True );
                             // kein Undo, auf einfache Strings testen
                 delete pObject;
                 if( ++nRow > MAXROW )
@@ -152,7 +152,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             {
                 ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
                 pRedoDoc->InitUndo( pDoc, nTab, nTab );
-                pDoc->CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, IDF_ALL|IDF_NOCAPTIONS, FALSE, pRedoDoc );
+                pDoc->CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, IDF_ALL|IDF_NOCAPTIONS, false, pRedoDoc );
 
                 ScMarkData aDestMark;
                 aDestMark.SelectOneTable( nTab );
@@ -187,17 +187,17 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         ShowAllCursors();
     }
 }
-void ScViewFunc::DoRefConversion( BOOL bRecord )
+void ScViewFunc::DoRefConversion( sal_Bool bRecord )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     SCTAB nTabCount = pDoc->GetTableCount();
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = false;
 
     ScRange aMarkRange;
     rMark.MarkToSimple();
-    BOOL bMulti = rMark.IsMultiMarked();
+    sal_Bool bMulti = rMark.IsMultiMarked();
     if (bMulti)
         rMark.GetMultiMarkArea( aMarkRange );
     else if (rMark.IsMarked())
@@ -216,7 +216,7 @@ void ScViewFunc::DoRefConversion( BOOL bRecord )
     }
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    BOOL bOk = FALSE;
+    sal_Bool bOk = false;
 
     ScDocument* pUndoDoc = NULL;
     if (bRecord)
@@ -239,15 +239,15 @@ void ScViewFunc::DoRefConversion( BOOL bRecord )
 
     ScRangeListRef xRanges;
     GetViewData()->GetMultiArea( xRanges );
-    ULONG nCount = xRanges->Count();
+    size_t nCount = xRanges->size();
 
     for (SCTAB i=0; i<nTabCount; i++)
     {
         if (rMark.GetTableSelect(i))
         {
-            for (ULONG j=0; j<nCount; j++)
+            for (size_t j = 0; j < nCount; ++j)
             {
-                ScRange aRange = *xRanges->GetObject(j);
+                ScRange aRange = *(*xRanges)[j];
                 aRange.aStart.SetTab(i);
                 aRange.aEnd.SetTab(i);
                 ScCellIterator aIter( pDoc, aRange );
@@ -271,7 +271,7 @@ void ScViewFunc::DoRefConversion( BOOL bRecord )
                             ScFormulaCell* pNewCell = new ScFormulaCell( pDoc, aPos,
                                                         pArr,formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE );
                             pDoc->PutCell( aPos, pNewCell );
-                            bOk = TRUE;
+                            bOk = sal_True;
                         }
                     }
                     pCell = aIter.GetNext();
@@ -310,7 +310,7 @@ void ScViewFunc::DoRefConversion( BOOL bRecord )
         ErrorMessage(STR_ERR_NOREF);
 }
 //  Thesaurus - Undo ok
-void ScViewFunc::DoThesaurus( BOOL bRecord )
+void ScViewFunc::DoThesaurus( sal_Bool bRecord )
 {
     SCCOL nCol;
     SCROW nRow;
@@ -328,9 +328,9 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     EditView* pEditView = NULL;
     ESelection* pEditSel = NULL;
     ScEditEngineDefaulter* pThesaurusEngine;
-    BOOL bIsEditMode = GetViewData()->HasEditView(eWhich);
+    sal_Bool bIsEditMode = GetViewData()->HasEditView(eWhich);
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = false;
     if (bIsEditMode)                                            // Edit-Mode aktiv
     {
         GetViewData()->GetEditView(eWhich, pEditView, nCol, nRow);
@@ -393,14 +393,16 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
         if (pCell)
         {
             ((ScEditCell*) pCell)->GetData(pTObject);
-            pOldTObj = pTObject->Clone();
             if (pTObject)
+            {
+                pOldTObj = pTObject->Clone();
                 pThesaurusEngine->SetText(*pTObject);
+            }
         }
     }
     else
     {
-        DBG_ERROR("DoThesaurus: Keine String oder Editzelle");
+        OSL_FAIL("DoThesaurus: Keine String oder Editzelle");
     }
     pEditView = GetViewData()->GetEditView(GetViewData()->GetActivePart());;
     if (pEditSel)
@@ -451,7 +453,7 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
         }
         delete pNewTObj;
     }
-    KillEditView(TRUE);
+    KillEditView(sal_True);
     delete pEditDefaults;
     delete pThesaurusEngine;
     delete pOldTObj;
@@ -459,13 +461,13 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     pDocSh->PostPaintGridAll();
 }
 
-void ScViewFunc::DoHangulHanjaConversion( BOOL bRecord )
+void ScViewFunc::DoHangulHanjaConversion( sal_Bool bRecord )
 {
     ScConversionParam aConvParam( SC_CONVERSION_HANGULHANJA, LANGUAGE_KOREAN, 0, true );
     DoSheetConversion( aConvParam, bRecord );
 }
 
-void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bRecord )
+void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, sal_Bool bRecord )
 {
     SCCOL nCol;
     SCROW nRow;
@@ -476,14 +478,12 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
     ScMarkData& rMark = rViewData.GetMarkData();
     ScSplitPos eWhich = rViewData.GetActivePart();
     EditView* pEditView = NULL;
-    ESelection* pEditSel = NULL;
-    BOOL bIsEditMode = rViewData.HasEditView(eWhich);
+    sal_Bool bIsEditMode = rViewData.HasEditView(eWhich);
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = false;
     if (bIsEditMode)                                            // Edit-Mode aktiv
     {
         rViewData.GetEditView(eWhich, pEditView, nCol, nRow);
-        pEditSel = new ESelection(pEditView->GetSelection());
         SC_MOD()->InputEnterHandler();
     }
     else
@@ -496,14 +496,13 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
     nTab = rViewData.GetTabNo();
 
     rMark.MarkToMulti();
-    BOOL bMarked = rMark.IsMultiMarked();
+    sal_Bool bMarked = rMark.IsMultiMarked();
     if (bMarked)
     {
         ScEditableTester aTester( pDoc, rMark );
         if (!aTester.IsEditable())
         {
             ErrorMessage(aTester.GetMessageId());
-            delete pEditSel;
             return;
         }
     }
@@ -531,8 +530,8 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
 
     //  ab hier kein return mehr
 
-    BOOL bOldDis = pDoc->IsIdleDisabled();
-    pDoc->DisableIdle( TRUE );   // #42726# stop online spelling
+    sal_Bool bOldDis = pDoc->IsIdleDisabled();
+    pDoc->DisableIdle( true );   // stop online spelling
 
     // *** create and init the edit engine *** --------------------------------
 
@@ -560,7 +559,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
     Rectangle aRect( Point( 0, 0 ), Point( 0, 0 ) );
     pEditView->SetOutputArea( aRect );
     pEngine->SetControlWord( EE_CNTRL_USECHARATTRIBS );
-    pEngine->EnableUndo( FALSE );
+    pEngine->EnableUndo( false );
     pEngine->SetPaperSize( aRect.GetSize() );
     pEngine->SetText( EMPTY_STRING );
 
@@ -595,9 +594,8 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
     // *** final cleanup *** --------------------------------------------------
 
     rViewData.SetSpellingView( NULL );
-    KillEditView(TRUE);
+    KillEditView(sal_True);
     delete pEngine;
-    delete pEditSel;
     pDocSh->PostPaintGridAll();
     rViewData.GetViewShell()->UpdateInputHandler();
     pDoc->DisableIdle(bOldDis);
@@ -606,7 +604,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
 // Pasten von FORMAT_FILE-Items
 //  wird nicht direkt aus Drop aufgerufen, sondern asynchron -> Dialoge sind erlaubt
 
-BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
+sal_Bool ScViewFunc::PasteFile( const Point& rPos, const String& rFile, sal_Bool bLink )
 {
     INetURLObject aURL;
     aURL.SetSmartURL( rFile );
@@ -616,7 +614,7 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
     if( ::avmedia::MediaWindow::isMediaURL( aStrURL ) )
     {
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aStrURL );
-        return BOOL( 0 != GetViewData()->GetDispatcher().Execute(
+        return sal_Bool( 0 != GetViewData()->GetDispatcher().Execute(
                                 SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON,
                                 &aMediaURLItem, 0L ) );
     }
@@ -628,10 +626,10 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
 
         // nur nach eigenen Filtern suchen, ohne Auswahlbox (wie in ScDocumentLoader)
         SfxFilterMatcher aMatcher( ScDocShell::Factory().GetFilterContainer()->GetName() );
-        SfxMedium aSfxMedium( aStrURL, (STREAM_READ | STREAM_SHARE_DENYNONE), FALSE );
+        SfxMedium aSfxMedium( aStrURL, (STREAM_READ | STREAM_SHARE_DENYNONE), false );
         // #i73992# GuessFilter no longer calls UseInteractionHandler.
         // This is UI, so it can be called here.
-        aSfxMedium.UseInteractionHandler(TRUE);
+        aSfxMedium.UseInteractionHandler(sal_True);
         ErrCode nErr = aMatcher.GuessFilter( aSfxMedium, &pFlt );
 
         if ( pFlt && !nErr )
@@ -645,7 +643,7 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
 
             // Asynchron oeffnen, kann naemlich auch aus D&D heraus passieren
             // und das bekommt dem MAC nicht so gut ...
-            return BOOL( 0 != rDispatcher.Execute( SID_OPENDOC,
+            return sal_Bool( 0 != rDispatcher.Execute( SID_OPENDOC,
                                     SFX_CALLMODE_ASYNCHRON, &aFileNameItem, &aFilterItem, &aTargetItem, 0L) );
         }
     }
@@ -653,11 +651,10 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
     // 2. Kann die Datei ueber die Grafik-Filter eingefuegt werden?
     // (als Link, weil Gallery das so anbietet)
 
-    USHORT nFilterFormat;
+    sal_uInt16 nFilterFormat;
     Graphic aGraphic;
     GraphicFilter* pGraphicFilter = GraphicFilter::GetGraphicFilter();
 
-//      GraphicProgress aGraphicProgress(&aGraphicFilter);
 
     if (!pGraphicFilter->ImportGraphic(aGraphic, aURL,
             GRFILTER_FORMAT_DONTKNOW, &nFilterFormat ))
@@ -683,7 +680,7 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
         SCROW nPosY = aRange.aStart.Row();
 
         InsertBookmark( aStrURL, aStrURL, nPosX, nPosY );
-        return TRUE;
+        return sal_True;
     }
     else
     {
@@ -703,14 +700,14 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
         if( xObj.is() )
             return PasteObject( rPos, xObj );
 
-        // #105851# If an OLE object can't be created, insert a URL button
+        // If an OLE object can't be created, insert a URL button
 
         GetViewData()->GetViewShell()->InsertURLButton( aStrURL, aStrURL, EMPTY_STRING, &rPos );
-        return TRUE;
+        return sal_True;
     }
 }
 
-BOOL ScViewFunc::PasteBookmark( ULONG nFormatId,
+sal_Bool ScViewFunc::PasteBookmark( sal_uLong nFormatId,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY )
@@ -718,15 +715,15 @@ BOOL ScViewFunc::PasteBookmark( ULONG nFormatId,
     INetBookmark aBookmark;
     TransferableDataHelper aDataHelper( rxTransferable );
     if ( !aDataHelper.GetINetBookmark( nFormatId, aBookmark ) )
-        return FALSE;
+        return false;
 
     InsertBookmark( aBookmark.GetDescription(), aBookmark.GetURL(), nPosX, nPosY );
-    return TRUE;
+    return sal_True;
 }
 
 void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
                                     SCCOL nPosX, SCROW nPosY, const String* pTarget,
-                                    BOOL bTryReplace )
+                                    sal_Bool bTryReplace )
 {
     ScViewData* pViewData = GetViewData();
     if ( pViewData->HasEditView( pViewData->GetActivePart() ) &&
@@ -766,7 +763,7 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
         }
     }
 
-    USHORT nPara = aEngine.GetParagraphCount();
+    sal_uInt16 nPara = aEngine.GetParagraphCount();
     if (nPara)
         --nPara;
     xub_StrLen nTxtLen = aEngine.GetTextLen(nPara);
@@ -790,7 +787,7 @@ void ScViewFunc::InsertBookmark( const String& rDescription, const String& rURL,
     delete pData;
 }
 
-BOOL ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
+sal_Bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
 {
     ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
     ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
@@ -801,7 +798,7 @@ BOOL ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
         const EditTextObject* pData = ((ScEditCell*)pCell)->GetData();
         if (pData)
         {
-            BOOL bField = pData->IsFieldObject();
+            sal_Bool bField = pData->IsFieldObject();
             if (bField)
             {
                 const SvxFieldItem* pFieldItem = pData->GetField();
@@ -817,13 +814,13 @@ BOOL ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
                             pContent->SetURL( pURLField->GetURL() );
                             pContent->SetTargetFrame( pURLField->GetTargetFrame() );
                         }
-                        return TRUE;
+                        return sal_True;
                     }
                 }
             }
         }
     }
-    return FALSE;
+    return false;
 }
 
 

@@ -55,7 +55,7 @@ public:
         m_aComboListBox( _pListBox ){}
 
     // -----------------------------------------------------------------------------
-    virtual String          GetEntry( USHORT nPos ) const
+    virtual String          GetEntry( sal_uInt16 nPos ) const
     {
         return m_aComboListBox.GetEntry( nPos );
     }
@@ -68,7 +68,7 @@ public:
         return aRet;
     }
     // -----------------------------------------------------------------------------
-    virtual Rectangle       GetBoundingRectangle( USHORT nItem ) const
+    virtual Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const
     {
         Rectangle aRect;
         if ( m_aComboListBox.IsInDropDown() && IsEntryVisible( nItem ) )
@@ -90,24 +90,24 @@ public:
         return m_aComboListBox.GetWindowExtentsRelative( pRelativeWindow );
     }
     // -----------------------------------------------------------------------------
-    virtual BOOL            IsActive() const
+    virtual sal_Bool            IsActive() const
     {
         return m_aComboListBox.IsActive();
     }
     // -----------------------------------------------------------------------------
-    virtual BOOL            IsEntryVisible( USHORT nPos ) const
+    virtual sal_Bool            IsEntryVisible( sal_uInt16 nPos ) const
     {
-        USHORT nTopEntry = m_aComboListBox.GetTopEntry();
-        USHORT nLines = m_aComboListBox.GetDisplayLineCount();
+        sal_uInt16 nTopEntry = m_aComboListBox.GetTopEntry();
+        sal_uInt16 nLines = m_aComboListBox.GetDisplayLineCount();
         return ( nPos >= nTopEntry && nPos < ( nTopEntry + nLines ) );
     }
     // -----------------------------------------------------------------------------
-    virtual USHORT          GetDisplayLineCount() const
+    virtual sal_uInt16          GetDisplayLineCount() const
     {
         return m_aComboListBox.GetDisplayLineCount();
     }
     // -----------------------------------------------------------------------------
-    virtual void            GetMaxVisColumnsAndLines( USHORT& rnCols, USHORT& rnLines ) const
+    virtual void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
     {
         m_aComboListBox.GetMaxVisColumnsAndLines(rnCols,rnLines);
     }
@@ -117,22 +117,22 @@ public:
         return m_aComboListBox.GetStyle();
     }
     // -----------------------------------------------------------------------------
-    virtual BOOL            IsMultiSelectionEnabled() const
+    virtual sal_Bool            IsMultiSelectionEnabled() const
     {
         return m_aComboListBox.IsMultiSelectionEnabled();
     }
     // -----------------------------------------------------------------------------
-    virtual USHORT          GetTopEntry() const
+    virtual sal_uInt16          GetTopEntry() const
     {
         return m_aComboListBox.GetTopEntry();
     }
     // -----------------------------------------------------------------------------
-    virtual BOOL            IsEntryPosSelected( USHORT nPos ) const
+    virtual sal_Bool            IsEntryPosSelected( sal_uInt16 nPos ) const
     {
         return m_aComboListBox.IsEntryPosSelected(nPos);
     }
     // -----------------------------------------------------------------------------
-    virtual USHORT          GetEntryCount() const
+    virtual sal_uInt16          GetEntryCount() const
     {
         return m_aComboListBox.GetEntryCount();
     }
@@ -142,12 +142,12 @@ public:
         m_aComboListBox.Select();
     }
     // -----------------------------------------------------------------------------
-    virtual void    SelectEntryPos( USHORT nPos, BOOL bSelect = TRUE )
+    virtual void    SelectEntryPos( sal_uInt16 nPos, sal_Bool bSelect = sal_True )
     {
         m_aComboListBox.SelectEntryPos(nPos,bSelect);
     }
     // -----------------------------------------------------------------------------
-    virtual USHORT          GetSelectEntryCount() const
+    virtual sal_uInt16          GetSelectEntryCount() const
     {
         return m_aComboListBox.GetSelectEntryCount();
     }
@@ -157,12 +157,12 @@ public:
         m_aComboListBox.SetNoSelection();
     }
     // -----------------------------------------------------------------------------
-    virtual USHORT          GetSelectEntryPos( USHORT nSelIndex = 0 ) const
+    virtual sal_uInt16          GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const
     {
         return m_aComboListBox.GetSelectEntryPos(nSelIndex);
     }
     // -----------------------------------------------------------------------------
-    virtual BOOL            IsInDropDown() const
+    virtual sal_Bool            IsInDropDown() const
     {
         return m_aComboListBox.IsInDropDown();
     }
@@ -180,7 +180,7 @@ public:
         return aRect;
     }
     // -----------------------------------------------------------------------------
-    long GetIndexForPoint( const Point& rPoint, USHORT& nPos ) const
+    long GetIndexForPoint( const Point& rPoint, sal_uInt16& nPos ) const
     {
         return m_aComboListBox.GetIndexForPoint( rPoint, nPos );
     }

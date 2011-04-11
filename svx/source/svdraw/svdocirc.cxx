@@ -48,8 +48,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx> // fuer die Objektkonvertierung
 #include <svx/svdview.hxx>  // Zum Draggen (Ortho)
-#include "svdglob.hxx"   // StringCache
-#include "svdstr.hrc"    // Objektname
+#include "svx/svdglob.hxx"   // StringCache
+#include "svx/svdstr.hrc"    // Objektname
 #include <editeng/eeitem.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/circleproperties.hxx>
@@ -154,15 +154,15 @@ SdrCircObj::~SdrCircObj()
 void SdrCircObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     bool bCanConv=!HasText() || ImpCanConvTextToCurve();
-    rInfo.bEdgeRadiusAllowed    = FALSE;
+    rInfo.bEdgeRadiusAllowed    = sal_False;
     rInfo.bCanConvToPath=bCanConv;
     rInfo.bCanConvToPoly=bCanConv;
     rInfo.bCanConvToContour = !IsFontwork() && (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 
-UINT16 SdrCircObj::GetObjIdentifier() const
+sal_uInt16 SdrCircObj::GetObjIdentifier() const
 {
-    return UINT16(meCircleKind);
+    return sal_uInt16(meCircleKind);
 }
 
 bool SdrCircObj::PaintNeedsXPolyCirc() const
@@ -172,10 +172,8 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     // und wenn nicht WIN dann (erstmal) auch fuer Kreis-/Ellipsenausschnitte
     // und Kreis-/Ellipsenboegen (wg. Genauigkeit)
     bool bNeed=aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 || meCircleKind==OBJ_CCUT;
-#ifndef WIN
     // Wenn nicht Win, dann fuer alle ausser Vollkreis (erstmal!!!)
     if (meCircleKind!=OBJ_CIRC) bNeed = true;
-#endif
 
     const SfxItemSet& rSet = GetObjectItemSet();
     if(!bNeed)
@@ -298,7 +296,7 @@ void SdrCircObj::RecalcXPoly()
 
 void SdrCircObj::TakeObjNameSingul(XubString& rName) const
 {
-    USHORT nID=STR_ObjNameSingulCIRC;
+    sal_uInt16 nID=STR_ObjNameSingulCIRC;
     if (aRect.GetWidth()==aRect.GetHeight() && aGeo.nShearWink==0) {
         switch (meCircleKind) {
             case OBJ_CIRC: nID=STR_ObjNameSingulCIRC; break;
@@ -330,7 +328,7 @@ void SdrCircObj::TakeObjNameSingul(XubString& rName) const
 
 void SdrCircObj::TakeObjNamePlural(XubString& rName) const
 {
-    USHORT nID=STR_ObjNamePluralCIRC;
+    sal_uInt16 nID=STR_ObjNamePluralCIRC;
     if (aRect.GetWidth()==aRect.GetHeight() && aGeo.nShearWink==0) {
         switch (meCircleKind) {
             case OBJ_CIRC: nID=STR_ObjNamePluralCIRC; break;
@@ -351,12 +349,9 @@ void SdrCircObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(nID);
 }
 
-void SdrCircObj::operator=(const SdrObject& rObj)
+SdrCircObj* SdrCircObj::Clone() const
 {
-    SdrRectObj::operator=(rObj);
-
-    nStartWink = ((SdrCircObj&)rObj).nStartWink;
-    nEndWink = ((SdrCircObj&)rObj).nEndWink;
+    return CloneHelper< SdrCircObj >();
 }
 
 basegfx::B2DPolyPolygon SdrCircObj::TakeXorPoly() const
@@ -387,7 +382,8 @@ public:
         nWdt(0),
         nStart(0),
         nEnd(0),
-        bRight(FALSE)
+        nWink(0),
+        bRight(sal_False)
     {}
     void SetCreateParams(SdrDragStat& rStat);
 };
@@ -598,7 +594,7 @@ String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
                 nWink = pU->nEnd;
             }
 
-            aStr += GetWinkStr(nWink,FALSE);
+            aStr += GetWinkStr(nWink,sal_False);
             aStr += sal_Unicode(')');
         }
 
@@ -615,7 +611,7 @@ String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
             ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
             aStr.AppendAscii(" (");
-            aStr += GetWinkStr(nWink,FALSE);
+            aStr += GetWinkStr(nWink,sal_False);
             aStr += sal_Unicode(')');
 
             return aStr;
@@ -701,7 +697,7 @@ bool SdrCircObj::BegCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     aRect = aRect1;
     ImpSetCreateParams(rStat);
-    return TRUE;
+    return sal_True;
 }
 
 bool SdrCircObj::MovCreate(SdrDragStat& rStat)
@@ -714,7 +710,7 @@ bool SdrCircObj::MovCreate(SdrDragStat& rStat)
     nStartWink=pU->nStart;
     nEndWink=pU->nEnd;
     SetBoundRectDirty();
-    bSnapRectDirty=TRUE;
+    bSnapRectDirty=sal_True;
     SetXPolyDirty();
 
     // #i103058# push current angle settings to ItemSet to
@@ -724,7 +720,7 @@ bool SdrCircObj::MovCreate(SdrDragStat& rStat)
         ImpSetCircInfoToAttr();
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 bool SdrCircObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
@@ -1074,7 +1070,7 @@ Point SdrCircObj::GetSnapPoint(sal_uInt32 i) const
     }
 }
 
-void __EXPORT SdrCircObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+void SdrCircObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SetXPolyDirty();
     SdrRectObj::Notify(rBC,rHint);
@@ -1101,8 +1097,8 @@ void SdrCircObj::ImpSetAttrToCircInfo()
     sal_Int32 nNewStart = ((SdrCircStartAngleItem&)rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
     sal_Int32 nNewEnd = ((SdrCircEndAngleItem&)rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
 
-    BOOL bKindChg = meCircleKind != eNewKind;
-    BOOL bWinkChg = nNewStart != nStartWink || nNewEnd != nEndWink;
+    sal_Bool bKindChg = meCircleKind != eNewKind;
+    sal_Bool bWinkChg = nNewStart != nStartWink || nNewEnd != nEndWink;
 
     if(bKindChg || bWinkChg)
     {
@@ -1158,7 +1154,7 @@ void SdrCircObj::ImpSetCircInfoToAttr()
     }
 }
 
-SdrObject* SdrCircObj::DoConvertToPolyObj(BOOL bBezier) const
+SdrObject* SdrCircObj::DoConvertToPolyObj(sal_Bool bBezier) const
 {
     const sal_Bool bFill(OBJ_CARC == meCircleKind ? sal_False : sal_True);
     const basegfx::B2DPolygon aCircPolygon(ImpCalcXPolyCirc(meCircleKind, aRect, nStartWink, nEndWink));

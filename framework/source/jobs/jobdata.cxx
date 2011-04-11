@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-    /*************************************************************************
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -62,6 +62,7 @@ namespace framework{
 
 const sal_Char* JobData::JOBCFG_ROOT              = "/org.openoffice.Office.Jobs/Jobs/"   ;
 const sal_Char* JobData::JOBCFG_PROP_SERVICE      = "Service"                             ;
+const sal_Char* JobData::JOBCFG_PROP_CONTEXT      = "Context"                             ;
 const sal_Char* JobData::JOBCFG_PROP_ARGUMENTS    = "Arguments"                           ;
 
 const sal_Char* JobData::EVENTCFG_ROOT            = "/org.openoffice.Office.Jobs/Events/" ;
@@ -80,6 +81,7 @@ const sal_Char* JobData::PROP_ENVTYPE             = "EnvType"                   
 const sal_Char* JobData::PROP_FRAME               = "Frame"                               ;
 const sal_Char* JobData::PROP_MODEL               = "Model"                               ;
 const sal_Char* JobData::PROP_SERVICE             = "Service"                             ;
+const sal_Char* JobData::PROP_CONTEXT             = "Context"                             ;
 
 //________________________________
 //  non exported definitions
@@ -140,6 +142,7 @@ void JobData::operator=( const JobData& rCopy )
     m_eEnvironment         = rCopy.m_eEnvironment        ;
     m_sAlias               = rCopy.m_sAlias              ;
     m_sService             = rCopy.m_sService            ;
+    m_sContext             = rCopy.m_sContext            ;
     m_sEvent               = rCopy.m_sEvent              ;
     m_lArguments           = rCopy.m_lArguments          ;
     m_aLastExecutionResult = rCopy.m_aLastExecutionResult;
@@ -181,8 +184,7 @@ void JobData::setAlias( const ::rtl::OUString& sAlias )
 
     // try to open the configuration set of this job directly and get a property access to it
     // We open it readonly here
-    ::rtl::OUString sKey;
-    sKey  = ::rtl::OUString::createFromAscii(JOBCFG_ROOT);
+    ::rtl::OUString sKey(::rtl::OUString::createFromAscii(JOBCFG_ROOT));
     sKey += ::utl::wrapConfigurationElementName(m_sAlias);
 
     ConfigAccess aConfig(m_xSMGR, sKey);
@@ -201,6 +203,10 @@ void JobData::setAlias( const ::rtl::OUString& sAlias )
         // read uno implementation name
         aValue   = xJobProperties->getPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_SERVICE));
         aValue >>= m_sService;
+
+        // read module context list
+        aValue   = xJobProperties->getPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_CONTEXT));
+        aValue >>= m_sContext;
 
         // read whole argument list
         aValue = xJobProperties->getPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_ARGUMENTS));
@@ -312,8 +318,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
         // It doesn't matter if this config object was already opened before.
         // It doesn nothing here then ... or it change the mode automaticly, if
         // it was opened using another one before.
-        ::rtl::OUString sKey;
-        sKey  = ::rtl::OUString::createFromAscii(JOBCFG_ROOT);
+        ::rtl::OUString sKey(::rtl::OUString::createFromAscii(JOBCFG_ROOT));
         sKey += ::utl::wrapConfigurationElementName(m_sAlias);
 
         ConfigAccess aConfig(m_xSMGR, sKey);
@@ -422,15 +427,15 @@ JobData::EEnvironment JobData::getEnvironment() const
     switch(m_eEnvironment)
     {
         case E_EXECUTION :
-            sDescriptor = ::rtl::OUString::createFromAscii("EXECUTOR");
+            sDescriptor = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EXECUTOR"));
             break;
 
         case E_DISPATCH :
-            sDescriptor = ::rtl::OUString::createFromAscii("DISPATCH");
+            sDescriptor = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DISPATCH"));
             break;
 
         case E_DOCUMENTEVENT :
-            sDescriptor = ::rtl::OUString::createFromAscii("DOCUMENTEVENT");
+            sDescriptor = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOCUMENTEVENT"));
             break;
         default:
             break;
@@ -478,7 +483,7 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
     css::uno::Sequence< css::beans::NamedValue > lConfig;
     if (m_eMode==E_ALIAS)
     {
-        lConfig.realloc(2);
+        lConfig.realloc(3);
         sal_Int32 i = 0;
 
         lConfig[i].Name = ::rtl::OUString::createFromAscii(PROP_ALIAS);
@@ -487,6 +492,10 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
 
         lConfig[i].Name = ::rtl::OUString::createFromAscii(PROP_SERVICE);
         lConfig[i].Value <<= m_sService;
+        ++i;
+
+        lConfig[i].Name = ::rtl::OUString::createFromAscii(PROP_CONTEXT);
+        lConfig[i].Value <<= m_sContext;
         ++i;
     }
     aReadLock.unlock();
@@ -504,7 +513,7 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
             some informations (e.g. for updating her configuration ...). We must know
             if such request is valid or not then.
 
-    @return TRUE if the represented job is part of the underlying configuration package.
+    @return sal_True if the represented job is part of the underlying configuration package.
  */
 sal_Bool JobData::hasConfig() const
 {
@@ -576,7 +585,7 @@ sal_Bool isEnabled( const ::rtl::OUString& sAdminTime ,
         we have to encode all '?' signs. Otherwhise e.g. "??-" will be translated
         to "~" ...
      */
-    static ::rtl::OUString PATTERN_ISO8601 = ::rtl::OUString::createFromAscii("\?\?\?\?-\?\?-\?\?*\0");
+    static ::rtl::OUString PATTERN_ISO8601(RTL_CONSTASCII_USTRINGPARAM("\?\?\?\?-\?\?-\?\?*\0"));
     WildCard aISOPattern(PATTERN_ISO8601);
 
     sal_Bool bValidAdmin = aISOPattern.Matches(sAdminTime);
@@ -606,6 +615,30 @@ void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::lang::X
         JobData::TJob2DocEventBinding aBinding(lAdditionalJobs[i], sEvent);
         lJobs.push_back(aBinding);
     }
+}
+
+//________________________________
+/**
+ */
+sal_Bool JobData::hasCorrectContext(const ::rtl::OUString& rModuleIdent) const
+{
+    sal_Int32 nContextLen  = m_sContext.getLength();
+    sal_Int32 nModuleIdLen = rModuleIdent.getLength();
+
+    if ( nContextLen == 0 )
+        return sal_True;
+
+    if ( nModuleIdLen > 0 )
+    {
+        sal_Int32 nIndex = m_sContext.indexOf( rModuleIdent );
+        if ( nIndex >= 0 && ( nIndex+nModuleIdLen <= nContextLen ))
+    {
+        ::rtl::OUString sContextModule = m_sContext.copy( nIndex, nModuleIdLen );
+        return sContextModule.equals( rModuleIdent );
+    }
+    }
+
+    return sal_False;
 }
 
 //________________________________
@@ -706,6 +739,7 @@ void JobData::impl_reset()
     m_eEnvironment = E_UNKNOWN_ENVIRONMENT;
     m_sAlias       = ::rtl::OUString();
     m_sService     = ::rtl::OUString();
+    m_sContext     = ::rtl::OUString();
     m_sEvent       = ::rtl::OUString();
     m_lArguments   = css::uno::Sequence< css::beans::NamedValue >();
     aWriteLock.unlock();

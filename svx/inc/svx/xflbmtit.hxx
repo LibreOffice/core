@@ -42,11 +42,11 @@ class SVX_DLLPUBLIC XFillBmpTileItem : public SfxBoolItem
 {
 public:
                             TYPEINFO();
-                            XFillBmpTileItem( BOOL bTile = TRUE );
+                            XFillBmpTileItem( sal_Bool bTile = sal_True );
                             XFillBmpTileItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

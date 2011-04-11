@@ -133,7 +133,7 @@ bool BaseContainerNode::notifyDeactivatedChild(
         return false;
 
     if (! isChildNode(pChildNode)) {
-        OSL_ENSURE( false, "unknown notifier!" );
+        OSL_FAIL( "unknown notifier!" );
         return false;
     }
 

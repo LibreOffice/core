@@ -6,10 +6,6 @@
 *
 * OpenOffice.org - a multi-platform office productivity suite
 *
-* $RCSfile: mysqlc_connection.hxx,v $
-*
-* $Revision: 1.1.2.4 $
-*
 * This file is part of OpenOffice.org.
 *
 * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -47,9 +43,8 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
-#include <preextstl.h>
 #include <cppconn/driver.h>
-#include <postextstl.h>
+
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/string.hxx>

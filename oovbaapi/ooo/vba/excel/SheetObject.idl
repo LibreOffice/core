@@ -111,7 +111,7 @@ interface XButton : com::sun::star::uno::XInterface
     [attribute] long Orientation;
 
     /** Access to text and text formatting of the button caption. */
-    XCharacters Characters( [in] any aStart, [in] any aLength );
+    XCharacters Characters( [in] any Start, [in] any Length );
 };
 
 //=============================================================================

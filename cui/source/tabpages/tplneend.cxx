@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
@@ -105,9 +102,6 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     rXLSet              ( aXLineAttr.GetItemSet() ),
     pLineEndList( NULL )
 {
-    aBtnLoad.SetModeImage( Image( CUI_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnSave.SetModeImage( Image( CUI_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
-
     FreeResource();
 
     // diese Page braucht ExchangeSupport
@@ -136,6 +130,9 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     aLbLineEnds.SetSelectHdl(
         LINK( this, SvxLineEndDefTabPage, SelectLineEndHdl_Impl ) );
 
+    aBtnAdd.SetAccessibleRelationMemberOf(&aFlTip);
+    aBtnModify.SetAccessibleRelationMemberOf(&aFlTip);
+    aBtnDelete.SetAccessibleRelationMemberOf(&aFlTip);
 }
 
 //------------------------------------------------------------------------
@@ -162,7 +159,7 @@ void SvxLineEndDefTabPage::Construct()
         pPolyObj->TakeObjInfo( aInfoRec );
         SdrObject* pNewObj = 0;
         if( aInfoRec.bCanConvToPath )
-            pNewObj = pPolyObj->ConvertToPolyObj( TRUE, FALSE );
+            pNewObj = pPolyObj->ConvertToPolyObj( sal_True, sal_False );
 
         bCreateArrowPossible = pNewObj && pNewObj->ISA( SdrPathObj );
         SdrObject::Free( pNewObj );
@@ -190,20 +187,6 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
 
             aURL.Append( pLineEndList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-/*          // Ermitteln (evtl. abschneiden) des Namens und in
-            // der GroupBox darstellen
-            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-
-            if ( aURL.getBase().Len() > 18 )
-            {
-                aString += aURL.getBase().Copy( 0, 15 );
-                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
-            }
-            else
-                aString += aURL.getBase();
-
-            aGrpLineEnds.SetText( aString );
-*/
             *pPageType = 0; // 3
             *pPosLineEndLb = LISTBOX_ENTRY_NOTFOUND;
         }
@@ -226,7 +209,7 @@ int SvxLineEndDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 void SvxLineEndDefTabPage::CheckChanges_Impl()
 {
-    USHORT nPos = aLbLineEnds.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbLineEnds.GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -249,7 +232,7 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( *pDlgType == 0 ) // Linien-Dialog
     {
@@ -264,7 +247,7 @@ BOOL SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
             rSet.Put( XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
         }
     }
-    return( TRUE );
+    return( sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -353,7 +336,7 @@ long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
 
 IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbLineEnds.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbLineEnds.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -361,12 +344,12 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         String aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
         String aName( aEdtName.GetText() );
         long nCount = pLineEndList->Count();
-        BOOL bDifferent = TRUE;
+        sal_Bool bDifferent = sal_True;
 
         // Pruefen, ob Name schon vorhanden ist
         for ( long i = 0; i < nCount && bDifferent; i++ )
             if ( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                bDifferent = FALSE;
+                bDifferent = sal_False;
 
         // Wenn ja, wird wiederholt ein neuer Name angefordert
         if ( !bDifferent )
@@ -380,21 +363,21 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
-            BOOL bLoop = TRUE;
+            sal_Bool bLoop = sal_True;
 
             while( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
             {
                 pDlg->GetName( aName );
-                bDifferent = TRUE;
+                bDifferent = sal_True;
 
                 for( long i = 0; i < nCount && bDifferent; i++ )
                 {
                     if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                        bDifferent = FALSE;
+                        bDifferent = sal_False;
                 }
 
                 if( bDifferent )
-                    bLoop = FALSE;
+                    bLoop = sal_False;
                 else
                     aWarningBox.Execute();
             }
@@ -441,7 +424,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
             if( aInfoRec.bCanConvToPath )
             {
-                pNewObj = pConvPolyObj = pPolyObj->ConvertToPolyObj( TRUE, FALSE );
+                pNewObj = pConvPolyObj = pPolyObj->ConvertToPolyObj( sal_True, sal_False );
 
                 if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
                     return( 0L ); // Abbruch, zusaetzliche Sicherheit, die bei
@@ -469,40 +452,40 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
         long nCount = pLineEndList->Count();
         long j = 1;
-        BOOL bDifferent = FALSE;
+        sal_Bool bDifferent = sal_False;
 
         while ( !bDifferent )
         {
             aName = aNewName;
             aName += sal_Unicode(' ');
             aName += UniString::CreateFromInt32( j++ );
-            bDifferent = TRUE;
+            bDifferent = sal_True;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
                 if ( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = FALSE;
+                    bDifferent = sal_False;
         }
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
-        BOOL bLoop = TRUE;
+        sal_Bool bLoop = sal_True;
 
         while ( bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bDifferent = TRUE;
+            bDifferent = sal_True;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = FALSE;
+                    bDifferent = sal_False;
             }
 
             if( bDifferent )
             {
-                bLoop = FALSE;
+                bLoop = sal_False;
                 pEntry = new XLineEndEntry( aNewPolyPolygon, aName );
 
                 long nLineEndCount = pLineEndList->Count();
@@ -544,7 +527,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxLineEndDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbLineEnds.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbLineEnds.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -581,7 +564,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
     ResMgr& rMgr = CUI_MGR();
-    USHORT nReturn = RET_YES;
+    sal_uInt16 nReturn = RET_YES;
 
     if ( *pnLineEndListState & CT_MODIFIED )
     {
@@ -615,39 +598,22 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             pLeList->SetName( aURL.getName() );
             if( pLeList->Load() )
             {
-                if( pLeList )
-                {
-                    // Pruefen, ob Tabelle geloescht werden darf:
-                    if( pLineEndList != ( (SvxLineTabDialog*) DLGWIN )->GetLineEndList() )
-                        delete pLineEndList;
+                // Pruefen, ob Tabelle geloescht werden darf:
+                if( pLineEndList != ( (SvxLineTabDialog*) DLGWIN )->GetLineEndList() )
+                    delete pLineEndList;
 
-                    pLineEndList = pLeList;
-                    ( (SvxLineTabDialog*) DLGWIN )->SetNewLineEndList( pLineEndList );
-                    aLbLineEnds.Clear();
-                    aLbLineEnds.Fill( pLineEndList );
-                    Reset( rOutAttrs );
+                pLineEndList = pLeList;
+                ( (SvxLineTabDialog*) DLGWIN )->SetNewLineEndList( pLineEndList );
+                aLbLineEnds.Clear();
+                aLbLineEnds.Fill( pLineEndList );
+                Reset( rOutAttrs );
 
-                    pLineEndList->SetName( aURL.getName() );
+                pLineEndList->SetName( aURL.getName() );
 
-/*                  // Ermitteln (evtl. abschneiden) des Namens und in
-                    // der GroupBox darstellen
-                    String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                    if( aURL.getBase().Len() > 18 )
-                    {
-                        aString += aURL.getBase().Copy( 0, 15 );
-                        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
-                    }
-                    else
-                        aString += aURL.getBase();
-
-                    aGrpLineEnds.SetText( aString );
-*/
-                    // Flag fuer gewechselt setzen
-                    *pnLineEndListState |= CT_CHANGED;
-                    // Flag fuer modifiziert entfernen
-                    *pnLineEndListState &= ~CT_MODIFIED;
-                }
+                // Flag fuer gewechselt setzen
+                *pnLineEndListState |= CT_CHANGED;
+                // Flag fuer modifiziert entfernen
+                *pnLineEndListState &= ~CT_MODIFIED;
             }
             else
                 ErrorBox( DLGWIN, WinBits( WB_OK ),
@@ -705,20 +671,6 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 
         if( pLineEndList->Save() )
         {
-/*          // Ermitteln (evtl. abschneiden) des Namens und in
-            // der GroupBox darstellen
-            String aString( CUI_RES( RID_SVXSTR_TABLE ) );
-            aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-
-            if ( aURL.getBase().Len() > 18 )
-            {
-                aString += aURL.getBase().Copy( 0, 15 );
-                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
-            }
-            else
-                aString += aURL.getBase();
-            aGrpLineEnds.SetText( aString );
-*/
             // Flag fuer gespeichert setzen
             *pnLineEndListState |= CT_SAVED;
             // Flag fuer modifiziert entfernen
@@ -739,7 +691,7 @@ void SvxLineEndDefTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        USHORT nOldSelect = aLbLineEnds.GetSelectEntryPos();
+        sal_uInt16 nOldSelect = aLbLineEnds.GetSelectEntryPos();
         aLbLineEnds.Clear();
         aLbLineEnds.Fill( pLineEndList );
         aLbLineEnds.SelectEntryPos( nOldSelect );

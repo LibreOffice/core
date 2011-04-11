@@ -77,7 +77,7 @@ CookiesDialog::CookiesDialog( Window* pParent,
     maCookieFB.SetPosSizePixel( LogicToPixel( aPoint ), aSize );
     maCookieFB.Show();
 
-    USHORT nOffset = CNTHTTP_COOKIE_REQUEST_RECV == mpCookieRequest->m_eType
+    sal_uInt16 nOffset = CNTHTTP_COOKIE_REQUEST_RECV == mpCookieRequest->m_eType
         ? 0 : STR_COOKIES_SEND_START - STR_COOKIES_RECV_START;
     INetURLObject aObj( mpCookieRequest->m_rURL );
     SetText( String( ResId( STR_COOKIES_RECV_TITLE + nOffset, *pResMgr ) ) );
@@ -88,7 +88,7 @@ CookiesDialog::CookiesDialog( Window* pParent,
     List& rList =mpCookieRequest->m_rCookieList;
     String aPair, aCookie;
 
-    for ( USHORT i = (USHORT)rList.Count(); i--; )
+    for ( sal_uInt16 i = (sal_uInt16)rList.Count(); i--; )
     {
         CntHTTPCookie* pCookie = (CntHTTPCookie*)rList.GetObject(i);
 
@@ -104,7 +104,7 @@ CookiesDialog::CookiesDialog( Window* pParent,
             aMsg += aCookie;
         }
     }
-    maInFutureInteractiveBtn.Check( TRUE );
+    maInFutureInteractiveBtn.Check( sal_True );
     maCookieFT.SetText( aMsg );
 }
 
@@ -114,7 +114,7 @@ short CookiesDialog::Execute()
 {
     maSendBtn.GrabFocus();
     short nRet = ModalDialog::Execute();
-    USHORT nStatus = CNTHTTP_COOKIE_POLICY_INTERACTIVE;
+    sal_uInt16 nStatus = CNTHTTP_COOKIE_POLICY_INTERACTIVE;
 
     if ( maInFutureSendBtn.IsChecked() )
         nStatus = CNTHTTP_COOKIE_POLICY_ACCEPTED;
@@ -123,9 +123,9 @@ short CookiesDialog::Execute()
         nStatus = CNTHTTP_COOKIE_POLICY_BANNED;
     List& rList = mpCookieRequest->m_rCookieList;
 
-    for ( USHORT i = (USHORT)rList.Count(); i--; )
+    for ( sal_uInt16 i = (sal_uInt16)rList.Count(); i--; )
     {
-        USHORT& rStatus = ( (CntHTTPCookie*)rList.GetObject(i) )->m_nPolicy;
+        sal_uInt16& rStatus = ( (CntHTTPCookie*)rList.GetObject(i) )->m_nPolicy;
 
         if ( rStatus == CNTHTTP_COOKIE_POLICY_INTERACTIVE )
             rStatus = nStatus;

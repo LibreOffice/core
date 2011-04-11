@@ -207,11 +207,11 @@ published service BaseFrameProperties
      */
     [property] short RelativeWidth;
     //-------------------------------------------------------------------------
-    /** determins whether the width follows the height.
+    /** determines whether the width follows the height.
      */
     [property] boolean IsSyncWidthToHeight;
     //-------------------------------------------------------------------------
-    /** determins whether the height follows the width.
+    /** determines whether the height follows the width.
      */
     [property] boolean IsSyncHeightToWidth;
     //-------------------------------------------------------------------------
@@ -335,7 +335,7 @@ published service BaseFrameProperties
         of the shape, if the text document setting ConsiderTextWrapOnObjPos
         is <TRUE/>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] short WrapInfluenceOnPosition;
 

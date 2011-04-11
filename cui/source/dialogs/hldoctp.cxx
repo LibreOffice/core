@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "cuihyperdlg.hxx"
 #include <unotools/localfilehelper.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -38,11 +35,11 @@
 #include "hyperdlg.hrc"
 #include "hlmarkwn_def.hxx"
 
-sal_Char __READONLY_DATA sHash[]                = "#";
-sal_Char __READONLY_DATA sFileScheme[]          = INET_FILE_SCHEME;
-sal_Char __READONLY_DATA sNewsSRVScheme[] = "news://";
+sal_Char const sHash[]              = "#";
+sal_Char const sFileScheme[]            = INET_FILE_SCHEME;
+sal_Char const sNewsSRVScheme[] = "news://";
     // TODO news:// is nonsense
-sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
+sal_Char const sHTTPScheme[]    = INET_HTTP_SCHEME;
 
 /*************************************************************************
 |*
@@ -62,13 +59,11 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
     maFtURL         ( this, CUI_RES (FT_URL) ),
     maFtFullURL     ( this, CUI_RES (FT_FULL_URL) ),
     maBtBrowse      ( this, CUI_RES (BTN_BROWSE) ),
-    mbMarkWndOpen   ( FALSE )
+    mbMarkWndOpen   ( sal_False )
 {
-    // Set HC bitmaps and disable display of bitmap names.
-    maBtBrowse.SetModeImage( Image( CUI_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
-    maBtBrowse.EnableTextDisplay (FALSE);
-    maBtFileopen.SetModeImage( Image( CUI_RES( IMG_FILEOPEN_HC ) ), BMP_COLOR_HIGHCONTRAST );
-    maBtFileopen.EnableTextDisplay (FALSE);
+    // Disable display of bitmap names.
+    maBtBrowse.EnableTextDisplay (sal_False);
+    maBtFileopen.EnableTextDisplay (sal_False);
 
     InitStdControls();
     FreeResource();
@@ -91,6 +86,10 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
 
     maCbbPath.SetLoseFocusHdl( LINK ( this, SvxHyperlinkDocTp, LostFocusPathHdl_Impl ) );
 
+    maBtBrowse.SetAccessibleRelationMemberOf( &maGrpTarget );
+    maBtBrowse.SetAccessibleRelationLabeledBy( &maFtTarget );
+    maBtFileopen.SetAccessibleRelationMemberOf( &maGrpDocument );
+    maBtFileopen.SetAccessibleRelationLabeledBy( &maFtPath );
     maTimer.SetTimeoutHdl ( LINK ( this, SvxHyperlinkDocTp, TimeoutHdl_Impl ) );
 }
 

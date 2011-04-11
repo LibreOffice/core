@@ -1,3 +1,4 @@
+
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
@@ -6,9 +7,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OptimisticSet.cxx,v $
- * $Revision: 1.73 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,8 +101,9 @@ DBG_NAME(OptimisticSet)
 OptimisticSet::OptimisticSet(const ::comphelper::ComponentContext& _rContext,
                              const Reference< XConnection>& i_xConnection,
                              const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
-                             const ORowSetValueVector& _aParameterValueForCache)
-            :OKeySet(NULL,NULL,::rtl::OUString(),_xComposer,_aParameterValueForCache)
+                             const ORowSetValueVector& _aParameterValueForCache,
+                             sal_Int32 i_nMaxRows)
+            :OKeySet(NULL,NULL,::rtl::OUString(),_xComposer,_aParameterValueForCache,i_nMaxRows)
             ,m_aSqlParser( _rContext.getLegacyServiceFactory() )
             ,m_aSqlIterator( i_xConnection, Reference<XTablesSupplier>(_xComposer,UNO_QUERY)->getTables(), m_aSqlParser, NULL )
             ,m_bResultSetChanged(false)
@@ -125,7 +124,7 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
     initColumns();
 
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-    bool bCase = (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers()) ? true : false;
+    bool bCase = (xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers()) ? true : false;
     Reference<XColumnsSupplier> xQueryColSup(m_xComposer,UNO_QUERY);
     const Reference<XNameAccess> xQueryColumns = xQueryColSup->getColumns();
     const Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);
@@ -200,7 +199,6 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     TSQLStatements aIndexConditions;
     TSQLStatements aSql;
 
-    // sal_Int32 i = 1;
     // here we build the condition part for the update statement
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
@@ -257,10 +255,8 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
             sSql.append(s_sSET);
             sSql.append(aSqlIter->second);
             ::rtl::OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
-            bool bAddWhere = true;
             if ( rCondition.getLength() )
             {
-                bAddWhere = false;
                 sSql.appendAscii(" WHERE ");
                 sSql.append( rCondition );
             }
@@ -393,7 +389,6 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
     TSQLStatements aIndexConditions;
     TSQLStatements aSql;
 
-    // sal_Int32 i = 1;
     // here we build the condition part for the update statement
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
@@ -430,7 +425,7 @@ void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const ::rtl::OUS
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::executeDelete" );
 
-    // now create end execute the prepared statement
+    // now create and execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(i_sSQL));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
 

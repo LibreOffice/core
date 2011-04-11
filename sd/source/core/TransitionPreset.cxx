@@ -82,7 +82,7 @@ TransitionPreset::TransitionPreset( const ::com::sun::star::uno::Reference< ::co
     const NamedValue* p = aUserData.getConstArray();
     while( nLength-- )
     {
-        if( p->Name.equalsAscii( "preset-id" ) )
+        if( p->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preset-id" ) ) )
         {
             p->Value >>= maPresetId;
             break;
@@ -135,7 +135,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             }
             else
                 {
-                    DBG_ERROR( "sd::TransitionPreset::importTransitionPresetList(), missformed xml configuration file, giving up!" );
+                    OSL_FAIL( "sd::TransitionPreset::importTransitionPresetList(), misformed xml configuration file, giving up!" );
                     break;
                 }
         }
@@ -219,7 +219,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR( "sd::TransitionPreset::importResources(), Exception cought!" );
+        OSL_FAIL( "sd::TransitionPreset::importResources(), Exception cought!" );
     }
 
     return bRet;

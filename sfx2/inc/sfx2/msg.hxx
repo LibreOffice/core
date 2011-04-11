@@ -30,6 +30,9 @@
 
 #include <tools/rtti.hxx>
 #include <sfx2/shell.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <sfx2/dllapi.h>
 
 //--------------------------------------------------------------------
 
@@ -76,14 +79,14 @@ class SfxRequest;
 class SfxItemSet;
 
 #define SFX_EXEC_STUB( aShellClass, aExecMethod) \
- void __EXPORT SfxStub##aShellClass##aExecMethod( \
+ void SfxStub##aShellClass##aExecMethod( \
    SfxShell *pShell, SfxRequest& rReq) \
   { \
     (( aShellClass* ) pShell )->aExecMethod( rReq ); \
   }
 
 #define SFX_STATE_STUB( aShellClass, aStateMethod) \
- void  __EXPORT SfxStub##aShellClass##aStateMethod( \
+ void  SfxStub##aShellClass##aStateMethod( \
    SfxShell *pShell, SfxItemSet& rSet) \
   { \
     (( aShellClass* ) pShell )->aStateMethod( rSet ); \
@@ -109,14 +112,14 @@ enum SfxSlotKind
 
 struct SfxTypeAttrib
 {
-    USHORT                  nAID;
-    const char __FAR_DATA*  pName;
+    sal_uInt16                  nAID;
+    const char* pName;
 };
 
 struct SfxType
 {
     TypeId          aTypeId;
-    USHORT          nAttribs;
+    sal_uInt16          nAttribs;
     SfxTypeAttrib   aAttrib[16];
 
     const TypeId&   Type() const
@@ -128,7 +131,7 @@ struct SfxType
 struct SfxType0
 {
     TypeId          aTypeId;
-    USHORT          nAttribs;
+    sal_uInt16          nAttribs;
 
     const TypeId&   Type() const
                     { return aTypeId; }
@@ -139,7 +142,7 @@ struct SfxType0
 #define SFX_DECL_TYPE(n)    struct SfxType##n                   \
                             {                                   \
                                 TypeId          aTypeId;        \
-                                USHORT          nAttribs;       \
+                                sal_uInt16          nAttribs;       \
                                 SfxTypeAttrib   aAttrib[n];     \
                             }
 
@@ -223,8 +226,8 @@ SFX_DECL_TYPE(18); // for SvxSearchItem
                }
 
 #define SFX_SLOTMAP_NONE(ShellClass) \
-            static SfxFormalArgument __FAR_DATA a##ShellClass##Args_Impl[1]; \
-            static SfxSlot __FAR_DATA a##ShellClass##Slots_Impl[] = \
+            static SfxFormalArgument a##ShellClass##Args_Impl[1]; \
+            static SfxSlot a##ShellClass##Slots_Impl[] = \
             { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } }
 
 #define SFX_ARGUMENT( ArgSlotId, ArgName, ArgTypeId ) \
@@ -237,8 +240,8 @@ class SfxPoolItem;
 struct SfxFormalArgument
 {
     const SfxType*          pType;  // Typ des Parameters (SfxPoolItem Subklasse)
-    const char __FAR_DATA*  pName;  // Name des Parameters
-    USHORT                  nSlotId;// Slot-Id zur Identifikation des Parameters
+    const char* pName;  // Name des Parameters
+    sal_uInt16                  nSlotId;// Slot-Id zur Identifikation des Parameters
 
     const TypeId&           Type() const
                             { return pType->aTypeId; }
@@ -251,46 +254,48 @@ struct SfxFormalArgument
 class SfxSlot
 {
 public:
-    USHORT                      nSlotId;        // in Shell eindeutige Slot-Id
-    USHORT                      nGroupId;       // f"ur Konfigurations-Bereich
-    ULONG                       nHelpId;        // i.d.R. == nSlotId
-    ULONG                       nFlags;         // artihm. veroderte Flags
+    sal_uInt16                      nSlotId;        // in Shell eindeutige Slot-Id
+    sal_uInt16                      nGroupId;       // f"ur Konfigurations-Bereich
+    sal_uIntPtr                     nHelpId;        // i.d.R. == nSlotId
+    sal_uIntPtr                     nFlags;         // artihm. veroderte Flags
 
-    USHORT                      nMasterSlotId;  // Enum-Slot bzw. Which-Id
-    USHORT                      nValue;         // Wert, falls Enum-Slot
+    sal_uInt16                      nMasterSlotId;  // Enum-Slot bzw. Which-Id
+    sal_uInt16                      nValue;         // Wert, falls Enum-Slot
 
     SfxExecFunc                 fnExec;         // Funktion zum Ausf"uhren
     SfxStateFunc                fnState;        // Funktion f"ur Status
 
     const SfxType*              pType;          // SfxPoolItem-Typ (Status)
-    const char __FAR_DATA*      pName;          // Name des Slots
-    const char __FAR_DATA*      pMethodName;    // Name der Method falls anders
+    const char*     pName;          // Name des Slots
+    const char*     pMethodName;    // Name der Method falls anders
 
     const SfxSlot*              pLinkedSlot;    // Master-Slot f"ur Enum-Werte
     const SfxSlot*              pNextSlot;      // mit derselben Status-Methode
 
     const SfxFormalArgument*    pFirstArgDef;   // erste formale Argument-Definition
-    USHORT                      nArgDefCount;   // Anzahl der formalen Argumente
+    sal_uInt16                      nArgDefCount;   // Anzahl der formalen Argumente
     long                        nDisableFlags;      // DisableFlags, die vorhanden sein
                                                 // m"ussen, damit der Slot enabled ist
-    const char __FAR_DATA*      pUnoName;       // UnoName des Slots
+    const char*     pUnoName;       // UnoName des Slots
 
 public:
 
     SfxSlotKind     GetKind() const;
-    USHORT          GetSlotId() const;
-    ULONG           GetHelpId() const;
-    ULONG           GetMode() const;
-    BOOL            IsMode( ULONG nMode ) const;
-    USHORT          GetGroupId() const;
-    USHORT          GetMasterSlotId() const { return nMasterSlotId; }
-    USHORT          GetWhich( const SfxItemPool &rPool ) const;
-    USHORT          GetValue() const { return nValue; }
+    sal_uInt16          GetSlotId() const;
+    sal_uIntPtr         GetHelpId() const;
+    sal_uIntPtr         GetMode() const;
+    sal_Bool            IsMode( sal_uIntPtr nMode ) const;
+    sal_uInt16          GetGroupId() const;
+    sal_uInt16          GetMasterSlotId() const { return nMasterSlotId; }
+    sal_uInt16          GetWhich( const SfxItemPool &rPool ) const;
+    sal_uInt16          GetValue() const { return nValue; }
     const SfxType*  GetType() const { return pType; }
     const char*     GetUnoName() const { return pUnoName; }
+    SFX2_DLLPUBLIC rtl::OString    GetCommand() const;
+    SFX2_DLLPUBLIC rtl::OUString    GetCommandString() const;
 
-    USHORT          GetFormalArgumentCount() const { return nArgDefCount; }
-    const SfxFormalArgument& GetFormalArgument( USHORT nNo ) const
+    sal_uInt16          GetFormalArgumentCount() const { return nArgDefCount; }
+    const SfxFormalArgument& GetFormalArgument( sal_uInt16 nNo ) const
                     { return pFirstArgDef[nNo]; }
 
     SfxExecFunc     GetExecFnc() const { return fnExec; }
@@ -304,14 +309,14 @@ public:
 
 // returns the id of the function
 
-inline USHORT SfxSlot::GetSlotId() const
+inline sal_uInt16 SfxSlot::GetSlotId() const
 {
     return nSlotId;
 }
 //--------------------------------------------------------------------
 // returns the help-id of the slot
 
-inline ULONG SfxSlot::GetHelpId() const
+inline sal_uIntPtr SfxSlot::GetHelpId() const
 {
     return nHelpId;
 }
@@ -320,7 +325,7 @@ inline ULONG SfxSlot::GetHelpId() const
 
 // returns  a bitfield with flags
 
-inline ULONG SfxSlot::GetMode() const
+inline sal_uIntPtr SfxSlot::GetMode() const
 {
     return nFlags;
 }
@@ -328,7 +333,7 @@ inline ULONG SfxSlot::GetMode() const
 
 // determines if the specified mode is assigned
 
-inline BOOL SfxSlot::IsMode( ULONG nMode ) const
+inline sal_Bool SfxSlot::IsMode( sal_uIntPtr nMode ) const
 {
     return (nFlags & nMode) != 0;
 }
@@ -336,7 +341,7 @@ inline BOOL SfxSlot::IsMode( ULONG nMode ) const
 
 // returns the id of the associated group
 
-inline USHORT SfxSlot::GetGroupId() const
+inline sal_uInt16 SfxSlot::GetGroupId() const
 {
     return nGroupId;
 

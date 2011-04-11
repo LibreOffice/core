@@ -46,7 +46,7 @@ public class _XClipboardEx extends MultiMethodTest {
 
     /**
     * Just calls the method. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured.
+    * Has <b> OK </b> status if no runtime exceptions occurred.
     */
     public void _getRenderingCapabilities() {
         byte caps = oObj.getRenderingCapabilities();

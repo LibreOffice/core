@@ -34,12 +34,30 @@ class ResMgr;
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_GStreamer"
 #else
 #ifdef WNT
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
+
+#define AVMEDIA_MANAGER_SERVICE_NAME                    "com.sun.star.comp.avmedia.Manager_DirectX"
+#define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED            sal_False
+
+#define AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1          ""
+#define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED_FALLBACK1  sal_False
+
 #else
 #ifdef QUARTZ
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_QuickTime"
+
+#define AVMEDIA_MANAGER_SERVICE_NAME                    "com.sun.star.comp.avmedia.Manager_QuickTime"
+#define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED            sal_False
+
+#define AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1           ""
+#define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED_FALLBACK1  sal_False
+
 #else
-#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
+
+#define AVMEDIA_MANAGER_SERVICE_NAME                    "com.sun.star.comp.avmedia.Manager_GStreamer"
+#define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED            sal_False
+
+#define AVMEDIA_MANAGER_SERVICE_NAME_FALLBACK1          "com.sun.star.comp.avmedia.Manager_Java"
+#define AVMEDIA_MANAGER_SERVICE_IS_JAVABASED_FALLBACK1  sal_True
+
 #endif
 #endif
 #endif

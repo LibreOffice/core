@@ -33,12 +33,16 @@ TARGET=		offuh
 
 .INCLUDE :  settings.mk
 
-# ------------------------------------------------------------------
+# --- Targets ------------------------------------------------------
+.INCLUDE :	target.mk
+
+ALLTAR : $(MISC)$/oovbaapi.don $(MISC)$/$(TARGET).don
 
 $(MISC)$/$(TARGET).don : $(UNOUCRRDB)
     @@-$(RM) $@
     $(CPPUMAKER) -Gc $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOUCRRDB) && echo > $@
 
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
+$(MISC)$/oovbaapi.don : $(SOLARBINDIR)$/oovbaapi.rdb
+    @@-$(RM) $@
+        $(CPPUMAKER) -Gc $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(SOLARBINDIR)$/oovbaapi.rdb -X$(SOLARBINDIR)$/types.rdb && echo > $@
+        echo $@

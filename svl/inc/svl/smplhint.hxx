@@ -69,11 +69,11 @@
 class SVL_DLLPUBLIC SfxSimpleHint: public SfxHint
 {
 private:
-    ULONG nId;
+    sal_uLong nId;
 public:
     TYPEINFO();
-    SfxSimpleHint( ULONG nId );
-    ULONG GetId() const { return nId; }
+    SfxSimpleHint( sal_uLong nId );
+    sal_uLong GetId() const { return nId; }
 };
 
 //--------------------------------------------------------------------
@@ -85,14 +85,14 @@ public:
         \
         public: \
             TYPEINFO(); \
-            Name( USHORT nId, const Type& rObject ); \
+            Name( sal_uInt16 nId, const Type& rObject ); \
             ~Name(); \
             const Type& GetObject() const { return aObj; } \
         }
 
 #define IMPL_OBJHINT(Name, Type) \
         TYPEINIT1(Name, SfxSimpleHint); \
-        Name::Name( USHORT nID, const Type& rObject ): \
+        Name::Name( sal_uInt16 nID, const Type& rObject ): \
             SfxSimpleHint( nID ), aObj(rObject) \
             { } \
         Name::~Name() {}

@@ -46,7 +46,7 @@ class FmFormObj: public SdrUnoObj
                 // m_pEnvironmentHistory was created
 
     FmFormView*     m_pControlCreationView;
-    ULONG       m_nControlCreationEvent;
+    sal_uLong       m_nControlCreationEvent;
 
     // Informationen fuer die Controlumgebung
     // werden nur vorgehalten, wenn ein Object sich nicht in einer Objectliste befindet
@@ -86,9 +86,9 @@ public:
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void NbcReformatText();
 
-    virtual SdrObject*  Clone() const;
+    virtual FmFormObj* Clone() const;
     // #116235# virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
-    virtual void        operator= (const SdrObject& rObj);
+    FmFormObj& operator= (const FmFormObj& rObj);
 
     virtual void SetModel(SdrModel* pNewModel);
 

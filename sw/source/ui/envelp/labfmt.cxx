@@ -49,11 +49,12 @@
 #include <unomid.h>
 
 using namespace utl;
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-#define ROUND(x) ((USHORT) ((x) + .5))
+using ::rtl::OUString;
+
+#define ROUND(x) ((sal_uInt16) ((x) + .5))
 
 SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
 
@@ -77,7 +78,7 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
     SetBackground(Wallpaper(rWinColor));
 
     Font aFont = GetFont();
-    aFont.SetTransparent(TRUE);
+    aFont.SetTransparent(sal_True);
     aFont.SetWeight  (WEIGHT_NORMAL);
     SetFont(aFont);
 
@@ -124,10 +125,10 @@ void SwLabPreview::Paint(const Rectangle &)
     SetLineColor(rWinColor);
     SetFillColor(aGrayColor);
     Font aPaintFont(GetFont());
-    aPaintFont.SetTransparent(FALSE);
+    aPaintFont.SetTransparent(sal_False);
     SetFont(aPaintFont);
 
-    // Groesse des darzustellenden Bereichs
+    // size of region to be displayed
     long lDispW = ROUND(aItem.lLeft  + aItem.lHDist);
     long lDispH = ROUND(aItem.lUpper + aItem.lVDist);
     if (aItem.nCols == 1)
@@ -139,12 +140,12 @@ void SwLabPreview::Paint(const Rectangle &)
     else
         lDispH += ROUND(aItem.lVDist / 10);
 
-    // Scale factor Skalierungsfaktor
+    // Scale factor
     float fx = (float) lOutWPix23 / Max(1L, lDispW),
           fy = (float) lOutHPix23 / Max(1L, lDispH),
           f  = fx < fy ? fx : fy;
 
-    // Nullpunkt
+    // zero point
     long lOutlineW = ROUND(f * lDispW);
     long lOutlineH = ROUND(f * lDispH);
 
@@ -157,23 +158,23 @@ void SwLabPreview::Paint(const Rectangle &)
     long lX3 = ROUND(lX0 + f * (aItem.lLeft  + aItem.lHDist ));
     long lY3 = ROUND(lY0 + f * (aItem.lUpper + aItem.lVDist ));
 
-    // Umriss zeichnen (Flaeche)
+    // draw outline (area)
     DrawRect(Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
 
-    // Umriss zeichnen (Umrandung)
+    // draw outline (border)
     SetLineColor(rFieldTextColor);
-    DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Oben
-    DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Links
+    DrawLine(Point(lX0, lY0), Point(lX0 + lOutlineW - 1, lY0)); // Up
+    DrawLine(Point(lX0, lY0), Point(lX0, lY0 + lOutlineH - 1)); // Left
     if (aItem.nCols == 1)
-        DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Rechts
+        DrawLine(Point(lX0 + lOutlineW - 1, lY0), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Right
     if (aItem.nRows == 1)
-        DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Unten
+        DrawLine(Point(lX0, lY0 + lOutlineH - 1), Point(lX0 + lOutlineW - 1, lY0 + lOutlineH - 1)); // Down
 
     // Labels
     SetClipRegion (Rectangle(Point(lX0, lY0), Size(lOutlineW, lOutlineH)));
     SetFillColor(rWinColor);
-    for (USHORT nRow = 0; nRow < Min((USHORT) 2, (USHORT) aItem.nRows); nRow++)
-        for (USHORT nCol = 0; nCol < Min((USHORT) 2, (USHORT) aItem.nCols); nCol++)
+    for (sal_uInt16 nRow = 0; nRow < Min((sal_uInt16) 2, (sal_uInt16) aItem.nRows); nRow++)
+        for (sal_uInt16 nCol = 0; nCol < Min((sal_uInt16) 2, (sal_uInt16) aItem.nCols); nCol++)
             DrawRect(Rectangle(
               Point(ROUND(lX0 + f * (aItem.lLeft  + nCol * aItem.lHDist)),
                     ROUND(lY0 + f * (aItem.lUpper + nRow * aItem.lVDist))),
@@ -181,23 +182,23 @@ void SwLabPreview::Paint(const Rectangle &)
                     ROUND(f * aItem.lHeight))));
     SetClipRegion();
 
-    // Beschritung: Rand links
+    // annotation: left border
     if (aItem.lLeft)
     {
         long lX = (lX0 + lX1) / 2;
-        DrawArrow(Point(lX0, lY0 - 5), Point(lX1, lY0 - 5), FALSE);
-        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), TRUE);
+        DrawArrow(Point(lX0, lY0 - 5), Point(lX1, lY0 - 5), sal_False);
+        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), sal_True);
         DrawText(Point(lX1 - lLeftWidth, lY0 - 10 - lXHeight), aLeftStr);
     }
 
-    // Beschriftung: Rand oben
+    // annotation: upper border
     if (aItem.lUpper)
     {
-        DrawArrow(Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), FALSE);
+        DrawArrow(Point(lX0 - 5, lY0), Point(lX0 - 5, lY1), sal_False);
         DrawText(Point(lX0 - 10 - lUpperWidth, ROUND(lY0 + f * aItem.lUpper / 2 - lXHeight / 2)), aUpperStr);
     }
 
-    // Beschriftung: Breite und Hoehe
+    // annotation: width and height
     {
         long lX = lX2 - lXWidth / 2 - lHeightWidth / 2;
         long lY = lY1 + lXHeight;
@@ -209,40 +210,40 @@ void SwLabPreview::Paint(const Rectangle &)
         DrawText(Point(lX - lHeightWidth / 2, lY2 - lXHeight - lXHeight / 2), aHeightStr);
     }
 
-    // Beschriftung: Horz. Abstand
+    // annotation: horizontal gap
     if (aItem.nCols > 1)
     {
         long lX = (lX1 + lX3) / 2;
-        DrawArrow(Point(lX1, lY0 - 5), Point(lX3, lY0 - 5), FALSE);
-        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), TRUE);
+        DrawArrow(Point(lX1, lY0 - 5), Point(lX3, lY0 - 5), sal_False);
+        DrawArrow(Point(lX, lY0 - 10), Point(lX, lY0 - 5), sal_True);
         DrawText(Point(lX - lHDistWidth / 2, lY0 - 10 - lXHeight), aHDistStr);
     }
 
-    // Beschriftung: Vertikaler Abstand
+    // annotation: vertical gap
     if (aItem.nRows > 1)
     {
-        DrawArrow(Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), FALSE);
+        DrawArrow(Point(lX0 - 5, lY1), Point(lX0 - 5, lY3), sal_False);
         DrawText(Point(lX0 - 10 - lVDistWidth, ROUND(lY1 + f * aItem.lVDist / 2 - lXHeight / 2)), aVDistStr);
     }
 
-    // Beschriftung: Spalten
+    // annotation: columns
     {
         long lY = lY0 + lOutlineH + 4;
-        DrawArrow(Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), TRUE);
+        DrawArrow(Point(lX0, lY), Point(lX0 + lOutlineW - 1, lY), sal_True);
         DrawText(Point((lX0 + lX0 + lOutlineW - 1) / 2 - lColsWidth / 2, lY + 5), aColsStr);
     }
 
-    // Beschriftung: Zeilen
+    // annotation: lines
     {
         long lX = lX0 + lOutlineW + 4;
-        DrawArrow(Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), TRUE);
+        DrawArrow(Point(lX, lY0), Point(lX, lY0 + lOutlineH - 1), sal_True);
         DrawText(Point(lX + 5, (lY0 + lY0 + lOutlineH - 1 - lXHeight / 2) / 2), aRowsStr);
     }
 }
 
 // Arror or interval character --------------------------------------------
 
-void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, BOOL bArrow)
+void SwLabPreview::DrawArrow(const Point &rP1, const Point &rP2, sal_Bool bArrow)
 {
     DrawLine(rP1, rP2);
 
@@ -323,14 +324,14 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aRowsText    (this, SW_RES(TXT_ROWS  )),
     aRowsField   (this, SW_RES(FLD_ROWS  )),
     aSavePB      (this, SW_RES(PB_SAVE  )),
-    bModified(FALSE),
+    bModified(sal_False),
     aItem        ((const SwLabItem&) rSet.Get(FN_LABEL))
 {
     FreeResource();
     SetExchangeSupport();
 
     // Metrics
-    FieldUnit aMetric = ::GetDfltMetric(FALSE);
+    FieldUnit aMetric = ::GetDfltMetric(sal_False);
     SetMetric(aHDistField , aMetric);
     SetMetric(aVDistField , aMetric);
     SetMetric(aWidthField , aMetric);
@@ -372,7 +373,7 @@ SwLabFmtPage::~SwLabFmtPage()
 // Modify-handler of MetricFields. start preview timer
 IMPL_LINK_INLINE_START( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
 {
-    bModified = TRUE;
+    bModified = sal_True;
     aPreviewTimer.Start();
     return 0;
 }
@@ -403,7 +404,7 @@ void SwLabFmtPage::ChangeMinMax()
 {
     long lMax = 31748; // 56 cm
 
-    // Min und Max
+    // Min and Max
 
     long lLeft  = static_cast< long >(GETFLDVAL(aLeftField )),
          lUpper = static_cast< long >(GETFLDVAL(aUpperField)),
@@ -430,7 +431,7 @@ void SwLabFmtPage::ChangeMinMax()
     aColsField  .SetMax((lMax - lLeft ) / Max(1L, lHDist));
     aRowsField  .SetMax((lMax - lUpper) / Max(1L, lVDist));
 
-    // First und Last
+    // First and Last
 
     aHDistField .SetFirst(aHDistField .GetMin());
     aVDistField .SetFirst(aVDistField .GetMin());
@@ -476,7 +477,7 @@ int SwLabFmtPage::DeactivatePage(SfxItemSet* _pSet)
     if (_pSet)
         FillItemSet(*_pSet);
 
-    return TRUE;
+    return sal_True;
 }
 
 void SwLabFmtPage::FillItem(SwLabItem& rItem)
@@ -492,17 +493,17 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
         rItem.lHeight = rRec.lHeight = static_cast< long >(GETFLDVAL(aHeightField));
         rItem.lLeft   = rRec.lLeft   = static_cast< long >(GETFLDVAL(aLeftField  ));
         rItem.lUpper  = rRec.lUpper  = static_cast< long >(GETFLDVAL(aUpperField ));
-        rItem.nCols   = rRec.nCols   = (USHORT) aColsField.GetValue();
-        rItem.nRows   = rRec.nRows   = (USHORT) aRowsField.GetValue();
+        rItem.nCols   = rRec.nCols   = (sal_uInt16) aColsField.GetValue();
+        rItem.nRows   = rRec.nRows   = (sal_uInt16) aRowsField.GetValue();
     }
 }
 
-BOOL SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
+sal_Bool SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(aItem);
     rSet.Put(aItem);
 
-    return TRUE;
+    return sal_True;
 }
 
 void SwLabFmtPage::Reset(const SfxItemSet& )
@@ -543,18 +544,18 @@ IMPL_LINK( SwLabFmtPage, SaveHdl, PushButton *, EMPTYARG )
     aRec.lHeight = static_cast< long >(GETFLDVAL(aHeightField));
     aRec.lLeft   = static_cast< long >(GETFLDVAL(aLeftField  ));
     aRec.lUpper  = static_cast< long >(GETFLDVAL(aUpperField ));
-    aRec.nCols   = (USHORT) aColsField.GetValue();
-    aRec.nRows   = (USHORT) aRowsField.GetValue();
+    aRec.nCols   = (sal_uInt16) aColsField.GetValue();
+    aRec.nRows   = (sal_uInt16) aRowsField.GetValue();
     aRec.bCont = aItem.bCont;
     SwSaveLabelDlg* pSaveDlg = new SwSaveLabelDlg(this, aRec);
     pSaveDlg->SetLabel(aItem.aLstMake, aItem.aLstType);
     pSaveDlg->Execute();
     if(pSaveDlg->GetLabel(aItem))
     {
-        bModified = FALSE;
+        bModified = sal_False;
         const Sequence<OUString>& rMan = GetParent()->GetLabelsConfig().GetManufacturers();
         SvStringsDtor& rMakes = GetParent()->Makes();
-        if(rMakes.Count() < (USHORT)rMan.getLength())
+        if(rMakes.Count() < (sal_uInt16)rMan.getLength())
         {
             rMakes.DeleteAndDestroy(0, rMakes.Count());
             const OUString* pMan = rMan.getConstArray();

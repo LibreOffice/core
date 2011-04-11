@@ -82,8 +82,8 @@ using namespace ::com::sun::star::uno;
     [ attributeNames addObject: NSAccessibilityValueAttribute ];
 }
 
-+(MacOSBOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper {
-    MacOSBOOL isSettable = NO;
++(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper {
+    BOOL isSettable = NO;
     if ( [ wrapper accessibleValue ] != nil 
       && [ attribute isEqualToString: NSAccessibilityValueAttribute ] 
       && ! [ wrapper isKindOfClass: [ AquaA11yWrapperStaticText class ] ] ) {

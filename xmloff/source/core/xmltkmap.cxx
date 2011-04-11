@@ -34,8 +34,9 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 
-using namespace rtl;
 using namespace ::xmloff::token;
+
+using ::rtl::OUString;
 
 class SvXMLTokenMapEntry_Impl
 {
@@ -60,13 +61,13 @@ public:
         nToken( rEntry.nToken )
     {}
 
-    BOOL operator==( const SvXMLTokenMapEntry_Impl& r ) const
+    sal_Bool operator==( const SvXMLTokenMapEntry_Impl& r ) const
     {
         return nPrefixKey == r.nPrefixKey &&
                sLocalName == r.sLocalName;
     }
 
-    BOOL operator<( const SvXMLTokenMapEntry_Impl& r ) const
+    sal_Bool operator<( const SvXMLTokenMapEntry_Impl& r ) const
     {
         return nPrefixKey < r.nPrefixKey ||
                ( nPrefixKey == r.nPrefixKey &&

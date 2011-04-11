@@ -51,15 +51,15 @@ class SvxUnoNameItemTable : public cppu::WeakImplHelper2< com::sun::star::contai
 private:
     SdrModel*       mpModel;
     SfxItemPool*    mpModelPool;
-    USHORT          mnWhich;
-    BYTE            mnMemberId;
+    sal_uInt16          mnWhich;
+    sal_uInt8           mnMemberId;
 
     ItemPoolVector maItemSetVector;
 
     void SAL_CALL ImplInsertByName( const rtl::OUString& aName, const com::sun::star::uno::Any& aElement );
 
 public:
-    SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE nMemberId ) throw();
+    SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, sal_uInt8 nMemberId ) throw();
     virtual ~SvxUnoNameItemTable() throw();
 
     virtual NameOrIndex* createItem() const throw() = 0;

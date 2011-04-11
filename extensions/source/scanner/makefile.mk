@@ -77,7 +77,7 @@ SHL1STDLIBS=\
     $(SVTOOLLIB)
 
 .IF "$(GUI)"=="UNX" && "$(OS)"!="FREEBSD" && \
-	"$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD"
+    "$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD" && "$(OS)"!="DRAGONFLY"
 SHL1STDLIBS+=$(SVTOOLLIB) -ldl
 .ENDIF
 
@@ -94,3 +94,11 @@ DEF1EXPORTFILE=exports.dxp
 
 .INCLUDE :  target.mk
 
+
+ALLTAR : $(MISC)/scn.component
+
+$(MISC)/scn.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        scn.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt scn.component

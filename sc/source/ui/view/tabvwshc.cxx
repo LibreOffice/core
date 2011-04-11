@@ -72,7 +72,7 @@
 
 //------------------------------------------------------------------
 
-void ScTabViewShell::SetCurRefDlgId( USHORT nNew )
+void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 {
     //  CurRefDlgId is stored in ScModule to find if a ref dialog is open,
     //  and in the view to identify the view that has opened the dialog
@@ -81,7 +81,7 @@ void ScTabViewShell::SetCurRefDlgId( USHORT nNew )
 
 SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                         SfxBindings* pB, SfxChildWindow* pCW, SfxChildWinInfo* pInfo,
-                        Window* pParent, USHORT nSlotId )
+                        Window* pParent, sal_uInt16 nSlotId )
 {
     //  Dialog nur aufmachen, wenn ueber ScModule::SetRefDialog gerufen, damit
     //  z.B. nach einem Absturz offene Ref-Dialoge nicht wiederkommen (#42341#).
@@ -94,14 +94,16 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         //  the dialog has been opened in a different view
         //  -> lock the dispatcher for this view (modal mode)
 
-        GetViewData()->GetDispatcher().Lock( TRUE );    // lock is reset when closing dialog
+        GetViewData()->GetDispatcher().Lock( sal_True );    // lock is reset when closing dialog
         return NULL;
     }
 
     SfxModelessDialog* pResult = 0;
 
     if(pCW)
-        pCW->SetHideNotDelete(TRUE);
+        pCW->SetHideNotDelete(sal_True);
+
+    ScDocument* pDoc = GetViewData()->GetDocument();
 
     switch( nSlotId )
     {
@@ -125,7 +127,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                 SCITEM_CONSOLIDATEDATA );
 
             const ScConsolidateParam* pDlgData =
-                            GetViewData()->GetDocument()->GetConsolidateDlgData();
+                            pDoc->GetConsolidateDlgData();
 
             if ( !pDlgData )
             {
@@ -159,10 +161,10 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_DEFINE_DBNAME:
         {
             //  wenn auf einem bestehenden Bereich aufgerufen, den markieren
-            GetDBData( TRUE, SC_DB_OLD );
+            GetDBData( sal_True, SC_DB_OLD );
             const ScMarkData& rMark = GetViewData()->GetMarkData();
             if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
-                MarkDataArea( FALSE );
+                MarkDataArea( false );
 
             pResult = new ScDbNameDlg( pB, pCW, pParent, GetViewData() );
         }
@@ -175,9 +177,13 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData(true, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, true, true);
+            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+            pDBData->ExtendDataArea(pDoc);
             pDBData->GetQueryParam( aQueryParam );
-            aQueryParam.bUseDynamicRange = true;
+
+            ScRange aArea;
+            pDBData->GetArea(aArea);
+            MarkRange(aArea, false);
 
             ScQueryItem aItem( SCITEM_QUERYDATA, GetViewData(), &aQueryParam );
             ScRange aAdvSource;
@@ -201,9 +207,13 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData(true, SC_DB_MAKE, SC_DBSEL_ROW_DOWN, true, true);
+            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+            pDBData->ExtendDataArea(pDoc);
             pDBData->GetQueryParam( aQueryParam );
-            aQueryParam.bUseDynamicRange = true;
+
+            ScRange aArea;
+            pDBData->GetArea(aArea);
+            MarkRange(aArea, false);
 
             aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA,
                                       GetViewData(),
@@ -222,7 +232,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             ScRefAddress  aCurPos   ( pViewData->GetCurX(),
                                       pViewData->GetCurY(),
                                       pViewData->GetTabNo(),
-                                      FALSE, FALSE, FALSE );
+                                      false, false, false );
 
             pResult = new ScTabOpDlg( pB, pCW, pParent, pViewData->GetDocument(), aCurPos );
         }
@@ -254,7 +264,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             {
                 // Check for an existing datapilot output.
                 ScViewData* pViewData = GetViewData();
-                ScDPObject* pObj = GetViewData()->GetDocument()->GetDPAtCursor(
+                ScDPObject* pObj = pDoc->GetDPAtCursor(
                     pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
 
                 GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
@@ -273,7 +283,6 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             ScViewData* pViewData = GetViewData();
 
-            ScDocument* pDoc = pViewData->GetDocument();
             const ScConditionalFormat* pForm = pDoc->GetCondFormat(
                 pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
 
@@ -312,7 +321,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
 
         default:
-        DBG_ERROR( "ScTabViewShell::CreateRefDialog: unbekannte ID" );
+        OSL_FAIL( "ScTabViewShell::CreateRefDialog: unbekannte ID" );
         break;
     }
 

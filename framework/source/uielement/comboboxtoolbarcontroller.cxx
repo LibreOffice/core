@@ -165,7 +165,7 @@ ComboboxToolbarController::ComboboxToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
-    USHORT                                   nID,
+    sal_uInt16                                   nID,
     sal_Int32                                nWidth,
     const ::rtl::OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
@@ -415,7 +415,7 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
                 com::sun::star::util::Color aColor(0);
                 if ( rControlCommand.Arguments[i].Value >>= aColor )
                 {
-                    ::Color aBackColor( static_cast< UINT32 >( aColor ));
+                    ::Color aBackColor( static_cast< sal_uInt32 >( aColor ));
                     m_pComboBox->SetControlBackground( aBackColor );
                 }
                 break;
@@ -431,7 +431,7 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
                 com::sun::star::util::Color aColor(0);
                 if ( rControlCommand.Arguments[i].Value >>= aColor )
                 {
-                    ::Color aForeColor( static_cast< UINT32 >( aColor ));
+                    ::Color aForeColor( static_cast< sal_uInt32 >( aColor ));
                     m_pComboBox->SetControlForeground( aForeColor );
                 }
                 break;

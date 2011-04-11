@@ -29,7 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+#include <rtl/random.h>
 #include <sfx2/docfile.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <unotools/saveopt.hxx>
 #include <svl/itemset.hxx>
@@ -51,6 +54,8 @@
 #include "tabprotection.hxx"
 #include "document.hxx"
 #include "scextopt.hxx"
+
+using namespace ::com::sun::star;
 
 // Global data ================================================================
 
@@ -76,91 +81,91 @@ XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
 
 XclExpTabInfo& XclExpRoot::GetTabInfo() const
 {
-    DBG_ASSERT( mrExpData.mxTabInfo.is(), "XclExpRoot::GetTabInfo - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxTabInfo, "XclExpRoot::GetTabInfo - missing object (wrong BIFF?)" );
     return *mrExpData.mxTabInfo;
 }
 
 XclExpAddressConverter& XclExpRoot::GetAddressConverter() const
 {
-    DBG_ASSERT( mrExpData.mxAddrConv.is(), "XclExpRoot::GetAddressConverter - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxAddrConv, "XclExpRoot::GetAddressConverter - missing object (wrong BIFF?)" );
     return *mrExpData.mxAddrConv;
 }
 
 XclExpFormulaCompiler& XclExpRoot::GetFormulaCompiler() const
 {
-    DBG_ASSERT( mrExpData.mxFmlaComp.is(), "XclExpRoot::GetFormulaCompiler - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxFmlaComp, "XclExpRoot::GetFormulaCompiler - missing object (wrong BIFF?)" );
     return *mrExpData.mxFmlaComp;
 }
 
 XclExpProgressBar& XclExpRoot::GetProgressBar() const
 {
-    DBG_ASSERT( mrExpData.mxProgress.is(), "XclExpRoot::GetProgressBar - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxProgress, "XclExpRoot::GetProgressBar - missing object (wrong BIFF?)" );
     return *mrExpData.mxProgress;
 }
 
 XclExpSst& XclExpRoot::GetSst() const
 {
-    DBG_ASSERT( mrExpData.mxSst.is(), "XclExpRoot::GetSst - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxSst, "XclExpRoot::GetSst - missing object (wrong BIFF?)" );
     return *mrExpData.mxSst;
 }
 
 XclExpPalette& XclExpRoot::GetPalette() const
 {
-    DBG_ASSERT( mrExpData.mxPalette.is(), "XclExpRoot::GetPalette - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxPalette, "XclExpRoot::GetPalette - missing object (wrong BIFF?)" );
     return *mrExpData.mxPalette;
 }
 
 XclExpFontBuffer& XclExpRoot::GetFontBuffer() const
 {
-    DBG_ASSERT( mrExpData.mxFontBfr.is(), "XclExpRoot::GetFontBuffer - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxFontBfr, "XclExpRoot::GetFontBuffer - missing object (wrong BIFF?)" );
     return *mrExpData.mxFontBfr;
 }
 
 XclExpNumFmtBuffer& XclExpRoot::GetNumFmtBuffer() const
 {
-    DBG_ASSERT( mrExpData.mxNumFmtBfr.is(), "XclExpRoot::GetNumFmtBuffer - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxNumFmtBfr, "XclExpRoot::GetNumFmtBuffer - missing object (wrong BIFF?)" );
     return *mrExpData.mxNumFmtBfr;
 }
 
 XclExpXFBuffer& XclExpRoot::GetXFBuffer() const
 {
-    DBG_ASSERT( mrExpData.mxXFBfr.is(), "XclExpRoot::GetXFBuffer - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxXFBfr, "XclExpRoot::GetXFBuffer - missing object (wrong BIFF?)" );
     return *mrExpData.mxXFBfr;
 }
 
 XclExpLinkManager& XclExpRoot::GetGlobalLinkManager() const
 {
-    DBG_ASSERT( mrExpData.mxGlobLinkMgr.is(), "XclExpRoot::GetGlobalLinkManager - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxGlobLinkMgr, "XclExpRoot::GetGlobalLinkManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxGlobLinkMgr;
 }
 
 XclExpLinkManager& XclExpRoot::GetLocalLinkManager() const
 {
-    DBG_ASSERT( GetLocalLinkMgrRef().is(), "XclExpRoot::GetLocalLinkManager - missing object (wrong BIFF?)" );
+    DBG_ASSERT( GetLocalLinkMgrRef(), "XclExpRoot::GetLocalLinkManager - missing object (wrong BIFF?)" );
     return *GetLocalLinkMgrRef();
 }
 
 XclExpNameManager& XclExpRoot::GetNameManager() const
 {
-    DBG_ASSERT( mrExpData.mxNameMgr.is(), "XclExpRoot::GetNameManager - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxNameMgr, "XclExpRoot::GetNameManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxNameMgr;
 }
 
 XclExpObjectManager& XclExpRoot::GetObjectManager() const
 {
-    DBG_ASSERT( mrExpData.mxObjMgr.is(), "XclExpRoot::GetObjectManager - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxObjMgr, "XclExpRoot::GetObjectManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxObjMgr;
 }
 
 XclExpFilterManager& XclExpRoot::GetFilterManager() const
 {
-    DBG_ASSERT( mrExpData.mxFilterMgr.is(), "XclExpRoot::GetFilterManager - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxFilterMgr, "XclExpRoot::GetFilterManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxFilterMgr;
 }
 
 XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
 {
-    DBG_ASSERT( mrExpData.mxPTableMgr.is(), "XclExpRoot::GetPivotTableManager - missing object (wrong BIFF?)" );
+    DBG_ASSERT( mrExpData.mxPTableMgr, "XclExpRoot::GetPivotTableManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxPTableMgr;
 }
 
@@ -231,7 +236,7 @@ XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const
         case EXC_ID_EXTERNSHEET:    xRec = GetLocalLinkMgrRef();    break;
         case EXC_ID_NAME:           xRec = mrExpData.mxNameMgr;     break;
     }
-    DBG_ASSERT( xRec.is(), "XclExpRoot::CreateRecord - unknown record ID or missing object" );
+    DBG_ASSERT( xRec, "XclExpRoot::CreateRecord - unknown record ID or missing object" );
     return xRec;
 }
 
@@ -242,23 +247,66 @@ bool XclExpRoot::IsDocumentEncrypted() const
     if (pDocProt && pDocProt->isProtected() && pDocProt->isOptionEnabled(ScDocProtection::STRUCTURE))
         return true;
 
-    if (GetPassword().Len() > 0)
+    if ( GetEncryptionData().getLength() > 0 )
         // Password is entered directly into the save dialog.
         return true;
 
     return false;
 }
 
-String XclExpRoot::GetPassword() const
+uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( const ::rtl::OUString& aPass ) const
 {
-    if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
+    uno::Sequence< beans::NamedValue > aEncryptionData;
+
+    if ( aPass.getLength() > 0 && aPass.getLength() < 16 )
     {
-        const SfxPoolItem* pItem = 0;
-        if( pItemSet->GetItemState( SID_PASSWORD, TRUE, &pItem ) == SFX_ITEM_SET )
-            if( const SfxStringItem* pStrItem = dynamic_cast< const SfxStringItem* >( pItem ) )
-                return pStrItem->GetValue();
+        TimeValue aTime;
+        osl_getSystemTime( &aTime );
+        rtlRandomPool aRandomPool = rtl_random_createPool ();
+        rtl_random_addBytes ( aRandomPool, &aTime, 8 );
+
+        sal_uInt8 pnDocId[16];
+        rtl_random_getBytes( aRandomPool, pnDocId, 16 );
+
+        rtl_random_destroyPool( aRandomPool );
+
+        sal_uInt16 pnPasswd[16];
+        memset( pnPasswd, 0, sizeof( pnPasswd ) );
+        for (xub_StrLen nChar = 0; nChar < aPass.getLength(); ++nChar )
+            pnPasswd[nChar] = aPass.getStr()[nChar];
+
+        ::msfilter::MSCodec_Std97 aCodec;
+        aCodec.InitKey( pnPasswd, pnDocId );
+        aEncryptionData = aCodec.GetEncryptionData();
     }
-    return String::EmptyString();
+
+    return aEncryptionData;
+}
+
+uno::Sequence< beans::NamedValue > XclExpRoot::GetEncryptionData() const
+{
+    uno::Sequence< beans::NamedValue > aEncryptionData;
+    SFX_ITEMSET_ARG( GetMedium().GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
+    if ( pEncryptionDataItem )
+        pEncryptionDataItem->GetValue() >>= aEncryptionData;
+    else
+    {
+        // try to get the encryption data from the password
+        SFX_ITEMSET_ARG( GetMedium().GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false );
+        if ( pPasswordItem && pPasswordItem->GetValue().Len() )
+            aEncryptionData = GenerateEncryptionData( pPasswordItem->GetValue() );
+    }
+
+    return aEncryptionData;
+}
+
+uno::Sequence< beans::NamedValue > XclExpRoot::GenerateDefaultEncryptionData() const
+{
+    uno::Sequence< beans::NamedValue > aEncryptionData;
+    if ( GetDefaultPassword().Len() > 0 )
+        aEncryptionData = GenerateEncryptionData( GetDefaultPassword() );
+
+    return aEncryptionData;
 }
 
 XclExpRootData::XclExpLinkMgrRef XclExpRoot::GetLocalLinkMgrRef() const

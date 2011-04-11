@@ -64,6 +64,7 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     css::uno::Reference< ov::excel::XChartObjects > mxCharts;
     css::uno::Reference< ov::excel::XHyperlinks > mxHlinks;
     ::rtl::Reference< ScVbaSheetObjectsBase > mxButtons;
+    bool mbVeryHidden;
 
     css::uno::Reference< ov::excel::XWorksheet > getSheetAtOffset(SCTAB offset) throw (css::uno::RuntimeException);
     css::uno::Reference< ov::excel::XRange > getSheetRange() throw (css::uno::RuntimeException);
@@ -89,6 +90,7 @@ public:
     { return mxModel; }
     virtual css::uno::Reference< css::sheet::XSpreadsheet > getSheet()
     { return mxSheet; }
+    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
 
     // Attributes
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
@@ -117,7 +119,7 @@ public:
 
     // Methods
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Select(const css::uno::Any& aReplace) throw (css::uno::RuntimeException); //liuchen 2009-9-2, add the input parameter to support expand selection
+    virtual void SAL_CALL Select(const css::uno::Any& aReplace) throw (css::uno::RuntimeException); // add the input parameter to support expand selection
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Move( const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException) ;
      virtual void SAL_CALL Copy( const css::uno::Any& Before, const css::uno::Any& After ) throw (css::uno::RuntimeException);
@@ -170,6 +172,8 @@ public:
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    // XUnoTunnel
+    virtual ::sal_Int64 getSomething(const css::uno::Sequence<sal_Int8 >& rId ) throw(css::uno::RuntimeException);
 };
 
 #endif /* SC_VBA_WORKSHEET_HXX */

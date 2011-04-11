@@ -93,7 +93,7 @@ void MozabDriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString MozabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii(MOZAB_DRIVER_IMPL_NAME);
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MOZAB_DRIVER_IMPL_NAME));
         // this name is referenced in the configuration and in the mozab.xml
         // Please take care when changing it.
 }
@@ -159,7 +159,7 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
         ::connectivity::SharedResources aResources;
         const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
                 STR_COULD_NOT_LOAD_LIB,
-                "$libname$", ::rtl::OUString::createFromAscii( SVLIBRARY( "mozabdrv" ) )
+                "$libname$", ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "mozabdrv" )) )
              ) );
 
         ::dbtools::throwGenericSQLException(sError,*this);
@@ -237,7 +237,7 @@ EDriverType MozabDriver::impl_classifyURL( const ::rtl::OUString& url )
         // There isn't any subschema: - but could be just subschema
         if ( aAddrbookURI.getLength() > 0 )
             aAddrbookScheme= aAddrbookURI;
-        else if(url == ::rtl::OUString::createFromAscii("sdbc:address:") )
+        else if(url == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:")) )
             return Unknown; // TODO check
         else
             return Unknown;
@@ -251,7 +251,7 @@ EDriverType MozabDriver::impl_classifyURL( const ::rtl::OUString& url )
         const sal_Char* pScheme;
     } aSchemeMap[] =
     {
-#if defined(WNT) || defined(WIN)
+#if defined(WNT)
         { Outlook,          "outlook" },
         { OutlookExpress,   "outlookexp" },
 #endif
@@ -283,7 +283,7 @@ namespace
 
             if ( !_rFunction )
             {   // did not find the symbol
-                OSL_ENSURE( false, ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) );
+                OSL_FAIL( ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) );
                 osl_unloadModule( _rModule );
                 _rModule = NULL;
             }
@@ -301,7 +301,7 @@ bool MozabDriver::ensureInit()
 
     OSL_ENSURE(NULL == m_pCreationFunc, "MozabDriver::ensureInit: inconsistence: already have a factory function!");
 
-    const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(SVLIBRARY( "mozabdrv" ));
+    const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY( "mozabdrv" )));
 
     // load the mozabdrv library
     m_hModule = osl_loadModuleRelative(&thisModule, sModuleName.pData, 0);

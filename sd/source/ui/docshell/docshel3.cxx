@@ -72,9 +72,9 @@ using namespace ::com::sun::star::uno;
 
 namespace sd {
 
-#define POOL_BUFFER_SIZE        (USHORT)32768
-#define BASIC_BUFFER_SIZE       (USHORT)8192
-#define DOCUMENT_BUFFER_SIZE    (USHORT)32768
+#define POOL_BUFFER_SIZE        (sal_uInt16)32768
+#define BASIC_BUFFER_SIZE       (sal_uInt16)8192
+#define DOCUMENT_BUFFER_SIZE    (sal_uInt16)32768
 
 /*************************************************************************
 |*
@@ -123,7 +123,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             if( dynamic_cast< FuSearch* >(mxDocShellFunction.get()) )
             {
-                // Suchen&Ersetzen in allen DocShells beenden
+                // End Search&Replace in all docshells
                 SfxObjectShell* pFirstShell = SfxObjectShell::GetFirst();
                 SfxObjectShell* pShell = pFirstShell;
 
@@ -184,7 +184,6 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_CLOSEDOC:
         {
-//            SfxObjectShell::DoClose();
             ExecuteSlot(rReq, SfxObjectShell::GetStaticInterface());
         }
         break;
@@ -200,7 +199,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_VERSION:
         {
-            const ULONG nOldSwapMode = mpDoc->GetSwapGraphicsMode();
+            const sal_uLong nOldSwapMode = mpDoc->GetSwapGraphicsMode();
 
             mpDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
             ExecuteSlot( rReq, SfxObjectShell::GetStaticInterface() );

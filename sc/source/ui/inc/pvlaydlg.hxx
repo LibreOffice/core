@@ -73,10 +73,14 @@ class ScDPObject;
 
 //============================================================================
 
-#define FUNC_COUNT 11
-
 class ScDPLayoutDlg : public ScAnyRefDlg
 {
+    /** data source type */
+    enum DataSrcType {
+        SRC_REF,     /// range reference
+        SRC_NAME,    /// range name
+        SRC_INVALID  /// invalid range
+    };
 public:
                             ScDPLayoutDlg(
                                 SfxBindings* pB,
@@ -87,19 +91,18 @@ public:
     virtual                 ~ScDPLayoutDlg();
 
     virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual BOOL            IsRefInputMode() const { return bRefInputMode; }
+    virtual sal_Bool            IsRefInputMode() const { return bRefInputMode; }
     virtual void            SetActive();
-    virtual BOOL            Close();
+    virtual sal_Bool            Close();
     virtual void            StateChanged( StateChangedType nStateChange );
 
     void                    NotifyDoubleClick    ( ScDPFieldType eType, size_t nFieldIndex );
     PointerStyle            NotifyMouseButtonDown( ScDPFieldType eType, size_t nFieldIndex );
     void                    NotifyMouseButtonUp  ( const Point& rAt );
     PointerStyle            NotifyMouseMove      ( const Point& rAt );
-    void                    NotifyFieldFocus     ( ScDPFieldType eType, BOOL bGotFocus );
-    void                    NotifyMoveField      ( ScDPFieldType eToType );
+    void                    NotifyFieldFocus     ( ScDPFieldType eType, sal_Bool bGotFocus );
+    void                    NotifyMoveFieldToEnd      ( ScDPFieldType eToType );
     void                    NotifyRemoveField    ( ScDPFieldType eType, size_t nFieldIndex );
-    BOOL                    NotifyMoveSlider     ( USHORT nKeyCode );   // return TRUE, if position changed
 
 protected:
     virtual void            Deactivate();
@@ -111,15 +114,14 @@ private:
 
     FixedLine               aFlLayout;
     FixedText               aFtPage;
-    ScDPFieldWindow         aWndPage;
+    ScDPPageFieldControl    aWndPage;
     FixedText               aFtCol;
-    ScDPFieldWindow         aWndCol;
+    ScDPColFieldControl     aWndCol;
     FixedText               aFtRow;
-    ScDPFieldWindow         aWndRow;
+    ScDPRowFieldControl     aWndRow;
     FixedText               aFtData;
-    ScDPFieldWindow         aWndData;
-    ScDPFieldWindow         aWndSelect;
-    ScrollBar               aSlider;
+    ScDPDataFieldControl    aWndData;
+    ScDPSelectFieldControl  aWndSelect;
     FixedInfo               aFtInfo;
 
     FixedLine               aFlAreas;
@@ -155,7 +157,7 @@ private:
 
     ScDPFieldType           eDnDFromType;
     size_t                  nDnDFromIndex;
-    BOOL                    bIsDrag;
+    sal_Bool                    bIsDrag;
 
     ::formula::RefEdit*     pEditActive;
 
@@ -176,18 +178,19 @@ private:
     ScDPFuncDataVec         aRowArr;
     ScDPFuncDataVec         aDataArr;
 
+    long                    mnFieldObjSpace;
+
     ScDPObjectPtr           xDlgDPObject;
     ScRange                 aOldRange;
     ScPivotParam            thePivotData;
     ScViewData*             pViewData;
     ScDocument*             pDoc;
-    BOOL                    bRefInputMode;
+    bool                    bRefInputMode;
 
 private:
-    ScDPFieldWindow&        GetFieldWindow  ( ScDPFieldType eType );
     void                    Init            (bool bNewOutput);
     void                    InitWndSelect   ( const ::std::vector<ScDPLabelDataRef>& rLabels );
-    void                    InitWnd         ( PivotField* pArr, long nCount, ScDPFieldType eType );
+    void                    InitFieldWindow ( const ::std::vector<PivotField>& rFields, ScDPFieldType eType );
     void                    InitFocus       ();
     void                    InitFields      ();
     void                    CalcWndSizes    ();
@@ -195,31 +198,47 @@ private:
     ScDPLabelData*          GetLabelData    ( SCsCOL nCol, size_t* pPos = NULL );
     String                  GetLabelString  ( SCsCOL nCol );
     bool                    IsOrientationAllowed( SCsCOL nCol, ScDPFieldType eType );
-    String                  GetFuncString   ( USHORT& rFuncMask, BOOL bIsValue = TRUE );
-    BOOL                    Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
+    String                  GetFuncString   ( sal_uInt16& rFuncMask, sal_Bool bIsValue = true );
+    sal_Bool                    Contains        ( ScDPFuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
     void                    Remove          ( ScDPFuncDataVec* pArr, size_t nAt );
     void                    Insert          ( ScDPFuncDataVec* pArr, const ScDPFuncData& rFData, size_t nAt );
 
     void                    AddField        ( size_t nFromIndex,
                                               ScDPFieldType eToType, const Point& rAtPos );
+    void                    AppendField(size_t nFromIndex, ScDPFieldType eToType);
     void                    MoveField       ( ScDPFieldType eFromType, size_t nFromIndex,
                                               ScDPFieldType eToType, const Point&  rAtPos );
+    void                    MoveFieldToEnd(ScDPFieldType eFromType, size_t nFromIndex, ScDPFieldType eToType);
     void                    RemoveField     ( ScDPFieldType eRemType, size_t nRemIndex );
 
-    BOOL                    GetPivotArrays  ( PivotField*   pPageArr,
-                                              PivotField*   pColArr,
-                                              PivotField*   pRowArr,
-                                              PivotField*   pDataArr,
-                                              USHORT&       rPageCount,
-                                              USHORT&       rColCount,
-                                              USHORT&       rRowCount,
-                                              USHORT&       rDataCount );
+    bool                    GetPivotArrays( ::std::vector<PivotField>& rPageFields,
+                                            ::std::vector<PivotField>& rColFields,
+                                            ::std::vector<PivotField>& rRowFields,
+                                            ::std::vector<PivotField>& rDataFields );
 
     void                    UpdateSrcRange();
+    void                    RepaintFieldWindows();
+
+    ScDPFieldControlBase* GetFieldWindow(ScDPFieldType eType);
+
+    /**
+     * Get pointers to field windows that are <b>not</b> the window of
+     * specified type.  The select window type is not included.
+     */
+    void GetOtherFieldWindows(
+        ScDPFieldType eType, ScDPFieldControlBase*& rpWnd1, ScDPFieldControlBase*& rpWnd2);
+
+    ScDPFuncDataVec* GetFieldDataArray(ScDPFieldType eType);
+
+    /**
+     * Like GetOtherFieldWindows(), get pointers to data arrays of the fields
+     * that are <b>not</b> the specified field type.
+     */
+    void GetOtherDataArrays(
+        ScDPFieldType eType, ScDPFuncDataVec*& rpArr1, ScDPFuncDataVec*& rpArr2);
 
     // Handler
     DECL_LINK( ClickHdl, PushButton * );
-    DECL_LINK( ScrollHdl, ScrollBar * );
     DECL_LINK( SelAreaHdl, ListBox * );
     DECL_LINK( MoreClickHdl, MoreButton * );
     DECL_LINK( EdModifyHdl, Edit * );
@@ -228,8 +247,6 @@ private:
     DECL_LINK( CancelHdl, CancelButton * );
     DECL_LINK( GetFocusHdl, Control* );
 };
-
-
 
 #endif // SC_PVLAYDLG_HXX
 

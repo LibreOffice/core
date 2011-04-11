@@ -79,7 +79,7 @@ namespace pcr
                             ~OBrowserLine();
 
         void setControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl );
-        const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& getControl()
+        const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& getControl() const
         {
             return m_xControl;
         }
@@ -91,7 +91,7 @@ namespace pcr
         const ::rtl::OUString&
                             GetEntryName() const { return m_sEntryName; }
 
-        void                SetComponentHelpIds( const SmartId& _rHelpId, sal_uInt32 _bPrimaryButtonId, sal_uInt32 _nSecondaryButtonId );
+        void                SetComponentHelpIds( const rtl::OString& _rHelpId, const rtl::OString& _sPrimaryButtonId, const rtl::OString& _sSecondaryButtonId );
 
         void                SetTitle(const String& rString );
         void                FullFillTitleString();
@@ -131,7 +131,7 @@ namespace pcr
         void    impl_layoutComponents();
 
         PushButton& impl_ensureButton( bool _bPrimary );
-        void        impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage, Image& _out_rHCImage );
+        void        impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage );
     };
 
 //............................................................................

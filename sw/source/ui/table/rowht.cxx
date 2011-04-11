@@ -77,10 +77,10 @@ void SwTableHeightDlg::Apply()
 SwTableHeightDlg::SwTableHeightDlg( Window *pParent, SwWrtShell &rS ) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_ROW_HEIGHT)),
+    aHeightFL(this, SW_RES(FL_HEIGHT)),
 
     aHeightEdit(this, SW_RES(ED_HEIGHT)),
     aAutoHeightCB(this, SW_RES(CB_AUTOHEIGHT)),
-    aHeightFL(this, SW_RES(FL_HEIGHT)),
     aOKBtn(this, SW_RES(BT_OK)),
     aCancelBtn(this, SW_RES(BT_CANCEL)),
     aHelpBtn( this, SW_RES( BT_HELP ) ),

@@ -73,7 +73,7 @@ published service UnoControlProgressBarModel
         <p>Not every border style (see <member>Border</member>) may support coloring.
         For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] long BorderColor;
 

@@ -58,7 +58,7 @@ namespace framework{
    structure was detected.
 
    This macro combined the given comment with a generic
-   way to find out the XML line (where the error occured)
+   way to find out the XML line (where the error occurred)
    to format a suitable message.
 
    @param   COMMENT

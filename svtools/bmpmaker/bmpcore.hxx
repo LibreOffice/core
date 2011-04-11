@@ -56,7 +56,7 @@
 struct LangInfo
 {
     char    maLangDir[ 257 ];
-    USHORT  mnLangNum;
+    sal_uInt16  mnLangNum;
 };
 
 // --------------
@@ -72,8 +72,8 @@ private:
     Size            aTotSize;
     Point           aPos;
     SvFileStream*   pSRS;
-    ULONG           nTotCount;
-    USHORT          nPos;
+    sal_uLong           nTotCount;
+    sal_uInt16          nPos;
 
     void            ImplCreate( const ::std::vector< DirEntry >& rInDirs,
                                 const DirEntry& rOut,
@@ -82,7 +82,7 @@ private:
 
 protected:
 
-    virtual void    Message( const String& rText, BYTE cExitCode = EXIT_NOERROR );
+    virtual void    Message( const String& rText, sal_uInt8 cExitCode = EXIT_NOERROR );
 
 public:
 

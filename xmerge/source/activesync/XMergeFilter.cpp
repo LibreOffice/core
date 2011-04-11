@@ -360,18 +360,6 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
     /* use current version */
     lRet = ::RegQueryValueEx(hKey, _T("CurrentVersion"), 0, NULL, (LPBYTE)szCurrentJava, &dwSize);
 
-    /*
-    for (DWORD i = 0; lRet != ERROR_NO_MORE_ITEMS; i++)
-    {
-        lRet = ::RegEnumKeyEx(hKey, i, szKeyName, &dwKeyName, 0, szClassName, &dwClassName, NULL);
-        if(!strncmp(szKeyName, "1.4", 3))
-            break;
-        dwKeyName = _MAX_PATH;
-    }
-    // Found a Java 1.4 installation.  Can now read its home directory.
-    */
-
-
     lRet = ::RegOpenKeyEx(hKey, _T(szCurrentJava), 0, KEY_READ, &hDataKey);
     if (lRet != ERROR_SUCCESS)
     {

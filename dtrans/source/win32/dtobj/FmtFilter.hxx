@@ -66,6 +66,12 @@ com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const com::sun
 
 /*------------------------------------------------------------------------
     input:
+    aWinDIB - sequence of bytes containing a windows bitmap handle
+------------------------------------------------------------------------*/
+com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL WinBITMAPToOOBMP( HBITMAP );
+
+/*------------------------------------------------------------------------
+    input:
     aOOBmp - sequence of bytes containing a openoffice bitmap
 ------------------------------------------------------------------------*/
 com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( com::sun::star::uno::Sequence< sal_Int8 >& aOOBmp );

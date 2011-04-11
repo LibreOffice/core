@@ -33,9 +33,9 @@
 #include <tools/solar.h>
 
 #ifndef SD_DEFINE_KEYWORDS
-#define SD_CONSTASCII_ACTION( n, s ) extern sal_Char __FAR_DATA n[sizeof(s)]
+#define SD_CONSTASCII_ACTION( n, s ) extern sal_Char n[sizeof(s)]
 #else
-#define SD_CONSTASCII_ACTION( n, s ) sal_Char __FAR_DATA n[sizeof(s)] = s
+#define SD_CONSTASCII_ACTION( n, s ) sal_Char n[sizeof(s)] = s
 #endif
 
 #define UNO_PREFIX "com.sun.star."

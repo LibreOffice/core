@@ -143,7 +143,7 @@ void XclImpColRowSettings::SetHeight( SCROW nScRow, sal_uInt16 nHeight )
     bool bDefHeight = ::get_flag( nHeight, EXC_ROW_FLAGDEFHEIGHT ) || (nRawHeight == 0);
     maRowHeights.insert_back(nScRow, nScRow+1, nRawHeight);
     sal_uInt8 nFlagVal = 0;
-    if (!maRowFlags.search(nScRow, nFlagVal))
+    if (!maRowFlags.search(nScRow, nFlagVal).second)
         return;
 
     ::set_flag(nFlagVal, EXC_COLROW_USED);
@@ -166,7 +166,7 @@ void XclImpColRowSettings::SetRowSettings( SCROW nScRow, sal_uInt16 nHeight, sal
     SetHeight(nScRow, nHeight);
 
     sal_uInt8 nFlagVal = 0;
-    if (!maRowFlags.search(nScRow, nFlagVal))
+    if (!maRowFlags.search(nScRow, nFlagVal).second)
         return;
 
     if (::get_flag(nFlags, EXC_ROW_UNSYNCED))
@@ -184,7 +184,7 @@ void XclImpColRowSettings::SetManualRowHeight( SCROW nScRow )
         return;
 
     sal_uInt8 nFlagVal = 0;
-    if (!maRowFlags.search(nScRow, nFlagVal))
+    if (!maRowFlags.search(nScRow, nFlagVal).second)
         return;
 
     ::set_flag(nFlagVal, EXC_COLROW_MAN);
@@ -193,7 +193,7 @@ void XclImpColRowSettings::SetManualRowHeight( SCROW nScRow )
 
 void XclImpColRowSettings::SetDefaultXF( SCCOL nScCol1, SCCOL nScCol2, sal_uInt16 nXFIndex )
 {
-    /*  #109555# assign the default column formatting here to ensure that
+    /*  assign the default column formatting here to ensure that
         explicit cell formatting is not overwritten. */
     DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetDefaultXF - invalid column index" );
     nScCol2 = ::std::min( nScCol2, MAXCOL );
@@ -242,7 +242,6 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     RowFlagsType::const_iterator itrFlags = maRowFlags.begin(), itrFlagsEnd = maRowFlags.end();
     SCROW nPrevRow = -1;
     sal_uInt8 nPrevFlags = 0;
-    sal_uInt16 nPrevHeight = 0;
     for (; itrFlags != itrFlagsEnd; ++itrFlags)
     {
         SCROW nRow = itrFlags->first;
@@ -274,7 +273,6 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
 
                         rDoc.SetRowHeightOnly(i, nLast-1, nScTab, nHeight);
                         i = nLast-1;
-                        nPrevHeight = nHeight;
                     }
                 }
 
@@ -286,7 +284,6 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
                 nHeight = mnDefHeight;
                 rDoc.SetRowHeightOnly(nPrevRow, nRow-1, nScTab, nHeight);
             }
-            nPrevHeight = nHeight;
         }
 
         nPrevRow = nRow;
@@ -306,7 +303,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     // hide the columns
     for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
         if( ::get_flag( maColFlags[ nScCol ], EXC_COLROW_HIDDEN ) )
-            rDoc.ShowCol( nScCol, nScTab, FALSE );
+            rDoc.ShowCol( nScCol, nScTab, false );
 
     // #i38093# rows hidden by filter need extra flag
     SCROW nFirstFilterScRow = SCROW_MAX;
@@ -328,7 +325,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     if (nLastXLRow < MAXROW)
     {
         bool bHidden = false;
-        if (!maHiddenRows.search(nLastXLRow, bHidden))
+        if (!maHiddenRows.search(nLastXLRow, bHidden).second)
             return;
 
         maHiddenRows.insert_back(nLastXLRow, MAXROWCOUNT, bHidden);
@@ -361,7 +358,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
 
     // #i47438# if default row format is hidden, hide remaining rows
     if( ::get_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN ) && (mnLastScRow < MAXROW) )
-        rDoc.ShowRows( mnLastScRow + 1, MAXROW, nScTab, FALSE );
+        rDoc.ShowRows( mnLastScRow + 1, MAXROW, nScTab, false );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

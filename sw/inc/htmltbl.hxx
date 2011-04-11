@@ -34,7 +34,7 @@
 #include <editeng/svxenum.hxx>
 
 #include "swtypes.hxx"
-#include "node.hxx"     // Fuer SwStartNode
+#include "node.hxx"     // For SwStartNode
 
 
 class SwTableBox;
@@ -47,29 +47,29 @@ class SwFrmFmt;
 
 class SwHTMLTableLayoutCnts
 {
-    SwHTMLTableLayoutCnts *pNext;   // der naechste Inhalt
+    SwHTMLTableLayoutCnts *pNext;   // The next content.
 
-    // von den beiden naechsten Pointern darf nur einer gesetzt sein!
-    SwTableBox *pBox;           // ein Box
-    SwHTMLTableLayout *pTable;  // eine "Tabelle in der Tabelle"
+    // Only one of the following two pointers may be set!
+    SwTableBox *pBox;           // A Box.
+    SwHTMLTableLayout *pTable;  // A "table within a table".
 
-    // Beim ersten Durchlauf gibt es noch keine Boxen. Es wird dann
-    // pStartNode anstelle von pBox verwendet.
+    // During first run there are still no boxes. In this case
+    // pStartNode is used instead of pBox.
     const SwStartNode *pStartNode;
 
-    // Die folgenden Zahler geben an, wie oft ein Pass bereits fuer diesen
-    // Inhalt durchgefuehrt wurde. Dazu werden sie mit einer Soll-Vorgabe
-    // verglichen. Wird 255 erreicht laufen sie bei 0 weiter. So wird
-    // eine Reinitialisierung bei jedem Resize vermieden.
-    BYTE nPass1Done;            // Wieoft wurde Pass 1 aufgerufen?
-    BYTE nWidthSet;             // Wieoft wurde die Breite gesetzt?
+    // The following counters indicate how often a pass has been
+    // done for this content. Therefore they are compared against
+    // a reference value. If 255 is reached the continue with 0.
+    // This avoids reinitialization on every resize.
+    sal_uInt8 nPass1Done;           // How many times has Pass 1 been called?
+    sal_uInt8 nWidthSet;                // How many times has the width been set?
 
-    BOOL bNoBreakTag;       // <NOBR>-Tag ueber gesamten Inhalt
+    sal_Bool bNoBreakTag;       // <NOBR>-Tag over complete content.
 
 public:
 
     SwHTMLTableLayoutCnts( const SwStartNode* pSttNd, SwHTMLTableLayout* pTab,
-                           BOOL bNoBreakTag, SwHTMLTableLayoutCnts* pNxt );
+                           sal_Bool bNoBreakTag, SwHTMLTableLayoutCnts* pNxt );
 
     ~SwHTMLTableLayoutCnts();
 
@@ -80,183 +80,174 @@ public:
 
     const SwStartNode *GetStartNode() const;
 
-    // Ermitteln des naechsten Knotens
+    // Calculation of next node.
     SwHTMLTableLayoutCnts *GetNext() const { return pNext; }
 
-    void SetWidthSet( BYTE nRef ) { nWidthSet = nRef; }
-    BOOL IsWidthSet( BYTE nRef ) const { return nRef==nWidthSet; }
+    void SetWidthSet( sal_uInt8 nRef ) { nWidthSet = nRef; }
+    sal_Bool IsWidthSet( sal_uInt8 nRef ) const { return nRef==nWidthSet; }
 
-    void SetPass1Done( BYTE nRef ) { nPass1Done = nRef; }
-    BOOL IsPass1Done( BYTE nRef ) const { return nRef==nPass1Done; }
+    void SetPass1Done( sal_uInt8 nRef ) { nPass1Done = nRef; }
+    sal_Bool IsPass1Done( sal_uInt8 nRef ) const { return nRef==nPass1Done; }
 
-    BOOL HasNoBreakTag() const { return bNoBreakTag; }
+    sal_Bool HasNoBreakTag() const { return bNoBreakTag; }
 };
-
-/*  */
 
 class SwHTMLTableLayoutCell
 {
-    SwHTMLTableLayoutCnts *pContents;       // der Inhalt der Zelle
+    SwHTMLTableLayoutCnts *pContents;       // Content of cell.
 
-    USHORT nRowSpan;    // ROWSPAN der Zelle
-    USHORT nColSpan;    // COLSPAN der Zelle
-    USHORT nWidthOption;// angegebene Breite der Zelle in Twip oder %
+    sal_uInt16 nRowSpan;    // ROWSPAN of cell.
+    sal_uInt16 nColSpan;    // COLSPAN of cell.
+    sal_uInt16 nWidthOption;// Given width of cell in Twip or %.
 
-    BOOL bPrcWidthOption : 1;// nWidth ist %-Angabe
-    BOOL bNoWrapOption : 1; // NOWRAP-Option
+    sal_Bool bPrcWidthOption : 1;// nWidth is %-value.
+    sal_Bool bNoWrapOption : 1; // NOWRAP-option.
 
 public:
 
     SwHTMLTableLayoutCell( SwHTMLTableLayoutCnts *pCnts,
-                         USHORT nRSpan, USHORT nCSpan,
-                         USHORT nWidthOpt, BOOL bPrcWdthOpt,
-                         BOOL nNWrapOpt );
+                         sal_uInt16 nRSpan, sal_uInt16 nCSpan,
+                         sal_uInt16 nWidthOpt, sal_Bool bPrcWdthOpt,
+                         sal_Bool nNWrapOpt );
 
     ~SwHTMLTableLayoutCell();
 
-    // Setzen/Ermitteln des Inhalts einer Zelle
+    // Set or get content of a cell.
     void SetContents( SwHTMLTableLayoutCnts *pCnts ) { pContents = pCnts; }
     SwHTMLTableLayoutCnts *GetContents() const { return pContents; }
 
     inline void SetProtected();
 
-    // ROWSPAN/COLSPAN der Zelle Setzen/Ermitteln
-    void SetRowSpan( USHORT nRSpan ) { nRowSpan = nRSpan; }
-    USHORT GetRowSpan() const { return nRowSpan; }
-    USHORT GetColSpan() const { return nColSpan; }
+    // Set or get ROWSPAN/COLSPAN of cell.
+    void SetRowSpan( sal_uInt16 nRSpan ) { nRowSpan = nRSpan; }
+    sal_uInt16 GetRowSpan() const { return nRowSpan; }
+    sal_uInt16 GetColSpan() const { return nColSpan; }
 
-    USHORT GetWidthOption() const { return nWidthOption; }
-    BOOL IsPrcWidthOption() const { return bPrcWidthOption; }
+    sal_uInt16 GetWidthOption() const { return nWidthOption; }
+    sal_Bool IsPrcWidthOption() const { return bPrcWidthOption; }
 
-    BOOL HasNoWrapOption() const { return bNoWrapOption; }
+    sal_Bool HasNoWrapOption() const { return bNoWrapOption; }
 };
-
-/*  */
 
 class SwHTMLTableLayoutColumn
 {
-    // Zwischenwerte von AutoLayoutPass1
-    ULONG nMinNoAlign, nMaxNoAlign, nAbsMinNoAlign;
 
-    // Ergebnisse von AutoLayoutPass1
-    ULONG nMin, nMax;
+    // Interim values of AutoLayoutPass1,
+    sal_uLong nMinNoAlign, nMaxNoAlign, nAbsMinNoAlign;
 
-    // Ergibnisse von Pass 2
-    USHORT nAbsColWidth;                // in Twips
-    USHORT nRelColWidth;                // in Twips bzw. relativ zu USHRT_MAX
+    // Results of AutoLayoutPass1
+    sal_uLong nMin, nMax;
 
-    USHORT nWidthOption;                // Optionen von <COL> oder <TD>/<TH>
+    // Results of Pass 2.
+    sal_uInt16 nAbsColWidth;                // In Twips.
+    sal_uInt16 nRelColWidth;                // In Twips or relative to USHRT_MAX.
 
-    BOOL bRelWidthOption : 1;
-    BOOL bLeftBorder : 1;
+    sal_uInt16 nWidthOption;                // Options of <COL> or <TD>/<TH>.
+
+    sal_Bool bRelWidthOption : 1;
+    sal_Bool bLeftBorder : 1;
 
 public:
 
-    SwHTMLTableLayoutColumn( USHORT nColWidthOpt, BOOL bRelColWidthOpt,
-                             BOOL bLBorder );
+    SwHTMLTableLayoutColumn( sal_uInt16 nColWidthOpt, sal_Bool bRelColWidthOpt,
+                             sal_Bool bLBorder );
 
     ~SwHTMLTableLayoutColumn() {}
 
-    inline void MergeCellWidthOption( USHORT nWidth, BOOL bPrc );
-    inline void SetWidthOption( USHORT nWidth, BOOL bRelWidth, BOOL bTest );
+    inline void MergeCellWidthOption( sal_uInt16 nWidth, sal_Bool bPrc );
+    inline void SetWidthOption( sal_uInt16 nWidth, sal_Bool bRelWidth, sal_Bool bTest );
 
-    USHORT GetWidthOption() const { return nWidthOption; }
-    BOOL IsRelWidthOption() const { return bRelWidthOption; }
+    sal_uInt16 GetWidthOption() const { return nWidthOption; }
+    sal_Bool IsRelWidthOption() const { return bRelWidthOption; }
 
-    inline void MergeMinMaxNoAlign( ULONG nMin, ULONG nMax, ULONG nAbsMin );
-    ULONG GetMinNoAlign() const { return nMinNoAlign; }
-    ULONG GetMaxNoAlign() const { return nMaxNoAlign; }
-    ULONG GetAbsMinNoAlign() const { return nAbsMinNoAlign; }
-    inline void ClearPass1Info( BOOL bWidthOpt );
+    inline void MergeMinMaxNoAlign( sal_uLong nMin, sal_uLong nMax, sal_uLong nAbsMin );
+    sal_uLong GetMinNoAlign() const { return nMinNoAlign; }
+    sal_uLong GetMaxNoAlign() const { return nMaxNoAlign; }
+    sal_uLong GetAbsMinNoAlign() const { return nAbsMinNoAlign; }
+    inline void ClearPass1Info( sal_Bool bWidthOpt );
 
-    inline void SetMinMax( ULONG nMin, ULONG nMax );
-    void SetMax( ULONG nVal ) { nMax = nVal; }
-    void AddToMin( ULONG nVal ) { nMin += nVal; }
-    void AddToMax( ULONG nVal ) { nMax += nVal; }
-    ULONG GetMin() const { return nMin; }
-    ULONG GetMax() const { return nMax; }
+    inline void SetMinMax( sal_uLong nMin, sal_uLong nMax );
+    void SetMax( sal_uLong nVal ) { nMax = nVal; }
+    void AddToMin( sal_uLong nVal ) { nMin += nVal; }
+    void AddToMax( sal_uLong nVal ) { nMax += nVal; }
+    sal_uLong GetMin() const { return nMin; }
+    sal_uLong GetMax() const { return nMax; }
 
-    void SetAbsColWidth( USHORT nWidth ) { nAbsColWidth = nWidth; }
-    USHORT GetAbsColWidth() const { return nAbsColWidth; }
+    void SetAbsColWidth( sal_uInt16 nWidth ) { nAbsColWidth = nWidth; }
+    sal_uInt16 GetAbsColWidth() const { return nAbsColWidth; }
 
-    void SetRelColWidth( USHORT nWidth ) { nRelColWidth = nWidth; }
-    USHORT GetRelColWidth() const { return nRelColWidth; }
+    void SetRelColWidth( sal_uInt16 nWidth ) { nRelColWidth = nWidth; }
+    sal_uInt16 GetRelColWidth() const { return nRelColWidth; }
 
-    BOOL HasLeftBorder() const { return bLeftBorder; }
+    sal_Bool HasLeftBorder() const { return bLeftBorder; }
 };
-
-/*  */
 
 class SwHTMLTableLayout
 {
-    Timer aResizeTimer;             // Timer fuer DelayedResize
+    Timer aResizeTimer;             // Timer for DelayedResize.
 
     SwHTMLTableLayoutColumn **aColumns;
     SwHTMLTableLayoutCell **aCells;
 
-    const SwTable *pSwTable;        // die SwTable (nur Top-Table)
-    SwTableBox *pLeftFillerBox;     // linke Filler-Zelle (nur Tab in Tab)
-    SwTableBox *pRightFillerBox;    // rechte Filler-Zelle (nur Tab-in Tab)
+    const SwTable *pSwTable;        // SwTable (Top-Table only).
+    SwTableBox *pLeftFillerBox;     // Left filler-box (table in table only).
+    SwTableBox *pRightFillerBox;    // Right filler-box (table in Table only).
 
-    ULONG nMin;                     // minimale Breite der Tabelle (Twips)
-    ULONG nMax;                     // maximale Breite der Tabelle (Twips)
+    sal_uLong nMin;                     // Minimal width of table (Twips).
+    sal_uLong nMax;                     // Maximal width of table (Twips).
 
-    USHORT nRows;                   // Anzahl Zeilen
-    USHORT nCols;                   // Anzahl Spalten
+    sal_uInt16 nRows;                   // Row count.
+    sal_uInt16 nCols;                   // Column count.
 
-    USHORT nLeftMargin;             // Abstand zum linken Rand (aus Absatz)
-    USHORT nRightMargin;            // Abstand zum rechten Rand (aus Absatz)
+    sal_uInt16 nLeftMargin;             // Space to left margin (from paragraph).
+    sal_uInt16 nRightMargin;            // Space to left margin (from paragraph).
 
-    USHORT nInhAbsLeftSpace;        // von umgebender Zelle geerbter Abstand,
-    USHORT nInhAbsRightSpace;       // der Zellen zugeschlagen wurde
+    sal_uInt16 nInhAbsLeftSpace;        // Space inherited from surrounding box
+    sal_uInt16 nInhAbsRightSpace;       // that was added to boxes.
 
-    USHORT nRelLeftFill;            // relative Breiten der Zellen zur
-    USHORT nRelRightFill;           // Ausrichtung von Tabellen in Tabellen
+    sal_uInt16 nRelLeftFill;            // Width of boxes relative to alignment
+    sal_uInt16 nRelRightFill;           // of tables in tables.
 
-    USHORT nRelTabWidth;            // Die relative Breite der Tabelle
+    sal_uInt16 nRelTabWidth;            // Relative width of table.
 
-    USHORT nWidthOption;            // die Breite der Tabelle (in Twip oder %)
-    USHORT nCellPadding;            // Abstand zum Inhalt (in Twip)
-    USHORT nCellSpacing;            // Absatnd zwischen Zellen (in Twip)
-    USHORT nBorder;                 // Dicke der ausseren Umrandung bzw.
-                                    // Platz, den Netscape hierfuer einrechnet.
+    sal_uInt16 nWidthOption;            // Width of table (in Twips oder %).
+    sal_uInt16 nCellPadding;            // Space to contents (in Twips).
+    sal_uInt16 nCellSpacing;            // Cell spacing (in Twips).
+    sal_uInt16 nBorder;                 // Line strength of outer border, or rather the
+                                    // space needed for it as calculated by Netscape.
 
-    USHORT nLeftBorderWidth;
-    USHORT nRightBorderWidth;
-    USHORT nInhLeftBorderWidth;
-    USHORT nInhRightBorderWidth;
-    USHORT nBorderWidth;
+    sal_uInt16 nLeftBorderWidth;
+    sal_uInt16 nRightBorderWidth;
+    sal_uInt16 nInhLeftBorderWidth;
+    sal_uInt16 nInhRightBorderWidth;
+    sal_uInt16 nBorderWidth;
 
-    USHORT nDelayedResizeAbsAvail;  // Param fuer's verzoegerte Resize
-    USHORT nLastResizeAbsAvail;
+    sal_uInt16 nDelayedResizeAbsAvail;  // Param for delayed Resize.
+    sal_uInt16 nLastResizeAbsAvail;
 
-    BYTE nPass1Done;                // Vorgabe-Werte fuer die einzelen
-    BYTE nWidthSet;                 // Schleifen-Durchlauefe
+    sal_uInt8 nPass1Done;               // Reference-values for
+    sal_uInt8 nWidthSet;                    // the runs through loop.
 
-    SvxAdjust eTableAdjust;         // Die Ausrichtung der Tabelle
+    SvxAdjust eTableAdjust;         // Alignment of table.
 
-    BOOL bColsOption : 1;           // Tabelle besitzt eine COLS-Option
-    BOOL bColTags : 1;              // Tabelle besitzt COL/COLGRP-Tags
-    BOOL bPrcWidthOption : 1;       // Breite ist eine %-Angabe
-    BOOL bUseRelWidth : 1;          // SwTable bekommt relative Breite
+    sal_Bool bColsOption : 1;           // Table has a COLS-option.
+    sal_Bool bColTags : 1;              // Tabelle has COL/COLGRP-tags.
+    sal_Bool bPrcWidthOption : 1;       // Width is given in percent.
+    sal_Bool bUseRelWidth : 1;          // SwTable gets relative width.
 
-    BOOL bMustResize : 1;           // Tabelle muss in der Breite ang. werden
-    BOOL bExportable : 1;           // Layout kann zum Export genutzt werden
-    BOOL bBordersChanged : 1;       // Umrandung wurde geaendert
-    BOOL bMayBeInFlyFrame : 1;      // Die Tabelle koennte im Rahmen sein
+    sal_Bool bMustResize : 1;           // Table width must be defined.
+    sal_Bool bExportable : 1;           // Layout may be used for export.
+    sal_Bool bBordersChanged : 1;       // Borders have been changed.
+    sal_Bool bMayBeInFlyFrame : 1;      // Table could be within frame.
 
-    BOOL bDelayedResizeRecalc : 1;  // Param fuer's verzoegerte Resize
-    BOOL bMustNotResize : 1;        // Die Tabelle darf nicht reseized werden
-    BOOL bMustNotRecalc : 1;        // Tabelle darf nicht an Inhalt angepasst
-                                    // werden
+    sal_Bool bDelayedResizeRecalc : 1;  // Param for delayed Resize.
+    sal_Bool bMustNotResize : 1;        // Table may not be resized.
+    sal_Bool bMustNotRecalc : 1;        // Table may not be adapted to its contents.
 
-//  USHORT GetLeftBorderWidth( USHORT nCol ) const;
-//  USHORT GetRightBorderWidth( USHORT nCol, USHORT nColSpan ) const;
-
-    void AddBorderWidth( ULONG &rMin, ULONG &rMax, ULONG& rAbsMin,
-                         USHORT nCol, USHORT nColSpan,
-                         BOOL bSwBorders=TRUE ) const;
-    void SetBoxWidth( SwTableBox *pBox, USHORT nCol, USHORT nColSpan ) const;
+    void AddBorderWidth( sal_uLong &rMin, sal_uLong &rMax, sal_uLong& rAbsMin,
+                         sal_uInt16 nCol, sal_uInt16 nColSpan,
+                         sal_Bool bSwBorders=sal_True ) const;
+    void SetBoxWidth( SwTableBox *pBox, sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
 
     const SwStartNode *GetAnyBoxStartNode() const;
     SwFrmFmt *FindFlyFrmFmt() const;
@@ -264,121 +255,115 @@ class SwHTMLTableLayout
 
     void ClearPass1Info() { nMin = nMax = 0; }
 
-    void _Resize( USHORT nAbsAvail, BOOL bRecalc=FALSE );
+    void _Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc=sal_False );
 
     DECL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void* );
 
-    static USHORT GetBrowseWidthByVisArea( const SwDoc& rDoc );
+    static sal_uInt16 GetBrowseWidthByVisArea( const SwDoc& rDoc );
 public:
 
     SwHTMLTableLayout( const SwTable *pSwTbl,
-                       USHORT nRows, USHORT nCols, BOOL bColsOpt, BOOL ColTgs,
-                       USHORT nWidth, BOOL bPrcWidth, USHORT nBorderOpt,
-                       USHORT nCellPad, USHORT nCellSp, SvxAdjust eAdjust,
-                       USHORT nLMargin, USHORT nRMargin, USHORT nBWidth,
-                       USHORT nLeftBWidth, USHORT nRightBWidth,
-                       USHORT nInhLeftBWidth, USHORT nInhRightBWidth );
+                       sal_uInt16 nRows, sal_uInt16 nCols, sal_Bool bColsOpt, sal_Bool ColTgs,
+                       sal_uInt16 nWidth, sal_Bool bPrcWidth, sal_uInt16 nBorderOpt,
+                       sal_uInt16 nCellPad, sal_uInt16 nCellSp, SvxAdjust eAdjust,
+                       sal_uInt16 nLMargin, sal_uInt16 nRMargin, sal_uInt16 nBWidth,
+                       sal_uInt16 nLeftBWidth, sal_uInt16 nRightBWidth,
+                       sal_uInt16 nInhLeftBWidth, sal_uInt16 nInhRightBWidth );
 
     ~SwHTMLTableLayout();
 
-    USHORT GetLeftCellSpace( USHORT nCol, USHORT nColSpan,
-                             BOOL bSwBorders=TRUE ) const;
-    USHORT GetRightCellSpace( USHORT nCol, USHORT nColSpan,
-                              BOOL bSwBorders=TRUE ) const;
-    inline USHORT GetInhCellSpace( USHORT nCol, USHORT nColSpan ) const;
+    sal_uInt16 GetLeftCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan,
+                             sal_Bool bSwBorders=sal_True ) const;
+    sal_uInt16 GetRightCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan,
+                              sal_Bool bSwBorders=sal_True ) const;
+    inline sal_uInt16 GetInhCellSpace( sal_uInt16 nCol, sal_uInt16 nColSpan ) const;
 
-    inline void SetInhBorderWidths( USHORT nLeft, USHORT nRight );
+    inline void SetInhBorderWidths( sal_uInt16 nLeft, sal_uInt16 nRight );
 
 
-    void GetAvail( USHORT nCol, USHORT nColSpan, USHORT& rAbsAvail,
-                   USHORT& rRelAvail ) const;
+    void GetAvail( sal_uInt16 nCol, sal_uInt16 nColSpan, sal_uInt16& rAbsAvail,
+                   sal_uInt16& rRelAvail ) const;
 
     void AutoLayoutPass1();
-    void AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
-                          USHORT nAbsLeftSpace, USHORT nAbsRightSpace,
-                          USHORT nParentInhSpace );
-    void SetWidths( BOOL bCallPass2=FALSE, USHORT nAbsAvail=0,
-                    USHORT nRelAvail=0, USHORT nAbsLeftSpace=0,
-                    USHORT nAbsRightSpace=0,
-                    USHORT nParentInhSpace=0 );
+    void AutoLayoutPass2( sal_uInt16 nAbsAvail, sal_uInt16 nRelAvail,
+                          sal_uInt16 nAbsLeftSpace, sal_uInt16 nAbsRightSpace,
+                          sal_uInt16 nParentInhSpace );
+    void SetWidths( sal_Bool bCallPass2=sal_False, sal_uInt16 nAbsAvail=0,
+                    sal_uInt16 nRelAvail=0, sal_uInt16 nAbsLeftSpace=0,
+                    sal_uInt16 nAbsRightSpace=0,
+                    sal_uInt16 nParentInhSpace=0 );
 
-    inline SwHTMLTableLayoutColumn *GetColumn( USHORT nCol ) const;
-    inline void SetColumn( SwHTMLTableLayoutColumn *pCol, USHORT nCol );
+    inline SwHTMLTableLayoutColumn *GetColumn( sal_uInt16 nCol ) const;
+    inline void SetColumn( SwHTMLTableLayoutColumn *pCol, sal_uInt16 nCol );
 
-    inline SwHTMLTableLayoutCell *GetCell( USHORT nRow, USHORT nCol ) const;
-    inline void SetCell( SwHTMLTableLayoutCell *pCell, USHORT nRow, USHORT nCol );
+    inline SwHTMLTableLayoutCell *GetCell( sal_uInt16 nRow, sal_uInt16 nCol ) const;
+    inline void SetCell( SwHTMLTableLayoutCell *pCell, sal_uInt16 nRow, sal_uInt16 nCol );
 
     void SetLeftFillerBox( SwTableBox *pBox ) { pLeftFillerBox = pBox; }
     void SetRightFillerBox( SwTableBox *pBox ) { pRightFillerBox = pBox; }
 
-    ULONG GetMin() const { return nMin; }
-    ULONG GetMax() const { return nMax; }
-    USHORT GetRelLeftFill() const { return nRelLeftFill; }
-    USHORT GetRelRightFill() const { return nRelRightFill; }
+    sal_uLong GetMin() const { return nMin; }
+    sal_uLong GetMax() const { return nMax; }
+    sal_uInt16 GetRelLeftFill() const { return nRelLeftFill; }
+    sal_uInt16 GetRelRightFill() const { return nRelRightFill; }
 
     inline long GetBrowseWidthMin() const;
 
-    BOOL HasColsOption() const { return bColsOption; }
-    BOOL HasColTags() const { return bColTags; }
+    sal_Bool HasColsOption() const { return bColsOption; }
+    sal_Bool HasColTags() const { return bColTags; }
 
-    BOOL IsTopTable() const  { return pSwTable != 0; }
+    sal_Bool IsTopTable() const  { return pSwTable != 0; }
 
-    void SetMustResize( BOOL bSet ) { bMustResize = bSet; }
-    void SetMustNotResize( BOOL bSet ) { bMustNotResize = bSet; }
-    void SetMustNotRecalc( BOOL bSet ) { bMustNotRecalc = bSet; }
+    void SetMustResize( sal_Bool bSet ) { bMustResize = bSet; }
+    void SetMustNotResize( sal_Bool bSet ) { bMustNotResize = bSet; }
+    void SetMustNotRecalc( sal_Bool bSet ) { bMustNotRecalc = bSet; }
 
-    // Neueberechnung der Tabellenbreiten fuer die uebergebene verfuegbare
-    // Breite.
-    // - Wenn bRecalc gesetzt ist, werden auch der Inhalt der Boxen
-    //   zur Berechnung herangezogen.
-    //   neu berechnet.
-    // - Wenn bForce gesetzt ist, wird die Tabelle auch neu berechnet, wenn
-    //   dies mit SetMustNotResize unterdrueckt werden soll.
-    // - Wenn nDelay>0 wird die Berechnung entsprechend verzoegert.
-    //   Innerhalb der Verzeoegerung auftretende Resize-Aufrufe werden
-    //   ignoriert, die Verzeogerung wird aber ggf. uebernommen.
-    // - Wenn nDelay==HTMLTABLE_RESIZE_NOW ist, wird sofort Resized und
-    //   eventuell noch asstehende Resize-Aufrufe werden nicht mehr
-    //   ausgefuehrt.
-    // - Der Rueckgabewert gibt an, ob sich die Tabelle geaendert hat.
-    BOOL Resize( USHORT nAbsAvail, BOOL bRecalc=FALSE, BOOL bForce=FALSE,
-                 ULONG nDelay=0 );
+    // Recalculation of table widths for available width that has been passed.
+    // - If bRecalc is set, contents of boxes are included into calculation.
+    // - If bForce is set, table will be recalculated even if this was
+    //   disallowed by SetMustNotResize.
+    // - If nDelay > 0 the calculation is delayed accordingly. Resizing calls
+    //   occuring during delay-time are ignored, but the delay may be counted
+    //   under certain circumstances.
+    // - If nDelay == HTMLTABLE_RESIZE_NOW, resize immediately and do not
+    //   consider any resize-calls that might possibly be in order.
+    // - The return value indicates whether the table has been changed.
+    sal_Bool Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc=sal_False, sal_Bool bForce=sal_False,
+                 sal_uLong nDelay=0 );
 
-    void BordersChanged( USHORT nAbsAvail, BOOL bRecalc=FALSE );
+    void BordersChanged( sal_uInt16 nAbsAvail, sal_Bool bRecalc=sal_False );
 
-    // Ermitteln der verfuegbaren Breite. Das geht nur, wenn ein Layout
-    // oder eine ViewShell vorhanden ist. Sonst wird 0 zurueckgegeben.
-    // (Wird vom HTML-Filter benoetigt, da der nicht an das Layout kommt.)
-    static USHORT GetBrowseWidth( const SwDoc& rDoc );
+    // Calculate available width. This works only if a layout or a
+    // ViewShell exists. Otherwise returns 0.
+    // This is needed by HTML-filter because it doesn't have access to the layout.)
+    static sal_uInt16 GetBrowseWidth( const SwDoc& rDoc );
 
-    // Ermitteln der verfuegbaren Breite uber den Tabellen-Frame
-    USHORT GetBrowseWidthByTabFrm( const SwTabFrm& rTabFrm ) const;
+    // Calculates available width by table-frame.
+    sal_uInt16 GetBrowseWidthByTabFrm( const SwTabFrm& rTabFrm ) const;
 
-    // Ermitteln der verfuegbaren Breite uber den Tabellen-Frame oder
-    // das statische GetBrowseWidth, wenn kein Layout existiert.
-    USHORT GetBrowseWidthByTable( const SwDoc& rDoc ) const;
+    // Calculates available width by the table-frame or
+    // static GetBrowseWidth if no layout exists.
+    sal_uInt16 GetBrowseWidthByTable( const SwDoc& rDoc ) const;
 
-    // Fuer Export
-    USHORT GetWidthOption() const { return nWidthOption; }
-    BOOL   HasPrcWidthOption() const { return bPrcWidthOption; }
+    // For Export.
+    sal_uInt16 GetWidthOption() const { return nWidthOption; }
+    sal_Bool   HasPrcWidthOption() const { return bPrcWidthOption; }
 
-    USHORT GetCellPadding() const { return nCellPadding; }
-    USHORT GetCellSpacing() const { return nCellSpacing; }
-    USHORT GetBorder() const { return nBorder; }
+    sal_uInt16 GetCellPadding() const { return nCellPadding; }
+    sal_uInt16 GetCellSpacing() const { return nCellSpacing; }
+    sal_uInt16 GetBorder() const { return nBorder; }
 
-    USHORT GetRowCount() const { return nRows; }
-    USHORT GetColCount() const { return nCols; }
+    sal_uInt16 GetRowCount() const { return nRows; }
+    sal_uInt16 GetColCount() const { return nCols; }
 
-    void SetExportable( BOOL bSet ) { bExportable = bSet; }
-    BOOL IsExportable() const { return bExportable; }
+    void SetExportable( sal_Bool bSet ) { bExportable = bSet; }
+    sal_Bool IsExportable() const { return bExportable; }
 
-    BOOL HaveBordersChanged() const { return bBordersChanged; }
+    sal_Bool HaveBordersChanged() const { return bBordersChanged; }
 
-    void SetMayBeInFlyFrame( BOOL bSet ) { bMayBeInFlyFrame = bSet; }
-    BOOL MayBeInFlyFrame() const { return bMayBeInFlyFrame; }
+    void SetMayBeInFlyFrame( sal_Bool bSet ) { bMayBeInFlyFrame = bSet; }
+    sal_Bool MayBeInFlyFrame() const { return bMayBeInFlyFrame; }
 };
-
-/*  */
 
 inline void SwHTMLTableLayoutCell::SetProtected()
 {
@@ -388,10 +373,8 @@ inline void SwHTMLTableLayoutCell::SetProtected()
     pContents = 0;
 }
 
-/*  */
-
-inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( ULONG nCMin,
-    ULONG nCMax,    ULONG nAbsMin )
+inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( sal_uLong nCMin,
+    sal_uLong nCMax,    sal_uLong nAbsMin )
 {
     if( nCMin > nMinNoAlign )
         nMinNoAlign = nCMin;
@@ -401,19 +384,19 @@ inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( ULONG nCMin,
         nAbsMinNoAlign = nAbsMin;
 }
 
-inline void SwHTMLTableLayoutColumn::ClearPass1Info( BOOL bWidthOpt )
+inline void SwHTMLTableLayoutColumn::ClearPass1Info( sal_Bool bWidthOpt )
 {
     nMinNoAlign = nMaxNoAlign = nAbsMinNoAlign = MINLAY;
     nMin = nMax = 0;
     if( bWidthOpt )
     {
         nWidthOption = 0;
-        bRelWidthOption = FALSE;
+        bRelWidthOption = sal_False;
     }
 }
 
 inline void SwHTMLTableLayoutColumn::MergeCellWidthOption(
-    USHORT nWidth, BOOL bRel )
+    sal_uInt16 nWidth, sal_Bool bRel )
 {
     if( !nWidthOption ||
         (bRel==bRelWidthOption && nWidthOption < nWidth) )
@@ -423,33 +406,31 @@ inline void SwHTMLTableLayoutColumn::MergeCellWidthOption(
     }
 }
 
-inline void SwHTMLTableLayoutColumn::SetMinMax( ULONG nMn, ULONG nMx )
+inline void SwHTMLTableLayoutColumn::SetMinMax( sal_uLong nMn, sal_uLong nMx )
 {
     nMin = nMn;
     nMax = nMx;
 }
 
-/*  */
-
-inline USHORT SwHTMLTableLayout::GetInhCellSpace( USHORT nCol,
-                                                  USHORT nColSpan ) const
+inline sal_uInt16 SwHTMLTableLayout::GetInhCellSpace( sal_uInt16 nCol,
+                                                  sal_uInt16 nColSpan ) const
 {
-    USHORT nSpace = 0;
+    sal_uInt16 nSpace = 0;
     if( nCol==0 )
-        nSpace = nSpace + sal::static_int_cast< USHORT >(nInhAbsLeftSpace);
+        nSpace = nSpace + sal::static_int_cast< sal_uInt16 >(nInhAbsLeftSpace);
     if( nCol+nColSpan==nCols )
-        nSpace = nSpace + sal::static_int_cast< USHORT >(nInhAbsRightSpace);
+        nSpace = nSpace + sal::static_int_cast< sal_uInt16 >(nInhAbsRightSpace);
 
     return nSpace;
 }
 
-inline SwHTMLTableLayoutColumn *SwHTMLTableLayout::GetColumn( USHORT nCol ) const
+inline SwHTMLTableLayoutColumn *SwHTMLTableLayout::GetColumn( sal_uInt16 nCol ) const
 {
     return aColumns[nCol];
 }
 
 inline void SwHTMLTableLayoutColumn::SetWidthOption(
-    USHORT nWidth, BOOL bRelWidth, BOOL bTest )
+    sal_uInt16 nWidth, sal_Bool bRelWidth, sal_Bool bTest )
 {
     if( bTest && bRelWidthOption==bRelWidth )
     {
@@ -461,18 +442,18 @@ inline void SwHTMLTableLayoutColumn::SetWidthOption(
     bRelWidthOption = bRelWidth;
 }
 
-inline void SwHTMLTableLayout::SetColumn( SwHTMLTableLayoutColumn *pCol, USHORT nCol )
+inline void SwHTMLTableLayout::SetColumn( SwHTMLTableLayoutColumn *pCol, sal_uInt16 nCol )
 {
     aColumns[nCol] = pCol;
 }
 
-inline SwHTMLTableLayoutCell *SwHTMLTableLayout::GetCell( USHORT nRow, USHORT nCol ) const
+inline SwHTMLTableLayoutCell *SwHTMLTableLayout::GetCell( sal_uInt16 nRow, sal_uInt16 nCol ) const
 {
     return aCells[nRow*nCols+nCol];
 }
 
 inline void SwHTMLTableLayout::SetCell( SwHTMLTableLayoutCell *pCell,
-                               USHORT nRow, USHORT nCol )
+                               sal_uInt16 nRow, sal_uInt16 nCol )
 {
     aCells[nRow*nCols+nCol] = pCell;
 }
@@ -482,7 +463,7 @@ inline long SwHTMLTableLayout::GetBrowseWidthMin() const
     return (long)( (!nWidthOption || bPrcWidthOption) ? nMin : nRelTabWidth );
 }
 
-void SwHTMLTableLayout::SetInhBorderWidths( USHORT nLeft, USHORT nRight )
+void SwHTMLTableLayout::SetInhBorderWidths( sal_uInt16 nLeft, sal_uInt16 nRight )
 {
     nInhLeftBorderWidth = nLeft;
     nInhRightBorderWidth = nRight;

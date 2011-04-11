@@ -39,7 +39,7 @@
 //=============================================================================
 
 // DocMerge from xml: struct com::sun::star::drawing::HomogenMatrix
-/** specifies a homogenous matrix by three homogenous lines
+/** specifies a homogeneous matrix by three homogeneous lines
  */
 published struct HomogenMatrix
 {

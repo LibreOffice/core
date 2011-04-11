@@ -69,7 +69,6 @@ GenericInfo_Parser::GenericInfo_Parser()
         nCurLine(0),
         nLevel(0),
         bGoon(false),
-        // sCurComment,
         eErrorCode(ok),
         nErrorLine(0),
         pResult(0),
@@ -319,18 +318,8 @@ GenericInfo_Parser::WriteList( ostream & o_rFile )
         {
             PushLevel_Write();
 
-/*
-            WriteIndentation();
-            o_rFile.write("{",1);
-            o_rFile.write(C_sLineEnd, C_nLineEndLength);
-*/
             WriteList(o_rFile);
 
-/*
-            WriteIndentation();
-            o_rFile.write("}",1);
-            o_rFile.write(C_sLineEnd, C_nLineEndLength);
-*/
             PopLevel_Write();
         }
     }   // end for

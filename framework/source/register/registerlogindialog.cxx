@@ -49,10 +49,6 @@
 
         COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-        COMPONENTWRITEINFO  (   COMPONENTINFO( Service1 )
-                                 COMPONENTINFO( Service2 )
-                            )
-
         COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
                                  else
                                 IFFACTORIE( Service2 )
@@ -62,9 +58,6 @@
 #include <services/logindialog.hxx>
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
-
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::LoginDialog )
-                    )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::LoginDialog     )
                     )

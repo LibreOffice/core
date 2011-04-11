@@ -166,9 +166,6 @@ namespace xmloff
         */
         bool documentContainsXForms() const;
 
-        /// retrieves the property mapper for control styles
-        ::rtl::Reference< SvXMLExportPropertyMapper > getStylePropertyMapper();
-
         /** exports the controls number styles
         */
         void exportControlNumberStyles();

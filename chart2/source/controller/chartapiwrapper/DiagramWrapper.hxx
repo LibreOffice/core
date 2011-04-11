@@ -31,7 +31,13 @@
 #include "WrappedPropertySet.hxx"
 #include "ServiceMacros.hxx"
 #include "DiagramHelper.hxx"
-#include <cppuhelper/implbase12.hxx>
+
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
+#include "comphelper/implbase_var.hxx"
+#endif
+
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -42,6 +48,7 @@
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/chart2/XChartTypeManager.hpp>
 #include <com/sun/star/chart/XDiagram.hpp>
+#include <com/sun/star/chart/XAxisSupplier.hpp>
 #include <com/sun/star/chart/XAxisZSupplier.hpp>
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
 #include <com/sun/star/chart/XTwoAxisYSupplier.hpp>
@@ -57,15 +64,15 @@
 
 namespace chart
 {
-
 namespace wrapper
 {
 
 class Chart2ModelContact;
 
-class DiagramWrapper : public ::cppu::ImplInheritanceHelper12<
+class DiagramWrapper : public ::comphelper::ImplInheritanceHelper13<
                       WrappedPropertySet
                      , ::com::sun::star::chart::XDiagram
+                     , ::com::sun::star::chart::XAxisSupplier
                      , ::com::sun::star::chart::XAxisZSupplier
                      , ::com::sun::star::chart::XTwoAxisXSupplier   //  : XAxisXSupplier
                      , ::com::sun::star::chart::XTwoAxisYSupplier   //  : XAxisYSupplier
@@ -73,8 +80,7 @@ class DiagramWrapper : public ::cppu::ImplInheritanceHelper12<
                      , ::com::sun::star::chart::X3DDisplay
                      , ::com::sun::star::chart::X3DDefaultSetter
                      , ::com::sun::star::lang::XServiceInfo
-                        , ::com::sun::star::lang::XComponent
-//                      , ::com::sun::star::lang::XEventListener
+                     , ::com::sun::star::lang::XComponent
                      , ::com::sun::star::chart::XDiagramPositioning
                      , ::com::sun::star::chart2::XDiagramProvider
                      , ::com::sun::star::chart::XSecondAxisTitleSupplier
@@ -122,6 +128,14 @@ public:
 
     // ____ XShapeDescriptor (base of XShape) ____
     virtual ::rtl::OUString SAL_CALL getShapeType()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XAxisSupplier ____
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart::XAxis > SAL_CALL getAxis( sal_Int32 nDimensionIndex )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart::XAxis > SAL_CALL getSecondaryAxis( sal_Int32 nDimensionIndex )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XAxisZSupplier ____
@@ -208,12 +222,7 @@ public:
     virtual void SAL_CALL setDefaultRotation() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDefaultIllumination() throw (::com::sun::star::uno::RuntimeException);
 
-//     // ____ XEventListener ____
-//     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-//         throw (::com::sun::star::uno::RuntimeException);
-
     // ____ XDiagramPositioning ____
-
     virtual void SAL_CALL setAutomaticDiagramPositioning(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isAutomaticDiagramPositioning(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDiagramPositionExcludingAxes( const ::com::sun::star::awt::Rectangle& PositionRect ) throw (::com::sun::star::uno::RuntimeException);
@@ -245,72 +254,27 @@ private:
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape >
-                        m_xXAxisTitle;
+        ::com::sun::star::chart::XAxis >        m_xXAxis;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape >
-                        m_xYAxisTitle;
+        ::com::sun::star::chart::XAxis >        m_xYAxis;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape >
-                        m_xZAxisTitle;
+        ::com::sun::star::chart::XAxis >        m_xZAxis;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape >
-                        m_xSecondXAxisTitle;
+        ::com::sun::star::chart::XAxis >        m_xSecondXAxis;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::drawing::XShape >
-                        m_xSecondYAxisTitle;
+        ::com::sun::star::chart::XAxis >        m_xSecondYAxis;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xXAxis;
+        ::com::sun::star::beans::XPropertySet > m_xWall;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xYAxis;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xZAxis;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xSecondXAxis;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xSecondYAxis;
+        ::com::sun::star::beans::XPropertySet > m_xFloor;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xXMainGrid;
+        ::com::sun::star::beans::XPropertySet > m_xMinMaxLineWrapper;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xYMainGrid;
+        ::com::sun::star::beans::XPropertySet > m_xUpBarWrapper;
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xZMainGrid;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xXHelpGrid;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xYHelpGrid;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xZHelpGrid;
-
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xWall;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xFloor;
-
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xMinMaxLineWrapper;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xUpBarWrapper;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >
-                        m_xDownBarWrapper;
+        ::com::sun::star::beans::XPropertySet > m_xDownBarWrapper;
 };
 
 } //  namespace wrapper

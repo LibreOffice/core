@@ -79,18 +79,18 @@ private:
     TokenId             nSubToken;  // ~
     TokenId             n0Token;    // '0.0';
     // ---------------------------------------------------------------
-    static FUNC_TYPE    IndexToType( BYTE );
-    static DefTokenId   IndexToToken( BYTE );
-    static FUNC_TYPE    IndexToTypeWK123( BYTE );
-    static DefTokenId   IndexToTokenWK123( BYTE );
-    void                DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtName );
-    void                LotusRelToScRel( UINT16 nCol, UINT16 nRow,
+    static FUNC_TYPE    IndexToType( sal_uInt8 );
+    static DefTokenId   IndexToToken( sal_uInt8 );
+    static FUNC_TYPE    IndexToTypeWK123( sal_uInt8 );
+    static DefTokenId   IndexToTokenWK123( sal_uInt8 );
+    void                DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtName );
+    void                LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow,
                             ScSingleRefData& rSRD );
-    BOOL                bWK3;       // alternative Codeumsetzung statt fuer < WK1
-        BOOL                            bWK123;         // alternative for 123
+    sal_Bool                bWK3;       // alternative Codeumsetzung statt fuer < WK1
+        sal_Bool                            bWK123;         // alternative for 123
     // -------------------------------------------------------------------
-    void                ReadSRD( ScSingleRefData& rSRD, BYTE nFlags );
-    inline void         ReadCRD( ScComplexRefData& rCRD, BYTE nFlags );
+    void                ReadSRD( ScSingleRefData& rSRD, sal_uInt8 nFlags );
+    inline void         ReadCRD( ScComplexRefData& rCRD, sal_uInt8 nFlags );
     void                IncToken( TokenId &rParam );
                         // ACHTUNG: hier wird die aktuelle Token-Kette im Pool
                         // mit '(<rParam>)+1' fortgeschrieben und mit
@@ -100,8 +100,8 @@ private:
     void                NegToken( TokenId& rParam );
                         // ACHTUNG: wie ~, nur wird '-(<rParam>)' gebildet
 public:
-                        LotusToSc( SvStream& aStr, CharSet eSrc, BOOL b );
-    virtual ConvErr     Convert( const ScTokenArray*& rpErg, INT32& nRest,
+                        LotusToSc( SvStream& aStr, CharSet eSrc, sal_Bool b );
+    virtual ConvErr     Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula );
 
     void                Reset( const ScAddress& rEingPos );
@@ -112,7 +112,7 @@ private:
 };
 
 
-inline void LotusToSc::ReadCRD( ScComplexRefData& rCRD, BYTE nRelBit )
+inline void LotusToSc::ReadCRD( ScComplexRefData& rCRD, sal_uInt8 nRelBit )
 {
     // erster Teil
     ReadSRD( rCRD.Ref1, nRelBit );
@@ -124,7 +124,7 @@ inline void LotusToSc::ReadCRD( ScComplexRefData& rCRD, BYTE nRelBit )
 
 inline void LotusToSc::SetWK3( void )
 {
-        bWK3 = TRUE;
+        bWK3 = sal_True;
 }
 
 

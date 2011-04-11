@@ -34,8 +34,6 @@
     #include <sal/types.h>
 #endif
 
-//     #include <rtl/tres.h>
-
 #include <testshl/tresstatewrapper.hxx>
 
 #ifndef _RTL_STRING_HXX_
@@ -51,8 +49,7 @@
 #endif
 #include <rtl/ustring.h>
 
-using namespace rtl;
-
+using ::rtl::OString;
 //------------------------------------------------------------------------
 // test classes
 //------------------------------------------------------------------------

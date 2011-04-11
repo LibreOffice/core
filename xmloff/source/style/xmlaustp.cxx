@@ -35,10 +35,10 @@
 #include "impastpl.hxx"
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "XMLTextListAutoStylePool.hxx"
+#include "xmloff/XMLTextListAutoStylePool.hxx"
 
 #include <xmloff/PageMasterStyleMap.hxx>
 #include "PageMasterExportPropMapper.hxx"
@@ -121,8 +121,8 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 
                         if (bFoundControlShapeDataStyle)
                         {
-                            DBG_ERROR("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the ControlShapeDataStyle context id!");
-                            // already added the attribute for the first occurence
+                            OSL_FAIL("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the ControlShapeDataStyle context id!");
+                            // already added the attribute for the first occurrence
                             break;
                         }
 
@@ -136,8 +136,8 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
                     {
                         if (bFoundNumberingRulesName)
                         {
-                            DBG_ERROR("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the numbering rules name context id!");
-                            // already added the attribute for the first occurence
+                            OSL_FAIL("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the numbering rules name context id!");
+                            // already added the attribute for the first occurrence
                             break;
                         }
 
@@ -160,7 +160,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 
     if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
     {
-        for( vector< XMLPropertyState >::const_iterator pProp = rProperties.begin(); pProp != rProperties.end(); pProp++ )
+        for( vector< XMLPropertyState >::const_iterator pProp = rProperties.begin(); pProp != rProperties.end(); ++pProp )
         {
             if (pProp->mnIndex > -1)
             {
@@ -279,7 +279,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
 
 SvXMLAutoStylePoolP::SvXMLAutoStylePoolP()
 {
-    DBG_ERROR("This constuctor is obsoleted and should not be used!");
+    OSL_FAIL("This constuctor is obsoleted and should not be used!");
     pImpl = NULL;
 }
 

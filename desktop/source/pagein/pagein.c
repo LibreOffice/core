@@ -44,7 +44,7 @@ static int do_pagein (const char * filename, size_t * size)
 
     if ((result = file_image_pagein (&image)) != 0)
     {
-        fprintf (stderr, "file_image_pagein: %s\n", strerror(result));
+        fprintf (stderr, "file_image_pagein %s: %s\n", filename, strerror(result));
         goto cleanup_and_leave;
     }
 
@@ -58,8 +58,10 @@ cleanup_and_leave:
     return (result);
 }
 
+extern int pagein_execute (int argc, char **argv);
+
 /* main */
-int  main (int argc, char **argv)
+int pagein_execute (int argc, char **argv)
 {
     int    i, v = 0;
     size_t nfiles = 0, nbytes = 0;
@@ -92,7 +94,7 @@ int  main (int argc, char **argv)
                 case 'L':
                     /* search path */
                     if (chdir (&(argv[i][2])) == -1)
-                        fprintf (stderr, "chdir: %s\n", strerror(errno));
+                        fprintf (stderr, "chdir %s: %s\n", &(argv[i][2]), strerror(errno));
                     break;
                 default:
                     /* ignored */
@@ -103,13 +105,12 @@ int  main (int argc, char **argv)
             continue;
         }
 
-
         if ((argv[i][0] == '@') && ((fp = fopen (argv[i], "r")) == 0))
         {
             char path[1024];
             if ((fp = fopen (&(argv[i][1]), "r")) == 0)
             {
-                fprintf (stderr, "fopen: %s\n", strerror(errno));
+                fprintf (stderr, "fopen %s: %s\n", &(argv[i][1]), strerror(errno));
                 continue;
             }
             while (fgets (path, sizeof(path), fp) != 0)

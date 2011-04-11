@@ -78,7 +78,7 @@ published service AppletShape
 
     //-------------------------------------------------------------------------
 
-    /** This sequence contains paramaters that are passed to the applet
+    /** This sequence contains parameters that are passed to the applet
         when it is initialized.
     */
     [property] sequence< com::sun::star::beans::PropertyValue > AppletCommands;

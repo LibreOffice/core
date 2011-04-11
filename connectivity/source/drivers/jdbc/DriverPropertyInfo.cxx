@@ -32,10 +32,10 @@
 #include "java/lang/Boolean.hxx"
 #include "java/tools.hxx"
 #include "java/lang/String.hxx"
+
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -52,7 +52,7 @@ java_sql_DriverPropertyInfo::~java_sql_DriverPropertyInfo()
 // --------------------------------------------------------------------------------
 jclass java_sql_DriverPropertyInfo::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/sql/DriverPropertyInfo");
     return theClass;

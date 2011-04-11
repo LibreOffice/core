@@ -33,8 +33,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#include "tbxalign.hxx"
-#include "tbxdraw.hxx"
+#include "svx/tbxalign.hxx"
+#include "svx/tbxdraw.hxx"
 #include "tbxdraw.hrc"
 #include <tools/shl.hxx>
 #include <sfx2/imagemgr.hxx>
@@ -52,7 +52,7 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlAlign, SfxAllEnumItem);
 |*
 \************************************************************************/
 
-SvxTbxCtlAlign::SvxTbxCtlAlign( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxTbxCtlAlign::SvxTbxCtlAlign( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
     ,   m_aSubTbName( RTL_CONSTASCII_USTRINGPARAM( "alignmentbar" ))
     ,   m_aSubTbResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/alignmentbar" ))
@@ -118,7 +118,7 @@ void SAL_CALL SvxTbxCtlAlign::functionSelected( const ::rtl::OUString& aCommand 
         if ( aCommand.getLength() > 0 )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-            Image aImage = GetImage( xFrame, aCommand, hasBigImages(), isHighContrast() );
+            Image aImage = GetImage( xFrame, aCommand, hasBigImages() );
             if ( !!aImage )
                 GetToolBox().SetItemImage( GetId(), aImage );
         }
@@ -133,7 +133,7 @@ void SAL_CALL SvxTbxCtlAlign::updateImage() throw (::com::sun::star::uno::Runtim
     if ( m_aCommand.getLength() > 0 )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
+        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );
         if ( !!aImage )
             GetToolBox().SetItemImage( GetId(), aImage );
     }

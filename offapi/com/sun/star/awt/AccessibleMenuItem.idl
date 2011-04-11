@@ -69,7 +69,7 @@ published service AccessibleMenuItem
         <li>Description: The description of a menu item is its localized
             help text.</li>
         <li>Children: There are no children.</li>
-        <li>Parent: The parent of a menu item is a menu bar, a popup menu or
+        <li>Parent: The parent of a menu item is a menu bar, a pop-up menu or
             a menu, whose accessible context supports the services
             <type>AccessibleMenuBar</type>, <type>AccessiblePopupMenu</type>
             or <type>AccessibleMenu</type>.</li>

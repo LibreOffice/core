@@ -38,10 +38,10 @@
 #include "xformsapi.hxx"
 
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -79,7 +79,7 @@ static SvXMLTokenMapEntry aChildren[] =
 
 
 XFormsModelContext::XFormsModelContext( SvXMLImport& rImport,
-                                        USHORT nPrefix,
+                                        sal_uInt16 nPrefix,
                                         const OUString& rLocalName ) :
     TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
     mxModel( lcl_createXFormsModel() )
@@ -110,7 +110,7 @@ void XFormsModelContext::HandleAttribute(
         GetImport().SetError( XMLERROR_XFORMS_NO_SCHEMA_SUPPORT );
         break;
     default:
-        DBG_ERROR( "this should not happen" );
+        OSL_FAIL( "this should not happen" );
         break;
     }
 }
@@ -145,7 +145,7 @@ SvXMLImportContext* XFormsModelContext::HandleChild(
                 ->getDataTypeRepository() );
         break;
     default:
-        DBG_ERROR( "Boooo!" );
+        OSL_FAIL( "Boooo!" );
         break;
     }
 

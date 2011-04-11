@@ -24,12 +24,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "testtool.hrc"
+#include "basic/testtool.hrc"
 
 
-///////////////////////////////
 // Strings
-///////////////////////////////
 String S_INVALID_KEYCODE
 {
     Text[ en-US ] = "Is an invalid KeyCode!";

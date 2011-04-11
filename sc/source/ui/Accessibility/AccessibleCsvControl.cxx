@@ -489,13 +489,6 @@ Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes(
     ensureValidIndexWithEnd( nIndex );
     Sequence< PropertyValue > aSeq;
     lcl_FillFontAttributes( aSeq, implGetRuler().GetFont() );
-//! TODO split attribute: waiting for #102221#
-//    if( implHasSplit( nIndex ) )
-//    {
-//        sal_Int32 nIndex = lcl_ExpandSequence( aSeq, 1 );
-//        aSeq[ nIndex ].Name = CREATE_OUSTRING( "..." );
-//        aSeq[ nIndex ].Value <<= ...;
-//    }
     return aSeq;
 }
 
@@ -508,7 +501,7 @@ ScAccessibleCsvRuler::AwtRectangle SAL_CALL ScAccessibleCsvRuler::getCharacterBo
     ScCsvRuler& rRuler = implGetRuler();
     Point aPos( rRuler.GetX( lcl_GetRulerPos( nIndex ) ) - rRuler.GetCharWidth() / 2, 0 );
     AwtRectangle aRect( aPos.X(), aPos.Y(), rRuler.GetCharWidth(), rRuler.GetSizePixel().Height() );
-    // #107054# do not return rectangle out of window
+    // do not return rectangle out of window
     sal_Int32 nWidth = rRuler.GetOutputSizePixel().Width();
     if( aRect.X >= nWidth )
         throw IndexOutOfBoundsException();
@@ -530,7 +523,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getIndexAtPoint( const AwtPoint& rPoint
     SolarMutexGuard aGuard;
     ensureAlive();
     ScCsvRuler& rRuler = implGetRuler();
-    // #107054# use object's coordinate system, convert to API position
+    // use object's coordinate system, convert to API position
     return lcl_GetApiPos( ::std::min( ::std::max( rRuler.GetPosFromX( rPoint.X ), static_cast<sal_Int32>(0) ), rRuler.GetPosCount() ) );
 }
 
@@ -556,7 +549,7 @@ sal_Bool SAL_CALL ScAccessibleCsvRuler::setSelection( sal_Int32 /* nStartIndex *
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL ScAccessibleCsvRuler::getText() throw( RuntimeException )
@@ -751,7 +744,7 @@ sal_Bool SAL_CALL ScAccessibleCsvRuler::copyText( sal_Int32 /* nStartIndex */, s
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
-    return sal_False;
+    return false;
 }
 
 
@@ -1119,7 +1112,7 @@ sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleRowSelected( sal_Int32 /* nRo
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleColumnSelected( sal_Int32 nColumn )

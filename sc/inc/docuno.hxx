@@ -106,10 +106,11 @@ private:
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawMarkerTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawDashTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xChartDataProv;
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xObjProvider;
 
     ::cppu::OInterfaceContainerHelper maChangesListeners;
 
-    BOOL                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
+    sal_Bool                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
                                                 const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rOptions,
                                                 ScMarkData& rMark, ScPrintSelectionStatus& rStatus, String& rPagesStr ) const;
     com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> GetFormatter();
@@ -135,6 +136,8 @@ public:
     void                    AfterXMLLoading(sal_Bool bRet);
     ScSheetSaveData*        GetSheetSaveData();
 
+    void                    RepaintRange( const ScRange& rRange );
+
     bool                    HasChangesListeners() const;
 
     void                    NotifyChanges( const ::rtl::OUString& rOperation, const ScRangeList& rRanges,
@@ -146,8 +149,6 @@ public:
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   acquire() throw();
     virtual void SAL_CALL   release() throw();
-
-//? virtual UString         getClassName(void);
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -211,8 +212,6 @@ public:
                             //  XDrawPagesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPages > SAL_CALL
                             getDrawPages() throw(::com::sun::star::uno::RuntimeException);
-
-    //! XPrintable??
 
                             //  XGoalSeek
     virtual ::com::sun::star::sheet::GoalResult SAL_CALL seekGoal(
@@ -333,7 +332,7 @@ private:
     ScDocShell*             pDocShell;
 
 ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
-                            GetObjectByIndex_Impl(INT32 nIndex) const;
+                            GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
                             ScDrawPagesObj(ScDocShell* pDocSh);
@@ -744,7 +743,7 @@ class ScAnnotationsObj : public cppu::WeakImplHelper3<
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB                   nTab;           // Collection haengt am Sheet
+    SCTAB                   nTab;           // Collection belongs to the sheet
 
     bool                    GetAddressByIndex_Impl( sal_Int32 nIndex, ScAddress& rPos ) const;
     ScAnnotationObj*        GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
@@ -799,7 +798,7 @@ private:
     ScDocShell*             pDocShell;
     SCTAB                   nTab;
 
-    BOOL                    GetScenarioIndex_Impl( const ::rtl::OUString& rName, SCTAB& rIndex );
+    sal_Bool                    GetScenarioIndex_Impl( const ::rtl::OUString& rName, SCTAB& rIndex );
     ScTableSheetObj*        GetObjectByIndex_Impl(sal_Int32 nIndex);
     ScTableSheetObj*        GetObjectByName_Impl(const ::rtl::OUString& aName);
 

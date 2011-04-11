@@ -45,7 +45,7 @@
 //==================================================================
 
 ScSelEntryDlg::ScSelEntryDlg(      Window*  pParent,
-                                   USHORT   nResId,
+                                   sal_uInt16   nResId,
                              const String&  aTitle,
                              const String&  aLbTitle,
                                    List&    aEntryList ) :
@@ -94,7 +94,7 @@ IMPL_LINK_INLINE_END( ScSelEntryDlg, DblClkHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScSelEntryDlg::~ScSelEntryDlg()
+ScSelEntryDlg::~ScSelEntryDlg()
 {
 }
 

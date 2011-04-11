@@ -65,7 +65,6 @@
 #include <cmdid.h>
 #include <helpid.h>
 #include <docvw.hrc>
-#include <docvw.hrc>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -77,27 +76,36 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
+void GetPreferedExtension( String &rExt, const Graphic &rGrf )
+{
+    // then propose the "best" filter using the native-info, if applicable
+    const sal_Char* pExt = "png";
+    switch( const_cast<Graphic&>(rGrf).GetLink().GetType() )
+    {
+        case GFX_LINK_TYPE_NATIVE_GIF:      pExt = "gif"; break;
+        case GFX_LINK_TYPE_NATIVE_TIF:      pExt = "tif"; break;
+        case GFX_LINK_TYPE_NATIVE_WMF:      pExt = "wmf"; break;
+        case GFX_LINK_TYPE_NATIVE_MET:      pExt = "met"; break;
+        case GFX_LINK_TYPE_NATIVE_PCT:      pExt = "pct"; break;
+        case GFX_LINK_TYPE_NATIVE_JPG:      pExt = "jpg"; break;
+        default:; //prevent warning
+    }
+    rExt.AssignAscii( pExt );
+}
+
 SwReadOnlyPopup::~SwReadOnlyPopup()
 {
-    String *pDel = (String*)aThemeList.First();
-    while ( pDel )
-    {
-        delete pDel;
-        pDel = (String*)aThemeList.Next();
-    }
     delete pImageMap;
     delete pTargetURL;
 }
 
-
-
-void SwReadOnlyPopup::Check( USHORT nMID, USHORT nSID, SfxDispatcher &rDis )
+void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rDis )
 {
     SfxPoolItem *_pItem = 0;
     SfxItemState eState = rDis.GetBindings()->QueryState( nSID, _pItem );
     if (eState >= SFX_ITEM_AVAILABLE)
     {
-        EnableItem( nMID, TRUE );
+        EnableItem( nMID, sal_True );
         if (_pItem)
         {
             CheckItem ( nMID, !_pItem->ISA(SfxVoidItem) &&
@@ -105,11 +113,11 @@ void SwReadOnlyPopup::Check( USHORT nMID, USHORT nSID, SfxDispatcher &rDis )
                             ((SfxBoolItem*)_pItem)->GetValue());
             //remove full screen entry when not in full screen mode
             if(SID_WIN_FULLSCREEN == nSID && !IsItemChecked(SID_WIN_FULLSCREEN) )
-                EnableItem(nMID, FALSE);
+                EnableItem(nMID, sal_False);
         }
     }
     else
-        EnableItem( nMID, FALSE );
+        EnableItem( nMID, sal_False );
 
     delete _pItem;
 }
@@ -128,7 +136,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     if ( !sURL.Len() )
     {
         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_INETATTR );
-        if( rSh.GetContentAtPos( rDocPos, aCntntAtPos, FALSE))
+        if( rSh.GetContentAtPos( rDocPos, aCntntAtPos, sal_False))
         {
             SwFmtINetFmt &rIItem = *(SwFmtINetFmt*)aCntntAtPos.aFnd.pAttr;
             sURL = rIItem.GetValue();
@@ -137,12 +145,12 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         }
     }
 
-    BOOL bLink = FALSE;
+    sal_Bool bLink = sal_False;
     const Graphic *pGrf;
     if ( 0 == (pGrf = rSh.GetGrfAtPos( rDocPos, sGrfName, bLink )) )
     {
-        EnableItem( MN_READONLY_SAVEGRAPHIC, FALSE );
-        EnableItem( MN_READONLY_COPYGRAPHIC, FALSE );
+        EnableItem( MN_READONLY_SAVEGRAPHIC, sal_False );
+        EnableItem( MN_READONLY_COPYGRAPHIC, sal_False );
     }
     else
     {
@@ -150,7 +158,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         const SwFrmFmt* pGrfFmt = rSh.GetFmtFromObj( rDocPos );
         const SfxPoolItem* pURLItem;
         if( pGrfFmt && SFX_ITEM_SET == pGrfFmt->GetItemState(
-            RES_URL, TRUE, &pURLItem ))
+            RES_URL, sal_True, &pURLItem ))
         {
             const SwFmtURL& rURL = *(SwFmtURL*)pURLItem;
             if( rURL.GetMap() )
@@ -163,47 +171,48 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         }
     }
 
-    BOOL bEnableGraphicToGallery;
-    if ( TRUE == (bEnableGraphicToGallery = bLink) )
+    bool bEnableGraphicToGallery = bLink;
+    if ( bEnableGraphicToGallery )
     {
-        GalleryExplorer::FillThemeList( aThemeList );
-        if ( aThemeList.Count() )
+        if (GalleryExplorer::FillThemeList( aThemeList ))
         {
             PopupMenu *pMenu = GetPopupMenu(MN_READONLY_GRAPHICTOGALLERY);
             pMenu->CheckItem( MN_READONLY_TOGALLERYLINK,  bGrfToGalleryAsLnk );
             pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
-            for ( USHORT i=0; i < aThemeList.Count(); ++i )
-                pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3,
-                                   *(String*)aThemeList.GetObject( i ) );
+
+            for ( sal_uInt16 i=0; i < aThemeList.size(); ++i )
+                pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3, aThemeList[ i ] );
         }
         else
-            bEnableGraphicToGallery = FALSE;
+            bEnableGraphicToGallery = false;
     }
+
     EnableItem( MN_READONLY_GRAPHICTOGALLERY, bEnableGraphicToGallery );
 
     SfxViewFrame * pVFrame = rV.GetViewFrame();
     SfxDispatcher &rDis = *pVFrame->GetDispatcher();
     const SwPageDesc &rDesc = rSh.GetPageDesc( rSh.GetCurPageDesc() );
     pItem = &rDesc.GetMaster().GetBackground();
-    BOOL bEnableBackGallery = FALSE,
-         bEnableBack = FALSE;
+    sal_Bool bEnableBackGallery = sal_False,
+         bEnableBack = sal_False;
 
     if ( GPOS_NONE != pItem->GetGraphicPos() )
     {
-        bEnableBack = TRUE;
+        bEnableBack = sal_True;
         if ( pItem->GetGraphicLink() )
         {
-            if ( !aThemeList.Count() )
+            if ( aThemeList.empty() )
                 GalleryExplorer::FillThemeList( aThemeList );
-            if ( aThemeList.Count() )
+
+            if ( !aThemeList.empty() )
             {
                 PopupMenu *pMenu = GetPopupMenu(MN_READONLY_BACKGROUNDTOGALLERY);
                 pMenu->CheckItem( MN_READONLY_TOGALLERYLINK,  bGrfToGalleryAsLnk );
                 pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
-                bEnableBackGallery = TRUE;
-                for ( USHORT i=0; i < aThemeList.Count(); ++i )
-                    pMenu->InsertItem( MN_READONLY_BACKGROUNDTOGALLERY+i + 3,
-                                       *(String*)aThemeList.GetObject( i ) );
+                bEnableBackGallery = sal_True;
+
+                for ( sal_uInt16 i=0; i < aThemeList.size(); ++i )
+                    pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3, aThemeList[ i ] );
             }
         }
     }
@@ -213,9 +222,9 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     if ( !rSh.GetViewOptions()->IsGraphic() )
         CheckItem( MN_READONLY_GRAPHICOFF );
     else
-        EnableItem( MN_READONLY_LOADGRAPHIC, FALSE );
+        EnableItem( MN_READONLY_LOADGRAPHIC, sal_False );
 
-    BOOL bReloadFrame = 0 != rSh.GetView().GetViewFrame()->GetFrame().GetParentFrame();
+    sal_Bool bReloadFrame = 0 != rSh.GetView().GetViewFrame()->GetFrame().GetParentFrame();
     EnableItem( MN_READONLY_RELOAD_FRAME,
             bReloadFrame );
     EnableItem( MN_READONLY_RELOAD, !bReloadFrame);
@@ -236,7 +245,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     SfxItemState eState = pVFrame->GetBindings().QueryState( SID_COPY, pState );
     Check( MN_READONLY_COPY,            SID_COPY,           rDis );
     if(eState < SFX_ITEM_AVAILABLE)
-        EnableItem( MN_READONLY_COPY, FALSE );
+        EnableItem( MN_READONLY_COPY, sal_False );
 
     eState = pVFrame->GetBindings().QueryState( SID_EDITDOC, pState );
     if (
@@ -244,39 +253,39 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         (rSh.IsGlobalDoc() && rView.GetDocShell()->IsReadOnlyUI())
        )
     {
-        EnableItem( MN_READONLY_EDITDOC, FALSE );
+        EnableItem( MN_READONLY_EDITDOC, sal_False );
     }
 
     if ( !sURL.Len() )
     {
-        EnableItem( MN_READONLY_OPENURL, FALSE );
-        EnableItem( MN_READONLY_OPENURLNEW, FALSE );
-        EnableItem( MN_READONLY_COPYLINK, FALSE );
+        EnableItem( MN_READONLY_OPENURL, sal_False );
+        EnableItem( MN_READONLY_OPENURLNEW, sal_False );
+        EnableItem( MN_READONLY_COPYLINK, sal_False );
     }
     Check( SID_WIN_FULLSCREEN,         SID_WIN_FULLSCREEN,        rDis );
 
-    RemoveDisabledEntries( TRUE, TRUE );
+    RemoveDisabledEntries( sal_True, sal_True );
 }
 
 void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
 {
-    USHORT nId     = PopupMenu::Execute(
+    sal_uInt16 nId     = PopupMenu::Execute(
     pWin,
     rPixPos );
     Execute(pWin, nId);
 }
 
-/*-- 17.03.2004 13:06:18---------------------------------------------------
+/*-------------------------------------------------------------------------
     execute the resulting ID only - necessary to support XContextMenuInterception
   -----------------------------------------------------------------------*/
-void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
+void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     SfxDispatcher &rDis = *rView.GetViewFrame()->GetDispatcher();
     if ( nId >= MN_READONLY_GRAPHICTOGALLERY )
     {
         String sTmp;
-        USHORT nSaveId;
+        sal_uInt16 nSaveId;
         if ( nId >= MN_READONLY_BACKGROUNDTOGALLERY )
         {
             nId -= MN_READONLY_BACKGROUNDTOGALLERY+3;
@@ -293,17 +302,15 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
             sTmp = SaveGraphic( nSaveId );
 
         if ( sTmp.Len() )
-        {
-            String sThemeName( *(String*)aThemeList.GetObject( nId ));
-            GalleryExplorer::InsertURL( sThemeName, sTmp );
-        }
+            GalleryExplorer::InsertURL( aThemeList[nId], sTmp );
+
         return;
     }
 
     TransferDataContainer* pClipCntnr = 0;
 
-    USHORT nExecId = USHRT_MAX;
-    USHORT nFilter = USHRT_MAX;
+    sal_uInt16 nExecId = USHRT_MAX;
+    sal_uInt16 nFilter = USHRT_MAX;
     switch( nId )
     {
         case SID_WIN_FULLSCREEN :           nExecId = SID_WIN_FULLSCREEN; break;
@@ -344,9 +351,9 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
 
         case MN_READONLY_LOADGRAPHIC:
             {
-                BOOL bModified = rSh.IsModified();
+                sal_Bool bModified = rSh.IsModified();
                 SwViewOption aOpt( *rSh.GetViewOptions() );
-                aOpt.SetGraphic( TRUE );
+                aOpt.SetGraphic( sal_True );
                 rSh.ApplyViewOptions( aOpt );
                 if(!bModified)
                     rSh.ResetModified();
@@ -357,10 +364,10 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
         case MN_READONLY_PLUGINOFF:         nExecId = SID_PLUGINS_ACTIVE; break;
 #endif
         case MN_READONLY_TOGALLERYLINK:
-            SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk( TRUE );
+            SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk( sal_True );
             break;
         case MN_READONLY_TOGALLERYCOPY:
-            SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk( FALSE );
+            SW_MOD()->GetModuleConfig()->SetGrfToGalleryAsLnk( sal_False );
             break;
 
         default: //forward the id to the SfxBindings
@@ -378,29 +385,11 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
             pClipCntnr->CopyToClipboard( pWin );
     }
 }
-static void lcl_GetPreferedExtension( String &rExt, const Graphic &rGrf )
-{
-    // dann ggfs. ueber die native-Info der Grafik den "besten"
-    // Filter vorschlagen
-    const sal_Char* pExt = "png";
-    switch( const_cast<Graphic&>(rGrf).GetLink().GetType() )
-    {
-        case GFX_LINK_TYPE_NATIVE_GIF:      pExt = "gif"; break;
-        case GFX_LINK_TYPE_NATIVE_TIF:      pExt = "tif"; break;
-        case GFX_LINK_TYPE_NATIVE_WMF:      pExt = "wmf"; break;
-        case GFX_LINK_TYPE_NATIVE_MET:      pExt = "met"; break;
-        case GFX_LINK_TYPE_NATIVE_PCT:      pExt = "pct"; break;
-        case GFX_LINK_TYPE_NATIVE_JPG:      pExt = "jpg"; break;
-        default:; //prevent warning
-    }
-    rExt.AssignAscii( pExt );
-}
 
-
-String SwReadOnlyPopup::SaveGraphic( USHORT nId )
+String SwReadOnlyPopup::SaveGraphic( sal_uInt16 nId )
 {
 
-    //Namen der Grafik herausfischen.
+    // fish out the graphic's name
     String aName;
     if ( MN_READONLY_SAVEBACKGROUND == nId )
     {
@@ -428,11 +417,10 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
-//    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
     INetURLObject aPath;
     aPath.SetSmartURL( sGrfPath );
 
-    //Namen der Grafik herausfischen.
+    // fish out the graphic's name
     String aName = rGrfName;
 
     aDlgHelper.SetTitle( SW_RESSTR(STR_EXPORT_GRAFIK_TITLE));
@@ -442,18 +430,18 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     aDlgHelper.SetFileName( aURL.GetName() );
 
     GraphicFilter& rGF = *GraphicFilter::GetGraphicFilter();
-    const USHORT nCount = rGF.GetExportFormatCount();
+    const sal_uInt16 nCount = rGF.GetExportFormatCount();
 
     String aExt( aURL.GetExtension() );
     if( !aExt.Len() )
-        lcl_GetPreferedExtension( aExt, rGraphic );
+        GetPreferedExtension( aExt, rGraphic );
 
     aExt.ToLowerAscii();
-    USHORT nDfltFilter = USHRT_MAX;
+    sal_uInt16 nDfltFilter = USHRT_MAX;
 
     Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 
-    for ( USHORT i = 0; i < nCount; i++ )
+    for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
         xFltMgr->appendFilter( rGF.GetExportFormatName( i ), rGF.GetExportWildcard( i ) );
         if ( COMPARE_EQUAL == aExt.CompareIgnoreCaseToAscii(rGF.GetExportFormatShortName( i ).ToLowerAscii() ))
@@ -461,9 +449,9 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     }
     if ( USHRT_MAX == nDfltFilter )
     {
-        //"falsche" Extension?
-        lcl_GetPreferedExtension( aExt, rGraphic );
-        for ( USHORT i = 0; i < nCount; ++i )
+        // "wrong" extension?
+        GetPreferedExtension( aExt, rGraphic );
+        for ( sal_uInt16 i = 0; i < nCount; ++i )
             if ( aExt == rGF.GetExportFormatShortName( i ).ToLowerAscii() )
             {
                 nDfltFilter =  i;
@@ -478,20 +466,20 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
         if( aDlgHelper.Execute() == ERRCODE_NONE )
         {
             String sPath( xFP->getFiles().getConstArray()[0] );
-            //verwendeten Pfad merken - bitte nicht wieder wegoptimieren!
+            // remember used path - please don't optimize away!
             aPath.SetSmartURL( sPath);
             sGrfPath = aPath.GetPath();
 
             if( rGrfName.Len() &&
                  nDfltFilter == rGF.GetExportFormatNumber( xFltMgr->getCurrentFilter()))
             {
-                //Versuchen die Originalgrafik zu speichern.
+                // try to save the original graphic
                 SfxMedium aIn( rGrfName, STREAM_READ | STREAM_NOCREATE,
-                                TRUE );
+                                sal_True );
                 if( aIn.GetInStream() && !aIn.GetInStream()->GetError() )
                 {
                     SfxMedium aOut( sPath, STREAM_WRITE | STREAM_SHARE_DENYNONE,
-                                            FALSE);
+                                            sal_False);
                     if( aOut.GetOutStream() && !aOut.GetOutStream()->GetError())
                     {
                         *aOut.GetOutStream() << *aIn.GetInStream();
@@ -506,7 +494,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
                 }
             }
 
-            USHORT nFilter;
+            sal_uInt16 nFilter;
             if ( xFltMgr->getCurrentFilter().getLength() && rGF.GetExportFormatCount() )
                 nFilter = rGF.GetExportFormatNumber( xFltMgr->getCurrentFilter() );
             else

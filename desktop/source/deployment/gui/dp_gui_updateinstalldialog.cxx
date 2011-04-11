@@ -262,14 +262,14 @@ UpdateInstallDialog::UpdateInstallDialog(
     m_xExtensionManager = css::deployment::ExtensionManager::get( xCtx );
 
     m_cancel.SetClickHdl(LINK(this, UpdateInstallDialog, cancelHandler));
-    m_mle_info.EnableCursor(FALSE);
+    m_mle_info.EnableCursor(sal_False);
     if ( ! dp_misc::office_is_running())
         m_help.Disable();
 }
 
 UpdateInstallDialog::~UpdateInstallDialog() {}
 
-BOOL UpdateInstallDialog::Close()
+sal_Bool UpdateInstallDialog::Close()
 {
     m_thread->stop();
     return ModalDialog::Close();
@@ -377,7 +377,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
 
         sal_uInt16 count = 0;
         typedef std::vector<UpdateData>::iterator It;
-        for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); i++)
+        for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); ++i)
         {
             UpdateData & curData = *i;
 
@@ -471,7 +471,7 @@ void UpdateInstallDialog::Thread::installExtensions()
 
     sal_uInt16 count = 0;
     typedef std::vector<UpdateData>::iterator It;
-    for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); i++, count++)
+    for (It i = m_aVecUpdateData.begin(); i != m_aVecUpdateData.end(); ++i, ++count)
     {
         //update the name of the extension which is to be installed
         {
@@ -487,8 +487,6 @@ void UpdateInstallDialog::Thread::installExtensions()
              }
             m_dialog.m_ft_extension_name.SetText(i->aInstalledPackage->getDisplayName());
         }
-//         TimeValue v = {1, 0};
-//       osl::Thread::wait(v);
         bool bError = false;
         bool bLicenseDeclined = false;
         cssu::Reference<css::deployment::XPackage> xExtension;

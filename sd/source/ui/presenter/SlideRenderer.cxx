@@ -54,7 +54,7 @@ Reference<XInterface> SAL_CALL SlideRenderer_createInstance (
 
 ::rtl::OUString SlideRenderer_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString::createFromAscii("com.sun.star.comp.Draw.SlideRenderer");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.SlideRenderer"));
 }
 
 
@@ -64,7 +64,7 @@ Sequence<rtl::OUString> SAL_CALL SlideRenderer_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.SlideRenderer"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SlideRenderer")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -117,7 +117,7 @@ void SAL_CALL SlideRenderer::initialize (const Sequence<Any>& rArguments)
     else
     {
         throw RuntimeException(
-            OUString::createFromAscii("SlideRenderer: invalid number of arguments"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideRenderer: invalid number of arguments")),
                 static_cast<XWeak*>(this));
     }
 }
@@ -203,7 +203,7 @@ BitmapEx SlideRenderer::CreatePreview (
     const SdPage* pPage = SdPage::getImplementation(rxSlide);
     if (pPage == NULL)
         throw lang::IllegalArgumentException(
-            OUString::createFromAscii("SlideRenderer::createPreview() called with invalid slide"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideRenderer::createPreview() called with invalid slide")),
             static_cast<XWeak*>(this),
             0);
 
@@ -211,7 +211,7 @@ BitmapEx SlideRenderer::CreatePreview (
     Size aPageSize = pPage->GetSize();
     if (aPageSize.Height() <= 0)
         throw lang::IllegalArgumentException(
-            OUString::createFromAscii("SlideRenderer::createPreview() called with invalid size"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideRenderer::createPreview() called with invalid size")),
             static_cast<XWeak*>(this),
             1);
 

@@ -43,7 +43,7 @@ using namespace com::sun::star;
 //------------------------------------------------------------------
 
 ScXMLTableShapesContext::ScXMLTableShapesContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
@@ -56,7 +56,7 @@ ScXMLTableShapesContext::~ScXMLTableShapesContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableShapesContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLTableShapesContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )

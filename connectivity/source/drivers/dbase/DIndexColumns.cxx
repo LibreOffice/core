@@ -70,7 +70,7 @@ sdbcx::ObjectType ODbaseIndexColumns::createObject(const ::rtl::OUString& _rName
                                                     ,sal_False
                                                     ,sal_False
                                                     ,sal_False
-                                                    ,pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                                                    ,pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 
     return xRet;
 }
@@ -83,7 +83,7 @@ void ODbaseIndexColumns::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > ODbaseIndexColumns::createDescriptor()
 {
-    return new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+    return new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
 sdbcx::ObjectType ODbaseIndexColumns::appendObject( const ::rtl::OUString& /*_rForName*/, const Reference< XPropertySet >& descriptor )

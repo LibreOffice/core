@@ -199,7 +199,7 @@ void ViewTabBar::disposing (void)
     {
         const SolarMutexGuard aSolarGuard;
         // Set all references to the one tab page to NULL and delete the page.
-        for (USHORT nIndex=0; nIndex<mpTabControl->GetPageCount(); ++nIndex)
+        for (sal_uInt16 nIndex=0; nIndex<mpTabControl->GetPageCount(); ++nIndex)
             mpTabControl->SetTabPage(nIndex, NULL);
         mpTabPage.reset();
         mpTabControl.reset();
@@ -454,7 +454,7 @@ bool ViewTabBar::ActivatePage (void)
             pIPClient = dynamic_cast<Client*>(mpViewShellBase->GetIPClient());
         if (pIPClient==NULL || ! pIPClient->IsObjectInPlaceActive())
         {
-            USHORT nIndex (mpTabControl->GetCurPageId() - 1);
+            sal_uInt16 nIndex (mpTabControl->GetCurPageId() - 1);
             if (nIndex < maTabBarButtons.size())
             {
                 xConfigurationController->requestResourceActivation(
@@ -553,7 +553,7 @@ void ViewTabBar::AddTabBarButton (
     if (nPosition>=0
         && nPosition<=mpTabControl->GetPageCount())
     {
-        USHORT nIndex ((USHORT)nPosition);
+        sal_uInt16 nIndex ((sal_uInt16)nPosition);
 
         // Insert the button into our local array.
         maTabBarButtons.insert(maTabBarButtons.begin()+nIndex, rButton);
@@ -568,7 +568,7 @@ void ViewTabBar::AddTabBarButton (
 void ViewTabBar::RemoveTabBarButton (
     const ::com::sun::star::drawing::framework::TabBarButton& rButton)
 {
-    USHORT nIndex;
+    sal_uInt16 nIndex;
     for (nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
     {
         if (IsEqual(maTabBarButtons[nIndex], rButton))
@@ -629,7 +629,7 @@ void ViewTabBar::UpdateActiveButton (void)
     if (xView.is())
     {
         Reference<XResourceId> xViewId (xView->getResourceId());
-        for (USHORT nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
+        for (sal_uInt16 nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
         {
             if (maTabBarButtons[nIndex].ResourceId->compareTo(xViewId) == 0)
             {
@@ -647,8 +647,8 @@ void ViewTabBar::UpdateActiveButton (void)
 void ViewTabBar::UpdateTabBarButtons (void)
 {
     TabBarButtonList::const_iterator iTab;
-    USHORT nPageCount (mpTabControl->GetPageCount());
-    USHORT nIndex;
+    sal_uInt16 nPageCount (mpTabControl->GetPageCount());
+    sal_uInt16 nIndex;
     for (iTab=maTabBarButtons.begin(),nIndex=1; iTab!=maTabBarButtons.end(); ++iTab,++nIndex)
     {
         // Create a new tab when there are not enough.

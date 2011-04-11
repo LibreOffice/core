@@ -41,7 +41,7 @@
 SourceTreeIterator::SourceTreeIterator(
     const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal_in )
 /*****************************************************************************/
-                : bInExecute( FALSE ) , bLocal( bLocal_in )
+                : bInExecute( sal_False ) , bLocal( bLocal_in )
 {
     (void) rVersion ;
 
@@ -64,13 +64,15 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
     if ( bInExecute ) {
         rtl::OUString sDirName = aDirectory.getDirectoryName();
 
-        static rtl::OUString WCARD1 ( rtl::OUString::createFromAscii( "unxlng" ) );
-        static rtl::OUString WCARD2 ( rtl::OUString::createFromAscii( "unxsol" ) );
-        static rtl::OUString WCARD3 ( rtl::OUString::createFromAscii( "wntmsc" ) );
-        static rtl::OUString WCARD4 ( rtl::OUString::createFromAscii( "common" ) );
-        static rtl::OUString WCARD5 ( rtl::OUString::createFromAscii( "unxmac" ) );
-        static rtl::OUString WCARD6 ( rtl::OUString::createFromAscii( "unxubt" ) );
-        static rtl::OUString WCARD7 ( rtl::OUString::createFromAscii( ".svn" ) );
+        static rtl::OUString WCARD1 ( RTL_CONSTASCII_USTRINGPARAM("unxlng") );
+        static rtl::OUString WCARD2 ( RTL_CONSTASCII_USTRINGPARAM("unxsol") );
+        static rtl::OUString WCARD3 ( RTL_CONSTASCII_USTRINGPARAM("wntmsc") );
+        static rtl::OUString WCARD4 ( RTL_CONSTASCII_USTRINGPARAM("common") );
+        static rtl::OUString WCARD5 ( RTL_CONSTASCII_USTRINGPARAM("unxmac") );
+        static rtl::OUString WCARD6 ( RTL_CONSTASCII_USTRINGPARAM("unxubt") );
+        static rtl::OUString WCARD7 ( RTL_CONSTASCII_USTRINGPARAM(".git") );
+        static rtl::OUString WCARD8 ( RTL_CONSTASCII_USTRINGPARAM("clone") );
+        static rtl::OUString WCARD9 ( RTL_CONSTASCII_USTRINGPARAM("install") );
 
 
         if( sDirName.indexOf( WCARD1 , 0 ) > -1 ||
@@ -79,7 +81,11 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
             sDirName.indexOf( WCARD4 , 0 ) > -1 ||
             sDirName.indexOf( WCARD5 , 0 ) > -1 ||
             sDirName.indexOf( WCARD6 , 0 ) > -1 ||
-            sDirName.indexOf( WCARD7 , 0 ) > -1
+            sDirName.indexOf( WCARD7 , 0 ) > -1 ||
+#ifndef WNT
+            sDirName.indexOf( WCARD8 , 0 ) > -1 ||
+#endif
+            sDirName.indexOf( WCARD9 , 0 ) > -1
            )    return;
         //printf("**** %s \n", OUStringToOString( sDirName , RTL_TEXTENCODING_UTF8 , sDirName.getLength() ).getStr() );
 
@@ -104,31 +110,31 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
         aDirectory.readDirectory();
         OnExecuteDirectory( aDirectory.getFullName() );
         if ( aDirectory.getSubDirectories().size() )
-            for ( ULONG i=0;i < aDirectory.getSubDirectories().size();i++ )
+            for ( sal_uLong i=0;i < aDirectory.getSubDirectories().size();i++ )
                 ExecuteDirectory( aDirectory.getSubDirectories()[ i ] );
     }
 }
 
 /*****************************************************************************/
-BOOL SourceTreeIterator::StartExecute()
+sal_Bool SourceTreeIterator::StartExecute()
 /*****************************************************************************/
 {
 
-    bInExecute = TRUE;                  // FIXME
+    bInExecute = sal_True;                  // FIXME
     ExecuteDirectory( aRootDirectory );
 
     if ( bInExecute ) {                 // FIXME
-        bInExecute = FALSE;
-        return TRUE;
+        bInExecute = sal_False;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*****************************************************************************/
 void SourceTreeIterator::EndExecute()
 /*****************************************************************************/
 {
-    bInExecute = FALSE;
+    bInExecute = sal_False;
 }
 
 /*****************************************************************************/

@@ -37,12 +37,12 @@ TARGET=miniapp
 # --- Allgemein ------------------------------------------------------------
 
 OBJFILES = \
-        $(OBJ)$/testapp.obj          \
-        $(OBJ)$/editwin.obj          \
-        $(OBJ)$/servres.obj
+        $(EXCEPTIONSFILES)
 
 
 EXCEPTIONSFILES= \
+        $(OBJ)$/editwin.obj          \
+        $(OBJ)$/servres.obj          \
         $(OBJ)$/testapp.obj
 
 SRS1NAME=$(TARGET)

@@ -29,8 +29,6 @@
 #ifndef _SBA_GRID_HXX
 #define _SBA_GRID_HXX
 
-//  #include <sdb/tools.hxx>
-
 #include <svx/fmgridcl.hxx>
 
 #include <svx/fmgridif.hxx>
@@ -242,7 +240,7 @@ namespace dbaui
 
         sal_Int32                       m_nAsyncDropEvent;
 
-        USHORT                          m_nCurrentActionColId;
+        sal_uInt16                          m_nCurrentActionColId;
             // ui actions (e.g. a context menu) may be performed on columns which aren't the current one
             // and aren't selected, so we have to track this column id
 

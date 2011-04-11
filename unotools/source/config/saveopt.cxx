@@ -44,8 +44,10 @@
 #include "itemholder1.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
+
 namespace css = ::com::sun::star;
 
 class SvtSaveOptions_Impl;
@@ -105,16 +107,16 @@ public:
     virtual void            Commit();
 
     sal_Int32               GetAutoSaveTime() const             { return nAutoSaveTime; }
-    BOOL                    IsUseUserData() const               { return bUseUserData; }
-    BOOL                    IsBackup() const                    { return bBackup; }
-    BOOL                    IsAutoSave() const                  { return bAutoSave; }
-    BOOL                    IsAutoSavePrompt() const            { return bAutoSavePrompt; }
-    BOOL                    IsDocInfoSave() const               { return bDocInfSave; }
-    BOOL                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
-    BOOL                    IsSaveDocView() const               { return bSaveDocView; }
-    BOOL                    IsSaveRelINet() const               { return bSaveRelINet; }
-    BOOL                    IsSaveRelFSys() const               { return bSaveRelFSys; }
-    BOOL                    IsSaveUnpacked() const              { return bSaveUnpacked; }
+    sal_Bool                    IsUseUserData() const               { return bUseUserData; }
+    sal_Bool                    IsBackup() const                    { return bBackup; }
+    sal_Bool                    IsAutoSave() const                  { return bAutoSave; }
+    sal_Bool                    IsAutoSavePrompt() const            { return bAutoSavePrompt; }
+    sal_Bool                    IsDocInfoSave() const               { return bDocInfSave; }
+    sal_Bool                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
+    sal_Bool                    IsSaveDocView() const               { return bSaveDocView; }
+    sal_Bool                    IsSaveRelINet() const               { return bSaveRelINet; }
+    sal_Bool                    IsSaveRelFSys() const               { return bSaveRelFSys; }
+    sal_Bool                    IsSaveUnpacked() const              { return bSaveUnpacked; }
     sal_Bool                IsPrettyPrintingEnabled( ) const    { return bDoPrettyPrinting; }
     sal_Bool                IsWarnAlienFormat() const           { return bWarnAlienFormat; }
     sal_Bool                IsLoadDocPrinter() const            { return bLoadDocPrinter; }
@@ -122,16 +124,16 @@ public:
                             GetODFDefaultVersion() const        { return eODFDefaultVersion; }
 
     void                    SetAutoSaveTime( sal_Int32 n );
-    void                    SetUseUserData( BOOL b );
-    void                    SetBackup( BOOL b );
-    void                    SetAutoSave( BOOL b );
-    void                    SetAutoSavePrompt( BOOL b );
-    void                    SetDocInfoSave( BOOL b );
-    void                    SetSaveWorkingSet( BOOL b );
-    void                    SetSaveDocView( BOOL b );
-    void                    SetSaveRelINet( BOOL b );
-    void                    SetSaveRelFSys( BOOL b );
-    void                    SetSaveUnpacked( BOOL b );
+    void                    SetUseUserData( sal_Bool b );
+    void                    SetBackup( sal_Bool b );
+    void                    SetAutoSave( sal_Bool b );
+    void                    SetAutoSavePrompt( sal_Bool b );
+    void                    SetDocInfoSave( sal_Bool b );
+    void                    SetSaveWorkingSet( sal_Bool b );
+    void                    SetSaveDocView( sal_Bool b );
+    void                    SetSaveRelINet( sal_Bool b );
+    void                    SetSaveRelFSys( sal_Bool b );
+    void                    SetSaveUnpacked( sal_Bool b );
     void                    EnablePrettyPrinting( sal_Bool _bDoPP );
     void                    SetWarnAlienFormat( sal_Bool _bDoPP );
     void                    SetLoadDocPrinter( sal_Bool bNew );
@@ -150,7 +152,7 @@ void SvtSaveOptions_Impl::SetAutoSaveTime( sal_Int32 n )
     }
 }
 
-void SvtSaveOptions_Impl::SetUseUserData( BOOL b )
+void SvtSaveOptions_Impl::SetUseUserData( sal_Bool b )
 {
     if (!bROUseUserData && bUseUserData!=b)
     {
@@ -159,7 +161,7 @@ void SvtSaveOptions_Impl::SetUseUserData( BOOL b )
     }
 }
 
-void SvtSaveOptions_Impl::SetBackup( BOOL b )
+void SvtSaveOptions_Impl::SetBackup( sal_Bool b )
 {
     if (!bROBackup && bBackup!=b)
     {
@@ -168,7 +170,7 @@ void SvtSaveOptions_Impl::SetBackup( BOOL b )
     }
 }
 
-void SvtSaveOptions_Impl::SetAutoSave( BOOL b )
+void SvtSaveOptions_Impl::SetAutoSave( sal_Bool b )
 {
     if (!bROAutoSave && bAutoSave!=b)
     {
@@ -178,7 +180,7 @@ void SvtSaveOptions_Impl::SetAutoSave( BOOL b )
     }
 }
 
-void SvtSaveOptions_Impl::SetAutoSavePrompt( BOOL b )
+void SvtSaveOptions_Impl::SetAutoSavePrompt( sal_Bool b )
 {
     if (!bROAutoSavePrompt && bAutoSavePrompt!=b)
     {
@@ -187,7 +189,7 @@ void SvtSaveOptions_Impl::SetAutoSavePrompt( BOOL b )
     }
 }
 
-void SvtSaveOptions_Impl::SetDocInfoSave(BOOL b)
+void SvtSaveOptions_Impl::SetDocInfoSave(sal_Bool b)
 {
     if (!bRODocInfSave && bDocInfSave!=b)
     {
@@ -196,7 +198,7 @@ void SvtSaveOptions_Impl::SetDocInfoSave(BOOL b)
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveWorkingSet( BOOL b )
+void SvtSaveOptions_Impl::SetSaveWorkingSet( sal_Bool b )
 {
     if (!bROSaveWorkingSet && bSaveWorkingSet!=b)
     {
@@ -205,7 +207,7 @@ void SvtSaveOptions_Impl::SetSaveWorkingSet( BOOL b )
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveDocView( BOOL b )
+void SvtSaveOptions_Impl::SetSaveDocView( sal_Bool b )
 {
     if (!bROSaveDocView && bSaveDocView!=b)
     {
@@ -214,7 +216,7 @@ void SvtSaveOptions_Impl::SetSaveDocView( BOOL b )
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveRelINet( BOOL b )
+void SvtSaveOptions_Impl::SetSaveRelINet( sal_Bool b )
 {
     if (!bROSaveRelINet && bSaveRelINet!=b)
     {
@@ -223,7 +225,7 @@ void SvtSaveOptions_Impl::SetSaveRelINet( BOOL b )
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveRelFSys( BOOL b )
+void SvtSaveOptions_Impl::SetSaveRelFSys( sal_Bool b )
 {
     if (!bROSaveRelFSys && bSaveRelFSys!=b)
     {
@@ -232,7 +234,7 @@ void SvtSaveOptions_Impl::SetSaveRelFSys( BOOL b )
     }
 }
 
-void SvtSaveOptions_Impl::SetSaveUnpacked( BOOL b )
+void SvtSaveOptions_Impl::SetSaveUnpacked( sal_Bool b )
 {
     if (!bROSaveUnpacked && bSaveUnpacked!=b)
     {
@@ -382,7 +384,7 @@ Sequence< OUString > GetPropertyNames()
 // -----------------------------------------------------------------------
 
 SvtSaveOptions_Impl::SvtSaveOptions_Impl()
-    : ConfigItem( OUString::createFromAscii("Office.Common/Save") )
+    : ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Save")) )
     , nAutoSaveTime( 0 )
     , bUseUserData( sal_False )
     , bBackup( sal_False )
@@ -440,7 +442,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                         if ( pValues[nProp] >>= nTemp )
                             nAutoSaveTime = nTemp;
                         else {
-                            DBG_ERROR( "Wrong Type!" );
+                            OSL_FAIL( "Wrong Type!" );
                         };
                         bROAutoSaveTime = pROStates[nProp];
                         break;
@@ -531,7 +533,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                         }
                         else
                         {
-                            DBG_ERROR( "Wrong Type!" );
+                            OSL_FAIL( "Wrong Type!" );
                         }
                     }
                 }
@@ -543,21 +545,21 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     {
     css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
         ::utl::getProcessServiceFactory(),
-        ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")),
         ::comphelper::ConfigurationHelper::E_READONLY);
 
     ::comphelper::ConfigurationHelper::readRelativeKey(
         xCFG,
-        ::rtl::OUString::createFromAscii("AutoSave"),
-        ::rtl::OUString::createFromAscii("Enabled")) >>= bAutoSave;
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled"))) >>= bAutoSave;
 
     ::comphelper::ConfigurationHelper::readRelativeKey(
         xCFG,
-        ::rtl::OUString::createFromAscii("AutoSave"),
-        ::rtl::OUString::createFromAscii("TimeIntervall")) >>= nAutoSaveTime;
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeIntervall"))) >>= nAutoSaveTime;
     }
     catch(const css::uno::Exception&)
-        { DBG_ERROR("Could not find needed informations for AutoSave feature."); }
+        { OSL_FAIL("Could not find needed informations for AutoSave feature."); }
 }
 
 SvtSaveOptions_Impl::~SvtSaveOptions_Impl()
@@ -713,19 +715,19 @@ void SvtSaveOptions_Impl::Commit()
 
     css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
         ::utl::getProcessServiceFactory(),
-        ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery")),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(
         xCFG,
-        ::rtl::OUString::createFromAscii("AutoSave"),
-        ::rtl::OUString::createFromAscii("TimeIntervall"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TimeIntervall")),
         css::uno::makeAny(nAutoSaveTime));
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(
         xCFG,
-        ::rtl::OUString::createFromAscii("AutoSave"),
-        ::rtl::OUString::createFromAscii("Enabled"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoSave")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Enabled")),
         css::uno::makeAny(bAutoSave));
 
     ::comphelper::ConfigurationHelper::flush(xCFG);
@@ -757,7 +759,7 @@ public:
 const sal_Char cUserDefinedSettings[] = "UserDefinedSettings";
 
 SvtLoadOptions_Impl::SvtLoadOptions_Impl()
-    : ConfigItem( OUString::createFromAscii("Office.Common/Load") )
+    : ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Load")) )
     , bLoadUserDefinedSettings( sal_False )
 {
     Sequence< OUString > aNames(1);

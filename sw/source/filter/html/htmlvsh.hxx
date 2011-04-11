@@ -35,7 +35,8 @@ class ViewShell;
 
 class SwHTMLViewShellClient : public SwClient
 {
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
 public:
 
@@ -46,7 +47,7 @@ public:
     void Register( ViewShell *pVsh );
     void DeRegister();
 
-    /*inline*/ ViewShell *GetViewShell(); // im swhtml.cxx
+    ViewShell *GetViewShell();
 };
 
 

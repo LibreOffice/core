@@ -44,6 +44,15 @@ OpenLockedQueryBox::OpenLockedQueryBox( Window* pParent, ResMgr* pResMgr, const 
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     SetButtonHelpText( RET_YES, String() );
     SetButtonHelpText( RET_NO, String() );
+
+#ifdef WNT
+    // bnc#656566
+    // Yes, it is silly to do this only for this dialog but not the
+    // other similar ones. But hey, it was about this dialog that the
+    // customer complained. You who read this and feel the itch, feel
+    // free to fix the problem in a better way.
+    EnableAlwaysOnTop( true );
+#endif
 }
 
 OpenLockedQueryBox::~OpenLockedQueryBox()

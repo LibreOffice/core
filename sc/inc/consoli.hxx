@@ -34,9 +34,7 @@
 
 class ScDocument;
 
-// -----------------------------------------------------------------------
-
-struct ScReferenceEntry             // ohne Constructor !
+struct ScReferenceEntry             // without constructor !
 {
     SCCOL   nCol;
     SCROW   nRow;
@@ -44,13 +42,13 @@ struct ScReferenceEntry             // ohne Constructor !
 };
 
 
-//!     Delta-Wert fuer Daten benutzen?
+//!     Use delta value for data?
 
-class ScReferenceList           // ohne Constructor !
+class ScReferenceList           // without constructor !
 {
 private:
     SCSIZE              nCount;
-    SCSIZE              nFullSize;          // inkl. Fuell-Eintraege
+    SCSIZE              nFullSize;          // incl. fill entries
     ScReferenceEntry*   pData;
 
 public:
@@ -64,34 +62,30 @@ public:
     void                    AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab );
 };
 
-// -----------------------------------------------------------------------
-
-
 //
-//  Reihenfolge:
-//      1)  ScConsData anlegen
+//  Sequence:
+//      1)  create ScConsData
 //      2)  Parameter (Size/Flags)
-//      3)  AddFields fuer alle Bereiche (nur noetig bei bColByName oder bRowByName)
-//      4)  DoneFields                   (      "                       "          )
-//      5)  AddData fuer alle Bereiche
-//          evtl. AddName nach jedem Bereich
+//      3)  AddFields for all areas (only needed for bColByName or bRowByName)
+//      4)  DoneFields              (       "                       "        )
+//      5)  AddData for all areas
+//          perhaps AddName after each area
 //      6)  OutputToDocument
 //
 
-//! ab bestimmter Groesse ScDocument Struktur benutzen?
-
+//! Use structure ScDocument if a certain size is exceeded?
 
 class ScConsData
 {
 private:
     ScSubTotalFunc      eFunction;
-    BOOL                bReference;
-    BOOL                bColByName;
-    BOOL                bRowByName;
-    BOOL                bSubTitles;
+    sal_Bool                bReference;
+    sal_Bool                bColByName;
+    sal_Bool                bRowByName;
+    sal_Bool                bSubTitles;
     SCSIZE              nColCount;
     SCSIZE              nRowCount;
-    BOOL**              ppUsed;
+    sal_Bool**              ppUsed;
     double**            ppSum;
     double**            ppCount;
     double**            ppSumSqr;
@@ -102,17 +96,17 @@ private:
     SCSIZE              nTitleCount;
     String**            ppTitles;
     SCSIZE**            ppTitlePos;
-    BOOL                bCornerUsed;
-    String              aCornerText;        // nur bei bColByName && bRowByName
+    sal_Bool                bCornerUsed;
+    String              aCornerText;        // only for bColByName && bRowByName
 
 public:
                 ScConsData();
                 ~ScConsData();
 
     void        SetSize( SCCOL nCols, SCROW nRows );
-    void        SetFlags( ScSubTotalFunc eFunc, BOOL bColName, BOOL bRowName, BOOL bRef );
+    void        SetFlags( ScSubTotalFunc eFunc, sal_Bool bColName, sal_Bool bRowName, sal_Bool bRef );
 
-    void        InitData(BOOL bDelete=TRUE);
+    void        InitData(sal_Bool bDelete=sal_True);
     void        DeleteData();
 
     void        AddFields( ScDocument* pSrcDoc, SCTAB nTab,

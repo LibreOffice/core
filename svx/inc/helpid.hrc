@@ -26,270 +26,258 @@
  ************************************************************************/
 #ifndef _SVX_HELPID_HRC
 #define _SVX_HELPID_HRC
-// include ---------------------------------------------------------------
-
-#include <svl/solar.hrc>
 
 #include <svx/exthelpid.hrc>
+#include <svx/svxcommands.h>
+#include <sfx2/sfxcommands.h>
 
 // Help-Ids --------------------------------------------------------------
-#define HID_ALIGN_TBX                                               (HID_SVX_START +   1)
-#define HID_BMPMASK_CTL_PIPETTE                                     (HID_SVX_START +   4)
-#define HID_BMPMASK_CTL_QCOL_1                                      (HID_SVX_START +   5)
-#define HID_BMPMASK_TBI_PIPETTE                                     (HID_SVX_START +   6)
-#define HID_COLOR_CTL_COLORS                                        (HID_SVX_START +   7)
-#define HID_CONTDLG_APPLY                                           (HID_SVX_START +   8)
-#define HID_CONTDLG_AUTOCONTOUR                                     (HID_SVX_START +   9)
-#define HID_CONTDLG_CIRCLE                                          (HID_SVX_START +  10)
-#define HID_CONTDLG_FREEPOLY                                        (HID_SVX_START +  11)
-#define HID_CONTDLG_GRAPHWND                                        (HID_SVX_START +  12)
-#define HID_CONTDLG_PIPETTE                                         (HID_SVX_START +  13)
-#define HID_CONTDLG_POLY                                            (HID_SVX_START +  14)
-#define HID_CONTDLG_POLYDELETE                                      (HID_SVX_START +  15)
-#define HID_CONTDLG_POLYEDIT                                        (HID_SVX_START +  16)
-#define HID_CONTDLG_POLYINSERT                                      (HID_SVX_START +  17)
-#define HID_CONTDLG_POLYMOVE                                        (HID_SVX_START +  18)
-#define HID_CONTDLG_RECT                                            (HID_SVX_START +  19)
-#define HID_CONTDLG_REDO                                            (HID_SVX_START +  20)
-#define HID_CONTDLG_SELECT                                          (HID_SVX_START +  21)
-#define HID_CONTDLG_TOOLBOX                                         (HID_SVX_START +  22)
-#define HID_CONTDLG_UNDO                                            (HID_SVX_START +  23)
-#define HID_CONTDLG_WORKPLACE                                       (HID_SVX_START +  24)
-#define HID_CTL_FONTWORK_FAVORITES                                  (HID_SVX_START +  25)
-#define HID_CTRL3D_HSCROLL                                          (HID_SVX_START +  26)
-#define HID_CTRL3D_SWITCHER                                         (HID_SVX_START +  27)
-#define HID_CTRL3D_VSCROLL                                          (HID_SVX_START +  28)
-#define HID_CTRL_COLOR                                              (HID_SVX_START +  29)
-#define HID_DRAWTOOL_TBX                                            (HID_SVX_START +  30)
-#define HID_EDITENG_SPELLER_ADDWORD                                 (HID_SVX_START +  31)
-#define HID_EDITENG_SPELLER_AUTOCORRECT                             (HID_SVX_START +  32)
-#define HID_EDITENG_SPELLER_IGNORE                                  (HID_SVX_START +  33)
-#define HID_EDITENG_SPELLER_PARALANGUAGE                            (HID_SVX_START +  34)
-#define HID_EDITENG_SPELLER_START                                   (HID_SVX_START +  35)
-#define HID_EDITENG_SPELLER_WORDLANGUAGE                            (HID_SVX_START +  36)
-#define HID_FILL_ATTR_LISTBOX                                       (HID_SVX_START +  37)
-#define HID_FILL_TYPE_LISTBOX                                       (HID_SVX_START +  38)
-#define HID_FONTWORK_CTL_FORMS                                      (HID_SVX_START +  39)
-#define HID_FONTWORK_TBI_ADJUST_AUTOSIZE                            (HID_SVX_START +  40)
-#define HID_FONTWORK_TBI_ADJUST_CENTER                              (HID_SVX_START +  41)
-#define HID_FONTWORK_TBI_ADJUST_LEFT                                (HID_SVX_START +  42)
-#define HID_FONTWORK_TBI_ADJUST_MIRROR                              (HID_SVX_START +  43)
-#define HID_FONTWORK_TBI_ADJUST_RIGHT                               (HID_SVX_START +  44)
-#define HID_FONTWORK_TBI_OUTLINE                                    (HID_SVX_START +  45)
-#define HID_FONTWORK_TBI_SHADOW_NORMAL                              (HID_SVX_START +  46)
-#define HID_FONTWORK_TBI_SHADOW_OFF                                 (HID_SVX_START +  47)
-#define HID_FONTWORK_TBI_SHADOW_SLANT                               (HID_SVX_START +  48)
-#define HID_FONTWORK_TBI_SHOWFORM                                   (HID_SVX_START +  49)
-#define HID_FONTWORK_TBI_STYLE_OFF                                  (HID_SVX_START +  50)
-#define HID_FONTWORK_TBI_STYLE_ROTATE                               (HID_SVX_START +  51)
-#define HID_FONTWORK_TBI_STYLE_SLANTX                               (HID_SVX_START +  52)
-#define HID_FONTWORK_TBI_STYLE_SLANTY                               (HID_SVX_START +  53)
-#define HID_FONTWORK_TBI_STYLE_UPRIGHT                              (HID_SVX_START +  54)
-#define HID_FORMAT_FOOTER                                           (HID_SVX_START +  55)
-#define HID_FORMAT_HEADER                                           (HID_SVX_START +  56)
+#define HID_ALIGN_TBX                                         "SVX_HID_ALIGN_TBX"
+#define HID_BMPMASK_CTL_PIPETTE                               "SVX_HID_BMPMASK_CTL_PIPETTE"
+#define HID_BMPMASK_CTL_QCOL_1                                "SVX_HID_BMPMASK_CTL_QCOL_1"
+#define HID_BMPMASK_TBI_PIPETTE                               "SVX_HID_BMPMASK_TBI_PIPETTE"
+#define HID_COLOR_CTL_COLORS                                  "SVX_HID_COLOR_CTL_COLORS"
+#define HID_CONTDLG_APPLY                                     "SVX_HID_CONTDLG_APPLY"
+#define HID_CONTDLG_AUTOCONTOUR                               "SVX_HID_CONTDLG_AUTOCONTOUR"
+#define HID_CONTDLG_CIRCLE                                    "SVX_HID_CONTDLG_CIRCLE"
+#define HID_CONTDLG_FREEPOLY                                  "SVX_HID_CONTDLG_FREEPOLY"
+#define HID_CONTDLG_GRAPHWND                                  "SVX_HID_CONTDLG_GRAPHWND"
+#define HID_CONTDLG_PIPETTE                                   "SVX_HID_CONTDLG_PIPETTE"
+#define HID_CONTDLG_POLY                                      "SVX_HID_CONTDLG_POLY"
+#define HID_CONTDLG_POLYDELETE                                "SVX_HID_CONTDLG_POLYDELETE"
+#define HID_CONTDLG_POLYEDIT                                  "SVX_HID_CONTDLG_POLYEDIT"
+#define HID_CONTDLG_POLYINSERT                                "SVX_HID_CONTDLG_POLYINSERT"
+#define HID_CONTDLG_POLYMOVE                                  "SVX_HID_CONTDLG_POLYMOVE"
+#define HID_CONTDLG_RECT                                      "SVX_HID_CONTDLG_RECT"
+#define HID_CONTDLG_REDO                                      "SVX_HID_CONTDLG_REDO"
+#define HID_CONTDLG_SELECT                                    "SVX_HID_CONTDLG_SELECT"
+#define HID_CONTDLG_TOOLBOX                                   "SVX_HID_CONTDLG_TOOLBOX"
+#define HID_CONTDLG_UNDO                                      "SVX_HID_CONTDLG_UNDO"
+#define HID_CONTDLG_WORKPLACE                                 "SVX_HID_CONTDLG_WORKPLACE"
+#define HID_CTL_FONTWORK_FAVORITES                            "SVX_HID_CTL_FONTWORK_FAVORITES"
+#define HID_CTRL3D_HSCROLL                                    "SVX_HID_CTRL3D_HSCROLL"
+#define HID_CTRL3D_SWITCHER                                   "SVX_HID_CTRL3D_SWITCHER"
+#define HID_CTRL3D_VSCROLL                                    "SVX_HID_CTRL3D_VSCROLL"
+#define HID_CTRL_COLOR                                        "SVX_HID_CTRL_COLOR"
+#define HID_DRAWTOOL_TBX                                      "SVX_HID_DRAWTOOL_TBX"
+#define HID_EDITENG_SPELLER_ADDWORD                           "SVX_HID_EDITENG_SPELLER_ADDWORD"
+#define HID_EDITENG_SPELLER_AUTOCORRECT                       "SVX_HID_EDITENG_SPELLER_AUTOCORRECT"
+#define HID_EDITENG_SPELLER_IGNORE                            "SVX_HID_EDITENG_SPELLER_IGNORE"
+#define HID_EDITENG_SPELLER_PARALANGUAGE                      "SVX_HID_EDITENG_SPELLER_PARALANGUAGE"
+#define HID_EDITENG_SPELLER_START                             "SVX_HID_EDITENG_SPELLER_START"
+#define HID_EDITENG_SPELLER_WORDLANGUAGE                      "SVX_HID_EDITENG_SPELLER_WORDLANGUAGE"
+#define HID_FILL_ATTR_LISTBOX                                "SVX_HID_FILL_ATTR_LISTBOX"
+#define HID_FILL_TYPE_LISTBOX                                 "SVX_HID_FILL_TYPE_LISTBOX"
+#define HID_FONTWORK_CTL_FORMS                                "SVX_HID_FONTWORK_CTL_FORMS"
+#define HID_FONTWORK_TBI_ADJUST_AUTOSIZE                      "SVX_HID_FONTWORK_TBI_ADJUST_AUTOSIZE"
+#define HID_FONTWORK_TBI_ADJUST_CENTER                        "SVX_HID_FONTWORK_TBI_ADJUST_CENTER"
+#define HID_FONTWORK_TBI_ADJUST_LEFT                          "SVX_HID_FONTWORK_TBI_ADJUST_LEFT"
+#define HID_FONTWORK_TBI_ADJUST_MIRROR                        "SVX_HID_FONTWORK_TBI_ADJUST_MIRROR"
+#define HID_FONTWORK_TBI_ADJUST_RIGHT                         "SVX_HID_FONTWORK_TBI_ADJUST_RIGHT"
+#define HID_FONTWORK_TBI_OUTLINE                              "SVX_HID_FONTWORK_TBI_OUTLINE"
+#define HID_FONTWORK_TBI_SHADOW_NORMAL                        "SVX_HID_FONTWORK_TBI_SHADOW_NORMAL"
+#define HID_FONTWORK_TBI_SHADOW_OFF                           "SVX_HID_FONTWORK_TBI_SHADOW_OFF"
+#define HID_FONTWORK_TBI_SHADOW_SLANT                         "SVX_HID_FONTWORK_TBI_SHADOW_SLANT"
+#define HID_FONTWORK_TBI_SHOWFORM                             "SVX_HID_FONTWORK_TBI_SHOWFORM"
+#define HID_FONTWORK_TBI_STYLE_OFF                            "SVX_HID_FONTWORK_TBI_STYLE_OFF"
+#define HID_FONTWORK_TBI_STYLE_ROTATE                         "SVX_HID_FONTWORK_TBI_STYLE_ROTATE"
+#define HID_FONTWORK_TBI_STYLE_SLANTX                         "SVX_HID_FONTWORK_TBI_STYLE_SLANTX"
+#define HID_FONTWORK_TBI_STYLE_SLANTY                         "SVX_HID_FONTWORK_TBI_STYLE_SLANTY"
+#define HID_FONTWORK_TBI_STYLE_UPRIGHT                        "SVX_HID_FONTWORK_TBI_STYLE_UPRIGHT"
+#define HID_FORMAT_FOOTER                                     "SVX_HID_FORMAT_FOOTER"
+#define HID_FORMAT_HEADER                                     "SVX_HID_FORMAT_HEADER"
 // free
-#define HID_GALLERY_ICONVIEW                                        (HID_SVX_START +  58)
-#define HID_GALLERY_LISTVIEW                                        (HID_SVX_START +  59)
-#define HID_GALLERY_MN_ADD                                          (HID_SVX_START +  60)
-#define HID_GALLERY_MN_ADDMENU                                      (HID_SVX_START +  61)
-#define HID_GALLERY_MN_ADD_LINK                                     (HID_SVX_START +  62)
-#define HID_GALLERY_MN_BACKGROUND                                   (HID_SVX_START +  63)
-#define HID_GALLERY_MN_COPYCLIPBOARD                                (HID_SVX_START +  64)
-#define HID_GALLERY_MN_DELETE                                       (HID_SVX_START +  65)
-#define HID_GALLERY_MN_PASTECLIPBOARD                               (HID_SVX_START +  66)
-#define HID_GALLERY_MN_PREVIEW                                      (HID_SVX_START +  67)
-#define HID_GALLERY_NEWTHEME                                        (HID_SVX_START +  68)
-#define HID_GALLERY_PREVIEW                                         (HID_SVX_START +  69)
-#define HID_GALLERY_PROPERTIES                                      (HID_SVX_START +  70)
-#define HID_GALLERY_RENAME                                          (HID_SVX_START +  71)
-#define HID_GALLERY_THEMELIST                                       (HID_SVX_START +  72)
+#define HID_GALLERY_ICONVIEW                                  "SVX_HID_GALLERY_ICONVIEW"
+#define HID_GALLERY_LISTVIEW                                  "SVX_HID_GALLERY_LISTVIEW"
+#define HID_GALLERY_MN_ADD                                    "SVX_HID_GALLERY_MN_ADD"
+#define HID_GALLERY_MN_ADDMENU                                "SVX_HID_GALLERY_MN_ADDMENU"
+#define HID_GALLERY_MN_ADD_LINK                               "SVX_HID_GALLERY_MN_ADD_LINK"
+#define HID_GALLERY_MN_BACKGROUND                             "SVX_HID_GALLERY_MN_BACKGROUND"
+#define HID_GALLERY_MN_COPYCLIPBOARD                          "SVX_HID_GALLERY_MN_COPYCLIPBOARD"
+#define HID_GALLERY_MN_DELETE                                 "SVX_HID_GALLERY_MN_DELETE"
+#define HID_GALLERY_MN_PASTECLIPBOARD                         "SVX_HID_GALLERY_MN_PASTECLIPBOARD"
+#define HID_GALLERY_MN_PREVIEW                                "SVX_HID_GALLERY_MN_PREVIEW"
+#define HID_GALLERY_NEWTHEME                                  "SVX_HID_GALLERY_NEWTHEME"
+#define HID_GALLERY_PREVIEW                                   "SVX_HID_GALLERY_PREVIEW"
+#define HID_GALLERY_PROPERTIES                                "SVX_HID_GALLERY_PROPERTIES"
+#define HID_GALLERY_RENAME                                    "SVX_HID_GALLERY_RENAME"
+#define HID_GALLERY_THEMELIST                                 "SVX_HID_GALLERY_THEMELIST"
 // free
-#define HID_GALLERY_WINDOW                                          (HID_SVX_START +  74)
-#define HID_GRFFILTER                                               (HID_SVX_START +  75)
-#define HID_GRFFILTER_EMBOSS                                        (HID_SVX_START +  76)
-#define HID_GRFFILTER_INVERT                                        (HID_SVX_START +  77)
-#define HID_GRFFILTER_MOSAIC                                        (HID_SVX_START +  78)
-#define HID_GRFFILTER_POPART                                        (HID_SVX_START +  79)
-#define HID_GRFFILTER_POSTER                                        (HID_SVX_START +  80)
-#define HID_GRFFILTER_REMOVENOISE                                   (HID_SVX_START +  81)
-#define HID_GRFFILTER_SEPIA                                         (HID_SVX_START +  82)
-#define HID_GRFFILTER_SHARPEN                                       (HID_SVX_START +  83)
-#define HID_GRFFILTER_SMOOTH                                        (HID_SVX_START +  84)
-#define HID_GRFFILTER_SOBEL                                         (HID_SVX_START +  85)
-#define HID_GRFFILTER_SOLARIZE                                      (HID_SVX_START +  86)
+#define HID_GALLERY_WINDOW                                    "SVX_HID_GALLERY_WINDOW"
+#define HID_GRFFILTER                                         "SVX_HID_GRFFILTER"
+#define HID_GRFFILTER_EMBOSS                                  "SVX_HID_GRFFILTER_EMBOSS"
+#define HID_GRFFILTER_INVERT                                  "SVX_HID_GRFFILTER_INVERT"
+#define HID_GRFFILTER_MOSAIC                                  "SVX_HID_GRFFILTER_MOSAIC"
+#define HID_GRFFILTER_POPART                                  "SVX_HID_GRFFILTER_POPART"
+#define HID_GRFFILTER_POSTER                                  "SVX_HID_GRFFILTER_POSTER"
+#define HID_GRFFILTER_REMOVENOISE                             "SVX_HID_GRFFILTER_REMOVENOISE"
+#define HID_GRFFILTER_SEPIA                                   "SVX_HID_GRFFILTER_SEPIA"
+#define HID_GRFFILTER_SHARPEN                                 "SVX_HID_GRFFILTER_SHARPEN"
+#define HID_GRFFILTER_SMOOTH                                  "SVX_HID_GRFFILTER_SMOOTH"
+#define HID_GRFFILTER_SOBEL                                   "SVX_HID_GRFFILTER_SOBEL"
+#define HID_GRFFILTER_SOLARIZE                                "SVX_HID_GRFFILTER_SOLARIZE"
 
-#define HID_IMAPDLG_ACTIVE                                          (HID_SVX_START +  88)
-#define HID_IMAPDLG_APPLY                                           (HID_SVX_START +  89)
-#define HID_IMAPDLG_CIRCLE                                          (HID_SVX_START +  90)
-#define HID_IMAPDLG_FREEPOLY                                        (HID_SVX_START +  91)
-#define HID_IMAPDLG_GRAPHWND                                        (HID_SVX_START +  92)
-#define HID_IMAPDLG_MACRO                                           (HID_SVX_START +  93)
-#define HID_IMAPDLG_OPEN                                            (HID_SVX_START +  94)
-#define HID_IMAPDLG_POLY                                            (HID_SVX_START +  95)
-#define HID_IMAPDLG_POLYDELETE                                      (HID_SVX_START +  96)
-#define HID_IMAPDLG_POLYEDIT                                        (HID_SVX_START +  97)
-#define HID_IMAPDLG_POLYINSERT                                      (HID_SVX_START +  98)
-#define HID_IMAPDLG_POLYMOVE                                        (HID_SVX_START +  99)
-#define HID_IMAPDLG_PROPERTY                                        (HID_SVX_START + 100)
-#define HID_IMAPDLG_RECT                                            (HID_SVX_START + 101)
-#define HID_IMAPDLG_REDO                                            (HID_SVX_START + 102)
-#define HID_IMAPDLG_SAVEAS                                          (HID_SVX_START + 103)
-#define HID_IMAPDLG_SELECT                                          (HID_SVX_START + 104)
-#define HID_IMAPDLG_TOOLBOX                                         (HID_SVX_START + 105)
-#define HID_IMAPDLG_UNDO                                            (HID_SVX_START + 106)
-#define HID_MENU_EXTRUSION_DEPTH                                    (HID_SVX_START + 107)
-#define HID_MENU_EXTRUSION_DIRECTION                                (HID_SVX_START + 108)
-#define HID_MENU_EXTRUSION_LIGHTING                                 (HID_SVX_START + 109)
-#define HID_MENU_EXTRUSION_SURFACE                                  (HID_SVX_START + 110)
-#define HID_MNU_FUNC_AVG                                            (HID_SVX_START + 111)
-#define HID_MNU_FUNC_COUNT                                          (HID_SVX_START + 112)
-#define HID_MNU_FUNC_COUNT2                                         (HID_SVX_START + 113)
-#define HID_MNU_FUNC_MAX                                            (HID_SVX_START + 114)
-#define HID_MNU_FUNC_MIN                                            (HID_SVX_START + 115)
-#define HID_MNU_FUNC_NONE                                           (HID_SVX_START + 116)
-#define HID_MNU_FUNC_SUM                                            (HID_SVX_START + 117)
-#define HID_MNU_ZOOM_100                                            (HID_SVX_START + 118)
-#define HID_MNU_ZOOM_150                                            (HID_SVX_START + 119)
-#define HID_MNU_ZOOM_200                                            (HID_SVX_START + 120)
-#define HID_MNU_ZOOM_50                                             (HID_SVX_START + 121)
-#define HID_MNU_ZOOM_75                                             (HID_SVX_START + 122)
-#define HID_MNU_ZOOM_OPTIMAL                                        (HID_SVX_START + 123)
-#define HID_MNU_ZOOM_PAGE_WIDTH                                     (HID_SVX_START + 124)
-#define HID_MNU_ZOOM_WHOLE_PAGE                                     (HID_SVX_START + 125)
-#define HID_OPTIONS_GRID                                            (HID_SVX_START + 126)
-#define HID_PASSWORD                                                (HID_SVX_START + 127)
-#define HID_POPUP_COLOR                                             (HID_SVX_START + 128)
-#define HID_POPUP_COLOR_CTRL                                        (HID_SVX_START + 129)
-#define HID_POPUP_EXTRUSION_DEPTH                                   (HID_SVX_START + 130)
-#define HID_POPUP_EXTRUSION_DIRECTION                               (HID_SVX_START + 131)
-#define HID_POPUP_EXTRUSION_LIGHTING                                (HID_SVX_START + 132)
-#define HID_POPUP_EXTRUSION_SURFACE                                 (HID_SVX_START + 133)
-#define HID_POPUP_FONTWORK_ALIGN                                    (HID_SVX_START + 134)
-#define HID_POPUP_FONTWORK_CHARSPACE                                (HID_SVX_START + 135)
-#define HID_POPUP_FRAME                                             (HID_SVX_START + 136)
-#define HID_POPUP_LINE                                              (HID_SVX_START + 137)
-#define HID_POPUP_LINEEND                                           (HID_SVX_START + 138)
-#define HID_POPUP_LINEEND_CTRL                                      (HID_SVX_START + 139)
-#define HID_REDLINING_FILTER_BTN_REF                                (HID_SVX_START + 140)
-#define HID_REDLINING_FILTER_CB_ACTION                              (HID_SVX_START + 141)
-#define HID_REDLINING_FILTER_CB_AUTOR                               (HID_SVX_START + 142)
-#define HID_REDLINING_FILTER_CB_COMMENT                             (HID_SVX_START + 143)
-#define HID_REDLINING_FILTER_CB_DATE                                (HID_SVX_START + 144)
-#define HID_REDLINING_FILTER_CB_RANGE                               (HID_SVX_START + 145)
-#define HID_REDLINING_FILTER_DF_DATE                                (HID_SVX_START + 146)
-#define HID_REDLINING_FILTER_DF_DATE2                               (HID_SVX_START + 147)
-#define HID_REDLINING_FILTER_ED_COMMENT                             (HID_SVX_START + 148)
-#define HID_REDLINING_FILTER_ED_RANGE                               (HID_SVX_START + 149)
-#define HID_REDLINING_FILTER_IB_CLOCK                               (HID_SVX_START + 150)
-#define HID_REDLINING_FILTER_IB_CLOCK2                              (HID_SVX_START + 151)
-#define HID_REDLINING_FILTER_LB_ACTION                              (HID_SVX_START + 152)
-#define HID_REDLINING_FILTER_LB_AUTOR                               (HID_SVX_START + 153)
-#define HID_REDLINING_FILTER_LB_DATE                                (HID_SVX_START + 154)
-#define HID_REDLINING_FILTER_PAGE                                   (HID_SVX_START + 155)
-#define HID_REDLINING_FILTER_TF_DATE                                (HID_SVX_START + 156)
-#define HID_REDLINING_FILTER_TF_DATE2                               (HID_SVX_START + 157)
-#define HID_REDLINING_TABCONTROL                                    (HID_SVX_START + 158)
-#define HID_REDLINING_VIEW_DG_VIEW                                  (HID_SVX_START + 159)
-#define HID_REDLINING_VIEW_DG_VIEW_HEADER                           (HID_SVX_START + 160)
-#define HID_REDLINING_VIEW_DG_VIEW_TABLE                            (HID_SVX_START + 161)
-#define HID_REDLINING_VIEW_PAGE                                     (HID_SVX_START + 162)
-#define HID_REDLINING_VIEW_PB_ACCEPT                                (HID_SVX_START + 163)
-#define HID_REDLINING_VIEW_PB_ACCEPTALL                             (HID_SVX_START + 164)
-#define HID_REDLINING_VIEW_PB_REJECT                                (HID_SVX_START + 165)
-#define HID_REDLINING_VIEW_PB_REJECTALL                             (HID_SVX_START + 166)
-#define HID_REDLINING_VIEW_PB_UNDO                                  (HID_SVX_START + 167)
-#define HID_RUBY_DIALOG                                             (HID_SVX_START + 168)
-#define HID_STYLE_LISTBOX                                           (HID_SVX_START + 169)
-#define HID_SVXTBX_ALIGNMENT                                        (HID_SVX_START + 170)
-#define HID_SVXTBX_DRAW                                             (HID_SVX_START + 171)
-#define HID_SVXTBX_UNDO_REDO_CTRL                                   (HID_SVX_START + 172)
-#define HID_SVX_CHINESE_DICTIONARY_CB_REVERSE                       (HID_SVX_START + 173)
-#define HID_SVX_CHINESE_DICTIONARY_LB_HEADER                        (HID_SVX_START + 174)
-#define HID_SVX_CHINESE_DICTIONARY_LB_TO_SIMPLIFIED                 (HID_SVX_START + 175)
-#define HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL                (HID_SVX_START + 176)
-#define HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_SIMPLIFIED      (HID_SVX_START + 177)
-#define HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_TRADITIONAL     (HID_SVX_START + 178)
-#define HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS                 (HID_SVX_START + 179)
-#define HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED     (HID_SVX_START + 180)
-#define HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL    (HID_SVX_START + 181)
-#define HID_SVX_MDLG_DOCRECOVERY_BROKEN                             (HID_SVX_START + 182)
-#define HID_SVX_MDLG_DOCRECOVERY_PROGR                              (HID_SVX_START + 183)
-#define HID_SVX_MDLG_ERR_REP_OPTIONS                                (HID_SVX_START + 184)
-#define HID_SVX_MDLG_ERR_REP_PREVIEW                                (HID_SVX_START + 185)
-#define HID_SVX_TABDLG_DOCRECOVERY                                  (HID_SVX_START + 186)
-#define HID_SVX_TP_DOCRECOVERY_RECOVER                              (HID_SVX_START + 187)
-#define HID_SVX_TP_DOCRECOVERY_SAVE                                 (HID_SVX_START + 188)
-#define HID_SVX_TP_ERR_REP_SEND                                     (HID_SVX_START + 189)
-#define HID_SVX_TP_ERR_REP_WELCOME                                  (HID_SVX_START + 190)
+#define HID_IMAPDLG_ACTIVE                                    "SVX_HID_IMAPDLG_ACTIVE"
+#define HID_IMAPDLG_APPLY                                     "SVX_HID_IMAPDLG_APPLY"
+#define HID_IMAPDLG_CIRCLE                                    "SVX_HID_IMAPDLG_CIRCLE"
+#define HID_IMAPDLG_FREEPOLY                                  "SVX_HID_IMAPDLG_FREEPOLY"
+#define HID_IMAPDLG_GRAPHWND                                  "SVX_HID_IMAPDLG_GRAPHWND"
+#define HID_IMAPDLG_MACRO                                     "SVX_HID_IMAPDLG_MACRO"
+#define HID_IMAPDLG_OPEN                                      "SVX_HID_IMAPDLG_OPEN"
+#define HID_IMAPDLG_POLY                                      "SVX_HID_IMAPDLG_POLY"
+#define HID_IMAPDLG_POLYDELETE                                "SVX_HID_IMAPDLG_POLYDELETE"
+#define HID_IMAPDLG_POLYEDIT                                  "SVX_HID_IMAPDLG_POLYEDIT"
+#define HID_IMAPDLG_POLYINSERT                                "SVX_HID_IMAPDLG_POLYINSERT"
+#define HID_IMAPDLG_POLYMOVE                                  "SVX_HID_IMAPDLG_POLYMOVE"
+#define HID_IMAPDLG_PROPERTY                                  "SVX_HID_IMAPDLG_PROPERTY"
+#define HID_IMAPDLG_RECT                                      "SVX_HID_IMAPDLG_RECT"
+#define HID_IMAPDLG_REDO                                      "SVX_HID_IMAPDLG_REDO"
+#define HID_IMAPDLG_SAVEAS                                    "SVX_HID_IMAPDLG_SAVEAS"
+#define HID_IMAPDLG_SELECT                                    "SVX_HID_IMAPDLG_SELECT"
+#define HID_IMAPDLG_TOOLBOX                                   "SVX_HID_IMAPDLG_TOOLBOX"
+#define HID_IMAPDLG_UNDO                                      "SVX_HID_IMAPDLG_UNDO"
+#define HID_MENU_EXTRUSION_DEPTH                              "SVX_HID_MENU_EXTRUSION_DEPTH"
+#define HID_MENU_EXTRUSION_DIRECTION                          "SVX_HID_MENU_EXTRUSION_DIRECTION"
+#define HID_MENU_EXTRUSION_LIGHTING                           "SVX_HID_MENU_EXTRUSION_LIGHTING"
+#define HID_MENU_EXTRUSION_SURFACE                            "SVX_HID_MENU_EXTRUSION_SURFACE"
+#define HID_MNU_FUNC_AVG                                      "SVX_HID_MNU_FUNC_AVG"
+#define HID_MNU_FUNC_COUNT                                    "SVX_HID_MNU_FUNC_COUNT"
+#define HID_MNU_FUNC_COUNT2                                   "SVX_HID_MNU_FUNC_COUNT2"
+#define HID_MNU_FUNC_MAX                                      "SVX_HID_MNU_FUNC_MAX"
+#define HID_MNU_FUNC_MIN                                      "SVX_HID_MNU_FUNC_MIN"
+#define HID_MNU_FUNC_NONE                                     "SVX_HID_MNU_FUNC_NONE"
+#define HID_MNU_FUNC_SUM                                      "SVX_HID_MNU_FUNC_SUM"
+#define HID_MNU_ZOOM_100                                      "SVX_HID_MNU_ZOOM_100"
+#define HID_MNU_ZOOM_150                                      "SVX_HID_MNU_ZOOM_150"
+#define HID_MNU_ZOOM_200                                      "SVX_HID_MNU_ZOOM_200"
+#define HID_MNU_ZOOM_50                                       "SVX_HID_MNU_ZOOM_50"
+#define HID_MNU_ZOOM_75                                       "SVX_HID_MNU_ZOOM_75"
+#define HID_MNU_ZOOM_OPTIMAL                                  "SVX_HID_MNU_ZOOM_OPTIMAL"
+#define HID_MNU_ZOOM_PAGE_WIDTH                               "SVX_HID_MNU_ZOOM_PAGE_WIDTH"
+#define HID_MNU_ZOOM_WHOLE_PAGE                               "SVX_HID_MNU_ZOOM_WHOLE_PAGE"
+#define HID_OPTIONS_GRID                                      "SVX_HID_OPTIONS_GRID"
+#define HID_PASSWORD                                          "SVX_HID_PASSWORD"
+#define HID_POPUP_COLOR                                       "SVX_HID_POPUP_COLOR"
+#define HID_POPUP_COLOR_CTRL                                  "SVX_HID_POPUP_COLOR_CTRL"
+#define HID_POPUP_EXTRUSION_DEPTH                             "SVX_HID_POPUP_EXTRUSION_DEPTH"
+#define HID_POPUP_EXTRUSION_DIRECTION                         "SVX_HID_POPUP_EXTRUSION_DIRECTION"
+#define HID_POPUP_EXTRUSION_LIGHTING                          "SVX_HID_POPUP_EXTRUSION_LIGHTING"
+#define HID_POPUP_EXTRUSION_SURFACE                           "SVX_HID_POPUP_EXTRUSION_SURFACE"
+#define HID_POPUP_FONTWORK_ALIGN                              "SVX_HID_POPUP_FONTWORK_ALIGN"
+#define HID_POPUP_FONTWORK_CHARSPACE                          "SVX_HID_POPUP_FONTWORK_CHARSPACE"
+#define HID_POPUP_FRAME                                       "SVX_HID_POPUP_FRAME"
+#define HID_POPUP_LINE                                        "SVX_HID_POPUP_LINE"
+#define HID_POPUP_LINEEND                                     "SVX_HID_POPUP_LINEEND"
+#define HID_POPUP_LINEEND_CTRL                                "SVX_HID_POPUP_LINEEND_CTRL"
+#define HID_REDLINING_FILTER_BTN_REF                          "SVX_HID_REDLINING_FILTER_BTN_REF"
+#define HID_REDLINING_FILTER_CB_ACTION                        "SVX_HID_REDLINING_FILTER_CB_ACTION"
+#define HID_REDLINING_FILTER_CB_AUTOR                         "SVX_HID_REDLINING_FILTER_CB_AUTOR"
+#define HID_REDLINING_FILTER_CB_COMMENT                       "SVX_HID_REDLINING_FILTER_CB_COMMENT"
+#define HID_REDLINING_FILTER_CB_DATE                          "SVX_HID_REDLINING_FILTER_CB_DATE"
+#define HID_REDLINING_FILTER_CB_RANGE                         "SVX_HID_REDLINING_FILTER_CB_RANGE"
+#define HID_REDLINING_FILTER_DF_DATE                          "SVX_HID_REDLINING_FILTER_DF_DATE"
+#define HID_REDLINING_FILTER_DF_DATE2                         "SVX_HID_REDLINING_FILTER_DF_DATE2"
+#define HID_REDLINING_FILTER_ED_COMMENT                       "SVX_HID_REDLINING_FILTER_ED_COMMENT"
+#define HID_REDLINING_FILTER_ED_RANGE                         "SVX_HID_REDLINING_FILTER_ED_RANGE"
+#define HID_REDLINING_FILTER_IB_CLOCK                         "SVX_HID_REDLINING_FILTER_IB_CLOCK"
+#define HID_REDLINING_FILTER_IB_CLOCK2                        "SVX_HID_REDLINING_FILTER_IB_CLOCK2"
+#define HID_REDLINING_FILTER_LB_ACTION                        "SVX_HID_REDLINING_FILTER_LB_ACTION"
+#define HID_REDLINING_FILTER_LB_AUTOR                         "SVX_HID_REDLINING_FILTER_LB_AUTOR"
+#define HID_REDLINING_FILTER_LB_DATE                          "SVX_HID_REDLINING_FILTER_LB_DATE"
+#define HID_REDLINING_FILTER_PAGE                             "SVX_HID_REDLINING_FILTER_PAGE"
+#define HID_REDLINING_FILTER_TF_DATE                          "SVX_HID_REDLINING_FILTER_TF_DATE"
+#define HID_REDLINING_FILTER_TF_DATE2                         "SVX_HID_REDLINING_FILTER_TF_DATE2"
+#define HID_REDLINING_TABCONTROL                              "SVX_HID_REDLINING_TABCONTROL"
+#define HID_REDLINING_VIEW_DG_VIEW                            "SVX_HID_REDLINING_VIEW_DG_VIEW"
+#define HID_REDLINING_VIEW_DG_VIEW_HEADER                     "SVX_HID_REDLINING_VIEW_DG_VIEW_HEADER"
+#define HID_REDLINING_VIEW_DG_VIEW_TABLE                      "SVX_HID_REDLINING_VIEW_DG_VIEW_TABLE"
+#define HID_REDLINING_VIEW_PAGE                               "SVX_HID_REDLINING_VIEW_PAGE"
+#define HID_REDLINING_VIEW_PB_ACCEPT                          "SVX_HID_REDLINING_VIEW_PB_ACCEPT"
+#define HID_REDLINING_VIEW_PB_ACCEPTALL                       "SVX_HID_REDLINING_VIEW_PB_ACCEPTALL"
+#define HID_REDLINING_VIEW_PB_REJECT                          "SVX_HID_REDLINING_VIEW_PB_REJECT"
+#define HID_REDLINING_VIEW_PB_REJECTALL                       "SVX_HID_REDLINING_VIEW_PB_REJECTALL"
+#define HID_REDLINING_VIEW_PB_UNDO                            "SVX_HID_REDLINING_VIEW_PB_UNDO"
+#define HID_RUBY_DIALOG                                       "SVX_HID_RUBY_DIALOG"
+#define HID_STYLE_LISTBOX                                     "SVX_HID_STYLE_LISTBOX"
+#define HID_SVXTBX_ALIGNMENT                                  "SVX_HID_SVXTBX_ALIGNMENT"
+#define HID_SVXTBX_DRAW                                       "SVX_HID_SVXTBX_DRAW"
+#define HID_SVXTBX_UNDO_REDO_CTRL                             "SVX_HID_SVXTBX_UNDO_REDO_CTRL"
+#define HID_SVX_CHINESE_DICTIONARY_CB_REVERSE                 "SVX_HID_SVX_CHINESE_DICTIONARY_CB_REVERSE"
+#define HID_SVX_CHINESE_DICTIONARY_LB_HEADER                  "SVX_HID_SVX_CHINESE_DICTIONARY_LB_HEADER"
+#define HID_SVX_CHINESE_DICTIONARY_LB_TO_SIMPLIFIED           "SVX_HID_SVX_CHINESE_DICTIONARY_LB_TO_SIMPLIFIED"
+#define HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL          "SVX_HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL"
+#define HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_SIMPLIFIED "SVX_HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_SIMPLIFIED"
+#define HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_TRADITIONAL "SVX_HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_TRADITIONAL"
+#define HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS           "SVX_HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS"
+#define HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED "SVX_HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED"
+#define HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL "SVX_HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL"
+#define HID_SVX_MDLG_DOCRECOVERY_BROKEN                       "SVX_HID_SVX_MDLG_DOCRECOVERY_BROKEN"
+#define HID_SVX_MDLG_DOCRECOVERY_PROGR                        "SVX_HID_SVX_MDLG_DOCRECOVERY_PROGR"
+#define HID_SVX_MDLG_ERR_REP_OPTIONS                          "SVX_HID_SVX_MDLG_ERR_REP_OPTIONS"
+#define HID_SVX_MDLG_ERR_REP_PREVIEW                          "SVX_HID_SVX_MDLG_ERR_REP_PREVIEW"
+#define HID_SVX_TABDLG_DOCRECOVERY                            "SVX_HID_SVX_TABDLG_DOCRECOVERY"
+#define HID_SVX_TP_DOCRECOVERY_RECOVER                        "SVX_HID_SVX_TP_DOCRECOVERY_RECOVER"
+#define HID_SVX_TP_DOCRECOVERY_SAVE                           "SVX_HID_SVX_TP_DOCRECOVERY_SAVE"
+#define HID_SVX_TP_ERR_REP_SEND                               "SVX_HID_SVX_TP_ERR_REP_SEND"
+#define HID_SVX_TP_ERR_REP_WELCOME                            "SVX_HID_SVX_TP_ERR_REP_WELCOME"
 
-#define HID_VALUESET_EXTRUSION_DIRECTION                            (HID_SVX_START + 192)
-#define HID_VALUESET_EXTRUSION_LIGHTING                             (HID_SVX_START + 193)
-#define HID_WIN_FONTWORK_ALIGN                                      (HID_SVX_START + 194)
-#define HID_WIN_FONTWORK_CHARSPACE                                  (HID_SVX_START + 195)
-#define HID_XMLSEC_CALL                                             (HID_SVX_START + 196)
-#define HID_OFA_HYPERLINK_DLG                                       (HID_SVX_START + 197)
-#define HID_OFA_HYPERLINK_NAME                                      (HID_SVX_START + 198)
-#define HID_OFA_HYPERLINK_SEARCH                                    (HID_SVX_START + 199)
-#define HID_OFA_HYPERLINK_TARGET                                    (HID_SVX_START + 200)
-#define HID_OFA_HYPERLINK_URL                                       (HID_SVX_START + 201)
-#define HID_OFA_HYPERLINK_URL_TXT                                   (HID_SVX_START + 202)
-#define HID_AUTOCORR_DLG                                            (HID_SVX_START + 203)
-#define HID_SVXCTL_MAIL_ATTACH                                      (HID_SVX_START + 204)
-#define HID_SVXDLG_REGISTRATION                                     (HID_SVX_START + 205)
-#define HID_SVXDLG_TREE_BASE                                        (HID_SVX_START + 206)
-#define HID_SVXDLG_TREE_CHART                                       (HID_SVX_START + 207)
-#define HID_SVXDLG_TREE_FILTER                                      (HID_SVX_START + 208)
-#define HID_SVXDLG_TREE_LANGUAGE                                    (HID_SVX_START + 209)
-#define HID_SVXWIN_MAIL_ATTACH                                      (HID_SVX_START + 210)
-#define HID_SVXWIN_MAIL_HEADER                                      (HID_SVX_START + 211)
-#define HID_SVX_DLGFORMNEW                                          (HID_SVX_START + 212)
-#define HID_SVX_DLGTABNEW                                           (HID_SVX_START + 213)
-#define HID_SVX_HYPERLINK                                           (HID_SVX_START + 214)
-#define HID_SVX_MAILATTACH_ASCII_CB                                 (HID_SVX_START + 215)
-#define HID_SVX_MAILATTACH_HTML_CB                                  (HID_SVX_START + 216)
-#define HID_SVX_MAILATTACH_OFFICE_CB                                (HID_SVX_START + 217)
-#define HID_SVX_MAILATTACH_PRIORITY_LB                              (HID_SVX_START + 218)
-#define HID_SVX_MAILATTACH_RECEIPT_CB                               (HID_SVX_START + 219)
-#define HID_SVX_MAILATTACH_RTF_CB                                   (HID_SVX_START + 220)
-#define HID_SVX_MAILHEAD_HEAD_WIN                                   (HID_SVX_START + 221)
-#define HID_SVX_MAILHEAD_PRIORITY_LB                                (HID_SVX_START + 222)
-#define HID_SVX_MAILHEAD_PROTOCOL_LB                                (HID_SVX_START + 223)
-#define HID_SVX_MAILHEAD_RCPT_CB                                    (HID_SVX_START + 224)
-#define HID_SVX_MAILHEAD_RCPT_ED                                    (HID_SVX_START + 225)
-#define HID_SVX_MAILHEAD_RCPT_LB                                    (HID_SVX_START + 226)
-#define HID_SVX_MAILHEAD_RECEIPT_CB                                 (HID_SVX_START + 227)
-#define HID_SVX_MAILHEAD_ROLE_LB                                    (HID_SVX_START + 228)
-#define HID_SVX_MAILHEAD_SUBJECT_ED                                 (HID_SVX_START + 229)
-#define HID_SVX_MAILMENU_ADDADDRESS                                 (HID_SVX_START + 230)
-#define HID_SVX_MAILMENU_COPYLINK                                   (HID_SVX_START + 231)
-#define HID_SVX_MAILMENU_DELETE                                     (HID_SVX_START + 232)
-#define HID_SVX_MAILMENU_FILE                                       (HID_SVX_START + 233)
-#define HID_SVX_MAILMENU_OPEN                                       (HID_SVX_START + 234)
-#define HID_SVX_MAILMENU_RENAME                                     (HID_SVX_START + 235)
-#define HID_SVX_MAILMENU_SAVEAS                                     (HID_SVX_START + 236)
-#define HID_SVX_MAILMENU_SIG1                                       (HID_SVX_START + 237)
-#define HID_SVX_MAILMENU_SIG2                                       (HID_SVX_START + 238)
-#define HID_SVX_MAILMENU_SIG3                                       (HID_SVX_START + 239)
-#define HID_SVX_MAILMENU_SIG4                                       (HID_SVX_START + 240)
-#define HID_SVX_MAILTOOLBOX                                         (HID_SVX_START + 241)
-#define HID_SVX_SENDMENU_ENCRYPT                                    (HID_SVX_START + 242)
-#define HID_SVX_SENDMENU_PLAIN                                      (HID_SVX_START + 243)
-#define HID_SVX_SENDMENU_SIGN                                       (HID_SVX_START + 244)
-#define HID_SVX_SENDMENU_SIGNANDENCRYPT                             (HID_SVX_START + 245)
-#define HID_SVX_TP_APPEARANCE                                       (HID_SVX_START + 246)
-#define HID_SVX_TP_DESKTOP                                          (HID_SVX_START + 247)
-#define HID_CT_THES_ALTERNATIVES                                    (HID_SVX_START + 248)
-
-// please adjust ACT_SVX_HID_END2 below if you add entries here!
-
-// -----------------------------------------------------------------------
-// Overrun check ---------------------------------------------------------
-// -----------------------------------------------------------------------
-
-#define ACT_SVX_HID_END     (HID_SVX_START+248)
-#if ACT_SVX_HID_END > HID_SVX_END
-#error Resource overflow in #line, #file
-#endif
+#define HID_VALUESET_EXTRUSION_DIRECTION                      "SVX_HID_VALUESET_EXTRUSION_DIRECTION"
+#define HID_VALUESET_EXTRUSION_LIGHTING                       "SVX_HID_VALUESET_EXTRUSION_LIGHTING"
+#define HID_WIN_FONTWORK_ALIGN                                "SVX_HID_WIN_FONTWORK_ALIGN"
+#define HID_WIN_FONTWORK_CHARSPACE                            "SVX_HID_WIN_FONTWORK_CHARSPACE"
+#define HID_XMLSEC_CALL                                       "SVX_HID_XMLSEC_CALL"
+#define HID_OFA_HYPERLINK_DLG                                 "SVX_HID_OFA_HYPERLINK_DLG"
+#define HID_OFA_HYPERLINK_NAME                                "SVX_HID_OFA_HYPERLINK_NAME"
+#define HID_OFA_HYPERLINK_SEARCH                              "SVX_HID_OFA_HYPERLINK_SEARCH"
+#define HID_OFA_HYPERLINK_TARGET                              "SVX_HID_OFA_HYPERLINK_TARGET"
+#define HID_OFA_HYPERLINK_URL                                 "SVX_HID_OFA_HYPERLINK_URL"
+#define HID_OFA_HYPERLINK_URL_TXT                             "SVX_HID_OFA_HYPERLINK_URL_TXT"
+#define HID_AUTOCORR_DLG                                      "SVX_HID_AUTOCORR_DLG"
+#define HID_SVXCTL_MAIL_ATTACH                                "SVX_HID_SVXCTL_MAIL_ATTACH"
+#define HID_SVXDLG_REGISTRATION                               "SVX_HID_SVXDLG_REGISTRATION"
+#define HID_SVXDLG_TREE_BASE                                  "SVX_HID_SVXDLG_TREE_BASE"
+#define HID_SVXDLG_TREE_CHART                                 "SVX_HID_SVXDLG_TREE_CHART"
+#define HID_SVXDLG_TREE_FILTER                                "SVX_HID_SVXDLG_TREE_FILTER"
+#define HID_SVXDLG_TREE_LANGUAGE                              "SVX_HID_SVXDLG_TREE_LANGUAGE"
+#define HID_SVXWIN_MAIL_ATTACH                                "SVX_HID_SVXWIN_MAIL_ATTACH"
+#define HID_SVXWIN_MAIL_HEADER                                "SVX_HID_SVXWIN_MAIL_HEADER"
+#define HID_SVX_DLGFORMNEW                                    "SVX_HID_SVX_DLGFORMNEW"
+#define HID_SVX_DLGTABNEW                                     "SVX_HID_SVX_DLGTABNEW"
+#define HID_SVX_HYPERLINK                                     "SVX_HID_SVX_HYPERLINK"
+#define HID_SVX_MAILATTACH_ASCII_CB                           "SVX_HID_SVX_MAILATTACH_ASCII_CB"
+#define HID_SVX_MAILATTACH_HTML_CB                            "SVX_HID_SVX_MAILATTACH_HTML_CB"
+#define HID_SVX_MAILATTACH_OFFICE_CB                          "SVX_HID_SVX_MAILATTACH_OFFICE_CB"
+#define HID_SVX_MAILATTACH_PRIORITY_LB                        "SVX_HID_SVX_MAILATTACH_PRIORITY_LB"
+#define HID_SVX_MAILATTACH_RECEIPT_CB                         "SVX_HID_SVX_MAILATTACH_RECEIPT_CB"
+#define HID_SVX_MAILATTACH_RTF_CB                             "SVX_HID_SVX_MAILATTACH_RTF_CB"
+#define HID_SVX_MAILHEAD_HEAD_WIN                             "SVX_HID_SVX_MAILHEAD_HEAD_WIN"
+#define HID_SVX_MAILHEAD_PRIORITY_LB                          "SVX_HID_SVX_MAILHEAD_PRIORITY_LB"
+#define HID_SVX_MAILHEAD_PROTOCOL_LB                          "SVX_HID_SVX_MAILHEAD_PROTOCOL_LB"
+#define HID_SVX_MAILHEAD_RCPT_CB                              "SVX_HID_SVX_MAILHEAD_RCPT_CB"
+#define HID_SVX_MAILHEAD_RCPT_ED                              "SVX_HID_SVX_MAILHEAD_RCPT_ED"
+#define HID_SVX_MAILHEAD_RCPT_LB                              "SVX_HID_SVX_MAILHEAD_RCPT_LB"
+#define HID_SVX_MAILHEAD_RECEIPT_CB                           "SVX_HID_SVX_MAILHEAD_RECEIPT_CB"
+#define HID_SVX_MAILHEAD_ROLE_LB                              "SVX_HID_SVX_MAILHEAD_ROLE_LB"
+#define HID_SVX_MAILHEAD_SUBJECT_ED                           "SVX_HID_SVX_MAILHEAD_SUBJECT_ED"
+#define HID_SVX_MAILMENU_ADDADDRESS                           "SVX_HID_SVX_MAILMENU_ADDADDRESS"
+#define HID_SVX_MAILMENU_COPYLINK                             "SVX_HID_SVX_MAILMENU_COPYLINK"
+#define HID_SVX_MAILMENU_DELETE                               "SVX_HID_SVX_MAILMENU_DELETE"
+#define HID_SVX_MAILMENU_FILE                                 "SVX_HID_SVX_MAILMENU_FILE"
+#define HID_SVX_MAILMENU_OPEN                                 "SVX_HID_SVX_MAILMENU_OPEN"
+#define HID_SVX_MAILMENU_RENAME                               "SVX_HID_SVX_MAILMENU_RENAME"
+#define HID_SVX_MAILMENU_SAVEAS                               "SVX_HID_SVX_MAILMENU_SAVEAS"
+#define HID_SVX_MAILMENU_SIG1                                 "SVX_HID_SVX_MAILMENU_SIG1"
+#define HID_SVX_MAILMENU_SIG2                                 "SVX_HID_SVX_MAILMENU_SIG2"
+#define HID_SVX_MAILMENU_SIG3                                 "SVX_HID_SVX_MAILMENU_SIG3"
+#define HID_SVX_MAILMENU_SIG4                                 "SVX_HID_SVX_MAILMENU_SIG4"
+#define HID_SVX_MAILTOOLBOX                                   "SVX_HID_SVX_MAILTOOLBOX"
+#define HID_SVX_SENDMENU_ENCRYPT                              "SVX_HID_SVX_SENDMENU_ENCRYPT"
+#define HID_SVX_SENDMENU_PLAIN                                "SVX_HID_SVX_SENDMENU_PLAIN"
+#define HID_SVX_SENDMENU_SIGN                                 "SVX_HID_SVX_SENDMENU_SIGN"
+#define HID_SVX_SENDMENU_SIGNANDENCRYPT                       "SVX_HID_SVX_SENDMENU_SIGNANDENCRYPT"
+#define HID_SVX_TP_APPEARANCE                                 "SVX_HID_SVX_TP_APPEARANCE"
+#define HID_SVX_TP_DESKTOP                                    "SVX_HID_SVX_TP_DESKTOP"
+#define HID_CT_THES_ALTERNATIVES                              "SVX_HID_CT_THES_ALTERNATIVES"
 
 #endif
 

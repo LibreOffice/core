@@ -164,10 +164,6 @@ private:
         m_xChartDocument;
 
     ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartDocument >
-        m_xBackupChartDocument;
-
-    ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartTypeTemplate >
         m_xTemplate;
 

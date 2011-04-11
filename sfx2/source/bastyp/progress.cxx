@@ -38,7 +38,6 @@
 #include <svl/eitem.hxx>
 #include <tools/time.hxx>
 
-// wg. nRescheduleLocks
 #include "appdata.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
@@ -50,7 +49,7 @@
 #include "sfxtypes.hxx"
 #include <sfx2/docfile.hxx>
 #include "workwin.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "bastyp.hrc"
 #include <sfx2/msg.hxx>
 
@@ -80,14 +79,14 @@ struct SfxProgress_Impl
 {
     Reference < XStatusIndicator > xStatusInd;
     String                  aText, aStateText;
-    ULONG                   nMax;
+    sal_uIntPtr                 nMax;
     clock_t                 nCreate;
     clock_t                 nNextReschedule;
-    BOOL                    bLocked, bAllDocs;
-    BOOL                    bWaitMode;
-    BOOL                    bAllowRescheduling;
-    BOOL                    bRunning;
-    BOOL                    bIsStatusText;
+    sal_Bool                    bLocked, bAllDocs;
+    sal_Bool                    bWaitMode;
+    sal_Bool                    bAllowRescheduling;
+    sal_Bool                    bRunning;
+    sal_Bool                    bIsStatusText;
 
     SfxProgress*            pActiveProgress;
     SfxObjectShellRef       xObjSh;
@@ -95,7 +94,7 @@ struct SfxProgress_Impl
     SfxViewFrame*           pView;
 
                             SfxProgress_Impl( const String& );
-    void                    Enable_Impl( BOOL );
+    void                    Enable_Impl( sal_Bool );
 
 };
 
@@ -113,11 +112,11 @@ struct SfxProgress_Impl
 #define aTypeLibInfo aProgressTypeLibImpl
 
 //========================================================================
-extern ULONG Get10ThSec();
+extern sal_uInt32 Get10ThSec();
 
 // -----------------------------------------------------------------------
 
-void SfxProgress_Impl::Enable_Impl( BOOL bEnable )
+void SfxProgress_Impl::Enable_Impl( sal_Bool bEnable )
 {
     SfxObjectShell* pDoc = bAllDocs ? NULL : (SfxObjectShell*) xObjSh;
     SfxViewFrame *pFrame= SfxViewFrame::GetFirst(pDoc);
@@ -149,43 +148,42 @@ SfxProgress_Impl::SfxProgress_Impl( const String &/*rTitle*/ )
 
 SfxProgress::SfxProgress
 (
-    SfxObjectShell* pObjSh, /* SfxObjectShell, an der die Aktion ausgef"uhrt
-                               wird. Kann NULL sein, dann wird die Applikation
-                               verwendet */
+    SfxObjectShell*     pObjSh, /*  The action is performed on the
+                                    SfxObjectShell which can be NULL.
+                                    When it is then the application will be
+                                    used */
 
-    const String&   rText,  /* Text, der in der Statuszeile vor den Statusmonitor
-                               erscheint */
+    const String&       rText,  /* Text, which appears before the Statusmonitor
+                                  in the status line */
 
-    ULONG           nRange, /* Maximalwert des Bereiches */
+    sal_uIntPtr               nRange, /* Max value for range  */
 
-    BOOL            bAll    /* alle Dokumente oder nur das Dokument des ViewFrames
-                               disablen (FALSE) */
-    ,BOOL           bWait   /* initial den Wait-Pointer aktivieren (TRUE) */
+    sal_Bool                bAll,    /* Disable all documents or only the document of the ViewFram */
+    sal_Bool                bWait    /* Activate the wait-Pointer initially (TRUE) */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Der Konstruktor der Klasse SfxProgress schaltet den als Parameter
-    "ubergebenen SfxObjectShell und SfxViewFrames, welche dieses Dokument
-    anzeigen in einen Progress-Mode. D.h. solange eine dieser SfxViewFrame
-    Instanzen aktiv ist, ist der dazugeh"orige SfxDispatcher und das
-    dazugeh"orige Window disabled. In der Statuszeile wird ein Balken zur
-    Fortschritts-Anzeige angezeigt.
+    The constructor of the class SfxProgress switches the SfxObjectShell
+    passed as parameter and SfxViewFrames which display this document in
+    a progress mode. Ie as long as one of those SfxViewFrame instances is
+    active the associated SfxDispatcher and associated Window is disabled.
+    A progress-bar will be displayed in the status bar,
 */
 
-:   pImp( new SfxProgress_Impl( rText ) ),
+:       pImp( new SfxProgress_Impl( rText ) ),
     nVal(0),
-    bSuspended(TRUE)
+    bSuspended(sal_True)
 {
-    pImp->bRunning = TRUE;
+    pImp->bRunning = sal_True;
     pImp->bAllowRescheduling = Application::IsInExecute();;
 
     pImp->xObjSh = pObjSh;
     pImp->aText = rText;
     pImp->nMax = nRange;
-    pImp->bLocked = FALSE;
+    pImp->bLocked = sal_False;
     pImp->bWaitMode = bWait;
-    pImp->bIsStatusText = FALSE;
+    pImp->bIsStatusText = sal_False;
     pImp->nCreate = Get10ThSec();
     pImp->nNextReschedule = pImp->nCreate;
     DBG( DbgOutf( "SfxProgress: created for '%s' at %luds",
@@ -206,11 +204,10 @@ SfxProgress::SfxProgress
 
 SfxProgress::~SfxProgress()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Der Destruktor der Klasse SfxProgress restauriert den alten Zustand;
-    die Dokumente werden wieder freigeschaltet und die Statuszeile zeigt
-    wieder Items an.
+    The destructor of the class SfxProgress restores the old status,
+    the documents are released again and the status bar shows the items again.
 */
 
 {
@@ -218,7 +215,7 @@ SfxProgress::~SfxProgress()
     if ( pImp->xStatusInd.is() )
         pImp->xStatusInd->end();
 
-    if( pImp->bIsStatusText == TRUE )
+    if( pImp->bIsStatusText == sal_True )
         GetpApp()->HideStatusText( );
     delete pImp;
 }
@@ -227,9 +224,9 @@ SfxProgress::~SfxProgress()
 
 void SfxProgress::Stop()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Vorzeitiges Beenden des <SfxProgress>.
+    Early Exit of <SfxProgress>.
 */
 
 {
@@ -242,7 +239,7 @@ void SfxProgress::Stop()
 
     if ( !pImp->bRunning )
         return;
-    pImp->bRunning = FALSE;
+    pImp->bRunning = sal_False;
     DBG( DbgOutf( "SfxProgress: destroyed at %luds", Get10ThSec() ) );
 
     Suspend();
@@ -251,20 +248,19 @@ void SfxProgress::Stop()
     else
         SFX_APP()->SetProgress_Impl(0);
     if ( pImp->bLocked )
-        pImp->Enable_Impl(TRUE);
+        pImp->Enable_Impl(sal_True);
 }
 
 // -----------------------------------------------------------------------
 
 void SfxProgress::SetText
 (
-    const String&   /*  neuer Text */
+    const String&       /*      new Text */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    "Andert den Text, der links neben dem Fortschritts-Balken
-    angezeigt wird.
+    Changes the text that appears to the left next to progress bar.
 */
 
 {
@@ -284,30 +280,9 @@ const String& SfxProgress::GetStateText_Impl() const
 }
 
 // -----------------------------------------------------------------------
-/*
-IMPL_STATIC_LINK( SfxProgress, SetStateHdl, PlugInLoadStatus*, pStatus )
-{
-    INetRequest* pReq = 0;
-    const INetHint *pHint = PTR_CAST( INetHint, pStatus->pHint );
-    pReq = PTR_CAST( INetRequest, pStatus->pBC );
 
-    String aString;
-    if( pReq )
-        aString = SfxMedium::GetStatusString( pHint->GetId(), pReq, pHint );
-    if( aString.Len() )
-    {
-        GetpApp()->ShowStatusText( aString );
-        if( pThis )
-            pThis->pImp->bIsStatusText = TRUE;
-    }
-    return 0;
-}
-*/
-
-// -----------------------------------------------------------------------
-
-// muss in AppDaten
-static ULONG nLastTime = 0;
+// Required in App data
+static sal_uIntPtr nLastTime = 0;
 
 long TimeOut_Impl( void*, void* pArgV )
 {
@@ -324,11 +299,11 @@ long TimeOut_Impl( void*, void* pArgV )
 
 // -----------------------------------------------------------------------
 
-BOOL SfxProgress::SetStateText
+sal_Bool SfxProgress::SetStateText
 (
-    ULONG           nNewVal,    /* neuer Wert f"ur die Fortschritts-Anzeige */
-    const String&   rNewVal,    /* Status als Text */
-    ULONG           nNewRange   /* neuer Maximalwert, 0 f"ur Beibehaltung des alten */
+    sal_uLong      nNewVal,     /* New value for the progress-bar */
+    const String&  rNewVal,     /* Status as Text */
+    sal_uLong      nNewRange    /* new maximum value, 0 for retaining the old */
 )
 
 {
@@ -338,45 +313,36 @@ BOOL SfxProgress::SetStateText
 
 // -----------------------------------------------------------------------
 
-BOOL SfxProgress::SetState
+sal_Bool SfxProgress::SetState
 (
-    ULONG   nNewVal,    /* neuer Wert f"ur die Fortschritts-Anzeige */
+    sal_uLong   nNewVal,    /* new value for the progress bar */
 
-    ULONG   nNewRange   /* neuer Maximalwert, 0 f"ur Beibehaltung des alten */
+    sal_uLong   nNewRange   /* new maximum value, 0 for retaining the old */
 )
-/*  [Beschreibung]
+/*  [Description]
 
-    Setzen des aktuellen Status; nach einem zeitlichen Versatz
-    wird Reschedule aufgerufen.
+    Setting the current status, after a time delay Reschedule is called.
 
+    [Return value]
 
-    [R"uckgabewert]
-
-    BOOL                TRUE
-                        Fortfahren mit der Aktion
+    sal_Bool                TRUE
+                        Proceed with the action
 
                         FALSE
-                        Abbrechen der Aktion
+                        Cancel action
 */
 
 {
-    // wurde via Stop-Button angehalten?
-//  if ( pImp->IsCancelled() )
-//      return FALSE;
+    if( pImp->pActiveProgress ) return sal_True;
 
-    if( pImp->pActiveProgress ) return TRUE;
-
-    // neuen Wert "ubernehmen
-    BOOL bOver=FALSE;
     nVal = nNewVal;
 
-    // neuer Range?
+    // new Range?
     if ( nNewRange && nNewRange != pImp->nMax )
     {
         DBG( DbgOutf( "SfxProgress: range changed from %lu to %lu",
                       pImp->nMax, nNewRange ) );
         pImp->nMax = nNewRange;
-        bOver = TRUE;
     }
 
     if ( !pImp->xStatusInd.is() )
@@ -396,19 +362,11 @@ BOOL SfxProgress::SetState
             {
                 // don't show status indicator for hidden documents (only valid while loading)
                 SfxMedium* pMedium = pObjSh->GetMedium();
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, FALSE );
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
                 if ( !pHiddenItem || !pHiddenItem->GetValue() )
                 {
-                    // not in a view, perhaps it's just loading
-                    //SfxFrame* pFrame = pMedium->GetLoadTargetFrame();
-                    //if ( pFrame && pFrame->GetCurrentViewFrame() )
-                    //{
-                        // recycling frame
-                        //pImp->pView = pFrame->GetCurrentViewFrame();
-                    //}
-                    //else
                     {
-                        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, FALSE );
+                        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, sal_False );
                         Reference< XStatusIndicator > xInd;
                         if ( pIndicatorItem && (pIndicatorItem->GetValue()>>=xInd) )
                             pImp->xStatusInd = xInd;
@@ -435,18 +393,19 @@ BOOL SfxProgress::SetState
         pImp->xStatusInd->setValue( nNewVal );
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
 void SfxProgress::Resume()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Nimmt die Anzeige des Status nach einer Unterbrechung wieder auf.
+    Resumed the status of the display after an interrupt.
 
-    [Querverweise]
+    [Cross-reference]
+
     <SfxProgress::Suspend()>
 */
 
@@ -479,7 +438,7 @@ void SfxProgress::Resume()
                 pFrame->GetBindings().ENTERREGISTRATIONS();
         }
 
-        bSuspended = FALSE;
+        bSuspended = sal_False;
     }
 }
 
@@ -487,11 +446,12 @@ void SfxProgress::Resume()
 
 void SfxProgress::Suspend()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Unterbricht die Anzeige des Status
+    Interrupts the status of the display
 
-    [Querverweise]
+    [Cross-reference]
+
     <SfxProgress::Resume()>
 */
 
@@ -500,7 +460,7 @@ void SfxProgress::Suspend()
     if ( !bSuspended )
     {
         DBG( DbgOutf( "SfxProgress: suspended" ) );
-        bSuspended = TRUE;
+        bSuspended = sal_True;
 
         if ( pImp->xStatusInd.is() )
         {
@@ -529,8 +489,8 @@ void SfxProgress::Suspend()
 void SfxProgress::Lock()
 {
     if( pImp->pActiveProgress ) return;
-    // kein Reschedule bei Embedded-Objekten,
-    // da wir gegen das OLE Protokoll wehrlos sind
+    // No Reschedule for Embedded-Objects,
+    // because we are defenseless against the OLE protocol
     if ( !pImp->xObjSh.Is() )
     {
         for ( SfxObjectShell *pDocSh = SfxObjectShell::GetFirst();
@@ -542,7 +502,7 @@ void SfxProgress::Lock()
                  ( eMode == SFX_CREATE_MODE_PREVIEW ) )
             {
                 DBG( DbgOutf( "SfxProgress: not locked because EMBEDDED/PREVIEW found" ) );
-                pImp->bAllowRescheduling = FALSE;
+                pImp->bAllowRescheduling = sal_False;
             }
         }
     }
@@ -553,14 +513,14 @@ void SfxProgress::Lock()
              ( eMode == SFX_CREATE_MODE_PREVIEW ) )
         {
             DBG( DbgOutf( "SfxProgress: not locked because ObjectShell is EMBEDDED/PREVIEW" ) );
-            pImp->bAllowRescheduling = FALSE;
+            pImp->bAllowRescheduling = sal_False;
         }
     }
 
-    pImp->Enable_Impl( FALSE );
+    pImp->Enable_Impl( sal_False );
 
     DBG( DbgOutf( "SfxProgress: locked" ) );
-    pImp->bLocked = TRUE;
+    pImp->bLocked = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -572,18 +532,17 @@ void SfxProgress::UnLock()
         return;
 
     DBG( DbgOutf( "SfxProgress: unlocked" ) );
-    pImp->bLocked = FALSE;
-    pImp->Enable_Impl(TRUE);
+    pImp->bLocked = sal_False;
+    pImp->Enable_Impl(sal_True);
 }
 
 // -----------------------------------------------------------------------
 
 void SfxProgress::Reschedule()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Reschedule von au"sen rufbar
-
+    Reschedule, callable from the outside
 */
 
 {
@@ -607,17 +566,14 @@ void SfxProgress::Reschedule()
 
 void SfxProgress::SetWaitMode
 (
-    BOOL    bWait       /*  TRUE
-                            Wartecursor wird verwendet
+    sal_Bool    bWait       /*  TRUE
 
-                            FALSE
-                            Es wird kein Wartecursor verwendet */
+                            FALSE Wait-cursor not used */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Wartecursor-Modus umschalten.
-
+    Switch Wait-mode.
 */
 
 {
@@ -653,12 +609,11 @@ void SfxProgress::SetWaitMode
 
 // -----------------------------------------------------------------------
 
-BOOL SfxProgress::GetWaitMode() const
+sal_Bool SfxProgress::GetWaitMode() const
 
-/*  [Beschreibung]
+/* [Description]
 
-    Wartecursor-Modus abfragen.
-
+   Get Wait-cursor mode.
 */
 
 {
@@ -669,36 +624,34 @@ BOOL SfxProgress::GetWaitMode() const
 
 SfxProgress* SfxProgress::GetActiveProgress
 (
-    SfxObjectShell* pDocSh    /*  <SfxObjectShell>, die nach einem laufenden
-                                    <SfxProgress> gefragt werden soll, oder
-                                    0, wenn ein f"ur die gesamte Applikation
-                                    laufender SfxProgress erfragt werden soll.
-                                    Der Pointer braucht nur zum Zeitpunkt des
-                                    Aufrufs g"ultig zu sein. */
+    SfxObjectShell* pDocSh        /*  the <SfxObjectShell>, which should be
+                                      queried after a current <SfxProgress>,
+                                      or 0 if an current SfxProgress for the
+                                      entire application should be obtained.
+                                      The pointer only needs at the time of
+                                      the call to be valid.
+                                  */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Mit dieser Methode kann erfragt werden, ob und welcher <SfxProgress>-
-    f"ur eine bestimmte Instanz von SfxObjectShell oder gar die gesamte
-    Applikation zur Zeit aktiv ist. Dies kann z.B. zum Abfangen von
-    Time-Out-Events etc. verwendet werden.
+    This method is used to check whether and which <SfxProgress> is currently
+    active for a specific instance of SfxObjectShell or even an entire
+    application. This can for example be used to check for Time-Out-Events, etc.
 
-    Anstelle eines Pointer auf den SfxProgress der SfxObjectShell wird
-    ggf. der auf den SfxProgress der Applikation geliefert, mit der
-    Abfrage 'SfxProgress::GetActiveProgress(pMyDocSh)' wird also
-    insofern vorhanden der SfxProgress von 'pMyDocSh' geliefert,
-    sonst der SfxProgress der Applikation bzw. ein 0-Pointer.
+    Instead of a pointer to the SfxProgress the SfxObjectShell may be
+    pointed at the SfxProgress of the application, with the query
+    'SfxProgress:: GetActiveProgress (pMyDocSh)' thus the current
+    SfxProgress of 'pMyDocSh' is delivered, otherwise the SfxProgress of
+    the application or a 0-pointer.
 
+    [Note]
 
-    [Anmerkung]
+    If no SfxProgress is running in the application and also not at the
+    specified SfxObjectShell, then this method will always return 0,
+    even if one SfxProgress runs on another SfxObjectShell.
 
-    "auft kein SfxProgress an der Applikation und ebenfalls keiner an
-    der angegebenen SfxObjectShell, dann wird immer 0 zur"uckgeliefert,
-    auch wenn an einer anderen SfxObjectShell ein SfxProgress l"uft.
-
-
-    [Querverweise]
+    [Cross-reference]
 
     <SfxApplication::GetProgress()const>
     <SfxObjectShell::GetProgress()const>
@@ -736,18 +689,17 @@ void SfxProgress::LeaveLock()
 
 bool SfxProgress::StatusBarManagerGone_Impl
 (
-    SfxStatusBarManager *   // dieser <SfxStatusBarManager> wird zerst"ort
+    SfxStatusBarManager *       // This <SfxStatusBarManager> will be destroyed
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Interne Methode zum Benachrichtigen des SfxProgress, da\s der angegebene
-    SfxStatusBarManger zerst"ort wird. Damit der Progress ihn loslassen
-    kann.
+    Internal method for notifying the SfxProgress that the specified
+    SfxStatusBarManger will be destroyed so that the Progress can let go of it.
 */
 
 {
-    return TRUE;
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

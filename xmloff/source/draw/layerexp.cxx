@@ -34,7 +34,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -104,7 +104,7 @@ void SdXMLayerExporter::exportLayer( SvXMLExport& rExport )
         }
         catch( Exception& )
         {
-            DBG_ERROR("SdXMLayerExporter::exportLayer(), exception caught during export of one layer!");
+            OSL_FAIL("SdXMLayerExporter::exportLayer(), exception caught during export of one layer!");
         }
     }
 }

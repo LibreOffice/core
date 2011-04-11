@@ -32,7 +32,7 @@
 #include "fmprop.hrc"
 #include "fmvwimp.hxx"
 #include "fmpgeimp.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "svx/fmview.hxx"
 #include "svx/fmglob.hxx"
 #include "svx/fmpage.hxx"
@@ -375,7 +375,7 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
     Reference< XInterface >  xSourceContainer = xSourceAsChild->getParent();
 
     m_xEnvironmentHistory = Reference< XIndexContainer >(
-        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.Forms")),
+        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.Forms")) ),
         UNO_QUERY);
     DBG_ASSERT(m_xEnvironmentHistory.is(), "FmFormObj::clonedFrom : could not create a forms collection !");
 
@@ -388,16 +388,14 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
 }
 
 //------------------------------------------------------------------
-SdrObject* FmFormObj::Clone() const
+FmFormObj* FmFormObj::Clone() const
 {
-    SdrObject* pReturn = SdrUnoObj::Clone();
-
-    FmFormObj* pFormObject = PTR_CAST(FmFormObj, pReturn);
+    FmFormObj* pFormObject = CloneHelper< FmFormObj >();
     DBG_ASSERT(pFormObject != NULL, "FmFormObj::Clone : invalid clone !");
     if (pFormObject)
         pFormObject->clonedFrom(this);
 
-    return pReturn;
+    return pFormObject;
 }
 
 //------------------------------------------------------------------
@@ -408,30 +406,29 @@ void FmFormObj::NbcReformatText()
 }
 
 //------------------------------------------------------------------
-void FmFormObj::operator= (const SdrObject& rObj)
+FmFormObj& FmFormObj::operator= (const FmFormObj& rObj)
 {
+    if( this == &rObj )
+        return *this;
     SdrUnoObj::operator= (rObj);
 
-    FmFormObj* pFormObj = PTR_CAST(FmFormObj, &rObj);
-    if (pFormObj)
+    // liegt das UnoControlModel in einer Eventumgebung,
+    // dann koennen noch Events zugeordnet sein
+    Reference< XFormComponent >  xContent(rObj.xUnoControlModel, UNO_QUERY);
+    if (xContent.is())
     {
-        // liegt das UnoControlModel in einer Eventumgebung,
-        // dann koennen noch Events zugeordnet sein
-        Reference< XFormComponent >  xContent(pFormObj->xUnoControlModel, UNO_QUERY);
-        if (xContent.is())
+        Reference< XEventAttacherManager >  xManager(xContent->getParent(), UNO_QUERY);
+        Reference< XIndexAccess >  xManagerAsIndex(xManager, UNO_QUERY);
+        if (xManagerAsIndex.is())
         {
-            Reference< XEventAttacherManager >  xManager(xContent->getParent(), UNO_QUERY);
-            Reference< XIndexAccess >  xManagerAsIndex(xManager, UNO_QUERY);
-            if (xManagerAsIndex.is())
-            {
-                sal_Int32 nPos = getElementPos( xManagerAsIndex, xContent );
-                if ( nPos >= 0 )
-                    aEvts = xManager->getScriptEvents( nPos );
-            }
+            sal_Int32 nPos = getElementPos( xManagerAsIndex, xContent );
+            if ( nPos >= 0 )
+                aEvts = xManager->getScriptEvents( nPos );
         }
-        else
-            aEvts = pFormObj->aEvts;
     }
+    else
+        aEvts = rObj.aEvts;
+    return *this;
 }
 
 //------------------------------------------------------------------
@@ -507,7 +504,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
         }
         catch(Exception&)
         {
-            DBG_ERROR("FmFormObj::ensureModelEnv : could not retrieve a source DSS !");
+            OSL_FAIL("FmFormObj::ensureModelEnv : could not retrieve a source DSS !");
         }
 
 
@@ -536,7 +533,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FmFormObj::ensureModelEnv : exception while getting a sibling's DSS !");
+                        OSL_FAIL("FmFormObj::ensureModelEnv : exception while getting a sibling's DSS !");
                     }
 
                 }
@@ -567,7 +564,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("FmFormObj::ensureModelEnv : exception while getting a destination DSS !");
+                        OSL_FAIL("FmFormObj::ensureModelEnv : exception while getting a destination DSS !");
                     }
 
                 }
@@ -581,7 +578,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                 {
                     // create and insert (into the destination) a copy of the form
                     xCurrentDestForm.set(
-                        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.form.component.DataForm" ) ),
+                        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.DataForm" )) ),
                         UNO_QUERY_THROW );
                     ::comphelper::copyProperties( xCurrentSourceForm, xCurrentDestForm );
 
@@ -593,7 +590,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmFormObj::ensureModelEnv : something went seriously wrong while creating a new form !");
+                    OSL_FAIL("FmFormObj::ensureModelEnv : something went seriously wrong while creating a new form !");
                     // no more options anymore ...
                     return Reference< XInterface > ();
                 }

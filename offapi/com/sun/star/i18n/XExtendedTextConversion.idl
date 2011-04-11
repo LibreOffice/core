@@ -43,7 +43,7 @@ module com { module sun { module star { module i18n {
     <p> It is derived from
     <type scope="::com::sun::star::i18n">XTextConversion</type> and provides
     a new conversion function containing position map (offset) between original
-    and conveted string. </p>
+    and converted string. </p>
 
      @since OOo 2.0
  */

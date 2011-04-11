@@ -34,7 +34,6 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
 #include "RangeSelectionHelper.hxx"
 // for RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR
 #include "TabPageNotifiable.hxx"
@@ -52,8 +51,8 @@ void lcl_enableRangeChoosing( bool bEnable, Dialog * pDialog )
 {
     if( pDialog )
     {
-        pDialog->Show( bEnable ? FALSE : TRUE );
-        pDialog->SetModalInputMode( bEnable ? FALSE : TRUE );
+        pDialog->Show( bEnable ? sal_False : sal_True );
+        pDialog->SetModalInputMode( bEnable ? sal_False : sal_True );
     }
 }
 
@@ -91,10 +90,6 @@ sal_uInt16 lcl_getLbEntryPosByErrorKind( SvxChartKindError eErrorKind )
 namespace chart
 {
 //.............................................................................
-
-// macro for selecting a normal or high contrast bitmap the stack variable
-// bIsHighContrast must exist and reflect the correct state
-#define SELECT_IMAGE(name) Image( SchResId( bIsHighContrast ? name ## _HC : name ))
 
 enum StatIndicator
 {
@@ -163,7 +158,7 @@ ErrorBarResources::ErrorBarResources( Window* pParent, Dialog * pParentDialog,
     m_aRbRange.SetClickHdl( LINK( this, ErrorBarResources, CategoryChosen ));
     m_aLbFunction.SetSelectHdl( LINK( this, ErrorBarResources, CategoryChosen ));
 
-    m_aCbSyncPosNeg.Check( FALSE );
+    m_aCbSyncPosNeg.Check( sal_False );
     m_aCbSyncPosNeg.SetToggleHdl( LINK( this, ErrorBarResources, SynchronizePosAndNeg ));
 
     m_aMfPositive.SetModifyHdl( LINK( this, ErrorBarResources, PosValueChanged ));
@@ -400,7 +395,7 @@ IMPL_LINK( ErrorBarResources, CategoryChosen, void *,  )
     }
     else
     {
-        OSL_ENSURE( false, "Unknown category chosen" );
+        OSL_FAIL( "Unknown category chosen" );
         m_bErrorKindUnique = false;
     }
 
@@ -475,12 +470,12 @@ IMPL_LINK( ErrorBarResources, ChooseRange, RangeSelectionButton *, pButton )
     if( pButton == &m_aIbRangePositive )
     {
         m_pCurrentRangeChoosingField = &m_aEdRangePositive;
-        aUIString = ::rtl::OUString( String( SchResId( STR_DATA_SELECT_RANGE_FOR_POSITIVE_ERRORBARS )));
+        aUIString = String( SchResId( STR_DATA_SELECT_RANGE_FOR_POSITIVE_ERRORBARS ));
     }
     else
     {
         m_pCurrentRangeChoosingField = &m_aEdRangeNegative;
-        aUIString = ::rtl::OUString( String( SchResId( STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS )));
+        aUIString = String( SchResId( STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS ));
     }
 
     OSL_ASSERT( m_pParentDialog );
@@ -521,7 +516,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
 
     // category
      m_eErrorKind = CHERROR_NONE;
-    aState = rInAttrs.GetItemState( SCHATTR_STAT_KIND_ERROR, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_STAT_KIND_ERROR, sal_True, &pPoolItem );
     m_bErrorKindUnique = ( aState != SFX_ITEM_DONTCARE );
 
     if( aState == SFX_ITEM_SET )
@@ -555,14 +550,14 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     }
     else
     {
-        m_aRbNone.Check( FALSE );
-        m_aRbConst.Check( FALSE );
-        m_aRbPercent.Check( FALSE );
-        m_aRbFunction.Check( FALSE );
+        m_aRbNone.Check( sal_False );
+        m_aRbConst.Check( sal_False );
+        m_aRbPercent.Check( sal_False );
+        m_aRbFunction.Check( sal_False );
     }
 
     // parameters
-    aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTPLUS, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTPLUS, sal_True, &pPoolItem );
     m_bPlusUnique = ( aState != SFX_ITEM_DONTCARE );
     double fPlusValue = 0.0;
     if( aState == SFX_ITEM_SET )
@@ -572,12 +567,11 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
         m_aMfPositive.SetValue( nPlusValue );
     }
 
-    aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTMINUS, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTMINUS, sal_True, &pPoolItem );
     m_bMinusUnique = ( aState != SFX_ITEM_DONTCARE );
-    double fMinusValue = 0.0;
     if( aState == SFX_ITEM_SET )
     {
-        fMinusValue = ((const SvxDoubleItem*) pPoolItem)->GetValue();
+        double fMinusValue = ((const SvxDoubleItem*) pPoolItem)->GetValue();
         sal_Int32 nMinusValue = static_cast< sal_Int32 >( fMinusValue * pow(10.0,m_aMfNegative.GetDecimalDigits()) );
         m_aMfNegative.SetValue( nMinusValue );
 
@@ -587,7 +581,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     }
 
     // indicator
-    aState = rInAttrs.GetItemState( SCHATTR_STAT_INDICATE, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_STAT_INDICATE, sal_True, &pPoolItem );
     m_bIndicatorUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET)
         m_eIndicate = ((const SvxChartIndicateItem * ) pPoolItem)->GetValue();
@@ -610,13 +604,13 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     }
     else
     {
-        m_aRbBoth.Check( FALSE );
-        m_aRbPositive.Check( FALSE );
-        m_aRbNegative.Check( FALSE );
+        m_aRbBoth.Check( sal_False );
+        m_aRbPositive.Check( sal_False );
+        m_aRbNegative.Check( sal_False );
     }
 
     // ranges
-    aState = rInAttrs.GetItemState( SCHATTR_STAT_RANGE_POS, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_STAT_RANGE_POS, sal_True, &pPoolItem );
     m_bRangePosUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET )
     {
@@ -624,7 +618,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
         m_aEdRangePositive.SetText( sRangePositive );
     }
 
-    aState = rInAttrs.GetItemState( SCHATTR_STAT_RANGE_NEG, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_STAT_RANGE_NEG, sal_True, &pPoolItem );
     m_bRangeNegUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET )
     {
@@ -639,7 +633,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     UpdateControlStates();
 }
 
-BOOL ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
+sal_Bool ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
 {
     if( m_bErrorKindUnique )
         rOutAttrs.Put( SvxChartKindErrorItem( m_eErrorKind, SCHATTR_STAT_KIND_ERROR ));
@@ -692,29 +686,22 @@ BOOL ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 void ErrorBarResources::FillValueSets()
 {
-    bool bIsHighContrast = ( true && m_aRbConst.GetSettings().GetStyleSettings().GetHighContrastMode() );
-
-    // do not scale images, show then centered
-//     m_aFiPositive.SetStyle( (m_aFiPositive.GetStyle() & (~WB_SCALE)) | WB_CENTER );
-//     m_aFiNegative.SetStyle( (m_aFiNegative.GetStyle() & (~WB_SCALE)) | WB_CENTER );
-//     m_aFiBoth.SetStyle( (m_aFiBoth.GetStyle() & (~WB_SCALE)) | WB_CENTER );
-
     if( m_eErrorBarType == ERROR_BAR_Y )
     {
-        m_aFiNegative.SetImage( SELECT_IMAGE( BMP_INDICATE_DOWN ));
-        m_aFiPositive.SetImage( SELECT_IMAGE( BMP_INDICATE_UP ));
-        m_aFiBoth.SetImage( SELECT_IMAGE( BMP_INDICATE_BOTH_VERTI ));
+        m_aFiNegative.SetImage( Image( SchResId( BMP_INDICATE_DOWN       ) ) );
+        m_aFiPositive.SetImage( Image( SchResId( BMP_INDICATE_UP         ) ) );
+        m_aFiBoth.SetImage(     Image( SchResId( BMP_INDICATE_BOTH_VERTI ) ) );
     }
     else if( m_eErrorBarType == ERROR_BAR_X )
     {
-        m_aFiNegative.SetImage( SELECT_IMAGE( BMP_INDICATE_LEFT ));
-        m_aFiPositive.SetImage( SELECT_IMAGE( BMP_INDICATE_RIGHT ));
-        m_aFiBoth.SetImage( SELECT_IMAGE( BMP_INDICATE_BOTH_HORI ));
+        m_aFiNegative.SetImage( Image( SchResId( BMP_INDICATE_LEFT      ) ) );
+        m_aFiPositive.SetImage( Image( SchResId( BMP_INDICATE_RIGHT     ) ) );
+        m_aFiBoth.SetImage(     Image( SchResId( BMP_INDICATE_BOTH_HORI ) ) );
     }
 }
 
@@ -727,8 +714,6 @@ void ErrorBarResources::listeningFinished(
 
     // rNewRange becomes invalid after removing the listener
     ::rtl::OUString aRange( rNewRange );
-
-//     m_rDialogModel.startControllerLockTimer();
 
     // stop listening
     m_apRangeSelectionHelper->stopRangeListening();

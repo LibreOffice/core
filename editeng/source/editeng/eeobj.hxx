@@ -45,9 +45,6 @@ private:
 
     String          maOfficeBookmark;
 
-//  String          maNetscapeBookmark;
-//  SvMemoryStream  maRTFData;
-
 public:
                     EditDataObject();
                     ~EditDataObject();

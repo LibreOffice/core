@@ -30,11 +30,8 @@
 #include <tokens/tkpstama.hxx>
 
 // NOT FULLY DECLARED SERVICES
-// #include <srcfind.hxx>
 #include <tokens/stmstarr.hxx>
-//#include <parseinc.hxx>
 #include <tools/tkpchars.hxx>
-
 
 const intt  C_nStatuslistResizeValue = 32;
 const intt  C_nTopStatus = 0;
@@ -159,8 +156,6 @@ StateMachine::CurrentStatus() const
     StmArrayStatus * pCurSt = Status(nCurrentStatus).AsArray();
 
     csv_assert(pCurSt != 0);
-//  if(pCurSt == 0)
-//      csv_assert(false);
     return *pCurSt;
 }
 

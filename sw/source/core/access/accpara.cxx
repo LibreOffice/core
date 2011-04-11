@@ -78,13 +78,11 @@
 #include <viewimp.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <textmarkuphelper.hxx>
-// --> OD 2010-02-22 #i10825#
+// #i10825#
 #include <parachangetrackinginfo.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
 // <--
-// --> OD 2010-03-08 #i92233#
-#include <comphelper/stlunosequence.hxx>
-// <--
+#include <comphelper/stlunosequence.hxx> // #i92233#
 
 #include <algorithm>
 
@@ -128,9 +126,7 @@ const SwTxtNode* SwAccessibleParagraph::GetTxtNode() const
 
 ::rtl::OUString SwAccessibleParagraph::GetDescription()
 {
-    // --> OD 2004-09-29 #117933# - provide empty description for paragraphs
-    return ::rtl::OUString();
-    // <--
+    return ::rtl::OUString(); // provide empty description for paragraphs
 }
 
 sal_Int32 SwAccessibleParagraph::GetCaretPos()
@@ -138,9 +134,9 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
     sal_Int32 nRet = -1;
 
     // get the selection's point, and test whether it's in our node
-    // --> OD 2005-12-20 #i27301# - consider adjusted method signature
+    // #i27301# - consider adjusted method signature
     SwPaM* pCaret = GetCursor( false );  // caret is first PaM in PaM-ring
-    // <--
+
     if( pCaret != NULL )
     {
         const SwTxtNode* pNode = GetTxtNode();
@@ -151,11 +147,10 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
         {
             // same node? Then check whether it's also within 'our' part
             // of the paragraph
-            USHORT nIndex = pPoint->nContent.GetIndex();
+            sal_uInt16 nIndex = pPoint->nContent.GetIndex();
             if( GetPortionData().IsValidCorePosition( nIndex ) )
             {
                 // Yes, it's us!
-                // --> OD 2006-10-19 #70538#
                 // consider that cursor/caret is in front of the list label
                 if ( pCaret->IsInFrontOfLabel() )
                 {
@@ -165,7 +160,6 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
                 {
                     nRet = GetPortionData().GetAccessiblePosition( nIndex );
                 }
-                // <--
 
                 DBG_ASSERT( nRet >= 0, "invalid cursor?" );
                 DBG_ASSERT( nRet <= GetPortionData().GetAccessibleString().
@@ -188,14 +182,12 @@ sal_Bool SwAccessibleParagraph::GetSelection(
     nEnd = -1;
 
     // get the selection, and test whether it affects our text node
-    // --> OD 2005-12-20 #i27301# - consider adjusted method signature
-    SwPaM* pCrsr = GetCursor( true );
-    // <--
+    SwPaM* pCrsr = GetCursor( true ); // #i27301# - consider adjusted method signature
     if( pCrsr != NULL )
     {
         // get SwPosition for my node
         const SwTxtNode* pNode = GetTxtNode();
-        ULONG nHere = pNode->GetIndex();
+        sal_uLong nHere = pNode->GetIndex();
 
         // iterate over ring
         SwPaM* pRingStart = pCrsr;
@@ -206,9 +198,9 @@ sal_Bool SwAccessibleParagraph::GetSelection(
             {
                 // check whether nHere is 'inside' pCrsr
                 SwPosition* pStart = pCrsr->Start();
-                ULONG nStartIndex = pStart->nNode.GetIndex();
+                sal_uLong nStartIndex = pStart->nNode.GetIndex();
                 SwPosition* pEnd = pCrsr->End();
-                ULONG nEndIndex = pEnd->nNode.GetIndex();
+                sal_uLong nEndIndex = pEnd->nNode.GetIndex();
                 if( ( nHere >= nStartIndex ) &&
                     ( nHere <= nEndIndex )      )
                 {
@@ -230,7 +222,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
                         // selection starts in this node:
                         // then check whether it's before or inside our part of
                         // the paragraph, and if so, get the proper position
-                        USHORT nCoreStart = pStart->nContent.GetIndex();
+                        sal_uInt16 nCoreStart = pStart->nContent.GetIndex();
                         if( nCoreStart <
                             GetPortionData().GetFirstValidCorePosition() )
                         {
@@ -266,7 +258,7 @@ sal_Bool SwAccessibleParagraph::GetSelection(
 
                         // selection ends in this node: then select everything
                         // before our part of the node
-                        USHORT nCoreEnd = pEnd->nContent.GetIndex();
+                        sal_uInt16 nCoreEnd = pEnd->nContent.GetIndex();
                         if( nCoreEnd >
                                 GetPortionData().GetLastValidCorePosition() )
                         {
@@ -309,16 +301,15 @@ sal_Bool SwAccessibleParagraph::GetSelection(
     return bRet;
 }
 
-// --> OD 2005-12-20 #i27301# - new parameter <_bForSelection>
+// #i27301# - new parameter <_bForSelection>
 SwPaM* SwAccessibleParagraph::GetCursor( const bool _bForSelection )
 {
     // get the cursor shell; if we don't have any, we don't have a
     // cursor/selection either
     SwPaM* pCrsr = NULL;
     SwCrsrShell* pCrsrShell = SwAccessibleParagraph::GetCrsrShell();
-    // --> OD 2005-12-20 #i27301#
-    // - if cursor is retrieved for selection, the cursors for a table selection
-    //   has to be returned.
+    // #i27301# - if cursor is retrieved for selection, the cursors for
+    // a table selection has to be returned.
     if ( pCrsrShell != NULL &&
          ( _bForSelection || !pCrsrShell->IsTableMode() ) )
     // <--
@@ -329,7 +320,7 @@ SwPaM* SwAccessibleParagraph::GetCursor( const bool _bForSelection )
             !(pFESh->IsFrmSelected() || pFESh->IsObjSelected() > 0) )
         {
             // get the selection, and test whether it affects our text node
-            pCrsr = pCrsrShell->GetCrsr( FALSE /* ??? */ );
+            pCrsr = pCrsrShell->GetCrsr( sal_False /* ??? */ );
         }
     }
 
@@ -360,9 +351,7 @@ void SwAccessibleParagraph::GetStates(
         rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
     // FOCUSED (simulates node index of cursor)
-    // --> OD 2005-12-20 #i27301# - consider adjusted method signature
-    SwPaM* pCaret = GetCursor( false );
-    // <--
+    SwPaM* pCaret = GetCursor( false ); // #i27301# - consider adjusted method signature
     const SwTxtNode* pTxtNd = GetTxtNode();
     if( pCaret != 0 && pTxtNd != 0 &&
         pTxtNd->GetIndex() == pCaret->GetPoint()->nNode.GetIndex() &&
@@ -494,9 +483,7 @@ void SwAccessibleParagraph::_InvalidateFocus()
 SwAccessibleParagraph::SwAccessibleParagraph(
         SwAccessibleMap& rInitMap,
         const SwTxtFrm& rTxtFrm )
-    // --> OD 2010-02-24 #i108125#
-    : SwClient( const_cast<SwTxtNode*>(rTxtFrm.GetTxtNode()) )
-    // <--
+    : SwClient( const_cast<SwTxtNode*>(rTxtFrm.GetTxtNode()) ) // #i108125#
     , SwAccessibleContext( &rInitMap, AccessibleRole::PARAGRAPH, &rTxtFrm )
     , sDesc()
     , pPortionData( NULL )
@@ -504,16 +491,12 @@ SwAccessibleParagraph::SwAccessibleParagraph(
     , nOldCaretPos( -1 )
     , bIsHeading( sal_False )
     , aSelectionHelper( *this )
-    // --> OD 2010-02-19 #i108125#
-    , mpParaChangeTrackInfo( new SwParaChangeTrackingInfo( rTxtFrm ) )
-    // <--
+    , mpParaChangeTrackInfo( new SwParaChangeTrackingInfo( rTxtFrm ) ) // #i108125#
 {
     SolarMutexGuard aGuard;
 
     bIsHeading = IsHeading();
-    // --> OD 2004-09-27 #117970# - set an empty accessibility name for paragraphs
-    SetName( ::rtl::OUString() );
-    // <--
+    SetName( ::rtl::OUString() ); // set an empty accessibility name for paragraphs
 
     // If this object has the focus, then it is remembered by the map itself.
     nOldCaretPos = GetCaretPos();
@@ -525,9 +508,7 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
 
     delete pPortionData;
     delete pHyperTextData;
-    // --> OD 2010-02-22 #i108125#
-    delete mpParaChangeTrackInfo;
-    // <--
+    delete mpParaChangeTrackInfo; // #i108125#
 }
 
 sal_Bool SwAccessibleParagraph::HasCursor()
@@ -563,7 +544,7 @@ void SwAccessibleParagraph::ClearPortionData()
 }
 
 
-void SwAccessibleParagraph::ExecuteAtViewShell( UINT16 nSlot )
+void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
 {
     DBG_ASSERT( GetMap() != NULL, "no map?" );
     ViewShell* pViewShell = GetMap()->GetShell();
@@ -597,8 +578,8 @@ SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
                 IsValidRange(nStartIndex, nEndIndex, GetString().getLength()),
                 "please check parameters before calling this method" );
 
-    USHORT nStart = GetPortionData().GetModelPosition( nStartIndex );
-    USHORT nEnd = (nEndIndex == -1) ? (nStart + 1) :
+    sal_uInt16 nStart = GetPortionData().GetModelPosition( nStartIndex );
+    sal_uInt16 nEnd = (nEndIndex == -1) ? (nStart + 1) :
                         GetPortionData().GetModelPosition( nEndIndex );
 
     // create UNO cursor
@@ -670,13 +651,13 @@ sal_Bool SwAccessibleParagraph::GetWordBoundary(
     if( pBreakIt->GetBreakIter().is() )
     {
         // get locale for this position
-        USHORT nModelPos = GetPortionData().GetModelPosition( nPos );
+        sal_uInt16 nModelPos = GetPortionData().GetModelPosition( nPos );
         lang::Locale aLocale = pBreakIt->GetLocale(
                               GetTxtNode()->GetLang( nModelPos ) );
 
         // which type of word are we interested in?
         // (DICTIONARY_WORD includes punctuation, ANY_WORD doesn't.)
-        const USHORT nWordType = i18n::WordType::ANY_WORD;
+        const sal_uInt16 nWordType = i18n::WordType::ANY_WORD;
 
         // get word boundary, as the Break-Iterator sees fit.
         rBound = pBreakIt->GetBreakIter()->getWordBoundary(
@@ -750,12 +731,12 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
     if( pBreakIt->GetBreakIter().is() )
     {
         // get locale for this position
-        USHORT nModelPos = GetPortionData().GetModelPosition( nPos );
+        sal_uInt16 nModelPos = GetPortionData().GetModelPosition( nPos );
         lang::Locale aLocale = pBreakIt->GetLocale(
                               GetTxtNode()->GetLang( nModelPos ) );
 
         // get word boundary, as the Break-Iterator sees fit.
-        const USHORT nIterMode = i18n::CharacterIteratorMode::SKIPCELL;
+        const sal_uInt16 nIterMode = i18n::CharacterIteratorMode::SKIPCELL;
         sal_Int32 nDone = 0;
         rBound.endPos = pBreakIt->GetBreakIter()->nextCharacters(
              rText, nPos, aLocale, nIterMode, 1, nDone );
@@ -862,12 +843,7 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
     return aLoc;
 }
 
-/** paragraphs are in relation CONTENT_FLOWS_FROM and/or CONTENT_FLOWS_TO
-
-    OD 2005-12-02 #i27138#
-
-    @author OD
-*/
+/** #i27138# - paragraphs are in relation CONTENT_FLOWS_FROM and/or CONTENT_FLOWS_TO */
 uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccessibleRelationSet()
     throw ( uno::RuntimeException )
 {
@@ -914,9 +890,7 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
 
     // get cursor shell
     SwCrsrShell *pCrsrSh = GetCrsrShell();
-    // --> OD 2005-12-20 #i27301# - consider new method signature
-    SwPaM *pCrsr = GetCursor( false );
-    // <--
+    SwPaM *pCrsr = GetCursor( false ); // #i27301# - consider new method signature
     const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
     const SwTxtNode* pTxtNd = pTxtFrm->GetTxtNode();
 
@@ -945,7 +919,7 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
     /* <-#i13955# */
 }
 
-// --> OD 2007-01-17 #i71385#
+// #i71385#
 bool lcl_GetBackgroundColor( Color & rColor,
                              const SwFrm* pFrm,
                              SwCrsrShell* pCrsrSh )
@@ -1064,7 +1038,7 @@ uno::Any SwAccessibleParagraph::queryInterface( const uno::Type& rType )
         uno::Reference<XAccessibleHypertext> aAccHyp = this;
         aRet <<= aAccHyp;
     }
-    // --> OD 2006-07-13 #i63870#
+    // #i63870#
     // add interface com::sun:star:accessibility::XAccessibleTextAttributes
     else if ( rType == ::getCppuType((uno::Reference<XAccessibleTextAttributes> *)0) )
     {
@@ -1072,7 +1046,7 @@ uno::Any SwAccessibleParagraph::queryInterface( const uno::Type& rType )
         aRet <<= aAccTextAttr;
     }
     // <--
-    // --> OD 2008-06-10 #i89175#
+    // #i89175#
     // add interface com::sun:star:accessibility::XAccessibleTextMarkup
     else if ( rType == ::getCppuType((uno::Reference<XAccessibleTextMarkup> *)0) )
     {
@@ -1100,10 +1074,9 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleParagraph::getTypes() throw(uno:
     uno::Sequence< uno::Type > aTypes( SwAccessibleContext::getTypes() );
 
     sal_Int32 nIndex = aTypes.getLength();
-    // --> OD 2006-07-13 #i63870#
-    // add type accessibility::XAccessibleTextAttributes
-    // --> OD 2008-06-10 #i89175#
-    // add type accessibility::XAccessibleTextMarkup and accessibility::XAccessibleMultiLineText
+    // #i63870# - add type accessibility::XAccessibleTextAttributes
+    // #i89175# - add type accessibility::XAccessibleTextMarkup and
+    // accessibility::XAccessibleMultiLineText
     aTypes.realloc( nIndex + 6 );
 
     uno::Type* pTypes = aTypes.getArray();
@@ -1210,9 +1183,8 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 }
 
-// --> OD 2006-07-20 #i63870#
-// re-implement method on behalf of methods <_getDefaultAttributesImpl(..)> and
-// <_getRunAttributesImpl(..)>
+// #i63870# - re-implement method on behalf of methods
+// <_getDefaultAttributesImpl(..)> and <_getRunAttributesImpl(..)>
 uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     sal_Int32 nIndex,
     const uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
@@ -1256,41 +1228,10 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
         ++i;
     }
 
-//    // create a (dummy) text portion for the sole purpose of calling
-//    // getPropertyValues on it
-//    Reference<XMultiPropertySet> xPortion = CreateUnoPortion( nIndex, nIndex + 1 );
-
-//    // get values
-//    Sequence<OUString> aNames = getAttributeNames();
-//    sal_Int32 nLength = aNames.getLength();
-//    Sequence<Any> aAnys( nLength );
-//    aAnys = xPortion->getPropertyValues( aNames );
-
-//    // copy names + anys into return sequence
-//    Sequence<PropertyValue> aValues( aNames.getLength() );
-//    const OUString* pNames = aNames.getConstArray();
-//    const Any* pAnys = aAnys.getConstArray();
-//    PropertyValue* pValues = aValues.getArray();
-//    for( sal_Int32 i = 0; i < nLength; i++ )
-//    {
-//        PropertyValue& rValue = pValues[i];
-//        rValue.Name = pNames[i];
-//        rValue.Value = pAnys[i];
-//        rValue.Handle = -1;                         // handle not supported
-//        rValue.State = PropertyState_DIRECT_VALUE;  // states not supported
-//    }
-
-//    // adjust background color if we're in a gray portion
-//    DBG_ASSERT( pValues[CHAR_BACK_COLOR_POS].Name.
-//                equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("CharBackColor")),
-//                "Please adjust CHAR_BACK_COLOR_POS constant." );
-//    if( GetPortionData().IsInGrayPortion( nIndex ) )
-//        pValues[CHAR_BACK_COLOR_POS].Value <<= SwViewOption::GetFieldShadingsColor().GetColor();
-
     return aValues;
 }
 
-// --> OD 2006-07-11 #i63870#
+// #i63870#
 void SwAccessibleParagraph::_getDefaultAttributesImpl(
         const uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
         tAccParaPropValMap& rDefAttrSeq,
@@ -1313,9 +1254,8 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
                                RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
                                0 ) );
     }
-    // --> OD 2007-11-12 #i82637#
-    // From the perspective of the a11y API the default character attributes
-    // are the character attributes, which are set at the paragraph style
+    // #i82637# - From the perspective of the a11y API the default character
+    // attributes are the character attributes, which are set at the paragraph style
     // of the paragraph. The character attributes set at the automatic paragraph
     // style of the paragraph are treated as run attributes.
 //    pTxtNode->SwCntntNode::GetAttr( *pSet );
@@ -1368,7 +1308,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
             ++aPropIt;
         }
 
-        // --> OD 2007-01-15 #i72800#
+        // #i72800#
         // add property value entry for the paragraph style
         if ( !bOnlyCharAttrs && pTxtNode->GetTxtColl() )
         {
@@ -1389,7 +1329,7 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
         }
         // <--
 
-        // --> OD 2007-01-15 #i73371#
+        // #i73371#
         // resolve value text::WritingMode2::PAGE of property value entry WritingMode
         if ( !bOnlyCharAttrs && GetFrm() )
         {
@@ -1470,7 +1410,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
     tAccParaPropValMap aDefAttrSeq;
     _getDefaultAttributesImpl( aRequestedAttributes, aDefAttrSeq );
 
-    // --> OD 2010-03-08 #i92233#
+    // #i92233#
     static rtl::OUString sMMToPixelRatio(RTL_CONSTASCII_USTRINGPARAM("MMToPixelRatio"));
     bool bProvideMMToPixelRatio( false );
     {
@@ -1504,7 +1444,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         ++i;
     }
 
-    // --> OD 2010-03-08 #i92233#
+    // #i92233#
     if ( bProvideMMToPixelRatio )
     {
         PropertyValue rPropVal;
@@ -1532,9 +1472,9 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     {
         const SwTxtNode* pTxtNode( GetTxtNode() );
         SwPosition* pStartPos = new SwPosition( *pTxtNode );
-        pStartPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), static_cast<USHORT>(nIndex) );
+        pStartPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), static_cast<sal_uInt16>(nIndex) );
         SwPosition* pEndPos = new SwPosition( *pTxtNode );
-        pEndPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), static_cast<USHORT>(nIndex+1) );
+        pEndPos->nContent.Assign( const_cast<SwTxtNode*>(pTxtNode), static_cast<sal_uInt16>(nIndex+1) );
 
         pPaM = new SwPaM( *pStartPos, *pEndPos );
 
@@ -1546,11 +1486,11 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     SfxItemSet aSet( pPaM->GetDoc()->GetAttrPool(),
                      RES_CHRATR_BEGIN, RES_CHRATR_END -1,
                      0 );
-    // --> OD 2007-11-12 #i82637#
+    // #i82637#
     // From the perspective of the a11y API the character attributes, which
     // are set at the automatic paragraph style of the paragraph are treated
     // as run attributes.
-//    SwXTextCursor::GetCrsrAttr( *pPaM, aSet, TRUE, TRUE );
+//    SwXTextCursor::GetCrsrAttr( *pPaM, aSet, sal_True, sal_True );
     // get character attributes from automatic paragraph style and merge these into <aSet>
     {
         const SwTxtNode* pTxtNode( GetTxtNode() );
@@ -1559,7 +1499,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
             SfxItemSet aAutomaticParaStyleCharAttrs( pPaM->GetDoc()->GetAttrPool(),
                                                      RES_CHRATR_BEGIN, RES_CHRATR_END -1,
                                                      0 );
-            aAutomaticParaStyleCharAttrs.Put( *(pTxtNode->GetpSwAttrSet()), FALSE );
+            aAutomaticParaStyleCharAttrs.Put( *(pTxtNode->GetpSwAttrSet()), sal_False );
             aSet.Put( aAutomaticParaStyleCharAttrs );
         }
     }
@@ -1568,7 +1508,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         SfxItemSet aCharAttrsAtPaM( pPaM->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END -1,
                                     0 );
-        SwUnoCursorHelper::GetCrsrAttr(*pPaM, aCharAttrsAtPaM, TRUE, TRUE);
+        SwUnoCursorHelper::GetCrsrAttr(*pPaM, aCharAttrsAtPaM, sal_True, sal_True);
         aSet.Put( aCharAttrsAtPaM );
     }
     // <--
@@ -1577,11 +1517,9 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     {
         tAccParaPropValMap aRunAttrSeq;
         {
-            // --> OD 2007-11-12 #i82637#
             tAccParaPropValMap aDefAttrSeq;
             uno::Sequence< ::rtl::OUString > aDummy;
-            _getDefaultAttributesImpl( aDummy, aDefAttrSeq, true );
-            // <--
+            _getDefaultAttributesImpl( aDummy, aDefAttrSeq, true ); // #i82637#
 
             const SfxItemPropertyMap* pPropMap =
                     aSwMapProvider.GetPropertySet( PROPERTY_MAP_TEXT_CURSOR )->getPropertyMap();
@@ -1590,10 +1528,9 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
             while ( aPropIt != aPropertyEntries.end() )
             {
                 const SfxPoolItem* pItem( 0 );
-                // --> OD 2007-11-12 #i82637#
-                // Found character attributes, whose value equals the value of
+                // #i82637# - Found character attributes, whose value equals the value of
                 // the corresponding default character attributes, are excluded.
-                if ( aSet.GetItemState( aPropIt->nWID, TRUE, &pItem ) == SFX_ITEM_SET )
+                if ( aSet.GetItemState( aPropIt->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
                     uno::Any aVal;
                     pItem->QueryValue( aVal, aPropIt->nMemberId );
@@ -1696,12 +1633,12 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
 
     // get model position & prepare GetCharRect() arguments
     SwCrsrMoveState aMoveState;
-    aMoveState.bRealHeight = TRUE;
-    aMoveState.bRealWidth = TRUE;
+    aMoveState.bRealHeight = sal_True;
+    aMoveState.bRealWidth = sal_True;
     SwSpecialPos aSpecialPos;
     SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
 
     /*  #i12332# FillSpecialPos does not accept nIndex ==
          GetString().getLength(). In that case nPos is set to the
@@ -1793,7 +1730,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     DBG_ASSERT( GetFrm()->IsTxtFrm(), "The text frame has mutated!" );
     const SwTxtFrm* pFrm = static_cast<const SwTxtFrm*>( GetFrm() );
     SwCrsrMoveState aMoveState;
-    aMoveState.bPosMatchesBounds = TRUE;
+    aMoveState.bPosMatchesBounds = sal_True;
     sal_Bool bSuccess = pFrm->GetCrsrOfst( &aPos, aCorePoint, &aMoveState );
 
     SwIndex aCntntIdx = aPos.nContent;
@@ -2126,7 +2063,7 @@ sal_Bool SwAccessibleParagraph::replaceText(
         SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
         // translate positions
-        USHORT nStart, nEnd;
+        sal_uInt16 nStart, nEnd;
         sal_Bool bSuccess = GetPortionData().GetEditableRange(
                                         nStartIndex, nEndIndex, nStart, nEnd );
 
@@ -2219,7 +2156,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     {
         xPortion->setPropertyValues( aNames, aValues );
     }
-    catch( UnknownPropertyException e )
+    catch( UnknownPropertyException &e )
     {
         // error handling through return code!
         bRet = sal_False;
@@ -2290,7 +2227,7 @@ uno::Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
     return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
-// --> OD 2004-11-16 #111714# - index has to be treated as global child index.
+// index has to be treated as global child index.
 void SwAccessibleParagraph::deselectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,
@@ -2362,7 +2299,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkCount()
     CHECK_FOR_DEFUNC( XAccessibleHypertext );
 
     sal_Int32 nCount = 0;
-    // --> OD 2007-06-27 #i77108# - provide hyperlinks also in editable documents.
+    // #i77108# - provide hyperlinks also in editable documents.
 //    if( !IsEditableState() )
     // <--
     {
@@ -2384,9 +2321,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 
     uno::Reference< XAccessibleHyperlink > xRet;
 
-    // --> OD 2007-06-27 #i77108# - provide hyperlinks also in editable documents.
-//    if( !IsEditableState() )
-    // <--
+    // #i77108#
     {
         const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
         SwHyperlinkIter_Impl aHIter( pTxtFrm );
@@ -2445,9 +2380,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
     }
 
     sal_Int32 nRet = -1;
-    // --> OD 2007-06-27 #i77108# - provide hyperlinks also in editable documents.
-//    if( !IsEditableState() )
-    // <--
+    // #i77108#
     {
         const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
         SwHyperlinkIter_Impl aHIter( pTxtFrm );
@@ -2469,8 +2402,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
     return nRet;
 }
 
-// --> OD 2008-05-26 #i71360#
-// --> OD 2010-02-22 #i108125# - adjustments for change tracking text markup
+// #i71360#, #i108125# - adjustments for change tracking text markup
 sal_Int32 SAL_CALL SwAccessibleParagraph::getTextMarkupCount( sal_Int32 nTextMarkupType )
                                         throw (lang::IllegalArgumentException,
                                                uno::RuntimeException)
@@ -2560,7 +2492,7 @@ uno::Sequence< /*accessibility::*/TextSegment > SAL_CALL
 }
 // <--
 
-// --> OD 2008-05-29 #i89175#
+// #i89175#
 sal_Int32 SAL_CALL SwAccessibleParagraph::getLineNumberAtIndex( sal_Int32 nIndex )
                                         throw (lang::IndexOutOfBoundsException,
                                                uno::RuntimeException)
@@ -2668,13 +2600,12 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
     return nLineNo;
 }
 
-// --> OD 2010-02-19 #i108125#
-void SwAccessibleParagraph::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+// #i108125#
+void SwAccessibleParagraph::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     mpParaChangeTrackInfo->reset();
 
-    SwClient::Modify( pOld, pNew );
+    CheckRegistration( pOld, pNew );
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

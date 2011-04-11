@@ -35,7 +35,7 @@
 #include <vector>
 #include <map>
 
-#include "stylepool.hxx"
+#include <svl/stylepool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
 
@@ -380,13 +380,13 @@ public:
         : maRoot(),
           mnCount(0),
           mpIgnorableItems( pIgnorableItems != 0
-                            ? pIgnorableItems->Clone( FALSE )
+                            ? pIgnorableItems->Clone( sal_False )
                             : 0 )
     {
         DBG_ASSERT( !pIgnorableItems || !pIgnorableItems->Count(),
                     "<StylePoolImpl::StylePoolImpl(..)> - misusage: item set for ignorable item should be empty. Please correct usage." );
         DBG_ASSERT( !mpIgnorableItems || !mpIgnorableItems->Count(),
-                    "<StylePoolImpl::StylePoolImpl(..)> - <SfxItemSet::Clone( FALSE )> does not work as excepted - <mpIgnorableItems> is not empty. Please inform OD." );
+                    "<StylePoolImpl::StylePoolImpl(..)> - <SfxItemSet::Clone( sal_False )> does not work as excepted - <mpIgnorableItems> is not empty. Please inform OD." );
     }
 
     ~StylePoolImpl()
@@ -456,18 +456,12 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
 #ifdef DEBUG
     {
         sal_Int32 nCheck = -1;
-        sal_Int32 nNo = -1;
         IStylePoolIteratorAccess* pIter = createIterator();
         StylePool::SfxItemSet_Pointer_t pTemp;
         do
         {
             ++nCheck;
             pTemp = pIter->getNext();
-            if( pCurNode->hasItemSet( false ) && pTemp.get() == pCurNode->getItemSet().get() )
-            {
-                ::rtl::OUString aStr = StylePool::nameOf( pTemp );
-                nNo = nCheck;
-            }
         } while( pTemp.get() );
         DBG_ASSERT( mnCount == nCheck, "Wrong counting");
         delete pIter;

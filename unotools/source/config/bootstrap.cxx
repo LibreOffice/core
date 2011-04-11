@@ -261,7 +261,7 @@ bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
     using osl::File;
 
     OUString sBasePath;
-    OSL_VERIFY(tools::getProcessWorkingDir(&sBasePath));
+    OSL_VERIFY(tools::getProcessWorkingDir(sBasePath));
 
     OUString sAbsolute;
     if ( File::E_None == File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
@@ -271,7 +271,7 @@ bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
     }
     else
     {
-        OSL_ENSURE(false, "Could not get absolute file URL for URL");
+        OSL_FAIL("Could not get absolute file URL for URL");
         return false;
     }
 }
@@ -359,7 +359,7 @@ PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
         if (eStatus == Bootstrap::PATH_EXISTS)
         {
             if (!implNormalizeURL(_sURL,aDirItem))
-                OSL_ENSURE(false,"Unexpected failure getting actual URL for existing object");
+                OSL_FAIL("Unexpected failure getting actual URL for existing object");
         }
     }
     return eStatus;
@@ -401,7 +401,7 @@ PathStatus getDerivedPath(
 
         OSL_ENSURE(sDerivedURL == _rURL,"Could not set derived URL via Bootstrap default parameter");
         OSL_POSTCOND(RTL_BOOTSTRAP_DEFAULTS_BROKEN ||
-                    _rData.getFrom(_sBootstrapParameter,sDerivedURL) && sDerivedURL==_rURL,"Use of default did not affect bootstrap value");
+                    (_rData.getFrom(_sBootstrapParameter,sDerivedURL) && sDerivedURL==_rURL),"Use of default did not affect bootstrap value");
     }
     else
     {

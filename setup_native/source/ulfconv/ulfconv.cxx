@@ -34,6 +34,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <sal/alloca.h>
+#include <sal/macros.h>
 
 #include <rtl/ustring.hxx>
 
@@ -189,7 +190,7 @@ void read_encoding_table(char * file, EncodingMap& aEncodingMap)
         *cp = '\0';
 
         // find the correct mapping for codepage
-        const unsigned int members = sizeof( _ms_encoding_list ) / sizeof( _pair );
+        const unsigned int members = SAL_N_ELEMENTS( _ms_encoding_list );
         const _pair *encoding = _pair_search( codepage, _ms_encoding_list, members );
 
         if ( encoding != NULL ) {

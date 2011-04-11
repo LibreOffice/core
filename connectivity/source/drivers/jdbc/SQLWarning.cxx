@@ -41,7 +41,7 @@ java_sql_SQLWarning_BASE::~java_sql_SQLWarning_BASE()
 
 jclass java_sql_SQLWarning_BASE::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class needs to be fetched only once, that is why it is static
     if( !theClass )
         theClass = findMyClass("java/sql/SQLWarning");
     return theClass;

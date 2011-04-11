@@ -47,10 +47,8 @@
 #include "tableundo.hxx"
 #include "svx/svdotable.hxx"
 #include "svx/svdmodel.hxx"
-#include "svdstr.hrc"
-#include "svdglob.hxx"
-
-//#define PLEASE_DEBUG_THE_TABLES 1
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 
 using ::rtl::OUString;
 using namespace ::osl;
@@ -610,10 +608,6 @@ void TableModel::unlockBroadcasts() throw (RuntimeException)
 }
 
 // -----------------------------------------------------------------------------
-#ifdef PLEASE_DEBUG_THE_TABLES
-#include <stdio.h>
-#endif
-
 void TableModel::notifyModification()
 {
     ::osl::MutexGuard guard( m_aMutex );
@@ -633,50 +627,6 @@ void TableModel::notifyModification()
     {
         mbNotifyPending = true;
     }
-
-#ifdef PLEASE_DEBUG_THE_TABLES
-        FILE* file = fopen( "c:\\table.xml","w" );
-
-        const sal_Int32 nColCount = getColumnCountImpl();
-        const sal_Int32 nRowCount = getRowCountImpl();
-
-        fprintf( file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\r" );
-        fprintf( file, "<table columns=\"%ld\" rows=\"%ld\" updated=\"%s\">\n\r", nColCount, nRowCount, mbNotifyPending ? "false" : "true");
-
-        for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )
-        {
-            fprintf( file, "<column this=\"%lx\"/>\n\r", maColumns[nCol].get() );
-        }
-
-        // first check merged cells before and inside the removed rows
-        for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow )
-        {
-            fprintf( file, "<row this=\"%lx\">\n\r", maRows[nRow].get() );
-            for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )
-            {
-                CellRef xCell( getCell( nCol, nRow ) );
-                fprintf( file, "<cell this=\"%lx\"", xCell.get() );
-
-                sal_Int32 nRowSpan = xCell->getRowSpan();
-                sal_Int32 nColSpan = xCell->getColumnSpan();
-                sal_Bool bMerged = xCell->isMerged();
-
-                if( nColSpan != 1 )
-                    fprintf( file, " column-span=\"%ld\"", nColSpan );
-                if( nRowSpan != 1 )
-                    fprintf( file, " row-span=\"%ld\"", nRowSpan );
-
-                if( bMerged )
-                    fprintf( file, " merged=\"true\"" );
-
-                fprintf( file, "/>" );
-            }
-            fprintf( file, "\n\r</row>\n\r" );
-        }
-
-        fprintf( file, "</table>\n\r" );
-        fclose( file );
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -693,26 +643,6 @@ CellRef TableModel::getCell( sal_Int32 nCol, sal_Int32 nRow ) const
         return xRet;
     }
 }
-
-// -----------------------------------------------------------------------------
-/*
-bool TableModel::getCellPos( const CellRef& xCell, ::sal_Int32& rnCol, ::sal_Int32& rnRow ) const
-{
-    const sal_Int32 nRowCount = getRowCount();
-    const sal_Int32 nColCount = getColumnCount();
-    for( rnRow = 0; rnRow < nRowCount; rnRow++ )
-    {
-        for( rnCol = 0; rnCol < nColCount; rnCol++ )
-        {
-            if( maRows[rnRow]->maCells[rnCol] == xCell )
-            {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-*/
 
 // -----------------------------------------------------------------------------
 
@@ -798,7 +728,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sdr::table::TableModel::insertColumns(), exception caught!");
+            OSL_FAIL("sdr::table::TableModel::insertColumns(), exception caught!");
         }
         updateColumns();
         setModified(sal_True);
@@ -907,7 +837,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sdr::table::TableModel::removeColumns(), exception caught!");
+            OSL_FAIL("sdr::table::TableModel::removeColumns(), exception caught!");
         }
 
         updateColumns();
@@ -965,7 +895,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sdr::table::TableModel::insertRows(), exception caught!");
+            OSL_FAIL("sdr::table::TableModel::insertRows(), exception caught!");
         }
         if( bUndo )
             pModel->EndUndo();
@@ -1066,7 +996,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
         }
         catch( Exception& )
         {
-            DBG_ERROR("sdr::table::TableModel::removeRows(), exception caught!");
+            OSL_FAIL("sdr::table::TableModel::removeRows(), exception caught!");
         }
 
         updateRows();
@@ -1132,7 +1062,7 @@ void TableModel::optimize()
                 catch( Exception& e )
                 {
                     (void)e;
-                    DBG_ERROR("svx::TableModel::optimize(), exception caught!");
+                    OSL_FAIL("svx::TableModel::optimize(), exception caught!");
                 }
 
                 removeColumns( nCol, 1 );
@@ -1169,7 +1099,7 @@ void TableModel::optimize()
                 catch( Exception& e )
                 {
                     (void)e;
-                    DBG_ERROR("svx::TableModel::optimize(), exception caught!");
+                    OSL_FAIL("svx::TableModel::optimize(), exception caught!");
                 }
 
                 removeRows( nRow, 1 );
@@ -1196,7 +1126,7 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
 
     if( (nLastRow > getRowCount()) || (nLastCol > getRowCount() ) )
     {
-        DBG_ERROR("TableModel::merge(), merge beyound the table!");
+        OSL_FAIL("TableModel::merge(), merge beyound the table!");
     }
 
     // merge first cell

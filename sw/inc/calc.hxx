@@ -41,7 +41,7 @@ class LocaleDataWrapper;
 class SwFieldType;
 class SwDoc;
 
-#define TBLSZ 47                // sollte Primzahl sein, wegen HashTable
+#define TBLSZ 47                // should be a prime, because of hash table
 
 const sal_Unicode cListDelim    = '|';
 
@@ -70,36 +70,36 @@ enum SwCalcOper
 
 //-- Calculate Operations Strings -----------------------------------------
 
-extern const sal_Char __FAR_DATA sCalc_Add[];
-extern const sal_Char __FAR_DATA sCalc_Sub[];
-extern const sal_Char __FAR_DATA sCalc_Mul[];
-extern const sal_Char __FAR_DATA sCalc_Div[];
-extern const sal_Char __FAR_DATA sCalc_Phd[];
-extern const sal_Char __FAR_DATA sCalc_Sqrt[];
-extern const sal_Char __FAR_DATA sCalc_Pow[];
-extern const sal_Char __FAR_DATA sCalc_Or[];
-extern const sal_Char __FAR_DATA sCalc_Xor[];
-extern const sal_Char __FAR_DATA sCalc_And[];
-extern const sal_Char __FAR_DATA sCalc_Not[];
-extern const sal_Char __FAR_DATA sCalc_Eq[];
-extern const sal_Char __FAR_DATA sCalc_Neq[];
-extern const sal_Char __FAR_DATA sCalc_Leq[];
-extern const sal_Char __FAR_DATA sCalc_Geq[];
-extern const sal_Char __FAR_DATA sCalc_L[];
-extern const sal_Char __FAR_DATA sCalc_G[];
-extern const sal_Char __FAR_DATA sCalc_Sum[];
-extern const sal_Char __FAR_DATA sCalc_Mean[];
-extern const sal_Char __FAR_DATA sCalc_Min[];
-extern const sal_Char __FAR_DATA sCalc_Max[];
-extern const sal_Char __FAR_DATA sCalc_Sin[];
-extern const sal_Char __FAR_DATA sCalc_Cos[];
-extern const sal_Char __FAR_DATA sCalc_Tan[];
-extern const sal_Char __FAR_DATA sCalc_Asin[];
-extern const sal_Char __FAR_DATA sCalc_Acos[];
-extern const sal_Char __FAR_DATA sCalc_Atan[];
-extern const sal_Char __FAR_DATA sCalc_Tdif[];
-extern const sal_Char __FAR_DATA sCalc_Round[];
-extern const sal_Char __FAR_DATA sCalc_Date[];
+extern const sal_Char sCalc_Add[];
+extern const sal_Char sCalc_Sub[];
+extern const sal_Char sCalc_Mul[];
+extern const sal_Char sCalc_Div[];
+extern const sal_Char sCalc_Phd[];
+extern const sal_Char sCalc_Sqrt[];
+extern const sal_Char sCalc_Pow[];
+extern const sal_Char sCalc_Or[];
+extern const sal_Char sCalc_Xor[];
+extern const sal_Char sCalc_And[];
+extern const sal_Char sCalc_Not[];
+extern const sal_Char sCalc_Eq[];
+extern const sal_Char sCalc_Neq[];
+extern const sal_Char sCalc_Leq[];
+extern const sal_Char sCalc_Geq[];
+extern const sal_Char sCalc_L[];
+extern const sal_Char sCalc_G[];
+extern const sal_Char sCalc_Sum[];
+extern const sal_Char sCalc_Mean[];
+extern const sal_Char sCalc_Min[];
+extern const sal_Char sCalc_Max[];
+extern const sal_Char sCalc_Sin[];
+extern const sal_Char sCalc_Cos[];
+extern const sal_Char sCalc_Tan[];
+extern const sal_Char sCalc_Asin[];
+extern const sal_Char sCalc_Acos[];
+extern const sal_Char sCalc_Atan[];
+extern const sal_Char sCalc_Tdif[];
+extern const sal_Char sCalc_Round[];
+extern const sal_Char sCalc_Date[];
 
 /******************************************************************************
  *                          Calculate ErrorCodes
@@ -107,22 +107,20 @@ extern const sal_Char __FAR_DATA sCalc_Date[];
 enum SwCalcError
 {
     CALC_NOERR=0,
-    CALC_SYNTAX,        //  Syntax Fehler
-    CALC_ZERODIV,       //  Division durch Null
-    CALC_BRACK,         //  Fehlerhafte Klammerung
-    CALC_POWERR,        //  Ueberlauf in Quadratfunktion
-    CALC_VARNFND,       //  Variable wurde nicht gefunden
-    CALC_OVERFLOW,      //  Ueberlauf
-    CALC_WRONGTIME      //  falsches Zeitformat
+    CALC_SYNTAX,        //  syntax error
+    CALC_ZERODIV,       //  division by zero
+    CALC_BRACK,         //  faulty brackets
+    CALC_POWERR,        //  overflow in power function
+    CALC_VARNFND,       //  variable was not found
+    CALC_OVERFLOW,      //  overflow
+    CALC_WRONGTIME      //  wrong time format
 };
 
 class SwSbxValue : public SbxValue
 {
     bool bVoid;
 public:
-    //JP 03.02.99: immer auf eine Zahl defaulten, damit auch gerechnet wird.
-    //              Ansonsten wird daraus ein SbxEMPTY und damit ist nichts
-    //              anzufangen.
+    // always default to a number. otherwise it will become a SbxEMPTY
     SwSbxValue( long n = 0 ) : bVoid(false)  { PutLong( n ); }
     SwSbxValue( const double& rD ) : bVoid(false) { PutDouble( rD ); }
     SwSbxValue( const SwSbxValue& rVal ) :
@@ -133,9 +131,7 @@ public:
     virtual ~SwSbxValue();
 
 
-    // Strings sonderbehandeln
-    BOOL GetBool() const;
-    // Strings sonderbehandeln BOOLs sonderbehandeln
+    sal_Bool GetBool() const;
     double GetDouble() const;
     SwSbxValue& MakeDouble();
 
@@ -144,7 +140,7 @@ public:
 };
 
 /******************************************************************************
- *          Calculate HashTables fuer VarTable und Operations
+ *          Calculate HashTables for VarTable und Operations
  ******************************************************************************/
 struct SwHash
 {
@@ -164,11 +160,11 @@ struct SwCalcExp : public SwHash
 };
 
 SwHash* Find( const String& rSrch, SwHash** ppTable,
-                USHORT nTblSize, USHORT* pPos = 0 );
+                sal_uInt16 nTblSize, sal_uInt16* pPos = 0 );
 
-void DeleteHashTable( SwHash** ppTable, USHORT nTblSize );
+void DeleteHashTable( SwHash** ppTable, sal_uInt16 nTblSize );
 
-// falls _CalcOp != 0, dann ist das ein gueltiger Operator
+// if _CalcOp != 0, this is a valid operator
 struct _CalcOp;
 _CalcOp* FindOperator( const String& rSearch );
 
@@ -191,7 +187,7 @@ class SwCalc
     const LocaleDataWrapper* pLclData;
     CharClass*  pCharClass;
 
-    USHORT      nListPor;
+    sal_uInt16      nListPor;
     SwCalcOper  eCurrOper;
     SwCalcOper  eCurrListOper;
     SwCalcError eError;
@@ -202,7 +198,7 @@ class SwCalc
     SwSbxValue  Term();
     SwSbxValue  Prim();
 
-    BOOL        ParseTime( USHORT*, USHORT*, USHORT* );
+    sal_Bool        ParseTime( sal_uInt16*, sal_uInt16*, sal_uInt16* );
 
     String  GetColumnName( const String& rName );
     String  GetDBName( const String& rName );
@@ -216,20 +212,20 @@ public:
         ~SwCalc();
 
     SwSbxValue  Calculate( const String &rStr );
-    String      GetStrResult( const SwSbxValue& rValue, BOOL bRound = TRUE );
-    String      GetStrResult( double, BOOL bRound = TRUE );
+    String      GetStrResult( const SwSbxValue& rValue, sal_Bool bRound = sal_True );
+    String      GetStrResult( double, sal_Bool bRound = sal_True );
 
     SwCalcExp*  VarInsert( const String& r );
-    SwCalcExp*  VarLook( const String &rStr, USHORT ins = 0 );
+    SwCalcExp*  VarLook( const String &rStr, sal_uInt16 ins = 0 );
     void        VarChange( const String& rStr, const SwSbxValue& rValue );
     void        VarChange( const String& rStr, double );
     SwHash**    GetVarTable()                       { return VarTable; }
 
-    BOOL        Push( const VoidPtr pPtr );
+    sal_Bool        Push( const VoidPtr pPtr );
     void        Pop( const VoidPtr pPtr );
 
     void        SetCalcError( SwCalcError eErr )    { eError = eErr; }
-    BOOL        IsCalcError() const                 { return 0 != eError; }
+    sal_Bool        IsCalcError() const                 { return 0 != eError; }
 
     static bool Str2Double( const String& rStr, xub_StrLen& rPos,
                                 double& rVal,
@@ -237,7 +233,7 @@ public:
     static bool Str2Double( const String& rStr, xub_StrLen& rPos,
                                 double& rVal, SwDoc *const pDoc );
 
-    SW_DLLPUBLIC static BOOL IsValidVarName( const String& rStr,
+    SW_DLLPUBLIC static sal_Bool IsValidVarName( const String& rStr,
                                     String* pValidName = 0 );
 };
 

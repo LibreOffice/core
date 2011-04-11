@@ -30,7 +30,7 @@
 
 #define RC_FLDTDLG_BEGIN    0
 
-// Datenbankfeld-TabPage:
+// database field TabPage:
 #define RC_TP_DB_START      (RC_FLDTDLG_BEGIN)
 #define FT_DBTYPE           (RC_TP_DB_START + 1)
 #define LB_DBTYPE           (RC_TP_DB_START + 2)
@@ -50,7 +50,7 @@
 #define FT_ADDDB            (RC_TP_DB_START + 16)
 #define PB_ADDDB            (RC_TP_DB_START + 17)
 
-// Dokumentinfo-TabPage:
+// Documentinfo-TabPage:
 #define RC_TP_DOCINF_START  (RC_TP_DB_END)
 #define FT_DOKINFTYPE       (RC_TP_DOCINF_START + 1)
 #define TLB_DOKINFTYPE      (RC_TP_DOCINF_START + 2)
@@ -64,7 +64,7 @@
 #define STR_DOKINF_INFO     (RC_TP_DOCINF_START + 10)
 #define RC_TP_DOCINF_END    (RC_TP_DOCINF_START + 11)
 
-// Variablen-TabPage:
+// Variable-TabPage:
 #define RC_TP_VAR_START     (RC_TP_DOCINF_END)
 #define FT_VARTYPE          (RC_TP_VAR_START + 1)
 #define LB_VARTYPE          (RC_TP_VAR_START + 2)
@@ -88,7 +88,7 @@
 #define BT_VARDELETE        (RC_TP_VAR_START + 20)
 #define RC_TP_VAR_END       (RC_TP_VAR_START + 21)
 
-// Dokument-TabPage:
+// Document-TabPage:
 #define RC_TP_DOC_START     (RC_TP_VAR_END)
 #define FT_DOKTYPE          (RC_TP_DOC_START + 1)
 #define LB_DOKTYPE          (RC_TP_DOC_START + 2)
@@ -108,7 +108,7 @@
 #define BMP_DOKROOT_CLOSED  (RC_TP_DOC_START + 16)
 #define RC_TP_DOC_END       (RC_TP_DOC_START + 17)
 
-// Funktion-TabPage:
+// Function-TabPage:
 #define RC_TP_FUNC_START    (RC_TP_DOC_END)
 #define FT_FUNCTYPE         (RC_TP_FUNC_START + 1)
 #define LB_FUNCTYPE         (RC_TP_FUNC_START + 2)
@@ -137,7 +137,7 @@
 #define FT_LISTNAME         (RC_TP_FUNC_START + 25)
 #define ED_LISTNAME         (RC_TP_FUNC_START + 26)
 
-// Referenz-TabPage:
+// Reference-TabPage:
 #define RC_TP_REF_START     (RC_TP_FUNC_END)
 #define FT_REFTYPE          (RC_TP_REF_START + 1)
 #define LB_REFTYPE          (RC_TP_REF_START + 2)

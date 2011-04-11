@@ -33,7 +33,6 @@
 
 #include <vcl/salbtype.hxx>
 #include <tools/stream.hxx>
-#include <tools/list.hxx>
 
 Bundle& Bundle::operator=( Bundle& rSource )
 {
@@ -49,7 +48,7 @@ void Bundle::SetColor( sal_uInt32 nColor )
     mnColor = nColor;
 }
 
-sal_uInt32 Bundle::GetColor()
+sal_uInt32 Bundle::GetColor() const
 {
     return mnColor;
 }

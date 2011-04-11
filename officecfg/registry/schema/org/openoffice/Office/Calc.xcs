@@ -1039,7 +1039,7 @@
                             with no exception.</desc>
                         <label>QuotedFieldAsText</label>
                     </info>
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
                 <prop oor:name="DetectSpecialNumbers" oor:type="xs:boolean">
                     <info>

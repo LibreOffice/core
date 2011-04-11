@@ -31,14 +31,14 @@
 
 #include "rtl/ustring.hxx"
 #include "db.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace berkeleydbproxy;
 
 namespace dp_misc
 {
 
-typedef ::std::hash_map<
+typedef ::boost::unordered_map<
     ::rtl::OString, ::rtl::OString, ::rtl::OStringHash > t_string2string_map;
 
 //==============================================================================

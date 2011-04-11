@@ -129,13 +129,13 @@ class Dictionary : protected List
 {
     friend class Section;
 
-        void        AddProperty( UINT32 nId, const String& rString );
+        void        AddProperty( sal_uInt32 nId, const String& rString );
 
     public :
                     Dictionary(){};
                     ~Dictionary();
         Dictionary& operator=( Dictionary& rDictionary );
-        UINT32      GetProperty( const String& rPropName );
+        sal_uInt32      GetProperty( const String& rPropName );
 };
 
 // ------------------------------------------------------------------------
@@ -146,7 +146,7 @@ class Section : private List
 
     protected:
 
-        BYTE                    aFMTID[ 16 ];
+        sal_uInt8                   aFMTID[ 16 ];
 
         void                    AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize );
 
@@ -167,7 +167,7 @@ class Section : private List
 class PropRead : private List
 {
         sal_Bool                mbStatus;
-        SvStorageStream*        mpSvStream;
+        SvStorageStreamRef      mpSvStream;
 
         sal_uInt16              mnByteOrder;
         sal_uInt16              mnFormat;
@@ -182,7 +182,7 @@ class PropRead : private List
                                 ~PropRead();
 
         PropRead&               operator=( PropRead& rPropRead );
-        const Section*          GetSection( const BYTE* pFMTID );
+        const Section*          GetSection( const sal_uInt8* pFMTID );
         sal_Bool                IsValid() const { return mbStatus; };
         void                    Read();
 };

@@ -27,87 +27,154 @@
  ************************************************************************/
 
 #include "oox/xls/connectionsfragment.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/xls/webquerybuffer.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
+#include "oox/helper/attributelist.hxx"
+#include "oox/xls/biffhelper.hxx"
+#include "oox/xls/connectionsbuffer.hxx"
 
 namespace oox {
 namespace xls {
 
-OoxConnectionsFragment::OoxConnectionsFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxWorkbookFragmentBase( rHelper, rFragmentPath )
+// ============================================================================
+
+using namespace ::oox::core;
+
+using ::rtl::OUString;
+
+// ============================================================================
+
+ConnectionContext::ConnectionContext( WorkbookFragmentBase& rParent, Connection& rConnection ) :
+    WorkbookContextBase( rParent ),
+    mrConnection( rConnection )
 {
 }
 
-ContextHandlerRef OoxConnectionsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef ConnectionContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
-        case XML_ROOT_CONTEXT:
-            if( nElement == XLS_TOKEN( connections ) ) return this;
-        break;
-
-        case XLS_TOKEN( connections ):
-            switch( nElement )
-            {
-                case XLS_TOKEN( connection ):   importConnection( rAttribs );   return this;
-            }
-        break;
-
         case XLS_TOKEN( connection ):
-            switch( nElement )
+            if( nElement == XLS_TOKEN( webPr ) )
             {
-                case XLS_TOKEN( webPr ):        importWebPr( rAttribs );        return this;
+                mrConnection.importWebPr( rAttribs );
+                return this;
             }
         break;
 
         case XLS_TOKEN( webPr ):
-            switch( nElement )
+            if( nElement == XLS_TOKEN( tables ) )
             {
-                case XLS_TOKEN( tables ):       importTables( rAttribs );       return this;
+                mrConnection.importTables( rAttribs );
+                return this;
             }
         break;
 
         case XLS_TOKEN( tables ):
-            switch( nElement )
-            {
-                case XLS_TOKEN( s ):            importS( rAttribs );            break;
-                case XLS_TOKEN( x ):            importX( rAttribs );            break;
-            }
+            mrConnection.importTable( rAttribs, nElement );
         break;
     }
     return 0;
 }
 
-void OoxConnectionsFragment::importConnection( const AttributeList& rAttribs )
+void ConnectionContext::onStartElement( const AttributeList& rAttribs )
 {
-    if ( rAttribs.getInteger( XML_type, 0 ) == Connection::CONNECTION_WEBQUERY )
+    if( getCurrentElement() == XLS_TOKEN( connection ) )
+        mrConnection.importConnection( rAttribs );
+}
+
+ContextHandlerRef ConnectionContext::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
+{
+    switch( getCurrentElement() )
     {
-        getWebQueries().importConnection( rAttribs );
+        case BIFF12_ID_CONNECTION:
+            if( nRecId == BIFF12_ID_WEBPR )
+            {
+                mrConnection.importWebPr( rStrm );
+                return this;
+            }
+        break;
+
+        case BIFF12_ID_WEBPR:
+            if( nRecId == BIFF12_ID_WEBPRTABLES )
+            {
+                mrConnection.importWebPrTables( rStrm );
+                return this;
+            }
+        break;
+
+        case BIFF12_ID_WEBPRTABLES:
+            mrConnection.importWebPrTable( rStrm, nRecId );
+        break;
     }
+    return 0;
 }
 
-void OoxConnectionsFragment::importWebPr( const AttributeList& rAttribs )
+void ConnectionContext::onStartRecord( SequenceInputStream& rStrm )
 {
-    getWebQueries().importWebPr( rAttribs );
+    if( getCurrentElement() == BIFF12_ID_CONNECTION )
+        mrConnection.importConnection( rStrm );
 }
 
-void OoxConnectionsFragment::importTables( const AttributeList& /*rAttribs*/ )
+// ============================================================================
+
+ConnectionsFragment::ConnectionsFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
+    WorkbookFragmentBase( rHelper, rFragmentPath )
 {
-//     sal_Int32 nCount = rAttribs.getInteger( XML_count, 0 );
 }
 
-void OoxConnectionsFragment::importS( const AttributeList& /*rAttribs*/ )
+ContextHandlerRef ConnectionsFragment::onCreateContext( sal_Int32 nElement, const AttributeList& /*rAttribs*/ )
 {
-//     OUString aName = rAttribs.getString( XML_v );
+    switch( getCurrentElement() )
+    {
+        case XML_ROOT_CONTEXT:
+            if( nElement == XLS_TOKEN( connections ) )
+                return this;
+        break;
+
+        case XLS_TOKEN( connections ):
+            if( nElement == XLS_TOKEN( connection ) )
+                return new ConnectionContext( *this, getConnections().createConnection() );
+        break;
+    }
+    return 0;
 }
 
-void OoxConnectionsFragment::importX( const AttributeList& /*rAttribs*/ )
+ContextHandlerRef ConnectionsFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& /*rStrm*/ )
 {
-//     sal_Int32 nSharedId = rAttribs.getInteger( XML_v, 0 );
+    switch( getCurrentElement() )
+    {
+        case XML_ROOT_CONTEXT:
+            if( nRecId == BIFF12_ID_CONNECTIONS )
+                return this;
+        break;
+
+        case BIFF12_ID_CONNECTIONS:
+            if( nRecId == BIFF12_ID_CONNECTION )
+                return new ConnectionContext( *this, getConnections().createConnection() );
+        break;
+    }
+    return 0;
 }
+
+const RecordInfo* ConnectionsFragment::getRecordInfos() const
+{
+    static const RecordInfo spRecInfos[] =
+    {
+        { BIFF12_ID_CONNECTIONS,    BIFF12_ID_CONNECTIONS + 1   },
+        { BIFF12_ID_CONNECTION,     BIFF12_ID_CONNECTION + 1    },
+        { BIFF12_ID_WEBPR,          BIFF12_ID_WEBPR + 1         },
+        { BIFF12_ID_WEBPRTABLES,    BIFF12_ID_WEBPRTABLES + 1   },
+        { -1,                       -1                          }
+    };
+    return spRecInfos;
+}
+
+void ConnectionsFragment::finalizeImport()
+{
+    getConnections().finalizeImport();
+}
+
+// ============================================================================
 
 } // namespace xls
 } // namespace oox

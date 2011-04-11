@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module embed {
 
 //============================================================================
 
-/** broadcasts messege in case transacted object is commited or reverted.
+/** broadcasts message in case transacted object is commited or reverted.
  */
 published interface XTransactionBroadcaster: com::sun::star::uno::XInterface
 {

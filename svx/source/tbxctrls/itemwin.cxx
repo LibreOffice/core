@@ -50,11 +50,11 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xtable.hxx>
-#include "drawitem.hxx"
+#include "svx/drawitem.hxx"
 #include <svx/dialmgr.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svx/itemwin.hxx>
-#include "linectrl.hxx"
+#include "svx/linectrl.hxx"
 #include <svtools/colorcfg.hxx>
 
 #include "linectrl.hrc"
@@ -72,10 +72,9 @@ using namespace ::com::sun::star::beans;
 
 SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
     LineLB( pParent, nBits ),
-    meBmpMode   ( GetSettings().GetStyleSettings().GetHighContrastMode() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL ),
     nCurPos     ( 0 ),
     aLogicalSize(40,140),
-    bRelease    ( TRUE ),
+    bRelease    ( sal_True ),
     mpSh        ( NULL ),
     mxFrame     ( rFrame )
 {
@@ -115,9 +114,7 @@ void SvxLineBox::Select()
     if ( !IsTravelSelect() )
     {
         XLineStyle eXLS;
-        USHORT nPos = GetSelectEntryPos();
-//      SfxDispatcher* pDisp = rBindings.GetDispatcher();
-        //DBG_ASSERT( pDisp, "invalid Dispatcher" );
+        sal_uInt16 nPos = GetSelectEntryPos();
 
         switch ( nPos )
         {
@@ -152,7 +149,6 @@ void SvxLineBox::Select()
                     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )),
                                                  aArgs );
-//                    pDisp->Execute( SID_ATTR_LINE_DASH, SFX_CALLMODE_RECORD, &aLineDashItem, 0L );
                 }
             }
             break;
@@ -167,7 +163,6 @@ void SvxLineBox::Select()
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:XLineStyle" )),
                                      aArgs );
-//      pDisp->Execute( SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aLineStyleItem, 0L );
 
         nCurPos = GetSelectEntryPos();
         ReleaseFocus_Impl();
@@ -178,7 +173,7 @@ void SvxLineBox::Select()
 
 long SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     switch(nType)
     {
@@ -194,7 +189,7 @@ long SvxLineBox::PreNotify( NotifyEvent& rNEvt )
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             if( pKEvt->GetKeyCode().GetCode() == KEY_TAB)
             {
-                bRelease = FALSE;
+                bRelease = sal_False;
                 Select();
             }
         }
@@ -236,7 +231,7 @@ void SvxLineBox::ReleaseFocus_Impl()
 {
     if(!bRelease)
     {
-        bRelease = TRUE;
+        bRelease = sal_True;
         return;
     }
 
@@ -248,9 +243,7 @@ void SvxLineBox::ReleaseFocus_Impl()
             pShellWnd->GrabFocus();
     }
 }
-/* -----------------------------08.03.2002 15:39------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -259,20 +252,9 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
         Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
         SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
-   }
+    }
 
     LineLB::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-    {
-        BmpColorMode eMode = GetSettings().GetStyleSettings().GetHighContrastMode() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL;
-        if( eMode != meBmpMode )
-        {
-            meBmpMode = eMode;
-            FillControl();
-        }
-     }
 }
 
 void SvxLineBox::FillControl()
@@ -287,10 +269,8 @@ void SvxLineBox::FillControl()
         if ( pItem )
             Fill( pItem->GetDashList() );
     }
-
-
-//  rBindings.Invalidate( SID_ATTR_LINE_DASH );
 }
+
 //========================================================================
 // SvxColorBox
 //========================================================================
@@ -303,7 +283,7 @@ SvxColorBox::SvxColorBox(
     ColorLB( pParent, nBits ),
     nCurPos     ( 0 ),
     aLogicalSize(45,80),
-    bRelease    ( TRUE ),
+    bRelease    ( sal_True ),
     maCommand   ( rCommand ),
     mxFrame     ( rFrame )
 {
@@ -332,7 +312,6 @@ IMPL_LINK( SvxColorBox, DelayHdl_Impl, Timer *, EMPTYARG )
         const SvxColorTableItem* pItem = (const SvxColorTableItem*)( pSh->GetItem( SID_COLOR_TABLE ) );
         if ( pItem )
             Fill( pItem->GetColorTable() );
-//      rBindings.Invalidate( nId );
     }
     return 0;
 }
@@ -373,7 +352,6 @@ void SvxColorBox::Select()
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                      maCommand,
                                      aArgs );
-//        rBindings.GetDispatcher()->Execute( nId, SFX_CALLMODE_RECORD, &aLineColorItem, 0L );
 
         nCurPos = GetSelectEntryPos();
         ReleaseFocus_Impl();
@@ -384,7 +362,7 @@ void SvxColorBox::Select()
 
 long SvxColorBox::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     switch(nType)
     {
@@ -401,7 +379,7 @@ long SvxColorBox::PreNotify( NotifyEvent& rNEvt )
 
             if( pKEvt->GetKeyCode().GetCode() == KEY_TAB)
             {
-                bRelease = FALSE;
+                bRelease = sal_False;
                 Select();
             }
         }
@@ -436,9 +414,7 @@ long SvxColorBox::Notify( NotifyEvent& rNEvt )
     }
     return nHandled;
 }
-/* -----------------------------08.03.2002 15:35------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxColorBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -457,7 +433,7 @@ void SvxColorBox::ReleaseFocus_Impl()
 {
     if(!bRelease)
     {
-        bRelease = TRUE;
+        bRelease = sal_True;
         return;
     }
 
@@ -492,8 +468,8 @@ SvxMetricField::SvxMetricField(
     SetLast( 5000 );
     SetFirst( 0 );
 
-    eDlgUnit = SfxModule::GetCurrentFieldUnit();
-    SetFieldUnit( *this, eDlgUnit, FALSE );
+    eDlgUnit = SfxModule::GetModuleFieldUnit( mxFrame );
+    SetFieldUnit( *this, eDlgUnit, sal_False );
     Show();
 }
 
@@ -532,7 +508,6 @@ void SvxMetricField::Modify()
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineWidth" )),
                                  aArgs );
-//  rBindings.GetDispatcher()->Execute( SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aLineWidthItem, 0L );
 }
 
 // -----------------------------------------------------------------------
@@ -577,11 +552,11 @@ void SvxMetricField::SetCoreUnit( SfxMapUnit eUnit )
 
 void SvxMetricField::RefreshDlgUnit()
 {
-    FieldUnit eTmpUnit = SfxModule::GetCurrentFieldUnit();
+    FieldUnit eTmpUnit = SfxModule::GetModuleFieldUnit( mxFrame );
     if ( eDlgUnit != eTmpUnit )
     {
         eDlgUnit = eTmpUnit;
-        SetFieldUnit( *this, eDlgUnit, FALSE );
+        SetFieldUnit( *this, eDlgUnit, sal_False );
     }
 }
 
@@ -589,7 +564,7 @@ void SvxMetricField::RefreshDlgUnit()
 
 long SvxMetricField::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         aCurTxt = GetText();
@@ -638,9 +613,7 @@ long SvxMetricField::Notify( NotifyEvent& rNEvt )
     }
     return nHandled;
 }
-/* -----------------------------08.03.2002 15:32------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -659,8 +632,8 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
 SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
     FillTypeLB( pParent, nBits | WB_TABSTOP ),
     nCurPos ( 0 ),
-    bSelect ( FALSE ),
-    bRelease(TRUE)
+    bSelect ( sal_False ),
+    bRelease(sal_True)
 {
     SetSizePixel( LogicToPixel( Size(40, 40 ),MAP_APPFONT ));
     Fill();
@@ -678,18 +651,18 @@ SvxFillTypeBox::~SvxFillTypeBox()
 
 long SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         nCurPos = GetSelectEntryPos();
     else if ( EVENT_LOSEFOCUS == nType
         && Application::GetFocusWindow()
-        && !IsWindowOrChild( Application::GetFocusWindow(), TRUE ) )
+        && !IsWindowOrChild( Application::GetFocusWindow(), sal_True ) )
     {
         if ( !bSelect )
             SelectEntryPos( nCurPos );
         else
-            bSelect = FALSE;
+            bSelect = sal_False;
     }
 
     return FillTypeLB::PreNotify( rNEvt );
@@ -711,9 +684,9 @@ long SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
                 ( (Link&)GetSelectHdl() ).Call( this );
             break;
             case KEY_TAB:
-                bRelease = FALSE;
+                bRelease = sal_False;
                 ( (Link&)GetSelectHdl() ).Call( this );
-                bRelease = TRUE;
+                bRelease = sal_True;
                 break;
 
             case KEY_ESCAPE:
@@ -748,7 +721,7 @@ SvxFillAttrBox::SvxFillAttrBox( Window* pParent, WinBits nBits ) :
     FillAttrLB( pParent, nBits | WB_TABSTOP ),
 
     nCurPos( 0 ),
-    bRelease( TRUE )
+    bRelease( sal_True )
 
 {
     SetPosPixel( Point( 90, 0 ) );
@@ -766,7 +739,7 @@ SvxFillAttrBox::~SvxFillAttrBox()
 
 long SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         nCurPos = GetSelectEntryPos();
@@ -791,9 +764,9 @@ long SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
                 nHandled = 1;
             break;
             case KEY_TAB:
-                bRelease = FALSE;
+                bRelease = sal_False;
                 GetSelectHdl().Call( this );
-                bRelease = TRUE;
+                bRelease = sal_True;
             break;
             case KEY_ESCAPE:
                 SelectEntryPos( nCurPos );

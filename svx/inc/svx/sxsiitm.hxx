@@ -33,11 +33,11 @@
 class SdrScaleItem: public SdrFractionItem {
 public:
     TYPEINFO();
-    SdrScaleItem(USHORT nId=0): SdrFractionItem(nId,Fraction(1,1)) {}
-    SdrScaleItem(USHORT nId, const Fraction& rVal): SdrFractionItem(nId,rVal) {}
-    SdrScaleItem(USHORT nId, SvStream& rIn): SdrFractionItem(nId,rIn) {}
+    SdrScaleItem(sal_uInt16 nId=0): SdrFractionItem(nId,Fraction(1,1)) {}
+    SdrScaleItem(sal_uInt16 nId, const Fraction& rVal): SdrFractionItem(nId,rVal) {}
+    SdrScaleItem(sal_uInt16 nId, SvStream& rIn): SdrFractionItem(nId,rIn) {}
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric, String &rText, const IntlWrapper * = 0) const;
-    virtual SfxPoolItem*     Create(SvStream&, USHORT nVer) const;
+    virtual SfxPoolItem*     Create(SvStream&, sal_uInt16 nVer) const;
     virtual SfxPoolItem*     Clone(SfxItemPool *pPool=NULL) const;
 };
 

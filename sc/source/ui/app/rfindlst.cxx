@@ -45,7 +45,7 @@ static ColorData aColNames[SC_RANGECOLORS] =
 
 ScRangeFindList::ScRangeFindList(const String& rName) :
     aDocName( rName ),
-    bHidden( FALSE )
+    bHidden( false )
 {
 }
 
@@ -59,7 +59,7 @@ ScRangeFindList::~ScRangeFindList()
     }
 }
 
-ColorData ScRangeFindList::GetColorName( USHORT nIndex )        // static
+ColorData ScRangeFindList::GetColorName( size_t nIndex )
 {
     return aColNames[nIndex % SC_RANGECOLORS];
 }

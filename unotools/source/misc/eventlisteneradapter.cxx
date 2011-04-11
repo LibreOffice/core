@@ -169,7 +169,7 @@ namespace utl
     {
         if (!_rxComp.is())
         {
-            OSL_ENSURE(sal_False, "OEventListenerAdapter::startComponentListening: invalid component!");
+            OSL_FAIL("OEventListenerAdapter::startComponentListening: invalid component!");
             return;
         }
 

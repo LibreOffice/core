@@ -39,7 +39,7 @@
 class DocxExportFilter : public oox::core::XmlFilterBase
 {
 public:
-    DocxExportFilter( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rMSF );
+    DocxExportFilter( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext );
 
     // FIXME these should not even exist for the export-only filter!
     // For now, let's just do empty implementations of those.
@@ -57,6 +57,11 @@ private:
 
     /// Implementatio of the filter abstract method.
     virtual ::rtl::OUString implGetImplementationName() const;
+
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const
+    {
+        return NULL; // FIXME: implement me !
+    }
 };
 
 #endif // _DOCXEXPORTFILTER_HXX_

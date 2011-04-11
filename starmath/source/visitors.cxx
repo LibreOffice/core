@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -31,163 +32,163 @@
 
 void SmVisitorTest::Visit( SmTableNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NTABLE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NTABLE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmBraceNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NBRACE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NBRACE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmBracebodyNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NBRACEBODY, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NBRACEBODY, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmOperNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NOPER, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NOPER, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmAlignNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NALIGN, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NALIGN, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmAttributNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NATTRIBUT, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NATTRIBUT, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmFontNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NFONT, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NFONT, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmUnHorNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NUNHOR, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NUNHOR, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmBinHorNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NBINHOR, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NBINHOR, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmBinVerNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NBINVER, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NBINVER, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmBinDiagonalNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NBINDIAGONAL, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NBINDIAGONAL, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmSubSupNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NSUBSUP, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NSUBSUP, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmMatrixNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NMATRIX, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NMATRIX, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmPlaceNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NPLACE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NPLACE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmTextNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NTEXT, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NTEXT, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmSpecialNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NSPECIAL, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NSPECIAL, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmGlyphSpecialNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NGLYPH_SPECIAL, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NGLYPH_SPECIAL, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmMathSymbolNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NMATH, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NMATH, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmBlankNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NBLANK, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NBLANK, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmErrorNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NERROR, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NERROR, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmLineNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NLINE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NLINE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmExpressionNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NEXPRESSION, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NEXPRESSION, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmPolyLineNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NPOLYLINE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NPOLYLINE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmRootNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NROOT, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NROOT, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmRootSymbolNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NROOTSYMBOL, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NROOTSYMBOL, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmRectangleNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NRECTANGLE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NRECTANGLE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
 void SmVisitorTest::Visit( SmVerticalBraceNode* pNode )
 {
-    j_assert( pNode->GetType( ) == NVERTICAL_BRACE, "the visitor-patterns isn't implemented correctly" );
+    OSL_ENSURE( pNode->GetType( ) == NVERTICAL_BRACE, "the visitor-patterns isn't implemented correctly" );
     VisitChildren( pNode );
 }
 
@@ -335,17 +336,18 @@ void SmDefaultingVisitor::Visit( SmVerticalBraceNode* pNode )
     DefaultVisit( pNode );
 }
 
-
 /////////////////////////////// SmCaretDrawingVisitor ////////////////////////////////
 
 SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
                                              SmCaretPos position,
-                                             Point offset )
+                                             Point offset,
+                                             bool caretVisible )
  : rDev( rDevice )
 {
     pos = position;
     Offset = offset;
-    j_assert( position.IsValid( ), "Cannot draw invalid position!" );
+    isCaretVisible = caretVisible;
+    OSL_ENSURE( position.IsValid( ), "Cannot draw invalid position!" );
     if( !position.IsValid( ) )
         return;
 
@@ -370,14 +372,23 @@ void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
     long left = pNode->GetLeft( ) + rDev.GetTextWidth( pNode->GetText( ), 0, i ) + Offset.X( );
     long top = pLine->GetTop( ) + Offset.Y( );
     long height = pLine->GetHeight( );
+    long left_line = pLine->GetLeft( ) + Offset.X( );
+    long right_line = pLine->GetRight( ) + Offset.X( );
 
     //Set color
     rDev.SetLineColor( Color( COL_BLACK ) );
 
-    //Draw vertical line
-    Point p1( left, top );
-    Point p2( left, top + height );
-    rDev.DrawLine( p1, p2 );
+    if ( isCaretVisible ) {
+        //Draw vertical line
+        Point p1( left, top );
+        Point p2( left, top + height );
+        rDev.DrawLine( p1, p2 );
+    }
+
+    //Underline the line
+    Point pLeft( left_line, top + height );
+    Point pRight( right_line, top + height );
+    rDev.DrawLine( pLeft, pRight );
 }
 
 void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
@@ -391,14 +402,23 @@ void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
     long left = pNode->GetLeft( ) + Offset.X( ) + ( pos.Index == 1 ? pNode->GetWidth( ) : 0 );
     long top = pLine->GetTop( ) + Offset.Y( );
     long height = pLine->GetHeight( );
+    long left_line = pLine->GetLeft( ) + Offset.X( );
+    long right_line = pLine->GetRight( ) + Offset.X( );
 
     //Set color
     rDev.SetLineColor( Color( COL_BLACK ) );
 
-    //Draw vertical line
-    Point p1( left, top );
-    Point p2( left, top + height );
-    rDev.DrawLine( p1, p2 );
+    if ( isCaretVisible ) {
+        //Draw vertical line
+        Point p1( left, top );
+        Point p2( left, top + height );
+        rDev.DrawLine( p1, p2 );
+    }
+
+    //Underline the line
+    Point pLeft( left_line, top + height );
+    Point pRight( right_line, top + height );
+    rDev.DrawLine( pLeft, pRight );
 }
 
 /////////////////////////////// SmCaretPos2LineVisitor ////////////////////////////////
@@ -435,7 +455,6 @@ void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
 
 /////////////////////////////// Nasty temporary device!!! ////////////////////////////////
 
-
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <rtl/math.hxx>
@@ -458,7 +477,7 @@ class SmTmpDevice2
     Color   Impl_GetColor( const Color& rColor );
 
 public:
-    SmTmpDevice2( OutputDevice &rTheDev, BOOL bUseMap100th_mm );
+    SmTmpDevice2( OutputDevice &rTheDev, bool bUseMap100th_mm );
     ~SmTmpDevice2( )  { rOutDev.Pop( ); }
 
     void SetFont( const Font &rNewFont );
@@ -470,19 +489,17 @@ public:
     operator OutputDevice & ( ) { return rOutDev; }
 };
 
-
-SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, BOOL bUseMap100th_mm ) :
+SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, bool bUseMap100th_mm ) :
     rOutDev( rTheDev )
 {
     rOutDev.Push( PUSH_FONT | PUSH_MAPMODE |
                   PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_TEXTCOLOR );
     if ( bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev.GetMapMode( ).GetMapUnit( ) )
     {
-        DBG_ERROR( "incorrect MapMode?" );
-        rOutDev.SetMapMode( MAP_100TH_MM );     //Immer fuer 100% fomatieren
+        OSL_FAIL( "incorrect MapMode?" );
+        rOutDev.SetMapMode( MAP_100TH_MM );     //format for 100% always
     }
 }
-
 
 Color SmTmpDevice2::Impl_GetColor( const Color& rColor )
 {
@@ -508,7 +525,6 @@ Color SmTmpDevice2::Impl_GetColor( const Color& rColor )
     }
     return Color( nNewCol );
 }
-
 
 void SmTmpDevice2::SetFont( const Font &rNewFont )
 {
@@ -646,8 +662,7 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     // draw root-sign itself
     DrawSpecialNode( pNode );
 
-
-    SmTmpDevice2  aTmpDev( ( OutputDevice & ) rDev, TRUE );
+    SmTmpDevice2  aTmpDev( ( OutputDevice & ) rDev, true );
     aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
     rDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
@@ -667,18 +682,9 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     //  This is done by shifting it's output-position to a point that
     //  corresponds exactly to a pixel on the output device.
     Point  aDrawPos( rDev.PixelToLogic( rDev.LogicToPixel( aBar.TopLeft( ) ) ) );
-    //aDrawPos.X( ) = aBar.Left( );     //! don't change X position
     aBar.SetPos( aDrawPos );
 
     rDev.DrawRect( aBar );
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, Position, nRFlags );
-#endif
 }
 
 void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
@@ -696,18 +702,10 @@ void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
           aPos ( Position + aOffset );
     pNode->GetPolygon( ).Move( aPos.X( ), aPos.Y( ) );    //Works because Polygon wraps a pointer
 
-    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, FALSE );
+    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, false );
     aTmpDev.SetLineColor( pNode->GetFont( ).GetColor( ) );
 
     rDev.DrawPolyLine( pNode->GetPolygon( ), aInfo );
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, Position, nRFlags );
-#endif
 }
 
 void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
@@ -715,12 +713,12 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     if ( pNode->IsPhantom( ) )
         return;
 
-    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, FALSE );
+    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, false );
     aTmpDev.SetFillColor( pNode->GetFont( ).GetColor( ) );
     rDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
 
-    ULONG  nTmpBorderWidth = pNode->GetFont( ).GetBorderWidth( );
+    sal_uLong  nTmpBorderWidth = pNode->GetFont( ).GetBorderWidth( );
 
     // get rectangle and remove borderspace
     Rectangle  aTmp ( pNode->AsRectangle( ) + Position - pNode->GetTopLeft( ) );
@@ -740,14 +738,6 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     aTmp.SetPos( aPos );
 
     rDev.DrawRect( aTmp );
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, rPosition, nRFlags );
-#endif
 }
 
 void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
@@ -755,7 +745,7 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
     if ( pNode->IsPhantom( )  ||  pNode->GetText( ).Len( ) == 0  ||  pNode->GetText( ).GetChar( 0 ) == xub_Unicode( '\0' ) )
         return;
 
-    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, FALSE );
+    SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, false );
     aTmpDev.SetFont( pNode->GetFont( ) );
 
     Point  aPos ( Position );
@@ -764,14 +754,6 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
     aPos = rDev.PixelToLogic( rDev.LogicToPixel( aPos ) );
 
     rDev.DrawStretchText( aPos, pNode->GetWidth( ), pNode->GetText( ) );
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, Position, nRFlags );
-#endif
 }
 
 void SmDrawingVisitor::DrawSpecialNode( SmSpecialNode* pNode )
@@ -797,20 +779,50 @@ void SmDrawingVisitor::DrawChildren( SmNode* pNode )
         Position = rPosition + aOffset;
         it->Accept( this );
     }
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, rPosition, nRFlags );
-#endif
 }
 
 /////////////////////////////// SmSetSelectionVisitor ////////////////////////////////
 
-void SmSetSelectionVisitor::SetSelectedOnAll( SmNode* pSubTree, bool IsSelected )
-{
+SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pTree) {
+    StartPos    = startPos;
+    EndPos      = endPos;
+    IsSelecting = false;
+
+    //Assume that pTree is a SmTableNode
+    OSL_ENSURE(pTree->GetType() == NTABLE, "pTree should be a SmTableNode!");
+    //Visit root node, this is special as this node cannot be selected, but it's children can!
+    if(pTree->GetType() == NTABLE){
+        //Change state if StartPos is infront of this node
+        if( StartPos.pSelectedNode == pTree && StartPos.Index == 0 )
+            IsSelecting = !IsSelecting;
+        //Change state if EndPos is infront of this node
+        if( EndPos.pSelectedNode == pTree && EndPos.Index == 0 )
+            IsSelecting = !IsSelecting;
+        OSL_ENSURE(!IsSelecting, "Caret positions needed to set IsSelecting about, shouldn't be possible!");
+
+        //Visit lines
+        SmNodeIterator it( pTree );
+        while( it.Next( ) ) {
+            it->Accept( this );
+            //If we started a selection in this line and it haven't ended, we do that now!
+            if(IsSelecting) {
+                IsSelecting = false;
+                SetSelectedOnAll(it.Current(), true);
+                //Set StartPos and EndPos to invalid positions, this ensures that an unused
+                //start or end (because we forced end above), doesn't start a new selection.
+                StartPos = EndPos = SmCaretPos();
+            }
+        }
+        //Check if pTree isn't selected
+        OSL_ENSURE(!pTree->IsSelected(), "pTree should never be selected!");
+        //Discard the selection if there's a bug (it's better than crashing)
+        if(pTree->IsSelected())
+            SetSelectedOnAll(pTree, false);
+    }else //This shouldn't happen, but I don't see any reason to die if it does
+        pTree->Accept(this);
+}
+
+void SmSetSelectionVisitor::SetSelectedOnAll( SmNode* pSubTree, bool IsSelected ) {
     pSubTree->SetSelected( IsSelected );
 
     //Quick BFS to set all selections
@@ -819,8 +831,7 @@ void SmSetSelectionVisitor::SetSelectedOnAll( SmNode* pSubTree, bool IsSelected 
         SetSelectedOnAll( it.Current( ), IsSelected );
 }
 
-void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode )
-{
+void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
     //Change state if StartPos is infront of this node
     if( StartPos.pSelectedNode == pNode && StartPos.Index == 0 )
         IsSelecting = !IsSelecting;
@@ -829,8 +840,8 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode )
         IsSelecting = !IsSelecting;
 
     //Cache current state
-    BOOL WasSelecting = IsSelecting;
-    BOOL ChangedState = FALSE;
+    bool WasSelecting = IsSelecting;
+    bool ChangedState = false;
 
     //Set selected
     pNode->SetSelected( IsSelecting );
@@ -875,8 +886,7 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode )
     }
 }
 
-void SmSetSelectionVisitor::VisitCompositionNode( SmNode* pNode )
-{
+void SmSetSelectionVisitor::VisitCompositionNode( SmNode* pNode ) {
     //Change state if StartPos is infront of this node
     if( StartPos.pSelectedNode == pNode && StartPos.Index == 0 )
         IsSelecting = !IsSelecting;
@@ -903,8 +913,7 @@ void SmSetSelectionVisitor::VisitCompositionNode( SmNode* pNode )
         IsSelecting = !IsSelecting;
 }
 
-void SmSetSelectionVisitor::Visit( SmTextNode* pNode )
-{
+void SmSetSelectionVisitor::Visit( SmTextNode* pNode ) {
     long    i1 = -1,
             i2 = -1;
     if( StartPos.pSelectedNode == pNode )
@@ -946,40 +955,37 @@ void SmSetSelectionVisitor::Visit( SmTextNode* pNode )
     pNode->SetSelectionEnd( end );
 }
 
-void SmSetSelectionVisitor::Visit( SmExpressionNode* pNode )
-{
+void SmSetSelectionVisitor::Visit( SmExpressionNode* pNode ) {
     VisitCompositionNode( pNode );
 }
 
-void SmSetSelectionVisitor::Visit( SmAlignNode* pNode )
-{
+void SmSetSelectionVisitor::Visit( SmLineNode* pNode ) {
     VisitCompositionNode( pNode );
 }
 
-void SmSetSelectionVisitor::Visit( SmBinHorNode* pNode )
-{
+void SmSetSelectionVisitor::Visit( SmAlignNode* pNode ) {
     VisitCompositionNode( pNode );
 }
 
-void SmSetSelectionVisitor::Visit( SmUnHorNode* pNode )
-{
+void SmSetSelectionVisitor::Visit( SmBinHorNode* pNode ) {
     VisitCompositionNode( pNode );
 }
 
-void SmSetSelectionVisitor::Visit( SmFontNode* pNode )
-{
+void SmSetSelectionVisitor::Visit( SmUnHorNode* pNode ) {
     VisitCompositionNode( pNode );
 }
 
-
+void SmSetSelectionVisitor::Visit( SmFontNode* pNode ) {
+    VisitCompositionNode( pNode );
+}
 
 /////////////////////////////// SmCaretPosGraphBuildingVisitor ////////////////////////////////
 
-SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNode ){
+SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNode ) {
     pRightMost  = NULL;
     pGraph = new SmCaretPosGraph( );
     //pRootNode should always be a table
-    j_assert( pRootNode->GetType( ) == NTABLE, "pRootNode must be a table node");
+    OSL_ENSURE( pRootNode->GetType( ) == NTABLE, "pRootNode must be a table node");
     //Handle the special case where NTABLE is used a rootnode
     if( pRootNode->GetType( ) == NTABLE ){
         //Children are SmLineNodes
@@ -995,7 +1001,7 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
             //The argument for doing this is that we now don't have to worry about SmLineNode
             //being a visual line composition node. Thus, no need for yet another special case
             //in SmCursor::IsLineCompositionNode and everywhere this method is used.
-            if( it->GetType( ) != NLINE )
+            //if( it->GetType( ) != NLINE )
                 pRightMost = pGraph->Add( SmCaretPos( it.Current( ), 0 ) );
             it->Accept( this );
         }
@@ -1004,11 +1010,8 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
 }
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
-    pRightMost = NULL;
     SmNodeIterator it( pNode );
     while( it.Next( ) ){
-        if( !pRightMost )
-            pRightMost = pGraph->Add( SmCaretPos( it.Current( ), 0 ) );
         it->Accept( this );
     }
 }
@@ -1021,7 +1024,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
 void SmCaretPosGraphBuildingVisitor::Visit( SmTableNode* pNode ){
     SmCaretPosGraphEntry *left  = pRightMost,
                          *right = pGraph->Add( SmCaretPos( pNode, 1) );
-    BOOL bIsFirst = TRUE;
+    bool bIsFirst = true;
     SmNodeIterator it( pNode );
     while( it.Next() ){
         pRightMost = pGraph->Add( SmCaretPos( it.Current(), 0 ), left);
@@ -1031,7 +1034,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmTableNode* pNode ){
         pRightMost->SetRight(right);
         if(bIsFirst)
             right->SetLeft(pRightMost);
-        bIsFirst = FALSE;
+        bIsFirst = false;
     }
     pRightMost = right;
 }
@@ -1074,10 +1077,10 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
                          *bodyRight;
 
     left = pRightMost;
-    j_assert( pRightMost, "pRightMost shouldn't be NULL here!" );
+    OSL_ENSURE( pRightMost, "pRightMost shouldn't be NULL here!" );
 
     //Create bodyLeft
-    j_assert( pNode->GetBody( ), "SmSubSupNode Doesn't have a body!" );
+    OSL_ENSURE( pNode->GetBody( ), "SmSubSupNode Doesn't have a body!" );
     bodyLeft = pGraph->Add( SmCaretPos( pNode->GetBody( ), 0 ), left );
     left->SetRight( bodyLeft ); //TODO: Don't make this if LSUP or LSUB are NULL ( not sure??? )
 
@@ -1285,9 +1288,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmMatrixNode* pNode )
     SmCaretPosGraphEntry *left  = pRightMost,
                          *right = pGraph->Add( SmCaretPos( pNode, 1 ) );
 
-    for ( USHORT i = 0;  i < pNode->GetNumRows( ); i++ ) {
+    for ( sal_uInt16 i = 0;  i < pNode->GetNumRows( ); i++ ) {
         SmCaretPosGraphEntry* r = left;
-        for ( USHORT j = 0;  j < pNode->GetNumCols( ); j++ ){
+        for ( sal_uInt16 j = 0;  j < pNode->GetNumCols( ); j++ ){
             SmNode* pSubNode = pNode->GetSubNode( i * pNode->GetNumCols( ) + j );
 
             pRightMost = pGraph->Add( SmCaretPos( pSubNode, 0 ), r );
@@ -1326,7 +1329,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmMatrixNode* pNode )
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmTextNode* pNode )
 {
-    j_assert( pNode->GetText( ).Len( ) > 0, "Empty SmTextNode is bad" );
+    OSL_ENSURE( pNode->GetText( ).Len( ) > 0, "Empty SmTextNode is bad" );
 
     int size = pNode->GetText( ).Len( );
     for( int i = 1; i <= size; i++ ){
@@ -1367,7 +1370,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinVerNode* pNode )
 
     //Set left
     left = pRightMost;
-    j_assert( pRightMost, "There must be a position infront of this" );
+    OSL_ENSURE( pRightMost, "There must be a position infront of this" );
 
     //Create right
     right = pGraph->Add( SmCaretPos( pNode, 1 ) );
@@ -1489,7 +1492,6 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinDiagonalNode* pNode )
     pRightMost = right;
 }
 
-
 //Straigt forward ( I think )
 void SmCaretPosGraphBuildingVisitor::Visit( SmBinHorNode* pNode )
 {
@@ -1607,7 +1609,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
 {
     SmNode  *pExtra = pNode->GetSubNode( 0 ), //Argument, NULL for sqrt, and SmTextNode if cubicroot
             *pBody  = pNode->GetSubNode( 2 ); //Body of the root
-    j_assert( pBody, "pBody cannot be NULL" );
+    OSL_ENSURE( pBody, "pBody cannot be NULL" );
 
     SmCaretPosGraphEntry  *left,
                         *right,
@@ -1615,7 +1617,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
                         *bodyRight;
 
     //Get left and save it
-    j_assert( pRightMost, "There must be a position infront of this" );
+    OSL_ENSURE( pRightMost, "There must be a position infront of this" );
     left = pRightMost;
 
     //Create body left
@@ -1817,12 +1819,12 @@ void SmCloningVisitor::CloneKids( SmStructureNode* pSource, SmStructureNode* pTa
     SmNode* pCurrResult = pResult;
 
     //Create array for holding clones
-    USHORT nSize = pSource->GetNumSubNodes( );
+    sal_uInt16 nSize = pSource->GetNumSubNodes( );
     SmNodeArray aNodes( nSize );
 
     //Clone children
     SmNode* pKid;
-    for( USHORT i = 0; i < nSize; i++ ){
+    for( sal_uInt16 i = 0; i < nSize; i++ ){
         if( NULL != ( pKid = pSource->GetSubNode( i ) ) )
             pKid->Accept( this );
         else
@@ -1852,7 +1854,6 @@ void SmCloningVisitor::Visit( SmBraceNode* pNode )
     CloneKids( pNode, pClone );
     pResult = pClone;
 }
-
 
 void SmCloningVisitor::Visit( SmBracebodyNode* pNode )
 {
@@ -2047,10 +2048,10 @@ void SmCloningVisitor::Visit( SmVerticalBraceNode* pNode )
 
 SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, Point Offset )
     : rDev( rDevice ) {
-    bHasSelectionArea = FALSE;
+    bHasSelectionArea = false;
 
     //Visit everything
-    j_assert( pTree, "pTree can't be null!" );
+    OSL_ENSURE( pTree, "pTree can't be null!" );
     if( pTree )
         pTree->Accept( this );
 
@@ -2114,15 +2115,15 @@ void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
     }
 }
 
-
 /////////////////////////////// SmNodeToTextVisitor ///////////////////////////////
 
 void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
 {
     if( pNode->GetToken( ).eType == TBINOM ) {
-        Append( "binom" );
+        Append( "{ binom" );
         LineToText( pNode->GetSubNode( 0 ) );
         LineToText( pNode->GetSubNode( 1 ) );
+        Append("} ");
     } else if( pNode->GetToken( ).eType == TSTACK ) {
         Append( "stack{ " );
         SmNodeIterator it( pNode );
@@ -2199,33 +2200,39 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
         SmNode* pChild;
         if( ( pChild = pSubSup->GetSubSup( LSUP ) ) ) {
             Separate( );
-            Append( "lsup " );
+            Append( "lsup { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( LSUB ) ) ) {
             Separate( );
-            Append( "lsub " );
+            Append( "lsub { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( RSUP ) ) ) {
             Separate( );
-            Append( "rsup " );
+            Append( "rsup { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( RSUB ) ) ) {
             Separate( );
-            Append( "rsub " );
+            Append( "rsub { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {
             Separate( );
-            Append( "csup " );
+            Append( "csup { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( CSUB ) ) ) {
             Separate( );
-            Append( "csub " );
+            Append( "csub { " );
             LineToText( pChild );
+            Append( "} " );
         }
     }
     LineToText( pNode->GetSubNode( 1 ) );
@@ -2331,18 +2338,15 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmUnHorNode* pNode )
 {
-    Append( "{" );
     SmNodeIterator it( pNode, pNode->GetSubNode( 1 )->GetToken( ).eType == TFACT );
     while( it.Next( ) ) {
         Separate( );
         it->Accept( this );
     }
-    Append( " }" );
 }
 
 void SmNodeToTextVisitor::Visit( SmBinHorNode* pNode )
 {
-    Append( "{" );
     SmNode *pLeft  = pNode->GetSubNode( 0 ),
            *pOper  = pNode->GetSubNode( 1 ),
            *pRight = pNode->GetSubNode( 2 );
@@ -2353,26 +2357,29 @@ void SmNodeToTextVisitor::Visit( SmBinHorNode* pNode )
     Separate( );
     pRight->Accept( this );
     Separate( );
-    Append( "}" );
 }
 
 void SmNodeToTextVisitor::Visit( SmBinVerNode* pNode )
 {
     SmNode *pNum    = pNode->GetSubNode( 0 ),
            *pDenom  = pNode->GetSubNode( 2 );
+    Append( "{ " );
     LineToText( pNum );
     Append( "over" );
     LineToText( pDenom );
+    Append( "} " );
 }
 
 void SmNodeToTextVisitor::Visit( SmBinDiagonalNode* pNode )
 {
     SmNode *pLeftOperand  = pNode->GetSubNode( 0 ),
            *pRightOperand = pNode->GetSubNode( 1 );
+    Append( "{ " );
     LineToText( pLeftOperand );
     Separate( );
     Append( "wideslash " );
     LineToText( pRightOperand );
+    Append( "} " );
 }
 
 void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
@@ -2414,8 +2421,8 @@ void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
 void SmNodeToTextVisitor::Visit( SmMatrixNode* pNode )
 {
     Append( "matrix{" );
-    for ( USHORT i = 0; i < pNode->GetNumRows( ); i++ ) {
-        for ( USHORT j = 0; j < pNode->GetNumCols( ); j++ ) {
+    for ( sal_uInt16 i = 0; i < pNode->GetNumRows( ); i++ ) {
+        for ( sal_uInt16 j = 0; j < pNode->GetNumCols( ); j++ ) {
             SmNode* pSubNode = pNode->GetSubNode( i * pNode->GetNumCols( ) + j );
             Separate( );
             pSubNode->Accept( this );
@@ -2427,7 +2434,7 @@ void SmNodeToTextVisitor::Visit( SmMatrixNode* pNode )
         if( i != pNode->GetNumRows( ) - 1 )
             Append( "##" );
     }
-    Append( "}" );
+    Append( "} " );
 }
 
 void SmNodeToTextVisitor::Visit( SmPlaceNode* )
@@ -2484,13 +2491,18 @@ void SmNodeToTextVisitor::Visit( SmLineNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
 {
-    Append( "{ " );
+    bool bracketsNeeded = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() == NBINHOR;
+    if (bracketsNeeded) {
+        Append( "{ " );
+    }
     SmNodeIterator it( pNode );
     while( it.Next( ) ) {
         it->Accept( this );
         Separate( );
     }
-    Append( "}" );
+    if (bracketsNeeded) {
+        Append( "} " );
+    }
 }
 
 void SmNodeToTextVisitor::Visit( SmPolyLineNode* )
@@ -2525,3 +2537,5 @@ void SmNodeToTextVisitor::Visit( SmVerticalBraceNode* pNode )
     Append( pNode->GetToken( ).aText );
     LineToText( pScript );
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

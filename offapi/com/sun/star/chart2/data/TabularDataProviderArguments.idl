@@ -97,15 +97,15 @@ service TabularDataProviderArguments
     /** determines the order of the created labeled sequences
 
         <p>For example a SequenceMapping of [3,0,2,1] indicates that
-        the sequence from old position '3' should now be the first one.
-        Then comes the sequence from old position '0'. Then that one
-        from old position '2' and then the sequence from old position '1'.</p>
+        the sequence from old position "3" should now be the first one.
+        Then comes the sequence from old position "0". Then that one
+        from old position "2" and then the sequence from old position "1".</p>
 
         <p>If the SequenceMapping contains invalid indexes just
         ignore those single indexes. For example if you only have three
         labeled sequences and a SequenceMapping [2,5,1,0], you should
-        ignore the '5' and continue to place the sequence from
-        old index '1' to the next new position and so on.</p>
+        ignore the "5" and continue to place the sequence from
+        old index "1" to the next new position and so on.</p>
 
         <p>If the given SequenceMapping does not cover all existing
         labeled sequences just put the remaining sequences in old order

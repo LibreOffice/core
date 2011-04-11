@@ -85,7 +85,7 @@ struct ARGBColor
     This interface encapsulates all information that is necessary to
     interpret color data, by defining a describing color space, like
     for example CMYK or sRGB. You can either convert between this and
-    an arbitrary other colorspace, or into the standard RGB or ARGB
+    an arbitrary other color space, or into the standard RGB or ARGB
     formats (because those are so overwhelmingly common in computer
     graphics).<p>
 
@@ -232,7 +232,7 @@ interface XColorSpace
     /** Convert sRGB color to a representation in this color space.<p>
 
         If this color space conveys alpha information, it is assumed
-        be fully opaque for the given rgb color value.
+        be fully opaque for the given RGB color value.
 
         @param deviceColor Sequence of sRGB color components. Is
         permitted to contain more than one color element, therefore,

@@ -61,7 +61,7 @@ Reference<XInterface> SAL_CALL PresenterHelperService_createInstance (
 ::rtl::OUString PresenterHelperService_getImplementationName (void)
     throw(RuntimeException)
 {
-    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper"));
 }
 
 
@@ -71,7 +71,7 @@ Sequence<rtl::OUString> SAL_CALL PresenterHelperService_getSupportedServiceNames
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.PresenterHelper"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterHelper")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -136,7 +136,7 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
         // Make the frame window transparent and make the parent able to
         // draw behind it.
         if (pParentWindow != NULL)
-            pParentWindow->EnableChildTransparentMode(TRUE);
+            pParentWindow->EnableChildTransparentMode(sal_True);
     }
 
     if (pWindow != NULL)
@@ -148,12 +148,12 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
         if ( ! bEnableParentClip)
         {
             pWindow->SetParentClipMode(PARENTCLIPMODE_NOCLIP);
-            pWindow->SetPaintTransparent(TRUE);
+            pWindow->SetPaintTransparent(sal_True);
         }
         else
         {
             pWindow->SetParentClipMode(PARENTCLIPMODE_CLIP);
-            pWindow->SetPaintTransparent(FALSE);
+            pWindow->SetPaintTransparent(sal_False);
         }
 
     }
@@ -177,7 +177,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createSharedCanvas (
         || ! rxWindow.is())
     {
         throw RuntimeException(
-            OUString::createFromAscii("illegal argument"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("illegal argument")),
             Reference<XInterface>(static_cast<XWeak*>(this)));
     }
 
@@ -223,7 +223,7 @@ Reference<rendering::XCanvas> SAL_CALL PresenterHelper::createCanvas (
             xFactory->createInstanceWithArguments(
                 rsOptionalCanvasServiceName.getLength()>0
                     ? rsOptionalCanvasServiceName
-                    : OUString::createFromAscii("com.sun.star.rendering.VCLCanvas"),
+                    : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.VCLCanvas")),
                 aArg),
             UNO_QUERY);
     }

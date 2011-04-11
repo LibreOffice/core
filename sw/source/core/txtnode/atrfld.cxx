@@ -44,7 +44,7 @@
 #include "calc.hxx"         // Update fuer UserFields
 #include "hints.hxx"
 #include <IDocumentFieldsAccess.hxx>
-
+#include <fieldhint.hxx>
 #include <svl/smplhint.hxx>
 
 TYPEINIT3( SwFmtFld, SfxPoolItem, SwClient,SfxBroadcaster)
@@ -102,7 +102,7 @@ SwFmtFld::~SwFmtFld()
     // bei einige FeldTypen muessen wir den FeldTypen noch loeschen
     if( pType && pType->IsLastDepend() )
     {
-        BOOL bDel = FALSE;
+        sal_Bool bDel = sal_False;
         switch( pType->Which() )
         {
         case RES_USERFLD:
@@ -126,6 +126,12 @@ SwFmtFld::~SwFmtFld()
         }
     }
 }
+
+void SwFmtFld::RegisterToFieldType( SwFieldType& rType )
+{
+    rType.Add(this);
+}
+
 
 // #111840#
 void SwFmtFld::SetFld(SwField * _pField)
@@ -154,7 +160,30 @@ SfxPoolItem* SwFmtFld::Clone( SfxItemPool* ) const
     return new SwFmtFld( *this );
 }
 
-void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
+{
+    if( !pTxtAttr )
+        return;
+
+    const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
+    if ( pHint )
+    {
+        // replace field content by text
+        SwPaM* pPaM = pHint->GetPaM();
+        SwDoc* pDoc = pPaM->GetDoc();
+        const SwTxtNode& rTxtNode = pTxtAttr->GetTxtNode();
+        pPaM->GetPoint()->nNode = rTxtNode;
+        pPaM->GetPoint()->nContent.Assign( (SwTxtNode*)&rTxtNode, *pTxtAttr->GetStart() );
+
+        String const aEntry( GetFld()->ExpandField( pDoc->IsClipBoard() ) );
+        pPaM->SetMark();
+        pPaM->Move( fnMoveForward );
+        pDoc->DeleteRange( *pPaM );
+        pDoc->InsertString( *pPaM, aEntry );
+    }
+}
+
+void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( !pTxtAttr )
         return;
@@ -172,7 +201,7 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         case RES_TXTATR_FLDCHG:
                 // "Farbe hat sich geaendert !"
                 // this, this fuer "nur Painten"
-                pTxtNd->Modify( this, this );
+                pTxtNd->ModifyNotification( this, this );
                 return;
         case RES_REFMARKFLD_UPDATE:
                 // GetReferenz-Felder aktualisieren
@@ -186,12 +215,12 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                 break;
         case RES_DOCPOS_UPDATE:
                 // Je nach DocPos aktualisieren (SwTxtFrm::Modify())
-                pTxtNd->Modify( pNew, this );
+                pTxtNd->ModifyNotification( pNew, this );
                 return;
 
         case RES_ATTRSET_CHG:
         case RES_FMT_CHG:
-                pTxtNd->Modify( pOld, pNew );
+                pTxtNd->ModifyNotification( pOld, pNew );
                 return;
         default:
                 break;
@@ -207,7 +236,7 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         case RES_DBNUMSETFLD:
         case RES_DBNEXTSETFLD:
         case RES_DBNAMEFLD:
-            pTxtNd->Modify( 0, pNew);
+            pTxtNd->ModifyNotification( 0, pNew);
             return;
     }
 
@@ -223,27 +252,27 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     pTxtAttr->Expand();
 }
 
-BOOL SwFmtFld::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwFmtFld::GetInfo( SfxPoolItem& rInfo ) const
 {
     const SwTxtNode* pTxtNd;
     if( RES_AUTOFMT_DOCNODE != rInfo.Which() ||
         !pTxtAttr || 0 == ( pTxtNd = pTxtAttr->GetpTxtNode() ) ||
         &pTxtNd->GetNodes() != ((SwAutoFmtGetDocNode&)rInfo).pNodes )
-        return TRUE;
+        return sal_True;
 
     ((SwAutoFmtGetDocNode&)rInfo).pCntntNode = pTxtNd;
-    return FALSE;
+    return sal_False;
 }
 
 
-BOOL SwFmtFld::IsFldInDoc() const
+sal_Bool SwFmtFld::IsFldInDoc() const
 {
     const SwTxtNode* pTxtNd;
     return pTxtAttr && 0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
             pTxtNd->GetNodes().IsDocNodes();
 }
 
-BOOL SwFmtFld::IsProtect() const
+sal_Bool SwFmtFld::IsProtect() const
 {
     const SwTxtNode* pTxtNd;
     return pTxtAttr && 0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
@@ -255,15 +284,12 @@ BOOL SwFmtFld::IsProtect() const
 |*                SwTxtFld::SwTxtFld()
 |*
 |*    Beschreibung      Attribut fuer automatischen Text, Ctor
-|*    Ersterstellung    BP 30.04.92
-|*    Letzte Aenderung  JP 15.08.94
 |*
 *************************************************************************/
 
-SwTxtFld::SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStartPos,
-        bool const bInClipboard)
+SwTxtFld::SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStartPos)
     : SwTxtAttr( rAttr, nStartPos )
-    , m_aExpand( rAttr.GetFld()->ExpandField(bInClipboard) )
+    , m_aExpand( rAttr.GetFld()->ExpandField(true) )
     , m_pTxtNode( 0 )
 {
     rAttr.pTxtAttr = this;
@@ -284,8 +310,6 @@ SwTxtFld::~SwTxtFld( )
 |*                SwTxtFld::Expand()
 |*
 |*    Beschreibung      exandiert das Feld und tauscht den Text im Node
-|*    Ersterstellung    BP 30.04.92
-|*    Letzte Aenderung  JP 15.08.94
 |*
 *************************************************************************/
 
@@ -301,7 +325,7 @@ void SwTxtFld::Expand() const
     if( aNewExpand == m_aExpand )
     {
         // Bei Seitennummernfeldern
-        const USHORT nWhich = pFld->GetTyp()->Which();
+        const sal_uInt16 nWhich = pFld->GetTyp()->Which();
         if( RES_CHAPTERFLD != nWhich && RES_PAGENUMBERFLD != nWhich &&
             RES_REFPAGEGETFLD != nWhich &&
             // --> FME 2005-05-23 #122919# Page count fields to not use aExpand
@@ -316,7 +340,7 @@ void SwTxtFld::Expand() const
             //              aenderung an die Frames posten
             if( m_pTxtNode->CalcHiddenParaField() )
             {
-                m_pTxtNode->Modify( 0, 0 );
+                m_pTxtNode->ModifyNotification( 0, 0 );
             }
             return;
         }
@@ -325,7 +349,7 @@ void SwTxtFld::Expand() const
     m_aExpand = aNewExpand;
 
     // 0, this for formatting
-    m_pTxtNode->Modify( 0, const_cast<SwFmtFld*>( &GetFld() ) );
+    m_pTxtNode->ModifyNotification( 0, const_cast<SwFmtFld*>( &GetFld() ) );
 }
 
 /*************************************************************************
@@ -341,7 +365,7 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
     IDocumentFieldsAccess* pDestIDFA = pDest->m_pTxtNode->getIDocumentFieldsAccess();
 
     SwFmtFld& rFmtFld = (SwFmtFld&)pDest->GetFld();
-    const USHORT nFldWhich = rFmtFld.GetFld()->GetTyp()->Which();
+    const sal_uInt16 nFldWhich = rFmtFld.GetFld()->GetTyp()->Which();
 
     if( pIDFA != pDestIDFA )
     {
@@ -387,15 +411,12 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
     }
 }
 
-/* -----------------26.06.2003 13:54-----------------
-
- --------------------------------------------------*/
 void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
 {
     //if not in undo section notify the change
     if (m_pTxtNode && m_pTxtNode->GetNodes().IsDocNodes())
     {
-        m_pTxtNode->Modify(0, &rFmtFld);
+        m_pTxtNode->ModifyNotification(0, &rFmtFld);
     }
 }
 

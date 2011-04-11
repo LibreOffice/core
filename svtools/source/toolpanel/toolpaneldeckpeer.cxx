@@ -35,6 +35,7 @@
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
+#include <vcl/svapp.hxx>
 
 //......................................................................................................................
 namespace svt
@@ -75,7 +76,7 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessibleContext > ToolPanelDeckPeer::CreateAccessibleContext()
     {
-        ::osl::SolarGuard aSolarGuard( GetMutex() );
+        SolarMutexGuard aSolarGuard;
         if ( m_pDeck == NULL )
             throw DisposedException( ::rtl::OUString(), *this );
 
@@ -89,7 +90,7 @@ namespace svt
     void SAL_CALL ToolPanelDeckPeer::dispose() throw(RuntimeException)
     {
         {
-            ::osl::SolarGuard aSolarGuard( GetMutex() );
+            SolarMutexGuard aSolarGuard;
             m_pDeck = NULL;
         }
         VCLXWindow::dispose();

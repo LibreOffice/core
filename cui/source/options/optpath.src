@@ -65,12 +65,14 @@ TabPage RID_SFXPAGE_PATH
     };
     PushButton BTN_PATH
     {
+        HelpID = "cui:PushButton:RID_SFXPAGE_PATH:BTN_PATH";
         Pos = MAP_APPFONT ( 183 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
         Text [ en-US ] = "~Edit..." ;
     };
     PushButton BTN_STANDARD
     {
+        HelpID = "cui:PushButton:RID_SFXPAGE_PATH:BTN_STANDARD";
         Pos = MAP_APPFONT ( 115 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
         Text [ en-US ] = "~Default" ;
@@ -84,11 +86,6 @@ TabPage RID_SFXPAGE_PATH
     Image IMG_LOCK
     {
         ImageBitmap = Bitmap { File = "lock.bmp"; };
-        MaskColor = STD_MASKCOLOR;
-    };
-    Image IMG_LOCK_HC
-    {
-        ImageBitmap = Bitmap { File = "lock_hc.bmp"; };
         MaskColor = STD_MASKCOLOR;
     };
     String STR_MULTIPATHDLG

@@ -34,7 +34,7 @@
 #include "tabvwsh.hxx"
 #include "drawview.hxx"
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 #include <svx/svdocirc.hxx>
 #include <svx/sxciaitm.hxx>
 
@@ -66,19 +66,19 @@ FuConstArc::~FuConstArc()
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
+sal_Bool FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FuConstruct::MouseButtonDown( rMEvt );
+    sal_Bool bReturn = FuConstruct::MouseButtonDown( rMEvt );
 
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pWindow->CaptureMouse();
         pView->BegCreateObj( aPnt );
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
     return bReturn;
 }
@@ -89,7 +89,7 @@ BOOL __EXPORT FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstArc::MouseMove( const MouseEvent& rMEvt )
+sal_Bool FuConstArc::MouseMove( const MouseEvent& rMEvt )
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -100,27 +100,18 @@ BOOL __EXPORT FuConstArc::MouseMove( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
+sal_Bool FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = false;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        // Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj( SDRCREATE_NEXTPOINT );
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
-/*
-    else if ( pView->IsCreateObj() && rMEvt.IsRight() )
-    {
-        // Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-        pView->EndCreateObj( SDRCREATE_FORCEEND );
-        bReturn = TRUE;
-    }
-*/
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
 
@@ -128,14 +119,14 @@ BOOL __EXPORT FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstArc::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuConstArc::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
+    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 
@@ -172,7 +163,7 @@ void FuConstArc::Activate()
             break;
     }
 
-    pView->SetCurrentObj( sal::static_int_cast<UINT16>( aObjKind ) );
+    pView->SetCurrentObj( sal::static_int_cast<sal_uInt16>( aObjKind ) );
 
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
@@ -192,7 +183,7 @@ void FuConstArc::Deactivate()
     pViewShell->SetActivePointer( aOldPointer );
 }
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_ARC:
@@ -225,7 +216,7 @@ SdrObject* FuConstArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle
         }
         else
         {
-            DBG_ERROR("Object is NO circle object");
+            OSL_FAIL("Object is NO circle object");
         }
     }
 

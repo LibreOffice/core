@@ -38,36 +38,26 @@
 
 #include <svx/fmmodel.hxx>
 
-#ifndef SVX_LIGHT
 #include "fmobj.hxx"
-#endif
 
-#ifndef SVX_LIGHT
-#include "fmresids.hrc"
-#endif
+#include <svx/fmresids.hrc>
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 
-#ifndef SVX_LIGHT
 #include "fmpgeimp.hxx"
-#endif
 
-#ifndef SVX_LIGHT
 #include <sfx2/objsh.hxx>
-#endif
-#include "svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/svdview.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 
 
-#ifndef SVX_LIGHT
 #include <svx/fmglob.hxx>
 #include "fmprop.hrc"
 #include "fmundo.hxx"
 #include "svx/fmtools.hxx"
 using namespace ::svxform;
-#endif
 #include <comphelper/property.hxx>
 #include <rtl/logfile.hxx>
 
@@ -81,11 +71,7 @@ TYPEINIT1(FmFormPage, SdrPage);
 //------------------------------------------------------------------
 FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, bool bMasterPage)
            :SdrPage(rModel, bMasterPage)
-#ifndef SVX_LIGHT
            ,m_pImpl( new FmFormPageImpl( *this ) )
-#else
-           ,m_pImpl(NULL)
-#endif
            ,m_pBasic(_pBasic)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::FmFormPage" );
@@ -94,11 +80,7 @@ FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, bool bMasterPage
 //------------------------------------------------------------------
 FmFormPage::FmFormPage(const FmFormPage& rPage)
            :SdrPage(rPage)
-#ifndef SVX_LIGHT
            ,m_pImpl(new FmFormPageImpl( *this, rPage.GetImpl() ) )
-#else
-           ,m_pImpl(NULL)
-#endif
            ,m_pBasic(0)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::FmFormPage" );
@@ -108,9 +90,7 @@ FmFormPage::FmFormPage(const FmFormPage& rPage)
 //------------------------------------------------------------------
 FmFormPage::~FmFormPage()
 {
-#ifndef SVX_LIGHT
     delete m_pImpl;
-#endif
 }
 
 //------------------------------------------------------------------
@@ -145,9 +125,9 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
                 }
             }
         }
-        catch( ::com::sun::star::uno::Exception ex )
+        catch( ::com::sun::star::uno::Exception const& )
         {
-            OSL_ENSURE( sal_False, "UNO Exception caught resetting model for m_pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
+            OSL_FAIL( "UNO Exception caught resetting model for m_pImpl (FmFormPageImpl) in FmFormPage::SetModel" );
         }
     }
 }
@@ -161,22 +141,19 @@ SdrPage* FmFormPage::Clone() const
 }
 
 //------------------------------------------------------------------
-void FmFormPage::InsertObject(SdrObject* pObj, ULONG nPos,
+void FmFormPage::InsertObject(SdrObject* pObj, sal_uLong nPos,
                               const SdrInsertReason* pReason)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::InsertObject" );
     SdrPage::InsertObject( pObj, nPos, pReason );
-#ifndef SVX_LIGHT
     if (GetModel() && (!pReason || pReason->GetReason() != SDRREASON_STREAMING))
         ((FmFormModel*)GetModel())->GetUndoEnv().Inserted(pObj);
-#endif
 }
 
 //------------------------------------------------------------------
 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > & FmFormPage::GetForms( bool _bForceCreate ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::GetForms" );
-#ifndef SVX_LIGHT
     const SdrPage& rMasterPage( *this );
     const FmFormPage* pFormPage = dynamic_cast< const FmFormPage* >( &rMasterPage );
     OSL_ENSURE( pFormPage, "FmFormPage::GetForms: referenced page is no FmFormPage - is this allowed?!" );
@@ -184,10 +161,6 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContai
         pFormPage = this;
 
     return pFormPage->m_pImpl->getForms( _bForceCreate );
-#else
-    static ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >  aRef;
-    return aRef;
-#endif
 }
 
 //------------------------------------------------------------------
@@ -195,7 +168,6 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                               const HelpEvent& rEvt )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::RequestHelp" );
-#ifndef SVX_LIGHT
     if( pView->IsAction() )
         return sal_False;
 
@@ -255,19 +227,16 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
         else
             Help::ShowQuickHelp( pWindow, aItemRect, aHelpText );
     }
-#endif
     return sal_True;
 }
 
 //------------------------------------------------------------------
-SdrObject* FmFormPage::RemoveObject(ULONG nObjNum)
+SdrObject* FmFormPage::RemoveObject(sal_uLong nObjNum)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::RemoveObject" );
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
-#ifndef SVX_LIGHT
     if (pObj && GetModel())
         ((FmFormModel*)GetModel())->GetUndoEnv().Removed(pObj);
-#endif
     return pObj;
 }
 

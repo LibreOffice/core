@@ -82,42 +82,42 @@ public:
 
     void            UpdateImport( const String& rTarget, const String& rDBName,
                         const String& rTableName, const String& rStatement,
-                        BOOL bNative, BYTE nType,
+                        sal_Bool bNative, sal_uInt8 nType,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::sdbc::XResultSet >& xResultSet,
                         const SbaSelectionList* pSelection );
 
-    BOOL            DoImport( SCTAB nTab, const ScImportParam& rParam,
+    sal_Bool            DoImport( SCTAB nTab, const ScImportParam& rParam,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::sdbc::XResultSet >& xResultSet,
-                        const SbaSelectionList* pSelection, BOOL bRecord,
-                        BOOL bAddrInsert = FALSE );
+                        const SbaSelectionList* pSelection, sal_Bool bRecord,
+                        sal_Bool bAddrInsert = false );
 
-    BOOL            DoImportUno( const ScAddress& rPos,
+    sal_Bool            DoImportUno( const ScAddress& rPos,
                                 const com::sun::star::uno::Sequence<
                                     com::sun::star::beans::PropertyValue>& aArgs );
 
     static void     ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFrame );
 
-    BOOL            Sort( SCTAB nTab, const ScSortParam& rSortParam,
-                            BOOL bRecord, BOOL bPaint, BOOL bApi );
+    sal_Bool            Sort( SCTAB nTab, const ScSortParam& rSortParam,
+                            sal_Bool bRecord, sal_Bool bPaint, sal_Bool bApi );
 
-    SC_DLLPUBLIC BOOL           Query( SCTAB nTab, const ScQueryParam& rQueryParam,
-                            const ScRange* pAdvSource, BOOL bRecord, BOOL bApi );
+    SC_DLLPUBLIC sal_Bool           Query( SCTAB nTab, const ScQueryParam& rQueryParam,
+                            const ScRange* pAdvSource, sal_Bool bRecord, sal_Bool bApi );
 
-    BOOL            DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
+    sal_Bool            DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                                     const ScSortParam* pForceNewSort,
-                                    BOOL bRecord, BOOL bApi );
+                                    sal_Bool bRecord, sal_Bool bApi );
 
-    BOOL            AddDBRange( const String& rName, const ScRange& rRange, BOOL bApi );
-    BOOL            DeleteDBRange( const String& rName, BOOL bApi );
-    BOOL            RenameDBRange( const String& rOld, const String& rNew, BOOL bApi );
-    BOOL            ModifyDBData( const ScDBData& rNewData, BOOL bApi );    // Name unveraendert
+    sal_Bool            AddDBRange( const String& rName, const ScRange& rRange, sal_Bool bApi );
+    sal_Bool            DeleteDBRange( const String& rName, sal_Bool bApi );
+    sal_Bool            RenameDBRange( const String& rOld, const String& rNew, sal_Bool bApi );
+    sal_Bool            ModifyDBData( const ScDBData& rNewData, sal_Bool bApi );    // Name unveraendert
 
-    BOOL            RepeatDB( const String& rDBName, BOOL bRecord, BOOL bApi );
+    sal_Bool            RepeatDB( const String& rDBName, sal_Bool bRecord, sal_Bool bApi );
 
-    BOOL            DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
-                                        BOOL bRecord, BOOL bApi, BOOL bAllowMove = FALSE );
+    sal_Bool            DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
+                                        sal_Bool bRecord, sal_Bool bApi, sal_Bool bAllowMove = false );
 };
 
 

@@ -36,7 +36,7 @@
 #include "swfont.hxx"
 
 // aus atrstck.cxx
-extern const BYTE StackPos[];
+extern const sal_uInt8 StackPos[];
 
 // globale Variablen, werden in SwFntCch.Hxx bekanntgegeben
 // Der FontCache wird in TxtInit.Cxx _TXTINIT erzeugt und in _TXTEXIT geloescht
@@ -46,9 +46,6 @@ SwFontCache *pSwFontCache = NULL;
 |*
 |*  SwFontObj::SwFontObj(), ~SwFontObj()
 |*
-|*  Ersterstellung      AMA 25. Jun. 95
-|*  Letzte Aenderung    AMA 25. Jun. 95
-|*
 |*************************************************************************/
 
 SwFontObj::SwFontObj( const void *pOwn, ViewShell *pSh ) :
@@ -57,8 +54,8 @@ SwFontObj::SwFontObj( const void *pOwn, ViewShell *pSh ) :
 {
     aSwFont.GoMagic( pSh, aSwFont.GetActual() );
     const SwAttrSet& rAttrSet = ((SwTxtFmtColl *)pOwn)->GetAttrSet();
-    for (USHORT i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
-        pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, TRUE );
+    for (sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
+        pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, sal_True );
 }
 
 SwFontObj::~SwFontObj()
@@ -68,9 +65,6 @@ SwFontObj::~SwFontObj()
 /*************************************************************************
 |*
 |*  SwFontAccess::SwFontAccess()
-|*
-|*  Ersterstellung      AMA 25. Jun. 95
-|*  Letzte Aenderung    AMA 25. Jun. 95
 |*
 |*************************************************************************/
 
@@ -88,7 +82,7 @@ SwFontObj *SwFontAccess::Get( )
 
 SwCacheObj *SwFontAccess::NewObj( )
 {
-    ((SwTxtFmtColl*)pOwner)->SetInSwFntCache( TRUE );
+    ((SwTxtFmtColl*)pOwner)->SetInSwFntCache( sal_True );
     return new SwFontObj( pOwner, pShell );
 }
 

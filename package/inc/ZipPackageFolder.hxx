@@ -34,13 +34,19 @@
 #include <HashMaps.hxx>
 #include <ZipPackageEntry.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
 namespace beans
 {
     struct PropertyValue;
 }
+namespace packages
+{
+    class ContentInfo;
+}
 } } }
+
 class ZipFile;
 class ZipPackage;
 class ZipOutputStream;
@@ -85,6 +91,8 @@ public:
 
     void setPackageFormat_Impl( sal_Int32 nFormat ) { m_nFormat = nFormat; }
     void setRemoveOnInsertMode_Impl( sal_Bool bRemove ) { this->mbAllowRemoveOnInsert = bRemove; }
+
+    bool saveChild(const rtl::OUString &rShortName, const com::sun::star::packages::ContentInfo &rInfo, rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool);
 
     // Recursive functions
     void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool)

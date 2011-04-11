@@ -33,7 +33,7 @@
 #define _SVSTDARR_STRINGSDTOR
 
 #include <svl/svstdarr.hxx>
-#include <clipfmtitem.hxx>
+#include <svx/clipfmtitem.hxx>
 #include <com/sun/star/frame/status/ClipboardFormats.hpp>
 
 struct SvxClipboardFmtItem_Impl
@@ -54,7 +54,7 @@ SvxClipboardFmtItem_Impl::SvxClipboardFmtItem_Impl(
                             const SvxClipboardFmtItem_Impl& rCpy )
 {
     aFmtIds.Insert( &rCpy.aFmtIds, 0 );
-    for( USHORT n = 0, nEnd = rCpy.aFmtNms.Count(); n < nEnd; ++n )
+    for( sal_uInt16 n = 0, nEnd = rCpy.aFmtNms.Count(); n < nEnd; ++n )
     {
         String* pStr = rCpy.aFmtNms[ n ];
         if( pStr )
@@ -63,7 +63,7 @@ SvxClipboardFmtItem_Impl::SvxClipboardFmtItem_Impl(
     }
 }
 
-SvxClipboardFmtItem::SvxClipboardFmtItem( USHORT nId )
+SvxClipboardFmtItem::SvxClipboardFmtItem( sal_uInt16 nId )
     : SfxPoolItem( nId ), pImpl( new SvxClipboardFmtItem_Impl )
 {
 }
@@ -79,15 +79,15 @@ SvxClipboardFmtItem::~SvxClipboardFmtItem()
     delete pImpl;
 }
 
-bool SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    USHORT nCount = Count();
+    sal_uInt16 nCount = Count();
 
     ::com::sun::star::frame::status::ClipboardFormats aClipFormats;
 
     aClipFormats.Identifiers.realloc( nCount );
     aClipFormats.Names.realloc( nCount );
-    for ( USHORT n=0; n < nCount; n++ )
+    for ( sal_uInt16 n=0; n < nCount; n++ )
     {
         aClipFormats.Identifiers[n] = (sal_Int64)GetClipbrdFormatId( n );
         aClipFormats.Names[n] = GetClipbrdFormatName( n );
@@ -97,17 +97,17 @@ bool SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMe
     return true;
 }
 
-bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::ClipboardFormats aClipFormats;
     if ( rVal >>= aClipFormats )
     {
-        USHORT nCount = USHORT( aClipFormats.Identifiers.getLength() );
+        sal_uInt16 nCount = sal_uInt16( aClipFormats.Identifiers.getLength() );
 
         pImpl->aFmtIds.Remove( 0, pImpl->aFmtIds.Count() );
         pImpl->aFmtNms.Remove( 0, pImpl->aFmtNms.Count() );
-        for ( USHORT n=0; n < nCount; n++ )
-            AddClipbrdFormat( ULONG( aClipFormats.Identifiers[n] ), aClipFormats.Names[n], n );
+        for ( sal_uInt16 n=0; n < nCount; n++ )
+            AddClipbrdFormat( sal_uIntPtr( aClipFormats.Identifiers[n] ), aClipFormats.Names[n], n );
 
         return true;
     }
@@ -123,7 +123,7 @@ int SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const
     {
         nRet = 1;
         const String* pStr1, *pStr2;
-        for( USHORT n = 0, nEnd = rCmp.pImpl->aFmtNms.Count(); n < nEnd; ++n )
+        for( sal_uInt16 n = 0, nEnd = rCmp.pImpl->aFmtNms.Count(); n < nEnd; ++n )
         {
             if( pImpl->aFmtIds[ n ] != rCmp.pImpl->aFmtIds[ n ] ||
                 ( (0 == ( pStr1 = pImpl->aFmtNms[ n ] )) ^
@@ -143,7 +143,7 @@ SfxPoolItem* SvxClipboardFmtItem::Clone( SfxItemPool * /*pPool*/ ) const
     return new SvxClipboardFmtItem( *this );
 }
 
-void SvxClipboardFmtItem::AddClipbrdFormat( ULONG nId, USHORT nPos )
+void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos )
 {
     if( nPos > pImpl->aFmtNms.Count() )
         nPos = pImpl->aFmtNms.Count();
@@ -152,8 +152,8 @@ void SvxClipboardFmtItem::AddClipbrdFormat( ULONG nId, USHORT nPos )
     pImpl->aFmtIds.Insert( nId, nPos );
 }
 
-void SvxClipboardFmtItem::AddClipbrdFormat( ULONG nId, const String& rName,
-                            USHORT nPos )
+void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, const String& rName,
+                            sal_uInt16 nPos )
 {
     if( nPos > pImpl->aFmtNms.Count() )
         nPos = pImpl->aFmtNms.Count();
@@ -162,17 +162,17 @@ void SvxClipboardFmtItem::AddClipbrdFormat( ULONG nId, const String& rName,
     pImpl->aFmtIds.Insert( nId, nPos );
 }
 
-USHORT SvxClipboardFmtItem::Count() const
+sal_uInt16 SvxClipboardFmtItem::Count() const
 {
     return pImpl->aFmtIds.Count();
 }
 
-ULONG SvxClipboardFmtItem::GetClipbrdFormatId( USHORT nPos ) const
+sal_uIntPtr SvxClipboardFmtItem::GetClipbrdFormatId( sal_uInt16 nPos ) const
 {
     return pImpl->aFmtIds[ nPos ];
 }
 
-const String& SvxClipboardFmtItem::GetClipbrdFormatName( USHORT nPos ) const
+const String& SvxClipboardFmtItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
 {
     const String* pS = pImpl->aFmtNms[ nPos ];
     return pS ? *pS : SvxClipboardFmtItem_Impl::sEmptyStr;

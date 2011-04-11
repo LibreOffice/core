@@ -38,14 +38,14 @@ namespace dbaui
 {
     //==================================================================
     // Ableitung von TabPage ist ein Trick von TH,
-    // um Aenderungen der Systemfarben zu bemerken (Bug #53905)
+    // um Aenderungen der Systemfarben zu bemerken
     class OTableDesignHelpBar : public TabPage
                                 ,public IClipboardTest
     {
     private:
         String          m_sHelpText;
         MultiLineEdit*  m_pTextWin;
-        USHORT          m_nDummy;
+        sal_uInt16          m_nDummy;
 
     protected:
         virtual void Resize();

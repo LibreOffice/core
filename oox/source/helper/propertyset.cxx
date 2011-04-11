@@ -27,21 +27,21 @@
  ************************************************************************/
 
 #include "oox/helper/propertyset.hxx"
-#include <rtl/strbuf.hxx>
+
 #include <osl/diagnose.h>
+#include <rtl/strbuf.hxx>
 #include "oox/helper/propertymap.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OStringBuffer;
-using ::rtl::OUStringToOString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::beans::XPropertySet;
-
 namespace oox {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OStringBuffer;
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 // ============================================================================
 
@@ -80,7 +80,7 @@ void PropertySet::getProperties( Sequence< Any >& orValues, const Sequence< OUSt
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "PropertySet::getProperties - cannot get all property values - fallback to single mode" );
+        OSL_FAIL( "PropertySet::getProperties - cannot get all property values - fallback to single mode" );
     }
 
     if( mxPropSet.is() )
@@ -114,7 +114,7 @@ void PropertySet::setProperties( const Sequence< OUString >& rPropNames, const S
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, "PropertySet::setProperties - cannot set all property values, fallback to single mode" );
+        OSL_FAIL( "PropertySet::setProperties - cannot set all property values, fallback to single mode" );
     }
 
     if( mxPropSet.is() )
@@ -153,7 +153,7 @@ bool PropertySet::getAnyProperty( Any& orValue, const OUString& rPropName ) cons
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, OStringBuffer( "PropertySet::getAnyProperty - cannot get property \"" ).
+        OSL_FAIL( OStringBuffer( "PropertySet::getAnyProperty - cannot get property \"" ).
             append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
     }
     return bHasValue;
@@ -168,7 +168,7 @@ void PropertySet::setAnyProperty( const OUString& rPropName, const Any& rValue )
     }
     catch( Exception& )
     {
-        OSL_ENSURE( false, OStringBuffer( "PropertySet::setAnyProperty - cannot set property \"" ).
+        OSL_FAIL( OStringBuffer( "PropertySet::setAnyProperty - cannot set property \"" ).
             append( OUStringToOString( rPropName, RTL_TEXTENCODING_ASCII_US ) ).append( '"' ).getStr() );
     }
 }

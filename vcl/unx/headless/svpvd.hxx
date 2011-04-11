@@ -38,12 +38,12 @@ class SvpSalGraphics;
 
 class SvpSalVirtualDevice : public SalVirtualDevice, public SvpElement
 {
-    USHORT                              m_nBitCount;
+    sal_uInt16                          m_nBitCount;
     basebmp::BitmapDeviceSharedPtr      m_aDevice;
     std::list< SvpSalGraphics* >        m_aGraphics;
 
 public:
-    SvpSalVirtualDevice( USHORT nBitCount ) : SvpElement(), m_nBitCount(nBitCount) {}
+    SvpSalVirtualDevice( sal_uInt16 nBitCount ) : SvpElement(), m_nBitCount(nBitCount) {}
     virtual ~SvpSalVirtualDevice();
 
     // SvpElement
@@ -53,7 +53,7 @@ public:
     virtual SalGraphics*    GetGraphics();
     virtual void            ReleaseGraphics( SalGraphics* pGraphics );
 
-    virtual BOOL            SetSize( long nNewDX, long nNewDY );
+    virtual sal_Bool            SetSize( long nNewDX, long nNewDY );
     virtual void            GetSize( long& rWidth, long& rHeight );
 };
 

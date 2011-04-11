@@ -41,7 +41,7 @@ public:
     SwDocFac( SwDoc *pDoc = 0 );
     ~SwDocFac();
 
-    // Das Dokument ist nach dem Aufruf von Read(..) angelegt
+    // Document is created after calling Read(...).
     SwDoc*  GetDoc();
 };
 

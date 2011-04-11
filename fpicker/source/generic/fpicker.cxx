@@ -34,16 +34,17 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 
-#ifdef WNT
-#include <tools/prewin.h>
-#include <tools/postwin.h>
-#include <odma_lib.hxx>
-#endif
-
 #include "svtools/miscopt.hxx"
 #include "svl/pickerhistoryaccess.hxx"
 
 #include "vcl/svapp.hxx"
+
+#ifdef WNT
+#define GradientStyle_RECT BLA_GradientStyle_RECT
+#include <windows.h>
+#undef GradientStyle_RECT
+#include <odma_lib.hxx>
+#endif
 
 namespace css = com::sun::star;
 
@@ -231,13 +232,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
     const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
-    void * pServiceManager, void * pRegistryKey)
-{
-    return cppu::component_writeInfoHelper (
-        pServiceManager, pRegistryKey, g_entries);
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (

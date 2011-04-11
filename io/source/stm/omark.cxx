@@ -406,7 +406,7 @@ void OMarkableOutputStream::checkMarksAndFlush() throw(     NotConnectedExceptio
 
     // find the smallest mark
     sal_Int32 nNextFound = m_nCurrentPos;
-    for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ii ++ ) {
+    for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
         if( (*ii).second <= nNextFound )  {
             nNextFound = (*ii).second;
         }
@@ -415,7 +415,7 @@ void OMarkableOutputStream::checkMarksAndFlush() throw(     NotConnectedExceptio
     if( nNextFound ) {
         // some data must be released !
         m_nCurrentPos -= nNextFound;
-        for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ii ++ ) {
+        for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
             (*ii).second -= nNextFound;
         }
 
@@ -735,10 +735,8 @@ void OMarkableInputStream::skipBytes(sal_Int32 nBytesToSkip)
         );
 
     // this method is blocking
-    sal_Int32 nRead;
     Sequence<sal_Int8> seqDummy( nBytesToSkip );
-
-    nRead = readBytes( seqDummy , nBytesToSkip );
+    readBytes( seqDummy , nBytesToSkip );
 }
 
 sal_Int32 OMarkableInputStream::available(void) throw (NotConnectedException, RuntimeException)
@@ -939,7 +937,7 @@ void OMarkableInputStream::checkMarksAndFlush()
 
     // find the smallest mark
     sal_Int32 nNextFound = m_nCurrentPos;
-    for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ii ++ ) {
+    for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
         if( (*ii).second <= nNextFound )  {
             nNextFound = (*ii).second;
         }
@@ -948,7 +946,7 @@ void OMarkableInputStream::checkMarksAndFlush()
     if( nNextFound ) {
         // some data must be released !
         m_nCurrentPos -= nNextFound;
-        for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ii ++ ) {
+        for( ii = m_mapMarks.begin() ; ii != m_mapMarks.end() ; ++ii ) {
             (*ii).second -= nNextFound;
         }
 

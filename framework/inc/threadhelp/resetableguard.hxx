@@ -30,7 +30,7 @@
 #define __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 
 #include <threadhelp/inoncopyable.h>
-#include <threadhelp/imutex.h>
+#include <framework/imutex.hxx>
 
 #include <sal/types.h>
 

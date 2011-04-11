@@ -47,7 +47,7 @@ class SbModule;
 class SbiFactory : public SbxFactory
 {
 public:
-    virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
+    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
     virtual SbxObject* CreateObject( const String& );
 };
 
@@ -80,7 +80,7 @@ public:
     void AddClassModule( SbModule* pClassModule );
     void RemoveClassModule( SbModule* pClassModule );
 
-    virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
+    virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
     virtual SbxObject* CreateObject( const String& );
 
     SbModule* FindClass( const String& rClassName );
@@ -118,14 +118,14 @@ struct SbiGlobals
     SbError         nCode;          // aktueller Fehlercode
     xub_StrLen      nLine;          // aktuelle Zeile
     xub_StrLen      nCol1,nCol2;    // aktuelle Spalten (von,bis)
-    BOOL            bCompiler;      // Flag fuer Compiler-Error
-    BOOL            bGlobalInitErr; // Beim GlobalInit trat ein Compiler-Fehler auf
-    BOOL            bRunInit;       // TRUE, wenn RunInit vom Basic aktiv ist
+    sal_Bool            bCompiler;      // Flag fuer Compiler-Error
+    sal_Bool            bGlobalInitErr; // Beim GlobalInit trat ein Compiler-Fehler auf
+    sal_Bool            bRunInit;       // sal_True, wenn RunInit vom Basic aktiv ist
     String          aErrMsg;        // Puffer fuer GetErrorText()
     SbLanguageMode  eLanguageMode;  // Flag fuer Visual-Basic-Script-Modus
     SbErrorStack*   pErrStack;      // Stack fuer die im Fehlerfall abgebaute SbiRuntime Kette
     ::utl::TransliterationWrapper* pTransliterationWrapper;    // For StrComp
-    BOOL            bBlockCompilerError;
+    sal_Bool            bBlockCompilerError;
     BasicManager*   pAppBasMgr;
     StarBASIC*      pMSOMacroRuntimLib; // Lib containing MSO Macro Runtime API entry symbols
 

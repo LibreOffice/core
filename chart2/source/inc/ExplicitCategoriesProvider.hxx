@@ -59,6 +59,24 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
 };
 
+struct DatePlusIndex
+{
+    DatePlusIndex()
+        : fValue(1.0)
+        , nIndex( -1 )
+    {
+    }
+
+    DatePlusIndex( const double& _fValue, sal_Int32 _nIndex )
+        : fValue(_fValue)
+        , nIndex( _nIndex )
+    {
+    }
+
+    double fValue;
+    sal_Int32 nIndex;
+};
+
 class OOO_DLLPUBLIC_CHARTTOOLS ExplicitCategoriesProvider
 {
 public:
@@ -70,6 +88,9 @@ public:
     virtual ~ExplicitCategoriesProvider();
 
     void init();
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::data::XDataSequence > getOriginalCategories();
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getSimpleCategories();
     ::std::vector< ComplexCategory > getCategoriesByLevel( sal_Int32 nLevel );
@@ -84,23 +105,37 @@ public:
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getExplicitSimpleCategories(
             const SplitCategoriesProvider& rSplitCategoriesProvider );
 
+    static void convertCategoryAnysToText( ::com::sun::star::uno::Sequence< rtl::OUString >& rOutTexts
+        , const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rInAnys
+        , ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xChartModel );
+
     bool hasComplexCategories() const;
     sal_Int32 getCategoryLevelCount() const;
 
     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence> >& getSplitCategoriesList();
 
-private: //member
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aExplicitCategories;
-    ::std::vector< ::std::vector< ComplexCategory > >   m_aComplexCats;
-    bool volatile m_bDirty;
+    bool isDateAxis();
+    const std::vector< DatePlusIndex >&  getDateCategories();
 
+private: //member
+    bool volatile m_bDirty;
     ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::chart2::XCoordinateSystem > m_xCooSysModel;
+        ::com::sun::star::chart2::XCoordinateSystem >   m_xCooSysModel;
+    ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::frame::XModel >               m_xChartModel;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
+
+    bool m_bIsExplicitCategoriesInited;
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aExplicitCategories;
+    ::std::vector< ::std::vector< ComplexCategory > >   m_aComplexCats;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence> > m_aSplitCategoriesList;
+
+    bool m_bIsDateAxis;
+    bool m_bIsAutoDate;
+    std::vector< DatePlusIndex >  m_aDateCategories;
 };
 
 } //  namespace chart

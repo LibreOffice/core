@@ -29,6 +29,7 @@ package com.sun.star.wizards.form;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.*;
 
 /**
@@ -59,7 +60,7 @@ public class Finalizer
         CurUnoDialog.insertLabel("lblFormName",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -68,16 +69,16 @@ public class Finalizer
         txtFormName = CurUnoDialog.insertTextField("txtFormName", "toggleFinishButton", this,
                 new String[]
                 {
-                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Text", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGER_12, "HID:34481", new Integer(97), new Integer(35), UIConsts.INTEGERS[8], new Short((short) 82), "", new Integer(185)
+                    UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGFORM_TXTPATH", new Integer(97), new Integer(35), UIConsts.INTEGERS[8], new Short((short) 82), "", new Integer(185)
                 });
         CurUnoDialog.insertLabel("lblProceed",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -86,20 +87,20 @@ public class Finalizer
         CurUnoDialog.insertRadioButton("optWorkWithForm", null,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:34482", sWorkWithForm, new Integer(101), new Integer(77), new Short((short) 1), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(107)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTWORKWITHFORM", sWorkWithForm, new Integer(101), new Integer(77), new Short((short) 1), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(107)
                 });
         optModifyForm = CurUnoDialog.insertRadioButton("optModifyForm", null,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:34483", sModifyForm, new Integer(101), new Integer(89), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(107)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTMODIFYFORM", sModifyForm, new Integer(101), new Integer(89), UIConsts.INTEGERS[8], new Short(curtabindex++), new Integer(107)
                 });
     }
 

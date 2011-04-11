@@ -47,7 +47,7 @@ private:
     ::svt::AcceleratorExecute*  pAccExec;
 
     SvtURLBox*              GetURLBox() const;
-    void                    OpenURL( const String& rName, BOOL bNew ) const;
+    void                    OpenURL( const String& rName, sal_Bool bNew ) const;
 
     DECL_LINK(              OpenHdl, void* );
     DECL_LINK(              SelectHdl, void* );
@@ -66,11 +66,11 @@ public:
 
                             SFX_DECL_TOOLBOX_CONTROL();
 
-                            SfxURLToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
+                            SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
     virtual                 ~SfxURLToolBoxControl_Impl();
 
     virtual Window*         CreateItemWindow( Window* pParent );
-    virtual void            StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
 };
 
 #endif

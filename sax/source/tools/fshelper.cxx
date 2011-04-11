@@ -10,25 +10,23 @@ using namespace ::com::sun::star::uno;
 
 namespace sax_fastparser {
 
-FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >& xOutputStream ) :
+FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >& xOutputStream, bool bWriteHeader ) :
     mpSerializer(new FastSaxSerializer())
 {
-    Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-    mxTokenHandler = Reference<xml::sax::XFastTokenHandler> ( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.FastTokenHandler") ) ), UNO_QUERY_THROW );
+    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_SET_THROW );
+    Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager(), UNO_SET_THROW );
+    mxTokenHandler.set( xFactory->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.FastTokenHandler") ), xContext ), UNO_QUERY_THROW );
 
     mpSerializer->setFastTokenHandler( mxTokenHandler );
     mpSerializer->setOutputStream( xOutputStream );
-    mpSerializer->startDocument();
+    if( bWriteHeader )
+        mpSerializer->startDocument();
 }
 
 FastSerializerHelper::~FastSerializerHelper()
 {
     mpSerializer->endDocument();
-
-    if (mpSerializer) {
-        delete mpSerializer;
-        mpSerializer = NULL;
-    }
+    delete mpSerializer;
 }
 
 void FastSerializerHelper::startElement(const char* elementName, ...)
@@ -183,9 +181,9 @@ FastSerializerHelper* FastSerializerHelper::writeId(sal_Int32 tokenId)
     return mpSerializer->getOutputStream();
 }
 
-void FastSerializerHelper::mark()
+void FastSerializerHelper::mark( Sequence< sal_Int32 > aOrder )
 {
-    mpSerializer->mark();
+    mpSerializer->mark( aOrder );
 }
 
 void FastSerializerHelper::mergeTopMarks( MergeMarksEnum eMergeType )

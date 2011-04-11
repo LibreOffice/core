@@ -51,13 +51,17 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::reflection;
+
+using ::rtl::OUString;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
 
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
@@ -70,7 +74,7 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL           getImplementationName() throw();
-    BOOL     SAL_CALL           supportsService(const OUString& ServiceName) throw();
+    sal_Bool     SAL_CALL           supportsService(const OUString& ServiceName) throw();
     Sequence< OUString > SAL_CALL   getSupportedServiceNames(void) throw();
 
     static Sequence< OUString > getSupportedServiceNames_Static(void) throw();
@@ -88,8 +92,8 @@ public:
     Any  SAL_CALL               invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) throw(IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException);
     void  SAL_CALL              setValue(const OUString& PropertyName, const Any& Value) throw(UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException);
     Any  SAL_CALL               getValue(const OUString& PropertyName) throw(UnknownPropertyException, RuntimeException);
-    BOOL  SAL_CALL              hasMethod(const OUString& Name)  throw(RuntimeException);
-    BOOL  SAL_CALL              hasProperty(const OUString& Name)  throw(RuntimeException);
+    sal_Bool  SAL_CALL              hasMethod(const OUString& Name)  throw(RuntimeException);
+    sal_Bool  SAL_CALL              hasProperty(const OUString& Name)  throw(RuntimeException);
 private:
     Reference< XTypeConverter >         getTypeConverter() const;
     Reference< XInvocation >            getDefaultInvocation() const;
@@ -129,14 +133,14 @@ OUString ResourceService::getImplementationName() throw()
 }
 
 // XServiceInfo
-BOOL SAL_CALL ResourceService::supportsService(const OUString& ServiceName) throw()
+sal_Bool SAL_CALL ResourceService::supportsService(const OUString& ServiceName) throw()
 {
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 // XServiceInfo
@@ -172,7 +176,7 @@ Reference< XInvocation > ResourceService::getDefaultInvocation() const
     /* f�hrt zur Zeit noch zu einer rekursion
     if( xSMgr.is() )
     {
-        Reference< XSingleServiceFactory > xFact( xSMgr->createInstance( OUString::createFromAscii("com.sun.star.script.Invocation") ), UNO_QUERY );
+        Reference< XSingleServiceFactory > xFact( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Invocation")) ), UNO_QUERY );
         if( xFact.is() )
         {
             Sequence< Any > aArgs( 1 );
@@ -191,19 +195,19 @@ OUString    SAL_CALL ResourceService::getExactName( const OUString & Approximate
 {
     OUString aName( ApproximateName );
     aName = aName.toAsciiLowerCase();
-    if( aName.equalsAscii("filename") )
+    if( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("filename")) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
-    else if( aName.equalsAscii("getstring" ))
+    else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("getstring" ) ))
         return OUString(RTL_CONSTASCII_USTRINGPARAM("getString"));
-    else if( aName.equalsAscii("getstrings" ))
+    else if( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("getstrings" ) ))
         return OUString(RTL_CONSTASCII_USTRINGPARAM("getStrings"));
-    else if( aName.equalsAscii("hasstring") )
+    else if( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("hasstring")) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("hasString"));
-    else if( aName.equalsAscii("hasstrings") )
+    else if( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("hasstrings")) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("hasStrings"));
-    else if( aName.equalsAscii("getstringlist") )
+    else if( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getstringlist")) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("getStringList"));
-    else if( aName.equalsAscii("hasStringList") )
+    else if( aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("hasStringList")) )
         return OUString(RTL_CONSTASCII_USTRINGPARAM("hasStringList"));
     Reference< XExactName > xEN( getDefaultInvocation(), UNO_QUERY );
     if( xEN.is() )
@@ -232,16 +236,16 @@ Any SAL_CALL ResourceService::invoke
     throw(IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException)
 {
     Any aRet;
-    if( FunctionName.equalsAscii("getString")
-        || FunctionName.equalsAscii("getStrings" )
-        || FunctionName.equalsAscii("hasString" )
-        || FunctionName.equalsAscii("hasStrings" )
+    if( FunctionName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getString"))
+        || FunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("getStrings" ) )
+        || FunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("hasString" ) )
+        || FunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("hasStrings" ) )
         )
     {
         sal_Int32 nElements = Params.getLength();
         if( nElements < 1 )
             throw IllegalArgumentException();
-        if( nElements > 1 && (FunctionName.equalsAscii("getString") || FunctionName.equalsAscii("hasString") ) )
+        if( nElements > 1 && (FunctionName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getString")) || FunctionName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("hasString")) ) )
             throw IllegalArgumentException();
         if( !pResMgr )
             throw IllegalArgumentException();
@@ -253,7 +257,7 @@ Any SAL_CALL ResourceService::invoke
         sal_Bool* pOutBool = aBools.getArray();
 
         Reference< XTypeConverter > xC = getTypeConverter();
-        bool bGetBranch = FunctionName.equalsAscii( "getString" ) || FunctionName.equalsAscii( "getStrings" );
+        bool bGetBranch = FunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getString" ) ) || FunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getStrings" ) );
 
         SolarMutexGuard aGuard;
         for( sal_Int32 n = 0; n < nElements; n++ )
@@ -273,7 +277,7 @@ Any SAL_CALL ResourceService::invoke
 
             if( bGetBranch )
             {
-                ResId aId( (USHORT)nId, *pResMgr );
+                ResId aId( (sal_uInt16)nId, *pResMgr );
                 aId.SetRT( RSC_STRING );
                 if( pResMgr->IsAvailable( aId ) )
                 {
@@ -288,23 +292,23 @@ Any SAL_CALL ResourceService::invoke
                 sal_Bool bRet = sal_False;
                 if( pResMgr )
                 {
-                    ResId aId( (USHORT)nId, *pResMgr );
+                    ResId aId( (sal_uInt16)nId, *pResMgr );
                     aId.SetRT( RSC_STRING );
                     bRet = pResMgr->IsAvailable( aId );
                 }
                 pOutBool[n] = bRet;
             }
         }
-        if( FunctionName.equalsAscii("getString") )
+        if( FunctionName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getString")) )
             aRet <<= pOutString[0];
-        else if( FunctionName.equalsAscii("getStrings" ) )
+        else if( FunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("getStrings" ) ) )
             aRet <<= aStrings;
-        else if( FunctionName.equalsAscii("hasString" ) )
+        else if( FunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("hasString" ) ) )
             aRet <<= pOutBool[0];
         else
             aRet <<= aBools;
     }
-    else if( FunctionName.equalsAscii("getStringList") || FunctionName.equalsAscii("hasStringList" ) )
+    else if( FunctionName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getStringList")) || FunctionName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("hasStringList" ) ) )
     {
         if( Params.getLength() != 1 )
             throw IllegalArgumentException();
@@ -322,9 +326,9 @@ Any SAL_CALL ResourceService::invoke
                 throw CannotConvertException();
         }
 
-        if( FunctionName.equalsAscii("getStringList") )
+        if( FunctionName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getStringList")) )
         {
-            ResId aId( (USHORT)nId, *pResMgr );
+            ResId aId( (sal_uInt16)nId, *pResMgr );
             aId.SetRT( RSC_STRINGARRAY );
             if( pResMgr->IsAvailable( aId ) )
             {
@@ -349,7 +353,7 @@ Any SAL_CALL ResourceService::invoke
             sal_Bool bRet = sal_False;
             if( pResMgr )
             {
-                ResId aId( (USHORT)nId, *pResMgr );
+                ResId aId( (sal_uInt16)nId, *pResMgr );
                 aId.SetRT( RSC_STRINGARRAY );
                 bRet = pResMgr->IsAvailable( aId );
             }
@@ -371,7 +375,7 @@ Any SAL_CALL ResourceService::invoke
 void SAL_CALL ResourceService::setValue(const OUString& PropertyName, const Any& Value)
     throw(UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException)
 {
-    if( PropertyName.equalsAscii("FileName") )
+    if( PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FileName")) )
     {
         OUString aName;
         if( !(Value >>= aName) )
@@ -409,7 +413,7 @@ Any SAL_CALL ResourceService::getValue(const OUString& PropertyName)
     throw(UnknownPropertyException, RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if( PropertyName.equalsAscii("FileName" ))
+    if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FileName" ) ))
         return makeAny( aFileName );
 
     Reference< XInvocation > xI = getDefaultInvocation();
@@ -420,40 +424,40 @@ Any SAL_CALL ResourceService::getValue(const OUString& PropertyName)
 }
 
 // XInvokation
-BOOL SAL_CALL ResourceService::hasMethod(const OUString& Name)
+sal_Bool SAL_CALL ResourceService::hasMethod(const OUString& Name)
     throw(RuntimeException)
 {
-    if( Name.equalsAscii("getString")     ||
-        Name.equalsAscii("getStrings")    ||
-        Name.equalsAscii("hasString")     ||
-        Name.equalsAscii("hasStrings")    ||
-        Name.equalsAscii("getStringList") ||
-        Name.equalsAscii("hasStringList")
+    if( Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getString"))     ||
+        Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getStrings"))    ||
+        Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("hasString"))     ||
+        Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("hasStrings"))    ||
+        Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getStringList")) ||
+        Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("hasStringList"))
         )
-        return TRUE;
+        return sal_True;
     else
     {
         Reference< XInvocation > xI = getDefaultInvocation();
         if( xI.is() )
             return xI->hasMethod( Name );
         else
-            return FALSE;
+            return sal_False;
     }
 }
 
 // XInvokation
-BOOL SAL_CALL ResourceService::hasProperty(const OUString& Name)
+sal_Bool SAL_CALL ResourceService::hasProperty(const OUString& Name)
     throw(RuntimeException)
 {
-    if( Name.equalsAscii("FileName") )
-        return TRUE;
+    if( Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FileName")) )
+        return sal_True;
     else
     {
         Reference< XInvocation > xI = getDefaultInvocation();
         if( xI.is() )
             return xI->hasProperty( Name );
         else
-            return FALSE;
+            return sal_False;
     }
 }
 

@@ -47,15 +47,11 @@ ScriptImpl::ScriptImpl(
     const Reference< runtime::XScriptInvocation > & runtimeMgr,
     const ::rtl::OUString& scriptURI )
 throw ( RuntimeException ) :
-        m_XScriptingContext( scriptingContext ),
-        m_RunTimeManager( runtimeMgr ),
+        m_XScriptingContext( scriptingContext, UNO_SET_THROW ),
+        m_RunTimeManager( runtimeMgr, UNO_SET_THROW ),
         m_ScriptURI( scriptURI )
 {
     OSL_TRACE( "<!constucting a ScriptImpl>\n" );
-    validateXRef( m_XScriptingContext,
-                  "ScriptImpl::ScriptImpl: No XScriptingContext\n" );
-    validateXRef( m_RunTimeManager,
-                  "ScriptImpl::ScriptImpl: No XScriptInvocation\n" );
 }
 
 //*************************************************************************

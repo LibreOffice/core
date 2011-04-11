@@ -74,9 +74,8 @@ import java.net.URI;
 
 
 /** This outer class provides an inner class to implement the service
- * description, a method to instantiate the
- * component on demand (__getServiceFactory()), and a method to give
- * information about the component (__writeRegistryServiceInfo()).
+ * description and a method to instantiate the
+ * component on demand (__getServiceFactory()).
  */
 public class XMergeBridge {
 
@@ -93,11 +92,8 @@ public class XMergeBridge {
     private static String sFileName=null;
     private static String sURL="";
 
-    //private static FileOutputStream adaptedStream =null;
-
     /** This inner class provides the component as a concrete implementation
      * of the service description. It implements the needed interfaces.
-     * @implements XTypeProvider
      */
     static public class _XMergeBridge implements
                                                XImportFilter,
@@ -161,16 +157,7 @@ public class XMergeBridge {
     public boolean importer(com.sun.star.beans.PropertyValue[] aSourceData,
                 com.sun.star.xml.sax.XDocumentHandler xDocHandler,
                 java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException {
-                /*
-        System.out.println("\nFound the Importer!\n");
 
-        System.out.println("\n"+msUserData[0]);
-        System.out.println("\n"+msUserData[1]);
-        System.out.println("\n"+msUserData[2]);
-        System.out.println("\n"+msUserData[3]);
-        System.out.println("\n"+msUserData[4]);
-        System.out.println("\n"+msUserData[5]);
-        */
         sFileName="";
         sURL="";
         String sDirectory = null;
@@ -186,10 +173,7 @@ public class XMergeBridge {
         for  (int  i = 0 ; i < pValue.length; i++)
         {
 
-        //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value;
-
          try{
-             //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
              if (pValue[i].Name.compareTo("InputStream")==0){
             xis=(com.sun.star.io.XInputStream)AnyConverter.toObject(new Type(com.sun.star.io.XInputStream.class), pValue[i].Value);
              }
@@ -244,11 +228,9 @@ public class XMergeBridge {
 
         }
         catch (IOException e){
-        //System.out.println("XMergeBridge IO Exception "+e.getMessage());
           return false;
         }
          catch (Exception e){
-        //System.out.println("XMergeBridge Exception "+e+" "+e.getMessage());
         return false;
         }
         return true;
@@ -257,16 +239,6 @@ public class XMergeBridge {
        public boolean exporter(com.sun.star.beans.PropertyValue[] aSourceData,
                    java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException{
 
-                   /*
-        System.out.println("\nFound the Exporter!\n");
-
-        System.out.println("\n"+msUserData[0]);
-        System.out.println("\n"+msUserData[1]);
-        System.out.println("\n"+msUserData[2]);
-        System.out.println("\n"+msUserData[3]);
-        System.out.println("\n"+msUserData[4]);
-        System.out.println("\n"+msUserData[5]);
-        */
         sFileName=null;
         sURL=null;
         String sDirectory = null;
@@ -282,28 +254,22 @@ public class XMergeBridge {
         for  (int  i = 0 ; i < pValue.length; i++)
         {
 
-        //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
-
 
         try{
-            //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
             if (pValue[i].Name.compareTo("OutputStream")==0){
             xos=(com.sun.star.io.XOutputStream)AnyConverter.toObject(new Type(com.sun.star.io.XOutputStream.class), pValue[i].Value);
-            //  System.out.println(pValue[i].Name+" "+xos);
             }
+
             if (pValue[i].Name.compareTo("FileName")==0){
             sFileName=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
-            //System.out.println(pValue[i].Name+" "+sFileName);
             }
+
             if (pValue[i].Name.compareTo("URL")==0){
             sURL=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
-            // System.out.println("\nMediaDescriptor url "+pValue[i].Name+" "+sURL);
-
             }
-            if (pValue[i].Name.compareTo("Title")==0){
 
+            if (pValue[i].Name.compareTo("Title")==0){
             title=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
-            //System.out.println(pValue[i].Name+" "+title);
             }
         }
         catch(com.sun.star.lang.IllegalArgumentException AnyExec){
@@ -380,7 +346,6 @@ public class XMergeBridge {
 
 
        public void  startDocument ()    {
-       //System.out.println("\nStart Document!");
        }
 
     public void endDocument()throws com.sun.star.uno.RuntimeException
@@ -392,12 +357,10 @@ public class XMergeBridge {
 
         }
         catch (IOException e){
-        //System.out.println("Exception "+e);
         throw new com.sun.star.uno.RuntimeException(e.getMessage());
 
         }
          catch (Exception e){
-        //System.out.println("Exception "+e);
         throw new com.sun.star.uno.RuntimeException("Xmerge Exception");
 
         }
@@ -422,7 +385,7 @@ public class XMergeBridge {
             }
         }
         str=str.concat(">");
-        // System.out.println(str);
+
         try{
          xOutStream.writeBytes(str.getBytes("UTF-8"));
         }
@@ -535,12 +498,10 @@ public class XMergeBridge {
 
                      int i=1;
                      while (docEnum.hasMoreElements() && sURL.startsWith("file:")) {
-                     //URI uri=new URI(sFileName);
+
                      URI uri=new URI(sURL);
                      String  newFileName= getPath(uri);
 
-
-                     //System.out.println("\nURI: "+uri.getPath());
                      File newFile=null;
                      if (newFileName.lastIndexOf(".")!=-1){
                          newFile =new File(newFileName.substring(0,newFileName.lastIndexOf("."))+String.valueOf(i)+newFileName.substring(newFileName.lastIndexOf(".")));
@@ -584,27 +545,15 @@ public class XMergeBridge {
              }
              else
              {
-                             /*
-                             ByteArrayOutputStream bout = new ByteArrayOutputStream();
-                             byte[][] buf = new byte[1][4096];
-                             int n=0;
-                             while ((n=xml.readSomeBytes(buf, 4096))>0)
-                                 bout.write(buf[0], 0, n);
-                             ByteArrayInputStream bin = new ByteArrayInputStream(bout.toByteArray());
-                             cv.addInputStream(name, bin, false);
-                            */
+
                  cv.addInputStream(name,(InputStream)xis,false);
-                 //System.out.println("\nConverting");
                  ConvertData dataIn = cv.convert();
-                 //System.out.println("\nFinished Converting");
                  Enumeration docEnum = dataIn.getDocumentEnumeration();
                  while (docEnum.hasMoreElements()) {
                  OfficeDocument docIn      = (OfficeDocument)docEnum.nextElement();
 
                  docIn.write(newxos,false);
                  }
-                 //newxos.write(-1); //EOF character
-                               //newxos.flush();
                  newxos.close();
              }
              ConverterInfoMgr.removeByJar(jarName);
@@ -631,12 +580,6 @@ public class XMergeBridge {
         }
         return path;
     }
-
-
-
-
-
-
 
         // Implement methods from interface XTypeProvider
         public byte[] getImplementationId() {
@@ -695,21 +638,4 @@ public class XMergeBridge {
 
         return xSingleServiceFactory;
     }
-
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-
-        return FactoryHelper.writeRegistryServiceInfo(_XMergeBridge.class.getName(),
-        _XMergeBridge.__serviceName, regKey);
-    }
 }
-
-
-

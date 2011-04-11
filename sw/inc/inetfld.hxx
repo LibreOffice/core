@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _INETFLD_HXX
-#define _INETFLD_HXX
+#ifndef SW_INETFLD_HXX
+#define SW_INETFLD_HXX
 
 
 #include "fldbas.hxx"
@@ -37,9 +37,7 @@ class SwINetField;
 class SwCharFmt;
 class SwDoc;
 
-/*--------------------------------------------------------------------
-    Beschreibung: InterNet-FieldType -> Lade Document mit der URL
- --------------------------------------------------------------------*/
+// InterNet-FieldType -> Load document with URL
 
 class SwINetFieldType : public SwFieldType
 {
@@ -57,38 +55,38 @@ public:
     SwDoc* GetDoc() const   { return pDoc; }
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: InterNet-Field -> Lade Document mit der URL
- --------------------------------------------------------------------*/
+
+// InterNet-Field -> Load document with URL
 
 class SwINetField : public SwField
 {
     friend class SwINetFieldType;
 
-    String  sTargetFrameName;   // in diesen Frame soll die URL
+    String  sTargetFrameName;   // Frame to put the URL.
     String  sURL;
     String  sText;
     SvxMacroTableDtor* pMacroTbl;
 
+    virtual String   Expand() const;
+    virtual SwField* Copy() const;
+
 public:
-    // Direkte Eingabe alten Wert loeschen
-    SwINetField( SwINetFieldType* pTyp, USHORT nFmt,
+    // Direct input, delete old value.
+    SwINetField( SwINetFieldType* pTyp, sal_uInt16 nFmt,
                   const String& rURL, const String& rText );
     virtual ~SwINetField();
 
-    virtual String   GetCntnt(BOOL bName = FALSE) const;
-    virtual String   Expand() const;
-    virtual SwField* Copy() const;
+    virtual String   GetFieldName() const;
 
     // URL
     virtual const String& GetPar1() const;
     virtual void    SetPar1(const String& rStr);
 
-    // HinweisText
+    // Information text.
     virtual String  GetPar2() const;
     virtual void    SetPar2(const String& rStr);
 
-    // das ist das akt. Zeichenformat
+    // Current character format.
           SwCharFmt* GetCharFmt();
     const SwCharFmt* GetCharFmt() const
             { return ((SwINetField*)this)->GetCharFmt(); }
@@ -96,16 +94,15 @@ public:
     const String& GetTargetFrameName() const        { return sTargetFrameName; }
     void SetTargetFrameName( const String& rNm )    { sTargetFrameName = rNm; }
 
-    // setze eine neue oder loesche die akt. MakroTabelle
+    // Set new or delete old MacroTable.
     void SetMacroTbl( const SvxMacroTableDtor* pTbl = 0 );
     const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTbl; }
 
-    // setze / erfrage ein Makro
-    void SetMacro( USHORT nEvent, const SvxMacro& rMacro );
-    const SvxMacro* GetMacro( USHORT nEvent ) const;
+    void SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro );
+    const SvxMacro* GetMacro( sal_uInt16 nEvent ) const;
 };
 
 
-#endif // _INETFLD_HXX
+#endif // SW_INETFLD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

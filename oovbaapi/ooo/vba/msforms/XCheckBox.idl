@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XCheckBox.idl,v $
- * $Revision: 1.3 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -30,9 +27,7 @@
 #ifndef __ooo_vba_msforms_XCheckBox_idl__
 #define __ooo_vba_msforms_XCheckBox_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 //=============================================================================
 
 module ooo {  module vba {  module msforms {

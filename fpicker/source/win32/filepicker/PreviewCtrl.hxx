@@ -152,7 +152,7 @@ public:
     // if the preview is shown and enabled
     // preview of the given file will be shown
     // returns true on success or false if an error
-    // occured (the file in not there or not accessible etc.)
+    // occurred (the file in not there or not accessible etc.)
     virtual sal_Bool SAL_CALL update( const rtl::OUString& aFileName );
 
 protected:

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <optaccessibility.hxx>
 #include <optaccessibility.hrc>
 #include <dialmgr.hxx>
@@ -124,7 +121,7 @@ SfxTabPage* SvxAccessibilityOptionsTabPage::Create( Window* pParent, const SfxIt
     return new SvxAccessibilityOptionsTabPage(pParent, rAttrSet);
 }
 
-BOOL SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
+sal_Bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
 {
     //aConfig.Set... from controls
 
@@ -149,7 +146,7 @@ BOOL SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
     Application::MergeSystemSettings( aAllSettings );
     Application::SetSettings(aAllSettings);
 
-    return FALSE;
+    return sal_False;
 }
 
 void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet& )
@@ -162,7 +159,6 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet& )
     m_aAnimatedGraphics.Check(        m_pImpl->m_aConfig.GetIsAllowAnimatedGraphics() );
     m_aAnimatedTexts.Check(           m_pImpl->m_aConfig.GetIsAllowAnimatedText() );
     m_aAutomaticFontColor.Check(      m_pImpl->m_aConfig.GetIsAutomaticFontColor() );
-//  m_aSystemFont.Check(              m_pImpl->m_aConfig.GetIsSystemFont() );
     m_aTextSelectionInReadonly.Check( m_pImpl->m_aConfig.IsSelectionInReadonly() );
     m_aAutoDetectHC.Check(            m_pImpl->m_aConfig.GetAutoDetectSystemHC() );
 

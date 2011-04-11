@@ -43,11 +43,12 @@
 #include "../app/desktop.hrc"
 
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
+
+using ::rtl::OUString;
 
 namespace desktop {
 
@@ -145,13 +146,13 @@ rtl::OUString SAL_CALL SOEvaluation::getExactName( const rtl::OUString& rApproxi
             for (int i=0; i<aSeq.getLength(); i++ )
             {
                 NamedValue& rValue = aSeq[i];
-                if ( rValue.Name.equalsAscii("expired") )
+                if ( rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("expired")) )
                     rValue.Value >>= bExpired;
-                else if (rValue.Name.equalsAscii("title") )
+                else if (rValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("title")) )
                     rValue.Value >>= aEval;
             }
             // append eval string to title
-            aTitle += OUString::createFromAscii(" ") + aEval;
+            aTitle += OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) + aEval;
             if ( bExpired )
                 throw RuntimeException();
         }

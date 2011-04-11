@@ -138,7 +138,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     aPrevWin      (this, SW_RES(WIN_SAMPLE  )),
     rView( rV ),
     pMgr( new SwFldMgr(rView.GetWrtShellPtr()) ),
-    bCopyAttributes( FALSE ),
+    bCopyAttributes( sal_False ),
     bOrderNumberingFirst( SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst() )
 {
     //#i61007# order of captions
@@ -183,7 +183,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     {
         nPoolId = RES_POOLCOLL_LABEL_ABB;
         pString = ::GetOldGrfCat();
-        bCopyAttributes = TRUE;
+        bCopyAttributes = sal_True;
         sObjectName = rSh.GetFlyName();
         //if not OLE
         if(!xNameAccess.is())
@@ -377,7 +377,7 @@ void SwCaptionDialog::DrawSample()
     String aStr;
     String sCaption = aTextEdit.GetText();
 
-    // Nummer
+    // number
     String sFldTypeName = aCategoryBox.GetText();
     sal_Bool bNone = sFldTypeName == sNone;
     if( !bNone )
@@ -386,7 +386,7 @@ void SwCaptionDialog::DrawSample()
                                         aFormatBox.GetSelectEntryPos() );
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
-            // Kategorie
+            // category
             //#i61007# order of captions
             if( !bOrderNumberingFirst )
             {
@@ -419,7 +419,6 @@ void SwCaptionDialog::DrawSample()
             case SVX_NUM_CHARS_LOWER_LETTER_N:  aStr += 'a'; break;
             case SVX_NUM_ROMAN_UPPER:           aStr += 'I'; break;
             case SVX_NUM_ROMAN_LOWER:           aStr += 'i'; break;
-            //case ARABIC:
             default:                    aStr += '1'; break;
             }
             //#i61007# order of captions
@@ -519,7 +518,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
     aLbLevel.SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
     aEdDelim.SetText( sDelim );
 
-    ::FillCharStyleListBox( aLbCharStyle, rView.GetDocShell(), TRUE, TRUE );
+    ::FillCharStyleListBox( aLbCharStyle, rView.GetDocShell(), sal_True, sal_True );
     aLbCharStyle.SelectEntryPos( 0 );
 }
 
@@ -544,7 +543,7 @@ void SwSequenceOptionDialog::Apply()
     }
     else if( aFldTypeName.Len() && nLvl < MAXLEVEL )
     {
-        // dann muessen wir das mal einfuegen
+        // then we have to insert that
         SwSetExpFieldType aFldType( rSh.GetDoc(), aFldTypeName, nsSwGetSetExpType::GSE_SEQ );
         aFldType.SetDelimiter( cDelim );
         aFldType.SetOutlineLvl( nLvl );
@@ -579,7 +578,7 @@ long SwCaptionDialog::CategoryBox::PreNotify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pEvent = rNEvt.GetKeyEvent();
         const KeyCode&  rKeyCode = pEvent->GetKeyCode();
-        USHORT nTmpCode = rKeyCode.GetFullCode() & ~KEY_ALLMODTYPE;
+        sal_uInt16 nTmpCode = rKeyCode.GetFullCode() & ~KEY_ALLMODTYPE;
 
         if(nTmpCode != KEY_BACKSPACE && nTmpCode != KEY_RETURN
                 && nTmpCode != KEY_TAB && nTmpCode != KEY_ESCAPE)
@@ -599,7 +598,7 @@ long SwCaptionDialog::CategoryBox::PreNotify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-/*-- 01.11.2007 10:45:51---------------------------------------------------
+/*-------------------------------------------------------------------------
     //#i61007# order of captions
   -----------------------------------------------------------------------*/
 void lcl_MoveH( Window& rWin, sal_Int32 nMove )

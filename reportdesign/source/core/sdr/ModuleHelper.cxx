@@ -90,8 +90,7 @@ ResMgr* OModuleImpl::getResManager()
     if (!m_pRessources)
     {
         // create a manager with a fixed prefix
-        rtl::OString sName = rtl::OString( "rptui" );
-        m_pRessources = ResMgr::CreateResMgr(sName);
+        m_pRessources = ResMgr::CreateResMgr("rptui");
     }
     return m_pRessources;
 }

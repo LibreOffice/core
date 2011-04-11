@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: GridInvalidModelException.idl,v $
- * $Revision: 1.0 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -43,7 +40,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
 /** Exception is thrown when data or column model isn't set.
 
-    @since OOo 3.3.0
+    @since OOo 3.3
  */
 exception GridInvalidModelException : com::sun::star::uno::RuntimeException
 {

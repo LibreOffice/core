@@ -117,37 +117,6 @@ ServiceDecl::Factory::createInstanceWithArgumentsAndContext(
         m_rServiceDecl, args, xContext );
 }
 
-bool ServiceDecl::writeInfo( registry::XRegistryKey * xKey ) const
-{
-    bool bRet = false;
-    if (xKey != 0) {
-        rtl::OUStringBuffer buf;
-        buf.append( static_cast<sal_Unicode>('/') );
-        buf.appendAscii( m_pImplName );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/UNO/SERVICES") );
-        try {
-            uno::Reference<registry::XRegistryKey> const xNewKey(
-                xKey->createKey( buf.makeStringAndClear() ) );
-
-            rtl::OString const str(m_pServiceNames);
-            sal_Int32 nIndex = 0;
-            do {
-                rtl::OString const token( str.getToken( 0, m_cDelim, nIndex ) );
-                xNewKey->createKey(
-                    rtl::OUString( token.getStr(), token.getLength(),
-                                   RTL_TEXTENCODING_ASCII_US ) );
-            }
-            while (nIndex >= 0);
-
-            bRet = true;
-        }
-        catch (registry::InvalidRegistryException const&) {
-            OSL_ENSURE( false, "### InvalidRegistryException!" );
-        }
-    }
-    return bRet;
-}
-
 void * ServiceDecl::getFactory( sal_Char const* pImplName ) const
 {
     if (rtl_str_compare(m_pImplName, pImplName) == 0) {

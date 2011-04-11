@@ -125,7 +125,7 @@ Table::getMinimumSize() throw( uno::RuntimeException )
         int col = 0;
         int row = 0;
         for ( std::list<Box_Base::ChildData *>::iterator it
-                  = maChildren.begin(); it != maChildren.end(); it++ )
+                  = maChildren.begin(); it != maChildren.end(); ++it )
         {
             ChildData *child = static_cast<Table::ChildData*> ( *it );
             if ( !child->isVisible() )
@@ -172,7 +172,7 @@ Table::getMinimumSize() throw( uno::RuntimeException )
 
         // 2.1 base sizes on one-column/row children
         for ( std::list<Box_Base::ChildData *>::iterator it
-                  = maChildren.begin(); it != maChildren.end(); it++ )
+                  = maChildren.begin(); it != maChildren.end(); ++it )
         {
             ChildData *child = static_cast<Table::ChildData*> ( *it );
             if ( !child->isVisible() )
@@ -195,7 +195,7 @@ Table::getMinimumSize() throw( uno::RuntimeException )
 
         // 2.2 make sure multiple-columns/rows children fit
         for ( std::list<Box_Base::ChildData *>::iterator it
-                  = maChildren.begin(); it != maChildren.end(); it++ )
+                  = maChildren.begin(); it != maChildren.end(); ++it )
         {
             ChildData *child = static_cast<Table::ChildData*> ( *it );
             if ( !child->isVisible() )
@@ -237,14 +237,14 @@ Table::getMinimumSize() throw( uno::RuntimeException )
     mnColExpandables =( mnRowExpandables = 0 );
     maRequisition.Width =( maRequisition.Height = 0 );
     for ( std::vector<GroupData>::iterator it = maCols.begin();
-          it != maCols.end(); it++ )
+          it != maCols.end(); ++it )
     {
         maRequisition.Width += it->mnSize;
         if ( it->mbExpand )
             mnColExpandables++;
     }
     for ( std::vector<GroupData>::iterator it = maRows.begin();
-          it != maRows.end(); it++ )
+          it != maRows.end(); ++it )
     {
         maRequisition.Height += it->mnSize;
         if ( it->mbExpand )
@@ -269,7 +269,7 @@ Table::allocateArea( const awt::Rectangle &rArea )
     nExtraSize[ 1 ] /= mnRowExpandables ? mnRowExpandables : maRows.size();
 
     for ( std::list<Box_Base::ChildData *>::const_iterator it
-              = maChildren.begin(); it != maChildren.end(); it++ )
+              = maChildren.begin(); it != maChildren.end(); ++it )
     {
         ChildData *child = static_cast<Table::ChildData*> ( *it );
         if ( !child->isVisible() )

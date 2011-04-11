@@ -217,7 +217,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
     // filter properties
     for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
          property != rProperties.end();
-         property++ )
+         ++property )
     {
         // find properties with context
         // to prevent writing this property set mnIndex member to -1
@@ -226,24 +226,24 @@ void XMLChartExportPropertyMapper::ContextFilter(
             // if Auto... is set the corresponding properties mustn't be exported
             case XML_SCH_CONTEXT_MIN:
                 bCheckAuto = sal_True;
-                aAutoPropName = ::rtl::OUString::createFromAscii( "AutoMin" );
+                aAutoPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoMin" ));
                 break;
             case XML_SCH_CONTEXT_MAX:
                 bCheckAuto = sal_True;
-                aAutoPropName = ::rtl::OUString::createFromAscii( "AutoMax" );
+                aAutoPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoMax" ));
                 break;
             case XML_SCH_CONTEXT_STEP_MAIN:
                 bCheckAuto = sal_True;
-                aAutoPropName = ::rtl::OUString::createFromAscii( "AutoStepMain" );
+                aAutoPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoStepMain" ));
                 break;
             case XML_SCH_CONTEXT_STEP_HELP_COUNT:
                 bCheckAuto = sal_True;
-                aAutoPropName = ::rtl::OUString::createFromAscii( "AutoStepHelp" );
+                aAutoPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoStepHelp" ));
                 break;
 
             case XML_SCH_CONTEXT_ORIGIN:
                 bCheckAuto = sal_True;
-                aAutoPropName = ::rtl::OUString::createFromAscii( "AutoOrigin" );
+                aAutoPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoOrigin" ));
                 break;
 
             // the following property is deprecated
@@ -490,7 +490,6 @@ XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< 
 
     // do not chain text properties: on import this is done by shape mapper
     // to import old documents
-//      ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper());
 }
 
 XMLChartImportPropertyMapper::~XMLChartImportPropertyMapper()

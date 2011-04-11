@@ -37,28 +37,27 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <vector>
-/* -----------------------------21.02.00 11:03--------------------------------
-    UNO III - Implementation
- ---------------------------------------------------------------------------*/
+
+// UNO III - Implementation
 #define MAP_CHAR_LEN(cchar) cchar, sizeof(cchar) - 1
 
 struct SfxItemPropertyMapEntry
 {
     const char*                         pName;
-    USHORT                              nNameLen;
-    USHORT                              nWID;
+    sal_uInt16                              nNameLen;
+    sal_uInt16                              nWID;
     const com::sun::star::uno::Type*    pType;
     long                                nFlags;
-    BYTE                                nMemberId;
+    sal_uInt8                                nMemberId;
 
 };
 
 struct SfxItemPropertySimpleEntry
 {
-    USHORT                              nWID;
+    sal_uInt16                              nWID;
     const com::sun::star::uno::Type*    pType;
     long                                nFlags;
-    BYTE                                nMemberId;
+    sal_uInt8                                nMemberId;
 
     SfxItemPropertySimpleEntry() :
         nWID( 0 ),
@@ -66,8 +65,8 @@ struct SfxItemPropertySimpleEntry
         nFlags( 0 ),
         nMemberId( 0 ){}
 
-    SfxItemPropertySimpleEntry(USHORT _nWID, const com::sun::star::uno::Type* _pType,
-                               long _nFlags, BYTE _nMemberId) :
+    SfxItemPropertySimpleEntry(sal_uInt16 _nWID, const com::sun::star::uno::Type* _pType,
+                               long _nFlags, sal_uInt8 _nMemberId) :
         nWID(      _nWID ),
         pType(     _pType ),
         nFlags(    _nFlags ),
@@ -109,15 +108,13 @@ public:
     sal_uInt32 getSize() const;
 
 };
-/* -----------------------------21.02.00 11:19--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SVL_DLLPUBLIC SfxItemPropertySet
 {
     SfxItemPropertyMap                                                              m_aMap;
     mutable com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> m_xInfo;
 protected:
-    virtual BOOL            FillItem(SfxItemSet& rSet, USHORT nWhich, BOOL bGetProperty) const;
+    virtual sal_Bool            FillItem(SfxItemSet& rSet, sal_uInt16 nWhich, sal_Bool bGetProperty) const;
 
 public:
                             SfxItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :
@@ -163,9 +160,7 @@ public:
         getPropertyMap() const {return &m_aMap;}
 
 };
-/* -----------------------------21.02.00 11:09--------------------------------
 
- ---------------------------------------------------------------------------*/
 struct SfxItemPropertySetInfo_Impl;
 class SVL_DLLPUBLIC SfxItemPropertySetInfo : public
     cppu::WeakImplHelper1<com::sun::star::beans::XPropertySetInfo>
@@ -192,9 +187,7 @@ public:
 
     const SfxItemPropertyMap* getMap() const;
 };
-/* -----------------------------21.02.00 12:01--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SVL_DLLPUBLIC SfxExtItemPropertySetInfo: public cppu::WeakImplHelper1<com::sun::star::beans::XPropertySetInfo >
 {
     SfxItemPropertyMap aExtMap;

@@ -311,7 +311,7 @@ struct SerializerTest : public CppUnit::TestFixture
                 CPPUNIT_ASSERT_MESSAGE(
                     "Converting ini file to URL",
                     osl_getFileURLFromSystemPath(
-                        (sBaseDir+rtl::OUString::createFromAscii("unoxml_unittest_test.ini")).pData,
+                        (sBaseDir+rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unoxml_unittest_test.ini"))).pData,
                         &aIniUrl.pData ) == osl_File_E_None );
 
                 mxCtx = ::cppu::defaultBootstrap_InitialComponentContext(aIniUrl);

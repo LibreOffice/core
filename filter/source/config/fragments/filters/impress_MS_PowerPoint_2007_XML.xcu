@@ -1,7 +1,7 @@
 <node oor:name="Impress MS PowerPoint 2007 XML" oor:op="replace">
     <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER PREFERRED</value></prop>
     <prop oor:name="UIComponent"/>
-    <prop oor:name="FilterService"><value>com.sun.star.comp.Impress.oox.PowerPointImport</value></prop>
+    <prop oor:name="FilterService"><value>com.sun.star.comp.oox.ppt.PowerPointImport</value></prop>
     <prop oor:name="UserData"/>
     <prop oor:name="FileFormatVersion"/>
     <prop oor:name="Type"><value>MS PowerPoint 2007 XML</value></prop>

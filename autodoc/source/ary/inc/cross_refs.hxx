@@ -44,7 +44,7 @@ class CrossReferences
   public:
     typedef TYPES::element_type         element;
 
-    /// Checks for double occurences
+    /// Checks for double occurrences
     void                Add(
                             VALUE_LIST::index_type
                                                 i_nPosition

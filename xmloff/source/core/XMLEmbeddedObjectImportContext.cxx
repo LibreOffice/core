@@ -32,20 +32,17 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-
-// #110680#
-//#include <comphelper/processfactory.hxx>
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <xmloff/attrlist.hxx>
-#include "XMLFilterServiceNames.h"
+#include "xmloff/XMLFilterServiceNames.h"
 #include "XMLEmbeddedObjectImportContext.hxx"
 
 using ::rtl::OUString;
@@ -91,14 +88,14 @@ class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
 public:
     TYPEINFO();
 
-    XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport, USHORT nPrfx,
+    XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const ::rtl::OUString& rLName,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XDocumentHandler >& rHandler );
 
     virtual ~XMLEmbeddedObjectImportContext_Impl();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -112,7 +109,7 @@ public:
 TYPEINIT1( XMLEmbeddedObjectImportContext_Impl, SvXMLImportContext );
 
 XMLEmbeddedObjectImportContext_Impl::XMLEmbeddedObjectImportContext_Impl(
-        SvXMLImport& rImport, USHORT nPrfx,
+        SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< XDocumentHandler >& rHandler ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -125,7 +122,7 @@ XMLEmbeddedObjectImportContext_Impl::~XMLEmbeddedObjectImportContext_Impl()
 }
 
 SvXMLImportContext *XMLEmbeddedObjectImportContext_Impl::CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList >& )
 {
@@ -166,8 +163,6 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
 
     Sequence<Any> aArgs( 0 );
 
-    // #110680#
-    // Reference< XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
     Reference< XMultiServiceFactory > xServiceFactory = GetImport().getServiceFactory();
 
     xHandler = Reference < XDocumentHandler >(
@@ -195,7 +190,7 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
 }
 
 XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
-        SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName,
+        SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList >& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -285,7 +280,7 @@ XMLEmbeddedObjectImportContext::~XMLEmbeddedObjectImportContext()
 }
 
 SvXMLImportContext *XMLEmbeddedObjectImportContext::CreateChildContext(
-        USHORT nPrefix, const OUString& rLocalName,
+        sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< XAttributeList >& )
 {
     if( xHandler.is() )
@@ -331,30 +326,6 @@ void XMLEmbeddedObjectImportContext::EndElement()
                                     GetPrefix(), GetLocalName() ) );
         xHandler->endDocument();
 
-
-        // storing part is commented out since it should be done through the object, not the model
-        // TODO/LATER: probably an object should be provided here an be stored here
-
-//      // Save the object. That's required because the object should not be
-//      // modified (it has been loaded just now). Setting it to unmodified
-//      // only does not work, because it is then assumed that it has been
-//      // stored.
-//      Reference < XStorable > xStorable( xComp, UNO_QUERY );
-//      if( xStorable.is() )
-//      {
-//          try
-//          {
-//              xStorable->store();
-//          }
-//          catch( ::com::sun::star::beans::PropertyVetoException& )
-//          {
-//              Sequence<OUString> aSeq( 0 );
-//              GetImport().SetError( XMLERROR_FLAG_WARNING |
-//                                XMLERROR_API,
-//                                aSeq );
-//          }
-//      }
-
     try
     {
         Reference < XModifiable2 > xModifiable2( xComp, UNO_QUERY_THROW );
@@ -364,25 +335,6 @@ void XMLEmbeddedObjectImportContext::EndElement()
     catch( Exception& )
     {
     }
-
-
-//      // reset modifies state for the object since it has been imported
-//      // completly and therfor hasn't been modified.
-//      Reference < XModifiable > xModifiable( xComp, UNO_QUERY );
-//      if( xModifiable.is() )
-//      {
-//          try
-//          {
-//              xModifiable->setModified( sal_False );
-//          }
-//          catch( ::com::sun::star::beans::PropertyVetoException& e )
-//          {
-//              Sequence<OUString> aSeq( 0 );
-//              GetImport().SetError( XMLERROR_FLAG_WARNING |
-//                                XMLERROR_API,
-//                                aSeq );
-//          }
-//      }
     }
 }
 
@@ -391,6 +343,5 @@ void XMLEmbeddedObjectImportContext::Characters( const ::rtl::OUString& rChars )
     if( xHandler.is() )
         xHandler->characters( rChars );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

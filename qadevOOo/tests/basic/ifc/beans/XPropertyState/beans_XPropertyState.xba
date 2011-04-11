@@ -159,7 +159,7 @@ On Error Goto ErrHndl
             bTypesEq = (oProperties(n).Type.Name = oCoreRefl.getType(aValue).Name)
         end if
 
-        if (NOT bOK) then ' exception was occured
+        if (NOT bOK) then ' exception was occurred
             Out.Log("Error while testing getPropertyDefault() for '" &amp; AllPropsNames(n) &amp; "' FAILED.")
         elseif ((TypeName(aValue) &lt;&gt; "Empty") AND (NOT bTypesEq)) then
             Out.Log("Types: '" &amp; oProperties(n).Type.Name &amp; "' and '" &amp; oCoreRefl.getType(aValue).Name &amp; "' are different.")

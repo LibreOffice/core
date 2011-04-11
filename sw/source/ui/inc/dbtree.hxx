@@ -44,14 +44,13 @@ class SwWrtShell;
 class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
 {
     ImageList       aImageList;
-    ImageList       aImageListHC;
     Image           aDBBMP;
     Image           aTableBMP;
     Image           aQueryBMP;
 
     String          sDefDBName;
-    BOOL            bInitialized;
-    BOOL            bShowColumns;
+    sal_Bool            bInitialized;
+    sal_Bool            bShowColumns;
 
     SwDBTreeList_Impl* pImpl;
 
@@ -69,15 +68,15 @@ public:
      SwDBTreeList( Window* pParent, const ResId& rResId,
                     SwWrtShell* pSh,
                     const String& rDefDBName = aEmptyStr,
-                    const BOOL bShowCol = FALSE );
+                    const sal_Bool bShowCol = sal_False );
     virtual ~SwDBTreeList();
 
-    String  GetDBName( String& rTableName, String& rColumnName, BOOL* pbIsTable = 0);
+    String  GetDBName( String& rTableName, String& rColumnName, sal_Bool* pbIsTable = 0);
 
     void    Select( const String& rDBName, const String& rTableName,
                     const String& rColumnName );
 
-    void    ShowColumns(BOOL bShowCol);
+    void    ShowColumns(sal_Bool bShowCol);
     void    SetWrtShell(SwWrtShell& rSh);
 
     void    AddDataSource(const String& rSource);

@@ -57,10 +57,6 @@
  * @file
  * Factory object for XFFont.It also manages all font life cycle.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
 #ifndef     _XFFONTFACTORY_HXX
 #define     _XFFONTFACTORY_HXX
 

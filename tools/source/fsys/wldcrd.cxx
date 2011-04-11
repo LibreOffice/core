@@ -34,10 +34,6 @@
 |*
 |*    WildCard::Match()
 |*
-|*    Beschreibung      WLDCRD.SDW
-|*    Ersterstellung    MA 19.06.91
-|*    Letzte Aenderung  MA 03.07.91
-|*
 *************************************************************************/
 
 /* Diese Methode ueberprueft, ob die Wilde Karte in pWild mit dem String
@@ -49,7 +45,7 @@
  *
  */
 
-USHORT WildCard::ImpMatch( const char *pWild, const char *pStr ) const
+sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
 {
     int    pos=0;
     int    flag=0;
@@ -112,18 +108,14 @@ USHORT WildCard::ImpMatch( const char *pWild, const char *pStr ) const
 |*
 |*    WildCard::Matches()
 |*
-|*    Beschreibung      WLDCRD.SDW
-|*    Ersterstellung    MA 19.06.91
-|*    Letzte Aenderung  TH 02.02.96
-|*
 *************************************************************************/
 
-BOOL WildCard::Matches( const String& rString ) const
+sal_Bool WildCard::Matches( const String& rString ) const
 {
     ByteString aTmpWild = aWildString;
     ByteString aString(rString, osl_getThreadTextEncoding());
 
-    USHORT  nSepPos;
+    sal_uInt16  nSepPos;
 
     if ( cSepSymbol != '\0' )
     {
@@ -131,16 +123,16 @@ BOOL WildCard::Matches( const String& rString ) const
         {
             // alle getrennten WildCard's pruefen
             if ( ImpMatch( aTmpWild.Copy( 0, nSepPos ).GetBuffer(), aString.GetBuffer() ) )
-                return TRUE;
+                return sal_True;
             aTmpWild.Erase( 0, nSepPos + 1 ); // Trennsymbol entfernen
         }
         // und noch den hinter dem letzen Trennsymbol bzw. den einzigen
     }
 
     if ( ImpMatch( aTmpWild.GetBuffer(), aString.GetBuffer() ) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

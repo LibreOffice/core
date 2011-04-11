@@ -59,7 +59,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
 
     /** Query the number of bits used for each component.<p>
 
-        This method returnes a sequence of integers, each denoting the
+        This method returns a sequence of integers, each denoting the
         number of bits occupied by the respective component. The sum
         of all component bits must be less or equal than the value
         returned from <member>getBitsPerPixel()</member>. If the sum is
@@ -79,7 +79,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
 
     /** Query whether color data bytes need to be swapped.<p>
 
-        @return <TRUE/>, This method returns the endiannes of the color
+        @return <TRUE/>, This method returns the endianness of the color
         data. The value is one of the <type>Endianness</type>
         constants. If color data is represented using more than one
         byte, the actual channel positions are specified using bit
@@ -210,7 +210,7 @@ interface XIntegerBitmapColorSpace : XColorSpace
         space.<p>
 
         If this color space conveys alpha information, it is assumed
-        be fully opaque for the given rgb color value.  Color values
+        be fully opaque for the given RGB color value.  Color values
         are properly rounded and clipped, to be valid in the target
         color space.<p>
 

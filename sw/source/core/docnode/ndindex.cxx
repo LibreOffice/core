@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-#include "errhdl.hxx"           // fuers ASSERT
-#include "error.h"              // fuers ASSERT
 #include "ndindex.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
@@ -48,7 +44,7 @@ SwNodeRange::SwNodeRange( const SwNodeRange &rRange )
     : aStart( rRange.aStart ), aEnd( rRange.aEnd )
 {}
 
-SwNodeRange::SwNodeRange( SwNodes& rNds, ULONG nSttIdx, ULONG nEndIdx )
+SwNodeRange::SwNodeRange( SwNodes& rNds, sal_uLong nSttIdx, sal_uLong nEndIdx )
     : aStart( rNds, nSttIdx ), aEnd( rNds, nEndIdx )
 {}
 
@@ -64,7 +60,7 @@ SwNodeRange::SwNodeRange( const SwNode& rS, long nSttDiff,
 {}
 
 
-SwNodeIndex::SwNodeIndex( SwNodes& rNds, ULONG nIdx )
+SwNodeIndex::SwNodeIndex( SwNodes& rNds, sal_uLong nIdx )
     : pNd( rNds[ nIdx ] ), pNext( 0 ), pPrev( 0 )
 {
     rNds.RegisterIndex( *this );
@@ -136,7 +132,7 @@ SwNodeIndex& SwNodeIndex::operator=( const SwNode& rNd )
     return *this;
 }
 
-SwNodeIndex& SwNodeIndex::Assign( SwNodes& rNds, ULONG nIdx )
+SwNodeIndex& SwNodeIndex::Assign( SwNodes& rNds, sal_uLong nIdx )
 {
     if( &pNd->GetNodes() != &rNds )
     {

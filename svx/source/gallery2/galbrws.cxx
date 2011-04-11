@@ -39,7 +39,7 @@
 #include "svx/gallery1.hxx"
 #include "galbrws1.hxx"
 #include "galbrws2.hxx"
-#include "galbrws.hxx"
+#include "svx/galbrws.hxx"
 
 // -------------------
 // - GallerySplitter -
@@ -82,7 +82,7 @@ void GallerySplitter::DataChanged( const DataChangedEvent& rDCEvt )
 // - SvxGalleryChildWindow -
 // -------------------------
 
-GalleryChildWindow::GalleryChildWindow( Window* _pParent, USHORT nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
+GalleryChildWindow::GalleryChildWindow( Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId )
 {
     pWindow = new GalleryBrowser( pBindings, this, _pParent, GAL_RESID( RID_SVXDLG_GALLERYBROWSER ) );
@@ -117,11 +117,11 @@ GalleryBrowser::GalleryBrowser( SfxBindings* _pBindings, SfxChildWindow* pCW,
     SetMinOutputSizePixel( maLastSize = GetOutputSizePixel() );
 
     mpBrowser1->SelectTheme( 0 );
-    mpBrowser1->Show( TRUE );
-    mpBrowser2->Show( TRUE );
+    mpBrowser1->Show( sal_True );
+    mpBrowser2->Show( sal_True );
 
     mpSplitter->SetSplitHdl( LINK( this, GalleryBrowser, SplitHdl ) );
-    mpSplitter->Show( TRUE );
+    mpSplitter->Show( sal_True );
 
     InitSettings();
 }
@@ -183,17 +183,17 @@ void GalleryBrowser::Resize()
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
+sal_Bool GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
 {
-    const USHORT    nCode = rKEvt.GetKeyCode().GetCode();
-    BOOL            bRet = ( !rKEvt.GetKeyCode().IsMod1() &&
+    const sal_uInt16    nCode = rKEvt.GetKeyCode().GetCode();
+    sal_Bool            bRet = ( !rKEvt.GetKeyCode().IsMod1() &&
                            ( ( KEY_TAB == nCode ) || ( KEY_F6 == nCode && rKEvt.GetKeyCode().IsMod2() ) ) );
 
     if( bRet )
     {
         if( !rKEvt.GetKeyCode().IsShift() )
         {
-            if( mpBrowser1->mpThemes->HasChildPathFocus( TRUE ) )
+            if( mpBrowser1->mpThemes->HasChildPathFocus( sal_True ) )
                 mpBrowser2->GetViewWindow()->GrabFocus();
             else if( mpBrowser2->GetViewWindow()->HasFocus() )
                 mpBrowser2->maViewBox.GrabFocus();
@@ -204,7 +204,7 @@ BOOL GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
         }
         else
         {
-            if( mpBrowser1->mpThemes->HasChildPathFocus( TRUE ) )
+            if( mpBrowser1->mpThemes->HasChildPathFocus( sal_True ) )
                 mpBrowser1->maNewTheme.GrabFocus();
             else if( mpBrowser1->maNewTheme.HasFocus() )
                 mpBrowser2->maViewBox.GrabFocus();
@@ -220,7 +220,7 @@ BOOL GalleryBrowser::KeyInput( const KeyEvent& rKEvt, Window* )
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryBrowser::Close()
+sal_Bool GalleryBrowser::Close()
 {
     return SfxDockingWindow::Close();
 }
@@ -263,14 +263,14 @@ Graphic GalleryBrowser::GetGraphic() const
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryBrowser::GetVCDrawModel( FmFormModel& rModel ) const
+sal_Bool GalleryBrowser::GetVCDrawModel( FmFormModel& rModel ) const
 {
     return mpBrowser2->GetVCDrawModel( rModel );
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryBrowser::IsLinkage() const
+sal_Bool GalleryBrowser::IsLinkage() const
 {
     return mpBrowser2->IsLinkage();
 }

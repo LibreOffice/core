@@ -38,12 +38,15 @@
 #include "funcdesc.hxx"
 #include <unotools/charclass.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
+#include <sal/macros.h>
 #include <string.h>
 
 #if OSL_DEBUG_LEVEL > 1
 // the documentation thingy
 #include <stdio.h>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
+#include <rtl/strbuf.hxx>
 #include "compiler.hxx"
 #include "sc.hrc"   // VAR_ARGS
 #endif
@@ -214,7 +217,7 @@ void ScParameterClassification::Init()
     memset( pData, 0, sizeof(RunData) * (SC_OPCODE_LAST_OPCODE_ID + 1));
 
     // init from specified static data above
-    for ( size_t i=0; i < sizeof(pRawData) / sizeof(RawData); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS(pRawData); ++i )
     {
         const RawData* pRaw = &pRawData[i];
         if ( pRaw->eOp > SC_OPCODE_LAST_OPCODE_ID )
@@ -224,10 +227,10 @@ void ScParameterClassification::Init()
         else
         {
             RunData* pRun = &pData[ pRaw->eOp ];
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             if ( pRun->aData.nParam[0] != Unknown )
             {
-                DBG_ERROR1( "already assigned: %d", pRaw->eOp);
+                OSL_TRACE( "already assigned: %d", pRaw->eOp);
             }
 #endif
             memcpy( &(pRun->aData), &(pRaw->aData), sizeof(CommonData));
@@ -240,7 +243,7 @@ void ScParameterClassification::Init()
                     if ( pRun->aData.nParam[j] )
                     {
                         eLast = pRun->aData.nParam[j];
-                        pRun->nMinParams = sal::static_int_cast<BYTE>( j+1 );
+                        pRun->nMinParams = sal::static_int_cast<sal_uInt8>( j+1 );
                     }
                     else
                         pRun->aData.nParam[j] = eLast;
@@ -253,7 +256,7 @@ void ScParameterClassification::Init()
                     if ( !pRun->aData.nParam[j] )
                     {
                         if ( j == 0 || pRun->aData.nParam[j-1] != Bounds )
-                            pRun->nMinParams = sal::static_int_cast<BYTE>( j );
+                            pRun->nMinParams = sal::static_int_cast<sal_uInt8>( j );
                         pRun->aData.nParam[j] = Bounds;
                     }
                 }
@@ -286,7 +289,7 @@ void ScParameterClassification::Exit()
 
 
 ScParameterClassification::Type ScParameterClassification::GetParameterType(
-        const formula::FormulaToken* pToken, USHORT nParameter)
+        const formula::FormulaToken* pToken, sal_uInt16 nParameter)
 {
     OpCode eOp = pToken->GetOpCode();
     switch ( eOp )
@@ -320,11 +323,11 @@ ScParameterClassification::Type ScParameterClassification::GetParameterType(
 
 ScParameterClassification::Type
 ScParameterClassification::GetExternalParameterType( const formula::FormulaToken* pToken,
-        USHORT nParameter)
+        sal_uInt16 nParameter)
 {
     Type eRet = Unknown;
     // similar to ScInterpreter::ScExternal()
-    USHORT nIndex;
+    sal_uInt16 nIndex;
     String aUnoName;
     String aFuncName( ScGlobal::pCharClass->upper( pToken->GetExternal()));
     if ( ScGlobal::GetFuncCollection()->SearchFunc( aFuncName, nIndex) )
@@ -348,7 +351,7 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
         }
     }
     else if ( (aUnoName = ScGlobal::GetAddInCollection()->FindFunction(
-                    aFuncName, FALSE)).Len() )
+                    aFuncName, false)).Len() )
     {
         // the relevant parts of ScUnoAddInCall without having to create one
         const ScUnoAddInFuncData* pFuncData =
@@ -406,7 +409,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
             continue;   // not an internal opcode or already done
 
         RunData* pRun = &pData[ pDesc->nFIndex ];
-        USHORT nArgs = pDesc->GetSuppressedArgCount();
+        sal_Int32 nArgs = pDesc->GetSuppressedArgCount();
         if ( nArgs >= VAR_ARGS )
         {
             nArgs -= VAR_ARGS - 1;
@@ -414,13 +417,16 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
         }
         if ( nArgs > CommonData::nMaxParams )
         {
-            DBG_ERROR2( "ScParameterClassification::Init: too many arguments in listed function: %s: %d",
-                    ByteString( *(pDesc->pFuncName),
-                        RTL_TEXTENCODING_UTF8).GetBuffer(), nArgs);
+            rtl::OStringBuffer aBuf;
+            aBuf.append("ScParameterClassification::Init: too many arguments in listed function: ");
+            aBuf.append(rtl::OUStringToOString(*(pDesc->pFuncName), RTL_TEXTENCODING_UTF8));
+            aBuf.append(": ");
+            aBuf.append(nArgs);
+            OSL_FAIL( aBuf.getStr());
             nArgs = CommonData::nMaxParams;
             pRun->aData.bRepeatLast = true;
         }
-        pRun->nMinParams = static_cast< BYTE >( nArgs );
+        pRun->nMinParams = static_cast< sal_uInt8 >( nArgs );
         for ( size_t j=0; j < nArgs; ++j )
         {
             pRun->aData.nParam[j] = Value;
@@ -465,7 +471,7 @@ void ScParameterClassification::GenerateDocumentation()
             ByteString aStr( xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8);
             aStr += "(";
             formula::FormulaByteToken aToken( eOp);
-            BYTE nParams = GetMinimumParameters( eOp);
+            sal_uInt8 nParams = GetMinimumParameters( eOp);
             // preset parameter count according to opcode value, with some
             // special handling
             if ( eOp < SC_OPCODE_STOP_DIV )
@@ -516,7 +522,7 @@ void ScParameterClassification::GenerateDocumentation()
             if ( nParams != aToken.GetParamCount() )
                 fprintf( stdout, "(parameter count differs, token ParamCount: %d  classification: %d) ",
                         aToken.GetParamCount(), nParams);
-            for ( USHORT j=0; j < nParams; ++j )
+            for ( sal_uInt16 j=0; j < nParams; ++j )
             {
                 if ( j > 0 )
                     aStr += ",";

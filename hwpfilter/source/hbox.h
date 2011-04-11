@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-/* $Id: hbox.h,v 1.6 2008-06-04 09:56:30 vg Exp $ */
-
 #ifndef _HBOX_H_
 #define _HBOX_H_
 
@@ -84,14 +82,14 @@ struct HBox
 /**
  * @short Class for saving data to be skipped.
  */
-struct SkipBlock: public HBox
+struct SkipData: public HBox
 {
     ulong data_block_len;
     hchar dummy;
     char  *data_block;
 
-    SkipBlock(hchar);
-    virtual ~SkipBlock();
+    SkipData(hchar);
+    virtual ~SkipData();
     virtual int Read(HWPFile &hwpf);
 };
 struct DateCode;

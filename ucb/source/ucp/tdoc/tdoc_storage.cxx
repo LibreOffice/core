@@ -311,8 +311,7 @@ StorageElementFactory::createOutputStream( const rtl::OUString & rUri,
     // Each stream must have a parent storage.
     if ( !xParentStorage.is() )
     {
-        OSL_ENSURE( false,
-                    "StorageElementFactory::createOutputStream - "
+        OSL_FAIL( "StorageElementFactory::createOutputStream - "
                     "Unable to create parent storage!" );
         return uno::Reference< io::XOutputStream >();
     }
@@ -323,8 +322,7 @@ StorageElementFactory::createOutputStream( const rtl::OUString & rUri,
 
     if ( !xStream.is() )
     {
-        OSL_ENSURE( false,
-                    "StorageElementFactory::createOutputStream - "
+        OSL_FAIL( "StorageElementFactory::createOutputStream - "
                     "Unable to create stream!" );
         return uno::Reference< io::XOutputStream >();
     }
@@ -359,8 +357,7 @@ StorageElementFactory::createStream( const rtl::OUString & rUri,
     // Each stream must have a parent storage.
     if ( !xParentStorage.is() )
     {
-        OSL_ENSURE( false,
-                    "StorageElementFactory::createStream - "
+        OSL_FAIL( "StorageElementFactory::createStream - "
                     "Unable to create parent storage!" );
         return uno::Reference< io::XStream >();
     }
@@ -371,8 +368,7 @@ StorageElementFactory::createStream( const rtl::OUString & rUri,
 
     if ( !xStream.is() )
     {
-        OSL_ENSURE( false,
-                    "StorageElementFactory::createStream - "
+        OSL_FAIL( "StorageElementFactory::createStream - "
                     "Unable to create stream!" );
         return uno::Reference< io::XStream >();
     }
@@ -502,8 +498,8 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
             }
             else
             {
-                OSL_ENSURE(
-                    false, "Bug! Value of property OpenMode has wrong type!" );
+                OSL_FAIL(
+                    "Bug! Value of property OpenMode has wrong type!" );
 
                 throw uno::RuntimeException(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -513,7 +509,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         }
         catch ( beans::UnknownPropertyException const & e )
         {
-            OSL_ENSURE( false, "Property OpenMode not supported!" );
+            OSL_FAIL( "Property OpenMode not supported!" );
 
             throw embed::StorageWrappedTargetException(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -523,7 +519,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         }
         catch ( lang::WrappedTargetException const & e )
         {
-            OSL_ENSURE( false, "Caught WrappedTargetException!" );
+            OSL_FAIL( "Caught WrappedTargetException!" );
 
             throw embed::StorageWrappedTargetException(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -643,8 +639,7 @@ StorageElementFactory::queryStream(
             break;
 
         default:
-            OSL_ENSURE( false,
-                "StorageElementFactory::queryStream : Unknown open mode!" );
+            OSL_FAIL( "StorageElementFactory::queryStream : Unknown open mode!" );
 
             throw embed::InvalidStorageException(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(

@@ -33,7 +33,7 @@
 #include "connectivity/FValue.hxx"
 #include "connectivity/CommonTools.hxx"
 #include <connectivity/dbconversion.hxx>
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
@@ -260,7 +260,7 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
                 break;
             default:
                 (*this) = getAny();
-                OSL_ENSURE(0,"ORowSetValue:operator==(): UNSPUPPORTED TYPE!");
+                OSL_FAIL("ORowSetValue:operator==(): UNSPUPPORTED TYPE!");
         }
     }
 
@@ -865,7 +865,7 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
             break;
         default:
             bRet = false;
-            OSL_ENSURE(0,"ORowSetValue::operator==(): UNSPUPPORTED TYPE!");
+            OSL_FAIL("ORowSetValue::operator==(): UNSPUPPORTED TYPE!");
             break;
     }
     return bRet;
@@ -958,7 +958,7 @@ Any ORowSetValue::makeAny() const
                 }
                 break;
             default:
-                OSL_ENSURE(0,"ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
+                OSL_FAIL("ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
                 rValue = getAny();
                 break;
         }
@@ -1007,7 +1007,7 @@ Any ORowSetValue::makeAny() const
             case DataType::VARBINARY:
             case DataType::LONGVARBINARY:
                 {
-                    ::rtl::OUStringBuffer sVal = ::rtl::OUString::createFromAscii("0x");
+                    ::rtl::OUStringBuffer sVal(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0x")));
                     Sequence<sal_Int8> aSeq(getSequence());
                     const sal_Int8* pBegin  = aSeq.getConstArray();
                     const sal_Int8* pEnd    = pBegin + aSeq.getLength();
@@ -1754,7 +1754,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
 
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::util::Date ORowSetValue::getDate()        const
+::com::sun::star::util::Date ORowSetValue::getDate() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbtools", "Ocke.Janssen@sun.com", "ORowSetValue::getDate" );
     ::com::sun::star::util::Date aValue;
@@ -1769,8 +1769,6 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                aValue = DBTypeConversion::toDate((double)*this);
-                break;
             case DataType::FLOAT:
             case DataType::DOUBLE:
             case DataType::REAL:
@@ -1788,12 +1786,28 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                     aValue.Year     = pDateTime->Year;
                 }
                 break;
+            case DataType::BIT:
+            case DataType::BOOLEAN:
+            case DataType::TINYINT:
+            case DataType::SMALLINT:
+            case DataType::INTEGER:
+            case DataType::BIGINT:
+                aValue = DBTypeConversion::toDate( double( sal_Int64( *this ) ) );
+                break;
+
+            case DataType::BLOB:
+            case DataType::CLOB:
+            case DataType::OBJECT:
             default:
-                {
-                    Any aAnyValue = getAny();
-                    aAnyValue >>= aValue;
-                    break;
-                }
+                OSL_ENSURE( false, "ORowSetValue::getDate: cannot retrieve the data!" );
+                // NO break!
+
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+            case DataType::TIME:
+                aValue = DBTypeConversion::toDate( (double)0 );
+                break;
         }
     }
     return aValue;
@@ -2157,7 +2171,7 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, sal_Bool _bNullable, const
         setTypeKind(DataType::OTHER);
         break;
     default:
-        OSL_ENSURE( false, "ORowSetValue::fill: unsupported type!" );
+        OSL_FAIL( "ORowSetValue::fill: unsupported type!" );
         (*this) = _rValueSource.getObject();
         break;
     }
@@ -2275,7 +2289,7 @@ void ORowSetValue::fill(const Any& _rValue)
             if ( _rValue >>= aDummy )
                 (*this) = aDummy;
             else
-                OSL_ENSURE( false, "ORowSetValue::fill: unsupported sequence type!" );
+                OSL_FAIL( "ORowSetValue::fill: unsupported sequence type!" );
             break;
         }
 
@@ -2297,7 +2311,7 @@ void ORowSetValue::fill(const Any& _rValue)
                 (*this) = aDateTime;
             }
             else
-                OSL_ENSURE( false, "ORowSetValue::fill: unsupported structure!" );
+                OSL_FAIL( "ORowSetValue::fill: unsupported structure!" );
 
             break;
         }
@@ -2326,7 +2340,7 @@ void ORowSetValue::fill(const Any& _rValue)
             break;
 
         default:
-            OSL_ENSURE(0,"Unknown type");
+            OSL_FAIL("Unknown type");
             break;
     }
 }

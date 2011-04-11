@@ -28,10 +28,7 @@
 #ifndef _CONNECTIVITY_JAVA_LANG_OBJECT_HXX_
 #define _CONNECTIVITY_JAVA_LANG_OBJECT_HXX_
 
-#if STLPORT_VERSION>=321
-// jni.h needs cstdarg for std::va_list
 #include <cstdarg>
-#endif
 #include <osl/thread.h>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

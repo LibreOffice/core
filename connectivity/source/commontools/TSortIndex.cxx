@@ -30,7 +30,8 @@
 #include "precompiled_connectivity.hxx"
 #include "TSortIndex.hxx"
 #include <algorithm>
-#include <functional>
+
+#include <o3tl/compat_functional.hxx>
 
 using namespace connectivity;
 //------------------------------------------------------------------
@@ -95,7 +96,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     ::std::transform(m_aKeyValues.begin()
                     ,m_aKeyValues.end()
                     ,::std::back_inserter(pKeySet->get())
-                    ,::std::select1st<TIntValuePairVector::value_type>());
+                    ,::o3tl::select1st<TIntValuePairVector::value_type>());
     pKeySet->setFrozen();
     return pKeySet;
 }
@@ -152,7 +153,7 @@ sal_Int32 OSortIndex::GetValue(sal_Int32 nPos) const
 
     if (!m_bFrozen && m_aKeyType[0] != SQL_ORDERBYKEY_NONE)
     {
-        OSL_ASSERT("OSortIndex::GetValue: Invalid use of index!");
+        OSL_FAIL("OSortIndex::GetValue: Invalid use of index!");
         return 0;
     }
     return m_aKeyValues[nPos-1].first;

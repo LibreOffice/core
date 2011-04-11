@@ -26,9 +26,16 @@
  *
  ************************************************************************/
 
-#include "documentbuilder.hxx"
-#include "node.hxx"
-#include "document.hxx"
+#include <documentbuilder.hxx>
+
+#include <string.h>
+#include <stdio.h>
+#include <stdarg.h>
+
+#include <libxml/xmlerror.h>
+#include <libxml/tree.h>
+
+#include <boost/shared_ptr.hpp>
 
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
@@ -36,17 +43,15 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-#include <libxml/xmlerror.h>
-
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
+#include <node.hxx>
+#include <document.hxx>
 
 
 using ::rtl::OUStringBuffer;
@@ -59,21 +64,6 @@ using ::com::sun::star::task::XInteractionHandler;
 
 namespace DOM
 {
-    extern "C" {
-        //char *strdup(const char *s);
-        /*
-        static char* strdupfunc(const char* s)
-        {
-            sal_Int32 len = 0;
-            while (s[len] != '\0') len++;
-            char *newStr = (char*)rtl_allocateMemory(len+1);
-            if (newStr != NULL)
-                rtl_copyMemory(newStr, s, len+1);
-            return newStr;
-        }
-        */
-    }
-
 
     class CDefaultEntityResolver : public cppu::WeakImplHelper1< XEntityResolver >
     {
@@ -94,7 +84,7 @@ namespace DOM
 
                 is.aInputStream = aContent.openStream();
             } catch (com::sun::star::uno::Exception) {
-                OSL_ENSURE(sal_False, "exception in default entity resolver");
+                OSL_FAIL("exception in default entity resolver");
                 is.aInputStream = Reference< XInputStream >();
             }
             return is;
@@ -102,9 +92,10 @@ namespace DOM
 
     };
 
-    CDocumentBuilder::CDocumentBuilder(const Reference< XMultiServiceFactory >& xFactory)
-        : m_aFactory(xFactory)
-        , m_aEntityResolver(Reference< XEntityResolver > (new CDefaultEntityResolver()))
+    CDocumentBuilder::CDocumentBuilder(
+            Reference< XMultiServiceFactory > const& xFactory)
+        : m_xFactory(xFactory)
+        , m_xEntityResolver(new CDefaultEntityResolver())
     {
         // init libxml. libxml will protect itself against multiple
         // initializations so there is no problem here if this gets
@@ -114,7 +105,6 @@ namespace DOM
 
     Reference< XInterface > CDocumentBuilder::_getInstance(const Reference< XMultiServiceFactory >& rSMgr)
     {
-        // XXX
         return static_cast< XDocumentBuilder* >(new CDocumentBuilder(rSMgr));
     }
 
@@ -183,9 +173,13 @@ namespace DOM
     Reference< XDocument > SAL_CALL CDocumentBuilder::newDocument()
         throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_Mutex);
+
         // create a new document
         xmlDocPtr pDocument = xmlNewDoc((const xmlChar*)"1.0");
-        return Reference< XDocument >(static_cast< CDocument* >(CNode::get((xmlNodePtr)pDocument)));
+        Reference< XDocument > const xRet(
+                CDocument::CreateCDocument(pDocument).get());
+        return xRet;
     }
 
     static OUString make_error_message(xmlParserCtxtPtr ctxt)
@@ -228,7 +222,7 @@ namespace DOM
             return nread;
         } catch (com::sun::star::uno::Exception& ex) {
             (void) ex;
-            OSL_ENSURE(sal_False, OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             return -1;
         }
     }
@@ -248,7 +242,7 @@ namespace DOM
             return 0;
         } catch (com::sun::star::uno::Exception& ex) {
             (void) ex;
-            OSL_ENSURE(sal_False, OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
             return -1;
         }
     }
@@ -288,45 +282,52 @@ namespace DOM
         return pInput;
     }
 
+#if 0
     static xmlParserInputPtr external_entity_loader(const char *URL, const char * /*ID*/, xmlParserCtxtPtr ctxt)
     {
         // just call our resolver function using the URL as systemId
         return resolve_func(ctxt, 0, (const xmlChar*)URL);
     }
+#endif
 
-    // default warning handler triggers assertion
+    // default warning handler does not trigger assertion
     static void warning_func(void * ctx, const char * /*msg*/, ...)
     {
-        OUStringBuffer buf(OUString::createFromAscii("libxml2 warning\n"));
+        OUStringBuffer buf(OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 warning\n")));
         buf.append(make_error_message(static_cast< xmlParserCtxtPtr >(ctx)));
         OString msg = OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, msg.getStr());
+        OSL_TRACE(msg.getStr());
     }
 
     // default error handler triggers assertion
     static void error_func(void * ctx, const char * /*msg*/, ...)
     {
-        OUStringBuffer buf(OUString::createFromAscii("libxml2 error\n"));
+        OUStringBuffer buf(OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 error\n")));
         buf.append(make_error_message(static_cast< xmlParserCtxtPtr >(ctx)));
         OString msg = OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSURE(sal_False, msg.getStr());
+        OSL_FAIL(msg.getStr());
     }
 
     } // extern "C"
 
-    void throwEx(xmlParserCtxtPtr ctxt) {
-        OUString msg = make_error_message(ctxt);
-        xmlFreeParserCtxt(ctxt);
+    void throwEx(xmlParserCtxtPtr ctxt)
+    {
         com::sun::star::xml::sax::SAXParseException saxex;
-        saxex.Message = msg;
+        saxex.Message = make_error_message(ctxt);
         saxex.LineNumber = static_cast<sal_Int32>(ctxt->lastError.line);
         saxex.ColumnNumber = static_cast<sal_Int32>(ctxt->lastError.int2);
+        xmlFreeParserCtxt(ctxt);
         throw saxex;
     }
 
     Reference< XDocument > SAL_CALL CDocumentBuilder::parse(const Reference< XInputStream >& is)
         throw (RuntimeException, SAXParseException, IOException)
     {
+        if (!is.is()) {
+            throw RuntimeException();
+        }
+
+        ::osl::MutexGuard const g(m_Mutex);
 
         // encoding...
         /*
@@ -334,14 +335,15 @@ namespace DOM
         xmlCharEncoding enc = xmlParseCharEncoding(encstr);
         */
 
-        xmlParserCtxtPtr ctxt = xmlNewParserCtxt();
+        ::boost::shared_ptr<xmlParserCtxt> const pContext(
+                xmlNewParserCtxt(), xmlFreeParserCtxt);
 
         // register error functions to prevent errors being printed
         // on the console
-        ctxt->_private = this;
-        ctxt->sax->error = error_func;
-        ctxt->sax->warning = warning_func;
-        ctxt->sax->resolveEntity = resolve_func;
+        pContext->_private = this;
+        pContext->sax->error = error_func;
+        pContext->sax->warning = warning_func;
+        pContext->sax->resolveEntity = resolve_func;
 
         // IO context struct
         context_t c;
@@ -350,82 +352,64 @@ namespace DOM
         // we did not open the stream, thus we do not close it.
         c.close = false;
         c.freeOnClose = false;
-        xmlDocPtr pDoc = xmlCtxtReadIO(ctxt, xmlIO_read_func, xmlIO_close_func, &c,
-                     0, 0, 0);
+        xmlDocPtr const pDoc = xmlCtxtReadIO(pContext.get(),
+                xmlIO_read_func, xmlIO_close_func, &c, 0, 0, 0);
 
         if (pDoc == 0) {
-            throwEx(ctxt);
+            throwEx(pContext.get());
         }
-        xmlFreeParserCtxt(ctxt);
-        return Reference< XDocument >(static_cast< CDocument* >(CNode::get((xmlNodePtr)pDoc)));
-    }
-
-    Reference< XDocument > SAL_CALL CDocumentBuilder::parseSource(const InputSource& is)
-        throw (RuntimeException, SAXParseException, IOException)
-    {
-        // if there is an encoding specified in the input source, use it
-        xmlCharEncoding enc = XML_CHAR_ENCODING_NONE;
-        if (is.sEncoding.getLength() > 0) {
-            OString oEncstr = OUStringToOString(is.sEncoding, RTL_TEXTENCODING_UTF8);
-            char *encstr = (char*) oEncstr.getStr();
-            enc = xmlParseCharEncoding(encstr);
-        }
-
-        // set up parser context
-        xmlParserCtxtPtr ctxt = xmlNewParserCtxt();
-        // register error functions to prevent errors being printed
-        // on the console
-        ctxt->_private = this;
-        ctxt->sax->error = error_func;
-        ctxt->sax->warning = warning_func;
-
-        // setup entity resolver binding(s)
-        ctxt->sax->resolveEntity = resolve_func;
-        xmlSetExternalEntityLoader(external_entity_loader);
-
-        // if an input stream is provided, use it
-
-        // use the systemID
-
-        return Reference< XDocument >();
+        Reference< XDocument > const xRet(
+                CDocument::CreateCDocument(pDoc).get());
+        return xRet;
     }
 
     Reference< XDocument > SAL_CALL CDocumentBuilder::parseURI(const OUString& sUri)
         throw (RuntimeException, SAXParseException, IOException)
     {
-        xmlParserCtxtPtr ctxt = xmlNewParserCtxt();
-        ctxt->_private = this;
-        ctxt->sax->error = error_func;
-        ctxt->sax->warning = warning_func;
-        ctxt->sax->resolveEntity = resolve_func;
+        ::osl::MutexGuard const g(m_Mutex);
+
+        ::boost::shared_ptr<xmlParserCtxt> const pContext(
+                xmlNewParserCtxt(), xmlFreeParserCtxt);
+        pContext->_private = this;
+        pContext->sax->error = error_func;
+        pContext->sax->warning = warning_func;
+        pContext->sax->resolveEntity = resolve_func;
         // xmlSetExternalEntityLoader(external_entity_loader);
         OString oUri = OUStringToOString(sUri, RTL_TEXTENCODING_UTF8);
         char *uri = (char*) oUri.getStr();
-        xmlDocPtr pDoc = xmlCtxtReadFile(ctxt, uri, 0, 0);
+        xmlDocPtr pDoc = xmlCtxtReadFile(pContext.get(), uri, 0, 0);
         if (pDoc == 0) {
-            throwEx(ctxt);
+            throwEx(pContext.get());
         }
-        xmlFreeParserCtxt(ctxt);
-        return Reference< XDocument >(static_cast< CDocument* >(CNode::get((xmlNodePtr)pDoc)));
+        Reference< XDocument > const xRet(
+                CDocument::CreateCDocument(pDoc).get());
+        return xRet;
     }
 
-    void SAL_CALL CDocumentBuilder::setEntityResolver(const Reference< XEntityResolver >& er)
+    void SAL_CALL
+    CDocumentBuilder::setEntityResolver(Reference< XEntityResolver > const& xER)
         throw (RuntimeException)
     {
-        m_aEntityResolver = er;
+        ::osl::MutexGuard const g(m_Mutex);
+
+        m_xEntityResolver = xER;
     }
 
     Reference< XEntityResolver > SAL_CALL CDocumentBuilder::getEntityResolver()
         throw (RuntimeException)
     {
-        return m_aEntityResolver;
+        ::osl::MutexGuard const g(m_Mutex);
+
+        return m_xEntityResolver;
     }
 
-
-    void SAL_CALL CDocumentBuilder::setErrorHandler(const Reference< XErrorHandler >& eh)
+    void SAL_CALL
+    CDocumentBuilder::setErrorHandler(Reference< XErrorHandler > const& xEH)
         throw (RuntimeException)
     {
-        m_aErrorHandler = eh;
+        ::osl::MutexGuard const g(m_Mutex);
+
+        m_xErrorHandler = xEH;
     }
 }
 

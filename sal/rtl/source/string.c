@@ -179,7 +179,7 @@ sal_Bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
     OSL_ASSERT(pTarget != NULL
                && (pSource != NULL || nLength == 0)
                && nLength >= 0
-               && rtl_isOctetTextEncoding(nEncoding));
+               && (nLength == 0 || rtl_isOctetTextEncoding(nEncoding)));
 
     if ( !nLength )
         rtl_string_new( pTarget );

@@ -126,6 +126,8 @@ namespace framework{
 #define SERVICENAME_TABWINDOWSERVICE                            DECLARE_ASCII("com.sun.star.ui.dialogs.TabContainerWindow"          )
 #define SERVICENAME_WINDOWCONTENTFACTORYMANAGER                 DECLARE_ASCII("com.sun.star.ui.WindowContentFactoryManager"         )
 #define SERVICENAME_DISPLAYACCESS                               DECLARE_ASCII("com.sun.star.awt.DisplayAccess"                      )
+#define SERVICENAME_PANELFACTORY                                DECLARE_ASCII("com.sun.star.ui.PanelFactory"                        )
+#define SERVICENAME_MODELWINSERVICE                             DECLARE_ASCII("com.sun.star.ui.ModelWinService"                     )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
@@ -212,6 +214,8 @@ namespace framework{
 #define IMPLEMENTATIONNAME_IMAGEMANAGER                         DECLARE_ASCII("com.sun.star.comp.framework.ImageManager"            )
 #define IMPLEMENTATIONNAME_TABWINDOWSERVICE                     DECLARE_ASCII("com.sun.star.comp.framework.TabWindowService"        )
 #define IMPLEMENTATIONNAME_WINDOWCONTENTFACTORYMANAGER          DECLARE_ASCII("com.sun.star.comp.framework.WindowContentFactoryManager" )
+#define IMPLEMENTATIONNAME_PANELFACTORY                         DECLARE_ASCII("com.sun.star.comp.framework.PanelFactory"            )
+#define IMPLEMENTATIONNAME_MODELWINSERVICE                      DECLARE_ASCII("com.sun.star.comp.framework.ModelWinService"         )
 
 }       //  namespace framework
 

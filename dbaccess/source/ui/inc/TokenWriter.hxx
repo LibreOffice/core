@@ -84,18 +84,18 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
 
         ::rtl::OUString m_sName;
-        //dyf add 20070601
+
         //for transfor the tablename
         ::rtl::OUString m_sDefaultTableName;
-        //dyf add end
+
         ::rtl::OUString m_sDataSourceName;
         sal_Int32       m_nCommandType;
         bool            m_bNeedToReInitialize;
 
 #if defined UNX
-        static const char __FAR_DATA sNewLine;
+        static const char sNewLine;
 #else
-        static const char __FAR_DATA sNewLine[];
+        static const char sNewLine[];
 #endif
 
         ODatabaseExport*    m_pReader;
@@ -121,13 +121,11 @@ namespace dbaui
     public:
         void setStream(SvStream* _pStream){  m_pStream = _pStream; }
 
-        //dyf add 20070601
         //for set the tablename
         void setSTableName(const ::rtl::OUString &_sTableName){ m_sDefaultTableName = _sTableName; }
-        //dyf add end
 
-        virtual BOOL Write(); // Export
-        virtual BOOL Read(); // Import
+        virtual sal_Bool Write(); // Export
+        virtual sal_Bool Read(); // Import
 
         void initialize(const ::svx::ODataAccessDescriptor& _aDataDescriptor);
         void dispose();
@@ -163,8 +161,8 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
-        virtual BOOL Write();
-        virtual BOOL Read();
+        virtual sal_Bool Write();
+        virtual sal_Bool Read();
     };
     // =========================================================================
     // HTML Im- und Export
@@ -178,11 +176,11 @@ namespace dbaui
         // HtmlFontSz[1-7] in s*3.ini [user]
         static sal_Int16        nFontSize[SBA_HTML_FONTSIZES];
         static const sal_Int16  nCellSpacing;
-        static const char __FAR_DATA sIndentSource[];
+        static const char sIndentSource[];
         char                    sIndent[nIndentMax+1];
         sal_Int16               m_nIndent;
-    #ifdef DBG_UTIL
-        BOOL                    m_bCheckFont;
+    #if OSL_DEBUG_LEVEL > 0
+        sal_Bool                    m_bCheckFont;
     #endif
 
         void WriteHeader();
@@ -207,8 +205,8 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,_rxNumberF,_rM)
         {}
 
-        virtual BOOL Write();
-        virtual BOOL Read();
+        virtual sal_Bool Write();
+        virtual sal_Bool Read();
 
     };
     // =========================================================================
@@ -244,8 +242,8 @@ namespace dbaui
                         : ODatabaseImportExport(_rxConnection,NULL,_rM)
         {}
 
-        virtual BOOL Write();
-        virtual BOOL Read();
+        virtual sal_Bool Write();
+        virtual sal_Bool Read();
 
     private:
         using ODatabaseImportExport::initialize;

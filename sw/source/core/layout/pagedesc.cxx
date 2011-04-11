@@ -51,13 +51,11 @@
 #include <frmtool.hxx>
 #include <doc.hxx>          // fuer GetAttrPool
 #include <poolfmt.hxx>
+#include <switerator.hxx>
 
 /*************************************************************************
 |*
 |*  SwPageDesc::SwPageDesc()
-|*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 16. Feb. 94
 |*
 |*************************************************************************/
 
@@ -73,7 +71,7 @@ SwPageDesc::SwPageDesc( const String& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
     nRegHeight( 0 ),
     nRegAscent( 0 ),
     eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE) ),
-    bLandscape( FALSE ),
+    bLandscape( sal_False ),
     aFtnInfo()
 {
 }
@@ -123,8 +121,6 @@ SwPageDesc::~SwPageDesc()
 |*
 |*  Beschreibung        Gespiegelt werden nur die Raender.
 |*      Attribute wie Umrandung und dergleichen werden 1:1 kopiert.
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    01. Nov. 94
 |*
 |*************************************************************************/
 
@@ -168,23 +164,16 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
 |*                SwPageDesc::GetInfo()
 |*
 |*    Beschreibung      erfragt Informationen
-|*    Ersterstellung    JP 31.03.94
-|*    Letzte Aenderung  JP 31.03.94
 |*
 *************************************************************************/
 
 
     // erfrage vom Modify Informationen
-BOOL SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
+sal_Bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 {
-//    if( RES_AUTOFMT_DOCNODE == rInfo.Which() )
-//    {
-        // dann weiter zum Format
-        if( !aMaster.GetInfo( rInfo ) )
-            return FALSE;       // gefunden
-        return aLeft.GetInfo( rInfo );
-//    }
-//    return TRUE;        // weiter suchen
+    if( !aMaster.GetInfo( rInfo ) )
+            return sal_False;       // found
+    return aLeft.GetInfo( rInfo );
 }
 
 /*************************************************************************
@@ -192,8 +181,6 @@ BOOL SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 |*                SwPageDesc::SetRegisterFmtColl()
 |*
 |*    Beschreibung      setzt die Vorlage fuer die Registerhaltigkeit
-|*    Ersterstellung    AMA 22.07.96
-|*    Letzte Aenderung  AMA 22.07.96
 |*
 *************************************************************************/
 
@@ -216,8 +203,6 @@ void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
 |*                SwPageDesc::GetRegisterFmtColl()
 |*
 |*    Beschreibung      holt die Vorlage fuer die Registerhaltigkeit
-|*    Ersterstellung    AMA 22.07.96
-|*    Letzte Aenderung  AMA 22.07.96
 |*
 *************************************************************************/
 
@@ -233,8 +218,6 @@ const SwTxtFmtColl* SwPageDesc::GetRegisterFmtColl() const
 |*                SwPageDesc::RegisterChange()
 |*
 |*    Beschreibung      benachrichtigt alle betroffenen PageFrames
-|*    Ersterstellung    AMA 22.07.96
-|*    Letzte Aenderung  AMA 22.07.96
 |*
 *************************************************************************/
 
@@ -258,20 +241,18 @@ void SwPageDesc::RegisterChange()
 
     nRegHeight = 0;
     {
-        SwClientIter aIter( GetMaster() );
-        for( SwClient* pLast = aIter.First(TYPE(SwFrm)); pLast;
-                pLast = aIter.Next() )
+        SwIterator<SwFrm,SwFmt> aIter( GetMaster() );
+        for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
-            if( ((SwFrm*)pLast)->IsPageFrm() )
+            if( pLast->IsPageFrm() )
                 ((SwPageFrm*)pLast)->PrepareRegisterChg();
         }
     }
     {
-        SwClientIter aIter( GetLeft() );
-        for( SwClient* pLast = aIter.First(TYPE(SwFrm)); pLast;
-                pLast = aIter.Next() )
+        SwIterator<SwFrm,SwFmt> aIter( GetLeft() );
+        for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
-            if( ((SwFrm*)pLast)->IsPageFrm() )
+            if( pLast->IsPageFrm() )
                 ((SwPageFrm*)pLast)->PrepareRegisterChg();
         }
     }
@@ -283,16 +264,14 @@ void SwPageDesc::RegisterChange()
 |*
 |*    Beschreibung      reagiert insbesondere auf Aenderungen
 |*                      der Vorlage fuer die Registerhaltigkeit
-|*    Ersterstellung    AMA 22.07.96
-|*    Letzte Aenderung  AMA 22.07.96
 |*
 *************************************************************************/
 
 
-void SwPageDesc::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    const USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    SwModify::Modify( pOld, pNew );
+    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    NotifyClients( pOld, pNew );
 
     if ( (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich)
         || isCHRATR(nWhich) || (RES_PARATR_LINESPACING == nWhich) )
@@ -304,7 +283,7 @@ void SwPageDesc::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
 {
     SwModify* pMod;
-    USHORT nFrmType = FRM_CNTNT;
+    sal_uInt16 nFrmType = FRM_CNTNT;
 
     if( rNd.IsCntntNode() )
     {
@@ -319,7 +298,7 @@ static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
         pMod = 0;
 
     Point aNullPt;
-    return pMod ? ::GetFrmOfModify( *pMod, nFrmType, &aNullPt, 0, FALSE )
+    return pMod ? ::GetFrmOfModify( 0, *pMod, nFrmType, &aNullPt, 0, sal_False )
                 : 0;
 }
 
@@ -333,7 +312,7 @@ const SwPageDesc* SwPageDesc::GetPageDescOfNode(const SwNode& rNd)
 }
 
 const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
-                                              BOOL bCheckForThisPgDc ) const
+                                              sal_Bool bCheckForThisPgDc ) const
 {
     // welches PageDescFormat ist fuer diesen Node gueltig?
     const SwFrmFmt* pRet;
@@ -344,14 +323,12 @@ const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
         const SwPageDesc* pPd = bCheckForThisPgDc ? this :
                                 ((SwPageFrm*)pChkFrm)->GetPageDesc();
         pRet = &pPd->GetMaster();
-        OSL_ENSURE( ((SwPageFrm*)pChkFrm)->GetPageDesc() == pPd,
-                "Falcher Node fuers erkennen des Seitenformats" );
+        OSL_ENSURE( ((SwPageFrm*)pChkFrm)->GetPageDesc() == pPd, "Wrong node for detection of page format!" );
         // an welchem Format haengt diese Seite?
-        if( pRet != pChkFrm->GetRegisteredIn() )
+        if( !pChkFrm->KnowsFormat(*pRet) )
         {
             pRet = &pPd->GetLeft();
-            OSL_ENSURE( pRet == pChkFrm->GetRegisteredIn(),
-                    "Falcher Node fuers erkennen des Seitenformats" );
+            OSL_ENSURE( pChkFrm->KnowsFormat(*pRet), "Wrong node for detection of page format!" );
         }
     }
     else
@@ -359,9 +336,9 @@ const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
     return pRet;
 }
 
-BOOL SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
+sal_Bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if( GetFollow() && this != GetFollow() )
     {
         const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
@@ -370,7 +347,7 @@ BOOL SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
             ( !pChkFrm->GetNext() || GetFollow() ==
                         ((SwPageFrm*)pChkFrm->GetNext())->GetPageDesc() ))
             // die Seite gefunden, auf die der Follow verweist
-            bRet = TRUE;
+            bRet = sal_True;
     }
     return bRet;
 }
@@ -378,9 +355,6 @@ BOOL SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
 /*************************************************************************
 |*
 |*  SwPageFtnInfo::SwPageFtnInfo()
-|*
-|*  Ersterstellung      MA 24. Feb. 93
-|*  Letzte Aenderung    MA 24. Feb. 93
 |*
 |*************************************************************************/
 
@@ -390,6 +364,7 @@ SwPageFtnInfo::SwPageFtnInfo() :
     nMaxHeight( 0 ),
 //  aPen( PEN_SOLID ),
     nLineWidth(10),
+    eLineStyle( editeng::SOLID ),
     aWidth( 25, 100 ),
     nTopDist( 57 ),         //1mm
     nBottomDist( 57 )
@@ -405,6 +380,7 @@ SwPageFtnInfo::SwPageFtnInfo() :
 SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy ) :
     nMaxHeight( rCpy.GetHeight() ),
     nLineWidth(rCpy.nLineWidth),
+    eLineStyle(rCpy.eLineStyle),
     aLineColor(rCpy.aLineColor),
     aWidth( rCpy.GetWidth() ),
     eAdj( rCpy.GetAdj() ),
@@ -417,9 +393,6 @@ SwPageFtnInfo::SwPageFtnInfo( const SwPageFtnInfo &rCpy ) :
 |*
 |*  SwPageFtnInfo::operator=
 |*
-|*  Ersterstellung      MA 24. Feb. 93
-|*  Letzte Aenderung    MA 24. Feb. 93
-|*
 |*************************************************************************/
 
 
@@ -428,6 +401,7 @@ SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
 {
     nMaxHeight  = rCpy.GetHeight();
     nLineWidth  = rCpy.nLineWidth;
+    eLineStyle  = rCpy.eLineStyle;
     aLineColor  = rCpy.aLineColor;
     aWidth      = rCpy.GetWidth();
     eAdj        = rCpy.GetAdj();
@@ -439,17 +413,15 @@ SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
 |*
 |*  SwPageFtnInfo::operator==
 |*
-|*  Ersterstellung      MA 01. Mar. 93
-|*  Letzte Aenderung    MA 01. Mar. 93
-|*
 |*************************************************************************/
 
 
 
-BOOL SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
+sal_Bool SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
 {
     return ( nMaxHeight == rCmp.GetHeight() &&
              nLineWidth == rCmp.nLineWidth &&
+             eLineStyle == rCmp.eLineStyle &&
              aLineColor == rCmp.aLineColor &&
              aWidth     == rCmp.GetWidth() &&
              eAdj       == rCmp.GetAdj() &&

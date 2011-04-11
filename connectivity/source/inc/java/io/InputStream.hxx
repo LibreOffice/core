@@ -42,12 +42,12 @@ namespace connectivity
                                 public ::cppu::WeakImplHelper1< ::com::sun::star::io::XInputStream>
     {
     protected:
-    // statische Daten fuer die Klasse
+    // statische Data for the class
         static jclass theClass;
         virtual ~java_io_InputStream();
     public:
         virtual jclass getMyClass() const;
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // a Constructor, that is needed for when Returning the Object is needed:
         java_io_InputStream( JNIEnv * pEnv, jobject myObj );
         // XInputStream
         virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);

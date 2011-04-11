@@ -75,7 +75,7 @@ void ListenerHelper::RemoveListener(
                     break;
                 }
 
-                aIter++;
+                ++aIter;
             }
         }
     }
@@ -97,7 +97,7 @@ void ListenerHelper::Notify(
             while ( aIter != aL.end() )
             {
                 (*aIter)->statusChanged( rEvent );
-                aIter++;
+                ++aIter;
             }
         }
     }
@@ -140,7 +140,7 @@ void SAL_CALL ListenerItemEventListener::disposing( const EventObject& aEvent) t
             break;
         }
 
-        aIter++;
+        ++aIter;
     }
 }
 

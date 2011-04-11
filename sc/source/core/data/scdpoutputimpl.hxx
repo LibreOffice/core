@@ -8,9 +8,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: scdpoutputimpl.hxx,v $
- * $Revision: 1.0 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -42,7 +39,7 @@
 class OutputImpl
 {
     ScDocument*         mpDoc;
-    USHORT              mnTab;
+    sal_uInt16              mnTab;
     ::std::vector< bool > mbNeedLineCols;
     ::std::vector< SCCOL > mnCols;
 
@@ -60,7 +57,7 @@ class OutputImpl
     SCROW   mnTabEndRow;
 
 public:
-    OutputImpl( ScDocument* pDoc, USHORT nTab,
+    OutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
         SCCOL   nTabStartCol,
         SCROW   nTabStartRow,
         SCCOL   nMemberStartCol,
@@ -69,11 +66,11 @@ public:
         SCROW nDataStartRow,
         SCCOL nTabEndCol,
         SCROW nTabEndRow );
-    BOOL AddRow( SCROW nRow );
-    BOOL AddCol( SCCOL nCol );
+    sal_Bool AddRow( SCROW nRow );
+    sal_Bool AddCol( SCCOL nCol );
 
     void OutputDataArea();
-    void OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, BOOL bHori = FALSE );
+    void OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Bool bHori = false );
 
 };
 

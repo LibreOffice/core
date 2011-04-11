@@ -34,7 +34,7 @@ class NoChaos
 {
 public:
     static SfxItemPool*     GetItemPool();
-    static USHORT           ReleaseItemPool();
+    static sal_uInt16           ReleaseItemPool();
 };
 
 #endif

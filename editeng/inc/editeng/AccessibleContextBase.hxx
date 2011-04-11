@@ -61,7 +61,7 @@ struct MutexOwner {mutable ::osl::Mutex maMutex;};
 */
 class EDITENG_DLLPUBLIC AccessibleContextBase
     :   public MutexOwner,
-        public cppu::WeakComponentImplHelper4<
+        public cppu::PartialWeakComponentImplHelper4<
         ::com::sun::star::accessibility::XAccessible,
         ::com::sun::star::accessibility::XAccessibleContext,
         ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
@@ -345,8 +345,8 @@ protected:
     /** Check whether or not the object has been disposed (or is in the
         state of beeing disposed).
 
-        @return sal_True, if the object is disposed or in the course
-        of being disposed. Otherwise, sal_False is returned.
+        @return TRUE, if the object is disposed or in the course
+        of being disposed. Otherwise, FALSE is returned.
     */
     sal_Bool IsDisposed (void);
 

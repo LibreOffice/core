@@ -48,7 +48,7 @@
 module com { module sun { module star { module document {
 
 //=============================================================================
-/** capsulate a type detection service and provide read/write access on it's configuration data.
+/** encapsulate a type detection service and provide read/write access on it's configuration data.
 
     <p>
     It's possible to make a "flat" detection which may use internal configuration

@@ -68,3 +68,11 @@ DEF1DES=UCB : Treeview help
 .INCLUDE: target.mk
 
 
+
+ALLTAR : $(MISC)/tvhlp1.component
+
+$(MISC)/tvhlp1.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        tvhlp1.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt tvhlp1.component

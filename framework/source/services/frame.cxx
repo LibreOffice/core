@@ -41,11 +41,11 @@
 #include <loadenv/loadenv.hxx>
 #include <helper/oframes.hxx>
 #include <helper/statusindicatorfactory.hxx>
-#include <helper/titlehelper.hxx>
+#include <framework/titlehelper.hxx>
 #include <classes/droptargetlistener.hxx>
 #include <classes/taskcreator.hxx>
 #include <loadenv/targethelper.hxx>
-#include <classes/framelistanalyzer.hxx>
+#include <framework/framelistanalyzer.hxx>
 #include <helper/dockingareadefaultacceptor.hxx>
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <threadhelp/transactionguard.hxx>
@@ -275,7 +275,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   PropertySetHelper           ( xFactory,
                                           &m_aLock,
                                           &m_aTransactionManager,
-                                          sal_False) // FALSE => dont release shared mutex on calling us!
+                                          sal_False) // sal_False => dont release shared mutex on calling us!
         ,   ::cppu::OWeakObject         (                                                   )
         //  init member
         ,   m_xFactory                  ( xFactory                                          )
@@ -292,6 +292,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   m_bSelfClose                ( sal_False                                         ) // Important!
         ,   m_bIsHidden                 ( sal_True                                          )
         ,   m_xTitleHelper              (                                                   )
+        ,   m_pWindowCommandDispatch    ( 0                                                 )
         ,   m_aChildFrameContainer      (                                                   )
 {
     // Check incoming parameter to avoid against wrong initialization.
@@ -557,7 +558,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     if (!xWindow.is())
         throw css::uno::RuntimeException(
-                    ::rtl::OUString::createFromAscii("Frame::initialize() called without a valid container window reference."),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Frame::initialize() called without a valid container window reference.")),
                     static_cast< css::frame::XFrame* >(this));
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -565,7 +566,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     if ( m_xContainerWindow.is() )
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Frame::initialized() is called more then once, which isnt usefull nor allowed."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Frame::initialized() is called more then once, which isnt usefull nor allowed.")),
                 static_cast< css::frame::XFrame* >(this));
 
     // Look for rejected calls first!
@@ -622,8 +623,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     impl_enablePropertySet();
 
-    // create WindowCommandDispatch; it is supposed to release itself at frame destruction
-    (void)new WindowCommandDispatch(xSMGR, this);
+    m_pWindowCommandDispatch = new WindowCommandDispatch(xSMGR, this);
 
     // Initialize title functionality
     TitleHelper* pTitleHelper = new TitleHelper(xSMGR);
@@ -959,7 +959,6 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
             //  Search on all our direct siblings - means all childrens of our parent.
             //  Use this flag in combination with TASK. We must supress such upper search if
             //  user has not set it and if we are a top frame.
-            //
             //  Attention: Don't forward this request to our parent as a findFrame() call.
             //  In such case we must protect us against recursive calls.
             //  Use snapshot of our parent. But don't use queryFrames() of XFrames interface.
@@ -1546,9 +1545,6 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getComponentWindow() th
 css::uno::Reference< css::frame::XController > SAL_CALL Frame::getController() throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // It seems to be unavoidable that disposed frames allow to ask for a Controller (#111452)
-    // Register transaction and reject wrong calls.
-    // TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
@@ -1863,6 +1859,8 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // We will die, die and die ...
     implts_stopWindowListening();
 
+    delete m_pWindowCommandDispatch;
+
     // Send message to all listener and forget her references.
     css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
@@ -2087,7 +2085,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( cons
     if ( aURL.Protocol.equalsIgnoreAsciiCaseAsciiL( UNO_PROTOCOL, sizeof( UNO_PROTOCOL )-1 ))
         aCommand = aURL.Path;
 
-    // Make hash_map lookup if the current URL is in the disabled list
+    // Make boost::unordered_map lookup if the current URL is in the disabled list
     if ( m_aCommandOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aCommand ) )
         return css::uno::Reference< css::frame::XDispatch >();
     else
@@ -2270,7 +2268,6 @@ aEvent
     // Activate the new active path from here to top.
     if( eState == E_INACTIVE )
     {
-//       CheckMenuCloser_Impl();
         setActiveFrame( css::uno::Reference< css::frame::XFrame >() );
         activate();
     }
@@ -2305,7 +2302,6 @@ aEvent
         // Only if no activation is done, deactivations have to be processed if the activated window
         // is a parent window of the last active Window!
         SolarMutexClearableGuard aSolarGuard;
-//       CheckMenuCloser_Impl();
         Window* pFocusWindow = Application::GetFocusWindow();
         if  (
                 ( xContainerWindow.is()                                                              ==  sal_True    )   &&
@@ -2614,7 +2610,7 @@ void SAL_CALL Frame::impl_setPropertyValue(const ::rtl::OUString& /*sProperty*/,
                                            const css::uno::Any&   aValue   )
 
 {
-    static ::rtl::OUString MATERIALPROP_TITLE = ::rtl::OUString::createFromAscii("title");
+    static ::rtl::OUString MATERIALPROP_TITLE(RTL_CONSTASCII_USTRINGPARAM("title"));
 
     /* There is no need to lock any mutex here. Because we share the
        solar mutex with our base class. And we said to our base class: "dont release it on calling us" .-)

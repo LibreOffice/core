@@ -47,7 +47,7 @@ namespace testOfHelperFunctions
     void test_valueequal::valueequal_001( )
     {
         rtl::OString sValue;
-        rtl::OUString suValue(rtl::OUString::createFromAscii("This is only a test of some helper functions"));
+        rtl::OUString suValue(RTL_CONSTASCII_USTRINGPARAM("This is only a test of some helper functions"));
         sValue <<= suValue;
         t_print("'%s'\n", sValue.getStr());
     }

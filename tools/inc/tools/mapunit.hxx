@@ -33,7 +33,6 @@
 // - MapMode-Types -
 // -----------------
 
-// By changes you must also change: rsc/vclrsc.hxx
 enum MapUnit { MAP_100TH_MM, MAP_10TH_MM, MAP_MM, MAP_CM,
                MAP_1000TH_INCH, MAP_100TH_INCH, MAP_10TH_INCH, MAP_INCH,
                MAP_POINT, MAP_TWIP, MAP_PIXEL, MAP_SYSFONT, MAP_APPFONT,

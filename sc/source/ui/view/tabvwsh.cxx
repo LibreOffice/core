@@ -43,7 +43,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
-#include <avmedia/mediaplayer.hxx>
 
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
@@ -57,9 +56,6 @@
 
 #define ScTabViewShell
 #include "scslots.hxx"
-
-#define SearchSettings
-#include <svx/svxslots.hxx>
 
 TYPEINIT2(ScTabViewShell,SfxViewShell,SfxListener);
 
@@ -96,11 +92,7 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_DIALOG);
     SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScSpellDialogChildWindow::GetChildWindowId());
-    SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
-
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
     SFX_CHILDWINDOW_REGISTRATION(ScValidityRefChildWin::GetChildWindowId());
-    //-->Added by PengYunQuan for Validity Cell Range Picker
 }
 
 SFX_IMPL_NAMED_VIEWFACTORY( ScTabViewShell, "Default" )

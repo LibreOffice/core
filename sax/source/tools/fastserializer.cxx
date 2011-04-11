@@ -30,6 +30,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/byteseq.hxx>
 
+#include <comphelper/sequenceasvector.hxx>
+
 #include <com/sun/star/xml/Attribute.hpp>
 #include <com/sun/star/xml/FastAttribute.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
@@ -40,6 +42,7 @@
 #include <cstdio>
 #endif
 
+using ::comphelper::SequenceAsVector;
 using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -87,7 +90,7 @@ namespace sax_fastparser {
     OUString FastSaxSerializer::escapeXml( const OUString& s )
     {
         ::rtl::OUStringBuffer sBuf( s.getLength() );
-        const sal_Unicode* pStr = s;
+        const sal_Unicode* pStr = s.getStr();
         sal_Int32 nLen = s.getLength();
         for( sal_Int32 i = 0; i < nLen; ++i)
         {
@@ -134,6 +137,9 @@ namespace sax_fastparser {
     {
         if (!mxOutputStream.is())
             return;
+
+        if ( !maMarkStack.empty() )
+            maMarkStack.top()->setCurrentElement( Element );
 
         writeBytes(toUnoSequence(aOpeningBracket));
 
@@ -201,6 +207,9 @@ namespace sax_fastparser {
     {
         if (!mxOutputStream.is())
             return;
+
+        if ( !maMarkStack.empty() )
+            maMarkStack.top()->setCurrentElement( Element );
 
         writeBytes(toUnoSequence(aOpeningBracket));
 
@@ -287,7 +296,7 @@ namespace sax_fastparser {
     // XServiceInfo
     OUString FastSaxSerializer::getImplementationName() throw (RuntimeException)
     {
-        return OUString::createFromAscii( SERIALIZER_IMPLEMENTATION_NAME );
+        return OUString(RTL_CONSTASCII_USTRINGPARAM( SERIALIZER_IMPLEMENTATION_NAME ));
     }
 
     // XServiceInfo
@@ -307,13 +316,13 @@ namespace sax_fastparser {
     Sequence< OUString > FastSaxSerializer::getSupportedServiceNames(void) throw (RuntimeException)
     {
         Sequence<OUString> seq(1);
-        seq.getArray()[0] = OUString::createFromAscii( SERIALIZER_SERVICE_NAME );
+        seq.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERIALIZER_SERVICE_NAME ));
         return seq;
     }
 
     OUString FastSaxSerializer::getImplementationName_Static()
     {
-        return OUString::createFromAscii( SERIALIZER_IMPLEMENTATION_NAME );
+        return OUString(RTL_CONSTASCII_USTRINGPARAM( SERIALIZER_IMPLEMENTATION_NAME ));
     }
 
     Sequence< OUString > FastSaxSerializer::getSupportedServiceNames_Static(void)
@@ -323,24 +332,31 @@ namespace sax_fastparser {
         return aRet;
     }
 
-    void FastSaxSerializer::mark()
+    void FastSaxSerializer::mark( Int32Sequence aOrder )
     {
-        maMarkStack.push( ForMerge() );
+        if ( aOrder.hasElements() )
+        {
+            boost::shared_ptr< ForMerge > pSort( new ForSort( aOrder ) );
+            maMarkStack.push( pSort );
+        }
+        else
+        {
+            boost::shared_ptr< ForMerge > pMerge( new ForMerge( ) );
+            maMarkStack.push( pMerge );
+        }
     }
 
 #if DEBUG
     void FastSaxSerializer::printMarkStack( )
     {
-        ::std::stack< ForMerge > aCopy( maMarkStack );
+        ::std::stack< boost::shared_ptr< ForMerge > > aCopy( maMarkStack );
         int nSize = aCopy.size();
         int i = 0;
         while ( !aCopy.empty() )
         {
             fprintf( stderr, "%d\n", nSize - i );
 
-            ForMerge aMarks = aCopy.top( );
-            aMarks.print();
-
+            aCopy.top( )->print( );
 
             fprintf( stderr, "\n" );
 
@@ -357,19 +373,19 @@ namespace sax_fastparser {
 
         if ( maMarkStack.size() == 1 )
         {
-            mxOutputStream->writeBytes( maMarkStack.top().getData() );
+            mxOutputStream->writeBytes( maMarkStack.top()->getData() );
             maMarkStack.pop();
             return;
         }
 
-        const Int8Sequence aMerge( maMarkStack.top().getData() );
+        const Int8Sequence aMerge( maMarkStack.top()->getData() );
         maMarkStack.pop();
 
         switch ( eMergeType )
         {
-            case MERGE_MARKS_APPEND:   maMarkStack.top().append( aMerge );   break;
-            case MERGE_MARKS_PREPEND:  maMarkStack.top().prepend( aMerge );  break;
-            case MERGE_MARKS_POSTPONE: maMarkStack.top().postpone( aMerge ); break;
+            case MERGE_MARKS_APPEND:   maMarkStack.top()->append( aMerge );   break;
+            case MERGE_MARKS_PREPEND:  maMarkStack.top()->prepend( aMerge );  break;
+            case MERGE_MARKS_POSTPONE: maMarkStack.top()->postpone( aMerge ); break;
         }
     }
 
@@ -378,7 +394,7 @@ namespace sax_fastparser {
         if ( maMarkStack.empty() )
             mxOutputStream->writeBytes( aData );
         else
-            maMarkStack.top().append( aData );
+            maMarkStack.top()->append( aData );
     }
 
     FastSaxSerializer::Int8Sequence& FastSaxSerializer::ForMerge::getData()
@@ -444,6 +460,71 @@ namespace sax_fastparser {
             }
         }
     }
+
+    void FastSaxSerializer::ForMerge::resetData( )
+    {
+        maData = Int8Sequence();
+    }
+
+    void FastSaxSerializer::ForSort::setCurrentElement( sal_Int32 nElement )
+    {
+        SequenceAsVector< sal_Int32 > aOrder( maOrder );
+        if( std::find( aOrder.begin(), aOrder.end(), nElement ) != aOrder.end() )
+        {
+            mnCurrentElement = nElement;
+            if ( maData.find( nElement ) == maData.end() )
+                maData[ nElement ] = Int8Sequence();
+        }
+    }
+
+    void FastSaxSerializer::ForSort::prepend( const Int8Sequence &rWhat )
+    {
+        append( rWhat );
+    }
+
+    void FastSaxSerializer::ForSort::append( const Int8Sequence &rWhat )
+    {
+        merge( maData[mnCurrentElement], rWhat, true );
+    }
+
+    void FastSaxSerializer::ForSort::sort()
+    {
+        // Clear the ForMerge data to avoid duplicate items
+        resetData();
+
+        // Sort it all
+        std::map< sal_Int32, Int8Sequence >::iterator iter;
+        for ( sal_Int32 i=0, len=maOrder.getLength(); i < len; i++ )
+        {
+            iter = maData.find( maOrder[i] );
+            if ( iter != maData.end() )
+                ForMerge::append( iter->second );
+        }
+    }
+
+    FastSaxSerializer::Int8Sequence& FastSaxSerializer::ForSort::getData()
+    {
+        sort( );
+        return ForMerge::getData();
+    }
+
+#if DEBUG
+    void FastSaxSerializer::ForSort::print( )
+    {
+        std::map< sal_Int32, Int8Sequence >::iterator iter = maData.begin();
+        while ( iter != maData.end( ) )
+        {
+            fprintf( stderr, "pair: %d, ", iter->first );
+            for ( sal_Int32 i=0, len=iter->second.getLength(); i < len; ++i )
+                fprintf( stderr, "%c", iter->second[i] );
+            fprintf( stderr, "\n" );
+            ++iter;
+        }
+
+        sort( );
+        ForMerge::print();
+    }
+#endif
 
 } // namespace sax_fastparser
 

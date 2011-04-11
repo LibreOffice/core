@@ -57,7 +57,6 @@
 //_________________________________________________________________________________________________________________
 //  Defines
 //_________________________________________________________________________________________________________________
-//
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -177,11 +176,11 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 
     for ( sal_Int32 n = 0; n < Args.getLength(); n++ )
     {
-        if ( Args[n].Name.equalsAscii( "ConfigurationData" ))
+        if ( Args[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ConfigurationData" ) ))
             Args[n].Value >>= aConfigData;
-        else if ( Args[n].Name.equalsAscii( "Frame" ))
+        else if ( Args[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Frame" ) ))
             Args[n].Value >>= xFrame;
-        else if ( Args[n].Name.equalsAscii( "ResourceURL" ))
+        else if ( Args[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ResourceURL" ) ))
             Args[n].Value >>= aResourceURL;
     }
 

@@ -109,8 +109,8 @@ public:
         return *m_pForbidden;
     }
 
-    USHORT GetRealScriptOfText( const String& rTxt, xub_StrLen nPos ) const;
-       USHORT GetAllScriptsOfText( const String& rTxt ) const;
+    sal_uInt16 GetRealScriptOfText( const String& rTxt, xub_StrLen nPos ) const;
+       sal_uInt16 GetAllScriptsOfText( const String& rTxt ) const;
 };
 
 #define SW_BREAKITER()  SwBreakIt::Get()

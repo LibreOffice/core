@@ -32,10 +32,11 @@
 #include "provprox.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
 
-using namespace rtl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 //=========================================================================
 //=========================================================================
@@ -86,10 +87,10 @@ XTYPEPROVIDER_IMPL_3( UcbContentProviderProxyFactory,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UcbContentProviderProxyFactory,
-                     OUString::createFromAscii(
-                         "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" ),
-                     OUString::createFromAscii(
-                         PROVIDER_FACTORY_SERVICE_NAME ) );
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" )),
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         PROVIDER_FACTORY_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -214,10 +215,10 @@ Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()                   
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( UcbContentProviderProxy,
-                            OUString::createFromAscii(
-                                "com.sun.star.comp.ucb.UcbContentProviderProxy" ),
-                            OUString::createFromAscii(
-                             PROVIDER_PROXY_SERVICE_NAME ) );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.comp.ucb.UcbContentProviderProxy" )),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                             PROVIDER_PROXY_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -256,8 +257,7 @@ sal_Int32 SAL_CALL UcbContentProviderProxy::compareContentIds(
     if ( xProvider.is() )
         return xProvider->compareContentIds( Id1, Id2 );
 
-    // OSL_ENSURE( sal_False,
-    // "UcbContentProviderProxy::compareContentIds - No provider!" );
+    // OSL_FAIL( // "UcbContentProviderProxy::compareContentIds - No provider!" );
 
     // @@@ What else?
     return 0;
@@ -319,8 +319,7 @@ UcbContentProviderProxy::deregisterInstance( const OUString& Template,
             }
             catch ( IllegalIdentifierException const & )
             {
-                OSL_ENSURE( sal_False,
-                    "UcbContentProviderProxy::deregisterInstance - "
+                OSL_FAIL( "UcbContentProviderProxy::deregisterInstance - "
                     "Caught IllegalIdentifierException!" );
             }
         }
@@ -348,7 +347,7 @@ UcbContentProviderProxy::getContentProvider()
             m_xProvider
                 = Reference< XContentProvider >(
                       m_xSMgr->createInstance( m_aService ), UNO_QUERY );
-            if(m_aArguments.compareToAscii("NoConfig") == 0)
+            if(m_aArguments.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("NoConfig")))
             {
                 Reference<XInitialization> xInit(m_xProvider,UNO_QUERY);
                 if(xInit.is()) {
@@ -382,8 +381,7 @@ UcbContentProviderProxy::getContentProvider()
                 }
                 catch ( IllegalIdentifierException const & )
                 {
-                    OSL_ENSURE( sal_False,
-                        "UcbContentProviderProxy::getContentProvider - "
+                    OSL_FAIL( "UcbContentProviderProxy::getContentProvider - "
                         "Caught IllegalIdentifierException!" );
                 }
 

@@ -74,7 +74,7 @@ published service AccessibleMenu
             menu separators, whose accessible context supports the services
             <type>AccessibleMenu</type>, <type>AccessibleMenuItem</type> or
             <type>AccessibleMenuSeparator</type>.</li>
-        <li>Parent: The parent of a menu is a menu bar, a popup menu or
+        <li>Parent: The parent of a menu is a menu bar, a pop-up menu or
             a menu, whose accessible context supports the services
             <type>AccessibleMenuBar</type>, <type>AccessiblePopupMenu</type>
             or <type>AccessibleMenu</type>.</li>

@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile:  $
- * $Revision: $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -135,9 +132,9 @@ class AlternativesString_Impl : public SvLBoxString
 public:
 
     AlternativesString_Impl( ThesaurusAlternativesCtrl_Impl &rControl,
-        SvLBoxEntry* pEntry, USHORT nFlags, const String& rStr );
+        SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rStr );
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry);
+    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
 };
 
 
@@ -191,7 +188,6 @@ struct SvxThesaurusDialog_Impl
 
     String          aErrStr;
     Image           aVendorDefaultImage;
-    Image           aVendorDefaultImageHC;
 
     uno::Reference< linguistic2::XThesaurus >   xThesaurus;
     OUString                aLookUpText;

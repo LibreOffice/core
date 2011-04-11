@@ -949,7 +949,7 @@ RegistryItem gid_Regitem_OpenOffice_OTP_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".otp\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "opendocument.ImpressDocument.1";
+    Name = "opendocument.ImpressTemplate.1";
     Value = " ";
 End
 
@@ -967,7 +967,7 @@ RegistryItem gid_Regitem_OpenOffice_STI_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sti\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Impress_Bin;
-    Name = "soffice.StarImpressDocument.6";
+    Name = "soffice.StarImpressTemplate.6";
     Value = " ";
 End
 
@@ -995,7 +995,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = ".otp";
-    Value = "opendocument.ImpressDocument.1";
+    Value = "opendocument.ImpressTemplate.1";
     Styles = ();
 End
 
@@ -1004,7 +1004,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Impress_Bin;
     Name = ".sti";
-    Value = "soffice.StarImpressDocument.6";
+    Value = "soffice.StarImpressTemplate.6";
     Styles = ();
 End
 

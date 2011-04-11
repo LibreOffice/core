@@ -41,11 +41,12 @@
 #include <my_module/MyService1.hpp>
 #include <my_module/MyService2.hpp>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
-//namespace cssuno = ::com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 SAL_IMPLEMENT_MAIN()
 {

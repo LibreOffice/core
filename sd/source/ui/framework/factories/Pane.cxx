@@ -150,7 +150,7 @@ Reference<accessibility::XAccessible> SAL_CALL Pane::getAccessible (void)
     ThrowIfDisposed();
     ::Window* pWindow = GetWindow();
     if (pWindow != NULL)
-        return pWindow->GetAccessible(FALSE);
+        return pWindow->GetAccessible(sal_False);
     else
         return NULL;
 }

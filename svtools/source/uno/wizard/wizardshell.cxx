@@ -134,7 +134,7 @@ namespace svt { namespace uno
         default:
             break;
         }
-        OSL_ENSURE( false, "WizardShell::convertCommitReasonToTravelType: unsupported CommitPageReason!" );
+        OSL_FAIL( "WizardShell::convertCommitReasonToTravelType: unsupported CommitPageReason!" );
         return WizardTravelType::FINISH;
     }
 

@@ -125,7 +125,8 @@ public:
     virtual ~SvxTableShape() throw();
 };
 
-#endif
+SvxUnoPropertyMapProvider& getSvxMapProvider();
 
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

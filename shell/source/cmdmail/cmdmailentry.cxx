@@ -55,7 +55,6 @@ using com::sun::star::system::XSimpleMailClientSupplier;
 
 #define COMP_SERVICE_NAME  "com.sun.star.system.SimpleCommandMail"
 #define COMP_IMPL_NAME     "com.sun.star.comp.system.SimpleCommandMail"
-#define COMP_REGKEY_NAME   "/com.sun.star.comp.system.SimpleCommandMail/UNO/SERVICES/com.sun.star.system.SimpleCommandMail"
 
 //-----------------------------------------------------------------------
 //
@@ -84,29 +83,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-//-----------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------
-
-sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
-{
-    if ( pRegistryKey )
-    {
-        try
-        {
-            Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-            pXNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( COMP_REGKEY_NAME ) ) );
-            return sal_True;
-        }
-        catch( InvalidRegistryException& )
-        {
-            OSL_ENSURE(sal_False, "InvalidRegistryException caught");
-        }
-    }
-
-    return sal_False;
 }
 
 //----------------------------------------------------------------------

@@ -38,7 +38,7 @@
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "txtimppr.hxx"
+#include "xmloff/txtimppr.hxx"
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
@@ -312,7 +312,6 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pNewBorders[4] = { 0, 0, 0, 0 };
     XMLPropertyState* pAllBorderWidth = 0;
     XMLPropertyState* pBorderWidths[4] = { 0, 0, 0, 0 };
-    XMLPropertyState* pAnchorType = 0;
     XMLPropertyState* pVertOrient = 0;
     XMLPropertyState* pVertOrientRelAsChar = 0;
     XMLPropertyState* pBackTransparency = NULL; // transparency in %
@@ -363,7 +362,7 @@ void XMLTextImportPropertyMapper::finished(
         case CTF_RIGHTBORDERWIDTH:      pBorderWidths[XML_LINE_RIGHT] = property; break;
         case CTF_TOPBORDERWIDTH:        pBorderWidths[XML_LINE_TOP] = property; break;
         case CTF_BOTTOMBORDERWIDTH:     pBorderWidths[XML_LINE_BOTTOM] = property; break;
-        case CTF_ANCHORTYPE:            pAnchorType = property; break;
+        case CTF_ANCHORTYPE:            break;
         case CTF_VERTICALPOS:           pVertOrient = property; break;
         case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsChar = property; break;
 
@@ -435,62 +434,6 @@ void XMLTextImportPropertyMapper::finished(
         else
             pBorderWidths[i]->mnIndex = -1;
 
-#ifdef XML_CHECK_UI_CONSTRAINS
-        sal_Bool bHasBorder = sal_False;
-        if( pBorders[i] )
-        {
-            table::BorderLine2 aBorderLine;
-            pBorders[i]->maValue >>= aBorderLine;
-
-             if( pBorderWidths[i] )
-            {
-                table::BorderLine2 aBorderLineWidth;
-                pBorderWidths[i]->maValue >>= aBorderLineWidth;
-                aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
-                aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
-                aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
-
-                pBorders[i]->maValue <<= aBorderLine;
-            }
-            bHasBorder = (aBorderLine.OuterLineWidth +
-                          aBorderLine.InnerLineWidth) > 0;
-        }
-        if( bHasBorder )
-        {
-            if( !pBorderDistances[i] )
-            {
-#ifdef DBG_UTIL
-                sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
-                                        pBorders[i]->mnIndex + 5 );
-                DBG_ASSERT( nTmp >= CTF_LEFTBORDERDISTANCE &&
-                            nTmp <= CTF_BOTTOMBORDERDISTANCE,
-                            "wrong property context id" );
-#endif
-
-                pNewBorderDistances[i] =
-                    new XMLPropertyState( pBorders[i]->mnIndex + 5 );
-                pNewBorderDistances[i]->maValue <<= (sal_Int32)MIN_BORDER_DIST;
-                pBorderDistances[i] = pNewBorderDistances[i];
-            }
-            else
-            {
-                sal_Int32 nDist;
-                pBorderDistances[i]->maValue >>= nDist;
-                if( nDist < MIN_BORDER_DIST )
-                    pBorderDistances[i]->maValue <<= (sal_Int32)MIN_BORDER_DIST;
-            }
-        }
-        else
-        {
-            if( pBorderDistances[i] )
-            {
-                sal_Int32 nDist;
-                pBorderDistances[i]->maValue >>= nDist;
-                if( nDist > 0 )
-                    pBorderDistances[i]->maValue <<= (sal_Int32)0;
-            }
-        }
-#else
         if( pBorders[i] && pBorderWidths[i] )
         {
             table::BorderLine2 aBorderLine;
@@ -502,10 +445,10 @@ void XMLTextImportPropertyMapper::finished(
             aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
             aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
             aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
+            aBorderLine.LineWidth = aBorderLineWidth.LineWidth;
 
             pBorders[i]->maValue <<= aBorderLine;
         }
-#endif
     }
     if( pAllBorderDistance )
         pAllBorderDistance->mnIndex = -1;

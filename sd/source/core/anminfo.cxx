@@ -41,7 +41,6 @@
 #include "sdiocmpt.hxx"
 #include "drawdoc.hxx"
 
-// #90477#
 #include <tools/tenccvt.hxx>
 
 using namespace ::com::sun::star;
@@ -52,18 +51,18 @@ SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
                  meEffect                   (presentation::AnimationEffect_NONE),
                  meTextEffect               (presentation::AnimationEffect_NONE),
                  meSpeed                    (presentation::AnimationSpeed_SLOW),
-                 mbActive                   (TRUE),
-                 mbDimPrevious              (FALSE),
-                 mbIsMovie                  (FALSE),
-                 mbDimHide                  (FALSE),
-                 mbSoundOn                  (FALSE),
-                 mbPlayFull                 (FALSE),
+                 mbActive                   (sal_True),
+                 mbDimPrevious              (sal_False),
+                 mbIsMovie                  (sal_False),
+                 mbDimHide                  (sal_False),
+                 mbSoundOn                  (sal_False),
+                 mbPlayFull                 (sal_False),
                  mpPathObj                  (NULL),
                  meClickAction              (presentation::ClickAction_NONE),
                  meSecondEffect             (presentation::AnimationEffect_NONE),
                  meSecondSpeed              (presentation::AnimationSpeed_SLOW),
-                 mbSecondSoundOn            (FALSE),
-                 mbSecondPlayFull           (FALSE),
+                 mbSecondSoundOn            (sal_False),
+                 mbSecondPlayFull           (sal_False),
                  mnVerb                     (0),
                  mnPresOrder                (LIST_APPEND),
                  mrObject                   (rObject)
@@ -94,7 +93,6 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rOb
                  maSecondSoundFile          (rAnmInfo.maSecondSoundFile),
                  mbSecondSoundOn            (rAnmInfo.mbSecondSoundOn),
                  mbSecondPlayFull           (rAnmInfo.mbSecondPlayFull),
-//               maBookmark                 (rAnmInfo.maBookmark),
                  mnVerb                     (rAnmInfo.mnVerb),
                  mnPresOrder                (LIST_APPEND),
                  mrObject                   (rObject)

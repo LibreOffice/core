@@ -29,7 +29,7 @@
 #ifndef __FRAMEWORK_XML_STATUSBARDOCUMENTHANDLER_HXX_
 #define __FRAMEWORK_XML_STATUSBARDOCUMENTHANDLER_HXX_
 
-#include <xml/statusbarconfiguration.hxx>
+#include <framework/statusbarconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -44,8 +44,9 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <stdtypes.h>
+#include <framework/fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -56,7 +57,7 @@ namespace framework{
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadStatusBarDocumentHandler :   private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
+class FWE_DLLPUBLIC OReadStatusBarDocumentHandler : private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
                                         public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
@@ -125,7 +126,7 @@ class OReadStatusBarDocumentHandler :   private ThreadHelpBase, // Struct for ri
     private:
         ::rtl::OUString getErrorLineString();
 
-        class StatusBarHashMap : public ::std::hash_map< ::rtl::OUString                ,
+        class StatusBarHashMap : public ::boost::unordered_map< ::rtl::OUString             ,
                                                          StatusBar_XML_Entry            ,
                                                          OUStringHashCode               ,
                                                          ::std::equal_to< ::rtl::OUString > >
@@ -145,7 +146,7 @@ class OReadStatusBarDocumentHandler :   private ThreadHelpBase, // Struct for ri
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >            m_xLocator;
 };
 
-class OWriteStatusBarDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
+class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
 {
     public:
         OWriteStatusBarDocumentHandler(

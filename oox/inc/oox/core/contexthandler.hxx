@@ -29,16 +29,18 @@
 #ifndef OOX_CORE_CONTEXTHANDLER_HXX
 #define OOX_CORE_CONTEXTHANDLER_HXX
 
-#include <boost/shared_ptr.hpp>
-#include <rtl/ref.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <boost/shared_ptr.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <rtl/ref.hxx>
+#include "oox/token/namespaces.hxx"
+#include "oox/token/tokens.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XLocator; } }
 } } }
 
-namespace oox { class RecordInputStream; }
+namespace oox { class SequenceInputStream; }
 
 namespace oox {
 namespace core {
@@ -92,8 +94,8 @@ public:
 
     // record context interface -----------------------------------------------
 
-    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-    virtual void        startRecord( sal_Int32 nRecId, RecordInputStream& rStrm );
+    virtual ContextHandlerRef createRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual void        startRecord( sal_Int32 nRecId, SequenceInputStream& rStrm );
     virtual void        endRecord( sal_Int32 nRecId );
 
 protected:

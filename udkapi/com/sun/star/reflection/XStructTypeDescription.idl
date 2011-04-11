@@ -66,7 +66,7 @@ interface XTypeDescription;
        sequence.</li>
    </ul>
 
-   @since OOo 2.0.0
+   @since OOo 2.0
  */
 interface XStructTypeDescription: XCompoundTypeDescription {
     /**

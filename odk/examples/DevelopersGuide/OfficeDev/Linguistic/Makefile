@@ -45,29 +45,32 @@ include $(SETTINGS)/dk.mk
 EXAMPLE_NAME=OfficeDevLinguisticExample
 OUT_COMP_CLASS = $(OUT_CLASS)/$(EXAMPLE_NAME)
 
-COMPONENT1_NAME=SampleHyphenator
-COMPONENT1_PACKAGE = $(OUT_BIN)/$(COMPONENT1_NAME).$(UNOOXT_EXT)
-COMPONENT1_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).$(UNOOXT_EXT)")
-COMPONENT1_JAR_NAME = $(COMPONENT1_NAME).uno.jar
-COMPONENT1_JAR = $(OUT_COMP_CLASS)/$(COMPONENT1_JAR_NAME)
-COMPONENT1_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT1_NAME).uno.Manifest
-COMPONENT1_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT1_NAME)/META-INF/manifest.xml
+COMP1_NAME=SampleHyphenator
+COMP1_PACKAGE = $(OUT_BIN)/$(COMP1_NAME).$(UNOOXT_EXT)
+COMP1_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP1_NAME).$(UNOOXT_EXT)")
+COMP1_JAR_NAME = $(COMP1_NAME).uno.jar
+COMP1_JAR = $(OUT_COMP_CLASS)/$(COMP1_JAR_NAME)
+COMP1_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMP1_NAME).uno.Manifest
+COMP1_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMP1_NAME)/META-INF/manifest.xml
+COMP1_COMPONENTS=$(COMP1_NAME).components
 
-COMPONENT2_NAME=SampleSpellChecker
-COMPONENT2_PACKAGE = $(OUT_BIN)/$(COMPONENT2_NAME).$(UNOOXT_EXT)
-COMPONENT2_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT2_NAME).$(UNOOXT_EXT)")
-COMPONENT2_JAR_NAME = $(COMPONENT2_NAME).uno.jar
-COMPONENT2_JAR = $(OUT_COMP_CLASS)/$(COMPONENT2_JAR_NAME)
-COMPONENT2_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT2_NAME).uno.Manifest
-COMPONENT2_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT2_NAME)/META-INF/manifest.xml
+COMP2_NAME=SampleSpellChecker
+COMP2_PACKAGE = $(OUT_BIN)/$(COMP2_NAME).$(UNOOXT_EXT)
+COMP2_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP2_NAME).$(UNOOXT_EXT)")
+COMP2_JAR_NAME = $(COMP2_NAME).uno.jar
+COMP2_JAR = $(OUT_COMP_CLASS)/$(COMP2_JAR_NAME)
+COMP2_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMP2_NAME).uno.Manifest
+COMP2_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMP2_NAME)/META-INF/manifest.xml
+COMP2_COMPONENTS=$(COMP2_NAME).components
 
-COMPONENT3_NAME=SampleThesaurus
-COMPONENT3_PACKAGE = $(OUT_BIN)/$(COMPONENT3_NAME).$(UNOOXT_EXT)
-COMPONENT3_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT3_NAME).$(UNOOXT_EXT)")
-COMPONENT3_JAR_NAME = $(COMPONENT3_NAME).uno.jar
-COMPONENT3_JAR = $(OUT_COMP_CLASS)/$(COMPONENT3_JAR_NAME)
-COMPONENT3_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT3_NAME).uno.Manifest
-COMPONENT3_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMPONENT3_NAME)/META-INF/manifest.xml
+COMP3_NAME=SampleThesaurus
+COMP3_PACKAGE = $(OUT_BIN)/$(COMP3_NAME).$(UNOOXT_EXT)
+COMP3_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP3_NAME).$(UNOOXT_EXT)")
+COMP3_JAR_NAME = $(COMP3_NAME).uno.jar
+COMP3_JAR = $(OUT_COMP_CLASS)/$(COMP3_JAR_NAME)
+COMP3_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMP3_NAME).uno.Manifest
+COMP3_UNOPKG_MANIFEST = $(OUT_COMP_CLASS)/$(COMP3_NAME)/META-INF/manifest.xml
+COMP3_COMPONENTS=$(COMP2_NAME).components
 
 APP1_NAME=LinguisticExamples
 APP1_JAR=$(OUT_COMP_CLASS)/$(APP1_NAME).jar
@@ -89,22 +92,22 @@ JAVAFILES  = \
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 
-$(COMPONENT1_NAME)_CLASSFILES = XHyphenatedWord_impl.class \
+$(COMP1_NAME)_CLASSFILES = XHyphenatedWord_impl.class \
 	XPossibleHyphens_impl.class \
 	PropChgHelper.class \
 	PropChgHelper_Hyph.class \
 	OneInstanceFactory.class \
-	$(COMPONENT1_NAME).class
+	$(COMP1_NAME).class
 
-$(COMPONENT2_NAME)_CLASSFILES = XSpellAlternatives_impl.class \
+$(COMP2_NAME)_CLASSFILES = XSpellAlternatives_impl.class \
 	PropChgHelper_Spell.class \
 	PropChgHelper.class \
 	OneInstanceFactory.class \
-	$(COMPONENT2_NAME).class
+	$(COMP2_NAME).class
 
-$(COMPONENT3_NAME)_CLASSFILES = XMeaning_impl.class \
+$(COMP3_NAME)_CLASSFILES = XMeaning_impl.class \
 	OneInstanceFactory.class \
-	$(COMPONENT3_NAME).class
+	$(COMP3_NAME).class
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
@@ -126,67 +129,59 @@ $(CLASSFILES) : $(JAVAFILES)
 # rules for the component jars and the packages doesn't work proper and we 
 # defined explicit rules
 
-#$(OUT_COMP_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
-#	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-#	-$(MKDIR) $(subst /,$(PS),$(@D))
-#	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
-
 # rule for component package manifest
 $(OUT_COMP_CLASS)/%/manifest.xml :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
 	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
 	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
-	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
-	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-components$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(OUT_COMP_CLASS)/,,$(@D))).components$(QM)"/$(CSEP) >> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
-#$(OUT_BIN)/%.uno.pkg : $(OUT_COMP_CLASS)/%.uno.jar $(OUT_COMP_CLASS)/%/META-INF/manifest.xml
-#	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-#	-$(MKDIR) $(subst /,$(PS),$(@D))
-#	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
-#	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
-
-$(COMPONENT1_JAR) : $(COMPONENT1_MANIFESTFILE) $(CLASSFILES)
+$(COMP1_JAR) : $(COMP1_MANIFESTFILE) $(CLASSFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
-$(COMPONENT1_PACKAGE) : $(COMPONENT1_JAR) $(COMPONENT1_UNOPKG_MANIFEST)
+$(COMP1_PACKAGE) : $(COMP1_JAR) $(COMP1_UNOPKG_MANIFEST) $(COMP1_COMPONENTS)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+	$(SDK_ZIP) $@ $(COMP1_COMPONENTS)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) -u ../../bin/$(@F) $(<F)
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
-$(COMPONENT2_JAR) : $(COMPONENT2_MANIFESTFILE) $(CLASSFILES)
+$(COMP2_JAR) : $(COMP2_MANIFESTFILE) $(CLASSFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
-$(COMPONENT2_PACKAGE) : $(COMPONENT2_JAR) $(COMPONENT2_UNOPKG_MANIFEST)
+$(COMP2_PACKAGE) : $(COMP2_JAR) $(COMP2_UNOPKG_MANIFEST) $(COMP2_COMPONENTS)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+	$(SDK_ZIP) $@ $(COMP2_COMPONENTS)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) -u ../../bin/$(@F) $(<F)
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
-$(COMPONENT3_JAR) : $(COMPONENT3_MANIFESTFILE) $(CLASSFILES)
+$(COMP3_JAR) : $(COMP3_MANIFESTFILE) $(CLASSFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
-$(COMPONENT3_PACKAGE) : $(COMPONENT3_JAR) $(COMPONENT3_UNOPKG_MANIFEST)
+$(COMP3_PACKAGE) : $(COMP3_JAR) $(COMP3_UNOPKG_MANIFEST) $(COMP3_COMPONENTS)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+	$(SDK_ZIP) $@ $(COMP3_COMPONENTS)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) -u ../../bin/$(@F) $(<F)
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
-$(REGISTERFLAG) : $(COMPONENT1_PACKAGE) $(COMPONENT2_PACKAGE) $(COMPONENT3_PACKAGE)
+$(REGISTERFLAG) : $(COMP1_PACKAGE) $(COMP2_PACKAGE) $(COMP3_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	$(DEPLOYTOOL) $(COMPONENT1_PACKAGE_URL)
-	$(DEPLOYTOOL) $(COMPONENT2_PACKAGE_URL)
-	$(DEPLOYTOOL) $(COMPONENT3_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMP1_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMP2_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMP3_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -220,8 +215,8 @@ $(EXAMPLE_NAME) : $(REGISTERFLAG) $(APP1_JAR)
 	@echo -
 	@echo $(MAKE) $(APP1_NAME).run 
 	@echo --------
-	@echo Before you can run the examples the components "$(QM)$(COMPONENT1_NAME)$(QM)", 
-	@echo "$(QM)$(COMPONENT2_NAME)$(QM)" and "$(QM)$(COMPONENT3_NAME)$(QM)" must be deployed. 
+	@echo Before you can run the examples the components "$(QM)$(COMP1_NAME)$(QM)", 
+	@echo "$(QM)$(COMP2_NAME)$(QM)" and "$(QM)$(COMP3_NAME)$(QM)" must be deployed. 
 	@echo The components will be automatically deployed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo --------------------------------------------------------------------------------
 
@@ -231,7 +226,7 @@ $(EXAMPLE_NAME) : $(REGISTERFLAG) $(APP1_JAR)
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT1_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT2_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT3_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP1_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP2_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP3_PACKAGE_URL)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))

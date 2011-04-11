@@ -231,7 +231,7 @@ int main( int argc, char *argv[] )
  * Gets the path of a UNO installation.
  *
  * @return the installation path or NULL, if no installation was specified or
- *         found, or if an error occured
+ *         found, or if an error occurred
  */
 char const* getPath()
 {
@@ -255,7 +255,7 @@ char const* getPath()
  *
  * @param argv0 specifies the argv[0] parameter of the main function
  *
- * @return the application's executable file name or NULL, if an error occured
+ * @return the application's executable file name or NULL, if an error occurred
  */
 char* createCommandName( char* argv0 )
 {

@@ -109,7 +109,7 @@ void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< ::com::sun::s
     m_xListener = xListener;
     prepareDialog();
     prepareExecute();
-    getDialog()->EnableAutocompletion( TRUE );
+    getDialog()->EnableAutocompletion( sal_True );
     getDialog()->StartExecuteModal( LINK( this, SvtFolderPicker, DialogClosedHdl ) );
 }
 
@@ -125,7 +125,7 @@ sal_Int16 SvtFolderPicker::implExecutePicker( )
     prepareExecute();
 
     // now we are ready to execute the dialog
-    getDialog()->EnableAutocompletion( FALSE );
+    getDialog()->EnableAutocompletion( sal_False );
     sal_Int16 nRet = getDialog()->Execute();
 
     return nRet;
@@ -246,14 +246,14 @@ Sequence< ::rtl::OUString > SAL_CALL SvtFolderPicker::getSupportedServiceNames()
 Sequence< ::rtl::OUString > SvtFolderPicker::impl_getStaticSupportedServiceNames()
 {
     Sequence< ::rtl::OUString > seqServiceNames(1);
-    seqServiceNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFolderPicker" );
+    seqServiceNames[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.OfficeFolderPicker" ));
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 ::rtl::OUString SvtFolderPicker::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.svtools.OfficeFolderPicker" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.OfficeFolderPicker" ));
 }
 
 /* Helper for registry */

@@ -44,7 +44,7 @@ template <class XY> class SortedIdSet;
 class Interface_2s
 {
   public:
-    /// Checks for double occurences
+    /// Checks for double occurrences
     void                Add_ExportingService(
                             Ce_id               i_nId );
     void                Get_ExportingServices(

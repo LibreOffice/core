@@ -33,7 +33,9 @@
 #include <rtl/strbuf.hxx>
 
 using namespace vcl;
-using namespace rtl;
+
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 OString PDFWriterImpl::BuiltinFont::getNameObject() const
 {

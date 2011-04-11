@@ -70,7 +70,7 @@ LwpObjectHeader::LwpObjectHeader()
     : m_nTag(0), m_ID(), m_nSize(0), m_bCompressed(sal_False)
     // m_nHeaderSize(0), m_nVersionID(0), m_nRefCount(0), m_nFlagBits(0),
     //m_nNextVersionOffset(0), m_nNextVersionID(0),
-{};
+{}
 /**
  * @descr  read header from stream
   */

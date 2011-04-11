@@ -58,8 +58,8 @@
 #include <viewopt.hxx>
 
 SwLayVout     *SwRootFrm::pVout = 0;
-BOOL           SwRootFrm::bInPaint = FALSE;
-BOOL           SwRootFrm::bNoVirDev = FALSE;
+sal_Bool           SwRootFrm::bInPaint = sal_False;
+sal_Bool           SwRootFrm::bNoVirDev = sal_False;
 
 SwCache *SwFrm::pCache = 0;
 
@@ -291,9 +291,67 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &SwRect::SetBottomAndHeight,
     &SwRect::SetLeftAndWidth
 };
+//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+static SwRectFnCollection aVerticalLeftToRight = {
+    /* fnRectGet      */
+    &SwRect::_Left,
+    &SwRect::_Right,
+    &SwRect::_Top,
+    &SwRect::_Bottom,
+    &SwRect::_Height,
+    &SwRect::_Width,
+    &SwRect::TopLeft,
+    &SwRect::SwappedSize,
+    /* fnRectSet      */
+    &SwRect::_Left,
+    &SwRect::_Right,
+    &SwRect::_Top,
+    &SwRect::_Bottom,
+    &SwRect::_Height,
+    &SwRect::_Width,
 
+    &SwRect::SubLeft,
+    &SwRect::AddRight,
+    &SwRect::SubTop,
+    &SwRect::AddBottom,
+    &SwRect::AddHeight,
+    &SwRect::AddWidth,
+
+    &SwRect::SetPosY,
+    &SwRect::SetPosX,
+
+    &SwFrm::GetLeftMargin,
+    &SwFrm::GetRightMargin,
+    &SwFrm::GetTopMargin,
+    &SwFrm::GetBottomMargin,
+    &SwFrm::SetTopBottomMargins,
+    &SwFrm::SetLeftRightMargins,
+    &SwFrm::GetPrtLeft,
+    &SwFrm::GetPrtRight,
+    &SwFrm::GetPrtTop,
+    &SwFrm::GetPrtBottom,
+    &SwRect::GetLeftDistance,
+    &SwRect::GetRightDistance,
+    &SwRect::GetTopDistance,
+    &SwRect::GetBottomDistance,
+    &SwFrm::SetMaxRight,
+    &SwRect::OverStepRight,
+
+    &SwRect::SetUpperLeftCorner,
+    &SwFrm::MakeRightPos,
+    &FirstMinusSecond,
+    &FirstMinusSecond,
+    &SwIncrement,
+    &SwIncrement,
+    &SwRect::SetTopAndHeight,
+    &SwRect::SetLeftAndWidth
+};
+//End of SCMS
 SwRectFn fnRectHori = &aHorizontal;
 SwRectFn fnRectVert = &aVertical;
+//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
+//End of SCMS
 SwRectFn fnRectB2T = &aBottomToTop;
 SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
@@ -322,7 +380,7 @@ void _FrmFinit()
 {
 #if OSL_DEBUG_LEVEL > 1
     // im Chache duerfen nur noch 0-Pointer stehen
-    for( USHORT n = SwFrm::GetCachePtr()->Count(); n; )
+    for( sal_uInt16 n = SwFrm::GetCachePtr()->Count(); n; )
         if( (*SwFrm::GetCachePtr())[ --n ] )
         {
             SwCacheObj* pObj = (*SwFrm::GetCachePtr())[ n ];
@@ -336,9 +394,6 @@ void _FrmFinit()
 /*************************************************************************
 |*
 |*  RootFrm::Alles was so zur CurrShell gehoert
-|*
-|*  Ersterstellung      MA 09. Sep. 98
-|*  Letzte Aenderung    MA 18. Feb. 99
 |*
 |*************************************************************************/
 
@@ -395,7 +450,7 @@ void SwRootFrm::DeRegisterShell( ViewShell *pSh )
         pWaitingCurrShell = 0;
 
     //Referenzen entfernen.
-    for ( USHORT i = 0; i < pCurrShells->Count(); ++i )
+    for ( sal_uInt16 i = 0; i < pCurrShells->Count(); ++i )
     {
         CurrShell *pC = (*pCurrShells)[i];
         if (pC->pPrev == pSh)
@@ -417,15 +472,13 @@ void InitCurrShells( SwRootFrm *pRoot )
 |*      Der RootFrm laesst sich grundsaetzlich vom Dokument ein eigenes
 |*      FrmFmt geben. Dieses loescht er dann selbst im DTor.
 |*      Das eigene FrmFmt wird vom uebergebenen Format abgeleitet.
-|*  Ersterstellung      SS 05-Apr-1991
-|*  Letzte Aenderung    MA 12. Dec. 94
 |*
 |*************************************************************************/
 
 
 SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     SwLayoutFrm( pFmt->GetDoc()->MakeFrmFmt(
-        XubString( "Root", RTL_TEXTENCODING_MS_1252 ), pFmt ) ),
+        XubString( "Root", RTL_TEXTENCODING_MS_1252 ), pFmt ), 0 ),
     // --> PAGES01
     maPagesArea(),
     mnViewWidth( -1 ),
@@ -445,9 +498,13 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     nAccessibleShells( 0 )
 {
     nType = FRMC_ROOT;
-    bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = TRUE;
-    bCheckSuperfluous = bBrowseWidthValid = FALSE;
+    bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = sal_True;
+    bCheckSuperfluous = bBrowseWidthValid = sal_False;
+    setRootFrm( this );
+}
 
+void SwRootFrm::Init( SwFrmFmt* pFmt )
+{
     InitCurrShells( this );
 
     IDocumentTimerAccess *pTimerAccess = pFmt->getIDocumentTimerAccess();
@@ -455,14 +512,17 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     IDocumentFieldsAccess *pFieldsAccess = pFmt->getIDocumentFieldsAccess();
     const IDocumentSettingAccess *pSettingAccess = pFmt->getIDocumentSettingAccess();
     pTimerAccess->StopIdling();
-    pLayoutAccess->SetRootFrm( this );      //Fuer das Erzeugen der Flys durch MakeFrms()
-    bCallbackActionEnabled = FALSE; //vor Verlassen auf TRUE setzen!
+    pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );     //Fuer das Erzeugen der Flys durch MakeFrms()   //swmod 071108//swmod 071225
+    bCallbackActionEnabled = sal_False; //vor Verlassen auf sal_True setzen!
 
     SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
-
     if ( pMd )
     {
-        pDrawPage = pMd->GetPage( 0 );
+        // Disable "multiple layout"
+        pDrawPage = pMd->GetPage(0); //pMd->AllocPage( FALSE );
+        //pMd->InsertPage( pDrawPage );
+        // end of disabling
+
         pDrawPage->SetSize( Frm().SSize() );
     }
 
@@ -473,7 +533,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
 
     SwDoc* pDoc = pFmt->GetDoc();
     SwNodeIndex aIndex( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-    SwCntntNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, TRUE, FALSE );
+    SwCntntNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, sal_True, sal_False );
     // --> FME 2005-05-25 #123067# pNode = 0 can really happen:
     SwTableNode *pTblNd= pNode ? pNode->FindTableNode() : 0;
     // <--
@@ -481,7 +541,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     //PageDesc besorgen (entweder vom FrmFmt des ersten Node oder den
     //initialen.)
     SwPageDesc *pDesc = 0;
-    USHORT nPgNum = 1;
+    sal_uInt16 nPgNum = 1;
 
     if ( pTblNd )
     {
@@ -498,14 +558,14 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
         bIsVirtPageNum = 0 != ( nPgNum = rDesc.GetNumOffset() );
     }
     else
-        bIsVirtPageNum = FALSE;
+        bIsVirtPageNum = sal_False;
     if ( !pDesc )
         pDesc = (SwPageDesc*)
             &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
-    const BOOL bOdd = !nPgNum || 0 != ( nPgNum % 2 );
+    const sal_Bool bOdd = !nPgNum || 0 != ( nPgNum % 2 );
 
     //Eine Seite erzeugen und in das Layout stellen
-    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, FALSE, FALSE, 0 );
+    SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, sal_False, sal_False, 0 );
 
     //Erstes Blatt im Bodytext-Bereich suchen.
     SwLayoutFrm *pLay = pPage->FindBodyCont();
@@ -513,7 +573,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
         pLay = (SwLayoutFrm*)pLay->Lower();
 
     SwNodeIndex aTmp( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
-    ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), TRUE );
+    ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), sal_True );
     //Noch nicht ersetzte Master aus der Liste entfernen.
     RemoveMasterObjs( pDrawPage );
     if( pSettingAccess->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
@@ -528,7 +588,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     // <---
 
     pTimerAccess->StartIdling();
-    bCallbackActionEnabled = TRUE;
+    bCallbackActionEnabled = sal_True;
 
     ViewShell *pViewSh  = GetCurrShell();
     if (pViewSh)
@@ -539,24 +599,22 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
 |*
 |*  SwRootFrm::~SwRootFrm()
 |*
-|*  Ersterstellung      SS 05-Apr-1991
-|*  Letzte Aenderung    MA 12. Dec. 94
-|*
 |*************************************************************************/
 
 
 
 SwRootFrm::~SwRootFrm()
 {
-    bTurboAllowed = FALSE;
+    bTurboAllowed = sal_False;
     pTurbo = 0;
     if(pBlink)
         pBlink->FrmDelete( this );
-    ((SwFrmFmt*)pRegisteredIn)->GetDoc()->DelFrmFmt( (SwFrmFmt*)pRegisteredIn );
+    static_cast<SwFrmFmt*>(GetRegisteredInNonConst())->GetDoc()->DelFrmFmt( static_cast<SwFrmFmt*>(GetRegisteredInNonConst()) );
     delete pDestroy;
+    pDestroy = 0;
 
     //Referenzen entfernen.
-    for ( USHORT i = 0; i < pCurrShells->Count(); ++i )
+    for ( sal_uInt16 i = 0; i < pCurrShells->Count(); ++i )
         (*pCurrShells)[i]->pRoot = 0;
 
     delete pCurrShells;
@@ -568,16 +626,13 @@ SwRootFrm::~SwRootFrm()
 |*
 |*  SwRootFrm::RemoveMasterObjs()
 |*
-|*  Ersterstellung      MA 19.10.95
-|*  Letzte Aenderung    MA 19.10.95
-|*
 |*************************************************************************/
 
 
 void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
 {
     //Alle Masterobjekte aus der Page entfernen. Nicht loeschen!!
-    for( ULONG i = pPg ? pPg->GetObjCount() : 0; i; )
+    for( sal_uLong i = pPg ? pPg->GetObjCount() : 0; i; )
     {
         SdrObject* pObj = pPg->GetObj( --i );
         if( pObj->ISA(SwFlyDrawObj ) )
@@ -586,6 +641,39 @@ void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
 }
 
 
+void SwRootFrm::AllCheckPageDescs() const
+{
+    CheckPageDescs( (SwPageFrm*)this->Lower() );
+}
+//swmod 080226
+void SwRootFrm::AllInvalidateAutoCompleteWords() const
+{
+    SwPageFrm *pPage = (SwPageFrm*)this->Lower();
+    while ( pPage )
+    {
+        pPage->InvalidateAutoCompleteWords();
+        pPage = (SwPageFrm*)pPage->GetNext();
+    }
+}//swmod 080305
+void SwRootFrm::AllAddPaintRect() const
+{
+    GetCurrShell()->AddPaintRect( this->Frm() );
+}//swmod 080305
+void SwRootFrm::AllRemoveFtns()
+{
+    RemoveFtns();
+}
+void SwRootFrm::AllInvalidateSmartTagsOrSpelling(sal_Bool bSmartTags) const
+{
+    SwPageFrm *pPage = (SwPageFrm*)this->Lower();
+    while ( pPage )
+    {
+        if ( bSmartTags )
+            pPage->InvalidateSmartTags();
 
+        pPage->InvalidateSpelling();
+        pPage = (SwPageFrm*)pPage->GetNext();
+    }   //swmod 080218
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

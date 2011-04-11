@@ -184,7 +184,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     maClientData.aInputEv.mnCursorPos       = 0;
     maClientData.aInputEv.mnDeltaStart      = 0;
     maClientData.aInputEv.mnCursorFlags     = 0;
-    maClientData.aInputEv.mbOnlyCursor      = FALSE;
+    maClientData.aInputEv.mbOnlyCursor      = sal_False;
 
     SalI18N_InputMethod *pInputMethod;
     pInputMethod = GetX11SalData()->GetDisplay()->GetInputMethod();
@@ -334,7 +334,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
         if ( mnPreeditStyle != XIMPreeditNone )
         {
-#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY
             if ( mpPreeditAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
@@ -342,7 +342,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         }
         if ( mnStatusStyle != XIMStatusNone )
         {
-#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY
             if ( mpStatusAttributes != NULL )
 #endif
                 mpAttributes = XVaAddToNestedList( mpAttributes,
@@ -559,14 +559,14 @@ SalI18N_InputContext::IsSupportedIMStyle( XIMStyle nStyle ) const
 Bool
 SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
 {
-    int nBestScore   = 0;
-    int nActualScore = 0;
-
     mnPreeditStyle = 0;
     mnStatusStyle  = 0;
 
     if ( pIMStyles != NULL )
     {
+        int nBestScore   = 0;
+        int nActualScore = 0;
+
         // check whether the XIM supports one of the desired styles
         // only a single preedit and a single status style must occure
         // in a inpuut method style. Hideki said so, so i trust him
@@ -760,7 +760,7 @@ SalI18N_InputContext::SetLanguage(LanguageType)
 }
 
 void
-SalI18N_InputContext::EndExtTextInput( USHORT /*nFlags*/ )
+SalI18N_InputContext::EndExtTextInput( sal_uInt16 /*nFlags*/ )
 {
     if ( mbUseable && (maContext != NULL) && maClientData.pFrame )
     {

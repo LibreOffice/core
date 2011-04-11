@@ -39,9 +39,6 @@
 #include <rootfrm.hxx>
 #include <viewsh.hxx>
 
-extern void repaintTextFrames( SwModify& rModify );
-
-
 /* SwGrammarContact
     This class is responsible for the delayed display of grammar checks when a paragraph is edited
     It's a client of the paragraph the cursor points to.
@@ -59,7 +56,7 @@ class SwGrammarContact : public IGrammarContact, public SwClient
     Timer aTimer;
     SwGrammarMarkUp *mpProxyList;
     bool mbFinished;
-    SwTxtNode* getMyTxtNode() { return (SwTxtNode*)pRegisteredIn; }
+    SwTxtNode* getMyTxtNode() { return (SwTxtNode*)GetRegisteredIn(); }
       DECL_LINK( TimerRepaint, Timer * );
 
 public:
@@ -70,9 +67,9 @@ public:
     virtual void updateCursorPosition( const SwPosition& rNewPos );
     virtual SwGrammarMarkUp* getGrammarCheck( SwTxtNode& rTxtNode, bool bCreate );
     virtual void finishGrammarCheck( SwTxtNode& rTxtNode );
-
+protected:
     // virtual function of SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
 SwGrammarContact::SwGrammarContact() : mpProxyList(0), mbFinished( false )
@@ -86,11 +83,11 @@ IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer )
     if( pTimer )
     {
         pTimer->Stop();
-        if( pRegisteredIn )
+        if( GetRegisteredIn() )
         {   //Replace the old wrong list by the proxy list and repaint all frames
             getMyTxtNode()->SetGrammarCheck( mpProxyList, true );
             mpProxyList = 0;
-            repaintTextFrames( *pRegisteredIn );
+            SwTxtFrm::repaintTextFrames( *getMyTxtNode() );
         }
     }
     return 0;
@@ -108,9 +105,9 @@ void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
             if( mpProxyList )
             {   // replace old list by the proxy list and repaint
                 getMyTxtNode()->SetGrammarCheck( mpProxyList, true );
-                repaintTextFrames( *pRegisteredIn );
+                SwTxtFrm::repaintTextFrames( *getMyTxtNode() );
             }
-            pRegisteredIn->Remove( this ); // good bye old paragraph
+            GetRegisteredInNonConst()->Remove( this ); // good bye old paragraph
             mpProxyList = 0;
         }
         if( pTxtNode )
@@ -159,16 +156,16 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTxtNode& rTxtNode, bool bC
     return pRet;
 }
 
-void SwGrammarContact::Modify( SfxPoolItem *pOld, SfxPoolItem * )
+void SwGrammarContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem * )
 {
     if( !pOld || pOld->Which() != RES_OBJECTDYING )
         return;
 
     SwPtrMsgPoolItem *pDead = (SwPtrMsgPoolItem *)pOld;
-    if( pDead->pObject == pRegisteredIn )
+    if( pDead->pObject == GetRegisteredIn() )
     {    // if my current paragraph dies, I throw the proxy list away
         aTimer.Stop();
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
         delete mpProxyList;
         mpProxyList = 0;
     }
@@ -176,8 +173,8 @@ void SwGrammarContact::Modify( SfxPoolItem *pOld, SfxPoolItem * )
 
 void SwGrammarContact::finishGrammarCheck( SwTxtNode& rTxtNode )
 {
-    if( &rTxtNode != pRegisteredIn ) // not my paragraph
-        repaintTextFrames( rTxtNode ); // can be repainted directly
+    if( &rTxtNode != GetRegisteredIn() ) // not my paragraph
+        SwTxtFrm::repaintTextFrames( rTxtNode ); // can be repainted directly
     else
     {
         if( mpProxyList )
@@ -188,7 +185,7 @@ void SwGrammarContact::finishGrammarCheck( SwTxtNode& rTxtNode )
         else if( getMyTxtNode()->GetGrammarCheck() )
         {   // all grammar problems seems to be gone, no delay needed
             getMyTxtNode()->SetGrammarCheck( 0, true );
-            repaintTextFrames( *pRegisteredIn );
+            SwTxtFrm::repaintTextFrames( *getMyTxtNode() );
         }
     }
 }
@@ -196,21 +193,6 @@ void SwGrammarContact::finishGrammarCheck( SwTxtNode& rTxtNode )
 IGrammarContact* createGrammarContact()
 {
     return new SwGrammarContact();
-}
-
-/* repaint all text frames of the given text node */
-void repaintTextFrames( SwModify& rModify )
-{
-    SwClientIter aIter( rModify );
-    for( const SwTxtFrm *pFrm = (const SwTxtFrm*)aIter.First( TYPE(SwTxtFrm) );
-         pFrm; pFrm = (const SwTxtFrm*)aIter.Next() )
-    {
-        SwRect aRec( pFrm->PaintArea() );
-        const SwRootFrm *pRootFrm = pFrm->FindRootFrm();
-        ViewShell *pCurShell = pRootFrm ? pRootFrm->GetCurrShell() : NULL;
-        if( pCurShell )
-            pCurShell->InvalidateWindows( aRec );
-    }
 }
 
 void finishGrammarCheck( SwTxtNode& rTxtNode )

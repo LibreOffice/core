@@ -49,7 +49,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace framework
 {
@@ -59,7 +59,6 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
 
 {
     public:
-        // #110897#
         MenuBarWrapper(
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
         virtual ~MenuBarWrapper();

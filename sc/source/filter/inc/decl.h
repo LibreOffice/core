@@ -39,7 +39,7 @@ typedef sal_Char STRING16[ 16 ];
 typedef sal_Char STRING14[ 14 ];
 typedef sal_Char STRING8[ 8 ];
 typedef sal_Char STRING6[ 6 ];
-typedef USHORT USHORT4[ 4 ];
+typedef sal_uInt16 USHORT4[ 4 ];
 //typedef unsigned short USHORT4[ 4 ];
 #endif
 

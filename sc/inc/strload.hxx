@@ -35,7 +35,7 @@
 class ScRscStrLoader : public Resource
 {
 public:
-    ScRscStrLoader( USHORT nRsc, USHORT nStrId ) :
+    ScRscStrLoader( sal_uInt16 nRsc, sal_uInt16 nStrId ) :
         Resource( ScResId( nRsc ) ), theStr( ScResId( nStrId ) )
     {
         FreeResource();

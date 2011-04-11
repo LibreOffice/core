@@ -39,8 +39,8 @@ class SVL_DLLPUBLIC SfxMetricItem: public SfxInt32Item
 {
 public:
                              TYPEINFO();
-                             SfxMetricItem( USHORT nWhich = 0, UINT32 nValue = 0 );
-                             SfxMetricItem( USHORT nWhich, SvStream & );
+                             SfxMetricItem( sal_uInt16 nWhich = 0, sal_uInt32 nValue = 0 );
+                             SfxMetricItem( sal_uInt16 nWhich, SvStream & );
                              SfxMetricItem( const SfxMetricItem& );
                              ~SfxMetricItem() {
                                  DBG_DTOR(SfxMetricItem, 0); }

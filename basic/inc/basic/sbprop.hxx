@@ -40,7 +40,7 @@ class SbProperty : public SbxProperty
     friend class SbModule;
     friend class SbProcedureProperty;
     SbModule* pMod;
-    BOOL     bInvalid;
+    sal_Bool     bInvalid;
     SbProperty( const String&, SbxDataType, SbModule* );
     virtual ~SbProperty();
 public:

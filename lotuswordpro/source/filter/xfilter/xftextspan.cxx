@@ -57,10 +57,6 @@
  * @file
  * An span of text with style.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
 #include    "xftextspan.hxx"
 #include    "ixfstream.hxx"
 #include    "ixfattrlist.hxx"
@@ -82,7 +78,7 @@ XFTextSpan::XFTextSpan(rtl::OUString& text,
 XFTextSpan::~XFTextSpan()
 {
     std::vector<IXFContent*>::iterator it;
-    for( it = m_aContents.begin(); it != m_aContents.end(); it++ )
+    for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
     {
         IXFContent  *pContent = *it;
         if( pContent )
@@ -149,7 +145,7 @@ void    XFTextSpan::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("text:span") );
 
     std::vector<IXFContent*>::iterator it;
-    for( it= m_aContents.begin(); it!= m_aContents.end(); it++ )
+    for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
     {
         IXFContent *pContent = *it;
         if( pContent )
@@ -172,7 +168,7 @@ void    XFTextSpanStart::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("text:span") );
 
     std::vector<IXFContent*>::iterator it;
-    for( it= m_aContents.begin(); it!= m_aContents.end(); it++ )
+    for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
     {
         IXFContent *pContent = *it;
         if( pContent )
@@ -182,7 +178,7 @@ void    XFTextSpanStart::ToXml(IXFStream *pStrm)
 void    XFTextSpanEnd::ToXml(IXFStream *pStrm)
 {
     std::vector<IXFContent*>::iterator it;
-    for( it= m_aContents.begin(); it!= m_aContents.end(); it++ )
+    for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
     {
         IXFContent *pContent = *it;
         if( pContent )

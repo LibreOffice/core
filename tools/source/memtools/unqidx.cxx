@@ -36,14 +36,10 @@
 |*
 |*    UniqueIndex::UniqueIndex()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
-UniqueIndex::UniqueIndex( ULONG _nStartIndex,
-                          ULONG _nInitSize, ULONG _nReSize ) :
+UniqueIndex::UniqueIndex( sal_uIntPtr _nStartIndex,
+                          sal_uIntPtr _nInitSize, sal_uIntPtr _nReSize ) :
                  Container( _nInitSize )
 {
     nReSize         = _nReSize;
@@ -55,10 +51,6 @@ UniqueIndex::UniqueIndex( ULONG _nStartIndex,
 /*************************************************************************
 |*
 |*    UniqueIndex::UniqueIndex()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
 |*
 *************************************************************************/
 
@@ -75,13 +67,9 @@ UniqueIndex::UniqueIndex( const UniqueIndex& rIdx ) :
 |*
 |*    UniqueIndex::Insert()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
-ULONG UniqueIndex::Insert( void* p )
+sal_uIntPtr UniqueIndex::Insert( void* p )
 {
     // NULL-Pointer ist nicht erlaubt
     if ( !p )
@@ -111,19 +99,15 @@ ULONG UniqueIndex::Insert( void* p )
 |*
 |*    UniqueIndex::Insert()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 21.04.96
-|*    Letzte Aenderung  MM 21.04.96
-|*
 *************************************************************************/
 
-ULONG UniqueIndex::Insert( ULONG nIndex, void* p )
+sal_uIntPtr UniqueIndex::Insert( sal_uIntPtr nIndex, void* p )
 {
     // NULL-Pointer ist nicht erlaubt
     if ( !p )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
 
-    ULONG nContIndex = nIndex - nStartIndex;
+    sal_uIntPtr nContIndex = nIndex - nStartIndex;
     // Ist Array voll, dann expandieren
     if ( nContIndex >= Container::GetSize() )
         SetSize( nContIndex + nReSize );
@@ -140,13 +124,9 @@ ULONG UniqueIndex::Insert( ULONG nIndex, void* p )
 |*
 |*    UniqueIndex::Remove()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
-void* UniqueIndex::Remove( ULONG nIndex )
+void* UniqueIndex::Remove( sal_uIntPtr nIndex )
 {
     // Ist Index zulaessig
     if ( (nIndex >= nStartIndex) &&
@@ -167,13 +147,9 @@ void* UniqueIndex::Remove( ULONG nIndex )
 |*
 |*    UniqueIndex::Replace()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
-void* UniqueIndex::Replace( ULONG nIndex, void* p )
+void* UniqueIndex::Replace( sal_uIntPtr nIndex, void* p )
 {
     // NULL-Pointer ist nicht erlaubt
     if ( !p )
@@ -193,13 +169,9 @@ void* UniqueIndex::Replace( ULONG nIndex, void* p )
 |*
 |*    UniqueIndex::Get()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
-void* UniqueIndex::Get( ULONG nIndex ) const
+void* UniqueIndex::Get( sal_uIntPtr nIndex ) const
 {
     // Ist Index zulaessig
     if ( (nIndex >= nStartIndex) &&
@@ -213,15 +185,11 @@ void* UniqueIndex::Get( ULONG nIndex ) const
 |*
 |*    UniqueIndex::GetCurIndex()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
-ULONG UniqueIndex::GetCurIndex() const
+sal_uIntPtr UniqueIndex::GetCurIndex() const
 {
-    ULONG nPos = Container::GetCurPos();
+    sal_uIntPtr nPos = Container::GetCurPos();
 
     // Ist der Current-Index nicht belegt, dann gibt es keinen Current-Index
     if ( !Container::ImpGetObject( nPos ) )
@@ -234,19 +202,15 @@ ULONG UniqueIndex::GetCurIndex() const
 |*
 |*    UniqueIndex::GetIndex()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
-ULONG UniqueIndex::GetIndex( const void* p ) const
+sal_uIntPtr UniqueIndex::GetIndex( const void* p ) const
 {
     // Wird ein NULL-Pointer uebergeben, dann wurde Pointer nicht gefunden
     if ( !p )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
 
-    ULONG nIndex = Container::GetPos( p );
+    sal_uIntPtr nIndex = Container::GetPos( p );
 
     if ( nIndex != CONTAINER_ENTRY_NOTFOUND )
         return nIndex+nStartIndex;
@@ -258,13 +222,9 @@ ULONG UniqueIndex::GetIndex( const void* p ) const
 |*
 |*    UniqueIndex::IsIndexValid()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
-BOOL UniqueIndex::IsIndexValid( ULONG nIndex ) const
+sal_Bool UniqueIndex::IsIndexValid( sal_uIntPtr nIndex ) const
 {
     // Ist Index zulaessig
     if ( (nIndex >= nStartIndex) &&
@@ -272,25 +232,21 @@ BOOL UniqueIndex::IsIndexValid( ULONG nIndex ) const
     {
         // Index ist nur zulaessig, wenn Eintrag auch belegt ist
         if ( Container::ImpGetObject( nIndex-nStartIndex ) )
-            return TRUE;
+            return sal_True;
         else
-            return FALSE;
+            return sal_False;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 /*************************************************************************
 |*
 |*    UniqueIndex::Seek()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
-void* UniqueIndex::Seek( ULONG nIndex )
+void* UniqueIndex::Seek( sal_uIntPtr nIndex )
 {
     // Index-Eintrag als aktuellen setzten, wenn er gueltig ist
     if ( IsIndexValid( nIndex ) )
@@ -303,10 +259,6 @@ void* UniqueIndex::Seek( ULONG nIndex )
 |*
 |*    UniqueIndex::Seek()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 void* UniqueIndex::Seek( void* p )
@@ -315,7 +267,7 @@ void* UniqueIndex::Seek( void* p )
     if ( !p )
         return NULL;
 
-    ULONG nIndex = GetIndex( p );
+    sal_uIntPtr nIndex = GetIndex( p );
 
     // Ist Index vorhanden, dann als aktuellen Eintrag setzen
     if ( nIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
@@ -327,10 +279,6 @@ void* UniqueIndex::Seek( void* p )
 /*************************************************************************
 |*
 |*    UniqueIndex::First()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
 |*
 *************************************************************************/
 
@@ -348,10 +296,6 @@ void* UniqueIndex::First()
 |*
 |*    UniqueIndex::Last()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 void* UniqueIndex::Last()
@@ -367,10 +311,6 @@ void* UniqueIndex::Last()
 /*************************************************************************
 |*
 |*    UniqueIndex::Next()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
 |*
 *************************************************************************/
 
@@ -388,10 +328,6 @@ void* UniqueIndex::Next()
 |*
 |*    UniqueIndex::Prev()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
 void* UniqueIndex::Prev()
@@ -407,10 +343,6 @@ void* UniqueIndex::Prev()
 /*************************************************************************
 |*
 |*    UniqueIndex::operator =()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
 |*
 *************************************************************************/
 
@@ -429,29 +361,21 @@ UniqueIndex& UniqueIndex::operator =( const UniqueIndex& rIdx )
 |*
 |*    UniqueIndex::operator ==()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    TH 24.09.91
-|*    Letzte Aenderung  TH 24.09.91
-|*
 *************************************************************************/
 
-BOOL UniqueIndex::operator ==( const UniqueIndex& rIdx ) const
+sal_Bool UniqueIndex::operator ==( const UniqueIndex& rIdx ) const
 {
     // Neue Werte zuweisen
     if ( (nStartIndex == rIdx.nStartIndex) &&
          (nCount      == rIdx.nCount)      &&
          (Container::operator ==( rIdx )) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 /*************************************************************************
 |*
 |*    UniqueIdContainer::UniqueIdContainer ()
-|*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 29.04.96
-|*    Letzte Aenderung  MM 29.04.96
 |*
 *************************************************************************/
 
@@ -459,7 +383,7 @@ UniqueIdContainer::UniqueIdContainer( const UniqueIdContainer& rObj )
     : UniqueIndex( rObj )
     , nCollectCount( rObj.nCollectCount )
 {
-    ULONG nCur = GetCurIndex();
+    sal_uIntPtr nCur = GetCurIndex();
 
     ImpUniqueId * pEle = (ImpUniqueId *)First();
     while( pEle )
@@ -474,10 +398,6 @@ UniqueIdContainer::UniqueIdContainer( const UniqueIdContainer& rObj )
 |*
 |*    UniqueIdContainer::operator = ()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 01.08.94
-|*    Letzte Aenderung  MM 01.08.94
-|*
 *************************************************************************/
 
 UniqueIdContainer& UniqueIdContainer::operator = ( const UniqueIdContainer & rObj )
@@ -485,7 +405,7 @@ UniqueIdContainer& UniqueIdContainer::operator = ( const UniqueIdContainer & rOb
     UniqueIndex::operator = ( rObj );
     nCollectCount = rObj.nCollectCount;
 
-    ULONG nCur = GetCurIndex();
+    sal_uIntPtr nCur = GetCurIndex();
 
     ImpUniqueId * pEle = (ImpUniqueId *)First();
     while( pEle )
@@ -501,18 +421,14 @@ UniqueIdContainer& UniqueIdContainer::operator = ( const UniqueIdContainer & rOb
 |*
 |*    UniqueIdContainer::Clear()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 01.08.94
-|*    Letzte Aenderung  MM 01.08.94
-|*
 *************************************************************************/
 
-void UniqueIdContainer::Clear( BOOL bAll )
+void UniqueIdContainer::Clear( sal_Bool bAll )
 {
-    USHORT nFree = bAll ? 0xFFFF : 1;
+    sal_uInt16 nFree = bAll ? 0xFFFF : 1;
 
     ImpUniqueId* pId = (ImpUniqueId*)Last();
-    BOOL bLast = TRUE;
+    sal_Bool bLast = sal_True;
     while ( pId )
     {
         if ( pId->nRefCount <= nFree )
@@ -526,7 +442,7 @@ void UniqueIdContainer::Clear( BOOL bAll )
         else
         {
             pId = (ImpUniqueId *)Prev();
-            bLast = FALSE;
+            bLast = sal_False;
         }
     }
 }
@@ -535,17 +451,13 @@ void UniqueIdContainer::Clear( BOOL bAll )
 |*
 |*    UniqueIdContainer::CreateId()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 01.08.94
-|*    Letzte Aenderung  MM 01.08.94
-|*
 *************************************************************************/
 
 UniqueItemId UniqueIdContainer::CreateId()
 {
     if( nCollectCount > 50 )
     { // aufraeumen
-        Clear( FALSE );
+        Clear( sal_False );
         nCollectCount = 0;
     }
     nCollectCount++;
@@ -560,13 +472,9 @@ UniqueItemId UniqueIdContainer::CreateId()
 |*
 |*    UniqueIdContainer::CreateIdProt()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 01.08.94
-|*    Letzte Aenderung  MM 01.08.94
-|*
 *************************************************************************/
 
-UniqueItemId UniqueIdContainer::CreateFreeId( ULONG nId )
+UniqueItemId UniqueIdContainer::CreateFreeId( sal_uIntPtr nId )
 {
     // Einfach erzeugen, fuer abgeleitete Klasse
     ImpUniqueId * pId = new ImpUniqueId;
@@ -579,13 +487,9 @@ UniqueItemId UniqueIdContainer::CreateFreeId( ULONG nId )
 |*
 |*    UniqueIdContainer::CreateIdProt()
 |*
-|*    Beschreibung      UNQIDX.SDW
-|*    Ersterstellung    MM 01.08.94
-|*    Letzte Aenderung  MM 01.08.94
-|*
 *************************************************************************/
 
-UniqueItemId UniqueIdContainer::CreateIdProt( ULONG nId )
+UniqueItemId UniqueIdContainer::CreateIdProt( sal_uIntPtr nId )
 {
     if ( IsIndexValid( nId ) )
         return UniqueItemId( (ImpUniqueId *)Get( nId ) );

@@ -30,8 +30,9 @@
 
 
 #include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/util/XCloneable.idl>
 #include <com/sun/star/awt/grid/XGridDataListener.idl>
-
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
 //=============================================================================
 
@@ -43,88 +44,59 @@ module com {  module sun {  module star {  module awt { module grid {
 
     If you do not need your own model implementation, you can also use the <type>DefaultGridDataModel</type>.
 
-    @since OOo 3.3.0
+    @since OOo 3.3
 */
-interface XGridDataModel: ::com::sun::star::lang::XComponent
+interface XGridDataModel
 {
-    /** Specifies the height of each row.
+    /** implements life time control for the component
     */
-    [attribute] long RowHeight;
+    interface ::com::sun::star::lang::XComponent;
 
-    /** Contains the row header.
+    /** allows cloning the complete column model
     */
-    [attribute] sequence< string > RowHeaders;
+    interface ::com::sun::star::util::XCloneable;
 
-    /** Returns the content of each row.
+    /** denotes the number of rows for which the model can provide data
     */
-    [attribute,readonly] sequence< sequence< any > > Data;
+    [attribute, readonly] long RowCount;
 
-    /**Specifies the width of row header.
+    /** denotes the number of columns for which the model can provide data
     */
-    [attribute] long RowHeaderWidth;
+    [attribute, readonly] long ColumnCount;
 
-    /** Returns the number of rows in in the model.
-        @returns
-                the number of rows.
+    /** retrieves the data for a given cell
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the column or row index do not denote a valid cell position.
     */
-    long getRowCount();
+    any getCellData( [in] long Column, [in] long Row )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
-    /** Adds a row to the model.
+    /** retrieves the tool tip to be displayed when the mouse hovers over a given cell
 
-        @param headername
-                specifies the name of the row.
-        @param data
-                the content of the row.
+        <p>At the moment, only string tool tips are supported.</p>
+
+        <p>If <VOID/> is returned here, the cell's content will be displayed as tip, but only if it does
+        not fit into the cell.</p>
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the column or row index do not denote a valid cell position.
     */
-    void addRow( [in] string headername, [in] sequence< any > data );
+    any getCellToolTip( [in] long Column, [in] long Row )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
-    /** Removes a row from the model.
+    /** retrieves the heading of a given row
 
-        @param index
-                the index of the row that should be removed.
+        <p>A grid control will usually paint a row's title in the header column of the respective row.</p>
+
+        <p>At the moment, only strings are supported as row headings.</p>
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the given index does not denote a valid row.
     */
-    void removeRow( [in] long index);
-
-    /** Removes all rows from the model.
-    */
-    void removeAll();
-
-    /**Updates the content of a given cell.
-        @param row
-            the row index
-        @param column
-            the column index
-        @param value
-            the new value of the cell.
-    */
-    void updateCell([in] long row, [in] long column, [in] any value );
-
-    /**Updates the content of a given row.
-        @param row
-            the row index
-        @param columns
-            column indexes of the cells, which should be updated
-        @param value
-            the new values of the cells.
-    */
-    void updateRow([in] long row, [in] sequence< long > columns, [in] sequence< any > values);
-
-    //-------------------------------------------------------------------------
-
-    /** Adds a listener for the <type>GridDataEvent</type> posted after the grid changes.
-        @param Listener
-            the listener to add.
-    */
-    [oneway] void addDataListener( [in] XGridDataListener  listener);
-
-    //-------------------------------------------------------------------------
-
-    /** Removes a listener previously added with <method>addDataListener()</method>.
-        @param Listener
-            the listener to remove.
-    */
-    [oneway] void removeDataListener( [in] XGridDataListener listener);
-
+    any
+        getRowHeading( [in] long RowIndex )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 };
 
 //=============================================================================

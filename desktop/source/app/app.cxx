@@ -117,6 +117,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/signal.h>
+#include <osl/thread.hxx>
 #include <rtl/uuid.h>
 #include <rtl/uri.hxx>
 #include <unotools/pathoptions.hxx>
@@ -167,14 +168,10 @@
 using rtl::OUString;
 using rtl::OUStringBuffer;
 
-//Gives an ICE with MSVC6
-//namespace css = ::com::sun::star;
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-//using namespace ::com::sun::star::bridge;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::view;
@@ -193,38 +190,23 @@ namespace desktop
 static oslSignalHandler pSignalHandler = 0;
 static sal_Bool _bCrashReporterEnabled = sal_True;
 
-static const ::rtl::OUString CFG_PACKAGE_COMMON_HELP   ( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/Help"));
-static const ::rtl::OUString CFG_PATH_REG              ( RTL_CONSTASCII_USTRINGPARAM( "Registration"                     ));
-static const ::rtl::OUString CFG_ENTRY_REGURL          ( RTL_CONSTASCII_USTRINGPARAM( "URL"                              ));
-static const ::rtl::OUString CFG_ENTRY_TEMPLATEREGURL  ( RTL_CONSTASCII_USTRINGPARAM( "TemplateURL"                      ));
-
+static ::rtl::OUString getBrandSharePreregBundledPathURL();
 // ----------------------------------------------------------------------------
 
 ResMgr* Desktop::GetDesktopResManager()
 {
     if ( !Desktop::pResMgr )
     {
-        String aMgrName = String::CreateFromAscii( "dkt" );
-
         // Create desktop resource manager and bootstrap process
         // was successful. Use default way to get language specific message.
         if ( Application::IsInExecute() )
-            Desktop::pResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
+            Desktop::pResMgr = ResMgr::CreateResMgr("dkt");
 
         if ( !Desktop::pResMgr )
         {
             // Use VCL to get the correct language specific message as we
             // are in the bootstrap process and not able to get the installed
             // language!!
-/*
-            LanguageType aLanguageType = LANGUAGE_DONTKNOW;
-
-            Desktop::pResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageType );
-            AllSettings as = GetSettings();
-            as.SetUILanguage(aLanguageType);
-            SetSettings(as);
-*/
-            // LanguageSelection langselect;
             OUString aUILocaleString = LanguageSelection::getLanguageString();
             sal_Int32 nIndex = 0;
             OUString aLanguage = aUILocaleString.getToken( 0, '-', nIndex);
@@ -233,7 +215,7 @@ ResMgr* Desktop::GetDesktopResManager()
 
             ::com::sun::star::lang::Locale aLocale( aLanguage, aCountry, aVariant );
 
-            Desktop::pResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
+            Desktop::pResMgr = ResMgr::SearchCreateResMgr( "dkt", aLocale);
             AllSettings as = GetSettings();
             as.SetUILocale(aLocale);
             SetSettings(as);
@@ -247,7 +229,7 @@ ResMgr* Desktop::GetDesktopResManager()
 // Get a message string securely. There is a fallback string if the resource
 // is not available.
 
-OUString Desktop::GetMsgString( USHORT nId, const OUString& aFaultBackMsg )
+OUString Desktop::GetMsgString( sal_uInt16 nId, const OUString& aFaultBackMsg )
 {
     ResMgr* resMgr = GetDesktopResManager();
     if ( !resMgr )
@@ -289,7 +271,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
         if ( pResMgr )
             aDiagnosticMessage.append( OUString(String(ResId(STR_INTERNAL_ERRMSG, *pResMgr ))) );
         else
-            aDiagnosticMessage.appendAscii( "The following internal error has occured:\n\n" );
+            aDiagnosticMessage.appendAscii( "The following internal error has occurred:\n\n" );
         aDiagnosticMessage.append( aInternalErrMsg );
     }
 
@@ -298,15 +280,12 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 
 //=============================================================================
 // shows a simple error box with the given message ... but exits from these process !
-//
 // Fatal errors cant be solved by the process ... nor any recovery can help.
 // Mostly the installation was damaged and must be repaired manually .. or by calling
 // setup again.
-//
 // On the other side we must make sure that no further actions will be possible within
 // the current office process ! No pipe requests, no menu/toolbar/shortuct actions
 // are allowed. Otherwise we will force a "crash inside a crash".
-//
 // Thats why we have to use a special native message box here which does not use yield :-)
 //=============================================================================
 void FatalError(const ::rtl::OUString& sMessage)
@@ -343,9 +322,7 @@ CommandLineArgs* Desktop::GetCommandLineArgs()
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if ( !pArgs )
-    {
             pArgs = new CommandLineArgs;
-    }
     }
 
     return pArgs;
@@ -484,7 +461,7 @@ static bool needsSynchronization(
     }
     else if (err1 != ::osl::File::E_None)
     {
-        OSL_ENSURE(0, "Cannot access lastsynchronized in user layer");
+        OSL_FAIL("Cannot access lastsynchronized in user layer");
         return true; //sync just in case
     }
 
@@ -498,7 +475,7 @@ static bool needsSynchronization(
     }
     else if (err2 != ::osl::File::E_None)
     {
-        OSL_ENSURE(0, "Cannot access file lastsynchronized in base layer");
+        OSL_FAIL("Cannot access file lastsynchronized in base layer");
         return true; //sync just in case
     }
 
@@ -575,6 +552,44 @@ static ::rtl::OUString getLastSyncFileURLFromUserInstallation()
 
     return aTmp.makeStringAndClear();
 }
+//Checks if the argument src is the folder of the help or configuration
+//backend in the prereg folder
+static bool excludeTmpFilesAndFolders(const rtl::OUString & src)
+{
+    const char helpBackend[] = "com.sun.star.comp.deployment.help.PackageRegistryBackend";
+    const char configBackend[] = "com.sun.star.comp.deployment.configuration.PackageRegistryBackend";
+    if (src.endsWithAsciiL(helpBackend, sizeof(helpBackend) - 1 )
+        || src.endsWithAsciiL(configBackend, sizeof(configBackend) - 1))
+    {
+        return true;
+    }
+    return false;
+}
+
+//If we are about to copy the contents of some special folder as determined
+//by excludeTmpFilesAndFolders, then we omit those files or folders with a name
+//derived from temporary folders.
+static bool isExcludedFileOrFolder( const rtl::OUString & name)
+{
+    char const * allowed[] = {
+        "backenddb.xml",
+        "configmgr.ini",
+        "registered_packages.db"
+    };
+
+    const unsigned int size = sizeof(allowed) / sizeof (char const *);
+    bool bExclude = true;
+    for (unsigned int i= 0; i < size; i ++)
+    {
+        ::rtl::OUString allowedName = ::rtl::OUString::createFromAscii(allowed[i]);
+        if (allowedName.equals(name))
+        {
+            bExclude = false;
+            break;
+        }
+    }
+    return bExclude;
+}
 
 static osl::FileBase::RC copy_bundled_recursive(
     const rtl::OUString& srcUnqPath,
@@ -590,64 +605,73 @@ throw()
     }
     else if( TypeToCopy == +1 ) // Folder
     {
-        osl::Directory aDir( srcUnqPath );
-        aDir.open();
-
         err = osl::Directory::create( dstUnqPath );
         osl::FileBase::RC next = err;
-        if( err == osl::FileBase::E_None ||
-            err == osl::FileBase::E_EXIST )
+        if( err == osl::FileBase::E_None || err == osl::FileBase::E_EXIST )
         {
             err = osl::FileBase::E_None;
-            sal_Int32 n_Mask = FileStatusMask_FileURL | FileStatusMask_FileName | FileStatusMask_Type;
 
-            osl::DirectoryItem aDirItem;
-
-            while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
+            osl::Directory aDir( srcUnqPath );
+            bool bExcludeFiles = excludeTmpFilesAndFolders(srcUnqPath);
+            if (aDir.open() == osl::FileBase::E_None)
             {
-                sal_Bool IsDoc = false;
-                sal_Bool bFilter = false;
-                osl::FileStatus aFileStatus( n_Mask );
-                aDirItem.getFileStatus( aFileStatus );
-                if( aFileStatus.isValid( FileStatusMask_Type ) )
-                    IsDoc = aFileStatus.getFileType() == osl::FileStatus::Regular;
+                sal_Int32 n_Mask = FileStatusMask_FileURL |
+                                   FileStatusMask_FileName |
+                                   FileStatusMask_Type;
 
-                // Getting the information for the next recursive copy
-                sal_Int32 newTypeToCopy = IsDoc ? -1 : +1;
-
-                rtl::OUString newSrcUnqPath;
-                if( aFileStatus.isValid( FileStatusMask_FileURL ) )
-                    newSrcUnqPath = aFileStatus.getFileURL();
-
-                rtl::OUString newDstUnqPath = dstUnqPath;
-                rtl::OUString tit;
-                if( aFileStatus.isValid( FileStatusMask_FileName ) )
+                osl::DirectoryItem aDirItem;
+                while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
                 {
-                    ::rtl::OUString aFileName = aFileStatus.getFileName();
-                    tit = rtl::Uri::encode( aFileName,
-                                            rtl_UriCharClassPchar,
-                                            rtl_UriEncodeIgnoreEscapes,
-                                            RTL_TEXTENCODING_UTF8 );
+                    sal_Bool IsDoc = false;
+                    sal_Bool bFilter = false;
+                    osl::FileStatus aFileStatus( n_Mask );
+                    aDirItem.getFileStatus( aFileStatus );
+                    if( aFileStatus.isValid( FileStatusMask_Type ) )
+                        IsDoc = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
-                    // Special treatment for "lastsychronized" file. Must not be
-                    // copied from the bundled folder!
-                    if ( IsDoc && aFileName.equalsAscii( pLastSyncFileName ))
-                        bFilter = true;
+                    // Getting the information for the next recursive copy
+                    sal_Int32 newTypeToCopy = IsDoc ? -1 : +1;
+
+                    rtl::OUString newSrcUnqPath;
+                    if( aFileStatus.isValid( FileStatusMask_FileURL ) )
+                        newSrcUnqPath = aFileStatus.getFileURL();
+
+                    rtl::OUString newDstUnqPath = dstUnqPath;
+                    rtl::OUString tit;
+                    if( aFileStatus.isValid( FileStatusMask_FileName ) )
+                    {
+                        ::rtl::OUString aFileName = aFileStatus.getFileName();
+                        tit = rtl::Uri::encode( aFileName,
+                                                rtl_UriCharClassPchar,
+                                                rtl_UriEncodeIgnoreEscapes,
+                                                RTL_TEXTENCODING_UTF8 );
+
+                        // Special treatment for "lastsychronized" file. Must not be
+                        // copied from the bundled folder!
+                        //Also do not copy *.tmp files and *.tmp_ folders. This affects the files/folders
+                        //from the help and configuration backend
+                        if ( IsDoc && (aFileName.equalsAscii( pLastSyncFileName )
+                                       || (bExcludeFiles && isExcludedFileOrFolder(aFileName))))
+                            bFilter = true;
+                        else if (!IsDoc && bExcludeFiles && isExcludedFileOrFolder(aFileName))
+                            bFilter = true;
+                    }
+
+                    if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
+                        newDstUnqPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+
+                    newDstUnqPath += tit;
+
+                    if (( newSrcUnqPath != dstUnqPath ) && !bFilter )
+                        err = copy_bundled_recursive( newSrcUnqPath,newDstUnqPath, newTypeToCopy );
                 }
 
-                if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
-                    newDstUnqPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                if( err == osl::FileBase::E_None && next != osl::FileBase::E_NOENT )
+                    err = next;
 
-                newDstUnqPath += tit;
-
-                if (( newSrcUnqPath != dstUnqPath ) && !bFilter )
-                    err = copy_bundled_recursive( newSrcUnqPath,newDstUnqPath, newTypeToCopy );
+                aDir.close();
             }
-
-            if( err == osl::FileBase::E_None && next != osl::FileBase::E_NOENT )
-                err = next;
         }
-        aDir.close();
     }
 
     return err;
@@ -688,14 +712,10 @@ void Desktop::Init()
         }
     }
 
-    // create service factory...
-    Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
-    if( rSMgr.is() )
+    // We need to have service factory before going further.
+    if( !::comphelper::getProcessServiceFactory().is())
     {
-        ::comphelper::setProcessServiceFactory( rSMgr );
-    }
-    else
-    {
+        OSL_FAIL("Service factory should have been crated in soffice_main().");
         SetBootstrapError( BE_UNO_SERVICEMANAGER );
     }
 
@@ -714,13 +734,6 @@ void Desktop::Init()
     if ( GetBootstrapError() == BE_OK )
     {
         CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
-#ifdef UNX
-    //  check whether we need to print cmdline help
-    if ( pCmdLineArgs->IsHelp() ) {
-        displayCmdlineHelp();
-        SetBootstrapStatus(BS_TERMINATE);
-    }
-#endif
         // start ipc thread only for non-remote offices
         RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) ::OfficeIPCThread::EnableOfficeIPCThread" );
         OfficeIPCThread::Status aStatus = OfficeIPCThread::EnableOfficeIPCThread();
@@ -747,6 +760,17 @@ void Desktop::InitFinished()
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::InitFinished" );
 
     CloseSplashScreen();
+}
+
+// GetCommandLineArgs() requires this code to work, otherwise it will abort, and
+// on Unix command line args needs to be checked before Desktop::Init()
+void Desktop::CreateProcessServiceFactory()
+{
+    Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
+    if( rSMgr.is() )
+    {
+        ::comphelper::setProcessServiceFactory( rSMgr );
+    }
 }
 
 void Desktop::DeInit()
@@ -782,7 +806,7 @@ void Desktop::DeInit()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::DeInit" );
 }
 
-BOOL Desktop::QueryExit()
+sal_Bool Desktop::QueryExit()
 {
     try
     {
@@ -808,7 +832,7 @@ BOOL Desktop::QueryExit()
         xPropertySet->setPropertyValue( OUSTRING(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
     }
 
-    BOOL bExit = ( !xDesktop.is() || xDesktop->terminate() );
+    sal_Bool bExit = ( !xDesktop.is() || xDesktop->terminate() );
 
 
     if ( !bExit && xPropertySet.is() )
@@ -840,9 +864,6 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 {
     if ( aBootstrapStatus != ::utl::Bootstrap::DATA_OK )
     {
-        sal_Bool            bWorkstationInstallation = sal_False;
-        ::rtl::OUString        aBaseInstallURL;
-        ::rtl::OUString        aUserInstallURL;
         ::rtl::OUString        aProductKey;
         ::rtl::OUString        aTemp;
 
@@ -854,16 +875,6 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         aTemp = ::utl::Bootstrap::getProductKey( aProductKey );
         if ( aTemp.getLength() > 0 )
             aProductKey = aTemp;
-
-        ::utl::Bootstrap::PathStatus aBaseInstallStatus = ::utl::Bootstrap::locateBaseInstallation( aBaseInstallURL );
-        ::utl::Bootstrap::PathStatus aUserInstallStatus = ::utl::Bootstrap::locateUserInstallation( aUserInstallURL );
-
-        if (( aBaseInstallStatus == ::utl::Bootstrap::PATH_EXISTS &&
-              aUserInstallStatus == ::utl::Bootstrap::PATH_EXISTS        ))
-        {
-            if ( aBaseInstallURL != aUserInstallURL )
-                bWorkstationInstallation = sal_True;
-        }
 
         OUString        aMessage;
         OUStringBuffer    aBuffer( 100 );
@@ -1248,8 +1259,6 @@ void impl_checkRecoveryState(sal_Bool& bCrashed           ,
     static const ::rtl::OUString PROP_CRASHED(RTL_CONSTASCII_USTRINGPARAM("Crashed"));
     static const ::rtl::OUString PROP_EXISTSRECOVERY(RTL_CONSTASCII_USTRINGPARAM("ExistsRecoveryData"));
     static const ::rtl::OUString PROP_EXISTSSESSION(RTL_CONSTASCII_USTRINGPARAM("ExistsSessionData"));
-    static const ::rtl::OUString CFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery/"));
-    static const ::rtl::OUString CFG_PATH_RECOVERYINFO(RTL_CONSTASCII_USTRINGPARAM("RecoveryInfo"));
 
     bCrashed            = sal_False;
     bRecoveryDataExists = sal_False;
@@ -1410,10 +1419,10 @@ void restartOnMac(bool passArguments) {
 
 }
 
-USHORT Desktop::Exception(USHORT nError)
+sal_uInt16 Desktop::Exception(sal_uInt16 nError)
 {
     // protect against recursive calls
-    static BOOL bInException = FALSE;
+    static sal_Bool bInException = sal_False;
 
     sal_uInt16 nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
@@ -1425,7 +1434,7 @@ USHORT Desktop::Exception(USHORT nError)
         Application::Abort( aDoubleExceptionString );
     }
 
-    bInException = TRUE;
+    bInException = sal_True;
     CommandLineArgs* pArgs = GetCommandLineArgs();
 
     // save all modified documents ... if it's allowed doing so.
@@ -1511,8 +1520,26 @@ namespace {
     }
 }
 
-void Desktop::Main()
+struct ExecuteGlobals
 {
+    Reference < css::document::XEventListener > xGlobalBroadcaster;
+    sal_Bool bRestartRequested;
+    sal_Bool bUseSystemFileDialog;
+    std::auto_ptr<SvtLanguageOptions> pLanguageOptions;
+    std::auto_ptr<SvtPathOptions> pPathOptions;
+
+    ExecuteGlobals()
+    : bRestartRequested( sal_False )
+    , bUseSystemFileDialog( sal_True )
+    {}
+};
+
+static ExecuteGlobals* pExecGlobals = NULL;
+
+int Desktop::Main()
+{
+    pExecGlobals = new ExecuteGlobals();
+
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Main" );
 
     // Remember current context object
@@ -1523,12 +1550,12 @@ void Desktop::Main()
     if ( eError != BE_OK )
     {
         HandleBootstrapErrors( eError );
-        return;
+        return EXIT_FAILURE;
     }
 
     BootstrapStatus eStatus = GetBootstrapStatus();
     if (eStatus == BS_TERMINATE) {
-        return;
+        return EXIT_FAILURE;
     }
 
     // Detect desktop environment - need to do this as early as possible
@@ -1554,14 +1581,14 @@ void Desktop::Main()
         UserInstall::UserInstallError instErr_fin = UserInstall::finalize();
         if ( instErr_fin != UserInstall::E_None)
         {
-            OSL_ENSURE(sal_False, "userinstall failed");
+            OSL_FAIL("userinstall failed");
             if ( instErr_fin == UserInstall::E_NoDiskSpace )
                 HandleBootstrapErrors( BE_USERINSTALL_NOTENOUGHDISKSPACE );
             else if ( instErr_fin == UserInstall::E_NoWriteAccess )
                 HandleBootstrapErrors( BE_USERINSTALL_NOWRITEACCESS );
             else
                 HandleBootstrapErrors( BE_USERINSTALL_FAILED );
-            return;
+            return EXIT_FAILURE;
         }
         // refresh path information
         utl::Bootstrap::reloadData();
@@ -1571,14 +1598,8 @@ void Desktop::Main()
     Reference< XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
 
-    std::auto_ptr<SvtLanguageOptions> pLanguageOptions;
-    std::auto_ptr<SvtPathOptions> pPathOptions;
-
     Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
-    sal_Bool bRestartRequested( sal_False );
-    sal_Bool bUseSystemFileDialog(sal_True);
-    int      nAcquireCount( 0 );
-    Reference < css::document::XEventListener > xGlobalBroadcaster;
+    int         nAcquireCount( 0 );
     try
     {
         RegisterServices( xSMgr );
@@ -1588,7 +1609,7 @@ void Desktop::Main()
 #ifndef UNX
         if ( pCmdLineArgs->IsHelp() ) {
             displayCmdlineHelp();
-            return;
+            return EXIT_SUCCESS;
         }
 #endif
 
@@ -1596,9 +1617,10 @@ void Desktop::Main()
         // there is no other instance using our data files from a remote host
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
         m_pLockfile = new Lockfile;
-        if ( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning )) {
+        if ( !pCmdLineArgs->IsHeadless() && !pCmdLineArgs->IsInvisible() &&
+             !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning )) {
             // Lockfile exists, and user clicked 'no'
-            return;
+            return EXIT_FAILURE;
         }
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main <- Lockfile" );
 
@@ -1606,20 +1628,22 @@ void Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ GetEnableATToolSupport" );
         if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
-            BOOL bQuitApp;
+            sal_Bool bQuitApp;
 
             if( !InitAccessBridge( true, bQuitApp ) )
                 if( bQuitApp )
-                    return;
+                    return EXIT_FAILURE;
         }
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} GetEnableATToolSupport" );
 
         // terminate if requested...
-        if( pCmdLineArgs->IsTerminateAfterInit() ) return;
+        if( pCmdLineArgs->IsTerminateAfterInit() )
+            return EXIT_SUCCESS;
 
 
         //  Read the common configuration items for optimization purpose
-        if ( !InitializeConfiguration() ) return;
+        if ( !InitializeConfiguration() )
+            return EXIT_FAILURE;
 
         SetSplashScreenProgress(30);
 
@@ -1634,41 +1658,16 @@ void Desktop::Main()
         // create title string
         sal_Bool bCheckOk = sal_False;
         ::com::sun::star::lang::Locale aLocale;
-        String aMgrName = String::CreateFromAscii( "iso" );
-        ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale );
-        if ( !pLabelResMgr )
-        {
-            // no "iso" resource -> search for "ooo" resource
-            aMgrName = String::CreateFromAscii( "ooo" );
-            pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
-        }
+        String aMgrName = String::CreateFromAscii( "ofa" );
+        ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( "ofa", aLocale );
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
-/*
-        // locale and UI locale in AppSettings are now retrieved from configuration or system directly via SvtSysLocale
-        // no reason to set while starting
-        // set UI language and locale
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
-        //LanguageSelection langselect;
-        OUString aUILocaleString = LanguageSelection::getLanguageString();
-        Locale aUILocale = LanguageSelection::IsoStringToLocale(aUILocaleString);
-        LanguageType eLanguage = SvtSysLocale().GetLanguage();
-
-        // #i39040#, do not call anything between GetSettings and SetSettings that might have
-        // a side effect on the settings (like, eg, SvtSysLocaleOptions().GetLocaleLanguageType(),
-        // which changes the MiscSettings !!! )
-        AllSettings aSettings( Application::GetSettings() );
-        aSettings.SetUILocale( aUILocale );
-        aSettings.SetLanguage( eLanguage );
-        Application::SetSettings( aSettings );
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
-*/
 
         // Check for StarOffice/Suite specific extensions runs also with OpenOffice installation sets
         OUString aTitleString( aTitle );
         bCheckOk = CheckInstallation( aTitleString );
         if ( !bCheckOk )
-            return;
+            return EXIT_FAILURE;
         else
             aTitle = aTitleString;
 
@@ -1684,13 +1683,11 @@ void Desktop::Main()
         SetDisplayName( aTitle );
         SetSplashScreenProgress(35);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
-        pPathOptions.reset( new SvtPathOptions);
+        pExecGlobals->pPathOptions.reset( new SvtPathOptions);
         SetSplashScreenProgress(40);
-//        pLanguageOptions = new SvtLanguageOptions(sal_True);
-//        SetSplashScreenProgress(45);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
 
-        // Check special env variable #111015#
+        // Check special env variable
         std::vector< String > aUnrestrictedFolders;
         svt::getUnrestrictedFolders( aUnrestrictedFolders );
 
@@ -1703,7 +1700,7 @@ void Desktop::Main()
         }
 
         // create service for loadin SFX (still needed in startup)
-        xGlobalBroadcaster = Reference < css::document::XEventListener >
+        pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
             ( xSMgr->createInstance(
             DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
 
@@ -1725,21 +1722,22 @@ void Desktop::Main()
         SynchronizeExtensionRepositories();
         bool bAbort = CheckExtensionDependencies();
         if ( bAbort )
-            return;
+            return EXIT_FAILURE;
 
         Migration::migrateSettingsIfNecessary();
 
         // keep a language options instance...
-        pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
+        pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
 
-        if (xGlobalBroadcaster.is())
+        if (pExecGlobals->xGlobalBroadcaster.is())
         {
             css::document::EventObject aEvent;
             aEvent.EventName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnStartApp"));
-            xGlobalBroadcaster->notifyEvent(aEvent);
+            pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
         }
 
         SetSplashScreenProgress(50);
+
         // Backing Component
         sal_Bool bCrashed            = sal_False;
         sal_Bool bExistsRecoveryData = sal_False;
@@ -1755,7 +1753,7 @@ void Desktop::Main()
         }
 
         // check whether the shutdown is caused by restart
-        bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+        pExecGlobals->bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
 
         if ( pCmdLineArgs->IsHeadless() )
         {
@@ -1763,43 +1761,38 @@ void Desktop::Main()
             // headless mode relies on Application::EnableHeadlessMode()
             // which does only work for VCL dialogs!!
             SvtMiscOptions aMiscOptions;
-            bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
+            pExecGlobals->bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
             aMiscOptions.SetUseSystemFileDialog( sal_False );
         }
 
-        if ( !bRestartRequested )
+        if ( !pExecGlobals->bRestartRequested )
         {
-            if (
-                (pCmdLineArgs->IsEmptyOrAcceptOnly()                                   ) &&
+            if ((!pCmdLineArgs->WantsToLoadDocument() && !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsHeadless() ) &&
                 (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
                 (!bExistsRecoveryData                                                  ) &&
                 (!bExistsSessionData                                                   ) &&
-                (!Application::AnyInput( INPUT_APPEVENT )                              )
-               )
+                (!Application::AnyInput( INPUT_APPEVENT )                              ))
             {
-                RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
-                Reference< XFrame > xDesktopFrame( xSMgr->createInstance(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
-                if (xDesktopFrame.is())
-                {
-                    SetSplashScreenProgress(60);
-                    Reference< XFrame > xBackingFrame;
-                    Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
+                 RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
+                 Reference< XFrame > xDesktopFrame( xSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
+                 if (xDesktopFrame.is())
+                 {
+                   SetSplashScreenProgress(60);
+                   Reference< XFrame > xBackingFrame;
+                   Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
 
-                    xBackingFrame = xDesktopFrame->findFrame(OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0);
-                    if (xBackingFrame.is())
-                        xContainerWindow = xBackingFrame->getContainerWindow();
-                    if (xContainerWindow.is())
-                    {
-                        SetDocumentExtendedStyle(xContainerWindow);
-                        SetSplashScreenProgress(75);
-                        Sequence< Any > lArgs(1);
-                        lArgs[0] <<= xContainerWindow;
+                   xBackingFrame = xDesktopFrame->findFrame(OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0);
+                   if (xBackingFrame.is())
+                       xContainerWindow = xBackingFrame->getContainerWindow();
+                   if (xContainerWindow.is())
+                   {
+                       SetDocumentExtendedStyle(xContainerWindow);
+                       SetSplashScreenProgress(75);
+                       Sequence< Any > lArgs(1);
+                       lArgs[0] <<= xContainerWindow;
 
-                        Reference< XController > xBackingComp(
-                            xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs),
-                            UNO_QUERY);
-                        SetSplashScreenProgress(80);
+                       Reference< XController > xBackingComp(
+                           xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs), UNO_QUERY);
                         if (xBackingComp.is())
                         {
                             Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
@@ -1823,22 +1816,13 @@ void Desktop::Main()
         com::sun::star::uno::Exception te;
         wte.TargetException >>= te;
         FatalError( MakeStartupConfigAccessErrorMessage(wte.Message + te.Message) );
-        return;
+        return EXIT_FAILURE;
     }
     catch ( com::sun::star::uno::Exception& e )
     {
         FatalError( MakeStartupErrorMessage(e.Message) );
-        return;
+        return EXIT_FAILURE;
     }
-    /*
-    catch ( ... )
-    {
-        FatalError( MakeStartupErrorMessage(
-            OUString::createFromAscii(
-            "Unknown error during startup (Office wrapper service).\nInstallation could be damaged.")));
-        return;
-    }
-    */
     SetSplashScreenProgress(55);
 
     SvtFontSubstConfig().Apply();
@@ -1850,10 +1834,9 @@ void Desktop::Main()
     aOptions.SetVCLSettings();
     SetSplashScreenProgress(60);
 
-    if ( !bRestartRequested )
+    if ( !pExecGlobals->bRestartRequested )
     {
         Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
-
         sal_Bool bTerminateRequested = sal_False;
 
         // Preload function depends on an initialized sfx application!
@@ -1880,17 +1863,8 @@ void Desktop::Main()
         catch ( com::sun::star::uno::Exception& e )
         {
             FatalError( MakeStartupErrorMessage(e.Message) );
-            return;
+            return EXIT_FAILURE;
         }
-        /*
-        catch ( ... )
-        {
-            FatalError( MakeStartupErrorMessage(
-                OUString::createFromAscii(
-                "Unknown error during startup (TD/Desktop service).\nInstallation could be damaged.")));
-            return;
-        }
-        */
 
         // Post user event to startup first application component window
         // We have to send this OpenClients message short before execute() to
@@ -1918,9 +1892,9 @@ void Desktop::Main()
                 new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
 
             // check whether the shutdown is caused by restart just before entering the Execute
-            bRestartRequested = bRestartRequested || ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+            pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested || ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
 
-            if ( !bRestartRequested )
+            if ( !pExecGlobals->bRestartRequested )
             {
                 // if this run of the office is triggered by restart, some additional actions should be done
                 DoRestartActionsIfNecessary( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoQuickstart() );
@@ -1939,52 +1913,65 @@ void Desktop::Main()
             FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
         }
     }
+    // CAUTION: you do not necessarily get here e.g. on the Mac.
+    // please put all deinitialization code into doShutdown
+    return doShutdown();
+}
 
-    if ( bRestartRequested )
+int Desktop::doShutdown()
+{
+    if( ! pExecGlobals )
+        return EXIT_SUCCESS;
+
+    if ( pExecGlobals->bRestartRequested )
         SetRestartState();
 
-    if (xGlobalBroadcaster.is())
+    if (pExecGlobals->xGlobalBroadcaster.is())
     {
         css::document::EventObject aEvent;
         aEvent.EventName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnCloseApp"));
-        xGlobalBroadcaster->notifyEvent(aEvent);
+        pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
     }
 
-    delete pResMgr;
+    delete pResMgr, pResMgr = NULL;
     // Restore old value
+    CommandLineArgs* pCmdLineArgs = GetCommandLineArgs();
     if ( pCmdLineArgs->IsHeadless() )
-        SvtMiscOptions().SetUseSystemFileDialog( bUseSystemFileDialog );
+        SvtMiscOptions().SetUseSystemFileDialog( pExecGlobals->bUseSystemFileDialog );
 
     // remove temp directory
     RemoveTemporaryDirectory();
     FlushConfiguration();
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)
     // with the solar mutex unlocked, to avoid deadlock:
-    nAcquireCount = Application::ReleaseSolarMutex();
+    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     DeregisterServices();
     Application::AcquireSolarMutex(nAcquireCount);
     tools::DeInitTestToolLib();
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> dispose path/language options" );
-    pLanguageOptions.reset( 0 );
-    pPathOptions.reset( 0 );
+    pExecGlobals->pLanguageOptions.reset( 0 );
+    pExecGlobals->pPathOptions.reset( 0 );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- dispose path/language options" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> deinit ucb" );
     ::ucbhelper::ContentBroker::deinitialize();
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- deinit ucb" );
 
+    sal_Bool bRR = pExecGlobals->bRestartRequested;
+    delete pExecGlobals, pExecGlobals = NULL;
+
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::Main" );
-    if ( bRestartRequested )
+    if ( bRR )
     {
         restartOnMac(true);
         if ( m_rSplashScreen.is() )
             m_rSplashScreen->reset();
 
-        // wouldn't the solution be more clean if SalMain returns the exit code to the system?
-        _exit( ExitHelper::E_NORMAL_RESTART );
+        return ExitHelper::E_NORMAL_RESTART;
     }
+    return EXIT_SUCCESS;
 }
 
 IMPL_LINK( Desktop, ImplInitFilterHdl, ConvertData*, pData )
@@ -2082,7 +2069,7 @@ sal_Bool Desktop::shouldLaunchQuickstart()
         const SfxPoolItem* pItem=0;
         SfxItemSet aQLSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
         SFX_APP()->GetOptions(aQLSet);
-        SfxItemState eState = aQLSet.GetItemState(SID_ATTR_QUICKLAUNCHER, FALSE, &pItem);
+        SfxItemState eState = aQLSet.GetItemState(SID_ATTR_QUICKLAUNCHER, sal_False, &pItem);
         if (SFX_ITEM_SET == eState)
             bQuickstart = ((SfxBoolItem*)pItem)->GetValue();
     }
@@ -2164,18 +2151,6 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* )
 
     SvtMenuOptions aMenuOpt;
     hStyleSettings.SetUseImagesInMenus(aMenuOpt.GetMenuIconsState());
-
-    sal_uInt16 nTabStyle = hStyleSettings.GetTabControlStyle();
-    nTabStyle &= ~STYLE_TABCONTROL_SINGLELINE;
-    if( aAppearanceCfg.IsSingleLineTabCtrl() )
-        nTabStyle |=STYLE_TABCONTROL_SINGLELINE;
-
-    nTabStyle &= ~STYLE_TABCONTROL_COLOR;
-    if( aAppearanceCfg.IsColoredTabCtrl() )
-        nTabStyle |= STYLE_TABCONTROL_COLOR;
-
-    hStyleSettings.SetTabControlStyle(nTabStyle);
-
     hStyleSettings.SetDragFullOptions( nDragFullOptions );
     rSettings.SetStyleSettings ( hStyleSettings );
 }
@@ -2211,14 +2186,8 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, EMPTYARG )
 
     OfficeIPCThread::SetReady();
 
-    // CloseStartupScreen();
     CloseSplashScreen();
-
     CheckFirstRun( );
-
-    // allow ipc interaction
-//    OfficeIPCThread::SetReady();
-
     EnableOleAutomation();
 
     if (getenv ("OOO_EXIT_POST_STARTUP"))
@@ -2611,7 +2580,7 @@ void Desktop::OpenClients()
     // check if a document has been recovered - if there is one of if a document was loaded by cmdline, no default document
     // should be created
     Reference < XComponent > xFirst;
-    BOOL bLoaded = FALSE;
+    sal_Bool bLoaded = sal_False;
 
     CommandLineArgs* pArgs = GetCommandLineArgs();
     SvtInternalOptions  aInternalOptions;
@@ -2655,8 +2624,6 @@ void Desktop::OpenClients()
             aHelpURLBuffer.appendAscii("&System=UNX");
 #elif defined WNT
             aHelpURLBuffer.appendAscii("&System=WIN");
-#elif defined MAC
-            aHelpURLBuffer.appendAscii("&System=MAC");
 #elif defined OS2
             aHelpURLBuffer.appendAscii("&System=OS2");
 #endif
@@ -2687,7 +2654,7 @@ void Desktop::OpenClients()
         OUString aPreloadData;
 
         aPerfTuneIniFile.getFrom( OUString( RTL_CONSTASCII_USTRINGPARAM( "QuickstartPreloadConfiguration" )), aPreloadData, aDefault );
-        if ( aPreloadData.equalsAscii( "1" ))
+        if ( aPreloadData.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "1" ) ))
         {
             if ( pArgs->IsWriter()  ||
                  pArgs->IsCalc()    ||
@@ -2716,16 +2683,6 @@ void Desktop::OpenClients()
 
     if ( ! bAllowRecoveryAndSessionManagement )
     {
-     /*
-        ::comphelper::ConfigurationHelper::writeDirectKey(
-                ::comphelper::getProcessServiceFactory(),
-                ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery"),
-                ::rtl::OUString::createFromAscii("AutoSave"),
-                ::rtl::OUString::createFromAscii("Enabled"),
-                ::com::sun::star::uno::makeAny(sal_False),
-                ::comphelper::ConfigurationHelper::E_STANDARD);
-
-        */
         try
         {
             Reference< XDispatch > xRecovery(
@@ -2746,7 +2703,7 @@ void Desktop::OpenClients()
         {
             OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Could not disable AutoRecovery.\n"))
                 + e.Message;
-            OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+            OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         }
     }
     else
@@ -2772,7 +2729,7 @@ void Desktop::OpenClients()
                     bCrashed           ,
                     bExistsRecoveryData);
                 /* TODO we cant be shure, that at least one document could be recovered here successfully
-                    So we set bLoaded=TRUE to supress opening of the default document.
+                    So we set bLoaded=sal_True to supress opening of the default document.
                     But we should make it more safe. Otherwhise we have an office without an UI ...
                     ...
                     May be we can check the desktop if some documents are existing there.
@@ -2788,7 +2745,7 @@ void Desktop::OpenClients()
             {
                 OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Error during recovery\n"))
                     + e.Message;
-                OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+                OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
             }
         }
 
@@ -2811,7 +2768,7 @@ void Desktop::OpenClients()
         {
             OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Registration of session listener failed\n"))
                 + e.Message;
-            OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+            OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
         }
 
         if (
@@ -2829,7 +2786,7 @@ void Desktop::OpenClients()
             {
                 OUString aMessage = OUString(RTL_CONSTASCII_USTRINGPARAM("Error in session management\n"))
                     + e.Message;
-                OSL_ENSURE(sal_False, OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+                OSL_FAIL(OUStringToOString(aMessage, RTL_TEXTENCODING_ASCII_US).getStr());
             }
         }
     }
@@ -2998,7 +2955,7 @@ String GetURL_Impl(
     }
 
     // Add path seperator to these directory and make given URL (rName) absolute by using of current working directory
-    // Attention: "setFianlSlash()" is neccessary for calling "smartRel2Abs()"!!!
+    // Attention: "setFinalSlash()" is necessary for calling "smartRel2Abs()"!!!
     // Otherwhise last part will be ignored and wrong result will be returned!!!
     // "smartRel2Abs()" interpret given URL as file not as path. So he truncate last element to get the base path ...
     // But if we add a seperator - he doesn't do it anymore.
@@ -3010,7 +2967,6 @@ String GetURL_Impl(
 
     // Use the provided parameters for smartRel2Abs to support the usage of '%' in system paths.
     // Otherwise this char won't get encoded and we are not able to load such files later,
-    // see #110156#
     bool bWasAbsolute;
     INetURLObject aURL     = aObj.smartRel2Abs( rName, bWasAbsolute, false, INetURLObject::WAS_ENCODED,
                                                 RTL_TEXTENCODING_UTF8, true );
@@ -3198,6 +3154,13 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         catch(const css::uno::Exception&)
         {}
     }
+    else if( rAppEvent.GetEvent() == "PRIVATE:DOSHUTDOWN" )
+    {
+        Desktop* pD = dynamic_cast<Desktop*>(GetpApp());
+        OSL_ENSURE( pD, "no desktop ?!?" );
+        if( pD )
+            pD->doShutdown();
+    }
 }
 
 void Desktop::OpenSplashScreen()
@@ -3207,6 +3170,7 @@ void Desktop::OpenSplashScreen()
     sal_Bool bVisible = sal_False;
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
     if ( !pCmdLine->IsInvisible() &&
+         !pCmdLine->IsHeadless() &&
          !pCmdLine->IsQuickstart() &&
          !pCmdLine->IsMinimized() &&
          !pCmdLine->IsNoLogo() &&
@@ -3289,7 +3253,7 @@ void Desktop::DoFirstRunInitializations()
     }
     catch(const ::com::sun::star::uno::Exception&)
     {
-        OSL_ENSURE( sal_False, "Desktop::DoFirstRunInitializations: caught an exception while trigger job executor ..." );
+        OSL_FAIL( "Desktop::DoFirstRunInitializations: caught an exception while trigger job executor ..." );
     }
 }
 

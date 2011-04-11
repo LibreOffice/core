@@ -35,7 +35,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 
 using ::rtl::OUString;
@@ -43,7 +43,7 @@ using ::rtl::OUStringBuffer;
 using namespace ::xmloff::token;
 
 /* The basic idea of this class is that we have two two ways to search our
- * data...by prefix and by key. We use an STL hash_map for fast prefix
+ * data...by prefix and by key. We use an STL boost::unordered_map for fast prefix
  * searching and an STL map for fast key searching.
  *
  * The references to an 'Index' refer to an earlier implementation of the
@@ -81,7 +81,7 @@ SvXMLNamespaceMap::~SvXMLNamespaceMap()
     while ( aIter != aEnd )
     {
         const OUString *pString = (*aIter).first.second;
-        aIter++;
+        ++aIter;
         delete pString;
     }
 }
@@ -171,7 +171,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByName( const OUString& rName ) const
             nKey = (*aIter).second->nKey;
             break;
         }
-        aIter++;
+        ++aIter;
     }
     return nKey;
 }
@@ -469,7 +469,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
                                             OUString *pPrefix,
                                             OUString *pLocalName,
                                             OUString *pNamespace,
-                                            USHORT /*nIdxGuess*/ ) const
+                                            sal_uInt16 /*nIdxGuess*/ ) const
 {
     return _GetKeyByAttrName ( rAttrName, pPrefix, pLocalName, pNamespace );
 }

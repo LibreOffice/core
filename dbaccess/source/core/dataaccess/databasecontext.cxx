@@ -160,7 +160,7 @@ namespace dbaccess
                     {
                         Reference<util::XCloseable> xCloseable(xModel,UNO_QUERY_THROW);
                         xCloseable->close(sal_False);
-                    } // if ( !xModel->getControllers()->hasMoreElements() )
+                    }
                 }
                 catch(const CloseVetoException&)
                 {
@@ -407,7 +407,7 @@ void ODatabaseContext::setTransientProperties(const ::rtl::OUString& _sURL, ODat
         const PropertyValue* pPropsEnd = rSessionPersistentProps.getConstArray() + rSessionPersistentProps.getLength();
         for ( ; pProp != pPropsEnd; ++pProp )
         {
-            if ( pProp->Name.equalsAscii( "AuthFailedPassword" ) )
+            if ( pProp->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AuthFailedPassword" ) ) )
             {
                 OSL_VERIFY( pProp->Value >>= sAuthFailedPassword );
             }
@@ -487,7 +487,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     }
 
     // additionally, remember the "failed password", which is not available as property
-    // #i86178# / 2008-02-19 / frank.schoenheit@sun.com
+    // #i86178#
     aRememberProps.put( "AuthFailedPassword", _rModelImpl.m_sFailedPassword );
 
     ::rtl::OUString sDocumentURL( _rModelImpl.getURL() );
@@ -497,7 +497,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     }
     else if ( m_aDatabaseObjects.find( _rModelImpl.m_sName ) != m_aDatabaseObjects.end() )
     {
-        OSL_ENSURE( false, "ODatabaseContext::storeTransientProperties: a database document register by name? This shouldn't happen anymore!" );
+        OSL_FAIL( "ODatabaseContext::storeTransientProperties: a database document register by name? This shouldn't happen anymore!" );
             // all the code should have been changed so that registration is by URL only
         m_aDatasourceProperties[ _rModelImpl.m_sName ] = aRememberProps.getPropertyValues();
     }
@@ -698,7 +698,7 @@ void ODatabaseContext::registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl
         setTransientProperties( sURL, _rModelImpl );
     }
     else
-        OSL_ENSURE( false, "ODatabaseContext::registerDatabaseDocument: already have an object registered for this URL!" );
+        OSL_FAIL( "ODatabaseContext::registerDatabaseDocument: already have an object registered for this URL!" );
 }
 
 void ODatabaseContext::revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl )

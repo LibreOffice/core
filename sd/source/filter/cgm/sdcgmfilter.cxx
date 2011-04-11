@@ -68,8 +68,8 @@ using namespace ::com::sun::star::frame;
 // - Typedefs -
 // ------------
 
-typedef UINT32 ( __LOADONCALLAPI *ImportCGM )( ::rtl::OUString&, Reference< XModel >&, UINT32, Reference< XStatusIndicator >& );
-typedef BOOL ( __LOADONCALLAPI *ExportCGM )( ::rtl::OUString&, Reference< XModel >&, Reference< XStatusIndicator >&, void* );
+typedef sal_uInt32 ( __LOADONCALLAPI *ImportCGM )( ::rtl::OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
+typedef sal_Bool ( __LOADONCALLAPI *ExportCGM )( ::rtl::OUString&, Reference< XModel >&, Reference< XStatusIndicator >&, void* );
 
 // ---------------
 // - SdPPTFilter -
@@ -95,9 +95,9 @@ sal_Bool SdCGMFilter::Import()
 
     if( pLibrary && mxModel.is() )
     {
-        ImportCGM       FncImportCGM = reinterpret_cast< ImportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii( "ImportCGM" ) ) );
+        ImportCGM       FncImportCGM = reinterpret_cast< ImportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ImportCGM" ) ) ) );
         ::rtl::OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
-        UINT32          nRetValue;
+        sal_uInt32          nRetValue;
 
         if( mrDocument.GetPageCount() == 0L )
             mrDocument.CreateFirstPages();
@@ -107,7 +107,7 @@ sal_Bool SdCGMFilter::Import()
 
         if( nRetValue )
         {
-            bRet = TRUE;
+            bRet = sal_True;
 
             if( ( nRetValue &~0xff000000 ) != 0xffffff )    // maybe the backgroundcolor is already white
             {                                               // so we must not set a master page
@@ -117,7 +117,7 @@ sal_Bool SdCGMFilter::Import()
                 if(pSdPage)
                 {
                     // set PageFill to given color
-                    const Color aColor((BYTE)(nRetValue >> 16), (BYTE)(nRetValue >> 8), (BYTE)(nRetValue >> 16));
+                    const Color aColor((sal_uInt8)(nRetValue >> 16), (sal_uInt8)(nRetValue >> 8), (sal_uInt8)(nRetValue >> 16));
                     pSdPage->getSdrPageProperties().PutItem(XFillColorItem(String(), aColor));
                     pSdPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_SOLID));
                 }
@@ -139,16 +139,12 @@ sal_Bool SdCGMFilter::Export()
 
     if( pLibrary && mxModel.is() )
     {
-        ExportCGM FncCGMExport = reinterpret_cast< ExportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii( "ExportCGM" ) ) );
+        ExportCGM FncCGMExport = reinterpret_cast< ExportCGM >( pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ExportCGM" ) ) ) );
 
         if( FncCGMExport )
         {
             ::rtl::OUString aPhysicalName( mrMedium.GetPhysicalName() );
 
-            /* !!!
-            if ( pViewShell && pViewShell->GetView() )
-                pViewShell->GetView()->SdrEndTextEdit();
-            */
             CreateStatusIndicator();
             bRet = FncCGMExport( aPhysicalName, mxModel, mxStatusIndicator, NULL );
         }

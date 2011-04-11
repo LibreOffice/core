@@ -48,13 +48,13 @@
 
 #define RID_RTS_DEVICEPAGE                  4003
 #define RID_RTS_DEVICE_COLOR_TXT            1
-#define RID_RTS_DEVICE_GRAY_TXT         2
+#define RID_RTS_DEVICE_GRAY_TXT             2
 #define RID_RTS_DEVICE_PPDKEY_TXT           3
 #define RID_RTS_DEVICE_PPDKEY_BOX           4
-#define RID_RTS_DEVICE_PPDVALUE_TXT     5
-#define RID_RTS_DEVICE_PPDVALUE_BOX     6
-#define RID_RTS_DEVICE_LEVEL_TXT            7
-#define RID_RTS_DEVICE_LEVEL_BOX            8
+#define RID_RTS_DEVICE_PPDVALUE_TXT         5
+#define RID_RTS_DEVICE_PPDVALUE_BOX         6
+#define RID_RTS_DEVICE_PRINTLANG_TXT        7
+#define RID_RTS_DEVICE_PRINTLANG_BOX        8
 #define RID_RTS_DEVICE_SPACE_TXT            9
 #define RID_RTS_DEVICE_SPACE_BOX            10
 #define RID_RTS_DEVICE_DEPTH_TXT            11

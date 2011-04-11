@@ -1,6 +1,4 @@
-#*************************************************************************
-#
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#************************************************************************* NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
@@ -72,7 +70,6 @@ SLOFILES =	\
 # --- Shared-Library -----------------------------------------------
 
 SHL1TARGET= $(TARGET)
-#SHL1IMPLIB= ihwp
 
 SHL1STDLIBS= \
         $(CPPULIB)		\
@@ -95,3 +92,11 @@ DEF1NAME=$(SHL1TARGET)
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR : $(MISC)/hwp.component
+
+$(MISC)/hwp.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        hwp.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt hwp.component

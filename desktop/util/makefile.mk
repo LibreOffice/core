@@ -78,11 +78,6 @@ APP1VERINFO=verinfo.rc
 APP1LINKRES=$(MISC)$/$(TARGET)1.res
 APP1STACK=10000000
 
-# create a manifest file with the same name as the
-#office executable file soffice.exe.manifest
-#$(BIN)$/$(TARGET).exe.manifest: template.manifest
-#$(COPY) $< $@
-
 .ENDIF # WNT
 
 .ENDIF # "$(GUI)" != "OS2"
@@ -96,7 +91,6 @@ APP5OBJS=$(OBJ)$/copyright_ascii_ooo.obj $(OBJ)$/main.obj
 APP5STDLIBS = $(SALLIB) $(SOFFICELIB)
 .IF "$(OS)" == "LINUX"
 APP5STDLIBS+= -lXext -lX11
-#APP5STDLIBS+= -lXext -lSM -lICE
 .ENDIF # LINUX
 
 APP5DEPN= $(APP1TARGETN) $(APP5RES) ooverinfo.rc
@@ -206,7 +200,7 @@ ALLTAR : $(BIN)$/soffice_oo$(EXECPOST)
 .IF "$(LINK_SO)"=="TRUE"
 $(BIN)$/so$/soffice_mac$(EXECPOST) : $(APP1TARGETN)
     $(COPY) $< $@
-
+    
 ALLTAR : $(BIN)$/so$/soffice_mac$(EXECPOST)
 .ENDIF # "$(LINK_SO)"=="TRUE"
 

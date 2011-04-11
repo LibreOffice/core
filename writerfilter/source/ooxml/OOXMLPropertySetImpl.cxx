@@ -35,8 +35,6 @@
 #include <ooxml/OOXMLFastTokens.hxx>
 #include "ooxmlLoggers.hxx"
 
-//#define DEBUG_RESOLVE
-
 namespace writerfilter {
 namespace ooxml
 {
@@ -438,11 +436,11 @@ void OOXMLPropertySetImpl::resolve(Properties & rHandler)
         {
             debug_logger->startElement("error");
             debug_logger->chars("zero-property");
-            debug_logger->endElement("error");
+            debug_logger->endElement();
         }
 #endif
 
-        aIt++;
+        ++aIt;
     }
 }
 
@@ -475,15 +473,22 @@ string OOXMLPropertySetImpl::getType() const
 
 void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
+#ifdef DEBUG_PROPERTY_SET
+    debug_logger->startElement("propertyset.add");
+    debug_logger->chars(pProperty->toString());
+#endif
+
     if (pProperty.get() != NULL && pProperty->getId() != 0x0)
     {
         mProperties.push_back(pProperty);
     }
-#ifdef DEBUG_PROPERTIES
+#ifdef DEBUG_PROPERTY_SET
     else
     {
         debug_logger->element("warning.property_not_added");
     }
+
+    debug_logger->endElement("propertyset.add");
 #endif
 }
 
@@ -498,7 +503,7 @@ void OOXMLPropertySetImpl::add(OOXMLPropertySet::Pointer_t pPropertySet)
         {
             mProperties.resize(mProperties.size() + pSet->mProperties.size());
             for (OOXMLProperties_t::iterator aIt = pSet->mProperties.begin();
-                 aIt != pSet->mProperties.end(); aIt++)
+                 aIt != pSet->mProperties.end(); ++aIt)
                 add(*aIt);
         }
     }
@@ -525,7 +530,7 @@ string OOXMLPropertySetImpl::toString()
     OOXMLProperties_t::iterator aItBegin = begin();
     OOXMLProperties_t::iterator aItEnd = end();
 
-    for (OOXMLProperties_t::iterator aIt = aItBegin; aIt != aItEnd; aIt++)
+    for (OOXMLProperties_t::iterator aIt = aItBegin; aIt != aItEnd; ++aIt)
     {
         if (aIt != aItBegin)
             sResult += ", ";
@@ -718,7 +723,7 @@ void OOXMLTableImpl::resolve(Table & rTable)
             pTable->entry(nPos, pProperties);
 
         ++nPos;
-        it++;
+        ++it;
     }
 }
 

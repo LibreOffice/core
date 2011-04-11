@@ -57,10 +57,6 @@
  * @file
  * Number style for table cell.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-03-23 create this file.
- ************************************************************************/
 #ifndef     _XFNUMBERSTYLE_HXX
 #define     _XFNUMBERSTYLE_HXX
 
@@ -86,7 +82,7 @@ public:
     void    SetGroup(sal_Bool group = sal_True);
 
     void    SetColor(const XFColor& color);
-    XFColor GetColor(){return m_aColor;}//add by ,2005/11/30
+    XFColor GetColor(){return m_aColor;}
 
     void    SetPrefix(rtl::OUString prefix);
 

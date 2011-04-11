@@ -25,7 +25,8 @@
  *
  ************************************************************************/
 
-#include <filedlg2.hrc>
+#include <svtools/filedlg2.hrc>
+
 String STR_FILEDLG_SELECT
 {
     Text [ en-US ] = "Select Directory" ;
@@ -86,41 +87,3 @@ String STR_FILEDLG_ASKNEWDIR
 {
     Text [ en-US ] = "Do you want the directory %s to be created ?" ;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

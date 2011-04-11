@@ -42,10 +42,6 @@ import integration.forms.BooleanValidator;
 import integration.forms.ListSelectionValidator;
 import integration.forms.SingleControlValidation;
 
-/**
- *
- * @author  fs@openoffice.org
- */
 public class ControlValidation extends complexlib.ComplexTestCase implements com.sun.star.lang.XEventListener
 {
     private DocumentHelper          m_document;         /// our current test document

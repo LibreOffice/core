@@ -240,7 +240,7 @@ OUString SAL_CALL AccessibleBrowseBoxTable::getImplementationName()
 
 Rectangle AccessibleBrowseBoxTable::implGetBoundingBox()
 {
-    return mpBrowseBox->calcTableRect(FALSE);
+    return mpBrowseBox->calcTableRect(sal_False);
 }
 
 Rectangle AccessibleBrowseBoxTable::implGetBoundingBoxOnScreen()
@@ -264,7 +264,7 @@ Reference< XAccessibleTable > AccessibleBrowseBoxTable::implGetHeaderBar(
         }
         catch( lang::IndexOutOfBoundsException& )
         {
-            DBG_ERROR( "implGetHeaderBar - wrong child index" );
+            OSL_FAIL( "implGetHeaderBar - wrong child index" );
         }
         // RuntimeException goes to caller
     }

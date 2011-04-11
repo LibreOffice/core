@@ -38,17 +38,20 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include "metadata.hxx"
+#include <tools/urlobj.hxx>
 
 //........................................................................
 namespace rptui
 {
 //........................................................................
     //------------------------------------------------------------------------
-    ::rtl::OUString HelpIdUrl::getHelpURL( sal_uInt32 _nHelpId )
+    ::rtl::OUString HelpIdUrl::getHelpURL( const rtl::OString& sHelpId )
     {
         ::rtl::OUStringBuffer aBuffer;
-        aBuffer.appendAscii( "HID:" );
-        aBuffer.append( (sal_Int32)_nHelpId );
+        ::rtl::OUString aTmp( sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8 );
+        DBG_ASSERT( INetURLObject( aTmp ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
+        aBuffer.appendAscii( INET_HID_SCHEME );
+        aBuffer.append( aTmp.getStr() );
         return aBuffer.makeStringAndClear();
     }
 
@@ -231,8 +234,8 @@ namespace rptui
         const struct
         {
             const sal_Char* programmaticName;
-            USHORT          uiNameResId;
-            sal_uInt32      helpId;
+            sal_uInt16          uiNameResId;
+            rtl::OString    helpId;
         } aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_RPT_PROPDLG_TAB_GENERAL },
             { "Data",       RID_STR_PROPPAGE_DATA,      HID_RPT_PROPDLG_TAB_DATA },

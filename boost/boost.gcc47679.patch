@@ -1,0 +1,38 @@
+--- misc/boost_1_44_0/boost/utility/compare_pointees.hpp	2011-02-10 16:39:05.960176555 +0000
++++ misc/build/boost_1_44_0/boost/utility/compare_pointees.hpp	2011-02-10 16:40:59.091423279 +0000
+@@ -29,7 +29,11 @@
+ inline
+ bool equal_pointees ( OptionalPointee const& x, OptionalPointee const& y )
+ {
+-  return (!x) != (!y) ? false : ( !x ? true : (*x) == (*y) ) ;
++  if (!x && !y)
++    return true;
++  if (!x || !y)
++    return false;
++  return (*x) == (*y);
+ }
+ 
+ template<class OptionalPointee>
+--- misc/boost_1_44_0/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2011-03-02 12:22:47.222870106 +0000
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2011-03-02 12:22:47.222870106 +0000
+@@ -219,6 +219,20 @@
+             }
+         };
+ 
++        template <int Radix>
++        struct negative_accumulate<unsigned char, Radix>
++        {
++            //  Use this accumulator if number is negative
++            static bool add(unsigned char& n, unsigned digit)
++            {
++                n *= Radix;
++                if (n < digit)
++                    return false;
++                n -= digit;
++                return true;
++            }
++        };
++
+         template <int MaxDigits>
+         inline bool allow_more_digits(std::size_t i)
+         {

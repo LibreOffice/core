@@ -227,7 +227,7 @@ sal_Bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const ::rtl::OUStr
     // 0 is normaly an error of the called method toInt32() ...
     // But we must be aware, that the identifier is "0"!
     rCode = 0;
-    return sIdentifier.equalsAscii("0");
+    return sIdentifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("0"));
 }
 
 } // namespace framework

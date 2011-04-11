@@ -88,7 +88,6 @@ private:
     DECL_LINK( FilterHdl_Impl, ListBox * );
     DECL_LINK( ODFVersionHdl_Impl, ListBox * );
 
-    bool    AcceptFilter( USHORT nPos );
     void    DetectHiddenControls();
 #endif
 
@@ -98,7 +97,7 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 

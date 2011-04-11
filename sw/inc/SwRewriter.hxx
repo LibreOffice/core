@@ -31,6 +31,11 @@
 
 #include <vector>
 #include <tools/string.hxx>
+#include <swdllapi.h>
+
+extern SW_DLLPUBLIC String const UNDO_ARG1;
+extern SW_DLLPUBLIC String const UNDO_ARG2;
+extern SW_DLLPUBLIC String const UNDO_ARG3;
 
 typedef std::pair<String, String> SwRewriteRule;
 

@@ -36,7 +36,7 @@
 
 #include "com/sun/star/ucb/XSimpleFileAccess.hpp"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/string.hxx>
 
 extern "C" {
@@ -89,8 +89,6 @@ namespace berkeleydbproxy {
     };
 
 
-//#define TEST_DBHELP
-
     class DBData
     {
         friend class        DBHelp;
@@ -114,12 +112,12 @@ namespace berkeleydbproxy {
             { return m_pBuffer; }
     };
 
-    typedef std::hash_map< rtl::OString,std::pair<int,int>,ha,eq >  StringToValPosMap;
-    typedef std::hash_map< rtl::OString,rtl::OString,ha,eq >        StringToDataMap;
+    typedef boost::unordered_map< rtl::OString,std::pair<int,int>,ha,eq >   StringToValPosMap;
+    typedef boost::unordered_map< rtl::OString,rtl::OString,ha,eq >     StringToDataMap;
 
     class DBHelp
     {
-        rtl::OUString       m_aFileName;
+        rtl::OUString       m_aFileURL;
         StringToDataMap*    m_pStringToDataMap;
         StringToValPosMap*  m_pStringToValPosMap;
         com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess >
@@ -134,25 +132,26 @@ namespace berkeleydbproxy {
         bool implReadLenAndData( const char* pData, int& riPos, DBData& rValue );
 
     public:
-        DBHelp( const rtl::OUString& rFileName,
+        //DBHelp must get a fileURL which can then directly be used by simple file access.
+        //SimpleFileAccess requires file URLs as arguments. Passing file path may work but fails
+        //for example when using long file paths on Windows, which start with "\\?\"
+        DBHelp( const rtl::OUString& rFileURL,
             com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess > xSFA )
-                : m_aFileName( rFileName )
+                : m_aFileURL( rFileURL )
                 , m_pStringToDataMap( NULL )
                 , m_pStringToValPosMap( NULL )
                 , m_xSFA( xSFA )
                 , m_pItData( NULL )
                 , m_nItRead( -1 )
                 , m_iItPos( -1 )
-        {}
+        {
+            OSL_ASSERT(!rFileURL.compareTo(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:")), 5));
+        }
         ~DBHelp()
             { releaseHashMap(); }
 
         void createHashMap( bool bOptimizeForPerformance = false );
         void releaseHashMap( void );
-
-#ifdef TEST_DBHELP
-        bool testAgainstDb( const rtl::OString& fileName, bool bOldDbAccess );
-#endif
 
         bool getValueForKey( const rtl::OString& rKey, DBData& rValue );
 
@@ -181,6 +180,12 @@ namespace berkeleydbproxy {
         int open(DB_TXN *txnid,
                  const char *file,
                  const char *database,
+                 DBTYPE type,
+                 u_int32_t flags,
+                 int mode);
+
+        int open(DB_TXN *txnid,
+                 ::rtl::OUString const & fileURL,
                  DBTYPE type,
                  u_int32_t flags,
                  int mode);
@@ -217,8 +222,6 @@ namespace berkeleydbproxy {
         Dbt(void *data_arg, u_int32_t size_arg);
 
         Dbt();
-        //Dbt(const Dbt & other);
-        //Dbt & operator=(const Dbt & other);
 
         ~Dbt();
 
@@ -233,20 +236,5 @@ namespace berkeleydbproxy {
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

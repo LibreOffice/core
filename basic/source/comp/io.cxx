@@ -36,9 +36,9 @@
 
 // Test, ob ein I/O-Channel angegeben wurde
 
-BOOL SbiParser::Channel( BOOL bAlways )
+sal_Bool SbiParser::Channel( sal_Bool bAlways )
 {
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     Peek();
     if( IsHash() )
     {
@@ -47,7 +47,7 @@ BOOL SbiParser::Channel( BOOL bAlways )
             Next();
         aExpr.Gen();
         aGen.Gen( _CHANNEL );
-        bRes = TRUE;
+        bRes = sal_True;
     }
     else if( bAlways )
         Error( SbERR_EXPECTED, "#" );
@@ -61,7 +61,7 @@ BOOL SbiParser::Channel( BOOL bAlways )
 
 void SbiParser::Print()
 {
-    BOOL bChan = Channel();
+    sal_Bool bChan = Channel();
     // Die Ausdruecke zum Drucken:
     while( !bAbort )
     {
@@ -92,7 +92,7 @@ void SbiParser::Print()
 
 void SbiParser::Write()
 {
-    BOOL bChan = Channel();
+    sal_Bool bChan = Channel();
     // Die Ausdruecke zum Drucken:
     while( !bAbort )
     {
@@ -144,28 +144,8 @@ void SbiParser::Line()
 
 void SbiParser::LineInput()
 {
-    Channel( TRUE );
-    // BOOL bChan = Channel( TRUE );
+    Channel( sal_True );
     SbiExpression* pExpr = new SbiExpression( this, SbOPERAND );
-    /* AB 15.1.96: Keinen allgemeinen Ausdruck mehr zulassen
-    SbiExpression* pExpr = new SbiExpression( this );
-    if( !pExpr->IsVariable() )
-    {
-        SbiToken eTok = Peek();
-        if( eTok == COMMA || eTok == SEMICOLON ) Next();
-        else Error( SbERR_EXPECTED, COMMA );
-        // mit Prompt
-        if( !bChan )
-        {
-            pExpr->Gen();
-            aGen.Gen( _PROMPT );
-        }
-        else
-            Error( SbERR_VAR_EXPECTED );
-        delete pExpr;
-        pExpr = new SbiExpression( this, SbOPERAND );
-    }
-    */
     if( !pExpr->IsVariable() )
         Error( SbERR_VAR_EXPECTED );
     if( pExpr->GetType() != SbxVARIANT && pExpr->GetType() != SbxSTRING )
@@ -181,14 +161,8 @@ void SbiParser::LineInput()
 void SbiParser::Input()
 {
     aGen.Gen( _RESTART );
-    Channel( TRUE );
-    // BOOL bChan = Channel( TRUE );
+    Channel( sal_True );
     SbiExpression* pExpr = new SbiExpression( this, SbOPERAND );
-    /* ALT: Jetzt keinen allgemeinen Ausdruck mehr zulassen
-    SbiExpression* pExpr = new SbiExpression( this );
-    ...
-    siehe LineInput
-    */
     while( !bAbort )
     {
         if( !pExpr->IsVariable() )
@@ -235,7 +209,7 @@ void SbiParser::Open()
     {
         Next();
         eTok = Next();
-        // #27964# Nur STREAM_READ,STREAM_WRITE-Flags in nMode beeinflussen
+        // Nur STREAM_READ,STREAM_WRITE-Flags in nMode beeinflussen
         nMode &= ~(STREAM_READ | STREAM_WRITE);     // loeschen
         if( eTok == READ )
         {

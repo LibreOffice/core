@@ -39,42 +39,6 @@ using namespace com::sun::star::lang;
 
 using namespace com::sun::star::registry;
 
-////////////////////////////////////////
-// declaration of external RegEntry-functions defined by the service objects
-//
-
-extern sal_Bool SAL_CALL LngSvcMgr_writeInfo
-(
-    void * /*pServiceManager*/,
-    XRegistryKey * pRegistryKey
-);
-
-extern sal_Bool SAL_CALL DicList_writeInfo
-(
-    void * /*pServiceManager*/, XRegistryKey * pRegistryKey
-);
-
-extern sal_Bool SAL_CALL LinguProps_writeInfo
-(
-    void * /*pServiceManager*/,
-    XRegistryKey * pRegistryKey
-);
-
-extern sal_Bool SAL_CALL ConvDicList_writeInfo
-(
-    void * /*pServiceManager*/, XRegistryKey * pRegistryKey
-);
-
-extern sal_Bool SAL_CALL GrammarCheckingIterator_writeInfo
-(
-    void * /*pServiceManager*/, XRegistryKey * pRegistryKey
-);
-
-//extern sal_Bool SAL_CALL GrammarChecker_writeInfo
-//(
-//    void * /*pServiceManager*/, XRegistryKey * pRegistryKey
-//);
-
 extern void * SAL_CALL LngSvcMgr_getFactory
 (
     const sal_Char * pImplName,
@@ -128,28 +92,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-sal_Bool SAL_CALL component_writeInfo
-(
-    void * pServiceManager,
-    XRegistryKey * pRegistryKey
-)
-{
-    sal_Bool bRet = LngSvcMgr_writeInfo( pServiceManager, pRegistryKey );
-    if(bRet)
-        bRet = LinguProps_writeInfo( pServiceManager, pRegistryKey );
-    if(bRet)
-        bRet = DicList_writeInfo( pServiceManager, pRegistryKey );
-    if(bRet)
-        bRet = ConvDicList_writeInfo( pServiceManager, pRegistryKey );
-    if(bRet)
-        bRet = GrammarCheckingIterator_writeInfo( pServiceManager, pRegistryKey );
-/*
-    if(bRet)
-        bRet = GrammarChecker_writeInfo( pServiceManager, pRegistryKey );
-*/
-    return bRet;
 }
 
 void * SAL_CALL component_getFactory(

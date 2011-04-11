@@ -42,7 +42,7 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry __READONLY_DATA aPostureGenericMapping[] =
+SvXMLEnumMapEntry const aPostureGenericMapping[] =
 {
     { XML_POSTURE_NORMAL,       ITALIC_NONE     },
     { XML_POSTURE_ITALIC,       ITALIC_NORMAL   },

@@ -43,7 +43,7 @@
 #include "com/sun/star/deployment/XPackageManager.hpp"
 #include "com/sun/star/deployment/InvalidRemovedParameterException.hpp"
 #include <memory>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include "dp_registry.hrc"
 
@@ -56,8 +56,7 @@ namespace css = ::com::sun::star;
 
 class PackageRegistryBackend;
 
-char const* const BACKEND_SERVICE_NAME =
-"com.sun.star.deployment.PackageRegistryBackend";
+#define BACKEND_SERVICE_NAME "com.sun.star.deployment.PackageRegistryBackend"
 
 typedef ::cppu::WeakComponentImplHelper1<
     css::deployment::XPackage > t_PackageBase;
@@ -122,16 +121,16 @@ public:
         const ::rtl::OUString m_mediaType;
         const ::rtl::OUString m_fileFilter;
         const ::rtl::OUString m_shortDescr;
-        const sal_uInt16 m_smallIcon, m_smallIcon_HC;
+        const sal_uInt16 m_smallIcon;
     public:
         virtual ~TypeInfo();
         TypeInfo( ::rtl::OUString const & mediaType,
                   ::rtl::OUString const & fileFilter,
                   ::rtl::OUString const & shortDescr,
-                  sal_uInt16 smallIcon, sal_uInt16 smallIcon_HC )
+                  sal_uInt16 smallIcon)
             : m_mediaType(mediaType), m_fileFilter(fileFilter),
               m_shortDescr(shortDescr),
-              m_smallIcon(smallIcon), m_smallIcon_HC(smallIcon_HC)
+              m_smallIcon(smallIcon)
             {}
         // XPackageTypeInfo
         virtual ::rtl::OUString SAL_CALL getMediaType()
@@ -238,6 +237,9 @@ public:
     virtual ::rtl::OUString SAL_CALL getDescription()
         throw (css::deployment::ExtensionRemovedException,
                css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getLicenseText()
+        throw (css::deployment::ExtensionRemovedException,
+               css::uno::RuntimeException);
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
     getUpdateInformationURLs()
         throw (css::deployment::ExtensionRemovedException,
@@ -284,7 +286,7 @@ class PackageRegistryBackend
     // XPackageManager::getDeployedPackages is called often. This results in a lot
     //of bindPackage calls which are costly. Therefore we keep hard references in
     //the map now.
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         ::rtl::OUString, css::uno::Reference<css::deployment::XPackage>,
         ::rtl::OUStringHash > t_string2ref;
     t_string2ref m_bound;
@@ -295,9 +297,9 @@ protected:
 
     ::rtl::OUString m_context;
     // currently only for library containers:
-    enum context {
+    enum {
         CONTEXT_UNKNOWN,
-        CONTEXT_USER, CONTEXT_SHARED,CONTEXT_BUNDLED, CONTEXT_TMP,
+        CONTEXT_USER, CONTEXT_SHARED,CONTEXT_BUNDLED, CONTEXT_TMP, CONTEXT_BUNDLED_PREREG,
         CONTEXT_DOCUMENT
     } m_eContext;
     bool m_readOnly;
@@ -343,6 +345,18 @@ protected:
     static void deleteTempFolder(
         ::rtl::OUString const & folderUrl);
 
+    ::rtl::OUString getSharedRegistrationDataURL(
+        css::uno::Reference<css::deployment::XPackage> const & extension,
+        css::uno::Reference<css::deployment::XPackage> const & item);
+
+    /* The backends must implement this function, which is called
+       from XPackageRegistry::packageRemoved (also implemented here).
+       This ensure that the backends clean up their registration data
+       when an extension was removed.
+    */
+//    virtual void deleteDbEntry( ::rtl::OUString const & url) = 0;
+
+
 
 public:
     struct StrRegisteringPackage : public ::dp_misc::StaticResourceString<
@@ -371,6 +385,12 @@ public:
                css::deployment::InvalidRemovedParameterException,
                css::ucb::CommandFailedException,
                css::lang::IllegalArgumentException, css::uno::RuntimeException);
+
+//     virtual void SAL_CALL packageRemoved(
+//         ::rtl::OUString const & url, ::rtl::OUString const & mediaType)
+//         throw (css::deployment::DeploymentException,
+//                css::uno::RuntimeException);
+
 };
 
 }

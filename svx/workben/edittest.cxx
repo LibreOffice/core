@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -154,9 +153,10 @@
 // VARS...
 short nRotation = 0;
 USHORT nZoom = 100;
-BOOL bURLClicked = FALSE;
+sal_Bool bURLClicked = sal_False;
 
 using namespace ::com::sun::star::connection;
+using namespace ::vos;
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
@@ -1793,5 +1793,3 @@ void __EXPORT EditApp::Main()
 }
 
 EditApp aEditApp;
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

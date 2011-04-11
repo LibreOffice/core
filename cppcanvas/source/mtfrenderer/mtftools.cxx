@@ -307,14 +307,14 @@ namespace cppcanvas
         TextLineInfo createTextLineInfo( const ::VirtualDevice&                     rVDev,
                                          const ::cppcanvas::internal::OutDevState&  rState )
         {
-            const BOOL bOldMode( rVDev.IsMapModeEnabled() );
+            const sal_Bool bOldMode( rVDev.IsMapModeEnabled() );
 
             // #i68512# Force metric regeneration with mapmode enabled
             // (prolly OutDev bug)
             rVDev.GetFontMetric();
 
             // will restore map mode below
-            const_cast< ::VirtualDevice& >(rVDev).EnableMapMode( FALSE );
+            const_cast< ::VirtualDevice& >(rVDev).EnableMapMode( sal_False );
 
             const ::FontMetric aMetric = rVDev.GetFontMetric();
 

@@ -45,6 +45,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
+
+/**
+   When this tool is used with long path names on Windows, that is paths which start
+   with \\?\, then the caller must make sure that the path is unique. This is achieved
+   by removing '.' and '..' from the path. Paths which are created by
+   osl_getSystemPathFromFileURL fulfill this requirement. This is necessary because
+   lucene is patched to not use File.getCanonicalPath. See long_path.patch in the lucene
+   module.
+ */
 public class HelpIndexerTool
 {
     public HelpIndexerTool()

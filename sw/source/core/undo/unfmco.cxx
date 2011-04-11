@@ -36,16 +36,13 @@
 #include "pam.hxx"
 #include "ndtxt.hxx"
 
-#include "undobj.hxx"
+#include <UndoCore.hxx>
 #include "rolbck.hxx"
 
-
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 //--------------------------------------------------
 
 
-// --> OD 2008-04-15 #refactorlists#
 SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
                               SwFmtColl* pColl,
                               const bool bReset,
@@ -56,7 +53,6 @@ SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange,
       pFmtColl( pColl ),
       mbReset( bReset ),
       mbResetListAttrs( bResetListAttrs )
-// <--
 {
     // --> FME 2004-08-06 #i31191#
     if ( pColl )
@@ -71,51 +67,43 @@ SwUndoFmtColl::~SwUndoFmtColl()
 }
 
 
-void SwUndoFmtColl::Undo( SwUndoIter& rUndoIter )
+void SwUndoFmtColl::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    // die alten Werte wieder zurueck
-    pHistory->TmpRollback( &rUndoIter.GetDoc(), 0 );
+    // restore old values
+    pHistory->TmpRollback(& rContext.GetDoc(), 0);
     pHistory->SetTmpEnd( pHistory->Count() );
 
-    // setze noch den Cursor auf den Undo-Bereich
-    SetPaM( rUndoIter );
+    // create cursor for undo range
+    AddUndoRedoPaM(rContext);
 }
 
 
-void SwUndoFmtColl::Redo( SwUndoIter& rUndoIter )
+void SwUndoFmtColl::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    // setze Attribut in dem Bereich:
-    SetPaM( rUndoIter );
-    rUndoIter.pLastUndoObj = 0;
+    SwPaM & rPam = AddUndoRedoPaM(rContext);
 
-    Repeat( rUndoIter );    // Collection setzen
-
-    rUndoIter.pLastUndoObj = 0;
+    DoSetFmtColl(rContext.GetDoc(), rPam);
 }
 
-
-void SwUndoFmtColl::Repeat( SwUndoIter& rUndoIter )
+void SwUndoFmtColl::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    if( UNDO_SETFMTCOLL == rUndoIter.GetLastUndoId() &&
-        pFmtColl == ((SwUndoFmtColl*)rUndoIter.pLastUndoObj)->pFmtColl )
-        return;
+    DoSetFmtColl(rContext.GetDoc(), rContext.GetRepeatPaM());
+}
 
+void SwUndoFmtColl::DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM)
+{
     // es kann nur eine TextFmtColl auf einen Bereich angewendet werden,
     // also erfrage auch nur in dem Array
-    USHORT nPos = rUndoIter.GetDoc().GetTxtFmtColls()->GetPos(
+    sal_uInt16 const nPos = rDoc.GetTxtFmtColls()->GetPos(
                                                      (SwTxtFmtColl*)pFmtColl );
-    // ist das Format ueberhaupt noch vorhanden?
+    // does the format still exist?
     if( USHRT_MAX != nPos )
     {
-        // --> OD 2008-04-15 #refactorlists#
-        rUndoIter.GetDoc().SetTxtFmtColl( *rUndoIter.pAktPam,
+        rDoc.SetTxtFmtColl(rPaM,
                                           (SwTxtFmtColl*)pFmtColl,
                                           mbReset,
                                           mbResetListAttrs );
-        // <--
     }
-
-    rUndoIter.pLastUndoObj = this;
 }
 
 SwRewriter SwUndoFmtColl::GetRewriter() const

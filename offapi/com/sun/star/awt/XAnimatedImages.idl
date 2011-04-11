@@ -1,0 +1,176 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_awt_XAnimatedImages_idl__
+#define __com_sun_star_awt_XAnimatedImages_idl__
+
+#include <com/sun/star/container/XContainerListener.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/container/XContainer.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//======================================================================================================================
+
+module com { module sun { module star { module awt {
+
+//======================================================================================================================
+
+/** allows administrating a set of images, to be displayed as animated seres.
+
+    <p>Components implementing this interface maintain a variable number of image sets. Components displaying
+    those images will choose the best-fitting image set depending on the available space, and possibly other
+    restrictions.</p>
+
+    @since OOo 3.4
+ */
+interface XAnimatedImages
+{
+    /** specifies the time in milliseconds between two animation steps.
+
+        <p>This is the minimum time, the actual value might be longer due to
+        system load. The default value will be 100 ms.</p>
+    */
+    [attribute] long    StepTime;
+
+    /** specifies whether the animation should start over with the first image of the image series when the last image
+        has been played.
+
+        <p>The default value for this attribute is <TRUE/>.</p>
+    */
+    [attribute] boolean AutoRepeat;
+
+    /** controls the way the images are scaled up or down, when the available space is larger or smaller
+        than what is needed for them.
+
+        <p>Allowed values are those from the <type>ImageScaleMode</type> constants group.</p>
+    */
+    [attribute] short ScaleMode
+    {
+        set raises (::com::sun::star::lang::IllegalArgumentException);
+    };
+
+    /** returns the number of images sets maintained by the component.
+    */
+    long
+        getImageSetCount();
+
+    /** returns the URLs of the image set with the given index
+
+        @param i_index
+            the index of the set those image URLs are to be retrieved. Must be greater than or equal to <code>0</code>,
+            and smaller than the value returned by <member>getImageSetCount</member>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the <code>i_index</code> is not a valid index.
+    */
+    sequence< string >
+        getImageSet
+        (
+            [in] long i_index
+        )
+        raises
+        (
+            ::com::sun::star::lang::IndexOutOfBoundsException
+        );
+
+    /** sets the URLs of the image set with the given index
+
+        @param i_index
+            the index at which a new image set should be inserted. Must be greater than or equal to <code>0</code>,
+            and smaller than or equal to the value returned by <member>getImageSetCount</member>.
+        @param i_imageURLs
+            the URLs for the images for the given set. Will be resolved using a <type scope="com::sun::star::graphic">GraphicProvider</type>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the <code>i_index</code> is not a valid index.
+    */
+    void
+        insertImageSet
+        (
+            [in] long i_index,
+            [in] sequence< string > i_imageURLs
+        )
+        raises
+        (
+            ::com::sun::star::lang::IndexOutOfBoundsException
+        );
+
+    /** replaces the image set given by index with a new one
+
+        @param i_index
+            the index of the set those image URLs are to be replaced. Must be greater than or equal to <code>0</code>,
+            and smaller than the value returned by <member>getImageSetCount</member>.
+
+        @param i_imageURLs
+            the URLs for the images for the given set. Will be resolved using a <type scope="com::sun::star::graphic">GraphicProvider</type>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the <code>i_index</code> is not a valid index.
+    */
+    void
+        replaceImageSet
+        (
+            [in] long i_index,
+            [in] sequence< string > i_imageURLs
+        )
+        raises
+        (
+            ::com::sun::star::lang::IndexOutOfBoundsException
+        );
+
+
+    /** removes the image set with the given index
+
+        @param i_index
+            the index of the set to remove. Must be greater than or equal to <code>0</code>,
+            and smaller than the value returned by <member>getImageSetCount</member>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the <code>i_index</code> is not a valid index.
+    */
+    void
+        removeImageSet
+        (
+            [in] long i_index
+        )
+        raises
+        (
+            ::com::sun::star::lang::IndexOutOfBoundsException
+        );
+
+
+    /** allows other components to observer the insertion, removal, and replacement of image sets
+    */
+    interface ::com::sun::star::container::XContainer;
+};
+
+//======================================================================================================================
+
+}; }; }; };
+
+//======================================================================================================================
+
+#endif

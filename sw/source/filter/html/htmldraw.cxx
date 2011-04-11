@@ -79,7 +79,7 @@ const sal_uInt32 HTML_FRMOPTS_MARQUEE_CSS1  =
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
 
-static HTMLOptionEnum __FAR_DATA aHTMLMarqBehaviorTable[] =
+static HTMLOptionEnum aHTMLMarqBehaviorTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,     SDRTEXTANI_SCROLL       },
     { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate,  SDRTEXTANI_ALTERNATE    },
@@ -87,7 +87,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLMarqBehaviorTable[] =
     { 0,                        0                       }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLMarqDirectionTable[] =
+static HTMLOptionEnum aHTMLMarqDirectionTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,          SDRTEXTANI_LEFT         },
     { OOO_STRING_SVTOOLS_HTML_AL_right,         SDRTEXTANI_RIGHT        },
@@ -104,8 +104,8 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
                                      sal_Bool bHidden )
 {
     // always on top of text.
-    // OD 02.07.2003 #108784# but in invisible layer. <ConnectToLayout> will
-    // move the object to the visible layer.
+    // but in invisible layer. <ConnectToLayout> will move the object
+    // to the visible layer.
     pNewDrawObj->SetLayer( pDoc->GetInvisibleHeavenId() );
 
     SfxItemSet aFrmSet( pDoc->GetAttrPool(),
@@ -184,7 +184,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eTopType )
     {
         const SwStartNode *pFlySttNd =
-            pDoc->GetNodes()[pPam->GetPoint()->nNode]->FindFlyStartNode();
+            pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
 
         if( pFlySttNd )
         {
@@ -196,7 +196,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         {
             aAnchor.SetType( FLY_AT_PAGE );
         }
-        // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
+        // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(rCSS1PropInfo.nLeft + nLeftSpace,
                                            rCSS1PropInfo.nTop + nUpperSpace) );
         aFrmSet.Put( SwFmtSurround(SURROUND_THROUGHT) );
@@ -207,7 +207,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aAnchor.SetType( FLY_AT_PARA );
         aFrmSet.Put( SwFmtSurround(bHidden ? SURROUND_THROUGHT
                                              : SURROUND_RIGHT) );
-        // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
+        // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(nLeftSpace, nUpperSpace) );
     }
     else if( text::VertOrientation::NONE != eVertOri )
@@ -387,9 +387,9 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     }
 
     // Ein DrawTxtobj anlegen
-    // --> OD 2005-08-08 #i52858# - method name changed
+    // #i52858# - method name changed
     SdrModel* pModel = pDoc->GetOrCreateDrawModel();
-    // <--
+
     SdrPage* pPg = pModel->GetPage( 0 );
     pMarquee = SdrObjFactory::MakeNewObject( SdrInventor,
                                              OBJ_TEXT, pPg, pModel );
@@ -447,8 +447,8 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
         0
     };
-    const SwTxtNode *pTxtNd = pDoc->GetNodes()[pPam->GetPoint()->nNode]
-                                  ->GetTxtNode();
+    SwTxtNode const*const pTxtNd =
+        pPam->GetPoint()->nNode.GetNode().GetTxtNode();
     if( pTxtNd )
     {
         const SfxItemSet& rItemSet = pTxtNd->GetAnyFmtColl().GetAttrSet();

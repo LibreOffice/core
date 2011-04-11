@@ -44,9 +44,9 @@
 
 class SwRenameXNamedDlg : public ModalDialog
 {
+    FixedLine       aNameFL;
     FixedText       aNewNameFT;
     NoSpaceEdit     aNewNameED;
-    FixedLine       aNameFL;
     OKButton        aOk;
     CancelButton    aCancel;
     HelpButton      aHelp;

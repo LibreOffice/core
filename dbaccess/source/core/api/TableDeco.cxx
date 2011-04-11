@@ -35,6 +35,7 @@
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -186,7 +187,7 @@ void ODBTableDecorator::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, con
     switch(_nHandle)
     {
         case PROPERTY_ID_PRIVILEGES:
-            OSL_ENSURE(0,"Property is readonly!");
+            OSL_FAIL("Property is readonly!");
         case PROPERTY_ID_FILTER:
         case PROPERTY_ID_ORDER:
         case PROPERTY_ID_APPLYFILTER:
@@ -325,7 +326,7 @@ void ODBTableDecorator::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) c
             }
             break;
         default:
-            OSL_ENSURE(0,"Invalid Handle for table");
+            OSL_FAIL("Invalid Handle for table");
     }
 }
 
@@ -427,9 +428,6 @@ void SAL_CALL ODBTableDecorator::rename( const ::rtl::OUString& _rNewName ) thro
     Reference<XRename> xRename(m_xTable,UNO_QUERY);
     if(xRename.is())
     {
-//      ::rtl::OUString sOldName;
-//      Reference<XPropertySet> xProp(m_xTable,UNO_QUERY);
-//      xProp->getPropertyValue(PROPERTY_NAME) >>= sOldName;
         xRename->rename(_rNewName);
     }
     else // not supported
@@ -539,7 +537,7 @@ Sequence< sal_Int8 > ODBTableDecorator::getUnoTunnelImplementationId()
 void ODBTableDecorator::fillPrivileges() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTableDecorator::fillPrivileges" );
-    // somebody is asking for the privileges an we do not know them, yet
+    // somebody is asking for the privileges and we do not know them, yet
     m_nPrivileges = 0;
     try
     {
@@ -563,7 +561,7 @@ void ODBTableDecorator::fillPrivileges() const
     catch(const SQLException& e)
     {
         (void)e;
-        DBG_ERROR("ODBTableDecorator::ODBTableDecorator : could not collect the privileges !");
+        OSL_FAIL("ODBTableDecorator::ODBTableDecorator : could not collect the privileges !");
     }
 }
 
@@ -574,7 +572,7 @@ Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) t
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
     Reference< XDataDescriptorFactory > xFactory( m_xTable, UNO_QUERY );
-    DBG_ASSERT( xFactory.is(), "ODBTableDecorator::createDataDescriptor: invalid table!" );
+    OSL_ENSURE( xFactory.is(), "ODBTableDecorator::createDataDescriptor: invalid table!" );
     Reference< XColumnsSupplier > xColsSupp;
     if ( xFactory.is() )
         xColsSupp = xColsSupp.query( xFactory->createDataDescriptor() );

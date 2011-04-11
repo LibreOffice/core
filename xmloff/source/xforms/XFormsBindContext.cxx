@@ -34,10 +34,10 @@
 #include "xformsapi.hxx"
 
 #include <xmloff/xmlimp.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -78,7 +78,7 @@ void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
 
 XFormsBindContext::XFormsBindContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XPropertySet>& xModel ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),
@@ -128,7 +128,7 @@ void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
                                        rValue ) ) );
         break;
     default:
-        DBG_ERROR( "should not happen" );
+        OSL_FAIL( "should not happen" );
         break;
     }
 }
@@ -156,7 +156,7 @@ SvXMLImportContext* XFormsBindContext::HandleChild(
     const OUString&,
     const Reference<XAttributeList>& )
 {
-    DBG_ERROR( "no children supported" );
+    OSL_FAIL( "no children supported" );
     return NULL;
 }
 

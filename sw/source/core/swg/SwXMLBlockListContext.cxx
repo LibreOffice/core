@@ -97,7 +97,7 @@ SwXMLBlockContext::SwXMLBlockContext(
 {
     static const CharClass & rCC = GetAppCharClass();
     String aShort, aLong, aPackageName;
-    BOOL bTextOnly = FALSE;
+    sal_Bool bTextOnly = sal_False;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for (sal_Int16 i=0; i < nAttrCount; i++)
@@ -123,7 +123,7 @@ SwXMLBlockContext::SwXMLBlockContext(
             else if ( IsXMLToken ( aLocalName, XML_UNFORMATTED_TEXT ) )
             {
                 if ( IsXMLToken ( rAttrValue, XML_TRUE ) )
-                    bTextOnly = TRUE;
+                    bTextOnly = sal_True;
             }
         }
     }

@@ -46,22 +46,19 @@ using com::sun::star::xml::dom::XNode;
 Reference< XInterface > SAL_CALL CLibxml2XFormsExtension::Create(
     const Reference< XMultiServiceFactory >& /*aFactory*/)
 {
-    // printf("_create_\n");
     Reference< XInterface > aInstance(static_cast< XXPathExtension* >(new CLibxml2XFormsExtension(/*aFactory*/)));
     return aInstance;
 }
 
 ::rtl::OUString SAL_CALL CLibxml2XFormsExtension::getImplementationName_Static()
 {
-    // printf("_implname_\n");
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.xml.xpath.XFormsExtension");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.xml.xpath.XFormsExtension") );
 }
 
 Sequence< ::rtl::OUString > SAL_CALL CLibxml2XFormsExtension::getSupportedServiceNames_Static()
 {
-    // printf("_services_\n");
     Sequence< ::rtl::OUString > aSequence(1);
-    aSequence[0] = ::rtl::OUString::createFromAscii("com.sun.star.xml.xpath.XPathExtension");
+    aSequence[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.xpath.XPathExtension") );
     return aSequence;
 }
 
@@ -82,9 +79,9 @@ void SAL_CALL CLibxml2XFormsExtension::initialize(const Sequence< Any >& aSequen
     {
         if (! (aSequence[i] >>= aValue))
             throw RuntimeException();
-        if (aValue.Name.equalsAscii("Model"))
+        if (aValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Model")))
             aValue.Value >>= m_aModel;
-        else if (aValue.Name.equalsAscii("ContextNode"))
+        else if (aValue.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ContextNode")))
             aValue.Value >>= m_aContextNode;
     }
 }

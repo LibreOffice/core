@@ -35,6 +35,7 @@
 
 #include <tools/urlobj.hxx>
 #include <vcl/sound.hxx>
+#include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
 
 #include "select.hxx"
@@ -46,14 +47,16 @@
 #include "docsh.hxx"
 #include "tabprotection.hxx"
 
-extern USHORT nScFillModeMouseModifier;             // global.cxx
+#define SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN 65
+
+extern sal_uInt16 nScFillModeMouseModifier;             // global.cxx
 
 using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
 static Point aSwitchPos;                //! Member
-static BOOL bDidSwitch = FALSE;
+static sal_Bool bDidSwitch = false;
 
 // -----------------------------------------------------------------------
 
@@ -64,8 +67,8 @@ static BOOL bDidSwitch = FALSE;
 ScViewFunctionSet::ScViewFunctionSet( ScViewData* pNewViewData ) :
         pViewData( pNewViewData ),
         pEngine( NULL ),
-        bAnchor( FALSE ),
-        bStarted( FALSE )
+        bAnchor( false ),
+        bStarted( false )
 {
     DBG_ASSERT(pViewData, "ViewData==0 bei FunctionSet");
 }
@@ -78,6 +81,83 @@ ScSplitPos ScViewFunctionSet::GetWhich()
         return pViewData->GetActivePart();
 }
 
+sal_uLong ScViewFunctionSet::CalcUpdateInterval( const Size& rWinSize, const Point& rEffPos,
+                                             bool bLeftScroll, bool bTopScroll, bool bRightScroll, bool bBottomScroll )
+{
+    sal_uLong nUpdateInterval = SELENG_AUTOREPEAT_INTERVAL_MAX;
+    Window* pWin = pEngine->GetWindow();
+    Rectangle aScrRect = pWin->GetDesktopRectPixel();
+    Point aRootPos = pWin->OutputToAbsoluteScreenPixel(Point(0,0));
+    if (bRightScroll)
+    {
+        double nWinRight = rWinSize.getWidth() + aRootPos.getX();
+        double nMarginRight = aScrRect.GetWidth() - nWinRight;
+        double nHOffset = rEffPos.X() - rWinSize.Width();
+        double nHAccelRate = nHOffset / nMarginRight;
+
+        if (nHAccelRate > 1.0)
+            nHAccelRate = 1.0;
+
+        nUpdateInterval = static_cast<sal_uLong>(SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nHAccelRate));
+    }
+
+    if (bLeftScroll)
+    {
+        double nMarginLeft = aRootPos.getX();
+        double nHOffset = -rEffPos.X();
+        double nHAccelRate = nHOffset / nMarginLeft;
+
+        if (nHAccelRate > 1.0)
+            nHAccelRate = 1.0;
+
+        sal_uLong nTmp = static_cast<sal_uLong>(SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nHAccelRate));
+        if (nUpdateInterval > nTmp)
+            nUpdateInterval = nTmp;
+    }
+
+    if (bBottomScroll)
+    {
+        double nWinBottom = rWinSize.getHeight() + aRootPos.getY();
+        double nMarginBottom = aScrRect.GetHeight() - nWinBottom;
+        double nVOffset = rEffPos.Y() - rWinSize.Height();
+        double nVAccelRate = nVOffset / nMarginBottom;
+
+        if (nVAccelRate > 1.0)
+            nVAccelRate = 1.0;
+
+        sal_uLong nTmp = static_cast<sal_uLong>(SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nVAccelRate));
+        if (nUpdateInterval > nTmp)
+            nUpdateInterval = nTmp;
+    }
+
+    if (bTopScroll)
+    {
+        double nMarginTop = aRootPos.getY();
+        double nVOffset = -rEffPos.Y();
+        double nVAccelRate = nVOffset / nMarginTop;
+
+        if (nVAccelRate > 1.0)
+            nVAccelRate = 1.0;
+
+        sal_uLong nTmp = static_cast<sal_uLong>(SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nVAccelRate));
+        if (nUpdateInterval > nTmp)
+            nUpdateInterval = nTmp;
+    }
+
+#ifdef WNT
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    bool bRefMode = pViewShell && pViewShell->IsRefInputMode();
+    if (bRefMode && nUpdateInterval < SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN)
+        // Lower the update interval during ref mode, because re-draw can be
+        // expensive on Windows.  Making this interval too small would queue up
+        // the scroll/paint requests which would cause semi-infinite
+        // scrolls even after the mouse cursor is released.  We don't have
+        // this problem on Linux.
+        nUpdateInterval = SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN;
+#endif
+    return nUpdateInterval;
+}
+
 void ScViewFunctionSet::SetSelectionEngine( ScViewSelectionEngine* pSelEngine )
 {
     pEngine = pSelEngine;
@@ -85,7 +165,7 @@ void ScViewFunctionSet::SetSelectionEngine( ScViewSelectionEngine* pSelEngine )
 
 //      Drag & Drop
 
-void __EXPORT ScViewFunctionSet::BeginDrag()
+void ScViewFunctionSet::BeginDrag()
 {
     SCTAB nTab = pViewData->GetTabNo();
 
@@ -103,7 +183,7 @@ void __EXPORT ScViewFunctionSet::BeginDrag()
     }
 
     ScModule* pScMod = SC_MOD();
-    BOOL bRefMode = pScMod->IsFormulaMode();
+    sal_Bool bRefMode = pScMod->IsFormulaMode();
     if (!bRefMode)
     {
         pViewData->GetView()->FakeButtonUp( GetWhich() );   // ButtonUp is swallowed
@@ -114,7 +194,7 @@ void __EXPORT ScViewFunctionSet::BeginDrag()
         {
             ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
             // bApi = TRUE -> no error messages
-            BOOL bCopied = pViewData->GetView()->CopyToClip( pClipDoc, FALSE, TRUE );
+            sal_Bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc, false, true );
             if ( bCopied )
             {
                 sal_Int8 nDragActions = pViewData->GetView()->SelectionEditable() ?
@@ -160,11 +240,11 @@ void __EXPORT ScViewFunctionSet::BeginDrag()
 
 //      Selection
 
-void __EXPORT ScViewFunctionSet::CreateAnchor()
+void ScViewFunctionSet::CreateAnchor()
 {
     if (bAnchor) return;
 
-    BOOL bRefMode = SC_MOD()->IsFormulaMode();
+    sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
     if (bRefMode)
         SetAnchor( pViewData->GetRefStartX(), pViewData->GetRefStartY() );
     else
@@ -173,22 +253,22 @@ void __EXPORT ScViewFunctionSet::CreateAnchor()
 
 void ScViewFunctionSet::SetAnchor( SCCOL nPosX, SCROW nPosY )
 {
-    BOOL bRefMode = SC_MOD()->IsFormulaMode();
+    sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
     ScTabView* pView = pViewData->GetView();
     SCTAB nTab = pViewData->GetTabNo();
 
     if (bRefMode)
     {
-        pView->DoneRefMode( FALSE );
+        pView->DoneRefMode( false );
         aAnchorPos.Set( nPosX, nPosY, nTab );
         pView->InitRefMode( aAnchorPos.Col(), aAnchorPos.Row(), aAnchorPos.Tab(),
                             SC_REFTYPE_REF );
-        bStarted = TRUE;
+        bStarted = sal_True;
     }
     else if (pViewData->IsAnyFillMode())
     {
         aAnchorPos.Set( nPosX, nPosY, nTab );
-        bStarted = TRUE;
+        bStarted = sal_True;
     }
     else
     {
@@ -199,46 +279,46 @@ void ScViewFunctionSet::SetAnchor( SCCOL nPosX, SCROW nPosY )
         }
         else
         {
-            pView->DoneBlockMode( TRUE );
+            pView->DoneBlockMode( sal_True );
             aAnchorPos.Set( nPosX, nPosY, nTab );
             ScMarkData& rMark = pViewData->GetMarkData();
             if ( rMark.IsMarked() || rMark.IsMultiMarked() )
             {
                 pView->InitBlockMode( aAnchorPos.Col(), aAnchorPos.Row(),
-                                        aAnchorPos.Tab(), TRUE );
-                bStarted = TRUE;
+                                        aAnchorPos.Tab(), sal_True );
+                bStarted = sal_True;
             }
             else
-                bStarted = FALSE;
+                bStarted = false;
         }
     }
-    bAnchor = TRUE;
+    bAnchor = sal_True;
 }
 
-void __EXPORT ScViewFunctionSet::DestroyAnchor()
+void ScViewFunctionSet::DestroyAnchor()
 {
-    BOOL bRefMode = SC_MOD()->IsFormulaMode();
+    sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
     if (bRefMode)
-        pViewData->GetView()->DoneRefMode( TRUE );
+        pViewData->GetView()->DoneRefMode( sal_True );
     else
-        pViewData->GetView()->DoneBlockMode( TRUE );
+        pViewData->GetView()->DoneBlockMode( sal_True );
 
-    bAnchor = FALSE;
+    bAnchor = false;
 }
 
-void ScViewFunctionSet::SetAnchorFlag( BOOL bSet )
+void ScViewFunctionSet::SetAnchorFlag( sal_Bool bSet )
 {
     bAnchor = bSet;
 }
 
-BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL /* bDontSelectAtCursor */ )
+sal_Bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool /* bDontSelectAtCursor */ )
 {
     if ( bDidSwitch )
     {
         if ( rPointPixel == aSwitchPos )
-            return FALSE;                   // nicht auf falschem Fenster scrollen
+            return false;                   // nicht auf falschem Fenster scrollen
         else
-            bDidSwitch = FALSE;
+            bDidSwitch = false;
     }
     aSwitchPos = rPointPixel;       // nur wichtig, wenn bDidSwitch
 
@@ -255,21 +335,22 @@ BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOO
     //  Scrolling
 
     Size aWinSize = pEngine->GetWindow()->GetOutputSizePixel();
-    BOOL bRightScroll  = ( aEffPos.X() >= aWinSize.Width() );
-    BOOL bBottomScroll = ( aEffPos.Y() >= aWinSize.Height() );
-    BOOL bNegScroll    = ( aEffPos.X() < 0 || aEffPos.Y() < 0 );
-    BOOL bScroll = bRightScroll || bBottomScroll || bNegScroll;
+    bool bRightScroll  = ( aEffPos.X() >= aWinSize.Width() );
+    bool bLeftScroll  = ( aEffPos.X() < 0 );
+    bool bBottomScroll = ( aEffPos.Y() >= aWinSize.Height() );
+    bool bTopScroll = ( aEffPos.Y() < 0 );
+    bool bScroll = bRightScroll || bBottomScroll || bLeftScroll || bTopScroll;
 
     SCsCOL  nPosX;
     SCsROW  nPosY;
     pViewData->GetPosFromPixel( aEffPos.X(), aEffPos.Y(), GetWhich(),
-                                nPosX, nPosY, TRUE, TRUE );     // mit Repair
+                                nPosX, nPosY, sal_True, sal_True );     // mit Repair
 
     //  fuer AutoFill in der Mitte der Zelle umschalten
     //  dabei aber nicht das Scrolling nach rechts/unten verhindern
     if ( pViewData->IsFillMode() || pViewData->GetFillMode() == SC_FILL_MATRIX )
     {
-        BOOL bLeft, bTop;
+        sal_Bool bLeft, bTop;
         pViewData->GetMouseQuadrant( aEffPos, GetWhich(), nPosX, nPosY, bLeft, bTop );
         ScDocument* pDoc = pViewData->GetDocument();
         SCTAB nTab = pViewData->GetTabNo();
@@ -296,26 +377,39 @@ BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOO
             if ( aEffPos.X() >= aWinSize.Width() )
             {
                 if ( eWhich == SC_SPLIT_TOPLEFT )
-                    pViewData->GetView()->ActivatePart( SC_SPLIT_TOPRIGHT ), bScroll = FALSE, bDidSwitch = TRUE;
+                    pViewData->GetView()->ActivatePart( SC_SPLIT_TOPRIGHT ), bScroll = false, bDidSwitch = sal_True;
                 else if ( eWhich == SC_SPLIT_BOTTOMLEFT )
-                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT ), bScroll = FALSE, bDidSwitch = TRUE;
+                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT ), bScroll = false, bDidSwitch = sal_True;
             }
 
         if ( pViewData->GetVSplitMode() == SC_SPLIT_FIX )
             if ( aEffPos.Y() >= aWinSize.Height() )
             {
                 if ( eWhich == SC_SPLIT_TOPLEFT )
-                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMLEFT ), bScroll = FALSE, bDidSwitch = TRUE;
+                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMLEFT ), bScroll = false, bDidSwitch = sal_True;
                 else if ( eWhich == SC_SPLIT_TOPRIGHT )
-                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT ), bScroll = FALSE, bDidSwitch = TRUE;
+                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT ), bScroll = false, bDidSwitch = sal_True;
             }
+    }
+
+    if (bScroll)
+    {
+        // Adjust update interval based on how far the mouse pointer is from the edge.
+        sal_uLong nUpdateInterval = CalcUpdateInterval(
+            aWinSize, aEffPos, bLeftScroll, bTopScroll, bRightScroll, bBottomScroll);
+        pEngine->SetUpdateInterval(nUpdateInterval);
+    }
+    else
+    {
+        // Don't forget to reset the interval when not scrolling!
+        pEngine->SetUpdateInterval(SELENG_AUTOREPEAT_INTERVAL);
     }
 
     pViewData->ResetOldCursor();
     return SetCursorAtCell( nPosX, nPosY, bScroll );
 }
 
-BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScroll )
+sal_Bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, sal_Bool bScroll )
 {
     ScTabView* pView = pViewData->GetView();
     SCTAB nTab = pViewData->GetTabNo();
@@ -331,19 +425,19 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
         bool bSkipUnprotected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
 
         if ( bSkipProtected && bSkipUnprotected )
-            return FALSE;
+            return false;
 
         bool bCellProtected = pDoc->HasAttrib(nPosX, nPosY, nTab, nPosX, nPosY, nTab, HASATTR_PROTECTED);
         if ( (bCellProtected && bSkipProtected) || (!bCellProtected && bSkipUnprotected) )
             // Don't select this cell!
-            return FALSE;
+            return false;
     }
 
     ScModule* pScMod = SC_MOD();
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     bool bRefMode = ( pViewShell ? pViewShell->IsRefInputMode() : false );
 
-    BOOL bHide = !bRefMode && !pViewData->IsAnyFillMode() &&
+    sal_Bool bHide = !bRefMode && !pViewData->IsAnyFillMode() &&
             ( nPosX != (SCsCOL) pViewData->GetCurX() || nPosY != (SCsROW) pViewData->GetCurY() );
 
     if (bHide)
@@ -362,12 +456,12 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
 
     if (bRefMode)
     {
-        // #90910# if no input is possible from this doc, don't move the reference cursor around
+        // if no input is possible from this doc, don't move the reference cursor around
         if ( !pScMod->IsModalMode(pViewData->GetSfxDocShell()) )
         {
             if (!bAnchor)
             {
-                pView->DoneRefMode( TRUE );
+                pView->DoneRefMode( sal_True );
                 pView->InitRefMode( nPosX, nPosY, pViewData->GetTabNo(), SC_REFTYPE_REF );
             }
 
@@ -391,7 +485,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
         }
 
         ScRange aDelRange;
-        BOOL bOldDelMark = pViewData->GetDelMark( aDelRange );
+        sal_Bool bOldDelMark = pViewData->GetDelMark( aDelRange );
 
         if ( nPosX+1 >= (SCsCOL) nStartX && nPosX <= (SCsCOL) nEndX &&
              nPosY+1 >= (SCsROW) nStartY && nPosY <= (SCsROW) nEndY &&
@@ -444,13 +538,13 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
                 pViewData->GetView()->UpdateShrinkOverlay();
             }
 
-            BOOL bNegX = ( nPosX < (SCsCOL) nStartX );
-            BOOL bNegY = ( nPosY < (SCsROW) nStartY );
+            sal_Bool bNegX = ( nPosX < (SCsCOL) nStartX );
+            sal_Bool bNegY = ( nPosY < (SCsROW) nStartY );
 
             long nSizeX = 0;
             if ( bNegX )
             {
-                //  #94321# in SetCursorAtPoint hidden columns are skipped.
+                //  in SetCursorAtPoint hidden columns are skipped.
                 //  They must be skipped here too, or the result will always be the first hidden column.
                 do ++nPosX; while ( nPosX<nStartX && pDoc->ColHidden(nPosX, nTab) );
                 for (SCCOL i=nPosX; i<nStartX; i++)
@@ -463,7 +557,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
             long nSizeY = 0;
             if ( bNegY )
             {
-                //  #94321# in SetCursorAtPoint hidden rows are skipped.
+                //  in SetCursorAtPoint hidden rows are skipped.
                 //  They must be skipped here too, or the result will always be the first hidden row.
                 if (++nPosY < nStartY)
                 {
@@ -479,12 +573,12 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
             if ( nSizeX > nSizeY )          // Fill immer nur in einer Richtung
             {
                 nPosY = nEndY;
-                bNegY = FALSE;
+                bNegY = false;
             }
             else
             {
                 nPosX = nEndX;
-                bNegX = FALSE;
+                bNegX = false;
             }
 
             SCCOL nRefStX = bNegX ? nEndX : nStartX;
@@ -500,7 +594,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
     }
     else if (pViewData->IsAnyFillMode())
     {
-        BYTE nMode = pViewData->GetFillMode();
+        sal_uInt8 nMode = pViewData->GetFillMode();
         if ( nMode == SC_FILL_EMBED_LT || nMode == SC_FILL_EMBED_RB )
         {
             DBG_ASSERT( pDoc->IsEmbedded(), "!pDoc->IsEmbedded()" );
@@ -540,7 +634,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
     }
     else                    // normales Markieren
     {
-        BOOL bHideCur = bAnchor && ( (SCCOL)nPosX != pViewData->GetCurX() ||
+        sal_Bool bHideCur = bAnchor && ( (SCCOL)nPosX != pViewData->GetCurX() ||
                                      (SCROW)nPosY != pViewData->GetCurY() );
         if (bHideCur)
             pView->HideAllCursors();            // sonst zweimal: Block und SetCursor
@@ -549,18 +643,18 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
         {
             if (!bStarted)
             {
-                BOOL bMove = ( nPosX != (SCsCOL) aAnchorPos.Col() ||
+                sal_Bool bMove = ( nPosX != (SCsCOL) aAnchorPos.Col() ||
                                 nPosY != (SCsROW) aAnchorPos.Row() );
                 if ( bMove || ( pEngine && pEngine->GetMouseEvent().IsShift() ) )
                 {
                     pView->InitBlockMode( aAnchorPos.Col(), aAnchorPos.Row(),
-                                            aAnchorPos.Tab(), TRUE );
-                    bStarted = TRUE;
+                                            aAnchorPos.Tab(), sal_True );
+                    bStarted = sal_True;
                 }
             }
             if (bStarted)
                 // If the selection is already started, don't set the cursor.
-                pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab, FALSE, FALSE, TRUE );
+                pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab, false, false, true );
             else
                 pView->SetCursor( (SCCOL) nPosX, (SCROW) nPosY );
         }
@@ -569,12 +663,12 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
             ScMarkData& rMark = pViewData->GetMarkData();
             if (rMark.IsMarked() || rMark.IsMultiMarked())
             {
-                pView->DoneBlockMode(TRUE);
-                pView->InitBlockMode( nPosX, nPosY, nTab, TRUE );
+                pView->DoneBlockMode(sal_True);
+                pView->InitBlockMode( nPosX, nPosY, nTab, sal_True );
                 pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab );
 
                 aAnchorPos.Set( nPosX, nPosY, nTab );
-                bStarted = TRUE;
+                bStarted = sal_True;
             }
             // #i3875# *Hack* When a new cell is Ctrl-clicked with no pre-selected cells,
             // it highlights that new cell as well as the old cell where the cursor is
@@ -585,18 +679,18 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
                 SCCOL nOldX = pViewData->GetCurX();
                 SCROW nOldY = pViewData->GetCurY();
 
-                pView->InitBlockMode( nOldX, nOldY, nTab, TRUE );
+                pView->InitBlockMode( nOldX, nOldY, nTab, sal_True );
                 pView->MarkCursor( (SCCOL) nOldX, (SCROW) nOldY, nTab );
 
                 if ( nOldX != nPosX || nOldY != nPosY )
                 {
-                    pView->DoneBlockMode( TRUE );
-                    pView->InitBlockMode( nPosX, nPosY, nTab, TRUE );
+                    pView->DoneBlockMode( sal_True );
+                    pView->InitBlockMode( nPosX, nPosY, nTab, sal_True );
                     pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab );
                     aAnchorPos.Set( nPosX, nPosY, nTab );
                 }
 
-                bStarted = TRUE;
+                bStarted = sal_True;
             }
             pView->SetCursor( (SCCOL) nPosX, (SCROW) nPosY );
         }
@@ -609,17 +703,17 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
     if (bHide)
         pView->ShowAllCursors();
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL __EXPORT ScViewFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+sal_Bool ScViewFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
-    BOOL bRefMode = SC_MOD()->IsFormulaMode();
+    sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
     if (bRefMode)
-        return FALSE;
+        return false;
 
     if (pViewData->IsAnyFillMode())
-        return FALSE;
+        return false;
 
     ScMarkData& rMark = pViewData->GetMarkData();
     if (bAnchor || !rMark.IsMultiMarked())
@@ -630,31 +724,31 @@ BOOL __EXPORT ScViewFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
         return pViewData->GetMarkData().IsCellMarked( (SCCOL) nPosX, (SCROW) nPosY );
     }
 
-    return FALSE;
+    return false;
 }
 
-void __EXPORT ScViewFunctionSet::DeselectAtPoint( const Point& /* rPointPixel */ )
+void ScViewFunctionSet::DeselectAtPoint( const Point& /* rPointPixel */ )
 {
     //  gibt's nicht
 }
 
-void __EXPORT ScViewFunctionSet::DeselectAll()
+void ScViewFunctionSet::DeselectAll()
 {
     if (pViewData->IsAnyFillMode())
         return;
 
-    BOOL bRefMode = SC_MOD()->IsFormulaMode();
+    sal_Bool bRefMode = SC_MOD()->IsFormulaMode();
     if (bRefMode)
     {
-        pViewData->GetView()->DoneRefMode( FALSE );
+        pViewData->GetView()->DoneRefMode( false );
     }
     else
     {
-        pViewData->GetView()->DoneBlockMode( FALSE );
+        pViewData->GetView()->DoneBlockMode( false );
         pViewData->GetViewShell()->UpdateInputHandler();
     }
 
-    bAnchor = FALSE;
+    bAnchor = false;
 }
 
 //------------------------------------------------------------------------
@@ -666,7 +760,7 @@ ScViewSelectionEngine::ScViewSelectionEngine( Window* pWindow, ScTabView* pView,
 {
     //  Parameter einstellen
     SetSelectionMode( MULTIPLE_SELECTION );
-    EnableDrag( TRUE );
+    EnableDrag( sal_True );
 }
 
 
@@ -678,15 +772,15 @@ ScViewSelectionEngine::ScViewSelectionEngine( Window* pWindow, ScTabView* pView,
 
 ScHeaderFunctionSet::ScHeaderFunctionSet( ScViewData* pNewViewData ) :
         pViewData( pNewViewData ),
-        bColumn( FALSE ),
+        bColumn( false ),
         eWhich( SC_SPLIT_TOPLEFT ),
-        bAnchor( FALSE ),
+        bAnchor( false ),
         nCursorPos( 0 )
 {
     DBG_ASSERT(pViewData, "ViewData==0 bei FunctionSet");
 }
 
-void ScHeaderFunctionSet::SetColumn( BOOL bSet )
+void ScHeaderFunctionSet::SetColumn( sal_Bool bSet )
 {
     bColumn = bSet;
 }
@@ -696,52 +790,52 @@ void ScHeaderFunctionSet::SetWhich( ScSplitPos eNew )
     eWhich = eNew;
 }
 
-void __EXPORT ScHeaderFunctionSet::BeginDrag()
+void ScHeaderFunctionSet::BeginDrag()
 {
     // gippsnich
 }
 
-void __EXPORT ScHeaderFunctionSet::CreateAnchor()
+void ScHeaderFunctionSet::CreateAnchor()
 {
     if (bAnchor)
         return;
 
     ScTabView* pView = pViewData->GetView();
-    pView->DoneBlockMode( TRUE );
+    pView->DoneBlockMode( sal_True );
     if (bColumn)
     {
-        pView->InitBlockMode( static_cast<SCCOL>(nCursorPos), 0, pViewData->GetTabNo(), TRUE, TRUE, FALSE );
+        pView->InitBlockMode( static_cast<SCCOL>(nCursorPos), 0, pViewData->GetTabNo(), sal_True, sal_True, false );
         pView->MarkCursor( static_cast<SCCOL>(nCursorPos), MAXROW, pViewData->GetTabNo() );
     }
     else
     {
-        pView->InitBlockMode( 0, nCursorPos, pViewData->GetTabNo(), TRUE, FALSE, TRUE );
+        pView->InitBlockMode( 0, nCursorPos, pViewData->GetTabNo(), sal_True, false, sal_True );
         pView->MarkCursor( MAXCOL, nCursorPos, pViewData->GetTabNo() );
     }
-    bAnchor = TRUE;
+    bAnchor = sal_True;
 }
 
-void __EXPORT ScHeaderFunctionSet::DestroyAnchor()
+void ScHeaderFunctionSet::DestroyAnchor()
 {
-    pViewData->GetView()->DoneBlockMode( TRUE );
-    bAnchor = FALSE;
+    pViewData->GetView()->DoneBlockMode( sal_True );
+    bAnchor = false;
 }
 
-BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL /* bDontSelectAtCursor */ )
+sal_Bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool /* bDontSelectAtCursor */ )
 {
     if ( bDidSwitch )
     {
         //  die naechste gueltige Position muss vom anderen Fenster kommen
         if ( rPointPixel == aSwitchPos )
-            return FALSE;                   // nicht auf falschem Fenster scrollen
+            return false;                   // nicht auf falschem Fenster scrollen
         else
-            bDidSwitch = FALSE;
+            bDidSwitch = false;
     }
 
     //  Scrolling
 
     Size aWinSize = pViewData->GetActiveWin()->GetOutputSizePixel();
-    BOOL bScroll;
+    sal_Bool bScroll;
     if (bColumn)
         bScroll = ( rPointPixel.X() < 0 || rPointPixel.X() >= aWinSize.Width() );
     else
@@ -749,7 +843,7 @@ BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, B
 
     //  ueber Fixier-Grenze bewegt?
 
-    BOOL bSwitched = FALSE;
+    sal_Bool bSwitched = false;
     if ( bColumn )
     {
         if ( pViewData->GetHSplitMode() == SC_SPLIT_FIX )
@@ -757,9 +851,9 @@ BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, B
             if ( rPointPixel.X() > aWinSize.Width() )
             {
                 if ( eWhich == SC_SPLIT_TOPLEFT )
-                    pViewData->GetView()->ActivatePart( SC_SPLIT_TOPRIGHT ), bSwitched = TRUE;
+                    pViewData->GetView()->ActivatePart( SC_SPLIT_TOPRIGHT ), bSwitched = sal_True;
                 else if ( eWhich == SC_SPLIT_BOTTOMLEFT )
-                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT ), bSwitched = TRUE;
+                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT ), bSwitched = sal_True;
             }
         }
     }
@@ -770,17 +864,17 @@ BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, B
             if ( rPointPixel.Y() > aWinSize.Height() )
             {
                 if ( eWhich == SC_SPLIT_TOPLEFT )
-                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMLEFT ), bSwitched = TRUE;
+                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMLEFT ), bSwitched = sal_True;
                 else if ( eWhich == SC_SPLIT_TOPRIGHT )
-                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT ), bSwitched = TRUE;
+                    pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT ), bSwitched = sal_True;
             }
         }
     }
     if (bSwitched)
     {
         aSwitchPos = rPointPixel;
-        bDidSwitch = TRUE;
-        return FALSE;               // nicht mit falschen Positionen rechnen
+        bDidSwitch = sal_True;
+        return false;               // nicht mit falschen Positionen rechnen
     }
 
     //
@@ -788,7 +882,7 @@ BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, B
     SCsCOL  nPosX;
     SCsROW  nPosY;
     pViewData->GetPosFromPixel( rPointPixel.X(), rPointPixel.Y(), pViewData->GetActivePart(),
-                                nPosX, nPosY, FALSE );
+                                nPosX, nPosY, false );
     if (bColumn)
     {
         nCursorPos = static_cast<SCCOLROW>(nPosX);
@@ -801,7 +895,7 @@ BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, B
     }
 
     ScTabView* pView = pViewData->GetView();
-    BOOL bHide = pViewData->GetCurX() != nPosX ||
+    sal_Bool bHide = pViewData->GetCurX() != nPosX ||
                  pViewData->GetCurY() != nPosY;
     if (bHide)
         pView->HideAllCursors();
@@ -812,11 +906,11 @@ BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, B
 
     if ( !bAnchor || !pView->IsBlockMode() )
     {
-        pView->DoneBlockMode( TRUE );
+        pView->DoneBlockMode( sal_True );
         pViewData->GetMarkData().MarkToMulti();         //! wer verstellt das ???
-        pView->InitBlockMode( nPosX, nPosY, pViewData->GetTabNo(), TRUE, bColumn, !bColumn );
+        pView->InitBlockMode( nPosX, nPosY, pViewData->GetTabNo(), sal_True, bColumn, !bColumn );
 
-        bAnchor = TRUE;
+        bAnchor = sal_True;
     }
 
     pView->MarkCursor( nPosX, nPosY, pViewData->GetTabNo(), bColumn, !bColumn );
@@ -827,15 +921,15 @@ BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, B
     if (bHide)
         pView->ShowAllCursors();
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL __EXPORT ScHeaderFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+sal_Bool ScHeaderFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     SCsCOL  nPosX;
     SCsROW  nPosY;
     pViewData->GetPosFromPixel( rPointPixel.X(), rPointPixel.Y(), pViewData->GetActivePart(),
-                                nPosX, nPosY, FALSE );
+                                nPosX, nPosY, false );
 
     ScMarkData& rMark = pViewData->GetMarkData();
     if (bColumn)
@@ -844,14 +938,14 @@ BOOL __EXPORT ScHeaderFunctionSet::IsSelectionAtPoint( const Point& rPointPixel 
         return rMark.IsRowMarked( nPosY );
 }
 
-void __EXPORT ScHeaderFunctionSet::DeselectAtPoint( const Point& /* rPointPixel */ )
+void ScHeaderFunctionSet::DeselectAtPoint( const Point& /* rPointPixel */ )
 {
 }
 
-void __EXPORT ScHeaderFunctionSet::DeselectAll()
+void ScHeaderFunctionSet::DeselectAll()
 {
-    pViewData->GetView()->DoneBlockMode( FALSE );
-    bAnchor = FALSE;
+    pViewData->GetView()->DoneBlockMode( false );
+    bAnchor = false;
 }
 
 //------------------------------------------------------------------------
@@ -861,7 +955,7 @@ ScHeaderSelectionEngine::ScHeaderSelectionEngine( Window* pWindow, ScHeaderFunct
 {
     //  Parameter einstellen
     SetSelectionMode( MULTIPLE_SELECTION );
-    EnableDrag( FALSE );
+    EnableDrag( false );
 }
 
 

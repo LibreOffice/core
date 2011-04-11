@@ -36,12 +36,12 @@
 #include "frmfmt.hxx"
 #include "rowfrm.hxx"
 #include "tabfrm.hxx"
+#include "switerator.hxx"
 
 void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
 {
-    SwClientIter aIter( const_cast<SwTxtNode&>(*this) );
-    for( const SwTxtFrm *pFrm = (const SwTxtFrm*)aIter.First( TYPE(SwTxtFrm) );
-         pFrm; pFrm = (const SwTxtFrm*)aIter.Next() )
+    SwIterator<SwTxtFrm,SwTxtNode> aIter( *this );
+    for( const SwTxtFrm *pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
     {
         // No soft page break in header or footer
         if( pFrm->FindFooterOrHeader() || pFrm->IsInFly() )
@@ -100,7 +100,7 @@ void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                 }
             }
             else // No soft page break if there's a "hard" page break attribute
-            if( pFirst2 == pFrm && !pFrm->IsPageBreak( TRUE ) )
+            if( pFirst2 == pFrm && !pFrm->IsPageBreak( sal_True ) )
                 rBreak.insert( pFrm->GetOfst() );
         }
     }
@@ -111,13 +111,12 @@ bool SwTableLine::hasSoftPageBreak() const
     // No soft page break for sub tables
     if( GetUpper() || !GetFrmFmt() )
         return false;
-    SwClientIter aIter( *GetFrmFmt() );
-    for( SwClient* pLast = aIter.First( TYPE( SwFrm ) ); pLast;
-         pLast = aIter.Next() )
+    SwIterator<SwRowFrm,SwFmt> aIter( *GetFrmFmt() );
+    for( SwRowFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
-        if( ((SwRowFrm*)pLast)->GetTabLine() == this )
+        if( pLast->GetTabLine() == this )
         {
-            const SwTabFrm* pTab = static_cast<SwRowFrm*>(pLast)->FindTabFrm();
+            const SwTabFrm* pTab = pLast->FindTabFrm();
             // No soft page break for
             //   tables with prevs, i.e. if the frame is not the first in its layout frame
             //   tables in footer or header
@@ -126,7 +125,7 @@ bool SwTableLine::hasSoftPageBreak() const
             //   master table frames with "hard" page break attribute
             if( pTab->GetIndPrev() || pTab->FindFooterOrHeader()
                 || pTab->IsInFly() || pTab->GetUpper()->IsInTab() ||
-                ( !pTab->IsFollow() && pTab->IsPageBreak( TRUE ) ) )
+                ( !pTab->IsFollow() && pTab->IsPageBreak( sal_True ) ) )
                 return false;
             const SwPageFrm* pPage = pTab->FindPageFrm();
             // No soft page break at the first page of the document

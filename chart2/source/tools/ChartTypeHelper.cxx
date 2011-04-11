@@ -360,7 +360,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     }
     else
     {
-        OSL_ENSURE( false, "unknown charttype" );
+        OSL_FAIL( "unknown charttype" );
     }
 
     return aRet;
@@ -416,13 +416,34 @@ bool ChartTypeHelper::isSupportingAxisPositioning( const uno::Reference< chart2:
     return true;
 }
 
-bool ChartTypeHelper::shiftTicksAtXAxisPerDefault( const uno::Reference< chart2::XChartType >& xChartType )
+bool ChartTypeHelper::isSupportingDateAxis( const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 /*nDimensionCount*/, sal_Int32 nDimensionIndex )
+{
+    if( nDimensionIndex!=0 )
+        return false;
+    if( xChartType.is() )
+    {
+        sal_Int32 nType = ChartTypeHelper::getAxisType( xChartType, nDimensionIndex );
+        if( nType != AxisType::CATEGORY )
+            return false;
+        rtl::OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+            return false;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
+            return false;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
+            return false;
+    }
+    return true;
+}
+
+bool ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( const uno::Reference< chart2::XChartType >& xChartType )
 {
     if(xChartType.is())
     {
         rtl::OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
-            || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
+            || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR)
+            || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
             return true;
     }
     return false;
@@ -439,7 +460,6 @@ bool ChartTypeHelper::noBordersForSimpleScheme( const uno::Reference< chart2::XC
     return sal_False;
 }
 
-//static
 sal_Int32 ChartTypeHelper::getDefaultDirectLightColor( bool bSimple, const uno::Reference< chart2::XChartType >& xChartType )
 {
     sal_Int32 nRet = static_cast< sal_Int32 >( 0x808080 ); // grey
@@ -460,7 +480,6 @@ sal_Int32 ChartTypeHelper::getDefaultDirectLightColor( bool bSimple, const uno::
     return nRet;
 }
 
-//static
 sal_Int32 ChartTypeHelper::getDefaultAmbientLightColor( bool bSimple, const uno::Reference< chart2::XChartType >& xChartType )
 {
     sal_Int32 nRet = static_cast< sal_Int32 >( 0x999999 ); // grey40
@@ -616,7 +635,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
     }
     else
     {
-        OSL_ENSURE( false, "unknown charttype" );
+        OSL_FAIL( "unknown charttype" );
     }
 
     return aRet;

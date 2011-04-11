@@ -173,7 +173,7 @@ void addFactories(
             buf.append( ppNames[ -2 ] );
             buf.append( "\"!!!" );
             OString str( buf.makeStringAndClear() );
-            OSL_ENSURE( 0, str.getStr() );
+            OSL_FAIL( str.getStr() );
         }
 #endif
     }
@@ -273,7 +273,7 @@ OUString findBoostrapArgument(
 }
 
 Reference< registry::XSimpleRegistry > nestRegistries(
-    const OUString baseDir,
+    const OUString &baseDir,
     const Reference< lang::XSingleServiceFactory > & xSimRegFac,
     const Reference< lang::XSingleServiceFactory > & xNesRegFac,
     OUString csl_rdbs,
@@ -381,9 +381,15 @@ SAL_CALL defaultBootstrap_InitialComponentContext(
     Bootstrap const & bootstrap )
     SAL_THROW( (Exception) )
 {
-    OUString bootstrapPath( get_this_libpath() );
-    OUString iniDir;
+    OUString bootstrapPath;
+    if (!bootstrap.getFrom(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URE_INTERNAL_LIB_DIR")),
+            bootstrapPath))
+    {
+        bootstrapPath = get_this_libpath();
+    }
 
+    OUString iniDir;
     osl_getProcessWorkingDir(&iniDir.pData);
 
     Reference<lang::XMultiComponentFactory> smgr_XMultiComponentFactory(
@@ -603,7 +609,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             case osl_Process_E_NotFound:
                 throw BootstrapException( OUSTR( "image not found!" ) );
             case osl_Process_E_TimedOut:
-                throw BootstrapException( OUSTR( "timout occured!" ) );
+                throw BootstrapException( OUSTR( "timout occurred!" ) );
             case osl_Process_E_NoPermission:
                 throw BootstrapException( OUSTR( "permission denied!" ) );
             case osl_Process_E_Unknown:

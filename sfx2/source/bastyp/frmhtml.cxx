@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include <tools/list.hxx>
 #include <tools/table.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/asynclink.hxx>
@@ -51,14 +50,14 @@
 #define SFX_HTMLFRMSIZE_REL 0x0001
 #define SFX_HTMLFRMSIZE_PERCENT 0x0002
 
-static sal_Char __READONLY_DATA sHTML_SC_yes[] =    "YES";
-static sal_Char __READONLY_DATA sHTML_SC_no[] =     "NO";
-static sal_Char __READONLY_DATA sHTML_SC_auto[] =   "AUTO";
+static sal_Char const sHTML_SC_yes[] =  "YES";
+static sal_Char const sHTML_SC_no[] =       "NO";
+static sal_Char const sHTML_SC_auto[] = "AUTO";
 
 #define HTML_O_READONLY "READONLY"
 #define HTML_O_EDIT     "EDIT"
 
-static HTMLOptionEnum __READONLY_DATA aScollingTable[] =
+static HTMLOptionEnum const aScollingTable[] =
 {
     { sHTML_SC_yes,     ScrollingYes    },
     { sHTML_SC_no,      ScrollingNo     },
@@ -68,18 +67,18 @@ static HTMLOptionEnum __READONLY_DATA aScollingTable[] =
 
 void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HTMLOptions *pOptions, const String& rBaseURL )
 {
-    // die Optionen holen und setzen
+    // Get and set the options
     Size aMargin( pFrame->GetMargin() );
 
-    // MIB 15.7.97: Netscape scheint marginwidth auf 0 zu setzen, sobald
-    // marginheight gesetzt wird und umgekehrt. Machen wir jetzt wegen
-    // bug #41665# auch so.
-    // Netscape l"a\st aber ein direktes Setzen auf 0 nicht zu, IE4.0 schon.
-    // Den Bug machen wir nicht mit!
-    BOOL bMarginWidth = FALSE, bMarginHeight = FALSE;
+    // Netscape seems to set marginwidth to 0 as soon as
+    // marginheight is set, and vice versa.
+    // Netscape does however not allow for a direct
+    // seting to 0, while IE4.0 does
+    // We will not mimic that bug !
+    sal_Bool bMarginWidth = sal_False, bMarginHeight = sal_False;
 
-    USHORT nArrLen = pOptions->Count();
-    for ( USHORT i=0; i<nArrLen; i++ )
+    sal_uInt16 nArrLen = pOptions->Count();
+    for ( sal_uInt16 i=0; i<nArrLen; i++ )
     {
         const HTMLOption *pOption = (*pOptions)[i];
         switch( pOption->GetToken() )
@@ -103,20 +102,16 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HT
         case HTML_O_MARGINWIDTH:
             aMargin.Width() = pOption->GetNumber();
 
-//          if( aMargin.Width() < 1 )
-//              aMargin.Width() = 1;
             if( !bMarginHeight )
                 aMargin.Height() = 0;
-            bMarginWidth = TRUE;
+            bMarginWidth = sal_True;
             break;
         case HTML_O_MARGINHEIGHT:
             aMargin.Height() = pOption->GetNumber();
 
-//          if( aMargin.Height() < 1 )
-//              aMargin.Height() = 1;
             if( !bMarginWidth )
                 aMargin.Width() = 0;
-            bMarginHeight = TRUE;
+            bMarginHeight = sal_True;
             break;
         case HTML_O_SCROLLING:
             pFrame->SetScrollingMode(
@@ -126,33 +121,33 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HT
         case HTML_O_FRAMEBORDER:
         {
             String aStr = pOption->GetString();
-            BOOL bBorder = TRUE;
+            sal_Bool bBorder = sal_True;
             if ( aStr.EqualsIgnoreCaseAscii("NO") ||
                  aStr.EqualsIgnoreCaseAscii("0") )
-                bBorder = FALSE;
+                bBorder = sal_False;
             pFrame->SetFrameBorder( bBorder );
             break;
         }
         case HTML_O_NORESIZE:
-            pFrame->SetResizable( FALSE );
+            pFrame->SetResizable( sal_False );
             break;
         default:
             if ( pOption->GetTokenString().EqualsIgnoreCaseAscii(
                                                         HTML_O_READONLY ) )
             {
                 String aStr = pOption->GetString();
-                BOOL bReadonly = TRUE;
+                sal_Bool bReadonly = sal_True;
                 if ( aStr.EqualsIgnoreCaseAscii("FALSE") )
-                    bReadonly = FALSE;
+                    bReadonly = sal_False;
                 pFrame->SetReadOnly( bReadonly );
             }
             else if ( pOption->GetTokenString().EqualsIgnoreCaseAscii(
                                                         HTML_O_EDIT ) )
             {
                 String aStr = pOption->GetString();
-                BOOL bEdit = TRUE;
+                sal_Bool bEdit = sal_True;
                 if ( aStr.EqualsIgnoreCaseAscii("FALSE") )
-                    bEdit = FALSE;
+                    bEdit = sal_False;
                 pFrame->SetEditable( bEdit );
             }
 

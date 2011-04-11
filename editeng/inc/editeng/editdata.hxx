@@ -57,7 +57,7 @@ enum EVAnchorMode       {
 #define EE_APPEND               0xFFFF
 #define EE_INDEX_NOT_FOUND      0xFFFF
 
-// Fehlermeldungen fuer Read/Write-Methode
+// Error messages for Read / Write Method
 #define EE_READWRITE_OK              (SVSTREAM_OK)
 #define EE_READWRITE_WRONGFORMAT     (SVSTREAM_ERRBASE_USER+1)
 #define EE_READWRITE_GENERALERROR    (SVSTREAM_ERRBASE_USER+2)
@@ -104,13 +104,13 @@ class ImpEditEngine;
 class EditTextObject;
 class SfxStyleSheet;
 
-#define RGCHK_NONE          0   // Keine Korrektur der ViusArea beim Scrollen
-#define RGCHK_NEG           1   // Keine neg. ViusArea beim Scrollen
-#define RGCHK_PAPERSZ1      2   // VisArea muss in Papierbreite,Texthoehe liegen
+#define RGCHK_NONE          0   // No correction of ViusArea when scrolling
+#define RGCHK_NEG           1   // No negative ViusArea when scrolling
+#define RGCHK_PAPERSZ1      2   // VisArea must be within paper width, Text Size
 
 struct EPosition
 {
-    USHORT      nPara;
+    sal_uInt16      nPara;
     xub_StrLen  nIndex;
 
     EPosition() :
@@ -119,7 +119,7 @@ struct EPosition
     {
     }
 
-    EPosition( USHORT nPara_, xub_StrLen nPos_ ) :
+    EPosition( sal_uInt16 nPara_, xub_StrLen nPos_ ) :
         nPara( nPara_ ),
         nIndex( nPos_ )
     {
@@ -128,14 +128,14 @@ struct EPosition
 
 struct ESelection
 {
-    USHORT      nStartPara;
+    sal_uInt16      nStartPara;
     xub_StrLen  nStartPos;
-    USHORT      nEndPara;
+    sal_uInt16      nEndPara;
     xub_StrLen  nEndPos;
 
     ESelection() : nStartPara( 0 ), nStartPos( 0 ), nEndPara( 0 ), nEndPos( 0 ) {}
 
-    ESelection( USHORT nStPara, xub_StrLen nStPos, USHORT nEPara, xub_StrLen nEPos ) :
+    ESelection( sal_uInt16 nStPara, xub_StrLen nStPos, sal_uInt16 nEPara, xub_StrLen nEPos ) :
         nStartPara( nStPara ),
         nStartPos( nStPos ),
         nEndPara( nEPara ),
@@ -143,7 +143,7 @@ struct ESelection
     {
     }
 
-    ESelection( USHORT nPara, xub_StrLen nPos ) :
+    ESelection( sal_uInt16 nPara, xub_StrLen nPos ) :
         nStartPara( nPara ),
         nStartPos( nPos ),
         nEndPara( nPara ),
@@ -152,14 +152,14 @@ struct ESelection
     }
 
     void    Adjust();
-    BOOL    IsEqual( const ESelection& rS ) const;
-    BOOL    IsLess( const ESelection& rS ) const;
-    BOOL    IsGreater( const ESelection& rS ) const;
-    BOOL    IsZero() const;
-    BOOL    HasRange() const;
+    sal_Bool    IsEqual( const ESelection& rS ) const;
+    sal_Bool    IsLess( const ESelection& rS ) const;
+    sal_Bool    IsGreater( const ESelection& rS ) const;
+    sal_Bool    IsZero() const;
+    sal_Bool    HasRange() const;
 };
 
-inline BOOL ESelection::HasRange() const
+inline sal_Bool ESelection::HasRange() const
 {
     return ( nStartPara != nEndPara ) || ( nStartPos != nEndPos );
 }
@@ -178,8 +178,8 @@ inline sal_Bool ESelection::IsEqual( const ESelection& rS ) const
 
 inline sal_Bool ESelection::IsLess( const ESelection& rS ) const
 {
-    // Selektion muss justiert sein.
-    // => Nur pueffen, ob Ende von 'this' < Start von rS
+    // The selection must be adjusted.
+    // => Only check if end of 'this' < Start of rS
 
     if ( ( nEndPara < rS.nStartPara ) ||
          ( ( nEndPara == rS.nStartPara ) && ( nEndPos < rS.nStartPos ) && !IsEqual( rS ) ) )
@@ -191,8 +191,8 @@ inline sal_Bool ESelection::IsLess( const ESelection& rS ) const
 
 inline sal_Bool ESelection::IsGreater( const ESelection& rS ) const
 {
-    // Selektion muss justiert sein.
-    // => Nur pueffen, ob Ende von 'this' > Start von rS
+    // The selection must be adjusted.
+    // => Only check if end of 'this' < Start of rS
 
     if ( ( nStartPara > rS.nEndPara ) ||
          ( ( nStartPara == rS.nEndPara ) && ( nStartPos > rS.nEndPos ) && !IsEqual( rS ) ) )
@@ -225,7 +225,7 @@ struct EDITENG_DLLPUBLIC EFieldInfo
     EPosition       aPosition;
 
     EFieldInfo();
-    EFieldInfo( const SvxFieldItem& rFieldItem, USHORT nPara, USHORT nPos );
+    EFieldInfo( const SvxFieldItem& rFieldItem, sal_uInt16 nPara, sal_uInt16 nPos );
     ~EFieldInfo();
 
     EFieldInfo( const EFieldInfo& );
@@ -235,12 +235,12 @@ struct EDITENG_DLLPUBLIC EFieldInfo
 // -----------------------------------------------------------------------
 
 enum ImportState {
-                    RTFIMP_START, RTFIMP_END,               // nur pParser, nPara, nIndex
+                    RTFIMP_START, RTFIMP_END,               // only pParser, nPara, nIndex
                     RTFIMP_NEXTTOKEN, RTFIMP_UNKNOWNATTR,   // nToken+nTokenValue
                     RTFIMP_SETATTR,                         // pAttrs
                     RTFIMP_INSERTTEXT,                      // aText
                     RTFIMP_INSERTPARA,                      // -
-                    HTMLIMP_START, HTMLIMP_END,             // nur pParser, nPara, nIndex
+                    HTMLIMP_START, HTMLIMP_END,             // only pParser, nPara, nIndex
                     HTMLIMP_NEXTTOKEN, HTMLIMP_UNKNOWNATTR, // nToken
                     HTMLIMP_SETATTR,                        // pAttrs
                     HTMLIMP_INSERTTEXT,                     // aText
@@ -283,24 +283,24 @@ struct ParagraphInfos
         , nFirstLineMaxAscent( 0 )
         , bValid( 0 )
         {}
-    USHORT  nParaHeight;
-    USHORT  nLines;
+    sal_uInt16  nParaHeight;
+    sal_uInt16  nLines;
 
-    USHORT  nFirstLineStartX;
+    sal_uInt16  nFirstLineStartX;
 
-    USHORT  nFirstLineOffset;
-    USHORT  nFirstLineHeight;
-    USHORT  nFirstLineTextHeight;
-    USHORT  nFirstLineMaxAscent;
+    sal_uInt16  nFirstLineOffset;
+    sal_uInt16  nFirstLineHeight;
+    sal_uInt16  nFirstLineTextHeight;
+    sal_uInt16  nFirstLineMaxAscent;
 
-    BOOL    bValid; // Bei einer Abfrage waehrend der Formatierung ungueltig!
+    sal_Bool    bValid; // A query during formatting is not valid!
 };
 
 struct EECharAttrib
 {
     const SfxPoolItem*  pAttr;
 
-    USHORT              nPara;
+    sal_uInt16              nPara;
     xub_StrLen          nStart;
     xub_StrLen          nEnd;
 };
@@ -309,11 +309,11 @@ SV_DECL_VARARR_VISIBILITY( EECharAttribArray, EECharAttrib, 0, 4, EDITENG_DLLPUB
 
 struct MoveParagraphsInfo
 {
-    USHORT  nStartPara;
-    USHORT  nEndPara;
-    USHORT  nDestPara;
+    sal_uInt16  nStartPara;
+    sal_uInt16  nEndPara;
+    sal_uInt16  nDestPara;
 
-    MoveParagraphsInfo( USHORT nS, USHORT nE, USHORT nD )
+    MoveParagraphsInfo( sal_uInt16 nS, sal_uInt16 nE, sal_uInt16 nD )
         { nStartPara = nS; nEndPara = nE; nDestPara = nD; }
 };
 
@@ -322,9 +322,9 @@ struct MoveParagraphsInfo
 
 struct PasteOrDropInfos
 {
-    USHORT  nAction;
-    USHORT  nStartPara;
-    USHORT  nEndPara;
+    sal_uInt16  nAction;
+    sal_uInt16  nStartPara;
+    sal_uInt16  nEndPara;
 
     PasteOrDropInfos() : nAction(0), nStartPara(0xFFFF), nEndPara(0xFFFF)  {}
 };
@@ -377,10 +377,10 @@ struct EENotify
     EditEngine*     pEditEngine;
     EditView*       pEditView;
 
-    USHORT          nParagraph; // only valid in PARAGRAPHINSERTED/EE_NOTIFY_PARAGRAPHREMOVED
+    sal_uInt16          nParagraph; // only valid in PARAGRAPHINSERTED/EE_NOTIFY_PARAGRAPHREMOVED
 
-    USHORT          nParam1;
-    USHORT          nParam2;
+    sal_uInt16          nParam1;
+    sal_uInt16          nParam2;
 
     EENotify( EENotifyType eType )
         { eNotificationType = eType; pEditEngine = NULL; pEditView = NULL; nParagraph = EE_PARA_NOT_FOUND; nParam1 = 0; nParam2 = 0; }

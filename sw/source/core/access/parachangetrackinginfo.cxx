@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: $
- * $Revision: $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -33,7 +30,6 @@
 
 #include <parachangetrackinginfo.hxx>
 
-#include <errhdl.hxx>
 #include <wrong.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
 
@@ -57,8 +53,7 @@ namespace {
 
         if ( !rTxtFrm.GetTxtNode() )
         {
-            OSL_ENSURE( false,
-                    "<initChangeTrackTextMarkupLists(..) - missing <SwTxtNode> instance!" );
+            OSL_FAIL( "<initChangeTrackTextMarkupLists(..) - missing <SwTxtNode> instance!" );
             return;
         }
         const SwTxtNode& rTxtNode( *(rTxtFrm.GetTxtNode()) );
@@ -66,8 +61,7 @@ namespace {
         const IDocumentRedlineAccess* pIDocChangeTrack( rTxtNode.getIDocumentRedlineAccess() );
         if ( !pIDocChangeTrack )
         {
-            OSL_ENSURE( false,
-                    "<initChangeTrackTextMarkupLists(..) - missing <IDocumentRedlineAccess> instance!" );
+            OSL_FAIL( "<initChangeTrackTextMarkupLists(..) - missing <IDocumentRedlineAccess> instance!" );
             return;
         }
 
@@ -95,7 +89,7 @@ namespace {
 
         // iteration over the redlines which overlap with the text node.
         const SwRedlineTbl& rRedlineTbl = pIDocChangeTrack->GetRedlineTbl();
-        const USHORT nRedlineCount( rRedlineTbl.Count() );
+        const sal_uInt16 nRedlineCount( rRedlineTbl.Count() );
         for ( sal_uInt16 nActRedline = nIdxOfFirstRedlineForTxtNode;
               nActRedline < nRedlineCount;
               ++nActRedline)
@@ -223,8 +217,7 @@ const SwWrongList* SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList( co
         break;
         default:
         {
-            OSL_ENSURE( false,
-                    "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..)> - misusage - unexpected text markup type for change tracking." );
+            OSL_FAIL( "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..)> - misusage - unexpected text markup type for change tracking." );
         }
     }
 

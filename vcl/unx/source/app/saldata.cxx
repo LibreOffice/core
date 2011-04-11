@@ -410,10 +410,10 @@ void SalXLib::Init()
     sal_uInt32 nParams = osl_getCommandArgCount();
     rtl::OUString aParam;
     rtl::OString aDisplay;
-    for (USHORT i=0; i<nParams; i++)
+    for (sal_uInt16 i=0; i<nParams; i++)
     {
         osl_getCommandArg(i, &aParam.pData);
-        if (aParam.equalsAscii("-display"))
+        if (aParam.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("-display")))
         {
             osl_getCommandArg(i+1, &aParam.pData);
             aDisplay = rtl::OUStringToOString(
@@ -427,8 +427,8 @@ void SalXLib::Init()
                  * the clipboard build another connection
                  * to the xserver using $DISPLAY
                  */
-                 rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DISPLAY"));
-                 osl_setEnvironment(envVar.pData, aParam.pData);
+                rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DISPLAY"));
+                osl_setEnvironment(envVar.pData, aParam.pData);
             }
             break;
         }
@@ -471,7 +471,7 @@ void SalXLib::Init()
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
     XSync( pDisp, False );
 
-    pKbdExtension->UseExtension( ! HasXErrorOccured() );
+    pKbdExtension->UseExtension( ! HasXErrorOccurred() );
     PopXErrorLevel();
 
     pSalDisplay->SetKbdExtension( pKbdExtension );
@@ -541,7 +541,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
             static Bool bOnce = False;
             if ( !bOnce )
             {
-                std::fprintf(stderr, "X-Error occured in a request for X_OpenFont\n");
+                std::fprintf(stderr, "X-Error occurred in a request for X_OpenFont\n");
                 EmitFontpathWarning();
 
                 bOnce = True ;

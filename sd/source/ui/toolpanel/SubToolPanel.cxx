@@ -43,35 +43,6 @@ namespace sd { namespace toolpanel {
 
 
 SubToolPanel::SubToolPanel (
-    TreeNode* pParent)
-    : Control (pParent->GetWindow(), WB_DIALOGCONTROL),
-      TreeNode(pParent),
-      maWindowFiller(this),
-      mbIsRearrangePending(true),
-      mbIsLayoutPending(true),
-      mnChildrenWidth(0),
-      mnVerticalBorder(0),
-      mnVerticalGap(3),
-      mnHorizontalBorder(2)
-{
-    SetAccessibleName (
-        ::rtl::OUString::createFromAscii("Sub Task Panel"));
-    mpControlContainer->SetMultiSelection (true);
-
-    SetBorderStyle (WINDOW_BORDER_NORMAL);
-    SetMapMode (MapMode(MAP_PIXEL));
-
-    // To reduce flickering during repaints make the container windows
-    // transparent and rely on their children to paint the whole area.
-    SetBackground(Wallpaper());
-    maWindowFiller.SetBackground(
-        Application::GetSettings().GetStyleSettings().GetWindowColor());
-}
-
-
-
-
-SubToolPanel::SubToolPanel (
     Window& i_rParentWindow)
     : Control (&i_rParentWindow, WB_DIALOGCONTROL),
       TreeNode(NULL),
@@ -84,7 +55,7 @@ SubToolPanel::SubToolPanel (
       mnHorizontalBorder(2)
 {
     SetAccessibleName (
-        ::rtl::OUString::createFromAscii("Sub Task Panel"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")));
     mpControlContainer->SetMultiSelection (true);
 
     SetBorderStyle (WINDOW_BORDER_NORMAL);
@@ -146,7 +117,7 @@ void SubToolPanel::Paint (const Rectangle& rRect)
         Point (mnHorizontalBorder,0),
         Size(mnChildrenWidth,0));
     StripeList::const_iterator iStripe;
-    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); iStripe++)
+    for (iStripe=maStripeList.begin(); iStripe!=maStripeList.end(); ++iStripe)
     {
         aStripeArea.Top() = iStripe->first;
         aStripeArea.Bottom() = iStripe->second;
@@ -412,8 +383,8 @@ IMPL_LINK(SubToolPanel, WindowEventListener, VclSimpleEvent*, pEvent)
 {
     return new ::accessibility::AccessibleTreeNode (
         *this,
-        ::rtl::OUString::createFromAscii("Sub Task Panel"),
-        ::rtl::OUString::createFromAscii("Sub Task Panel"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")),
         ::com::sun::star::accessibility::AccessibleRole::PANEL);
 }
 

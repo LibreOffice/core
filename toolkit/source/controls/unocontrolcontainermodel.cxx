@@ -37,7 +37,8 @@
 //  ----------------------------------------------------
 //  class UnoControlContainerModel
 //  ----------------------------------------------------
-UnoControlContainerModel::UnoControlContainerModel()
+UnoControlContainerModel::UnoControlContainerModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+    :UnoControlModel( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );

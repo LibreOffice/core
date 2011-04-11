@@ -1,0 +1,263 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVX_FMRESIDS_HRC
+#define _SVX_FMRESIDS_HRC
+
+// include     -----------------------------------------------------------
+#include <svl/solar.hrc>
+
+// unnamed ressources -------------------------------------------------------
+// sub ressources .....................
+
+// ImageList-Id's -----------------------------------------------------------
+#define RID_SVXIMGLIST_FMEXPL                       (RID_FORMS_START + 0)
+
+// Image-Id's -----------------------------------------------------------
+//#define SID_FMSLOTS_START                          (SID_SVX_START + 592)  -> svxids.hrc
+#define RID_SVXIMG_FORM                             SID_FM_CONFIG
+#define RID_SVXIMG_CONTROL                          SID_CHOOSE_CONTROLS
+#define RID_SVXIMG_COLLAPSEDNODE                    (RID_FORMS_START + 2)
+#define RID_SVXIMG_EXPANDEDNODE                     (RID_FORMS_START + 3)
+#define RID_SVXIMG_BUTTON                           SID_FM_PUSHBUTTON
+#define RID_SVXIMG_RADIOBUTTON                      SID_FM_RADIOBUTTON
+#define RID_SVXIMG_CHECKBOX                         SID_FM_CHECKBOX
+#define RID_SVXIMG_FIXEDTEXT                        SID_FM_FIXEDTEXT
+#define RID_SVXIMG_GROUPBOX                         SID_FM_GROUPBOX
+#define RID_SVXIMG_EDIT                             SID_FM_EDIT
+#define RID_SVXIMG_LISTBOX                          SID_FM_LISTBOX
+#define RID_SVXIMG_COMBOBOX                         SID_FM_COMBOBOX
+#define RID_SVXIMG_FORMS                            (RID_FORMS_START +13)
+#define RID_SVXIMG_IMAGEBUTTON                      SID_FM_IMAGEBUTTON
+#define RID_SVXIMG_IMAGECONTROL                     SID_FM_IMAGECONTROL
+#define RID_SVXIMG_FILECONTROL                      SID_FM_FILECONTROL
+#define RID_SVXIMG_DATEFIELD                        SID_FM_DATEFIELD
+#define RID_SVXIMG_TIMEFIELD                        SID_FM_TIMEFIELD
+#define RID_SVXIMG_NUMERICFIELD                     SID_FM_NUMERICFIELD
+#define RID_SVXIMG_CURRENCYFIELD                    SID_FM_CURRENCYFIELD
+#define RID_SVXIMG_PATTERNFIELD                     SID_FM_PATTERNFIELD
+#define RID_SVXIMG_HIDDEN                           (RID_FORMS_START +22)
+#define RID_SVXIMG_GRID                             SID_FM_DBGRID
+#define RID_SVXIMG_FORMATTEDFIELD                   SID_FM_FORMATTEDFIELD
+#define RID_SVXIMG_FILTER                           SID_FM_FILTERCRIT
+#define RID_SVXIMG_DATE_N_TIME_FIELDS               SID_FM_TWOFIELDS_DATE_N_TIME
+#define RID_SVXIMG_FIELD                            (RID_FORMS_START +27)
+#define RID_SVXIMG_SCROLLBAR                        SID_FM_SCROLLBAR
+#define RID_SVXIMG_SPINBUTTON                       SID_FM_SPINBUTTON
+#define RID_SVXIMG_NAVIGATIONBAR                    SID_FM_NAVIGATIONBAR
+
+// Dialog-Id's -----------------------------------------------------------
+#define RID_SVXTBX_FORM                             (RID_FORMS_START + 1)
+#define TBX_FORM                                    (RID_FORMS_START + 2)
+#define RID_SVXDLG_ADD_TABLE                        (RID_FORMS_START + 3)
+#define RID_SVXDLG_TAB_ORDER                        (RID_FORMS_START + 4)
+#define RID_SVXDLG_SETFORM                          (RID_FORMS_START + 5)
+#define RID_SVX_FMEXPLORER                          (RID_FORMS_START + 6)
+#define RID_SVXDLG_ADD_DATAITEM                     (RID_FORMS_START + 12)
+#define RID_SVXDLG_ADD_CONDITION                    (RID_FORMS_START + 13)
+#define RID_SVXDLG_NAMESPACE_ITEM                   (RID_FORMS_START + 14)
+#define RID_SVXDLG_MANAGE_NAMESPACE                 (RID_FORMS_START + 15)
+#define RID_SVXDLG_ADD_SUBMISSION                   (RID_FORMS_START + 16)
+#define RID_SVXDLG_ADD_MODEL                        (RID_FORMS_START + 17)
+#define RID_SVXDLG_ADD_INSTANCE                     (RID_FORMS_START + 18)
+#define RID_SVXWIN_DATANAVIGATOR                    (RID_FORMS_START + 19)
+#define RID_SVX_XFORMS_TABPAGES                     (RID_FORMS_START + 20)
+
+// Toolbars ------------------------------------------------------------
+#define RID_SVXTBX_FORM_NAVIGATION                  (RID_FORMS_START +  1)
+#define RID_SVXTBX_FORM_FILTER                      (RID_FORMS_START +  2)
+#define RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES          (RID_FORMS_START +  3)
+#define RID_SVXTBX_CONTROLS                         (RID_FORMS_START +  4)
+#define RID_SVXTBX_MORECONTROLS                     (RID_FORMS_START +  5)
+#define RID_SVXTBX_FORMDESIGN                       (RID_FORMS_START +  6)
+
+// Menu-Id's -----------------------------------------------------------
+#define RID_FMEXPLORER_POPUPMENU                    (RID_FORMS_START + 0)
+#define RID_SVXMNU_ROWS                             (RID_FORMS_START + 1)
+#define RID_SVXMNU_COLS                             (RID_FORMS_START + 2)
+#define RID_SVXMNU_CELL                             (RID_FORMS_START + 3)
+#define RID_FMSHELL_CONVERSIONMENU                  (RID_FORMS_START + 4)
+#define RID_FM_FILTER_MENU                          (RID_FORMS_START + 5)
+#define RID_FM_TEXTATTRIBUTE_MENU                   (RID_FORMS_START + 6)
+#define MENU_FM_TEXTATTRIBITES_STYLE                (RID_FORMS_START + 7)
+#define MENU_FM_TEXTATTRIBITES_ALIGNMENT            (RID_FORMS_START + 8)
+#define MENU_FM_TEXTATTRIBITES_SPACING              (RID_FORMS_START + 9)
+#define RID_MENU_DATANAVIGATOR                      (RID_FORMS_START + 10)
+
+// QueryBox-Id's -----------------------------------------------------------
+#define RID_QRY_SAVEMODIFIED                        (RID_FORMS_START + 1)
+#define RID_QRY_REMOVE_MODEL                        (RID_FORMS_START + 2)
+#define RID_QRY_REMOVE_INSTANCE                     (RID_FORMS_START + 3)
+#define RID_QRY_REMOVE_ELEMENT                      (RID_FORMS_START + 4)
+#define RID_QRY_REMOVE_ATTRIBUTE                    (RID_FORMS_START + 5)
+#define RID_QRY_LINK_WARNING                        (RID_FORMS_START + 6)
+#define RID_QRY_REMOVE_SUBMISSION                   (RID_FORMS_START + 7)
+#define RID_QRY_REMOVE_BINDING                      (RID_FORMS_START + 8)
+
+// ErrorBox-Id's -----------------------------------------------------------
+#define RID_ERR_INVALID_XMLNAME                     (RID_FORMS_START + 1)
+#define RID_ERR_INVALID_XMLPREFIX                   (RID_FORMS_START + 2)
+#define RID_ERR_DOUBLE_MODELNAME                    (RID_FORMS_START + 3)
+#define RID_ERR_EMPTY_SUBMISSIONNAME                (RID_FORMS_START + 4)
+
+// String-Id's -----------------------------------------------------------
+#define RID_STR_FORMSHELL                           (RID_FORMS_START +  10)
+#define RID_STR_STDFORMNAME                         (RID_FORMS_START +  11)
+#define RID_STR_REC_TEXT                            (RID_FORMS_START +  12)
+#define RID_STR_REC_FROM_TEXT                       (RID_FORMS_START +  13)
+#define RID_STR_UNDO_PROPERTY                       (RID_FORMS_START +  14)
+#define RID_STR_UNDO_CONTAINER_INSERT               (RID_FORMS_START +  15)
+#define RID_STR_UNDO_CONTAINER_REMOVE               (RID_FORMS_START +  16)
+#define RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE      (RID_FORMS_START +  27)
+#define RID_STR_UNDO_CONTAINER_REPLACE              (RID_FORMS_START +  28)
+#define RID_STR_UNDO_TABORDER                       (RID_FORMS_START +  29)
+#define RID_STR_UNDO_DELETE_LOGICAL                 (RID_FORMS_START +  30)
+#define RID_STR_UNDO_MODEL_REPLACE                  (RID_FORMS_START +  31)
+#define RID_STR_NAVIGATIONBAR                       (RID_FORMS_START +  32)
+#define RID_STR_DEFAULT_CONTROL                     (RID_FORMS_START +  33)
+#define RID_STR_FORM                                (RID_FORMS_START +  36)
+#define RID_STR_FIELDSELECTION                      (RID_FORMS_START +  37)
+#define RID_STR_NO_PROPERTIES                       (RID_FORMS_START +  38)
+#define RID_STR_PROPERTIES_CONTROL                  (RID_FORMS_START +  39)
+#define RID_STR_PROPERTIES_FORM                     (RID_FORMS_START +  40)
+#define RID_STR_FMEXPLORER                          (RID_FORMS_START +  41)
+#define RID_STR_FORMS                               (RID_FORMS_START +  42)
+#define RID_STR_WRITEERROR                          (RID_FORMS_START +  43)
+#define RID_STR_DELETECONFIRM_RECORD                (RID_FORMS_START +  44)
+#define RID_STR_DELETECONFIRM                       (RID_FORMS_START +  45)
+#define RID_STR_GROUPBOX                            (RID_FORMS_START +  46)
+#define RID_STR_NAVIGATION                          (RID_FORMS_START +  47)
+#define RID_STR_COLUMN                              (RID_FORMS_START +  48)
+#define RID_STR_DATE                                (RID_FORMS_START +  49)
+#define RID_STR_TIME                                (RID_FORMS_START +  50)
+#define RID_STR_PROPTITLE_NAVBAR                    (RID_FORMS_START +  51)
+#define RID_STR_PROPTITLE_PUSHBUTTON                (RID_FORMS_START +  52)
+#define RID_STR_PROPTITLE_RADIOBUTTON               (RID_FORMS_START +  53)
+#define RID_STR_PROPTITLE_CHECKBOX                  (RID_FORMS_START +  54)
+#define RID_STR_PROPTITLE_FIXEDTEXT                 (RID_FORMS_START +  55)
+#define RID_STR_PROPTITLE_GROUPBOX                  (RID_FORMS_START +  56)
+#define RID_STR_PROPTITLE_EDIT                      (RID_FORMS_START +  57)
+#define RID_STR_PROPTITLE_LISTBOX                   (RID_FORMS_START +  58)
+#define RID_STR_PROPTITLE_COMBOBOX                  (RID_FORMS_START +  59)
+#define RID_STR_PROPTITLE_IMAGEBUTTON               (RID_FORMS_START +  60)
+#define RID_STR_PROPTITLE_IMAGECONTROL              (RID_FORMS_START +  61)
+#define RID_STR_PROPTITLE_FILECONTROL               (RID_FORMS_START +  62)
+#define RID_STR_PROPTITLE_DATEFIELD                 (RID_FORMS_START +  63)
+#define RID_STR_PROPTITLE_TIMEFIELD                 (RID_FORMS_START +  64)
+#define RID_STR_PROPTITLE_NUMERICFIELD              (RID_FORMS_START +  65)
+#define RID_STR_PROPTITLE_CURRENCYFIELD             (RID_FORMS_START +  66)
+#define RID_STR_PROPTITLE_PATTERNFIELD              (RID_FORMS_START +  67)
+#define RID_STR_PROPTITLE_DBGRID                    (RID_FORMS_START +  68)
+#define RID_STR_PROPTITLE_MULTISELECT               (RID_FORMS_START +  69)
+#define RID_STR_DELETECONFIRM_RECORDS               (RID_FORMS_START +  70)
+#define RID_STR_CONTROL                             (RID_FORMS_START +  71)
+#define RID_STR_POSTFIX_DATE                        (RID_FORMS_START +  72)
+#define RID_STR_POSTFIX_TIME                        (RID_FORMS_START +  73)
+#define RID_STR_NODATACONTROLS                      (RID_FORMS_START +  77)
+#define RID_STR_FILTER_NAVIGATOR                    (RID_FORMS_START +  78)
+#define RID_STR_FILTER_FILTER_FOR                   (RID_FORMS_START +  79)
+#define RID_STR_FILTER_FILTER_OR                    (RID_FORMS_START +  80)
+#define RID_STR_PROPTITLE_FORMATTED                 (RID_FORMS_START +  81)
+#define RID_STR_SYNTAXERROR                         (RID_FORMS_START +  82)
+    // FREE
+#define RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY      (RID_FORMS_START +  84)
+#define RID_STR_AUTOFIELD                           (RID_FORMS_START +  89)
+#define RID_STR_SVT_SQL_SYNTAX_ERROR                (RID_FORMS_START +  90)
+#define RID_STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE        (RID_FORMS_START +  91)
+#define RID_STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE        (RID_FORMS_START +  92)
+#define RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE      (RID_FORMS_START +  93)
+#define RID_STR_SVT_SQL_SYNTAX_INT_NO_VALID         (RID_FORMS_START +  94)
+#define RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID  (RID_FORMS_START +  95)
+#define RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID        (RID_FORMS_START +  96)
+#define RID_STR_SVT_SQL_SYNTAX_TABLE                (RID_FORMS_START +  97)
+#define RID_STR_SVT_SQL_SYNTAX_COLUMN               (RID_FORMS_START +  98)
+#define RID_STR_PROPTITLE_SCROLLBAR                 (RID_FORMS_START +  99)
+#define RID_STR_PROPTITLE_SPINBUTTON                (RID_FORMS_START + 100)
+#define RID_STR_PROPTITLE_HIDDEN                    (RID_FORMS_START + 101)
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+#define RID_STR_DATANAVIGATOR                       (RID_FORMS_START + 124)
+#define RID_STR_DATANAV_SUBM_PARENT                 (RID_FORMS_START + 125)
+#define RID_STR_DATANAV_SUBM_ID                     (RID_FORMS_START + 126)
+#define RID_STR_DATANAV_SUBM_ACTION                 (RID_FORMS_START + 127)
+#define RID_STR_DATANAV_SUBM_METHOD                 (RID_FORMS_START + 128)
+#define RID_STR_DATANAV_SUBM_REF                    (RID_FORMS_START + 129)
+#define RID_STR_DATANAV_SUBM_BIND                   (RID_FORMS_START + 130)
+#define RID_STR_DATANAV_SUBM_REPLACE                (RID_FORMS_START + 131)
+#define RID_STR_DATANAV_ADD_ELEMENT                 (RID_FORMS_START + 132)
+#define RID_STR_DATANAV_EDIT_ELEMENT                (RID_FORMS_START + 133)
+#define RID_STR_DATANAV_REMOVE_ELEMENT              (RID_FORMS_START + 134)
+#define RID_STR_DATANAV_ADD_ATTRIBUTE               (RID_FORMS_START + 135)
+#define RID_STR_DATANAV_EDIT_ATTRIBUTE              (RID_FORMS_START + 136)
+#define RID_STR_DATANAV_REMOVE_ATTRIBUTE            (RID_FORMS_START + 137)
+#define RID_STR_DATANAV_ADD_BINDING                 (RID_FORMS_START + 138)
+#define RID_STR_DATANAV_EDIT_BINDING                (RID_FORMS_START + 139)
+#define RID_STR_DATANAV_REMOVE_BINDING              (RID_FORMS_START + 140)
+#define RID_STR_DATANAV_ADD_SUBMISSION              (RID_FORMS_START + 141)
+#define RID_STR_DATANAV_EDIT_SUBMISSION             (RID_FORMS_START + 142)
+#define RID_STR_DATANAV_REMOVE_SUBMISSION           (RID_FORMS_START + 143)
+#define RID_STR_DATANAV_LINKWARN_BUTTON             (RID_FORMS_START + 144)
+#define RID_STR_SVT_SQL_SYNTAX_TABLE_OR_QUERY       (RID_FORMS_START + 145)
+#define RID_STR_SVT_SQL_SYNTAX_TABLE_EXISTS         (RID_FORMS_START + 146)
+#define RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS         (RID_FORMS_START + 147)
+#define RID_STR_READONLY_VIEW                       (RID_FORMS_START + 148)
+#define RID_STR_ALREADYEXISTOVERWRITE               (RID_FORMS_START + 149)
+#define RID_STR_OBJECT_LABEL                        (RID_FORMS_START + 150)
+
+// Error-String-Id's -----------------------------------------------------------
+#define RID_ERR_START                               (RID_FORMS_START + 600)
+#define RID_ERR_CONTEXT_ADDFORM                     (RID_ERR_START + 0)
+#define RID_ERR_DUPLICATE_NAME                      (RID_ERR_START + 1)
+#define RID_ERR_FIELDREQUIRED                       (RID_ERR_START + 2)
+#define RID_ERR_NO_ELEMENT                          (RID_ERR_START + 4)
+
+// untyped resources  ----------------------------------------------------------
+
+#define RID_RSC_TABWIN_PREFIX                       ( RID_FORMS_START +  0 )
+#define RID_RSC_SQL_INTERNATIONAL                   ( RID_FORMS_START +  1 )
+
+#endif          // _FM_FMPAGE_HXX
+

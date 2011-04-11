@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(__IBMC__))
 #   include <io.h>
 #else
 #   include <unistd.h>
@@ -37,13 +37,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
-
-#ifdef __hpux
-#   define _HPUX_SOURCE
-#endif
-#ifdef SCO
-#define _IBCS2
-#endif
 #include <limits.h>
 
 #include "cpp.h"

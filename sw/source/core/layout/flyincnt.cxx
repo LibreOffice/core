@@ -49,14 +49,11 @@ void DeepCalc( const SwFrm *pFrm );
 |*
 |*  SwFlyInCntFrm::SwFlyInCntFrm(), ~SwFlyInCntFrm()
 |*
-|*  Ersterstellung      MA 01. Dec. 92
-|*  Letzte Aenderung    MA 09. Apr. 99
-|*
 |*************************************************************************/
-SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
-    SwFlyFrm( pFmt, pAnch )
+SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
+    SwFlyFrm( pFmt, pSib, pAnch )
 {
-    bInCnt = bInvalidLayout = bInvalidCntnt = TRUE;
+    bInCnt = bInvalidLayout = bInvalidCntnt = sal_True;
     SwTwips nRel = pFmt->GetVertOrient().GetPos();
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
     Point aRelPos;
@@ -84,9 +81,6 @@ TYPEINIT1(SwFlyInCntFrm,SwFlyFrm);
 |*
 |*  SwFlyInCntFrm::SetRefPoint(),
 |*
-|*  Ersterstellung      MA 01. Dec. 92
-|*  Letzte Aenderung    MA 06. Aug. 95
-|*
 |*************************************************************************/
 void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
                                  const Point& rRelAttr,
@@ -109,8 +103,8 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
     if( pNotify )
     {
         InvalidatePage();
-        bValidPos = FALSE;
-        bInvalid  = TRUE;
+        bValidPos = sal_False;
+        bInvalid  = sal_True;
         Calc();
         delete pNotify;
     }
@@ -120,20 +114,17 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
 |*
 |*  SwFlyInCntFrm::Modify()
 |*
-|*  Ersterstellung      MA 16. Dec. 92
-|*  Letzte Aenderung    MA 02. Sep. 93
-|*
 |*************************************************************************/
-void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    BOOL bCallPrepare = FALSE;
-    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    sal_Bool bCallPrepare = sal_False;
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     if( RES_ATTRSET_CHG == nWhich )
     {
         if( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
-            GetItemState( RES_SURROUND, FALSE ) ||
+            GetItemState( RES_SURROUND, sal_False ) ||
             SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
-            GetItemState( RES_FRMMACRO, FALSE ) )
+            GetItemState( RES_FRMMACRO, sal_False ) )
         {
             SwAttrSetChg aOld( *(SwAttrSetChg*)pOld );
             SwAttrSetChg aNew( *(SwAttrSetChg*)pNew );
@@ -145,19 +136,19 @@ void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             if( aNew.Count() )
             {
                 SwFlyFrm::Modify( &aOld, &aNew );
-                bCallPrepare = TRUE;
+                bCallPrepare = sal_True;
             }
         }
         else if( ((SwAttrSetChg*)pNew)->GetChgSet()->Count())
         {
             SwFlyFrm::Modify( pOld, pNew );
-            bCallPrepare = TRUE;
+            bCallPrepare = sal_True;
         }
     }
     else if( nWhich != RES_SURROUND && RES_FRMMACRO != nWhich )
     {
         SwFlyFrm::Modify( pOld, pNew );
-        bCallPrepare = TRUE;
+        bCallPrepare = sal_True;
     }
 
     if ( bCallPrepare && GetAnchorFrm() )
@@ -168,8 +159,6 @@ void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 |*  SwFlyInCntFrm::Format()
 |*
 |*  Beschreibung:       Hier wird der Inhalt initial mit Formatiert.
-|*  Ersterstellung      MA 16. Dec. 92
-|*  Letzte Aenderung    MA 19. May. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
@@ -193,8 +182,6 @@ void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
 |*  Beschreibung        Im Unterschied zu anderen Frms wird hier nur die
 |*      die RelPos berechnet. Die absolute Position wird ausschliesslich
 |*      per SetAbsPos errechnet.
-|*  Ersterstellung      MA 03. Dec. 92
-|*  Letzte Aenderung    MA 12. Apr. 96
 |*
 |*************************************************************************/
 // OD 2004-03-23 #i26791#
@@ -203,7 +190,7 @@ void SwFlyInCntFrm::MakeObjPos()
 {
     if ( !bValidPos )
     {
-        bValidPos = TRUE;
+        bValidPos = sal_True;
         SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
         const SwFmtVertOrient &rVert = pFmt->GetVertOrient();
         //Und ggf. noch die aktuellen Werte im Format updaten, dabei darf
@@ -236,9 +223,6 @@ void SwFlyInCntFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
 |*
 |*  SwFlyInCntFrm::NotifyBackground()
 |*
-|*  Ersterstellung      MA 03. Dec. 92
-|*  Letzte Aenderung    MA 26. Aug. 93
-|*
 |*************************************************************************/
 void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
                                        PrepareHint eHint)
@@ -253,9 +237,6 @@ void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
 |*
 |*  SwFlyInCntFrm::GetRelPos()
 |*
-|*  Ersterstellung      MA 04. Dec. 92
-|*  Letzte Aenderung    MA 04. Dec. 92
-|*
 |*************************************************************************/
 const Point SwFlyInCntFrm::GetRelPos() const
 {
@@ -266,9 +247,6 @@ const Point SwFlyInCntFrm::GetRelPos() const
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::RegistFlys()
-|*
-|*  Ersterstellung      MA 26. Nov. 93
-|*  Letzte Aenderung    MA 26. Nov. 93
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::RegistFlys()
@@ -282,9 +260,6 @@ void SwFlyInCntFrm::RegistFlys()
 /*************************************************************************
 |*
 |*  SwFlyInCntFrm::MakeAll()
-|*
-|*  Ersterstellung      MA 18. Feb. 94
-|*  Letzte Aenderung    MA 13. Jun. 96
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::MakeAll()
@@ -306,14 +281,14 @@ void SwFlyInCntFrm::MakeAll()
     const SwBorderAttrs &rAttrs = *aAccess.Get();
 
     if ( IsClipped() )
-        bValidSize = bHeightClipped = bWidthClipped = FALSE;
+        bValidSize = bHeightClipped = bWidthClipped = sal_False;
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
         //Nur einstellen wenn das Flag gesetzt ist!!
         if ( !bValidSize )
         {
-            bValidPrtArea = FALSE;
+            bValidPrtArea = sal_False;
 /*
             // This is also done in the Format function, so I think
             // this code is not necessary anymore:
@@ -351,8 +326,8 @@ void SwFlyInCntFrm::MakeAll()
                  Frm().Width() > pFrm->Prt().Width() )
             {
                 Frm().Width( pFrm->Prt().Width() );
-                bValidPrtArea = FALSE;
-                bWidthClipped = TRUE;
+                bValidPrtArea = sal_False;
+                bWidthClipped = sal_True;
             }
         }
         // <--

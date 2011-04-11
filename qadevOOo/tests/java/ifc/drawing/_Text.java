@@ -57,7 +57,7 @@ public class _Text extends MultiPropertyTest {
                 oObj.getPropertyValue( "NumberingRules" );
             bResult = true;
         } catch( Exception e ) {
-            log.println("Error occured while trying to get property"+
+            log.println("Error occurred while trying to get property"+
                 " 'NumberingRules'");
             e.printStackTrace( log );
             bResult = false;

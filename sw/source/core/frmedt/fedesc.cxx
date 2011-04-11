@@ -29,11 +29,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <tools/ref.hxx>
 
 #include <hintids.hxx>
-#include <tools/ref.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
@@ -43,16 +44,14 @@
 #include <tabfrm.hxx>
 #include <edimp.hxx>
 #include <SwStyleNameMapper.hxx>
+
 /*************************************************************************
 |*
 |*  SwFEShell::GetPageDescCnt()
 |*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 25. Jan. 93
-|*
 |*************************************************************************/
 
-USHORT SwFEShell::GetPageDescCnt() const
+sal_uInt16 SwFEShell::GetPageDescCnt() const
 {
     return GetDoc()->GetPageDescCnt();
 }
@@ -61,9 +60,6 @@ USHORT SwFEShell::GetPageDescCnt() const
 |*
 |*  SwFEShell::ChgCurPageDesc()
 |*
-|*  Ersterstellung      ST ??
-|*  Letzte Aenderung    MA 01. Aug. 94
-|*
 |*************************************************************************/
 
 void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
@@ -71,10 +67,10 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 #if OSL_DEBUG_LEVEL > 1
     //Die SS veraendert keinen PageDesc, sondern setzt nur das Attribut.
     //Der Pagedesc muss im Dokument vorhanden sein!
-    BOOL bFound = FALSE;
-    for ( USHORT nTst = 0; nTst < GetPageDescCnt(); ++nTst )
+    sal_Bool bFound = sal_False;
+    for ( sal_uInt16 nTst = 0; nTst < GetPageDescCnt(); ++nTst )
         if ( &rDesc == &GetPageDesc( nTst ) )
-            bFound = TRUE;
+            bFound = sal_True;
     OSL_ENSURE( bFound, "ChgCurPageDesc mit ungueltigem Descriptor." );
 #endif
 
@@ -82,7 +78,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 
     SwPageFrm *pPage = GetCurrFrm()->FindPageFrm();
     const SwFrm *pFlow = 0;
-    USHORT nPageNmOffset = 0;
+    sal_uInt16 nPageNmOffset = 0;
 
     OSL_ENSURE( !GetCrsr()->HasMark(), "ChgCurPageDesc nur ohne Selektion!");
 
@@ -134,22 +130,19 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 |*
 |*  SwFEShell::ChgPageDesc()
 |*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 24. Jan. 95
-|*
 |*************************************************************************/
 
-void SwFEShell::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
+void SwFEShell::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 {
     StartAllAction();
     SET_CURR_SHELL( this );
     //Fix i64842: because Undo has a very special way to handle header/footer content
     // we have to copy the page descriptor before calling ChgPageDesc.
-    const sal_Bool bDoesUndo( GetDoc()->DoesUndo() );
     SwPageDesc aDesc( rChged );
-    GetDoc()->DoUndo( sal_False );
-    GetDoc()->CopyPageDesc(rChged, aDesc);
-    GetDoc()->DoUndo( bDoesUndo );
+    {
+        ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
+        GetDoc()->CopyPageDesc(rChged, aDesc);
+    }
     GetDoc()->ChgPageDesc( i, aDesc );
     EndAllActionAndCall();
 }
@@ -158,24 +151,21 @@ void SwFEShell::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 |*
 |*  SwFEShell::GetPageDesc(), GetCurPageDesc()
 |*
-|*  Ersterstellung      MA 25. Jan. 93
-|*  Letzte Aenderung    MA 23. Apr. 93
-|
 |*************************************************************************/
 
-const SwPageDesc& SwFEShell::GetPageDesc( USHORT i ) const
+const SwPageDesc& SwFEShell::GetPageDesc( sal_uInt16 i ) const
 {
     return const_cast<const SwDoc *>(GetDoc())->GetPageDesc( i );
 }
 
 SwPageDesc* SwFEShell::FindPageDescByName( const String& rName,
-                                            BOOL bGetFromPool,
-                                            USHORT* pPos )
+                                            sal_Bool bGetFromPool,
+                                            sal_uInt16* pPos )
 {
     SwPageDesc* pDesc = GetDoc()->FindPageDescByName( rName, pPos );
     if( !pDesc && bGetFromPool )
     {
-        USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( rName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
+        sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( rName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
         if( USHRT_MAX != nPoolId &&
             0 != (pDesc = GetDoc()->GetPageDescFromPool( nPoolId ))
             && pPos )
@@ -185,7 +175,7 @@ SwPageDesc* SwFEShell::FindPageDescByName( const String& rName,
     return pDesc;
 }
 
-USHORT SwFEShell::GetMousePageDesc( const Point &rPt ) const
+sal_uInt16 SwFEShell::GetMousePageDesc( const Point &rPt ) const
 {
     if( GetLayout() )
     {
@@ -196,7 +186,7 @@ USHORT SwFEShell::GetMousePageDesc( const Point &rPt ) const
             while( pPage->GetNext() && rPt.Y() > pPage->Frm().Bottom() )
                 pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
             SwDoc *pMyDoc = GetDoc();
-            for ( USHORT i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
+            for ( sal_uInt16 i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
             {
                 if ( pPage->GetPageDesc() == &const_cast<const SwDoc *>(pMyDoc)
                      ->GetPageDesc(i) )
@@ -207,7 +197,7 @@ USHORT SwFEShell::GetMousePageDesc( const Point &rPt ) const
     return 0;
 }
 
-USHORT SwFEShell::GetCurPageDesc( const BOOL bCalcFrm ) const
+sal_uInt16 SwFEShell::GetCurPageDesc( const sal_Bool bCalcFrm ) const
 {
     const SwFrm *pFrm = GetCurrFrm( bCalcFrm );
     if ( pFrm )
@@ -216,7 +206,7 @@ USHORT SwFEShell::GetCurPageDesc( const BOOL bCalcFrm ) const
         if ( pPage )
         {
             SwDoc *pMyDoc = GetDoc();
-            for ( USHORT i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
+            for ( sal_uInt16 i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
             {
                 if ( pPage->GetPageDesc() == &const_cast<const SwDoc *>(pMyDoc)
                      ->GetPageDesc(i) )
@@ -239,14 +229,14 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
     FOREACHPAM_START(this)
 
         if( 0 != (pCNd = PCURCRSR->GetCntntNode() ) &&
-            0 != ( pPtFrm = pCNd->GetFrm( &aNulPt, 0, FALSE )) )
+            0 != ( pPtFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, sal_False )) )
             pPtFrm = pPtFrm->FindPageFrm();
         else
             pPtFrm = 0;
 
         if( PCURCRSR->HasMark() &&
-            0 != (pCNd = PCURCRSR->GetCntntNode( FALSE ) ) &&
-            0 != ( pMkFrm = pCNd->GetFrm( &aNulPt, 0, FALSE )) )
+            0 != (pCNd = PCURCRSR->GetCntntNode( sal_False ) ) &&
+            0 != ( pMkFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, sal_False )) )
             pMkFrm = pMkFrm->FindPageFrm();
         else
             pMkFrm = pPtFrm;

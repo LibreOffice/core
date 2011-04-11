@@ -256,10 +256,10 @@ WordTransTree::TransformNextToken()
                 //   9. TB~Eot       continue
 
                 // bNext and Prev are true, if there are alphabetic letters:
-                BOOL bNext =  pInputPosition + 1 != pInputEnd
+                sal_Bool bNext =  pInputPosition + 1 != pInputEnd
                                     ?   CalculateBranch(pInputPosition[1]) >= BR_ALPHABASE
-                                    :   FALSE;
-                BOOL bPrev = pCurParseNode->Value() >= BR_ALPHABASE;
+                                    :   sal_False;
+                sal_Bool bPrev = pCurParseNode->Value() >= BR_ALPHABASE;
 
                 if ( bNext && (bPrev || pCurParseNode == dpParsingTreeTop) )
                 {   // case 1. and 7.
@@ -331,11 +331,11 @@ WordTransTree::Handle_TokenToKeep()
 void
 WordTransTree::Handle_TokenToTransform()
 {
-    BOOL bHaveHotkey = CalculateBranch(cCurHotkey) >= BR_ALPHABASE;
+    sal_Bool bHaveHotkey = CalculateBranch(cCurHotkey) >= BR_ALPHABASE;
     const ByteString & rReplace = pCurParseNode->ReplaceString();
 
     // Find position of hotkey in replace-string:
-    USHORT nHotkeyPos = bHaveHotkey
+    sal_uInt16 nHotkeyPos = bHaveHotkey
                             ?   rReplace.Search(char(cCurHotkey))
                             :   STRING_NOTFOUND;
     if (nHotkeyPos == STRING_NOTFOUND && bHaveHotkey)
@@ -366,7 +366,7 @@ WordTransTree::Handle_TokenToTransform()
         if (nHotkeyPos == STRING_NOTFOUND)
         {
             eCurResult = HOTKEY_LOST;
-            bHaveHotkey = FALSE;
+            bHaveHotkey = sal_False;
         }
     }   // endif (nHotkeyPos == STRING_NOT_FOUND && bHaveHotkey)
 

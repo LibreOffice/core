@@ -328,7 +328,7 @@ void load_config( const OUString& rPath )
         // get parser
         Reference< XParser > xParser(
             comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
             UNO_QUERY_THROW );
 
         // get filter
@@ -343,7 +343,7 @@ void load_config( const OUString& rPath )
     }
     catch( Exception& r )
     {
-        DBG_ERROR(
+        OSL_FAIL(
             (rtl::OString("load_config(), "
                      "exception caught: ") +
              rtl::OUStringToOString(

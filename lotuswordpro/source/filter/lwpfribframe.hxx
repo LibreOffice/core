@@ -71,8 +71,8 @@
 class LwpFribFrame : public LwpFrib
 {
 public:
-    LwpFribFrame( LwpPara* pPara) : LwpFrib(pPara){};
-    ~LwpFribFrame(){};
+    LwpFribFrame( LwpPara* pPara) : LwpFrib(pPara){}
+    ~LwpFribFrame(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     LwpObject* GetLayout();
     void RegisterStyle(LwpFoundry* pFoundry);
@@ -85,8 +85,8 @@ private:
 class LwpFribRubyFrame : public LwpFrib
 {
 public:
-    LwpFribRubyFrame( LwpPara* pPara) : LwpFrib(pPara){};
-    ~LwpFribRubyFrame(){};
+    LwpFribRubyFrame( LwpPara* pPara) : LwpFrib(pPara){}
+    ~LwpFribRubyFrame(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len);
     LwpRubyLayout* GetLayout();
     void RegisterStyle(LwpFoundry* pFoundry);

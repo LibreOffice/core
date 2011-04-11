@@ -40,21 +40,7 @@ TARGET = cliureversion.mk
 ALLTAR : \
     $(BIN)$/cliureversion.mk 
 
-#	INCVERSION
-
 #always deliver a cliureversion.mk. It is needed for the packing process even for all other
 #platforms. Therefore BUILD_FOR_CLI is not used here 
 $(BIN)$/cliureversion.mk: version.txt 
     $(GNUCOPY) $< $@
-
-
-#disabled because of #67482
-#Create the config file that is used with the policy assembly 
-#only if new published types have been added, the cliureversion.mk is written.
-#INCVERSION .PHONY: version.txt incversions.txt  
-#	$(PERL) $(PRJ)$/source$/scripts$/increment_version.pl \
-#	$< $(BIN)$/cliureversion.mk $(SOLARBINDIR)$/unotype_statistics.txt
-
-
-
-

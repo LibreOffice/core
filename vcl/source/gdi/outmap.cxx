@@ -52,8 +52,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#define USE_64BIT_INTS
-
 // =======================================================================
 
 DBG_NAMEEX( OutputDevice )
@@ -133,7 +131,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     {
         // Schwellenwerte fuer BigInt Arithmetik berechnen
         long    nDenomHalfX = rMapRes.mnMapScDenomX / 2;
-        ULONG   nDenomX     = rMapRes.mnMapScDenomX;
+        sal_uLong   nDenomX     = rMapRes.mnMapScDenomX;
         long    nProductX   = nDPIX * rMapRes.mnMapScNumX;
 
         if ( !nProductX )
@@ -144,9 +142,9 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         if ( !nDenomX )
             rThresRes.mnThresPixToLogX = LONG_MAX;
         else if ( nProductX >= 0 )
-            rThresRes.mnThresPixToLogX = (long)(((ULONG)LONG_MAX - (ULONG)( nProductX/2)) / nDenomX);
+            rThresRes.mnThresPixToLogX = (long)(((sal_uLong)LONG_MAX - (sal_uLong)( nProductX/2)) / nDenomX);
         else
-            rThresRes.mnThresPixToLogX = (long)(((ULONG)LONG_MAX + (ULONG)(-nProductX/2)) / nDenomX);
+            rThresRes.mnThresPixToLogX = (long)(((sal_uLong)LONG_MAX + (sal_uLong)(-nProductX/2)) / nDenomX);
     }
 
     if ( nDPIY && (LONG_MAX / nDPIY < Abs( rMapRes.mnMapScNumY ) ) ) // #111139# avoid div by zero
@@ -158,7 +156,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     {
         // Schwellenwerte fuer BigInt Arithmetik berechnen
         long    nDenomHalfY = rMapRes.mnMapScDenomY / 2;
-        ULONG   nDenomY     = rMapRes.mnMapScDenomY;
+        sal_uLong   nDenomY     = rMapRes.mnMapScDenomY;
         long    nProductY   = nDPIY * rMapRes.mnMapScNumY;
 
         if ( !nProductY )
@@ -169,17 +167,15 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
         if ( !nDenomY )
             rThresRes.mnThresPixToLogY = LONG_MAX;
         else if ( nProductY >= 0 )
-            rThresRes.mnThresPixToLogY = (long)(((ULONG)LONG_MAX - (ULONG)( nProductY/2)) / nDenomY);
+            rThresRes.mnThresPixToLogY = (long)(((sal_uLong)LONG_MAX - (sal_uLong)( nProductY/2)) / nDenomY);
         else
-            rThresRes.mnThresPixToLogY = (long)(((ULONG)LONG_MAX + (ULONG)(-nProductY/2)) / nDenomY);
+            rThresRes.mnThresPixToLogY = (long)(((sal_uLong)LONG_MAX + (sal_uLong)(-nProductY/2)) / nDenomY);
     }
 
-#ifdef USE_64BIT_INTS
     rThresRes.mnThresLogToPixX /= 2;
     rThresRes.mnThresLogToPixY /= 2;
     rThresRes.mnThresPixToLogX /= 2;
     rThresRes.mnThresPixToLogY /= 2;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -283,7 +279,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             }
             break;
         default:
-            DBG_ERROR( "unhandled MapUnit" );
+            OSL_FAIL( "unhandled MapUnit" );
             break;
     }
 
@@ -383,7 +379,6 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
 {
     // To "use" it...
     (void) nThres;
-#ifdef USE_64BIT_INTS
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
     {
@@ -411,34 +406,6 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
        }
     }
     return n;
-#else // USE_64BIT_INTS
-    if ( Abs( n ) < nThres )
-    {
-        n *= nDPI * nMapNum;
-        n += n >= 0 ? nMapDenom/2 : -((nMapDenom-1)/2);
-                return (n / nMapDenom);
-    }
-    else
-    {
-        BigInt aTemp( n );
-        aTemp *= BigInt( nDPI );
-        aTemp *= BigInt( nMapNum );
-
-        if ( aTemp.IsNeg() )
-        {
-            BigInt aMapScDenom2( (nMapDenom-1)/2 );
-            aTemp -= aMapScDenom2;
-        }
-        else
-        {
-            BigInt aMapScDenom2( nMapDenom/2 );
-            aTemp += aMapScDenom2;
-        }
-
-        aTemp /= BigInt( nMapDenom );
-        return (long)aTemp;
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -448,7 +415,6 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
 {
     // To "use" it...
    (void) nThres;
-#ifdef USE_64BIT_INTS
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
         n = (2 * n * nMapDenom) / (nDPI * nMapNum);
@@ -462,59 +428,6 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
     }
     if( n < 0 ) --n; else ++n;
     return (n / 2);
-#else // USE_64BIT_INTS
-    if ( Abs( n ) < nThres )
-    {
-        long nDenom  = nDPI * nMapNum;
-        long nNum    = n * nMapDenom;
-        if( (nNum ^ nDenom) >= 0 )
-            nNum += nDenom/2;
-        else
-            nNum -= nDenom/2;
-        return (nNum / nDenom);
-    }
-    else
-    {
-        BigInt aDenom( nDPI );
-        aDenom *= BigInt( nMapNum );
-
-        BigInt aNum( n );
-        aNum *= BigInt( nMapDenom );
-
-        BigInt aDenom2( aDenom );
-        if ( aNum.IsNeg() )
-        {
-            if ( aDenom.IsNeg() )
-            {
-                aDenom2 /= BigInt(2);
-                aNum += aDenom2;
-            }
-            else
-            {
-                aDenom2 -= 1;
-                aDenom2 /= BigInt(2);
-                aNum -= aDenom2;
-            }
-        }
-        else
-        {
-            if ( aDenom.IsNeg() )
-            {
-                aDenom2 += 1;
-                aDenom2 /= BigInt(2);
-                aNum -= aDenom2;
-            }
-            else
-            {
-                aDenom2 /= BigInt(2);
-                aNum += aDenom2;
-            }
-        }
-
-        aNum  /= aDenom;
-        return (long)aNum;
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -687,8 +600,8 @@ Polygon OutputDevice::ImplLogicToDevicePixel( const Polygon& rLogicPoly ) const
     if ( !mbMap && !mnOutOffX && !mnOutOffY )
         return rLogicPoly;
 
-    USHORT  i;
-    USHORT  nPoints = rLogicPoly.GetSize();
+    sal_uInt16  i;
+    sal_uInt16  nPoints = rLogicPoly.GetSize();
     Polygon aPoly( rLogicPoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
@@ -731,8 +644,8 @@ PolyPolygon OutputDevice::ImplLogicToDevicePixel( const PolyPolygon& rLogicPolyP
         return rLogicPolyPoly;
 
     PolyPolygon aPolyPoly( rLogicPolyPoly );
-    USHORT      nPoly = aPolyPoly.Count();
-    for( USHORT i = 0; i < nPoly; i++ )
+    sal_uInt16      nPoly = aPolyPoly.Count();
+    for( sal_uInt16 i = 0; i < nPoly; i++ )
     {
         Polygon& rPoly = aPolyPoly[i];
         rPoly = ImplLogicToDevicePixel( rPoly );
@@ -812,7 +725,7 @@ Region OutputDevice::ImplPixelToDevicePixel( const Region& rRegion ) const
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::EnableMapMode( BOOL bEnable )
+void OutputDevice::EnableMapMode( sal_Bool bEnable )
 {
     mbMap = (bEnable != 0);
 
@@ -831,12 +744,12 @@ void OutputDevice::SetMapMode()
 
     if ( mbMap || !maMapMode.IsDefault() )
     {
-        mbMap       = FALSE;
+        mbMap       = sal_False;
         maMapMode   = MapMode();
 
         // create new objects (clip region werden nicht neu skaliert)
-        mbNewFont   = TRUE;
-        mbInitFont  = TRUE;
+        mbNewFont   = sal_True;
+        mbInitFont  = sal_True;
         if ( GetOutDevType() == OUTDEV_WINDOW )
         {
             if ( ((Window*)this)->mpWindowImpl->mpCursor )
@@ -861,7 +774,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    BOOL bRelMap = (rNewMapMode.GetMapUnit() == MAP_RELATIVE);
+    sal_Bool bRelMap = (rNewMapMode.GetMapUnit() == MAP_RELATIVE);
 
     if ( mpMetaFile )
     {
@@ -880,7 +793,7 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         mpAlphaVDev->SetMapMode( rNewMapMode );
 
     // Ist Default-MapMode, dann bereche nichts
-    BOOL bOldMap = mbMap;
+    sal_Bool bOldMap = mbMap;
     mbMap = !rNewMapMode.IsDefault();
     if ( mbMap )
     {
@@ -936,8 +849,8 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
         maMapMode = rNewMapMode;
 
     // create new objects (clip region werden nicht neu skaliert)
-    mbNewFont   = TRUE;
-    mbInitFont  = TRUE;
+    mbNewFont   = sal_True;
+    mbInitFont  = sal_True;
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
         if ( ((Window*)this)->mpWindowImpl->mpCursor )
@@ -1208,8 +1121,8 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly ) const
     if ( !mbMap )
         return rLogicPoly;
 
-    USHORT  i;
-    USHORT  nPoints = rLogicPoly.GetSize();
+    sal_uInt16  i;
+    sal_uInt16  nPoints = rLogicPoly.GetSize();
     Polygon aPoly( rLogicPoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
@@ -1242,8 +1155,8 @@ PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly ) cons
         return rLogicPolyPoly;
 
     PolyPolygon aPolyPoly( rLogicPolyPoly );
-    USHORT      nPoly = aPolyPoly.Count();
-    for( USHORT i = 0; i < nPoly; i++ )
+    sal_uInt16      nPoly = aPolyPoly.Count();
+    for( sal_uInt16 i = 0; i < nPoly; i++ )
     {
         Polygon& rPoly = aPolyPoly[i];
         rPoly = LogicToPixel( rPoly );
@@ -1304,7 +1217,7 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
         long                nWidth;
         long                nHeight;
         ImplRegionInfo      aInfo;
-        BOOL                bRegionRect;
+        sal_Bool                bRegionRect;
 
         aRegion.ImplBeginAddRect();
         bRegionRect = rLogicRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
@@ -1411,8 +1324,8 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
     ImplThresholdRes    aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
-    USHORT  i;
-    USHORT  nPoints = rLogicPoly.GetSize();
+    sal_uInt16  i;
+    sal_uInt16  nPoints = rLogicPoly.GetSize();
     Polygon aPoly( rLogicPoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
@@ -1446,8 +1359,8 @@ PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly,
         return rLogicPolyPoly;
 
     PolyPolygon aPolyPoly( rLogicPolyPoly );
-    USHORT      nPoly = aPolyPoly.Count();
-    for( USHORT i = 0; i < nPoly; i++ )
+    sal_uInt16      nPoly = aPolyPoly.Count();
+    for( sal_uInt16 i = 0; i < nPoly; i++ )
     {
         Polygon& rPoly = aPolyPoly[i];
         rPoly = LogicToPixel( rPoly, rMapMode );
@@ -1502,7 +1415,7 @@ Region OutputDevice::LogicToPixel( const Region& rLogicRegion,
         long                nWidth;
         long                nHeight;
         ImplRegionInfo      aInfo;
-        BOOL                bRegionRect;
+        sal_Bool                bRegionRect;
 
         aRegion.ImplBeginAddRect();
         bRegionRect = rLogicRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
@@ -1585,8 +1498,8 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly ) const
     if ( !mbMap )
         return rDevicePoly;
 
-    USHORT  i;
-    USHORT  nPoints = rDevicePoly.GetSize();
+    sal_uInt16  i;
+    sal_uInt16  nPoints = rDevicePoly.GetSize();
     Polygon aPoly( rDevicePoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
@@ -1619,8 +1532,8 @@ PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly ) con
         return rDevicePolyPoly;
 
     PolyPolygon aPolyPoly( rDevicePolyPoly );
-    USHORT      nPoly = aPolyPoly.Count();
-    for( USHORT i = 0; i < nPoly; i++ )
+    sal_uInt16      nPoly = aPolyPoly.Count();
+    for( sal_uInt16 i = 0; i < nPoly; i++ )
     {
         Polygon& rPoly = aPolyPoly[i];
         rPoly = PixelToLogic( rPoly );
@@ -1672,7 +1585,7 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion ) const
         long                nWidth;
         long                nHeight;
         ImplRegionInfo      aInfo;
-        BOOL                bRegionRect;
+        sal_Bool                bRegionRect;
 
         aRegion.ImplBeginAddRect();
         bRegionRect = rDeviceRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
@@ -1783,8 +1696,8 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
     ImplThresholdRes    aThresRes;
     ImplCalcMapResolution( rMapMode, mnDPIX, mnDPIY, aMapRes, aThresRes );
 
-    USHORT  i;
-    USHORT  nPoints = rDevicePoly.GetSize();
+    sal_uInt16  i;
+    sal_uInt16  nPoints = rDevicePoly.GetSize();
     Polygon aPoly( rDevicePoly );
 
     // Pointer auf das Point-Array holen (Daten werden kopiert)
@@ -1818,8 +1731,8 @@ PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly,
         return rDevicePolyPoly;
 
     PolyPolygon aPolyPoly( rDevicePolyPoly );
-    USHORT      nPoly = aPolyPoly.Count();
-    for( USHORT i = 0; i < nPoly; i++ )
+    sal_uInt16      nPoly = aPolyPoly.Count();
+    for( sal_uInt16 i = 0; i < nPoly; i++ )
     {
         Polygon& rPoly = aPolyPoly[i];
         rPoly = PixelToLogic( rPoly, rMapMode );
@@ -1874,7 +1787,7 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion,
         long                nWidth;
         long                nHeight;
         ImplRegionInfo      aInfo;
-        BOOL                bRegionRect;
+        sal_Bool                bRegionRect;
 
         aRegion.ImplBeginAddRect();
         bRegionRect = rDeviceRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
@@ -2190,7 +2103,7 @@ Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
 
 // -----------------------------------------------------------------------
 
-long* OutputDevice::LogicToLogic( long* pX, USHORT nCount,
+long* OutputDevice::LogicToLogic( long* pX, sal_uInt16 nCount,
                                   const MapMode* pMapModeSource,
                                   const MapMode* pMapModeDest ) const
 {

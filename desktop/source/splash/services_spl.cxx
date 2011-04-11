@@ -37,13 +37,13 @@
 
 #include "splash.hxx"
 
-
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::desktop;
+
+using ::rtl::OUString;
 
 static const char* pServices[] =
 {
@@ -64,7 +64,6 @@ static const fProvider pInstanceProviders[] =
     SplashScreen::getInstance,
     NULL
 };
-
 
 static const char** pSupportedServices[] =
 {
@@ -91,32 +90,6 @@ component_getImplementationEnvironment(
     uno_Environment**)
 {
     *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
-}
-
-sal_Bool SAL_CALL
-component_writeInfo(
-    void* pServiceManager,
-    void* pRegistryKey)
-{
-    Reference<XMultiServiceFactory> xMan(
-        reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-    Reference<XRegistryKey> xKey(
-        reinterpret_cast< XRegistryKey* >( pRegistryKey ) ) ;
-
-    // iterate over service names and register them...
-    OUString aImpl;
-    const char* pServiceName = NULL;
-    const char* pImplName = NULL;
-    for (int i = 0; (pServices[i]!=NULL)&&(pImplementations[i]!=NULL); i++) {
-        pServiceName= pServices[i];
-        pImplName = pImplementations[i];
-        aImpl = OUString::createFromAscii("/")
-              + OUString::createFromAscii(pImplName)
-              + OUString::createFromAscii("/UNO/SERVICES");
-        Reference<XRegistryKey> xNewKey = xKey->createKey(aImpl);
-        xNewKey->createKey(OUString::createFromAscii(pServiceName));
-    }
-    return sal_True;
 }
 
 void* SAL_CALL

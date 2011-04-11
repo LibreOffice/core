@@ -82,7 +82,7 @@ static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
 }
 
 
-// defines f"ur den Style der BrowseBox
+// defines for the style of the BrowseBox
 
 #define STYLE_MULTI_SELECTION   \
     CNTVIEWSTYLE_NODE_BUTTONS | \
@@ -121,7 +121,7 @@ namespace
 
     struct SvtSimpleResId : public ResId
     {
-        SvtSimpleResId (USHORT nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
+        SvtSimpleResId (sal_uInt16 nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
     };
 }
 
@@ -219,15 +219,14 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     delete _pURLs;
     _pURLs = new SvStringsDtor;
 
-    // "Ubergeordnete Ebenen bestimmen.
+    // determine parent levels
     INetURLObject aObject( pBox->GetViewURL() );
     sal_Int32 nCount = aObject.getSegmentCount();
 
     ::svtools::VolumeInfo aVolInfo( sal_True /* volume */, sal_False /* remote */,
                                     sal_False /* removable */, sal_False /* floppy */,
                                     sal_False /* compact disk */ );
-    sal_Bool bIsHighContrast = pBox->GetSettings().GetStyleSettings().GetHighContrastMode();
-    Image aVolumeImage( SvFileInformationManager::GetFolderImage( aVolInfo, bIsHighContrast ) );
+    Image aVolumeImage( SvFileInformationManager::GetFolderImage( aVolInfo ) );
 
     while ( nCount >= 1 )
     {
@@ -242,8 +241,7 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
                 aTitle = aObject.getName();
 
             Image aImage = ( nCount > 1 ) // if nCount == 1 means workplace, which detects the wrong image
-                ? SvFileInformationManager::GetImage( aObject, bIsHighContrast )
-                : aVolumeImage;
+                ? SvFileInformationManager::GetImage( aObject ) : aVolumeImage;
 
             _pMenu->InsertItem( nItemId++, aTitle, aImage );
             _pURLs->Insert( pParentURL, _pURLs->Count() );
@@ -314,9 +312,7 @@ void SvtTravelButton_Impl::FillURLMenu( PopupMenu* _pMenu )
 
     _pMenu->Clear();
 
-    sal_Bool bIsHighContrast = GetDialogParent()->GetView()->GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    USHORT nItemId = 1;
+    sal_uInt16 nItemId = 1;
     String sDisplayName;
 
     ::std::vector< String >::const_iterator aLoop;
@@ -324,8 +320,7 @@ void SvtTravelButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     {
         if ( GetDialogParent()->isUrlAllowed( *aLoop ) )
         {
-            Image aImage = SvFileInformationManager::GetImage(
-                INetURLObject(*aLoop), bIsHighContrast );
+            Image aImage = SvFileInformationManager::GetImage( INetURLObject(*aLoop) );
             if ( LocalFileHelper::ConvertURLToSystemPath(*aLoop, sDisplayName) )
                 _pMenu->InsertItem( nItemId, sDisplayName, aImage );
             else
@@ -472,7 +467,7 @@ void SvtExpFileDlg_Impl::InsertFilterListEntry( const SvtFileDialogFilter_Impl* 
         sName = _pFilterDesc->GetName();
 
     // insert an set user data
-    USHORT nPos = _pLbFilter->InsertEntry( sName );
+    sal_uInt16 nPos = _pLbFilter->InsertEntry( sName );
     _pLbFilter->SetEntryData( nPos, const_cast< void* >( static_cast< const void* >( _pFilterDesc ) ) );
 }
 
@@ -484,7 +479,7 @@ void SvtExpFileDlg_Impl::InitFilterList( )
     ClearFilterList( );
 
     // reinit it
-    USHORT nPos = _pFilter->Count();
+    sal_uInt16 nPos = _pFilter->Count();
 
     // search for the first entry which is no group separator
     while ( nPos-- && _pFilter->GetObject( nPos ) && _pFilter->GetObject( nPos )->isGroupSeparator() )

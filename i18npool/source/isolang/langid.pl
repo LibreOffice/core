@@ -53,13 +53,13 @@ sub Usage()
         "langtab.src, a generic string match of the listbox entries will be tried.\n\n",
 
         "Numeric values of LangID,primarylanguage,sublanguage can be given\n",
-        "decimal, hexagesimal (leading 0x), octal (leading 0) or binary (leading 0b).\n",
+        "decimal, hexadecimal (leading 0x), octal (leading 0) or binary (leading 0b).\n",
         "The exact language_define of an exact match will be used in remaining lookups.\n\n",
 
         "A language-country pair will lookup a xx-YY mapping from isolang.cxx,\n",
         "for example: 'en-US' or 'de-' or '-CH',\n",
         "xx and YY can be given case insensitive, will be lowered-uppered internally,\n",
-        "and xx and YY themselfs may be regular expressions.\n",
+        "and xx and YY themselves may be regular expressions.\n",
         "Also here a list of matches will be processed.\n\n",
 
         "If option --single is given, only the first match will be processed.\n\n";

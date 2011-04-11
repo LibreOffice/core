@@ -211,10 +211,10 @@ static sal_Bool _parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTi
     sal_Int32 nDateLength = 10;
     sal_Int32 nTimeLength = 8;
 
-    ::rtl::OUString aDateTimeSep = ::rtl::OUString::createFromAscii("T");
-    ::rtl::OUString aDateSep = ::rtl::OUString::createFromAscii("-");
-    ::rtl::OUString aTimeSep = ::rtl::OUString::createFromAscii(":");
-    ::rtl::OUString aUTCString = ::rtl::OUString::createFromAscii("Z");
+    ::rtl::OUString aDateTimeSep(RTL_CONSTASCII_USTRINGPARAM("T"));
+    ::rtl::OUString aDateSep(RTL_CONSTASCII_USTRINGPARAM("-"));
+    ::rtl::OUString aTimeSep(RTL_CONSTASCII_USTRINGPARAM(":"));
+    ::rtl::OUString aUTCString(RTL_CONSTASCII_USTRINGPARAM("Z"));
 
     ::rtl::OUString aDateString = aDateTimeString.copy(0, nDateLength);
     ::rtl::OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);
@@ -228,7 +228,7 @@ static sal_Bool _parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTi
     sal_Int32 nMinute = aTimeString.getToken(0, ':', nIndex).toInt32();
     sal_Int32 nSecond = aTimeString.getToken(0, ':', nIndex).toInt32();
 
-    Date tmpDate((USHORT)nDay, (USHORT)nMonth, (USHORT)nYear);
+    Date tmpDate((sal_uInt16)nDay, (sal_uInt16)nMonth, (sal_uInt16)nYear);
     Time tmpTime(nHour, nMinute, nSecond);
     DateTime tmpDateTime(tmpDate, tmpTime);
     if (aString.indexOf(aUTCString) < 0)
@@ -258,29 +258,24 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             Bootstrap::locateBaseInstallation(aBaseInstallPath);
         if (aBaseLocateResult != Bootstrap::PATH_EXISTS)
         {
-            // base install noit found
-            // prepare termination
-            // m_bTerminate = sal_True;
-            // Application::PostUserEvent( STATIC_LINK( 0, License, Terminate ) );
             aRet <<= sal_False;
             return aRet;
         }
         // determine the filename of the license to show
         ::rtl::OUString  aLangString;
         ::com::sun::star::lang::Locale aLocale;
-        ::rtl::OString aMgrName = ::rtl::OString("fwe");
         AllSettings aSettings(Application::GetSettings());
         aLocale = aSettings.GetUILocale();
-        ResMgr* pResMgr = ResMgr::SearchCreateResMgr(aMgrName, aLocale);
+        ResMgr* pResMgr = ResMgr::SearchCreateResMgr("fwe", aLocale);
 
         aLangString = aLocale.Language;
         if ( aLocale.Country.getLength() != 0 )
         {
-            aLangString += ::rtl::OUString::createFromAscii("-");
+            aLangString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
             aLangString += aLocale.Country;
             if ( aLocale.Variant.getLength() != 0 )
             {
-                aLangString += ::rtl::OUString::createFromAscii("-");
+                aLangString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
                 aLangString += aLocale.Variant;
             }
         }
@@ -288,21 +283,21 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         ::rtl::OUString aLicensePath =
             aBaseInstallPath + ::rtl::OUString::createFromAscii(szLicensePath)
             + ::rtl::OUString::createFromAscii(szWNTLicenseName)
-            + ::rtl::OUString::createFromAscii("_")
+            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"))
             + aLangString
             + ::rtl::OUString::createFromAscii(szWNTLicenseExt);
 #else
         ::rtl::OUString aLicensePath =
             aBaseInstallPath + ::rtl::OUString::createFromAscii(szLicensePath)
             + ::rtl::OUString::createFromAscii(szUNXLicenseName)
-            + ::rtl::OUString::createFromAscii("_")
+            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"))
             + aLangString
             + ::rtl::OUString::createFromAscii(szUNXLicenseExt);
 #endif
         // check if we need to show the license at all
         // open org.openoffice.Setup/Office/ooLicenseAcceptDate
         ::rtl::OUString sConfigSrvc = SERVICENAME_CFGPROVIDER;
-        ::rtl::OUString sAccessSrvc = ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess");
+        ::rtl::OUString sAccessSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
         ::rtl::OUString sReadSrvc   = SERVICENAME_CFGREADACCESS;
 
         // get configuration provider
@@ -310,22 +305,18 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         m_xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
         Sequence< Any > theArgs(1);
         NamedValue v;
-        v.Name = ::rtl::OUString::createFromAscii("NodePath");
-        v.Value <<= ::rtl::OUString::createFromAscii("org.openoffice.Setup/Office");
+        v.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath"));
+        v.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office"));
         theArgs[0] <<= v;
         Reference< XPropertySet > pset = Reference< XPropertySet >(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
 
         // if we find a date there, compare it to baseinstall license date
         ::rtl::OUString aAcceptDate;
-        if (pset->getPropertyValue(::rtl::OUString::createFromAscii("ooLicenseAcceptDate")) >>= aAcceptDate)
+        if (pset->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooLicenseAcceptDate"))) >>= aAcceptDate)
         {
             // get LicenseFileDate from base install
             ::rtl::OUString aLicenseURL = aLicensePath;
-            /*
-            if (FileBase::getFileURLFromSystemPath(aLicensePath, aLicenseURL) != FileBase::E_None)
-                return makeAny(sal_False);
-                */
             DirectoryItem aDirItem;
             if (DirectoryItem::get(aLicenseURL, aDirItem) != FileBase::E_None)
                 return makeAny(sal_False);
@@ -356,7 +347,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
 
             // write org.openoffice.Setup/ooLicenseAcceptDate
             aAcceptDate = _getCurrentDateString();
-            pset->setPropertyValue(::rtl::OUString::createFromAscii("ooLicenseAcceptDate"), makeAny(aAcceptDate));
+            pset->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooLicenseAcceptDate")), makeAny(aAcceptDate));
             Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
 
             // enable quickstarter
@@ -367,7 +358,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             aSeq[1] <<= bAutostart;
 
             Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString::createFromAscii( "com.sun.star.office.Quickstart" )),UNO_QUERY );
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.Quickstart"))),UNO_QUERY );
             if ( xQuickstart.is() )
                 xQuickstart->initialize( aSeq );
 
@@ -375,10 +366,6 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         }
         else
         {
-            // license was not accepted
-            // prepare termination
-            // m_bTerminate = sal_True;
-            // Application::PostUserEvent( STATIC_LINK( 0, License, Terminate ) );
             aRet <<= sal_False;
         }
     }
@@ -424,7 +411,7 @@ LicenseDialog::LicenseDialog(const ::rtl::OUString & aLicensePath, ResMgr *pResM
     aArrow(this, ResId(IMG_ARROW, *pResMgr)),
     aStrAccept( ResId(LICENSE_ACCEPT, *pResMgr) ),
     aStrNotAccept( ResId(LICENSE_NOTACCEPT, *pResMgr) ),
-    bEndReached(FALSE)
+    bEndReached(sal_False)
 {
     FreeResource();
 
@@ -451,7 +438,7 @@ LicenseDialog::LicenseDialog(const ::rtl::OUString & aLicensePath, ResMgr *pResM
 
     // load license text
     File aLicenseFile(aLicensePath);
-    if ( aLicenseFile.open(OpenFlag_Read) == FileBase::E_None)
+    if ( aLicenseFile.open(osl_File_OpenFlag_Read) == FileBase::E_None)
     {
         DirectoryItem d;
         DirectoryItem::get(aLicensePath, d);
@@ -461,7 +448,6 @@ LicenseDialog::LicenseDialog(const ::rtl::OUString & aLicensePath, ResMgr *pResM
         sal_uInt64 nPosition = 0;
         sal_uInt32 nBytes = (sal_uInt32)fs.getFileSize();
         sal_Char *pBuffer = new sal_Char[nBytes];
-        // FileBase RC r = FileBase::E_None;
         while (aLicenseFile.read(pBuffer+nPosition, nBytes-nPosition, nBytesRead) == FileBase::E_None
             && nPosition + nBytesRead < nBytes)
         {
@@ -487,7 +473,7 @@ IMPL_LINK( LicenseDialog, PageDownHdl, PushButton *, EMPTYARG )
 
 IMPL_LINK( LicenseDialog, EndReachedHdl, LicenseView *, EMPTYARG )
 {
-    bEndReached = TRUE;
+    bEndReached = sal_True;
 
     EnableControls();
 
@@ -517,7 +503,7 @@ void LicenseDialog::EnableControls()
 {
     if( !bEndReached &&
         ( aLicenseML.IsEndReached() || !aLicenseML.GetText().Len() ) )
-        bEndReached = TRUE;
+        bEndReached = sal_True;
 
     if ( bEndReached )
     {
@@ -568,20 +554,20 @@ void LicenseView::ScrollDown( ScrollType eScroll )
         pScroll->DoScrollAction( eScroll );
 }
 
-BOOL LicenseView::IsEndReached() const
+sal_Bool LicenseView::IsEndReached() const
 {
-    BOOL bEndReached;
+    sal_Bool bEndReached;
 
     ExtTextView*    pView = GetTextView();
     ExtTextEngine*  pEdit = GetTextEngine();
-    ULONG           nHeight = pEdit->GetTextHeight();
+    sal_uLong           nHeight = pEdit->GetTextHeight();
     Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
     Point           aBottom( 0, aOutSize.Height() );
 
-    if ( (ULONG) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
-        bEndReached = TRUE;
+    if ( (sal_uLong) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
+        bEndReached = sal_True;
     else
-        bEndReached = FALSE;
+        bEndReached = sal_False;
 
     return bEndReached;
 }
@@ -590,8 +576,8 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
-        BOOL    bLastVal = EndReached();
-        ULONG   nId = ((const TextHint&)rHint).GetId();
+        sal_Bool    bLastVal = EndReached();
+        sal_uLong   nId = ((const TextHint&)rHint).GetId();
 
         if ( nId == TEXT_HINT_PARAINSERTED )
         {

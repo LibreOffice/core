@@ -32,7 +32,7 @@
 #define DIFF_Y 17
 ModalDialog DLG_CUSTOMSHOW
 {
-    HelpID = SID_CUSTOMSHOW_DLG ;
+    HelpID = CMD_SID_CUSTOMSHOW_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 175 + DIFF , 114 + DIFF_Y ) ;
@@ -40,6 +40,7 @@ ModalDialog DLG_CUSTOMSHOW
     Closeable = TRUE ;
     PushButton BTN_NEW
     {
+        HelpID = "sd:PushButton:DLG_CUSTOMSHOW:BTN_NEW";
         Pos = MAP_APPFONT ( 120 + DIFF , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -47,6 +48,7 @@ ModalDialog DLG_CUSTOMSHOW
     };
     PushButton BTN_EDIT
     {
+        HelpID = "sd:PushButton:DLG_CUSTOMSHOW:BTN_EDIT";
         Pos = MAP_APPFONT ( 120 + DIFF , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -54,6 +56,7 @@ ModalDialog DLG_CUSTOMSHOW
     };
     PushButton BTN_REMOVE
     {
+        HelpID = "sd:PushButton:DLG_CUSTOMSHOW:BTN_REMOVE";
         Pos = MAP_APPFONT ( 120 + DIFF , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -61,6 +64,7 @@ ModalDialog DLG_CUSTOMSHOW
     };
     PushButton BTN_COPY
     {
+        HelpID = "sd:PushButton:DLG_CUSTOMSHOW:BTN_COPY";
         Pos = MAP_APPFONT ( 120 + DIFF , 57 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -74,6 +78,7 @@ ModalDialog DLG_CUSTOMSHOW
     };
     PushButton BTN_STARTSHOW
     {
+        HelpID = "sd:PushButton:DLG_CUSTOMSHOW:BTN_STARTSHOW";
         Pos = MAP_APPFONT ( 120 + DIFF , 94 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -89,13 +94,18 @@ ModalDialog DLG_CUSTOMSHOW
     };
     ListBox LB_CUSTOMSHOWS
     {
+        HelpID = "sd:ListBox:DLG_CUSTOMSHOW:LB_CUSTOMSHOWS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 102 + DIFF , 86 + DIFF_Y ) ;
         TabStop = TRUE ;
+        //IAccessibility2 Implementation 2009-----
+        QuickHelpText [ en-US ] = "Custom Screen Show" ;
+        //-----IAccessibility2 Implementation 2009
     };
     CheckBox CBX_USE_CUSTOMSHOW
     {
+        HelpID = "sd:CheckBox:DLG_CUSTOMSHOW:CBX_USE_CUSTOMSHOW";
         Pos = MAP_APPFONT ( 6 , 96 + DIFF_Y ) ;
         Size = MAP_APPFONT ( 112 + DIFF , 12 ) ;
         TabStop = TRUE ;
@@ -138,6 +148,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     };
     Edit EDT_NAME
     {
+        HelpID = "sd:Edit:DLG_DEFINE_CUSTOMSHOW:EDT_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 38 , 6 ) ;
         Size = MAP_APPFONT ( 141 , 12 ) ;
@@ -145,6 +156,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     };
     MultiListBox LB_PAGES
     {
+        HelpID = "sd:MultiListBox:DLG_DEFINE_CUSTOMSHOW:LB_PAGES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 35 ) ;
         Size = MAP_APPFONT ( 75 , 75 ) ;
@@ -153,6 +165,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     };
     PushButton BTN_ADD
     {
+        HelpID = "sd:PushButton:DLG_DEFINE_CUSTOMSHOW:BTN_ADD";
         Pos = MAP_APPFONT ( 84 , 67 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "~>>" ;
@@ -168,6 +181,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     };
     PushButton BTN_REMOVE
     {
+        HelpID = "sd:PushButton:DLG_DEFINE_CUSTOMSHOW:BTN_REMOVE";
         Pos = MAP_APPFONT ( 84 , 95 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "~<<" ;

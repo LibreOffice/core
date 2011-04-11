@@ -30,7 +30,7 @@
 #include "precompiled_vcl.hxx"
 
 #define _SV_SALDATA_CXX
-#include <shell/kde_headers.h>
+#include <kde_headers.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -96,7 +96,7 @@ SalKDEDisplay::~SalKDEDisplay()
 
 KDEXLib::~KDEXLib()
 {
-    // #158056# on 64 bit linux using libXRandr.so.2 will crash in
+    // on 64 bit linux using libXRandr.so.2 will crash in
     // XCloseDisplay when freeing extension data
     // no known work around, therefor currently leak. Hopefully
     // this does not make problems since we're shutting down anyway
@@ -135,7 +135,7 @@ void KDEXLib::Init()
             "http://artax.karlin.mff.cuni.cz/~kendy" );
 
     m_nFakeCmdLineArgs = 1;
-    USHORT nIdx;
+    sal_uInt16 nIdx;
     int nParams = osl_getCommandArgCount();
     rtl::OString aDisplay;
     rtl::OUString aParam, aBin;
@@ -143,7 +143,7 @@ void KDEXLib::Init()
     for ( nIdx = 0; nIdx < nParams; ++nIdx )
     {
         osl_getCommandArg( nIdx, &aParam.pData );
-        if ( !m_pFreeCmdLineArgs && aParam.equalsAscii( "-display" ) && nIdx + 1 < nParams )
+        if ( !m_pFreeCmdLineArgs && aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-display" ) ) && nIdx + 1 < nParams )
         {
             osl_getCommandArg( nIdx + 1, &aParam.pData );
             aDisplay = rtl::OUStringToOString( aParam, osl_getThreadTextEncoding() );
@@ -187,7 +187,7 @@ void KDEXLib::Init()
     SalI18N_KeyboardExtension *pKbdExtension = new SalI18N_KeyboardExtension( pDisp );
     XSync( pDisp, False );
 
-    pKbdExtension->UseExtension( ! HasXErrorOccured() );
+    pKbdExtension->UseExtension( ! HasXErrorOccurred() );
     PopXErrorLevel();
 
     pSalDisplay->SetKbdExtension( pKbdExtension );

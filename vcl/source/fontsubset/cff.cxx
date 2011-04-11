@@ -1306,13 +1306,12 @@ void CffSubsetterContext::callType2Subr( bool bGlobal, int nSubrNumber)
     const U8* const pOldReadPtr = mpReadPtr;
     const U8* const pOldReadEnd = mpReadEnd;
 
-    int nLen = 0;
     if( bGlobal ) {
         nSubrNumber += mnGlobalSubrBias;
-        nLen = seekIndexData( mnGlobalSubrBase, nSubrNumber);
+        seekIndexData( mnGlobalSubrBase, nSubrNumber);
     } else {
         nSubrNumber += mpCffLocal->mnLocalSubrBias;
-        nLen = seekIndexData( mpCffLocal->mnLocalSubrBase, nSubrNumber);
+        seekIndexData( mpCffLocal->mnLocalSubrBase, nSubrNumber);
     }
 
     while( mpReadPtr < mpReadEnd)
@@ -1754,6 +1753,7 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
                 assert( nRangeCount <= mnCharStrCount);
                 U16 nPrev = (pReadPtr[2]<<8) + pReadPtr[3];
                 assert( nPrev == 0);
+                (void)nPrev;
                 pReadPtr += 4;
                 // TODO? binary search
                 for( int i = 0; i < nRangeCount; ++i) {
@@ -2048,7 +2048,7 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
         return;
 
     // emit the line head
-    mpPtr += sprintf( mpPtr, pLineHead);
+    mpPtr += sprintf( mpPtr, "%s", pLineHead);
     // emit the vector values
     ValVector::value_type aVal = 0;
     for( ValVector::const_iterator it = rVector.begin();;) {
@@ -2061,7 +2061,7 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
     // emit the last value
     mpPtr += dbl2str( mpPtr, aVal);
     // emit the line tail
-    mpPtr += sprintf( mpPtr, pLineTail);
+    mpPtr += sprintf( mpPtr, "%s", pLineTail);
 }
 
 // --------------------------------------------------------------------

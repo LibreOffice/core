@@ -36,7 +36,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnumi.hxx>

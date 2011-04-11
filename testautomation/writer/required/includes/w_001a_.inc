@@ -89,7 +89,7 @@ testcase tFileProperties
     Call DialogTest (TabDokumentinfo)
 
 
-    QAErrorlog "#i95523# - FileProperties - Tabpage 'User Defined' has changed. - Adaption of testcases needed."
+    Warnlog "#i95523# - FileProperties - Tabpage 'User Defined' has changed. - Adaption of testcases needed."
     '    printlog " Switch to Tabpage 'User defined'"
     '    Kontext
     '    active.SetPage TabBenutzer

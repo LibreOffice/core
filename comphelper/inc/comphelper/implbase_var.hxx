@@ -396,6 +396,52 @@ public:
         { WeakComponentImplHelperBase::removeEventListener( xListener ); }
 };
 
+template < BOOST_PP_ENUM_PARAMS(COMPHELPER_IMPLBASE_INTERFACE_NUMBER,
+                                typename Ifc) >
+class SAL_NO_VTABLE BOOST_PP_CAT(PartialWeakComponentImplHelper,
+                                 COMPHELPER_IMPLBASE_INTERFACE_NUMBER)
+    : public ::cppu::WeakComponentImplHelperBase,
+      public ::com::sun::star::lang::XTypeProvider,
+      BOOST_PP_ENUM_PARAMS(COMPHELPER_IMPLBASE_INTERFACE_NUMBER, public Ifc)
+{
+    /// @internal
+    struct cd : public ::rtl::StaticAggregate<
+        ::cppu::class_data,
+        BOOST_PP_CAT(detail::ImplClassData,
+                     COMPHELPER_IMPLBASE_INTERFACE_NUMBER)
+        <
+            BOOST_PP_ENUM_PARAMS(COMPHELPER_IMPLBASE_INTERFACE_NUMBER, Ifc),
+            BOOST_PP_CAT(PartialWeakComponentImplHelper,
+                         COMPHELPER_IMPLBASE_INTERFACE_NUMBER)<
+                BOOST_PP_ENUM_PARAMS(COMPHELPER_IMPLBASE_INTERFACE_NUMBER, Ifc)>
+        > > {};
+
+public:
+    BOOST_PP_CAT(PartialWeakComponentImplHelper, COMPHELPER_IMPLBASE_INTERFACE_NUMBER)(
+        ::osl::Mutex & rMutex ) : WeakComponentImplHelperBase(rMutex) {}
+
+    virtual ::com::sun::star::uno::Any
+        SAL_CALL queryInterface( ::com::sun::star::uno::Type const& rType )
+        throw (::com::sun::star::uno::RuntimeException)
+    {
+        return ::cppu::WeakComponentImplHelper_query(
+            rType, cd::get(), this,
+            static_cast< ::cppu::WeakComponentImplHelperBase * >(this) );
+    }
+    virtual void SAL_CALL acquire() throw ()
+        { WeakComponentImplHelperBase::acquire(); }
+    virtual void SAL_CALL release() throw ()
+        { WeakComponentImplHelperBase::release(); }
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+        SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException)
+        { return ::cppu::WeakComponentImplHelper_getTypes( cd::get() ); }
+    virtual ::com::sun::star::uno::Sequence<sal_Int8>
+        SAL_CALL getImplementationId()
+        throw (::com::sun::star::uno::RuntimeException)
+        { return ::cppu::ImplHelper_getImplementationId( cd::get() ); }
+};
+
+
 } // namespace comphelper
 
 // undef for multiple use/inclusion of this header:

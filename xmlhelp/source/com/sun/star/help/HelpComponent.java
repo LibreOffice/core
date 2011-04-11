@@ -31,47 +31,8 @@ import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.registry.XRegistryKey;
 
-/*
-import com.sun.star.lib.uno.helper.Factory;
-import com.sun.star.lang.XMultiComponentFactory;
-import com.sun.star.lang.XSingleComponentFactory;
-import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.registry.XRegistryKey;
-import com.sun.star.lang.XInitialization;
-import com.sun.star.lang.XTypeProvider;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.Any;
-import com.sun.star.uno.AnyConverter;
-
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.index.FilterIndexReader;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Hits;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.Searcher;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.WildcardQuery;
-
-import com.sun.star.script.XInvocation;
-import com.sun.star.beans.XIntrospectionAccess;
-
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.io.File;
-*/
-
-/** This class capsulates the class, that implements the minimal component, a
- * factory for creating the service (<CODE>__getComponentFactory</CODE>) and a
- * method, that writes the information into the given registry key
- * (<CODE>__writeRegistryServiceInfo</CODE>).
+/** This class capsulates the class, that implements the minimal component and a
+ * factory for creating the service (<CODE>__getComponentFactory</CODE>).
  */
 public class HelpComponent
 {
@@ -98,25 +59,6 @@ public class HelpComponent
         return xFactory;
     }
 
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey the registryKey
-     * @see     com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey)
-    {
-        boolean bSuccessHelpSearch = Factory.writeRegistryServiceInfo
-            (HelpSearch._HelpSearch.class.getName(),
-             HelpSearch._HelpSearch.getServiceNames(), regKey);
-        boolean bSuccessHelpIndexer = Factory.writeRegistryServiceInfo
-            (HelpIndexer.class.getName(),
-             HelpIndexer.getServiceNames(), regKey);
-
-        return bSuccessHelpSearch && bSuccessHelpIndexer;
-    }
     /** This method is a member of the interface for initializing an object
      * directly after its creation.
      * @param object This array of arbitrary objects will be passed to the

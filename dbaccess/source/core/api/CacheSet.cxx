@@ -61,18 +61,17 @@ using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
-//  using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
-//  using namespace ::cppu;
 using namespace ::osl;
 
 DBG_NAME(OCacheSet)
 
-OCacheSet::OCacheSet()
-            :m_bInserted(sal_False)
+OCacheSet::OCacheSet(sal_Int32 i_nMaxRows)
+            :m_nMaxRows(i_nMaxRows)
+            ,m_bInserted(sal_False)
             ,m_bUpdated(sal_False)
             ,m_bDeleted(sal_False)
 {
@@ -139,11 +138,11 @@ OCacheSet::~OCacheSet()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception occured");
+        OSL_FAIL("Exception occurred");
     }
     catch(...)
     {
-        OSL_ENSURE(0,"Unknown Exception occured");
+        OSL_FAIL("Unknown Exception occurred");
     }
 
     DBG_DTOR(OCacheSet,NULL);
@@ -219,7 +218,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
                                         ,::std::list< sal_Int32>& _rOrgValues)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::fillParameters" );
-    // use keys and indexes for excat postioning
+    // use keys and indexes for exact positioning
     // first the keys
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(xSet);
@@ -273,7 +272,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
             _sCondition.append(aAnd);
             _rOrgValues.push_back(nCheckCount);
 
-        } // if(xPrimaryKeyColumns.is() && xPrimaryKeyColumns->hasByName(aColumnName))
+        }
         ::std::vector< Reference<XNameAccess> >::const_iterator aIndexEnd = aAllIndexColumns.end();
         for( ::std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
                 aIndexIter != aIndexEnd;++aIndexIter)
@@ -336,7 +335,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
             setParameter(i,xParameter,*aIter,m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
             ++i;
         }
-    } // for(ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1; aIter != aEnd;++aIter)
+    }
     ::std::list< sal_Int32>::const_iterator aOrgValueEnd = aOrgValues.end();
     for(::std::list< sal_Int32>::const_iterator aOrgValue = aOrgValues.begin(); aOrgValue != aOrgValueEnd;++aOrgValue,++i)
     {
@@ -360,7 +359,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     ::rtl::OUString aQuote  = getIdentifierQuoteString();
     static ::rtl::OUString aAnd(RTL_CONSTASCII_USTRINGPARAM(" AND "));
 
-    // use keys and indexes for excat postioning
+    // use keys and indexes for exact positioning
     // first the keys
     const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(xSet);
     // second the indexes
@@ -392,7 +391,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
 
     aSql.setLength(aSql.getLength()-5);
 
-    // now create end execute the prepared statement
+    // now create and execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
     sal_Int32 i = 1;
@@ -678,7 +677,7 @@ bool OCacheSet::isResultSetChanged() const
 
 void OCacheSet::reset(const Reference< XResultSet>& /*_xDriverSet*/)
 {
-    OSL_ENSURE(0,"Illegal call!");
+    OSL_FAIL("Illegal call!");
 }
 
 void OCacheSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& /*io_aInsertRow*/,ORowSetValueVector::Vector& /*io_aRow*/,::std::vector<sal_Int32>& o_aChangedColumns)

@@ -56,13 +56,12 @@ using ::rtl::OUString;
 
 extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
-BOOL SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
+sal_Bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {
-//JP 08.03.96: die Wizards brauchen die Selektion !!
-//  EndSelect();
+    addCurrentPosition();
     (this->*fnKillSel)( 0, sal_False );
 
-    BOOL bRet = sal_True;
+    sal_Bool bRet = sal_True;
     switch(eFuncId)
     {
         case BOOKMARK_INDEX:bRet = SwCrsrShell::GotoMark( pMark );break;
@@ -84,11 +83,11 @@ BOOL SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* co
     return bRet;
 }
 
-BOOL SwWrtShell::GotoField( const SwFmtFld& rFld )
+sal_Bool SwWrtShell::GotoField( const SwFmtFld& rFld )
 {
     (this->*fnKillSel)( 0, sal_False );
 
-    BOOL bRet = SwCrsrShell::GotoFld( rFld );
+    sal_Bool bRet = SwCrsrShell::GotoFld( rFld );
     if( bRet && IsSelFrmMode() )
     {
         UnSelectFrm();
@@ -128,7 +127,7 @@ bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
 
 void SwWrtShell::DrawSelChanged( )
 {
-    static sal_uInt16 __READONLY_DATA aInval[] =
+    static sal_uInt16 const aInval[] =
     {
         SID_ATTR_FILL_STYLE, SID_ATTR_FILL_COLOR, SID_ATTR_LINE_STYLE,
         SID_ATTR_LINE_WIDTH, SID_ATTR_LINE_COLOR, 0
@@ -142,7 +141,7 @@ void SwWrtShell::DrawSelChanged( )
     bNoInterrupt = bOldVal;
 }
 
-BOOL SwWrtShell::GotoMark( const ::rtl::OUString& rName )
+sal_Bool SwWrtShell::GotoMark( const ::rtl::OUString& rName )
 {
     IDocumentMarkAccess::const_iterator_t ppMark = getIDocumentMarkAccess()->findMark( rName );
     if(ppMark == getIDocumentMarkAccess()->getMarksEnd()) return false;
@@ -150,19 +149,19 @@ BOOL SwWrtShell::GotoMark( const ::rtl::OUString& rName )
 }
 
 
-BOOL SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark )
+sal_Bool SwWrtShell::GotoMark( const ::sw::mark::IMark* const pMark )
 {
     return MoveBookMark( BOOKMARK_INDEX, pMark );
 }
 
 
-BOOL SwWrtShell::GoNextBookmark()
+sal_Bool SwWrtShell::GoNextBookmark()
 {
     return MoveBookMark( BOOKMARK_NEXT );
 }
 
 
-BOOL SwWrtShell::GoPrevBookmark()
+sal_Bool SwWrtShell::GoPrevBookmark()
 {
     return MoveBookMark( BOOKMARK_PREV );
 }

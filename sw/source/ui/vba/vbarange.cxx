@@ -96,74 +96,7 @@ SwVbaRange::getXTextRange() throw (uno::RuntimeException)
     uno::Reference< text::XTextRange > xTextRange( mxTextCursor, uno::UNO_QUERY_THROW );
     return xTextRange;
 }
-#ifdef TOMORROW
-void SwVbaRange::setXTextRange( const uno::Reference< text::XTextRange >& xRange ) throw (uno::RuntimeException)
-{
-    mxTextCursor->gotoRange( xRange->getStart(), sal_False );
-    mxTextCursor->gotoRange( xRange->getEnd(), sal_True );
-}
 
-void
-SwVbaRange::Move( const uno::Any& _unit, const uno::Any& _count, const uno::Any& _extend, word::E_DIRECTION eDirection ) throw ( uno::RuntimeException )
-{
-    sal_Int32 nUnit = word::WdUnits::wdCharacter;
-    sal_Int32 nCount = 1;
-    sal_Int32 nExtend = word::WdMovementType::wdMove;
-
-    if( _unit.hasValue() )
-        _unit >>= nUnit;
-    if( _count.hasValue() )
-        _count >>= nCount;
-    if( _extend.hasValue() )
-        _extend >>= nExtend;
-
-    if( nCount == 0 )
-        return;
-
-    sal_Bool bExpand = ( nExtend == word::WdMovementType::wdMove ) ? sal_False : sal_True;
-
-    switch( nUnit )
-    {
-        case word::WdUnits::wdParagraph:
-        {
-            if( eDirection == word::MOVE_LEFT || eDirection == word::MOVE_RIGHT )
-            {
-                throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-            }
-            uno::Reference< text::XParagraphCursor > xParagraphCursor( mxTextCursor, uno::UNO_QUERY_THROW );
-            for( sal_Int32 i=0; i<nCount; i++ )
-            {
-                if( ( eDirection == word::MOVE_UP ) && ( xParagraphCursor->gotoPreviousParagraph( bExpand ) == sal_False ) )
-                    break;
-                else if( ( eDirection == word::MOVE_DOWN ) && ( xParagraphCursor->gotoNextParagraph( bExpand ) == sal_False ) )
-                    break;
-            }
-            break;
-        }
-        case word::WdUnits::wdWord:
-        {
-            if( eDirection == word::MOVE_UP || eDirection == word::MOVE_DOWN )
-            {
-                throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-            }
-            uno::Reference< text::XWordCursor > xWordCursor( mxTextCursor, uno::UNO_QUERY_THROW );
-            for( sal_Int32 i=0; i<nCount; i++ )
-            {
-                if( (eDirection == word::MOVE_LEFT ) && ( xWordCursor->gotoPreviousWord( bExpand ) == sal_False ) )
-                    break;
-                else if( ( eDirection == word::MOVE_RIGHT ) && ( xWordCursor->gotoNextWord( bExpand ) == sal_False ) )
-                    break;
-            }
-            break;
-        }
-        default:
-        {
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-            break;
-        }
-    }
-}
-#endif
 /**
 * The complexity in this method is because we need to workaround
 * an issue that the last paragraph in a document does not have a trailing CRLF.

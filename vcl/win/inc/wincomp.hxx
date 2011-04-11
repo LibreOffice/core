@@ -128,17 +128,17 @@ inline DWORD GetWindowExStyle( HWND hWnd )
     return GetWindowLong( hWnd, GWL_EXSTYLE );
 }
 
-inline WIN_BOOL IsMinimized( HWND hWnd )
+inline BOOL IsMinimized( HWND hWnd )
 {
     return IsIconic( hWnd );
 }
 
-inline WIN_BOOL IsMaximized( HWND hWnd )
+inline BOOL IsMaximized( HWND hWnd )
 {
     return IsZoomed( hWnd );
 }
 
-inline void SetWindowFont( HWND hWnd, HFONT hFont, WIN_BOOL bRedraw )
+inline void SetWindowFont( HWND hWnd, HFONT hFont, BOOL bRedraw )
 {
     SendMessage( hWnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM((UINT)bRedraw,0) );
 }
@@ -150,37 +150,37 @@ inline HFONT GetWindowFont( HWND hWnd )
 
 inline void SetClassCursor( HWND hWnd, HCURSOR hCursor )
 {
-    SetClassLong( hWnd, GCL_HCURSOR, (DWORD)hCursor );
+    SetClassLongPtr( hWnd, GCLP_HCURSOR, (LONG_PTR)hCursor );
 }
 
 inline HCURSOR GetClassCursor( HWND hWnd )
 {
-    return (HCURSOR)GetClassLong( hWnd, GCL_HCURSOR );
+    return (HCURSOR)GetClassLongPtr( hWnd, GCLP_HCURSOR );
 }
 
 inline void SetClassIcon( HWND hWnd, HICON hIcon )
 {
-    SetClassLong( hWnd, GCL_HICON, (DWORD)hIcon );
+    SetClassLongPtr( hWnd, GCLP_HICON, (LONG_PTR)hIcon );
 }
 
 inline HICON GetClassIcon( HWND hWnd )
 {
-    return (HICON)GetClassLong( hWnd, GCL_HICON );
+    return (HICON)GetClassLongPtr( hWnd, GCLP_HICON );
 }
 
 inline HBRUSH SetClassBrush( HWND hWnd, HBRUSH hBrush )
 {
-    return (HBRUSH)SetClassLong( hWnd, GCL_HBRBACKGROUND, (DWORD)hBrush );
+    return (HBRUSH)SetClassLongPtr( hWnd, GCLP_HBRBACKGROUND, (LONG_PTR)hBrush );
 }
 
 inline HBRUSH GetClassBrush( HWND hWnd )
 {
-    return (HBRUSH)GetClassLong( hWnd, GCL_HBRBACKGROUND );
+    return (HBRUSH)GetClassLongPtr( hWnd, GCLP_HBRBACKGROUND );
 }
 
 inline HINSTANCE GetWindowInstance( HWND hWnd )
 {
-    return (HINSTANCE)GetWindowLong( hWnd, GWL_HINSTANCE );
+    return (HINSTANCE)GetWindowLongPtr( hWnd, GWLP_HINSTANCE );
 }
 
 // ------------------------

@@ -78,44 +78,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-static void writeInfo (
-    XRegistryKey * pRegistryKey,
-    const OUString& rImplementationName,
-    const Sequence< OUString >& rServices)
-{
-    Reference< XRegistryKey > xNewKey(
-        pRegistryKey->createKey(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + rImplementationName + OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) ) );
-
-    for( sal_Int32 i = 0; i < rServices.getLength(); i++ )
-        xNewKey->createKey( rServices.getConstArray()[i]);
-}
-
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
-    void * , void * pRegistryKey)
-{
-    if( pRegistryKey )
-    {
-        try
-        {
-            XRegistryKey *pKey = reinterpret_cast< XRegistryKey * >( pRegistryKey );
-
-            writeInfo( pKey, ::svx::ExtrusionDepthController_getImplementationName(),::svx::ExtrusionDepthController_getSupportedServiceNames() );
-            writeInfo( pKey, ::svx::ExtrusionDirectionControl_getImplementationName(),::svx::ExtrusionDirectionControl_getSupportedServiceNames() );
-            writeInfo( pKey, ::svx::ExtrusionLightingControl_getImplementationName(),::svx::ExtrusionLightingControl_getSupportedServiceNames() );
-            writeInfo( pKey, ::svx::ExtrusionSurfaceControl_getImplementationName(),::svx::ExtrusionSurfaceControl_getSupportedServiceNames() );
-            writeInfo( pKey, ::svx::FontWorkAlignmentControl_getImplementationName(),::svx::FontWorkAlignmentControl_getSupportedServiceNames() );
-            writeInfo( pKey, ::svx::FontWorkCharacterSpacingControl_getImplementationName(),::svx::FontWorkCharacterSpacingControl_getSupportedServiceNames() );
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-
-    return sal_True;
-}
-
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
     const sal_Char * pImplName, void * pServiceManager, void *  )
 {

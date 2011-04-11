@@ -37,30 +37,30 @@ class SvxMacroTableDtor;
 class SwTxtINetFmt;
 class IntlWrapper;
 
-// ATT_INETFMT *********************************************
+// ATT_INETFMT
 
 class SW_DLLPUBLIC SwFmtINetFmt: public SfxPoolItem
 {
     friend class SwTxtINetFmt;
 
-    String aURL;                    // die URL
-    String aTargetFrame;            // in diesen Frame soll die URL
+    String aURL;                    // URL.
+    String aTargetFrame;            // Target frame for URL.
     String aINetFmt;
     String aVisitedFmt;
-    String aName;                   // Name des Links
+    String aName;                   // Name of the link.
     SvxMacroTableDtor* pMacroTbl;
-    SwTxtINetFmt* pTxtAttr;         // mein TextAttribut
-    USHORT nINetId;
-    USHORT nVisitedId;
+    SwTxtINetFmt* pTxtAttr;         // My TextAttribute.
+    sal_uInt16 nINetId;
+    sal_uInt16 nVisitedId;
 public:
     SwFmtINetFmt( const String& rURL, const String& rTarget );
     SwFmtINetFmt( const SwFmtINetFmt& rAttr );
-    SwFmtINetFmt();                     // for TypeInfo
+    SwFmtINetFmt();                     // For TypeInfo.
     virtual ~SwFmtINetFmt();
 
     TYPEINFO();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -70,9 +70,9 @@ public:
                                     const IntlWrapper* pIntl = 0 ) const;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 ) const;
+                                        sal_uInt8 nMemberId = 0 ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 );
+                                        sal_uInt8 nMemberId = 0 );
 
 
     const SwTxtINetFmt* GetTxtINetFmt() const   { return pTxtAttr; }
@@ -91,19 +91,19 @@ public:
     const String& GetVisitedFmt() const     { return aVisitedFmt; }
     void SetVisitedFmt( const String& rNm ) { aVisitedFmt = rNm; }
 
-    USHORT GetINetFmtId() const             { return nINetId; }
-    void SetINetFmtId( USHORT nNew )        { nINetId = nNew; }
+    sal_uInt16 GetINetFmtId() const             { return nINetId; }
+    void SetINetFmtId( sal_uInt16 nNew )        { nINetId = nNew; }
 
-    USHORT GetVisitedFmtId() const          { return nVisitedId; }
-    void SetVisitedFmtId( USHORT nNew )     { nVisitedId = nNew; }
+    sal_uInt16 GetVisitedFmtId() const          { return nVisitedId; }
+    void SetVisitedFmtId( sal_uInt16 nNew )     { nVisitedId = nNew; }
 
-    // setze eine neue oder loesche die akt. MakroTabelle
+    // Set a new MacroTable or clear the current one.
     void SetMacroTbl( const SvxMacroTableDtor* pTbl = 0 );
     const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTbl; }
 
-    // setze / erfrage ein Makro
-    void SetMacro( USHORT nEvent, const SvxMacro& rMacro );
-    const SvxMacro* GetMacro( USHORT nEvent ) const;
+    // Macro getter and setter.
+    void SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro );
+    const SvxMacro* GetMacro( sal_uInt16 nEvent ) const;
 };
 
 

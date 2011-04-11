@@ -55,7 +55,7 @@ MacabResultSetMetaData::~MacabResultSetMetaData()
 void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
     OSQLColumns::Vector::const_iterator aIter;
-    static const ::rtl::OUString aName(::rtl::OUString::createFromAscii("Name"));
+    static const ::rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("Name"));
     MacabRecords *aRecords;
     MacabHeader *aHeader;
 

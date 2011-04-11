@@ -67,7 +67,7 @@ ZIP3DEPS=$(ZIP3LIST)
 .INCLUDE :  target.mk
 
 ALLTAR : \
-    $(COMMONBIN)$/brand$/intro.zip \
+    $(COMMONBIN)$/intro.zip \
     $(COMMONBIN)$/brand_dev$/intro.zip \
     $(COMMONBIN)$/shell/shell.zip
 
@@ -75,7 +75,7 @@ $(COMMONBIN)$/brand_dev$/intro.zip : $(COMMONBIN)$/brand_dev.zip
     @@-$(MKDIR) $(@:d)
     @$(COPY) $< $@
 
-$(COMMONBIN)$/brand$/intro.zip : $(COMMONBIN)$/brand.zip
+$(COMMONBIN)$/intro.zip : $(COMMONBIN)$/brand.zip
     @@-$(MKDIR) $(@:d)
     @$(COPY) $< $@
 

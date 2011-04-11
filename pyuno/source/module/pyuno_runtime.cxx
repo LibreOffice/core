@@ -64,6 +64,8 @@ using com::sun::star::script::XInvocation;
 using com::sun::star::beans::XMaterialHolder;
 using com::sun::star::beans::XIntrospection;
 
+#include <vector>
+
 namespace pyuno
 {
 #define USTR_ASCII(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
@@ -177,17 +179,17 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         reinterpret_cast< oslGenericFunction >(readLoggingConfig),
         (rtl_uString **) &fileName );
     fileName = OUString( fileName.getStr(), fileName.lastIndexOf( '/' )+1 );
-    fileName += OUString::createFromAscii(  SAL_CONFIGFILE("pyuno") );
+    fileName += OUString(RTL_CONSTASCII_USTRINGPARAM(  SAL_CONFIGFILE("pyuno") ));
     rtl::Bootstrap bootstrapHandle( fileName );
 
     OUString str;
     if( bootstrapHandle.getFrom( USTR_ASCII( "PYUNO_LOGLEVEL" ), str ) )
     {
-        if( str.equalsAscii( "NONE" ) )
+        if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "NONE" ) ) )
             *pLevel = LogLevel::NONE;
-        else if( str.equalsAscii( "CALL" ) )
+        else if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CALL" ) ) )
             *pLevel = LogLevel::CALL;
-        else if( str.equalsAscii( "ARGS" ) )
+        else if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ARGS" ) ) )
             *pLevel = LogLevel::ARGS;
         else
         {
@@ -200,9 +202,9 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         *ppFile = stdout;
         if( bootstrapHandle.getFrom( USTR_ASCII( "PYUNO_LOGTARGET" ), str ) )
         {
-            if( str.equalsAscii( "stdout" ) )
+            if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "stdout" ) ) )
                 *ppFile = stdout;
-            else if( str.equalsAscii( "stderr" ) )
+            else if( str.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "stderr" ) ) )
                 *ppFile = stderr;
             else
             {

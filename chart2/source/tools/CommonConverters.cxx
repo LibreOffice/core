@@ -166,7 +166,7 @@ void AddPointToPoly( drawing::PolyPolygonShape3D& rPoly, const drawing::Position
 {
     if(nPolygonIndex<0)
     {
-        OSL_ENSURE( false, "The polygon index needs to be > 0");
+        OSL_FAIL( "The polygon index needs to be > 0");
         nPolygonIndex=0;
     }
 
@@ -211,12 +211,12 @@ drawing::Position3D getPointFromPoly( const drawing::PolyPolygonShape3D& rPolygo
         }
         else
         {
-            ;DBG_ERROR("polygon was accessed with a wrong index");
+            OSL_FAIL("polygon was accessed with a wrong index");
         }
     }
     else
     {
-        ;DBG_ERROR("polygon was accessed with a wrong index");
+        OSL_FAIL("polygon was accessed with a wrong index");
     }
     return aRet;
 }
@@ -281,7 +281,6 @@ drawing::PolyPolygonShape3D BezierToPoly(
     const drawing::PolyPolygonBezierCoords& rBezier )
 {
     const drawing::PointSequenceSequence& rPointSequence = rBezier.Coordinates;
-//     const drawing::FlagSequenceSequence& rFlags = rBezier.Flags;
 
     drawing::PolyPolygonShape3D aRet;
     aRet.SequenceX.realloc( rPointSequence.getLength() );
@@ -475,7 +474,6 @@ uno::Sequence< rtl::OUString > DataSequenceToStringSequence(
     const uno::Reference< data::XDataSequence >& xDataSequence )
 {
     uno::Sequence< rtl::OUString > aResult;
-    OSL_ASSERT( xDataSequence.is());
     if(!xDataSequence.is())
         return aResult;
 

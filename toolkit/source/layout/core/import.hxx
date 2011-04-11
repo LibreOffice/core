@@ -32,7 +32,7 @@
 #include <map>
 #include <list>
 #define _BACKWARD_BACKWARD_WARNING_H 1
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 
 #include <com/sun/star/xml/input/XRoot.hpp>

@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: dlgutil.cxx,v $
- * $Revision: 1.17 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -38,7 +35,7 @@
 
 // -----------------------------------------------------------------------
 
-void SetFieldUnit( MetricField& rField, FieldUnit eUnit, BOOL bAll )
+void SetFieldUnit( MetricField& rField, FieldUnit eUnit, sal_Bool bAll )
 {
     sal_Int64 nFirst    = rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) );
     sal_Int64 nLast = rField.Denormalize( rField.GetLast( FUNIT_TWIP ) );
@@ -98,7 +95,7 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, BOOL bAll )
 
 // -----------------------------------------------------------------------
 
-void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, BOOL bAll )
+void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, sal_Bool bAll )
 {
     sal_Int64 nMin = rBox.Denormalize( rBox.GetMin( FUNIT_TWIP ) );
     sal_Int64 nMax = rBox.Denormalize( rBox.GetMax( FUNIT_TWIP ) );
@@ -354,7 +351,7 @@ long ConvertValueToUnit( long nVal, SfxMapUnit eUnit )
 
 // -----------------------------------------------------------------------
 
-long CalcToPoint( long nIn, SfxMapUnit eUnit, USHORT nFaktor )
+long CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFaktor )
 {
     DBG_ASSERT( eUnit == SFX_MAPUNIT_TWIP       ||
                 eUnit == SFX_MAPUNIT_100TH_MM   ||
@@ -726,8 +723,8 @@ long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
         return nVal;
     }
 
-    USHORT nOld = 0;
-    USHORT nNew = 0;
+    sal_uInt16 nOld = 0;
+    sal_uInt16 nNew = 0;
 
     switch ( aOld )
     {

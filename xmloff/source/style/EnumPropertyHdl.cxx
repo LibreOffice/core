@@ -53,7 +53,7 @@ XMLEnumPropertyHdl::~XMLEnumPropertyHdl()
 
 sal_Bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    USHORT nValue = 0;
+    sal_uInt16 nValue = 0;
 
     if( SvXMLUnitConverter::convertEnum( nValue, rStrImpValue, mpEnumMap ) )
     {
@@ -72,7 +72,7 @@ sal_Bool XMLEnumPropertyHdl::importXML( const OUString& rStrImpValue, Any& rValu
             rValue <<= (sal_Int8) nValue;
             break;
         default:
-            DBG_ERROR( "Wrong type for enum property handler!" );
+            OSL_FAIL( "Wrong type for enum property handler!" );
             return sal_False;
         }
         return sal_True;

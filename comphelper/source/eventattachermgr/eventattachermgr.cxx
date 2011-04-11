@@ -65,7 +65,8 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 namespace comphelper
 {
@@ -381,7 +382,7 @@ Reference< XEventAttacherManager > createEventAttacherManager( const Reference< 
 {
     if ( rSMgr.is() )
     {
-        Reference< XInterface > xIFace( rSMgr->createInstance( OUString::createFromAscii("com.sun.star.beans.Introspection") ) );
+        Reference< XInterface > xIFace( rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.Introspection" )) ) );
         if ( xIFace.is() )
         {
             Reference< XIntrospection > xIntrospection( xIFace, UNO_QUERY);
@@ -401,12 +402,12 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
 {
     if ( rSMgr.is() )
     {
-        Reference< XInterface > xIFace( rSMgr->createInstance( OUString::createFromAscii("com.sun.star.script.EventAttacher") ) );
+        Reference< XInterface > xIFace( rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.EventAttacher" )) ) );
         if ( xIFace.is() )
         {
             xAttacher = Reference< XEventAttacher >::query( xIFace );
         }
-        xIFace = rSMgr->createInstance( OUString::createFromAscii("com.sun.star.script.Converter") );
+        xIFace = rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" )) );
         if ( xIFace.is() )
         {
             xConverter = Reference< XTypeConverter >::query( xIFace );
@@ -433,7 +434,7 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exc
     // Haben wir den Service schon? Sonst anlegen
     if( !mxCoreReflection.is() )
     {
-        Reference< XInterface > xIFace( mxSMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ) );
+        Reference< XInterface > xIFace( mxSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.CoreReflection" )) ) );
         mxCoreReflection = Reference< XIdlReflection >( xIFace, UNO_QUERY);
     }
     return mxCoreReflection;
@@ -988,7 +989,7 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
         // Ganze richtig sein. Sonst ist etwas voellig daneben gegangen.
         if( nRealLen > nLen || nVersion == 1 )
         {
-            OSL_ENSURE( sal_False, "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
+            OSL_FAIL( "ImplEventAttacherManager::read(): Fatal Error, wrong object length" );
         }
         else
         {

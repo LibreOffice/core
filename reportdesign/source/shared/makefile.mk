@@ -34,8 +34,6 @@ LIB1TARGET=$(SLB)$/coreshared.lib
 LIB2TARGET=$(SLB)$/xmlshared.lib
 LIB3TARGET=$(SLB)$/uishared.lib
 
-#ENABLE_EXCEPTIONS=TRUE
-
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk

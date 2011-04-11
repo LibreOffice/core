@@ -56,7 +56,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 
 
-// static
 void ScGlobal::InitAddIns()
 {
     // multi paths separated by semicolons
@@ -135,7 +134,6 @@ void ScGlobal::InitAddIns()
 }
 
 
-// static
 String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
 {
     if (!xOrdinalSuffix.is())
@@ -146,7 +144,7 @@ String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
                 ::comphelper::getProcessServiceFactory();
             Reference< XInterface > xInterface =
                 xServiceManager->createInstance(
-                    ::rtl::OUString::createFromAscii("com.sun.star.i18n.OrdinalSuffix"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.OrdinalSuffix")));
             if  (xInterface.is())
                 xOrdinalSuffix = Reference< i18n::XOrdinalSuffix >( xInterface, UNO_QUERY);
         }
@@ -160,8 +158,12 @@ String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
     {
         try
         {
-            return xOrdinalSuffix->getOrdinalSuffix( nNumber,
+            uno::Sequence< rtl::OUString > aSuffixes = xOrdinalSuffix->getOrdinalSuffix( nNumber,
                     ScGlobal::pLocaleData->getLocale());
+            if ( aSuffixes.getLength() > 0 )
+                return aSuffixes[0];
+            else
+                return String();
         }
         catch ( Exception& )
         {

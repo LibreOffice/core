@@ -28,6 +28,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_i18npool.hxx"
+
+#include <osl/diagnose.h>
 #include <sal/config.h>
 #include <sal/macros.h>
 #include <rtl/ustring.hxx>
@@ -131,7 +133,6 @@ static PageDesc aDinTab[] =
     { MM2MM100( 227 ),   MM2MM100( 356 ),    "SuperA",  NULL },
     { MM2MM100( 305 ),   MM2MM100( 487 ),    "SuperB",  NULL },
     { IN2MM100( 8.5 ),   IN2MM100( 12.69 ),  "LetterPlus",  NULL },
-    { IN2MM100( 8.5 ),   IN2MM100( 12.69 ),  "LetterPlus",  NULL },
     { MM2MM100( 210 ),   MM2MM100( 330 ),    "A4Plus",  NULL },
     { MM2MM100( 200 ),   MM2MM100( 148 ),    "DoublePostcard",  NULL },
     { MM2MM100( 105 ),   MM2MM100( 148 ),    "A6",  NULL },
@@ -160,7 +161,7 @@ static PageDesc aDinTab[] =
 
 static const size_t nTabSize = SAL_N_ELEMENTS(aDinTab);
 
-#define MAXSLOPPY 11
+#define MAXSLOPPY 21
 
 bool PaperInfo::doSloppyFit()
 {
@@ -227,21 +228,26 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
     rtl::OUString aLocaleStr;
 
-    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    Reference< XMultiServiceFactory > xConfigProv(
-        xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationProvider" ) ),
-        UNO_QUERY_THROW );
-
+    Reference< XMultiServiceFactory > xConfigProv;
+    Reference< XNameAccess > xConfigNA;
     Sequence< Any > aArgs( 1 );
-    aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.Setup/L10N/" );
-    Reference< XNameAccess > xConfigNA( xConfigProv->createInstanceWithArguments(
-        CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ), UNO_QUERY_THROW );
     try
     {
+        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        xConfigProv = Reference< XMultiServiceFactory >(
+            xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationProvider" ) ),
+            UNO_QUERY_THROW);
+
+        aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.Setup/L10N/" );
+        xConfigNA = Reference< XNameAccess >(xConfigProv->createInstanceWithArguments(
+            CREATE_OUSTRING( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ), UNO_QUERY_THROW);
+
         // try user-defined locale setting
         xConfigNA->getByName( CREATE_OUSTRING( "ooSetupSystemLocale" ) ) >>= aLocaleStr;
     }
-    catch( Exception& ) {}
+    catch( Exception& )
+    {
+    }
 
 #ifdef UNX
     // if set to "use system", get papersize from system
@@ -360,7 +366,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
     try
     {
         // if set to "use system", try to get locale from system
-        if( aLocaleStr.getLength() == 0 )
+        if (aLocaleStr.getLength() == 0 && xConfigProv.is())
         {
             aArgs[ 0 ] <<= CREATE_OUSTRING( "org.openoffice.System/L10N/" );
             xConfigNA.set( xConfigProv->createInstanceWithArguments(
@@ -387,6 +393,9 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
 PaperInfo::PaperInfo(Paper eType) : m_eType(eType)
 {
+    OSL_ENSURE( sizeof(aDinTab) / sizeof(aDinTab[0]) == NUM_PAPER_ENTRIES,
+            "mismatch between array entries and enum values" );
+
     m_nPaperWidth = aDinTab[m_eType].m_nWidth;
     m_nPaperHeight = aDinTab[m_eType].m_nHeight;
 }

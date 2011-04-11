@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #include "fields.hxx"
-#include <errhdl.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <stddef.h>
@@ -40,8 +39,7 @@ namespace ww
     const char *GetEnglishFieldName(eField eIndex) throw()
     {
         //0 Signifies the field names I can't find.
-        // --> OD 2005-06-08 #i43956#
-        // field <eFOOTREF> = 5 should be mapped to "REF"
+        // #i43956# - field <eFOOTREF> = 5 should be mapped to "REF"
         static const char *aFieldNames[] =
         {
             /* 0*/  0,

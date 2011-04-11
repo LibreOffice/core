@@ -64,7 +64,7 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
     SetTextColor(aSystemStyle.GetButtonTextColor());
 
     Font aFont( GetFont() );
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
     SetFont( aFont );
 }
 
@@ -127,15 +127,6 @@ void OTableWindowTitle::Command( const CommandEvent& rEvt )
         }
     }
 }
-
-//------------------------------------------------------------------------------
-//void OTableWindowTitle::Paint( const Rectangle& rRect )
-//{
-//  //////////////////////////////////////////////////////////////////////
-//  // Ausgabe des Textes in der Titelzeile
-//  Rectangle aWinRect( Point(0,0), GetSizePixel() );
-//  DrawText( aWinRect, GetText(), TEXT_DRAW_CENTER|TEXT_DRAW_VCENTER|TEXT_DRAW_ENDELLIPSIS );
-//}
 
 //------------------------------------------------------------------------------
 void OTableWindowTitle::KeyInput( const KeyEvent& rEvt )
@@ -215,8 +206,5 @@ void OTableWindowTitle::StateChanged( StateChangedType nType )
         Resize();
     }
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

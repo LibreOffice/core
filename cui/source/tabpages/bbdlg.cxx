@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
 #include <svx/dialogs.hrc>
@@ -44,7 +41,7 @@
 
 SvxBorderBackgroundDlg::SvxBorderBackgroundDlg( Window *pParent,
                                                 const SfxItemSet& rCoreSet,
-                                                BOOL bEnableSelector ) :
+                                                sal_Bool bEnableSelector ) :
 
     SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_BBDLG ), &rCoreSet ),
     bEnableBackgroundSelector( bEnableSelector )
@@ -62,7 +59,7 @@ SvxBorderBackgroundDlg::~SvxBorderBackgroundDlg()
 
 // -----------------------------------------------------------------------
 
-void SvxBorderBackgroundDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
+void SvxBorderBackgroundDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
     // Umschalten zwischen Farbe/Grafik ermoeglichen:
 

@@ -79,7 +79,7 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
         /** TODO document me
             keys -> commands
         */
-        typedef ::std::hash_map< css::awt::KeyEvent ,
+        typedef ::boost::unordered_map< css::awt::KeyEvent ,
                                  ::rtl::OUString    ,
                                  KeyEventHashCode   ,
                                  KeyEventEqualsFunc > TKey2Commands;
@@ -128,7 +128,7 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
 
         //---------------------------------------
         /** TODO document me */
-        virtual AcceleratorCache& operator=(const AcceleratorCache& rCopy);
+        AcceleratorCache& operator=(const AcceleratorCache& rCopy);
 
         //---------------------------------------
         /** @short  checks if the specified key exists.
@@ -137,7 +137,7 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
                     the key, which should be checked.
 
             @return [bool]
-                    TRUE if the speicfied key exists inside this container.
+                    sal_True if the speicfied key exists inside this container.
          */
         virtual sal_Bool hasKey(const css::awt::KeyEvent& aKey) const;
         virtual sal_Bool hasCommand(const ::rtl::OUString& sCommand) const;

@@ -38,7 +38,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 CachedDynamicResultSet::CachedDynamicResultSet(
         Reference< XDynamicResultSet > xOrigin
@@ -121,10 +122,10 @@ XTYPEPROVIDER_IMPL_4( CachedDynamicResultSet
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSet,
-                            OUString::createFromAscii(
-                            "com.sun.star.comp.ucb.CachedDynamicResultSet" ),
-                            OUString::createFromAscii(
-                            CACHED_DRS_SERVICE_NAME ) );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.comp.ucb.CachedDynamicResultSet" )),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            CACHED_DRS_SERVICE_NAME )) );
 
 //--------------------------------------------------------------------------
 // own methds. ( inherited )
@@ -177,10 +178,10 @@ XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedDynamicResultSetFactory,
-                         OUString::createFromAscii(
-                         "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" ),
-                         OUString::createFromAscii(
-                         CACHED_DRS_FACTORY_NAME ) );
+                         OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" )),
+                         OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         CACHED_DRS_FACTORY_NAME )) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

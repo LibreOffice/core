@@ -36,6 +36,7 @@
 #include "cupsmgr.hxx"
 #include "vcl/fontmanager.hxx"
 #include "vcl/strhelper.hxx"
+#include "saldata.hxx"
 
 #include "tools/urlobj.hxx"
 #include "tools/stream.hxx"
@@ -51,16 +52,22 @@
 #include "osl/mutex.hxx"
 #include "osl/process.h"
 
+#include <boost/scoped_ptr.hpp>
+
 // filename of configuration files
 #define PRINT_FILENAME  "psprint.conf"
 // the group of the global defaults
 #define GLOBAL_DEFAULTS_GROUP "__Global_Printer_Defaults__"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 using namespace psp;
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringHash;
 
 namespace psp
 {
@@ -94,22 +101,28 @@ namespace psp
 
 PrinterInfoManager& PrinterInfoManager::get()
 {
-    static PrinterInfoManager* pManager = NULL;
+    SalData* pSalData = GetSalData();
 
-    if( ! pManager )
+    if( ! pSalData->m_pPIManager )
     {
-        pManager = CUPSManager::tryLoadCUPS();
-        if( ! pManager )
-            pManager = new PrinterInfoManager();
+        pSalData->m_pPIManager = CUPSManager::tryLoadCUPS();
+        if( ! pSalData->m_pPIManager )
+            pSalData->m_pPIManager = new PrinterInfoManager();
 
-        if( pManager )
-            pManager->initialize();
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "PrinterInfoManager::get create Manager of type %d\n", pManager->getType() );
-        #endif
+        pSalData->m_pPIManager->initialize();
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "PrinterInfoManager::get create Manager of type %d\n", pSalData->m_pPIManager->getType() );
+#endif
     }
 
-    return *pManager;
+    return *pSalData->m_pPIManager;
+}
+
+void PrinterInfoManager::release()
+{
+    SalData* pSalData = GetSalData();
+    delete pSalData->m_pPIManager;
+    pSalData->m_pPIManager = NULL;
 }
 
 // -----------------------------------------------------------------
@@ -132,6 +145,9 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
 PrinterInfoManager::~PrinterInfoManager()
 {
     delete m_pQueueInfo;
+    #if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "PrinterInfoManager: destroyed Manager of type %d\n", getType() );
+    #endif
 }
 
 // -----------------------------------------------------------------
@@ -285,6 +301,10 @@ void PrinterInfoManager::initialize()
             if( aValue.Len() )
                 m_aGlobalDefaults.m_nPSLevel = aValue.ToInt32();
 
+            aValue = aConfig.ReadKey( "PDFDevice" );
+            if( aValue.Len() )
+                m_aGlobalDefaults.m_nPDFDevice = aValue.ToInt32();
+
             aValue = aConfig.ReadKey( "PerformFontSubstitution" );
             if( aValue.Len() )
             {
@@ -316,7 +336,7 @@ void PrinterInfoManager::initialize()
                         m_aGlobalDefaults.m_aContext.
                         setValue( pKey,
                         aValue.Equals( "*nil" ) ? NULL : pKey->getValue( String( aValue, RTL_TEXTENCODING_ISO_8859_1 ) ),
-                        TRUE );
+                        sal_True );
                     }
                 }
                 else if( aKey.Len() > 10 && aKey.CompareTo("SubstFont_", 10 ) == COMPARE_EQUAL )
@@ -326,7 +346,7 @@ void PrinterInfoManager::initialize()
                 }
             }
             #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "global settings: fontsubst = %s, %d substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", m_aGlobalDefaults.m_aFontSubstitutes.size() );
+            fprintf( stderr, "global settings: fontsubst = %s, %" SAL_PRI_SIZET "u substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", m_aGlobalDefaults.m_aFontSubstitutes.size() );
             #endif
         }
     }
@@ -496,6 +516,10 @@ void PrinterInfoManager::initialize()
                 if( aValue.Len() )
                     aPrinter.m_aInfo.m_nPSLevel = aValue.ToInt32();
 
+                aValue = aConfig.ReadKey( "PDFDevice" );
+                if( aValue.Len() )
+                    aPrinter.m_aInfo.m_nPDFDevice = aValue.ToInt32();
+
                 aValue = aConfig.ReadKey( "PerformFontSubstitution" );
                 if( ! aValue.Equals( "0" ) && ! aValue.EqualsIgnoreCaseAscii( "false" ) )
                     aPrinter.m_aInfo.m_bPerformFontSubstitution = true;
@@ -517,7 +541,7 @@ void PrinterInfoManager::initialize()
                             aPrinter.m_aInfo.m_aContext.
                             setValue( pKey,
                             aValue.Equals( "*nil" ) ? NULL : pKey->getValue( String( aValue, RTL_TEXTENCODING_ISO_8859_1 ) ),
-                            TRUE );
+                            sal_True );
                         }
                     }
                     else if( aKey.Len() > 10 && aKey.CompareTo("SubstFont_", 10 ) == COMPARE_EQUAL )
@@ -534,7 +558,7 @@ void PrinterInfoManager::initialize()
                 FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aPrinter.m_aFile );
                 aPrinter.m_bModified    = false;
                 aPrinter.m_aGroup       = aConfig.GetGroupName( nGroup );
-                std::hash_map< OUString, Printer, OUStringHash >::const_iterator find_it =
+                boost::unordered_map< OUString, Printer, OUStringHash >::const_iterator find_it =
                 m_aPrinters.find( aPrinterName );
                 if( find_it != m_aPrinters.end() )
                 {
@@ -613,7 +637,7 @@ void PrinterInfoManager::initialize()
 
 void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
 {
-    ::std::hash_map< OUString, Printer, OUStringHash >::const_iterator it;
+    ::boost::unordered_map< OUString, Printer, OUStringHash >::const_iterator it;
     rList.clear();
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
         rList.push_back( it->first );
@@ -624,9 +648,9 @@ void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
 const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter ) const
 {
     static PrinterInfo aEmptyInfo;
-    ::std::hash_map< OUString, Printer, OUStringHash >::const_iterator it = m_aPrinters.find( rPrinter );
+    ::boost::unordered_map< OUString, Printer, OUStringHash >::const_iterator it = m_aPrinters.find( rPrinter );
 
-    DBG_ASSERT( it != m_aPrinters.end(), "Do not ask for info about nonexistant printers" );
+    DBG_ASSERT( it != m_aPrinters.end(), "Do not ask for info about nonexistent printers" );
 
     return it != m_aPrinters.end() ? it->second.m_aInfo : aEmptyInfo;
 }
@@ -635,7 +659,7 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter 
 
 void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo )
 {
-    ::std::hash_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinter );
+    ::boost::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinter );
 
     DBG_ASSERT( it != m_aPrinters.end(), "Do not change nonexistant printers" );
 
@@ -666,9 +690,9 @@ static bool checkWriteability( const OUString& rUniPath )
 bool PrinterInfoManager::writePrinterConfig()
 {
     // find at least one writeable config
-    ::std::hash_map< OUString, Config*, OUStringHash > files;
-    ::std::hash_map< OUString, int, OUStringHash > rofiles;
-    ::std::hash_map< OUString, Config*, OUStringHash >::iterator file_it;
+    ::boost::unordered_map< OUString, Config*, OUStringHash > files;
+    ::boost::unordered_map< OUString, int, OUStringHash > rofiles;
+    ::boost::unordered_map< OUString, Config*, OUStringHash >::iterator file_it;
 
     for( ::std::list< WatchFile >::const_iterator wit = m_aWatchFiles.begin(); wit != m_aWatchFiles.end(); ++wit )
     {
@@ -686,7 +710,7 @@ bool PrinterInfoManager::writePrinterConfig()
     pGlobal->SetGroup( GLOBAL_DEFAULTS_GROUP );
     pGlobal->WriteKey( "DisableCUPS", m_bDisableCUPS ? "true" : "false" );
 
-    ::std::hash_map< OUString, Printer, OUStringHash >::iterator it;
+    ::boost::unordered_map< OUString, Printer, OUStringHash >::iterator it;
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
     {
         if( ! it->second.m_bModified )
@@ -760,6 +784,7 @@ bool PrinterInfoManager::writePrinterConfig()
             pConfig->WriteKey( "Copies", ByteString::CreateFromInt32( it->second.m_aInfo.m_nCopies ) );
             pConfig->WriteKey( "Orientation", it->second.m_aInfo.m_eOrientation == orientation::Landscape ? "Landscape" : "Portrait" );
             pConfig->WriteKey( "PSLevel", ByteString::CreateFromInt32( it->second.m_aInfo.m_nPSLevel ) );
+            pConfig->WriteKey( "PDFDevice", ByteString::CreateFromInt32( it->second.m_aInfo.m_nPDFDevice ) );
             pConfig->WriteKey( "ColorDevice", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDevice ) );
             pConfig->WriteKey( "ColorDepth", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDepth ) );
             aValue = ByteString::CreateFromInt32( it->second.m_aInfo.m_nLeftMarginAdjust );
@@ -788,7 +813,7 @@ bool PrinterInfoManager::writePrinterConfig()
 
             // write font substitution table
             pConfig->WriteKey( "PerformFontSubstitution", it->second.m_aInfo.m_bPerformFontSubstitution ? "true" : "false" );
-            for( ::std::hash_map< OUString, OUString, OUStringHash >::const_iterator subst = it->second.m_aInfo.m_aFontSubstitutes.begin();
+            for( ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator subst = it->second.m_aInfo.m_aFontSubstitutes.begin();
             subst != it->second.m_aInfo.m_aFontSubstitutes.end(); ++subst )
             {
                 ByteString aKey( "SubstFont_" );
@@ -847,9 +872,10 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
         m_aPrinters[ rPrinterName ] = aPrinter;
         bSuccess = true;
         #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "new printer %s, level = %d, colordevice = %d, depth = %d\n",
+        fprintf( stderr, "new printer %s, level = %d, pdfdevice = %d, colordevice = %d, depth = %d\n",
         OUStringToOString( rPrinterName, osl_getThreadTextEncoding() ).getStr(),
         m_aPrinters[rPrinterName].m_aInfo.m_nPSLevel,
+        m_aPrinters[rPrinterName].m_aInfo.m_nPDFDevice,
         m_aPrinters[rPrinterName].m_aInfo.m_nColorDevice,
         m_aPrinters[rPrinterName].m_aInfo.m_nColorDepth );
         #endif
@@ -867,7 +893,7 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
 {
     bool bSuccess = true;
 
-    ::std::hash_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
+    ::boost::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
     if( it != m_aPrinters.end() )
     {
         if( it->second.m_aFile.getLength() )
@@ -921,7 +947,7 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
 {
     bool bSuccess = false;
 
-    ::std::hash_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
+    ::boost::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
     if( it != m_aPrinters.end() )
     {
         bSuccess = true;
@@ -952,7 +978,7 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
     return;
 
     ::std::list< FastPrintFontInfo > aFonts;
-    ::std::hash_map< OUString, ::std::list< FastPrintFontInfo >, OUStringHash > aPrinterFonts;
+    ::boost::unordered_map< OUString, ::std::list< FastPrintFontInfo >, OUStringHash > aPrinterFonts;
     rFontManager.getFontListWithFastInfo( aFonts, rInfo.m_pParser );
 
     // get builtin fonts
@@ -962,8 +988,8 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
             aPrinterFonts[ it->m_aFamilyName.toAsciiLowerCase() ].push_back( *it );
 
     // map lower case, so build a local copy of the font substitutions
-    ::std::hash_map< OUString, OUString, OUStringHash > aSubstitutions;
-    ::std::hash_map< OUString, OUString, OUStringHash >::const_iterator subst;
+    ::boost::unordered_map< OUString, OUString, OUStringHash > aSubstitutions;
+    ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator subst;
     for( subst = rInfo.m_aFontSubstitutes.begin(); subst != rInfo.m_aFontSubstitutes.end(); ++subst )
     {
         OUString aFamily( subst->first.toAsciiLowerCase() );
@@ -1097,14 +1123,14 @@ FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickC
     return popen (aShellCommand.getStr(), "w");
 }
 
-int PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* pFile, const JobData& /*rDocumentJobData*/ )
+int PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUString& /*rJobTitle*/, FILE* pFile, const JobData& /*rDocumentJobData*/, bool /*bBanner*/ )
 {
     return (0 == pclose( pFile ));
 }
 
 void PrinterInfoManager::setupJobContextData( JobData& rData )
 {
-    std::hash_map< OUString, Printer, OUStringHash >::iterator it =
+    boost::unordered_map< OUString, Printer, OUStringHash >::iterator it =
     m_aPrinters.find( rData.m_aPrinterName );
     if( it != m_aPrinters.end() )
     {
@@ -1168,7 +1194,11 @@ SystemQueueInfo::SystemQueueInfo() :
 
 SystemQueueInfo::~SystemQueueInfo()
 {
-    terminate();
+    static const char* pNoSyncDetection = getenv( "SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION" );
+    if( ! pNoSyncDetection || !*pNoSyncDetection )
+        join();
+    else
+        terminate();
 }
 
 bool SystemQueueInfo::hasChanged() const
@@ -1214,8 +1244,8 @@ static void lpgetSysQueueTokenHandler(
     const SystemCommandParameters* )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    std::hash_set< OUString, OUStringHash > aUniqueSet;
-    std::hash_set< OUString, OUStringHash > aOnlySet;
+    boost::unordered_set< OUString, OUStringHash > aUniqueSet;
+    boost::unordered_set< OUString, OUStringHash > aOnlySet;
     aUniqueSet.insert( OUString( RTL_CONSTASCII_USTRINGPARAM( "_all" ) ) );
     aUniqueSet.insert( OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
 
@@ -1311,7 +1341,7 @@ static void standardSysQueueTokenHandler(
     const SystemCommandParameters* i_pParms)
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    std::hash_set< OUString, OUStringHash > aUniqueSet;
+    boost::unordered_set< OUString, OUStringHash > aUniqueSet;
     rtl::OString aForeToken( i_pParms->pForeToken );
     rtl::OString aAftToken( i_pParms->pAftToken );
     /* Normal Unix print queue discovery, also used for Darwin 5 LPR printing

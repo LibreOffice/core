@@ -30,7 +30,7 @@
 #include "precompiled_svx.hxx"
 
 #include "fmprop.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmtextcontroldialogs.hxx"
 #include "fmtextcontrolfeature.hxx"
 #include "fmtextcontrolshell.hxx"
@@ -95,7 +95,7 @@ namespace svx
     using namespace ::com::sun::star::container;
 
     //====================================================================
-    typedef USHORT WhichId;
+    typedef sal_uInt16 WhichId;
 
     //====================================================================
     static SfxSlotId pTextControlSlots[] =
@@ -434,7 +434,7 @@ namespace svx
                     }
                     else
                     {
-                        DBG_ERROR( "lcl_translateUnoStateToItem: invalid state!" );
+                        OSL_FAIL( "lcl_translateUnoStateToItem: invalid state!" );
                     }
                 }
                 }
@@ -478,7 +478,7 @@ namespace svx
                 sMessage += "(slot id: ";
                 sMessage += ::rtl::OString::valueOf( (sal_Int32)_nSlotId );
                 sMessage += ")";
-                DBG_ERROR( sMessage );
+                OSL_FAIL( sMessage.getStr() );
             }
 #endif
             return sSlotUnoName;
@@ -584,7 +584,7 @@ namespace svx
     {
         if ( m_bNeedClipboardInvalidation )
         {
-            DBG_TRACE( "FmTextControlShell::ClipBoard: invalidating clipboard slots" );
+            OSL_TRACE( "FmTextControlShell::ClipBoard: invalidating clipboard slots" );
             m_rBindings.Invalidate( SID_CUT );
             m_rBindings.Invalidate( SID_COPY );
             m_rBindings.Invalidate( SID_PASTE );
@@ -648,7 +648,7 @@ namespace svx
                     sMessage += sUnoSlotNameAscii;
                     if ( !bFeatureIsEnabled )
                         sMessage += " (disabled)";
-                    DBG_TRACE( sMessage );
+                    OSL_TRACE( "%s", sMessage.getStr() );
                 #endif
 
                 lcl_translateUnoStateToItem( nSlotId, aFeature->second->getFeatureState(), _rSet );
@@ -659,7 +659,7 @@ namespace svx
                 ::rtl::OString sMessage( "FmTextControlShell::transferFeatureStatesToItemSet: found a feature state for " );
                 sMessage += sUnoSlotNameAscii;
                 sMessage += ", but could not translate it into an item!";
-                DBG_TRACE( sMessage );
+                OSL_TRACE( "%s", sMessage.getStr() );
             }
             #endif
         }
@@ -765,7 +765,7 @@ namespace svx
                             sError += ::rtl::OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
                         else
                             sError += "unknown (no SfxSlot)";
-                        DBG_ERROR( sError.getStr() );
+                        OSL_FAIL( sError.getStr() );
                     }
                 #endif
                 }
@@ -828,7 +828,7 @@ namespace svx
                 }
                 break;
                 default:
-                    OSL_ENSURE( sal_False, "FmTextControlShell::executeClipboardSlot: invalid slot!" );
+                    OSL_FAIL( "FmTextControlShell::executeClipboardSlot: invalid slot!" );
                 }
                 return true;
             }
@@ -993,7 +993,7 @@ namespace svx
                     bNeedSelection = true;
                     bNeedTextComponent = true;
                     bNeedWriteableControl = true;
-                    DBG_TRACE( "FmTextControlShell::ClipBoard: need to invalidate again" );
+                    OSL_TRACE( "FmTextControlShell::ClipBoard: need to invalidate again" );
                     m_bNeedClipboardInvalidation = true;
                     break;
 
@@ -1079,7 +1079,7 @@ namespace svx
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sTrace( "FmTextControlShell::formActivated: 0x" );
         sTrace += ::rtl::OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
-        DBG_TRACE( sTrace );
+        OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 
         DBG_ASSERT( _rxController.is(), "FmTextControlShell::formActivated: invalid controller!" );
@@ -1107,7 +1107,7 @@ namespace svx
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sTrace( "FmTextControlShell::formDeactivated: 0x" );
         sTrace += ::rtl::OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
-        DBG_TRACE( sTrace );
+        OSL_TRACE( "%s", sTrace.getStr() );
 #endif
         (void)_rxController;
 
@@ -1193,7 +1193,7 @@ namespace svx
 
         if ( m_xActiveTextComponent.is() )
         {
-            DBG_TRACE( "FmTextControlShell::ClipBoard: stopping timer for clipboard invalidation" );
+            OSL_TRACE( "FmTextControlShell::ClipBoard: stopping timer for clipboard invalidation" );
             m_aClipboardInvalidation.Stop();
         }
         // no more active control
@@ -1258,7 +1258,7 @@ namespace svx
 
         if ( m_xActiveTextComponent.is() )
         {
-            DBG_TRACE( "FmTextControlShell::ClipBoard: starting timer for clipboard invalidation" );
+            OSL_TRACE( "FmTextControlShell::ClipBoard: starting timer for clipboard invalidation" );
             m_aClipboardInvalidation.Start();
         }
 
@@ -1360,7 +1360,7 @@ namespace svx
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sTrace( "FmTextControlShell::focusGained: 0x" );
         sTrace += ::rtl::OString::valueOf( (sal_IntPtr)xControl.get(), 16 );
-        DBG_TRACE( sTrace );
+        OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 
         DBG_ASSERT( xControl.is(), "FmTextControlShell::focusGained: suspicious focus event!" );
@@ -1376,7 +1376,7 @@ namespace svx
 #if OSL_DEBUG_LEVEL > 0
         ::rtl::OString sTrace( "FmTextControlShell::focusLost: 0x" );
         sTrace += ::rtl::OString::valueOf( (sal_IntPtr)xControl.get(), 16 );
-        DBG_TRACE( sTrace );
+        OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 
         m_bActiveControl = false;

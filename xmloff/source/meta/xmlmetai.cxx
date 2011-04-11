@@ -40,7 +40,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 
 using ::rtl::OUString;
@@ -59,7 +59,7 @@ private:
         ::com::sun::star::xml::sax::XDocumentHandler> mxDocBuilder;
 
 public:
-    XMLDocumentBuilderContext(SvXMLImport& rImport, USHORT nPrfx,
+    XMLDocumentBuilderContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
         const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -68,7 +68,7 @@ public:
 
     virtual ~XMLDocumentBuilderContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -82,7 +82,7 @@ public:
 };
 
 XMLDocumentBuilderContext::XMLDocumentBuilderContext(SvXMLImport& rImport,
-        USHORT nPrfx, const ::rtl::OUString& rLName,
+        sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
         const uno::Reference<xml::sax::XAttributeList>&,
         const uno::Reference<xml::sax::XDocumentHandler>& rDocBuilder) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -95,7 +95,7 @@ XMLDocumentBuilderContext::~XMLDocumentBuilderContext()
 }
 
 SvXMLImportContext *
-XMLDocumentBuilderContext::CreateChildContext( USHORT nPrefix,
+XMLDocumentBuilderContext::CreateChildContext( sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& rAttrs)
 {
@@ -126,7 +126,7 @@ void XMLDocumentBuilderContext::EndElement()
 //===========================================================================
 
 SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
-            USHORT nPrfx, const rtl::OUString& rLName,
+            sal_uInt16 nPrfx, const rtl::OUString& rLName,
             const uno::Reference<document::XDocumentProperties>& xDocProps,
             const uno::Reference<xml::sax::XDocumentHandler>& xDocBuilder) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -143,7 +143,7 @@ SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext()
 }
 
 SvXMLImportContext *SvXMLMetaDocumentContext::CreateChildContext(
-             USHORT nPrefix, const rtl::OUString& rLocalName,
+             sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
              const uno::Reference<xml::sax::XAttributeList>& rAttrs)
 {
     if (  (XML_NAMESPACE_OFFICE == nPrefix) &&
@@ -200,9 +200,9 @@ void SvXMLMetaDocumentContext::initDocumentProperties()
         throw;
     } catch (uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "SvXMLMetaDocumentContext::initDocumentProperties: "
-                "properties init exception"),
+                "properties init exception")),
             GetImport(), makeAny(e));
     }
 }
@@ -252,11 +252,11 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
             (i_rBuildId.compareToAscii(
                 RTL_CONSTASCII_STRINGPARAM("OpenOffice.org 1") ) == 0))
         {
-            sBuildId = OUString::createFromAscii( "645$8687" );
+            sBuildId = OUString(RTL_CONSTASCII_USTRINGPARAM("645$8687"));
         }
         if ((i_rBuildId.compareToAscii( RTL_CONSTASCII_STRINGPARAM("NeoOffice/2") ) == 0) )
         {
-            sBuildId = OUString::createFromAscii( "680$9134" ); // fake NeoOffice as OpenOffice.org 2.2 release
+            sBuildId = OUString(RTL_CONSTASCII_USTRINGPARAM("680$9134")); // fake NeoOffice as OpenOffice.org 2.2 release
         }
     }
 

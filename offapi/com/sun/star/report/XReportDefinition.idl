@@ -117,7 +117,7 @@ interface XReportDefinition
     */
     interface com::sun::star::frame::XLoadable;
 
-    /** represents common visualisation functionality for the embedded report.
+    /** represents common visualization functionality for the embedded report.
     */
     interface com::sun::star::embed::XVisualObject;
 
@@ -151,7 +151,7 @@ interface XReportDefinition
 
         <p>
         With this interface it's possible too, to reset the modify state.
-        That can be neccessary to prevent code against problem during closing
+        That can be necessary to prevent code against problem during closing
         of the document without saving any changes.
         </p>
      */
@@ -234,14 +234,14 @@ interface XReportDefinition
 
         <p><member>Command</member> needs to be interpreted depending on the value of this property.</p>
 
-        <p>This property is only meaningfull together with the <member>Command</member>
+        <p>This property is only meaningful together with the <member>Command</member>
         property, thus either <em>both</em> or <em>none</em> of them are present.</p>
 
         @see com::sun::star::sdb::CommandType
      */
     [attribute,bound] long CommandType;
 
-    /** specifies an addtional filter to optinally use.
+    /** specifies an additional filter to optionally use.
 
         <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
 

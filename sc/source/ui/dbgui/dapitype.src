@@ -31,12 +31,20 @@
 
 ModalDialog RID_SCDLG_DAPITYPE
 {
+    Text [ en-US ] = "Select Source";
     OutputSize = TRUE ;
     HelpId = HID_DATAPILOT_TYPE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 241 , 63 ) ;
+    Size = MAP_APPFONT ( 241 , 76 ) ;
     Moveable = TRUE ;
     Closeable = FALSE ;
+
+    FixedLine FL_FRAME
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
+        Text [ en-US ] = "Selection";
+    };
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 185 , 6 ) ;
@@ -58,32 +66,39 @@ ModalDialog RID_SCDLG_DAPITYPE
     };
     RadioButton BTN_SELECTION
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 18 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Current selection";
     };
+    RadioButton BTN_NAMED_RANGE
+    {
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Named range";
+    };
+    ListBox LB_NAMED_RANGE
+    {
+        Pos = MAP_APPFONT ( 90 , 31 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
     RadioButton BTN_DATABASE
     {
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Data source registered in %PRODUCTNAME";
     };
     RadioButton BTN_EXTERNAL
     {
-        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~External source/interface";
     };
-    FixedLine FL_FRAME
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text [ en-US ] = "Selection";
-    };
-    Text [ en-US ] = "Select Source";
 };
 
 
@@ -125,6 +140,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     };
     ListBox LB_SERVICE
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DAPISERVICE:LB_SERVICE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 12 ) ;
         Size = MAP_APPFONT ( 120 , 80 ) ;
@@ -139,6 +155,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     };
     Edit ED_SOURCE
     {
+        HelpID = "sc:Edit:RID_SCDLG_DAPISERVICE:ED_SOURCE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 28 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
@@ -152,6 +169,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     };
     Edit ED_NAME
     {
+        HelpID = "sc:Edit:RID_SCDLG_DAPISERVICE:ED_NAME";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 44 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
@@ -165,6 +183,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     };
     Edit ED_USER
     {
+        HelpID = "sc:Edit:RID_SCDLG_DAPISERVICE:ED_USER";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 60 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
@@ -178,6 +197,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     };
     Edit ED_PASSWD
     {
+        HelpID = "sc:Edit:RID_SCDLG_DAPISERVICE:ED_PASSWD";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 76 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
@@ -233,6 +253,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     ListBox LB_DATABASE
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DAPIDATA:LB_DATABASE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , 12 ) ;
         Size = MAP_APPFONT ( 110 , 80 ) ;
@@ -248,6 +269,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     ComboBox CB_OBJECT
     {
+        HelpID = "sc:ComboBox:RID_SCDLG_DAPIDATA:CB_OBJECT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , 28 ) ;
         Size = MAP_APPFONT ( 110 , 80 ) ;
@@ -263,6 +285,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     ListBox LB_OBJTYPE
     {
+        HelpID = "sc:ListBox:RID_SCDLG_DAPIDATA:LB_OBJTYPE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 66 , 44 ) ;
         Size = MAP_APPFONT ( 110 , 80 ) ;
@@ -285,24 +308,3 @@ ModalDialog RID_SCDLG_DAPIDATA
     };
     Text [ en-US ] = "Select Data Source";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

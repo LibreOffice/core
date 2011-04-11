@@ -69,7 +69,7 @@ SwWebTableShell::SwWebTableShell(SwView &_rView) :
     SetHelpId(SW_TABSHELL);
 }
 
-__EXPORT SwWebTableShell::~SwWebTableShell()
+SwWebTableShell::~SwWebTableShell()
 {
 }
 

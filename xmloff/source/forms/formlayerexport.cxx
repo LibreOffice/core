@@ -33,7 +33,7 @@
 #include <xmloff/formlayerexport.hxx>
 #include "strings.hxx"
 #include "elementexport.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlexp.hxx>
 #include "layerexport.hxx"
 #include "propertyexport.hxx"
@@ -94,12 +94,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::Reference< SvXMLExportPropertyMapper > OFormLayerXMLExport::getStylePropertyMapper()
-    {
-        return m_pImpl->getStylePropertyMapper();
-    }
-
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport::initialize()
     {
         m_pImpl->clear();
@@ -114,7 +108,7 @@ namespace xmloff
         }
         catch(Exception&)
         {
-            OSL_ENSURE(sal_False, "OFormLayerXMLExport::examine: could not examine the draw page!");
+            OSL_FAIL("OFormLayerXMLExport::examine: could not examine the draw page!");
         }
     }
 

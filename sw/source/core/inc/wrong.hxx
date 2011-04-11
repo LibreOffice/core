@@ -78,8 +78,8 @@ class SwWrongList
     { if( rPos >= nStart ) rPos += nStart - nEnd; }
     void _Invalidate( xub_StrLen nBegin, xub_StrLen nEnd );
 
-    void Insert(USHORT nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos);
-    void Remove( USHORT nIdx, USHORT nLen );
+    void Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos);
+    void Remove( sal_uInt16 nIdx, sal_uInt16 nLen );
 
     // forbidden and not implemented
     SwWrongList& operator= (const SwWrongList &);
@@ -95,15 +95,15 @@ public:
     inline WrongListType GetWrongListType() const { return meType; }
     inline xub_StrLen GetBeginInv() const { return nBeginInvalid; }
     inline xub_StrLen GetEndInv() const { return nEndInvalid; }
-    inline BOOL InsideInvalid( xub_StrLen nChk ) const
+    inline sal_Bool InsideInvalid( xub_StrLen nChk ) const
         { return nChk >= nBeginInvalid && nChk <= nEndInvalid; }
     void SetInvalid( xub_StrLen nBegin, xub_StrLen nEnd );
     inline void Validate(){ nBeginInvalid = STRING_LEN; }
     void Invalidate( xub_StrLen nBegin, xub_StrLen nEnd );
-    BOOL InvalidateWrong();
-    BOOL Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nPos,
-            xub_StrLen nLen, USHORT nIndex, xub_StrLen nCursorPos );
-    USHORT GetWrongPos( xub_StrLen nValue ) const;
+    sal_Bool InvalidateWrong();
+    sal_Bool Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nPos,
+            xub_StrLen nLen, sal_uInt16 nIndex, xub_StrLen nCursorPos );
+    sal_uInt16 GetWrongPos( xub_StrLen nValue ) const;
 
     sal_Bool Check( xub_StrLen &rChk, xub_StrLen &rLn ) const;
     sal_Bool InWrongWord( xub_StrLen &rChk, xub_StrLen &rLn ) const;
@@ -119,21 +119,21 @@ public:
     // the other wrong list has to be inserted.
     void JoinList( SwWrongList* pNext, xub_StrLen nInsertPos );
 
-    inline xub_StrLen Len( USHORT nIdx ) const
+    inline xub_StrLen Len( sal_uInt16 nIdx ) const
     {
         return nIdx < maList.size() ? maList[nIdx].mnLen : 0;
     }
 
-    inline xub_StrLen Pos( USHORT nIdx ) const
+    inline xub_StrLen Pos( sal_uInt16 nIdx ) const
     {
         return nIdx < maList.size() ? maList[nIdx].mnPos : 0;
     }
 
-    inline USHORT Count() const { return (USHORT)maList.size(); }
+    inline sal_uInt16 Count() const { return (sal_uInt16)maList.size(); }
 
     inline void Insert( const rtl::OUString& rType,
                         com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
-                        xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT nWhere )
+                        xub_StrLen nNewPos, xub_StrLen nNewLen, sal_uInt16 nWhere )
     {
         std::vector<SwWrongArea>::iterator i = maList.begin();
         if ( nWhere >= maList.size() )
@@ -147,14 +147,14 @@ public:
                  com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
                  xub_StrLen nNewPos, xub_StrLen nNewLen );
 
-    inline SwWrongList* SubList( USHORT nIdx ) const
+    inline SwWrongList* SubList( sal_uInt16 nIdx ) const
     {
         return nIdx < maList.size() ? maList[nIdx].mpSubList : 0;
     }
 
-    void InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT nWhere, SwWrongList* pSubList );
+    void InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, sal_uInt16 nWhere, SwWrongList* pSubList );
 
-    inline const SwWrongArea* GetElement( USHORT nIdx ) const
+    inline const SwWrongArea* GetElement( sal_uInt16 nIdx ) const
     {
         return nIdx < maList.size() ? &maList[nIdx] : 0;
     }

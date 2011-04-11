@@ -33,6 +33,7 @@
 #include <string.h>
 
 #include <tools/rc.h>
+#include <tools/list.hxx>
 #include <rscerror.h>
 #include <rsctools.hxx>
 #include <rscclass.hxx>
@@ -64,7 +65,7 @@ RSCINST GetVarInst( const RSCINST & rInst, const char * pVarName )
     return( aInst );
 }
 
-void SetNumber( const RSCINST & rInst, const char * pVarName, INT32 lValue )
+void SetNumber( const RSCINST & rInst, const char * pVarName, sal_Int32 lValue )
 {
     RSCINST aInst;
 
@@ -80,7 +81,7 @@ void SetNumber( const RSCINST & rInst, const char * pVarName, INT32 lValue )
 }
 
 void SetConst( const RSCINST & rInst, const char * pVarName,
-               Atom nValueId, INT32 nVal )
+               Atom nValueId, sal_Int32 nVal )
 {
     RSCINST aInst;
 
@@ -112,11 +113,11 @@ void SetString( const RSCINST & rInst, const char * pVarName, const char * pStr 
 RscId MakeRscId( RscExpType aExpType )
 {
     if( !aExpType.IsNothing() ){
-        INT32       lValue;
+        sal_Int32       lValue;
 
         if( !aExpType.Evaluate( &lValue ) )
             pTC->pEH->Error( ERR_ZERODIVISION, NULL, RscId() );
-        if( lValue < 1 || lValue > (INT32)0x7FFF )
+        if( lValue < 1 || lValue > (sal_Int32)0x7FFF )
         {
             pTC->pEH->Error( ERR_IDRANGE, NULL, RscId(),
                              ByteString::CreateFromInt32( lValue ).GetBuffer() );
@@ -130,7 +131,7 @@ RscId MakeRscId( RscExpType aExpType )
     return RscId();
 }
 
-BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
+sal_Bool DoClassHeader( RSCHEADER * pHeader, sal_Bool bMember )
 {
     RSCINST aCopyInst;
     RscId aName1 = MakeRscId( pHeader->nName1 );
@@ -178,7 +179,7 @@ BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
     {
         if( S.IsEmpty() )
         {
-            if( (INT32)aName1 < 256 )
+            if( (sal_Int32)aName1 < 256 )
                 pTC->pEH->Error( WRN_GLOBALID, pHeader->pClass, aName1 );
 
             if( aCopyInst.IsInst() )
@@ -200,7 +201,7 @@ BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
             RSCINST aTmpI;
             ERRTYPE aError;
 
-            if( (INT32)aName1 >= 256 && aName1.IsId() )
+            if( (sal_Int32)aName1 >= 256 && aName1.IsId() )
                 pTC->pEH->Error( WRN_LOCALID, pHeader->pClass, aName1 );
             aError = S.Top().pClass->GetElement( S.Top(), aName1,
                                                  pHeader->pClass, aCopyInst, &aTmpI );
@@ -218,7 +219,7 @@ BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
                                             pHeader->pClass, RSCINST(), &aTmpI );
 
                 if( !aTmpI.IsInst() )
-                    return( FALSE );
+                    return( sal_False );
             }
             S.Push( aTmpI );
         };
@@ -231,7 +232,7 @@ BOOL DoClassHeader( RSCHEADER * pHeader, BOOL bMember )
         pTC->pEH->Error( aError, S.Top().pClass, aName1 );
     }
 
-    return( TRUE );
+    return( sal_True );
 }
 
 RSCINST GetFirstTupelEle( const RSCINST & rTop )
@@ -254,16 +255,12 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 #ifdef UNX
 #define YYMAXDEPTH              2000
 #else
-#ifdef W30
-#define YYMAXDEPTH              300
-#else
 #define YYMAXDEPTH              800
-#endif
 #endif
 
 #if defined _MSC_VER
 #pragma warning(push, 1)
-#pragma warning(disable:4129 4273 4701)
+#pragma warning(disable:4129 4273 4701 4702)
 #endif
 #include "yyrscyacc.cxx"
 #if defined _MSC_VER

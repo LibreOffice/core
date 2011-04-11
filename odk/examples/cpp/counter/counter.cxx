@@ -168,7 +168,7 @@ Reference< XInterface > SAL_CALL MyCounterImpl_create(
 /**
  * Gives the environment this component belongs to.
  */
-extern "C" void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv)
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv)
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -180,33 +180,33 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(const sal_Char *
  * @param pServiceManager   the service manager
  * @param pRegistryKey      the registry key
  */
-extern "C" sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * pRegistryKey)
-{
-    sal_Bool result = sal_False;
+// extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * pRegistryKey)
+// {
+//  sal_Bool result = sal_False;
 
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
+//  if (pRegistryKey)
+//  {
+//      try
+//      {
+//          Reference< XRegistryKey > xNewKey(
+//              reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
+//                  OUString( RTL_CONSTASCII_USTRINGPARAM("/" IMPLNAME "/UNO/SERVICES") ) ) );
 
-            const Sequence< OUString > & rSNL =
-                MyCounterImpl::getSupportedServiceNames_Static();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
+//          const Sequence< OUString > & rSNL =
+//              MyCounterImpl::getSupportedServiceNames_Static();
+//          const OUString * pArray = rSNL.getConstArray();
+//          for ( sal_Int32 nPos = rSNL.getLength(); nPos--; )
+//              xNewKey->createKey( pArray[nPos] );
 
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            // we should not ignore exceptions
-        }
-    }
-    return result;
-}
+//          return sal_True;
+//      }
+//      catch (InvalidRegistryException &)
+//      {
+//          // we should not ignore exceptions
+//      }
+//  }
+//  return result;
+// }
 
 /**
  * This function is called to get service factories for an implementation.
@@ -216,7 +216,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * 
  * @param pRegistryKey    the registry key for this component, need for persistent data
  * @return a component factory
  */
-extern "C" void * SAL_CALL component_getFactory(const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey)
 {
     void * pRet = 0;
 

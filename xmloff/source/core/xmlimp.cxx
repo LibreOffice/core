@@ -38,7 +38,7 @@
 #include "unointerfacetouniqueidentifiermapper.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -50,7 +50,7 @@
 #include "StyleMap.hxx"
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -89,47 +89,47 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 
-sal_Char __READONLY_DATA sXML_np__office[] = "_office";
-sal_Char __READONLY_DATA sXML_np__office_ext[] = "_office_ooo";
-sal_Char __READONLY_DATA sXML_np__ooo[] = "_ooo";
-sal_Char __READONLY_DATA sXML_np__ooow[] = "_ooow";
-sal_Char __READONLY_DATA sXML_np__oooc[] = "_oooc";
-sal_Char __READONLY_DATA sXML_np__of[] = "_of";
-sal_Char __READONLY_DATA sXML_np__style[] = "_style";
-sal_Char __READONLY_DATA sXML_np__text[] = "_text";
-sal_Char __READONLY_DATA sXML_np__table[] = "_table";
-sal_Char __READONLY_DATA sXML_np__table_ext[] = "_table_ooo";
-sal_Char __READONLY_DATA sXML_np__draw[] = "_draw";
-sal_Char __READONLY_DATA sXML_np__draw_ext[] = "_draw_ooo";
-sal_Char __READONLY_DATA sXML_np__dr3d[] = "_dr3d";
-sal_Char __READONLY_DATA sXML_np__fo[] = "_fo";
-sal_Char __READONLY_DATA sXML_np__xlink[] = "_xlink";
-sal_Char __READONLY_DATA sXML_np__dc[] = "_dc";
-sal_Char __READONLY_DATA sXML_np__dom[] = "_dom";
-sal_Char __READONLY_DATA sXML_np__meta[] = "_meta";
-sal_Char __READONLY_DATA sXML_np__number[] = "_number";
-sal_Char __READONLY_DATA sXML_np__svg[] = "_svg";
-sal_Char __READONLY_DATA sXML_np__chart[] = "_chart";
-sal_Char __READONLY_DATA sXML_np__math[] = "_math";
-sal_Char __READONLY_DATA sXML_np__form[] = "_form";
-sal_Char __READONLY_DATA sXML_np__script[] = "_script";
-sal_Char __READONLY_DATA sXML_np__config[] = "_config";
-sal_Char __READONLY_DATA sXML_np__db[] = "_db";
-sal_Char __READONLY_DATA sXML_np__xforms[] = "_xforms";
-sal_Char __READONLY_DATA sXML_np__formx[] = "_formx";
-sal_Char __READONLY_DATA sXML_np__xsd[] = "_xsd";
-sal_Char __READONLY_DATA sXML_np__xsi[] = "_xsi";
-sal_Char __READONLY_DATA sXML_np__field[] = "_field";
-sal_Char __READONLY_DATA sXML_np__xhtml[] = "_xhtml";
-sal_Char __READONLY_DATA sXML_np__css3text[] = "_css3text";
+sal_Char const sXML_np__office[] = "_office";
+sal_Char const sXML_np__office_ext[] = "_office_ooo";
+sal_Char const sXML_np__ooo[] = "_ooo";
+sal_Char const sXML_np__ooow[] = "_ooow";
+sal_Char const sXML_np__oooc[] = "_oooc";
+sal_Char const sXML_np__of[] = "_of";
+sal_Char const sXML_np__style[] = "_style";
+sal_Char const sXML_np__text[] = "_text";
+sal_Char const sXML_np__table[] = "_table";
+sal_Char const sXML_np__table_ext[] = "_table_ooo";
+sal_Char const sXML_np__draw[] = "_draw";
+sal_Char const sXML_np__draw_ext[] = "_draw_ooo";
+sal_Char const sXML_np__dr3d[] = "_dr3d";
+sal_Char const sXML_np__fo[] = "_fo";
+sal_Char const sXML_np__xlink[] = "_xlink";
+sal_Char const sXML_np__dc[] = "_dc";
+sal_Char const sXML_np__dom[] = "_dom";
+sal_Char const sXML_np__meta[] = "_meta";
+sal_Char const sXML_np__number[] = "_number";
+sal_Char const sXML_np__svg[] = "_svg";
+sal_Char const sXML_np__chart[] = "_chart";
+sal_Char const sXML_np__math[] = "_math";
+sal_Char const sXML_np__form[] = "_form";
+sal_Char const sXML_np__script[] = "_script";
+sal_Char const sXML_np__config[] = "_config";
+sal_Char const sXML_np__db[] = "_db";
+sal_Char const sXML_np__xforms[] = "_xforms";
+sal_Char const sXML_np__formx[] = "_formx";
+sal_Char const sXML_np__xsd[] = "_xsd";
+sal_Char const sXML_np__xsi[] = "_xsi";
+sal_Char const sXML_np__field[] = "_field";
+sal_Char const sXML_np__xhtml[] = "_xhtml";
+sal_Char const sXML_np__css3text[] = "_css3text";
 
-sal_Char __READONLY_DATA sXML_np__fo_old[] = "__fo";
-sal_Char __READONLY_DATA sXML_np__xlink_old[] = "__xlink";
-sal_Char __READONLY_DATA sXML_np__office_old[] = "__office";
-sal_Char __READONLY_DATA sXML_np__style_old[] = "__style";
-sal_Char __READONLY_DATA sXML_np__text_old[] = "__text";
-sal_Char __READONLY_DATA sXML_np__table_old[] = "__table";
-sal_Char __READONLY_DATA sXML_np__meta_old[] = "__meta";
+sal_Char const sXML_np__fo_old[] = "__fo";
+sal_Char const sXML_np__xlink_old[] = "__xlink";
+sal_Char const sXML_np__office_old[] = "__office";
+sal_Char const sXML_np__style_old[] = "__style";
+sal_Char const sXML_np__text_old[] = "__text";
+sal_Char const sXML_np__table_old[] = "__table";
+sal_Char const sXML_np__meta_old[] = "__meta";
 
 
 
@@ -185,14 +185,11 @@ public:
 
     ::rtl::OUString aODFVersion;
 
-    // --> OD 2004-08-10 #i28749# - boolean, indicating that position attributes
+    // Boolean, indicating that position attributes
     // of shapes are given in horizontal left-to-right layout. This is the case
-    // for the OpenOffice.org file format.
+    // for the OpenOffice.org file format. (#i28749#)
     sal_Bool mbShapePositionInHoriL2R;
-    // <--
-    // --> OD 2007-12-19 #152540#
     sal_Bool mbTextDocInOOoFileFormat;
-    // <--
 
     const uno::Reference< uno::XComponentContext > mxComponentContext;
 
@@ -203,12 +200,9 @@ public:
         mbOwnGraphicResolver( false ),
         mbOwnEmbeddedResolver( false ),
         mStreamName(),
-        // --> OD 2004-08-11 #i28749#
+        // Convert drawing object positions from OOo file format to OASIS (#i28749#)
         mbShapePositionInHoriL2R( sal_False ),
-        // <--
-        // --> OD 2007-12-19 #152540#
         mbTextDocInOOoFileFormat( sal_False ),
-        // <--
         mxComponentContext( ::comphelper::getProcessComponentContext() ),
         mpRDFaHelper() // lazy
     {
@@ -231,7 +225,7 @@ typedef SvXMLImportContext *SvXMLImportContextPtr;
 SV_DECL_PTRARR( SvXMLImportContexts_Impl, SvXMLImportContextPtr, 20, 5 )
 SV_IMPL_PTRARR( SvXMLImportContexts_Impl, SvXMLImportContextPtr )
 
-SvXMLImportContext *SvXMLImport::CreateContext( USHORT nPrefix,
+SvXMLImportContext *SvXMLImport::CreateContext( sal_uInt16 nPrefix,
                                          const OUString& rLocalName,
                                          const uno::Reference< xml::sax::XAttributeList >& )
 {
@@ -357,7 +351,6 @@ SvXMLImport::SvXMLImport(
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
     // #110680#
-    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
 
     mpContexts( new SvXMLImportContexts_Impl ),
@@ -387,7 +380,6 @@ SvXMLImport::SvXMLImport(
     mpImpl( new SvXMLImport_Impl() ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     // #110680#
-    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
     mpContexts( new SvXMLImportContexts_Impl ),
     mpNumImport( NULL ),
@@ -418,7 +410,6 @@ SvXMLImport::SvXMLImport(
     mpImpl( new SvXMLImport_Impl() ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     // #110680#
-    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
     mpContexts( new SvXMLImportContexts_Impl ),
     mpNumImport( NULL ),
@@ -455,8 +446,6 @@ SvXMLImport::~SvXMLImport() throw ()
         }
         delete mpContexts;
     }
-
-    //  delete pImageMapImportHelper;
 
     //  #i9518# the import component might not be deleted until after the document has been closed,
     //  so the stuff that accesses the document has been moved to endDocument.
@@ -664,11 +653,11 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 
     // Process namespace attributes. This must happen before creating the
     // context, because namespace decaration apply to the element name itself.
-    INT16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( INT16 i=0; i < nAttrCount; i++ )
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        if ( rAttrName.equalsAscii("office:version") )
+        if ( rAttrName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("office:version")) )
         {
             mpImpl->aODFVersion = xAttrList->getValueByIndex( i );
 
@@ -720,13 +709,13 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 
     // Get element's namespace and local name.
     OUString aLocalName;
-    USHORT nPrefix =
+    sal_uInt16 nPrefix =
         mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
 
     // If there are contexts already, call a CreateChildContext at the topmost
     // context. Otherwise, create a default context.
     SvXMLImportContext *pContext;
-    USHORT nCount = mpContexts->Count();
+    sal_uInt16 nCount = mpContexts->Count();
     if( nCount > 0 )
     {
         pContext = (*mpContexts)[nCount - 1]->CreateChildContext( nPrefix,
@@ -784,7 +773,7 @@ rName
 )
     throw(xml::sax::SAXException, uno::RuntimeException)
 {
-    USHORT nCount = mpContexts->Count();
+    sal_uInt16 nCount = mpContexts->Count();
     DBG_ASSERT( nCount, "SvXMLImport::endElement: no context left" );
     if( nCount > 0 )
     {
@@ -795,7 +784,7 @@ rName
 #ifdef DBG_UTIL
         // Non product only: check if endElement call matches startELement call.
         OUString aLocalName;
-        USHORT nPrefix =
+        sal_uInt16 nPrefix =
             mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
         DBG_ASSERT( pContext->GetPrefix() == nPrefix,
                 "SvXMLImport::endElement: popped context has wrong prefix" );
@@ -825,7 +814,7 @@ rName
 void SAL_CALL SvXMLImport::characters( const OUString& rChars )
     throw(xml::sax::SAXException, uno::RuntimeException)
 {
-    USHORT nCount = mpContexts->Count();
+    sal_uInt16 nCount = mpContexts->Count();
     if( nCount > 0 )
     {
         (*mpContexts)[nCount - 1]->Characters( rChars );
@@ -999,22 +988,19 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     mpImpl->aBaseURL.insertName( sName );
                 }
                 mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
-                // --> OD 2004-08-10 #i28749# - retrieve property <ShapePositionInHoriL2R>
+                // Retrieve property <ShapePositionInHoriL2R> (#i28749#)
                 sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("ShapePositionInHoriL2R" ) );
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= (mpImpl->mbShapePositionInHoriL2R);
                 }
-                // <--
-                // --> OD 2007-12-19 #152540#
                 sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("TextDocInOOoFileFormat" ) );
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= (mpImpl->mbTextDocInOOoFileFormat);
                 }
-                // <--
             }
         }
     }
@@ -1063,19 +1049,15 @@ XMLShapeImportHelper* SvXMLImport::CreateShapeImport()
     return new XMLShapeImportHelper( *this, mxModel );
 }
 
-#ifndef SVX_LIGHT
 SchXMLImportHelper* SvXMLImport::CreateChartImport()
 {
     return new SchXMLImportHelper();
 }
-#endif
 
-#ifndef SVX_LIGHT
 ::xmloff::OFormLayerXMLImport* SvXMLImport::CreateFormImport()
 {
     return new ::xmloff::OFormLayerXMLImport(*this);
 }
-#endif // #ifndef SVX_LIGHT
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1496,17 +1478,16 @@ void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
         }
         catch ( uno::Exception& )
         {
-            DBG_ERROR("Numberformat could not be inserted");
+            OSL_FAIL("Numberformat could not be inserted");
         }
     }
     else {
-        DBG_ERROR("not possible to create NameContainer");
+        OSL_FAIL("not possible to create NameContainer");
     }
 }
 
 XMLEventImportHelper& SvXMLImport::GetEventImport()
 {
-#ifndef SVX_LIGHT
     if (!mpEventImportHelper)
     {
         // construct event helper and register StarBasic handler and standard
@@ -1525,7 +1506,6 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
         mpEventImportHelper->RegisterFactory(sStarBasicCap,
                                             new XMLStarBasicContextFactory());
     }
-#endif
 
     return *mpEventImportHelper;
 }
@@ -1572,10 +1552,8 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
     mxAutoStyles = pAutoStyles;
     GetTextImport()->SetAutoStyles( pAutoStyles );
     GetShapeImport()->SetAutoStylesContext( pAutoStyles );
-#ifndef SVX_LIGHT
     GetChartImport()->SetAutoStylesContext( pAutoStyles );
     GetFormImport()->setAutoStyleContext( pAutoStyles );
-#endif
 }
 
 void SvXMLImport::SetMasterStyles( SvXMLStylesContext *pMasterStyles )
@@ -1763,9 +1741,9 @@ void SvXMLImport::SetError(
 {
     // maintain error flags
     if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
-        mnErrorFlags |= ERROR_ERROR_OCCURED;
+        mnErrorFlags |= ERROR_ERROR_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_WARNING ) != 0 )
-        mnErrorFlags |= ERROR_WARNING_OCCURED;
+        mnErrorFlags |= ERROR_WARNING_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_SEVERE ) != 0 )
         mnErrorFlags |= ERROR_DO_NOTHING;
 
@@ -1898,20 +1876,16 @@ String SvXMLImport::GetDocumentBase() const
     return mpImpl->mStreamName;
 }
 
-// --> OD 2004-08-10 #i28749#
+// Convert drawing object positions from OOo file format to OASIS (#i28749#)
 sal_Bool SvXMLImport::IsShapePositionInHoriL2R() const
 {
     return mpImpl->mbShapePositionInHoriL2R;
 }
-// <--
 
-// --> OD 2007-12-19 #152540#
 sal_Bool SvXMLImport::IsTextDocInOOoFileFormat() const
 {
     return mpImpl->mbTextDocInOOoFileFormat;
 }
-
-// <--
 
 void SvXMLImport::initXForms()
 {
@@ -1982,7 +1956,6 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
             const uno::Reference<rdf::XMetadatable> xMeta(i_xIfc,
                 uno::UNO_QUERY);
 //FIXME: not yet
-//            OSL_ENSURE(xMeta.is(), "xml:id: not XMetadatable");
             if (xMeta.is()) {
                 const beans::StringPair mdref( GetStreamName(), i_rXmlId );
                 try {
@@ -1993,7 +1966,7 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
                 }
             }
         } catch (uno::Exception &) {
-            OSL_ENSURE(false, "SvXMLImport::SetXmlId: exception?");
+            OSL_FAIL("SvXMLImport::SetXmlId: exception?");
         }
     }
 }

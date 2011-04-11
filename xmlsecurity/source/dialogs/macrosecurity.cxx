@@ -42,7 +42,6 @@
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <comphelper/sequence.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svl/pickerhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -125,7 +124,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
     maHighRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
     maVeryHighRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
 
-    mnCurLevel = (USHORT) mpDlg->maSecOptions.GetMacroSecurityLevel();
+    mnCurLevel = (sal_uInt16) mpDlg->maSecOptions.GetMacroSecurityLevel();
     sal_Bool bReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_MACRO_SECLEVEL );
 
     RadioButton* pCheck = 0;
@@ -140,7 +139,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
         pCheck->Check();
     else
     {
-        DBG_ERROR("illegal macro security level");
+        OSL_FAIL("illegal macro security level");
     }
     maSecReadonlyFI.Show(bReadonly);
     if(bReadonly)
@@ -163,7 +162,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
 
 IMPL_LINK( MacroSecurityLevelTP, RadioButtonHdl, RadioButton*, EMPTYARG )
 {
-    USHORT nNewLevel = 0;
+    sal_uInt16 nNewLevel = 0;
     if( maVeryHighRB.IsChecked() )
         nNewLevel = 3;
     else if( maHighRB.IsChecked() )
@@ -200,7 +199,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMPTYARG )
 {
     if( maTrustCertLB.FirstSelected() )
     {
-        USHORT nSelected = USHORT( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
+        sal_uInt16 nSelected = sal_uInt16( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
 
         uno::Reference< dcss::security::XSerialNumberAdapter > xSerialNumberAdapter =
             ::com::sun::star::security::SerialNumberAdapter::create(mpDlg->mxCtx);
@@ -215,7 +214,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMPTYARG )
 
         if ( xCert.is() )
         {
-            CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, xCert, FALSE );
+            CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, xCert, sal_False );
             aViewer.Execute();
         }
     }
@@ -226,7 +225,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMPTYARG )
 {
     if( maTrustCertLB.FirstSelected() )
     {
-        USHORT nAuthor = USHORT( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
+        sal_uInt16 nAuthor = sal_uInt16( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
         ::comphelper::removeElementAt( maTrustedAuthors, nAuthor );
 
         FillCertLB();
@@ -279,20 +278,19 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMPTYARG )
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMPTYARG )
 {
-    USHORT  nSel = maTrustFileLocLB.GetSelectEntryPos();
+    sal_uInt16  nSel = maTrustFileLocLB.GetSelectEntryPos();
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         maTrustFileLocLB.RemoveEntry( nSel );
-        // --> PB 2004-09-21 #i33584#
+        // Trusted Path could not be removed (#i33584#)
         // after remove an entry, select another one if exists
-        USHORT nNewCount = maTrustFileLocLB.GetEntryCount();
+        sal_uInt16 nNewCount = maTrustFileLocLB.GetEntryCount();
         if ( nNewCount > 0 )
         {
             if ( nSel >= nNewCount )
                 nSel = nNewCount - 1;
             maTrustFileLocLB.SelectEntryPos( nSel );
         }
-        // <--
         ImplCheckButtons();
     }
 
@@ -330,7 +328,7 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
             SvLBoxEntry*    pLBEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName() ) );
             maTrustCertLB.SetEntryText( XmlSec::GetContentPart( xCert->getIssuerName() ), pLBEntry, 1 );
             maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( xCert->getNotValidAfter() ), pLBEntry, 2 );
-            pLBEntry->SetUserData( ( void* ) sal_Int32( nEntry ) );     // missuse user data as index
+            pLBEntry->SetUserData( ( void* ) (sal_IntPtr)nEntry );      // missuse user data as index
         }
     }
 }
@@ -400,11 +398,11 @@ void MacroSecurityTrustedSourcesTP::ActivatePage()
 
 void MacroSecurityTrustedSourcesTP::ClosePage( void )
 {
-    USHORT  nEntryCnt = maTrustFileLocLB.GetEntryCount();
+    sal_uInt16  nEntryCnt = maTrustFileLocLB.GetEntryCount();
     if( nEntryCnt )
     {
         cssu::Sequence< rtl::OUString > aSecureURLs( nEntryCnt );
-        for( USHORT i = 0 ; i < nEntryCnt ; ++i )
+        for( sal_uInt16 i = 0 ; i < nEntryCnt ; ++i )
         {
             ::rtl::OUString aURL( maTrustFileLocLB.GetEntry( i ) );
             osl::FileBase::getFileURLFromSystemPath( aURL, aURL );
@@ -413,33 +411,24 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
 
         mpDlg->maSecOptions.SetSecureURLs( aSecureURLs );
     }
-    // --> PB 2004-09-21 #i33584#
+    // Trusted Path could not be removed (#i33584#)
     // don't forget to remove the old saved SecureURLs
     else
         mpDlg->maSecOptions.SetSecureURLs( cssu::Sequence< rtl::OUString >() );
-    // <--
 
     mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
 }
-/*-- 26.02.2004 13:31:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ReadOnlyImage::ReadOnlyImage(Window* pParent, const ResId rResId) :
             FixedImage(pParent, rResId)
 {
-    sal_Bool bHighContrast = pParent->GetSettings().GetStyleSettings().GetHighContrastMode();
-    SetImage( Image(XMLSEC_RES( bHighContrast ? RID_XMLSECTP_LOCK_HC : RID_XMLSECTP_LOCK )));
+    SetImage( Image(XMLSEC_RES( RID_XMLSECTP_LOCK )));
 }
 
-/*-- 26.02.2004 13:31:04---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 ReadOnlyImage::~ReadOnlyImage()
 {
 }
-/*-- 26.02.2004 13:31:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
 {
     if( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
@@ -459,9 +448,6 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp( rHEvt );
 }
 
-/*-- 26.02.2004 14:20:21---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 const String& ReadOnlyImage::GetHelpTip()
 {
      static String  aStr(XMLSEC_RES( RID_XMLSECTP_READONLY_CONFIG_TIP));

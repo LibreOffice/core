@@ -65,9 +65,6 @@
 #include <functional>
 #include <algorithm>
 
-#include <functional>
-#include <algorithm>
-
 
 //... namespace frm .......................................................
 namespace frm
@@ -297,11 +294,11 @@ Sequence< ::rtl::OUString > SAL_CALL OControl::getSupportedServiceNames_Static()
 //------------------------------------------------------------------------------
 void SAL_CALL OControl::disposing(const com::sun::star::lang::EventObject& _rEvent) throw (RuntimeException)
 {
-    InterfaceRef xAggAsIface;
+    Reference< XInterface > xAggAsIface;
     query_aggregation(m_xAggregate, xAggAsIface);
 
     // does the disposing come from the aggregate ?
-    if (xAggAsIface != InterfaceRef(_rEvent.Source, UNO_QUERY))
+    if (xAggAsIface != Reference< XInterface >(_rEvent.Source, UNO_QUERY))
     {   // no -> forward it
                 Reference<com::sun::star::lang::XEventListener> xListener;
         if (query_aggregation(m_xAggregate, xListener))
@@ -311,16 +308,16 @@ void SAL_CALL OControl::disposing(const com::sun::star::lang::EventObject& _rEve
 
 // XControl
 //------------------------------------------------------------------------------
-void SAL_CALL OControl::setContext(const InterfaceRef& Context) throw (RuntimeException)
+void SAL_CALL OControl::setContext(const Reference< XInterface >& Context) throw (RuntimeException)
 {
     if (m_xControl.is())
         m_xControl->setContext(Context);
 }
 
 //------------------------------------------------------------------------------
-InterfaceRef SAL_CALL OControl::getContext() throw (RuntimeException)
+Reference< XInterface > SAL_CALL OControl::getContext() throw (RuntimeException)
 {
-    return m_xControl.is() ? m_xControl->getContext() : InterfaceRef();
+    return m_xControl.is() ? m_xControl->getContext() : Reference< XInterface >();
 }
 
 //------------------------------------------------------------------------------
@@ -567,7 +564,7 @@ void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XOb
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(sal_False, "OControlModel::readHelpTextCompatibly: could not forward the property value to the aggregate!");
+        OSL_FAIL("OControlModel::readHelpTextCompatibly: could not forward the property value to the aggregate!");
     }
 }
 
@@ -582,7 +579,7 @@ void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XO
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(sal_False, "OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
+        OSL_FAIL("OControlModel::writeHelpTextCompatibly: could not retrieve the property value from the aggregate!");
     }
     ::comphelper::operator<<( _rxOutStream, sHelpText);
 }
@@ -602,7 +599,7 @@ OControlModel::OControlModel(
     ,m_bNativeLook( sal_False )
         // form controls are usually embedded into documents, not dialogs, and in documents
         // the native look is ugly ....
-        // #i37342# / 2004-11-19 / frank.schoenheit@sun.com
+        // #i37342#
 {
     DBG_CTOR(OControlModel, NULL);
     if (_rUnoControlModelTypeName.getLength())  // the is a model we have to aggregate
@@ -622,7 +619,7 @@ OControlModel::OControlModel(
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "OControlModel::OControlModel: caught an exception!" );
+                    OSL_FAIL( "OControlModel::OControlModel: caught an exception!" );
                 }
             }
         }
@@ -712,13 +709,13 @@ void OControlModel::doSetDelegator()
 
 // XChild
 //------------------------------------------------------------------------------
-InterfaceRef SAL_CALL OControlModel::getParent() throw(RuntimeException)
+Reference< XInterface > SAL_CALL OControlModel::getParent() throw(RuntimeException)
 {
     return m_xParent;
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OControlModel::setParent(const InterfaceRef& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException)
+void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent) throw(com::sun::star::lang::NoSupportException, RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
@@ -784,7 +781,7 @@ Sequence< ::rtl::OUString > SAL_CALL OControlModel::getSupportedServiceNames_Sta
 {
     Sequence< ::rtl::OUString > aServiceNames( 2 );
     aServiceNames[ 0 ] = FRM_SUN_FORMCOMPONENT;
-    aServiceNames[ 1 ] = ::rtl::OUString::createFromAscii( "com.sun.star.form.FormControlModel" );
+    aServiceNames[ 1 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.FormControlModel") );
     return aServiceNames;
 }
 
@@ -921,7 +918,7 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
     }
 
     // 2. Lesen des Versionsnummer
-    UINT16 nVersion = InStream->readShort();
+    sal_uInt16 nVersion = InStream->readShort();
 
     // 3. Lesen der allgemeinen Properties
     ::comphelper::operator>>( InStream, m_aName);
@@ -995,7 +992,7 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.getDynamicPropertyDefaultByHandle( _nHandle, aReturn );
             else
-                OSL_ENSURE( false, "OControlModel::convertFastPropertyValue: unknown handle!" );
+                OSL_FAIL( "OControlModel::convertFastPropertyValue: unknown handle!" );
     }
     return aReturn;
 }
@@ -1053,7 +1050,7 @@ sal_Bool OControlModel::convertFastPropertyValue(
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 bModified = m_aPropertyBagHelper.convertDynamicFastPropertyValue( _nHandle, _rValue, _rConvertedValue, _rOldValue );
             else
-                OSL_ENSURE( false, "OControlModel::convertFastPropertyValue: unknown handle!" );
+                OSL_FAIL( "OControlModel::convertFastPropertyValue: unknown handle!" );
             break;
     }
     return bModified;
@@ -1087,7 +1084,7 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.setDynamicFastPropertyValue( _nHandle, _rValue );
             else
-                OSL_ENSURE( false, "OControlModel::setFastPropertyValue_NoBroadcast: unknown handle!" );
+                OSL_FAIL( "OControlModel::setFastPropertyValue_NoBroadcast: unknown handle!" );
             break;
     }
 }
@@ -1654,7 +1651,7 @@ StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(Run
 Sequence< ::rtl::OUString > SAL_CALL OBoundControlModel::getSupportedServiceNames_Static() throw( RuntimeException )
 {
     Sequence< ::rtl::OUString > aOwnServiceNames( 1 );
-    aOwnServiceNames[ 0 ] = ::rtl::OUString::createFromAscii( "com.sun.star.form.DataAwareControlModel" );
+    aOwnServiceNames[ 0 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.DataAwareControlModel") );
 
     return ::comphelper::concatSequences(
         OControlModel::getSupportedServiceNames_Static(),
@@ -1683,7 +1680,6 @@ void SAL_CALL OBoundControlModel::write( const Reference<stario::XObjectOutputSt
     // in anything from data loss to crash.
     // (use writeCommonProperties instead, this is called in derived classes write-method)
     // !!! EOIN !!!
-    // FS - 68876 - 28.09.1999
 }
 
 //------------------------------------------------------------------------------
@@ -1759,7 +1755,7 @@ void SAL_CALL OBoundControlModel::read( const Reference< stario::XObjectInputStr
     OControlModel::read(_rxInStream);
 
     osl::MutexGuard aGuard(m_aMutex);
-    UINT16 nVersion = _rxInStream->readShort(); (void)nVersion;
+    sal_uInt16 nVersion = _rxInStream->readShort(); (void)nVersion;
     ::comphelper::operator>>( _rxInStream, m_aControlSource);
 }
 
@@ -1808,7 +1804,7 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aControlSource);
             break;
         case PROPERTY_ID_BOUNDFIELD:
-            DBG_ERROR( "OBoundControlModel::convertFastPropertyValue: BoundField should be a read-only property !" );
+            OSL_FAIL( "OBoundControlModel::convertFastPropertyValue: BoundField should be a read-only property !" );
             throw com::sun::star::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
             if (!_rValue.hasValue())
@@ -1864,34 +1860,28 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             OSL_VERIFY( rValue >>= m_aControlSource );
             break;
         case PROPERTY_ID_BOUNDFIELD:
-            DBG_ERROR("OBoundControlModel::setFastPropertyValue_NoBroadcast : BoundField should be a read-only property !");
+            OSL_FAIL("OBoundControlModel::setFastPropertyValue_NoBroadcast : BoundField should be a read-only property !");
             throw com::sun::star::lang::IllegalArgumentException();
         case PROPERTY_ID_CONTROLLABEL:
         {
-            DBG_ASSERT(!rValue.hasValue() || (rValue.getValueType().getTypeClass() == TypeClass_INTERFACE),
-                "OBoundControlModel::setFastPropertyValue_NoBroadcast : invalid argument !");
-            if (!rValue.hasValue())
+            if ( rValue.hasValue() && ( rValue.getValueTypeClass() != TypeClass_INTERFACE ) )
+                throw com::sun::star::lang::IllegalArgumentException();
+
+            Reference< XInterface > xNewValue( rValue, UNO_QUERY );
+            if ( !xNewValue.is() )
             {   // set property to "void"
-                Reference<com::sun::star::lang::XComponent> xComp(m_xLabelControl, UNO_QUERY);
-                if (xComp.is())
-                    xComp->removeEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));
+                Reference< XComponent > xComp( m_xLabelControl, UNO_QUERY );
+                if ( xComp.is() )
+                    xComp->removeEventListener( static_cast< XPropertyChangeListener* >( this ) );
                 m_xLabelControl = NULL;
                 break;
             }
 
-            InterfaceRef xNewValue;
-            rValue >>= xNewValue;
-
-            Reference<XControlModel> xAsModel(xNewValue, UNO_QUERY);
-            Reference<com::sun::star::lang::XServiceInfo> xAsServiceInfo(xNewValue, UNO_QUERY);
-            Reference<XPropertySet> xAsPropSet(xNewValue, UNO_QUERY);
-            Reference<XChild> xAsChild(xNewValue, UNO_QUERY);
-            if (!xAsModel.is() || !xAsServiceInfo.is() || !xAsPropSet.is() || !xAsChild.is())
-            {
-                throw com::sun::star::lang::IllegalArgumentException();
-            }
-
-            if (!xAsServiceInfo->supportsService(m_aLabelServiceName))
+            Reference< XControlModel >  xAsModel        ( xNewValue,        UNO_QUERY );
+            Reference< XServiceInfo >   xAsServiceInfo  ( xAsModel,         UNO_QUERY );
+            Reference< XPropertySet >   xAsPropSet      ( xAsServiceInfo,   UNO_QUERY );
+            Reference< XChild >         xAsChild        ( xAsPropSet,       UNO_QUERY );
+            if ( !xAsChild.is() || !xAsServiceInfo->supportsService( m_aLabelServiceName ) )
             {
                 throw com::sun::star::lang::IllegalArgumentException();
             }
@@ -1899,7 +1889,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             // check if weself and the given model have a common anchestor (up to the forms collection)
             Reference<XChild> xCont;
             query_interface(static_cast<XWeak*>(this), xCont);
-            InterfaceRef xMyTopLevel = xCont->getParent();
+            Reference< XInterface > xMyTopLevel = xCont->getParent();
             while (xMyTopLevel.is())
             {
                 Reference<XForm> xAsForm(xMyTopLevel, UNO_QUERY);
@@ -1908,9 +1898,9 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
                     break;
 
                 Reference<XChild> xLoopAsChild(xMyTopLevel, UNO_QUERY);
-                xMyTopLevel = xLoopAsChild.is() ? xLoopAsChild->getParent() : InterfaceRef();
+                xMyTopLevel = xLoopAsChild.is() ? xLoopAsChild->getParent() : Reference< XInterface >();
             }
-            InterfaceRef xNewTopLevel = xAsChild->getParent();
+            Reference< XInterface > xNewTopLevel = xAsChild->getParent();
             while (xNewTopLevel.is())
             {
                 Reference<XForm> xAsForm(xNewTopLevel, UNO_QUERY);
@@ -1918,7 +1908,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
                     break;
 
                 Reference<XChild> xLoopAsChild(xNewTopLevel, UNO_QUERY);
-                xNewTopLevel = xLoopAsChild.is() ? xLoopAsChild->getParent() : InterfaceRef();
+                xNewTopLevel = xLoopAsChild.is() ? xLoopAsChild->getParent() : Reference< XInterface >();
             }
             if (xNewTopLevel != xMyTopLevel)
             {
@@ -1976,7 +1966,7 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!" );
+            OSL_FAIL( "OBoundControlModel::propertyChange: could not adjust my binding-controlled property!" );
         }
     }
 }
@@ -2135,14 +2125,14 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                     m_xColumnUpdate = Reference< XColumnUpdate >( m_xField, UNO_QUERY );
                     m_xColumn = Reference< XColumn >( m_xField, UNO_QUERY );
 
-                    INT32 nNullableFlag = ColumnValue::NO_NULLS;
+                    sal_Int32 nNullableFlag = ColumnValue::NO_NULLS;
                     m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
                     m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag);
                         // we're optimistic : in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability ....
                 }
                 else
                 {
-                    OSL_ENSURE(sal_False, "OBoundControlModel::connectToField: property NAME not supported!");
+                    OSL_FAIL("OBoundControlModel::connectToField: property NAME not supported!");
                     impl_setField_noNotify( NULL );
                 }
             }
@@ -2166,7 +2156,7 @@ void OBoundControlModel::initFromField( const Reference< XRowSet >& _rxRowSet )
             transferDbValueToControl();
         else
             // reset the field if the row set is empty
-            // #i30661# / 2004-12-16 / frank.schoenheit@sun.com
+            // #i30661#
             resetNoBroadcast();
     }
 }
@@ -2339,7 +2329,6 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
         // release our mutex once (it's acquired in one of the the calling methods), as setting aggregate properties
         // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
         // our own mutex locked
-        // #72451# / 2000-01-31 / frank.schoenheit@sun.com
         MutexRelease aRelease( m_aMutex );
         if ( ( m_nValuePropertyAggregateHandle != -1 ) && m_xAggregateFastSet.is() )
         {
@@ -2352,7 +2341,7 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::doSetControlValue: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::doSetControlValue: caught an exception!" );
     }
 }
 
@@ -2372,7 +2361,7 @@ void OBoundControlModel::onConnectedValidator( )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::onConnectedValidator: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::onConnectedValidator: caught an exception!" );
     }
     recheckValidity( false );
 }
@@ -2390,7 +2379,7 @@ void OBoundControlModel::onDisconnectedValidator( )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::onDisconnectedValidator: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::onDisconnectedValidator: caught an exception!" );
     }
     recheckValidity( false );
 }
@@ -2478,12 +2467,9 @@ void OBoundControlModel::reset() throw (RuntimeException)
     }
     catch( const SQLException& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::reset: caught an SQL exception!" );
+        OSL_FAIL( "OBoundControlModel::reset: caught an SQL exception!" );
     }
-    // don't count the insert row as "invalid"
-    // @since  #i24495#
-    // @date   2004-05-14
-    // @author fs@openoffice.org
+    // #i24495# - don't count the insert row as "invalid"
 
     sal_Bool bSimpleReset =
                         (   !m_xColumn.is()                     // no connection to a database column
@@ -2527,7 +2513,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
         }
         catch(Exception&)
         {
-            DBG_ERROR("OBoundControlModel::reset: this should have succeeded in all cases!");
+            OSL_FAIL("OBoundControlModel::reset: this should have succeeded in all cases!");
         }
 
         sal_Bool bNeedValueTransfer = sal_True;
@@ -2690,7 +2676,7 @@ void OBoundControlModel::disconnectExternalValueBinding( )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::disconnectExternalValueBinding: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::disconnectExternalValueBinding: caught an exception!" );
     }
 
     // if the binding also acts as our validator, disconnect the validator, too
@@ -3059,7 +3045,7 @@ void OBoundControlModel::recheckValidity( bool _bForceNotification )
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "OBoundControlModel::recheckValidity: caught an exception!" );
+        OSL_FAIL( "OBoundControlModel::recheckValidity: caught an exception!" );
     }
 }
 

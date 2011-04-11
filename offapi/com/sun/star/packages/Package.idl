@@ -55,14 +55,14 @@ module com {  module sun {  module star {  module packages {
 
     Each instance is created with an argument which specifies the URL of
     the Package file to which the user requires access. If the instance is
-    created without arguments, it must be initialised with the
+    created without arguments, it must be initialized with the
     <type scope="com::sun::star::lang">XInitialization</type> service methods
     before it is a valid instance of the service.
 */
 published service Package
 {
     /**
-    A Package can be initialised with one of the following:
+    A Package can be initialized with one of the following:
 
     1. A file URL referring to a package.
     2. An XInputStream referring to a package (it must also
@@ -71,9 +71,9 @@ published service Package
        an XSeekable interface, and the XOutputStream must support an
        XTruncate interface.
 
-    It will throw a css::uno::Exception if initialised with bad data or
-    if the package has an invalid format (for example, a corrupt central d
-    irectory record if the file is a ZIP file).
+    It will throw a css::uno::Exception if initialized with bad data or
+    if the package has an invalid format (for example, a corrupt central
+    directory record if the file is a ZIP file).
     */
     interface com::sun::star::lang::XInitialization;
     /**

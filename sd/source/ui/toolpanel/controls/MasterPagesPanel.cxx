@@ -46,6 +46,7 @@
 #include "sdresid.hxx"
 #include "helpids.h"
 #include <svtools/valueset.hxx>
+#include "app.hrc"
 
 namespace sd { namespace toolpanel { namespace controls {
 
@@ -61,7 +62,6 @@ void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
 {
     SdDrawDocument* pDocument = rBase.GetDocument();
     ::std::auto_ptr<controls::MasterPagesSelector> pSelector;
-    TitledControl* pTitledControl;
 
     ::boost::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
 
@@ -74,12 +74,12 @@ void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
         rBase,
         pContainer));
     pSelector->LateInit();
-    pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_CURRENT) );
+    pSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_CURRENT );
     GetShellManager()->AddSubShell(
-        HID_SD_TASK_PANE_PREVIEW_CURRENT,
+        SHELLID_SD_TASK_PANE_PREVIEW_CURRENT,
         pSelector.get(),
         pSelector->GetWindow());
-    pTitledControl = AddControl (
+    AddControl (
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE),
         HID_SD_CURRENT_MASTERS);
@@ -91,12 +91,12 @@ void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
         rBase,
         pContainer));
     pSelector->LateInit();
-    pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_RECENT) );
+    pSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_RECENT );
     GetShellManager()->AddSubShell(
-        HID_SD_TASK_PANE_PREVIEW_RECENT,
+        SHELLID_SD_TASK_PANE_PREVIEW_RECENT,
         pSelector.get(),
         pSelector->GetWindow());
-    pTitledControl = AddControl (
+    AddControl (
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE),
         HID_SD_RECENT_MASTERS);
@@ -109,12 +109,12 @@ void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
         *pDrawViewShell,
         pContainer));
     pSelector->LateInit();
-    pSelector->SetSmartHelpId( SmartId(HID_SD_TASK_PANE_PREVIEW_ALL) );
+    pSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_ALL );
     GetShellManager()->AddSubShell(
-        HID_SD_TASK_PANE_PREVIEW_ALL,
+        SHELLID_SD_TASK_PANE_PREVIEW_ALL,
         pSelector.get(),
         pSelector->GetWindow());
-    pTitledControl = AddControl (
+    AddControl (
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_ALL_MASTER_PAGES_TITLE),
         HID_SD_ALL_MASTERS);
@@ -130,9 +130,9 @@ MasterPagesPanel::~MasterPagesPanel (void)
     OSL_ENSURE( pShellManager, "MasterPagesPanel::~MasterPagesPanel: no shell manager anymore - cannot remove sub shells!" );
     if ( pShellManager )
     {
-        pShellManager->RemoveSubShell( HID_SD_TASK_PANE_PREVIEW_CURRENT );
-        pShellManager->RemoveSubShell( HID_SD_TASK_PANE_PREVIEW_RECENT );
-        pShellManager->RemoveSubShell( HID_SD_TASK_PANE_PREVIEW_ALL );
+        pShellManager->RemoveSubShell( SHELLID_SD_TASK_PANE_PREVIEW_CURRENT );
+        pShellManager->RemoveSubShell( SHELLID_SD_TASK_PANE_PREVIEW_RECENT );
+        pShellManager->RemoveSubShell( SHELLID_SD_TASK_PANE_PREVIEW_ALL );
     }
 }
 

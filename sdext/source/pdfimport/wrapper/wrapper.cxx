@@ -69,7 +69,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <string.h>
 #ifdef WNT
 #include <stdlib.h>
@@ -148,7 +148,7 @@ enum parseKey {
 
 class Parser
 {
-    typedef std::hash_map< sal_Int64,
+    typedef boost::unordered_map< sal_Int64,
                            FontAttributes > FontMapType;
 
     const uno::Reference<uno::XComponentContext> m_xContext;
@@ -159,6 +159,8 @@ class Parser
     sal_Int32                                    m_nNextToken;
     sal_Int32                                    m_nCharIndex;
 
+    const double                                 minAreaThreshold;
+    const double                                 minLineWidth;
 
     ::rtl::OString readNextToken();
     void           readInt32( sal_Int32& o_Value );
@@ -168,7 +170,7 @@ class Parser
     double         readDouble();
     void           readBinaryData( uno::Sequence<sal_Int8>& rBuf );
 
-    uno::Reference<rendering::XPolyPolygon2D> readPath();
+    uno::Reference<rendering::XPolyPolygon2D> readPath( double* );
 
     void                 readChar();
     void                 readLineCap();
@@ -200,7 +202,9 @@ public:
         m_aLine(),
         m_aFontMap(101),
         m_nNextToken(-1),
-        m_nCharIndex(-1)
+        m_nCharIndex(-1),
+        minAreaThreshold( 300.0 ),
+        minLineWidth( 12 )
     {}
 
     void parseLine( const ::rtl::OString& rLine );
@@ -307,7 +311,7 @@ void Parser::readBinaryData( uno::Sequence<sal_Int8>& rBuf )
     OSL_PRECOND(nRes==osl_File_E_None, "inconsistent data");
 }
 
-uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
+uno::Reference<rendering::XPolyPolygon2D> Parser::readPath( double* pArea = NULL )
 {
     const rtl::OString aSubPathMarker( "subpath" );
 
@@ -365,6 +369,15 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
         aResult.append( aSubPath );
         if( m_nCharIndex != -1 )
             readNextToken();
+    }
+
+    if( pArea )
+    {
+        basegfx::B2DRange aRange( aResult.getB2DRange() );
+        if( aRange.getWidth() <= minLineWidth || aRange.getHeight() <= minLineWidth)
+            *pArea = 0.0;
+        else
+            *pArea = aRange.getWidth() * aRange.getHeight();
     }
 
     return static_cast<rendering::XLinePolyPolygon2D*>(
@@ -669,15 +682,15 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
         aStreamCreationArgs, m_xContext ), uno::UNO_QUERY_THROW );
 
     uno::Sequence<beans::PropertyValue> aSequence(3);
-    aSequence[0] = beans::PropertyValue( ::rtl::OUString::createFromAscii("URL"),
+    aSequence[0] = beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),
                                          0,
                                          uno::makeAny(aFileName),
                                          beans::PropertyState_DIRECT_VALUE );
-    aSequence[1] = beans::PropertyValue( ::rtl::OUString::createFromAscii("InputStream"),
+    aSequence[1] = beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")),
                                          0,
                                          uno::makeAny( xDataStream ),
                                          beans::PropertyState_DIRECT_VALUE );
-    aSequence[2] = beans::PropertyValue( ::rtl::OUString::createFromAscii("InputSequence"),
+    aSequence[2] = beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputSequence")),
                                          0,
                                          uno::makeAny(aDataSequence),
                                          beans::PropertyState_DIRECT_VALUE );
@@ -806,9 +819,25 @@ void Parser::parseLine( const ::rtl::OString& rLine )
         case EOCLIPPATH:
             m_pSink->intersectEoClip(readPath()); break;
         case EOFILLPATH:
-            m_pSink->eoFillPath(readPath()); break;
+        {
+            double area = 0.0;
+            uno::Reference<rendering::XPolyPolygon2D> path = readPath( &area );
+            m_pSink->eoFillPath(path);
+            // if area is smaller than required, add borders.
+            if(area < minAreaThreshold)
+                m_pSink->strokePath(path);
+        }
+        break;
         case FILLPATH:
-            m_pSink->fillPath(readPath()); break;
+        {
+            double area = 0.0;
+            uno::Reference<rendering::XPolyPolygon2D> path = readPath( &area );
+            m_pSink->fillPath(path);
+            // if area is smaller than required, add borders.
+            if(area < minAreaThreshold)
+                m_pSink->strokePath(path);
+        }
+        break;
         case RESTORESTATE:
             m_pSink->popState(); break;
         case SAVESTATE:
@@ -914,6 +943,8 @@ static bool checkEncryption( const rtl::OUString&                               
                     rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                    RTL_TEXTENCODING_ISO_8859_1 );
                     bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
+                    // trash password string on heap
+                    rtl_zeroMemory( (void*)aIsoPwd.getStr(), aIsoPwd.getLength() );
                 }
                 if( bAuthenticated )
                     bSuccess = true;
@@ -928,11 +959,22 @@ static bool checkEncryption( const rtl::OUString&                               
                             rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                            RTL_TEXTENCODING_ISO_8859_1 );
                             bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
+                            // trash password string on heap
+                            rtl_zeroMemory( (void*)aIsoPwd.getStr(), aIsoPwd.getLength() );
                         } while( bEntered && ! bAuthenticated );
                     }
 
                     OSL_TRACE( "password: %s\n", bAuthenticated ? "matches" : "does not match" );
                     bSuccess = bAuthenticated;
+                }
+                // trash password string on heap
+                rtl_zeroMemory( (void*)io_rPwd.getStr(), io_rPwd.getLength()*sizeof(sal_Unicode) );
+                if( bAuthenticated )
+                {
+                    rtl::OUStringBuffer aBuf( 128 );
+                    aBuf.appendAscii( "_OOO_pdfi_Credentials_" );
+                    aBuf.append( pPDFFile->getDecryptionKey() );
+                    io_rPwd = aBuf.makeStringAndClear();
                 }
             }
             else
@@ -961,19 +1003,19 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
     if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) == false )
         return false;
 
-    rtl::OUStringBuffer converterURL = rtl::OUString::createFromAscii("xpdfimport");
+    rtl::OUStringBuffer converterURL = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xpdfimport"));
 
     // retrieve package location url (xpdfimport executable is located there)
     // ---------------------------------------------------
     uno::Reference<deployment::XPackageInformationProvider> xProvider(
         xContext->getValueByName(
-            rtl::OUString::createFromAscii("/singletons/com.sun.star.deployment.PackageInformationProvider" )),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.deployment.PackageInformationProvider"))),
         uno::UNO_QUERY);
     if( xProvider.is() )
     {
         converterURL.insert(
             0,
-            rtl::OUString::createFromAscii("/"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")));
         converterURL.insert(
             0,
             xProvider->getPackageLocation(

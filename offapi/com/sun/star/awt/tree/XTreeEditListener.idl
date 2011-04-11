@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module awt {  module tree {
 //=============================================================================
 
 /** You can implement this interface and register with <method scope="XTreeControl">addTreeEditListener</method>
-    to get notifcaitons when editing of a node starts and ends.
+    to get notifications when editing of a node starts and ends.
 
     <p>You have to set the <member>TreeControlModel::Editable</member> property to
     <TRUE/> before a tree supports editing.</p>

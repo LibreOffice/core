@@ -45,7 +45,7 @@
 CSerializationAppXML::CSerializationAppXML()
     : m_aFactory(utl::getProcessServiceFactory())
     , m_aPipe(CSS::uno::Reference< CSS::io::XOutputStream > (m_aFactory->createInstance(
-        rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), CSS::uno::UNO_QUERY))
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe") ) ), CSS::uno::UNO_QUERY))
 {
     OSL_ENSURE(m_aPipe.is(), "cannot create Pipe");
 }
@@ -91,21 +91,10 @@ CSerializationAppXML::serialize_node(const CSS::uno::Reference< CSS::xml::dom::X
     } else {
         // can't get tunnel to native backend
         // logic for generic implementation could be implemented here...
-        OSL_ENSURE(sal_False, "unkown dom implementation, cannot serialize");
+        OSL_FAIL("unkown dom implementation, cannot serialize");
         return;
     }
 }
-
-/*
-void
-CSerializationAppXML::serialize_nodeset()
-{
-    CSS::uno::Reference< CSS::xml::dom::XNodeList > aNodeList = m_aXPathObject->getNodeList();
-    for (sal_Int32 i=0; i<aNodeList->getLength(); i++)
-        serialize_node(aNodeList->item(i));
-    m_aPipe->closeOutput();
-}
-*/
 
 void
 CSerializationAppXML::serialize()

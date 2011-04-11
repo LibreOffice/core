@@ -104,9 +104,9 @@ TableStyle::~TableStyle()
 {
     typedef std::vector<TableCellStyle *>::iterator TCSVIter;
     typedef std::vector<TableRowStyle *>::iterator TRSVIter;
-    for (TCSVIter iterTableCellStyles = mTableCellStyles.begin() ; iterTableCellStyles != mTableCellStyles.end(); iterTableCellStyles++)
+    for (TCSVIter iterTableCellStyles = mTableCellStyles.begin() ; iterTableCellStyles != mTableCellStyles.end(); ++iterTableCellStyles)
         delete(*iterTableCellStyles);
-    for (TRSVIter iterTableRowStyles = mTableRowStyles.begin() ; iterTableRowStyles != mTableRowStyles.end(); iterTableRowStyles++)
+    for (TRSVIter iterTableRowStyles = mTableRowStyles.begin() ; iterTableRowStyles != mTableRowStyles.end(); ++iterTableRowStyles)
         delete(*iterTableRowStyles);
 }
 
@@ -156,11 +156,11 @@ void TableStyle::write(DocumentHandlerInterface *pHandler) const
     }
 
     typedef std::vector<TableRowStyle *>::const_iterator TRSVIter;
-    for (TRSVIter iterTableRow = mTableRowStyles.begin() ; iterTableRow != mTableRowStyles.end(); iterTableRow++)
+    for (TRSVIter iterTableRow = mTableRowStyles.begin() ; iterTableRow != mTableRowStyles.end(); ++iterTableRow)
         (*iterTableRow)->write(pHandler);
 
     typedef std::vector<TableCellStyle *>::const_iterator TCSVIter;
-    for (TCSVIter iterTableCell = mTableCellStyles.begin() ; iterTableCell != mTableCellStyles.end(); iterTableCell++)
+    for (TCSVIter iterTableCell = mTableCellStyles.begin() ; iterTableCell != mTableCellStyles.end(); ++iterTableCell)
         (*iterTableCell)->write(pHandler);
 }
 

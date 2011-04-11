@@ -1,5 +1,3 @@
-smtoon      smoketestoo_native     ::       instsetoo_native test NULL
+smtoon      smoketestoo_native     ::       instsetoo_native test smoketestdoc NULL
 smtoon      smoketestoo_native    usr1	-       all     smoketestoonative_mkout NULL
-smtoon      smoketestoo_native\com\sun\star\comp\smoketest    nmake    -       all smoketestoonative_csscs NULL
-smtoon      smoketestoo_native\data nmake - all smoketestoonative_data NULL
-smtoon      smoketestoo_native    nmake	-       all,test10     smoketestoonative_mk smoketestoonative_csscs smoketestoonative_data NULL
+smtoon      smoketestoo_native    nmake	-       all,test10     smoketestoonative_mk NULL

@@ -49,13 +49,13 @@ struct FPtrHash
 class CUPSManager : public PrinterInfoManager
 {
     CUPSWrapper*                                                m_pCUPSWrapper;
-    std::hash_map< FILE*, rtl::OString, FPtrHash >              m_aSpoolFiles;
+    boost::unordered_map< FILE*, rtl::OString, FPtrHash >               m_aSpoolFiles;
     int                                                         m_nDests;
     void*                                                       m_pDests;
     bool                                                        m_bNewDests;
-    std::hash_map< rtl::OUString, int, rtl::OUStringHash >      m_aCUPSDestMap;
+    boost::unordered_map< rtl::OUString, int, rtl::OUStringHash >       m_aCUPSDestMap;
 
-    std::hash_map< rtl::OUString, PPDContext, rtl::OUStringHash > m_aDefaultContexts;
+    boost::unordered_map< rtl::OUString, PPDContext, rtl::OUStringHash > m_aDefaultContexts;
 
     rtl::OString                                                m_aUser;
     // this is a security risk, but the CUPS API demands
@@ -71,7 +71,7 @@ class CUPSManager : public PrinterInfoManager
 
     virtual void initialize();
 
-    void getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOptions, void** rOptions ) const;
+    void getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions ) const;
     void runDests();
 public:
     // public for stub
@@ -85,7 +85,7 @@ public:
     const char* authenticateUser( const char* );
 
     virtual FILE* startSpool( const rtl::OUString& rPrinterName, bool bQuickCommand );
-    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData );
+    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner );
     virtual void setupJobContextData( JobData& rData );
 
     // changes the info about a named printer

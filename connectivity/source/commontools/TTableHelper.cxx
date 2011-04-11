@@ -45,6 +45,8 @@
 #include <unotools/sharedunocomponent.hxx>
 #include "TConnection.hxx"
 
+#include <o3tl/compat_functional.hxx>
+
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
@@ -243,7 +245,7 @@ namespace
         // if that's not the case, normalize it
         if ( bGaps || bDuplicates )
         {
-            OSL_ENSURE( false, "lcl_sanitizeColumnDescs: database did provide invalid ORDINAL_POSITION values!" );
+            OSL_FAIL( "lcl_sanitizeColumnDescs: database did provide invalid ORDINAL_POSITION values!" );
 
             OrdinalPosition nNormalizedPosition = 1;
             for (   ::std::vector< ColumnDesc >::iterator normalize = _rColumns.begin();
@@ -279,7 +281,7 @@ void OTableHelper::refreshColumns()
             aCatalog,
             m_SchemaName,
             m_Name,
-            ::rtl::OUString::createFromAscii("%")
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"))
         ) );
 
         // collect the column names, together with their ordinal position
@@ -302,7 +304,7 @@ void OTableHelper::refreshColumns()
             aSortedColumns.begin(),
             aSortedColumns.end(),
             ::std::insert_iterator< TStringVector >( aVector, aVector.begin() ),
-            ::std::select2nd< ::std::map< OrdinalPosition, ::rtl::OUString >::value_type >()
+            ::o3tl::select2nd< ::std::map< OrdinalPosition, ::rtl::OUString >::value_type >()
         );
     }
 
@@ -520,7 +522,7 @@ void SAL_CALL OTableHelper::rename( const ::rtl::OUString& newName ) throw(SQLEx
             ::rtl::OUString sComposedName;
             sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_True,::dbtools::eInDataManipulation);
             sSql += sComposedName
-                 + ::rtl::OUString::createFromAscii(" TO ");
+                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TO "));
             sComposedName = ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sal_True,::dbtools::eInDataManipulation);
             sSql += sComposedName;
 
@@ -587,7 +589,7 @@ sdbcx::TKeyProperties OTableHelper::getKeyProperties(const ::rtl::OUString& _sNa
     }
     else // only a fall back
     {
-        OSL_ENSURE(0,"No key with the given name found");
+        OSL_FAIL("No key with the given name found");
         pKeyProps.reset(new sdbcx::KeyProperties());
     }
 

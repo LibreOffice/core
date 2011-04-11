@@ -288,4 +288,55 @@ function GetExtention ( Datei as String ) as string
     next i%
     GetExtention = Datei
 end function
+'
+'-------------------------------------------------------------------------------
+'
+function hSplitString( sString as string, sSeparator as string, iIndex as integer ) as string
+
+    ' This function wraps around the "split" command and returns one single
+    ' item by index. Index = 0 means the *LAST* item is returned as this is
+    ' probably the most commonly used item. If the index is invalid (out of
+    ' bounds) we print a warning and return an error string.
+
+    const CFN = "global::tools::includes::required::t_dir.inc:hSplitString(): "
+    const ERROR_MESSAGE = "Array out of bounds for the requested index in string "
+    const ARRAY_INDEX_CORRECTION = 1 ' The array lower boundary is zero but
+                                     ' function starts to count with one.
+
+    ' Split the string into its fragments into an array with dynamic boundaries
+    dim sArray() as string
+    dim sReturnString as string : sReturnString = ""
+
+    if ( GVERBOSE ) then
+        printlog( CFN & "Separator is: " & sSeparator )
+        printlog( CFN & "Original string is: " & sString )
+    endif
+
+    sArray() = split( sString, sSeparator )
+
+    if ( GVERBOSE ) then
+        printlog( CFN & "Number of items found: " & ubound( sArray() ) )
+    endif
+
+	' Special case: Index out of bounds
+	if ( iIndex > ( ubound( sArray() ) + ARRAY_INDEX_CORRECTION ) or iIndex < 0 ) then
+        warnlog( CFN   & ERROR_MESSAGE & sString )
+		hSplitString() = ERROR_MESSAGE & sString
+		exit function
+    endif
+
+    ' Special case: Last item requested (this usually is the filename from a path)
+    if ( iIndex = 0 ) then
+        sReturnString = sArray( ubound( sArray() )
+        if ( GVERBOSE ) then printlog( CFN & sReturnString )
+    	hSplitString() = sReturnString
+    	exit function
+    endif
+
+    ' Default is to return the requested item.
+    sReturnString = sArray( iIndex - ARRAY_INDEX_CORRECTION )
+    if ( GVERBOSE ) then printlog( CFN & sReturnString )
+    hSplitString() = sReturnString
+
+end function
 

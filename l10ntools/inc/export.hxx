@@ -34,17 +34,13 @@
 #include <l10ntools/directory.hxx>
 #endif
 
-
-// #define MERGE_SOURCE_LANGUAGES <- To merge en-US and de resource
-
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <tools/fsys.hxx>
 #include <osl/file.hxx>
 #include <osl/file.h>
 
-#include <hash_map> /* std::hashmap*/
+#include <boost/unordered_map.hpp>
 #include <iterator> /* std::iterator*/
 #include <set>      /* std::set*/
 #include <vector>   /* std::vector*/
@@ -62,7 +58,7 @@
 
 
 struct eqstr{
-  BOOL operator()(const char* s1, const char* s2) const{
+  sal_Bool operator()(const char* s1, const char* s2) const{
     return strcmp(s1,s2)==0;
   }
 };
@@ -80,8 +76,7 @@ struct lessByteString{
 
 struct hashByteString{
     size_t operator()( const ByteString& rName ) const{
-                std::hash< const char* > myHash;
-                return myHash( rName.GetBuffer() );
+        return rtl_str_hashCode_WithLength(rName.GetBuffer(), rName.Len() );
     }
 };
 
@@ -89,38 +84,45 @@ class PFormEntrys;
 class MergeData;
 typedef std::set<ByteString , lessByteString > ByteStringSet;
 
-typedef std::hash_map<ByteString , ByteString , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , ByteString , hashByteString,equalByteString>
                                 ByteStringHashMap;
 
-typedef std::hash_map<ByteString , bool , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , bool , hashByteString,equalByteString>
                                 ByteStringBoolHashMap;
 
-typedef std::hash_map<ByteString , PFormEntrys* , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , PFormEntrys* , hashByteString,equalByteString>
                                 PFormEntrysHashMap;
 
-typedef std::hash_map<ByteString , MergeData* , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , MergeData* , hashByteString,equalByteString>
                                 MergeDataHashMap;
 
 #define SOURCE_LANGUAGE ByteString("en-US")
 #define LIST_REFID  "LIST_REFID"
 
 typedef ByteStringHashMap ExportListEntry;
-
-DECLARE_LIST( ExportListBase, ExportListEntry * )
+typedef ::std::vector< ExportListEntry* > ExportListBase;
 
 //
 // class ExportList
 //
 
-class ExportList : public ExportListBase
+class ExportList
 {
 private:
-    ULONG nSourceLanguageListEntryCount;
+    ExportListBase maList;
+    sal_uLong nSourceLanguageListEntryCount;
 
 public:
-    ExportList() : ExportListBase() { nSourceLanguageListEntryCount = 0; }
-    ULONG GetSourceLanguageListEntryCount() { return nSourceLanguageListEntryCount; }
+    ExportList() { nSourceLanguageListEntryCount = 0; }
+    sal_uLong GetSourceLanguageListEntryCount() { return nSourceLanguageListEntryCount; }
     void NewSourceLanguageListEntry() { nSourceLanguageListEntryCount++; }
+    size_t size() const { return maList.size(); }
+    void push_back( ExportListEntry* item ) { maList.push_back( item ); }
+
+    ExportListEntry* operator [] ( size_t i )
+        {
+            return ( i < maList.size() ) ? maList[ i ] : NULL;
+        }
 };
 
 #define REFID_NONE 0xFFFF
@@ -145,21 +147,21 @@ class ResData
 {
 public:
     ~ResData();
-    BOOL SetId( const ByteString &rId, USHORT nLevel );
+    sal_Bool SetId( const ByteString &rId, sal_uInt16 nLevel );
 
-    USHORT nWidth;
-    USHORT nChildIndex;
-    USHORT nIdLevel;
-    BOOL bChild;
-    BOOL bChildWithText;
+    sal_uInt16 nWidth;
+    sal_uInt16 nChildIndex;
+    sal_uInt16 nIdLevel;
+    sal_Bool bChild;
+    sal_Bool bChildWithText;
 
-    BOOL bText;
-    BOOL bHelpText;
-    BOOL bQuickHelpText;
-    BOOL bTitle;
-    BOOL bList;
+    sal_Bool bText;
+    sal_Bool bHelpText;
+    sal_Bool bQuickHelpText;
+    sal_Bool bTitle;
+    sal_Bool bList;
 
-    BOOL bRestMerged;
+    sal_Bool bRestMerged;
 
     ByteString sResTyp;
     ByteString sId;
@@ -168,16 +170,16 @@ public:
     ByteString sFilename;
 
     ByteStringHashMap sText;
-    USHORT nTextRefId;
+    sal_uInt16 nTextRefId;
 
     ByteStringHashMap sHelpText;
-    USHORT nHelpTextRefId;
+    sal_uInt16 nHelpTextRefId;
 
     ByteStringHashMap sQuickHelpText;
-    USHORT nQuickHelpTextRefId;
+    sal_uInt16 nQuickHelpTextRefId;
 
     ByteStringHashMap sTitle;
-    USHORT nTitleRefId;
+    sal_uInt16 nTitleRefId;
 
     ByteString sTextTyp;
     ByteStringHashMap aFallbackData;
@@ -202,14 +204,14 @@ public:
             nWidth( 0 ),
             nChildIndex( 0 ),
             nIdLevel( ID_LEVEL_NULL ),
-            bChild( FALSE ),
-            bChildWithText( FALSE ),
-            bText( FALSE ),
-            bHelpText( FALSE ),
-            bQuickHelpText( FALSE ),
-            bTitle( FALSE ),
-            bList( FALSE ),
-            bRestMerged( FALSE ),
+            bChild( sal_False ),
+            bChildWithText( sal_False ),
+            bText( sal_False ),
+            bHelpText( sal_False ),
+            bQuickHelpText( sal_False ),
+            bTitle( sal_False ),
+            bList( sal_False ),
+            bRestMerged( sal_False ),
             sGId( rGId ),
             nTextRefId( REFID_NONE ),
             nHelpTextRefId( REFID_NONE ),
@@ -230,14 +232,14 @@ public:
             :
             nChildIndex( 0 ),
             nIdLevel( ID_LEVEL_NULL ),
-            bChild( FALSE ),
-            bChildWithText( FALSE ),
-            bText( FALSE ),
-            bHelpText( FALSE ),
-            bQuickHelpText( FALSE ),
-            bTitle( FALSE ),
-            bList( FALSE ),
-            bRestMerged( FALSE ),
+            bChild( sal_False ),
+            bChildWithText( sal_False ),
+            bText( sal_False ),
+            bHelpText( sal_False ),
+            bQuickHelpText( sal_False ),
+            bTitle( sal_False ),
+            bList( sal_False ),
+            bRestMerged( sal_False ),
             sGId( rGId ),
             sFilename( rFilename ),
             nTextRefId( REFID_NONE ),
@@ -283,7 +285,7 @@ public:
 #define MERGE_MODE_NORMAL           0x0000
 #define MERGE_MODE_LIST             0x0001
 
-DECLARE_LIST( ResStack, ResData * )
+typedef ::std::vector< ResData* > ResStack;
 // forwards
 class WordTransformer;
 class ParserQueue;
@@ -301,23 +303,23 @@ private:
 
     ByteString sActPForm;               // hold cur. system
 
-    BOOL bDefine;                       // cur. res. in a define?
-    BOOL bNextMustBeDefineEOL;          // define but no \ at lineend
-    ULONG nLevel;                       // res. recursiv? how deep?
-    USHORT nList;                       // cur. res. is String- or FilterList
+    sal_Bool bDefine;                       // cur. res. in a define?
+    sal_Bool bNextMustBeDefineEOL;          // define but no \ at lineend
+    sal_uLong nLevel;                       // res. recursiv? how deep?
+    sal_uInt16 nList;                       // cur. res. is String- or FilterList
     ByteString nListLang;
-    ULONG nListIndex;
-    ULONG nListLevel;
+    sal_uLong nListIndex;
+    sal_uLong nListLevel;
     bool bSkipFile;
     ByteString sProject;
     ByteString sRoot;
-    BOOL bEnableExport;
-    BOOL bMergeMode;
+    sal_Bool bEnableExport;
+    sal_Bool bMergeMode;
     ByteString sMergeSrc;
     ByteString sLastListLine;
-    BOOL bError;                        // any errors while export?
-    BOOL bReadOver;
-    BOOL bDontWriteOutput;
+    sal_Bool bError;                        // any errors while export?
+    sal_Bool bReadOver;
+    sal_Bool bDontWriteOutput;
     ByteString sLastTextTyp;
     static bool isInitialized;
     ByteString sFilename;
@@ -340,7 +342,7 @@ public:
     static bool hasUTF8ByteOrderMarker( const ByteString &rString );
     static void RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename );
     static bool fileHasUTF8ByteOrderMarker( const ByteString &rString );
-    static ByteString GetIsoLangByIndex( USHORT nIndex );
+    static ByteString GetIsoLangByIndex( sal_uInt16 nIndex );
     static void QuotHTML( ByteString &rString );
     static bool CopyFile( const ByteString& source , const ByteString& dest );
 
@@ -365,7 +367,7 @@ public:
     static void FillInFallbacks( ResData *pResData );
     static void FillInListFallbacks( ExportList *pList, const ByteString &nSource, const ByteString &nFallback );
     static ByteString GetTimeStamp();
-    static BOOL ConvertLineEnds( ByteString sSource, ByteString sDestination );
+    static sal_Bool ConvertLineEnds( ByteString sSource, ByteString sDestination );
     static ByteString GetNativeFile( ByteString sSource );
     static DirEntry GetTempFile();
 
@@ -376,11 +378,11 @@ private:
     static std::vector<ByteString> aLanguages;
     static std::vector<ByteString> aForcedLanguages;
 
-    BOOL ListExists( ResData *pResData, USHORT nLst );
+    sal_Bool ListExists( ResData *pResData, sal_uInt16 nLst );
 
-    BOOL WriteData( ResData *pResData, BOOL bCreateNew = FALSE );// called befor dest. cur ResData
-    BOOL WriteExportList( ResData *pResData, ExportList *pExportList,
-                        const ByteString &rTyp, BOOL bCreateNew = FALSE );
+    sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False );// called befor dest. cur ResData
+    sal_Bool WriteExportList( ResData *pResData, ExportList *pExportList,
+                        const ByteString &rTyp, sal_Bool bCreateNew = sal_False );
 
     ByteString MergePairedList( ByteString& sLine , ByteString& sText );
 
@@ -397,10 +399,10 @@ private:
     void CleanValue( ByteString &rValue );
     ByteString GetText( const ByteString &rSource, int nToken );
 
-    BOOL PrepareTextToMerge( ByteString &rText, USHORT nTyp,
+    sal_Bool PrepareTextToMerge( ByteString &rText, sal_uInt16 nTyp,
         ByteString &nLangIndex, ResData *pResData );
 
-    void MergeRest( ResData *pResData, USHORT nMode = MERGE_MODE_NORMAL );
+    void MergeRest( ResData *pResData, sal_uInt16 nMode = MERGE_MODE_NORMAL );
     void ConvertMergeContent( ByteString &rText );
 
       void WriteToMerged( const ByteString &rText , bool bSDFContent );
@@ -409,17 +411,17 @@ private:
     void CutComment( ByteString &rText );
 
 public:
-    Export( const ByteString &rOutput, BOOL bWrite,
+    Export( const ByteString &rOutput, sal_Bool bWrite,
             const ByteString &rPrj, const ByteString &rPrjRoot , const ByteString& rFile );
-    Export( const ByteString &rOutput, BOOL bWrite,
+    Export( const ByteString &rOutput, sal_Bool bWrite,
             const ByteString &rPrj, const ByteString &rPrjRoot,
             const ByteString &rMergeSource , const ByteString& rFile );
     ~Export();
 
     void Init();
     int Execute( int nToken, const char * pToken ); // called from lexer
-    void SetError() { bError = TRUE; }
-    BOOL GetError() { return bError; }
+    void SetError() { bError = sal_True; }
+    sal_Bool GetError() { return bError; }
 };
 
 
@@ -461,8 +463,8 @@ public:
             sTitle[ nId ] = rTitle;
             bTitleFirst[ nId ] = true;
         }
-     BOOL GetText( ByteString &rReturn, USHORT nTyp, const ByteString &nLangIndex, BOOL bDel = FALSE );
-     BOOL GetTransex3Text( ByteString &rReturn, USHORT nTyp, const ByteString &nLangIndex, BOOL bDel = FALSE );
+     sal_Bool GetText( ByteString &rReturn, sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel = sal_False );
+     sal_Bool GetTransex3Text( ByteString &rReturn, sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel = sal_False );
 
 };
 
@@ -496,7 +498,7 @@ public:
     PFormEntrys* GetPFObject( const ByteString& rPFO );
 
     ByteString Dump();
-    BOOL operator==( ResData *pData );
+    sal_Bool operator==( ResData *pData );
 };
 
 //
@@ -509,39 +511,34 @@ public:
 
 class MergeDataFile
 {
-private:
-    BOOL bErrorLog;
-    ByteString sErrorLog;
-    SvFileStream aErrLog;
-    ByteStringSet aLanguageSet;
+    private:
+        sal_Bool bErrorLog;
+        ByteString sErrorLog;
+        SvFileStream aErrLog;
     MergeDataHashMap aMap;
-    ByteStringHashMap aLanguageMap;
-    std::vector<ByteString> aLanguageList;
-    ByteStringHashMap aFilenames;
+        std::set<ByteString> aLanguageSet;
+
+        MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
+        void InsertEntry( const ByteString &rTYP, const ByteString &rGID, const ByteString &rLID,
+            const ByteString &rPFO,
+            const ByteString &nLang, const ByteString &rTEXT,
+            const ByteString &rQHTEXT, const ByteString &rTITLE,
+            const ByteString &sFilename, bool bCaseSensitive
+            );
+        ByteString Dump();
+        void WriteError( const ByteString &rLine );
+
+    public:
+        MergeDataFile( const ByteString &rFileName, const ByteString& rFile , sal_Bool bErrLog, CharSet aCharSet, bool bCaseSensitive = false );
+        ~MergeDataFile();
 
 
-public:
-    MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet, bool bCaseSensitive = false );
-    ~MergeDataFile();
+        std::vector<ByteString> GetLanguages();
 
+        PFormEntrys *GetPFormEntrys( ResData *pResData );
+        PFormEntrys *GetPFormEntrysCaseSensitive( ResData *pResData );
 
-    std::vector<ByteString> GetLanguages();
-    MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
-
-    PFormEntrys *GetPFormEntrys( ResData *pResData );
-    PFormEntrys *GetPFormEntrysCaseSensitive( ResData *pResData );
-
-    void InsertEntry( const ByteString &rTYP, const ByteString &rGID, const ByteString &rLID,
-                const ByteString &rPFO,
-                const ByteString &nLang , const ByteString &rTEXT,
-                const ByteString &rQHTEXT, const ByteString &rTITLE ,
-                const ByteString &sFilename , bool bCaseSensitive
-                );
-    static USHORT GetLangIndex( USHORT nId );
-    static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename , bool bCaseSensitive = false );
-
-    ByteString Dump();
-    void WriteError( const ByteString &rLine );
+        static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename , bool bCaseSensitive = false );
 };
 
 

@@ -3,6 +3,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  * Copyright 2010 Miklos Vajna.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,10 +45,10 @@ class RtfImportFilter : public cppu::WeakImplHelper2
 >
 {
 protected:
-    ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xMSF;
+    ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xCtx;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xDstDoc;
 public:
-    RtfImportFilter( const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
+    RtfImportFilter( const ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xCtx );
     virtual ~RtfImportFilter();
 
     // XFilter
@@ -66,7 +67,7 @@ public:
     throw();
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL RtfImport_createInstance(
                                                                         const ::com::sun::star::uno::Reference<
-                                                                        com::sun::star::lang::XMultiServiceFactory > &xMSF)
+                                                                        com::sun::star::uno::XComponentContext > &xCtx)
     throw( ::com::sun::star::uno::Exception );
 
 #define IMPL_NAME_RTFIMPORT "com.sun.star.comp.Writer.RtfImport"

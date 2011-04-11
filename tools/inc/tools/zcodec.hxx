@@ -74,47 +74,47 @@ class TOOLS_DLLPUBLIC ZCodec
 {
 private:
 
-    ULONG           mbInit;
-    BOOL            mbStatus;
-    BOOL            mbFinish;
-    ULONG           mnMemUsage;
+    sal_uIntPtr         mbInit;
+    sal_Bool            mbStatus;
+    sal_Bool            mbFinish;
+    sal_uIntPtr         mnMemUsage;
     SvStream*       mpIStm;
-    BYTE*           mpInBuf;
-    ULONG           mnInBufSize;
-    ULONG           mnInToRead;
+    sal_uInt8*          mpInBuf;
+    sal_uIntPtr         mnInBufSize;
+    sal_uIntPtr         mnInToRead;
     SvStream*       mpOStm;
-    BYTE*           mpOutBuf;
-    ULONG           mnOutBufSize;
+    sal_uInt8*          mpOutBuf;
+    sal_uIntPtr         mnOutBufSize;
 
-    ULONG           mnCRC;
-    ULONG           mnCompressMethod;
+    sal_uIntPtr         mnCRC;
+    sal_uIntPtr         mnCompressMethod;
     void*           mpsC_Stream;
 
-    void            ImplInitBuf( BOOL nIOFlag );
+    void            ImplInitBuf( sal_Bool nIOFlag );
     void            ImplWriteBack( void );
 
 public:
-                    ZCodec( ULONG nInBuf, ULONG nOutBuf, ULONG nMemUsage = MAX_MEM_USAGE );
+                    ZCodec( sal_uIntPtr nInBuf, sal_uIntPtr nOutBuf, sal_uIntPtr nMemUsage = MAX_MEM_USAGE );
                     ZCodec( void );
     virtual         ~ZCodec();
 
-    virtual void    BeginCompression( ULONG nCompressMethod = ZCODEC_DEFAULT );
+    virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT );
     virtual long    EndCompression();
-    BOOL            IsFinished () const { return mbFinish; }
+    sal_Bool            IsFinished () const { return mbFinish; }
 
     long            Compress( SvStream& rIStm, SvStream& rOStm );
     long            Decompress( SvStream& rIStm, SvStream& rOStm );
 
-    long            Write( SvStream& rOStm, const BYTE* pData, ULONG nSize );
-    long            Read( SvStream& rIStm, BYTE* pData, ULONG nSize );
-    long            ReadAsynchron( SvStream& rIStm, BYTE* pData, ULONG nSize );
+    long            Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize );
+    long            Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize );
+    long            ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize );
 
-    void            SetBreak( ULONG );
-    ULONG           GetBreak( void );
-    void            SetCRC( ULONG nCurrentCRC );
-    ULONG           UpdateCRC( ULONG nLatestCRC, ULONG nSource );
-    ULONG           UpdateCRC( ULONG nLatestCRC, BYTE* pSource, long nDatSize );
-    ULONG           GetCRC();
+    void            SetBreak( sal_uIntPtr );
+    sal_uIntPtr         GetBreak( void );
+    void            SetCRC( sal_uIntPtr nCurrentCRC );
+    sal_uIntPtr         UpdateCRC( sal_uIntPtr nLatestCRC, sal_uIntPtr nSource );
+    sal_uIntPtr         UpdateCRC( sal_uIntPtr nLatestCRC, sal_uInt8* pSource, long nDatSize );
+    sal_uIntPtr         GetCRC();
 };
 
 class GZCodec : public ZCodec
@@ -123,7 +123,7 @@ class GZCodec : public ZCodec
 public:
                     GZCodec(){};
                     ~GZCodec(){};
-    virtual void    BeginCompression( ULONG nCompressMethod = ZCODEC_DEFAULT );
+    virtual void    BeginCompression( sal_uIntPtr nCompressMethod = ZCODEC_DEFAULT );
 };
 
 #endif // _ZCODEC_HXX

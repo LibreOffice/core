@@ -190,9 +190,11 @@ css::uno::Any Service::getPropertyValue(rtl::OUString const & PropertyName)
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
-    for (std::size_t i = 0; i < gconfaccess::nConfigurationValues; ++i) {
-        if (PropertyName.equalsAscii(
-                gconfaccess::ConfigurationValues[i].OOoConfItem))
+    for (std::size_t i = 0; i < gconfaccess::nConfigurationValues; ++i)
+    {
+        if (PropertyName.equalsAsciiL(
+                gconfaccess::ConfigurationValues[i].OOoConfItem,
+                gconfaccess::ConfigurationValues[i].nOOoConfItemLen))
         {
             return css::uno::makeAny(
                 enabled_
@@ -233,10 +235,5 @@ component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey)
-{
-    return component_writeInfoHelper(pServiceManager, pRegistryKey, services);
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

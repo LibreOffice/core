@@ -229,7 +229,7 @@ OUString SAL_CALL WordPerfectImportFilter::detect( com::sun::star::uno::Sequence
         if ( location == Descriptor.getLength() )
         {
             Descriptor.realloc(nLength+1);
-            Descriptor[location].Name = ::rtl::OUString::createFromAscii( "TypeName" );
+            Descriptor[location].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName"));
         }
 
            Descriptor[location].Value <<=sTypeName;
@@ -377,7 +377,7 @@ void SAL_CALL WordPerfectImportFilterDialog::setPropertyValues( const uno::Seque
 
         if ( aPropName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Password")) )
             rProp.Value >>= msPassword;
-        else if ( aPropName.equalsAscii( "InputStream" ) )
+        else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "InputStream" ) ) )
             rProp.Value >>= mxInputStream;
     }
 }

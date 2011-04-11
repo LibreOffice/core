@@ -28,8 +28,6 @@ PRJ=..$/..$/..
 
 PRJNAME=writerfilter
 TARGET=test-doctok
-# this is removed at the moment because we need some enhancements
-# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -50,7 +48,6 @@ SHL1STDLIBS=\
     $(UCBHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-     $(TESTSHL2LIB)    \
    $(CPPUNITLIB)
 
 SHL1LIBS=\

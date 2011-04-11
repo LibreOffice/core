@@ -60,16 +60,16 @@ public:
 class SdTbxCtlGlueEscDir: public SfxToolBoxControl
 {
 private:
-    UINT16  GetEscDirPos( UINT16 nEscDir );
+    sal_uInt16  GetEscDirPos( sal_uInt16 nEscDir );
 
 public:
-    virtual void StateChanged( USHORT nSId, SfxItemState eState,
+    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
 
             SFX_DECL_TOOLBOX_CONTROL();
 
-            SdTbxCtlGlueEscDir( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+            SdTbxCtlGlueEscDir( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
             ~SdTbxCtlGlueEscDir() {}
 };
 

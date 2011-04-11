@@ -41,8 +41,8 @@ module com { module sun { module star { module ucb {
 published service Store
 {
     //-------------------------------------------------------------------------
-    /** A factory for propertyset registries. This factory must create
-        instances of the service <typePropertySetRegistry</type>
+    /** A factory for property set registries. This factory must create
+        instances of the service <type>PropertySetRegistry</type>
      */
     interface com::sun::star::ucb::XPropertySetRegistryFactory;
 };

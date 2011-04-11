@@ -132,7 +132,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
                     }
                     else
                     {
-                        mystr = "An error occured during removing content of " + sCompleteFileName;
+                        mystr = "An error occurred during removing content of " + sCompleteFileName;
                         // MessageBox(NULL, mystr.c_str(), "Error removing directory", MB_OK);
                     }
                 }
@@ -146,7 +146,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
                     }
                     else
                     {
-                        mystr = "An error occured during removal of file " + sCompleteFileName;
+                        mystr = "An error occurred during removal of file " + sCompleteFileName;
                         // MessageBox(NULL, mystr.c_str(), "Error removing file", MB_OK);
                     }
                 }
@@ -171,7 +171,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
         }
         else
         {
-            mystr = "An error occured during removal of empty directory " + sPath;
+            mystr = "An error occurred during removal of empty directory " + sPath;
             // MessageBox(NULL, mystr.c_str(), "Error removing directory", MB_OK);
             bDirectoryRemoved = false;
         }

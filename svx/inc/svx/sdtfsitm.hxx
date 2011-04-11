@@ -54,21 +54,21 @@ enum SdrFitToSizeType {
 class SVX_DLLPUBLIC SdrTextFitToSizeTypeItem: public SfxEnumItem {
 public:
     TYPEINFO();
-    SdrTextFitToSizeTypeItem(SdrFitToSizeType eFit=SDRTEXTFIT_NONE): SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,(USHORT)eFit) {}
+    SdrTextFitToSizeTypeItem(SdrFitToSizeType eFit=SDRTEXTFIT_NONE): SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,(sal_uInt16)eFit) {}
     SdrTextFitToSizeTypeItem(SvStream& rIn)                        : SfxEnumItem(SDRATTR_TEXT_FITTOSIZE,rIn)  {}
     virtual SfxPoolItem*     Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem*     Create(SvStream& rIn, USHORT nVer) const;
-    virtual USHORT           GetValueCount() const; // { return 4; }
+    virtual SfxPoolItem*     Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual sal_uInt16           GetValueCount() const; // { return 4; }
             SdrFitToSizeType GetValue() const      { return (SdrFitToSizeType)SfxEnumItem::GetValue(); }
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual String  GetValueTextByPos(USHORT nPos) const;
+    virtual String  GetValueTextByPos(sal_uInt16 nPos) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
     virtual int              HasBoolValue() const;
-    virtual BOOL             GetBoolValue() const;
-    virtual void             SetBoolValue(BOOL bVal);
+    virtual sal_Bool             GetBoolValue() const;
+    virtual void             SetBoolValue(sal_Bool bVal);
 };
 
 #endif

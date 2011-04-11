@@ -136,7 +136,7 @@ class GtkSalFrame : public SalFrame
         bool                            m_bFocused;
         bool                            m_bPreeditJustChanged;
         SalExtTextInputEvent            m_aInputEvent;
-        std::vector< USHORT >           m_aInputFlags;
+        std::vector< sal_uInt16 >           m_aInputFlags;
 
         IMHandler( GtkSalFrame* );
         ~IMHandler();
@@ -145,7 +145,7 @@ class GtkSalFrame : public SalFrame
         void            deleteIMContext();
         void            updateIMSpotLocation();
         void            setInputContext( SalInputContext* pContext );
-        void            endExtTextInput( USHORT nFlags );
+        void            endExtTextInput( sal_uInt16 nFlags );
         bool            handleKeyEvent( GdkEventKey* pEvent );
         void            focusChanged( bool bFocusIn );
 
@@ -169,7 +169,7 @@ class GtkSalFrame : public SalFrame
     GdkWindow*                      m_pForeignTopLevel;
     GdkNativeWindow                 m_aForeignTopLevelWindow;
     Pixmap                          m_hBackgroundPixmap;
-    ULONG                           m_nStyle;
+    sal_uLong                     m_nStyle;
     SalExtStyle                     m_nExtStyle;
     GtkFixed*                       m_pFixedContainer;
     GtkSalFrame*                    m_pParent;
@@ -177,7 +177,7 @@ class GtkSalFrame : public SalFrame
     GdkWindowState                  m_nState;
     SystemEnvData                   m_aSystemData;
     GraphicsHolder                  m_aGraphics[ nMaxGraphics ];
-    USHORT                          m_nKeyModifiers;
+    sal_uInt16                          m_nKeyModifiers;
     GdkCursor                      *m_pCurrentCursor;
     GdkVisibilityState              m_nVisibility;
     PointerStyle                    m_ePointerStyle;
@@ -201,7 +201,7 @@ class GtkSalFrame : public SalFrame
 
     GdkRegion*                      m_pRegion;
 
-    void Init( SalFrame* pParent, ULONG nStyle );
+    void Init( SalFrame* pParent, sal_uLong nStyle );
     void Init( SystemParentData* pSysData );
     void InitCommon();
 
@@ -253,7 +253,7 @@ class GtkSalFrame : public SalFrame
 
     bool isChild( bool bPlug = true, bool bSysChild = true )
     {
-        ULONG nMask = 0;
+        sal_uLong nMask = 0;
         if( bPlug )
             nMask |= SAL_FRAME_STYLE_PLUG;
         if( bSysChild )
@@ -274,14 +274,14 @@ class GtkSalFrame : public SalFrame
 
     DECL_LINK( ImplDelayedFullScreenHdl, void* );
 public:
-    GtkSalFrame( SalFrame* pParent, ULONG nStyle );
+    GtkSalFrame( SalFrame* pParent, sal_uLong nStyle );
     GtkSalFrame( SystemParentData* pSysData );
 
     // dispatches an event, returns true if dispatched
     // and false else; if true was returned the event should
     // be swallowed
     bool Dispatch( const XEvent* pEvent );
-    void grabPointer( BOOL bGrab, BOOL bOwnerEvents = FALSE );
+    void grabPointer( sal_Bool bGrab, sal_Bool bOwnerEvents = sal_False );
 
     GtkSalDisplay*  getDisplay();
     GdkDisplay*     getGdkDisplay();
@@ -308,41 +308,41 @@ public:
 
     // Event must be destroyed, when Frame is destroyed
     // When Event is called, SalInstance::Yield() must be returned
-    virtual BOOL                PostEvent( void* pData );
+    virtual sal_Bool                PostEvent( void* pData );
 
     virtual void                SetTitle( const XubString& rTitle );
-    virtual void                SetIcon( USHORT nIcon );
+    virtual void                SetIcon( sal_uInt16 nIcon );
     virtual void                SetMenu( SalMenu *pSalMenu );
     virtual void                DrawMenuBar();
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
     // Before the window is visible, a resize event
     // must be sent with the correct size
-    virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
-    virtual void                Enable( BOOL bEnable );
+    virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = sal_False );
+    virtual void                Enable( sal_Bool bEnable );
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
     virtual void                SetMinClientSize( long nWidth, long nHeight );
     virtual void                SetMaxClientSize( long nWidth, long nHeight );
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
+    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
     virtual void                GetClientSize( long& rWidth, long& rHeight );
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual BOOL                GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay );
+    virtual sal_Bool                GetWindowState( SalFrameState* pState );
+    virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay );
     // Enable/Disable ScreenSaver, SystemAgents, ...
-    virtual void                StartPresentation( BOOL bStart );
+    virtual void                StartPresentation( sal_Bool bStart );
     // Show Window over all other Windows
-    virtual void                SetAlwaysOnTop( BOOL bOnTop );
+    virtual void                SetAlwaysOnTop( sal_Bool bOnTop );
 
     // Window to top and grab focus
-    virtual void                ToTop( USHORT nFlags );
+    virtual void                ToTop( sal_uInt16 nFlags );
 
     // this function can call with the same
     // pointer style
     virtual void                SetPointer( PointerStyle ePointerStyle );
-    virtual void                CaptureMouse( BOOL bMouse );
+    virtual void                CaptureMouse( sal_Bool bMouse );
     virtual void                SetPointerPos( long nX, long nY );
 
     // flush output buffer
@@ -352,11 +352,11 @@ public:
     virtual void                Sync();
 
     virtual void                SetInputContext( SalInputContext* pContext );
-    virtual void                EndExtTextInput( USHORT nFlags );
+    virtual void                EndExtTextInput( sal_uInt16 nFlags );
 
-    virtual String              GetKeyName( USHORT nKeyCode );
-    virtual String              GetSymbolKeyName( const XubString& rFontName, USHORT nKeyCode );
-    virtual BOOL                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual String              GetKeyName( sal_uInt16 nKeyCode );
+    virtual String              GetSymbolKeyName( const XubString& rFontName, sal_uInt16 nKeyCode );
+    virtual sal_Bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
 
     // returns the input language used for the last key stroke
     // may be LANGUAGE_DONTKNOW if not supported by the OS
@@ -377,7 +377,7 @@ public:
 
     virtual SalIndicatorState   GetIndicatorState();
 
-    virtual void                SimulateKeyPress( USHORT nKeyCode );
+    virtual void                SimulateKeyPress( sal_uInt16 nKeyCode );
 
     // set new parent window
     virtual void                SetParent( SalFrame* pNewParent );
@@ -395,7 +395,7 @@ public:
     // set clip region to none (-> rectangular windows, normal state)
     virtual void                    ResetClipRegion();
     // start setting the clipregion consisting of nRects rectangles
-    virtual void                    BeginSetClipRegion( ULONG nRects );
+    virtual void                    BeginSetClipRegion( sal_uLong nRects );
     // add a rectangle to the clip region
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     // done setting up the clipregion

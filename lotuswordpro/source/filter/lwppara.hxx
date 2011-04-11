@@ -65,6 +65,9 @@
 
 #ifndef _LWPPARAGRAPH_HXX_
 #define _LWPPARAGRAPH_HXX_
+
+#include <boost/scoped_ptr.hpp>
+
 #include "lwpfribheader.hxx"
 #include "lwpobj.hxx"
 #include "lwpobjstrm.hxx"
@@ -91,7 +94,7 @@ class LwpBulletStyleMgr;
 class LwpNotifyListPersistent
 {
 public:
-    LwpNotifyListPersistent(){};
+    LwpNotifyListPersistent(){}
     void Read(LwpObjectStream* pObjStrm);
 protected:
     LwpObjectID m_Head;
@@ -100,7 +103,7 @@ protected:
 class LwpForked3NotifyList
 {
 public:
-    LwpForked3NotifyList(){};
+    LwpForked3NotifyList(){}
 protected:
     LwpNotifyListPersistent m_ExtraList;
     LwpNotifyListPersistent m_PersistentList;
@@ -201,7 +204,7 @@ public:
     // add by  04/13/2005
     LwpVirtualLayout* GetLayoutWithMyStory();
     LwpBulletStyleMgr* GetBulletStyleMgr();
-    sal_uInt32 GetOrdinal(){ return m_nOrdinal;};
+    sal_uInt32 GetOrdinal(){ return m_nOrdinal;}
     sal_Bool operator <(LwpPara& Other);
     sal_Bool ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout);
 //  rtl::OUString RegisterBulletStyle();
@@ -226,7 +229,7 @@ protected:
     //LwpForked3NotifyList* m_NotifyList;   //not saved
 
     rtl::OUString m_StyleName;
-    rtl::OUString m_ParentStyleName;//Add by ,to support toc,2005/12/13
+    rtl::OUString m_ParentStyleName;//Add to support toc
     LwpBreaksOverride* m_pBreaks;
     rtl::OUString m_AftPageBreakName;
     rtl::OUString m_BefPageBreakName;
@@ -235,16 +238,14 @@ protected:
     rtl::OUString m_BefColumnBreakName;
     LwpIndentOverride* m_pIndentOverride;
     rtl::OUString m_Content;//for silver bullet,get text of first frib, add by  2/1
-    sal_uInt32 m_FontID;//for silver bullet, add by  2/1
+    sal_uInt32 m_FontID;//for silver bullet
     rtl::OUString m_AllText;//get all text in this paragraph
 
-    //add by
     sal_Bool m_bHasBullet;
     LwpObjectID m_aSilverBulletID;
     LwpSilverBullet* m_pSilverBullet;
     LwpBulletOverride* m_pBullOver;
-//  LwpNumberingOverride* m_pParaNumbering;
-    LwpNumberingOverride m_aParaNumbering;
+    boost::scoped_ptr<LwpNumberingOverride> m_pParaNumbering;
     rtl::OUString m_aBulletStyleName;
     sal_Bool m_bBullContinue;
     //end add
@@ -291,7 +292,7 @@ private:
     void OverrideParaBullet(LwpParaProperty* pProps);
     void OverrideParaNumbering(LwpParaProperty* pProps);
     void OverrideTab(LwpTabOverride* base,LwpTabOverride* over,XFParaStyle* pOverStyle);
-    BOOL IsBadHintsInFile();
+    sal_Bool IsBadHintsInFile();
 
     //void OutPutSectionTail(IXFStream* pOutputStream);
     //void OutPutBulletTail(LwpBulletStyleMgr* pBulletStyleMgr,IXFStream* pOutputStream);
@@ -409,9 +410,9 @@ inline void LwpPara::SetDropcapLayout(LwpDropcapLayout* pLayout)
 {
     m_pDropcapLayout = pLayout;
 }
-inline BOOL LwpPara::IsBadHintsInFile()
+inline sal_Bool LwpPara::IsBadHintsInFile()
 {
-    return (BOOL) ((m_nFlags & DOC_BADFILEPARAHINTS) != 0);
+    return (sal_Bool) ((m_nFlags & DOC_BADFILEPARAHINTS) != 0);
 }
 inline double LwpPara::GetBelowSpacing()
 {

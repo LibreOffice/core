@@ -142,7 +142,7 @@ sal_Int32 OMarkableOutputStreamTest::test(
             }
             else
             {
-                Reference < XInterface > x = m_rFactory->createInstance( OUString::createFromAscii("com.sun.star.io.Pipe"));
+                Reference < XInterface > x = m_rFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")));
                 Reference< XOutputStream >  rPipeOutput( x , UNO_QUERY );
                 Reference < XInputStream >  rPipeInput( x , UNO_QUERY );
 
@@ -509,7 +509,7 @@ sal_Int32 OMarkableInputStreamTest::test(
                 testInvariant( TestName , TestObject );
             }
             else  {
-                Reference < XInterface > x = m_rFactory->createInstance( OUString::createFromAscii("com.sun.star.io.Pipe"));
+                Reference < XInterface > x = m_rFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")));
                 Reference< XOutputStream >  rPipeOutput( x , UNO_QUERY );
                 Reference < XInputStream >  rPipeInput( x , UNO_QUERY );
 

@@ -73,15 +73,15 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
-                                              USHORT nPrfx,
+                                              sal_uInt16 nPrfx,
                                                    const ::rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sPassword(),
     meHash1(PASSHASH_SHA1),
     meHash2(PASSHASH_UNSPECIFIED),
-    bProtected(sal_False),
-    bHadCalculationSettings(sal_False),
+    bProtected(false),
+    bHadCalculationSettings(false),
     pChangeTrackingImportHelper(NULL)
 {
     ScDocument* pDoc = GetScImport().GetDocument();
@@ -115,7 +115,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
     {
         const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
-        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
         const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -137,7 +137,7 @@ ScXMLBodyContext::~ScXMLBodyContext()
 {
 }
 
-SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -158,13 +158,13 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
 //  case XML_TOK_TEXT_H:
-//      bHeading = TRUE;
+//      bHeading = sal_True;
 //  case XML_TOK_TEXT_P:
 //      pContext = new SwXMLParaContext( GetSwImport(),nPrefix, rLocalName,
 //                                       xAttrList, bHeading );
 //      break;
 //  case XML_TOK_TEXT_ORDERED_LIST:
-//      bOrdered = TRUE;
+//      bOrdered = sal_True;
 //  case XML_TOK_TEXT_UNORDERED_LIST:
 //      pContext = new SwXMLListBlockContext( GetSwImport(),nPrefix, rLocalName,
 //                                            xAttrList, bOrdered );
@@ -201,8 +201,9 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
         }
         break;
     case XML_TOK_BODY_NAMED_EXPRESSIONS:
-        pContext = new ScXMLNamedExpressionsContext ( GetScImport(), nPrefix, rLocalName,
-                                                        xAttrList );
+        pContext = new ScXMLNamedExpressionsContext (
+            GetScImport(), nPrefix, rLocalName, xAttrList,
+            new ScXMLNamedExpressionsContext::GlobalInserter(GetScImport()) );
         break;
     case XML_TOK_BODY_DATABASE_RANGES:
         pContext = new ScXMLDatabaseRangesContext ( GetScImport(), nPrefix, rLocalName,
@@ -268,7 +269,9 @@ void ScXMLBodyContext::EndElement()
         SvXMLImportContext *pContext = new ScXMLCalculationSettingsContext( GetScImport(), XML_NAMESPACE_TABLE, GetXMLToken(XML_CALCULATION_SETTINGS), NULL );
         pContext->EndElement();
     }
-    GetScImport().LockSolarMutex();
+
+    ScXMLImport::MutexGuard aGuard(GetScImport());
+
     ScMyImpDetectiveOpArray*    pDetOpArray = GetScImport().GetDetectiveOpArray();
     ScDocument*                 pDoc        = GetScImport().GetDocument();
     ScMyImpDetectiveOp          aDetOp;
@@ -304,7 +307,6 @@ void ScXMLBodyContext::EndElement()
             pDoc->SetDocProtection(pProtection.get());
         }
     }
-    GetScImport().UnlockSolarMutex();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

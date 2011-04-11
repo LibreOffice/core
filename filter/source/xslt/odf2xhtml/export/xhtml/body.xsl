@@ -59,13 +59,13 @@
 	<xsl:key name="writingModeStyles" match="/*/office:styles/style:style/style:paragraph-properties/@style:writing-mode | /*/office:automatic-styles/style:style/style:paragraph-properties/@style:writing-mode" use="'test'"/>
 	<xsl:template name="create-body">
 		<xsl:param name="globalData"/>
-        <xsl:call-template name="create-body.collect-page-properties">
-            <xsl:with-param name="globalData" select="$globalData"/>
-        </xsl:call-template>
-    </xsl:template>
+		<xsl:call-template name="create-body.collect-page-properties">
+			<xsl:with-param name="globalData" select="$globalData"/>
+		</xsl:call-template>
+	</xsl:template>
 
-    <xsl:template name="create-body.collect-page-properties">
-        <xsl:param name="globalData"/>
+	<xsl:template name="create-body.collect-page-properties">
+		<xsl:param name="globalData"/>
 
 		<!-- approximation to find the correct master page style (with page dimensions) -->
 		<xsl:variable name="masterPageNames">
@@ -75,7 +75,8 @@
 				<xsl:if test="key('elementUsingStyle', ../@style:name)">
 					<!-- Check every master-page-name if it is not emtpy and return as ';' separated list  -->
 					<xsl:if test="string-length(../@style:master-page-name) &gt; 0">
-						<xsl:value-of select="../@style:master-page-name"/>;</xsl:if>
+						<xsl:value-of select="../@style:master-page-name"/>;
+					</xsl:if>
 				</xsl:if>
 			</xsl:for-each>
 		</xsl:variable>
@@ -85,7 +86,7 @@
 		<xsl:variable name="pagePropertiesRTF">
 			<xsl:choose>
 				<xsl:when test="not($pageLayoutName) or $pageLayoutName = ''">
-					<xsl:value-of select="$globalData/styles-file/*/office:automatic-styles/style:page-layout[1]/style:page-layout-properties"/>
+					<xsl:copy-of select="$globalData/styles-file/*/office:automatic-styles/style:page-layout[1]/style:page-layout-properties"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<!-- Find the according style:page-layout and store the properties in a variable  -->
@@ -93,34 +94,35 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-        <xsl:choose>
-            <xsl:when test="function-available('common:node-set')">
-                <xsl:call-template name="create-body.create">
-                    <xsl:with-param name="globalData" select="common:node-set($globalData)"/>
-                    <xsl:with-param name="pageProperties" select="common:node-set($pagePropertiesRTF)"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="function-available('xalan:nodeset')">
-                <xsl:call-template name="create-body.create">
-                    <xsl:with-param name="globalData" select="xalan:nodeset($globalData)"/>
-                    <xsl:with-param name="pageProperties" select="xalan:nodeset($pagePropertiesRTF)"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="function-available('xt:node-set')">
-                <xsl:call-template name="create-body.create">
-                    <xsl:with-param name="globalData" select="xt:node-set($globalData)"/>
-                    <xsl:with-param name="pageProperties" select="xt:node-set($pagePropertiesRTF)"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message terminate="yes">The required node-set function was not found!</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
 
-    <xsl:template name="create-body.create">
-        <xsl:param name="globalData"/>
-        <xsl:param name="pageProperties"/>
+		<xsl:choose>
+			<xsl:when test="function-available('common:node-set')">
+				<xsl:call-template name="create-body.create">
+					<xsl:with-param name="globalData" select="common:node-set($globalData)"/>
+					<xsl:with-param name="pageProperties" select="common:node-set($pagePropertiesRTF)"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="function-available('xalan:nodeset')">
+				<xsl:call-template name="create-body.create">
+					<xsl:with-param name="globalData" select="xalan:nodeset($globalData)"/>
+					<xsl:with-param name="pageProperties" select="xalan:nodeset($pagePropertiesRTF)"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="function-available('xt:node-set')">
+				<xsl:call-template name="create-body.create">
+					<xsl:with-param name="globalData" select="xt:node-set($globalData)"/>
+					<xsl:with-param name="pageProperties" select="xt:node-set($pagePropertiesRTF)"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:message terminate="yes">The required node-set function was not found!</xsl:message>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="create-body.create">
+		<xsl:param name="globalData"/>
+		<xsl:param name="pageProperties"/>
 
 		<xsl:element name="body">
 			<!-- direction of text flow -->
@@ -402,7 +404,7 @@
 					&#160; is an unbreakable whitespace to give conent to the element and force a browser not to ignore the element -->
 				<div style="clear:both; line-height:0; width:0; height:0; margin:0; padding:0;">&#160;</div>
 			</xsl:when>
-			<xsl:when test="text:tab">
+			<xsl:when test="text:tab and not(ancestor::text:index-body)">
 				<!-- If there is a tabulator (ie. text:tab) within a paragraph, a heuristic for ODF tabulators creates a
 					span for every text:tab embracing the following text nodes aligning them according to the tabulator.
 					A line break or another text:tab starts a new text:span, line break even the tab counter for the line.
@@ -509,8 +511,9 @@
 				<!-- every frame sibling have to be incapuslated within a div with left indent  -->
 				<xsl:element name="span">
 					<xsl:choose>
-						<xsl:when test="count($tabStops/style:tab-stop) &lt; 3">
+						<xsl:when test="count($tabStops/style:tab-stop) &gt; 0 and count($tabStops/style:tab-stop) &lt; 3">
 							<!-- only allow the heuristic when the style has less than 3 TABS -->
+							<!-- ignore heuristics if no TABS are defined -->
 							<xsl:attribute name="style">
 								<xsl:call-template name="createTabIndent">
 									<xsl:with-param name="globalData" select="$globalData"/>
@@ -613,6 +616,11 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
+		<!--<xsl:message>TAB: tabCount=
+			<xsl:value-of select="$tabCount"/>, tabPosition=
+			<xsl:value-of select="$tabPosition"/>, tabIndent=
+			<xsl:value-of select="$tabIndent"/>
+		</xsl:message>-->
 		<xsl:choose>
 			<xsl:when test="$tabIndent='NaN'">
 				<xsl:variable name="tabPositionTmp">
@@ -783,7 +791,7 @@
 					<xsl:with-param name="globalData" select="$globalData"/>
 					<xsl:with-param name="previousFrameWidths" select="$previousFrameWidths"/>
 					<xsl:with-param name="previousFrameHeights" select="$previousFrameHeights"/>
-				   <xsl:with-param name="parentMarginLeft" select="$parentMarginLeft"/>
+					<xsl:with-param name="parentMarginLeft" select="$parentMarginLeft"/>
 				</xsl:call-template>
 				<!-- next elements will be called after the creation with the new indent (plus width of frame) -->
 			</xsl:when>
@@ -889,7 +897,9 @@
 			<xsl:with-param name="previousFrameHeights" select="$previousFrameHeights"/>
 		</xsl:call-template>
 		<!-- after the last draw:frame sibling the CSS float is disabled -->
-		<div style="clear:both; line-height:0; width:0; height:0; margin:0; padding:0;">&#160;</div>
+		<xsl:if test="@text:anchor-type!='as-char'">
+			<div style="clear:both; line-height:0; width:0; height:0; margin:0; padding:0;">&#160;</div>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template name="getPageMarginLeft">
@@ -901,7 +911,8 @@
 				<xsl:if test="key('elementUsingStyle', ../@style:name)">
 						<!-- Check every master-page-name if it is not emtpy and return as ';' separated list  -->
 					<xsl:if test="string-length(../@style:master-page-name) &gt; 0">
-						<xsl:value-of select="../@style:master-page-name"/>;</xsl:if>
+						<xsl:value-of select="../@style:master-page-name"/>;
+					</xsl:if>
 				</xsl:if>
 			</xsl:for-each>
 		</xsl:variable>
@@ -1028,21 +1039,21 @@
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>-->
-				<xsl:call-template name="createDrawFrame2">
-					<xsl:with-param name="globalData" select="$globalData"/>
-					<xsl:with-param name="previousFrameWidths" select="$previousFrameWidths + $svgWidth"/>
-					<xsl:with-param name="parentMarginLeftNew" select="$parentMarginLeftNew"/>
-					<xsl:with-param name="leftPosition" select="$leftPosition"/>
-					<xsl:with-param name="svgY" select="$svgY"/>
-				</xsl:call-template>
-				<xsl:apply-templates select="following-sibling::node()[1]" mode="frameFloating">
-					<xsl:with-param name="globalData" select="$globalData"/>
-					<xsl:with-param name="previousFrameWidths" select="$previousFrameWidths + $svgWidth"/>
-					<xsl:with-param name="parentMarginLeft" select="$parentMarginLeftNew"/>
-					<xsl:with-param name="leftPosition" select="$leftPosition"/>
-					<xsl:with-param name="createDiv" select="true()"/>
-					<xsl:with-param name="noDivBefore" select="false()"/>
-				</xsl:apply-templates>
+		<xsl:call-template name="createDrawFrame2">
+			<xsl:with-param name="globalData" select="$globalData"/>
+			<xsl:with-param name="previousFrameWidths" select="$previousFrameWidths + $svgWidth"/>
+			<xsl:with-param name="parentMarginLeftNew" select="$parentMarginLeftNew"/>
+			<xsl:with-param name="leftPosition" select="$leftPosition"/>
+			<xsl:with-param name="svgY" select="$svgY"/>
+		</xsl:call-template>
+		<xsl:apply-templates select="following-sibling::node()[1]" mode="frameFloating">
+			<xsl:with-param name="globalData" select="$globalData"/>
+			<xsl:with-param name="previousFrameWidths" select="$previousFrameWidths + $svgWidth"/>
+			<xsl:with-param name="parentMarginLeft" select="$parentMarginLeftNew"/>
+			<xsl:with-param name="leftPosition" select="$leftPosition"/>
+			<xsl:with-param name="createDiv" select="true()"/>
+			<xsl:with-param name="noDivBefore" select="false()"/>
+		</xsl:apply-templates>
 				<!--
 
 			</xsl:otherwise>
@@ -1056,20 +1067,31 @@
 		<xsl:param name="leftPosition" />
 		<xsl:param name="svgY" />
 
-		<xsl:comment>Next 'div' is a draw:frame.</xsl:comment>
-		<xsl:element name="div">
+		<xsl:variable name="elem-name">
+			<xsl:choose>
+				<xsl:when test="@text:anchor-type='as-char'">span</xsl:when>
+				<xsl:otherwise>div</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:comment>Next '
+			<xsl:value-of select="$elem-name"/>' is a draw:frame.
+		</xsl:comment>
+		<xsl:element name="{$elem-name}">
 			<xsl:attribute name="style">
 				<xsl:call-template name="widthAndHeight"/>
-
-				<!-- all images float (CSS float reltaive) with a left position calculated by svg:x - parentMarginLeft - previousFrameWidths -->
-				<xsl:text> float:left; padding:0; position:relative; left:</xsl:text>
-				   <xsl:value-of select="$leftPosition"/>
+				<!-- MIB -->
+				<xsl:text> padding:0; </xsl:text>
+				<xsl:if test="@text:anchor-type!='as-char'">
+					<!-- all images float (CSS float reltaive) with a left position calculated by svg:x - parentMarginLeft - previousFrameWidths -->
+					<xsl:text> float:left; position:relative; left:</xsl:text>
+					<xsl:value-of select="$leftPosition"/>
 					<xsl:text>cm; </xsl:text>
-				<!-- if the frame is anchored on a char -->
-				<xsl:if test="@text:anchor-type='char'">
-					<xsl:text>top:</xsl:text>
-					<xsl:value-of select="$svgY"/>
-					<xsl:text>cm; </xsl:text>
+					<!-- if the frame is anchored on a char -->
+					<xsl:if test="@text:anchor-type='char'">
+						<xsl:text>top:</xsl:text>
+						<xsl:value-of select="$svgY"/>
+						<xsl:text>cm; </xsl:text>
+					</xsl:if>
 				</xsl:if>
 			</xsl:attribute>
 			<xsl:apply-templates select="@*">
@@ -1080,6 +1102,8 @@
 			</xsl:apply-templates>
 		</xsl:element>
 	</xsl:template>
+
+	<xsl:template match="svg:desc"/>
 
 	<xsl:template name="widthAndHeight">
 		<xsl:if test="@svg:height | @svg:width">
@@ -1496,7 +1520,9 @@
 						<xsl:message>
 	Accessibility Warning:
 		 No alternate text ('svg:desc' element) set for
-		 image '<xsl:value-of select="@xlink:href"/>'!</xsl:message>
+		 image '
+							<xsl:value-of select="@xlink:href"/>'!
+						</xsl:message>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:attribute>
@@ -1778,7 +1804,7 @@
 		3) 'fo:text-indent' the indent of the first line of some child (e.g. paragraph) (applied by CSS class style)
 
 	Possible list children:
-	<!ELEMENT text:list-item (text:p|text:h|text:list|text:list)+>
+	<!ELEMENT text:list-item (text:p|text:h|text:list)+>
 
 	In the Office the list label before the text depends on two attributes:
 		- 'text:min-label-width': the distance between list label and all text of the list item.
@@ -1803,11 +1829,11 @@
 		<xsl:param name="minLabelWidth"/>
 		<xsl:param name="listIndent" />
 
-        <!-- The text:list-header shall not be labeled. According to ODF specification (sect. 4.3.2):
-            "The <text:list-header> element represents a list header and is a special kind of list item. It
-            contains one or more paragraphs that are displayed before a list. The paragraphs are formatted
-            like list items but they do not have a preceding number or bullet." -->
-        <xsl:variable name="isListHeader" select="boolean(self::text:list-header)"/>
+		<!-- The text:list-header shall not be labeled. According to ODF specification (sect. 4.3.2):
+		"The <text:list-header> element represents a list header and is a special kind of list item. It
+		contains one or more paragraphs that are displayed before a list. The paragraphs are formatted
+		like list items but they do not have a preceding number or bullet." -->
+		<xsl:variable name="isListHeader" select="boolean(self::text:list-header)"/>
 
 		<xsl:variable name="listIndentNew">
 			<xsl:choose>
@@ -1827,14 +1853,14 @@
 			<xsl:if test="$listStyle/text:list-style/text:list-level-style-number">
 				<xsl:choose>
 					<xsl:when test="$isListHeader">0</xsl:when>
-                    <xsl:when test="$isEmptyList">
+					<xsl:when test="$isEmptyList">
 						<!--  An empty list item (no text:h/text:p as child), will not count as item and does not increment the count.  -->
 						<xsl:variable name="tempItemNumber">
 							<xsl:choose>
 								<!-- siblings will be incremented by one -->
 								<xsl:when test="$itemNumber">
 									<xsl:if test="not($isListHeader)">
-									    <xsl:value-of select="$itemNumber + 1"/>
+										<xsl:value-of select="$itemNumber + 1"/>
 									</xsl:if>
 								</xsl:when>
 								<!-- if a higher list level had content the numbering starts with 1 -->
@@ -1924,7 +1950,6 @@
 				<xsl:when test="$isEmptyList or $isListHeader">
 					<xsl:apply-templates>
 						<xsl:with-param name="globalData" select="$globalData"/>
-						<xsl:with-param name="isNextLevelNumberingReset" select="$isListHeader or $isNextLevelNumberingReset"/>
 						<xsl:with-param name="itemLabel" select="$itemLabelNew"/>
 						<xsl:with-param name="listLevel" select="$listLevel + 1"/>
 						<xsl:with-param name="listStyleName" select="$listStyleName"/>
@@ -2168,6 +2193,7 @@
 		<!-- E.g.: If a list level 2 number is searched, a level 3 with content found with only a level 1 parent with content,
 			the level 3 gets a 'pseudoLevel' -->
 		<xsl:param name="pseudoLevel" select="0" />
+
 		<xsl:variable name="isListHeader" select="boolean(self::text:list-header)"/>
 		<xsl:variable name="isEmptyList" select="not(*[name() = 'text:h' or name() = 'text:p'])"/>
 
@@ -2203,7 +2229,7 @@
 								<xsl:when test="$currentListLevel &lt; $listLevel">
 									<xsl:choose>
 										<!-- if it has content the counting is ended -->
-										<xsl:when test="not($isEmptyList or $isListHeader)">
+										<xsl:when test="*[name() = 'text:h' or name() = 'text:p'] or $isListHeader">
 											<!-- 2DO: Perhaps the children still have to be processed -->
 											<xsl:value-of select="$itemNumber + $pseudoLevel"/>
 										</xsl:when>
@@ -2258,7 +2284,7 @@
 										<xsl:with-param name="pseudoLevel">
 											<xsl:choose>
 												<!-- empty list item does not count -->
-												<xsl:when test="$isEmptyList or $isListHeader">
+												<xsl:when test="not(*[name() = 'text:h' or name() = 'text:p']) or $isListHeader">
 													<xsl:value-of select="$pseudoLevel"/>
 												</xsl:when>
 												<xsl:otherwise>1</xsl:otherwise>
@@ -2849,6 +2875,20 @@
 			<xsl:with-param name="globalData" select="$globalData" />
 		</xsl:apply-templates>
 	</xsl:template>
+
+	<!-- ***************** -->
+	<!-- *** Bookmarks *** -->
+	<!-- ***************** -->
+
+	<xsl:template match="text:bookmark|text:bookmark-start">
+		<xsl:element name="a">
+			<xsl:attribute name="name">
+				<xsl:value-of select="@text:name"/>
+			</xsl:attribute>
+		</xsl:element>
+	</xsl:template>
+
+	<xsl:template match="text:bookmark-end"/>
 
 	<!-- DISABLING this tab handling as the tab width is only relative
 	<xsl:template match="text:tab">

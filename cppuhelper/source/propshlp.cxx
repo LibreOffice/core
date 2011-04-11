@@ -33,6 +33,7 @@
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/weak.hxx"
 #include "cppuhelper/propshlp.hxx"
+#include "cppuhelper/exc_hlp.hxx"
 #include "com/sun/star/beans/PropertyAttribute.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 
@@ -41,8 +42,10 @@ using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
-using namespace rtl;
 using namespace cppu;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 namespace cppu {
 
@@ -145,15 +148,20 @@ sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & Proper
 class OPropertySetHelper::Impl {
 
 public:
-    Impl (  bool i_bIgnoreRuntimeExceptionsWhileFiring,
-            IEventNotificationHook *i_pFireEvents)
-    :   m_bIgnoreRuntimeExceptionsWhileFiring(
-            i_bIgnoreRuntimeExceptionsWhileFiring ),
-        m_pFireEvents( i_pFireEvents )
-    { }
+    Impl(   bool i_bIgnoreRuntimeExceptionsWhileFiring,
+            IEventNotificationHook *i_pFireEvents
+        )
+        :m_bIgnoreRuntimeExceptionsWhileFiring( i_bIgnoreRuntimeExceptionsWhileFiring )
+        ,m_pFireEvents( i_pFireEvents )
+    {
+    }
 
     bool m_bIgnoreRuntimeExceptionsWhileFiring;
     class IEventNotificationHook * const m_pFireEvents;
+
+    ::std::vector< sal_Int32 >  m_handles;
+    ::std::vector< Any >        m_newValues;
+    ::std::vector< Any >        m_oldValues;
 };
 
 
@@ -300,7 +308,7 @@ void OPropertySetHelper::addPropertyChangeListener(
             rPH.fillPropertyMembersByHandle( NULL, &nAttributes, nHandle );
             if( !(nAttributes & ::com::sun::star::beans::PropertyAttribute::BOUND) )
             {
-                OSL_ENSURE( sal_False, "add listener to an unbound property" );
+                OSL_FAIL( "add listener to an unbound property" );
                 // silent ignore this
                 return;
             }
@@ -382,7 +390,7 @@ void OPropertySetHelper::addVetoableChangeListener(
             rPH.fillPropertyMembersByHandle( NULL, &nAttributes, nHandle );
             if( !(nAttributes & PropertyAttribute::CONSTRAINED) )
             {
-                OSL_ENSURE( sal_False, "addVetoableChangeListener, and property is not constrained" );
+                OSL_FAIL( "addVetoableChangeListener, and property is not constrained" );
                 // silent ignore this
                 return;
             }
@@ -431,6 +439,57 @@ void OPropertySetHelper::removeVetoableChangeListener(
                                 rxListener
                                         );
     }
+}
+
+void OPropertySetHelper::setDependentFastPropertyValue( sal_Int32 i_handle, const ::com::sun::star::uno::Any& i_value )
+{
+    //OSL_PRECOND( rBHelper.rMutex.isAcquired(), "OPropertySetHelper::setDependentFastPropertyValue: to be called with a locked mutex only!" );
+        // there is no such thing as Mutex.isAcquired, sadly ...
+
+    sal_Int16 nAttributes(0);
+    IPropertyArrayHelper& rInfo = getInfoHelper();
+    if ( !rInfo.fillPropertyMembersByHandle( NULL, &nAttributes, i_handle ) )
+        // unknown property
+        throw UnknownPropertyException();
+
+    // no need to check for READONLY-ness of the property. The method is intended to be called internally, which
+    // implies it might be invoked for properties which are read-only to the instance's clients, but well allowed
+    // to change their value.
+
+    Any aConverted, aOld;
+    sal_Bool bChanged = convertFastPropertyValue( aConverted, aOld, i_handle, i_value );
+    if ( !bChanged )
+        return;
+
+    // don't fire vetoable events. This method is called with our mutex locked, so calling into listeners would not be
+    // a good idea. The caler is responsible for not invoking this for constrained properties.
+    OSL_ENSURE( ( nAttributes & PropertyAttribute::CONSTRAINED ) == 0,
+        "OPropertySetHelper::setDependentFastPropertyValue: not to be used for constrained properties!" );
+    (void)nAttributes;
+
+    // actually set the new value
+    try
+    {
+        setFastPropertyValue_NoBroadcast( i_handle, aConverted );
+    }
+    catch (const UnknownPropertyException& )    { throw;    /* allowed to leave */ }
+    catch (const PropertyVetoException& )       { throw;    /* allowed to leave */ }
+    catch (const IllegalArgumentException& )    { throw;    /* allowed to leave */ }
+    catch (const WrappedTargetException& )      { throw;    /* allowed to leave */ }
+    catch (const RuntimeException& )            { throw;    /* allowed to leave */ }
+    catch (const Exception& )
+    {
+        // not allowed to leave this meathod
+        WrappedTargetException aWrapped;
+        aWrapped.TargetException <<= ::cppu::getCaughtException();
+        aWrapped.Context = static_cast< XPropertySet* >( this );
+        throw aWrapped;
+    }
+
+    // remember the handle/values, for the events to be fired later
+    m_pReserved->m_handles.push_back( i_handle );
+    m_pReserved->m_newValues.push_back( aConverted );   // TODO: setFastPropertyValue notifies the unconverted value here ...?
+    m_pReserved->m_oldValues.push_back( aOld );
 }
 
 // XFastPropertySet
@@ -499,7 +558,7 @@ void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rVa
             // release guard to fire events
         }
         // file a change event, if the value changed
-        fire( &nHandle, &rValue, &aOldVal, 1, sal_False );
+        impl_fireAll( &nHandle, &rValue, &aOldVal, 1 );
     }
 }
 
@@ -519,6 +578,42 @@ Any OPropertySetHelper::getFastPropertyValue( sal_Int32 nHandle )
     MutexGuard aGuard( rBHelper.rMutex );
     getFastPropertyValue( aRet, nHandle );
     return aRet;
+}
+
+//--------------------------------------------------------------------------
+void OPropertySetHelper::impl_fireAll( sal_Int32* i_handles, const Any* i_newValues, const Any* i_oldValues, sal_Int32 i_count )
+{
+    ClearableMutexGuard aGuard( rBHelper.rMutex );
+    if ( m_pReserved->m_handles.empty() )
+    {
+        aGuard.clear();
+        fire( i_handles, i_newValues, i_oldValues, i_count, sal_False );
+        return;
+    }
+
+    const size_t additionalEvents = m_pReserved->m_handles.size();
+    OSL_ENSURE( additionalEvents == m_pReserved->m_newValues.size()
+            &&  additionalEvents == m_pReserved->m_oldValues.size(),
+            "OPropertySetHelper::impl_fireAll: inconsistency!" );
+
+    ::std::vector< sal_Int32 > allHandles( additionalEvents + i_count );
+    ::std::copy( m_pReserved->m_handles.begin(), m_pReserved->m_handles.end(), allHandles.begin() );
+    ::std::copy( i_handles, i_handles + i_count, allHandles.begin() + additionalEvents );
+
+    ::std::vector< Any > allNewValues( additionalEvents + i_count );
+    ::std::copy( m_pReserved->m_newValues.begin(), m_pReserved->m_newValues.end(), allNewValues.begin() );
+    ::std::copy( i_newValues, i_newValues + i_count, allNewValues.begin() + additionalEvents );
+
+    ::std::vector< Any > allOldValues( additionalEvents + i_count );
+    ::std::copy( m_pReserved->m_oldValues.begin(), m_pReserved->m_oldValues.end(), allOldValues.begin() );
+    ::std::copy( i_oldValues, i_oldValues + i_count, allOldValues.begin() + additionalEvents );
+
+    m_pReserved->m_handles.clear();
+    m_pReserved->m_newValues.clear();
+    m_pReserved->m_oldValues.clear();
+
+    aGuard.clear();
+    fire( &allHandles[0], &allNewValues[0], &allOldValues[0], additionalEvents + i_count, sal_False );
 }
 
 //--------------------------------------------------------------------------
@@ -804,7 +899,7 @@ void OPropertySetHelper::setFastPropertyValues(
         }
 
         // fire change events
-        fire( pHandles, pConvertedValues, pOldValues, n, sal_False );
+        impl_fireAll( pHandles, pConvertedValues, pOldValues, n );
     }
     catch( ... )
     {
@@ -909,11 +1004,11 @@ void OPropertySetHelper::firePropertiesChangeEvent(
     Sequence<PropertyChangeEvent> aChanges( nFireLen );
     PropertyChangeEvent* pChanges = aChanges.getArray();
 
-    sal_Int32 nFirePos = 0;
     {
     // must lock the mutex outside the loop. So all values are consistent.
     MutexGuard aGuard( rBHelper.rMutex );
     Reference < XInterface > xSource( (XPropertySet *)this, UNO_QUERY );
+    sal_Int32 nFirePos = 0;
     for( i = 0; i < nLen; i++ )
     {
         if( pHandles[i] != -1 )
@@ -946,7 +1041,6 @@ PropertyState OPropertySetHelper::getPropertyState( const OUString& PropertyName
 Sequence< PropertyState > OPropertySetHelper::getPropertyStates( const Sequence< OUString >& PropertyNames )
 {
     ULONG nNames = PropertyNames.getLength();
-    const OUString* pNames = PropertyNames.getConstArray();
 
     Sequence< PropertyState > aStates( nNames );
     return aStates;
@@ -1015,7 +1109,7 @@ void OPropertyArrayHelper::init( sal_Bool bSorted ) SAL_THROW( () )
         {
 #ifndef OS2 // YD disabled, too many troubles with debug builds!
             if (bSorted) {
-                OSL_ENSURE( false, "Property array is not sorted" );
+                OSL_FAIL( "Property array is not sorted" );
             }
 #endif
             // not sorted

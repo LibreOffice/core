@@ -40,7 +40,7 @@
 #include <memory>
 #include <vector>
 #include <list>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 class ScDocument;
 class ScChartUnoData;
@@ -58,27 +58,27 @@ public:
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType);
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
-        ::std::hash_set<sal_uInt16>& getAllFileIds();
+        ::boost::unordered_set<sal_uInt16>& getAllFileIds();
 
     private:
         ExternalRefListener();
         ExternalRefListener(const ExternalRefListener& r);
 
         ScChartListener& mrParent;
-        ::std::hash_set<sal_uInt16> maFileIds;
+        ::boost::unordered_set<sal_uInt16> maFileIds;
         ScDocument*                 mpDoc;
     };
 
 private:
 
     ::std::auto_ptr<ExternalRefListener>                mpExtRefListener;
-    ::std::auto_ptr< ::std::vector<ScSharedTokenRef> >  mpTokens;
+    ::std::auto_ptr< ::std::vector<ScTokenRef> >  mpTokens;
 
     ScChartUnoData* pUnoData;
     ScDocument*     pDoc;
-    BOOL            bUsed;  // fuer ScChartListenerCollection::FreeUnused
-    BOOL            bDirty;
-    BOOL            bSeriesRangesScheduled;
+    sal_Bool            bUsed;  // for ScChartListenerCollection::FreeUnused
+    sal_Bool            bDirty;
+    sal_Bool            bSeriesRangesScheduled;
 
                     // not implemented
     ScChartListener& operator=( const ScChartListener& );
@@ -89,7 +89,7 @@ public:
                     ScChartListener( const String& rName, ScDocument* pDoc,
                                      const ScRangeListRef& rRangeListRef );
                     ScChartListener( const String& rName, ScDocument* pDoc,
-                                     ::std::vector<ScSharedTokenRef>* pTokens );
+                                     ::std::vector<ScTokenRef>* pTokens );
                     ScChartListener( const ScChartListener& );
     virtual         ~ScChartListener();
     virtual ScDataObject*   Clone() const;
@@ -99,34 +99,34 @@ public:
     com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >  GetUnoListener() const;
     com::sun::star::uno::Reference< com::sun::star::chart::XChartData >                     GetUnoSource() const;
 
-    BOOL            IsUno() const   { return (pUnoData != NULL); }
+    sal_Bool            IsUno() const   { return (pUnoData != NULL); }
 
     virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
     void            StartListeningTo();
     void            EndListeningTo();
     void            ChangeListening( const ScRangeListRef& rRangeListRef,
-                                    BOOL bDirty = FALSE );
+                                    sal_Bool bDirty = false );
     void            Update();
     ScRangeListRef  GetRangeList() const;
     void            SetRangeList( const ScRangeListRef& rNew );
     void            SetRangeList( const ScRange& rNew );
-    BOOL            IsUsed() const { return bUsed; }
-    void            SetUsed( BOOL bFlg ) { bUsed = bFlg; }
-    BOOL            IsDirty() const { return bDirty; }
-    void            SetDirty( BOOL bFlg ) { bDirty = bFlg; }
+    sal_Bool            IsUsed() const { return bUsed; }
+    void            SetUsed( sal_Bool bFlg ) { bUsed = bFlg; }
+    sal_Bool            IsDirty() const { return bDirty; }
+    void            SetDirty( sal_Bool bFlg ) { bDirty = bFlg; }
 
     void            UpdateChartIntersecting( const ScRange& rRange );
 
     // if chart series ranges are to be updated later on (e.g. DeleteTab, InsertTab)
-    void            ScheduleSeriesRanges()      { bSeriesRangesScheduled = TRUE; }
+    void            ScheduleSeriesRanges()      { bSeriesRangesScheduled = sal_True; }
     void            UpdateScheduledSeriesRanges();
     void            UpdateSeriesRanges();
 
     ExternalRefListener* GetExtRefListener();
     void            SetUpdateQueue();
 
-    BOOL            operator==( const ScChartListener& );
-    BOOL            operator!=( const ScChartListener& r )
+    sal_Bool            operator==( const ScChartListener& );
+    sal_Bool            operator!=( const ScChartListener& r )
                         { return !operator==( r ); }
 };
 
@@ -172,13 +172,13 @@ public:
 
     virtual         ~ScChartListenerCollection();
 
-                    // nur nach copy-ctor noetig, wenn neu ins Dok gehaengt
+                    // only needed after copy-ctor, if newly added to doc
     void            StartAllListeners();
 
     void            ChangeListening( const String& rName,
                                     const ScRangeListRef& rRangeListRef,
-                                    BOOL bDirty = FALSE );
-    // FreeUnused nur wie in ScDocument::UpdateChartListenerCollection verwenden!
+                                    sal_Bool bDirty = sal_False );
+    // use FreeUnused only the way it's used in ScDocument::UpdateChartListenerCollection
     void            FreeUnused();
     void            FreeUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
                              const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
@@ -186,14 +186,14 @@ public:
     void            UpdateDirtyCharts();
     void SC_DLLPUBLIC SetDirty();
     void            SetDiffDirty( const ScChartListenerCollection&,
-                        BOOL bSetChartRangeLists = FALSE );
+                        sal_Bool bSetChartRangeLists = false );
 
-    void            SetRangeDirty( const ScRange& rRange );     // z.B. Zeilen/Spalten
+    void            SetRangeDirty( const ScRange& rRange );     // for example rows/columns
 
     void            UpdateScheduledSeriesRanges();
     void            UpdateChartsContainingTab( SCTAB nTab );
 
-    BOOL            operator==( const ScChartListenerCollection& );
+    sal_Bool            operator==( const ScChartListenerCollection& );
 
     /**
      * Start listening on hide/show change within specified cell range.  A

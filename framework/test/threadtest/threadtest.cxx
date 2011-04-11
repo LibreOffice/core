@@ -547,11 +547,6 @@ void SAL_CALL TestThread::run()
         // Work with class.
         // Use random to select called method.
         nA = (sal_Int32)getRandomValue();
-        if( nA % 5 == 0 )
-        {
-            //nA = m_pClass->workA( nA, m_nThreadID );
-        }
-        else
         if( nA % 3 == 0 )
         {
             m_pClass->setA( nA, m_nThreadID );

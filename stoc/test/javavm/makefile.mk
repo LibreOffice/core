@@ -35,14 +35,11 @@ NO_BSYMBOLIC=	TRUE
 
 UNOUCRDEP=	$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRRDB=	$(SOLARBINDIR)$/udkapi.rdb
-#UNOUCROUT=	$(OUT)$/inc$/test
 UNOUCROUT=	$(OUT)$/inc$
-#INCPRE+=	$(OUT)$/inc$/test
 INCPRE+=	$(OUT)$/inc$
 
-
-
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  settings.mk
 
 # --- Application 6 - testjavavm ------------------------------------
@@ -65,7 +62,6 @@ APP6STDLIBS= \
         $(CPPUHELPERLIB) 	\
         $(SALHELPERLIB) 	\
         $(SALLIB)	
-#		$(UNOLIB)
 
 # --- Target ------------------------------------------------
 

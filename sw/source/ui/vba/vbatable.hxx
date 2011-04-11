@@ -15,7 +15,7 @@ class SwVbaTable : public SwVbaTable_BASE
     css::uno::Reference< css::text::XTextTable > mxTextTable;
 public:
     SwVbaTable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rDocument, const css::uno::Reference< css::text::XTextTable >& xTextTable) throw ( css::uno::RuntimeException);
-    css::uno::Reference< css::text::XTextDocument > getDocument() { return mxTextDocument; };
+    css::uno::Reference< css::text::XTextDocument > getDocument() const { return mxTextDocument; };
     virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL Range(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL Select(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL Delete(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);

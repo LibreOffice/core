@@ -44,6 +44,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/xmluconv.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -102,14 +103,11 @@ private:
 public:
 
                                 FastString( sal_uInt32 nInitLen = 2048, sal_uInt32 nIncrement = 2048 );
-                                FastString( sal_Char* pBufferForBase64Encoding, sal_uInt32 nBufLen );
                                 ~FastString();
 
     FastString&                 operator+=( const ::rtl::OUString& rStr );
 
     const ::rtl::OUString&      GetString() const;
-    sal_Bool                    GetFirstPartString( const sal_uInt32 nPartLen, ::rtl::OUString& rPartString );
-    sal_Bool                    GetNextPartString( const sal_uInt32 nPartLen, ::rtl::OUString& rPartString );
 
     sal_uInt32                  GetLength() const { return mnCurLen; }
     void                        Clear() { mnCurLen = 0, maString = ::rtl::OUString(); }
@@ -142,6 +140,7 @@ public:
     virtual                 ~SVGAttributeWriter();
 
     ::rtl::OUString         GetFontStyle( const Font& rFont );
+    ::rtl::OUString         GetColorStyle( const Color& rColor );
     ::rtl::OUString         GetPaintStyle( const Color& rLineColor, const Color& rFillColor, const LineInfo* pLineInfo );
 
     void                    SetFontAttr( const Font& rFont );
@@ -165,6 +164,9 @@ private:
     SVGAttributeWriter*     mpContext;
     sal_Bool                mbClipAttrChanged;
     sal_Int32               mnCurClipId;
+    sal_Int32               mnCurPatternId;
+    sal_Int32               mnCurGradientId;
+    sal_Int32               mnCurMaskId;
     Stack                   maContextStack;
     VirtualDevice*          mpVDev;
     MapMode                 maTargetMapMode;
@@ -185,8 +187,15 @@ private:
     void                    ImplWriteRect( const Rectangle& rRect, long nRadX = 0, long nRadY = 0, const ::rtl::OUString* pStyle = NULL );
     void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY, const ::rtl::OUString* pStyle = NULL );
     void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly, const ::rtl::OUString* pStyle = NULL );
+    void                    ImplWritePattern( const PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
     void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
+    void                    ImplWriteGradientLinear( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void                    ImplWriteGradientStop( const Color& rColor, double fOffset );
+    Color                   ImplGetColorWithIntensity( const Color& rColor, sal_uInt16 nIntensity );
+    Color                   ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
+    void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
     void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, const ::rtl::OUString* pStyle = NULL );
+    void                ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, const ::rtl::OUString* pStyle, Color aTextColor );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const ::rtl::OUString* pStyle = NULL );
 
     void                    ImplCheckFontAttributes();
@@ -194,6 +203,9 @@ private:
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
     sal_Int32               ImplGetNextClipId() { return mnCurClipId++; }
+    sal_Int32               ImplGetNextPatternId() { return mnCurPatternId++; }
+    sal_Int32               ImplGetNextGradientId() { return mnCurGradientId++; }
+    sal_Int32               ImplGetNextMaskId() { return mnCurMaskId++; }
 
 public:
 

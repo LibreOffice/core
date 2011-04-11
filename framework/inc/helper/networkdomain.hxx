@@ -30,11 +30,12 @@
 #define __FRAMEWORK_HELPER_NETWORKDOMAIN_HXX_
 
 #include <rtl/ustring.hxx>
+#include <fwidllapi.h>
 
 namespace framework
 {
 
-class NetworkDomain
+class FWI_DLLPUBLIC NetworkDomain
 {
     public:
         static rtl::OUString GetNTDomainName();

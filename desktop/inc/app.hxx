@@ -63,6 +63,8 @@ class Desktop : public Application
 {
     friend class UserInstall;
 
+    int doShutdown();
+
     public:
         enum BootstrapError
         {
@@ -84,12 +86,12 @@ class Desktop : public Application
 
                                 Desktop();
                                 ~Desktop();
-        virtual void            Main( );
+        virtual int         Main( );
         virtual void            Init();
         virtual void            InitFinished();
         virtual void            DeInit();
-        virtual BOOL            QueryExit();
-        virtual USHORT          Exception(USHORT nError);
+        virtual sal_Bool            QueryExit();
+        virtual sal_uInt16          Exception(sal_uInt16 nError);
         virtual void            SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
         virtual void            AppEvent( const ApplicationEvent& rAppEvent );
 
@@ -127,10 +129,7 @@ class Desktop : public Application
         static sal_Bool         CheckOEM();
         static sal_Bool         isCrashReporterEnabled();
 
-        // first-start (ever) & license relate methods
-        static rtl::OUString    GetLicensePath();
-        static sal_Bool         LicenseNeedsAcceptance();
-        static sal_Bool         IsFirstStartWizardNeeded();
+        // first-start (ever) related methods
         static sal_Bool         CheckExtensionDependencies();
 
         static void             DoRestartActionsIfNecessary( sal_Bool bQuickStart );
@@ -139,6 +138,8 @@ class Desktop : public Application
         void                    SynchronizeExtensionRepositories();
         void                    SetSplashScreenText( const ::rtl::OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
+
+        void                    CreateProcessServiceFactory();
 
     private:
         // Bootstrap methods
@@ -162,7 +163,7 @@ class Desktop : public Application
         void                    StartSetup( const ::rtl::OUString& aParameters );
 
         // Get a resource message string securely e.g. if resource cannot be retrieved return aFaultBackMsg
-        ::rtl::OUString         GetMsgString( USHORT nId, const ::rtl::OUString& aFaultBackMsg );
+        ::rtl::OUString         GetMsgString( sal_uInt16 nId, const ::rtl::OUString& aFaultBackMsg );
 
         // Create a error message depending on bootstrap failure code and an optional file url
         ::rtl::OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
@@ -201,7 +202,7 @@ class Desktop : public Application
         sal_Bool                        m_bMinimized;
         sal_Bool                        m_bInvisible;
         bool                            m_bServicesRegistered;
-        USHORT                          m_nAppEvents;
+        sal_uInt16                          m_nAppEvents;
         BootstrapError                  m_aBootstrapError;
         BootstrapStatus                 m_aBootstrapStatus;
 

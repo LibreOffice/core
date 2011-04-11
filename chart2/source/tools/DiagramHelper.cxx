@@ -43,10 +43,12 @@
 #include "ChartModelHelper.hxx"
 #include "RelativePositionHelper.hxx"
 #include "ControllerLockGuard.hxx"
+#include "NumberFormatterWrapper.hxx"
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
+#include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
@@ -58,10 +60,15 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 
+#include <com/sun/star/util/NumberFormat.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+
 #include <unotools/saveopt.hxx>
 #include <rtl/math.hxx>
-
-#include <com/sun/star/util/XModifiable.hpp>
+#include <svl/zformat.hxx>
+// header for class Application
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -69,12 +76,13 @@ using namespace ::std;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
+using ::com::sun::star::chart2::XAnyDescriptionAccess;
 
 namespace chart
 {
 
-// static
 DiagramHelper::tTemplateWithServiceName
     DiagramHelper::getTemplateForDiagram(
         const Reference< XDiagram > & xDiagram,
@@ -133,7 +141,6 @@ DiagramHelper::tTemplateWithServiceName
     return aResult;
 }
 
-// static
 void DiagramHelper::setVertical(
     const Reference< XDiagram > & xDiagram,
     bool bVertical /* = true */ )
@@ -211,7 +218,6 @@ void DiagramHelper::setVertical(
     }
 }
 
-//static
 bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDiagram,
                              bool& rbFound, bool& rbAmbiguous )
 {
@@ -249,7 +255,6 @@ bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDia
     return bValue;
 }
 
-//static
 void DiagramHelper::setStackMode(
     const Reference< XDiagram > & xDiagram,
     StackMode eStackMode,
@@ -341,8 +346,6 @@ void DiagramHelper::setStackMode(
     }
 }
 
-//static
-
 StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, bool& rbFound, bool& rbAmbiguous )
 {
     rbFound=false;
@@ -384,7 +387,6 @@ StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, b
     return eGlobalStackMode;
 }
 
-// static
 StackMode DiagramHelper::getStackModeFromChartType(
     const Reference< XChartType > & xChartType,
     bool& rbFound, bool& rbAmbiguous,
@@ -468,7 +470,6 @@ StackMode DiagramHelper::getStackModeFromChartType(
     return eStackMode;
 }
 
-// static
 sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
 {
     // -1: not yet set
@@ -501,7 +502,6 @@ sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
     return nResult;
 }
 
-// static
 void DiagramHelper::setDimension(
     const Reference< XDiagram > & xDiagram,
     sal_Int32 nNewDimensionCount )
@@ -562,7 +562,6 @@ void DiagramHelper::setDimension(
     }
 }
 
-// static
 void DiagramHelper::replaceCoordinateSystem(
     const Reference< XDiagram > & xDiagram,
     const Reference< XCoordinateSystem > & xCooSysToReplace,
@@ -598,7 +597,6 @@ void DiagramHelper::replaceCoordinateSystem(
     }
 }
 
-//static
 bool DiagramHelper::isSeriesAttachedToMainAxis(
                           const uno::Reference< chart2::XDataSeries >& xDataSeries )
 {
@@ -606,7 +604,6 @@ bool DiagramHelper::isSeriesAttachedToMainAxis(
     return (nAxisIndex==0);
 }
 
-//static
 bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
                         , const uno::Reference< chart2::XDataSeries >& xDataSeries
                         , const uno::Reference< chart2::XDiagram >& xDiagram
@@ -652,7 +649,6 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
     return bChanged;
 }
 
-//static
 uno::Reference< XAxis > DiagramHelper::getAttachedAxis(
         const uno::Reference< XDataSeries >& xSeries,
         const uno::Reference< XDiagram >& xDiagram )
@@ -660,7 +656,6 @@ uno::Reference< XAxis > DiagramHelper::getAttachedAxis(
     return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), xDiagram );
 }
 
-//static
 uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
                                 const uno::Reference< chart2::XDiagram >&   xDiagram
                               , const uno::Reference< XDataSeries >&        xGivenDataSeries )
@@ -710,7 +705,6 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
     return 0;
 }
 
-// static
 ::std::vector< Reference< XDataSeries > >
     DiagramHelper::getDataSeriesFromDiagram(
         const Reference< XDiagram > & xDiagram )
@@ -857,7 +851,6 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
 
 } // anonymous namespace
 
-//static
 bool DiagramHelper::isCategoryDiagram(
             const Reference< XDiagram >& xDiagram )
 {
@@ -881,7 +874,7 @@ bool DiagramHelper::isCategoryDiagram(
                     if( xAxis.is())
                     {
                         ScaleData aScaleData = xAxis->getScaleData();
-                        if( aScaleData.AxisType == AxisType::CATEGORY )
+                        if( aScaleData.AxisType == AxisType::CATEGORY || aScaleData.AxisType == AxisType::DATE )
                             return true;
                     }
                 }
@@ -896,7 +889,6 @@ bool DiagramHelper::isCategoryDiagram(
     return false;
 }
 
-// static
 void DiagramHelper::setCategoriesToDiagram(
     const Reference< chart2::data::XLabeledDataSequence >& xCategories,
     const Reference< XDiagram >& xDiagram,
@@ -920,7 +912,7 @@ void DiagramHelper::setCategoriesToDiagram(
             {
                 if( bCategoryAxis )
                     aScaleData.AxisType = AxisType::CATEGORY;
-                else if( aScaleData.AxisType == AxisType::CATEGORY )
+                else if( aScaleData.AxisType == AxisType::CATEGORY || aScaleData.AxisType == AxisType::DATE )
                     aScaleData.AxisType = AxisType::REALNUMBER;
             }
             xCatAxis->setScaleData( aScaleData );
@@ -928,7 +920,6 @@ void DiagramHelper::setCategoriesToDiagram(
     }
 }
 
-// static
 Reference< data::XLabeledDataSequence >
     DiagramHelper::getCategoriesFromDiagram(
         const Reference< XDiagram > & xDiagram )
@@ -1023,7 +1014,6 @@ Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( 
     return aRet;
 }
 
-//static
 Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
             const Reference< XChartDocument >& xChartDoc )
 {
@@ -1038,7 +1028,203 @@ Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
     return aRet;
 }
 
-// static
+namespace
+{
+void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, const Reference< XAxis >& xAxis )
+{
+    if( !xAxis.is() )
+        return;
+    if( !xChartDoc.is() )
+        return;
+
+    ScaleData aScale( xAxis->getScaleData() );
+    if( xChartDoc->hasInternalDataProvider() )
+    {
+        //remove all content the is not of type double and remove multiple level
+        Reference< XAnyDescriptionAccess > xDataAccess( xChartDoc->getDataProvider(), uno::UNO_QUERY );
+        if( xDataAccess.is() )
+        {
+            Sequence< Sequence< Any > > aAnyCategories( xDataAccess->getAnyRowDescriptions() );
+            double fTest = 0.0;
+            double fNan = 0.0;
+            ::rtl::math::setNan( & fNan );
+            sal_Int32 nN = aAnyCategories.getLength();
+            for( ; nN--; )
+            {
+                Sequence< Any >& rCat = aAnyCategories[nN];
+                if( rCat.getLength() > 1 )
+                    rCat.realloc(1);
+                if( rCat.getLength() == 1 )
+                {
+                    Any& rAny = rCat[0];
+                    if( !(rAny>>=fTest) )
+                    {
+                        rAny = uno::makeAny(fNan);
+                    }
+                }
+            }
+            xDataAccess->setAnyRowDescriptions( aAnyCategories );
+        }
+        //check the numberformat at the axis
+        Reference< beans::XPropertySet > xAxisProps( xAxis, uno::UNO_QUERY );
+        Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartDoc, uno::UNO_QUERY );
+        if( xAxisProps.is() && xNumberFormatsSupplier.is() )
+        {
+            sal_Int32 nNumberFormat = -1;
+            xAxisProps->getPropertyValue( C2U("NumberFormat") ) >>= nNumberFormat;
+
+            Reference< util::XNumberFormats > xNumberFormats = Reference< util::XNumberFormats >( xNumberFormatsSupplier->getNumberFormats() );
+            if( xNumberFormats.is() )
+            {
+                Reference< beans::XPropertySet > xKeyProps;
+                try
+                {
+                    xKeyProps = xNumberFormats->getByKey( nNumberFormat );
+                }
+                catch( uno::Exception & ex )
+                {
+                    ASSERT_EXCEPTION( ex );
+                }
+                sal_Int32 nType = util::NumberFormat::UNDEFINED;
+                if( xKeyProps.is() )
+                    xKeyProps->getPropertyValue( C2U("Type") ) >>= nType;
+                if( !( nType & util::NumberFormat::DATE ) )
+                {
+                    //set a date format to the axis
+                    sal_Bool bCreate = sal_True;
+                    const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+                    Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLocale(), bCreate );
+                    if( aKeySeq.getLength() )
+                    {
+                        xAxisProps->setPropertyValue( C2U("NumberFormat"), uno::makeAny(aKeySeq[0]) );
+                    }
+                }
+            }
+        }
+    }
+    if( aScale.AxisType != chart2::AxisType::DATE )
+        AxisHelper::removeExplicitScaling( aScale );
+    aScale.AxisType = chart2::AxisType::DATE;
+    xAxis->setScaleData( aScale );
+}
+
+void lcl_switchToTextCategories( const Reference< XChartDocument >& xChartDoc, const Reference< XAxis >& xAxis )
+{
+    if( !xAxis.is() )
+        return;
+    if( !xChartDoc.is() )
+        return;
+    ScaleData aScale( xAxis->getScaleData() );
+    if( aScale.AxisType != chart2::AxisType::CATEGORY )
+        AxisHelper::removeExplicitScaling( aScale );
+    //todo migrate dates to text?
+    aScale.AxisType = chart2::AxisType::CATEGORY;
+    aScale.AutoDateAxis = false;
+    xAxis->setScaleData( aScale );
+}
+
+}
+
+void DiagramHelper::switchToDateCategories( const Reference< XChartDocument >& xChartDoc )
+{
+    Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
+    if(xChartModel.is())
+    {
+        ControllerLockGuard aCtrlLockGuard( xChartModel );
+
+        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+        if( xCooSys.is() )
+        {
+            Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );
+            lcl_switchToDateCategories( xChartDoc, xAxis );
+        }
+    }
+}
+
+void DiagramHelper::switchToTextCategories( const Reference< XChartDocument >& xChartDoc )
+{
+    Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
+    if(xChartModel.is())
+    {
+        ControllerLockGuard aCtrlLockGuard( xChartModel );
+
+        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+        if( xCooSys.is() )
+        {
+            Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );
+            lcl_switchToTextCategories( xChartDoc, xAxis );
+        }
+    }
+}
+
+bool DiagramHelper::isSupportingDateAxis( const Reference< chart2::XDiagram >& xDiagram )
+{
+    return ::chart::ChartTypeHelper::isSupportingDateAxis(
+            DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), DiagramHelper::getDimension( xDiagram ), 0 );
+}
+
+bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const Reference< util::XNumberFormats >& xNumberFormats )
+{
+    bool bIsDate = false;
+    if( !xNumberFormats.is() )
+        return bIsDate;
+
+    Reference< beans::XPropertySet > xKeyProps = xNumberFormats->getByKey( nNumberFormat );
+    if( xKeyProps.is() )
+    {
+        sal_Int32 nType = util::NumberFormat::UNDEFINED;
+        xKeyProps->getPropertyValue( C2U("Type") ) >>= nType;
+        bIsDate = nType & util::NumberFormat::DATE;
+    }
+    return bIsDate;
+}
+
+sal_Int32 DiagramHelper::getDateNumberFormat( const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+{
+    sal_Int32 nRet=-1;
+    Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
+    if( xNumberFormats.is() )
+    {
+        sal_Bool bCreate = sal_True;
+        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+        Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,
+            rLocaleDataWrapper.getLocale(), bCreate );
+        if( aKeySeq.getLength() )
+        {
+            nRet = aKeySeq[0];
+        }
+    }
+
+    //try to get a date format with full year display
+    NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
+    SvNumberFormatter* pNumFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
+    if( pNumFormatter )
+    {
+        const SvNumberformat* pFormat = pNumFormatter->GetEntry( nRet );
+        if( pFormat )
+            nRet = pNumFormatter->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, pFormat->GetLanguage() );
+    }
+    return nRet;
+}
+
+sal_Int32 DiagramHelper::getPercentNumberFormat( const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+{
+    sal_Int32 nRet=-1;
+    Reference< util::XNumberFormats > xNumberFormats( xNumberFormatsSupplier->getNumberFormats() );
+    if( xNumberFormats.is() )
+    {
+        sal_Bool bCreate = sal_True;
+        const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
+        Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::PERCENT,
+            rLocaleDataWrapper.getLocale(), bCreate );
+        if( aKeySeq.getLength() )
+        {
+            nRet = aKeySeq[0];
+        }
+    }
+    return nRet;
+}
+
 Sequence< Reference< XChartType > >
     DiagramHelper::getChartTypesFromDiagram(
         const Reference< XDiagram > & xDiagram )
@@ -1068,7 +1254,6 @@ Sequence< Reference< XChartType > >
     return ContainerHelper::ContainerToSequence( aResult );
 }
 
-//static
 bool DiagramHelper::areChartTypesCompatible( const Reference< ::chart2::XChartType >& xFirstType,
                 const Reference< ::chart2::XChartType >& xSecondType )
 {
@@ -1328,7 +1513,6 @@ bool DiagramHelper::isPieOrDonutChart( const ::com::sun::star::uno::Reference<
     return false;
 }
 
-// static
 sal_Int32 DiagramHelper::getGeometry3D(
     const uno::Reference< chart2::XDiagram > & xDiagram,
     bool& rbFound, bool& rbAmbiguous )
@@ -1375,7 +1559,6 @@ sal_Int32 DiagramHelper::getGeometry3D(
     return nCommonGeom;
 }
 
-// static
 void DiagramHelper::setGeometry3D(
     const Reference< chart2::XDiagram > & xDiagram,
     sal_Int32 nNewGeometry )
@@ -1391,7 +1574,6 @@ void DiagramHelper::setGeometry3D(
     }
 }
 
-//static
 sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
             const Reference< chart2::XDiagram > & xDiagram,
             const Reference< chart2::XChartType >& xChartType )
@@ -1419,7 +1601,6 @@ sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
     return nResult;
 }
 
-//static
 DiagramPositioningMode DiagramHelper::getDiagramPositioningMode( const uno::Reference<
                 chart2::XDiagram > & xDiagram )
 {
@@ -1451,7 +1632,6 @@ void lcl_ensureRange0to1( double& rValue )
         rValue=1.0;
 }
 
-//static
 bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >& xChartModel,
         const awt::Rectangle& rPosRect /*100th mm*/ )
 {
@@ -1497,7 +1677,6 @@ bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >
     return bChanged;
 }
 
-//static
 awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference< frame::XModel >& xChartModel )
 {
     awt::Rectangle aRet(-1,-1,-1,-1);
@@ -1514,8 +1693,8 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference
     xDiaProps->getPropertyValue(C2U("RelativeSize") ) >>= aRelSize;
 
     awt::Size aAbsSize(
-        aRelSize.Primary * aPageSize.Width,
-        aRelSize.Secondary * aPageSize.Height );
+        static_cast< sal_Int32 >( aRelSize.Primary * aPageSize.Width ),
+        static_cast< sal_Int32 >( aRelSize.Secondary * aPageSize.Height ));
 
     awt::Point aAbsPos(
         static_cast< sal_Int32 >( aRelPos.Primary * aPageSize.Width ),
@@ -1528,7 +1707,6 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference
     return aRet;
 }
 
-//static
 bool DiagramHelper::switchDiagramPositioningToExcludingPositioning(
     const uno::Reference< frame::XModel >& xChartModel
     , bool bResetModifiedState, bool bConvertAlsoFromAutoPositioning )

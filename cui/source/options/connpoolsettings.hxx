@@ -47,7 +47,6 @@ namespace offapp
         sal_Bool            bEnabled;
         sal_Int32           nTimeoutSeconds;
 
-        DriverPooling();
         DriverPooling( const String& _rName, sal_Bool _bEnabled, const sal_Int32 _nTimeout );
 
         sal_Bool operator == (const DriverPooling& _rR) const;
@@ -92,7 +91,7 @@ namespace offapp
     public:
         TYPEINFO();
 
-        DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings _rSettings );
+        DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings );
 
         virtual int              operator==( const SfxPoolItem& ) const;
         virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;

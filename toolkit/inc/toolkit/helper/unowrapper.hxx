@@ -67,11 +67,11 @@ public:
     void                WindowDestroyed( Window* pWindow );
     void                WindowEvent_Move( Window* pWindow );
     void                WindowEvent_Resize( Window* pWindow );
-    void                WindowEvent_Show( Window* pWindow, BOOL bShow );
+    void                WindowEvent_Show( Window* pWindow, sal_Bool bShow );
     void                WindowEvent_Close( Window* pWindow );
     void                WindowEvent_Minimize( Window* pWindow );
     void                WindowEvent_Normalize( Window* pWindow );
-    void                WindowEvent_Activate( Window* pWindow, BOOL bActivated );
+    void                WindowEvent_Activate( Window* pWindow, sal_Bool bActivated );
     void                WindowEvent_MouseButtonUp( Window* pWindow, const MouseEvent& rEvt );
     void                WindowEvent_MouseButtonDown( Window* pWindow, const MouseEvent& rEvt );
     void                WindowEvent_MouseMove( Window* pWindow, const MouseEvent& rEvt );

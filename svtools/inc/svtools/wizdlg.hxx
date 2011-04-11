@@ -65,7 +65,7 @@ berechnet und genommen.
 
 ShowPrevPage()/ShowNextPage() zeigt die vorherige/naechste TabPage
 an. Dazu wird zuerst der Deactivate-Handler vom Dialog gerufen und
-wenn dieser TRUE zurueckgegeben hat, wird der Acivate-Handler
+wenn dieser sal_True zurueckgegeben hat, wird der Acivate-Handler
 vom Dialog gerufen und die entsprechende TabPage angezeigt.
 Finnsh() kann gerufen werden, wenn der Finnish-Button betaetigt
 wird. Dort wird dann auch noch der Deactivate-Page-Handler vom
@@ -116,10 +116,10 @@ Level 0 die erste Seite ist.
 Der DeactivatePage()-Handler wird gerufen, wenn eine neue TabPage
 angezeigt werden soll. In diesem Handler kann noch eine Fehler-
 ueberprufung stattfinden und das Umschalten gegebenenfalls verhindert
-werden, indem FALSE zurueckgegeben wird. Der Handler kann auch als
+werden, indem sal_False zurueckgegeben wird. Der Handler kann auch als
 Link gesetzt werden. Die Defaultimplementierung ruft den Link und
 gibt den Rueckgabewert des Links zurueck und wenn kein Link gesetzt
-ist, wird TRUE zurueckgegeben.
+ist, wird sal_True zurueckgegeben.
 
 --------------------------------------------------------------------------
 
@@ -145,7 +145,7 @@ maNextBtn.SetClickHdl( LINK( this, MyWizardDlg, ImplNextHdl ) );
 SetViewWindow( &maPreview );
 
 // Show line between Buttons and Page
-ShowButtonFixedLine( TRUE );
+ShowButtonFixedLine( sal_True );
 
 // Call ActivatePage, because the first page should be created an activated
 ActivatePage();
@@ -228,7 +228,7 @@ private:
     PushButton*         mpPrevBtn;
     PushButton*         mpNextBtn;
     Window*             mpViewWindow;
-    USHORT              mnCurLevel;
+    sal_uInt16              mnCurLevel;
     WindowAlign         meViewAlign;
     Link                maActivateHdl;
     Link                maDeactivateHdl;
@@ -256,7 +256,7 @@ private:
     SVT_DLLPRIVATE void             ImplPosCtrls();
     SVT_DLLPRIVATE void             ImplPosTabPage();
     SVT_DLLPRIVATE void             ImplShowTabPage( TabPage* pPage );
-    SVT_DLLPRIVATE TabPage*         ImplGetPage( USHORT nLevel ) const;
+    SVT_DLLPRIVATE TabPage*         ImplGetPage( sal_uInt16 nLevel ) const;
 #endif
 
 public:
@@ -271,16 +271,16 @@ public:
     virtual void        ActivatePage();
     virtual long        DeactivatePage();
 
-    BOOL                ShowPrevPage();
-    BOOL                ShowNextPage();
-    BOOL                ShowPage( USHORT nLevel );
-    BOOL                Finnish( long nResult = 0 );
-    USHORT              GetCurLevel() const { return mnCurLevel; }
+    sal_Bool                ShowPrevPage();
+    sal_Bool                ShowNextPage();
+    sal_Bool                ShowPage( sal_uInt16 nLevel );
+    sal_Bool                Finnish( long nResult = 0 );
+    sal_uInt16              GetCurLevel() const { return mnCurLevel; }
 
     void                AddPage( TabPage* pPage );
     void                RemovePage( TabPage* pPage );
-    void                SetPage( USHORT nLevel, TabPage* pPage );
-    TabPage*            GetPage( USHORT nLevel ) const;
+    void                SetPage( sal_uInt16 nLevel, TabPage* pPage );
+    TabPage*            GetPage( sal_uInt16 nLevel ) const;
 
     void                AddButton( Button* pButton, long nOffset = 0 );
     void                RemoveButton( Button* pButton );
@@ -290,8 +290,8 @@ public:
     void                SetNextButton( PushButton* pButton ) { mpNextBtn = pButton; }
     PushButton*         GetNextButton() const { return mpNextBtn; }
 
-    void                ShowButtonFixedLine( BOOL bVisible );
-    BOOL                IsButtonFixedLineVisible();
+    void                ShowButtonFixedLine( sal_Bool bVisible );
+    sal_Bool                IsButtonFixedLineVisible();
 
     void                SetViewWindow( Window* pWindow ) { mpViewWindow = pWindow; }
     Window*             GetViewWindow() const { return mpViewWindow; }

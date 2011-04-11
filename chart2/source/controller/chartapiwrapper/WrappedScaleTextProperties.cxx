@@ -140,9 +140,6 @@ enum
 }//anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//static
 void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -154,9 +151,7 @@ void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOut
 }
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
-//static
 void WrappedScaleTextProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
                                  , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {

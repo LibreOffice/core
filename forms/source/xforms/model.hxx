@@ -428,10 +428,6 @@ public:
 
 };
 
-// finally, allow 'shifting' of Model objects into/out of Any
-void operator <<= ( com::sun::star::uno::Any&, const xforms::Model* );
-bool operator >>= ( xforms::Model*, const com::sun::star::uno::Any&  );
-
 } // namespace
 #endif
 

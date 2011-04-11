@@ -28,13 +28,13 @@
 #ifndef _PAM_HXX
 #define _PAM_HXX
 
-#include <stddef.h>         // fuer MemPool
+#include <stddef.h>         // For MemPool.
 #include <tools/gen.hxx>
 #include <tools/mempool.hxx>
-#include <cshtyp.hxx>       // fuer die Funktions-Definitionen
-#include <ring.hxx>         // Superklasse
-#include <index.hxx>        // fuer SwIndex
-#include <ndindex.hxx>      // fuer SwNodeIndex
+#include <cshtyp.hxx>       // For function definitions.
+#include <ring.hxx>         // Super class.
+#include <index.hxx>        // For SwIndex.
+#include <ndindex.hxx>      // For SwNodeIndex.
 #include "swdllapi.h"
 
 class SwFmt;
@@ -66,7 +66,6 @@ struct SW_DLLPUBLIC SwPosition
     SwPosition( const SwPosition & );
     SwPosition &operator=(const SwPosition &);
 
-    // #111827#
     /**
        Returns the document this position is in.
 
@@ -74,26 +73,26 @@ struct SW_DLLPUBLIC SwPosition
     */
     SwDoc * GetDoc() const;
 
-    BOOL operator < (const SwPosition &) const;
-    BOOL operator > (const SwPosition &) const;
-    BOOL operator <=(const SwPosition &) const;
-    BOOL operator >=(const SwPosition &) const;
-    BOOL operator ==(const SwPosition &) const;
-    BOOL operator !=(const SwPosition &) const;
+    sal_Bool operator < (const SwPosition &) const;
+    sal_Bool operator > (const SwPosition &) const;
+    sal_Bool operator <=(const SwPosition &) const;
+    sal_Bool operator >=(const SwPosition &) const;
+    sal_Bool operator ==(const SwPosition &) const;
+    sal_Bool operator !=(const SwPosition &) const;
 };
 
 
-// das Ergebnis eines Positions Vergleiches
+// Result of comparing positions.
 enum SwComparePosition {
-    POS_BEFORE,             // Pos1 liegt vor Pos2
-    POS_BEHIND,             // Pos1 liegt hinter Pos2
-    POS_INSIDE,             // Pos1 liegt vollstaendig in Pos2
-    POS_OUTSIDE,            // Pos2 liegt vollstaendig in Pos1
-    POS_EQUAL,              // Pos1 ist genauso gross wie Pos2
-    POS_OVERLAP_BEFORE,     // Pos1 ueberlappt Pos2 am Anfang
-    POS_OVERLAP_BEHIND,     // Pos1 ueberlappt Pos2 am Ende
-    POS_COLLIDE_START,      // Pos1 Start stoesst an Pos2 Ende
-    POS_COLLIDE_END         // Pos1 End stoesst an Pos2 Start
+    POS_BEFORE,             // Pos1 before Pos2.
+    POS_BEHIND,             // Pos1 behind Pos2.
+    POS_INSIDE,             // Pos1 completely contained in Pos2.
+    POS_OUTSIDE,            // Pos2 completely contained in Pos1.
+    POS_EQUAL,              // Pos1 is as large as Pos2.
+    POS_OVERLAP_BEFORE,     // Pos1 overlaps Pos2 at the beginning.
+    POS_OVERLAP_BEHIND,     // Pos1 overlaps Pos2 at the end.
+    POS_COLLIDE_START,      // Pos1 start touches at Pos2 end.
+    POS_COLLIDE_END         // Pos1 end touches at Pos2 start.
 };
 SwComparePosition ComparePosition(
             const SwPosition& rStt1, const SwPosition& rEnd1,
@@ -110,7 +109,7 @@ typedef SwMoveFnCollection* SwMoveFn;
 SW_DLLPUBLIC extern SwMoveFn fnMoveForward; // SwPam::Move()/Find() default argument.
 SW_DLLPUBLIC extern SwMoveFn fnMoveBackward;
 
-typedef BOOL (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
+typedef sal_Bool (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
 SW_DLLPUBLIC extern SwGoInDoc fnGoDoc;
 extern SwGoInDoc fnGoSection;
 SW_DLLPUBLIC extern SwGoInDoc fnGoNode;
@@ -151,28 +150,28 @@ public:
     // @@@ semantic: no copy assignment for super class Ring.
     SwPaM& operator=( const SwPaM & );
 
-    // Bewegen des Cursors
-    BOOL Move( SwMoveFn fnMove = fnMoveForward,
+    // Movement of cursor.
+    sal_Bool Move( SwMoveFn fnMove = fnMoveForward,
                     SwGoInDoc fnGo = fnGoCntnt );
 
-    // Suchen
-    BYTE Find(  const com::sun::star::util::SearchOptions& rSearchOpt,
-                BOOL bSearchInNotes,
+    // Search.
+    sal_uInt8 Find( const com::sun::star::util::SearchOptions& rSearchOpt,
+                sal_Bool bSearchInNotes,
                 utl::TextSearch& rSTxt,
                 SwMoveFn fnMove = fnMoveForward,
-                const SwPaM *pPam =0, BOOL bInReadOnly = FALSE);
-    BOOL Find(  const SwFmt& rFmt,
+                const SwPaM *pPam =0, sal_Bool bInReadOnly = sal_False);
+    sal_Bool Find(  const SwFmt& rFmt,
                 SwMoveFn fnMove = fnMoveForward,
-                const SwPaM *pPam =0, BOOL bInReadOnly = FALSE);
-    BOOL Find(  const SfxPoolItem& rAttr, BOOL bValue = TRUE,
+                const SwPaM *pPam =0, sal_Bool bInReadOnly = sal_False);
+    sal_Bool Find(  const SfxPoolItem& rAttr, sal_Bool bValue = sal_True,
                 SwMoveFn fnMove = fnMoveForward,
-                const SwPaM *pPam =0, BOOL bInReadOnly = FALSE );
-    BOOL Find(  const SfxItemSet& rAttr, BOOL bNoColls,
+                const SwPaM *pPam =0, sal_Bool bInReadOnly = sal_False );
+    sal_Bool Find(  const SfxItemSet& rAttr, sal_Bool bNoColls,
                 SwMoveFn fnMove,
-                const SwPaM *pPam, BOOL bInReadOnly, BOOL bMoveFirst );
+                const SwPaM *pPam, sal_Bool bInReadOnly, sal_Bool bMoveFirst );
 
     bool DoSearch( const com::sun::star::util::SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
-                    SwMoveFn fnMove, BOOL bSrchForward, BOOL bRegSearch, BOOL bChkEmptyPara, BOOL bChkParaEnd,
+                    SwMoveFn fnMove, sal_Bool bSrchForward, sal_Bool bRegSearch, sal_Bool bChkEmptyPara, sal_Bool bChkParaEnd,
                     xub_StrLen &nStart, xub_StrLen &nEnde,xub_StrLen nTxtLen,SwNode* pNode, SwPaM* pPam);
 
     inline bool IsInFrontOfLabel() const        { return m_bIsInFrontOfLabel; }
@@ -240,10 +239,10 @@ public:
     /**
        Normalizes PaM, i.e. sort point and mark.
 
-       @param bPointFirst TRUE: If the point is behind the mark then swap.
-                          FALSE: If the mark is behind the point then swap.
+       @param bPointFirst sal_True: If the point is behind the mark then swap.
+                          sal_False: If the mark is behind the point then swap.
     */
-    SwPaM & Normalize(BOOL bPointFirst = TRUE);
+    SwPaM & Normalize(sal_Bool bPointFirst = sal_True);
 
     /// @return the document (SwDoc) at which the PaM is registered
     SwDoc* GetDoc() const   { return m_pPoint->nNode.GetNode().GetDoc(); }
@@ -253,19 +252,19 @@ public:
     const SwPosition& GetBound( bool bOne = true ) const
                             { return bOne ? m_Bound1 : m_Bound2; }
 
-    // erfrage die Seitennummer auf der der Cursor steht
-    USHORT GetPageNum( BOOL bAtPoint = TRUE, const Point* pLayPos = 0 );
+    // Get number of page which contains cursor.
+    sal_uInt16 GetPageNum( sal_Bool bAtPoint = sal_True, const Point* pLayPos = 0 );
 
-    // steht in etwas geschuetztem oder in die Selektion umspannt
-    // etwas geschuetztes.
-    BOOL HasReadonlySel( bool bFormView ) const;
+    // Is in something protected (readonly) or selection contains
+    // something protected.
+    sal_Bool HasReadonlySel( bool bFormView ) const;
 
-    BOOL ContainsPosition(const SwPosition & rPos)
+    sal_Bool ContainsPosition(const SwPosition & rPos)
     { return *Start() <= rPos && rPos <= *End(); }
 
-    static BOOL Overlap(const SwPaM & a, const SwPaM & b);
+    static sal_Bool Overlap(const SwPaM & a, const SwPaM & b);
 
-    static BOOL LessThan(const SwPaM & a, const SwPaM & b);
+    static sal_Bool LessThan(const SwPaM & a, const SwPaM & b);
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwPaM);
 
@@ -274,8 +273,8 @@ public:
 };
 
 
-BOOL CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, BOOL );
-BOOL GoInCntnt( SwPaM & rPam, SwMoveFn fnMove );
+sal_Bool CheckNodesRange( const SwNodeIndex&, const SwNodeIndex&, sal_Bool );
+sal_Bool GoInCntnt( SwPaM & rPam, SwMoveFn fnMove );
 
 
 #endif  // _PAM_HXX

@@ -27,7 +27,8 @@
 
 #define __RSC
 #include <svtools/svtools.hrc>
-#include "sfxecode.hxx"
+#include <svtools/sfxecode.hxx>
+
  // pragma ----------------------------------------------------------------
 
 String STR_ERR_HDLMESS

@@ -41,13 +41,13 @@
 #include "services.h"
 #include "general.h"
 #include "properties.h"
-#include <helper/imageproducer.hxx>
-#include <classes/sfxhelperfunctions.hxx>
+#include <framework/imageproducer.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>
 #include <classes/resource.hrc>
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 #include <uielement/toolbarmerger.hxx>
-#include <helper/acceleratorinfo.hxx>
+#include <framework/acceleratorinfo.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -123,20 +123,19 @@ static const char   ITEM_DESCRIPTOR_VISIBLE[]       = "IsVisible";
 static const char   ITEM_DESCRIPTOR_WIDTH[]         = "Width";
 static const char   ITEM_DESCRIPTOR_STYLE[]         = "Style";
 
-static const sal_Int32 ITEM_DESCRIPTOR_COMMANDURL_LEN  = 10;
-static const sal_Int32 ITEM_DESCRIPTOR_HELPURL_LEN     = 7;
-static const sal_Int32 ITEM_DESCRIPTOR_TOOLTIP_LEN     = 7;
-static const sal_Int32 ITEM_DESCRIPTOR_CONTAINER_LEN   = 23;
-static const sal_Int32 ITEM_DESCRIPTOR_LABEL_LEN       = 5;
-static const sal_Int32 ITEM_DESCRIPTOR_TYPE_LEN        = 4;
-static const sal_Int32 ITEM_DESCRIPTOR_VISIBLE_LEN     = 9;
-static const sal_Int32 ITEM_DESCRIPTOR_WIDTH_LEN       = 5;
-static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = 5;
+static const sal_Int32 ITEM_DESCRIPTOR_COMMANDURL_LEN  = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_COMMANDURL);
+static const sal_Int32 ITEM_DESCRIPTOR_HELPURL_LEN     = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_HELPURL);
+static const sal_Int32 ITEM_DESCRIPTOR_TOOLTIP_LEN     = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_TOOLTIP);
+static const sal_Int32 ITEM_DESCRIPTOR_CONTAINER_LEN   = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_CONTAINER);
+static const sal_Int32 ITEM_DESCRIPTOR_LABEL_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_LABEL);
+static const sal_Int32 ITEM_DESCRIPTOR_TYPE_LEN        = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_TYPE);
+static const sal_Int32 ITEM_DESCRIPTOR_VISIBLE_LEN     = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_VISIBLE);
+static const sal_Int32 ITEM_DESCRIPTOR_WIDTH_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_WIDTH);
+static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = RTL_CONSTASCII_LENGTH(ITEM_DESCRIPTOR_STYLE);
 
 static const char   HELPID_PREFIX[]                 = "helpid:";
 static const char   HELPID_PREFIX_TESTTOOL[]        = ".HelpId:";
-//static sal_Int32    HELPID_PREFIX_LENGTH            = 7;
-static const USHORT STARTID_CUSTOMIZE_POPUPMENU     = 1000;
+static const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU     = 1000;
 
 #define MENUPREFIX "private:resource/menubar/"
 
@@ -176,13 +175,11 @@ throw ( RuntimeException )
 
 //*****************************************************************************************************************
 
-static sal_Int16 getImageTypeFromBools( sal_Bool bBig, sal_Bool bHighContrast )
+static sal_Int16 getImageTypeFromBools( sal_Bool bBig )
 {
     sal_Int16 n( 0 );
     if ( bBig )
         n |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
-    if ( bHighContrast )
-        n |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
     return n;
 }
 
@@ -239,7 +236,6 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     ThreadHelpBase( &Application::GetSolarMutex() ),
     OWeakObject(),
     m_bDisposed( sal_False ),
-    m_bIsHiContrast( pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode() ),
     m_bSmallSymbols( !SvtMiscOptions().AreCurrentSymbolsLarge() ),
     m_bModuleIdentified( sal_False ),
     m_bAddedToTaskPaneList( sal_True ),
@@ -287,8 +283,8 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
 
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
-    USHORT nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
-    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString::createFromAscii( "CreateDialog" )))
+    sal_uInt16 nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
+    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialog"))))
          nMenuType |= TOOLBOX_MENUTYPE_CUSTOMIZE;
     //added for issue33668 by shizhoubo
     m_pToolBar->SetCommandHdl( LINK( this, ToolBarManager, Command ) );
@@ -301,10 +297,10 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     // set name for testtool, the useful part is after the last '/'
     sal_Int32 idx = rResourceName.lastIndexOf('/');
     idx++; // will become 0 if '/' not found: use full string
-    ::rtl::OUString  aHelpIdAsString( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX_TESTTOOL ));
+    ::rtl::OString  aHelpIdAsString( HELPID_PREFIX_TESTTOOL );
     ::rtl::OUString  aToolbarName = rResourceName.copy( idx );
-    aHelpIdAsString += aToolbarName;
-    m_pToolBar->SetSmartHelpId( SmartId( aHelpIdAsString ) );
+    aHelpIdAsString += rtl::OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );;
+    m_pToolBar->SetHelpId( aHelpIdAsString );
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
     m_aAsyncUpdateControllersTimer.SetTimeoutHdl( LINK( this, ToolBarManager, AsyncUpdateControllersHdl ) );
@@ -354,7 +350,6 @@ void ToolBarManager::Destroy()
     m_pToolBar->SetStateChangedHdl( aEmpty );
     m_pToolBar->SetDataChangedHdl( aEmpty );
 
-//    delete m_pToolBar;
     m_pToolBar = 0;
 }
 
@@ -368,21 +363,6 @@ void ToolBarManager::CheckAndUpdateImages()
 {
     ResetableGuard aGuard( m_aLock );
     sal_Bool bRefreshImages = sal_False;
-
-    // Check if high contrast/normal mode have changed
-    if ( m_pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        if ( !m_bIsHiContrast )
-        {
-            bRefreshImages = TRUE;
-            m_bIsHiContrast = sal_True;
-        }
-    }
-    else if ( m_bIsHiContrast )
-    {
-        bRefreshImages = sal_True;
-        m_bIsHiContrast = sal_False;
-    }
 
     SvtMiscOptions aMiscOptions;
     bool bCurrentSymbolsSmall = !aMiscOptions.AreCurrentSymbolsLarge();
@@ -409,18 +389,18 @@ void ToolBarManager::RefreshImages()
     ResetableGuard aGuard( m_aLock );
 
     sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    for ( USHORT nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
+    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
     {
-        USHORT nId( m_pToolBar->GetItemId( nPos ) );
+        sal_uInt16 nId( m_pToolBar->GetItemId( nPos ) );
 
         if ( nId > 0 )
         {
             ::rtl::OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
-            Image aImage = GetImageFromURL( m_xFrame, aCommandURL, bBigImages, m_bIsHiContrast );
+            Image aImage = GetImageFromURL( m_xFrame, aCommandURL, bBigImages );
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
-                aImage = QueryAddonsImage( aCommandURL, bBigImages, m_bIsHiContrast );
+                aImage = QueryAddonsImage( aCommandURL, bBigImages );
             m_pToolBar->SetItemImage( nId, aImage );
         }
     }
@@ -461,9 +441,9 @@ void ToolBarManager::UpdateImageOrientation()
         }
     }
 
-    for ( USHORT nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
+    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
     {
-        USHORT nId = m_pToolBar->GetItemId( nPos );
+        sal_uInt16 nId = m_pToolBar->GetItemId( nPos );
         if ( nId > 0 )
         {
             rtl::OUString aCmd = m_pToolBar->GetItemCommand( nId );
@@ -473,7 +453,7 @@ void ToolBarManager::UpdateImageOrientation()
             {
                 if ( pIter->second.bRotated )
                 {
-                    m_pToolBar->SetItemImageMirrorMode( nId, FALSE );
+                    m_pToolBar->SetItemImageMirrorMode( nId, sal_False );
                     m_pToolBar->SetItemImageAngle( nId, m_lImageRotation );
                 }
                 if ( pIter->second.bMirrored )
@@ -546,22 +526,6 @@ void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::
          {
          }
 
-       /* m_bUpdateControllers = sal_True;
-        ToolBarControllerMap::iterator pIter = m_aControllerMap.begin();
-
-        while ( pIter != m_aControllerMap.end() )
-        {
-            try
-            {
-                Reference< XUpdatable > xUpdatable( pIter->second, UNO_QUERY );
-                if ( xUpdatable.is() )
-                    xUpdatable->update();
-            }
-            catch ( Exception& )
-            {
-            }
-            ++pIter;
-        }*/
 
     }
     m_bUpdateControllers = sal_False;
@@ -582,7 +546,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     if ( m_bDisposed )
         return;
 
-    if ( Event.FeatureURL.Complete.equalsAscii( ".uno:ImageOrientation" ))
+    if ( Event.FeatureURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:ImageOrientation")) )
     {
         SfxImageItem aItem( 1, 0 );
         aItem.PutValue( Event.State );
@@ -764,8 +728,8 @@ void ToolBarManager::impl_elementChanged(bool _bRemove,const ::com::sun::star::u
     Reference< XNameAccess > xNameAccess;
     sal_Int16                nImageType = sal_Int16();
     sal_Int16                nCurrentImageType = getImageTypeFromBools(
-                                                    SvtMiscOptions().AreCurrentSymbolsLarge(),
-                                                    m_bIsHiContrast );
+                                                    SvtMiscOptions().AreCurrentSymbolsLarge()
+                                                    );
 
     if (( Event.aInfo >>= nImageType ) &&
         ( nImageType == nCurrentImageType ) &&
@@ -815,7 +779,7 @@ void ToolBarManager::impl_elementChanged(bool _bRemove,const ::com::sun::star::u
 }
 void ToolBarManager::setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter)
 {
-    const ::std::vector< USHORT >& _rIDs = _pIter->second.aIds;
+    const ::std::vector< sal_uInt16 >& _rIDs = _pIter->second.aIds;
     m_pToolBar->SetItemImage( _pIter->second.nId, _aImage );
     ::std::for_each(_rIDs.begin(),_rIDs.end(),::boost::bind(&ToolBar::SetItemImage,m_pToolBar,_1,_aImage));
 }
@@ -907,7 +871,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
     aPropSeq = GetPropsForCommand( aCmdURL );
     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
     {
-        if ( aPropSeq[i].Name.equalsAscii( "Name" ))
+        if ( aPropSeq[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Name")) )
         {
             aPropSeq[i].Value >>= aLabel;
             break;
@@ -925,7 +889,7 @@ sal_Int32 ToolBarManager::RetrievePropertiesFromCommand( const ::rtl::OUString& 
     aPropSeq = GetPropsForCommand( aCmdURL );
     for ( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
     {
-        if ( aPropSeq[i].Name.equalsAscii( "Properties" ))
+        if ( aPropSeq[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Properties")) )
         {
             aPropSeq[i].Value >>= nProperties;
             break;
@@ -950,22 +914,22 @@ void ToolBarManager::CreateControllers()
     if ( xProps.is() )
         xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xComponentContext;
 
-    for ( USHORT i = 0; i < m_pToolBar->GetItemCount(); i++ )
+    for ( sal_uInt16 i = 0; i < m_pToolBar->GetItemCount(); i++ )
     {
-        USHORT nId = m_pToolBar->GetItemId( i );
+        sal_uInt16 nId = m_pToolBar->GetItemId( i );
         if ( nId == 0 )
             continue;
 
-        sal_Int16                    nWidth( sal_Int16( m_pToolBar->GetHelpId( nId )));
         rtl::OUString                aLoadURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:OpenUrl" ));
         rtl::OUString                aCommandURL( m_pToolBar->GetItemCommand( nId ));
         sal_Bool                     bInit( sal_True );
         sal_Bool                     bCreate( sal_True );
         Reference< XStatusListener > xController;
+        CommandToInfoMap::iterator pCommandIter = m_aCommandMap.find( aCommandURL );
+        sal_Int16 nWidth = ( pCommandIter != m_aCommandMap.end() ? pCommandIter->second.nWidth : 0 );
 
         svt::ToolboxController* pController( 0 );
 
-        m_pToolBar->SetHelpId( nId, 0 ); // reset value again
         if ( bHasDisabledEntries )
         {
             aURL.Complete = aCommandURL;
@@ -1124,7 +1088,6 @@ void ToolBarManager::CreateControllers()
                 //for Support Visiblitly by shizhoubo
                 if (pController)
                 {
-                //  rtl::OUString aCommandURL = pController->m_aCommandURL;
                     if(aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SwitchXFormsDesignMode" )) ||
                        aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ViewDataSourceBrowser" )) ||
                        aCommandURL == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ParaLeftToRight" )) ||
@@ -1247,7 +1210,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     if ( m_bDisposed )
         return;
 
-    USHORT    nId( 1 );
+    sal_uInt16    nId( 1 );
     ::rtl::OUString  aHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( HELPID_PREFIX ));
 
     Reference< XModuleManager > xModuleManager( Reference< XModuleManager >(
@@ -1318,7 +1281,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
             {
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
-                    if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_COMMANDURL, ITEM_DESCRIPTOR_COMMANDURL_LEN ))
+                    if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)) )
                     {
                         aProp[i].Value >>= aCommandURL;
                         if ( aCommandURL.compareToAscii(MENUPREFIX, RTL_CONSTASCII_LENGTH(MENUPREFIX) ) == 0  )
@@ -1339,7 +1302,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                     xMenuContainer->getByIndex(0) >>= aProps;
                                     for ( sal_Int32 index=0; index<aProps.getLength(); ++index )
                                     {
-                                        if ( aProps[ index ].Name.equalsAsciiL( ITEM_DESCRIPTOR_CONTAINER, ITEM_DESCRIPTOR_CONTAINER_LEN ))
+                                        if ( aProps[ index ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_CONTAINER)) )
 
                                         {
                                             aProps[ index ].Value >>= aMenuDesc;
@@ -1353,19 +1316,19 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                             }
                         }
                     }
-                    else if (  aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_HELPURL, ITEM_DESCRIPTOR_HELPURL_LEN ))
+                    else if (  aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_HELPURL)) )
                         aProp[i].Value >>= aHelpURL;
-                    else if (  aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_TOOLTIP, ITEM_DESCRIPTOR_TOOLTIP_LEN ))
+                    else if (  aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_TOOLTIP)) )
                         aProp[i].Value >>= aTooltip;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_LABEL, ITEM_DESCRIPTOR_LABEL_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_LABEL)) )
                         aProp[i].Value >>= aLabel;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_TYPE, ITEM_DESCRIPTOR_TYPE_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_TYPE)) )
                         aProp[i].Value >>= nType;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_VISIBLE, ITEM_DESCRIPTOR_VISIBLE_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_VISIBLE)) )
                         aProp[i].Value >>= bIsVisible;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_WIDTH, ITEM_DESCRIPTOR_WIDTH_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_WIDTH)) )
                         aProp[i].Value >>= nWidth;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_STYLE, ITEM_DESCRIPTOR_STYLE_LEN ))
+                    else if ( aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_STYLE)) )
                         aProp[i].Value >>= nStyle;
                 }
 
@@ -1414,15 +1377,13 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     if ( pIter == m_aCommandMap.end())
                     {
                         aCmdInfo.nId = nId;
+                        aCmdInfo.nWidth = nWidth;
                         m_aCommandMap.insert( CommandToInfoMap::value_type( aCommandURL, aCmdInfo ));
                     }
                     else
                     {
                         pIter->second.aIds.push_back( nId );
                     }
-
-                    // Add additional information for the controller to the obsolete help id
-                    m_pToolBar->SetHelpId( ULONG( nWidth ));
 
                     if ( !bIsVisible )
                         m_pToolBar->HideItem( nId );
@@ -1559,8 +1520,7 @@ void ToolBarManager::RequestImages()
     }
 
     sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    m_bIsHiContrast = m_pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode();
-    sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge(), m_bIsHiContrast );
+    sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge() );
 
     if ( m_xDocImageManager.is() )
         aDocGraphicSeq = m_xDocImageManager->getImages( p, aCmdURLSeq );
@@ -1581,7 +1541,7 @@ void ToolBarManager::RequestImages()
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
-                aImage = QueryAddonsImage( aCmdURLSeq[i], bBigImages, m_bIsHiContrast );
+                aImage = QueryAddonsImage( aCmdURLSeq[i], bBigImages );
 
             pIter->second.nImageInfo = 1; // mark image as module based
         }
@@ -1639,7 +1599,7 @@ long ToolBarManager::HandleClick(void ( SAL_CALL XToolbarController::*_pClick )(
     if ( m_bDisposed )
         return 1;
 
-    USHORT nId( m_pToolBar->GetCurItemId() );
+    sal_uInt16 nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -1663,7 +1623,7 @@ IMPL_LINK( ToolBarManager, DropdownClick, ToolBox*, EMPTYARG )
     if ( m_bDisposed )
         return 1;
 
-    USHORT nId( m_pToolBar->GetCurItemId() );
+    sal_uInt16 nId( m_pToolBar->GetCurItemId() );
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
     {
@@ -1703,7 +1663,7 @@ void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
     }
 
     // remove all items that were not added by the toolbar itself
-    USHORT i;
+    sal_uInt16 i;
     for( i=0; i<pMenu->GetItemCount(); )
     {
         if( pMenu->GetItemId( i ) < TOOLBOX_MENUITEM_START )
@@ -1789,7 +1749,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
 
     if ( m_pToolBar->IsCustomize() )
     {
-        USHORT      nPos( 0 );
+        sal_uInt16      nPos( 0 );
         PopupMenu*  pItemMenu( aPopupMenu.GetPopupMenu( 1 ));
 
         sal_Bool    bIsFloating( sal_False );
@@ -1830,16 +1790,14 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
         {
             if ( m_pToolBar->GetItemType(nPos) == TOOLBOXITEM_BUTTON )
             {
-                USHORT nId = m_pToolBar->GetItemId(nPos);
+                sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
                 ::rtl::OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
                 pItemMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MIB_CHECKABLE );
                 pItemMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
                 pItemMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
                 pItemMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos,
-                                         GetImageFromURL( m_xFrame,
-                                                          aCommandURL,
-                                                          sal_False,
-                                                          m_bIsHiContrast ));
+                                         GetImageFromURL( m_xFrame, aCommandURL, sal_False )
+                                       );
             }
             else
             {
@@ -1849,7 +1807,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
     }
     else
     {
-        USHORT nPos = aPopupMenu.GetItemPos( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR );
+        sal_uInt16 nPos = aPopupMenu.GetItemPos( MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR );
         if ( nPos != MENU_ITEM_NOTFOUND )
             aPopupMenu.RemoveItem( nPos );
     }
@@ -1858,7 +1816,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
     if( pMenu->GetItemCount() )
         pMenu->InsertSeparator();
 
-    USHORT i;
+    sal_uInt16 i;
     for( i=0; i< aPopupMenu.GetItemCount(); i++)
     {
         sal_uInt16 nId = aPopupMenu.GetItemId( i );
@@ -2017,7 +1975,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
 
             default:
             {
-                USHORT nId = pMenu->GetCurItemId();
+                sal_uInt16 nId = pMenu->GetCurItemId();
                 if(( nId > 0 ) && ( nId < TOOLBOX_MENUITEM_START ))
                 {
                     // toggle toolbar button visibility
@@ -2042,11 +2000,11 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                                 {
                                     for ( sal_Int32 j = 0; j < aProp.getLength(); j++ )
                                     {
-                                        if ( aProp[j].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+                                        if ( aProp[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)) )
                                         {
                                             aProp[j].Value >>= aCommandURL;
                                         }
-                                        else if ( aProp[j].Name.equalsAscii( ITEM_DESCRIPTOR_VISIBLE ))
+                                        else if ( aProp[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_VISIBLE)) )
                                         {
                                             aProp[j].Value >>= bVisible;
                                             nVisibleIndex = j;
@@ -2099,7 +2057,7 @@ IMPL_LINK( ToolBarManager, Select, ToolBox*, EMPTYARG )
         return 1;
 
     sal_Int16   nKeyModifier( (sal_Int16)m_pToolBar->GetModifier() );
-    USHORT      nId( m_pToolBar->GetCurItemId() );
+    sal_uInt16      nId( m_pToolBar->GetCurItemId() );
 
     ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
     if ( pIter != m_aControllerMap.end() )
@@ -2135,7 +2093,6 @@ IMPL_LINK( ToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
 
     if ( *pStateChangedType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
     else if ( *pStateChangedType == STATE_CHANGE_VISIBLE )
@@ -2156,13 +2113,12 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
         (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY  ))  &&
         ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE        ))
     {
-        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
 
-    for ( USHORT nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
+    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); ++nPos )
     {
-        const USHORT nId = m_pToolBar->GetItemId(nPos);
+        const sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
         Window* pWindow = m_pToolBar->GetItemWindow( nId );
         if ( pWindow )
         {
@@ -2241,9 +2197,9 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExe
     return 0;
 }
 
-Image ToolBarManager::QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages, bool bHiContrast )
+Image ToolBarManager::QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages )
 {
-    Image aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages, bHiContrast );
+    Image aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages );
     return aImage;
 }
 

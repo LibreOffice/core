@@ -46,5 +46,4 @@
 #define COMMAND_ID_FONT_DIALOG                 15
 #define COMMAND_ID_PARAGRAPH_DIALOG            16
 
-// CHART_SHAPECONTROLLER_HRC
 #endif

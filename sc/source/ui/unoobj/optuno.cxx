@@ -43,7 +43,6 @@
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
-// static
 const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 {
     static SfxItemPropertyMapEntry aMap[] =
@@ -65,7 +64,6 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
     return aMap;
 }
 
-// static
 sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
                 const rtl::OUString& aPropertyName, const uno::Any& aValue )
@@ -74,7 +72,7 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
 
     const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName(aPropertyName );
     if( !pEntry || !pEntry->nWID )
-        return sal_False;
+        return false;
     switch( pEntry->nWID )
     {
         case PROP_UNO_CALCASSHOWN :
@@ -97,7 +95,7 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
         {
             sal_Int32 nIntVal = 0;
             if ( aValue >>= nIntVal )
-                rOptions.SetIterCount( (USHORT)nIntVal );
+                rOptions.SetIterCount( (sal_uInt16)nIntVal );
         }
         break;
         case PROP_UNO_ITEREPSILON :
@@ -138,7 +136,6 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
     return sal_True;
 }
 
-// static
 uno::Any ScDocOptionsHelper::getPropertyValue(
                 const ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
@@ -176,7 +173,7 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
         break;
         case PROP_UNO_NULLDATE:
         {
-            USHORT nD, nM, nY;
+            sal_uInt16 nD, nM, nY;
             rOptions.GetDate( nD, nM, nY );
             util::Date aDate( nD, nM, nY );
             aRet <<= aDate;
@@ -216,7 +213,7 @@ void SAL_CALL ScDocOptionsObj::setPropertyValue(
 {
     SolarMutexGuard aGuard;
 
-    BOOL bDone = ScDocOptionsHelper::setPropertyValue( aOptions, *GetPropertySet().getPropertyMap(), aPropertyName, aValue );
+    sal_Bool bDone = ScDocOptionsHelper::setPropertyValue( aOptions, *GetPropertySet().getPropertyMap(), aPropertyName, aValue );
 
     if (!bDone)
         ScModelObj::setPropertyValue( aPropertyName, aValue );

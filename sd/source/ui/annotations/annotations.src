@@ -28,6 +28,7 @@
 #include "annotations.hrc"
 #include "glob.hrc"
 #include <svx/svxids.hrc>
+#include "helpids.h"
 
 Menu RID_ANNOTATION_CONTEXTMENU
 {
@@ -36,7 +37,7 @@ Menu RID_ANNOTATION_CONTEXTMENU
         MenuItem
         {
             Identifier = SID_REPLYTO_POSTIT;
-            HelpID = SID_REPLYTO_POSTIT ;
+            HelpId = CMD_SID_REPLYTO_POSTIT ;
             Text [ en-US ] = "~Reply";
         };
         MenuItem
@@ -46,25 +47,25 @@ Menu RID_ANNOTATION_CONTEXTMENU
         MenuItem
         {
             Identifier = SID_ATTR_CHAR_WEIGHT;
-            HelpID = SID_ATTR_CHAR_WEIGHT ;
+            HelpId = CMD_SID_ATTR_CHAR_WEIGHT ;
             Text [ en-US ] = "~Bold";
         };
         MenuItem
         {
             Identifier = SID_ATTR_CHAR_POSTURE;
-            HelpID = SID_ATTR_CHAR_POSTURE;
+            HelpId = CMD_SID_ATTR_CHAR_POSTURE;
             Text [ en-US ] = "~Italic";
         };
         MenuItem
         {
             Identifier = SID_ATTR_CHAR_UNDERLINE;
-            HelpID = SID_ATTR_CHAR_UNDERLINE;
+            HelpId = CMD_SID_ATTR_CHAR_UNDERLINE;
             Text [ en-US ] = "~Underline";
         };
         MenuItem
         {
             Identifier = SID_ATTR_CHAR_STRIKEOUT;
-            HelpID = SID_ATTR_CHAR_STRIKEOUT;
+            HelpId = CMD_SID_ATTR_CHAR_STRIKEOUT;
             Text [ en-US ] = "~Strikethrough";
         };
         MenuItem
@@ -74,13 +75,13 @@ Menu RID_ANNOTATION_CONTEXTMENU
         MenuItem
         {
             Identifier = SID_COPY ;
-            HelpID = SID_COPY ;
+            HelpId = CMD_SID_COPY ;
             Text [ en-US ] = "~Copy" ;
         };
         MenuItem
         {
             Identifier = SID_PASTE ;
-            HelpID = SID_PASTE ;
+            HelpId = CMD_SID_PASTE ;
             Text [ en-US ] = "~Paste" ;
         };
         MenuItem
@@ -90,19 +91,19 @@ Menu RID_ANNOTATION_CONTEXTMENU
         MenuItem
         {
             Identifier = SID_DELETE_POSTIT ;
-            HelpID = SID_DELETE_POSTIT;
+            HelpId = CMD_SID_DELETE_POSTIT;
             Text [ en-US ] = "~Delete Comment" ;
         };
         MenuItem
         {
             Identifier = SID_DELETEALLBYAUTHOR_POSTIT ;
-            HelpID = SID_DELETEALLBYAUTHOR_POSTIT;
+            HelpId = CMD_SID_DELETEALLBYAUTHOR_POSTIT;
             Text [ en-US ] = "Delete All Comments b~y %1" ;
         };
         MenuItem
         {
             Identifier = SID_DELETEALL_POSTIT;
-            HelpID = SID_DELETEALL_POSTIT;
+            HelpId = CMD_SID_DELETEALL_POSTIT;
             Text [ en-US ] = "Delete ~All Comments" ;
         };
     };
@@ -115,7 +116,7 @@ Menu RID_ANNOTATION_TAG_CONTEXTMENU
         MenuItem
         {
             Identifier = SID_REPLYTO_POSTIT;
-            HelpID = SID_REPLYTO_POSTIT;
+            HelpId = CMD_SID_REPLYTO_POSTIT;
             Text [ en-US ] = "~Reply";
         };
         MenuItem
@@ -125,19 +126,19 @@ Menu RID_ANNOTATION_TAG_CONTEXTMENU
         MenuItem
         {
             Identifier = SID_DELETE_POSTIT ;
-            HelpID = SID_DELETE_POSTIT ;
+            HelpId = CMD_SID_DELETE_POSTIT ;
             Text [ en-US ] = "~Delete Comment" ;
         };
         MenuItem
         {
             Identifier = SID_DELETEALLBYAUTHOR_POSTIT ;
-            HelpID = SID_DELETEALLBYAUTHOR_POSTIT ;
+            HelpId = CMD_SID_DELETEALLBYAUTHOR_POSTIT ;
             Text [ en-US ] = "Delete All Comments ~by %1" ;
         };
         MenuItem
         {
             Identifier = SID_DELETEALL_POSTIT;
-            HelpID = SID_DELETEALL_POSTIT;
+            HelpId = CMD_SID_DELETEALL_POSTIT;
             Text [ en-US ] = "Delete ~All Comments" ;
         };
     };

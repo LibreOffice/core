@@ -70,16 +70,16 @@ class SpellChecker :
     >
 {
     Sequence< Locale >                 aSuppLocales;
-        Hunspell **                         aDicts;
-        rtl_TextEncoding *                 aDEncs;
-        Locale *                           aDLocs;
-        OUString *                         aDNames;
-        sal_Int32                          numdict;
+    Hunspell **                        aDicts;
+    rtl_TextEncoding *                 aDEncs;
+    Locale *                           aDLocs;
+    OUString *                         aDNames;
+    sal_Int32                          numdict;
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     linguistic::PropertyHelper_Spell *      pPropHelper;
-    BOOL                                    bDisposing;
+    sal_Bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     SpellChecker(const SpellChecker &);
@@ -91,92 +91,50 @@ class SpellChecker :
         return pPropHelper ? *pPropHelper : GetPropHelper_Impl();
     }
 
-    INT16   GetSpellFailure( const OUString &rWord, const Locale &rLocale );
-    Reference< XSpellAlternatives >
-            GetProposals( const OUString &rWord, const Locale &rLocale );
+    sal_Int16   GetSpellFailure( const OUString &rWord, const Locale &rLocale );
+    Reference< XSpellAlternatives > GetProposals( const OUString &rWord, const Locale &rLocale );
 
 public:
     SpellChecker();
     virtual ~SpellChecker();
 
     // XSupportedLocales (for XSpellChecker)
-    virtual Sequence< Locale > SAL_CALL
-        getLocales()
-            throw(RuntimeException);
-    virtual sal_Bool SAL_CALL
-        hasLocale( const Locale& rLocale )
-            throw(RuntimeException);
+    virtual Sequence< Locale > SAL_CALL getLocales() throw(RuntimeException);
+    virtual sal_Bool SAL_CALL hasLocale( const Locale& rLocale ) throw(RuntimeException);
 
     // XSpellChecker
-    virtual sal_Bool SAL_CALL
-        isValid( const OUString& rWord, const Locale& rLocale,
-                const PropertyValues& rProperties )
-            throw(IllegalArgumentException,
-                  RuntimeException);
-    virtual Reference< XSpellAlternatives > SAL_CALL
-        spell( const OUString& rWord, const Locale& rLocale,
-                const PropertyValues& rProperties )
-            throw(IllegalArgumentException,
-                  RuntimeException);
+    virtual sal_Bool SAL_CALL isValid( const OUString& rWord, const Locale& rLocale, const PropertyValues& rProperties ) throw(IllegalArgumentException, RuntimeException);
+    virtual Reference< XSpellAlternatives > SAL_CALL spell( const OUString& rWord, const Locale& rLocale, const PropertyValues& rProperties ) throw(IllegalArgumentException, RuntimeException);
 
     // XLinguServiceEventBroadcaster
-    virtual sal_Bool SAL_CALL
-        addLinguServiceEventListener(
-            const Reference< XLinguServiceEventListener >& rxLstnr )
-            throw(RuntimeException);
-    virtual sal_Bool SAL_CALL
-        removeLinguServiceEventListener(
-            const Reference< XLinguServiceEventListener >& rxLstnr )
-            throw(RuntimeException);
+    virtual sal_Bool SAL_CALL addLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) throw(RuntimeException);
+    virtual sal_Bool SAL_CALL removeLinguServiceEventListener( const Reference< XLinguServiceEventListener >& rxLstnr ) throw(RuntimeException);
 
     // XServiceDisplayName
-    virtual OUString SAL_CALL
-        getServiceDisplayName( const Locale& rLocale )
-            throw(RuntimeException);
+    virtual OUString SAL_CALL getServiceDisplayName( const Locale& rLocale ) throw(RuntimeException);
 
     // XInitialization
-    virtual void SAL_CALL
-        initialize( const Sequence< Any >& rArguments )
-            throw(Exception, RuntimeException);
+    virtual void SAL_CALL initialize( const Sequence< Any >& rArguments ) throw(Exception, RuntimeException);
 
     // XComponent
-    virtual void SAL_CALL
-        dispose()
-            throw(RuntimeException);
-    virtual void SAL_CALL
-        addEventListener( const Reference< XEventListener >& rxListener )
-            throw(RuntimeException);
-    virtual void SAL_CALL
-        removeEventListener( const Reference< XEventListener >& rxListener )
-            throw(RuntimeException);
-
-    ////////////////////////////////////////////////////////////
-    // Service specific part
-    //
+    virtual void SAL_CALL dispose() throw(RuntimeException);
+    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& rxListener ) throw(RuntimeException);
+    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& rxListener ) throw(RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL
-        getImplementationName()
-            throw(RuntimeException);
-    virtual sal_Bool SAL_CALL
-        supportsService( const OUString& rServiceName )
-            throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw(RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw(RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
 
-    static inline OUString
-        getImplementationName_Static() throw();
-    static Sequence< OUString >
-        getSupportedServiceNames_Static() throw();
+    static inline OUString  getImplementationName_Static() throw();
+    static Sequence< OUString > getSupportedServiceNames_Static() throw();
 };
 
 inline OUString SpellChecker::getImplementationName_Static() throw()
 {
     return A2OU( "org.openoffice.lingu.MySpellSpellChecker" );
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////////

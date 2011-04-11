@@ -44,7 +44,7 @@ namespace svx
     public:
         PasswordTable( Window* pParent, const ResId& rResId );
 
-        void InsertHeaderItem( USHORT nColumn, const String& rText, HeaderBarItemBits nBits );
+        void InsertHeaderItem( sal_uInt16 nColumn, const String& rText, HeaderBarItemBits nBits );
         void ResetTabs();
         void Resort( bool bForced );
     };

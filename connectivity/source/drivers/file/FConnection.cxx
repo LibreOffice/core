@@ -178,7 +178,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         // set fields to fetch
         Sequence< OUString > aProps(1);
         OUString* pProps = aProps.getArray();
-        pProps[ 0 ] = OUString::createFromAscii( "Title" );
+        pProps[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
 
         try
         {
@@ -198,7 +198,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             }
             else
             {
-                OSL_ENSURE(0,"OConnection::construct: ::ucbhelper::Content isn't a folde nor a document! How that?!");
+                OSL_FAIL("OConnection::construct: ::ucbhelper::Content isn't a folde nor a document! How that?!");
                 throw SQLException();
             }
         }
@@ -405,7 +405,7 @@ Reference< XDynamicResultSet > OConnection::getDir() const
     Reference<XDynamicResultSet> xContent;
     Sequence< ::rtl::OUString > aProps(1);
     ::rtl::OUString* pProps = aProps.getArray();
-    pProps[ 0 ] = ::rtl::OUString::createFromAscii( "Title" );
+    pProps[ 0 ] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
     try
     {
         Reference<XContentIdentifier> xIdent = getContent()->getIdentifier();

@@ -477,7 +477,7 @@ PresenterPaneBorderPainter::Renderer::Renderer (
     {
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
                 rxContext),
             UNO_QUERY_THROW);
     }
@@ -694,7 +694,7 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     RendererPaneStyleContainer::const_iterator iStyle (maRendererPaneStyles.find(rsResourceURL));
     if (iStyle == maRendererPaneStyles.end())
     {
-        OUString sPaneStyleName (OUString::createFromAscii("DefaultRendererPaneStyle"));
+        OUString sPaneStyleName (RTL_CONSTASCII_USTRINGPARAM("DefaultRendererPaneStyle"));
 
         // Get pane layout name for resource URL.
         const OUString sStyleName (mpTheme->GetStyleName(rsResourceURL));
@@ -955,7 +955,7 @@ RendererPaneStyle::RendererPaneStyle (
         // Get font description.
         mpFont = rpTheme->GetFont(rsStyleName);
 
-        OUString sAnchor (OUString::createFromAscii("Left"));
+        OUString sAnchor (RTL_CONSTASCII_USTRINGPARAM("Left"));
         if (mpFont.get() != NULL)
         {
             sAnchor = mpFont->msAnchor;
@@ -963,11 +963,11 @@ RendererPaneStyle::RendererPaneStyle (
             mnFontYOffset = mpFont->mnYOffset;
         }
 
-        if (sAnchor == OUString::createFromAscii("Left"))
+        if (sAnchor == OUString(RTL_CONSTASCII_USTRINGPARAM("Left")))
             meFontAnchor = AnchorLeft;
-        else if (sAnchor == OUString::createFromAscii("Right"))
+        else if (sAnchor == OUString(RTL_CONSTASCII_USTRINGPARAM("Right")))
             meFontAnchor = AnchorRight;
-        else if (sAnchor == OUString::createFromAscii("Center"))
+        else if (sAnchor == OUString(RTL_CONSTASCII_USTRINGPARAM("Center")))
             meFontAnchor = AnchorCenter;
         else
             meFontAnchor = AnchorCenter;

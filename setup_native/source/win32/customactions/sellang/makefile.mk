@@ -55,8 +55,7 @@ SHL1STDLIBS=	kernel32.lib\
                 user32.lib\
                 advapi32.lib\
                 shell32.lib\
-                msi.lib\
-                $(LIBSTLPORTST)
+                msi.lib
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib
 

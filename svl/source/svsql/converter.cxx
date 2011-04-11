@@ -28,14 +28,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#include "converter.hxx"
+#include <svl/converter.hxx>
 
-INT32 SvDbaseConverter::ConvertPrecisionToDbase(INT32 _nLen, INT32 _nScale)
+sal_Int32 SvDbaseConverter::ConvertPrecisionToDbase(sal_Int32 _nLen, sal_Int32 _nScale)
 {
     return _nScale ? _nLen +2 : _nLen +1;
 }
 //------------------------------------------------------------------------
-INT32 SvDbaseConverter::ConvertPrecisionToOdbc(INT32 _nLen, INT32 _nScale)
+sal_Int32 SvDbaseConverter::ConvertPrecisionToOdbc(sal_Int32 _nLen, sal_Int32 _nScale)
 {
     return _nScale ? _nLen -2 : _nLen -1;
 }

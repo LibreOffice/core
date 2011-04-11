@@ -173,15 +173,6 @@ OMRCListenerMultiplexerHelper::operator Reference< XInterface >() const
 }
 
 //____________________________________________________________________________________________________________
-//  operator
-//____________________________________________________________________________________________________________
-
-//OMRCListenerMultiplexerHelper& OMRCListenerMultiplexerHelper::operator= ( const OMRCListenerMultiplexerHelper& aCopyInstance )
-//{
-//  return this ;
-//}
-
-//____________________________________________________________________________________________________________
 //  container method
 //____________________________________________________________________________________________________________
 
@@ -498,7 +489,7 @@ void OMRCListenerMultiplexerHelper::impl_adviseToPeer(  const   Reference< XWind
     }
     else
     {
-        OSL_ENSURE( sal_False, "unknown listener" );
+        OSL_FAIL( "unknown listener" );
     }
 }
 
@@ -530,7 +521,7 @@ void OMRCListenerMultiplexerHelper::impl_unadviseFromPeer(  const   Reference< X
     }
     else
     {
-        OSL_ENSURE( sal_False, "unknown listener" );
+        OSL_FAIL( "unknown listener" );
     }
 }
 

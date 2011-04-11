@@ -39,7 +39,6 @@ import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.util.ColourConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
-
 /**
  * Represents a BIFF Record descibing a font used
  */
@@ -61,11 +60,9 @@ public class FontDescription implements BIFFRecord {
     public static final int ITALIC      = 0x02;
 
     /**
-      * Constructs a FontDescription from the bold italic and undelrine attributes
+      * Constructs a FontDescription from a Format.
       *
-      * @param  italic      Italic attribute
-      * @param  bold        Bold attribute
-      * @param  underline   Underline attribute
+      * @param  fmt The <code>Format</code> to use as source.
       */
     public FontDescription(Format fmt) throws IOException {
 
@@ -85,7 +82,6 @@ public class FontDescription implements BIFFRecord {
 
         if (fmt.getAttribute(Format.UNDERLINE))
             uls |= UNDERLINE;
-
 
         bFamily     = 0;
         bCharSet    = 0;
@@ -188,7 +184,6 @@ public class FontDescription implements BIFFRecord {
         return true;
     }
 
-
     /**
       * Constructs a Font Description from the <code>InputStream</code>
       *
@@ -234,7 +229,7 @@ public class FontDescription implements BIFFRecord {
     /**
       * Constructs a Font Description from the <code>InputStream</code>
       *
-      * @param  is InputStream containing a <code>FontDescription</code>
+      * @param  input InputStream containing a <code>FontDescription</code>
       */
     public int read(InputStream input) throws IOException {
 

@@ -31,7 +31,7 @@
 
 
 #include <vcl/dialog.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
 //------------------------------------------------------------------------
@@ -40,12 +40,12 @@ class ScGroupDlg : public ModalDialog
 {
 public:
             ScGroupDlg( Window* pParent,
-                        USHORT  nResId,
-                        BOOL    bUnGroup = FALSE,
-                        BOOL    bRows    = TRUE  );
+                        sal_uInt16  nResId,
+                        sal_Bool    bUnGroup = false,
+                        sal_Bool    bRows    = sal_True  );
             ~ScGroupDlg();
 
-    BOOL GetColsChecked() const;
+    sal_Bool GetColsChecked() const;
 
 private:
     FixedLine       aFlFrame;

@@ -55,7 +55,7 @@ published constants BibliographyDataType
     const short BOOKLET         = 2;
 
     // DocMerge from idl: value com::sun::star::text::BibliographyDataType::CONFERENCE
-    /** An article in the proceedings of a conference. This entry is identical to the 'inproceedings'
+    /** An article in the proceedings of a conference. This entry is identical to the "inproceedings"
     entry and is included for compatibility with BiBTex.
      */
     const short CONFERENCE      = 3;

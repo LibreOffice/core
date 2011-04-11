@@ -72,7 +72,7 @@
 class LwpSLVListHead
 {
 public:
-    LwpSLVListHead(){};
+    LwpSLVListHead(){}
     void Read(LwpObjectStream* pObjStrm);
 private:
     LwpObjectID m_ListHead;
@@ -81,7 +81,7 @@ private:
 class LwpContentHintHead
 {
 public:
-    LwpContentHintHead(){};
+    LwpContentHintHead(){}
     void Read(LwpObjectStream* pObjStrm);
 private:
     LwpSLVListHead m_ListHead;
@@ -90,7 +90,7 @@ private:
 class LwpFootnoteSeenHead
 {
 public:
-    LwpFootnoteSeenHead(){};
+    LwpFootnoteSeenHead(){}
     void Read(LwpObjectStream* pObjStrm);
 private:
     LwpSLVListHead m_ListHead;
@@ -100,7 +100,7 @@ class LwpPageHint : public LwpDLVList
 {
 public:
     LwpPageHint(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    ~LwpPageHint(){};
+    ~LwpPageHint(){}
     void Read();
     void Parse(IXFStream* pOutputStream);
     sal_uInt16 GetPageNumber(){return m_nPageNumber;}

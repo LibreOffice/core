@@ -34,8 +34,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 
 namespace utl
 {

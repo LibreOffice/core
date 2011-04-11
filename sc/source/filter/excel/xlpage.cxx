@@ -33,6 +33,7 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/paperinf.hxx>
 #include <vcl/svapp.hxx>
+#include <sal/macros.h>
 #include "scitems.hxx"
 #include <editeng/brshitem.hxx>
 #include "global.hxx"
@@ -209,7 +210,7 @@ void XclPageData::SetDefaults()
 Size XclPageData::GetScPaperSize() const
 {
     const XclPaperSize* pEntry = pPaperSizeTable;
-    if( mnPaperSize < STATIC_TABLE_SIZE( pPaperSizeTable ) )
+    if( mnPaperSize < SAL_N_ELEMENTS( pPaperSizeTable ) )
         pEntry += mnPaperSize;
 
     Size aSize;

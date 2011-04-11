@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <tools/svwin.h>
+#include <svsys.h>
 #include "rtl/tencinfo.h"
 #include <saldata.hxx>
 #include <vcl/svapp.hxx>
@@ -55,7 +55,7 @@ rtl_TextEncoding ImplSalGetSystemEncoding()
 
 // -----------------------------------------------------------------------
 
-ByteString ImplSalGetWinAnsiString( const UniString& rStr, BOOL bFileName )
+ByteString ImplSalGetWinAnsiString( const UniString& rStr, sal_Bool bFileName )
 {
     rtl_TextEncoding eEncoding = ImplSalGetSystemEncoding();
     if ( bFileName )
@@ -118,75 +118,37 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
 
 // =======================================================================
 
-LONG ImplSetWindowLong( HWND hWnd, int nIndex, DWORD dwNewLong )
+BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
-    if ( aSalShlData.mbWNT )
-        return SetWindowLongW( hWnd, nIndex, dwNewLong );
-    else
-        return SetWindowLongA( hWnd, nIndex, dwNewLong );
+    return PostMessageW( hWnd, nMsg, wParam, lParam );
 }
 
 // -----------------------------------------------------------------------
 
-LONG ImplGetWindowLong( HWND hWnd, int nIndex )
+BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
-    if ( aSalShlData.mbWNT )
-        return GetWindowLongW( hWnd, nIndex );
-    else
-        return GetWindowLongA( hWnd, nIndex );
+    return SendMessageW( hWnd, nMsg, wParam, lParam );
 }
 
 // -----------------------------------------------------------------------
 
-WIN_BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
 {
-    if ( aSalShlData.mbWNT )
-        return PostMessageW( hWnd, nMsg, wParam, lParam );
-    else
-        return PostMessageA( hWnd, nMsg, wParam, lParam );
+    return GetMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
 }
 
 // -----------------------------------------------------------------------
 
-WIN_BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
 {
-    WIN_BOOL bRet;
-    if ( aSalShlData.mbWNT )
-        bRet = SendMessageW( hWnd, nMsg, wParam, lParam );
-    else
-        bRet = SendMessageA( hWnd, nMsg, wParam, lParam );
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
-WIN_BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
-{
-    if ( aSalShlData.mbWNT )
-        return GetMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
-    else
-        return GetMessageA( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
-}
-
-// -----------------------------------------------------------------------
-
-WIN_BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
-{
-    if ( aSalShlData.mbWNT )
-        return PeekMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );
-    else
-        return PeekMessageA( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );
+    return PeekMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );
 }
 
 // -----------------------------------------------------------------------
 
 LONG ImplDispatchMessage( CONST MSG *lpMsg )
 {
-    if ( aSalShlData.mbWNT )
-        return DispatchMessageW( lpMsg );
-    else
-        return DispatchMessageA( lpMsg );
+    return DispatchMessageW( lpMsg );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

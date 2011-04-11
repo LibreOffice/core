@@ -57,10 +57,6 @@
  * @file
  * Implement for font factory which will manage all font.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- ************************************************************************/
 #include    "xffontfactory.hxx"
 
 XFFontFactory::XFFontFactory()
@@ -75,7 +71,7 @@ XFFontFactory::~XFFontFactory()
 void    XFFontFactory::Reset()
 {
     std::vector<XFFont*>::iterator it;
-    for( it = s_aFonts.begin(); it != s_aFonts.end(); it++ )
+    for( it = s_aFonts.begin(); it != s_aFonts.end(); ++it )
     {
         XFFont *pFont = (*it);
         if( !pFont )
@@ -93,7 +89,7 @@ void    XFFontFactory::AddFont(XFFont *pFont)
 XFFont* XFFontFactory::FindSameFont(XFFont *pFont)
 {
     std::vector<XFFont*>::iterator it;
-    for( it = s_aFonts.begin(); it != s_aFonts.end(); it++ )
+    for( it = s_aFonts.begin(); it != s_aFonts.end(); ++it )
     {
         if( *pFont == **it )
             return *it;

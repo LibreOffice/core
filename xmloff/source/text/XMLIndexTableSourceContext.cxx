@@ -41,7 +41,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -86,7 +86,7 @@ XMLIndexTableSourceContext::~XMLIndexTableSourceContext()
 {
 }
 
-static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
+static SvXMLEnumMapEntry const lcl_aReferenceTypeTokenMap[] =
 {
 
     { XML_TEXT,                 ReferenceFieldPart::TEXT },

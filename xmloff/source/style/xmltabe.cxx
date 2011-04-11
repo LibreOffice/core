@@ -34,11 +34,11 @@
 #include <com/sun/star/style/TabAlign.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "xmltabe.hxx"
+#include "xmloff/xmltabe.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -118,16 +118,12 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny )
     uno::Sequence< ::com::sun::star::style::TabStop> aSeq;
     if(!(rAny >>= aSeq))
     {
-        DBG_ERROR( "SvxXMLTabStopExport needs a Sequence ::com::sun::star::style::TabStop>" );
+        OSL_FAIL( "SvxXMLTabStopExport needs a Sequence ::com::sun::star::style::TabStop>" );
     }
     else
     {
         const ::com::sun::star::style::TabStop* pTabs = aSeq.getConstArray();
         const sal_Int32 nTabs   = aSeq.getLength();
-
-        // ignore default tab stop here
-        //if( 1 == nTabs && style::TabAlign_DEFAULT == pTabs[0].Alignment )
-        //  return;
 
         SvXMLElementExport rElem( rExport, XML_NAMESPACE_STYLE, XML_TAB_STOPS,
                                   sal_True, sal_True );

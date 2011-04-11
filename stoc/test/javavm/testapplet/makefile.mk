@@ -31,11 +31,12 @@ PRJNAME = testapplet
 PACKAGE =
 TARGET  = TestApplet
 
-
 # --- Settings -----------------------------------------------------
-#.INCLUDE : $(PRJ)$/util$/makefile.pmk
+
 .INCLUDE : settings.mk
+
 # Files --------------------------------------------------------
+
 JARFILES = ridl.jar jurt.jar unoil.jar
 
 JAVAFILES= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
@@ -45,11 +46,7 @@ JAVACLASSFILES= \
     $(CLASSDIR)$/$(PACKAGE)$/TestApplet.class 	
 
 JARCLASSDIRS= .
-#JARTARGET		= $(TARGET).jar
-#JARCOMPRESS= TRUE
-#CUSTOMMANIFESTFILE= .$/manifest
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-

@@ -61,8 +61,8 @@ class LwpTempObject
 {
 //  friend class LwpObjectFactory;
 public:
-    LwpTempObject(){};
-    ~LwpTempObject(){};
+    LwpTempObject(){}
+    ~LwpTempObject(){}
 
 /*protected:
     LwpObjectHeader m_ObjHdr;

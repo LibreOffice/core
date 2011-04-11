@@ -129,7 +129,7 @@ published service GenericDrawPage
     // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::container::XNamed
     /** Gets or sets the name of this page.
 
-                <p>Duplicated pagenames inside a document are not allowed.
+                <p>Duplicated page names inside a document are not allowed.
      */
     [optional] interface com::sun::star::container::XNamed;
 
@@ -214,9 +214,9 @@ published service GenericDrawPage
 
     //-------------------------------------------------------------------------
 
-    /** this property is true if the avveraged background filling colors luminance
+    /** this property is true if the averaged background filling colors luminance
         is belove an application specified threshold value. This can be used to
-        determine the actuall value of an auto color.
+        determine the actual value of an auto color.
     */
     [readonly, optional, property] boolean IsBackgroundDark;
 

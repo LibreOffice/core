@@ -89,14 +89,14 @@ public:
     ~SvxConnectionPage();
 
     static SfxTabPage*  Create( Window*, const SfxItemSet& );
-    static  USHORT*     GetRanges();
+    static  sal_uInt16*     GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet & );
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void PageCreated (SfxAllItemSet aSet);
 };
 
 /*************************************************************************
@@ -113,7 +113,6 @@ public:
                        const SdrView* pView );
     ~SvxConnectionDialog();
 };
-
 
 #endif // _SVX_CONNECT_HXX
 

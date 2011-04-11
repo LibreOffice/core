@@ -29,17 +29,21 @@
 #define INCLUDED_CELLMARGINHANDLER_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 
 namespace writerfilter {
 namespace dmapper
 {
 class TablePropertyMap;
-class WRITERFILTER_DLLPRIVATE CellMarginHandler : public Properties
+class WRITERFILTER_DLLPRIVATE CellMarginHandler : public LoggedProperties
 {
 private:
     sal_Int32   m_nValue;
+
+    // Properties
+    virtual void lcl_attribute(Id Name, Value & val);
+    virtual void lcl_sprm(Sprm & sprm);
 
 public:
     sal_Int32   m_nLeftMargin;
@@ -54,10 +58,6 @@ public:
 public:
     CellMarginHandler( );
     virtual ~CellMarginHandler();
-
-    // Properties
-    virtual void attribute(Id Name, Value & val);
-    virtual void sprm(Sprm & sprm);
 
     ::boost::shared_ptr<TablePropertyMap>            getProperties();
 

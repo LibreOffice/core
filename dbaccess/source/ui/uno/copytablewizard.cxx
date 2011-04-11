@@ -328,7 +328,7 @@ namespace dbaui
                     const Reference< XPropertySet >& _rxDestTable
                 );
 
-        /** processes an error which occured during copying
+        /** processes an error which occurred during copying
 
             First, all listeners are ask. If a listener tells to cancel or continue copying, this is reported to the
             method's caller. If a listener tells to ask the user, this is done, and the user's decision is
@@ -1095,7 +1095,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
             case CopyTableContinuation::AskUser:            break;          // stop asking the listeners, ask the user
 
             default:
-                OSL_ENSURE( false, "CopyTableWizard::impl_processCopyError_nothrow: invalid listener response!" );
+                OSL_FAIL( "CopyTableWizard::impl_processCopyError_nothrow: invalid listener response!" );
                 // ask next listener
                 continue;
             }
@@ -1112,7 +1112,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
     {
         SQLContext aError;
         aError.Context = *this;
-        aError.Message = String( ModuleRes( STR_ERROR_OCCURED_WHILE_COPYING ) );
+        aError.Message = String( ModuleRes( STR_ERROR_OCCURRED_WHILE_COPYING ) );
 
         ::dbtools::SQLExceptionInfo aInfo( _rEvent.Error );
         if ( aInfo.isValid() )
@@ -1179,8 +1179,15 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     aSourceColTypes.reserve( nCount + 1 );
     aSourceColTypes.push_back( -1 ); // just to avoid a everytime i-1 call
 
+    ::std::vector< sal_Int32 > aSourcePrec;
+    aSourcePrec.reserve( nCount + 1 );
+    aSourcePrec.push_back( -1 ); // just to avoid a everytime i-1 call
+
     for ( sal_Int32 k=1; k <= nCount; ++k )
+    {
         aSourceColTypes.push_back( xMeta->getColumnType( k ) );
+        aSourcePrec.push_back( xMeta->getPrecision( k ) );
+    }
 
     // now create, fill and execute the prepared statement
     Reference< XPreparedStatement > xStatement( ODatabaseExport::createPreparedStatment( xDestMetaData, _rxDestTable, aColumnMapping ), UNO_SET_THROW );
@@ -1292,7 +1299,6 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                     case DataType::LONGVARBINARY:
                     case DataType::BINARY:
                     case DataType::VARBINARY:
-                    case DataType::BIT:
                         aTransfer.transferComplexValue( &XRow::getBytes, &XParameters::setBytes );
                         break;
 
@@ -1308,6 +1314,13 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                         aTransfer.transferComplexValue( &XRow::getTimestamp, &XParameters::setTimestamp );
                         break;
 
+                    case DataType::BIT:
+                        if ( aSourcePrec[nSourceColumn] > 1 )
+                        {
+                            aTransfer.transferComplexValue( &XRow::getBytes, &XParameters::setBytes );
+                            break;
+                        }
+                        // run through
                     case DataType::BOOLEAN:
                         aTransfer.transferValue( &XRow::getBoolean, &XParameters::setBoolean );
                         break;
@@ -1384,7 +1397,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
 
                 if( !xTable.is() )
                 {
-                    OSL_ENSURE( false, "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
+                    OSL_FAIL( "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
                     break;
                 }
 
@@ -1401,7 +1414,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                     xTable = rWizard.createTable();
                     if ( !xTable.is() )
                     {
-                        OSL_ENSURE( false, "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
+                        OSL_FAIL( "CopyTableWizard::impl_doCopy_nothrow: createTable should throw here, shouldn't it?" );
                         break;
                     }
                 }
@@ -1449,7 +1462,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
                 break;
 
             default:
-                OSL_ENSURE( false, "CopyTableWizard::impl_doCopy_nothrow: What operation, please?" );
+                OSL_FAIL( "CopyTableWizard::impl_doCopy_nothrow: What operation, please?" );
                 break;
         }
     }
@@ -1502,7 +1515,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
             sColumns.append(aDestColumnNames[aPosIter->second - 1]);
             sColumns.append(sQuote);
         }
-    } // for ( ; aPosIter != aColumnMapping.end() ; ++aPosIter )
+    }
     ::rtl::OUStringBuffer sSql;
     sSql.appendAscii("INSERT INTO ");
     const ::rtl::OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, _xTable, ::dbtools::eInDataManipulation, false, false, true );

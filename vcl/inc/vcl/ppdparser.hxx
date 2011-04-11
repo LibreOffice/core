@@ -30,7 +30,7 @@
 
 #include <list>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "tools/string.hxx"
 #include "tools/stream.hxx"
@@ -63,7 +63,7 @@ class PPDKey
 {
     friend class PPDParser;
 
-    typedef ::std::hash_map< ::rtl::OUString, PPDValue, ::rtl::OUStringHash > hash_type;
+    typedef ::boost::unordered_map< ::rtl::OUString, PPDValue, ::rtl::OUStringHash > hash_type;
     typedef ::std::vector< PPDValue* > value_type;
 
     String              m_aKey;
@@ -125,8 +125,9 @@ class PPDParser
 {
     friend class PPDContext;
     friend class CUPSManager;
+    friend class PPDCache;
 
-    typedef ::std::hash_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash > hash_type;
+    typedef ::boost::unordered_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash > hash_type;
     typedef ::std::vector< PPDKey* > value_type;
 
     void insertKey( const String& rKey, PPDKey* pKey );
@@ -141,11 +142,6 @@ public:
         PPDConstraint() : m_pKey1( NULL ), m_pOption1( NULL ), m_pKey2( NULL ), m_pOption2( NULL ) {}
     };
 private:
-
-    static ::std::list< PPDParser* >           aAllParsers;
-    static ::std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >*
-                                                pAllPPDFiles;
-
     hash_type                                   m_aKeys;
     value_type                                  m_aOrderedKeys;
     ::std::list< PPDConstraint >                m_aConstraints;
@@ -158,7 +154,7 @@ private:
     // some basic attributes
     bool                                        m_bColorDevice;
     bool                                        m_bType42Capable;
-    ULONG                                       m_nLanguageLevel;
+    sal_uLong                                       m_nLanguageLevel;
     rtl_TextEncoding                            m_aFileEncoding;
 
 
@@ -220,7 +216,7 @@ public:
 
     bool            isColorDevice() const { return m_bColorDevice; }
     bool            isType42Capable() const { return m_bType42Capable; }
-    ULONG           getLanguageLevel() const { return m_nLanguageLevel; }
+    sal_uLong           getLanguageLevel() const { return m_nLanguageLevel; }
 
     String          getDefaultPaperDimension() const;
     void            getDefaultPaperDimension( int& rWidth, int& rHeight ) const
@@ -299,7 +295,7 @@ public:
 
 class PPDContext
 {
-    typedef ::std::hash_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
+    typedef ::boost::unordered_map< const PPDKey*, const PPDValue*, PPDKeyhash > hash_type;
     hash_type m_aCurrentValues;
     const PPDParser*                                    m_pParser;
 
@@ -328,8 +324,8 @@ public:
     void getUnconstrainedValues( const PPDKey*, ::std::list< const PPDValue* >& rValues );
 
     // for printer setup
-    void*   getStreamableBuffer( ULONG& rBytes ) const;
-    void    rebuildFromStreamBuffer( void* pBuffer, ULONG nBytes );
+    void*   getStreamableBuffer( sal_uLong& rBytes ) const;
+    void    rebuildFromStreamBuffer( void* pBuffer, sal_uLong nBytes );
 
     // convenience
     int getRenderResolution() const;

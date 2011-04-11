@@ -52,7 +52,7 @@ ScAutoNameCache::~ScAutoNameCache()
 {
 }
 
-const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurences( const String& rName, SCTAB nTab )
+const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurrences( const String& rName, SCTAB nTab )
 {
     if ( nTab != nCurrentTab )
     {

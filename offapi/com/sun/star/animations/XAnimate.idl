@@ -141,7 +141,7 @@ interface XAnimate : XAnimationNode
     [attribute] sequence< TimeFilterPair > TimeFilter;
 
     /** if this string is set, its contents will be parsed as a formula.
-        All values are used as a parameter for this formula and the computet
+        All values are used as a parameter for this formula and the computed
         result will be used.
     */
     [attribute] string Formula;

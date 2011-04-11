@@ -73,24 +73,16 @@ DEF1NAME=$(SHL1TARGET)
 
 SHL1LIBS=$(LIB1TARGET)
 
-.IF "$(OS)"=="MACOSX"
-SHL1STDLIBS= \
-    $(LIBSTLPORT)		\
-    $(TKLIB)
-.ELSE
-SHL1STDLIBS= \
-    $(TKLIB)
-.ENDIF
-
 SHL1STDLIBS+= \
+    $(TKLIB)            \
     $(VCLLIB)			\
     $(SVLLIB)			\
-        $(UNOTOOLSLIB)                     \
+    $(UNOTOOLSLIB)      \
     $(TOOLSLIB)			\
     $(UCBHELPERLIB)		\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(SALLIB) \
+    $(SALLIB)           \
     $(SALHELPERLIB)
 
 .IF "$(GUIBASE)"=="unx"
@@ -107,3 +99,11 @@ SHL1STDLIBS+=$(SHL1OWNLIBS)
 
 
 
+
+ALLTAR : $(MISC)/pl.component
+
+$(MISC)/pl.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        pl.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt pl.component

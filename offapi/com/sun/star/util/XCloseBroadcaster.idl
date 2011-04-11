@@ -46,10 +46,10 @@
     The called object for closing must post the closing events immediately
     and before any internal cancel operations will be started.
     If a listener disagree with that it should throw a <type>CloseVetoException</type>
-    and called function <method>XCloseable::close</method> must be breaked immediately.
+    and called function <method>XCloseable::close</method> must be broken immediately.
     It's not allowed to catch it inside the close() request.
     If no listener nor internal processes hinder the object on closing
-    all listener get's a notification about real closing.
+    all listeners get a notification about real closing.
     </p>
 
     @see
@@ -60,7 +60,7 @@ published interface XCloseBroadcaster: com::sun::star::uno::XInterface
     /** adds the specified listener to receive or have a veto for "close" events
 
         @param Listener
-            the listener wich is interest on closing events
+            the listener which is interest on closing events
      */
     [oneway] void addCloseListener( [in] XCloseListener Listener );
 
@@ -68,7 +68,7 @@ published interface XCloseBroadcaster: com::sun::star::uno::XInterface
     /** removes the specified listener
 
         @param Listener
-            the listener wich isn't interest on closing events anylonger
+            the listener which isn't interest on closing events any longer
      */
     [oneway] void removeCloseListener( [in] XCloseListener Listener );
 };

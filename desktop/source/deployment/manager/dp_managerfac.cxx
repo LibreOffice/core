@@ -55,7 +55,7 @@ class PackageManagerFactoryImpl : private MutexHolder, public t_pmfac_helper
     Reference<deployment::XPackageManager> m_xUserMgr;
     Reference<deployment::XPackageManager> m_xSharedMgr;
     Reference<deployment::XPackageManager> m_xBundledMgr;
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         OUString, WeakReference<deployment::XPackageManager>,
         ::rtl::OUStringHash > t_string2weakref;
     t_string2weakref m_managers;
@@ -99,7 +99,7 @@ bool singleton_entries(
     }
     catch (registry::InvalidRegistryException & exc) {
         (void) exc; // avoid warnings
-        OSL_ENSURE( 0, ::rtl::OUStringToOString(
+        OSL_FAIL( ::rtl::OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return false;
     }

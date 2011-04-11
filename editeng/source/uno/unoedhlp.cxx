@@ -38,46 +38,46 @@
 
 TYPEINIT1( SvxEditSourceHint, TextHint );
 
-SvxEditSourceHint::SvxEditSourceHint( ULONG _nId ) :
+SvxEditSourceHint::SvxEditSourceHint( sal_uLong _nId ) :
     TextHint( _nId ),
     mnStart( 0 ),
     mnEnd( 0 )
 {
 }
 
-SvxEditSourceHint::SvxEditSourceHint( ULONG _nId, ULONG nValue, ULONG nStart, ULONG nEnd ) :
+SvxEditSourceHint::SvxEditSourceHint( sal_uLong _nId, sal_uLong nValue, sal_uLong nStart, sal_uLong nEnd ) :
     TextHint( _nId, nValue ),
     mnStart( nStart),
     mnEnd( nEnd )
 {
 }
 
-ULONG SvxEditSourceHint::GetValue() const
+sal_uLong SvxEditSourceHint::GetValue() const
 {
     return TextHint::GetValue();
 }
 
-ULONG SvxEditSourceHint::GetStartValue() const
+sal_uLong SvxEditSourceHint::GetStartValue() const
 {
     return mnStart;
 }
 
-ULONG SvxEditSourceHint::GetEndValue() const
+sal_uLong SvxEditSourceHint::GetEndValue() const
 {
     return mnEnd;
 }
 
-void SvxEditSourceHint::SetValue( ULONG n )
+void SvxEditSourceHint::SetValue( sal_uLong n )
 {
     TextHint::SetValue( n );
 }
 
-void SvxEditSourceHint::SetStartValue( ULONG n )
+void SvxEditSourceHint::SetStartValue( sal_uLong n )
 {
     mnStart = n;
 }
 
-void SvxEditSourceHint::SetEndValue( ULONG n )
+void SvxEditSourceHint::SetEndValue( sal_uLong n )
 {
     mnEnd = n;
 }
@@ -124,7 +124,7 @@ void SvxEditSourceHint::SetEndValue( ULONG n )
                 return ::std::auto_ptr<SfxHint>( new TextHint( TEXT_HINT_INPUT_END, 0 ) );
 
             default:
-                DBG_ERROR( "SvxEditSourceHelper::EENotification2Hint unknown notification" );
+                OSL_FAIL( "SvxEditSourceHelper::EENotification2Hint unknown notification" );
                 break;
         }
     }
@@ -132,14 +132,14 @@ void SvxEditSourceHint::SetEndValue( ULONG n )
     return ::std::auto_ptr<SfxHint>( new SfxHint() );
 }
 
-sal_Bool SvxEditSourceHelper::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, const EditEngine& rEE, USHORT nPara, USHORT nIndex )
+sal_Bool SvxEditSourceHelper::GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_uInt16 nPara, sal_uInt16 nIndex )
 {
     EECharAttribArray aCharAttribs;
 
     rEE.GetCharAttribs( nPara, aCharAttribs );
 
     // find closest index in front of nIndex
-    USHORT nAttr, nCurrIndex;
+    sal_uInt16 nAttr, nCurrIndex;
     sal_Int32 nClosestStartIndex;
     for( nAttr=0, nClosestStartIndex=0; nAttr<aCharAttribs.Count(); ++nAttr )
     {
@@ -167,8 +167,8 @@ sal_Bool SvxEditSourceHelper::GetAttributeRun( USHORT& nStartIndex, USHORT& nEnd
         }
     }
 
-    nStartIndex = static_cast<USHORT>( nClosestStartIndex );
-    nEndIndex = static_cast<USHORT>( nClosestEndIndex );
+    nStartIndex = static_cast<sal_uInt16>( nClosestStartIndex );
+    nEndIndex = static_cast<sal_uInt16>( nClosestEndIndex );
 
     return sal_True;
 }
@@ -185,14 +185,12 @@ Point SvxEditSourceHelper::UserSpaceToEE( const Point& rPoint, const Size& rEESi
 
 Rectangle SvxEditSourceHelper::EEToUserSpace( const Rectangle& rRect, const Size& rEESize, bool bIsVertical )
 {
-    // #106775# Don't touch rect if not vertical
     return bIsVertical ? Rectangle( EEToUserSpace(rRect.BottomLeft(), rEESize, bIsVertical),
                                     EEToUserSpace(rRect.TopRight(), rEESize, bIsVertical) ) : rRect;
 }
 
 Rectangle SvxEditSourceHelper::UserSpaceToEE( const Rectangle& rRect, const Size& rEESize, bool bIsVertical )
 {
-    // #106775# Don't touch rect if not vertical
     return bIsVertical ? Rectangle( UserSpaceToEE(rRect.TopRight(), rEESize, bIsVertical),
                                     UserSpaceToEE(rRect.BottomLeft(), rEESize, bIsVertical) ) : rRect;
 }

@@ -135,7 +135,7 @@ service NavigationToolBar
     //-------------------------------------------------------------------------
     /** specifies a repeat delay for the control
 
-        <p>Some buttons of a NavigationToolBar may show repeating behaviour, e.g. may be
+        <p>Some buttons of a NavigationToolBar may show repeating behavior, e.g. may be
         repeatedly triggered when the user keeps the mouse pressed over such a button.<br/>
         The delay between two such triggers (in milliseconds) is specified with this property.
         </p>

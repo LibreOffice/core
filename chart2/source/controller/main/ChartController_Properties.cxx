@@ -103,10 +103,10 @@ namespace
     ObjectType eObjectType = ObjectIdentifier::getObjectType( aObjectCID );
     if( OBJECTTYPE_UNKNOWN==eObjectType )
     {
-        DBG_ERROR("unknown ObjectType");
+        OSL_FAIL("unknown ObjectType");
         return NULL;
     }
-    //--
+
     rtl::OUString aParticleID = ObjectIdentifier::getParticleID( aObjectCID );
     bool bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
     //-------------------------------------------------------------
@@ -209,13 +209,7 @@ namespace
                 sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
                 if( !ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount ) )
                     eMapTo = wrapper::GraphicPropertyItemConverter::LINE_DATA_POINT;
-                /*
-                FILLED_DATA_POINT,
-                LINE_DATA_POINT,
-                LINE_PROPERTIES,
-                FILL_PROPERTIES,
-                LINE_AND_FILL_PROPERTIES
-                */
+
                 bool bDataSeries = ( eObjectType == OBJECTTYPE_DATA_SERIES || eObjectType == OBJECTTYPE_DATA_LABELS );
 
                 //special color for pie chart:
@@ -721,11 +715,11 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
     UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::FORMAT,
                 ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aObjectCID ))),
-            m_xUndoManager, getModel() );
+            m_xUndoManager );
 
     bool bSuccess = ChartController::executeDlg_ObjectProperties_withoutUndoGuard( aObjectCID, false );
     if( bSuccess )
-        aUndoGuard.commitAction();
+        aUndoGuard.commit();
 }
 
 bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl::OUString& rObjectCID, bool bOkClickOnUnchangedDialogSouldBeRatedAsSuccessAlso )
@@ -734,8 +728,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
     bool bRet = false;
     if( !rObjectCID.getLength() )
     {
-        //DBG_ERROR("empty ObjectID");
-        return bRet;
+       return bRet;
     }
     try
     {
@@ -746,7 +739,6 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
         ObjectType eObjectType = ObjectIdentifier::getObjectType( rObjectCID );
         if( OBJECTTYPE_UNKNOWN==eObjectType )
         {
-            //DBG_ERROR("unknown ObjectType");
             return bRet;
         }
         if( OBJECTTYPE_DIAGRAM_WALL==eObjectType || OBJECTTYPE_DIAGRAM_FLOOR==eObjectType )
@@ -839,16 +831,14 @@ void SAL_CALL ChartController::executeDispatch_View3D()
     {
         // using assignment for broken gcc 3.3
         UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-            ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_3D_VIEW ))),
-            m_xUndoManager, getModel());
+            String( SchResId( STR_ACTION_EDIT_3D_VIEW )),
+            m_xUndoManager );
 
-        // /--
         //open dialog
         SolarMutexGuard aSolarGuard;
         View3DDialog aDlg( m_pChartWindow, getModel(), m_pDrawModelWrapper->GetColorTable() );
         if( aDlg.Execute() == RET_OK )
-            aUndoGuard.commitAction();
-        // \--
+            aUndoGuard.commit();
     }
     catch( uno::RuntimeException& e)
     {

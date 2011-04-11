@@ -35,8 +35,8 @@
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <tools/stream.hxx>
-#include <strmadpt.hxx>
-#include "instrm.hxx"
+#include <svl/strmadpt.hxx>
+#include <svl/instrm.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -45,7 +45,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::utl;
 
-#define PERSISTENT_SERVICE_NAME     ::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier");
+#define PERSISTENT_SERVICE_NAME     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier"));
 
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL SvNumberFormatsSupplierServiceObject_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
@@ -117,7 +117,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 #ifdef DBG_UTIL
         else
         {
-            DBG_ERROR("SvNumberFormatsSupplierServiceObject::initialize : unknown argument !");
+            OSL_FAIL("SvNumberFormatsSupplierServiceObject::initialize : unknown argument !");
         }
 #endif
     }
@@ -130,7 +130,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getImplementationName(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject"));
 }
 
 //-------------------------------------------------------------------------

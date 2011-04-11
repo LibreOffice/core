@@ -67,7 +67,7 @@ private:
 
     SwWrtShell* pWrtShell;
     sal_Bool    bHTMLMode;
-    UINT16      nLastTab;
+    sal_uInt16      nLastTab;
     sal_Int32   nOldLinkMode;
 
     DECL_LINK(CaptionHdl, PushButton*);
@@ -80,7 +80,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
@@ -166,8 +166,8 @@ private:
     String          sNone;
 
     SwFldMgr        *pMgr;
-    USHORT          eType;
-    BOOL            bHTMLMode;
+    sal_uInt16          eType;
+    sal_Bool            bHTMLMode;
 
     DECL_LINK( SelectHdl, ListBox *pLB = 0 );
     DECL_LINK( ModifyHdl, Edit *pEdt = 0 );
@@ -176,7 +176,7 @@ private:
     DECL_LINK( SaveEntryHdl, SvxCheckListBox *pLB = 0 );
 
     void                DelUserData();
-    void                SetOptions( const USHORT nPos,
+    void                SetOptions( const sal_uInt16 nPos,
                                     const SwCapObjType eType,
                                     const SvGlobalName *pOleId = 0);
     void                SaveEntry( SvLBoxEntry* pEntry );
@@ -190,7 +190,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 

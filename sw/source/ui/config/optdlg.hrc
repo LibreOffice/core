@@ -25,12 +25,12 @@
  *
  ************************************************************************/
 
-/* TabPage Ansicht*/
+/* TabPage View */
 #define FL_DISP                 1
 #define FL_NOPRINT              2
 #define FL_WINDOW               3
 
-#define CB_GRF              1
+#define CB_GRF                  1
 #define CB_TBL                  2
 #define CB_DRWFAST              3
 #define CB_FIELD                4
@@ -39,10 +39,10 @@
 #define CB_SPACE                7
 #define CB_HSPACE               8
 #define CB_SHYPH                9
-#define CB_FLD_HIDDEN               10
+#define CB_FLD_HIDDEN           10
 #define CB_BREAK                11
 #define CB_ANY_RULER            12
-#define CB_CROSS        14
+#define CB_CROSS                14
 #define CB_HSCROLL              15
 #define CB_VSCROLL              16
 #define CB_HRULER               17
@@ -50,7 +50,7 @@
 #define FL_LINE                 22
 #define CB_POSTIT               23
 #define CB_VRULER_RIGHT         24
-#define CB_BIGHANDLE                  25
+#define CB_BIGHANDLE            25
 
 #define FL_SETTINGS             26
 #define LB_METRIC               27
@@ -69,7 +69,7 @@
 #define CB_TEST10       34
 #define FL_TEST                 35
 
-#define CB_FLD_HIDDEN_PARA 36  //Mittendrin, damit die HelpIds zum FPII kompatibel bleiben
+#define CB_FLD_HIDDEN_PARA 36  // right in the middle of it, so that HelpIds stay compatible to FPII
 #define CB_SMOOTH_SCROLL 37
 
 #define BT_OK           38
@@ -125,7 +125,7 @@
 #define CB_TEXT_PLACEHOLDER  94
 
 
-// Tabpage Grundschriften
+// Tabpage Basic Fonts
 #define FT_STANDARD         90
 #define LB_STANDARD                     91
 #define FT_TITLE                        92
@@ -150,7 +150,7 @@
 #define LB_LABEL_SIZE                  111
 #define LB_INDEX_SIZE                  112
 
-//Tabpage Tabelle
+//Tabpage Table
 #define CB_HEADER           101
 #define CB_REPEAT_HEADER    102
 #define CB_DONT_SPLIT       103
@@ -191,7 +191,7 @@
 #define FL_TABLE_SEPARATOR          139
 #define CB_PROSPECT_RTL        140
 
-#define FL_SHDWCRSFLAG                             1
+#define FL_SHDWCRSFLAG                 1
 #define CB_SHDWCRSONOFF                2
 #define FL_SHDWCRSMODE                 3
 #define FT_SHDWCRSFILLMODE             4
@@ -201,5 +201,8 @@
 #define RB_SHDWCRSFILLSPACE            8
 #define CB_ALLOW_IN_PROT              12
 #define FL_CRSR_OPT                   13
-#define FL_SEPARATOR_SHDW               14
+#define FL_SEPARATOR_SHDW             14
+#define FL_LAYOUT_OPTIONS             15
+#define CB_MATH_BASELINE_ALIGNMENT    16
+
 

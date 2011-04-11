@@ -34,7 +34,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/inoncopyable.h>
-#include <threadhelp/imutex.h>
+#include <framework/imutex.hxx>
 #include <threadhelp/irwlock.h>
 #include <threadhelp/fairrwlock.hxx>
 
@@ -46,6 +46,7 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <osl/mutex.hxx>
+#include <fwidllapi.h>
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -103,7 +104,7 @@ enum ELockType
 
     @devstatus      draft
 *//*-*************************************************************************************************************/
-class LockHelper : public  IMutex
+class FWI_DLLPUBLIC LockHelper : public  IMutex
                  , public  IRWLock
                  , private INonCopyable
 {

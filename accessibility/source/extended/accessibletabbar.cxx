@@ -208,7 +208,7 @@ namespace accessibility
 
     ::rtl::OUString AccessibleTabBar::getImplementationName() throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( "com.sun.star.comp.svtools.AccessibleTabBar" );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleTabBar" ));
     }
 
     // -----------------------------------------------------------------------------
@@ -229,7 +229,7 @@ namespace accessibility
     Sequence< ::rtl::OUString > AccessibleTabBar::getSupportedServiceNames() throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aNames(1);
-        aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleTabBar" );
+        aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleTabBar" ));
         return aNames;
     }
 
@@ -273,7 +273,7 @@ namespace accessibility
 
                 if ( i < nCount )
                 {
-                    Window* pChild = m_pTabBar->GetAccessibleChildWindow( (USHORT)i );
+                    Window* pChild = m_pTabBar->GetAccessibleChildWindow( (sal_uInt16)i );
                     if ( pChild )
                         xChild = pChild->GetAccessible();
                 }
@@ -319,7 +319,7 @@ namespace accessibility
             Window* pParent = m_pTabBar->GetAccessibleParentWindow();
             if ( pParent )
             {
-                for ( USHORT i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
+                for ( sal_uInt16 i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
                 {
                     Window* pChild = pParent->GetAccessibleChildWindow( i );
                     if ( pChild == static_cast< Window* >( m_pTabBar ) )

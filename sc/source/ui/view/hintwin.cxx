@@ -56,7 +56,7 @@ ScHintWindow::ScHintWindow( Window* pParent, const String& rTit, const String& r
     SetBackground( aYellow );
 
     aTextFont = GetFont();
-    aTextFont.SetTransparent( TRUE );
+    aTextFont.SetTransparent( sal_True );
     aTextFont.SetWeight( WEIGHT_NORMAL );
     aHeadFont = aTextFont;
     aHeadFont.SetWeight( WEIGHT_BOLD );
@@ -92,7 +92,7 @@ ScHintWindow::~ScHintWindow()
 }
 
 
-void __EXPORT ScHintWindow::Paint( const Rectangle& /* rRect */ )
+void ScHintWindow::Paint( const Rectangle& /* rRect */ )
 {
     SetFont( aHeadFont );
     DrawText( Point(HINT_MARGIN,HINT_MARGIN), aTitle );

@@ -41,8 +41,8 @@ class SwExtTextInput : public SwPaM
 {
     SvUShorts aAttrs;
     String sOverwriteText;
-    BOOL bInsText : 1;
-    BOOL bIsOverwriteCursor : 1;
+    sal_Bool bInsText : 1;
+    sal_Bool bIsOverwriteCursor : 1;
     LanguageType eInputLanguage;
 public:
     SwExtTextInput( const SwPaM& rPam, Ring* pRing = 0 );
@@ -50,9 +50,9 @@ public:
 
     void SetInputData( const CommandExtTextInputData& rData );
     const SvUShorts& GetAttrs() const   { return aAttrs; }
-    void SetInsText( BOOL bFlag )       { bInsText = bFlag; }
-    BOOL IsOverwriteCursor() const      { return bIsOverwriteCursor; }
-    void SetOverwriteCursor( BOOL bFlag );
+    void SetInsText( sal_Bool bFlag )       { bInsText = bFlag; }
+    sal_Bool IsOverwriteCursor() const      { return bIsOverwriteCursor; }
+    void SetOverwriteCursor( sal_Bool bFlag );
     void SetLanguage(LanguageType eSet) { eInputLanguage = eSet;}
 };
 

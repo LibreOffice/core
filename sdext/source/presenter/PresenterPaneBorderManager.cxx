@@ -60,7 +60,7 @@ namespace sdext { namespace presenter {
 
 OUString PresenterPaneBorderManager::getImplementationName_static (void)
 {
-    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterPaneBorderManager");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterPaneBorderManager"));
 }
 
 
@@ -69,7 +69,7 @@ OUString PresenterPaneBorderManager::getImplementationName_static (void)
 Sequence<OUString> PresenterPaneBorderManager::getSupportedServiceNames_static (void)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.PresenterPaneBorderManager"));
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PresenterPaneBorderManager"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -108,13 +108,13 @@ PresenterPaneBorderManager::PresenterPaneBorderManager (
     {
         mxPointer = Reference<awt::XPointer>(
             xFactory->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.awt.Pointer"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Pointer")),
                 rxContext),
             UNO_QUERY_THROW);
 
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
                 rxContext),
             UNO_QUERY_THROW);
     }
@@ -282,7 +282,7 @@ void SAL_CALL PresenterPaneBorderManager::initialize (const Sequence<Any>& rArgu
     else
     {
         throw RuntimeException(
-            OUString::createFromAscii("PresenterPane: invalid number of arguments"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterPane: invalid number of arguments")),
                 static_cast<XWeak*>(this));
     }
 }

@@ -31,7 +31,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <vcl/toolbox.hxx>
 #include <vcl/button.hxx>
 #include <svl/intitem.hxx>
@@ -39,7 +39,7 @@
 #include <sfx2/app.hxx>
 
 #include <svx/dialogs.hrc>
-#include "layctrl.hxx"
+#include "svx/layctrl.hxx"
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/colorcfg.hxx>
@@ -77,8 +77,8 @@ private:
     ::Color             aBackgroundColor;
     long                nCol;
     long                nLine;
-    BOOL                bInitialKeyInput;
-    BOOL                m_bMod1;
+    sal_Bool                bInitialKeyInput;
+    sal_Bool                m_bMod1;
     ToolBox&            rTbx;
     Reference< XFrame > mxFrame;
     rtl::OUString       maCommand;
@@ -86,7 +86,7 @@ private:
     DECL_LINK( SelectHdl, void * );
 
 public:
-                            TableWindow( USHORT                     nSlotId,
+                            TableWindow( sal_uInt16                     nSlotId,
                                          const rtl::OUString&       rCmd,
                                          const String&              rText,
                                          ToolBox&                   rParentTbx,
@@ -116,13 +116,11 @@ IMPL_LINK( TableWindow, SelectHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-TableWindow::TableWindow( USHORT nSlotId, const rtl::OUString& rCmd, const String& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
+TableWindow::TableWindow( sal_uInt16 nSlotId, const rtl::OUString& rCmd, const String& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
     SfxPopupWindow( nSlotId, rFrame, WinBits( WB_STDPOPUP ) ),
     aTableButton( this ),
     nCol( 0 ),
     nLine( 0 ),
-    bInitialKeyInput(TRUE),
-    m_bMod1(FALSE),
     rTbx(rParentTbx),
     mxFrame( rFrame ),
     maCommand( rCmd )
@@ -139,7 +137,7 @@ TableWindow::TableWindow( USHORT nSlotId, const rtl::OUString& rCmd, const Strin
     Font aFont = GetFont();
     aFont.SetColor( ::Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor )  );
     aFont.SetFillColor( aBackgroundColor );
-    aFont.SetTransparent( FALSE );
+    aFont.SetTransparent( sal_False );
     SetFont( aFont );
 
     SetText( rText );
@@ -185,8 +183,8 @@ void TableWindow::MouseMove( const MouseEvent& rMEvt )
 void TableWindow::KeyInput( const KeyEvent& rKEvt )
 {
     bool bHandled = false;
-    USHORT nModifier = rKEvt.GetKeyCode().GetModifier();
-    USHORT nKey = rKEvt.GetKeyCode().GetCode();
+    sal_uInt16 nModifier = rKEvt.GetKeyCode().GetModifier();
+    sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
     if ( !nModifier )
     {
         bHandled = true;
@@ -235,7 +233,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
             //make sure that a table can initially be created
             if(bInitialKeyInput)
             {
-                bInitialKeyInput = FALSE;
+                bInitialKeyInput = sal_False;
                 if(!nNewLine)
                     nNewLine = 1;
                 if(!nNewCol)
@@ -246,7 +244,7 @@ void TableWindow::KeyInput( const KeyEvent& rKEvt )
     }
     else if(KEY_MOD1 == nModifier && KEY_RETURN == nKey)
     {
-        m_bMod1 = TRUE;
+        m_bMod1 = sal_True;
         EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
     }
 
@@ -307,7 +305,6 @@ void TableWindow::Paint( const Rectangle& )
             aText += String(SVX_RESSTR(RID_SVXSTR_PAGES));
         }
 
-        Size aSize = GetOutputSizePixel();
         Size aTextSize( GetTextWidth( aText ), GetTextHeight() );
 
         long nTextX = nSelectionWidth + TABLE_CELL_WIDTH;
@@ -374,7 +371,7 @@ void TableWindow::Update( long nNewCol, long nNewLine )
 void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
 {
     Window* pParent = rTbx.GetParent();
-    USHORT nId = GetId();
+    sal_uInt16 nId = GetId();
     pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, reinterpret_cast<void*>(nId));
 
     Reference< XDispatchProvider > xDispatchProvider( mxFrame, UNO_QUERY );
@@ -382,7 +379,7 @@ void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
     {
         com::sun::star::util::URL aTargetURL;
         Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
                 UNO_QUERY );
         aTargetURL.Complete = maCommand;
         xTrans->parseStrict( aTargetURL );
@@ -418,15 +415,15 @@ private:
     long                nWidth;
     long                nMX;
     long                nTextHeight;
-    BOOL                bInitialKeyInput;
-    BOOL                m_bMod1;
+    sal_Bool                bInitialKeyInput;
+    sal_Bool                m_bMod1;
     ToolBox&            rTbx;
     Reference< XFrame > mxFrame;
     ::rtl::OUString            maCommand;
 
     void UpdateSize_Impl( long nNewCol );
 public:
-                            ColumnsWindow( USHORT nId, const ::rtl::OUString& rCmd, const String& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame );
+                            ColumnsWindow( sal_uInt16 nId, const ::rtl::OUString& rCmd, const String &rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame );
 
     void                    KeyInput( const KeyEvent& rKEvt );
     virtual void            MouseMove( const MouseEvent& rMEvt );
@@ -436,15 +433,15 @@ public:
     virtual void            PopupModeEnd();
     virtual SfxPopupWindow* Clone() const;
 
-    USHORT                  GetColCount() const { return (USHORT)nCol; }
+    sal_uInt16                  GetColCount() const { return (sal_uInt16)nCol; }
 };
 
 // -----------------------------------------------------------------------
 
-ColumnsWindow::ColumnsWindow( USHORT nId, const ::rtl::OUString& rCmd, const String& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
+ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const ::rtl::OUString& rCmd, const String& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
     SfxPopupWindow( nId, rFrame, WB_STDPOPUP ),
-    bInitialKeyInput(TRUE),
-    m_bMod1(FALSE),
+    bInitialKeyInput(sal_True),
+    m_bMod1(sal_False),
     rTbx(rParentTbx),
     mxFrame(rFrame),
     maCommand( rCmd )
@@ -462,7 +459,7 @@ ColumnsWindow::ColumnsWindow( USHORT nId, const ::rtl::OUString& rCmd, const Str
     Font aFont( GetFont() );
     aFont.SetColor( aLineColor );
     aFont.SetFillColor( aFaceColor );
-    aFont.SetTransparent( FALSE );
+    aFont.SetTransparent( sal_False );
     SetFont( aFont );
 
     nCol        = 0;
@@ -490,7 +487,6 @@ void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
     SfxPopupWindow::MouseMove( rMEvt );
     Point aPos = rMEvt.GetPosPixel();
     Point aMousePos = aPos;
-    Point aWinPos = GetPosPixel();
 
     if ( rMEvt.IsEnterWindow() )
         CaptureMouse();
@@ -511,14 +507,10 @@ void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
         nNewCol = 20;
     UpdateSize_Impl( nNewCol );
 }
-/* -----------------------------21.05.2002 16:16------------------------------
 
- ---------------------------------------------------------------------------*/
 void ColumnsWindow::UpdateSize_Impl( long nNewCol )
 {
     Size    aWinSize = GetOutputSizePixel();
-    long    nMinCol = 0;
-    long    nMaxCol = 0;
     Point   aWinPos;// = GetPosPixel();
 
     if ( nWidth <= nNewCol )
@@ -549,6 +541,8 @@ void ColumnsWindow::UpdateSize_Impl( long nNewCol )
         Invalidate( Rectangle( 0, aWinSize.Height()-nTextHeight+2,
                                aWinSize.Width(), aWinSize.Height() ) );
 
+        long nMinCol = 0, nMaxCol = 0;
+
         if ( nNewCol < nCol )
         {
             nMinCol = nNewCol;
@@ -573,21 +567,19 @@ void ColumnsWindow::MouseButtonDown( const MouseEvent& rMEvt )
     SfxPopupWindow::MouseButtonDown( rMEvt );
     CaptureMouse();
 }
-/* -----------------------------21.05.2002 16:11------------------------------
 
- ---------------------------------------------------------------------------*/
 void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    BOOL bHandled = FALSE;
-    USHORT nModifier = rKEvt.GetKeyCode().GetModifier();
-    USHORT nKey = rKEvt.GetKeyCode().GetCode();
+    sal_Bool bHandled = sal_False;
+    sal_uInt16 nModifier = rKEvt.GetKeyCode().GetModifier();
+    sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
     if(!nModifier)
     {
         if( KEY_LEFT == nKey || KEY_RIGHT == nKey ||
             KEY_RETURN == nKey ||KEY_ESCAPE == nKey ||
             KEY_UP == nKey)
         {
-            bHandled = TRUE;
+            bHandled = sal_True;
             long nNewCol = nCol;
             switch(nKey)
             {
@@ -611,7 +603,7 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
             //make sure that a table can initially be created
             if(bInitialKeyInput)
             {
-                bInitialKeyInput = FALSE;
+                bInitialKeyInput = sal_False;
                 if(!nNewCol)
                     nNewCol = 1;
             }
@@ -620,7 +612,7 @@ void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
     }
     else if(KEY_MOD1 == nModifier && KEY_RETURN == nKey)
     {
-        m_bMod1 = TRUE;
+        m_bMod1 = sal_True;
         if(IsMouseCaptured())
             ReleaseMouse();
         EndPopupMode(FLOATWIN_POPUPMODEEND_CLOSEALL );
@@ -702,7 +694,7 @@ void ColumnsWindow::PopupModeEnd()
 {
     if ( !IsPopupModeCanceled() && nCol )
     {
-        USHORT nId = GetId();
+        sal_uInt16 nId = GetId();
         Window* pParent = rTbx.GetParent();
         pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, reinterpret_cast<void*>(nId));
 
@@ -723,9 +715,9 @@ void ColumnsWindow::PopupModeEnd()
 
 // class SvxTableToolBoxControl ------------------------------------------
 
-SvxTableToolBoxControl::SvxTableToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxTableToolBoxControl::SvxTableToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    bEnabled( TRUE )
+    bEnabled( sal_True )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
@@ -770,17 +762,17 @@ SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindowCascading()
 
 // -----------------------------------------------------------------------
 
-void SvxTableToolBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* pState )
+void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( pState && pState->ISA(SfxUInt16Item) )
     {
-        INT16 nValue = static_cast< const SfxUInt16Item* >( pState )->GetValue();
+        sal_Int16 nValue = static_cast< const SfxUInt16Item* >( pState )->GetValue();
         bEnabled = ( nValue != 0 );
     }
     else
         bEnabled = SFX_ITEM_DISABLED != eState;
 
-    USHORT nId = GetId();
+    sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
@@ -790,7 +782,7 @@ void SvxTableToolBoxControl::StateChanged( USHORT, SfxItemState eState, const Sf
 
 // class SvxColumnsToolBoxControl ------------------------------------------
 
-SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
@@ -836,10 +828,8 @@ SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindowCascading()
     }
     return pWin;
 }
-/* -----------------18.11.99 16:38-------------------
 
- --------------------------------------------------*/
-void SvxColumnsToolBoxControl::StateChanged( USHORT nSID,
+void SvxColumnsToolBoxControl::StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState )
 {

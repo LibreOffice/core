@@ -27,20 +27,25 @@
 
 package complex.ConfigItems;
 
-import com.sun.star.beans.*;
-import com.sun.star.lang.*;
-import com.sun.star.uno.*;
-import com.sun.star.task.*;
+import com.sun.star.beans.NamedValue;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.task.XJob;
+import com.sun.star.uno.UnoRuntime;
 
-import complexlib.*;
 
-import java.lang.*;
-import java.util.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+// import static org.junit.Assert.*;
 
 //-----------------------------------------------
 /** @short  todo document me
+ * @deprecated this tests seems no longer work as expected.
  */
-public class CheckConfigItems extends ComplexTestCase
+public class CheckConfigItems
 {
     //-------------------------------------------
     // some const
@@ -64,43 +69,44 @@ public class CheckConfigItems extends ComplexTestCase
         @return All test methods.
         @todo   Think about selection of tests from outside ...
      */
-    public String[] getTestMethodNames()
-    {
-        return new String[]
-        {
-            "checkPicklist",
-            "checkURLHistory",
-            "checkHelpBookmarks",
-            "checkPrintOptions",
-            "checkAccessibilityOptions",
-            "checkUserOptions"
-        };
-    }
+//    public String[] getTestMethodNames()
+//    {
+//        return new String[]
+//        {
+//            "checkPicklist",
+//            "checkURLHistory",
+//            "checkHelpBookmarks",
+//            "checkPrintOptions",
+//            "checkAccessibilityOptions",
+//          "checkUserOptions"
+//        };
+//    }
 
     //-------------------------------------------
     /** @short  Create the environment for following tests.
 
-        @descr  Use either a component loader from desktop or
+     * @throws java.lang.Exception
+     * @descr  Use either a component loader from desktop or
                 from frame
      */
-    public void before()
+    @Before public void before()
         throws java.lang.Exception
     {
         // get uno service manager from global test environment
-        m_xSmgr = (XMultiServiceFactory)param.getMSF();
+        m_xSmgr = getMSF();
 
         // TODO register helper service
 
         // create module manager
-        m_xTest = (XJob)UnoRuntime.queryInterface(
-                    XJob.class,
-                    m_xSmgr.createInstance("com.sun.star.comp.svl.ConfigItemTest"));
+        m_xTest = UnoRuntime.queryInterface(XJob.class, m_xSmgr.createInstance("com.sun.star.comp.svl.ConfigItemTest"));
     }
 
     //-------------------------------------------
-    /** @short  close the environment.
+    /**
+     * @throws java.lang.Exception
+     * @short  close the environment.
      */
-    public void after()
+    @After public void after()
         throws java.lang.Exception
     {
         // TODO deregister helper service
@@ -110,54 +116,66 @@ public class CheckConfigItems extends ComplexTestCase
     }
 
     //-------------------------------------------
-    /** @todo document me
+    /**
+     * @throws java.lang.Exception
+     * @todo document me
      */
-    public void checkPicklist()
+    @Test public void checkPicklist()
         throws java.lang.Exception
     {
         impl_triggerTest("checkPicklist");
     }
 
     //-------------------------------------------
-    /** @todo document me
+    /**
+     * @throws java.lang.Exception
+     * @todo document me
      */
-    public void checkURLHistory()
+    @Test public void checkURLHistory()
         throws java.lang.Exception
     {
         impl_triggerTest("checkURLHistory");
     }
 
     //-------------------------------------------
-    /** @todo document me
+    /**
+     * @throws java.lang.Exception
+     * @todo document me
      */
-    public void checkHelpBookmarks()
+    @Test public void checkHelpBookmarks()
         throws java.lang.Exception
     {
         impl_triggerTest("checkHelpBookmarks");
     }
 
     //-------------------------------------------
-    /** @todo document me
+    /**
+     * @throws java.lang.Exception
+     * @todo document me
      */
-    public void checkPrintOptions()
-        throws java.lang.Exception
-    {
-        impl_triggerTest("checkPrintOptions");
-    }
+//     @Test public void checkPrintOptions()
+//         throws java.lang.Exception
+//     {
+//         impl_triggerTest("checkPrintOptions");
+//     }
 
     //-------------------------------------------
-    /** @todo document me
+    /**
+     * @throws java.lang.Exception
+     * @todo document me
      */
-    public void checkAccessibilityOptions()
+    @Test public void checkAccessibilityOptions()
         throws java.lang.Exception
     {
         impl_triggerTest("checkAccessibilityOptions");
     }
 
     //-------------------------------------------
-    /** @todo document me
+    /**
+     * @throws java.lang.Exception
+     * @todo document me
      */
-    public void checkUserOptions()
+    @Test public void checkUserOptions()
         throws java.lang.Exception
     {
         impl_triggerTest("checkUserOptions");
@@ -175,4 +193,27 @@ public class CheckConfigItems extends ComplexTestCase
                      lArgs[0].Value = sTest;
         m_xTest.execute(lArgs);
     }
+
+
+       private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 }

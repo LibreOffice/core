@@ -77,19 +77,10 @@ void MenuButton::ImplExecuteMenu()
         Point aPos( 0, 1 );
         Size aSize = GetSizePixel();
         Rectangle aRect( aPos, aSize );
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        if ( !((GetStyle() & (WB_RECTSTYLE | WB_SMALLSTYLE)) ||
-             !(rStyleSettings.GetOptions() & STYLE_OPTION_MACSTYLE)) )
-        {
-            aRect.Left()    += 2;
-            aRect.Top()     += 2;
-            aRect.Right()   -= 2;
-            aRect.Bottom()  -= 2;
-        }
-        SetPressed( TRUE );
+        SetPressed( sal_True );
         EndSelection();
         mnCurItemId = mpMenu->Execute( this, aRect, POPUPMENU_EXECUTE_DOWN );
-        SetPressed( FALSE );
+        SetPressed( sal_False );
         if ( mnCurItemId )
         {
             Select();
@@ -128,7 +119,7 @@ void MenuButton::ImplLoadRes( const ResId& rResId )
 {
     Control::ImplLoadRes( rResId );
 
-    ULONG nObjMask = ReadLongRes();
+    sal_uLong nObjMask = ReadLongRes();
 
     if ( RSCMENUBUTTON_MENU & nObjMask )
     {
@@ -204,7 +195,7 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 void MenuButton::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();
-    USHORT nCode = aKeyCode.GetCode();
+    sal_uInt16 nCode = aKeyCode.GetCode();
     if ( (nCode == KEY_DOWN) && aKeyCode.IsMod2() )
         ImplExecuteMenu();
     else if ( !(mnMenuMode & MENUBUTTON_MENUMODE_TIMED) &&
@@ -231,7 +222,7 @@ void MenuButton::Select()
 
 // -----------------------------------------------------------------------
 
-void MenuButton::SetMenuMode( USHORT nMode )
+void MenuButton::SetMenuMode( sal_uInt16 nMode )
 {
     // Fuer die 5.1-Auslieferung besser noch nicht inline, ansonsten kann
     // diese Funktion zur 6.0 inline werden

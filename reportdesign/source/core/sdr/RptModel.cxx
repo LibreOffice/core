@@ -29,7 +29,7 @@
 
 #include "RptModel.hxx"
 #include "RptPage.hxx"
-#include <dbaccess/singledoccontroller.hxx>
+#include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
 
@@ -71,13 +71,6 @@ OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition
     m_pUndoEnv = new OXUndoEnvironment(*this);
     m_pUndoEnv->acquire();
     SetSdrUndoFactory(new OReportUndoFactory);
-
- //   SvxFontNameToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONT);
-    //SvxFontHeightToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT);
-    //SvxFontColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR);
-    //SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2);
-    //SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND);
-    //SvxColorToolBoxControl::RegisterControl(SID_BACKGROUND_COLOR);
 }
 
 //----------------------------------------------------------------------------
@@ -100,7 +93,7 @@ void OReportModel::detachController()
 SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
 {
     DBG_CHKTHIS( rpt_OReportModel, 0);
-    OSL_ENSURE(0,"Who called me!");
+    OSL_FAIL("Who called me!");
     return NULL;
 }
 
@@ -131,13 +124,9 @@ void OReportModel::SetModified(sal_Bool _bModified)
         m_pController->setModified(_bModified);
 }
 // -----------------------------------------------------------------------------
-SdrPage* OReportModel::RemovePage(USHORT nPgNum)
+SdrPage* OReportModel::RemovePage(sal_uInt16 nPgNum)
 {
     OReportPage* pPage = dynamic_cast<OReportPage*>(SdrModel::RemovePage(nPgNum));
-    //if ( pPage )
-    //{
-    //    m_pUndoEnv->RemoveSection(pPage);
-    //}
     return pPage;
 }
 // -----------------------------------------------------------------------------
@@ -152,8 +141,8 @@ OReportPage* OReportModel::createNewPage(const uno::Reference< report::XSection 
 OReportPage* OReportModel::getPage(const uno::Reference< report::XSection >& _xSection)
 {
     OReportPage* pPage = NULL;
-    USHORT nCount = GetPageCount();
-    for (USHORT i = 0; i < nCount && !pPage ; ++i)
+    sal_uInt16 nCount = GetPageCount();
+    for (sal_uInt16 i = 0; i < nCount && !pPage ; ++i)
     {
         OReportPage* pRptPage = PTR_CAST( OReportPage, GetPage(i) );
         if ( pRptPage && pRptPage->getSection() == _xSection )

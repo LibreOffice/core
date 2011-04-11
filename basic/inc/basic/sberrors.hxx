@@ -32,7 +32,7 @@
 #include <basic/sbxdef.hxx>
 
 #ifndef __RSC
-typedef ULONG SbError;
+typedef sal_uIntPtr SbError;
 #endif
 
 // Mapping to SbxError

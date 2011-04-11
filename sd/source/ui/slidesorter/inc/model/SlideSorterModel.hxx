@@ -37,12 +37,16 @@ class SdDrawDocument;
 #include "pres.hxx"
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <osl/mutex.hxx>
+#include <vcl/region.hxx>
 
 #include <memory>
 #include <vector>
 #include <functional>
 
 namespace css = ::com::sun::star;
+
+class SdrPage;
+class SdPage;
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
@@ -56,6 +60,9 @@ namespace sd { namespace slidesorter { namespace model {
 
 class DocumentPageContainer;
 
+inline sal_Int32 FromCoreIndex (const sal_uInt16 nCoreIndex) { return (nCoreIndex-1)/2; }
+inline sal_uInt16 ToCoreIndex (const sal_Int32 nIndex) { return nIndex*2+1; }
+
 /** The model of the slide sorter gives access to the slides that are to be
     displayed in the slide sorter view.  Via the SetDocumentSlides() method
     this set of slides can be modified (but do not call it directly, use
@@ -65,8 +72,10 @@ class SlideSorterModel
 {
 public:
     SlideSorterModel (SlideSorter& rSlideSorter);
+    void Init (void);
 
     virtual ~SlideSorterModel (void);
+    void Dispose (void);
 
     /** This method is present to let the view create a ShowView for
         displaying slides.
@@ -84,6 +93,9 @@ public:
     */
     bool SetEditMode (EditMode eEditMode);
 
+    /** Set the edit mode to that currently used by the controller.
+    */
+    bool SetEditModeFromController (void);
     EditMode GetEditMode (void) const;
     PageKind GetPageType (void) const;
 
@@ -127,6 +139,25 @@ public:
     sal_Int32 GetIndex (
         const ::com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage>& rxSlide) const;
 
+    /** Return a page descriptor for the given SdrPage.  Page descriptors
+        are created on demand.  The page descriptor is found (or not found)
+        in (at most) linear time.  Note that all page descriptors in front of
+        the one associated with the given XDrawPage are created when not yet
+        present. When the SdrPage is not found then all descriptors are
+        created.
+        @return
+            Returns the index to the requested page descriptor or -1 when
+            there is no such page descriptor.
+    */
+    sal_Int32 GetIndex (const SdrPage* pPage) const;
+
+    /** Return an index for accessing an SdrModel that corresponds to the
+        given SlideSorterModel index.  In many cases we just have to apply
+        the n*2+1 magic.  Only when a special model is set, like a custom
+        slide show, then the returned value is different.
+    */
+    sal_uInt16 GetCoreIndex (const sal_Int32 nIndex) const;
+
     /** Call this method after the document has changed its structure.  This
         will get the model in sync with the SdDrawDocument.  This method
         tries not to throw away to much information already gathered.  This
@@ -145,16 +176,9 @@ public:
     */
     void SynchronizeDocumentSelection (void);
 
-    /** Replace the factory for the creation of the page objects and
-        contacts with the given object.  The old factory is destroyed.
+    /** Set the selection of the called model to exactly that of the document.
     */
-    void SetPageObjectFactory(
-        ::std::auto_ptr<controller::PageObjectFactory> pPageObjectFactory);
-
-    /** Return the page object factory.  It none has been set so far or it
-        has been reset, then a new one is created.
-    */
-    const controller::PageObjectFactory& GetPageObjectFactory (void) const;
+    void SynchronizeModelSelection (void);
 
     /** Return the mutex so that the caller can lock it and then safely
         access the model.
@@ -180,6 +204,29 @@ public:
     */
     void UpdatePageList (void);
 
+    bool IsReadOnly (void) const;
+
+    /** The current selection is saved by copying the ST_Selected state into
+        ST_WasSelected for slides.
+    */
+    void SaveCurrentSelection (void);
+
+    /** The current selection is restored from the ST_WasSelected state from
+        the slides.
+        @returns
+            The returned region has to be repainted to reflect the updated
+            selection states.
+    */
+    Region RestoreSelection (void);
+
+    /** Typically called from controller::Listener this method handles the
+        insertion and deletion of single pages.
+        @return
+            Returns <TRUE/> when the given page is relevant for the current
+            page kind and edit mode.
+    */
+    bool NotifyPageEvent (const SdrPage* pPage);
+
 private:
     mutable ::osl::Mutex maMutex;
     SlideSorter& mrSlideSorter;
@@ -188,13 +235,16 @@ private:
     EditMode meEditMode;
     typedef ::std::vector<SharedPageDescriptor> DescriptorContainer;
     mutable DescriptorContainer maPageDescriptors;
-    mutable ::std::auto_ptr<controller::PageObjectFactory> mpPageObjectFactory;
 
     /** Resize the descriptor container according to current values of
         page kind and edit mode.
     */
     void AdaptSize (void);
 
+    SdPage* GetPage (const sal_Int32 nCoreIndex) const;
+    void InsertSlide (SdPage* pPage);
+    void DeleteSlide (const SdPage* pPage);
+    void UpdateIndices (const sal_Int32 nFirstIndex);
 };
 
 } } } // end of namespace ::sd::slidesorter::model

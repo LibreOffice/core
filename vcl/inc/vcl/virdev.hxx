@@ -50,13 +50,13 @@ private:
     SalVirtualDevice*   mpVirDev;
     VirtualDevice*      mpPrev;
     VirtualDevice*      mpNext;
-    USHORT              mnBitCount;
-    BOOL                mbScreenComp;
+    sal_uInt16              mnBitCount;
+    sal_Bool                mbScreenComp;
     sal_Int8            mnAlphaDepth;
-    BYTE                meRefDevMode;
+    sal_uInt8               meRefDevMode;
 
-    SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData = NULL );
-    SAL_DLLPRIVATE BOOL ImplSetOutputSizePixel( const Size& rNewSize, BOOL bErase );
+    SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL );
+    SAL_DLLPRIVATE sal_Bool ImplSetOutputSizePixel( const Size& rNewSize, sal_Bool bErase );
 
     // Copy assignment is forbidden and not implemented.
     VirtualDevice (const VirtualDevice &);
@@ -73,9 +73,9 @@ private:
     SAL_DLLPRIVATE bool ForceZeroExtleadBug() const
         { return ((meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD) != 0); }
 public:
-                        VirtualDevice( USHORT nBitCount = 0 );
+                        VirtualDevice( sal_uInt16 nBitCount = 0 );
                         VirtualDevice( const OutputDevice& rCompDev,
-                                       USHORT nBitCount = 0 );
+                                       sal_uInt16 nBitCount = 0 );
     /** Create a virtual device with alpha channel
 
         @param rCompDev
@@ -93,18 +93,18 @@ public:
         are allowed here, with 1 denoting binary mask.
      */
                         VirtualDevice( const OutputDevice& rCompDev,
-                                       USHORT nBitCount, USHORT nAlphaBitCount );
+                                       sal_uInt16 nBitCount, sal_uInt16 nAlphaBitCount );
 
     /** Create a virtual device using an existing system dependent device or graphics context
         Any rendering will happen directly on the context and not on any intermediate bitmap.
         Note: This might not be suported on all platforms !
     */
-                        VirtualDevice( const SystemGraphicsData *pData, USHORT nBitCount );
+                        VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCount );
 
     virtual             ~VirtualDevice();
 
-    BOOL                SetOutputSizePixel( const Size& rNewSize, BOOL bErase = TRUE );
-    BOOL                SetOutputSize( const Size& rNewSize, BOOL bErase = TRUE )
+    sal_Bool                SetOutputSizePixel( const Size& rNewSize, sal_Bool bErase = sal_True );
+    sal_Bool                SetOutputSize( const Size& rNewSize, sal_Bool bErase = sal_True )
                             { return SetOutputSizePixel( LogicToPixel( rNewSize ), bErase ); }
 
     // reference device modes for different compatibility levels

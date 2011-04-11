@@ -77,14 +77,13 @@ class GraphicCollector
 
     struct GraphicEntity
     {
-        com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > mxGraphic;          // the corresponding XGraphic of the Shape
         com::sun::star::awt::Size                       maLogicalSize;                          // the biggest logical size the graphic will be displayed
         sal_Bool                                        mbRemoveCropArea;                       //
         com::sun::star::text::GraphicCrop               maGraphicCropLogic;
         std::vector< GraphicUser >                      maUser;
 
-        GraphicEntity( const com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic >& xGraphic, const GraphicUser& rUser )
-            : mxGraphic( xGraphic ), maLogicalSize( rUser.maLogicalSize ), mbRemoveCropArea( sal_False ), maGraphicCropLogic( 0, 0, 0, 0 ) { maUser.push_back( rUser ); };
+        GraphicEntity( const GraphicUser& rUser )
+            : maLogicalSize( rUser.maLogicalSize ), mbRemoveCropArea( sal_False ), maGraphicCropLogic( 0, 0, 0, 0 ) { maUser.push_back( rUser ); };
     };
 
     static const com::sun::star::awt::DeviceInfo& GetDeviceInfo( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxFact );

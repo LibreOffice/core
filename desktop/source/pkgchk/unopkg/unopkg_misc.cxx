@@ -105,7 +105,7 @@ OptionInfo const * getOptionInfo(
             }
         }
     }
-    OSL_ENSURE( 0, ::rtl::OUStringToOString(
+    OSL_FAIL( ::rtl::OUStringToOString(
                     opt, osl_getThreadTextEncoding() ).getStr() );
     return 0;
 }
@@ -177,7 +177,6 @@ bool readArgument(
     return false;
 }
 
-//##############################################################################
 
 namespace {
 struct ExecutableDir : public rtl::StaticWithInit<
@@ -195,7 +194,7 @@ struct ProcessWorkingDir : public rtl::StaticWithInit<
     const OUString, ProcessWorkingDir> {
     const OUString operator () () {
         OUString workingDir;
-        tools::getProcessWorkingDir(&workingDir);
+        tools::getProcessWorkingDir(workingDir);
         return workingDir;
     }
 };
@@ -256,7 +255,6 @@ OUString makeAbsoluteFileUrl(
         ? abs.copy( 0, abs.getLength() -1 ) : abs;
 }
 
-//##############################################################################
 
 namespace {
 
@@ -369,7 +367,6 @@ void printf_packages(
 }
 
 
-//##############################################################################
 
 namespace {
 
@@ -629,7 +626,7 @@ void removeFolder(OUString const & folderUrl)
         dir.close();
         ::osl::Directory::remove(url);
     }
-    else
+    else if (rc != osl::File::E_NOENT)
     {
         dp_misc::writeConsole(
             OUSTR("unopkg: Error while removing ") + url + OUSTR("\n"));

@@ -50,7 +50,7 @@ namespace dbaui
     protected:
         ::osl::Mutex        m_aEventSafety;
         ::osl::Mutex        m_aDestructionSafety;
-        ULONG               m_nEventId;
+        sal_uLong               m_nEventId;
 
     public:
         /** constructs the object

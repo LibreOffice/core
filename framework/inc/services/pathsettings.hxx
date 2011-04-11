@@ -159,6 +159,9 @@ class PathSettings : public  css::lang::XTypeProvider             ,
         /** provides access to the new configuration schema. */
         css::uno::Reference< css::container::XNameAccess > m_xCfgNew;
 
+        /** helper to listen for configuration changes without ownership cycle problems */
+        css::uno::Reference< css::util::XChangesListener > m_xCfgNewListener;
+
         ::cppu::OPropertyArrayHelper* m_pPropHelp;
 
         ::sal_Bool m_bIgnoreEvents;

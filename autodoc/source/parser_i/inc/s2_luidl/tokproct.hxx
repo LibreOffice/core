@@ -64,7 +64,7 @@ class TokenProcessing_Types
         push_sure,      // push sub environment, which must be the correct one
         push_try,       // push sub environment, which is tried, if it may be the right one
         pop_success,    // return to parent environment, parsing was successful
-        pop_failure     // return to parent environment, but an error occured.
+        pop_failure     // return to parent environment, but an error occurred.
     };
 
     struct TokenProcessing_Result

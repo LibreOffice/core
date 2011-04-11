@@ -35,8 +35,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include "scdllapi.h"
 
-#define MAXSORT     3
-
+#define MAXSORT 3
 
 struct ScSubTotalParam;
 struct ScQueryParam;
@@ -47,23 +46,23 @@ struct SC_DLLPUBLIC ScSortParam
     SCROW       nRow1;
     SCCOL       nCol2;
     SCROW       nRow2;
-    BOOL        bHasHeader;
-    BOOL        bByRow;
-    BOOL        bCaseSens;
-    BOOL        bNaturalSort;
-    BOOL        bUserDef;
-    USHORT      nUserIndex;
-    BOOL        bIncludePattern;
-    BOOL        bInplace;
+    sal_uInt16  nUserIndex;
+    bool        bHasHeader;
+    bool        bByRow;
+    bool        bCaseSens;
+    bool        bNaturalSort;
+    bool        bUserDef;
+    bool        bIncludePattern;
+    bool        bInplace;
     SCTAB       nDestTab;
     SCCOL       nDestCol;
     SCROW       nDestRow;
-    BOOL        bDoSort[MAXSORT];
+    bool        bDoSort[MAXSORT];
     SCCOLROW    nField[MAXSORT];
-    BOOL        bAscending[MAXSORT];
-    ::com::sun::star::lang::Locale      aCollatorLocale;
-    String      aCollatorAlgorithm;
-    USHORT      nCompatHeader;
+    bool        bAscending[MAXSORT];
+    ::com::sun::star::lang::Locale aCollatorLocale;
+    ::rtl::OUString aCollatorAlgorithm;
+    sal_uInt16  nCompatHeader;
 
     ScSortParam();
     ScSortParam( const ScSortParam& r );
@@ -72,8 +71,8 @@ struct SC_DLLPUBLIC ScSortParam
     /// TopTen sort
     ScSortParam( const ScQueryParam&, SCCOL nCol );
 
-    ScSortParam&    operator=   ( const ScSortParam& r );
-    BOOL            operator==  ( const ScSortParam& rOther ) const;
+    ScSortParam&    operator=  ( const ScSortParam& r );
+    bool            operator== ( const ScSortParam& rOther ) const;
     void            Clear       ();
 
     void            MoveToDest();

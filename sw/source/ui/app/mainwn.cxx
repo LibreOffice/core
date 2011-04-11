@@ -55,7 +55,7 @@ static SvPtrarr *pProgressContainer = 0;
 
 static SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
 {
-    for ( USHORT i = 0; i < pProgressContainer->Count(); ++i )
+    for ( sal_uInt16 i = 0; i < pProgressContainer->Count(); ++i )
     {
         SwProgress *pTmp = (SwProgress*)(*pProgressContainer)[i];
         if ( pTmp->pDocShell == pDocShell )
@@ -65,7 +65,7 @@ static SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
 }
 
 
-void StartProgress( USHORT nMessResId, long nStartValue, long nEndValue,
+void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
                     SwDocShell *pDocShell )
 {
     if( !SW_MOD()->IsEmbeddedLoadSave() )
@@ -85,8 +85,8 @@ void StartProgress( USHORT nMessResId, long nStartValue, long nEndValue,
             pProgress->pProgress = new SfxProgress( pDocShell,
                                                     SW_RESSTR(nMessResId),
                                                     nEndValue - nStartValue,
-                                                    FALSE,
-                                                    TRUE );
+                                                    sal_False,
+                                                    sal_True );
             pProgress->nStartCount = 1;
             pProgress->pDocShell = pDocShell;
             pProgressContainer->Insert( (void*)pProgress, 0 );
@@ -112,7 +112,7 @@ void EndProgress( SwDocShell *pDocShell )
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
     {
         SwProgress *pProgress = 0;
-        USHORT i;
+        sal_uInt16 i;
         for ( i = 0; i < pProgressContainer->Count(); ++i )
         {
             SwProgress *pTmp = (SwProgress*)(*pProgressContainer)[i];
@@ -138,7 +138,7 @@ void EndProgress( SwDocShell *pDocShell )
 }
 
 
-void SetProgressText( USHORT nId, SwDocShell *pDocShell )
+void SetProgressText( sal_uInt16 nId, SwDocShell *pDocShell )
 {
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
     {

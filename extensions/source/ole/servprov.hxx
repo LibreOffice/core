@@ -35,7 +35,6 @@
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
 
-
 using namespace com::sun::star::bridge;
 using namespace cppu;
 using namespace std;
@@ -273,7 +272,5 @@ protected:
 
 } // end namespace
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

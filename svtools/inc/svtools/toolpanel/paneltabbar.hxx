@@ -89,7 +89,7 @@ namespace svt
         virtual void    DataChanged( const DataChangedEvent& i_rDataChanedEvent );
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                        GetComponentInterface( BOOL i_bCreate );
+                        GetComponentInterface( sal_Bool i_bCreate );
 
     private:
         ::std::auto_ptr< PanelTabBar_Impl > m_pImpl;

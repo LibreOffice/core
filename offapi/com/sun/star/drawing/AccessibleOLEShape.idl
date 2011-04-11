@@ -41,15 +41,15 @@ module com {  module sun {  module star {  module drawing {
 /** The <type>AccessibleOLEShape</type> service is implemented by
     OLE shapes.
 
-    <p>This includes generic OLE shapes, frames, plugins, and applets.</p>
+    <p>This includes generic OLE shapes, frames, plug-ins, and applets.</p>
 
     <p>This service supports the additional <type
     scope="::com::sun::star::accessibility">XAccessibleAction</type>
     interface.</p>
 
     <p>OLE objects are handled as place holders.  While not activated the
-    accessible OLE shape is the only indicator of the OLE objects'
-    existence.  When an OLE object has been activated then the accessbility
+    accessible OLE shape is the only indicator of the OLE object's
+    existence.  When an OLE object has been activated then the accessibility
     tree representing it (as far as that is available) is included directly
     under the accessible document view and not under the OLE object.  This
     is due to underlying implementation constraints and may change in the

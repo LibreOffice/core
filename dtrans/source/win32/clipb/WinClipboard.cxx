@@ -43,7 +43,6 @@
 // namespace directives
 //------------------------------------------------------------------------
 
-using namespace rtl;
 using namespace osl;
 using namespace std;
 using namespace cppu;
@@ -52,6 +51,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 // defines
@@ -68,7 +69,7 @@ namespace
     Sequence< OUString > SAL_CALL WinClipboard_getSupportedServiceNames()
     {
         Sequence< OUString > aRet(1);
-        aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.clipboard.SystemClipboard");
+        aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard"));
         return aRet;
     }
 }
@@ -102,7 +103,7 @@ Reference< XTransferable > SAL_CALL CWinClipboard::getContents( ) throw( Runtime
     MutexGuard aGuard( m_aMutex );
 
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString::createFromAscii( "object is already disposed" ),
+        throw DisposedException( OUString(RTL_CONSTASCII_USTRINGPARAM("object is already disposed")),
                                  static_cast< XClipboardEx* >( this ) );
 
     if ( NULL != m_pImpl.get( ) )
@@ -122,7 +123,7 @@ void SAL_CALL CWinClipboard::setContents( const Reference< XTransferable >& xTra
     MutexGuard aGuard( m_aMutex );
 
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString::createFromAscii( "object is already disposed" ),
+        throw DisposedException( OUString(RTL_CONSTASCII_USTRINGPARAM("object is already disposed")),
                                  static_cast< XClipboardEx* >( this ) );
 
     if ( NULL != m_pImpl.get( ) )
@@ -136,13 +137,13 @@ void SAL_CALL CWinClipboard::setContents( const Reference< XTransferable >& xTra
 OUString SAL_CALL CWinClipboard::getName(  ) throw( RuntimeException )
 {
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString::createFromAscii( "object is already disposed" ),
+        throw DisposedException( OUString(RTL_CONSTASCII_USTRINGPARAM("object is already disposed")),
                                  static_cast< XClipboardEx* >( this ) );
 
     if ( NULL != m_pImpl.get( ) )
         return m_pImpl->getName( );
 
-    return OUString::createFromAscii( "" );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(""));
 }
 
 //========================================================================
@@ -154,7 +155,7 @@ void SAL_CALL CWinClipboard::flushClipboard( ) throw( RuntimeException )
     MutexGuard aGuard( m_aMutex );
 
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString::createFromAscii( "object is already disposed" ),
+        throw DisposedException( OUString(RTL_CONSTASCII_USTRINGPARAM("object is already disposed")),
                                  static_cast< XClipboardEx* >( this ) );
 
     if ( NULL != m_pImpl.get( ) )
@@ -168,7 +169,7 @@ void SAL_CALL CWinClipboard::flushClipboard( ) throw( RuntimeException )
 sal_Int8 SAL_CALL CWinClipboard::getRenderingCapabilities(  ) throw( RuntimeException )
 {
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString::createFromAscii( "object is already disposed" ),
+        throw DisposedException( OUString(RTL_CONSTASCII_USTRINGPARAM("object is already disposed")),
                                  static_cast< XClipboardEx* >( this ) );
 
     if ( NULL != m_pImpl.get( ) )
@@ -189,12 +190,12 @@ void SAL_CALL CWinClipboard::addClipboardListener( const Reference< XClipboardLi
     throw( RuntimeException )
 {
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString::createFromAscii( "object is already disposed" ),
+        throw DisposedException( OUString(RTL_CONSTASCII_USTRINGPARAM("object is already disposed")),
                                  static_cast< XClipboardEx* >( this ) );
 
     // check input parameter
     if ( !listener.is( ) )
-        throw IllegalArgumentException( OUString::createFromAscii( "empty reference" ),
+        throw IllegalArgumentException( OUString(RTL_CONSTASCII_USTRINGPARAM("empty reference")),
                                         static_cast< XClipboardEx* >( this ),
                                         1 );
 
@@ -209,12 +210,12 @@ void SAL_CALL CWinClipboard::removeClipboardListener( const Reference< XClipboar
     throw( RuntimeException )
 {
     if ( rBHelper.bDisposed )
-        throw DisposedException( OUString::createFromAscii( "object is already disposed" ),
+        throw DisposedException( OUString(RTL_CONSTASCII_USTRINGPARAM("object is already disposed")),
                                  static_cast< XClipboardEx* >( this ) );
 
     // check input parameter
     if ( !listener.is( ) )
-        throw IllegalArgumentException( OUString::createFromAscii( "empty reference" ),
+        throw IllegalArgumentException( OUString(RTL_CONSTASCII_USTRINGPARAM("empty reference")),
                                         static_cast< XClipboardEx* >( this ),
                                         1 );
 
@@ -255,13 +256,13 @@ void SAL_CALL CWinClipboard::notifyAllClipboardListener( )
                         }
                         catch(RuntimeException&)
                         {
-                            OSL_ENSURE( false, "RuntimeException caught" );
+                            OSL_FAIL( "RuntimeException caught" );
                         }
                     }
                 }
                 catch(const ::com::sun::star::lang::DisposedException&)
                 {
-                    OSL_ENSURE(false, "Service Manager disposed");
+                    OSL_FAIL("Service Manager disposed");
 
                     // no further clipboard changed notifications
                     m_pImpl->unregisterClipboardViewer();
@@ -293,7 +294,7 @@ void SAL_CALL CWinClipboard::disposing()
 OUString SAL_CALL CWinClipboard::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString::createFromAscii( WINCLIPBOARD_IMPL_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( WINCLIPBOARD_IMPL_NAME ));
 }
 
 // -------------------------------------------------

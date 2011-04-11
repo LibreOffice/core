@@ -46,21 +46,15 @@ TYPEINIT1(GraphicViewShellBase, ViewShellBase);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new GraphicViewShellBase object has been constructed.
 
-/*
-SFX_IMPL_VIEWFACTORY(GraphicViewShellBase, SdResId(STR_DEFAULTVIEW))
-{
-    SFX_VIEW_REGISTRATION(GraphicDocShell);
-}
-*/
 SfxViewFactory* GraphicViewShellBase::pFactory;
-SfxViewShell* __EXPORT GraphicViewShellBase::CreateInstance (
+SfxViewShell* GraphicViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     GraphicViewShellBase* pBase = new GraphicViewShellBase(pFrame, pOldView);
     pBase->LateInit(framework::FrameworkHelper::msDrawViewURL);
     return pBase;
 }
-void GraphicViewShellBase::RegisterFactory( USHORT nPrio )
+void GraphicViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"Default");
@@ -97,7 +91,7 @@ GraphicViewShellBase::~GraphicViewShellBase (void)
 
 void GraphicViewShellBase::Execute (SfxRequest& rRequest)
 {
-    USHORT nSlotId = rRequest.GetSlot();
+    sal_uInt16 nSlotId = rRequest.GetSlot();
 
     switch (nSlotId)
     {

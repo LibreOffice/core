@@ -58,10 +58,8 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     // fuers GetRefFeld - oben/unten
     String          aGetRefFld_Up;
     String          aGetRefFld_Down;
-    // --> OD 2007-09-13 #i81002#
     // for GetRefField - referenced item not found
     String          aGetRefFld_RefItemNotFound;
-    // <--
     // fuer dynamisches Menu - String "alle"
     String          aStrAllPageHeadFoot;
     // fuer einige Listboxen - String "keine"
@@ -84,18 +82,19 @@ struct SW_DLLPUBLIC ShellResource : public Resource
 
     SvStringsDtor   aDocInfoLst;
 
-    // Fly-Anker Bmps
-//  Bitmap          aAnchorBmp;
-//  Bitmap          aDragAnchorBmp;
-
     // die AutoFormat-Redline-Kommentare
     inline const SvStringsDtor& GetAutoFmtNameLst() const;
 
+    enum PageNameMode
+    {
+        NORMAL_PAGE,
+        FIRST_PAGE,
+        FOLLOW_PAGE
+    };
     // returns for the specific filter the new names of pagedescs
     // This method is for the old code of the specific filters with
     // now localized names
-    String GetPageDescName( USHORT nNo, BOOL bFirst = FALSE,
-                                        BOOL bFollow = FALSE );
+    String GetPageDescName( sal_uInt16 nNo, PageNameMode eMode );
 
     ShellResource();
     ~ShellResource();

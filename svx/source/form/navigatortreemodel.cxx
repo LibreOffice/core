@@ -33,7 +33,7 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/fmglob.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdogrp.hxx>
 #include <svx/svdpagv.hxx>
 
@@ -43,7 +43,7 @@
 #include "fmhelp.hrc"
 #include "fmexpl.hrc"
 #include "fmexpl.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmshimp.hxx"
 #include "fmobj.hxx"
 #include <sfx2/objsh.hxx>
@@ -177,7 +177,7 @@ namespace svxform
             }
             else if (pEntryData->ISA(FmFormData))
             {
-                DBG_ERROR("replacing forms not implemented yet !");
+                OSL_FAIL("replacing forms not implemented yet !");
             }
         }
 
@@ -216,12 +216,11 @@ namespace svxform
     //========================================================================
 
     //------------------------------------------------------------------------
-    NavigatorTreeModel::NavigatorTreeModel( const ImageList& _rNormalImages, const ImageList& _rHCImages )
+    NavigatorTreeModel::NavigatorTreeModel( const ImageList& _rNormalImages )
                     :m_pFormShell(NULL)
                     ,m_pFormPage(NULL)
                     ,m_pFormModel(NULL)
                     ,m_aNormalImages( _rNormalImages )
-                    ,m_aHCImages( _rHCImages )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::NavigatorTreeModel" );
         m_pPropChangeList = new OFormComponentObserver(this);
@@ -272,15 +271,7 @@ namespace svxform
 
         //////////////////////////////////////////////////////////////////////
         // RootList loeschen
-        FmEntryData* pChildData;
-        FmEntryDataList* pRootList = GetRootList();
-
-        for( sal_uInt32 i=pRootList->Count(); i>0; i-- )
-        {
-            pChildData = pRootList->GetObject(i-1);
-            pRootList->Remove( pChildData );
-            delete pChildData;
-        }
+        GetRootList()->clear();
 
         //////////////////////////////////////////////////////////////////////
         // UI benachrichtigen
@@ -299,7 +290,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTreeModel::Insert(FmEntryData* pEntry, ULONG nRelPos, sal_Bool bAlterModel)
+    void NavigatorTreeModel::Insert(FmEntryData* pEntry, sal_uLong nRelPos, sal_Bool bAlterModel)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Insert" );
         if (IsListening(*m_pFormModel))
@@ -361,7 +352,7 @@ namespace svxform
             }
             else
             {
-                DBG_ERROR("NavigatorTreeModel::Insert : the parent container needs an elementtype I don't know !");
+                OSL_FAIL("NavigatorTreeModel::Insert : the parent container needs an elementtype I don't know !");
             }
 
             if( bUndo )
@@ -384,9 +375,9 @@ namespace svxform
         }
 
         if (pFolder)
-            pFolder->GetChildList()->Insert( pEntry, nRelPos );
+            pFolder->GetChildList()->insert( pEntry, nRelPos );
         else
-            GetRootList()->Insert( pEntry, nRelPos );
+            GetRootList()->insert( pEntry, nRelPos );
 
         //////////////////////////////////////////////////////////////////////
         // UI benachrichtigen
@@ -467,13 +458,13 @@ namespace svxform
 
         // beim Vater austragen
         if (pFolder)
-            pFolder->GetChildList()->Remove(pEntry);
+            pFolder->GetChildList()->remove( pEntry );
         else
         {
-            GetRootList()->Remove(pEntry);
+            GetRootList()->remove( pEntry );
             //////////////////////////////////////////////////////////////////////
             // Wenn keine Form mehr in der Root, an der Shell CurForm zuruecksetzen
-            if (!GetRootList()->Count())
+            if ( !GetRootList()->size() )
                 m_pFormShell->GetImpl()->forgetCurrentForm();
         }
 
@@ -499,10 +490,9 @@ namespace svxform
             return;
 
         FmEntryDataList*    pChildList = pFormData->GetChildList();
-        sal_uInt32 nCount = pChildList->Count();
-        for (sal_uInt32 i = nCount; i > 0; i--)
+        for ( size_t i = pChildList->size(); i > 0; )
         {
-            FmEntryData* pEntryData = pChildList->GetObject(i - 1);
+            FmEntryData* pEntryData = pChildList->at( --i );
 
             //////////////////////////////////////////////////////////////////////
             // Child ist Form -> rekursiver Aufruf
@@ -546,15 +536,14 @@ namespace svxform
         //////////////////////////////////////////////////////////////////////
         // Alle Eintraege dieses Zweiges loeschen
         FmEntryDataList* pChildList = pParentData->GetChildList();
-        FmEntryData* pChildData;
 
-        for( sal_uInt32 i=pChildList->Count(); i>0; i-- )
+        for( size_t i = pChildList->size(); i > 0; )
         {
-            pChildData = pChildList->GetObject(i-1);
+            FmEntryData* pChildData = pChildList->at( --i );
             if( pChildData->ISA(FmFormData) )
                 ClearBranch( (FmFormData*)pChildData );
 
-            pChildList->Remove( pChildData );
+            pChildList->remove( pChildData );
         }
     }
 
@@ -578,7 +567,7 @@ namespace svxform
                     "NavigatorTreeModel::FillBranch : the root container should supply only elements of type XForm");
 
                 xForms->getByIndex(i) >>= xSubForm;
-                pSubFormData = new FmFormData( xSubForm, m_aNormalImages, m_aHCImages, pFormData );
+                pSubFormData = new FmFormData( xSubForm, m_aNormalImages, pFormData );
                 Insert( pSubFormData, LIST_APPEND );
 
                 //////////////////////////////////////////////////////////////
@@ -608,7 +597,7 @@ namespace svxform
 
                 if (xSubForm.is())
                 {   // die aktuelle Component ist eine Form
-                    pSubFormData = new FmFormData(xSubForm, m_aNormalImages, m_aHCImages, pFormData);
+                    pSubFormData = new FmFormData(xSubForm, m_aNormalImages, pFormData);
                     Insert(pSubFormData, LIST_APPEND);
 
                     //////////////////////////////////////////////////////////////
@@ -617,7 +606,7 @@ namespace svxform
                 }
                 else
                 {
-                    pNewControlData = new FmControlData(xCurrentComponent, m_aNormalImages, m_aHCImages, pFormData);
+                    pNewControlData = new FmControlData(xCurrentComponent, m_aNormalImages, pFormData);
                     Insert(pNewControlData, LIST_APPEND);
                 }
             }
@@ -640,7 +629,7 @@ namespace svxform
         if (xParentForm.is())
             pParentData = (FmFormData*)FindData( xParentForm, GetRootList() );
 
-        pFormData = new FmFormData( xForm, m_aNormalImages, m_aHCImages, pParentData );
+        pFormData = new FmFormData( xForm, m_aNormalImages, pParentData );
         Insert( pFormData, nRelPos );
     }
 
@@ -658,7 +647,7 @@ namespace svxform
         FmFormData* pParentData = (FmFormData*)FindData( xForm, GetRootList() );
         if( !pParentData )
         {
-            pParentData = new FmFormData( xForm, m_aNormalImages, m_aHCImages, NULL );
+            pParentData = new FmFormData( xForm, m_aNormalImages, NULL );
             Insert( pParentData, LIST_APPEND );
         }
 
@@ -666,7 +655,7 @@ namespace svxform
         {
             //////////////////////////////////////////////////////////
             // Neue EntryData setzen
-            FmEntryData* pNewEntryData = new FmControlData( xComp, m_aNormalImages, m_aHCImages, pParentData );
+            FmEntryData* pNewEntryData = new FmControlData( xComp, m_aNormalImages, pParentData );
 
             //////////////////////////////////////////////////////////
             // Neue EntryData einfuegen
@@ -675,12 +664,15 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTreeModel::ReplaceFormComponent(const Reference< XFormComponent > & xOld, const Reference< XFormComponent > & xNew)
+    void NavigatorTreeModel::ReplaceFormComponent(
+        const Reference< XFormComponent > & xOld,
+        const Reference< XFormComponent > & xNew
+    )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::ReplaceFormComponent" );
         FmEntryData* pData = FindData(xOld, GetRootList(), sal_True);
         DBG_ASSERT(pData && pData->ISA(FmControlData), "NavigatorTreeModel::ReplaceFormComponent : invalid argument !");
-        ((FmControlData*)pData)->ModelReplaced( xNew, m_aNormalImages, m_aHCImages );
+        ((FmControlData*)pData)->ModelReplaced( xNew, m_aNormalImages );
 
         FmNavModelReplacedHint aReplacedHint( pData );
         Broadcast( aReplacedHint );
@@ -693,9 +685,9 @@ namespace svxform
         // normalize
         Reference< XInterface > xIFace( xElement, UNO_QUERY );
 
-        for (sal_uInt16 i=0; i < pDataList->Count(); i++)
+        for ( size_t i = 0; i < pDataList->size(); i++ )
         {
-            FmEntryData* pEntryData = pDataList->GetObject(i);
+            FmEntryData* pEntryData = pDataList->at( i );
             if ( pEntryData->GetElement().get() == xIFace.get() )
                 return pEntryData;
             else if (bRecurs)
@@ -722,9 +714,9 @@ namespace svxform
         FmEntryData* pEntryData;
         FmEntryData* pChildData;
 
-        for( sal_uInt16 i=0; i<pDataList->Count(); i++ )
+        for( size_t i = 0; i < pDataList->size(); i++ )
         {
-            pEntryData = pDataList->GetObject(i);
+            pEntryData = pDataList->at( i );
             aEntryText = pEntryData->GetText();
 
             if (rText == aEntryText)
@@ -873,7 +865,7 @@ namespace svxform
         FmNavRequestSelectHint rshRequestSelection;
         sal_Bool bIsMixedSelection = sal_False;
 
-        for (ULONG i=0; (i<mlMarked.GetMarkCount()) && !bIsMixedSelection; i++)
+        for (sal_uLong i=0; (i<mlMarked.GetMarkCount()) && !bIsMixedSelection; i++)
         {
             SdrObject* pobjCurrent = mlMarked.GetMark(i)->GetMarkedSdrObj();
             bIsMixedSelection |= !InsertFormComponent(rshRequestSelection, pobjCurrent);
@@ -989,9 +981,9 @@ namespace svxform
         ::rtl::OUString aChildText;
         FmEntryData* pChildData;
 
-        for( sal_uInt16 i=0; i<pChildList->Count(); i++ )
+        for( size_t i = 0; i < pChildList->size(); i++ )
         {
-            pChildData = pChildList->GetObject(i);
+            pChildData = pChildList->at( i );
             aChildText = pChildData->GetText();
 
             //////////////////////////////////////////////////////////////////////

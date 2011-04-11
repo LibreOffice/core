@@ -61,12 +61,12 @@
 #include <sfx2/objsh.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include "fmobj.hxx"
 
 #include <svx/svxids.hrc>
 
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmexch.hxx"
 #include <svx/fmglob.hxx>
 #include <svl/eitem.hxx>
@@ -93,27 +93,6 @@
 #include <svx/dialogs.hrc>
 
 #include "svx/sdrobjectfilter.hxx"
-
-#define HANDLE_SQL_ERRORS( action, successflag, context, message )                  \
-    try                                                 \
-    {                                                   \
-        successflag = sal_False;                                    \
-        action;                                             \
-        successflag = sal_True;                                     \
-    }                                                   \
-    catch(::com::sun::star::sdbc::SQLException& e)                          \
-    {                                                   \
-        ::com::sun::star::sdb::SQLContext eExtendedInfo =                       \
-        GetImpl()->prependContextInfo(e, Reference< XInterface > (), context, ::rtl::OUString());   \
-        displayException(eExtendedInfo);                                \
-    }                                                   \
-    catch(Exception&)                                           \
-    {                                                   \
-        DBG_ERROR(message);                                         \
-    }                                                   \
-
-
-#define DO_SAFE_WITH_ERROR( action, message ) try { action; } catch(Exception&) { DBG_ERROR(message); }
 
 #define FmFormShell
 #include "svxslots.hxx"
@@ -279,11 +258,10 @@ void FmFormShell::NotifyMarkListChanged(FmFormView* pWhichView)
 }
 
 //------------------------------------------------------------------------
-sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
+sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool /*bForBrowsing*/)
 {
     if ( GetImpl()->didPrepareClose() )
         // we already did a PrepareClose for the current modifications of the current form
-        // 2002-11-12 #104702# - fs@openoffice.org
         return sal_True;
 
     sal_Bool bResult = sal_True;
@@ -311,10 +289,6 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
                     if ( bModified && bUI )
                     {
                         QueryBox aQry(NULL, SVX_RES(RID_QRY_SAVEMODIFIED));
-                        if (bForBrowsing)
-                            aQry.AddButton(SVX_RES(RID_STR_NEW_TASK), RET_NEWTASK,
-                                BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
-
                         switch (aQry.Execute())
                         {
                             case RET_NO:
@@ -810,7 +784,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             }
 
             if ( nRecord != -1 )
-                rController->execute( nSlot, ::rtl::OUString::createFromAscii( "Position" ), makeAny( (sal_Int32)nRecord ) );
+                rController->execute( nSlot, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Position" )), makeAny( (sal_Int32)nRecord ) );
 
             rReq.Done();
         }   break;
@@ -863,7 +837,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             rReq.Done();
 
             // initially open the filter navigator, the whole form based filter is pretty useless without it
-            SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, TRUE );
+            SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, sal_True );
             GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_FILTER_NAVIGATOR, SFX_CALLMODE_ASYNCHRON,
                 &aIdentifierItem, NULL );
         }   break;
@@ -1219,7 +1193,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "FmFormShell::GetFormState: caught an exception while determining the state!" );
+            OSL_FAIL( "FmFormShell::GetFormState: caught an exception while determining the state!" );
         }
         if (!bEnable)
             rSet.DisableItem(nWhich);

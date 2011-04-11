@@ -45,10 +45,11 @@
 
 #include <unotools/securityoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include "eventsupplier.hxx"
 
 #include <sfx2/app.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 
 #include <sfx2/sfxsids.hrc>
 #include "sfxlocal.hrc"
@@ -85,41 +86,37 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
     {
         if ( maEventNames[i] == aName )
         {
-            Sequence< PropertyValue > aProperties;
+            const ::comphelper::NamedValueCollection aEventDescriptor( rElement );
             // check for correct type of the element
-            if ( rElement.hasValue() && !( rElement >>= aProperties ) )
+            if ( rElement.hasValue() && aEventDescriptor.empty() )
                 throw ILLEGALARGUMENTEXCEPTION();
 
             // create Configuration at first, creation might call this method also and that would overwrite everything
             // we might have stored before!
             if ( mpObjShell && !mpObjShell->IsLoading() )
-                mpObjShell->SetModified( TRUE );
+                mpObjShell->SetModified( sal_True );
 
-            if ( aProperties.getLength() )
+            ::comphelper::NamedValueCollection aNormalizedDescriptor;
+            NormalizeMacro( aEventDescriptor, aNormalizedDescriptor, mpObjShell );
+
+            ::rtl::OUString sType;
+            if  (   ( aNormalizedDescriptor.size() == 1 )
+                &&  ( aNormalizedDescriptor.has( PROP_EVENT_TYPE) == 0 )
+                &&  ( aNormalizedDescriptor.get( PROP_EVENT_TYPE ) >>= sType )
+                &&  ( sType.getLength() == 0 )
+                )
             {
-                // "normalize" the macro descriptor
-                ANY aValue;
-                BlowUpMacro( rElement, aValue, mpObjShell );
-                aValue >>= aProperties;
-
-                ::rtl::OUString sType;
-                if  (   ( aProperties.getLength() == 1 )
-                    &&  ( aProperties[0].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
-                    &&  ( aProperties[0].Value >>= sType )
-                    &&  ( sType.getLength() == 0 )
-                    )
-                {
-                    // An empty event type means no binding. Therefore reset data
-                    // to reflect that state.
-                    // (that's for compatibility only. Nowadays, the Tools/Customize dialog should
-                    // set an empty sequence to indicate the request for resetting the assignment.)
-                    aProperties.realloc( 0 );
-                }
+                // An empty event type means no binding. Therefore reset data
+                // to reflect that state.
+                // (that's for compatibility only. Nowadays, the Tools/Customize dialog should
+                // set an empty sequence to indicate the request for resetting the assignment.)
+                OSL_ENSURE( false, "legacy event assignment format detected" );
+                aNormalizedDescriptor.clear();
             }
 
-            if ( aProperties.getLength() )
+            if ( !aNormalizedDescriptor.empty() )
             {
-                maEventData[i] = makeAny( aProperties );
+                maEventData[i] <<= aNormalizedDescriptor.getPropertyValues();
             }
             else
             {
@@ -217,27 +214,27 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
         sal_Int32 nIndex = 0;
         while ( nIndex < nCount )
         {
-            if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
+            if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_EVENT_TYPE)))
                 aProperties[ nIndex ].Value >>= aType;
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
+            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_SCRIPT)))
                 aProperties[ nIndex ].Value >>= aScript;
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
+            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_LIBRARY)))
                 aProperties[ nIndex ].Value >>= aLibrary;
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
+            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_MACRO_NAME)))
                 aProperties[ nIndex ].Value >>= aMacroName;
             else {
-                DBG_ERROR("Unknown property value!");
+                OSL_FAIL("Unknown property value!");
             }
             nIndex += 1;
         }
 
-        if ( aType.compareToAscii( STAR_BASIC ) == 0 && aScript.getLength() )
+        if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STAR_BASIC)) && aScript.getLength())
         {
             com::sun::star::uno::Any aAny;
             SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
         }
-        else if ( aType.compareToAscii( "Service" ) == 0 ||
-                  aType.compareToAscii( "Script" ) == 0 )
+        else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Service")) ||
+                  aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")))
         {
             if ( aScript.getLength() )
             {
@@ -248,8 +245,8 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
                 ::com::sun::star::uno::Reference
                     < ::com::sun::star::util::XURLTransformer > xTrans(
                         ::comphelper::getProcessServiceFactory()->createInstance(
-                            rtl::OUString::createFromAscii(
-                                "com.sun.star.util.URLTransformer" ) ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.util.URLTransformer" )) ),
                         UNO_QUERY );
 
                 ::com::sun::star::util::URL aURL;
@@ -270,8 +267,8 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
                     xProv = ::com::sun::star::uno::Reference
                         < ::com::sun::star::frame::XDispatchProvider > (
                             ::comphelper::getProcessServiceFactory()->createInstance(
-                                rtl::OUString::createFromAscii(
-                                    "com.sun.star.frame.Desktop" ) ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.frame.Desktop" )) ),
                             UNO_QUERY );
                 }
 
@@ -281,10 +278,6 @@ static void Execute( ANY& aEventData, const css::document::DocumentEvent& aTrigg
 
                 if ( xDisp.is() )
                 {
-                    //::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
-                    //aArgs[0].Name = rtl::OUString::createFromAscii("Referer");
-                    //aArs[0].Value <<= ::rtl::OUString( pDoc->GetMedium()->GetName() );
-                    //xDisp->dispatch( aURL, aArgs );
 
                     css::beans::PropertyValue aEventParam;
                     aEventParam.Value <<= aTrigger;
@@ -349,7 +342,6 @@ void SAL_CALL SfxEvents_Impl::disposing( const EVENTOBJECT& /*Source*/ ) throw( 
 }
 
 //--------------------------------------------------------------------------------------------------------
-//
 //--------------------------------------------------------------------------------------------------------
 SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
                                 REFERENCE< XEVENTBROADCASTER > xBroadcaster )
@@ -375,13 +367,13 @@ SfxEvents_Impl::~SfxEvents_Impl()
 }
 
 //--------------------------------------------------------------------------------------------------------
-SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* pObjShell, BOOL bBlowUp )
+SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* pObjShell, sal_Bool bNormalizeMacro )
 {
     SvxMacro* pMacro = NULL;
     SEQUENCE < PROPERTYVALUE > aProperties;
     ANY aAny;
-    if ( bBlowUp )
-        BlowUpMacro( rElement, aAny, pObjShell );
+    if ( bNormalizeMacro )
+        NormalizeMacro( rElement, aAny, pObjShell );
     else
         aAny = rElement;
 
@@ -400,27 +392,27 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
         while ( nIndex < nCount )
         {
-            if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
+            if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_EVENT_TYPE)))
                 aProperties[ nIndex ].Value >>= aType;
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
+            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_SCRIPT)))
                 aProperties[ nIndex ].Value >>= aScriptURL;
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
+            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_LIBRARY)))
                 aProperties[ nIndex ].Value >>= aLibrary;
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
+            else if (aProperties[ nIndex ].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROP_MACRO_NAME)))
                 aProperties[ nIndex ].Value >>= aMacroName;
             else {
-                DBG_ERROR("Unknown propery value!");
+                OSL_FAIL("Unknown propery value!");
             }
             nIndex += 1;
         }
 
         // Get the type
         ScriptType  eType( STARBASIC );
-        if ( aType.compareToAscii( STAR_BASIC ) == COMPARE_EQUAL )
+        if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STAR_BASIC)))
             eType = STARBASIC;
-        else if ( aType.compareToAscii( "Script" ) == COMPARE_EQUAL && aScriptURL.getLength() )
+        else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Script")) && aScriptURL.getLength())
             eType = EXTENDED_STYPE;
-        else if ( aType.compareToAscii( SVX_MACRO_LANGUAGE_JAVASCRIPT ) == COMPARE_EQUAL )
+        else if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SVX_MACRO_LANGUAGE_JAVASCRIPT)))
             eType = JAVASCRIPT;
         else {
             DBG_ERRORFILE( "ConvertToMacro: Unknown macro type" );
@@ -428,7 +420,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
         if ( aMacroName.getLength() )
         {
-            if ( aLibrary.compareToAscii("application") == 0 )
+            if (aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")))
                 aLibrary = SFX_APP()->GetName();
             else
                 aLibrary = ::rtl::OUString();
@@ -441,70 +433,46 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
     return pMacro;
 }
 
-void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* pDoc )
+void SfxEvents_Impl::NormalizeMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* pDoc )
 {
+    const ::comphelper::NamedValueCollection aEventDescriptor( rEvent );
+    ::comphelper::NamedValueCollection aEventDescriptorOut;
+
+    NormalizeMacro( aEventDescriptor, aEventDescriptorOut, pDoc );
+
+    rRet <<= aEventDescriptorOut.getPropertyValues();
+}
+
+void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i_eventDescriptor,
+        ::comphelper::NamedValueCollection& o_normalizedDescriptor, SfxObjectShell* i_document )
+{
+    SfxObjectShell* pDoc = i_document;
     if ( !pDoc )
         pDoc = SfxObjectShell::Current();
 
-    SEQUENCE < PROPERTYVALUE > aInProps;
-    SEQUENCE < PROPERTYVALUE > aOutProps(2);
+    ::rtl::OUString aType = i_eventDescriptor.getOrDefault( PROP_EVENT_TYPE, ::rtl::OUString() );
+    ::rtl::OUString aScript = i_eventDescriptor.getOrDefault( PROP_SCRIPT, ::rtl::OUString() );
+    ::rtl::OUString aLibrary = i_eventDescriptor.getOrDefault( PROP_LIBRARY, ::rtl::OUString() );
+    ::rtl::OUString aMacroName = i_eventDescriptor.getOrDefault( PROP_MACRO_NAME, ::rtl::OUString() );
 
-    if ( !( rEvent >>= aInProps ) )
-        return;
+    if ( aType.getLength() )
+        o_normalizedDescriptor.put( PROP_EVENT_TYPE, aType );
+    if ( aScript.getLength() )
+        o_normalizedDescriptor.put( PROP_SCRIPT, aScript );
 
-    sal_Int32 nCount = aInProps.getLength();
-
-    if ( !nCount )
-        return;
-
-    OUSTRING aType;
-    OUSTRING aScript;
-    OUSTRING aLibrary;
-    OUSTRING aMacroName;
-
-    sal_Int32 nIndex = 0;
-
-    while ( nIndex < nCount )
+    if (aType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STAR_BASIC)))
     {
-        if ( aInProps[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
-        {
-            aInProps[nIndex].Value >>= aType;
-            aOutProps[0] = aInProps[nIndex];
-        }
-        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
-        {
-            aInProps[nIndex].Value >>= aScript;
-            aOutProps[1] = aInProps[nIndex];
-        }
-        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
-        {
-            aInProps[ nIndex ].Value >>= aLibrary;
-        }
-        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
-        {
-            aInProps[ nIndex ].Value >>= aMacroName;
-        }
-        nIndex += 1;
-    }
-
-    if ( aType.compareToAscii( STAR_BASIC ) == 0 )
-    {
-        aOutProps.realloc(4);
         if ( aScript.getLength() )
         {
-            if( ! aMacroName.getLength() || ! aLibrary.getLength() )
+            if ( !aMacroName.getLength() || !aLibrary.getLength() )
             {
                 sal_Int32 nHashPos = aScript.indexOf( '/', 8 );
                 sal_Int32 nArgsPos = aScript.indexOf( '(' );
                 if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
                 {
                     OUSTRING aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
-                    if ( aBasMgrName.compareToAscii(".") == 0 )
+                    if (aBasMgrName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".")))
                         aLibrary = pDoc->GetTitle();
-/*
-                    else if ( aBasMgrName.getLength() )
-                        aLibrary = aBasMgrName;
- */
                     else
                         aLibrary = SFX_APP()->GetName();
 
@@ -520,7 +488,7 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
         else if ( aMacroName.getLength() )
         {
             aScript = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
-            if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0 && aLibrary.compareToAscii("StarDesktop") != 0 && aLibrary.compareToAscii("application") != 0 )
+            if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0 && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StarDesktop")) && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")) )
                 aScript += String('.');
 
             aScript += String('/');
@@ -531,7 +499,7 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
             // wrong properties
             return;
 
-        if ( aLibrary.compareToAscii("document") != 0 )
+        if (!aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("document")))
         {
             if ( !aLibrary.getLength() || (pDoc && ( String(aLibrary) == pDoc->GetTitle( SFX_TITLE_APINAME ) || String(aLibrary) == pDoc->GetTitle() )) )
                 aLibrary = String::CreateFromAscii("document");
@@ -539,22 +507,9 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
                 aLibrary = String::CreateFromAscii("application");
         }
 
-        aOutProps[1].Name = OUSTRING::createFromAscii( PROP_SCRIPT );
-        aOutProps[1].Value <<= aScript;
-        aOutProps[2].Name = OUSTRING::createFromAscii( PROP_LIBRARY );
-        aOutProps[2].Value <<= aLibrary;
-        aOutProps[3].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
-        aOutProps[3].Value <<= aMacroName;
-        rRet <<= aOutProps;
-    }
-    else if ( aType.compareToAscii( SVX_MACRO_LANGUAGE_JAVASCRIPT ) == 0 )
-    {
-        aOutProps[1] = aInProps[1];
-        rRet <<= aOutProps;
-    }
-    else
-    {
-        rRet <<= aOutProps;
+        o_normalizedDescriptor.put( PROP_SCRIPT, aScript );
+        o_normalizedDescriptor.put( PROP_LIBRARY, aLibrary );
+        o_normalizedDescriptor.put( PROP_MACRO_NAME, aMacroName );
     }
 }
 
@@ -597,7 +552,7 @@ css::uno::Any SAL_CALL ModelCollectionEnumeration::nextElement()
     ::osl::ResettableMutexGuard aLock(m_aLock);
     if (m_pEnumerationIt == m_lModels.end())
         throw css::container::NoSuchElementException(
-                    ::rtl::OUString::createFromAscii("End of model enumeration reached."),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("End of model enumeration reached.")),
                     static_cast< css::container::XEnumeration* >(this));
     css::uno::Reference< css::frame::XModel > xModel(*m_pEnumerationIt, UNO_QUERY);
     ++m_pEnumerationIt;
@@ -623,7 +578,7 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference
     pImp                   = new GlobalEventConfig();
     m_xEvents              = pImp;
     m_xJobExecutorListener = css::uno::Reference< css::document::XEventListener >(
-                        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.task.JobExecutor")),
+                        xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.JobExecutor"))),
                         UNO_QUERY);
     m_refCount--;
 }
@@ -746,7 +701,7 @@ void SAL_CALL SfxGlobalEvents_Impl::insert( const css::uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Cant locate at least the model parameter."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant locate at least the model parameter.")),
                 static_cast< css::container::XSet* >(this),
                 0);
 
@@ -783,7 +738,7 @@ void SAL_CALL SfxGlobalEvents_Impl::remove( const css::uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Cant locate at least the model parameter."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant locate at least the model parameter.")),
                 static_cast< css::container::XSet* >(this),
                 0);
 

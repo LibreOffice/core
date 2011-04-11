@@ -67,12 +67,8 @@ double ImpGetDate( const SbxValues* p )
         case SbxDATE:
         case SbxDOUBLE:
             nRes = p->nDouble; break;
-        case SbxULONG64:
-            nRes = ImpUINT64ToDouble( p->nULong64 ); break;
-        case SbxLONG64:
-            nRes = ImpINT64ToDouble( p->nLong64 ); break;
         case SbxCURRENCY:
-            nRes = ImpCurrencyToDouble( p->nLong64 ); break;
+            nRes = ImpCurrencyToDouble( p->nInt64 ); break;
         case SbxSALINT64:
             nRes = static_cast< double >(p->nInt64); break;
         case SbxSALUINT64:
@@ -91,7 +87,6 @@ double ImpGetDate( const SbxValues* p )
                 nRes = 0;
             else
             {
-#ifndef DOS
                 LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
 
                 SvNumberFormatter* pFormatter;
@@ -127,13 +122,13 @@ double ImpGetDate( const SbxValues* p )
 
                 pFormatter->PutandConvertEntry( aStr, nCheckPos,    nType,
                     nIndex, LANGUAGE_GERMAN, eLangType );
-                BOOL bSuccess = pFormatter->IsNumberFormat( *p->pOUString, nIndex, nRes );
+                sal_Bool bSuccess = pFormatter->IsNumberFormat( *p->pOUString, nIndex, nRes );
                 if ( bSuccess )
                 {
                     short nType_ = pFormatter->GetType( nIndex );
                     if(!(nType_ & ( NUMBERFORMAT_DATETIME | NUMBERFORMAT_DATE |
                                     NUMBERFORMAT_TIME | NUMBERFORMAT_DEFINED )))
-                        bSuccess = FALSE;
+                        bSuccess = sal_False;
                 }
 
                 if ( !bSuccess )
@@ -142,9 +137,6 @@ double ImpGetDate( const SbxValues* p )
                 }
 
                 delete pFormatter;
-#else
-                SbxBase::SetError( SbxERR_CONVERSION ); nRes = 0;
-#endif
             }
             break;
         case SbxOBJECT:
@@ -178,12 +170,8 @@ double ImpGetDate( const SbxValues* p )
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             nRes = *p->pDouble; break;
-        case SbxBYREF | SbxULONG64:
-            nRes = ImpUINT64ToDouble( *p->pULong64 ); break;
-        case SbxBYREF | SbxLONG64:
-            nRes = ImpINT64ToDouble( *p->pLong64 ); break;
         case SbxBYREF | SbxCURRENCY:
-            nRes = ImpCurrencyToDouble( *p->pLong64 ); break;
+            nRes = ImpCurrencyToDouble( *p->pnInt64 ); break;
         case SbxBYREF | SbxSALINT64:
             nRes = static_cast< double >(*p->pnInt64); break;
         case SbxBYREF | SbxSALUINT64:
@@ -223,11 +211,7 @@ start:
             aTmp.pUShort = &p->nUShort; goto direct;
         case SbxSINGLE:
             aTmp.pSingle = &p->nSingle; goto direct;
-        case SbxULONG64:
-            aTmp.pULong64 = &p->nULong64; goto direct;
-        case SbxLONG64:
         case SbxCURRENCY:
-            aTmp.pLong64 = &p->nLong64; goto direct;
         case SbxSALINT64:
             aTmp.pnInt64 = &p->nInt64; goto direct;
         case SbxSALUINT64:
@@ -247,7 +231,6 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-#ifndef DOS
         {
             if( !p->pOUString )
                 p->pOUString = new ::rtl::OUString;
@@ -304,11 +287,8 @@ start:
             pFormatter->GetOutputString( n, nIndex, aTmpString, &pColor );
             *p->pOUString = aTmpString;
             delete pFormatter;
-#endif
             break;
-#ifndef DOS
         }
-#endif
         case SbxOBJECT:
         {
             SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
@@ -337,7 +317,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
             }
-            *p->pByte = (BYTE) n; break;
+            *p->pByte = (sal_uInt8) n; break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
             if( n > SbxMAXINT )
@@ -348,7 +328,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMININT;
             }
-            *p->pInteger = (INT16) n; break;
+            *p->pInteger = (sal_Int16) n; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             if( n > SbxMAXUINT )
@@ -359,7 +339,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
             }
-            *p->pUShort = (UINT16) n; break;
+            *p->pUShort = (sal_uInt16) n; break;
         case SbxBYREF | SbxLONG:
             if( n > SbxMAXLNG )
             {
@@ -369,7 +349,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMINLNG;
             }
-            *p->pLong = (INT32) n; break;
+            *p->pLong = (sal_Int32) n; break;
         case SbxBYREF | SbxULONG:
             if( n > SbxMAXULNG )
             {
@@ -379,7 +359,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
             }
-            *p->pULong = (UINT32) n; break;
+            *p->pULong = (sal_uInt32) n; break;
         case SbxBYREF | SbxSINGLE:
             if( n > SbxMAXSNG )
             {
@@ -406,7 +386,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMINCURR;
             }
-            *p->pLong64 = ImpDoubleToCurrency( n ); break;
+            *p->pnInt64 = ImpDoubleToCurrency( n ); break;
 
         default:
             SbxBase::SetError( SbxERR_CONVERSION );

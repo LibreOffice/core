@@ -41,7 +41,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <osl/process.h>
 #include <rtl/string.hxx>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <assert.h>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -101,8 +101,8 @@ public:
               xContext), uno::UNO_QUERY_THROW);
         xInputStream = xFileAccess->openFileRead(absFileUrl) ;
 
-        mLF = rtl::OUString::createFromAscii("\n");
-        mCRLF = rtl::OUString::createFromAscii("\r\n");
+        mLF = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
+        mCRLF = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\r\n"));
     }
 
     rtl::OUString getURL()
@@ -269,18 +269,18 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
 ::rtl::OUString AnalyzeService_getImplementationName ()
 {
-    return rtl::OUString::createFromAscii ( AnalyzeService::IMPLEMENTATION_NAME );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( AnalyzeService::IMPLEMENTATION_NAME ));
 }
 
 sal_Bool SAL_CALL AnalyzeService_supportsService( const ::rtl::OUString& ServiceName )
 {
-    return ServiceName.equals( rtl::OUString::createFromAscii( AnalyzeService::SERVICE_NAME ) );
+    return ServiceName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( AnalyzeService::SERVICE_NAME )) );
 }
 uno::Sequence< rtl::OUString > SAL_CALL AnalyzeService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
     uno::Sequence < rtl::OUString > aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString::createFromAscii ( AnalyzeService::SERVICE_NAME );
+    pArray[0] =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( AnalyzeService::SERVICE_NAME ));
     return aRet;
 }
 

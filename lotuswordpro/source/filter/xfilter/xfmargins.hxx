@@ -57,10 +57,6 @@
  * @file
  * Margins object, include left margin,right margin,top margin and bottom margin.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-19 create this file.
- ************************************************************************/
 #ifndef     _XFMARGINS_HXX
 #define     _XFMARGINS_HXX
 

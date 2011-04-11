@@ -116,7 +116,7 @@ int SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
              eType      == rItem.GetType()          );
 }
 
-bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -139,14 +139,14 @@ bool SvxZoomItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) c
         case MID_VALUESET: rVal <<= (sal_Int16) nValueSet; break;
         case MID_TYPE: rVal <<= (sal_Int16) eType; break;
         default:
-            DBG_ERROR("svx::SvxZoomItem::QueryValue(), Wrong MemberId!");
+            OSL_FAIL("svx::SvxZoomItem::QueryValue(), Wrong MemberId!");
             return false;
     }
 
     return true;
 }
 
-bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -183,7 +183,7 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId
 
                 if ( bAllConverted && nConvertedCount == ZOOM_PARAMS )
                 {
-                    SetValue( (UINT16)nValueTmp );
+                    SetValue( (sal_uInt16)nValueTmp );
                     nValueSet = nValueSetTmp;
                     eType = SvxZoomType( nTypeTmp );
                     return true;
@@ -198,7 +198,7 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId
             sal_Int32 nVal = 0;
             if ( rVal >>= nVal )
             {
-                SetValue( (UINT16)nVal );
+                SetValue( (sal_uInt16)nVal );
                 return true;
             }
             else
@@ -222,7 +222,7 @@ bool SvxZoomItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId
         }
 
         default:
-            DBG_ERROR("svx::SvxZoomItem::PutValue(), Wrong MemberId!");
+            OSL_FAIL("svx::SvxZoomItem::PutValue(), Wrong MemberId!");
             return false;
     }
 

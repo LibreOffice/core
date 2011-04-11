@@ -451,7 +451,6 @@
 #include "tools/gen.hxx"
 #include "tools/globname.hxx"
 #include "tools/inetdef.hxx"
-#include "tools/list.hxx"
 #include "tools/ref.hxx"
 #include "tools/rtti.hxx"
 #include "tools/solar.h"

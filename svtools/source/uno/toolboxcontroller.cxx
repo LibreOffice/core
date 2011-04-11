@@ -36,9 +36,8 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <imgdef.hxx>
+#include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
-
 #include <toolkit/unohlp.hxx>
 #include <vcl/toolbox.hxx>
 //shizhobo
@@ -447,7 +446,7 @@ void ToolboxController::addStatusListener( const rtl::OUString& aCommandURL )
         // intialize is called.
         if ( !m_bInitialized )
         {
-            // Put into the hash_map of status listener. Will be activated when initialized is called
+            // Put into the boost::unordered_map of status listener. Will be activated when initialized is called
             m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, Reference< XDispatch >() ));
             return;
         }
@@ -673,22 +672,6 @@ sal_Bool ToolboxController::hasBigImages() const
     return SvtMiscOptions().AreCurrentSymbolsLarge();
 }
 
-sal_Bool ToolboxController::isHighContrast() const
-{
-    sal_Bool bHighContrast( sal_False );
-
-    Reference< XWindow > xWindow = m_pImpl->m_xParentWindow;
-    if ( xWindow.is() )
-    {
-        SolarMutexGuard aSolarMutexGuard;
-        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-        if ( pWindow )
-            bHighContrast = ( ((ToolBox *)pWindow)->GetSettings().GetStyleSettings().GetHighContrastMode() );
-    }
-
-    return bHighContrast;
-}
-
 void ToolboxController::updateStatus()
 {
     bindListener();
@@ -805,7 +788,7 @@ sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( com::sun::star::u
     {
         case TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIABLE:
         {
-            sal_Bool aNewValue;
+            sal_Bool aNewValue(sal_False);
             aValue >>= aNewValue;
             if (aNewValue != m_bSupportVisiable)
             {
@@ -848,7 +831,7 @@ void ToolboxController::enable( bool bEnable )
     sal_uInt16 nItemId = 0;
     if( getToolboxId( nItemId, &pToolBox ) )
     {
-        pToolBox->EnableItem( nItemId, bEnable ? TRUE : FALSE );
+        pToolBox->EnableItem( nItemId, bEnable ? sal_True : sal_False );
     }
 }
 

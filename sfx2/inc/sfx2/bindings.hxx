@@ -120,7 +120,7 @@ friend class SfxBindings_Impl;
 
 private:
     SAL_DLLPRIVATE const SfxPoolItem*  Execute_Impl( sal_uInt16 nSlot, const SfxPoolItem **pArgs, sal_uInt16 nModi,
-                                    SfxCallMode nCall, const SfxPoolItem **pInternalArgs, BOOL bGlobalOnly=FALSE);
+                                    SfxCallMode nCall, const SfxPoolItem **pInternalArgs, sal_Bool bGlobalOnly=sal_False);
     SAL_DLLPRIVATE void SetSubBindings_Impl( SfxBindings* );
     SAL_DLLPRIVATE void UpdateSlotServer_Impl(); // SlotServer aktualisieren
     SAL_DLLPRIVATE SfxItemSet* CreateSet_Impl( SfxStateCache* &pCache,
@@ -200,18 +200,18 @@ public:
     SAL_DLLPRIVATE void ClearCache_Impl( sal_uInt16 nSlotId );
     SAL_DLLPRIVATE sal_Bool IsInUpdate_Impl() const{ return IsInUpdate(); }
     SAL_DLLPRIVATE void RegisterInternal_Impl( SfxControllerItem& rBinding );
-    SAL_DLLPRIVATE void Register_Impl( SfxControllerItem& rBinding, BOOL );
+    SAL_DLLPRIVATE void Register_Impl( SfxControllerItem& rBinding, sal_Bool );
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl() const;
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
     SAL_DLLPRIVATE SfxBindings* GetSubBindings_Impl( sal_Bool bTop = sal_False ) const;
     SAL_DLLPRIVATE void InvalidateUnoControllers_Impl();
     SAL_DLLPRIVATE void RegisterUnoController_Impl( SfxUnoControllerItem* );
     SAL_DLLPRIVATE void ReleaseUnoController_Impl( SfxUnoControllerItem* );
-    SAL_DLLPRIVATE BOOL ExecuteCommand_Impl( const String& rCommand );
+    SAL_DLLPRIVATE sal_Bool ExecuteCommand_Impl( const String& rCommand );
     SAL_DLLPRIVATE void SetRecorder_Impl( com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder >& );
-    SAL_DLLPRIVATE void ExecuteGlobal_Impl( USHORT nId );
+    SAL_DLLPRIVATE void ExecuteGlobal_Impl( sal_uInt16 nId );
     SAL_DLLPRIVATE void InvalidateSlotsInMap_Impl();
-    SAL_DLLPRIVATE void AddSlotToInvalidateSlotsMap_Impl( USHORT nId );
+    SAL_DLLPRIVATE void AddSlotToInvalidateSlotsMap_Impl( sal_uInt16 nId );
 };
 
 #ifdef DBG_UTIL

@@ -30,6 +30,5 @@
 #include "res_bmp.hrc"
 #include <svx/dialogs.hrc>
 #include "cfgids.hxx"
-#include "misc.hxx"
 #include <svx/svxids.hrc>
 

@@ -356,7 +356,7 @@ namespace drawinglayer
                 SvMemoryStream aMemStm;
 
                 aMemStm << *pSvtGraphicFill;
-                mpMetaFile->AddAction(new MetaCommentAction("XPATHFILL_SEQ_BEGIN", 0, static_cast< const BYTE* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
+                mpMetaFile->AddAction(new MetaCommentAction("XPATHFILL_SEQ_BEGIN", 0, static_cast< const sal_uInt8* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
                 mnSvtGraphicFillCount++;
             }
         }
@@ -509,7 +509,7 @@ namespace drawinglayer
                 SvMemoryStream aMemStm;
 
                 aMemStm << *pSvtGraphicStroke;
-                mpMetaFile->AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_BEGIN", 0, static_cast< const BYTE* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
+                mpMetaFile->AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_BEGIN", 0, static_cast< const sal_uInt8* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
                 mnSvtGraphicStrokeCount++;
             }
         }
@@ -850,7 +850,7 @@ namespace drawinglayer
                         }
                         catch(const uno::Exception&)
                         {
-                            OSL_ENSURE(false, "VclMetafileProcessor2D: No access to printable flag of Control, caught an exception!");
+                            OSL_FAIL("VclMetafileProcessor2D: No access to printable flag of Control, caught an exception!");
                         }
                     }
 
@@ -927,7 +927,7 @@ namespace drawinglayer
                             }
                             catch( const uno::Exception& )
                             {
-                                OSL_ENSURE(false, "VclMetafileProcessor2D: Printing of Control failed, caught an exception!");
+                                OSL_FAIL("VclMetafileProcessor2D: Printing of Control failed, caught an exception!");
                             }
                         }
 
@@ -965,7 +965,7 @@ namespace drawinglayer
                         {
                             const rtl::OUString& rURL = rFieldPrimitive.getString();
                             const String aOldString(rURL);
-                            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const BYTE* >(aOldString.GetBuffer()), 2 * aOldString.Len()));
+                            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const sal_uInt8* >(aOldString.GetBuffer()), 2 * aOldString.Len()));
                             break;
                         }
                     }
@@ -1076,7 +1076,7 @@ namespace drawinglayer
                         if(!mxBreakIterator.is())
                         {
                             uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
-                            mxBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), uno::UNO_QUERY);
+                            mxBreakIterator.set(xMSF->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))), uno::UNO_QUERY);
                         }
 
                         if(mxBreakIterator.is())
@@ -1927,15 +1927,6 @@ namespace drawinglayer
                                 aBufferDevice.Erase();
                                 aBufferProcessor.process(rTransparence);
                                 const AlphaMask aBmAlpha(aBufferDevice.GetBitmap(aEmptyPoint, aSizePixel));
-
-#ifdef DBG_UTIL
-                                static bool bDoSaveForVisualControl(false);
-                                if(bDoSaveForVisualControl)
-                                {
-                                    SvFileStream aNew(String(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
-                                    aNew << aBmContent;
-                                }
-#endif
 
                                 // paint
                                 mpOutputDevice->DrawBitmapEx(

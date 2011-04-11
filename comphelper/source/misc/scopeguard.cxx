@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
-#include "comphelper/scopeguard.hxx"
+#include "comphelper/flagguard.hxx"
 #include "osl/diagnose.h"
 #include "com/sun/star/uno/Exception.hpp"
 
@@ -46,14 +46,14 @@ ScopeGuard::~ScopeGuard()
             }
             catch (com::sun::star::uno::Exception & exc) {
                 (void) exc; // avoid warning about unused variable
-                OSL_ENSURE(
-                    false, rtl::OUStringToOString(
+                OSL_FAIL(
+                    rtl::OUStringToOString(
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                           "UNO exception occured: ") ) +
+                                           "UNO exception occurred: ") ) +
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             }
             catch (...) {
-                OSL_ENSURE( false, "unknown exception occured!" );
+                OSL_FAIL( "unknown exception occurred!" );
             }
         }
         else
@@ -66,6 +66,14 @@ ScopeGuard::~ScopeGuard()
 void ScopeGuard::dismiss()
 {
     m_func.clear();
+}
+
+FlagGuard::~FlagGuard()
+{
+}
+
+FlagRestorationGuard::~FlagRestorationGuard()
+{
 }
 
 } // namespace comphelper

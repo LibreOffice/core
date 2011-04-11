@@ -35,8 +35,8 @@
 
 #include "../../../source/inc/exithelper.hxx"
 
-using namespace rtl;
 using namespace desktop;
+using ::rtl::OUString;
 
 SAL_IMPLEMENT_MAIN()
 {

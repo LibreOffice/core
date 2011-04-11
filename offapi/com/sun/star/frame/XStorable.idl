@@ -99,7 +99,7 @@ published interface XStorable: com::sun::star::uno::XInterface
         <p>Only objects which know their locations can be stored.</p>
 
         @throws com::sun::star::io::IOException
-            if an IO error occured during save operation
+            if an IO error occurred during save operation
             (may the location is unknown)
 
         @see XStorable::storeAsURL
@@ -129,7 +129,7 @@ published interface XStorable: com::sun::star::uno::XInterface
             (see <type scope="com::sun::star::document">MediaDescriptor</type> for further details)
 
         @throws com::sun::star::io::IOException
-            if an IO error occured during save operation
+            if an IO error occurred during save operation
             (may the location is unknown)
 
         @see XStorable::store
@@ -152,7 +152,7 @@ published interface XStorable: com::sun::star::uno::XInterface
         persistence capability.</p>
 
         @throws com::sun::star::io::IOException
-            if an IO error occured during save operation
+            if an IO error occurred during save operation
             (may the location is unknown)
 
         @param lArguments

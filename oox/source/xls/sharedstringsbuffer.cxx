@@ -27,13 +27,16 @@
  ************************************************************************/
 
 #include "oox/xls/sharedstringsbuffer.hxx"
-#include "oox/xls/biffinputstream.hxx"
 
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::text::XText;
+#include "oox/xls/biffinputstream.hxx"
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
 
 // ============================================================================
 

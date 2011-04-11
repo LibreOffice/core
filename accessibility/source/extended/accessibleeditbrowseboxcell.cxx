@@ -259,7 +259,7 @@ namespace accessibility
             catch( const Exception& e )
             {
                 (void)e;
-                OSL_ENSURE( false, "EditBrowseBoxTableCellAccess::disposing: caught an exception while disposing the context!" );
+                OSL_FAIL( "EditBrowseBoxTableCellAccess::disposing: caught an exception while disposing the context!" );
             }
         }
 

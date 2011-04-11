@@ -48,7 +48,8 @@ namespace toolkit
     //= UnoControlScrollBarModel
     //====================================================================
     //--------------------------------------------------------------------
-    UnoControlScrollBarModel::UnoControlScrollBarModel()
+    UnoControlScrollBarModel::UnoControlScrollBarModel( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
+        :UnoControlModel( i_factory )
     {
         UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXScrollBar );
     }
@@ -97,14 +98,15 @@ namespace toolkit
     //====================================================================
     //= UnoControlScrollBarModel
     //====================================================================
-    UnoScrollBarControl::UnoScrollBarControl()
-        : maAdjustmentListeners( *this )
+    UnoScrollBarControl::UnoScrollBarControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
+        :UnoControlBase( i_factory )
+        ,maAdjustmentListeners( *this )
     {
     }
 
     ::rtl::OUString UnoScrollBarControl::GetComponentServiceName()
     {
-        return ::rtl::OUString::createFromAscii( "ScrollBar" );
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScrollBar"));
     }
 
     // ::com::sun::star::uno::XInterface
@@ -160,7 +162,7 @@ namespace toolkit
             break;
             default:
             {
-                DBG_ERROR( "UnoScrollBarControl::adjustmentValueChanged - unknown Type" );
+                OSL_FAIL( "UnoScrollBarControl::adjustmentValueChanged - unknown Type" );
 
             }
         }

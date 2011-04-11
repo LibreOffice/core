@@ -81,9 +81,9 @@ OUString ScPassHashHelper::getHashURI(ScPasswordHash eHash)
     switch (eHash)
     {
         case PASSHASH_SHA1:
-            return OUString::createFromAscii(URI_SHA1);
+            return OUString(RTL_CONSTASCII_USTRINGPARAM(URI_SHA1));
         case PASSHASH_XL:
-            return OUString::createFromAscii(URI_XLS_LEGACY);
+            return OUString(RTL_CONSTASCII_USTRINGPARAM(URI_XLS_LEGACY));
         case PASSHASH_UNSPECIFIED:
         default:
             ;
@@ -93,9 +93,9 @@ OUString ScPassHashHelper::getHashURI(ScPasswordHash eHash)
 
 ScPasswordHash ScPassHashHelper::getHashTypeFromURI(const OUString& rURI)
 {
-    if (rURI.equalsAscii(URI_SHA1))
+    if (rURI.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URI_SHA1)))
         return PASSHASH_SHA1;
-    else if (rURI.equalsAscii(URI_XLS_LEGACY))
+    else if (rURI.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URI_XLS_LEGACY)))
         return PASSHASH_XL;
     return PASSHASH_UNSPECIFIED;
 }
@@ -351,7 +351,7 @@ bool ScTableProtectionImpl::isOptionEnabled(SCSIZE nOptId) const
 {
     if ( maOptions.size() <= static_cast<size_t>(nOptId) )
     {
-        DBG_ERROR("ScTableProtectionImpl::isOptionEnabled: wrong size");
+        OSL_FAIL("ScTableProtectionImpl::isOptionEnabled: wrong size");
         return false;
     }
 
@@ -362,7 +362,7 @@ void ScTableProtectionImpl::setOption(SCSIZE nOptId, bool bEnabled)
 {
     if ( maOptions.size() <= static_cast<size_t>(nOptId) )
     {
-        DBG_ERROR("ScTableProtectionImpl::setOption: wrong size");
+        OSL_FAIL("ScTableProtectionImpl::setOption: wrong size");
         return;
     }
 
@@ -522,5 +522,4 @@ void ScTableProtection::setOption(Option eOption, bool bEnabled)
 {
     mpImpl->setOption(eOption, bEnabled);
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

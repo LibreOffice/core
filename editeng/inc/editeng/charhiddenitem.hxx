@@ -35,8 +35,8 @@
 #include "editeng/editengdllapi.h"
 
 // class SvxCharHiddenItem -------------------------------------------------
-/*
-    [Description]
+/*  [Description]
+
     This item marks text as hidden
 */
 
@@ -45,7 +45,7 @@ class EDITENG_DLLPUBLIC SvxCharHiddenItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxCharHiddenItem( const BOOL bHidden /*= FALSE*/, const USHORT nId );
+    SvxCharHiddenItem( const sal_Bool bHidden /*= sal_False*/, const sal_uInt16 nId );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

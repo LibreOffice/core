@@ -82,6 +82,7 @@ struct Entry_Impl
     String          m_sPublisher;
     String          m_sPublisherURL;
     String          m_sErrorText;
+    String          m_sLicenseText;
     Image           m_aIcon;
     Image           m_aIconHC;
     svt::FixedHyperlink *m_pPublisher;
@@ -137,13 +138,9 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     long            m_nExtraHeight;
     Size            m_aOutputSize;
     Image           m_aSharedImage;
-    Image           m_aSharedImageHC;
     Image           m_aLockedImage;
-    Image           m_aLockedImageHC;
     Image           m_aWarningImage;
-    Image           m_aWarningImageHC;
     Image           m_aDefaultImage;
-    Image           m_aDefaultImageHC;
     Link            m_aClickHdl;
 
     ScrollBar      *m_pScrollBar;
@@ -170,9 +167,8 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     void            SetupScrollBar();
     void            DrawRow( const Rectangle& rRect, const TEntry_Impl pEntry );
     bool            HandleTabKey( bool bReverse );
-    bool            HandleCursorKey( USHORT nKeyCode );
+    bool            HandleCursorKey( sal_uInt16 nKeyCode );
     bool            FindEntryPos( const TEntry_Impl pEntry, long nStart, long nEnd, long &nFound );
-    bool            isHCMode();
     void            DeleteRemoved();
 
     //-----------------

@@ -31,7 +31,7 @@
 #define _SD_DLGSNAP_HXX
 
 
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/group.hxx>
@@ -82,7 +82,7 @@ public:
 
     void HideRadioGroup();
     void HideDeleteBtn() { aBtnDelete.Hide(); }
-    void SetInputFields(BOOL bEnableX, BOOL bEnableY);
+    void SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY);
 };
 
 

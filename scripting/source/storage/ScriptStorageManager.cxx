@@ -46,6 +46,7 @@
 #include "ScriptStorageManager.hxx"
 #include <util/util.hxx>
 #include <util/scriptingconstants.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -55,57 +56,38 @@ using namespace ::drafts::com::sun::star::script::framework;
 namespace scripting_impl
 {
 
-static OUString s_implName =
-    ::rtl::OUString::createFromAscii(
-        "drafts.com.sun.star.script.framework.storage.ScriptStorageManager" );
-static OUString s_serviceName =
-    ::rtl::OUString::createFromAscii(
-        "drafts.com.sun.star.script.framework.storage.ScriptStorageManager" );
+static OUString s_implName(RTL_CONSTASCII_USTRINGPARAM(
+        "drafts.com.sun.star.script.framework.storage.ScriptStorageManager" ));
+static OUString s_serviceName(RTL_CONSTASCII_USTRINGPARAM(
+        "drafts.com.sun.star.script.framework.storage.ScriptStorageManager" ));
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
-
-//extern ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
-//extern ::rtl_StandardModuleCount s_moduleCount;
 
 
 //*************************************************************************
 // ScriptStorageManager Constructor
 ScriptStorageManager::ScriptStorageManager( const Reference<
         XComponentContext > & xContext ) SAL_THROW ( ( RuntimeException ) )
-        : m_xContext( xContext ), m_count( 0 ), m_securityMgr( xContext )
+        : m_xContext( xContext, UNO_SET_THROW ), m_count( 0 ), m_securityMgr( xContext )
 {
     OSL_TRACE( "< ScriptStorageManager ctor called >\n" );
-    //s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 
-    validateXRef( m_xContext,
-                  "ScriptStorageManager::ScriptStorageManager : cannot get component context" );
-
-    m_xMgr = m_xContext->getServiceManager();
-    validateXRef( m_xMgr,
-                  "ScriptStorageManager::ScriptStorageManager : cannot get service manager" );
+    m_xMgr.set( m_xContext->getServiceManager(), UNO_SET_THROW );
 
     try
     {
         // obtain the macro expander singleton to use in determining the
         // location of the application script storage
-        Any aAny = m_xContext->getValueByName( OUString::createFromAscii(
-                                                   "/singletons/com.sun.star.util.theMacroExpander" ) );
-        Reference< util::XMacroExpander > xME;
-        if ( sal_False == ( aAny >>= xME ) )
-        {
-            throw RuntimeException(
-                OUSTR( "ScriptStorageManager::ScriptStorageManager: can't get XMacroExpander" ),
-                Reference< XInterface >() );
-        }
-        validateXRef( xME, "ScriptStorageManager constructor: can't get MacroExpander" );
+        Reference< util::XMacroExpander > xME( m_xContext->getValueByName( OUString::createFromAscii(
+                                                   "/singletons/com.sun.star.util.theMacroExpander" ) ), UNO_QUERY_THROW );
 
-        OUString base = OUString::createFromAscii(
-                            SAL_CONFIGFILE( "${$BRAND_BASE_DIR/program/bootstrap" ) );
+        OUString base(RTL_CONSTASCII_USTRINGPARAM(
+                            SAL_CONFIGFILE( "${$BRAND_BASE_DIR/program/bootstrap" )) );
 
         setupAppStorage( xME,
-                         base.concat( OUString::createFromAscii( "::BaseInstallation}/share" ) ),
+                         base.concat( OUString(RTL_CONSTASCII_USTRINGPARAM("::BaseInstallation}/share")) ),
                          OUSTR( "SHARE" ) );
         setupAppStorage( xME,
-                         base.concat( OUString::createFromAscii( "::UserInstallation}/user" ) ),
+                         base.concat( OUString(RTL_CONSTASCII_USTRINGPARAM("::UserInstallation}/user")) ),
                          OUSTR( "USER" ) );
 
     }
@@ -127,12 +109,13 @@ SAL_THROW ( ( RuntimeException ) )
 {
     try
     {
-        Reference< XInterface > xInterface =
+        Reference< ucb::XSimpleFileAccess > xSFA(
             m_xMgr->createInstanceWithContext(
-                OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ), m_xContext );
-        validateXRef( xInterface,
-                      "ScriptStorageManager constructor: can't get SimpleFileAccess XInterface" );
-        Reference< ucb::XSimpleFileAccess > xSFA( xInterface, UNO_QUERY_THROW );
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")),
+                m_xContext
+            ),
+            UNO_QUERY_THROW
+        );
 
         setupAnyStorage( xSFA, xME->expandMacros( storageStr ), appStr );
     }
@@ -169,15 +152,17 @@ SAL_THROW ( ( RuntimeException ) )
                    ::rtl::OUStringToOString( storageStr,
                                              RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
-        Reference< XInterface > xInterface =
+        Reference< XInterface > xInterface(
             m_xMgr->createInstanceWithArgumentsAndContext(
-                OUString::createFromAscii(
-                    "drafts.com.sun.star.script.framework.storage.ScriptStorage" ),
-                aArgs, m_xContext );
+                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "drafts.com.sun.star.script.framework.storage.ScriptStorage" )),
+                aArgs,
+                m_xContext
+            ),
+            UNO_QUERY_THROW
+        );
 
-        validateXRef( xInterface, "ScriptStorageManager:: setupAnyStorage: Can't create ScriptStorage for share" );
-
-        // and place it in the hash_map. Increment the counter
+        // and place it in the boost::unordered_map. Increment the counter
         m_ScriptStorageMap[ m_count++ ] = xInterface;
         sal_Int32 sid =  m_count - 1;
 
@@ -204,7 +189,6 @@ ScriptStorageManager::~ScriptStorageManager()
 SAL_THROW ( () )
 {
     OSL_TRACE( "< ScriptStorageManager dtor called >\n" );
-//    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
 }
 
 //*************************************************************************
@@ -216,11 +200,10 @@ ScriptStorageManager::createScriptStorage(
 throw ( RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptStorageManager in createScriptingStorage\n" );
-    validateXRef( xSFA,
-                  "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
+    ENSURE_OR_THROW( xSFA.is(), "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
 
-    return setupAnyStorage( xSFA, ::rtl::OUString::createFromAscii( "" ),
-                            ::rtl::OUString::createFromAscii( "" ) );
+    return setupAnyStorage( xSFA, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")) );
 }
 
 //*************************************************************************
@@ -230,14 +213,14 @@ ScriptStorageManager::createScriptStorageWithURI(
 throw ( RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptStorageManager in createScriptingStorageWithURI\n" );
-    validateXRef( xSFA, "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
+    ENSURE_OR_THROW( xSFA.is(), "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
 
     // related to issue 11866
     // warning dialog gets launched when adding binding to script in doc
     // workaround issue: no functionProvider created on doc open
     // if NODIALOG tag, strip from stringURI, set boolean=true
     bool displayDialog = true;
-    ::rtl::OUString dialogTag = ::rtl::OUString::createFromAscii( "NoDialog::" );
+    ::rtl::OUString dialogTag(RTL_CONSTASCII_USTRINGPARAM("NoDialog::"));
     ::rtl::OUString stringURI = cStringURI;
     if( stringURI.indexOf( dialogTag ) == 0 )
     {
@@ -249,8 +232,7 @@ throw ( RuntimeException )
 
 
     // convert file:///... url to vnd... syntax
-    ::rtl::OUString canonicalURI(
-        ::rtl::OUString::createFromAscii( "vnd.sun.star.pkg://" ) );
+    ::rtl::OUString canonicalURI(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.pkg://"));
     canonicalURI = canonicalURI.concat( ::rtl::Uri::encode( stringURI,
                                         rtl_UriCharClassUricNoSlash, rtl_UriEncodeCheckEscapes,
                                         RTL_TEXTENCODING_ASCII_US ) );
@@ -269,31 +251,6 @@ throw ( RuntimeException )
                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     }
 
-// np - removed previous scripting framework security handling
-// now handled by modification to existing calls in sfx for basic
-//
-/*    if( displayDialog )
-    {
-        try
-        {
-           OSL_TRACE("Adding to security mgr for %s",
-               ::rtl::OUStringToOString( stringURI,
-                   RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-            m_securityMgr.addScriptStorage( stringURI, returnedID );
-        }
-        catch ( RuntimeException & rte )
-        {
-            throw RuntimeException(
-                OUSTR( "ScriptStorageManager::createScriptStorageWithURI: " ).concat(
-                    rte.Message ), Reference< XInterface >() );
-        }
-    }
-    else
-    {
-       OSL_TRACE("No need to security mgr for %s",
-           ::rtl::OUStringToOString( stringURI,
-               RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-    }*/
     return returnedID;
 }
 
@@ -314,7 +271,7 @@ throw( RuntimeException )
             OUSTR( "ScriptStorageManager::getScriptStorage: invalid storage ID" ),
             Reference< XInterface >() );
     }
-    validateXRef( itr->second,
+    ENSURE_OR_THROW( itr->second.is(),
                   "ScriptStorageManager::getScriptStorage: Cannot get ScriptStorage from ScriptStorageHash" );
     return itr->second;
 }

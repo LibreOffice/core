@@ -224,7 +224,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
         break;
 
         default:
-            DBG_ERROR("OButtonModel::read : unknown version !");
+            OSL_FAIL("OButtonModel::read : unknown version !");
             m_eButtonType = FormButtonType_PUSH;
             m_sTargetURL = ::rtl::OUString();
             m_sTargetFrame = ::rtl::OUString();
@@ -440,7 +440,7 @@ void SAL_CALL OButtonControl::disposing( const EventObject& _rSource ) throw( Ru
 void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::com::sun::star::uno::RuntimeException)
 {
     // Asynchron fuer starutil::URL-Button
-    ULONG n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
+    sal_uLong n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_nClickEvent = n;
@@ -480,7 +480,6 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
                 // catch exceptions
                 // and catch them on a per-listener basis - if one listener fails, the others still need
                 // to get notified
-                // 97676 - 21.02.2002 - fs@openoffice.org
                 try
                 {
                     static_cast< XActionListener* >( aIter.next() )->actionPerformed(aEvt);
@@ -493,7 +492,7 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
 #endif
                 catch( const Exception& )
                 {
-                    DBG_ERROR( "OButtonControl::OnClick: caught a exception other than RuntimeException!" );
+                    OSL_FAIL( "OButtonControl::OnClick: caught a exception other than RuntimeException!" );
                 }
             }
         }

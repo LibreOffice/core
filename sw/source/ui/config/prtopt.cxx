@@ -29,22 +29,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <unotools/configmgr.hxx>
 #include <prtopt.hxx>
-#include <swprtopt.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <unomid.h>
 
+
 using namespace utl;
 using rtl::OUString;
 using namespace com::sun::star::uno;
 
 /*--------------------------------------------------------------------
-     Beschreibung: Ctor
+     Description: Ctor
  --------------------------------------------------------------------*/
 
 Sequence<OUString> SwPrintOptions::GetPropertyNames()
@@ -154,7 +153,7 @@ void    SwPrintOptions::Commit()
     Any* pValues = aValues.getArray();
 
     const Type& rType = ::getBooleanCppuType();
-    BOOL bVal;
+    sal_Bool bVal;
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)

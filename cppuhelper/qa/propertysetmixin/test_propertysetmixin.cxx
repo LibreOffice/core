@@ -53,21 +53,19 @@
 #include "com/sun/star/beans/XPropertySetInfo.hpp"
 #include "com/sun/star/beans/XVetoableChangeListener.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/XComponentContext.hpp"
+#include "cppuhelper/bootstrap.hxx"
 #include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/servicefactory.hxx"
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 #include "osl/mutex.hxx"
-#include "rtl/bootstrap.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
 #include "rtl/textenc.h"
@@ -97,14 +95,6 @@ std::ostream & operator <<(std::ostream & out, css::uno::Type const & value) {
 std::ostream & operator <<(std::ostream & out, css::uno::Any const & value) {
     return
         out << "com::sun::star::uno::Any[" << value.getValueType() << ", ...]";
-}
-
-rtl::OUString getArgument(rtl::OUString const & name) {
-    rtl::OUString val;
-    CPPUNIT_ASSERT(
-        rtl::Bootstrap::get(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("arg-")) + name, val));
-    return val;
 }
 
 class BoundListener:
@@ -179,7 +169,7 @@ class Test: public CppUnit::TestFixture {
 public:
     virtual void setUp();
 
-    void finish();
+    virtual void tearDown();
 
     void testCppEmpty1() { testEmpty1(getCppSupplier()); }
 
@@ -200,7 +190,6 @@ public:
     CPPUNIT_TEST(testJavaEmpty1);
     CPPUNIT_TEST(testJavaEmpty2);
     CPPUNIT_TEST(testJavaFull);
-    CPPUNIT_TEST(finish);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -222,30 +211,15 @@ private:
         css::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
         const & supplier) const;
 
-    static css::uno::Reference< css::uno::XComponentContext > m_context;
+    css::uno::Reference< css::uno::XComponentContext > m_context;
 };
 
 void Test::setUp() {
-    // For whatever reason, on W32 it does not work to create/destroy a fresh
-    // component context for each test in Test::setUp/tearDown; therefore, a
-    // single component context is used for all tests and destroyed in the last
-    // pseudo-test "finish":
-    if (!m_context.is()) {
-        css::uno::Reference< css::lang::XMultiComponentFactory > factory(
-            cppu::createRegistryServiceFactory(
-                getArgument(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reg"))),
-                sal_False,
-                getArgument(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("path")))),
-            css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::beans::XPropertySet >(
-            factory, css::uno::UNO_QUERY_THROW)->getPropertyValue(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")))
-            >>= m_context;
-    }
+    m_context = cppu::defaultBootstrap_InitialComponentContext();
+    CPPUNIT_ASSERT(m_context.is());
 }
 
-void Test::finish() {
+void Test::tearDown() {
     css::uno::Reference< css::lang::XComponent >(
         m_context, css::uno::UNO_QUERY_THROW)->dispose();
 }
@@ -671,8 +645,6 @@ void Test::testFull(
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
 }
-
-css::uno::Reference< css::uno::XComponentContext > Test::m_context;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 

@@ -36,7 +36,7 @@
 
 #define INVALID_INDEX STRING_NOTFOUND
 
-// Maximale Anzahl von Indizies im IndexArray (zum Abtesten auf Ueberlaeufe)
+// Maximal count of indices in IndexArray (for testing on overflows).
 class SwIndex;
 class SwIndexReg;
 struct SwPosition;
@@ -61,7 +61,7 @@ class SW_DLLPUBLIC SwIndex
     SwIndex *pNext, *pPrev;
 
     SwIndex& ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue );
-    void Remove();                  // Ausketten
+    void Remove();
 
 public:
     explicit SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx = 0);
@@ -71,45 +71,40 @@ public:
 
     INLINE xub_StrLen operator++();
     INLINE xub_StrLen operator--();
-#ifndef CFRONT
     INLINE xub_StrLen operator++(int);
     INLINE xub_StrLen operator--(int);
-#endif
 
     INLINE xub_StrLen operator+=( xub_StrLen );
     INLINE xub_StrLen operator-=( xub_StrLen );
     INLINE xub_StrLen operator+=( const SwIndex& );
     INLINE xub_StrLen operator-=( const SwIndex& );
 
-    INLINE BOOL operator<( const SwIndex& ) const;
-    INLINE BOOL operator<=( const SwIndex& ) const;
-    INLINE BOOL operator>( const SwIndex& ) const;
-    INLINE BOOL operator>=( const SwIndex& ) const;
-    BOOL operator==( const SwIndex& rSwIndex ) const
+    INLINE sal_Bool operator<( const SwIndex& ) const;
+    INLINE sal_Bool operator<=( const SwIndex& ) const;
+    INLINE sal_Bool operator>( const SwIndex& ) const;
+    INLINE sal_Bool operator>=( const SwIndex& ) const;
+    sal_Bool operator==( const SwIndex& rSwIndex ) const
     { return (nIndex == rSwIndex.nIndex) &&  (pArray == rSwIndex.pArray); }
 
-    BOOL operator!=( const SwIndex& rSwIndex ) const
+    sal_Bool operator!=( const SwIndex& rSwIndex ) const
     { return (nIndex != rSwIndex.nIndex) ||  (pArray != rSwIndex.pArray); }
 
-    BOOL operator<( xub_StrLen nWert ) const    { return nIndex <  nWert; }
-    BOOL operator<=( xub_StrLen nWert ) const   { return nIndex <= nWert; }
-    BOOL operator>( xub_StrLen nWert ) const    { return nIndex >  nWert; }
-    BOOL operator>=( xub_StrLen nWert ) const   { return nIndex >= nWert; }
-    BOOL operator==( xub_StrLen nWert ) const   { return nIndex == nWert; }
-    BOOL operator!=( xub_StrLen nWert ) const   { return nIndex != nWert; }
+    sal_Bool operator<( xub_StrLen nWert ) const    { return nIndex <  nWert; }
+    sal_Bool operator<=( xub_StrLen nWert ) const   { return nIndex <= nWert; }
+    sal_Bool operator>( xub_StrLen nWert ) const    { return nIndex >  nWert; }
+    sal_Bool operator>=( xub_StrLen nWert ) const   { return nIndex >= nWert; }
+    sal_Bool operator==( xub_StrLen nWert ) const   { return nIndex == nWert; }
+    sal_Bool operator!=( xub_StrLen nWert ) const   { return nIndex != nWert; }
 
     INLINE SwIndex& operator=( xub_StrLen );
     SwIndex& operator=( const SwIndex & );
 
-    // gebe den Wert vom Index als xub_StrLen zurueck
     xub_StrLen GetIndex() const { return nIndex; }
 
-    // ermoeglicht Zuweisungen ohne Erzeugen eines temporaeren
-    // Objektes
+    // Assignments without creating a temporary object.
     SwIndex &Assign(SwIndexReg *,xub_StrLen);
 
-        // Herausgabe des Pointers auf das IndexArray,
-        // (fuers RTTI am SwIndexReg)
+    // Returns pointer to IndexArray (for RTTI at SwIndexReg).
     const SwIndexReg* GetIdxReg() const { return pArray; }
 };
 
@@ -122,9 +117,8 @@ class SwIndexReg
 
     const SwIndex *pFirst, *pLast, *pMiddle;
 
-    // ein globales Array, in das Indizies verschoben werden, die mal
-    // temporaer "ausgelagert" werden muessen; oder die zum Zeitpunkt des
-    // anlegens kein gueltiges Array kennen (SwPaM/SwPosition!)
+    // A global array for holding indices that need to be "swapped" temporarily
+    // or do not know a valid array (SwPaM/SwPosition!).
     friend void _InitCore();
     friend void _FinitCore();
     static SwIndexReg* pEmptyIndexArray;
@@ -135,7 +129,7 @@ protected:
 
     void ChkArr();
 
-    BOOL HasAnyIndex() const { return 0 != pFirst; }
+    sal_Bool HasAnyIndex() const { return 0 != pFirst; }
 
 public:
     SwIndexReg();
@@ -158,7 +152,6 @@ inline xub_StrLen SwIndex::operator--()
 {
     return ChgValue( *this, nIndex-1 ).nIndex;
 }
-#ifndef CFRONT
 inline xub_StrLen SwIndex::operator++(int)
 {
     xub_StrLen nOldIndex = nIndex;
@@ -171,7 +164,6 @@ inline xub_StrLen SwIndex::operator--(int)
     ChgValue( *this, nIndex-1 );
     return nOldIndex;
 }
-#endif
 
 inline xub_StrLen SwIndex::operator+=( xub_StrLen nWert )
 {
@@ -190,19 +182,19 @@ inline xub_StrLen SwIndex::operator-=( const SwIndex& rIndex )
     return ChgValue( *this, nIndex - rIndex.nIndex ).nIndex;
 }
 
-inline BOOL SwIndex::operator<( const SwIndex& rIndex ) const
+inline sal_Bool SwIndex::operator<( const SwIndex& rIndex ) const
 {
     return nIndex < rIndex.nIndex;
 }
-inline BOOL SwIndex::operator<=( const SwIndex& rIndex ) const
+inline sal_Bool SwIndex::operator<=( const SwIndex& rIndex ) const
 {
     return nIndex <= rIndex.nIndex;
 }
-inline BOOL SwIndex::operator>( const SwIndex& rIndex ) const
+inline sal_Bool SwIndex::operator>( const SwIndex& rIndex ) const
 {
     return nIndex > rIndex.nIndex;
 }
-inline BOOL SwIndex::operator>=( const SwIndex& rIndex ) const
+inline sal_Bool SwIndex::operator>=( const SwIndex& rIndex ) const
 {
     return nIndex >= rIndex.nIndex;
 }

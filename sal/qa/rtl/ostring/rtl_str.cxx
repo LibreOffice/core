@@ -29,7 +29,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
-#include <testshl/simpleheader.hxx>
+
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
+#include <rtl/string.hxx>
+#include <cstring>
 
 namespace rtl_str
 {
@@ -253,7 +259,7 @@ namespace rtl_str
             {
                 rtl::OString aStr1 = "Line for a hashCode.";
                 sal_Int32 nHashCode = rtl_str_hashCode( aStr1.getStr() );
-                t_print("hashcode: %d\n", nHashCode);
+                printf("hashcode: %d\n", nHashCode);
                 // CPPUNIT_ASSERT_MESSAGE("failed.", nValue == 0);
             }
 
@@ -638,7 +644,7 @@ namespace rtl_str
 
                 rtl_str_toAsciiLowerCase_WithLength( pStr, 10 );
 
-                t_print("Lowercase with length: '%s'\n", pStr);
+                printf("Lowercase with length: '%s'\n", pStr);
                 CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(rtl::OString(pStr)) == sal_True);
                 free(pStr);
             }
@@ -710,7 +716,7 @@ namespace rtl_str
                 strcpy(pStr, aStr1.getStr());
                 rtl_str_toAsciiUpperCase_WithLength( pStr, 10 );
 
-                t_print("Uppercase with length: '%s'\n", aStr1.getStr());
+                printf("Uppercase with length: '%s'\n", aStr1.getStr());
                 CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(rtl::OString(pStr)) == sal_True);
                 free(pStr);
             }
@@ -861,26 +867,26 @@ namespace rtl_str
     };
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::compare, "rtl_str");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::compareIgnoreAsciiCase, "rtl_str");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::shortenedCompareIgnoreAsciiCase_WithLength, "rtl_str");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::hashCode, "rtl_str");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::compare);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::compareIgnoreAsciiCase);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::shortenedCompareIgnoreAsciiCase_WithLength);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::hashCode);
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::indexOfChar, "rtl_str");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::lastIndexOfChar, "rtl_str");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::indexOfStr, "rtl_str");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::lastIndexOfStr, "rtl_str");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::indexOfChar);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::lastIndexOfChar);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::indexOfStr);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::lastIndexOfStr);
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::replaceChar, "rtl_str");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::replaceChar_WithLength, "rtl_str");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::replaceChar);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::replaceChar_WithLength);
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::toAsciiLowerCase, "rtl_str");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::toAsciiLowerCase_WithLength, "rtl_str");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::toAsciiUpperCase, "rtl_str");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::toAsciiUpperCase_WithLength, "rtl_str");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::toAsciiLowerCase);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::toAsciiLowerCase_WithLength);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::toAsciiUpperCase);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::toAsciiUpperCase_WithLength);
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::trim_WithLength, "rtl_str");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::valueOfChar, "rtl_str");
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::trim_WithLength);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::valueOfChar);
 
 } // namespace rtl_str
 
@@ -888,6 +894,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_str::valueOfChar, "rtl_str");
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

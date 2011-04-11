@@ -79,27 +79,9 @@ Menu MENU_POPUP
     };
 };
 
-/*
-Bitmap BMP_FOLDER_CLOSED
-{
-    File = "bmp/fldclose.bmp" ;
-};
-Bitmap BMP_FOLDER_OPENED
-{
-    File = "bmp/fldopen.bmp" ;
-};
-Bitmap BMP_DOCUMENT
-{
-    File = "bmp/document.bmp" ;
-};
-Bitmap BMP_LINK
-{
-    File = "bmp/link.bmp" ;
-};
-*/
-
 ModalDialog DLG_STRINGINPUT
 {
+    HelpID = "ucbhelper:ModalDialog:DLG_STRINGINPUT";
     Border = TRUE ;
     Moveable = TRUE ;
     OutputSize = TRUE ;
@@ -113,6 +95,7 @@ ModalDialog DLG_STRINGINPUT
     };
     Edit ED_STRINGINPUT_DLG_NAME
     {
+        HelpID = "ucbhelper:Edit:DLG_STRINGINPUT:ED_STRINGINPUT_DLG_NAME";
         Pos = MAP_APPFONT ( 40 , 16 ) ;
         Size = MAP_APPFONT ( 110 , 12 ) ;
         Border = TRUE ;
@@ -146,4 +129,3 @@ String TEXT_TITLEBAR
 {
     Text [ en-US ] = "UCB Explorer" ;
 };
-

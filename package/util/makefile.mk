@@ -55,7 +55,7 @@ LIB1FILES=	\
 
 SHL1TARGET=$(TARGET)$(MAJOR_VERSION)
 SHL1IMPLIB=i$(TARGET)
-SHL1VERSIONMAP=$(SOLARENV)$/src$/component.map
+SHL1USE_EXPORTS=name
 
 SHL1STDLIBS=\
     $(CPPULIB)		\
@@ -75,3 +75,11 @@ DEF1NAME=$(SHL1TARGET)
 
 .INCLUDE :  target.mk
 
+
+ALLTAR : $(MISC)/package2.component
+
+$(MISC)/package2.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        package2.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt package2.component

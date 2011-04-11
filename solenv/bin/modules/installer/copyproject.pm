@@ -69,17 +69,14 @@ sub copy_project
 
         installer::systemactions::copy_one_file($source, $destination);
 
-        if ( $destination =~ /install\s*$/ )
+        if ( $onefile->{'UnixRights'} )
         {
-            my $localcall = "chmod 775 $destination \>\/dev\/null 2\>\&1";
-            system($localcall);
+            chmod oct($onefile->{'UnixRights'}), $destination;
         }
-
-            if ( $onefile->{'UnixRights'} )
+        elsif ( $destination =~ /install\s*$/ )
         {
-            my $localcall = "chmod $onefile->{'UnixRights'} $destination \>\/dev\/null 2\>\&1";
-            system($localcall);
-            }
+            chmod 0775, $destination;
+        }
     }
 
     # copy ScpActions
@@ -93,16 +90,13 @@ sub copy_project
 
         installer::systemactions::copy_one_file($source, $destination);
 
-        if ( $destination =~ /install\s*$/ )
-        {
-            my $localcall = "chmod 775 $destination \>\/dev\/null 2\>\&1";
-            system($localcall);
-        }
-
         if ( $onefile->{'UnixRights'} )
         {
-            my $localcall = "chmod $onefile->{'UnixRights'} $destination \>\/dev\/null 2\>\&1";
-            system($localcall);
+            chmod oct($onefile->{'UnixRights'}), $destination;
+        }
+        elsif ( $destination =~ /install\s*$/ )
+        {
+            chmod 0775, $destination;
         }
     }
 

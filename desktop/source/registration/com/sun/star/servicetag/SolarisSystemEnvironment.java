@@ -309,7 +309,6 @@ class SolarisSystemEnvironment extends SystemEnvironment {
     // Sample smbios output segment:
     // ID    SIZE TYPE
     // 1     150  SMB_TYPE_SYSTEM (system information)
-    //
     //   Manufacturer: Sun Microsystems
     //   Product: Sun Fire X4600
     //   Version: To Be Filled By O.E.M.

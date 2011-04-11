@@ -72,9 +72,9 @@ PrinterGfx::Init (PrinterJob &rPrinterJob)
     rPrinterJob.GetScale (mfScaleX, mfScaleY);
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rPrinterJob.GetPrinterName() ) );
     if( mpFontSubstitutes )
-        delete const_cast< ::std::hash_map<fontID,fontID>* >(mpFontSubstitutes);
+        delete const_cast< ::boost::unordered_map<fontID,fontID>* >(mpFontSubstitutes);
     if( rInfo.m_bPerformFontSubstitution )
-        mpFontSubstitutes = new ::std::hash_map< fontID, fontID >( rInfo.m_aFontSubstitutions );
+        mpFontSubstitutes = new ::boost::unordered_map< fontID, fontID >( rInfo.m_aFontSubstitutions );
     else
         mpFontSubstitutes = NULL;
     mbUploadPS42Fonts = rInfo.m_pParser ? ( rInfo.m_pParser->isType42Capable() ? sal_True : sal_False ) : sal_False;
@@ -96,9 +96,9 @@ PrinterGfx::Init (const JobData& rData)
     mfScaleY        = (double)72.0 / (double)mnDpi;
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rData.m_aPrinterName ) );
     if( mpFontSubstitutes )
-        delete const_cast< ::std::hash_map<fontID,fontID>* >(mpFontSubstitutes);
+        delete const_cast< ::boost::unordered_map<fontID,fontID>* >(mpFontSubstitutes);
     if( rInfo.m_bPerformFontSubstitution )
-        mpFontSubstitutes = new ::std::hash_map< fontID, fontID >( rInfo.m_aFontSubstitutions );
+        mpFontSubstitutes = new ::boost::unordered_map< fontID, fontID >( rInfo.m_aFontSubstitutions );
     else
         mpFontSubstitutes = NULL;
     mbUploadPS42Fonts = rInfo.m_pParser ? ( rInfo.m_pParser->isType42Capable() ? sal_True : sal_False ) : sal_False;
@@ -144,7 +144,7 @@ PrinterGfx::PrinterGfx() :
 PrinterGfx::~PrinterGfx()
 {
     /*
-     *  #95810# the original reasoning why mpFontSubstitutes is a pointer was
+     *  the original reasoning why mpFontSubstitutes is a pointer was
      *  that applications should release all PrinterGfx when printers change
      *  because they are really invalid; the corresponding printers may have
      *  changed their settings or even not exist anymore.
@@ -152,7 +152,7 @@ PrinterGfx::~PrinterGfx()
      *  Alas, this is not always done real time. So we keep a local copy of
      *  the font substitutes now in case of bad timing.
      */
-    delete const_cast< ::std::hash_map<fontID,fontID>* >(mpFontSubstitutes);
+    delete const_cast< ::boost::unordered_map<fontID,fontID>* >(mpFontSubstitutes);
 }
 
 void
@@ -528,9 +528,9 @@ PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const P
  */
 
 void
-PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const BYTE* pFlgAry)
+PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const sal_uInt8* pFlgAry)
 {
-    const sal_uInt32 nBezString = 1024;
+    const sal_uInt32 nBezString= 1024;
     sal_Char pString[nBezString];
 
     if ( nPoints > 1 && maLineColor.Is() && pPath )
@@ -566,7 +566,7 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const BY
                 }
                 else
                 {
-                    DBG_ERROR( "PrinterGfx::DrawPolyLineBezier: Strange output" );
+                    OSL_FAIL( "PrinterGfx::DrawPolyLineBezier: Strange output" );
                 }
                 i+=3;
             }
@@ -579,7 +579,7 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const BY
 }
 
 void
-PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const BYTE* pFlgAry)
+PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal_uInt8* pFlgAry)
 {
     const sal_uInt32 nBezString = 1024;
     sal_Char pString[nBezString];
@@ -612,7 +612,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const BYT
             }
             else
             {
-                DBG_ERROR( "PrinterGfx::DrawPolygonBezier: Strange output" );
+                OSL_FAIL( "PrinterGfx::DrawPolygonBezier: Strange output" );
             }
             i+=3;
         }
@@ -635,7 +635,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const BYT
 }
 
 void
-PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints, const Point* const * pPtAry, const BYTE* const* pFlgAry)
+PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints, const Point* const * pPtAry, const sal_uInt8* const* pFlgAry)
 {
     const sal_uInt32 nBezString = 1024;
     sal_Char pString[nBezString];
@@ -646,7 +646,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
     for (unsigned int i=0; i<nPoly;i++)
     {
         sal_uInt32 nPoints = pPoints[i];
-        // #112689# sanity check
+        // sanity check
         if( nPoints == 0 || pPtAry[i] == NULL )
             continue;
 
@@ -676,7 +676,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
                 }
                 else
                 {
-                    DBG_ERROR( "PrinterGfx::DrawPolyPolygonBezier: Strange output" );
+                    OSL_FAIL( "PrinterGfx::DrawPolyPolygonBezier: Strange output" );
                 }
                 j+=3;
             }
@@ -999,7 +999,7 @@ PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
         case 4: cCmd |= 0x01;   break;
         case 6: cCmd |= 0x02;   break;
         case 8: cCmd |= 0x03;   break;
-        default:    DBG_ERROR ("invalid x precision in binary path");
+        default:    OSL_FAIL("invalid x precision in binary path");
     }
     switch (nXPrec)
     {
@@ -1007,7 +1007,7 @@ PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
         case 4: cCmd |= 0x04;   break;
         case 6: cCmd |= 0x08;   break;
         case 8: cCmd |= 0x0c;   break;
-        default:    DBG_ERROR ("invalid y precision in binary path");
+        default:    OSL_FAIL("invalid y precision in binary path");
     }
     cCmd += 'A';
     pPath[0] = cCmd;

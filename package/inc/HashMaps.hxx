@@ -30,7 +30,7 @@
 
 #include <ZipEntry.hxx>
 #include <rtl/ref.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 struct eqFunc
 {
@@ -46,17 +46,17 @@ namespace com { namespace sun { namespace star { namespace packages {
 class ContentInfo;
 } } } }
 
-typedef std::hash_map < rtl::OUString,
+typedef boost::unordered_map < rtl::OUString,
                         ZipPackageFolder *,
                         ::rtl::OUStringHash,
                         eqFunc > FolderHash;
 
-typedef std::hash_map < rtl::OUString,
+typedef boost::unordered_map < rtl::OUString,
                         rtl::Reference < com::sun::star::packages::ContentInfo >,
                         ::rtl::OUStringHash,
                         eqFunc > ContentHash;
 
-typedef std::hash_map < rtl::OUString,
+typedef boost::unordered_map < rtl::OUString,
                         ZipEntry,
                         rtl::OUStringHash,
                         eqFunc > EntryHash;

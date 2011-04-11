@@ -36,7 +36,7 @@
 module com { module sun { module star { module xml {
 
 //=============================================================================
-/** This service describes a container for xml attributes.
+/** This service describes a container for XML attributes.
 
     <p>Each attribute is accessed with its local name, or optionally, its local
     name with its namespace prefix. The type and value of an attribute is stored

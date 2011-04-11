@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: cpp2uno.cxx,v $
- * $Revision: 1.11 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -252,7 +249,7 @@ static typelib_TypeClass cpp2uno_call(
         (*pThis->getUnoI()->pDispatcher)(
          pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-        // in case an exception occured...
+        // in case an exception occurred...
         if (pUnoExc)
         {
                 // destruct temporary in/inout params
@@ -273,7 +270,7 @@ static typelib_TypeClass cpp2uno_call(
                 // is here for dummy
                 return typelib_TypeClass_VOID;
         }
-        else // else no exception occured...
+        else // else no exception occurred...
         {
                 // temporary params
                 for ( ; nTempIndizes--; )
@@ -353,7 +350,7 @@ static typelib_TypeClass cpp_mediate(
         if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
         {
                 throw RuntimeException(
-            rtl::OUString::createFromAscii("illegal vtable index!"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
             (XInterface *)pThis );
         }
 
@@ -445,7 +442,7 @@ static typelib_TypeClass cpp_mediate(
         default:
         {
                 throw RuntimeException(
-            rtl::OUString::createFromAscii("no member description found!"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
             (XInterface *)pThis );
                 // is here for dummy
                 eRet = typelib_TypeClass_VOID;
@@ -500,7 +497,7 @@ static sal_uInt64 cpp_vtable_call(sal_Int32 r3, sal_Int32 r4, sal_Int32 r5,
     register double d11 asm("fr12"); fpreg[11] = d11;
     register double d12 asm("fr13"); fpreg[12] = d12;
 
-#if CMC_DEBUG
+#if OSL_DEBUG_LEVEL > 2
     for(int i = 0; i < 8; ++i)
     {
         fprintf(stderr, "general reg %d is %x\n", i, gpreg[i]);

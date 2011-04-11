@@ -29,9 +29,9 @@
 
 #include "rcid.hrc"
 
-// Dialoge fuer die Konfiguration
+// dialogs for configuration
 
-// Strings fuer die Konfiguration
+// strings for configuration
 #define STR_CFG_SIGNATUR        (RC_CONFIG_BEGIN + 0)
 #define DLG_CONFIG_VIEW         (RC_CONFIG_BEGIN + 1)
 #define DLG_CONFIG_MISC         (RC_CONFIG_BEGIN + 2)

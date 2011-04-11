@@ -37,7 +37,7 @@ module com { module sun { module star { module linguistic2 {
     @see    com::sun::star::linguistic2::XConversionDictionary
     @see    com::sun::star::linguistic2::XConversionPropertyType
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 constants ConversionPropertyType
 {

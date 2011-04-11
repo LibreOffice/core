@@ -58,10 +58,6 @@
  * Page master used bye XFMasterPage.
  * It is the real object to define header and footer of pages.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-17 create this file.
- ************************************************************************/
 #include    "xfpagemaster.hxx"
 #include    "ixfstream.hxx"
 #include    "ixfattrlist.hxx"

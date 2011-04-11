@@ -145,18 +145,21 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     };
     PushButton BTN_VIEWCERT
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_VIEWCERT";
         Pos = MAP_APPFONT( 6, 142 );
         Size = MAP_APPFONT( 70, 14 );
         Text [ en-US ] = "View Certificate...";
     };
     PushButton BTN_ADDCERT
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_ADDCERT";
         Pos = MAP_APPFONT( 82, 142 );
         Size = MAP_APPFONT( 70, 14 );
         Text [ en-US ] = "Sign Document...";
     };
     PushButton BTN_REMOVECERT
     {
+        HelpID = "xmlsecurity:PushButton:RID_XMLSECDLG_DIGSIG:BTN_REMOVECERT";
         Pos = MAP_APPFONT( 158, 142 );
         Size = MAP_APPFONT( 70, 14 );
         Text [ en-US ] = "Remove";
@@ -177,21 +180,6 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     {
         Pos = MAP_APPFONT( 6, 171 );
         Size = MAP_APPFONT( 50, 14 );
-    };
-    Image IMG_STATE_VALID_HC
-    {
-        ImageBitmap = Bitmap { File = "signet_11x16_h.png"; };
-        MaskColor = STD_MASKCOLOR;
-    };
-    Image IMG_STATE_BROKEN_HC
-    {
-        ImageBitmap = Bitmap { File = "caution_11x16_h.png"; };
-        MaskColor = STD_MASKCOLOR;
-    };
-    Image IMG_STATE_NOTVALIDATED_HC
-    {
-        ImageBitmap = Bitmap { File = "notcertificate_16_h.png"; };
-        MaskColor = STD_MASKCOLOR;
     };
 };
 

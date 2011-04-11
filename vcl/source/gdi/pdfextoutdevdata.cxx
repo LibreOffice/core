@@ -400,7 +400,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
                         }
                         break;
                     }
-                    aBeg++;
+                    ++aBeg;
                 }
             }
             break;
@@ -411,13 +411,11 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
             break;
             case PDFExtOutDevDataSync::EndGroupGfxLink :
             {
-                sal_Int32 nTransparency;
                 Rectangle aOutputRect, aVisibleOutputRect;
                 Graphic   aGraphic( mGraphics.front() );
 
                 mGraphics.pop_front();
-                nTransparency = mParaInts.front();
-                mParaInts.pop_front();
+                mParaInts.pop_front(); //Transparency
                 aOutputRect = mParaRects.front();
                 mParaRects.pop_front();
                 aVisibleOutputRect = mParaRects.front();
@@ -785,7 +783,7 @@ void PDFExtOutDevData::EndGroup()
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::EndGroup );
 }
 void PDFExtOutDevData::EndGroup( const Graphic&     rGraphic,
-                                 BYTE               nTransparency,
+                                 sal_uInt8              nTransparency,
                                  const Rectangle&   rOutputRect,
                                  const Rectangle&   rVisibleOutputRect )
 {

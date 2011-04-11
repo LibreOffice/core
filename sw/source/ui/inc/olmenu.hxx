@@ -65,7 +65,7 @@ class SwSpellPopup : public PopupMenu
 
     Image   aInfo16;
 
-    void fillLangPopupMenu( PopupMenu *pPopupMenu, USHORT nLangStart,
+    void fillLangPopupMenu( PopupMenu *pPopupMenu, sal_uInt16 nLangStart,
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq, SwWrtShell* pWrtSh,
             std::map< sal_Int16, ::rtl::OUString > &rLangTable );
 
@@ -84,7 +84,7 @@ public:
             const String & rParaText );
 
     sal_uInt16  Execute( const Rectangle& rPopupPos, Window* pWin );
-    void Execute( USHORT nId );
+    void Execute( sal_uInt16 nId );
 
 };
 

@@ -49,12 +49,10 @@
 #pragma warning (disable:4005)
 #pragma warning (disable:4548)
 
-#include <tools/prewin.h>
 #include <tchar.h>
 #if (_MSC_VER >= 1200) || defined(__MINGW32__)
 #include <dispex.h>
 #endif
-#include <tools/postwin.h>
 
 #include <tools/presys.h>
 #include <list>
@@ -91,10 +89,9 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::beans;
 using namespace osl;
-using namespace rtl;
 using namespace std;
 
-
+using ::rtl::OUString;
 
 namespace ole_adapter
 {

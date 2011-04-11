@@ -39,7 +39,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include "sdrpaintwindow.hxx"
+#include "svx/sdrpaintwindow.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -197,7 +197,7 @@ namespace sdr { namespace contact {
                 m_xControlView.set( m_xControl, UNO_QUERY );
                 if ( !m_xControlWindow.is() || !m_xControlView.is() )
                 {
-                    OSL_ENSURE( false, "ControlHolder::operator=: invalid XControl, missing required interfaces!" );
+                    OSL_FAIL( "ControlHolder::operator=: invalid XControl, missing required interfaces!" );
                     clear();
                 }
             }
@@ -368,6 +368,10 @@ namespace sdr { namespace contact {
         ::basegfx::B2DTuple aViewScale, aViewTranslate;
         double nViewRotate(0), nViewShearX(0);
         _rViewTransformation.decompose( aViewScale, aViewTranslate, nViewRotate, nViewShearX );
+
+        ::basegfx::B2DTuple aZoomScale, aZoomTranslate;
+        double nZoomRotate(0), nZoomShearX(0);
+        _rZoomLevelNormalization.decompose( aZoomScale, aZoomTranslate, nZoomRotate, nZoomShearX );
     #endif
 
         // transform the logic bound rect, using the view transformation, to pixel coordinates
@@ -980,6 +984,10 @@ namespace sdr { namespace contact {
         aScaleNormalization.set( 0, 0, (double)aCurrentDeviceMapMode.GetScaleX() );
         aScaleNormalization.set( 1, 1, (double)aCurrentDeviceMapMode.GetScaleY() );
         m_aZoomLevelNormalization *= aScaleNormalization;
+
+    #if OSL_DEBUG_LEVEL > 1
+        m_aZoomLevelNormalization.decompose( aScale, aTranslate, fRotate, fShearX );
+    #endif
    }
 
     //--------------------------------------------------------------------
@@ -1055,7 +1063,7 @@ namespace sdr { namespace contact {
                 UnoControlContactHelper::adjustControlGeometry_throw( m_aControl, pUnoObject->GetLogicRect(), _rViewTransformation, m_aZoomLevelNormalization );
             }
             else
-                OSL_ENSURE( false, "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no SdrUnoObj!" );
+                OSL_FAIL( "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no SdrUnoObj!" );
         }
         catch( const Exception& )
         {
@@ -1135,7 +1143,7 @@ namespace sdr { namespace contact {
     {
         if ( m_bCreatingControl )
         {
-            OSL_ENSURE( false, "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: reentrance is not really good here!" );
+            OSL_FAIL( "ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow: reentrance is not really good here!" );
             // We once had a situation where this was called reentrantly, which lead to all kind of strange effects. All
             // those affected the grid control, which is the only control so far which is visible in design mode (and
             // not only in alive mode).
@@ -1239,16 +1247,15 @@ namespace sdr { namespace contact {
                 _rInitialZoomNormalization
             );
 
-            // #107049# set design mode before peer is created,
+            // set design mode before peer is created,
             // this is also needed for accessibility
             _out_rControl.setDesignMode( _rPageView.isDesignMode() );
 
             // adjust the initial visibility according to the visibility of the layer
-            // 2003-06-03 - #110592# - fs@openoffice.org
             impl_adjustControlVisibilityToLayerVisibility_throw( _out_rControl, _rUnoObject, _rPageView, false, true );
 
             // add the control to the respective control container
-            // #108327# do this last
+            // do this last
             Reference< XControlContainer > xControlContainer( _rPageView.getControlContainer( _rDevice ) );
             if ( xControlContainer.is() )
                 xControlContainer->addControl( sControlServiceName, _out_rControl.getControl() );
@@ -1508,17 +1515,16 @@ namespace sdr { namespace contact {
     {
         VOCGuard aGuard( *this );
 
-        DBG_ASSERT( _rSource.NewMode.equalsAscii( "design" ) || _rSource.NewMode.equalsAscii( "alive" ),
+        DBG_ASSERT( _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "design" ) ) || _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "alive" ) ),
             "ViewObjectContactOfUnoControl_Impl::modeChanged: unexpected mode!" );
 
-        m_eControlDesignMode = _rSource.NewMode.equalsAscii( "design" ) ? eDesign : eAlive;
+        m_eControlDesignMode = _rSource.NewMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "design" ) ) ? eDesign : eAlive;
 
         impl_switchDesignModeListening_nothrow( impl_isControlDesignMode_nothrow() );
 
         try
         {
             // if the control is part of a invisible layer, we need to explicitly hide it in alive mode
-            // 2003-06-03 - #110592# - fs@openoffice.org
             impl_adjustControlVisibilityToLayerVisibility_throw( false );
         }
         catch( const Exception& )
@@ -1817,6 +1823,10 @@ namespace sdr { namespace contact {
             // our control already died.
             // TODO: Is it worth re-creating the control? Finally, this is a pathological situation, it means some instance
             // disposed the control though it doesn't own it. So, /me thinks we should not bother here.
+            return drawinglayer::primitive2d::Primitive2DSequence();
+
+        if ( GetObjectContact().getViewInformation2D().getViewTransformation().isIdentity() )
+            // remove this when #i115754# is fixed
             return drawinglayer::primitive2d::Primitive2DSequence();
 
         // ignore existing controls which are in alive mode and manually switched to "invisible"

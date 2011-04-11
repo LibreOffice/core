@@ -53,6 +53,30 @@ public class Factory
 
         @param impl_class
                implementation class
+        @param impl_name
+               implementation name
+        @param supported_services
+               services implemented
+        @return
+               object factory
+
+        @since UDK 3.2.13
+    */
+    public static XSingleComponentFactory createComponentFactory(
+        Class impl_class, String impl_name, String supported_services [] )
+        throws com.sun.star.uno.RuntimeException
+    {
+        return new Factory( impl_class, impl_name, supported_services );
+    }
+
+    /** Creates an object factory supporting interfaces
+        com.sun.star.lang.XSingleComponentFactory and
+        com.sun.star.lang.XServiceInfo
+
+        The implementation name is the name of the implementation class.
+
+        @param impl_class
+               implementation class
         @param supported_services
                services implemented
         @return
@@ -62,7 +86,8 @@ public class Factory
         Class impl_class, String supported_services [] )
         throws com.sun.star.uno.RuntimeException
     {
-        return new Factory( impl_class, supported_services );
+        return createComponentFactory(
+            impl_class, impl_class.getName(), supported_services );
     }
     /** Writes component's implementation info to given registry key.
 
@@ -106,11 +131,10 @@ public class Factory
     private java.lang.reflect.Method m_method;
     private java.lang.reflect.Constructor m_ctor;
 
-    // ctor
-    private Factory( Class impl_class, String supported_services [] )
-        throws com.sun.star.uno.RuntimeException
+    private Factory(
+        Class impl_class, String impl_name, String supported_services [] )
     {
-        m_impl_name = impl_class.getName();
+        m_impl_name = impl_name;
         m_supported_services = supported_services;
         m_impl_class = impl_class;
         m_method = null;

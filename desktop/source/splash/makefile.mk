@@ -44,8 +44,7 @@ SLOFILES =	$(SLO)$/splash.obj \
 
 SHL1DEPN=   makefile.mk
 SHL1OBJS=   $(SLOFILES) \
-            $(SLO)$/migration.obj \
-            $(SLO)$/cfgfilter.obj
+            $(SLO)$/migration.obj
 
 
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
@@ -71,3 +70,11 @@ SHL1STDLIBS= \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR : $(MISC)/spl.component
+
+$(MISC)/spl.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        spl.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt spl.component

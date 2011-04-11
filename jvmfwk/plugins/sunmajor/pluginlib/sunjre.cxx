@@ -34,8 +34,10 @@
 #include "sunversion.hxx"
 #include "diagnostics.h"
 
-using namespace rtl;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::Reference;
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 namespace jfw_plugin
@@ -69,7 +71,9 @@ char const* const* SunInfo::getRuntimePaths(int * size)
 #if defined(WNT)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
-        "/bin/classic/jvm.dll"
+        "/bin/classic/jvm.dll",
+        // The 64-bit JRE has the jvm in bin/server
+        "/bin/server/jvm.dll"
 #elif defined(OS2)
         "/bin/classic/jvm.dll",
 #elif UNX
@@ -89,9 +93,7 @@ char const* const* SunInfo::getLibraryPaths(int* size)
     static char const * ar[] = {
 
         "/lib/" JFW_PLUGIN_ARCH "/client",
-#if defined(OPENBSD)
         "/lib/" JFW_PLUGIN_ARCH "/server",
-#endif
         "/lib/" JFW_PLUGIN_ARCH "/native_threads",
         "/lib/" JFW_PLUGIN_ARCH
 

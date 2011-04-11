@@ -83,7 +83,7 @@ namespace cairocanvas
                           const ::Size&         rTileSize,
                           const GraphicAttr&    rAttr)
         {
-            BOOL    bRet( false );
+            bool bRet( false );
             Point   aCurrPos;
             int     nX, nY;
 

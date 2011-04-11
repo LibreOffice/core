@@ -31,10 +31,8 @@
 
 #include <rtl/ustring.hxx>
 
-#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "texttabstoplistcontext.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -67,7 +65,7 @@ namespace oox { namespace drawingml {
             Reference< XFastContextHandler > xRet;
             switch( aElement )
             {
-            case NMSP_DRAWINGML|XML_tab:
+            case A_TOKEN( tab ):
             {
                 OUString sValue;
                 TabStop aTabStop;

@@ -43,7 +43,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <tools/datetime.hxx>
 
@@ -52,6 +52,7 @@
 #include <basic/sbuno.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
+#include <basic/vbahelper.hxx>
 
 #include "vbacommandbars.hxx"
 
@@ -89,7 +90,7 @@ public:
         Time aTimeNow;
          Date aRefDate( 1,1,1900 );
         long nDiffDays = (long)(aDateNow - aRefDate);
-        nDiffDays += 2; // Anpassung VisualBasic: 1.Jan.1900 == 2
+        nDiffDays += 2; // Change VisualBasic: 1.Jan.1900 == 2
 
         long nDiffSeconds = aTimeNow.GetHour() * 3600 + aTimeNow.GetMin() * 60 + aTimeNow.GetSec();
         return (double)nDiffDays + ((double)nDiffSeconds)/(double)(24*3600);
@@ -156,7 +157,7 @@ struct VbaTimerInfoHash
 };
 
 // ====VbaTimerHashMap==================================
-typedef ::std::hash_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash, ::std::equal_to< VbaTimerInfo > > VbaTimerHashMap;
+typedef ::boost::unordered_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash, ::std::equal_to< VbaTimerInfo > > VbaTimerHashMap;
 
 // ====VbaApplicationBase_Impl==================================
 struct VbaApplicationBase_Impl
@@ -202,12 +203,8 @@ void SAL_CALL
 VbaApplicationBase::setScreenUpdating(sal_Bool bUpdate) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    if( bUpdate != xModel->hasControllersLocked() )
-        return;
-    if (bUpdate)
-        xModel->unlockControllers();
-    else
-        xModel->lockControllers();
+    // #163808# use helper from module "basic" to lock all documents of this application
+    ::basic::vba::lockControllersOfAllDocuments( xModel, !bUpdate );
 }
 
 sal_Bool SAL_CALL
@@ -266,10 +263,8 @@ void SAL_CALL VbaApplicationBase::setInteractive( ::sal_Bool bInteractive )
     throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
-    uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
-
-    xWindow->setEnable( bInteractive );
+    // #163808# use helper from module "basic" to enable/disable all container windows of all documents of this application
+    ::basic::vba::enableContainerWindowsOfAllDocuments( xModel, bInteractive );
 }
 
 sal_Bool SAL_CALL VbaApplicationBase::getVisible() throw (uno::RuntimeException)
@@ -299,56 +294,26 @@ VbaApplicationBase::getVersion() throw (uno::RuntimeException)
 
 uno::Any SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, const uno::Any& varg1, const uno::Any& varg2, const uno::Any& varg3, const uno::Any& varg4, const uno::Any& varg5, const uno::Any& varg6, const uno::Any& varg7, const uno::Any& varg8, const uno::Any& varg9, const uno::Any& varg10, const uno::Any& varg11, const uno::Any& varg12, const uno::Any& varg13, const uno::Any& varg14, const uno::Any& varg15, const uno::Any& varg16, const uno::Any& varg17, const uno::Any& varg18, const uno::Any& varg19, const uno::Any& varg20, const uno::Any& varg21, const uno::Any& varg22, const uno::Any& varg23, const uno::Any& varg24, const uno::Any& varg25, const uno::Any& varg26, const uno::Any& varg27, const uno::Any& varg28, const uno::Any& varg29, const uno::Any& varg30 ) throw (uno::RuntimeException)
 {
-    ::rtl::OUString sSeparator = ::rtl::OUString::createFromAscii("/");
-    ::rtl::OUString sMacroSeparator = ::rtl::OUString::createFromAscii("!");
-    ::rtl::OUString sMacro_only_Name;
-    sal_Int32 Position_MacroSeparator = MacroName.indexOf(sMacroSeparator);
+    ::rtl::OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
+    ::rtl::OUString sMacroSeparator(RTL_CONSTASCII_USTRINGPARAM("!"));
+    ::rtl::OUString aMacroName = MacroName.trim();
+    if (0 == aMacroName.indexOf('!'))
+        aMacroName = aMacroName.copy(1).trim();
 
-    uno::Reference< frame::XModel > aMacroDocumentModel;
-    if (-1 != Position_MacroSeparator)
+    uno::Reference< frame::XModel > xModel;
+    SbMethod* pMeth = StarBASIC::GetActiveMethod();
+    if ( pMeth )
     {
-        uno::Reference< container::XEnumerationAccess > xComponentEnumAccess;
-        uno::Reference< lang::XMultiComponentFactory > xServiceManager = mxContext->getServiceManager();
-        try
-        {
-            uno::Reference< frame::XDesktop > xDesktop (xServiceManager->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )),mxContext ), uno::UNO_QUERY_THROW );
-            xComponentEnumAccess = xDesktop->getComponents();
-        }
-        catch(uno::Exception&)
-        {
-        }
-
-        //rem look for the name of the document in the cmpoonents collection
-        uno::Reference < container::XEnumeration > xEnum = xComponentEnumAccess->createEnumeration();
-
-        // iterate through the collection by name
-        while (xEnum->hasMoreElements())
-        {
-            // get the next element as a UNO Any
-            uno::Any aComponentHelper = xEnum->nextElement();
-            uno::Reference <frame::XModel> xDocModel( aComponentHelper, uno::UNO_QUERY_THROW );
-
-            // get the name of the sheet from its XNamed interface
-            ::rtl::OUString  aName = xDocModel->getURL();
-
-
-            if (aName.match(MacroName.copy(0,Position_MacroSeparator-1),aName.lastIndexOf(sSeparator)+1))
-            {
-                aMacroDocumentModel = xDocModel;
-                sMacro_only_Name = MacroName.copy(Position_MacroSeparator+1);
-            }
-        }
-    }
-    else
-    {
-        aMacroDocumentModel = getCurrentDocument();
-        sMacro_only_Name = MacroName.copy(0);
+        SbModule* pMod = dynamic_cast< SbModule* >( pMeth->GetParent() );
+        if ( pMod )
+            xModel = StarBASIC::GetModelFromBasic( pMod );
     }
 
+    if ( !xModel.is() )
+        xModel = getCurrentDocument();
 
-    // search the global tempalte
-    VBAMacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( aMacroDocumentModel ), sMacro_only_Name, sal_True );
-    if( aMacroInfo.IsResolved() )
+    MacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( xModel ), aMacroName );
+    if( aMacroInfo.mbFound )
     {
         // handle the arguments
         const uno::Any* aArgsPtrArray[] = { &varg1, &varg2, &varg3, &varg4, &varg5, &varg6, &varg7, &varg8, &varg9, &varg10, &varg11, &varg12, &varg13, &varg14, &varg15, &varg16, &varg17, &varg18, &varg19, &varg20, &varg21, &varg22, &varg23, &varg24, &varg25, &varg26, &varg27, &varg28, &varg29, &varg30 };
@@ -359,22 +324,17 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, con
         const uno::Any** pArg = aArgsPtrArray;
         const uno::Any** pArgEnd = ( aArgsPtrArray + nArg );
 
-        sal_Int32 nLastArgWithValue = 0;
         sal_Int32 nArgProcessed = 0;
 
         for ( ; pArg != pArgEnd; ++pArg, ++nArgProcessed )
-        {
             aArgs[ nArgProcessed ] =  **pArg;
-            if( (*pArg)->hasValue() )
-                nLastArgWithValue = nArgProcessed;
-        }
 
         // resize array to position of last param with value
         aArgs.realloc( nArgProcessed + 1 );
 
         uno::Any aRet;
         uno::Any aDummyCaller;
-        executeMacro( aMacroInfo.MacroDocContext(), aMacroInfo.ResolvedMacro(), aArgs, aRet, aDummyCaller );
+        executeMacro( aMacroInfo.mpDocContext, aMacroInfo.msResolvedMacro, aArgs, aRet, aDummyCaller );
 
         return aRet;
     }

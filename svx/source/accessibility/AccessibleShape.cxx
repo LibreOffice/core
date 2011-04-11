@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/AccessibleShape.hxx>
-#include "DescriptionGenerator.hxx"
+#include "svx/DescriptionGenerator.hxx"
 #include <svx/AccessibleShapeInfo.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <rtl/uuid.h>
@@ -48,13 +48,13 @@
 #include <svx/unoshtxt.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <com/sun/star/uno/Exception.hpp>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 
 #include "accessibility.hrc"
-#include "svdstr.hrc"
+#include "svx/svdstr.hrc"
 #include <svx/dialmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -249,7 +249,7 @@ void AccessibleShape::UpdateStates (void)
     // XXX fix_me this has to be done with an extra interface later on
     if ( m_pShape && maShapeTreeInfo.GetSdrView() )
     {
-        bShapeIsSelected = maShapeTreeInfo.GetSdrView()->IsObjMarked(m_pShape) == TRUE;
+        bShapeIsSelected = maShapeTreeInfo.GetSdrView()->IsObjMarked(m_pShape) == sal_True;
     }
 
     if (bShapeIsSelected)
@@ -378,7 +378,7 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString::createFromAscii ("shape has no child with index ")
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shape has no child with index "))
             + rtl::OUString::valueOf(nIndex),
             static_cast<uno::XWeak*>(this));
 
@@ -513,7 +513,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
                         aValue >>= aBoundingBox;
                         bFoundBoundRect = true;
                     }
-                    catch (beans::UnknownPropertyException e)
+                    catch (beans::UnknownPropertyException const&)
                     {
                         // Handled below (bFoundBoundRect stays false).
                     }
@@ -569,27 +569,6 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
             int x = aPixelPosition.getX() - aParentLocation.X;
             int y = aPixelPosition.getY() - aParentLocation.Y;
 
-            /*        //  The following block is a workarround for bug #99889# (property
-            //  BoundRect returnes coordinates relative to document window
-            //  instead of absolute coordinates for shapes in Writer).  Has to
-            //  be removed as soon as bug is fixed.
-
-            // Use a non-null anchor position as flag that the shape is in a
-            // Writer document.
-            if (xSetInfo.is())
-                if (xSetInfo->hasPropertyByName (sAnchorPositionName))
-                {
-                    uno::Any aPos = xSet->getPropertyValue (sAnchorPositionName);
-                    awt::Point aAnchorPosition;
-                    aPos >>= aAnchorPosition;
-                    if (aAnchorPosition.X > 0)
-                    {
-                        x = aPixelPosition.getX();
-                        y = aPixelPosition.getY();
-                    }
-                }
-            //  End of workarround.
-            */
             // Clip with parent (with coordinates relative to itself).
             ::Rectangle aBBox (
                 x, y, x + aPixelSize.getWidth(), y + aPixelSize.getHeight());
@@ -676,7 +655,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString::createFromAscii ("LineColor"));
+            aColor = aSet->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")) );
             aColor >>= nColor;
         }
     }
@@ -702,7 +681,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString::createFromAscii ("FillColor"));
+            aColor = aSet->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")) );
             aColor >>= nColor;
         }
     }
@@ -845,8 +824,6 @@ uno::Sequence<uno::Type> SAL_CALL
         ::getCppuType((const uno::Reference<document::XEventListener>*)0);
     const uno::Type aUnoTunnelType =
         ::getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
-    //    const uno::Type aStateSetType =
-    //      ::getCppuType((const uno::Reference<XAccessibleStateSet>*)0);
 
     // ... and merge them all into one list.
     sal_Int32   nTypeCount (aTypeList.getLength()),
@@ -891,7 +868,7 @@ void SAL_CALL
         }
 
     }
-    catch (uno::RuntimeException e)
+    catch (uno::RuntimeException const&)
     {
         OSL_TRACE ("caught exception while disposing");
     }
@@ -1034,7 +1011,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
             if (xSet.is())
             {
-                uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString::createFromAscii ("ZOrder")));
+                uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")) ));
                 aZOrder >>= nIndex;
 
                 // Add one to be not zero based.
@@ -1104,10 +1081,10 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             break;
 
         case DRAWING_CONTROL:
-            aDG.AddProperty (OUString::createFromAscii ("ControlBackground"),
+            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBackground")),
                 DescriptionGenerator::COLOR,
                 OUString());
-            aDG.AddProperty (OUString::createFromAscii ("ControlBorder"),
+            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBorder")),
                 DescriptionGenerator::INTEGER,
                 OUString());
             break;

@@ -218,8 +218,8 @@ const int* getStateTransitionTable( sal_Int16 nRestartMode,
     default:
     case animations::AnimationRestart::DEFAULT:
         // same value: animations::AnimationRestart::INHERIT:
-        OSL_ENSURE(
-            false, "getStateTransitionTable(): unexpected case for restart" );
+        OSL_FAIL(
+            "getStateTransitionTable(): unexpected case for restart" );
         // FALLTHROUGH intended
     case animations::AnimationRestart::NEVER:
         nRestartValue = 0;
@@ -238,8 +238,8 @@ const int* getStateTransitionTable( sal_Int16 nRestartMode,
     case animations::AnimationFill::AUTO:
     case animations::AnimationFill::DEFAULT:
         // same value: animations::AnimationFill::INHERIT:
-        OSL_ENSURE(
-            false, "getStateTransitionTable(): unexpected case for fill" );
+        OSL_FAIL(
+            "getStateTransitionTable(): unexpected case for fill" );
         // FALLTHROUGH intended
     case animations::AnimationFill::REMOVE:
         nFillValue = 0;

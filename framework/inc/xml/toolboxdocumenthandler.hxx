@@ -29,7 +29,7 @@
 #ifndef __FRAMEWORK_XML_TOOLBOXDOCUMENTHANDLER_HXX_
 #define __FRAMEWORK_XML_TOOLBOXDOCUMENTHANDLER_HXX_
 
-#include <xml/toolboxconfiguration.hxx>
+#include <framework/toolboxconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -44,6 +44,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <stdtypes.h>
+#include <framework/fwedllapi.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -54,7 +55,7 @@ namespace framework{
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 
-class OReadToolBoxDocumentHandler : private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
+class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : private ThreadHelpBase,   // Struct for right initalization of lock member! Must be first of baseclasses.
                                     public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
@@ -129,7 +130,7 @@ class OReadToolBoxDocumentHandler : private ThreadHelpBase, // Struct for right 
     private:
         ::rtl::OUString getErrorLineString();
 
-        class ToolBoxHashMap : public ::std::hash_map<  ::rtl::OUString                 ,
+        class ToolBoxHashMap : public ::boost::unordered_map<   ::rtl::OUString                 ,
                                                         ToolBox_XML_Entry               ,
                                                         OUStringHashCode                ,
                                                         ::std::equal_to< ::rtl::OUString >  >
@@ -170,7 +171,7 @@ class OReadToolBoxDocumentHandler : private ThreadHelpBase, // Struct for right 
 };
 
 
-class OWriteToolBoxDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
+class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler : private ThreadHelpBase   // Struct for right initalization of lock member! Must be first of baseclasses.
 {
     public:
             OWriteToolBoxDocumentHandler(

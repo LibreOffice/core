@@ -45,17 +45,17 @@ enum SdrTextVertAdjust {SDRTEXTVERTADJUST_TOP,      // aligned to top (normally 
 class SVX_DLLPUBLIC SdrTextVertAdjustItem: public SfxEnumItem {
 public:
     TYPEINFO();
-    SdrTextVertAdjustItem(SdrTextVertAdjust eAdj=SDRTEXTVERTADJUST_TOP): SfxEnumItem(SDRATTR_TEXT_VERTADJUST,(USHORT)eAdj) {}
+    SdrTextVertAdjustItem(SdrTextVertAdjust eAdj=SDRTEXTVERTADJUST_TOP): SfxEnumItem(SDRATTR_TEXT_VERTADJUST,(sal_uInt16)eAdj) {}
     SdrTextVertAdjustItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_TEXT_VERTADJUST,rIn)  {}
     virtual SfxPoolItem*      Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem*      Create(SvStream& rIn, USHORT nVer) const;
-    virtual USHORT            GetValueCount() const; // { return 5; }
+    virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual sal_uInt16            GetValueCount() const; // { return 5; }
             SdrTextVertAdjust GetValue() const      { return (SdrTextVertAdjust)SfxEnumItem::GetValue(); }
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual String  GetValueTextByPos(USHORT nPos) const;
+    virtual String  GetValueTextByPos(sal_uInt16 nPos) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
 };
 
@@ -72,17 +72,17 @@ enum SdrTextHorzAdjust {SDRTEXTHORZADJUST_LEFT,     // left adjusted
 class SVX_DLLPUBLIC SdrTextHorzAdjustItem: public SfxEnumItem {
 public:
     TYPEINFO();
-    SdrTextHorzAdjustItem(SdrTextHorzAdjust eAdj=SDRTEXTHORZADJUST_BLOCK): SfxEnumItem(SDRATTR_TEXT_HORZADJUST,(USHORT)eAdj) {}
+    SdrTextHorzAdjustItem(SdrTextHorzAdjust eAdj=SDRTEXTHORZADJUST_BLOCK): SfxEnumItem(SDRATTR_TEXT_HORZADJUST,(sal_uInt16)eAdj) {}
     SdrTextHorzAdjustItem(SvStream& rIn)                                 : SfxEnumItem(SDRATTR_TEXT_HORZADJUST,rIn)  {}
     virtual SfxPoolItem*      Clone(SfxItemPool* pPool=NULL) const;
-    virtual SfxPoolItem*      Create(SvStream& rIn, USHORT nVer) const;
-    virtual USHORT            GetValueCount() const;
+    virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual sal_uInt16        GetValueCount() const;
             SdrTextHorzAdjust GetValue() const      { return (SdrTextHorzAdjust)SfxEnumItem::GetValue(); }
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual String  GetValueTextByPos(USHORT nPos) const;
+    virtual String  GetValueTextByPos(sal_uInt16 nPos) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
 };
 

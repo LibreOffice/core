@@ -26,18 +26,35 @@
  *
  ************************************************************************/
 
-#include "entity.hxx"
+#include <entity.hxx>
 
 #include <string.h>
+
 
 namespace DOM
 {
 
-    CEntity::CEntity(const xmlEntityPtr aEntityPtr)
+    CEntity::CEntity(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            xmlEntityPtr const pEntity)
+        : CEntity_Base(rDocument, rMutex,
+            NodeType_ENTITY_NODE, reinterpret_cast<xmlNodePtr>(pEntity))
+        , m_aEntityPtr(pEntity)
     {
-        m_aNodeType = NodeType_ENTITY_NODE;
-        m_aEntityPtr = aEntityPtr;
-        init_node((xmlNodePtr)aEntityPtr);
+    }
+
+    bool CEntity::IsChildTypeAllowed(NodeType const nodeType)
+    {
+        switch (nodeType) {
+            case NodeType_ELEMENT_NODE:
+            case NodeType_PROCESSING_INSTRUCTION_NODE:
+            case NodeType_COMMENT_NODE:
+            case NodeType_TEXT_NODE:
+            case NodeType_CDATA_SECTION_NODE:
+            case NodeType_ENTITY_REFERENCE_NODE:
+                return true;
+            default:
+                return false;
+        }
     }
 
     /**
@@ -45,7 +62,8 @@ namespace DOM
     */
     OUString SAL_CALL CEntity::getNotationName() throw (RuntimeException)
     {
-        // XXX
+        OSL_ENSURE(false,
+                "CEntity::getNotationName: not implemented (#i113683#)");
         return OUString();
     }
 
@@ -54,6 +72,8 @@ namespace DOM
     */
     OUString SAL_CALL CEntity::getPublicId() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aID;
         if(m_aEntityPtr != NULL)
         {
@@ -67,6 +87,8 @@ namespace DOM
     */
     OUString SAL_CALL CEntity::getSystemId() throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
         OUString aID;
         if(m_aEntityPtr != NULL)
         {
@@ -76,6 +98,8 @@ namespace DOM
     }
     OUString SAL_CALL CEntity::getNodeName()throw (RuntimeException)
     {
+        ::osl::MutexGuard const g(m_rMutex);
+
        OUString aName;
         if (m_aNodePtr != NULL)
         {

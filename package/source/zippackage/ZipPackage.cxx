@@ -38,7 +38,6 @@
 #include <ZipFile.hxx>
 #include <PackageConstants.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
 #include <com/sun/star/packages/manifest/XManifestWriter.hpp>
@@ -85,7 +84,6 @@
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/documentconstants.hxx>
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
 using namespace cppu;
@@ -103,6 +101,9 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::manifest;
 using namespace com::sun::star::packages::zip::ZipConstants;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 #define LOGFILE_AUTHOR "mg115289"
 
@@ -209,7 +210,7 @@ ZipPackage::~ZipPackage( void )
 #if 0
     // As all folders and streams contain references to their parents,
     // we must remove these references so that they will be deleted when
-    // the hash_map of the root folder is cleared, releasing all subfolders
+    // the boost::unordered_map of the root folder is cleared, releasing all subfolders
     // and substreams which in turn release theirs, etc. When m_xRootFolder is
     // released when this destructor completes, the folder tree should be
     // deleted fully (and automagically).
@@ -596,18 +597,18 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                         do
                         {
                             ::rtl::OUString aCommand = aParam.getToken( 0, '&', nIndex );
-                            if ( aCommand.equals( OUString::createFromAscii( "repairpackage" ) ) )
+                            if ( aCommand.equals( OUString(RTL_CONSTASCII_USTRINGPARAM( "repairpackage" )) ) )
                             {
                                 m_bForceRecovery = sal_True;
                                 break;
                             }
-                            else if ( aCommand.equals( OUString::createFromAscii( "purezip" ) ) )
+                            else if ( aCommand.equals( OUString(RTL_CONSTASCII_USTRINGPARAM( "purezip" )) ) )
                             {
                                 m_nFormat = embed::StorageFormats::ZIP;
                                 m_pRootFolder->setPackageFormat_Impl( m_nFormat );
                                 break;
                             }
-                            else if ( aCommand.equals( OUString::createFromAscii( "ofopxml" ) ) )
+                            else if ( aCommand.equals( OUString(RTL_CONSTASCII_USTRINGPARAM( "ofopxml" )) ) )
                             {
                                 m_nFormat = embed::StorageFormats::OFOPXML;
                                 m_pRootFolder->setPackageFormat_Impl( m_nFormat );
@@ -620,7 +621,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                         m_aURL = aParamUrl;
 
                     Content aContent ( m_aURL, uno::Reference < XCommandEnvironment >() );
-                    Any aAny = aContent.getPropertyValue( OUString::createFromAscii( "Size" ) );
+                    Any aAny = aContent.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Size" )) );
                     sal_uInt64 aSize = 0;
                     // kind of optimisation: treat empty files as nonexistent files
                     // and write to such files directly. Note that "Size" property is optional.
@@ -654,9 +655,9 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             }
             else if ( ( aArguments[ind] >>= aNamedValue ) )
             {
-                if ( aNamedValue.Name.equalsAscii( "RepairPackage" ) )
+                if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ) ) )
                     aNamedValue.Value >>= m_bForceRecovery;
-                else if ( aNamedValue.Name.equalsAscii( "PackageFormat" ) )
+                else if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PackageFormat" ) ) )
                 {
                     // setting this argument to true means Package format
                     // setting it to false means plain Zip format
@@ -668,7 +669,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
 
                     m_pRootFolder->setPackageFormat_Impl( m_nFormat );
                 }
-                else if ( aNamedValue.Name.equalsAscii( "StorageFormat" ) )
+                else if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StorageFormat" ) ) )
                 {
                     ::rtl::OUString aFormatName;
                     sal_Int32 nFormatID = 0;
@@ -697,14 +698,14 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
 
                     m_pRootFolder->setPackageFormat_Impl( m_nFormat );
                 }
-                else if ( aNamedValue.Name.equalsAscii( "AllowRemoveOnInsert" ) )
+                else if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "AllowRemoveOnInsert" ) ) )
                 {
                     aNamedValue.Value >>= m_bAllowRemoveOnInsert;
                     m_pRootFolder->setRemoveOnInsertMode_Impl( m_bAllowRemoveOnInsert );
                 }
 
                 // for now the progress handler is not used, probably it will never be
-                // if ( aNamedValue.Name.equalsAscii( "ProgressHandler" )
+                // if ( aNamedValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ProgressHandler" ) )
             }
             else
             {
@@ -987,7 +988,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     }
     catch ( ::com::sun::star::io::IOException & r )
     {
-        OSL_ENSURE( 0, "Error adding mimetype to the ZipOutputStream" );
+        OSL_FAIL( "Error adding mimetype to the ZipOutputStream" );
         throw WrappedTargetException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Error adding mimetype to the ZipOutputStream!" ) ),
                 static_cast < OWeakObject * > ( this ),
@@ -1017,7 +1018,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< Sequence
         Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
         for (vector < Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
              aIter != aEnd;
-             aIter++, pSequence++)
+             ++aIter, ++pSequence)
             *pSequence= (*aIter);
         xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
 
@@ -1032,7 +1033,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< Sequence
     }
     else
     {
-                OSL_ENSURE ( 0, "Couldn't get a ManifestWriter!" );
+                OSL_FAIL( "Couldn't get a ManifestWriter!" );
         IOException aException;
         throw WrappedTargetException(
                 OUString( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "Couldn't get a ManifestWriter!" ) ),
@@ -1063,7 +1064,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< Sequ
     for ( vector< uno::Sequence< beans::PropertyValue > >::const_iterator aIter = aManList.begin(),
             aEnd = aManList.end();
          aIter != aEnd;
-         aIter++)
+         ++aIter)
     {
         ::rtl::OUString aPath;
         ::rtl::OUString aType;
@@ -1313,7 +1314,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
             {
                 Exception aDetect;
                 sal_Int64 aSize = 0;
-                Any aAny = aOriginalContent.setPropertyValue( OUString::createFromAscii( "Size" ), makeAny( aSize ) );
+                Any aAny = aOriginalContent.setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Size" )), makeAny( aSize ) );
                 if( !( aAny >>= aDetect ) )
                     bTruncSuccess = sal_True;
             }
@@ -1336,7 +1337,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
                aArg.Sink       = xSink;
                aArg.Properties = Sequence< Property >( 0 ); // unused
 
-            aOriginalContent.executeCommand( OUString::createFromAscii( "open" ), makeAny( aArg ) );
+            aOriginalContent.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM( "open" )), makeAny( aArg ) );
         }
         catch( Exception& )
         {
@@ -1435,7 +1436,7 @@ void SAL_CALL ZipPackage::commitChanges()
             {
                 // write directly in case of local file
                 uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleAccess(
-                    m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                    m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ),
                     uno::UNO_QUERY );
                 OSL_ENSURE( xSimpleAccess.is(), "Can't instatiate SimpleFileAccess service!\n" );
                 uno::Reference< io::XTruncate > xOrigTruncate;
@@ -1531,14 +1532,14 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
     ::rtl::OUString aTempURL;
     try {
         uno::Reference< beans::XPropertySet > xTempFile( xTempStream, uno::UNO_QUERY_THROW );
-        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) );
+        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri") ) );
         aUrl >>= aTempURL;
-        xTempFile->setPropertyValue( ::rtl::OUString::createFromAscii( "RemoveFile" ),
+        xTempFile->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveFile") ),
                                      uno::makeAny( sal_False ) );
     }
     catch ( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "These calls are pretty simple, they should not fail!\n" );
+        OSL_FAIL( "These calls are pretty simple, they should not fail!\n" );
     }
 
     ::rtl::OUString aErrTxt( RTL_CONSTASCII_USTRINGPARAM ( OSL_LOG_PREFIX "This package is read only!" ) );
@@ -1645,7 +1646,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
         throw PropertyVetoException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
     {
-        if (!( aValue >>= m_aEncryptionKey ) )
+        if (!( aValue >>= m_aEncryptionKey ) || m_aEncryptionKey.getLength() == 0 )
             throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 2 );
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("UseManifest") ) )

@@ -34,7 +34,6 @@
 #include <memory>
 
 
-//////////////////////////////////////////////////////////////////////
 
 struct SfxSecurityPage_Impl;
 
@@ -46,14 +45,13 @@ protected:
     SfxSecurityPage( Window* pParent, const SfxItemSet& );
     virtual ~SfxSecurityPage();
 
-    virtual BOOL            FillItemSet( SfxItemSet& );
+    virtual sal_Bool            FillItemSet( SfxItemSet& );
     virtual void            Reset( const SfxItemSet& );
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
 };
 
-//////////////////////////////////////////////////////////////////////
 
 #endif // #ifndef _SECURITYPAGE_HXX_
 

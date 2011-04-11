@@ -41,13 +41,13 @@
 
 //=============================================================================
 
-/** specifies an end popup mode event.
+/** specifies an end pop-up mode event.
  */
 struct EndPopupModeEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    /** specifies how the popup mode was ended
+    /** specifies how the pop-up mode was ended
         <TRUE/> means the window should be teared-off and positioned at FloatingPosition
         <FALSE/> means the window was closed
      */

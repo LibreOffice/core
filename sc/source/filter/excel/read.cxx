@@ -89,10 +89,9 @@ FltError ImportExcel::Read( void )
 
     Zustand             eAkt = Z_BiffNull, ePrev = Z_BiffNull;
 
-    FltError            eLastErr = eERR_OK;
-    UINT16              nOpcode;
-    UINT16              nBofLevel = 0;
-    BOOL                bBiff4Workbook = FALSE;
+    FltError        eLastErr = eERR_OK;
+    sal_uInt16      nOpcode;
+    sal_uInt16      nBofLevel = 0;
 
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
@@ -125,7 +124,7 @@ FltError ImportExcel::Read( void )
 
         if( !aIn.IsValid() )
         {
-            // #124240# finalize table if EOF is missing
+            // finalize table if EOF is missing
             switch( eAkt )
             {
                 case Z_Biff2:
@@ -188,10 +187,7 @@ FltError ImportExcel::Read( void )
                                     NeueTabelle();
                                 }
                                 else if( pExcRoot->eDateiTyp == Biff4W )
-                                {
                                     eAkt = Z_Biff4W;
-                                    bBiff4Workbook = TRUE;
-                                }
                             break;
                             case EXC_BIFF5:
                                 Bof5();
@@ -723,7 +719,7 @@ FltError ImportExcel::Read( void )
                             break;
                             case Biff5V:
                             default:
-                                pD->SetVisible( GetCurrScTab(), FALSE );
+                                pD->SetVisible( GetCurrScTab(), false );
                                 ePrev = eAkt;
                                 eAkt = Z_Biffn0;
                         }
@@ -749,9 +745,9 @@ FltError ImportExcel::Read( void )
                 break;
             // ----------------------------------------------------------------
             case Z_Ende:        // ----------------------------------- Z_Ende -
-                DBG_ERROR( "*ImportExcel::Read(): Not possible state!" );
+                OSL_FAIL( "*ImportExcel::Read(): Not possible state!" );
                 break;
-            default: DBG_ERROR( "-ImportExcel::Read(): Zustand vergessen!" );
+            default: OSL_FAIL( "-ImportExcel::Read(): Zustand vergessen!" );
         }
     }
 
@@ -783,7 +779,7 @@ FltError ImportExcel8::Read( void )
 {
 #if EXC_INCL_DUMPER
     {
-        Biff8RecDumper aDumper( GetRoot(), TRUE );
+        Biff8RecDumper aDumper( GetRoot(), sal_True );
         if( aDumper.Dump( aIn ) )
             return ERRCODE_ABORT;
     }
@@ -858,14 +854,13 @@ FltError ImportExcel8::Read( void )
 
         if( !aIn.IsValid() )
         {
-            // #124240# #i63591# finalize table if EOF is missing
+            // #i63591# finalize table if EOF is missing
             switch( eAkt )
             {
                 case EXC_STATE_SHEET_PRE:
                     eAkt = EXC_STATE_SHEET;
                     aIn.SeekGlobalPosition();
                     continue;   // next iteration in while loop
-//                break;    // unxsols warning: statement unreachable
                 case EXC_STATE_SHEET:
                     Eof();
                     eAkt = EXC_STATE_END;
@@ -1021,6 +1016,7 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_SXIDSTM:        rPTableMgr.ReadSxidstm( maStrm );   break;
                     case EXC_ID_SXVS:           rPTableMgr.ReadSxvs( maStrm );      break;
                     case EXC_ID_DCONREF:        rPTableMgr.ReadDconref( maStrm );   break;
+                    case EXC_ID_DCONNAME:       rPTableMgr.ReadDConName( maStrm );  break;
                 }
 
             }
@@ -1032,7 +1028,7 @@ FltError ImportExcel8::Read( void )
             {
                 if( nRecId == EXC_ID5_BOF )
                 {
-                    // #94191# import only 256 sheets
+                    // import only 256 sheets
                     if( GetCurrScTab() > GetScMaxPos().Tab() )
                     {
                         XclTools::SkipSubStream( maStrm );
@@ -1062,7 +1058,7 @@ FltError ImportExcel8::Read( void )
                             case Biff8V:    // VB module
                             default:
                                 // TODO: do not create a sheet in the Calc document
-                                pD->SetVisible( GetCurrScTab(), FALSE );
+                                pD->SetVisible( GetCurrScTab(), false );
                                 XclTools::SkipSubStream( maStrm );
                                 IncCurrScTab();
                         }

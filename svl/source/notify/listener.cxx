@@ -30,11 +30,10 @@
 #include "precompiled_svl.hxx"
 
 #include <tools/debug.hxx>
-
-#include "broadcast.hxx"
-#include "listener.hxx"
+#include <svl/broadcast.hxx>
+#include <svl/listener.hxx>
 #include "listenerbase.hxx"
-#include "listeneriter.hxx"
+#include <svl/listeneriter.hxx>
 
 
 //====================================================================
@@ -74,7 +73,7 @@ SvtListener::~SvtListener()
 
 // registeres at a specific SvtBroadcaster
 
-BOOL SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
+sal_Bool SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
 {
     const SvtListenerBase* pLst = pBrdCastLst;
     while( pLst )
@@ -82,19 +81,19 @@ BOOL SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
         if( &rBroadcaster == pLst->GetBroadcaster() )
         {
             // double, than return
-            return FALSE;
+            return sal_False;
         }
         pLst = pLst->GetNext();
     }
     new SvtListenerBase( *this, rBroadcaster );
-    return TRUE;
+    return sal_True;
 }
 
 //--------------------------------------------------------------------
 
 // unregisteres at a specific SvtBroadcaster
 
-BOOL SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
+sal_Bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
 {
     SvtListenerBase *pLst = pBrdCastLst, *pPrev = pLst;
     while( pLst )
@@ -107,12 +106,12 @@ BOOL SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
                 pPrev->SetNext( pLst->GetNext() );
 
             delete pLst;
-            return TRUE;
+            return sal_True;
         }
         pPrev = pLst;
         pLst = pLst->GetNext();
     }
-    return FALSE;
+    return sal_False;
 }
 
 //--------------------------------------------------------------------
@@ -134,7 +133,7 @@ void SvtListener::EndListeningAll()
 
 //--------------------------------------------------------------------
 
-BOOL SvtListener::IsListening( SvtBroadcaster& rBroadcaster ) const
+sal_Bool SvtListener::IsListening( SvtBroadcaster& rBroadcaster ) const
 {
     const SvtListenerBase *pLst = pBrdCastLst;
     while( pLst )

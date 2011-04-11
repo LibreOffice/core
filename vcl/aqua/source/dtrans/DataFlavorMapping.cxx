@@ -47,11 +47,14 @@
 #include <postmac.h>
 
 using namespace ::com::sun::star::datatransfer;
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace cppu;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
 
 namespace // private
 {
@@ -576,11 +579,19 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(NSString* systemFlavor, Refe
 
       if (isByteSequenceType(data.getValueType()))
         {
+          /*
+             the HTMLFormatDataProvider prepends segment information to HTML
+             this is useful for exchange with MS Word (which brings this stuff from Windows)
+             but annoying for other applications. Since this extension is not a standard datatype
+             on the Mac, let us not provide but provide normal HTML
+
           if ([systemFlavor caseInsensitiveCompare: NSHTMLPboardType] == NSOrderedSame)
             {
               dp = DataProviderPtr_t(new HTMLFormatDataProvider(data));
             }
-          else if ([systemFlavor caseInsensitiveCompare: NSPICTPboardType] == NSOrderedSame)
+          else
+          */
+          if ([systemFlavor caseInsensitiveCompare: NSPICTPboardType] == NSOrderedSame)
             {
               dp = DataProviderPtr_t(new BMPDataProvider(data, PICTImageFileType));
             }

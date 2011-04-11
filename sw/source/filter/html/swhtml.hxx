@@ -28,13 +28,10 @@
 #ifndef _SWHTML_HXX
 #define _SWHTML_HXX
 
-#if !defined(_SVSTDARR_XUB_STRLEN_DECL) || !defined(_SVSTDARR_LONGS_DECL) || \
+#if !defined(_SVSTDARR_XUB_STRLEN_DECL) || \
     !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_STRINGSDTOR_DECL)
 #ifndef _SVSTDARR_XUB_STRLEN_DECL
 #define _SVSTDARR_XUB_STRLEN
-#endif
-#ifndef _SVSTDARR_LONGS_DECL
-#define _SVSTDARR_LONGS
 #endif
 #ifndef _SVSTDARR_USHORTS_DECL
 #define _SVSTDARR_USHORTS
@@ -80,9 +77,9 @@ class SvxCSS1PropertyInfo;
 #define HTML_DFLT_IMG_HEIGHT (MM50*2)
 
 // ein par Sachen, die man oefter mal braucht
-extern HTMLOptionEnum __FAR_DATA aHTMLPAlignTable[];
-extern HTMLOptionEnum __FAR_DATA aHTMLImgHAlignTable[];
-extern HTMLOptionEnum __FAR_DATA aHTMLImgVAlignTable[];
+extern HTMLOptionEnum aHTMLPAlignTable[];
+extern HTMLOptionEnum aHTMLImgHAlignTable[];
+extern HTMLOptionEnum aHTMLImgVAlignTable[];
 
 
 // der Attribut Stack:
@@ -407,8 +404,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     _HTMLAttrs      aParaAttrs; // vorlauefige Absatz-Attribute
     _HTMLAttrTable  aAttrTab;   // "offene" Attribute
     _HTMLAttrContexts aContexts;// der aktuelle Attribut/Token-Kontext
-    SwHTMLFrmFmts   aMoveFlyFrms;// Fly-Frames, deren Anker verschoben wird
-    SvXub_StrLens   aMoveFlyCnts;// und deren Content-Positionen
+    SwHTMLFrmFmts   aMoveFlyFrms;// Fly-Frames, the anchor is moved
+    SvXub_StrLens   aMoveFlyCnts;// and the Content-Positions
 
     SwApplet_Impl *pAppletImpl; // das aktuelle Applet
 
@@ -434,7 +431,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     sal_uInt32  aFontHeights[7];    // die Font-Hoehen 1-7
     sal_uInt32  nScriptStartLineNr; // Zeilennummer eines Script-Blocks
-    ULONG       nEventId;
+    sal_uLong       nEventId;
 
     sal_uInt16  nBaseFontStMin;     //
     sal_uInt16  nFontStMin;         //
@@ -571,10 +568,8 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SwTwips GetCurrentBrowseWidth();
 
     SwHTMLNumRuleInfo& GetNumInfo() { return *pNumRuleInfo; }
-    // --> OD 2008-04-02 #refactorlists#
     // add parameter <bCountedInList>
     void SetNodeNum( sal_uInt8 nLevel, bool bCountedInList );
-    // <--
 
     // Verwalten von Absatz-Vorlagen
 
@@ -602,7 +597,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void GetULSpaceFromContext( sal_uInt16 &rUpper, sal_uInt16 &rLower ) const;
 
 
-    void MovePageDescAttrs( SwNode *pSrcNd, ULONG nDestIdx, sal_Bool bFmtBreak );
+    void MovePageDescAttrs( SwNode *pSrcNd, sal_uLong nDestIdx, sal_Bool bFmtBreak );
 
     // Behandlung von Tags auf Absatz-Ebene
 
@@ -823,8 +818,8 @@ private:
                         sal_Bool bSetPropSet = sal_True,
                         sal_Bool bHidden = sal_False );
     void SetControlSize( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rShape, const Size& rTextSz,
-                         sal_Bool bMinWidth, sal_Bool bMinHeight, int nToken );
-    void SetPendingControlSize( int nToken );
+                         sal_Bool bMinWidth, sal_Bool bMinHeight );
+    void SetPendingControlSize();
 
 public:
     void ResizeDrawObject( SdrObject* pObj, SwTwips nWidth );
@@ -925,7 +920,7 @@ protected:
     virtual ~SwHTMLParser();
 
     // wird das Dok geloescht, ist auch der Parser zu loeschen
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
     virtual void AddMetaUserDefined( ::rtl::OUString const & i_rMetaName );
 

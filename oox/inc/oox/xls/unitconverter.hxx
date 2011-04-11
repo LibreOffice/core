@@ -29,8 +29,8 @@
 #ifndef OOX_XLS_UNITCONVERTER_HXX
 #define OOX_XLS_UNITCONVERTER_HXX
 
-#include <vector>
 #include <map>
+#include <vector>
 #include "oox/xls/workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {

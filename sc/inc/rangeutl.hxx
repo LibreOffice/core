@@ -29,17 +29,15 @@
 #ifndef SC_RANGEUTL_HXX
 #define SC_RANGEUTL_HXX
 
-#include "address.hxx"
 #include <tools/string.hxx>
+
+#include "address.hxx"
+#include "rangenam.hxx"
 #include "scdllapi.h"
+
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-
-// Chart always stores cell range addresses using CONV_OOO convention. But
-// if parsing with CONV_OOO fails, try parsing it using the current address
-// convention.
-#define CHART_ADDRESS_CONV_WORKAROUND 1
 
 //------------------------------------------------------------------------
 
@@ -62,7 +60,7 @@ public:
                 ScRangeUtil()  {}
                 ~ScRangeUtil() {}
 
-    BOOL    MakeArea            ( const String&     rAreaStr,
+    sal_Bool    MakeArea            ( const String&     rAreaStr,
                                   ScArea&           rArea,
                                   ScDocument*       pDoc,
                                   SCTAB         nTab,
@@ -71,14 +69,14 @@ public:
     void    CutPosString        ( const String&     theAreaStr,
                                   String&           thePosStr ) const;
 
-    BOOL    IsAbsTabArea        ( const String&     rAreaStr,
+    sal_Bool    IsAbsTabArea        ( const String&     rAreaStr,
                                   ScDocument*       pDoc,
                                   ScArea***         pppAreas    = 0,
-                                  USHORT*           pAreaCount  = 0,
-                                  BOOL              bAcceptCellRef = FALSE,
+                                  sal_uInt16*           pAreaCount  = 0,
+                                  sal_Bool              bAcceptCellRef = false,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    BOOL    IsAbsArea           ( const String& rAreaStr,
+    sal_Bool    IsAbsArea           ( const String& rAreaStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
                                   String*       pCompleteStr = 0,
@@ -86,21 +84,21 @@ public:
                                   ScRefAddress* pEndPos      = 0,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    BOOL    IsRefArea           ( const String&,
+    sal_Bool    IsRefArea           ( const String&,
                                   ScDocument*,
                                   SCTAB,
                                   String* = 0,
                                   ScRefAddress* = 0 ) const
-                                      { return FALSE; }
+                                      { return false; }
 
-    BOOL    IsAbsPos            ( const String& rPosStr,
+    sal_Bool    IsAbsPos            ( const String& rPosStr,
                                   ScDocument*   pDoc,
                                   SCTAB     nTab,
                                   String*       pCompleteStr = 0,
                                   ScRefAddress* pPosTripel   = 0,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    BOOL    MakeRangeFromName   ( const String& rName,
+    sal_Bool    MakeRangeFromName   ( const String& rName,
                                     ScDocument*     pDoc,
                                     SCTAB           nCurTab,
                                     ScRange&        rRange,
@@ -215,7 +213,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
-                            sal_Bool bAppendStr = sal_False,
+                            sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRange(
                             ::rtl::OUString& rString,
@@ -223,7 +221,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
-                            sal_Bool bAppendStr = sal_False,
+                            sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRangeList(
                             ::rtl::OUString& rString,
@@ -239,7 +237,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
-                            sal_Bool bAppendStr = sal_False,
+                            sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
 
 // Range to String API
@@ -249,7 +247,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
-                            sal_Bool bAppendStr = sal_False,
+                            sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRange(
                             ::rtl::OUString& rString,
@@ -257,7 +255,7 @@ public:
                             const ScDocument* pDocument,
                             formula::FormulaGrammar::AddressConvention eConv,
                             sal_Unicode cSeperator = ' ',
-                            sal_Bool bAppendStr = sal_False,
+                            sal_Bool bAppendStr = false,
                             sal_uInt16 nFormatFlags = (SCA_VALID | SCA_TAB_3D) );
     static void         GetStringFromRangeList(
                             ::rtl::OUString& rString,
@@ -288,8 +286,8 @@ public:
             ScArea( const ScArea& r );
 
     ScArea& operator=   ( const ScArea& r );
-    BOOL    operator==  ( const ScArea& r ) const;
-    BOOL    operator!=  ( const ScArea& r ) const  { return !( operator==(r) ); }
+    sal_Bool    operator==  ( const ScArea& r ) const;
+    sal_Bool    operator!=  ( const ScArea& r ) const  { return !( operator==(r) ); }
 
 public:
     SCTAB nTab;
@@ -299,27 +297,26 @@ public:
     SCROW nRowEnd;
 };
 
-//------------------------------------------------------------------------
-
 //
-//  gibt Bereiche mit Referenz und alle DB-Bereiche zurueck
+//  returns areas with reference and all db-areas
 //
 
 class SC_DLLPUBLIC ScAreaNameIterator
 {
 private:
     ScRangeName*    pRangeName;
+    ScRangeName::const_iterator maRNPos;
+    ScRangeName::const_iterator maRNEnd;
     ScDBCollection* pDBCollection;
-    BOOL            bFirstPass;
-    USHORT          nPos;
-    String          aStrNoName;
+    bool            bFirstPass;
+    size_t          nPos;
 
 public:
             ScAreaNameIterator( ScDocument* pDoc );
             ~ScAreaNameIterator() {}
 
-    BOOL    Next( String& rName, ScRange& rRange );
-    BOOL    WasDBName() const   { return !bFirstPass; }
+    sal_Bool    Next( String& rName, ScRange& rRange );
+    sal_Bool    WasDBName() const   { return !bFirstPass; }
 };
 
 

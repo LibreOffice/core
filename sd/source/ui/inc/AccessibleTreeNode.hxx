@@ -62,7 +62,7 @@ namespace accessibility {
 
 class AccessibleSlideSorterObject;
 
-typedef ::cppu::WeakComponentImplHelper5<
+typedef ::cppu::PartialWeakComponentImplHelper5<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -97,36 +97,21 @@ public:
         const ::rtl::OUString& rsDescription,
         sal_Int16 eRole);
 
-    /** Use this variant of the constructor when the accessible parent is
-        non-standard.
-        @param rxParent
-            The accessible parent that will be returned by
-            getAccessibleParent() and that is used for computing relative
-            coordinates.
-        @param rNode
-            The TreeNode to make accessible.
-        @param rsName
-            The accessible name that will be returned by getAccessibleName().
-        @param rsDescription
-            The accessible description that will be returned by
-            getAccessibleDescription().
-        @param eRole
-            The role that will be returned by getAccessibleRole().
-    */
-    AccessibleTreeNode(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible> & rxParent,
-        ::sd::toolpanel::TreeNode& rNode,
-        const ::rtl::OUString& rsName,
-        const ::rtl::OUString& rsDescription,
-        sal_Int16 eRole);
-
     void FireAccessibleEvent (
         short nEventId,
         const ::com::sun::star::uno::Any& rOldValue,
         const ::com::sun::star::uno::Any& rNewValue);
 
     virtual void SAL_CALL disposing (void);
+
+    //===== XComponent =======================================================
+
+    virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException)
+        { WeakComponentImplHelperBase::dispose(); }
+    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+        { WeakComponentImplHelperBase::addEventListener(xListener); }
+    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+        { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     //===== XAccessible =======================================================
 
@@ -149,9 +134,6 @@ public:
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener )
         throw (::com::sun::star::uno::RuntimeException);
-
-    using cppu::WeakComponentImplHelperBase::addEventListener;
-    using cppu::WeakComponentImplHelperBase::removeEventListener;
 
     //=====  XAccessibleContext  ==============================================
 

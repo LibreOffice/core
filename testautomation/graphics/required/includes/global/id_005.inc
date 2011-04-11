@@ -30,6 +30,33 @@
 '* short description :
 '*
 '\******************************************************************************
+sub id_005
+
+    printLog Chr(13) + "---------    id_005    ----------"
+
+    call tiFormatDefault
+    call tiFormatLine
+    call tdFormatArea
+    call tiFormatText
+    call tiFormatPositionAndSize
+    call tiFormatCharacter
+    call tiFormatControlForm
+    '       ^ Form
+    call tiFormatDimensions
+    call tiFormatConnector
+    call tiFormat3D_Effects
+    call tiFormatNumberingBullets
+    call tiFormatCaseCharacter
+    call tiFormatParagraph
+    call tiFormatPage
+    call tiFormatStylesAndFormatting
+    call tiFormatStylesSlideDesign
+    call tiFormatFontwork
+    call tiFormatGroup
+    printlog " format->group is also modify->group "
+
+end sub
+'------------------------------------------------------------------------------
 testcase tiFormatDefault
 
     printlog "open application"
@@ -985,8 +1012,8 @@ testcase tiFormatStylesSlideDesign
       DeleteUnusedBackgrounds.check
     printlog "click button 'Load...'"
       Laden.Click
-      kontext "Neu"
-    printlog "click button 'more'"
+      sleep (10)
+    Kontext "Neu"
          Zusaetze.click
          sleep 1
       kontext "Neu"

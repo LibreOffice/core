@@ -28,7 +28,6 @@
 #ifndef _SVX_GRIDCTRL_HXX
 #define _SVX_GRIDCTRL_HXX
 
-#include <tools/list.hxx>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 #include <com/sun/star/sdb/XRowsChangeListener.hpp>
@@ -47,6 +46,7 @@
 #include <comphelper/propmultiplex.hxx>
 #include <svtools/transfer.hxx>
 #include "svx/svxdllapi.h"
+#include <vector>
 
 class DbGridControl;
 class CursorWrapper;
@@ -57,7 +57,7 @@ namespace svxform
 {
     class DataColumn;
 }
-DECLARE_LIST(DbDataColumns, ::svxform::DataColumn*)
+typedef ::std::vector< ::svxform::DataColumn* > DbDataColumns;
 
 enum GridRowStatus
 {
@@ -73,10 +73,10 @@ enum GridRowStatus
 
 class DbGridRow : public SvRefBase
 {
-    ::com::sun::star::uno::Any                      m_aBookmark;        // ::com::sun::star::text::Bookmark of the row, can be set
+    ::com::sun::star::uno::Any  m_aBookmark;        // ::com::sun::star::text::Bookmark of the row, can be set
     DbDataColumns               m_aVariants;
     GridRowStatus               m_eStatus;
-    sal_Bool                        m_bIsNew;
+    sal_Bool                    m_bIsNew;
                                                     // row is no longer valid
                                                     // is removed on the next positioning
 public:
@@ -86,9 +86,8 @@ public:
 
     ~DbGridRow();
 
-    // Because GetField is tuned on speed, always use hasField first
-    sal_Bool HasField(sal_uInt32 nPos) const {return nPos < m_aVariants.Count();}
-    const ::svxform::DataColumn& GetField(sal_uInt32 nPos) const { return *m_aVariants.GetObject(nPos); }
+    sal_Bool HasField(sal_uInt32 nPos) const { return nPos < m_aVariants.size(); }
+    const ::svxform::DataColumn& GetField(sal_uInt32 nPos) const { return *m_aVariants[ nPos ]; }
 
     void            SetStatus(GridRowStatus _eStat) { m_eStatus = _eStat; }
     GridRowStatus   GetStatus() const               { return m_eStatus; }
@@ -107,7 +106,7 @@ SV_DECL_REF(DbGridRow)
 // DbGridControl
 //==================================================================
 class DbGridColumn;
-DECLARE_LIST(DbGridColumns, DbGridColumn*)
+typedef ::std::vector< DbGridColumn* > DbGridColumns;
 
 //==================================================================
 class FmGridListener
@@ -286,7 +285,7 @@ private:
     sal_uInt16          m_nOptionMask;      // the mask of options to be enabled in setDataSource
                                         // (with respect to the data source capabilities)
                                         // defaults to (insert | update | delete)
-    USHORT              m_nLastColId;
+    sal_uInt16              m_nLastColId;
     long                m_nLastRowId;
 
     sal_Bool            m_bDesignMode : 1;      // default = sal_False
@@ -391,7 +390,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual String  GetCellText(long _nRow, USHORT _nColId) const;
+    virtual String  GetCellText(long _nRow, sal_uInt16 _nColId) const;
 
     void RemoveRows(sal_Bool bNewCursor);
 
@@ -422,7 +421,7 @@ public:
 
     // the number of columns in the model
     sal_uInt16 GetViewColCount() const { return ColCount() - 1; }
-    sal_uInt16 GetModelColCount() const { return (sal_uInt16)m_aColumns.Count(); }
+    sal_uInt16 GetModelColCount() const { return (sal_uInt16)m_aColumns.size(); }
     // reverse to GetViewColumnPos: Id of position, the first non-handle column has position 0
     sal_uInt16 GetColumnIdFromViewPos( sal_uInt16 nPos ) const { return GetColumnId(nPos + 1); }
     sal_uInt16 GetColumnIdFromModelPos( sal_uInt16 nPos ) const;

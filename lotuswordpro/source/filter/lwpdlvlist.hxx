@@ -74,7 +74,7 @@ class LwpDLVList : public LwpObject
 {
 public:
     LwpDLVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDLVList(){};
+    virtual ~LwpDLVList(){}
 protected:
     LwpObjectID m_ListPrevious;
     LwpObjectID m_ListNext;
@@ -99,7 +99,7 @@ class LwpDLNFVList : public LwpDLVList
 {
 public:
     LwpDLNFVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDLNFVList(){};
+    virtual ~LwpDLNFVList(){}
 protected:
     LwpObjectID m_ChildHead;
     LwpObjectID m_ChildTail;
@@ -167,7 +167,7 @@ LwpPropList* LwpDLNFPVList::GetPropList()
 class LwpDLVListHeadTail
 {
 public:
-    LwpDLVListHeadTail(){};
+    LwpDLVListHeadTail(){}
     void Read(LwpObjectStream* pObjStrm);
 private:
     LwpObjectID m_ListHead;
@@ -191,8 +191,8 @@ LwpObjectID* LwpDLVListHeadTail::GetTail()
 class LwpDLVListHead
 {
 public:
-    LwpDLVListHead(){};
-    ~LwpDLVListHead(){};
+    LwpDLVListHead(){}
+    ~LwpDLVListHead(){}
     void Read(LwpObjectStream* pObjStrm);
     inline LwpObjectID* GetFirst();
 protected:

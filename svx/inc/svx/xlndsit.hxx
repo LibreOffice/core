@@ -46,7 +46,7 @@ class SVX_DLLPUBLIC XLineDashItem : public NameOrIndex
 public:
                             TYPEINFO();
                             XLineDashItem() : NameOrIndex(XATTR_LINEDASH, -1) {}
-                            XLineDashItem(INT32 nIndex, const XDash& rTheDash);
+                            XLineDashItem(sal_Int32 nIndex, const XDash& rTheDash);
                             XLineDashItem(const String& rName, const XDash& rTheDash);
                             XLineDashItem(SfxItemPool* pPool, const XDash& rTheDash);
                             XLineDashItem(SfxItemPool* pPool );
@@ -55,11 +55,11 @@ public:
 
     virtual int             operator==(const SfxPoolItem& rItem) const;
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
-    virtual SvStream&       Store(SvStream& rOut, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual SvStream&       Store(SvStream& rOut, sal_uInt16 nItemVersion ) const;
 
-    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -71,7 +71,7 @@ public:
     const XDash&            GetDashValue(const XDashTable* pTable = 0) const; // GetValue -> GetDashValue
     void                    SetDashValue(const XDash& rNew)   { aDash = rNew; Detach(); } // SetValue -> SetDashValue
 
-    static BOOL CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
+    static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );
     XLineDashItem* checkForUniqueItem( SdrModel* pModel ) const;
 };
 

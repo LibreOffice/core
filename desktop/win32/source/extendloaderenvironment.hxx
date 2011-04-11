@@ -79,12 +79,10 @@ inline WCHAR * commandLineAppendEncoded(WCHAR * buffer, WCHAR const * text) {
 
 // Set the PATH environment variable in the current (loader) process, so that a
 // following CreateProcess has the necessary environment:
-//
 // @param binPath
 // Must point to an array of size at least MAX_PATH.  Is filled with the null
 // terminated full path to the "bin" file corresponding to the current
 // executable.
-//
 // @param iniDirectory
 // Must point to an array of size at least MAX_PATH.  Is filled with the null
 // terminated full directory path (ending in "\") to the "ini" file

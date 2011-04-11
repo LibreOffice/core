@@ -39,7 +39,6 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::rtl;
 
-// #110680#
 SvXMLAutoCorrectExport::SvXMLAutoCorrectExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const SvxAutocorrWordList *  pNewAutocorr_List,
@@ -81,7 +80,6 @@ sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
     return 0;
 }
 
-// #110680#
 SvXMLExceptionListExport::SvXMLExceptionListExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const SvStringsISortDtor &rNewList,

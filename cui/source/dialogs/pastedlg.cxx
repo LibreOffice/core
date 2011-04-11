@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <pastedlg.hxx>
@@ -54,10 +52,10 @@ SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
     aFtObjectSource( this, CUI_RES( FT_OBJECT_SOURCE ) ),
     aRbPaste( this, CUI_RES( RB_PASTE ) ),
     aRbPasteLink( this, CUI_RES( RB_PASTE_LINK ) ),
-    aLbInsertList( this, CUI_RES( LB_INSERT_LIST ) ),
     aCbDisplayAsIcon( this, CUI_RES( CB_DISPLAY_AS_ICON ) ),
     aPbChangeIcon( this, CUI_RES( PB_CHANGE_ICON ) ),
     aFlChoice( this, CUI_RES( FL_CHOICE ) ),
+    aLbInsertList( this, CUI_RES( LB_INSERT_LIST ) ),
     aOKButton1( this, CUI_RES( 1 ) ),
     aCancelButton1( this, CUI_RES( 1 ) ),
     aHelpButton1( this, CUI_RES( 1 ) ),
@@ -75,6 +73,8 @@ SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
     ObjectLB().SetSelectHdl( LINK( this, SvPasteObjectDialog, SelectHdl ) );
     ObjectLB().SetDoubleClickHdl( LINK( this, SvPasteObjectDialog, DoubleClickHdl ) );
     SetDefault();
+
+    aLbInsertList.SetAccessibleName(aFlChoice.GetText());
 }
 
 void SvPasteObjectDialog::SelectObject()
@@ -107,8 +107,8 @@ IMPL_LINK_INLINE_END( SvPasteObjectDialog, DoubleClickHdl, ListBox *, pListBox )
 
 void SvPasteObjectDialog::SetDefault()
 {
-    bLink   = FALSE;
-    nAspect = (USHORT)::com::sun::star::embed::Aspects::MSOLE_CONTENT;
+    bLink   = sal_False;
+    nAspect = (sal_uInt16)::com::sun::star::embed::Aspects::MSOLE_CONTENT;
 }
 
 SvPasteObjectDialog::~SvPasteObjectDialog()
@@ -123,10 +123,6 @@ SvPasteObjectDialog::~SvPasteObjectDialog()
 
 /*************************************************************************
 |*    SvPasteObjectDialog::Insert()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 14.06.94
-|*    Letzte Aenderung  KA 16.03.2001
 *************************************************************************/
 void SvPasteObjectDialog::Insert( SotFormatStringId nFormat, const String& rFormatName )
 {
@@ -135,7 +131,7 @@ void SvPasteObjectDialog::Insert( SotFormatStringId nFormat, const String& rForm
         delete pStr;
 }
 
-ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
+sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
                                       const DataFlavorExVector* pFormats,
                                       const TransferableObjectDescriptor* )
 {
@@ -149,10 +145,10 @@ ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 
     //Dialogbox erzeugen und fuellen
     String aSourceName, aTypeName;
-    ULONG nSelFormat = 0;
+    sal_uLong nSelFormat = 0;
     SvGlobalName aEmptyNm;
 
-    ObjectLB().SetUpdateMode( FALSE );
+    ObjectLB().SetUpdateMode( sal_False );
 
     DataFlavorExVector::iterator aIter( ((DataFlavorExVector&)*pFormats).begin() ),
                                  aEnd( ((DataFlavorExVector&)*pFormats).end() );
@@ -163,53 +159,6 @@ ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 
         String* pName = (String*) aSupplementTable.Get( nFormat );
         String aName;
-
-#ifdef WNT
-/*
-        if( !pName &&
-            ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE || nFormat == SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ) )
-        {
-            BOOL IsClipboardObject_Impl( SotDataObject * );
-            if( IsClipboardObject_Impl( pDataObj ) )
-            {
-                IDataObject * pDO = NULL;
-                OleGetClipboard( &pDO );
-                if( pDO )
-                {
-                    FORMATETC fe;
-                    STGMEDIUM stm;
-                    (fe).cfFormat=RegisterClipboardFormat( "Object Descriptor" );
-                    (fe).dwAspect=DVASPECT_CONTENT;
-                    (fe).ptd=NULL;
-                    (fe).tymed=TYMED_HGLOBAL;
-                    (fe).lindex=-1;
-
-                    if (SUCCEEDED(pDO->GetData(&fe, &stm)))
-                    {
-                        LPOBJECTDESCRIPTOR pOD=(LPOBJECTDESCRIPTOR)GlobalLock(stm.hGlobal);
-                        if( pOD->dwFullUserTypeName )
-                        {
-                            OLECHAR * pN = (OLECHAR *)(((BYTE *)pOD) + pOD->dwFullUserTypeName);
-                            aName.Append( pN );
-                            pName = &aName;
-                            // set format to ole object
-                            nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
-                        }
-                        if( pOD->dwSrcOfCopy )
-                        {
-                            OLECHAR * pN = (OLECHAR *)(((BYTE *)pOD) + pOD->dwSrcOfCopy);
-                            aSourceName.Append( *pN++ );
-                        }
-                        else
-                            aSourceName = String( ResId( STR_UNKNOWN_SOURCE, SOAPP->GetResMgr() ) );
-                        GlobalUnlock(stm.hGlobal);
-                        ReleaseStgMedium(&stm);
-                    }
-                }
-            }
-        }
-*/
-#endif
 
         // if there is an "Embed Source" or and "Embedded Object" on the
         // Clipboard we read the Description and the Source of this object
@@ -271,7 +220,7 @@ ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         }
     }
 
-    ObjectLB().SetUpdateMode( TRUE );
+    ObjectLB().SetUpdateMode( sal_True );
     SelectObject();
 
     if( aSourceName.Len() )
@@ -292,9 +241,9 @@ ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         bLink = PasteLink().IsChecked();
 
         if( AsIconBox().IsChecked() )
-            nAspect = (USHORT)com::sun::star::embed::Aspects::MSOLE_ICON;
+            nAspect = (sal_uInt16)com::sun::star::embed::Aspects::MSOLE_ICON;
 
-        nSelFormat  = (ULONG)ObjectLB().GetEntryData( ObjectLB().GetSelectEntryPos() );
+        nSelFormat  = (sal_uLong)ObjectLB().GetEntryData( ObjectLB().GetSelectEntryPos() );
     }
 
     return nSelFormat;

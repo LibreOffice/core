@@ -31,7 +31,6 @@
 #define BT_UP               5
 #define BT_DOWN             6
 #define IL_CONTENT          7
-#define ILH_CONTENT         8
 #define FT_PAGE             10
 #define ED_PAGE             11
 #define LB_SELECT           22
@@ -88,4 +87,3 @@
 #define ST_POSTIT_SHOW              (ST_GLOBAL_CONTEXT_FIRST +35)
 #define ST_POSTIT_HIDE              (ST_GLOBAL_CONTEXT_FIRST +36)
 #define ST_POSTIT_DELETE            (ST_GLOBAL_CONTEXT_FIRST +37)
-

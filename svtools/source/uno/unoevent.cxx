@@ -31,11 +31,9 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <rtl/ustrbuf.hxx>
-
-
 #include <tools/rtti.hxx>
 #include <tools/solar.h>
-#include "unoevent.hxx"
+#include <svtools/unoevent.hxx>
 #include <svl/macitem.hxx>
 
 using namespace ::com::sun::star;
@@ -282,7 +280,7 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                         }
             case JAVASCRIPT:
             default:
-                DBG_ERROR("not implemented");
+                OSL_FAIL("not implemented");
         }
     }
     // else: bRetValueOK not set

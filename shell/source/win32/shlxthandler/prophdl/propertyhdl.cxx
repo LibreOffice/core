@@ -239,14 +239,14 @@ HRESULT STDMETHODCALLTYPE CPropertyHdl::Initialize( IStream *pStream, DWORD grfM
         try
         {
             pMetaInfoReader = new CMetaInfoReader( (void*)pStream, &z_filefunc );
+            LoadProperties( pMetaInfoReader );
+            delete pMetaInfoReader;
         }
         catch (const std::exception& e)
         {
             OutputDebugStringFormat( "CPropertyHdl::Initialize: Caught exception [%s]", e.what() );
             return E_FAIL;
         }
-
-        LoadProperties( pMetaInfoReader );
 /*
     // load extended properties and search content
     _LoadExtendedProperties();

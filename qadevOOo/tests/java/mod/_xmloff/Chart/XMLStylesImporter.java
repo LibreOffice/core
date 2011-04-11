@@ -172,7 +172,7 @@ public class XMLStylesImporter extends TestCase {
                         logF.println(" TRUE returned.");
                         return true ;
 /*                    } catch (com.sun.star.uno.Exception e) {
-                        logF.println("Exception occured while checking filter :") ;
+                        logF.println("Exception occurred while checking filter :") ;
                         e.printStackTrace(logF) ;
                         return false ;
                     }

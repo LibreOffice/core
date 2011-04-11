@@ -39,7 +39,7 @@ class Window;
 class SdrModel;
 class Dialog;
 
-// #98185# Create default drawing objects via keyboard
+// Create default drawing objects via keyboard
 class SdrObject;
 
 //  Return-Werte fuer Command
@@ -71,10 +71,10 @@ protected:
     Timer           aDragTimer;             // fuer Drag&Drop
     DECL_LINK( DragTimerHdl, Timer * );
     DECL_LINK( DragHdl, void * );
-    BOOL            bIsInDragMode;
+    sal_Bool            bIsInDragMode;
     Point           aMDPos;                 // Position von MouseButtonDown
 
-    // #95491# member to hold state of the mouse buttons for creation
+    // member to hold state of the mouse buttons for creation
     // of own MouseEvents (like in ScrollHdl)
 private:
     sal_uInt16      mnCode;
@@ -84,7 +84,7 @@ public:
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuPoor();
 
-    // #95491# see member
+    // see member
     void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
     sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
@@ -95,16 +95,16 @@ public:
     virtual void DoPaste();
 
     // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent&) { return FALSE; }
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool MouseMove(const MouseEvent&) { return false; }
 
-    // #95491# moved from inline to *.cxx
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt); // { return FALSE; }
+    // moved from inline to *.cxx
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt); // { return FALSE; }
 
-    // #95491# moved from inline to *.cxx
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt); // { return FALSE; }
+    // moved from inline to *.cxx
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt); // { return FALSE; }
 
-    virtual BYTE Command(const CommandEvent& rCEvt);
+    virtual sal_uInt8 Command(const CommandEvent& rCEvt);
 
     virtual void Activate();        // Function aktivieren
     virtual void Deactivate();      // Function deaktivieren
@@ -114,13 +114,13 @@ public:
 
     void SetWindow(Window* pWin) { pWindow = pWin; }
 
-    USHORT GetSlotID() const { return( aSfxRequest.GetSlot() ); }
+    sal_uInt16 GetSlotID() const { return( aSfxRequest.GetSlot() ); }
 
-    BOOL    IsDetectiveHit( const Point& rLogicPos );
+    sal_Bool    IsDetectiveHit( const Point& rLogicPos );
 
     void    StopDragTimer();
 
-    // #98185# Create default drawing objects via keyboard
+    // Create default drawing objects via keyboard
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 protected:

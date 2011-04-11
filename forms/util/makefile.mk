@@ -111,3 +111,11 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo NavigationToolBar     >>$@
     @echo ONavigationBar        >>$@
 
+
+ALLTAR : $(MISC)/frm.component
+
+$(MISC)/frm.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        frm.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt frm.component

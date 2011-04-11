@@ -32,6 +32,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/property.hxx>
 #include <vcl/ctrl.hxx>
+#include <vcl/svapp.hxx>
 
 #include "forward.hxx"
 
@@ -55,7 +56,7 @@ VCLXPlugin::~VCLXPlugin()
 void SAL_CALL VCLXPlugin::dispose() throw(uno::RuntimeException)
 {
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         lang::EventObject aDisposeEvent;
         aDisposeEvent.Source = W3K_EXPLICIT_CAST (*this);
@@ -72,7 +73,7 @@ void VCLXPlugin::SetPlugin( ::Control *p )
 awt::Size SAL_CALL VCLXPlugin::getMinimumSize()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::ClearableSolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     if ( mpPlugin )
         return AWTSize( mpPlugin->GetSizePixel() );
     return awt::Size();

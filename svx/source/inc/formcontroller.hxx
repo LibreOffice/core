@@ -215,7 +215,8 @@ namespace svxform
         sal_Bool                    m_bFiltering                : 1;
         sal_Bool                    m_bAttachEvents             : 1;
         sal_Bool                    m_bDetachEvents             : 1;
-        sal_Bool                    m_bAttemptedHandlerCreation : 1;
+        bool                        m_bAttemptedHandlerCreation : 1;
+        bool                        m_bSuspendFilterTextListening;          // no bit field, passed around as reference
 
         // as we want to intercept dispatches of _all_ controls we're responsible for, and an object implementing
         // the ::com::sun::star::frame::XDispatchProviderInterceptor interface can intercept only _one_ objects dispatches, we need a helper class

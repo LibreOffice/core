@@ -45,10 +45,10 @@ class SW_DLLPUBLIC SwNumberingTypeListBox : public ListBox
 
 public:
     SwNumberingTypeListBox( Window* pWin, const ResId& rResId,
-        USHORT nTypeFlags = INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING|INSERT_NUM_TYPE_NO_NUMBERING|INSERT_NUM_EXTENDED_TYPES );
+        sal_uInt16 nTypeFlags = INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING|INSERT_NUM_TYPE_NO_NUMBERING|INSERT_NUM_EXTENDED_TYPES );
     ~SwNumberingTypeListBox();
 
-    void        Reload(USHORT nTypeFlags);
+    void        Reload(sal_uInt16 nTypeFlags);
 
     sal_Int16   GetSelectedNumberingType();
     sal_Bool    SelectNumberingType(sal_Int16 nType);

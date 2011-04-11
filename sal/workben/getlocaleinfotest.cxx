@@ -35,8 +35,8 @@
 
 int _cdecl main( int argc, char * argv[] )
 {
-    rtl::OUString lang = rtl::OUString::createFromAscii( "de" );
-    rtl::OUString country = rtl::OUString::createFromAscii( "DE" );
+    rtl::OUString lang(RTL_CONSTASCII_USTRINGPARAM("de"));
+    rtl::OUString country(RTL_CONSTASCII_USTRINGPARAM("DE"));
     rtl_TextEncoding rtlTextEnc;
 
     rtl_Locale* rtlLocale =

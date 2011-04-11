@@ -36,7 +36,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <unoapi.hxx>
+#include <svx/unoapi.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>
@@ -59,7 +59,7 @@ namespace
         {
             try
             {
-                const uno::Any aNumber(xSet->getPropertyValue(::rtl::OUString::createFromAscii("Number")));
+                const uno::Any aNumber(xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Number"))));
                 aNumber >>= nRetval;
             }
             catch(const uno::Exception&)

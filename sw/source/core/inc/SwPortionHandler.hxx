@@ -61,8 +61,8 @@ public:
      * model string.
      */
     virtual void Text(
-        USHORT nLength,      /// length of this portion in the model string
-        USHORT nType         /// type of this portion
+        sal_uInt16 nLength,      /// length of this portion in the model string
+        sal_uInt16 nType         /// type of this portion
         ) = 0;
 
     /** special portion. This method is called for every non-text
@@ -71,9 +71,9 @@ public:
      * the text which is displayed, and the type of the portion.
      */
     virtual void Special(
-        USHORT nLength,      /// length of this portion in the model string
+        sal_uInt16 nLength,      /// length of this portion in the model string
         const String& rText, /// text which is painted on-screen
-        USHORT nType         /// type of this portion
+        sal_uInt16 nType         /// type of this portion
         ) = 0;
 
     /** line break. This method is called whenever a line break in the
@@ -90,7 +90,7 @@ public:
      * Skip() between portions is not allowed.
      */
     virtual void Skip(
-        USHORT nLength   /// number of 'model string' characters to be skipped
+        sal_uInt16 nLength   /// number of 'model string' characters to be skipped
         ) = 0;
 
     /** end of paragraph. This method is to be called when all the

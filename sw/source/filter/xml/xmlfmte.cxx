@@ -317,8 +317,7 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
                     {
                         OUString sStyleName;
                         aProperty->maValue >>= sStyleName;
-                        // --> OD 2008-11-19 #i70748#
-                        // export also empty list styles
+                        // #i70748# - export also empty list styles
                         if( sStyleName.getLength() )
                         {
                             OUString sTmp = rExport.GetTextParagraphExport()->GetListAutoStylePool().Find( sStyleName );

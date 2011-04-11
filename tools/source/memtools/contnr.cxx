@@ -49,8 +49,6 @@ DBG_NAME( Container )
 |*    DbgCheckCBlock()
 |*
 |*    Beschreibung      Pruefung eines CBlock fuer Debug-Utilities
-|*    Ersterstellung    MI 30.01.92
-|*    Letzte Aenderung  TH 24.01.96
 |*
 *************************************************************************/
 
@@ -74,12 +72,10 @@ const char* CBlock::DbgCheckCBlock( const void* pBlock )
 |*    CBlock::CBlock()
 |*
 |*    Beschreibung      Construktor des Verwaltungsblocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
-CBlock::CBlock( USHORT nInitSize, CBlock* _pPrev, CBlock* _pNext )
+CBlock::CBlock( sal_uInt16 nInitSize, CBlock* _pPrev, CBlock* _pNext )
 {
     DBG_CTOR( CBlock, DbgCheckCBlock );
 
@@ -97,12 +93,10 @@ CBlock::CBlock( USHORT nInitSize, CBlock* _pPrev, CBlock* _pNext )
 |*    CBlock::CBlock()
 |*
 |*    Beschreibung      Construktor des Verwaltungsblocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
-CBlock::CBlock( USHORT _nSize, CBlock* _pPrev )
+CBlock::CBlock( sal_uInt16 _nSize, CBlock* _pPrev )
 {
     DBG_CTOR( CBlock, DbgCheckCBlock );
     DBG_ASSERT( _nSize, "CBlock::CBlock(): nSize == 0" );
@@ -122,8 +116,6 @@ CBlock::CBlock( USHORT _nSize, CBlock* _pPrev )
 |*    CBlock::CBlock()
 |*
 |*    Beschreibung      Copy-Construktor des Verwaltungsblocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -147,8 +139,6 @@ CBlock::CBlock( const CBlock& r, CBlock* _pPrev )
 |*    CBlock::~CBlock()
 |*
 |*    Beschreibung      Destruktor des Verwaltungsblocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -165,12 +155,10 @@ inline CBlock::~CBlock()
 |*    CBlock::Insert()
 |*
 |*    Beschreibung      Fuegt einen Pointer ein
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
-void CBlock::Insert( void* p, USHORT nIndex, USHORT nReSize )
+void CBlock::Insert( void* p, sal_uInt16 nIndex, sal_uInt16 nReSize )
 {
     DBG_CHKTHIS( CBlock, DbgCheckCBlock );
     DBG_ASSERT( nIndex <= nCount, "CBlock::Insert(): Index > nCount" );
@@ -221,17 +209,15 @@ void CBlock::Insert( void* p, USHORT nIndex, USHORT nReSize )
 |*    CBlock::Split()
 |*
 |*    Beschreibung      Fuegt einen Pointer ein und splittet den Block
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
-CBlock* CBlock::Split( void* p, USHORT nIndex, USHORT nReSize )
+CBlock* CBlock::Split( void* p, sal_uInt16 nIndex, sal_uInt16 nReSize )
 {
     DBG_CHKTHIS( CBlock, DbgCheckCBlock );
 
-    USHORT  nNewSize;
-    USHORT  nMiddle;
+    sal_uInt16  nNewSize;
+    sal_uInt16  nMiddle;
     CBlock* pNewBlock;
 
     nMiddle = nCount/2;
@@ -358,12 +344,10 @@ CBlock* CBlock::Split( void* p, USHORT nIndex, USHORT nReSize )
 |*    CBlock::Remove()
 |*
 |*    Beschreibung      Entfernt einen Pointer
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
-void* CBlock::Remove( USHORT nIndex, USHORT nReSize )
+void* CBlock::Remove( sal_uInt16 nIndex, sal_uInt16 nReSize )
 {
     DBG_CHKTHIS( CBlock, DbgCheckCBlock );
 
@@ -417,12 +401,10 @@ void* CBlock::Remove( USHORT nIndex, USHORT nReSize )
 |*    CBlock::Replace()
 |*
 |*    Beschreibung      Ersetzt einen Pointer
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
-inline void* CBlock::Replace( void* p, USHORT nIndex )
+inline void* CBlock::Replace( void* p, sal_uInt16 nIndex )
 {
     DBG_CHKTHIS( CBlock, DbgCheckCBlock );
 
@@ -438,12 +420,10 @@ inline void* CBlock::Replace( void* p, USHORT nIndex )
 |*
 |*    Beschreibung      Gibt einen Pointer auf den Pointer aus dem Block
 |*                      zurueck
-|*    Ersterstellung    TH 26.01.93
-|*    Letzte Aenderung  TH 26.01.93
 |*
 *************************************************************************/
 
-inline void** CBlock::GetObjectPtr( USHORT nIndex )
+inline void** CBlock::GetObjectPtr( sal_uInt16 nIndex )
 {
     DBG_CHKTHIS( CBlock, DbgCheckCBlock );
 
@@ -455,12 +435,10 @@ inline void** CBlock::GetObjectPtr( USHORT nIndex )
 |*    CBlock::SetSize()
 |*
 |*    Beschreibung      Aendert die Groesse des Blocks
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
-void CBlock::SetSize( USHORT nNewSize )
+void CBlock::SetSize( sal_uInt16 nNewSize )
 {
     DBG_CHKTHIS( CBlock, DbgCheckCBlock );
     DBG_ASSERT( nNewSize, "CBlock::SetSize(): nNewSize == 0" );
@@ -497,8 +475,6 @@ void CBlock::SetSize( USHORT nNewSize )
 |*    DbgCheckContainer()
 |*
 |*    Beschreibung      Pruefung eines Container fuer Debug-Utilities
-|*    Ersterstellung    MI 30.01.92
-|*    Letzte Aenderung  TH 24.01.96
 |*
 *************************************************************************/
 
@@ -519,8 +495,6 @@ const char* Container::DbgCheckContainer( const void* pCont )
 |*    ImpCopyContainer()
 |*
 |*    Beschreibung      Kopiert alle Daten des Containers
-|*    Ersterstellung    TH 24.01.96
-|*    Letzte Aenderung  TH 24.01.96
 |*
 *************************************************************************/
 
@@ -578,13 +552,9 @@ void Container::ImpCopyContainer( const Container* pCont2 )
 |*
 |*    Container::Container()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
-Container::Container( USHORT _nBlockSize, USHORT _nInitSize, USHORT _nReSize )
+Container::Container( sal_uInt16 _nBlockSize, sal_uInt16 _nInitSize, sal_uInt16 _nReSize )
 {
     DBG_CTOR( Container, DbgCheckContainer );
 
@@ -643,13 +613,9 @@ Container::Container( USHORT _nBlockSize, USHORT _nInitSize, USHORT _nReSize )
 |*
 |*    Container::Container()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
-Container::Container( ULONG nSize )
+Container::Container( sal_uIntPtr nSize )
 {
     DBG_CTOR( Container, DbgCheckContainer );
 
@@ -670,7 +636,7 @@ Container::Container( ULONG nSize )
         // Muss mehr als ein Block angelegt werden
         if ( nSize <= nBlockSize )
         {
-            pFirstBlock = new CBlock( (USHORT)nSize, NULL );
+            pFirstBlock = new CBlock( (sal_uInt16)nSize, NULL );
             pLastBlock = pFirstBlock;
         }
         else
@@ -691,7 +657,7 @@ Container::Container( ULONG nSize )
                 nSize -= nBlockSize;
             }
 
-            pLastBlock = new CBlock( (USHORT)nSize, pBlock1 );
+            pLastBlock = new CBlock( (sal_uInt16)nSize, pBlock1 );
             pBlock1->SetNextBlock( pLastBlock );
         }
 
@@ -702,10 +668,6 @@ Container::Container( ULONG nSize )
 /*************************************************************************
 |*
 |*    Container::Container()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -720,10 +682,6 @@ Container::Container( const Container& r )
 /*************************************************************************
 |*
 |*    Container::~Container()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -746,12 +704,10 @@ Container::~Container()
 |*    Container::ImpInsert()
 |*
 |*    Beschreibung      Interne Methode zum Einfuegen eines Pointers
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  DV 01.07.97
 |*
 *************************************************************************/
 
-void Container::ImpInsert( void* p, CBlock* pBlock, USHORT nIndex )
+void Container::ImpInsert( void* p, CBlock* pBlock, sal_uInt16 nIndex )
 {
     DBG_CHKTHIS( Container, DbgCheckContainer );
 
@@ -830,10 +786,6 @@ void Container::ImpInsert( void* p, CBlock* pBlock, USHORT nIndex )
 |*
 |*    Container::Insert()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void Container::Insert( void* p )
@@ -845,13 +797,9 @@ void Container::Insert( void* p )
 |*
 |*    Container::Insert()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
-void Container::Insert( void* p, ULONG nIndex )
+void Container::Insert( void* p, sal_uIntPtr nIndex )
 {
     if ( nCount <= nIndex )
     {
@@ -870,7 +818,7 @@ void Container::Insert( void* p, ULONG nIndex )
             pTemp   = pTemp->GetNextBlock();
         }
 
-        ImpInsert( p, pTemp, (USHORT)nIndex );
+        ImpInsert( p, pTemp, (sal_uInt16)nIndex );
     }
 }
 
@@ -878,15 +826,11 @@ void Container::Insert( void* p, ULONG nIndex )
 |*
 |*    Container::Insert()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void Container::Insert( void* pNew, void* pOld )
 {
-    ULONG nIndex = GetPos( pOld );
+    sal_uIntPtr nIndex = GetPos( pOld );
     if ( nIndex != CONTAINER_ENTRY_NOTFOUND )
         Insert( pNew, nIndex );
 }
@@ -896,12 +840,10 @@ void Container::Insert( void* pNew, void* pOld )
 |*    Container::ImpRemove()
 |*
 |*    Beschreibung      Interne Methode zum Entfernen eines Pointers
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
-void* Container::ImpRemove( CBlock* pBlock, USHORT nIndex )
+void* Container::ImpRemove( CBlock* pBlock, sal_uInt16 nIndex )
 {
     DBG_CHKTHIS( Container, DbgCheckContainer );
 
@@ -972,10 +914,6 @@ void* Container::ImpRemove( CBlock* pBlock, USHORT nIndex )
 |*
 |*    Container::Remove()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void* Container::Remove()
@@ -991,13 +929,9 @@ void* Container::Remove()
 |*
 |*    Container::Remove()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
-void* Container::Remove( ULONG nIndex )
+void* Container::Remove( sal_uIntPtr nIndex )
 {
     // Ist Index nicht innerhalb des Containers, dann NULL zurueckgeben
     if ( nCount <= nIndex )
@@ -1012,17 +946,13 @@ void* Container::Remove( ULONG nIndex )
             pTemp   = pTemp->GetNextBlock();
         }
 
-        return ImpRemove( pTemp, (USHORT)nIndex );
+        return ImpRemove( pTemp, (sal_uInt16)nIndex );
     }
 }
 
 /*************************************************************************
 |*
 |*    Container::Replace()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1040,13 +970,9 @@ void* Container::Replace( void* p )
 |*
 |*    Container::Replace()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
-void* Container::Replace( void* p, ULONG nIndex )
+void* Container::Replace( void* p, sal_uIntPtr nIndex )
 {
     DBG_CHKTHIS( Container, DbgCheckContainer );
 
@@ -1063,7 +989,7 @@ void* Container::Replace( void* p, ULONG nIndex )
             pTemp   = pTemp->GetNextBlock();
         }
 
-        return pTemp->Replace( p, (USHORT)nIndex );
+        return pTemp->Replace( p, (sal_uInt16)nIndex );
     }
 }
 
@@ -1071,13 +997,9 @@ void* Container::Replace( void* p, ULONG nIndex )
 |*
 |*    Container::SetSize()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
-void Container::SetSize( ULONG nNewSize )
+void Container::SetSize( sal_uIntPtr nNewSize )
 {
     DBG_CHKTHIS( Container, DbgCheckContainer );
 
@@ -1087,7 +1009,7 @@ void Container::SetSize( ULONG nNewSize )
         if ( nNewSize != nCount )
         {
             CBlock* pTemp;
-            ULONG   nTemp;
+            sal_uIntPtr nTemp;
 
             // Wird verkleinert
             if ( nNewSize < nCount )
@@ -1101,14 +1023,14 @@ void Container::SetSize( ULONG nNewSize )
                 }
 
                 // Alle folgenden Bloecke loeschen
-                BOOL    bLast = FALSE;
+                sal_Bool    bLast = sal_False;
                 CBlock* pDelNext;
                 CBlock* pDelBlock = pTemp->GetNextBlock();
                 while ( pDelBlock )
                 {
                     // Muss CurrentBlock umgesetzt werden
                     if ( pDelBlock == pCurBlock )
-                        bLast = TRUE;
+                        bLast = sal_True;
                     pDelNext = pDelBlock->GetNextBlock();
                     delete pDelBlock;
                     pDelBlock = pDelNext;
@@ -1119,7 +1041,7 @@ void Container::SetSize( ULONG nNewSize )
                 {
                     pLastBlock = pTemp;
                     pTemp->SetNextBlock( NULL );
-                    pTemp->SetSize( (USHORT)(nNewSize-nTemp) );
+                    pTemp->SetSize( (sal_uInt16)(nNewSize-nTemp) );
                 }
                 else
                 {
@@ -1146,7 +1068,7 @@ void Container::SetSize( ULONG nNewSize )
                     // Muss mehr als ein Block angelegt werden
                     if ( nNewSize <= nBlockSize )
                     {
-                        pFirstBlock = new CBlock( (USHORT)nNewSize, NULL );
+                        pFirstBlock = new CBlock( (sal_uInt16)nNewSize, NULL );
                         pLastBlock = pFirstBlock;
                     }
                     else
@@ -1167,7 +1089,7 @@ void Container::SetSize( ULONG nNewSize )
                             nNewSize -= nBlockSize;
                         }
 
-                        pLastBlock = new CBlock( (USHORT)nNewSize, pBlock1 );
+                        pLastBlock = new CBlock( (sal_uInt16)nNewSize, pBlock1 );
                         pBlock1->SetNextBlock( pLastBlock );
                     }
 
@@ -1175,7 +1097,7 @@ void Container::SetSize( ULONG nNewSize )
                 }
                 // Reicht es, den letzen Puffer in der Groesse anzupassen
                 else if ( (nTemp+pTemp->Count()) <= nBlockSize )
-                    pTemp->SetSize( (USHORT)(nTemp+pTemp->Count()) );
+                    pTemp->SetSize( (sal_uInt16)(nTemp+pTemp->Count()) );
                 else
                 {
                     // Puffer auf max. Blockgroesse setzen
@@ -1196,7 +1118,7 @@ void Container::SetSize( ULONG nNewSize )
                     // Den letzten Block anlegen
                     if ( nTemp )
                     {
-                        pLastBlock = new CBlock( (USHORT)nTemp, pTemp );
+                        pLastBlock = new CBlock( (sal_uInt16)nTemp, pTemp );
                         pTemp->SetNextBlock( pLastBlock );
                     }
                     else
@@ -1214,10 +1136,6 @@ void Container::SetSize( ULONG nNewSize )
 /*************************************************************************
 |*
 |*    Container::Clear()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1246,10 +1164,6 @@ void Container::Clear()
 |*
 |*    Container::GetCurObject()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void* Container::GetCurObject() const
@@ -1267,13 +1181,9 @@ void* Container::GetCurObject() const
 |*
 |*    Container::GetCurPos()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
-ULONG Container::GetCurPos() const
+sal_uIntPtr Container::GetCurPos() const
 {
     DBG_CHKTHIS( Container, DbgCheckContainer );
 
@@ -1284,7 +1194,7 @@ ULONG Container::GetCurPos() const
     {
         // Block suchen
         CBlock* pTemp = pFirstBlock;
-        ULONG   nTemp = 0;
+        sal_uIntPtr nTemp = 0;
         while ( pTemp != pCurBlock )
         {
             nTemp += pTemp->Count();
@@ -1300,12 +1210,10 @@ ULONG Container::GetCurPos() const
 |*    Container::GetObjectPtr()
 |*
 |*    Beschreibung      Interne Methode fuer Referenz-Container
-|*    Ersterstellung    TH 26.01.93
-|*    Letzte Aenderung  TH 26.01.93
 |*
 *************************************************************************/
 
-void** Container::GetObjectPtr( ULONG nIndex )
+void** Container::GetObjectPtr( sal_uIntPtr nIndex )
 {
     DBG_CHKTHIS( Container, DbgCheckContainer );
 
@@ -1323,7 +1231,7 @@ void** Container::GetObjectPtr( ULONG nIndex )
         }
 
         // Item innerhalb des gefundenen Blocks zurueckgeben
-        return pTemp->GetObjectPtr( (USHORT)nIndex );
+        return pTemp->GetObjectPtr( (sal_uInt16)nIndex );
     }
 }
 
@@ -1331,13 +1239,9 @@ void** Container::GetObjectPtr( ULONG nIndex )
 |*
 |*    Container::GetObject()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
-void* Container::GetObject( ULONG nIndex ) const
+void* Container::GetObject( sal_uIntPtr nIndex ) const
 {
     DBG_CHKTHIS( Container, DbgCheckContainer );
 
@@ -1355,7 +1259,7 @@ void* Container::GetObject( ULONG nIndex ) const
         }
 
         // Item innerhalb des gefundenen Blocks zurueckgeben
-        return pTemp->GetObject( (USHORT)nIndex );
+        return pTemp->GetObject( (sal_uInt16)nIndex );
     }
 }
 
@@ -1363,21 +1267,17 @@ void* Container::GetObject( ULONG nIndex ) const
 |*
 |*    Container::GetPos()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
-ULONG Container::GetPos( const void* p ) const
+sal_uIntPtr Container::GetPos( const void* p ) const
 {
     DBG_CHKTHIS( Container, DbgCheckContainer );
 
     void**  pNodes;
     CBlock* pTemp;
-    ULONG   nTemp;
-    USHORT  nBlockCount;
-    USHORT  i;
+    sal_uIntPtr nTemp;
+    sal_uInt16  nBlockCount;
+    sal_uInt16  i;
 
     // Block suchen
     pTemp = pFirstBlock;
@@ -1405,14 +1305,10 @@ ULONG Container::GetPos( const void* p ) const
 |*
 |*    Container::GetPos()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 14.09.94
-|*    Letzte Aenderung  TH 14.09.94
-|*
 *************************************************************************/
 
-ULONG Container::GetPos( const void* p, ULONG nStartIndex,
-                         BOOL bForward ) const
+sal_uIntPtr Container::GetPos( const void* p, sal_uIntPtr nStartIndex,
+                         sal_Bool bForward ) const
 {
     DBG_CHKTHIS( Container, DbgCheckContainer );
 
@@ -1422,12 +1318,12 @@ ULONG Container::GetPos( const void* p, ULONG nStartIndex,
     else
     {
         void**  pNodes;
-        USHORT  nBlockCount;
-        USHORT  i;
+        sal_uInt16  nBlockCount;
+        sal_uInt16  i;
 
         // Block suchen
         CBlock* pTemp = pFirstBlock;
-        ULONG   nTemp = 0;
+        sal_uIntPtr nTemp = 0;
         while ( nTemp+pTemp->Count() <= nStartIndex )
         {
             nTemp += pTemp->Count();
@@ -1438,7 +1334,7 @@ ULONG Container::GetPos( const void* p, ULONG nStartIndex,
         if ( bForward )
         {
             // Alle Bloecke durchrsuchen
-            i = (USHORT)(nStartIndex - nTemp);
+            i = (sal_uInt16)(nStartIndex - nTemp);
             pNodes = pTemp->GetObjectPtr( i );
             do
             {
@@ -1460,12 +1356,12 @@ ULONG Container::GetPos( const void* p, ULONG nStartIndex,
                 else
                     break;
             }
-            while ( TRUE );
+            while ( sal_True );
         }
         else
         {
             // Alle Bloecke durchrsuchen
-            i = (USHORT)(nStartIndex-nTemp)+1;
+            i = (sal_uInt16)(nStartIndex-nTemp)+1;
             pNodes = pTemp->GetObjectPtr( i-1 );
             do
             {
@@ -1489,7 +1385,7 @@ ULONG Container::GetPos( const void* p, ULONG nStartIndex,
                 else
                     break;
             }
-            while ( TRUE );
+            while ( sal_True );
         }
     }
 
@@ -1500,13 +1396,9 @@ ULONG Container::GetPos( const void* p, ULONG nStartIndex,
 |*
 |*    Container::Seek()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
-void* Container::Seek( ULONG nIndex )
+void* Container::Seek( sal_uIntPtr nIndex )
 {
     DBG_CHKTHIS( Container, DbgCheckContainer );
 
@@ -1525,7 +1417,7 @@ void* Container::Seek( ULONG nIndex )
 
         // Item innerhalb des gefundenen Blocks zurueckgeben
         pCurBlock = pTemp;
-        nCurIndex = (USHORT)nIndex;
+        nCurIndex = (sal_uInt16)nIndex;
         return pCurBlock->GetObject( nCurIndex );
     }
 }
@@ -1533,10 +1425,6 @@ void* Container::Seek( ULONG nIndex )
 /*************************************************************************
 |*
 |*    Container::First()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1560,10 +1448,6 @@ void* Container::First()
 |*
 |*    Container::Last()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void* Container::Last()
@@ -1585,10 +1469,6 @@ void* Container::Last()
 /*************************************************************************
 |*
 |*    Container::Next()
-|*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
 |*
 *************************************************************************/
 
@@ -1618,10 +1498,6 @@ void* Container::Next()
 |*
 |*    Container::Prev()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 void* Container::Prev()
@@ -1650,10 +1526,6 @@ void* Container::Prev()
 |*
 |*    Container::operator =()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
 Container& Container::operator =( const Container& r )
@@ -1678,28 +1550,24 @@ Container& Container::operator =( const Container& r )
 |*
 |*    Container::operator ==()
 |*
-|*    Beschreibung      CONTNR.SDW
-|*    Ersterstellung    TH 17.09.91
-|*    Letzte Aenderung  TH 17.09.91
-|*
 *************************************************************************/
 
-BOOL Container::operator ==( const Container& r ) const
+sal_Bool Container::operator ==( const Container& r ) const
 {
     DBG_CHKTHIS( Container, DbgCheckContainer );
 
     if ( nCount != r.nCount )
-        return FALSE;
+        return sal_False;
 
-    ULONG i = 0;
+    sal_uIntPtr i = 0;
     while ( i < nCount )
     {
         if ( GetObject( i ) != r.GetObject( i ) )
-            return FALSE;
+            return sal_False;
         i++;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

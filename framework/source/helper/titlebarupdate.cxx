@@ -28,65 +28,41 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_framework.hxx"
-
 #include <helper/titlebarupdate.hxx>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
 #include <pattern/window.hxx>
-
 #include <threadhelp/writeguard.hxx>
-
 #include <threadhelp/readguard.hxx>
-
 #include <macros/generic.hxx>
-
 #include <services.h>
-
 #include <properties.h>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
 #include <com/sun/star/awt/XWindow.hpp>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
-
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-
 #include <com/sun/star/frame/XModuleManager.hpp>
-
 #include <com/sun/star/container/XNameAccess.hpp>
-
 #include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
-
 #include <com/sun/star/beans/NamedValue.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-
 #include <comphelper/sequenceashashmap.hxx>
-
 #include <unotools/configmgr.hxx>
-
 #include <unotools/bootstrap.hxx>
-
 #include <vcl/window.hxx>
-
 #include <vcl/syswin.hxx>
-
 #include <toolkit/unohlp.hxx>
-
 #include <vcl/svapp.hxx>
-
 #include <vcl/wrkwin.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -231,30 +207,30 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         rtl::OUString aModuleId = xModuleManager->identify(xFrame);
         rtl::OUString sDesktopName;
 
-        if ( aModuleId.equalsAscii( "com.sun.star.text.TextDocument" ) ||
-             aModuleId.equalsAscii( "com.sun.star.text.GlobalDocument" ) ||
-             aModuleId.equalsAscii( "com.sun.star.text.WebDocument" ) ||
-             aModuleId.equalsAscii( "com.sun.star.xforms.XMLFormDocument" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("writer");
-        else if ( aModuleId.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("calc");
-        else if ( aModuleId.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("impress");
-        else if ( aModuleId.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("draw");
-        else if ( aModuleId.equalsAscii( "com.sun.star.formula.FormulaProperties" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("math");
-        else if ( aModuleId.equalsAscii( "com.sun.star.sdb.DatabaseDocument" ) ||
-                  aModuleId.equalsAscii( "com.sun.star.sdb.OfficeDatabaseDocument" ) ||
-                  aModuleId.equalsAscii( "com.sun.star.sdb.RelationDesign" ) ||
-                  aModuleId.equalsAscii( "com.sun.star.sdb.QueryDesign" ) ||
-                  aModuleId.equalsAscii( "com.sun.star.sdb.TableDesign" ) ||
-                  aModuleId.equalsAscii( "com.sun.star.sdb.DataSourceBrowser" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("base");
-        else if ( aModuleId.equalsAscii( "com.sun.star.frame.StartModule" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("startcenter");
+        if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) ||
+             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.GlobalDocument")) ||
+             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.WebDocument")) ||
+             aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.xforms.XMLFormDocument")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer"));
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc"));
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PresentationDocument")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress"));
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DrawingDocument")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw"));
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.formula.FormulaProperties")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math"));
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DatabaseDocument")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.RelationDesign")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.QueryDesign")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.TableDesign")) ||
+                  aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DataSourceBrowser")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("base"));
+        else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.frame.StartModule")) )
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
         else
-            sDesktopName = ::rtl::OUString::createFromAscii("startcenter");
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
         sApplicationID = aProductName.toAsciiLowerCase();
         sApplicationID += ::rtl::OUString(sal_Unicode('-'));
         sApplicationID += sDesktopName;
@@ -273,9 +249,6 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
        )
     {
         WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
-#ifdef COPY_TO_TITLE_FOR_DEBUG
-        pWorkWindow->SetText( sApplicationID );
-#endif
         pWorkWindow->SetApplicationID( sApplicationID );
     }
     // <- VCL SYNCHRONIZED

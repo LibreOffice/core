@@ -54,7 +54,7 @@ public:
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
     createInstance( const rtl::OUString& aServiceSpecifier ) throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
     {
-        if ( aServiceSpecifier.equalsAscii( "com.sun.star.awt.Layout" ) )
+        if ( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.awt.Layout" ) ) )
         {
             fprintf( stderr, "UnoBootstrapLayout: create service '%s'\n",
                      rtl::OUStringToOString (aServiceSpecifier, RTL_TEXTENCODING_UTF8 ).getStr() );

@@ -160,7 +160,7 @@ LwpTableHeadingLayout* LwpSuperTableLayout::GetTableHeadingLayout()
 /**
  * @short   Register super table layout style
  */
-void LwpSuperTableLayout::RegisterStyle()
+void LwpSuperTableLayout::RegisterNewStyle()
 {
     // if this layout is style of real table entry
     LwpTableLayout* pTableLayout = GetTableLayout();
@@ -758,7 +758,7 @@ void LwpTableLayout::RegisterStyle()
     RegisterRows();
 
     // Parse table
-    Parse();
+    ParseTable();
 
 
     //Comment:The old code doesn't check if the LwpFoundry pointer is NULL,
@@ -773,7 +773,7 @@ void LwpTableLayout::RegisterStyle()
  * @short   read table layout
  * @param   none
  */
-void LwpTableLayout::Parse()
+void LwpTableLayout::ParseTable()
 {
     // get super table layout
     LwpSuperTableLayout * pSuper = GetSuperTableLayout();
@@ -852,7 +852,6 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
 {
     sal_uInt16 nContentRow;
     sal_uInt8 nCol = static_cast<sal_uInt8>(GetTable()->GetColumn());
-    sal_uInt8 nFirstColSpann = 1;
     XFTable* pTmpTable = new XFTable;
     XFRow* pXFRow;
 
@@ -871,6 +870,7 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
     }
     else
     {
+        sal_uInt8 nFirstColSpann = 1;
         bFindFlag = FindSplitColMark(pTmpTable,CellMark,nFirstColSpann);
 
         if (bFindFlag)//split to 2 cells
@@ -1073,9 +1073,8 @@ sal_Bool  LwpTableLayout::FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMar
 void LwpTableLayout::ConvertTable(XFTable* pXFTable,sal_uInt16 nStartRow,
                 sal_uInt16 nEndRow,sal_uInt8 nStartCol,sal_uInt8 nEndCol)
 {
-    //out put column info TO BE CHANGED,note by ,2005/4/4
+    //out put column info TO BE CHANGED
     ConvertColumn(pXFTable,nStartCol,nEndCol);
-    //note end
 
     std::map<sal_uInt16,LwpRowLayout*>::iterator iter;
 
@@ -1194,11 +1193,9 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
     if(pCellLayout)
     {
         XFParagraph * pXFPara = NULL;
-        //mod by ,fix bug 2759,2006/3/22
         pXFPara = static_cast<XFParagraph*>(pCell->FindFirstContent(enumXFContentPara));
         if (!pXFPara)
             return;
-        //mod end
         XFColor aColor;
         XFColor aNullColor = XFColor();
 

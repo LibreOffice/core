@@ -48,26 +48,13 @@ public:
     void Fill( SdDrawDocument* pDoc );
     void Clear();
 
-    USHORT GetSelectedPage();
-    BOOL IsPageChecked( USHORT nPage );
+    sal_uInt16 GetSelectedPage();
+    sal_Bool IsPageChecked( sal_uInt16 nPage );
 
     DECL_LINK( CheckButtonClickHdl, SvLBoxButtonData * );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
 };
-
-class TemplateCacheInfo;
-
-DECLARE_LIST( TemplateCacheInfoList, TemplateCacheInfo * )
-
-class TemplateCacheDirEntry
-{
-public:
-    String                      m_aPath;
-    TemplateCacheInfoList       m_aFiles;
-};
-
-DECLARE_LIST( TemplateCacheDirEntryList, TemplateCacheDirEntry * )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

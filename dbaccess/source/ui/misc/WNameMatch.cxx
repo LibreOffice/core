@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 #include "WNameMatch.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
 #include "WCopyTable.hxx"
 #include "dbaccess_helpid.hrc"
@@ -73,19 +73,13 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
     m_CTRL_RIGHT.SetSelectHdl(LINK(this,OWizNameMatching,TableListRightSelectHdl));
     m_CTRL_RIGHT.EnableCheckButton( NULL );
 
-    m_CTRL_LEFT.SetWindowBits( WB_FORCE_MAKEVISIBLE );
-    m_CTRL_RIGHT.SetWindowBits( WB_FORCE_MAKEVISIBLE );
+    m_CTRL_LEFT.SetStyle( m_CTRL_LEFT.GetStyle() | WB_FORCE_MAKEVISIBLE );
+    m_CTRL_RIGHT.SetStyle( m_CTRL_RIGHT.GetStyle() | WB_FORCE_MAKEVISIBLE );
 
     m_sSourceText   = m_FT_TABLE_LEFT.GetText();
     m_sSourceText.AppendAscii("\n");
     m_sDestText     = m_FT_TABLE_RIGHT.GetText();
     m_sDestText.AppendAscii("\n");
-
-    // set hiContrast
-    m_ibColumn_up.SetModeImage(ModuleRes(IMG_SORTUP_H),BMP_COLOR_HIGHCONTRAST);
-    m_ibColumn_down.SetModeImage(ModuleRes(IMG_SORTDOWN_H),BMP_COLOR_HIGHCONTRAST);
-    m_ibColumn_up_right.SetModeImage(ModuleRes(IMG_SORTUP_H),BMP_COLOR_HIGHCONTRAST);
-    m_ibColumn_down_right.SetModeImage(ModuleRes(IMG_SORTDOWN_H),BMP_COLOR_HIGHCONTRAST);
 
     FreeResource();
 }
@@ -111,7 +105,6 @@ void OWizNameMatching::Reset()
         m_bFirstTime = sal_False;
     }
 
-    //  m_CTRL_LEFT.Clear();
 }
 // -----------------------------------------------------------------------
 void OWizNameMatching::ActivatePage( )
@@ -162,7 +155,7 @@ sal_Bool OWizNameMatching::LeavePage()
     while(pLeftEntry && pRightEntry)
     {
         OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeftEntry->GetUserData());
-        DBG_ASSERT(pSrcField,"OWizNameMatching: OColumn can not be null!");
+        OSL_ENSURE(pSrcField,"OWizNameMatching: OColumn can not be null!");
 
         ODatabaseExport::TColumnVector::const_iterator aSrcIter = pSrcColumns->begin();
         ODatabaseExport::TColumnVector::const_iterator aSrcEnd  = pSrcColumns->end();
@@ -170,11 +163,10 @@ sal_Bool OWizNameMatching::LeavePage()
             ;
         const sal_Int32 nPos = ::std::distance(pSrcColumns->begin(),aSrcIter);
 
-        //  sal_Int32 nPos = m_CTRL_LEFT.GetModel()->GetAbsPos(pLeftEntry);
         if(m_CTRL_LEFT.GetCheckButtonState(pLeftEntry) == SV_BUTTON_CHECKED)
         {
             OFieldDescription* pDestField = static_cast<OFieldDescription*>(pRightEntry->GetUserData());
-            DBG_ASSERT(pDestField,"OWizNameMatching: OColumn can not be null!");
+            OSL_ENSURE(pDestField,"OWizNameMatching: OColumn can not be null!");
             const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
             ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
             ODatabaseExport::TColumnVector::const_iterator aDestEnd = pDestColumns->end();
@@ -228,7 +220,6 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
         if(pButton == &m_ibColumn_down && (nThumbPos+nVisibleSize+1) < nPos)
         {
             m_CTRL_LEFT.GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
-            //  m_CTRL_LEFT.MakeVisible(pEntry,sal_True);
         }
 
         TableListClickHdl(&m_CTRL_LEFT);
@@ -267,7 +258,7 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
     SvLBoxEntry* pEntry = m_CTRL_LEFT.FirstSelected();
     if(pEntry)
     {
-        ULONG nPos          = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
+        sal_uLong nPos          = m_CTRL_LEFT.GetModel()->GetAbsPos(pEntry);
         SvLBoxEntry* pOldEntry = m_CTRL_RIGHT.FirstSelected();
         if(pOldEntry && nPos != m_CTRL_RIGHT.GetModel()->GetAbsPos(pOldEntry))
         {
@@ -276,7 +267,7 @@ IMPL_LINK( OWizNameMatching, TableListClickHdl, void*, /*NOTINTERESTEDIN*/ )
             pOldEntry = m_CTRL_RIGHT.GetEntry(nPos);
             if(pOldEntry)
             {
-                ULONG nNewPos = m_CTRL_LEFT.GetModel()->GetAbsPos(m_CTRL_LEFT.GetFirstEntryInView());
+                sal_uLong nNewPos = m_CTRL_LEFT.GetModel()->GetAbsPos(m_CTRL_LEFT.GetFirstEntryInView());
                 if ( nNewPos - nPos == 1 )
                     --nNewPos;
                 m_CTRL_RIGHT.MakeVisible(m_CTRL_RIGHT.GetEntry(nNewPos),sal_True);
@@ -301,7 +292,7 @@ IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/
     SvLBoxEntry* pEntry = m_CTRL_RIGHT.FirstSelected();
     if(pEntry)
     {
-        ULONG nPos          = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
+        sal_uLong nPos          = m_CTRL_RIGHT.GetModel()->GetAbsPos(pEntry);
         SvLBoxEntry* pOldEntry = m_CTRL_LEFT.FirstSelected();
         if(pOldEntry && nPos != m_CTRL_LEFT.GetModel()->GetAbsPos(pOldEntry))
         {
@@ -310,7 +301,7 @@ IMPL_LINK( OWizNameMatching, TableListRightSelectHdl, void*, /*NOTINTERESTEDIN*/
             pOldEntry = m_CTRL_LEFT.GetEntry(nPos);
             if(pOldEntry)
             {
-                ULONG nNewPos = m_CTRL_RIGHT.GetModel()->GetAbsPos(m_CTRL_RIGHT.GetFirstEntryInView());
+                sal_uLong nNewPos = m_CTRL_RIGHT.GetModel()->GetAbsPos(m_CTRL_RIGHT.GetFirstEntryInView());
                 if ( nNewPos - nPos == 1 )
                     nNewPos--;
                 m_CTRL_LEFT.MakeVisible(m_CTRL_LEFT.GetEntry(nNewPos),sal_True);
@@ -357,18 +348,7 @@ public:
     }
 
     virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
-    //virtual void InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData);
 };
-
-
-
-//------------------------------------------------------------------------
-/*
-void OColumnString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
-{
-    SvLBoxString::InitViewData(pView,pEntry,pViewData);
-}
-*/
 //------------------------------------------------------------------------
 void OColumnString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
 {
@@ -386,7 +366,7 @@ OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
 {
     SetDragDropMode( 0 );
     EnableInplaceEditing( sal_False );
-    SetWindowBits(WB_BORDER | WB_HASBUTTONS | WB_HSCROLL);
+    SetStyle(GetStyle() | WB_BORDER | WB_HASBUTTONS | WB_HSCROLL);
     SetSelectionMode( SINGLE_SELECTION );
 }
 //------------------------------------------------------------------------

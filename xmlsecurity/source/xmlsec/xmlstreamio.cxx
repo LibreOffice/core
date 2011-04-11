@@ -164,19 +164,8 @@ int xmlStreamClose( void * context )
 
 int xmlEnableStreamInputCallbacks()
 {
-    int cbs = 0 ;
 
     if( !( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) ) {
-        //Register the callbacks into libxml2
-        //cbs = xmlRegisterInputCallbacks(
-        //          xmlStreamMatch,
-        //          xmlStreamOpen,
-        //          xmlStreamRead,
-        //          xmlStreamClose ) ;
-        //if( cbs < 0 ) {
-        //  return -1 ;
-        //}
-
         //Register the callbacks into xmlSec
         //In order to make the xmlsec io finding the callbacks firstly,
         //I put the callbacks at the very begining.
@@ -186,7 +175,7 @@ int xmlEnableStreamInputCallbacks()
         xmlSecIOCleanupCallbacks() ;
 
         //Register my classbacks.
-        cbs = xmlSecIORegisterCallbacks(
+        int cbs = xmlSecIORegisterCallbacks(
                     xmlStreamMatch,
                     xmlStreamOpen,
                     xmlStreamRead,

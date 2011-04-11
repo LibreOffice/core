@@ -43,7 +43,7 @@
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <tools/table.hxx>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "sprophelp.hxx"
 
 using namespace ::rtl;
@@ -51,9 +51,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
-
-
-#define A2OU(x) ::rtl::OUString::createFromAscii( x )
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -168,7 +165,7 @@ public:
 
 inline OUString SpellChecker::getImplementationName_Static() throw()
 {
-    return A2OU( "com.sun.star.lingu.examples.SpellChecker" );
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.lingu.examples.SpellChecker" ));
 }
 
 

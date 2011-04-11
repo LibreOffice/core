@@ -63,7 +63,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
 
-static HTMLOutEvent __FAR_DATA aBodyEventTable[] =
+static HTMLOutEvent aBodyEventTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_O_SDonload,       OOO_STRING_SVTOOLS_HTML_O_onload,       SFX_EVENT_OPENDOC   },
     { OOO_STRING_SVTOOLS_HTML_O_SDonunload, OOO_STRING_SVTOOLS_HTML_O_onunload, SFX_EVENT_PREPARECLOSEDOC   },
@@ -81,31 +81,27 @@ void SwHTMLParser::NewScript()
     if( aScriptURL.Len() )
     {
         // Den Inhalt des Script-Tags ignorieren
-        bIgnoreRawData = TRUE;
+        bIgnoreRawData = sal_True;
     }
 }
 
 void SwHTMLParser::EndScript()
 {
-    BOOL bInsIntoBasic = FALSE,
-         bInsSrcIntoFld = FALSE;
+    sal_Bool bInsIntoBasic = sal_False,
+         bInsSrcIntoFld = sal_False;
 
     switch( eScriptLang )
     {
     case HTML_SL_STARBASIC:
-        bInsIntoBasic = TRUE;
+        bInsIntoBasic = sal_True;
         break;
     default:
-        bInsSrcIntoFld = TRUE;
+        bInsSrcIntoFld = sal_True;
         break;
     }
 
-    bIgnoreRawData = FALSE;
+    bIgnoreRawData = sal_False;
     aScriptSource.ConvertLineEnd();
-
-//  MIB 23.5.97: SGML-Kommentare brauchen nicht mehr entfernt zu werden,
-//  weil JS das jetzt selber kann.
-//  RemoveSGMLComment( aScriptSource, TRUE );
 
     // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den
     // Modulnamen in einem Feld merken merken
@@ -126,7 +122,7 @@ void SwHTMLParser::EndScript()
     {
     // Fuer JavaScript und StarBasic noch ein Basic-Modul anlegen
         // Das Basic entfernt natuerlich weiterhin keine SGML-Kommentare
-        RemoveSGMLComment( aScriptSource, TRUE );
+        RemoveSGMLComment( aScriptSource, sal_True );
 
         // get library name
         ::rtl::OUString aLibName;
@@ -158,7 +154,7 @@ void SwHTMLParser::EndScript()
                 if( !aBasicModule.Len() )
                 {
                     // create module name
-                    BOOL bFound = TRUE;
+                    sal_Bool bFound = sal_True;
                     while( bFound )
                     {
                         aBasicModule.AssignAscii( "Modul" );
@@ -272,8 +268,7 @@ void SwHTMLParser::InsertBasicDocEvent( rtl::OUString aEvent, const String& rNam
 
     rtl::OUString aEventName;
 
-    SfxEventConfiguration* pECfg = SFX_APP()->GetEventConfig();
-    pECfg->ConfigureEvent( aEvent, SvxMacro( sEvent, sScriptType, eScrType ),
+    SfxEventConfiguration::ConfigureEvent( aEvent, SvxMacro( sEvent, sScriptType, eScrType ),
                            pDocSh );
 }
 
@@ -282,26 +277,23 @@ void SwHTMLWriter::OutBasic()
     if( !bCfgStarBasic )
         return;
 
-    SFX_APP()->EnterBasicCall();
-
     BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
     OSL_ENSURE( pBasicMan, "Wo ist der Basic-Manager?" );
-    //JP 17.07.96: Bug 29538 - nur das DocumentBasic schreiben
+    // nur das DocumentBasic schreiben
     if( !pBasicMan || pBasicMan == SFX_APP()->GetBasicManager() )
     {
-        SFX_APP()->LeaveBasicCall();
         return;
     }
 
     // und jetzt alle StarBasic-Module und alle unbenutzen JavaSrript-Module
     // ausgeben
-    for( USHORT i=0; i<pBasicMan->GetLibCount(); i++ )
+    for( sal_uInt16 i=0; i<pBasicMan->GetLibCount(); i++ )
     {
         StarBASIC *pBasic = pBasicMan->GetLib( i  );
         const String& rLibName = pBasic->GetName();
 
         SbxArray *pModules = pBasic->GetModules();
-        for( USHORT j=0; j<pModules->Count(); j++ )
+        for( sal_uInt16 j=0; j<pModules->Count(); j++ )
         {
             const SbModule *pModule = PTR_CAST( SbModule, pModules->Get(j) );
             OSL_ENSURE( pModule, "Wo ist das Modul?" );
@@ -336,8 +328,6 @@ void SwHTMLWriter::OutBasic()
                                      eDestEnc, &aNonConvertableCharacters );
         }
     }
-
-    SFX_APP()->LeaveBasicCall();
 }
 
 static const char* aEventNames[] =
@@ -357,7 +347,7 @@ void SwHTMLWriter::OutBasicBodyEvents()
     uno::Reference < container::XNameReplace > xEvents = xSup->getEvents();
     for ( sal_Int32 i=0; i<4; i++ )
     {
-        SvxMacro* pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( ::rtl::OUString::createFromAscii(aEventNames[i]) ), pDocSh, TRUE );
+        SvxMacro* pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( ::rtl::OUString::createFromAscii(aEventNames[i]) ), pDocSh, sal_True );
         if ( pMacro )
             pDocTable->Insert( aBodyEventTable[i].nEvent, pMacro );
     }

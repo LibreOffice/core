@@ -106,9 +106,7 @@ namespace pcr
         aPB_OK.SetClickHdl( LINK( this, TabOrderDialog, OKClickHdl ) );
         aPB_OK.Disable();
 
-        sal_Bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-        pImageList = new ImageList( PcrRes( bIsHighContrast ? RID_IL_FORMEXPLORER_HC : RID_IL_FORMEXPLORER ) );
-
+        pImageList = new ImageList( PcrRes( RID_IL_FORMEXPLORER ) );
 
         if ( m_xModel.is() )
             m_xTempModel = new OSimpleTabModel( m_xModel->getControlModels() );
@@ -173,7 +171,7 @@ namespace pcr
             case FormComponentType::SPINBUTTON:     nImageId = RID_SVXIMG_SPINBUTTON; break;
             case FormComponentType::NAVIGATIONBAR:  nImageId = RID_SVXIMG_NAVIGATIONBAR; break;
             default:
-                DBG_ERROR( "TabOrderDialog::GetImage: unknown control type" );
+                OSL_FAIL( "TabOrderDialog::GetImage: unknown control type" );
             }
         }
 
@@ -217,7 +215,7 @@ namespace pcr
                 else
                 {
                     // no property set -> no tab order
-                    DBG_ERROR( "TabOrderDialog::FillList: invalid control encountered!" );
+                    OSL_FAIL( "TabOrderDialog::FillList: invalid control encountered!" );
                     aLB_Controls.Clear();
                     break;
                 }
@@ -225,7 +223,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "TabOrderDialog::FillList: caught an exception!" );
+            OSL_FAIL( "TabOrderDialog::FillList: caught an exception!" );
         }
 
         // select first entry
@@ -271,7 +269,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "TabOrderDialog::AutoOrderClickHdl: caught an exception!" );
+            OSL_FAIL( "TabOrderDialog::AutoOrderClickHdl: caught an exception!" );
         }
 
         return 0;
@@ -280,13 +278,13 @@ namespace pcr
     //------------------------------------------------------------------------
     IMPL_LINK( TabOrderDialog, OKClickHdl, Button*, /*pButton*/ )
     {
-        ULONG nEntryCount = aLB_Controls.GetEntryCount();
+        sal_uLong nEntryCount = aLB_Controls.GetEntryCount();
         Sequence< Reference< XControlModel > > aSortedControlModelSeq( nEntryCount );
         Sequence< Reference< XControlModel > > aControlModels( m_xTempModel->getControlModels());
         Reference< XControlModel > * pSortedControlModels = aSortedControlModelSeq.getArray();
         const Reference< XControlModel > * pControlModels = aControlModels.getConstArray();
 
-        for (ULONG i=0; i < nEntryCount; i++)
+        for (sal_uLong i=0; i < nEntryCount; i++)
         {
             SvLBoxEntry* pEntry = aLB_Controls.GetEntry(i);
 
@@ -302,9 +300,7 @@ namespace pcr
         }
 
         // TODO: UNO action (to bracket all the single actions which are being created)
-//        pDrawModel->BegUndo(PcrRes(RID_STR_UNDO_TABORDER));
         m_xModel->setControlModels( aSortedControlModelSeq );
-//        pDrawModel->EndUndo();
 
         EndDialog( sal_True );
         return 0;
@@ -354,13 +350,13 @@ namespace pcr
             {
                 SvLBoxEntry* pFirstSelected = FirstSelected();
                 if( !pFirstSelected ) return;
-                ULONG nFirstSelPos = GetModel()->GetAbsPos( pFirstSelected );
+                sal_uLong nFirstSelPos = GetModel()->GetAbsPos( pFirstSelected );
                 if( nFirstSelPos == 0 ) return;
 
                 SvLBoxEntry* pSelEntry = pFirstSelected;
                 while( pSelEntry )
                 {
-                    ULONG nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
+                    sal_uLong nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
                     SvLBoxEntry* pSelEntryPrev = GetEntry( nSelEntryPos-1 );
                     aSelEntryPrevText = GetEntryText( pSelEntryPrev );
                     aImage = GetExpandedEntryBmp(pSelEntryPrev);
@@ -377,12 +373,12 @@ namespace pcr
             {
                 SvLBoxEntry* pLastSelected = LastSelected();
                 if( !pLastSelected ) return;
-                ULONG nLastSelPos = GetModel()->GetAbsPos( pLastSelected );
+                sal_uLong nLastSelPos = GetModel()->GetAbsPos( pLastSelected );
 
                 if( (nLastSelPos + nRelPos - i) > (GetEntryCount()-1) ) return;
 
 #if OSL_DEBUG_LEVEL > 0
-                ULONG nSelCount = GetSelectionCount();
+                sal_uLong nSelCount = GetSelectionCount();
                 (void)nSelCount;
 #endif
 
@@ -390,7 +386,7 @@ namespace pcr
                 SvLBoxEntry* pSelEntry = pLastSelected;
                 while( pSelEntry )
                 {
-                    ULONG nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
+                    sal_uLong nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
                     SvLBoxEntry* pSelEntryNext = GetEntry( nSelEntryPos+1 );
                     void* pData = pSelEntryNext->GetUserData();
 

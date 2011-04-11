@@ -44,24 +44,22 @@
 #include "rtl/bootstrap.hxx"
 #include "boost/optional.hpp"
 #include <string.h>
-// #define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
-// #define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
 
 
 using namespace osl;
 namespace jfw
 {
 
-rtl::OString getElementUpdated()
+rtl::OString getElement(::rtl::OString const & docPath,
+                        xmlChar const * pathExpression, bool bThrowIfEmpty)
 {
     //Prepare the xml document and context
-    rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
-    OSL_ASSERT(sSettingsPath.getLength() > 0);
-     jfw::CXmlDocPtr doc(xmlParseFile(sSettingsPath.getStr()));
+    OSL_ASSERT(docPath.getLength() > 0);
+     jfw::CXmlDocPtr doc(xmlParseFile(docPath.getStr()));
     if (doc == NULL)
         throw FrameworkException(
             JFW_E_ERROR,
-            rtl::OString("[Java framework] Error in function getElementUpdated "
+            rtl::OString("[Java framework] Error in function getElement "
                          "(elements.cxx)"));
 
     jfw::CXPathContextPtr context(xmlXPathNewContext(doc));
@@ -69,18 +67,40 @@ rtl::OString getElementUpdated()
         (xmlChar*) NS_JAVA_FRAMEWORK) == -1)
         throw FrameworkException(
             JFW_E_ERROR,
-            rtl::OString("[Java framework] Error in function getElementUpdated "
+            rtl::OString("[Java framework] Error in function getElement "
                          "(elements.cxx)"));
+
     CXPathObjectPtr pathObj;
-    pathObj = xmlXPathEvalExpression(
-        (xmlChar*)"/jf:javaSelection/jf:updated/text()", context);
+    pathObj = xmlXPathEvalExpression(pathExpression, context);
+    rtl::OString sValue;
     if (xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
-        throw FrameworkException(
-            JFW_E_ERROR,
-            rtl::OString("[Java framework] Error in function getElementUpdated "
-                         "(elements.cxx)"));
-    rtl::OString sValue = (sal_Char*) pathObj->nodesetval->nodeTab[0]->content;
+    {
+        if (bThrowIfEmpty)
+            throw FrameworkException(
+                JFW_E_ERROR,
+                rtl::OString("[Java framework] Error in function getElement "
+                             "(elements.cxx)"));
+    }
+    else
+    {
+        sValue = (sal_Char*) pathObj->nodesetval->nodeTab[0]->content;
+    }
     return sValue;
+}
+
+rtl::OString getElementUpdated()
+{
+    return getElement(jfw::getVendorSettingsPath(),
+                      (xmlChar*)"/jf:javaSelection/jf:updated/text()", true);
+}
+
+// Use only in INSTALL mode !!!
+rtl::OString getElementModified()
+{
+    //The modified element is only written in INSTALL mode.
+    //That is NodeJava::m_layer = INSTALL
+    return getElement(jfw::getInstallSettingsPath(),
+                      (xmlChar*)"/jf:java/jf:modified/text()", false);
 }
 
 
@@ -154,13 +174,12 @@ void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
 
-    //<javaInfo xsi:nil="true"  autoSelect="true">
+    //<javaInfo xsi:nil="true">
     xmlNode  * nodeJava = xmlNewTextChild(
         root,NULL, (xmlChar*) "javaInfo", (xmlChar*) "");
     if (nodeJava == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
     xmlSetNsProp(nodeJava,nsXsi,(xmlChar*) "nil",(xmlChar*) "true");
-//    xmlSetProp(nodeJava,(xmlChar*) "autoSelect",(xmlChar*) "true");
     //add a new line
     nodeCrLf = xmlNewText((xmlChar*) "\n");
     xmlAddChild(root, nodeCrLf);
@@ -192,7 +211,7 @@ rtl_uString** VersionInfo::getExcludeVersions()
     int j=0;
     typedef std::vector<rtl::OUString>::const_iterator it;
     for (it i = vecExcludeVersions.begin(); i != vecExcludeVersions.end();
-         i++, j++)
+         ++i, ++j)
     {
         arVersions[j] = vecExcludeVersions[j].pData;
     }
@@ -253,7 +272,7 @@ void NodeJava::load()
     }
     else
     {
-        OSL_ASSERT("[Java framework] Unknown enum used.");
+        OSL_FAIL("[Java framework] Unknown enum used.");
     }
 
 
@@ -381,7 +400,7 @@ void NodeJava::load()
     case INSTALL: ret = getInstallSettingsPath(); break;
     case SHARED: ret = getSharedSettingsPath(); break;
     default:
-        OSL_ASSERT("[Java framework] NodeJava::getSettingsPath()");
+        OSL_FAIL("[Java framework] NodeJava::getSettingsPath()");
     }
     return ret;
 }
@@ -395,7 +414,7 @@ void NodeJava::load()
     case INSTALL: ret = BootParams::getInstallData(); break;
     case SHARED: ret = BootParams::getSharedData(); break;
     default:
-        OSL_ASSERT("[Java framework] NodeJava::getSettingsURL()");
+        OSL_FAIL("[Java framework] NodeJava::getSettingsURL()");
     }
     return ret;
 }
@@ -530,7 +549,7 @@ void NodeJava::write() const
         }
 
         typedef std::vector<rtl::OUString>::const_iterator cit;
-        for (cit i = m_vmParameters->begin(); i != m_vmParameters->end(); i++)
+        for (cit i = m_vmParameters->begin(); i != m_vmParameters->end(); ++i)
         {
             xmlNewTextChild(vmParameters, NULL, (xmlChar*) "param",
                             CXmlCharPtr(*i));
@@ -571,13 +590,28 @@ void NodeJava::write() const
         }
 
         typedef std::vector<rtl::OUString>::const_iterator cit;
-        for (cit i = m_JRELocations->begin(); i != m_JRELocations->end(); i++)
+        for (cit i = m_JRELocations->begin(); i != m_JRELocations->end(); ++i)
         {
             xmlNewTextChild(jreLocationsNode, NULL, (xmlChar*) "location",
                             CXmlCharPtr(*i));
             //add a new line
             xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
             xmlAddChild(jreLocationsNode, nodeCrLf);
+        }
+    }
+
+    if (INSTALL == m_layer)
+    {
+        //now write the current system time
+        ::TimeValue curTime = {0,0};
+        if (::osl_getSystemTime(& curTime))
+        {
+            rtl::OUString sSeconds =
+                rtl::OUString::valueOf((sal_Int64) curTime.Seconds);
+            xmlNewTextChild(
+                root,NULL, (xmlChar*) "modified", CXmlCharPtr(sSeconds));
+            xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
+            xmlAddChild(root, nodeCrLf);
         }
     }
     if (xmlSaveFormatFile(sSettingsPath.getStr(), docUser, 1) == -1)
@@ -722,7 +756,7 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
         File::RC rc_stat = item.getFileStatus(stat);
         if (File::E_None == rc_stat)
         {
-            //ToDo we remove the file and create it shortly after. This
+            // This
             //function may be called multiple times when a java is started.
             //If the expiretime is too small then we may loop because everytime
             //the file is deleted and we need to search for a java again.
@@ -733,22 +767,28 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
                 //that after removing the file and shortly later creating it again
                 //did not change the creation time. That is the newly created file
                 //had the creation time of the former file.
-//                ::TimeValue time = stat.getCreationTime();
-                ::TimeValue modTime = stat.getModifyTime();
                 ::TimeValue curTime = {0,0};
+                ret = FILE_OK;
                 if (sal_True == ::osl_getSystemTime(& curTime))
                 {
-                    if ( curTime.Seconds - modTime.Seconds >
+                    //get the modified time recorded in the <modified> element
+                    sal_uInt32 modified = getModifiedTime();
+                    OSL_ASSERT(modified <= curTime.Seconds);
+                    //Only if modified has a valued then NodeJava::write was called,
+                    //then the xml structure was filled with data.
+
+                    if ( modified && curTime.Seconds - modified >
                          BootParams::getInstallDataExpiration())
                     {
 #if OSL_DEBUG_LEVEL >=2
+                        fprintf(stderr, "[Java framework] Settings file is %d seconds old. \n",
+                                (int)( curTime.Seconds - modified));
                         rtl::OString s = rtl::OUStringToOString(sURL, osl_getThreadTextEncoding());
-                        fprintf(stderr, "[Java framework] Deleting settings file at \n%s\n", s.getStr());
+                        fprintf(stderr, "[Java framework] Settings file is exspired. Deleting settings file at \n%s\n", s.getStr());
 #endif
                         //delete file
-//                        File::RC rc_rem = File::remove(sURL);
                         File f(sURL);
-                        if (File::E_None == f.open(OpenFlag_Write | OpenFlag_Read)
+                        if (File::E_None == f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Read)
                             && File::E_None == f.setPos(0, 0)
                             && File::E_None == f.setSize(0))
                                     ret = FILE_DOES_NOT_EXIST;
@@ -1094,6 +1134,16 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
     return pInfo;
 }
 
+sal_uInt32 NodeJava::getModifiedTime() const
+{
+    if (m_layer != INSTALL)
+    {
+        OSL_ASSERT(0);
+        return 0;
+    }
+    rtl::OString modTimeSeconds = getElementModified();
+    return (sal_uInt32) modTimeSeconds.toInt64();
+}
 
 //================================================================================
 MergedSettings::MergedSettings():
@@ -1206,7 +1256,7 @@ void MergedSettings::getVmParametersArray(
     int j=0;
     typedef std::vector<rtl::OUString>::const_iterator it;
     for (it i = m_vmParams.begin(); i != m_vmParams.end();
-         i++, j++)
+         ++i, ++j)
     {
         (*parParams)[j] = i->pData;
         rtl_uString_acquire(i->pData);
@@ -1228,7 +1278,7 @@ void MergedSettings::getJRELocations(
     int j=0;
     typedef std::vector<rtl::OUString>::const_iterator it;
     for (it i = m_JRELocations.begin(); i != m_JRELocations.end();
-         i++, j++)
+         ++i, ++j)
     {
         (*parLocations)[j] = i->pData;
         rtl_uString_acquire(i->pData);

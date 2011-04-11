@@ -143,7 +143,7 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
         sal_uInt16 nFlags;
         rStrm >> nFlags >> maData.maFirstXclPos;
 
-        // #i59590# #158194# real life: Excel ignores some view settings in chart sheets
+        // #i59590# real life: Excel ignores some view settings in chart sheets
         maData.mbSelected       = ::get_flag( nFlags, EXC_WIN2_SELECTED );
         maData.mbDisplayed      = ::get_flag( nFlags, EXC_WIN2_DISPLAYED );
         maData.mbMirrored       = !bChart && ::get_flag( nFlags, EXC_WIN2_MIRRORED );
@@ -227,8 +227,8 @@ void XclImpTabViewSettings::Finalize()
 
     // sheet flags
     if( maData.mbMirrored )
-        // do not call this function with FALSE, it would mirror away all drawing objects
-        rDoc.SetLayoutRTL( nScTab, TRUE );
+        // do not call this function with sal_False, it would mirror away all drawing objects
+        rDoc.SetLayoutRTL( nScTab, sal_True );
     rTabSett.mbSelected = maData.mbSelected || bDisplayed;
 
     // first visible cell in top-left pane and in additional pane(s)
@@ -259,7 +259,7 @@ void XclImpTabViewSettings::Finalize()
             #i35812# Excel uses number of visible rows/columns, Calc uses position of freeze. */
         if( (maData.mnSplitX > 0) && (maData.maFirstXclPos.mnCol + maData.mnSplitX <= GetScMaxPos().Col()) )
             rTabSett.maFreezePos.SetCol( static_cast< SCCOL >( maData.maFirstXclPos.mnCol + maData.mnSplitX ) );
-        if( (maData.mnSplitY > 0) && (maData.maFirstXclPos.mnRow + maData.mnSplitY <= GetScMaxPos().Row()) )
+        if( (maData.mnSplitY > 0) && (maData.maFirstXclPos.mnRow + maData.mnSplitY <= static_cast<unsigned>(GetScMaxPos().Row())) )
             rTabSett.maFreezePos.SetRow( static_cast< SCROW >( maData.maFirstXclPos.mnRow + maData.mnSplitY ) );
     }
     else

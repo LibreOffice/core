@@ -39,7 +39,6 @@
 #include <unotools/useroptions.hxx>
 #include <tools/shl.hxx>
 #include <swmodule.hxx>
-#include <errhdl.hxx>
 #include <swtypes.hxx>
 #include <envimg.hxx>
 
@@ -48,15 +47,16 @@
 
 #include <unomid.h>
 
-#ifdef WIN
+#ifdef WNT
 #define NEXTLINE  UniString::CreateFromAscii("\r\n")
 #else
 #define NEXTLINE  '\n'
 #endif
 
 using namespace utl;
-using namespace rtl;
 using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 
 TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
@@ -68,7 +68,7 @@ SW_DLLPUBLIC String MakeSender()
     String sRet;
     String sSenderToken(SW_RES(STR_SENDER_TOKENS));
     xub_StrLen nSttPos = 0, nTokenCount = sSenderToken.GetTokenCount(';');
-    BOOL bLastLength = TRUE;
+    sal_Bool bLastLength = sal_True;
     for( xub_StrLen i = 0; i < nTokenCount; i++ )
     {
         String sToken = sSenderToken.GetToken( 0, ';', nSttPos );
@@ -82,7 +82,7 @@ SW_DLLPUBLIC String MakeSender()
         {
             if(bLastLength)
                 sRet +=NEXTLINE;
-            bLastLength = TRUE;
+            bLastLength = sal_True;
         }
         else if(sToken.EqualsAscii("FIRSTNAME"))
             sRet += (String)rUserOpt.GetFirstName();
@@ -108,7 +108,7 @@ SwEnvItem::SwEnvItem() :
     SfxPoolItem(FN_ENVELOP)
 {
     aAddrText       = aEmptyStr;
-    bSend           = TRUE;
+    bSend           = sal_True;
     aSendText       = MakeSender();
     lSendFromLeft   = 566; // 1 cm
     lSendFromTop    = 566; // 1 cm
@@ -116,7 +116,7 @@ SwEnvItem::SwEnvItem() :
     lWidth          = aEnvSz.Width();
     lHeight         = aEnvSz.Height();
     eAlign          = ENV_HOR_LEFT;
-    bPrintFromAbove = TRUE;
+    bPrintFromAbove = sal_True;
     lShiftRight     = 0;
     lShiftDown      = 0;
 
@@ -310,7 +310,7 @@ Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
     return aNames;
 }
 
-bool SwEnvItem::QueryValue( Any& rVal, BYTE nMemberId ) const
+bool SwEnvItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bRet = true;
     switch(nMemberId & ~CONVERT_TWIPS)
@@ -329,13 +329,13 @@ bool SwEnvItem::QueryValue( Any& rVal, BYTE nMemberId ) const
         case MID_ENV_SHIFT_RIGHT      : rVal <<= lShiftRight; break;
         case MID_ENV_SHIFT_DOWN       : rVal <<= lShiftDown; break;
         default:
-            OSL_ENSURE(false, "Wrong memberId");
+            OSL_FAIL("Wrong memberId");
             bRet = false;
     }
     return bRet;
 }
 
-bool SwEnvItem::PutValue(const Any& rVal, BYTE nMemberId)
+bool SwEnvItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
 {
     bool bRet = false;
     switch(nMemberId  & ~CONVERT_TWIPS)
@@ -361,7 +361,7 @@ bool SwEnvItem::PutValue(const Any& rVal, BYTE nMemberId)
         case MID_ENV_SHIFT_RIGHT      : bRet = (rVal >>= lShiftRight); break;
         case MID_ENV_SHIFT_DOWN       : bRet = (rVal >>= lShiftDown); break;
         default:
-            OSL_ENSURE(false,"Wrong memberId");
+            OSL_FAIL("Wrong memberId");
     }
     return bRet;
 }

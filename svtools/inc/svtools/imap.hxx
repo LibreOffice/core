@@ -54,13 +54,13 @@ protected:
 
     // Binaer laden/speichern
     void                ImpWriteImageMap( SvStream& rOStm, const String& ) const ;
-    void                ImpReadImageMap( SvStream& rIStm, USHORT nCount, const String& );
+    void                ImpReadImageMap( SvStream& rIStm, sal_uInt16 nCount, const String& );
 
     // Im-/Export
     void                ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const;
     void                ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL ) const;
-    ULONG               ImpReadCERN( SvStream& rOStm, const String& rBaseURL );
-    ULONG               ImpReadNCSA( SvStream& rOStm, const String& rBaseURL );
+    sal_uLong               ImpReadCERN( SvStream& rOStm, const String& rBaseURL );
+    sal_uLong               ImpReadNCSA( SvStream& rOStm, const String& rBaseURL );
 
     void                ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL );
     Point               ImpReadCERNCoords( const char** ppStr );
@@ -71,7 +71,7 @@ protected:
     String              ImpReadNCSAURL( const char** ppStr, const String& rBaseURL );
     Point               ImpReadNCSACoords( const char** ppStr );
 
-    ULONG               ImpDetectFormat( SvStream& rIStm );
+    sal_uLong               ImpDetectFormat( SvStream& rIStm );
 
 public:
 
@@ -90,8 +90,8 @@ public:
     ImageMap&           operator=( const ImageMap& rImageMap );
 
     // Vergleichsoperator (es wird alles auf Gleichheit geprueft)
-    BOOL                operator==( const ImageMap& rImageMap );
-    BOOL                operator!=( const ImageMap& rImageMap );
+    sal_Bool                operator==( const ImageMap& rImageMap );
+    sal_Bool                operator!=( const ImageMap& rImageMap );
 
     // In die Map wird ein neues IMap-Obkekt ans Ende eingefuegt
     void                InsertIMapObject( const IMapObject& rIMapObject );
@@ -102,7 +102,7 @@ public:
     IMapObject*         GetNextIMapObject() { return (IMapObject*) maList.Next(); }
     IMapObject*         GetLastIMapObject() { return (IMapObject*) maList.Last(); }
     IMapObject*         GetPrevIMapObject() { return (IMapObject*) maList.Prev(); }
-    IMapObject*         GetIMapObject( USHORT nPos ) const { return (IMapObject*) maList.GetObject( nPos ); }
+    IMapObject*         GetIMapObject( sal_uInt16 nPos ) const { return (IMapObject*) maList.GetObject( nPos ); }
 
     // Gibt das Objekt zurueck, das zuerst getroffen wurde oder NULL;
     // Groessen- und Positionsangaben sind in 1/100mm;
@@ -113,16 +113,16 @@ public:
     IMapObject*         GetHitIMapObject( const Size& rOriginalSize,
                                           const Size& rDisplaySize,
                                           const Point& rRelHitPoint,
-                                          ULONG nFlags = 0 );
+                                          sal_uLong nFlags = 0 );
 
     // Gibt die Gesamtanzahl der IMap-Objekte zurueck
-    UINT16              GetIMapObjectCount() const { return (UINT16) maList.Count(); }
+    sal_uInt16              GetIMapObjectCount() const { return (sal_uInt16) maList.Count(); }
 
     // Loescht alle internen Objekte
     void                ClearImageMap();
 
     // liefert die aktuelle Versionsnummer
-    UINT16              GetVersion() const;
+    sal_uInt16              GetVersion() const;
 
     // liefert / setzt den Namen der ImageMap
     const String&       GetName() const { return aName; }
@@ -138,8 +138,8 @@ public:
     void                Write ( SvStream& rOStm, const String& rBaseURL ) const;
     void                Read( SvStream& rIStm, const String& rBaseURL );
 
-    void                Write( SvStream& rOStm, ULONG nFormat, const String& rBaseURL ) const;
-    ULONG               Read( SvStream& rIStm, ULONG nFormat, const String& rBaseURL );
+    void                Write( SvStream& rOStm, sal_uLong nFormat, const String& rBaseURL ) const;
+    sal_uLong               Read( SvStream& rIStm, sal_uLong nFormat, const String& rBaseURL );
 };
 
 /******************************************************************************
@@ -151,18 +151,18 @@ public:
 class IMapCompat
 {
     SvStream*       pRWStm;
-    ULONG           nCompatPos;
-    ULONG           nTotalSize;
-    USHORT          nStmMode;
+    sal_uLong           nCompatPos;
+    sal_uLong           nTotalSize;
+    sal_uInt16          nStmMode;
 
                     IMapCompat() {}
                     IMapCompat( const IMapCompat& ) {}
     IMapCompat&     operator=( const IMapCompat& ) { return *this; }
-    BOOL            operator==( const IMapCompat& ) { return FALSE; }
+    sal_Bool            operator==( const IMapCompat& ) { return sal_False; }
 
 public:
 
-                    IMapCompat( SvStream& rStm, const USHORT nStreamMode );
+                    IMapCompat( SvStream& rStm, const sal_uInt16 nStreamMode );
                     ~IMapCompat();
 };
 

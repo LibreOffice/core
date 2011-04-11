@@ -38,7 +38,6 @@
 #include "pdfparse.hxx"
 
 // workaround windows compiler: do not include multi_pass.hpp
-//#include <boost/spirit.hpp>
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_utility.hpp>
 #include <boost/spirit/include/classic_error_handling.hpp>
@@ -58,8 +57,10 @@
 #endif
 
 using namespace boost::spirit;
-using namespace rtl;
 using namespace pdfparse;
+
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 class StringEmitContext : public EmitContext
 {
@@ -563,7 +564,9 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
 
     try
     {
+        #if OSL_DEBUG_LEVEL > 1
         boost::spirit::parse_info<const char*> aInfo =
+        #endif
             boost::spirit::parse( pBuffer,
                                   pBuffer+nLen,
                                   aGrammar,
@@ -573,7 +576,7 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
                  aInfo.stop, pBuffer, aInfo.stop - pBuffer,
                  aInfo.hit ? "true" : "false",
                  aInfo.full ? "true" : "false",
-                 aInfo.length );
+                 (int)aInfo.length );
         #endif
     }
     catch( parser_error<const char*, const char*>& rError )
@@ -641,7 +644,9 @@ PDFEntry* PDFReader::read( const char* pFileName )
 
     try
     {
+        #if OSL_DEBUG_LEVEL > 1
         boost::spirit::parse_info< file_iterator<> > aInfo =
+        #endif
             boost::spirit::parse( file_start,
                                   file_end,
                                   aGrammar,
@@ -651,7 +656,7 @@ PDFEntry* PDFReader::read( const char* pFileName )
                  aInfo.stop - file_start,
                  aInfo.hit ? "true" : "false",
                  aInfo.full ? "true" : "false",
-                 aInfo.length );
+                 (int)aInfo.length );
         #endif
     }
     catch( parser_error< const char*, file_iterator<> >& rError )

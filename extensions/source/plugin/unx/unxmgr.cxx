@@ -46,10 +46,14 @@
 #include <vcl/svapp.hxx>
 #include <plugin/impl.hxx>
 
-using namespace rtl;
 using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::plugin;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringToOUString;
 
 // Unix specific implementation
 static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rDescriptions )
@@ -239,7 +243,7 @@ static void CheckPluginRegistryFiles( const rtl::OString& rPath, list< PluginDes
 Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() throw()
 {
     static Sequence<PluginDescription> aDescriptions;
-    static BOOL bHavePlugins = FALSE;
+    static sal_Bool bHavePlugins = sal_False;
     if( ! bHavePlugins )
     {
         rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
@@ -308,7 +312,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         // create return value
         aDescriptions = Sequence<PluginDescription>( aPlugins.size() );
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "found %d plugins\n", aPlugins.size() );
+        fprintf( stderr, "found %" SAL_PRI_SIZET "u plugins\n", aPlugins.size() );
 #endif
         list<PluginDescription*>::iterator iter;
         for( iter = aPlugins.begin(), i=0; iter != aPlugins.end(); ++iter ,i++ )
@@ -317,7 +321,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
             delete *iter;
         }
         aPlugins.clear();
-        bHavePlugins = TRUE;
+        bHavePlugins = sal_True;
     }
     return aDescriptions;
 }

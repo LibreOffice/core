@@ -35,7 +35,6 @@
 #include <algorithm>
 #include <comphelper/stlunosequence.hxx>
 
-#include <errhdl.hxx>
 
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
@@ -86,14 +85,14 @@ namespace {
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                                         const SwTxtNode& rTxtNode )
     : mrPortionData( rPortionData )
-    // --> OD 2010-02-19 #i108125#
+    // #i108125#
     , mpTxtNode( &rTxtNode )
     , mpTextMarkupList( 0 )
     // <--
 {
 }
 
-// --> OD 2010-02-19 #i108125#
+// #i108125#
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                                         const SwWrongList& rTextMarkupList )
     : mrPortionData( rPortionData )
@@ -109,7 +108,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
 {
     sal_Int32 nTextMarkupCount( 0 );
 
-    // --> OD 2010-02-19 #i108125#
+    // #i108125#
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
@@ -139,7 +138,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     aTextMarkupSegment.SegmentStart = -1;
     aTextMarkupSegment.SegmentEnd = -1;
 
-    // --> OD 2010-02-19 #i108125#
+    // #i108125#
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
@@ -148,7 +147,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     if ( pTextMarkupList )
     {
         const SwWrongArea* pTextMarkup =
-                pTextMarkupList->GetElement( static_cast<USHORT>(nTextMarkupIndex) );
+                pTextMarkupList->GetElement( static_cast<sal_uInt16>(nTextMarkupIndex) );
         if ( pTextMarkup )
         {
             const ::rtl::OUString rText = mrPortionData.GetAccessibleString();
@@ -162,8 +161,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
         }
         else
         {
-            OSL_ENSURE( false,
-                    "<SwTextMarkupHelper::getTextMarkup(..)> - missing <SwWrongArea> instance" );
+            OSL_FAIL( "<SwTextMarkupHelper::getTextMarkup(..)> - missing <SwWrongArea> instance" );
         }
     }
 
@@ -180,7 +178,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     // assumption:
     // value of <nCharIndex> is in range [0..length of accessible text)
 
-    const USHORT nCoreCharIndex = mrPortionData.GetModelPosition( nCharIndex );
+    const sal_uInt16 nCoreCharIndex = mrPortionData.GetModelPosition( nCharIndex );
     // Handling of portions with core length == 0 at the beginning of the
     // paragraph - e.g. numbering portion.
     if ( mrPortionData.GetAccessiblePosition( nCoreCharIndex ) > nCharIndex )
@@ -188,7 +186,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
         return uno::Sequence< ::com::sun::star::accessibility::TextSegment >();
     }
 
-    // --> OD 2010-02-19 #i108125#
+    // #i108125#
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
@@ -199,11 +197,11 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     {
         const ::rtl::OUString rText = mrPortionData.GetAccessibleString();
 
-        const USHORT nTextMarkupCount = pTextMarkupList->Count();
-        for ( USHORT nTextMarkupIdx = 0; nTextMarkupIdx < nTextMarkupCount; ++nTextMarkupIdx )
+        const sal_uInt16 nTextMarkupCount = pTextMarkupList->Count();
+        for ( sal_uInt16 nTextMarkupIdx = 0; nTextMarkupIdx < nTextMarkupCount; ++nTextMarkupIdx )
         {
             const SwWrongArea* pTextMarkup =
-                    pTextMarkupList->GetElement( static_cast<USHORT>(nTextMarkupIdx) );
+                    pTextMarkupList->GetElement( static_cast<sal_uInt16>(nTextMarkupIdx) );
             OSL_ENSURE( pTextMarkup,
                     "<SwTextMarkupHelper::getTextMarkup(..)> - missing <SwWrongArea> instance" );
             if ( pTextMarkup &&

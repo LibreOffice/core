@@ -96,7 +96,7 @@ struct RSCINST {
                     pClass = pCl;
                     pData = pClassData;
                 }
-    BOOL        IsInst() const { return( pData != NULL ); }
+    sal_Bool        IsInst() const { return( pData != NULL ); }
 };
 
 /********************** S U B I N F O S T R U C T ************************/

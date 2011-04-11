@@ -42,11 +42,11 @@ class SVX_DLLPUBLIC XFillBmpPosOffsetXItem : public SfxUInt16Item
 {
 public:
                             TYPEINFO();
-                            XFillBmpPosOffsetXItem( USHORT nOffPosX = 0 );
+                            XFillBmpPosOffsetXItem( sal_uInt16 nOffPosX = 0 );
                             SVX_DLLPRIVATE XFillBmpPosOffsetXItem( SvStream& rIn );
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
 
     SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -65,11 +65,11 @@ class SVX_DLLPUBLIC XFillBmpPosOffsetYItem : public SfxUInt16Item
 {
 public:
                             TYPEINFO();
-                            XFillBmpPosOffsetYItem( USHORT nOffPosY = 0 );
+                            XFillBmpPosOffsetYItem( sal_uInt16 nOffPosY = 0 );
                             SVX_DLLPRIVATE XFillBmpPosOffsetYItem( SvStream& rIn );
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
 
     SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

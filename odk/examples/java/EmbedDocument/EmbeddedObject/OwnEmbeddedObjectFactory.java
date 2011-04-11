@@ -37,11 +37,15 @@ public final class OwnEmbeddedObjectFactory extends WeakBase
         return xFactory;
     }
 
-    public static boolean __writeRegistryServiceInfo( XRegistryKey xRegistryKey ) {
-        return Factory.writeRegistryServiceInfo(m_implementationName,
-                                                m_serviceNames,
-                                                xRegistryKey);
-    }
+    // This method not longer necessary since OOo 3.4 where the component registration
+    // was changed to passive component registration. For more details see
+    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
+
+//     public static boolean __writeRegistryServiceInfo( XRegistryKey xRegistryKey ) {
+//         return Factory.writeRegistryServiceInfo(m_implementationName,
+//                                                 m_serviceNames,
+//                                                 xRegistryKey);
+//     }
 
     // com.sun.star.lang.XServiceInfo:
     public String getImplementationName() {

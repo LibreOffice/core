@@ -80,6 +80,7 @@
 #include <unomodel.hxx>
 #include <document.hxx>
 #include <utility.hxx>
+#include <config.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -344,7 +345,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     }
     catch ( uno::Exception& )
     {
-        DBG_ERROR( "Can't create output stream in package!" );
+        OSL_FAIL( "Can't create output stream in package!" );
         return sal_False;
     }
 
@@ -386,7 +387,6 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
 
 ////////////////////////////////////////////////////////////
 
-// #110680#
 SmXMLExport::SmXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nExportFlags)
@@ -441,7 +441,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    // #110680#
     // EXPORT_OASIS is required here allthough there is no differrence between
     // OOo and OASIS, because without the flag, a transformation to OOo would
     // be chained in.
@@ -467,7 +466,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMetaOOO_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_META );
 }
 
@@ -490,7 +488,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_META );
 }
 
@@ -513,7 +510,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettingsOOO_createInstance
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_SETTINGS );
 }
 
@@ -536,7 +532,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_SETTINGS );
 }
 
@@ -559,7 +554,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportContent_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
     // The EXPORT_OASIS flag is only required to avoid that a transformer is
     // chanied in
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_CONTENT );
@@ -662,8 +656,8 @@ void SmXMLExport::_ExportContent()
         if (pDocShell)
         {
             SmParser &rParser = pDocShell->GetParser();
-            BOOL bVal = rParser.IsExportSymbolNames();
-            rParser.SetExportSymbolNames( TRUE );
+            bool bVal = rParser.IsExportSymbolNames();
+            rParser.SetExportSymbolNames( true );
             SmNode *pTmpTree = rParser.Parse( aText );
             aText = rParser.GetText();
             delete pTmpTree;
@@ -733,6 +727,9 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                 PropertyValue* pProps = rProps.getArray();
                 if (pProps)
                 {
+                    SmConfig *pConfig = SM_MOD()->GetConfig();
+                    const bool bUsedSymbolsOnly = pConfig ? pConfig->IsSaveOnlyUsedSymbols() : false;
+
                     const OUString sFormula ( RTL_CONSTASCII_USTRINGPARAM ( "Formula" ) );
                     const OUString sBasicLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "BasicLibraries" ) );
                     const OUString sDialogLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "DialogLibraries" ) );
@@ -746,7 +743,14 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                             rPropName != sRuntimeUID)
                         {
                             pProps->Name = rPropName;
-                            pProps->Value = xProps->getPropertyValue(rPropName);
+
+                            rtl::OUString aActualName( rPropName );
+
+                            // handle 'save used symbols only'
+                            if (bUsedSymbolsOnly && rPropName.equalsAscii("Symbols"))
+                                aActualName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "UserDefinedSymbolsInUse" ) );
+
+                            pProps->Value = xProps->getPropertyValue( aActualName );
                         }
                     }
                 }
@@ -773,12 +777,13 @@ void SmXMLExport::ExportUnaryHorizontal(const SmNode *pNode, int nLevel)
 void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel)
 {
     SvXMLElementExport *pRow=0;
-    ULONG  nSize = pNode->GetNumSubNodes();
+    sal_uLong  nSize = pNode->GetNumSubNodes();
 
-    if (nSize > 1)
+    // #i115443: nodes of type expression always need to be grouped with mrow statement
+    if (nSize > 1 || (pNode && pNode->GetType() == NEXPRESSION))
         pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW, sal_True, sal_True);
 
-    for (USHORT i = 0; i < nSize; i++)
+        for (sal_uInt16 i = 0; i < nSize; i++)
         if (const SmNode *pTemp = pNode->GetSubNode(i))
             ExportNodes(pTemp, nLevel+1);
 
@@ -797,7 +802,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
 {
     SvXMLElementExport *pTable=0;
 
-    USHORT nSize = pNode->GetNumSubNodes();
+    sal_uInt16 nSize = pNode->GetNumSubNodes();
 
     //If the list ends in newline then the last entry has
     //no subnodes, the newline is superfulous so we just drop
@@ -811,7 +816,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     if (nLevel || (nSize >1))
         pTable = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTABLE, sal_True, sal_True);
 
-    for (USHORT i = 0; i < nSize; i++)
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (const SmNode *pTemp = pNode->GetSubNode(i))
         {
             SvXMLElementExport *pRow=0;
@@ -1186,7 +1191,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             case TSERIF     : nSansSerifFixed  = 1; break;
             case TFIXED     : nSansSerifFixed  = 2; break;
             default:
-                OSL_ENSURE( 0, "unexpected case" );
+                OSL_FAIL( "unexpected case" );
         }
         // According to the parser every node that is to be evaluated heres
         // has a single non-zero subnode at index 1!! Thus we only need to check
@@ -1320,7 +1325,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                     pText = "monospace";    // no modifiers allowed for monospace ...
                 else
                 {
-                    OSL_ENSURE( 0, "unexpected case" );
+                    OSL_FAIL( "unexpected case" );
                 }
                 AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, A2OU(pText));
             }
@@ -1377,11 +1382,11 @@ void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
 {
     SvXMLElementExport aTable(*this, XML_NAMESPACE_MATH, XML_MTABLE, sal_True, sal_True);
     const SmMatrixNode *pMatrix = static_cast<const SmMatrixNode *>(pNode);
-    USHORT i=0;
-    for (ULONG y = 0; y < pMatrix->GetNumRows(); y++)
+    sal_uInt16 i=0;
+    for (sal_uLong y = 0; y < pMatrix->GetNumRows(); y++)
     {
         SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MTR, sal_True, sal_True);
-        for (ULONG x = 0; x < pMatrix->GetNumCols(); x++)
+        for (sal_uLong x = 0; x < pMatrix->GetNumCols(); x++)
             if (const SmNode *pTemp = pNode->GetSubNode(i++))
             {
                 SvXMLElementExport aCell(*this, XML_NAMESPACE_MATH, XML_MTD, sal_True, sal_True);
@@ -1492,7 +1497,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             ExportBlank(pNode, nLevel);
             break;
        default:
-            OSL_ENSURE( 0, "Warning: failed to export a node?" );
+            OSL_FAIL( "Warning: failed to export a node?" );
             break;
 
     }

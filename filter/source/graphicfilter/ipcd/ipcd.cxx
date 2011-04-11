@@ -54,14 +54,14 @@ class PCDReader {
 
 private:
 
-    BOOL bStatus;
+    sal_Bool bStatus;
 
-    ULONG               nLastPercent;
+    sal_uLong               nLastPercent;
 
-    SvStream*           pPCD;
+    SvStream &m_rPCD;
     BitmapWriteAccess*  mpAcc;
 
-    BYTE                nOrientation;   // Ausrichtung des Bildes in der PCD-Datei:
+    sal_uInt8               nOrientation;   // Ausrichtung des Bildes in der PCD-Datei:
                                         // 0 - Turmspitze zeigt nach oben
                                         // 1 - Turmspitze zeigt nach rechts
                                         // 2 - Turmspitze zeigt nach unten
@@ -69,15 +69,15 @@ private:
 
     PCDResolution       eResolution;    // Welche Aufloesung wir haben wollen
 
-    ULONG               nWidth;         // Breite des PCD-Bildes
-    ULONG               nHeight;        // Hoehe des PCD-Bildes
-    ULONG               nImagePos;      // Position des Bildes in der PCD-Datei
+    sal_uLong               nWidth;         // Breite des PCD-Bildes
+    sal_uLong               nHeight;        // Hoehe des PCD-Bildes
+    sal_uLong               nImagePos;      // Position des Bildes in der PCD-Datei
 
     // Temporare BLue-Green-Red-Bitmap
-    ULONG               nBMPWidth;
-    ULONG               nBMPHeight;
+    sal_uLong               nBMPWidth;
+    sal_uLong               nBMPHeight;
 
-    void    MayCallback(ULONG nPercent);
+    void    MayCallback(sal_uLong nPercent);
 
     void    CheckPCDImagePacFile();
         // Prueft, ob es eine Photo-CD-Datei mit 'Image Pac' ist.
@@ -85,29 +85,31 @@ private:
     void    ReadOrientation();
         // Liest die Ausrichtung und setzt nOrientation
 
-    void    ReadImage(ULONG nMinPercent, ULONG nMaxPercent);
+    void    ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent);
 
 public:
 
-    PCDReader() {}
+    PCDReader(SvStream &rStream)
+        : m_rPCD(rStream)
+    {
+    }
     ~PCDReader() {}
 
-    BOOL ReadPCD( SvStream & rPCD, Graphic & rGraphic, FilterConfigItem* pConfigItem );
+    sal_Bool ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem );
 };
 
 //=================== Methoden von PCDReader ==============================
 
-BOOL PCDReader::ReadPCD( SvStream & rPCD, Graphic & rGraphic, FilterConfigItem* pConfigItem )
+sal_Bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 {
     Bitmap       aBmp;
 
-    bStatus      = TRUE;
+    bStatus      = sal_True;
     nLastPercent = 0;
-    pPCD         = &rPCD;
 
     MayCallback( 0 );
 
-    // Ist es eine PCD-Datei mit Bild ? ( setzt bStatus == FALSE, wenn nicht ):
+    // Ist es eine PCD-Datei mit Bild ? ( setzt bStatus == sal_False, wenn nicht ):
     CheckPCDImagePacFile();
 
     // Orientierung des Bildes einlesen:
@@ -145,7 +147,7 @@ BOOL PCDReader::ReadPCD( SvStream & rPCD, Graphic & rGraphic, FilterConfigItem* 
             break;
 
         default:
-            bStatus = FALSE;
+            bStatus = sal_False;
     }
     if ( bStatus )
     {
@@ -160,8 +162,8 @@ BOOL PCDReader::ReadPCD( SvStream & rPCD, Graphic & rGraphic, FilterConfigItem* 
             nBMPHeight = nWidth;
         }
         aBmp = Bitmap( Size( nBMPWidth, nBMPHeight ), 24 );
-        if ( ( mpAcc = aBmp.AcquireWriteAccess() ) == FALSE )
-            return FALSE;
+        if ( ( mpAcc = aBmp.AcquireWriteAccess() ) == sal_False )
+            return sal_False;
 
         ReadImage( 5 ,65 );
 
@@ -173,16 +175,16 @@ BOOL PCDReader::ReadPCD( SvStream & rPCD, Graphic & rGraphic, FilterConfigItem* 
 
 // -------------------------------------------------------------------------------------------
 
-void PCDReader::MayCallback(ULONG /*nPercent*/)
+void PCDReader::MayCallback(sal_uLong /*nPercent*/)
 {
 /*
     if ( nPercent >= nLastPercent + 3 )
     {
         nLastPercent=nPercent;
-        if ( pCallback != NULL && nPercent <= 100 && bStatus == TRUE )
+        if ( pCallback != NULL && nPercent <= 100 && bStatus == sal_True )
         {
-            if ( ( (*pCallback)( pCallerData, (USHORT)nPercent ) ) == TRUE )
-                bStatus = FALSE;
+            if ( ( (*pCallback)( pCallerData, (sal_uInt16)nPercent ) ) == sal_True )
+                bStatus = sal_False;
         }
     }
 */
@@ -194,51 +196,51 @@ void PCDReader::CheckPCDImagePacFile()
 {
     char Buf[ 8 ];
 
-    pPCD->Seek( 2048 );
-    pPCD->Read( Buf, 7 );
+    m_rPCD.Seek( 2048 );
+    m_rPCD.Read( Buf, 7 );
     Buf[ 7 ] = 0;
     if ( ByteString( Buf ).CompareTo( "PCD_IPI" ) != COMPARE_EQUAL )
-        bStatus = FALSE;
+        bStatus = sal_False;
 }
 
 // -------------------------------------------------------------------------------------------
 
 void PCDReader::ReadOrientation()
 {
-    if ( bStatus == FALSE )
+    if ( bStatus == sal_False )
         return;
-    pPCD->Seek( 194635 );
-    *pPCD >> nOrientation;
+    m_rPCD.Seek( 194635 );
+    m_rPCD >> nOrientation;
     nOrientation &= 0x03;
 }
 
 // -------------------------------------------------------------------------------------------
 
-void PCDReader::ReadImage(ULONG nMinPercent, ULONG nMaxPercent)
+void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 {
-    ULONG  nx,ny,nW2,nH2,nYPair,ndy,nXPair;
+    sal_uLong  nx,ny,nW2,nH2,nYPair,ndy,nXPair;
     long   nL,nCb,nCr,nRed,nGreen,nBlue;
-    BYTE * pt;
-    BYTE * pL0; // Luminanz fuer jeden Pixel der 1. Zeile des aktuellen Zeilen-Paars
-    BYTE * pL1; // Luminanz fuer jeden Pixel der 2. Zeile des aktuellen Zeilen-Paars
-    BYTE * pCb; // Blau-Chrominanz fuer je 2x2 Pixel des aktuellen Zeilen-Paars
-    BYTE * pCr; // Rot-Chrominanz fuer je 2x2 Pixel des aktuellen Zeilen-Paars
-    BYTE * pL0N, * pL1N, * pCbN, * pCrN; // wie oben, nur fuer das naechste Zeilen-Paar
+    sal_uInt8 * pt;
+    sal_uInt8 * pL0; // Luminanz fuer jeden Pixel der 1. Zeile des aktuellen Zeilen-Paars
+    sal_uInt8 * pL1; // Luminanz fuer jeden Pixel der 2. Zeile des aktuellen Zeilen-Paars
+    sal_uInt8 * pCb; // Blau-Chrominanz fuer je 2x2 Pixel des aktuellen Zeilen-Paars
+    sal_uInt8 * pCr; // Rot-Chrominanz fuer je 2x2 Pixel des aktuellen Zeilen-Paars
+    sal_uInt8 * pL0N, * pL1N, * pCbN, * pCrN; // wie oben, nur fuer das naechste Zeilen-Paar
 
-    if ( bStatus == FALSE )
+    if ( bStatus == sal_False )
         return;
 
     nW2=nWidth>>1;
     nH2=nHeight>>1;
 
-    pL0 =(BYTE*)rtl_allocateMemory( nWidth );
-    pL1 =(BYTE*)rtl_allocateMemory( nWidth );
-    pCb =(BYTE*)rtl_allocateMemory( nW2+1 );
-    pCr =(BYTE*)rtl_allocateMemory( nW2+1 );
-    pL0N=(BYTE*)rtl_allocateMemory( nWidth );
-    pL1N=(BYTE*)rtl_allocateMemory( nWidth );
-    pCbN=(BYTE*)rtl_allocateMemory( nW2+1 );
-    pCrN=(BYTE*)rtl_allocateMemory( nW2+1 );
+    pL0 =(sal_uInt8*)rtl_allocateMemory( nWidth );
+    pL1 =(sal_uInt8*)rtl_allocateMemory( nWidth );
+    pCb =(sal_uInt8*)rtl_allocateMemory( nW2+1 );
+    pCr =(sal_uInt8*)rtl_allocateMemory( nW2+1 );
+    pL0N=(sal_uInt8*)rtl_allocateMemory( nWidth );
+    pL1N=(sal_uInt8*)rtl_allocateMemory( nWidth );
+    pCbN=(sal_uInt8*)rtl_allocateMemory( nW2+1 );
+    pCrN=(sal_uInt8*)rtl_allocateMemory( nW2+1 );
 
     if ( pL0 == NULL || pL1 == NULL || pCb == NULL || pCr == NULL ||
         pL0N == NULL || pL1N == NULL || pCbN == NULL || pCrN == NULL)
@@ -251,17 +253,17 @@ void PCDReader::ReadImage(ULONG nMinPercent, ULONG nMaxPercent)
         rtl_freeMemory((void*)pL1N);
         rtl_freeMemory((void*)pCbN);
         rtl_freeMemory((void*)pCrN);
-        bStatus = FALSE;
+        bStatus = sal_False;
         return;
     }
 
-    pPCD->Seek( nImagePos );
+    m_rPCD.Seek( nImagePos );
 
     // naechstes Zeilen-Paar := erstes Zeile-Paar:
-    pPCD->Read( pL0N, nWidth );
-    pPCD->Read( pL1N, nWidth );
-    pPCD->Read( pCbN, nW2 );
-    pPCD->Read( pCrN, nW2 );
+    m_rPCD.Read( pL0N, nWidth );
+    m_rPCD.Read( pL1N, nWidth );
+    m_rPCD.Read( pCbN, nW2 );
+    m_rPCD.Read( pCrN, nW2 );
     pCbN[ nW2 ] = pCbN[ nW2 - 1 ];
     pCrN[ nW2 ] = pCrN[ nW2 - 1 ];
 
@@ -276,10 +278,10 @@ void PCDReader::ReadImage(ULONG nMinPercent, ULONG nMaxPercent)
         // naechstes Zeilen-Paar holen:
         if ( nYPair < nH2 - 1 )
         {
-            pPCD->Read( pL0N, nWidth );
-            pPCD->Read( pL1N, nWidth );
-            pPCD->Read( pCbN, nW2 );
-            pPCD->Read( pCrN, nW2 );
+            m_rPCD.Read( pL0N, nWidth );
+            m_rPCD.Read( pL1N, nWidth );
+            m_rPCD.Read( pCbN, nW2 );
+            m_rPCD.Read( pCrN, nW2 );
             pCbN[nW2]=pCbN[ nW2 - 1 ];
             pCrN[nW2]=pCrN[ nW2 - 1 ];
         }
@@ -355,24 +357,24 @@ void PCDReader::ReadImage(ULONG nMinPercent, ULONG nMaxPercent)
                 if ( nOrientation < 2 )
                 {
                     if ( nOrientation == 0 )
-                        mpAcc->SetPixel( ny, nx, BitmapColor( (BYTE)nRed, (BYTE)nGreen, (BYTE)nBlue ) );
+                        mpAcc->SetPixel( ny, nx, BitmapColor( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
                     else
-                        mpAcc->SetPixel( nWidth - 1 - nx, ny, BitmapColor( (BYTE)nRed, (BYTE)nGreen, (BYTE)nBlue ) );
+                        mpAcc->SetPixel( nWidth - 1 - nx, ny, BitmapColor( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
                 }
                 else
                 {
                     if ( nOrientation == 2 )
-                        mpAcc->SetPixel( nHeight - 1 - ny, ( nWidth - 1 - nx ), BitmapColor( (BYTE)nRed, (BYTE)nGreen, (BYTE)nBlue ) );
+                        mpAcc->SetPixel( nHeight - 1 - ny, ( nWidth - 1 - nx ), BitmapColor( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
                     else
-                        mpAcc->SetPixel( nx, ( nHeight - 1 - ny ), BitmapColor( (BYTE)nRed, (BYTE)nGreen, (BYTE)nBlue ) );
+                        mpAcc->SetPixel( nx, ( nHeight - 1 - ny ), BitmapColor( (sal_uInt8)nRed, (sal_uInt8)nGreen, (sal_uInt8)nBlue ) );
                 }
             }
         }
 
-        if ( pPCD->GetError() )
-            bStatus = FALSE;
+        if ( m_rPCD.GetError() )
+            bStatus = sal_False;
         MayCallback( nMinPercent + ( nMaxPercent - nMinPercent ) * nYPair / nH2 );
-        if ( bStatus == FALSE )
+        if ( bStatus == sal_False )
             break;
     }
     rtl_freeMemory((void*)pL0 );
@@ -387,36 +389,10 @@ void PCDReader::ReadImage(ULONG nMinPercent, ULONG nMaxPercent)
 
 //================== GraphicImport - die exportierte Funktion ================
 
-extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem, BOOL )
+extern "C" sal_Bool __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pConfigItem, sal_Bool )
 {
-    PCDReader aPCDReader;
-    return aPCDReader.ReadPCD( rStream, rGraphic, pConfigItem );
+    PCDReader aPCDReader(rStream);
+    return aPCDReader.ReadPCD(rGraphic, pConfigItem);
 }
-
-//============================= fuer Windows ==================================
-
-#ifdef WIN
-
-static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
-{
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

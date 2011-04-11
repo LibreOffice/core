@@ -38,9 +38,10 @@
 #include "svl/zforlist.hxx"
 #include "scmatrix.hxx"
 #include "rangelst.hxx"
+#include "formula/token.hxx"
 
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <list>
@@ -86,16 +87,14 @@ private:
     bool        mbDoRefresh;
 };
 
-// ============================================================================
-
 /**
  * Cache table for external reference data.
  */
 class ScExternalRefCache
 {
 public:
-    typedef ::boost::shared_ptr< formula::FormulaToken>     TokenRef;
-    typedef ::boost::shared_ptr<ScTokenArray>               TokenArrayRef;
+    typedef ::formula::FormulaTokenRef          TokenRef;
+    typedef ::boost::shared_ptr<ScTokenArray>   TokenArrayRef;
 
     struct TableName
     {
@@ -121,8 +120,8 @@ private:
         TokenRef    mxToken;
         sal_uInt32  mnFmtIndex;
     };
-    typedef ::std::hash_map<SCCOL, Cell>            RowDataType;
-    typedef ::std::hash_map<SCROW, RowDataType>     RowsDataType;
+    typedef ::boost::unordered_map<SCCOL, Cell>            RowDataType;
+    typedef ::boost::unordered_map<SCROW, RowDataType>     RowsDataType;
 
 public:
     // SUNWS needs a forward declared friend, otherwise types and members
@@ -179,7 +178,6 @@ public:
         /// Returns the half-open range of used columns in the specified row. Returns [0,0) if row is empty.
         SC_DLLPUBLIC ::std::pair< SCCOL, SCCOL > getColRange( SCROW nRow ) const;
         void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
-        const ScRangeList& getCachedRanges() const;
         bool isRangeCached(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
         void setCachedCell(SCCOL nCol, SCROW nRow);
@@ -207,7 +205,7 @@ public:
     };
 
     typedef ::boost::shared_ptr<Table>      TableTypeRef;
-    typedef ::std::hash_map<String, size_t, ScStringHashCode>   TableNameIndexMap;
+    typedef ::boost::unordered_map<String, size_t, ScStringHashCode>   TableNameIndexMap;
 
     ScExternalRefCache();
     ~ScExternalRefCache();
@@ -250,12 +248,12 @@ public:
         ScMatrixRef mpRangeData;
     };
     void setCellRangeData(sal_uInt16 nFileId, const ScRange& rRange, const ::std::vector<SingleRangeData>& rData,
-                          TokenArrayRef pArray);
+                          const TokenArrayRef& pArray);
 
     bool isDocInitialized(sal_uInt16 nFileId);
     void initializeDoc(sal_uInt16 nFileId, const ::std::vector<String>& rTabNames);
     String getTableName(sal_uInt16 nFileId, size_t nCacheId) const;
-    void getAllTableNames(sal_uInt16 nFileId, ::std::vector<String>& rTabNames) const;
+    void getAllTableNames(sal_uInt16 nFileId, ::std::vector<rtl::OUString>& rTabNames) const;
     SCsTAB getTabSpan( sal_uInt16 nFileId, const String& rStartTabName, const String& rEndTabName ) const;
     void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
     bool hasCacheTable(sal_uInt16 nFileId, const String& rTabName) const;
@@ -298,7 +296,6 @@ private:
         bool             mbAllReferenced;
 
                     ReferencedStatus();
-        explicit    ReferencedStatus( size_t nDocs );
         void        reset( size_t nDocs );
         void        checkAllDocs();
 
@@ -323,9 +320,9 @@ private:
         }
     };
 
-    typedef ::std::hash_map<String, TokenArrayRef, ScStringHashCode>    RangeNameMap;
-    typedef ::std::hash_map<ScRange, TokenArrayRef, RangeHash>          RangeArrayMap;
-    typedef ::std::hash_map<String, String, ScStringHashCode>           NamePairMap;
+    typedef ::boost::unordered_map<String, TokenArrayRef, ScStringHashCode>    RangeNameMap;
+    typedef ::boost::unordered_map<ScRange, TokenArrayRef, RangeHash>          RangeArrayMap;
+    typedef ::boost::unordered_map<String, String, ScStringHashCode>           NamePairMap;
 
     // SUNWS needs a forward declared friend, otherwise types and members
     // of the outer class are not accessible.
@@ -352,21 +349,19 @@ private:
 
         DocItem() : mbInitFromSource(false) {}
     };
-    typedef ::std::hash_map<sal_uInt16, DocItem>  DocDataType;
+    typedef ::boost::unordered_map<sal_uInt16, DocItem>  DocDataType;
     DocItem* getDocItem(sal_uInt16 nFileId) const;
 
 private:
     mutable DocDataType maDocs;
 };
 
-// ============================================================================
-
 class SC_DLLPUBLIC ScExternalRefManager : public formula::ExternalReferenceHelper
 {
 public:
 
     typedef ::std::set<ScFormulaCell*>                      RefCellSet;
-    typedef ::std::hash_map<sal_uInt16, RefCellSet>         RefCellMap;
+    typedef ::boost::unordered_map<sal_uInt16, RefCellSet>         RefCellMap;
 
     enum LinkUpdateType { LINK_MODIFIED, LINK_BROKEN };
 
@@ -414,14 +409,14 @@ private:
         Time                maLastAccess;
     };
 
-    typedef ::std::hash_map<sal_uInt16, SrcShell>           DocShellMap;
-    typedef ::std::hash_map<sal_uInt16, bool>               LinkedDocMap;
+    typedef ::boost::unordered_map<sal_uInt16, SrcShell>           DocShellMap;
+    typedef ::boost::unordered_map<sal_uInt16, bool>               LinkedDocMap;
 
-    typedef ::std::hash_map<sal_uInt16, SvNumberFormatterMergeMap> NumFmtMap;
+    typedef ::boost::unordered_map<sal_uInt16, SvNumberFormatterMergeMap> NumFmtMap;
 
 
-    typedef ::std::hash_set<LinkListener*, LinkListener::Hash>  LinkListeners;
-    typedef ::std::hash_map<sal_uInt16, LinkListeners>          LinkListenerMap;
+    typedef ::boost::unordered_set<LinkListener*, LinkListener::Hash>  LinkListeners;
+    typedef ::boost::unordered_map<sal_uInt16, LinkListeners>          LinkListenerMap;
 
 public:
     /** Source document meta-data container. */
@@ -482,7 +477,7 @@ public:
         The index in the returned vector corresponds to the table index used to
         access the cache table, e.g. in getCacheTable().
      */
-    void getAllCachedTableNames(sal_uInt16 nFileId, ::std::vector<String>& rTabNames) const;
+    void getAllCachedTableNames(sal_uInt16 nFileId, ::std::vector<rtl::OUString>& rTabNames) const;
 
     /**
      * Get the span (distance+sign(distance)) of two sheets of a specified

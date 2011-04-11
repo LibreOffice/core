@@ -389,8 +389,6 @@ Reference< XAccessibleStateSet > SAL_CALL SvxRectCtlAccessibleContext::getAccess
 
     if( IsAlive() )
     {
-        // pStateSetHelper->AddState( AccessibleStateType::ENABLED );
-        // pStateSetHelper->AddState( AccessibleStateType::SENSITIVE );
         pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
         if( mpRepr->HasFocus() )
             pStateSetHelper->AddState( AccessibleStateType::FOCUSED );
@@ -846,7 +844,6 @@ Reference< XAccessibleContext> SAL_CALL SvxRectCtlChildAccessibleContext::getAcc
 sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
     // no guard -> done in getBounds()
-//  return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
     return Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
@@ -901,13 +898,13 @@ sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::isFocusTraversable() throw( 
 void SAL_CALL SvxRectCtlChildAccessibleContext::addFocusListener( const Reference< awt::XFocusListener >& /*xListener*/ )
     throw( RuntimeException )
 {
-    OSL_ENSURE( false, "SvxRectCtlChildAccessibleContext::addFocusListener: not implemented" );
+    OSL_FAIL( "SvxRectCtlChildAccessibleContext::addFocusListener: not implemented" );
 }
 
 void SAL_CALL SvxRectCtlChildAccessibleContext::removeFocusListener( const Reference< awt::XFocusListener >& /*xListener*/ )
     throw (RuntimeException)
 {
-    OSL_ENSURE( false, "SvxRectCtlChildAccessibleContext::removeFocusListener: not implemented" );
+    OSL_FAIL( "SvxRectCtlChildAccessibleContext::removeFocusListener: not implemented" );
 }
 
 void SAL_CALL SvxRectCtlChildAccessibleContext::grabFocus() throw( RuntimeException )

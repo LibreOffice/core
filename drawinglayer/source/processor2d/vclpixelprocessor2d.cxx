@@ -231,7 +231,7 @@ namespace drawinglayer
 
                     const primitive2d::MetafilePrimitive2D& rMetafilePrimitive( static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate) );
 
-                    static bool bTestMetaFilePrimitiveDecomposition(true);
+                    static bool bTestMetaFilePrimitiveDecomposition( true );
                     if( bTestMetaFilePrimitiveDecomposition && !rMetafilePrimitive.getMetaFile().GetUseCanvas() )
                     {
                         // use new Metafile decomposition

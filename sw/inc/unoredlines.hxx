@@ -68,20 +68,18 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     static ::com::sun::star::beans::XPropertySet*           GetObject( SwRedline& rRedline, SwDoc& rDoc );
 };
-/* -----------------------------12.01.01 14:58--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwXRedlineEnumeration
     : public SwSimpleEnumeration_Base
     , public SwClient
 {
     SwDoc* pDoc;
-    USHORT nCurrentIndex;
+    sal_uInt16 nCurrentIndex;
 protected:
     virtual ~SwXRedlineEnumeration();
 public:
@@ -89,16 +87,16 @@ public:
 
 
     //XEnumeration
-    virtual BOOL SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement(void) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
-
+protected:
     //SwClient
-    virtual void            Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
 

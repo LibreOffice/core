@@ -41,11 +41,10 @@ private:
 public:
     TYPEINFO();
 
-    // --> OD 2004-10-18 #i35017# - constant name has changed
+    // #i35017# - constant name has changed
     SwFmtWrapInfluenceOnObjPos(
             sal_Int16 _nWrapInfluenceOnPosition =
             com::sun::star::text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
-    // <--
     SwFmtWrapInfluenceOnObjPos(
             const SwFmtWrapInfluenceOnObjPos& _rCpy );
     ~SwFmtWrapInfluenceOnObjPos();
@@ -57,22 +56,21 @@ public:
     virtual int operator==( const SfxPoolItem& _rAttr ) const;
     virtual SfxPoolItem* Clone( SfxItemPool* pPool = 0 ) const;
 
-    virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     // direct accessors to data
     void SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition );
-    // --> OD 2004-10-18 #i35017# - add parameter <_bIterativeAsOnceConcurrent>
+    // #i35017# - add parameter <_bIterativeAsOnceConcurrent>
     // to control, if value <ITERATIVE> has to be treated as <ONCE_CONCURRENT>
     sal_Int16 GetWrapInfluenceOnObjPos(
                         const bool _bIterativeAsOnceConcurrent = false ) const;
-    // <--
 };
 
-inline const SwFmtWrapInfluenceOnObjPos& SwAttrSet::GetWrapInfluenceOnObjPos(BOOL bInP) const
+inline const SwFmtWrapInfluenceOnObjPos& SwAttrSet::GetWrapInfluenceOnObjPos(sal_Bool bInP) const
     { return (const SwFmtWrapInfluenceOnObjPos&)Get( RES_WRAP_INFLUENCE_ON_OBJPOS,bInP); }
 
- inline const SwFmtWrapInfluenceOnObjPos& SwFmt::GetWrapInfluenceOnObjPos(BOOL bInP) const
+ inline const SwFmtWrapInfluenceOnObjPos& SwFmt::GetWrapInfluenceOnObjPos(sal_Bool bInP) const
     { return aSet.GetWrapInfluenceOnObjPos(bInP); }
 
 #endif

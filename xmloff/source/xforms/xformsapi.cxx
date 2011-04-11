@@ -46,7 +46,7 @@
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmlnmspe.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 
 using rtl::OUString;
@@ -117,6 +117,7 @@ void lcl_addXFormsModel(
 
     // TODO: implement proper error handling
     DBG_ASSERT( bSuccess, "can't import model" );
+    (void)bSuccess;
 }
 
 Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
@@ -343,7 +344,7 @@ rtl::OUString lcl_getBasicTypeName(
     }
     catch( const Exception& )
     {
-        DBG_ERROR( "exception during type creation" );
+        OSL_FAIL( "exception during type creation" );
     }
     return sTypeName;
 }

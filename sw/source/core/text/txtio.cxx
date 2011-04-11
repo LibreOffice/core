@@ -29,17 +29,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
-#error Who broke the makefiles?
-#endif
+#if OSL_DEBUG_LEVEL > 1
 
 #include "viewsh.hxx"       // IsDbg()
 #include "viewopt.hxx"      // IsDbg()
 #include "txtatr.hxx"
-#include "errhdl.hxx"
-#include "txtcfg.hxx"
 #include "txtfrm.hxx"       // IsDbg()
+#include "rootfrm.hxx"
 #include "flyfrms.hxx"
 #include "inftxt.hxx"
 #include "porexp.hxx"
@@ -59,224 +55,11 @@
 #include "pormulti.hxx"
 #include "ndhints.hxx"
 
-// So kann man die Layoutstruktur ausgeben lassen
-// #define AMA_LAYOUT
-#ifdef AMA_LAYOUT
-#include <stdio.h>
-#include <stdlib.h>         // getenv()
-#include <flowfrm.hxx>
-#include <pagefrm.hxx>
-#include <svx/svdobj.hxx>
-#include <dflyobj.hxx>
-
-
-void lcl_OutFollow( XubString &rTmp, const SwFrm* pFrm )
-{
-    if( pFrm->IsFlowFrm() )
-    {
-        const SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( pFrm );
-        if( pFlow->IsFollow() || pFlow->GetFollow() )
-        {
-            rTmp += "(";
-            if( pFlow->IsFollow() )
-                rTmp += ".";
-            if( pFlow->GetFollow() )
-            {
-                MSHORT nFrmId = pFlow->GetFollow()->GetFrm()->GetFrmId();
-                rTmp += nFrmId;
-            }
-            rTmp += ")";
-        }
-    }
-}
-
-void lcl_OutFrame( SvFileStream& rStr, const SwFrm* pFrm, ByteString& rSp, sal_Bool bNxt )
-{
-    if( !pFrm )
-        return;
-    KSHORT nSpc = 0;
-    MSHORT nFrmId = pFrm->GetFrmId();
-    ByteString aTmp;
-    if( pFrm->IsLayoutFrm() )
-    {
-        if( pFrm->IsRootFrm() )
-            aTmp = "R";
-        else if( pFrm->IsPageFrm() )
-            aTmp = "P";
-        else if( pFrm->IsBodyFrm() )
-            aTmp = "B";
-        else if( pFrm->IsColumnFrm() )
-            aTmp = "C";
-        else if( pFrm->IsTabFrm() )
-            aTmp = "Tb";
-        else if( pFrm->IsRowFrm() )
-            aTmp = "Rw";
-        else if( pFrm->IsCellFrm() )
-            aTmp = "Ce";
-        else if( pFrm->IsSctFrm() )
-            aTmp = "S";
-        else if( pFrm->IsFlyFrm() )
-        {
-            aTmp = "F";
-            const SwFlyFrm *pFly = (SwFlyFrm*)pFrm;
-            if( pFly->IsFlyInCntFrm() )
-                aTmp += "in";
-            else if( pFly->IsFlyAtCntFrm() )
-            {
-                aTmp += "a";
-                if( pFly->IsAutoPos() )
-                    aTmp += "u";
-                else
-                    aTmp += "t";
-            }
-            else
-                aTmp += "l";
-        }
-        else if( pFrm->IsHeaderFrm() )
-            aTmp = "H";
-        else if( pFrm->IsFooterFrm() )
-            aTmp = "Fz";
-        else if( pFrm->IsFtnContFrm() )
-            aTmp = "Fc";
-        else if( pFrm->IsFtnFrm() )
-            aTmp = "Fn";
-        else
-            aTmp = "?L?";
-        aTmp += nFrmId;
-        lcl_OutFollow( aTmp, pFrm );
-        aTmp += " ";
-        rStr << aTmp;
-        nSpc = aTmp.Len();
-        rSp.Expand( nSpc + rSp.Len() );
-        lcl_OutFrame( rStr, ((SwLayoutFrm*)pFrm)->Lower(), rSp, sal_True );
-    }
-    else
-    {
-        if( pFrm->IsTxtFrm() )
-            aTmp = "T";
-        else if( pFrm->IsNoTxtFrm() )
-            aTmp = "N";
-        else
-            aTmp = "?C?";
-        aTmp += nFrmId;
-        lcl_OutFollow( aTmp, pFrm );
-        aTmp += " ";
-        rStr << aTmp;
-        nSpc = aTmp.Len();
-        rSp.Expand( nSpc + rSp.Len() );
-    }
-    if( pFrm->IsPageFrm() )
-    {
-        const SwPageFrm* pPg = (SwPageFrm*)pFrm;
-        const SwSortedObjs *pSorted = pPg->GetSortedObjs();
-        const MSHORT nCnt = pSorted ? pSorted->Count() : 0;
-        if( nCnt )
-        {
-            for( MSHORT i=0; i < nCnt; ++i )
-            {
-                // --> OD 2004-07-07 #i28701# - consider changed type of
-                // <SwSortedObjs> entries
-                SwAnchoredObject* pAnchoredObj = (*pSorted)[ i ];
-                if( pAnchoredObj->ISA(SwFlyFrm) )
-                {
-                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
-                    lcl_OutFrame( rStr, pFly, rSp, sal_False );
-                }
-                else
-                {
-                    aTmp = pAnchoredObj->GetDrawObj()->IsUnoObj() ? "UNO" : "Drw";
-                    rStr << aTmp;
-                }
-                // <--
-                if( i < nCnt - 1 )
-                    rStr << endl << rSp;
-            }
-        }
-    }
-    else if( pFrm->GetDrawObjs() )
-    {
-        MSHORT nCnt = pFrm->GetDrawObjs()->Count();
-        if( nCnt )
-        {
-            for( MSHORT i=0; i < nCnt; ++i )
-            {
-                // --> OD 2004-07-07 #i28701# - consider changed type of
-                // <SwSortedObjs> entries
-                SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[ i ];
-                if( pAnchoredObj->ISA(SwFlyFrm) )
-                {
-                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
-                    lcl_OutFrame( rStr, pFly, rSp, sal_False );
-                }
-                else
-                {
-                    aTmp = pAnchoredObj->GetDrawObj()->IsUnoObj() ? "UNO" : "Drw";
-                    rStr << aTmp;
-                }
-                if( i < nCnt - 1 )
-                    rStr << endl << rSp;
-            }
-        }
-    }
-    if( nSpc )
-        rSp.Erase( rSp.Len() - nSpc );
-    if( bNxt && pFrm->GetNext() )
-    {
-        do
-        {
-            pFrm = pFrm->GetNext();
-            rStr << endl << rSp;
-            lcl_OutFrame( rStr, pFrm, rSp, sal_False );
-        } while ( pFrm->GetNext() );
-    }
-}
-
-void LayOutPut( const SwFrm* pFrm )
-{
-    static char* pOutName = 0;
-    const sal_Bool bFirstOpen = pOutName ? sal_False : sal_True;
-    if( bFirstOpen )
-    {
-        char *pPath = getenv( "TEMP" );
-        char *pName = "layout.txt";
-        if( !pPath )
-            pOutName = pName;
-        else
-        {
-            const int nLen = strlen(pPath);
-            // fuer dieses new wird es kein delete geben.
-            pOutName = new char[nLen + strlen(pName) + 3];
-            if(nLen && (pPath[nLen-1] == '\\') || (pPath[nLen-1] == '/'))
-                snprintf( pOutName, sizeof(pOutName), "%s%s", pPath, pName );
-            else
-                snprintf( pOutName, sizeof(pOutName), "%s/%s", pPath, pName );
-        }
-    }
-    SvFileStream aStream( pOutName, (bFirstOpen
-                                        ? STREAM_WRITE | STREAM_TRUNC
-                                        : STREAM_WRITE ));
-
-    if( !aStream.GetError() )
-    {
-        if ( bFirstOpen )
-            aStream << "Layout-Struktur";
-        else
-            aStream.Seek( STREAM_SEEK_TO_END );
-        aStream << endl;
-        aStream << "---------------------------------------------" << endl;
-        XubString aSpace;
-        lcl_OutFrame( aStream, pFrm, aSpace, sal_False );
-    }
-}
-
-#endif
+#define CONSTCHAR( name, string ) static const sal_Char name[] = string
 
 SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
 {
     rOs << " {HINTS:";
-
-// REMOVED
-
     rOs << '}';
     return rOs;
 }
@@ -287,14 +70,9 @@ SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
 
 sal_Bool IsDbg( const SwTxtFrm *pFrm )
 {
-// Hmm, so IsTest4 etc are defined only if OSL_DEBUG_LEVEL > 1,
-// but this file is compiled if DBG_UTIL is defined. So should the IsTest4 etc
-// then instead be conditional on DBG_UTIL? Such crack.
-#if OSL_DEBUG_LEVEL > 1
-    if( pFrm && pFrm->GetShell() )
-        return pFrm->GetShell()->GetViewOptions()->IsTest4();
+    if( pFrm && pFrm->getRootFrm()->GetCurrShell() )
+        return pFrm->getRootFrm()->GetCurrShell()->GetViewOptions()->IsTest4();
     else
-#endif
         return sal_False;
 }
 
@@ -372,16 +150,11 @@ void SwLineLayout::DebugPortions( SvStream &, const XubString &, //$ ostream
 {
 }
 
-const char *GetLangName( const MSHORT  )
-{
-    return 0;
-}
-
 #else
-# include <limits.h>
-# include <stdlib.h>
-# include "swtypes.hxx"      // ZTCCONST
-# include "swfont.hxx"     // SwDropPortion
+#include <limits.h>
+#include <stdlib.h>
+#include "swtypes.hxx"      // ZTCCONST
+#include "swfont.hxx"     // SwDropPortion
 
 CONSTCHAR( pClose, "} " );
 
@@ -492,7 +265,6 @@ void SwLineLayout::DebugPortions( SvStream &rOs, const XubString &/*rTxt*/, //$ 
 
     while( pPortion2 )
     {
-        DBG_LOOP;
         SwTxtPortion *pTxtPor = pPortion2->InTxtGrp() ?
                                 (SwTxtPortion *)pPortion2 : NULL ;
         (void)pTxtPor;
@@ -510,11 +282,6 @@ void SwLineLayout::DebugPortions( SvStream &rOs, const XubString &/*rTxt*/, //$ 
         nPos = nPos + pPortion2->GetLen();
         pPortion2 = pPortion2->GetPortion();
     }
-}
-
-const char *GetLangName( const MSHORT /*nLang*/ )
-{
-    return "???";
 }
 
 SvStream &SwLinePortion::operator<<( SvStream &rOs ) const //$ ostream
@@ -601,7 +368,6 @@ SvStream &SwLineLayout::operator<<( SvStream &rOs ) const //$ ostream
     SwLinePortion *pPos = GetPortion();
     while( pPos )
     {
-        DBG_LOOP;
         rOs << "\t";
         pPos->operator<<( rOs );
         pPos = pPos->GetPortion();
@@ -950,7 +716,8 @@ SvStream &SwDropPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-#endif /* OSL_DEBUG_LEVEL */
+#endif
 
+#endif /* OSL_DEBUG_LEVEL */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

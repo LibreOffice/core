@@ -38,12 +38,13 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
+
+using ::rtl::OUString;
 
 namespace linguistic
 {
@@ -52,10 +53,10 @@ namespace linguistic
 
 Meaning::Meaning(
 #if 0
-            const OUString &rTerm, INT16 nLang,
+            const OUString &rTerm, sal_Int16 nLang,
             const PropertyHelper_Thes &rHelper ) :
 #else
-            const OUString &rTerm, INT16 nLang) :
+            const OUString &rTerm, sal_Int16 nLang) :
 #endif
 
     aSyn        ( Sequence< OUString >(1) ),

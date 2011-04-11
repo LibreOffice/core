@@ -41,6 +41,7 @@
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star;
+using namespace ZipUtils;
 
 /** Provides general purpose compression using the ZLIB compression
  * library.

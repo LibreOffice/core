@@ -61,7 +61,7 @@ private:
     SignatureInformations maCertsToIgnore;
 
     FixedText           maHintFT;
-    SvxSimpleTable      maCertLB;   // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    SvxSimpleTable      maCertLB;   // #i48648 now SvHeaderTabListBox
 
     PushButton          maViewBtn;
 
@@ -70,9 +70,9 @@ private:
     CancelButton        maCancelBtn;
     HelpButton          maHelpBtn;
 
-    BOOL                mbInitialized;
+    sal_Bool                mbInitialized;
 
-    USHORT              GetSelectedEntryPos( void ) const;
+    sal_uInt16              GetSelectedEntryPos( void ) const;
 //  DECL_LINK(          Initialize, void* );
     DECL_LINK(          ViewButtonHdl, Button* );
     DECL_LINK(          CertificateHighlightHdl, void* );

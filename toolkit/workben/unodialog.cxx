@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
-#include <tools/svwin.h>
 #include <sal/main.h>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

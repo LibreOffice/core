@@ -29,11 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include <tools/poly.hxx>
 #include <svx/svdpage.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/lathe3d.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svxids.hrc>
@@ -131,26 +131,14 @@ void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-UINT16 E3dLatheObj::GetObjIdentifier() const
+sal_uInt16 E3dLatheObj::GetObjIdentifier() const
 {
     return E3D_LATHEOBJ_ID;
 }
 
-/*************************************************************************
-|*
-|* Zuweisungsoperator
-|*
-\************************************************************************/
-
-void E3dLatheObj::operator=(const SdrObject& rObj)
+E3dLatheObj* E3dLatheObj::Clone() const
 {
-    // erstmal alle Childs kopieren
-    E3dCompoundObject::operator=(rObj);
-
-    // weitere Parameter kopieren
-    const E3dLatheObj& r3DObj = (const E3dLatheObj&)rObj;
-
-    maPolyPoly2D  = r3DObj.maPolyPoly2D;
+    return CloneHelper< E3dLatheObj >();
 }
 
 /*************************************************************************
@@ -159,7 +147,7 @@ void E3dLatheObj::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-SdrObject *E3dLatheObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
+SdrObject *E3dLatheObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
 {
     return NULL;
 }
@@ -249,9 +237,9 @@ void E3dLatheObj::TakeObjNamePlural(XubString& rName) const
 |*
 \************************************************************************/
 
-BOOL E3dLatheObj::IsBreakObjPossible()
+sal_Bool E3dLatheObj::IsBreakObjPossible()
 {
-    return TRUE;
+    return sal_True;
 }
 
 SdrAttrObj* E3dLatheObj::GetBreakObj()

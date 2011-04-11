@@ -28,7 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <swframeposstrings.hxx>
+#include <svx/swframeposstrings.hxx>
 #include <tools/rc.hxx>
 #include <tools/debug.hxx>
 #include <svx/dialmgr.hxx>
@@ -44,30 +44,24 @@ public:
 SvxSwFramePosString_Impl::SvxSwFramePosString_Impl() :
     Resource(SVX_RES(RID_SVXSW_FRAMEPOSITIONS))
 {
-    for(USHORT i = 0; i < SvxSwFramePosString::STR_MAX; i++)
+    for(sal_uInt16 i = 0; i < SvxSwFramePosString::STR_MAX; i++)
     {
         //string ids have to start at 1
         aStrings[i] = String(SVX_RES(i + 1));
     }
     FreeResource();
 }
-/*-- 04.03.2004 13:14:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxSwFramePosString::SvxSwFramePosString() :
     pImpl(new SvxSwFramePosString_Impl)
 {
 }
-/*-- 04.03.2004 13:14:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxSwFramePosString::~SvxSwFramePosString()
 {
     delete pImpl;
 }
-/*-- 04.03.2004 13:14:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 const String& SvxSwFramePosString::GetString(StringId eId)
 {
     DBG_ASSERT(eId >= 0 && eId < STR_MAX, "invalid StringId");

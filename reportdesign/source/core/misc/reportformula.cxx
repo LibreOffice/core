@@ -99,7 +99,7 @@ namespace rptui
         }
         break;
         default:
-            OSL_ENSURE( false, "ReportFormula::ReportFormula: illegal bind type!" );
+            OSL_FAIL( "ReportFormula::ReportFormula: illegal bind type!" );
             return;
         }
 

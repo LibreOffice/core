@@ -29,66 +29,63 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
-#include "errhdl.hxx"
 
 
 void SwFrm::Format( const SwBorderAttrs * )
 {
-    OSL_ENSURE( FALSE, "Format() der Basisklasse gerufen." );
+    OSL_FAIL( "Format() der Basisklasse gerufen." );
 }
 
-void SwFrm::Paint(const SwRect &, const SwPrtOptions * ) const
+void SwFrm::Paint(SwRect const&, SwPrintData const*const) const
 {
-    OSL_ENSURE( FALSE, "Paint() der Basisklasse gerufen." );
+    OSL_FAIL( "Paint() der Basisklasse gerufen." );
 }
 
 sal_Bool SwCntntFrm::WouldFit( SwTwips &, sal_Bool&, sal_Bool )
 {
-    OSL_ENSURE( FALSE, "WouldFit des CntntFrm gerufen." );
-    return FALSE;
+    OSL_FAIL( "WouldFit des CntntFrm gerufen." );
+    return sal_False;
 }
 
 bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const
 {
-    OSL_ENSURE( false, "Don't call this function at the base class!" );
+    OSL_FAIL( "Don't call this function at the base class!" );
     return false;
 }
 
-BOOL SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
+sal_Bool SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
 {
-    OSL_ENSURE( FALSE, "GetCrsrOfst der Basisklasse, hi!" );
-    return FALSE;
+    OSL_FAIL( "GetCrsrOfst der Basisklasse, hi!" );
+    return sal_False;
 }
 
 #if OSL_DEBUG_LEVEL > 1
 
 void SwRootFrm::Cut()
 {
-    OSL_ENSURE( FALSE, "Cut() des RootFrm gerufen." );
+    OSL_FAIL( "Cut() des RootFrm gerufen." );
 }
 
 void SwRootFrm::Paste( SwFrm *, SwFrm * )
 {
-    OSL_ENSURE( FALSE, "Paste() des RootFrm gerufen." );
+    OSL_FAIL( "Paste() des RootFrm gerufen." );
 }
 
 void SwFlyFrm::Paste( SwFrm *, SwFrm * )
 {
-    OSL_ENSURE( FALSE, "Paste() des FlyFrm gerufen." );
+    OSL_FAIL( "Paste() des FlyFrm gerufen." );
 }
 
 #endif
 
-BOOL SwFrm::GetCharRect( SwRect&, const SwPosition&,
+sal_Bool SwFrm::GetCharRect( SwRect&, const SwPosition&,
                          SwCrsrMoveState* ) const
 {
-    OSL_ENSURE( FALSE, "GetCharRect() der Basis gerufen." );
-    return FALSE;
+    OSL_FAIL( "GetCharRect() der Basis gerufen." );
+    return sal_False;
 }
 
 

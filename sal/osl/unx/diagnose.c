@@ -29,7 +29,6 @@
 #include "osl/diagnose.h"
 #include "system.h"
 
-
 #ifndef HAVE_DLFCN_H
 
 #if defined(LINUX) || defined(SOLARIS)
@@ -58,6 +57,8 @@
 #include <stddef.h>
 #define INCLUDED_STDDEF_H
 #endif
+
+#include "printtrace.h"
 
 /************************************************************************/
 /* Internal data structures and functions */
@@ -218,6 +219,11 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     oslDebugMessageFunc f = g_pDebugMessageFunc;
     char                szMessage[1024];
 
+    // after reporting the assertion, abort if told so by SAL_DIAGNOSE_ABORT, but *not* if
+    // assertions are routed to some external instance
+    char const * env = getenv( "SAL_DIAGNOSE_ABORT" );
+    sal_Bool const doAbort = ( ( env != NULL ) && ( *env != '\0' ) && ( f == NULL ) );
+
     /* If there's a callback for detailed messages, use it */
     if ( g_pDetailedDebugMessageFunc != NULL )
     {
@@ -227,7 +233,7 @@ sal_Bool SAL_CALL osl_assertFailedLine (
 
     /* if SAL assertions are disabled in general, stop here */
     if ( getenv("DISABLE_SAL_DBGBOX") )
-        return sal_False;
+        return doAbort;
 
     /* format message into buffer */
     if (pszMessage != 0)
@@ -252,9 +258,10 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     /* output backtrace */
     osl_diagnose_backtrace_Impl(f);
 
-    /* release lock and leave, w/o calling osl_breakDebug() */
+    /* release lock and leave */
     pthread_mutex_unlock(&g_mutex);
-    return sal_False;
+
+    return doAbort;
 }
 
 /************************************************************************/
@@ -262,7 +269,7 @@ sal_Bool SAL_CALL osl_assertFailedLine (
 /************************************************************************/
 void SAL_CALL osl_breakDebug()
 {
-    exit(0);
+    abort();
 }
 
 /************************************************************************/
@@ -302,33 +309,11 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc (
 /************************************************************************/
 /* osl_trace */
 /************************************************************************/
-/* comment this define to stop output thread identifier*/
-#define OSL_TRACE_THREAD 1
-void SAL_CALL osl_trace (
-    const sal_Char* lpszFormat, ...)
-{
+void osl_trace(char const * pszFormat, ...) {
     va_list args;
-
-#if defined(OSL_PROFILING)
-    fprintf(stderr, "Time: %06lu : ", osl_getGlobalTimer() );
-#else
-#if defined(OSL_TRACE_THREAD)
-    fprintf(
-        stderr, "Thread: %6lu :",
-        SAL_INT_CAST(unsigned long, osl_getThreadIdentifier(NULL)));
-#else
-    fprintf(stderr, "Trace Message: ");
-#endif
-#endif
-
-    va_start(args, lpszFormat);
-    vfprintf(stderr, lpszFormat, args);
+    va_start(args, pszFormat);
+    printTrace((unsigned long) getpid(), pszFormat, args);
     va_end(args);
-
-    fprintf(stderr,"\n");
-    fflush(stderr);
 }
-
-/************************************************************************/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

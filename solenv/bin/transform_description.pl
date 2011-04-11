@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 #*************************************************************************
-#*
+#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,7 +24,7 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#************************************************************************/
+#*************************************************************************
 
 parse_args();
 execute_args();
@@ -130,7 +130,7 @@ sub explain
     print STDOUT "\n";
     print STDOUT "  The following transformations are done at the moment:\n";
     print STDOUT "  - duplicate all lines containing #LANG#, for ever token of \$WITH_LANG\n";
-    print STDOUT "    replacing every occurance of \$LANG with a token\n";
+    print STDOUT "    replacing every occurrence of \$LANG with a token\n";
     print STDOUT "\n";
     print STDOUT "  And yes, the functionality of this script should be\n";
     print STDOUT "  - moved to solenv/inc/tg_ext.mk\n";

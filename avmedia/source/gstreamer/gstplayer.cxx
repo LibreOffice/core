@@ -28,9 +28,11 @@
 
 #include <math.h>
 
-#ifndef __RTL_USTRING_
 #include <rtl/string.hxx>
-#endif
+
+#include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
+
 
 #include "gstplayer.hxx"
 #include "gstframegrabber.hxx"
@@ -41,7 +43,7 @@
 #define AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME "com.sun.star.comp.avmedia.Player_GStreamer"
 #define AVMEDIA_GST_PLAYER_SERVICENAME "com.sun.star.media.Player_GStreamer"
 
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 2
 #define DBG OSL_TRACE
 #else
 #define DBG(...)
@@ -73,7 +75,8 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
 {
     // Initialize GStreamer library
     int argc = 1;
-    char *arguments[] = { "libreoffice.org" };
+    char name[] = "libreoffice";
+    char *arguments[] = { name };
     char** argv = arguments;
     GError* pError = NULL;
 
@@ -154,7 +157,18 @@ void Player::processMessage( GstMessage *message )
 
 GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 {
-    DBG( "%p processSyncMessage", this );
+    DBG( "%p processSyncMessage: %s", this, GST_MESSAGE_TYPE_NAME( message ) );
+
+#if OSL_DEBUG_LEVEL > 0
+    if ( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR )
+    {
+        GError* error;
+        gchar* error_debug;
+
+        gst_message_parse_error( message, &error, &error_debug );
+        OSL_TRACE("gstreamer error: '%s' debug: '%s'", error->message, error_debug);
+    }
+#endif
 
     if (message->structure) {
         if( !strcmp( gst_structure_get_name( message->structure ), "prepare-xwindow-id" ) && mnWindowID != 0 ) {
@@ -217,7 +231,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
                         }
                     }
 
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 2
                     sal_Bool aSuccess =
 #endif
                                           osl_setCondition( maSizeCondition );
@@ -227,8 +241,8 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
         }
     } else if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
         if( mnWidth == 0 ) {
-            // an error occured, set condition so that OOo thread doesn't wait for us
-#if DEBUG
+            // an error occurred, set condition so that OOo thread doesn't wait for us
+#if OSL_DEBUG_LEVEL > 2
             sal_Bool aSuccess =
 #endif
                                 osl_setCondition( maSizeCondition );
@@ -272,6 +286,8 @@ bool Player::create( const ::rtl::OUString& rURL )
 
     // create all the elements and link them
 
+    DBG("create player, URL: %s", OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr());
+
     if( mbInitialized )
     {
         preparePlaybin( rURL, true );
@@ -281,7 +297,6 @@ bool Player::create( const ::rtl::OUString& rURL )
 
         bRet = true;
     }
-
 
     if( bRet )
         maURL = rURL;
@@ -366,7 +381,7 @@ void SAL_CALL Player::setMediaTime( double fTime )
         if( !isPlaying() )
             gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
 
-        DBG( "seek to: %lld ns original: %lf s", gst_position, fTime );
+        DBG( "seek to: %"SAL_PRIdINT64" ns original: %lf s", gst_position, fTime );
     }
 }
 
@@ -522,7 +537,7 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     DBG( "%p Player::getPreferredPlayerWindowSize, member %d x %d", this, mnWidth, mnHeight );
 
     TimeValue aTimeout = { 10, 0 };
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 2
     oslConditionResult aResult =
 #endif
                                  osl_waitCondition( maSizeCondition, &aTimeout );
@@ -561,9 +576,15 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
         xRet = pWindow;
 
-        if( rArguments.getLength() > 2 ) {
-            rArguments[ 2 ] >>= mnWindowID;
-            DBG( "window ID: %ld", mnWindowID );
+        if( rArguments.getLength() > 2 )
+        {
+            sal_IntPtr pIntPtr = 0;
+            rArguments[ 2 ] >>= pIntPtr;
+            SystemChildWindow *pParentWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
+            const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : NULL;
+            OSL_ASSERT(pEnvData);
+            if (pEnvData)
+                mnWindowID = pEnvData->aWindow;
         }
     }
 

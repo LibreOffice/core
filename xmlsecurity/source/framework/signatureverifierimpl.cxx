@@ -74,9 +74,6 @@ bool SignatureVerifierImpl::checkReady() const
  *   RESULT
  *  bReady - true if all conditions are satisfied, false otherwise
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -103,9 +100,6 @@ void SignatureVerifierImpl::notifyResultListener() const
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -139,9 +133,6 @@ void SignatureVerifierImpl::startEngine( const cssu::Reference<
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi

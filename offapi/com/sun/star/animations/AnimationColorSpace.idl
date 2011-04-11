@@ -33,7 +33,7 @@
 
 //=============================================================================
 
-/** defines the colorspace that is used for interpolation.
+/** defines the color space that is used for interpolation.
     <br>
     This does not change how colors are interpreted but how to
     interpolate from one color to another.
@@ -42,11 +42,11 @@
 */
 constants AnimationColorSpace
 {
-    /** defines that the RGB colorspace is used for interpolation .
+    /** defines that the RGB color space is used for interpolation.
     */
     const short RGB = 0;
 
-    /** defines that the HSL colorspace is used for interpolation .
+    /** defines that the HSL color space is used for interpolation.
     */
     const short HSL = 1;
 };

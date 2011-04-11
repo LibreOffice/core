@@ -44,9 +44,7 @@
 #include <flyfrm.hxx>
 #include <accmap.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-// --> OD 2009-07-14 #i73249#
-#include <hints.hxx>
-// <--
+#include <hints.hxx> // #i73249#
 #include "acctextframe.hxx"
 
 using namespace ::com::sun::star;
@@ -85,12 +83,11 @@ SwAccessibleTextFrame::~SwAccessibleTextFrame()
 {
 }
 
-void SwAccessibleTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
-    // --> OD 2009-07-14 #i73249#
-    // suppress handling of RES_NAME_CHANGED in case that attribute Title is
-    // used as the accessible name.
+    // #i73249# - suppress handling of RES_NAME_CHANGED
+    // in case that attribute Title is used as the accessible name.
     if ( nWhich != RES_NAME_CHANGED ||
          msTitle.getLength() == 0 )
     {
@@ -100,13 +97,13 @@ void SwAccessibleTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     const SwFlyFrm *pFlyFrm = static_cast< const SwFlyFrm * >( GetFrm() );
     switch( nWhich )
     {
-        // --> OD 2009-07-14 #i73249#
+        // #i73249#
         case RES_TITLE_CHANGED:
         {
             const String& sOldTitle(
-                        dynamic_cast<SwStringMsgPoolItem*>(pOld)->GetString() );
+                        dynamic_cast<const SwStringMsgPoolItem*>(pOld)->GetString() );
             const String& sNewTitle(
-                        dynamic_cast<SwStringMsgPoolItem*>(pNew)->GetString() );
+                        dynamic_cast<const SwStringMsgPoolItem*>(pNew)->GetString() );
             if ( sOldTitle == sNewTitle )
             {
                 break;
@@ -157,7 +154,7 @@ void SwAccessibleTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     }
 }
 
-// --> OD 2009-07-14 #i73249#
+// #i73249#
 OUString SAL_CALL SwAccessibleTextFrame::getAccessibleName (void)
         throw (uno::RuntimeException)
 {

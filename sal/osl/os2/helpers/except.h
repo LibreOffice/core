@@ -226,7 +226,7 @@ extern "C" {
                                 (PEXCEPTIONREGISTRATIONRECORD)&(excptstruct.RegRec2)); \
                     } /* end of TRY block */                                    \
                     else                                                        \
-                    { /* exception occured: */                                  \
+                    { /* exception occurred: */                                  \
                         DosUnsetExceptionHandler((PEXCEPTIONREGISTRATIONRECORD)&(excptstruct.RegRec2));
     #endif
 
@@ -235,7 +235,7 @@ extern "C" {
         #define END_CATCH() }
     #else
         #define END_CATCH()                                                     \
-                    } /* end of exception-occured block */                      \
+                    } /* end of exception-occurred block */                      \
                 }
     #endif
 

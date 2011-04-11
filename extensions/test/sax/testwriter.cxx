@@ -51,7 +51,6 @@
 #include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE
 
 using namespace std;
-using namespace rtl;
 using namespace usr;
 
 #define BUILD_ERROR(expr, Message)\
@@ -108,9 +107,6 @@ using namespace usr;
 
 /****
 * test szenarios :
-*
-*
-*
 ****/
 
 
@@ -333,8 +329,10 @@ UString AttributeListImpl::getTypeByName( const UString& sName ) THROWS( (UsrSys
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
-        if( (*ii).sName == sName ) {
+    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
+    {
+        if( (*ii).sName == sName )
+        {
             return (*ii).sType;
         }
     }
@@ -345,8 +343,10 @@ UString AttributeListImpl::getValueByName(const UString& sName) THROWS( (UsrSyst
 {
     vector<struct TagAttribute>::iterator ii = m_pImpl->vecAttribute.begin();
 
-    for( ; ii != m_pImpl->vecAttribute.end() ; ii ++ ) {
-        if( (*ii).sName == sName ) {
+    for (; ii != m_pImpl->vecAttribute.end(); ++ii)
+    {
+        if( (*ii).sName == sName )
+        {
             return (*ii).sValue;
         }
     }
@@ -394,20 +394,8 @@ void AttributeListImpl::clear()
     OSL_ASSERT( ! getLength() );
 }
 
-
-
-
-
-
-
-
-
-
-
 /**
 * for external binding
-*
-*
 **/
 XInterfaceRef OSaxWriterTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception))
 {
@@ -747,8 +735,6 @@ void OSaxWriterTest::testPerformance(const  XExtendedDocumentHandlerRef &r )
             r->ignorableWhitespace( L"");
             r->startElement( L"huhu" , rList );
             r->characters( testParagraph );
-//          writeParagraph( r , testParagraph );
-
             r->ignorableWhitespace( L"");
             r->endElement( L"huhu" );
         }

@@ -178,7 +178,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     SQLExceptionInfo aInfo;
     if ( !_xDataSource.is() )
     {
-        OSL_ENSURE(0,"createConnection: coult not retrieve the data source!");
+        OSL_FAIL("createConnection: coult not retrieve the data source!");
         return aInfo;
     }
 
@@ -192,7 +192,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"createConnection: error while retrieving data source properties!");
+        OSL_FAIL("createConnection: error while retrieving data source properties!");
     }
 
 
@@ -203,15 +203,14 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
             Reference<XCompletedConnection> xConnectionCompletion(_xDataSource, UNO_QUERY);
             if (!xConnectionCompletion.is())
             {
-                OSL_ENSURE(0,"createConnection: missing an interface ... need an error message here!");
+                OSL_FAIL("createConnection: missing an interface ... need an error message here!");
             }
             else
             {   // instantiate the default SDB interaction handler
                 Reference< XInteractionHandler > xHandler(_rMF->createInstance(SERVICE_TASK_INTERACTION_HANDLER), UNO_QUERY);
                 if (!xHandler.is())
                 {
-                    OSL_ENSURE(sal_False, "createConnection: could not instantiate an interaction handler!");
-                    // ShowServiceNotAvailableError(NULL, String(SERVICE_TASK_INTERACTION_HANDLER), sal_True);
+                    OSL_FAIL("createConnection: could not instantiate an interaction handler!");
                         // TODO: a real parent!
                 }
                 else
@@ -231,9 +230,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     catch(SQLContext& e) { aInfo = SQLExceptionInfo(e); }
     catch(SQLWarning& e) { aInfo = SQLExceptionInfo(e); }
     catch(SQLException& e) { aInfo = SQLExceptionInfo(e); }
-    catch(Exception&) { OSL_ENSURE(0,"SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
-
-    //  showError(aInfo);
+    catch(Exception&) { OSL_FAIL("SbaTableQueryBrowser::OnExpandEntry: could not connect - unknown exception!"); }
 
     return aInfo;
 }
@@ -403,8 +400,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                     &&  ( (_bAutoIncrement && aIter->second->bAutoIncrement) || !_bAutoIncrement )
                     )
                 {
-                    OSL_ENSURE(sal_False,
-                        (   ::rtl::OString("getTypeInfoFromType: assuming column type ")
+                    OSL_FAIL((  ::rtl::OString("getTypeInfoFromType: assuming column type ")
                         +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), gsl_getSystemTextEncoding())
                         +=  ::rtl::OString("\" (expected type name ")
                         +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
@@ -419,11 +415,6 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             // -> drop the precision and the scale restriction, accept any type with the property
             // type id (nType)
 
-            //OSL_ENSURE(sal_False,
-            //  (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
-            //  +=  ::rtl::OString(" (expected type name: ")
-            //  +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
-            //  +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
                 // search the best matching type (now comparing the local names)
@@ -511,8 +502,8 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
     // Information for a single SQL type
     if(xRs.is())
     {
-        static const ::rtl::OUString aB1 = ::rtl::OUString::createFromAscii(" [ ");
-        static const ::rtl::OUString aB2 = ::rtl::OUString::createFromAscii(" ]");
+        static const ::rtl::OUString aB1(RTL_CONSTASCII_USTRINGPARAM(" [ "));
+        static const ::rtl::OUString aB2(RTL_CONSTASCII_USTRINGPARAM(" ]"));
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
         ::connectivity::ORowSetValue aValue;
         ::std::vector<sal_Int32> aTypes;
@@ -804,7 +795,7 @@ sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
         case SVX_HOR_JUSTIFY_CENTER:    nAlignment = ::com::sun::star::awt::TextAlign::CENTER;  break;
         case SVX_HOR_JUSTIFY_RIGHT:     nAlignment = ::com::sun::star::awt::TextAlign::RIGHT;   break;
         default:
-            OSL_ENSURE(0,"Invalid TextAlign!");
+            OSL_FAIL("Invalid TextAlign!");
     }
     return nAlignment;
 }
@@ -818,7 +809,7 @@ SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
         case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
         case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
         default:
-            OSL_ENSURE(0,"Invalid TextAlign!");
+            OSL_FAIL("Invalid TextAlign!");
     }
     return eJustify;
 }
@@ -846,7 +837,7 @@ float ConvertFontWeight( ::FontWeight eWeight )
     else if( eWeight == WEIGHT_BLACK )
         return ::com::sun::star::awt::FontWeight::BLACK;
 
-    OSL_ENSURE(0, "Unknown FontWeigth" );
+    OSL_FAIL("Unknown FontWeigth" );
     return ::com::sun::star::awt::FontWeight::DONTKNOW;
 }
 // -----------------------------------------------------------------------------
@@ -873,7 +864,7 @@ float ConvertFontWidth( ::FontWidth eWidth )
     else if( eWidth == WIDTH_ULTRA_EXPANDED )
         return ::com::sun::star::awt::FontWidth::ULTRAEXPANDED;
 
-    OSL_ENSURE(0, "Unknown FontWidth" );
+    OSL_FAIL("Unknown FontWidth" );
     return ::com::sun::star::awt::FontWidth::DONTKNOW;
 }
 // -----------------------------------------------------------------------------
@@ -947,7 +938,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
                                 sal_Bool  _bHasFormat)
 {
     sal_Bool bRet = sal_False;
-    // the allowed format changes depend of the type of the field ...
+    // the allowed format changes depending on the type of the field ...
     _nFlags = TP_ATTR_ALIGN;
 
     if (_bHasFormat)
@@ -1085,7 +1076,7 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
             xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
             // first check if we have something like SCHEMA.%
             sal_Bool bHasToInsert = sal_True;
-            static ::rtl::OUString sPattern = ::rtl::OUString::createFromAscii("%");
+            static ::rtl::OUString sPattern(RTL_CONSTASCII_USTRINGPARAM("%"));
             const ::rtl::OUString* pBegin = aFilter.getConstArray();
             const ::rtl::OUString* pEnd = pBegin + aFilter.getLength();
             for (;pBegin != pEnd; ++pBegin)
@@ -1149,22 +1140,6 @@ void adjustToolBoxSize(ToolBox* _pToolBox)
         _pToolBox->Invalidate();
     }
 }
-// -----------------------------------------------------------------------------
-sal_Bool isHiContrast(Window* _pWindow)
-{
-    OSL_ENSURE(_pWindow,"Window must be not null!");
-    Window* pIter = _pWindow;
-    //  while( pIter &&  pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
-    while( pIter )
-    {
-        if ( pIter->GetBackground().GetColor().GetColor() == COL_TRANSPARENT )
-            pIter = pIter->GetParent();
-        else
-            break;
-    }
-    return pIter && pIter->GetSettings().GetStyleSettings().GetHighContrastMode();
-}
-
 // -----------------------------------------------------------------------------
 void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId )
 {
@@ -1231,7 +1206,7 @@ void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
             pValue->Value >>= _rsAutoIncrementValue;
         pValue =::std::find_if(aInfo.getConstArray(),
                                                     aInfo.getConstArray() + aInfo.getLength(),
-                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),::rtl::OUString::createFromAscii("IsAutoRetrievingEnabled") ));
+                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled")) ));
         if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
             pValue->Value >>= _rAutoIncrementValueEnabled;
     }
@@ -1306,7 +1281,7 @@ namespace
         {
             ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                                  Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-            if ( ( aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "AnchorName" ) ) >>= sAnchor ) )
+            if ( ( aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorName")) ) >>= sAnchor ) )
             {
 
                 if ( sAnchor.getLength() > 0 )
@@ -1330,13 +1305,13 @@ namespace
 } // annonymous
 // .........................................................................
 // -----------------------------------------------------------------------------
-::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId)
+::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName, const rtl::OString& sHelpId)
 {
     ::com::sun::star::util::URL aURL;
     aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
     aURL.Complete += _sModuleName;
     aURL.Complete += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-    aURL.Complete += ::rtl::OUString::valueOf(_nHelpId);
+    aURL.Complete += ::rtl::OUString(sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8);
 
     ::rtl::OUString sAnchor;
     ::rtl::OUString sTempURL = aURL.Complete;
@@ -1464,18 +1439,18 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
             break;
         default:
             ;
-    } // switch(_nDataType)
+    }
     if ( !pTypeInfo )
     {
         ::rtl::OUString sCreate(RTL_CONSTASCII_USTRINGPARAM("x")),sTypeName;
         sal_Bool bForce = sal_True;
         pTypeInfo = ::dbaui::getTypeInfoFromType(_rTypeInfo,DataType::VARCHAR,sTypeName,sCreate,50,0,sal_False,bForce);
-    } // if ( !pTypeInfo )
+    }
     OSL_ENSURE(pTypeInfo,"Wrong DataType supplied!");
     return pTypeInfo;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 askForUserAction(Window* _pParent,USHORT _nTitle,USHORT _nText,sal_Bool _bAll,const ::rtl::OUString& _sName)
+sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const ::rtl::OUString& _sName)
 {
     SolarMutexGuard aGuard;
     String aMsg = String(ModuleRes(_nText));

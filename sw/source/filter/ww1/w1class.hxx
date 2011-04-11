@@ -39,8 +39,9 @@
 
 using std::ostream;
 
+namespace editeng { class SvxBorderLine; }
+
 class SvxFontItem;
-class SvxBorderLine;
 class SvxBoxItem;
 class SvStream;
 class SwField;
@@ -108,13 +109,13 @@ class Ww1StyleSheet;
 class Ww1Fib
 {
     W1_FIB aFib;
-    BOOL bOK;
+    sal_Bool bOK;
     SvStream& rStream;
 public:
     Ww1Fib(SvStream&);
     friend ostream& operator <<(ostream&, Ww1Fib&);
     W1_FIB& GetFIB()        { return aFib; }
-    BOOL GetError()         { return !bOK; }
+    sal_Bool GetError()         { return !bOK; }
     SvStream& GetStream()   { return rStream; }
 };
 
@@ -126,10 +127,10 @@ class Ww1Dop
 {
     W1_DOP aDop;
     Ww1Fib& rFib;
-    BOOL bOK;
+    sal_Bool bOK;
 public:
     Ww1Dop(Ww1Fib&);
-    BOOL GetError() {
+    sal_Bool GetError() {
         return !bOK; }
     W1_DOP& GetDOP() {
         return aDop; }
@@ -146,23 +147,23 @@ class Ww1PlainText
 {
 protected:
     Ww1Fib& rFib;
-    ULONG ulFilePos;
-    ULONG ulCountBytes;
-    ULONG ulSeek;
-    BOOL bOK;
+    sal_uLong ulFilePos;
+    sal_uLong ulCountBytes;
+    sal_uLong ulSeek;
+    sal_Bool bOK;
 public:
-    Ww1PlainText(Ww1Fib& rWwFib, ULONG nFilePos, ULONG nCountBytes);
+    Ww1PlainText(Ww1Fib& rWwFib, sal_uLong nFilePos, sal_uLong nCountBytes);
     // innerhalb des textes
-    ULONG Where() const                 { return ulSeek; }
-    void Seek( ULONG ulNew )
+    sal_uLong Where() const                 { return ulSeek; }
+    void Seek( sal_uLong ulNew )
         {
             DBG_ASSERT(ulNew < ulCountBytes, "Ww1PlainText");
             if (ulNew < ulCountBytes)
                 ulSeek = ulNew;
         }
 
-    ULONG Count() const                 { return ulCountBytes; }
-    void SetCount(ULONG ulNew)
+    sal_uLong Count() const                 { return ulCountBytes; }
+    void SetCount(sal_uLong ulNew)
         {
             ulNew += ulSeek;
             if (ulCountBytes > ulNew)
@@ -173,17 +174,17 @@ public:
         DBG_ASSERT(ulSeek+1<ulCountBytes, "Ww1PlainText");
         ulSeek++;
     }
-    BOOL GetError()                     { return !bOK; }
-    sal_Unicode Out( Ww1Shell&, ULONG& );
-    sal_Unicode Out( String&, ULONG=0xffffffff);
+    sal_Bool GetError()                     { return !bOK; }
+    sal_Unicode Out( Ww1Shell&, sal_uLong& );
+    sal_Unicode Out( String&, sal_uLong=0xffffffff);
     sal_Unicode Out( sal_Unicode& );
     friend ostream& operator <<(ostream&, Ww1PlainText&);
-    String& Fill( String&, ULONG=0, ULONG=0xffffffff );
-    sal_Unicode operator []( ULONG );
-    String GetText( ULONG ulOffset, ULONG nLen ) const;
+    String& Fill( String&, sal_uLong=0, sal_uLong=0xffffffff );
+    sal_Unicode operator []( sal_uLong );
+    String GetText( sal_uLong ulOffset, sal_uLong nLen ) const;
 
     enum Consts { MinChar = 32 };
-    static BOOL IsChar( sal_Unicode c )     { return c >= MinChar; }
+    static sal_Bool IsChar( sal_Unicode c )     { return c >= MinChar; }
 };
 
 /////////////////////////////////////////////////////////////// DocText
@@ -200,7 +201,7 @@ public:
 class Ww1FtnText : public Ww1PlainText
 {
 public:
-    ULONG Offset(Ww1Fib& rFibL) {
+    sal_uLong Offset(Ww1Fib& rFibL) {
         return rFibL.GetFIB().ccpTextGet(); }
     Ww1FtnText(Ww1Fib& rFibL) :
         Ww1PlainText(rFibL, rFibL.GetFIB().fcMinGet() +
@@ -212,7 +213,7 @@ public:
 class Ww1HddText : public Ww1PlainText
 {
 public:
-    ULONG Offset(Ww1Fib& rFibL) {
+    sal_uLong Offset(Ww1Fib& rFibL) {
         return rFibL.GetFIB().ccpTextGet() + rFibL.GetFIB().ccpFtnGet(); }
     Ww1HddText(Ww1Fib& rFibL) :
         Ww1PlainText(rFibL, rFibL.GetFIB().fcMinGet() +
@@ -224,7 +225,7 @@ public:
 class Ww1McrText : public Ww1PlainText
 {
 public:
-    ULONG Offset(Ww1Fib& rFibL) {
+    sal_uLong Offset(Ww1Fib& rFibL) {
         return rFibL.GetFIB().ccpTextGet() + rFibL.GetFIB().ccpFtnGet()
          + rFibL.GetFIB().ccpHddGet(); }
     Ww1McrText(Ww1Fib& rFibL) :
@@ -237,7 +238,7 @@ public:
 class Ww1AtnText : public Ww1PlainText
 {
 public:
-    ULONG Offset(Ww1Fib& rFibL) {
+    sal_uLong Offset(Ww1Fib& rFibL) {
         return rFibL.GetFIB().ccpTextGet() + rFibL.GetFIB().ccpFtnGet()
          + rFibL.GetFIB().ccpHddGet() + rFibL.GetFIB().ccpMcrGet(); }
     Ww1AtnText(Ww1Fib& rFibL) :
@@ -256,25 +257,24 @@ class Ww1Style
     W1_CHP aChpx;
     Ww1SprmPapx* pPapx;
     Ww1StyleSheet* pParent;
-    BYTE stcBase;
-    BYTE stcNext;
-    BOOL bUsed;
+    sal_uInt8 stcBase;
+    sal_uInt8 stcNext;
+    sal_Bool bUsed;
 public:
     Ww1Style();
     ~Ww1Style();
-    BOOL IsUsed() const                 { return bUsed; }
-    void SetDefaults(BYTE);
+    sal_Bool IsUsed() const                 { return bUsed; }
+    void SetDefaults(sal_uInt8);
     void SetParent(Ww1StyleSheet* newParent)    { pParent = newParent; }
-    void SetName(const String& rName)   { bUsed = TRUE; aName = rName; }
+    void SetName(const String& rName)   { bUsed = sal_True; aName = rName; }
     const String& GetName() const       { return aName; }
-//  Ww1Style& GetNext();
     Ww1Style& GetBase();
-    USHORT GetnBase() const             { return stcBase; }
-    USHORT GetnNext() const             { return stcNext; }
-    USHORT ReadName(BYTE*&, USHORT&, USHORT stc);
-    USHORT ReadChpx(BYTE*&, USHORT&);
-    USHORT ReadPapx(BYTE*&, USHORT&);
-    USHORT ReadEstcp(BYTE*&, USHORT&);
+    sal_uInt16 GetnBase() const             { return stcBase; }
+    sal_uInt16 GetnNext() const             { return stcNext; }
+    sal_uInt16 ReadName(sal_uInt8*&, sal_uInt16&, sal_uInt16 stc);
+    sal_uInt16 ReadChpx(sal_uInt8*&, sal_uInt16&);
+    sal_uInt16 ReadPapx(sal_uInt8*&, sal_uInt16&);
+    sal_uInt16 ReadEstcp(sal_uInt8*&, sal_uInt16&);
     friend ostream& operator <<(ostream&, Ww1Style&);
     void Out(Ww1Shell&, Ww1Manager&);
 };
@@ -286,28 +286,28 @@ public:
 class Ww1StyleSheet
 {
     Ww1Style aStyles[256];
-    USHORT cstcStd; // count style code standard
+    sal_uInt16 cstcStd; // count style code standard
     Ww1Fib& rFib;
-    BOOL bOK;
-    USHORT ReadNames(BYTE*&, USHORT&);
-    USHORT ReadChpx(BYTE*&, USHORT&);
-    USHORT ReadPapx(BYTE*&, USHORT&);
-    USHORT ReadEstcp(BYTE*&, USHORT&);
+    sal_Bool bOK;
+    sal_uInt16 ReadNames(sal_uInt8*&, sal_uInt16&);
+    sal_uInt16 ReadChpx(sal_uInt8*&, sal_uInt16&);
+    sal_uInt16 ReadPapx(sal_uInt8*&, sal_uInt16&);
+    sal_uInt16 ReadEstcp(sal_uInt8*&, sal_uInt16&);
 
-    void OutDefaults(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc);
-    void OutOne(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc);
-    void OutOneWithBase(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc,
-                        BYTE* pbStopRecur );
+    void OutDefaults(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 stc);
+    void OutOne(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 stc);
+    void OutOneWithBase(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 stc,
+                        sal_uInt8* pbStopRecur );
 public:
     Ww1StyleSheet(Ww1Fib& rFib);
-    Ww1Style& GetStyle(USHORT stc) {
+    Ww1Style& GetStyle(sal_uInt16 stc) {
         return aStyles[stc]; }
-    USHORT Count() {
+    sal_uInt16 Count() {
         return 256; }
     friend ostream& operator <<(ostream&, Ww1StyleSheet&);
     void Out(Ww1Shell&, Ww1Manager&);
     friend class Ww1Style;
-    BOOL GetError() {
+    sal_Bool GetError() {
         return !bOK; }
 };
 
@@ -322,22 +322,22 @@ class Ww1Fonts
 protected:
     W1_FFN** pFontA; // Array of Pointers to Font Description
     Ww1Fib& rFib;
-    ULONG nFieldFlags;
-    USHORT nMax; // Array-Groesse
-    BOOL bOK;
+    sal_uLong nFieldFlags;
+    sal_uInt16 nMax; // Array-Groesse
+    sal_Bool bOK;
 public:
-    Ww1Fonts(Ww1Fib&, ULONG nFieldFlgs);
+    Ww1Fonts(Ww1Fib&, sal_uLong nFieldFlgs);
     ~Ww1Fonts() {
         if (pFontA)
             DELETEZ(pFontA[0]);
         DELETEZ(pFontA); }
-    W1_FFN* GetFFN(USHORT nNum);
-    USHORT Count() {
+    W1_FFN* GetFFN(sal_uInt16 nNum);
+    sal_uInt16 Count() {
         return nMax; }
     friend ostream& operator <<(ostream&, Ww1Fonts&);
-    BOOL GetError() {
+    sal_Bool GetError() {
         return !bOK; }
-    SvxFontItem GetFont(USHORT);
+    SvxFontItem GetFont(sal_uInt16);
 };
 
 //////////////////////////////////////////////////////////// SingleSprm
@@ -367,19 +367,19 @@ public:
 // stehen faellt dann auch nicht auf. Der Namensstring ist nur im
 // Dumper noetig: weg damit im Filter.
 //
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-    void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-    virtual ostream& Dump(ostream&, BYTE*, USHORT);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    virtual ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
     const sal_Char* sName;
 #else
-    virtual void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-    virtual void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-    ostream& Dump(ostream&, BYTE*, USHORT);
+    virtual void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    virtual void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
 #endif
-    virtual USHORT Size(BYTE*);
-    USHORT nCountBytes;
+    virtual sal_uInt16 Size(sal_uInt8*);
+    sal_uInt16 nCountBytes;
 
-    Ww1SingleSprm(USHORT nBytes, const sal_Char* /*pName*/ = 0 )
+    Ww1SingleSprm(sal_uInt16 nBytes, const sal_Char* /*pName*/ = 0 )
         : nCountBytes(nBytes)
 #ifdef DUMP
         , sName( pName)
@@ -390,26 +390,23 @@ public:
 
 class Ww1SingleSprmByteSized : public Ww1SingleSprm {
 public:
-//  ostream& Dump(ostream&, BYTE*, USHORT);
-    USHORT Size(BYTE*);
-    Ww1SingleSprmByteSized(USHORT nBytes, sal_Char* sName = 0) :
+    sal_uInt16 Size(sal_uInt8*);
+    Ww1SingleSprmByteSized(sal_uInt16 nBytes, sal_Char* sName = 0) :
         Ww1SingleSprm(nBytes, sName) {
         }
 };
 
 class Ww1SingleSprmWordSized : public Ww1SingleSprm {
 public:
-//  ostream& Dump(ostream&, BYTE*, USHORT);
-    USHORT Size(BYTE*);
-    Ww1SingleSprmWordSized(USHORT nBytes, sal_Char* sName = 0) :
+    sal_uInt16 Size(sal_uInt8*);
+    Ww1SingleSprmWordSized(sal_uInt16 nBytes, sal_Char* sName = 0) :
         Ww1SingleSprm(nBytes, sName) {
         }
 };
 
 class Ww1SingleSprmByte : public Ww1SingleSprm {
 public:
-    ostream& Dump(ostream&, BYTE*, USHORT);
-//  USHORT Size(BYTE*);
+    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
     Ww1SingleSprmByte(sal_Char* sName = 0) :
         Ww1SingleSprm(1, sName) {
         }
@@ -417,8 +414,7 @@ public:
 
 class Ww1SingleSprmBool : public Ww1SingleSprmByte {
 public:
-    ostream& Dump(ostream&, BYTE*, USHORT);
-//  USHORT Size(BYTE*);
+    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
     Ww1SingleSprmBool(sal_Char* sName = 0) :
         Ww1SingleSprmByte(sName) {
         }
@@ -426,8 +422,7 @@ public:
 
 class Ww1SingleSprm4State : public Ww1SingleSprmByte {
 public:
-    ostream& Dump(ostream&, BYTE*, USHORT);
-//  USHORT Size(BYTE*);
+    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
     Ww1SingleSprm4State(sal_Char* sName = 0) :
         Ww1SingleSprmByte(sName) {
         }
@@ -435,16 +430,14 @@ public:
 
 class Ww1SingleSprmWord : public Ww1SingleSprm {
 public:
-    ostream& Dump(ostream&, BYTE*, USHORT);
-//  USHORT Size(BYTE*);
+    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
     Ww1SingleSprmWord(sal_Char* sName = 0)
     : Ww1SingleSprm(2, sName) {}
 };
 
 class Ww1SingleSprmLong : public Ww1SingleSprm {
 public:
-    ostream& Dump(ostream&, BYTE*, USHORT);
-//  USHORT Size(BYTE*);
+    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
     Ww1SingleSprmLong(sal_Char* sName = 0) :
         Ww1SingleSprm(4, sName) {
         }
@@ -452,9 +445,9 @@ public:
 
 class Ww1SingleSprmTab : public Ww1SingleSprm {
 public:
-    ostream& Dump(ostream&, BYTE*, USHORT);
-    USHORT Size(BYTE*);
-    Ww1SingleSprmTab(USHORT nBytes, sal_Char* sName = 0) :
+    ostream& Dump(ostream&, sal_uInt8*, sal_uInt16);
+    sal_uInt16 Size(sal_uInt8*);
+    Ww1SingleSprmTab(sal_uInt16 nBytes, sal_Char* sName = 0) :
         Ww1SingleSprm(nBytes, sName) {
         }
 };
@@ -464,8 +457,8 @@ public:
     Ww1SingleSprmPJc(sal_Char* sName) :
         Ww1SingleSprmByte(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-    void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPDxa : public Ww1SingleSprmWord {
@@ -473,7 +466,7 @@ public:
     Ww1SingleSprmPDxa(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPDxaRight : public Ww1SingleSprmPDxa {
@@ -481,7 +474,7 @@ public:
     Ww1SingleSprmPDxaRight(sal_Char* sName) :
         Ww1SingleSprmPDxa(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPDxaLeft : public Ww1SingleSprmPDxa {
@@ -489,7 +482,7 @@ public:
     Ww1SingleSprmPDxaLeft(sal_Char* sName) :
         Ww1SingleSprmPDxa(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPDxaLeft1 : public Ww1SingleSprmPDxa {
@@ -497,7 +490,7 @@ public:
     Ww1SingleSprmPDxaLeft1(sal_Char* sName) :
         Ww1SingleSprmPDxa(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPFKeep : public Ww1SingleSprmBool {
@@ -505,8 +498,8 @@ public:
     Ww1SingleSprmPFKeep(sal_Char* sName) :
         Ww1SingleSprmBool(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-    void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPFKeepFollow : public Ww1SingleSprmBool {
@@ -514,8 +507,8 @@ public:
     Ww1SingleSprmPFKeepFollow(sal_Char* sName) :
         Ww1SingleSprmBool(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-    void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPPageBreakBefore : public Ww1SingleSprmBool {
@@ -523,17 +516,16 @@ public:
     Ww1SingleSprmPPageBreakBefore(sal_Char* sName) :
         Ww1SingleSprmBool(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-    void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPBrc : public Ww1SingleSprmWord {
 protected:
-//  SvxBorderLine* SetBorder(SvxBorderLine*, W1_BRC*);
     // spezielle start-routine, je nach sprm verschieden versorgt
     // mit einem BoxItem.
-    void Start(Ww1Shell&, BYTE, W1_BRC10*, USHORT, Ww1Manager&, SvxBoxItem&);
-    void Start(Ww1Shell&, BYTE, W1_BRC*, USHORT, Ww1Manager&, SvxBoxItem&);
+    void Start(Ww1Shell&, sal_uInt8, W1_BRC10*, sal_uInt16, Ww1Manager&, SvxBoxItem&);
+    void Start(Ww1Shell&, sal_uInt8, W1_BRC*, sal_uInt16, Ww1Manager&, SvxBoxItem&);
 
     using Ww1SingleSprm::Start;
 
@@ -541,16 +533,16 @@ public:
     Ww1SingleSprmPBrc(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
     // SetBorder() wird auch fuer Tabellen gebraucht, deshalb public
-    static SvxBorderLine* SetBorder(SvxBorderLine*, W1_BRC10*);
+    static editeng::SvxBorderLine* SetBorder(editeng::SvxBorderLine*, W1_BRC10*);
 };
 
-#define BRC_TOP ((USHORT)0)
-#define BRC_LEFT ((USHORT)1)
-#define BRC_BOTTOM ((USHORT)2)
-#define BRC_RIGHT ((USHORT)3)
-#define BRC_ANZ ((USHORT)BRC_RIGHT-BRC_TOP+1)
+#define BRC_TOP ((sal_uInt16)0)
+#define BRC_LEFT ((sal_uInt16)1)
+#define BRC_BOTTOM ((sal_uInt16)2)
+#define BRC_RIGHT ((sal_uInt16)3)
+#define BRC_ANZ ((sal_uInt16)BRC_RIGHT-BRC_TOP+1)
 
 // Die BRC-struktur fuer 1.0 versionen von word sind verschieden von
 // denen der folgenden versionen. diese werden zum glueck aber auch
@@ -558,29 +550,29 @@ public:
 // SH: Ab sofort alle 4 Umrandungen ueber nur 1 Klasse.
 class Ww1SingleSprmPBrc10 : public Ww1SingleSprmPBrc
 {
-    USHORT nLine;   // BRC_TOP, BRC_LEFT, ...
+    sal_uInt16 nLine;   // BRC_TOP, BRC_LEFT, ...
 
     using Ww1SingleSprmPBrc::Start;
 
 public:
-    Ww1SingleSprmPBrc10(USHORT nL, sal_Char* sName)
+    Ww1SingleSprmPBrc10(sal_uInt16 nL, sal_Char* sName)
     : Ww1SingleSprmPBrc(sName), nLine(nL) {}
 
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmParaSpace : public Ww1SingleSprmWord {
 public:
     Ww1SingleSprmParaSpace(sal_Char* sName)
     : Ww1SingleSprmWord(sName) {}
-    void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPDyaBefore : public Ww1SingleSprmParaSpace {
 public:
     Ww1SingleSprmPDyaBefore(sal_Char* sName)
     : Ww1SingleSprmParaSpace(sName) {}
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPDyaAfter : public Ww1SingleSprmParaSpace {
@@ -588,7 +580,7 @@ public:
     Ww1SingleSprmPDyaAfter(sal_Char* sName) :
         Ww1SingleSprmParaSpace(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPDyaLine : public Ww1SingleSprmWord {
@@ -596,8 +588,8 @@ public:
     Ww1SingleSprmPDyaLine(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-    void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPChgTabsPapx : public Ww1SingleSprmByteSized {
@@ -606,8 +598,8 @@ public:
         Ww1SingleSprmByteSized(0, sName) {
         }
   // Size() ist noch nicht aktiviert !!
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-    void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmSGprfIhdt : public Ww1SingleSprmByte {
@@ -615,7 +607,7 @@ public:
     Ww1SingleSprmSGprfIhdt(sal_Char* sName) :
         Ww1SingleSprmByte(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmSColumns : public Ww1SingleSprmWord {
@@ -623,7 +615,7 @@ public:
     Ww1SingleSprmSColumns(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPFInTable : public Ww1SingleSprmBool {
@@ -631,8 +623,8 @@ public:
     Ww1SingleSprmPFInTable(sal_Char* sName) :
         Ww1SingleSprmBool(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-    void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPTtp : public Ww1SingleSprmBool {
@@ -640,8 +632,8 @@ public:
     Ww1SingleSprmPTtp(sal_Char* sName) :
         Ww1SingleSprmBool(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-    void Stop(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
+    void Stop(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmTJc : public Ww1SingleSprmWord {
@@ -650,20 +642,12 @@ public:
     : Ww1SingleSprmWord(sName) {}
 };
 
-//class Ww1SingleSprmTDxaLeft : public Ww1SingleSprmWord {
-//public:
-//  Ww1SingleSprmTDxaLeft(sal_Char* sName) :
-//      Ww1SingleSprmWord(sName) {
-//      }
-//  void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-//};
-
 class Ww1SingleSprmTDxaGapHalf : public Ww1SingleSprmWord {
 public:
     Ww1SingleSprmTDxaGapHalf(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmTDefTable10 : public Ww1SingleSprmWordSized {
@@ -671,7 +655,7 @@ public:
     Ww1SingleSprmTDefTable10(sal_Char* sName) :
         Ww1SingleSprmWordSized(0, sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmTDyaRowHeight : public Ww1SingleSprmWord {
@@ -679,7 +663,7 @@ public:
     Ww1SingleSprmTDyaRowHeight(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 // Klassendefinitionen fuer Tabellen-Fastsave-Attribute
@@ -692,7 +676,7 @@ public:
     Ww1SingleSprmPpc(sal_Char* sName) :
         Ww1SingleSprmByte(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPDxaAbs : public Ww1SingleSprmWord {
@@ -700,7 +684,7 @@ public:
     Ww1SingleSprmPDxaAbs(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPDyaAbs : public Ww1SingleSprmWord {
@@ -708,7 +692,7 @@ public:
     Ww1SingleSprmPDyaAbs(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPDxaWidth : public Ww1SingleSprmWord {
@@ -716,7 +700,7 @@ public:
     Ww1SingleSprmPDxaWidth(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 class Ww1SingleSprmPFromText : public Ww1SingleSprmWord {
@@ -724,7 +708,7 @@ public:
     Ww1SingleSprmPFromText(sal_Char* sName) :
         Ww1SingleSprmWord(sName) {
         }
-    void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
+    void Start(Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&);
 };
 
 ////////////////////////////////////////////////////////////////// Sprm
@@ -733,48 +717,48 @@ public:
 //
 class Ww1Sprm
 {
-    BOOL ReCalc();
+    sal_Bool ReCalc();
     static Ww1SingleSprm* aTab[256];
     static Ww1SingleSprm* pSingleSprm;
 protected:
     static void InitTab();
-    Ww1SingleSprm& GetTab(USHORT nId)
+    Ww1SingleSprm& GetTab(sal_uInt16 nId)
     {
         if( !pSingleSprm )
             InitTab();
         return aTab[ nId ] ? *aTab[nId] : *pSingleSprm;
     }
 
-    BYTE* p;
-    USHORT nCountBytes;
-    BOOL bOK;
-    USHORT* pArr;
-    USHORT count;
+    sal_uInt8* p;
+    sal_uInt16 nCountBytes;
+    sal_Bool bOK;
+    sal_uInt16* pArr;
+    sal_uInt16 count;
 // ohne Token, mit laengen-byte/word
-    USHORT GetSize(BYTE nId, BYTE* pSprm);
+    sal_uInt16 GetSize(sal_uInt8 nId, sal_uInt8* pSprm);
 // mit Token und LaengenByte
-    USHORT GetSizeBrutto(BYTE* pSprm) {
-        BYTE nId = *pSprm++;
+    sal_uInt16 GetSizeBrutto(sal_uInt8* pSprm) {
+        sal_uInt8 nId = *pSprm++;
         return GetSize(nId, pSprm) + 1; }
 // gibt fuer nTh element id, size & zeiger auf daten:
-//  BOOL Fill(USHORT, BYTE&, USHORT&, BYTE*&);
+//  sal_Bool Fill(sal_uInt16, sal_uInt8&, sal_uInt16&, sal_uInt8*&);
 public:
 // SH: brauche ich public
 // gibt fuer nTh element id, size & zeiger auf daten:
-    BOOL Fill(USHORT, BYTE&, USHORT&, BYTE*&);
+    sal_Bool Fill(sal_uInt16, sal_uInt8&, sal_uInt16&, sal_uInt8*&);
 
-    Ww1Sprm(BYTE*, USHORT);
-    Ww1Sprm(SvStream&, ULONG);
+    Ww1Sprm(sal_uInt8*, sal_uInt16);
+    Ww1Sprm(SvStream&, sal_uLong);
     ~Ww1Sprm();
     friend ostream& operator <<(ostream&, Ww1Sprm&);
     void Start(Ww1Shell&, Ww1Manager&);
-    void Start(Ww1Shell&, Ww1Manager&, USHORT);
+    void Start(Ww1Shell&, Ww1Manager&, sal_uInt16);
     void Stop(Ww1Shell&, Ww1Manager&);
-    BOOL IsUsed() {
+    sal_Bool IsUsed() {
         return nCountBytes != 255; }
-    USHORT Count() {
+    sal_uInt16 Count() {
         return count; }
-    BOOL GetError() {
+    sal_Bool GetError() {
         return !bOK; }
     static void DeinitTab();
 };
@@ -786,13 +770,13 @@ public:
 //
 class Ww1Picture
 {
-    BOOL bOK;
+    sal_Bool bOK;
     W1_PIC* pPic;
 public:
-    Ww1Picture(SvStream&, ULONG);
+    Ww1Picture(SvStream&, sal_uLong);
     ~Ww1Picture() {
         }
-    BOOL GetError() {
+    sal_Bool GetError() {
         return !bOK; }
     friend ostream& operator <<(ostream&, Ww1Picture&);
     void Out(Ww1Shell&, Ww1Manager&);
@@ -807,26 +791,26 @@ public:
 //
 class Ww1Plc
 {
-    BYTE* p;
-    USHORT nCountBytes;
-    USHORT iMac;
-    USHORT nItemSize;
-    BOOL bOK;
+    sal_uInt8* p;
+    sal_uInt16 nCountBytes;
+    sal_uInt16 iMac;
+    sal_uInt16 nItemSize;
+    sal_Bool bOK;
 protected:
     Ww1Fib& rFib;
-    BYTE* GetData(USHORT);
+    sal_uInt8* GetData(sal_uInt16);
 public:
-    Ww1Plc(Ww1Fib&, ULONG, USHORT, USHORT);
+    Ww1Plc(Ww1Fib&, sal_uLong, sal_uInt16, sal_uInt16);
     ~Ww1Plc();
     friend ostream& operator <<(ostream&, Ww1Plc&);
-    ULONG Where(USHORT); // wie im jeweiligen plc
-    void Seek(ULONG, USHORT&);
-    void Fill(USHORT nIndex, ULONG& begin, ULONG& end) {
+    sal_uLong Where(sal_uInt16); // wie im jeweiligen plc
+    void Seek(sal_uLong, sal_uInt16&);
+    void Fill(sal_uInt16 nIndex, sal_uLong& begin, sal_uLong& end) {
         begin = Where(nIndex);
         end = Where(nIndex+1); }
-    USHORT Count() {
+    sal_uInt16 Count() {
         return iMac; }
-    BOOL GetError() {
+    sal_Bool GetError() {
         return !bOK; }
 };
 
@@ -935,14 +919,13 @@ public:
 ///////////////////////////////////////////////////////////// PlcFields
 class Ww1PlcFields : public Ww1Plc
 {
-    //USHORT Fill(USHORT, BYTE&, String&, String&, String&);
 public:
-    Ww1PlcFields(Ww1Fib& rFibL, ULONG start, USHORT nBytes)
+    Ww1PlcFields(Ww1Fib& rFibL, sal_uLong start, sal_uInt16 nBytes)
         : Ww1Plc(rFibL, start, nBytes, 2)
     {}
-    W1_FLD* GetData(USHORT nIndex)
+    W1_FLD* GetData(sal_uInt16 nIndex)
         { return (W1_FLD*)Ww1Plc::GetData(nIndex); }
-    ULONG Where(USHORT nIndex)  // absolut im file
+    sal_uLong Where(sal_uInt16 nIndex)  // absolut im file
         { return Ww1Plc::Where(nIndex) + rFib.GetFIB().fcMinGet(); }
     friend ostream& operator <<(ostream&, Ww1PlcFields&);
 };
@@ -951,14 +934,14 @@ public:
 class Ww1StringList
 {
     sal_Char** pIdxA;
-    USHORT nMax;
+    sal_uInt16 nMax;
 public:
-    Ww1StringList( SvStream& rSt, ULONG nFc, USHORT nCb );
+    Ww1StringList( SvStream& rSt, sal_uLong nFc, sal_uInt16 nCb );
     ~Ww1StringList()
         {   if( pIdxA ) { delete pIdxA[0]; delete pIdxA; } }
-    const String GetStr( USHORT nNum ) const;
-    USHORT Count() const    { return nMax; }
-    BOOL GetError() const   { return (nMax != 0) && !pIdxA; }
+    const String GetStr( sal_uInt16 nNum ) const;
+    sal_uInt16 Count() const    { return nMax; }
+    sal_Bool GetError() const   { return (nMax != 0) && !pIdxA; }
 };
 
 class Ww1PlcBookmarkTxt: public Ww1StringList
@@ -972,23 +955,21 @@ public:
 
 class Ww1PlcBookmarkPos : public Ww1Plc
 {
-//  USHORT Fill(USHORT, BYTE&, String&, String&, String&);
 public:
-    Ww1PlcBookmarkPos(Ww1Fib& _rFib, ULONG start, USHORT nBytes, BOOL bEnd)
+    Ww1PlcBookmarkPos(Ww1Fib& _rFib, sal_uLong start, sal_uInt16 nBytes, sal_Bool bEnd)
         : Ww1Plc(_rFib, start, nBytes, (bEnd) ? 0 : 2)
     {}
 
-    BYTE* GetData(USHORT nIndex)    {   return Ww1Plc::GetData(nIndex); }
+    sal_uInt8* GetData(sal_uInt16 nIndex)   {   return Ww1Plc::GetData(nIndex); }
     // Position als CP
-    ULONG WhereCP(USHORT nIndex)    { return Ww1Plc::Where(nIndex); }
+    sal_uLong WhereCP(sal_uInt16 nIndex)    { return Ww1Plc::Where(nIndex); }
     // absolut im file
-    ULONG Where(USHORT nIndex)
+    sal_uLong Where(sal_uInt16 nIndex)
     {
         return ( nIndex < Count() )
                ? Ww1Plc::Where(nIndex) + rFib.GetFIB().fcMinGet()
                : 0xffffffff;
     }
-//  friend ostream& operator <<(ostream&, Ww1PlcBookmarks&);
 };
 
 //////////////////////////////////////////////////////////////// PlcHdd
@@ -1009,26 +990,26 @@ public:
 class Ww1Fkp
 {
 protected:
-    BYTE aFkp[512];
-    USHORT nItemSize;
-    BOOL bOK;
-    BYTE* GetData(USHORT);
+    sal_uInt8 aFkp[512];
+    sal_uInt16 nItemSize;
+    sal_Bool bOK;
+    sal_uInt8* GetData(sal_uInt16);
 public:
-    Ww1Fkp(SvStream&, ULONG, USHORT);
+    Ww1Fkp(SvStream&, sal_uLong, sal_uInt16);
     friend ostream& operator <<(ostream&, Ww1Fkp&);
-    USHORT Count() const            { return SVBT8ToByte(aFkp+511); }
-    ULONG Where(USHORT); // wie im entsprechenden fkp
+    sal_uInt16 Count() const            { return SVBT8ToByte(aFkp+511); }
+    sal_uLong Where(sal_uInt16); // wie im entsprechenden fkp
 };
 
 //////////////////////////////////////////////////////////////// FkpPap
 class Ww1FkpPap : public Ww1Fkp
 {
 public:
-    Ww1FkpPap(SvStream& rStream, ULONG ulFilePos)
+    Ww1FkpPap(SvStream& rStream, sal_uLong ulFilePos)
         : Ww1Fkp(rStream, ulFilePos, 1)
     {}
     friend ostream& operator <<(ostream&, Ww1FkpPap&);
-    BOOL Fill(USHORT,  BYTE*&, USHORT&);
+    sal_Bool Fill(sal_uInt16,  sal_uInt8*&, sal_uInt16&);
 };
 
 //////////////////////////////////////////////////////////////// FkpChp
@@ -1039,7 +1020,7 @@ class Ww1FkpChp : public Ww1Fkp
     SvStream& GetStream()   { return rStream; }
 #endif
 public:
-    Ww1FkpChp(SvStream& rStream, ULONG ulFilePos)
+    Ww1FkpChp(SvStream& rStream, sal_uLong ulFilePos)
         : Ww1Fkp(rStream, ulFilePos, 1)
 #ifdef DUMP
         , rStream(rStream)
@@ -1047,17 +1028,17 @@ public:
     {}
 
     friend ostream& operator <<(ostream&, Ww1FkpChp&);
-    BOOL Fill(USHORT, W1_CHP&);
+    sal_Bool Fill(sal_uInt16, W1_CHP&);
 };
 
 ////////////////////////////////////////////////////////////// SprmPapx
 class Ww1SprmPapx : public Ww1Sprm
 {
     W1_PAPX aPapx;
-    BYTE* Sprm(BYTE* p, USHORT nSize);
-    USHORT SprmSize(BYTE* p, USHORT nSize);
+    sal_uInt8* Sprm(sal_uInt8* p, sal_uInt16 nSize);
+    sal_uInt16 SprmSize(sal_uInt8* p, sal_uInt16 nSize);
 public:
-    Ww1SprmPapx(BYTE* p, USHORT nSize);
+    Ww1SprmPapx(sal_uInt8* p, sal_uInt16 nSize);
     friend ostream& operator <<(ostream&, Ww1SprmPapx&);
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&);
@@ -1067,7 +1048,7 @@ public:
 class Ww1SprmSep : public Ww1Sprm
 {
 public:
-    Ww1SprmSep(Ww1Fib& rFib, ULONG ulFilePos)
+    Ww1SprmSep(Ww1Fib& rFib, sal_uLong ulFilePos)
         : Ww1Sprm(rFib.GetStream(), ulFilePos)
     {}
     friend ostream& operator <<(ostream&, Ww1SprmSep&);
@@ -1083,14 +1064,14 @@ class Ww1Assoc
     Ww1Fib& rFib;
     sal_Char* pBuffer;
     sal_Char* pStrTbl[ MaxFields ];
-    BOOL bOK;
+    sal_Bool bOK;
 
-    String GetStr(USHORT);
+    String GetStr(sal_uInt16);
 
 public:
     Ww1Assoc(Ww1Fib&);
     ~Ww1Assoc()             { delete pBuffer; }
-    BOOL GetError() const   { return !bOK; }
+    sal_Bool GetError() const   { return !bOK; }
     friend ostream& operator <<(ostream&, Ww1Assoc&);
     void Out(Ww1Shell&);
 };
@@ -1113,23 +1094,23 @@ public:
 //
 class Ww1HeaderFooter : public Ww1PlcHdd
 {
-    USHORT nextIhdd; // naechster textteil im HddText
-    USHORT nFtnSep; // fusznoten trenner
-    USHORT nFtnFollowSep; // folge fusznoten trenner
-    USHORT nFtnNote; // folgefunsznotennotiz
-    USHORT nEvenHeadL; // kopfzeilen grader seiten
-    USHORT nOddHeadL; // kopfzeilen ungrader seiten
-    USHORT nEvenFootL; // fuszzeilen grader seiten
-    USHORT nOddFootL; // fuszzeilen ungerader seiten
-    USHORT nFirstHeadL; // kopfzeilen der ersten seite
-    USHORT nFirstFootL; // fuszzeilen der ersten seite
+    sal_uInt16 nextIhdd; // naechster textteil im HddText
+    sal_uInt16 nFtnSep; // fusznoten trenner
+    sal_uInt16 nFtnFollowSep; // folge fusznoten trenner
+    sal_uInt16 nFtnNote; // folgefunsznotennotiz
+    sal_uInt16 nEvenHeadL; // kopfzeilen grader seiten
+    sal_uInt16 nOddHeadL; // kopfzeilen ungrader seiten
+    sal_uInt16 nEvenFootL; // fuszzeilen grader seiten
+    sal_uInt16 nOddFootL; // fuszzeilen ungerader seiten
+    sal_uInt16 nFirstHeadL; // kopfzeilen der ersten seite
+    sal_uInt16 nFirstFootL; // fuszzeilen der ersten seite
     enum HeaderFooterMode {
         None, FtnSep, FtnFollowSep, FtnNote, EvenHeadL, OddHeadL,
         EvenFootL, OddFootL, FirstHeadL, MaxHeaderFooterMode
     } eHeaderFooterMode;
 
 public:
-    Ww1HeaderFooter(Ww1Fib& rFibL, USHORT grpfIhdt)
+    Ww1HeaderFooter(Ww1Fib& rFibL, sal_uInt16 grpfIhdt)
         : Ww1PlcHdd(rFibL),
         nextIhdd(0),
         nFtnSep(0xffff),
@@ -1147,8 +1128,7 @@ public:
         if (grpfIhdt & 0x0002) nFtnFollowSep = nextIhdd++;
         if (grpfIhdt & 0x0004) nFtnNote = nextIhdd++;
     }
-//  ~Ww1HeaderFooter() {}
-    void SetGrpfIhdt(USHORT grpfIhdt)
+    void SetGrpfIhdt(sal_uInt16 grpfIhdt)
     {
         if (grpfIhdt & 0x0001) nEvenHeadL = nextIhdd++;
         if (grpfIhdt & 0x0002) nOddHeadL = nextIhdd++;
@@ -1158,79 +1138,79 @@ public:
         if (grpfIhdt & 0x0020) nFirstFootL = nextIhdd++;
         DBG_ASSERT(nextIhdd<=Count(), "Ww1HeaderFooter");
     }
-    BOOL operator++(int)
+    sal_Bool operator++(int)
     {
-        BOOL bRet = TRUE;
+        sal_Bool bRet = sal_True;
         eHeaderFooterMode = (HeaderFooterMode)((short)eHeaderFooterMode + 1);
         if( eHeaderFooterMode == MaxHeaderFooterMode)
         {
             eHeaderFooterMode = None;
-            bRet = FALSE;
+            bRet = sal_False;
         }
         return bRet;
     }
-    BOOL FillFtnSep(ULONG& begin, ULONG& end)
+    sal_Bool FillFtnSep(sal_uLong& begin, sal_uLong& end)
     {
         if (nFtnSep == 0xffff)
-            return FALSE;
+            return sal_False;
         Fill(nFtnSep, begin, end);
-        return TRUE;
+        return sal_True;
     }
-    BOOL FillFtnFollowSep(ULONG& begin, ULONG& end)
+    sal_Bool FillFtnFollowSep(sal_uLong& begin, sal_uLong& end)
     {
         if (nFtnFollowSep == 0xffff)
-            return FALSE;
+            return sal_False;
         Fill(nFtnFollowSep, begin, end);
-        return TRUE;
+        return sal_True;
     }
-    BOOL FillFtnNote(ULONG& begin, ULONG& end)
+    sal_Bool FillFtnNote(sal_uLong& begin, sal_uLong& end)
     {
         if (nFtnNote == 0xffff)
-            return FALSE;
+            return sal_False;
         Fill(nFtnNote, begin, end);
-        return TRUE;
+        return sal_True;
     }
-    BOOL FillEvenHeadL(ULONG& begin, ULONG& end)
+    sal_Bool FillEvenHeadL(sal_uLong& begin, sal_uLong& end)
     {
         if (nEvenHeadL == 0xffff)
-            return FALSE;
+            return sal_False;
         Fill(nEvenHeadL, begin, end);
-        return TRUE;
+        return sal_True;
     }
-    BOOL FillOddHeadL(ULONG& begin, ULONG& end)
+    sal_Bool FillOddHeadL(sal_uLong& begin, sal_uLong& end)
     {
         if (nOddHeadL == 0xffff)
-            return FALSE;
+            return sal_False;
         Fill(nOddHeadL, begin, end);
-        return TRUE;
+        return sal_True;
     }
-    BOOL FillEvenFootL(ULONG& begin, ULONG& end)
+    sal_Bool FillEvenFootL(sal_uLong& begin, sal_uLong& end)
     {
         if (nEvenFootL == 0xffff)
-            return FALSE;
+            return sal_False;
         Fill(nEvenFootL, begin, end);
-        return TRUE;
+        return sal_True;
     }
-    BOOL FillOddFootL(ULONG& begin, ULONG& end)
+    sal_Bool FillOddFootL(sal_uLong& begin, sal_uLong& end)
     {
         if (nOddFootL == 0xffff)
-            return FALSE;
+            return sal_False;
         Fill(nOddFootL, begin, end);
-        return TRUE;
+        return sal_True;
     }
-    BOOL FillFirstHeadL(ULONG& begin, ULONG& end)
+    sal_Bool FillFirstHeadL(sal_uLong& begin, sal_uLong& end)
     {
         if (nFirstHeadL == 0xffff)
-            return FALSE;
+            return sal_False;
         Fill(nFirstHeadL, begin, end);
-        return TRUE;
+        return sal_True;
     }
-    BOOL FillFirstFootL(ULONG& begin, ULONG& end)
+    sal_Bool FillFirstFootL(sal_uLong& begin, sal_uLong& end)
     {
         if (nFirstFootL == 0xffff)
-            return FALSE;
+            return sal_False;
         Fill(nFirstFootL, begin, end);
-        return TRUE;
+        return sal_True;
     }
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
@@ -1239,35 +1219,34 @@ public:
 //////////////////////////////////////////////////////////////// Fields
 class Ww1Fields : public Ww1PlcFields
 {
-    USHORT nPlcIndex;
+    sal_uInt16 nPlcIndex;
     String sErgebnis; // das von word errechnete ergebniss
     SwField* pField;
-    ULONG Where(USHORT nIndex)  // innerhalb des textes
+    sal_uLong Where(sal_uInt16 nIndex)  // innerhalb des textes
         { return Ww1PlcFields::Where(nIndex) - rFib.GetFIB().fcMinGet(); }
 
 public:
-    Ww1Fields(Ww1Fib& rFibL, ULONG ulFilePos, USHORT nBytes)
+    Ww1Fields(Ww1Fib& rFibL, sal_uLong ulFilePos, sal_uInt16 nBytes)
         : Ww1PlcFields(rFibL, ulFilePos, nBytes), nPlcIndex(0), pField(0)
     {}
-//  ~Ww1Fields() {}
     // innerhalb des textes
-    ULONG Where()       { return Where(nPlcIndex); }
+    sal_uLong Where()       { return Where(nPlcIndex); }
     void operator++(int)
     {
         DBG_ASSERT(nPlcIndex+1 <= Count(), "Ww1Fields");
         nPlcIndex++;
     }
-    void Seek(ULONG ulNew)      { Ww1PlcFields::Seek(ulNew, nPlcIndex); }
+    void Seek(sal_uLong ulNew)      { Ww1PlcFields::Seek(ulNew, nPlcIndex); }
     W1_FLD* GetData()
     {
         DBG_ASSERT(nPlcIndex < Count(), "Ww1Fields");
         return Ww1PlcFields::GetData(nPlcIndex);
     }
-    ULONG GetLength();
+    sal_uLong GetLength();
     friend ostream& operator <<(ostream&, Ww1Manager&);
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
-    void Out(Ww1Shell&, Ww1Manager&, USHORT=0);
+    void Out(Ww1Shell&, Ww1Manager&, sal_uInt16=0);
 };
 
 class Ww1TextFields : public Ww1Fields
@@ -1313,11 +1292,9 @@ class Ww1Bookmarks
     Ww1PlcBookmarkPos* pPos[2];
     Ww1Fib& rFib;
 
-    USHORT nPlcIdx[2];
-    USHORT nIsEnd;
-    BOOL bOK;
-//  ULONG Where(USHORT nIndex) { // innerhalb des textes
-//      return Ww1PlcFields::Where(nIndex) - rFib.GetFIB().fcMinGet(); }
+    sal_uInt16 nPlcIdx[2];
+    sal_uInt16 nIsEnd;
+    sal_Bool bOK;
 public:
     Ww1Bookmarks(Ww1Fib& rFib);
     ~Ww1Bookmarks()
@@ -1325,34 +1302,33 @@ public:
             delete pPos[1];
             delete pPos[0];
     }
-    ULONG Where() const     { return pPos[nIsEnd]->WhereCP(nPlcIdx[nIsEnd]); }
+    sal_uLong Where() const     { return pPos[nIsEnd]->WhereCP(nPlcIdx[nIsEnd]); }
     void operator++(int);
-    BOOL GetError() const   { return !bOK; }
+    sal_Bool GetError() const   { return !bOK; }
     long GetHandle() const;
-    BOOL GetIsEnd() const   { return ( nIsEnd ) ? TRUE : FALSE; }
+    sal_Bool GetIsEnd() const   { return ( nIsEnd ) ? sal_True : sal_False; }
     const String GetName() const;
     long Len() const;
     friend ostream& operator <<(ostream&, Ww1Bookmarks&);
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
-    void Out(Ww1Shell&, Ww1Manager&, USHORT=0);
+    void Out(Ww1Shell&, Ww1Manager&, sal_uInt16=0);
 };
 
 ///////////////////////////////////////////////////////////// Footnotes
 class Ww1Footnotes : public Ww1PlcFootnoteRef
 {
-    USHORT nPlcIndex;
+    sal_uInt16 nPlcIndex;
     Ww1PlcFootnoteTxt aText;
-    BOOL bStarted;
+    sal_Bool bStarted;
 public:
     Ww1Footnotes(Ww1Fib& rFibL)
-        : Ww1PlcFootnoteRef(rFibL), nPlcIndex(0), aText(rFibL), bStarted(FALSE)
+        : Ww1PlcFootnoteRef(rFibL), nPlcIndex(0), aText(rFibL), bStarted(sal_False)
     {}
-//  ~Ww1Footnotes() {}
     // innerhalb des textes
-    ULONG Where()
+    sal_uLong Where()
     {
-        ULONG ulRet = 0xffffffff;
+        sal_uLong ulRet = 0xffffffff;
         if (Count())
             ulRet = Ww1PlcFootnoteRef::Where(nPlcIndex);
         return ulRet;
@@ -1370,20 +1346,19 @@ public:
 class Ww1Sep : public Ww1PlcSep
 {
     Ww1HeaderFooter aHdd;
-    USHORT nPlcIndex;
+    sal_uInt16 nPlcIndex;
 public:
-    Ww1Sep(Ww1Fib& rFibL, USHORT grpfIhdt)
+    Ww1Sep(Ww1Fib& rFibL, sal_uInt16 grpfIhdt)
     : Ww1PlcSep(rFibL), aHdd(rFibL, grpfIhdt), nPlcIndex(0) {}
 
     Ww1HeaderFooter& GetHdd()   { return aHdd; }
     void operator++(int)        { nPlcIndex++; }
-    BYTE* GetData()             { return Ww1PlcSep::GetData(nPlcIndex); }
+    sal_uInt8* GetData()            { return Ww1PlcSep::GetData(nPlcIndex); }
     // innerhalb des textes
-    ULONG Where()               { return Ww1PlcSep::Where(nPlcIndex); }
-    void SetGrpfIhdt(BYTE grpfIhdt)
+    sal_uLong Where()               { return Ww1PlcSep::Where(nPlcIndex); }
+    void SetGrpfIhdt(sal_uInt8 grpfIhdt)
     {
         GetHdd().SetGrpfIhdt(grpfIhdt);
-//      GetHdd().Start(rOut, rMan);
     }
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode& c)
@@ -1393,14 +1368,14 @@ public:
 /////////////////////////////////////////////////////////////////// Pap
 class Ww1Pap : public Ww1PlcPap
 {
-    USHORT nPlcIndex;
-    USHORT nPushedPlcIndex;
-    USHORT nFkpIndex;
-    USHORT nPushedFkpIndex;
-    ULONG ulOffset;
+    sal_uInt16 nPlcIndex;
+    sal_uInt16 nPushedPlcIndex;
+    sal_uInt16 nFkpIndex;
+    sal_uInt16 nPushedFkpIndex;
+    sal_uLong ulOffset;
     Ww1FkpPap* pPap;
 
-    BOOL FindSprm(USHORT nId, BYTE* pStart, BYTE* pEnd);
+    sal_Bool FindSprm(sal_uInt16 nId, sal_uInt8* pStart, sal_uInt8* pEnd);
     void UpdateIdx()
     {
         if (pPap && nFkpIndex >= pPap->Count() )
@@ -1412,26 +1387,26 @@ class Ww1Pap : public Ww1PlcPap
         if( !pPap )
             Where();
     }
-    BOOL HasId0(USHORT nId);
+    sal_Bool HasId0(sal_uInt16 nId);
 
 public:
     Ww1Pap(Ww1Fib& rFib);
     ~Ww1Pap()   { delete pPap; }
-    ULONG Where( BOOL bSetIndex = TRUE ); // innerhalb des textes
+    sal_uLong Where( sal_Bool bSetIndex = sal_True ); // innerhalb des textes
     void operator++(int);
-    BOOL FillStart(BYTE*& pB, USHORT& nSize)
+    sal_Bool FillStart(sal_uInt8*& pB, sal_uInt16& nSize)
     {
         UpdateIdx();
         return pPap->Fill(nFkpIndex, pB, nSize);
     }
-    BOOL FillStop(BYTE*& pB, USHORT& nSize)
+    sal_Bool FillStop(sal_uInt8*& pB, sal_uInt16& nSize)
     {
-        return nFkpIndex ? pPap->Fill(nFkpIndex-1, pB, nSize) : FALSE;
+        return nFkpIndex ? pPap->Fill(nFkpIndex-1, pB, nSize) : sal_False;
     }
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
-    void Seek(ULONG);
-    void Push(ULONG ulOffsetTmp = 0)
+    void Seek(sal_uLong);
+    void Push(sal_uLong ulOffsetTmp = 0)
     {
         DBG_ASSERT(!Pushed(), "Ww1Pap");
         nPushedPlcIndex = nPlcIndex;
@@ -1441,7 +1416,7 @@ public:
         delete pPap;
         pPap = NULL;
     }
-    BOOL Pushed()
+    sal_Bool Pushed()
     {
         return nPushedPlcIndex != 0xffff;
     }
@@ -1455,19 +1430,19 @@ public:
         nPushedFkpIndex = 0xffff;
         delete pPap;
         pPap = NULL;
-        Where( FALSE );
+        Where( sal_False );
     }
-    BOOL HasId(USHORT nId);
+    sal_Bool HasId(sal_uInt16 nId);
 };
 
 /////////////////////////////////////////////////////////////////// Chp
 class Ww1Chp : public Ww1PlcChp
 {
-    USHORT nPlcIndex;
-    USHORT nPushedPlcIndex;
-    USHORT nFkpIndex;
-    USHORT nPushedFkpIndex;
-    ULONG ulOffset;
+    sal_uInt16 nPlcIndex;
+    sal_uInt16 nPushedPlcIndex;
+    sal_uInt16 nFkpIndex;
+    sal_uInt16 nPushedFkpIndex;
+    sal_uLong ulOffset;
     Ww1FkpChp* pChp;
     void UpdateIdx()
     {
@@ -1484,19 +1459,19 @@ class Ww1Chp : public Ww1PlcChp
 public:
     Ww1Chp( Ww1Fib& rFib );
     ~Ww1Chp()   { delete pChp; }
-    ULONG Where( BOOL bSetIndex = TRUE ); // innerhalb des textes
+    sal_uLong Where( sal_Bool bSetIndex = sal_True ); // innerhalb des textes
     void operator++(int);
-    BOOL FillStart(W1_CHP& rChp)
+    sal_Bool FillStart(W1_CHP& rChp)
     {
         UpdateIdx();
         return pChp->Fill(nFkpIndex, rChp);
     }
-    BOOL FillStop(W1_CHP& rChp)
-    { return nFkpIndex ? pChp->Fill(nFkpIndex-1, rChp) : FALSE;  }
+    sal_Bool FillStop(W1_CHP& rChp)
+    { return nFkpIndex ? pChp->Fill(nFkpIndex-1, rChp) : sal_False;  }
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell&, Ww1Manager&, sal_Unicode&);
-    void Seek(ULONG);
-    void Push(ULONG ulOffsetTmp = 0)
+    void Seek(sal_uLong);
+    void Push(sal_uLong ulOffsetTmp = 0)
     {
         DBG_ASSERT(!Pushed(), "Ww1Chp");
         nPushedPlcIndex = nPlcIndex;
@@ -1506,7 +1481,7 @@ public:
         delete pChp;
         pChp = NULL;
     }
-    BOOL Pushed()               { return nPushedPlcIndex != 0xffff; }
+    sal_Bool Pushed()               { return nPushedPlcIndex != 0xffff; }
     void Pop()
     {
         DBG_ASSERT(Pushed(), "Ww1Chp");
@@ -1517,7 +1492,7 @@ public:
         nPushedFkpIndex = 0xffff;
         delete pChp;
         pChp = NULL;
-        Where( FALSE );
+        Where( sal_False );
     }
 };
 
@@ -1529,18 +1504,18 @@ public:
 //
 class Ww1Manager
 {
-    BOOL bOK;
-    BOOL bInTtp;
-    BOOL bInStyle;
-    BOOL bStopAll;
+    sal_Bool bOK;
+    sal_Bool bInTtp;
+    sal_Bool bInStyle;
+    sal_Bool bStopAll;
     Ww1Fib aFib;
     Ww1Dop aDop;
     Ww1Fonts aFonts;
 // ab jetzt alles paarig, fuer 'pushed':
     Ww1DocText aDoc;
     Ww1PlainText* pDoc;
-    ULONG ulDocSeek;
-    ULONG* pSeek;
+    sal_uLong ulDocSeek;
+    sal_uLong* pSeek;
     Ww1TextFields aFld;
     Ww1Fields* pFld;
 // selbst 'push'bar:
@@ -1556,43 +1531,43 @@ class Ww1Manager
     void Out(Ww1Shell&, sal_Unicode );
 
 public:
-    Ww1Manager(SvStream& rStrm, ULONG nFieldFlgs);
-    BOOL GetError() const       { return !bOK; }
+    Ww1Manager(SvStream& rStrm, sal_uLong nFieldFlgs);
+    sal_Bool GetError() const       { return !bOK; }
 
 // Fuer Tabellen
-    void SetInTtp(BOOL bSet = TRUE)     { bInTtp = bSet; }
-    BOOL IsInTtp() const                { return bInTtp; }
-    void SetInStyle(BOOL bSet = TRUE)   { bInStyle = bSet; }
-    BOOL IsInStyle() const              { return bInStyle; }
-    void SetStopAll(BOOL bSet = TRUE)   { bStopAll = bSet; }
-    BOOL IsStopAll() const              { return bStopAll; }
-    BOOL HasInTable();
-    BOOL HasTtp();
-    BOOL LastHasTtp();
+    void SetInTtp(sal_Bool bSet = sal_True)     { bInTtp = bSet; }
+    sal_Bool IsInTtp() const                { return bInTtp; }
+    void SetInStyle(sal_Bool bSet = sal_True)   { bInStyle = bSet; }
+    sal_Bool IsInStyle() const              { return bInStyle; }
+    void SetStopAll(sal_Bool bSet = sal_True)   { bStopAll = bSet; }
+    sal_Bool IsStopAll() const              { return bStopAll; }
+    sal_Bool HasInTable();
+    sal_Bool HasTtp();
+    sal_Bool LastHasTtp();
 
 // Fuer Flys
-    BOOL HasPPc();
-    BOOL HasPDxaAbs();
+    sal_Bool HasPPc();
+    sal_Bool HasPDxaAbs();
 
     Ww1Fib& GetFib()                    { return aFib; }
     Ww1PlainText& GetText()             { return *pDoc; }
     Ww1Dop& GetDop()                    { return aDop; }
     Ww1Sep& GetSep()                    { return aSep; }
     // innerhalb des textes
-    ULONG Where()                       { return pDoc->Where(); }
+    sal_uLong Where()                       { return pDoc->Where(); }
     void Fill( sal_Unicode& rChr )      { pDoc->Out( rChr ); }
-    BYTE Fill( String& rStr, ULONG ulLen)
+    sal_uInt8 Fill( String& rStr, sal_uLong ulLen)
     {
         ulLen += pDoc->Where();
-        return sal::static_int_cast< BYTE >(pDoc->Out(rStr, ulLen));
+        return sal::static_int_cast< sal_uInt8 >(pDoc->Out(rStr, ulLen));
     }
-    SvxFontItem GetFont(USHORT nFCode);
+    SvxFontItem GetFont(sal_uInt16 nFCode);
     friend Ww1Shell& operator <<(Ww1Shell&, Ww1Manager&);
     friend ostream& operator <<(ostream&, Ww1Manager&);
-    BOOL Pushed()                       { return pDoc != &aDoc; }
+    sal_Bool Pushed()                       { return pDoc != &aDoc; }
     void Pop();
-    void Push0(Ww1PlainText* pDoc, ULONG, Ww1Fields* = 0);
-    void Push1(Ww1PlainText* pDoc, ULONG ulSeek, ULONG ulSeek2 = 0,
+    void Push0(Ww1PlainText* pDoc, sal_uLong, Ww1Fields* = 0);
+    void Push1(Ww1PlainText* pDoc, sal_uLong ulSeek, sal_uLong ulSeek2 = 0,
                Ww1Fields* = 0);
 };
 

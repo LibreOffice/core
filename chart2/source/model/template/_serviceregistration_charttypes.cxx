@@ -131,7 +131,6 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
 
 } // anonymous namespace
 
-// static
 struct ::cppu::ImplementationEntry *
     ChartTypeEntriesForServiceRegistration::getImplementationEntries()
 {

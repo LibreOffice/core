@@ -31,9 +31,6 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbstar.hxx>
 
-#ifdef WIN
-#define _TL_LANG_SPECIAL
-#endif
 #include <svl/svdde.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
@@ -43,15 +40,15 @@
 
 #include "app.hrc"
 #include <sfx2/app.hxx>
+#include <sfx2/evntconf.hxx>
 #include <sfx2/unoctitm.hxx>
 #include "appdata.hxx"
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include "arrdecl.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/event.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/msgpool.hxx>
@@ -71,21 +68,21 @@
 using ::basic::BasicManagerRepository;
 
 //===================================================================
-BOOL SfxApplication::QueryExit_Impl()
+sal_Bool SfxApplication::QueryExit_Impl()
 {
-    BOOL bQuit = TRUE;
+    sal_Bool bQuit = sal_True;
 
-    // will trotzdem noch jemand, den man nicht abschiessen kann, die App haben?
+    // Does some instance, that can not be shut down, still require the app?
     if ( !bQuit )
     {
-        // nicht wirklich beenden, nur minimieren
+        // Not really exit, only minimize
         InfoBox aInfoBox( NULL, SfxResId(MSG_CANT_QUIT) );
         aInfoBox.Execute();
-        DBG_TRACE( "QueryExit => FALSE (in use)" );
-        return FALSE;
+        OSL_TRACE( "QueryExit => sal_False (in use)" );
+        return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 //-------------------------------------------------------------------------
@@ -97,14 +94,14 @@ void SfxApplication::Deinitialize()
 
     StarBASIC::Stop();
 
-    // ggf. BASIC speichern
+    // Save BASIC if possible
     BasicManager* pBasMgr = BasicManagerRepository::getApplicationBasicManager( false );
     if ( pBasMgr && pBasMgr->IsModified() )
         SaveBasicManager();
 
     SaveBasicAndDialogContainer();
 
-    pAppData_Impl->bDowning = TRUE; // wegen Timer aus DecAliveCount und QueryExit
+    pAppData_Impl->bDowning = sal_True; // due to Timer from DecAliveCount and QueryExit
 
     DELETEZ( pAppData_Impl->pTemplates );
 
@@ -112,23 +109,21 @@ void SfxApplication::Deinitialize()
     // this method. Therefore this call makes no sense and is the source of
     // some stack traces, which we don't understand.
     // For more information see:
-    // #123501#
-    //SetViewFrame(0);
-    pAppData_Impl->bDowning = FALSE;
+    pAppData_Impl->bDowning = sal_False;
     DBG_ASSERT( !SfxViewFrame::GetFirst(),
                 "existing SfxViewFrame after Execute" );
     DBG_ASSERT( !SfxObjectShell::GetFirst(),
                 "existing SfxObjectShell after Execute" );
     pAppData_Impl->pAppDispat->Pop( *this, SFX_SHELL_POP_UNTIL );
     pAppData_Impl->pAppDispat->Flush();
-    pAppData_Impl->bDowning = TRUE;
-    pAppData_Impl->pAppDispat->DoDeactivate_Impl( TRUE, NULL );
+    pAppData_Impl->bDowning = sal_True;
+    pAppData_Impl->pAppDispat->DoDeactivate_Impl( sal_True, NULL );
 
     // call derived application-exit
     Exit();
 
-    // Controller u."a. freigeben
-    // dabei sollten auch restliche Komponenten ( Beamer! ) verschwinden
+    // Release Controller and others
+    // then the remaining components should alse disapear ( Beamer! )
     BasicManagerRepository::resetApplicationBasicManager();
     pAppData_Impl->pBasicManager->reset( NULL );
         // this will also delete pBasMgr
@@ -142,14 +137,10 @@ void SfxApplication::Deinitialize()
     SfxResId::DeleteResMgr();
     DELETEZ(pAppData_Impl->pOfaResMgr);
 
-    // ab hier d"urfen keine SvObjects mehr existieren
+    // from here no SvObjects have to exists
     DELETEZ(pAppData_Impl->pMatcher);
 
-    delete pAppData_Impl->pLabelResMgr;
-
     DELETEX(pAppData_Impl->pSlotPool);
-    DELETEX(pAppData_Impl->pEventConfig);
-    SfxMacroConfig::Release_Impl();
     DELETEX(pAppData_Impl->pFactArr);
     DELETEX(pAppData_Impl->pInitLinkList);
 
@@ -162,13 +153,6 @@ void SfxApplication::Deinitialize()
 
     //TODO/CLEANTUP
     //ReleaseArgs could be used instead!
-/* This leak is intended !
-   Otherwise the TestTool cant use .uno:QuitApp ...
-   because every destructed ItemSet work's on an already
-   released pool pointer .-)
-
-    NoChaos::ReleaseItemPool();
-*/
     pAppData_Impl->pPool = NULL;
 }
 

@@ -64,22 +64,22 @@ sal_Bool SAL_CALL ClassName::supportsService( const ::rtl::OUString& ServiceName
                             const uno::Reference<beans::XPropertyChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
                             lang::WrappedTargetException, uno::RuntimeException)    \
-    { DBG_ERROR("not implemented"); }                                               \
+    { OSL_FAIL("not implemented"); }                                                \
     void SAL_CALL ClassName::removePropertyChangeListener( const rtl::OUString&,    \
                             const uno::Reference<beans::XPropertyChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
                             lang::WrappedTargetException, uno::RuntimeException)    \
-    { DBG_ERROR("not implemented"); }                                               \
+    { OSL_FAIL("not implemented"); }                                                \
     void SAL_CALL ClassName::addVetoableChangeListener( const rtl::OUString&,       \
                             const uno::Reference<beans::XVetoableChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
                             lang::WrappedTargetException, uno::RuntimeException)    \
-    { DBG_ERROR("not implemented"); }                                               \
+    { OSL_FAIL("not implemented"); }                                                \
     void SAL_CALL ClassName::removeVetoableChangeListener( const rtl::OUString&,    \
                             const uno::Reference<beans::XVetoableChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
                             lang::WrappedTargetException, uno::RuntimeException)    \
-    { DBG_ERROR("not implemented"); }
+    { OSL_FAIL("not implemented"); }
 
 
 #define SC_QUERYINTERFACE(x)    \
@@ -167,7 +167,7 @@ public:
                             AnyToInterface( const com::sun::star::uno::Any& rAny );
     static sal_Bool         GetBoolProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
-                                            const ::rtl::OUString& rName, sal_Bool bDefault = sal_False );
+                                            const ::rtl::OUString& rName, sal_Bool bDefault = false );
     static sal_Int32        GetLongProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
                                             const ::rtl::OUString& rName, long nDefault = 0 );

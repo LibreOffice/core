@@ -42,7 +42,8 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
@@ -275,7 +276,7 @@ void SAL_CALL DynamicResultSetWrapper
                     }
                     else
                     {
-                        OSL_ENSURE( sal_False, "ListActionType was WELCOME but ActionInfo didn't contain a WelcomeDynamicResultSetStruct" );
+                        OSL_FAIL( "ListActionType was WELCOME but ActionInfo didn't contain a WelcomeDynamicResultSetStruct" );
                         //throw RuntimeException();
                     }
                     break;
@@ -428,8 +429,8 @@ void SAL_CALL DynamicResultSetWrapper
         {
             xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
                 m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" )) ),
                 UNO_QUERY );
         }
         catch ( Exception const & )
@@ -443,7 +444,7 @@ void SAL_CALL DynamicResultSetWrapper
             return;
         }
     }
-    OSL_ENSURE( sal_False, "could not connect to cache" );
+    OSL_FAIL( "could not connect to cache" );
     throw ServiceNotFoundException();
 }
 

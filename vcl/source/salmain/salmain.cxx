@@ -37,7 +37,7 @@
 
 SAL_IMPLEMENT_MAIN() {
     tools::extendApplicationEnvironment();
-    return SVMain() ? EXIT_SUCCESS : EXIT_FAILURE;
+    return SVMain();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

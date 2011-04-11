@@ -27,8 +27,9 @@
  ************************************************************************/
 // local includes
 #include "export.hxx"
+#include <vector>
 
-DECLARE_LIST( LngLineList, ByteString * )
+typedef ::std::vector< ByteString* > LngLineList;
 
 #define LNG_OK              0x0000
 #define LNG_FILE_NOTFOUND   0x0001
@@ -44,11 +45,11 @@ DECLARE_LIST( LngLineList, ByteString * )
 class LngParser
 {
 private:
-    USHORT nError;
+    sal_uInt16 nError;
     LngLineList *pLines;
     ByteString sSource;
-    BOOL bDBIsUTF8;
-    BOOL bULF;
+    sal_Bool bDBIsUTF8;
+    sal_Bool bULF;
     bool bQuiet;
     std::vector<ByteString> aLanguages;
 
@@ -59,11 +60,11 @@ private:
                     const ByteString &rPrj ,
                     const ByteString &rRoot , const ByteString &sActFileName , const ByteString &sID );
 public:
-    LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat );
+    LngParser( const ByteString &rLngFile, sal_Bool bUTF8, sal_Bool bULFFormat );
     ~LngParser();
 
-    BOOL CreateSDF( const ByteString &rSDFFile, const ByteString &rPrj, const ByteString &rRoot );
-    BOOL Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile , const ByteString &rPrj );
+    sal_Bool CreateSDF( const ByteString &rSDFFile, const ByteString &rPrj, const ByteString &rRoot );
+    sal_Bool Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile , const ByteString &rPrj );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

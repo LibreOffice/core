@@ -43,7 +43,7 @@
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <tools/list.hxx>
+#include <vector>
 
 //____________________________________________________________________________________________________________
 //  includes of my own project
@@ -70,10 +70,6 @@ struct IMPL_ControlInfo
     CSS_UNO::Reference< CSS_AWT::XControl > xControl ;
     ::rtl::OUString                         sName    ;
 };
-
-// makro define a list-class for struct IMPL_ControlInfo!
-class IMPL_ControlInfoList ;
-DECLARE_LIST( IMPL_ControlInfoList, IMPL_ControlInfo* )
 
 //____________________________________________________________________________________________________________
 //  classes
@@ -576,7 +572,7 @@ private:
 
 private:
     // list of pointer of "struct IMPL_ControlInfo" to hold child-controls
-    IMPL_ControlInfoList*                                               m_pControlInfoList      ;
+    ::std::vector< IMPL_ControlInfo* > maControlInfoList;
 
     // list of references of XTabController to hold tab-order in this container
     CSS_UNO::Sequence< CSS_UNO::Reference< CSS_AWT::XTabController > >  m_xTabControllerList    ;

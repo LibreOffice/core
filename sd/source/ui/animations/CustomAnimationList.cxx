@@ -211,10 +211,10 @@ static OUString getDescription( const Any& rTarget, bool bWithText = true )
 class CustomAnimationListEntryItem : public SvLBoxString
 {
 public:
-                    CustomAnimationListEntryItem( SvLBoxEntry*,USHORT nFlags, OUString aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  );
+                    CustomAnimationListEntryItem( SvLBoxEntry*,sal_uInt16 nFlags, OUString aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  );
     virtual         ~CustomAnimationListEntryItem();
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    void            Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
+    void            Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );
 
@@ -226,7 +226,7 @@ private:
 
 // --------------------------------------------------------------------
 
-CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvLBoxEntry* pEntry, USHORT nFlags, OUString aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
+CustomAnimationListEntryItem::CustomAnimationListEntryItem( SvLBoxEntry* pEntry, sal_uInt16 nFlags, OUString aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  )
 : SvLBoxString( pEntry, nFlags, aDescription )
 , mpParent( pParent )
 , maDescription( aDescription )
@@ -255,9 +255,8 @@ void CustomAnimationListEntryItem::InitViewData( SvLBox* pView, SvLBoxEntry* pEn
 
 // --------------------------------------------------------------------
 
-void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* pEntry )
+void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
 {
-    const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     SvViewDataItem* pViewData = mpParent->GetViewDataItem( pEntry, this );
 
@@ -267,16 +266,16 @@ void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, USHOR
     sal_Int16 nNodeType = mpEffect->getNodeType();
     if( nNodeType == EffectNodeType::ON_CLICK )
     {
-        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_ON_CLICK, bHighContrast ) );
+        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_ON_CLICK ) );
     }
     else if( nNodeType == EffectNodeType::AFTER_PREVIOUS )
     {
-        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_AFTER_PREVIOUS, bHighContrast ) );
+        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_AFTER_PREVIOUS ) );
     }
 
     aPos.X() += 19;
 
-    USHORT nImage;
+    sal_uInt16 nImage;
     switch( mpEffect->getPresetClass() )
     {
     case EffectPresetClass::ENTRANCE:   nImage = IMG_CUSTOMANIMATION_ENTRANCE_EFFECT; break;
@@ -298,7 +297,7 @@ void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, USHOR
 
     if( nImage != 0xffff )
     {
-        const Image& rImage = mpParent->getImage( nImage, bHighContrast );
+        const Image& rImage = mpParent->getImage( nImage );
         Point aImagePos( aPos );
         aImagePos.Y() += ( aSize.Height() - rImage.GetSizePixel().Height() ) >> 1;
         rDev.DrawImage( aImagePos, rImage );
@@ -362,11 +361,11 @@ CustomAnimationListEntry::~CustomAnimationListEntry()
 class CustomAnimationTriggerEntryItem : public SvLBoxString
 {
 public:
-                    CustomAnimationTriggerEntryItem( SvLBoxEntry*,USHORT nFlags, OUString aDescription, CustomAnimationList* pParent  );
+                    CustomAnimationTriggerEntryItem( SvLBoxEntry*,sal_uInt16 nFlags, OUString aDescription, CustomAnimationList* pParent  );
     virtual         ~CustomAnimationTriggerEntryItem();
-    virtual USHORT  IsA();
+    virtual sal_uInt16  IsA();
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    void            Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
+    void            Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );
 
@@ -377,7 +376,7 @@ private:
 
 // --------------------------------------------------------------------
 
-CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvLBoxEntry* pEntry, USHORT nFlags, OUString aDescription, CustomAnimationList* pParent  )
+CustomAnimationTriggerEntryItem::CustomAnimationTriggerEntryItem( SvLBoxEntry* pEntry, sal_uInt16 nFlags, OUString aDescription, CustomAnimationList* pParent  )
 : SvLBoxString( pEntry, nFlags, aDescription ), mpParent( pParent ), maDescription( aDescription )
 {
 }
@@ -390,9 +389,9 @@ CustomAnimationTriggerEntryItem::~CustomAnimationTriggerEntryItem()
 
 // --------------------------------------------------------------------
 
-USHORT CustomAnimationTriggerEntryItem::IsA()
+sal_uInt16 CustomAnimationTriggerEntryItem::IsA()
 {
-    return (USHORT)-1;
+    return (sal_uInt16)-1;
 }
 
 // --------------------------------------------------------------------
@@ -406,17 +405,11 @@ void CustomAnimationTriggerEntryItem::InitViewData( SvLBox* pView, SvLBoxEntry* 
     if( aSize.Height() < 19 )
         aSize.Height() = 19;
     pViewData->aSize = aSize;
-
-/*
-        SvViewData* pViewData = pView->GetViewData( pEntry );
-        if( pViewData )
-            pViewData->SetSelectable(false);
-*/
 }
 
 // --------------------------------------------------------------------
 
-void CustomAnimationTriggerEntryItem::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* )
+void CustomAnimationTriggerEntryItem::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* )
 {
     Size aSize( rDev.GetOutputSizePixel().Width(), static_cast< SvTreeListBox* >(&rDev)->GetEntryHeight() );
 
@@ -474,7 +467,7 @@ CustomAnimationList::CustomAnimationList( ::Window* pParent, const ResId& rResId
 ,   mpController( pController )
 ,   mpLastParentEntry(0)
 {
-    SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT ) );
+    SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT );
 
     EnableContextMenuHandling();
     SetSelectionMode( MULTIPLE_SELECTION );
@@ -484,12 +477,9 @@ CustomAnimationList::CustomAnimationList( ::Window* pParent, const ResId& rResId
 
 // --------------------------------------------------------------------
 
-const Image&  CustomAnimationList::getImage( USHORT nId, bool bHighContrast )
+const Image&  CustomAnimationList::getImage( sal_uInt16 nId )
 {
     DBG_ASSERT( (nId >= IMG_CUSTOMANIMATION_ON_CLICK) && (nId <= IMG_CUSTOMANIMATION_MEDIA_STOP), "sd::CustomAnimationList::getImage(), illegal index!" );
-
-    if( bHighContrast )
-        nId += 1;
 
     Image& rImage = maImages[nId - IMG_CUSTOMANIMATION_ON_CLICK];
 
@@ -693,31 +683,6 @@ void CustomAnimationList::update()
 
 // --------------------------------------------------------------------
 
-/*
-void CustomAnimationList::update( CustomAnimationEffectPtr pEffect )
-{
-    SvLBoxEntry* pEntry = First();
-    while( pEntry )
-    {
-        if( static_cast< CustomAnimationEffectPtr * >( pEntry->GetUserData() )->get() == pEffect.get() )
-        {
-            CustomAnimationPresetsPtr pPresets = mpController->getPresets();
-            const CustomAnimationPresetPtr pPreset = pPresets->getEffectDescriptor( pEffect->getPresetId() );
-            if( pPreset.get() )
-                pEffect->setName( pPresets->getUINameForPresetId( pPreset->getPresetId() ) );
-            else
-                pEffect->setName( pEffect->getPresetId() );
-            break;
-        }
-        pEntry = Next( pEntry );
-    }
-
-    Invalidate();
-}
-*/
-
-// --------------------------------------------------------------------
-
 void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
 {
     // create a ui description
@@ -763,34 +728,9 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::CustomAnimationList::append(), exception catched!" );
+        OSL_FAIL("sd::CustomAnimationList::append(), exception catched!" );
     }
 }
-
-// --------------------------------------------------------------------
-
-/*
-void CustomAnimationList::remove( CustomAnimationEffectPtr pEffect )
-{
-    SvLBoxEntry* pEntry = First();
-    while( pEntry )
-    {
-        if( static_cast< CustomAnimationEffectPtr * >( pEntry->GetUserData() )->get() == pEffect.get() )
-        {
-            GetModel()->Remove( pEntry );
-            if( pEntry == mpLastParentEntry )
-            {
-                mpLastParentEntry = 0;
-                mxLastTargetShape = 0;
-            }
-            break;
-        }
-        pEntry = Next( pEntry );
-    }
-
-    Invalidate();
-}
-*/
 
 // --------------------------------------------------------------------
 
@@ -816,7 +756,7 @@ void CustomAnimationList::onSelectionChanged( Any aSelection )
 {
     try
     {
-        SelectAll(FALSE);
+        SelectAll(sal_False);
 
         if( aSelection.hasValue() )
         {
@@ -844,7 +784,7 @@ void CustomAnimationList::onSelectionChanged( Any aSelection )
     }
     catch( Exception& )
     {
-        DBG_ERROR( "sd::CustomAnimationList::onSelectionChanged(), Exception catched!" );
+        OSL_FAIL( "sd::CustomAnimationList::onSelectionChanged(), Exception catched!" );
     }
 }
 
@@ -914,7 +854,7 @@ EffectSequence CustomAnimationList::getSelection() const
 
 // --------------------------------------------------------------------
 
-BOOL CustomAnimationList::DoubleClickHdl()
+sal_Bool CustomAnimationList::DoubleClickHdl()
 {
     mpController->onDoubleClick();
     return false;
@@ -964,7 +904,7 @@ PopupMenu* CustomAnimationList::CreateContextMenu()
 
 // --------------------------------------------------------------------
 
-void CustomAnimationList::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
+void CustomAnimationList::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
     mpController->onContextMenu( nSelectedPopupEntry );
 }

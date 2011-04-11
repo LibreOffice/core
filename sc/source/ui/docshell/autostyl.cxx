@@ -29,48 +29,40 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include <time.h>
-#include "autostyl.hxx"
 
-#include "docsh.hxx"
+#include <boost/bind.hpp>
+
 #include "attrib.hxx"
+#include "autostyl.hxx"
+#include "docsh.hxx"
 #include "sc.hrc"
-
-//==================================================================
 
 struct ScAutoStyleInitData
 {
     ScRange aRange;
     String  aStyle1;
-    ULONG   nTimeout;
+    sal_uLong   nTimeout;
     String  aStyle2;
 
-    ScAutoStyleInitData( const ScRange& rR, const String& rSt1, ULONG nT, const String& rSt2 ) :
+    ScAutoStyleInitData( const ScRange& rR, const String& rSt1, sal_uLong nT, const String& rSt2 ) :
         aRange(rR), aStyle1(rSt1), nTimeout(nT), aStyle2(rSt2) {}
 };
 
 struct ScAutoStyleData
 {
-    ULONG   nTimeout;
+    sal_uLong   nTimeout;
     ScRange aRange;
     String  aStyle;
 
-    ScAutoStyleData( ULONG nT, const ScRange& rR, const String& rT ) :
+    ScAutoStyleData( sal_uLong nT, const ScRange& rR, const String& rT ) :
         nTimeout(nT), aRange(rR), aStyle(rT) {}
 };
 
-//==================================================================
-
-inline ULONG TimeNow()          // Sekunden
+inline sal_uLong TimeNow()          // Sekunden
 {
-    return (ULONG) time(0);
+    return (sal_uLong) time(0);
 }
-
-//==================================================================
 
 ScAutoStyleList::ScAutoStyleList(ScDocShell* pShell) :
     pDocSh( pShell )
@@ -82,89 +74,56 @@ ScAutoStyleList::ScAutoStyleList(ScDocShell* pShell) :
 
 ScAutoStyleList::~ScAutoStyleList()
 {
-    ULONG i;
-    ULONG nCount = aEntries.Count();
-    for (i=0; i<nCount; i++)
-        delete (ScAutoStyleData*) aEntries.GetObject(i);
-    nCount = aInitials.Count();
-    for (i=0; i<nCount; i++)
-        delete (ScAutoStyleInitData*) aInitials.GetObject(i);
 }
-
-//==================================================================
 
 //  initial short delay (asynchronous call)
 
 void ScAutoStyleList::AddInitial( const ScRange& rRange, const String& rStyle1,
-                                    ULONG nTimeout, const String& rStyle2 )
+                                    sal_uLong nTimeout, const String& rStyle2 )
 {
-    ScAutoStyleInitData* pNew =
-        new ScAutoStyleInitData( rRange, rStyle1, nTimeout, rStyle2 );
-    aInitials.Insert( pNew, aInitials.Count() );
+    aInitials.push_back(new ScAutoStyleInitData( rRange, rStyle1, nTimeout, rStyle2 ));
     aInitTimer.Start();
 }
 
 IMPL_LINK( ScAutoStyleList, InitHdl, Timer*, EMPTYARG )
 {
-    ULONG nCount = aInitials.Count();
-    for (ULONG i=0; i<nCount; i++)
+    boost::ptr_vector<ScAutoStyleInitData>::iterator iter;
+    for (iter = aInitials.begin(); iter != aInitials.end(); ++iter)
     {
-        ScAutoStyleInitData* pData = (ScAutoStyleInitData*) aInitials.GetObject(i);
-
         //  apply first style immediately
-        pDocSh->DoAutoStyle( pData->aRange, pData->aStyle1 );
+        pDocSh->DoAutoStyle(iter->aRange,iter->aStyle1);
 
         //  add second style to list
-        if ( pData->nTimeout )
-            AddEntry( pData->nTimeout, pData->aRange, pData->aStyle2 );
-
-        delete pData;
+        if (iter->nTimeout)
+            AddEntry(iter->nTimeout,iter->aRange,iter->aStyle2 );
     }
-    aInitials.Clear();
+
+    aInitials.clear();
 
     return 0;
 }
 
-//==================================================================
-
-void ScAutoStyleList::AddEntry( ULONG nTimeout, const ScRange& rRange, const String& rStyle )
+void ScAutoStyleList::AddEntry( sal_uLong nTimeout, const ScRange& rRange, const String& rStyle )
 {
     aTimer.Stop();
-    ULONG nNow = TimeNow();
+    sal_uLong nNow = TimeNow();
 
-    //  alten Eintrag loeschen
-
-    ULONG nCount = aEntries.Count();
-    ULONG i;
-    for (i=0; i<nCount; i++)
-    {
-        ScAutoStyleData* pData = (ScAutoStyleData*) aEntries.GetObject(i);
-        if (pData->aRange == rRange)
-        {
-            delete pData;
-            aEntries.Remove(i);
-            --nCount;
-            break;                      // nicht weitersuchen - es kann nur einen geben
-        }
-    }
+    aEntries.erase(std::remove_if(aEntries.begin(),aEntries.end(),
+                                  boost::bind(&ScAutoStyleData::aRange,_1) == rRange));
 
     //  Timeouts von allen Eintraegen anpassen
 
-    if (nCount && nNow != nTimerStart)
+    if (!aEntries.empty() && nNow != nTimerStart)
     {
         DBG_ASSERT(nNow>nTimerStart, "Zeit laeuft rueckwaerts?");
         AdjustEntries((nNow-nTimerStart)*1000);
     }
 
     //  Einfuege-Position suchen
+    boost::ptr_vector<ScAutoStyleData>::iterator iter = std::find_if(aEntries.begin(),aEntries.end(),
+                                                                     boost::bind(&ScAutoStyleData::nTimeout,_1) >= nTimeout);
 
-    ULONG nPos = LIST_APPEND;
-    for (i=0; i<nCount && nPos == LIST_APPEND; i++)
-        if (nTimeout <= ((ScAutoStyleData*) aEntries.GetObject(i))->nTimeout)
-            nPos = i;
-
-    ScAutoStyleData* pNew = new ScAutoStyleData( nTimeout, rRange, rStyle );
-    aEntries.Insert( pNew, nPos );
+    aEntries.insert(iter,new ScAutoStyleData(nTimeout,rRange,rStyle));
 
     //  abgelaufene ausfuehren, Timer neu starten
 
@@ -172,28 +131,32 @@ void ScAutoStyleList::AddEntry( ULONG nTimeout, const ScRange& rRange, const Str
     StartTimer(nNow);
 }
 
-void ScAutoStyleList::AdjustEntries( ULONG nDiff )  // Millisekunden
+void ScAutoStyleList::AdjustEntries( sal_uLong nDiff )  // Millisekunden
 {
-    ULONG nCount = aEntries.Count();
-    for (ULONG i=0; i<nCount; i++)
+    boost::ptr_vector<ScAutoStyleData>::iterator iter;
+    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
     {
-        ScAutoStyleData* pData = (ScAutoStyleData*) aEntries.GetObject(i);
-        if ( pData->nTimeout <= nDiff )
-            pData->nTimeout = 0;                    // abgelaufen
+        if (iter->nTimeout <= nDiff)
+            iter->nTimeout = 0;                 // abgelaufen
         else
-            pData->nTimeout -= nDiff;               // weiterzaehlen
+            iter->nTimeout -= nDiff;                // weiterzaehlen
     }
 }
 
 void ScAutoStyleList::ExecuteEntries()
 {
-    ScAutoStyleData* pData;
-    while ((pData = (ScAutoStyleData*) aEntries.GetObject(0)) != NULL && pData->nTimeout == 0)
+    boost::ptr_vector<ScAutoStyleData>::iterator iter;
+    for (iter = aEntries.begin(); iter != aEntries.end();)
     {
-        pDocSh->DoAutoStyle( pData->aRange, pData->aStyle );    //! oder Request ???
-
-        delete pData;
-        aEntries.Remove((ULONG)0);
+        if (!iter->nTimeout)
+        {
+            pDocSh->DoAutoStyle(iter->aRange,iter->aStyle);
+            iter = aEntries.erase(iter);
+        }
+        else
+        {
+            ++iter;
+        }
     }
 }
 
@@ -201,38 +164,31 @@ void ScAutoStyleList::ExecuteAllNow()
 {
     aTimer.Stop();
 
-    ULONG nCount = aEntries.Count();
-    for (ULONG i=0; i<nCount; i++)
-    {
-        ScAutoStyleData* pData = (ScAutoStyleData*) aEntries.GetObject(i);
+    boost::ptr_vector<ScAutoStyleData>::iterator iter;
+    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
+        pDocSh->DoAutoStyle(iter->aRange,iter->aStyle);
 
-        pDocSh->DoAutoStyle( pData->aRange, pData->aStyle );    //! oder Request ???
-
-        delete pData;
-    }
-    aEntries.Clear();
+    aEntries.clear();
 }
 
-void ScAutoStyleList::StartTimer( ULONG nNow )      // Sekunden
+void ScAutoStyleList::StartTimer( sal_uLong nNow )      // Sekunden
 {
     // ersten Eintrag mit Timeout != 0 suchen
+    boost::ptr_vector<ScAutoStyleData>::iterator iter = std::find_if(aEntries.begin(),aEntries.end(),
+                                                                     boost::bind(&ScAutoStyleData::nTimeout,_1) != static_cast<unsigned>(0));
 
-    ULONG nPos = 0;
-    ScAutoStyleData* pData;
-    while ( (pData = (ScAutoStyleData*) aEntries.GetObject(nPos)) != NULL && pData->nTimeout == 0 )
-        ++nPos;
-
-    if (pData)
+    if (iter != aEntries.end())
     {
-        aTimer.SetTimeout( pData->nTimeout );
+        aTimer.SetTimeout(iter->nTimeout);
         aTimer.Start();
     }
+
     nTimerStart = nNow;
 }
 
 IMPL_LINK( ScAutoStyleList, TimerHdl, Timer*, EMPTYARG )
 {
-    ULONG nNow = TimeNow();
+    sal_uLong nNow = TimeNow();
     AdjustEntries(aTimer.GetTimeout());             // eingestellte Wartezeit
     ExecuteEntries();
     StartTimer(nNow);

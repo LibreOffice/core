@@ -52,7 +52,7 @@
 #include <vcl/keycodes.hxx>
 #include <saltimer.h>
 
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
 extern "C" int debug_printf(const char *f, ...);
 
 static BOOL _bCapture;
@@ -112,7 +112,7 @@ BOOL APIENTRY _WinQueryWindowPos( Os2SalFrame* pFrame, PSWP pswp)
     SWP swpOwner;
     BOOL rc = WinQueryWindowPos( pFrame->mhWndFrame, pswp);
 
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "> WinQueryWindowPos hwnd %x at %d,%d (%dx%d)\n",
                     pFrame->mhWndFrame, pswp->x, pswp->y, pswp->cx, pswp->cy);
 #endif
@@ -142,7 +142,7 @@ BOOL APIENTRY _WinQueryWindowPos( Os2SalFrame* pFrame, PSWP pswp)
     // invert Y coordinate
     pswp->y = swpOwner.cy - (pswp->y + pswp->cy);
 
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "< WinQueryWindowPos hwnd %x at %d,%d (%dx%d)\n",
                     pFrame->mhWndFrame, pswp->x, pswp->y, pswp->cx, pswp->cy);
 #endif
@@ -156,7 +156,7 @@ BOOL APIENTRY _WinSetWindowPos( Os2SalFrame* pFrame, HWND hwndInsertBehind, LONG
     POINTL  ptlOwner = {0};
     HWND    hParent = NULL;
 
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( ">WinSetWindowPos hwnd %x at %d,%d (%dx%d) fl 0x%08x\n",
                     pFrame->mhWndFrame, x, y, cx, cy, fl);
 #endif
@@ -208,7 +208,7 @@ BOOL APIENTRY _WinSetWindowPos( Os2SalFrame* pFrame, HWND hwndInsertBehind, LONG
         if (fl & SWP_CENTER) {
             ptlOwner.x = (swpOwner.cx - cx) / 2;
             ptlOwner.y = (swpOwner.cy - cy) / 2;
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
             debug_printf( "_WinSetWindowPos SWP_CENTER\n");
 #endif
             fl = fl & ~SWP_CENTER;
@@ -218,7 +218,7 @@ BOOL APIENTRY _WinSetWindowPos( Os2SalFrame* pFrame, HWND hwndInsertBehind, LONG
             ptlOwner.x = x;
             ptlOwner.y = swpOwner.cy - (y + cy);
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
             debug_printf( "_WinSetWindowPos owner 0x%x at %d,%d (%dx%d) OS2\n",
                 hParent, ptlOwner.x, ptlOwner.y, swpOwner.cx, swpOwner.cy);
 #endif
@@ -228,13 +228,13 @@ BOOL APIENTRY _WinSetWindowPos( Os2SalFrame* pFrame, HWND hwndInsertBehind, LONG
         x = ptlOwner.x;
         y = ptlOwner.y;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
         debug_printf( "_WinSetWindowPos owner 0x%x at %d,%d (%dx%d) MAPPED OS2\n",
             hParent, ptlOwner.x, ptlOwner.y, swpOwner.cx, swpOwner.cy);
 #endif
     }
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "<WinSetWindowPos hwnd %x at %d,%d (%dx%d) fl=%x\n",
                     pFrame->mhWndFrame, x, y, cx, cy, fl);
 #endif
@@ -243,7 +243,7 @@ BOOL APIENTRY _WinSetWindowPos( Os2SalFrame* pFrame, HWND hwndInsertBehind, LONG
 
 // =======================================================================
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
 static void dumpWindowInfo( char* fnc, HWND hwnd)
 {
     SWP aSWP;
@@ -348,7 +348,7 @@ static void ImplSaveFrameState( Os2SalFrame* pFrame )
 
         if ( aSWP.fl & SWP_MINIMIZE )
         {
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
             debug_printf("Os2SalFrame::GetWindowState %08x SAL_FRAMESTATE_MINIMIZED\n",
                     pFrame->mhWndFrame);
 #endif
@@ -358,7 +358,7 @@ static void ImplSaveFrameState( Os2SalFrame* pFrame )
         }
         else if ( aSWP.fl & SWP_MAXIMIZE )
         {
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
             debug_printf("Os2SalFrame::GetWindowState %08x SAL_FRAMESTATE_MAXIMIZED\n",
                     pFrame->mhWndFrame);
 #endif
@@ -384,7 +384,7 @@ static void ImplSaveFrameState( Os2SalFrame* pFrame )
             pFrame->maState.mnY      = nScreenHeight - (aSWP.y+aSWP.cy)+nTopDeco;
             pFrame->maState.mnWidth  = aSWP.cx-nLeftDeco-nRightDeco;
             pFrame->maState.mnHeight = aSWP.cy-nTopDeco-nBottomDeco;
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
             debug_printf("Os2SalFrame::GetWindowState %08x (%dx%d) at %d,%d VCL\n",
                     pFrame->mhWndFrame,
                     pFrame->maState.mnWidth,pFrame->maState.mnHeight,pFrame->maState.mnX,pFrame->maState.mnY);
@@ -392,9 +392,6 @@ static void ImplSaveFrameState( Os2SalFrame* pFrame )
             if ( bVisible )
                 pFrame->mnShowState = SWP_SHOWNORMAL;
             pFrame->mbRestoreMaximize = FALSE;
-            //debug_printf( "ImplSaveFrameState: window %08x at %d,%d (size %dx%d)\n",
-            //  pFrame->mhWndFrame,
-            //  pFrame->maState.mnX, pFrame->maState.mnY, pFrame->maState.mnWidth, pFrame->maState.mnHeight);
         }
     }
 }
@@ -445,8 +442,7 @@ static void ImplSalCalcFrameSize( const Os2SalFrame* pFrame,
     else
         nCaptionY = 0;
 
-#if OSL_DEBUG_LEVEL>0
-    //if (_bCapture)
+#if OSL_DEBUG_LEVEL > 1
         debug_printf("ImplSalCalcFrameSize 0x%08x x=%d y=%d t=%d\n", pFrame->mhWndFrame, nFrameX, nFrameY, nCaptionY);
 #endif
 }
@@ -570,7 +566,7 @@ SalFrame* ImplSalCreateFrame( Os2SalInstance* pInst, HWND hWndParent, ULONG nSal
     ULONG           nClientStyle = WS_CLIPSIBLINGS;
     BOOL            bSubFrame = FALSE;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf(">ImplSalCreateFrame hWndParent 0x%x, nSalFrameStyle 0x%x\n", hWndParent, nSalFrameStyle);
 #endif
 
@@ -616,12 +612,8 @@ SalFrame* ImplSalCreateFrame( Os2SalInstance* pInst, HWND hWndParent, ULONG nSal
 
     if ( nSalFrameStyle & SAL_FRAME_STYLE_FLOAT )
     {
-        //nExSysStyle |= WS_EX_TOOLWINDOW;
         pFrame->mbFloatWin = TRUE;
     }
-    //if( nSalFrameStyle & SAL_FRAME_STYLE_TOOLTIP )
-    //    nExSysStyle |= WS_EX_TOPMOST;
-
     // init frame data
     pFrame->mnStyle = nSalFrameStyle;
 
@@ -762,7 +754,6 @@ Os2SalFrame::Os2SalFrame()
     mbConversionMode    = FALSE;
     mbCandidateMode     = FALSE;
     mbCaption           = FALSE;
-    //mhDefIMEContext     = 0;
     mpGraphics          = NULL;
     mnShowState         = SWP_SHOWNORMAL;
     mnWidth             = 0;
@@ -779,23 +770,16 @@ Os2SalFrame::Os2SalFrame()
     mbFixBorder         = FALSE;
     mbSizeBorder        = FALSE;
     mbFullScreen        = FALSE;
-    //mbPresentation      = FALSE;
     mbInShow            = FALSE;
     mbRestoreMaximize   = FALSE;
     mbInMoveMsg         = FALSE;
     mbInSizeMsg         = FALSE;
-    //mbFullScreenToolWin = FALSE;
     mbDefPos            = TRUE;
     mbOverwriteState    = TRUE;
-    //mbIME               = FALSE;
     mbHandleIME         = FALSE;
-    //mbSpezIME           = FALSE;
-    //mbAtCursorIME       = FALSE;
     mbCandidateMode     = FALSE;
     mbFloatWin          = FALSE;
     mbNoIcon            = FALSE;
-    //mSelectedhMenu      = 0;
-    //mLastActivatedhMenu = 0;
     mpParentFrame       = NULL;
 
     memset( &maState, 0, sizeof( SalFrameState ) );
@@ -944,7 +928,7 @@ static void ImplSalShow( HWND hWnd, ULONG bVisible, ULONG bNoActivate )
         pFrame->mbOverwriteState = TRUE;
         pFrame->mbInShow = TRUE;
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         debug_printf( "ImplSalShow hwnd %x visible flag %d, no activate: flag %d\n", hWnd, bVisible, bNoActivate);
 #endif
 
@@ -964,7 +948,7 @@ static void ImplSalShow( HWND hWnd, ULONG bVisible, ULONG bNoActivate )
     }
     else
     {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         debug_printf( "ImplSalShow hwnd %x HIDE\n");
 #endif
         WinSetWindowPos(hWnd, NULL, 0, 0, 0, 0, SWP_HIDE);
@@ -1024,8 +1008,7 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     USHORT  nEvent = 0;
     ULONG   nPosFlags = 0;
 
-#if OSL_DEBUG_LEVEL > 0
-    //dumpWindowInfo( "-Os2SalFrame::SetPosSize", mhWndFrame);
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( ">Os2SalFrame::SetPosSize go to %d,%d (%dx%d) VCL\n",nX,nY,nWidth,nHeight);
 #endif
 
@@ -1047,16 +1030,15 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
     if ( (nFlags & (SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y)) ) {
         nPosFlags |= SWP_MOVE;
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         debug_printf( "-Os2SalFrame::SetPosSize MOVE to %d,%d\n", nX, nY);
 #endif
-        //DBG_ASSERT( nX && nY, " Windowposition of (0,0) requested!" );
         nEvent = SALEVENT_MOVE;
     }
 
     if ( (nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT)) ) {
         nPosFlags |= SWP_SIZE;
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         debug_printf( "-Os2SalFrame::SetPosSize SIZE to %d,%d\n", nWidth,nHeight);
 #endif
         nEvent = (nEvent == SALEVENT_MOVE) ? SALEVENT_MOVERESIZE : SALEVENT_RESIZE;
@@ -1069,7 +1051,7 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
         mbDefPos = FALSE;
         nPosFlags |= SWP_MOVE | SWP_CENTER;
         nEvent = SALEVENT_MOVERESIZE;
-#if OSL_DEBUG_LEVEL > 10
+#if OSL_DEBUG_LEVEL > 1
         debug_printf( "-Os2SalFrame::SetPosSize CENTER\n");
         debug_printf( "-Os2SalFrame::SetPosSize default position to %d,%d\n", nX, nY);
 #endif
@@ -1103,11 +1085,6 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
             nY = 0;
     }
 
-    // bring floating windows always to top
-    // do not change zorder, otherwise tooltips will bring main window to top (ticket:14)
-    //if( (mnStyle & SAL_FRAME_STYLE_FLOAT) )
-    //    nPosFlags |= SWP_ZORDER; // do not change z-order
-
     // set new position
     _WinSetWindowPos( this, HWND_TOP, nX, nY, nWidth, nHeight, nPosFlags); // | SWP_RESTORE
 
@@ -1117,7 +1094,7 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     if( nEvent )
         CallCallback( nEvent, NULL );
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     dumpWindowInfo( "<Os2SalFrame::SetPosSize (exit)", mhWndFrame);
 #endif
 
@@ -1128,14 +1105,12 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 void Os2SalFrame::SetParent( SalFrame* pNewParent )
 {
     APIRET rc;
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("Os2SalFrame::SetParent mhWndFrame 0x%08x to 0x%08x\n",
             static_cast<Os2SalFrame*>(this)->mhWndFrame,
             static_cast<Os2SalFrame*>(pNewParent)->mhWndClient);
 #endif
     Os2SalFrame::mbInReparent = TRUE;
-    //rc = WinSetParent(static_cast<Os2SalFrame*>(this)->mhWndFrame,
-    //                  static_cast<Os2SalFrame*>(pNewParent)->mhWndClient, TRUE);
     rc = WinSetOwner(static_cast<Os2SalFrame*>(this)->mhWndFrame,
                       static_cast<Os2SalFrame*>(pNewParent)->mhWndClient);
     mpParentFrame = static_cast<Os2SalFrame*>(pNewParent);
@@ -1197,7 +1172,7 @@ void Os2SalFrame::SetWindowState( const SalFrameState* pState )
     LONG    nHeight;
     ULONG   nPosSize = 0;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("Os2SalFrame::SetWindowState\n");
     debug_printf("Os2SalFrame::SetWindowState %08x (%dx%d) at %d,%d VCL\n",
         mhWndFrame,
@@ -1243,16 +1218,13 @@ void Os2SalFrame::SetWindowState( const SalFrameState* pState )
     else
         nHeight = aSWP.cy;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("Os2SalFrame::SetWindowState (%dx%d) at %d,%d\n", nWidth,nHeight,nX,nY);
 #endif
 
     // Adjust Window in the screen:
     // if it does not fit into the screen do nothing, ie default pos/size will be used
     // if there is an overlap with the screen border move the window while keeping its size
-
-    //if( nWidth > nScreenWidth || nHeight > nScreenHeight )
-    //    nPosSize |= (SWP_NOMOVE | SWP_NOSIZE);
 
     if ( nX+nWidth > nScreenWidth )
         nX = (nScreenWidth) - nWidth;
@@ -1296,8 +1268,6 @@ void Os2SalFrame::SetWindowState( const SalFrameState* pState )
         {
             if ( pState->mnState & SAL_FRAMESTATE_MINIMIZED )
             {
-                //if ( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
-                //    aPlacement.flags |= WPF_RESTORETOMAXIMIZED;
                 aPlacement.fl = SWP_SHOWMINIMIZED;
             }
             else if ( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
@@ -1337,7 +1307,7 @@ void Os2SalFrame::SetWindowState( const SalFrameState* pState )
                          aPlacement.cx, aPlacement.cy, aPlacement.fl );
     }
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("Os2SalFrame::SetWindowState DONE\n");
 #endif
 }
@@ -1349,9 +1319,6 @@ BOOL Os2SalFrame::GetWindowState( SalFrameState* pState )
     if ( maState.mnWidth && maState.mnHeight )
     {
         *pState = maState;
-        // #94144# allow Minimize again, should be masked out when read from configuration
-        // 91625 - Don't save minimize
-        //if ( !(pState->mnState & SAL_FRAMESTATE_MAXIMIZED) )
         if ( !(pState->mnState & (SAL_FRAMESTATE_MINIMIZED | SAL_FRAMESTATE_MAXIMIZED)) )
             pState->mnState |= SAL_FRAMESTATE_NORMAL;
         return TRUE;
@@ -1412,7 +1379,6 @@ void Os2SalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
 
 void Os2SalFrame::StartPresentation( BOOL bStart )
 {
-    // SysSetObjectData("<WP_DESKTOP>","Autolockup=no"); oder OS2.INI: PM_Lockup
 }
 
 // -----------------------------------------------------------------------
@@ -1428,7 +1394,7 @@ void Os2SalFrame::SetAlwaysOnTop( BOOL bOnTop )
 static void ImplSalToTop( HWND hWnd, ULONG nFlags )
 {
     Os2SalFrame* pFrame = GetWindowPtr( hWnd );
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("ImplSalToTop hWnd %08x, nFlags %x\n", hWnd, nFlags);
 #endif
 
@@ -1587,8 +1553,6 @@ void Os2SalFrame::SetPointer( PointerStyle ePointerStyle )
 #error New Pointer must be defined!
 #endif
 
-    //debug_printf("Os2SalFrame::SetPointer\n");
-
     // Mousepointer loaded ?
     if ( !aImplPtrTab[ePointerStyle].mhPointer )
     {
@@ -1614,7 +1578,7 @@ void Os2SalFrame::SetPointer( PointerStyle ePointerStyle )
 
 void Os2SalFrame::CaptureMouse( BOOL bCapture )
 {
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     _bCapture=bCapture;
     debug_printf("Os2SalFrame::CaptureMouse bCapture %d\n", bCapture);
 #endif
@@ -1669,8 +1633,6 @@ void Os2SalFrame::SetInputContext( SalInputContext* pContext )
                     nInputMode &= ~IMI_IM_IME_DISABLE;
                     if ( pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT_OFF )
                         nInputMode &= ~IMI_IM_IME_ON;
-// !!! Da derzeit ueber das OS2-IME-UI der IME-Mode nicht einschaltbar ist !!!
-//                    if ( SAL_INPUTCONTEXT_EXTTEXTINPUT_ON )
                         nInputMode |= IMI_IM_IME_ON;
                 }
                 else
@@ -2056,8 +2018,6 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
 
     // --- Style settings ---
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
-    BOOL bCompBorder = (aStyleSettings.GetOptions() & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE)) == 0;
-
     // General settings
     LONG    nDisplayTime = PrfQueryProfileInt( HINI_PROFILE, (PSZ)aControlPanel, (PSZ)"LogoDisplayTime", -1 );
     ULONG   nSalDisplayTime;
@@ -2079,32 +2039,26 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
 
     // Size settings
     aStyleSettings.SetScrollBarSize( WinQuerySysValue( HWND_DESKTOP, SV_CYHSCROLL ) );
-    if ( bCompBorder )
-    {
-        aStyleSettings.SetTitleHeight( WinQuerySysValue( HWND_DESKTOP, SV_CYTITLEBAR ) );
-    }
+    aStyleSettings.SetTitleHeight( WinQuerySysValue( HWND_DESKTOP, SV_CYTITLEBAR ) );
 
     // Color settings
-    if ( bCompBorder )
-    {
-        aStyleSettings.SetFaceColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONMIDDLE, 0 ) ) );
-        aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
-        aStyleSettings.SetLightColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONLIGHT, 0 ) ) );
-        aStyleSettings.SetLightBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONMIDDLE, 0 ) ) );
-        aStyleSettings.SetShadowColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONDARK, 0 ) ) );
-        aStyleSettings.SetDarkShadowColor( Color( COL_BLACK ) );
-        aStyleSettings.SetDialogColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_DIALOGBACKGROUND, 0 ) ) );
-        aStyleSettings.SetButtonTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
-        aStyleSettings.SetActiveColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ACTIVETITLE, 0 ) ) );
-        aStyleSettings.SetActiveTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ACTIVETITLETEXT, 0 ) ) );
-        aStyleSettings.SetActiveBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ACTIVEBORDER, 0 ) ) );
-        aStyleSettings.SetDeactiveColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVETITLE, 0 ) ) );
-        aStyleSettings.SetDeactiveTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVETITLETEXT, 0 ) ) );
-        aStyleSettings.SetDeactiveBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVEBORDER, 0 ) ) );
-        aStyleSettings.SetMenuColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENU, 0 ) ) );
-        aStyleSettings.SetMenuTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
-        aStyleSettings.SetMenuBarTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
-    }
+    aStyleSettings.SetFaceColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONMIDDLE, 0 ) ) );
+    aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
+    aStyleSettings.SetLightColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONLIGHT, 0 ) ) );
+    aStyleSettings.SetLightBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONMIDDLE, 0 ) ) );
+    aStyleSettings.SetShadowColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_BUTTONDARK, 0 ) ) );
+    aStyleSettings.SetDarkShadowColor( Color( COL_BLACK ) );
+    aStyleSettings.SetDialogColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_DIALOGBACKGROUND, 0 ) ) );
+    aStyleSettings.SetButtonTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
+    aStyleSettings.SetActiveColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ACTIVETITLE, 0 ) ) );
+    aStyleSettings.SetActiveTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ACTIVETITLETEXT, 0 ) ) );
+    aStyleSettings.SetActiveBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_ACTIVEBORDER, 0 ) ) );
+    aStyleSettings.SetDeactiveColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVETITLE, 0 ) ) );
+    aStyleSettings.SetDeactiveTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVETITLETEXT, 0 ) ) );
+    aStyleSettings.SetDeactiveBorderColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_INACTIVEBORDER, 0 ) ) );
+    aStyleSettings.SetMenuColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENU, 0 ) ) );
+    aStyleSettings.SetMenuTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
+    aStyleSettings.SetMenuBarTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUTEXT, 0 ) ) );
     aStyleSettings.SetDialogTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetRadioCheckTextColor( aStyleSettings.GetButtonTextColor() );
     aStyleSettings.SetGroupTextColor( ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_WINDOWSTATICTEXT, 0 ) ) );
@@ -2121,11 +2075,8 @@ void Os2SalFrame::UpdateSettings( AllSettings& rSettings )
     Color aMenuHighColor = ImplOS2ColorToSal( WinQuerySysColor( HWND_DESKTOP, SYSCLR_MENUHILITEBGND, 0 ) );
     if ( ImplSalIsSameColor( aMenuHighColor, aStyleSettings.GetMenuColor() ) )
     {
-        if ( bCompBorder )
-        {
-            aStyleSettings.SetMenuHighlightColor( Color( COL_BLUE ) );
-            aStyleSettings.SetMenuHighlightTextColor( Color( COL_WHITE ) );
-        }
+        aStyleSettings.SetMenuHighlightColor( Color( COL_BLUE ) );
+        aStyleSettings.SetMenuHighlightTextColor( Color( COL_WHITE ) );
     }
     else
     {
@@ -2452,8 +2403,7 @@ static long ImplHandleMouseMsg( HWND hWnd,
     if( !WinIsWindow( pFrame->mhAB, hWnd ) )
         return 0;
 
-#if OSL_DEBUG_LEVEL>10
-    //if (_bCapture)
+#if OSL_DEBUG_LEVEL > 1
         debug_printf("ImplHandleMouseMsg mouse %d,%d\n",aMouseEvt.mnX,aMouseEvt.mnY);
 #endif
 
@@ -2461,10 +2411,6 @@ static long ImplHandleMouseMsg( HWND hWnd,
     {
         if ( nEvent == SALEVENT_MOUSEBUTTONDOWN )
             WinUpdateWindow( pFrame->mhWndClient );
-
-        // --- RTL --- (mirror mouse pos)
-        //if( Application::GetSettings().GetLayoutRTL() )
-        //    aMouseEvt.mnX = pFrame->maGeometry.nWidth-1-aMouseEvt.mnX;
 
         nRet = pFrame->CallCallback( nEvent, &aMouseEvt );
         if ( nMsg == WM_MOUSEMOVE )
@@ -2625,7 +2571,7 @@ static void ImplUpdateInputLang( Os2SalFrame* pFrame )
     // convert uni string to integer
     rc = UniStrtoul(locale_object, pinfo_item, &pinfo_item, 16, &nLang);
     rc = UniFreeMem(pinfo_item);
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("ImplUpdateInputLang nLang %04x\n", nLang);
     char         char_buffer[256];
     rc = UniCreateUconvObject((UniChar *)L"", &uconv_object);
@@ -2637,7 +2583,7 @@ static void ImplUpdateInputLang( Os2SalFrame* pFrame )
     rc = UniFreeLocaleObject(locale_object);
 
     // keep input lang up-to-date
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("ImplUpdateInputLang pFrame %08x lang changed from %d to %d\n",
         pFrame, pFrame->mnInputLang, nLang);
 #endif
@@ -2649,7 +2595,7 @@ static sal_Unicode ImplGetCharCode( Os2SalFrame* pFrame, USHORT nKeyFlags,
                                     sal_Char nCharCode, UCHAR nScanCode )
 {
     ImplUpdateInputLang( pFrame );
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("ImplGetCharCode nCharCode %c, %04x\n", nCharCode, nCharCode);
 #endif
     return OUString( &nCharCode, 1, gsl_getSystemTextEncoding()).toChar();
@@ -2731,7 +2677,7 @@ static long ImplHandleKeyMsg( HWND hWnd,
         SalKeyModEvent aModEvt;
         aModEvt.mnTime = WinQueryMsgTime( pFrame->mhAB );
         aModEvt.mnCode = nModCode;
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
         debug_printf("SALEVENT_KEYMODCHANGE\n");
 #endif
         nRet = pFrame->CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
@@ -2740,7 +2686,7 @@ static long ImplHandleKeyMsg( HWND hWnd,
     {
         nSVCode = ImplSalGetKeyCode( pFrame, nMP1, nMP2 );
         nSVCharCode = ImplConvertKey( pFrame, nMP1, nMP2 );
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
         debug_printf("nSVCode %04x nSVCharCode %04x\n",nSVCode,nSVCharCode );
 #endif
 
@@ -2777,7 +2723,7 @@ static long ImplHandleKeyMsg( HWND hWnd,
             aKeyEvt.mnCharCode  = nSVCharCode;
             aKeyEvt.mnRepeat    = nRepeat;
 
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
             debug_printf( (nFlags & KC_KEYUP) ? "SALEVENT_KEYUP\n" : "SALEVENT_KEYINPUT\n");
 #endif
             nRet = pFrame->CallCallback( (nFlags & KC_KEYUP) ? SALEVENT_KEYUP : SALEVENT_KEYINPUT,
@@ -2914,7 +2860,7 @@ static void UpdateFrameGeometry( HWND hWnd, Os2SalFrame* pFrame )
     // clamp to zero
     pFrame->maGeometry.nHeight = nHeight < 0 ? 0 : nHeight;
     pFrame->maGeometry.nWidth = nWidth < 0 ? 0 : nWidth;
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "UpdateFrameGeometry: hwnd %x, frame %x at %d,%d (%dx%d)\n",
         hWnd, pFrame->mhWndFrame,
         pFrame->maGeometry.nX, pFrame->maGeometry.nY,
@@ -3038,7 +2984,6 @@ static int SalImplHandleProcessMenu( Os2SalFrame* pFrame, ULONG nMsg, MPARAM nMP
 {
     long nRet = 0;
 debug_printf("SalImplHandleProcessMenu\n");
-    //return (nRet != 0);
     return (nRet == 0);
 }
 
@@ -3088,28 +3033,6 @@ static long ImplHandleIMEStartConversion( Os2SalFrame* pFrame )
             }
             if ( pFrame->mbHandleIME )
             {
-/* Windows-Code, der noch nicht angepasst wurde !!!
-                // Cursor-Position ermitteln und aus der die Default-Position fuer
-                // das Composition-Fenster berechnen
-                SalCursorPosEvent aCursorPosEvt;
-                pFrame->CallCallback( pFrame->mpInst, pFrame,
-                                            SALEVENT_CURSORPOS, (void*)&aCursorPosEvt );
-                COMPOSITIONFORM aForm;
-                memset( &aForm, 0, sizeof( aForm ) );
-                if ( !aCursorPosEvt.mnWidth || !aCursorPosEvt.mnHeight )
-                    aForm.dwStyle |= CFS_DEFAULT;
-                else
-                {
-                    aForm.dwStyle          |= CFS_POINT;
-                    aForm.ptCurrentPos.x    = aCursorPosEvt.mnX;
-                    aForm.ptCurrentPos.y    = aCursorPosEvt.mnY;
-                }
-                ImmSetCompositionWindow( hIMC, &aForm );
-
-                // Den InputContect-Font ermitteln und diesem dem Composition-Fenster
-                // bekannt machen
-*/
-
                 pFrame->mbConversionMode = TRUE;
                 pFrame->CallCallback( SALEVENT_STARTEXTTEXTINPUT, (void*)NULL );
                 nRet = TRUE;
@@ -3182,24 +3105,6 @@ static long ImplHandleIMEConversion( Os2SalFrame* pFrame, MPARAM nMP2Param )
                         pIMEData->mpGetConversionString( hIMI, IMR_CONV_CONVERSIONATTR, pAttrBuf, &nAttrBufLen );
                     }
 
-/* !!! Wir bekommen derzeit nur falsche Daten, deshalb zeigen wir derzeit
-   !!! auch keine Cursor an
-                    ULONG nTempBufLen;
-                    ULONG nCursorPos = 0;
-                    ULONG nCursorAttr = 0;
-                    ULONG nChangePos = 0;
-                    nTempBufLen = sizeof( ULONG );
-                    pIMEData->mpGetConversionString( hIMI, IMR_CONV_CURSORPOS, &nCursorPos, &nTempBufLen );
-                    nTempBufLen = sizeof( ULONG );
-                    pIMEData->mpGetConversionString( hIMI, IMR_CONV_CURSORATTR, &nCursorAttr, &nTempBufLen );
-                    nTempBufLen = sizeof( ULONG );
-                    pIMEData->mpGetConversionString( hIMI, IMR_CONV_CHANGESTART, &nChangePos, &nTempBufLen );
-
-                    aEvt.mnCursorPos = nCursorPos;
-                    aEvt.mnDeltaStart = nChangePos;
-                    if ( nCursorAttr & CP_CURSORATTR_INVISIBLE )
-                        aEvt.mbCursorVisible = FALSE;
-*/
                     aEvt.mnCursorPos = 0;
                     aEvt.mnDeltaStart = 0;
                     aEvt.mbCursorVisible = FALSE;
@@ -3291,11 +3196,6 @@ static void ImplHandleIMEOpenCandidate( Os2SalFrame* pFrame )
             pIMEData->mpGetConversionString( hIMI, IMR_CONV_CONVERSIONSTRING, 0, &nBufLen );
             if ( nBufLen > 0 )
             {
-/* !!! Wir bekommen derzeit nur falsche Daten steht der Cursor immer bei 0
-                ULONG nTempBufLen = sizeof( ULONG );
-                ULONG nCursorPos = 0;
-                pIMEData->mpGetConversionString( hIMI, IMR_CONV_CURSORPOS, &nCursorPos, &nTempBufLen );
-*/
                 ULONG nCursorPos = 0;
 
                 SalExtTextInputPosEvent aEvt;
@@ -3369,7 +3269,7 @@ MRESULT EXPENTRY SalFrameWndProc( HWND hWnd, ULONG nMsg,
     BOOL            bDef        = TRUE;
     bool            bCheckTimers= false;
 
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     if (nMsg!=WM_TIMER && nMsg!=WM_MOUSEMOVE)
         debug_printf( "SalFrameWndProc hWnd 0x%x nMsg 0x%x\n", hWnd, nMsg);
 #endif

@@ -49,7 +49,7 @@ class SlideSorter;
 namespace accessibility {
 
 
-typedef ::cppu::WeakComponentImplHelper5<
+typedef ::cppu::PartialWeakComponentImplHelper5<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -95,7 +95,14 @@ public:
 
     virtual void SAL_CALL disposing (void);
 
+    //=====  XComponent ==============================================
 
+    virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException)
+    { WeakComponentImplHelperBase::dispose(); }
+    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+    { WeakComponentImplHelperBase::addEventListener(xListener); }
+    virtual void SAL_CALL removeEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)throw (::com::sun::star::uno::RuntimeException)
+    { WeakComponentImplHelperBase::removeEventListener(xListener); }
 
     //===== XAccessible =======================================================
 
@@ -117,9 +124,6 @@ public:
             const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessibleEventListener >& rxListener )
         throw (::com::sun::star::uno::RuntimeException);
-
-    using cppu::WeakComponentImplHelperBase::addEventListener;
-    using cppu::WeakComponentImplHelperBase::removeEventListener;
 
     //=====  XAccessibleContext  ==============================================
 

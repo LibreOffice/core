@@ -39,12 +39,10 @@
 
 //------------------------------------------------------------------
 
-// static
-BOOL ScOptionsUtil::IsMetricSystem()
+sal_Bool ScOptionsUtil::IsMetricSystem()
 {
     //! which language should be used here - system language or installed office language?
 
-//  MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
     MeasurementSystem eSys = ScGlobal::pLocaleData->getMeasurementSystemEnum();
 
     return ( eSys == MEASURE_METRIC );

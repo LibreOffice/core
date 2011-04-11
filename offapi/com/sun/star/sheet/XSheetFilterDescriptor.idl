@@ -28,13 +28,8 @@
 #ifndef __com_sun_star_sheet_XSheetFilterDescriptor_idl__
 #define __com_sun_star_sheet_XSheetFilterDescriptor_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_sheet_TableFilterField_idl__
 #include <com/sun/star/sheet/TableFilterField.idl>
-#endif
+#include <com/sun/star/uno/XInterface.idl>
 
 //=============================================================================
 
@@ -44,7 +39,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** provides access to a collection of filter conditions (filter fields).
 
-    @see com::sun::star::sheet::SheetFilterDescriptor
+    @see SheetFilterDescriptor
  */
 published interface XSheetFilterDescriptor: com::sun::star::uno::XInterface
 {
@@ -52,14 +47,13 @@ published interface XSheetFilterDescriptor: com::sun::star::uno::XInterface
 
     /** returns the collection of filter fields.
      */
-    sequence< com::sun::star::sheet::TableFilterField > getFilterFields();
+    sequence< TableFilterField > getFilterFields();
 
     //-------------------------------------------------------------------------
 
     /** sets a new collection of filter fields.
      */
-    void setFilterFields(
-        [in] sequence< com::sun::star::sheet::TableFilterField > aFilterFields );
+    void setFilterFields( [in] sequence< TableFilterField > aFilterFields );
 
 };
 

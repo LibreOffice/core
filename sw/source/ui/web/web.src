@@ -25,15 +25,10 @@
  *
  ************************************************************************/
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "globals.hrc"
 #include "cmdid.h"
 #include "web.hrc"
-#include "swmn.hrc"
-#define ACC_SW_WEB
-#include "toolbox.hrc"
 #include "helpid.h"
 #include "cfgid.h"
 
@@ -65,124 +60,6 @@ String RID_WEBTOOLS_TOOLBOX
 {
     Text [ en-US ] = "Main Toolbar/Web" ;
 };
-ToolBox RID_WEBTOOLS_TOOLBOX
-{
-    HelpID = HID_WEBTOOLS_TOOLBOX ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    LineSpacing = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    Customize = TRUE ;
-    MenuStrings = TRUE ;
-    Scroll = TRUE ;
-    Hide = TRUE ;
-    Align = BOXALIGN_LEFT ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = FN_INSERT_CTRL ;
-            HelpID = HID_INSERT_CTRL ;
-            DropDown = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_INSERT_FIELD_CTRL ;
-            HelpID = HID_INSERT_FIELD_CTRL ;
-            DropDown = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_DRAW_TEXT_MARQUEE ;
-            HelpID = SID_DRAW_TEXT_MARQUEE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_FM_CONFIG ;
-            HelpID = SID_FM_CONFIG;
-            DropDown = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_GLOSSARY_DLG ;
-            HelpID = FN_GLOSSARY_DLG ;
-            DropDown = TRUE ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_SPELL_GRAMMAR_DIALOG;
-            HelpID = FN_SPELL_GRAMMAR_DIALOG;
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_AUTOSPELL_CHECK
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_HYPHENATE_OPT_DLG;
-            HelpID = FN_HYPHENATE_OPT_DLG;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_THESAURUS;
-            HelpID = SID_THESAURUS;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SEARCH_DLG ;
-            HelpID = SID_SEARCH_DLG ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_ZOOM;
-            HelpID = SID_ATTR_ZOOM ;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_VIEW_META_CHARS ;
-            HelpID = FN_VIEW_META_CHARS ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_VIEW_GRAPHIC ;
-            HelpID = FN_VIEW_GRAPHIC ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_PRINT_LAYOUT ;
-            HelpID = FN_PRINT_LAYOUT ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SOURCEVIEW ;
-            HelpID = HID_SOURCEVIEW ;
-        };
-    };
-};
 /*************************************************************************
     Textleiste
 *************************************************************************/
@@ -190,156 +67,17 @@ String RID_WEBTEXT_TOOLBOX
 {
     Text [ en-US ] = "Text Object Bar/Web" ;
 };
-ToolBox RID_WEBTEXT_TOOLBOX
-{
-    HelpID = HID_WEBTEXT_TOOLBOX ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Hide = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    LineSpacing = TRUE ;
-    Customize = TRUE ;
-    MenuStrings = TRUE ;
-    ItemList =
-    {
-        MN_TEMPLATE
-        MN_FONT
-        MN_TEXT1(TRUE)
-        MN_TEXT_LTR_RTL
-        MN_TEXT_LINESPACE
-        MN_TEXT2
-        MN_TEXT_BACKGROUND
-        MN_TEXT_DIALOGS(TRUE)
-    };
-    Scroll = TRUE ;
-};
 String RID_WEBFRAME_TOOLBOX
 {
     Text [ en-US ] = "Frame Object Bar/Web" ;
-};
-ToolBox RID_WEBFRAME_TOOLBOX
-{
-    HelpID = HID_WEBFRAME_TOOLBOX ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Hide = TRUE ;
-    LineSpacing = TRUE ;
-    MenuStrings = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    Customize = TRUE ;
-    ItemList =
-    {
-        MN_FRAME_WRAP_WEB
-        MN_FRAME1
-        MN_FRAME3
-        MN_LINESTYLE
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        MN_BACKGROUND_COLOR
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-        MN_ATTRIBUTES_FRAME
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-        MN_LAYER
-        ToolBoxItem
-        {
-            Identifier = FN_TOOL_ANKER ;
-            HelpID = FN_TOOL_ANKER ;
-        };
-    };
-    Scroll = TRUE ;
 };
 String RID_WEBGRAPHIC_TOOLBOX
 {
     Text [ en-US ] = "Graphics Object Bar/Web" ;
 };
-ToolBox RID_WEBGRAPHIC_TOOLBOX
-{
-    HelpID = HID_WEBGRAPHIC_TOOLBOX ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    LineSpacing = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    MenuStrings = TRUE ;
-    Customize = TRUE ;
-    Hide = TRUE ;
-    ItemList =
-    {
-        MN_FRAME_WRAP_WEB
-        MN_FRAME1
-        MN_FRAME3
-        MN_LINESTYLE
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-        MN_ATTRIBUTES_GRAFIK
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-        MN_LAYER
-        ToolBoxItem
-        {
-            Identifier = FN_TOOL_ANKER ;
-            HelpID = FN_TOOL_ANKER ;
-            DropDown = TRUE ;
-        };
-    };
-    Scroll = TRUE ;
-};
 String RID_WEBOLE_TOOLBOX
 {
     Text [ en-US ] = "Object/Web" ;
 };
-ToolBox RID_WEBOLE_TOOLBOX
-{
-    HelpID = HID_OLE_TOOLBOX ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    LineSpacing = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    Customize = TRUE ;
-    MenuStrings = TRUE ;
-    Hide = TRUE ;
-    Scroll = TRUE ;
-    ItemList =
-    {
-        MN_FRAME_WRAP_WEB
-        MN_FRAME1
-        MN_FRAME3
-        MN_LINESTYLE
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-        MN_ATTRIBUTES_OLE
-        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-        MN_LAYER
-        ToolBoxItem
-        {
-            Identifier = FN_TOOL_ANKER ;
-            HelpID = FN_TOOL_ANKER ;
-            DropDown = TRUE ;
-        };
-    };
-};
-/*************************************************************************
 
-*************************************************************************/
-Menu MN_WEB_TEXT_POPUPMENU
-    BASE_TEXT_POPUPMENU_BEGIN
-    BASE_TEXT_POPUPMENU_END
 

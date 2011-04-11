@@ -35,9 +35,7 @@
 #include "JoinDesignView.hxx"
 #include "TableConnectionData.hxx"
 #include "TableWindowData.hxx"
-#ifndef _MEMORY_
 #include <memory>
-#endif
 #include <boost/shared_ptr.hpp>
 
 namespace comphelper
@@ -150,14 +148,14 @@ namespace dbaui
         /** only defines a method to save a SQLException in d&d methods to show the error at a later state
             set the internal member m_aExceptionInfo to _rInfo
         */
-        void setErrorOccured(const ::dbtools::SQLExceptionInfo& _rInfo)
+        void setErrorOccurred(const ::dbtools::SQLExceptionInfo& _rInfo)
         {
             m_aExceptionInfo = _rInfo;
         }
         /**
             just returns the internal member and clears it
         */
-        ::dbtools::SQLExceptionInfo clearOccuredError()
+        ::dbtools::SQLExceptionInfo clearOccurredError()
         {
             ::dbtools::SQLExceptionInfo aInfo = m_aExceptionInfo;
             m_aExceptionInfo = ::dbtools::SQLExceptionInfo();

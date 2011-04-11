@@ -73,7 +73,7 @@ redland_CC+=-shared-libgcc
 .ENDIF
 redland_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-redland_LIBS+=-lstdc++_s
+redland_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 
 CONFIGURE_DIR=
@@ -90,7 +90,7 @@ BUILD_DIR=$(CONFIGURE_DIR)$/librdf
 .ELSE # "WNT"
 
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec -Wl,-z,noexecstack
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
@@ -135,8 +135,6 @@ CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-threads --with-openssl
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
-#INSTALL_ACTION=$(GNUMAKE) install
-#INSTALL_FLAGS+=DESTDIR=$(PWD)$/$(P_INSTALL_TARGET_DIR)
 .ENDIF
 
 

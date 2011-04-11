@@ -14,8 +14,6 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

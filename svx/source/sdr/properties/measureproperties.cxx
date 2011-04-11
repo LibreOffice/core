@@ -118,9 +118,9 @@ namespace sdr
             GetObjectItemSet();
 
             //#71958# by default, the show units Bool-Item is set as hard
-            // attribute to TRUE to aviod confusion when copying SdrMeasureObj's
+            // attribute to sal_True to aviod confusion when copying SdrMeasureObj's
             // from one application to another
-            mpItemSet->Put(SdrMeasureShowUnitItem(TRUE));
+            mpItemSet->Put(SdrMeasureShowUnitItem(sal_True));
 
             basegfx::B2DPolygon aNewPolygon;
             aNewPolygon.append(basegfx::B2DPoint(100.0, 0.0));

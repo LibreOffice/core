@@ -86,7 +86,6 @@ DEFINE_INIT_SERVICE                 (   MediaTypeDetectionHelper,
 //   XStringMapping
 //*****************************************************************************************************************
 
-//virtual
 sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(
         uno::Sequence< OUString >& rSeq )
         throw(uno::RuntimeException)

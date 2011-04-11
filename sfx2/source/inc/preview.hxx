@@ -33,7 +33,6 @@
 #include <sfx2/basedlgs.hxx>
 
 class SfxObjectShell;
-//REMOVE    class SvStorageRef;
 class SfxFrameWindow;
 
 class SfxFrame;

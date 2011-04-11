@@ -300,7 +300,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
         }
         else {
             // Should never see this...
-            OSL_ASSERT("Unknown Expression Type!");
+            OSL_FAIL("Unknown Expression Type!");
             return( NS_ERROR_UNEXPECTED );
         }
     }
@@ -697,7 +697,7 @@ MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
             xResEntry->setValue( m_rColumnAlias.getProgrammaticNameOrFallbackToUTF8Alias( aDBColumnName ), rValue.getString() );
             break;
         default:
-            OSL_ENSURE( sal_False, "invalid data type!" );
+            OSL_FAIL( "invalid data type!" );
             break;
     }
 

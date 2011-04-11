@@ -33,7 +33,7 @@
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLTextMasterPageContext.hxx>
 #include "XMLTextHeaderFooterContext.hxx"
@@ -52,7 +52,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 Reference < XStyle > XMLTextMasterPageContext::Create()

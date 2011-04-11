@@ -70,8 +70,7 @@ const rtl::OUString UIELEMENT_PROPNAME_RESOURCEURL( RTL_CONSTASCII_USTRINGPARAM(
 const rtl::OUString UIELEMENT_PROPNAME_TYPE( RTL_CONSTASCII_USTRINGPARAM( "Type" ));
 const rtl::OUString UIELEMENT_PROPNAME_XMENUBAR( RTL_CONSTASCII_USTRINGPARAM( "XMenuBar" ));
 const rtl::OUString UIELEMENT_PROPNAME_NOCLOSE( RTL_CONSTASCII_USTRINGPARAM( "NoClose" ));
-
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
@@ -219,7 +218,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
                                                                         sal_Int32  nHandle         ,
                                                                         const Any& aValue             ) throw( com::sun::star::lang::IllegalArgumentException )
 {
-    //  Initialize state with FALSE !!!
+    //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
     sal_Bool bReturn = sal_False;
 
@@ -500,8 +499,6 @@ void SAL_CALL UIConfigElementWrapperBase::setSettings( const Reference< XIndexAc
 {
     ResetableGuard aLock( m_aLock );
 
-    //if ( m_bDisposed )
-    //    throw DisposedException();
 
     if ( xSettings.is() )
     {
@@ -541,8 +538,6 @@ Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_
 {
     ResetableGuard aLock( m_aLock );
 
-    //if ( m_bDisposed )
-    //    throw DisposedException();
 
     if ( bWriteable )
         return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( m_xConfigData ) ), UNO_QUERY );

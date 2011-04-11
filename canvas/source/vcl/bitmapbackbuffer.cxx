@@ -89,7 +89,7 @@ namespace vclcanvas
         if( mbVDevContentIsCurrent && mpVDev )
         {
             // VDev content is more current than bitmap - copy contents before!
-            mpVDev->EnableMapMode( FALSE );
+            mpVDev->EnableMapMode( sal_False );
             const Point aEmptyPoint;
             *maBitmap = mpVDev->GetBitmapEx( aEmptyPoint,
                                              mpVDev->GetOutputSizePixel() );
@@ -109,7 +109,7 @@ namespace vclcanvas
 
         if( mbVDevContentIsCurrent && mpVDev )
         {
-            mpVDev->EnableMapMode( FALSE );
+            mpVDev->EnableMapMode( sal_False );
             aSize = mpVDev->GetOutputSizePixel();
         }
 
@@ -139,7 +139,7 @@ namespace vclcanvas
             // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
             // is not required to do AA. It would need to be adapted to use it correctly
             // (especially gradient painting). This will need extra work.
-            mpVDev->SetAntialiasing(mpVDev->GetAntialiasing() & !ANTIALIASING_ENABLE_B2DDRAW);
+            mpVDev->SetAntialiasing(mpVDev->GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
 #endif
         }
     }
@@ -152,7 +152,7 @@ namespace vclcanvas
         if( mpVDev && mbBitmapContentIsCurrent )
         {
             // fill with bitmap content
-            mpVDev->EnableMapMode( FALSE );
+            mpVDev->EnableMapMode( sal_False );
             const Point aEmptyPoint;
             mpVDev->DrawBitmapEx( aEmptyPoint, *maBitmap );
         }

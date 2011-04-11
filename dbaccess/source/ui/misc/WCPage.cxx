@@ -82,7 +82,7 @@ OCopyTable::OCopyTable( Window * pParent )
     ,m_edKeyName(           this, ModuleRes( ET_KEYNAME         ) )
     ,m_pPage2(NULL)
     ,m_pPage3(NULL)
-    ,m_bUseHeaderAllowed(TRUE)
+    ,m_bUseHeaderAllowed(sal_True)
 {
     DBG_CTOR(OCopyTable,NULL);
 
@@ -93,7 +93,7 @@ OCopyTable::OCopyTable( Window * pParent )
         if ( !m_pParent->supportsViews() )
             m_aRB_View.Disable();
 
-        m_aCB_UseHeaderLine.Check(TRUE);
+        m_aCB_UseHeaderLine.Check(sal_True);
         m_bPKeyAllowed = m_pParent->supportsPrimaryKey();
 
         m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
@@ -134,7 +134,7 @@ IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, /*pButton*/ )
     SetAppendDataRadio();
     return 0;
 }
-//--------dyf ADD
+
 void OCopyTable::SetAppendDataRadio()
 {
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_True);
@@ -144,7 +144,6 @@ void OCopyTable::SetAppendDataRadio()
     m_pParent->setOperation(CopyTableOperation::AppendData);
 }
 
-//--------add end
 //------------------------------------------------------------------------
 IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 {
@@ -264,7 +263,7 @@ sal_Bool OCopyTable::LeavePage()
 void OCopyTable::ActivatePage()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
-    m_pParent->GetOKButton().Enable( TRUE );
+    m_pParent->GetOKButton().Enable( sal_True );
     m_nOldOperation = m_pParent->getOperation();
     m_edTableName.GrabFocus();
     m_aCB_UseHeaderLine.Check(m_pParent->UseHeaderLine());
@@ -305,7 +304,6 @@ sal_Bool OCopyTable::checkAppendData()
         xTables->getByName( m_edTableName.GetText() ) >>= xTable;
         ObjectCopySource aTableCopySource( m_pParent->m_xDestConnection, xTable );
         m_pParent->loadData( aTableCopySource, m_pParent->m_vDestColumns, m_pParent->m_aDestVec );
-        // #90027#
         const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
         ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
         ODatabaseExport::TColumnVector::const_iterator aDestEnd     = pDestColumns->end();
@@ -351,7 +349,6 @@ void OCopyTable::setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _r
 }
 
 // -----------------------------------------------------------------------------
-//---dyf add 2006/7/10
 void OCopyTable::setCreateStyleAction()
 {
     // reselect the last action before
@@ -382,6 +379,5 @@ void OCopyTable::setCreateStyleAction()
             }
     }
 }
-//---add end
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

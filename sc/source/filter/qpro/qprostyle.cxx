@@ -139,18 +139,18 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     if( nTmp & 0x80 )
     {
         SfxBoolItem aWrapItem( ATTR_LINEBREAK );
-        aWrapItem.SetValue( TRUE );
+        aWrapItem.SetValue( sal_True );
         rItemSet.Put( aWrapItem );
     }
 
     // Font Attributes
     sal_uInt16 nTmpFnt = maFontRecord[ maFont[ nStyle ] ];
-    BOOL bIsBold, bIsItalic, bIsUnderLine, bIsStrikeThrough;
+    sal_Bool bIsBold, bIsItalic, bIsUnderLine;
 
     bIsBold = ( nTmpFnt & 0x0001 ) != 0;
     bIsItalic = ( nTmpFnt & 0x0002 ) != 0;
     bIsUnderLine = ( nTmpFnt & 0x0004 ) != 0;
-    bIsStrikeThrough = (nTmpFnt & 0x0020 ) != 0;
+    //(nTmpFnt & 0x0020 ) for StrikeThrough
 
     if( bIsBold )
         rItemSet.Put( SvxWeightItem( WEIGHT_BOLD,ATTR_FONT_WEIGHT) );
@@ -160,7 +160,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
         rItemSet.Put( SvxUnderlineItem( UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE ) );
 
     if (maFontHeight[ maFont [ nStyle ] ])
-        rItemSet.Put( SvxFontHeightItem( (ULONG) (20 * maFontHeight[ maFont[ nStyle ] ] ), 100, ATTR_FONT_HEIGHT ) );
+        rItemSet.Put( SvxFontHeightItem( (sal_uLong) (20 * maFontHeight[ maFont[ nStyle ] ] ), 100, ATTR_FONT_HEIGHT ) );
 
     String fntName = maFontType[ maFont[ nStyle ] ];
     rItemSet.Put( SvxFontItem( FAMILY_SYSTEM, fntName, EMPTY_STRING, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );

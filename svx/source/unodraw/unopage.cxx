@@ -50,15 +50,16 @@
 #include <svx/svdpagv.hxx>
 #include <svx/unopage.hxx>
 #include "shapeimpl.hxx"
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/polysc3d.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/svdopath.hxx>
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <svx/svdomeas.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 using ::rtl::OUString;
 using namespace ::cppu;
@@ -70,13 +71,6 @@ using namespace ::com::sun::star::drawing;
 
 #define INTERFACE_TYPE( xint ) \
     ::getCppuType((const Reference< xint >*)0)
-
-#define QUERYINT( xint ) \
-    if( rType == ::getCppuType((const Reference< xint >*)0) ) \
-        aAny <<= Reference< xint >(this)
-
-DECLARE_LIST( SvxDrawPageList, SvxDrawPage * )
-
 
 /**********************************************************************
 * class SvxDrawPage                                                   *
@@ -306,7 +300,7 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
 {
     SolarMutexGuard aGuard;
 
-    if( (mpModel == 0) || (mpPage == 0) )
+    if ( ( mpModel == NULL ) || ( mpPage == NULL ) )
         throw lang::DisposedException();
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
@@ -319,6 +313,7 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
     if(!pObj)
     {
         pObj = CreateSdrObject( xShape );
+        ENSURE_OR_RETURN_VOID( pObj != NULL, "SvxDrawPage::add: no SdrObject was created!" );
     }
     else if ( !pObj->IsInserted() )
     {
@@ -326,13 +321,10 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
         mpPage->InsertObject( pObj );
     }
 
-    if(pObj == NULL)
-        return;
-
     pShape->Create( pObj, this );
+    OSL_ENSURE( pShape->GetSdrObject() == pObj, "SvxDrawPage::add: shape does not know about its newly created SdrObject!" );
 
-    if( mpModel )
-        mpModel->SetChanged();
+    mpModel->SetChanged();
 }
 
 //----------------------------------------------------------------------
@@ -445,7 +437,7 @@ namespace
 
 //----------------------------------------------------------------------
 // ACHTUNG: _SelectObjectsInView selektiert die ::com::sun::star::drawing::Shapes nur in der angegebennen
-//         SdrPageView. Dies muß nicht die sichtbare SdrPageView sein.
+//         SdrPageView. Dies muï¿½ nicht die sichtbare SdrPageView sein.
 //----------------------------------------------------------------------
 void SvxDrawPage::_SelectObjectsInView( const Reference< drawing::XShapes > & aShapes, SdrPageView* pPageView ) throw ()
 {
@@ -469,7 +461,7 @@ void SvxDrawPage::_SelectObjectsInView( const Reference< drawing::XShapes > & aS
 
 //----------------------------------------------------------------------
 // ACHTUNG: _SelectObjectInView selektiert das Shape *nur* in der angegebennen
-//         SdrPageView. Dies muß nicht die sichtbare SdrPageView sein.
+//         SdrPageView. Dies muï¿½ nicht die sichtbare SdrPageView sein.
 //----------------------------------------------------------------------
 void SvxDrawPage::_SelectObjectInView( const Reference< drawing::XShape > & xShape, SdrPageView* pPageView ) throw()
 {
@@ -624,7 +616,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 aNewPolygon.setClosed(true);
                 pObj->SetExtrudePolygon(basegfx::B2DPolyPolygon(aNewPolygon));
 
-                // #107245# pObj->SetExtrudeCharacterMode(TRUE);
+                // #107245# pObj->SetExtrudeCharacterMode(sal_True);
                 pObj->SetMergedItem(Svx3DCharacterModeItem(sal_True));
             }
             else if(pNewObj->ISA(E3dLatheObj))
@@ -637,7 +629,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 aNewPolygon.setClosed(true);
                 pObj->SetPolyPoly2D(basegfx::B2DPolyPolygon(aNewPolygon));
 
-                // #107245# pObj->SetLatheCharacterMode(TRUE);
+                // #107245# pObj->SetLatheCharacterMode(sal_True);
                 pObj->SetMergedItem(Svx3DCharacterModeItem(sal_True));
             }
         }
@@ -829,7 +821,8 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                         }
                         if( pRet == NULL )
                         {
-                            pRet = new SvxOle2Shape( pObj, aSvxMapProvider.GetMap(SVXMAP_OLE2),  aSvxMapProvider.GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool()) );
+                            SvxUnoPropertyMapProvider& rSvxMapProvider = getSvxMapProvider();
+                            pRet = new SvxOle2Shape( pObj, rSvxMapProvider.GetMap(SVXMAP_OLE2),  rSvxMapProvider.GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool()) );
                         }
                      }
                     break;
@@ -843,7 +836,10 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                     pRet = new SvxShapePolyPolygon( pObj , PolygonKind_PATHPLIN );
                     break;
                 case OBJ_PAGE:
-                    pRet = new SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_PAGE),  aSvxMapProvider.GetPropertySet(SVXMAP_PAGE, SdrObject::GetGlobalDrawObjectItemPool()) );
+                {
+                    SvxUnoPropertyMapProvider& rSvxMapProvider = getSvxMapProvider();
+                    pRet = new SvxShape( pObj, rSvxMapProvider.GetMap(SVXMAP_PAGE),  rSvxMapProvider.GetPropertySet(SVXMAP_PAGE, SdrObject::GetGlobalDrawObjectItemPool()) );
+                }
                     break;
                 case OBJ_MEASURE:
                     pRet = new SvxShapeDimensioning( pObj );
@@ -863,7 +859,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                     pRet = new SvxTableShape( pObj );
                     break;
                 default: // unbekanntes 2D-Objekt auf der Page
-                    DBG_ERROR("Nicht implementierter Starone-Shape erzeugt! [CL]");
+                    OSL_FAIL("Nicht implementierter Starone-Shape erzeugt! [CL]");
                     pRet = new SvxShapeText( pObj );
                     break;
             }
@@ -871,7 +867,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
         }
         default: // Unbekannter Inventor
         {
-            DBG_ERROR("AW: Unknown Inventor in SvxDrawPage::_CreateShape()");
+            OSL_FAIL("AW: Unknown Inventor in SvxDrawPage::_CreateShape()");
             break;
         }
     }

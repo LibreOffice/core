@@ -35,9 +35,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/drawingml/embeddedwavaudiofile.hxx"
-#include "tokens.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -68,29 +66,29 @@ namespace oox { namespace ppt {
 
                 switch( aElementToken )
                 {
-                case NMSP_PPT|XML_bg:
+                case PPT_TOKEN( bg ):
                     bTargetSet = true;
                     maShapeTarget.mnType = XML_bg;
                     break;
-                case NMSP_PPT|XML_txEl:
+                case PPT_TOKEN( txEl ):
                     bTargetSet = true;
                     maShapeTarget.mnType = XML_txEl;
                     break;
-                case NMSP_PPT|XML_subSp:
+                case PPT_TOKEN( subSp ):
                     bTargetSet = true;
                     maShapeTarget.mnType = XML_subSp;
                     maShapeTarget.msSubShapeId = xAttribs->getOptionalValue( XML_spid );
                     break;
-                case NMSP_PPT|XML_graphicEl:
-                case NMSP_PPT|XML_oleChartEl:
+                case PPT_TOKEN( graphicEl ):
+                case PPT_TOKEN( oleChartEl ):
                     bTargetSet = true;
                     // TODO
                     break;
-                case NMSP_PPT|XML_charRg:
-                case NMSP_PPT|XML_pRg:
+                case PPT_TOKEN( charRg ):
+                case PPT_TOKEN( pRg ):
                     if( bTargetSet && maShapeTarget.mnType == XML_txEl )
                     {
-                        maShapeTarget.mnRangeType = getToken( aElementToken );
+                        maShapeTarget.mnRangeType = getBaseToken( aElementToken );
                         maShapeTarget.maRange = drawingml::GetIndexRange( xAttribs );
                     }
                     break;
@@ -131,7 +129,7 @@ namespace oox { namespace ppt {
 
         switch( aElementToken )
         {
-        case NMSP_PPT|XML_inkTgt:
+        case PPT_TOKEN( inkTgt ):
         {
             mpTarget->mnType = XML_inkTgt;
             OUString aId = xAttribs->getOptionalValue( XML_spid );
@@ -141,10 +139,10 @@ namespace oox { namespace ppt {
             }
             break;
         }
-        case NMSP_PPT|XML_sldTgt:
+        case PPT_TOKEN( sldTgt ):
             mpTarget->mnType = XML_sldTgt;
             break;
-        case NMSP_PPT|XML_sndTgt:
+        case PPT_TOKEN( sndTgt ):
         {
             mpTarget->mnType = XML_sndTgt;
             drawingml::EmbeddedWAVAudioFile aAudio;
@@ -154,7 +152,7 @@ namespace oox { namespace ppt {
             mpTarget->msValue = sSndName;
             break;
         }
-        case NMSP_PPT|XML_spTgt:
+        case PPT_TOKEN( spTgt ):
         {
             mpTarget->mnType = XML_spTgt;
             OUString aId = xAttribs->getOptionalValue( XML_spid );
@@ -163,7 +161,7 @@ namespace oox { namespace ppt {
             break;
         }
         default:
-            OSL_TRACE( "OOX: unhandled tag %ld in TL_TimeTargetElement.", getToken( aElementToken ) );
+            OSL_TRACE( "OOX: unhandled tag %ld in TL_TimeTargetElement.", getBaseToken( aElementToken ) );
             break;
         }
 

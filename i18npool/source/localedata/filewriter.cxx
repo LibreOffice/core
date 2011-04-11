@@ -144,14 +144,14 @@ void OFileWriter::writeIntParameter(const sal_Char* pAsciiStr, const sal_Int16 c
 
 bool OFileWriter::writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str, sal_Int16 count) const
 {
-    bool bBool = (str.equalsAscii("true") ? 1 : 0);
+    bool bBool = (str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ? 1 : 0);
     fprintf(m_f,"static const sal_Unicode default%s%d[] = {%d};\n", pAsciiStr, count, bBool);
     return bBool;
 }
 
 bool OFileWriter::writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str) const
 {
-    bool bBool = (str.equalsAscii("true") ? 1 : 0);
+    bool bBool = (str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) ? 1 : 0);
     fprintf(m_f,"static const sal_Unicode default%s[] = {%d};\n", pAsciiStr, bBool);
     return bBool;
 }

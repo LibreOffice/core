@@ -28,54 +28,75 @@
 
 #include "oox/xls/tablefragment.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::RecordInfo;
+#include "oox/xls/autofilterbuffer.hxx"
+#include "oox/xls/autofiltercontext.hxx"
+#include "oox/xls/tablebuffer.hxx"
 
 namespace oox {
 namespace xls {
 
 // ============================================================================
 
-OoxTableFragment::OoxTableFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
-    OoxWorksheetFragmentBase( rHelper, rFragmentPath )
+using namespace ::oox::core;
+
+using ::rtl::OUString;
+
+// ============================================================================
+
+TableFragment::TableFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
+    WorksheetFragmentBase( rHelper, rFragmentPath ),
+    mrTable( getTables().createTable() )
 {
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
-
-ContextHandlerRef OoxTableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+ContextHandlerRef TableFragment::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
             if( nElement == XLS_TOKEN( table ) )
-                mxTable = getTables().importTable( rAttribs, getSheetIndex() );
+            {
+                mrTable.importTable( rAttribs, getSheetIndex() );
+                return this;
+            }
+        break;
+        case XLS_TOKEN( table ):
+            if( nElement == XLS_TOKEN( autoFilter ) )
+                return new AutoFilterContext( *this, mrTable.createAutoFilter() );
         break;
     }
     return 0;
 }
 
-ContextHandlerRef OoxTableFragment::onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm )
+ContextHandlerRef TableFragment::onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
-            if( nRecId == OOBIN_ID_TABLE )
-                mxTable = getTables().importTable( rStrm, getSheetIndex() );
+            if( nRecId == BIFF12_ID_TABLE )
+            {
+                mrTable.importTable( rStrm, getSheetIndex() );
+                return this;
+            }
+        break;
+        case BIFF12_ID_TABLE:
+            if( nRecId == BIFF12_ID_AUTOFILTER )
+                return new AutoFilterContext( *this, mrTable.createAutoFilter() );
         break;
     }
     return 0;
 }
 
-// oox.core.FragmentHandler2 interface ----------------------------------------
-
-const RecordInfo* OoxTableFragment::getRecordInfos() const
+const RecordInfo* TableFragment::getRecordInfos() const
 {
     static const RecordInfo spRecInfos[] =
     {
-        { OOBIN_ID_TABLE,   OOBIN_ID_TABLE + 1  },
-        { -1,               -1                  }
+        { BIFF12_ID_AUTOFILTER,         BIFF12_ID_AUTOFILTER + 1        },
+        { BIFF12_ID_CUSTOMFILTERS,      BIFF12_ID_CUSTOMFILTERS + 1     },
+        { BIFF12_ID_DISCRETEFILTERS,    BIFF12_ID_DISCRETEFILTERS + 1   },
+        { BIFF12_ID_FILTERCOLUMN,       BIFF12_ID_FILTERCOLUMN + 1      },
+        { BIFF12_ID_TABLE,              BIFF12_ID_TABLE + 1             },
+        { -1,                           -1                              }
     };
     return spRecInfos;
 }

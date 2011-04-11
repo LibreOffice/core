@@ -40,7 +40,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A factory for propertyset registries.
+/** A factory for property set registries.
 
      @version  1.0
      @author   Kai Sommerfeld
@@ -48,7 +48,7 @@ module com { module sun { module star { module ucb {
 published interface XPropertySetRegistryFactory : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** creates a propertyset registry.
+    /** creates a property set registry.
 
         @param URL
         The identifier of the registry to create ( e.g. file-URL ). The

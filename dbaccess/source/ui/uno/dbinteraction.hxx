@@ -124,7 +124,7 @@ namespace dbaui
             SUPPLY_DOCUMENTSAVE
         };
         /** check if a given continuation sequence contains a given continuation type<p/>
-            @return     the index within <arg>_rContinuations</arg> of the first occurence of a continuation
+            @return     the index within <arg>_rContinuations</arg> of the first occurrence of a continuation
                         of the requested type, -1 of no such continuation exists
         */
         sal_Int32 getContinuation(

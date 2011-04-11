@@ -90,7 +90,7 @@ class BaseContainerNode;
     file-private accessor methods.
 */
 class BaseNode : public AnimationNode,
-                 protected ::osl::DebugBase<BaseNode>,
+                 public  ::osl::DebugBase<BaseNode>,
                  private ::boost::noncopyable
 {
 public:

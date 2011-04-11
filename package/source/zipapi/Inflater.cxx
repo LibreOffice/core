@@ -39,6 +39,7 @@
 #include <string.h> // for memset
 
 using namespace com::sun::star::uno;
+using namespace ZipUtils;
 
 /** Provides general purpose decompression using the ZLIB library */
 

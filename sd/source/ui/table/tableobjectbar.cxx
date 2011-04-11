@@ -36,7 +36,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-
+#include <sfx2/msgpool.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
 #include <svx/svdomedia.hxx>
@@ -158,7 +158,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
         SfxBindings* pBindings = &mpViewSh->GetViewFrame()->GetBindings();
 
         rtl::Reference< sdr::SelectionController > xController( mpView->getSelectionController() );
-        ULONG nSlotId = rReq.GetSlot();
+        sal_uLong nSlotId = rReq.GetSlot();
         if( xController.is() )
         {
             switch( nSlotId )
@@ -167,7 +167,7 @@ void TableObjectBar::Execute( SfxRequest& rReq )
             case SID_TABLE_INSERT_COL_DLG:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ::std::auto_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( mpView->GetViewShell()->GetParentWindow(), nSlotId == SID_TABLE_INSERT_COL_DLG, nSlotId) : 0);
+                ::std::auto_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( mpView->GetViewShell()->GetParentWindow(), nSlotId == SID_TABLE_INSERT_COL_DLG, SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) : 0);
 
                 if( pDlg.get() && (pDlg->Execute() == 1) )
                 {
@@ -176,10 +176,10 @@ void TableObjectBar::Execute( SfxRequest& rReq )
                     else
                         nSlotId = SID_TABLE_INSERT_COL;
 
-                    rReq.AppendItem( SfxInt16Item( (USHORT)nSlotId, (sal_uInt16)pDlg->getInsertCount() ) );
+                    rReq.AppendItem( SfxInt16Item( (sal_uInt16)nSlotId, (sal_uInt16)pDlg->getInsertCount() ) );
                     rReq.AppendItem( SfxBoolItem( SID_TABLE_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() ) );
 
-                     rReq.SetSlot( (USHORT)nSlotId );
+                     rReq.SetSlot( (sal_uInt16)nSlotId );
                 }
             }
             }

@@ -58,7 +58,6 @@ const OUString& WrappedProperty::getOuterName() const
     return m_aOuterName;
 }
 
-//virtual
 ::rtl::OUString WrappedProperty::getInnerName() const
 {
     return m_aInnerName;

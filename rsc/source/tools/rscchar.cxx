@@ -48,18 +48,16 @@
 |*    RscChar::MakeChar()
 |*
 |*    Beschreibung      Der String wird nach C-Konvention umgesetzt
-|*    Ersterstellung    MM 20.03.91
-|*    Letzte Aenderung  MM 20.03.91
 |*
 *************************************************************************/
-char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
+char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
 {
-    sal_Size        nMaxUniCodeBuf = strlen( pStr ) + 1;
-    char *          pOrgStr = new char[ nMaxUniCodeBuf ];
-    sal_uInt32      nOrgLen = 0;
-
+    sal_Size nMaxUniCodeBuf = strlen( pStr ) + 1;
     if( nMaxUniCodeBuf * 6 > 0x0FFFFF )
         RscExit( 10 );
+
+    char *          pOrgStr = new char[ nMaxUniCodeBuf ];
+    sal_uInt32      nOrgLen = 0;
 
     char cOld = '1';
     while( cOld != 0 )
@@ -112,15 +110,14 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
                         int  i = 0;
                         while( '0' <= *pStr && '7' >= *pStr && i != 3 )
                         {
-                            nChar = nChar * 8 + (BYTE)*pStr - (BYTE)'0';
+                            nChar = nChar * 8 + (sal_uInt8)*pStr - (sal_uInt8)'0';
                             ++pStr;
                             i++;
                         }
                         if( nChar > 255 )
                         {
-                            rtl_freeMemory( pOrgStr );
-
                             // Wert zu gross, oder kein 3 Ziffern
+                            delete [] pOrgStr;
                             return( NULL );
                         }
                         c = (char)nChar;
@@ -134,11 +131,11 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
                         while( isxdigit( *pStr ) && i != 2 )
                         {
                             if( isdigit( *pStr ) )
-                                nChar = nChar * 16 + (BYTE)*pStr - (BYTE)'0';
+                                nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'0';
                             else if( isupper( *pStr ) )
-                                nChar = nChar * 16 + (BYTE)*pStr - (BYTE)'A' +10;
+                                nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'A' +10;
                             else
-                                nChar = nChar * 16 + (BYTE)*pStr - (BYTE)'a' +10;
+                                nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'a' +10;
                             ++pStr;
                             i++;
                         }
@@ -173,6 +170,7 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
                                                 &nSrcCvtBytes );
 
     rtl_destroyTextToUnicodeConverter( hConv );
+    delete[] pOrgStr, pOrgStr = 0;
 
     hConv = rtl_createUnicodeToTextConverter( RTL_TEXTENCODING_UTF8 );
     // factor fo 6 is the maximum size of an UNICODE character as utf8
@@ -187,9 +185,7 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
                             &nSrcCvtBytes );
 
     rtl_destroyTextToUnicodeConverter( hConv );
-
-    delete[] pUniCode;
-    delete[] pOrgStr;
+    delete[] pUniCode, pUniCode = 0;
 
     return pUtf8;
 };

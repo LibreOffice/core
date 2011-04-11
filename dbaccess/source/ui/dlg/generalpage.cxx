@@ -52,6 +52,7 @@
 #include "UITools.hxx"
 #include <comphelper/processfactory.hxx>
 #include <unotools/confignode.hxx>
+#include <osl/diagnose.h>
 
 //.........................................................................
 namespace dbaui
@@ -100,12 +101,12 @@ namespace dbaui
         DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rItems.GetItem(DSID_TYPECOLLECTION));
         if (pCollectionItem)
             m_pCollection = pCollectionItem->getCollection();
-        DBG_ASSERT(m_pCollection, "OGeneralPage::OGeneralPage : really need a DSN type collection !");
+        OSL_ENSURE(m_pCollection, "OGeneralPage::OGeneralPage : really need a DSN type collection !");
 
         // If no driver for embedded DBs is installed, and no dBase driver, then hide the "Create new database" option
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
-            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString::createFromAscii( "sdbc:dbase:" ) );
+            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:")) );
         bool bHideCreateNew = ( nCreateNewDBIndex == -1 );
 
         // also, if our application policies tell us to hide the option, do it
@@ -213,7 +214,7 @@ namespace dbaui
                         ++loop
                     )
                     insertDatasourceTypeEntryData( loop->eType, loop->sDisplayName );
-            } // if ( m_pCollection )
+            }
         }
     }
 
@@ -360,8 +361,8 @@ namespace dbaui
             // collect some items and some values
             SFX_ITEMSET_GET(_rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True);
             SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
-            DBG_ASSERT(pUrlItem, "OGeneralPage::implInitControls : missing the type attribute !");
-            DBG_ASSERT(pNameItem, "OGeneralPage::implInitControls : missing the type attribute !");
+            OSL_ENSURE(pUrlItem, "OGeneralPage::implInitControls : missing the type attribute !");
+            OSL_ENSURE(pNameItem, "OGeneralPage::implInitControls : missing the type attribute !");
             sName = pNameItem->GetValue();
             sConnectURL = pUrlItem->GetValue();
         }
@@ -504,7 +505,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    BOOL OGeneralPage::FillItemSet(SfxItemSet& _rCoreAttrs)
+    sal_Bool OGeneralPage::FillItemSet(SfxItemSet& _rCoreAttrs)
     {
         sal_Bool bChangedSomething = sal_False;
 
@@ -529,7 +530,7 @@ namespace dbaui
 
         if ( bCommitTypeSelection )
         {
-            USHORT nEntry = m_pDatasourceType->GetSelectEntryPos();
+            sal_uInt16 nEntry = m_pDatasourceType->GetSelectEntryPos();
             ::rtl::OUString sURLPrefix = m_aURLPrefixes[nEntry];
             if (m_DBWizardMode)
             {
@@ -607,7 +608,6 @@ namespace dbaui
         const SfxFilter* pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {
-//          aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
             aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
         if ( aFileDlg.Execute() == ERRCODE_NONE )

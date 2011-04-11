@@ -212,10 +212,10 @@ public:
     // the method returns:
     //  0 - when the dialog was canceled by the user
     //  1 - when the dialog was closed with ok
-    // -1 - when an error occured
+    // -1 - when an error occurred
     sal_Int16 SAL_CALL doModal();
 
-    // returns the last dialog error that occured
+    // returns the last dialog error that occurred
     sal_uInt32 SAL_CALL getLastDialogError() const;
 
     // retrievs the currently selected file
@@ -303,9 +303,9 @@ private:
     WNDPROC             m_pfnBaseDlgProc;
 
     // callback function
-    static unsigned int CALLBACK ofnHookProc(
+    static UINT_PTR CALLBACK ofnHookProc(
         HWND hChildDlg, // handle to child dialog box
-        unsigned int uiMsg,     // message identifier
+        UINT uiMsg,     // message identifier
         WPARAM wParam,  // message parameter
         LPARAM lParam   // message parameter
     );

@@ -76,13 +76,13 @@ namespace framework
 //-----------------------------------------------
 // Accelerators.xcu
 
-static const ::rtl::OUString CFG_ENTRY_PRIMARY(RTL_CONSTASCII_USTRINGPARAM("PrimaryKeys"));
-static const ::rtl::OUString CFG_ENTRY_SECONDARY(RTL_CONSTASCII_USTRINGPARAM("SecondaryKeys"));
+extern const ::rtl::OUString CFG_ENTRY_PRIMARY;
+extern const ::rtl::OUString CFG_ENTRY_SECONDARY;
 
-static const ::rtl::OUString CFG_ENTRY_GLOBAL(RTL_CONSTASCII_USTRINGPARAM("Global"));
-static const ::rtl::OUString CFG_ENTRY_MODULES(RTL_CONSTASCII_USTRINGPARAM("Modules"));
+extern const ::rtl::OUString CFG_ENTRY_GLOBAL;
+extern const ::rtl::OUString CFG_ENTRY_MODULES;
 
-static const ::rtl::OUString CFG_PROP_COMMAND(RTL_CONSTASCII_USTRINGPARAM("Command"));
+extern const ::rtl::OUString CFG_PROP_COMMAND;
 
 /** "global" type to make accelerator presets unique, so they can be used
     in combination with the salhelper::SingletonRef mechanism! */
@@ -220,7 +220,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
             throw(css::uno::RuntimeException);
 
         // IStorageListener
-        virtual void changesOccured(const ::rtl::OUString& sPath);
+        virtual void changesOccurred(const ::rtl::OUString& sPath);
 
         //______________________________________
         // helper for derived classes
@@ -300,7 +300,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
 
         @param  bWriteAccessRequested
         if the outside code whish to change the container
-        it must call this method with "TRUE". So the internal
+        it must call this method with "sal_True". So the internal
         cache can be prepared for that (means copy-on-write ...).
 
         @return [AcceleratorCache]

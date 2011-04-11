@@ -58,8 +58,8 @@
 // forward declarations
 //----------------------------------------------------------
 
-using namespace rtl;
-
+using ::rtl::OUString;
+using ::rtl::OString;
 struct FilterEntry;
 struct ElementEntry_Impl;
 
@@ -243,7 +243,6 @@ class SalGtkFilePicker :
 
         void SAL_CALL fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
         void SAL_CALL directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
-        rtl::OUString SAL_CALL helpRequested( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
         void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
 
     private:

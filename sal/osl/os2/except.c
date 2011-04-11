@@ -79,7 +79,7 @@
  +              }
  +              CATCH(excptid)
  +              {
- +                  ....        // exception occured: react here
+ +                  ....        // exception occurred: react here
  +              } END_CATCH();  // always needed!
  +          } // end of your_func
  *
@@ -166,7 +166,7 @@
  +              CATCH(excpt1) { } END_CATCH();    // always needed!
  +
  +              if (fSemOwned)
- +                  // this gets executed always, even if an exception occured
+ +                  // this gets executed always, even if an exception occurred
  +                  DosReleaseMutexSem(hmtx);
  +          } // end of your_func
  *
@@ -736,7 +736,7 @@ VOID excExplainException(FILE *file,                   // in: logfile from fopen
 
             // *** instruction
 
-            fprintf(file, "Instruction pointer (where exception occured):\n    CS:EIP = %04lX:%08lX  ",
+            fprintf(file, "Instruction pointer (where exception occurred):\n    CS:EIP = %04lX:%08lX  ",
                     pContextRec->ctx_SegCs,
                     pContextRec->ctx_RegEip);
             excDescribePage(file, pContextRec->ctx_RegEip);

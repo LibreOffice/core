@@ -60,7 +60,7 @@ class ScChartsObj : public cppu::WeakImplHelper4<
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB                   nTab;           // Charts sind pro Sheet
+    SCTAB                   nTab;           // Charts are per sheet
 
     ScChartObj*             GetObjectByIndex_Impl(long nIndex) const;
     ScChartObj*             GetObjectByName_Impl(const ::rtl::OUString& aName) const;
@@ -134,7 +134,7 @@ class ScChartObj : public ::comphelper::OBaseMutex
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB                   nTab;           // Charts sind pro Sheet
+    SCTAB                   nTab;           // Charts are per sheet
     String                  aChartName;
 
     void    Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, bool bRowHeaders );

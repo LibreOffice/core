@@ -35,8 +35,7 @@
 
 #define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
-using namespace rtl;
-
+using ::rtl::OUString;
 namespace stoc_javavm {
 
 JVM::JVM() throw()//: _enabled(sal_False)

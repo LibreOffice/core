@@ -45,7 +45,7 @@
 
 #include <unotools/pathoptions.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
@@ -86,7 +86,7 @@ struct OUStringHashCode
     }
 };
 
-class ExtensionHashMap : public ::std::hash_map< ::rtl::OUString,
+class ExtensionHashMap : public ::boost::unordered_map< ::rtl::OUString,
                                                  sal_Int32,
                                                  OUStringHashCode,
                                                  ::std::equal_to< ::rtl::OUString > >
@@ -257,7 +257,7 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
                 if ( seqValues[nProperty] >>= nMode )
                     m_eOpenHyperlinkMode = (SvtExtendedSecurityOptions::OpenHyperlinkMode)nMode;
                 else {
-                    DBG_ERROR("Wrong type for Open mode!");
+                    OSL_FAIL("Wrong type for Open mode!");
                 }
                 m_bROOpenHyperlinkMode = seqRO[nProperty];
             }
@@ -342,7 +342,7 @@ Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetSecureExtensionList() c
 
     sal_Int32 nIndex = 0;
     for ( ExtensionHashMap::const_iterator pIter = m_aExtensionHashMap.begin();
-            pIter != m_aExtensionHashMap.end(); pIter++ )
+            pIter != m_aExtensionHashMap.end(); ++pIter )
     {
         aResult[nIndex++] = pIter->first;
     }
@@ -357,9 +357,7 @@ SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions_Impl::G
 {
     return m_eOpenHyperlinkMode;
 }
-/* -----------------09.07.2003 11:26-----------------
 
- --------------------------------------------------*/
 sal_Bool SvtExtendedSecurityOptions_Impl::IsOpenHyperlinkModeReadOnly() const
 {
     return m_bROOpenHyperlinkMode;
@@ -496,9 +494,7 @@ SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions::GetOpe
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->GetOpenHyperlinkMode();
 }
-/* -----------------09.07.2003 11:26-----------------
 
- --------------------------------------------------*/
 sal_Bool SvtExtendedSecurityOptions::IsOpenHyperlinkModeReadOnly() const
 {
     return m_pDataContainer->IsOpenHyperlinkModeReadOnly();

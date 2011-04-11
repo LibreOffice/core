@@ -37,10 +37,11 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+using ::rtl::OUString;
+
+#define C2U(cChar) OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
 // -----------------------------------------------------------------------
 #define FILTERCFG_WORD_CODE             0x0001
@@ -66,9 +67,6 @@ using namespace com::sun::star::uno;
 
 static SvtFilterOptions* pOptions=0;
 
-/* -----------------------------22.01.01 10:23--------------------------------
-
- ---------------------------------------------------------------------------*/
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
 {
     sal_Bool                bLoadVBA;
@@ -99,17 +97,12 @@ public:
                             }
 };
 
-/* -----------------------------22.01.01 11:08--------------------------------
-
- ---------------------------------------------------------------------------*/
 SvtAppFilterOptions_Impl::~SvtAppFilterOptions_Impl()
 {
     if(IsModified())
         Commit();
 }
-/* -----------------------------22.01.01 10:38--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    SvtAppFilterOptions_Impl::Commit()
 {
     Sequence<OUString> aNames(2);
@@ -131,10 +124,6 @@ void SvtAppFilterOptions_Impl::Notify( const Sequence< rtl::OUString >&  )
     // no listeners supported yet
 }
 
-
-/* -----------------------------22.01.01 10:38--------------------------------
-
- ---------------------------------------------------------------------------*/
 void    SvtAppFilterOptions_Impl::Load()
 {
     Sequence<OUString> aNames(2);
@@ -243,12 +232,9 @@ void SvtCalcFilterOptions_Impl::Load()
         bLoadExecutable = *(sal_Bool*)pValues[0].getValue();
 }
 
-/* -----------------------------22.01.01 10:32--------------------------------
-
- ---------------------------------------------------------------------------*/
 struct SvtFilterOptions_Impl
 {
-    ULONG nFlags;
+    sal_uLong nFlags;
     SvtWriterFilterOptions_Impl aWriterCfg;
     SvtCalcFilterOptions_Impl aCalcCfg;
     SvtAppFilterOptions_Impl aImpressCfg;
@@ -276,8 +262,8 @@ struct SvtFilterOptions_Impl
         Load();
     }
 
-    void SetFlag( ULONG nFlag, BOOL bSet );
-    BOOL IsFlag( ULONG nFlag ) const;
+    void SetFlag( sal_uLong nFlag, sal_Bool bSet );
+    sal_Bool IsFlag( sal_uLong nFlag ) const;
     void Load()
     {
         aWriterCfg.Load();
@@ -285,10 +271,8 @@ struct SvtFilterOptions_Impl
         aImpressCfg.Load();
     }
 };
-/* -----------------------------22.01.01 10:34--------------------------------
 
- ---------------------------------------------------------------------------*/
-void SvtFilterOptions_Impl::SetFlag( ULONG nFlag, BOOL bSet )
+void SvtFilterOptions_Impl::SetFlag( sal_uLong nFlag, sal_Bool bSet )
 {
     switch(nFlag)
     {
@@ -307,12 +291,10 @@ void SvtFilterOptions_Impl::SetFlag( ULONG nFlag, BOOL bSet )
                 nFlags &= ~nFlag;
     }
 }
-/* -----------------------------22.01.01 10:35--------------------------------
 
- ---------------------------------------------------------------------------*/
-BOOL SvtFilterOptions_Impl::IsFlag( ULONG nFlag ) const
+sal_Bool SvtFilterOptions_Impl::IsFlag( sal_uLong nFlag ) const
 {
-    BOOL bRet;
+    sal_Bool bRet;
     switch(nFlag)
     {
         case FILTERCFG_WORD_CODE        : bRet = aWriterCfg.IsLoad();break;
@@ -344,9 +326,7 @@ SvtFilterOptions::~SvtFilterOptions()
 {
     delete pImp;
 }
-/* -----------------------------22.01.01 08:45--------------------------------
 
- ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -371,14 +351,14 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
-            pNames[i] = C2U(aPropNames[i]);
+            pNames[i] = OUString::createFromAscii(aPropNames[i]);
     }
     return aNames;
 }
 //-----------------------------------------------------------------------
-static ULONG lcl_GetFlag(sal_Int32 nProp)
+static sal_uLong lcl_GetFlag(sal_Int32 nProp)
 {
-    ULONG nFlag = 0;
+    sal_uLong nFlag = 0;
     switch(nProp)
     {
         case  0: nFlag = FILTERCFG_MATH_LOAD; break;
@@ -394,20 +374,16 @@ static ULONG lcl_GetFlag(sal_Int32 nProp)
         case 10: nFlag = FILTERCFG_ENABLE_WORD_PREVIEW; break;
         case 11: nFlag = FILTERCFG_USE_ENHANCED_FIELDS; break;
 
-        default: DBG_ERROR("illegal value");
+        default: OSL_FAIL("illegal value");
     }
     return nFlag;
 }
-/*-- 22.01.01 08:53:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtFilterOptions::Notify( const Sequence<OUString>& )
 {
     Load();
 }
-/*-- 22.01.01 08:53:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtFilterOptions::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
@@ -417,16 +393,14 @@ void SvtFilterOptions::Commit()
     const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        ULONG nFlag = lcl_GetFlag(nProp);
+        sal_uLong nFlag = lcl_GetFlag(nProp);
         sal_Bool bVal = pImp->IsFlag( nFlag);
         pValues[nProp].setValue(&bVal, rType);
 
     }
     PutProperties(aNames, aValues);
 }
-/*-- 22.01.01 08:53:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtFilterOptions::Load()
 {
     pImp->Load();
@@ -441,7 +415,7 @@ void SvtFilterOptions::Load()
             if(pValues[nProp].hasValue())
             {
                 sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
-                ULONG nFlag = lcl_GetFlag(nProp);
+                sal_uLong nFlag = lcl_GetFlag(nProp);
                 pImp->SetFlag( nFlag, bVal);
             }
         }
@@ -466,7 +440,7 @@ void SvtFilterOptions::SetLoadWordBasicExecutable( sal_Bool bFlag )
     SetModified();
 }
 
-BOOL SvtFilterOptions::IsLoadWordBasicExecutable() const
+sal_Bool SvtFilterOptions::IsLoadWordBasicExecutable() const
 {
     return pImp->IsFlag( FILTERCFG_WORD_WBCTBL );
 }

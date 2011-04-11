@@ -130,10 +130,10 @@
         <zip  destfile="${dist}/${name}.${ext}">
             <fileset dir="${out}/misc/${target}/package_tmp" casesensitive="yes"/>
             <fileset dir="${dist}" includes="${target}.jar" casesensitive="yes"/>
-            <file file="${commons-codec-jar}"/>
-            <file file="${commons-httpclient-jar}"/>
-            <file file="${commons-lang-jar}"/>
-            <file file="${commons-logging-jar}"/>
+            <fileset file="${commons-codec-jar}" casesensitive="yes"/>
+            <fileset file="${commons-httpclient-jar}" casesensitive="yes"/>
+            <fileset file="${commons-lang-jar}" casesensitive="yes"/>
+            <fileset file="${commons-logging-jar}" casesensitive="yes"/>
             <zipfileset file="src/filter/odt2mediawiki.xsl" casesensitive="yes" fullpath="filter/odt2mediawiki.xsl"/>
             <zipfileset file="src/filter/mediawiki.ott" casesensitive="yes" fullpath="templates/MediaWiki/mediawiki.ott"/>
             <zipfileset dir="${solar.bin}/xslt/export/xsltml" casesensitive="yes" prefix="filter/math"/>

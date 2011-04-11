@@ -42,7 +42,7 @@
 #endif
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/hdft2.hxx>
+#include <svx/hdft.hxx>
 #include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svtools/htmlcfg.hxx>
@@ -51,19 +51,18 @@
 #include <fmtclds.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
-#include <errhdl.hxx>       // fuer Create-Methoden
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <wdocsh.hxx>
 #include <viewopt.hxx>
 #include <pgfnote.hxx>
 #include <pggrid.hxx>
-#include <tmpdlg.hxx>       // der Dialog
-#include <column.hxx>       // Spalten
-#include <drpcps.hxx>       // Initialen
-#include <frmpage.hxx>      // Rahmen
-#include <wrap.hxx>         // Rahmen
-#include <frmmgr.hxx>       // Rahmen
+#include <tmpdlg.hxx>       // the dialog
+#include <column.hxx>       // columns
+#include <drpcps.hxx>       // initials
+#include <frmpage.hxx>      // frames
+#include <wrap.hxx>         // frames
+#include <frmmgr.hxx>       // frames
 #include <ccoll.hxx>        // CondColl
 #include <swuiccoll.hxx>
 #include <docstyle.hxx>     //
@@ -72,6 +71,7 @@
 #include <poolfmt.hxx>
 #include <uitool.hxx>
 #include <shellres.hxx>
+#include <swabstdlg.hxx>
 
 #include <cmdid.h>
 #include <helpid.h>
@@ -91,19 +91,19 @@
 extern SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Der Traeger des Dialoges
+    Description:    the dialog's carrier
  --------------------------------------------------------------------*/
 
 SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                              SfxStyleSheetBase& rBase,
-                             USHORT             nRegion,
-                             BOOL               bColumn,
+                             sal_uInt16             nRegion,
+                             sal_Bool               bColumn,
                              SwWrtShell*        pActShell,
-                             BOOL               bNew ) :
+                             sal_Bool               bNew ) :
     SfxStyleDialog( pParent,
                     SW_RES(DLG_TEMPLATE_BASE + nRegion),
                     rBase,
-                    FALSE,
+                    sal_False,
                     0 ),
     nType( nRegion ),
     pWrtShell(pActShell),
@@ -114,10 +114,10 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
     nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    // TabPages zusammenfieseln
+    // tinker TabPages together
     switch( nRegion )
     {
-        // Zeichenvorlagen
+        // character styles
         case SFX_STYLE_FAMILY_CHAR:
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
@@ -145,7 +145,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                 RemoveTabPage(TP_CHAR_TWOLN);
         }
         break;
-        // Absatzvorlagen
+        // paragraph styles
         case SFX_STYLE_FAMILY_PARA:
         {
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
@@ -230,7 +230,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             }
         }
         break;
-        // Rahmenvorlagen
+        // frame styles
         case SFX_STYLE_FAMILY_FRAME:
         {
             AddTabPage(TP_FRM_STD,      SwFrmPage::Create,
@@ -251,18 +251,9 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
             AddTabPage( TP_MACRO_ASSIGN, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
 
-            // Auskommentiert wegen Bug #45776 (per default keine Breite&Groesse in Rahmenvorlagen)
-/*          SwFmtFrmSize aSize( (const SwFmtFrmSize&)rBase.
-                                            GetItemSet().Get(RES_FRM_SIZE));
-            if( !aSize.GetWidth() )
-            {
-                aSize.SetWidth( DFLT_WIDTH );
-                aSize.SetHeight( DFLT_HEIGHT );
-                rBase.GetItemSet().Put( aSize );
-            }*/
         break;
         }
-        // Seitenvorlagen
+        // page styles
         case SFX_STYLE_FAMILY_PAGE:
         {
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
@@ -282,8 +273,8 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             AddTabPage(TP_PAGE_STD,         String(SW_RES(STR_PAGE_STD)),
                                             pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ),
                                             pFact->GetTabPageRangesFunc( RID_SVXPAGE_PAGE ),
-                                            FALSE,
-                                            1 ); // nach der Verwalten-Page
+                                            sal_False,
+                                            1 ); // after the manage-page
             if(!pActShell || 0 == ::GetHtmlMode(pWrtShell->GetView().GetDocShell()))
             {
                 OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
@@ -307,7 +298,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
         }
         break;
-        // Numerierungsvorlagen
+        // numbering styles
         case SFX_STYLE_FAMILY_PSEUDO:
         {
             AddTabPage( RID_SVXPAGE_PICK_SINGLE_NUM );
@@ -317,14 +308,6 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             AddTabPage( RID_SVXPAGE_NUM_OPTIONS );
             AddTabPage( RID_SVXPAGE_NUM_POSITION );
 
-
-/*          const SfxPoolItem* pItem;
-            if(SFX_ITEM_SET == rBase.GetItemSet().GetItemState(
-                FN_PARAM_ACT_NUMBER, FALSE, &pItem ))
-            {
-//              pActNum = (ActNumberFormat*)((const SwPtrItem*)pItem)->GetValue();
-            }
-*/
         }
         break;
 
@@ -332,19 +315,24 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             OSL_ENSURE(!this, "wrong family");
 
     }
+    EnableApplyButton( true );
+    SetApplyHandler( LINK(this, SwTemplateDlg, ApplyHdl ) );
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 SwTemplateDlg::~SwTemplateDlg()
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
+IMPL_LINK( SwTemplateDlg, ApplyHdl, void*, pVoid )
+{
+    (void)pVoid; //unused
+    if ( OK_Impl() )
+    {
+        Ok();
+        EndDialog( RET_APPLY_TEMPLATE );
+    }
+    return 0;
+}
 
 short SwTemplateDlg::Ok()
 {
@@ -353,10 +341,10 @@ short SwTemplateDlg::Ok()
     {
         const SfxPoolItem *pOutItem, *pExItem;
         if( SFX_ITEM_SET == pExampleSet->GetItemState(
-            SID_ATTR_NUMBERING_RULE, FALSE, &pExItem ) &&
+            SID_ATTR_NUMBERING_RULE, sal_False, &pExItem ) &&
             ( !GetOutputItemSet() ||
             SFX_ITEM_SET != GetOutputItemSet()->GetItemState(
-            SID_ATTR_NUMBERING_RULE, FALSE, &pOutItem ) ||
+            SID_ATTR_NUMBERING_RULE, sal_False, &pOutItem ) ||
             *pExItem != *pOutItem ))
         {
             if( GetOutputItemSet() )
@@ -367,14 +355,10 @@ short SwTemplateDlg::Ok()
     }
     else
         //JP 09.01.98 Bug #46446#:
-        // das ist der Ok - Handler also muss auf OK defaultet werden!
+        // that's the Ok-Handler, so OK has to be default!
         nRet = RET_OK;
     return nRet;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
 {
@@ -384,13 +368,9 @@ const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
     return pInSet;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
-    //Namen der Vorlagen und Metric setzen
+    // set style's and metric's names
     String sNumCharFmt, sBulletCharFmt;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFmt);
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFmt);
@@ -406,7 +386,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
                     GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );
 
                 aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
-                UINT32 nFlags = 0;
+                sal_uInt32 nFlags = 0;
                 if(rPage.GetItemSet().GetParent() && 0 == (nHtmlMode & HTMLMODE_ON ))
                     nFlags = SVX_RELATIVE_MODE;
                 if( SFX_STYLE_FAMILY_CHAR == nType )
@@ -418,7 +398,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 
         case TP_CHAR_EXT:
             {
-            UINT32 nFlags = SVX_ENABLE_FLASH;
+            sal_uInt32 nFlags = SVX_ENABLE_FLASH;
             if( SFX_STYLE_FAMILY_CHAR == nType )
                 nFlags = nFlags|SVX_PREVIEW_CHARACTER;
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
@@ -473,35 +453,35 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
                     aNames.Insert(new String(pBase->GetName()));
                     pBase = pPool->Next();
                 }
-                for(USHORT i = 0; i < aNames.Count(); i++)
+                for(sal_uInt16 i = 0; i < aNames.Count(); i++)
                     rBox.InsertEntry(*aNames.GetObject(i));
         }
         break;
         case TP_PARA_ALIGN:
             {
-                aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,TRUE));
+                aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,sal_True));
                 rPage.PageCreated(aSet);
             }
             break;
 
         case TP_FRM_STD:
-            ((SwFrmPage&)rPage).SetNewFrame( TRUE );
-            ((SwFrmPage&)rPage).SetFormatUsed( TRUE );
+            ((SwFrmPage&)rPage).SetNewFrame( sal_True );
+            ((SwFrmPage&)rPage).SetFormatUsed( sal_True );
             break;
 
         case TP_FRM_ADD:
-            ((SwFrmAddPage&)rPage).SetFormatUsed(TRUE);
-            ((SwFrmAddPage&)rPage).SetNewFrame(TRUE);
+            ((SwFrmAddPage&)rPage).SetFormatUsed(sal_True);
+            ((SwFrmAddPage&)rPage).SetNewFrame(sal_True);
             break;
 
         case TP_FRM_WRAP:
-            ((SwWrapTabPage&)rPage).SetFormatUsed( TRUE, FALSE );
+            ((SwWrapTabPage&)rPage).SetFormatUsed( sal_True, sal_False );
             break;
 
         case TP_COLUMN:
             if( nType == SFX_STYLE_FAMILY_FRAME )
-                ((SwColumnPage&)rPage).SetFrmMode(TRUE);
-            ((SwColumnPage&)rPage).SetFormatUsed( TRUE );
+                ((SwColumnPage&)rPage).SetFrmMode(sal_True);
+            ((SwColumnPage&)rPage).SetFormatUsed( sal_True );
             break;
 
         case TP_BACKGROUND:
@@ -528,7 +508,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
                 List aList;
                 String* pNew = new String;
                 SwStyleNameMapper::FillUIName( RES_POOLCOLL_TEXT, *pNew );
-                aList.Insert( pNew, (ULONG)0 );
+                aList.Insert( pNew, (sal_uLong)0 );
                 if( pWrtShell )
                 {
                     SfxStyleSheetBasePool* pStyleSheetPool = pWrtShell->
@@ -544,7 +524,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
                 }
                 aSet.Put (SfxStringListItem(SID_COLLECT_LIST, &aList));
                 rPage.PageCreated(aSet);
-                for( USHORT i = (USHORT)aList.Count(); i; --i )
+                for( sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i )
                     delete (String*)aList.Remove(i);
             }
             break;
@@ -571,23 +551,23 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 
             aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFmt));
             aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFmt));
-            // Zeichenvorlagen sammeln
+            // collect character styles
             ListBox rCharFmtLB(this);
             rCharFmtLB.Clear();
             rCharFmtLB.InsertEntry( ViewShell::GetShellRes()->aStrNone );
             SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
             ::FillCharStyleListBox(rCharFmtLB,  pDocShell);
             List aList;
-            for(USHORT j = 0; j < rCharFmtLB.GetEntryCount(); j++)
+            for(sal_uInt16 j = 0; j < rCharFmtLB.GetEntryCount(); j++)
             {
 
                  aList.Insert( new XubString(rCharFmtLB.GetEntry(j)), LIST_APPEND );
             }
             aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< USHORT >(eMetric)));
+            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
             rPage.PageCreated(aSet);
-            for( USHORT i = (USHORT)aList.Count(); i; --i )
+            for( sal_uInt16 i = (sal_uInt16)aList.Count(); i; --i )
                     delete (XubString*)aList.Remove(i);
             aList.Clear();
         }
@@ -597,7 +577,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             SwDocShell* pDocShell = ::GetActiveWrtShell()->GetView().GetDocShell();
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, pDocShell));
 
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< USHORT >(eMetric)));
+            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric)));
             rPage.PageCreated(aSet);
         }
         break;

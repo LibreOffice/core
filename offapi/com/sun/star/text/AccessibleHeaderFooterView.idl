@@ -77,7 +77,7 @@ published service AccessibleHeaderFooterView
                         A child of this kind is returned for every paragraph
                         that is contained in the document body and
                         is at least partially visible. The child always
-                        represents a whole paragarph (and not a fragment only),
+                        represents a whole paragraph (and not a fragment only),
                         because there are no page breaks within headers and
                         footers.
                     <li><type scope="::com::sun::star::table"
@@ -121,7 +121,7 @@ published service AccessibleHeaderFooterView
                         >AccessibleStateType::VISIBLE</const>
                 </ul>
             <li>Depending of the application's region setting, the locale is
-                the western, asian or complex default language of the document.
+                the western, Asian or complex default language of the document.
         </ul>
 
      */

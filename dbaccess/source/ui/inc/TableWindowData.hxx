@@ -80,16 +80,16 @@ namespace dbaui
         inline ::rtl::OUString GetWinName()         const { return m_aWinName; }
         inline Point GetPosition()                  const { return m_aPosition; }
         inline Size GetSize()                       const { return m_aSize; }
-        inline BOOL IsShowAll()                     const { return m_bShowAll; }
+        inline sal_Bool IsShowAll()                     const { return m_bShowAll; }
         inline bool isQuery()                       const { return m_bIsQuery; }
         inline bool isValid()                       const { return m_bIsValid; } // it is either a table or query but it is known
-        BOOL HasPosition()  const;
-        BOOL HasSize()      const;
+        sal_Bool HasPosition()  const;
+        sal_Bool HasSize()      const;
 
         inline void SetWinName( const ::rtl::OUString& rWinName )       { m_aWinName = rWinName; }
         inline void SetPosition( const Point& rPos )                    { m_aPosition=rPos; }
         inline void SetSize( const Size& rSize )                        { m_aSize = rSize; }
-        inline void ShowAll( BOOL bAll )                                { m_bShowAll = bAll; }
+        inline void ShowAll( sal_Bool bAll )                                { m_bShowAll = bAll; }
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getTable() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTable; }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess> getKeys() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xKeys; }

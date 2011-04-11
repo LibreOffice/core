@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -5,9 +6,6 @@
  * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ColorPropertySet.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,7 +148,7 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aPropertyN
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName.equalsAscii("FillStyle") && m_bIsFillColor )
+    if( aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("FillStyle")) && m_bIsFillColor )
     {
         ::com::sun::star::drawing::FillStyle aFillStyle = ::com::sun::star::drawing::FillStyle_SOLID;
         return uno::makeAny(aFillStyle);
@@ -163,7 +161,7 @@ void SAL_CALL ColorPropertySet::addPropertyChangeListener( const OUString& /* aP
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not Implemented" );
+    OSL_FAIL( "Not Implemented" );
     return;
 }
 
@@ -172,7 +170,7 @@ void SAL_CALL ColorPropertySet::removePropertyChangeListener( const OUString& /*
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not Implemented" );
+    OSL_FAIL( "Not Implemented" );
     return;
 }
 
@@ -181,7 +179,7 @@ void SAL_CALL ColorPropertySet::addVetoableChangeListener( const OUString& /* Pr
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not Implemented" );
+    OSL_FAIL( "Not Implemented" );
     return;
 }
 
@@ -190,7 +188,7 @@ void SAL_CALL ColorPropertySet::removeVetoableChangeListener( const OUString& /*
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    OSL_ENSURE( false, "Not Implemented" );
+    OSL_FAIL( "Not Implemented" );
     return;
 }
 
@@ -231,3 +229,5 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropert
 
 } //  namespace chart
 } //  namespace xmloff
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

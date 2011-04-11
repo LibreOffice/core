@@ -121,11 +121,9 @@ namespace framework{
 //  UseProxy=[browser|custom|none]
 //  SecurityProxy=so-webcache:3128
 //  dialog=[big|small]
-//
 //  [DefaultPorts]
 //  https=8445
 //  http=8090
-//
 //  [ServerHistory]
 //  Server_1=localhost
 //  Server_2=munch:7202
@@ -561,7 +559,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
             @return     1; if closed with OK
             @return     0; if cancelled
 
-            @onerror    We return 0(FALSE).
+            @onerror    We return 0(sal_False).
         *//*-*****************************************************************************************************/
 
         virtual sal_Int16 SAL_CALL execute() throw( RUNTIMEEXCEPTION );
@@ -804,7 +802,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
             @short      helper methods to read/write  properties from/to ini file
             @descr      Using of Config-Class isn't easy everytime :-(
                         Thats the reason for these helper. State of operation isn't realy important ..
-                        but we assert impossible cases or occured errors!
+                        but we assert impossible cases or occurred errors!
 
             @seealso    -
 

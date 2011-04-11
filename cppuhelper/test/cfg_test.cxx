@@ -263,7 +263,7 @@ SAL_IMPLEMENT_MAIN()
         // show what is in context
         xContext->getValueByName( OUSTR("dump_maps") );
 
-        sal_Int32 n;
+        sal_Int32 n(0);
         OSL_VERIFY( xContext->getValueByName( OUSTR("/global-context-properties/TestValue") ) >>= n );
         ::fprintf( stderr, "> n=%d\n", n );
 
@@ -272,7 +272,7 @@ SAL_IMPLEMENT_MAIN()
         OSL_VERIFY( xContext->getValueByName( OUSTR("/singletons/com.sun.star.script.theConverter") ) >>= x );
         OSL_VERIFY( xContext->getValueByName( OUSTR("/singletons/com.sun.star.bootstrap.theTestComponent0") ) >>= x );
 
-        ::fprintf( stderr, "> registering service...\n", n );
+        ::fprintf( stderr, "> registering service...\n");
 #if defined(SAL_W32) || defined(SAL_OS2)
         OUString libName( OUSTR("cfg_test.dll") );
 #elif defined(SAL_UNX)

@@ -58,9 +58,6 @@ namespace
         IPM_MAP_ENTRY( EE_CHAR_LANGUAGE, "CharLocale", MID_LANG_LOCALE )
         IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CJK, "CharLocaleAsian", MID_LANG_LOCALE )
         IPM_MAP_ENTRY( EE_CHAR_LANGUAGE_CTL, "CharLocaleComplex", MID_LANG_LOCALE )
-//         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT, "CharHeight", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_ITALIC, "CharPosture", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_WEIGHT, "CharWeight", 0 )
 
         IPM_MAP_ENTRY( EE_CHAR_STRIKEOUT, "CharStrikeout", MID_CROSS_OUT )
         IPM_MAP_ENTRY( EE_CHAR_WLM, "CharWordMode", 0 )
@@ -71,12 +68,6 @@ namespace
 
         IPM_MAP_ENTRY( EE_PARA_WRITINGDIR, "WritingMode", 0 )
 
-//         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT_CJK, "CharHeightAsian", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_FONTHEIGHT_CTL, "CharHeightComplex", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_WEIGHT_CJK, "CharWeightAsian", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_WEIGHT_CTL, "CharWeightComplex", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_ITALIC_CJK, "CharPostureAsian", 0 )
-//         IPM_MAP_ENTRY( EE_CHAR_ITALIC_CTL, "CharPostureComplex", 0 )
         IPM_MAP_ENTRY( EE_PARA_ASIANCJKSPACING, "ParaIsCharacterDistance", 0 )
         );
 
@@ -112,7 +103,7 @@ CharacterPropertyItemConverter::CharacterPropertyItemConverter(
 CharacterPropertyItemConverter::~CharacterPropertyItemConverter()
 {}
 
-const USHORT * CharacterPropertyItemConverter::GetWhichPairs() const
+const sal_uInt16 * CharacterPropertyItemConverter::GetWhichPairs() const
 {
     return nCharacterPropertyWhichPairs;
 }
@@ -130,7 +121,7 @@ bool CharacterPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tPr
 }
 
 void CharacterPropertyItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )
@@ -191,6 +182,40 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 
             if( bModified )
                 rOutItemSet.Put( aItem );
+        }
+        break;
+
+        case EE_CHAR_OVERLINE:
+        {
+            SvxOverlineItem aItem( UNDERLINE_NONE, EE_CHAR_OVERLINE );
+            bool bModified = false;
+
+            uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharOverline" ) ) );
+            if ( aValue.hasValue() )
+            {
+                aItem.PutValue( aValue, MID_TL_STYLE );
+                bModified = true;
+            }
+
+            aValue = GetPropertySet()->getPropertyValue( C2U( "CharOverlineHasColor" ) );
+            if ( aValue.hasValue() &&
+                 ( *reinterpret_cast< const sal_Bool* >( aValue.getValue() ) != sal_False ) )
+            {
+                aItem.PutValue( aValue, MID_TL_HASCOLOR );
+                bModified = true;
+            }
+
+            aValue = GetPropertySet()->getPropertyValue( C2U( "CharOverlineColor" ) );
+            if ( aValue.hasValue() )
+            {
+                aItem.PutValue( aValue, MID_TL_COLOR );
+                bModified = true;
+            }
+
+            if ( bModified )
+            {
+                rOutItemSet.Put( aItem );
+            }
         }
         break;
 
@@ -298,7 +323,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 }
 
 bool CharacterPropertyItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
+    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -392,6 +417,39 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                 if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharUnderlineHasColor" ) ))
                 {
                     GetPropertySet()->setPropertyValue( C2U( "CharUnderlineHasColor" ), aValue );
+                    bChanged = true;
+                }
+            }
+        }
+        break;
+
+        case EE_CHAR_OVERLINE:
+        {
+            const SvxOverlineItem& rItem = static_cast< const SvxOverlineItem & >( rItemSet.Get( nWhichId ) );
+
+            if ( rItem.QueryValue( aValue, MID_TL_STYLE ) )
+            {
+                if ( aValue != GetPropertySet()->getPropertyValue( C2U( "CharOverline" ) ) )
+                {
+                    GetPropertySet()->setPropertyValue( C2U( "CharOverline" ), aValue );
+                    bChanged = true;
+                }
+            }
+
+            if ( rItem.QueryValue( aValue, MID_TL_COLOR ) )
+            {
+                if ( aValue != GetPropertySet()->getPropertyValue( C2U( "CharOverlineColor" ) ) )
+                {
+                    GetPropertySet()->setPropertyValue( C2U( "CharOverlineColor" ), aValue );
+                    bChanged = true;
+                }
+            }
+
+            if ( rItem.QueryValue( aValue, MID_TL_HASCOLOR ) )
+            {
+                if ( aValue != GetPropertySet()->getPropertyValue( C2U( "CharOverlineHasColor" ) ) )
+                {
+                    GetPropertySet()->setPropertyValue( C2U( "CharOverlineHasColor" ), aValue );
                     bChanged = true;
                 }
             }

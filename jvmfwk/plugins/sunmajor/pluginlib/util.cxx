@@ -59,9 +59,14 @@
 #include "sunjre.hxx"
 #include "vendorlist.hxx"
 #include "diagnostics.h"
-using namespace rtl;
 using namespace osl;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::Reference;
+using ::rtl::OString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringToOString;
 
 #define CHAR_POINTER(oustr) ::rtl::OUStringToOString(oustr,RTL_TEXTENCODING_UTF8).pData->buffer
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
@@ -87,12 +92,14 @@ char const *g_arJavaNames[] = {
  */
 char const *g_arCollectDirs[] = {
     "",
+#ifndef JVM_ONE_PATH_CHECK
     "j2re/",
     "j2se/",
     "j2sdk/",
     "jdk/",
     "jre/",
     "java/",
+#endif
     "jvm/"
 };
 
@@ -104,6 +111,7 @@ char const *g_arSearchPaths[] = {
     "",
     "System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/"
 #else
+#ifndef JVM_ONE_PATH_CHECK
     "",
     "usr/",
     "usr/local/",
@@ -114,6 +122,9 @@ char const *g_arSearchPaths[] = {
 #endif
     "usr/lib/",
     "usr/bin/"
+#else
+    JVM_ONE_PATH_CHECK
+#endif
 #endif
 };
 }
@@ -152,7 +163,6 @@ namespace
    {
        OUString const & operator()()
        {
-           //  osl::Guard<osl::Mutex> g(osl::GetGlobalMutex());
            static OUString sIni;
             rtl::OUStringBuffer buf( 255);
             buf.append( getLibraryLocation());
@@ -199,7 +209,7 @@ inline FileHandleGuard::~FileHandleGuard() SAL_THROW(())
     {
         if (osl_closeFile(m_rHandle) != osl_File_E_None)
         {
-            OSL_ENSURE(false, "unexpected situation");
+            OSL_FAIL("unexpected situation");
         }
     }
 }
@@ -364,6 +374,9 @@ void AsynchReader::run()
 
 
 bool getJavaProps(const OUString & exePath,
+#ifdef JVM_ONE_PATH_CHECK
+                  const OUString & homePath,
+#endif
                   std::vector<std::pair<rtl::OUString, rtl::OUString> >& props,
                   bool * bProcessRun)
 {
@@ -451,8 +464,6 @@ bool getJavaProps(const OUString & exePath,
         rs = stdoutReader.readLine( & aLine);
         if (rs != FileHandleReader::RESULT_OK)
             break;
-//         JFW_TRACE2(OString("[Java framework] line:\" ")
-//                + aLine + OString(" \".\n"));
         OUString sLine;
         if (!decodeOutput(aLine, &sLine))
             continue;
@@ -466,6 +477,15 @@ bool getJavaProps(const OUString & exePath,
         OSL_ASSERT(index != -1);
         OUString sKey = sLine.copy(0, index);
         OUString sVal = sLine.copy(index + 1);
+
+#ifdef JVM_ONE_PATH_CHECK
+        //replace absolute path by linux distro link
+        OUString sHomeProperty(RTL_CONSTASCII_USTRINGPARAM("java.home"));
+        if(sHomeProperty.equals(sKey))
+        {
+            sVal = homePath + OUString::createFromAscii("/jre");
+        }
+#endif
 
         props.push_back(std::make_pair(sKey, sVal));
     }
@@ -510,7 +530,6 @@ bool decodeOutput(const rtl::OString& s, rtl::OUString* out)
     } while (nIndex >= 0);
 
     *out = buff.makeStringAndClear();
-//    JFW_TRACE2(*out);
     return true;
 }
 
@@ -554,7 +573,6 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
         DWORD dwIndex = 0;
         const DWORD BUFFSIZE = 1024;
         wchar_t bufVersion[BUFFSIZE];
-//      char bufVersion[BUFFSIZE];
         DWORD nNameLen = BUFFSIZE;
         FILETIME fileTime;
         nNameLen = sizeof(bufVersion);
@@ -705,7 +723,7 @@ bool getJREInfoFromBinPath(
             sBinPath = path.copy(0, path.getLength() - 1);
 
         typedef vector<OUString>::const_iterator c_it;
-        for (c_it i = vecPaths.begin(); i != vecPaths.end(); i++)
+        for (c_it i = vecPaths.begin(); i != vecPaths.end(); ++i)
         {
             //the map contains e.g. jre/bin/java.exe
             //get the directory where the executable is contained
@@ -751,10 +769,12 @@ vector<Reference<VendorBase> > getAllJREInfos()
     createJavaInfoFromWinReg(vecInfos);
 #endif // WNT
 
+#ifndef JVM_ONE_PATH_CHECK
     createJavaInfoFromJavaHome(vecInfos);
     //this function should be called after createJavaInfoDirScan.
     //Otherwise in SDKs Java may be started twice
      createJavaInfoFromPath(vecInfos);
+#endif
 
 #ifdef UNX
     createJavaInfoDirScan(vecInfos);
@@ -818,7 +838,11 @@ OUString resolveDirPath(const OUString & path)
         if (item.getFileStatus(status) == File::E_None
             && status.getFileType() == FileStatus::Directory)
         {
+#ifndef JVM_ONE_PATH_CHECK
             ret = sResolved;
+#else
+            ret = path;
+#endif
         }
     }
     else
@@ -847,7 +871,11 @@ OUString resolveFilePath(const OUString & path)
         if (item.getFileStatus(status) == File::E_None
             && status.getFileType() == FileStatus::Regular)
         {
+#ifndef JVM_ONE_PATH_CHECK
             ret = sResolved;
+#else
+            ret = path;
+#endif
         }
     }
     else
@@ -901,7 +929,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 
         bool bBreak = false;
         typedef vector<OUString>::const_iterator c_it;
-        for (c_it i = vecPaths.begin(); i != vecPaths.end(); i++)
+        for (c_it i = vecPaths.begin(); i != vecPaths.end(); ++i)
         {
             //if the path is a link, then resolve it
             //check if the executable exists at all
@@ -942,7 +970,11 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             }
 
             bool bProcessRun= false;
-            if (getJavaProps(sFilePath, props, & bProcessRun) == false)
+            if (getJavaProps(sFilePath,
+#ifdef JVM_ONE_PATH_CHECK
+                             sResolvedDir,
+#endif
+                             props, & bProcessRun) == false)
             {
                 //The java executable could not be run or the system properties
                 //could not be retrieved. We can assume that this java is corrupt.
@@ -961,7 +993,11 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                     //invoked to build the path to the executable. It we start the script directy as .java_wrapper
                     //then it tries to start a jdk/.../native_threads/.java_wrapper. Therefore the link, which
                     //is named java, must be used to start the script.
-                    getJavaProps(sFullPath, props, & bProcessRun);
+                    getJavaProps(sFullPath,
+#ifdef JVM_ONE_PATH_CHECK
+                                 sResolvedDir,
+#endif
+                                 props, & bProcessRun);
                     // Either we found a working 1.3.1
                     //Or the java is broken. In both cases we stop searchin under this "root" directory
                     bBreak = true;
@@ -994,7 +1030,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     OUString sVendor(RTL_CONSTASCII_USTRINGPARAM("java.vendor"));
     OUString sVendorName;
 
-    for (c_ip i = props.begin(); i != props.end(); i++)
+    for (c_ip i = props.begin(); i != props.end(); ++i)
     {
         if (sVendor.equals(i->first))
         {

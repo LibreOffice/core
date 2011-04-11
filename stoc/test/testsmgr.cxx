@@ -80,7 +80,7 @@ void setStarUserRegistry()
     RegistryKey rootKey, rKey, rKey2;
 
     OUString userReg = getExePath();
-    userReg += OUString::createFromAscii("user.rdb");
+    userReg += OUString(RTL_CONSTASCII_USTRINGPARAM("user.rdb"));
     if(myRegistry->open(userReg, REG_READWRITE))
     {
         TEST_ENSHURE(!myRegistry->create(userReg), "setStarUserRegistry error 1");

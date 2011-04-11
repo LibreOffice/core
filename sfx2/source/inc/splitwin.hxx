@@ -45,21 +45,21 @@ private:
     SfxChildAlignment   eAlign;
     SfxWorkWindow*      pWorkWin;
     SfxDockArr_Impl*    pDockArr;
-    BOOL                bLocked;
-    BOOL                bPinned;
+    sal_Bool                bLocked;
+    sal_Bool                bPinned;
     SfxEmptySplitWin_Impl*  pEmptyWin;
     SfxDockingWindow*   pActive;
 
     void                InsertWindow_Impl( SfxDock_Impl* pDockWin,
                             const Size& rSize,
-                            USHORT nLine,
-                            USHORT nPos,
-                            BOOL bNewLine=FALSE );
+                            sal_uInt16 nLine,
+                            sal_uInt16 nPos,
+                            sal_Bool bNewLine=sal_False );
 
     DECL_LINK(          TimerHdl, Timer* );
-    BOOL                CursorIsOverRect( BOOL bForceAdding = FALSE ) const;
-    void                SetPinned_Impl( BOOL );
-    void                SetFadeIn_Impl( BOOL );
+    sal_Bool                CursorIsOverRect( sal_Bool bForceAdding = sal_False ) const;
+    void                SetPinned_Impl( sal_Bool );
+    void                SetFadeIn_Impl( sal_Bool );
     void                SaveConfig_Impl();
     void                FadeOut_Impl();
 
@@ -73,57 +73,57 @@ protected:
 
 public:
                         SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
-                            SfxWorkWindow *pW, BOOL bWithButtons,
+                            SfxWorkWindow *pW, sal_Bool bWithButtons,
                             WinBits nBits = WB_BORDER | WB_SIZEABLE | WB_3DLOOK );
 
                         ~SfxSplitWindow();
 
-    void                ReleaseWindow_Impl(SfxDockingWindow *pWin, BOOL bSaveConfig=TRUE);
+    void                ReleaseWindow_Impl(SfxDockingWindow *pWin, sal_Bool bSaveConfig=sal_True);
 
     void                InsertWindow( SfxDockingWindow* pDockWin,
                             const Size& rSize);
 
     void                InsertWindow( SfxDockingWindow* pDockWin,
                             const Size& rSize,
-                            USHORT nLine,
-                            USHORT nPos,
-                            BOOL bNewLine=FALSE );
+                            sal_uInt16 nLine,
+                            sal_uInt16 nPos,
+                            sal_Bool bNewLine=sal_False );
 
     void                MoveWindow( SfxDockingWindow* pDockWin,
                             const Size& rSize,
-                            USHORT nLine,
-                            USHORT nPos,
-                            BOOL bNewLine=FALSE );
+                            sal_uInt16 nLine,
+                            sal_uInt16 nPos,
+                            sal_Bool bNewLine=sal_False );
 
-    void                RemoveWindow( SfxDockingWindow* pDockWin, BOOL bHide=TRUE);
+    void                RemoveWindow( SfxDockingWindow* pDockWin, sal_Bool bHide=sal_True);
 
-    void                Lock( BOOL bLock=TRUE )
+    void                Lock( sal_Bool bLock=sal_True )
                         {
                             bLocked = bLock;
                             SetUpdateMode( !bLock );
                         }
         using Window::IsLocked;
-    BOOL                IsLocked() const { return bLocked; }
-    BOOL                GetWindowPos( const SfxDockingWindow* pWindow,
-                                      USHORT& rLine, USHORT& rPos ) const;
-    BOOL                GetWindowPos( const Point& rTestPos,
-                                      USHORT& rLine, USHORT& rPos ) const;
-    USHORT              GetLineCount() const;
-    long                GetLineSize( USHORT ) const;
-    USHORT              GetWindowCount(USHORT nLine) const;
-    USHORT              GetWindowCount() const;
+    sal_Bool                IsLocked() const { return bLocked; }
+    sal_Bool                GetWindowPos( const SfxDockingWindow* pWindow,
+                                      sal_uInt16& rLine, sal_uInt16& rPos ) const;
+    sal_Bool                GetWindowPos( const Point& rTestPos,
+                                      sal_uInt16& rLine, sal_uInt16& rPos ) const;
+    sal_uInt16              GetLineCount() const;
+    long                GetLineSize( sal_uInt16 ) const;
+    sal_uInt16              GetWindowCount(sal_uInt16 nLine) const;
+    sal_uInt16              GetWindowCount() const;
 
-    BOOL                IsPinned() const { return bPinned; }
-    BOOL                IsFadeIn() const;
-    BOOL                IsAutoHide( BOOL bSelf = FALSE ) const;
+    sal_Bool                IsPinned() const { return bPinned; }
+    sal_Bool                IsFadeIn() const;
+    sal_Bool                IsAutoHide( sal_Bool bSelf = sal_False ) const;
     SplitWindow*        GetSplitWindow();
 
     virtual void        AutoHide();
     virtual void        FadeOut();
     virtual void        FadeIn();
     void                Show_Impl();
-    void                Pin_Impl( BOOL bPinned );
-    BOOL                ActivateNextChild_Impl( BOOL bForward = TRUE );
+    void                Pin_Impl( sal_Bool bPinned );
+    sal_Bool                ActivateNextChild_Impl( sal_Bool bForward = sal_True );
     void                SetActiveWindow_Impl( SfxDockingWindow* pWin );
 };
 

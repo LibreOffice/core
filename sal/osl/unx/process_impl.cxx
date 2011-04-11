@@ -408,10 +408,10 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
             result = osl_Process_E_None;
         else
             rtl_string_release(pBuffer);
-#elif defined(MACOSX)
+#elif (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
         //MacOSX baseline is 10.4, which has an old-school void return
         //for unsetenv.
-        //See: http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/10.4/man3/unsetenv.3.html?useVersion=10.4
+                //See: http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/10.4/man3/unsetenv.3.html?useVersion=10.4
         unsetenv(rtl_string_getStr(pstr_env_var));
         result = osl_Process_E_None;
 #else
@@ -480,17 +480,20 @@ extern "C" int  _imp_setProcessLocale( rtl_Locale * );
  *********************************************/
 oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
 {
+    oslProcessError result = osl_Process_E_Unknown;
     OSL_PRECOND(ppLocale, "osl_getProcessLocale(): Invalid parameter.");
+    if (ppLocale)
+    {
+        pthread_mutex_lock(&(g_process_locale.m_mutex));
 
-    pthread_mutex_lock(&(g_process_locale.m_mutex));
+        if (g_process_locale.m_pLocale == 0)
+            _imp_getProcessLocale (&(g_process_locale.m_pLocale));
+        *ppLocale = g_process_locale.m_pLocale;
+        result = osl_Process_E_None;
 
-    if (g_process_locale.m_pLocale == 0)
-        _imp_getProcessLocale (&(g_process_locale.m_pLocale));
-    *ppLocale = g_process_locale.m_pLocale;
-
-    pthread_mutex_unlock (&(g_process_locale.m_mutex));
-
-    return (osl_Process_E_None);
+        pthread_mutex_unlock (&(g_process_locale.m_mutex));
+    }
+    return (result);
 }
 
 /**********************************************

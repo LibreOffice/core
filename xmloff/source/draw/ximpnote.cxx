@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 //////////////////////////////////////////////////////////////////////////////
 
 SdXMLNotesContext::SdXMLNotesContext( SdXMLImport& rImport,
-    USHORT nPrfx, const OUString& rLocalName,
+    sal_uInt16 nPrfx, const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
@@ -112,7 +112,7 @@ SdXMLNotesContext::~SdXMLNotesContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext *SdXMLNotesContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *SdXMLNotesContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {

@@ -56,7 +56,7 @@ class TokenProcessing_Types
         stay,           // same parse environment
         push,           // push sub environment
         pop_success,    // return to parent environment, parsing was successful
-        pop_failure     // return to parent environment, but an error occured.
+        pop_failure     // return to parent environment, but an error occurred.
     };
 
     struct TokenProcessing_Result

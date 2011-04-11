@@ -101,12 +101,12 @@ sal_Bool XMLConstantsPropertyHandler::exportXML(
         }
         else
         {
-            DBG_ERROR("XMLConstantsPropertyHandler::exportXML() constant is out of range for implementation using sal_uInt16");
+            OSL_FAIL("XMLConstantsPropertyHandler::exportXML() constant is out of range for implementation using sal_uInt16");
         }
     }
     else
     {
-        DBG_ERROR("XMLConstantsPropertyHandler::exportXML() could not convert any to sal_Int32");
+        OSL_FAIL("XMLConstantsPropertyHandler::exportXML() could not convert any to sal_Int32");
     }
 
     return bRet;

@@ -127,69 +127,6 @@ all: \
     $(MISC)$/ooo11-math-doc.ico \
     $(MISC)$/ooo11-writer-doc.ico \
     $(MISC)$/ooo11-writer-tem.ico \
-    $(MISC)$/so8-base-app.ico \
-    $(MISC)$/so8-base-doc.ico \
-    $(MISC)$/so8-calc-app.ico \
-    $(MISC)$/so8-calc-doc.ico \
-    $(MISC)$/so8-calc-tem.ico \
-    $(MISC)$/so8-chart-doc.ico \
-    $(MISC)$/so8-configuration.ico \
-    $(MISC)$/so8-draw-app.ico \
-    $(MISC)$/so8-draw-doc.ico \
-    $(MISC)$/so8-draw-tem.ico \
-    $(MISC)$/so8-empty-doc.ico \
-    $(MISC)$/so8-empty-tem.ico \
-    $(MISC)$/so8-image-doc.ico \
-    $(MISC)$/so8-impress-app.ico \
-    $(MISC)$/so8-impress-doc.ico \
-    $(MISC)$/so8-impress-tem.ico \
-    $(MISC)$/so8-macro-doc.ico \
-    $(MISC)$/so8-main-app.ico \
-    $(MISC)$/so8-master-doc.ico \
-    $(MISC)$/so8-math-app.ico \
-    $(MISC)$/so8-math-doc.ico \
-    $(MISC)$/so8-open.ico \
-    $(MISC)$/so8-printer.ico \
-    $(MISC)$/so8-web-doc.ico \
-    $(MISC)$/so8-writer-app.ico \
-    $(MISC)$/so8-writer-doc.ico \
-    $(MISC)$/so8-writer-tem.ico \
-    $(MISC)$/so9_empty_tem.ico \
-    $(MISC)$/so9_math_app.ico \
-    $(MISC)$/so9_global_doc.ico \
-    $(MISC)$/so9_main_app.ico \
-    $(MISC)$/so9_empty_doc.ico \
-    $(MISC)$/so9_math_doc.ico \
-    $(MISC)$/so9_base_app.ico \
-    $(MISC)$/so9_html_doc.ico \
-    $(MISC)$/so9_impress_doc.ico \
-    $(MISC)$/so9_draw_tem.ico \
-    $(MISC)$/so9_writer_tem.ico \
-    $(MISC)$/so9_impress_app.ico \
-    $(MISC)$/so9_calc_tem.ico \
-    $(MISC)$/so9_base_doc.ico \
-    $(MISC)$/so9_macro_doc.ico \
-    $(MISC)$/so9_calc_doc.ico \
-    $(MISC)$/so9_draw_doc.ico \
-    $(MISC)$/so9_writer_doc.ico \
-    $(MISC)$/so9_calc_app.ico \
-    $(MISC)$/so9_impress_tem.ico \
-    $(MISC)$/so9_chart_doc.ico \
-    $(MISC)$/so9_writer_app.ico \
-    $(MISC)$/so9_draw_app.ico \
-    $(MISC)$/so9_open.ico \
-    $(MISC)$/so7-base-doc.ico \
-    $(MISC)$/so7-calc-doc.ico \
-    $(MISC)$/so7-calc-tem.ico \
-    $(MISC)$/so7-chart-doc.ico \
-    $(MISC)$/so7-draw-doc.ico \
-    $(MISC)$/so7-draw-tem.ico \
-    $(MISC)$/so7-impress-doc.ico \
-    $(MISC)$/so7-impress-tem.ico \
-    $(MISC)$/so7-master-doc.ico \
-    $(MISC)$/so7-math-doc.ico \
-    $(MISC)$/so7-writer-doc.ico \
-    $(MISC)$/so7-writer-tem.ico \
     $(MISC)$/oxt-extension.ico
 
 $(MISC)$/%.ico: %.ico

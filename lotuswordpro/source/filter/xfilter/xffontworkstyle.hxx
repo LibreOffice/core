@@ -57,10 +57,6 @@
  * @file
  * Style of Fontwork object.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-06-20  create this file.
- ************************************************************************/
  #ifndef _XFFONTWORKSTYLE_HXX
  #define _XFFONTWORKSTYLE_HXX
 
@@ -76,7 +72,7 @@ public:
         m_eStyleType(enumXFFWOff),
         m_eAdjustType(enumXFFWAdjustAutosize),
         m_eShadowType(enumXFFWShadowNone)
-        {};
+        {}
 
     ~XFFontWorkStyle(){}
 

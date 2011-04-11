@@ -56,9 +56,9 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
-BOOL lcl_IsURLButton( SdrObject* pObject )
+sal_Bool lcl_IsURLButton( SdrObject* pObject )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = false;
 
     SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObject);
     if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
@@ -70,13 +70,13 @@ BOOL lcl_IsURLButton( SdrObject* pObject )
             uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-            rtl::OUString sPropButtonType = rtl::OUString::createFromAscii( "ButtonType" );
+            rtl::OUString sPropButtonType(RTL_CONSTASCII_USTRINGPARAM( "ButtonType" ));
             if(xInfo->hasPropertyByName( sPropButtonType ))
             {
                 uno::Any aAny = xPropSet->getPropertyValue( sPropButtonType );
                 form::FormButtonType eTmp;
                 if ( (aAny >>= eTmp) && eTmp == form::FormButtonType_URL )
-                    bRet = TRUE;
+                    bRet = sal_True;
             }
          }
     }
@@ -84,7 +84,6 @@ BOOL lcl_IsURLButton( SdrObject* pObject )
     return bRet;
 }
 
-// static
 
 ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView )
 {
@@ -99,13 +98,13 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
         {
             //  handle selection on drawing layer
             const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-            ULONG nMarkCount = rMarkList.GetMarkCount();
+            sal_uLong nMarkCount = rMarkList.GetMarkCount();
             if ( nMarkCount )
             {
                 if ( nMarkCount == 1 )
                 {
                     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                    UINT16 nSdrObjKind = pObj->GetObjIdentifier();
+                    sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
 
                     if ( nSdrObjKind == OBJ_GRAF )
                     {
@@ -177,11 +176,11 @@ ScSelectionTransferObj::~ScSelectionTransferObj()
     DBG_ASSERT( !pView, "ScSelectionTransferObj dtor: ForgetView not called" );
 }
 
-BOOL ScSelectionTransferObj::StillValid()
+sal_Bool ScSelectionTransferObj::StillValid()
 {
     //! check if view still has same cell selection
-    //! (but return FALSE if data has changed inbetween)
-    return FALSE;
+    //! (but return sal_False if data has changed inbetween)
+    return false;
 }
 
 void ScSelectionTransferObj::ForgetView()
@@ -297,10 +296,10 @@ void ScSelectionTransferObj::CreateCellData()
             ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
 
             ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-            // bApi = TRUE -> no error mesages
-            // #i18364# bStopEdit = FALSE -> don't end edit mode
+            // bApi = sal_True -> no error mesages
+            // #i18364# bStopEdit = sal_False -> don't end edit mode
             // (this may be called from pasting into the edit line)
-            BOOL bCopied = pViewData->GetView()->CopyToClip( pClipDoc, FALSE, TRUE, TRUE, FALSE );
+            sal_Bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc, false, sal_True, sal_True, false );
 
             ScDrawLayer::SetGlobalDrawPersist(NULL);
 
@@ -333,7 +332,7 @@ void ScSelectionTransferObj::CreateCellData()
 }
 
 //! make static member of ScDrawView
-extern void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle );
+extern void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle );
 
 void ScSelectionTransferObj::CreateDrawData()
 {
@@ -345,7 +344,7 @@ void ScSelectionTransferObj::CreateDrawData()
         ScDrawView* pDrawView = pView->GetScDrawView();
         if ( pDrawView )
         {
-            BOOL bAnyOle, bOneOle;
+            sal_Bool bAnyOle, bOneOle;
             const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
             lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
 
@@ -402,7 +401,7 @@ ScDrawTransferObj* ScSelectionTransferObj::GetDrawData()
 
 sal_Bool ScSelectionTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    sal_Bool bOK = sal_False;
+    sal_Bool bOK = false;
 
     uno::Reference<datatransfer::XTransferable> xSource;
     switch (eMode)

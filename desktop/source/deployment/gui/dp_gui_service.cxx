@@ -66,7 +66,7 @@ public:
     virtual ~MyApp();
 
     // Application
-    virtual void Main();
+    virtual int Main();
 };
 
 //______________________________________________________________________________
@@ -80,11 +80,11 @@ MyApp::MyApp()
 }
 
 //______________________________________________________________________________
-void MyApp::Main()
+int MyApp::Main()
 {
+    return EXIT_SUCCESS;
 }
 
-//##############################################################################
 
 namespace
 {
@@ -355,14 +355,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-sal_Bool SAL_CALL component_writeInfo(
-    lang::XMultiServiceFactory * pServiceManager,
-    registry::XRegistryKey * pRegistryKey )
-{
-    return component_writeInfoHelper(
-        pServiceManager, pRegistryKey, dp_gui::serviceDecl, dp_gui::licenseDecl, dp_gui::updateDecl );
 }
 
 void * SAL_CALL component_getFactory(

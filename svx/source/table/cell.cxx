@@ -65,6 +65,7 @@
 
 // -----------------------------------------------------------------------------
 
+using ::editeng::SvxBorderLine;
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -182,7 +183,7 @@ namespace sdr
 
         BaseProperties& CellProperties::Clone(SdrObject& rObj) const
         {
-            DBG_ERROR("CellProperties::Clone(), does not work yet!");
+            OSL_FAIL("CellProperties::Clone(), does not work yet!");
             return *(new CellProperties(*this, rObj,0));
         }
 
@@ -334,7 +335,7 @@ void Cell::dispose()
         }
         catch( Exception& )
         {
-            DBG_ERROR("Cell::dispose(), exception caught!");
+            OSL_FAIL("Cell::dispose(), exception caught!");
         }
         mxTable.clear();
     }
@@ -400,7 +401,7 @@ void Cell::mergeContent( const CellRef& xSourceCell )
     if( xSourceCell->hasText() )
     {
         SdrOutliner& rOutliner=rTableObj.ImpGetDrawOutliner();
-        rOutliner.SetUpdateMode(TRUE);
+        rOutliner.SetUpdateMode(sal_True);
 
         if( hasText() )
         {
@@ -554,7 +555,7 @@ const SfxItemSet& Cell::GetObjectItemSet()
     }
     else
     {
-        DBG_ERROR("Cell::GetObjectItemSet(), called without properties!");
+        OSL_FAIL("Cell::GetObjectItemSet(), called without properties!");
         return GetObject().GetObjectItemSet();
     }
 }
@@ -658,7 +659,7 @@ sal_Int32 Cell::getMinimumHeight()
     {
         Outliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aSize);
-        rOutliner.SetUpdateMode(TRUE);
+        rOutliner.SetUpdateMode(sal_True);
         ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
 
         if( GetOutlinerParaObject() )
@@ -977,7 +978,7 @@ Any Cell::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMa
         }
         else
         {
-            DBG_ERROR("GetAnyForItem() Returnvalue has wrong Type!" );
+            OSL_FAIL("GetAnyForItem() Returnvalue has wrong Type!" );
         }
     }
 
@@ -1272,11 +1273,11 @@ void SAL_CALL Cell::setPropertyValues( const Sequence< OUString >& aPropertyName
         }
         catch( UnknownPropertyException& )
         {
-            DBG_ERROR("svx::Cell::setPropertyValues(), unknown property!" );
+            OSL_FAIL("svx::Cell::setPropertyValues(), unknown property!" );
         }
         catch( Exception& )
         {
-            DBG_ERROR("svx::Cell::setPropertyValues(), Exception caught!" );
+            OSL_FAIL("svx::Cell::setPropertyValues(), Exception caught!" );
         }
     }
 }
@@ -1304,11 +1305,11 @@ Sequence< Any > SAL_CALL Cell::getPropertyValues( const Sequence< OUString >& aP
         }
         catch( UnknownPropertyException& )
         {
-            DBG_ERROR("svx::Cell::setPropertyValues(), unknown property!" );
+            OSL_FAIL("svx::Cell::setPropertyValues(), unknown property!" );
         }
         catch( Exception& )
         {
-            DBG_ERROR( "svx::Cell::getPropertyValues(), Exception caught!" );
+            OSL_FAIL( "svx::Cell::getPropertyValues(), Exception caught!" );
         }
     }
 
@@ -1418,7 +1419,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 case XATTR_FILLHATCH:
                 case XATTR_LINEDASH:
                     {
-                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
+                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
                         if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
                             eState = PropertyState_DEFAULT_VALUE;
                     }
@@ -1433,7 +1434,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 case XATTR_LINESTART:
                 case XATTR_FILLFLOATTRANSPARENCE:
                     {
-                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
+                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
                         if( ( pItem == NULL ) )
                             eState = PropertyState_DEFAULT_VALUE;
                     }

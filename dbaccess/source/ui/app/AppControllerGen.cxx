@@ -75,6 +75,7 @@
 #include <svx/dbaexchange.hxx>
 #include <toolkit/unohlp.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/mnemonic.hxx>
@@ -226,7 +227,7 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
         Reference< ::com::sun::star::awt::XWindow> xWindow = getTopMostContainerWindow();
         if ( !xWindow.is() )
         {
-            DBG_ASSERT( getContainer(), "OApplicationController::Construct: have no view!" );
+            OSL_ENSURE( getContainer(), "OApplicationController::Construct: have no view!" );
             if ( getContainer() )
                 xWindow = VCLUnoHelper::GetInterface(getView()->Window::GetParent());
         }
@@ -291,7 +292,7 @@ void OApplicationController::refreshTables()
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Could not refresh tables!");
+            OSL_FAIL("Could not refresh tables!");
         }
 
         getContainer()->getDetailView()->clearPages(sal_False);
@@ -451,7 +452,7 @@ namespace
         case DatabaseObject::FORM:   eType = E_FORM;    break;
         case DatabaseObject::REPORT: eType = E_REPORT;  break;
         default:
-            OSL_ENSURE( false, "lcl_objectType2ElementType: unsupported object type!" );
+            OSL_FAIL( "lcl_objectType2ElementType: unsupported object type!" );
                 // this should have been caught earlier
         }
         return eType;
@@ -750,8 +751,8 @@ void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::fra
             MenuBar* pMenu = pSystemWindow ? pSystemWindow->GetMenuBar() : NULL;
             if ( pMenu )
             {
-                USHORT nMenuItems = pMenu->GetItemCount();
-                for ( USHORT i = 0; i < nMenuItems; ++i )
+                sal_uInt16 nMenuItems = pMenu->GetItemCount();
+                for ( sal_uInt16 i = 0; i < nMenuItems; ++i )
                     aMnemonicGenerator.RegisterMnemonic( pMenu->GetItemText( pMenu->GetItemId( i ) ) );
             }
             // - the icons should use automatic ones

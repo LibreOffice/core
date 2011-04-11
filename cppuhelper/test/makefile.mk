@@ -141,15 +141,15 @@ $(UNO_OUT)$/%$(EXT_SO): $(UNO_PATH)$/%$(EXT_SO)
     $(COPY) $^ $@
 
 $(BIN)$/cpputest.rdb: $(ALLIDLFILES) $(UNO_OUT)$/invocadapt.uno$(EXT_SO) $(UNO_OUT)$/bootstrap.uno$(EXT_SO)
-    idlc -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $(ALLIDLFILES)
-    regmerge $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
-    regmerge $@ / $(UNOUCRRDB)
-    regcomp -register -r $@ -c reflection.uno$(DLLPOST)
-    touch $@
+    $(IDLC) -I$(PRJ) -I$(SOLARIDLDIR) -O$(BIN) $(ALLIDLFILES)
+    $(REGMERGE) $@ /UCR $(BIN)$/{$(?:f:s/.idl/.urd/)}
+    $(REGMERGE) $@ / $(UNOUCRRDB)
+    $(REGCOMP) -register -r $@ -c reflection.uno$(DLLPOST)
+    $(TOUCH) $@
 
 unoheader: $(BIN)$/cpputest.rdb
-    cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TYPES);$(HELPERTYPES)" $(BIN)$/cpputest.rdb
-    cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(FACTORYTYPES)" $(BIN)$/cpputest.rdb
+    $(CPPUMAKER) $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(TYPES);$(HELPERTYPES)" $(BIN)$/cpputest.rdb
+    $(CPPUMAKER) $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) -T"$(FACTORYTYPES)" $(BIN)$/cpputest.rdb
 
 
 $(BIN)$/testdefaultbootstrapping.pl: testdefaultbootstrapping.pl

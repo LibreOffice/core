@@ -47,7 +47,8 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 #define COMSUNSTARUCBCCRS_DEFAULT_FETCH_SIZE 256
 #define COMSUNSTARUCBCCRS_DEFAULT_FETCH_DIRECTION FetchDirection::FORWARD
@@ -73,7 +74,7 @@ if( !m_aCache.hasRow( nRow ) )                          \
 {                                                       \
         if( !m_xFetchProvider.is() )                    \
         {                                               \
-            OSL_ENSURE( sal_False, "broadcaster was disposed already" );    \
+            OSL_FAIL( "broadcaster was disposed already" ); \
             throw SQLException();                       \
         }                                               \
         aGuard.clear();                                 \
@@ -309,7 +310,7 @@ const Any& SAL_CALL CachedContentResultSet::CCRS_Cache
     return rRow[nColumnIndex-1];
 }
 
-const rtl::OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
+const OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
     ::getContentIdentifierString( sal_Int32 nRow )
     throw( com::sun::star::uno::RuntimeException )
 {
@@ -318,12 +319,12 @@ const rtl::OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
         if( m_xContentIdentifierMapping.is() && !isRowMapped( nRow ) )
         {
             Any& rRow = getRowAny( nRow );
-            rtl::OUString aValue;
+            OUString aValue;
             rRow >>= aValue;
             rRow <<= m_xContentIdentifierMapping->mapContentIdentifierString( aValue );
             remindMapped( nRow );
         }
-        return (* reinterpret_cast< const rtl::OUString * >
+        return (* reinterpret_cast< const OUString * >
                 (getRowAny( nRow ).getValue() ));
     }
     catch( SQLException )
@@ -396,10 +397,10 @@ class CCRS_PropertySetInfo :
                             m_pProperties;
 
     //some helping variables ( names for my special properties )
-    static rtl::OUString    m_aPropertyNameForCount;
-    static rtl::OUString    m_aPropertyNameForFinalCount;
-    static rtl::OUString    m_aPropertyNameForFetchSize;
-    static rtl::OUString    m_aPropertyNameForFetchDirection;
+    static OUString m_aPropertyNameForCount;
+    static OUString m_aPropertyNameForFinalCount;
+    static OUString m_aPropertyNameForFetchSize;
+    static OUString m_aPropertyNameForFetchDirection;
 
     long                    m_nFetchSizePropertyHandle;
     long                    m_nFetchDirectionPropertyHandle;
@@ -410,13 +411,13 @@ private:
 
     sal_Bool SAL_CALL
     impl_queryProperty(
-            const rtl::OUString& rName
+            const OUString& rName
             , com::sun::star::beans::Property& rProp ) const;
     sal_Int32 SAL_CALL
-    impl_getPos( const rtl::OUString& rName ) const;
+    impl_getPos( const OUString& rName ) const;
 
     static sal_Bool SAL_CALL
-    impl_isMyPropertyName( const rtl::OUString& rName );
+    impl_isMyPropertyName( const OUString& rName );
 
 public:
     CCRS_PropertySetInfo(   Reference<
@@ -436,18 +437,18 @@ public:
         throw( RuntimeException );
 
     virtual com::sun::star::beans::Property SAL_CALL
-    getPropertyByName( const rtl::OUString& aName )
+    getPropertyByName( const OUString& aName )
         throw( com::sun::star::beans::UnknownPropertyException, RuntimeException );
 
     virtual sal_Bool SAL_CALL
-    hasPropertyByName( const rtl::OUString& Name )
+    hasPropertyByName( const OUString& Name )
         throw( RuntimeException );
 };
 
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForCount( OUString::createFromAscii( "RowCount" ) );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFinalCount( OUString::createFromAscii( "IsRowCountFinal" ) );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchSize( OUString::createFromAscii( "FetchSize" ) );
-OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection( OUString::createFromAscii( "FetchDirection" ) );
+OUString    CCRS_PropertySetInfo::m_aPropertyNameForCount( RTL_CONSTASCII_USTRINGPARAM("RowCount") );
+OUString    CCRS_PropertySetInfo::m_aPropertyNameForFinalCount( RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal") );
+OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchSize( RTL_CONSTASCII_USTRINGPARAM("FetchSize") );
+OUString    CCRS_PropertySetInfo::m_aPropertyNameForFetchDirection( RTL_CONSTASCII_USTRINGPARAM("FetchDirection") );
 
 CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         Reference< XPropertySetInfo > xInfo )
@@ -468,7 +469,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     }
     else
     {
-        OSL_ENSURE( sal_False, "The received XPropertySetInfo doesn't contain required properties" );
+        OSL_FAIL( "The received XPropertySetInfo doesn't contain required properties" );
         m_pProperties = new Sequence<Property>;
     }
 
@@ -556,7 +557,7 @@ Sequence< Property > SAL_CALL CCRS_PropertySetInfo
 
 //virtual
 Property SAL_CALL CCRS_PropertySetInfo
-    ::getPropertyByName( const rtl::OUString& aName )
+    ::getPropertyByName( const OUString& aName )
         throw( UnknownPropertyException, RuntimeException )
 {
     if ( !aName.getLength() )
@@ -571,7 +572,7 @@ Property SAL_CALL CCRS_PropertySetInfo
 
 //virtual
 sal_Bool SAL_CALL CCRS_PropertySetInfo
-    ::hasPropertyByName( const rtl::OUString& Name )
+    ::hasPropertyByName( const OUString& Name )
         throw( RuntimeException )
 {
     return ( impl_getPos( Name ) != -1 );
@@ -629,7 +630,7 @@ sal_Int32 SAL_CALL CCRS_PropertySetInfo
 
     if( !m_pProperties )
     {
-        OSL_ENSURE( sal_False, "Properties not initialized yet" );
+        OSL_FAIL( "Properties not initialized yet" );
         return nHandle;
     }
     sal_Bool bFound = sal_True;
@@ -726,7 +727,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     OSL_ENSURE( nRow >= 0, "only positive values supported" );
     if( !m_xResultSetOrigin.is() )
     {
-        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
+        OSL_FAIL( "broadcaster was disposed already" );
         return sal_False;
     }
 //  OSL_ENSURE( nRow <= m_nKnownCount, "don't step into regions you don't know with this method" );
@@ -972,10 +973,10 @@ XTYPEPROVIDER_IMPL_11( CachedContentResultSet
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( CachedContentResultSet,
-                               OUString::createFromAscii(
-                            "com.sun.star.comp.ucb.CachedContentResultSet" ),
-                            OUString::createFromAscii(
-                            CACHED_CONTENT_RESULTSET_SERVICE_NAME ) );
+                               OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.comp.ucb.CachedContentResultSet" )),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            CACHED_CONTENT_RESULTSET_SERVICE_NAME )) );
 
 //--------------------------------------------------------------------------
 // XPropertySet methods. ( inherited )
@@ -994,7 +995,7 @@ void SAL_CALL CachedContentResultSet
 
     if( !getPropertySetInfo().is() )
     {
-        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
+        OSL_FAIL( "broadcaster was disposed already" );
         throw UnknownPropertyException();
     }
 
@@ -1085,7 +1086,7 @@ void SAL_CALL CachedContentResultSet
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             if( !m_xPropertySetOrigin.is() )
             {
-                OSL_ENSURE( sal_False, "broadcaster was disposed already" );
+                OSL_FAIL( "broadcaster was disposed already" );
                 return;
             }
         }
@@ -1105,7 +1106,7 @@ Any SAL_CALL CachedContentResultSet
 
     if( !getPropertySetInfo().is() )
     {
-        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
+        OSL_FAIL( "broadcaster was disposed already" );
         throw UnknownPropertyException();
     }
 
@@ -1144,7 +1145,7 @@ Any SAL_CALL CachedContentResultSet
             osl::Guard< osl::Mutex > aGuard( m_aMutex );
             if( !m_xPropertySetOrigin.is() )
             {
-                OSL_ENSURE( sal_False, "broadcaster was disposed already" );
+                OSL_FAIL( "broadcaster was disposed already" );
                 throw UnknownPropertyException();
             }
         }
@@ -1203,7 +1204,7 @@ void SAL_CALL CachedContentResultSet
             sal_Int32 nNew = 0;
             if( !( aEvt.NewValue >>= nNew ) )
             {
-                OSL_ENSURE( sal_False, "PropertyChangeEvent contains wrong data" );
+                OSL_FAIL( "PropertyChangeEvent contains wrong data" );
                 return;
             }
 
@@ -1217,7 +1218,7 @@ void SAL_CALL CachedContentResultSet
             sal_Bool bNew = sal_False;
             if( !( aEvt.NewValue >>= bNew ) )
             {
-                OSL_ENSURE( sal_False, "PropertyChangeEvent contains wrong data" );
+                OSL_FAIL( "PropertyChangeEvent contains wrong data" );
                 return;
             }
             impl_changeIsRowCountFinal( m_bFinalCount, bNew );
@@ -1269,7 +1270,7 @@ if( !m_aCache##XXX.hasRow( nRow ) )                         \
 {                                                           \
         if( !m_xFetchProviderForContentAccess.is() )        \
         {                                                   \
-            OSL_ENSURE( sal_False, "broadcaster was disposed already" );\
+            OSL_FAIL( "broadcaster was disposed already" );\
             throw RuntimeException();                       \
         }                                                   \
         aGuard.clear();                                     \
@@ -1422,7 +1423,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     if( !m_xResultSetOrigin.is() )
     {
-        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
+        OSL_FAIL( "broadcaster was disposed already" );
         return sal_False;
     }
     if( row < 0 )
@@ -1634,7 +1635,7 @@ sal_Bool SAL_CALL CachedContentResultSet
     //unknown position
     if( !m_xResultSetOrigin.is() )
     {
-        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
+        OSL_FAIL( "broadcaster was disposed already" );
         return sal_False;
     }
     aGuard.clear();
@@ -1712,7 +1713,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     if( !m_xResultSetOrigin.is() )
     {
-        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
+        OSL_FAIL( "broadcaster was disposed already" );
         return sal_False;
     }
     aGuard.clear();
@@ -1747,7 +1748,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 
     if( !m_xResultSetOrigin.is() )
     {
-        OSL_ENSURE( sal_False, "broadcaster was disposed already" );
+        OSL_FAIL( "broadcaster was disposed already" );
         return sal_False;
     }
     aGuard.clear();
@@ -1921,7 +1922,7 @@ sal_Bool SAL_CALL CachedContentResultSet
             return m_bLastCachedReadWasNull;
         if( !m_xRowOrigin.is() )
         {
-            OSL_ENSURE( sal_False, "broadcaster was disposed already" );
+            OSL_FAIL( "broadcaster was disposed already" );
             return sal_False;
         }
     }
@@ -1929,7 +1930,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-rtl::OUString SAL_CALL CachedContentResultSet
+OUString SAL_CALL CachedContentResultSet
     ::getString( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException )
@@ -2077,7 +2078,7 @@ Any SAL_CALL CachedContentResultSet
         {
             if( !m_xFetchProvider.is() )
             {
-                OSL_ENSURE( sal_False, "broadcaster was disposed already" );
+                OSL_FAIL( "broadcaster was disposed already" );
                 return Any();
             }
             aGuard.clear();
@@ -2151,8 +2152,8 @@ const Reference< XTypeConverter >& CachedContentResultSet::getTypeConverter()
         m_bTriedToGetTypeConverter = sal_True;
         m_xTypeConverter = Reference< XTypeConverter >(
                                 m_xSMgr->createInstance(
-                                    OUString::createFromAscii(
-                                        "com.sun.star.script.Converter" ) ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.script.Converter" )) ),
                                 UNO_QUERY );
 
         OSL_ENSURE( m_xTypeConverter.is(),
@@ -2201,10 +2202,10 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedContentResultSetFactory,
-                     OUString::createFromAscii(
-                           "com.sun.star.comp.ucb.CachedContentResultSetFactory" ),
-                         OUString::createFromAscii(
-                         CACHED_CONTENT_RESULTSET_FACTORY_NAME ) );
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                           "com.sun.star.comp.ucb.CachedContentResultSetFactory" )),
+                         OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         CACHED_CONTENT_RESULTSET_FACTORY_NAME )) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

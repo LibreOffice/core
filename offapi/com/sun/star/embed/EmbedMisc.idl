@@ -33,11 +33,11 @@
 module com { module sun { module star { module embed {
 
 //============================================================================
-/** The constant set contains flags describing miscellaneous charactetistics
+/** The constant set contains flags describing miscellaneous characteristics
     of embedded objects.
 
     <p>
-    The constant values can be combined with 'or' operation.
+    The constant values can be combined with "or" operation.
     The first 32 bits are reserved for MS values, they are added because
     this API is going to be used to embed MS OLE objects into OOo documents,
     so there should be a possibility to transfer all the possible MS flags

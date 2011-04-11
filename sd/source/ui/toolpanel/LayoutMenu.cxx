@@ -122,58 +122,57 @@ TYPEINIT1(LayoutMenu, SfxShell);
 
 struct snewfoil_value_info
 {
-    USHORT mnBmpResId;
-    USHORT mnHCBmpResId;
-    USHORT mnStrResId;
+    sal_uInt16 mnBmpResId;
+    sal_uInt16 mnStrResId;
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;
 };
 
 static snewfoil_value_info notes[] =
 {
-    {BMP_FOILN_01, BMP_FOILN_01_H, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
+    {BMP_FOILN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
      AUTOLAYOUT_NOTES},
-    {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 static snewfoil_value_info handout[] =
 {
-    {BMP_FOILH_01, BMP_FOILH_01_H, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB,
+    {BMP_FOILH_01, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT1},
-    {BMP_FOILH_02, BMP_FOILH_02_H, STR_AUTOLAYOUT_HANDOUT2, WritingMode_LR_TB,
+    {BMP_FOILH_02, STR_AUTOLAYOUT_HANDOUT2, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT2},
-    {BMP_FOILH_03, BMP_FOILH_03_H, STR_AUTOLAYOUT_HANDOUT3, WritingMode_LR_TB,
+    {BMP_FOILH_03, STR_AUTOLAYOUT_HANDOUT3, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT3},
-    {BMP_FOILH_04, BMP_FOILH_04_H, STR_AUTOLAYOUT_HANDOUT4, WritingMode_LR_TB,
+    {BMP_FOILH_04, STR_AUTOLAYOUT_HANDOUT4, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT4},
-    {BMP_FOILH_06, BMP_FOILH_06_H, STR_AUTOLAYOUT_HANDOUT6, WritingMode_LR_TB,
+    {BMP_FOILH_06, STR_AUTOLAYOUT_HANDOUT6, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT6},
-    {BMP_FOILH_09, BMP_FOILH_09_H, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
+    {BMP_FOILH_09, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT9},
-    {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
+    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 static snewfoil_value_info standard[] =
 {
-    {BMP_LAYOUT_EMPTY, BMP_LAYOUT_EMPTY_H, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
-    {BMP_LAYOUT_HEAD03, BMP_LAYOUT_HEAD03_H, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,       AUTOLAYOUT_TITLE},
-    {BMP_LAYOUT_HEAD02, BMP_LAYOUT_HEAD02_H, STR_AUTOLAYOUT_CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_ENUM},
-    {BMP_LAYOUT_HEAD02A, BMP_LAYOUT_HEAD02A_H, STR_AUTOLAYOUT_2CONTENT, WritingMode_LR_TB,       AUTOLAYOUT_2TEXT},
-    {BMP_LAYOUT_HEAD01, BMP_LAYOUT_HEAD01_H, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,  AUTOLAYOUT_ONLY_TITLE},
-    {BMP_LAYOUT_TEXTONLY, BMP_LAYOUT_TEXTONLY_H, STR_AUTOLAYOUT_ONLY_TEXT, WritingMode_LR_TB,   AUTOLAYOUT_ONLY_TEXT},
-    {BMP_LAYOUT_HEAD03B, BMP_LAYOUT_HEAD03B_H, STR_AUTOLAYOUT_2CONTENT_CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_2OBJTEXT},
-    {BMP_LAYOUT_HEAD03C, BMP_LAYOUT_HEAD03C_H, STR_AUTOLAYOUT_CONTENT_2CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_TEXT2OBJ},
-    {BMP_LAYOUT_HEAD03A, BMP_LAYOUT_HEAD03A_H, STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT,WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT},
-    {BMP_LAYOUT_HEAD02B, BMP_LAYOUT_HEAD02B_H, STR_AUTOLAYOUT_CONTENT_OVER_CONTENT, WritingMode_LR_TB, AUTOLAYOUT_OBJOVERTEXT},
-    {BMP_LAYOUT_HEAD04, BMP_LAYOUT_HEAD04_H, STR_AUTOLAYOUT_4CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_4OBJ},
-    {BMP_LAYOUT_HEAD06, BMP_LAYOUT_HEAD06_H, STR_AUTOLAYOUT_6CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_6CLIPART},
+    {BMP_LAYOUT_EMPTY, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
+    {BMP_LAYOUT_HEAD03, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,       AUTOLAYOUT_TITLE},
+    {BMP_LAYOUT_HEAD02, STR_AUTOLAYOUT_CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_ENUM},
+    {BMP_LAYOUT_HEAD02A, STR_AUTOLAYOUT_2CONTENT, WritingMode_LR_TB,       AUTOLAYOUT_2TEXT},
+    {BMP_LAYOUT_HEAD01, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,  AUTOLAYOUT_ONLY_TITLE},
+    {BMP_LAYOUT_TEXTONLY, STR_AUTOLAYOUT_ONLY_TEXT, WritingMode_LR_TB,   AUTOLAYOUT_ONLY_TEXT},
+    {BMP_LAYOUT_HEAD03B, STR_AUTOLAYOUT_2CONTENT_CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_2OBJTEXT},
+    {BMP_LAYOUT_HEAD03C, STR_AUTOLAYOUT_CONTENT_2CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_TEXT2OBJ},
+    {BMP_LAYOUT_HEAD03A, STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT,WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT},
+    {BMP_LAYOUT_HEAD02B, STR_AUTOLAYOUT_CONTENT_OVER_CONTENT, WritingMode_LR_TB, AUTOLAYOUT_OBJOVERTEXT},
+    {BMP_LAYOUT_HEAD04, STR_AUTOLAYOUT_4CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_4OBJ},
+    {BMP_LAYOUT_HEAD06, STR_AUTOLAYOUT_6CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_6CLIPART},
 
     // vertical
-    {BMP_LAYOUT_VERTICAL02, BMP_LAYOUT_VERTICAL02_H, STR_AL_VERT_TITLE_TEXT_CHART, WritingMode_TB_RL,AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART},
-    {BMP_LAYOUT_VERTICAL01, BMP_LAYOUT_VERTICAL01_H, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE},
-    {BMP_LAYOUT_HEAD02, BMP_LAYOUT_HEAD02_H, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE},
-    {BMP_LAYOUT_HEAD02A, BMP_LAYOUT_HEAD02A_H, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART},
-    {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
+    {BMP_LAYOUT_VERTICAL02, STR_AL_VERT_TITLE_TEXT_CHART, WritingMode_TB_RL,AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART},
+    {BMP_LAYOUT_VERTICAL01, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE},
+    {BMP_LAYOUT_HEAD02, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE},
+    {BMP_LAYOUT_HEAD02A, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART},
+    {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
 LayoutMenu::LayoutMenu( TreeNode* pParent, ToolPanelViewShell& i_rPanelViewShell )
@@ -222,17 +221,17 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
         | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL
         | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER);
 
-    SetSmartHelpId(SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS));
+    Window::SetHelpId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS);
     SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
 
     Link aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
     mxListener = new ::sd::tools::SlotStateListener(
         aStateChangeLink,
         Reference<frame::XDispatchProvider>(mrBase.GetController()->getFrame(), UNO_QUERY),
-        ::rtl::OUString::createFromAscii(".uno:VerticalTextState"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:VerticalTextState")));
 
     // Add this new object as shell to the shell factory.
-    GetShellManager()->AddSubShell(HID_SD_TASK_PANE_PREVIEW_LAYOUTS,this,this);
+    GetShellManager()->AddSubShell(SHELLID_SD_TASK_PANE_PREVIEW_LAYOUTS,this,this);
 }
 
 
@@ -289,8 +288,8 @@ Size LayoutMenu::GetPreferredSize (void)
     Size aItemSize = CalcItemSizePixel (Size());
     Size aPreferredWindowSize = CalcWindowSizePixel (
         aItemSize,
-         (USHORT)mnPreferredColumnCount,
-        (USHORT)CalculateRowCount (aItemSize,mnPreferredColumnCount));
+         (sal_uInt16)mnPreferredColumnCount,
+        (sal_uInt16)CalculateRowCount (aItemSize,mnPreferredColumnCount));
     return aPreferredWindowSize;
 }
 
@@ -483,8 +482,8 @@ void LayoutMenu::Resize (void)
 
             int nRowCount = CalculateRowCount (aItemSize, nColumnCount);
 
-            SetColCount ((USHORT)nColumnCount);
-            SetLineCount ((USHORT)nRowCount);
+            SetColCount ((sal_uInt16)nColumnCount);
+            SetLineCount ((sal_uInt16)nRowCount);
         }
     }
 
@@ -501,7 +500,7 @@ void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
     if (rEvent.IsRight())
     {
         ReleaseMouse();
-        USHORT nIndex = GetItemId (rEvent.GetPosPixel());
+        sal_uInt16 nIndex = GetItemId (rEvent.GetPosPixel());
         if (nIndex > 0)
             SelectItem(nIndex);
     }
@@ -713,7 +712,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
                 SfxRequest aRequest (mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
                 aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATPAGE, ((*iPage)->GetPageNum()-1)/2));
                 aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
-                pMainViewShell->ExecuteSlot (aRequest, BOOL(FALSE));
+                pMainViewShell->ExecuteSlot (aRequest, sal_Bool(sal_False));
             }
     }
     while(false);
@@ -723,7 +722,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
 
 
 SfxRequest LayoutMenu::CreateRequest (
-    USHORT nSlotId,
+    sal_uInt16 nSlotId,
     AutoLayout aLayout)
 {
     SfxRequest aRequest (mrBase.GetViewFrame(), nSlotId);
@@ -731,10 +730,10 @@ SfxRequest LayoutMenu::CreateRequest (
     do
     {
         SdrLayerAdmin& rLayerAdmin (mrBase.GetDocument()->GetLayerAdmin());
-        BYTE aBackground (rLayerAdmin.GetLayerID(
-            String(SdResId(STR_LAYER_BCKGRND)), FALSE));
-        BYTE aBackgroundObject (rLayerAdmin.GetLayerID(
-            String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
+        sal_uInt8 aBackground (rLayerAdmin.GetLayerID(
+            String(SdResId(STR_LAYER_BCKGRND)), sal_False));
+        sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(
+            String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False));
         ViewShell* pViewShell = mrBase.GetMainViewShell().get();
         if (pViewShell == NULL)
             break;
@@ -764,7 +763,6 @@ SfxRequest LayoutMenu::CreateRequest (
 
 void LayoutMenu::Fill (void)
 {
-    const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     SvtLanguageOptions aLanguageOptions;
     sal_Bool bVertical = aLanguageOptions.IsVerticalTextEnabled();
     SdDrawDocument* pDocument = mrBase.GetDocument();
@@ -812,9 +810,7 @@ void LayoutMenu::Fill (void)
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {
-            BitmapEx aBmp (SdResId (bHighContrast
-                             ? pInfo->mnHCBmpResId
-                             : pInfo->mnBmpResId));
+            BitmapEx aBmp(SdResId(pInfo->mnBmpResId));
 
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
                 aBmp.Mirror (BMP_MIRROR_HORZ);
@@ -833,7 +829,7 @@ void LayoutMenu::Fill (void)
 
 void LayoutMenu::Clear (void)
 {
-    for (USHORT nId=1; nId<=GetItemCount(); nId++)
+    for (sal_uInt16 nId=1; nId<=GetItemCount(); nId++)
         delete static_cast<AutoLayout*>(GetItemData(nId));
     ValueSet::Clear();
 }
@@ -885,7 +881,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                     // When the command event was not caused by a mouse
                     // event (for example a key press instead) then show the
                     // popup menu at the center of the current item.
-                    if (GetSelectItemId() != (USHORT)-1)
+                    if (GetSelectItemId() != (sal_uInt16)-1)
                     {
                         Rectangle aBBox (GetItemRect(GetSelectItemId()));
                         Point aPosition (aBBox.Center());
@@ -937,8 +933,8 @@ void LayoutMenu::UpdateSelection (void)
             break;
 
         // Find the entry of the menu for to the layout.
-        USHORT nItemCount (GetItemCount());
-        for (USHORT nId=1; nId<=nItemCount; nId++)
+        sal_uInt16 nItemCount (GetItemCount());
+        for (sal_uInt16 nId=1; nId<=nItemCount; nId++)
         {
             if (*static_cast<AutoLayout*>(GetItemData(nId)) == aLayout)
             {

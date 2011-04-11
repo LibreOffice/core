@@ -68,11 +68,11 @@ public:
     static void         GetStringFromFunction(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::sheet::GeneralFunction eFunction,
-                            sal_Bool bAppendStr = sal_False );
+                            sal_Bool bAppendStr = false );
     static void         GetStringFromFunction(
                             ::rtl::OUString& rString,
                             const ScSubTotalFunc eFunction,
-                            sal_Bool bAppendStr = sal_False );
+                            sal_Bool bAppendStr = false );
 
 // IMPORT: DataPilotFieldOrientation
     static ::com::sun::star::sheet::DataPilotFieldOrientation
@@ -83,7 +83,7 @@ public:
     static void         GetStringFromOrientation(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::sheet::DataPilotFieldOrientation eOrientation,
-                            sal_Bool bAppendStr = sal_False );
+                            sal_Bool bAppendStr = false );
 
 // IMPORT: Detective
     static ScDetectiveObjType
@@ -97,11 +97,11 @@ public:
     static void         GetStringFromDetObjType(
                             ::rtl::OUString& rString,
                             const ScDetectiveObjType eObjType,
-                            sal_Bool bAppendStr = sal_False );
+                            sal_Bool bAppendStr = false );
     static void         GetStringFromDetOpType(
                             ::rtl::OUString& rString,
                             const ScDetOpType eOpType,
-                            sal_Bool bAppendStr = sal_False );
+                            sal_Bool bAppendStr = false );
 
 // IMPORT: Formulas
     static void         ParseFormula(

@@ -43,9 +43,9 @@ class Fraction;
 class SVT_DLLPUBLIC IMapCircleObject : public IMapObject
 {
     Point               aCenter;
-    ULONG               nRadius;
+    sal_uLong               nRadius;
 
-    void                ImpConstruct( const Point& rCenter, ULONG nRad, BOOL bPixel );
+    void                ImpConstruct( const Point& rCenter, sal_uLong nRad, sal_Bool bPixel );
 
 protected:
 
@@ -56,21 +56,21 @@ protected:
 public:
 
                         IMapCircleObject() {};
-                        IMapCircleObject( const Point& rCenter, ULONG nRad,
+                        IMapCircleObject( const Point& rCenter, sal_uLong nRad,
                                           const String& rURL,
                                           const String& rAltText,
                                           const String& rDesc,
                                           const String& rTarget,
                                           const String& rName,
-                                          BOOL bActive = TRUE,
-                                          BOOL bPixelCoords = TRUE );
+                                          sal_Bool bActive = sal_True,
+                                          sal_Bool bPixelCoords = sal_True );
     virtual             ~IMapCircleObject() {};
 
-    virtual UINT16      GetType() const;
-    virtual BOOL        IsHit( const Point& rPoint ) const;
+    virtual sal_uInt16      GetType() const;
+    virtual sal_Bool        IsHit( const Point& rPoint ) const;
 
-    Point               GetCenter( BOOL bPixelCoords = TRUE ) const;
-    ULONG               GetRadius( BOOL bPixelCoords = TRUE ) const;
+    Point               GetCenter( sal_Bool bPixelCoords = sal_True ) const;
+    sal_uLong               GetRadius( sal_Bool bPixelCoords = sal_True ) const;
 
     // liefert das BoundRect des Kreis-Objektes in 1/100mm
     virtual Rectangle   GetBoundRect() const;
@@ -78,7 +78,7 @@ public:
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     using IMapObject::IsEqual;
-    BOOL                IsEqual( const IMapCircleObject& rEqObj );
+    sal_Bool                IsEqual( const IMapCircleObject& rEqObj );
 
     // Im-/Export
     void                WriteCERN( SvStream& rOStm, const String& rBaseURL  ) const;

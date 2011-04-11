@@ -57,12 +57,6 @@
  * @file
  * Font object to serial to xml filter.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2004-12-23 create this file.
- * 2005-01-14 add scale,position,emphasize support.
- * 2005-01-24 move some tool function to xfutil.hxx
- ************************************************************************/
 #include    "xffont.hxx"
 
 XFFont::XFFont()

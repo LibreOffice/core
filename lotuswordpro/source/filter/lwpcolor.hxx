@@ -74,18 +74,16 @@
 class LwpColor
 {
 public:
-    LwpColor():m_nRed(0), m_nGreen(0), m_nBlue(0), m_nExtra(0){};
-    ~LwpColor(){};
+    LwpColor():m_nRed(0), m_nGreen(0), m_nBlue(0), m_nExtra(0){}
+    ~LwpColor(){}
 public:
     void Read(LwpObjectStream *pStrm);
     sal_uInt16 GetRed();
     sal_uInt16 GetGreen();
     sal_uInt16 GetBlue();
-    BOOL IsValidColor();
+    sal_Bool IsValidColor();
     sal_uInt32 To24Color();
-    //add by , 01/26/2005
-    void operator = (const LwpColor& rOther);
-    //end
+    LwpColor& operator = (const LwpColor& rOther);
     sal_Bool IsTransparent();
 private:
     sal_uInt16 m_nRed;          // When extra is AGLRGB_INDEX, m_nRed holds the
@@ -120,7 +118,7 @@ inline sal_uInt16 LwpColor::GetBlue()
 {
     return m_nBlue;
 }
-inline BOOL LwpColor::IsValidColor()
+inline sal_Bool LwpColor::IsValidColor()
 {
     return ((m_nExtra!=AGLRGB_INVALID) && (m_nExtra!=AGLRGB_TRANSPARENT));
 }

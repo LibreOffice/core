@@ -32,7 +32,7 @@
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include "rtl/allocator.hxx"
 
 #include <functional>
@@ -157,7 +157,7 @@ struct hashModule
     }
 };
 
-typedef std::hash_map<
+typedef boost::unordered_map<
     oslModule,
     std::pair<sal_uInt32, component_canUnloadFunc>,
     hashModule,
@@ -306,7 +306,7 @@ struct hashListener
     }
 };
 
-typedef std::hash_map<
+typedef boost::unordered_map<
     sal_Int32,
     std::pair<rtl_unloadingListenerFunc, void*>,
     hashListener,

@@ -185,7 +185,7 @@ namespace sfx2
     {
         Reference < XInterface > xHoldAlive( m_pData->m_rControllerImpl );
 
-        USHORT nType = _rEvent.GetType();
+        sal_uInt16 nType = _rEvent.GetType();
         bool bHandled = false;
 
         switch ( nType )
@@ -267,7 +267,7 @@ namespace sfx2
             break;
 
             default:
-                OSL_ENSURE( false, "UserInputInterception::handleNotifyEvent: illegal event type!" );
+                OSL_FAIL( "UserInputInterception::handleNotifyEvent: illegal event type!" );
                 break;
         }
 

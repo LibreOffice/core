@@ -56,7 +56,7 @@ using ::com::sun::star::xml::sax::XAttributeList;
 // ============================================================================
 
 ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
-    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
     SvXMLImportContext( rImport, nPrefix, rLName ),
     mrScImport(rImport),
@@ -93,7 +93,7 @@ ScXMLExternalRefTabSourceContext::~ScXMLExternalRefTabSourceContext()
 }
 
 SvXMLImportContext* ScXMLExternalRefTabSourceContext::CreateChildContext(
-    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
+    sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
 {
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }
@@ -139,7 +139,7 @@ void ScXMLExternalRefTabSourceContext::EndElement()
 // ============================================================================
 
 ScXMLExternalRefRowsContext::ScXMLExternalRefRowsContext(
-    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& /* xAttrList */, ScXMLExternalTabData& rRefInfo ) :
     SvXMLImportContext( rImport, nPrefix, rLName ),
     mrScImport(rImport),
@@ -152,7 +152,7 @@ ScXMLExternalRefRowsContext::~ScXMLExternalRefRowsContext()
 }
 
 SvXMLImportContext* ScXMLExternalRefRowsContext::CreateChildContext(
-    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
+    sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
 {
     // #i101319# row elements inside group, rows or header-rows
     // are treated like row elements directly in the table element
@@ -182,7 +182,7 @@ void ScXMLExternalRefRowsContext::EndElement()
 // ============================================================================
 
 ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
-    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
     SvXMLImportContext( rImport, nPrefix, rLName ),
     mrScImport(rImport),
@@ -216,7 +216,7 @@ ScXMLExternalRefRowContext::~ScXMLExternalRefRowContext()
 }
 
 SvXMLImportContext* ScXMLExternalRefRowContext::CreateChildContext(
-    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
+    sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
 {
     const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
@@ -259,7 +259,7 @@ void ScXMLExternalRefRowContext::EndElement()
 // ============================================================================
 
 ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
-    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
     SvXMLImportContext( rImport, nPrefix, rLName ),
     mrScImport(rImport),
@@ -366,7 +366,7 @@ ScXMLExternalRefCellContext::~ScXMLExternalRefCellContext()
 }
 
 SvXMLImportContext* ScXMLExternalRefCellContext::CreateChildContext(
-    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
+    sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
 {
     const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowCellElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
@@ -408,7 +408,7 @@ void ScXMLExternalRefCellContext::SetCellString(const OUString& rStr)
 // ============================================================================
 
 ScXMLExternalRefCellTextContext::ScXMLExternalRefCellTextContext(
-    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    ScXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& /*xAttrList*/,
     ScXMLExternalRefCellContext& rParent ) :
     SvXMLImportContext( rImport, nPrefix, rLName ),
@@ -422,7 +422,7 @@ ScXMLExternalRefCellTextContext::~ScXMLExternalRefCellTextContext()
 }
 
 SvXMLImportContext* ScXMLExternalRefCellTextContext::CreateChildContext(
-    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
+    sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
 {
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }

@@ -109,12 +109,10 @@ void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
     sal_uInt8 FribTag=0;
     sal_uInt8 FribType;
     sal_uInt8 FribEditor;
-    BOOL ProblemFrib;
 
     LwpFrib* pCurFrib = m_pFribs = NULL;
     for(;;)
     {
-        ProblemFrib = FALSE;
         // Get the frib type
         pObjStrm->QuickRead(&FribTag, sizeof(FribTag));
 
@@ -151,25 +149,8 @@ void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
             }
             pCurFrib = pFrib;
         }
-        else
-            ProblemFrib = TRUE;
     }
 }
-
-/*String LwpFribPtr::GetText()
-{
-    LwpFrib* pFrib = m_pFribs;
-    String content;
-    while(pFrib)
-    {
-        if(pFrib->GetType() == FRIB_TAG_TEXT)
-        {
-            content+= static_cast<LwpFribText*>(pFrib)->GetText();
-        }
-        pFrib = pFrib->GetNext();
-    }
-    return (content);
-}*/
 
 #include "lwpdropcapmgr.hxx"
 void LwpFribPtr::XFConvert()
@@ -179,14 +160,13 @@ void LwpFribPtr::XFConvert()
     {
         sal_uInt8 nFribType = pFrib->GetType();
         sal_Bool bRevisionFlag = pFrib->GetRevisionFlag();
-        sal_uInt8 nRevisionType;
         OUString sChangeID;
         if (bRevisionFlag)
         {
             if ( nFribType!= FRIB_TAG_TABLE && nFribType != FRIB_TAG_FIELD
                     && nFribType != FRIB_TAG_FRAME)
             {
-                nRevisionType = pFrib->GetRevisionType();
+                //sal_uInt8 nRevisionType = pFrib->GetRevisionType();
                 LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
                 LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
                 sChangeID = pChangeMgr->GetChangeID(pFrib);
@@ -566,19 +546,19 @@ void LwpFribPtr::RegisterStyle()
                 case FRIB_TAG_TABLE:
                 {
                     LwpFribTable* tableFrib = static_cast<LwpFribTable*>(pFrib);
-                    tableFrib->RegisterStyle();
+                    tableFrib->RegisterNewStyle();
                 }
                     break;
         case FRIB_TAG_FOOTNOTE:
         {
             LwpFribFootnote* pFribFootnote = static_cast<LwpFribFootnote*>(pFrib);
-            pFribFootnote->RegisterStyle();
+            pFribFootnote->RegisterNewStyle();
         }
             break;
         case FRIB_TAG_NOTE:
         {
             LwpFribNote* pNoteFrib = static_cast<LwpFribNote*>(pFrib);
-            pNoteFrib->RegisterStyle();
+            pNoteFrib->RegisterNewStyle();
             break;
         }
         case FRIB_TAG_PAGENUMBER:

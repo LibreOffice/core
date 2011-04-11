@@ -116,7 +116,7 @@ void PresenterSlideShowView::LateInit (void)
     Reference<lang::XMultiComponentFactory> xFactory (
         mxComponentContext->getServiceManager(), UNO_QUERY_THROW);
     mxPresenterHelper.set (xFactory->createInstanceWithContext(
-                   OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
+                   OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
                    mxComponentContext),
                UNO_QUERY_THROW);
 
@@ -545,7 +545,7 @@ void SAL_CALL PresenterSlideShowView::setMouseCursor(::sal_Int16 nPointerShape)
             mxComponentContext, UNO_QUERY);
         if (xFactory.is())
             mxPointer = Reference<awt::XPointer>(
-                xFactory->createInstance(OUString::createFromAscii("com.sun.star.awt.Pointer")),
+                xFactory->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Pointer"))),
                 UNO_QUERY);
     }
 
@@ -973,7 +973,7 @@ Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
 
         Reference<awt::XToolkit> xToolkit (
             xFactory->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.awt.Toolkit"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")),
                 mxComponentContext),
             UNO_QUERY_THROW);
         awt::WindowDescriptor aWindowDescriptor (
@@ -1148,7 +1148,7 @@ void PresenterSlideShowView::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString::createFromAscii("PresenterSlideShowView object has already been disposed"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterSlideShowView object has already been disposed")),
             static_cast<uno::XWeak*>(this));
     }
 }

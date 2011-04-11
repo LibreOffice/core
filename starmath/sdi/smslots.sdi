@@ -275,7 +275,7 @@ interface FormulaView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    SID_INSERT_FORMULA //idlpp ole : no , status : no
+    SID_IMPORT_FORMULA //idlpp ole : no , status : no
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

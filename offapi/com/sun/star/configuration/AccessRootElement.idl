@@ -61,7 +61,7 @@ module com { module sun { module star { module configuration {
  It represents the <em>root</em> of the accessible part of the hierarchy.
  </p>
 
- <p><em><strong>NOTE:</strong> In this description 'hierarchy' may actually
+ <p><em><strong>NOTE:</strong> In this description "hierarchy" may actually
  designate a part or fragment of a larger hierarchy. It is that part that is
  rooted in the element represented by an implementation of this service
  and that is accessible starting from this element.</em>

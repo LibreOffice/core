@@ -91,7 +91,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
 
         uno::Reference<container::XNameAccess> xContext(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( DP_SERVICE_DBCONTEXT ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( DP_SERVICE_DBCONTEXT )) ),
                 uno::UNO_QUERY);
         if (xContext.is())
         {
@@ -107,7 +107,7 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     }
     catch(uno::Exception&)
     {
-        DBG_ERROR("exception in database");
+        OSL_FAIL("exception in database");
     }
 
     aLbDatabase.SelectEntryPos( 0 );
@@ -125,7 +125,7 @@ ScDataPilotDatabaseDlg::~ScDataPilotDatabaseDlg()
 
 void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
 {
-    USHORT nSelect = aLbType.GetSelectEntryPos();
+    sal_uInt16 nSelect = aLbType.GetSelectEntryPos();
 
     rDesc.aDBName = aLbDatabase.GetSelectEntry();
     rDesc.aObject = aCbObject.GetText();
@@ -156,7 +156,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     if (!aDatabaseName.Len())
         return;
 
-    USHORT nSelect = aLbType.GetSelectEntryPos();
+    sal_uInt16 nSelect = aLbType.GetSelectEntryPos();
     if ( nSelect > DP_TYPELIST_QUERY )
         return;                                 // only tables and queries
 
@@ -166,7 +166,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
 
         uno::Reference<container::XNameAccess> xContext(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( DP_SERVICE_DBCONTEXT ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( DP_SERVICE_DBCONTEXT )) ),
                 uno::UNO_QUERY);
         if ( !xContext.is() ) return;
 
@@ -177,7 +177,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
 
         uno::Reference<task::XInteractionHandler> xHandler(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( SC_SERVICE_INTHANDLER ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_INTHANDLER )) ),
                 uno::UNO_QUERY);
 
         uno::Reference<sdbc::XConnection> xConnection = xSource->connectWithCompletion( xHandler );
@@ -220,7 +220,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     }
     catch(uno::Exception&)
     {
-        //  #71604# this may happen if an invalid database is selected -> no DBG_ERROR
+        //  this may happen if an invalid database is selected -> no DBG_ERROR
         DBG_WARNING("exception in database");
     }
 }

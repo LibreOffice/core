@@ -154,14 +154,15 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO
 //
 //-----------------------------
 
- HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, VARIANT *pvarData)
+HRESULT STDMETHODCALLTYPE CColumnInfo::GetItemData(LPCSHCOLUMNID pscid, LPCSHCOLUMNDATA pscd, VARIANT *pvarData)
 {
     if (IsOOFileExtension(pscd->pwszExt))
     {
         try
         {
+            std::wstring fname = getShortPathName( std::wstring( pscd->wszFile ) );
 
-            CMetaInfoReader meta_info_accessor(WStringToString(pscd->wszFile));
+            CMetaInfoReader meta_info_accessor(WStringToString(fname));
 
             VariantClear(pvarData);
 

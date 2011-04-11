@@ -258,7 +258,7 @@ void ODbTypeWizDialog::clearPassword()
 // -----------------------------------------------------------------------------
 TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
 {
-    USHORT nStringId = STR_PAGETITLE_ADVANCED;
+    sal_uInt16 nStringId = STR_PAGETITLE_ADVANCED;
     TabPage* pPage = NULL;
     switch(_nState)
     {
@@ -310,7 +310,7 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
             pPage = ODriversSettings::CreateUser(this,*m_pOutSet);
             break;
         default:
-            OSL_ENSURE(0,"Wrong state!");
+            OSL_FAIL("Wrong state!");
             break;
     }
 
@@ -347,7 +347,7 @@ void ODbTypeWizDialog::enableConfirmSettings( bool _bEnable )
 {
     enableButtons( WZB_FINISH, _bEnable );
     // TODO:
-    // this is hacky. At the moment, this method is used in only one case (#b6532894#).
+    // this is hacky. At the moment, this method is used in only one case.
     // As soon as it is to be used more wide-spread, we should find a proper concept
     // for enabling both the Next and Finish buttons, depending on the current page state.
     // Plus, the concept must also care for the case where those pages are embedded into

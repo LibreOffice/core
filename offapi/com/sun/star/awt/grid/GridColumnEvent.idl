@@ -38,21 +38,21 @@ module com {  module sun {  module star {  module awt { module grid {
 //=============================================================================
 /** An event used by a <type>XGridColumn</type> to notify changes in the column.
 
-    @since OOo 3.3.0
+    @since OOo 3.3
  */
 struct GridColumnEvent: com::sun::star::lang::EventObject
 {
-    /** Contains the property name of the changed value **/
-    string valueName;
+    /** Contains the name of the attributes whose value changed. **/
+    string AttributeName;
 
     /** Contains the old value **/
-    any oldValue;
+    any OldValue;
 
     /** Contains the new value **/
-    any newValue;
+    any NewValue;
 
     /** Contains the index of the changed column**/
-    long index;
+    long ColumnIndex;
     //-------------------------------------------------------------------------
 };
 

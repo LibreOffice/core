@@ -40,7 +40,6 @@
 #include "sal/main.h"
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 
@@ -79,9 +78,7 @@ void RscHrcDep::Execute()
     CppDep::Execute();
 }
 
-//static String aDelim;
-
-SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
+int main( int argc, char** argv )
 {
     int c;
     char aBuf[255];
@@ -89,7 +86,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     char pOutputFileName[255];
     char pSrsFileName[255];
     String aSrsBaseName;
-    BOOL bSource = FALSE;
+    sal_Bool bSource = sal_False;
     ByteString aRespArg;
 //  who needs anything but '/' ?
 //  String aDelim = String(DirEntry::GetAccessDelimiter());
@@ -106,12 +103,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         if ( aBuf[0] == '-' && aBuf[1] == 'p' && aBuf[2] == '=' )
         {
             strcpy(pFileNamePrefix, &aBuf[3]);
-            //break;
         }
         if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'o' && aBuf[3] == '=' )
         {
             strcpy(pOutputFileName, &aBuf[4]);
-            //break;
         }
         if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'p' && aBuf[3] == '=' )
         {
@@ -119,16 +114,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             String aName( pSrsFileName, gsl_getSystemTextEncoding());
             DirEntry aDest( aName );
             aSrsBaseName = aDest.GetBase();
-            //break;
         }
         if (aBuf[0] == '-' &&  aBuf[1] == 'i' )
         {
-            //printf("Include : %s\n", &aBuf[2] );
             pDep->AddSearchPath( &aBuf[2] );
         }
         if (aBuf[0] == '-' &&  aBuf[1] == 'I' )
         {
-            //printf("Include : %s\n", &aBuf[2] );
             pDep->AddSearchPath( &aBuf[2] );
         }
         if (aBuf[0] == '@' )
@@ -143,12 +135,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                 if ( aBuf[0] == '-' && aBuf[1] == 'p' && aBuf[2] == '=' )
                 {
                     strcpy(pFileNamePrefix, &aBuf[3]);
-                    //break;
                 }
                 if ( aBuf2[0] == '-' && aBuf2[1] == 'f' && aBuf2[2] == 'o' )
                 {
                     strcpy(pOutputFileName, &aBuf2[3]);
-                    //break;
                 }
                 if ( aBuf2[0] == '-' && aBuf2[1] == 'f' && aBuf2[2] == 'p' )
                 {
@@ -156,16 +146,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                     String aName( pSrsFileName, gsl_getSystemTextEncoding());
                     DirEntry aDest( aName );
                     aSrsBaseName = aDest.GetBase();
-                    //break;
                 }
                 if (aBuf2[0] == '-' &&  aBuf2[1] == 'i' )
                 {
-                    //printf("Include : %s\n", &aBuf[2] );
                     pDep->AddSearchPath( &aBuf2[2] );
                 }
                 if (aBuf2[0] == '-' &&  aBuf2[1] == 'I' )
                 {
-                    //printf("Include : %s\n", &aBuf[2] );
                     pDep->AddSearchPath( &aBuf2[2] );
                 }
                 if (( aBuf2[0] != '-' ) && ( aBuf2[0] != '@' ))
@@ -173,7 +160,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                     pDep->AddSource( &aBuf2[0] );
                     aRespArg += " ";
                     aRespArg += &aBuf2[0];
-                    bSource = TRUE;
+                    bSource = sal_True;
                 }
             }
         }
@@ -206,7 +193,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             case 'h' :
             case 'H' :
             case '?' :
-                printf("RscDep 1.0 (c)2000 StarOffice\n");
+                printf("RscDep 1.0\n");
                 break;
 
             default:
@@ -218,20 +205,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     }
 
 
-    DirEntry aEntry(".");
-    aEntry.ToAbs();
-//  String aCwd = aEntry.GetName();
     String aCwd(pFileNamePrefix, gsl_getSystemTextEncoding());
-/*  USHORT nPos;
-#ifndef UNX
-    while ( (nPos = aCwd.Search('\\') != STRING_NOTFOUND  ))
-#else
-    while ( (nPos = aCwd.Search('/') != STRING_NOTFOUND  ))
-#endif
-    {
-        String attt = aCwd.Copy( 0, nPos );
-        aCwd.Erase( 0, nPos );
-    } */
     SvFileStream aOutStream;
     String aOutputFileName( pOutputFileName, gsl_getSystemTextEncoding());
     DirEntry aOutEntry( aOutputFileName );
@@ -243,7 +217,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     aFileName += String(".", gsl_getSystemTextEncoding());
     aFileName += aSrsBaseName;
     aFileName += String(".dprr", gsl_getSystemTextEncoding());
-    //fprintf( stderr, "OutFileName : %s \n",aFileName.GetStr());
     aOutStream.Open( aFileName, STREAM_WRITE );
 
     ByteString aString;
@@ -273,7 +246,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     aString += aRespArg;
     pDep->Execute();
     ByteStringList *pLst = pDep->GetDepList();
-    ULONG nCount = pLst->Count();
+    size_t nCount = pLst->size();
     if ( nCount == 0 )
     {
         aOutStream.WriteLine( aString );
@@ -284,9 +257,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         aOutStream.WriteLine( aString );
     }
 
-    for ( ULONG j=0; j<nCount; j++ )
+    for ( size_t j = 0; j < nCount; j++ )
     {
-        ByteString *pStr = pLst->GetObject(j);
+        ByteString *pStr = (*pLst)[ j ];
         pStr->SearchAndReplaceAll('\\', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));
         if ( j != (nCount-1) )
             *pStr += ByteString( "\\" );

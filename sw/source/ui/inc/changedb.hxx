@@ -36,7 +36,6 @@
 #include <svtools/svtreebx.hxx>
 #include <svx/stddlg.hxx>
 #include "dbtree.hxx"
-#include <vcl/fixed.hxx>
 
 class SwFldMgr;
 class SwView;
@@ -60,10 +59,8 @@ class SwChangeDBDlg: public SvxStandardDialog
     OKButton        aOKBT;
     CancelButton    aCancelBT;
     HelpButton      aHelpBT;
-//  PushButton      aChangeBT;
 
     ImageList       aImageList;
-    ImageList       aImageListHC;
 
     SwWrtShell      *pSh;
     SwFldMgr        *pMgr;

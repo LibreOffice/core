@@ -5,8 +5,6 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
-#include <com/sun/star/chart2/XFormattedString.idl>
-
 module com
 {
 module sun

@@ -108,10 +108,11 @@ class ScCellRangeObj;
 class SvxUnoText;
 class ScLinkListener;
 class ScPatternAttr;
-class SvxBorderLine;
 class SvxBoxItem;
 class SvxBoxInfoItem;
 class SvxItemPropertySet;
+
+namespace editeng { class SvxBorderLine; }
 
 class ScLinkListener : public SvtListener
 {
@@ -131,17 +132,17 @@ typedef ScNamedEntry* ScNamedEntryPtr;
 SV_DECL_PTRARR_DEL( ScNamedEntryArr_Impl, ScNamedEntryPtr, 4, 4 )
 
 
-//  ScCellRangesBase - Basisklasse fuer ScCellRangesObj (mit Index-Access)
-//                                  und ScCellRangeObj (ohne Index-Access)
+//  ScCellRangesBase - base class for ScCellRangesObj (with access by index)
+//                                and ScCellRangeObj  (without access by index)
 
-//  XServiceInfo ist in den Ableitungen implementiert
+//  XServiceInfo is implemented in derived classes
 
 class ScHelperFunctions
 {
 public:
-    static const SvxBorderLine* GetBorderLine( SvxBorderLine& rLine, const com::sun::star::table::BorderLine& rStruct );
+    static const ::editeng::SvxBorderLine* GetBorderLine( ::editeng::SvxBorderLine& rLine, const com::sun::star::table::BorderLine& rStruct );
     static void FillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const com::sun::star::table::TableBorder& rBorder );
-    static void FillBorderLine( com::sun::star::table::BorderLine& rStruct, const SvxBorderLine* pLine );
+    static void FillBorderLine( com::sun::star::table::BorderLine& rStruct, const ::editeng::SvxBorderLine* pLine );
     static void FillTableBorder( com::sun::star::table::TableBorder& rBorder,
                             const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner );
     static void ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
@@ -174,9 +175,9 @@ class SC_DLLPUBLIC ScCellRangesBase : public com::sun::star::beans::XPropertySet
                          public cppu::OWeakObject,
                          public SfxListener
 {
-    friend class ScTabViewObj;      // fuer select()
-    friend class ScTableSheetObj;   // fuer createCursorByRange()
-     friend class ooo::vba::excel::ScVbaCellRangeAccess;
+    friend class ScTabViewObj;      // for select()
+    friend class ScTableSheetObj;   // for createCursorByRange()
+    friend class ooo::vba::excel::ScVbaCellRangeAccess;
 
 private:
     const SfxItemPropertySet* pPropSet;
@@ -189,16 +190,16 @@ private:
     ScMarkData*             pMarkData;
     ScRangeList             aRanges;
     sal_Int64               nObjectId;
-    BOOL                    bChartColAsHdr;
-    BOOL                    bChartRowAsHdr;
-    BOOL                    bCursorOnly;
-    BOOL                    bGotDataChangedHint;
+    sal_Bool                    bChartColAsHdr;
+    sal_Bool                    bChartRowAsHdr;
+    sal_Bool                    bCursorOnly;
+    sal_Bool                    bGotDataChangedHint;
     XModifyListenerArr_Impl aValueListeners;
 
     DECL_LINK( ValueListenerHdl, SfxHint* );
 
 private:
-    void            PaintRanges_Impl( USHORT nPart );
+    void            PaintRanges_Impl( sal_uInt16 nPart );
     ScRangeListRef  GetLimitedChartRanges_Impl( long nDataColumns, long nDataRows ) const;
     void            ForceChartListener_Impl();
     ScMemChart*     CreateMemChart_Impl() const;
@@ -206,23 +207,24 @@ private:
     const ScPatternAttr*    GetCurrentAttrsFlat();
     const ScPatternAttr*    GetCurrentAttrsDeep();
     SfxItemSet*             GetCurrentDataSet(bool bNoDflt = false);
-    const ScMarkData*       GetMarkData();
     void                    ForgetMarkData();
     void                    ForgetCurrentAttrs();
 
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges>
                             QueryDifferences_Impl(const com::sun::star::table::CellAddress& aCompare,
-                                                    BOOL bColumnDiff);
+                                                    sal_Bool bColumnDiff);
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
                             Find_Impl(const com::sun::star::uno::Reference<
                                         com::sun::star::util::XSearchDescriptor>& xDesc,
                                     const ScAddress* pLastPos);
 
 protected:
+    const ScMarkData*       GetMarkData();
+
     // GetItemPropertyMap for derived classes must contain all entries, including base class
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
     virtual ::com::sun::star::beans::PropertyState GetOnePropertyState(
-                                USHORT nItemWhich, const SfxItemPropertySimpleEntry* pEntry );
+                                sal_uInt16 nItemWhich, const SfxItemPropertySimpleEntry* pEntry );
     virtual void            GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -232,7 +234,6 @@ protected:
                                         ::com::sun::star::uno::RuntimeException);
 
 public:
-                            ScCellRangesBase();     // fuer SMART_REFLECTION Krempel
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR);
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR);
     virtual                 ~ScCellRangesBase();
@@ -246,20 +247,20 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual void            RefChanged();
 
-                            // aus Ableitungen, aber auch per getImplementation
+                            // from derived classes and by getImplementation
     ScDocShell*             GetDocShell() const     { return pDocShell; }
     ScDocument*             GetDocument() const;
     const ScRangeList&      GetRangeList() const    { return aRanges; }
     void                    AddRange(const ScRange& rRange, const sal_Bool bMergeRanges);
 
-                            // per Service erzeugtes Objekt zum Leben erwecken:
+                            // arouse object created via service:
     void                    InitInsertRange(ScDocShell* pDocSh, const ScRange& rR);
 
-    void                    SetNewRange(const ScRange& rNew);   // fuer Cursor
+    void                    SetNewRange(const ScRange& rNew);   // for cursor
     void                    SetNewRanges(const ScRangeList& rNew);
 
-    void                    SetCursorOnly(BOOL bSet);
-    BOOL                    IsCursorOnly() const            { return bCursorOnly; }
+    void                    SetCursorOnly(sal_Bool bSet);
+    sal_Bool                    IsCursorOnly() const            { return bCursorOnly; }
 
                             // XSheetOperation
     virtual double SAL_CALL computeFunction( ::com::sun::star::sheet::GeneralFunction nFunction )
@@ -657,9 +658,6 @@ public:
                                     const formula::FormulaGrammar::Grammar )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    // XCellRange ist Basisklasse von XSheetCellRange und XSheetOperation
-//  operator XCellRangeRef() const  { return (XSheetCellRange*)this; }
-
                             // XCellRangeAddressable
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getRangeAddress()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -793,7 +791,7 @@ public:
                             getCellRangeByName( const ::rtl::OUString& aRange,  const ScAddress::Details& rDetails )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XPropertySet ueberladen wegen Range-Properties
+                            // XPropertySet overloaded due to Range-Properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -816,7 +814,7 @@ public:
 
 //! really derive cell from range?
 
-class ScCellObj : public ScCellRangeObj,
+class SC_DLLPUBLIC ScCellObj : public ScCellRangeObj,
                   public com::sun::star::text::XText,
                   public com::sun::star::container::XEnumerationAccess,
                   public com::sun::star::table::XCell,
@@ -833,9 +831,9 @@ private:
     sal_Int16               nActionLockCount;
 
 private:
-    String      GetInputString_Impl(BOOL bEnglish) const;
+    String      GetInputString_Impl(sal_Bool bEnglish) const;
     String      GetOutputString_Impl() const;
-    void        SetString_Impl(const String& rString, BOOL bInterpret, BOOL bEnglish);
+    void        SetString_Impl(const String& rString, sal_Bool bInterpret, sal_Bool bEnglish);
     double      GetValue_Impl() const;
     void        SetValue_Impl(double fValue);
     com::sun::star::table::CellContentType GetResultType_Impl();
@@ -874,6 +872,8 @@ public:
     void                    SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
                                 const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar );
     const ScAddress&        GetPosition() const { return aCellPos; }
+
+    void                    InputEnglishString( const ::rtl::OUString& rText );
 
                             // XText
     virtual void SAL_CALL   insertTextContent( const ::com::sun::star::uno::Reference<
@@ -956,7 +956,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL
                             getTextFieldMasters() throw(::com::sun::star::uno::RuntimeException);
 
-                            // XPropertySet ueberladen wegen Zell-Properties
+                            // XPropertySet overloaded due to cell properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -1007,7 +1007,7 @@ class ScTableSheetObj : public ScCellRangeObj,
                         public com::sun::star::sheet::XExternalSheetName,
                         public com::sun::star::document::XEventsSupplier
 {
-    friend class ScTableSheetsObj;      // fuer insertByName()
+    friend class ScTableSheetsObj;      // for insertByName()
 
 private:
     const SfxItemPropertySet*       pSheetPropSet;
@@ -1214,7 +1214,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents()
                                 throw (::com::sun::star::uno::RuntimeException);
 
-                            // XPropertySet ueberladen wegen Sheet-Properties
+                            // XPropertySet overloaded due to sheet properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -1275,7 +1275,7 @@ public:
     virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
-                            // XPropertySet ueberladen wegen Spalten-Properties
+                            // XPropertySet overloaded due to column properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -1315,7 +1315,7 @@ public:
                             ScTableRowObj(ScDocShell* pDocSh, SCROW nRow, SCTAB nTab);
     virtual                 ~ScTableRowObj();
 
-                            // XPropertySet ueberladen wegen Zeilen-Properties
+                            // XPropertySet overloaded due to row properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -1374,7 +1374,7 @@ private:
     ScRangeList             aRanges;
     ScAddress               aPos;
     ScMarkData*             pMark;
-    BOOL                    bAtEnd;
+    sal_Bool                    bAtEnd;
 
 private:
     void                    Advance_Impl();
@@ -1457,8 +1457,8 @@ private:
     SCTAB                   nTab;
     ScAttrRectIterator*     pIter;
     ScRange                 aNext;
-    BOOL                    bAtEnd;
-    BOOL                    bDirty;
+    sal_Bool                    bAtEnd;
+    sal_Bool                    bDirty;
 
 private:
     void                    Advance_Impl();

@@ -76,7 +76,7 @@ published interface XPossibleHyphens : com::sun::star::uno::XInterface
     /**
          @returns
              a string depicting the word with all hyphen positions
-             which are represented by '=' characters.
+             which are represented by "=" characters.
              If there are any alternative spellings, the word will be altered
              accordingly.
     */

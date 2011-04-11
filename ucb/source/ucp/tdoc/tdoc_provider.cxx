@@ -345,11 +345,11 @@ ContentProvider::queryStorage( const rtl::OUString & rUri,
         }
         catch ( embed::InvalidStorageException const & )
         {
-            OSL_ENSURE( false, "Caught InvalidStorageException!" );
+            OSL_FAIL( "Caught InvalidStorageException!" );
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+            OSL_FAIL( "Caught IllegalArgumentException!" );
         }
         catch ( io::IOException const & )
         {
@@ -358,7 +358,7 @@ ContentProvider::queryStorage( const rtl::OUString & rUri,
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
+            OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
         }
     }
     return uno::Reference< embed::XStorage >();
@@ -384,11 +384,11 @@ ContentProvider::queryStorageClone( const rtl::OUString & rUri ) const
         }
         catch ( embed::InvalidStorageException const & )
         {
-            OSL_ENSURE( false, "Caught InvalidStorageException!" );
+            OSL_FAIL( "Caught InvalidStorageException!" );
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+            OSL_FAIL( "Caught IllegalArgumentException!" );
         }
         catch ( io::IOException const & )
         {
@@ -397,7 +397,7 @@ ContentProvider::queryStorageClone( const rtl::OUString & rUri ) const
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
+            OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
         }
     }
 
@@ -418,19 +418,19 @@ ContentProvider::queryInputStream( const rtl::OUString & rUri,
         }
         catch ( embed::InvalidStorageException const & )
         {
-            OSL_ENSURE( false, "Caught InvalidStorageException!" );
+            OSL_FAIL( "Caught InvalidStorageException!" );
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+            OSL_FAIL( "Caught IllegalArgumentException!" );
         }
         catch ( io::IOException const & )
         {
-            OSL_ENSURE( false, "Caught IOException!" );
+            OSL_FAIL( "Caught IOException!" );
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
+            OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
         }
 //        catch ( packages::WrongPasswordException const & )
 //        {
@@ -457,11 +457,11 @@ ContentProvider::queryOutputStream( const rtl::OUString & rUri,
         }
         catch ( embed::InvalidStorageException const & )
         {
-            OSL_ENSURE( false, "Caught InvalidStorageException!" );
+            OSL_FAIL( "Caught InvalidStorageException!" );
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+            OSL_FAIL( "Caught IllegalArgumentException!" );
         }
         catch ( io::IOException const & )
         {
@@ -470,7 +470,7 @@ ContentProvider::queryOutputStream( const rtl::OUString & rUri,
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
+            OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
         }
 //        catch ( packages::WrongPasswordException const & )
 //        {
@@ -496,11 +496,11 @@ ContentProvider::queryStream( const rtl::OUString & rUri,
         }
         catch ( embed::InvalidStorageException const & )
         {
-            OSL_ENSURE( false, "Caught InvalidStorageException!" );
+            OSL_FAIL( "Caught InvalidStorageException!" );
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+            OSL_FAIL( "Caught IllegalArgumentException!" );
         }
         catch ( io::IOException const & )
         {
@@ -509,7 +509,7 @@ ContentProvider::queryStream( const rtl::OUString & rUri,
         }
         catch ( embed::StorageWrappedTargetException const & )
         {
-            OSL_ENSURE( false, "Caught embed::StorageWrappedTargetException!" );
+            OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
         }
 //        catch ( packages::WrongPasswordException const & )
 //        {
@@ -560,11 +560,11 @@ bool ContentProvider::queryNamesOfChildren(
             }
             catch ( embed::InvalidStorageException const & )
             {
-                OSL_ENSURE( false, "Caught InvalidStorageException!" );
+                OSL_FAIL( "Caught InvalidStorageException!" );
             }
             catch ( lang::IllegalArgumentException const & )
             {
-                OSL_ENSURE( false, "Caught IllegalArgumentException!" );
+                OSL_FAIL( "Caught IllegalArgumentException!" );
             }
             catch ( io::IOException const & )
             {
@@ -573,8 +573,7 @@ bool ContentProvider::queryNamesOfChildren(
             }
             catch ( embed::StorageWrappedTargetException const & )
             {
-                OSL_ENSURE( false,
-                            "Caught embed::StorageWrappedTargetException!" );
+                OSL_FAIL( "Caught embed::StorageWrappedTargetException!" );
             }
         }
     }

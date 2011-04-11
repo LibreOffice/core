@@ -44,13 +44,13 @@
 //    Initialisieren der Feld-FilterFlags
 //----------------------------------------
 
-static ULONG WW1_Read_FieldIniFlags()
+static sal_uLong WW1_Read_FieldIniFlags()
 {
-//  USHORT i;
+//  sal_uInt16 i;
     static const sal_Char* aNames[ 1 ] = { "WinWord/WW1F" };
     sal_uInt32 aVal[ 1 ];
     SwFilterOptions aOpt( 1, aNames, aVal );
-    ULONG nFieldFlags = aVal[ 0 ];
+    sal_uLong nFieldFlags = aVal[ 0 ];
 
     if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) )
     {
@@ -70,17 +70,17 @@ static ULONG WW1_Read_FieldIniFlags()
 // Diese werden dann einfach per Pipe 'uebertragen'.
 //
 
-ULONG WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const String& /*cName*/)
+sal_uLong WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const String& /*cName*/)
 {
-    ULONG nRet = ERR_SWG_READ_ERROR;
+    sal_uLong nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE(pStrm!=NULL, "W1-Read ohne Stream");
     if (pStrm != NULL)
     {
-        BOOL bNew = !bInsertMode;           // Neues Doc ( kein Einfuegen )
+        sal_Bool bNew = !bInsertMode;           // Neues Doc ( kein Einfuegen )
 
         // erstmal eine shell konstruieren: die ist schnittstelle
         // zum writer-dokument
-        ULONG nFieldFlags = WW1_Read_FieldIniFlags();
+        sal_uLong nFieldFlags = WW1_Read_FieldIniFlags();
         Ww1Shell* pRdr = new Ww1Shell( rDoc, rPam, rBaseURL, bNew, nFieldFlags );
         if( pRdr )
         {
@@ -130,7 +130,7 @@ ULONG WW1Reader::Read(SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam, const St
 // in einen Stream werden alle Informationen, die aus der Datei
 // gelesen werden, in die shell ge'piped'.
 //
-Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const String& rBaseURL, BOOL bNew, ULONG nFieldFlags)
+Ww1Shell::Ww1Shell( SwDoc& rD, SwPaM& rPam, const String& rBaseURL, sal_Bool bNew, sal_uLong nFieldFlags)
     : SwFltShell(&rD, rPam, rBaseURL, bNew, nFieldFlags)
 {
 }

@@ -79,7 +79,6 @@ public class CodePage implements BIFFRecord {
         int numOfBytesRead  = input.read(codepage);
         numOfBytesRead      += input.read(unknown1);
         numOfBytesRead      += input.read(unknown2);
-        // numOfBytesRead       += input.read(unknown3);
         unknown3            = (byte) input.read();
         numOfBytesRead++;
 

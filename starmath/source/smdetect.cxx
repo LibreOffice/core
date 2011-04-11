@@ -31,7 +31,7 @@
 
 #include "smdetect.hxx"
 
-#include <framework/interaction.hxx>
+//#include <framework/interaction.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -39,7 +39,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -47,7 +46,6 @@
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-#include <framework/interaction.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
@@ -118,7 +116,6 @@ SmFilterDetect::~SmFilterDetect()
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
     sal_Int32 nPropertyCount = lDescriptor.getLength();
-    sal_Int32 nIndexOfFilterName = -1;
     sal_Int32 nIndexOfInputStream = -1;
     sal_Int32 nIndexOfContent = -1;
     sal_Int32 nIndexOfReadOnlyFlag = -1;
@@ -147,10 +144,6 @@ SmFilterDetect::~SmFilterDetect()
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aPreselectedFilterName = sTemp;
-
-            // if the preselected filter name is not correct, it must be erased after detection
-            // remember index of property to get access to it later
-            nIndexOfFilterName = nProperty;
         }
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
             nIndexOfInputStream = nProperty;
@@ -177,7 +170,7 @@ SmFilterDetect::~SmFilterDetect()
     SfxApplication* pApp = SFX_APP();
     SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
     TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
 
     bWasReadOnly = pItem && pItem->GetValue();
 
@@ -198,10 +191,10 @@ SmFilterDetect::~SmFilterDetect()
     else
     {
         // ctor of SfxMedium uses owner transition of ItemSet
-        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
-        aMedium.UseInteractionHandler( TRUE );
+        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, sal_False, NULL, pSet );
+        aMedium.UseInteractionHandler( true );
 
-        BOOL bIsStorage = aMedium.IsStorage();
+        bool bIsStorage = aMedium.IsStorage();
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
             // remember input stream and content and put them into the descriptor later
@@ -250,7 +243,7 @@ SmFilterDetect::~SmFilterDetect()
                         String aTmpFilterName;
                         if ( pFilter )
                             aTmpFilterName = pFilter->GetName();
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : FALSE, &aTmpFilterName );
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : sal_False, &aTmpFilterName );
                     }
                     catch( lang::WrappedTargetException& aWrap )
                     {
@@ -270,20 +263,16 @@ SmFilterDetect::~SmFilterDetect()
                                 if ( !bRepairPackage )
                                 {
                                     // ask the user whether he wants to try to repair
-                                    RequestPackageReparation* pRequest = new RequestPackageReparation( aDocumentTitle );
-                                    uno::Reference< task::XInteractionRequest > xRequest ( pRequest );
-
-                                    xInteraction->handle( xRequest );
-
-                                    bRepairAllowed = pRequest->isApproved();
+                                    RequestPackageReparation aRequest( aDocumentTitle );
+                                    xInteraction->handle( aRequest.GetRequest() );
+                                    bRepairAllowed = aRequest.isApproved();
                                 }
 
                                 if ( !bRepairAllowed )
                                 {
                                     // repair either not allowed or not successful
-                                    NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
-                                    uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
-                                       xInteraction->handle( xRequest );
+                                    NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
+                                    xInteraction->handle( aNotifyRequest.GetRequest() );
                                 }
                             }
 
@@ -318,7 +307,7 @@ SmFilterDetect::~SmFilterDetect()
                 aTypeName.Erase();
                 if (pStrm && !pStrm->GetError())
                 {
-                    SotStorageRef aStorage = new SotStorage ( pStrm, FALSE );
+                    SotStorageRef aStorage = new SotStorage ( pStrm, sal_False );
                     if ( !aStorage->GetError() )
                     {
                         if ( aStorage->IsStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Equation Native" ) ) ) )
@@ -330,11 +319,11 @@ SmFilterDetect::~SmFilterDetect()
                     }
                     else
                     {
-                        const USHORT nSize = 5;
+                        const sal_uInt16 nSize = 5;
                         sal_Char aBuffer[nSize+1];
                         aBuffer[nSize] = 0;
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
-                        ULONG nBytesRead = pStrm->Read( aBuffer, nSize );
+                        sal_uLong nBytesRead = pStrm->Read( aBuffer, nSize );
                         if (nBytesRead == nSize)
                         {
                             if (0 == strncmp( "<?xml",aBuffer,nSize))
@@ -468,14 +457,14 @@ UNOSEQUENCE< UNOOUSTRING > SmFilterDetect::impl_getStaticSupportedServiceNames()
 {
     UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
     UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.ExtendedTypeDetection"  );
+    seqServiceNames.getArray() [0] = UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 UNOOUSTRING SmFilterDetect::impl_getStaticImplementationName()
 {
-    return UNOOUSTRING::createFromAscii( "com.sun.star.comp.math.FormatDetector" );
+    return UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.math.FormatDetector" ));
 }
 
 /* Helper for registry */

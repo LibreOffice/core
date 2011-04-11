@@ -40,6 +40,7 @@ const sal_Int16 BORDER_SIMPLE_COLOR = 3;
 
 }
 
+#define XMLSCRIPT_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

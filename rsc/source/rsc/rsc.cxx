@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_rsc.hxx"
 /****************************************************************/
-/*                  Include File                                */
+/*                  Include File        */
 /****************************************************************/
 
 #include <stdlib.h>
@@ -50,13 +50,6 @@
 #include <ctype.h>
 #include <errno.h>
 
-#if defined( PM2 ) && defined( ZTC )
-#include <svpm.h>
-#ifndef unlink
-#define unlink( p ) DosDelete( (PSZ)(const char*)p )
-#endif
-#endif
-
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <rscerror.h>
@@ -67,15 +60,20 @@
 #include <rschash.hxx>
 
 #include <osl/file.h>
+#include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
 
 #include <vector>
+#include <algorithm>
 
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringToOUString;
 
 /*************** F o r w a r d s *****************************************/
 /*************** G l o b a l e   V a r i a b l e n **********************/
@@ -95,8 +93,6 @@ AtomContainer*  pHS          = NULL;
 |*    RscCmdLine::Init()
 |*
 |*    Beschreibung      Kommandozeile interpretierten
-|*    Ersterstellung    MM 03.05.91
-|*    Letzte Aenderung  MM 03.05.91
 |*
 *************************************************************************/
 void RscCmdLine::Init()
@@ -115,8 +111,6 @@ void RscCmdLine::Init()
 |*    RscCmdLine::RscCmdLine()
 |*
 |*    Beschreibung      Kommandozeile interpretierten
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 RscCmdLine::RscCmdLine()
@@ -129,8 +123,6 @@ RscCmdLine::RscCmdLine()
 |*    RscCmdLine::RscCmdLine()
 |*
 |*    Beschreibung      Kommandozeile interpretierten
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
@@ -140,7 +132,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
     RscPtrPtr       aCmdLine;       // Kommandozeile
     ByteString      aString;
     sal_uInt32      i;
-    BOOL            bOutputSrsIsSet = FALSE;
+    sal_Bool        bOutputSrsIsSet = sal_False;
 
     Init(); // Defaults setzen
 
@@ -222,7 +214,6 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             else if( !rsc_strnicmp( (*ppStr) + 1, "d", 1 ) )
             { // Symbole definieren
                 nCommands |= DEFINE_FLAG;
-                aSymbolList.Insert( new ByteString( (*ppStr) + 2 ), 0xFFFF );
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "i", 1 ) )
             { // Include-Pfade definieren
@@ -240,19 +231,23 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             else if( !rsc_strnicmp( (*ppStr) + 1, "lip=", 4 ) )
             {  // additional language specific include for system dependent files
                 const ByteString    aSysSearchDir( (*ppStr)+5 );
-                DirEntry            aSysDir( String( aSysSearchDir, RTL_TEXTENCODING_ASCII_US ) );
 
-                m_aOutputFiles.back().aSysSearchDirs.push_back( ByteString( aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) );
-
-                if( m_aOutputFiles.back().aLangSearchPath.Len() )
-                    m_aOutputFiles.back().aLangSearchPath.Append( ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ) );
-
-                m_aOutputFiles.back().aLangSearchPath.Append( aSysSearchDir );
+                // ignore empty -lip= arguments that we get lots of these days
+                if (aSysSearchDir.Len())
+                {
+                    DirEntry aSysDir( String( aSysSearchDir, RTL_TEXTENCODING_ASCII_US ) );
+                    m_aOutputFiles.back().aSysSearchDirs.push_back(
+                        ByteString( aSysDir.GetFull(), RTL_TEXTENCODING_ASCII_US ) );
+                    if( m_aOutputFiles.back().aLangSearchPath.Len() )
+                        m_aOutputFiles.back().aLangSearchPath.Append(
+                        ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ) );
+                    m_aOutputFiles.back().aLangSearchPath.Append( aSysSearchDir );
+                }
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
             { // anderer Name fuer .srs-file
                 aOutputSrs = (*ppStr) + 4;
-                bOutputSrsIsSet = TRUE;
+                bOutputSrsIsSet = sal_True;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fl=", 3 ) )
             { // Name fuer listing-file
@@ -310,7 +305,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
         else
         {
             // Eingabedatei
-            aInputList.Insert( new ByteString( *ppStr ), 0xFFFF );
+            aInputList.push_back( new ByteString( *ppStr ) );
         }
         ppStr++;
         i++;
@@ -319,16 +314,16 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
     if( nCommands & HELP_FLAG )
         pEH->FatalError( ERR_USAGE, RscId() );
     // was an inputted file specified
-    else if( aInputList.Count() )
+    else if( !aInputList.empty() )
     {
         ::std::list<OutputFile>::iterator it;
         for( it = m_aOutputFiles.begin(); it != m_aOutputFiles.end(); ++it )
         {
             if( ! it->aOutputRc.Len() )
-                it->aOutputRc  = ::OutputFile( *aInputList.First(), "rc"  );
+                it->aOutputRc  = ::OutputFile( *aInputList.front(), "rc"  );
         }
         if( ! bOutputSrsIsSet )
-            aOutputSrs = ::OutputFile( *aInputList.First(), "srs" );
+            aOutputSrs = ::OutputFile( *aInputList.front(), "srs" );
     }
     else if( !(nCommands & PRINTSYNTAX_FLAG) )
         pEH->FatalError( ERR_NOINPUT, RscId() );
@@ -339,18 +334,13 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
 |*    RscCmdLine::~RscCmdLine()
 |*
 |*    Beschreibung      dtor
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 RscCmdLine::~RscCmdLine()
 {
-    ByteString  *pString;
-
-    while( NULL != (pString = aInputList.Remove( (ULONG)0 )) )
-        delete pString;
-    while( NULL != (pString = aSymbolList.Remove( (ULONG)0 )) )
-        delete pString;
+    for ( size_t i = 0, n = aInputList.size(); i < n; ++i )
+        delete aInputList[ i ];
+    aInputList.clear();
 }
 
 /*************************************************************************
@@ -423,24 +413,9 @@ RscCompiler::RscCompiler( RscCmdLine * pLine, RscTypCont * pTypCont )
 |*
 |*    RscCompiler :: RscCompiler()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 07.02.91
-|*    Letzte Aenderung  MM 07.02.91
-|*
 *************************************************************************/
 RscCompiler::~RscCompiler()
 {
-    ByteString* pString;
-
-    // Dateien loeschen
-    pString = aTmpFileList.First();
-    while( pString )
-    {
-        unlink( pString->GetBuffer() );
-        delete pString;
-        pString = aTmpFileList.Next();
-    }
-
     pTC->pEH->SetListFile( NULL );
 
     if( fListing )
@@ -463,35 +438,26 @@ RscCompiler::~RscCompiler()
 |*    RscCompiler::Start()
 |*
 |*    Beschreibung      Datei in Kommandozeile aendern
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 ERRTYPE RscCompiler::Start()
 {
     ERRTYPE         aError;
-    ByteString*     pString;
     RscFile*        pFName;
 
     if( PRINTSYNTAX_FLAG & pCL->nCommands )
     {
-#ifndef W30
         pTC->WriteSyntax( stdout );
-printf( "khg\n" );
-#endif
+        printf( "khg\n" );
         return ERR_OK;
     }
 
     // Kein Parameter, dann Hilfe
-    pString = pCL->aInputList.First();
-    if( !pString )
+    if( pCL->aInputList.empty() )
         pTC->pEH->FatalError( ERR_NOINPUT, RscId() );
 
-    while( pString )
-    {
-        pTC->aFileTab.NewCodeFile( *pString );
-        pString = pCL->aInputList.Next();
-    }
+    for( size_t i = 0, n = pCL->aInputList.size(); i < n; ++i )
+        pTC->aFileTab.NewCodeFile( *pCL->aInputList[ i ] );
 
     if( !(pCL->nCommands & NOSYNTAX_FLAG) )
     {
@@ -547,8 +513,6 @@ printf( "khg\n" );
 |*    RscCmdLine::EndCompile()
 |*
 |*    Beschreibung      Datei in Kommandozeile aendern
-|*    Ersterstellung    MM 13.02.91
-|*    Letzte Aenderung  MM 13.02.91
 |*
 *************************************************************************/
 void RscCompiler::EndCompile()
@@ -577,7 +541,7 @@ void RscCompiler::EndCompile()
                     if( !pFN->IsIncFile() )
                     {
                         pTC->WriteSrc( foutput, NOFILE_INDEX,
-                                       RTL_TEXTENCODING_UNICODE, FALSE );
+                                       RTL_TEXTENCODING_UNICODE, sal_False );
                         break; // ?T 281091MM nur eine Src-Datei
                     }
                 };
@@ -652,12 +616,8 @@ void RscCompiler::EndCompile()
 |*
 |*    RscCompiler::IncludeParser()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 21.06.91
-|*    Letzte Aenderung  MM 21.06.91
-|*
 *************************************************************************/
-ERRTYPE RscCompiler :: IncludeParser( ULONG lFileKey )
+ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
 {
     FILE            * finput;
     RscFile         * pFName;
@@ -682,21 +642,20 @@ ERRTYPE RscCompiler :: IncludeParser( ULONG lFileKey )
             RscDepend       * pDep;
             RscFileInst       aFileInst( pTC, lFileKey, lFileKey, finput );
 
-            pFName->bScanned = TRUE;
+            pFName->bScanned = sal_True;
             ::IncludeParser( &aFileInst );
             fclose( finput );
 
             // Include-Pfad durchsuchen
-            pDep = pFName->First();
-            while( pDep )
+            for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
             {
+                pDep = pFName->aDepLst[ i ];
                 pFNTmp = pTC->aFileTab.GetFile( pDep->GetFileKey() );
-                pDep = pFName->Next();
             }
 
-            pDep = pFName->First();
-            while( pDep )
+            for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
             {
+                pDep = pFName->aDepLst[ i ];
                 pFNTmp = pTC->aFileTab.GetFile( pDep->GetFileKey() );
                 // Kein Pfad und Include Datei
                 if( pFNTmp && !pFNTmp->bLoaded )
@@ -708,7 +667,6 @@ ERRTYPE RscCompiler :: IncludeParser( ULONG lFileKey )
                     else
                         aError = ERR_OPENFILE;
                 }
-                pDep = pFName->Next();
             };
         };
     };
@@ -720,14 +678,10 @@ ERRTYPE RscCompiler :: IncludeParser( ULONG lFileKey )
 |*
 |*    RscCompiler :: ParseOneFile()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 26.06.91
-|*    Letzte Aenderung  MM 26.06.91
-|*
 *************************************************************************/
-ERRTYPE RscCompiler :: ParseOneFile( ULONG lFileKey,
+ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
                                      const RscCmdLine::OutputFile* pOutputFile,
-                                      const WriteRcContext* pContext )
+                                     const WriteRcContext* pContext )
 {
     FILE *              finput = NULL;
     ERRTYPE             aError;
@@ -741,17 +695,16 @@ ERRTYPE RscCompiler :: ParseOneFile( ULONG lFileKey,
         RscDepend  * pDep;
 
         //Include-Dateien vorher lesen
-        pFName->bLoaded = TRUE; //Endlos Rekursion vermeiden
-        pDep = pFName->First();
-        while( pDep && aError.IsOk() )
+        pFName->bLoaded = sal_True; //Endlos Rekursion vermeiden
+
+        for ( size_t i = 0; i < pFName->aDepLst.size() && aError.IsOk(); ++i )
         {
+            pDep = pFName->aDepLst[ i ];
             aError = ParseOneFile( pDep->GetFileKey(), pOutputFile, pContext );
-            pFName->Seek( pDep );
-            pDep = pFName->Next();
         }
 
         if( aError.IsError() )
-            pFName->bLoaded = FALSE; //bei Fehler nicht geladenen
+            pFName->bLoaded = sal_False; //bei Fehler nicht geladenen
         else
         {
             String      aTmpName( ::GetTmpFileName(), RTL_TEXTENCODING_ASCII_US );
@@ -799,19 +752,38 @@ ERRTYPE RscCompiler :: ParseOneFile( ULONG lFileKey,
 |*
 |*    RscCompiler :: Link()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 07.02.91
-|*    Letzte Aenderung  MM 07.02.91
-|*
 *************************************************************************/
 
-static OString do_prefix( const char* pPrefix, const OUString& rFile )
+namespace
 {
-    OStringBuffer aBuf(256);
-    aBuf.append( pPrefix );
-    aBuf.append( ":" );
-    aBuf.append( OUStringToOString( rFile, RTL_TEXTENCODING_MS_1252 ) );
-    return aBuf.makeStringAndClear();
+    using namespace ::osl;
+    class RscIoError { };
+    static inline OUString lcl_getAbsoluteUrl(const OUString& i_sBaseUrl, const OString& i_sPath)
+    {
+        OUString sRelUrl, sAbsUrl;
+        if(FileBase::getFileURLFromSystemPath(OStringToOUString(i_sPath, RTL_TEXTENCODING_MS_1252), sRelUrl) != FileBase::E_None)
+            throw RscIoError();
+        if(FileBase::getAbsoluteFileURL(i_sBaseUrl, sRelUrl, sAbsUrl) != FileBase::E_None)
+            throw RscIoError();
+        return sAbsUrl;
+    };
+    static inline OString lcl_getSystemPath(const OUString& i_sUrl)
+    {
+        OUString sSys;
+        if(FileBase::getSystemPathFromFileURL(i_sUrl, sSys) != FileBase::E_None)
+            throw RscIoError();
+        OSL_TRACE("temporary file: %s", OUStringToOString(sSys, RTL_TEXTENCODING_UTF8).getStr());
+        return OUStringToOString(sSys, RTL_TEXTENCODING_MS_1252);
+    };
+    static inline OString lcl_getTempFile(OUString& sTempDirUrl)
+    {
+        // get a temp file name for the rc file
+        OUString sTempUrl;
+        if(FileBase::createTempFile(&sTempDirUrl, NULL, &sTempUrl) != FileBase::E_None)
+            throw RscIoError();
+        OSL_TRACE("temporary url: %s", OUStringToOString(sTempUrl, RTL_TEXTENCODING_UTF8).getStr());
+        return lcl_getSystemPath(sTempUrl);
+    };
 }
 
 ERRTYPE RscCompiler::Link()
@@ -819,12 +791,6 @@ ERRTYPE RscCompiler::Link()
     FILE *      foutput;
     ERRTYPE     aError;
     RscFile*    pFName;
-
-#ifdef UNX
-#define PATHSEP '/'
-#else
-#define PATHSEP '\\'
-#endif
 
     if( !(pCL->nCommands & NOLINK_FLAG) )
     {
@@ -839,91 +805,60 @@ ERRTYPE RscCompiler::Link()
                 {
                     pTC->Delete( pTC->aFileTab.GetIndex( pFName ) );
                     pTC->aFileTab.Seek( pFName );
-                    pFName->bLoaded = FALSE;
+                    pFName->bLoaded = sal_False;
                 }
             }
 
-            // rc-Datei schreiben
-            ByteString aDir( it->aOutputRc );
-            aDir.SetToken( aDir.GetTokenCount( PATHSEP )-1, PATHSEP, ByteString() );
-            if( ! aDir.Len() )
-            {
-                char aBuf[1024];
-                if( getcwd( aBuf, sizeof( aBuf ) ) )
-                {
-                    aDir = aBuf;
-                    aDir.Append( PATHSEP );
-                }
-            }
-            // work dir for absolute Urls
-            OUString aCWD, aTmpUrl;
-            osl_getProcessWorkingDir( &aCWD.pData );
 
             // get two temp file urls
             OString aRcTmp, aSysListTmp, aSysList;
-            OUString aSysPath, aUrlDir;
-            aSysPath = OStringToOUString( aDir, RTL_TEXTENCODING_MS_1252 );
-            if( osl_getFileURLFromSystemPath( aSysPath.pData, &aUrlDir.pData ) != osl_File_E_None )
-                pTC->pEH->FatalError( ERR_OPENFILE, RscId(), do_prefix( "url conversion", aUrlDir ) );
+            try
+            {
+                OUString sPwdUrl;
+                osl_getProcessWorkingDir( &sPwdUrl.pData );
+                OUString sRcUrl = lcl_getAbsoluteUrl(sPwdUrl, it->aOutputRc);
+                // TempDir is either the directory where the rc file is located or pwd
+                OUString sTempDirUrl = sRcUrl.copy(0,sRcUrl.lastIndexOf('/'));
+                OSL_TRACE("rc directory URL: %s", OUStringToOString(sTempDirUrl, RTL_TEXTENCODING_UTF8).getStr());
 
-            if( osl_getAbsoluteFileURL( aCWD.pData, aUrlDir.pData, &aTmpUrl.pData ) != osl_File_E_None )
-                pTC->pEH->FatalError( ERR_OPENFILE, RscId(), do_prefix( "absolute url", aUrlDir ) );
-            aUrlDir = aTmpUrl;
+                aRcTmp = lcl_getTempFile(sTempDirUrl);
+                OSL_TRACE("temporary rc file: %s", aRcTmp.getStr());
 
-            // create temp file for rc target
-            if( osl_createTempFile( aUrlDir.pData, NULL, &aTmpUrl.pData ) != osl_File_E_None )
-                pTC->pEH->FatalError( ERR_OPENFILE, RscId(), do_prefix( "temp file creation", aUrlDir ) );
+                OUString sOilDirUrl;
+                if(pCL->aILDir.Len())
+                    sOilDirUrl = lcl_getAbsoluteUrl(sPwdUrl, pCL->aILDir);
+                else
+                    sOilDirUrl = sTempDirUrl;
+                OSL_TRACE("ilst directory URL: %s", OUStringToOString(sOilDirUrl, RTL_TEXTENCODING_UTF8).getStr());
 
-            if( osl_getSystemPathFromFileURL( aTmpUrl.pData, &aSysPath.pData ) != osl_File_E_None )
-                pTC->pEH->FatalError( ERR_OPENFILE, RscId(), do_prefix( "sys path conversion", aTmpUrl ) );
-            aRcTmp = OUStringToOString( aSysPath, RTL_TEXTENCODING_MS_1252 );
+                aSysListTmp = lcl_getTempFile(sOilDirUrl);
+                OSL_TRACE("temporary ilst file: %s", aSysListTmp.getStr());
 
+                OUString sIlstUrl, sIlstSys;
+                sIlstUrl = sRcUrl.copy(sRcUrl.lastIndexOf('/')+1);
+                sIlstUrl = sIlstUrl.copy(0,sIlstUrl.lastIndexOf('.'));
+                sIlstUrl += OUString::createFromAscii(".ilst");
+                sIlstUrl = lcl_getAbsoluteUrl(sOilDirUrl, OUStringToOString(sIlstUrl, RTL_TEXTENCODING_UTF8));
+
+                aSysList = lcl_getSystemPath(sIlstUrl);
+                OSL_TRACE("ilst file: %s", aSysList.getStr());
+            }
+            catch (RscIoError&)
+            {
+                OString sMsg("Error with paths:\n");
+                sMsg += "temporary rc file: " + aRcTmp + "\n";
+                sMsg += "temporary ilst file: " + aSysListTmp + "\n";
+                sMsg += "ilst file: " + aSysList + "\n";
+                pTC->pEH->FatalError(ERR_OPENFILE, RscId(), sMsg);
+            }
             if ( NULL == (fExitFile = foutput = fopen( aRcTmp.getStr(), "wb" )) )
                 pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aRcTmp.getStr() );
-
-            // make absolute path from IL dir (-oil switch)
-            // if no -oil was given, use the same dir as for rc file
-            if( pCL->aILDir.Len() )
-            {
-                aSysPath = OStringToOUString( pCL->aILDir, RTL_TEXTENCODING_MS_1252 );
-                if( osl_getFileURLFromSystemPath( aSysPath.pData, &aTmpUrl.pData ) != osl_File_E_None )
-                    pTC->pEH->FatalError( ERR_OPENFILE, RscId(), do_prefix( "url conversion", aSysPath ) );
-                if( osl_getAbsoluteFileURL( aCWD.pData, aTmpUrl.pData, &aUrlDir.pData ) != osl_File_E_None )
-                    pTC->pEH->FatalError( ERR_OPENFILE, RscId(), do_prefix( "absolute url", aTmpUrl ) );
-            }
-
-            if( osl_getSystemPathFromFileURL( aUrlDir.pData, &aSysPath.pData ) != osl_File_E_None )
-                pTC->pEH->FatalError( ERR_OPENFILE, RscId(), do_prefix( "sys path conversion", aUrlDir ) );
-
-            aSysList = OUStringToOString( aSysPath, RTL_TEXTENCODING_MS_1252 );
-            aSysList = aSysList + "/";
-            xub_StrLen nLastSep = it->aOutputRc.SearchBackward( PATHSEP );
-            if( nLastSep == STRING_NOTFOUND )
-                nLastSep = 0;
-            xub_StrLen nLastPt = it->aOutputRc.Search( '.', nLastSep );
-            if( nLastPt == STRING_NOTFOUND )
-                nLastPt = it->aOutputRc.Len()+1;
-            aSysList = aSysList + it->aOutputRc.Copy( nLastSep+1, nLastPt - nLastSep-1 );
-            aSysList = aSysList + ".ilst";
-            // create temp file for sys list target
-            if( osl_createTempFile( aUrlDir.pData, NULL, &aTmpUrl.pData ) != osl_File_E_None )
-                pTC->pEH->FatalError( ERR_OPENFILE, RscId(), do_prefix( "temp file creation", aUrlDir ) );
-
-            if( osl_getSystemPathFromFileURL( aTmpUrl.pData, &aSysPath.pData ) != osl_File_E_None )
-                pTC->pEH->FatalError( ERR_OPENFILE, RscId(), do_prefix( "sys path conversion", aTmpUrl ) );
-            aSysListTmp = OUStringToOString( aSysPath, RTL_TEXTENCODING_MS_1252 );
-
-            pTC->pEH->StdOut( "Generating .rc file\n" );
-
-            rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
-            //if( it->aLangName.CompareIgnoreCaseToAscii( "de", 2 ) == COMPARE_EQUAL )
-            //    aEnc = RTL_TEXTENCODING_MS_1252;
 
             // Schreibe Datei
             sal_Char cSearchDelim = ByteString( DirEntry::GetSearchDelimiter(), RTL_TEXTENCODING_ASCII_US ).GetChar( 0 );
             sal_Char cAccessDelim = ByteString( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US ).GetChar( 0 );
             pTC->ChangeLanguage( it->aLangName );
-            pTC->SetSourceCharSet( aEnc );
+            pTC->SetSourceCharSet( RTL_TEXTENCODING_UTF8 );
             pTC->ClearSysNames();
             ByteString aSysSearchPath( it->aLangSearchPath );
             xub_StrLen nIndex = 0;
@@ -939,9 +874,7 @@ ERRTYPE RscCompiler::Link()
                 aSysSearchPath.Append( cSearchDelim );
                 aSysSearchPath.Append( aToken );
             }
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "setting search path for language %s: %s\n", it->aLangName.GetBuffer(), aSysSearchPath.GetBuffer() );
-#endif
+            OSL_TRACE( "setting search path for language %s: %s\n", it->aLangName.GetBuffer(), aSysSearchPath.GetBuffer() );
             pTC->SetSysSearchPath( aSysSearchPath );
 
             WriteRcContext  aContext;
@@ -1127,13 +1060,12 @@ ByteString RscCompiler::GetTmpFileName()
     ByteString aFileName;
 
     aFileName = ::GetTmpFileName();
-    aTmpFileList.Insert( new ByteString( aFileName ) );
     return( aFileName );
 }
 
 /********************************************************************/
 /*                                                                  */
-/*  Function    :   BOOL openinput()                                */
+/*  Function    :   sal_Bool openinput()                            */
 /*                                                                  */
 /*  Description :   Check to see if the input file exists and can   */
 /*  be opened for reading.                                          */
@@ -1156,7 +1088,7 @@ void RscCompiler::OpenInput( const ByteString& rInput )
 |*************************************************************************/
 
 bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
-                                       const WriteRcContext& rContext,
+                                    const WriteRcContext& rContext,
                                     const ByteString& rBaseFileName,
                                     ByteString& rImagePath,
                                     FILE* pSysListFile )
@@ -1246,15 +1178,14 @@ bool RscCompiler::GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
 // ------------------------------------------------------------------------------
 
 void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
-                                        const WriteRcContext& rContext,
-                                       const DirEntry& rSrsInPath,
-                                       const DirEntry& rSrsOutPath )
+                                     const WriteRcContext& rContext,
+                                     const DirEntry& rSrsInPath,
+                                     const DirEntry& rSrsOutPath )
 {
     SvFileStream                aIStm( rSrsInPath.GetFull(), STREAM_READ );
     SvFileStream                aOStm( rSrsOutPath.GetFull(), STREAM_WRITE | STREAM_TRUNC );
     ::std::vector< ByteString > aMissingImages;
     FILE*                       pSysListFile = rContext.aOutputSysList.getLength() ? fopen( rContext.aOutputSysList.getStr(), "ab" ) : NULL;
-    bool                        bRet = true;
 
     if( !aIStm.GetError() && !aOStm.GetError() )
     {
@@ -1320,7 +1251,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                                 aBaseFileName += ByteString::CreateFromInt32( 0 );
 
                             if( GetImageFilePath( rOutputFile, rContext, aBaseFileName += aLine , aFilePath, pSysListFile ) )
-                                aEntryVector.push_back( ::std::make_pair< ByteString, sal_Int32 >( aFilePath, nNumber ) );
+                                aEntryVector.push_back( ::std::pair< ByteString, sal_Int32 >( aFilePath, nNumber ) );
                             else
                                 aMissingImages.push_back( aBaseFileName );
                         }
@@ -1356,7 +1287,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                     }
 
                     aOStm.WriteLine( "};" );
-                   }
+                }
                 else
                     aOStm.WriteLine( aLine );
             }
@@ -1364,8 +1295,6 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                 aOStm.WriteLine( aLine );
         }
     }
-    else
-        bRet = false;
 
     if( aMissingImages.size() > 0 )
     {

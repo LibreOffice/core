@@ -65,7 +65,7 @@ published service UnoControlCheckBoxModel
         2: right
         </pre>
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] short Align;
 
@@ -155,7 +155,7 @@ published service UnoControlCheckBoxModel
 
     /** specifies that the text may be displayed on more than one line.
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] boolean MultiLine;
 
@@ -205,7 +205,7 @@ published service UnoControlCheckBoxModel
 
     /** specifies the vertical alignment of the text in the control.
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 
@@ -218,7 +218,7 @@ published service UnoControlCheckBoxModel
 
         @see com::sun::star::awt::VisualEffect
 
-        @since OOo 2.0.0
+        @since OOo 2.0
      */
     [optional, property] short VisualEffect;
 

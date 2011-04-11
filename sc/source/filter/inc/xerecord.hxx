@@ -31,6 +31,7 @@
 
 #include "xlconst.hxx"
 #include "xestream.hxx"
+#include <boost/shared_ptr.hpp>
 
 // Base classes to export Excel records =======================================
 
@@ -258,7 +259,7 @@ typedef XclExpValueRecord< double >         XclExpDoubleRecord;
 // ----------------------------------------------------------------------------
 
 /** Record which contains a Boolean value.
-    @descr  The value is stored as 16-bit value: 0x0000 = FALSE, 0x0001 = TRUE. */
+    @descr  The value is stored as 16-bit value: 0x0000 = sal_False, 0x0001 = TRUE. */
 class XclExpBoolRecord : public XclExpRecord
 {
 public:
@@ -333,7 +334,7 @@ template< typename RecType = XclExpRecordBase >
 class XclExpRecordList : public XclExpRecordBase
 {
 public:
-    typedef ScfRef< RecType > RecordRefType;
+    typedef boost::shared_ptr< RecType > RecordRefType;
 
     /** Returns pointer to an existing record or 0 on error. */
     inline bool         IsEmpty() const { return maRecs.empty(); }

@@ -267,7 +267,7 @@ rtl::OUString SAL_CALL
 BaseContent::getImplementationName()
     throw( RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "com.sun.star.comp.ucb.FileContent" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ucb.FileContent"));
 }
 
 
@@ -276,7 +276,7 @@ sal_Bool SAL_CALL
 BaseContent::supportsService( const rtl::OUString& ServiceName )
     throw( RuntimeException)
 {
-    if( ServiceName.compareToAscii( "com.sun.star.ucb.FileContent" ) == 0 )
+    if (ServiceName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.ucb.FileContent")))
         return true;
     else
         return false;
@@ -289,7 +289,7 @@ BaseContent::getSupportedServiceNames()
     throw( RuntimeException )
 {
     Sequence< rtl::OUString > ret( 1 );
-    ret[0] = rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContent" );
+    ret[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContent"));
     return ret;
 }
 
@@ -349,15 +349,15 @@ BaseContent::execute( const Command& aCommand,
 
     Any aAny;
 
-    if( ! aCommand.Name.compareToAscii( "getPropertySetInfo" ) )  // No exceptions
+    if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getPropertySetInfo")))  // No exceptions
     {
         aAny <<= getPropertySetInfo( CommandId );
     }
-    else if( ! aCommand.Name.compareToAscii( "getCommandInfo" ) )  // no exceptions
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getCommandInfo")))  // no exceptions
     {
         aAny <<= getCommandInfo();
     }
-    else if( ! aCommand.Name.compareToAscii( "setPropertyValues" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("setPropertyValues")))
     {
         Sequence< beans::PropertyValue > sPropertyValues;
 
@@ -367,7 +367,7 @@ BaseContent::execute( const Command& aCommand,
         else
             aAny <<= setPropertyValues( CommandId,sPropertyValues );  // calls endTask by itself
     }
-    else if( ! aCommand.Name.compareToAscii( "getPropertyValues" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getPropertyValues")))
     {
         Sequence< beans::Property > ListOfRequestedProperties;
 
@@ -378,7 +378,7 @@ BaseContent::execute( const Command& aCommand,
             aAny <<= getPropertyValues( CommandId,
                                         ListOfRequestedProperties );
     }
-    else if( ! aCommand.Name.compareToAscii( "open" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("open")))
     {
         OpenCommandArgument2 aOpenArgument;
         if( ! ( aCommand.Argument >>= aOpenArgument ) )
@@ -391,7 +391,7 @@ BaseContent::execute( const Command& aCommand,
                 aAny <<= result;
         }
     }
-    else if( ! aCommand.Name.compareToAscii( "delete" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("delete")))
     {
         if( ! aCommand.Argument.has< sal_Bool >() )
             m_pMyShell->installError( CommandId,
@@ -399,7 +399,7 @@ BaseContent::execute( const Command& aCommand,
         else
             deleteContent( CommandId );
     }
-    else if( ! aCommand.Name.compareToAscii( "transfer" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("transfer")))
     {
         TransferInfo aTransferInfo;
         if( ! ( aCommand.Argument >>= aTransferInfo ) )
@@ -408,7 +408,7 @@ BaseContent::execute( const Command& aCommand,
         else
             transfer( CommandId, aTransferInfo );
     }
-    else if( ! aCommand.Name.compareToAscii( "insert" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("insert")))
     {
         InsertCommandArgument aInsertArgument;
         if( ! ( aCommand.Argument >>= aInsertArgument ) )
@@ -417,11 +417,11 @@ BaseContent::execute( const Command& aCommand,
         else
             insert( CommandId,aInsertArgument );
     }
-    else if( ! aCommand.Name.compareToAscii( "getCasePreservingURL" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("getCasePreservingURL")))
     {
         Sequence< beans::Property > seq(1);
         seq[0] = beans::Property(
-            rtl::OUString::createFromAscii("CasePreservingURL"),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CasePreservingURL")),
             -1,
             getCppuType( static_cast< sal_Bool* >(0) ),
             0 );
@@ -430,7 +430,7 @@ BaseContent::execute( const Command& aCommand,
         if(!xRow->wasNull())
             aAny <<= CasePreservingURL;
     }
-    else if( ! aCommand.Name.compareToAscii( "createNewContent" ) )
+    else if (aCommand.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("createNewContent")))
     {
         ucb::ContentInfo aArg;
         if ( !( aCommand.Argument >>= aArg ) )
@@ -530,7 +530,7 @@ BaseContent::getContentType()
             {
                 // Who am I ?
                 Sequence< beans::Property > seq(1);
-                seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
+                seq[0] = beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
                                           -1,
                                           getCppuType( static_cast< sal_Bool* >(0) ),
                                           0 );
@@ -546,14 +546,12 @@ BaseContent::getContentType()
                 }
                 else
                 {
-                    OSL_ENSURE( false,
-                                "BaseContent::getContentType - Property value was null!" );
+                    OSL_FAIL( "BaseContent::getContentType - Property value was null!" );
                 }
             }
             catch ( sdbc::SQLException const & )
             {
-                OSL_ENSURE( false,
-                            "BaseContent::getContentType - Caught SQLException!" );
+                OSL_FAIL( "BaseContent::getContentType - Caught SQLException!" );
             }
         }
     }
@@ -669,7 +667,7 @@ BaseContent::createNewContent(
     try
     {
         Sequence< beans::Property > seq(1);
-        seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
+        seq[0] = beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
                                   -1,
                                   getCppuType( static_cast< sal_Bool* >(0) ),
                                   0 );
@@ -679,15 +677,13 @@ BaseContent::createNewContent(
         if ( xRow->wasNull() )
         {
             IsDocument = false;
-//              OSL_ENSURE( false,
-//                          "BaseContent::createNewContent - Property value was null!" );
+//              OSL_FAIL( //                          "BaseContent::createNewContent - Property value was null!" );
 //              return Reference< XContent >();
         }
     }
     catch ( sdbc::SQLException const & )
     {
-        OSL_ENSURE( false,
-                    "BaseContent::createNewContent - Caught SQLException!" );
+        OSL_FAIL( "BaseContent::createNewContent - Caught SQLException!" );
         return Reference< XContent >();
     }
 
@@ -836,16 +832,16 @@ BaseContent::getPropertyValues(
             const beans::Property& rProp = pProps[ n ];
             Any& rValue = pValues[ n ];
 
-            if( rProp.Name.compareToAscii( "ContentType" ) == 0 )
+            if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ContentType")))
             {
                 rValue <<= m_bFolder ? m_pMyShell->FolderContentType
                     : m_pMyShell->FileContentType;
             }
-            else if( rProp.Name.compareToAscii( "IsFolder" ) == 0 )
+            else if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsFolder")))
             {
                 rValue <<= m_bFolder;
             }
-            else if( rProp.Name.compareToAscii( "IsDocument" ) == 0 )
+            else if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("IsDocument")))
             {
                 rValue <<= sal_Bool( !m_bFolder );
             }
@@ -872,7 +868,7 @@ BaseContent::setPropertyValues(
         return Sequence< Any >( Values.getLength() );
     }
 
-    const rtl::OUString Title = rtl::OUString::createFromAscii( "Title" );
+    const rtl::OUString Title(RTL_CONSTASCII_USTRINGPARAM("Title"));
 
     // Special handling for files which have to be inserted
     if( m_nState & JustInserted )
@@ -926,7 +922,7 @@ BaseContent::setPropertyValues(
                             // m_aUncPath contains parent's URI.
 
                             if( m_aUncPath.lastIndexOf( sal_Unicode('/') ) != m_aUncPath.getLength() - 1 )
-                                m_aUncPath += rtl::OUString::createFromAscii("/");
+                                m_aUncPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
                             m_aUncPath += rtl::Uri::encode( NewTitle,
                                                             rtl_UriCharClassPchar,
@@ -967,7 +963,7 @@ BaseContent::setPropertyValues(
 
             rtl::OUString aDstName = getParentName( m_aUncPath );
             if( aDstName.lastIndexOf( sal_Unicode('/') ) != aDstName.getLength() - 1 )
-                aDstName += rtl::OUString::createFromAscii("/");
+                aDstName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
             aDstName += rtl::Uri::encode( NewTitle,
                                           rtl_UriCharClassPchar,
@@ -1129,7 +1125,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 
     // Is destination a document or a folder ?
     Sequence< beans::Property > seq(1);
-    seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
+    seq[0] = beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
                               -1,
                               getCppuType( static_cast< sal_Bool* >(0) ),
                               0 );
@@ -1152,7 +1148,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
         // as child
         dstUncPath = m_aUncPath;
 
-    dstUncPath += ( rtl::OUString::createFromAscii( "/" ) + NewTitle );
+    dstUncPath += ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + NewTitle );
 
     sal_Int32 NameClash = aTransferInfo.NameClash;
 
@@ -1198,7 +1194,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     sal_Bool bDocument = false;
 
     Sequence< beans::Property > seq(1);
-    seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
+    seq[0] = beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
                               -1,
                               getCppuType( static_cast< sal_Bool* >(0) ),
                               0 );
@@ -1215,8 +1211,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     }
     catch ( sdbc::SQLException const & )
     {
-        OSL_ENSURE( false,
-                    "BaseContent::insert - Caught SQLException!" );
+        OSL_FAIL( "BaseContent::insert - Caught SQLException!" );
         contentTypeSet = false;
     }
 
@@ -1264,7 +1259,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
             m_pMyShell->clearError( nMyCommandIdentifier );
             m_aUncPath = getParentName( m_aUncPath );
             if( m_aUncPath.lastIndexOf( sal_Unicode('/') ) != m_aUncPath.getLength() - 1 )
-                m_aUncPath += rtl::OUString::createFromAscii("/");
+                m_aUncPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
             m_aUncPath += rtl::Uri::encode( aRequestImpl->newName(),
                                             rtl_UriCharClassPchar,

@@ -29,10 +29,13 @@
 #ifndef SD_SLIDESORTER_SLIDE_SORTER_SCROLL_BAR_MANAGER_HXX
 #define SD_SLIDESORTER_SLIDE_SORTER_SCROLL_BAR_MANAGER_HXX
 
+#include "SlideSorter.hxx"
+
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
 #include <boost/shared_ptr.hpp>
+#include <boost/function.hpp>
 
 class Point;
 class Rectangle;
@@ -111,30 +114,34 @@ public:
         bool bScrollToCurrentPosition = true);
 
     /** Place the scroll bars inside the given area.  When the available
-        area is not large enough for the content to display the resulting
-        behaviour depends on the mbUseVerticalScrollBar flag.  When it is
-        set to true then a vertical scroll bar is shown.  Otherwise the
-        height of the returned area is enlarged so that the content fits
-        into it.
+        area is not large enough for the content to display the horizontal
+        and/or vertical scroll bar is enabled.
         @param rAvailableArea
             The scroll bars will be placed inside this rectangle.  It is
             expected to be given in pixel relative to its parent.
+        @param bIsHorizontalScrollBarAllowed
+            Only when this flag is <TRUE/> the horizontal scroll may be
+            displayed.
+        @param bIsVerticalScrollBarAllowed
+            Only when this flag is <TRUE/> the horizontal scroll may be
+            displayed.
         @return
             Returns the space that remains after the scroll bars are
-            placed.  When the mbUseVerticalScrollBar flag is false then the
-            returned rectangle may be larger than the given one.
+            placed.
     */
-    Rectangle PlaceScrollBars (const Rectangle& rAvailableArea);
+    Rectangle PlaceScrollBars (
+        const Rectangle& rAvailableArea,
+        const bool bIsHorizontalScrollBarAllowed,
+        const bool bIsVerticalScrollBarAllowed);
 
-    /** Update the vertical scroll bar so that the visible area has the
-        given top value.
+    /** Update the vertical and horizontal scroll bars so that the visible
+        area has the given top and left values.
     */
-    void SetTop (const sal_Int32 nTop);
+    void SetTopLeft (const Point aNewTopLeft);
 
-    /** Update the horizontal scroll bar so that the visible area has the
-        given left value.
-    */
-    void SetLeft (const sal_Int32 nLeft);
+    sal_Int32 GetTop (void) const;
+
+    sal_Int32 GetLeft (void) const;
 
     /** Return the width of the vertical scroll bar, which--when
         shown--should be fixed in contrast to its height.
@@ -155,13 +162,34 @@ public:
     /** Call this method to scroll a window while the mouse is in dragging a
         selection.  If the mouse is near the window border or is outside the
         window then scroll the window accordingly.
+        @param rMouseWindowPosition
+            The mouse position for which the scroll amount is calculated.
+        @param rAutoScrollFunctor
+            Every time when the window is scrolled then this functor is executed.
         @return
             When the window is scrolled then this method returns <TRUE/>.
             When the window is not changed then <FALSE/> is returned.
     */
-    bool AutoScroll (const Point& rMouseWindowPosition);
+    bool AutoScroll (
+        const Point& rMouseWindowPosition,
+        const ::boost::function<void(void)>& rAutoScrollFunctor);
 
     void StopAutoScroll (void);
+
+    enum Orientation { Orientation_Horizontal, Orientation_Vertical };
+    enum Unit { Unit_Pixel, Unit_Slide };
+    /** Scroll the slide sorter by setting the thumbs of the scroll bars and
+        by moving the content of the content window.
+        @param eOrientation
+            Defines whether to scroll horizontally or vertically.
+        @param eUnit
+            Defines whether the distance is a pixel value or the number of
+            slides to scroll.
+    */
+    void Scroll(
+        const Orientation eOrientation,
+        const Unit eUnit,
+        const sal_Int32 nDistance);
 
 private:
     SlideSorter& mrSlideSorter;
@@ -198,11 +226,14 @@ private:
     */
     Timer maAutoScrollTimer;
     Size maAutoScrollOffset;
+    bool mbIsAutoScrollActive;
 
     /** The content window is the one whose view port is controlled by the
         scroll bars.
     */
-    ::boost::shared_ptr<sd::Window> mpContentWindow;
+    SharedSdWindow mpContentWindow;
+
+    ::boost::function<void(void)> maAutoScrollFunctor;
 
     void SetWindowOrigin (
         double nHorizontalPosition,
@@ -218,7 +249,10 @@ private:
             The area that is enclosed by the scroll bars is returned.  It
             will be filled with the SlideSorterView.
     */
-    Rectangle DetermineScrollBarVisibilities (const Rectangle& rAvailableArea);
+    Rectangle DetermineScrollBarVisibilities(
+        const Rectangle& rAvailableArea,
+        const bool bIsHorizontalScrollBarAllowed,
+        const bool bIsVerticalScrollBarAllowed);
 
     /** Typically called by DetermineScrollBarVisibilities() this method
         tests a specific configuration of the two scroll bars being visible

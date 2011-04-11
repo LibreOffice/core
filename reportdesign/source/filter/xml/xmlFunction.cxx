@@ -101,7 +101,7 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Exception catched while putting Function props!");
+            OSL_FAIL("Exception catched while putting Function props!");
         }
     }
 }
@@ -132,7 +132,7 @@ void OXMLFunction::EndElement()
             m_xFunction.clear();
         }catch(uno::Exception&)
         {
-            OSL_ENSURE(0,"Exception catched!");
+            OSL_FAIL("Exception catched!");
         }
     }
 }

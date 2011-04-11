@@ -38,7 +38,7 @@
 //#endif
 #include "filter/msfilter/msfilterdllapi.h"
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace com{namespace sun{namespace star{
         namespace drawing{
@@ -99,14 +99,14 @@ public:
     sal_Bool ReadOCXStream( SotStorageRef& rSrc1,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > *pShapeRef=0,
-        BOOL bFloatingCtrl=FALSE );
+        sal_Bool bFloatingCtrl=sal_False );
 
 
     //Excel has a nasty kludged mechanism for this, read
     //the comments in the source to follow it
     sal_Bool ReadOCXExcelKludgeStream(SotStorageStreamRef& rSrc1,
         com::sun::star::uno::Reference <
-        com::sun::star::drawing::XShape > *pShapeRef,BOOL bFloatingCtrl);
+        com::sun::star::drawing::XShape > *pShapeRef,sal_Bool bFloatingCtrl);
 
 
     //Writes the given Uno Control into the given storage
@@ -137,7 +137,7 @@ public:
         const com::sun::star::awt::Size& /*rSize*/,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape >* /*pShape*/,
-        BOOL /*bFloatingCtrl*/ ) {return sal_False;}
+        sal_Bool /*bFloatingCtrl*/ ) {return sal_False;}
 
     /*begin: Backwards compatability with office 95 import, modify later*/
     const com::sun::star::uno::Reference<
@@ -179,7 +179,7 @@ class OCX_FontData
 public:
     OCX_FontData() : nFontNameLen(0), fBold(0), fItalic(0), fUnderline(0),
         fStrike(0), nFontSize(12), nJustification(1), pFontName(0),
-        bHasAlign(FALSE), bHasFont(TRUE) {}
+        bHasAlign(sal_False), bHasFont(sal_True) {}
     ~OCX_FontData()  {
         if (pFontName)
         delete [] pFontName;
@@ -230,7 +230,7 @@ class MSFILTER_DLLPUBLIC OCX_Control
 public:
     OCX_Control(UniString sN, OCX_Control* parent = NULL ) : nWidth( 0 ), nHeight( 0 ), mnLeft(0), mnTop(0),
         mnStep(0), mnBackColor(0x8000000FL), mnForeColor(0), mnTabPos(0), mbVisible(true), sName(sN), pDocSh(0),
-        bSetInDialog(FALSE), mpParent( parent ) {}
+        bSetInDialog(sal_False), mpParent( parent ) {}
     sal_Bool FullRead(SotStorageStream *pS)
     {
         return Read(pS) && ReadFontData(pS);
@@ -294,6 +294,8 @@ public:
     rtl::OUString msCtrlSource;
     rtl::OUString msRowSource;
         SfxObjectShell *pDocSh;
+    ::rtl::OUString sImageUrl;
+    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
 protected:
 
     sal_uInt32 ImportColor(sal_uInt32 nColorCode) const;
@@ -306,7 +308,7 @@ protected:
     sal_Int16 ImportSpecEffect( sal_uInt8 nSpecialEffect ) const;
     sal_uInt8 ExportSpecEffect( sal_Int16 nApiEffect ) const;
     static sal_uInt16 nStandardId;
-    static sal_uInt8 __READONLY_DATA aObjInfo[4];
+    static sal_uInt8 const aObjInfo[4];
     rtl::OUString msFormType;
     rtl::OUString msDialogType;
         OCX_Control* mpParent;
@@ -416,30 +418,31 @@ public:
 
     sal_uInt8 pPictureHeader[20];
     sal_uInt32 nPictureLen;
-    ::rtl::OUString sImageUrl;
-    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
 
 };
 
 class OCX_TabStrip : public OCX_Control
 {
 public:
-    OCX_TabStrip() : OCX_Control( rtl::OUString::createFromAscii("TabStrip")) {}
+    OCX_TabStrip() : OCX_Control( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabStrip" ))), nIdentifier(0), nFixedAreaLen(0), nNumTabs(0), bHasTabs(true) {}
+
         virtual sal_Bool ReadFontData(SotStorageStream *pS);
         virtual sal_Bool Read(SotStorageStream *pS);
 
+    std::vector< rtl::OUString > msItems;
     sal_uInt16  nIdentifier;
     sal_uInt16  nFixedAreaLen;
     sal_uInt8   pBlockFlags[4];
-    sal_uInt16  nNumTabs;
+    sal_Int32   nNumTabs;
+    bool        bHasTabs;
 };
 
 class OCX_Image : public OCX_Control
 {
 public:
-    OCX_Image() : OCX_Control(rtl::OUString::createFromAscii("Image")), fEnabled(1), fBackStyle(0), bPictureTiling(false), bAutoSize(false) {
-                msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseImageControl");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlImageControlModel");
+    OCX_Image() : OCX_Control(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Image" ))), fEnabled(1), fBackStyle(0), bPictureTiling(false), bAutoSize(false) {
+                msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.DatabaseImageControl" ));
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlImageControlModel" ));
          }
 
     ~OCX_Image() { }
@@ -465,8 +468,6 @@ public:
     sal_uInt8   nSpecialEffect;
 
         bool bAutoSize;
-        ::rtl::OUString sImageUrl;
-        com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
         sal_Bool Read(SotStorageStream *pS);
 
     using OCX_Control::Import; // to not hide the other two import methods
@@ -487,8 +488,7 @@ public:
 };
 struct ContainerRecord
 {
-    ContainerRecord():nTop(0), nLeft(0), nSubStorageId(0), nSubStreamLen(0), nTabPos(0), nTypeIdent(0), bVisible( true ) {}
-
+    ContainerRecord():nTop(0), nLeft(0), nSubStorageId(0), nSubStreamLen(0), nTabPos(0), nTypeIdent(0), bVisible( true ), bTabStop( true ) {}
     ::rtl::OUString cName;
     ::rtl::OUString controlTip;
     ::rtl::OUString sCtrlSource;
@@ -501,6 +501,7 @@ struct ContainerRecord
     sal_uInt16  nTabPos;
     sal_uInt16 nTypeIdent;
     bool bVisible;
+    bool bTabStop;
 };
 
 typedef std::vector<OCX_Control*>::iterator CtrlIterator;
@@ -509,331 +510,49 @@ typedef std::vector<OCX_Control*>  CtrlList;
 
 class OCX_OptionButton;
 
-class OCX_ContainerControl : public OCX_Control
+class OCX_ParentControl : public OCX_Control
 {
 public:
-    virtual ~OCX_ContainerControl();
-        // sub class will process the control specific information
-        // e.g frame or userform ( maybe tab, mulipage in the future )
-        // Base (this) class will process the container specific information
-        // e.g. the controls contained by this container
-        // will
-        // a) create the controls
-        // b) read the controls
-        // c) store these controls in a list for post processing
-        //     e.g. import
-        //
     virtual sal_Bool Read(SvStorageStream *pS);
-        // No Font record
     virtual sal_Bool ReadFontData(SvStorageStream* /*pS*/) { return sal_True; }
 
     using OCX_Control::Import; // to not hide the other two import methods
+
     virtual sal_Bool Import(com::sun::star::uno::Reference<
         com::sun::star::beans::XPropertySet> &rPropSet);
 
         SotStorageStreamRef getContainerStream() { return mContainerStream; }
 
+        SotStorageStreamRef getOStream() { return mContainedControlsStream; }
         virtual void ProcessControl( OCX_Control* pControl, SvStorageStream* pS, ContainerRecord& rec );
-        bool createFromContainerRecord( ContainerRecord& record,
+        bool createFromContainerRecord( const ContainerRecord& record,
             OCX_Control*& );
         SotStorageStreamRef getContainedControlsStream(){ return mContainedControlsStream; }
 protected:
-        // This class not meant to be instantiated
-        // needs to be subclassed
-    OCX_ContainerControl( SotStorageRef& parent,
+    OCX_ParentControl( SotStorageRef& parent,
             const ::rtl::OUString& storageName,
             const ::rtl::OUString& sN,
             const com::sun::star::uno::Reference<
-                com::sun::star::container::XNameContainer >  &rParent,
+            com::sun::star::container::XNameContainer >  &rDialog,
             OCX_Control* pParent = NULL );
-        rtl::OUString createSubStreamName( const sal_uInt32& subStorageID );
+    ~OCX_ParentControl();
 
         com::sun::star::uno::Reference<
                 com::sun::star::container::XNameContainer > mxParent;
     std::vector<OCX_Control*> mpControls;
-        std::hash_map<sal_uInt16, sal_uInt16> mActiveXIDMap;
+        boost::unordered_map<sal_uInt16, sal_uInt16> mActiveXIDMap;
         SotStorageRef mContainerStorage;
         SotStorageStreamRef mContainerStream;
         SotStorageStreamRef mContainedControlsStream;
-    sal_uInt32 nNoRecords;
-    sal_uInt32 nTotalLen;
-        sal_uInt32 containerType;
-
-private:
-        OCX_ContainerControl(); // not implemented
-        OCX_ContainerControl(const OCX_ContainerControl&); // not implemented
-};
-
-
-class OCX_MultiPage : public OCX_ContainerControl
-{
-public:
-    OCX_MultiPage( SotStorageRef& parent,
-            const ::rtl::OUString& storageName,
-            const ::rtl::OUString& sN,
-            const com::sun::star::uno::Reference<
-                com::sun::star::container::XNameContainer >  &rDialog, OCX_Control* pParent = NULL);
-    virtual ~OCX_MultiPage()
-    {
-        delete[] pCaption;
-        delete[] pIcon;
-        delete[] pPicture;
-    }
-    virtual sal_Bool Read(SvStorageStream *pS);
-
-    using OCX_ContainerControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::container::XNameContainer>
-        &rDialog);
-        virtual void ProcessControl( OCX_Control* pControl, SvStorageStream* pS, ContainerRecord& rec );
-    /*sal_uInt8 for sal_uInt8 Word Struct*/
-    sal_uInt16 nIdentifier;
-    sal_uInt16 nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
-
-    sal_uInt32  fUnknown1;
-
-    sal_uInt8   fUnknown2:1;
-    sal_uInt8   fEnabled:1;
-    sal_uInt8   fLocked:1;
-    sal_uInt8   fBackStyle:1;
-    sal_uInt8   fUnknown3:4;
-
-    sal_uInt8   fUnknown4:8;
-
-    sal_uInt8   fUnknown5:7;
-    sal_uInt8   fWordWrap:1;
-
-    sal_uInt8   fUnknown6:4;
-    sal_uInt8   fAutoSize:1;
-    sal_uInt8   fUnknown7:3;
-
-    sal_uInt32  nCaptionLen;
-    sal_uInt16  nVertPos;
-    sal_uInt16  nHorzPos;
-    sal_uInt8   nMousePointer;
-    sal_uInt32  nBorderColor;
-    sal_uInt32  fUnknown8;
-    sal_uInt32  fUnknown9;
-    sal_uInt8   nKeepScrollBarsVisible;
-    sal_uInt8   nCycle;
-    sal_uInt16  nBorderStyle;
-    sal_uInt16  nSpecialEffect;
-    sal_uInt16  nPicture;
-    sal_uInt8   nPictureAlignment;
-    sal_uInt8   nPictureSizeMode;
-    bool        bPictureTiling;
-    sal_uInt16  nAccelerator;
-    sal_uInt16  nIcon;
-
-    char *pCaption;
-
-    sal_uInt32  nScrollWidth;
-    sal_uInt32  nScrollHeight;
-
-
-    sal_uInt8 pIconHeader[20];
-    sal_uInt32  nIconLen;
-    sal_uInt8 *pIcon;
-
-    sal_uInt8 pPictureHeader[20];
-    sal_uInt32  nPictureLen;
-    sal_uInt8 *pPicture;
-private:
-        sal_Int32 mnCurrentPageStep;
-};
-
-
-
-class OCX_Page : public OCX_ContainerControl
-{
-public:
-    OCX_Page( SotStorageRef& parentStorage,
-            const ::rtl::OUString& storageName,
-            const ::rtl::OUString& sN,
-            const com::sun::star::uno::Reference<
-                com::sun::star::container::XNameContainer >  &rDialog, OCX_Control* parent = NULL);
-    virtual ~OCX_Page()
-    {
-        delete[] pCaption;
-        delete[] pIcon;
-        delete[] pPicture;
-    }
-    virtual sal_Bool Read(SvStorageStream *pS);
-
-    using OCX_ContainerControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::container::XNameContainer>
-        &rDialog);
-/*  virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
-*/
-    /*sal_uInt8 for sal_uInt8 Word Struct*/
-    sal_uInt16 nIdentifier;
-    sal_uInt16 nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
-
-    sal_uInt32  fUnknown1;
-
-    sal_uInt8   fUnknown2:1;
-    sal_uInt8   fEnabled:1;
-    sal_uInt8   fLocked:1;
-    sal_uInt8   fBackStyle:1;
-    sal_uInt8   fUnknown3:4;
-
-    sal_uInt8   fUnknown4:8;
-
-    sal_uInt8   fUnknown5:7;
-    sal_uInt8   fWordWrap:1;
-
-    sal_uInt8   fUnknown6:4;
-    sal_uInt8   fAutoSize:1;
-    sal_uInt8   fUnknown7:3;
-
-    sal_uInt32  nCaptionLen;
-    sal_uInt16  nVertPos;
-    sal_uInt16  nHorzPos;
-    sal_uInt8   nMousePointer;
-    sal_uInt32  nBorderColor;
-    sal_uInt32  fUnknown8;
-    sal_uInt32  fUnknown9;
-    sal_uInt8   nKeepScrollBarsVisible;
-    sal_uInt8   nCycle;
-    sal_uInt16  nBorderStyle;
-    sal_uInt16  nSpecialEffect;
-    sal_uInt16  nPicture;
-    sal_uInt8   nPictureAlignment;
-    sal_uInt8   nPictureSizeMode;
-    bool        bPictureTiling;
-    sal_uInt16  nAccelerator;
-    sal_uInt16  nIcon;
-
-    char *pCaption;
-
-    sal_uInt32  nScrollWidth;
-    sal_uInt32  nScrollHeight;
-
-
-    sal_uInt8 pIconHeader[20];
-    sal_uInt32  nIconLen;
-    sal_uInt8 *pIcon;
-
-    sal_uInt8 pPictureHeader[20];
-    sal_uInt32  nPictureLen;
-    sal_uInt8 *pPicture;
-private:
-};
-
-
-class OCX_Frame : public OCX_ContainerControl
-{
-public:
-    OCX_Frame( SotStorageRef& parent,
-            const ::rtl::OUString& storageName,
-            const ::rtl::OUString& sN,
-            const com::sun::star::uno::Reference<
-                com::sun::star::container::XNameContainer >  &rDialog, OCX_Control* pParent = NULL);
-    virtual ~OCX_Frame()
-    {
-        delete[] pCaption;
-        delete[] pIcon;
-        delete[] pPicture;
-    }
-    virtual sal_Bool Read(SvStorageStream *pS);
-
-    using OCX_ContainerControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import(com::sun::star::uno::Reference<
-        com::sun::star::beans::XPropertySet> &rPropSet);
-
-    /*sal_uInt8 for sal_uInt8 Word Struct*/
-    sal_uInt16 nIdentifier;
-    sal_uInt16 nFixedAreaLen;
-    sal_uInt8   pBlockFlags[4];
-
-    sal_uInt32  fUnknown1;
-
-    sal_uInt8   fUnknown2:1;
-    sal_uInt8   fEnabled:1;
-    sal_uInt8   fLocked:1;
-    sal_uInt8   fBackStyle:1;
-    sal_uInt8   fUnknown3:4;
-
-    sal_uInt8   fUnknown4:8;
-
-    sal_uInt8   fUnknown5:7;
-    sal_uInt8   fWordWrap:1;
-
-    sal_uInt8   fUnknown6:4;
-    sal_uInt8   fAutoSize:1;
-    sal_uInt8   fUnknown7:3;
-
-    sal_uInt32  nCaptionLen;
-    sal_uInt16  nVertPos;
-    sal_uInt16  nHorzPos;
-    sal_uInt8   nMousePointer;
-    sal_uInt32  nBorderColor;
-    sal_uInt32  fUnknown8;
-    sal_uInt32  fUnknown9;
-    sal_uInt8   nKeepScrollBarsVisible;
-    sal_uInt8   nCycle;
-    sal_uInt16  nBorderStyle;
-    sal_uInt16  nSpecialEffect;
-    sal_uInt16  nPicture;
-    sal_uInt8   nPictureAlignment;
-    sal_uInt8   nPictureSizeMode;
-    bool        bPictureTiling;
-    sal_uInt16  nAccelerator;
-    sal_uInt16  nIcon;
-
-    char *pCaption;
-
-    sal_uInt32  nScrollWidth;
-    sal_uInt32  nScrollHeight;
-    sal_uInt32  nScrollLeft;
-    sal_uInt32  nScrollTop;
-
-
-    sal_uInt8 pIconHeader[20];
-    sal_uInt32  nIconLen;
-    sal_uInt8 *pIcon;
-
-    sal_uInt8 pPictureHeader[20];
-    sal_uInt32  nPictureLen;
-    sal_uInt8 *pPicture;
-private:
-};
-
-class OCX_UserForm : public OCX_ContainerControl
-{
-public:
-    OCX_UserForm( SotStorageRef& parent,
-            const ::rtl::OUString& storageName,
-            const ::rtl::OUString& sN,
-            const com::sun::star::uno::Reference<
-                com::sun::star::container::XNameContainer >  &rDialog,
-            const com::sun::star::uno::Reference<
-                com::sun::star::lang::XMultiServiceFactory >& rMsf);
-    ~OCX_UserForm()
-    {
-        delete[] pCaption;
-        delete[] pIcon;
-    }
-
-    virtual sal_Bool Read(SvStorageStream *pS);
-
-    using OCX_ContainerControl::Import; // to not hide the other two import methods
-    virtual sal_Bool Import( com::sun::star::uno::Reference<
-        com::sun::star::container::XNameContainer>
-        &rDialog);
-
-    /*sal_uInt8 for sal_uInt8 Word Struct*/
     sal_uInt16 nIdentifier;
     sal_uInt16 nFixedAreaLen;
     sal_uInt8   pBlockFlags[4];
 
     sal_uInt32  nChildrenA;
+    sal_uInt32  nNextAvailableID;
+    sal_uInt32  nBooleanProperties;
+    sal_uInt32  nGroupCnt;
+    sal_uInt32  nZoom;
 
     sal_uInt8   fUnknown1:1;
     sal_uInt8   fEnabled:1;
@@ -853,13 +572,13 @@ public:
     sal_uInt32  nCaptionLen;
     sal_uInt16  nVertPos;
     sal_uInt16  nHorzPos;
-    sal_uInt8   nMousePointer;
     sal_uInt32  nBorderColor;
     sal_uInt32  nDrawBuffer;
-    sal_uInt32  nChildrenB;
+    sal_uInt32  nShapeCookie;
     sal_uInt8   nKeepScrollBarsVisible;
     sal_uInt8   nCycle;
-    sal_uInt16  nBorderStyle;
+    sal_uInt8   nBorderStyle;
+    sal_uInt8   nMousePointer;
     sal_uInt8   nSpecialEffect;
     sal_uInt16  nPicture;
     sal_uInt8   nPictureAlignment;
@@ -882,11 +601,91 @@ public:
 
     sal_uInt8 pPictureHeader[20];
     sal_uInt32  nPictureLen;
-    ::rtl::OUString sImageUrl;
-    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
 private:
-        com::sun::star::uno::Reference<
-                com::sun::star::uno::XComponentContext> mxCtx;
+     OCX_ParentControl(); // not implemented
+     OCX_ParentControl(const OCX_ParentControl&); // not implemented
+
+};
+
+class OCX_Page;
+class OCX_MultiPage : public OCX_ParentControl
+{
+public:
+    OCX_MultiPage( SotStorageRef& parent,
+            const ::rtl::OUString& storageName,
+            const ::rtl::OUString& sN,
+            const com::sun::star::uno::Reference<
+                com::sun::star::container::XNameContainer >  &rDialog, OCX_Control* pParent = NULL);
+
+    virtual sal_Bool Read(SvStorageStream *pS);
+
+    using OCX_ParentControl::Import; // to not hide the other two import methods
+    virtual sal_Bool Import(com::sun::star::uno::Reference<
+        com::sun::star::beans::XPropertySet> &rPropSet);
+    virtual void ProcessControl( OCX_Control* pControl, SvStorageStream* pS, ContainerRecord& rec );
+private:
+    sal_Int32 nActiveTab;
+    SotStorageStreamRef mXStream;
+    bool bHasTabs;
+    std::vector< rtl::OUString > sCaptions;
+    // order of Ids corrosponds to the order of captions above
+    std::vector< sal_Int32 > mPageIds;
+    boost::unordered_map< sal_Int32, OCX_Page* > idToPage;
+};
+
+
+class OCX_Page : public OCX_ParentControl
+{
+public:
+    OCX_Page( SotStorageRef& parentStorage,
+        sal_Int32 nID,
+        const ::rtl::OUString& sN,
+        const com::sun::star::uno::Reference<
+        com::sun::star::container::XNameContainer >  &rDialog, OCX_Control* parent = NULL);
+    virtual sal_Bool Read(SvStorageStream *pS);
+
+    using OCX_ParentControl::Import; // to not hide the other two import methods
+    virtual sal_Bool Import(com::sun::star::uno::Reference<
+        com::sun::star::beans::XPropertySet> &rPropSet);
+    rtl::OUString msTitle; // #FIXME we should use the existing caption
+    sal_Int32 mnID;
+private:
+};
+
+
+class OCX_Frame : public OCX_ParentControl
+{
+public:
+    OCX_Frame( SotStorageRef& parent,
+        const ::rtl::OUString& storageName,
+        const ::rtl::OUString& sN,
+        const com::sun::star::uno::Reference<
+        com::sun::star::container::XNameContainer >  &rDialog, OCX_Control* pParent = NULL);
+    virtual sal_Bool Read(SvStorageStream *pS);
+
+    using OCX_ParentControl::Import; // to not hide the other two import methods
+    virtual sal_Bool Import(com::sun::star::uno::Reference<
+        com::sun::star::beans::XPropertySet> &rPropSet);
+};
+
+
+class OCX_UserForm : public OCX_ParentControl
+{
+public:
+    OCX_UserForm( SotStorageRef& parent,
+        const ::rtl::OUString& storageName,
+        const ::rtl::OUString& sN,
+        const com::sun::star::uno::Reference<
+        com::sun::star::container::XNameContainer >  &rDialog,
+        const com::sun::star::uno::Reference<
+        com::sun::star::lang::XMultiServiceFactory >& rMsf);
+    using OCX_ParentControl::Import; // to not hide the other two import methods
+    virtual sal_Bool Import( com::sun::star::uno::Reference<
+        com::sun::star::container::XNameContainer>
+        &rDialog);
+private:
+    com::sun::star::uno::Reference<
+        com::sun::star::uno::XComponentContext> mxCtx;
 };
 
 
@@ -894,12 +693,12 @@ private:
 class OCX_CheckBox : public OCX_ModernControl
 {
 public:
-    OCX_CheckBox() : OCX_ModernControl(rtl::OUString::createFromAscii("CheckBox")){
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.CheckBox");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlCheckBoxModel");
+    OCX_CheckBox() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CheckBox" ))){
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.CheckBox" ));
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlCheckBoxModel" ));
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
 
     using OCX_ModernControl::Import; // to not hide the other two import methods
@@ -919,14 +718,14 @@ public:
 class OCX_OptionButton : public OCX_ModernControl
 {
 public:
-    OCX_OptionButton() : OCX_ModernControl(rtl::OUString::createFromAscii("OptionButton"))
+    OCX_OptionButton() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OptionButton" )))
     {
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.RadioButton");
-        //msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlRadioButtonModel");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.RadioButton");
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.RadioButton" ));
+        //msDialogType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel"));
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.RadioButton" ));
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
 
     using OCX_ModernControl::Import; // to not hide the other two import methods
@@ -948,13 +747,13 @@ public:
 class OCX_TextBox : public OCX_ModernControl
 {
 public:
-    OCX_TextBox() : OCX_ModernControl(rtl::OUString::createFromAscii("TextBox")) {
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.TextField");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlEditModel");
+    OCX_TextBox() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextBox" ))) {
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.TextField" ));
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlEditModel" ));
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         nBorderColor = 0x80000006L;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
 
     using OCX_ModernControl::Import; // to not hide the other two import methods
@@ -975,7 +774,7 @@ public:
 class OCX_FieldControl: public OCX_ModernControl
 {
 public:
-    OCX_FieldControl() : OCX_ModernControl(rtl::OUString::createFromAscii("TextBox")) {
+    OCX_FieldControl() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextBox" ))) {
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         nBorderColor = 0x80000006L;
@@ -995,13 +794,13 @@ public:
 class OCX_ToggleButton : public OCX_ModernControl
 {
 public:
-    OCX_ToggleButton() : OCX_ModernControl(rtl::OUString::createFromAscii("ToggleButton")) {
-                msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.CommandButton");
-                msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlButtonModel");
+    OCX_ToggleButton() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToggleButton" ))) {
+                msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.CommandButton" ));
+                msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlButtonModel" ));
 
         mnBackColor = 0x8000000F;
         mnForeColor = 0x80000012;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
         aFontData.nJustification = 3;   // centered by default
     }
     static OCX_Control *Create() { return new OCX_ToggleButton;}
@@ -1022,13 +821,13 @@ public:
 class OCX_ComboBox : public OCX_ModernControl
 {
 public:
-    OCX_ComboBox() : OCX_ModernControl(rtl::OUString::createFromAscii("ComboBox")){
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.ComboBox");
-            msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.ComboBox");
+    OCX_ComboBox() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ComboBox" ))){
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ComboBox" ));
+            msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ComboBox" ));
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
         nBorderColor = 0x80000006;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
     static OCX_Control *Create() { return new OCX_ComboBox;}
     using OCX_ModernControl::Import; // to not hide the other two import methods
@@ -1047,14 +846,14 @@ public:
 class OCX_ListBox : public OCX_ModernControl
 {
 public:
-    OCX_ListBox() : OCX_ModernControl(rtl::OUString::createFromAscii("ListBox")){
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.ListBox");
-        //msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlListBoxModel");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.form.component.ListBox");
+    OCX_ListBox() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ListBox" ))){
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ListBox" ));
+        //msDialogType = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlListBoxModel"));
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ListBox" ));
         mnBackColor = 0x80000005;
         mnForeColor = 0x80000008;
         nBorderColor = 0x80000006;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
     static OCX_Control *Create() { return new OCX_ListBox;}
     using OCX_ModernControl::Import; // to not hide the other two import methods
@@ -1080,8 +879,8 @@ public:
         nAccelerator(0), nIcon(0), pCaption(0), nIconLen(0), pIcon(0), nPictureLen(0),
         mbTakeFocus( true )
     {
-            msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.CommandButton");
-            msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlButtonModel");
+            msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.CommandButton" ));
+            msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlButtonModel" ));
             mnForeColor = 0x80000012L;
                 mnBackColor = 0x8000000FL;
     }
@@ -1131,8 +930,6 @@ public:
 
     sal_uInt8 pPictureHeader[20];
     sal_uInt32  nPictureLen;
-    ::rtl::OUString sImageUrl;
-    com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicObject> mxGrfObj;
 
     bool        mbTakeFocus;
 
@@ -1155,8 +952,8 @@ class OCX_ImageButton: public OCX_CommandButton
 {
 public:
     OCX_ImageButton() {
-        aFontData.SetHasAlign(FALSE);
-        aFontData.SetHasFont(FALSE);
+        aFontData.SetHasAlign(sal_False);
+        aFontData.SetHasFont(sal_False);
     }
     static OCX_Control *Create() { return new OCX_ImageButton;}
     sal_Bool Export(SotStorageRef &rObj,
@@ -1189,24 +986,23 @@ public:
 class OCX_Label : public OCX_Control
 {
 public:
-    OCX_Label(OCX_Control* pParent = NULL ) : OCX_Control(rtl::OUString::createFromAscii("Label"), pParent ), fEnabled(1),
+    OCX_Label(OCX_Control* pParent = NULL ) : OCX_Control(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Label" )), pParent ), fEnabled(1),
         fLocked(0),fBackStyle(1),fWordWrap(1),
     fAutoSize(0),nCaptionLen(0),nVertPos(1),nHorzPos(7),nMousePointer(0),
     nBorderColor(0x80000006),nBorderStyle(0),nSpecialEffect(0),
     nPicture(0),nAccelerator(0),nIcon(0),pCaption(0),nIconLen(0),pIcon(0),
-    nPictureLen(0),pPicture(0)
+    nPictureLen(0)
     {
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.FixedText");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFixedTextModel");
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.FixedText" ));
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFixedTextModel" ));
                 mnForeColor = 0x80000008;
                 mnBackColor = 0x80000005;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
 
     ~OCX_Label() {
         if (pCaption) delete[] pCaption;
         if (pIcon) delete[] pIcon;
-        if (pPicture) delete[] pPicture;
     }
     sal_Bool Read(SotStorageStream *pS);
 
@@ -1250,7 +1046,6 @@ public:
 
     sal_uInt8 pPictureHeader[20];
     sal_uInt32  nPictureLen;
-    sal_uInt8 *pPicture;
 
     static OCX_Control *Create() { return new OCX_Label;}
 
@@ -1386,13 +1181,13 @@ public:
 class HTML_TextBox : public OCX_ModernControl
 {
 public:
-    HTML_TextBox() : OCX_ModernControl(rtl::OUString::createFromAscii("TextBox")) {
-        msFormType = rtl::OUString::createFromAscii("com.sun.star.form.component.TextField");
-        msDialogType = rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlEditModel");
+    HTML_TextBox() : OCX_ModernControl(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TextBox" ))) {
+        msFormType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.TextField" ));
+        msDialogType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlEditModel" ));
         mnBackColor = 0x80000005L;
         mnForeColor = 0x80000008L;
         nBorderColor = 0x80000006L;
-        aFontData.SetHasAlign(TRUE);
+        aFontData.SetHasAlign(sal_True);
     }
 
     using OCX_ModernControl::Import; // to not hide the other two import methods

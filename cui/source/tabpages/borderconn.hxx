@@ -45,14 +45,7 @@ class FrameSelector;
 
 /** Creates an item connection object that connects an SvxLineItem with an
     svx::FrameSelector control. */
-sfx::ItemConnectionBase* CreateFrameLineConnection( USHORT nSlot,
-        FrameSelector& rFrameSel, FrameBorderType eBorder,
-        sfx::ItemConnFlags nFlags = sfx::ITEMCONN_DEFAULT );
-
-/** Creates an item connection object that connects an SvxBoxItem and an
-    SvxBoxInfoItem with an svx::FrameSelector control. */
-sfx::ItemConnectionBase* CreateFrameBoxConnection(
-        USHORT nBoxSlot, USHORT nBoxInfoSlot,
+sfx::ItemConnectionBase* CreateFrameLineConnection( sal_uInt16 nSlot,
         FrameSelector& rFrameSel, FrameBorderType eBorder,
         sfx::ItemConnFlags nFlags = sfx::ITEMCONN_DEFAULT );
 

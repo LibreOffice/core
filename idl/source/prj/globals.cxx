@@ -29,34 +29,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idl.hxx"
 
-/****************** I N C L U D E S **************************************/
 #include <tools/shl.hxx>
 
 #include <globals.hxx>
 #include <database.hxx>
 
-/****************** G L O B A L S ****************************************/
-#ifdef DOS
-static IdlDll * pApp = NULL;
-IdlDll * GetIdlApp()
-{
-    if( !pApp )
-        pApp = new IdlDll();
-    return pApp;
-}
-#else
 IdlDll * GetIdlApp()
 {
     if( !(*(IdlDll**)GetAppData(SHL_IDL)) )
     {
         (*(IdlDll**)GetAppData(SHL_IDL)) = new IdlDll();
-        // Temporaer, sonst nur wenn Compiler
-        //GetIdlApp()->pHashTable      = new SvStringHashTable( 2801 );
-        //GetIdlApp()->pGlobalNames    = new SvGlobalHashNames();
     }
     return (*(IdlDll**)GetAppData(SHL_IDL));
 }
-#endif
 
 IdlDll::IdlDll()
     : pHashTable( NULL )
@@ -93,18 +78,9 @@ IdlDll::~IdlDll()
     delete pHashTable;
 }
 
-/*************************************************************************
-|*
-|*    SvGlobalHashNames::SvGlobalHashNames()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.08.91
-|*    Letzte Aenderung  MM 08.08.91
-|*
-*************************************************************************/
 inline SvStringHashEntry * INS( const ByteString & rName )
 {
-    UINT32  nIdx;
+    sal_uInt32  nIdx;
     IDLAPP->pHashTable->Insert( rName, &nIdx );
     return (SvStringHashEntry * )IDLAPP->pHashTable->Get( nIdx );
 }
@@ -130,7 +106,6 @@ SvGlobalHashNames::SvGlobalHashNames()
     , MM_SlotId( INS( "SlotId" ) )
     , MM_HasCoreId( INS( "HasCoreId" ) )
     , MM_Cachable( INS( "Cachable" ) )
-//    , MM_Volatile( INS( "Volatile" ) )
     , MM_Toggle( INS( "Toggle" ) )
     , MM_AutoUpdate( INS( "AutoUpdate" ) )
     , MM_Synchron( INS( "Synchron" ) )

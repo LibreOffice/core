@@ -45,7 +45,7 @@ class VirtualDevice;
 //  class VCLXDevice
 //  ----------------------------------------------------
 
-// For using nDummy, no incompatible update, add a BOOL bCreatedWithToolkitMember later...
+// For using nDummy, no incompatible update, add a sal_Bool bCreatedWithToolkitMember later...
 #define FLAGS_CREATEDWITHTOOLKIT    0x00000001
 
 class TOOLKIT_DLLPUBLIC VCLXDevice :    public ::com::sun::star::awt::XDevice,
@@ -58,7 +58,6 @@ class TOOLKIT_DLLPUBLIC VCLXDevice :    public ::com::sun::star::awt::XDevice,
     friend class VCLXGraphics;
 
 private:
-    ::osl::SolarMutex&      mrMutex;  // Reference to SolarMutex
     OutputDevice*           mpOutputDevice;
 
 public:
@@ -66,7 +65,6 @@ public:
     sal_uInt32              nFlags;
 
 protected:
-    ::osl::SolarMutex&       GetMutex() { return mrMutex; }
     void                    DestroyOutputDevice();
 
 public:

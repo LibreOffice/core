@@ -34,7 +34,7 @@
 #include <rtl/string.hxx>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace pdfparse
 {
@@ -189,7 +189,7 @@ struct PDFArray : public PDFContainer
 
 struct PDFDict : public PDFContainer
 {
-    typedef std::hash_map<rtl::OString,PDFEntry*,rtl::OStringHash> Map;
+    typedef boost::unordered_map<rtl::OString,PDFEntry*,rtl::OStringHash> Map;
     Map m_aMap;
 
     PDFDict() {}
@@ -261,6 +261,8 @@ struct PDFFile : public PDFContainer
     bool decrypt( const sal_uInt8* pInBuffer, sal_uInt32 nLen,
                   sal_uInt8* pOutBuffer,
                   unsigned int nObject, unsigned int nGeneration ) const;
+
+    rtl::OUString getDecryptionKey() const;
 };
 
 struct PDFObject : public PDFContainer

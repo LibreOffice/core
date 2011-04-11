@@ -35,7 +35,7 @@
 #include <unotools/viewoptions.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -104,7 +104,6 @@ namespace css = ::com::sun::star;
         sMsg.appendAscii("Unexpected exception catched. Original message was:\n\""      );                          \
         sMsg.append     (SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION_PARAM_EXCEPTION.Message);                          \
         sMsg.appendAscii("\""                                                           );                          \
-        OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr()); \
     }
 
 //_________________________________________________________________________________________________________________
@@ -273,7 +272,7 @@ struct IMPL_TStringHashCode
     }
 };
 
-typedef ::std::hash_map< ::rtl::OUString                    ,
+typedef ::boost::unordered_map< ::rtl::OUString                    ,
                          IMPL_TViewData                     ,
                          IMPL_TStringHashCode               ,
                          ::std::equal_to< ::rtl::OUString > > IMPL_TViewHash;
@@ -782,7 +781,7 @@ css::uno::Reference< css::uno::XInterface > SvtViewOptionsBase_Impl::impl_getSet
             xNode = ::comphelper::ConfigurationHelper::makeSureSetNodeExists(m_xRoot, m_sListName, sNode);
         else
         {
-            if (m_xSet.is())
+            if (m_xSet.is() && m_xSet->hasByName(sNode) )
                 m_xSet->getByName(sNode) >>= xNode;
         }
     }
@@ -860,7 +859,7 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
                                     }
                                 }
                                 break;
-        default             :   OSL_ENSURE( sal_False, "SvtViewOptions::SvtViewOptions()\nThese view type is unknown! All following calls at these instance will do nothing!\n" );
+        default             :   OSL_FAIL( "SvtViewOptions::SvtViewOptions()\nThese view type is unknown! All following calls at these instance will do nothing!\n" );
     }
 }
 

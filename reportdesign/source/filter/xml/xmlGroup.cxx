@@ -193,7 +193,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Exception catched while putting group props!");
+            OSL_FAIL("Exception catched while putting group props!");
         }
     }
 }
@@ -271,7 +271,7 @@ void OXMLGroup::EndElement()
         m_xGroups->insertByIndex(0,uno::makeAny(m_xGroup));
     }catch(uno::Exception&)
     {
-        OSL_ENSURE(0,"Exception catched!");
+        OSL_FAIL("Exception catched!");
     }
 }
 // -----------------------------------------------------------------------------

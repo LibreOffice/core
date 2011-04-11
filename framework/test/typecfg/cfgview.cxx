@@ -55,7 +55,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
@@ -553,16 +553,6 @@ void CFGView::impl_generateFilterListHTML()
     sAllFiltersHTML.appendAscii( "\t\t<table border=0><tr><td bgcolor=#ff8040><strong>Nr.</strong></td><td bgcolor=#ff8040><strong>Filter</strong></td></tr>\n" );  // open table
 
     sFilterPropHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFilterProperties\n\t\t</title>\n\t</head>\n\t<body>\n"                                   );  // open html
-/*
-    ::framework::StringList lFilterNames;
-    for( ConstFilterIterator pFilter=m_pData->aCFGView.begin(); pFilter!=m_pData->aCFGView.end(); ++pFilter )
-    {
-        lFilterNames.push_back( pFilter->first );
-    }
-    ::std::stable_sort( lFilterNames.begin(), lFilterNames.end() );
-    css::uno::Sequence< ::rtl::OUString > lNames;
-    ::framework::DataContainer::convertStringVectorToSequence( lFilterNames, lNames );
-*/
     css::uno::Sequence< ::rtl::OUString > lNames         = m_aData.pCache->getAllFilterNames()  ;
     sal_Int32                             nFilterCounter = 0                                    ;
     sal_Int32                             nCount         = lNames.getLength()                   ;

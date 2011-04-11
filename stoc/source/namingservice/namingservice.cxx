@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <uno/dispatcher.h>
@@ -45,13 +45,14 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 using namespace std;
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
+
+using ::rtl::OUString;
 
 #define SERVICENAME "com.sun.star.uno.NamingService"
 #define IMPLNAME    "com.sun.star.comp.stoc.NamingService"
@@ -103,7 +104,7 @@ struct hashOWString_Impl
         { return rName.hashCode(); }
 };
 
-typedef hash_map
+typedef boost::unordered_map
 <
     OUString,
     Reference<XInterface >,
@@ -235,12 +236,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

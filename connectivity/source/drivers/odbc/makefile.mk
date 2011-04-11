@@ -77,3 +77,11 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 # --- Targets ----------------------------------
 
 .INCLUDE : $(PRJ)$/target.pmk
+
+ALLTAR : $(MISC)/odbc.component
+
+$(MISC)/odbc.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        odbc.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt odbc.component

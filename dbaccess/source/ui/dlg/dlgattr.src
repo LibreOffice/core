@@ -36,6 +36,7 @@
 #ifndef DBAUI_SBATTRDLG_HRC
 #include "dlgattr.hrc"
 #endif
+
  //================================================
  // Der Attributdialog:
 TabDialog DLG_ATTR
@@ -73,7 +74,6 @@ TabDialog DLG_ATTR
     };
     String TP_ATTR_CHAR
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Schrift : Zeichen */
         Text [ en-US ] = "Font" ;
     };
     String TP_ATTR_NUMBER
@@ -89,34 +89,3 @@ TabDialog DLG_ATTR
         Text [ en-US ] = "Table Format" ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

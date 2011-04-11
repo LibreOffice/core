@@ -93,24 +93,24 @@ static const ::sal_Int32 FEATURE_PLAY           =  256;
 static const ::sal_Int32 FEATURE_READONLY       =  512;
 static const ::sal_Int32 FEATURE_VERSION        = 1024;
 
-static const ::rtl::OUString PROP_PICKER_LISTENER     = ::rtl::OUString::createFromAscii("picker_listener"    ); // [XFilePickerListenert]
-static const ::rtl::OUString PROP_DIALOG_SHOW_RESULT  = ::rtl::OUString::createFromAscii("dialog_show_result" ); // [sal_Bool] true=OK, false=CANCEL
-static const ::rtl::OUString PROP_SELECTED_FILES      = ::rtl::OUString::createFromAscii("selected_files"     ); // [seq< OUString >] contains all user selected files (can be empty!)
-static const ::rtl::OUString PROP_MULTISELECTION_MODE = ::rtl::OUString::createFromAscii("multiselection_mode"); // [sal_Bool] true=ON, false=OFF
-static const ::rtl::OUString PROP_TITLE               = ::rtl::OUString::createFromAscii("title"              ); // [OUString]
-static const ::rtl::OUString PROP_FILENAME            = ::rtl::OUString::createFromAscii("filename"           ); // [OUString]
-static const ::rtl::OUString PROP_DIRECTORY           = ::rtl::OUString::createFromAscii("directory"          ); // [OUString]
-static const ::rtl::OUString PROP_FEATURES            = ::rtl::OUString::createFromAscii("features"           ); // [sal_Int32]
-static const ::rtl::OUString PROP_TEMPLATE_DESCR      = ::rtl::OUString::createFromAscii("templatedescription"); // [sal_Int32]
-static const ::rtl::OUString PROP_FILTER_TITLE        = ::rtl::OUString::createFromAscii("filter_title"       ); // [OUString]
-static const ::rtl::OUString PROP_FILTER_VALUE        = ::rtl::OUString::createFromAscii("filter_value"       ); // [OUString]
-static const ::rtl::OUString PROP_FORCE               = ::rtl::OUString::createFromAscii("force"              ); // [sal_Bool]
+static const ::rtl::OUString PROP_PICKER_LISTENER(RTL_CONSTASCII_USTRINGPARAM("picker_listener"   ) ); // [XFilePickerListenert]
+static const ::rtl::OUString PROP_DIALOG_SHOW_RESULT(RTL_CONSTASCII_USTRINGPARAM("dialog_show_result" )); // [sal_Bool] true=OK, false=CANCEL
+static const ::rtl::OUString PROP_SELECTED_FILES(RTL_CONSTASCII_USTRINGPARAM("selected_files"     )); // [seq< OUString >] contains all user selected files (can be empty!)
+static const ::rtl::OUString PROP_MULTISELECTION_MODE(RTL_CONSTASCII_USTRINGPARAM("multiselection_mode")); // [sal_Bool] true=ON, false=OFF
+static const ::rtl::OUString PROP_TITLE(RTL_CONSTASCII_USTRINGPARAM("title"              )); // [OUString]
+static const ::rtl::OUString PROP_FILENAME(RTL_CONSTASCII_USTRINGPARAM("filename"          ) ); // [OUString]
+static const ::rtl::OUString PROP_DIRECTORY(RTL_CONSTASCII_USTRINGPARAM("directory"          )); // [OUString]
+static const ::rtl::OUString PROP_FEATURES(RTL_CONSTASCII_USTRINGPARAM("features"           )); // [sal_Int32]
+static const ::rtl::OUString PROP_TEMPLATE_DESCR(RTL_CONSTASCII_USTRINGPARAM("templatedescription")); // [sal_Int32]
+static const ::rtl::OUString PROP_FILTER_TITLE(RTL_CONSTASCII_USTRINGPARAM("filter_title"       )); // [OUString]
+static const ::rtl::OUString PROP_FILTER_VALUE(RTL_CONSTASCII_USTRINGPARAM("filter_value"       )); // [OUString]
+static const ::rtl::OUString PROP_FORCE(RTL_CONSTASCII_USTRINGPARAM("force"              )); // [sal_Bool]
 
-static const ::rtl::OUString PROP_CONTROL_ID          = ::rtl::OUString::createFromAscii("control_id"         ); // [sal_Int16]
-static const ::rtl::OUString PROP_CONTROL_ACTION      = ::rtl::OUString::createFromAscii("control_action"     ); // [sal_Int16]
-static const ::rtl::OUString PROP_CONTROL_VALUE       = ::rtl::OUString::createFromAscii("control_value"      ); // [Any]
-static const ::rtl::OUString PROP_CONTROL_LABEL       = ::rtl::OUString::createFromAscii("control_label"      ); // [OUString]
-static const ::rtl::OUString PROP_CONTROL_ENABLE      = ::rtl::OUString::createFromAscii("control_enable"     ); // [sal_Bool] true=ON, false=OFF
+static const ::rtl::OUString PROP_CONTROL_ID(RTL_CONSTASCII_USTRINGPARAM("control_id"         )); // [sal_Int16]
+static const ::rtl::OUString PROP_CONTROL_ACTION(RTL_CONSTASCII_USTRINGPARAM("control_action"     )); // [sal_Int16]
+static const ::rtl::OUString PROP_CONTROL_VALUE(RTL_CONSTASCII_USTRINGPARAM("control_value"      )); // [Any]
+static const ::rtl::OUString PROP_CONTROL_LABEL(RTL_CONSTASCII_USTRINGPARAM("control_label"      )); // [OUString]
+static const ::rtl::OUString PROP_CONTROL_ENABLE(RTL_CONSTASCII_USTRINGPARAM("control_enable"     )); // [sal_Bool] true=ON, false=OFF
 
 //-----------------------------------------------------------------------------
 /** native implementation of the file picker on Vista and upcoming windows versions.

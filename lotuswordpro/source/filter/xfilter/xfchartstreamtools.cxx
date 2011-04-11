@@ -89,7 +89,7 @@ void XFChartStreamTools::ParseStream(SvStorageStreamRef rInpStream, Reference<XD
             return;
         }
         xParser = uno::Reference< xml::sax::XParser > (
-            xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )),
+            xServiceFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
             uno::UNO_QUERY );
 
         if( ! xParser.is() )

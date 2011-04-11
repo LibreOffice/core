@@ -57,11 +57,6 @@
  * @file
  * Styles for ordered list and unordered list.
  ************************************************************************/
-/*************************************************************************
- * Change History
- * 2005-01-07   create the file.
- * 2005-01-20   use XFNumFmt to fill XFListLevelNumber.
- ************************************************************************/
 #include    "xfliststyle.hxx"
 
 XFListLevel::XFListLevel()

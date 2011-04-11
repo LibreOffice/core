@@ -43,7 +43,8 @@
 
 
 using namespace ::com::sun::star;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 const char* cURLStart           = ".uno:DataSourceBrowser/";
 const char* cURLFormLetter      = ".uno:DataSourceBrowser/FormLetter";
@@ -234,11 +235,10 @@ void SwXDispatch::dispatch(
             FN_MAILMERGE_WIZARD,
             SFX_CALLMODE_ASYNCHRON,
             &aDBProperties, 0L);
-//      pNewDBMgr->ExecuteFormLetter(rSh, aArgs);
     }
     else if(!aURL.Complete.compareToAscii(cURLDocumentDataSource))
     {
-        OSL_ENSURE(sal_False, "SwXDispatch::dispatch: this URL is not to be dispatched!");
+        OSL_FAIL("SwXDispatch::dispatch: this URL is not to be dispatched!");
     }
     else if(!aURL.Complete.compareToAscii(cInternalDBChangeNotification))
     {
@@ -393,7 +393,6 @@ const sal_Char* SwXDispatch::GetDBChangeURL()
 
 SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::DispatchMutexLock_Impl(
                                                  SwXDispatchProviderInterceptor& ) :
-//    aGuard(rInterceptor.m_aMutex) #102295# solar mutex has to be used currently
     aGuard(Application::GetSolarMutex())
 {
 }

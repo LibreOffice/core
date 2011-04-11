@@ -94,9 +94,9 @@ public:
     DlgEdFunc( OReportSection* pParent );
     virtual ~DlgEdFunc();
 
-    virtual BOOL MouseButtonDown( const MouseEvent& rMEvt );
-    virtual BOOL MouseButtonUp( const MouseEvent& rMEvt );
-    virtual BOOL MouseMove( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
 
     /** checks if the keycode is known by the child windows
         @param  _rCode  the keycode
@@ -135,9 +135,9 @@ public:
     DlgEdFuncInsert( OReportSection* pParent );
     ~DlgEdFuncInsert();
 
-    virtual BOOL MouseButtonDown( const MouseEvent& rMEvt );
-    virtual BOOL MouseButtonUp( const MouseEvent& rMEvt );
-    virtual BOOL MouseMove( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
 };
 
 //============================================================================
@@ -150,11 +150,11 @@ public:
     DlgEdFuncSelect( OReportSection* pParent );
     ~DlgEdFuncSelect();
 
-    virtual BOOL MouseButtonDown( const MouseEvent& rMEvt );
-    virtual BOOL MouseButtonUp( const MouseEvent& rMEvt );
-    virtual BOOL MouseMove( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonDown( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseButtonUp( const MouseEvent& rMEvt );
+    virtual sal_Bool MouseMove( const MouseEvent& rMEvt );
 
-    void SetInEditMode(SdrTextObj* _pTextObj,const MouseEvent& rMEvt, BOOL bQuickDrag);
+    void SetInEditMode(SdrTextObj* _pTextObj,const MouseEvent& rMEvt, sal_Bool bQuickDrag);
 };
 
 }

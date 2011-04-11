@@ -45,7 +45,7 @@ using namespace ::xmloff::token;
 // class XMLMeasurePropHdl
 //
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_DrawAspect_Enum[] =
+SvXMLEnumMapEntry const pXML_DrawAspect_Enum[] =
 {
     { XML_CONTENT,          1   },
     { XML_THUMBNAIL,        2   },

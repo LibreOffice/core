@@ -42,13 +42,13 @@ module com { module sun { module star { module ui {
     elements.
 
     <p>
-    OpenOffice.org has an amout of user interface elements that can be positioned,
+    OpenOffice.org has an amount of user interface elements that can be positioned,
     resized, closed and their style can be changed. This service provides access
     to the window based information of available user interface elements which are
     part of OpenOffice.org modules, like Writer or Calc.
     </p>
 
-    @since OOo 2.0.0
+    @since OOo 2.0
 */
 
 service WindowStateConfiguration

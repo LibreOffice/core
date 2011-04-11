@@ -31,7 +31,7 @@
 #include "editwin.hxx"
 #include <automation/communi.hxx>
 
-#define TT_PORT_NOT_INITIALIZED     ULONG(0xFFFFFFFF)   // Eigentlich ja noch mehr, aber soll mal reichen
+#define TT_PORT_NOT_INITIALIZED     sal_uLong(0xFFFFFFFF)   // Eigentlich ja noch mehr, aber soll mal reichen
 #define TT_NO_PORT_DEFINED          0
 
 class RemoteControlCommunicationManager : public CommunicationManagerServerViaSocket
@@ -41,12 +41,12 @@ class RemoteControlCommunicationManager : public CommunicationManagerServerViaSo
 #endif
     String aOriginalWinCaption;
     String aAdditionalWinCaption;
-    BOOL bIsPortValid;
+    sal_Bool bIsPortValid;
     DECL_LINK( SetWinCaption, Timer* = NULL);
     Timer* pTimer;
     virtual void InfoMsg( InfoString aMsg );
-    static ULONG nPortIs;
-    static BOOL bQuiet;
+    static sal_uLong nPortIs;
+    static sal_Bool bQuiet;
 
 public:
 #if OSL_DEBUG_LEVEL > 1
@@ -59,8 +59,8 @@ public:
     virtual void ConnectionOpened( CommunicationLink* pCL );
     virtual void ConnectionClosed( CommunicationLink* pCL );
 
-    static ULONG GetPort();
-    static USHORT nComm;
+    static sal_uLong GetPort();
+    static sal_uInt16 nComm;
 
 #if OSL_DEBUG_LEVEL > 1
 //  virtual void DataReceived( CommunicationLink* pCL );

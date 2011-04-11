@@ -33,7 +33,6 @@ PACKAGE = com$/sun$/star$/wizards$/query
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
-#.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar commonwizards.jar
 CUSTOMMANIFESTFILE= MANIFEST.MF
@@ -43,10 +42,6 @@ JARTARGET		= $(TARGET).jar
 JARCLASSPATH = commonwizards.jar
 
 # --- Files --------------------------------------------------------
-#SRS2NAME =              dbwizres
-#SRC2FILES=		dbwizres.src
-#RESLIB2SRSFILES= $(SRS)$/dbwizres.srs
-#RESLIB2NAME=	dbw
 
 JAVAFILES=	\
         CallQueryWizard.java \
@@ -59,3 +54,11 @@ JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR : $(MISC)/query.component
+
+$(MISC)/query.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        query.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)$(JARTARGET)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt query.component

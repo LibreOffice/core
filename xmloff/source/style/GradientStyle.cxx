@@ -28,12 +28,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "GradientStyle.hxx"
+#include "xmloff/GradientStyle.hxx"
 #include <com/sun/star/awt/Gradient.hpp>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -67,7 +67,7 @@ enum SvXMLTokenMapAttrs
 };
 
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_GradientStyle_Enum[] =
+SvXMLEnumMapEntry const pXML_GradientStyle_Enum[] =
 {
     { XML_GRADIENTSTYLE_LINEAR,         awt::GradientStyle_LINEAR },
     { XML_GRADIENTSTYLE_AXIAL,          awt::GradientStyle_AXIAL },
@@ -112,7 +112,7 @@ sal_Bool XMLGradientStyleImport::importXML(
     aGradient.Border = 0;
 
     {
-        static __FAR_DATA SvXMLTokenMapEntry aGradientAttrTokenMap[] =
+        static SvXMLTokenMapEntry aGradientAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
     { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },
@@ -235,8 +235,6 @@ sal_Bool XMLGradientStyleImport::importXML(
 // Export
 //-------------------------------------------------------------
 
-#ifndef SVX_LIGHT
-
 XMLGradientStyleExport::XMLGradientStyleExport(
     SvXMLExport& rExp )
     : rExport(rExp)
@@ -341,7 +339,5 @@ sal_Bool XMLGradientStyleExport::exportXML(
 
     return bRet;
 }
-
-#endif // #ifndef SVX_LIGHT
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

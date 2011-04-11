@@ -66,8 +66,13 @@ protected:
     // Zuruecksetzen in die erste Zeile.
     void Init();
     void CtorInitTxtIter( SwTxtFrm *pFrm, SwTxtInfo *pInf );
-    inline SwTxtIter(SwTxtNode* pTxtNode) : SwAttrIter(pTxtNode) { }
-
+    inline SwTxtIter(SwTxtNode* pTxtNode)
+        : SwAttrIter(pTxtNode)
+        , pFrm(NULL)
+        , pInf(NULL)
+        , pCurr(NULL)
+        , pPrev(NULL)
+    {}
 public:
     inline SwTxtIter( SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf ) : SwAttrIter(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtIter( pTxtFrm, pTxtInf ); }
@@ -279,8 +284,8 @@ public:
 
     // calculates baseline for portion rPor
     // bAutoToCentered indicates, if AUTOMATIC mode means CENTERED or BASELINE
-    USHORT AdjustBaseLine( const SwLineLayout& rLine, const SwLinePortion* pPor,
-                           USHORT nPorHeight = 0, USHORT nAscent = 0,
+    sal_uInt16 AdjustBaseLine( const SwLineLayout& rLine, const SwLinePortion* pPor,
+                           sal_uInt16 nPorHeight = 0, sal_uInt16 nAscent = 0,
                            const sal_Bool bAutoToCentered = sal_False ) const;
 
     static inline void SetRightMargin( const sal_Bool bNew ){ bRightMargin = bNew; }

@@ -71,7 +71,7 @@ namespace
 CertificateViewer::CertificateViewer(
         Window* _pParent,
         const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
-        const cssu::Reference< dcss::security::XCertificate >& _rXCert, BOOL bCheckForPrivateKey )
+        const cssu::Reference< dcss::security::XCertificate >& _rXCert, sal_Bool bCheckForPrivateKey )
     :TabDialog      ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTVIEWER ) )
     ,maTabCtrl      ( this, XMLSEC_RES( 1 ) )
     ,maOkBtn        ( this, XMLSEC_RES( BTN_OK ) )
@@ -120,24 +120,18 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     ,maKeyImg               ( this, XMLSEC_RES( IMG_KEY ) )
     ,maHintCorrespPrivKeyFI ( this, XMLSEC_RES( FI_CORRPRIVKEY ) )
 {
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-        maKeyImg.SetImage( Image( XMLSEC_RES( IMG_KEY_HC ) ) );
-
     //Verify the certificate
     sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert,
          Sequence<Reference<css::security::XCertificate> >());
 
     bool bCertValid = certStatus == css::security::CertificateValidity::VALID ?  true : false;
 
-    bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     if ( !bCertValid )
     {
         maCertImg.SetImage(
-            Image( XMLSEC_RES( bHC ? IMG_STATE_NOT_VALIDATED_HC : IMG_STATE_NOT_VALIDATED ) ) );
+            Image( XMLSEC_RES( IMG_STATE_NOT_VALIDATED ) ) );
         maHintNotTrustedFI.SetText( String( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) ) );
     }
-    else if ( bHC )
-        maCertImg.SetImage( Image( XMLSEC_RES( IMG_STATE_CERIFICATED_HC ) ) );
 
     FreeResource();
 
@@ -210,12 +204,12 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     XmlSec::AlignAfterImage( maKeyImg, maHintCorrespPrivKeyFI, 12 );
 
     // Check if we have the private key...
-    BOOL bHasPrivateKey = FALSE;
+    sal_Bool bHasPrivateKey = sal_False;
     // #i41270# Check only if we have that certificate in our security environment
     if ( _pDlg->mbCheckForPrivateKey )
     {
         long nCertificateCharacters = _pDlg->mxSecurityEnvironment->getCertificateCharacters( xCert );
-        bHasPrivateKey = ( nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY ) ? TRUE : FALSE;
+        bHasPrivateKey = ( nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY ) ? sal_True : sal_False;
     }
     if ( !bHasPrivateKey )
     {
@@ -248,7 +242,7 @@ inline Details_UserDatat::Details_UserDatat( const String& _rTxt, bool _bFixedWi
 void CertificateViewerDetailsTP::Clear( void )
 {
     maElementML.SetText( String() );
-    ULONG           i = 0;
+    sal_uLong           i = 0;
     SvLBoxEntry*    pEntry = maElementsLB.GetEntry( i );
     while( pEntry )
     {
@@ -287,14 +281,13 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
 
     // fill list box
     Reference< security::XCertificate > xCert = mpDlg->mxCert;
-    UINT16                  nLineBreak = 16;
+    sal_uInt16                  nLineBreak = 16;
     const char*             pHexSep = " ";
     String                  aLBEntry;
     String                  aDetails;
-    // --> PB 2004-10-11 #i35107# - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
+    // Certificate Versions are reported wrong (#i35107#) - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
     aLBEntry = String::CreateFromAscii( "V" );
     aLBEntry += String::CreateFromInt32( xCert->getVersion() + 1 );
-    // <--
     InsertElement( String( XMLSEC_RES( STR_VERSION ) ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
@@ -420,12 +413,6 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
     ,msCertNotValidated     ( XMLSEC_RES( STR_PATH_CERT_NOT_VALIDATED ) )
 
 {
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        maCertImage = Image( XMLSEC_RES( IMG_CERT_SMALL_HC ) );
-        maCertNotValidatedImage = Image( XMLSEC_RES( IMG_CERT_NOTVALIDATED_SMALL_HC ) );
-    }
-
     FreeResource();
 
     maCertPathLB.SetNodeDefaultImages();
@@ -500,7 +487,7 @@ IMPL_LINK( CertificateViewerCertPathTP, ViewCertHdl, void*, EMPTYARG )
     SvLBoxEntry* pEntry = maCertPathLB.FirstSelected();
     if( pEntry )
     {
-        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, ((CertPath_UserData*)pEntry->GetUserData())->mxCert, FALSE );
+        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, ((CertPath_UserData*)pEntry->GetUserData())->mxCert, sal_False );
         aViewer.Execute();
     }
 
@@ -526,7 +513,7 @@ IMPL_LINK( CertificateViewerCertPathTP, CertSelectHdl, void*, EMPTYARG )
 void CertificateViewerCertPathTP::Clear( void )
 {
     maCertStatusML.SetText( String() );
-    ULONG           i = 0;
+    sal_uLong           i = 0;
     SvLBoxEntry*    pEntry = maCertPathLB.GetEntry( i );
     while( pEntry )
     {

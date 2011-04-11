@@ -73,9 +73,8 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::container;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
-
+using ::rtl::OUString;
 
 namespace stoc_inv
 {
@@ -639,7 +638,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
         catch (Exception & exc)
         {
             throw InvocationTargetException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("exception occured in setValue(): ") ) +
+                OUString( RTL_CONSTASCII_USTRINGPARAM("exception occurred in setValue(): ") ) +
                 exc.Message, Reference< XInterface >(), makeAny( exc /* though sliced */ ) );
         }
     }
@@ -1246,12 +1245,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

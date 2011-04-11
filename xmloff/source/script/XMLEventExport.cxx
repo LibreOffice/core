@@ -38,7 +38,7 @@
 #include <tools/debug.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 
 
@@ -70,7 +70,7 @@ XMLEventExport::~XMLEventExport()
     for( HandlerMap::iterator aIter =
              aHandlerMap.begin();
          aIter != aEnd;
-         aIter++ )
+         ++aIter )
     {
         delete aIter->second;
     }
@@ -159,7 +159,7 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
             // don't proceed further
             ::rtl::OString aStr("Unknown event name:" );
             aStr += ::rtl::OUStringToOString( aNames[i], RTL_TEXTENCODING_UTF8 );
-            DBG_ERROR( aStr.getStr() );
+            OSL_FAIL( aStr.getStr() );
         }
 #endif
     }
@@ -209,7 +209,7 @@ void XMLEventExport::ExportSingleEvent(
         // don't proceed further
         ::rtl::OString aStr("Unknown event name:" );
         aStr += ::rtl::OUStringToOString( rApiEventName, RTL_TEXTENCODING_UTF8 );
-        DBG_ERROR( aStr.getStr() );
+        OSL_FAIL( aStr.getStr() );
     }
 #endif
 }
@@ -256,7 +256,7 @@ void XMLEventExport::ExportEvent(
             {
                 if (! sType.equalsAsciiL("None", sizeof("None")-1))
                 {
-                    DBG_ERROR("unknown event type returned by API");
+                    OSL_FAIL("unknown event type returned by API");
                     // unknown type -> error (ignore)
                 }
                 // else: we ignore None fields

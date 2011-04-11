@@ -77,3 +77,11 @@ APP1DEF=$(MISC)$/$(APP1TARGET).def
 
 .INCLUDE :	target.mk
 
+
+ALLTAR : $(MISC)/smplmail.component
+
+$(MISC)/smplmail.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        smplmail.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt smplmail.component

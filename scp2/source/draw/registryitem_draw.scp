@@ -920,7 +920,7 @@ RegistryItem gid_Regitem_OpenOffice_OTG_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".otg\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Name = "opendocument.DrawDocument.1";
+    Name = "opendocument.DrawTemplate.1";
     Value = " ";
 End
 
@@ -938,7 +938,7 @@ RegistryItem gid_Regitem_OpenOffice_STD_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".std\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Draw_Bin;
-    Name = "soffice.StarDrawDocument.6";
+    Name = "soffice.StarDrawTemplate.6";
     Value = " ";
 End
 
@@ -948,7 +948,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Draw_Bin;
     Name = ".otg";
-    Value = "opendocument.DrawDocument.1";
+    Value = "opendocument.DrawTemplate.1";
     Styles = ();
 End
 

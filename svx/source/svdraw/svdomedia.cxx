@@ -32,8 +32,8 @@
 #include <vcl/svapp.hxx>
 
 #include <svx/svdomedia.hxx>
-#include "svdglob.hxx"
-#include "svdstr.hrc"
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediawindow.hxx>
 
@@ -104,9 +104,9 @@ void SdrMediaObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 
 // ------------------------------------------------------------------------------
 
-UINT16 SdrMediaObj::GetObjIdentifier() const
+sal_uInt16 SdrMediaObj::GetObjIdentifier() const
 {
-    return UINT16( OBJ_MEDIA );
+    return sal_uInt16( OBJ_MEDIA );
 }
 
 // ------------------------------------------------------------------------------
@@ -135,17 +135,20 @@ void SdrMediaObj::TakeObjNamePlural(XubString& rName) const
 
 // ------------------------------------------------------------------------------
 
-void SdrMediaObj::operator=(const SdrObject& rObj)
+SdrMediaObj* SdrMediaObj::Clone() const
 {
+    return CloneHelper< SdrMediaObj >();
+}
+
+SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
+{
+    if( this == &rObj )
+        return *this;
     SdrRectObj::operator=( rObj );
 
-    if( rObj.ISA( SdrMediaObj ) )
-    {
-        const SdrMediaObj& rMediaObj = static_cast< const SdrMediaObj& >( rObj );
-
-        setMediaProperties( rMediaObj.getMediaProperties() );
-        setGraphic( rMediaObj.mapGraphic.get() );
-    }
+    setMediaProperties( rObj.getMediaProperties() );
+    setGraphic( rObj.mapGraphic.get() );
+    return *this;
 }
 
 // ------------------------------------------------------------------------------

@@ -37,7 +37,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <ooo/vba/XControlProvider.hpp>
@@ -210,7 +209,6 @@ uno::Any SAL_CALL
 SwVbaDocument::Shapes( const uno::Any& index ) throw (uno::RuntimeException)
 {
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( getModel(), uno::UNO_QUERY_THROW );
-    //uno::Reference< drawing::XShapes > xShapes( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
     uno::Reference< container::XIndexAccess > xIndexAccess( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XModel > xModel( mxTextDocument, uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xCol( new ScVbaShapes( this, mxContext, xIndexAccess, xModel ) );
@@ -238,19 +236,10 @@ SwVbaDocument::TablesOfContents( const uno::Any& index ) throw (uno::RuntimeExce
     return uno::makeAny( xCol );
 }
 
-#ifdef FIELDPATCH
-uno::Any SAL_CALL
-SwVbaDocument::FormFields( const uno::Any& index ) throw (uno::RuntimeException)
-{
-    uno::Reference< XCollection > xCol( new SwVbaFormFields( this, mxContext, getModel() ) );
-    if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-#else
 uno::Any SAL_CALL
 SwVbaDocument::FormFields( const uno::Any& /*index*/ ) throw (uno::RuntimeException)
 {
     uno::Reference< XCollection > xCol;
-#endif
     return uno::makeAny( xCol );
 }
 

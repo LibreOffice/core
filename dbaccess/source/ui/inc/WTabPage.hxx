@@ -43,7 +43,7 @@ namespace dbaui
         OCopyTableWizard*           m_pParent;
         sal_Bool                    m_bFirstTime;   // Page wird das erste mal gerufen ; should be set in the reset methode
 
-        OWizardPage( Window* pParent, const ResId& rResId );// : TabPage(pParent,rResId),m_pParent((OCopyTableWizard*)pParent),m_bFirstTime(sal_True) {};
+        OWizardPage( Window* pParent, const ResId& rResId );
 
     public:
         virtual void        Reset ( )           = 0;

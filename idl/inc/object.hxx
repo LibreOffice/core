@@ -32,6 +32,8 @@
 #define _SVSTDARR_ULONGS
 #include <types.hxx>
 #include <slot.hxx>
+#include <vector>
+#include <tools/list.hxx>
 
 struct SvSlotElement
 {
@@ -43,18 +45,10 @@ struct SvSlotElement
              {}
 };
 DECLARE_LIST( SvSlotElementList, SvSlotElement* )
+
 class SvMetaClass;
-DECLARE_LIST( SvMetaClassList, SvMetaClass* )
+typedef ::std::vector< SvMetaClass* > SvMetaClassList;
 
-class SvULongs : public List
-{
-public:
-    void    Insert( ULONG& rId, ULONG nPos ) { ULONG nId(rId ); List::Insert( (void*) nId, nPos ); }
-    void    Remove( ULONG& rId ){ ULONG nId(rId ); List::Remove( (void*) nId ); }
-    ULONG   GetObject( ULONG nPos ){ return (ULONG) List::GetObject( nPos ); }
-};
-
-/******************** class SvClassElement *******************************/
 SV_DECL_REF(SvMetaClass)
 class SvClassElement : public SvPersistBase
 {
@@ -70,9 +64,9 @@ public:
     const ByteString &  GetPrefix() const
                     { return aPrefix; }
 
-    void            SetAutomation( BOOL rAutomation )
+    void            SetAutomation( sal_Bool rAutomation )
                     { aAutomation = rAutomation; }
-    BOOL            GetAutomation() const
+    sal_Bool            GetAutomation() const
                     { return aAutomation; }
 
     void            SetClass( SvMetaClass * pClass )
@@ -84,7 +78,6 @@ public:
 SV_DECL_IMPL_REF(SvClassElement)
 SV_DECL_IMPL_PERSIST_LIST(SvClassElement,SvClassElement *)
 
-/******************** class SvMetaClass *********************************/
 class SvMetaModule;
 SV_DECL_PERSIST_LIST(SvMetaClass,SvMetaClass *)
 class SvMetaClass : public SvMetaType
@@ -95,25 +88,22 @@ class SvMetaClass : public SvMetaType
     SvBOOL                      aAutomation;
     SvMetaClassRef              xAutomationInterface;
 
-//    void                FillSbxMemberObject( SvIdlDataBase & rBase,
-//                                            SbxObject *, StringList &,
-//                                            BOOL bVariable );
-    BOOL                TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
+    sal_Bool                TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                      SvMetaAttribute & rAttr ) const;
 #ifdef IDL_COMPILER
     void                WriteSlotStubs( const ByteString & rShellName,
                                         SvSlotElementList & rSlotList,
                                         ByteStringList & rList,
                                         SvStream & rOutStm );
-    USHORT              WriteSlotParamArray( SvIdlDataBase & rBase,
+    sal_uInt16              WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvSlotElementList & rSlotList,
                                             SvStream & rOutStm );
-    USHORT              WriteSlots( const ByteString & rShellName, USHORT nCount,
+    sal_uInt16              WriteSlots( const ByteString & rShellName, sal_uInt16 nCount,
                                     SvSlotElementList & rSlotList,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
 
-    void                InsertSlots( SvSlotElementList& rList, SvULongs& rSuperList,
+    void                InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>& rSuperList,
                                     SvMetaClassList & rClassList,
                                     const ByteString & rPrefix, SvIdlDataBase& rBase );
 
@@ -121,45 +111,44 @@ protected:
     virtual void    ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm );
     virtual void    WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, USHORT nTab );
+                                    SvStream & rOutStm, sal_uInt16 nTab );
     virtual void    ReadContextSvIdl( SvIdlDataBase &,
                                      SvTokenStream & rInStm );
     virtual void    WriteContextSvIdl( SvIdlDataBase & rBase,
-                                     SvStream & rOutStm, USHORT nTab );
+                                     SvStream & rOutStm, sal_uInt16 nTab );
     void            WriteOdlMembers( ByteStringList & rSuperList,
-                                    BOOL bVariable, BOOL bWriteTab,
+                                    sal_Bool bVariable, sal_Bool bWriteTab,
                                     SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, USHORT nTab );
+                                    SvStream & rOutStm, sal_uInt16 nTab );
 #endif
 public:
             SV_DECL_META_FACTORY1( SvMetaClass, SvMetaType, 6 )
             SvMetaClass();
 
-    BOOL                GetAutomation() const
+    sal_Bool                GetAutomation() const
                         { return aAutomation; }
     SvMetaClass *       GetSuperClass() const
                         { return aSuperClass; }
 
     void                FillClasses( SvMetaClassList & rList );
-//    virtual void        FillSbxObject( SvIdlDataBase & rBase, SbxObject * );
 
     const SvClassElementMemberList&
                         GetClassList() const
                         { return aClassList; }
 
 #ifdef IDL_COMPILER
-    virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
+    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                 USHORT nTab,
+                                 sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void        WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
                                 Table* pTable );
     virtual void        WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                                  Table * pTable );
-    virtual void        WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
-    virtual void        WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
+    virtual void        WriteCxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    virtual void        WriteHxx( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 #endif
 };
 SV_IMPL_REF(SvMetaClass)

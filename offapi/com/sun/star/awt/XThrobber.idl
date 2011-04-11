@@ -41,20 +41,13 @@
 
 //=============================================================================
 
-/** Controls the animation control.
+/**
+    @deprecatd
+        You should use <type>XAnimation</type>, <type>AnimatedImagesControl</type>, and <type>AnimatedImagesControlModel</type>.
  */
 published interface XThrobber: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-
-    /** starts the animation of the control.
-     */
     void start();
-
-    //-------------------------------------------------------------------------
-
-    /** stops the animation of the control.
-     */
     void stop();
 };
 

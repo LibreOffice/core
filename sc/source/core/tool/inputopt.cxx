@@ -47,13 +47,14 @@
 #include "miscuno.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 
 //  Version, ab der das Item kompatibel ist
-#define SC_VERSION ((USHORT)351)
+#define SC_VERSION ((sal_uInt16)351)
 
 
 //========================================================================
@@ -83,15 +84,15 @@ ScInputOptions::~ScInputOptions()
 void ScInputOptions::SetDefaults()
 {
     nMoveDir        = DIR_BOTTOM;
-    bMoveSelection  = TRUE;
-    bEnterEdit      = FALSE;
-    bExtendFormat   = FALSE;
-    bRangeFinder    = TRUE;
-    bExpandRefs     = FALSE;
-    bMarkHeader     = TRUE;
-    bUseTabCol      = FALSE;
-    bTextWysiwyg    = FALSE;
-    bReplCellsWarn  = TRUE;
+    bMoveSelection  = sal_True;
+    bEnterEdit      = false;
+    bExtendFormat   = false;
+    bRangeFinder    = sal_True;
+    bExpandRefs     = false;
+    bMarkHeader     = sal_True;
+    bUseTabCol      = false;
+    bTextWysiwyg    = false;
+    bReplCellsWarn  = sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -155,10 +156,8 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
 }
 
 ScInputCfg::ScInputCfg() :
-    ConfigItem( OUString::createFromAscii( CFGPATH_INPUT ) )
+    ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_INPUT )) )
 {
-    sal_Int32 nIntVal = 0;
-
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     EnableNotification(aNames);
@@ -171,11 +170,12 @@ ScInputCfg::ScInputCfg() :
             DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
             if(pValues[nProp].hasValue())
             {
+                sal_Int32 nIntVal = 0;
                 switch(nProp)
                 {
                     case SCINPUTOPT_MOVEDIR:
                         if ( pValues[nProp] >>= nIntVal )
-                            SetMoveDir( (USHORT)nIntVal );
+                            SetMoveDir( (sal_uInt16)nIntVal );
                         break;
                     case SCINPUTOPT_MOVESEL:
                         SetMoveSelection( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
@@ -256,9 +256,9 @@ void ScInputCfg::Commit()
     PutProperties(aNames, aValues);
 }
 
-void ScInputCfg::Notify( const Sequence<rtl::OUString>& /* aPropertyNames */ )
+void ScInputCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
 {
-    DBG_ERROR("properties have been changed");
+    OSL_FAIL("properties have been changed");
 }
 
 void ScInputCfg::SetOptions( const ScInputOptions& rNew )

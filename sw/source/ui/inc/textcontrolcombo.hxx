@@ -51,14 +51,14 @@ public:
                             Control& _rCtrl, FixedText& _rFTbefore, FixedText& _rFTafter );
     virtual     ~TextControlCombo();
 
-    void        Arrange( FixedText& _rOrg, BOOL bShow = true );
+    void        Arrange( FixedText& _rOrg, sal_Bool bShow = true );
 
     // identical to window functionality
-    void        Show( BOOL bVisible = TRUE, USHORT nFlags = 0 );
-    void        Hide( USHORT nFlags = 0 ) { Show( FALSE, nFlags ); }
+    void        Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = 0 );
+    void        Hide( sal_uInt16 nFlags = 0 ) { Show( sal_False, nFlags ); }
 
-    void        Enable( BOOL bEnable = TRUE, BOOL bChild = TRUE );
-    void        Disable( BOOL bChild = TRUE ) { Enable( FALSE, bChild ); }
+    void        Enable( sal_Bool bEnable = sal_True, sal_Bool bChild = sal_True );
+    void        Disable( sal_Bool bChild = sal_True ) { Enable( sal_False, bChild ); }
 };
 
 

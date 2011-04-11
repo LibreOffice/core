@@ -142,7 +142,7 @@ namespace comphelper
             @throws ::com::sun::star::lang::ServiceNotRegisteredException
                 if the given service is not registered
             @throws Exception
-                if an exception occured during creating the component
+                if an exception occurred during creating the component
             @return
                 the newly created component. Is never <NULL/>.
         */
@@ -153,7 +153,7 @@ namespace comphelper
             @throws ::com::sun::star::lang::ServiceNotRegisteredException
                 if the given service is not registered
             @throws Exception
-                if an exception occured during creating the component
+                if an exception occurred during creating the component
             @return
                 the newly created component. Is never <NULL/>.
         */
@@ -167,7 +167,7 @@ namespace comphelper
             @throws ::com::sun::star::lang::ServiceNotRegisteredException
                 if the given service is not registered
             @throws Exception
-                if an exception occured during creating the component
+                if an exception occurred during creating the component
             @return
                 the newly created component. Is never <NULL/>.
         */
@@ -181,7 +181,7 @@ namespace comphelper
             @throws ::com::sun::star::lang::ServiceNotRegisteredException
                 if the given service is not registered
             @throws Exception
-                if an exception occured during creating the component
+                if an exception occurred during creating the component
             @return
                 the newly created component. Is never <NULL/>.
         */

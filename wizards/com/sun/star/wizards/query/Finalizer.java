@@ -26,15 +26,16 @@
  ************************************************************************/
 package com.sun.star.wizards.query;
 
-import com.sun.star.wizards.common.*;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
-import com.sun.star.wizards.db.*;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.XComponent;
 import com.sun.star.sdb.CommandType;
-import com.sun.star.uno.*;
-import com.sun.star.wizards.ui.*;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.wizards.common.HelpIds;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.ui.UIConsts;
+import com.sun.star.wizards.ui.UnoDialog;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -66,7 +67,7 @@ public class Finalizer
 
         m_queryWizard.insertLabel("lblQueryTitle", new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -74,15 +75,15 @@ public class Finalizer
                 });
         m_aTxtTitle = m_queryWizard.insertTextField("txtQueryTitle", "changeTitle", this, new String[]
                 {
-                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    new Integer(12), "HID:" + curHelpIndex++, new Integer(95), new Integer(37), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(90)
+                    new Integer(12), HelpIds.getHelpIdString(curHelpIndex++), new Integer(95), new Integer(37), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(90)
                 });
         m_queryWizard.insertLabel("lblHowGoOn", new String[]
                 {
-                    "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -91,25 +92,25 @@ public class Finalizer
         this.xRadioDisplayQuery = m_queryWizard.insertRadioButton("optDisplayQuery",
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    new Integer(9), "HID:" + curHelpIndex++, resoptDisplayQuery, new Integer(192), new Integer(46), new Short((short) 1), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
+                    new Integer(9), HelpIds.getHelpIdString(curHelpIndex++), resoptDisplayQuery, new Integer(192), new Integer(46), new Short((short) 1), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
                 });
 
         m_queryWizard.insertRadioButton("optModifyQuery",
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    new Integer(10), "HID:" + curHelpIndex++, resoptModifyQuery, new Integer(192), new Integer(56), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
+                    new Integer(10), HelpIds.getHelpIdString(curHelpIndex++), resoptModifyQuery, new Integer(192), new Integer(56), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(118)
                 });
         m_queryWizard.insertFixedLine("flnSummary", new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -117,11 +118,11 @@ public class Finalizer
                 });
         m_queryWizard.insertTextField("txtSummary", 0, null, new String[]
                 {
-                    "Height", "HelpURL", "MultiLine", "PositionX", "PositionY", "ReadOnly", "Step", "VScroll", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ReadOnly", PropertyNames.PROPERTY_STEP, "VScroll", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    new Integer(96), "HID:" + curHelpIndex++, Boolean.TRUE, new Integer(95), new Integer(80), Boolean.TRUE, new Integer(8), Boolean.TRUE, new Integer(209)
+                    new Integer(96), HelpIds.getHelpIdString(curHelpIndex++), Boolean.TRUE, new Integer(95), new Integer(80), Boolean.TRUE, new Integer(8), Boolean.TRUE, new Integer(209)
                 });
     }
 
@@ -145,7 +146,7 @@ public class Finalizer
                 {
                     String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
                     sCurQueryName = resQuery + "_" + sCommandNames[0];
-                    sCurQueryName = CurDBMetaData.ConnectionTools.getObjectNames().suggestName(CommandType.QUERY, sCurQueryName);
+                    sCurQueryName = CurDBMetaData.suggestName( CommandType.QUERY, sCurQueryName );
                     Helper.setUnoPropertyValue(UnoDialog.getModel(m_aTxtTitle), "Text", sCurQueryName);
                 }
             }
@@ -182,7 +183,7 @@ public class Finalizer
     {
         try
         {
-            final short state = AnyConverter.toShort( Helper.getUnoPropertyValue( UnoDialog.getModel( xRadioDisplayQuery ), "State" ) );
+            final short state = AnyConverter.toShort( Helper.getUnoPropertyValue( UnoDialog.getModel( xRadioDisplayQuery ), PropertyNames.PROPERTY_STATE ) );
             final boolean viewMode = state == (short)1;
             return !viewMode;
         }

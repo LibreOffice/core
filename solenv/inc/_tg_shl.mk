@@ -245,10 +245,10 @@ SHL1TARGET8=$(shell @fix_shl $(SHL1TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
-_SHL1IMP_ORD = $(SHL1STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL1STDLIBS:^"$(LB)/") 
+_SHL1IMP_ORD = $(SHL1STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL1STDLIBS:^"$(LB)/")
 SHL1IMP_ORD = $(foreach,i,$(_SHL1IMP_ORD) $(shell @-ls $i))
 .ELSE
-SHL1IMP_ORD = 
+SHL1IMP_ORD =
 .ENDIF
 
 
@@ -333,7 +333,7 @@ $(SHL1TARGETN) : \
         $(SHL1STDLIBS) \
         $(SHL1STDSHL) $(STDSHL1) \
         $(SHL1LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -357,7 +357,7 @@ $(SHL1TARGETN) : \
         $(SHL1STDLIBS)                      \
         $(SHL1STDSHL) $(STDSHL1)                           \
         $(SHL1LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -429,7 +429,7 @@ $(SHL1TARGETN) : \
     @echo $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
     $(SHL1VERSIONOBJ) \
     `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(SHL1LINKER) $(SHL1LINKFLAGS) $(SHL1VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(SHL1STDSHL) $(STDSHL1) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_1.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_1.cmd` \
@@ -440,8 +440,10 @@ $(SHL1TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_1.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL1RPATH) $@
+.IF "$(SHL1CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL1CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL1NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS1) $(SHL1TARGETN)
@@ -511,7 +513,7 @@ $(SHL1TARGETN) : \
         $(SHL1LIBS) \
         $(SHL1STDLIBS:^"-l") \
         $(SHL1LINKRES) \
-        $(SHL1STDSHL:^"-l") $(STDSHL1:^"-l") 
+        $(SHL1STDSHL:^"-l") $(STDSHL1:^"-l")
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -527,7 +529,6 @@ $(SHL1TARGETN) : \
         $(SHL1STDLIBS:^"-l") \
         $(SHL1LINKRES) \
         $(SHL1STDSHL:^"-l") $(STDSHL1:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -538,16 +539,6 @@ $(SHL1TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL1TARGET)
-
-runtest_$(SHL1TARGET) : $(SHL1TARGETN)
-    testshl $(SHL1TARGETN) sce/$(SHL1TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL1TARGETN)"!=""
 
 # unroll begin
@@ -797,10 +788,10 @@ SHL2TARGET8=$(shell @fix_shl $(SHL2TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
-_SHL2IMP_ORD = $(SHL2STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL2STDLIBS:^"$(LB)/") 
+_SHL2IMP_ORD = $(SHL2STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL2STDLIBS:^"$(LB)/")
 SHL2IMP_ORD = $(foreach,i,$(_SHL2IMP_ORD) $(shell @-ls $i))
 .ELSE
-SHL2IMP_ORD = 
+SHL2IMP_ORD =
 .ENDIF
 
 
@@ -885,7 +876,7 @@ $(SHL2TARGETN) : \
         $(SHL2STDLIBS) \
         $(SHL2STDSHL) $(STDSHL2) \
         $(SHL2LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -909,7 +900,7 @@ $(SHL2TARGETN) : \
         $(SHL2STDLIBS)                      \
         $(SHL2STDSHL) $(STDSHL2)                           \
         $(SHL2LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -981,7 +972,7 @@ $(SHL2TARGETN) : \
     @echo $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
     $(SHL2VERSIONOBJ) \
     `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(SHL2LINKER) $(SHL2LINKFLAGS) $(SHL2VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(SHL2STDSHL) $(STDSHL2) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_2.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_2.cmd` \
@@ -992,8 +983,10 @@ $(SHL2TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_2.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL2RPATH) $@
+.IF "$(SHL2CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL2CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL2NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS2) $(SHL2TARGETN)
@@ -1063,7 +1056,7 @@ $(SHL2TARGETN) : \
         $(SHL2LIBS) \
         $(SHL2STDLIBS:^"-l") \
         $(SHL2LINKRES) \
-        $(SHL2STDSHL:^"-l") $(STDSHL2:^"-l") 
+        $(SHL2STDSHL:^"-l") $(STDSHL2:^"-l")
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -1079,7 +1072,6 @@ $(SHL2TARGETN) : \
         $(SHL2STDLIBS:^"-l") \
         $(SHL2LINKRES) \
         $(SHL2STDSHL:^"-l") $(STDSHL2:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -1090,16 +1082,6 @@ $(SHL2TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL2TARGET)
-
-runtest_$(SHL2TARGET) : $(SHL2TARGETN)
-    testshl $(SHL2TARGETN) sce/$(SHL2TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL2TARGETN)"!=""
 
 # unroll begin
@@ -1349,10 +1331,10 @@ SHL3TARGET8=$(shell @fix_shl $(SHL3TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
-_SHL3IMP_ORD = $(SHL3STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL3STDLIBS:^"$(LB)/") 
+_SHL3IMP_ORD = $(SHL3STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL3STDLIBS:^"$(LB)/")
 SHL3IMP_ORD = $(foreach,i,$(_SHL3IMP_ORD) $(shell @-ls $i))
 .ELSE
-SHL3IMP_ORD = 
+SHL3IMP_ORD =
 .ENDIF
 
 
@@ -1437,7 +1419,7 @@ $(SHL3TARGETN) : \
         $(SHL3STDLIBS) \
         $(SHL3STDSHL) $(STDSHL3) \
         $(SHL3LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -1461,7 +1443,7 @@ $(SHL3TARGETN) : \
         $(SHL3STDLIBS)                      \
         $(SHL3STDSHL) $(STDSHL3)                           \
         $(SHL3LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -1533,7 +1515,7 @@ $(SHL3TARGETN) : \
     @echo $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
     $(SHL3VERSIONOBJ) \
     `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(SHL3LINKER) $(SHL3LINKFLAGS) $(SHL3VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(SHL3STDSHL) $(STDSHL3) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_3.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_3.cmd` \
@@ -1544,8 +1526,10 @@ $(SHL3TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_3.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL3RPATH) $@
+.IF "$(SHL3CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL3CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL3NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS3) $(SHL3TARGETN)
@@ -1615,7 +1599,7 @@ $(SHL3TARGETN) : \
         $(SHL3LIBS) \
         $(SHL3STDLIBS:^"-l") \
         $(SHL3LINKRES) \
-        $(SHL3STDSHL:^"-l") $(STDSHL3:^"-l") 
+        $(SHL3STDSHL:^"-l") $(STDSHL3:^"-l")
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -1631,7 +1615,6 @@ $(SHL3TARGETN) : \
         $(SHL3STDLIBS:^"-l") \
         $(SHL3LINKRES) \
         $(SHL3STDSHL:^"-l") $(STDSHL3:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -1642,16 +1625,6 @@ $(SHL3TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL3TARGET)
-
-runtest_$(SHL3TARGET) : $(SHL3TARGETN)
-    testshl $(SHL3TARGETN) sce/$(SHL3TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL3TARGETN)"!=""
 
 # unroll begin
@@ -1901,10 +1874,10 @@ SHL4TARGET8=$(shell @fix_shl $(SHL4TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
-_SHL4IMP_ORD = $(SHL4STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL4STDLIBS:^"$(LB)/") 
+_SHL4IMP_ORD = $(SHL4STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL4STDLIBS:^"$(LB)/")
 SHL4IMP_ORD = $(foreach,i,$(_SHL4IMP_ORD) $(shell @-ls $i))
 .ELSE
-SHL4IMP_ORD = 
+SHL4IMP_ORD =
 .ENDIF
 
 
@@ -1989,7 +1962,7 @@ $(SHL4TARGETN) : \
         $(SHL4STDLIBS) \
         $(SHL4STDSHL) $(STDSHL4) \
         $(SHL4LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -2013,7 +1986,7 @@ $(SHL4TARGETN) : \
         $(SHL4STDLIBS)                      \
         $(SHL4STDSHL) $(STDSHL4)                           \
         $(SHL4LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -2085,7 +2058,7 @@ $(SHL4TARGETN) : \
     @echo $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
     $(SHL4VERSIONOBJ) \
     `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(SHL4LINKER) $(SHL4LINKFLAGS) $(SHL4VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(SHL4STDSHL) $(STDSHL4) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_4.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_4.cmd` \
@@ -2096,8 +2069,10 @@ $(SHL4TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_4.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL4RPATH) $@
+.IF "$(SHL4CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL4CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL4NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS4) $(SHL4TARGETN)
@@ -2167,7 +2142,7 @@ $(SHL4TARGETN) : \
         $(SHL4LIBS) \
         $(SHL4STDLIBS:^"-l") \
         $(SHL4LINKRES) \
-        $(SHL4STDSHL:^"-l") $(STDSHL4:^"-l") 
+        $(SHL4STDSHL:^"-l") $(STDSHL4:^"-l")
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -2183,7 +2158,6 @@ $(SHL4TARGETN) : \
         $(SHL4STDLIBS:^"-l") \
         $(SHL4LINKRES) \
         $(SHL4STDSHL:^"-l") $(STDSHL4:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -2194,16 +2168,6 @@ $(SHL4TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL4TARGET)
-
-runtest_$(SHL4TARGET) : $(SHL4TARGETN)
-    testshl $(SHL4TARGETN) sce/$(SHL4TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL4TARGETN)"!=""
 
 # unroll begin
@@ -2453,10 +2417,10 @@ SHL5TARGET8=$(shell @fix_shl $(SHL5TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
-_SHL5IMP_ORD = $(SHL5STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL5STDLIBS:^"$(LB)/") 
+_SHL5IMP_ORD = $(SHL5STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL5STDLIBS:^"$(LB)/")
 SHL5IMP_ORD = $(foreach,i,$(_SHL5IMP_ORD) $(shell @-ls $i))
 .ELSE
-SHL5IMP_ORD = 
+SHL5IMP_ORD =
 .ENDIF
 
 
@@ -2541,7 +2505,7 @@ $(SHL5TARGETN) : \
         $(SHL5STDLIBS) \
         $(SHL5STDSHL) $(STDSHL5) \
         $(SHL5LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -2565,7 +2529,7 @@ $(SHL5TARGETN) : \
         $(SHL5STDLIBS)                      \
         $(SHL5STDSHL) $(STDSHL5)                           \
         $(SHL5LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -2637,7 +2601,7 @@ $(SHL5TARGETN) : \
     @echo $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
     $(SHL5VERSIONOBJ) \
     `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(SHL5LINKER) $(SHL5LINKFLAGS) $(SHL5VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(SHL5STDSHL) $(STDSHL5) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_5.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_5.cmd` \
@@ -2648,8 +2612,10 @@ $(SHL5TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_5.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL5RPATH) $@
+.IF "$(SHL5CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL5CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL5NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS5) $(SHL5TARGETN)
@@ -2719,7 +2685,7 @@ $(SHL5TARGETN) : \
         $(SHL5LIBS) \
         $(SHL5STDLIBS:^"-l") \
         $(SHL5LINKRES) \
-        $(SHL5STDSHL:^"-l") $(STDSHL5:^"-l") 
+        $(SHL5STDSHL:^"-l") $(STDSHL5:^"-l")
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -2735,7 +2701,6 @@ $(SHL5TARGETN) : \
         $(SHL5STDLIBS:^"-l") \
         $(SHL5LINKRES) \
         $(SHL5STDSHL:^"-l") $(STDSHL5:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -2746,16 +2711,6 @@ $(SHL5TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL5TARGET)
-
-runtest_$(SHL5TARGET) : $(SHL5TARGETN)
-    testshl $(SHL5TARGETN) sce/$(SHL5TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL5TARGETN)"!=""
 
 # unroll begin
@@ -3005,10 +2960,10 @@ SHL6TARGET8=$(shell @fix_shl $(SHL6TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
-_SHL6IMP_ORD = $(SHL6STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL6STDLIBS:^"$(LB)/") 
+_SHL6IMP_ORD = $(SHL6STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL6STDLIBS:^"$(LB)/")
 SHL6IMP_ORD = $(foreach,i,$(_SHL6IMP_ORD) $(shell @-ls $i))
 .ELSE
-SHL6IMP_ORD = 
+SHL6IMP_ORD =
 .ENDIF
 
 
@@ -3093,7 +3048,7 @@ $(SHL6TARGETN) : \
         $(SHL6STDLIBS) \
         $(SHL6STDSHL) $(STDSHL6) \
         $(SHL6LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -3117,7 +3072,7 @@ $(SHL6TARGETN) : \
         $(SHL6STDLIBS)                      \
         $(SHL6STDSHL) $(STDSHL6)                           \
         $(SHL6LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -3189,7 +3144,7 @@ $(SHL6TARGETN) : \
     @echo $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
     $(SHL6VERSIONOBJ) \
     `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(SHL6LINKER) $(SHL6LINKFLAGS) $(SHL6VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(SHL6STDSHL) $(STDSHL6) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_6.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_6.cmd` \
@@ -3200,8 +3155,10 @@ $(SHL6TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_6.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL6RPATH) $@
+.IF "$(SHL6CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL6CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL6NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS6) $(SHL6TARGETN)
@@ -3271,7 +3228,7 @@ $(SHL6TARGETN) : \
         $(SHL6LIBS) \
         $(SHL6STDLIBS:^"-l") \
         $(SHL6LINKRES) \
-        $(SHL6STDSHL:^"-l") $(STDSHL6:^"-l") 
+        $(SHL6STDSHL:^"-l") $(STDSHL6:^"-l")
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -3287,7 +3244,6 @@ $(SHL6TARGETN) : \
         $(SHL6STDLIBS:^"-l") \
         $(SHL6LINKRES) \
         $(SHL6STDSHL:^"-l") $(STDSHL6:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -3298,16 +3254,6 @@ $(SHL6TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL6TARGET)
-
-runtest_$(SHL6TARGET) : $(SHL6TARGETN)
-    testshl $(SHL6TARGETN) sce/$(SHL6TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL6TARGETN)"!=""
 
 # unroll begin
@@ -3557,10 +3503,10 @@ SHL7TARGET8=$(shell @fix_shl $(SHL7TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
-_SHL7IMP_ORD = $(SHL7STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL7STDLIBS:^"$(LB)/") 
+_SHL7IMP_ORD = $(SHL7STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL7STDLIBS:^"$(LB)/")
 SHL7IMP_ORD = $(foreach,i,$(_SHL7IMP_ORD) $(shell @-ls $i))
 .ELSE
-SHL7IMP_ORD = 
+SHL7IMP_ORD =
 .ENDIF
 
 
@@ -3645,7 +3591,7 @@ $(SHL7TARGETN) : \
         $(SHL7STDLIBS) \
         $(SHL7STDSHL) $(STDSHL7) \
         $(SHL7LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -3669,7 +3615,7 @@ $(SHL7TARGETN) : \
         $(SHL7STDLIBS)                      \
         $(SHL7STDSHL) $(STDSHL7)                           \
         $(SHL7LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -3741,7 +3687,7 @@ $(SHL7TARGETN) : \
     @echo $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
     $(SHL7VERSIONOBJ) \
     `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(SHL7LINKER) $(SHL7LINKFLAGS) $(SHL7VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(SHL7STDSHL) $(STDSHL7) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_7.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_7.cmd` \
@@ -3752,8 +3698,10 @@ $(SHL7TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_7.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL7RPATH) $@
+.IF "$(SHL7CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL7CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL7NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS7) $(SHL7TARGETN)
@@ -3823,7 +3771,7 @@ $(SHL7TARGETN) : \
         $(SHL7LIBS) \
         $(SHL7STDLIBS:^"-l") \
         $(SHL7LINKRES) \
-        $(SHL7STDSHL:^"-l") $(STDSHL7:^"-l") 
+        $(SHL7STDSHL:^"-l") $(STDSHL7:^"-l")
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -3839,7 +3787,6 @@ $(SHL7TARGETN) : \
         $(SHL7STDLIBS:^"-l") \
         $(SHL7LINKRES) \
         $(SHL7STDSHL:^"-l") $(STDSHL7:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -3850,16 +3797,6 @@ $(SHL7TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL7TARGET)
-
-runtest_$(SHL7TARGET) : $(SHL7TARGETN)
-    testshl $(SHL7TARGETN) sce/$(SHL7TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL7TARGETN)"!=""
 
 # unroll begin
@@ -4109,10 +4046,10 @@ SHL8TARGET8=$(shell @fix_shl $(SHL8TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
-_SHL8IMP_ORD = $(SHL8STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL8STDLIBS:^"$(LB)/") 
+_SHL8IMP_ORD = $(SHL8STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL8STDLIBS:^"$(LB)/")
 SHL8IMP_ORD = $(foreach,i,$(_SHL8IMP_ORD) $(shell @-ls $i))
 .ELSE
-SHL8IMP_ORD = 
+SHL8IMP_ORD =
 .ENDIF
 
 
@@ -4197,7 +4134,7 @@ $(SHL8TARGETN) : \
         $(SHL8STDLIBS) \
         $(SHL8STDSHL) $(STDSHL8) \
         $(SHL8LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -4221,7 +4158,7 @@ $(SHL8TARGETN) : \
         $(SHL8STDLIBS)                      \
         $(SHL8STDSHL) $(STDSHL8)                           \
         $(SHL8LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -4293,7 +4230,7 @@ $(SHL8TARGETN) : \
     @echo $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
     $(SHL8VERSIONOBJ) \
     `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(SHL8LINKER) $(SHL8LINKFLAGS) $(SHL8VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(SHL8STDSHL) $(STDSHL8) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_8.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_8.cmd` \
@@ -4304,8 +4241,10 @@ $(SHL8TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_8.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL8RPATH) $@
+.IF "$(SHL8CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL8CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL8NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS8) $(SHL8TARGETN)
@@ -4375,7 +4314,7 @@ $(SHL8TARGETN) : \
         $(SHL8LIBS) \
         $(SHL8STDLIBS:^"-l") \
         $(SHL8LINKRES) \
-        $(SHL8STDSHL:^"-l") $(STDSHL8:^"-l") 
+        $(SHL8STDSHL:^"-l") $(STDSHL8:^"-l")
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -4391,7 +4330,6 @@ $(SHL8TARGETN) : \
         $(SHL8STDLIBS:^"-l") \
         $(SHL8LINKRES) \
         $(SHL8STDSHL:^"-l") $(STDSHL8:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -4402,16 +4340,6 @@ $(SHL8TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL8TARGET)
-
-runtest_$(SHL8TARGET) : $(SHL8TARGETN)
-    testshl $(SHL8TARGETN) sce/$(SHL8TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL8TARGETN)"!=""
 
 # unroll begin
@@ -4661,10 +4589,10 @@ SHL9TARGET8=$(shell @fix_shl $(SHL9TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
-_SHL9IMP_ORD = $(SHL9STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL9STDLIBS:^"$(LB)/") 
+_SHL9IMP_ORD = $(SHL9STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL9STDLIBS:^"$(LB)/")
 SHL9IMP_ORD = $(foreach,i,$(_SHL9IMP_ORD) $(shell @-ls $i))
 .ELSE
-SHL9IMP_ORD = 
+SHL9IMP_ORD =
 .ENDIF
 
 
@@ -4749,7 +4677,7 @@ $(SHL9TARGETN) : \
         $(SHL9STDLIBS) \
         $(SHL9STDSHL) $(STDSHL9) \
         $(SHL9LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -4773,7 +4701,7 @@ $(SHL9TARGETN) : \
         $(SHL9STDLIBS)                      \
         $(SHL9STDSHL) $(STDSHL9)                           \
         $(SHL9LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -4845,7 +4773,7 @@ $(SHL9TARGETN) : \
     @echo $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
     $(SHL9VERSIONOBJ) \
     `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(SHL9LINKER) $(SHL9LINKFLAGS) $(SHL9VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(SHL9STDSHL) $(STDSHL9) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_9.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_9.cmd` \
@@ -4856,8 +4784,10 @@ $(SHL9TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_9.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL9RPATH) $@
+.IF "$(SHL9CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL9CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL9NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS9) $(SHL9TARGETN)
@@ -4927,7 +4857,7 @@ $(SHL9TARGETN) : \
         $(SHL9LIBS) \
         $(SHL9STDLIBS:^"-l") \
         $(SHL9LINKRES) \
-        $(SHL9STDSHL:^"-l") $(STDSHL9:^"-l") 
+        $(SHL9STDSHL:^"-l") $(STDSHL9:^"-l")
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -4943,7 +4873,6 @@ $(SHL9TARGETN) : \
         $(SHL9STDLIBS:^"-l") \
         $(SHL9LINKRES) \
         $(SHL9STDSHL:^"-l") $(STDSHL9:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -4954,16 +4883,6 @@ $(SHL9TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL9TARGET)
-
-runtest_$(SHL9TARGET) : $(SHL9TARGETN)
-    testshl $(SHL9TARGETN) sce/$(SHL9TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL9TARGETN)"!=""
 
 # unroll begin
@@ -5213,10 +5132,10 @@ SHL10TARGET8=$(shell @fix_shl $(SHL10TARGET))
 .ENDIF
 
 .IF "$(GUI)" == "OS2"
-_SHL10IMP_ORD = $(SHL10STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL10STDLIBS:^"$(LB)/") 
+_SHL10IMP_ORD = $(SHL10STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL10STDLIBS:^"$(LB)/")
 SHL10IMP_ORD = $(foreach,i,$(_SHL10IMP_ORD) $(shell @-ls $i))
 .ELSE
-SHL10IMP_ORD = 
+SHL10IMP_ORD =
 .ENDIF
 
 
@@ -5301,7 +5220,7 @@ $(SHL10TARGETN) : \
         $(SHL10STDLIBS) \
         $(SHL10STDSHL) $(STDSHL10) \
         $(SHL10LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -5325,7 +5244,7 @@ $(SHL10TARGETN) : \
         $(SHL10STDLIBS)                      \
         $(SHL10STDSHL) $(STDSHL10)                           \
         $(SHL10LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -5397,7 +5316,7 @@ $(SHL10TARGETN) : \
     @echo $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
     $(SHL10VERSIONOBJ) \
     `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)/$(@:b).list
-    @echo -n $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
+    @/bin/echo -n $(SHL10LINKER) $(SHL10LINKFLAGS) $(SHL10VERSIONMAPPARA) $(LINKFLAGSSHL) -L$(PRJ)/$(ROUT)/lib $(SOLARLIB) -o $@ \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(SHL10STDSHL) $(STDSHL10) -filelist $(MISC)/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)/$(TARGET).$(@:b)_10.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         `cat $(MISC)/$(TARGET).$(@:b)_10.cmd` \
@@ -5408,8 +5327,10 @@ $(SHL10TARGETN) : \
     @+source $(MISC)/$(TARGET).$(@:b)_10.cmd
     @$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl \
         shl $(SHL10RPATH) $@
+.IF "$(SHL10CREATEJNILIB)"!=""
     @echo "Making:   " $(@:f).jnilib
     @macosx-create-bundle $@
+.ENDIF          # "$(SHL10CREATEJNILIB)"!=""
 .IF "$(UPDATER)"=="YES"
 .IF "$(SHL10NOCHECK)"==""
     $(SOLARENV)/bin/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS10) $(SHL10TARGETN)
@@ -5479,7 +5400,7 @@ $(SHL10TARGETN) : \
         $(SHL10LIBS) \
         $(SHL10STDLIBS:^"-l") \
         $(SHL10LINKRES) \
-        $(SHL10STDSHL:^"-l") $(STDSHL10:^"-l") 
+        $(SHL10STDSHL:^"-l") $(STDSHL10:^"-l")
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
@@ -5495,7 +5416,6 @@ $(SHL10TARGETN) : \
         $(SHL10STDLIBS:^"-l") \
         $(SHL10LINKRES) \
         $(SHL10STDSHL:^"-l") $(STDSHL10:^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""
@@ -5506,16 +5426,6 @@ $(SHL10TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL10TARGET)
-
-runtest_$(SHL10TARGET) : $(SHL10TARGETN)
-    testshl $(SHL10TARGETN) sce/$(SHL10TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL10TARGETN)"!=""
 
 # unroll begin

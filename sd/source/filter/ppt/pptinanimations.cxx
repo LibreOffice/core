@@ -245,7 +245,6 @@ void AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRe
 {
 #ifdef DBG_ANIM_LOG
     mpFile = fopen( "c:\\output.xml", "w+" );
-    //mpFile = stdout;
 #endif
     dump("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
@@ -301,10 +300,6 @@ Reference< XAnimationNode > AnimationImporter::createNode( const Atom* pAtom, co
         switch( rNode.mnNodeType )
         {
         case mso_Anim_Behaviour_FILTER:
-/*
-            pServiceName = "com.sun.star.animations.TransitionFilter";
-            break;
-*/
         case mso_Anim_Behaviour_ANIMATION:
             if( pAtom->hasChildAtom( DFF_msofbtAnimateSet ) )
                 pServiceName = "com.sun.star.animations.AnimateSet";
@@ -533,7 +528,7 @@ void AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refer
                 }
                 else
                 {
-                    DBG_ERROR( "unknown node atom!" );
+                    OSL_FAIL( "unknown node atom!" );
                     dump_atom_header( pAtom, true, false );
                     dump_atom( pAtom );
                     dump_atom_header( pAtom, false, false );
@@ -561,7 +556,7 @@ void AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refer
             break;
 
             default:
-                DBG_ERROR( "unknown group atom!" );
+                OSL_FAIL( "unknown group atom!" );
 
                 dump_atom_header( pAtom, true, false );
                 dump_atom( pAtom );
@@ -645,7 +640,7 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::AnimationImporter::fixMainSequenceTiming(), exception caught!" );
+        OSL_FAIL("sd::AnimationImporter::fixMainSequenceTiming(), exception caught!" );
     }
 }
 
@@ -671,7 +666,7 @@ void AnimationImporter::fixInteractiveSequenceTiming( const ::com::sun::star::un
     catch( Exception& e )
     {
         (void)e;
-        DBG_ERROR("sd::AnimationImporter::fixInteractiveSequenceTiming(), exception caught!" );
+        OSL_FAIL("sd::AnimationImporter::fixInteractiveSequenceTiming(), exception caught!" );
     }
 }
 
@@ -693,7 +688,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
 
     OUString aAttributeName( xAnimate->getAttributeName() );
 
-    if( (nNodeType == AnimationNodeType::SET) && aAttributeName.equalsAscii( "fill.on" ) )
+    if( (nNodeType == AnimationNodeType::SET) && aAttributeName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "fill.on" ) ) )
         return false;
 
     const ImplAttributeNameConversion* p = gImplConversionList;
@@ -934,9 +929,9 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
             if( aString.getLength() >= 7 && aString[0] == '#' )
             {
                 Color aColor;
-                aColor.SetRed( (UINT8)(lcl_gethex( aString[1] ) * 16 + lcl_gethex( aString[2] )) );
-                aColor.SetGreen( (UINT8)(lcl_gethex( aString[3] ) * 16 + lcl_gethex( aString[4] )) );
-                aColor.SetBlue( (UINT8)(lcl_gethex( aString[5] ) * 16 + lcl_gethex( aString[6] )) );
+                aColor.SetRed( (sal_uInt8)(lcl_gethex( aString[1] ) * 16 + lcl_gethex( aString[2] )) );
+                aColor.SetGreen( (sal_uInt8)(lcl_gethex( aString[3] ) * 16 + lcl_gethex( aString[4] )) );
+                aColor.SetBlue( (sal_uInt8)(lcl_gethex( aString[5] ) * 16 + lcl_gethex( aString[6] )) );
                 rValue <<= (sal_Int32)aColor.GetColor();
                 bRet = true;
             }
@@ -945,9 +940,9 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
                 aString = aString.copy( 4, aString.getLength() - 5 );
                 Color aColor;
                 sal_Int32 index = 0;
-                aColor.SetRed( (UINT8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
-                aColor.SetGreen( (UINT8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
-                aColor.SetRed( (UINT8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
+                aColor.SetRed( (sal_uInt8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
+                aColor.SetGreen( (sal_uInt8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
+                aColor.SetRed( (sal_uInt8)aString.getToken( 0, (sal_Unicode)',', index ).toInt32() );
                 rValue <<= (sal_Int32)aColor.GetColor();
                 bRet = true;
             }
@@ -976,7 +971,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString.equalsAscii( "solid" ) ? FillStyle_SOLID : FillStyle_NONE;
+            rValue <<= aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "solid" ) ) ? FillStyle_SOLID : FillStyle_NONE;
             bRet = true;
         }
     }
@@ -987,7 +982,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString.equalsAscii( "true" ) ? ::com::sun::star::drawing::LineStyle_SOLID : ::com::sun::star::drawing::LineStyle_NONE;
+            rValue <<= aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "true" ) ) ? ::com::sun::star::drawing::LineStyle_SOLID : ::com::sun::star::drawing::LineStyle_NONE;
             bRet = true;
         }
     }
@@ -998,7 +993,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString.equalsAscii( "bold" ) ? com::sun::star::awt::FontWeight::BOLD : com::sun::star::awt::FontWeight::NORMAL;
+            rValue <<= aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "bold" ) ) ? com::sun::star::awt::FontWeight::BOLD : com::sun::star::awt::FontWeight::NORMAL;
             bRet = true;
         }
     }
@@ -1009,7 +1004,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString.equalsAscii( "italic" ) ? com::sun::star::awt::FontSlant_ITALIC : com::sun::star::awt::FontSlant_NONE;
+            rValue <<= aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "italic" ) ) ? com::sun::star::awt::FontSlant_ITALIC : com::sun::star::awt::FontSlant_NONE;
             bRet = true;
         }
     }
@@ -1020,7 +1015,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString.equalsAscii( "true" ) ? com::sun::star::awt::FontUnderline::SINGLE : com::sun::star::awt::FontUnderline::NONE;
+            rValue <<= aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "true" ) ) ? com::sun::star::awt::FontUnderline::SINGLE : com::sun::star::awt::FontUnderline::NONE;
             bRet = true;
         }
     }
@@ -1043,7 +1038,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString.equalsAscii( "visible" ) ? sal_True : sal_False;
+            rValue <<= aString.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "visible" ) ) ? sal_True : sal_False;
             bRet = true;
         }
     }
@@ -1446,7 +1441,7 @@ void AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference<
                 {
                     if( pChildAtom->hasChildAtom( DFF_msofbtAnimCommand ) )
                     {
-                        const OUString aServiceName( OUString::createFromAscii("com.sun.star.animations.Command") );
+                        const OUString aServiceName( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.Command")) );
                         Reference< XAnimationNode > xChildNode( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY );
                         importAnimationNodeContainer( pChildAtom, xChildNode );
                         Reference< XTimeContainer > xParentContainer( xNode, UNO_QUERY );
@@ -1648,7 +1643,7 @@ void AnimationImporter::importAnimateFilterContainer( const Atom* pAtom, const R
                         }
                         else
                         {
-                            DBG_ERROR( "unknown transition!" );
+                            OSL_FAIL( "unknown transition!" );
                         }
                     }
                 }
@@ -1844,7 +1839,7 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
             dump( "rgb(%ld", nA );
             dump( ",%ld", nB );
             dump( ",%ld)", nC );
-            Color aColor( (UINT8)nA, (UINT8)nB, (UINT8)nC );
+            Color aColor( (sal_uInt8)nA, (sal_uInt8)nB, (sal_uInt8)nC );
             return makeAny( (sal_Int32)aColor.GetRGBColor() );
         }
     case 1: // hsl
@@ -1862,7 +1857,7 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
     case 2: // index
         {
             Color aColor;
-            mpPPTImport->GetColorFromPalette((USHORT)nA, aColor );
+            mpPPTImport->GetColorFromPalette((sal_uInt16)nA, aColor );
             dump( "index(%ld", nA );
             dump( " [%ld", (sal_Int32)aColor.GetRed() );
             dump( ",%ld", (sal_Int32)aColor.GetGreen() );
@@ -1876,7 +1871,7 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
             dump( "%ld", nA );
             dump( ",%ld", nB );
             dump( ",%ld)", nC );
-            DBG_ERROR( "ppt::implGetColorAny(), unhandled color type" );
+            OSL_FAIL( "ppt::implGetColorAny(), unhandled color type" );
 
             Any aAny;
             return aAny;
@@ -2290,7 +2285,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
             xCommand->setCommand( nCommand );
             if( nCommand == EffectCommands::CUSTOM )
             {
-                DBG_ERROR("sd::AnimationImporter::importCommandContainer(), unknown command!");
+                OSL_FAIL("sd::AnimationImporter::importCommandContainer(), unknown command!");
                 aParamValue.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("UserDefined"));
                 aParamValue.Value <<= aParam;
             }
@@ -2573,7 +2568,7 @@ bool AnimationImporter::importAttributeNamesContainer( const Atom* pAtom, OUStri
             }
             else
             {
-                DBG_ERROR( "error during ppt::AnimationImporter::importAttributeName()!" );
+                OSL_FAIL( "error during ppt::AnimationImporter::importAttributeName()!" );
             }
 
             pAttributeValueAtom = pAtom->findNextChildAtom( DFF_msofbtAnimAttributeValue, pAttributeValueAtom );
@@ -2942,7 +2937,7 @@ void AnimationImporter::importAnimationEvents( const Atom* pAtom, const Referenc
                 break;
                 default:
                 {
-                    DBG_ERROR("unknown atom inside ppt::AnimationImporter::importAnimationEvents()!");
+                    OSL_FAIL("unknown atom inside ppt::AnimationImporter::importAnimationEvents()!");
                 }
                 }
 
@@ -3067,7 +3062,6 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
 
                     switch( nRefMode )
                     {
-// default          case 0: rSubType = ShapeAnimationSubType::AS_WHOLE; break;
                     case 6: rSubType = ShapeAnimationSubType::ONLY_BACKGROUND; break;
                     case 8: rSubType = ShapeAnimationSubType::ONLY_TEXT; break;
                     case 2: // one paragraph
@@ -3083,9 +3077,9 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
 
                         const EditTextObject& rEditTextObject = pOPO->GetTextObject();
 
-                        const USHORT nParaCount = rEditTextObject.GetParagraphCount();
+                        const sal_uInt16 nParaCount = rEditTextObject.GetParagraphCount();
 
-                        USHORT nPara = 0;
+                        sal_uInt16 nPara = 0;
 
                         while( (nPara < nParaCount) && (begin > 0) )
                         {
@@ -3129,33 +3123,19 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
                     }
                     break;
                 default:
-                    DBG_ERROR("unknown reference type");
+                    OSL_FAIL("unknown reference type");
                 }
 
-
-//              dump( " ref=\"%s\"", nRefMode == 3 ? "source" : ( nRefMode == 0 ? "target" : "unknown" ) );
-//              dump( " type=\"%s\"", nRefType == 1 ? "shape" : ( nRefType == 2 ? "sound": "unknown" ) );
-//              dump( " id=\"%lu\"", (sal_Int32)nRefId );
-#ifdef DBG_ANIM_LOG
-                if((begin != -1) || (end != -1) )
-                {
-//                  dump( " text_begin=\"%ld\"", begin );
-//                  dump( " text_end=\"%ld\"", end );
-                }
-#endif
             }
             break;
             case 0x2b01:
             {
                 sal_Int32 nU1;
                 mrStCtrl >> nU1;
-
-                // HINT: nU1 == 1 : target document. ?
-//              dump( " unknown_0x2b01=\"%#lx\"", nU1 );
             }
             break;
             default:
-                DBG_ERROR("unknwon atom inside ppt::AnimationImporter::importTargetElementContainer()!");
+                OSL_FAIL("unknwon atom inside ppt::AnimationImporter::importTargetElementContainer()!");
                 break;
             }
 
@@ -3186,7 +3166,7 @@ void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertyS
             }
             else
             {
-                DBG_ERROR("unknwon atom inside ppt::AnimationImporter::importPropertySetContainer()!");
+                OSL_FAIL("unknwon atom inside ppt::AnimationImporter::importPropertySetContainer()!");
             }
 
             pChildAtom = pAtom->findNextChildAtom( pChildAtom );
@@ -3202,8 +3182,6 @@ void AnimationImporter::dump_atom_header( const Atom* pAtom, bool bOpen, bool bA
     if( pAtom )
     {
         const char* pTitle;
-
-        bool bUnknown = false;
 
         switch( pAtom->getType() )
         {
@@ -3260,11 +3238,11 @@ void AnimationImporter::dump_atom_header( const Atom* pAtom, bool bOpen, bool bA
 
 // --------------------------------------------------------------------
 
-void AnimationImporter::dump( UINT32 nLen, bool bNewLine )
+void AnimationImporter::dump( sal_uInt32 nLen, bool bNewLine )
 {
     char * faul = "0123456789abcdef";
 
-    UINT32 i = 0;
+    sal_uInt32 i = 0;
     int b = 0;
     sal_Int8 nData;
 
@@ -3543,7 +3521,6 @@ void AnimationImporter::dump( const PropertySet& rSet )
         break;
 
         case DFF_ANIM_DIRECTION:
-//      case DFF_ANIM_MASTERREL:
         {
             sal_Bool bDirection;
             if( aAny >>= bDirection )
@@ -3741,7 +3718,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
 
         case DFF_ANIM_VOLUME:
         {
-            double fVolume;
+            double fVolume(0.0);
             if( aAny >>= fVolume )
             {
                 fprintf( mpFile, " volume=\"%g%%\"", (double)(fVolume * 100.0) );
@@ -3771,7 +3748,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
             fprintf( mpFile, "\"" );
         }
 
-        aIter++;
+        ++aIter;
     }
 }
 

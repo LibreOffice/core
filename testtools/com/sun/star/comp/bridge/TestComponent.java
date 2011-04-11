@@ -47,7 +47,10 @@ import test.testtools.bridgetest.TestStruct;
 import test.testtools.bridgetest.SmallStruct;
 import test.testtools.bridgetest.MediumStruct;
 import test.testtools.bridgetest.BigStruct;
-import test.testtools.bridgetest.AllFloats;
+import test.testtools.bridgetest.TwoFloats;
+import test.testtools.bridgetest.FourFloats;
+import test.testtools.bridgetest.MixedFloatAndInteger;
+import test.testtools.bridgetest.ThreeByteStruct;
 import test.testtools.bridgetest.XBridgeTest;
 import test.testtools.bridgetest.XBridgeTest2;
 import test.testtools.bridgetest.XCurrentContextChecker;
@@ -488,7 +491,19 @@ public class TestComponent {
             return i_Struct;
         }
 
-        public AllFloats echoAllFloats( AllFloats i_Struct) throws com.sun.star.uno.RuntimeException {
+        public TwoFloats echoTwoFloats( TwoFloats i_Struct) throws com.sun.star.uno.RuntimeException {
+            return i_Struct;
+        }
+
+        public FourFloats echoFourFloats( FourFloats i_Struct) throws com.sun.star.uno.RuntimeException {
+            return i_Struct;
+        }
+
+        public MixedFloatAndInteger echoMixedFloatAndInteger( MixedFloatAndInteger i_Struct) throws com.sun.star.uno.RuntimeException {
+            return i_Struct;
+        }
+
+        public ThreeByteStruct echoThreeByteStruct( ThreeByteStruct i_Struct) throws com.sun.star.uno.RuntimeException {
             return i_Struct;
         }
 
@@ -1310,23 +1325,4 @@ public class TestComponent {
 
         return xSingleServiceFactory;
     }
-
-    /**
-     * Writes the service information into the given registry key.
-     * This method is called by the <code>JavaLoader</code>
-     * <p>
-     * @return  returns true if the operation succeeded
-     * @param   regKey       the registryKey
-     * @see                  com.sun.star.comp.loader.JavaLoader
-     */
-    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
-        boolean result = true;
-
-        result = result & FactoryHelper.writeRegistryServiceInfo(_TestObject.class.getName(), _TestObject.__serviceName, regKey);
-        result = result & FactoryHelper.writeRegistryServiceInfo(_PerformancTestObject.class.getName(),
-                                                                 _PerformancTestObject.__serviceName, regKey);
-
-        return result;
-    }
-
 }

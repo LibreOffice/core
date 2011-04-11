@@ -164,8 +164,8 @@ int test_ftplist(void) {
     FTPHandleProviderI provider;
 
     ftp::FTPURL url(
-        rtl::OUString::createFromAscii(
-            "ftp://abi:psswd@abi-1/dir"),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "ftp://abi:psswd@abi-1/dir")),
         &provider);
 
     std::vector<ftp::FTPDirentry> vec =
@@ -174,9 +174,9 @@ int test_ftplist(void) {
     if(vec.size() != 3)
         ++number_of_errors;
 
-    if(!(vec[0].m_aName.equalsAscii("dir1") &&
-         vec[1].m_aName.equalsAscii("dir2") &&
-         vec[2].m_aName.equalsAscii("file1")))
+    if(!(vec[0].m_aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dir1")) &&
+         vec[1].m_aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("dir2")) &&
+         vec[2].m_aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file1"))))
        ++number_of_errors;
 
     TESTEVAL;
@@ -230,13 +230,13 @@ int test_ftpproperties(void) {
     FTPHandleProviderI provider;
 
     ftp::FTPURL url(
-        rtl::OUString::createFromAscii(
-            "ftp://abi:psswd@abi-1/file"),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "ftp://abi:psswd@abi-1/file")),
         &provider);
 
     ftp::FTPDirentry ade(url.direntry());
 
-    if(!(ade.m_aName.equalsAscii("file") &&
+    if(!(ade.m_aName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file")) &&
          ade.isFile()))
         ++number_of_errors;
 
@@ -251,8 +251,8 @@ int test_ftpopen(void)
 
     FTPHandleProviderI provider;
     ftp::FTPURL url(
-        rtl::OUString::createFromAscii(
-            "ftp://abi:psswd@abi-1/file"),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "ftp://abi:psswd@abi-1/file")),
         &provider);
 
     FILE* file = url.open();

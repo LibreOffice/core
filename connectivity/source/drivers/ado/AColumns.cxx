@@ -39,10 +39,10 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-#ifdef __MINGW32__
 #include <algorithm>
-#endif
 #include "resource/ado_res.hrc"
+
+#include <o3tl/compat_functional.hxx>
 
 using namespace connectivity::ado;
 using namespace connectivity;
@@ -73,8 +73,14 @@ Reference< XPropertySet > OColumns::createDescriptor()
 sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoColumn* pColumn = NULL;
+    Reference< XPropertySet > xColumn;
     if ( !getImplementation( pColumn, descriptor ) || pColumn == NULL )
-        m_pConnection->throwGenericSQLException( STR_INVALID_COLUMN_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
+    {
+        // m_pConnection->throwGenericSQLException( STR_INVALID_COLUMN_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
+        pColumn = new OAdoColumn(isCaseSensitive(),m_pConnection);
+        xColumn = pColumn;
+        ::comphelper::copyProperties(descriptor,xColumn);
+    }
 
     WpADOColumn aColumn = pColumn->getColumnImpl();
 
@@ -95,11 +101,11 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Referenc
     // search for typeinfo where the typename is equal sTypeName
     OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
                                                         pTypeInfoMap->end(),
-                                                        ::std::compose1(
+                                                        ::o3tl::compose1(
                                                             ::std::bind2nd(aCase, sTypeName),
-                                                            ::std::compose1(
+                                                            ::o3tl::compose1(
                                                                 ::std::mem_fun(&OExtendedTypeInfo::getDBName),
-                                                                ::std::select2nd<OTypeInfoMap::value_type>())
+                                                                ::o3tl::select2nd<OTypeInfoMap::value_type>())
                                                             )
 
                                                 );

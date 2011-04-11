@@ -57,14 +57,14 @@
 //------------------------------------------------------------------
 
 #define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
+    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
 
 //!         Parent-Window fuer Dialoge
 //!         Problem: OLE Server!
 
 Window* ScTabViewShell::GetDialogParent()
 {
-    //  #95513# if a ref-input dialog is open, use it as parent
+    //  if a ref-input dialog is open, use it as parent
     //  (necessary when a slot is executed from the dialog's OK handler)
     if ( nCurRefDlgId && nCurRefDlgId == SC_MOD()->GetCurRefDlgId() )
     {

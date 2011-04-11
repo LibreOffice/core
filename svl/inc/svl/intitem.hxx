@@ -38,13 +38,13 @@ class SVL_DLLPUBLIC SfxByteItem: public CntByteItem
 public:
     TYPEINFO();
 
-    SfxByteItem(USHORT which = 0, BYTE nValue = 0):
+    SfxByteItem(sal_uInt16 which = 0, sal_uInt8 nValue = 0):
         CntByteItem(which, nValue) {}
 
-    SfxByteItem(USHORT which, SvStream & rStream):
+    SfxByteItem(sal_uInt16 which, SvStream & rStream):
         CntByteItem(which, rStream) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const
     { return new SfxByteItem(*this); }
@@ -55,16 +55,16 @@ DBG_NAMEEX_VISIBILITY(SfxInt16Item, SVL_DLLPUBLIC)
 
 class SVL_DLLPUBLIC SfxInt16Item: public SfxPoolItem
 {
-    INT16 m_nValue;
+    sal_Int16 m_nValue;
 
 public:
     TYPEINFO();
 
-    SfxInt16Item(USHORT which = 0, INT16 nTheValue = 0):
+    SfxInt16Item(sal_uInt16 which = 0, sal_Int16 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue)
     { DBG_CTOR(SfxInt16Item, 0); }
 
-    SfxInt16Item(USHORT nWhich, SvStream & rStream);
+    SfxInt16Item(sal_uInt16 nWhich, SvStream & rStream);
 
     SfxInt16Item(const SfxInt16Item & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
@@ -84,29 +84,29 @@ public:
         const;
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal,
-                             BYTE nMemberId = 0 ) const;
+                             sal_uInt8 nMemberId = 0 ) const;
 
     virtual bool PutValue( const com::sun::star::uno::Any& rVal,
-                           BYTE nMemberId = 0 );
+                           sal_uInt8 nMemberId = 0 );
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
 
-    virtual SvStream & Store(SvStream & rStream, USHORT) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 
-    virtual INT16 GetMin() const;
+    virtual sal_Int16 GetMin() const;
 
-    virtual INT16 GetMax() const;
+    virtual sal_Int16 GetMax() const;
 
     virtual SfxFieldUnit GetUnit() const;
 
-    INT16 GetValue() const { return m_nValue; }
+    sal_Int16 GetValue() const { return m_nValue; }
 
-    inline void SetValue(INT16 nTheValue);
+    inline void SetValue(sal_Int16 nTheValue);
 };
 
-inline void SfxInt16Item::SetValue(INT16 nTheValue)
+inline void SfxInt16Item::SetValue(sal_Int16 nTheValue)
 {
     DBG_ASSERT(GetRefCount() == 0, "SfxInt16Item::SetValue(); Pooled item");
     m_nValue = nTheValue;
@@ -118,13 +118,13 @@ class SVL_DLLPUBLIC SfxUInt16Item: public CntUInt16Item
 public:
     TYPEINFO();
 
-    SfxUInt16Item(USHORT which = 0, UINT16 nValue = 0):
+    SfxUInt16Item(sal_uInt16 which = 0, sal_uInt16 nValue = 0):
         CntUInt16Item(which, nValue) {}
 
-    SfxUInt16Item(USHORT which, SvStream & rStream):
+    SfxUInt16Item(sal_uInt16 which, SvStream & rStream):
         CntUInt16Item(which, rStream) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const
     { return new SfxUInt16Item(Which(), rStream); }
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const
@@ -137,13 +137,13 @@ class SVL_DLLPUBLIC SfxInt32Item: public CntInt32Item
 public:
     TYPEINFO();
 
-    SfxInt32Item(USHORT which = 0, INT32 nValue = 0):
+    SfxInt32Item(sal_uInt16 which = 0, sal_Int32 nValue = 0):
         CntInt32Item(which, nValue) {}
 
-    SfxInt32Item(USHORT which, SvStream & rStream):
+    SfxInt32Item(sal_uInt16 which, SvStream & rStream):
         CntInt32Item(which, rStream) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const
     { return new SfxInt32Item(Which(), rStream); }
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const
@@ -157,13 +157,13 @@ class SVL_DLLPUBLIC SfxUInt32Item: public CntUInt32Item
 public:
     TYPEINFO();
 
-    SfxUInt32Item(USHORT which = 0, UINT32 nValue = 0):
+    SfxUInt32Item(sal_uInt16 which = 0, sal_uInt32 nValue = 0):
         CntUInt32Item(which, nValue) {}
 
-    SfxUInt32Item(USHORT which, SvStream & rStream):
+    SfxUInt32Item(sal_uInt16 which, SvStream & rStream):
         CntUInt32Item(which, rStream) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const
     { return new SfxUInt32Item(Which(), rStream); }
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const

@@ -34,6 +34,7 @@
 #include "sdbcoretools.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -219,7 +220,6 @@ namespace dbaccess
         if ( !m_bInChangingState && nNewState == EmbedStates::RUNNING && nOldState == EmbedStates::ACTIVE && m_pDefinition )
         {
             m_bInChangingState = true;
-            //m_pDefinition->save(sal_False);
             m_bInChangingState = false;
         }
     }
@@ -339,13 +339,13 @@ namespace dbaccess
         inline LifetimeCoupler( const Reference< XInterface >& _rxClient, const Reference< XComponent >& _rxActor )
             :m_xClient( _rxClient )
         {
-            DBG_ASSERT( _rxActor.is(), "LifetimeCoupler::LifetimeCoupler: this will crash!" );
+            OSL_ENSURE( _rxActor.is(), "LifetimeCoupler::LifetimeCoupler: this will crash!" );
             osl_incrementInterlockedCount( &m_refCount );
             {
                 _rxActor->addEventListener( this );
             }
             osl_decrementInterlockedCount( &m_refCount );
-            DBG_ASSERT( m_refCount, "LifetimeCoupler::LifetimeCoupler: the actor is not holding us by hard ref - this won't work!" );
+            OSL_ENSURE( m_refCount, "LifetimeCoupler::LifetimeCoupler: the actor is not holding us by hard ref - this won't work!" );
         }
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (RuntimeException);
@@ -683,7 +683,7 @@ namespace
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERROR( "PreserveVisualAreaSize::PreserveVisualAreaSize: caught an exception!" );
+                    OSL_FAIL( "PreserveVisualAreaSize::PreserveVisualAreaSize: caught an exception!" );
                 }
             }
         }
@@ -698,7 +698,7 @@ namespace
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERROR( "PreserveVisualAreaSize::~PreserveVisualAreaSize: caught an exception!" );
+                    OSL_FAIL( "PreserveVisualAreaSize::~PreserveVisualAreaSize: caught an exception!" );
                 }
             }
         }
@@ -717,7 +717,7 @@ namespace
     public:
         inline LayoutManagerLock( const Reference< XController >& _rxController )
         {
-            DBG_ASSERT( _rxController.is(), "LayoutManagerLock::LayoutManagerLock: this will crash!" );
+            OSL_ENSURE( _rxController.is(), "LayoutManagerLock::LayoutManagerLock: this will crash!" );
             Reference< XFrame > xFrame( _rxController->getFrame() );
             try
             {
@@ -730,7 +730,7 @@ namespace
             }
             catch( Exception& )
             {
-                DBG_ERROR( "LayoutManagerLock::LayoutManagerLock: caught an exception!" );
+                OSL_FAIL( "LayoutManagerLock::LayoutManagerLock: caught an exception!" );
             }
         }
 
@@ -744,7 +744,7 @@ namespace
             }
             catch( Exception& )
             {
-                DBG_ERROR( "LayoutManagerLock::~LayoutManagerLock: caught an exception!" );
+                OSL_FAIL( "LayoutManagerLock::~LayoutManagerLock: caught an exception!" );
             }
         }
     };
@@ -853,7 +853,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
                 if ( lcl_extractOpenMode( pIter->Value, nOpenMode ) )
                     continue;
 
-                if ( pIter->Name.equalsAscii( "MacroExecutionMode" ) )
+                if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MacroExecutionMode" ) ) )
                 {
                     sal_Int16 nMacroExecMode( !aDocumentMacroMode ? MacroExecMode::USE_CONFIG : *aDocumentMacroMode );
                     OSL_VERIFY( pIter->Value >>= nMacroExecMode );
@@ -874,7 +874,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
         // However, it is possible to programmatically load forms/reports, without actually
         // loading the database document into a frame. In this case, the user will be asked
         // here and now.
-        // #i87741# / 2008-05-05 / frank.schoenheit@sun.com
+        // #i87741#
 
     // allow the command arguments to downgrade the macro execution mode, but not to upgrade
     // it
@@ -935,7 +935,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
                                 sal_Int16( nOpenMode ) ) ),
                 _rxEnvironment );
         // Unreachable
-        DBG_ERROR( "unreachable" );
+        OSL_FAIL( "unreachable" );
       }
 
     OSL_ENSURE( m_pImpl->m_aProps.sPersistentName.getLength(),
@@ -1003,9 +1003,9 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 {
     Any aRet;
 
-    sal_Bool bOpen = aCommand.Name.equalsAscii( "open" );
-    sal_Bool bOpenInDesign = aCommand.Name.equalsAscii( "openDesign" );
-    sal_Bool bOpenForMail = aCommand.Name.equalsAscii( "openForMail" );
+    sal_Bool bOpen = aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "open" ) );
+    sal_Bool bOpenInDesign = aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "openDesign" ) );
+    sal_Bool bOpenForMail = aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "openForMail" ) );
     if ( bOpen || bOpenInDesign || bOpenForMail )
     {
         // opening the document involves a lot of VCL code, which is not thread-safe, but needs the SolarMutex locked.
@@ -1024,7 +1024,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         bool bActivateObject = true;
         if ( bOpenForMail )
         {
-            OSL_ENSURE( false, "ODocumentDefinition::execute: 'openForMail' should not be used anymore - use the 'Hidden' parameter instead!" );
+            OSL_FAIL( "ODocumentDefinition::execute: 'openForMail' should not be used anymore - use the 'Hidden' parameter instead!" );
             bActivateObject = false;
         }
 
@@ -1062,7 +1062,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         aCommand.Argument >>= aIni;
         if ( aIni.getLength() != 2 )
         {
-            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -1088,7 +1088,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         aCommand.Argument >>= aIni;
         if ( !aIni.getLength() )
         {
-            OSL_ENSURE( sal_False, "Wrong argument count!" );
+            OSL_FAIL( "Wrong argument count!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
                                     rtl::OUString(),
@@ -1208,7 +1208,7 @@ void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const R
     // Check, if all required properties were set.
     if ( !_sURL.getLength() || m_xEmbeddedObject.is() )
     {
-        OSL_ENSURE( sal_False, "Content::onCommandInsert - property value missing!" );
+        OSL_FAIL( "Content::onCommandInsert - property value missing!" );
 
         Sequence< rtl::OUString > aProps( 1 );
         aProps[ 0 ] = PROPERTY_URL;
@@ -1238,7 +1238,7 @@ void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const R
                                                                                 ,aEmpty),UNO_QUERY);
 
                 lcl_resetFormsToEmptyDataSource( m_xEmbeddedObject );
-                // #i57669# / 2005-12-01 / frank.schoenheit@sun.com
+                // #i57669#
 
                 Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
                 if ( xPersist.is() )
@@ -1345,7 +1345,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
+        OSL_FAIL("ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
     return sal_True;
 }
@@ -1454,7 +1454,7 @@ sal_Bool ODocumentDefinition::saveAs()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
+        OSL_FAIL("ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
     }
     return sal_True;
 }
@@ -1509,9 +1509,9 @@ sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
     bool bAllowDocumentMacros = !m_pImpl->m_pDataSource
                             ||  ( m_pImpl->m_pDataSource->determineEmbeddedMacros() == ODatabaseModelImpl::eSubDocumentMacros );
 
-    // if *any* of the objects of the database document already has macros, we continue to allow it
-    // to have them, until the user did a migration.
-    // If there are no macros, yet, we don't allow to create them
+    // if *any* of the objects of the database document already has macros, we
+    // continue to allow it to have them, until the user does a migration.
+    // If there are no macros, we don't allow them to be created.
 
     return bAllowDocumentMacros;
 }
@@ -1651,7 +1651,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                     sDocumentService = GetDocumentServiceFromMediaType( getContentType(), m_aContext, aClassID );
                     // check if we are not a form and
                     // the com.sun.star.report.pentaho.SOReportJobFactory is not present.
-                    if ( !m_bForm && !sDocumentService.equalsAscii("com.sun.star.text.TextDocument"))
+                    if ( !m_bForm && !sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")))
                     {
                         // we seem to be a "new style" report, check if report extension is present.
                         Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
@@ -1757,8 +1757,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                 lcl_putLoadArgs( aExistentMediaDesc, optional_bool(), optional_bool() );
                     // don't put _bSuppressMacros and _bReadOnly here - if the document was already
                     // loaded, we should not tamper with its settings.
-                    // #i88977# / 2008-05-05 / frank.schoenheit@sun.com
-                    // #i86872# / 2008-03-13 / frank.schoenheit@sun.com
+                    // #i88977# #i86872#
 
                 xModel->attachResource( xModel->getURL(), aExistentMediaDesc.getPropertyValues() );
             }
@@ -1770,7 +1769,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
     }
 
     // set the OfficeDatabaseDocument instance as parent of the embedded document
-    // #i40358# / 2005-01-19 / frank.schoenheit@sun.com
+    // #i40358#
     Reference< XChild > xDepdendDocAsChild( getComponent(), UNO_QUERY );
     if ( xDepdendDocAsChild.is() )
     {
@@ -2054,7 +2053,7 @@ bool ODocumentDefinition::prepareClose()
         // suspend the controller. Embedded objects are not allowed to raise
         // own UI at their own discretion, instead, this has always to be triggered
         // by the embedding component. Thus, we do the suspend call here.
-        // #i49370# / 2005-06-09 / frank.schoenheit@sun.com
+        // #i49370#
 
         Reference< util::XCloseable > xComponent( impl_getComponent_throw( false ) );
         if ( !xComponent.is() )

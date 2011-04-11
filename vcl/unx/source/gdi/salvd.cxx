@@ -45,7 +45,7 @@
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
                                                        long nDX, long nDY,
-                                                       USHORT nBitCount, const SystemGraphicsData *pData )
+                                                       sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 {
     X11SalVirtualDevice *pVDev = new X11SalVirtualDevice();
     if( !nBitCount && pGraphics )
@@ -127,14 +127,14 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
     m_pFrame     = NULL;
 
     bWindow_     = pDisplay->IsDisplay();
-    bVirDev_     = TRUE;
+    bVirDev_     = sal_True;
 }
 
 // -=-= SalVirDevData / SalVirtualDevice -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-BOOL X11SalVirtualDevice::Init( SalDisplay *pDisplay,
+sal_Bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
                                 long nDX, long nDY,
-                                USHORT nBitCount,
+                                sal_uInt16 nBitCount,
                                 int nScreen,
                                 Pixmap hDrawable,
                                 XRenderPictFormat* pXRenderFormat )
@@ -171,12 +171,12 @@ BOOL X11SalVirtualDevice::Init( SalDisplay *pDisplay,
     else
     {
         hDrawable_ = hDrawable;
-        bExternPixmap_ = TRUE;
+        bExternPixmap_ = sal_True;
     }
 
     pGraphics_->Init( this, pColormap, bDeleteColormap );
 
-    return hDrawable_ != None ? TRUE : FALSE;
+    return hDrawable_ != None ? sal_True : sal_False;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -188,8 +188,8 @@ X11SalVirtualDevice::X11SalVirtualDevice()
     nDX_                    = 0;
     nDY_                    = 0;
     nDepth_                 = 0;
-    bGraphics_              = FALSE;
-    bExternPixmap_          = FALSE;
+    bGraphics_              = sal_False;
+    bExternPixmap_          = sal_False;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -209,18 +209,18 @@ SalGraphics* X11SalVirtualDevice::GetGraphics()
         return NULL;
 
     if( pGraphics_ )
-        bGraphics_ = TRUE;
+        bGraphics_ = sal_True;
 
     return pGraphics_;
 }
 
 void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
-{ bGraphics_ = FALSE; }
+{ bGraphics_ = sal_False; }
 
-BOOL X11SalVirtualDevice::SetSize( long nDX, long nDY )
+sal_Bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( bExternPixmap_ )
-        return FALSE;
+        return sal_False;
 
     // #144688#
     // the X protocol request CreatePixmap puts an upper bound
@@ -230,7 +230,7 @@ BOOL X11SalVirtualDevice::SetSize( long nDX, long nDY )
     // 16 bit truncation here without noticing.
     if( nDX < 0 || nDX > 65535 ||
         nDY < 0 || nDY > 65535 )
-        return FALSE;
+        return sal_False;
 
     if( !nDX ) nDX = 1;
     if( !nDY ) nDY = 1;
@@ -249,7 +249,7 @@ BOOL X11SalVirtualDevice::SetSize( long nDX, long nDY )
             nDX_ = 1;
             nDY_ = 1;
         }
-        return FALSE;
+        return sal_False;
     }
 
     if( GetDrawable() )
@@ -262,7 +262,7 @@ BOOL X11SalVirtualDevice::SetSize( long nDX, long nDY )
     if( pGraphics_ )
         InitGraphics( this );
 
-    return TRUE;
+    return sal_True;
 }
 
 void X11SalVirtualDevice::GetSize( long& rWidth, long& rHeight )

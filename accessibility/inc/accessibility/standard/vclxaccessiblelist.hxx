@@ -153,7 +153,7 @@ protected:
     /// Index in parent.  This is settable from the outside.
     sal_Int32   m_nIndexInParent;
     sal_Int32   m_nLastTopEntry;
-    USHORT      m_nLastSelectedPos;
+    sal_uInt16      m_nLastSelectedPos;
     bool        m_bDisableProcessEvent;
     bool        m_bVisible;
 
@@ -212,8 +212,8 @@ private:
     void adjustEntriesIndexInParent(ListItems::iterator& _aBegin,::std::mem_fun_t<bool,VCLXAccessibleListItem>& _rMemFun);
     void UpdateEntryRange_Impl (void);
 protected:
-    void UpdateSelection_Impl (USHORT nPos = 0);
-    BOOL checkEntrySelected(USHORT _nPos,
+    void UpdateSelection_Impl (sal_uInt16 nPos = 0);
+    sal_Bool checkEntrySelected(sal_uInt16 _nPos,
                             ::com::sun::star::uno::Any& _rNewValue,
                             ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxNewAcc);
 private:

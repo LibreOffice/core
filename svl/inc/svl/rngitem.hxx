@@ -30,7 +30,7 @@
 
 #ifndef NUMTYPE
 
-#define NUMTYPE USHORT
+#define NUMTYPE sal_uInt16
 #define SfxXRangeItem SfxRangeItem
 #define SfxXRangesItem SfxUShortRangesItem
 #include <svl/rngitem.hxx>
@@ -39,7 +39,7 @@
 #undef SfxXRangesItem
 
 #ifndef _SFXITEMS_HXX
-#define NUMTYPE ULONG
+#define NUMTYPE sal_uLong
 #define SfxXRangeItem SfxULongRangeItem
 #define SfxXRangesItem SfxULongRangesItem
 #include <svl/rngitem.hxx>
@@ -66,8 +66,8 @@ private:
 public:
                                 TYPEINFO();
                                 SfxXRangeItem();
-                                SfxXRangeItem( USHORT nWID, NUMTYPE nFrom, NUMTYPE nTo );
-                                SfxXRangeItem( USHORT nWID, SvStream &rStream );
+                                SfxXRangeItem( sal_uInt16 nWID, NUMTYPE nFrom, NUMTYPE nTo );
+                                SfxXRangeItem( sal_uInt16 nWID, SvStream &rStream );
                                 SfxXRangeItem( const SfxXRangeItem& rItem );
     virtual int                 operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -80,9 +80,9 @@ public:
     inline NUMTYPE              From() const { return nFrom; }
     inline NUMTYPE&             To() { return nTo; }
     inline NUMTYPE              To() const { return nTo; }
-    inline BOOL                 HasRange() const { return nTo>nFrom; }
-    virtual SfxPoolItem*        Create( SvStream &, USHORT nVersion ) const;
-    virtual SvStream&           Store( SvStream &, USHORT nItemVersion ) const;
+    inline sal_Bool                 HasRange() const { return nTo>nFrom; }
+    virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVersion ) const;
+    virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const;
 };
 
 // -----------------------------------------------------------------------
@@ -95,8 +95,8 @@ private:
 public:
                                 TYPEINFO();
                                 SfxXRangesItem();
-                                SfxXRangesItem( USHORT nWID, const NUMTYPE *pRanges );
-                                SfxXRangesItem( USHORT nWID, SvStream &rStream );
+                                SfxXRangesItem( sal_uInt16 nWID, const NUMTYPE *pRanges );
+                                SfxXRangesItem( sal_uInt16 nWID, SvStream &rStream );
                                 SfxXRangesItem( const SfxXRangesItem& rItem );
     virtual                     ~SfxXRangesItem();
     virtual int                 operator==( const SfxPoolItem& ) const;
@@ -107,8 +107,8 @@ public:
                                     const IntlWrapper * = 0 ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
     inline const NUMTYPE*       GetRanges() const { return _pRanges; }
-    virtual SfxPoolItem*        Create( SvStream &, USHORT nVersion ) const;
-    virtual SvStream&           Store( SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVersion ) const;
+    virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const;
 };
 
 #endif

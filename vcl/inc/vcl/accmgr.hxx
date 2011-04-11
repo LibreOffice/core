@@ -30,10 +30,12 @@
 #define _SV_ACCMGR_HXX
 
 #include <vcl/sv.h>
+#include <vector>
 
-class ImplAccelList;
 class Accelerator;
 class KeyCode;
+
+typedef ::std::vector< Accelerator* > ImplAccelList;
 
 // --------------------
 // - ImplAccelManager -
@@ -53,13 +55,13 @@ public:
                         }
                         ~ImplAccelManager();
 
-    BOOL                InsertAccel( Accelerator* pAccel );
+    sal_Bool                InsertAccel( Accelerator* pAccel );
     void                RemoveAccel( Accelerator* pAccel );
 
-    void                EndSequence( BOOL bCancel = FALSE );
-    void                FlushAccel() { EndSequence( TRUE ); }
+    void                EndSequence( sal_Bool bCancel = sal_False );
+    void                FlushAccel() { EndSequence( sal_True ); }
 
-    BOOL                IsAccelKey( const KeyCode& rKeyCode, USHORT nRepeat );
+    sal_Bool                IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat );
 };
 
 #endif  // _SV_ACCMGR_HXX

@@ -37,6 +37,7 @@
 #include <map>
 #include <tools/gen.hxx>
 #include "fapihelper.hxx"
+#include <boost/shared_ptr.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -102,6 +103,7 @@ class XclRoot;
 #define EXC_CHPROP_ERRORBARX                CREATE_OUSTRING( "ErrorBarX" )
 #define EXC_CHPROP_ERRORBARY                CREATE_OUSTRING( "ErrorBarY" )
 #define EXC_CHPROP_EXPANSION                CREATE_OUSTRING( "Expansion" )
+#define EXC_CHPROP_EXPTIMEINCREMENT         CREATE_OUSTRING( "ExplicitTimeIncrement" )
 #define EXC_CHPROP_FILLBITMAPMODE           CREATE_OUSTRING( "FillBitmapMode" )
 #define EXC_CHPROP_FILLSTYLE                CREATE_OUSTRING( "FillStyle" )
 #define EXC_CHPROP_GAPWIDTHSEQ              CREATE_OUSTRING( "GapwidthSequence" )
@@ -126,6 +128,7 @@ class XclRoot;
 #define EXC_CHPROP_PERSPECTIVE              CREATE_OUSTRING( "Perspective" )
 #define EXC_CHPROP_POSITIVEERROR            CREATE_OUSTRING( "PositiveError" )
 #define EXC_CHPROP_RELATIVEPOSITION         CREATE_OUSTRING( "RelativePosition" )
+#define EXC_CHPROP_RELATIVESIZE             CREATE_OUSTRING( "RelativeSize" )
 #define EXC_CHPROP_RIGHTANGLEDAXES          CREATE_OUSTRING( "RightAngledAxes" )
 #define EXC_CHPROP_ROLE                     CREATE_OUSTRING( "Role" )
 #define EXC_CHPROP_ROTATIONHORIZONTAL       CREATE_OUSTRING( "RotationHorizontal" )
@@ -722,6 +725,23 @@ const sal_uInt8 EXC_CH3DDATAFORMAT_TRUNC        = 2;        /// Shart top, trunc
 
 const sal_uInt16 EXC_ID_CHPIEEXT                = 0x1061;
 
+// (0x1062) CHDATERANGE -------------------------------------------------------
+
+const sal_uInt16 EXC_ID_CHDATERANGE             = 0x1062;
+
+const sal_uInt16 EXC_CHDATERANGE_AUTOMIN        = 0x0001;
+const sal_uInt16 EXC_CHDATERANGE_AUTOMAX        = 0x0002;
+const sal_uInt16 EXC_CHDATERANGE_AUTOMAJOR      = 0x0004;
+const sal_uInt16 EXC_CHDATERANGE_AUTOMINOR      = 0x0008;
+const sal_uInt16 EXC_CHDATERANGE_DATEAXIS       = 0x0010;
+const sal_uInt16 EXC_CHDATERANGE_AUTOBASE       = 0x0020;
+const sal_uInt16 EXC_CHDATERANGE_AUTOCROSS      = 0x0040;   /// Other axis crosses at own maximum.
+const sal_uInt16 EXC_CHDATERANGE_AUTODATE       = 0x0080;   /// Recognize date/text automatically.
+
+const sal_uInt16 EXC_CHDATERANGE_DAYS           = 0;
+const sal_uInt16 EXC_CHDATERANGE_MONTHS         = 1;
+const sal_uInt16 EXC_CHDATERANGE_YEARS          = 2;
+
 // (0x1066) CHESCHERFORMAT ----------------------------------------------------
 
 const sal_uInt16 EXC_ID_CHESCHERFORMAT          = 0x1066;
@@ -823,8 +843,8 @@ class EscherPropertyContainer;
 
 struct XclChEscherFormat
 {
-    typedef ScfRef< SfxItemSet >                SfxItemSetRef;
-    typedef ScfRef< EscherPropertyContainer >   EscherPropSetRef;
+    typedef boost::shared_ptr< SfxItemSet >                SfxItemSetRef;
+    typedef boost::shared_ptr< EscherPropertyContainer >   EscherPropSetRef;
 
     SfxItemSetRef       mxItemSet;          /// Item set for Escher properties import.
     EscherPropSetRef    mxEscherSet;        /// Container for Escher properties export.
@@ -1051,6 +1071,23 @@ struct XclChLabelRange
     sal_uInt16          mnFlags;            /// Additional flags.
 
     explicit            XclChLabelRange();
+};
+
+// ----------------------------------------------------------------------------
+
+struct XclChDateRange
+{
+    sal_uInt16          mnMinDate;          /// Minimum value on axis.
+    sal_uInt16          mnMaxDate;          /// Maximum value on axis.
+    sal_uInt16          mnMajorStep;        /// Distance for major grid lines.
+    sal_uInt16          mnMajorUnit;        /// Time unit for major step.
+    sal_uInt16          mnMinorStep;        /// Distance for minor grid lines.
+    sal_uInt16          mnMinorUnit;        /// Time unit for minor step.
+    sal_uInt16          mnBaseUnit;         /// Time unit for axis values.
+    sal_uInt16          mnCross;            /// Crossing position of other axis.
+    sal_uInt16          mnFlags;            /// Additional flags.
+
+    explicit            XclChDateRange();
 };
 
 // ----------------------------------------------------------------------------
@@ -1445,9 +1482,9 @@ private:
 /** Base struct for internal root data structs for import and export. */
 struct XclChRootData
 {
-    typedef ScfRef< XclChTypeInfoProvider >                 XclChTypeProvRef;
-    typedef ScfRef< XclChFormatInfoProvider >               XclChFmtInfoProvRef;
-    typedef ScfRef< XclChObjectTable >                      XclChObjectTableRef;
+    typedef boost::shared_ptr< XclChTypeInfoProvider >      XclChTypeProvRef;
+    typedef boost::shared_ptr< XclChFormatInfoProvider >    XclChFmtInfoProvRef;
+    typedef boost::shared_ptr< XclChObjectTable >           XclChObjectTableRef;
     typedef ::std::map< XclChTextKey, XclChGetShapeFunc >   XclChGetShapeFuncMap;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >

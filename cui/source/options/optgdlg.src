@@ -50,12 +50,14 @@ TabPage OFA_TP_MISC
     };
     CheckBox CB_TOOLTIP
     {
+        HelpID = "cui:CheckBox:OFA_TP_MISC:CB_TOOLTIP";
         Pos = MAP_APPFONT( COL1, ROW1 );
         Size = MAP_APPFONT( COL3 - COL1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "~Tips";
     };
     CheckBox CB_EXTHELP
     {
+        HelpID = "cui:CheckBox:OFA_TP_MISC:CB_EXTHELP";
         Pos = MAP_APPFONT( COL3, ROW1 );
         Size = MAP_APPFONT( WHOLE_WIDTH - COL3, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "~Extended tips";
@@ -69,6 +71,7 @@ TabPage OFA_TP_MISC
     };
     ListBox LB_HELPFORMAT
     {
+        HelpID = "cui:ListBox:OFA_TP_MISC:LB_HELPFORMAT";
         Pos = MAP_APPFONT( COL3, ROW2 );
         Size = MAP_APPFONT( WHOLE_WIDTH - COL4, 50 );
         DropDown = TRUE ;
@@ -86,12 +89,14 @@ TabPage OFA_TP_MISC
 #endif
     CheckBox CB_HELPAGENT
     {
+        HelpID = "cui:CheckBox:OFA_TP_MISC:CB_HELPAGENT";
         Pos = MAP_APPFONT( COL1, ROW3 );
         Size = MAP_APPFONT( COL3 - COL1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "~Help Agent";
     };
     PushButton PB_HELPAGENT_RESET
     {
+        HelpID = "cui:PushButton:OFA_TP_MISC:PB_HELPAGENT_RESET";
         Pos = MAP_APPFONT( COL3, ROW3 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH + 20, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "~Reset Help Agent";
@@ -110,6 +115,7 @@ TabPage OFA_TP_MISC
     };
     CheckBox CB_FILEDLG
     {
+        HelpID = "cui:CheckBox:OFA_TP_MISC:CB_FILEDLG";
         Pos = MAP_APPFONT( COL1, ROW5 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "~Use %PRODUCTNAME dialogs";
@@ -141,6 +147,7 @@ TabPage OFA_TP_MISC
     };
     CheckBox CB_DOCSTATUS
     {
+        HelpID = "cui:CheckBox:OFA_TP_MISC:CB_DOCSTATUS";
         Pos = MAP_APPFONT( COL1, ROW10 );
         Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "~Printing sets \"document modified\" status";
@@ -165,6 +172,7 @@ TabPage OFA_TP_MISC
     };
     NumericField NF_YEARVALUE
     {
+        HelpID = "cui:NumericField:OFA_TP_MISC:NF_YEARVALUE";
         Border = TRUE ;
         Pos = MAP_APPFONT( COL4, ROW13 );
         Size = MAP_APPFONT( EDIT_WIDTH, RSC_CD_TEXTBOX_HEIGHT );
@@ -213,6 +221,7 @@ TabPage OFA_TP_VIEW
     };
     MetricField MF_WINDOWSIZE
     {
+        HelpID = "cui:MetricField:OFA_TP_VIEW:MF_WINDOWSIZE";
         Pos = MAP_APPFONT ( 95 , ROW_MF_SCALING ) ;
         Size = MAP_APPFONT ( 31 , 12 ) ;
         Border = TRUE ;
@@ -241,6 +250,7 @@ TabPage OFA_TP_VIEW
     };
     ListBox LB_ICONSIZE
     {
+        HelpID = "cui:ListBox:OFA_TP_VIEW:LB_ICONSIZE";
         Pos = MAP_APPFONT ( 12 , ROW_LB_ICONSIZESTYLE ) ;
         Size = MAP_APPFONT ( 45 , 60 ) ;
         DropDown = TRUE ;
@@ -255,6 +265,7 @@ TabPage OFA_TP_VIEW
     };
     ListBox LB_ICONSTYLE
     {
+        HelpID = "cui:ListBox:OFA_TP_VIEW:LB_ICONSTYLE";
         Pos = MAP_APPFONT ( 61 , ROW_LB_ICONSIZESTYLE ) ;
         Size = MAP_APPFONT ( 65 , 70 ) ;
         DropDown = TRUE ;
@@ -275,6 +286,7 @@ TabPage OFA_TP_VIEW
     };
     CheckBox CB_SYSTEM_FONT
     {
+        HelpID = "cui:CheckBox:OFA_TP_VIEW:CB_SYSTEM_FONT";
         TabStop = TRUE ;
         Pos = MAP_APPFONT( 12, ROW_CB_SYSTEM_FONT );
         Size = MAP_APPFONT( 114, 16 );
@@ -284,6 +296,7 @@ TabPage OFA_TP_VIEW
 
     CheckBox CB_FONTANTIALIASING
     {
+        HelpID = "cui:CheckBox:OFA_TP_VIEW:CB_FONTANTIALIASING";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , ROW_CB_FONTANTIALIASING ) ;
         Size = MAP_APPFONT ( 110 , RSC_CD_CHECKBOX_HEIGHT ) ;
@@ -297,6 +310,7 @@ TabPage OFA_TP_VIEW
     };
     NumericField NF_AA_POINTLIMIT
     {
+        HelpID = "cui:NumericField:OFA_TP_VIEW:NF_AA_POINTLIMIT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 46, ROW_NF_AA_POINTLIMIT ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -326,6 +340,7 @@ TabPage OFA_TP_VIEW
     };
     ListBox LB_MENU_ICONS
     {
+        HelpID = "cui:ListBox:OFA_TP_VIEW:LB_MENU_ICONS";
         Pos = MAP_APPFONT ( 12 , ROW_LB_MENU_ICONS ) ;
         Size = MAP_APPFONT ( 114 , 60 ) ;
         DropDown = TRUE ;
@@ -346,12 +361,14 @@ TabPage OFA_TP_VIEW
     };
     CheckBox CB_FONT_SHOW
     {
+        HelpID = "cui:CheckBox:OFA_TP_VIEW:CB_FONT_SHOW";
         Pos = MAP_APPFONT ( 12, ROW_CB_FONT_SHOW ) ;
         Size = MAP_APPFONT ( 118 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Show p~review of fonts" ;
     };
     CheckBox CB_FONT_HISTORY
     {
+        HelpID = "cui:CheckBox:OFA_TP_VIEW:CB_FONT_HISTORY";
         Pos = MAP_APPFONT ( 12, ROW_CB_FONT_HISTORY ) ;
         Size = MAP_APPFONT ( 118 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Show font h~istory" ;
@@ -365,6 +382,7 @@ TabPage OFA_TP_VIEW
 
     CheckBox CB_USE_HARDACCELL
     {
+        HelpID = "cui:CheckBox:OFA_TP_VIEW:CB_USE_HARDACCELL";
         Pos = MAP_APPFONT ( 139, ROW_CB_USE_HARDACCELL ) ;
         Size = MAP_APPFONT ( 118 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Use hardware acceleration" ;
@@ -372,6 +390,7 @@ TabPage OFA_TP_VIEW
 
     CheckBox CB_USE_ANTIALIASE
     {
+        HelpID = "cui:CheckBox:OFA_TP_VIEW:CB_USE_ANTIALIASE";
         Pos = MAP_APPFONT ( 139, ROW_CB_USE_ANTIALIASE ) ;
         Size = MAP_APPFONT ( 118 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Use Anti-Aliasing" ;
@@ -391,6 +410,7 @@ TabPage OFA_TP_VIEW
     };
     ListBox LB_MOUSEPOS
     {
+        HelpID = "cui:ListBox:OFA_TP_VIEW:LB_MOUSEPOS";
         Pos = MAP_APPFONT ( 139, ROW_LB_MOUSEPOS ) ;
         Size = MAP_APPFONT ( 114 , 60 ) ;
         DropDown = TRUE ;
@@ -411,6 +431,7 @@ TabPage OFA_TP_VIEW
     };
     ListBox LB_MOUSEMIDDLE
     {
+        HelpID = "cui:ListBox:OFA_TP_VIEW:LB_MOUSEMIDDLE";
         Pos = MAP_APPFONT ( 139, ROW_LB_MOUSEMIDDLE ) ;
         Size = MAP_APPFONT ( 114 , 60 ) ;
         DropDown = TRUE ;
@@ -434,6 +455,7 @@ TabPage OFA_TP_VIEW
 
     CheckBox CB_SELECTION
     {
+        HelpID = "cui:CheckBox:OFA_TP_VIEW:CB_SELECTION";
         Pos = MAP_APPFONT ( 139, ROW_CB_SELECTION + (((12 - RSC_CD_CHECKBOX_HEIGHT) / 2) + 1)) ;
         Size = MAP_APPFONT ( 118 - 34 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Transparency" ;
@@ -441,6 +463,7 @@ TabPage OFA_TP_VIEW
 
     MetricField MF_SELECTION
     {
+        HelpID = "cui:MetricField:OFA_TP_VIEW:MF_SELECTION";
         Pos = MAP_APPFONT ( 139 + (95 - 12), ROW_CB_SELECTION ) ;
         Size = MAP_APPFONT ( 31 , 12 ) ;
         Border = TRUE ;
@@ -485,6 +508,7 @@ TabPage OFA_TP_LANGUAGES
     };
     ListBox LB_USERINTERFACE
     {
+        HelpID = "cui:ListBox:OFA_TP_LANGUAGES:LB_USERINTERFACE";
         Pos = MAP_APPFONT ( 123 , 14 ) ;
         Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
@@ -506,6 +530,7 @@ TabPage OFA_TP_LANGUAGES
     };
     ListBox LB_LOCALESETTING
     {
+        HelpID = "cui:ListBox:OFA_TP_LANGUAGES:LB_LOCALESETTING";
         Pos = MAP_APPFONT ( 123 , 30 ) ;
         Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
@@ -521,6 +546,7 @@ TabPage OFA_TP_LANGUAGES
     };
     CheckBox CB_DECIMALSEPARATOR
     {
+        HelpID = "cui:CheckBox:OFA_TP_LANGUAGES:CB_DECIMALSEPARATOR";
         Pos = MAP_APPFONT ( 123 , 46) ;
         Size = MAP_APPFONT ( 125 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "~Same as locale setting ( %1 )";
@@ -539,6 +565,7 @@ TabPage OFA_TP_LANGUAGES
     };
     ListBox LB_CURRENCY
     {
+        HelpID = "cui:ListBox:OFA_TP_LANGUAGES:LB_CURRENCY";
         Pos = MAP_APPFONT ( 123 , 59 ) ;
         Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
@@ -567,6 +594,7 @@ TabPage OFA_TP_LANGUAGES
 
     ListBox LB_WEST_LANG
     {
+        HelpID = "cui:ListBox:OFA_TP_LANGUAGES:LB_WEST_LANG";
         Pos = MAP_APPFONT ( 123 ,  88 ) ;
         Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
@@ -588,6 +616,7 @@ TabPage OFA_TP_LANGUAGES
     };
     ListBox LB_ASIAN_LANG
     {
+        HelpID = "cui:ListBox:OFA_TP_LANGUAGES:LB_ASIAN_LANG";
         Pos = MAP_APPFONT ( 123 , 104 ) ;
         Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
@@ -609,6 +638,7 @@ TabPage OFA_TP_LANGUAGES
     };
     ListBox LB_COMPLEX_LANG
     {
+        HelpID = "cui:ListBox:OFA_TP_LANGUAGES:LB_COMPLEX_LANG";
         Pos = MAP_APPFONT ( 123 , 120 ) ;
         Size = MAP_APPFONT ( 125 , 60 ) ;
         DropDown = TRUE ;
@@ -618,6 +648,7 @@ TabPage OFA_TP_LANGUAGES
     };
     CheckBox CB_CURRENT_DOC
     {
+        HelpID = "cui:CheckBox:OFA_TP_LANGUAGES:CB_CURRENT_DOC";
         Pos = MAP_APPFONT ( 123 , 135 ) ;
         Size = MAP_APPFONT ( 125 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "For the current document only";
@@ -636,6 +667,7 @@ TabPage OFA_TP_LANGUAGES
     };
     CheckBox CB_ASIANSUPPORT
     {
+        HelpID = "cui:CheckBox:OFA_TP_LANGUAGES:CB_ASIANSUPPORT";
         Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 236 ,RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "E~nabled for Asian languages";
@@ -648,6 +680,7 @@ TabPage OFA_TP_LANGUAGES
     };
     CheckBox CB_CTLSUPPORT
     {
+        HelpID = "cui:CheckBox:OFA_TP_LANGUAGES:CB_CTLSUPPORT";
         Pos = MAP_APPFONT ( 12 , 173 ) ;
         Size = MAP_APPFONT ( 236 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ en-US ] = "Ena~bled for complex text layout (CTL)";

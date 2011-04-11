@@ -37,7 +37,6 @@
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 
-// #90477#
 #include <tools/tenccvt.hxx>
 
 using namespace ::com::sun::star;
@@ -108,7 +107,7 @@ void SdCustomShow::ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage )
     }
     else
     {
-        ULONG nPos;
+        sal_uLong nPos;
         while( (nPos = GetPos( (void*)pOldPage )) != CONTAINER_ENTRY_NOTFOUND  )
         {
             Replace( (void*)pNewPage, nPos );
@@ -118,7 +117,7 @@ void SdCustomShow::ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage )
 
 void SdCustomShow::RemovePage( const SdPage* pPage )
 {
-    ULONG nPos;
+    sal_uLong nPos;
     while( (nPos = GetPos( (void*)pPage )) != CONTAINER_ENTRY_NOTFOUND  )
     {
         Remove( nPos );

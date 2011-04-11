@@ -48,7 +48,7 @@ module com { module sun { module star { module rendering {
     <member>FontInfo::StyleName</member> empty, if font selection
     should only happen via the PANOSE description.
 
-    @since OOo 2.0.0
+    @since OOo 2.0
  */
 struct FontRequest
 {
@@ -109,8 +109,8 @@ struct FontRequest
         This member supplements the
         <member>FontInfo::UnicodeRange0</member> entry with a specific
         locale; this is e.g. important when selecting between
-        traditional and simplified chinese is necessary (since the
-        letters have the same unicode ranges and character values).<p>
+        traditional and simplified Chinese is necessary (since the
+        letters have the same Unicode ranges and character values).<p>
      */
     ::com::sun::star::lang::Locale  Locale;
 

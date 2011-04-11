@@ -28,8 +28,6 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #define _COMPHELPER_STLTYPES_HXX_
 
-#if !defined(__SGI_STL_VECTOR_H) || !defined(__SGI_STL_MAP_H) || !defined(__SGI_STL_MULTIMAP_H)
-
 #include <vector>
 #include <map>
 
@@ -276,8 +274,6 @@ OutputIter intersperse(
 #define DECLARE_STL_SET(valuetype, comparefct, classname)               \
     typedef ::std::set< valuetype, comparefct > classname;  \
     DECLARE_STL_ITERATORS(classname)                        \
-
-#endif
 
 #endif  // _COMPHELPER_STLTYPES_HXX_
 

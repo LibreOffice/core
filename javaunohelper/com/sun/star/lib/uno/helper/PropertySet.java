@@ -617,7 +617,7 @@ XMultiPropertySet
      *  @return true - Conversion was successful. <em>newVal</em> contains a valid value for the property. false -
      *  conversion failed for some reason.
      *  @throws com.sun.star.lang.IllegalArgumentException The value provided is unfit for the property.
-     *  @throws com.sun.star.lang.WrappedTargetException - An exception occured during the conversion, that is to be made known
+     *  @throws com.sun.star.lang.WrappedTargetException - An exception occurred during the conversion, that is to be made known
      *  to the caller.
      */
     protected boolean convertPropertyValue(Property property, Object[] newVal, Object[]curVal,  Object setVal)
@@ -799,7 +799,7 @@ XMultiPropertySet
      *  @param property the property for which the new value is set
      *  @param value the new value for the property.
      *  @throws com.sun.star.lang.WrappedTargetException An exception, which has to be made known to the caller,
-     *  occured during the setting of the value.
+     *  occurred during the setting of the value.
      */
     protected void setPropertyValueNoBroadcast(Property property, Object newVal)
     throws WrappedTargetException

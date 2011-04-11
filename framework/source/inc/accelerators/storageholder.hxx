@@ -91,7 +91,7 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
         };
 
         /** @short  TODO */
-        typedef ::std::hash_map< ::rtl::OUString                    ,
+        typedef ::boost::unordered_map< ::rtl::OUString                    ,
                                  TStorageInfo                       ,
                                  ::rtl::OUStringHash                ,
                                  ::std::equal_to< ::rtl::OUString > > TPath2StorageInfo;
@@ -200,7 +200,7 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
         //---------------------------------------
         /** @short  TODO
          */
-        virtual void operator=(const StorageHolder& rCopy);
+        void operator=(const StorageHolder& rCopy);
 
         //---------------------------------------
         /** @short  opens a sub element of the specified base storage.
@@ -209,7 +209,7 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
                     using the given open mode. If it failed there is second step,
                     which tries to do the same again ... but removing a might existing
                     WRITE flag from the open mode. The user can supress this fallback
-                    handling by setting the parameter bAllowFallback to FALSE.
+                    handling by setting the parameter bAllowFallback to sal_False.
 
             @param  xBaseStorage
                     the storage, where the sub element should be searched.

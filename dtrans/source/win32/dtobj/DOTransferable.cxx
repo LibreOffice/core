@@ -58,7 +58,6 @@
 // namespace directives
 //------------------------------------------------------------------------
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
 using namespace cppu;
@@ -67,6 +66,8 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 //
@@ -347,6 +348,15 @@ CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFor
             byteStream = WinENHMFPictToOOMFPict( stgmedium.hEnhMetaFile );
         else if (CF_HDROP == aFormatEtc.getClipformat())
             byteStream = CF_HDROPToFileList(stgmedium.hGlobal);
+        else if ( CF_BITMAP == aFormatEtc.getClipformat() )
+        {
+            byteStream = WinBITMAPToOOBMP(stgmedium.hBitmap);
+            if( aFormatEtc.getTymed() == TYMED_GDI &&
+                ! stgmedium.pUnkForRelease )
+            {
+                DeleteObject(stgmedium.hBitmap);
+            }
+        }
         else
         {
             clipDataToByteStream( aFormatEtc.getClipformat( ), stgmedium, byteStream );
@@ -502,7 +512,7 @@ sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
     if ( !m_rXMimeCntFactory.is( ) )
     {
         m_rXMimeCntFactory = Reference< XMimeContentTypeFactory >( m_SrvMgr->createInstance(
-            OUString::createFromAscii( "com.sun.star.datatransfer.MimeContentTypeFactory" ) ), UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory")) ), UNO_QUERY );
     }
     OSL_ASSERT( m_rXMimeCntFactory.is( ) );
 
@@ -520,7 +530,7 @@ sal_Bool SAL_CALL CDOTransferable::compareDataFlavors(
     }
     catch( IllegalArgumentException& )
     {
-        OSL_ENSURE( sal_False, "Invalid content type detected" );
+        OSL_FAIL( "Invalid content type detected" );
         bRet = sal_False;
     }
 

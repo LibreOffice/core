@@ -360,7 +360,7 @@ css::uno::Any WinInetBackend::getPropertyValue(
 //------------------------------------------------------------------------------
 
 rtl::OUString SAL_CALL WinInetBackend::getBackendName(void) {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.configuration.backend.WinInetBackend") ;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.configuration.backend.WinInetBackend")) ;
 }
 
 //------------------------------------------------------------------------------

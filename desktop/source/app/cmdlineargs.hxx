@@ -39,9 +39,9 @@ namespace desktop
 class CommandLineArgs
 {
     public:
-        enum BoolParam  // must be zero based!
+        enum BoolParam // must be zero based!
         {
-            CMD_BOOLPARAM_MINIMIZED,
+            CMD_BOOLPARAM_MINIMIZED = 0,
             CMD_BOOLPARAM_INVISIBLE,
             CMD_BOOLPARAM_NORESTORE,
             CMD_BOOLPARAM_BEAN,
@@ -72,12 +72,13 @@ class CommandLineArgs
             CMD_BOOLPARAM_HELPIMPRESS,
             CMD_BOOLPARAM_HELPBASE,
             CMD_BOOLPARAM_PSN,
+            CMD_BOOLPARAM_VERSION,
             CMD_BOOLPARAM_COUNT             // must be last element!
         };
 
         enum StringParam // must be zero based!
         {
-            CMD_STRINGPARAM_PORTAL,
+            CMD_STRINGPARAM_PORTAL = 0,
             CMD_STRINGPARAM_SPLASHPIPE,
             CMD_STRINGPARAM_ACCEPT,
             CMD_STRINGPARAM_UNACCEPT,
@@ -98,16 +99,17 @@ class CommandLineArgs
             CMD_STRINGPARAM_INFILTER,
             CMD_STRINGPARAM_DISPLAY,
             CMD_STRINGPARAM_LANGUAGE,
-            CMD_STRINGPARAM_COUNT           // must be last element!
+            CMD_STRINGPARAM_COUNT // must be last element!
         };
 
         enum GroupParamId
         {
-            CMD_GRPID_MODULE,
+            CMD_GRPID_MODULE = 0,
             CMD_GRPID_COUNT
         };
 
-        struct Supplier {
+        struct Supplier
+        {
             // Thrown from constructors and next:
             class Exception {
             public:
@@ -128,7 +130,7 @@ class CommandLineArgs
         boost::optional< rtl::OUString > getCwdUrl() const { return m_cwdUrl; }
 
         // generic methods to access parameter
-        void                    SetBoolParam( BoolParam eParam, sal_Bool bNewValue );
+        void     SetBoolParam( BoolParam eParam, sal_Bool bNewValue );
 
         const rtl::OUString&    GetStringParam( StringParam eParam ) const;
 
@@ -143,7 +145,6 @@ class CommandLineArgs
         sal_Bool                IsQuickstart() const;
         sal_Bool                IsNoQuickstart() const;
         sal_Bool                IsTerminateAfterInit() const;
-        sal_Bool                IsNoFirstStartWizard() const;
         sal_Bool                IsNoLogo() const;
         sal_Bool                IsNoLockcheck() const;
         sal_Bool                IsHelp() const;
@@ -162,7 +163,9 @@ class CommandLineArgs
         sal_Bool                IsGlobal() const;
         sal_Bool                IsMath() const;
         sal_Bool                IsWeb() const;
+        sal_Bool                IsVersion() const;
         sal_Bool                HasModuleParam() const;
+        sal_Bool                WantsToLoadDocument() const;
 
         // Access to string parameters
         sal_Bool                GetPortalConnectString( ::rtl::OUString& rPara) const;
@@ -183,37 +186,38 @@ class CommandLineArgs
         sal_Bool                GetConversionOut( ::rtl::OUString& rPara ) const;
 
         // Special analyzed states (does not match directly to a command line parameter!)
-        sal_Bool                IsPrinting() const;
-        sal_Bool                IsEmpty() const;
-        sal_Bool                IsEmptyOrAcceptOnly() const;
+        sal_Bool IsPrinting() const;
+        sal_Bool IsEmpty() const;
+        sal_Bool IsEmptyOrAcceptOnly() const;
 
     private:
         enum Count { NONE, ONE, MANY };
 
         struct GroupDefinition
         {
-            sal_Int32   nCount;
-            BoolParam*  pGroupMembers;
+            sal_Int32  nCount;
+            BoolParam* pGroupMembers;
         };
 
         // no copy and operator=
         CommandLineArgs( const CommandLineArgs& );
         CommandLineArgs operator=( const CommandLineArgs& );
 
-        sal_Bool                InterpretCommandLineParameter( const ::rtl::OUString& );
+        sal_Bool                InterpretCommandLineParameter( const ::rtl::OUString&, ::rtl::OUString& );
         void                    ParseCommandLine_Impl( Supplier& supplier );
         void                    ResetParamValues();
         sal_Bool                CheckGroupMembers( GroupParamId nGroup, BoolParam nExcludeMember ) const;
 
-        void                    AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam );
-        void                    SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue );
+        void     AddStringListParam_Impl( StringParam eParam, const rtl::OUString& aParam );
+        void     SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue );
 
         boost::optional< rtl::OUString > m_cwdUrl;
-        sal_Bool                m_aBoolParams[ CMD_BOOLPARAM_COUNT ];       // Stores boolean parameters
-        rtl::OUString           m_aStrParams[ CMD_STRINGPARAM_COUNT ];      // Stores string parameters
-        sal_Bool                m_aStrSetParams[ CMD_STRINGPARAM_COUNT ];   // Stores if string parameters are provided on cmdline
-        Count                   m_eArgumentCount;                           // Number of Args
-        mutable ::osl::Mutex    m_aMutex;
+        sal_Bool                         m_aBoolParams[ CMD_BOOLPARAM_COUNT ];     // Stores boolean parameters
+        rtl::OUString                    m_aStrParams[ CMD_STRINGPARAM_COUNT ];    // Stores string parameters
+        sal_Bool                         m_aStrSetParams[ CMD_STRINGPARAM_COUNT ]; // Stores if string parameters are provided on cmdline
+        Count                            m_eArgumentCount;                         // Number of Args
+        bool                             m_bDocumentArgs;                          // A document creation/open/load arg is used
+        mutable ::osl::Mutex             m_aMutex;
 
         // static definition for groups where only one member can be true
         static GroupDefinition  m_pGroupDefinitions[ CMD_GRPID_COUNT ];

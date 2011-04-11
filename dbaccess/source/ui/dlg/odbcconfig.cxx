@@ -30,6 +30,13 @@
 #include "precompiled_dbaccess.hxx"
 
 #include "odbcconfig.hxx"
+
+#ifdef SYSTEM_ODBC_HEADERS
+#include <sqltypes.h>
+#else
+#include <odbc/sqltypes.h>
+#endif
+
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -41,7 +48,7 @@
 
 #ifdef HAVE_ODBC_SUPPORT
 
-#if defined(WIN) || defined(OS2)
+#if defined(OS2)
 #define ODBC_LIBRARY    "ODBC.DLL"
 #define ODBC_UI_LIBRARY "ODBCINST.DLL"
 #endif
@@ -63,7 +70,7 @@
 
 // just to go with calling convention of windows
 // so don't touch this
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 #define SQL_API __stdcall
 // At least under some circumstances, the below #include <odbc/sqlext.h> re-
 // defines SQL_API to an empty string, leading to a compiler warning on MSC; to
@@ -73,7 +80,7 @@
 #pragma warning(push)
 #pragma warning(disable: 4005)
 #endif
-#endif // defined(WIN) || defined(WNT)
+#endif // defined(WNT)
 
 #if defined(OS2)
 #define ALLREADY_HAVE_OS2_TYPES
@@ -86,13 +93,13 @@
 #include <odbc/sqlext.h>
 #endif
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
 #undef SQL_API
 #define SQL_API __stdcall
-#endif // defined(WIN) || defined(WNT)
+#endif // defined(WNT)
 // from here on you can do what you want to
 
 #if defined(OS2)
@@ -278,7 +285,7 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
 
     if (!allocEnv())
     {
-        OSL_ENSURE(sal_False, "OOdbcEnumeration::getDatasourceNames: could not allocate an ODBC environment!");
+        OSL_FAIL("OOdbcEnumeration::getDatasourceNames: could not allocate an ODBC environment!");
         return;
     }
 

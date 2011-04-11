@@ -30,6 +30,7 @@
 #include "precompiled_dbaccess.hxx"
 #include "TableConnectionData.hxx"
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/stl_types.hxx>
 
 using namespace dbaui;
@@ -60,8 +61,8 @@ void OTableConnectionData::Init()
 {
     //////////////////////////////////////////////////////////////////////
     // LineDataList mit Defaults initialisieren
-    DBG_ASSERT(m_vConnLineData.size() == 0, "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
-    ResetConnLines(TRUE);
+    OSL_ENSURE(m_vConnLineData.size() == 0, "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
+    ResetConnLines(sal_True);
         // das legt Defaults an
 }
 //------------------------------------------------------------------------
@@ -83,7 +84,6 @@ OTableConnectionData::~OTableConnectionData()
     DBG_DTOR(OTableConnectionData,NULL);
     // LineDataList loeschen
     OConnectionLineDataVec().swap(m_vConnLineData);
-    //ResetConnLines(FALSE);
 }
 
 //------------------------------------------------------------------------
@@ -97,7 +97,7 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     m_aConnName = rConnData.GetConnName();
 
     // clear line list
-    ResetConnLines(FALSE);
+    ResetConnLines(sal_False);
 
     // und kopieren
     OConnectionLineDataVec* pLineData = const_cast<OTableConnectionData*>(&rConnData)->GetConnLineDataList();
@@ -111,26 +111,26 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
 }
 
 //------------------------------------------------------------------------
-BOOL OTableConnectionData::SetConnLine( USHORT nIndex, const String& rSourceFieldName, const String& rDestFieldName )
+sal_Bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const String& rSourceFieldName, const String& rDestFieldName )
 {
-    if (USHORT(m_vConnLineData.size()) < nIndex)
-        return FALSE;
+    if (sal_uInt16(m_vConnLineData.size()) < nIndex)
+        return sal_False;
         // == ist noch erlaubt, das entspricht einem Append
 
     if (m_vConnLineData.size() == nIndex)
         return AppendConnLine(rSourceFieldName, rDestFieldName);
 
     OConnectionLineDataRef pConnLineData = m_vConnLineData[nIndex];
-    DBG_ASSERT(pConnLineData != NULL, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
+    OSL_ENSURE(pConnLineData != NULL, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
 
     pConnLineData->SetSourceFieldName( rSourceFieldName );
     pConnLineData->SetDestFieldName( rDestFieldName );
 
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
-BOOL OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName )
+sal_Bool OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName )
 {
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
     OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
@@ -143,15 +143,15 @@ BOOL OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldNa
     {
         OConnectionLineDataRef pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
         if (!pNew.is())
-            return FALSE;
+            return sal_False;
 
         m_vConnLineData.push_back(pNew);
     }
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
-void OTableConnectionData::ResetConnLines( BOOL /*bUseDefaults*/ )
+void OTableConnectionData::ResetConnLines( sal_Bool /*bUseDefaults*/ )
 {
     OConnectionLineDataVec().swap(m_vConnLineData);
 }

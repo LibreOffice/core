@@ -35,32 +35,32 @@ class ScPaintLockData
 {
 private:
     ScRangeListRef  xRangeList;
-    USHORT          nMode;
-    USHORT          nLevel;
-    USHORT          nDocLevel;
-    USHORT          nParts;
-    BOOL            bModified;
+    sal_uInt16          nMode;
+    sal_uInt16          nLevel;
+    sal_uInt16          nDocLevel;
+    sal_uInt16          nParts;
+    sal_Bool            bModified;
 
 public:
-                    ScPaintLockData(USHORT nNewMode);
+                    ScPaintLockData(sal_uInt16 nNewMode);
                     ~ScPaintLockData();
 
-    void            AddRange( const ScRange& rRange, USHORT nP );
+    void            AddRange( const ScRange& rRange, sal_uInt16 nP );
 
-    void            SetModified()   { bModified = TRUE; }
+    void            SetModified()   { bModified = sal_True; }
     void            IncLevel(sal_Bool bDoc)
                         { if (bDoc) ++nDocLevel; else ++nLevel; }
     void            DecLevel(sal_Bool bDoc)
                         { if (bDoc) --nDocLevel; else --nLevel; }
 
     const ScRangeListRef&   GetRangeList() const            { return xRangeList; }
-    USHORT                  GetParts() const                { return nParts; }
-    USHORT                  GetLevel(sal_Bool bDoc) const
+    sal_uInt16                  GetParts() const                { return nParts; }
+    sal_uInt16                  GetLevel(sal_Bool bDoc) const
                                 { return bDoc ? nDocLevel : nLevel; }
-    BOOL                    GetModified() const             { return bModified; }
+    sal_Bool                    GetModified() const             { return bModified; }
 
                     // fuer Wiederherstellen nach Reset
-    void            SetLevel(USHORT nNew, sal_Bool bDoc)
+    void            SetLevel(sal_uInt16 nNew, sal_Bool bDoc)
                         { if (bDoc) nDocLevel = nNew; else nLevel = nNew; }
 };
 

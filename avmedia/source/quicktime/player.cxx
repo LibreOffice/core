@@ -140,7 +140,6 @@ bool Player::create( const ::rtl::OUString& rURL )
         NSString* aNSStr = [[[NSString alloc] initWithCharacters: rURL.getStr() length: rURL.getLength()]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
         NSURL* aURL = [NSURL URLWithString:aNSStr ];
 
-
         NSError* pErr = nil;
         mpMovie = [QTMovie movieWithURL:aURL error:&pErr];
         if(mpMovie)
@@ -422,7 +421,6 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize(  )
     awt::Size aSize( nsSize.width, nsSize.height );
     return aSize;
 }
-
 
 // ------------------------------------------------------------------------------
 

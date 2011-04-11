@@ -50,7 +50,7 @@ namespace formula
 ValWnd::ValWnd( Window* pParent, const ResId& rId ) : Window( pParent, rId )
 {
     Font aFnt( GetFont() );
-    aFnt.SetTransparent( TRUE );
+    aFnt.SetTransparent( sal_True );
     aFnt.SetWeight( WEIGHT_LIGHT );
     if ( pParent->IsBackground() )
     {
@@ -78,7 +78,7 @@ ValWnd::ValWnd( Window* pParent, const ResId& rId ) : Window( pParent, rId )
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ValWnd::Paint( const Rectangle& )
+void ValWnd::Paint( const Rectangle& )
 {
     DrawText( aRectOut.TopLeft(), aStrValue );
 }
@@ -111,7 +111,7 @@ ArgEdit::ArgEdit( Window* pParent, const ResId& rResId )
 //----------------------------------------------------------------------------
 
 void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
-                    ScrollBar& rArgSlider, USHORT nArgCount )
+                    ScrollBar& rArgSlider, sal_uInt16 nArgCount )
 {
     pEdPrev = pPrevEdit;
     pEdNext = pNextEdit;
@@ -123,11 +123,11 @@ void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
 
 // Cursor control for Edit Fields in Argument Dialog
 
-void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
+void ArgEdit::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode     aCode   = rKEvt.GetKeyCode();
-    BOOL        bUp     = (aCode.GetCode() == KEY_UP);
-    BOOL        bDown   = (aCode.GetCode() == KEY_DOWN);
+    sal_Bool        bUp     = (aCode.GetCode() == KEY_UP);
+    sal_Bool        bDown   = (aCode.GetCode() == KEY_DOWN);
     ArgEdit*    pEd     = NULL;
 
     if (   pSlider
@@ -137,8 +137,8 @@ void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
         if ( nArgs > 1 )
         {
             long    nThumb       = pSlider->GetThumbPos();
-            BOOL    bDoScroll    = FALSE;
-            BOOL    bChangeFocus = FALSE;
+            sal_Bool    bDoScroll    = sal_False;
+            sal_Bool    bChangeFocus = sal_False;
 
             if ( bDown )
             {
@@ -152,13 +152,13 @@ void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
                     else
                     {
                         pEd = pEdNext;
-                        bChangeFocus = TRUE;
+                        bChangeFocus = sal_True;
                     }
                 }
                 else if ( pEdNext )
                 {
                     pEd = pEdNext;
-                    bChangeFocus = TRUE;
+                    bChangeFocus = sal_True;
                 }
             }
             else // if ( bUp )
@@ -173,13 +173,13 @@ void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
                     else
                     {
                         pEd = pEdPrev;
-                        bChangeFocus = TRUE;
+                        bChangeFocus = sal_True;
                     }
                 }
                 else if ( pEdPrev )
                 {
                     pEd = pEdPrev;
-                    bChangeFocus = TRUE;
+                    bChangeFocus = sal_True;
                 }
             }
 
@@ -744,7 +744,7 @@ EditBox::EditBox(   Window* pParent,WinBits nWinStyle)
 #************************************************************************/
 EditBox::EditBox( Window* pParent, const ResId& rResId )
         :Control(pParent,rResId),
-        bMouseFlag(FALSE)
+        bMouseFlag(sal_False)
 {
     WinBits nStyle=GetStyle();
     SetStyle( nStyle| WB_DIALOGCONTROL);
@@ -759,8 +759,8 @@ EditBox::EditBox( Window* pParent, const ResId& rResId )
 
     //  #105582# the HelpId from the resource must be set for the MultiLineEdit,
     //  not for the control that contains it.
-    pMEdit->SetSmartHelpId( GetSmartHelpId() );
-    SetSmartHelpId( SmartId() );
+    pMEdit->SetHelpId( GetHelpId() );
+    SetHelpId( "" );
 }
 
 EditBox::~EditBox()
@@ -849,15 +849,15 @@ void EditBox::GetFocus()
 #************************************************************************/
 long EditBox::PreNotify( NotifyEvent& rNEvt )
 {
-    long nResult=TRUE;
+    long nResult=sal_True;
 
     if(pMEdit==NULL) return nResult;
 
-    USHORT nSwitch=rNEvt.GetType();
+    sal_uInt16 nSwitch=rNEvt.GetType();
     if(nSwitch==EVENT_KEYINPUT)// || nSwitch==EVENT_KEYUP)
     {
         const KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
-        USHORT nKey=aKeyCode.GetCode();
+        sal_uInt16 nKey=aKeyCode.GetCode();
         if( (nKey==KEY_RETURN && !aKeyCode.IsShift()) || nKey==KEY_TAB )
         {
             nResult=GetParent()->Notify(rNEvt);
@@ -875,7 +875,7 @@ long EditBox::PreNotify( NotifyEvent& rNEvt )
 
         if(nSwitch==EVENT_MOUSEBUTTONDOWN || nSwitch==EVENT_MOUSEBUTTONUP)
         {
-            bMouseFlag=TRUE;
+            bMouseFlag=sal_True;
             Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ) );
         }
     }
@@ -930,7 +930,7 @@ void EditBox::UpdateOldSel()
 RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResId& rResId ) :
     Edit( _pParent, rResId ),
     pAnyRefDlg( pParent ),
-    bSilentFocus( FALSE )
+    bSilentFocus( sal_False )
 {
     aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
     aTimer.SetTimeout( SC_ENABLE_TIME );
@@ -939,7 +939,7 @@ RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResI
 RefEdit::RefEdit( Window* pParent, const ResId& rResId ) :
     Edit( pParent, rResId ),
     pAnyRefDlg( NULL ),
-    bSilentFocus( FALSE )
+    bSilentFocus( sal_False )
 {
 }
 
@@ -952,6 +952,20 @@ RefEdit::~RefEdit()
 void RefEdit::SetRefString( const XubString& rStr )
 {
     Edit::SetText( rStr );
+}
+
+void RefEdit::SetRefValid(bool bValid)
+{
+    if (bValid)
+    {
+        SetControlForeground();
+        SetControlBackground();
+    }
+    else
+    {
+        SetControlForeground(COL_WHITE);
+        SetControlBackground(0xff6563);
+    }
 }
 
 void RefEdit::SetText( const XubString& rStr )
@@ -967,9 +981,9 @@ void RefEdit::StartUpdateData()
 
 void RefEdit::SilentGrabFocus()
 {
-    bSilentFocus = TRUE;
+    bSilentFocus = sal_True;
     GrabFocus();
-    bSilentFocus = FALSE;
+    bSilentFocus = sal_False;
 }
 
 void RefEdit::SetRefDialog( IControlReferenceHandler* pDlg )
@@ -1032,9 +1046,7 @@ IMPL_LINK( RefEdit, UpdateHdl, Timer*, EMPTYARG )
 RefButton::RefButton( Window* _pParent, const ResId& rResId) :
     ImageButton( _pParent, rResId ),
     aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
-    aImgRefStartHC( ModuleRes( RID_BMP_REFBTN1_H ) ),
     aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
-    aImgRefDoneHC( ModuleRes( RID_BMP_REFBTN2_H ) ),
     pAnyRefDlg( NULL ),
     pRefEdit( NULL )
 {
@@ -1044,9 +1056,7 @@ RefButton::RefButton( Window* _pParent, const ResId& rResId) :
 RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, IControlReferenceHandler* _pDlg ) :
     ImageButton( _pParent, rResId ),
     aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
-    aImgRefStartHC( ModuleRes( RID_BMP_REFBTN1_H ) ),
     aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
-    aImgRefDoneHC( ModuleRes( RID_BMP_REFBTN2_H ) ),
     pAnyRefDlg( _pDlg ),
     pRefEdit( pEdit )
 {
@@ -1056,13 +1066,11 @@ RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, ICo
 void RefButton::SetStartImage()
 {
     SetModeImage( aImgRefStart );
-    SetModeImage( aImgRefStartHC, BMP_COLOR_HIGHCONTRAST );
 }
 
 void RefButton::SetEndImage()
 {
     SetModeImage( aImgRefDone );
-    SetModeImage( aImgRefDoneHC, BMP_COLOR_HIGHCONTRAST );
 }
 
 void RefButton::SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit )

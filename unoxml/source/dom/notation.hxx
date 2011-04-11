@@ -26,14 +26,16 @@
  *
  ************************************************************************/
 
-#ifndef _NOTATION_HXX
-#define _NOTATION_HXX
+#ifndef DOM_NOTATION_HXX
+#define DOM_NOTATION_HXX
+
+#include <libxml/tree.h>
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNotation.hpp>
-#include "node.hxx"
-#include <libxml/tree.h>
+
+#include <node.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -41,14 +43,20 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CNotation : public cppu::ImplInheritanceHelper1< CNode, XNotation >
+    typedef cppu::ImplInheritanceHelper1< CNode, XNotation > CNotation_Base;
+
+    class CNotation
+        : public CNotation_Base
     {
-        friend class CNode;
+    private:
+        friend class CDocument;
+
     private:
         xmlNotationPtr m_aNotationPtr;
 
     protected:
-        CNotation(const xmlNotationPtr);
+        CNotation(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlNotationPtr const pNotation);
 
         /**
         The public identifier of this notation.

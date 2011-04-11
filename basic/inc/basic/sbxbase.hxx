@@ -30,7 +30,6 @@
 #define _SBXBASE_HXX
 
 #include <i18npool/lang.h>
-#include "tools/list.hxx"
 #include "svl/svarray.hxx"
 #include <basic/sbxdef.hxx>
 
@@ -39,14 +38,12 @@ class SbxVariable;
 class SbxBasicFormater;
 
 SV_DECL_PTRARR_DEL(SbxFacs,SbxFactory*,5,5)
-DECLARE_LIST(SbxVarList_Impl, SbxVariable*)
 
 // AppData-Struktur for SBX:
 struct SbxAppData
 {
     SbxError            eSbxError;  // Error code
     SbxFacs             aFacs;      // Factories
-    SbxVarList_Impl     aVars;      // for Dump
     SbxBasicFormater    *pBasicFormater;    // Pointer to Format()-Command helper class
 
     LanguageType        eBasicFormaterLangType;

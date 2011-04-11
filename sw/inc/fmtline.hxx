@@ -38,8 +38,8 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtLineNumber: public SfxPoolItem
 {
-    ULONG nStartValue   :24; //Startwert fuer den Absatz, 0 == kein Startwert
-    ULONG bCountLines   :1;  //Zeilen des Absatzes sollen mitgezaehlt werden.
+    sal_uLong nStartValue   :24; // Starting value for the paragraph. 0 == no starting value.
+    sal_uLong bCountLines   :1;  // Also count lines of paragraph.
 
 public:
     SwFmtLineNumber();
@@ -47,7 +47,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -55,17 +55,17 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    ULONG GetStartValue() const { return nStartValue; }
-    BOOL  IsCount()       const { return bCountLines != 0; }
+    sal_uLong GetStartValue() const { return nStartValue; }
+    sal_Bool  IsCount()       const { return bCountLines != 0; }
 
-    void SetStartValue( ULONG nNew ) { nStartValue = nNew; }
-    void SetCountLines( BOOL b )     { bCountLines = b;    }
+    void SetStartValue( sal_uLong nNew ) { nStartValue = nNew; }
+    void SetCountLines( sal_Bool b )     { bCountLines = b;    }
 };
 
-inline const SwFmtLineNumber &SwAttrSet::GetLineNumber(BOOL bInP) const
+inline const SwFmtLineNumber &SwAttrSet::GetLineNumber(sal_Bool bInP) const
     { return (const SwFmtLineNumber&)Get( RES_LINENUMBER,bInP); }
 
 #endif

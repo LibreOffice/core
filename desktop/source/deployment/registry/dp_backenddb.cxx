@@ -92,7 +92,10 @@ css::uno::Reference<css::xml::dom::XDocument> BackendDb::getDocument()
         ::osl::File::RC err = ::osl::DirectoryItem::get(m_urlDb, item);
         if (err == ::osl::File::E_None)
         {
-            m_doc = xDocBuilder->parseURI(m_urlDb);
+            ::ucbhelper::Content descContent(
+                m_urlDb, css::uno::Reference<css::ucb::XCommandEnvironment>());
+            Reference<css::io::XInputStream> xIn = descContent.openStream();
+            m_doc = xDocBuilder->parse(xIn);
         }
         else if (err == ::osl::File::E_NOENT)
         {
@@ -186,6 +189,74 @@ void BackendDb::removeEntry(::rtl::OUString const & url)
     sExpression.appendAscii("\"]");
 
     removeElement(sExpression.makeStringAndClear());
+}
+
+void BackendDb::revokeEntry(::rtl::OUString const & url)
+{
+    try
+    {
+        Reference<css::xml::dom::XElement> entry = Reference<css::xml::dom::XElement>(getKeyElement(url), UNO_QUERY);
+        if (entry.is())
+        {
+            entry->setAttribute(OUSTR("revoked"), OUSTR("true"));
+            save();
+        }
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to revoke data entry in backend db: ") +
+            m_urlDb, 0, exc);
+    }
+}
+
+bool BackendDb::activateEntry(::rtl::OUString const & url)
+{
+    try
+    {
+        bool ret = false;
+        Reference<css::xml::dom::XElement> entry = Reference<css::xml::dom::XElement>(getKeyElement(url), UNO_QUERY);
+        if (entry.is())
+        {
+            //no attribute "active" means it is active, that is, registered.
+            entry->removeAttribute(OUSTR("revoked"));
+            save();
+            ret = true;
+        }
+        return ret;
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to revoke data entry in backend db: ") +
+            m_urlDb, 0, exc);
+    }
+}
+
+bool BackendDb::hasActiveEntry(::rtl::OUString const & url)
+{
+    try
+    {
+        bool ret = false;
+        Reference<css::xml::dom::XElement> entry = Reference<css::xml::dom::XElement>(getKeyElement(url), UNO_QUERY);
+        if (entry.is())
+        {
+            OUString sActive = entry->getAttribute(OUSTR("revoked"));
+            if (!sActive.equals(OUSTR("true")))
+                ret = true;
+        }
+        return ret;
+
+    }
+    catch(css::uno::Exception &)
+    {
+        Any exc( ::cppu::getCaughtException() );
+        throw css::deployment::DeploymentException(
+            OUSTR("Extension Manager: failed to determine an active entry in backend db: ") +
+            m_urlDb, 0, exc);
+    }
 }
 
 Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
@@ -566,44 +637,43 @@ OUString BackendDb::readSimpleElement(
 }
 
 
-
-//================================================================================
 RegisteredDb::RegisteredDb(
     Reference<XComponentContext> const &  xContext,
     ::rtl::OUString const & url):BackendDb(xContext, url)
 {
-
 }
 
 void RegisteredDb::addEntry(::rtl::OUString const & url)
 {
     try{
+        if (!activateEntry(url))
+        {
+            const OUString sNameSpace = getDbNSName();
+            const OUString sPrefix = getNSPrefix();
+            const OUString sEntry = getKeyElementName();
 
-        const OUString sNameSpace = getDbNSName();
-        const OUString sPrefix = getNSPrefix();
-        const OUString sEntry = getKeyElementName();
-
-        Reference<css::xml::dom::XDocument> doc = getDocument();
-        Reference<css::xml::dom::XNode> root = doc->getFirstChild();
+            Reference<css::xml::dom::XDocument> doc = getDocument();
+            Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
 #if    OSL_DEBUG_LEVEL > 0
-        //There must not be yet an entry with the same url
-        OUString sExpression(
-            sPrefix + OUSTR(":") + sEntry + OUSTR("[@url = \"") + url + OUSTR("\"]"));
-        Reference<css::xml::dom::XNode> _extensionNode =
-            getXPathAPI()->selectSingleNode(root, sExpression);
-        OSL_ASSERT(! _extensionNode.is());
+            //There must not be yet an entry with the same url
+            OUString sExpression(
+                sPrefix + OUSTR(":") + sEntry + OUSTR("[@url = \"") + url + OUSTR("\"]"));
+            Reference<css::xml::dom::XNode> _extensionNode =
+                getXPathAPI()->selectSingleNode(root, sExpression);
+            OSL_ASSERT(! _extensionNode.is());
 #endif
-        Reference<css::xml::dom::XElement> helpElement(
-            doc->createElementNS(sNameSpace, sPrefix +  OUSTR(":") + sEntry));
+            Reference<css::xml::dom::XElement> helpElement(
+                doc->createElementNS(sNameSpace, sPrefix +  OUSTR(":") + sEntry));
 
-        helpElement->setAttribute(OUSTR("url"), url);
+            helpElement->setAttribute(OUSTR("url"), url);
 
-        Reference<css::xml::dom::XNode> helpNode(
-            helpElement, UNO_QUERY_THROW);
-        root->appendChild(helpNode);
+            Reference<css::xml::dom::XNode> helpNode(
+                helpElement, UNO_QUERY_THROW);
+            root->appendChild(helpNode);
 
-        save();
+            save();
+        }
     }
     catch(css::uno::Exception &)
     {
@@ -626,14 +696,10 @@ bool RegisteredDb::getEntry(::rtl::OUString const & url)
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
         Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        //find the extension element that is to be removed
         Reference<css::xml::dom::XNode> aNode =
             xpathApi->selectSingleNode(root, sExpression);
-        if (!aNode.is())
-        {
-            return false;
-        }
-        return true;
+
+        return aNode.is();
     }
     catch(css::uno::Exception &)
     {
@@ -643,7 +709,6 @@ bool RegisteredDb::getEntry(::rtl::OUString const & url)
             m_urlDb, 0, exc);
     }
 }
-
 
 } // namespace backend
 } // namespace dp_registry

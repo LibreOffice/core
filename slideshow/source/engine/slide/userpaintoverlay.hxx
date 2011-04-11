@@ -70,16 +70,21 @@ namespace slideshow
             static UserPaintOverlaySharedPtr create( const RGBColor&          rStrokeColor,
                                                      double                   nStrokeWidth,
                                                      const SlideShowContext&  rContext,
-                                                     const PolyPolygonVector& rPolygons );
+                                                     const PolyPolygonVector& rPolygons,
+                                                     bool                     bActive);
             ~UserPaintOverlay();
             PolyPolygonVector getPolygons();
             void drawPolygons();
+
+            void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth );
+
 
         private:
             UserPaintOverlay( const RGBColor&          rStrokeColor,
                               double                   nStrokeWidth,
                               const SlideShowContext&  rContext,
-                              const PolyPolygonVector& rPolygons );
+                              const PolyPolygonVector& rPolygons,
+                              bool                    bActive );
 
             ::boost::shared_ptr<PaintOverlayHandler>    mpHandler;
             EventMultiplexer&                           mrMultiplexer;

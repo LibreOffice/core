@@ -47,6 +47,7 @@
 
 ModalDialog DLG_INDEXDESIGN
 {
+    HelpID = "dbaccess:ModalDialog:DLG_INDEXDESIGN";
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( DIALOG_SIZE_X , DIALOG_SIZE_Y ) ;
@@ -57,7 +58,6 @@ ModalDialog DLG_INDEXDESIGN
     ToolBox TLB_ACTIONS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        //  Size = MAP_APPFONT ( DIALOG_SIZE_X - 14 , 14 ) ;
         ButtonType = BUTTON_SYMBOL;
         Align = BOXALIGN_TOP;
         HelpId = HID_INDEX_DIALOG_ACTION_TB;
@@ -132,6 +132,7 @@ ModalDialog DLG_INDEXDESIGN
     };
     CheckBox CB_UNIQUE
     {
+        HelpID = "dbaccess:CheckBox:DLG_INDEXDESIGN:CB_UNIQUE";
         Pos = MAP_APPFONT ( LIST_WIDTH + 16, 34 ) ;
         Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, 8 ) ;
         SVLook = TRUE;
@@ -154,6 +155,7 @@ ModalDialog DLG_INDEXDESIGN
     };
     PushButton PB_CLOSE
     {
+        HelpID = "dbaccess:PushButton:DLG_INDEXDESIGN:PB_CLOSE";
         Pos = MAP_APPFONT ( DIALOG_SIZE_X - BUTTON_SIZE_X - 6 - BUTTON_SIZE_X - 6, DIALOG_SIZE_Y - BUTTON_SIZE_Y - 6 ) ;
         Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
         SVLook = TRUE;
@@ -171,14 +173,17 @@ String STR_TAB_INDEX_SORTORDER
 {
     Text [ en-US ] = "Sort order" ;
 };
+
 String STR_TAB_INDEX_FIELD
 {
     Text [ en-US ] = "Index field" ;
 };
+
 String STR_ORDER_ASCENDING
 {
     Text [ en-US ] = "Ascending" ;
 };
+
 String STR_ORDER_DESCENDING
 {
     Text [ en-US ] = "Descending" ;
@@ -196,12 +201,7 @@ String STR_LOGICAL_INDEX_NAME
 
 Image IMG_PKEYICON
 {
-    ImageBitmap = Bitmap { File = "pkey.bmp"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-};
-Image IMG_PKEYICON_SCH
-{
-    ImageBitmap = Bitmap { File = "pkey_sch.bmp"; };
+    ImageBitmap = Bitmap { File = "pkey.png"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
@@ -233,4 +233,3 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 {
     Text [ en-US ] = "In an index definition, no table column may occur more than once. However, you have entered column \"$name$\" twice.";
 };
-

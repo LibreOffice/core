@@ -50,15 +50,11 @@
 //      1)  LOGTYPE                                                         use it to define the output of all assertions, errors, exception infos
 //      2)  LOGFILE_ASSERTIONS                                              use it to define the file name to log assertions if LOGTYPE=LOGTYPE_FILE...
 //      3)  LOGFILE_WARNINGS                                                use it to define the file name to log warnings if LOGTYPE=LOGTYPE_FILE...
-//
 //      active for "non product":
-//
 //      4)  LOG_ASSERT( BCONDITION, STEXT )                                 assert some critical errors wich depend from given condition
 //      4a) LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )                       same like 4) + additional location of error
 //      5)  LOG_ERROR( SMETHOD, STEXT )                                     show errors without any condition
-//
 //      active for debug only!
-//
 //      6)  LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )        show/log an exception for easier debug
 //      7)  LOG_WARNING( SMETHOD, STEXT )                                   should be used to detect leaks in algorithm, mechanism or operation handling
 //*****************************************************************************************************************
@@ -80,7 +76,7 @@
         LOG_ASSERT ( BCONDITION, STEXT )
         LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )
 
-        Forward assertion to logfile (if condition is FALSE - like a DBG_ASSERT!) and continue with program.
+        Forward assertion to logfile (if condition is sal_False - like a DBG_ASSERT!) and continue with program.
         Set LOGTYPE to LOGTYPE_FILECONTINUE to do this.
         BCONDITION is inserted in "(...)" because user can call this macro with an complex expression!
     _____________________________________________________________________________________________________________*/

@@ -288,47 +288,32 @@ APPHELPER_XSERVICEINFO_IMPL( CachedDataSequence, lcl_aServiceName )
 Sequence< double > SAL_CALL CachedDataSequence::getNumericalData()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
 
     if( m_eCurrentDataType == NUMERICAL )
         return m_aNumericalSequence;
     else
         return Impl_getNumericalData();
-    // \--
 }
 
 // ________ XTextualDataSequence ________
 Sequence< OUString > SAL_CALL CachedDataSequence::getTextualData()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
 
     if( m_eCurrentDataType == TEXTUAL )
         return m_aTextualSequence;
     else
         return Impl_getTextualData();
-    // \--
 }
-
-// void SAL_CALL CachedDataSequence::setTextualData( const Sequence< OUString >& aData )
-//     throw (uno::RuntimeException)
-// {
-//     // /--
-//     MutexGuard aGuard( GetMutex() );
-//     Impl_setTextualData( aData );
-//     // \--
-// }
 
 // ________ XDataSequence  ________
 Sequence< Any > SAL_CALL CachedDataSequence::getData()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     return Impl_getMixedData();
-    // \--
 }
 
 OUString SAL_CALL CachedDataSequence::getSourceRangeRepresentation()

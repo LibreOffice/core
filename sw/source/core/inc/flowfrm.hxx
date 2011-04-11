@@ -53,9 +53,8 @@ class SwRect;
 class SwBorderAttrs;
 class SwDoc;
 class SwNodeIndex;
-// --> OD 2005-03-04 #i44049#
+// #i44049#
 class SwObjectFormatterTxtFrm;
-// <--
 
 void MakeFrms( SwDoc *, const SwNodeIndex &, const SwNodeIndex & );
 
@@ -66,9 +65,8 @@ class SwFlowFrm
     friend inline void PrepareUnlock( SwFlowFrm * );
     friend inline void TableSplitRecalcLock( SwFlowFrm * );
     friend inline void TableSplitRecalcUnlock( SwFlowFrm * );
-    // --> OD 2005-03-04 #i44049#
+    // #i44049#
     friend class SwObjectFormatterTxtFrm;
-    // <--
 
     //TblSel darf das Follow-Bit zuruecksetzen.
     friend inline void UnsetFollow( SwFlowFrm *pFlow );
@@ -81,41 +79,35 @@ class SwFlowFrm
 
     //Hilfsfunktionen fuer MoveSubTree()
     static SwLayoutFrm *CutTree( SwFrm* );
-    static BOOL   PasteTree( SwFrm *, SwLayoutFrm *, SwFrm *, SwFrm* );
+    static sal_Bool   PasteTree( SwFrm *, SwLayoutFrm *, SwFrm *, SwFrm* );
 
     //Wird fuer das Zusammenspiel von _GetPrevxxx und MoveBwd gebraucht, damit
     //mehrere Blaetter gleichzeitig uebersprungen werden koennen.
     //Wird auch vom MoveBwd des TabFrm ausgewertet!
-    static BOOL bMoveBwdJump;
+    static sal_Bool bMoveBwdJump;
 
     /** helper method to determine previous frame for calculation of the
         upper space
 
-        OD 2004-03-10 #i11860#
+        #i11860#
 
         @param _pProposedPrevFrm
         optional input parameter - pointer to frame, which should be used
         instead of the direct previous frame.
-
-        @author OD
     */
     const SwFrm* _GetPrevFrmForUpperSpaceCalc( const SwFrm* _pProposedPrevFrm = 0L ) const;
 
     /** method to detemine the upper space amount, which is considered for
         the previous frame
 
-        OD 2004-03-11 #i11860#
-
-        @author OD
+        #i11860#
     */
     SwTwips _GetUpperSpaceAmountConsideredForPrevFrm() const;
 
     /** method to detemine the upper space amount, which is considered for
         the page grid
 
-        OD 2004-03-12 #i11860#
-
-        @author OD
+        #i11860#
     */
     SwTwips _GetUpperSpaceAmountConsideredForPageGrid(
                                 const SwTwips _nUpperSpaceWithoutGrid ) const;
@@ -124,37 +116,36 @@ protected:
 
     SwFlowFrm *pFollow;
 
-    BOOL bIsFollow  :1; //Ist's ein Follow
-    BOOL bLockJoin  :1; //Join (und damit deleten) verboten wenn TRUE!
-    BOOL bUndersized:1; // wir sind kleiner als gewuenscht
-    BOOL bFtnAtEnd  :1; // For sectionfrms only: footnotes at the end of section
-    BOOL bEndnAtEnd :1; //  "       "        " : endnotes at the end of section
-    BOOL bCntntLock :1; //  "       "        " : content locked
-    BOOL bOwnFtnNum :1; //  "       "        " : special numbering of footnotes
-    BOOL bFtnLock   :1; //  "       "        " : ftn, don't leave this section bwd
-    BOOL bFlyLock   :1; //  Stop positioning of at-character flyframes
+    sal_Bool bIsFollow  :1; //Ist's ein Follow
+    sal_Bool bLockJoin  :1; //Join (und damit deleten) verboten wenn sal_True!
+    sal_Bool bUndersized:1; // wir sind kleiner als gewuenscht
+    sal_Bool bFtnAtEnd  :1; // For sectionfrms only: footnotes at the end of section
+    sal_Bool bEndnAtEnd :1; //  "       "        " : endnotes at the end of section
+    sal_Bool bCntntLock :1; //  "       "        " : content locked
+    sal_Bool bOwnFtnNum :1; //  "       "        " : special numbering of footnotes
+    sal_Bool bFtnLock   :1; //  "       "        " : ftn, don't leave this section bwd
+    sal_Bool bFlyLock   :1; //  Stop positioning of at-character flyframes
 
     //Prueft ob Vorwaertsfluss noch Sinn macht Endloswanderschaften (unterbinden)
-    inline BOOL IsFwdMoveAllowed();
-    // --> OD 2005-03-08 #i44049# - method <CalcCntnt(..)> has to check this property.
+    inline sal_Bool IsFwdMoveAllowed();
+    // #i44049# - method <CalcCntnt(..)> has to check this property.
     friend void CalcCntnt( SwLayoutFrm *pLay, bool bNoColl, bool bNoCalcFollow );
-    // <--
-    BOOL IsKeepFwdMoveAllowed();    //Wie oben, Move fuer Keep.
+    sal_Bool IsKeepFwdMoveAllowed();    //Wie oben, Move fuer Keep.
 
     //Prueft ob ein Obj das Umlauf wuenscht ueberlappt.
     //eine Null bedeutet, kein Objekt ueberlappt,
     // 1 heisst, Objekte, die am FlowFrm selbst verankert sind, ueberlappen
     // 2 heisst, Objekte, die woanders verankert sind, ueberlappen
     // 3 heistt, beiderlei verankerte Objekte ueberlappen
-    BYTE BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect );
+    sal_uInt8 BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect );
 
-    void LockJoin()   { bLockJoin = TRUE;  }
-    void UnlockJoin() { bLockJoin = FALSE; }
+    void LockJoin()   { bLockJoin = sal_True;  }
+    void UnlockJoin() { bLockJoin = sal_False; }
 
-            BOOL CheckMoveFwd( BOOL &rbMakePage, BOOL bKeep, BOOL bMovedBwd );
-            BOOL MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways = FALSE );
-    virtual BOOL ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReformat )=0;
-            BOOL MoveBwd( BOOL &rbReformat );
+            sal_Bool CheckMoveFwd( sal_Bool &rbMakePage, sal_Bool bKeep, sal_Bool bMovedBwd );
+            sal_Bool MoveFwd( sal_Bool bMakePage, sal_Bool bPageBreak, sal_Bool bMoveAlways = sal_False );
+    virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool bHead, sal_Bool &rReformat )=0;
+            sal_Bool MoveBwd( sal_Bool &rbReformat );
 
 public:
     SwFlowFrm( SwFrm &rFrm );
@@ -162,50 +153,48 @@ public:
     const SwFrm *GetFrm() const            { return &rThis; }
           SwFrm *GetFrm()                  { return &rThis; }
 
-    static BOOL IsMoveBwdJump()            { return bMoveBwdJump; }
-    static void SetMoveBwdJump( BOOL bNew ){ bMoveBwdJump = bNew; }
+    static sal_Bool IsMoveBwdJump()            { return bMoveBwdJump; }
+    static void SetMoveBwdJump( sal_Bool bNew ){ bMoveBwdJump = bNew; }
 
-    inline void SetUndersized( const BOOL bNew ) { bUndersized = bNew; }
-    inline BOOL IsUndersized()  const { return bUndersized; }
+    inline void SetUndersized( const sal_Bool bNew ) { bUndersized = bNew; }
+    inline sal_Bool IsUndersized()  const { return bUndersized; }
 
-    BOOL IsPrevObjMove() const;
+    sal_Bool IsPrevObjMove() const;
 
     //Die Kette mit minimalen Operationen und Benachrichtigungen unter den
     //neuen Parent Moven.
     void MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling = 0 );
 
-           BOOL       HasFollow() const    { return pFollow ? TRUE : FALSE; }
-           BOOL       IsFollow()     const { return bIsFollow; }
-    inline void       _SetIsFollow( BOOL bSet ) { bIsFollow = bSet; }
+           sal_Bool       HasFollow() const    { return pFollow ? sal_True : sal_False; }
+           sal_Bool       IsFollow()     const { return bIsFollow; }
+    inline void       _SetIsFollow( sal_Bool bSet ) { bIsFollow = bSet; }
     const  SwFlowFrm *GetFollow() const    { return pFollow;   }
            SwFlowFrm *GetFollow()          { return pFollow;   }
-           BOOL       IsAnFollow( const SwFlowFrm *pFlow ) const;
+           sal_Bool       IsAnFollow( const SwFlowFrm *pFlow ) const;
     inline void       SetFollow( SwFlowFrm *pNew ) { pFollow = pNew; }
 
     sal_Bool IsJoinLocked() const { return bLockJoin; }
     sal_Bool IsAnyJoinLocked() const { return bLockJoin || HasLockedFollow(); }
-    BOOL IsFtnAtEnd() const { return bFtnAtEnd; }
-    BOOL IsEndnAtEnd() const { return bEndnAtEnd;   }
-    BOOL IsAnyNoteAtEnd() const { return bFtnAtEnd || bEndnAtEnd; }
-    BOOL AreNotesAtEnd() const { return bFtnAtEnd && bEndnAtEnd; }
+    sal_Bool IsFtnAtEnd() const { return bFtnAtEnd; }
+    sal_Bool IsEndnAtEnd() const { return bEndnAtEnd;   }
+    sal_Bool IsAnyNoteAtEnd() const { return bFtnAtEnd || bEndnAtEnd; }
+    sal_Bool AreNotesAtEnd() const { return bFtnAtEnd && bEndnAtEnd; }
 
-    BOOL IsPageBreak( BOOL bAct ) const;
-    BOOL IsColBreak( BOOL bAct ) const;
+    sal_Bool IsPageBreak( sal_Bool bAct ) const;
+    sal_Bool IsColBreak( sal_Bool bAct ) const;
 
     //Ist ein Keep zu beruecksichtigen (Breaks!)
-    BOOL IsKeep( const SwAttrSet& rAttrs, bool bBreakCheck = false ) const;
+    sal_Bool IsKeep( const SwAttrSet& rAttrs, bool bBreakCheck = false ) const;
 
     sal_Bool HasLockedFollow() const;
 
-    BOOL HasParaSpaceAtPages( BOOL bSct ) const;
+    sal_Bool HasParaSpaceAtPages( sal_Bool bSct ) const;
 
     /** method to determine the upper space hold by the frame
 
-        OD 2004-03-12 #i11860# - add 3rd parameter <_bConsiderGrid> to get
+        #i11860# - add 3rd parameter <_bConsiderGrid> to get
         the upper space with and without considering the page grid
-        (default value: <TRUE>)
-
-        @author ?
+        (default value: <sal_True>)
     */
     SwTwips CalcUpperSpace( const SwBorderAttrs *pAttrs = NULL,
                             const SwFrm* pPr = NULL,
@@ -215,26 +204,18 @@ public:
         the previous frame and the page grid, if option 'Use former object
         positioning' is OFF
 
-        OD 2004-03-18 #i11860#
-
-        @author OD
+        #i11860#
     */
     SwTwips GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() const;
 
     /** calculation of lower space
-
-        OD 2004-03-02 #106629#
-
-        @author OD
     */
     SwTwips CalcLowerSpace( const SwBorderAttrs* _pAttrs = 0L ) const;
 
     /** calculation of the additional space to be considered, if flow frame
         is the last inside a table cell
 
-        OD 2004-07-16 #i26250
-
-        @author OD
+        #i26250
 
         @param _pAttrs
         optional input parameter - border attributes of the flow frame.
@@ -248,14 +229,14 @@ public:
 
     void CheckKeep();
 
-    void SetFtnLock( BOOL bNew ){ bFtnLock = bNew; }
-    BOOL IsFtnLock() const {    return bFtnLock; }
-    void SetFlyLock( BOOL bNew ){ bFlyLock = bNew; }
-    BOOL IsFlyLock() const {    return bFlyLock; }
-    void SetOwnFtnNum( BOOL bNew ){ bOwnFtnNum = bNew; }
-    BOOL IsOwnFtnNum() const {  return bOwnFtnNum; }
-    void SetCntntLock( BOOL bNew ){ bCntntLock = bNew; }
-    BOOL IsCntntLocked() const {    return bCntntLock; }
+    void SetFtnLock( sal_Bool bNew ){ bFtnLock = bNew; }
+    sal_Bool IsFtnLock() const {    return bFtnLock; }
+    void SetFlyLock( sal_Bool bNew ){ bFlyLock = bNew; }
+    sal_Bool IsFlyLock() const {    return bFlyLock; }
+    void SetOwnFtnNum( sal_Bool bNew ){ bOwnFtnNum = bNew; }
+    sal_Bool IsOwnFtnNum() const {  return bOwnFtnNum; }
+    void SetCntntLock( sal_Bool bNew ){ bCntntLock = bNew; }
+    sal_Bool IsCntntLocked() const {    return bCntntLock; }
 
     //casten einen Frm auf einen FlowFrm - wenns denn einer ist, sonst 0
     //Diese Methoden muessen fuer neue Ableitungen geaendert werden!
@@ -263,7 +244,7 @@ public:
     static const SwFlowFrm *CastFlowFrm( const SwFrm *pFrm );
 };
 
-inline BOOL SwFlowFrm::IsFwdMoveAllowed()
+inline sal_Bool SwFlowFrm::IsFwdMoveAllowed()
 {
     return rThis.GetIndPrev() != 0;
 }

@@ -223,7 +223,7 @@ GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase)
     Widths::const_iterator aWidthsEnd = pWidths->end();
     for ( Widths::const_iterator aIt = pWidths->begin();
           aIt != aWidthsEnd;
-          aIt++)
+          ++aIt)
     {
         nSz += *aIt;
         SwTwips nCalc = nSz;
@@ -252,9 +252,6 @@ WidthsPtr WW8TableNodeInfoInner::getWidthsOfRow()
         pWidths = WidthsPtr(new Widths);
         // number of cell written
         sal_uInt32 nBoxes = rTabBoxes.Count();
-        if ( nBoxes > 32 )
-            nBoxes = 32;
-
         for (sal_uInt32 n = 0; n < nBoxes; n++)
         {
             const SwFrmFmt* pBoxFmt = rTabBoxes[ n ]->GetFrmFmt();
@@ -283,9 +280,6 @@ RowSpansPtr WW8TableNodeInfoInner::getRowSpansOfRow()
         const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
 
         sal_uInt32 nBoxes = rTabBoxes.Count();
-        if (nBoxes > 32)
-            nBoxes = 32;
-
         for (sal_uInt32 n = 0; n < nBoxes; ++n)
         {
             pResult->push_back(rTabBoxes[n]->getRowSpan());
@@ -665,7 +659,7 @@ void WW8TableInfo::processSwTable(const SwTable * pTable)
     {
         const SwTableLines & rLines = pTable->GetTabLines();
 
-        for (USHORT n = 0; n < rLines.Count(); n++)
+        for (sal_uInt16 n = 0; n < rLines.Count(); n++)
         {
             const SwTableLine * pLine = rLines[n];
 
@@ -701,7 +695,7 @@ WW8TableInfo::processTableLine(const SwTable * pTable,
 
     WW8TableNodeInfo::Pointer_t pTextNodeInfo;
 
-    for (USHORT n = 0; n < rBoxes.Count(); n++)
+    for (sal_uInt16 n = 0; n < rBoxes.Count(); n++)
     {
         const SwTableBox * pBox = rBoxes[n];
 
@@ -738,7 +732,7 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
             const SwTableLine * pLine = rLines[n];
             const SwTableBoxes & rBoxes = pLine->GetTabBoxes();
 
-            for (USHORT nBox = 0; nBox < rBoxes.Count(); nBox++)
+            for (sal_uInt16 nBox = 0; nBox < rBoxes.Count(); nBox++)
                 pNodeInfo = processTableBoxLines(rBoxes[nBox], pTable, pBoxToSet, nRow, nCell, nDepth);
         }
     }
@@ -1155,7 +1149,7 @@ void WW8TableCellGrid::addShadowCells()
             if (bBeginningOfCell)
             {
                 RowTops_t::const_iterator aRowSpanIt(aTopsIt);
-                aRowSpanIt++;
+                ++aRowSpanIt;
 
                 if (aRowSpanIt != getRowTopsEnd() &&
                     *aRowSpanIt < aCellIt->bottom())
@@ -1173,7 +1167,7 @@ void WW8TableCellGrid::addShadowCells()
                 while (aRowSpanIt != getRowTopsEnd() &&
                        *aRowSpanIt < aCellIt->bottom())
                 {
-                    aRowSpanIt++;
+                    ++aRowSpanIt;
                     nRowSpan++;
                 }
 
@@ -1188,7 +1182,7 @@ void WW8TableCellGrid::addShadowCells()
                 pNodeInfo->setVertMerge(bVertMerge);
             }
 
-            aCellIt++;
+            ++aCellIt;
 
             bBeginningOfCell = (aRect.Left() != aCellIt->left());
             aRect = aCellIt->getRect();
@@ -1198,7 +1192,7 @@ void WW8TableCellGrid::addShadowCells()
         if (pRow.get() != NULL)
             pRow->setRowSpans(pRowSpans);
 
-        aTopsIt++;
+        ++aTopsIt;
     }
 #ifdef DEBUG
     ::std::clog << "</addShadowCells>" << ::std::endl;
@@ -1274,7 +1268,7 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells()
                     pTableBoxes->push_back(NULL);
             }
 
-            aCellIt++;
+            ++aCellIt;
             bBeginningOfCell = false;
 
             if (aCellIt != aCellEndIt && aCellIt->left() != nCellX)
@@ -1307,7 +1301,7 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells()
 
         nShadows = 0;
 
-        aTopsIt++;
+        ++aTopsIt;
         nRow++;
     }
 
@@ -1341,7 +1335,7 @@ string WW8TableCellGrid::toString()
                 sResult += "<shadow/>\n";
 
             sResult += "</cellInfo>\n";
-            aCellIt++;
+            ++aCellIt;
         }
 
         WW8TableCellGridRow::Pointer_t pRow = getRow(*aTopsIt);
@@ -1353,7 +1347,7 @@ string WW8TableCellGrid::toString()
             Widths::const_iterator aItEnd = pWidths->end();
             for (Widths::const_iterator aIt = pWidths->begin();
                  aIt != aItEnd;
-                 aIt++)
+                 ++aIt)
             {
                 if (aIt != pWidths->begin())
                     sResult += ", ";
@@ -1373,7 +1367,7 @@ string WW8TableCellGrid::toString()
             RowSpans::const_iterator aItEnd = pRowSpans->end();
             for (RowSpans::const_iterator aIt = pRowSpans->begin();
                  aIt != aItEnd;
-                 aIt++)
+                 ++aIt)
             {
                 if (aIt != pRowSpans->begin())
                     sResult += ", ";
@@ -1386,7 +1380,7 @@ string WW8TableCellGrid::toString()
         }
 
         sResult += "</row>\n";
-        aTopsIt++;
+        ++aTopsIt;
     }
 
     sResult += "</WW8TableCellGrid>\n";

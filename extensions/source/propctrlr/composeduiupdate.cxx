@@ -374,7 +374,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL CachedInspectorUI::registerControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException)
     {
-        OSL_ENSURE( false, "CachedInspectorUI::registerControlObserver: not expected to be called!" );
+        OSL_FAIL( "CachedInspectorUI::registerControlObserver: not expected to be called!" );
             // CachedInspectorUI is used as context for the controls, and we don't expect them to
             // register listeners themself
         m_rMaster.getDelegatorUI()->registerControlObserver( _Observer );
@@ -383,7 +383,7 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL CachedInspectorUI::revokeControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException)
     {
-        OSL_ENSURE( false, "CachedInspectorUI::revokeControlObserver: not expected to be called!" );
+        OSL_FAIL( "CachedInspectorUI::revokeControlObserver: not expected to be called!" );
             // CachedInspectorUI is used as context for the controls, and we don't expect them to
             // register listeners themself
         m_rMaster.getDelegatorUI()->revokeControlObserver( _Observer );

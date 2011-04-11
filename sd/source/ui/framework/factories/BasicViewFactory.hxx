@@ -130,13 +130,15 @@ private:
         SfxViewFrame& rFrame,
         ::Window& rWindow,
         const css::uno::Reference<css::drawing::framework::XPane>& rxPane,
-        FrameView* pFrameView);
+        FrameView* pFrameView,
+        const bool bIsCenterView);
 
     ::boost::shared_ptr<ViewShell> CreateViewShell (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         SfxViewFrame& rFrame,
         ::Window& rWindow,
-        FrameView* pFrameView);
+        FrameView* pFrameView,
+        const bool bIsCenterView);
 
     void ActivateCenterView (
         const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor);

@@ -58,7 +58,7 @@
 
     <p>For instance, you may have a form which is bound to a table <em>invoice</em>, and you use it
     to enter invoices for your customers. Probably, you will have a second table (say <em>customer</em>),
-    which (amonst other data) contains a unique key for identifying customers. In your invoice table, you will
+    which (among other data) contains a unique key for identifying customers. In your invoice table, you will
     have a foreign key referring to these customers.<br/>
     Now, besides the result set the form is based on (all your invoices), the list box can be caused
     to open a second result set, this time for the <em>customer</em> table, and fill it's list with entries
@@ -143,7 +143,7 @@ published service DatabaseListBox
 
                 <dt><member scope="com::sun::star::form">ListSourceType::TABLEFIELDS</member></dt>
                 <dd>The first element of the string sequence in <member>ListBox::ListSource</member>
-                determines the table which's column names should fill the list.</dd>
+                determines the table whose column names should fill the list.</dd>
             </dl>
         </p>
 

@@ -93,7 +93,6 @@ private:
     void                        ReadDateTime( DateTime& rDateTime );
 
     inline void                 ReadString( String& rString );
-    inline void                 IgnoreString();
 
     sal_Bool                    CheckRecord( sal_uInt16 nOpCode );
 
@@ -167,11 +166,6 @@ inline void XclImpChangeTrack::ReadString( String& rString )
     rString = pStrm->ReadUniString();
 }
 
-inline void XclImpChangeTrack::IgnoreString()
-{
-    pStrm->IgnoreUniString();
-}
-
 //___________________________________________________________________
 // derived class for special 3D ref handling
 
@@ -180,7 +174,7 @@ class XclImpChTrFmlConverter : public ExcelToSc8
 private:
     XclImpChangeTrack&          rChangeTrack;
 
-    virtual bool                Read3DTabReference( UINT16 nIxti, SCTAB& rFirstTab, SCTAB& rLastTab, ExternalTabInfo& rExtInfo );
+    virtual bool                Read3DTabReference( sal_uInt16 nIxti, SCTAB& rFirstTab, SCTAB& rLastTab, ExternalTabInfo& rExtInfo );
 
 public:
     inline                      XclImpChTrFmlConverter(

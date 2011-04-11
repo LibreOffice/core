@@ -48,7 +48,6 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <unostyle.hxx>
 #include <SwStyleNameMapper.hxx>
-#include "errhdl.hxx"
 #include "paratr.hxx"
 #include "charfmt.hxx"
 #include "cmdid.h"
@@ -62,8 +61,6 @@ TYPEINIT1_AUTOFACTORY( SwParaConnectBorderItem, SfxBoolItem);
 
 /*************************************************************************
 |*    Beschreibung      Methoden von SwFmtDrop
-|*    Ersterstellung    MS  19.02.91
-|*    Letzte Aenderung  JP 08.08.94
 *************************************************************************/
 
 
@@ -84,7 +81,7 @@ SwFmtDrop::SwFmtDrop()
 
 SwFmtDrop::SwFmtDrop( const SwFmtDrop &rCpy )
     : SfxPoolItem( RES_PARATR_DROP ),
-    SwClient( rCpy.pRegisteredIn ),
+    SwClient( rCpy.GetRegisteredInNonConst() ),
     pDefinedIn( 0 ),
     nDistance( rCpy.GetDistance() ),
     nReadFmt( rCpy.nReadFmt ),
@@ -105,8 +102,8 @@ SwFmtDrop::~SwFmtDrop()
 void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
 {
     //Ummelden
-    if ( pRegisteredIn )
-        pRegisteredIn->Remove( this );
+    if ( GetRegisteredIn() )
+        GetRegisteredInNonConst()->Remove( this );
     if(pNew)
         pNew->Add( this );
     nReadFmt = USHRT_MAX;
@@ -114,26 +111,19 @@ void SwFmtDrop::SetCharFmt( SwCharFmt *pNew )
 
 
 
-void SwFmtDrop::Modify( SfxPoolItem *, SfxPoolItem * )
+void SwFmtDrop::Modify( const SfxPoolItem*, const SfxPoolItem * )
 {
     if( pDefinedIn )
     {
         if( !pDefinedIn->ISA( SwFmt ))
-            pDefinedIn->Modify( this, this );
+            pDefinedIn->ModifyNotification( this, this );
         else if( pDefinedIn->GetDepends() &&
                 !pDefinedIn->IsModifyLocked() )
         {
             // selbst den Abhaengigen vom Format bescheid sagen. Das
             // Format selbst wuerde es nicht weitergeben, weil es ueber
             // die Abpruefung nicht hinauskommt.
-            SwClientIter aIter( *pDefinedIn );
-            SwClient * pLast = aIter.GoStart();
-            if( pLast )     // konnte zum Anfang gesprungen werden ??
-                do {
-                    pLast->Modify( this, this );
-                    if( !pDefinedIn->GetDepends() ) // Baum schon Weg ??
-                        break;
-                } while( 0 != ( pLast = aIter++ ));
+            pDefinedIn->ModifyBroadcast( this, this );
         }
     }
 }
@@ -200,7 +190,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int8 nTemp = 0;
             rVal >>= nTemp;
             if(nTemp >=1 && nTemp < 0x7f)
-                nLines = (BYTE)nTemp;
+                nLines = (sal_uInt8)nTemp;
         }
         break;
         case MID_DROPCAP_COUNT :
@@ -208,7 +198,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nTemp = 0;
             rVal >>= nTemp;
             if(nTemp >=1 && nTemp < 0x7f)
-                nChars = (BYTE)nTemp;
+                nChars = (sal_uInt8)nTemp;
         }
         break;
         case MID_DROPCAP_DISTANCE :
@@ -230,8 +220,6 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 nDistance   = MM100_TO_TWIP(pDrop->Distance);
             }
             else {
-                //exception( wrong_type)
-                ;
             }
         }
         break;
@@ -239,7 +227,7 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             bWholeWord = *(sal_Bool*)rVal.getValue();
         break;
         case MID_DROPCAP_CHAR_STYLE_NAME :
-            DBG_ERROR("char format cannot be set in PutValue()!");
+            OSL_FAIL("char format cannot be set in PutValue()!");
         break;
     }
     return true;
@@ -261,32 +249,25 @@ SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    // --> OD 2008-03-04 #refactorlists# - removed <pDefinedIn>
-    return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
-    // <--
-}
-/* -----------------------------27.06.00 11:05--------------------------------
 
- ---------------------------------------------------------------------------*/
-bool    SwNumRuleItem::QueryValue( uno::Any& rVal, BYTE ) const
+    return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
+}
+
+bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     rtl::OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
     rVal <<= sRet;
     return true;
 }
-/* -----------------------------27.06.00 11:05--------------------------------
 
- ---------------------------------------------------------------------------*/
-bool    SwNumRuleItem::PutValue( const uno::Any& rVal, BYTE )
+bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     rtl::OUString uName;
     rVal >>= uName;
     SetValue(SwStyleNameMapper::GetUIName(uName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE));
     return true;
 }
-/* -----------------19.05.2003 10:44-----------------
 
- --------------------------------------------------*/
 SfxPoolItem* SwParaConnectBorderItem::Clone( SfxItemPool * ) const
 {
     return new SwParaConnectBorderItem( *this );

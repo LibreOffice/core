@@ -46,7 +46,7 @@ private:
 protected:
 
     virtual void            _ExportMeta() {}
-    virtual void            _ExportStyles( BOOL /*bUsed*/ ) {}
+    virtual void            _ExportStyles( sal_Bool /*bUsed*/ ) {}
     virtual void            _ExportAutoStyles() {}
     virtual void            _ExportContent() {}
     virtual void            _ExportMasterStyles() {}
@@ -54,7 +54,6 @@ protected:
 
 public:
 
-    // #110680#
     SVGMtfExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const REF( NMSP_SAX::XDocumentHandler )& rxHandler );
@@ -66,7 +65,6 @@ public:
 
 // -----------------------------------------------------------------------------
 
-// #110680#
 SVGMtfExport::SVGMtfExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const REF( NMSP_SAX::XDocumentHandler )& rxHandler )
@@ -108,7 +106,7 @@ void SVGMtfExport::writeMtf( const GDIMetaFile& rMtf )
     AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
 
     {
-        SvXMLElementExport  aSVG( *this, XML_NAMESPACE_NONE, "svg", TRUE, TRUE );
+        SvXMLElementExport  aSVG( *this, XML_NAMESPACE_NONE, "svg", sal_True, sal_True );
         SVGActionWriter*    pWriter = new SVGActionWriter( *this, rMtf );
 
         delete pWriter;
@@ -167,8 +165,6 @@ void SAL_CALL SVGWriter::write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHa
 
     const REF( NMSP_SAX::XDocumentHandler ) xDocumentHandler( rxDocHandler );
 
-    // #110680#
-    // SVGMtfExport* pWriter = new SVGMtfExport( xDocumentHandler );
     SVGMtfExport* pWriter = new SVGMtfExport( mxFact, xDocumentHandler );
 
     pWriter->writeMtf( aMtf );

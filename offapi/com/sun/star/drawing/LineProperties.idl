@@ -102,27 +102,27 @@ published service LineProperties
 
     //-------------------------------------------------------------------------
 
-    /** This property contains the name of the line start poly polygon bezier.
+    /** This property contains the name of the line start poly polygon Bezier.
         <p>If this string is empty, no line start polygon is rendered.
      */
     [optional, property] string LineStartName;
 
     //-------------------------------------------------------------------------
 
-    /** This property contains the name of the line end poly polygon bezier.
+    /** This property contains the name of the line end poly polygon Bezier.
         <p>If this string is empty, no line end polygon is rendered.
      */
     [optional, property] string LineEndName;
 
     //-------------------------------------------------------------------------
 
-    /** This property contains the line start in the form of a poly polygon bezier.
+    /** This property contains the line start in the form of a poly polygon Bezier.
      */
     [optional, property] com::sun::star::drawing::PolyPolygonBezierCoords LineStart;
 
     //-------------------------------------------------------------------------
 
-    /** This property contains the line end in the form of a poly polygon bezier.
+    /** This property contains the line end in the form of a poly polygon Bezier.
      */
     [optional, property] com::sun::star::drawing::PolyPolygonBezierCoords LineEnd;
 

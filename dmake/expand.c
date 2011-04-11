@@ -133,23 +133,23 @@ char *src;                    /* pointer to source string  */
 
       /* START <+...+> KLUDGE */
       if(   (ks=DmStrStr(start,"<+")) != NIL(char)
-         && (ke=DmStrStr(ks,"+>")) != NIL(char) ){
-     char *t1, *t2;
+            && (ke=DmStrStr(ks,"+>")) != NIL(char) ) {
+        char *t1, *t2;
 
-     res = DmStrJoin( res, t2=Expand(t1=DmSubStr(start,ks)), -1, TRUE);
-     FREE(t1); FREE(t2);
+        res = DmStrJoin( res, t2=Expand(t1=DmSubStr(start,ks)), -1, TRUE);
+        FREE(t1); FREE(t2);
 
-     t1 = DmSubStr(ks+2, ke+1); t1[ke-ks-2] = ')';
-     t2 = DmStrJoin( "$(mktmp ", t1, -1,FALSE);
-     FREE(t1);
-     res = DmStrJoin( res, t2=Expand(t2), -1, TRUE);
-     FREE(t2);
-     src = ke+2;
+        t1 = DmSubStr(ks+2, ke+1); t1[ke-ks-2] = ')';
+        t2 = DmStrJoin( "$(mktmp ", t1, -1,FALSE);
+        FREE(t1);
+        res = DmStrJoin( res, t1=Expand(t2), -1, TRUE);
+        FREE(t1); FREE(t2);
+        src = ke+2;
       }
       /* END <+...+> KLUDGE */
       else {
-     res   = DmStrJoin( res, tmp = ScanToken(start,&src,TRUE), -1, TRUE );
-     FREE( tmp );
+        res   = DmStrJoin( res, tmp = ScanToken(start,&src,TRUE), -1, TRUE );
+        FREE( tmp );
       }
    }
 
@@ -726,36 +726,36 @@ int  doexpand;          /* If TRUE enables macro expansion  */
         break;
 
      case '\\':                             /* Transform \<nl> -> ' '. */
-            if( s[1] != '\n' ) {
-          done = !lev;
-          break;
-            } else {
-              size_t len;
-          s[1] = ' ';
-              len = strlen(s+1)+1;
-          memmove( s, s+1, len );
-        }
-        /*FALLTHRU*/
+       if( s[1] != '\n' ) {
+         done = !lev;
+         break;
+       } else {
+         size_t len;
+         s[1] = ' ';
+         len = strlen(s+1)+1;
+         memmove( s, s+1, len );
+       }
+       /*FALLTHRU*/
      case ' ':
      case '\t':
         if ( lev == 1 ) fflag = 1;
         break;
 
      case '\0':             /* check for null */
-        *ps = s;
-        done = TRUE;
-        if( lev ) {             /* catch $( or ${ without closing bracket */
-           Fatal( "Syntax error in macro [$%s]. The closing bracket [%c] is missing.\n", start, edelim );
-        } else
-          Fatal( "DEBUG: This cannot occur! [%s].\n", start );
-        break;
+       *ps = s;
+       done = TRUE;
+       if( lev ) {              /* catch $( or ${ without closing bracket */
+         Fatal( "Syntax error in macro [$%s]. The closing bracket [%c] is missing.\n", start, edelim );
+       } else
+         Fatal( "DEBUG: This cannot occur! [%s].\n", start );
+       break;
 
-         case ')':              /* close macro brace */
-         case '}':
+      case ')':             /* close macro brace */
+      case '}':
         if( !lev )      /* A closing bracket without an .. */
-           Fatal("Syntax error in macro [$%s]. Closing bracket [%c] cannot be a macro name.\n", start, *s );
+          Fatal("Syntax error in macro [$%s]. Closing bracket [%c] cannot be a macro name.\n", start, *s );
         else if( *s == edelim ) --lev;
-        /*FALLTHRU*/
+      /*FALLTHRU*/
 
          default:       /* Done when lev == 0. This means either no */
         done = !lev;    /* opening bracket (single letter macro) or */
@@ -768,14 +768,14 @@ int  doexpand;          /* If TRUE enables macro expansion  */
    /* Check if this is a $A type macro.  If so then we have to
     * handle it a little differently. */
    if( bflag )
-      macro_name = DmSubStr( start+1, s-1 );
+     macro_name = DmSubStr( start+1, s-1 );
    else
-      macro_name = DmSubStr( start, s );
+     macro_name = DmSubStr( start, s );
 
    /* If we don't have to expand the macro we're done. */
    if (!doexpand) {
-      *ps = s;
-      DB_RETURN(macro_name);
+     *ps = s;
+     DB_RETURN(macro_name);
    }
 
    /* Check to see if the macro name contains spaces, if so then treat it
@@ -783,251 +783,251 @@ int  doexpand;          /* If TRUE enables macro expansion  */
     * deal with it.  We do not call the function expander if the function
     * invocation begins with a '$' */
    if( fflag && *macro_name != '$' ) {
-      result = Exec_function(macro_name);
+     result = Exec_function(macro_name);
    }
    else {
-      /* Check if the macro is a recursive macro name, if so then
-       * EXPAND the name before expanding the value */
-      if( strchr( macro_name, '$' ) != NIL(char) ) {
-     recurse_name = Expand( macro_name );
-     FREE( macro_name );
-     macro_name = recurse_name;
-      }
-
-      /* Code to do value expansion goes here, NOTE:  macros whose assign bit
-     is one have been evaluated and assigned, they contain no further
-     expansions and thus do not need their values expanded again. */
-
-      if( (hp = GET_MACRO( macro_name )) != NIL(HASH) ) {
-     if( hp->ht_flag & M_MARK )
-        Fatal( "Detected circular macro [%s]", hp->ht_name );
-
-     if( !(hp->ht_flag & M_EXPANDED) ) {
-        hp->ht_flag |= M_MARK;
-        result = Expand( hp->ht_value );
-        hp->ht_flag ^= M_MARK;
+     /* Check if the macro is a recursive macro name, if so then
+      * EXPAND the name before expanding the value */
+     if( strchr( macro_name, '$' ) != NIL(char) ) {
+       recurse_name = Expand( macro_name );
+       FREE( macro_name );
+       macro_name = recurse_name;
      }
-     else if( hp->ht_value != NIL(char) )
-        result = DmStrDup( hp->ht_value );
-     else
-        result = DmStrDup( "" );
 
-      }
-      else {
-     /* The use of an undefined macro implicitly defines it but
-      * leaves its value to NIL(char). */
-     hp = Def_macro( macro_name, NIL(char), M_EXPANDED );
-     /* Setting M_INIT assures that this macro is treated unset like
-      * default internal macros. (Necessary for *= and *:=) */
-     hp->ht_flag |= M_INIT;
+     /* Code to do value expansion goes here, NOTE:  macros whose assign bit
+        is one have been evaluated and assigned, they contain no further
+        expansions and thus do not need their values expanded again. */
 
-     result = DmStrDup( "" );
-      }
-      /* Mark macros as used only if we are not expanding them for
-       * the purpose of a .IF test, so we can warn about redef after use*/
-      if( !If_expand ) hp->ht_flag |= M_USED;
+     if( (hp = GET_MACRO( macro_name )) != NIL(HASH) ) {
+       if( hp->ht_flag & M_MARK )
+         Fatal( "Detected circular macro [%s]", hp->ht_name );
+
+       if( !(hp->ht_flag & M_EXPANDED) ) {
+         hp->ht_flag |= M_MARK;
+         result = Expand( hp->ht_value );
+         hp->ht_flag ^= M_MARK;
+       }
+       else if( hp->ht_value != NIL(char) )
+         result = DmStrDup( hp->ht_value );
+       else
+         result = DmStrDup( "" );
+
+     }
+     else {
+       /* The use of an undefined macro implicitly defines it but
+        * leaves its value to NIL(char). */
+       hp = Def_macro( macro_name, NIL(char), M_EXPANDED );
+       /* Setting M_INIT assures that this macro is treated unset like
+        * default internal macros. (Necessary for *= and *:=) */
+       hp->ht_flag |= M_INIT;
+
+       result = DmStrDup( "" );
+     }
+     /* Mark macros as used only if we are not expanding them for
+      * the purpose of a .IF test, so we can warn about redef after use*/
+     if( !If_expand ) hp->ht_flag |= M_USED;
 
    }
 
    if( mflag ) {
-      char separator;
-      int  modifier_list = 0;
-      int  aug_mod       = FALSE;
-      char *pat1;
-      char *pat2;
-      char *p;
+     char separator;
+     int  modifier_list = 0;
+     int  aug_mod       = FALSE;
+     char *pat1;
+     char *pat2;
+     char *p;
 
-      /* We are inside of a macro expansion. The "build up macro name,
-       * find its while loop above should have caught all \<nl> and
-       * converted them to a real space. Let's verify this. */
-      for( p=s; *p && *p != edelim && *p; p++ ) {
-    if( p[0] == '\\' && p[1] == '\n' ) {
-      size_t len;
-      p[1] = ' ';
-      len = strlen(p+1)+1;
-      memmove( p, p+1, len );
-    }
-      }
-      if( !*p )
-     Fatal( "Syntax error in macro modifier pattern [$%s]. The closing bracket [%c] is missing.\n", start, edelim );
-
-      /* Yet another brain damaged AUGMAKE kludge.  We should accept the
-       * AUGMAKE bullshit of $(f:pat=sub) form of macro expansion.  In
-       * order to do this we will forgo the normal processing if the
-       * AUGMAKE solution pans out, otherwise we will try to process the
-       * modifiers ala dmake.
-       *
-       * So we look for = in modifier string.
-       * If found we process it and not do the normal stuff */
-
-      for( p=s; *p && *p != '=' && *p != edelim; p++ );
-
-      if( *p == '=' ) {
-     char *tmp;
-
-     pat1 = Expand(tmp = DmSubStr(s,p)); FREE(tmp);
-     s = p+1;
-     p = _scan_ballanced_parens(s+1, edelim);
-
-     if ( !*p ) {
-        Fatal( "Incomplete macro expression [%s]", s );
-        p = s+1;
+     /* We are inside of a macro expansion. The "build up macro name,
+      * find its while loop above should have caught all \<nl> and
+      * converted them to a real space. Let's verify this. */
+     for( p=s; *p && *p != edelim && *p; p++ ) {
+       if( p[0] == '\\' && p[1] == '\n' ) {
+         size_t len;
+         p[1] = ' ';
+         len = strlen(p+1)+1;
+         memmove( p, p+1, len );
+       }
      }
-     pat2 = Expand(tmp = DmSubStr(s,p)); FREE(tmp);
+     if( !*p )
+       Fatal( "Syntax error in macro modifier pattern [$%s]. The closing bracket [%c] is missing.\n", start, edelim );
 
-     result = Apply_edit( result, pat1, pat2, TRUE, TRUE );
-     FREE( pat1 );
-     FREE( pat2 );
-     s = p;
-     aug_mod = TRUE;
-      }
+     /* Yet another brain damaged AUGMAKE kludge.  We should accept the
+      * AUGMAKE bullshit of $(f:pat=sub) form of macro expansion.  In
+      * order to do this we will forgo the normal processing if the
+      * AUGMAKE solution pans out, otherwise we will try to process the
+      * modifiers ala dmake.
+      *
+      * So we look for = in modifier string.
+      * If found we process it and not do the normal stuff */
 
-      if( !aug_mod )
-     while( *s && *s != edelim ) {      /* while not at end of macro */
-        char switch_char;
+     for( p=s; *p && *p != '=' && *p != edelim; p++ );
 
-        switch( switch_char = *s++ ) {
-           case '1': modifier_list |= JUST_FIRST_FLAG;         break;
+     if( *p == '=' ) {
+       char *tmp;
 
-           case 'b':
-           case 'B': modifier_list |= FILE_FLAG;           break;
+       pat1 = Expand(tmp = DmSubStr(s,p)); FREE(tmp);
+       s = p+1;
+       p = _scan_ballanced_parens(s+1, edelim);
 
-           case 'd':
-           case 'D': modifier_list |= DIRECTORY_FLAG;      break;
+       if ( !*p ) {
+         Fatal( "Incomplete macro expression [%s]", s );
+         p = s+1;
+       }
+       pat2 = Expand(tmp = DmSubStr(s,p)); FREE(tmp);
 
-           case 'f':
-           case 'F': modifier_list |= FILE_FLAG | SUFFIX_FLAG; break;
+       result = Apply_edit( result, pat1, pat2, TRUE, TRUE );
+       FREE( pat1 );
+       FREE( pat2 );
+       s = p;
+       aug_mod = TRUE;
+     }
 
-           case 'e':
-           case 'E': modifier_list |= SUFFIX_FLAG; break;
+     if( !aug_mod )
+       while( *s && *s != edelim ) {        /* while not at end of macro */
+         char switch_char;
 
-           case 'l':
-           case 'L': modifier_list |= TOLOWER_FLAG; break;
+         switch( switch_char = *s++ ) {
+         case '1': modifier_list |= JUST_FIRST_FLAG;         break;
 
-           case 'i':
-           case 'I': modifier_list |= INFNAME_FLAG; break;
+         case 'b':
+         case 'B': modifier_list |= FILE_FLAG;         break;
 
-           case 'u':
-           case 'U': modifier_list |= TOUPPER_FLAG; break;
+         case 'd':
+         case 'D': modifier_list |= DIRECTORY_FLAG;        break;
 
-           case 'm':
-           case 'M':
-          if( modifier_list || ( (*s != edelim) && (*s != ':') ) ) {
+         case 'f':
+         case 'F': modifier_list |= FILE_FLAG | SUFFIX_FLAG; break;
+
+         case 'e':
+         case 'E': modifier_list |= SUFFIX_FLAG; break;
+
+         case 'l':
+         case 'L': modifier_list |= TOLOWER_FLAG; break;
+
+         case 'i':
+         case 'I': modifier_list |= INFNAME_FLAG; break;
+
+         case 'u':
+         case 'U': modifier_list |= TOUPPER_FLAG; break;
+
+         case 'm':
+         case 'M':
+           if( modifier_list || ( (*s != edelim) && (*s != ':') ) ) {
              Warning( "Map escape modifier must appear alone, ignored");
              modifier_list = 0;
-          }
-          else {
+           }
+           else {
              /* map the escape codes in the separator string first */
              for(p=result; (p = strchr(p,ESCAPE_CHAR)) != NIL(char); p++)
-                Map_esc( p );
-          }
-          /* find the end of the macro spec, or the start of a new
-           * modifier list for further processing of the result */
+               Map_esc( p );
+           }
+         /* find the end of the macro spec, or the start of a new
+          * modifier list for further processing of the result */
 
-          for( ; (*s != edelim) && (*s != ':') && *s; s++ );
-          if( !*s )
-             Fatal( "Syntax error in macro. [$%s].\n", start );
-          if( *s == ':' ) s++;
-          break;
+         for( ; (*s != edelim) && (*s != ':') && *s; s++ );
+         if( !*s )
+           Fatal( "Syntax error in macro. [$%s].\n", start );
+         if( *s == ':' ) s++;
+         break;
 
-           case 'n':
-           case 'N': modifier_list |= NORMPATH_FLAG; break;
+         case 'n':
+         case 'N': modifier_list |= NORMPATH_FLAG; break;
 
-           case 'S':
-           case 's':
-          if( modifier_list ) {
+         case 'S':
+         case 's':
+           if( modifier_list ) {
              Warning( "Edit modifier must appear alone, ignored");
              modifier_list = 0;
-          }
-          else {
+           }
+           else {
              separator = *s++;
              for( p=s; *p != separator && *p; p++ );
 
              if( !*p )
-                Fatal( "Syntax error in subst macro. [$%s].\n", start );
+               Fatal( "Syntax error in subst macro. [$%s].\n", start );
              else {
-            char *t1, *t2;
-            pat1 = DmSubStr( s, p );
-            for(s=p=p+1; (*p != separator) && *p; p++ );
-            /* Before the parsing fixes in iz36027 the :s macro modifier
-             * erroneously worked with patterns with missing pattern
-             * separator, i.e. $(XXX:s#pat#sub). This is an error because
-             * it prohibits the use of following macro modifiers.
-             * I.e. $(XXX:s#pat#sub:u) falsely replaces with "sub:u".
-             * ??? Remove this special case once OOo compiles without
-             * any of this warnings. */
-            if( !*p ) {
-               if( *(p-1) == edelim ) {
-                  p--;
-                  Warning( "Syntax error in subst macro. Bracket found, but third delimiter [%c] missing in [$%s].\n", separator, start );
+               char *t1, *t2;
+               pat1 = DmSubStr( s, p );
+               for(s=p=p+1; (*p != separator) && *p; p++ );
+               /* Before the parsing fixes in iz36027 the :s macro modifier
+                * erroneously worked with patterns with missing pattern
+                * separator, i.e. $(XXX:s#pat#sub). This is an error because
+                * it prohibits the use of following macro modifiers.
+                * I.e. $(XXX:s#pat#sub:u) falsely replaces with "sub:u".
+                * ??? Remove this special case once OOo compiles without
+                * any of this warnings. */
+               if( !*p ) {
+                 if( *(p-1) == edelim ) {
+                   p--;
+                   Warning( "Syntax error in subst macro. Bracket found, but third delimiter [%c] missing in [$%s].\n", separator, start );
+                 }
+                 else {
+                   Fatal( "Syntax error in subst macro. Third delimiter [%c] missing in [$%s].\n", separator, start );
+                 }
                }
-               else {
-                  Fatal( "Syntax error in subst macro. Third delimiter [%c] missing in [$%s].\n", separator, start );
-               }
-            }
-            pat2 = DmSubStr( s, p );
-            t1 = Expand(pat1); FREE(pat1);
-            t2 = Expand(pat2); FREE(pat2);
-            result = Apply_edit( result, t1, t2, TRUE, FALSE );
-            FREE( t1 );
-            FREE( t2 );
+               pat2 = DmSubStr( s, p );
+               t1 = Expand(pat1); FREE(pat1);
+               t2 = Expand(pat2); FREE(pat2);
+               result = Apply_edit( result, t1, t2, TRUE, FALSE );
+               FREE( t1 );
+               FREE( t2 );
              }
              s = p;
-          }
-          /* find the end of the macro spec, or the start of a new
-           * modifier list for further processing of the result */
+           }
+         /* find the end of the macro spec, or the start of a new
+          * modifier list for further processing of the result */
 
-          for( ; (*s != edelim) && (*s != ':') && *s; s++ );
-          if( !*s )
-             Fatal( "Syntax error in macro. [$%s].\n", start );
-          if( *s == ':' ) s++;
-          break;
+         for( ; (*s != edelim) && (*s != ':') && *s; s++ );
+         if( !*s )
+           Fatal( "Syntax error in macro. [$%s].\n", start );
+         if( *s == ':' ) s++;
+         break;
 
-           case 'T':
-           case 't':
-           case '^':
-           case '+':
-          if( modifier_list ) {
+         case 'T':
+         case 't':
+         case '^':
+         case '+':
+           if( modifier_list ) {
              Warning( "Tokenize modifier must appear alone, ignored");
              modifier_list = 0;
-          }
-          else {
+           }
+           else {
              separator = *s++;
 
              if( separator == '$' ) {
-            p = _scan_ballanced_parens(s,'\0');
+               p = _scan_ballanced_parens(s,'\0');
 
-            if ( *p ) {
-               char *tmp;
-               pat1 = Expand(tmp = DmSubStr(s-1,p));
-               FREE(tmp);
-               result = Tokenize(result, pat1, switch_char, TRUE);
-               FREE(pat1);
-            }
-            else {
-               Warning( "Incomplete macro expression [%s]", s );
-            }
-            s = p;
+               if ( *p ) {
+                 char *tmp;
+                 pat1 = Expand(tmp = DmSubStr(s-1,p));
+                 FREE(tmp);
+                 result = Tokenize(result, pat1, switch_char, TRUE);
+                 FREE(pat1);
+               }
+               else {
+                 Warning( "Incomplete macro expression [%s]", s );
+               }
+               s = p;
              }
              else if ( separator == '\"' ) {
-            /* we change the semantics to allow $(v:t")") */
-            for (p = s; *p && *p != separator; p++)
-               if (*p == '\\')
-                  if (p[1] == '\\' || p[1] == '"')
-                 p++;
+               /* we change the semantics to allow $(v:t")") */
+               for (p = s; *p && *p != separator; p++)
+                 if (*p == '\\')
+                   if (p[1] == '\\' || p[1] == '"')
+                     p++;
 
-            if( *p == 0 )
-               Fatal( "Unterminated separator string" );
-            else {
-               pat1 = DmSubStr( s, p );
-               result = Tokenize( result, pat1, switch_char, TRUE);
-               FREE( pat1 );
-            }
-            s = p;
+               if( *p == 0 )
+                 Fatal( "Unterminated separator string" );
+               else {
+                 pat1 = DmSubStr( s, p );
+                 result = Tokenize( result, pat1, switch_char, TRUE);
+                 FREE( pat1 );
+               }
+               s = p;
              }
              else {
                Warning(
-               "Separator must be a quoted string or macro expression");
+                       "Separator must be a quoted string or macro expression");
              }
 
              /* find the end of the macro spec, or the start of a new
@@ -1035,26 +1035,26 @@ int  doexpand;          /* If TRUE enables macro expansion  */
 
              for( ; (*s != edelim) && (*s != ':'); s++ );
              if( *s == ':' ) s++;
-          }
-          break;
+           }
+         break;
 
-           case ':':
-          if( modifier_list ) {
+         case ':':
+           if( modifier_list ) {
              result = Apply_modifiers( modifier_list, result );
              modifier_list = 0;
-          }
-          break;
+           }
+           break;
 
-           default:
-          Warning( "Illegal modifier in macro, ignored" );
-          break;
-        }
-     }
+         default:
+           Warning( "Illegal modifier in macro, ignored" );
+           break;
+         }
+       }
 
-      if( modifier_list ) /* apply modifier */
-         result = Apply_modifiers( modifier_list, result );
+     if( modifier_list ) /* apply modifier */
+       result = Apply_modifiers( modifier_list, result );
 
-      s++;
+     s++;
    }
 
    *ps = s;
@@ -1077,68 +1077,68 @@ char *s;
 char **ps;
 int  *flag;
 {
-   char *t;
-   char *start;
-   char *res;
-   int  lev  = 1;
-   int  done = 0;
+  char *t;
+  char *start;
+  char *res;
+  int  lev  = 1;
+  int  done = 0;
 
-   DB_ENTER( "_scan_brace" );
+  DB_ENTER( "_scan_brace" );
 
-   start = s;
-   while( !done )
-      switch( *s++ ) {
-         case '{':
-            if( *s == '{' ) break;              /* ignore {{ */
-            lev++;
-            break;
+  start = s;
+  while( !done )
+    switch( *s++ ) {
+    case '{':
+      if( *s == '{' ) break;              /* ignore {{ */
+      lev++;
+      break;
 
-         case '}':
-            if( *s == '}' ) break;              /* ignore }} */
-        if( lev )
-           if( --lev == 0 ) done = TRUE;
-        break;
+    case '}':
+      if( *s == '}' ) break;              /* ignore }} */
+      if( lev )
+        if( --lev == 0 ) done = TRUE;
+      break;
 
-     case '$':
-        if( *s == '{' || *s == '}' ) {
-          if( (t = strchr(s,'}')) != NIL(char) )
-             s = t;
-          s++;
-        }
-        break;
-
-         case '\0':
-        if( lev ) {
-           done = TRUE;
-           s--;
-           /* error malformed macro expansion */
-        }
-        break;
+    case '$':
+      if( *s == '{' || *s == '}' ) {
+        if( (t = strchr(s,'}')) != NIL(char) )
+          s = t;
+        s++;
       }
+      break;
 
-   start = DmSubStr( start, (lev) ? s : s-1 );
-
-   if( lev ) {
-      /* Braces were not ballanced so just return the string.
-       * Do not expand it. */
-
-      res   = DmStrJoin( "{", start, -1, FALSE );
-      *flag = 0;
-   }
-   else {
-      *flag = 1;
-      res   = Expand( start );
-
-      if( (t = DmStrSpn( res, " \t" )) != res ) {
-          size_t len = strlen(t)+1;
-          memmove( res, t, len );
+    case '\0':
+      if( lev ) {
+        done = TRUE;
+        s--;
+        /* error malformed macro expansion */
       }
-   }
+      break;
+    }
 
-   FREE( start );       /* this is ok! start is assigned a DmSubStr above */
-   *ps = s;
+  start = DmSubStr( start, (lev) ? s : s-1 );
 
-   DB_RETURN( res );
+  if( lev ) {
+    /* Braces were not ballanced so just return the string.
+     * Do not expand it. */
+
+    res   = DmStrJoin( "{", start, -1, FALSE );
+    *flag = 0;
+  }
+  else {
+    *flag = 1;
+    res   = Expand( start );
+
+    if( (t = DmStrSpn( res, " \t" )) != res ) {
+      size_t len = strlen(t)+1;
+      memmove( res, t, len );
+    }
+  }
+
+  FREE( start );       /* this is ok! start is assigned a DmSubStr above */
+  *ps = s;
+
+  DB_RETURN( res );
 }
 
 
@@ -1155,31 +1155,31 @@ _cross_prod( x, y )/*
 char *x;
 char *y;
 {
-   static char *buf = NULL;
-   static int  buf_siz = 0;
-   char *brkx;
-   char *brky;
-   char *cy;
-   char *cx;
-   char *res;
-   int  i;
+  static char *buf = NULL;
+  static int  buf_siz = 0;
+  char *brkx;
+  char *brky;
+  char *cy;
+  char *cx;
+  char *res;
+  int  i;
 
-   if( *x && *y ) {
-      res = DmStrDup( "" ); cx = x;
-      while( *cx ) {
-     cy = y;
-         brkx = DmStrPbrk( cx, " \t\n" );
-     if( (brkx-cx == 2) && *cx == '\"' && *(cx+1) == '\"' ) cx = brkx;
+  if( *x && *y ) {
+    res = DmStrDup( "" ); cx = x;
+    while( *cx ) {
+      cy = y;
+      brkx = DmStrPbrk( cx, " \t\n" );
+      if( (brkx-cx == 2) && *cx == '\"' && *(cx+1) == '\"' ) cx = brkx;
 
-     while( *cy ) {
+      while( *cy ) {
         brky = DmStrPbrk( cy, " \t\n" );
         if( (brky-cy == 2) && *cy == '\"' && *(cy+1) == '\"' ) cy = brky;
         i    = brkx-cx + brky-cy + 2;
 
         if( i > buf_siz ) {     /* grow buf to the correct size */
-           if( buf != NIL(char) ) FREE( buf );
-           if( (buf = MALLOC( i, char )) == NIL(char))  No_ram();
-           buf_siz = i;
+          if( buf != NIL(char) ) FREE( buf );
+          if( (buf = MALLOC( i, char )) == NIL(char))  No_ram();
+          buf_siz = i;
         }
 
         strncpy( buf, cx, (i = brkx-cx) );
@@ -1189,16 +1189,16 @@ char *y;
         strcat( buf, " " );
         res = DmStrJoin( res, buf, -1, TRUE );
         cy = DmStrSpn( brky, " \t\n" );
-     }
-     cx = DmStrSpn( brkx, " \t\n" );
       }
+      cx = DmStrSpn( brkx, " \t\n" );
+    }
 
-      FREE( x );
-      res[ strlen(res)-1 ] = '\0';
-   }
-   else
-      res = DmStrJoin( x, y, -1, TRUE );
+    FREE( x );
+    res[ strlen(res)-1 ] = '\0';
+  }
+  else
+    res = DmStrJoin( x, y, -1, TRUE );
 
-   FREE( y );
-   return( res );
+  FREE( y );
+  return( res );
 }

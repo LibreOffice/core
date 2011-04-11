@@ -43,10 +43,9 @@
 #include <vector>
 #include "rtl/strbuf.hxx"
 #ifdef WNT
-#include <direct.h>
-#include "tools/prewin.h"
 #include <windows.h>
-#include "tools/postwin.h"
+#undef CopyFile
+#include <direct.h>
 #endif
 
 /*****************************************************************************/
@@ -165,7 +164,6 @@ bool HelpParser::CreateSDF(
     if(file.get() == NULL){
         printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_ASCII_US).GetBuffer());
         exit(-1);
-        //return false;
     }
     file->Extract();
     if( !file->CheckExportStatus() ){
@@ -184,8 +182,6 @@ bool HelpParser::CreateSDF(
     XMLHashMap*  aXMLStrHM   = file->GetStrings();
     LangHashMap* pElem;
     XMLElement*  pXMLElement  = NULL;
-
-    //Dump(aXMLStrHM);
 
     ByteString sTimeStamp( Export::GetTimeStamp() );
     OUString sOUTimeStamp( sTimeStamp.GetBuffer() , sTimeStamp.Len() , RTL_TEXTENCODING_ASCII_US );
@@ -244,23 +240,19 @@ bool HelpParser::CreateSDF(
                   sBuffer.append( GSI_SEQUENCE4 );      //"\t\t\t\t";
                 sBuffer.append( sOUTimeStamp );
                 ByteString sOut( sBuffer.makeStringAndClear().getStr() , RTL_TEXTENCODING_UTF8 );
-                //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( rPrj_in ) ) )
-                //{
                 if( data.getLength() > 0 ) aSDFStream.WriteLine( sOut );
-                //}
                 pXMLElement=NULL;
             }else fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreateSDF , Language %s\n",sCur.GetBuffer() );
         }
 
     }
-    //Dump(aXMLStrHM);
     aSDFStream.Close();
 
     if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
         DirEntry aTempFile( sUsedTempFile );
         aTempFile.Kill();
     }
-    return TRUE;
+    return sal_True;
 }
 
 ByteString HelpParser::makeAbsolutePath( const ByteString& sHelpFile , const ByteString& rRoot_in )
@@ -398,7 +390,6 @@ bool HelpParser::Merge(
     {
         printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_UTF8).GetBuffer());
         exit(-1);
-        //return false;
     }
 
 
@@ -490,7 +481,6 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
             return false;
         }
     }
-    //remove( sTargetFile.GetBuffer() );
 
     FileStat aFSTest( aTar );
     if( aFSTest.GetSize() < 1 )
@@ -574,9 +564,9 @@ void HelpParser::MakeDir( const ByteString& sPath ){
     ByteString sTPath( sPath );
     ByteString sDelimiter( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
     sTPath.SearchAndReplaceAll( sDelimiter , '/' );
-    USHORT cnt = sTPath.GetTokenCount( '/' );
+    sal_uInt16 cnt = sTPath.GetTokenCount( '/' );
     ByteString sCreateDir;
-    for( USHORT i = 0 ; i < cnt ; i++ )
+    for( sal_uInt16 i = 0 ; i < cnt ; i++ )
     {
         sCreateDir += sTPath.GetToken( i , '/' );
         sCreateDir += sDelimiter;
@@ -595,7 +585,6 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , Re
     XMLElement*   pXMLElement = NULL;
        PFormEntrys   *pEntrys    = NULL;
     XMLData       *data       = NULL;
-    XMLParentNode *parent     = NULL;
 
     String        sNewdata;
     ByteString sLId;
@@ -615,7 +604,6 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , Re
         }
         if( pXMLElement != NULL )
         {
-            parent  = pXMLElement->GetParent();
             sLId    = pXMLElement->GetOldref();
             pResData->sId     =  sLId;
 

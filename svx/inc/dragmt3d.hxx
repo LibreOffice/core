@@ -88,7 +88,7 @@ public:
         SdrDragView &rView,
         const SdrMarkList& rMark,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
-        BOOL bFull = FALSE);
+        sal_Bool bFull = sal_False);
 
     virtual void TakeSdrDragComment(String& rStr) const;
     virtual bool BeginSdrDrag();
@@ -119,7 +119,7 @@ public:
         SdrDragView &rView,
         const SdrMarkList& rMark,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
-        BOOL bFull = FALSE);
+        sal_Bool bFull = sal_False);
 
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual Pointer GetSdrDragPointer() const;
@@ -144,7 +144,7 @@ public:
         const SdrMarkList& rMark,
         SdrHdlKind eDrgHdl = HDL_MOVE,
         E3dDragConstraint eConstr = E3DDRAG_CONSTR_XYZ,
-        BOOL bFull = FALSE);
+        sal_Bool bFull = sal_False);
 
     virtual void MoveSdrDrag(const Point& rPnt);
     virtual Pointer GetSdrDragPointer() const;

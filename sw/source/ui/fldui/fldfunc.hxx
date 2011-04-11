@@ -38,9 +38,6 @@
 #include "condedit.hxx"
 #include "fldpage.hxx"
 #include <actctrl.hxx>
-/*--------------------------------------------------------------------
-   Beschreibung:
- --------------------------------------------------------------------*/
 
 class SwFldFuncPage : public SwFldPage
 {
@@ -75,7 +72,7 @@ class SwFldFuncPage : public SwFldPage
     String          sOldValueFT;
     String          sOldNameFT;
 
-    ULONG           nOldFormat;
+    sal_uLong           nOldFormat;
     bool            bDropDownLBChanged;
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
@@ -85,14 +82,14 @@ class SwFldFuncPage : public SwFldPage
     DECL_LINK( ListModifyHdl, Control*);
     DECL_LINK( ListEnableHdl, void*);
 
-    // Macro ausw„hlen
+    // select Macro
     DECL_LINK( MacroHdl, Button * );
 
     void                UpdateSubType();
     String              TurnMacroString(const String &rMacro);
 
 protected:
-    virtual USHORT      GetGroup();
+    virtual sal_uInt16      GetGroup();
 
 public:
                         SwFldFuncPage(Window* pParent, const SfxItemSet& rSet);
@@ -101,7 +98,7 @@ public:
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     virtual void        FillUserData();

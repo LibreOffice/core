@@ -293,7 +293,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                     utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
 
                     xub_StrLen start = 0;
-                    xub_StrLen end   = static_cast<USHORT>(aExtIdentifier.getLength());
+                    xub_StrLen end   = static_cast<sal_uInt16>(aExtIdentifier.getLength());
                     if (ts.SearchFrwrd(aExtIdentifier, &start, &end))
                         return false;
                 }
@@ -318,7 +318,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
                 utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
 
                 xub_StrLen start = 0;
-                xub_StrLen end   = static_cast<USHORT>(sDescriptionXmlURL.getLength());
+                xub_StrLen end   = static_cast<sal_uInt16>(sDescriptionXmlURL.getLength());
                 if (ts.SearchFrwrd(sDescriptionXmlURL, &start, &end))
                     return false;
             }
@@ -415,14 +415,14 @@ void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments ) thro
     {
         beans::NamedValue aValue;
         *pIter >>= aValue;
-        if ( aValue.Name.equalsAscii( "UserData" ) )
+        if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserData" ) ) )
         {
             if ( !(aValue.Value >>= m_sSourceDir) )
             {
-                OSL_ENSURE( false, "ExtensionMigration::initialize: argument UserData has wrong type!" );
+                OSL_FAIL( "ExtensionMigration::initialize: argument UserData has wrong type!" );
             }
         }
-        else if ( aValue.Name.equalsAscii( "ExtensionBlackList" ) )
+        else if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ExtensionBlackList" ) ) )
         {
             Sequence< ::rtl::OUString > aBlackList;
             if ( (aValue.Value >>= aBlackList ) && ( aBlackList.getLength() > 0 ))
@@ -432,28 +432,6 @@ void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments ) thro
             }
         }
     }
-}
-
-// -----------------------------------------------------------------------------
-
-TStringVectorPtr getContent( const ::rtl::OUString& rBaseURL )
-{
-    TStringVectorPtr aResult( new TStringVector );
-    ::osl::Directory aDir( rBaseURL);
-    if ( aDir.open() == ::osl::FileBase::E_None )
-    {
-        // iterate over directory content
-        TStringVector aSubDirs;
-        ::osl::DirectoryItem aItem;
-        while ( aDir.getNextItem( aItem ) == ::osl::FileBase::E_None )
-        {
-            ::osl::FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileURL );
-            if ( aItem.getFileStatus( aFileStatus ) == ::osl::FileBase::E_None )
-                aResult->push_back( aFileStatus.getFileURL() );
-        }
-    }
-
-    return aResult;
 }
 
 Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )

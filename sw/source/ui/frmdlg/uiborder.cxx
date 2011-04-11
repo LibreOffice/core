@@ -48,14 +48,14 @@
 
 
 
-SwBorderDlg::SwBorderDlg(Window* pParent, SfxItemSet& rSet, USHORT nType) :
+SwBorderDlg::SwBorderDlg(Window* pParent, SfxItemSet& rSet, sal_uInt16 nType) :
 
     SfxSingleTabDialog(pParent, rSet, 0)
 
 {
     SetText(SW_RESSTR(STR_FRMUI_BORDER));
 
-    // TabPage erzeugen
+    // create TabPage
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER );

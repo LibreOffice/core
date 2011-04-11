@@ -101,7 +101,7 @@ public:
 
 void ImplFillPrnDlgListBox( const Printer* pPrinter,
                             ListBox* pBox, PushButton* pPropBtn );
-void ImplFreePrnDlgListBox( ListBox* pBox, BOOL bClear = TRUE );
+void ImplFreePrnDlgListBox( ListBox* pBox, sal_Bool bClear = sal_True );
 Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
                                   Printer* pPrinter, Printer* pTempPrinter );
 Printer* ImplPrnDlgUpdatePrinter( Printer* pPrinter, Printer* pTempPrinter );

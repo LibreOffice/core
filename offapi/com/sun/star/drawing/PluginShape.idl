@@ -68,7 +68,7 @@ published service PluginShape
 
     //-------------------------------------------------------------------------
 
-    /** This sequence contains paramaters that are passed to the application
+    /** This sequence contains parameters that are passed to the application
         that renders the plugin when it is initialized.
     */
     [property] sequence< com::sun::star::beans::PropertyValue > PluginCommands;

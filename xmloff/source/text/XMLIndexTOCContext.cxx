@@ -50,10 +50,10 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/prstylei.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustring.hxx>
 
@@ -94,7 +94,7 @@ static const XMLTokenEnum aIndexSourceElementMap[] =
     XML_ILLUSTRATION_INDEX_SOURCE
 };
 
-SvXMLEnumMapEntry __READONLY_DATA aIndexTypeMap[] =
+SvXMLEnumMapEntry const aIndexTypeMap[] =
 {
     { XML_TABLE_OF_CONTENT,     TEXT_INDEX_TOC },
     { XML_ALPHABETICAL_INDEX,   TEXT_INDEX_ALPHABETICAL },
@@ -362,7 +362,7 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
                         break;
 
                     default:
-                        OSL_ENSURE(false, "index type not implemented");
+                        OSL_FAIL("index type not implemented");
                         break;
                 }
             }

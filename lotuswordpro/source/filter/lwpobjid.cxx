@@ -148,11 +148,11 @@ sal_uInt32 LwpObjectID::ReadIndexed(LwpObjectStream *pStrm)
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pFactory = pGlobal->GetLwpObjFactory();
         LwpIndexManager* pIdxMgr = pFactory->GetIndexManager();
-        m_nLow =  pIdxMgr->GetObjTime( (sal_uInt16)m_nIndex);
+        m_nLow = pIdxMgr->GetObjTime( (sal_uInt16)m_nIndex);
     }
     else
     {
-         pStrm->QuickRead(&m_nLow, sizeof(m_nLow));
+        pStrm->QuickRead(&m_nLow, sizeof(m_nLow));
     }
     pStrm->QuickRead(&m_nHigh, sizeof(m_nHigh));
     return DiskSizeIndexed();
@@ -211,7 +211,7 @@ sal_uInt32 LwpObjectID::ReadCompressed( LwpObjectStream* pObj, LwpObjectID &prev
 sal_uInt32 LwpObjectID::DiskSizeIndexed() const
 {
     return sizeof(sal_uInt8)
-        + (((0 < m_nIndex) && (m_nIndex <= 255)) ? 0 : sizeof(m_nLow))
+        + ((m_nIndex != 0) ? 0 : sizeof(m_nLow))
         + sizeof(m_nHigh);
 }
 /**
@@ -235,7 +235,7 @@ LwpObject* LwpObjectID::obj(VO_TYPE tag) const
     LwpObject* pObj = pObjMgr->QueryObject(*this);
     if( tag!=VO_INVALID &&  (pObj) )
     {
-        if(tag!=pObj->GetTag())
+        if(static_cast<sal_uInt32>(tag) != pObj->GetTag())
         {
             pObj=NULL;
         }

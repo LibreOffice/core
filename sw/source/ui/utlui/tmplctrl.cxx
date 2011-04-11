@@ -54,10 +54,10 @@ class TemplatePopup_Impl : public PopupMenu
 public:
     TemplatePopup_Impl();
 
-    USHORT          GetCurId() const { return nCurId; }
+    sal_uInt16          GetCurId() const { return nCurId; }
 
 private:
-    USHORT          nCurId;
+    sal_uInt16          nCurId;
 
     virtual void    Select();
 };
@@ -75,8 +75,8 @@ void TemplatePopup_Impl::Select()
 
 // class SvxZoomStatusBarControl ------------------------------------------
 
-SwTemplateControl::SwTemplateControl( USHORT _nSlotId,
-                                      USHORT _nId,
+SwTemplateControl::SwTemplateControl( sal_uInt16 _nSlotId,
+                                      sal_uInt16 _nId,
                                       StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
@@ -87,7 +87,7 @@ SwTemplateControl::~SwTemplateControl()
 }
 
 void SwTemplateControl::StateChanged(
-    USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if( eState != SFX_ITEM_AVAILABLE || pState->ISA( SfxVoidItem ) )
         GetStatusBar().SetItemText( GetId(), String() );
@@ -123,7 +123,7 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
                 pPool->SetSearchMask(SFX_STYLE_FAMILY_PAGE, SFXSTYLEBIT_ALL);
                 if( pPool->Count() > 1 )
                 {
-                    USHORT nCount = 0;
+                    sal_uInt16 nCount = 0;
                     SfxStyleSheetBase* pStyle = pPool->First();
                     while( pStyle )
                     {
@@ -133,7 +133,7 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
                     }
 
                     aPop.Execute( &GetStatusBar(), rCEvt.GetMousePosPixel());
-                    USHORT nCurrId = aPop.GetCurId();
+                    sal_uInt16 nCurrId = aPop.GetCurId();
                     if( nCurrId != USHRT_MAX)
                     {
                         // sieht etwas umstaendlich aus, anders geht's aber nicht

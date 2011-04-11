@@ -40,7 +40,7 @@
 #include <avmedia/mediaitem.hxx>
 #include "sdrmediawindow.hxx"
 #include <svx/sdrpagewindow.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

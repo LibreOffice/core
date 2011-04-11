@@ -67,7 +67,7 @@ const sal_uInt32 </xsl:text>
 <xsl:call-template name="namespaceid"/>
 <xsl:text> = </xsl:text>
 <xsl:value-of select="@id"/>
-<xsl:text> &lt;&lt; 16;</xsl:text>
+<xsl:text>;</xsl:text>
   </xsl:for-each>
 </xsl:template>
 

@@ -67,14 +67,12 @@ AccessibleShape* CreateSvxAccessibleShape (
         case DRAWING_POLY_LINE_PATH:
         case DRAWING_RECTANGLE:
         case DRAWING_TEXT:
-        // --> OD 2004-11-29 #i37790# - default accessiblility shape for
-        // com::sun::star::drawing::CustomShape
+        // Default accessiblility shape for
+        // com::sun::star::drawing::CustomShape (#i37790#)
         case DRAWING_CUSTOM:
-        // <--
-        // --> OD 2008-05-19 #i85429# - default accessiblility shape for
-        // com::sun::star::drawing::MediaShape
+        // Default accessiblility shape for
+        // com::sun::star::drawing::MediaShape (#i85429#)
         case DRAWING_MEDIA:
-        // <--
             return new AccessibleShape (rShapeInfo, rShapeTreeInfo);
 
         case DRAWING_CONTROL:
@@ -199,9 +197,8 @@ ShapeTypeDescriptor aSvxShapeTypeList[] = {
 
 void RegisterDrawShapeTypes (void)
 {
-    // --> OD 2004-11-26 #i37790#
+    // Crash while inserting callout with activated accesibility (#i37790#)
     ShapeTypeHandler::Instance().AddShapeTypeList ( DRAWING_END, aSvxShapeTypeList);
-    // <--
 }
 
 

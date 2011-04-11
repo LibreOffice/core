@@ -66,7 +66,6 @@
 #include <sfx2/frame.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <swerror.h>
-#include <errhdl.hxx>
 #include <fltini.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
@@ -76,25 +75,19 @@
 
 #include <statstr.hrc>
 
-// --> OD 2005-09-06 #i44177#
+// #i44177#
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>
 // <--
 
-// --> OD 2006-02-22 #b6382898#
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
-// <--
-
-// --> OD 2008-12-17 #i70748#
-#include <sfx2/docfilt.hxx>
-// <--
-
+#include <sfx2/docfilt.hxx> // #i70748#
 #include <istyleaccess.hxx>
 #define LOGFILE_AUTHOR "mb93740"
 
@@ -122,8 +115,8 @@ void lcl_EnsureValidPam( SwPaM& rPam )
         // else: point was already valid
 
         // if mark is invalid, we delete it
-        if( ( rPam.GetCntntNode( FALSE ) == NULL ) ||
-            ( rPam.GetCntntNode( FALSE ) != rPam.GetMark()->nContent.GetIdxReg() ) )
+        if( ( rPam.GetCntntNode( sal_False ) == NULL ) ||
+            ( rPam.GetCntntNode( sal_False ) != rPam.GetMark()->nContent.GetIdxReg() ) )
         {
             rPam.DeleteMark();
         }
@@ -236,9 +229,9 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "SAX parse exception catched while importing:\n" );
+        ByteString aError( "SAX parse exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
 
         String sErr( String::CreateFromInt32( r.LineNumber ));
@@ -270,9 +263,9 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "SAX exception catched while importing:\n" );
+        ByteString aError( "SAX exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
 
         return ERR_SWG_READ_ERROR;
@@ -281,9 +274,9 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "Zip exception catched while importing:\n" );
+        ByteString aError( "Zip exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return ERRCODE_IO_BROKENPACKAGE;
     }
@@ -291,9 +284,9 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "IO exception catched while importing:\n" );
+        ByteString aError( "IO exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return ERR_SWG_READ_ERROR;
     }
@@ -301,9 +294,9 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 1
-        ByteString aError( "uno exception catched while importing:\n" );
+        ByteString aError( "uno exception caught while importing:\n" );
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return ERR_SWG_READ_ERROR;
     }
@@ -402,14 +395,14 @@ sal_Int32 ReadThroughComponent(
     }
     catch ( uno::Exception& )
     {
-        OSL_ENSURE( sal_False, "Error on import!\n" );
+        OSL_FAIL( "Error on import!\n" );
         // TODO/LATER: error handling
     }
 
     return ERR_SWG_READ_ERROR;
 }
 
-// --> OD 2005-09-06 #i44177#
+// #i44177#
 void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 {
     // array containing the names of the default outline styles ('Heading 1',
@@ -417,7 +410,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     String aDefOutlStyleNames[ MAXLEVEL ];
     {
         String sStyleName;
-        for ( BYTE i = 0; i < MAXLEVEL; ++i )
+        for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
             sStyleName =
                 SwStyleNameMapper::GetProgName( static_cast< sal_uInt16 >(RES_POOLCOLL_HEADLINE1 + i),
@@ -432,7 +425,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     SwTxtFmtColl* aCreatedDefaultOutlineStyles[ MAXLEVEL ];
 
     {
-        for ( BYTE i = 0; i < MAXLEVEL; ++i )
+        for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
             aOutlineLevelAssigned[ i ] = false;
             aCreatedDefaultOutlineStyles[ i ] = 0L;
@@ -442,17 +435,15 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     // determine, which outline level has already a style assigned and
     // which of the default outline styles is created.
     const SwTxtFmtColls& rColls = *(_rDoc.GetTxtFmtColls());
-    for ( USHORT n = 1; n < rColls.Count(); ++n )
+    for ( sal_uInt16 n = 1; n < rColls.Count(); ++n )
     {
         SwTxtFmtColl* pColl = rColls[ n ];
-        //if ( pColl->GetOutlineLevel() != NO_NUMBERING )       //#outline level zhaojianwei
         if ( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-        //  aOutlineLevelAssigned[ pColl->GetOutlineLevel() ] = true;
             aOutlineLevelAssigned[ pColl->GetAssignedOutlineStyleLevel() ] = true;//<-end,zhaojianwei
         }
 
-        for ( BYTE i = 0; i < MAXLEVEL; ++i )
+        for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
         {
             if ( aCreatedDefaultOutlineStyles[ i ] == 0L &&
                  pColl->GetName() == aDefOutlStyleNames[i] )
@@ -466,24 +457,22 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     // assign already created default outline style to outline level, which
     // doesn't have a style assigned to it.
     const SwNumRule* pOutlineRule = _rDoc.GetOutlineNumRule();
-    for ( BYTE i = 0; i < MAXLEVEL; ++i )
+    for ( sal_uInt8 i = 0; i < MAXLEVEL; ++i )
     {
-        // --> OD 2007-01-11 #i73361#
+        // #i73361#
         // Do not change assignment of already created default outline style
         // to a certain outline level.
-//        if ( aCreatedDefaultOutlineStyles[ i ] != 0 && !aOutlineLevelAssigned[ i ] )
         if ( !aOutlineLevelAssigned[ i ] &&
              aCreatedDefaultOutlineStyles[ i ] != 0 &&
              ! aCreatedDefaultOutlineStyles[ i ]->IsAssignedToListLevelOfOutlineStyle() )
         // <--
         {
             // apply outline level at created default outline style
-            //aCreatedDefaultOutlineStyles[ i ]->SetOutlineLevel( i );
             aCreatedDefaultOutlineStyles[ i ]->AssignToListLevelOfOutlineStyle(i);//#outline level added by zhaojianwei
 
             // apply outline numbering rule, if none is set.
             const SfxPoolItem& rItem =
-                aCreatedDefaultOutlineStyles[ i ]->GetFmtAttr( RES_PARATR_NUMRULE, FALSE );
+                aCreatedDefaultOutlineStyles[ i ]->GetFmtAttr( RES_PARATR_NUMRULE, sal_False );
             if ( static_cast<const SwNumRuleItem&>(rItem).GetValue().Len() == 0 )
             {
                 SwNumRuleItem aItem( pOutlineRule->GetName() );
@@ -495,7 +484,6 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 }
 // <--
 
-// --> OD 2006-02-22 #b6382898#
 void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 {
     if ( _rDoc.GetDrawModel() &&
@@ -533,10 +521,9 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
         }
     }
 }
-// <--
 
 
-ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
+sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
 {
     // Get service factory
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
@@ -650,23 +637,25 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         { "OrganizerMode", sizeof("OrganizerMode")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // --> OD 2004-08-10 #i28749# - Add property, which indicates, if the
+
+        // #i28749# - Add property, which indicates, if the
         // shape position attributes are given in horizontal left-to-right layout.
         // This is the case for the OpenOffice.org file format.
         { "ShapePositionInHoriL2R", sizeof("ShapePositionInHoriL2R")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         // <--
+
         { "BuildId", sizeof("BuildId")-1, 0,
               &::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // --> OD 2007-12-19 #152540#
+
         // Add property, which indicates, if a text document in OpenOffice.org
         // file format is read.
         // Note: Text documents read via the binary filter are also finally
         //       read using the OpenOffice.org file format. Thus, e.g. for text
         //       documents in StarOffice 5.2 binary file format this property
-        //       will be TRUE.
+        //       will be sal_True.
         { "TextDocInOOoFileFormat", sizeof("TextDocInOOoFileFormat")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
@@ -874,7 +863,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     rDoc.SetRedlineMode_intern( nsRedlineMode_t::REDLINE_NONE );
 
     const sal_Bool bOASIS = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
-    // --> OD 2004-08-10 #i28749# - set property <ShapePositionInHoriL2R>
+    // #i28749# - set property <ShapePositionInHoriL2R>
     {
         const sal_Bool bShapePositionInHoriL2R = !bOASIS;
         xInfoSet->setPropertyValue(
@@ -882,14 +871,12 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
                 makeAny( bShapePositionInHoriL2R ) );
     }
     // <--
-    // --> OD 2007-12-19 #152540#
     {
         const sal_Bool bTextDocInOOoFileFormat = !bOASIS;
         xInfoSet->setPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("TextDocInOOoFileFormat")),
                 makeAny( bTextDocInOOoFileFormat ) );
     }
-    // <--
 
     sal_uInt32 nWarnRDF = 0;
     if ( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
@@ -977,9 +964,9 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
 
     // Notify math objects
     if( bInsertMode )
-        rDoc.PrtOLENotify( FALSE );
+        rDoc.PrtOLENotify( sal_False );
     else if ( rDoc.IsOLEPrtNotifyPending() )
-        rDoc.PrtOLENotify( TRUE );
+        rDoc.PrtOLENotify( sal_True );
 
     nRet = nRet ? nRet : (nWarn ? nWarn : (nWarn2 ? nWarn2 : nWarnRDF ) );
 
@@ -1008,8 +995,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     rDoc.SetRedlineMode_intern((RedlineMode_t)( ~nRedlineMode ));
     rDoc.SetRedlineMode( (RedlineMode_t)( nRedlineMode ));
 
-    // #103728# move Pam into valid content
-    lcl_EnsureValidPam( rPaM );
+    lcl_EnsureValidPam( rPaM ); // move Pam into valid content
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
@@ -1021,14 +1007,14 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
 
     if ( !bOASIS )
     {
-        // --> OD 2005-09-06 #i44177# - assure that for documents in OpenOffice.org
+        // #i44177# - assure that for documents in OpenOffice.org
         // file format the relation between outline numbering rule and styles is
         // filled-up accordingly.
         // Note: The OpenOffice.org file format, which has no content that applys
         //       a certain style, which is related to the outline numbering rule,
         //       has lost the information, that this certain style is related to
         //       the outline numbering rule.
-        // --> OD 2008-12-17 #i70748# - only for templates
+        // #i70748# - only for templates
         if ( pMedium && pMedium->GetFilter() &&
              pMedium->GetFilter()->IsOwnTemplateFormat() )
         {
@@ -1037,24 +1023,22 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         // <--
         // Fix #i58251#: Unfortunately is the static default different to SO7 behaviour,
         // so we have to set a dynamic default after importing SO7
-        rDoc.SetDefault( SfxBoolItem( RES_ROW_SPLIT, FALSE ) );
+        rDoc.SetDefault( SfxBoolItem( RES_ROW_SPLIT, sal_False ) );
     }
     // <--
 
     rDoc.PropagateOutlineRule();
 
-    // --> OD 2006-03-14 #i62875#
+    // #i62875#
     if ( rDoc.get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) && !docfunc::ExistsDrawObjs( rDoc ) )
     {
         rDoc.set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
     // <--
 
-    // --> OD 2006-02-22 #b6382898#
     // Convert all instances of <SdrOle2Obj> into <SdrGrafObj>, because the
     // Writer doesn't support such objects.
     lcl_ConvertSdrOle2ObjsToSdrGrafObjs( rDoc );
-    // <--
 
     // set BuildId on XModel for later OLE object loading
     if( xInfoSet.is() )
@@ -1082,7 +1066,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
-USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
+sal_uInt16 XMLReader::GetSectionList( SfxMedium& rMedium,
                                     SvStrings& rStrings ) const
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
@@ -1110,7 +1094,6 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
             if( xXMLParser.is() )
             {
                 // get filter
-                // #110680#
                 // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( rStrings );
                 uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
 

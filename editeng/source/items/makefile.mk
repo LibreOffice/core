@@ -6,10 +6,6 @@
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.19 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -30,11 +26,6 @@
 #*************************************************************************
 
 PRJ=..$/..
-
-#PROJECTPCH4DLL=TRUE
-#PROJECTPCH=svxpch
-#PROJECTPCHSOURCE=$(PRJ)$/util$/svxpch
-#ENABLE_EXCEPTIONS=TRUE
 
 PRJNAME=editeng
 TARGET=items
@@ -62,6 +53,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/bulitem.obj \
         $(SLO)$/flditem.obj \
         $(SLO)$/frmitems.obj \
+        $(SLO)$/borderline.obj \
         $(SLO)$/itemtype.obj \
         $(SLO)$/numitem.obj \
         $(SLO)$/paperinf.obj \

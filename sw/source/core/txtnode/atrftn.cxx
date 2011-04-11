@@ -48,14 +48,11 @@
 #include <ndindex.hxx>
 #include <fmtftntx.hxx>
 #include <section.hxx>
+#include <switerator.hxx>
 
 /*************************************************************************
 |*
 |*    class SwFmtFtn
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 09.08.94
-|*    Letzte Aenderung  JP 08.08.94
 |*
 *************************************************************************/
 
@@ -93,7 +90,7 @@ void SwFmtFtn::SetEndNote( bool b )
     {
         if ( GetTxtFtn() )
         {
-            GetTxtFtn()->DelFrms();
+            GetTxtFtn()->DelFrms(0);
         }
         m_bEndNote = b;
     }
@@ -119,14 +116,14 @@ void SwFmtFtn::GetFtnText( XubString& rStr ) const
 }
 
     // returnt den anzuzeigenden String der Fuss-/Endnote
-XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, BOOL bInclStrings ) const
+XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrings ) const
 {
     XubString sRet( GetNumStr() );
     if( !sRet.Len() )
     {
         // dann ist die Nummer von Interesse, also ueber die Info diese
         // besorgen.
-        BOOL bMakeNum = TRUE;
+        sal_Bool bMakeNum = sal_True;
         const SwSectionNode* pSectNd = pTxtAttr
                     ? SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *pTxtAttr )
                     : 0;
@@ -136,12 +133,12 @@ XubString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, BOOL bInclStrings ) const
             const SwFmtFtnEndAtTxtEnd& rFtnEnd = (SwFmtFtnEndAtTxtEnd&)
                 pSectNd->GetSection().GetFmt()->GetFmtAttr(
                                 IsEndNote() ?
-                                static_cast<USHORT>(RES_END_AT_TXTEND) :
-                                static_cast<USHORT>(RES_FTN_AT_TXTEND) );
+                                static_cast<sal_uInt16>(RES_END_AT_TXTEND) :
+                                static_cast<sal_uInt16>(RES_FTN_AT_TXTEND) );
 
             if( FTNEND_ATTXTEND_OWNNUMANDFMT == rFtnEnd.GetValue() )
             {
-                bMakeNum = FALSE;
+                bMakeNum = sal_False;
                 sRet = rFtnEnd.GetSwNumType().GetNumStr( GetNumber() );
                 if( bInclStrings )
                 {
@@ -191,7 +188,7 @@ SwTxtFtn::~SwTxtFtn()
 
 
 
-void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, BOOL bDelNode )
+void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, sal_Bool bDelNode )
 {
     if( pNewNode )
     {
@@ -239,12 +236,12 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, BOOL bDelNode )
                 // Werden die Nodes nicht geloescht mussen sie bei den Seiten
                 // abmeldet (Frms loeschen) werden, denn sonst bleiben sie
                 // stehen (Undo loescht sie nicht!)
-                DelFrms();
+                DelFrms( 0 );
         }
         DELETEZ( m_pStartNode );
 
         // loesche die Fussnote noch aus dem Array am Dokument
-        for( USHORT n = 0; n < pDoc->GetFtnIdxs().Count(); ++n )
+        for( sal_uInt16 n = 0; n < pDoc->GetFtnIdxs().Count(); ++n )
             if( this == pDoc->GetFtnIdxs()[n] )
             {
                 pDoc->GetFtnIdxs().Remove( n );
@@ -260,7 +257,7 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, BOOL bDelNode )
 }
 
 
-void SwTxtFtn::SetNumber( const USHORT nNewNum, const XubString* pStr )
+void SwTxtFtn::SetNumber( const sal_uInt16 nNewNum, const XubString* pStr )
 {
     SwFmtFtn& rFtn = (SwFmtFtn&)GetFtn();
     if( pStr && pStr->Len() )
@@ -273,18 +270,18 @@ void SwTxtFtn::SetNumber( const USHORT nNewNum, const XubString* pStr )
 
     OSL_ENSURE( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
     SwNodes &rNodes = m_pTxtNode->GetDoc()->GetNodes();
-    m_pTxtNode->Modify( 0, &rFtn );
+    m_pTxtNode->ModifyNotification( 0, &rFtn );
     if ( m_pStartNode )
     {
         // must iterate over all TxtNodes because of footnotes on other pages
         SwNode* pNd;
-        ULONG nSttIdx = m_pStartNode->GetIndex() + 1;
-        ULONG nEndIdx = m_pStartNode->GetNode().EndOfSectionIndex();
+        sal_uLong nSttIdx = m_pStartNode->GetIndex() + 1;
+        sal_uLong nEndIdx = m_pStartNode->GetNode().EndOfSectionIndex();
         for( ; nSttIdx < nEndIdx; ++nSttIdx )
         {
             // Es koennen ja auch Grafiken in der Fussnote stehen ...
             if( ( pNd = rNodes[ nSttIdx ] )->IsTxtNode() )
-                ((SwTxtNode*)pNd)->Modify( 0, &rFtn );
+                ((SwTxtNode*)pNd)->ModifyNotification( 0, &rFtn );
         }
     }
 }
@@ -312,9 +309,9 @@ void SwTxtFtn::CopyFtn(SwTxtFtn & rDest, SwTxtNode & rDestNode) const
         // nDestLen contains number of CntntNodes in rDest _before_ copy.
         SwNodeIndex aStart( *(rDest.GetStartNode()) );
         SwNodeIndex aEnd( *aStart.GetNode().EndOfSectionNode() );
-        ULONG  nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
+        sal_uLong  nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
 
-        m_pTxtNode->GetDoc()->CopyWithFlyInFly( aRg, 0, aEnd, TRUE );
+        m_pTxtNode->GetDoc()->CopyWithFlyInFly( aRg, 0, aEnd, sal_True );
 
         // in case the destination section was not empty, delete the old nodes
         // before:   Src: SxxxE,  Dst: SnE
@@ -341,7 +338,7 @@ void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
     // Nun verpassen wir dem TxtNode noch die Fussnotenvorlage.
     SwTxtFmtColl *pFmtColl;
     const SwEndNoteInfo* pInfo;
-    USHORT nPoolId;
+    sal_uInt16 nPoolId;
 
     if( GetFtn().IsEndNote() )
     {
@@ -363,24 +360,26 @@ void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
 }
 
 
-void SwTxtFtn::DelFrms()
+void SwTxtFtn::DelFrms( const SwFrm* pSib )
 {
     // delete the FtnFrames from the pages
     OSL_ENSURE( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
     if ( !m_pTxtNode )
         return;
 
-    BOOL bFrmFnd = FALSE;
+    const SwRootFrm* pRoot = pSib ? pSib->getRootFrm() : 0;
+    sal_Bool bFrmFnd = sal_False;
     {
-        SwClientIter aIter( *m_pTxtNode );
-        for( SwCntntFrm* pFnd = (SwCntntFrm*)aIter.First( TYPE( SwCntntFrm ));
-                pFnd; pFnd = (SwCntntFrm*)aIter.Next() )
+        SwIterator<SwCntntFrm,SwTxtNode> aIter( *m_pTxtNode );
+        for( SwCntntFrm* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
         {
+            if( pRoot != pFnd->getRootFrm() && pRoot )
+                continue;
             SwPageFrm* pPage = pFnd->FindPageFrm();
             if( pPage )
             {
                 pPage->RemoveFtn( pFnd, this );
-                bFrmFnd = TRUE;
+                bFrmFnd = sal_True;
             }
         }
     }
@@ -392,10 +391,11 @@ void SwTxtFtn::DelFrms()
         SwCntntNode* pCNd = m_pTxtNode->GetNodes().GoNext( &aIdx );
         if( pCNd )
         {
-            SwClientIter aIter( *pCNd );
-            for( SwCntntFrm* pFnd = (SwCntntFrm*)aIter.First( TYPE( SwCntntFrm ));
-                    pFnd; pFnd = (SwCntntFrm*)aIter.Next() )
+            SwIterator<SwCntntFrm,SwCntntNode> aIter( *pCNd );
+            for( SwCntntFrm* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
             {
+                if( pRoot != pFnd->getRootFrm() && pRoot )
+                    continue;
                 SwPageFrm* pPage = pFnd->FindPageFrm();
 
                 SwFrm *pFrm = pFnd->GetUpper();
@@ -425,7 +425,7 @@ void SwTxtFtn::DelFrms()
 }
 
 
-USHORT SwTxtFtn::SetSeqRefNo()
+sal_uInt16 SwTxtFtn::SetSeqRefNo()
 {
     if( !m_pTxtNode )
         return USHRT_MAX;
@@ -434,9 +434,9 @@ USHORT SwTxtFtn::SetSeqRefNo()
     if( pDoc->IsInReading() )
         return USHRT_MAX;
 
-    USHORT n, nFtnCnt = pDoc->GetFtnIdxs().Count();
+    sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
 
-    const BYTE nTmp = 255 < nFtnCnt ? 255 : static_cast<BYTE>(nFtnCnt);
+    const sal_uInt8 nTmp = 255 < nFtnCnt ? 255 : static_cast<sal_uInt8>(nFtnCnt);
     SvUShortsSort aArr( nTmp, nTmp );
 
     // dann testmal, ob die Nummer schon vergeben ist oder ob eine neue
@@ -482,9 +482,9 @@ USHORT SwTxtFtn::SetSeqRefNo()
 
 void SwTxtFtn::SetUniqueSeqRefNo( SwDoc& rDoc )
 {
-    USHORT n, nStt = 0, nFtnCnt = rDoc.GetFtnIdxs().Count();
+    sal_uInt16 n, nStt = 0, nFtnCnt = rDoc.GetFtnIdxs().Count();
 
-    const BYTE nTmp = 255 < nFtnCnt ? 255 : static_cast<BYTE>(nFtnCnt);
+    const sal_uInt8 nTmp = 255 < nFtnCnt ? 255 : static_cast<sal_uInt8>(nFtnCnt);
     SvUShortsSort aArr( nTmp, nTmp );
 
     // dann alle Nummern zusammensammeln die schon existieren

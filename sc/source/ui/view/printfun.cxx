@@ -103,8 +103,8 @@ ScPageRowEntry::ScPageRowEntry(const ScPageRowEntry& r)
     nPagesX   = r.nPagesX;
     if (r.pHidden && nPagesX)
     {
-        pHidden = new BOOL[nPagesX];
-        memcpy( pHidden, r.pHidden, nPagesX * sizeof(BOOL) );
+        pHidden = new sal_Bool[nPagesX];
+        memcpy( pHidden, r.pHidden, nPagesX * sizeof(sal_Bool) );
     }
     else
         pHidden = NULL;
@@ -119,8 +119,8 @@ const ScPageRowEntry& ScPageRowEntry::operator=(const ScPageRowEntry& r)
     nPagesX   = r.nPagesX;
     if (r.pHidden && nPagesX)
     {
-        pHidden = new BOOL[nPagesX];
-        memcpy( pHidden, r.pHidden, nPagesX * sizeof(BOOL) );
+        pHidden = new sal_Bool[nPagesX];
+        memcpy( pHidden, r.pHidden, nPagesX * sizeof(sal_Bool) );
     }
     else
         pHidden = NULL;
@@ -132,7 +132,7 @@ void ScPageRowEntry::SetPagesX(size_t nNew)
 {
     if (pHidden)
     {
-        DBG_ERROR("SetPagesX nicht nach SetHidden");
+        OSL_FAIL("SetPagesX nicht nach SetHidden");
         delete[] pHidden;
         pHidden = NULL;
     }
@@ -149,15 +149,15 @@ void ScPageRowEntry::SetHidden(size_t nX)
         {
             if (!pHidden)
             {
-                pHidden = new BOOL[nPagesX];
-                memset( pHidden, FALSE, nPagesX * sizeof(BOOL) );
+                pHidden = new sal_Bool[nPagesX];
+                memset( pHidden, false, nPagesX * sizeof(sal_Bool) );
             }
-            pHidden[nX] = TRUE;
+            pHidden[nX] = sal_True;
         }
     }
 }
 
-BOOL ScPageRowEntry::IsHidden(size_t nX) const
+sal_Bool ScPageRowEntry::IsHidden(size_t nX) const
 {
     return nX>=nPagesX || ( pHidden && pHidden[nX] );       //! inline?
 }
@@ -178,7 +178,7 @@ size_t ScPageRowEntry::CountVisible() const
 
 //------------------------------------------------------------------------
 
-long lcl_LineTotal(const SvxBorderLine* pLine)
+long lcl_LineTotal(const ::editeng::SvxBorderLine* pLine)
 {
     return pLine ? ( pLine->GetOutWidth() + pLine->GetInWidth() + pLine->GetDistance() ) : 0;
 }
@@ -214,16 +214,16 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
         pParamSet = &pStyleSheet->GetItemSet();
     else
     {
-        DBG_ERROR("Seitenvorlage nicht gefunden" );
+        OSL_FAIL("Seitenvorlage nicht gefunden" );
         pParamSet = NULL;
     }
 
     if (!bState)
         nZoom = 100;
     nManualZoom = 100;
-    bClearWin = FALSE;
-    bUseStyleColor = FALSE;
-    bIsRender = FALSE;
+    bClearWin = false;
+    bUseStyleColor = false;
+    bIsRender = false;
 
     InitParam(pOptions);
 
@@ -241,12 +241,15 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTa
         nPageStart          ( nPage ),
         nDocPages           ( nDocP ),
         pUserArea           ( pArea ),
-        bState              ( FALSE ),
-        bSourceRangeValid   ( FALSE ),
-        bPrintCurrentTable  ( FALSE ),
-        bMultiArea          ( FALSE ),
+        bState              ( false ),
+        bSourceRangeValid   ( false ),
+        bPrintCurrentTable  ( false ),
+        bMultiArea          ( false ),
         nTabPages           ( 0 ),
         nTotalPages         ( 0 ),
+        nPagesX(0),
+        nPagesY(0),
+        nTotalY(0),
         pPageData           ( pData )
 {
     pDev = pPrinter;
@@ -264,12 +267,15 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
         nPageStart          ( nPage ),
         nDocPages           ( nDocP ),
         pUserArea           ( pArea ),
-        bState              ( FALSE ),
-        bSourceRangeValid   ( FALSE ),
-        bPrintCurrentTable  ( FALSE ),
-        bMultiArea          ( FALSE ),
+        bState              ( false ),
+        bSourceRangeValid   ( false ),
+        bPrintCurrentTable  ( false ),
+        bMultiArea          ( false ),
         nTabPages           ( 0 ),
         nTotalPages         ( 0 ),
+        nPagesX(0),
+        nPagesY(0),
+        nTotalY(0),
         pPageData           ( NULL )
 {
     pDev = pOutDev;
@@ -282,9 +288,12 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
         pPrinter            ( NULL ),
         pDrawView           ( NULL ),
         pUserArea           ( NULL ),
-        bSourceRangeValid   ( FALSE ),
-        bPrintCurrentTable  ( FALSE ),
-        bMultiArea          ( FALSE ),
+        bSourceRangeValid   ( false ),
+        bPrintCurrentTable  ( false ),
+        bMultiArea          ( false ),
+        nPagesX(0),
+        nPagesY(0),
+        nTotalY(0),
         pPageData           ( NULL )
 {
     pDev = pOutDev;
@@ -301,7 +310,7 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
     nTotalPages = rState.nTotalPages;
     nPageStart  = rState.nPageStart;
     nDocPages   = rState.nDocPages;
-    bState      = TRUE;
+    bState      = sal_True;
 
     Construct( pOptions );
 }
@@ -315,11 +324,14 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow, SCTAB nTab,
         nPageStart          ( nPage ),
         nDocPages           ( nDocP ),
         pUserArea           ( pArea ),
-        bState              ( FALSE ),
-        bPrintCurrentTable  ( FALSE ),
-        bMultiArea          ( FALSE ),
+        bState              ( false ),
+        bPrintCurrentTable  ( false ),
+        bMultiArea          ( false ),
         nTabPages           ( 0 ),
         nTotalPages         ( 0 ),
+        nPagesX(0),
+        nPagesY(0),
+        nTotalY(0),
         pPageData           ( NULL )
 {
     pDev = pWindow;
@@ -331,8 +343,11 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow,
         pPrinter            ( NULL ),
         pDrawView           ( NULL ),
         pUserArea           ( NULL ),
-        bPrintCurrentTable  ( FALSE ),
-        bMultiArea          ( FALSE ),
+        bPrintCurrentTable  ( false ),
+        bMultiArea          ( false ),
+        nPagesX(0),
+        nPagesY(0),
+        nTotalY(0),
         pPageData           ( NULL )
 {
     pDev = pWindow;
@@ -349,7 +364,7 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow,
     nTotalPages = rState.nTotalPages;
     nPageStart  = rState.nPageStart;
     nDocPages   = rState.nDocPages;
-    bState      = TRUE;
+    bState      = sal_True;
 
     Construct( pOptions );
 }
@@ -370,7 +385,7 @@ void ScPrintFunc::GetPrintState( ScPrintState& rState )
     rState.nDocPages    = nDocPages;
 }
 
-BOOL ScPrintFunc::GetLastSourceRange( ScRange& rRange ) const
+sal_Bool ScPrintFunc::GetLastSourceRange( ScRange& rRange ) const
 {
     rRange = aLastSourceRange;
     return bSourceRangeValid;
@@ -380,7 +395,7 @@ void ScPrintFunc::FillPageData()
 {
     if (pPageData)
     {
-        USHORT nCount = sal::static_int_cast<USHORT>( pPageData->GetCount() );
+        sal_uInt16 nCount = sal::static_int_cast<sal_uInt16>( pPageData->GetCount() );
         ScPrintRangeData& rData = pPageData->GetData(nCount);       // hochzaehlen
 
         rData.SetPrintRange( ScRange( nStartCol, nStartRow, nPrintTab,
@@ -412,7 +427,7 @@ ScPrintFunc::~ScPrintFunc()
 
     //  Druckereinstellungen werden jetzt von aussen wiederhergestellt
 
-    //  #64294# Fuer DrawingLayer/Charts muss der MapMode am Drucker (RefDevice) immer stimmen
+    //  Fuer DrawingLayer/Charts muss der MapMode am Drucker (RefDevice) immer stimmen
     SfxPrinter* pDocPrinter = pDoc->GetPrinter();   // auch fuer Preview den Drucker nehmen
     if (pDocPrinter)
         pDocPrinter->SetMapMode(aOldPrinterMode);
@@ -436,7 +451,7 @@ void lcl_HidePrint( ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
                             GetItem(ATTR_PROTECTION, rCellInfo.pConditionSet)).GetHidePrint())
                 {
                     pThisRowInfo->pCellInfo[nX+1].pCell          = NULL;
-                    pThisRowInfo->pCellInfo[nX+1].bEmptyCellText = TRUE;
+                    pThisRowInfo->pCellInfo[nX+1].bEmptyCellText = sal_True;
                 }
         }
     }
@@ -451,7 +466,7 @@ void lcl_HidePrint( ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
 //      -   Vorschau bei Vorlagen
 
 void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPrintFactor */,
-                            const Rectangle& rBound, ScViewData* pViewData, BOOL bMetaFile )
+                            const Rectangle& rBound, ScViewData* pViewData, sal_Bool bMetaFile )
 {
     //! nPrintFactor auswerten !!!
 
@@ -459,7 +474,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     if (pViewData)
         nTab = pViewData->GetTabNo();
 
-    BOOL bDoGrid, bNullVal, bFormula;
+    sal_Bool bDoGrid, bNullVal, bFormula;
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
     if (pStyleSheet)
@@ -519,7 +534,6 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     Rectangle aLines;
     ScRange aRange( nX1,nY1,nTab, nX2,nY2,nTab );
-//    BOOL bAddLines = pDoc->HasLines( aRange, aLines );
 
     long nTwipsSizeX = 0;
     for (SCCOL i=nX1; i<=nX2; i++)
@@ -536,7 +550,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
                             //!     Flag bei FillInfo uebergeben !!!!!
     ScRange aERange;
-    BOOL bEmbed = pDoc->IsEmbedded();
+    sal_Bool bEmbed = pDoc->IsEmbedded();
     if (bEmbed)
     {
         pDoc->GetEmbedded(aERange);
@@ -547,15 +561,12 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     ScTableInfo aTabInfo;
     pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
-                                        nScaleX, nScaleY, FALSE, bFormula );
+                                        nScaleX, nScaleY, false, bFormula );
     lcl_HidePrint( aTabInfo, nX1, nX2 );
 
     if (bEmbed)
         pDoc->SetEmbedded(aERange);
 
-/*  if (!bMetaFile)
-        pDev->SetMapMode(MAP_PIXEL);
-*/
     long nScrX = aRect.Left();
     long nScrY = aRect.Top();
 
@@ -580,7 +591,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     {
         pDrawView = new FmFormView( pModel, pDev );
         pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
-        pDrawView->SetPrintPreview( TRUE );
+        pDrawView->SetPrintPreview( sal_True );
         aOutputData.SetDrawView( pDrawView );
     }
 
@@ -633,7 +644,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
         if (!bMetaFile && pViewData)
             pDev->SetMapMode(aMode);
 
-        aOutputData.DrawGrid( TRUE, FALSE );    // keine Seitenumbrueche
+        aOutputData.DrawGrid( sal_True, false );    // keine Seitenumbrueche
 
         pDev->SetLineColor( COL_BLACK );
 
@@ -643,7 +654,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
         long nRight = nScrX + aOutputData.GetScrW() - aOne.Width();
         long nBottom = nScrY + aOutputData.GetScrH() - aOne.Height();
 
-        BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+        sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
         // extra line at the left edge for left-to-right, right for right-to-left
         if ( bLayoutRTL )
@@ -673,7 +684,7 @@ void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
 
     if ( pHFSet == NULL )
     {
-        rParam.bEnable  = FALSE;
+        rParam.bEnable  = false;
         rParam.pBorder  = NULL;
         rParam.pBack    = NULL;
         rParam.pShadow  = NULL;
@@ -687,9 +698,9 @@ void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
         const SvxLRSpaceItem* pHFLR = &(const SvxLRSpaceItem&) pHFSet->Get(ATTR_LRSPACE);
         long nTmp;
         nTmp = pHFLR->GetLeft();
-        rParam.nLeft = nTmp < 0 ? 0 : USHORT(nTmp);
+        rParam.nLeft = nTmp < 0 ? 0 : sal_uInt16(nTmp);
         nTmp = pHFLR->GetRight();
-        rParam.nRight = nTmp < 0 ? 0 : USHORT(nTmp);
+        rParam.nRight = nTmp < 0 ? 0 : sal_uInt16(nTmp);
         rParam.pBorder  = (const SvxBoxItem*)   &pHFSet->Get(ATTR_BORDER);
         rParam.pBack    = (const SvxBrushItem*) &pHFSet->Get(ATTR_BACKGROUND);
         rParam.pShadow  = (const SvxShadowItem*)&pHFSet->Get(ATTR_SHADOW);;
@@ -711,27 +722,27 @@ void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
 //  bNew = TRUE:    benutzten Bereich aus dem Dokument suchen
 //  bNew = FALSE:   nur ganze Zeilen/Spalten begrenzen
 
-BOOL ScPrintFunc::AdjustPrintArea( BOOL bNew )
+sal_Bool ScPrintFunc::AdjustPrintArea( sal_Bool bNew )
 {
     SCCOL nOldEndCol = nEndCol; // nur wichtig bei !bNew
     SCROW nOldEndRow = nEndRow;
-    BOOL bChangeCol = TRUE;         // bei bNew werden beide angepasst
-    BOOL bChangeRow = TRUE;
+    sal_Bool bChangeCol = sal_True;         // bei bNew werden beide angepasst
+    sal_Bool bChangeRow = sal_True;
 
-    BOOL bNotes = aTableParam.bNotes;
+    sal_Bool bNotes = aTableParam.bNotes;
     if ( bNew )
     {
         nStartCol = 0;
         nStartRow = 0;
         if (!pDoc->GetPrintArea( nPrintTab, nEndCol, nEndRow, bNotes ))
-            return FALSE;   // nix
+            return false;   // nix
     }
     else
     {
-        BOOL bFound = TRUE;
+        sal_Bool bFound = sal_True;
         bChangeCol = ( nStartCol == 0 && nEndCol == MAXCOL );
         bChangeRow = ( nStartRow == 0 && nEndRow == MAXROW );
-        BOOL bForcedChangeRow = FALSE;
+        sal_Bool bForcedChangeRow = false;
 
         // #i53558# Crop entire column of old row limit to real print area with
         // some fuzzyness.
@@ -744,11 +755,11 @@ BOOL ScPrintFunc::AdjustPrintArea( BOOL bNew )
             const SCROW nFuzzy = 23*42;
             if (nPAEndRow + nFuzzy < nEndRow)
             {
-                bForcedChangeRow = TRUE;
+                bForcedChangeRow = sal_True;
                 nEndRow = nPAEndRow;
             }
             else
-                bFound = TRUE;  // user seems to _want_ to print some empty rows
+                bFound = sal_True;  // user seems to _want_ to print some empty rows
         }
         // TODO: in case we extend the number of columns we may have to do the
         // same for horizontal cropping.
@@ -761,14 +772,14 @@ BOOL ScPrintFunc::AdjustPrintArea( BOOL bNew )
             bFound = pDoc->GetPrintAreaVer( nPrintTab, nStartCol, nEndCol, nEndRow, bNotes );
 
         if (!bFound)
-            return FALSE;   // leer
+            return false;   // leer
 
         if (bForcedChangeRow)
-            bChangeRow = TRUE;
+            bChangeRow = sal_True;
     }
 
     pDoc->ExtendMerge( nStartCol,nStartRow, nEndCol,nEndRow, nPrintTab,
-                        FALSE, TRUE );      // kein Refresh, incl. Attrs
+                        false, sal_True );      // kein Refresh, incl. Attrs
 
     if ( bChangeCol )
     {
@@ -790,7 +801,7 @@ BOOL ScPrintFunc::AdjustPrintArea( BOOL bNew )
     if (!bChangeCol) nEndCol = nOldEndCol;
     if (!bChangeRow) nEndRow = nOldEndRow;
 
-    return TRUE;
+    return sal_True;
 }
 
 long ScPrintFunc::TextHeight( const EditTextObject* pObject )
@@ -798,8 +809,7 @@ long ScPrintFunc::TextHeight( const EditTextObject* pObject )
     if (!pObject)
         return 0;
 
-//  pEditEngine->SetPageNo( nTotalPages );
-    pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, FALSE );
+    pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, false );
 
     return (long) pEditEngine->GetTextHeight();
 }
@@ -868,9 +878,9 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     const SvxLRSpaceItem* pLRItem = (const SvxLRSpaceItem*) &pParamSet->Get( ATTR_LRSPACE );
     long nTmp;
     nTmp = pLRItem->GetLeft();
-    nLeftMargin = nTmp < 0 ? 0 : USHORT(nTmp);
+    nLeftMargin = nTmp < 0 ? 0 : sal_uInt16(nTmp);
     nTmp = pLRItem->GetRight();
-    nRightMargin = nTmp < 0 ? 0 : USHORT(nTmp);
+    nRightMargin = nTmp < 0 ? 0 : sal_uInt16(nTmp);
     const SvxULSpaceItem* pULItem = (const SvxULSpaceItem*) &pParamSet->Get( ATTR_ULSPACE );
     nTopMargin    = pULItem->GetUpper();
     nBottomMargin = pULItem->GetLower();
@@ -886,7 +896,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     aPageSize = ((const SvxSizeItem&) pParamSet->Get(ATTR_PAGE_SIZE)).GetSize();
     if ( !aPageSize.Width() || !aPageSize.Height() )
     {
-        DBG_ERROR("PageSize Null ?!?!?");
+        OSL_FAIL("PageSize Null ?!?!?");
         aPageSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );
     }
 
@@ -901,7 +911,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     const SvxSetItem* pHeaderSetItem;
     const SfxItemSet* pHeaderSet = NULL;
-    if ( pParamSet->GetItemState( ATTR_PAGE_HEADERSET, FALSE,
+    if ( pParamSet->GetItemState( ATTR_PAGE_HEADERSET, false,
                             (const SfxPoolItem**)&pHeaderSetItem ) == SFX_ITEM_SET )
     {
         pHeaderSet = &pHeaderSetItem->GetItemSet();
@@ -917,7 +927,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     const SvxSetItem* pFooterSetItem;
     const SfxItemSet* pFooterSet = NULL;
-    if ( pParamSet->GetItemState( ATTR_PAGE_FOOTERSET, FALSE,
+    if ( pParamSet->GetItemState( ATTR_PAGE_FOOTERSET, false,
                             (const SfxPoolItem**)&pFooterSetItem ) == SFX_ITEM_SET )
     {
         pFooterSet = &pFooterSetItem->GetItemSet();
@@ -936,19 +946,19 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     const SfxUInt16Item*     pScaleToPagesItem   = NULL;
     SfxItemState             eState;
 
-    eState = pParamSet->GetItemState( ATTR_PAGE_SCALE, FALSE,
+    eState = pParamSet->GetItemState( ATTR_PAGE_SCALE, false,
                                       (const SfxPoolItem**)&pScaleItem );
     if ( SFX_ITEM_DEFAULT == eState )
         pScaleItem = (const SfxUInt16Item*)
                     &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALE );
 
-    eState = pParamSet->GetItemState( ATTR_PAGE_SCALETO, FALSE,
+    eState = pParamSet->GetItemState( ATTR_PAGE_SCALETO, false,
                                       (const SfxPoolItem**)&pScaleToItem );
     if ( SFX_ITEM_DEFAULT == eState )
         pScaleToItem = (const ScPageScaleToItem*)
                     &pParamSet->GetPool()->GetDefaultItem( ATTR_PAGE_SCALETO );
 
-    eState = pParamSet->GetItemState( ATTR_PAGE_SCALETOPAGES, FALSE,
+    eState = pParamSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false,
                                       (const SfxPoolItem**)&pScaleToPagesItem );
     if ( SFX_ITEM_DEFAULT == eState )
         pScaleToPagesItem = (const SfxUInt16Item*)
@@ -956,7 +966,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     DBG_ASSERT( pScaleItem && pScaleToItem && pScaleToPagesItem, "Missing ScaleItem! :-/" );
 
-    aTableParam.bCellContent    = TRUE;
+    aTableParam.bCellContent    = sal_True;
     aTableParam.bNotes          = GET_BOOL(pParamSet,ATTR_PAGE_NOTES);
     aTableParam.bGrid           = GET_BOOL(pParamSet,ATTR_PAGE_GRID);
     aTableParam.bHeaders        = GET_BOOL(pParamSet,ATTR_PAGE_HEADERS);
@@ -969,12 +979,12 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     aTableParam.bLeftRight      = !aTableParam.bLeftRight;
     aTableParam.nFirstPageNo    = GET_USHORT(pParamSet,ATTR_PAGE_FIRSTPAGENO);
     if (!aTableParam.nFirstPageNo)
-        aTableParam.nFirstPageNo = (USHORT) nPageStart;     // von vorheriger Tabelle
+        aTableParam.nFirstPageNo = (sal_uInt16) nPageStart;     // von vorheriger Tabelle
 
     if ( pScaleItem && pScaleToItem && pScaleToPagesItem )
     {
-        UINT16  nScaleAll     = pScaleItem->GetValue();
-        UINT16  nScaleToPages = pScaleToPagesItem->GetValue();
+        sal_uInt16  nScaleAll     = pScaleItem->GetValue();
+        sal_uInt16  nScaleToPages = pScaleToPagesItem->GetValue();
 
         aTableParam.bScaleNone      = (nScaleAll     == 100);
         aTableParam.bScaleAll       = (nScaleAll      > 0  );
@@ -987,10 +997,10 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     }
     else
     {
-        aTableParam.bScaleNone      = TRUE;
-        aTableParam.bScaleAll       = FALSE;
-        aTableParam.bScaleTo        = FALSE;
-        aTableParam.bScalePageNum   = FALSE;
+        aTableParam.bScaleNone      = sal_True;
+        aTableParam.bScaleAll       = false;
+        aTableParam.bScaleTo        = false;
+        aTableParam.bScalePageNum   = false;
         aTableParam.nScaleAll       = 0;
         aTableParam.nScaleWidth     = 0;
         aTableParam.nScaleHeight    = 0;
@@ -1000,7 +1010,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     //  skip empty pages only if options with that flag are passed
     aTableParam.bSkipEmpty = pOptions && pOptions->GetSkipEmpty();
     if ( pPageData )
-        aTableParam.bSkipEmpty = FALSE;
+        aTableParam.bSkipEmpty = false;
     // Wenn pPageData gesetzt ist, interessieren fuer die Umbruch-Vorschau
     // nur die Umbrueche, leere Seiten werden nicht speziell behandelt
 
@@ -1018,21 +1028,19 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     if ( pUserArea )                // UserArea (Selektion) hat Vorrang
     {
         bPrintCurrentTable    =
-        aAreaParam.bPrintArea = TRUE;                   // Selektion
+        aAreaParam.bPrintArea = sal_True;                   // Selektion
         aAreaParam.aPrintArea = *pUserArea;
 
         //  Die Tabellen-Abfrage ist schon in DocShell::Print, hier immer
         aAreaParam.aPrintArea.aStart.SetTab(nPrintTab);
         aAreaParam.aPrintArea.aEnd.SetTab(nPrintTab);
-
-//      lcl_LimitRange( aAreaParam.aPrintArea, nPrintTab );         // ganze Zeilen/Spalten...
     }
     else if ( pDoc->HasPrintRange() )
     {
         if ( pPrintArea )                               // mindestens eine gesetzt ?
         {
             bPrintCurrentTable    =
-            aAreaParam.bPrintArea = TRUE;
+            aAreaParam.bPrintArea = sal_True;
             aAreaParam.aPrintArea = *pPrintArea;
 
             bMultiArea = ( pDoc->GetPrintRangeCount(nPrintTab) > 1 );
@@ -1046,42 +1054,42 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     }
     else
     {
-        //  #74834# don't print hidden tables if there's no print range defined there
+        //  don't print hidden tables if there's no print range defined there
         if ( pDoc->IsVisible( nPrintTab ) )
         {
-            aAreaParam.bPrintArea = FALSE;
-            bPrintCurrentTable = TRUE;
+            aAreaParam.bPrintArea = false;
+            bPrintCurrentTable = sal_True;
         }
         else
         {
-            aAreaParam.bPrintArea = TRUE;   // otherwise the table is always counted
-            bPrintCurrentTable = FALSE;
+            aAreaParam.bPrintArea = sal_True;   // otherwise the table is always counted
+            bPrintCurrentTable = false;
         }
     }
 
     if ( pRepeatCol )
     {
-        aAreaParam.bRepeatCol = TRUE;
+        aAreaParam.bRepeatCol = sal_True;
         aAreaParam.aRepeatCol = *pRepeatCol;
         nRepeatStartCol = pRepeatCol->aStart.Col();
         nRepeatEndCol   = pRepeatCol->aEnd  .Col();
     }
     else
     {
-        aAreaParam.bRepeatCol = FALSE;
+        aAreaParam.bRepeatCol = false;
         nRepeatStartCol = nRepeatEndCol = SCCOL_REPEAT_NONE;
     }
 
     if ( pRepeatRow )
     {
-        aAreaParam.bRepeatRow = TRUE;
+        aAreaParam.bRepeatRow = sal_True;
         aAreaParam.aRepeatRow = *pRepeatRow;
         nRepeatStartRow = pRepeatRow->aStart.Row();
         nRepeatEndRow   = pRepeatRow->aEnd  .Row();
     }
     else
     {
-        aAreaParam.bRepeatRow = FALSE;
+        aAreaParam.bRepeatRow = false;
         nRepeatStartRow = nRepeatEndRow = SCROW_REPEAT_NONE;
     }
 
@@ -1182,8 +1190,7 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
     Point aPos;
     Size aDrawSize = aGrfSize;
 
-    bool bDraw = TRUE;
-//  bool bRetouche = TRUE;
+    bool bDraw = true;
     switch ( ePos )
     {
         case GPOS_LT: aPos = rOrg.TopLeft();
@@ -1218,11 +1225,10 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
         case GPOS_AREA:
                       aPos = rOrg.TopLeft();
                       aDrawSize = rOrg.GetSize();
-//                    bRetouche = FALSE;
                       break;
         case GPOS_TILED:
                     {
-                        //  #104004# use GraphicObject::DrawTiled instead of an own loop
+                        //  use GraphicObject::DrawTiled instead of an own loop
                         //  (pixel rounding is handled correctly, and a very small bitmap
                         //  is duplicated into a bigger one for better performance)
 
@@ -1231,7 +1237,7 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
                         if( pOut->GetPDFWriter() &&
                             (aObject.GetType() == GRAPHIC_BITMAP || aObject.GetType() == GRAPHIC_DEFAULT) )
                         {
-                            // #104004# For PDF export, every draw
+                            // For PDF export, every draw
                             // operation for bitmaps takes a noticeable
                             // amount of place (~50 characters). Thus,
                             // optimize between tile bitmap size and
@@ -1267,13 +1273,12 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
                             aObject.DrawTiled( pOut, rOrg, aGrfSize, Size(0,0) );
                         }
 
-                        bDraw = FALSE;
-//                      bRetouche = FALSE;
+                        bDraw = false;
                     }
                     break;
 
         case GPOS_NONE:
-                      bDraw = FALSE;
+                      bDraw = false;
                       break;
 
         default: DBG_ASSERT( !pOut, "new Graphic position?" );
@@ -1330,13 +1335,11 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     if (nEffHeight<=0 || nEffWidth<=0)
         return;                                         // leer
 
-    //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
-    BOOL bCellContrast = bUseStyleColor &&
-            Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+    sal_Bool bCellContrast = bUseStyleColor;
 
     if ( pBackground && !bCellContrast )
     {
-//      Rectangle aBackRect( Point(nScrX+nLeft, nScrY+nTop), Size(nEffWidth,nEffHeight) );
         if (pBackground->GetGraphicPos() != GPOS_NONE)
         {
             OutputDevice* pRefDev;
@@ -1408,24 +1411,22 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     if (pBorderData)
     {
         ScDocument* pBorderDoc = new ScDocument( SCDOCMODE_UNDO );
-        pBorderDoc->InitUndo( pDoc, 0,0, TRUE,TRUE );
+        pBorderDoc->InitUndo( pDoc, 0,0, sal_True,sal_True );
         if (pBorderData)
             pBorderDoc->ApplyAttr( 0,0,0, *pBorderData );
 
         ScTableInfo aTabInfo;
         pBorderDoc->FillInfo( aTabInfo, 0,0, 0,0, 0,
-                                            nScaleX, nScaleY, FALSE, FALSE );
+                                            nScaleX, nScaleY, false, false );
         DBG_ASSERT(aTabInfo.mnArrCount,"nArrCount == 0");
 
-        aTabInfo.mpRowInfo[1].nHeight = (USHORT) nEffHeight;
+        aTabInfo.mpRowInfo[1].nHeight = (sal_uInt16) nEffHeight;
         aTabInfo.mpRowInfo[0].pCellInfo[1].nWidth =
-            aTabInfo.mpRowInfo[1].pCellInfo[1].nWidth = (USHORT) nEffWidth;
+            aTabInfo.mpRowInfo[1].pCellInfo[1].nWidth = (sal_uInt16) nEffWidth;
 
         ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pBorderDoc, 0,
                                     nScrX+nLeft, nScrY+nTop, 0,0, 0,0, nScaleX, nScaleY );
         aOutputData.SetUseStyleColor( bUseStyleColor );
-
-//      pDev->SetMapMode(aTwipMode);
 
         if (pBorderData)
             aOutputData.DrawFrame();
@@ -1436,7 +1437,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
 
 void ScPrintFunc::PrintColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY )
 {
-    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nPrintTab );
+    sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nPrintTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     Size aOnePixel = pDev->PixelToLogic(Size(1,1));
@@ -1460,7 +1461,7 @@ void ScPrintFunc::PrintColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY )
 
     for (nCol=nX1; nCol<=nX2; nCol++)
     {
-        USHORT nDocW = pDoc->GetColWidth( nCol, nPrintTab );
+        sal_uInt16 nDocW = pDoc->GetColWidth( nCol, nPrintTab );
         if (nDocW)
         {
             long nWidth = (long) (nDocW * nScaleX);
@@ -1489,7 +1490,7 @@ void ScPrintFunc::PrintRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY )
     long nOneX = aOnePixel.Width();
     long nOneY = aOnePixel.Height();
 
-    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nPrintTab );
+    sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nPrintTab );
 
     long nWidth = (long) (PRINT_HEADER_WIDTH * nScaleX);
     long nEndX = nScrX + nWidth;
@@ -1504,7 +1505,7 @@ void ScPrintFunc::PrintRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY )
 
     for (SCROW nRow=nY1; nRow<=nY2; nRow++)
     {
-        USHORT nDocH = pDoc->GetRowHeight( nRow, nPrintTab );
+        sal_uInt16 nDocH = pDoc->GetRowHeight( nRow, nPrintTab );
         if (nDocH)
         {
             long nHeight = (long) (nDocH * nScaleY);
@@ -1525,7 +1526,7 @@ void ScPrintFunc::PrintRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY )
 }
 
 void ScPrintFunc::LocateColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY,
-                                BOOL bRepCol, ScPreviewLocationData& rLocationData )
+                                sal_Bool bRepCol, ScPreviewLocationData& rLocationData )
 {
     Size aOnePixel = pDev->PixelToLogic(Size(1,1));
     long nOneX = aOnePixel.Width();
@@ -1537,7 +1538,7 @@ void ScPrintFunc::LocateColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY,
     long nPosX = nScrX - nOneX;
     for (SCCOL nCol=nX1; nCol<=nX2; nCol++)
     {
-        USHORT nDocW = pDoc->GetColWidth( nCol, nPrintTab );
+        sal_uInt16 nDocW = pDoc->GetColWidth( nCol, nPrintTab );
         if (nDocW)
             nPosX += (long) (nDocW * nScaleX);
     }
@@ -1546,13 +1547,13 @@ void ScPrintFunc::LocateColHdr( SCCOL nX1, SCCOL nX2, long nScrX, long nScrY,
 }
 
 void ScPrintFunc::LocateRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY,
-                                BOOL bRepRow, ScPreviewLocationData& rLocationData )
+                                sal_Bool bRepRow, ScPreviewLocationData& rLocationData )
 {
     Size aOnePixel = pDev->PixelToLogic(Size(1,1));
     long nOneX = aOnePixel.Width();
     long nOneY = aOnePixel.Height();
 
-    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nPrintTab );
+    sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nPrintTab );
 
     long nWidth = (long) (PRINT_HEADER_WIDTH * nScaleX);
     long nEndX = nScrX + nWidth;
@@ -1566,7 +1567,7 @@ void ScPrintFunc::LocateRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY,
 }
 
 void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                long nScrX, long nScrY, BOOL bRepCol, BOOL bRepRow,
+                                long nScrX, long nScrY, sal_Bool bRepCol, sal_Bool bRepRow,
                                 ScPreviewLocationData& rLocationData )
 {
     //  get MapMode for drawing objects (same MapMode as in ScOutputData::PrintDrawingLayer)
@@ -1596,7 +1597,7 @@ void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     long nPosX = nScrX - nOneX;
     for (nCol=nX1; nCol<=nX2; nCol++)
     {
-        USHORT nDocW = pDoc->GetColWidth( nCol, nPrintTab );
+        sal_uInt16 nDocW = pDoc->GetColWidth( nCol, nPrintTab );
         if (nDocW)
             nPosX += (long) (nDocW * nScaleX);
     }
@@ -1610,7 +1611,7 @@ void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
 void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                 long nScrX, long nScrY,
-                                BOOL bShLeft, BOOL bShTop, BOOL bShRight, BOOL bShBottom )
+                                sal_Bool bShLeft, sal_Bool bShTop, sal_Bool bShRight, sal_Bool bShBottom )
 {
     // #i47547# nothing to do if the end of the print area is before the end of
     // the repeat columns/rows (don't use negative size for ScOutputData)
@@ -1619,7 +1620,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
                             //!     Flag bei FillInfo uebergeben !!!!!
     ScRange aERange;
-    BOOL bEmbed = pDoc->IsEmbedded();
+    sal_Bool bEmbed = pDoc->IsEmbedded();
     if (bEmbed)
     {
         pDoc->GetEmbedded(aERange);
@@ -1634,7 +1635,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
     ScTableInfo aTabInfo;
     pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nPrintTab,
-                                        nScaleX, nScaleY, TRUE, aTableParam.bFormulas );
+                                        nScaleX, nScaleY, sal_True, aTableParam.bFormulas );
     lcl_HidePrint( aTabInfo, nX1, nX2 );
 
     if (bEmbed)
@@ -1684,41 +1685,24 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
             aOutputData.SetRefDevice( pRefDev );
     }
 
-//  aOutputData.SetMetaFileMode(TRUE);
     if( aTableParam.bCellContent )
         aOutputData.DrawBackground();
 
     pDev->SetClipRegion( Rectangle( aPos, Size( aOutputData.GetScrW(), aOutputData.GetScrH() ) ) );
     pDev->SetClipRegion();
 
-//  aOutputData.SetMetaFileMode(FALSE);
     if( aTableParam.bCellContent )
     {
         aOutputData.DrawExtraShadow( bShLeft, bShTop, bShRight, bShBottom );
         aOutputData.DrawFrame();
         aOutputData.DrawStrings();
-
-    //  pDev->SetMapMode(aLogicMode);
-        aOutputData.DrawEdit(FALSE);
+        aOutputData.DrawEdit(false);
     }
 
-//  pDev->SetMapMode(aOffsetMode);
     if (aTableParam.bGrid)
-        aOutputData.DrawGrid( TRUE, FALSE );    // keine Seitenumbrueche
-
-/*!!!!!!!!!!!       Notizen in Tabelle markieren ??????????????????????????
-
-    if (aTableParam.bNotes)
-    {
-        pDev->SetMapMode(aOffsetMode);
-        aOutputData.PrintNoteMarks(aNotePosList);
-        pDev->SetMapMode(aLogicMode);
-    }
-*/
+        aOutputData.DrawGrid( sal_True, false );    // keine Seitenumbrueche
 
     aOutputData.AddPDFNotes();      // has no effect if not rendering PDF with notes enabled
-
-//  pDev->SetMapMode(aDrawMode);
 
     // test if all paint parts are hidden, then a paint is not necessary at all
     if(!bHideAllDrawingLayer)
@@ -1732,20 +1716,20 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     aOutputData.PostPrintDrawingLayer(aMMOffset); // #i74768#
 }
 
-BOOL ScPrintFunc::IsMirror( long nPageNo )          // Raender spiegeln ?
+sal_Bool ScPrintFunc::IsMirror( long nPageNo )          // Raender spiegeln ?
 {
     SvxPageUsage eUsage = (SvxPageUsage) ( nPageUsage & 0x000f );
     return ( eUsage == SVX_PAGE_MIRROR && (nPageNo & 1) );
 }
 
-BOOL ScPrintFunc::IsLeft( long nPageNo )            // linke Fussnoten ?
+sal_Bool ScPrintFunc::IsLeft( long nPageNo )            // linke Fussnoten ?
 {
     SvxPageUsage eUsage = (SvxPageUsage) ( nPageUsage & 0x000f );
-    BOOL bLeft;
+    sal_Bool bLeft;
     if (eUsage == SVX_PAGE_LEFT)
-        bLeft = TRUE;
+        bLeft = sal_True;
     else if (eUsage == SVX_PAGE_RIGHT)
-        bLeft = FALSE;
+        bLeft = false;
     else
         bLeft = (nPageNo & 1) != 0;
     return bLeft;
@@ -1762,9 +1746,9 @@ void ScPrintFunc::MakeEditEngine()
     {
         //  can't use document's edit engine pool here,
         //  because pool must have twips as default metric
-        pEditEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), TRUE );
+        pEditEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), sal_True );
 
-        pEditEngine->EnableUndo(FALSE);
+        pEditEngine->EnableUndo(false);
         pEditEngine->SetRefDevice( pDev );
         pEditEngine->SetWordDelimiters(
                 ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
@@ -1781,7 +1765,7 @@ void ScPrintFunc::MakeEditEngine()
         pEditDefaults->Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
         pEditDefaults->Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
         pEditDefaults->Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
-        //  #69193# dont use font color, because background color is not used
+        //  dont use font color, because background color is not used
         //! there's no way to set the background for note pages
         pEditDefaults->ClearItem( EE_CHAR_COLOR );
         if (ScGlobal::IsSystemRTL())
@@ -1792,14 +1776,14 @@ void ScPrintFunc::MakeEditEngine()
 }
 
 //  nStartY = logic
-void ScPrintFunc::PrintHF( long nPageNo, BOOL bHeader, long nStartY,
-                            BOOL bDoPrint, ScPreviewLocationData* pLocationData )
+void ScPrintFunc::PrintHF( long nPageNo, sal_Bool bHeader, long nStartY,
+                            sal_Bool bDoPrint, ScPreviewLocationData* pLocationData )
 {
     const ScPrintHFParam& rParam = bHeader ? aHdr : aFtr;
 
     pDev->SetMapMode( aTwipMode );          // Kopf-/Fusszeilen in Twips
 
-    BOOL bLeft = IsLeft(nPageNo) && !rParam.bShared;
+    sal_Bool bLeft = IsLeft(nPageNo) && !rParam.bShared;
     const ScPageHFItem* pHFItem = bLeft ? rParam.pLeft : rParam.pRight;
 
     long nLineStartX = aPageRect.Left()  + rParam.nLeft;
@@ -1884,7 +1868,7 @@ void ScPrintFunc::PrintHF( long nPageNo, BOOL bHeader, long nStartY,
         if (pObject)
         {
             pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
-            pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, FALSE );
+            pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, false );
             Point aDraw = aStart;
             long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
             if (nDif > 0)
@@ -1898,7 +1882,7 @@ void ScPrintFunc::PrintHF( long nPageNo, BOOL bHeader, long nStartY,
         if (pObject)
         {
             pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
-            pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, FALSE );
+            pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, false );
             Point aDraw = aStart;
             long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
             if (nDif > 0)
@@ -1912,7 +1896,7 @@ void ScPrintFunc::PrintHF( long nPageNo, BOOL bHeader, long nStartY,
         if (pObject)
         {
             pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
-            pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, FALSE );
+            pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, false );
             Point aDraw = aStart;
             long nDif = aPaperSize.Height() - (long) pEditEngine->GetTextHeight();
             if (nDif > 0)
@@ -1930,7 +1914,7 @@ void ScPrintFunc::PrintHF( long nPageNo, BOOL bHeader, long nStartY,
     }
 }
 
-long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData* pLocationData )
+long ScPrintFunc::DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocationData* pLocationData )
 {
     if (bDoPrint)
         pDev->SetMapMode(aTwipMode);
@@ -1942,7 +1926,6 @@ long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData
     Font aMarkFont;
     ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
     ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont( aMarkFont, eColorMode );
-//? aMarkFont.SetWeight( WEIGHT_BOLD );
     pDev->SetFont( aMarkFont );
     long nMarkLen = pDev->GetTextWidth(
             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("GW99999:")));
@@ -1958,10 +1941,10 @@ long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData
     long nPosY = aPageRect.Top();
 
     long nCount = 0;
-    BOOL bOk;
+    sal_Bool bOk;
     do
     {
-        bOk = FALSE;
+        bOk = false;
         ScAddress* pPos = (ScAddress*) aNotePosList.GetObject( nNoteStart+nCount );
         if (pPos)
         {
@@ -1997,7 +1980,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData
                     nPosY += nTextHeight;
                     nPosY += 200;                   // Abstand
                     ++nCount;
-                    bOk = TRUE;
+                    bOk = sal_True;
                 }
             }
         }
@@ -2007,7 +1990,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData
     return nCount;
 }
 
-long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPreviewLocationData* pLocationData )
+long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, sal_Bool bDoPrint, ScPreviewLocationData* pLocationData )
 {
     if ( nNoteStart >= (long) aNotePosList.Count() || !aTableParam.bNotes )
         return 0;
@@ -2045,8 +2028,7 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
 
     if ( pPrinter && bDoPrint )
     {
-        DBG_ERROR( "StartPage does not exist anymore" );
-        // pPrinter->StartPage();
+        OSL_FAIL( "StartPage does not exist anymore" );
     }
 
     if ( bDoPrint || pLocationData )
@@ -2056,12 +2038,12 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
         if (aHdr.bEnable)
         {
             long nHeaderY = aPageRect.Top()-aHdr.nHeight;
-            PrintHF( nPageNo, TRUE, nHeaderY, bDoPrint, pLocationData );
+            PrintHF( nPageNo, sal_True, nHeaderY, bDoPrint, pLocationData );
         }
         if (aFtr.bEnable)
         {
             long nFooterY = aPageRect.Bottom()+aFtr.nDistance;
-            PrintHF( nPageNo, FALSE, nFooterY, bDoPrint, pLocationData );
+            PrintHF( nPageNo, false, nFooterY, bDoPrint, pLocationData );
         }
     }
 
@@ -2069,17 +2051,16 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
 
     if ( pPrinter && bDoPrint )
     {
-        DBG_ERROR( "EndPage does not exist anymore" );
-        // pPrinter->EndPage();
+        OSL_FAIL( "EndPage does not exist anymore" );
     }
 
     return nCount;
 }
 
 void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                BOOL bDoPrint, ScPreviewLocationData* pLocationData )
+                                sal_Bool bDoPrint, ScPreviewLocationData* pLocationData )
 {
-    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nPrintTab );
+    sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nPrintTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     //  nPageNo is the page number within all sheets of one "start page" setting
@@ -2118,11 +2099,11 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     if ( aAreaParam.bRepeatCol )
         if ( nX1 > nRepeatStartCol && nX1 <= nRepeatEndCol )
             nX1 = nRepeatEndCol + 1;
-    BOOL bDoRepCol = (aAreaParam.bRepeatCol && nX1 > nRepeatEndCol);
+    sal_Bool bDoRepCol = (aAreaParam.bRepeatCol && nX1 > nRepeatEndCol);
     if ( aAreaParam.bRepeatRow )
         if ( nY1 > nRepeatStartRow && nY1 <= nRepeatEndRow )
             nY1 = nRepeatEndRow + 1;
-    BOOL bDoRepRow = (aAreaParam.bRepeatRow && nY1 > nRepeatEndRow);
+    sal_Bool bDoRepRow = (aAreaParam.bRepeatRow && nY1 > nRepeatEndRow);
 
     // use new object hide flags in SdrPaintView
     if(pDrawView)
@@ -2135,8 +2116,7 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
 
     if ( pPrinter && bDoPrint )
     {
-        DBG_ERROR( "StartPage does not exist anymore" );
-        // pPrinter->StartPage();
+        OSL_FAIL( "StartPage does not exist anymore" );
     }
 
     //  Kopf- und Fusszeilen (ohne Zentrierung)
@@ -2144,12 +2124,12 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     if (aHdr.bEnable)
     {
         long nHeaderY = aPageRect.Top()-aHdr.nHeight;
-        PrintHF( nPageNo, TRUE, nHeaderY, bDoPrint, pLocationData );
+        PrintHF( nPageNo, sal_True, nHeaderY, bDoPrint, pLocationData );
     }
     if (aFtr.bEnable)
     {
         long nFooterY = aPageRect.Bottom()+aFtr.nDistance;
-        PrintHF( nPageNo, FALSE, nFooterY, bDoPrint, pLocationData );
+        PrintHF( nPageNo, false, nFooterY, bDoPrint, pLocationData );
     }
 
     //  Position ( Raender / zentrieren )
@@ -2230,9 +2210,6 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
 
     long nStartX = ((long) ( nLeftSpace * nScaleX ));
     long nStartY = ((long) ( nTopSpace  * nScaleY ));
-//      nStartX -= aOffset.X();         // schon im MapMode
-//      nStartY -= aOffset.Y();
-
     long nInnerStartX = nStartX;
     long nInnerStartY = nStartY;
     if (pBorderItem)
@@ -2319,34 +2296,34 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     {
         if ( bDoPrint )
             PrintArea( nRepeatStartCol,nRepeatStartRow, nRepeatEndCol,nRepeatEndRow,
-                            nRepStartX,nRepStartY, TRUE,TRUE,FALSE,FALSE );
+                            nRepStartX,nRepStartY, sal_True,sal_True,false,false );
         if ( pLocationData )
             LocateArea( nRepeatStartCol,nRepeatStartRow, nRepeatEndCol,nRepeatEndRow,
-                            nRepStartX,nRepStartY, TRUE,TRUE, *pLocationData );
+                            nRepStartX,nRepStartY, sal_True,sal_True, *pLocationData );
     }
     if (bDoRepCol)
     {
         if ( bDoPrint )
             PrintArea( nRepeatStartCol,nY1, nRepeatEndCol,nY2, nRepStartX,nDataY,
-                        TRUE,!bDoRepRow,FALSE,TRUE );
+                        sal_True,!bDoRepRow,false,sal_True );
         if ( pLocationData )
-            LocateArea( nRepeatStartCol,nY1, nRepeatEndCol,nY2, nRepStartX,nDataY, TRUE,FALSE, *pLocationData );
+            LocateArea( nRepeatStartCol,nY1, nRepeatEndCol,nY2, nRepStartX,nDataY, sal_True,false, *pLocationData );
     }
     if (bDoRepRow)
     {
         if ( bDoPrint )
             PrintArea( nX1,nRepeatStartRow, nX2,nRepeatEndRow, nDataX,nRepStartY,
-                        !bDoRepCol,TRUE,TRUE,FALSE );
+                        !bDoRepCol,sal_True,sal_True,false );
         if ( pLocationData )
-            LocateArea( nX1,nRepeatStartRow, nX2,nRepeatEndRow, nDataX,nRepStartY, FALSE,TRUE, *pLocationData );
+            LocateArea( nX1,nRepeatStartRow, nX2,nRepeatEndRow, nDataX,nRepStartY, false,sal_True, *pLocationData );
     }
 
     //  Daten ausgeben
 
     if ( bDoPrint )
-        PrintArea( nX1,nY1, nX2,nY2, nDataX,nDataY, !bDoRepCol,!bDoRepRow,TRUE,TRUE );
+        PrintArea( nX1,nY1, nX2,nY2, nDataX,nDataY, !bDoRepCol,!bDoRepRow,sal_True,sal_True );
     if ( pLocationData )
-        LocateArea( nX1,nY1, nX2,nY2, nDataX,nDataY, FALSE,FALSE, *pLocationData );
+        LocateArea( nX1,nY1, nX2,nY2, nDataX,nDataY, false,false, *pLocationData );
 
     //  Spalten-/Zeilenkoepfe ausgeben
     //  nach den Daten (ueber evtl. weitergezeichneten Schatten)
@@ -2375,23 +2352,23 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
             if ( bDoPrint )
                 PrintColHdr( nRepeatStartCol,nRepeatEndCol, nRepStartX,nInnerStartY );
             if ( pLocationData )
-                LocateColHdr( nRepeatStartCol,nRepeatEndCol, nRepStartX,nInnerStartY, TRUE, *pLocationData );
+                LocateColHdr( nRepeatStartCol,nRepeatEndCol, nRepStartX,nInnerStartY, sal_True, *pLocationData );
         }
         if ( bDoPrint )
             PrintColHdr( nX1,nX2, nDataX,nInnerStartY );
         if ( pLocationData )
-            LocateColHdr( nX1,nX2, nDataX,nInnerStartY, FALSE, *pLocationData );
+            LocateColHdr( nX1,nX2, nDataX,nInnerStartY, false, *pLocationData );
         if (bDoRepRow)
         {
             if ( bDoPrint )
                 PrintRowHdr( nRepeatStartRow,nRepeatEndRow, nInnerStartX,nRepStartY );
             if ( pLocationData )
-                LocateRowHdr( nRepeatStartRow,nRepeatEndRow, nInnerStartX,nRepStartY, TRUE, *pLocationData );
+                LocateRowHdr( nRepeatStartRow,nRepeatEndRow, nInnerStartX,nRepStartY, sal_True, *pLocationData );
         }
         if ( bDoPrint )
             PrintRowHdr( nY1,nY2, nInnerStartX,nDataY );
         if ( pLocationData )
-            LocateRowHdr( nY1,nY2, nInnerStartX,nDataY, FALSE, *pLocationData );
+            LocateRowHdr( nY1,nY2, nInnerStartX,nDataY, false, *pLocationData );
     }
 
     //  einfacher Rahmen
@@ -2420,12 +2397,11 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
 
     if ( pPrinter && bDoPrint )
     {
-        DBG_ERROR( "EndPage does not exist anymore" );
-        // pPrinter->EndPage();
+        OSL_FAIL( "EndPage does not exist anymore" );
     }
 
     aLastSourceRange = ScRange( nX1, nY1, nPrintTab, nX2, nY2, nPrintTab );
-    bSourceRangeValid = TRUE;
+    bSourceRangeValid = sal_True;
 }
 
 void ScPrintFunc::SetOffset( const Point& rOfs )
@@ -2433,24 +2409,24 @@ void ScPrintFunc::SetOffset( const Point& rOfs )
     aSrcOffset = rOfs;
 }
 
-void ScPrintFunc::SetManualZoom( USHORT nNewZoom )
+void ScPrintFunc::SetManualZoom( sal_uInt16 nNewZoom )
 {
     nManualZoom = nNewZoom;
 }
 
-void ScPrintFunc::SetClearFlag( BOOL bFlag )
+void ScPrintFunc::SetClearFlag( sal_Bool bFlag )
 {
     bClearWin = bFlag;
 }
 
-void ScPrintFunc::SetUseStyleColor( BOOL bFlag )
+void ScPrintFunc::SetUseStyleColor( sal_Bool bFlag )
 {
     bUseStyleColor = bFlag;
     if (pEditEngine)
         pEditEngine->EnableAutoColor( bUseStyleColor );
 }
 
-void ScPrintFunc::SetRenderFlag( BOOL bFlag )
+void ScPrintFunc::SetRenderFlag( sal_Bool bFlag )
 {
     bIsRender = bFlag;      // set when using XRenderable (PDF)
 }
@@ -2471,10 +2447,10 @@ void ScPrintFunc::SetExclusivelyDrawOleAndDrawObjects()
 //  richtig zu setzen - immer ohne UserArea
 //
 
-BOOL ScPrintFunc::UpdatePages()
+sal_Bool ScPrintFunc::UpdatePages()
 {
     if (!pParamSet)
-        return FALSE;
+        return false;
 
     //  Zoom
 
@@ -2501,12 +2477,12 @@ BOOL ScPrintFunc::UpdatePages()
             pDocShell->PostPaint(0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID);
         }
 
-    return TRUE;
+    return sal_True;
 }
 
 long ScPrintFunc::CountPages()                          // setzt auch nPagesX, nPagesY
 {
-    BOOL bAreaOk = FALSE;
+    sal_Bool bAreaOk = false;
 
     if (pDoc->HasTable( nPrintTab ))
     {
@@ -2524,13 +2500,13 @@ long ScPrintFunc::CountPages()                          // setzt auch nPagesX, n
                 nStartRow = rRange.aStart.Row();
                 nEndCol   = rRange.aEnd  .Col();
                 nEndRow   = rRange.aEnd  .Row();
-                bAreaOk   = AdjustPrintArea(FALSE);         // begrenzen
+                bAreaOk   = AdjustPrintArea(false);         // begrenzen
             }
             else
-                bAreaOk = FALSE;
+                bAreaOk = false;
         }
         else                                                // aus Dokument suchen
-            bAreaOk = AdjustPrintArea(TRUE);
+            bAreaOk = AdjustPrintArea(sal_True);
     }
 
     if (bAreaOk)
@@ -2539,8 +2515,8 @@ long ScPrintFunc::CountPages()                          // setzt auch nPagesX, n
         size_t nY;
         if (bMultiArea)
         {
-            USHORT nRCount = pDoc->GetPrintRangeCount( nPrintTab );
-            for (USHORT i=0; i<nRCount; i++)
+            sal_uInt16 nRCount = pDoc->GetPrintRangeCount( nPrintTab );
+            for (sal_uInt16 i=0; i<nRCount; i++)
             {
                 CalcZoom(i);
                 if ( aTableParam.bSkipEmpty )
@@ -2567,7 +2543,6 @@ long ScPrintFunc::CountPages()                          // setzt auch nPagesX, n
     }
     else
     {
-//      nZoom = 100;                        // nZoom auf letztem Wert stehenlassen !!!
         nPagesX = nPagesY = nTotalY = 0;
         return 0;
     }
@@ -2582,19 +2557,19 @@ long ScPrintFunc::CountNotePages()
     SCCOL nCol;
     SCROW nRow;
 
-    BOOL bError = FALSE;
+    sal_Bool bError = false;
     if (!aAreaParam.bPrintArea)
-        bError = !AdjustPrintArea(TRUE);            // komplett aus Dok suchen
+        bError = !AdjustPrintArea(sal_True);            // komplett aus Dok suchen
 
-    USHORT nRepeats = 1;                            // wie oft durchgehen ?
+    sal_uInt16 nRepeats = 1;                            // wie oft durchgehen ?
     if (bMultiArea)
         nRepeats = pDoc->GetPrintRangeCount(nPrintTab);
     if (bError)
         nRepeats = 0;
 
-    for (USHORT nStep=0; nStep<nRepeats; nStep++)
+    for (sal_uInt16 nStep=0; nStep<nRepeats; nStep++)
     {
-        BOOL bDoThis = TRUE;
+        sal_Bool bDoThis = sal_True;
         if (bMultiArea)             // alle Areas durchgehen
         {
             const ScRange* pThisRange = pDoc->GetPrintRange( nPrintTab, nStep );
@@ -2604,7 +2579,7 @@ long ScPrintFunc::CountNotePages()
                 nStartRow = pThisRange->aStart.Row();
                 nEndCol   = pThisRange->aEnd  .Col();
                 nEndRow   = pThisRange->aEnd  .Row();
-                bDoThis = AdjustPrintArea(FALSE);
+                bDoThis = AdjustPrintArea(false);
             }
         }
 
@@ -2630,7 +2605,7 @@ long ScPrintFunc::CountNotePages()
     long nNoteAdd;
     do
     {
-        nNoteAdd = PrintNotes( nPages, nNoteNr, FALSE, NULL );
+        nNoteAdd = PrintNotes( nPages, nNoteNr, false, NULL );
         if (nNoteAdd)
         {
             nNoteNr += nNoteAdd;
@@ -2647,8 +2622,6 @@ void ScPrintFunc::InitModes()               // aus nZoom etc. die MapModes setze
     aOffset = Point( aSrcOffset.X()*100/nZoom, aSrcOffset.Y()*100/nZoom );
 
     long nEffZoom = nZoom * (long) nManualZoom;
-
-//  nScaleX = nScaleY = 1.0;            // Ausgabe in Twips
     nScaleX = nScaleY = HMM_PER_TWIPS;  // Ausgabe in 1/100 mm
 
     Fraction aZoomFract( nEffZoom,10000 );
@@ -2692,8 +2665,8 @@ void ScPrintFunc::ApplyPrintSettings()
                 aEnumSize.Width() = aEnumSize.Height();
                 aEnumSize.Height() = nTemp;
         }
-        Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MAP_TWIP, TRUE );
-        USHORT nPaperBin = ((const SvxPaperBinItem&)pParamSet->Get(ATTR_PAGE_PAPERBIN)).GetValue();
+        Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MAP_TWIP, sal_True );
+        sal_uInt16 nPaperBin = ((const SvxPaperBinItem&)pParamSet->Get(ATTR_PAGE_PAPERBIN)).GetValue();
 
         pPrinter->SetPaper( ePaper );
         if ( PAPER_USER == ePaper )
@@ -2715,7 +2688,7 @@ void ScPrintFunc::ApplyPrintSettings()
 //  nDisplayStart = lfd. Nummer fuer Anzeige der Seitennummer
 
 long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
-                                long nStartPage, long nDisplayStart, BOOL bDoPrint,
+                                long nStartPage, long nDisplayStart, sal_Bool bDoPrint,
                                 SfxProgress* pProgress, ScPreviewLocationData* pLocationData )
 {
     DBG_ASSERT(pDev,"Device == NULL");
@@ -2745,10 +2718,10 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
     long nPrinted = 0;
     long nEndPage = rPageRanges.GetTotalRange().Max();
 
-    USHORT nRepeats = 1;                    // wie oft durchgehen ?
+    sal_uInt16 nRepeats = 1;                    // wie oft durchgehen ?
     if (bMultiArea)
         nRepeats = pDoc->GetPrintRangeCount(nPrintTab);
-    for (USHORT nStep=0; nStep<nRepeats; nStep++)
+    for (sal_uInt16 nStep=0; nStep<nRepeats; nStep++)
     {
         if (bMultiArea)                     // Bereich neu belegen ?
         {
@@ -2833,7 +2806,7 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
     {
         if ( nPageNo+nStartPage <= nEndPage )
         {
-            BOOL bPageSelected = rPageRanges.IsSelected( nPageNo+nStartPage+1 );
+            sal_Bool bPageSelected = rPageRanges.IsSelected( nPageNo+nStartPage+1 );
             nNoteAdd = PrintNotes( nPageNo+nStartPage, nNoteNr, bDoPrint && bPageSelected,
                                     ( bPageSelected ? pLocationData : NULL ) );
             if ( nNoteAdd )
@@ -2847,7 +2820,7 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
                 if (bPageSelected)
                 {
                     ++nPrinted;
-                    bSourceRangeValid = FALSE;      // last page was no cell range
+                    bSourceRangeValid = false;      // last page was no cell range
                 }
                 ++nPageNo;
             }
@@ -2863,9 +2836,9 @@ long ScPrintFunc::DoPrint( const MultiSelection& rPageRanges,
     return nPrinted;
 }
 
-void ScPrintFunc::CalcZoom( USHORT nRangeNo )                       // Zoom berechnen
+void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // Zoom berechnen
 {
-    USHORT nRCount = pDoc->GetPrintRangeCount( nPrintTab );
+    sal_uInt16 nRCount = pDoc->GetPrintRangeCount( nPrintTab );
     const ScRange* pThisRange = NULL;
     if ( nRangeNo != RANGENO_NORANGE || nRangeNo < nRCount )
         pThisRange = pDoc->GetPrintRange( nPrintTab, nRangeNo );
@@ -2877,7 +2850,7 @@ void ScPrintFunc::CalcZoom( USHORT nRangeNo )                       // Zoom bere
         nEndRow   = pThisRange->aEnd  .Row();
     }
 
-    if (!AdjustPrintArea(FALSE))                        // leer
+    if (!AdjustPrintArea(false))                        // leer
     {
         nZoom = 100;
         nPagesX = nPagesY = nTotalY = 0;
@@ -2889,7 +2862,7 @@ void ScPrintFunc::CalcZoom( USHORT nRangeNo )                       // Zoom bere
     if (aTableParam.bScalePageNum)
     {
         nZoom = 100;
-        USHORT nPagesToFit = aTableParam.nScalePageNum;
+        sal_uInt16 nPagesToFit = aTableParam.nScalePageNum;
 
         sal_uInt16 nLastFitZoom = 0, nLastNonFitZoom = 0;
         while (true)
@@ -2930,8 +2903,8 @@ void ScPrintFunc::CalcZoom( USHORT nRangeNo )                       // Zoom bere
     else if (aTableParam.bScaleTo)
     {
         nZoom = 100;
-        USHORT nW = aTableParam.nScaleWidth;
-        USHORT nH = aTableParam.nScaleHeight;
+        sal_uInt16 nW = aTableParam.nScaleWidth;
+        sal_uInt16 nH = aTableParam.nScaleHeight;
 
         sal_uInt16 nLastFitZoom = 0, nLastNonFitZoom = 0;
         while (true)
@@ -3042,7 +3015,7 @@ void lcl_SetHidden( ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEntry& rPageRowE
     SCROW nStartRow = rPageRowEntry.GetStartRow();
     SCROW nEndRow   = rPageRowEntry.GetEndRow();
 
-    BOOL bLeftIsEmpty = FALSE;
+    sal_Bool bLeftIsEmpty = false;
     ScRange aTempRange;
     Rectangle aTempRect = pDoc->GetMMRect( 0,0, 0,0, 0 );
 
@@ -3053,10 +3026,10 @@ void lcl_SetHidden( ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEntry& rPageRowE
                                     bLeftIsEmpty, &aTempRange, &aTempRect ) )
         {
             rPageRowEntry.SetHidden(i);
-            bLeftIsEmpty = TRUE;
+            bLeftIsEmpty = sal_True;
         }
         else
-            bLeftIsEmpty = FALSE;
+            bLeftIsEmpty = false;
 
         nStartCol = nEndCol+1;
     }
@@ -3087,10 +3060,9 @@ void ScPrintFunc::CalcPages()               // berechnet aPageRect und Seiten au
     nTotalY = 0;
 
     bool bVisCol = false;
-    SCCOL nLastCol = -1;
     for (SCCOL i=nStartCol; i<=nEndCol; i++)
     {
-        bool bHidden = pDoc->ColHidden(i, nPrintTab, nLastCol);
+        bool bHidden = pDoc->ColHidden(i, nPrintTab);
         bool bPageBreak = (pDoc->HasColBreak(i, nPrintTab) & BREAK_PAGE);
         if ( i>nStartCol && bVisCol && bPageBreak )
         {

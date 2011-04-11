@@ -88,7 +88,7 @@ class Thesaurus :
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     linguistic::PropertyHelper_Thes *       pPropHelper;
-    BOOL                                    bDisposing;
+    sal_Bool                                    bDisposing;
     CharClass **                            aCharSetInfo;
     MyThes **                               aThes;
     rtl_TextEncoding *                      aTEncs;
@@ -99,7 +99,7 @@ class Thesaurus :
     // cache for the Thesaurus dialog
     Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > prevMeanings;
     OUString  prevTerm;
-    INT16 prevLocale;
+    sal_Int16 prevLocale;
 
     // disallow copy-constructor and assignment-operator for now
     Thesaurus(const Thesaurus &);
@@ -117,55 +117,27 @@ public:
     virtual ~Thesaurus();
 
     // XSupportedLocales (for XThesaurus)
-    virtual Sequence< Locale > SAL_CALL
-        getLocales()
-            throw(RuntimeException);
-    virtual sal_Bool SAL_CALL
-        hasLocale( const Locale& rLocale )
-            throw(RuntimeException);
+    virtual Sequence< Locale > SAL_CALL getLocales() throw(RuntimeException);
+    virtual sal_Bool SAL_CALL hasLocale( const Locale& rLocale ) throw(RuntimeException);
 
     // XThesaurus
-  virtual Sequence< Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
-        queryMeanings( const OUString& rTerm, const Locale& rLocale,
-                const PropertyValues& rProperties )
-            throw(IllegalArgumentException,
-                  RuntimeException);
+    virtual Sequence< Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL queryMeanings( const OUString& rTerm, const Locale& rLocale, const PropertyValues& rProperties ) throw(IllegalArgumentException, RuntimeException);
 
     // XServiceDisplayName
-    virtual OUString SAL_CALL
-        getServiceDisplayName( const Locale& rLocale )
-            throw(RuntimeException);
+    virtual OUString SAL_CALL getServiceDisplayName( const Locale& rLocale ) throw(RuntimeException);
 
     // XInitialization
-    virtual void SAL_CALL
-        initialize( const Sequence< Any >& rArguments )
-            throw(Exception, RuntimeException);
+    virtual void SAL_CALL initialize( const Sequence< Any >& rArguments ) throw(Exception, RuntimeException);
 
     // XComponent
-    virtual void SAL_CALL
-        dispose()
-            throw(RuntimeException);
-    virtual void SAL_CALL
-        addEventListener( const Reference< XEventListener >& rxListener )
-            throw(RuntimeException);
-    virtual void SAL_CALL
-        removeEventListener( const Reference< XEventListener >& rxListener )
-            throw(RuntimeException);
-
-    ////////////////////////////////////////////////////////////
-    // Service specific part
-    //
+    virtual void SAL_CALL dispose() throw(RuntimeException);
+    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& rxListener ) throw(RuntimeException);
+    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& rxListener ) throw(RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL
-        getImplementationName()
-            throw(RuntimeException);
-    virtual sal_Bool SAL_CALL
-        supportsService( const OUString& rServiceName )
-            throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw(RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw(RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
 
     static inline OUString
@@ -184,8 +156,7 @@ private:
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 > xSpell;
 */
-    static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguServiceManager > GetLngSvcMgr();
+    static ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLinguServiceManager > GetLngSvcMgr();
 
 };
 

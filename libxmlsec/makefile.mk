@@ -67,7 +67,8 @@ PATCH_FILES=\
    xmlsec1-noverify.patch \
    xmlsec1-mingw32.patch \
    xmlsec1-mingw-keymgr-mscrypto.patch \
-   xmlsec1-vc10.patch
+   xmlsec1-vc10.patch \
+   xmlsec1-1.2.14_fix_extern_c.patch
 
 ADDITIONAL_FILES= \
     include$/xmlsec$/mscrypto$/akmngr.h \
@@ -81,9 +82,6 @@ ADDITIONAL_FILES= \
 
 .IF "$(GUI)"=="WNT"
 CRYPTOLIB=mscrypto
-#CRYPTOLIB=nss
-#BASEINC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla;$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla$/nspr;$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla$/nss;$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/external
-#BASELIB=$(SOLARVERSION)$/$(INPATH)$/lib$(UPDMINOREXT)
 .ELSE
 CRYPTOLIB=nss
 .ENDIF
@@ -96,7 +94,7 @@ xmlsec_CC+=-shared-libgcc
 .ENDIF
 xmlsec_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-xmlsec_LIBS+=-lstdc++_s
+xmlsec_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
@@ -105,7 +103,7 @@ CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozi
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
-BUILD_ACTION=$(GNUMAKE)
+BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 CONFIGURE_DIR=win32
@@ -146,10 +144,6 @@ xmlsec_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 xmlsec_LDFLAGS+=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF			# "$(OS)$(COM)"=="SOLARISC52"
 
-.IF "$(OS)$(COM)"=="LINUXGCC"
-xmlsec_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
-
 LDFLAGS:=$(xmlsec_LDFLAGS)
 .EXPORT: LDFLAGS
 
@@ -169,7 +163,7 @@ CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=n
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
-BUILD_ACTION=$(GNUMAKE)
+BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 

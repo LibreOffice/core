@@ -28,11 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "HatchStyle.hxx"
+#include "xmloff/HatchStyle.hxx"
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -59,7 +59,7 @@ enum SvXMLTokenMapAttrs
 };
 
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_HatchStyle_Enum[] =
+SvXMLEnumMapEntry const pXML_HatchStyle_Enum[] =
 {
     { XML_HATCHSTYLE_SINGLE,    drawing::HatchStyle_SINGLE },
     { XML_HATCHSTYLE_DOUBLE,    drawing::HatchStyle_DOUBLE },
@@ -101,7 +101,7 @@ sal_Bool XMLHatchStyleImport::importXML(
     aHatch.Angle = 0;
 
     {
-        static __FAR_DATA SvXMLTokenMapEntry aHatchAttrTokenMap[] =
+        static SvXMLTokenMapEntry aHatchAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_HATCH_NAME },
     { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_HATCH_DISPLAY_NAME },
@@ -189,8 +189,6 @@ sal_Bool XMLHatchStyleImport::importXML(
 // Export
 //-------------------------------------------------------------
 
-#ifndef SVX_LIGHT
-
 XMLHatchStyleExport::XMLHatchStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
 {
@@ -260,7 +258,5 @@ sal_Bool XMLHatchStyleExport::exportXML(
 
     return bRet;
 }
-
-#endif // #ifndef SVX_LIGHT
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

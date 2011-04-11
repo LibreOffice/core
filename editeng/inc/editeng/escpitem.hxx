@@ -43,42 +43,42 @@ namespace rtl
 // class SvxEscapementItem -----------------------------------------------
 
 #define DFLT_ESC_SUPER   33     // 1/3
-#define DFLT_ESC_SUB    -33     // auch 1/3 fr"uher 8/100
+#define DFLT_ESC_SUB    -33     // also 1/3 previously 8/100
 #define DFLT_ESC_PROP    58
 #define DFLT_ESC_AUTO_SUPER 101
 #define DFLT_ESC_AUTO_SUB  -101
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt die Schrift-Position.
+    This item describes the writing position.
 */
 
 class EDITENG_DLLPUBLIC SvxEscapementItem : public SfxEnumItemInterface
 {
     short nEsc;
-    BYTE  nProp;
+    sal_uInt8  nProp;
 public:
     TYPEINFO();
 
-    SvxEscapementItem( const USHORT nId  );
+    SvxEscapementItem( const sal_uInt16 nId  );
     SvxEscapementItem( const SvxEscapement eEscape,
-                   const USHORT nId  );
-    SvxEscapementItem( const short nEsc, const BYTE nProp,
-                   const USHORT nId  );
+                   const sal_uInt16 nId  );
+    SvxEscapementItem( const short nEsc, const sal_uInt8 nProp,
+                   const sal_uInt16 nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
 
     inline void SetEscapement( const SvxEscapement eNew )
     {
@@ -95,8 +95,8 @@ public:
     inline short &GetEsc() { return nEsc; }
     inline short GetEsc() const { return nEsc; }
 
-    inline BYTE &GetProp() { return nProp; }
-    inline BYTE GetProp() const { return nProp; }
+    inline sal_uInt8 &GetProp() { return nProp; }
+    inline sal_uInt8 GetProp() const { return nProp; }
 
     inline SvxEscapementItem& operator=(const SvxEscapementItem& rEsc)
         {
@@ -105,10 +105,10 @@ public:
             return *this;
         }
 
-    virtual USHORT          GetValueCount() const;
-    virtual String          GetValueTextByPos( USHORT nPos ) const;
-    virtual USHORT          GetEnumValue() const;
-    virtual void            SetEnumValue( USHORT nNewVal );
+    virtual sal_uInt16          GetValueCount() const;
+    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual sal_uInt16          GetEnumValue() const;
+    virtual void            SetEnumValue( sal_uInt16 nNewVal );
 };
 
 #endif

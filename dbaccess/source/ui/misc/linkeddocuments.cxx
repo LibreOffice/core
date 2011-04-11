@@ -46,7 +46,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/msgbox.hxx>
 #include <ucbhelper/content.hxx>
@@ -54,14 +54,12 @@
 #include <svl/filenotation.hxx>
 #include "browserids.hxx"
 #include <sfx2/new.hxx>
-#include <svtools/templdlg.hxx>
 #include "moduledbu.hxx"
 // -----------------
 // for calling basic
 #include <sfx2/app.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
-#include <sfx2/macrconf.hxx>
 #include <svtools/ehdl.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
@@ -173,7 +171,7 @@ namespace dbaui
                 break;
 
             default:
-                OSL_ENSURE( false, "OLinkedDocumentsAccess::implOpen: invalid open mode!" );
+                OSL_FAIL( "OLinkedDocumentsAccess::implOpen: invalid open mode!" );
                 break;
         }
         aArguments.put( "OpenMode", sOpenMode );
@@ -191,9 +189,8 @@ namespace dbaui
 
             xRet = xComponentLoader->loadComponentFromURL( _rLinkName, ::rtl::OUString(), 0, aArguments.getPropertyValues() );
         }
-        catch(Exception& e)
+        catch(const Exception&)
         {
-            (void)e;
             throw;
         }
 
@@ -231,7 +228,7 @@ namespace dbaui
             xWizard->trigger( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "start" ) ) );
             ::comphelper::disposeComponent( xWizard );
         }
-        catch(const Exception& e)
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -289,7 +286,7 @@ namespace dbaui
                     break;
 
                 default:
-                    OSL_ENSURE( sal_False, "OLinkedDocumentsAccess::newDocument: please use newFormWithPilot!" );
+                    OSL_FAIL( "OLinkedDocumentsAccess::newDocument: please use newFormWithPilot!" );
                     return Reference< XComponent >();
 
             }
@@ -336,7 +333,7 @@ namespace dbaui
                 xNewDocument.set( xContent->execute( aCommand, xContent->createCommandIdentifier(), NULL ), UNO_QUERY );
             }
         }
-        catch(const Exception& )
+        catch(const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -360,12 +357,11 @@ namespace dbaui
 
                 com::sun::star::sdbc::SQLException aSQLException;
                 aSQLException.Message = sMessage;
-                // aSQLException.Context = e.Context;
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
             }
             return xRet;
         }
-        catch (com::sun::star::io::WrongFormatException e)
+        catch(const com::sun::star::io::WrongFormatException &e)
         {
             com::sun::star::sdbc::SQLException aSQLException;
             aSQLException.Message = e.Message;
@@ -381,7 +377,7 @@ namespace dbaui
             sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
             aInfo.prepend(sMessage);
         }
-        catch(Exception& e)
+        catch(const Exception& e)
         {
             Any aAny = ::cppu::getCaughtException();
             com::sun::star::sdbc::SQLException a;

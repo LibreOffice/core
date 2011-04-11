@@ -41,18 +41,19 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
-using namespace rtl;
 using namespace std;
 using namespace osl;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 // constants
 //------------------------------------------------------------------------
 
-const OUString TSPECIALS = OUString::createFromAscii( "()<>@,;:\\\"/[]?=" );
-const OUString TOKEN     = OUString::createFromAscii( "!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~." );
-const OUString SPACE     = OUString::createFromAscii( " " );
-const OUString SEMICOLON = OUString::createFromAscii( ";" );
+const OUString TSPECIALS (RTL_CONSTASCII_USTRINGPARAM( "()<>@,;:\\\"/[]?=" ));
+const OUString TOKEN     (RTL_CONSTASCII_USTRINGPARAM("!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~."));
+const OUString SPACE     (RTL_CONSTASCII_USTRINGPARAM(" "));
+const OUString SEMICOLON (RTL_CONSTASCII_USTRINGPARAM(";"));
 
 //------------------------------------------------------------------------
 // ctor
@@ -87,7 +88,7 @@ OUString SAL_CALL CMimeContentType::getMediaSubtype( ) throw(RuntimeException)
 
 OUString SAL_CALL CMimeContentType::getFullMediaType( ) throw(RuntimeException)
 {
-    return m_MediaType + OUString::createFromAscii( "/" ) + m_MediaSubtype;
+    return m_MediaType + OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + m_MediaSubtype;
 }
 
 //------------------------------------------------------------------------
@@ -206,7 +207,7 @@ void SAL_CALL CMimeContentType::type( void )
     {
         if ( isInRange( m_nxtSym, TOKEN ) )
             m_MediaType += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString::createFromAscii( "/ " ) ) )
+        else if ( isInRange( m_nxtSym, OUString(RTL_CONSTASCII_USTRINGPARAM("/ ")) ) )
             break;
         else
             throw IllegalArgumentException( );
@@ -215,7 +216,7 @@ void SAL_CALL CMimeContentType::type( void )
 
     // check FOLLOW( type )
     skipSpaces( );
-    acceptSym( OUString::createFromAscii( "/" ) );
+    acceptSym( OUString(RTL_CONSTASCII_USTRINGPARAM("/")) );
 
     subtype( );
 }
@@ -236,7 +237,7 @@ void SAL_CALL CMimeContentType::subtype( void )
     {
         if ( isInRange( m_nxtSym, TOKEN ) )
             m_MediaSubtype += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString::createFromAscii( "; " ) ) )
+        else if ( isInRange( m_nxtSym, OUString(RTL_CONSTASCII_USTRINGPARAM("; ")) ) )
             break;
         else
             throw IllegalArgumentException( );
@@ -256,13 +257,13 @@ void SAL_CALL CMimeContentType::trailer( void )
 {
     while( m_nxtSym.getLength( ) )
     {
-        if ( m_nxtSym == OUString::createFromAscii( "(" ) )
+        if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM("(")) )
         {
             getSym( );
             comment( );
-            acceptSym( OUString::createFromAscii( ")" ) );
+            acceptSym( OUString(RTL_CONSTASCII_USTRINGPARAM(")")) );
         }
-        else if ( m_nxtSym == OUString::createFromAscii( ";" ) )
+        else if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM(";")) )
         {
             // get the parameter name
             getSym( );
@@ -274,7 +275,7 @@ void SAL_CALL CMimeContentType::trailer( void )
             OUString pname = pName( );
 
             skipSpaces();
-            acceptSym( OUString::createFromAscii( "=" ) );
+            acceptSym( OUString(RTL_CONSTASCII_USTRINGPARAM("=")) );
 
             // get the parameter value
             skipSpaces( );
@@ -304,7 +305,7 @@ OUString SAL_CALL CMimeContentType::pName( )
     {
         if ( isInRange( m_nxtSym, TOKEN ) )
             pname += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString::createFromAscii( "= " ) ) )
+        else if ( isInRange( m_nxtSym, OUString(RTL_CONSTASCII_USTRINGPARAM("= ")) ) )
             break;
         else
             throw IllegalArgumentException( );
@@ -323,12 +324,12 @@ OUString SAL_CALL CMimeContentType::pValue( )
     OUString pvalue;
 
     // quoted pvalue
-    if ( m_nxtSym == OUString::createFromAscii( "\"" ) )
+    if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM( "\"" )) )
     {
         getSym( );
         pvalue = quotedPValue( );
 
-        if (  OUString( &pvalue[pvalue.getLength() - 1], 1 ) != OUString::createFromAscii( "\"" ) )
+        if (  OUString( &pvalue[pvalue.getLength() - 1], 1 ) != OUString(RTL_CONSTASCII_USTRINGPARAM( "\"" )) )
             throw IllegalArgumentException( );
 
         // remove the last quote-sign
@@ -366,7 +367,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
         else if ( isInRange( m_nxtSym, TOKEN + TSPECIALS + SPACE ) )
         {
             pvalue += m_nxtSym;
-            if ( m_nxtSym == OUString::createFromAscii( "\"" ) )
+            if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM( "\"" )) )
                 bAfterQuoteSign = sal_True;
             else
                 bAfterQuoteSign = sal_False;
@@ -391,7 +392,7 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
     {
         if ( isInRange( m_nxtSym, TOKEN ) )
             pvalue += m_nxtSym;
-        else if ( isInRange( m_nxtSym, OUString::createFromAscii( "; " ) ) )
+        else if ( isInRange( m_nxtSym, OUString(RTL_CONSTASCII_USTRINGPARAM("; ")) ) )
             break;
         else
             throw IllegalArgumentException( );
@@ -411,7 +412,7 @@ void SAL_CALL CMimeContentType::comment( void )
     {
         if ( isInRange( m_nxtSym, TOKEN + SPACE ) )
             getSym( );
-        else if ( m_nxtSym == OUString::createFromAscii( ")" ) )
+        else if ( m_nxtSym == OUString(RTL_CONSTASCII_USTRINGPARAM(")")) )
             break;
         else
             throw IllegalArgumentException( );

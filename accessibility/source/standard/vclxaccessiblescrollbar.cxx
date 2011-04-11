@@ -52,7 +52,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
-
 // -----------------------------------------------------------------------------
 // VCLXAccessibleScrollBar
 // -----------------------------------------------------------------------------
@@ -119,7 +118,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleScrollBar, VCLXAccessibleCompone
 
 ::rtl::OUString VCLXAccessibleScrollBar::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleScrollBar" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleScrollBar") );
 }
 
 // -----------------------------------------------------------------------------
@@ -127,7 +126,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleScrollBar, VCLXAccessibleCompone
 Sequence< ::rtl::OUString > VCLXAccessibleScrollBar::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleScrollBar" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleScrollBar") );
     return aNames;
 }
 

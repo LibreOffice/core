@@ -1,0 +1,20 @@
+--- misc/SampleICC-1.3.2/IccProfLib/IccProfile.cpp  2009-01-20 11:48:36.000000000 -0500
++++ misc/build/SampleICC-1.3.2/IccProfLib/IccProfile.cpp     2009-01-19 14:41:23.000000000 -0500
+@@ -1155,7 +1155,7 @@
+
+   CIccInfo Info;
+   icChar buf[128];
+-  sprintf(buf, Info.GetSigName(m_Header.deviceClass));
++  sprintf(buf, "%s", Info.GetSigName(m_Header.deviceClass));
+   if (m_Header.deviceClass!=icSigInputClass && m_Header.deviceClass!=icSigDisplayClass) {
+     if (GetTag(icSigGrayTRCTag) || GetTag(icSigRedTRCTag) || GetTag(icSigGreenTRCTag) ||
+        GetTag(icSigBlueTRCTag) || GetTag(icSigRedColorantTag) || GetTag(icSigGreenColorantTag) ||
+@@ -1230,7 +1230,7 @@
+   for (i=m_Tags->begin(); i!=m_Tags->end(); i++) {
+     tagsig = i->TagInfo.sig;
+     typesig = i->pTag->GetType();
+-    sprintf(buf, Info.GetSigName(tagsig));
++    sprintf(buf, "%s", Info.GetSigName(tagsig));
+     if (!IsTypeValid(tagsig, typesig)) {
+       sReport += icValidateNonCompliantMsg;
+       sReport += buf;

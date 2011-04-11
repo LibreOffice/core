@@ -44,28 +44,25 @@
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 
-// STATIC DATA -----------------------------------------------------------
 
 TYPEINIT1_FACTORY( SvxHorJustifyItem, SfxEnumItem, new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, 0) );
 TYPEINIT1_FACTORY( SvxVerJustifyItem, SfxEnumItem, new SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, 0) );
 
 using namespace ::com::sun::star;
 
-// class SvxHorJustifyItem -----------------------------------------------
 
 
-SvxHorJustifyItem::SvxHorJustifyItem( const USHORT nId ) :
-    SfxEnumItem( nId, (USHORT)SVX_HOR_JUSTIFY_STANDARD )
+SvxHorJustifyItem::SvxHorJustifyItem( const sal_uInt16 nId ) :
+    SfxEnumItem( nId, (sal_uInt16)SVX_HOR_JUSTIFY_STANDARD )
 {
 }
 
 SvxHorJustifyItem::SvxHorJustifyItem( const SvxCellHorJustify eJustify,
-                                      const USHORT nId ) :
-    SfxEnumItem( nId, (USHORT)eJustify )
+                                      const sal_uInt16 nId ) :
+    SfxEnumItem( nId, (sal_uInt16)eJustify )
 {
 }
 
-//------------------------------------------------------------------------
 
 SfxItemPresentation SvxHorJustifyItem::GetPresentation
 (
@@ -88,9 +85,8 @@ SfxItemPresentation SvxHorJustifyItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
 
-bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -133,7 +129,7 @@ bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return true;
 }
 
-bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -159,7 +155,7 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     case table::CellHoriJustify_REPEAT:   eSvx = SVX_HOR_JUSTIFY_REPEAT;   break;
                     default: ; //prevent warning
                 }
-                SetValue( (USHORT)eSvx );
+                SetValue( (sal_uInt16)eSvx );
             }
             break;
         case MID_HORJUST_ADJUST:
@@ -179,56 +175,51 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     case style::ParagraphAdjust_BLOCK:   eSvx = SVX_HOR_JUSTIFY_BLOCK;  break;
                     case style::ParagraphAdjust_CENTER:  eSvx = SVX_HOR_JUSTIFY_CENTER; break;
                 }
-                SetValue( (USHORT)eSvx );
+                SetValue( (sal_uInt16)eSvx );
             }
     }
     return true;
 }
 
-//------------------------------------------------------------------------
 
-XubString SvxHorJustifyItem::GetValueText( USHORT nVal ) const
+XubString SvxHorJustifyItem::GetValueText( sal_uInt16 nVal ) const
 {
     DBG_ASSERT( nVal <= SVX_HOR_JUSTIFY_REPEAT, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_HORJUST_STANDARD + nVal);
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* SvxHorJustifyItem::Clone( SfxItemPool* ) const
 {
     return new SvxHorJustifyItem( *this );
 }
 
-//------------------------------------------------------------------------
 
-SfxPoolItem* SvxHorJustifyItem::Create( SvStream& rStream, USHORT ) const
+SfxPoolItem* SvxHorJustifyItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
-    USHORT nVal;
+    sal_uInt16 nVal;
     rStream >> nVal;
     return new SvxHorJustifyItem( (SvxCellHorJustify)nVal, Which() );
 }
-//------------------------------------------------------------------------
 
-USHORT SvxHorJustifyItem::GetValueCount() const
+
+sal_uInt16 SvxHorJustifyItem::GetValueCount() const
 {
-    return SVX_HOR_JUSTIFY_REPEAT + 1;  // letzter Enum-Wert + 1
+    return SVX_HOR_JUSTIFY_REPEAT + 1;  // Last Enum value + 1
 }
 
-// class SvxVerJustifyItem -----------------------------------------------
 
-SvxVerJustifyItem::SvxVerJustifyItem( const USHORT nId ) :
-    SfxEnumItem( nId, (USHORT)SVX_VER_JUSTIFY_STANDARD )
+SvxVerJustifyItem::SvxVerJustifyItem( const sal_uInt16 nId ) :
+    SfxEnumItem( nId, (sal_uInt16)SVX_VER_JUSTIFY_STANDARD )
 {
 }
 
 SvxVerJustifyItem::SvxVerJustifyItem( const SvxCellVerJustify eJustify,
-                                      const USHORT nId ) :
-    SfxEnumItem( nId, (USHORT)eJustify )
+                                      const sal_uInt16 nId ) :
+    SfxEnumItem( nId, (sal_uInt16)eJustify )
 {
 }
 
-//------------------------------------------------------------------------
 
 SfxItemPresentation SvxVerJustifyItem::GetPresentation
 (
@@ -252,9 +243,8 @@ SfxItemPresentation SvxVerJustifyItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
 
-bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -291,7 +281,7 @@ bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return true;
 }
 
-bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -311,16 +301,13 @@ bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     case style::VerticalAlignment_BOTTOM:   eSvx = SVX_VER_JUSTIFY_BOTTOM;  break;
                     default:;
                 }
-                SetValue( (USHORT)eSvx );
+                SetValue( (sal_uInt16)eSvx );
                 break;
             }
         default:
             {
-                sal_Int32 eUno;
-                if(!(rVal >>= eUno))
-                {
-                    eUno = table::CellVertJustify2::STANDARD;
-                }
+                sal_Int32 eUno = table::CellVertJustify2::STANDARD;
+                rVal >>= eUno;
 
                 SvxCellVerJustify eSvx = SVX_VER_JUSTIFY_STANDARD;
                 switch (eUno)
@@ -332,7 +319,7 @@ bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     case table::CellVertJustify2::BLOCK:    eSvx = SVX_VER_JUSTIFY_BLOCK;     break;
                     default: ; //prevent warning
                 }
-                SetValue( (USHORT)eSvx );
+                SetValue( (sal_uInt16)eSvx );
                 break;
             }
     }
@@ -340,52 +327,46 @@ bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     return true;
 }
 
-//------------------------------------------------------------------------
 
-XubString SvxVerJustifyItem::GetValueText( USHORT nVal ) const
+XubString SvxVerJustifyItem::GetValueText( sal_uInt16 nVal ) const
 {
     DBG_ASSERT( nVal <= SVX_VER_JUSTIFY_BOTTOM, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_VERJUST_STANDARD + nVal);
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* SvxVerJustifyItem::Clone( SfxItemPool* ) const
 {
     return new SvxVerJustifyItem( *this );
 }
 
-//------------------------------------------------------------------------
 
-SfxPoolItem* SvxVerJustifyItem::Create( SvStream& rStream, USHORT ) const
+SfxPoolItem* SvxVerJustifyItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
-    USHORT nVal;
+    sal_uInt16 nVal;
     rStream >> nVal;
     return new SvxVerJustifyItem( (SvxCellVerJustify)nVal, Which() );
 }
 
-//------------------------------------------------------------------------
 
-USHORT SvxVerJustifyItem::GetValueCount() const
+sal_uInt16 SvxVerJustifyItem::GetValueCount() const
 {
-    return SVX_VER_JUSTIFY_BOTTOM + 1;  // letzter Enum-Wert + 1
+    return SVX_VER_JUSTIFY_BOTTOM + 1;  // Last Enum value + 1
 }
 
 
-// class SvxJustifyMethodItem -----------------------------------------------
 
-SvxJustifyMethodItem::SvxJustifyMethodItem( const USHORT nId ) :
-    SfxEnumItem( nId, (USHORT)SVX_JUSTIFY_METHOD_AUTO )
+SvxJustifyMethodItem::SvxJustifyMethodItem( const sal_uInt16 nId ) :
+    SfxEnumItem( nId, (sal_uInt16)SVX_JUSTIFY_METHOD_AUTO )
 {
 }
 
 SvxJustifyMethodItem::SvxJustifyMethodItem( const SvxCellJustifyMethod eJustify,
-                                      const USHORT nId ) :
-    SfxEnumItem( nId, (USHORT)eJustify )
+                                      const sal_uInt16 nId ) :
+    SfxEnumItem( nId, (sal_uInt16)eJustify )
 {
 }
 
-//------------------------------------------------------------------------
 
 SfxItemPresentation SvxJustifyMethodItem::GetPresentation
 (
@@ -409,9 +390,8 @@ SfxItemPresentation SvxJustifyMethodItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
 
-bool SvxJustifyMethodItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+bool SvxJustifyMethodItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     sal_Int32 nUno = table::CellJustifyMethod::AUTO;
     switch (static_cast<SvxCellJustifyMethod>(GetValue()))
@@ -424,7 +404,7 @@ bool SvxJustifyMethodItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) cons
     return true;
 }
 
-bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     sal_Int32 nVal = table::CellJustifyMethod::AUTO;
     if (!(rVal >>= nVal))
@@ -441,39 +421,35 @@ bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
         break;
         default:;
     }
-    SetValue(static_cast<USHORT>(eSvx));
+    SetValue(static_cast<sal_uInt16>(eSvx));
     return true;
 }
 
-//------------------------------------------------------------------------
 
-XubString SvxJustifyMethodItem::GetValueText( USHORT nVal ) const
+XubString SvxJustifyMethodItem::GetValueText( sal_uInt16 nVal ) const
 {
     DBG_ASSERT( nVal <= SVX_VER_JUSTIFY_BOTTOM, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_JUSTMETHOD_AUTO + nVal);
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* SvxJustifyMethodItem::Clone( SfxItemPool* ) const
 {
     return new SvxJustifyMethodItem( *this );
 }
 
-//------------------------------------------------------------------------
 
-SfxPoolItem* SvxJustifyMethodItem::Create( SvStream& rStream, USHORT ) const
+SfxPoolItem* SvxJustifyMethodItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
-    USHORT nVal;
+    sal_uInt16 nVal;
     rStream >> nVal;
     return new SvxJustifyMethodItem( (SvxCellJustifyMethod)nVal, Which() );
 }
 
-//------------------------------------------------------------------------
 
-USHORT SvxJustifyMethodItem::GetValueCount() const
+sal_uInt16 SvxJustifyMethodItem::GetValueCount() const
 {
-    return SVX_JUSTIFY_METHOD_DISTRIBUTE + 1;   // letzter Enum-Wert + 1
+    return SVX_JUSTIFY_METHOD_DISTRIBUTE + 1;   // Last Enum value + 1
 }
 
 SvxJustifyMethodItem& SvxJustifyMethodItem::operator=(const SvxJustifyMethodItem& r)

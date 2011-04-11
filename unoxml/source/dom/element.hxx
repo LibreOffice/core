@@ -26,16 +26,19 @@
  *
  ************************************************************************/
 
-#ifndef _ELEMENT_HXX
-#define _ELEMENT_HXX
+#ifndef DOM_ELEMENT_HXX
+#define DOM_ELEMENT_HXX
+
+#include <libxml/tree.h>
+
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
-#include <libxml/tree.h>
-#include "node.hxx"
+
+#include <node.hxx>
+
 
 using ::rtl::OUString;
 using namespace com::sun::star::uno;
@@ -43,22 +46,28 @@ using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    class CElement : public cppu::ImplInheritanceHelper1<CNode, XElement >
+    typedef ::cppu::ImplInheritanceHelper1<CNode, XElement > CElement_Base;
+
+    class CElement
+        : public CElement_Base
     {
-        friend class CNode;
     private:
-        Reference< XAttr > _setAttributeNode(const Reference< XAttr >& newAttr, sal_Bool bNS)
-            throw (RuntimeException);
+        friend class CDocument;
+
+        Reference< XAttr > setAttributeNode_Impl_Lock(
+                Reference< XAttr > const& xNewAttr, bool const bNS);
 
     protected:
-        CElement(const xmlNodePtr aNodePtr);
+        CElement(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+                xmlNodePtr const pNode);
 
     public:
 
-        virtual void SAL_CALL saxify(
-            const Reference< XDocumentHandler >& i_xHandler);
+        virtual void saxify(const Reference< XDocumentHandler >& i_xHandler);
 
-        virtual void SAL_CALL fastSaxify( Context& i_rContext );
+        virtual void fastSaxify( Context& i_rContext );
+
+        virtual bool IsChildTypeAllowed(NodeType const nodeType);
 
         /**
         Retrieves an attribute value by name.

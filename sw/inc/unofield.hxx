@@ -47,9 +47,6 @@ class SwField;
 class SwSetExpField;
 class SwTextAPIObject;
 
-/* -----------------04.12.98 12:49-------------------
- *
- * --------------------------------------------------*/
 class SwXFieldMaster : public cppu::WeakImplHelper4
 <
     ::com::sun::star::beans::XPropertySet,
@@ -78,6 +75,9 @@ class SwXFieldMaster : public cppu::WeakImplHelper4
 
 protected:
     virtual ~SwXFieldMaster();
+    //SwClient
+virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
 
     SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId);
@@ -107,11 +107,8 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
-
-    //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     static rtl::OUString GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc);
     static rtl::OUString LocalizeFormula(const SwSetExpField& rFld, const rtl::OUString& rFormula, sal_Bool bQuery);
@@ -123,9 +120,6 @@ public:
     sal_uInt16      GetResId() const {return nResTypeId;}
 };
 
-/* -----------------04.12.98 12:49-------------------
- *
- * --------------------------------------------------*/
 struct SwFieldProperties_Impl;
 class SwXTextField : public cppu::WeakImplHelper5
 <
@@ -154,6 +148,9 @@ class SwXTextField : public cppu::WeakImplHelper5
     SwDoc*       GetDoc() {return m_pDoc;}
 protected:
     virtual ~SwXTextField();
+    //SwClient
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc=0);
     SwXTextField(const SwFmtFld& rFmt, SwDoc* pDoc);
@@ -193,14 +190,11 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     //XUpdatable
     virtual void SAL_CALL update(  ) throw (::com::sun::star::uno::RuntimeException);
-
-    //SwClient
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
@@ -208,15 +202,11 @@ public:
     const SwFmtFld*     GetFldFmt(){return GetField() ? pFmtFld : 0; };
 
     void Invalidate();
+
+    /// @return an SwXTextField, either an already existing one or a new one
+    static SwXTextField* CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt);
 };
 
-/// @return a SwXTextField, either an already existing one or a new one
-SwXTextField * CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt);
-
-
-/* -----------------21.12.98 10:26-------------------
- *
- * --------------------------------------------------*/
 typedef
 cppu::WeakImplHelper2
 <
@@ -244,16 +234,13 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
 
     static sal_Bool getInstanceName(const SwFieldType& rFldType, String& rName);
 };
 
-/* -----------------21.12.98 10:26-------------------
- *
- * --------------------------------------------------*/
 typedef
 cppu::WeakImplHelper3
 <
@@ -286,16 +273,13 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     // SwUnoCollection
     virtual void    Invalidate();
 };
 
-/* -----------------21.12.98 14:49-------------------
- *
- * --------------------------------------------------*/
 class SwXFieldEnumeration : public cppu::WeakImplHelper2
 <
     ::com::sun::star::container::XEnumeration,
@@ -310,20 +294,20 @@ class SwXFieldEnumeration : public cppu::WeakImplHelper2
 
 protected:
     virtual ~SwXFieldEnumeration();
+    //SwClient
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 public:
     SwXFieldEnumeration(SwDoc* pDoc);
 
     //XEnumeration
-    virtual BOOL SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL hasMoreElements(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement(void) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    //SwClient
-    virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 };
 #endif
 

@@ -189,7 +189,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
         }
         else
         {
-            // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
+            // for wildcard search : remove all table filters which are a wildcard expression and build a WildCard
             // for them
             ::std::vector< WildCard > aWildCardTableFilter;
             Sequence< ::rtl::OUString > aNonWildCardTableFilter = _tableFilter;
@@ -311,12 +311,11 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
     {
         // build sorted versions of the filter sequences, so the visibility decision is faster
         Sequence< ::rtl::OUString > aTableFilter(_rTableFilter);
-        sal_Int32   nTableFilterLen = aTableFilter.getLength();
 
-        // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
+        // for wildcard search : remove all table filters which are a wildcard expression and build a WildCard
         // for them
         ::std::vector< WildCard > aWCSearch;
-        nTableFilterLen = createWildCardVector(aTableFilter,aWCSearch);
+        createWildCardVector(aTableFilter,aWCSearch);
 
         try
         {
@@ -460,7 +459,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
         switch ( nFilterMode )
         {
         default:
-            OSL_ENSURE( sal_False, "OTableContainer::getAllTableTypeFilter: unknown TableTypeFilterMode!" );
+            OSL_FAIL( "OTableContainer::getAllTableTypeFilter: unknown TableTypeFilterMode!" );
         case FILTER_MODE_MIX_ALL:
             _rFilter.realloc( 3 );
             _rFilter[0] = sView;

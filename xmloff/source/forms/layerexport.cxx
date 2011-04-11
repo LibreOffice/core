@@ -34,7 +34,7 @@
 #include "strings.hxx"
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/prhdlfac.hxx>
@@ -55,7 +55,7 @@
 #include <xmloff/XMLEventExport.hxx>
 #include "formevents.hxx"
 #include <xmloff/xmlnumfe.hxx>
-#include "xformsexport.hxx"
+#include "xmloff/xformsexport.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/text/XText.hpp>
@@ -87,7 +87,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     const ::rtl::OUString& OFormLayerXMLExport_Impl::getControlNumberStyleNamePrefix()
     {
-        static const ::rtl::OUString s_sControlNumberStyleNamePrefix = ::rtl::OUString::createFromAscii("C");
+        static const ::rtl::OUString s_sControlNumberStyleNamePrefix(RTL_CONSTASCII_USTRINGPARAM("C"));
         return s_sControlNumberStyleNamePrefix;
     }
 
@@ -140,7 +140,7 @@ namespace xmloff
 
         if (!xSI->supportsService(SERVICE_FORMSCOLLECTION))
         {
-            OSL_ENSURE(sal_False, "OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (is no com.sun.star.form.Forms)!");
+            OSL_FAIL("OFormLayerXMLExport_Impl::impl_isFormPageContainingForms: invalid collection (is no com.sun.star.form.Forms)!");
             // nothing to do
             return sal_False;
         }
@@ -245,7 +245,7 @@ namespace xmloff
             }
             catch(Exception&)
             {
-                OSL_ENSURE(sal_False, "OFormLayerXMLExport_Impl::exportCollectionElements: caught an exception ... skipping the current element!");
+                OSL_FAIL("OFormLayerXMLExport_Impl::exportCollectionElements: caught an exception ... skipping the current element!");
                 continue;
             }
         }
@@ -776,16 +776,11 @@ namespace xmloff
                 // create it for en-US (does not really matter, as we will specify a locale for every
                 // concrete language to use)
                 Sequence< Any > aSupplierArgs(1);
-                aSupplierArgs[0] <<= Locale (   ::rtl::OUString::createFromAscii("en"),
-                                                ::rtl::OUString::createFromAscii("US"),
+                aSupplierArgs[0] <<= Locale (   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")),
+                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")),
                                                 ::rtl::OUString()
                                             );
-                // #110680#
-                //Reference< XInterface > xFormatsSupplierUntyped =
-                //  ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-                //      SERVICE_NUMBERFORMATSSUPPLIER,
-                //      aSupplierArgs
-                //  );
+
                 Reference< XInterface > xFormatsSupplierUntyped =
                     m_rContext.getServiceFactory()->createInstanceWithArguments(
                         SERVICE_NUMBERFORMATSSUPPLIER,

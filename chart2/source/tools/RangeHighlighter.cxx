@@ -216,12 +216,14 @@ void RangeHighlighter::fillRangesForDiagram( const Reference< chart2::XDiagram >
 
 void RangeHighlighter::fillRangesForDataSeries( const uno::Reference< chart2::XDataSeries > & xSeries )
 {
-    sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR;
     Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
     if( xSource.is())
+    {
+        sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR;
         lcl_fillRanges( m_aSelectedRanges,
                         ::chart::DataSourceHelper::getRangesFromDataSource( xSource ),
                         nPreferredColor );
+    }
 }
 
 void RangeHighlighter::fillRangesForErrorBars(
@@ -245,12 +247,14 @@ void RangeHighlighter::fillRangesForErrorBars(
 
     if( bUsesRangesAsErrorBars )
     {
-        sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR;
         Reference< chart2::data::XDataSource > xSource( xErrorBar, uno::UNO_QUERY );
         if( xSource.is())
+        {
+            sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR;
             lcl_fillRanges( m_aSelectedRanges,
                             ::chart::DataSourceHelper::getRangesFromDataSource( xSource ),
                             nPreferredColor );
+        }
     }
     else
     {
@@ -269,12 +273,12 @@ void RangeHighlighter::fillRangesForCategories( const Reference< chart2::XAxis >
 
 void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface > & xDataSeries, sal_Int32 nIndex )
 {
-    sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR;
     if( xDataSeries.is())
     {
         Reference< chart2::data::XDataSource > xSource( xDataSeries, uno::UNO_QUERY );
         if( xSource.is() )
         {
+            sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR;
             ::std::vector< chart2::data::HighlightedRange > aHilightedRanges;
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqSeq( xSource->getDataSequences());
             for( sal_Int32 i=0; i<aLSeqSeq.getLength(); ++i )

@@ -33,7 +33,7 @@
 
 class SW_DLLPUBLIC SwWebDocShell: public SwDocShell
 {
-    USHORT      nSourcePara;    // aktive Zeile in der SourceView
+    sal_uInt16      nSourcePara;    // aktive Zeile in der SourceView
 
 public:
 
@@ -54,9 +54,9 @@ public:
                                    String * pUserName,
                                    sal_Int32 nFileFormat,
                                    sal_Bool bTemplate = sal_False ) const;
-    USHORT      GetSourcePara()const
+    sal_uInt16      GetSourcePara()const
                             {return nSourcePara;}
-    void        SetSourcePara(USHORT nSet) {nSourcePara = nSet;}
+    void        SetSourcePara(sal_uInt16 nSet) {nSourcePara = nSet;}
 };
 
 #endif

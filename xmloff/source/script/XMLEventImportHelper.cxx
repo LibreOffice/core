@@ -33,8 +33,8 @@
 #include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
-#include "xmlerror.hxx"
+#include "xmloff/xmlnmspe.hxx"
+#include "xmloff/xmlerror.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::xml::sax::XAttributeList;
@@ -55,7 +55,7 @@ XMLEventImportHelper::~XMLEventImportHelper()
     FactoryMap::iterator aEnd = aFactoryMap.end();
     for(FactoryMap::iterator aIter = aFactoryMap.begin();
         aIter != aEnd;
-        aIter++ )
+        ++aIter)
     {
         delete aIter->second;
     }

@@ -75,7 +75,7 @@ void ScMediaShell::GetMediaState( SfxItemSet& rSet )
     if( pView )
     {
         SfxWhichIter    aIter( rSet );
-        USHORT          nWhich = aIter.FirstWhich();
+        sal_uInt16          nWhich = aIter.FirstWhich();
 
         while( nWhich )
         {
@@ -118,7 +118,7 @@ void ScMediaShell::ExecuteMedia( SfxRequest& rReq )
         const SfxItemSet*   pArgs = rReq.GetArgs();
         const SfxPoolItem*  pItem;
 
-        if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, FALSE, &pItem ) ) )
+        if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, false, &pItem ) ) )
             pItem = NULL;
 
         if( pItem )

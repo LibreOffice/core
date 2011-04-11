@@ -94,7 +94,7 @@ String DictionaryList::getPropertyTypeName( sal_Int16 nConversionPropertyType ) 
     if(!m_pPropertyTypeNameListBox || !m_pPropertyTypeNameListBox->GetEntryCount())
         return String();
 
-    USHORT nPos = static_cast<USHORT>( nConversionPropertyType )-1;
+    sal_uInt16 nPos = static_cast<sal_uInt16>( nConversionPropertyType )-1;
     if(nPos<m_pPropertyTypeNameListBox->GetEntryCount())
         return m_pPropertyTypeNameListBox->GetEntry(nPos);
     return m_pPropertyTypeNameListBox->GetEntry(0);
@@ -113,7 +113,7 @@ String DictionaryList::makeTabString( const DictionaryEntry& rEntry ) const
 void DictionaryList::initDictionaryControl( const Reference< linguistic2::XConversionDictionary>& xDictionary
                                            , ListBox* pPropertyTypeNameListBox )
 {
-    SetWindowBits( WB_VSCROLL );
+    SetStyle( WB_VSCROLL | WB_TABSTOP );
     SetSelectionMode( SINGLE_SELECTION );
     SetBorderStyle( WINDOW_BORDER_MONO );
     SetHighlightRange();
@@ -198,7 +198,7 @@ void DictionaryList::refillFromDictionary( sal_Int32 nTextConversionOptions )
 
         if(aRightList.getLength()!=1)
         {
-            OSL_ASSERT("The Chinese Translation Dictionary should have exactly one Mapping for each term.");
+            OSL_FAIL("The Chinese Translation Dictionary should have exactly one Mapping for each term.");
             continue;
         }
 
@@ -257,7 +257,7 @@ bool DictionaryList::hasTerm( const rtl::OUString& rTerm ) const
 }
 
 void DictionaryList::addEntry( const rtl::OUString& rTerm, const rtl::OUString& rMapping
-                              , sal_Int16 nConversionPropertyType, ULONG nPos )
+                              , sal_Int16 nConversionPropertyType, sal_uIntPtr nPos )
 {
     if( hasTerm( rTerm ) )
         return;
@@ -283,9 +283,9 @@ void DictionaryList::deleteEntryOnPos( sal_Int32 nPos  )
     }
 }
 
-ULONG DictionaryList::deleteEntries( const rtl::OUString& rTerm )
+sal_uIntPtr DictionaryList::deleteEntries( const rtl::OUString& rTerm )
 {
-    ULONG nPos = LIST_APPEND;
+    sal_uIntPtr nPos = LIST_APPEND;
     for( sal_Int32 nN=GetRowCount(); nN--; )
     {
         DictionaryEntry* pCurEntry = getEntryOnPos( nN );
@@ -352,7 +352,7 @@ void DictionaryList::Resize()
     m_pHeaderBar->SetSizePixel( aBarSize );
 }
 
-void DictionaryList::sortByColumn( USHORT nSortColumnIndex, bool bSortAtoZ )
+void DictionaryList::sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ )
 {
     m_nSortColumnIndex=nSortColumnIndex;
     if( nSortColumnIndex<3 )
@@ -369,7 +369,7 @@ void DictionaryList::sortByColumn( USHORT nSortColumnIndex, bool bSortAtoZ )
         GetModel()->SetSortMode(SortNone);
 }
 
-USHORT DictionaryList::getSortColumn() const
+sal_uInt16 DictionaryList::getSortColumn() const
 {
     return m_nSortColumnIndex;
 }
@@ -390,8 +390,8 @@ StringCompare DictionaryList::ColumnCompare( SvLBoxEntry* pLeft, SvLBoxEntry* pR
 
     if(pLeftItem != NULL && pRightItem != NULL)
     {
-        USHORT nLeftKind=pLeftItem->IsA();
-        USHORT nRightKind=pRightItem->IsA();
+        sal_uInt16 nLeftKind=pLeftItem->IsA();
+        sal_uInt16 nRightKind=pRightItem->IsA();
 
         if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
             nLeftKind == SV_ITEM_ID_LBOXSTRING )
@@ -409,12 +409,12 @@ StringCompare DictionaryList::ColumnCompare( SvLBoxEntry* pLeft, SvLBoxEntry* pR
     return eCompare;
 }
 
-SvLBoxItem* DictionaryList::getItemAtColumn( SvLBoxEntry* pEntry, USHORT nColumn ) const
+SvLBoxItem* DictionaryList::getItemAtColumn( SvLBoxEntry* pEntry, sal_uInt16 nColumn ) const
 {
     SvLBoxItem* pItem = NULL;
     if( pEntry )
     {
-        USHORT nCount = pEntry->ItemCount();
+        sal_uInt16 nCount = pEntry->ItemCount();
         nColumn++;
         if( nTreeFlags & TREEFLAG_CHKBTN )
             nColumn++;
@@ -492,7 +492,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
 
     SvtLinguConfig  aLngCfg;
     sal_Bool bValue = sal_Bool();
-    Any aAny( aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_REVERSE_MAPPING ) ) );
+    Any aAny( aLngCfg.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_REVERSE_MAPPING )) ) );
     if( aAny >>= bValue )
         m_aCB_Reverse.Check( bValue );
 
@@ -511,7 +511,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
         {
             Reference< linguistic2::XConversionDictionaryList > xDictionaryList(
                                 m_xFactory->createInstanceWithContext(
-                                    rtl::OUString::createFromAscii("com.sun.star.linguistic2.ConversionDictionaryList")
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ConversionDictionaryList"))
                                     , m_xContext), uno::UNO_QUERY);
             if( xDictionaryList.is() )
             {
@@ -520,17 +520,17 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
                 {
                     try
                     {
-                        rtl::OUString aNameTo_Simplified( rtl::OUString::createFromAscii("ChineseT2S") );
-                        rtl::OUString aNameTo_Traditional( rtl::OUString::createFromAscii("ChineseS2T") );
+                        rtl::OUString aNameTo_Simplified( RTL_CONSTASCII_USTRINGPARAM("ChineseT2S") );
+                        rtl::OUString aNameTo_Traditional( RTL_CONSTASCII_USTRINGPARAM("ChineseS2T") );
                         lang::Locale aLocale;
-                        aLocale.Language = rtl::OUString::createFromAscii("zh");
+                        aLocale.Language = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("zh") );
 
                         if( xContainer->hasByName( aNameTo_Simplified ) )
                             xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
                                     xContainer->getByName( aNameTo_Simplified ), UNO_QUERY );
                         else
                         {
-                            aLocale.Country = rtl::OUString::createFromAscii("TW");
+                            aLocale.Country = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TW") );
                             xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
                                     xDictionaryList->addNewDictionary( aNameTo_Simplified
                                     , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
@@ -545,7 +545,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
                                     xContainer->getByName( aNameTo_Traditional ), UNO_QUERY );
                         else
                         {
-                            aLocale.Country = rtl::OUString::createFromAscii("CN");
+                            aLocale.Country = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CN") );
                             xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
                                     xDictionaryList->addNewDictionary( aNameTo_Traditional
                                     , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
@@ -788,12 +788,12 @@ IMPL_LINK( ChineseDictionaryDialog, ModifyHdl, void*, EMPTYARG )
         {
             if( m_aCB_Reverse.IsChecked() )
             {
-                ULONG nPos = rReverse.deleteEntries( pE->m_aMapping );
+                sal_uIntPtr nPos = rReverse.deleteEntries( pE->m_aMapping );
                 nPos = rReverse.deleteEntries( aMapping );
                 rReverse.addEntry( aMapping, aTerm, nConversionPropertyType, nPos );
             }
 
-            ULONG nPos = rActive.deleteEntries( aTerm );
+            sal_uIntPtr nPos = rActive.deleteEntries( aTerm );
             rActive.addEntry( aTerm, aMapping, nConversionPropertyType, nPos );
         }
     }
@@ -850,7 +850,7 @@ short ChineseDictionaryDialog::Execute()
         SvtLinguConfig  aLngCfg;
         Any aAny;
         aAny <<= sal_Bool( !!m_aCB_Reverse.IsChecked() );
-        aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_REVERSE_MAPPING ), aAny );
+        aLngCfg.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_REVERSE_MAPPING )), aAny );
 
         m_aCT_DictionaryToSimplified.save();
         m_aCT_DictionaryToTraditional.save();
@@ -866,7 +866,7 @@ IMPL_LINK( ChineseDictionaryDialog, HeaderBarClick, void*, EMPTYARG )
 {
     if(m_pHeaderBar)
     {
-        USHORT nId = m_pHeaderBar->GetCurItemId();
+        sal_uInt16 nId = m_pHeaderBar->GetCurItemId();
         HeaderBarItemBits nBits = m_pHeaderBar->GetItemBits(nId);
         if( nBits & HIB_CLICKABLE )
         {

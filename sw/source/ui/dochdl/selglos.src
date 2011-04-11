@@ -33,11 +33,10 @@
  // #define DLG_SEL_GLOS 256
 ModalDialog DLG_SEL_GLOS
 {
-    HelpID = FN_EXPAND_GLOSSARY ;
+    HelpID = CMD_FN_EXPAND_GLOSSARY ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 100 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? AutoText einfügen : AutoText einf³gen */
     Text [ en-US ] = "Insert AutoText" ;
     Moveable = TRUE ;
     OKButton BT_OK
@@ -63,11 +62,11 @@ ModalDialog DLG_SEL_GLOS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? AutoTexte zum Kürzel  : AutoTexte zum K³rzel  */
         Text [ en-US ] = "AutoTexts for shortcut " ;
     };
     ListBox LB_GLOS
     {
+        HelpID = "sw:ListBox:DLG_SEL_GLOS:LB_GLOS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 140 , 74 ) ;

@@ -48,7 +48,7 @@
 #include "docvor.hxx"
 #include "orgmgr.hxx"
 #include "sfxtypes.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "view.hrc"
 #include <sfx2/docfilt.hxx>
 #include "fltfnc.hxx"
@@ -57,28 +57,24 @@ using namespace ::com::sun::star;
 
 //=========================================================================
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Implementierungsklasse; einzelner Eintrag in der Dateiansicht
-
+    Implementation class, single entry in the file view.
 */
 
 struct _FileListEntry
 {
-    String aFileName;           // Dateiname mit komplettem Pfad
-    String aBaseName;           // Dateiname
+    String aFileName;           // File Name with complete path
+    String aBaseName;           // File Name
     const CollatorWrapper* pCollator;
-    SfxObjectShellLock aDocShell; // ObjectShell als Ref-Klasse
+    SfxObjectShellLock aDocShell; // ObjectShell as reference class
 
-//REMOVE        SvStorageRef aStor;         // Referenz auf Storage, wenn wir diesen geoeffnet haben
-    //uno::Reference< embed::XStorage > xStorage;
-
-    BOOL bFile;                 // als Datei auf Platte
-                                // (!= unbenannt1, nicht als Dok. geladen;
-                                // diese werden nicht gespeichert!)
-    BOOL bOwner;                // selbst erzeugt
-    BOOL bNoName;
-    BOOL bOwnFormat;
+    sal_Bool bFile;                 // As File on disk
+                                // (!= not processed, not loaded as document
+                                // these are not saved!)
+    sal_Bool bOwner;                // self-generated
+    sal_Bool bNoName;
+    sal_Bool bOwnFormat;
 
     _FileListEntry( const String& rFileName,
                     const CollatorWrapper* pColl, const String* pTitle = NULL );
@@ -86,7 +82,7 @@ struct _FileListEntry
 
     int operator==( const _FileListEntry &rCmp) const;
     int operator< ( const _FileListEntry &rCmp) const;
-    BOOL DeleteObjectShell();
+    sal_Bool DeleteObjectShell();
 };
 
 //-------------------------------------------------------------------------
@@ -112,10 +108,10 @@ _FileListEntry::_FileListEntry( const String& rFileName,
 
     aFileName   ( rFileName ),
     pCollator   ( pColl ),
-    bFile       ( FALSE ),
-    bOwner      ( FALSE ),
-    bNoName     ( TRUE ),
-    bOwnFormat  ( TRUE )
+    bFile       ( sal_False ),
+    bOwner      ( sal_False ),
+    bNoName     ( sal_True ),
+    bOwnFormat  ( sal_True )
 {
     if ( pTitle )
         aBaseName = *pTitle;
@@ -140,28 +136,27 @@ SV_IMPL_OP_PTRARR_SORT(_SfxObjectList, _FileListEntry*)
 
 //=========================================================================
 
-BOOL _FileListEntry::DeleteObjectShell()
+sal_Bool _FileListEntry::DeleteObjectShell()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Freigabe der DokumentShell
+    Release of ther DocumentShell
 
-    [Returnwert]            TRUE: alles Ok
-                            FALSE: es ist ein Fehler aufgetreten (das
-                            Dokument konnte nicht gesichert werden)
-
+    [Return value]          TRUE: Everything is ok
+                            FALSE: An error occured
+                            (the document could not be saved)
 */
 
 {
-    BOOL bRet = TRUE;
-    //Falls wir die Shell angelegt haben und sie veraendert wurde
+    sal_Bool bRet = sal_True;
+
     if(bOwner && aDocShell.Is() && aDocShell->IsModified())
     {
-        //Mussten wir konvertieren?
+        // Converted?
         if( bOwnFormat )
         {
             if(!aDocShell->Save() )
-                bRet = FALSE;
+                bRet = sal_False;
             else
             {
                 try {
@@ -176,12 +171,11 @@ BOOL _FileListEntry::DeleteObjectShell()
                 {
                 }
 
-//              aDocShell->SfxObjectShell::DoSaveCompleted();
             }
         }
         else
         {
-            // Falls konvertiert im eigenen Format speichern
+            // If converted save in native format
             INetURLObject aObj( aFileName );
             String aTitle = aObj.getName( INetURLObject::LAST_SEGMENT, true,
                                           INetURLObject::DECODE_WITH_CHARSET );
@@ -213,14 +207,14 @@ SfxObjectList::~SfxObjectList()
 
 //-------------------------------------------------------------------------
 
-const String &SfxObjectList::GetBaseName(USHORT i) const
+const String &SfxObjectList::GetBaseName(sal_uInt16 i) const
 {
     return (*this)[i]->aBaseName;
 }
 
 //-------------------------------------------------------------------------
 
-const String& SfxObjectList::GetFileName( USHORT i ) const
+const String& SfxObjectList::GetFileName( sal_uInt16 i ) const
 {
     return (*this)[i]->aFileName;
 }
@@ -237,13 +231,9 @@ SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
     bDeleteTemplates(pTempl == 0),
     bModified(0)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Konstruktor
-
-    Das aktuelle Dokument wird in die Liste der Dokumente
-    aufgenommen.
-
+    Constructor. The current document is added to the list of documents.
 */
 {
     pImpl->pDocList = new SfxObjectList;
@@ -276,34 +266,33 @@ SfxOrganizeMgr::~SfxOrganizeMgr()
 
 //-------------------------------------------------------------------------
 
-SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
+SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( sal_uInt16 nIdx )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Zugriff auf die DokumentShell an der Position nIdx
+    Access to the DocumentShell at the position nIdx.
 
-    [Returnwert]            Referenz auf die DokumentShell
+    [Return value]                      Reference to the DocumentShell
 
 */
 
 {
     _FileListEntry* pEntry = (*pImpl->pDocList)[nIdx];
-    // andernfalls Doc-Shell anlegen
+    // otherwise create Doc-Shell
     if ( !pEntry->aDocShell.Is() )
     {
-//(mba)/task        SfxWaitCursor aWaitCursor;
         INetURLObject aFileObj( pEntry->aFileName );
-        BOOL bDum = FALSE;
+        sal_Bool bDum = sal_False;
         SfxApplication* pSfxApp = SFX_APP();
         String aFilePath = aFileObj.GetMainURL( INetURLObject::NO_DECODE );
-        pEntry->aDocShell = pSfxApp->DocAlreadyLoaded( aFilePath, FALSE, bDum );
+        pEntry->aDocShell = pSfxApp->DocAlreadyLoaded( aFilePath, sal_False, bDum );
         if ( !pEntry->aDocShell.Is() )
         {
-            pEntry->bOwner = TRUE;
+            pEntry->bOwner = sal_True;
             SfxMedium* pMed = new SfxMedium(
-                aFilePath, ( STREAM_READ | STREAM_SHARE_DENYWRITE ), FALSE, 0 );
+                aFilePath, ( STREAM_READ | STREAM_SHARE_DENYWRITE ), sal_False, 0 );
             const SfxFilter* pFilter = NULL;
-            pMed->UseInteractionHandler(TRUE);
+            pMed->UseInteractionHandler(sal_True);
             if (
                 pSfxApp->GetFilterMatcher().GuessFilter(*pMed, &pFilter, SFX_FILTER_TEMPLATE, 0) ||
                 (pFilter && !pFilter->IsOwnFormat()) ||
@@ -311,7 +300,7 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
                )
             {
                 pSfxApp->LoadTemplate( pEntry->aDocShell, aFilePath );
-                pEntry->bOwnFormat = FALSE;
+                pEntry->bOwnFormat = sal_False;
                 delete pMed;
                 if ( pEntry->aDocShell.Is() )
                     return (SfxObjectShellRef)(SfxObjectShell*)(pEntry->aDocShell);
@@ -320,7 +309,7 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
             {
                 if ( pFilter )
                 {
-                    pEntry->bOwnFormat = TRUE;
+                    pEntry->bOwnFormat = sal_True;
                     pEntry->aDocShell = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
                     if ( pEntry->aDocShell.Is() )
                     {
@@ -338,16 +327,15 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
 
 //-------------------------------------------------------------------------
 
-BOOL SfxOrganizeMgr::DeleteObjectShell(USHORT nIdx)
+sal_Bool SfxOrganizeMgr::DeleteObjectShell(sal_uInt16 nIdx)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Freigabe der DokumentShell an der Position nIdx
+    Release DocumentShell at position nIdx
 
-    [Returnwert]            TRUE: alles Ok
-                            FALSE: es ist ein Fehler aufgetreten (das
-                            Dokument konnte nicht gesichert werden)
-
+    [Return value]          TRUE: Everything is ok
+                            FALSE: An error occured
+                            (the document could not be saved)
 */
 {
     return (*pImpl->pDocList)[nIdx]->DeleteObjectShell();
@@ -355,34 +343,32 @@ BOOL SfxOrganizeMgr::DeleteObjectShell(USHORT nIdx)
 
 //-------------------------------------------------------------------------
 
-SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell(USHORT nRegion,
-                                                        USHORT nIdx)
-/*  [Beschreibung]
+SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell(sal_uInt16 nRegion,
+                                                        sal_uInt16 nIdx)
+/*  [Description]
 
-    Zugriff auf die DokumentShell an der Position nIdx im Bereich
-    nRegion (Dokumentvorlage)
+    Access to the  DocumentShell at Position nIdx in Region
+    nRegion (Document template)
 
-    [Returnwert]            Referenz auf die DokumentShell
+    [Return value]                      Reference to the DocumentShell
 
 */
 {
-//(mba)/task    SfxWaitCursor aWaitCursor;
     return pTemplates->CreateObjectShell(nRegion, nIdx);
 }
 
 //-------------------------------------------------------------------------
 
-BOOL SfxOrganizeMgr::DeleteObjectShell(USHORT nRegion, USHORT nIdx)
+sal_Bool SfxOrganizeMgr::DeleteObjectShell(sal_uInt16 nRegion, sal_uInt16 nIdx)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Freigabe der DokumentShell an der Position nIdx im Bereich
-    nRegion (Dokumentvorlage)
+    Release of the DocumentShell at Position nIdx in Region
+    nRegion (Document template)
 
-    [Returnwert]            TRUE: alles Ok
-                            FALSE: es ist ein Fehler aufgetreten (das
-                            Dokument konnte nicht gesichert werden)
-
+    [Return value]          TRUE: Everything is ok
+                            FALSE: An error occured
+                            (the document could not be saved)
 */
 
 {
@@ -391,39 +377,39 @@ BOOL SfxOrganizeMgr::DeleteObjectShell(USHORT nRegion, USHORT nIdx)
 
 //-------------------------------------------------------------------------
 
-BOOL    SfxOrganizeMgr::Copy(USHORT nTargetRegion,
-                            USHORT nTargetIdx,
-                            USHORT nSourceRegion,
-                            USHORT nSourceIdx)
+sal_Bool    SfxOrganizeMgr::Copy(sal_uInt16 nTargetRegion,
+                            sal_uInt16 nTargetIdx,
+                            sal_uInt16 nSourceRegion,
+                            sal_uInt16 nSourceIdx)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Kopieren einer Dokumentvorlage
+    Copy of a Document Template
 
     [Parameter]
 
-    USHORT nTargetRegion            Index des Zielbereiches
-    USHORT nTargetIdx               Index Zielposition
-    USHORT nSourceRegion            Index des Quellbereiches
-    USHORT nSourceIdx               Index der zu kopierenden / z uverschiebenden
-                                    Dokumentvorlage
+    sal_uInt16 nTargetRegion                Index of the Target Region
+    sal_uInt16 nTargetIdx                   Index of the Target Position
+    sal_uInt16 nSourceRegion                Index of the Source Region
+    sal_uInt16 nSourceIdx                   Index of the template to be
+                                        copied/moved.
 
-    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    [Return value]                      Success (TRUE) or Failure (FALSE)
 
 
-    [Querverweise]
+    [Cross-reference]
 
-    <SfxDocumentTemplates::Copy(USHORT nTargetRegion,
-                                USHORT nTargetIdx,
-                                USHORT nSourceRegion,
-                                USHORT nSourceIdx)>
+    <SfxDocumentTemplates::Copy(sal_uInt16 nTargetRegion,
+                                sal_uInt16 nTargetIdx,
+                                sal_uInt16 nSourceRegion,
+                                sal_uInt16 nSourceIdx)>
 
 */
 
 {
-    if(nSourceIdx == USHRT_MAX) // keine Verzeichnisse kopieren
-        return FALSE ;
-    const BOOL bOk = pTemplates->Copy(nTargetRegion, nTargetIdx,
+    if(nSourceIdx == USHRT_MAX) // No directories copied
+        return sal_False ;
+    const sal_Bool bOk = pTemplates->Copy(nTargetRegion, nTargetIdx,
                                         nSourceRegion, nSourceIdx);
     if(bOk)
         bModified = 1;
@@ -432,39 +418,37 @@ BOOL    SfxOrganizeMgr::Copy(USHORT nTargetRegion,
 
 //-------------------------------------------------------------------------
 
-BOOL    SfxOrganizeMgr::Move(USHORT nTargetRegion,
-                            USHORT nTargetIdx,
-                            USHORT nSourceRegion,
-                            USHORT nSourceIdx)
+sal_Bool    SfxOrganizeMgr::Move(sal_uInt16 nTargetRegion,
+                            sal_uInt16 nTargetIdx,
+                            sal_uInt16 nSourceRegion,
+                            sal_uInt16 nSourceIdx)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Verschieben einer Dokumentvorlage
+    Moving a template
 
     [Parameter]
 
-    USHORT nTargetRegion            Index des Zielbereiches
-    USHORT nTargetIdx               Index Zielposition
-    USHORT nSourceRegion            Index des Quellbereiches
-    USHORT nSourceIdx               Index der zu kopierenden / z uverschiebenden
-                                    Dokumentvorlage
+    sal_uInt16 nTargetRegion                Index of the Target Region
+    sal_uInt16 nTargetIdx                   Index of the Target Position
+    sal_uInt16 nSourceRegion                Index of the Source Region
+    sal_uInt16 nSourceIdx                   Index of the template to be
+                                        copied/moved.
 
-    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    [Return value]                      Success (TRUE) or Failure (FALSE)
 
+    [Cross-reference]
 
-    [Querverweise]
-
-    <SfxDocumentTemplates::Move(USHORT nTargetRegion,
-                                USHORT nTargetIdx,
-                                USHORT nSourceRegion,
-                                USHORT nSourceIdx)>
-
+    <SfxDocumentTemplates::Move(sal_uInt16 nTargetRegion,
+                                sal_uInt16 nTargetIdx,
+                                sal_uInt16 nSourceRegion,
+                                sal_uInt16 nSourceIdx)>
 */
 
 {
-    if(nSourceIdx == USHRT_MAX) // keine Verzeichnisse verschieben
-        return FALSE ;
-    const BOOL bOk = pTemplates->Move(nTargetRegion, nTargetIdx,
+    if(nSourceIdx == USHRT_MAX) // No directory moved
+        return sal_False ;
+    const sal_Bool bOk = pTemplates->Move(nTargetRegion, nTargetIdx,
                                         nSourceRegion, nSourceIdx);
     if(bOk)
         bModified = 1;
@@ -473,34 +457,31 @@ BOOL    SfxOrganizeMgr::Move(USHORT nTargetRegion,
 
 //-------------------------------------------------------------------------
 
-BOOL    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
-                                USHORT nRegion, USHORT nIdx)
+sal_Bool    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
+                                sal_uInt16 nRegion, sal_uInt16 nIdx)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    "oschen einer Dokumentvorlage
+    Delete  a Document Template
 
     [Parameter]
 
-    SfxOrganizeListBox *pCaller     rufende ListBox; da dieses
-                                    Event durch das Men"u oder
-                                    durch das Keyboard angetriggert wird,
-                                    mu"s das Model der ListBox anschlie"send
-                                    aktualisiert werden.
-    USHORT nRegion                  Index des Bereiches
-    USHORT nIdx                     Index der Dokumentvorlage
+    SfxOrganizeListBox *pCaller     calling ListBox, since this event
+                                    is triggered by the menu or the
+                                    keyboard, the ListBox must be updated.
+    sal_uInt16 nRegion                  Index for Region
+    sal_uInt16 nIdx                     Index of Document template
 
-    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    [Return value]                  Success (TRUE) or Failure (FALSE)
 
+    [Cross-reference]
 
-    [Querverweise]
-
-    <SfxDocumentTemplates::Delete(USHORT nRegion, USHORT nIdx)>
+    <SfxDocumentTemplates::Delete(sal_uInt16 nRegion, sal_uInt16 nIdx)>
 
 */
 
 {
-    BOOL bOk = FALSE;
+    sal_Bool bOk = sal_False;
 
     if ( USHRT_MAX == nIdx )
     {
@@ -509,11 +490,11 @@ BOOL    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
         SvLBoxEntry *pGroupToDelete = pCaller->SvLBox::GetEntry(nRegion);
         if ( pGroupToDelete )
         {
-            USHORT nItemNum = (USHORT)( pCaller->GetModel()->GetChildCount( pGroupToDelete ) );
-            USHORT nToDeleteNum = 0;
+            sal_uInt16 nItemNum = (sal_uInt16)( pCaller->GetModel()->GetChildCount( pGroupToDelete ) );
+            sal_uInt16 nToDeleteNum = 0;
             SvLBoxEntry **pEntriesToDelete = new SvLBoxEntry*[nItemNum];
 
-            USHORT nInd = 0;
+            sal_uInt16 nInd = 0;
             for ( nInd = 0; nInd < nItemNum; nInd++ )
                 pEntriesToDelete[nInd] = NULL;
 
@@ -546,7 +527,7 @@ BOOL    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
         if(bOk)
         {
             bModified = 1;
-                // zu loeschender Eintrag
+                // Entry to be deleted.
             SvLBoxEntry *pEntryToDelete = pCaller->SvLBox::GetEntry(pCaller->SvLBox::GetEntry(nRegion), nIdx);
 
             pCaller->GetModel()->Remove(pEntryToDelete);
@@ -558,41 +539,35 @@ BOOL    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
 
 //-------------------------------------------------------------------------
 
-BOOL    SfxOrganizeMgr::InsertDir
+sal_Bool    SfxOrganizeMgr::InsertDir
 (
-    SfxOrganizeListBox_Impl*    pCaller,/*  rufende ListBox; da dieses Event
-                                            durch das Men"u oder durch das
-                                            Keyboard angetriggert wird,
-                                            mu\s das Model der ListBox
-                                            anschlie\send aktualisiert werden */
-    const String&               rText,  //  logischer Name des Bereiches
-    USHORT                      nRegion //  Index des Bereiches
+    SfxOrganizeListBox_Impl* pCaller, /* calling ListBox, since this event
+                                         is triggered by the menu or the
+                                         keyboard, the ListBox must be updated. */
+    const String&            rText,   // logical Name of Region
+    sal_uInt16                   nRegion  // Index of Region
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Einf"ugen eines Bereiches
+    Insert Region.
 
+    [Return value]                  Success (TRUE) or Failure (FALSE)
 
-    [R"uckgabewert]
+    [Cross-reference]
 
-    Erfolg (TRUE) oder Mi\serfolg (FALSE)
-
-
-    [Querverweise]
-
-    <SfxDocumentTemplates::InsertDir(const String &, USHORT nRegion)>
+    <SfxDocumentTemplates::InsertDir(const String &, sal_uInt16 nRegion)>
 */
 
 {
-    const BOOL bOk = pTemplates->InsertDir(rText, nRegion);
+    const sal_Bool bOk = pTemplates->InsertDir(rText, nRegion);
     if(bOk)
     {
         bModified = 1;
         SvLBoxEntry *pEntry = pCaller->InsertEntry(rText,
                                                    pCaller->GetOpenedBmp(0),
                                                    pCaller->GetClosedBmp(0),
-                                                   0, TRUE, nRegion);
+                                                   0, sal_True, nRegion);
         pCaller->Update();
         pCaller->EditEntry(pEntry);
     }
@@ -601,30 +576,28 @@ BOOL    SfxOrganizeMgr::InsertDir
 
 //-------------------------------------------------------------------------
 
-BOOL SfxOrganizeMgr::SetName(const String &rName,
-                             USHORT nRegion, USHORT nIdx)
+sal_Bool SfxOrganizeMgr::SetName(const String &rName,
+                             sal_uInt16 nRegion, sal_uInt16 nIdx)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    "Andern eines (logischen) Namens
+    Set (logical) Name
 
     [Parameter]
 
-    const String &rName             der neue Name
-    USHORT nRegion                  Index des Bereiches
-    USHORT nIdx                     Index der Dokumentvorlage
+    const String &rName             The new Name
+    sal_uInt16 nRegion                  Index of Region
+    sal_uInt16 nIdx                     Index of Document template
 
-    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    [Return value]                  Success (TRUE) or Failure (FALSE)
 
+    [Cross-reference]
 
-    [Querverweise]
-
-    <SfxDocumentTemplates::SetName(const String &, USHORT nRegion, USHORT nIdx)>
-
+    <SfxDocumentTemplates::SetName(const String &, sal_uInt16 nRegion, sal_uInt16 nIdx)>
 */
 
 {
-    const BOOL bOk = pTemplates->SetName(rName, nRegion, nIdx);
+    const sal_Bool bOk = pTemplates->SetName(rName, nRegion, nIdx);
     if(bOk)
         bModified = 1;
     return bOk;
@@ -632,25 +605,23 @@ BOOL SfxOrganizeMgr::SetName(const String &rName,
 
 //-------------------------------------------------------------------------
 
-BOOL SfxOrganizeMgr::CopyTo(USHORT nRegion, USHORT nIdx, const String &rName) const
+sal_Bool SfxOrganizeMgr::CopyTo(sal_uInt16 nRegion, sal_uInt16 nIdx, const String &rName) const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Export einer Vorlage
+    Export of a Template
 
     [Parameter]
 
-    USHORT nRegion                  Index des Bereiches
-    USHORT nIdx                     Index der Dokumentvorlage
-    const String &rName             Dateiname
+    sal_uInt16 nRegion                  Index of Region
+    sal_uInt16 nIdx                     Index of Document Template
+    const String &rName             File name
 
-    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    [Return value]                  Success (TRUE) or Failure (FALSE)
 
+    [Cross-reference]
 
-    [Querverweise]
-
-    <SfxDocumentTemplates::CopyTo( USHORT nRegion, USHORT nIdx, const String &)>
-
+    <SfxDocumentTemplates::CopyTo( sal_uInt16 nRegion, sal_uInt16 nIdx, const String &)>
 */
 
 {
@@ -659,30 +630,28 @@ BOOL SfxOrganizeMgr::CopyTo(USHORT nRegion, USHORT nIdx, const String &rName) co
 
 //-------------------------------------------------------------------------
 
-BOOL SfxOrganizeMgr::CopyFrom(SfxOrganizeListBox_Impl *pCaller,
-                              USHORT nRegion, USHORT nIdx, String &rName)
+sal_Bool SfxOrganizeMgr::CopyFrom(SfxOrganizeListBox_Impl *pCaller,
+                              sal_uInt16 nRegion, sal_uInt16 nIdx, String &rName)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Import einer Vorlage
+    Import of Document Template
 
     [Parameter]
 
-    SfxOrganizeListBox *pCaller     rufende ListBox; da dieses
-                                    Event durch das Men"u angetriggert wird,
-                                    mu"s das Model der ListBox anschlie"send
-                                    aktualisiert werden.
-    USHORT nRegion                  Index des Bereiches
-    USHORT nIdx                     Index der Dokumentvorlage
-    String &rName                   Dateiname
+    SfxOrganizeListBox *pCaller     calling ListBox, since this event
+                                    is triggered by the menu or the
+                                    keyboard, the ListBox must be updated.
 
-    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    sal_uInt16 nRegion                  Index of Region
+    sal_uInt16 nIdx                     Index of Document Template
+    String &rName                   File name
 
+    [Return value]                  Success (TRUE) or Failure (FALSE)
 
-    [Querverweise]
+    [Cross-reference]
 
-    <SfxDocumentTemplates::CopyFrom( USHORT nRegion, USHORT nIdx, const String &)>
-
+    <SfxDocumentTemplates::CopyFrom( sal_uInt16 nRegion, sal_uInt16 nIdx, const String &)>
 */
 
 {
@@ -691,7 +660,7 @@ BOOL SfxOrganizeMgr::CopyFrom(SfxOrganizeListBox_Impl *pCaller,
         pParent = pCaller->GetParent(pParent);
     if( pTemplates->CopyFrom( nRegion, nIdx, rName ) )
     {
-        // pCaller aktualisieren
+        // Update pCaller
         if( nIdx == USHRT_MAX )
             nIdx = 0;
         else nIdx++;
@@ -700,35 +669,33 @@ BOOL SfxOrganizeMgr::CopyFrom(SfxOrganizeListBox_Impl *pCaller,
                               pCaller->GetOpenedBmp(1),
                               pCaller->GetClosedBmp(1),
                               pParent,
-                              TRUE,
+                              sal_True,
                               nIdx);
         pCaller->Update();
-        // pCaller->EditEntry( pEntry );
         pCaller->Expand( pParent );
-        bModified = TRUE;
-        return TRUE;
+        bModified = sal_True;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 //-------------------------------------------------------------------------
 
-BOOL SfxOrganizeMgr::InsertFile( SfxOrganizeListBox_Impl* pCaller, const String& rFileName )
+sal_Bool SfxOrganizeMgr::InsertFile( SfxOrganizeListBox_Impl* pCaller, const String& rFileName )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Eine Datei in der Dateiansicht hinzuf"ugen
+    Insert a file in the file view.
 
     [Parameter]
 
-    SfxOrganizeListBox *pCaller     rufende ListBox; da dieses
-                                    Event durch das Men"u angetriggert wird,
-                                    mu"s das Model der ListBox anschlie"send
-                                    aktualisiert werden.
-    const String &rFileName         Name der hinzuf"ugenden Datei
+    SfxOrganizeListBox *pCaller     calling ListBox, since this event
+                                    is triggered by the menu or the
+                                    keyboard, the ListBox must be updated.
 
-    [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfolg (FALSE)
+    const String &rFileName         Name of inserted File.
 
+    [Return value]                  Success (TRUE) or Failure (FALSE)
 */
 
 {
@@ -736,29 +703,29 @@ BOOL SfxOrganizeMgr::InsertFile( SfxOrganizeListBox_Impl* pCaller, const String&
     _FileListEntry* pEntry = new _FileListEntry( rFileName, pCollator );
     if ( pImpl->pDocList->C40_PTR_INSERT( _FileListEntry, pEntry ) )
     {
-        USHORT nPos = 0;
+        sal_uInt16 nPos = 0;
         pImpl->pDocList->Seek_Entry( pEntry, &nPos );
         pCaller->InsertEntry( pEntry->aBaseName, pCaller->GetOpenedBmp(1),
-                              pCaller->GetClosedBmp(1), 0, TRUE, nPos );
-        return TRUE;
+                              pCaller->GetClosedBmp(1), 0, sal_True, nPos );
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 //-------------------------------------------------------------------------
 
-BOOL SfxOrganizeMgr::Rescan()
+sal_Bool SfxOrganizeMgr::Rescan()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Aktualisieren der Datenbasis
+    Updating the database.
 
-    [R"uckgabewert]
+    [Return value]
 
-    TRUE                    es bestanden Unterschiede
-    FALSE                   keine "Anderung
+    TRUE                                        Changes were made
+    FALSE                                       No changes
 
-    [Querverweise]
+    [Cross-reference]
 
     <SfxDocumentTemplates::Rescan()>
 */
@@ -766,35 +733,34 @@ BOOL SfxOrganizeMgr::Rescan()
 {
     if(pTemplates->Rescan())
     {
-        bModified = TRUE;
-        return TRUE;
+        bModified = sal_True;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 //-------------------------------------------------------------------------
 
 void SfxOrganizeMgr::SaveAll(Window *pParent)
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Schreiben aller ge"anderten Dokumente
+    Save all Documents that have been modified
 
     [Parameter]
 
-    Window *pParent         Parent der Boxen f"ur Fehlermeldungen
-
+    Window *pParent            Parent of the Error message Box
 */
 
 {
-    USHORT nRangeCount = pTemplates->GetRegionCount();
-    USHORT i;
+    sal_uInt16 nRangeCount = pTemplates->GetRegionCount();
+    sal_uInt16 i;
     for(i = 0; i < nRangeCount; ++i)
     {
         if( pTemplates->IsRegionLoaded( i ))
         {
-            const USHORT nCount = pTemplates->GetCount(i);
-            for(USHORT j = 0; j < nCount; ++j)
+            const sal_uInt16 nCount = pTemplates->GetCount(i);
+            for(sal_uInt16 j = 0; j < nCount; ++j)
             {
                 if(!pTemplates->DeleteObjectShell(i, j))
                 {

@@ -29,7 +29,6 @@
 #ifndef OOX_POWERPOINT_SLIDEPERSIST_HXX
 #define OOX_POWERPOINT_SLIDEPERSIST_HXX
 
-#include "tokens.hxx"
 #include <boost/shared_ptr.hpp>
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/theme.hxx"
@@ -72,6 +71,10 @@ public:
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >    getPage() const { return mxPage; };
 
+#if OSL_DEBUG_LEVEL > 0
+    static com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > mxDebugPage;
+#endif
+
     void setMasterPersist( SlidePersistPtr pMasterPersistPtr ){ mpMasterPagePtr = pMasterPersistPtr; }
     SlidePersistPtr getMasterPersist() const { return mpMasterPagePtr; }
 
@@ -92,6 +95,7 @@ public:
 
     void setBackgroundProperties( const oox::drawingml::FillPropertiesPtr pFillPropertiesPtr ){ mpBackgroundPropertiesPtr = pFillPropertiesPtr; }
     oox::drawingml::FillPropertiesPtr getBackgroundProperties() const { return mpBackgroundPropertiesPtr; }
+    oox::drawingml::Color& getBackgroundColorRef() { return maBackgroundColorRef; }
 
     sal_Bool isMasterPage() const { return mbMaster; }
     sal_Bool isNotesPage() const { return mbNotes; }
@@ -112,7 +116,7 @@ public:
 
     oox::vml::Drawing* getDrawing() { return mpDrawingPtr.get(); }
 
-    void createXShapes( const oox::core::XmlFilterBase& rFilterBase );
+    void createXShapes( oox::core::XmlFilterBase& rFilterBase );
     void createBackground( const oox::core::XmlFilterBase& rFilterBase );
     void applyTextStyles( const oox::core::XmlFilterBase& rFilterBase );
 
@@ -131,6 +135,7 @@ private:
     SlidePersistPtr                                                         mpMasterPagePtr;
 
     oox::drawingml::ShapePtr                                                maShapesPtr;
+    oox::drawingml::Color                                                   maBackgroundColorRef;
     oox::drawingml::FillPropertiesPtr                                       mpBackgroundPropertiesPtr;
     ::std::list< boost::shared_ptr< TimeNode > >                            maTimeNodeList;
 

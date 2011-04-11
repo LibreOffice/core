@@ -64,13 +64,13 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     SvxObjectItem *pObjectItem;    // object
     Window *pEditWin;
     SvxRuler_Impl *pRuler_Imp;
-    BOOL bAppSetNullOffset :1;
-    BOOL bHorz :1;
+    sal_Bool bAppSetNullOffset :1;
+    sal_Bool bHorz :1;
     long lLogicNullOffset;      // in logic coordinates
     long lAppNullOffset;        // in logic coordinates
     long lMinFrame;             // minimal frame width in pixels
     long lInitialDragPos;
-    USHORT nFlags;
+    sal_uInt16 nFlags;
     enum {
         NONE = 0x0000,
         DRAG_OBJECT =  0x0001,
@@ -83,27 +83,27 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
         DRAG_OBJECT_LEFT_INDENT_ONLY = DRAG_OBJECT_SIZE_PROPORTIONAL
         }
     nDragType;
-    USHORT nDefTabType;
-    USHORT nTabCount;
-    USHORT nTabBufSize;
+    sal_uInt16 nDefTabType;
+    sal_uInt16 nTabCount;
+    sal_uInt16 nTabBufSize;
     long lDefTabDist;
     long lTabPos;
     RulerTab *pTabs;            // tab positions in pixel
     RulerIndent *pIndents;      // paragraph margins in pixel
     RulerBorder *pBorders;
-    USHORT nBorderCount;
+    sal_uInt16 nBorderCount;
     RulerBorder *pObjectBorders;
     SfxBindings *pBindings;
     long nDragOffset;
     long nMaxLeft;
     long nMaxRight;
-    BOOL bValid;
-    BOOL bListening;
-    BOOL bActive;
+    sal_Bool bValid;
+    sal_Bool bListening;
+    sal_Bool bActive;
     void StartListening_Impl();
-    long GetCorrectedDragPos( BOOL bLeft = TRUE, BOOL bRight = TRUE );
-    void DrawLine_Impl(long &lTabPos, int, BOOL Hori=TRUE);
-    USHORT GetObjectBordersOff(USHORT nIdx) const;
+    long GetCorrectedDragPos( sal_Bool bLeft = sal_True, sal_Bool bRight = sal_True );
+    void DrawLine_Impl(long &lTabPos, int, sal_Bool Hori=sal_True);
+    sal_uInt16 GetObjectBordersOff(sal_uInt16 nIdx) const;
 
     // page borders or surrounding frame
     void UpdateFrame(const SvxLongLRSpaceItem *);
@@ -118,7 +118,7 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     // page position and width
     void Update(const SvxPagePosSizeItem *);
     // columns
-    void Update(const SvxColumnItem *, USHORT nSID);
+    void Update(const SvxColumnItem *, sal_uInt16 nSID);
     // object selection
     void Update(const SvxObjectItem *);
     // protect
@@ -190,8 +190,8 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     DECL_LINK( MenuSelect, Menu * );
     void PrepareProportional_Impl(RulerType);
 
-    USHORT GetNextVisible(USHORT nColumn);
-    USHORT GetPrevVisible(USHORT nColumn);
+    sal_uInt16 GetNextVisible(sal_uInt16 nColumn);
+    sal_uInt16 GetPrevVisible(sal_uInt16 nColumn);
 
     void Update();
 
@@ -214,16 +214,16 @@ protected:
 
     // calculation of boundary values for object borders
     // values refer to the page
-    virtual BOOL    CalcLimits(long &nMax1, long &nMax2, BOOL bFirst) const;
-    BOOL IsActLastColumn(
-        BOOL bForceDontConsiderHidden = FALSE, USHORT nAct=USHRT_MAX) const ;
-    BOOL IsActFirstColumn(
-        BOOL bForceDontConsiderHidden = FALSE, USHORT nAct=USHRT_MAX) const;
-    USHORT GetActLeftColumn(
-        BOOL bForceDontConsiderHidden = FALSE, USHORT nAct=USHRT_MAX ) const;
-    USHORT GetActRightColumn (
-        BOOL bForceDontConsiderHidden = FALSE, USHORT nAct=USHRT_MAX ) const;
-    long CalcPropMaxRight(USHORT nCol=USHRT_MAX) const;
+    virtual sal_Bool    CalcLimits(long &nMax1, long &nMax2, sal_Bool bFirst) const;
+    sal_Bool IsActLastColumn(
+        sal_Bool bForceDontConsiderHidden = sal_False, sal_uInt16 nAct=USHRT_MAX) const ;
+    sal_Bool IsActFirstColumn(
+        sal_Bool bForceDontConsiderHidden = sal_False, sal_uInt16 nAct=USHRT_MAX) const;
+    sal_uInt16 GetActLeftColumn(
+        sal_Bool bForceDontConsiderHidden = sal_False, sal_uInt16 nAct=USHRT_MAX ) const;
+    sal_uInt16 GetActRightColumn (
+        sal_Bool bForceDontConsiderHidden = sal_False, sal_uInt16 nAct=USHRT_MAX ) const;
+    long CalcPropMaxRight(sal_uInt16 nCol=USHRT_MAX) const;
 
 public:
 #define     SVXRULER_SUPPORT_TABS                       0x0001
@@ -237,7 +237,7 @@ public:
 
     SvxRuler(Window* pParent,
              Window *pEditWin,
-             USHORT nRulerFlags,
+             sal_uInt16 nRulerFlags,
              SfxBindings &rBindings,
              WinBits nWinStyle = WB_STDRULER);
     ~SvxRuler();
@@ -245,7 +245,7 @@ public:
     void SetMinFrameSize(long lSize);
     long GetMinFrameSize() const ;
 
-    USHORT GetRulerFlags() const { return nFlags; }
+    sal_uInt16 GetRulerFlags() const { return nFlags; }
 
     void SetDefTabDist(long);
     long GetDefTabDist() const;
@@ -254,13 +254,13 @@ public:
     void SetNullOffsetLogic(long lOff = 0);
     long GetNullOffsetLogic() const { return lAppNullOffset; }
 
-    void SetActive(BOOL bOn = TRUE);
-    BOOL IsActive() const { return bActive; }
+    void SetActive(sal_Bool bOn = sal_True);
+    sal_Bool IsActive() const { return bActive; }
 
     void ForceUpdate() { Update(); }
 
     //#i24363# tab stops relative to indent
-    void SetTabsRelativeToIndent( BOOL bRel = TRUE );
+    void SetTabsRelativeToIndent( sal_Bool bRel = sal_True );
 };
 
 #endif

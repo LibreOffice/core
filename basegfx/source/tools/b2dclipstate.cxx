@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: b2dmultirange.cxx,v $
- * $Revision: 1.8 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -46,7 +43,7 @@ namespace basegfx
 {
 namespace tools
 {
-    struct ImplB2DClipState
+    class ImplB2DClipState
     {
     public:
         enum Operation {UNION, INTERSECT, XOR, SUBTRACT};

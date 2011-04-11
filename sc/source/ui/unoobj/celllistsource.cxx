@@ -81,7 +81,7 @@ namespace calc
         ,OCellListSource_PBase( OCellListSource_Base::rBHelper )
         ,m_xDocument( _rxDocument )
         ,m_aListEntryListeners( m_aMutex )
-        ,m_bInitialized( sal_False )
+        ,m_bInitialized( false )
     {
         DBG_CTOR( OCellListSource, checkConsistency_static );
 
@@ -90,7 +90,7 @@ namespace calc
         // register our property at the base class
         CellRangeAddress aInitialPropValue;
         registerPropertyNoMember(
-            ::rtl::OUString::createFromAscii( "CellRange" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellRange" )),
             PROP_HANDLE_RANGE_ADDRESS,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             ::getCppuType( &aInitialPropValue ),
@@ -131,7 +131,6 @@ namespace calc
         EventObject aDisposeEvent( *this );
         m_aListEntryListeners.disposeAndClear( aDisposeEvent );
 
-//        OCellListSource_Base::disposing();
         WeakAggComponentImplHelperBase::disposing();
 
         // TODO: clean up here whatever you need to clean up (e.g. revoking listeners etc.)
@@ -201,7 +200,7 @@ namespace calc
             if ( *pLookup++ == _rServiceName )
                 return sal_True;
 
-        return sal_False;
+        return false;
     }
 
     //--------------------------------------------------------------------
@@ -338,7 +337,7 @@ namespace calc
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "OCellListSource::notifyModified: caught a (non-runtime) exception!" );
+                OSL_FAIL( "OCellListSource::notifyModified: caught a (non-runtime) exception!" );
             }
         }
 
@@ -366,7 +365,7 @@ namespace calc
 
         // get the cell address
         CellRangeAddress aRangeAddress;
-        sal_Bool bFoundAddress = sal_False;
+        sal_Bool bFoundAddress = false;
 
         const Any* pLoop = _rArguments.getConstArray();
         const Any* pLoopEnd = _rArguments.getConstArray() + _rArguments.getLength();
@@ -375,7 +374,7 @@ namespace calc
             NamedValue aValue;
             if ( *pLoop >>= aValue )
             {
-                if ( aValue.Name.equalsAscii( "CellRange" ) )
+                if ( aValue.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "CellRange" ) ) )
                 {
                     if ( aValue.Value >>= aRangeAddress )
                         bFoundAddress = sal_True;
@@ -415,7 +414,7 @@ namespace calc
         }
         catch( const Exception& )
         {
-            DBG_ERROR( "OCellListSource::initialize: caught an exception while retrieving the cell object!" );
+            OSL_FAIL( "OCellListSource::initialize: caught an exception while retrieving the cell object!" );
         }
 
 

@@ -230,7 +230,7 @@ sal_Int32 XclPCNumGroupInfo::GetScDateType() const
         case EXC_SXNUMGROUP_TYPE_MONTH: nScType = ScDPGroupBy::MONTHS;    break;
         case EXC_SXNUMGROUP_TYPE_QUART: nScType = ScDPGroupBy::QUARTERS;  break;
         case EXC_SXNUMGROUP_TYPE_YEAR:  nScType = ScDPGroupBy::YEARS;     break;
-        default:    DBG_ERROR1( "XclPCNumGroupInfo::GetScDateType - unexpected date type %d", GetXclDataType() );
+        default:    OSL_TRACE( "XclPCNumGroupInfo::GetScDateType - unexpected date type %d", GetXclDataType() );
     }
     return nScType;
 }
@@ -247,7 +247,7 @@ void XclPCNumGroupInfo::SetScDateType( sal_Int32 nScType )
         case ScDPGroupBy::MONTHS:     nXclType = EXC_SXNUMGROUP_TYPE_MONTH;   break;
         case ScDPGroupBy::QUARTERS:   nXclType = EXC_SXNUMGROUP_TYPE_QUART;   break;
         case ScDPGroupBy::YEARS:      nXclType = EXC_SXNUMGROUP_TYPE_YEAR;    break;
-        default:    DBG_ERROR1( "XclPCNumGroupInfo::SetScDateType - unexpected date type %d", nScType );
+        default:    OSL_TRACE( "XclPCNumGroupInfo::SetScDateType - unexpected date type %d", nScType );
     }
     SetXclDataType( nXclType );
 }

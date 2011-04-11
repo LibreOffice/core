@@ -29,11 +29,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XEncryptionProtectedSource.hpp>
+#include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
+
+#include <rtl/digest.h>
 
 #include <ucbhelper/content.hxx>
 
@@ -58,7 +61,7 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetStorageFactory(
         throw uno::RuntimeException();
 
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.embed.StorageFactory" ) ),
+                    xFactory->createInstance ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.StorageFactory" )) ),
                     uno::UNO_QUERY );
 
     if ( !xStorageFactory.is() )
@@ -77,7 +80,7 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetFileSystemStora
         throw uno::RuntimeException();
 
     uno::Reference < lang::XSingleServiceFactory > xStorageFactory(
-                    xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.embed.FileSystemStorageFactory" ) ),
+                    xFactory->createInstance ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.FileSystemStorageFactory" )) ),
                     uno::UNO_QUERY );
 
     if ( !xStorageFactory.is() )
@@ -223,7 +226,7 @@ uno::Reference< io::XInputStream > OStorageHelper::GetInputStreamFromURL(
         throw uno::RuntimeException();
 
     uno::Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess(
-            xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+            xFactory->createInstance ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ),
             uno::UNO_QUERY );
 
     if ( !xTempAccess.is() )
@@ -237,16 +240,16 @@ uno::Reference< io::XInputStream > OStorageHelper::GetInputStreamFromURL(
 }
 
 // ----------------------------------------------------------------------
-void OStorageHelper::SetCommonStoragePassword(
+void OStorageHelper::SetCommonStorageEncryptionData(
             const uno::Reference< embed::XStorage >& xStorage,
-            const ::rtl::OUString& aPass )
+            const uno::Sequence< beans::NamedValue >& aEncryptionData )
     throw ( uno::Exception )
 {
-    uno::Reference< embed::XEncryptionProtectedSource > xEncrSet( xStorage, uno::UNO_QUERY );
+    uno::Reference< embed::XEncryptionProtectedSource2 > xEncrSet( xStorage, uno::UNO_QUERY );
     if ( !xEncrSet.is() )
         throw io::IOException(); // TODO
 
-    xEncrSet->setEncryptionPassword( aPass );
+    xEncrSet->setEncryptionData( aEncryptionData );
 }
 
 // ----------------------------------------------------------------------
@@ -257,7 +260,7 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
 
     ::rtl::OUString aMediaType;
-    xStorProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
+    xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" )) ) >>= aMediaType;
 
     sal_Int32 nResult = 0;
 
@@ -417,6 +420,45 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
         throw uno::RuntimeException();
 
     return xTempStorage;
+}
+
+// ----------------------------------------------------------------------
+uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( const ::rtl::OUString& aPassword )
+{
+    // TODO/LATER: Should not the method be part of DocPasswordHelper?
+    uno::Sequence< beans::NamedValue > aEncryptionData;
+    if ( aPassword.getLength() )
+    {
+        // MS_1252 encoding was used for SO60 document format password encoding,
+        // this encoding supports only a minor subset of nonascii characters,
+        // but for compatibility reasons it has to be used for old document formats
+        aEncryptionData.realloc( 2 );
+        aEncryptionData[0].Name = PACKAGE_ENCRYPTIONDATA_SHA1UTF8;
+        aEncryptionData[1].Name = PACKAGE_ENCRYPTIONDATA_SHA1MS1252;
+
+        rtl_TextEncoding pEncoding[2] = { RTL_TEXTENCODING_UTF8, RTL_TEXTENCODING_MS_1252 };
+
+        for ( sal_Int32 nInd = 0; nInd < 2; nInd++ )
+        {
+            ::rtl::OString aByteStrPass = ::rtl::OUStringToOString( aPassword, pEncoding[nInd] );
+
+            sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_SHA1];
+            rtlDigestError nError = rtl_digest_SHA1( aByteStrPass.getStr(),
+                                                    aByteStrPass.getLength(),
+                                                    pBuffer,
+                                                    RTL_DIGEST_LENGTH_SHA1 );
+
+            if ( nError != rtl_Digest_E_None )
+            {
+                aEncryptionData.realloc( 0 );
+                break;
+            }
+
+            aEncryptionData[nInd].Value <<= uno::Sequence< sal_Int8 >( (sal_Int8*)pBuffer, RTL_DIGEST_LENGTH_SHA1 );
+        }
+    }
+
+    return aEncryptionData;
 }
 
 // ----------------------------------------------------------------------

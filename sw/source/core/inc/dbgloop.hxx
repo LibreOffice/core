@@ -1,4 +1,3 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,7 +28,7 @@
 #ifndef _DBGLOOP_HXX
 #define _DBGLOOP_HXX
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DBG_UTIL
 
 #include <tools/solar.h>
 
@@ -40,8 +39,8 @@ class SvStream;
 
 class DbgLoopStack
 {
-    USHORT aCount[DBG_MAX_STACK];
-    USHORT nPtr;
+    sal_uInt16 aCount[DBG_MAX_STACK];
+    sal_uInt16 nPtr;
     const void *pDbg;
     void Reset();
 public:
@@ -76,5 +75,3 @@ inline void PrintLoopStack( SvStream &rOS ) //$ ostream
 #endif
 
 #endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

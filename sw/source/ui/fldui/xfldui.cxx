@@ -42,7 +42,7 @@
 #include <comphelper/processfactory.hxx>
 #include <fldmgr.hxx>
 #include <dbmgr.hxx>
-#include <wrtsh.hxx>        // Actives Fenster
+#include <wrtsh.hxx>        // active window
 #include <view.hxx>
 #include <swmodule.hxx>
 
@@ -63,14 +63,14 @@ using namespace ::com::sun::star::beans;
 // ---------------------------------------------------------------------------
 
 /*--------------------------------------------------------------------
-     Beschreibung: Ist das Datenbankfeld numerisch?
-     Anm: Im Fehlerfall wird TRUE returnt.
+     Description: Is the database field numeric?
+     remark: in case of error sal_True is returned
  --------------------------------------------------------------------*/
 
-BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
-                            BOOL bIsTable, const String& rFldName)
+sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
+                            sal_Bool bIsTable, const String& rFldName)
 {
-    BOOL bNumeric = TRUE;
+    sal_Bool bNumeric = sal_True;
 
     SwNewDBMgr* pDBMgr = pWrtShell ? pWrtShell->GetNewDBMgr() :
                             ::GetActiveView()->GetWrtShell().GetNewDBMgr();
@@ -127,7 +127,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
         }
         catch(Exception& )
         {
-            OSL_ENSURE(false, "Exception in getColumns()");
+            OSL_FAIL("Exception in getColumns()");
         }
         if(xCols.is() && xCols->hasByName(rFldName))
         {
@@ -171,7 +171,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
                 default:
-                    bNumeric = FALSE;
+                    bNumeric = sal_False;
             }
         }
     }

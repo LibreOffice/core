@@ -639,8 +639,7 @@ namespace slideshow
                     case DocTreeNode::NODETYPE_INVALID:
                         // FALLTHROUGH intended
                     default:
-                        OSL_ENSURE(false,
-                                   "DrawShapeSubsetting::mapDocTreeNode(): unexpected node type");
+                        OSL_FAIL("DrawShapeSubsetting::mapDocTreeNode(): unexpected node type");
                         return DrawShapeSubsetting::CLASS_NOOP;
 
                     case DocTreeNode::NODETYPE_LOGICAL_SHAPE:
@@ -665,7 +664,7 @@ namespace slideshow
                 };
             }
 
-            /// Counts number of class occurences
+            /// Counts number of class occurrences
             class CountClassFunctor
             {
             public:
@@ -683,7 +682,7 @@ namespace slideshow
                     if( eCurrElemClassification == meClass )
                         ++mnCurrCount;
 
-                    return true; // never stop, count all occurences
+                    return true; // never stop, count all occurrences
                 }
 
                 sal_Int32 getCount() const
@@ -708,7 +707,7 @@ namespace slideshow
             // actions
             CountClassFunctor aFunctor( eRequestedClass );
 
-            // count all occurences in the given range
+            // count all occurrences in the given range
             iterateActionClassifications( aFunctor, rBegin, rEnd );
 
             return aFunctor.getCount();

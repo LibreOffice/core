@@ -29,7 +29,7 @@
 #define _FILTASK_HXX_
 #endif
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 
 #include "osl/mutex.hxx"
@@ -39,7 +39,6 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include "filerror.hxx"
-
 
 namespace fileaccess
 {
@@ -93,7 +92,7 @@ namespace fileaccess
                 m_bHandled = true;
             }
 
-            bool isHandled()
+            bool isHandled() const
             {
                 return true;
             }
@@ -148,7 +147,7 @@ namespace fileaccess
         };  // end class TaskHandling
 
 
-        typedef std::hash_map< sal_Int32,TaskHandling,std::hash< sal_Int32 > > TaskMap;
+        typedef boost::unordered_map< sal_Int32,TaskHandling,boost::hash< sal_Int32 > > TaskMap;
 
 
     private:
@@ -183,15 +182,6 @@ namespace fileaccess
         void SAL_CALL installError( sal_Int32 CommandId,
                                     sal_Int32 ErrorCode,
                                     sal_Int32 minorCode = TASKHANDLER_NO_ERROR );
-
-
-//          void SAL_CALL installError( sal_Int32 CommandId,
-//                                      sal_Int32 ErrorCode,
-//                                      rtl::OUString message );
-
-//          void SAL_CALL installError( sal_Int32 CommandId,
-//                                      sal_Int32 ErrorCode,
-//                                      rtl::OUString message );
 
         void SAL_CALL retrieveError( sal_Int32 CommandId,
                                      sal_Int32 &ErrorCode,

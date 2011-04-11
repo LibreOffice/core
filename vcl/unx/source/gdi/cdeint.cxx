@@ -73,7 +73,6 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
         int nStringCount;
         XTextProperty aTextProperty;
         aTextProperty.value = 0;
-        int i;
 
         static Atom nResMgrAtom = XInternAtom( mpDisplay, "RESOURCE_MANAGER", False );
 
@@ -89,6 +88,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
             // *n*ColorPalette: palettefile
 
             ByteString aLines;
+            int i;
             for( i=0; i < nStringCount; i++ )
                 aLines += ppStringList[i];
             for( i = aLines.GetTokenCount( '\n' )-1; i >= 0; i-- )
@@ -125,7 +125,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                         ;
                     int nNumber = aLine.Copy( ++nPos ).ToInt32();
 
-                    DBG_TRACE2( "found palette %d in resource \"%s\"", nNumber, aLine.GetBuffer() );
+                    OSL_TRACE( "found palette %d in resource \"%s\"", nNumber, aLine.GetBuffer() );
 
                     // found no documentation what this number actually means;
                     // might be the screen number. 0 seems to be the right one
@@ -133,7 +133,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                     if( nNumber )
                         continue;
 
-                    DBG_TRACE1( "Palette file is \"%s\".\n", aPaletteFile.GetBuffer() );
+                    OSL_TRACE( "Palette file is \"%s\".\n", aPaletteFile.GetBuffer() );
 
                     String aPath( aHomeDir );
                     aPath.AppendAscii( "/.dt/palettes/" );
@@ -155,7 +155,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                         aStream.ReadLine( aBuffer );
                         // format is "#RRRRGGGGBBBB"
 
-                        DBG_TRACE1( "\t\"%s\".\n", aBuffer.GetBuffer() );
+                        OSL_TRACE( "\t\"%s\".\n", aBuffer.GetBuffer() );
 
                         if( aBuffer.Len() )
                         {
@@ -169,7 +169,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
                                 | ( getHexDigit( pArr[8] ) << 4 )
                                 );
 
-                            DBG_TRACE1( "\t\t%lx\n", aColors[nIndex].GetColor() );
+                            OSL_TRACE( "\t\t%lx\n", aColors[nIndex].GetColor() );
                         }
                     }
 
@@ -232,9 +232,9 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
         {
             // calculate Checked color
             Color   aColor2 = aStyleSettings.GetLightColor();
-            BYTE    nRed    = (BYTE)(((USHORT)aColors[1].GetRed()   + (USHORT)aColor2.GetRed())/2);
-            BYTE    nGreen  = (BYTE)(((USHORT)aColors[1].GetGreen() + (USHORT)aColor2.GetGreen())/2);
-            BYTE    nBlue   = (BYTE)(((USHORT)aColors[1].GetBlue()  + (USHORT)aColor2.GetBlue())/2);
+            sal_uInt8    nRed    = (sal_uInt8)(((sal_uInt16)aColors[1].GetRed()   + (sal_uInt16)aColor2.GetRed())/2);
+            sal_uInt8    nGreen  = (sal_uInt8)(((sal_uInt16)aColors[1].GetGreen() + (sal_uInt16)aColor2.GetGreen())/2);
+            sal_uInt8    nBlue   = (sal_uInt8)(((sal_uInt16)aColors[1].GetBlue()  + (sal_uInt16)aColor2.GetBlue())/2);
             aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
         }
     }

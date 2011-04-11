@@ -13,6 +13,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\auth
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\awt
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\awt\tree
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\awt\grid
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\awt\tab
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\chart
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\chart2
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\chart2\data
@@ -109,12 +110,6 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\sax
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\xpath
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xsd
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star
-mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
-
 
 ..\%__SRC%\ucr\offapi.db %_DEST%\bin%_EXT%\offapi.rdb
 ..\%__SRC%\ucrdoc\offapi_doc.db %_DEST%\bin%_EXT%\offapi_doc.rdb
@@ -130,6 +125,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
 ..\com\sun\star\awt\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\awt
 ..\com\sun\star\awt\tree\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\awt\tree
 ..\com\sun\star\awt\grid\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\awt\grid
+..\com\sun\star\awt\tab\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\awt\tab
 ..\com\sun\star\chart\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\chart
 ..\com\sun\star\chart2\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\chart2
 ..\com\sun\star\chart2\data\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\chart2\data
@@ -226,5 +222,3 @@ mkdir: %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form
 ..\com\sun\star\xml\wrapper\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\xml\xpath\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\xpath
 ..\com\sun\star\xsd\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xsd
-
-..\drafts\com\sun\star\form\*.idl %COMMON_DEST%\idl%_EXT%\drafts\com\sun\star\form

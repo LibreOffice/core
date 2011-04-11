@@ -142,7 +142,7 @@ public:
     XMLTableStyleContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
             const ::rtl::OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
-            SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle = sal_False );
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle = false );
     virtual ~XMLTableStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -316,7 +316,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
-            sal_Bool bDefaultStyle = sal_False );
+            sal_Bool bDefaultStyle = false );
     virtual ~ScCellTextStyleContext();
 
     // overload FillPropertySet to store style information

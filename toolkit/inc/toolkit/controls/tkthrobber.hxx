@@ -52,7 +52,7 @@ namespace toolkit
         ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
     public:
-                            UnoThrobberControlModel();
+                            UnoThrobberControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                             UnoThrobberControlModel( const UnoThrobberControlModel& rModel ) : UnoControlModel( rModel ) {;}
 
         UnoControlModel*    Clone() const { return new UnoThrobberControlModel( *this ); }
@@ -81,7 +81,7 @@ namespace toolkit
     private:
 
     public:
-                                    UnoThrobberControl();
+                                    UnoThrobberControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
         ::rtl::OUString             GetComponentServiceName();
 
         DECLARE_UNO3_AGG_DEFAULTS( UnoThrobberControl, UnoControlBase );

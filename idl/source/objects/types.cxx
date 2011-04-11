@@ -34,51 +34,37 @@
 
 #include <tools/debug.hxx>
 
-#include <attrib.hxx>
 #include <types.hxx>
 #include <globals.hxx>
 #include <database.hxx>
 
-/****************** SvMetaAttribute *************************************/
-/************************************************************************/
 SV_IMPL_META_FACTORY1( SvMetaAttribute, SvMetaReference );
-/*************************************************************************
-|*    SvMetaAttribute::SvMetaAttribute()
-|*
-|*    Beschreibung
-*************************************************************************/
 SvMetaAttribute::SvMetaAttribute()
-    : aAutomation( TRUE, FALSE )
-    , aExport( TRUE, FALSE )
-    , aIsCollection ( FALSE, FALSE )
-    , aReadOnlyDoc ( TRUE, FALSE )
-    , aHidden( FALSE, FALSE )
-    , bNewAttr( FALSE )
+    : aAutomation( sal_True, sal_False )
+    , aExport( sal_True, sal_False )
+    , aIsCollection ( sal_False, sal_False )
+    , aReadOnlyDoc ( sal_True, sal_False )
+    , aHidden( sal_False, sal_False )
+    , bNewAttr( sal_False )
 {
 }
 
 SvMetaAttribute::SvMetaAttribute( SvMetaType * pType )
     : aType( pType )
-    , aAutomation( TRUE, FALSE )
-    , aExport( TRUE, FALSE )
-    , aIsCollection ( FALSE, FALSE)
-    , aReadOnlyDoc ( TRUE, FALSE)
-    , aHidden( FALSE, FALSE )
-    , bNewAttr( FALSE )
+    , aAutomation( sal_True, sal_False )
+    , aExport( sal_True, sal_False )
+    , aIsCollection ( sal_False, sal_False)
+    , aReadOnlyDoc ( sal_True, sal_False)
+    , aHidden( sal_False, sal_False )
+    , bNewAttr( sal_False )
 {
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::Load()
-|*    SvMetaAttribute::Save()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaAttribute::Load( SvPersistStream & rStm )
 {
     SvMetaReference::Load( rStm );
 
-    BYTE nMask;
+    sal_uInt8 nMask;
     rStm >> nMask;
     if( nMask & 0x01 )
     {
@@ -99,8 +85,8 @@ void SvMetaAttribute::Save( SvPersistStream & rStm )
 {
     SvMetaReference::Save( rStm );
 
-    // Maske erstellen
-    BYTE nMask = 0;
+    // create mask
+    sal_uInt8 nMask = 0;
     if( aType.Is() )            nMask |= 0x1;
     if( aSlotId.IsSet() )       nMask |= 0x2;
     if( aExport.IsSet() )       nMask |= 0x4;
@@ -110,7 +96,7 @@ void SvMetaAttribute::Save( SvPersistStream & rStm )
     if( aReadOnlyDoc.IsSet() )  nMask |= 0x40;
     if( aHidden.IsSet() )       nMask |= 0x80;
 
-    // Daten schreiben
+    // write data
     rStm << nMask;
     if( nMask & 0x1 )   rStm << aType;
     if( nMask & 0x2 )   rStm << aSlotId;
@@ -122,59 +108,33 @@ void SvMetaAttribute::Save( SvPersistStream & rStm )
     if( nMask & 0x80 )  rStm << aHidden;
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::GetType()
-|*
-|*    Beschreibung
-*************************************************************************/
 SvMetaType * SvMetaAttribute::GetType() const
 {
     if( aType.Is() || !GetRef() ) return aType;
     return ((SvMetaAttribute *)GetRef())->GetType();
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::GetSlotId()
-|*
-|*    Beschreibung
-*************************************************************************/
 const SvNumberIdentifier & SvMetaAttribute::GetSlotId() const
 {
     if( aSlotId.IsSet() || !GetRef() ) return aSlotId;
     return ((SvMetaAttribute *)GetRef())->GetSlotId();
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::GetReadonly()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaAttribute::GetReadonly() const
+sal_Bool SvMetaAttribute::GetReadonly() const
 {
     if( aReadonly.IsSet() || !GetRef() ) return aReadonly;
     return ((SvMetaAttribute *)GetRef())->GetReadonly();
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::GetExport()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaAttribute::GetExport() const
+sal_Bool SvMetaAttribute::GetExport() const
 {
     if( aExport.IsSet() || !GetRef() ) return aExport;
     return ((SvMetaAttribute *)GetRef())->GetExport();
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::GetHidden()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaAttribute::GetHidden() const
+sal_Bool SvMetaAttribute::GetHidden() const
 {
-    // Wenn Export gesetzt wurde, aber Hidden nicht, gilt der Default
-    // aHidden = !aExport
+    // when export is set, but hidden is not the default is used
     if ( aExport.IsSet() && !aHidden.IsSet() )
         return !aExport;
     else if( aHidden.IsSet() || !GetRef() )
@@ -183,20 +143,15 @@ BOOL SvMetaAttribute::GetHidden() const
         return ((SvMetaAttribute *)GetRef())->GetHidden();
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::GetAutomation()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaAttribute::GetAutomation() const
+sal_Bool SvMetaAttribute::GetAutomation() const
 {
     if( aAutomation.IsSet() || !GetRef() ) return aAutomation;
     return ((SvMetaAttribute *)GetRef())->GetAutomation();
 }
 
-BOOL SvMetaAttribute::GetIsCollection() const
+sal_Bool SvMetaAttribute::GetIsCollection() const
 {
-    BOOL bRet;
+    sal_Bool bRet;
     if( aIsCollection.IsSet() || !GetRef() )
     {
         if ( aIsCollection.IsSet() )
@@ -211,176 +166,58 @@ BOOL SvMetaAttribute::GetIsCollection() const
     return ((SvMetaSlot *)GetRef())->GetIsCollection();
 }
 
-BOOL SvMetaAttribute::GetReadOnlyDoc() const
+sal_Bool SvMetaAttribute::GetReadOnlyDoc() const
 {
     if( aReadOnlyDoc.IsSet() || !GetRef() ) return aReadOnlyDoc;
     return ((SvMetaSlot *)GetRef())->GetReadOnlyDoc();
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::IsMethod()
-|*    SvMetaAttribute::IsVariable()
-|*    SvMetaAttribute::GetMangleName()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaAttribute::IsMethod() const
+sal_Bool SvMetaAttribute::IsMethod() const
 {
     SvMetaType * pType = GetType();
     DBG_ASSERT( pType, "no type for attribute" );
     return pType->GetType() == TYPE_METHOD;
 }
 
-BOOL SvMetaAttribute::IsVariable() const
+sal_Bool SvMetaAttribute::IsVariable() const
 {
     SvMetaType * pType = GetType();
     return pType->GetType() != TYPE_METHOD;
 }
 
-ByteString SvMetaAttribute::GetMangleName( BOOL ) const
+ByteString SvMetaAttribute::GetMangleName( sal_Bool ) const
 {
     return GetName();
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::FillSbxObject()
-|*
-|*    Beschreibung
-*************************************************************************/
-/*
-void SvMetaAttribute::FillSbxObject( SbxInfo * pInfo, USHORT nSbxFlags )
-{
-    SvMetaType * pType = GetType();
-    DBG_ASSERT( pType, "no type for attribute" );
-    if( !nSbxFlags )
-    { // Flags koennen vom Aufrufer ueberschrieben werden
-        if( pType->GetOut() )
-        {
-            nSbxFlags |= SBX_WRITE;
-            if( pType->GetIn() )
-                nSbxFlags |= SBX_READ;
-        }
-        else
-            nSbxFlags |= SBX_READ;
-    }
-    SvMetaType * pBaseType = pType->GetBaseType();
-    DBG_ASSERT( pBaseType, "no base type for attribute" );
-    if( pBaseType->GetType() == TYPE_STRUCT )
-    {
-        const SvMetaAttributeMemberList & rList = pBaseType->GetAttrList();
-        ULONG nCount = rList.Count();
-        for( ULONG i = 0; i < nCount; i++ )
-            rList.GetObject( i )->FillSbxObject( pInfo, nSbxFlags );
-    }
-    else
-        //MI: pInfo->AddParam( GetName(), pBaseType->GetSbxDataType(), nSbxFlags );
-        pInfo->AddParam( GetName(), SbxVARIANT, nSbxFlags );
-}
-*/
-
-/*************************************************************************
-|*    SvMetaAttribute::FillSbxObject()
-|*
-|*    Beschreibung
-*************************************************************************/
-/*
-void SvMetaAttribute::FillSbxObject( SvIdlDataBase & rBase,
-                                    SbxObject * pObj, BOOL bVariable )
-{
-    // keine Attribut fuer Automation
-    if( !GetAutomation() || !GetExport() )
-        return;
-
-    if( bVariable && IsVariable() )
-    {
-        SvMetaType * pType = GetType();
-        DBG_ASSERT( pType, "no type for attribute" );
-        SvMetaType * pBaseType = pType->GetBaseType();
-        DBG_ASSERT( pBaseType, "no base type for attribute" );
-
-        if( pBaseType->GetType() == TYPE_STRUCT )
-        {
-            SvNumberIdentifier aSlotId = rBase.aStructSlotId;
-            if ( GetSlotId().Len() )
-                rBase.aStructSlotId = GetSlotId();
-            const SvMetaAttributeMemberList & rList = pBaseType->GetAttrList();
-            ULONG nCount = rList.Count();
-            for( ULONG i = 0; i < nCount; i++ )
-                rList.GetObject( i )->FillSbxObject( rBase, pObj, bVariable );
-            rBase.aStructSlotId = aSlotId;
-        }
-        else
-        {
-            SbxPropertyRef xProp = new SbxProperty( GetName(), SbxVARIANT );
-                                        //MI: pBaseType->GetSbxDataType() );
-            if ( GetReadonly() || IsMethod() )
-                xProp->ResetFlag( SBX_WRITE );
-            xProp->SetUserData( MakeSlotValue( rBase, TRUE ) );
-            pType->FillSbxObject( xProp, bVariable );
-
-            pObj->Insert( &xProp );
-        }
-    }
-    else if( !bVariable && IsMethod() )
-    {
-        SvMetaType * pType = GetType();
-        SvMetaType * pRetBaseType = GetType()->GetReturnType()->GetBaseType();
-        SbxMethodRef xMeth = new SbxMethod( GetName(),
-                            pRetBaseType->GetSbxDataType() );
-        xMeth->ResetFlag( SBX_WRITE );
-        xMeth->SetUserData( MakeSlotValue( rBase, FALSE ) );
-        pType->FillSbxObject( xMeth, bVariable );
-
-        pObj->Insert( &xMeth );
-    }
-}
-*/
 #ifdef IDL_COMPILER
-/*************************************************************************
-|*    SvMetaAttribute::Test()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaAttribute::Test( SvIdlDataBase & rBase,
+sal_Bool SvMetaAttribute::Test( SvIdlDataBase & rBase,
                             SvTokenStream & rInStm )
 {
-    BOOL bOk = TRUE;
+    sal_Bool bOk = sal_True;
     if( GetType()->IsItem() && !GetSlotId().IsSet() )
     {
         rBase.SetError( "slot without id declared", rInStm.GetToken() );
         rBase.WriteError( rInStm );
-        bOk = FALSE;
+        bOk = sal_False;
     }
-    /*
-    if( !GetType()->IsItem() && GetSlotId().IsSet() )
-    {
-        rBase.SetError( "slot without item declared", rInStm.GetToken() );
-        rBase.WriteError( rInStm );
-        bOk = FALSE;
-    }
-    */
     return bOk;
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::ReadSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
+sal_Bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
                                      SvTokenStream & rInStm )
 {
-    UINT32  nTokPos     = rInStm.Tell();
+    sal_uInt32  nTokPos     = rInStm.Tell();
     if( !GetType() )
-        // Es wurde kein Typ im ctor mitgegeben
+        // no type in ctor passed on
         aType = rBase.ReadKnownType( rInStm );
-    BOOL bOk = FALSE;
+    sal_Bool bOk = sal_False;
     if( GetType() )
     {
         ReadNameSvIdl( rBase, rInStm );
         aSlotId.ReadSvIdl( rBase, rInStm );
 
-        bOk = TRUE;
+        bOk = sal_True;
         SvToken * pTok  = rInStm.GetToken();
         if( bOk && pTok->IsChar() && pTok->GetChar() == '(' )
         {
@@ -400,16 +237,11 @@ BOOL SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
     return bOk;
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::WriteSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaAttribute::WriteSvIdl
 (
     SvIdlDataBase & rBase,
     SvStream & rOutStm,
-    USHORT nTab
+    sal_uInt16 nTab
 )
 {
     SvMetaType * pType = GetType();
@@ -419,17 +251,12 @@ void SvMetaAttribute::WriteSvIdl
         rOutStm << ' ' << aSlotId.GetBuffer();
     if( pType->GetType() == TYPE_METHOD )
         pType->WriteMethodArgs( rBase, rOutStm, nTab, WRITE_IDL );
-    ULONG nPos = rOutStm.Tell();
+    sal_uLong nPos = rOutStm.Tell();
     rOutStm << endl;
     SvMetaName::WriteSvIdl( rBase, rOutStm, nTab );
     TestAndSeekSpaceOnly( rOutStm, nPos );
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::ReadAttributesSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaAttribute::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm )
 {
@@ -444,28 +271,22 @@ void SvMetaAttribute::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     {
         if( GetType()->GetType() == TYPE_METHOD )
         {
-            // Fehler setzen
+            // set error
             rBase.SetError( "Readonly in function attribute", rInStm.GetToken() );
             rBase.WriteError( rInStm );
         }
     }
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::WriteAttributesSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaAttribute::WriteAttributesSvIdl
 (
     SvIdlDataBase & rBase,
     SvStream & rOutStm,
-    USHORT nTab
+    sal_uInt16 nTab
 )
 {
     SvMetaReference::WriteAttributesSvIdl( rBase, rOutStm, nTab );
 
-    //aSlotId.WriteSvIdl( SvHash_SlotId(), rOutStm, nTab );
     if( !aExport || !aAutomation || aReadonly )
     {
         WriteTab( rOutStm, nTab );
@@ -509,14 +330,9 @@ void SvMetaAttribute::WriteAttributesSvIdl
     }
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::WriteParam()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaAttribute::WriteParam( SvIdlDataBase & rBase,
                                     SvStream & rOutStm,
-                                    USHORT nTab,
+                                    sal_uInt16 nTab,
                                     WriteType nT )
 {
     SvMetaType * pType = GetType();
@@ -530,16 +346,13 @@ void SvMetaAttribute::WriteParam( SvIdlDataBase & rBase,
         if( pBaseType->GetType() == TYPE_STRUCT )
         {
             const SvMetaAttributeMemberList & rList = pBaseType->GetAttrList();
-            ULONG nCount = rList.Count();
-            for( ULONG i = 0; i < nCount; i++ )
+            sal_uLong nCount = rList.Count();
+            for( sal_uLong i = 0; i < nCount; i++ )
             {
                 rList.GetObject( i )->WriteParam( rBase, rOutStm, nTab, nT );
                 if( i+1<nCount )
                 {
-//                  if ( nT == WRITE_DOCU )
                         rOutStm << ',';
-//                  else
-//                      rOutStm << ',' << endl;
                 }
             }
         }
@@ -563,32 +376,19 @@ void SvMetaAttribute::WriteParam( SvIdlDataBase & rBase,
                      pBaseType->GetType() == TYPE_STRUCT ||
                     pBaseType->GetType() == TYPE_ENUM )
                 {
-                    DBG_ERROR( "Falscher Parametertyp!" );
+                    OSL_FAIL( "Falscher Parametertyp!" );
                 }
                 else
                     rOutStm << pBaseType->GetBasicPostfix().GetBuffer();
             }
         }
     }
-/*
-    else if( nT == WRITE_C_HEADER || nT == WRITE_C_SOURCE )
-    {
-        pBaseType->WriteTypePrefix( rBase, rOutStm, nTab, nT );
-        rOutStm << ' ';
-        rOutStm << GetName().GetBuffer();
-    }
-*/
 }
 
-/*************************************************************************
-|*    SvMetaSlot::WriteSlotId()
-|*
-|*    Beschreibung
-*************************************************************************/
-ULONG SvMetaAttribute::MakeSlotValue( SvIdlDataBase & rBase, BOOL bVar ) const
+sal_uLong SvMetaAttribute::MakeSlotValue( SvIdlDataBase & rBase, sal_Bool bVar ) const
 {
      const SvNumberIdentifier & rId = GetSlotId();
-    ULONG n = rId.GetValue();
+    sal_uLong n = rId.GetValue();
     if( rBase.aStructSlotId.Len() )
     {
         n = n << 20;
@@ -603,26 +403,21 @@ ULONG SvMetaAttribute::MakeSlotValue( SvIdlDataBase & rBase, BOOL bVar ) const
     return n;
 }
 
-/*************************************************************************
-|*    SvMetaSlot::WriteAttributes()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaAttribute::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                      USHORT nTab,
+                                      sal_uInt16 nTab,
                                       WriteType nT, WriteAttribute nA )
 {
     if( nT == WRITE_ODL  )
     {
         const SvNumberIdentifier & rId = GetSlotId();
-        BOOL bReadonly = GetReadonly() || ( nA & WA_READONLY );
+        sal_Bool bReadonly = GetReadonly() || ( nA & WA_READONLY );
         if( (rId.IsSet() && !(nA & WA_STRUCT)) || bReadonly )
         {
-            BOOL bVar = IsVariable();
+            sal_Bool bVar = IsVariable();
             if( nA & WA_VARIABLE )
-                bVar = TRUE;
+                bVar = sal_True;
             else if( nA & WA_METHOD )
-                bVar = FALSE;
+                bVar = sal_False;
 
             WriteTab( rOutStm, nTab );
             rOutStm << "//class SvMetaAttribute" << endl;
@@ -642,30 +437,21 @@ void SvMetaAttribute::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm
     }
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::WriteCSource()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaAttribute::WriteCSource( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                    BOOL bSet )
+                                    sal_Bool bSet )
 {
     rOutStm << endl;
     SvMetaType * pType = GetType();
     SvMetaType * pBaseType = pType->GetBaseType();
 
-    // Bei Set ist der Return immer void
-    BOOL bVoid = bSet;
+    // for Set the return is always void
+    sal_Bool bVoid = bSet;
     if( pBaseType->GetType() == TYPE_METHOD )
         bVoid = pBaseType->GetReturnType()->GetBaseType()->GetName() == "void";
 
-    // Methoden/Funktions-Body ausgeben
+    // emit methods/functions body
     rOutStm << '{' << endl;
     WriteTab( rOutStm, 1 );
-//  rOutStm << "if( SvIPCIsConnected() )" << endl;
-//  WriteTab( rOutStm, 1 );
-//  rOutStm << '{' << endl;
-//  WriteTab( rOutStm, 2 );
 
     if( !bVoid )
     {
@@ -717,45 +503,31 @@ void SvMetaAttribute::WriteCSource( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         rOutStm << ", ";
         if( IsMethod() )
-            // void SetPosSize( C_Object *, C_Rectangle * pRect );
             pBaseType->WriteParamNames( rBase, rOutStm, ByteString() );
         else if( bSet )
             pBaseType->WriteParamNames( rBase, rOutStm, GetName() );
     }
 
     rOutStm << " );" << endl;
-//  WriteTab( rOutStm, 1 );
-//  rOutStm << '}' << endl;
-//  if( !bVoid )
-//  {
-//      WriteTab( rOutStm, 1 );
-//      rOutStm << "return 0;" << endl;
-//  }
     rOutStm << '}' << endl;
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::WriteRecursiv_Impl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaAttribute::WriteRecursiv_Impl( SvIdlDataBase & rBase,
-                            SvStream & rOutStm, USHORT nTab,
+                            SvStream & rOutStm, sal_uInt16 nTab,
                              WriteType nT, WriteAttribute nA )
 {
     const SvMetaAttributeMemberList & rList = GetType()->GetBaseType()->GetAttrList();
-    ULONG nCount = rList.Count();
+    sal_uLong nCount = rList.Count();
 
     SvNumberIdentifier slotId = rBase.aStructSlotId;
     if ( GetSlotId().Len() )
         rBase.aStructSlotId = GetSlotId();
 
-    // Offizielle Hack-Schnittstelle von MM: spezielle Schalter werden "uber
-    // die WriteAttribute "ubergeben
+    // offial hack interface by MM: special controls get passed with the WriteAttribute
     if ( GetReadonly() )
         nA |= WA_READONLY;
 
-    for( ULONG i = 0; i < nCount; i++ )
+    for( sal_uLong i = 0; i < nCount; i++ )
     {
         SvMetaAttribute *pAttr = rList.GetObject( i );
         if ( nT == WRITE_DOCU )
@@ -768,16 +540,11 @@ void SvMetaAttribute::WriteRecursiv_Impl( SvIdlDataBase & rBase,
     rBase.aStructSlotId = slotId;
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::Write()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                            USHORT nTab,
+                            sal_uInt16 nTab,
                              WriteType nT, WriteAttribute nA )
 {
-    // keine Attribut fuer Automation
+    // no attributes for automation
     if( nT == WRITE_DOCU )
     {
         if ( GetHidden() )
@@ -786,11 +553,11 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     else if ( !GetAutomation() || !GetExport() )
         return;
 
-    BOOL bVariable;
+    sal_Bool bVariable;
     if( nA & WA_VARIABLE )
-        bVariable = TRUE;
+        bVariable = sal_True;
     else if( nA & WA_METHOD )
-        bVariable = FALSE;
+        bVariable = sal_False;
     else
         bVariable = IsVariable();
 
@@ -826,46 +593,38 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         if( !bVariable && IsMethod() )
         {
-            ByteString name; // (rBase.GetActModulePrefix());
+            ByteString name;
             name += rBase.aIFaceName;
             name += GetName();
             const char * pName = name.GetBuffer();
-            // Beispiel
-            // void SetPosSize( C_Object *, C_Rectangle * );
             WriteTab( rOutStm, nTab );
             pBaseType->WriteTypePrefix( rBase, rOutStm, nTab, nT );
-//          rOutStm << " SYSCALL";
             rOutStm << ' ' << pName;
             pType->WriteMethodArgs( rBase, rOutStm, nTab, nT );
             if( nT == WRITE_C_HEADER )
                 rOutStm << ';' << endl << endl;
             else
-                WriteCSource( rBase, rOutStm, FALSE );
+                WriteCSource( rBase, rOutStm, sal_False );
         }
         else if ( bVariable && IsVariable() )
         {
               if( nBType == TYPE_STRUCT )
             {
-                // Zur Hilfe den Namen des Properties als Kommentar ausgeben
+                // for assistance emit the name of the property as acomment
                 rOutStm << "/* " << GetName().GetBuffer() << " */" << endl;
 
                 WriteRecursiv_Impl( rBase, rOutStm, nTab, nT, nA );
             }
             else
             {
-                // Beispiel
-                // void SetValue( C_Object *, USHORT n );
                 ByteString name = GetName();
 
-                BOOL bReadonly = GetReadonly() || ( nA & WA_READONLY );
+                sal_Bool bReadonly = GetReadonly() || ( nA & WA_READONLY );
                 if ( !bReadonly && !IsMethod() )
                 {
-                    // Zuweisung
+                    // allocation
                     WriteTab( rOutStm, nTab );
                     rOutStm << "void ";
-//                  rOutStm << "SYSCALL ";
-//                  if ( rBase.GetActModulePrefix().Len() )
-//                      rOutStm << rBase.GetActModulePrefix().GetBuffer();
                     rOutStm << rBase.aIFaceName.GetBuffer()
                             << "Set" << name.GetBuffer() << "( " << C_PREF
                             << "Object h" << rBase.aIFaceName.GetBuffer() << ", " << endl;
@@ -875,23 +634,20 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                     if( nT == WRITE_C_HEADER )
                         rOutStm << ';' << endl << endl;
                     else
-                        WriteCSource( rBase, rOutStm, TRUE );
+                        WriteCSource( rBase, rOutStm, sal_True );
                 }
 
-                // Zugriff
+                // access
                 WriteTab( rOutStm, nTab );
                 pBaseType->WriteTypePrefix( rBase, rOutStm, nTab, nT );
                 rOutStm << ' ';
-//              rOutStm << "SYSCALL ";
-//              if ( rBase.GetActModulePrefix().Len() )
-//                  rOutStm << rBase.GetActModulePrefix().GetBuffer();
                 rOutStm << rBase.aIFaceName.GetBuffer()
                         << "Get" << name.GetBuffer() << "( " << C_PREF
                         << "Object h" << rBase.aIFaceName.GetBuffer() << " )";
                 if( nT == WRITE_C_HEADER )
                     rOutStm << ';' << endl << endl;
                 else
-                    WriteCSource( rBase, rOutStm, FALSE );
+                    WriteCSource( rBase, rOutStm, sal_False );
             }
         }
     }
@@ -904,7 +660,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                     << GetName().GetBuffer() << endl
                     << endl;    // readonly
 
-            // Returntype
+            // return type
             SvMetaType* pType2 = GetType();
             SvMetaType* pBaseType2 = pType2->GetBaseType();
             rOutStm << pBaseType2->GetReturnType()->GetBaseType()->GetBasicName().GetBuffer() << endl;
@@ -912,20 +668,20 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             DBG_ASSERT( pBaseType2->GetReturnType()->GetBaseType()->GetBasicName().Len(),
                 "Leerer BasicName" );
 
-            // Syntax
+            // syntax
             rOutStm << GetName().GetBuffer();
             pType2->WriteMethodArgs( rBase, rOutStm, nTab, nT );
 
-            // C-Returntype
+            // C return type
             pBaseType2->WriteTypePrefix( rBase, rOutStm, 0, WRITE_C_HEADER );
             rOutStm << endl;
 
-            // Bei Methoden auch C-Syntax
+            // for methods also C syntax
             rOutStm << "<C-SYNTAX>" << endl;
             Write( rBase, rOutStm, 0, WRITE_C_HEADER, nA );
             rOutStm << "</C-SYNTAX>" << endl;
 
-            // Description
+            // description
             WriteDescription( rOutStm );
             rOutStm << "</METHOD>" << endl << endl;
         }
@@ -945,20 +701,20 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                 else
                     rOutStm << endl;
 
-                // Bei properties Type anstelle des return value
+                // for properties type instead of the return value
                 rOutStm << pBaseType->GetBasicName().GetBuffer() << endl;
 
                 DBG_ASSERT( pBaseType->GetBasicName().Len(),
                     "Leerer BasicName" );
 
-                // Bei properties keine Syntax
+                // for properties no syntax
                 rOutStm << endl;
 
-                // C-Returntype
+                // C return type
                 pBaseType->WriteTypePrefix( rBase, rOutStm, 0, WRITE_C_HEADER );
                 rOutStm << endl;
 
-                // Description
+                // description
                 WriteDescription( rOutStm );
                 rOutStm << "</PROPERTY>" << endl << endl;
             }
@@ -966,12 +722,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::MakeSfx()
-|*
-|*    Beschreibung
-*************************************************************************/
-ULONG SvMetaAttribute::MakeSfx( ByteString * pAttrArray )
+sal_uLong SvMetaAttribute::MakeSfx( ByteString * pAttrArray )
 {
     SvMetaType * pType = GetType();
     DBG_ASSERT( pType, "no type for attribute" );
@@ -994,11 +745,6 @@ void SvMetaAttribute::Insert (SvSlotElementList&, const ByteString &, SvIdlDataB
 {
 }
 
-/*************************************************************************
-|*    SvMetaAttribute::WriteSrc()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaAttribute::WriteSrc( SvIdlDataBase &, SvStream &, Table * )
 {
 }
@@ -1009,22 +755,15 @@ void SvMetaAttribute::WriteHelpId( SvIdlDataBase &, SvStream &, Table * )
 
 #endif // IDL_COMPILER
 
-/****************** SvMetaType *************************************/
-/************************************************************************/
 SV_IMPL_META_FACTORY1( SvMetaType, SvMetaExtern );
-/*************************************************************************
-|*    SvMetaType::SvMetaType()
-|*
-|*    Beschreibung
-*************************************************************************/
 #define CTOR                            \
-    : aCall0( CALL_VALUE, FALSE )       \
-    , aCall1( CALL_VALUE, FALSE )       \
-    , aSbxDataType( 0, FALSE )          \
+    : aCall0( CALL_VALUE, sal_False )       \
+    , aCall1( CALL_VALUE, sal_False )       \
+    , aSbxDataType( 0, sal_False )          \
     , pAttrList( NULL )                 \
     , nType( TYPE_BASE )                \
-    , bIsItem( FALSE )                  \
-    , bIsShell( FALSE )                 \
+    , bIsItem( sal_False )                  \
+    , bIsShell( sal_False )                 \
     , cParserChar( 'h' )
 
 SvMetaType::SvMetaType()
@@ -1050,7 +789,6 @@ SvMetaType::SvMetaType( const ByteString & rName,
                         const ByteString & rBasicPostfix )
     CTOR
 {
-//    aSbxDataType = (int)nT;
     SetName( rName );
     aSbxName    = rSbxName;
     aOdlName    = rOdlName;
@@ -1064,7 +802,7 @@ void SvMetaType::Load( SvPersistStream & rStm )
 {
     SvMetaExtern::Load( rStm );
 
-    USHORT nMask;
+    sal_uInt16 nMask;
     rStm >> nMask;
     if( nMask & 0x0001 ) rStm >> aIn;
     if( nMask & 0x0002 ) rStm >> aOut;
@@ -1075,11 +813,11 @@ void SvMetaType::Load( SvPersistStream & rStm )
     if( nMask & 0x0040 ) rStm >> aSbxName;
     if( nMask & 0x0080 ) rStm >> aOdlName;
     if( nMask & 0x0100 ) rStm >> GetAttrList();
-    if( nMask & 0x0200 ) bIsItem = TRUE;
-    if( nMask & 0x0400 ) bIsShell = TRUE;
+    if( nMask & 0x0200 ) bIsItem = sal_True;
+    if( nMask & 0x0400 ) bIsShell = sal_True;
     if( nMask & 0x0800 )
     {
-        USHORT nT;
+        sal_uInt16 nT;
         rStm >> nT;
         nType = nT;
     }
@@ -1093,8 +831,8 @@ void SvMetaType::Save( SvPersistStream & rStm )
 {
     SvMetaExtern::Save( rStm );
 
-    // Maske erstellen
-    USHORT nMask = 0;
+    // create mask
+    sal_uInt16 nMask = 0;
     if( aIn.IsSet() )               nMask |= 0x0001;
     if( aOut.IsSet() )              nMask |= 0x0002;
     if( aCall0.IsSet() )            nMask |= 0x0004;
@@ -1112,7 +850,7 @@ void SvMetaType::Save( SvPersistStream & rStm )
     if( aBasicName.IsSet() )        nMask |= 0x4000;
     if( aBasicPostfix.IsSet() )     nMask |= 0x8000;
 
-    // Daten schreiben
+    // write data
     rStm << nMask;
     if( nMask & 0x0001 ) rStm << aIn;
     if( nMask & 0x0002 ) rStm << aOut;
@@ -1123,18 +861,13 @@ void SvMetaType::Save( SvPersistStream & rStm )
     if( nMask & 0x0040 ) rStm << aSbxName;
     if( nMask & 0x0080 ) rStm << aOdlName;
     if( nMask & 0x0100 ) rStm << *pAttrList;
-    if( nMask & 0x0800 ) rStm << (USHORT)nType;
+    if( nMask & 0x0800 ) rStm << (sal_uInt16)nType;
     if( nMask & 0x1000 ) rStm << cParserChar;
     if( nMask & 0x2000 ) rStm << aCName;
     if( nMask & 0x4000 ) rStm << aBasicName;
     if( nMask & 0x8000 ) rStm << aBasicPostfix;
 }
 
-/*************************************************************************
-|*    SvMetaType::GetAttrList()
-|*
-|*    Beschreibung
-*************************************************************************/
 SvMetaAttributeMemberList & SvMetaType::GetAttrList() const
 {
     if( !pAttrList )
@@ -1142,18 +875,12 @@ SvMetaAttributeMemberList & SvMetaType::GetAttrList() const
     return *pAttrList;
 }
 
-/*************************************************************************
-|*    SvMetaType::SetType()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::SetType( int nT )
 {
     nType = nT;
     if( nType == TYPE_ENUM )
     {
         aOdlName = "short";
-//        aSbxDataType = SbxINTEGER;
     }
     else if( nType == TYPE_CLASS )
     {
@@ -1162,11 +889,6 @@ void SvMetaType::SetType( int nT )
     }
 }
 
-/*************************************************************************
-|*    SvMetaType::GetBaseType()
-|*
-|*    Beschreibung
-*************************************************************************/
 SvMetaType * SvMetaType::GetBaseType() const
 {
     if( GetRef() && GetType() == TYPE_BASE )
@@ -1174,11 +896,6 @@ SvMetaType * SvMetaType::GetBaseType() const
     return (SvMetaType *)this;
 }
 
-/*************************************************************************
-|*    SvMetaType::GetReturnType()
-|*
-|*    Beschreibung
-*************************************************************************/
 SvMetaType * SvMetaType::GetReturnType() const
 {
     DBG_ASSERT( GetType() == TYPE_METHOD, "no method" );
@@ -1186,25 +903,6 @@ SvMetaType * SvMetaType::GetReturnType() const
     return (SvMetaType *)GetRef();
 }
 
-/*************************************************************************
-|*    SvMetaType::GetSbxDataType()
-|*
-|*    Beschreibung
-*************************************************************************/
-/*
-SbxDataType SvMetaType::GetSbxDataType() const
-{
-    if( aSbxDataType.IsSet() || !GetRef() )
-        return (SbxDataType)(int)aSbxDataType;
-    else
-        return ((SvMetaType *)GetRef())->GetSbxDataType();
-}
-*/
-/*************************************************************************
-|*    SvMetaType::GetBasicName()
-|*
-|*    Beschreibung
-*************************************************************************/
 const ByteString& SvMetaType::GetBasicName() const
 {
     if( aBasicName.IsSet() || !GetRef() )
@@ -1213,25 +911,12 @@ const ByteString& SvMetaType::GetBasicName() const
         return ((SvMetaType*)GetRef())->GetBasicName();
 }
 
-/*************************************************************************
-|*    SvMetaType::GetBasicPostfix()
-|*
-|*    Beschreibung
-*************************************************************************/
 ByteString SvMetaType::GetBasicPostfix() const
 {
 
     ByteString aRet;
 
-    // MBN und Co wollen immer "As xxx"
-/*
-    if( aBasicPostfix.IsSet() || !GetRef() )
-        aRet = aBasicPostfix;
-    else
-        aRet = ((SvMetaType*)GetRef())->GetBasicPostfix();
-
-    if ( !aRet.Len() && GetBasicName().Len() )
-*/
+    // MBN and Co always want "As xxx"
     {
 
         aRet = " As ";
@@ -1241,12 +926,7 @@ ByteString SvMetaType::GetBasicPostfix() const
     return aRet;
 }
 
-/*************************************************************************
-|*    SvMetaType::GetIn()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaType::GetIn() const
+sal_Bool SvMetaType::GetIn() const
 {
     if( aIn.IsSet() || !GetRef() )
         return aIn;
@@ -1254,12 +934,7 @@ BOOL SvMetaType::GetIn() const
         return ((SvMetaType *)GetRef())->GetIn();
 }
 
-/*************************************************************************
-|*    SvMetaType::GetOut()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaType::GetOut() const
+sal_Bool SvMetaType::GetOut() const
 {
     if( aOut.IsSet() || !GetRef() )
         return aOut;
@@ -1267,11 +942,6 @@ BOOL SvMetaType::GetOut() const
         return ((SvMetaType *)GetRef())->GetOut();
 }
 
-/*************************************************************************
-|*    SvMetaType::SetCall0()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::SetCall0( int e )
 {
     aCall0 = (int)e;
@@ -1288,11 +958,6 @@ void SvMetaType::SetCall0( int e )
     }
 }
 
-/*************************************************************************
-|*    SvMetaType::GetCall0()
-|*
-|*    Beschreibung
-*************************************************************************/
 int SvMetaType::GetCall0() const
 {
     if( aCall0.IsSet() || !GetRef() )
@@ -1301,11 +966,6 @@ int SvMetaType::GetCall0() const
         return ((SvMetaType *)GetRef())->GetCall0();
 }
 
-/*************************************************************************
-|*    SvMetaType::SetCall1()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::SetCall1( int e )
 {
     aCall1 = (int)e;
@@ -1322,11 +982,6 @@ void SvMetaType::SetCall1( int e )
     }
 }
 
-/*************************************************************************
-|*    SvMetaType::GetCall1()
-|*
-|*    Beschreibung
-*************************************************************************/
 int SvMetaType::GetCall1() const
 {
     if( aCall1.IsSet() || !GetRef() )
@@ -1335,11 +990,6 @@ int SvMetaType::GetCall1() const
         return ((SvMetaType *)GetRef())->GetCall1();
 }
 
-/*************************************************************************
-|*    SvMetaType::GetSvName()
-|*
-|*    Beschreibung
-*************************************************************************/
 const ByteString & SvMetaType::GetSvName() const
 {
     if( aSvName.IsSet() || !GetRef() )
@@ -1348,11 +998,6 @@ const ByteString & SvMetaType::GetSvName() const
         return ((SvMetaType *)GetRef())->GetSvName();
 }
 
-/*************************************************************************
-|*    SvMetaType::GetSbxName()
-|*
-|*    Beschreibung
-*************************************************************************/
 const ByteString & SvMetaType::GetSbxName() const
 {
     if( aSbxName.IsSet() || !GetRef() )
@@ -1361,11 +1006,6 @@ const ByteString & SvMetaType::GetSbxName() const
         return ((SvMetaType *)GetRef())->GetSbxName();
 }
 
-/*************************************************************************
-|*    SvMetaType::GetOdlName()
-|*
-|*    Beschreibung
-*************************************************************************/
 const ByteString & SvMetaType::GetOdlName() const
 {
     if( aOdlName.IsSet() || !GetRef() )
@@ -1374,11 +1014,6 @@ const ByteString & SvMetaType::GetOdlName() const
         return ((SvMetaType *)GetRef())->GetOdlName();
 }
 
-/*************************************************************************
-|*    SvMetaType::GetCName()
-|*
-|*    Beschreibung
-*************************************************************************/
 const ByteString & SvMetaType::GetCName() const
 {
     if( aCName.IsSet() || !GetRef() )
@@ -1387,12 +1022,7 @@ const ByteString & SvMetaType::GetCName() const
         return ((SvMetaType *)GetRef())->GetCName();
 }
 
-/*************************************************************************
-|*    SvMetaType::SetName()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaType::SetName( const ByteString & rName, SvIdlDataBase * pBase )
+sal_Bool SvMetaType::SetName( const ByteString & rName, SvIdlDataBase * pBase )
 {
     aSvName     = rName;
     aSbxName    = rName;
@@ -1402,40 +1032,7 @@ BOOL SvMetaType::SetName( const ByteString & rName, SvIdlDataBase * pBase )
     return SvMetaReference::SetName( rName, pBase );
 }
 
-/*************************************************************************
-|*    SvMetaType::FillSbxObject()
-|*
-|*    Beschreibung
-*************************************************************************/
-/*
-void SvMetaType::FillSbxObject( SbxVariable * pObj, BOOL bVariable )
-{
-    if( PTR_CAST( SbxMethod, pObj ) )
-    {
-        if( GetType() == TYPE_METHOD )
-        {
-            ULONG nCount = GetAttrCount();
-            if( nCount )
-            {
-                SbxInfoRef xInfo = pObj->GetInfo();
-                if( !xInfo.Is() )
-                {
-                    xInfo = new SbxInfo();
-                    pObj->SetInfo( xInfo );
-                }
-                for( ULONG n = nCount; n > 0; n-- )
-                    pAttrList->GetObject( n -1 )->FillSbxObject( xInfo );
-            }
-        }
-    }
-}
-*/
 #ifdef IDL_COMPILER
-/*************************************************************************
-|*    SvMetaType::GetString()
-|*
-|*    Beschreibung
-*************************************************************************/
 ByteString SvMetaType::GetCString() const
 {
     ByteString out( GetSvName() );
@@ -1450,23 +1047,18 @@ ByteString SvMetaType::GetCString() const
     return out;
 }
 
-/*************************************************************************
-|*    SvMetaType::ReadHeaderSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
+sal_Bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
                                      SvTokenStream & rInStm )
 {
-    BOOL bOk = FALSE;
-    UINT32  nTokPos = rInStm.Tell();
+    sal_Bool bOk = sal_False;
+    sal_uInt32  nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->Is( SvHash_interface() )
       || pTok->Is( SvHash_shell() ) )
     {
         if( pTok->Is( SvHash_shell() ) )
-            bIsShell = TRUE;
+            bIsShell = sal_True;
         SetType( TYPE_CLASS );
         bOk = ReadNamesSvIdl( rBase, rInStm );
 
@@ -1480,7 +1072,7 @@ BOOL SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
     {
         SetType( TYPE_UNION );
         if( ReadNameSvIdl( rBase, rInStm ) )
-            return TRUE;
+            return sal_True;
     }
     else if( pTok->Is( SvHash_enum() ) )
     {
@@ -1491,7 +1083,7 @@ BOOL SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
       || pTok->Is( SvHash_item() ) )
     {
           if( pTok->Is( SvHash_item() ) )
-            bIsItem = TRUE;
+            bIsItem = sal_True;
 
         SvMetaType * pType = rBase.ReadKnownType( rInStm );
         if( pType )
@@ -1499,22 +1091,18 @@ BOOL SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
             SetRef( pType );
             if( ReadNameSvIdl( rBase, rInStm ) )
             {
-                /*      // um aufwaertskompatibel zu bleiben
-                        aOdlName = pType->GetOdlName();
-                */
                 if( rInStm.Read( '(' ) )
                 {
-                    //DoReadContextSvIdl( rBase, rInStm, ',' );
                     DoReadContextSvIdl( rBase, rInStm );
                     if( rInStm.Read( ')' ) )
                     {
                         SetType( TYPE_METHOD );
-                        bOk = TRUE;
+                        bOk = sal_True;
                     }
                 }
                 else
                 {
-                    bOk = TRUE;
+                    bOk = sal_True;
                 }
             }
         }
@@ -1532,12 +1120,7 @@ BOOL SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
     return bOk;
 }
 
-/*************************************************************************
-|*    SvMetaType::ReadSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaType::ReadSvIdl( SvIdlDataBase & rBase,
+sal_Bool SvMetaType::ReadSvIdl( SvIdlDataBase & rBase,
                              SvTokenStream & rInStm )
 {
     if( ReadHeaderSvIdl( rBase, rInStm ) )
@@ -1545,41 +1128,31 @@ BOOL SvMetaType::ReadSvIdl( SvIdlDataBase & rBase,
         rBase.Write( '.' );
         return SvMetaExtern::ReadSvIdl( rBase, rInStm );
     }
-    return FALSE;
+    return sal_False;
 }
 
-/*************************************************************************
-|*    SvMetaType::WriteSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::WriteSvIdl
 (
     SvIdlDataBase & rBase,
     SvStream & rOutStm,
-    USHORT nTab
+    sal_uInt16 nTab
 )
 {
     WriteHeaderSvIdl( rBase, rOutStm, nTab );
     if( GetType() == TYPE_METHOD )
         WriteMethodArgs( rBase, rOutStm, nTab, WRITE_IDL );
 
-    ULONG nOldPos = rOutStm.Tell();
+    sal_uLong nOldPos = rOutStm.Tell();
     rOutStm << endl;
     SvMetaExtern::WriteSvIdl( rBase, rOutStm, nTab );
     if( TestAndSeekSpaceOnly( rOutStm, nOldPos ) )
-        // nichts geschrieben
+        // nothin written
         rOutStm.Seek( nOldPos );
     rOutStm << ';' << endl;
 }
 
-/*************************************************************************
-|*    SvMetaType::WriteContext()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                 USHORT nTab,
+                                 sal_uInt16 nTab,
                              WriteType nT, WriteAttribute nA )
 {
     if( GetAttrCount() )
@@ -1597,17 +1170,12 @@ void SvMetaType::WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-/*************************************************************************
-|*    SvMetaType::Write()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                          USHORT nTab,
+                          sal_uInt16 nTab,
                          WriteType nT, WriteAttribute nA )
 {
     if( nT == WRITE_C_HEADER && nType != TYPE_ENUM )
-        // nur enum schreiben
+        // write only enum
         return;
 
     ByteString name = GetName();
@@ -1682,47 +1250,17 @@ void SvMetaType::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-/*************************************************************************
-|*    SvMetaType::ReadNamesSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaType::ReadNamesSvIdl( SvIdlDataBase & rBase,
+sal_Bool SvMetaType::ReadNamesSvIdl( SvIdlDataBase & rBase,
                                      SvTokenStream & rInStm )
 {
-    BOOL bOk = ReadNameSvIdl( rBase, rInStm );
-/*
-    if( bOk )
-    {
-        UINT32 nTokPos = rInStm.Tell();
-        SvToken * pTok = rInStm.GetToken_Next();
+    sal_Bool bOk = ReadNameSvIdl( rBase, rInStm );
 
-        if( pTok->IsIdentifier() )
-        {
-            aSbxName = pTok->GetString();
-
-            nTokPos = rInStm.Tell();
-            pTok = rInStm.GetToken_Next();
-            if( pTok->IsIdentifier() )
-            {
-                aItemName = pTok->GetString();
-                nTokPos = rInStm.Tell();
-            }
-        }
-        rInStm.Seek( nTokPos );
-    }
-*/
     return bOk;
 }
 
-/*************************************************************************
-|*    SvMetaType::WriteHeaderSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::WriteHeaderSvIdl( SvIdlDataBase & rBase,
                                    SvStream & rOutStm,
-                                   USHORT nTab )
+                                   sal_uInt16 nTab )
 {
     switch( nType )
     {
@@ -1780,11 +1318,6 @@ void SvMetaType::WriteHeaderSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-/*************************************************************************
-|*    SvMetaType::ReadAttributesSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm )
 {
@@ -1794,14 +1327,9 @@ void SvMetaType::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     aOdlName.ReadSvIdl( SvHash_OdlName(), rInStm );
 }
 
-/*************************************************************************
-|*    SvMetaType::WriteAttributesSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::WriteAttributesSvIdl( SvIdlDataBase & rBase,
                                        SvStream & rOutStm,
-                                       USHORT nTab )
+                                       sal_uInt16 nTab )
 {
     SvMetaExtern::WriteAttributesSvIdl( rBase, rOutStm, nTab );
     ByteString name = GetName();
@@ -1830,11 +1358,6 @@ void SvMetaType::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-/*************************************************************************
-|*    SvMetaType::ReadContextSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::ReadContextSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm )
 {
@@ -1846,16 +1369,11 @@ void SvMetaType::ReadContextSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-/*************************************************************************
-|*    SvMetaType::WriteContextSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::WriteContextSvIdl
 (
     SvIdlDataBase & rBase,
     SvStream & rOutStm,
-    USHORT nTab
+    sal_uInt16 nTab
 )
 {
     if( GetAttrCount() )
@@ -1874,32 +1392,22 @@ void SvMetaType::WriteContextSvIdl
     }
 }
 
-/*************************************************************************
-|*    SvMetaType::WriteAttributes()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                   USHORT nTab,
+                                   sal_uInt16 nTab,
                                  WriteType nT, WriteAttribute nA )
 {
     SvMetaExtern::WriteAttributes( rBase, rOutStm, nTab, nT, nA );
 }
 
-/*************************************************************************
-|*    SvMetaType::MakeSfx()
-|*
-|*    Beschreibung
-*************************************************************************/
-ULONG SvMetaType::MakeSfx( ByteString * pAttrArray )
+sal_uLong SvMetaType::MakeSfx( ByteString * pAttrArray )
 {
-    ULONG nC = 0;
+    sal_uLong nC = 0;
 
     if( GetBaseType()->GetType() == TYPE_STRUCT )
     {
-        ULONG nAttrCount = GetAttrCount();
-        // Die einzelnen Attribute schreiben
-        for( ULONG n = 0; n < nAttrCount; n++ )
+        sal_uLong nAttrCount = GetAttrCount();
+        // write the single attributes
+        for( sal_uLong n = 0; n < nAttrCount; n++ )
         {
             nC += pAttrList->GetObject( n )->MakeSfx( pAttrArray );
             if( n +1 < nAttrCount )
@@ -1919,15 +1427,14 @@ void SvMetaType::WriteSfxItem(
 
     ByteString  aTypeName = "SfxType";
     ByteString  aAttrArray;
-    ULONG   nAttrCount = MakeSfx( &aAttrArray );
-    //ULONG nAttrCount = GetAttrCount();
+    sal_uLong   nAttrCount = MakeSfx( &aAttrArray );
     ByteString  aAttrCount( ByteString::CreateFromInt32( nAttrCount ) );
     aTypeName += aAttrCount;
 
     rOutStm << "extern " << aTypeName.GetBuffer()
             << aVarName.GetBuffer() << ';' << endl;
 
-    // Den Implementationsteil schreiben
+    // write the implementation part
     rOutStm << "#ifdef SFX_TYPEMAP" << endl
             << aTypeName.GetBuffer() << aVarName.GetBuffer()
             << " = " << endl;
@@ -1937,7 +1444,7 @@ void SvMetaType::WriteSfxItem(
     if( nAttrCount )
     {
         rOutStm << ", { ";
-        // Die einzelnen Attribute schreiben
+        // write the single attributes
         rOutStm << aAttrArray.GetBuffer();
         rOutStm << " }";
     }
@@ -1945,11 +1452,6 @@ void SvMetaType::WriteSfxItem(
             << "#endif" << endl << endl;
 }
 
-/*************************************************************************
-|*    SvMetaType::WriteSfx()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     if( IsItem() )
@@ -1961,39 +1463,28 @@ void SvMetaType::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     }
 }
 
-/*************************************************************************
-|*    SvMetaType::ReadMethodArgs()
-|*
-|*    Beschreibung
-*************************************************************************/
-BOOL SvMetaType::ReadMethodArgs( SvIdlDataBase & rBase,
+sal_Bool SvMetaType::ReadMethodArgs( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm )
 {
-    UINT32  nTokPos = rInStm.Tell();
+    sal_uInt32  nTokPos = rInStm.Tell();
     if( rInStm.Read( '(' ) )
     {
-        //DoReadContextSvIdl( rBase, rInStm, ',' );
         DoReadContextSvIdl( rBase, rInStm );
         if( rInStm.Read( ')' ) )
         {
             SetType( TYPE_METHOD );
-            return TRUE;
+            return sal_True;
         }
     }
     rInStm.Seek( nTokPos );
-    return FALSE;
+    return sal_False;
 }
 
-/*************************************************************************
-|*    SvMetaType::WriteMethodArgs()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::WriteMethodArgs
 (
     SvIdlDataBase & rBase,
     SvStream & rOutStm,
-    USHORT nTab, WriteType nT
+    sal_uInt16 nTab, WriteType nT
 )
 {
     if( nT == WRITE_IDL )
@@ -2069,7 +1560,7 @@ void SvMetaType::WriteMethodArgs
 
                     default:
                     {
-                        DBG_ASSERT( FALSE, "WriteType not implemented" );
+                        DBG_ASSERT( sal_False, "WriteType not implemented" );
                     }
                 }
                 pAttr = pAttrList->Next();
@@ -2087,13 +1578,8 @@ void SvMetaType::WriteMethodArgs
     }
 }
 
-/*************************************************************************
-|*    SvMetaType::WriteTypePrefix()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                 USHORT nTab, WriteType nT )
+                                 sal_uInt16 nTab, WriteType nT )
 {
     switch( nT )
     {
@@ -2111,8 +1597,8 @@ void SvMetaType::WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm,
 
         case WRITE_ODL:
         {
-            BOOL bIn = GetIn();
-            BOOL bOut = GetOut();
+            sal_Bool bIn = GetIn();
+            sal_Bool bOut = GetOut();
             if( bIn || bOut )
             {
                 if( bIn && bOut )
@@ -2199,29 +1685,19 @@ void SvMetaType::WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm,
 
         default:
         {
-            DBG_ASSERT( FALSE, "WriteType not implemented" );
+            DBG_ASSERT( sal_False, "WriteType not implemented" );
         }
     }
 }
 
-/*************************************************************************
-|*    SvMetaType::WriteTheType()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::WriteTheType( SvIdlDataBase & rBase, SvStream & rOutStm,
-                             USHORT nTab, WriteType nT )
+                             sal_uInt16 nTab, WriteType nT )
 {
     WriteTypePrefix( rBase, rOutStm, nTab, nT );
     if( GetType() == TYPE_METHOD )
         WriteMethodArgs( rBase, rOutStm, nTab +2, nT );
 }
 
-/*************************************************************************
-|*    SvMetaType::GetParserString()
-|*
-|*    Beschreibung
-*************************************************************************/
 ByteString SvMetaType::GetParserString() const
 {
     SvMetaType * pBT = GetBaseType();
@@ -2233,9 +1709,9 @@ ByteString SvMetaType::GetParserString() const
 
     if( TYPE_METHOD == type || TYPE_STRUCT == type )
     {
-        ULONG nAttrCount = GetAttrCount();
-        // Die einzelnen Attribute schreiben
-        for( ULONG n = 0; n < nAttrCount; n++ )
+        sal_uLong nAttrCount = GetAttrCount();
+        // write the single attributes
+        for( sal_uLong n = 0; n < nAttrCount; n++ )
         {
             SvMetaAttribute * pT = pAttrList->GetObject( n );
             aPStr += pT->GetType()->GetParserString();
@@ -2246,11 +1722,6 @@ ByteString SvMetaType::GetParserString() const
     return aPStr;
 }
 
-/*************************************************************************
-|*    SvMetaType::WriteParamNames()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaType::WriteParamNames( SvIdlDataBase & rBase,
                                    SvStream & rOutStm,
                                    const ByteString & rChief )
@@ -2265,16 +1736,12 @@ void SvMetaType::WriteParamNames( SvIdlDataBase & rBase,
 
         if( TYPE_METHOD == type || TYPE_STRUCT == type )
         {
-            ULONG nAttrCount = GetAttrCount();
-            // Die einzelnen Attribute schreiben
-            for( ULONG n = 0; n < nAttrCount; n++ )
+            sal_uLong nAttrCount = GetAttrCount();
+            // write the single attributes
+            for( sal_uLong n = 0; n < nAttrCount; n++ )
             {
                 SvMetaAttribute * pA = pAttrList->GetObject( n );
-                // Fuer Methoden ist rChief immer ""
-                ByteString aStr = /*rChief;
-                if( aStr.Len() )
-                    aStr += "->";
-                aStr += */pA->GetName();
+                ByteString aStr = pA->GetName();
                 pA->GetType()->WriteParamNames( rBase, rOutStm, aStr );
                 if( n +1 < nAttrCount )
                     rOutStm << ", ";
@@ -2287,16 +1754,7 @@ void SvMetaType::WriteParamNames( SvIdlDataBase & rBase,
 
 #endif // IDL_COMPILER
 
-/************************************************************************/
-/************************************************************************/
 SV_IMPL_META_FACTORY1( SvMetaTypeString, SvMetaType );
-/*************************************************************************
-|*
-|*    SvMetaTypeString::SvMetaTypeString()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 SvMetaTypeString::SvMetaTypeString()
     : SvMetaType( "String", "SbxSTRING", "BSTR", 's', "char *", "String", "$" )
 {
@@ -2312,16 +1770,7 @@ void SvMetaTypeString::Save( SvPersistStream & rStm )
     SvMetaType::Save( rStm );
 }
 
-/************************************************************************/
-/************************************************************************/
 SV_IMPL_META_FACTORY1( SvMetaEnumValue, SvMetaName );
-/*************************************************************************
-|*
-|*    SvMetaEnumValue::SvMetaEnumValue()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 SvMetaEnumValue::SvMetaEnumValue()
 {
 }
@@ -2330,12 +1779,12 @@ void SvMetaEnumValue::Load( SvPersistStream & rStm )
 {
     SvMetaName::Load( rStm );
 
-    BYTE nMask;
+    sal_uInt8 nMask;
     rStm >> nMask;
     if( nMask >= 0x02 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" );
+        OSL_FAIL( "wrong format" );
         return;
     }
     if( nMask & 0x01 ) rStm.ReadByteString( aEnumValue );
@@ -2345,51 +1794,30 @@ void SvMetaEnumValue::Save( SvPersistStream & rStm )
 {
     SvMetaName::Save( rStm );
 
-    // Maske erstellen
-    BYTE nMask = 0;
+    // create mask
+    sal_uInt8 nMask = 0;
     if( aEnumValue.Len() ) nMask |= 0x01;
 
-    // Daten schreiben
+    // write data
     rStm << nMask;
     if( nMask & 0x01 ) rStm.WriteByteString( aEnumValue );
 }
 
 #ifdef IDL_COMPILER
-/*************************************************************************
-|*
-|*    SvMetaEnumValue::ReadSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-BOOL SvMetaEnumValue::ReadSvIdl( SvIdlDataBase & rBase,
+sal_Bool SvMetaEnumValue::ReadSvIdl( SvIdlDataBase & rBase,
                                  SvTokenStream & rInStm )
 {
     if( !ReadNameSvIdl( rBase, rInStm ) )
-        return FALSE;
-    return TRUE;
+        return sal_False;
+    return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    SvMetaEnumValue::WriteSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-void SvMetaEnumValue::WriteSvIdl( SvIdlDataBase &, SvStream & rOutStm, USHORT )
+void SvMetaEnumValue::WriteSvIdl( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 )
 {
     rOutStm << GetName().GetBuffer();
 }
 
-/*************************************************************************
-|*
-|*    SvMetaEnumValue::Write()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-void SvMetaEnumValue::Write( SvIdlDataBase &, SvStream & rOutStm, USHORT,
+void SvMetaEnumValue::Write( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16,
                              WriteType nT, WriteAttribute )
 {
     if ( nT == WRITE_C_HEADER || nT == WRITE_C_SOURCE )
@@ -2399,16 +1827,7 @@ void SvMetaEnumValue::Write( SvIdlDataBase &, SvStream & rOutStm, USHORT,
 }
 #endif // IDL_COMPILER
 
-/************************************************************************/
-/************************************************************************/
 SV_IMPL_META_FACTORY1( SvMetaTypeEnum, SvMetaType );
-/*************************************************************************
-|*
-|*    SvMetaTypeEnum::SvMetaTypeEnum()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 SvMetaTypeEnum::SvMetaTypeEnum()
 {
     SetBasicName( "Integer" );
@@ -2418,12 +1837,12 @@ void SvMetaTypeEnum::Load( SvPersistStream & rStm )
 {
     SvMetaType::Load( rStm );
 
-    BYTE nMask;
+    sal_uInt8 nMask;
     rStm >> nMask;
     if( nMask >= 0x04 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "wrong format" );
+        OSL_FAIL( "wrong format" );
         return;
     }
     if( nMask & 0x01 ) rStm >> aEnumValueList;
@@ -2434,61 +1853,33 @@ void SvMetaTypeEnum::Save( SvPersistStream & rStm )
 {
     SvMetaType::Save( rStm );
 
-    // Maske erstellen
-    BYTE nMask = 0;
+    // create mask
+    sal_uInt8 nMask = 0;
     if( aEnumValueList.Count() )    nMask |= 0x01;
     if( aPrefix.Len() )             nMask |= 0x02;
 
-    // Daten schreiben
+    // write data
     rStm << nMask;
     if( nMask & 0x01 ) rStm << aEnumValueList;
     if( nMask & 0x02 ) rStm.WriteByteString( aPrefix );
 }
 
-/*************************************************************************
-|*
-|*    SvMetaTypeEnum::GetMaxValue()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-/*
-USHORT SvMetaTypeEnum::GetMaxValue() const
-{
-    USHORT nMax = 0;
-    for( ULONG n = 0; n < aEnumValueList.Count(); n++ )
-    {
-        SvMetaEnumValue * pObj = aEnumValueList.GetObject( n );
-        if( nMax < pObj->GetValue() )
-            nMax = pObj->GetValue();
-    }
-    return nMax;
-}
-*/
-
 #ifdef IDL_COMPILER
-/*************************************************************************
-|*
-|*    SvMetaTypeEnum::ReadContextSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void SvMetaTypeEnum::ReadContextSvIdl( SvIdlDataBase & rBase,
                                        SvTokenStream & rInStm )
 {
-    UINT32 nTokPos = rInStm.Tell();
+    sal_uInt32 nTokPos = rInStm.Tell();
 
     SvMetaEnumValueRef aEnumVal = new SvMetaEnumValue();
-    BOOL bOk = aEnumVal->ReadSvIdl( rBase, rInStm );
+    sal_Bool bOk = aEnumVal->ReadSvIdl( rBase, rInStm );
     if( bOk )
     {
         if( 0 == aEnumValueList.Count() )
-           // der Erste
+           // the first
            aPrefix = aEnumVal->GetName();
         else
         {
-            USHORT nPos = aPrefix.Match( aEnumVal->GetName() );
+            sal_uInt16 nPos = aPrefix.Match( aEnumVal->GetName() );
             if( nPos != aPrefix.Len() && nPos != STRING_MATCH )
                 aPrefix.Erase( nPos );
         }
@@ -2498,19 +1889,12 @@ void SvMetaTypeEnum::ReadContextSvIdl( SvIdlDataBase & rBase,
         rInStm.Seek( nTokPos );
 }
 
-/*************************************************************************
-|*
-|*    SvMetaTypeEnum::WriteSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void SvMetaTypeEnum::WriteContextSvIdl( SvIdlDataBase & rBase,
                                         SvStream & rOutStm,
-                                        USHORT nTab )
+                                        sal_uInt16 nTab )
 {
     WriteTab( rOutStm, nTab +1 );
-    for( ULONG n = 0; n < aEnumValueList.Count(); n++ )
+    for( sal_uLong n = 0; n < aEnumValueList.Count(); n++ )
     {
         aEnumValueList.GetObject( n )->WriteSvIdl( rBase, rOutStm, nTab );
         if( n +1 != aEnumValueList.Count() )
@@ -2520,36 +1904,22 @@ void SvMetaTypeEnum::WriteContextSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-/*************************************************************************
-|*
-|*    SvMetaTypeEnum::ReadSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-BOOL SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
+sal_Bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
                                 SvTokenStream & rInStm )
 {
-    UINT32  nTokPos = rInStm.Tell();
+    sal_uInt32  nTokPos = rInStm.Tell();
     if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm )
       && GetType() == TYPE_ENUM )
     {
         if( SvMetaName::ReadSvIdl( rBase, rInStm ) )
-             return TRUE;
+             return sal_True;
     }
     rInStm.Seek( nTokPos );
-    return FALSE;
+    return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    SvMetaTypeEnum::WriteSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void SvMetaTypeEnum::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                   USHORT nTab )
+                                   sal_uInt16 nTab )
 {
     WriteHeaderSvIdl( rBase, rOutStm, nTab );
     rOutStm << endl;
@@ -2557,31 +1927,19 @@ void SvMetaTypeEnum::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
     rOutStm << endl;
 }
 
-/*************************************************************************
-|*
-|*    SvMetaTypeEnum::Write()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void SvMetaTypeEnum::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                            USHORT nTab,
+                            sal_uInt16 nTab,
                              WriteType nT, WriteAttribute nA )
 {
     SvMetaType::Write( rBase, rOutStm, nTab, nT, nA );
 }
 
-/*************************************************************************
-|*    SvMetaTypeEnum::WriteContext()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaTypeEnum::WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                   USHORT nTab,
+                                   sal_uInt16 nTab,
                                  WriteType nT, WriteAttribute nA )
 {
     WriteTab( rOutStm, nTab +1 );
-    for( ULONG n = 0; n < aEnumValueList.Count(); n++ )
+    for( sal_uLong n = 0; n < aEnumValueList.Count(); n++ )
     {
         aEnumValueList.GetObject( n )->Write( rBase, rOutStm, nTab +1, nT, nA );
 
@@ -2603,16 +1961,7 @@ void SvMetaTypeEnum::WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm,
 
 #endif // IDL_COMPILER
 
-/************************************************************************/
-/************************************************************************/
 SV_IMPL_META_FACTORY1( SvMetaTypevoid, SvMetaType );
-/*************************************************************************
-|*
-|*    SvMetaTypevoid::SvMetaTypevoid()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 SvMetaTypevoid::SvMetaTypevoid()
     : SvMetaType( "void", "SbxVOID", "void", 'v', "void", "", "" )
 {
@@ -2636,8 +1985,7 @@ ByteString SvMetaAttribute::Compare( SvMetaAttribute* pAttr )
     {
         if ( aType->GetType() == TYPE_METHOD )
         {
-            // Nur testen, wenn das Attribut eine Methode ist, nicht wenn es
-            // eine hat !!
+            // Test only when the attribute is a method not if it has one!
             if ( !pAttr->GetType()->GetType() == TYPE_METHOD )
                 aStr += "    IsMethod\n";
             else if ( aType->GetReturnType() &&
@@ -2646,7 +1994,7 @@ ByteString SvMetaAttribute::Compare( SvMetaAttribute* pAttr )
 
             if ( aType->GetAttrCount() )
             {
-                ULONG nCount = aType->GetAttrCount();
+                sal_uLong nCount = aType->GetAttrCount();
                 SvMetaAttributeMemberList& rList = aType->GetAttrList();
                 SvMetaAttributeMemberList& rOtherList = pAttr->GetType()->GetAttrList();
                 if ( pAttr->GetType()->GetAttrCount() != nCount )
@@ -2655,7 +2003,7 @@ ByteString SvMetaAttribute::Compare( SvMetaAttribute* pAttr )
                 }
                 else
                 {
-                    for ( USHORT n=0; n<nCount; n++ )
+                    for ( sal_uInt16 n=0; n<nCount; n++ )
                     {
                         SvMetaAttribute *pAttr1 = rList.GetObject(n);
                         SvMetaAttribute *pAttr2 = rOtherList.GetObject(n);

@@ -48,6 +48,8 @@
 #include "diagnose_ex.h"
 #include <rtl/logfile.hxx>
 
+#include <o3tl/compat_functional.hxx>
+
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::odbc;
@@ -67,14 +69,14 @@ using namespace com::sun::star::util;
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
 ::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.odbc.ResultSet");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.odbc.ResultSet"));
 }
 // -------------------------------------------------------------------------
  Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.ResultSet");
-    aSupported[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.ResultSet");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
+    aSupported[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ResultSet"));
     return aSupported;
 }
 // -------------------------------------------------------------------------
@@ -318,7 +320,7 @@ TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
             aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new sal_Int8[m_aRow[_nColumnIndex].getSequence().getLength()]),_nType);
             break;
         default:
-            OSL_ENSURE(0,"Unknown type");
+            OSL_FAIL("Unknown type");
             aPair = TVoidPtr(0,_nType);
     }
     return aPair;
@@ -1150,7 +1152,7 @@ Any SAL_CALL OResultSet::getBookmark(  ) throw( SQLException,  RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     TBookmarkPosMap::iterator aFind = ::std::find_if(m_aPosToBookmarks.begin(),m_aPosToBookmarks.end(),
-        ::std::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),m_nRowPos),::std::select2nd<TBookmarkPosMap::value_type>()));
+        ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),m_nRowPos),::o3tl::select2nd<TBookmarkPosMap::value_type>()));
 
     if ( aFind == m_aPosToBookmarks.end() )
     {
@@ -1366,12 +1368,12 @@ sal_Bool  OResultSet::isBookmarkable() const
 //------------------------------------------------------------------------------
 void OResultSet::setFetchDirection(sal_Int32 _par0)
 {
-    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
+    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
 }
 //------------------------------------------------------------------------------
 void OResultSet::setFetchSize(sal_Int32 _par0)
 {
-    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
+    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
     delete m_pRowStatusArray;
     m_pRowStatusArray = new SQLUSMALLINT[_par0];
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
@@ -1603,7 +1605,7 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
                 if ( aIter->second == _nOffset )
                     return moveToBookmark(makeAny(aIter->first));
             }
-            OSL_ENSURE(0,"Bookmark not found!");
+            OSL_FAIL("Bookmark not found!");
         }
         return sal_False;
     }
@@ -1738,7 +1740,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                     break;
                 }
                 default:
-                    OSL_ENSURE(0,"Not supported at the moment!");
+                    OSL_FAIL("Not supported at the moment!");
             }
             nRet = N3SQLParamData(m_aStatementHandle,&pColumnIndex);
         }

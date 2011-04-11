@@ -67,7 +67,7 @@ public:
     void    SetRanges(const ScRangeList& rNew)  { aRanges = rNew; }
     void    SetOptions(const ScPrintOptions& rNew) { aOptions = rNew; }
 
-    BOOL    operator==(const ScPrintSelectionStatus& rOther) const
+    sal_Bool    operator==(const ScPrintSelectionStatus& rOther) const
             { return eMode == rOther.eMode && aRanges == rOther.aRanges && aOptions == rOther.aOptions; }
 
     ScPrintSelectionMode GetMode() const { return eMode; }
@@ -110,7 +110,7 @@ public:
                                 const ScPrintSelectionStatus& rStatus );
             ~ScPrintFuncCache();
 
-    BOOL    IsSameSelection( const ScPrintSelectionStatus& rStatus ) const;
+    sal_Bool    IsSameSelection( const ScPrintSelectionStatus& rStatus ) const;
 
     void    InitLocations( const ScMarkData& rMark, OutputDevice* pDev );
     bool    FindLocation( const ScAddress& rCell, ScPrintPageLocation& rLocation ) const;

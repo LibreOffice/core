@@ -29,7 +29,7 @@
 #ifndef SC_XINAME_HXX
 #define SC_XINAME_HXX
 
-#include <map>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include "xlname.hxx"
 #include "xiroot.hxx"
 
@@ -91,7 +91,7 @@ public:
     const XclImpName*   GetName( sal_uInt16 nXclNameIdx ) const;
 
 private:
-    typedef ScfDelList< XclImpName > XclImpNameList;
+    typedef boost::ptr_vector< XclImpName > XclImpNameList;
     XclImpNameList      maNameList;
 };
 

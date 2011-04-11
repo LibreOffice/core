@@ -36,3 +36,19 @@ TARGET=scriptruntimeforjava
 ALLTAR : ANTBUILD
 .ENDIF
 .ENDIF
+
+ALLTAR : \
+    $(MISC)/ScriptFramework.component \
+    $(MISC)/ScriptProviderForJava.component \
+
+$(MISC)/ScriptFramework.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt ScriptFramework.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)ScriptFramework.jar' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ScriptFramework.component
+
+$(MISC)/ScriptProviderForJava.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt ScriptProviderForJava.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_JAVA)ScriptProviderForJava.jar' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ScriptProviderForJava.component

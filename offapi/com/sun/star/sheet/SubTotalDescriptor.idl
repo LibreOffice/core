@@ -51,7 +51,7 @@ module com {  module sun {  module star {  module sheet {
 /** represents a description of how subtotals are created.
 
     <p>The descriptor contains properties and a collection of subtotal fields
-    which control the behaviour of operation.</p>
+    which control the behavior of operation.</p>
  */
 published service SubTotalDescriptor
 {
@@ -78,7 +78,7 @@ published service SubTotalDescriptor
     //-------------------------------------------------------------------------
 
 //!published service PropertySet
-    /** procides access to the properties.
+    /** provides access to the properties.
      */
     interface com::sun::star::beans::XPropertySet;
 

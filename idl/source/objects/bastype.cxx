@@ -40,71 +40,50 @@
 #include <database.hxx>
 
 #ifdef IDL_COMPILER
-/************************************************************************/
-static BOOL ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
-                            ULONG nMin, ULONG nMax, ULONG* pValue )
+static sal_Bool ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
+                            sal_uLong nMin, sal_uLong nMax, sal_uLong* pValue )
 {
-    UINT32 nTokPos = rInStm.Tell();
+    sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
     if( pTok->Is( pName ) )
     {
-        BOOL bOk = FALSE;
+        sal_Bool bOk = sal_False;
         if( rInStm.Read( '=' ) )
         {
             pTok = rInStm.GetToken_Next();
             if( pTok->IsInteger() )
             {
-                ULONG n = pTok->GetNumber();
+                sal_uLong n = pTok->GetNumber();
                 if ( n >= nMin && n <= nMax )
                 {
                     *pValue = n;
-                    bOk = TRUE;
+                    bOk = sal_True;
                 }
             }
         }
 
         if( bOk )
-            return TRUE;
+            return sal_True;
     }
 
     rInStm.Seek( nTokPos );
-    return FALSE;
+    return sal_False;
 }
 #endif
 
-/*************************************************************************
-|*
-|*    SvUINT32::Read()
-|*    SvUINT32::Write()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
-UINT32 SvUINT32::Read( SvStream & rStm )
+sal_uInt32 SvUINT32::Read( SvStream & rStm )
 {
     return SvPersistStream::ReadCompressed( rStm );
 }
 
-void SvUINT32::Write( SvStream & rStm, UINT32 nVal )
+void SvUINT32::Write( SvStream & rStm, sal_uInt32 nVal )
 {
     SvPersistStream::WriteCompressed( rStm, nVal );
 }
 
-/*************************************************************************
-|*
-|*    SvStream& operator << ( SvBOOL )
-|*    SvStream& operator >> ( SvBOOL )
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
 SvStream& operator << (SvStream & rStm, const SvBOOL & rb )
 {
-    BYTE n = rb.nVal;
+    sal_uInt8 n = rb.nVal;
     if( rb.bSet )
         n |= 0x02;
     rStm << n;
@@ -112,43 +91,33 @@ SvStream& operator << (SvStream & rStm, const SvBOOL & rb )
 }
 SvStream& operator >> (SvStream & rStm, SvBOOL & rb )
 {
-    BYTE n;
+    sal_uInt8 n;
     rStm >> n;
-    rb.nVal = (n & 0x01) ? TRUE : FALSE;
-    rb.bSet = (n & 0x02) ? TRUE : FALSE;
+    rb.nVal = (n & 0x01) ? sal_True : sal_False;
+    rb.bSet = (n & 0x02) ? sal_True : sal_False;
     if( n & ~0x03 )
     {
         rStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-        DBG_ERROR( "format error" );
+        OSL_FAIL( "format error" );
     }
     return rStm;
 }
 
-/*************************************************************************
-|*
-|*    SvStream& operator << ( SvVersion )
-|*    SvStream& operator >> ( SvVersion )
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
 SvStream& operator << (SvStream & rStm, const SvVersion & r )
 {
     if( (r.GetMajorVersion() || r.GetMinorVersion())
       && r.GetMajorVersion() <= 0x0F && r.GetMinorVersion() <= 0x0F )
-    { // Versionsnummer in 1 Byte komprimieren
-        // Format 4 Bit fuer Major, dann 4 Bit fuer Minor.
-        // 0.0 wird nicht komprimiert
+    { // compress version number in 1 byte
+        // format first 4 bit for major, then 4 bit for minor
+        // 0.0 gets not compressed
 
         int n = r.GetMajorVersion() << 4;
         n |= r.GetMinorVersion();
-        rStm << (BYTE)n;
+        rStm << (sal_uInt8)n;
     }
     else
     {
-        rStm << (BYTE)0;
+        rStm << (sal_uInt8)0;
         rStm << r.GetMajorVersion();
         rStm << r.GetMinorVersion();
     }
@@ -157,15 +126,15 @@ SvStream& operator << (SvStream & rStm, const SvVersion & r )
 
 SvStream& operator >> (SvStream & rStm, SvVersion & r )
 {
-    BYTE n;
+    sal_uInt8 n;
     rStm >> n;
     if( n == 0 )
-    { // nicht komprimiert
+    { // not compressed
         rStm >> r.nMajorVersion;
         rStm >> r.nMinorVersion;
     }
     else
-    { // komprimiert
+    { // compressed
         r.nMajorVersion = (n >> 4) & 0x0F;
         r.nMinorVersion = n & 0x0F;
     }
@@ -174,26 +143,15 @@ SvStream& operator >> (SvStream & rStm, SvVersion & r )
 
 
 #ifdef IDL_COMPILER
-/************************************************************************/
-
-/*************************************************************************
-|*
-|*    SvBOOL::ReadSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
-BOOL SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
+sal_Bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
-    UINT32 nTokPos = rInStm.Tell();
+    sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->Is( pName ) )
     {
-        BOOL bOk = TRUE;
-        BOOL bBraket = rInStm.Read( '(' );
+        sal_Bool bOk = sal_True;
+        sal_Bool bBraket = rInStm.Read( '(' );
         if( bBraket || rInStm.Read( '=' ) )
         {
             pTok = rInStm.GetToken();
@@ -207,37 +165,23 @@ BOOL SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
                 bOk = rInStm.Read( ')' );
         }
         else
-            *this = TRUE; //Defaultaktion ist auf TRUE setzen
+            *this = sal_True; //default action set to TRUE
         if( bOk )
-            return TRUE;
+            return sal_True;
     }
     rInStm.Seek( nTokPos );
-    return FALSE;
+    return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    SvBOOL::WriteSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-BOOL SvBOOL::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm )
+sal_Bool SvBOOL::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm )
 {
     if( nVal )
         rOutStm << pName->GetName().GetBuffer();
     else
         rOutStm << pName->GetName().GetBuffer() << "(FALSE)";
-    return TRUE;
+    return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    SvBOOL::WriteSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 ByteString SvBOOL::GetSvIdlString( SvStringHashEntry * pName )
 {
     if( nVal )
@@ -251,23 +195,15 @@ ByteString SvBOOL::GetSvIdlString( SvStringHashEntry * pName )
 }
 
 
-/************************************************************************/
-/*************************************************************************
-|*
-|*    SvIdentifier::ReadSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-BOOL SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
+sal_Bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
-    UINT32 nTokPos = rInStm.Tell();
+    sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->Is( pName ) )
     {
-        BOOL bOk = TRUE;
-        BOOL bBraket = rInStm.Read( '(' );
+        sal_Bool bOk = sal_True;
+        sal_Bool bBraket = rInStm.Read( '(' );
         if( bBraket || rInStm.Read( '=' ) )
         {
             pTok = rInStm.GetToken();
@@ -280,26 +216,19 @@ BOOL SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
                 bOk = rInStm.Read( ')' );
         }
         if( bOk )
-            return TRUE;
+            return sal_True;
     }
     rInStm.Seek( nTokPos );
-    return FALSE;
+    return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    SvIdentifier::WriteSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-BOOL SvIdentifier::WriteSvIdl( SvStringHashEntry * pName,
+sal_Bool SvIdentifier::WriteSvIdl( SvStringHashEntry * pName,
                                SvStream & rOutStm,
-                               USHORT /*nTab */ )
+                               sal_uInt16 /*nTab */ )
 {
     rOutStm << pName->GetName().GetBuffer() << '(';
     rOutStm << GetBuffer() << ')';
-    return TRUE;
+    return sal_True;
 }
 
 SvStream& operator << (SvStream & rStm, const SvIdentifier & r )
@@ -315,25 +244,17 @@ SvStream& operator >> (SvStream & rStm, SvIdentifier & r )
 }
 
 
-/************************************************************************/
-/*************************************************************************
-|*
-|*    SvNumberIdentifier::ReadSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-BOOL SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
+sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
                                     SvStringHashEntry * pName,
                                     SvTokenStream & rInStm )
 {
     if( SvIdentifier::ReadSvIdl( pName, rInStm ) )
     {
-        ULONG n;
+        sal_uLong n;
         if( rBase.FindId( *this, &n ) )
         {
             nValue = n;
-            return TRUE;
+            return sal_True;
         }
         else
         {
@@ -344,30 +265,23 @@ BOOL SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
             rBase.WriteError( rInStm );
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    SvNumberIdentifier::ReadSvIdl()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
-BOOL SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
+sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
-    UINT32 nTokPos = rInStm.Tell();
+    sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->IsIdentifier() )
     {
-        ULONG n;
+        sal_uLong n;
         if( rBase.FindId( pTok->GetString(), &n ) )
         {
             *(ByteString *)this = pTok->GetString();
             nValue = n;
-            return TRUE;
+            return sal_True;
         }
         else
         {
@@ -379,19 +293,9 @@ BOOL SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         }
     }
     rInStm.Seek( nTokPos );
-    return FALSE;
+    return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    SvStream& operator << ( SvNumberIdentifier )
-|*    SvStream& operator >> ( SvNumberIdentifier )
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
 SvStream& operator << (SvStream & rStm, const SvNumberIdentifier & r )
 {
     rStm << (SvIdentifier &)r;
@@ -407,25 +311,15 @@ SvStream& operator >> (SvStream & rStm, SvNumberIdentifier & r )
 }
 
 
-/************************************************************************/
-/*************************************************************************
-|*
-|*    SvString::ReadSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
-BOOL SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
+sal_Bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 {
-    UINT32 nTokPos = rInStm.Tell();
+    sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->Is( pName ) )
     {
-        BOOL bOk = TRUE;
-        BOOL bBraket = rInStm.Read( '(' );
+        sal_Bool bOk = sal_True;
+        sal_Bool bBraket = rInStm.Read( '(' );
         if( bBraket || rInStm.Read( '=' ) )
         {
             pTok = rInStm.GetToken();
@@ -438,27 +332,18 @@ BOOL SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
                 bOk = rInStm.Read( ')' );
         }
         if( bOk )
-            return TRUE;
+            return sal_True;
     }
     rInStm.Seek( nTokPos );
-    return FALSE;
+    return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    SvString::WriteSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
-BOOL SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
-                           USHORT /*nTab */ )
+sal_Bool SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
+                           sal_uInt16 /*nTab */ )
 {
     rOutStm << pName->GetName().GetBuffer() << "(\"";
     rOutStm << GetBuffer() << "\")";
-    return TRUE;
+    return sal_True;
 }
 
 SvStream& operator << (SvStream & rStm, const SvString & r )
@@ -474,53 +359,25 @@ SvStream& operator >> (SvStream & rStm, SvString & r )
 }
 
 
-/*************************************************************************
-|*
-|*    SvHelpText::ReadSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
-BOOL SvHelpText::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
+sal_Bool SvHelpText::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 {
     return SvString::ReadSvIdl( SvHash_HelpText(), rInStm );
 }
 
-/*************************************************************************
-|*
-|*    SvHelpText::WriteSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
-BOOL SvHelpText::WriteSvIdl( SvIdlDataBase &, SvStream & rOutStm, USHORT nTab )
+sal_Bool SvHelpText::WriteSvIdl( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16 nTab )
 {
     return SvString::WriteSvIdl( SvHash_HelpText(), rOutStm, nTab );
 }
 
-/************************************************************************/
-/*************************************************************************
-|*
-|*    SvUUId::ReadSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
-BOOL SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
+sal_Bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 {
-    UINT32 nTokPos = rInStm.Tell();
+    sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     if( pTok->Is( SvHash_uuid() ) )
     {
-        BOOL bOk = TRUE;
-        BOOL bBraket = rInStm.Read( '(' );
+        sal_Bool bOk = sal_True;
+        sal_Bool bBraket = rInStm.Read( '(' );
         if( bBraket || rInStm.Read( '=' ) )
         {
             pTok = rInStm.GetToken();
@@ -533,79 +390,51 @@ BOOL SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
                 bOk = rInStm.Read( ')' );
         }
         if( bOk )
-            return TRUE;
+            return sal_True;
     }
     rInStm.Seek( nTokPos );
-    return FALSE;
+    return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    SvMetaObject::WriteSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
-BOOL SvUUId::WriteSvIdl( SvStream & rOutStm )
+sal_Bool SvUUId::WriteSvIdl( SvStream & rOutStm )
 {
-    // Global Id schreiben
+    // write global id
     rOutStm << SvHash_uuid()->GetName().GetBuffer() << "(\"";
     rOutStm << ByteString( GetHexName(), RTL_TEXTENCODING_UTF8 ).GetBuffer() << "\")";
-    return TRUE;
+    return sal_True;
 }
 
 
-/************************************************************************/
-/*************************************************************************
-|*
-|*    SvVersion::ReadSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
-BOOL SvVersion::ReadSvIdl( SvTokenStream & rInStm )
+sal_Bool SvVersion::ReadSvIdl( SvTokenStream & rInStm )
 {
-    ULONG n = 0;
+    sal_uLong n = 0;
 
-    UINT32 nTokPos = rInStm.Tell();
+    sal_uInt32 nTokPos = rInStm.Tell();
     if( ReadRangeSvIdl( SvHash_Version(), rInStm, 0 , 0xFFFF, &n ) )
     {
-        nMajorVersion = (USHORT)n;
+        nMajorVersion = (sal_uInt16)n;
         if( rInStm.Read( '.' ) )
         {
             SvToken * pTok = rInStm.GetToken_Next();
             if( pTok->IsInteger() && pTok->GetNumber() <= 0xFFFF )
             {
-                nMinorVersion = (USHORT)pTok->GetNumber();
-                return TRUE;
+                nMinorVersion = (sal_uInt16)pTok->GetNumber();
+                return sal_True;
             }
         }
         else
-            return TRUE;
+            return sal_True;
     }
     rInStm.Seek( nTokPos );
-    return FALSE;
+    return sal_False;
 }
 
-/*************************************************************************
-|*
-|*    SvVersion::WriteSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
-*************************************************************************/
-BOOL SvVersion::WriteSvIdl( SvStream & rOutStm )
+sal_Bool SvVersion::WriteSvIdl( SvStream & rOutStm )
 {
     rOutStm << SvHash_Version()->GetName().GetBuffer() << '('
             << ByteString::CreateFromInt32( nMajorVersion ).GetBuffer() << '.'
             << ByteString::CreateFromInt32( nMinorVersion ).GetBuffer() << ')';
-    return TRUE;
+    return sal_True;
 }
 #endif //IDL_COMPILER
 

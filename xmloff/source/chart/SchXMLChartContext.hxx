@@ -101,7 +101,7 @@ public:
                                      com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
     virtual SvXMLImportContext *CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -167,24 +167,9 @@ public:
     virtual void StartElement( const com::sun::star::uno::Reference<
                                com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext *CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
-};
-
-// ----------------------------------------
-
-class SchXMLLegendContext : public SvXMLImportContext
-{
-private:
-    SchXMLImportHelper& mrImportHelper;
-
-public:
-    SchXMLLegendContext( SchXMLImportHelper& rImpHelper,
-                         SvXMLImport& rImport, const rtl::OUString& rLocalName );
-    virtual ~SchXMLLegendContext();
-
-    virtual void StartElement( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
 #endif  // _SCH_XMLCHARTCONTEXT_HXX_

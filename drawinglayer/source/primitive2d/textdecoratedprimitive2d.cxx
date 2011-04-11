@@ -210,7 +210,7 @@ namespace drawinglayer
             if(!xLocalBreakIterator.is())
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
-                xLocalBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), ::com::sun::star::uno::UNO_QUERY);
+                xLocalBreakIterator.set(xMSF->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))), ::com::sun::star::uno::UNO_QUERY);
             }
 
             if(xLocalBreakIterator.is() && getTextLength())

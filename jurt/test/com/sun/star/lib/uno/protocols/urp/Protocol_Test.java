@@ -34,20 +34,17 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.IBridge;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XInterface;
-import complexlib.ComplexTestCase;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.LinkedList;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public final class Protocol_Test extends ComplexTestCase {
-    public String[] getTestMethodNames() {
-        return new String[] { "test" };
-    }
-
-    public void test() throws Exception {
+public final class Protocol_Test {
+    @Test public void test() throws Exception {
         IBridge iBridge = new TestBridge();
         PipedInputStream inA = new PipedInputStream();
         PipedOutputStream outA = new PipedOutputStream(inA);
@@ -93,7 +90,7 @@ public final class Protocol_Test extends ComplexTestCase {
             new Object[] { "hallo" });
         Message iMessage = iReceiver.readMessage();
         Object[] t_params = iMessage.getArguments();
-        assure("", "hallo".equals((String)t_params[0]));
+        assertEquals("hallo", (String)t_params[0]);
 
         // send a reply
         iReceiver.writeReply(false, new ThreadId(new byte[] { 0, 1 }), null);
@@ -118,7 +115,7 @@ public final class Protocol_Test extends ComplexTestCase {
         iReceiver.writeReply(false, new ThreadId(new byte[] { 0, 1 }), null);
         iSender.readMessage();
 
-        assure("", "testString".equals(((String [])params[0])[0]));
+        assertEquals("testString", ((String [])params[0])[0]);
     }
 
     public void testCallWithInOutParameter(
@@ -133,7 +130,7 @@ public final class Protocol_Test extends ComplexTestCase {
 
 
         Object[] t_params = iMessage.getArguments();
-        assure("", "inString".equals(((String [])t_params[0])[0]));
+        assertEquals("inString", ((String [])t_params[0])[0]);
 
         // provide reply
         ((String [])t_params[0])[0] = "outString";
@@ -142,7 +139,7 @@ public final class Protocol_Test extends ComplexTestCase {
         iReceiver.writeReply(false, new ThreadId(new byte[] { 0, 1 }), null);
         iSender.readMessage();
 
-        assure("", "outString".equals(((String [])params[0])[0]));
+        assertEquals("outString", ((String [])params[0])[0]);
     }
 
     public void testCallWithResult(
@@ -161,7 +158,7 @@ public final class Protocol_Test extends ComplexTestCase {
         Message iMessage = iSender.readMessage();
         Object result = iMessage.getResult();
 
-        assure("", "resultString".equals(result));
+        assertEquals("resultString", result);
     }
 
     public void testCallWhichRaisesException(
@@ -181,7 +178,7 @@ public final class Protocol_Test extends ComplexTestCase {
 
         Object result = iMessage.getResult();
 
-        assure("", result instanceof com.sun.star.uno.RuntimeException);
+        assertTrue(result instanceof com.sun.star.uno.RuntimeException);
     }
 
     public void testCallWithIn_Out_InOut_Paramters_and_result(
@@ -196,9 +193,9 @@ public final class Protocol_Test extends ComplexTestCase {
 
         Object[] t_params = iMessage.getArguments();
 
-        assure("", "hallo".equals((String)t_params[0]));
+        assertEquals("hallo", (String)t_params[0]);
 
-        assure("", "inOutString".equals(((String [])t_params[2])[0]));
+        assertEquals("inOutString", ((String [])t_params[2])[0]);
 
         ((String [])t_params[1])[0] = "outString";
         ((String [])t_params[2])[0] = "inOutString_res";
@@ -209,11 +206,11 @@ public final class Protocol_Test extends ComplexTestCase {
         iMessage = iSender.readMessage();
 
         Object result = iMessage.getResult();
-        assure("", "outString".equals(((String [])params[1])[0]));
+        assertEquals("outString", ((String [])params[1])[0]);
 
-        assure("", "inOutString_res".equals(((String [])params[2])[0]));
+        assertEquals("inOutString_res", ((String [])params[2])[0]);
 
-        assure("", "resultString".equals(result));
+        assertEquals("resultString", result);
     }
 
     public void testCallWhichReturnsAny(
@@ -229,9 +226,11 @@ public final class Protocol_Test extends ComplexTestCase {
             false, new ThreadId(new byte[] { 0, 1 }), Any.VOID);
         Message iMessage = iSender.readMessage();
         Object result = iMessage.getResult();
-        assure("", result instanceof Any
-               && (TypeDescription.getTypeDescription(((Any) result).getType()).
-                   getZClass() == void.class));
+        assertTrue(
+            result instanceof Any &&
+            ((TypeDescription.getTypeDescription(((Any) result).getType()).
+              getZClass()) ==
+             void.class));
 
         // send an ordinary request
         iSender.writeRequest(
@@ -244,7 +243,7 @@ public final class Protocol_Test extends ComplexTestCase {
             new Any(XInterface.class, null));
         iMessage = iSender.readMessage();
         result = iMessage.getResult();
-        assure("", result == null);
+        assertNull(result);
 
         // send an ordinary request
         iSender.writeRequest(
@@ -256,7 +255,7 @@ public final class Protocol_Test extends ComplexTestCase {
             false, new ThreadId(new byte[] { 0, 1 }), new Integer(501));
         iMessage = iSender.readMessage();
         result = iMessage.getResult();
-        assure("", result.equals(new Integer(501)));
+        assertEquals(501, result);
     }
 
     private static final class Endpoint {

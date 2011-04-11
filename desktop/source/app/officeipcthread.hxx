@@ -123,7 +123,7 @@ class OfficeIPCThread : public osl::Thread
     static void                 RequestsCompleted( int n = 1 );
     static sal_Bool             ExecuteCmdLineRequests( ProcessDocumentsRequest& );
 
-    // return FALSE if second office
+    // return sal_False if second office
     static Status               EnableOfficeIPCThread();
     static void                 DisableOfficeIPCThread();
     // start dispatching events...

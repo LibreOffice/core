@@ -32,6 +32,7 @@
 #include "comphelper/docpasswordrequest.hxx"
 #include <com/sun/star/task/DocumentMSPasswordRequest2.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest2.hpp>
+#include <com/sun/star/task/PasswordRequest.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionPassword2.hpp>
 
@@ -45,6 +46,7 @@ using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::task::InteractionClassification_QUERY;
 using ::com::sun::star::task::DocumentMSPasswordRequest2;
 using ::com::sun::star::task::DocumentPasswordRequest2;
+using ::com::sun::star::task::PasswordRequest;
 using ::com::sun::star::task::PasswordRequestMode;
 using ::com::sun::star::task::XInteractionAbort;
 using ::com::sun::star::task::XInteractionContinuation;
@@ -99,11 +101,74 @@ private:
 
 // ============================================================================
 
+SimplePasswordRequest::SimplePasswordRequest( PasswordRequestMode eMode )
+: mpAbort( NULL )
+, mpPassword( NULL )
+{
+    PasswordRequest aRequest( OUString(), Reference< XInterface >(),
+        InteractionClassification_QUERY, eMode );
+    maRequest <<= aRequest;
+
+    maContinuations.realloc( 2 );
+    maContinuations[ 0 ].set( mpAbort = new AbortContinuation );
+    maContinuations[ 1 ].set( mpPassword = new PasswordContinuation );
+}
+
+SimplePasswordRequest::~SimplePasswordRequest()
+{
+}
+
+/*uno::*/Any SAL_CALL SimplePasswordRequest::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
+{
+    return ::cppu::queryInterface ( rType,
+            // OWeakObject interfaces
+            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
+            static_cast< XWeak* > ( this ),
+            // my own interfaces
+            static_cast< XInteractionRequest*  > ( this ) );
+}
+
+void SAL_CALL SimplePasswordRequest::acquire(  ) throw ()
+{
+    OWeakObject::acquire();
+}
+
+void SAL_CALL SimplePasswordRequest::release(  ) throw ()
+{
+    OWeakObject::release();
+}
+
+sal_Bool SimplePasswordRequest::isAbort() const
+{
+    return mpAbort->isSelected();
+}
+
+sal_Bool SimplePasswordRequest::isPassword() const
+{
+    return mpPassword->isSelected();
+}
+
+OUString SimplePasswordRequest::getPassword() const
+{
+    return mpPassword->getPassword();
+}
+
+Any SAL_CALL SimplePasswordRequest::getRequest() throw( RuntimeException )
+{
+    return maRequest;
+}
+
+Sequence< Reference< XInteractionContinuation > > SAL_CALL SimplePasswordRequest::getContinuations() throw( RuntimeException )
+{
+    return maContinuations;
+}
+
+// ============================================================================
+
 DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
         PasswordRequestMode eMode, const OUString& rDocumentName, sal_Bool bPasswordToModify )
 : mpAbort( NULL )
 , mpPassword( NULL )
-, mbPasswordToModify( bPasswordToModify )
 {
     switch( eType )
     {

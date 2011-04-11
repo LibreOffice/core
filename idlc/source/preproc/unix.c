@@ -31,7 +31,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <fcntl.h>
-#if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
+#if (defined(_WIN32) || defined(__IBMC__))
 #include <io.h>
 #include <sys/stat.h>
 #include <external/glibc/getopt.h>
@@ -92,6 +92,7 @@ void
                 maketokenrow(3, &tr);
                 gettokens(&tr, 1);
                 doadefine(&tr, c);
+                dofree(tr.bp); tr.bp = 0;
                 unsetsource();
                 break;
 

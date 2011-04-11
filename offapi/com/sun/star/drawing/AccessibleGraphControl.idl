@@ -46,7 +46,7 @@ module com {  module sun {  module star {  module drawing {
     image map of the Draw and Impress applications and the contour dialog of
     the Writer application.
 
-    <p>The children of graph controls are shapes that define contrours.</p>
+    <p>The children of graph controls are shapes that define contours.</p>
 
      @since OOo 1.1.2
  */

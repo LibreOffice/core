@@ -160,7 +160,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
     }
     else
     {
-        // exception occured:
+        // exception occurred:
         OSL_ENSURE(
             typelib_typedescriptionreference_isAssignableFrom(
                 ::getCppuType( reinterpret_cast<
@@ -525,13 +525,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return ::cppu::component_writeInfoHelper(
-        pServiceManager, pRegistryKey, g_entries );
 }
 
 void * SAL_CALL component_getFactory(

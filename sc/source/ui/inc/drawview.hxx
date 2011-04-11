@@ -42,15 +42,14 @@ class ScDrawObjData;
 class ScDrawView: public FmFormView
 {
     ScViewData*             pViewData;
-    OutputDevice*           pDev;                   //! noetig ?
+    OutputDevice*           pDev;                   //! needed ?
     ScDocument*             pDoc;
     SCTAB                   nTab;
-    Fraction                aScaleX;                // Faktor fuer Drawing-MapMode
+    Fraction                aScaleX;                // Factor for Drawing-MapMode
     Fraction                aScaleY;
     SdrDropMarkerOverlay*   pDropMarker;
     SdrObject*              pDropMarkObj;
-    BOOL                    bInConstruct;
-    //HMHBOOL                   bDisableHdl;
+    sal_Bool                    bInConstruct;
 
     void            Construct();
     void            UpdateBrowser();
@@ -76,18 +75,14 @@ public:
 
     virtual void    DeleteMarked();
 
-    void            DrawMarks( OutputDevice* pOut ) const;
-
     void            MarkDropObj( SdrObject* pObj );
 
-    //HMHBOOL           IsDisableHdl() const    { return bDisableHdl; }
-
-    void            SetMarkedToLayer( BYTE nLayerNo );
+    void            SetMarkedToLayer( sal_uInt8 nLayerNo );
 
     void            InvalidateAttribs();
     void            InvalidateDrawTextAttrs();
 
-    BOOL            BeginDrag( Window* pWindow, const Point& rStartPos );
+    sal_Bool            BeginDrag( Window* pWindow, const Point& rStartPos );
     void            DoCut();
     void            DoCopy();
 
@@ -98,24 +93,25 @@ public:
 
     void            CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const;
 
-    void            SetAnchor( ScAnchorType );
-    ScAnchorType    GetAnchor() const;
+    void            SetPageAnchored();
+    void            SetCellAnchored();
+    ScAnchorType    GetAnchorType() const;
 
     void            VCAddWin( Window* pWin );
     void            VCRemoveWin( Window* pWin );
 
     void            UpdateIMap( SdrObject* pObj );
 
-    USHORT          GetPopupMenuId();
+    sal_uInt16          GetPopupMenuId();
     void            UpdateUserViewOptions();
 
     void            SetMarkedOriginalSize();
 
-    BOOL            SelectObject( const String& rName );
+    sal_Bool            SelectObject( const String& rName );
     bool            HasMarkedControl() const;
     bool            HasMarkedInternal() const;
 
-    bool            InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions=0);
+    bool            InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong nOptions=0);
 
     /** Returns the selected object, if it is the caption object of a cell note.
         @param ppCaptData  (out-param) If not null, returns the pointer to the caption object data. */
@@ -139,7 +135,7 @@ public:
     /** Unlocks the internal layer that contains caption objects of cell notes. */
     inline void     UnlockInternalLayer() { LockInternalLayer( false ); }
 
-    SdrEndTextEditKind  ScEndTextEdit();    // ruft SetDrawTextUndo(0)
+    SdrEndTextEditKind  ScEndTextEdit();    // calls SetDrawTextUndo(0)
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 };
 

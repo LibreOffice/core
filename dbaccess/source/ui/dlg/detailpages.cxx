@@ -76,7 +76,7 @@ namespace dbaui
     //========================================================================
     DBG_NAME(OCommonBehaviourTabPage)
     //------------------------------------------------------------------------
-    OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, USHORT nResId, const SfxItemSet& _rCoreAttrs,
+    OCommonBehaviourTabPage::OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nResId, const SfxItemSet& _rCoreAttrs,
         sal_uInt32 nControlFlags,bool _bFreeResource)
 
         :OGenericAdministrationPage(pParent, ModuleRes(nResId), _rCoreAttrs)
@@ -500,7 +500,7 @@ namespace dbaui
     //========================================================================
     //= OMySQLJDBCDetailsPage
     //========================================================================
-    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId)
+    OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( Window* pParent,sal_uInt16 _nResId, const SfxItemSet& _rCoreAttrs ,sal_uInt16 _nPortId)
         :OCommonBehaviourTabPage(pParent, _nResId, _rCoreAttrs, CBTP_USE_CHARSET ,false)
         ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
         ,m_aFTHostname      (this, ModuleRes(FT_HOSTNAME))
@@ -531,9 +531,9 @@ namespace dbaui
         else
         {
             m_bUseClass = false;
-            m_aFTDriverClass.Show(FALSE);
-            m_aEDDriverClass.Show(FALSE);
-            m_aTestJavaDriver.Show(FALSE);
+            m_aFTDriverClass.Show(sal_False);
+            m_aEDDriverClass.Show(sal_False);
+            m_aTestJavaDriver.Show(sal_False);
         }
 
         m_aFTSocket.Show(PAGE_MYSQL_JDBC == _nResId && !m_bUseClass);
@@ -648,7 +648,7 @@ namespace dbaui
         {
         }
 
-        USHORT nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
+        sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String() );
         aMsg.Execute();
         return 0L;
@@ -900,7 +900,7 @@ namespace dbaui
     IMPL_LINK( OAdabasDetailsPage, AttributesChangedHdl, void *, EMPTYARG )
     {
         m_CB_SHUTDB.Enable(m_ET_CTRLUSERNAME.GetText().Len() && m_ET_CTRLPASSWORD.GetText().Len());
-        bAttrsChanged = TRUE;
+        bAttrsChanged = sal_True;
         callModifiedHdl();
         return 0;
     }

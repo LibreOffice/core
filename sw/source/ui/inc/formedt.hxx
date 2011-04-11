@@ -81,14 +81,14 @@ class SwIdxFormDlg : public SvxStandardDialog
 
     SwWrtShell     &rSh;
     SwForm         *pForm;
-    USHORT          nAktLevel;
-    BOOL            bLastLinkIsEnd;
+    sal_uInt16          nAktLevel;
+    sal_Bool            bLastLinkIsEnd;
 
 public:
     SwIdxFormDlg( Window* pParent, SwWrtShell &rShell, const SwForm& rForm );
     ~SwIdxFormDlg();
 
-    static BOOL     IsNoNum(SwWrtShell& rSh, const String& rName);
+    static sal_Bool     IsNoNum(SwWrtShell& rSh, const String& rName);
     const SwForm&   GetTOXForm();
 };
 

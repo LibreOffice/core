@@ -65,10 +65,10 @@ using lang::IndexOutOfBoundsException;
 // SwAccessiblePreview
 //
 
-SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap* pInitMap ) :
-    SwAccessibleContext( pInitMap, AccessibleRole::DOCUMENT,
-                         pInitMap->GetShell()->getIDocumentLayoutAccess()->GetRootFrm() ),
-    mxParent( pInitMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
+SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap *_pMap ) :
+    SwAccessibleContext( _pMap, AccessibleRole::DOCUMENT,
+                         _pMap->GetShell()->GetLayout() ),//swmod 071107//swmod 071225
+    mxParent( _pMap->GetShell()->GetWin()->GetAccessibleParentWindow()->GetAccessible() ),
     mpChildWin( 0 )
 {
 }
@@ -86,12 +86,10 @@ void SwAccessibleDocumentBase::SetVisArea()
     if( aOldVisArea != rNewVisArea )
     {
         SwAccessibleFrame::SetVisArea( GetMap()->GetVisArea() );
-        // --> OD 2007-12-07 #i58139#
-        // showing state of document view needs also be updated.
+        // #i58139# - showing state of document view needs also be updated.
         // Thus, call method <Scrolled(..)> instead of <ChildrenScrolled(..)>
 //        ChildrenScrolled( GetFrm(), aOldVisArea );
         Scrolled( aOldVisArea );
-        // <--
     }
 }
 
@@ -318,7 +316,7 @@ SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap* pInitMap ) :
     if( pWin )
     {
         pWin->AddChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
-        USHORT nCount =   pWin->GetChildCount();
+        sal_uInt16 nCount =   pWin->GetChildCount();
         for( sal_uInt16 i=0; i < nCount; i++ )
         {
             Window* pChildWin = pWin->GetChild( i );
@@ -504,7 +502,7 @@ uno::Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
     return maSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
-// --> OD 2004-11-16 #111714# - index has to be treated as global child index.
+// index has to be treated as global child index.
 void SwAccessibleDocument::deselectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,

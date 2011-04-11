@@ -42,7 +42,6 @@
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/extract.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <tools/diagnose_ex.h>
@@ -60,6 +59,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/extract.hxx>
 #include <vcl/svapp.hxx>
 #include <uno/data.h>
 
@@ -147,7 +147,7 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
                                                             break;
         case BASEPROPERTY_FONTDESCRIPTORPART_TYPE:          rValue >>= rFD.Type;
                                                             break;
-        default:                                            DBG_ERROR( "FontProperty?!" );
+        default:                                            OSL_FAIL( "FontProperty?!" );
     }
 }
 
@@ -155,7 +155,24 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
 //  class UnoControlModel
 //  ----------------------------------------------------
 UnoControlModel::UnoControlModel()
-    : OPropertySetHelper( BrdcstHelper ), maDisposeListeners( *this )
+    :UnoControlModel_Base()
+    ,MutexAndBroadcastHelper()
+    ,OPropertySetHelper( BrdcstHelper )
+    ,maDisposeListeners( *this )
+    ,maContext( ::comphelper::getProcessServiceFactory() )
+{
+    OSL_ENSURE( false, "UnoControlModel::UnoControlModel: not implemented. Well, not really." );
+    // just implemented to let the various FooImplInheritanceHelper compile, you should use the
+    // version taking a service factory
+    mpData = new ImplPropertyTable;
+}
+
+UnoControlModel::UnoControlModel( const Reference< XMultiServiceFactory >& i_factory )
+    :UnoControlModel_Base()
+    ,MutexAndBroadcastHelper()
+    ,OPropertySetHelper( BrdcstHelper )
+    ,maDisposeListeners( *this )
+    ,maContext( i_factory )
 {
     // Die Properties muessen vom Model in die Tabelle gestopft werden,
     // nur vorhandene Properties sind gueltige Properties, auch wenn VOID.
@@ -163,18 +180,11 @@ UnoControlModel::UnoControlModel()
 }
 
 UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
-    : XControlModel()
-    , XPropertyState()
-    , XPersistObject()
-    , XComponent()
-    , XServiceInfo()
-    , XTypeProvider()
-    , XUnoTunnel()
-    , XCloneable()
+    : UnoControlModel_Base()
     , MutexAndBroadcastHelper()
     , OPropertySetHelper( BrdcstHelper )
-    , OWeakAggObject()
     , maDisposeListeners( *this )
+    , maContext( rModel.maContext )
 {
     mpData = new ImplPropertyTable;
 
@@ -195,7 +205,7 @@ UnoControlModel::~UnoControlModel()
 
 UnoControlModel* UnoControlModel::Clone() const
 {
-    DBG_ERROR( "UnoControlModel::Clone() ?!" );
+    OSL_FAIL( "UnoControlModel::Clone() ?!" );
     return NULL;
 }
 
@@ -249,7 +259,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             case BASEPROPERTY_FONTDESCRIPTORPART_KERNING:       aDefault <<= aFD.Kerning;           break;
             case BASEPROPERTY_FONTDESCRIPTORPART_WORDLINEMODE:  aDefault <<= aFD.WordLineMode;      break;
             case BASEPROPERTY_FONTDESCRIPTORPART_TYPE:          aDefault <<= aFD.Type;              break;
-            default: DBG_ERROR( "FontProperty?!" );
+            default: OSL_FAIL( "FontProperty?!" );
         }
     }
     else
@@ -405,7 +415,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                     aLocale.Country = sDefaultCurrency.copy( nSepPos + 1 );
                 }
 
-                LocaleDataWrapper aLocaleInfo( ::comphelper::getProcessServiceFactory(), aLocale );
+                LocaleDataWrapper aLocaleInfo( maContext.getLegacyServiceFactory(), aLocale );
                 if ( !sBankSymbol.getLength() )
                     sBankSymbol = aLocaleInfo.getCurrBankSymbol();
 
@@ -438,13 +448,14 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                                 break;
                         }
                     DBG_ASSERT( bLegacy || pAllCurrencies != pAllCurrenciesEnd, "UnoControlModel::ImplGetDefaultValue: did not find the given bank symbol!" );
+                    (void)bLegacy;
                 }
 
                 aDefault <<= sCurrencySymbol;
             }
             break;
 
-            default:    DBG_ERROR( "ImplGetDefaultValue - unknown Property" );
+            default:    OSL_FAIL( "ImplGetDefaultValue - unknown Property" );
         }
     }
 
@@ -477,7 +488,8 @@ void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
 void UnoControlModel::ImplRegisterProperties( const std::list< sal_uInt16 > &rIds )
 {
     std::list< sal_uInt16 >::const_iterator iter;
-    for( iter = rIds.begin(); iter != rIds.end(); iter++) {
+    for( iter = rIds.begin(); iter != rIds.end(); ++iter)
+    {
         if( !ImplHasProperty( *iter ) )
             ImplRegisterProperty( *iter, ImplGetDefaultValue( *iter ) );
     }
@@ -486,36 +498,20 @@ void UnoControlModel::ImplRegisterProperties( const std::list< sal_uInt16 > &rId
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any UnoControlModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XControlModel*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::io::XPersistObject*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XComponent*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XServiceInfo*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::util::XCloneable*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XPropertyState*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XMultiPropertySet*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XFastPropertySet*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::beans::XPropertySet*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::lang::XUnoTunnel*, this ) );
-    return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
+    Any aRet = UnoControlModel_Base::queryAggregation( rType );
+    if ( !aRet.hasValue() )
+        aRet = ::cppu::OPropertySetHelper::queryInterface( rType );
+    return aRet;
 }
 
 // ::com::sun::star::lang::XUnoTunnel
 IMPL_XUNOTUNNEL( UnoControlModel )
 
+// XInterface
+IMPLEMENT_FORWARD_REFCOUNT( UnoControlModel, UnoControlModel_Base )
+
 // ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( UnoControlModel )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>* ) NULL )
-IMPL_XTYPEPROVIDER_END
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlModel, UnoControlModel_Base, ::cppu::OPropertySetHelper )
 
 
 uno::Reference< util::XCloneable > UnoControlModel::createClone() throw(::com::sun::star::uno::RuntimeException)
@@ -533,6 +529,8 @@ void UnoControlModel::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
     ::com::sun::star::lang::EventObject aEvt;
     aEvt.Source = (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this;
     maDisposeListeners.disposeAndClear( aEvt );
+
+    BrdcstHelper.aLC.disposeAndClear( aEvt );
 
     // let the property set helper notify our property listeners
     OPropertySetHelper::disposing();
@@ -605,7 +603,7 @@ void UnoControlModel::setPropertyToDefault( const ::rtl::OUString& PropertyName 
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    DBG_ERROR( "ServiceName von UnoControlModel ?!" );
+    OSL_FAIL( "ServiceName von UnoControlModel ?!" );
     return ::rtl::OUString();
 }
 
@@ -759,7 +757,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 ::rtl::OUString sPropertyName( GetPropertyName( pProp->GetId() ) );
                 sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
                 sMessage += "'.)";
-                DBG_ERROR( sMessage );
+                OSL_FAIL( sMessage.getStr() );
             }
 #endif
         }
@@ -817,7 +815,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
             }
             else
             {
-                DBG_ERROR( "Property?!" );
+                OSL_FAIL( "Property?!" );
             }
 
             sal_Int32 nPropDataLen = xMark->offsetToMark( nPropDataBeginMark );
@@ -960,7 +958,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                     ::rtl::OUString sPropertyName( GetPropertyName( nPropId ) );
                     sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
                     sMessage += "'.)";
-                    DBG_ERROR( sMessage );
+                    OSL_FAIL( sMessage.getStr() );
                 }
             }
             else
@@ -1025,7 +1023,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                 }
                 else
                 {
-                    DBG_ERROR( "read: unknown Property!" );
+                    OSL_FAIL( "read: unknown Property!" );
                 }
             }
         }
@@ -1088,7 +1086,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
 // ::com::sun::star::lang::XServiceInfo
 ::rtl::OUString UnoControlModel::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    DBG_ERROR( "This method should be overloaded!" );
+    OSL_FAIL( "This method should be overloaded!" );
     return ::rtl::OUString();
 
 }
@@ -1114,7 +1112,7 @@ sal_Bool UnoControlModel::supportsService( const ::rtl::OUString& rServiceName )
 // ::cppu::OPropertySetHelper
 ::cppu::IPropertyArrayHelper& UnoControlModel::getInfoHelper()
 {
-    DBG_ERROR( "UnoControlModel::getInfoHelper() not possible!" );
+    OSL_FAIL( "UnoControlModel::getInfoHelper() not possible!" );
     return *(::cppu::IPropertyArrayHelper*) NULL;
 }
 
@@ -1155,7 +1153,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
             }
             else
             {
-                BOOL bConverted = FALSE;
+                sal_Bool bConverted = sal_False;
                 // 13.03.2001 - 84923 - frank.schoenheit@germany.sun.com
 
                 switch (pDestType->getTypeClass())
@@ -1168,7 +1166,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                         if ( bConverted )
                             rConvertedValue <<= nAsDouble;
                         else
-                        {   // try as integer - 96136 - 2002-10-08 - fs@openoffice.org
+                        {   // try as integer
                             sal_Int32 nAsInteger = 0;
                             bConverted = ( rValue >>= nAsInteger );
                             if ( bConverted )
@@ -1315,12 +1313,12 @@ void UnoControlModel::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, 
                                                                 break;
             case BASEPROPERTY_FONTDESCRIPTORPART_TYPE:          rValue <<= aFD.Type;
                                                                 break;
-            default: DBG_ERROR( "FontProperty?!" );
+            default: OSL_FAIL( "FontProperty?!" );
         }
     }
     else
     {
-        DBG_ERROR( "getFastPropertyValue - invalid Property!" );
+        OSL_FAIL( "getFastPropertyValue - invalid Property!" );
     }
 }
 
@@ -1377,7 +1375,7 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun:
 // ::com::sun::star::beans::XMultiPropertySet
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > UnoControlModel::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    DBG_ERROR( "UnoControlModel::getPropertySetInfo() not possible!" );
+    OSL_FAIL( "UnoControlModel::getPropertySetInfo() not possible!" );
     return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >();
 }
 
@@ -1393,7 +1391,6 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
     sal_Int32* pHandles = aHandles.getArray();
 
     // may need to change the order in the sequence, for this we need a non-const value sequence
-    // 15.05.2002 - 99314 - fs@openoffice.org
     uno::Sequence< uno::Any > aValues( Values );
     uno::Any* pValues = aValues.getArray();
 
@@ -1427,7 +1424,7 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
                 // clear our guard before calling into setFastPropertyValues - this method
                 // will implicitly call property listeners, and this should not happen with
                 // our mutex locked
-                // #i23451# - 2004-03-18 - fs@openoffice.org
+                // #i23451#
              setFastPropertyValues( nProps, pHandles, pValues, nValidHandles );
         }
         else

@@ -23,8 +23,6 @@ struct IncrementData
         incompatible type, the Distance is meant to be calculated
         automatically by the view component representing the model
         containing this increment.
-
-        @see <type>ExplicitIncrementData</type>
      */
     any         Distance;
 
@@ -45,8 +43,6 @@ struct IncrementData
         incompatible type, the BaseValue is meant to be calculated
         automatically by the view component representing the model
         containing this increment.
-
-        @see <type>ExplicitIncrementData</type>
      */
     any         BaseValue;
 

@@ -61,13 +61,13 @@ public:
     virtual void Resize (void);
 
 protected:
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, BOOL bIsFirst);
+    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, sal_Bool bIsFirst);
     virtual SvxRuler* CreateVRuler(::sd::Window* pWin);
 
 private:
     Rectangle       maOldVisArea;
 
-    virtual void Activate (BOOL bIsMDIActivate);
+    virtual void Activate (sal_Bool bIsMDIActivate);
     virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
 };
 

@@ -36,9 +36,9 @@
 #include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
@@ -87,15 +87,6 @@ XMLEventsImportContext::~XMLEventsImportContext()
 {
 //  // if, for whatever reason, the object gets destroyed prematurely,
 //  // we need to delete the collected events
-//  EventsVector::iterator aEnd = aCollectEvents.end();
-//  for(EventsVector::iterator aIter = aCollectEvents.begin();
-//      aIter != aEnd;
-//      aIter++)
-//  {
-//      EventNameValuesPair* pPair = &(*aIter);
-//      delete pPair;
-//  }
-//  aCollectEvents.clear();
 }
 
 
@@ -172,11 +163,9 @@ void XMLEventsImportContext::SetEvents(
         EventsVector::iterator aEnd = aCollectEvents.end();
         for(EventsVector::iterator aIter = aCollectEvents.begin();
             aIter != aEnd;
-            aIter++)
+            ++aIter)
         {
             AddEventValues(aIter->first, aIter->second);
-//          EventNameValuesPair* pPair = &(*aIter);
-//          delete pPair;
         }
         aCollectEvents.clear();
     }
@@ -194,7 +183,7 @@ sal_Bool XMLEventsImportContext::GetEventSequence(
     EventsVector::iterator aIter = aCollectEvents.begin();
     while( (aIter != aCollectEvents.end()) && (aIter->first != rName) )
     {
-        aIter++;
+        ++aIter;
     }
 
     // if we're not at the end, set the sequence
@@ -235,9 +224,6 @@ void XMLEventsImportContext::AddEventValues(
     }
     else
     {
-//      EventNameValuesPair* aPair = new EventNameValuesPair(rEventName,
-//                                                          rValues);
-//      aCollectEvents.push_back(*aPair);
         EventNameValuesPair aPair(rEventName, rValues);
         aCollectEvents.push_back(aPair);
     }

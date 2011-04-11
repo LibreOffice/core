@@ -47,7 +47,7 @@ namespace dbaui
         bool                             m_bInRemove;
 
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
-        virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable = FALSE);
+        virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, sal_Bool bNewTable = sal_False);
 
         virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData);
 
@@ -73,7 +73,7 @@ namespace dbaui
         void AddNewRelation();
             // reisst den Dialog fuer eine voellig neue Relation hoch
         // wird vom AddTabDlg benutzt, um festzustellen, ob noch Tabellen hinzugefuegt werden duerfen
-        virtual BOOL IsAddAllowed();
+        virtual sal_Bool IsAddAllowed();
 
         virtual void lookForUiActivities();
     };

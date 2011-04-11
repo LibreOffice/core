@@ -80,11 +80,11 @@ WTT_Node::~WTT_Node()
 {
     // Delete the tree hanging below this node:
 
-    bIsOnDeleting = TRUE;   // Avoid double deleting of multiple used nodes.
+    bIsOnDeleting = sal_True;   // Avoid double deleting of multiple used nodes.
 
     for (int i = 0; i < C_NR_OF_BRANCHES; i++)
     {
-        if (aBranches[i] != 0 ? ! aBranches[i]->IsOnDeleting() : FALSE)
+        if (aBranches[i] != 0 ? ! aBranches[i]->IsOnDeleting() : sal_False)
         {
             delete aBranches[i];
         }

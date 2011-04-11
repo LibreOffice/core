@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "hldocntp.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfac.hxx>
@@ -97,7 +94,7 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const String& rPath, const Stri
         }
         if ( bIsValidURL )
         {
-            USHORT nPos = maLbDocTypes.GetSelectEntryPos();
+            sal_uInt16 nPos = maLbDocTypes.GetSelectEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
                 aURLObject.SetExtension( ((DocumentTypeData*)maLbDocTypes.GetEntryData( nPos ))->aStrExt );
         }
@@ -124,8 +121,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
     maLbDocTypes    ( this, CUI_RES (LB_DOCUMENT_TYPES) )
 {
     // Set HC bitmaps and disable display of bitmap names.
-    maBtCreate.SetModeImage( Image( CUI_RES( IMG_CREATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
-    maBtCreate.EnableTextDisplay (FALSE);
+    maBtCreate.EnableTextDisplay (sal_False);
 
     InitStdControls();
     FreeResource();
@@ -136,19 +132,21 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
                                 LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
     maCbbPath.Show();
     maCbbPath.SetBaseURL(SvtPathOptions().GetWorkPath());
-//  maCbbPath.SetHelpId( HID_HYPERDLG_DOC_PATH );
 
     // set defaults
     maRbtEditNow.Check();
 
     maBtCreate.SetClickHdl        ( LINK ( this, SvxHyperlinkNewDocTp, ClickNewHdl_Impl ) );
 
+    maBtCreate.SetAccessibleRelationMemberOf( &maGrpNewDoc );
+    maBtCreate.SetAccessibleRelationLabeledBy( &maFtPath );
+
     FillDocumentList ();
 }
 
 SvxHyperlinkNewDocTp::~SvxHyperlinkNewDocTp ()
 {
-    for ( USHORT n=0; n<maLbDocTypes.GetEntryCount(); n++ )
+    for ( sal_uInt16 n=0; n<maLbDocTypes.GetEntryCount(); n++ )
     {
         DocumentTypeData* pTypeData = (DocumentTypeData*)
                                       maLbDocTypes.GetEntryData ( n );
@@ -173,37 +171,6 @@ void SvxHyperlinkNewDocTp::FillDlgFields ( String& /*aStrURL*/ )
 #define INTERNETSHORTCUT_FOLDER_TAG   "Folder"
 #define INTERNETSHORTCUT_URL_TAG      "URL"
 #define INTERNETSHORTCUT_ICONID_TAG   "IconIndex"
-
-void SvxHyperlinkNewDocTp::ReadURLFile( const String& rFile, String& rTitle, String& rURL, sal_Int32& rIconId, BOOL* pShowAsFolder )
-{
-    // Open file
-    Config aCfg( rFile );
-    aCfg.SetGroup( INTERNETSHORTCUT_ID_TAG );
-
-    // read URL
-    rURL = aCfg.ReadKey( ByteString( RTL_CONSTASCII_STRINGPARAM( INTERNETSHORTCUT_URL_TAG) ), RTL_TEXTENCODING_ASCII_US );
-    SvtPathOptions aPathOpt;
-    rURL = aPathOpt.SubstituteVariable( rURL );
-
-    // read target
-    if ( pShowAsFolder )
-    {
-        String aTemp( aCfg.ReadKey( ByteString( RTL_CONSTASCII_STRINGPARAM( INTERNETSHORTCUT_TARGET_TAG ) ), RTL_TEXTENCODING_ASCII_US ) );
-        *pShowAsFolder = aTemp == String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( INTERNETSHORTCUT_FOLDER_TAG ) );
-    }
-
-    // read image-ID
-    String aStrIconId( aCfg.ReadKey( ByteString( RTL_CONSTASCII_STRINGPARAM( INTERNETSHORTCUT_ICONID_TAG ) ), RTL_TEXTENCODING_ASCII_US ) );
-    rIconId = aStrIconId.ToInt32();
-
-    // read title
-    String aLangStr = aPathOpt.SubstituteVariable( DEFINE_CONST_UNICODE("$(vlang)") );
-    ByteString aLang( aLangStr, RTL_TEXTENCODING_UTF8 );
-    ByteString aGroup = INTERNETSHORTCUT_ID_TAG;
-    ( ( aGroup += '-' ) += aLang ) += ".W";
-    aCfg.SetGroup( aGroup );
-    rTitle = String( aCfg.ReadKey( INTERNETSHORTCUT_TITLE_TAG ), RTL_TEXTENCODING_UTF7 );
-}
 
 void SvxHyperlinkNewDocTp::FillDocumentList ()
 {
@@ -239,7 +206,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
         // Insert into listbox
         if ( aDocumentUrl.getLength() )
         {
-            if ( aDocumentUrl.equalsAscii( "private:factory/simpress?slot=6686" ) )             // SJ: #106216# do not start
+            if ( aDocumentUrl.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:factory/simpress?slot=6686" ) ) )              // SJ: #106216# do not start
                 aDocumentUrl = String( RTL_CONSTASCII_USTRINGPARAM( "private:factory/simpress" ) ); // the AutoPilot for impress
 
             // insert private-url and default-extension as user-data
@@ -311,7 +278,7 @@ void SvxHyperlinkNewDocTp::SetInitFocus()
 |*
 \************************************************************************/
 
-BOOL SvxHyperlinkNewDocTp::AskApply()
+sal_Bool SvxHyperlinkNewDocTp::AskApply()
 {
     INetURLObject aINetURLObject;
     sal_Bool bRet = ImplGetURLObject( maCbbPath.GetText(), maCbbPath.GetBaseURL(), aINetURLObject );
@@ -380,7 +347,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                 if ( aStrNewName != aEmptyStr )
                 {
                     // get private-url
-                    USHORT nPos = maLbDocTypes.GetSelectEntryPos();
+                    sal_uInt16 nPos = maLbDocTypes.GetSelectEntryPos();
                     if( nPos == LISTBOX_ENTRY_NOTFOUND )
                         nPos=0;
                     String aStrDocName ( ( ( DocumentTypeData* )
@@ -391,7 +358,6 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     SfxStringItem aReferer( SID_REFERER, UniString::CreateFromAscii(
                                                 RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
                     SfxStringItem aFrame( SID_TARGETNAME, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_blank" ) ) );
-                    //SfxBoolItem aFrame( SID_OPEN_NEW_VIEW, TRUE );
 
                     String aStrFlags ( sal_Unicode('S') );
                     if ( maRbtEditLater.IsChecked() )
@@ -413,7 +379,6 @@ void SvxHyperlinkNewDocTp::DoApply ()
                         pViewFrame = pItem->GetFrame();
                         if (pViewFrame)
                         {
-                            //SfxViewFrame *pViewFrame = pFrame->GetCurrentViewFrame();
                             SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
                             pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,
@@ -461,14 +426,14 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
     utl::LocalFileHelper::ConvertSystemPathToURL( aTempStrURL, maCbbPath.GetBaseURL(), aStrURL );
 
     String              aStrPath = aStrURL;
-    BOOL                bZeroPath = ( aStrPath.Len() == 0 );
-    BOOL                bHandleFileName = bZeroPath;    // when path has length of 0, then the rest should always be handled
+    sal_Bool                bZeroPath = ( aStrPath.Len() == 0 );
+    sal_Bool                bHandleFileName = bZeroPath;    // when path has length of 0, then the rest should always be handled
                                                         //  as file name, otherwise we do not yet know
 
     if( bZeroPath )
         aStrPath = SvtPathOptions().GetWorkPath();
     else if( !::utl::UCBContentHelper::IsFolder( aStrURL ) )
-        bHandleFileName = TRUE;
+        bHandleFileName = sal_True;
 
     xFolderPicker->setDisplayDirectory( aStrPath );
     DisableClose( sal_True );
@@ -499,7 +464,7 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
             maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
         {
             // get private-url
-            USHORT nPos = maLbDocTypes.GetSelectEntryPos();
+            sal_uInt16 nPos = maLbDocTypes.GetSelectEntryPos();
             aNewURL.setExtension( ( ( DocumentTypeData* ) maLbDocTypes.GetEntryData( nPos ) )->aStrExt );
         }
 

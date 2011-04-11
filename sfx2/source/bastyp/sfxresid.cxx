@@ -31,26 +31,24 @@
 
 #include <tools/simplerm.hxx>
 
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/app.hxx>
 
 // -----------------------------------------------------------------------
 
 static ResMgr* pMgr=NULL;
 
-SfxResId::SfxResId( USHORT nId ) :
+SfxResId::SfxResId( sal_uInt16 nId ) :
 
     ResId( nId, *GetResMgr() )
 {
 }
 
 //============================================================================
-//
 // SfxSimpleResId Implementation.
-//
 //============================================================================
 
-SfxSimpleResId::SfxSimpleResId(USHORT nID):
+SfxSimpleResId::SfxSimpleResId(sal_uInt16 nID):
     m_sText( SFX_APP()->GetSimpleResManager()->ReadString(nID) )
 {}
 

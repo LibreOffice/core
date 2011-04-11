@@ -300,13 +300,13 @@ public class _ParagraphProperties extends MultiPropertyTest {
             oObj.setPropertyValue("ParaAdjust",
                                   com.sun.star.style.ParagraphAdjust.BLOCK);
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured setting property 'ParagraphAdjust'" + e);
+            log.println("Exception occurred setting property 'ParagraphAdjust'" + e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occured setting property 'ParagraphAdjust'" + e);
+            log.println("Exception occurred setting property 'ParagraphAdjust'" + e);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Exception occured setting property 'ParagraphAdjust'" + e);
+            log.println("Exception occurred setting property 'ParagraphAdjust'" + e);
         } catch (com.sun.star.beans.PropertyVetoException e) {
-            log.println("Exception occured setting property 'ParagraphAdjust'" + e);
+            log.println("Exception occurred setting property 'ParagraphAdjust'" + e);
         }
 
         testProperty("ParaLastLineAdjust", ShortTester);

@@ -28,9 +28,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
-#include <tools/svwin.h>
+#include <windows.h>
 #include <dll.hxx>
-#include <toolsdll.hxx>
 #include <tools/shl.hxx>
 
 // =======================================================================

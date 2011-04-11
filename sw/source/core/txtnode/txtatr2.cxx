@@ -61,16 +61,16 @@ SwTxtCharFmt::SwTxtCharFmt( SwFmtCharFmt& rAttr,
     , m_nSortNumber( 0 )
 {
     rAttr.pTxtAttr = this;
-    SetCharFmtAttr( TRUE );
+    SetCharFmtAttr( sal_True );
 }
 
 SwTxtCharFmt::~SwTxtCharFmt( )
 {
 }
 
-void SwTxtCharFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwTxtCharFmt::ModifyNotification( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
         "SwTxtCharFmt::Modify(): unknown Modify");
@@ -78,21 +78,20 @@ void SwTxtCharFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if ( m_pTxtNode )
     {
         SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
-        m_pTxtNode->Modify( &aUpdateAttr, &aUpdateAttr );
+        m_pTxtNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
-    // erfrage vom Modify Informationen
-BOOL SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
         &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
     {
-        return TRUE;
+        return true;
     }
 
     static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
-    return FALSE;
+    return false;
 }
 
 
@@ -150,17 +149,17 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
             SetVisited( pDoc->IsVisitedURL( rFmt.GetValue() ) );
             SetVisitedValid( true );
         }
-        USHORT nId;
+        sal_uInt16 nId;
         const String& rStr = IsVisited() ? rFmt.GetVisitedFmt()
                                            : rFmt.GetINetFmt();
         if( rStr.Len() )
             nId = IsVisited() ? rFmt.GetVisitedFmtId() : rFmt.GetINetFmtId();
         else
-            nId = static_cast<USHORT>(IsVisited() ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL);
+            nId = static_cast<sal_uInt16>(IsVisited() ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL);
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //      correct charstyle.
-        BOOL bResetMod = !pDoc->IsModified();
+        sal_Bool bResetMod = !pDoc->IsModified();
         Link aOle2Lnk;
         if( bResetMod )
         {
@@ -182,14 +181,14 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
     if( pRet )
         pRet->Add( this );
     else if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 
     return pRet;
 }
 
-void SwTxtINetFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwTxtINetFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
         "SwTxtINetFmt::Modify(): unknown Modify");
@@ -197,24 +196,24 @@ void SwTxtINetFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if ( m_pTxtNode )
     {
         SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
-        m_pTxtNode->Modify( &aUpdateAttr, &aUpdateAttr );
+        m_pTxtNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
     // erfrage vom Modify Informationen
-BOOL SwTxtINetFmt::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwTxtINetFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
         &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
     {
-        return TRUE;
+        return sal_True;
     }
 
     static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SwTxtINetFmt::IsProtect( ) const
+sal_Bool SwTxtINetFmt::IsProtect( ) const
 {
     return m_pTxtNode && m_pTxtNode->IsProtect();
 }
@@ -236,9 +235,9 @@ SwTxtRuby::~SwTxtRuby()
 {
 }
 
-void SwTxtRuby::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwTxtRuby::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
         "SwTxtRuby::Modify(): unknown Modify");
@@ -246,20 +245,20 @@ void SwTxtRuby::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     if ( m_pTxtNode )
     {
         SwUpdateAttr aUpdateAttr( *GetStart(), *GetEnd(), nWhich );
-        m_pTxtNode->Modify( &aUpdateAttr, &aUpdateAttr );
+        m_pTxtNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
     }
 }
 
-BOOL SwTxtRuby::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwTxtRuby::GetInfo( SfxPoolItem& rInfo ) const
 {
     if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
         &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
     {
-        return TRUE;
+        return sal_True;
     }
 
     static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
-    return FALSE;
+    return sal_False;
 }
 
 SwCharFmt* SwTxtRuby::GetCharFmt()
@@ -271,13 +270,13 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
     {
         const SwDoc* pDoc = GetTxtNode().GetDoc();
         const String& rStr = rFmt.GetCharFmtName();
-        USHORT nId = RES_POOLCHR_RUBYTEXT;
+        sal_uInt16 nId = RES_POOLCHR_RUBYTEXT;
         if ( rStr.Len() )
             nId = rFmt.GetCharFmtId();
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //              correct charstyle.
-        BOOL bResetMod = !pDoc->IsModified();
+        sal_Bool bResetMod = !pDoc->IsModified();
         Link aOle2Lnk;
         if( bResetMod )
         {
@@ -299,7 +298,7 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
     if( pRet )
         pRet->Add( this );
     else if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 
     return pRet;
 }
@@ -309,10 +308,25 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
  *                        class SwTxtMeta
  *************************************************************************/
 
+SwTxtMeta *
+SwTxtMeta::CreateTxtMeta(
+    ::sw::MetaFieldManager & i_rTargetDocManager,
+    SwTxtNode *const i_pTargetTxtNode,
+    SwFmtMeta & i_rAttr,
+    xub_StrLen const i_nStart, xub_StrLen const i_nEnd, bool const i_bIsCopy)
+{
+    if (COPY == i_bIsCopy)
+    {   // i_rAttr is already cloned, now call DoCopy to copy the sw::Meta
+        OSL_ENSURE(i_pTargetTxtNode, "cannot copy Meta without target node");
+        i_rAttr.DoCopy(i_rTargetDocManager, *i_pTargetTxtNode);
+    }
+    SwTxtMeta *const pTxtMeta(new SwTxtMeta(i_rAttr, i_nStart, i_nEnd));
+    return pTxtMeta;
+}
+
 SwTxtMeta::SwTxtMeta( SwFmtMeta & i_rAttr,
         const xub_StrLen i_nStart, const xub_StrLen i_nEnd )
     : SwTxtAttrNesting( i_rAttr, i_nStart, i_nEnd )
-    , m_pTxtNode( 0 )
 {
     i_rAttr.SetTxtAttr( this );
     SetHasDummyChar(true);
@@ -329,7 +343,6 @@ SwTxtMeta::~SwTxtMeta()
 
 void SwTxtMeta::ChgTxtNode(SwTxtNode * const pNode)
 {
-    m_pTxtNode = pNode; // before Notify!
     SwFmtMeta & rFmtMeta( static_cast<SwFmtMeta &>(GetAttr()) );
     if (rFmtMeta.GetTxtAttr() == this)
     {

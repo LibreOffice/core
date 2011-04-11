@@ -45,14 +45,14 @@ class SfxItemPool;
 class NameOrIndex;
 class XPropertyList;
 
-typedef BOOL (*SvxCompareValueFunc)( const NameOrIndex* p1, const NameOrIndex* p2 );
+typedef sal_Bool (*SvxCompareValueFunc)( const NameOrIndex* p1, const NameOrIndex* p2 );
 
 //-------------------
 // class NameOrIndex
 //-------------------
 class SVX_DLLPUBLIC NameOrIndex : public SfxStringItem
 {
-    INT32    nPalIndex;
+    sal_Int32    nPalIndex;
 
 protected:
     void    Detach()    { nPalIndex = -1; }
@@ -60,30 +60,30 @@ protected:
 public:
             TYPEINFO();
             NameOrIndex() { nPalIndex = -1; }
-            NameOrIndex(USHORT nWhich, INT32 nIndex);
-            NameOrIndex(USHORT nWhich,
+            NameOrIndex(sal_uInt16 nWhich, sal_Int32 nIndex);
+            NameOrIndex(sal_uInt16 nWhich,
                         const String& rName= String());
-            NameOrIndex(USHORT nWhich, SvStream& rIn);
+            NameOrIndex(sal_uInt16 nWhich, SvStream& rIn);
             NameOrIndex(const NameOrIndex& rNameOrIndex);
            ~NameOrIndex() {};
 
     virtual int          operator==(const SfxPoolItem& rItem) const;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
-    virtual SvStream&    Store(SvStream& rOut, USHORT nItemVersion ) const;
+    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
+    virtual SvStream&    Store(SvStream& rOut, sal_uInt16 nItemVersion ) const;
 
             String       GetName() const              { return GetValue();   }
             void         SetName(const String& rName) { SetValue(rName);     }
-            INT32        GetIndex() const             { return nPalIndex;    }
-            void         SetIndex(INT32 nIndex)        { nPalIndex = nIndex;  }
-            BOOL         IsIndex() const          { return (nPalIndex >= 0); }
+            sal_Int32        GetIndex() const             { return nPalIndex;    }
+            void         SetIndex(sal_Int32 nIndex)        { nPalIndex = nIndex;  }
+            sal_Bool         IsIndex() const          { return (nPalIndex >= 0); }
 
     /** this static checks if the given NameOrIndex item has a unique name for its value.
         The returned String is a unique name for an item with this value in both given pools.
         Argument pPool2 can be null.
         If returned string equals NameOrIndex->GetName(), the name was already unique.
     */
-    static String CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* pPool2, SvxCompareValueFunc pCompareValueFunc, USHORT nPrefixResId, XPropertyList* pDefaults = NULL );
+    static String CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uInt16 nWhich, const SfxItemPool* pPool1, const SfxItemPool* pPool2, SvxCompareValueFunc pCompareValueFunc, sal_uInt16 nPrefixResId, XPropertyList* pDefaults = NULL );
 };
 
 #endif

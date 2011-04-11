@@ -46,6 +46,7 @@ namespace avmedia { namespace priv {
 // - MediaWindowBaseImpl -
 // -----------------------
 
+
 MediaWindowBaseImpl::MediaWindowBaseImpl( MediaWindow* pMediaWindow ) :
     mpMediaWindow( pMediaWindow )
 {
@@ -71,7 +72,7 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
         {
 
             uno::Reference< ::com::sun::star::media::XManager > xManager(
-                xFactory->createInstance( ::rtl::OUString::createFromAscii( AVMEDIA_MANAGER_SERVICE_NAME ) ),
+                xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_MANAGER_SERVICE_NAME )) ),
                 uno::UNO_QUERY );
 
             if( xManager.is() )
@@ -87,7 +88,6 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
 
     return xPlayer;
 }
-
 
 // ---------------------------------------------------------------------
 
@@ -142,10 +142,7 @@ void MediaWindowBaseImpl::stopPlayingInternal( bool bStop )
 {
     if( isPlaying() )
     {
-        if( bStop )
-            mxPlayer->stop();
-        else
-            mxPlayer->start();
+        bStop ? mxPlayer->stop() : mxPlayer->start();
     }
 }
 
@@ -405,12 +402,7 @@ void MediaWindowBaseImpl::executeMediaItem( const MediaItem& rItem )
             case( MEDIASTATE_PLAY ):
             case( MEDIASTATE_PLAYFFW ):
             {
-/*
-                const double fNewRate = ( ( MEDIASTATE_PLAYFFW == rItem.getState() ) ? AVMEDIA_FFW_PLAYRATE : 1.0 );
 
-                if( getRate() != fNewRate )
-                    setRate( fNewRate );
-*/
                 if( !isPlaying() )
                     start();
             }

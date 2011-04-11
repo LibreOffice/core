@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <svl/intitem.hxx>
@@ -39,14 +38,13 @@
 #include <editeng/protitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
-
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/fcontnr.hxx>
 #include <docary.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtpdsc.hxx>
-#include <errhdl.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <frmtool.hxx>
@@ -65,25 +63,24 @@
 #include <fmtftntx.hxx>
 #include <ftnidx.hxx>
 #include <doctxm.hxx>
-// --> FME 2004-06-22 #114856# edit in readonly sections
 #include <fmteiro.hxx>
-// <--
 #include <swerror.h>
 #include <unosection.hxx>
+#include <switerator.hxx>
+#include <svl/smplhint.hxx>
 
 using namespace ::com::sun::star;
 
 
 SV_IMPL_REF( SwServerObject )
 
-//static const char __FAR_DATA sSectionFmtNm[] = "Section";
 #define sSectionFmtNm aEmptyStr
 
 class SwIntrnlSectRefLink : public SwBaseLink
 {
     SwSectionFmt& rSectFmt;
 public:
-    SwIntrnlSectRefLink( SwSectionFmt& rFmt, USHORT nUpdateType, USHORT nFmt )
+    SwIntrnlSectRefLink( SwSectionFmt& rFmt, sal_uInt16 nUpdateType, sal_uInt16 nFmt )
         : SwBaseLink( nUpdateType, nFmt ),
         rSectFmt( rFmt )
     {}
@@ -93,16 +90,14 @@ public:
                                 const uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
-    virtual BOOL IsInRange( ULONG nSttNd, ULONG nEndNd, xub_StrLen nStt = 0,
+    virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
                             xub_StrLen nEnd = STRING_NOTFOUND ) const;
 
-    // --> OD 2007-02-14 #b6521322#
     inline SwSectionNode* GetSectNode()
     {
         const SwNode* pSectNd( const_cast<SwIntrnlSectRefLink*>(this)->GetAnchor() );
         return const_cast<SwSectionNode*>( dynamic_cast<const SwSectionNode*>( pSectNd ) );
     }
-    // <--
 };
 
 
@@ -120,9 +115,7 @@ SwSectionData::SwSectionData(SectionType const eType, String const& rName)
     , m_sSectionName(rName)
     , m_bHiddenFlag(false)
     , m_bProtectFlag(false)
-    // --> FME 2004-06-22 #114856# edit in readonly sections
-    , m_bEditInReadonlyFlag(false)
-    // <--
+    , m_bEditInReadonlyFlag(false) // edit in readonly sections
     , m_bHidden(false)
     , m_bCondHiddenFlag(true)
     , m_bConnectFlag(true)
@@ -139,9 +132,8 @@ SwSectionData::SwSectionData(SwSection const& rSection)
     , m_Password(rSection.GetPassword())
     , m_bHiddenFlag(rSection.IsHiddenFlag())
     , m_bProtectFlag(rSection.IsProtect())
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // edit in readonly sections
     , m_bEditInReadonlyFlag(rSection.IsEditInReadonly())
-    // <--
     , m_bHidden(rSection.IsHidden())
     , m_bCondHiddenFlag(true)
     , m_bConnectFlag(rSection.IsConnectFlag())
@@ -158,9 +150,8 @@ SwSectionData::SwSectionData(SwSectionData const& rOther)
     , m_Password(rOther.m_Password)
     , m_bHiddenFlag(rOther.m_bHiddenFlag)
     , m_bProtectFlag(rOther.m_bProtectFlag)
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // edit in readonly sections
     , m_bEditInReadonlyFlag(rOther.m_bEditInReadonlyFlag)
-    // <--
     , m_bHidden(rOther.m_bHidden)
     , m_bCondHiddenFlag(true)
     , m_bConnectFlag(rOther.m_bConnectFlag)
@@ -220,9 +211,8 @@ SwSection::SwSection(
         }
 
         m_Data.SetProtectFlag( pParentSect->IsProtectFlag() );
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // edit in readonly sections
         m_Data.SetEditInReadonlyFlag( pParentSect->IsEditInReadonlyFlag() );
-        // <--
     }
 
     if (!m_Data.IsProtectFlag())
@@ -230,12 +220,10 @@ SwSection::SwSection(
         m_Data.SetProtectFlag( rFormat.GetProtect().IsCntntProtected() );
     }
 
-    // --> FME 2004-06-22 #114856# edit in readonly sections
-    if (!m_Data.IsEditInReadonlyFlag())
+    if (!m_Data.IsEditInReadonlyFlag()) // edit in readonly sections
     {
         m_Data.SetEditInReadonlyFlag( rFormat.GetEditInReadonly().GetValue() );
     }
-    // <--
 }
 
 
@@ -251,7 +239,7 @@ SwSection::~SwSection()
         // dann melden wir noch schnell unser Format um ans dflt FrameFmt,
         // damit es keine Abhaengigkeiten gibt
         if( pFmt->DerivedFrom() != pDoc->GetDfltFrmFmt() )
-            pDoc->GetDfltFrmFmt()->Add( pFmt );
+            pFmt->RegisterToFormat( *pDoc->GetDfltFrmFmt() );
     }
     else
     {
@@ -270,15 +258,13 @@ SwSection::~SwSection()
         // ist die Section der letzte Client im Format, kann dieses
         // geloescht werden
         SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFmt );
-        pFmt->Modify( &aMsgHint, &aMsgHint );
+        pFmt->ModifyNotification( &aMsgHint, &aMsgHint );
         if( !pFmt->GetDepends() )
         {
             // Bug: 28191 - nicht ins Undo aufnehmen, sollte schon vorher
             //          geschehen sein!!
-            BOOL bUndo = pDoc->DoesUndo();
-            pDoc->DoUndo( FALSE );
+            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
             pDoc->DelSectionFmt( pFmt );    // und loeschen
-            pDoc->DoUndo( bUndo );
         }
     }
     if (m_RefObj.Is())
@@ -291,8 +277,6 @@ void SwSection::SetSectionData(SwSectionData const& rData)
 {
     bool const bOldHidden( m_Data.IsHidden() );
     m_Data = rData;
-    // now update format and reflink with new data
-//    SetLinkFileName(m_Data.GetLinkFileName()); // old code did not do this?
     // next 2 may actually overwrite m_Data.m_b{Protect,EditInReadonly}Flag
     // in Modify, which should result in same flag value as the old code!
     SetProtect(m_Data.IsProtectFlag());
@@ -337,7 +321,7 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
 
                 // erstmal allen Childs sagen, das sie versteckt sind
                 SwMsgPoolItem aMsgItem( RES_SECTION_HIDDEN );
-                pFmt->Modify( &aMsgItem, &aMsgItem );
+                pFmt->ModifyNotification( &aMsgItem, &aMsgItem );
 
                 // alle Frames loeschen
                 pFmt->DelFrms();
@@ -354,7 +338,7 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
                 // erstmal allen Childs sagen, das der Parent nicht mehr
                 // versteckt ist
                 SwMsgPoolItem aMsgItem( RES_SECTION_NOT_HIDDEN );
-                pFmt->Modify( &aMsgItem, &aMsgItem );
+                pFmt->ModifyNotification( &aMsgItem, &aMsgItem );
 
                 pFmt->MakeFrms();
             }
@@ -362,15 +346,15 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
     }
 }
 
-BOOL SwSection::CalcHiddenFlag() const
+sal_Bool SwSection::CalcHiddenFlag() const
 {
     const SwSection* pSect = this;
     do {
         if( pSect->IsHidden() && pSect->IsCondHidden() )
-            return TRUE;
+            return sal_True;
     } while( 0 != ( pSect = pSect->GetParent()) );
 
-    return FALSE;
+    return sal_False;
 }
 
 bool SwSection::IsProtect() const
@@ -382,7 +366,7 @@ bool SwSection::IsProtect() const
         :   IsProtectFlag();
 }
 
-// --> FME 2004-06-22 #114856# edit in readonly sections
+// edit in readonly sections
 bool SwSection::IsEditInReadonly() const
 {
     SwSectionFmt *const pFmt( GetFmt() );
@@ -391,7 +375,6 @@ bool SwSection::IsEditInReadonly() const
         ?   pFmt->GetEditInReadonly().GetValue()
         :   IsEditInReadonlyFlag();
 }
-// <--
 
 void SwSection::SetHidden(bool const bFlag)
 {
@@ -410,7 +393,7 @@ void SwSection::SetProtect(bool const bFlag)
     if (pFormat)
     {
         SvxProtectItem aItem( RES_PROTECT );
-        aItem.SetCntntProtect( (BOOL)bFlag );
+        aItem.SetCntntProtect( (sal_Bool)bFlag );
         pFormat->SetFmtAttr( aItem );
         // note: this will call m_Data.SetProtectFlag via Modify!
     }
@@ -420,7 +403,7 @@ void SwSection::SetProtect(bool const bFlag)
     }
 }
 
-// --> FME 2004-06-22 #114856# edit in readonly sections
+// edit in readonly sections
 void SwSection::SetEditInReadonly(bool const bFlag)
 {
     SwSectionFmt *const pFormat( GetFmt() );
@@ -428,7 +411,7 @@ void SwSection::SetEditInReadonly(bool const bFlag)
     if (pFormat)
     {
         SwFmtEditInReadonly aItem;
-        aItem.SetValue( (BOOL)bFlag );
+        aItem.SetValue( (sal_Bool)bFlag );
         pFormat->SetFmtAttr( aItem );
         // note: this will call m_Data.SetEditInReadonlyFlag via Modify!
     }
@@ -437,9 +420,8 @@ void SwSection::SetEditInReadonly(bool const bFlag)
         m_Data.SetEditInReadonlyFlag(bFlag);
     }
 }
-// <--
 
-void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     bool bRemake = false;
     bool bUpdateFtn = false;
@@ -452,7 +434,7 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             const SfxPoolItem* pItem;
 
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                        RES_PROTECT, FALSE, &pItem ) )
+                        RES_PROTECT, sal_False, &pItem ) )
             {
                 m_Data.SetProtectFlag( static_cast<SvxProtectItem const*>(pItem)
                         ->IsCntntProtected() );
@@ -460,9 +442,9 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                 pOldSet->ClearItem( RES_PROTECT );
             }
 
-            // --> FME 2004-06-22 #114856# edit in readonly sections
+            // --> edit in readonly sections
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                        RES_EDIT_IN_READONLY, FALSE, &pItem ) )
+                        RES_EDIT_IN_READONLY, sal_False, &pItem ) )
             {
                 m_Data.SetEditInReadonlyFlag(
                     static_cast<SwFmtEditInReadonly const*>(pItem)->GetValue());
@@ -472,9 +454,9 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             // <--
 
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                        RES_FTN_AT_TXTEND, FALSE, &pItem ) ||
+                        RES_FTN_AT_TXTEND, sal_False, &pItem ) ||
                 SFX_ITEM_SET == pNewSet->GetItemState(
-                        RES_END_AT_TXTEND, FALSE, &pItem ))
+                        RES_END_AT_TXTEND, sal_False, &pItem ))
             {
                     bUpdateFtn = true;
             }
@@ -488,7 +470,7 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         if( pNew )
         {
             bool bNewFlag =
-                static_cast<SvxProtectItem*>(pNew)->IsCntntProtected();
+                static_cast<const SvxProtectItem*>(pNew)->IsCntntProtected();
             if( !bNewFlag )
             {
                 // Abschalten: teste ob nicht vielleich ueber die Parents
@@ -507,16 +489,15 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             m_Data.SetProtectFlag( bNewFlag );
         }
         return;
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // edit in readonly sections
     case RES_EDIT_IN_READONLY:
         if( pNew )
         {
             const bool bNewFlag =
-                static_cast<SwFmtEditInReadonly*>(pNew)->GetValue();
+                static_cast<const SwFmtEditInReadonly*>(pNew)->GetValue();
             m_Data.SetEditInReadonlyFlag( bNewFlag );
         }
         return;
-    // <--
 
     case RES_SECTION_HIDDEN:
         m_Data.SetHiddenFlag(true);
@@ -544,6 +525,10 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             bUpdateFtn = true;
         }
         break;
+
+    default:
+        CheckRegistration( pOld, pNew );
+        break;
     }
 
     if( bRemake )
@@ -554,11 +539,10 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
     if( bUpdateFtn )
     {
-        SwSectionNode* pSectNd = GetFmt()->GetSectionNode( FALSE );
+        SwSectionNode* pSectNd = GetFmt()->GetSectionNode( sal_False );
         if( pSectNd )
             pSectNd->GetDoc()->GetFtnIdxs().UpdateFtn(SwNodeIndex( *pSectNd ));
     }
-    SwClient::Modify( pOld, pNew );
 }
 
 void SwSection::SetRefObject( SwServerObject* pObj )
@@ -635,7 +619,7 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
 {
     const SwNode* pNd;
     const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->GetLinkManager().GetLinks();
-    for( USHORT n = rLnks.Count(); n; )
+    for( sal_uInt16 n = rLnks.Count(); n; )
     {
         ::sfx2::SvBaseLink* pBLnk = &(*rLnks[ --n ]);
         if( pBLnk && !pBLnk->IsVisible() &&
@@ -652,7 +636,7 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
             // steht nur noch in einer normalen Section, also
             // wieder anzeigen
             if( !pParent )
-                pBLnk->SetVisible( TRUE );
+                pBLnk->SetVisible( sal_True );
         }
     }
 }
@@ -680,7 +664,7 @@ SwSectionFmt::~SwSectionFmt()
     if( !GetDoc()->IsInDtor() )
     {
         SwSectionNode* pSectNd;
-        const SwNodeIndex* pIdx = GetCntnt( FALSE ).GetCntntIdx();
+        const SwNodeIndex* pIdx = GetCntnt( sal_False ).GetCntntIdx();
         if( pIdx && &GetDoc()->GetNodes() == &pIdx->GetNodes() &&
             0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
         {
@@ -701,19 +685,9 @@ SwSectionFmt::~SwSectionFmt()
                     rSect.SetHidden(false);
                 }
             }
-            SwClientIter aIter( *this );
-            SwClient *pLast = aIter.GoStart();
-            while ( pLast )
-            {
-                if ( pLast->IsA( TYPE(SwFrm) ) )
-                {
-                    SwSectionFrm *pFrm = (SwSectionFrm*)pLast;
-                    SwSectionFrm::MoveCntntAndDelete( pFrm, TRUE );
-                    pLast = aIter.GoStart();
-                }
-                else
-                    pLast = aIter++;
-            }
+            // mba: test iteration; objects are removed while iterating
+            CallSwClientNotify( SfxSimpleHint(SFX_HINT_DYING) );
+
             // hebe die Section doch mal auf
             SwNodeRange aRg( *pSectNd, 0, *pSectNd->EndOfSectionNode() );
             GetDoc()->GetNodes().SectionUp( &aRg );
@@ -727,71 +701,48 @@ SwSectionFmt::~SwSectionFmt()
 
 SwSection * SwSectionFmt::GetSection() const
 {
-    if( GetDepends() )
-    {
-        SwClientIter aIter( *(SwSectionFmt*)this );
-        return (SwSectionPtr)aIter.First( TYPE(SwSection) );
-    }
-
-    OSL_ENSURE( FALSE, "keine Section als Client." );
-    return 0;
+    return SwIterator<SwSection,SwSectionFmt>::FirstElement( *this );
 }
 
-extern void lcl_DeleteFtn( SwSectionNode *pNd, ULONG nStt, ULONG nEnd );
+extern void lcl_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd );
 
 //Vernichtet alle Frms in aDepend (Frms werden per PTR_CAST erkannt).
 void SwSectionFmt::DelFrms()
 {
     SwSectionNode* pSectNd;
-    const SwNodeIndex* pIdx = GetCntnt(FALSE).GetCntntIdx();
+    const SwNodeIndex* pIdx = GetCntnt(sal_False).GetCntntIdx();
     if( pIdx && &GetDoc()->GetNodes() == &pIdx->GetNodes() &&
         0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
     {
-        SwClientIter aIter( *this );
-        SwClient *pLast = aIter.GoStart();
-        // --> OD 2007-08-14 #147431#
-        // First delete the <SwSectionFrm> of the <SwSectionFmt> instance
-        while ( pLast )
-        {
-            if ( pLast->IsA( TYPE(SwFrm) ) )
-            {
-                SwSectionFrm *pFrm = (SwSectionFrm*)pLast;
-                SwSectionFrm::MoveCntntAndDelete( pFrm, FALSE );
-                pLast = aIter.GoStart();
-            }
-            else
-            {
-                pLast = aIter++;
-            }
-        }
+        // #147431# : First delete the <SwSectionFrm> of the <SwSectionFmt> instance
+        // mba: test iteration as objects are removed in iteration
+        CallSwClientNotify( SfxSimpleHint(SFX_HINT_DYING) );
+
         // Then delete frames of the nested <SwSectionFmt> instances
-        pLast = aIter.GoStart();
+        SwIterator<SwSectionFmt,SwSectionFmt> aIter( *this );
+        SwSectionFmt *pLast = aIter.First();
         while ( pLast )
         {
-            if ( pLast->IsA( TYPE(SwSectionFmt) ) )
-            {
-                ((SwSectionFmt*)pLast)->DelFrms();
-            }
-            pLast = aIter++;
+            pLast->DelFrms();
+            pLast = aIter.Next();
         }
-        // <--
-        ULONG nEnde = pSectNd->EndOfSectionIndex();
-        ULONG nStart = pSectNd->GetIndex()+1;
+
+        sal_uLong nEnde = pSectNd->EndOfSectionIndex();
+        sal_uLong nStart = pSectNd->GetIndex()+1;
         lcl_DeleteFtn( pSectNd, nStart, nEnde );
     }
     if( pIdx )
     {
-        //JP 22.09.98:
         //Hint fuer Pagedesc versenden. Das mueste eigntlich das Layout im
         //Paste der Frames selbst erledigen, aber das fuehrt dann wiederum
         //zu weiteren Folgefehlern, die mit Laufzeitkosten geloest werden
-        //muesten. #56977# #55001# #56135#
+        //muesten.
         SwNodeIndex aNextNd( *pIdx );
-        SwCntntNode* pCNd = GetDoc()->GetNodes().GoNextSection( &aNextNd, TRUE, FALSE );
+        SwCntntNode* pCNd = GetDoc()->GetNodes().GoNextSection( &aNextNd, sal_True, sal_False );
         if( pCNd )
         {
             const SfxPoolItem& rItem = pCNd->GetSwAttrSet().Get( RES_PAGEDESC );
-            pCNd->Modify( (SfxPoolItem*)&rItem, (SfxPoolItem*)&rItem );
+            pCNd->ModifyNotification( (SfxPoolItem*)&rItem, (SfxPoolItem*)&rItem );
         }
     }
 }
@@ -801,7 +752,7 @@ void SwSectionFmt::DelFrms()
 void SwSectionFmt::MakeFrms()
 {
     SwSectionNode* pSectNd;
-    const SwNodeIndex* pIdx = GetCntnt(FALSE).GetCntntIdx();
+    const SwNodeIndex* pIdx = GetCntnt(sal_False).GetCntntIdx();
 
     if( pIdx && &GetDoc()->GetNodes() == &pIdx->GetNodes() &&
         0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
@@ -811,21 +762,10 @@ void SwSectionFmt::MakeFrms()
     }
 }
 
-void lcl_ClientIter( SwSectionFmt* pFmt, const SfxPoolItem* pOld,
-                                        const SfxPoolItem* pNew )
+void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    SwClientIter aIter( *pFmt );
-    SwClient * pLast = aIter.GoStart();
-    if( pLast )
-        do {
-            pLast->Modify( (SfxPoolItem*)pOld, (SfxPoolItem*)pNew );
-        } while( 0 != ( pLast = aIter++ ));
-}
-
-void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
-{
-    BOOL bClients = FALSE;
-    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    sal_Bool bClients = sal_False;
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
     {
     case RES_ATTRSET_CHG:
@@ -835,36 +775,34 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             SfxItemSet* pOldSet = ((SwAttrSetChg*)pOld)->GetChgSet();
             const SfxPoolItem *pItem;
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                                        RES_PROTECT, FALSE, &pItem ))
+                                        RES_PROTECT, sal_False, &pItem ))
             {
-                lcl_ClientIter( this, pItem, pItem );
+                ModifyBroadcast( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
                 pNewSet->ClearItem( RES_PROTECT );
                 pOldSet->ClearItem( RES_PROTECT );
             }
 
-            // --> FME 2004-06-22 #114856# edit in readonly sections
+            // --> edit in readonly sections
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                        RES_EDIT_IN_READONLY, FALSE, &pItem ) )
+                        RES_EDIT_IN_READONLY, sal_False, &pItem ) )
             {
-                lcl_ClientIter( this, pItem, pItem );
+                ModifyBroadcast( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
                 pNewSet->ClearItem( RES_EDIT_IN_READONLY );
                 pOldSet->ClearItem( RES_EDIT_IN_READONLY );
             }
             // <--
 
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                                    RES_FTN_AT_TXTEND, FALSE, &pItem ))
+                                    RES_FTN_AT_TXTEND, sal_False, &pItem ))
             {
-                lcl_ClientIter( this, &pOldSet->Get( RES_FTN_AT_TXTEND ),
-                                        pItem );
+                ModifyBroadcast( (SfxPoolItem*)&pOldSet->Get( RES_FTN_AT_TXTEND ), (SfxPoolItem*)pItem );
                 pNewSet->ClearItem( RES_FTN_AT_TXTEND );
                 pOldSet->ClearItem( RES_FTN_AT_TXTEND );
             }
             if( SFX_ITEM_SET == pNewSet->GetItemState(
-                                    RES_END_AT_TXTEND, FALSE, &pItem ))
+                                    RES_END_AT_TXTEND, sal_False, &pItem ))
             {
-                lcl_ClientIter( this, &pOldSet->Get( RES_END_AT_TXTEND ),
-                                        pItem );
+                ModifyBroadcast( (SfxPoolItem*)&pOldSet->Get( RES_END_AT_TXTEND ), (SfxPoolItem*)pItem );
                 pNewSet->ClearItem( RES_END_AT_TXTEND );
                 pOldSet->ClearItem( RES_END_AT_TXTEND );
             }
@@ -875,7 +813,7 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
     case RES_SECTION_RESETHIDDENFLAG:
     case RES_FTN_AT_TXTEND:
-    case RES_END_AT_TXTEND : bClients = TRUE;
+    case RES_END_AT_TXTEND : bClients = sal_True;
                             // no break !!
     case RES_SECTION_HIDDEN:
     case RES_SECTION_NOT_HIDDEN:
@@ -884,30 +822,18 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             if( pSect && ( bClients || ( RES_SECTION_HIDDEN == nWhich ?
                             !pSect->IsHiddenFlag() : pSect->IsHiddenFlag() ) ) )
             {
-                // selbst ueber die Clients iterieren, sollte schneller sein!
-                SwClientIter aIter( *this );
-                SwClient * pLast = aIter.GoStart();
-                do {
-                    pLast->Modify( pOld, pNew );
-                } while( 0 != ( pLast = aIter++ ));
+                ModifyBroadcast( pOld, pNew );
             }
         }
         return ;
 
 
     case RES_PROTECT:
-    // --> FME 2004-06-22 #114856# edit in readonly sections
-    case RES_EDIT_IN_READONLY:
-    // <--
+    case RES_EDIT_IN_READONLY: // edit in readonly sections
         // diese Messages bis zum Ende des Baums durchreichen !
         if( GetDepends() )
         {
-            SwClientIter aIter( *this );
-            SwClient * pLast = aIter.GoStart();
-            if( pLast )     // konnte zum Anfang gesprungen werden ??
-                do {
-                    pLast->Modify( pOld, pNew );
-                } while( 0 != ( pLast = aIter++ ));
+            ModifyBroadcast( pOld, pNew );
         }
         return;     // das wars
 
@@ -944,7 +870,7 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 }
 
         // erfrage vom Format Informationen
-BOOL SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
@@ -955,26 +881,25 @@ BOOL SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
             if( pNd )
                 ((SwFindNearestNode&)rInfo).CheckNode( *pNd );
         }
-        return TRUE;
+        return sal_True;
 
     case RES_CONTENT_VISIBLE:
         {
-            SwFrm* pFrm = (SwFrm*)SwClientIter( *(SwSectionFmt*)this ).First( TYPE(SwFrm) );
+            SwFrm* pFrm = SwIterator<SwFrm,SwFmt>::FirstElement(*this);
             // if the current section has no own frame search for the children
             if(!pFrm)
             {
-                SwClientIter aFormatIter( *(SwSectionFmt*)this );
-                SwSectionFmt* pChild = (SwSectionFmt*)aFormatIter.
-                                                First( TYPE(SwSectionFmt) );
+                SwIterator<SwSectionFmt,SwSectionFmt> aFormatIter(*this);
+                SwSectionFmt* pChild = aFormatIter.First();
                 while(pChild && !pFrm)
                 {
-                    pFrm = (SwFrm*)SwClientIter( *pChild ).First( TYPE(SwFrm) );
-                    pChild = (SwSectionFmt*)aFormatIter.Next();
+                    pFrm = SwIterator<SwFrm,SwFmt>::FirstElement(*pChild);
+                    pChild = aFormatIter.Next();
                 }
             }
             ((SwPtrMsgPoolItem&)rInfo).pObject = pFrm;
         }
-        return FALSE;
+        return sal_False;
     }
     return SwModify::GetInfo( rInfo );
 }
@@ -993,11 +918,11 @@ extern "C" {
         const SwSectionFmt* pFSectFmt = (*(SwSectionPtr*)pFirst)->GetFmt();
         const SwSectionFmt* pSSectFmt = (*(SwSectionPtr*)pSecond)->GetFmt();
         OSL_ENSURE( pFSectFmt && pSSectFmt &&
-                pFSectFmt->GetCntnt(FALSE).GetCntntIdx() &&
-                pSSectFmt->GetCntnt(FALSE).GetCntntIdx(),
+                pFSectFmt->GetCntnt(sal_False).GetCntntIdx() &&
+                pSSectFmt->GetCntnt(sal_False).GetCntntIdx(),
                     "ungueltige Sections" );
-        return (int)((long)pFSectFmt->GetCntnt(FALSE).GetCntntIdx()->GetIndex()) -
-                      pSSectFmt->GetCntnt(FALSE).GetCntntIdx()->GetIndex();
+        return (int)((long)pFSectFmt->GetCntnt(sal_False).GetCntntIdx()->GetIndex()) -
+                      pSSectFmt->GetCntnt(sal_False).GetCntntIdx()->GetIndex();
     }
 
     int
@@ -1020,23 +945,22 @@ extern "C" {
 }
 
     // alle Sections, die von dieser abgeleitet sind
-USHORT SwSectionFmt::GetChildSections( SwSections& rArr,
+sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
                                         SectionSort eSort,
-                                        BOOL bAllSections ) const
+                                        sal_Bool bAllSections ) const
 {
     rArr.Remove( 0, rArr.Count() );
 
     if( GetDepends() )
     {
-        SwClientIter aIter( *this );
-        SwClient * pLast;
+        SwIterator<SwSectionFmt,SwSectionFmt> aIter(*this);
         const SwNodeIndex* pIdx;
-        for( pLast = aIter.First(TYPE(SwSectionFmt)); pLast; pLast = aIter.Next() )
+        for( SwSectionFmt* pLast = aIter.First(); pLast; pLast = aIter.Next() )
             if( bAllSections ||
-                ( 0 != ( pIdx = ((SwSectionFmt*)pLast)->GetCntnt(FALSE).
+                ( 0 != ( pIdx = pLast->GetCntnt(sal_False).
                 GetCntntIdx()) && &pIdx->GetNodes() == &GetDoc()->GetNodes() ))
             {
-                const SwSection* Dummy=((SwSectionFmt*)pLast)->GetSection();
+                const SwSection* Dummy = pLast->GetSection();
                 rArr.C40_INSERT( SwSection,
                     Dummy,
                     rArr.Count() );
@@ -1067,9 +991,9 @@ USHORT SwSectionFmt::GetChildSections( SwSections& rArr,
 
     // erfrage, ob sich die Section im Nodes-Array oder UndoNodes-Array
     // befindet.
-BOOL SwSectionFmt::IsInNodesArr() const
+sal_Bool SwSectionFmt::IsInNodesArr() const
 {
-    const SwNodeIndex* pIdx = GetCntnt(FALSE).GetCntntIdx();
+    const SwNodeIndex* pIdx = GetCntnt(sal_False).GetCntntIdx();
     return pIdx && &pIdx->GetNodes() == &GetDoc()->GetNodes();
 }
 
@@ -1081,13 +1005,12 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
 
     SwSectionPtr pSection = 0;
     const SvxProtectItem* pProtect(0);
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // edit in readonly sections
     const SwFmtEditInReadonly* pEditInReadonly = 0;
-    // <--
     bool bIsHidden = false;
 
-    SwClientIter aIter( *this );
-    SwClient * pLast = aIter.GoStart();
+    SwClientIter aIter( *this );    // TODO
+    ::SwClient * pLast = aIter.GoStart();
     if( pLast )     // konnte zum Anfang gesprungen werden ??
         do {
             if( pLast->IsA( TYPE(SwSectionFmt) ) )
@@ -1099,42 +1022,39 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
                     {
                         const SwSectionPtr pPS = GetParentSection();
                         pProtect = &pPS->GetFmt()->GetProtect();
-                        // --> FME 2004-06-22 #114856# edit in readonly sections
+                        // edit in readonly sections
                         pEditInReadonly = &pPS->GetFmt()->GetEditInReadonly();
-                        // <--
                         bIsHidden = pPS->IsHiddenFlag();
                     }
                     else
                     {
                         pProtect = &GetProtect();
-                        // --> FME 2004-06-22 #114856# edit in readonly sections
+                        // edit in readonly sections
                         pEditInReadonly = &GetEditInReadonly();
-                        // <--
                         bIsHidden = pSection->IsHidden();
                     }
                 }
                 if (!pProtect->IsCntntProtected() !=
                     !pSection->IsProtectFlag())
                 {
-                    pLast->Modify( (SfxPoolItem*)pProtect,
+                    pLast->ModifyNotification( (SfxPoolItem*)pProtect,
                                     (SfxPoolItem*)pProtect );
                 }
 
-                // --> FME 2004-06-22 #114856# edit in readonly sections
+                // edit in readonly sections
                 if (!pEditInReadonly->GetValue() !=
                     !pSection->IsEditInReadonlyFlag())
                 {
-                    pLast->Modify( (SfxPoolItem*)pEditInReadonly,
+                    pLast->ModifyNotification( (SfxPoolItem*)pEditInReadonly,
                                     (SfxPoolItem*)pEditInReadonly );
                 }
-                // <--
 
                 if( bIsHidden == pSection->IsHiddenFlag() )
                 {
-                    SwMsgPoolItem aMsgItem( static_cast<USHORT>(bIsHidden
+                    SwMsgPoolItem aMsgItem( static_cast<sal_uInt16>(bIsHidden
                                 ? RES_SECTION_HIDDEN
                                 : RES_SECTION_NOT_HIDDEN ) );
-                    pLast->Modify( &aMsgItem, &aMsgItem );
+                    pLast->ModifyNotification( &aMsgItem, &aMsgItem );
                 }
             }
             else if( !pSection &&
@@ -1145,17 +1065,15 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
                 {
                     const SwSectionPtr pPS = GetParentSection();
                     pProtect = &pPS->GetFmt()->GetProtect();
-                    // --> FME 2004-06-22 #114856# edit in readonly sections
+                    // edit in readonly sections
                     pEditInReadonly = &pPS->GetFmt()->GetEditInReadonly();
-                    // <--
                     bIsHidden = pPS->IsHiddenFlag();
                 }
                 else
                 {
                     pProtect = &GetProtect();
-                    // --> FME 2004-06-22 #114856# edit in readonly sections
+                    // edit in readonly sections
                     pEditInReadonly = &GetEditInReadonly();
-                    // <--
                     bIsHidden = pSection->IsHidden();
                 }
             }
@@ -1165,7 +1083,7 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
 
 SwSectionNode* SwSectionFmt::GetSectionNode(bool const bAlways)
 {
-    const SwNodeIndex* pIdx = GetCntnt(FALSE).GetCntntIdx();
+    const SwNodeIndex* pIdx = GetCntnt(sal_False).GetCntntIdx();
     if( pIdx && ( bAlways || &pIdx->GetNodes() == &GetDoc()->GetNodes() ))
         return pIdx->GetNode().GetSectionNode();
     return 0;
@@ -1203,7 +1121,7 @@ bool SwSectionFmt::IsInUndo() const
 
 bool SwSectionFmt::IsInContent() const
 {
-    SwNodeIndex const*const pIdx = GetCntnt(FALSE).GetCntntIdx();
+    SwNodeIndex const*const pIdx = GetCntnt(sal_False).GetCntntIdx();
     OSL_ENSURE(pIdx, "SwSectionFmt::IsInContent: no index?");
     return (pIdx) ? !GetDoc()->IsInHeaderFooter(*pIdx) : true;
 }
@@ -1228,26 +1146,23 @@ SwSectionFmt::MakeUnoObject()
 }
 
 
-// --> OD 2007-02-14 #b6521322#
 // Method to break section links inside a linked section
 void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
 {
     if ( !rSectNd.GetDoc() )
     {
-        OSL_ENSURE( false,
-                "method <lcl_RemoveSectionLinksInSect(..)> - no Doc at SectionNode" );
+        OSL_FAIL( "method <lcl_RemoveSectionLinksInSect(..)> - no Doc at SectionNode" );
         return;
     }
 
     if ( !rSectNd.GetSection().IsConnected() )
     {
-        OSL_ENSURE( false,
-                "method <lcl_RemoveSectionLinksInSect(..)> - no Link at Section of SectionNode" );
+        OSL_FAIL( "method <lcl_RemoveSectionLinksInSect(..)> - no Link at Section of SectionNode" );
         return;
     }
     const ::sfx2::SvBaseLink* pOwnLink( &(rSectNd.GetSection().GetBaseLink() ) );
     const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->GetLinkManager().GetLinks();
-    for ( USHORT n = rLnks.Count(); n > 0; )
+    for ( sal_uInt16 n = rLnks.Count(); n > 0; )
     {
         SwIntrnlSectRefLink* pSectLnk = dynamic_cast<SwIntrnlSectRefLink*>(&(*rLnks[ --n ]));
         if ( pSectLnk && pSectLnk != pOwnLink &&
@@ -1265,7 +1180,6 @@ void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
         }
     }
 }
-// <--
 
 void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 {
@@ -1281,7 +1195,7 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     aValue <<= ::rtl::OUString( sName );                        // beliebiger Name
 
     const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
-    for( USHORT n = rLnks.Count(); n; )
+    for( sal_uInt16 n = rLnks.Count(); n; )
     {
         ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
         if( pLnk && pLnk != &rUpdLnk &&
@@ -1320,13 +1234,14 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 // Der Return-Wert gibt an, was mit der Shell zu geschehen hat:
 //  0 - Fehler, konnte DocShell nicht finden
 //  1 - DocShell ist ein existieren Document
-//  2 - DocShell wurde neu angelegt, muss also wieder geschlossen werden
+//  2 - DocShell wurde neu angelegt, muss also wieder geschlossen werden ( will be assigned to xLockRef additionaly )
 
 int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
+                        SfxObjectShellLock& xLockRef,
                         const String& rFileName,
                         const String& rPasswd,
                         String& rFilter,
-                        INT16 nVersion,
+                        sal_Int16 nVersion,
                         SwDocShell* pDestSh )
 {
     if( !rFileName.Len() )
@@ -1341,7 +1256,7 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
     TypeId aType( TYPE(SwDocShell) );
 
     SfxObjectShell* pShell = pDestSh;
-    BOOL bFirst = 0 != pShell;
+    sal_Bool bFirst = 0 != pShell;
 
     if( !bFirst )
         // keine DocShell uebergeben, also beginne mit der ersten aus der
@@ -1356,7 +1271,7 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
         {
             const SfxPoolItem* pItem;
             if( ( SFX_ITEM_SET == pMed->GetItemSet()->GetItemState(
-                                            SID_VERSION, FALSE, &pItem ) )
+                                            SID_VERSION, sal_False, &pItem ) )
                     ? (nVersion == ((SfxInt16Item*)pItem)->GetValue())
                     : !nVersion )
             {
@@ -1368,7 +1283,7 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
 
         if( bFirst )
         {
-            bFirst = FALSE;
+            bFirst = sal_False;
             pShell = SfxObjectShell::GetFirst( &aType );
         }
         else
@@ -1377,7 +1292,7 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
 
     // 2. selbst die Date oeffnen
     SfxMedium* pMed = new SfxMedium( aTmpObj.GetMainURL(
-                             INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
+                             INetURLObject::NO_DECODE ), STREAM_READ, sal_True );
     if( INET_PROT_FILE == aTmpObj.GetProtocol() )
         pMed->DownLoad();     // nur mal das Medium anfassen (DownLoaden)
 
@@ -1401,14 +1316,16 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
             pMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
 
         if( !pSfxFlt )
-            aMatcher.DetectFilter( *pMed, &pSfxFlt, FALSE, FALSE );
+            aMatcher.DetectFilter( *pMed, &pSfxFlt, sal_False, sal_False );
 
         if( pSfxFlt )
         {
             // ohne Filter geht gar nichts
             pMed->SetFilter( pSfxFlt );
 
-            xDocSh = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
+            // if the new shell is created, SfxObjectShellLock should be used to let it be closed later for sure
+            xLockRef = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
+            xDocSh = (SfxObjectShell*)xLockRef;
             if( xDocSh->DoLoad( pMed ) )
                 return 2;
         }
@@ -1424,10 +1341,10 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
 void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                                 const uno::Any & rValue )
 {
-    SwSectionNode* pSectNd = rSectFmt.GetSectionNode( FALSE );
+    SwSectionNode* pSectNd = rSectFmt.GetSectionNode( sal_False );
     SwDoc* pDoc = rSectFmt.GetDoc();
 
-    ULONG nDataFormat = SotExchange::GetFormatIdFromMimeType( rMimeType );
+    sal_uLong nDataFormat = SotExchange::GetFormatIdFromMimeType( rMimeType );
 
     if( !pSectNd || !pDoc || pDoc->IsInDtor() || ChkNoDataFlag() ||
         sfx2::LinkManager::RegisterStatusInfoId() == nDataFormat )
@@ -1436,7 +1353,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
         return ;
     }
 
-    // --> OD 2005-02-11 #i38810# - Due to possible existing signatures, the
+    //  #i38810# - Due to possible existing signatures, the
     // document has to be modified after updating a link.
     pDoc->SetModified();
     // set additional flag that links have been updated, in order to check this
@@ -1445,10 +1362,10 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
     // <--
 
     // Undo immer abschalten
-    BOOL bWasUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
-    BOOL bWasVisibleLinks = pDoc->IsVisibleLinks();
-    pDoc->SetVisibleLinks( FALSE );
+    bool const bWasUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    sal_Bool bWasVisibleLinks = pDoc->IsVisibleLinks();
+    pDoc->SetVisibleLinks( sal_False );
 
     SwPaM* pPam;
     ViewShell* pVSh = 0;
@@ -1468,7 +1385,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
 
         SwPosition aPos( aIdx, SwIndex( pNewNd, 0 ));
         aPos.nNode--;
-        pDoc->CorrAbs( aIdx, aEndIdx, aPos, TRUE );
+        pDoc->CorrAbs( aIdx, aEndIdx, aPos, sal_True );
 
         pPam = new SwPaM( aPos );
 
@@ -1505,6 +1422,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
 
             RedlineMode_t eOldRedlineMode = nsRedlineMode_t::REDLINE_NONE;
             SfxObjectShellRef xDocSh;
+            SfxObjectShellLock xLockRef;
             int nRet;
             if( !sFileName.Len() )
             {
@@ -1513,7 +1431,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
             }
             else
             {
-                nRet = lcl_FindDocShell( xDocSh, sFileName,
+                nRet = lcl_FindDocShell( xDocSh, xLockRef, sFileName,
                                     rSection.GetLinkFilePassword(),
                                     sFilter, 0, pDoc->GetDocShell() );
                 if( nRet )
@@ -1536,7 +1454,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                 {
                     const SfxPoolItem* pItem;
                     if( SFX_ITEM_SET == xDocSh->GetMedium()->GetItemSet()->
-                        GetItemState( SID_PASSWORD, FALSE, &pItem ) )
+                        GetItemState( SID_PASSWORD, sal_False, &pItem ) )
                         rSection.SetLinkFilePassword(
                                 ((SfxStringItem*)pItem)->GetValue() );
                 }
@@ -1546,7 +1464,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                 if( sRange.Len() )
                 {
                     // Rekursionen abfangen
-                    BOOL bRecursion = FALSE;
+                    sal_Bool bRecursion = sal_False;
                     if( pSrcDoc == pDoc )
                     {
                         SwServerObjectRef refObj( (SwServerObject*)
@@ -1582,19 +1500,19 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                     pCpyRg = new SwNodeRange( pSrcDoc->GetNodes().GetEndOfExtras(), 2,
                                           pSrcDoc->GetNodes().GetEndOfContent() );
 
-                // --> OD 2007-11-30 #i81653#
+                // #i81653#
                 // Update links of extern linked document or extern linked
                 // document section, if section is protected.
                 if ( pSrcDoc != pDoc &&
                      rSection.IsProtectFlag() )
                 {
-                    pSrcDoc->GetLinkManager().UpdateAllLinks( FALSE, TRUE, FALSE, 0 );
+                    pSrcDoc->GetLinkManager().UpdateAllLinks( sal_False, sal_True, sal_False, 0 );
                 }
                 // <--
                 if( pCpyRg )
                 {
                     SwNodeIndex& rInsPos = pPam->GetPoint()->nNode;
-                    BOOL bCreateFrm = rInsPos.GetIndex() <=
+                    sal_Bool bCreateFrm = rInsPos.GetIndex() <=
                                 pDoc->GetNodes().GetEndOfExtras().GetIndex() ||
                                 rInsPos.GetNode().FindTableNode();
 
@@ -1615,15 +1533,13 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                         pPam->Move( fnMoveBackward, fnGoNode );
                         pPam->SetMark();    // beide SwPositions ummelden!
 
-                        pDoc->CorrAbs( aSave, *pPam->GetPoint(), 0, TRUE );
+                        pDoc->CorrAbs( aSave, *pPam->GetPoint(), 0, sal_True );
                         pDoc->GetNodes().Delete( aSave, 1 );
                     }
                     delete pCpyRg;
                 }
 
-                // --> OD 2007-02-14 #b6521322#
                 lcl_BreakSectionLinksInSect( *pSectNd );
-                // <--
 
                 // update alle Links in diesem Bereich
                 lcl_UpdateLinksInSect( *this, *pSectNd );
@@ -1676,15 +1592,15 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
 
         if( pESh )
         {
-            pESh->Pop( FALSE );
+            pESh->Pop( sal_False );
             pPam = 0;                   // pam is deleted before
         }
     }
 
 
-    // Alle UndoActions entfernen und Undo wieder einschalten
-    pDoc->DelAllUndoObj();
-    pDoc->DoUndo( bWasUndo );
+    // remove all undo actions and turn undo on again
+    pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+    pDoc->GetIDocumentUndoRedo().DoUndo(bWasUndo);
     pDoc->SetVisibleLinks( bWasVisibleLinks );
 
     pDoc->UnlockExpFlds();
@@ -1708,7 +1624,7 @@ void SwIntrnlSectRefLink::Closed()
         // kennzeichnen und das Flag umsetzen
 
         const SwSectionFmts& rFmts = pDoc->GetSections();
-        for( USHORT n = rFmts.Count(); n; )
+        for( sal_uInt16 n = rFmts.Count(); n; )
             if( rFmts[ --n ] == &rSectFmt )
             {
                 ViewShell* pSh;
@@ -1724,16 +1640,15 @@ void SwIntrnlSectRefLink::Closed()
                 aSectionData.SetLinkFileName( aEmptyStr );
                 aSectionData.SetHidden( false );
                 aSectionData.SetProtectFlag( false );
-                // --> FME 2004-06-22 #114856# edit in readonly sections
+                // edit in readonly sections
                 aSectionData.SetEditInReadonlyFlag( false );
-                // <--
 
                 aSectionData.SetConnectFlag( false );
 
                 pDoc->UpdateSection( n, aSectionData );
 
                 // alle in der Section liegenden Links werden sichtbar
-                SwSectionNode* pSectNd = rSectFmt.GetSectionNode( FALSE );
+                SwSectionNode* pSectNd = rSectFmt.GetSectionNode( sal_False );
                 if( pSectNd )
                     pSectNd->GetSection().MakeChildLinksVisible( *pSectNd );
 
@@ -1755,7 +1670,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     if (!pFmt || (CONTENT_SECTION == m_Data.GetType()))
         return ;
 
-    USHORT nUpdateType = sfx2::LINKUPDATE_ALWAYS;
+    sal_uInt16 nUpdateType = sfx2::LINKUPDATE_ALWAYS;
 
     if (!m_RefLink.Is())
     {
@@ -1790,7 +1705,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
             String sFltr( sCmd.GetToken( 1, sfx2::cTokenSeperator ) );
             String sRange( sCmd.GetToken( 2, sfx2::cTokenSeperator ) );
             pFmt->GetDoc()->GetLinkManager().InsertFileLink( *pLnk,
-                                static_cast<USHORT>(m_Data.GetType()),
+                                static_cast<sal_uInt16>(m_Data.GetType()),
                                 sCmd.GetToken( 0, sfx2::cTokenSeperator ),
                                 ( sFltr.Len() ? &sFltr : 0 ),
                                 ( sRange.Len() ? &sRange : 0 ) );
@@ -1813,7 +1728,6 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     }
 }
 
-// --> OD 2007-02-14 #b6521322#
 void SwSection::BreakLink()
 {
     const SectionType eCurrentType( GetType() );
@@ -1842,18 +1756,17 @@ void SwSection::BreakLink()
     SetLinkFileName( aEmptyStr );
     SetLinkFilePassword( aEmptyStr );
 }
-// <--
 
 const SwNode* SwIntrnlSectRefLink::GetAnchor() const
 {
-    return rSectFmt.GetSectionNode( FALSE );
+    return rSectFmt.GetSectionNode( sal_False );
 }
 
 
-BOOL SwIntrnlSectRefLink::IsInRange( ULONG nSttNd, ULONG nEndNd,
+sal_Bool SwIntrnlSectRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                      xub_StrLen , xub_StrLen ) const
 {
-    SwStartNode* pSttNd = rSectFmt.GetSectionNode( FALSE );
+    SwStartNode* pSttNd = rSectFmt.GetSectionNode( sal_False );
     return pSttNd &&
             nSttNd < pSttNd->GetIndex() &&
             pSttNd->EndOfSectionIndex() < nEndNd;

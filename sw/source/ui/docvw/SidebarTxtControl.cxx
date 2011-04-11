@@ -7,9 +7,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile:  $
- * $Revision:  $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -65,7 +62,6 @@
 #include <wrtsh.hxx>
 #include <shellres.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 
 namespace css = ::com::sun::star;
 
@@ -117,7 +113,7 @@ void SidebarTxtControl::LoseFocus()
 
 void SidebarTxtControl::RequestHelp(const HelpEvent &rEvt)
 {
-    USHORT nResId = 0;
+    sal_uInt16 nResId = 0;
     switch( mrSidebarWin.GetLayoutStatus() )
     {
         case SwPostItHelper::INSERTED:  nResId = STR_REDLINE_INSERT; break;
@@ -182,7 +178,7 @@ void SidebarTxtControl::Paint( const Rectangle& rRect)
 void SidebarTxtControl::KeyInput( const KeyEvent& rKeyEvt )
 {
     const KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
-    USHORT nKey = rKeyCode.GetCode();
+    sal_uInt16 nKey = rKeyCode.GetCode();
     if ( ( rKeyCode.IsMod1() && rKeyCode.IsMod2() ) &&
          ( (nKey == KEY_PAGEUP) || (nKey == KEY_PAGEDOWN) ) )
     {
@@ -237,7 +233,7 @@ void SidebarTxtControl::KeyInput( const KeyEvent& rKeyEvt )
         }
     }
 
-    mrDocView.GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+    mrDocView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
 }
 
 void SidebarTxtControl::MouseMove( const MouseEvent& rMEvt )
@@ -304,7 +300,7 @@ void SidebarTxtControl::MouseButtonDown( const MouseEvent& rMEvt )
     {
         GetTextView()->MouseButtonDown( rMEvt );
     }
-    mrDocView.GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+    mrDocView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
 }
 
 void SidebarTxtControl::MouseButtonUp( const MouseEvent& rMEvt )
@@ -334,7 +330,7 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
     {
         if ( !mrSidebarWin.IsProtected() &&
              GetTextView() &&
-             GetTextView()->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(),TRUE ))
+             GetTextView()->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(),sal_True ))
         {
             Link aLink = LINK(this, SidebarTxtControl, OnlineSpellCallback);
             GetTextView()->ExecuteSpellPopup(rCEvt.GetMousePosPixel(),&aLink);
@@ -364,7 +360,6 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
             //!! call different Execute function to get rid of the new thesaurus sub menu
             //!! pointer created in the call to Popup.
             //!! Otherwise we would have a memory leak (see also #i107205#)
-            //((PopupMenu*)pMgr->GetSVMenu())->Execute( this, aPos );
             pMgr->Execute( aPos, this );
             delete pMgr;
         }

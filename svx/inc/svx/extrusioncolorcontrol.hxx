@@ -38,14 +38,15 @@ namespace svx {
 class SVX_DLLPUBLIC ExtrusionColorControl : public SfxToolBoxControl
 {
 private:
-    ToolboxButtonColorUpdater*  mpBtnUpdater;
+    ToolboxButtonColorUpdater* mpBtnUpdater;
+    Color                      mLastColor;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    ExtrusionColorControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    ExtrusionColorControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~ExtrusionColorControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();

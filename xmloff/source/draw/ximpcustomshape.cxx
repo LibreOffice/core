@@ -42,11 +42,11 @@
 #include "EnhancedCustomShapeToken.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xexptran.hxx"
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -57,7 +57,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -150,7 +150,7 @@ void GetEnum( std::vector< com::sun::star::beans::PropertyValue >& rDest,
                          const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
                         const SvXMLEnumMapEntry& rMap )
 {
-    USHORT eKind;
+    sal_uInt16 eKind;
     if( SvXMLUnitConverter::convertEnum( eKind, rValue, &rMap ) )
     {
         sal_Int16 nEnum = (sal_Int16)eKind;
@@ -317,10 +317,10 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
         if ( bNumberRequired )
         {
             sal_Int32 nStartIndex = nIndex;
+            sal_Int32 nEIndex = 0;  // index of "E" in double
 
-            sal_Bool bM = sal_False;    // set if the value is negative
             sal_Bool bE = sal_False;    // set if a double is including a "E" statement
-            sal_Bool bEM = sal_False;   // set if a double is including a "E-"statement
+            sal_Bool bENum = sal_False; // there is at least one number after "E"
             sal_Bool bDot = sal_False;  // set if there is a dot included
             sal_Bool bEnd = sal_False;  // set for each value that can not be part of a double/integer
 
@@ -348,11 +348,16 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                         else
                         {
                             if ( nStartIndex == nIndex )
-                                bM = sal_True;
+                               bValid = sal_True;
                             else if ( bE )
-                                bEM = sal_True;
-                            else
-                                bValid = sal_False;
+                            {
+                                if ( nEIndex + 1 == nIndex )
+                                    bValid = sal_True;
+                                else if ( bENum )
+                                    bEnd = sal_True;
+                                else
+                                    bValid = sal_False;
+                            }
                         }
                     }
                     break;
@@ -365,7 +370,10 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                         else
                         {
                             if ( !bE )
+                            {
                                 bE = sal_True;
+                                nEIndex = nIndex;
+                            }
                             else
                                 bEnd = sal_True;
                         }
@@ -381,6 +389,10 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                     case '7' :
                     case '8' :
                     case '9' :
+                    {
+                        if ( bE && ! bENum )
+                            bENum = sal_True;
+                    }
                     break;
                     default:
                         bEnd = sal_True;
@@ -883,7 +895,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                         double fFactor = SvXMLExportHelper::GetConversionFactor( aUnitStr, MAP_100TH_MM, eSrcUnit );
                         if ( ( fFactor != 1.0 ) && ( fFactor != 0.0 ) )
                         {
-                            double fDepth;
+                            double fDepth(0.0);
                             if ( rDepth.Value >>= fDepth )
                             {
                                 fDepth /= fFactor;
@@ -1133,7 +1145,7 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
     }
 }
 
-typedef std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash, OUStringEqFunc> EquationHashMap;
+typedef boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash, OUStringEqFunc> EquationHashMap;
 
 /* if rPara.Type is from type EnhancedCustomShapeParameterType::EQUATION, the name of the equation
    will be converted from rtl::OUString to index */
@@ -1165,7 +1177,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
         while( aEquationNameIter != aEquationNameEnd )
         {
             (*pH)[ *aEquationNameIter ] = (sal_Int32)( aEquationNameIter - maEquationNames.begin() );
-            aEquationNameIter++;
+            ++aEquationNameIter;
         }
 
         // resolve equation
@@ -1196,7 +1208,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 }
             }
             while( nIndexOf != -1 );
-            aEquationIter++;
+            ++aEquationIter;
         }
 
         // Path
@@ -1237,7 +1249,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 default:
                     break;
             }
-            aPathIter++;
+            ++aPathIter;
         }
         std::vector< beans::PropertyValues >::iterator aHandleIter = maHandles.begin();
         std::vector< beans::PropertyValues >::iterator aHandleEnd  = maHandles.end();
@@ -1248,7 +1260,6 @@ void XMLEnhancedCustomShapeContext::EndElement()
             {
                 switch( EASGet( pValues->Name ) )
                 {
-                    case EAS_Position :
                     case EAS_RangeYMinimum :
                     case EAS_RangeYMaximum :
                     case EAS_RangeXMinimum :
@@ -1260,6 +1271,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
                             pValues->Value.getValue()), pH );
                     }
                     break;
+
+                    case EAS_Position :
                     case EAS_Polar :
                     {
                         CheckAndResolveEquationParameter( (*((com::sun::star::drawing::EnhancedCustomShapeParameterPair*)
@@ -1273,7 +1286,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 }
                 pValues++;
             }
-            aHandleIter++;
+            ++aHandleIter;
         }
         delete pH;
     }
@@ -1286,7 +1299,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
         SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maHandles, EASGet( EAS_Handles ) );
 }
 
-SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( USHORT nPrefix,const rtl::OUString& rLocalName,
+SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt16 nPrefix,const rtl::OUString& rLocalName,
                                                                     const uno::Reference< xml::sax::XAttributeList> & xAttrList )
 {
     EnhancedCustomShapeTokenEnum aTokenEnum = EASGet( rLocalName );

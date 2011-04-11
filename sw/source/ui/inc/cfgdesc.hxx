@@ -35,25 +35,25 @@ class SwCfgDesc
 protected:
     String aFuncText;
     String aLibName;
-    USHORT nEvent;
+    sal_uInt16 nEvent;
 
-    SwCfgDesc(const String &rFuncName, USHORT nId);
+    SwCfgDesc(const String &rFuncName, sal_uInt16 nId);
     SwCfgDesc(const String &rLib,const String &rMacro);
     ~SwCfgDesc();
 
 public:
-    void SetEvent(USHORT nE);               // inline
+    void SetEvent(sal_uInt16 nE);               // inline
     void SetFuncText(const String &rStr);   // inline
     void SetMacro(const String &rLib, const String &rMac);
-    BOOL IsMacro() const;
-    USHORT GetEvent() const;                // inline
+    sal_Bool IsMacro() const;
+    sal_uInt16 GetEvent() const;                // inline
     String GetFuncText() const;             // inline
     String GetMacro() const;                // inline
     String GetLib() const;              // inline
 };
 
 // INLINE METHODE --------------------------------------------------------
-inline void SwCfgDesc::SetEvent(USHORT nE) {
+inline void SwCfgDesc::SetEvent(sal_uInt16 nE) {
     nEvent = nE;
 }
 
@@ -61,7 +61,7 @@ inline void SwCfgDesc::SetFuncText(const String &rStr) {
     aFuncText = rStr;
 }
 
-inline  USHORT SwCfgDesc::GetEvent() const { return nEvent; }
+inline  sal_uInt16 SwCfgDesc::GetEvent() const { return nEvent; }
 inline  String SwCfgDesc::GetFuncText() const { return aFuncText; }
 inline  String SwCfgDesc::GetMacro() const { return aFuncText; }
 inline  String SwCfgDesc::GetLib() const { return aLibName; }

@@ -83,7 +83,7 @@ protected:
 
 public:
     LwpDrawObj(SvStream* pStream, DrawingOffsetAndScale* pTransData = NULL);
-    virtual ~LwpDrawObj() {};
+    virtual ~LwpDrawObj() {}
 
 private:
     void ReadObjHeaderRecord();
@@ -156,7 +156,7 @@ public:
 
 protected:
     virtual void Read() {}
-    virtual rtl::OUString RegisterStyle() { return rtl::OUString::createFromAscii(""); }
+    virtual rtl::OUString RegisterStyle() { return rtl::OUString(); }
     virtual XFFrame* CreateDrawObj(const rtl::OUString& /*rStyleName*/) { return NULL; }
     virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& /*rStyleName*/) { return NULL; }
 };
@@ -173,7 +173,7 @@ private:
 
 public:
     LwpDrawLine(SvStream * pStream, DrawingOffsetAndScale* pTransData);
-    virtual ~LwpDrawLine() {};
+    virtual ~LwpDrawLine() {}
 
 protected:
     virtual void Read();
@@ -259,7 +259,7 @@ private:
 
 public:
     LwpDrawEllipse(SvStream * pStream, DrawingOffsetAndScale* pTransData);
-    virtual ~LwpDrawEllipse(){};
+    virtual ~LwpDrawEllipse(){}
 
 protected:
     virtual void Read();
@@ -281,7 +281,7 @@ private:
 
 public:
     LwpDrawArc(SvStream * pStream, DrawingOffsetAndScale* pTransData);
-    virtual ~LwpDrawArc() {};
+    virtual ~LwpDrawArc() {}
 
 protected:
     virtual void Read();
@@ -350,7 +350,7 @@ public:
 
 protected:
     virtual void Read();
-    virtual rtl::OUString RegisterStyle() {return rtl::OUString::createFromAscii("");}
+    virtual rtl::OUString RegisterStyle() {return rtl::OUString();}
     virtual XFFrame* CreateDrawObj(const rtl::OUString& /*rStyleName*/){return NULL;}
     virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& /*rStyleName*/){return NULL;}
 };

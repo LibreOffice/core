@@ -74,7 +74,7 @@ LockFileCommon::LockFileCommon( const ::rtl::OUString& aOrigURL, const uno::Refe
     ::rtl::OUString aShareURLString = aDocURL.GetPartBeforeLastName();
     aShareURLString += aPrefix;
     aShareURLString += aDocURL.GetName();
-    aShareURLString += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "#" ) );
+    aShareURLString += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "%23" ) ); // '#'
     m_aURL = INetURLObject( aShareURLString ).GetMainURL( INetURLObject::NO_DECODE );
 }
 

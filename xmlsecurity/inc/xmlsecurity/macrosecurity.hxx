@@ -121,7 +121,7 @@ private:
     RadioButton         maMediumRB;
     RadioButton         maLowRB;
 
-    USHORT              mnCurLevel;
+    sal_uInt16              mnCurLevel;
 
 protected:
     DECL_LINK(          RadioButtonHdl, RadioButton* );
@@ -138,7 +138,7 @@ class MacroSecurityTrustedSourcesTP : public MacroSecurityTP
 private:
     FixedLine           maTrustCertFL;
     ReadOnlyImage       maTrustCertROFI;
-    SvxSimpleTable      maTrustCertLB;  // PB 2006/02/02 #i48648 now SvHeaderTabListBox
+    SvxSimpleTable      maTrustCertLB;  // #i48648 now SvHeaderTabListBox
     PushButton          maAddCertPB;
     PushButton          maViewCertPB;
     PushButton          maRemoveCertPB;

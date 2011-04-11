@@ -61,12 +61,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::Reference< SvXMLImportPropertyMapper > OFormLayerXMLImport::getStylePropertyMapper() const
-    {
-        return m_pImpl->getStylePropertyMapper();
-    }
-
-    //---------------------------------------------------------------------
     void OFormLayerXMLImport::setAutoStyleContext(SvXMLStylesContext* _pNewContext)
     {
         m_pImpl->setAutoStyleContext(_pNewContext);

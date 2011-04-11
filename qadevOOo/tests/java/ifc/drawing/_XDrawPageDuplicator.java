@@ -73,11 +73,11 @@ public class _XDrawPageDuplicator extends MultiMethodTest {
             DP = (XDrawPage) AnyConverter.toObject(
                     new Type(XDrawPage.class),DPs.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured while testing: " + e);
+            log.println("Exception occurred while testing: " + e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception occured while testing: " + e);
+            log.println("Exception occurred while testing: " + e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occured while testing: " + e);
+            log.println("Exception occurred while testing: " + e);
         }
 
         if (DP != null) {

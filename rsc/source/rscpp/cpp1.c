@@ -39,7 +39,7 @@ FILE *pDefOut = NULL;       /* ER  evtl. #define's dump */
 #endif
 
 #ifdef B200
-/* BP, 25.07.91, einzige Moeglichkeit unter BC Stack und Heap festzusetzen */
+/* einzige Moeglichkeit unter BC Stack und Heap festzusetzen */
 extern unsigned _stklen  = 24000;
 extern unsigned _heaplen = 30000;
 #endif
@@ -189,7 +189,7 @@ char    *magic[] = {                    /* Note: order is important     */
         "__FILE__",
         NULL                            /* Must be last                 */
 };
-
+
 static char     *sharpfilename = NULL;
 
 int nRunde = 0;
@@ -197,7 +197,6 @@ int nRunde = 0;
 void InitCpp1()
 {
     int i;
-    /* BP */
     /* in der LIB-Version muessen alle Variablen initialisiert werden */
 
     line = wrongline = errors = recursion = 0;
@@ -234,7 +233,6 @@ void InitCpp1()
     nflag = 0;
     incend = incdir;
     sharpfilename = NULL;
-    /* BP */
 }
 
 int MAIN(int argc, char** argv)
@@ -287,8 +285,6 @@ nRunde++;
                     if ((i = creat(useargv[3], 0, "rat=cr", "rfm=var")) == -1
                      || dup2(i, fileno(stdout)) == -1) {
 #else
-/* alt                if (freopen(useargv[3], "w", stdout) == NULL) { */
-
                     pDefOut = fopen( useargv[3], "w" );
                     if( pDefOut == NULL ) {
 #endif
@@ -298,7 +294,6 @@ nRunde++;
                     }
                 }                           /* Continue by opening output    */
             }
-/* OSL_DEBUG_LEVEL > 1 */
 #endif
         case 3:
             /*
@@ -312,8 +307,6 @@ nRunde++;
                 if ((i = creat(useargv[2], 0, "rat=cr", "rfm=var")) == -1
                  || dup2(i, fileno(stdout)) == -1) {
 #else
-/* alt                if (freopen(useargv[2], "w", stdout) == NULL) { */
-
                 pCppOut = fopen( useargv[2], "w" );
                 if( pCppOut == NULL ) {
 #endif
@@ -327,7 +320,6 @@ nRunde++;
              * Open input file, "-" means use stdin.
              */
             if (!streq(useargv[1], "-")) {
-/* alt:                if (freopen(useargv[1], "r", stdin) == NULL) { */
                 pCppIn = fopen( useargv[1], "r" );
                 if( pCppIn == NULL) {
                     perror(useargv[1]);
@@ -349,16 +341,6 @@ nRunde++;
         default:
             exit(IO_ERROR);             /* Can't happen                 */
         }
-/*      if ( pfargv )
-        {
-            for ( j=0;j++;j < PARALIMIT )
-            {
-                if (pfargv[j]!=0)
-                    free(pfargv[j]);
-            }
-            free(pfargv);
-        }
-*/
 
         setincdirs();                   /* Setup -I include directories */
         addfile( pCppIn, work);           /* "open" main input file       */
@@ -399,7 +381,7 @@ nRunde++;
 #endif
 
 }
-
+
 FILE_LOCAL
 void cppmain()
 /*
@@ -551,7 +533,7 @@ end_line:   if (c == '\n') {                    /* Compiling at EOL?    */
             EvalBuf[nEvalOff++] = '\0';
 #endif
 }
-
+
 void output(int c)
 /*
  * Output one character to stdout -- output() is passed as an
@@ -563,7 +545,6 @@ void output(int c)
 #else
         if (c != TOK_SEP)
 #endif
-/* alt:            PUTCHAR(c); */
             PUTCHAR(c);
 }
 
@@ -580,7 +561,6 @@ int             c;
 #else
         if (c != TOK_SEP)
 #endif
-/* alt:            PUTCHAR(c); */
         {
             PUTCHAR(c);
             if ( bIsInEval && nEvalOff < NEVALBUF )

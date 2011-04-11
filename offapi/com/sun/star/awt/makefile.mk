@@ -161,6 +161,7 @@ IDLFILES=\
     UnoControlDialog.idl\
     UnoControlDialogElement.idl\
     UnoControlDialogModel.idl\
+    UnoControlDialogModelProvider.idl\
     UnoControlEdit.idl\
     UnoControlEditModel.idl\
     UnoControlFileControl.idl\
@@ -334,7 +335,12 @@ IDLFILES=\
     XPopupMenuExtended.idl \
     XItemList.idl \
     XItemListListener.idl \
-    ItemListEvent.idl
+    ItemListEvent.idl \
+    AnimatedImagesControl.idl \
+    AnimatedImagesControlModel.idl \
+    XAnimatedImages.idl \
+    XAnimation.idl \
+    SpinningProgressControlModel.idl
 
 # ------------------------------------------------------------------
 

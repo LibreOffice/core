@@ -31,7 +31,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "XMLTextHeaderFooterContext.hxx"
 #include <xmloff/XMLTextTableContext.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -43,12 +43,8 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-//using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
-//using namespace ::com::sun::star::container;
-//using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::text;
 
 
 TYPEINIT1( XMLTextHeaderFooterContext, SvXMLImportContext );
@@ -61,12 +57,12 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
                        sal_Bool bFooter, sal_Bool bLft ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xPropSet( rPageStylePropSet ),
-    sOn( OUString::createFromAscii( bFooter ? "FooterIsOn" : "HeaderIsOn" ) ),
-    sShareContent( OUString::createFromAscii( bFooter ? "FooterIsShared"
-                                                      : "HeaderIsShared" ) ),
-    sText( OUString::createFromAscii( bFooter ? "FooterText" : "HeaderText" ) ),
-    sTextLeft( OUString::createFromAscii( bFooter ? "FooterTextLeft"
-                                                     : "HeaderTextLeft" ) ),
+    sOn( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsOn" )) : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsOn" )) ),
+    sShareContent( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsShared" ))
+                                                      : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsShared" )) ),
+    sText( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterText" )) : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderText" )) ),
+    sTextLeft( bFooter ?  OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterTextLeft" ))
+                                                     : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderTextLeft" )) ),
     bInsertContent( sal_True ),
     bLeft( bLft )
 {

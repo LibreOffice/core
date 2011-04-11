@@ -57,31 +57,78 @@ namespace
 static const OUString lcl_aServiceName(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart.ChartLine" ));
 
-const Sequence< Property > & lcl_GetPropertySequence()
+struct StaticMinMaxLineWrapperDefaults_Initializer
 {
-    static Sequence< Property > aPropSeq;
-
-    // /--
-    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aPropSeq.getLength() )
+    ::chart::tPropertyValueMap* operator()()
     {
-        // get properties
+        static ::chart::tPropertyValueMap aStaticDefaults;
+        lcl_AddDefaultsToMap( aStaticDefaults );
+        return &aStaticDefaults;
+    }
+private:
+    void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
+    {
+        ::chart::LineProperties::AddDefaultsToMap( rOutMap );
+    }
+};
+
+struct StaticMinMaxLineWrapperDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticMinMaxLineWrapperDefaults_Initializer >
+{
+};
+
+struct StaticMinMaxLineWrapperPropertyArray_Initializer
+{
+    Sequence< Property >* operator()()
+    {
+        static Sequence< Property > aPropSeq( lcl_GetPropertySequence() );
+        return &aPropSeq;
+    }
+
+private:
+    Sequence< Property > lcl_GetPropertySequence()
+    {
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
 
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
-//         ::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        // and sort them for access via bsearch
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
-        // transfer result to static Sequence
-        aPropSeq = ::chart::ContainerHelper::ContainerToSequence( aProperties );
+        return ::chart::ContainerHelper::ContainerToSequence( aProperties );
     }
+};
 
-    return aPropSeq;
-}
+struct StaticMinMaxLineWrapperPropertyArray : public rtl::StaticAggregate< Sequence< Property >, StaticMinMaxLineWrapperPropertyArray_Initializer >
+{
+};
+
+struct StaticMinMaxLineWrapperInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
+    {
+        static ::cppu::OPropertyArrayHelper aPropHelper( *StaticMinMaxLineWrapperPropertyArray::get() );
+        return &aPropHelper;
+    }
+};
+
+struct StaticMinMaxLineWrapperInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticMinMaxLineWrapperInfoHelper_Initializer >
+{
+};
+
+struct StaticMinMaxLineWrapperInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticMinMaxLineWrapperInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticMinMaxLineWrapperInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticMinMaxLineWrapperInfo_Initializer >
+{
+};
 
 } // anonymous namespace
 
@@ -95,7 +142,6 @@ namespace wrapper
 MinMaxLineWrapper::MinMaxLineWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : m_spChart2ModelContact( spChart2ModelContact )
         , m_aEventListenerContainer( m_aMutex )
-        , m_pPropertyArrayHelper()
         , m_aWrappedLineJointProperty( C2U("LineJoint"), uno::makeAny( drawing::LineJoint_NONE ))
 {
 }
@@ -110,11 +156,6 @@ void SAL_CALL MinMaxLineWrapper::dispose()
 {
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
-
-    // /--
-    MutexGuard aGuard( GetMutex());
-    m_xInfo.clear();
-    // \--
 }
 
 void SAL_CALL MinMaxLineWrapper::addEventListener(
@@ -133,34 +174,16 @@ void SAL_CALL MinMaxLineWrapper::removeEventListener(
 
 ::cppu::IPropertyArrayHelper& MinMaxLineWrapper::getInfoHelper()
 {
-    if(!m_pPropertyArrayHelper.get())
-    {
-        // /--
-        ::osl::MutexGuard aGuard( GetMutex() );
-        if(!m_pPropertyArrayHelper.get())
-        {
-            sal_Bool bSorted = sal_True;
-            m_pPropertyArrayHelper = ::boost::shared_ptr< ::cppu::OPropertyArrayHelper >( new ::cppu::OPropertyArrayHelper( lcl_GetPropertySequence(), bSorted ) );
-        }
-        // \--
-    }
-    return *m_pPropertyArrayHelper.get();
+    return *StaticMinMaxLineWrapperInfoHelper::get();
 }
 
 //XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL MinMaxLineWrapper::getPropertySetInfo()
                     throw (uno::RuntimeException)
 {
-    if( !m_xInfo.is() )
-    {
-        // /--
-        ::osl::MutexGuard aGuard( GetMutex() );
-        if( !m_xInfo.is() )
-            m_xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
-        // \--
-    }
-    return m_xInfo;
+    return *StaticMinMaxLineWrapperInfo::get();
 }
+
 void SAL_CALL MinMaxLineWrapper::setPropertyValue( const ::rtl::OUString& rPropertyName, const uno::Any& rValue )
                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -243,22 +266,22 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const ::rtl::OUString& rP
 void SAL_CALL MinMaxLineWrapper::addPropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL MinMaxLineWrapper::removePropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL MinMaxLineWrapper::addVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL MinMaxLineWrapper::removeVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 //XMultiPropertySet
@@ -266,7 +289,6 @@ void SAL_CALL MinMaxLineWrapper::removeVetoableChangeListener( const ::rtl::OUSt
 void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< ::rtl::OUString >& rNameSeq, const uno::Sequence< uno::Any >& rValueSeq )
                     throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    bool bUnknownProperty = false;
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
     {
@@ -278,12 +300,9 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< ::rtl::
         catch( beans::UnknownPropertyException& ex )
         {
             ASSERT_EXCEPTION( ex );
-            bUnknownProperty = true;
         }
     }
     //todo: store unknown properties elsewhere
-//    if( bUnknownProperty )
-//        throw beans::UnknownPropertyException();
 }
 uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyValues( const uno::Sequence< ::rtl::OUString >& rNameSeq )
                     throw (uno::RuntimeException)
@@ -305,20 +324,20 @@ void SAL_CALL MinMaxLineWrapper::addPropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL MinMaxLineWrapper::removePropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 void SAL_CALL MinMaxLineWrapper::firePropertiesChangeEvent(
     const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */,
     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented");
+    OSL_FAIL("not implemented");
 }
 
 //XPropertyState
@@ -356,26 +375,14 @@ void SAL_CALL MinMaxLineWrapper::setPropertyToDefault( const ::rtl::OUString& rP
 {
     this->setPropertyValue( rPropertyName, this->getPropertyDefault(rPropertyName) );
 }
+
 uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const ::rtl::OUString& rPropertyName )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    static tPropertyValueMap aStaticDefaults;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( 0 == aStaticDefaults.size() )
-    {
-        LineProperties::AddDefaultsToMap( aStaticDefaults );
-    }
-
-    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
-
-    tPropertyValueMap::const_iterator aFound(
-        aStaticDefaults.find( nHandle ));
-
-    if( aFound == aStaticDefaults.end())
+    const tPropertyValueMap& rStaticDefaults = *StaticMinMaxLineWrapperDefaults::get();
+    tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( getInfoHelper().getHandleByName( rPropertyName ) ) );
+    if( aFound == rStaticDefaults.end() )
         return uno::Any();
-
     return (*aFound).second;
 }
 
@@ -384,7 +391,7 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyDefault( const ::rtl::OUString& 
 void SAL_CALL MinMaxLineWrapper::setAllPropertiesToDefault(  )
                     throw (uno::RuntimeException)
 {
-    const Sequence< beans::Property >&  rPropSeq = lcl_GetPropertySequence();
+    const Sequence< beans::Property >& rPropSeq = *StaticMinMaxLineWrapperPropertyArray::get();
     for(sal_Int32 nN=0; nN<rPropSeq.getLength(); nN++)
     {
         ::rtl::OUString aPropertyName( rPropSeq[nN].Name );

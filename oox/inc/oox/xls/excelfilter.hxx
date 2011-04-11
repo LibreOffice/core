@@ -29,8 +29,9 @@
 #ifndef OOX_XLS_EXCELFILTER_HXX
 #define OOX_XLS_EXCELFILTER_HXX
 
-#include "oox/core/xmlfilterbase.hxx"
 #include "oox/core/binaryfilterbase.hxx"
+#include "oox/core/xmlfilterbase.hxx"
+#include "oox/ole/vbaprojectfilter.hxx"
 
 namespace oox {
 namespace xls {
@@ -60,7 +61,8 @@ class ExcelFilter : public ::oox::core::XmlFilterBase, public ExcelFilterBase
 {
 public:
     explicit            ExcelFilter(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
     virtual             ~ExcelFilter();
 
     virtual bool        importDocument() throw();
@@ -75,6 +77,7 @@ public:
 
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
     virtual ::rtl::OUString implGetImplementationName() const;
 };
 
@@ -84,7 +87,8 @@ class ExcelBiffFilter : public ::oox::core::BinaryFilterBase, public ExcelFilter
 {
 public:
     explicit            ExcelBiffFilter(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
     virtual             ~ExcelBiffFilter();
 
     virtual bool        importDocument() throw();
@@ -92,10 +96,26 @@ public:
 
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const;
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
     virtual ::rtl::OUString implGetImplementationName() const;
 };
 
 // ============================================================================
+
+class ExcelVbaProjectFilter : public ExcelBiffFilter
+{
+public:
+    explicit            ExcelVbaProjectFilter(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual bool        importDocument() throw();
+    virtual bool        exportDocument() throw();
+
+private:
+    virtual ::rtl::OUString implGetImplementationName() const;
+};
+ // ============================================================================
 
 } // namespace xls
 } // namespace oox

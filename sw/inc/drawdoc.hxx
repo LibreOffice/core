@@ -47,17 +47,16 @@ public:
 
     virtual SdrPage* AllocPage(bool bMasterPage);
 
-    // fuers "load on demand" von Grafiken im DrawingLayer
+
+    // For "load on demand" of graphics in DrawingLayer.
     virtual SvStream* GetDocumentStream( SdrDocumentStreamInfo& rInfo ) const;
 
-    // fuers Speicher von Rechtecken als Control-Ersatz fuker Versionen < 5.0
+    // For saving of rectangles as control-replacement for versions < 5.0.
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 
 protected:
-    // --> OD 2006-03-01 #b6382898#
     // overload of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
-    // <--
 };
 
 

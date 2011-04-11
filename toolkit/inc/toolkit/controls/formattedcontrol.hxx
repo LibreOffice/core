@@ -68,8 +68,11 @@ namespace toolkit
                 ) throw (::com::sun::star::uno::Exception);
 
     public:
-                            UnoControlFormattedFieldModel();
-                            UnoControlFormattedFieldModel( const UnoControlFormattedFieldModel& rModel ) : UnoControlModel( rModel ) {;}
+                            UnoControlFormattedFieldModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                            UnoControlFormattedFieldModel( const UnoControlFormattedFieldModel& rModel )
+                                :UnoControlModel( rModel )
+                            {
+                            }
 
         UnoControlModel*    Clone() const { return new UnoControlFormattedFieldModel( *this ); }
 
@@ -111,7 +114,7 @@ namespace toolkit
     class UnoFormattedFieldControl : public UnoSpinFieldControl
     {
     public:
-                            UnoFormattedFieldControl();
+                            UnoFormattedFieldControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
         ::rtl::OUString     GetComponentServiceName();
 
         // ::com::sun::star::awt::XTextListener

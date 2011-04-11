@@ -31,9 +31,10 @@
 
 #include <vector>
 #include <map>
-#include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
+#include "oox/token/properties.hxx"
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct PropertyValue;
@@ -42,7 +43,7 @@ namespace com { namespace sun { namespace star { namespace beans {
 
 namespace oox {
 
-struct PropertyList;
+struct PropertyNameVector;
 
 // ============================================================================
 
@@ -94,9 +95,8 @@ public:
   static void dump( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
   void dump();
 #endif
-
 private:
-    const PropertyList* mpPropNames;
+    const PropertyNameVector* mpPropNames;
 };
 
 // ============================================================================

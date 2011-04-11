@@ -98,7 +98,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
         Reference< chart2::XAxis > xAxis( xResult->getAxisByDimension( i, MAIN_AXIS_INDEX ) );
         if( !xAxis.is() )
         {
-            OSL_ENSURE(false,"a created coordinate system should have an axis for each dimension");
+            OSL_FAIL("a created coordinate system should have an axis for each dimension");
             continue;
         }
 
@@ -138,12 +138,6 @@ Sequence< OUString > SAL_CALL ChartType::getSupportedOptionalRoles()
     throw (uno::RuntimeException)
 {
     static Sequence< OUString > aDefaultOptRolesSeq;
-
-//     if( aDefaultOptRolesSeq.getLength() == 0 )
-//     {
-//         aDefaultOptRolesSeq.realloc( 1 );
-//         aDefaultOptRolesSeq[0] = C2U( "error-bars-y" );
-//     }
 
     return aDefaultOptRolesSeq;
 }
@@ -231,34 +225,51 @@ uno::Any ChartType::GetDefaultValue( sal_Int32 /* nHandle */ ) const
     return uno::Any();
 }
 
+namespace
+{
+
+struct StaticChartTypeInfoHelper_Initializer
+{
+    ::cppu::OPropertyArrayHelper* operator()()
+    {
+        // using assignment for broken gcc 3.3
+        static ::cppu::OPropertyArrayHelper aPropHelper = ::cppu::OPropertyArrayHelper(
+            Sequence< beans::Property >() );
+        return &aPropHelper;
+    }
+};
+
+struct StaticChartTypeInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticChartTypeInfoHelper_Initializer >
+{
+};
+
+struct StaticChartTypeInfo_Initializer
+{
+    uno::Reference< beans::XPropertySetInfo >* operator()()
+    {
+        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticChartTypeInfoHelper::get() ) );
+        return &xPropertySetInfo;
+    }
+};
+
+struct StaticChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticChartTypeInfo_Initializer >
+{
+};
+
+}
+
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL ChartType::getInfoHelper()
 {
-    // using assignment for broken gcc 3.3
-    static ::cppu::OPropertyArrayHelper aArrayHelper = ::cppu::OPropertyArrayHelper(
-        Sequence< beans::Property >(), /* bSorted */ sal_True );
-
-    return aArrayHelper;
+    return *StaticChartTypeInfoHelper::get();
 }
 
-
 // ____ XPropertySet ____
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
-    ChartType::getPropertySetInfo()
+uno::Reference< beans::XPropertySetInfo > SAL_CALL ChartType::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo > xInfo;
-
-    // /--
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !xInfo.is())
-    {
-        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
-            getInfoHelper());
-    }
-
-    return xInfo;
-    // \--
+    return *StaticChartTypeInfo::get();
 }
 
 // ____ XModifyBroadcaster ____

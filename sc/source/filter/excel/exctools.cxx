@@ -62,8 +62,6 @@
 
 #include <vector>
 
-// - ALLGEMEINE ----------------------------------------------------------
-
 RootData::RootData( void )
 {
     eDateiTyp = BiffX;
@@ -163,7 +161,7 @@ void XclImpOutlineBuffer::MakeScOutline()
                 else if (nFirstPos > 0)
                     bCollapsed = maCollapsedPosSet.count(nFirstPos-1) > 0;
 
-                BOOL bDummy;
+                sal_Bool bDummy;
                 mpOutlineArray->Insert(nFirstPos, nPos-1, bDummy, bCollapsed);
             }
         }
@@ -187,31 +185,16 @@ void XclImpOutlineBuffer::SetButtonMode( bool bRightOrUnder )
     mbButtonAfter = bRightOrUnder;
 }
 
-//___________________________________________________________________
-
-
-ExcScenarioCell::ExcScenarioCell( const UINT16 nC, const UINT16 nR ) : nCol( nC ), nRow( nR )
+ExcScenarioCell::ExcScenarioCell( const sal_uInt16 nC, const sal_uInt16 nR )
+    : nCol( nC ), nRow( nR )
 {
 }
 
-
-void ExcScenarioCell::SetValue( const String& r )
+ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR )
+    : nTab( rR.pIR->GetCurrScTab() )
 {
-    aValue = r;
-}
-
-
-
-
-#define EXCSCAPPEND(EXCSCCELL)  (List::Insert(EXCSCCELL,LIST_APPEND))
-#define EXCSCFIRST()            ((ExcScenarioCell*)List::First())
-#define EXCSCNEXT()             ((ExcScenarioCell*)List::Next())
-
-
-ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR->GetCurrScTab() )
-{
-    UINT16          nCref;
-    UINT8           nName, nComment;
+    sal_uInt16          nCref;
+    sal_uInt8           nName, nComment;
 
     rIn >> nCref;
     rIn >> nProtected;
@@ -234,38 +217,26 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR
     else
         pComment = new String;
 
-    UINT16          n = nCref;
-    UINT16          nC, nR;
+    sal_uInt16          n = nCref;
+    sal_uInt16          nC, nR;
     while( n )
     {
         rIn >> nR >> nC;
 
-        EXCSCAPPEND( new ExcScenarioCell( nC, nR ) );
+        aEntries.push_back(new ExcScenarioCell( nC, nR ));
 
         n--;
     }
 
     n = nCref;
-    ExcScenarioCell*    p = EXCSCFIRST();
-    while( p )
-    {
-        p->SetValue( rIn.ReadUniString() );
 
-        p = EXCSCNEXT();
-    }
+    boost::ptr_vector<ExcScenarioCell>::iterator iter;
+    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
+        iter->SetValue(rIn.ReadUniString());
 }
-
 
 ExcScenario::~ExcScenario()
 {
-    ExcScenarioCell*    p = EXCSCFIRST();
-
-    while( p )
-    {
-        delete p;
-        p = EXCSCNEXT();
-    }
-
     if( pName )
         delete pName;
     if( pComment )
@@ -274,38 +245,35 @@ ExcScenario::~ExcScenario()
         delete pUserName;
 }
 
-
-void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
+void ExcScenario::Apply( const XclImpRoot& rRoot, const sal_Bool bLast )
 {
     ScDocument&         r = rRoot.GetDoc();
-    ExcScenarioCell*    p = EXCSCFIRST();
     String              aSzenName( *pName );
-    UINT16              nNewTab = nTab + 1;
+    sal_uInt16              nNewTab = nTab + 1;
 
     if( !r.InsertTab( nNewTab, aSzenName ) )
         return;
 
-    r.SetScenario( nNewTab, TRUE );
-    // #112621# do not show scenario frames
+    r.SetScenario( nNewTab, true );
+    // do not show scenario frames
     r.SetScenarioData( nNewTab, *pComment, COL_LIGHTGRAY, /*SC_SCENARIO_SHOWFRAME|*/SC_SCENARIO_COPYALL|(nProtected ? SC_SCENARIO_PROTECT : 0) );
 
-    while( p )
+    boost::ptr_vector<ExcScenarioCell>::const_iterator iter;
+    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
     {
-        UINT16          nCol = p->nCol;
-        UINT16          nRow = p->nRow;
-        String          aVal = p->GetValue();
+        sal_uInt16 nCol = iter->nCol;
+        sal_uInt16 nRow = iter->nRow;
+        String aVal = iter->GetValue();
 
         r.ApplyFlagsTab( nCol, nRow, nCol, nRow, nNewTab, SC_MF_SCENARIO );
 
         r.SetString( nCol, nRow, nNewTab, aVal );
-
-        p = EXCSCNEXT();
     }
 
     if( bLast )
-        r.SetActiveScenario( nNewTab, TRUE );
+        r.SetActiveScenario( nNewTab, sal_True );
 
-    // #111896# modify what the Active tab is set to if the new
+    // modify what the Active tab is set to if the new
     // scenario tab occurs before the active tab.
     ScExtDocSettings& rDocSett = rRoot.GetExtDocOptions().GetDocSettings();
     if( (static_cast< SCCOL >( nTab ) < rDocSett.mnDisplTab) && (rDocSett.mnDisplTab < MAXTAB) )
@@ -313,33 +281,16 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
     rRoot.GetTabInfo().InsertScTab( nNewTab );
 }
 
-
-
-
-ExcScenarioList::~ExcScenarioList()
-{
-    ExcScenario*    p = _First();
-
-    while( p )
-    {
-        delete p;
-        p = _Next();
-    }
-}
-
-
 void ExcScenarioList::Apply( const XclImpRoot& rRoot )
 {
-    ExcScenario*    p = _Last();
-    UINT16          n = ( UINT16 ) Count();
+    sal_uInt16 n = static_cast<sal_uInt16>(aEntries.size());
 
-    while( p )
+    boost::ptr_vector<ExcScenario>::reverse_iterator iter;
+    for (iter = aEntries.rbegin(); iter != aEntries.rend(); ++iter)
     {
         n--;
-        p->Apply( rRoot, ( BOOL ) ( n == nLastScenario ) );
-        p = _Prev();
+        iter->Apply(rRoot, n == nLastScenario);
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

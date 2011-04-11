@@ -42,10 +42,10 @@ class SVX_DLLPUBLIC XGradientStepCountItem: public SfxUInt16Item
 {
 public:
                             TYPEINFO();
-                            XGradientStepCountItem( USHORT nStepCount = 0 );
+                            XGradientStepCountItem( sal_uInt16 nStepCount = 0 );
                             XGradientStepCountItem( SvStream& rIn );
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

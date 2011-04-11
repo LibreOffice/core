@@ -52,10 +52,9 @@ public class BlankCell extends CellValue {
     /**
       * Constructs a <code>BlankCell</code> using specified attributes
      *
-     * @param row row number
-     * @param col column number
-     * @param cellContents contents of the cell
-     * @param ixfe font index
+     * @param row     row number
+     * @param column  column number
+     * @param ixfe    font index
       */
     public BlankCell(int row, int column, int ixfe) throws IOException {
 
@@ -87,7 +86,7 @@ public class BlankCell extends CellValue {
     /**
      * Reads a BlankCell <code>InputStream</code>
      *
-     * @param   is InputStream containing a BlankCell.
+     * @param   input InputStream containing a BlankCell.
      */
     public int read(InputStream input) throws IOException {
 

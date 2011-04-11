@@ -46,7 +46,7 @@
 #include <itemholder1.hxx>
 
 #include <algorithm>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -105,11 +105,6 @@ class SvtCmdOptions
             return ( m_aCommandHashMap.size() > 0 );
         }
 
-        void SetContainerSize( sal_Int32 nSize )
-        {
-            m_aCommandHashMap.resize( nSize );
-        }
-
         sal_Bool Lookup( const OUString& aCmd ) const
         {
             CommandHashMap::const_iterator pEntry = m_aCommandHashMap.find( aCmd );
@@ -143,7 +138,7 @@ class SvtCmdOptions
         }
 
     private:
-        class CommandHashMap : public ::std::hash_map< ::rtl::OUString      ,
+        class CommandHashMap : public ::boost::unordered_map< ::rtl::OUString       ,
                                                         sal_Int32           ,
                                                         OUStringHashCode    ,
                                                         ::std::equal_to< ::rtl::OUString >  >
@@ -292,9 +287,6 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     sal_Int32   nItem     = 0 ;
     OUString    sCmd          ;
 
-    // Set size of hash_map reach a used size of approx. 60%
-    m_aDisabledCommands.SetContainerSize( lNames.getLength() * 10 / 6 );
-
     // Get names/values for disabled commands.
     for( nItem=0; nItem < lNames.getLength(); ++nItem )
     {
@@ -343,9 +335,7 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
     sal_Int32   nItem     = 0 ;
     OUString    sCmd          ;
 
-    // Set size of hash_map reach a used size of approx. 60%
     m_aDisabledCommands.Clear();
-    m_aDisabledCommands.SetContainerSize( lNames.getLength() * 10 / 6 );
 
     // Get names/values for disabled commands.
     for( nItem=0; nItem < lNames.getLength(); ++nItem )
@@ -372,7 +362,7 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
 //*****************************************************************************************************************
 void SvtCommandOptions_Impl::Commit()
 {
-    DBG_ERROR( "SvtCommandOptions_Impl::Commit()\nNot implemented yet!\n" );
+    OSL_FAIL( "SvtCommandOptions_Impl::Commit()\nNot implemented yet!\n" );
 }
 
 //*****************************************************************************************************************
