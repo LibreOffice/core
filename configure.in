@@ -5922,7 +5922,8 @@ if $GNUCP --version 2>/dev/null | grep "coreutils" >/dev/null 2>/dev/null; then
 elif $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null; then
     AC_MSG_RESULT([yes])
 else
-    if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" -o "$_os" = "FreeBSD"; then
+    if test "$_os" = "Darwin" -o "$_os" = "NetBSD" -o "$_os" = "OpenBSD" \
+         -o "$_os" = "FreeBSD" -o "$_os" = "DragonFly"; then
         GNUCP=''
         AC_MSG_RESULT([no gnucp found - using the system's cp command])
     else
