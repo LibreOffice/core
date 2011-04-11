@@ -124,7 +124,7 @@ my_components = \
     lnth \
     localebe1 \
     log \
-    lwpfilter \
+    component/lotuswordpro/util/lwpfilter \
     mcnttype \
     migrationoo2 \
     msfilter \
