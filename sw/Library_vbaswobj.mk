@@ -114,10 +114,8 @@ $(eval $(call gb_Library_add_exception_objects,vbaswobj,\
 ))
 
 ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_set_ldflags,vbaswobj,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_ldflags,vbaswobj,\
     -Wl$(COMMA)-O1 \
-    -Wl$(COMMA)-z$(COMMA)noexecstack \
 ))
 endif
 
