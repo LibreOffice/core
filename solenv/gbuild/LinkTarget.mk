@@ -368,7 +368,7 @@ $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE_STL := $$(gb_LinkTarget_INCLUDE_STL)
-$(call gb_LinkTarget_get_target,$(1)) : LDFLAGS := $$(gb_LinkTarget_LDFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS := $$(gb_LinkTarget_LDFLAGS) $(LDFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_LIBS := 
 $(call gb_LinkTarget_get_target,$(1)) : LINKED_STATIC_LIBS := 
 $(call gb_LinkTarget_get_target,$(1)) : LIBS :=
@@ -501,8 +501,12 @@ endif
 
 endef
 
+define gb_LinkTarget_add_ldflags
+$(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS += $(2)
+endef
+
 define gb_LinkTarget_set_ldflags
-$(call gb_LinkTarget_get_target,$(1)) : LDFLAGS := $(2)
+$(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS := $(2)
 endef
 
 define gb_LinkTarget_add_libs

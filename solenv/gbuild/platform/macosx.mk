@@ -256,12 +256,14 @@ $(call gb_Helper_abbreviate_dirs,\
     $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         $(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
         $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-        $(subst \d,$$,$(RPATH)) $(LDFLAGS) \
+		$(subst \d,$$,$(RPATH)) \
+		$(T_LDFLAGS) \
         $(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
     $(gb_CXX) \
         $(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
         $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-        $(subst \d,$$,$(RPATH)) $(LDFLAGS) \
+		$(subst \d,$$,$(RPATH)) \
+		$(T_LDFLAGS) \
         $(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
         $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
         $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \

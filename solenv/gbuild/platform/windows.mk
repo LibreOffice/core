@@ -433,7 +433,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
         $(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
         $(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
-        $(LDFLAGS) \
+		$(T_LDFLAGS) \
         @$${RESPONSEFILE} \
         $(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
         $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
