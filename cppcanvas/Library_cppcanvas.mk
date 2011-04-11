@@ -78,6 +78,7 @@ $(eval $(call gb_Library_add_exception_objects,cppcanvas,\
 	cppcanvas/source/mtfrenderer/lineaction \
 	cppcanvas/source/mtfrenderer/pointaction \
 	cppcanvas/source/mtfrenderer/polypolyaction \
+	cppcanvas/source/mtfrenderer/rendergraphicaction \
 	cppcanvas/source/mtfrenderer/textaction \
 	cppcanvas/source/mtfrenderer/implrenderer \
 	cppcanvas/source/mtfrenderer/mtftools \
