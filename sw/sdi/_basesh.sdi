@@ -430,9 +430,7 @@ interface BaseTextSelection
         StateMethod = GetState ;
     ]
 
-/*-----------------22.01.97 09.41-------------------
-// ab hier immer Export = FALSE
---------------------------------------------------*/
+// from here on Export = FALSE
 
     FN_FRAME_WRAP   // status()
     [

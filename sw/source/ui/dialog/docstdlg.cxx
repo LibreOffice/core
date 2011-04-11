@@ -156,9 +156,6 @@ void SwDocStatPage::Update()
     SetData(aDocStat);
 }
 
-/*-----------------19.06.97 16.37-------------------
-    upate line number
---------------------------------------------------*/
 IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, EMPTYARG)
 {
     Update();

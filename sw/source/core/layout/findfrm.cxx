@@ -1398,12 +1398,12 @@ void SwFrm::SetInfFlags()
     } while ( pFrm && !pFrm->IsPageFrm() ); //Oberhalb der Seite kommt nix
 }
 
-/*-----------------22.8.2001 14:30------------------
+/*
  * SwFrm::SetDirFlags( sal_Bool )
  * actualizes the vertical or the righttoleft-flags.
  * If the property is derived, it's from the upper or (for fly frames) from
  * the anchor. Otherwise we've to call a virtual method to check the property.
- * --------------------------------------------------*/
+ */
 
 void SwFrm::SetDirFlags( sal_Bool bVert )
 {

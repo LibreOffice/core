@@ -1680,10 +1680,10 @@ void SwTextShell::GetState( SfxItemSet &rSet )
     }
 }
 
-/* -----------------------------2002/07/05 10:31------------------------------
-    Switch on/off header of footer of a page style - if an empty name is
-    given all styles are changed
- ---------------------------------------------------------------------------*/
+/*
+ *  Switch on/off header of footer of a page style - if an empty name is
+ *  given all styles are changed
+ */
 void SwTextShell::ChangeHeaderOrFooter(
     const String& rStyleName, sal_Bool bHeader, sal_Bool bOn, sal_Bool bShowWarning)
 {

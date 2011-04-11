@@ -44,10 +44,6 @@
 class SwView;
 class SvxMacroItem;
 
-/*--------------------------------------------------------------------
-   Beschreibung:    Der Tabdialog Traeger der TabPages
- --------------------------------------------------------------------*/
-
 class SwCharDlg: public SfxTabDialog
 {
     SwView&   rView;
@@ -61,10 +57,6 @@ public:
 
     virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 };
-
-/*-----------------14.08.96 11.03-------------------
-    Beschreibung: Tabpage fuer URL-Attribut
---------------------------------------------------*/
 
 class SwCharURLPage : public SfxTabPage
 {

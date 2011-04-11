@@ -75,7 +75,7 @@ using namespace ::com::sun::star;
 
 SV_IMPL_PTRARR( SwPageFlyCache, SwFlyCachePtr )
 
-/*-----------------28.5.2001 10:06------------------
+/*
  *  Reading and writing of the layout cache.
  *  The layout cache is not necessary, but it improves
  *  the performance and reduces the text flow during
@@ -84,7 +84,7 @@ SV_IMPL_PTRARR( SwPageFlyCache, SwFlyCachePtr )
  *  at the top of every page, so it's possible to create
  *  the right count of pages and to distribute the document content
  *  to this pages before the formatting starts.
- *--------------------------------------------------*/
+ */
 
 void SwLayoutCache::Read( SvStream &rStream )
 {
@@ -175,7 +175,7 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
     return !aIo.HasError();
 }
 
-/*-----------------28.5.2001 10:19------------------
+/*
  * SwLayoutCache::Write(..)
  * writes the index (more precise: the difference between
  * the index and the first index of the document content)
@@ -185,7 +185,7 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
  * number is stored, too.
  * The position, size and page number of the text frames
  * are stored, too
- * --------------------------------------------------*/
+ */
 
 void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 {
@@ -481,11 +481,11 @@ SwLayoutCache::~SwLayoutCache()
     delete pImpl;
 }
 
-/*-----------------28.5.2001 10:47------------------
+/*
  * SwActualSection,
  *  a help class to create not nested section frames
  *  for nested sections.
- * --------------------------------------------------*/
+ */
 
 SwActualSection::SwActualSection( SwActualSection *pUp,
                                   SwSectionFrm    *pSect,
@@ -501,14 +501,14 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
     }
 }
 
-/*-----------------28.5.2001 11:09------------------
+/*
  * SwLayHelper
  *  is the helper class, which utilizes the layout cache information
  *  to distribute the document content to the rigth pages.
  * It's used by the _InsertCnt(..)-function.
  * If there's no layout cache, the distibution to the pages is more
  * a guess, but a guess with statistical background.
- * --------------------------------------------------*/
+ */
 
 SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
             SwLayoutFrm* &rpL, SwActualSection* &rpA, sal_Bool &rB,
@@ -550,11 +550,11 @@ SwLayHelper::~SwLayHelper()
     }
 }
 
-/*-----------------23.5.2001 16:40------------------
+/*
  * SwLayHelper::CalcPageCount() does not really calculate the page count,
  * it returns the page count value from the layout cache, if available,
  * otherwise it estimates the page count.
- * --------------------------------------------------*/
+ */
 
 sal_uLong SwLayHelper::CalcPageCount()
 {
@@ -613,7 +613,7 @@ sal_uLong SwLayHelper::CalcPageCount()
     return nPgCount;
 }
 
-/*-----------------23.5.2001 16:44------------------
+/*
  * SwLayHelper::CheckInsertPage()
  * inserts a page and return sal_True, if
  * - the break after flag is set
@@ -622,7 +622,7 @@ sal_uLong SwLayHelper::CalcPageCount()
  *
  * The break after flag is set, if the actual content
  * wants a break after.
- * --------------------------------------------------*/
+ */
 
 sal_Bool SwLayHelper::CheckInsertPage()
 {
@@ -753,7 +753,7 @@ void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
 }
 // <--
 
-/*-----------------28.5.2001 11:31------------------
+/*
  * SwLayHelper::CheckInsert
  *  is the entry point for the _InsertCnt-function.
  *  The document content index is checked either it is
@@ -761,7 +761,7 @@ void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
  *  cause the maximal estimation of content per page is reached.
  *  A really big table or long paragraph may contains more than
  *  one page, in this case the needed count of pages will inserted.
- * --------------------------------------------------*/
+ */
 
 sal_Bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
 {
@@ -1014,12 +1014,12 @@ struct FlyCacheCompare
   }
 };
 
- /*-----------------28.6.2001 14:40------------------
+ /*
   * SwLayHelper::_CheckFlyCache(..)
   * If a new page is inserted, the last page is analysed.
   * If there are text frames with default position, the fly cache
   * is checked, if these frames are stored in the cache.
-  * --------------------------------------------------*/
+  */
 
 void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 {
@@ -1106,14 +1106,14 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
     }
 }
 
-/*-----------------28.6.2001 14:48------------------
+/*
  * SwLayHelper::CheckPageFlyCache(..)
  * looks for the given text frame in the fly cache and sets
  * the position and size, if possible.
  * The fly cache is sorted by pages and we start searching with the given page.
  * If we found the page number in the fly cache, we set
  * the rpPage parameter to the right page, if possible.
- * --------------------------------------------------*/
+ */
 
 sal_Bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
 {

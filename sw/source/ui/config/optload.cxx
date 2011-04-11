@@ -312,9 +312,6 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
     aUseCharUnit.SaveValue();
 }
 
-/*-----------------13.01.97 14.44-------------------
-    Switch Deftabstops' metric
---------------------------------------------------*/
 IMPL_LINK(SwLoadOptPage, MetricHdl, ListBox*, EMPTYARG)
 {
     const sal_uInt16 nMPos = aMetricLB.GetSelectEntryPos();

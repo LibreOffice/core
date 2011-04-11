@@ -171,9 +171,6 @@ public:
 
 };
 
-/*-----------------12.12.96 11.48-------------------
-        Textfluss
---------------------------------------------------*/
 class SwTextFlowPage : public SfxTabPage
 {
     FixedLine       aFlowFL;
