@@ -200,13 +200,13 @@ inline sal_Bool FontPrevWin_Impl::Is100PercentFontWidthValid() const
 
 // class FontPrevWin_Impl -----------------------------------------------
 
-/*-----------------19.7.2001 08:44------------------
+/*
  * void FontPrevWin_Impl::_CheckScript()
  * evalutates the scripttypes of the actual string.
  * Afterwards the positions of script change are notified in aScriptChg,
  * the scripttypes in aScriptType.
  * The aTextWidth array will be filled with zero.
- * --------------------------------------------------*/
+ */
 
 void FontPrevWin_Impl::_CheckScript()
 {
@@ -271,7 +271,7 @@ void FontPrevWin_Impl::_CheckScript()
     }
 }
 
-/*-----------------19.7.2001 08:48------------------
+/*
  * Size FontPrevWin_Impl::CalcTextSize(..)
  * fills the aTextWidth array with the text width of every part
  * of the actual string without a script change inside.
@@ -279,7 +279,7 @@ void FontPrevWin_Impl::_CheckScript()
  * for Asian parts the aCJKFont.
  * The returned size contains the whole string.
  * The member nAscent is calculated to the maximal ascent of all used fonts.
- * --------------------------------------------------*/
+ */
 
 Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter,
     SvxFont &rFont )
@@ -352,12 +352,12 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
     return aTxtSize;
 }
 
-/*-----------------19.7.2001 08:54------------------
+/*
  * void FontPrevWin_Impl::DrawPrev(..)
  * calls SvxFont::DrawPrev(..) for every part of the string without a script
  * change inside, for Asian parts the aCJKFont will be used, otherwise the
  * given rFont.
- * --------------------------------------------------*/
+ */
 
 void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* _pPrinter,
     Point &rPt, SvxFont &rFont )
