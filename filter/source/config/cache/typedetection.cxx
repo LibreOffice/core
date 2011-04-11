@@ -804,7 +804,21 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     // <- SAFE ----------------------------------
 }
 
-
+//TO-DO: add a priority entry to filter config, e.g. defaulting to 50 and
+//flag externally that some filters are lower e.g. 25 and are catch-alls
+//to be tried last. Split up writer/calc/etc. filter detection to standalone
+//those problematic formats
+namespace
+{
+    bool sort_catchalls_to_end(const rtl::OUString& rA, const rtl::OUString& rB)
+    {
+        if (rA == rB)
+            return false;
+        if (rA.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.FormatDetector")))
+            return true;
+        return rA < rB;
+    }
+}
 
 ::rtl::OUString TypeDetection::impl_detectTypeDeepOnly(      ::comphelper::MediaDescriptor& rDescriptor          ,
                                                        const OUStringList&                  lOutsideUsedDetectors)
@@ -836,6 +850,7 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
     OUStringList lDetectors = m_rCache->getItemNames(FilterCache::E_DETECTSERVICE);
+    std::sort(lDetectors.begin(), lDetectors.end(), sort_catchalls_to_end);
     aLock.clear();
     // <- SAFE ----------------------------------
 
