@@ -128,7 +128,7 @@ gb_LinkTarget_LDFLAGS += \
 
 ifeq ($(HAVE_LD_HASH_STYLE),TRUE)
 gb_LinkTarget_LDFLAGS += \
-	-Wl,--hash-style=both \
+	-Wl,--hash-style=$(WITH_LINKER_HASH_STYLE) \
 
 endif
 

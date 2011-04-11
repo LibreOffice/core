@@ -40,7 +40,7 @@ endif
 #  gb_CppunitTest_TARGETTYPE
 #  gb_CppunitTest_get_filename
 gb_CppunitTest_CPPTESTTARGET := $(call gb_Executable_get_target,cppunit/cppunittester)
-gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_CPPTESTTARGET)
+gb_CppunitTest_CPPTESTCOMMAND := $(gb_CppunitTest_CPPTESTPRECOMMAND) $(gb_CppunitTest_GDBTRACE) STAR_RESOURCEPATH=$(dir $(call gb_ResTarget_get_outdir_target,example)) $(gb_CppunitTest_CPPTESTTARGET)
 gb_CppunitTest__get_linktargetname = CppunitTest/$(call gb_CppunitTest_get_filename,$(1))
 
 .PHONY : $(call gb_CppunitTest_get_clean_target,%)
@@ -53,7 +53,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTTARGET)
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs_native,\
 		mkdir -p $(dir $@) && \
-		$(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) > $@.log 2>&1 || (cat $@.log && false))
+		$(gb_CppunitTest_CPPTESTCOMMAND) $(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) $(ARGS) > $@.log 2>&1 || (cat $@.log && false))
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest__get_linktargetname,$(1)))
@@ -72,7 +72,13 @@ $(call gb_LinkTarget_set_defs,$(2), \
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_CppunitTest_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_CppunitTest_CppunitTest_platform,$(1),$(2),$(gb_CppunitTest_DLLDIR)/$(call gb_CppunitTest_get_libfilename,$(1)))
+$(call gb_CppunitTest_get_target,$(1)) : ARGS :=
 $$(eval $$(call gb_Module_register_target,$(call gb_CppunitTest_get_target,$(1)),$(call gb_CppunitTest_get_clean_target,$(1))))
+
+endef
+
+define gb_CppunitTest_set_args
+$(call gb_CppunitTest_get_target,$(1)) : ARGS := $(2)
 
 endef
 
