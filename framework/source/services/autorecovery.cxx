@@ -3443,11 +3443,11 @@ sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
     sal_uInt64 nFreeSpace = SAL_MAX_UINT64;
 
     ::rtl::OUString     sBackupPath(SvtPathOptions().GetBackupPath());
-    ::osl::VolumeInfo   aInfo      (VolumeInfoMask_FreeSpace);
+    ::osl::VolumeInfo   aInfo      (osl_VolumeInfo_Mask_FreeSpace);
     ::osl::FileBase::RC aRC         = ::osl::Directory::getVolumeInfo(sBackupPath, aInfo);
 
     if (
-        (aInfo.isValid(VolumeInfoMask_FreeSpace)) &&
+        (aInfo.isValid(osl_VolumeInfo_Mask_FreeSpace)) &&
         (aRC == ::osl::FileBase::E_None         )
        )
     {

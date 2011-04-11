@@ -2371,10 +2371,10 @@ shell::commit( const shell::ContentMap::iterator& it,
         if( it1 != properties.end() )
             it1->setValue( uno::makeAny( isFile ) );
 
-        osl::VolumeInfo aVolumeInfo( VolumeInfoMask_Attributes );
+        osl::VolumeInfo aVolumeInfo( osl_VolumeInfo_Mask_Attributes );
         if( isVolume &&
             osl::FileBase::E_None == osl::Directory::getVolumeInfo( it->first,aVolumeInfo ) &&
-            aVolumeInfo.isValid( VolumeInfoMask_Attributes ) )
+            aVolumeInfo.isValid( osl_VolumeInfo_Mask_Attributes ) )
         {
             // Retrieve the flags;
             isRemote = aVolumeInfo.getRemoteFlag();

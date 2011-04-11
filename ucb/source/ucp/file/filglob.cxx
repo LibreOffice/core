@@ -112,7 +112,7 @@ namespace {
                                 RTL_CONSTASCII_USTRINGPARAM("volume"));
                         bResourceType = true;
                         osl::VolumeInfo aVolumeInfo(
-                            VolumeInfoMask_Attributes );
+                            osl_VolumeInfo_Mask_Attributes );
                         if( osl::Directory::getVolumeInfo(
                             rPhysicalUrl,aVolumeInfo ) ==
                             osl::FileBase::E_None )
