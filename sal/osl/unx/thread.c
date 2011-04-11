@@ -39,6 +39,9 @@
 
 #if defined LINUX
 #include <sys/prctl.h>
+#ifndef PR_SET_NAME
+#define PR_SET_NAME 15
+#endif
 #endif
 
 /****************************************************************************
