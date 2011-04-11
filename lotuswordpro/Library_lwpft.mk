@@ -230,12 +230,5 @@ $(eval $(call gb_Library_add_exception_objects,lwpft,\
     lotuswordpro/source/filter/xfilter/xftimestyle \
     lotuswordpro/source/filter/xfilter/xfutil \
 ))
-	# lotuswordpro/source/filter/lwpchartstreamtools
-	# lotuswordpro/source/filter/lwpchartwrapper
-	# lotuswordpro/source/filter/schxmlwrapper
-	# lotuswordpro/source/filter/xfilter/xfchartstreamtools
-	# lotuswordpro/source/filter/xfilter/xfchartxmlhandler
-	# lotuswordpro/source/filter/xfilter/xfdrawchart
-	# lotuswordpro/source/filter/xfilter/xftexttable
 
 # vim: set noet ts=4 sw=4:
