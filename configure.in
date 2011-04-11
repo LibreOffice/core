@@ -7733,6 +7733,7 @@ fi
 # check that the list is valid
 for lang in $WITH_LANG ; do
    test "$lang" = "ALL" && continue;
+   test "$lang" = "kid" && continue;
    # need to check for the exact string, so add space before and after the list of all languages
    all_langs=" $ALL_LANGS "
    test `echo "$all_langs" | sed "s|.* $lang .*|found|"` = "found" && continue;
