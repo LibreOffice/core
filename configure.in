@@ -6717,6 +6717,8 @@ fi
 AC_SUBST(USE_XINERAMA)
 AC_SUBST(XINERAMA_LINK)
 
+if test "$ENABLE_LIBRSVG" = "TRUE"
+then
 dnl ===================================================================
 dnl Test whether to build librsvg or rely on the system version
 dnl ===================================================================
@@ -6859,6 +6861,22 @@ case "$_os" in
    ;;
 esac
 AC_SUBST(SYSTEM_LIBGSF)
+else
+   SYSTEM_LIBGSF=YES
+   AC_SUBST(SYSTEM_LIBGSF)
+   SYSTEM_LIBRSVG=YES
+   AC_SUBST(SYSTEM_LIBRSVG)
+   SYSTEM_GDKPIXBUF=YES
+   AC_SUBST(SYSTEM_GDKPIXBUF)
+   SYSTEM_GLIB=YES
+   AC_SUBST(SYSTEM_GLIB)
+   SYSTEM_GETTEXT=YES
+   AC_SUBST(SYSTEM_GETTEXT)
+   SYSTEM_LIBCROCO=YES
+   AC_SUBST(SYSTEM_LIBCROCO)
+   SYSTEM_PANGO=YES
+   AC_SUBST(SYSTEM_PANGO)
+fi
 
 dnl ===================================================================
 dnl Test whether to build libpng or rely on the system version

@@ -30416,6 +30416,8 @@ fi
 
 
 
+if test "$ENABLE_LIBRSVG" = "TRUE"
+then
 echo "$as_me:$LINENO: checking whether to build own version of librsvg" >&5
 echo $ECHO_N "checking whether to build own version of librsvg... $ECHO_C" >&6
 
@@ -30564,6 +30566,22 @@ echo "${ECHO_T}no" >&6
    ;;
 esac
 
+else
+   SYSTEM_LIBGSF=YES
+
+   SYSTEM_LIBRSVG=YES
+
+   SYSTEM_GDKPIXBUF=YES
+
+   SYSTEM_GLIB=YES
+
+   SYSTEM_GETTEXT=YES
+
+   SYSTEM_LIBCROCO=YES
+
+   SYSTEM_PANGO=YES
+
+fi
 
 echo "$as_me:$LINENO: checking whether to build own version of libpng" >&5
 echo $ECHO_N "checking whether to build own version of libpng... $ECHO_C" >&6
