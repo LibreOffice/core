@@ -72,7 +72,7 @@ $(foreach sourcefile,$(2),$(call gb_JavaClassSet_add_sourcefile,$(1),$(sourcefil
 endef
 
 define gb_JavaClassSet_set_classpath
-$(call gb_JavaClassSet_get_target,$(1)) : CLASSPATH := $(2)
+$(eval $(call gb_JavaClassSet_get_target,$(1)) : CLASSPATH := $(2))
 
 endef
 
@@ -80,7 +80,34 @@ endef
 # build order dependency is a hack to get these prerequisites out of the way in the build command
 define gb_JavaClassSet_add_jar
 $(eval $(call gb_JavaClassSet_get_target,$(1)) : $(2))
+$(eval $(call gb_JavaClassSet_get_target,$(1)) : CLASSPATH := $$(CLASSPATH)$(gb_CLASSPATHSEP)$(2))
 $(eval $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2))
-
 endef
+
+# this does not generate dependency on the jar
+define gb_JavaClassSet_add_system_jar
+$(eval $(call gb_JavaClassSet_get_target,$(1)) : CLASSPATH := $$(CLASSPATH)$(gb_CLASSPATHSEP)$(2))
+$(eval $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2))
+endef
+
+define gb_JavaClassSet_add_jars
+$(foreach jar,$(2),$(call gb_JavaClassSet_add_jar,$(1),$(jar)))
+endef
+
+define gb_JavaClassSet_add_system_jars
+$(foreach jar,$(2),$(call gb_JavaClassSet_add_system_jar,$(1),$(jar)))
+endef
+
+# this forwards to functions that must be defined in RepositoryExternal.mk.
+# $(call gb_LinkTarget_use_external,library,external)
+define gb_JavaClassSet_use_external
+$(eval $(if $(value gb_JavaClassSet__use_$(2)),\
+  $(call gb_JavaClassSet__use_$(2),$(1)),\
+  $(error gb_JavaClassSet_use_external: unknown external: $(2))))
+endef
+
+define gb_JavaClassSet_use_externals
+$(foreach external,$(2),$(call gb_JavaClassSet_use_external,$(1),$(external)))
+endef
+
 # vim: set noet sw=4 ts=4:

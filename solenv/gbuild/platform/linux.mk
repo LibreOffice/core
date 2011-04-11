@@ -277,15 +277,16 @@ gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 endif
 
 gb_Library_PLAINLIBS_NONE += \
-	fontconfig \
-	Xrender \
     dl \
     freetype \
+	fontconfig \
     m \
     pthread \
+    ICE \
+    SM \
     X11 \
     Xext \
-    SM \
+	Xrender \
     ICE \
 
 gb_Library_FILENAMES := \

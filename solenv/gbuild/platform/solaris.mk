@@ -262,7 +262,10 @@ gb_Library_PLAINLIBS_NONE += \
     $(gb_STDLIBS) \
     dl \
     freetype \
+	jpeg \
     pthread \
+    ICE \
+    SM \
     X11 \
     Xext \
     SM \

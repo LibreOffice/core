@@ -123,6 +123,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
     SrsTarget \
     CppunitTest \
     CustomTarget \
+    WinResTarget \
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\

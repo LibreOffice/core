@@ -139,12 +139,12 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     fsstorage \
 	gdipluscanvas \
     hatchwindowfactory \
+    msforms \
 	nullcanvas \
     passwordcontainer \
     productregistration \
 	simplecanvas \
     vbaswobj \
-    msforms \
 	vclcanvas \
 ))
 
