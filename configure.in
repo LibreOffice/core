@@ -2051,7 +2051,7 @@ if test "$GCC" = "yes" ; then
 #include <stdio.h>
 
 int main(char argc, char** argv) {
-   printf ("hello world\n");
+   printf ("");
    return 0;
 }
        ], HAVE_LD_HASH_STYLE=TRUE; WITH_LINKER_HASH_STYLE=$hash_style, HAVE_LD_HASH_STYLE=FALSE)
